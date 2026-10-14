@@ -102,6 +102,7 @@ BOARD::BOARD() :
         m_LegacyNetclassesLoaded( false ),
         m_boardUse( BOARD_USE::NORMAL ),
         m_timeStamp( 1 ),
+        m_itemIndex( *this ),
         m_paper( PAGE_SIZE_TYPE::A4 ),
         m_project( nullptr ),
         m_userUnits( EDA_UNITS::MM ),
@@ -1673,7 +1674,7 @@ void BOARD::BulkRemoveStaleTeardrops( BOARD_COMMIT& aCommit )
 
         if( zone->IsTeardropArea() && zone->HasFlag( STRUCT_DELETED ) )
         {
-            UncacheItemById( zone->m_Uuid );
+            m_itemIndex.Unbind( zone->m_Uuid );
             m_zones.erase( m_zones.begin() + ii );
             IncrementTimeStamp();
             m_connectivity->Remove( zone );
@@ -1697,7 +1698,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         parentGroup->RemoveItem( aBoardItem );
     }
 
-    UncacheItemById( aBoardItem->m_Uuid );
+    m_itemIndex.Unbind( aBoardItem->m_Uuid );
 
     switch( aBoardItem->Type() )
     {
@@ -2062,7 +2063,7 @@ void BOARD::UpdateUserUnits( BOARD_ITEM* aItem, KIGFX::VIEW* aView )
 void BOARD::DeleteMARKERs()
 {
     for( PCB_MARKER* marker : m_markers )
-        UncacheItemById( marker->m_Uuid );
+        m_itemIndex.Unbind( marker->m_Uuid );
 
     for( PCB_MARKER* marker : m_markers )
         delete marker;
@@ -2082,7 +2083,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
         if( ( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION && aExclusions )
             || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
         {
-            UncacheItemById( marker->m_Uuid );
+            m_itemIndex.Unbind( marker->m_Uuid );
             delete marker;
         }
         else
@@ -2140,7 +2141,7 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     if( aID == niluuid )
         return nullptr;
 
-    if( BOARD_ITEM* cached = GetCachedItemById( aID ) )
+    if( BOARD_ITEM* cached = m_itemIndex.Find( aID ) )
         return cached;
 
     // Linear scan fallback for items not in the cache.  Any hit is cached so
@@ -2267,183 +2268,7 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
 }
 
 
-BOARD_ITEM* BOARD::GetCachedItemById( const KIID& aId ) const
-{
-    auto it = m_itemByIdCache.find( aId );
 
-    if( it == m_itemByIdCache.end() )
-        return nullptr;
-
-    BOARD_ITEM* item = it->second;
-
-    if( item && item->m_Uuid == aId )
-        return item;
-
-    UncacheItemById( aId );
-    return nullptr;
-}
-
-
-void BOARD::CacheItemById( BOARD_ITEM* aItem ) const
-{
-    if( IsFootprintHolder() )
-        return;
-
-    // Hand the item to this board. A stale owner cannot evict it.
-    if( aItem->m_boardCacheOwner && aItem->m_boardCacheOwner != this )
-        aItem->m_boardCacheOwner->UncacheItemByPtr( aItem );
-
-    // Called once per item on load, so probe and insert in one lookup per map and pay for the
-    // aliasing fixups only when a key was already taken
-    auto [idIt, idInserted] = m_itemByIdCache.try_emplace( aItem->m_Uuid, aItem );
-    auto [itemIt, itemInserted] = m_cachedIdByItem.try_emplace( aItem, aItem->m_Uuid );
-
-    if( !itemInserted && itemIt->second != aItem->m_Uuid )
-    {
-        // The item was indexed under an older UUID; drop that forward alias
-        auto prevIt = m_itemByIdCache.find( itemIt->second );
-
-        if( prevIt != m_itemByIdCache.end() && prevIt->second == aItem )
-            m_itemByIdCache.erase( prevIt );
-
-        itemIt->second = aItem->m_Uuid;
-    }
-
-    if( !idInserted && idIt->second != aItem )
-    {
-        // Another item already claims this UUID; evict it
-        if( auto prev = m_cachedIdByItem.find( idIt->second );
-            prev != m_cachedIdByItem.end() && prev->second == aItem->m_Uuid )
-        {
-            idIt->second->m_boardCacheOwner = nullptr;
-            m_cachedIdByItem.erase( prev );
-        }
-
-        idIt->second = aItem;
-    }
-
-    // Set owner last, see CacheAndReturnItemById()
-    aItem->m_boardCacheOwner = const_cast<BOARD*>( this );
-}
-
-
-void BOARD::UncacheItemById( const KIID& aId ) const
-{
-    auto it = m_itemByIdCache.find( aId );
-
-    if( it == m_itemByIdCache.end() )
-        return;
-
-    const BOARD_ITEM* item = it->second;
-
-    m_itemByIdCache.erase( it );
-
-    if( auto cached = m_cachedIdByItem.find( item );
-        cached != m_cachedIdByItem.end() && cached->second == aId )
-    {
-        item->m_boardCacheOwner = nullptr;
-        m_cachedIdByItem.erase( cached );
-    }
-}
-
-
-BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const
-{
-    if( IsFootprintHolder() )
-        return aItem;
-
-    // Hand the item to this board. A stale owner cannot evict it.
-    if( aItem->m_boardCacheOwner && aItem->m_boardCacheOwner != this )
-        aItem->m_boardCacheOwner->UncacheItemByPtr( aItem );
-
-    // catches a future alias between the cache key and the cached item's own UUID
-    wxASSERT_MSG( aItem && aItem->m_Uuid == aId,
-                  wxT( "BOARD identity cache key must be the item's own UUID" ) );
-
-    if( auto prev = m_cachedIdByItem.find( aItem );
-        prev != m_cachedIdByItem.end() && prev->second != aId )
-    {
-        auto prevIt = m_itemByIdCache.find( prev->second );
-
-        if( prevIt != m_itemByIdCache.end() && prevIt->second == aItem )
-            m_itemByIdCache.erase( prevIt );
-    }
-
-    if( auto existing = m_itemByIdCache.find( aId );
-        existing != m_itemByIdCache.end() && existing->second != aItem )
-    {
-        if( auto prev = m_cachedIdByItem.find( existing->second );
-            prev != m_cachedIdByItem.end() && prev->second == aId )
-        {
-            existing->second->m_boardCacheOwner = nullptr;
-            m_cachedIdByItem.erase( prev );
-        }
-    }
-
-    m_itemByIdCache.insert_or_assign( aId, aItem );
-    m_cachedIdByItem.insert_or_assign( aItem, aId );
-
-    // Set owner last, a half-done update then reads as not indexed
-    aItem->m_boardCacheOwner = const_cast<BOARD*>( this );
-
-    return aItem;
-}
-
-
-void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
-{
-    // Clear owner first, the item no longer points to this board
-    aItem->m_boardCacheOwner = nullptr;
-
-    if( auto cached = m_cachedIdByItem.find( aItem ); cached != m_cachedIdByItem.end() )
-    {
-        auto it = m_itemByIdCache.find( cached->second );
-
-        if( it != m_itemByIdCache.end() && it->second == aItem )
-            m_itemByIdCache.erase( it );
-
-        m_cachedIdByItem.erase( cached );
-        return;
-    }
-
-    std::erase_if( m_itemByIdCache, [aItem]( const auto& entry ) { return entry.second == aItem; } );
-}
-
-
-void BOARD::ClearItemByIdCache()
-{
-    for( const auto& [item, id] : m_cachedIdByItem )
-        item->m_boardCacheOwner = nullptr;
-
-    m_itemByIdCache.clear();
-    m_cachedIdByItem.clear();
-}
-
-
-void BOARD::RebindItemUuid( BOARD_ITEM* aItem, const KIID& aNewId )
-{
-    wxCHECK_RET( aItem, "BOARD::RebindItemUuid() requires a valid item" );
-
-    if( IsFootprintHolder() )
-        return;
-
-    if( aItem->m_Uuid == aNewId )
-    {
-        CacheAndReturnItemById( aNewId, aItem );
-        return;
-    }
-
-    if( BOARD_ITEM* existing = GetCachedItemById( aNewId ); existing && existing != aItem )
-    {
-        wxFAIL_MSG( wxString::Format( "BOARD::RebindItemUuid() duplicate target UUID: %s",
-                                      aNewId.AsString() ) );
-        return;
-    }
-
-    UncacheItemByPtr( aItem );
-    aItem->SetUuidDirect( aNewId );
-    CacheAndReturnItemById( aNewId, aItem );
-}
 
 
 int BOARD::RepairDuplicateItemUuids()

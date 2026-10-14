@@ -23,6 +23,7 @@
 #include <atomic>
 #include <functional>
 #include <board_item_container.h>
+#include <board_item_index.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <core/mirror.h>
 #include <drill/drill_chart_model.h>
@@ -733,7 +734,7 @@ public:
     /**
      * Rebind the UUID of an attached item and keep the item-by-id cache coherent.
      */
-    void RebindItemUuid( BOARD_ITEM* aItem, const KIID& aNewId );
+    void RebindItemUuid( BOARD_ITEM* aItem, const KIID& aNewId ) { m_itemIndex.Rebind( aItem, aNewId ); }
 
     /**
      * Rebind duplicate attached-item UUIDs so each live board item has a unique ID.
@@ -1629,7 +1630,7 @@ public:
     void OnRatsnestChanged();
 
     /**
-     * Notify the board that the listed zones were just refilled. 
+     * Notify the board that the listed zones were just refilled.
      */
     void OnZonesFilled( const std::vector<ZONE*>& aZones );
 
@@ -1695,24 +1696,16 @@ public:
      */
     std::weak_ptr<void> GetHistoryLifetimeToken() const { return m_historyLifetime; }
 
-    const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const
-    {
-        return m_itemByIdCache;
-    }
-
-    bool IsItemIndexedById( const BOARD_ITEM* aItem ) const
-    {
-        return m_cachedIdByItem.contains( aItem );
-    }
+    // --------- Items-by-index facades ---------
 
     /**
-     * Return a cached item for @a aId if the entry is still self-consistent.
+     * The board's item identity index, used by ResolveItem() and for item lifecycle management.
      *
-     * UUIDs can still be rewritten in-place in some attached-item paths.  When that happens, the
-     * cache may temporarily contain a stale alias from the old UUID to the live item.  Drop those
-     * aliases on read so lookups never return an item whose current UUID no longer matches the key.
+     * This map is owned and maintained by the board's #BOARD_ITEM_INDEX.
      */
-    BOARD_ITEM* GetCachedItemById( const KIID& aId ) const;
+    const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const { return m_itemIndex.Map(); }
+
+    bool IsItemIndexedById( const BOARD_ITEM* aItem ) const { return m_itemIndex.IsIndexed( aItem ); }
 
     /**
      * Add an item to the item-by-id cache.
@@ -1720,69 +1713,17 @@ public:
      * This is called by FOOTPRINT::Add() when items are added to footprints that are already
      * on the board, to keep the cache in sync.
      */
-    void CacheItemById( BOARD_ITEM* aItem ) const;
+    void CacheItemById( BOARD_ITEM* aItem ) const { m_itemIndex.BindItem( aItem ); }
 
-    /**
-     * Remove an item from the item-by-id cache.
-     *
-     * This is called by FOOTPRINT::Remove() when items are removed from footprints that are
-     * already on the board, to keep the cache in sync.
-     */
-    void UncacheItemById( const KIID& aId ) const;
+    void CacheItemSubtreeById( BOARD_ITEM* aItem ) { m_itemIndex.BindSubtree( aItem ); }
 
-    void CacheItemSubtreeById( BOARD_ITEM* aItem )
-    {
-        wxCHECK( aItem, /* void */ );
+    void CacheChildrenById( const BOARD_ITEM* aParent ) { m_itemIndex.BindChildren( aParent ); }
 
-        CacheItemById( aItem );
+    /// Uncache an item and its children.  Pointer-keyed, so a temporary copy sharing the UUID
+    /// of a live item is left alone.
+    void UncacheItemSubtreeById( const BOARD_ITEM* aItem ) { m_itemIndex.UnbindSubtree( aItem ); }
 
-        aItem->RunOnChildren(
-                [this]( BOARD_ITEM* aChild )
-                {
-                    CacheItemSubtreeById( aChild );
-                },
-                RECURSE_MODE::NO_RECURSE );
-    }
-
-    void CacheChildrenById( const BOARD_ITEM* aParent )
-    {
-        wxCHECK( aParent, /* void */ );
-
-        aParent->RunOnChildren(
-                [this]( BOARD_ITEM* aChild )
-                {
-                    CacheItemSubtreeById( aChild );
-                },
-                RECURSE_MODE::NO_RECURSE );
-    }
-
-    void UncacheItemSubtreeById( const BOARD_ITEM* aItem )
-    {
-        wxCHECK( aItem, /* void */ );
-
-        // Pointer-keyed eviction: never remove an entry that belongs to a
-        // different live item with the same UUID (e.g. a temporary copy).
-        UncacheItemByPtr( aItem );
-
-        aItem->RunOnChildren(
-                [this]( BOARD_ITEM* aChild )
-                {
-                    UncacheItemSubtreeById( aChild );
-                },
-                RECURSE_MODE::NO_RECURSE );
-    }
-
-    void UncacheChildrenById( const BOARD_ITEM* aParent )
-    {
-        wxCHECK( aParent, /* void */ );
-
-        aParent->RunOnChildren(
-                [this]( BOARD_ITEM* aChild )
-                {
-                    UncacheItemSubtreeById( aChild );
-                },
-                RECURSE_MODE::NO_RECURSE );
-    }
+    void UncacheChildrenById( const BOARD_ITEM* aParent ) { m_itemIndex.UnbindChildren( aParent ); }
 
     /**
      * Remove every cache entry that still points to @a aItem.
@@ -1790,11 +1731,14 @@ public:
      * Safe to call from ~BOARD_ITEM and UUID-rebind paths: avoids evicting live items that
      * share the same UUID while still purging stale aliases after in-place UUID changes.
      */
-    void UncacheItemByPtr( const BOARD_ITEM* aItem );
+    void UncacheItemByPtr( const BOARD_ITEM* aItem ) { m_itemIndex.UnbindByPtr( aItem ); }
 
-    BOARD_ITEM* CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const;
+    BOARD_ITEM* CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const
+    {
+        return m_itemIndex.BindAndReturnItem( aId, aItem );
+    }
 
-    void ClearItemByIdCache();
+    void ClearItemByIdCache() { m_itemIndex.Clear(); }
 
     // --------- Item order comparators ---------
 
@@ -1926,11 +1870,10 @@ private:
     PCB_BOARD_OUTLINE*  m_boardOutline;
     PCB_POINTS          m_points;
 
-    // Cache for fast access to items in the containers above by KIID, including children.
-    // Mutable because it's a performance cache that can be populated during const lookups.
-    // NOT protected by m_CachesMutex. Only safe for single-threaded access (UI, serialization).
-    mutable std::unordered_map<KIID, BOARD_ITEM*>        m_itemByIdCache;
-    mutable std::unordered_map<const BOARD_ITEM*, KIID>  m_cachedIdByItem;
+    // Identity index for the containers above, including their children.  Mutable because
+    // const lookups populate it, and NOT covered by m_CachesMutex: only safe for
+    // single-threaded access (UI, serialization).  BOARD_ITEM_INDEX owns the rules.
+    mutable BOARD_ITEM_INDEX m_itemIndex;
 
     std::map<int, LAYER> m_layers;                  // layer data
 
@@ -2004,4 +1947,3 @@ private:
     // destructor order ensures it outlives no listener calls.
     std::unique_ptr<BOARD_TEXT_VAR_ADAPTER>   m_textVarAdapter;
 };
-

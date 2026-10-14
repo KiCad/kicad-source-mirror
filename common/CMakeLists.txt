@@ -1124,6 +1124,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_chart_template.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_symbol_assigner.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_item_index.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_exchange_footprint.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_text_var_adapter.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class.cpp
