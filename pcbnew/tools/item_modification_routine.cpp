@@ -404,19 +404,22 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
         aShape.SetLocked( aLineA.IsLocked() );
     };
 
-    const auto addSegment =
-            [&]( const SEG& aSeg )
-            {
-                if( aSeg.Length() == 0 )
-                    return;
+    const auto addSegment = [&]( const SEG& aSeg ) -> std::optional<KIID>
+    {
+        if( aSeg.Length() == 0 )
+            return std::nullopt;
 
-                auto tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
-                tSegment->SetStart( aSeg.A );
-                tSegment->SetEnd( aSeg.B );
+        auto tSegment = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::SEGMENT );
+        tSegment->SetStart( aSeg.A );
+        tSegment->SetEnd( aSeg.B );
 
-                copyProps( *tSegment );
-                handler.AddNewItem( std::move( tSegment ) );
-            };
+        copyProps( *tSegment );
+
+        const KIID id = tSegment->m_Uuid;
+        handler.AddNewItem( std::move( tSegment ) );
+
+        return id;
+    };
 
     tArc->SetArcGeometry( dogbone_result->m_arc.GetP0(), dogbone_result->m_arc.GetArcMid(),
                           dogbone_result->m_arc.GetP1() );
@@ -424,13 +427,29 @@ void DOGBONE_CORNER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
     // Copy properties from one of the source lines
     copyProps( *tArc );
 
-    addSegment( SEG{ dogbone_result->m_arc.GetP0(), dogbone_result->m_updated_seg_a->B } );
-    addSegment( SEG{ dogbone_result->m_arc.GetP1(), dogbone_result->m_updated_seg_b->B } );
+    const std::optional<KIID> slotA =
+            addSegment( SEG{ dogbone_result->m_arc.GetP0(), dogbone_result->m_updated_seg_a->B } );
+    const std::optional<KIID> slotB =
+            addSegment( SEG{ dogbone_result->m_arc.GetP1(), dogbone_result->m_updated_seg_b->B } );
+
+    const KIID arcId = tArc->m_Uuid;
 
     handler.AddNewItem( std::move( tArc ) );
 
-    ModifyLineOrDeleteIfZeroLength( aLineA, dogbone_result->m_updated_seg_a );
-    ModifyLineOrDeleteIfZeroLength( aLineB, dogbone_result->m_updated_seg_b );
+    const bool removedA = ModifyLineOrDeleteIfZeroLength( aLineA, dogbone_result->m_updated_seg_a );
+    const bool removedB = ModifyLineOrDeleteIfZeroLength( aLineB, dogbone_result->m_updated_seg_b );
+
+    if( !removedA && !removedB )
+    {
+        // On a narrow mouth a slot reaches the line, otherwise the arc does
+        const CONSTRAINT_MEMBER heldA = slotA ? CONSTRAINT_MEMBER( *slotA, CONSTRAINT_ANCHOR::END )
+                                              : CONSTRAINT_MEMBER( arcId, CONSTRAINT_ANCHOR::START );
+        const CONSTRAINT_MEMBER heldB = slotB ? CONSTRAINT_MEMBER( *slotB, CONSTRAINT_ANCHOR::END )
+                                              : CONSTRAINT_MEMBER( arcId, CONSTRAINT_ANCHOR::END );
+
+        SplitCornerConstraint( { aLineA.m_Uuid, CONSTRAINT_ANCHOR::END }, { aLineB.m_Uuid, CONSTRAINT_ANCHOR::END },
+                               heldA, heldB );
+    }
 
     AddSuccess();
 }

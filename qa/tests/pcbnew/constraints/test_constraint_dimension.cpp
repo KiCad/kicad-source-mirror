@@ -1645,4 +1645,89 @@ BOOST_AUTO_TEST_CASE( ChamferRebindsCornerCoincidentToChamfer )
 }
 
 
+// A dogbone corner reaches each line with an arc, or with a slot segment on a narrow mouth
+BOOST_AUTO_TEST_CASE( DogboneRebindsCornerCoincidentToInsertedShape )
+{
+    const auto runDogbone = []( const VECTOR2I& aFarB, bool aAddSlots, std::vector<PCB_SHAPE*>& aInserted,
+                                BOARD& aBoard ) -> std::pair<PCB_SHAPE*, PCB_SHAPE*>
+    {
+        PCB_SHAPE* lineA = addSegment( aBoard, VECTOR2I( 0, 0 ), VECTOR2I( 20 * MM, 0 ) );
+        PCB_SHAPE* lineB = addSegment( aBoard, VECTOR2I( 20 * MM, 0 ), aFarB );
+
+        addConstraint( aBoard, PCB_CONSTRAINT_TYPE::COINCIDENT,
+                       { { lineB->m_Uuid, CONSTRAINT_ANCHOR::START }, { lineA->m_Uuid, CONSTRAINT_ANCHOR::END } } );
+
+        ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER handler(
+                [&]( std::unique_ptr<BOARD_ITEM> aItem )
+                {
+                    if( aItem->Type() == PCB_SHAPE_T )
+                        aInserted.push_back( static_cast<PCB_SHAPE*>( aItem.get() ) );
+
+                    aBoard.Add( aItem.release() );
+                },
+                []( BOARD_ITEM& )
+                {
+                },
+                [&]( BOARD_ITEM& aItem )
+                {
+                    aBoard.Remove( &aItem );
+                } );
+
+        DOGBONE_CORNER_ROUTINE dogbone( &aBoard, handler, { 1 * MM, aAddSlots } );
+        dogbone.ProcessLinePair( *lineA, *lineB );
+
+        return { lineA, lineB };
+    };
+
+    auto boundPosition = []( BOARD& aBoard, const CONSTRAINT_MEMBER& aMember ) -> std::optional<VECTOR2I>
+    {
+        for( const PCB_CONSTRAINT* constraint : aBoard.Constraints() )
+        {
+            if( constraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::COINCIDENT )
+                continue;
+
+            const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
+
+            if( members.size() != 2 )
+                continue;
+
+            if( members[0] == aMember )
+                return ConstraintAnchorPosition( &aBoard, members[1] );
+
+            if( members[1] == aMember )
+                return ConstraintAnchorPosition( &aBoard, members[0] );
+        }
+
+        return std::nullopt;
+    };
+
+    // A right angle needs no slot and gets a bare arc, a 45 degree corner gets two slots as well
+    struct CORNER
+    {
+        VECTOR2I farB;
+        bool     addSlots;
+        size_t   inserted;
+    };
+
+    const std::vector<CORNER> corners = { { { 20 * MM, 20 * MM }, false, 1 }, { { 10 * MM, 10 * MM }, true, 3 } };
+
+    for( const CORNER& corner : corners )
+    {
+        BOARD                   board;
+        std::vector<PCB_SHAPE*> inserted;
+
+        auto [lineA, lineB] = runDogbone( corner.farB, corner.addSlots, inserted, board );
+
+        BOOST_REQUIRE_EQUAL( inserted.size(), corner.inserted );
+
+        // Whatever shape the corner inserted, it must be held to the line it reaches
+        std::optional<VECTOR2I> atA = boundPosition( board, { lineA->m_Uuid, CONSTRAINT_ANCHOR::END } );
+        std::optional<VECTOR2I> atB = boundPosition( board, { lineB->m_Uuid, CONSTRAINT_ANCHOR::END } );
+
+        BOOST_CHECK( atA && *atA == lineA->GetEnd() );
+        BOOST_CHECK( atB && *atB == lineB->GetEnd() );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
