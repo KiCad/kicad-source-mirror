@@ -4599,7 +4599,15 @@ RHI_SwapchainHandle RHI_VULKAN_DEVICE::CreateSwapchain( const RHI_SWAPCHAIN_DESC
                 static_cast<int>( chosenFormat.format ),
                 static_cast<int>( chosenFormat.colorSpace ) );
 
-    const VkExtent2D     extent = swapchainExtent( surfCaps, desc.width, desc.height );
+    const VkExtent2D extent = swapchainExtent( surfCaps, desc.width, desc.height );
+
+    // A minimized window reports a zero extent, which a swapchain may not have. The render thread retries.
+    if( extent.width == 0 || extent.height == 0 )
+    {
+        wxLogTrace( traceRhi, wxS( "VulkanDevice: CreateSwapchain SKIPPED (zero extent)" ) );
+        return {};
+    }
+
     const VkSwapchainTry made = createVkSwapchain( surfIt->second, surfCaps, chosenFormat, extent, VK_NULL_HANDLE,
                                                    false );
 
