@@ -28,6 +28,7 @@
 
 #include <qa_utils/error_handlers.h>
 #include <qa_utils/file_utils.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <kiplatform/app.h>
 #include <mock_pgm_base.h>

@@ -17,13 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef UNIT_TEST_UTILS__H
-#define UNIT_TEST_UTILS__H
+#pragma once
 
 #define BOOST_NO_AUTO_PTR
 
 #include <boost/test/unit_test.hpp>
-#include <turtle/mock.hpp>
 
 #include <qa_utils/wx_utils/wx_assert.h>
 
@@ -475,9 +473,6 @@ std::vector<uint8_t> LoadBinaryData( const std::string& aFilePath, std::optional
  */
 std::string LoadStringData( const wxString& aPath );
 
-void SetMockConfigDir();
-
-
 /**
  * Some tests on some platforms require a display connection to run.
  * This function checks if a display is available on those platforms
@@ -488,5 +483,3 @@ void SetMockConfigDir();
 bool CanDoDisplayTests();
 
 } // namespace KI_TEST
-
-#endif // UNIT_TEST_UTILS__H

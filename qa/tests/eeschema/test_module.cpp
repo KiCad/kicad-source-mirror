@@ -30,6 +30,7 @@
 #include <mock_pgm_base.h>
 #include <qa_utils/error_handlers.h>
 #include <qa_utils/file_utils.h>
+#include <qa_utils/mock_utils.h>
 #include <qa_utils/wx_utils/wx_assert.h>
 #include <qa_utils/wx_utils/wx_log.h>
 

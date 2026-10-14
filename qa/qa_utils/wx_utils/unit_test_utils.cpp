@@ -123,25 +123,6 @@ std::string KI_TEST::LoadStringData( const wxString& aPath )
 }
 
 
-void KI_TEST::SetMockConfigDir()
-{
-    if( !wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), nullptr ) )
-    {
-        wxString path( GetTestDataRootDir() );
-        path += wxT( "/config/" );
-        wxSetEnv( wxT( "KICAD_CONFIG_HOME" ), path );
-        wxSetEnv( wxT( "KICAD_CONFIG_HOME_IS_QA" ), wxT( "1" ) );
-
-        if( wxFileName fn( path ); fn.DirExists() )
-        {
-            // Under normal circumstances, don't let QA test runs write back to the config dir
-            // to avoid churn.  Disable this if you want to update the QA schema.
-            wxSetEnv( wxT( "KICAD_INHIBIT_SETTINGS_WRITES" ), wxT( "1" ) );
-        }
-    }
-}
-
-
 bool KI_TEST::CanDoDisplayTests()
 {
     // On Linux/GTK, clipboard operations require a display connection.

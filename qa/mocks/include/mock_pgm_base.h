@@ -18,7 +18,9 @@
  */
 
 #pragma once
-#include <qa_utils/wx_utils/unit_test_utils.h>
+
+#include <qa_utils/mock_utils.h>
+
 #include <pgm_base.h>
 #include <config.h>
 
