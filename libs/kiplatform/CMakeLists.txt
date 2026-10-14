@@ -25,16 +25,16 @@ elseif( KICAD_WX_PORT STREQUAL gtk )
 
     # X11 is used directly for the window-manager class hint (see port/wxgtk/ui.cpp); GTK links
     # it only privately, so we need it explicitly on the final link line.
-    pkg_check_modules(X11 REQUIRED x11)
+    find_package( X11 REQUIRED )
 
     # Detect GTK3 and configure it
     set( PLATFORM_LIBS
         ${GTK3_LIBRARIES}
-        ${X11_LIBRARIES}
+        X11::X11
         )
 
-    include_directories( SYSTEM ${GTK3_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} )
-    link_directories( ${GTK3_LIBRARY_DIRS} ${X11_LIBRARY_DIRS} )
+    include_directories( SYSTEM ${GTK3_INCLUDE_DIRS} )
+    link_directories( ${GTK3_LIBRARY_DIRS} )
     add_definitions( ${GTK3_CFLAGS_OTHER} )
 endif()
 

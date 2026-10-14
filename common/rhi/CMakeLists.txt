@@ -37,11 +37,6 @@ target_link_libraries( rhi PUBLIC core PRIVATE kiplatform magic_enum )
 if( RHI_HAS_VULKAN )
     target_compile_definitions( rhi PUBLIC RHI_HAS_VULKAN )
     find_package( X11 QUIET )
-    find_package( PkgConfig QUIET )
-
-    if( PkgConfig_FOUND )
-        pkg_check_modules( WAYLAND_CLIENT QUIET wayland-client )
-    endif()
 
     if( VulkanHeaders_FOUND )
         target_link_libraries( rhi PRIVATE Vulkan::Headers )
@@ -60,16 +55,15 @@ if( RHI_HAS_VULKAN )
     endif()
 
     # The X11 surface path connects through xcb, so it needs both libraries
-    if( X11_FOUND AND X11_xcb_FOUND )
+    if( TARGET X11::X11 AND TARGET X11::xcb )
         target_compile_definitions( rhi PRIVATE RHI_VULKAN_HAS_X11 )
-        target_include_directories( rhi PRIVATE ${X11_INCLUDE_DIR} ${X11_xcb_INCLUDE_PATH} )
-        target_link_libraries( rhi PRIVATE ${X11_X11_LIB} ${X11_xcb_LIB} )
+        target_link_libraries( rhi PRIVATE X11::X11 X11::xcb )
     endif()
 
-    if( WAYLAND_CLIENT_FOUND )
+    if( KICAD_WAYLAND )
+        find_package( Wayland 1.20 COMPONENTS Client REQUIRED )
         target_compile_definitions( rhi PRIVATE RHI_VULKAN_HAS_WAYLAND )
-        target_include_directories( rhi PRIVATE ${WAYLAND_CLIENT_INCLUDE_DIRS} )
-        target_link_libraries( rhi PRIVATE ${WAYLAND_CLIENT_LIBRARIES} )
+        target_link_libraries( rhi PRIVATE Wayland::Client )
     endif()
 endif()
 
