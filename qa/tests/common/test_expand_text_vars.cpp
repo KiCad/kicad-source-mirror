@@ -36,6 +36,7 @@
 #include <env_vars.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <pgm_base.h>
+#include <project.h>
 #include <settings/environment.h>
 #include <title_block.h>
 
@@ -590,6 +591,59 @@ BOOST_AUTO_TEST_CASE( TildeInsideNameIsLiteral )
 {
     BOOST_CHECK( ExpandPathVariables( wxS( "~user/out" ), nullptr ) == wxS( "~user/out" ) );
     BOOST_CHECK( ExpandPathVariables( wxS( "out/~/file" ), nullptr ) == wxS( "out/~/file" ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+// A backslash in a link is a path separator, so it must not read as a variable escape
+BOOST_AUTO_TEST_SUITE( ResolveUriByEnvVarsPaths )
+
+BOOST_AUTO_TEST_CASE( BackslashSeparatorBeforeVarExpands )
+{
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedEnvVar( wxS( "QA_DATASHEETS" ), wxS( "Z:" ) );
+
+    PROJECT project;
+
+    wxString uri = ResolveUriByEnvVars( wxS( "File:\\\\${QA_DATASHEETS}\\JGNE\\part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "File:\\\\Z:\\JGNE\\part.pdf" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SingleBackslashSeparatorBeforeVarExpands )
+{
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedEnvVar( wxS( "QA_DATASHEETS" ), wxS( "Z:" ) );
+
+    PROJECT project;
+
+    wxString uri = ResolveUriByEnvVars( wxS( "File:\\${QA_DATASHEETS}\\part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "File:\\Z:\\part.pdf" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForwardSlashUriStillExpands )
+{
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedEnvVar( wxS( "QA_DATASHEETS" ), wxS( "Z:" ) );
+
+    PROJECT project;
+
+    wxString uri = ResolveUriByEnvVars( wxS( "File://${QA_DATASHEETS}/part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "File://Z:/part.pdf" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( BackslashesAwayFromVarArePreserved )
+{
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedEnvVar( wxS( "QA_DATASHEETS" ), wxS( "Z:" ) );
+
+    PROJECT project;
+
+    wxString uri = ResolveUriByEnvVars( wxS( "${QA_DATASHEETS}\\JGNE\\sub\\part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "Z:\\JGNE\\sub\\part.pdf" ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

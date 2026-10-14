@@ -80,10 +80,12 @@ KICOMMON_API wxString JoinExtensions( const std::vector<std::string>& aExts );
  *
  * @param aString a string containing (perhaps) references to env var.
  * @param aProject the project to get variable substitutions from.
+ * @param aAllowEscapes false in a URI, where a backslash can only be a separator.
  *
  * @return the expanded environment variable.
  */
-KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
+KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject,
+                                                       bool aAllowEscapes = true );
 
 enum RESOLUTION_CONTEXT
 {
@@ -93,7 +95,8 @@ enum RESOLUTION_CONTEXT
     FOR_ERC_DRC,
     INTERNAL,       // Importantly, keeps the escape on literal variable references (such as "\${foo}")
     RESOLVED,
-    RAW_VALUE
+    RAW_VALUE,
+    FOR_URI // A backslash is a path separator here, so no escapes are recognized
 };
 
 KICOMMON_API void FinalizeTextVarExpansion( wxString& aText, RESOLUTION_CONTEXT aContext );

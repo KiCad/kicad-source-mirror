@@ -164,7 +164,7 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
         // Handle escaped variable references: \${...} or \@{...}
         // Replace with escape markers that won't be expanded by multi-pass loops
         // The markers will be converted back to ${...} or @{...} only at the final display stage
-        if( aSource[i] == '\\' && i + 1 < sourceLen )
+        if( aSource[i] == '\\' && i + 1 < sourceLen && aContext != FOR_URI )
         {
             if( ( aSource[i + 1] == '$' || aSource[i + 1] == '@' ) && i + 2 < sourceLen && aSource[i + 2] == '{' )
             {
@@ -517,7 +517,8 @@ wxString DescribeRef( const wxString& aRef )
 //
 // Stolen from wxExpandEnvVars and then heavily optimized
 //
-wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::set<wxString>* aSet = nullptr )
+wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::set<wxString>* aSet = nullptr,
+                            bool aAllowEscapes = true )
 {
     // If the same string is inserted twice, we have a loop
     if( aSet )
@@ -747,7 +748,7 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
 
         case wxT( '\\' ):
             // backslash can be used to suppress special meaning of % and $
-            if( n < strlen - 1 && ( str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' ) ) )
+            if( aAllowEscapes && n < strlen - 1 && ( str[n + 1] == wxT( '%' ) || str[n + 1] == wxT( '$' ) ) )
             {
                 strResult += str_n;
                 str_n = str[++n];
@@ -767,13 +768,13 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
     size_t             last_pos = strResult.find_last_of( wxS( "})%" ) );
 
     if( first_pos != strResult.npos && last_pos != strResult.npos && first_pos != last_pos )
-        strResult = KIwxExpandEnvVars( strResult, aProject, aSet ? aSet : &loop_check );
+        strResult = KIwxExpandEnvVars( strResult, aProject, aSet ? aSet : &loop_check, aAllowEscapes );
 
     return strResult;
 }
 
 
-const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject )
+const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject, bool aAllowEscapes )
 {
     // wxGetenv( wchar_t* ) is not re-entrant on linux.
     // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
@@ -782,15 +783,15 @@ const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT
     std::lock_guard<std::mutex> lock( getenv_mutex );
 
     // We reserve the right to do this another way, by providing our own member function.
-    return KIwxExpandEnvVars( aString, aProject );
+    return KIwxExpandEnvVars( aString, aProject, nullptr, aAllowEscapes );
 }
 
 
 const wxString ResolveUriByEnvVars( const wxString& aUri, const PROJECT* aProject )
 {
-    wxString uri = ExpandTextVars( aUri, aProject, INTERNAL );
+    wxString uri = ExpandTextVars( aUri, aProject, FOR_URI );
 
-    return ExpandEnvVarSubstitutions( uri, aProject );
+    return ExpandEnvVarSubstitutions( uri, aProject, false );
 }
 
 
