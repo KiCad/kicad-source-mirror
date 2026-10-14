@@ -12,13 +12,14 @@
 # Yutaro Urata2 <yutarourata03@gmail.com>, 2024, 2026.
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
+# 2tama3 <2tama3@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 15:39+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2026-10-15 03:56+0000\n"
+"Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8082,7 +8083,7 @@ msgstr "テーブル"
 #: common/eda_item.cpp:590 pcbnew/dialogs/dialog_board_setup.cpp:141
 #: pcbnew/pcb_drill_chart.cpp:150
 msgid "Drill Chart"
-msgstr "ドリル チャート"
+msgstr "ドリル表"
 
 #: common/eda_item.cpp:591 pcbnew/pcb_drill_map.cpp:220
 msgid "Drill Map"
@@ -14522,9 +14523,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr ""
-"表示上はネット %s はバス %s に接続されていますが、バスのメンバーではありませ"
-"ん"
+msgstr "ネット %s はバス %s に図形的に接続されているが、バスのメンバーではありません"
 
 #: eeschema/connection_graph.cpp:4693 eeschema/erc/erc.cpp:2298
 #: eeschema/erc/erc_item.cpp:266
@@ -21810,7 +21809,7 @@ msgstr "ピン %s が %s と %s の両方に接続されています"
 
 #: eeschema/erc/erc.cpp:2321
 msgid "Bus vector and bus group are graphically connected"
-msgstr ""
+msgstr "バス ベクターとバス グループは図形的に接続されている"
 
 #: eeschema/erc/erc.cpp:2506
 #, c-format
@@ -22011,7 +22010,7 @@ msgstr "異なるネットの重複ピン"
 
 #: eeschema/erc/erc_item.cpp:67
 msgid "Wired hidden power input pin also connects globally by name"
-msgstr ""
+msgstr "配線された隠し電源入力ピンは名前でグローバルに接続されている"
 
 #: eeschema/erc/erc_item.cpp:71 eeschema/erc/erc_item.cpp:75
 msgid "Conflict problem between pins"
@@ -22047,11 +22046,11 @@ msgstr "ラベルが1つのピンにのみ接続されている"
 
 #: eeschema/erc/erc_item.cpp:115
 msgid "Labels are similar"
-msgstr ""
+msgstr "ラベルが似ている"
 
 #: eeschema/erc/erc_item.cpp:119
 msgid "Power pins are similar"
-msgstr ""
+msgstr "電源ピンは似ている"
 
 #: eeschema/erc/erc_item.cpp:123
 msgid "Power pin and label are similar"
@@ -22088,7 +22087,7 @@ msgstr "このバスまたはネットに与えられた複数の名前"
 
 #: eeschema/erc/erc_item.cpp:155
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr "ネットは図形的にはバスに接続されているが、バスのメンバーではない"
+msgstr "ネットはバスに図形的に接続されているが、バスのメンバーではない"
 
 #: eeschema/erc/erc_item.cpp:159
 msgid "Buses are graphically connected but share no bus members"
@@ -22602,7 +22601,7 @@ msgstr "ベクター画像ファイルをインポート"
 #: eeschema/import_net_map.cpp:65
 #, c-format
 msgid "Ambiguous imported net name '%s'; board net rename omitted."
-msgstr ""
+msgstr "あいまいなインポートされたネット名 '%s';基板のネット名の変更は省略された。"
 
 #: eeschema/import_net_map.cpp:81
 #, c-format
@@ -22610,6 +22609,8 @@ msgid ""
 "Imported net name '%s' is claimed by more than one source net; board net "
 "rename omitted."
 msgstr ""
+"インポートされたネット名 '%s' は複数のソースネットで使われています;基板の"
+"ネット名の変更は省略された。"
 
 #: eeschema/lib_symbol.cpp:796 eeschema/sch_symbol.cpp:1381
 #, c-format
@@ -23023,7 +23024,7 @@ msgstr "回路図のエクスポートに失敗しました: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:98
 msgid "Connectivity changed while preparing the netlist."
-msgstr ""
+msgstr "ネットリストを準備中に接続性が変更された。"
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:103
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:120
@@ -25124,6 +25125,8 @@ msgid ""
 "The legacy design cache could not be read past 0x%zx (%s); the remaining "
 "symbols fall back to placeholders."
 msgstr ""
+"レガシーなデザインキャッシュは0x%zx (%s)を超えて読み取ることができませんでし"
+"た ; 残りのシンボルはプレースホルダーにフォールバックします。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:291
 #, c-format
@@ -25132,16 +25135,16 @@ msgstr "'%s' ページを変換中..."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:2826
 msgid "OrCAD interface has no surviving source wire for label placement."
-msgstr ""
+msgstr "OrCADインターフェースはラベル配置のための残りのソース配線がありません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3009
 msgid "OrCAD native connectivity joins distinct source nets."
-msgstr ""
+msgstr "OrCADネイティブ接続は異なるソースネットを結合します。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3199
 #, c-format
 msgid "Cannot place OrCAD net repair '%s' without a wire intersection."
-msgstr ""
+msgstr "配線の交点なしで OrCAD ネット修復 '%s' を配置することはできません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3233
 #, c-format
@@ -44560,9 +44563,8 @@ msgid "Mark:"
 msgstr "マーク:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
-#, fuzzy
 msgid "Letter"
-msgstr "パターン"
+msgstr "文字"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
@@ -44575,9 +44577,8 @@ msgid "Shape:"
 msgstr "形状:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:90
-#, fuzzy
 msgid "Letter:"
-msgstr "中心:"
+msgstr "文字:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:110
 msgid "Flash on Canvas"
@@ -45035,15 +45036,15 @@ msgstr "パーツ番号フィールド:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:151
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:158
-#, fuzzy
 msgid ""
 "Which footprint field to export as the part number in the IDF library file"
-msgstr "ライブラリ中からエクスポートするフットプリントを指定する"
+msgstr ""
+"IDFライブラリ中からパーツ番号としてエクスポートするフットプリント フィールド"
+"はどれであるか"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:172
-#, fuzzy
 msgid "Log"
-msgstr "ロック"
+msgstr "ログ"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:345
 msgid "zip files"
@@ -45080,24 +45081,20 @@ msgid "Generated %s"
 msgstr "生成された %s"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:31
-#, fuzzy
 msgid "Output archive or directory"
-msgstr "出力ファイルまたはディレクトリ"
+msgstr "出力アーカイブまたはディレクトリ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:85
-#, fuzzy
 msgid "8.1"
-msgstr ".1"
+msgstr "8.1"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:91
-#, fuzzy
 msgid "Refill zones before export"
-msgstr "プロット前にゾーンを塗り直す"
+msgstr "エクスポート前にゾーンを塗り直す"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:93
-#, fuzzy
 msgid "Refill zones before generating ODB++"
-msgstr "DRC 実行前にゾーンを塗り直す"
+msgstr "ODB++を生成する前にゾーンを塗り直す"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:97
 msgid "Compression format:"
@@ -45116,9 +45113,8 @@ msgid "TGZ"
 msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:109
-#, fuzzy
 msgid "Product name:"
-msgstr "グループ名:"
+msgstr "プロダクト名:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:114
 msgid "Product model name in ODB++"
@@ -45130,9 +45126,8 @@ msgid "Origin:"
 msgstr "原点:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:122
-#, fuzzy
 msgid "Absolute coordinates"
-msgstr "極座標"
+msgstr "絶対座標"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:171
 #: pcbnew/dialogs/dialog_map_layers.cpp:275
@@ -45140,19 +45135,16 @@ msgid "KiCad Layer"
 msgstr "KiCadレイヤー"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:172
-#, fuzzy
 msgid "ODB++ Name"
-msgstr "部品表(BOM)名"
+msgstr "ODB++名"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:174
-#, fuzzy
 msgid "Context"
 msgstr "内容"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:175
-#, fuzzy
 msgid "Span / Reference"
-msgstr "表側リファレンス面"
+msgstr "スパン ／ リファレンス"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:164
 msgid "Non-unity scaled models:"
@@ -46243,7 +46235,6 @@ msgid "Solder paste relative clearance:"
 msgstr "ハンダペーストの相対クリアランス:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:388
-#, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -46666,19 +46657,16 @@ msgid "Precision"
 msgstr "精度"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:95
-#, fuzzy
 msgid "Column"
 msgstr "列"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:96
-#, fuzzy
 msgid "Heading"
-msgstr "保留中"
+msgstr "見出し"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:98
-#, fuzzy
 msgid "Min Width"
-msgstr "線幅"
+msgstr "最小幅"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:299
 msgid "A table needs at least one column."
@@ -46689,24 +46677,20 @@ msgid "The columns are too wide in total."
 msgstr ""
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:57
-#, fuzzy
 msgid "Decimal places:"
-msgstr "代替候補:"
+msgstr "小数点以下の桁数:"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:147
-#, fuzzy
 msgid "Header separator"
-msgstr "セパレーターを挿入"
+msgstr "ヘッダー セパレーター"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:151
-#, fuzzy
 msgid "Row separators"
-msgstr "行セパレーター"
+msgstr "行 セパレーター"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:155
-#, fuzzy
 msgid "Column separators"
-msgstr "セパレーターを結合:"
+msgstr "列 セパレーター"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:165
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:217
@@ -47665,18 +47649,16 @@ msgstr ""
 "イヤーを自動一致]をクリックすると残りのレイヤーが自動的に一致します"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:86
-#, fuzzy
 msgid "The start and end layers must be different."
-msgstr "ソース 1 とソース 2 は別のものでなければなりません。"
+msgstr "始点と終点のレイヤーは異なる必要があります。"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:92
 msgid "Select a start and an end layer present on this board."
 msgstr "この基板上の始点レイヤーと終点レイヤーを選択してください。"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:98
-#, fuzzy
 msgid "Staggered stacks need a pitch greater than zero."
-msgstr "０より大きな値を入力してください。"
+msgstr "スタッガード型のスタックはピッチが０より大きい必要があります。"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:107
 #, fuzzy, c-format
@@ -47703,9 +47685,8 @@ msgstr "基板積層構造"
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
 #: pcbnew/generators/pcb_via_stack.cpp:1598
-#, fuzzy
 msgid "Staggered"
-msgstr "切り返し:"
+msgstr "スタッガード"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:60
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:310
@@ -50534,26 +50515,22 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:113
 msgid "Import Drill Chart Template"
-msgstr ""
+msgstr "ドリル表テンプレートのインポート"
 
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:114
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:146
-#, fuzzy
 msgid "Drill chart templates"
-msgstr "フィールド名テンプレート"
+msgstr "ドリル表テンプレート"
 
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:145
-#, fuzzy
 msgid "Export Drill Chart Template"
-msgstr "ドリルデータのエクスポート"
+msgstr "ドリル表テンプレートのエクスポート"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:40
-#, fuzzy
 msgid "Slots"
-msgstr "スロット"
+msgstr "長穴"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:44
-#, fuzzy
 msgid "Backdrills"
 msgstr "バックドリル"
 
@@ -50562,58 +50539,49 @@ msgid "Castellated"
 msgstr "端面スルーホール"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:55
-#, fuzzy
 msgid "Show totals row"
-msgstr "すべてのエラーを表示"
+msgstr "合計行を表示"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:63
-#, fuzzy
 msgid "Group holes by"
-msgstr "グループ化:"
+msgstr "穴をグループ化する基準"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Hole size"
 msgstr "穴サイズ"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Slot shape"
-msgstr "インポートされた図形"
+msgstr "長穴形状"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
 #: pcbnew/drill/drill_chart_template.cpp:44
-#, fuzzy
 msgid "Plating"
-msgstr "白金"
+msgstr "メッキ"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
 #: pcbnew/drill/drill_chart_template.cpp:50
-#, fuzzy
 msgid "Layer span"
-msgstr "レイヤー"
+msgstr "レイヤー スパン"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Drill operation"
-msgstr "ブロックの操作"
+msgstr "ドリル操作"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Hole function"
-msgstr "ジャンクション(接続点)を配置"
+msgstr "穴の機能"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "IPC-4761 protection"
-msgstr "投影"
+msgstr "IPC-4761保護"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27 pcbnew/pcb_track.cpp:3579
@@ -50622,17 +50590,15 @@ msgstr "後加工"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:68
 msgid "Grouping is shared by every drill chart and drill map on the board"
-msgstr ""
+msgstr "グルーピングは、基板上のすべてのドリル表およびドリルマップで共有"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:82
-#, fuzzy
 msgid "Import Template..."
-msgstr "ネットリストをインポート..."
+msgstr "テンプレートをインポート..."
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:85
-#, fuzzy
 msgid "Export Template..."
-msgstr "イメージをエクスポート..."
+msgstr "テンプレートをエクスポート..."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
@@ -50812,18 +50778,16 @@ msgid "physical netlist"
 msgstr "基板図ネットリスト"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:79
-#, fuzzy
 msgid "Section"
-msgstr "選択"
+msgstr "セクション"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
 msgid "ODB++"
 msgstr ""
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
-#, fuzzy
 msgid "IPC-2581"
-msgstr "IPC-2581 としてエクスポート"
+msgstr "IPC-2581"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:98
 msgid ""
@@ -50833,9 +50797,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:101
 #: pcbnew/dialogs/panel_fab_export_content.cpp:397
-#, fuzzy
 msgid "board metadata"
-msgstr "付帯情報の検索"
+msgstr "基板付帯情報"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:109
 msgid "intentional shorts"
@@ -50881,9 +50844,8 @@ msgid "Selected variants…"
 msgstr "バリアントを選択した…"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:227
-#, fuzzy
 msgid "All variants"
-msgstr "バリアント"
+msgstr "全バリアント"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:385
 #: pcbnew/dialogs/panel_fab_export_content.cpp:402
@@ -50895,9 +50857,8 @@ msgid "Choose the variants to export"
 msgstr "エクスポートするバリアントを選択"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
-#, fuzzy
 msgid "Selected variants"
-msgstr "バリアントを削除"
+msgstr "選択したバリアント"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:17
 msgid "Content"
@@ -50928,9 +50889,8 @@ msgstr ""
 "を保持します"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:62
-#, fuzzy
 msgid "Select a board variant for this export"
-msgstr "ファイルをエクスポートするディレクトリを選択"
+msgstr "このエクスポートの基板バリアントを選択"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:66
 msgid "Reference designators:"
@@ -50947,18 +50907,16 @@ msgstr ""
 "らないアートワークであり、常に保管されます。"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
-#, fuzzy
 msgid "One package per variant"
-msgstr "%d 個のパッケージの更新があります"
+msgstr "バリアント毎に１つのパッケージ"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
 msgid "One package, all variants inside"
 msgstr ""
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:83
-#, fuzzy
 msgid "Variant output"
-msgstr "製造用出力"
+msgstr "出力バリアント"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:87
 msgid "${VARIANT} is replaced per package"
@@ -51128,9 +51086,8 @@ msgid "Unable to open file"
 msgstr "ファイルを開けませんでした"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1039
-#, fuzzy
 msgid "Overall height is not a valid number."
-msgstr "%s の値は有効な数値である必要があります。"
+msgstr "高さは有効な数値ではありません。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1045
 msgid "Standoff height is not a valid number."
@@ -51638,19 +51595,16 @@ msgstr ""
 "描画されます"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:23
-#, fuzzy
 msgid "Group holes by:"
-msgstr "グループ化:"
+msgstr "穴をグループ化:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:43
-#, fuzzy
 msgid "Default marks:"
-msgstr "デフォルト値:"
+msgstr "デフォルト 記号:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
-#, fuzzy
 msgid "Curated shapes"
-msgstr "インポートされた図形"
+msgstr "厳選された形状"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
 msgid "Letters"
@@ -51661,14 +51615,12 @@ msgid "Curated shapes, then letters"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:57
-#, fuzzy
 msgid "Symbol size:"
-msgstr "ピン シンボルのサイズ:"
+msgstr "シンボル サイズ:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:68
-#, fuzzy
 msgid "Symbol line width:"
-msgstr "最小ライン幅:"
+msgstr "シンボル 線幅:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:82
 msgid "Keep existing symbol assignments when holes change"
@@ -54046,9 +53998,8 @@ msgid "Via Layer To"
 msgstr "ビアレイヤーへ"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:42
-#, fuzzy
 msgid "Diameter / Hole"
-msgstr "直径"
+msgstr "直径 ／ 穴"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:44
 #: pcbnew/generators/pcb_via_stack.cpp:1663
@@ -54057,7 +54008,6 @@ msgid "Pitch"
 msgstr "ピッチ"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:77
-#, fuzzy
 msgid "netclass"
 msgstr "ネットクラス"
 
@@ -54079,14 +54029,13 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:131
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "A preset named \"%s\" already exists."
-msgstr "シート名 \"%s\" は既に存在します。"
+msgstr "プリセット名 \"%s\" はすでに存在します。"
 
 #: pcbnew/dialogs/panel_setup_via_stacks_base.cpp:49
-#, fuzzy
 msgid "Add..."
-msgstr "フィールドを追加..."
+msgstr "追加..."
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
@@ -54462,9 +54411,9 @@ msgid "Checking %s min spoke count: %s."
 msgstr "%s の 最小スポーク数を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1482
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max microvia stack depth: %s."
-msgstr "%s の 最大遅延差（スキュー）を確認中: %s。"
+msgstr "%s の 最大マイクロビア スタック深さを確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1488
 #, c-format
@@ -54800,29 +54749,24 @@ msgid "Micro via hole size out of range"
 msgstr "マイクロビアの穴サイズが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:149
-#, fuzzy
 msgid "Microvia stack has malformed span"
-msgstr "基板外形が異常な形状"
+msgstr "マイクロビア スタックが異常なスパン"
 
 #: pcbnew/drc/drc_item.cpp:152
-#, fuzzy
 msgid "Microvia under microvia not filled"
-msgstr "マイクロ ビア禁止です"
+msgstr "マイクロ ビア下のマイクロビアが充填されていない"
 
 #: pcbnew/drc/drc_item.cpp:155
-#, fuzzy
 msgid "Microvia stack too deep"
-msgstr "マイクロ ビアのサイズが小さすぎます"
+msgstr "スタック型マイクロビアが深すぎます"
 
 #: pcbnew/drc/drc_item.cpp:158
-#, fuzzy
 msgid "Microvia too deep for its diameter"
-msgstr "マイクロビアのメッキ穴の直径"
+msgstr "スタック型マイクロビアが直径に対して深すぎます"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Microvia crosses core material"
-msgstr "マイクロ ビアのサイズが小さすぎます"
+msgstr "マイクロビアがコア材料を貫通する"
 
 #: pcbnew/drc/drc_item.cpp:165
 msgid "Courtyards overlap"
@@ -55143,9 +55087,8 @@ msgid "Missing assertion expression."
 msgstr "アサーションの式がありません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:768
-#, fuzzy
 msgid "Item 'B' is not available in assertion expressions."
-msgstr "アサーションの式がありません。"
+msgstr "アイテム 'B' はアサーションの式では使えません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:795
 msgid "within_diff_pairs option invalid for constraint type."
@@ -56097,14 +56040,12 @@ msgid "Crosses %s dielectric: aspect ratio %.2f exceeds the %.2f limit"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:338
-#, fuzzy
 msgid "an unnamed"
 msgstr "<名前なし>"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:358
-#, fuzzy
 msgid "Checking microvia stacks..."
-msgstr "マイクロ ビア穴を確認中..."
+msgstr "スタック型マイクロビアを確認中..."
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
 msgid "Checking via-stitch zone overlaps..."
@@ -56767,36 +56708,32 @@ msgid "Conditions"
 msgstr "条件"
 
 #: pcbnew/drill/drill_chart_template.cpp:37
-#, fuzzy
 msgid "SYM"
-msgstr "SMD"
+msgstr "SYM"
 
 #: pcbnew/drill/drill_chart_template.cpp:39
 msgid "DRILL DIA"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:40
-#, fuzzy
 msgid "Drill diameter"
-msgstr "最小ドリル直径"
+msgstr "ドリル直径"
 
 #: pcbnew/drill/drill_chart_template.cpp:41
 msgid "SLOT W x L"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:42
-#, fuzzy
 msgid "Slot size"
-msgstr "フルサイズ"
+msgstr "スロット サイズ"
 
 #: pcbnew/drill/drill_chart_template.cpp:43
 msgid "PLATED"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:45
-#, fuzzy
 msgid "OPS"
-msgstr "OP"
+msgstr "OPS"
 
 #: pcbnew/drill/drill_chart_template.cpp:46
 msgid "Operation count"
@@ -56820,65 +56757,59 @@ msgid "OPERATION"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:52
-#, fuzzy
 msgid "Operation"
-msgstr "オプション"
+msgstr "操作"
 
 #: pcbnew/drill/drill_chart_template.cpp:53
 msgid "PROTECTION"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:54
-#, fuzzy
 msgid "Protection"
-msgstr "投影"
+msgstr "保護"
 
 #: pcbnew/drill/drill_chart_template.cpp:55
 msgid "BACKDRILL STUB"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:56
-#, fuzzy
 msgid "Backdrill stub"
-msgstr "バックドリル表面"
+msgstr "バックドリル スタブ"
 
 #: pcbnew/drill/drill_chart_template.cpp:57
 msgid "ASPECT RATIO"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:58
-#, fuzzy
 msgid "Aspect ratio"
-msgstr "アスペクト"
+msgstr "アスペクト比"
 
 #: pcbnew/drill/drill_chart_template.cpp:59
 msgid "DESCRIPTION"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write '%s'."
-msgstr "ファイル '%s' を読み取れません。"
+msgstr "'%s' を書き込みできません。"
 
 #: pcbnew/drill/drill_chart_template.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing '%s'."
-msgstr "ファイル '%s' への書き込みがエラーしました。"
+msgstr "'%s' への書き込みエラー。"
 
 #: pcbnew/drill/drill_chart_template.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read '%s'."
-msgstr "ファイル '%s' を読み取れません。"
+msgstr "'%s' を読み取れません。"
 
 #: pcbnew/drill/drill_chart_template.cpp:175
-#, fuzzy
 msgid "Template is not a JSON object."
-msgstr "テンプレート名は空にできません。"
+msgstr "テンプレートはJSONオブジェクトでありません。"
 
 #: pcbnew/drill/drill_chart_template.cpp:243
-#, fuzzy
 msgid "Template has no usable columns."
-msgstr "テンプレート名は空にできません。"
+msgstr "テンプレートに使える列がない。"
 
 #: pcbnew/edit_zone_helpers.cpp:41
 msgid "Edit copper-thieving parameters in the Properties panel."
@@ -56958,19 +56889,18 @@ msgid "Exported extruded body for footprint %s"
 msgstr "フットプリント %s の押し出しボディをエクスポートした"
 
 #: pcbnew/exporters/export_idf.cpp:1099
-#, fuzzy
 msgid "Exporting board shape"
-msgstr "基板積層構造テーブルをエクスポート"
+msgstr "基板形状をエクスポート"
 
 #: pcbnew/exporters/export_idf.cpp:1139
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote IDF board file to %s"
-msgstr "基板ファイルに書き込みました: \"%s\""
+msgstr "IDF基板ファイルを %s に書き込みました"
 
 #: pcbnew/exporters/export_idf.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote IDF library file to %s"
-msgstr "基板ファイルに書き込みました: \"%s\""
+msgstr "IDFライブラリファイルを %s に書き込みました"
 
 #: pcbnew/exporters/exporter_vrml.cpp:805
 msgid "VRML Export Failed: Could not add holes to contours."
@@ -58073,9 +58003,9 @@ msgid "current length"
 msgstr "現在の長さ"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2399
-#, fuzzy, c-format
+#, c-format
 msgid "Skew: %s"
-msgstr "目標の遅延差（スキュー）: %s"
+msgstr "遅延差（スキュー）: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2399
 #, c-format
@@ -58279,24 +58209,20 @@ msgid "The microvia stack layers are not present on this board."
 msgstr ""
 
 #: pcbnew/generators/pcb_via_stack.cpp:1346
-#, fuzzy
 msgid "Microvia stack location violates DRC."
-msgstr "ビアの場所は DRC に違反します。"
+msgstr "スタック型マイクロビアの位置が DRC に違反しています。"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1370 pcbnew/tools/pcb_actions.cpp:693
-#, fuzzy
 msgid "Place Microvia Stack"
-msgstr "マイクロビアを配置"
+msgstr "スタック型マイクロビアを配置"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1622
-#, fuzzy
 msgid "Microvia Stack Properties"
-msgstr "ビア ステッチのプロパティ"
+msgstr "スタック型マイクロビアのプロパティ"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1630
-#, fuzzy
 msgid "End Layer"
-msgstr "終了レイヤー:"
+msgstr "終点レイヤー"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1642
 msgid "Use Netclass Values"
@@ -58464,9 +58390,8 @@ msgid "Footprint..."
 msgstr "フットプリント..."
 
 #: pcbnew/menubar_footprint_editor.cpp:77
-#, fuzzy
 msgid "Footprint as &SVG..."
-msgstr "フットプリント..."
+msgstr "フットプリントをSVGとして..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
@@ -59895,17 +59820,15 @@ msgstr "テキストの枠"
 #: pcbnew/pcb_drill_chart.cpp:144
 #, c-format
 msgid "Drill Chart (%d rows)"
-msgstr ""
+msgstr "ドリル表 (%d 行)"
 
 #: pcbnew/pcb_drill_chart.cpp:496
-#, fuzzy
 msgid "Drill Chart Properties"
-msgstr "ビアのプロパティ"
+msgstr "ドリル表のプロパティ"
 
 #: pcbnew/pcb_drill_chart.cpp:498
-#, fuzzy
 msgid "Show Totals"
-msgstr "詳細を表示"
+msgstr "合計を表示"
 
 #: pcbnew/pcb_drill_map.cpp:214
 #, c-format
@@ -59913,14 +59836,12 @@ msgid "Drill Map on %s"
 msgstr "%s のドリル マップ"
 
 #: pcbnew/pcb_drill_map.cpp:222
-#, fuzzy
 msgid "Spans"
-msgstr "スペイン語"
+msgstr "スパン"
 
 #: pcbnew/pcb_drill_map.cpp:386
-#, fuzzy
 msgid "Drill Map Properties"
-msgstr "ビアのプロパティ"
+msgstr "ドリルマップのプロパティ"
 
 #: pcbnew/pcb_drill_map.cpp:390 pcbnew/zone_layer_properties_grid.h:49
 msgid "Offset X"
@@ -59931,24 +59852,20 @@ msgid "Offset Y"
 msgstr "オフセット Y"
 
 #: pcbnew/pcb_drill_map.cpp:400
-#, fuzzy
 msgid "Symbol Size"
-msgstr "シンボル フィールド"
+msgstr "シンボル サイズ"
 
 #: pcbnew/pcb_drill_map.cpp:409 pcbnew/widgets/pcb_properties_panel.cpp:1411
-#, fuzzy
 msgid "Hole Span"
-msgstr "穴の形状"
+msgstr "穴のスパン"
 
 #: pcbnew/pcb_drill_map.cpp:413
-#, fuzzy
 msgid "Outline Slots"
-msgstr "外枠の角度:"
+msgstr "長穴のアウトライン"
 
 #: pcbnew/pcb_drill_map.cpp:417
-#, fuzzy
 msgid "Guide Cross"
-msgstr "カーソルを非表示"
+msgstr "ガイド十字"
 
 #: pcbnew/pcb_edit_frame.cpp:251
 msgid "KiCad PCB Editor"
@@ -60068,14 +59985,12 @@ msgid "%s field of %s (%s)"
 msgstr "%s フィールド %s ( %s )"
 
 #: pcbnew/pcb_generated_table.cpp:445
-#, fuzzy
 msgid "Table Generator"
-msgstr "ジェネレーター"
+msgstr "テーブル ジェネレーター"
 
 #: pcbnew/pcb_generated_table.cpp:451
-#, fuzzy
 msgid "Decimal Places"
-msgstr "小数点フォーマット"
+msgstr "小数点以下の桁数"
 
 #: pcbnew/pcb_generator.cpp:171 pcbnew/pcb_generator.cpp:208
 msgid "Update Order"
@@ -61402,9 +61317,8 @@ msgstr "フットプリント '%s' をライブラリ %s から読み込み中�
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:184
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:295
-#, fuzzy
 msgid "No PCB was found in the project to import."
-msgstr "フットプリントにデータシートが見つかりません。"
+msgstr "インポートするプロジェクトにプリント基板が見つかりません。"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:189
 msgid "Failed to load the project data."
@@ -61692,14 +61606,12 @@ msgid "gEDA / Lepton EDA PCB footprint library directory"
 msgstr "gEDA / Lepton EDA プリント基板 フットプリント ライブラリ ディレクトリ"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:70
-#, fuzzy
 msgid "Unsupported IPC-2581 data set."
-msgstr "未知のIPC-2581データセット '%s'。"
+msgstr "サポートされていないIPC-2581データセット。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:120
-#, fuzzy
 msgid "Cannot create temporary IPC-2581 output."
-msgstr "一時的な出力ディレクトリを作成できませんでした。"
+msgstr "一時的なIPC-2581出力を作成できません。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:136
 #, c-format
@@ -61720,7 +61632,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s'."
@@ -62236,9 +62148,8 @@ msgstr ""
 "スポート用に '%s' に名前が変更されました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:381
-#, fuzzy
 msgid "Failed to generate ODB++ metadata."
-msgstr "画像データの読み込みに失敗しました。"
+msgstr "ODB++付帯情報の生成に失敗しました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:595
 msgid "ODB++ layer name override is empty or collides; using automatic name."
@@ -62261,9 +62172,8 @@ msgid "Board outline is not closed; ODB++ rout layer has no board contour."
 msgstr ""
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:148
-#, fuzzy
 msgid "Output path is not a directory"
-msgstr "出力ファイルまたはディレクトリ"
+msgstr "出力パスはディレクトリではありません"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:165
 msgid "Output directory is not an ODB++ product"
@@ -62297,7 +62207,7 @@ msgid "No board for ODB++ export."
 msgstr "ODB++ エクスポート基板がありません。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists. Do you want to overwrite it?"
 msgstr "出力ファイル '%s' はすでに存在します。このファイルを上書きしますか？"
 
@@ -62323,7 +62233,7 @@ msgid "Cannot create temporary output directory."
 msgstr "一時的な出力ディレクトリを作成できませんでした。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODB++ files '%s'.\n"
 "%s"
@@ -62359,9 +62269,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:588
-#, fuzzy
 msgid "Unsupported ODB++ data set."
-msgstr "サポートされていないリモートの3Dモデル タイプ。"
+msgstr "サポートされていないODB++データセット。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:598
 msgid "Unknown ODB++ section key."
@@ -63590,32 +63499,26 @@ msgid "Via Type"
 msgstr "ビア タイプ"
 
 #: pcbnew/pcb_track.cpp:3606
-#, fuzzy
 msgid "Front Tenting"
 msgstr "表面のテンティング"
 
 #: pcbnew/pcb_track.cpp:3609
-#, fuzzy
 msgid "Back Tenting"
 msgstr "裏面のテンティング"
 
 #: pcbnew/pcb_track.cpp:3612
-#, fuzzy
 msgid "Front Covering"
 msgstr "表面のカバー"
 
 #: pcbnew/pcb_track.cpp:3615
-#, fuzzy
 msgid "Back Covering"
 msgstr "裏面のカバー"
 
 #: pcbnew/pcb_track.cpp:3618
-#, fuzzy
 msgid "Front Plugging"
 msgstr "表面の封止"
 
 #: pcbnew/pcb_track.cpp:3621
-#, fuzzy
 msgid "Back Plugging"
 msgstr "裏面の封止"
 
@@ -66579,13 +66482,12 @@ msgid "Add a board stackup table on a graphic layer"
 msgstr "図形レイヤーに基板積層構造の表を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:511
-#, fuzzy
 msgid "Add Drill Chart"
-msgstr "円弧を追加"
+msgstr "ドリル表を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:512
 msgid "Add a drill chart that tracks the board's holes"
-msgstr ""
+msgstr "基板の穴を追跡するドリル表を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:519
 #, fuzzy
@@ -66698,7 +66600,7 @@ msgstr "独立したビアを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:694
 msgid "Place a stacked or staggered microvia stack"
-msgstr ""
+msgstr "スタック型マイクロビアかスタッガード型マイクロビアを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:702
 #, fuzzy
@@ -68831,12 +68733,11 @@ msgstr "基板積層構造の表を置く"
 
 #: pcbnew/tools/pcb_control.cpp:2994
 msgid "No documentation layer is enabled to hold a drill chart."
-msgstr ""
+msgstr "ドリル表を保持するためのドキュメントレイヤーは有効になっていません。"
 
 #: pcbnew/tools/pcb_control.cpp:2995
-#, fuzzy
 msgid "Place Drill Chart"
-msgstr "すべてのユニットを配置"
+msgstr "ドリル表を配置"
 
 #: pcbnew/tools/pcb_control.cpp:3025
 #, c-format
