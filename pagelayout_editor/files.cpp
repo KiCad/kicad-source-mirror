@@ -32,7 +32,6 @@
 
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
-#include "properties_frame.h"
 
 #include <wx/filedlg.h>
 #include <wx/filename.h>

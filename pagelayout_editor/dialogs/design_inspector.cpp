@@ -35,7 +35,7 @@
 #include "dialogs/dialog_design_inspector_base.h"
 #include "design_inspector.h"
 #include "pl_editor_frame.h"
-#include "properties_frame.h"
+#include "widgets/pl_properties_panel.h"
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
 
@@ -351,7 +351,7 @@ void DIALOG_INSPECTOR::onCellClicked( wxGridEvent& event )
     EDA_ITEM* draw_item = item->GetDrawItems()[0];
     selectionTool->AddItemToSel( draw_item );
     m_editorFrame->GetCanvas()->Refresh();
-    m_editorFrame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( item );
+    m_editorFrame->GetPropertiesPanel()->UpdateData();
 }
 
 

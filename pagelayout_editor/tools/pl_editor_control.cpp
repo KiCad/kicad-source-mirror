@@ -29,7 +29,7 @@
 
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
-#include <properties_frame.h>
+#include "widgets/pl_properties_panel.h"
 #include <tools/pl_actions.h>
 #include <tools/pl_editor_control.h>
 #include <tools/pl_selection_tool.h>
@@ -146,7 +146,7 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     PL_SELECTION&      selection = selTool->GetSelection();
 
     // The Properties frame will be updated. Avoid flicker during update:
-    wxWindowUpdateLocker updateLock( m_frame->GetPropertiesFrame() );
+    wxWindowUpdateLocker updateLock( m_frame->GetPropertiesPanel() );
 
     if( selection.GetSize() == 1 )
     {
@@ -158,17 +158,13 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
         item->GetMsgPanelInfo( m_frame, msgItems );
         m_frame->SetMsgPanel( msgItems );
-
-        DS_DATA_ITEM* dataItem = static_cast<DS_DRAW_ITEM_BASE*>( item )->GetPeer();
-        m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( dataItem );
     }
     else
     {
         m_frame->UpdateMsgPanelInfo();
-        m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( nullptr );
     }
 
-    m_frame->GetPropertiesFrame()->CopyPrmsFromGeneralToPanel();
+    m_frame->GetPropertiesPanel()->UpdateData();
 
     return 0;
 }
@@ -202,4 +198,5 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::UnselectedEvent );
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::ClearedEvent );
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::SelectedItemsModified );
+    Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    ACTIONS::updateUnits.MakeEvent() );
 }

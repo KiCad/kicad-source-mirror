@@ -220,6 +220,18 @@ public:
 
     const wxString& Name() const { return m_name; }
 
+    const wxString& HelpString() const { return m_helpString; }
+
+    /**
+     * Set untranslated help text, marked with _HKI for translation extraction.
+     * An empty string makes the property grid use the property name as its help text.
+     */
+    PROPERTY_BASE& SetHelpString( const wxString& aHelpString )
+    {
+        m_helpString = aHelpString;
+        return *this;
+    }
+
     /**
      * Return a limited set of possible values (e.g. enum). Check with HasChoices() if a particular
      * PROPERTY provides such set.
@@ -457,6 +469,9 @@ private:
      * system.  Never rename properties; instead deprecate them and hide them from the GUI.
      */
     const wxString m_name;
+
+    /// Optional help text, translated when the property grid control is created.
+    wxString m_helpString;
 
     /// The display style controls how properties are edited in the properties manager GUI
     PROPERTY_DISPLAY m_display;

@@ -499,8 +499,17 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
     for( const wxString& groupName : groupDisplayOrder )
     {
-        if( groupName != _HKI( "Custom Properties" ) && !pgPropGroups.contains( groupName ) )
+        if( !pgPropGroups.contains( groupName )
+            && std::ranges::none_of( m_categoryButtons,
+                                     [&]( const CATEGORY_BUTTON& aButton )
+                                     {
+                                         return aButton.groupKey == groupName
+                                                && ( aButton.forceCategory || groupName == _HKI( "Custom Properties" ) )
+                                                && ( !aButton.enableFunc || aButton.enableFunc() );
+                                     } ) )
+        {
             continue;
+        }
 
         std::vector<wxPGProperty*> properties;
 

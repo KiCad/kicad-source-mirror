@@ -45,7 +45,8 @@
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
 #include "pl_editor_settings.h"
-#include "properties_frame.h"
+#include "widgets/pl_properties_panel.h"
+#include <wx/choice.h>
 #include <toolbars_pl_editor.h>
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
@@ -180,7 +181,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
-    m_propertiesPagelayout = new PROPERTIES_FRAME( this );
+    m_propertiesPagelayout = new PL_PROPERTIES_PANEL( this );
+    m_propertiesPagelayout->SetSplitterProportion(
+            static_cast<PL_EDITOR_SETTINGS*>( config() )->m_PropertiesSplitter );
 
     // Rows; layers 4 - 6
     m_auimgr.AddPane( m_tbTopMain, EDA_PANE().HToolbar().Name( "TopMainToolbar" )
@@ -554,6 +557,7 @@ void PL_EDITOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     m_propertiesFrameWidth = m_propertiesPagelayout->GetSize().x;
 
     cfg->m_PropertiesFrameWidth = m_propertiesFrameWidth;
+    cfg->m_PropertiesSplitter   = m_propertiesPagelayout->SplitterProportion();
     cfg->m_CornerOrigin         = m_originSelectChoice;
     cfg->m_BlackBackground      = GetDrawBgColor() == BLACK;
     cfg->m_LastPaperSize        = GetPageSettings().GetTypeAsString();
@@ -818,15 +822,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 {
     GetCanvas()->DisplayDrawingSheet();
 
-    PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
-    PL_SELECTION&       selection = selTool->GetSelection();
-    DS_DATA_ITEM*       item = nullptr;
-
-    if( selection.GetSize() == 1 )
-        item = static_cast<DS_DRAW_ITEM_BASE*>( selection.Front() )->GetPeer();
-
-    m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
-    m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
+    m_propertiesPagelayout->UpdateData();
     UpdateMsgPanelInfo();
     GetCanvas()->Refresh();
 }
@@ -915,8 +911,7 @@ void PL_EDITOR_FRAME::OnNewDrawingSheet()
     GetScreen()->SetContentModified( false );
     GetCanvas()->DisplayDrawingSheet();
 
-    m_propertiesPagelayout->CopyPrmsFromItemToPanel( nullptr );
-    m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
+    m_propertiesPagelayout->UpdateData();
 
     UpdateTitleAndInfo();
 

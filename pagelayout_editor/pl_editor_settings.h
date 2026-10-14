@@ -37,6 +37,7 @@ protected:
 public:
     int      m_CornerOrigin;
     int      m_PropertiesFrameWidth;
+    float    m_PropertiesSplitter;
     wxString m_LastPaperSize;
     int      m_LastCustomWidth;
     int      m_LastCustomHeight;

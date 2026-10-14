@@ -32,6 +32,7 @@ PL_EDITOR_SETTINGS::PL_EDITOR_SETTINGS() :
     // Make Coverity happy:
     m_CornerOrigin = 0;
     m_PropertiesFrameWidth = 150;
+    m_PropertiesSplitter = 0.5f;
     m_LastCustomWidth = 17000;
     m_LastCustomHeight = 11000;
     m_LastWasPortrait = false;
@@ -40,6 +41,9 @@ PL_EDITOR_SETTINGS::PL_EDITOR_SETTINGS() :
     // Build settings:
     m_params.emplace_back(
             new PARAM<int>( "properties_frame_width", &m_PropertiesFrameWidth, 150 ) );
+
+    m_params.emplace_back(
+            new PARAM<float>( "properties_splitter", &m_PropertiesSplitter, 0.5f ) );
 
     m_params.emplace_back( new PARAM<int>( "corner_origin", &m_CornerOrigin, 0 ) );
 

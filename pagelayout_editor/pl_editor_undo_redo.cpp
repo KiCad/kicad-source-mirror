@@ -26,6 +26,7 @@
 
 #include "pl_editor_frame.h"
 #include "tools/pl_selection_tool.h"
+#include "widgets/pl_properties_panel.h"
 
 void PL_EDITOR_FRAME::SaveCopyInUndoList()
 {
@@ -75,6 +76,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
         GetCanvas()->Refresh();
 
     OnModify();
+    m_propertiesPagelayout->UpdateData();
 }
 
 
@@ -112,6 +114,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
         GetCanvas()->Refresh();
 
     OnModify();
+    m_propertiesPagelayout->UpdateData();
 }
 
 
@@ -142,4 +145,6 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
     }
     else
         GetCanvas()->Refresh();
+
+    m_propertiesPagelayout->UpdateData();
 }

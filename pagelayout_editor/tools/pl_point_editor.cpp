@@ -36,7 +36,7 @@ using namespace std::placeholders;
 #include <drawing_sheet/ds_data_item.h>
 #include "pl_editor_frame.h"
 #include "pl_point_editor.h"
-#include "properties_frame.h"
+#include "widgets/pl_properties_panel.h"
 #include "tools/pl_selection_tool.h"
 
 // Few constants to avoid using bare numbers for point indices
@@ -425,9 +425,9 @@ void PL_POINT_EDITOR::updateItem() const
     m_frame->SetMsgPanel( item );
 
     // The Properties frame will be updated. Avoid flicker during update:
-    m_frame->GetPropertiesFrame()->Freeze();
-    m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( dataItem );
-    m_frame->GetPropertiesFrame()->Thaw();
+    m_frame->GetPropertiesPanel()->Freeze();
+    m_frame->GetPropertiesPanel()->UpdateData();
+    m_frame->GetPropertiesPanel()->Thaw();
 }
 
 

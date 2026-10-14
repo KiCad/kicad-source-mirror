@@ -307,9 +307,11 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
 
     if( ret )
     {
+        const wxString& help = aProperty->HelpString();
+
         ret->SetLabel( wxGetTranslation( aProperty->Name() ) );
         ret->SetName( aProperty->Name() );
-        ret->SetHelpString( wxGetTranslation( aProperty->Name() ) );
+        ret->SetHelpString( wxGetTranslation( help.IsEmpty() ? aProperty->Name() : help ) );
         ret->SetClientData( const_cast<PROPERTY_BASE*>( aProperty ) );
     }
 
