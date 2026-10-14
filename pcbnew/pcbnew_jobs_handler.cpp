@@ -64,6 +64,7 @@
 #include <jobs/job_export_pcb_drill.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_gencad.h>
+#include <jobs/job_export_pcb_specctra_dsn.h>
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_png.h>
 #include <jobs/job_export_pcb_pos.h>
@@ -149,6 +150,8 @@
 #include <fstream>
 #include <paths.h>
 #include <streamwrapper.h>
+
+#include <specctra_import_export/specctra.h>
 #include <tools/zone_filler_tool.h>
 
 #include <locale_io.h>
@@ -246,6 +249,12 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   DIALOG_GENCAD_EXPORT_OPTIONS dlg( editFrame, gencadJob->GetSettingsDialogTitle(), gencadJob );
                   return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "specctra_dsn",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportSpecctraDsn, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
               } );
     Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -1955,6 +1964,52 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
 
     aJob->AddOutput( outPath );
     m_reporter->Report( _( "Successfully created genCAD file\n" ), RPT_SEVERITY_INFO );
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportSpecctraDsn( JOB* aJob )
+{
+    JOB_EXPORT_PCB_SPECCTRA_DSN* specctraJob = dynamic_cast<JOB_EXPORT_PCB_SPECCTRA_DSN*>( aJob );
+
+    if( !specctraJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( specctraJob->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( specctraJob->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetExt( FILEEXT::SpecctraDsnFileExtension );
+
+        specctraJob->SetWorkingOutputPath( fn.GetFullName() );
+    }
+
+    wxString outPath = resolveJobOutputPath( aJob, brd );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    try
+    {
+        DSN::ExportBoardToSpecctraFile( brd, outPath, m_reporter );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Export failed: %s\n" ), ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    aJob->AddOutput( outPath );
+    m_reporter->Report( _( "Successfully created Specctra DSN file\n" ), RPT_SEVERITY_INFO );
 
     return CLI::EXIT_CODES::OK;
 }

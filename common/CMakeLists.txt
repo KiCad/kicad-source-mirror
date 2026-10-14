@@ -174,6 +174,7 @@ set( KICOMMON_SRCS
     jobs/job_export_pcb_ps.cpp
     jobs/job_export_pcb_svg.cpp
     jobs/job_export_pcb_gencad.cpp
+    jobs/job_export_pcb_specctra_dsn.cpp
     jobs/job_export_pcb_3d.cpp
     jobs/job_export_sch_netlist.cpp
     jobs/job_export_sch_plot.cpp
