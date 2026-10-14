@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-13 20:51+0000\n"
+"PO-Revision-Date: 2026-10-15 03:56+0000\n"
 "Last-Translator: Frank Sonnenberg "
 "<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
@@ -37249,9 +37249,8 @@ msgid "Import CADSTAR Archive Project Files"
 msgstr "CADSTAR-Archiv-Projektdateien importieren"
 
 #: kicad/import_project.cpp:193
-#, fuzzy
 msgid "Import P-CAD Project Files"
-msgstr "PADS-Projektdateien importieren"
+msgstr "P-CAD-Projektdateien importieren"
 
 #: kicad/import_project.cpp:201
 msgid "Import Eagle Project Files"
@@ -40015,7 +40014,7 @@ msgstr ""
 "PD1: Es tritt keine Verschmutzung oder nur geringe, nicht leitfähige "
 "Verschmutzung auf.\n"
 "\n"
-"PD2: Es tritt nichtleitende Verschmutzung auf die durch gelegentliches "
+"PD2: Es tritt nichtleitende Verschmutzung auf, die durch gelegentliches "
 "Kondenswasser leitfähig werden könnte.\n"
 "\n"
 "PD3: Es tritt leitfähige Verschmutzung oder nicht leitfähige Verschmutzung "
