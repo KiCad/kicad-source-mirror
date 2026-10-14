@@ -1733,11 +1733,6 @@ public:
      */
     void UncacheItemByPtr( const BOARD_ITEM* aItem ) { m_itemIndex.UnbindByPtr( aItem ); }
 
-    BOARD_ITEM* CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const
-    {
-        return m_itemIndex.BindAndReturnItem( aId, aItem );
-    }
-
     void ClearItemByIdCache() { m_itemIndex.Clear(); }
 
     // --------- Item order comparators ---------

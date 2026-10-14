@@ -70,9 +70,6 @@ public:
      */
     void BindItem( BOARD_ITEM* aItem );
 
-    /// BindItem() and return @a aItem.
-    BOARD_ITEM* BindAndReturnItem( const KIID& aId, BOARD_ITEM* aItem );
-
     /**
      * Remove an item from the item-by-id cache.
      */

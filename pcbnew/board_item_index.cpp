@@ -87,49 +87,6 @@ void BOARD_ITEM_INDEX::BindItem( BOARD_ITEM* aItem )
 }
 
 
-BOARD_ITEM* BOARD_ITEM_INDEX::BindAndReturnItem( const KIID& aId, BOARD_ITEM* aItem )
-{
-    if( m_owner.IsFootprintHolder() )
-        return aItem;
-
-    // Hand the item to this board. A stale owner cannot evict it.
-    if( aItem->m_boardCacheOwner && aItem->m_boardCacheOwner != &m_owner )
-        aItem->m_boardCacheOwner->UncacheItemByPtr( aItem );
-
-    // catches a future alias between the index key and the item's own UUID
-    wxASSERT_MSG( aItem->m_Uuid == aId,
-                  wxT( "BOARD item index key must be the item's own UUID" ) );
-
-    if( auto prev = m_idsByItem.find( aItem );
-        prev != m_idsByItem.end() && prev->second != aId )
-    {
-        auto prevIt = m_itemsById.find( prev->second );
-
-        if( prevIt != m_itemsById.end() && prevIt->second == aItem )
-            m_itemsById.erase( prevIt );
-    }
-
-    if( auto existing = m_itemsById.find( aId );
-        existing != m_itemsById.end() && existing->second != aItem )
-    {
-        if( auto prev = m_idsByItem.find( existing->second );
-            prev != m_idsByItem.end() && prev->second == aId )
-        {
-            existing->second->m_boardCacheOwner = nullptr;
-            m_idsByItem.erase( prev );
-        }
-    }
-
-    m_itemsById.insert_or_assign( aId, aItem );
-    m_idsByItem.insert_or_assign( aItem, aId );
-
-    // Set owner last, a half-done update then reads as not indexed
-    aItem->m_boardCacheOwner = &m_owner;
-
-    return aItem;
-}
-
-
 void BOARD_ITEM_INDEX::Unbind( const KIID& aId )
 {
     auto it = m_itemsById.find( aId );
@@ -189,7 +146,7 @@ void BOARD_ITEM_INDEX::Rebind( BOARD_ITEM* aItem, const KIID& aNewId )
 
     if( aItem->m_Uuid == aNewId )
     {
-        BindAndReturnItem( aNewId, aItem );
+        BindItem( aItem );
         return;
     }
 
@@ -201,7 +158,7 @@ void BOARD_ITEM_INDEX::Rebind( BOARD_ITEM* aItem, const KIID& aNewId )
 
     UnbindByPtr( aItem );
     aItem->SetUuidDirect( aNewId );
-    BindAndReturnItem( aNewId, aItem );
+    BindItem( aItem );
 }
 
 

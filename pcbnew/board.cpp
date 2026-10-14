@@ -2144,42 +2144,53 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     if( BOARD_ITEM* cached = m_itemIndex.Find( aID ) )
         return cached;
 
+    // Cache the item and return it.
+    // The item MUST match the requested UUID.
+    const auto cacheAndReturn =
+            [&]( BOARD_ITEM* aItem ) -> BOARD_ITEM*
+            {
+                wxASSERT_MSG( aItem->m_Uuid == aID,
+                              wxT( "BOARD::ResolveItem() must only return an item that carries the requested UUID" ) );
+                CacheItemById( aItem );
+                return aItem;
+            };
+
     // Linear scan fallback for items not in the cache.  Any hit is cached so
     // subsequent lookups for the same item are O(1).
 
     for( PCB_GROUP* group : m_groups )
     {
         if( group->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, group );
+            return cacheAndReturn( group );
     }
 
     for( PCB_CONSTRAINT* constraint : m_constraints )
     {
         if( constraint->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, constraint );
+            return cacheAndReturn( constraint );
     }
 
     for( PCB_GENERATOR* generator : m_generators )
     {
         if( generator->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, generator );
+            return cacheAndReturn( generator );
     }
 
     for( PCB_TRACK* track : Tracks() )
     {
         if( track->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, track );
+            return cacheAndReturn( track );
     }
 
     for( FOOTPRINT* footprint : Footprints() )
     {
         if( footprint->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, footprint );
+            return cacheAndReturn( footprint );
 
         for( PAD* pad : footprint->Pads() )
         {
             if( pad->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, pad );
+                return cacheAndReturn( pad );
         }
 
         for( PCB_FIELD* field : footprint->GetFields() )
@@ -2187,74 +2198,74 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
             wxCHECK2( field, continue );
 
             if( field && field->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, field );
+                return cacheAndReturn( field );
         }
 
         for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
         {
             if( PCB_TABLECELL* cell = findTableCell( drawing, aID ) )
-                return CacheAndReturnItemById( aID, cell );
+                return cacheAndReturn( cell );
 
             if( drawing->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, drawing );
+                return cacheAndReturn( drawing );
         }
 
         for( BOARD_ITEM* zone : footprint->Zones() )
         {
             if( zone->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, zone );
+                return cacheAndReturn( zone );
         }
 
         for( PCB_GROUP* group : footprint->Groups() )
         {
             if( group->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, group );
+                return cacheAndReturn( group );
         }
 
         for( PCB_CONSTRAINT* constraint : footprint->Constraints() )
         {
             if( constraint->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, constraint );
+                return cacheAndReturn( constraint );
         }
 
         for( PCB_POINT* point : footprint->Points() )
         {
             if( point->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, point );
+                return cacheAndReturn( point );
         }
     }
 
     for( ZONE* zone : Zones() )
     {
         if( zone->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, zone );
+            return cacheAndReturn( zone );
     }
 
     for( BOARD_ITEM* drawing : Drawings() )
     {
         if( PCB_TABLECELL* cell = findTableCell( drawing, aID ) )
-            return CacheAndReturnItemById( aID, cell );
+            return cacheAndReturn( cell );
 
         if( drawing->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, drawing );
+            return cacheAndReturn( drawing );
     }
 
     for( PCB_MARKER* marker : m_markers )
     {
         if( marker->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, marker );
+            return cacheAndReturn( marker );
     }
 
     for( PCB_POINT* point : m_points )
     {
         if( point->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, point );
+            return cacheAndReturn( point );
     }
 
     for( NETINFO_ITEM* netInfo : m_NetInfo )
     {
         if( netInfo->m_Uuid == aID )
-            return CacheAndReturnItemById( aID, netInfo );
+            return cacheAndReturn( netInfo );
     }
 
     if( m_Uuid == aID )
