@@ -122,8 +122,9 @@ void ITEM_MODIFICATION_ROUTINE::SplitCornerConstraint( const CONSTRAINT_MEMBER& 
         if( members.size() != 2 )
             continue;
 
-        if( !( ( members[0] == aCornerA && members[1] == aCornerB )
-               || ( members[0] == aCornerB && members[1] == aCornerA ) ) )
+        // Match on the lines alone, because the operation can move the corner to another anchor
+        if( !( ( members[0].m_item == aCornerA.m_item && members[1].m_item == aCornerB.m_item )
+               || ( members[0].m_item == aCornerB.m_item && members[1].m_item == aCornerA.m_item ) ) )
         {
             continue;
         }
@@ -304,10 +305,19 @@ void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB
 
     CHANGE_HANDLER& handler = GetHandler();
 
+    const KIID chamferId = tSegment->m_Uuid;
+
     handler.AddNewItem( std::move( tSegment ) );
 
-    ModifyLineOrDeleteIfZeroLength( aLineA, chamfer_result->m_updated_seg_a );
-    ModifyLineOrDeleteIfZeroLength( aLineB, chamfer_result->m_updated_seg_b );
+    const bool removedA = ModifyLineOrDeleteIfZeroLength( aLineA, chamfer_result->m_updated_seg_a );
+    const bool removedB = ModifyLineOrDeleteIfZeroLength( aLineB, chamfer_result->m_updated_seg_b );
+
+    if( !removedA && !removedB )
+    {
+        // ComputeChamferPoints leaves each line running from its far end to the chamfer
+        SplitCornerConstraint( { aLineA.m_Uuid, CONSTRAINT_ANCHOR::END }, { aLineB.m_Uuid, CONSTRAINT_ANCHOR::END },
+                               { chamferId, CONSTRAINT_ANCHOR::START }, { chamferId, CONSTRAINT_ANCHOR::END } );
+    }
 
     AddSuccess();
 }

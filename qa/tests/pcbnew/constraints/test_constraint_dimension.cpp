@@ -1577,4 +1577,72 @@ BOOST_AUTO_TEST_CASE( FilletRebindsCornerCoincidentToArc )
 }
 
 
+// Chamfering a constrained corner puts a segment between the lines so each line binds to it
+BOOST_AUTO_TEST_CASE( ChamferRebindsCornerCoincidentToChamfer )
+{
+    BOARD board;
+
+    PCB_SHAPE* lineA = addSegment( board, VECTOR2I( 0, 0 ), VECTOR2I( 10 * MM, 0 ) );
+    PCB_SHAPE* lineB = addSegment( board, VECTOR2I( 10 * MM, 0 ), VECTOR2I( 10 * MM, 10 * MM ) );
+
+    const CONSTRAINT_MEMBER cornerA( lineA->m_Uuid, CONSTRAINT_ANCHOR::END );
+    const CONSTRAINT_MEMBER cornerB( lineB->m_Uuid, CONSTRAINT_ANCHOR::START );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::COINCIDENT, { cornerB, cornerA } );
+
+    PCB_SHAPE* chamfer = nullptr;
+
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER handler(
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
+            {
+                if( aItem->Type() == PCB_SHAPE_T )
+                    chamfer = static_cast<PCB_SHAPE*>( aItem.get() );
+
+                board.Add( aItem.release() );
+            },
+            []( BOARD_ITEM& )
+            {
+            },
+            [&]( BOARD_ITEM& aItem )
+            {
+                board.Remove( &aItem );
+            } );
+
+    LINE_CHAMFER_ROUTINE chamferRoutine( &board, handler, CHAMFER_PARAMS{ 1 * MM, 1 * MM } );
+    chamferRoutine.ProcessLinePair( *lineA, *lineB );
+
+    BOOST_REQUIRE( chamfer );
+
+    auto heldTogether = [&]( const CONSTRAINT_MEMBER& aFirst, const CONSTRAINT_MEMBER& aSecond )
+    {
+        for( const PCB_CONSTRAINT* constraint : board.Constraints() )
+        {
+            if( constraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::COINCIDENT )
+                continue;
+
+            const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
+
+            if( members.size() != 2 )
+                continue;
+
+            if( ( members[0] == aFirst && members[1] == aSecond ) || ( members[0] == aSecond && members[1] == aFirst ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    // The chamfer leaves each line running from its far end to the chamfer
+    const CONSTRAINT_MEMBER newCornerA( lineA->m_Uuid, CONSTRAINT_ANCHOR::END );
+    const CONSTRAINT_MEMBER newCornerB( lineB->m_Uuid, CONSTRAINT_ANCHOR::END );
+
+    BOOST_CHECK( heldTogether( { chamfer->m_Uuid, CONSTRAINT_ANCHOR::START }, newCornerA ) );
+    BOOST_CHECK( heldTogether( { chamfer->m_Uuid, CONSTRAINT_ANCHOR::END }, newCornerB ) );
+
+    BOOST_CHECK( !heldTogether( cornerA, cornerB ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
