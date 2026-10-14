@@ -30,6 +30,7 @@
 #include <env_vars.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <pgm_base.h>
+#include <project.h>
 #include <settings/environment.h>
 #include <title_block.h>
 #include <wx/filename.h>
@@ -672,6 +673,52 @@ BOOST_AUTO_TEST_CASE( IsVersionedEnvVarPredicate )
     BOOST_CHECK( !ENV_VAR::IsVersionedEnvVar( wxS( "KICAD_USER_FOOTPRINT_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
     BOOST_CHECK( !ENV_VAR::IsVersionedEnvVar( wxS( "KICAD_FOOTPRINT_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
     BOOST_CHECK( !ENV_VAR::IsVersionedEnvVar( wxS( "KICAD7_SYMBOL_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+struct URI_ENV_FIXTURE
+{
+    URI_ENV_FIXTURE() { wxSetEnv( wxS( "QA_DATASHEETS" ), wxS( "Z:" ) ); }
+    ~URI_ENV_FIXTURE() { wxUnsetEnv( wxS( "QA_DATASHEETS" ) ); }
+
+    PROJECT project;
+};
+
+
+// A backslash in a link is a path separator, so it must not read as a variable escape
+BOOST_FIXTURE_TEST_SUITE( ResolveUriByEnvVarsPaths, URI_ENV_FIXTURE )
+
+BOOST_AUTO_TEST_CASE( BackslashSeparatorBeforeVarExpands )
+{
+    wxString uri = ResolveUriByEnvVars( wxS( "File:\\\\${QA_DATASHEETS}\\JGNE\\part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "File:\\\\Z:\\JGNE\\part.pdf" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SingleBackslashSeparatorBeforeVarExpands )
+{
+    wxString uri = ResolveUriByEnvVars( wxS( "File:\\${QA_DATASHEETS}\\part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "File:\\Z:\\part.pdf" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForwardSlashUriStillExpands )
+{
+    wxString uri = ResolveUriByEnvVars( wxS( "File://${QA_DATASHEETS}/part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "File://Z:/part.pdf" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( BackslashesAwayFromVarArePreserved )
+{
+    wxString uri = ResolveUriByEnvVars( wxS( "${QA_DATASHEETS}\\JGNE\\sub\\part.pdf" ), &project );
+
+    BOOST_CHECK_EQUAL( uri, wxString( wxS( "Z:\\JGNE\\sub\\part.pdf" ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -86,14 +86,21 @@ KICOMMON_API wxString JoinExtensions( const std::vector<std::string>& aExts );
  * Replace any environment variable & text variable references with their values.
  *
  * @param aString a string containing (perhaps) references to env var
+ * @param aAllowEscapes false in a URI, where a backslash can only be a separator.
  * @return the expanded environment variable.
  */
-KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
+KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject,
+                                                       bool aAllowEscapes = true );
 
 /**
  * Expand '${var-name}' templates in text.
  */
 #define FOR_ERC_DRC 1
+
+/**
+ * Resolving a URI, where a backslash is a path separator and never an escape.
+ */
+#define FOR_URI 2
 
 KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver,
                                       int aFlags = 0, int aDepth = 0 );
