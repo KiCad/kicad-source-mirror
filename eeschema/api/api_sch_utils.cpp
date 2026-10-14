@@ -321,7 +321,7 @@ static void registerVariant( SCHEMATIC* aSchematic, const wxString& aName, const
 
 
 /// Make the set of variant records on one placement of a symbol match @a aInput, by name.
-static void applySymbolVariants( SCH_SYMBOL* aSymbol,
+static bool applySymbolVariants( kiapi::common::commands::ItemStatus* aStatus, SCH_SYMBOL* aSymbol,
                                  const kiapi::schematic::types::SchematicSymbolVariants& aInput,
                                  const SCH_SHEET_PATH& aPath, SCHEMATIC* aSchematic )
 {
@@ -358,11 +358,8 @@ static void applySymbolVariants( SCH_SYMBOL* aSymbol,
         {
             for( const auto& [fieldName, unused] : stored.m_Variants[name].m_Fields )
             {
-                if( variantProto.fields().find( std::string( fieldName.ToUTF8() ) )
-                    == variantProto.fields().end() )
-                {
+                if( variantProto.fields().find( std::string( fieldName.ToUTF8() ) ) == variantProto.fields().end() )
                     aSymbol->ClearVariantField( aPath.Path(), name, fieldName );
-                }
             }
         }
 
@@ -378,8 +375,20 @@ static void applySymbolVariants( SCH_SYMBOL* aSymbol,
 
         for( const auto& [key, value] : variantProto.fields() )
         {
-            aSymbol->SetFieldText( wxString::FromUTF8( key ), wxString::FromUTF8( value ), &aPath,
-                                   name );
+            wxString fieldName = wxString::FromUTF8( key );
+            wxString fieldValue = wxString::FromUTF8( value );
+
+            if( SCH_FIELD* field = aSymbol->GetField( fieldName ) )
+            {
+                if( field->GetId() == FIELD_T::REFERENCE )
+                {
+                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
+                    aStatus->set_error_message( "symbol reference can not be changed in a variant" );
+                    return false;
+                }
+
+                aSymbol->SetFieldText( field, fieldName, fieldValue, &aPath, name );
+            }
         }
     }
 
@@ -395,10 +404,12 @@ static void applySymbolVariants( SCH_SYMBOL* aSymbol,
                 aSymbol->DeleteVariant( aPath.Path(), name );
         }
     }
+
+    return true;
 }
 
 
-void ApplySymbolInstance( SCH_SYMBOL* aSymbol,
+bool ApplySymbolInstance( kiapi::common::commands::ItemStatus* aStatus, SCH_SYMBOL* aSymbol,
                           const kiapi::schematic::types::SchematicSymbolInstance& aInput,
                           const SCH_SHEET_PATH& aPath, SCHEMATIC* aSchematic )
 {
@@ -427,8 +438,10 @@ void ApplySymbolInstance( SCH_SYMBOL* aSymbol,
     aSymbol->SetUnit( unit );
 
     // A request that carries no variant set leaves the placement's variants as they are.
-    if( aInput.has_variants() )
-        applySymbolVariants( aSymbol, aInput.variants(), aPath, aSchematic );
+    if( aInput.has_variants() && !applySymbolVariants( aStatus, aSymbol, aInput.variants(), aPath, aSchematic ) )
+        return false;
+
+    return true;
 }
 
 
@@ -475,7 +488,7 @@ bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* 
 /// Make the set of variant records on one placement of a sheet match @a aInput, by name.
 ///
 /// Each surviving record keeps the attributes the message leaves unset.
-static void applySheetVariants( SCH_SHEET* aSheet,
+static bool applySheetVariants( commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
                                 const kiapi::schematic::types::SheetVariants& aInput,
                                 const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic )
 {
@@ -512,18 +525,33 @@ static void applySheetVariants( SCH_SHEET* aSheet,
 
             for( const auto& [fieldName, unused] : storedFields )
             {
-                if( variantProto.fields().find( std::string( fieldName.ToUTF8() ) )
-                    == variantProto.fields().end() )
-                {
+                if( variantProto.fields().find( std::string( fieldName.ToUTF8() ) ) == variantProto.fields().end() )
                     aSheet->ClearVariantField( aParentPath.Path(), name, fieldName );
-                }
             }
         }
 
         for( const auto& [key, value] : variantProto.fields() )
         {
-            aSheet->SetFieldText( wxString::FromUTF8( key ), wxString::FromUTF8( value ),
-                                  &aParentPath, name );
+            wxString fieldName = wxString::FromUTF8( key );
+            wxString fieldValue = wxString::FromUTF8( value );
+
+            if( SCH_FIELD* field = aSheet->GetField( fieldName ) )
+            {
+                if( field->GetId() == FIELD_T::SHEET_NAME )
+                {
+                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
+                    aStatus->set_error_message( "sheet name can not be changed in a variant" );
+                    return false;
+                }
+                else if( field->GetId() == FIELD_T::SHEET_FILENAME )
+                {
+                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
+                    aStatus->set_error_message( "sheet filename can not be changed in a variant" );
+                    return false;
+                }
+
+                aSheet->SetFieldText( field, fieldName, fieldValue, &aParentPath, name );
+            }
         }
     }
 
@@ -541,10 +569,13 @@ static void applySheetVariants( SCH_SHEET* aSheet,
         for( const wxString& name : obsolete )
             aSheet->DeleteVariant( aParentPath.Path(), name );
     }
+
+    return true;
 }
 
 
-void ApplySheetInstance( SCH_SHEET* aSheet, const kiapi::schematic::types::SheetSymbol& aInput,
+bool ApplySheetInstance( commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
+                         const kiapi::schematic::types::SheetSymbol& aInput,
                          const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic )
 {
     wxString       pageNumber = wxString::FromUTF8( aInput.page_number() );
@@ -557,8 +588,10 @@ void ApplySheetInstance( SCH_SHEET* aSheet, const kiapi::schematic::types::Sheet
     path.SetPageNumber( pageNumber.IsEmpty() ? path.GetPageNumber() : pageNumber );
 
     // A request that carries no variant set leaves the placement's variants as they are.
-    if( aInput.has_variants() )
-        applySheetVariants( aSheet, aInput.variants(), aParentPath, aSchematic );
+    if( aInput.has_variants() && !applySheetVariants( aStatus, aSheet, aInput.variants(), aParentPath, aSchematic ) )
+        return false;
+
+    return true;
 }
 
 
@@ -603,8 +636,8 @@ ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const s
 
         if( !sheet )
         {
-            return tl::unexpected(
-                    MakeResponseStatus( AS_BAD_REQUEST, "the requested sheet path is not valid for this schematic" ) );
+            return tl::unexpected( MakeResponseStatus( AS_BAD_REQUEST, "the requested sheet path is not valid for "
+                                                                       "this schematic" ) );
         }
     }
 
@@ -628,9 +661,9 @@ ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const s
         }
         else if( !aSheetPath && itemSheet != *sheet )
         {
-            return tl::unexpected( MakeResponseStatus(
-                    AS_BAD_REQUEST, "the items are not all on one sheet; set the document's sheet path to choose "
-                                    "the sheet to focus" ) );
+            return tl::unexpected( MakeResponseStatus( AS_BAD_REQUEST, "the items are not all on one sheet; set "
+                                                                       "the document's sheet path to choose the "
+                                                                       "sheet to focus" ) );
         }
 
         if( bbox )
@@ -641,9 +674,9 @@ ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const s
 
     if( !missing.empty() )
     {
-        return tl::unexpected(
-                MakeResponseStatus( AS_BAD_REQUEST, fmt::format( "the items {} are not in the requested document",
-                                                                 fmt::join( missing, ", " ) ) ) );
+        return tl::unexpected( MakeResponseStatus( AS_BAD_REQUEST, fmt::format( "the items {} are not in the "
+                                                                                "requested document",
+                                                                                fmt::join( missing, ", " ) ) ) );
     }
 
     return SCH_FOCUS_TARGET{ *sheet, *bbox };

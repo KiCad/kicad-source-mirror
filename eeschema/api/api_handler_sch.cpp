@@ -1431,7 +1431,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( createdItem );
                 kiapi::schematic::types::SchematicSymbolInstance packed;
 
-                ApplySymbolInstance( symbol, symbolProto, targetPath, schematic() );
+                if( !ApplySymbolInstance( &status, symbol, symbolProto, targetPath, schematic() ) )
+                {
+                    aItemHandler( status, anyItem );
+                    continue;
+                }
 
                 if( PackSymbol( &packed, symbol, targetPath ) )
                     newItem.PackFrom( packed );
@@ -1444,7 +1448,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 if( sheetProto.page_number().empty() )
                     sheetProto.set_page_number( hierarchy.GetNextPageNumber().ToUTF8() );
 
-                ApplySheetInstance( sheet, sheetProto, targetPath, schematic() );
+                if( !ApplySheetInstance( &status, sheet, sheetProto, targetPath, schematic() ) )
+                {
+                    aItemHandler( status, anyItem );
+                    continue;
+                }
 
                 if( PackSheet( &packed, sheet, targetPath ) )
                     newItem.PackFrom( packed );
@@ -1483,7 +1491,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 for( const SCH_SYMBOL_INSTANCE& placement : symbolPlacements )
                     symbol->AddHierarchicalReference( placement );
 
-                ApplySymbolInstance( symbol, symbolProto, existingPath, schematic() );
+                if( !ApplySymbolInstance( &status, symbol, symbolProto, existingPath, schematic() ) )
+                {
+                    aItemHandler( status, anyItem );
+                    continue;
+                }
 
                 if( PackSymbol( &packed, symbol, existingPath ) )
                     newItem.PackFrom( packed );
@@ -1496,7 +1508,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 for( const SCH_SHEET_INSTANCE& placement : sheetPlacements )
                     sheet->AddInstance( placement );
 
-                ApplySheetInstance( sheet, sheetProto, existingPath, schematic() );
+                if( !ApplySheetInstance( &status, sheet, sheetProto, existingPath, schematic() ) )
+                {
+                    aItemHandler( status, anyItem );
+                    continue;
+                }
 
                 if( PackSheet( &packed, sheet, existingPath ) )
                     newItem.PackFrom( packed );

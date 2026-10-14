@@ -218,6 +218,7 @@ BOOST_AUTO_TEST_CASE( KitchenSink )
             BOOST_TEST_CONTEXT( "symbol: " << symbol->m_Uuid.AsStdString() )
             {
                 bool result = false;
+                kiapi::common::commands::ItemStatus status;
                 kiapi::schematic::types::SchematicSymbolInstance symbolProto;
                 BOOST_REQUIRE_NO_THROW( result = PackSymbol( &symbolProto, symbol, path ) );
                 BOOST_REQUIRE_MESSAGE( result, "Serialization failed" );
@@ -231,7 +232,7 @@ BOOST_AUTO_TEST_CASE( KitchenSink )
                 BOOST_REQUIRE_NO_THROW( result = UnpackSymbol( output.get(), symbolProto ) );
                 BOOST_REQUIRE_MESSAGE( result, "Deserialization failed" );
 
-                BOOST_REQUIRE_NO_THROW( ApplySymbolInstance( output.get(), symbolProto, path,
+                BOOST_REQUIRE_NO_THROW( ApplySymbolInstance( &status, output.get(), symbolProto, path,
                                                              m_schematic.get() ) );
 
                 kiapi::schematic::types::SchematicSymbolInstance outputProto;
@@ -281,12 +282,12 @@ BOOST_AUTO_TEST_CASE( PerPlacementAttributes )
     kiapi::schematic::types::SchematicSymbolInstance proto;
     BOOST_REQUIRE( PackSymbol( &proto, symbol, path ) );
 
-    kiapi::schematic::types::SchematicSymbolVariant* variant =
-            proto.mutable_variants()->add_variants();
+    kiapi::common::commands::ItemStatus status;
+    kiapi::schematic::types::SchematicSymbolVariant* variant = proto.mutable_variants()->add_variants();
     variant->set_name( variantName.ToUTF8() );
     variant->mutable_attributes()->set_do_not_populate( !baseDNP );
 
-    ApplySymbolInstance( symbol, proto, path, m_schematic.get() );
+    ApplySymbolInstance( &status, symbol, proto, path, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), !baseDNP );
     BOOST_CHECK_EQUAL( symbol->GetDNP(), baseDNP );
@@ -294,10 +295,9 @@ BOOST_AUTO_TEST_CASE( PerPlacementAttributes )
 
     // An unset variant set leaves the placement's variants alone.
     kiapi::schematic::types::SchematicSymbolInstance untouched;
-    untouched.mutable_reference_field()->mutable_text()->set_text(
-            symbol->GetRef( &path ).ToUTF8() );
+    untouched.mutable_reference_field()->mutable_text()->set_text( symbol->GetRef( &path ).ToUTF8() );
 
-    ApplySymbolInstance( symbol, untouched, path, m_schematic.get() );
+    ApplySymbolInstance( &status, symbol, untouched, path, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), !baseDNP );
 
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE( PerPlacementAttributes )
     BOOST_REQUIRE_EQUAL( cleared.variants().variants_size(), 1 );
     cleared.mutable_variants()->clear_variants();
 
-    ApplySymbolInstance( symbol, cleared, path, m_schematic.get() );
+    ApplySymbolInstance( &status, symbol, cleared, path, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( symbol->GetDNP( &path, variantName ), baseDNP );
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
@@ -336,6 +336,7 @@ BOOST_AUTO_TEST_CASE( PerPlacementFieldOverride )
     const wxString baseValue = symbol->GetFieldText( fieldName, &path );
     const wxString overrideValue( wxS( "Override" ) );
 
+    kiapi::common::commands::ItemStatus status;
     kiapi::schematic::types::SchematicSymbolInstance proto;
     BOOST_REQUIRE( PackSymbol( &proto, symbol, path ) );
 
@@ -344,7 +345,7 @@ BOOST_AUTO_TEST_CASE( PerPlacementFieldOverride )
     variant->mutable_attributes()->set_do_not_populate( true );
     ( *variant->mutable_fields() )[std::string( fieldName.ToUTF8() )] = overrideValue.ToUTF8();
 
-    ApplySymbolInstance( symbol, proto, path, m_schematic.get() );
+    ApplySymbolInstance( &status, symbol, proto, path, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( symbol->GetFieldText( fieldName, &path, variantName ), overrideValue );
     BOOST_CHECK( symbol->GetDNP( &path, variantName ) );
@@ -355,7 +356,7 @@ BOOST_AUTO_TEST_CASE( PerPlacementFieldOverride )
 
     withoutField.mutable_variants()->mutable_variants( 0 )->clear_fields();
 
-    ApplySymbolInstance( symbol, withoutField, path, m_schematic.get() );
+    ApplySymbolInstance( &status, symbol, withoutField, path, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( symbol->GetFieldText( fieldName, &path, variantName ), baseValue );
     BOOST_CHECK( symbol->GetDNP( &path, variantName ) );
@@ -364,7 +365,7 @@ BOOST_AUTO_TEST_CASE( PerPlacementFieldOverride )
     BOOST_REQUIRE( PackSymbol( &cleared, symbol, path ) );
     cleared.mutable_variants()->clear_variants();
 
-    ApplySymbolInstance( symbol, cleared, path, m_schematic.get() );
+    ApplySymbolInstance( &status, symbol, cleared, path, m_schematic.get() );
 
     BOOST_CHECK( !symbol->GetDNP( &path, variantName ) );
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
@@ -397,6 +398,7 @@ BOOST_AUTO_TEST_CASE( SheetInstanceRoundTrip )
     BOOST_CHECK_EQUAL( proto.page_number(), "2" );
     BOOST_REQUIRE_EQUAL( proto.variants().variants_size(), 1 );
 
+    kiapi::common::commands::ItemStatus status;
     const kiapi::schematic::types::SheetVariant& variant = proto.variants().variants( 0 );
     BOOST_CHECK_EQUAL( variant.name(), "Variant 1" );
     BOOST_CHECK( variant.exclude_from_sim() );
@@ -406,7 +408,7 @@ BOOST_AUTO_TEST_CASE( SheetInstanceRoundTrip )
     output->SetScreen( new SCH_SCREEN( m_schematic.get() ) );
 
     BOOST_REQUIRE( UnpackSheet( output.get(), proto ).has_value() );
-    ApplySheetInstance( output.get(), proto, parentPath, m_schematic.get() );
+    ApplySheetInstance( &status, output.get(), proto, parentPath, m_schematic.get() );
 
     SCH_SHEET_PATH childPath( parentPath );
     childPath.push_back( output.get() );
@@ -444,6 +446,7 @@ BOOST_AUTO_TEST_CASE( SheetVariantManagement )
     const wxString variantName( wxS( "api-sheet-variant" ) );
     const bool     baseDNP = sheet->GetDNP( &parentPath );
 
+    kiapi::common::commands::ItemStatus status;
     kiapi::schematic::types::SheetSymbol proto;
     BOOST_REQUIRE( PackSheet( &proto, sheet, parentPath ) );
 
@@ -451,11 +454,15 @@ BOOST_AUTO_TEST_CASE( SheetVariantManagement )
     variant->set_name( variantName.ToUTF8() );
     variant->set_dnp( !baseDNP );
 
-    ApplySheetInstance( sheet, proto, parentPath, m_schematic.get() );
+    ApplySheetInstance( &status, sheet, proto, parentPath, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( sheet->GetDNP( &parentPath, variantName ), !baseDNP );
     BOOST_CHECK_EQUAL( sheet->GetDNP( &parentPath ), baseDNP );
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
+
+    ( *variant->mutable_fields() )["Sheetfile"] = "should_not_be_allowed";
+    BOOST_CHECK( ApplySheetInstance( &status, sheet, proto, parentPath, m_schematic.get() ) == false );
+    BOOST_CHECK( status.code() == kiapi::common::commands::ItemStatusCode::ISC_INVALID_DATA );
 
     kiapi::schematic::types::SheetSymbol untouched;
     BOOST_REQUIRE( PackSheet( &untouched, sheet, parentPath ) );
@@ -464,7 +471,7 @@ BOOST_AUTO_TEST_CASE( SheetVariantManagement )
     if( untouched.page_number().empty() )
         untouched.set_page_number( "1" );
 
-    ApplySheetInstance( sheet, untouched, parentPath, m_schematic.get() );
+    ApplySheetInstance( &status, sheet, untouched, parentPath, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( sheet->GetDNP( &parentPath, variantName ), !baseDNP );
 
@@ -473,7 +480,7 @@ BOOST_AUTO_TEST_CASE( SheetVariantManagement )
     BOOST_REQUIRE_EQUAL( cleared.variants().variants_size(), 1 );
     cleared.mutable_variants()->clear_variants();
 
-    ApplySheetInstance( sheet, cleared, parentPath, m_schematic.get() );
+    ApplySheetInstance( &status, sheet, cleared, parentPath, m_schematic.get() );
 
     BOOST_CHECK_EQUAL( sheet->GetDNP( &parentPath, variantName ), baseDNP );
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );

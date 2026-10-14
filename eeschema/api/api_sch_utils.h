@@ -26,6 +26,7 @@
 #include <tl/expected.hpp>
 #include <core/typeinfo.h>
 #include <api/common/envelope.pb.h>
+#include <api/common/commands/editor_commands.pb.h>
 #include <api/schematic/schematic_types.pb.h>
 #include <pin_map.h>
 #include <kiid.h>
@@ -55,7 +56,7 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
  * Variant names are registered with @a aSchematic so that the UI offers them for selection.
  * @a aSymbol must already be in the schematic; the other placements of the symbol are untouched.
  */
-void ApplySymbolInstance( SCH_SYMBOL* aSymbol,
+bool ApplySymbolInstance( kiapi::common::commands::ItemStatus* aStatus, SCH_SYMBOL* aSymbol,
                           const kiapi::schematic::types::SchematicSymbolInstance& aInput,
                           const SCH_SHEET_PATH& aPath, SCHEMATIC* aSchematic );
 
@@ -81,7 +82,8 @@ tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOu
  * @a aParentPath is the path of the sheet that contains @a aSheet, which is how a sheet's
  * placement records are keyed.
  */
-void ApplySheetInstance( SCH_SHEET* aSheet, const kiapi::schematic::types::SheetSymbol& aInput,
+bool ApplySheetInstance( kiapi::common::commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
+                         const kiapi::schematic::types::SheetSymbol& aInput,
                          const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic );
 
 /// Specialization of PackSheetPath that includes the human-readable path
