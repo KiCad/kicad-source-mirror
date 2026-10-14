@@ -116,15 +116,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 08:33+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"PO-Revision-Date: 2026-10-15 09:51+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -2669,7 +2669,7 @@ msgstr "Icone"
 
 #: common/dialog_about/AboutDialog_main.cpp:1124
 msgid "Package Developers"
-msgstr "Sviluppo pacchetti"
+msgstr "Sviluppatori di package"
 
 #: common/dialog_about/dialog_about.cpp:108
 #, c-format
@@ -2714,7 +2714,7 @@ msgstr "Traduttori"
 
 #: common/dialog_about/dialog_about.cpp:154
 msgid "Packagers"
-msgstr "Pacchetti"
+msgstr "Sviluppatori di pacchetti"
 
 #: common/dialog_about/dialog_about.cpp:157
 msgid "License"
@@ -5811,7 +5811,7 @@ msgstr "Gestione plugin e contenuti"
 #: common/dialogs/panel_packages_and_updates_base.cpp:50
 #: common/dialogs/panel_startwizard_privacy_base.cpp:30
 msgid "Check for package updates on startup"
-msgstr "Controlla aggiornamenti pacchetti all'avvio"
+msgstr "Controllo aggiornamento pacchetti all'avvio"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
 msgid "Library Package Handling"
@@ -6952,7 +6952,7 @@ msgstr "Editor fogli di disegno"
 
 #: common/eda_base_frame.cpp:1756
 msgid "Packages and Updates"
-msgstr "Aggiornamento pacchetti"
+msgstr "Pacchetti e aggiornamenti"
 
 #: common/eda_base_frame.cpp:1767
 msgid "Maintenance"
@@ -15363,7 +15363,7 @@ msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:65
 msgid "Number of units per package:"
-msgstr "Numero di &parti per contenitore:"
+msgstr "Numero di unità per contenitore:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:78
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:307
@@ -23993,11 +23993,11 @@ msgstr "Mancante [Nome File]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 msgid "Package model name cannot be empty."
-msgstr "Il nome del modello del pacchetto non può essere vuoto."
+msgstr "Il nome del modello del contenitore non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:877
 msgid "Checking package model "
-msgstr "Controllo modello pacchetto "
+msgstr "Controllo modello contenitore "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:884
 msgid "Manufacturer cannot be empty."
