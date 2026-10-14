@@ -57,8 +57,9 @@ SCH_DESIGN_BLOCK_PREVIEW_WIDGET::SCH_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aPar
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 
-    // Allows only a CAIRO or OPENGL canvas:
-    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL && canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
+    // Only a canvas that can draw is allowed
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL && canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_MODERN
+        && canvasType != EDA_DRAW_PANEL_GAL::GAL_FALLBACK )
     {
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     }

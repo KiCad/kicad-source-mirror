@@ -77,6 +77,9 @@ namespace KIGFX {
 
         GAL_API const FONT_GLYPH_TYPE* LookupGlyph( unsigned int aCodePoint );
 
+        /** The number of glyphs in the font, starting at LookupGlyph( '!' ) */
+        GAL_API unsigned int GlyphCount();
+
         GAL_API GLYPH_BOX ComputeGlyphBox( const FONT_GLYPH_TYPE& aGlyph );
 
         /** How far a space moves the pen. The font has no space glyph, so this matches the stroke font. */

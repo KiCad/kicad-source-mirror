@@ -43,7 +43,7 @@ public:
      * @param aParent - parent window
      * @param aKiway - an active Kiway instance
      * @param aIncludeStatus shows the preview status when true
-     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
+     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL, GAL_TYPE_MODERN or GAL_TYPE_CAIRO)
      */
     SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, bool aIncludeStatus,
                            EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );

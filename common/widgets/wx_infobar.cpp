@@ -192,6 +192,8 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     wxInfoBarGeneric::ShowMessage( m_message, aFlags );
 
+    KIPLATFORM::UI::KeepAboveExternalRendering( this );
+
     // Force infoBar to full-width.  Yes, this should happen automatically, and it does -- sometimes.
     FixSize();
     stackOverlays();

@@ -20,6 +20,7 @@
 
 #include <regex>
 
+#include <class_draw_panel_gal.h>
 #include <eeschema_settings.h>
 #include <gal/gal_display_options.h>
 #include <gal/graphics_abstraction_layer.h>

@@ -159,6 +159,9 @@ static const wxChar EagleImportFieldsCanAutoplace[] = wxT( "EagleImportFieldsCan
 static const wxChar EnableGLResetRecovery[] = wxT( "EnableGLResetRecovery" );
 
 
+static const wxChar EnableVulkanValidation[] = wxT( "EnableVulkanValidation" );
+static const wxChar RenderThreadPriority[] = wxT( "RenderThreadPriority" );
+
 } // namespace AC_KEYS
 
 
@@ -367,6 +370,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DiffSkewCosThetaParallelTestValue = 0.9999;
     m_DiffSkewColourInterpolationLogStrength = 9.0;
     m_DiffSkewTargetDiffSegmentSize = 5e4;
+    m_EnableVulkanValidation = false;
+    m_RenderThreadPriority = wxS( "normal" );
 
     m_EagleImportFieldsCanAutoplace = true;
 
@@ -722,6 +727,13 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EagleImportFieldsCanAutoplace,
                 &m_EagleImportFieldsCanAutoplace, m_EagleImportFieldsCanAutoplace ) );
 
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableVulkanValidation,
+                                                           &m_EnableVulkanValidation,
+                                                           m_EnableVulkanValidation ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_WXSTRING>( true, AC_KEYS::RenderThreadPriority,
+                                                               &m_RenderThreadPriority,
+                                                               wxS( "normal" ) ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

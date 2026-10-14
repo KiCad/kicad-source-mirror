@@ -270,6 +270,20 @@ extern KICOMMON_API const wxChar* const traceGalProfile;
 extern KICOMMON_API const wxChar* const traceGalContext;
 
 /**
+ * Flag to enable debug output of GAL cached group creation and drawing.
+ *
+ * Use "KICAD_GAL_GROUPS" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceGalGroups;
+
+/**
+ * Flag to enable debug output of the RHI rendering backend.
+ *
+ * Use "KICAD_RHI" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceRhi;
+
+/**
  * Flag to enable KiCad2Step debug tracing.
  *
  * Use "KICAD2STEP" to enable.

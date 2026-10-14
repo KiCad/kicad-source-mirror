@@ -20,6 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <wx/dcclient.h>
+
+#include <chrono>
+
 #include <eda_draw_frame.h>
 #include <kiface_base.h>
 #include <macros.h>
@@ -37,6 +41,20 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/gpu_oom_error.h>
 #include <gal/cairo/cairo_gal.h>
+#include <gal/gal_modern.h>
+#include <rhi/rhi_device.h>
+#include <rhi/rhi_platform_device.h>
+#include <rhi/render_thread.h>
+#include <rhi/rhi_device_proxy.h>
+#include <rhi/swapchain_controller.h>
+#include <rhi/frame_mailbox.h>
+#include <rhi/frame_packet.h>
+#include <rhi/rhi_surface.h>
+#ifdef __WXMAC__
+#include <rhi/rhi_metal_view.h>
+#endif
+#include <advanced_config.h>
+#include <frame_type.h>
 #include <math/vector2wx.h>
 
 
@@ -48,10 +66,12 @@
 #include <kiplatform/touchpad.h>
 #include <kiplatform/ui.h>
 
+#include <atomic>
 #include <stdexcept>
 
 #include <core/profile.h>
 
+#include <wx/display.h>
 #include <wx/utils.h>
 
 #include <pgm_base.h>
@@ -63,7 +83,124 @@
  *
  * @ingroup trace_env_vars
  */
-static const wxChar traceDrawPanel[] = wxT( "KICAD_DRAW_PANEL" );
+[[maybe_unused]] static const wxChar traceDrawPanel[] = wxT( "KICAD_DRAW_PANEL" );
+
+// Counts inputs to any canvas so the render thread never holds back a frame that answers one
+static std::atomic<uint64_t> s_inputSerial{ 0 };
+
+std::atomic<uint32_t> EDA_DRAW_PANEL_GAL::s_nextWindowId{ 1 };
+
+
+static KIGFX::RHI_LINE_PIPELINE_KIND DetermineLinePipelineKind( const EDA_DRAW_FRAME* aFrame )
+{
+    if( !aFrame )
+        return KIGFX::RHI_LINE_PIPELINE_KIND::PCB_TRACKS;
+
+    switch( aFrame->GetFrameType() )
+    {
+    case FRAME_SCH:
+    case FRAME_SCH_SYMBOL_EDITOR:
+    case FRAME_SCH_VIEWER:
+    case FRAME_SCH_DIFF:
+        return KIGFX::RHI_LINE_PIPELINE_KIND::SCH_WIRES;
+
+    default:
+        return KIGFX::RHI_LINE_PIPELINE_KIND::PCB_TRACKS;
+    }
+}
+
+
+static RHI_NATIVE_WINDOW_HANDLE GetNativeWindowHandle( wxWindow* aWindow )
+{
+    static_assert( static_cast<int>( RHI_DISPLAY_TYPE::COCOA ) == KIPLATFORM::UI::DISPLAY_COCOA );
+
+    RHI_NATIVE_WINDOW_HANDLE handle;
+    int                      displayType = KIPLATFORM::UI::DISPLAY_UNKNOWN;
+
+    KIPLATFORM::UI::GetNativeWindowHandles( aWindow, &handle.nativeHandle, &handle.nativeDisplay, &displayType );
+    handle.displayType = static_cast<RHI_DISPLAY_TYPE>( displayType );
+    return handle;
+}
+
+
+static void ApplyAntialiasingMode( KIGFX::FRAME_DRAW_DESC& aDesc,
+                                   KIGFX::GAL_ANTIALIASING_MODE aMode )
+{
+    // Fast relies on the shaders' analytic edge coverage, High Quality supersamples the layer FBOs
+    aDesc.supersampleFactor = aMode == KIGFX::GAL_ANTIALIASING_MODE::AA_HIGHQUALITY ? 2u : 1u;
+}
+
+
+const RHI_NATIVE_WINDOW_HANDLE& EDA_DRAW_PANEL_GAL::getCachedNativeWindowHandle()
+{
+    if( !m_nativeHandleValid )
+    {
+        m_cachedNativeHandle = GetNativeWindowHandle( this );
+
+#ifdef __WXMAC__
+        if( m_cachedNativeHandle.displayType == RHI_DISPLAY_TYPE::COCOA
+            && m_cachedNativeHandle.nativeHandle )
+        {
+            RHI_METAL_HOST_VIEW host = RhiMetalAttachHostView( m_cachedNativeHandle.nativeHandle );
+            m_cachedNativeHandle.nativeHandle  = host.view;
+            m_cachedNativeHandle.nativeDisplay = host.layer;
+        }
+#endif
+
+        // A paint before the window is realized gets an invalid handle, so retry next frame
+        m_nativeHandleValid = m_cachedNativeHandle.IsValid();
+    }
+
+    return m_cachedNativeHandle;
+}
+
+
+void EDA_DRAW_PANEL_GAL::releaseCachedNativeWindowHandle()
+{
+#ifdef __WXMAC__
+    if( m_cachedNativeHandle.displayType == RHI_DISPLAY_TYPE::COCOA )
+        RhiMetalDetachHostView( m_cachedNativeHandle.nativeHandle );
+#endif
+
+    m_cachedNativeHandle = {};
+    m_nativeHandleValid = false;
+}
+
+
+void EDA_DRAW_PANEL_GAL::presentFrame()
+{
+    if( !m_swapchainCtrl )
+        return;
+
+    const wxSize cs = backendScreenSize();
+    float dpiScale = static_cast<float>( GetContentScaleFactor() );
+    const RHI_NATIVE_WINDOW_HANDLE& nativeHandle = getCachedNativeWindowHandle();
+
+    // An unrealized window's handle would fail surface creation on the render thread
+    if( nativeHandle.IsValid() )
+    {
+        // GTK drawing suppression needs the realized widget at its final layout size
+        if( m_needsExternalRenderingSetup )
+        {
+            wxLogTrace( traceRhi, wxS( "DrawPanel: deferred PrepareForExternalRendering "
+                                        "windowId=%u" ), m_windowId );
+            KIPLATFORM::UI::PrepareForExternalRendering( this );
+            m_needsExternalRenderingSetup = false;
+        }
+
+        // Caps a window that presents without vsync at one frame per display refresh
+        m_swapchainCtrl->SetRefreshRate( displayRefreshRate() );
+        m_swapchainCtrl->OnPaint( nativeHandle,
+                                  static_cast<uint32_t>( cs.x ),
+                                  static_cast<uint32_t>( cs.y ),
+                                  dpiScale );
+    }
+    else if( IsShown() && !m_refreshTimer.IsRunning() )
+    {
+        // A timer rather than an idle refresh, so a surface that never maps cannot spin
+        m_refreshTimer.StartOnce( 100 );
+    }
+}
 
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -116,6 +253,18 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
         if( ancestor )
             m_edaFrame = dynamic_cast<EDA_DRAW_FRAME*>( ancestor );
+    }
+
+    m_linePipelineKind = DetermineLinePipelineKind( m_edaFrame );
+
+    // Callers ask for the modern canvas before the saved choice is known. Starting it only to
+    // switch away costs a GPU device, so other choices start on the fallback and the frame applies them.
+    if( aGalType == GAL_TYPE_MODERN )
+    {
+        COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+
+        if( !cfg || ResolveStoredCanvasType( cfg->m_Graphics.canvas_type ) != GAL_TYPE_MODERN )
+            aGalType = GAL_FALLBACK;
     }
 
     SwitchBackend( aGalType );
@@ -171,6 +320,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
+    wxLogTrace( traceRhi, wxS( "DrawPanel: destructor windowId=%u backend=%d" ),
+                m_windowId, static_cast<int>( m_backend ) );
+
     m_touchpadGestureHandler.reset();
 
     // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
@@ -179,10 +331,14 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
     wxASSERT( !m_drawing );
 
+    // Deleting the view can retire GAL groups, which needs the device proxy
     delete m_viewControls;
     delete m_view;
+
+    teardownModernRenderInfra();
+
     delete m_gal;
-    m_gal = nullptr;    // Ensure OnShow is not called
+    m_gal = nullptr;
 }
 
 
@@ -196,6 +352,13 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
+    // Consuming the paint region stops GTK3 clearing the modern canvas between presents. The other
+    // backends repost their child's paint event here with no native paint context, where a wxPaintDC asserts.
+    std::optional<wxPaintDC> dc;
+
+    if( m_backend == GAL_TYPE_MODERN )
+        dc.emplace( this );
+
     DoRePaint( false );
 }
 
@@ -206,6 +369,48 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_PANEL_GAL::CanvasAfterFailure( GAL_TYPE aF
         return GAL_FALLBACK;
 
     return GAL_TYPE_NONE;
+}
+
+
+bool EDA_DRAW_PANEL_GAL::abandonRhiCanvas( const wxString& aDetail )
+{
+    if( !EDA_DRAW_FRAME::CanvasFailed( GAL_TYPE_MODERN ) )
+    {
+        EDA_DRAW_FRAME::SetCanvasFailed( GAL_TYPE_MODERN );
+
+#ifdef __WXMAC__
+        showMessageLater( _( "Could not use Metal, switching to OpenGL" ), aDetail, false );
+#else
+        showMessageLater( _( "Could not use Vulkan, falling back to software rendering" ), aDetail, false );
+#endif
+    }
+
+    wxLogTrace( traceRhi, wxS( "DrawPanel: leaving the RHI canvas for backend %d" ), static_cast<int>( GAL_FALLBACK ) );
+
+    return SwitchBackend( GAL_FALLBACK );
+}
+
+
+void EDA_DRAW_PANEL_GAL::teardownModernRenderInfra()
+{
+    if( m_swapchainCtrl )
+    {
+        m_swapchainCtrl->OnCloseSync();
+        m_swapchainCtrl.reset();
+    }
+
+    if( auto* galModern = dynamic_cast<KIGFX::GAL_MODERN*>( m_gal ) )
+        galModern->ReleaseBuffers();
+
+    // The proxy references the render thread. ReleaseBuffers() left no proxy call outstanding.
+    m_deviceProxy.reset();
+
+    // Joining the render thread keeps queued uploads from reading the GAL's geometry after it goes
+    m_renderThread.reset();
+    m_frameMailbox.reset();
+    m_hasLastFullDrawDesc = false;
+
+    releaseCachedNativeWindowHandle();
 }
 
 
@@ -239,6 +444,14 @@ bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
                 StartDrawing();
                 return true;
             }
+        }
+
+        if( failedBackend == GAL_TYPE_MODERN )
+        {
+            m_recoveryAttempted = false;
+            abandonRhiCanvas( wxString( aError.what() ) );
+            StartDrawing();
+            return true;
         }
 
         if( CanvasAfterFailure( failedBackend ) != GAL_TYPE_NONE )
@@ -358,34 +571,91 @@ void EDA_DRAW_PANEL_GAL::showMessageLater( const wxString& aTitle, const wxStrin
 static constexpr int MAX_CONTEXT_BIND_RETRIES = 2;
 
 
+void EDA_DRAW_PANEL_GAL::submitCachedScene()
+{
+    auto* galModern = static_cast<KIGFX::GAL_MODERN*>( m_gal );
+    auto  packet = std::make_unique<KIGFX::FRAME_PACKET>();
+
+    packet->drawDesc = m_lastFullStaticDesc;
+    packet->drawDesc.reuseStaticFBO = true;
+
+    // The cached desc holds the camera of the last full render, which would snap a pan or zoom back
+    galModern->PopulateCameraUBOs( packet->drawDesc );
+    galModern->PopulateCursorUBO( packet->drawDesc );
+
+    // Unchanged epochs tell the render thread to keep both geometry FBOs
+    packet->staticDrawDesc  = m_lastFullStaticDesc;
+    packet->dynamicDrawDesc = m_lastFullDynamicDesc;
+    packet->staticChanged   = true;
+    packet->dynamicChanged  = true;
+    packet->staticEpoch     = m_staticEpoch;
+    packet->dynamicEpoch    = m_dynamicEpoch;
+
+    packet->inputSerial = s_inputSerial.load( std::memory_order_relaxed );
+    m_frameMailbox->Submit( std::move( packet ) );
+}
+
+
 bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 {
     if( !m_refreshMutex.try_lock() )
+    {
+        wxLogTrace( traceRhi, wxS( "DrawPanel: DoRePaint SKIP (mutex locked)" ) );
         return false;
+    }
 
     std::lock_guard<std::mutex> lock( m_refreshMutex, std::adopt_lock );
 
     if( !m_drawingEnabled )
         return false;
 
+    // No surface may be created on an unmapped window. The other backends check visibility below.
+    if( m_backend == GAL_TYPE_MODERN && !IsShown() )
+    {
+        wxLogTrace( traceRhi, wxS( "DrawPanel: DoRePaint SKIP (hidden) windowId=%u" ), m_windowId );
+        return false;
+    }
+
     if( handleContextLoss() )
         return false;
 
-    if( !m_gal->IsInitialized() || !m_gal->IsVisible() || m_gal->IsContextLocked() )
+    if( m_backend == GAL_TYPE_MODERN && m_renderThread && m_renderThread->IsDeviceLost() )
+    {
+        // A device lost before it ever presented gives way to the fallback rather than retrying forever
+        if( m_renderThread->HasPresented() )
+        {
+            m_backend = GAL_TYPE_NONE;
+
+            if( SwitchBackend( GAL_TYPE_MODERN ) )
+            {
+                StartDrawing();
+                return false;
+            }
+        }
+
+        abandonRhiCanvas( _( "The graphics device was lost and could not be restored." ) );
+        StartDrawing();
         return false;
+    }
+
+    if( !m_gal->IsInitialized() || !m_gal->IsVisible() || m_gal->IsContextLocked() )
+    {
+        wxLogTrace( traceRhi, wxS( "DrawPanel: DoRePaint SKIP (init=%d vis=%d locked=%d)" ),
+                    m_gal->IsInitialized(), m_gal->IsVisible(), m_gal->IsContextLocked() );
+        return false;
+    }
 
     if( m_drawing )
+    {
+        wxLogTrace( traceRhi, wxS( "DrawPanel: DoRePaint SKIP (already drawing)" ) );
         return false;
+    }
 
     // The context may have become current since the size change was deferred
     if( m_pendingResize )
         ResizeGal();
 
     m_lastRepaintStart = std::chrono::steady_clock::now();
-
-    // Repaint the canvas, and fix scrollbar cursors
-    // Usually called by a OnPaint event, but because it does not use a wxPaintDC,
-    // it can be called outside a wxPaintEvent.
 
     // Update current zoom settings if the canvas is managed by a EDA frame
     // (i.e. not by a preview panel in a dialog)
@@ -416,10 +686,18 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
     bool isDirty = false;
 
+    if( m_backend == GAL_TYPE_MODERN && m_frameMailbox )
+    {
+        static_cast<KIGFX::GAL_MODERN*>( m_gal )->ReleaseRetiredBuffers(
+                m_frameMailbox->ConsumedBufferGeneration() );
+    }
+
     cntTotal.Start();
 
     try
     {
+        beforeRedraw();
+
         VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
         bool viewDirty = m_view->IsDirty();
         bool cursorMoved = ( cursorPos != m_lastCursorPosition );
@@ -472,6 +750,100 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
         m_lastCursorPosition = cursorPos;
 
+        // A cursor move alone reuses the cached scene and skips the view traversal and upload
+        const bool useOverlayFastPath = m_backend == GAL_TYPE_MODERN
+                             && m_hasLastFullDrawDesc
+                             && !viewDirty
+                             && cursorMoved;
+
+        // A zoom can carry groups across their level of detail
+        if( m_backend == GAL_TYPE_MODERN )
+            m_view->SyncRetainedScene();
+
+        // Grid items are thinned and sized for the zoom they were made at, so they need a full redraw
+        const bool useCameraFastPath = m_backend == GAL_TYPE_MODERN
+                            && m_hasLastFullDrawDesc
+                            && viewDirty
+                            && m_view->IsCameraDirtyOnly()
+                            && !m_gal->HasStaticRebuildPending()
+                            && m_gal->GetGridSources().empty();
+
+        if( useOverlayFastPath && m_frameMailbox && m_swapchainCtrl )
+        {
+            m_gal->SetCursorColor( settings->GetCursorColor() );
+            m_gal->DrawCursor( cursorPos );
+            submitCachedScene();
+            presentFrame();
+
+            m_lastRepaintEnd = std::chrono::steady_clock::now();
+
+            m_recoveryAttempted = false;
+            return true;
+        }
+
+        if( useCameraFastPath && m_frameMailbox && m_swapchainCtrl )
+        {
+            // GetDrawDesc() is unusable here because reused-scene frames overwrite the ring-buffered state
+            auto* galModern = static_cast<KIGFX::GAL_MODERN*>( m_gal );
+
+            m_gal->SetClearColor( settings->GetBackgroundColor() );
+            m_gal->SetGridColor( settings->GetGridColor() );
+            m_gal->SetCursorColor( settings->GetCursorColor() );
+            m_gal->DrawCursor( cursorPos );
+
+            if( galModern->SyncScene() )
+            {
+                KIGFX::FRAME_DRAW_DESC patched = galModern->GetStaticDrawDesc();
+                patched.linePipelineKind  = m_lastFullStaticDesc.linePipelineKind;
+                patched.supersampleFactor = m_lastFullStaticDesc.supersampleFactor;
+                m_lastFullStaticDesc = patched;
+                m_staticEpoch++;
+            }
+
+            auto packet = std::make_unique<KIGFX::FRAME_PACKET>();
+            packet->drawDesc = m_lastFullStaticDesc;
+            packet->drawDesc.reuseStaticFBO = false;
+            packet->drawDesc.linePipelineKind = m_linePipelineKind;
+            ApplyAntialiasingMode( packet->drawDesc, m_options.antialiasing_mode );
+
+            galModern->PopulateCameraUBOs( packet->drawDesc );
+            galModern->PopulateCursorUBO( packet->drawDesc );
+
+            packet->staticDrawDesc  = m_lastFullStaticDesc;
+            packet->dynamicDrawDesc = m_lastFullDynamicDesc;
+
+            // The render thread decides reuse from each target desc's own flag and camera, not
+            // drawDesc's, so stale ones would revert the canvas to the old zoom
+            packet->staticDrawDesc.reuseStaticFBO   = false;
+            packet->dynamicDrawDesc.reuseDynamicFBO = false;
+            galModern->PopulateCameraUBOs( packet->staticDrawDesc );
+            galModern->PopulateCameraUBOs( packet->dynamicDrawDesc );
+
+            packet->staticChanged   = true;
+            packet->dynamicChanged  = true;
+            packet->staticEpoch     = m_staticEpoch;
+            packet->dynamicEpoch    = m_dynamicEpoch;
+
+            // A following cursor-only frame reuses these descs, which must not keep the old view
+            m_lastFullStaticDesc.frameUBO    = packet->staticDrawDesc.frameUBO;
+            m_lastFullStaticDesc.gridUBO     = packet->staticDrawDesc.gridUBO;
+            m_lastFullStaticDesc.cursorUBO   = packet->staticDrawDesc.cursorUBO;
+            m_lastFullDynamicDesc.frameUBO   = packet->dynamicDrawDesc.frameUBO;
+            m_lastFullDynamicDesc.gridUBO    = packet->dynamicDrawDesc.gridUBO;
+            m_lastFullDynamicDesc.cursorUBO  = packet->dynamicDrawDesc.cursorUBO;
+
+            m_view->MarkClean();
+
+            packet->inputSerial = s_inputSerial.load( std::memory_order_relaxed );
+            m_frameMailbox->Submit( std::move( packet ) );
+
+            presentFrame();
+
+            m_lastRepaintEnd = std::chrono::steady_clock::now();
+            m_recoveryAttempted = false;
+            return true;
+        }
+
         // GAL_DRAWING_CONTEXT can throw in the dtor, so we need to scope
         // the full lifetime inside the try block
         {
@@ -513,10 +885,21 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
                     m_gal->ClearScreen();
                 }
 
+                // A rebuild the backend asked for itself also redraws the whole non-cached target
+                if( m_gal->HasStaticRebuildPending() )
+                {
+                    m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+                    m_view->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+                }
+
+                // A retained scene keeps NONCACHED through a pan or zoom, but the grid is clipped to the old view
+                const bool viewMoved = m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED );
+
                 m_view->ClearTargets();
 
                 // Grid has to be redrawn only when the NONCACHED target is redrawn
-                if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                if( viewMoved || m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED )
+                        || m_gal->RefillsNonCachedTargets() )
                 {
                     prepareGridSources();
                     m_gal->DrawGrid();
@@ -542,8 +925,56 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         cntCtxDestroy.Stop();
 
 #ifdef KICAD_GAL_PROFILE
-    	latencyProbeZoomToRender.Checkpoint("do-repaint-ctx-done");
+        latencyProbeZoomToRender.Checkpoint("do-repaint-ctx-done");
 #endif
+
+        // A clean view leaves GetDrawDesc() empty, which would blank the static FBO
+        if( m_frameMailbox && m_swapchainCtrl )
+        {
+            auto* galModern = static_cast<KIGFX::GAL_MODERN*>( m_gal );
+
+            if( !isDirty && m_hasLastFullDrawDesc && m_backend == GAL_TYPE_MODERN )
+            {
+                submitCachedScene();
+            }
+            else if( isDirty )
+            {
+                auto packet = std::make_unique<KIGFX::FRAME_PACKET>();
+
+                packet->drawDesc = galModern->GetDrawDesc();
+                packet->drawDesc.linePipelineKind = m_linePipelineKind;
+                ApplyAntialiasingMode( packet->drawDesc, m_options.antialiasing_mode );
+
+                // Lets the first frame show the cursor without waiting for a move
+                galModern->PopulateCursorUBO( packet->drawDesc );
+
+                packet->staticDrawDesc  = galModern->GetStaticDrawDesc();
+                packet->dynamicDrawDesc = galModern->GetDynamicDrawDesc();
+                packet->staticDrawDesc.linePipelineKind  = m_linePipelineKind;
+                packet->dynamicDrawDesc.linePipelineKind = m_linePipelineKind;
+                packet->staticDrawDesc.supersampleFactor  = packet->drawDesc.supersampleFactor;
+                packet->dynamicDrawDesc.supersampleFactor = packet->drawDesc.supersampleFactor;
+
+                packet->staticChanged  = galModern->TakeStaticChanged();
+                packet->dynamicChanged = true;
+
+                if( packet->staticChanged )
+                    m_staticEpoch++;
+
+                m_dynamicEpoch++;
+                packet->staticEpoch  = m_staticEpoch;
+                packet->dynamicEpoch = m_dynamicEpoch;
+
+                m_lastFullStaticDesc  = packet->staticDrawDesc;
+                m_lastFullDynamicDesc = packet->dynamicDrawDesc;
+                m_hasLastFullDrawDesc = true;
+
+                packet->inputSerial = s_inputSerial.load( std::memory_order_relaxed );
+                m_frameMailbox->Submit( std::move( packet ) );
+            }
+
+            presentFrame();
+        }
 
         m_recoveryAttempted = false;
         m_contextBindFailures = 0;
@@ -647,6 +1078,10 @@ void EDA_DRAW_PANEL_GAL::ZoomToFit( const BOX2I& aBox, std::optional<double> aMa
 
 int EDA_DRAW_PANEL_GAL::ScreenSizePad( GAL_TYPE aBackend )
 {
+    // A swapchain that does not match its surface rescales and blurs every frame
+    if( aBackend == GAL_TYPE_MODERN )
+        return 0;
+
 #ifdef __WXMAC__
     // The aligned GL child covers the client area without the offset pixel
     if( aBackend == GAL_TYPE_OPENGL )
@@ -703,11 +1138,31 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
     if( backendWindow && backendWindow->GetPosition().y != m_overlayInsetTop )
         backendWindow->Move( 0, m_overlayInsetTop );
 
+    if( m_backend == GAL_TYPE_MODERN )
+    {
+        static_cast<KIGFX::GAL_MODERN*>( m_gal )->SetDpiScale(
+                static_cast<float>( GetContentScaleFactor() ) );
+    }
+
+    if( m_swapchainCtrl )
+    {
+        float dpiScale = static_cast<float>( GetContentScaleFactor() );
+        m_swapchainCtrl->OnResize( static_cast<uint32_t>( clientSize.x ),
+                                   static_cast<uint32_t>( clientSize.y ),
+                                   dpiScale );
+    }
+
     if( m_view )
     {
         // ResizeScreen reallocates every compositor buffer, so nothing survives the resize
         m_view->MarkDirty();
+
+        // New FBO sizes need a fresh upload, which the camera fast path would skip
+        m_view->MarkGeometryDirty();
     }
+
+    if( m_backend == GAL_TYPE_MODERN )
+        Refresh();
 }
 
 
@@ -800,6 +1255,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     }
     else if( !m_refreshTimer.IsRunning() )
     {
+        m_refreshDeferred = true;
         m_refreshTimer.StartOnce( static_cast<int>( minPeriodMs - delta ) );
     }
 }
@@ -807,6 +1263,11 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
 void EDA_DRAW_PANEL_GAL::ForceRefresh()
 {
+    wxLogTrace( traceRhi, wxS( "DrawPanel: ForceRefresh windowId=%u drawEnabled=%d "
+                                "IsShown=%d IsShownOnScreen=%d galInit=%d" ),
+                m_windowId, m_drawingEnabled, IsShown(), IsShownOnScreen(),
+                m_gal ? m_gal->IsInitialized() : -1 );
+
     if( !m_drawingEnabled )
     {
         if( m_gal && m_gal->IsInitialized() )
@@ -830,16 +1291,33 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
 
 bool EDA_DRAW_PANEL_GAL::GetScreenshot( wxImage& aDstImage )
 {
-    if( m_backend != GAL_TYPE_OPENGL || !m_gal )
+    if( !m_gal )
         return false;
 
-    DoRePaint( false );
+    if( m_backend == GAL_TYPE_OPENGL )
+    {
+        DoRePaint( false );
 
-    // The repaint may have replaced a GAL lost to a GPU reset
-    if( m_backend != GAL_TYPE_OPENGL || !m_gal )
-        return false;
+        // The repaint may have replaced a GAL lost to a GPU reset
+        if( m_backend != GAL_TYPE_OPENGL || !m_gal )
+            return false;
 
-    return static_cast<KIGFX::OPENGL_GAL*>( m_gal )->GetScreenshot( aDstImage );
+        return static_cast<KIGFX::OPENGL_GAL*>( m_gal )->GetScreenshot( aDstImage );
+    }
+
+    if( m_backend == GAL_TYPE_MODERN && m_renderThread )
+    {
+        DoRePaint( false );
+
+        // The repaint may have torn down the render thread while recovering from an error
+        if( m_backend != GAL_TYPE_MODERN || !m_renderThread )
+            return false;
+
+        return m_renderThread->ReadbackWindowPixels( m_windowId, aDstImage );
+    }
+
+    // The caller falls back to a wxClientDC capture
+    return false;
 }
 
 
@@ -851,6 +1329,8 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 
 void EDA_DRAW_PANEL_GAL::StartDrawing()
 {
+    wxLogTrace( traceRhi, wxS( "DrawPanel: StartDrawing windowId=%u" ), m_windowId );
+
     // Start querying GAL if it is ready
     m_refreshTimer.StartOnce( 100 );
 }
@@ -890,8 +1370,8 @@ void EDA_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 
 EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_PANEL_GAL::ResolveStoredCanvasType( int aStoredCanvasType )
 {
-    if( aStoredCanvasType == GAL_TYPE_CAIRO )
-        return GAL_TYPE_CAIRO;
+    if( aStoredCanvasType == GAL_TYPE_CAIRO || aStoredCanvasType == GAL_TYPE_MODERN )
+        return static_cast<GAL_TYPE>( aStoredCanvasType );
 
     // The retired wxDC canvas, and any value another KiCad version may have written, leave the
     // user with the accelerated canvas rather than the do-nothing stub GAL
@@ -956,20 +1436,104 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
             break;
 
+        case GAL_TYPE_MODERN:
+        {
+            teardownModernRenderInfra();
+
+            // A device that failed once is not retried, so the user is told only once
+            if( EDA_DRAW_FRAME::CanvasFailed( GAL_TYPE_MODERN ) )
+                return abandonRhiCanvas( wxEmptyString );
+
+            bool enableValidation = ADVANCED_CFG::GetCfg().m_EnableVulkanValidation;
+
+            auto deviceFactory = [enableValidation]() -> std::unique_ptr<RHI_DEVICE>
+            {
+                return RhiCreatePlatformDevice( enableValidation );
+            };
+
+            m_renderThread = std::make_unique<KIGFX::RENDER_THREAD>(
+                    std::move( deviceFactory ) );
+
+            // A repaint sees the loss and rebuilds the canvas. The thread is joined before the panel is
+            // destroyed, and wx drops anything still queued for it.
+            m_renderThread->SetDeviceLostHandler(
+                    [this]()
+                    {
+                        CallAfter(
+                                [this]()
+                                {
+                                    Refresh();
+                                } );
+                    } );
+
+            wxLogTrace( traceRhi, wxS( "DrawPanel: starting render thread" ) );
+
+            if( m_renderThread->Start() )
+            {
+                wxLogTrace( traceRhi, wxS( "DrawPanel: render thread started" ) );
+
+                // The render thread owns the device, so the UI thread reaches it only through the proxy
+                m_deviceProxy = std::make_unique<KIGFX::RHI_DEVICE_PROXY>( *m_renderThread );
+
+                new_gal = new KIGFX::GAL_MODERN( m_options, *m_deviceProxy );
+
+                auto* galModern = static_cast<KIGFX::GAL_MODERN*>( new_gal );
+                galModern->SetRenderThread( m_renderThread.get() );
+                galModern->SetPersistentTargets( true );
+
+                // Only the track shader draws the glyphs of the font atlas
+                galModern->SetBitmapGlyphs( m_linePipelineKind == KIGFX::RHI_LINE_PIPELINE_KIND::PCB_TRACKS );
+
+                m_windowId = s_nextWindowId++;
+                m_frameMailbox = std::make_unique<KIGFX::FRAME_MAILBOX>();
+                m_swapchainCtrl = std::make_unique<KIGFX::SWAPCHAIN_CONTROLLER>(
+                        *m_renderThread, m_windowId );
+                m_swapchainCtrl->SetFrameMailbox( m_frameMailbox.get() );
+
+                wxLogTrace( traceRhi, wxS( "DrawPanel: windowId=%u swapchainCtrl created" ),
+                            m_windowId );
+
+                // The GDK background is set on the first paint, once the widget is laid out
+                KIPLATFORM::UI::PrepareForExternalRendering( this );
+                m_needsExternalRenderingSetup = true;
+
+                // The native surface is being recreated
+                m_nativeHandleValid = false;
+            }
+            else
+            {
+                wxLogTrace( traceRhi, wxS( "DrawPanel: render thread start FAILED" ) );
+
+                m_renderThread.reset();
+
+                return abandonRhiCanvas( wxEmptyString );
+            }
+
+            break;
+        }
+
         default:
             wxASSERT( false );
             KI_FALLTHROUGH;
-            // warn about unhandled GAL canvas type, but continue with the fallback option
 
         case GAL_TYPE_NONE:
-            // KIGFX::GAL is a stub - it actually does cannot display anything,
-            // but prevents code relying on GAL canvas existence from crashing
+            // KIGFX::GAL is a stub that prevents code relying on GAL canvas
+            // existence from crashing, but cannot display anything
             new_gal = new KIGFX::GAL( m_options );
             break;
         }
     }
     catch( std::runtime_error& err )
     {
+        // The GAL is deleted while the device proxy it releases its buffers through is still alive
+        if( aGalType == GAL_TYPE_MODERN )
+        {
+            delete new_gal;
+            teardownModernRenderInfra();
+
+            return abandonRhiCanvas( wxString( err.what() ) );
+        }
+
         // A context the driver refuses to create would otherwise leave every frame on the blank stub
         if( aGalType == GAL_TYPE_OPENGL && GAL_FALLBACK_AVAILABLE )
         {
@@ -1000,15 +1564,29 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // trigger update of the gal options in case they differ from the defaults
     m_options.NotifyChanged();
 
-    // The native touchpad hook is attached to the backend's child window.
+    // The native touchpad hook is attached to the window that takes the backend's input
     m_touchpadGestureHandler.reset();
 
+    // Queued uploads must not outlive the GAL_MODERN geometry they point at
+    if( m_backend == GAL_TYPE_MODERN && aGalType != GAL_TYPE_MODERN )
+        teardownModernRenderInfra();
+
     delete m_gal;
+    m_gal = nullptr;
+
     m_gal = new_gal;
 
     // The view lays itself out in the editor's world units as it attaches
     if( worldUnitLength > 0.0 )
         m_gal->SetWorldUnitLength( worldUnitLength );
+
+    if( aGalType == GAL_TYPE_MODERN )
+    {
+        KIGFX::GAL_MODERN* galModern = static_cast<KIGFX::GAL_MODERN*>( m_gal );
+
+        galModern->SetDpiScale( static_cast<float>( GetContentScaleFactor() ) );
+        galModern->SetCentringPad( ScreenSizePad( GAL_TYPE_OPENGL ) - ScreenSizePad( GAL_TYPE_MODERN ) );
+    }
 
     // Matches ResizeGal() so the picture does not move at the next resize
     wxSize clientSize = GetClientSize();
@@ -1032,8 +1610,11 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     if( m_view )
     {
         m_view->SetGAL( m_gal );
-        // Note: OpenGL requires reverse draw order when draw priority is enabled
+        // OpenGL requires reverse draw order when draw priority is enabled.
         m_view->ReverseDrawOrder( aGalType == GAL_TYPE_OPENGL );
+
+        // The new GAL starts with empty geometry caches
+        m_view->UpdateAllItems( KIGFX::ALL );
     }
 
     m_backend = aGalType;
@@ -1049,6 +1630,13 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     UpdateTouchpadGestureHandler();
 
+    if( m_view )
+    {
+        wxLogTrace( traceRhi, wxS( "DrawPanel: backend %d view centre (%.17g, %.17g) scale %.17g screen %dx%d" ),
+                    static_cast<int>( m_backend ), m_view->GetCenter().x, m_view->GetCenter().y, m_view->GetScale(),
+                    m_gal->GetScreenPixelSize().x, m_gal->GetScreenPixelSize().y );
+    }
+
     return result;
 }
 
@@ -1060,7 +1648,11 @@ void EDA_DRAW_PANEL_GAL::UpdateTouchpadGestureHandler()
     if( Pgm().GetCommonSettings()->m_Input.touchpad_mode != TOUCHPAD_MODE::NATIVE_GESTURES )
         return;
 
-    if( wxWindow* inputWindow = dynamic_cast<wxWindow*>( m_gal ) )
+    // The modern canvas has no child window, so this panel receives the native pointer input
+    wxWindow* inputWindow = m_backend == GAL_TYPE_MODERN ? static_cast<wxWindow*>( this )
+                                                         : dynamic_cast<wxWindow*>( m_gal );
+
+    if( inputWindow )
     {
         m_touchpadGestureHandler = KIPLATFORM::UI::CreateTouchpadGestureHandler(
                 inputWindow,
@@ -1100,8 +1692,17 @@ void EDA_DRAW_PANEL_GAL::OnShow()
 }
 
 
+void EDA_DRAW_PANEL_GAL::NoteInput()
+{
+    s_inputSerial.fetch_add( 1, std::memory_order_relaxed );
+}
+
+
 void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 {
+    if( aEvent.GetEventType() != KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+        NoteInput();
+
     bool shouldSetFocus = m_lostFocus && m_stealsFocus
                           && !KIUI::IsInputControlFocused()                // Don't steal from input controls
                           && !KIUI::IsModalDialogFocused()                 // Don't steal from dialogs
@@ -1154,6 +1755,10 @@ void EDA_DRAW_PANEL_GAL::onIdle( wxIdleEvent& aEvent )
 {
     if( m_needIdleRefresh )
     {
+        wxLogTrace( traceRhi, wxS( "DrawPanel: onIdle refresh windowId=%u IsShown=%d "
+                                    "IsShownOnScreen=%d" ),
+                    m_windowId, IsShown(), IsShownOnScreen() );
+
         m_needIdleRefresh = false;
         Refresh();
     }
@@ -1164,16 +1769,35 @@ void EDA_DRAW_PANEL_GAL::onIdle( wxIdleEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 {
+    const bool deferred = m_refreshDeferred;
+
+    m_refreshDeferred = false;
+
+    // A postponed Refresh() is not an expose and must not present the frame already on screen
+    if( deferred && m_backend == GAL_TYPE_MODERN && m_drawingEnabled )
+    {
+        if( !DoRePaint() && IsShownOnScreen() )
+            RequestRefresh();
+
+        return;
+    }
+
     ForceRefresh();
 }
 
 
 void EDA_DRAW_PANEL_GAL::onShowEvent( wxShowEvent& aEvent )
 {
+    wxLogTrace( traceRhi, wxS( "DrawPanel: onShowEvent windowId=%u show=%d IsShown=%d "
+                                "IsShownOnScreen=%d galInit=%d" ),
+                m_windowId, aEvent.IsShown(), IsShown(), IsShownOnScreen(),
+                m_gal ? m_gal->IsInitialized() : -1 );
+
     if( m_gal && m_gal->IsInitialized() && m_gal->IsVisible() )
     {
         OnShow();
     }
+
 }
 
 
@@ -1194,6 +1818,13 @@ void EDA_DRAW_PANEL_GAL::SetCurrentCursor( KICURSOR aCursor )
 #endif
 
     m_gal->SetNativeCursorStyle( aCursor, hidpi );
+
+    // The RHI canvas draws into the panel itself, and a new canvas window inherits the panel's cursor
+#if wxCHECK_VERSION( 3, 3, 0 )
+    SetCursorBundle( CURSOR_STORE::GetCursor( aCursor, hidpi ) );
+#else
+    SetCursor( CURSOR_STORE::GetCursor( aCursor, hidpi ) );
+#endif
 }
 
 

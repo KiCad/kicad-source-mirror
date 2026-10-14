@@ -261,7 +261,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Create GAL canvas
     PCB_DRAW_PANEL_GAL* canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                          GetGalDisplayOptions(),
-                                                         EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
+                                                         EDA_DRAW_PANEL_GAL::GAL_TYPE_MODERN );
 
     SetCanvas( canvas );
     SetBoard( new BOARD() );
@@ -515,6 +515,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
               {
                   redrawNetnames();
                   m_lastNetnamesViewport = viewport;
+                  m_lastNetnamesScale = GetCanvas()->GetView()->GetScale();
               }
 
               // Do not forget to pass the Idle event to other clients:
@@ -914,6 +915,43 @@ void PCB_EDIT_FRAME::redrawNetnames()
     BOX2D        viewport = view->GetViewport();
 
     view->SyncLayerVisibilityCache();   // Required for ViewGetLOD() calls.
+
+    if( view->GetGAL()->HasRetainedScene() )
+    {
+        // Labels sit on the visible part of their track. A track wholly inside both the old and new
+        // view keeps its label, so only the others are repainted, and only on net name layers.
+        const BOX2I before = BOX2ISafe( m_lastNetnamesViewport );
+        const BOX2I now = BOX2ISafe( viewport );
+        BOX2D       reach = viewport;
+
+        view->RepaintLayers(
+                BOX2ISafe( reach.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ),
+                []( int aLayer )
+                {
+                    return IsNetnameLayer( aLayer );
+                },
+                [&]( KIGFX::VIEW_ITEM* aItem, int aLayer )
+                {
+                    PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem );
+
+                    if( !track || track->Type() == PCB_VIA_T )
+                        return false;
+
+                    const double lod = track->ViewGetLOD( aLayer, view );
+
+                    const BOX2I  bbox = track->GetBoundingBox();
+
+                    if( lod < m_lastNetnamesScale && before.Contains( bbox ) && now.Contains( bbox ) )
+                        return false;
+
+                    return lod < view->GetScale();
+                } );
+
+        // Labels are laid out on idle after a zoom's last paint and would otherwise wait for
+        // whatever paints next
+        GetCanvas()->Refresh();
+        return;
+    }
 
     // Inflate to catch most of the track width
     BOX2I_MINMAX clipbox( BOX2ISafe( viewport.Inflate( pcbIUScale.mmToIU( 2.0 ) ) ) );
@@ -2066,7 +2104,11 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
 
     m_toolManager->PostAction( PCB_ACTIONS::layerChanged );  // notify other tools
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
-    GetCanvas()->SetHighContrastLayer( aLayer );
+
+    if( aForceRedraw )
+        GetCanvas()->SetHighContrastLayer( aLayer );
+    else
+        GetCanvas()->ChangeHighContrastLayer( aLayer );
 
     /*
     * Only show pad, via and track clearances when a copper layer is active

@@ -143,10 +143,13 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     ws_settings->SetPageBorderColor( settings->GetLayerColor( m_pageBorderColorLayer ) );
     ws_settings->SetDefaultFont( settings->GetDefaultFont() );
 
+    // A retained scene keeps the sheet across pans, so it must hold all of it
+    const bool wholeSheet = gal->HasRetainedScene();
+
     // Draw all the components that make the drawing sheet
     for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
     {
-        if( viewport.Intersects( item->GetApproxBBox() ) )
+        if( wholeSheet || viewport.Intersects( item->GetApproxBBox() ) )
             ws_painter.Draw( item, LAYER_DRAWINGSHEET );
     }
 

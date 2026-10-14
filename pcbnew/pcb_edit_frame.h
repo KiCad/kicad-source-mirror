@@ -871,6 +871,7 @@ private:
      * Keep track of viewport so that track net labels can be adjusted when it changes.
      */
     BOX2D             m_lastNetnamesViewport;
+    double            m_lastNetnamesScale = 0.0;
 
     wxTimer*          m_eventCounterTimer;
 

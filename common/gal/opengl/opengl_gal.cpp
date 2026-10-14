@@ -2199,7 +2199,7 @@ void OPENGL_GAL::DrawGrid()
     m_compositor->SetBuffer( m_mainBuffer );
     m_nonCachedManager->EnableDepthTest( false );
 
-    const float minorLineWidth = std::fmax( 1.0f, m_gridLineWidth ) * getWorldPixelSize() / GetScaleFactor();
+    const float minorLineWidth = gridMinorLineWidth( getWorldPixelSize(), GetScaleFactor() );
 
     // Axes drawn first so grid lines at x/y=0 can skip on top of them.
     if( m_axesEnabled )
@@ -2265,7 +2265,7 @@ void OPENGL_GAL::drawGridSources()
             ordered.push_back( &src );
     }
 
-    const float minorLineWidth = std::fmax( 1.0f, m_gridLineWidth ) * getWorldPixelSize() / GetScaleFactor();
+    const float minorLineWidth = gridMinorLineWidth( getWorldPixelSize(), GetScaleFactor() );
     const float majorLineWidth = minorLineWidth * 2.0f;
     const float hairLineWidth = getWorldPixelSize() / GetScaleFactor();
 

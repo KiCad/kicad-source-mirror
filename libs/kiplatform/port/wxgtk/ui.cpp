@@ -48,6 +48,7 @@
 
 // Set WXTRACE=KICAD_WAYLAND to see logs
 const wxString traceWayland = wxS( "KICAD_WAYLAND" );
+static const wxChar traceRhi[] = wxT( "KICAD_RHI" );
 
 
 bool KIPLATFORM::UI::IsDarkTheme()
@@ -983,22 +984,49 @@ void KIPLATFORM::UI::GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, 
     gtk_widget_realize( gtkWidget );
     GdkWindow* gdkWindow = gtk_widget_get_window( gtkWidget );
 
-    if( !gdkWindow || !gdk_window_ensure_native( gdkWindow ) )
+    if( !gdkWindow )
         return;
+
+    if( !gdk_window_ensure_native( gdkWindow ) )
+    {
+        wxLogTrace( traceRhi, wxS( "GetNativeWindowHandles: gdk_window_ensure_native failed "
+                                    "widget=%p window=%p" ),
+                    static_cast<void*>( gtkWidget ),
+                    static_cast<void*>( gdkWindow ) );
+        return;
+    }
 
     if( !gdk_window_is_viewable( gdkWindow ) )
     {
         // Hide() unmaps the GDK window, and mapping it anyway would put a hidden preview canvas back
         // on screen over its replacement.
         if( !gtk_widget_get_visible( gtkWidget ) )
+        {
+            wxLogTrace( traceRhi, wxS( "GetNativeWindowHandles: widget hidden, skipping "
+                                        "native window map widget=%p window=%p" ),
+                        static_cast<void*>( gtkWidget ),
+                        static_cast<void*>( gdkWindow ) );
             return;
+        }
+
+        wxLogTrace( traceRhi, wxS( "GetNativeWindowHandles: mapping native window "
+                                    "widget=%p window=%p mapped=%s viewable=%s" ),
+                    static_cast<void*>( gtkWidget ),
+                    static_cast<void*>( gdkWindow ),
+                    gtk_widget_get_mapped( gtkWidget ) ? "yes" : "no",
+                    gdk_window_is_viewable( gdkWindow ) ? "yes" : "no" );
 
         gdk_window_show_unraised( gdkWindow );
+
+        wxLogTrace( traceRhi, wxS( "GetNativeWindowHandles: native window map result "
+                                    "window=%p viewable=%s" ),
+                    static_cast<void*>( gdkWindow ),
+                    gdk_window_is_viewable( gdkWindow ) ? "yes" : "no" );
     }
 
     GdkDisplay* gdkDisplay = gtk_widget_get_display( gtkWidget );
 
-    // A surface may be created on another display connection, which must see the window first
+    // The render thread uses its own display connection and must see the window before creating a surface
     gdk_display_flush( gdkDisplay );
 
 #ifdef GDK_WINDOWING_X11
@@ -1010,6 +1038,12 @@ void KIPLATFORM::UI::GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, 
         if( aDisplayType )
             *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_X11;
 
+        wxLogTrace( traceRhi, wxS( "GetNativeWindowHandles: X11 widget=%p window=%p xid=0x%lx "
+                                    "display=%p" ),
+                    static_cast<void*>( gtkWidget ),
+                    static_cast<void*>( gdkWindow ),
+                    static_cast<unsigned long>( GDK_WINDOW_XID( gdkWindow ) ),
+                    *aDisplay );
         return;
     }
 #endif
@@ -1023,6 +1057,12 @@ void KIPLATFORM::UI::GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, 
         if( aDisplayType )
             *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_WAYLAND;
 
+        wxLogTrace( traceRhi, wxS( "GetNativeWindowHandles: Wayland widget=%p window=%p "
+                                    "surface=%p display=%p" ),
+                    static_cast<void*>( gtkWidget ),
+                    static_cast<void*>( gdkWindow ),
+                    *aHandle,
+                    *aDisplay );
         return;
     }
 #endif
@@ -1037,7 +1077,15 @@ void KIPLATFORM::UI::PrepareForExternalRendering( wxWindow* aWindow )
     GtkWidget* gtkWidget = static_cast<GtkWidget*>( aWindow->GetHandle() );
 
     if( !gtkWidget )
+    {
+        wxLogTrace( traceRhi, wxS( "PrepareForExternalRendering: no GtkWidget handle" ) );
         return;
+    }
+
+    bool realized = gtk_widget_get_realized( gtkWidget );
+
+    wxLogTrace( traceRhi, wxS( "PrepareForExternalRendering: widget=%p realized=%s" ),
+                static_cast<void*>( gtkWidget ), realized ? "yes" : "no" );
 
     // Do not realize here. Before layout that creates a 1x1 X11 window and poisons Vulkan's surface
     // capabilities, so GetNativeWindowHandles() realizes it on the first paint instead.
@@ -1050,29 +1098,46 @@ void KIPLATFORM::UI::PrepareForExternalRendering( wxWindow* aWindow )
     // Otherwise GTK clears to the GDK background before every draw and flashes black between presents
     gtk_widget_set_app_paintable( gtkWidget, TRUE );
 
-    // Keep areas not yet presented from showing the GTK theme. This needs a realized widget.
-    GdkWindow* gdkWindow = gtk_widget_get_realized( gtkWidget ) ? gtk_widget_get_window( gtkWidget ) : nullptr;
+    wxLogTrace( traceRhi, wxS( "PrepareForExternalRendering: double-buffering disabled, "
+                                "app-paintable enabled" ) );
 
-    if( gdkWindow )
+    // Keep areas not yet presented from showing the GTK theme. This needs a realized widget.
+    if( realized )
     {
-#ifdef GDK_WINDOWING_X11
-        if( GDK_IS_X11_DISPLAY( gdk_display_get_default() ) )
+        GdkWindow* gdkWindow = gtk_widget_get_window( gtkWidget );
+
+        if( gdkWindow )
         {
-            // The X server repaints exposed regions with the BackgroundPixmap before the
-            // client presents, flashing black; None leaves the previous frame in place.
-            Display* xDisplay = GDK_DISPLAY_XDISPLAY( gdk_display_get_default() );
-            Window   xWindow  = GDK_WINDOW_XID( gdkWindow );
-            XSetWindowBackgroundPixmap( xDisplay, xWindow, None );
+#ifdef GDK_WINDOWING_X11
+            if( GDK_IS_X11_DISPLAY( gdk_display_get_default() ) )
+            {
+                // The X server repaints exposed regions with the BackgroundPixmap before the
+                // client presents, flashing black; None leaves the previous frame in place.
+                Display* xDisplay = GDK_DISPLAY_XDISPLAY( gdk_display_get_default() );
+                Window   xWindow  = GDK_WINDOW_XID( gdkWindow );
+                XSetWindowBackgroundPixmap( xDisplay, xWindow, None );
+
+                wxLogTrace( traceRhi, wxS( "PrepareForExternalRendering: X11 "
+                                            "BackgroundPixmap set to None" ) );
+            }
+            else
+#endif
+            {
+                GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
+
+                G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+                gdk_window_set_background_rgba( gdkWindow, &black );
+                G_GNUC_END_IGNORE_DEPRECATIONS
+
+                wxLogTrace( traceRhi, wxS( "PrepareForExternalRendering: GDK background "
+                                            "set to black" ) );
+            }
         }
         else
-#endif
         {
-            GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
-
-            G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-            gdk_window_set_background_rgba( gdkWindow, &black );
-            G_GNUC_END_IGNORE_DEPRECATIONS
+            wxLogTrace( traceRhi, wxS( "PrepareForExternalRendering: no GdkWindow" ) );
         }
+
     }
 
     // Children shown earlier have been painting into the window the GPU now presents to
@@ -1107,6 +1172,7 @@ void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
     if( !window || window == gtk_widget_get_window( parent ) )
         return;
 
-    gdk_window_ensure_native( window );
+    if( !gdk_window_ensure_native( window ) )
+        wxLogTrace( traceRhi, wxS( "KeepAboveExternalRendering: gdk_window_ensure_native failed" ) );
 #endif
 }

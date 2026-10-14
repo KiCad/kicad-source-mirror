@@ -25,12 +25,15 @@
 #define PCB_PAINTER_H
 
 #include <frame_type.h>
+#include <gal/definitions.h>
 #include <gal/painter.h>
 #include <kiid.h>
 #include <padstack.h>   // PAD_DRILL_SHAPE
 #include <pcb_display_options.h>
 #include <math/vector2d.h>
+#include <bitset>
 #include <memory>
+#include <set>
 #include <unordered_set>
 #include <geometry/shape_segment.h>
 
@@ -115,6 +118,26 @@ public:
     {
         return GetColor( static_cast<const BOARD_ITEM*>( nullptr ), aLayer );
     }
+
+    /**
+     * Let the canvas fade these VIEW layers as a whole for high contrast, see GAL::SetSceneLayerDim().
+     * Only layers whose dim does not depend on the item qualify.
+     */
+    void SetCanvasFadedLayers( const std::bitset<MAX_LAYERS_FOR_VIEW>& aLayers ) { m_canvasFadedLayers = aLayers; }
+
+    bool IsCanvasFadedLayer( int aLayer ) const;
+
+    bool HasCanvasFadedLayers() const { return m_canvasFadedLayers.any(); }
+
+    /**
+     * @copydoc RENDER_SETTINGS::GetLayerDim()
+     */
+    bool GetLayerDim( int aLayer, COLOR4D& aToward, double& aKeep ) const override;
+
+    /**
+     * @copydoc RENDER_SETTINGS::IsDimExempt()
+     */
+    bool IsDimExempt( const VIEW_ITEM* aItem ) const override;
 
     bool GetShowPageLimits() const override;
 
@@ -211,6 +234,9 @@ protected:
 
     /// Selected constraint members shadow highlighted
     std::unordered_set<KIID> m_highlightedConstraintMembers;
+
+    /** Layers the canvas fades for high contrast, see SetCanvasFadedLayers() */
+    std::bitset<MAX_LAYERS_FOR_VIEW> m_canvasFadedLayers;
 };
 
 

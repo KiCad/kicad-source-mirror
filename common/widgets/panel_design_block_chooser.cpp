@@ -26,6 +26,7 @@
 #include <kiface_base.h>
 #include <kiway_holder.h>
 #include <eda_draw_frame.h>
+#include <class_draw_panel_gal.h>
 #include <widgets/lib_tree.h>
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
@@ -170,9 +171,41 @@ void PANEL_DESIGN_BLOCK_CHOOSER::SetPreviewWidgetFactory(
 {
     m_previewFactory = std::move( aFactory );
 
+    // Only a modern canvas costs a render thread and GPU device. Others are built with the pane,
+    // since creating them later reorders the startup of the editor's own canvas.
+    if( m_frame->GetCanvas() && m_frame->GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_MODERN )
+    {
+        m_detailsPanel->Bind( wxEVT_PAINT, &PANEL_DESIGN_BLOCK_CHOOSER::onDetailsPaint, this );
+        return;
+    }
+
     m_preview = m_previewFactory( m_detailsPanel );
     m_detailsSizer->Add( m_preview, 1, wxEXPAND, 5 );
     Layout();
+}
+
+
+void PANEL_DESIGN_BLOCK_CHOOSER::onDetailsPaint( wxPaintEvent& aEvent )
+{
+    m_detailsPanel->Unbind( wxEVT_PAINT, &PANEL_DESIGN_BLOCK_CHOOSER::onDetailsPaint, this );
+
+    // Creating a child window from inside a paint handler is not safe on every platform
+    CallAfter( &PANEL_DESIGN_BLOCK_CHOOSER::createPreview );
+    aEvent.Skip();
+}
+
+
+void PANEL_DESIGN_BLOCK_CHOOSER::createPreview()
+{
+    if( m_preview || !m_previewFactory )
+        return;
+
+    m_preview = m_previewFactory( m_detailsPanel );
+    m_detailsSizer->Add( m_preview, 1, wxEXPAND, 5 );
+    m_detailsPanel->Layout();
+
+    // A block may have been selected while the pane was hidden
+    displaySelectedDesignBlock();
 }
 
 
@@ -335,6 +368,12 @@ void PANEL_DESIGN_BLOCK_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 
 
 void PANEL_DESIGN_BLOCK_CHOOSER::onDesignBlockSelected( wxCommandEvent& aEvent )
+{
+    displaySelectedDesignBlock();
+}
+
+
+void PANEL_DESIGN_BLOCK_CHOOSER::displaySelectedDesignBlock()
 {
     if( !m_preview || !m_preview->IsInitialized() )
         return;

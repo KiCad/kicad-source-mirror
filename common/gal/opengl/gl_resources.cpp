@@ -20,6 +20,7 @@
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
 #include <algorithm>
+#include <iterator>
 #include <limits>
 #include <core/utf8.h>
 #include "gl_resources.h"
@@ -55,6 +56,12 @@ const FONT_GLYPH_TYPE* LookupGlyph( unsigned int aCodepoint )
 #else
     return &bitmap_chars[codepoint];
 #endif
+}
+
+
+unsigned int GlyphCount()
+{
+    return std::size( font_codepoint_infos );
 }
 
 

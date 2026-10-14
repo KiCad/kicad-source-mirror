@@ -31,6 +31,9 @@
 #include <math/vector2d.h>
 #include <view/automatic_fit.h>
 #include <widgets/msgpanel.h>
+#include <rhi/frame_packet.h>
+#include <rhi/rhi_surface.h>
+#include <atomic>
 #include <memory>
 #include <optional>
 #include <mutex>
@@ -55,6 +58,10 @@ class TOUCHPAD_GESTURE_HANDLER;
 namespace KIGFX
 {
 class GAL;
+class FRAME_MAILBOX;
+class RENDER_THREAD;
+class RHI_DEVICE_PROXY;
+class SWAPCHAIN_CONTROLLER;
 class VIEW;
 class WX_VIEW_CONTROLS;
 class VIEW_CONTROLS;
@@ -73,6 +80,7 @@ public:
         GAL_TYPE_NONE = 0,      ///< GAL not used (the legacy wxDC engine is used)
         GAL_TYPE_OPENGL = 1,    /**< OpenGL implementation */
         GAL_TYPE_CAIRO = 2,     /**< Cairo implementation */
+        GAL_TYPE_MODERN = 3,    /**< RHI implementation, Vulkan or Metal on macOS */
         GAL_TYPE_LAST           ///< Sentinel, do not use as a parameter
     };
 
@@ -120,7 +128,8 @@ public:
      *
      * A settings file may have been written by hand or by another version of KiCad, so a value
      * outside the supported range is bad data rather than a programming error.  It resolves to
-     * the accelerated canvas, as does the retired wxDC canvas (#GAL_TYPE_NONE).
+     * the OpenGL canvas, as does the retired wxDC canvas (#GAL_TYPE_NONE).  Only an explicitly
+     * stored #GAL_TYPE_MODERN selects the RHI canvas.
      *
      * @param aStoredCanvasType is the raw COMMON_SETTINGS graphics.canvas_type value.
      * @return a GAL type that #SwitchBackend() implements.
@@ -141,7 +150,7 @@ public:
      */
     static bool IsAccelerated( GAL_TYPE aCanvasType )
     {
-        return aCanvasType == GAL_TYPE_OPENGL;
+        return aCanvasType == GAL_TYPE_OPENGL || aCanvasType == GAL_TYPE_MODERN;
     }
 
     /**
@@ -193,6 +202,9 @@ public:
      */
     bool GetScreenshot( wxImage& aDstImage );
 
+    /**
+     * @copydoc wxWindow::Refresh()
+     */
     virtual void Refresh( bool aEraseBackground = true, const wxRect* aRect = nullptr ) override;
 
     /**
@@ -315,11 +327,17 @@ public:
     void OnEvent( wxEvent& aEvent );
 
     /**
+     * Count an input so the frame that answers it is never held back by the display-rate limit.
+     * Call before the input is acted on.
+     */
+    static void NoteInput();
+
+    /**
      * Repaint the canvas, and fix scrollbar cursors
      *
      * Usually called by a OnPaint event.
      *
-     * Because it does not use a wxPaintDC, it can be called outside a wxPaintEvent.
+     * Does not use a wxPaintDC, so it can be called outside a wxPaintEvent.
      *
      * @return true if the repaint attempt was successful.
      */
@@ -357,6 +375,12 @@ public:
      */
     virtual void prepareGridSources() {}
 
+    /**
+     * Hook for subclasses to update view items whose inputs nothing else tracks.
+     * Called from DoRePaint before the pending item updates are applied.
+     */
+    virtual void beforeRedraw() {}
+
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
@@ -389,9 +413,39 @@ protected:
     void showMessageLater( const wxString& aTitle, const wxString& aDetail, bool aError );
 
     /**
+     * Leave the RHI canvas for #GAL_FALLBACK after its device could not be created or restored.
+     * The user is told the first time it happens in a session.
+     */
+    bool abandonRhiCanvas( const wxString& aDetail );
+
+    /**
+     * Stop the RHI render thread and release its swapchain, mailbox and buffers. Must run before
+     * the GAL_MODERN is destroyed, since in-flight uploads point at its geometry.
+     */
+    void teardownModernRenderInfra();
+
+    /**
+     * Return the native window handle for RHI surface creation, or an invalid handle until the
+     * window is realized. It is fetched again only after swapchain recreation.
+     */
+    const RHI_NATIVE_WINDOW_HANDLE& getCachedNativeWindowHandle();
+    void releaseCachedNativeWindowHandle();
+
+    /**
+     * Present the most recently submitted frame packet. An unmapped surface arms the refresh timer
+     * instead.
+     */
+    void presentFrame();
+
+    /**
      * The padded size of the backend window, which sits below the top overlay inset.
      */
     wxSize backendScreenSize() const;
+
+    /**
+     * Submit the last full scene again with the current camera and cursor, keeping all targets.
+     */
+    void submitCachedScene();
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
@@ -410,6 +464,9 @@ protected:
 
     /// True when canvas needs to be refreshed from idle handler
     bool                     m_needIdleRefresh;
+
+    /** The refresh timer was armed by Refresh() for a repaint it postponed */
+    bool                     m_refreshDeferred = false;
 
     /// Last cursor position sent to GAL for drawing
     VECTOR2D                 m_lastCursorPosition;
@@ -461,9 +518,47 @@ protected:
 
     wxWindow*                m_statusPopup;
 
+    /** Owns the RHI device and GPU context */
+    std::unique_ptr<KIGFX::RENDER_THREAD> m_renderThread;
+
+    /** The UI thread's access to the device. Must be destroyed before m_renderThread. */
+    std::unique_ptr<KIGFX::RHI_DEVICE_PROXY> m_deviceProxy;
+
+    std::unique_ptr<KIGFX::SWAPCHAIN_CONTROLLER> m_swapchainCtrl;
+
+    /** Delivers frame packets to the render thread */
+    std::unique_ptr<KIGFX::FRAME_MAILBOX> m_frameMailbox;
+
+    /** Routes this window's work on the render thread */
+    uint32_t m_windowId = 0;
+
+    /** True until the first paint completes the deferred GTK drawing suppression */
+    bool m_needsExternalRenderingSetup = false;
+
+    /**
+     * Fetching the handle forces a display-server flush, so it is cached between realizations and
+     * fetched again only when m_nativeHandleValid is cleared on swapchain recreation.
+     */
+    RHI_NATIVE_WINDOW_HANDLE m_cachedNativeHandle;
+    bool                     m_nativeHandleValid = false;
+
     /** What displayRefreshRate() last asked the window system */
     float                                 m_refreshRate = 0.0f;
     std::chrono::steady_clock::time_point m_refreshRateAsked;
+
+    /** Draw descriptors of the last full redraw, reused by frames that need no new geometry */
+    KIGFX::FRAME_DRAW_DESC m_lastFullStaticDesc;
+    KIGFX::FRAME_DRAW_DESC m_lastFullDynamicDesc;
+    bool m_hasLastFullDrawDesc = false;
+
+    /** Content generations of the static and dynamic pools last submitted, see FRAME_PACKET */
+    uint64_t m_staticEpoch = 1;
+    uint64_t m_dynamicEpoch = 1;
+
+    /** Fixed in the constructor from the parent frame's editor */
+    KIGFX::RHI_LINE_PIPELINE_KIND m_linePipelineKind = KIGFX::RHI_LINE_PIPELINE_KIND::PCB_TRACKS;
+
+    static std::atomic<uint32_t> s_nextWindowId;
 
     /// Optional overlay for drawing transient debug objects
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;

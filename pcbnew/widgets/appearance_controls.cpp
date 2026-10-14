@@ -35,6 +35,7 @@
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <settings/color_settings.h>
@@ -1366,12 +1367,22 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
     }
     else if( BOARD* board = m_frame->GetBoard() )
     {
+        const LSET before = board->GetVisibleLayers();
+        const LSET changed = before ^ aLayers;
+
         board->SetVisibleLayers( aLayers );
+
+        // A retained scene tracks layer visibility itself, so only items on changed layers need
+        // repainting. Holes also depend on whether any physical layer is left.
+        const bool anyPhysicalBefore = ( before & LSET::PhysicalLayersMask() ).any();
+        const bool anyPhysicalAfter = ( aLayers & LSET::PhysicalLayersMask() ).any();
+        const bool narrow = view->GetGAL() && view->GetGAL()->HasRetainedScene()
+                            && anyPhysicalBefore == anyPhysicalAfter;
 
         // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
         // they won't be found in the view layer's itemset for repainting.
         view->UpdateAllItemsConditionally( KIGFX::ALL,
-                []( KIGFX::VIEW_ITEM* aItem ) -> bool
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
                     // Items rendered to composite layers (such as LAYER_PAD_TH) must be redrawn
                     // whether they're optionally flashed or not (as the layer being hidden/shown
@@ -1381,7 +1392,10 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
 
                     const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
 
-                    return item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T;
+                    if( item->Type() != PCB_VIA_T && item->Type() != PCB_PAD_T )
+                        return false;
+
+                    return !narrow || ( item->GetLayerSet() & changed ).any();
                 } );
 
         m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );

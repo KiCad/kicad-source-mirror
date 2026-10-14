@@ -643,6 +643,7 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     KIGFX::GAL*  gal = aView->GetGAL();
 
+    // Returning before the scale is read keeps a retained overlay from treating this as zoom dependent
     if( m_badges.empty() )
         return;
 

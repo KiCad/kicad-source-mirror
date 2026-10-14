@@ -34,6 +34,7 @@
 #include <layer_ids.h>
 #include <pcb_base_frame.h>
 #include <view/view.h>
+#include <hash.h>
 
 #include <memory>
 #include <utility>
@@ -56,9 +57,10 @@ static void drawCross( KIGFX::GAL* aGal, const VECTOR2D& aPos )
 }
 
 
-RATSNEST_VIEW_ITEM::RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData ) :
+RATSNEST_VIEW_ITEM::RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData, PART aPart ) :
         EDA_ITEM( NOT_USED ),
-        m_data( std::move( aData ) )
+        m_data( std::move( aData ) ),
+        m_part( aPart )
 {
 }
 
@@ -112,6 +114,9 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     std::unique_lock<KISPINLOCK> lock( m_data->GetLock(), std::try_to_lock );
 
+    // A cached copy drawn now would stay empty until the next update, see BoardInputsChanged()
+    m_drawSkipped = !lock;
+
     if( !lock )
         return;
 
@@ -124,7 +129,16 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     KIGFX::GAL* gal = aView->GetGAL();
     gal->SetIsStroke( true );
     gal->SetIsFill( false );
-    gal->SetLineWidth( cfg->m_Display.m_RatsnestThickness / gal->GetWorldScale() );
+    // A pixel width the canvas resolves itself keeps the ratsnest valid across zooms
+    if( gal->SupportsStrokePixelPad() )
+    {
+        gal->SetLineWidth( 0.0f );
+        gal->SetStrokePixelPad( cfg->m_Display.m_RatsnestThickness );
+    }
+    else
+    {
+        gal->SetLineWidth( cfg->m_Display.m_RatsnestThickness / gal->GetWorldScale() );
+    }
 
     std::set<int>        highlightedNets = rs->GetHighlightNetCodes();
     const std::set<int>& hiddenNets      = rs->GetHiddenNets();
@@ -172,19 +186,34 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // by the line's own thickness. We use line_width/4 for a 2x safety margin. The filter is
     // in world units and scales with zoom (line width is already world-scaled above), so it
     // produces far fewer segments without any visible faceting.
-    const double curveFilter = curved_ratsnest ? ( gal->GetLineWidth() / 4.0 ) : 0.0;
+    const double widthFilter = gal->GetLineWidth() / 4.0;
+
+    // A pixel-padded stroke has no world width and is kept at every zoom, so the filter follows
+    // the curve's own span
+    auto curveFilter = [&]( const VECTOR2I& aSource, const VECTOR2I& aTarget )
+    {
+        if( widthFilter > 0.0 )
+            return widthFilter;
+
+        return ( VECTOR2D( aTarget ) - VECTOR2D( aSource ) ).EuclideanNorm() / 512.0;
+    };
 
     // Lines are stroked, so one just off screen still reaches back into the viewport
     BOX2D viewport = aView->GetViewport();
     viewport.Inflate( gal->GetLineWidth() );
 
+    // A cached board ratsnest is kept through pans and zooms, so it must hold every line
+    const bool cull = m_part != PART::BOARD;
+
+    static const std::vector<RN_DYNAMIC_LINE> noLines;
+
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
-    for( const RN_DYNAMIC_LINE& l : m_data->GetLocalRatsnest() )
+    for( const RN_DYNAMIC_LINE& l : m_part == PART::BOARD ? noLines : m_data->GetLocalRatsnest() )
     {
         if( hiddenNets.count( l.netCode ) )
             continue;
 
-        if( !LineInViewport( l.a, l.b, viewport, curved_ratsnest ) )
+        if( cull && !LineInViewport( l.a, l.b, viewport, curved_ratsnest ) )
             continue;
 
         const NETCLASS*     nc = nullptr;
@@ -219,7 +248,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             if( curved_ratsnest )
             {
                 const VECTOR2D center = CurveControlPoint( l.a, l.b );
-                gal->DrawCurve( l.a, center, center, l.b, curveFilter );
+                gal->DrawCurve( l.a, center, center, l.b, curveFilter( l.a, l.b ) );
             }
             else
             {
@@ -228,7 +257,9 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         }
     }
 
-    for( int i = 1 /* skip "No Net" at [0] */; i < m_data->GetNetCount(); ++i )
+    const int netCount = m_part == PART::LOCAL ? 0 : m_data->GetNetCount();
+
+    for( int i = 1 /* skip "No Net" at [0] */; i < netCount; ++i )
     {
         if( hiddenNets.count( i ) )
             continue;
@@ -284,7 +315,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             const VECTOR2I source( sourceNode->Pos() );
             const VECTOR2I target( targetNode->Pos() );
 
-            if( !LineInViewport( source, target, viewport, curved_ratsnest ) )
+            if( cull && !LineInViewport( source, target, viewport, curved_ratsnest ) )
                 continue;
 
             bool enable =  !sourceNode->GetNoLine() && !targetNode->GetNoLine();
@@ -328,7 +359,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                     if( curved_ratsnest )
                     {
                         const VECTOR2D center = CurveControlPoint( source, target );
-                        gal->DrawCurve( source, center, center, target, curveFilter );
+                        gal->DrawCurve( source, center, center, target, curveFilter( source, target ) );
                     }
                     else
                     {
@@ -338,11 +369,48 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             }
         }
     }
+    gal->SetStrokePixelPad( 0.0 );
 }
 
 
 std::vector<int> RATSNEST_VIEW_ITEM::ViewGetLayers() const
 {
-    return { LAYER_RATSNEST };
+    return { m_part == PART::LOCAL ? LOCAL_LAYER : LAYER_RATSNEST };
+}
+
+
+bool RATSNEST_VIEW_ITEM::BoardInputsChanged( KIGFX::VIEW* aView )
+{
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+
+    if( !cfg )
+        return false;
+
+    auto   rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    size_t seed = 0;
+
+    hash_combine( seed, !m_data->GetLocalRatsnest().empty(), static_cast<int>( rs->GetNetColorMode() ),
+                  static_cast<int>( rs->m_ContrastModeDisplay ), static_cast<int>( rs->GetPrimaryHighContrastLayer() ),
+                  cfg->m_Display.m_RatsnestThickness, cfg->m_Display.m_DisplayRatsnestLinesCurved,
+                  static_cast<int>( cfg->m_Display.m_RatsnestMode ), cfg->m_Display.m_ShowGlobalRatsnest );
+
+    for( int net : rs->GetHighlightNetCodes() )
+        hash_combine( seed, net );
+
+    // Keeps a highlighted net distinct from a hidden one with the same code
+    hash_combine( seed, -1 );
+
+    for( int net : rs->GetHiddenNets() )
+        hash_combine( seed, net );
+
+    LSET::AllCuMask().RunOnLayers(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                hash_combine( seed, aView->IsLayerVisible( aLayer ) );
+            } );
+
+    const bool skipped = std::exchange( m_drawSkipped, false );
+
+    return std::exchange( m_boardInputs, seed ) != seed || skipped;
 }
 

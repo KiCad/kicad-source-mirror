@@ -36,7 +36,7 @@ public:
      * a library symbol, and a slider for fading between the two.
      *
      * @param aParent - parent window
-     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
+     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL, GAL_TYPE_MODERN or GAL_TYPE_CAIRO)
      */
     SYMBOL_DIFF_WIDGET( wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 

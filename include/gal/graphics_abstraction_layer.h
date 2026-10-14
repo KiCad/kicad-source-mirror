@@ -23,9 +23,12 @@
 #ifndef GRAPHICSABSTRACTIONLAYER_H_
 #define GRAPHICSABSTRACTIONLAYER_H_
 
+#include <array>
+#include <cstdint>
 #include <deque>
 #include <stack>
 #include <limits>
+#include <tuple>
 
 #include <math/matrix3x3.h>
 #include <math/box2.h>
@@ -47,6 +50,28 @@ class BITMAP_BASE;
 
 namespace KIGFX
 {
+
+struct RETAINED_GROUP_ORDER
+{
+    int64_t                  priority = 0;
+    std::array<int, 4>       bbox{};
+    wxString                 className;
+    double                   lodScale = 0.0;
+    std::array<uint64_t, 2>  contentHash{};
+    bool                     contentTie = false;
+
+    bool SamePrefix( const RETAINED_GROUP_ORDER& aOther ) const
+    {
+        return std::tie( priority, bbox, className, lodScale )
+               == std::tie( aOther.priority, aOther.bbox, aOther.className, aOther.lodScale );
+    }
+
+    bool operator<( const RETAINED_GROUP_ORDER& aOther ) const
+    {
+        return std::tie( priority, bbox, className, lodScale, contentHash )
+               < std::tie( aOther.priority, aOther.bbox, aOther.className, aOther.lodScale, aOther.contentHash );
+    }
+};
 
 /**
  * Multiply aPitch by aTick until it exceeds aThreshold, so a sub-threshold grid
@@ -142,6 +167,93 @@ public:
     virtual bool IsOpenGlEngine() { return false; }
 
     /**
+     * Return true if the backend empties every non-cached target each frame, so VIEW must emit them again
+     * even when clean.
+     */
+    virtual bool RefillsNonCachedTargets() const { return false; }
+
+    /**
+     * Return true if the backend dropped its cached geometry and VIEW must draw the cached layers again,
+     * even when its own TARGET_CACHED is clean. Otherwise the pool would rebuild empty and blank the scene.
+     */
+    virtual bool HasStaticRebuildPending() const { return false; }
+
+    /**
+     * Return true if the backend keeps cached groups in a persistent scene that it patches in place,
+     * so one changed item does not make VIEW emit every cached layer again. VIEW places each group with
+     * SetGroupPlacement() and emits the cached layers through BeginSceneLayer() only while
+     * HasStaticRebuildPending(). The scene holds every item, not just the viewport.
+     */
+    virtual bool HasRetainedScene() const { return false; }
+
+    /**
+     * Open a cached layer of the retained scene during a rebuild. Layers draw in the order they are
+     * opened, at the current layer depth.
+     *
+     * @param aLayer is the VIEW layer id.
+     */
+    virtual void BeginSceneLayer( int aLayer ) {}
+
+    /**
+     * Describe a cached layer to the retained scene. Layers draw in decreasing order value and a hidden
+     * layer keeps its groups, so showing, hiding or reordering layers emits nothing again.
+     *
+     * @param aLayer is the VIEW layer id.
+     * @param aOrder is the layer's rendering order.
+     * @param aVisible is false to leave the layer out of the frame.
+     * @param aHasNegatives is true if the layer has to contain its own knockouts.
+     */
+    virtual void SetSceneLayerState( int aLayer, int aOrder, bool aVisible, bool aHasNegatives ) {}
+
+    /**
+     * Fade a cached layer towards a colour in the shader, so dimming it recolours none of its groups.
+     * Groups marked with ChangeGroupUndimmed() keep their colour.
+     *
+     * @param aLayer is the VIEW layer id.
+     * @param aToward is the colour the layer fades towards, usually the background.
+     * @param aKeep is the share of each colour that is kept, 1 to leave the layer as it is.
+     */
+    virtual void SetSceneLayerDim( int aLayer, const COLOR4D& aToward, double aKeep ) {}
+
+    /**
+     * Blend a cached layer the way the other canvases blend the overlay they draw it in. Colour c with
+     * alpha a over d then shows c*a + d*(1 - a*a) rather than c*a + d*(1 - a).
+     *
+     * @param aLayer is the VIEW layer id.
+     */
+    virtual void SetSceneLayerOverlayAlpha( int aLayer ) {}
+
+    /**
+     * Tell the retained scene whether cached groups are placed in an order that matters. When they are,
+     * a knockout erases only what was placed before it on its layer, as on a Gerber layer. Otherwise a
+     * layer's knockouts apply to all of it.
+     */
+    virtual void SetSceneDrawOrdered( bool aOrdered ) {}
+
+    /**
+     * Declare where a cached group belongs in the retained scene.
+     *
+     * @param aGroup is the group number returned by BeginGroup().
+     * @param aLayer is the VIEW layer id the group was cached for.
+     * @param aLodScale is the view scale above which the group is drawn.
+     * @param aShown is false to keep the group out of the scene regardless of scale.
+     */
+    virtual void SetGroupPlacement( int aGroup, int aLayer, double aLodScale, bool aShown,
+                                    const RETAINED_GROUP_ORDER& aOrder ) {}
+
+    /** Set the view scale that group placements are tested against. */
+    virtual void SetSceneScale( double aScale ) {}
+
+    /** Return true if the GAL is inside a BeginDrawing/EndDrawing pair. */
+    virtual bool IsDrawingMode() const { return false; }
+
+    /**
+     * Return true if DrawPad() renders every standard pad shape. Painters must not use it otherwise,
+     * since the base implementation draws every non-circular pad as a rectangle.
+     */
+    virtual bool SupportsTypedPads() const { return false; }
+
+    /**
      * Return true if filled polygons are drawn from the SHAPE_POLY_SET triangulation cache, which painters
      * should then fill before calling DrawPolygon.
      */
@@ -172,6 +284,22 @@ public:
      */
     virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                               double aWidth ){};
+
+    /**
+     * Draw a filled track capsule in \a aColor without touching the fill and stroke state. Backends may
+     * override it to skip that overhead on the track hot path.
+     */
+    virtual void DrawTrack( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                            double aWidth, const COLOR4D& aColor );
+
+    /**
+     * Draw a filled pad as one primitive in \a aColor. Only called when SupportsTypedPads().
+     *
+     * @param aShapeType is 0 circle, 1 rect, 2 roundrect, 3 chamfered, 4 oval or 5 trapezoid.
+     */
+    virtual void DrawPad( const VECTOR2D& aCenter, double aHalfWidth, double aHalfHeight,
+                          double aCornerRadius, float aShapeType, double aRotation,
+                          const COLOR4D& aColor ) {}
 
     /**
      * Draw a chain of rounded segments.
@@ -368,11 +496,20 @@ public:
         return m_screenSize;
     }
 
+    /**
+     * Return the size the view is centred in and panned by. It is the canvas size unless the canvas lays
+     * its view out like one of another size.
+     */
+    virtual VECTOR2I GetLayoutPixelSize() const { return m_screenSize; }
+
     /// Return the swap interval. -1 for adaptive, 0 for disabled/unknown
     virtual int GetSwapInterval() const { return 0; };
 
     /// Force all remaining objects to be drawn.
     virtual void Flush() {};
+
+    /** Make a backend that keeps a static geometry pool rebuild it on the next frame. */
+    virtual void MarkStaticDirty() {};
 
     void SetClearColor( const COLOR4D& aColor )
     {
@@ -656,6 +793,8 @@ public:
     /// End the group.
     virtual void EndGroup() {};
 
+    virtual std::array<uint64_t, 2> GroupContentFingerprint( int aGroupNumber ) const { return {}; }
+
     /**
      * Draw the stored group.
      *
@@ -680,6 +819,14 @@ public:
     virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) {};
 
     /**
+     * Exempt the group from its layer's dim, see SetSceneLayerDim().
+     *
+     * @param aGroupNumber is the group number.
+     * @param aUndimmed is true to keep the group's colour while its layer is dimmed.
+     */
+    virtual void ChangeGroupUndimmed( int aGroupNumber, bool aUndimmed ) {};
+
+    /**
      * Delete the group from the memory.
      *
      * @param aGroupNumber is the group number.
@@ -701,20 +848,26 @@ public:
     /**
      * Get the world <-> screen transformation matrix.
      *
+     * The matrix carries the world scale, so this counts as a read of it, see TakeWorldScaleRead().
+     *
      * @return the transformation matrix.
      */
     const MATRIX3x3D& GetWorldScreenMatrix() const
     {
+        m_worldScaleRead = true;
         return m_worldScreenMatrix;
     }
 
     /**
      * Get the screen <-> world transformation matrix.
      *
+     * The matrix carries the world scale, so this counts as a read of it, see TakeWorldScaleRead().
+     *
      * @return the transformation matrix.
      */
     const MATRIX3x3D& GetScreenWorldMatrix() const
     {
+        m_worldScaleRead = true;
         return m_screenWorldMatrix;
     }
 
@@ -789,7 +942,54 @@ public:
      *
      * @return the actual world scale factor.
      */
-    double GetWorldScale() const { return m_worldScale; }
+    double GetWorldScale() const
+    {
+        m_worldScaleRead = true;
+        return m_worldScale;
+    }
+
+    /**
+     * Get the world scale to size something drawn in screen space mode. Such things keep their pixel
+     * size at any scale, so unlike GetWorldScale() this is not a read, see TakeWorldScaleRead().
+     */
+    double GetWorldScaleForScreenSpace() const { return m_worldScale; }
+
+    /**
+     * Tell whether the world scale is below a limit. This is not a read of the scale, so what depends only
+     * on the answer stays valid through a zoom that does not cross the limit, see TakeWorldScaleLimits().
+     */
+    bool WorldScaleBelow( double aLimit ) const
+    {
+        const bool below = m_worldScale < aLimit;
+
+        if( below )
+            m_scaleLimitAbove = std::min( m_scaleLimitAbove, aLimit );
+        else
+            m_scaleLimitBelow = std::max( m_scaleLimitBelow, aLimit );
+
+        return below;
+    }
+
+    /** Give and forget the nearest limits on either side of the scale passed to WorldScaleBelow(). */
+    void TakeWorldScaleLimits( double& aBelow, double& aAbove ) const
+    {
+        aBelow = m_scaleLimitBelow;
+        aAbove = m_scaleLimitAbove;
+        m_scaleLimitBelow = 0.0;
+        m_scaleLimitAbove = std::numeric_limits<double>::max();
+    }
+
+    /**
+     * Tell whether GetWorldScale() or a transformation matrix was read since the last call. A backend that
+     * keeps geometry across frames needs this because whatever was sized from the scale goes stale on zoom.
+     */
+    bool TakeWorldScaleRead() const
+    {
+        const bool read = m_worldScaleRead;
+
+        m_worldScaleRead = false;
+        return read;
+    }
 
     /**
      * Sets flipping of the screen.
@@ -853,6 +1053,39 @@ public:
      * @param aSetting is true if negative mode should be enabled
      */
     virtual void SetNegativeDrawMode( bool aSetting ) {};
+
+    /**
+     * Store sizes of what is drawn next in pixels rather than world units, so it keeps its pixel size
+     * through a zoom without being drawn again.
+     */
+    virtual void SetScreenSpaceMode( bool aEnabled ) {}
+
+    /** Tell whether strokes can carry part of their width in pixels, see SetStrokePixelPad(). */
+    virtual bool SupportsStrokePixelPad() const { return false; }
+
+    /** Tell whether strokes can be longer by a number of pixels, see SetStrokeLengthPad(). */
+    virtual bool SupportsStrokeLengthPad() const { return false; }
+
+    /**
+     * Extend every stroke drawn from now on by \a aPixels at each end. Pixels are resolved per frame so
+     * the look survives a zoom without drawing again. Zero turns it off.
+     */
+    virtual void SetStrokeLengthPad( double aPixels ) {}
+
+    /**
+     * Widen every stroke, circle and pad drawn from now on by \a aPixels. Pixels are resolved per frame so
+     * the look survives a zoom without drawing again. Zero turns it off.
+     */
+    virtual void SetStrokePixelPad( double aPixels ) {}
+
+    /** Tell whether strokes can carry a level of detail, see SetStrokeLevelOfDetail(). */
+    virtual bool SupportsStrokeLevelOfDetail() const { return false; }
+
+    /**
+     * Show every stroke drawn from now on only while the view scale is above \a aLod, as
+     * VIEW::IsShownAtScale() decides. It is decided per frame so a zoom needs no redraw. Zero turns it off.
+     */
+    virtual void SetStrokeLevelOfDetail( double aLod ) {}
 
     /**
      * Begins rendering of a differential layer. Used by gerbview's differential mode.
@@ -1218,6 +1451,28 @@ protected:
     double computeMinGridSpacing() const;
 
     /**
+     * Compute the world width of a minor grid line. A major line is twice as wide. Shaders round this to
+     * whole pixels, so every canvas must evaluate it in the same order to round the same way.
+     *
+     * @param aWorldPixelSize is the world length of a screen pixel.
+     * @param aScaleFactor is the canvas DPI scale factor.
+     */
+    float gridMinorLineWidth( double aWorldPixelSize, double aScaleFactor ) const
+    {
+        return std::fmax( 1.0f, m_gridLineWidth ) * aWorldPixelSize / aScaleFactor;
+    }
+
+    /** The default number of segments approximating a full circle */
+    static constexpr int SEG_PER_CIRCLE_COUNT = 64;
+
+    /** Compute the angle step when drawing arcs/circles approximated with lines. */
+    static double calcAngleStep( double aRadius )
+    {
+        /** Bigger arcs need smaller alpha increment to make them look smooth */
+        return std::min( 1e6 / aRadius, 2.0 * M_PI / SEG_PER_CIRCLE_COUNT );
+    }
+
+    /**
      * @return the visible screen area expressed in aSrc's frame (relative to its
      *         origin and counter-rotated by its orientation).
      */
@@ -1307,6 +1562,9 @@ protected:
     MATRIX3x3D           m_worldScreenMatrix;  ///< World transformation
     MATRIX3x3D           m_screenWorldMatrix;  ///< Screen transformation
     double               m_worldScale;         ///< The scale factor world->screen
+    mutable bool         m_worldScaleRead = false; /**< see TakeWorldScaleRead() */
+    mutable double       m_scaleLimitBelow = 0.0;  /**< see TakeWorldScaleLimits() */
+    mutable double       m_scaleLimitAbove = std::numeric_limits<double>::max();
 
     bool                 m_globalFlipX;        ///< Flag for X axis flipping
     bool                 m_globalFlipY;        ///< Flag for Y axis flipping

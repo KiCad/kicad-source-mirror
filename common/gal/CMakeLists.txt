@@ -48,10 +48,13 @@ set( GAL_SRCS
     opengl/opengl_compositor.cpp
     opengl/utils.cpp
 
-    # Cairo GAL
+    # Cairo GAL (screen rendering plus print/plot/export)
     cairo/cairo_gal.cpp
     cairo/cairo_compositor.cpp
     cairo/cairo_print.cpp
+
+    # Modern RHI GAL
+    gal_modern.cpp
     )
 
 add_library( gal SHARED ${GAL_SRCS} )
@@ -76,6 +79,7 @@ target_link_libraries( gal
     kicommon
     kimath
     kiplatform
+    rhi
     nlohmann_json
     ${CAIRO_LIBRARIES}
     ${PIXMAN_LIBRARIES}

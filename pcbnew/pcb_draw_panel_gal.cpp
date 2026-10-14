@@ -317,10 +317,36 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
 
     // Ratsnest
     if( !aBoard->IsFootprintHolder() )
+        addRatsnest( aBoard->GetConnectivity() );
+}
+
+
+void PCB_DRAW_PANEL_GAL::addRatsnest( std::shared_ptr<CONNECTIVITY_DATA> aConnectivity )
+{
+    // A retained scene caches the board's lines, so the lines of moving items, which change every
+    // frame, get their own overlay item
+    if( m_gal->HasRetainedScene() )
     {
-        m_ratsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aBoard->GetConnectivity() );
-        m_view->Add( m_ratsnest.get() );
+        m_ratsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aConnectivity, RATSNEST_VIEW_ITEM::PART::BOARD );
+        m_localRatsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aConnectivity, RATSNEST_VIEW_ITEM::PART::LOCAL );
+        m_view->Add( m_localRatsnest.get() );
     }
+    else
+    {
+        m_ratsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aConnectivity );
+        m_localRatsnest.reset();
+    }
+
+    m_view->Add( m_ratsnest.get() );
+}
+
+
+void PCB_DRAW_PANEL_GAL::beforeRedraw()
+{
+    // Nothing else updates the cached board lines when a move starts or ends, a highlight changes
+    // or a display option changes
+    if( m_localRatsnest && m_ratsnest->BoardInputsChanged( m_view ) )
+        m_view->Update( m_ratsnest.get() );
 }
 
 
@@ -411,6 +437,18 @@ void PCB_DRAW_PANEL_GAL::prepareGridSources()
 
 void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
 {
+    applyHighContrastLayer( aLayer, false );
+}
+
+
+void PCB_DRAW_PANEL_GAL::ChangeHighContrastLayer( PCB_LAYER_ID aLayer )
+{
+    applyHighContrastLayer( aLayer, true );
+}
+
+
+void PCB_DRAW_PANEL_GAL::applyHighContrastLayer( PCB_LAYER_ID aLayer, bool aOnlyLayerChanged )
+{
     // Set display settings for high contrast mode
     KIGFX::RENDER_SETTINGS* rSettings = m_view->GetPainter()->GetSettings();
 
@@ -464,7 +502,32 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         }
     }
 
-    m_view->UpdateAllLayersColor();
+    // High contrast hides and shows items as well as recolouring them
+    const bool contrast = rSettings->GetHighContrast();
+    auto*      pcbSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rSettings );
+    const bool hidden = contrast && pcbSettings->m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN;
+
+    // Layers the canvas fades keep their item colours, unless high contrast hides inactive layers
+    // now or did at the last switch
+    if( aOnlyLayerChanged && pcbSettings->HasCanvasFadedLayers() && !hidden && !m_highContrastHidden )
+    {
+        m_view->UpdateLayersColor( contrast || m_highContrastShown,
+                                   [pcbSettings]( int aViewLayer )
+                                   {
+                                       return !pcbSettings->IsCanvasFadedLayer( aViewLayer );
+                                   } );
+    }
+    else if( contrast || m_highContrastShown )
+    {
+        m_view->UpdateAllLayersColorAndVisibility();
+    }
+    else
+    {
+        m_view->UpdateAllLayersColor();
+    }
+
+    m_highContrastShown = contrast;
+    m_highContrastHidden = hidden;
 }
 
 
@@ -743,6 +806,20 @@ bool PCB_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
     m_gal->SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+
+    // Whether the ratsnest is split depends on the canvas
+    if( m_ratsnest && ( m_localRatsnest != nullptr ) != m_gal->HasRetainedScene() )
+    {
+        std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_ratsnest->GetConnectivity();
+
+        m_view->Remove( m_ratsnest.get() );
+
+        if( m_localRatsnest )
+            m_view->Remove( m_localRatsnest.get() );
+
+        addRatsnest( connectivity );
+    }
+
     return rv;
 }
 
@@ -751,6 +828,9 @@ void PCB_DRAW_PANEL_GAL::RedrawRatsnest()
 {
     if( m_ratsnest )
         m_view->Update( m_ratsnest.get() );
+
+    if( m_localRatsnest )
+        m_view->Update( m_localRatsnest.get() );
 }
 
 
@@ -767,6 +847,11 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
     // Cairo keeps cached groups in screen coordinates, so caching makes no sense for it
     auto target = IsAccelerated( m_backend ) ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+
+    // Anything not cached is composited above the whole retained scene, which would put reference
+    // images over the zones
+    const KIGFX::RENDER_TARGET bitmapTarget = ( m_gal && m_gal->HasRetainedScene() ) ? KIGFX::TARGET_CACHED
+                                                                                      : KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
@@ -791,7 +876,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
             m_view->SetRequired( POINT_LAYER_FOR( layer ), layer );
 
             m_view->SetRequired( BITMAP_LAYER_FOR( layer ), layer );
-            m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), KIGFX::TARGET_NONCACHED );
+            m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), bitmapTarget );
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
             m_view->SetRequired( DRILL_SYMBOL_LAYER_FOR( layer ), layer );
         }
@@ -799,7 +884,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
         {
             m_view->SetRequired( POINT_LAYER_FOR( layer ), layer );
             m_view->SetRequired( ZONE_LAYER_FOR( layer ), layer );
-            m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), KIGFX::TARGET_NONCACHED );
+            m_view->SetLayerTarget( BITMAP_LAYER_FOR( layer ), bitmapTarget );
             m_view->SetRequired( BITMAP_LAYER_FOR( layer ), layer );
             m_view->SetRequired( DRILL_SYMBOL_LAYER_FOR( layer ), layer );
         }
@@ -850,8 +935,19 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_ROUTER_PREVIEW_COLLISION, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_ROUTER_PREVIEW_COLLISION );
 
-    m_view->SetLayerTarget( LAYER_RATSNEST, KIGFX::TARGET_OVERLAY );
+    // A retained scene caches the board's ratsnest, see addRatsnest()
+    const bool cachedRatsnest = m_gal && m_gal->HasRetainedScene();
+
+    m_view->SetLayerTarget( LAYER_RATSNEST, cachedRatsnest ? KIGFX::TARGET_CACHED : KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_RATSNEST );
+
+    if( cachedRatsnest )
+    {
+        m_view->SetRequired( RATSNEST_VIEW_ITEM::LOCAL_LAYER, LAYER_RATSNEST );
+
+        // Blended as on the legacy overlay
+        m_gal->SetSceneLayerOverlayAlpha( LAYER_RATSNEST );
+    }
 
     m_view->SetLayerTarget( LAYER_DRC_ERROR, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerTarget( LAYER_DRC_WARNING, KIGFX::TARGET_OVERLAY );
@@ -859,7 +955,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_MARKER_SHADOWS, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_MARKER_SHADOWS );
 
-    m_view->SetLayerTarget( LAYER_DRAWINGSHEET, KIGFX::TARGET_NONCACHED );
+    // A retained scene keeps the sheet with the board rather than redrawing it on every pan
+    m_view->SetLayerTarget( LAYER_DRAWINGSHEET, ( m_gal && m_gal->HasRetainedScene() ) ? KIGFX::TARGET_CACHED
+                                                                                        : KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_DRAWINGSHEET ) ; // drawing sheet can't be selected
     m_view->SetLayerDisplayOnly( LAYER_GRID );          // grid can't be selected
 
@@ -868,6 +966,32 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
         m_view->SetLayerTarget( i, KIGFX::TARGET_OVERLAY );
         m_view->SetLayerDisplayOnly( i );
     }
+
+    updateCanvasFadedLayers();
+}
+
+
+void PCB_DRAW_PANEL_GAL::updateCanvasFadedLayers()
+{
+    auto* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
+    std::bitset<MAX_LAYERS_FOR_VIEW> layers;
+
+    if( m_gal && m_gal->HasRetainedScene() )
+    {
+        for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+        {
+            for( int viewLayer : { layer, static_cast<int>( ZONE_LAYER_FOR( layer ) ),
+                                   static_cast<int>( PAD_COPPER_LAYER_FOR( layer ) ),
+                                   static_cast<int>( VIA_COPPER_LAYER_FOR( layer ) ),
+                                   static_cast<int>( CLEARANCE_LAYER_FOR( layer ) ) } )
+            {
+                if( m_view->IsCached( viewLayer ) )
+                    layers.set( viewLayer );
+            }
+        }
+    }
+
+    settings->SetCanvasFadedLayers( layers );
 }
 
 

@@ -52,6 +52,7 @@
 #include <status_popup.h>
 #include <string_utils.h>
 #include <footprint_library_adapter.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <pcb_shape.h>
 #include <widgets/appearance_controls.h>
@@ -2732,8 +2733,43 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         if( !netcodes.empty() )
             m_lastHighlighted = netcodes;
 
+        KIGFX::VIEW*        view = m_toolMgr->GetView();
+        const bool          wasEnabled = settings->IsHighlightEnabled();
+        const std::set<int> before = settings->GetHighlightNetCodes();
+
         settings->SetHighlight( enableHighlight, net );
-        m_toolMgr->GetView()->UpdateAllLayersColor();
+
+        auto*      pcbSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings );
+        const bool retained = view->GetGAL()->HasRetainedScene();
+
+        auto onChangedNet = [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+        {
+            BOARD_CONNECTED_ITEM* connected = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+            return connected && ( connected->GetNetCode() == net || before.contains( connected->GetNetCode() ) );
+        };
+
+        // Switching between highlighted nets recolours only those two nets. Toggling highlight
+        // dims or restores everything else, which a canvas that fades layers does itself.
+        const bool switchedNet = wasEnabled && enableHighlight;
+
+        if( retained && ( switchedNet || pcbSettings->HasCanvasFadedLayers() ) )
+        {
+            if( !switchedNet )
+            {
+                view->UpdateLayersColor( false,
+                                         [pcbSettings]( int aLayer )
+                                         {
+                                             return !pcbSettings->IsCanvasFadedLayer( aLayer );
+                                         } );
+            }
+
+            view->UpdateAllItemsConditionally( KIGFX::COLOR, onChangedNet );
+        }
+        else
+        {
+            view->UpdateAllLayersColor();
+        }
     }
 
     // Store the highlighted netcode in the current board (for dialogs for instance)

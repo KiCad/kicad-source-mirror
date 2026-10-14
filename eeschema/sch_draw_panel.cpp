@@ -135,6 +135,17 @@ bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
     setDefaultLayerDeps();
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
+    // Items carried over from the previous GAL have stale caches. The rebuild waits for startup
+    // events to settle, since a partial redraw would clobber the GPU buffers.
+    if( rv && aGalType == GAL_TYPE_MODERN )
+    {
+        CallAfter( [this]()
+        {
+            if( EDA_DRAW_FRAME* frame = GetParentEDAFrame() )
+                frame->HardRedraw();
+        } );
+    }
+
     Refresh();
 
     return rv;
@@ -152,8 +163,9 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
     m_view->SetLayerTarget( LAYER_SCHEMATIC_ANCHOR, KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_SCHEMATIC_ANCHOR );
 
-    // Bitmaps are draw on a non cached GAL layer:
-    m_view->SetLayerTarget( LAYER_DRAW_BITMAPS, KIGFX::TARGET_NONCACHED );
+    // A retained scene draws cached bitmaps in their layer's place rather than above everything
+    m_view->SetLayerTarget( LAYER_DRAW_BITMAPS, ( m_gal && m_gal->HasRetainedScene() ) ? KIGFX::TARGET_CACHED
+                                                                                      : KIGFX::TARGET_NONCACHED );
 
     // Some draw layers need specific settings
     m_view->SetLayerTarget( LAYER_GP_OVERLAY, KIGFX::TARGET_OVERLAY );

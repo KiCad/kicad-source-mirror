@@ -31,7 +31,7 @@ public:
     GERBVIEW_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                              const wxPoint& aPosition, const wxSize& aSize,
                              KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                             GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+                             GAL_TYPE aGalType = GAL_TYPE_MODERN );
 
     virtual ~GERBVIEW_DRAW_PANEL_GAL();
 

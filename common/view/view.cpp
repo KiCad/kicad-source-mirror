@@ -36,10 +36,17 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 #include <algorithm>
+#include <array>
+#include <chrono>
+#include <cinttypes>
+#include <cmath>
+#include <limits>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 
 #include <core/profile.h>
+
 
 #ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>
@@ -57,6 +64,7 @@ public:
         m_view( nullptr ),
         m_flags( KIGFX::VISIBLE ),
         m_requiredUpdate( KIGFX::NONE ),
+        m_pendingIndex( -1 ),
         m_drawPriority( 0 ),
         m_cachedIndex( -1 ),
         m_groups( nullptr ),
@@ -206,6 +214,7 @@ private:
     VIEW*                m_view;             ///< Current dynamic view the item is assigned to.
     int                  m_flags;            ///< Visibility flags
     int                  m_requiredUpdate;   ///< Flag required for updating
+    int                  m_pendingIndex;     // Place in the view's pending list, or -1
     int                  m_drawPriority;     ///< Order to draw this item in a layer, lowest first
     int                  m_cachedIndex;      ///< Cached index in m_allItems.
 
@@ -217,6 +226,63 @@ private:
 
     BOX2I                m_bbox;             /// Cached inserted Bbox for faster removals.
 };
+
+
+struct RETAINED_ORDER_ITEM
+{
+    VIEW_ITEM*           item;
+    int                  layer;
+    int                  group;
+    RETAINED_GROUP_ORDER order;
+};
+
+
+static RETAINED_GROUP_ORDER retainedOrderKey( VIEW_ITEM* aItem, int aPriority, const BOX2I& aBBox,
+                                               bool aUseDrawPriority, bool aReverseDrawOrder,
+                                               double aLodScale )
+{
+    RETAINED_GROUP_ORDER key;
+    key.priority = aUseDrawPriority ? ( aReverseDrawOrder ? -int64_t( aPriority ) : int64_t( aPriority ) ) : 0;
+
+    key.bbox = { aBBox.GetLeft(), aBBox.GetTop(), aBBox.GetRight(), aBBox.GetBottom() };
+    key.className = aItem->GetClass();
+    key.lodScale = std::isnan( aLodScale ) ? std::numeric_limits<double>::infinity() : aLodScale;
+
+    return key;
+}
+
+
+template <typename T>
+static void sortRetainedOrder( VIEW* aView, std::vector<T>& aEntries )
+{
+    std::sort( aEntries.begin(), aEntries.end(), []( const T& a, const T& b )
+               {
+                   return a.order < b.order;
+               } );
+
+    for( size_t first = 0; first < aEntries.size(); )
+    {
+        size_t last = first + 1;
+
+        while( last < aEntries.size() && aEntries[first].order.SamePrefix( aEntries[last].order ) )
+            ++last;
+
+        if( last - first > 1 )
+        {
+            for( size_t i = first; i < last; ++i )
+            {
+                T& entry = aEntries[i];
+                entry.order.contentHash = aView->GetGAL()->GroupContentFingerprint( entry.group );
+                entry.order.contentTie = true;
+            }
+
+            std::sort( aEntries.begin() + first, aEntries.begin() + last,
+                       []( const T& a, const T& b ) { return a.order < b.order; } );
+        }
+
+        first = last;
+    }
+}
 
 
 void VIEW::OnDestroy( VIEW_ITEM* aItem )
@@ -244,7 +310,8 @@ VIEW::VIEW() :
     m_useDrawPriority( false ),
     m_nextDrawPriority( 0 ),
     m_reverseDrawOrder( false ),
-    m_hasPendingItemUpdates( false )
+    m_hasPendingItemUpdates( false ),
+    m_cameraDirtyOnly( false )
 {
     // Set m_boundary to define the max area size. The default area size
     // is defined here as the max value of a int.
@@ -308,6 +375,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
         previous->unlinkItem( aItem );
 
     aItem->m_viewPrivData->m_view = this;
+    aItem->m_viewPrivData->m_pendingIndex = -1;
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
     const BOX2I bbox = aItem->ViewBBox();
     aItem->m_viewPrivData->m_bbox = bbox;
@@ -333,6 +401,9 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
         l.items->Insert( aItem, bbox );
         MarkTargetDirty( l.target );
     }
+
+    // The camera-reuse path would replay a scene without this item.
+    markSceneEdited();
 
     SetVisible( aItem, true );
     Update( aItem, KIGFX::INITIAL_ADD );
@@ -366,6 +437,7 @@ void VIEW::AddBatch( const std::vector<VIEW_ITEM*>& aItems )
             previous->unlinkItem( item );
 
         item->m_viewPrivData->m_view = this;
+        item->m_viewPrivData->m_pendingIndex = -1;
         item->m_viewPrivData->m_drawPriority = drawPriority;
         const BOX2I bbox = item->ViewBBox();
         item->m_viewPrivData->m_bbox = bbox;
@@ -396,6 +468,9 @@ void VIEW::AddBatch( const std::vector<VIEW_ITEM*>& aItems )
         l.items->BulkLoad( items );
         MarkTargetDirty( l.target );
     }
+
+    if( !aItems.empty() )
+        markSceneEdited();
 
     // Phase 3: Set visibility and queue initial invalidation.
     // INITIAL_ADD is required even though VIEW_ITEM_DATA defaults VISIBLE=true (making
@@ -441,6 +516,12 @@ void VIEW::unlinkItem( VIEW_ITEM* aItem )
             item = std::find( m_allItems->begin(), m_allItems->end(), aItem );
         }
 
+        if( aItem->m_viewPrivData->m_pendingIndex >= 0 )
+        {
+            m_pendingItems[aItem->m_viewPrivData->m_pendingIndex] = nullptr;
+            aItem->m_viewPrivData->m_pendingIndex = -1;
+        }
+
         if( item != m_allItems->end() )
         {
             *item = nullptr;
@@ -482,6 +563,9 @@ void VIEW::unlinkItem( VIEW_ITEM* aItem )
 
         aItem->m_viewPrivData->deleteGroups();
         aItem->m_viewPrivData->m_view = nullptr;
+
+        // The camera-reuse path would still draw the removed item.
+        markSceneEdited();
     }
 }
 
@@ -495,6 +579,165 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
         m_layers[aLayerId].requiredLayers.insert( aRequiredId );
     else
         m_layers[aLayerId].requiredLayers.erase( aRequiredId );
+
+    // redrawRect() skips layers whose required layers are hidden, so the cached output is stale.
+    layerStateChanged( aLayerId );
+}
+
+
+void VIEW::layerStateChanged( int aLayer )
+{
+    if( !m_gal || !m_gal->HasRetainedScene() )
+    {
+        if( IsCached( aLayer ) )
+        {
+            MarkGeometryDirty();
+            MarkStaticDirty();
+        }
+
+        return;
+    }
+
+    m_sceneLayersStale = true;
+    m_lodRefreshLayers.push_back( aLayer );
+
+    // Items of the kept non-cached targets can read the layer's visibility as well
+    MarkTargetDirty( TARGET_CACHED );
+    MarkTargetDirty( TARGET_NONCACHED );
+    MarkTargetDirty( TARGET_OVERLAY );
+    markSceneEdited();
+}
+
+
+void VIEW::noteLodRead( int aLayer ) const
+{
+    if( aLayer < 0 || aLayer >= VIEW_MAX_LAYERS )
+        return;
+
+    std::vector<bool>& readers = m_lodReads[aLayer];
+
+    if( readers.empty() )
+        readers.resize( VIEW_MAX_LAYERS );
+
+    readers[m_lodProbeLayer] = true;
+}
+
+
+void VIEW::SyncRetainedScene()
+{
+    if( !m_gal || !m_gal->HasRetainedScene() )
+        return;
+
+    m_gal->SetSceneScale( m_scale );
+    m_gal->SetSceneDrawOrdered( m_useDrawPriority );
+
+    if( m_sceneLayersStale )
+    {
+        for( const auto& [id, l] : m_layers )
+        {
+            const bool drawn = l.target == TARGET_CACHED && l.visible && areRequiredLayersEnabled( id );
+
+            m_gal->SetSceneLayerState( id, l.renderingOrder, drawn, l.hasNegatives );
+
+            COLOR4D toward;
+            double  keep = 1.0;
+
+            if( l.target == TARGET_CACHED && m_painter && m_painter->GetSettings()->GetLayerDim( id, toward, keep ) )
+                m_gal->SetSceneLayerDim( id, toward, keep );
+            else
+                m_gal->SetSceneLayerDim( id, COLOR4D::BLACK, 1.0 );
+        }
+
+        m_sceneLayersStale = false;
+    }
+
+    if( m_lodRefreshLayers.empty() )
+        return;
+
+    // A rebuild asks every item anyway
+    if( m_gal->HasStaticRebuildPending() || m_lodReads.empty() )
+    {
+        m_lodRefreshLayers.clear();
+        return;
+    }
+
+    if( !m_gal->IsVisible() || !m_gal->IsInitialized() )
+        return;
+
+    GAL_UPDATE_CONTEXT ctx( m_gal );
+
+    if( !ctx.IsUpdating() )
+        return;
+
+    SyncLayerVisibilityCache();
+
+    std::vector<bool> readers( VIEW_MAX_LAYERS );
+
+    for( int read : m_lodRefreshLayers )
+    {
+        auto it = m_lodReads.find( read );
+
+        if( it == m_lodReads.end() )
+            continue;
+
+        for( int reader = 0; reader < VIEW_MAX_LAYERS; ++reader )
+        {
+            if( it->second[reader] )
+                readers[reader] = true;
+        }
+    }
+
+    m_lodRefreshLayers.clear();
+
+    BOX2I everywhere;
+    everywhere.SetMaximum();
+
+    for( auto& [id, l] : m_layers )
+    {
+        if( !readers[id] || l.target != TARGET_CACHED )
+            continue;
+
+        const int layer = id;
+
+        auto place = [&]( VIEW_ITEM* aItem ) -> bool
+        {
+            placeCachedGroup( aItem, layer );
+            return true;
+        };
+
+        l.items->Query( everywhere, place );
+    }
+}
+
+
+void VIEW::MarkStaticDirty()
+{
+    if( !m_gal )
+        return;
+
+    m_gal->MarkStaticDirty();
+
+    // Whatever rebuilds the cached scene, such as showing a layer, can also change what the kept
+    // non-cached targets draw
+    if( m_gal->HasRetainedScene() )
+    {
+        MarkTargetDirty( TARGET_NONCACHED );
+        MarkTargetDirty( TARGET_OVERLAY );
+        m_sceneLayersStale = true;
+    }
+}
+
+
+void VIEW::markSceneEdited()
+{
+    // Slots are handed out in arrival order, which cannot follow a draw priority
+    if( !m_gal || !m_gal->HasRetainedScene() || m_useDrawPriority )
+    {
+        MarkGeometryDirty();
+        return;
+    }
+
+    m_cameraDirtyOnly = false;
 }
 
 
@@ -594,6 +837,9 @@ void VIEW::SetGAL( GAL* aGal )
     bool recacheGroups = ( m_gal != nullptr );    // recache groups only if GAL is reassigned
     m_gal = aGal;
 
+    // A new retained GAL knows no layer state and would show every layer
+    m_sceneLayersStale = true;
+
     // clear group numbers, so everything is going to be recached
     if( recacheGroups )
     {
@@ -657,7 +903,8 @@ void VIEW::SetScale( double aScale, VECTOR2D aAnchor )
     if( aAnchor == VECTOR2D( 0, 0 ) )
         aAnchor = m_center;
 
-    VECTOR2D a = ToScreen( aAnchor );
+    VECTOR2D     a = ToScreen( aAnchor );
+    const double oldScale = m_scale;
 
     if( aScale < m_minScale )
         m_scale = m_minScale;
@@ -674,7 +921,50 @@ void VIEW::SetScale( double aScale, VECTOR2D aAnchor )
     SetCenter( m_center - delta );
 
     // Redraw everything after the viewport has changed
-    MarkDirty();
+    MarkViewportDirty();
+
+    if( m_scale != oldScale )
+        rescaleKeptTargets();
+}
+
+
+bool VIEW::IsShownAtScale( double aLod ) const
+{
+    noteKeptLod( aLod );
+
+    return aLod < m_scale;
+}
+
+
+void VIEW::noteKeptLod( double aLod ) const
+{
+    // A kept target has to be emitted again once the scale crosses one of these
+    if( !m_keptScaleUse || aLod == VIEW_ITEM::LOD_SHOW || aLod == VIEW_ITEM::LOD_HIDE )
+        return;
+
+    if( aLod < m_scale )
+        m_keptScaleUse->lodBelow = std::max( m_keptScaleUse->lodBelow, aLod );
+    else
+        m_keptScaleUse->lodAbove = std::min( m_keptScaleUse->lodAbove, aLod );
+}
+
+
+void VIEW::rescaleKeptTargets()
+{
+    if( !m_gal || !m_gal->HasRetainedScene() )
+        return;
+
+    for( int target : { TARGET_NONCACHED, TARGET_OVERLAY } )
+    {
+        const SCALE_USE& use = m_scaleUse[target];
+
+        // A pan reuses the target, and so does a zoom that changes nothing it holds
+        if( use.read || m_scale <= use.lodBelow || m_scale > use.lodAbove )
+        {
+            MarkTargetDirty( target );
+            m_cameraDirtyOnly = false;
+        }
+    }
 }
 
 
@@ -699,7 +989,7 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
     m_gal->ComputeWorldScreenMatrix();
 
     // Redraw everything after the viewport has changed
-    MarkDirty();
+    MarkViewportDirty();
 }
 
 
@@ -809,7 +1099,14 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
             m_layers.find( from )->second.items = std::make_shared<VIEW_RTREE>();
     }
 
+    // Visibility and targets moved between ids
+    m_layerCachesStale = true;
+
     SortOrderedLayers();
+
+    // A recolor leaves each retained group on the scene layer of its old id
+    if( m_gal && m_gal->HasRetainedScene() )
+        MarkStaticDirty();
 
     for( VIEW_ITEM* item : *m_allItems )
     {
@@ -828,6 +1125,7 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 
         viewData->m_requiredUpdate |= COLOR;
         m_hasPendingItemUpdates = true;
+        m_pendingListIncomplete = true;
     }
 
     UpdateItems();
@@ -839,6 +1137,9 @@ void VIEW::UpdateLayerColor( int aLayer )
     // There is no point in updating non-cached layers
     if( !IsCached( aLayer ) )
         return;
+
+    // The layer's fade can follow the same settings as its colours
+    m_sceneLayersStale = true;
 
     BOX2I r;
 
@@ -862,11 +1163,15 @@ void VIEW::UpdateLayerColor( int aLayer )
 
             m_layers[aLayer].items->Query( r, collect );
 
-            // Items without a uniform color are drawn again, as in UpdateAllLayersColor()
+            // Items without a uniform color are drawn again, as in recolorAllLayers()
             for( const auto& [item, group] : groups )
                 recolorGroup( item, aLayer, group );
 
             MarkTargetDirty( m_layers[aLayer].target );
+
+            // A retained scene's ChangeGroupColor() does not re-upload the static buffer
+            MarkGeometryDirty();
+            MarkStaticDirty();
         }
     }
 }
@@ -874,6 +1179,34 @@ void VIEW::UpdateLayerColor( int aLayer )
 
 void VIEW::UpdateAllLayersColor()
 {
+    recolorAllLayers( false );
+}
+
+
+void VIEW::UpdateAllLayersColorAndVisibility()
+{
+    recolorAllLayers( m_gal->HasRetainedScene() );
+}
+
+
+void VIEW::UpdateLayersColor( bool aVisibility, const std::function<bool( int )>& aLayers )
+{
+    recolorAllLayers( aVisibility && m_gal->HasRetainedScene(), aLayers );
+}
+
+
+void VIEW::recolorAllLayers( bool aReplace, const std::function<bool( int )>& aLayers )
+{
+    // A layer's fade can follow the same settings as its colours
+    m_sceneLayersStale = true;
+
+    if( aReplace )
+    {
+        SyncLayerVisibilityCache();
+        m_gal->SetSceneScale( m_scale );
+        markSceneEdited();
+    }
+
     if( m_gal->IsVisible() )
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
@@ -892,10 +1225,16 @@ void VIEW::UpdateAllLayersColor()
 
                 for( int layer : viewData->m_layers )
                 {
+                    if( aLayers && !aLayers( layer ) )
+                        continue;
+
                     int group = viewData->getGroup( layer );
 
                     if( group >= 0 )
                         recolorGroup( item, layer, group );
+
+                    if( group >= 0 && aReplace )
+                        placeCachedGroup( item, layer );
                 }
             }
         }
@@ -985,7 +1324,8 @@ void VIEW::UpdateAllLayersOrder()
 {
     SortOrderedLayers();
 
-    if( m_gal->IsVisible() )
+    // A retained scene keeps depth per layer, not per group
+    if( m_gal->IsVisible() && !m_gal->HasRetainedScene() )
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
@@ -1024,7 +1364,8 @@ struct VIEW::DRAW_ITEM_VISITOR
         useDrawPriority( aUseDrawPriority ),
         reverseDrawOrder( aReverseDrawOrder ),
         drawForcedTransparent( false ),
-        foundForcedTransparent( false )
+        foundForcedTransparent( false ),
+        placing( false )
     {
     }
 
@@ -1035,10 +1376,24 @@ struct VIEW::DRAW_ITEM_VISITOR
         if( aItem->m_forcedTransparency > 0 && !drawForcedTransparent )
         {
             foundForcedTransparent = true;
+
+            if( placing )
+                drawItems.push_back( aItem );
+
+            return true;
+        }
+
+        // A retained scene decides what is drawn itself, so it is told about every item
+        if( placing && !drawForcedTransparent )
+        {
+            drawItems.push_back( aItem );
+
             return true;
         }
 
         const double itemLOD = aItem->ViewGetLOD( layer, view );
+
+        view->noteKeptLod( itemLOD );
 
         // Conditions that have to be fulfilled for an item to be drawn
         bool drawCondition = aItem->viewPrivData()->isRenderable() && view->IsShownAtScale( itemLOD );
@@ -1056,6 +1411,18 @@ struct VIEW::DRAW_ITEM_VISITOR
 
     void deferredDraw()
     {
+        if( placing )
+        {
+            std::vector<VIEW::LAYER_ITEM_PAIR> items;
+            items.reserve( drawItems.size() );
+
+            for( VIEW_ITEM* item : drawItems )
+                items.emplace_back( item, layer );
+
+            view->placeRetainedInOrder( items, false );
+            return;
+        }
+
         if( reverseDrawOrder )
         {
             std::sort( drawItems.begin(), drawItems.end(),
@@ -1085,19 +1452,132 @@ struct VIEW::DRAW_ITEM_VISITOR
     std::vector<VIEW_ITEM*> drawItems;
     bool drawForcedTransparent;
     bool foundForcedTransparent;
+    bool placing;
 };
+
+
+void VIEW::placeRetainedInOrder( const std::vector<LAYER_ITEM_PAIR>& aItems, bool aReplacing )
+{
+    std::vector<RETAINED_ORDER_ITEM> ordered;
+    ordered.reserve( aItems.size() );
+
+    for( const auto& [item, layer] : aItems )
+    {
+        VIEW_ITEM_DATA* data = item->viewPrivData();
+
+        if( !data || !IsCached( layer ) )
+            continue;
+
+        if( data->getGroup( layer ) < 0 )
+            updateItemGeometry( item, layer, false );
+
+        ordered.push_back( { item, layer, data->getGroup( layer ),
+                             retainedOrderKey( item, data->m_drawPriority, data->m_bbox, m_useDrawPriority,
+                                               m_reverseDrawOrder, cachedGroupLOD( item, layer ) ) } );
+    }
+
+    sortRetainedOrder( this, ordered );
+
+    for( const RETAINED_ORDER_ITEM& entry : ordered )
+    {
+        if( aReplacing )
+            releaseReplacedGroup( entry.item, entry.layer );
+
+        placeCachedGroup( entry.item, entry.layer, &entry.order );
+    }
+
+    if( aReplacing )
+        releaseReplacedGroups();
+}
+
+
+void VIEW::placeCachedGroup( VIEW_ITEM* aItem, int aLayer,
+                             const RETAINED_GROUP_ORDER* aOrder )
+{
+    VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
+
+    if( !viewData )
+        return;
+
+    if( m_deferRetainedPlacement )
+    {
+        m_deferredRetainedPlacements.emplace_back( aItem, aLayer );
+        return;
+    }
+
+    if( viewData->getGroup( aLayer ) < 0 )
+        updateItemGeometry( aItem, aLayer );
+
+    int group = viewData->getGroup( aLayer );
+
+    if( group < 0 )
+        return;
+
+    // cachedGroupLOD() records which other layers the item reads, so showing or hiding one of them
+    // places it again. The layer's own visibility is layer state.
+    const double lod = aOrder ? aOrder->lodScale : cachedGroupLOD( aItem, aLayer );
+    RETAINED_GROUP_ORDER order = aOrder ? *aOrder
+                                       : retainedOrderKey( aItem, viewData->m_drawPriority, viewData->m_bbox,
+                                                           m_useDrawPriority,
+                                                           m_reverseDrawOrder, lod );
+
+    if( !aOrder )
+    {
+        order.contentHash = m_gal->GroupContentFingerprint( group );
+        order.contentTie = true;
+    }
+
+    m_gal->SetGroupPlacement( group, aLayer, lod,
+                              viewData->isRenderable() && aItem->m_forcedTransparency <= 0, order );
+}
+
+
+double VIEW::cachedGroupLOD( VIEW_ITEM* aItem, int aLayer )
+{
+    m_lodProbeLayer = aLayer;
+    const double lod = aItem->ViewGetLOD( aLayer, this );
+    m_lodProbeLayer = -1;
+    return lod;
+}
 
 
 void VIEW::redrawRect( const BOX2I& aRect )
 {
     SyncLayerVisibilityCache();
 
+    const bool retained = m_gal && m_gal->HasRetainedScene();
+
+    SyncRetainedScene();
+
+    if( retained )
+    {
+        for( int target : { TARGET_NONCACHED, TARGET_OVERLAY } )
+        {
+            if( IsTargetDirty( target ) || m_gal->RefillsNonCachedTargets() )
+                m_scaleUse[target] = SCALE_USE();
+        }
+    }
+
     for( VIEW_LAYER* l : m_orderedLayers )
     {
         if( l->items->IsEmpty() )
             continue;
 
-        if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
+        const bool placing = retained && l->target == TARGET_CACHED;
+
+        // A backend that empties its non-cached targets on each drawn frame needs a clean
+        // target emitted along with the dirty one, or it goes missing
+        const bool refilled = l->target != TARGET_CACHED && m_gal && m_gal->RefillsNonCachedTargets();
+
+        // A retained scene keeps its cached layers until the backend asks for all of them again. A
+        // pending rebuild empties the static pool even when TARGET_CACHED is clean.
+        const bool targetDirty = placing ? m_gal->HasStaticRebuildPending()
+                                         : ( IsTargetDirty( l->target ) || refilled
+                                             || ( l->target == TARGET_CACHED && m_gal
+                                                  && m_gal->HasStaticRebuildPending() ) );
+
+        // A rebuild places the groups of hidden layers too, as the scene leaves those layers out
+        if( targetDirty && ( placing || ( l->visible && areRequiredLayersEnabled( l->id ) ) ) )
         {
             DRAW_ITEM_VISITOR drawFunc( this, l->id, m_useDrawPriority, m_reverseDrawOrder );
 
@@ -1111,10 +1591,48 @@ void VIEW::redrawRect( const BOX2I& aRect )
             else if( l->hasNegatives )
                 m_gal->StartNegativesLayer();
 
+            if( placing )
+            {
+                drawFunc.placing = true;
+                m_gal->BeginSceneLayer( l->id );
+            }
+
+            const bool kept = retained && l->target != TARGET_CACHED;
+
+            if( kept )
+            {
+                m_keptScaleUse = &m_scaleUse[l->target];
+                m_scaleRead = false;
+                m_gal->TakeWorldScaleRead();
+
+                double below, above;
+                m_gal->TakeWorldScaleLimits( below, above );
+            }
+
             l->items->Query( aRect, drawFunc );
 
-            if( m_useDrawPriority )
+            if( m_useDrawPriority || placing )
                 drawFunc.deferredDraw();
+
+            m_keptScaleUse = nullptr;
+
+            if( kept && ( m_gal->TakeWorldScaleRead() || m_scaleRead ) )
+                m_scaleUse[l->target].read = true;
+
+            // Limits on the world scale become limits on the view's, which is proportional
+            if( kept && m_gal->GetWorldScaleForScreenSpace() > 0.0 )
+            {
+                const double toView = m_scale / m_gal->GetWorldScaleForScreenSpace();
+                double       below, above;
+
+                m_gal->TakeWorldScaleLimits( below, above );
+
+                SCALE_USE& use = m_scaleUse[l->target];
+                use.lodBelow = std::max( use.lodBelow, below * toView );
+
+                if( above < std::numeric_limits<double>::max() )
+                    use.lodAbove = std::min( use.lodAbove, above * toView );
+            }
 
             if( l->diffLayer )
                 m_gal->EndDiffLayer();
@@ -1145,19 +1663,49 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
 
     if( m_layerCachedFlagCache[ aLayer ] && !aImmediate )
     {
-        // Draw using cached information or create one
         int group = viewData->getGroup( aLayer );
 
         if( group >= 0 )
+        {
             m_gal->DrawGroup( group );
+        }
         else
-            Update( aItem );
+        {
+            wxLogTrace( traceRhi, wxS( "ViewCache: miss layer=%d item=%p drawingMode=%d" ),
+                        aLayer, static_cast<const void*>( aItem ), m_gal->IsDrawingMode() ? 1 : 0 );
+
+            // Only a retained scene builds a missed group mid-frame. Other backends wait for the next
+            // update, since opening a group in Cairo ends its drawing surface.
+            if( !m_gal->HasRetainedScene() )
+            {
+                Update( aItem );
+                return;
+            }
+
+            if( m_gal->IsDrawingMode() )
+            {
+                updateItemGeometry( aItem, aLayer, false );
+                group = viewData->getGroup( aLayer );
+
+                if( group >= 0 )
+                {
+                    m_gal->DrawGroup( group );
+                    return;
+                }
+            }
+
+            // Outside drawing mode there is no open group to draw into, so rebuild on the next pass
+            wxLogTrace( traceRhi, wxS( "ViewCache: defer-build layer=%d item=%p" ),
+                        aLayer, static_cast<const void*>( aItem ) );
+
+            Update( aItem, REPAINT );
+        }
     }
     else
     {
         // Immediate mode
         if( !m_painter->Draw( aItem, aLayer ) )
-            aItem->ViewDraw( aLayer, this );  // Alternative drawing method
+            aItem->ViewDraw( aLayer, this );
     }
 }
 
@@ -1208,13 +1756,18 @@ struct VIEW::RECACHE_ITEM_VISITOR
         if( !viewData )
             return false;
 
-        // Remove previously cached group
-        int group = viewData->getGroup( layer );
+        // A retained scene keeps the cached group until the item is drawn again, so its replacement
+        // takes the same place in the draw order, see updateItemGeometry()
+        if( !gal->HasRetainedScene() )
+        {
+            int group = viewData->getGroup( layer );
 
-        if( group >= 0 )
-            gal->DeleteGroup( group );
+            if( group >= 0 )
+                gal->DeleteGroup( group );
 
-        viewData->setGroup( layer, -1 );
+            viewData->setGroup( layer, -1 );
+        }
+
         view->Update( aItem, KIGFX::REPAINT );
 
         return true;
@@ -1234,6 +1787,8 @@ void VIEW::Clear()
     // Invalidate viewPrivData for all items before clearing. This ensures that items
     // which persist outside the view (like selection groups) won't have stale references
     // to this view, which could cause issues if they're later removed and re-added.
+    clearPendingItems();
+
     for( VIEW_ITEM* item : *m_allItems )
     {
         if( item && item->m_viewPrivData )
@@ -1253,14 +1808,35 @@ void VIEW::Clear()
 
 void VIEW::ClearTargets()
 {
-    if( IsTargetDirty( TARGET_CACHED ) || IsTargetDirty( TARGET_NONCACHED ) )
+    // A kept target that only the camera moved still holds valid content
+    if( m_gal && m_gal->HasRetainedScene() && !m_gal->RefillsNonCachedTargets() )
     {
-        // TARGET_CACHED and TARGET_NONCACHED have to be redrawn together, as they contain
-        // layers that rely on each other (eg. netnames are noncached, but tracks - are cached)
-        m_gal->ClearTarget( TARGET_NONCACHED );
-        m_gal->ClearTarget( TARGET_CACHED );
+        for( int target : { TARGET_NONCACHED, TARGET_OVERLAY } )
+        {
+            if( !m_targetEdited[target] )
+                m_dirtyTargets[target] = false;
+        }
+    }
 
-        MarkDirty();
+    // Without a retained scene the cached and non-cached targets share surfaces, so they clear
+    // together
+    if( m_gal && !m_gal->HasRetainedScene() )
+    {
+        if( IsTargetDirty( TARGET_CACHED ) || IsTargetDirty( TARGET_NONCACHED ) )
+        {
+            m_gal->ClearTarget( TARGET_NONCACHED );
+            m_gal->ClearTarget( TARGET_CACHED );
+
+            MarkDirty();
+        }
+    }
+    else
+    {
+        if( IsTargetDirty( TARGET_CACHED ) )
+            m_gal->ClearTarget( TARGET_CACHED );
+
+        if( IsTargetDirty( TARGET_NONCACHED ) )
+            m_gal->ClearTarget( TARGET_NONCACHED );
     }
 
     if( IsTargetDirty( TARGET_OVERLAY ) )
@@ -1277,12 +1853,22 @@ void VIEW::Redraw()
     latencyProbeZoomToRender.Checkpoint("view-redraw-start");
 #endif /* KICAD_GAL_PROFILE */
 
-    VECTOR2D screenSize = m_gal->GetScreenPixelSize();
-    BOX2D    rect( ToWorld( VECTOR2D( 0, 0 ) ),
-                   ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
+    BOX2I recti;
 
-    rect.Normalize();
-    BOX2I recti = BOX2ISafe( rect );
+    // A retained scene holds every item, not only the visible ones, so a full redraw visits them all
+    if( m_gal && m_gal->HasRetainedScene() && m_gal->IsInitialized() )
+    {
+        recti.SetMaximum();
+    }
+    else
+    {
+        VECTOR2D screenSize = m_gal->GetScreenPixelSize();
+        BOX2D    rect( ToWorld( VECTOR2D( 0, 0 ) ),
+                       ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
+
+        rect.Normalize();
+        recti = BOX2ISafe( rect );
+    }
 
     redrawRect( recti );
 
@@ -1349,20 +1935,49 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
         aUpdateFlags = ALL;
 
     std::vector<int> layers = aItem->ViewGetLayers();
+    bool             cachedMutation = false;
+    const bool       retained = m_gal && m_gal->HasRetainedScene();
 
     // Iterate through layers used by the item and recache it immediately
     for( int layer : layers )
     {
         if( IsCached( layer ) )
         {
+            cachedMutation = true;
+
             if( aUpdateFlags & ( GEOMETRY | LAYERS | REPAINT ) )
                 updateItemGeometry( aItem, layer );
             else if( aUpdateFlags & COLOR )
                 updateItemColor( aItem, layer );
+
+            // Visibility is a placement, the group itself is unchanged
+            if( retained && ( aUpdateFlags & APPEARANCE ) )
+                placeCachedGroup( aItem, layer );
         }
 
         // Mark those layers as dirty, so the VIEW will be refreshed
         MarkTargetDirty( m_layers[layer].target );
+    }
+
+    if( retained && !m_useDrawPriority && aItem->m_forcedTransparency <= 0 )
+    {
+        // The groups above are already patched into the scene, but a non-cached layer still needs
+        // the frame off the camera-reuse path
+        markSceneEdited();
+    }
+    else if( aUpdateFlags & ( GEOMETRY | LAYERS | REPAINT ) )
+    {
+        MarkGeometryDirty();
+    }
+    else if( cachedMutation && ( aUpdateFlags & ( APPEARANCE | COLOR ) ) )
+    {
+        // A retained scene patches a color change into the group. Visibility changes cannot be
+        // patched that way and rebuild.
+        const bool colorOnlyPatchable = ( aUpdateFlags & COLOR ) && !( aUpdateFlags & APPEARANCE )
+                                        && m_gal && m_gal->HasRetainedScene();
+
+        if( !colorOnlyPatchable )
+            MarkGeometryDirty();
     }
 
     aItem->viewPrivData()->clearUpdateFlags();
@@ -1380,6 +1995,9 @@ void VIEW::SortOrderedLayers()
 
     sort( m_orderedLayers.begin(), m_orderedLayers.end(), compareRenderingOrder );
 
+    // A retained scene takes the new order as layer state
+    m_sceneLayersStale = true;
+
     MarkDirty();
 }
 
@@ -1387,9 +2005,21 @@ void VIEW::SortOrderedLayers()
 void VIEW::recolorGroup( VIEW_ITEM* aItem, int aLayer, int aGroup )
 {
     if( m_painter->HasUniformColor( aItem, aLayer ) )
+    {
         m_gal->ChangeGroupColor( aGroup, m_painter->GetSettings()->GetColor( aItem, aLayer ) );
+        markDimExemption( aItem, aGroup );
+    }
     else
+    {
         updateItemGeometry( aItem, aLayer );
+    }
+}
+
+
+void VIEW::markDimExemption( const VIEW_ITEM* aItem, int aGroup )
+{
+    if( m_gal->HasRetainedScene() )
+        m_gal->ChangeGroupUndimmed( aGroup, m_painter->GetSettings()->IsDimExempt( aItem ) );
 }
 
 
@@ -1408,7 +2038,7 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 }
 
 
-void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
+void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer, bool aPlace )
 {
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
@@ -1426,22 +2056,54 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
     if( l.target != TARGET_CACHED )
         return;
 
+    int group = viewData->getGroup( aLayer );
+
     m_gal->SetTarget( l.target );
     m_gal->SetLayerDepth( l.renderingOrder );
 
-    // Redraw the item from scratch
-    int group = viewData->getGroup( aLayer );
+    // A batch draws all of its items again before it places any. Deleting each old group here
+    // would hand the freed slots back in reverse, so the old group waits for its replacement.
+    const bool keepForPlacement = group >= 0 && aPlace && m_deferRetainedPlacement && m_gal->HasRetainedScene()
+                                  && m_replacedRetainedGroups.emplace( std::make_pair( aItem, aLayer ), group ).second;
 
-    if( group >= 0 )
+    if( group >= 0 && !keepForPlacement )
         m_gal->DeleteGroup( group );
 
     group = m_gal->BeginGroup();
     viewData->setGroup( aLayer, group );
 
+    wxLogTrace( traceGalGroups, wxS( "updateItemGeometry() item=%p layer=%d newGroup=%d" ),
+                static_cast<void*>( aItem ), aLayer, group );
+
     if( !m_painter->Draw( aItem, aLayer ) )
-        aItem->ViewDraw( aLayer, this ); // Alternative drawing method
+        aItem->ViewDraw( aLayer, this );
 
     m_gal->EndGroup();
+    markDimExemption( aItem, group );
+
+    if( aPlace && m_gal->HasRetainedScene() )
+        placeCachedGroup( aItem, aLayer );
+}
+
+
+void VIEW::releaseReplacedGroup( VIEW_ITEM* aItem, int aLayer )
+{
+    auto it = m_replacedRetainedGroups.find( std::make_pair( aItem, aLayer ) );
+
+    if( it == m_replacedRetainedGroups.end() )
+        return;
+
+    m_gal->DeleteGroup( it->second );
+    m_replacedRetainedGroups.erase( it );
+}
+
+
+void VIEW::releaseReplacedGroups()
+{
+    for( const auto& [key, group] : m_replacedRetainedGroups )
+        m_gal->DeleteGroup( group );
+
+    m_replacedRetainedGroups.clear();
 }
 
 
@@ -1476,6 +2138,8 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
         l.items->Insert( aItem, new_bbox );
         MarkTargetDirty( l.target );
     }
+
+    markSceneEdited();
 }
 
 
@@ -1534,6 +2198,8 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
         l.items->Insert( aItem, new_bbox );
         MarkTargetDirty( l.target );
     }
+
+    markSceneEdited();
 }
 
 
@@ -1581,7 +2247,12 @@ void VIEW::RecacheAllItems()
 void VIEW::UpdateItems()
 {
     if( !m_gal->IsVisible() || !m_gal->IsInitialized() )
+    {
+        wxLogTrace( traceGalGroups,
+                    wxS( "UpdateItems() SKIP: visible=%d initialized=%d" ),
+                    m_gal->IsVisible(), m_gal->IsInitialized() );
         return;
+    }
 
 #ifdef KICAD_GAL_PROFILE
     latencyProbeZoomToRender.Checkpoint("view-update-items");
@@ -1590,10 +2261,20 @@ void VIEW::UpdateItems()
     if( !m_hasPendingItemUpdates )
         return;
 
+    // Groups cached below are placed against the scale they will be drawn at
+    if( m_gal->HasRetainedScene() )
+        m_gal->SetSceneScale( m_scale );
+
     unsigned int cntGeomUpdate = 0;
     bool         anyUpdated = false;
 
-    for( VIEW_ITEM* item : *m_allItems )
+    // Other backends scan every item, since the shape of their R-trees depends on that order
+    const bool retained = m_gal->HasRetainedScene();
+    const bool listed = retained && !m_pendingListIncomplete;
+
+    const std::vector<VIEW_ITEM*>& flagged = listed ? m_pendingItems : *m_allItems;
+
+    for( VIEW_ITEM* item : flagged )
     {
         if( !item )
             continue;
@@ -1670,6 +2351,8 @@ void VIEW::UpdateItems()
                 MarkTargetDirty( it->second.target );
             }
         }
+
+        markSceneEdited();
     }
 
     // Skipping the loop below leaves m_requiredUpdate and m_hasPendingItemUpdates set so the
@@ -1678,32 +2361,122 @@ void VIEW::UpdateItems()
 
     if( anyUpdated )
     {
+        unsigned int cntInvalidated = 0;
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
         if( ctx.IsUpdating() )
         {
-            for( VIEW_ITEM* item : *m_allItems.get() )
+            auto invalidate = [&]( VIEW_ITEM* item )
             {
                 if( item && item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
                 {
+                    cntInvalidated++;
                     invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
                     item->viewPrivData()->m_requiredUpdate = NONE;
                 }
+            };
+
+            if( retained )
+            {
+                if( m_gal->HasStaticRebuildPending() )
+                {
+                    // The full redraw places every cached group, including those hidden at this scale
+                    m_deferRetainedPlacement = true;
+
+                    for( size_t next = 0; next < flagged.size(); ++next )
+                        invalidate( flagged[next] );
+
+                    m_deferRetainedPlacement = false;
+                    m_deferredRetainedPlacements.clear();
+                    releaseReplacedGroups();
+                }
+                else
+                {
+                    size_t next = 0;
+
+                    // An invalidation may queue another item, so sort each newly queued batch.
+                    while( next < flagged.size() )
+                    {
+                        std::vector<RETAINED_ORDER_ITEM> batch;
+
+                        while( next < flagged.size() )
+                        {
+                            VIEW_ITEM* item = flagged[next++];
+
+                            if( !item || !item->viewPrivData() || item->viewPrivData()->m_requiredUpdate == NONE )
+                                continue;
+
+                            const VIEW_ITEM_DATA* data = item->viewPrivData();
+                            const int front = data->m_layers.empty() ? -1 : data->m_layers.front();
+
+                            batch.push_back(
+                                    { item, front, front < 0 ? -1 : data->getGroup( front ),
+                                      retainedOrderKey( item, data->m_drawPriority, data->m_bbox, m_useDrawPriority,
+                                                        m_reverseDrawOrder,
+                                                        data->m_layers.empty()
+                                                                ? 0.0
+                                                                : cachedGroupLOD( item, data->m_layers.front() ) ) } );
+                        }
+
+                        std::sort( batch.begin(), batch.end(),
+                                   []( const RETAINED_ORDER_ITEM& a, const RETAINED_ORDER_ITEM& b )
+                                   {
+                                       return a.order < b.order;
+                                   } );
+
+                        m_deferRetainedPlacement = true;
+
+                        for( const RETAINED_ORDER_ITEM& entry : batch )
+                            invalidate( entry.item );
+
+                        m_deferRetainedPlacement = false;
+
+                        placeRetainedInOrder( std::exchange( m_deferredRetainedPlacements, {} ), true );
+                    }
+                }
+            }
+            else
+            {
+                // Invalidating an item can flag another, which grows the list being walked.
+                for( size_t ii = 0; ii < flagged.size(); ++ii )
+                    invalidate( flagged[ii] );
             }
         }
         else
         {
             updatesProcessed = false;
         }
+
+        wxLogTrace( traceGalGroups, wxS( "UpdateItems() invalidated %u items" ), cntInvalidated );
     }
+
+    wxLogTrace( traceGalGroups,
+                wxS( "UpdateItems() total=%u geomUpdate=%u anyUpdated=%d bulkRebuild=%d" ),
+                cntTotal, cntGeomUpdate, anyUpdated, ratio > 0.05 );
 
 #ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u" ),
-              cntTotal, cntGeomUpdate, (unsigned) anyUpdated );
+                cntTotal, cntGeomUpdate, (unsigned) anyUpdated );
 #endif
 
     if( updatesProcessed )
+    {
         m_hasPendingItemUpdates = false;
+        m_pendingListIncomplete = false;
+        clearPendingItems();
+    }
+}
+
+
+void VIEW::clearPendingItems()
+{
+    for( VIEW_ITEM* item : m_pendingItems )
+    {
+        if( item && item->viewPrivData() )
+            item->viewPrivData()->m_pendingIndex = -1;
+    }
+
+    m_pendingItems.clear();
 }
 
 
@@ -1718,6 +2491,7 @@ void VIEW::UpdateAllItems( int aUpdateFlags )
         {
             item->viewPrivData()->m_requiredUpdate |= aUpdateFlags;
             m_hasPendingItemUpdates = true;
+            m_pendingListIncomplete = true;
         }
     }
 }
@@ -1740,6 +2514,7 @@ void VIEW::UpdateAllItemsConditionally( int aUpdateFlags,
             {
                 item->viewPrivData()->m_requiredUpdate |= aUpdateFlags;
                 m_hasPendingItemUpdates = true;
+                m_pendingListIncomplete = true;
             }
         }
     }
@@ -1759,7 +2534,10 @@ void VIEW::UpdateAllItemsConditionally( std::function<int( VIEW_ITEM* )> aItemFl
             item->viewPrivData()->m_requiredUpdate |= flags;
 
             if( flags != NONE )
+            {
                 m_hasPendingItemUpdates = true;
+                m_pendingListIncomplete = true;
+            }
         }
     }
 }
@@ -1772,6 +2550,8 @@ std::unique_ptr<VIEW> VIEW::DataReference() const
     ret->m_allItems = m_allItems;
     ret->m_layers = m_layers;
     ret->m_hasPendingItemUpdates = m_hasPendingItemUpdates;
+    ret->m_pendingListIncomplete = true;
+    ret->m_cameraDirtyOnly = m_cameraDirtyOnly;
     ret->SortOrderedLayers();
     return ret;
 }
@@ -1867,6 +2647,71 @@ void VIEW::Update( const VIEW_ITEM* aItem, int aUpdateFlags ) const
 
     viewData->m_requiredUpdate |= aUpdateFlags;
     m_hasPendingItemUpdates = true;
+
+    // An item records a single list position, so only this view's own items are listed
+    if( viewData->m_view != this )
+    {
+        m_pendingListIncomplete = true;
+    }
+    else if( viewData->m_pendingIndex < 0 )
+    {
+        viewData->m_pendingIndex = static_cast<int>( m_pendingItems.size() );
+        m_pendingItems.push_back( const_cast<VIEW_ITEM*>( aItem ) );
+    }
+}
+
+
+void VIEW::RepaintLayers( const BOX2I& aRect, const std::function<bool( int )>& aLayerFilter,
+                          const std::function<bool( VIEW_ITEM*, int )>& aItemFilter )
+{
+    if( !m_gal->IsVisible() || !m_gal->IsInitialized() )
+        return;
+
+    std::vector<LAYER_ITEM_PAIR> stale;
+
+    for( VIEW_LAYER* l : m_orderedLayers )
+    {
+        if( l->target != TARGET_CACHED || !l->visible || !aLayerFilter( l->id ) )
+            continue;
+
+        auto collect = [&]( VIEW_ITEM* aItem ) -> bool
+        {
+            if( aItemFilter( aItem, l->id ) )
+                stale.emplace_back( aItem, l->id );
+
+            return true;
+        };
+
+        l->items->Query( aRect, collect );
+    }
+
+    if( stale.empty() )
+        return;
+
+    GAL_UPDATE_CONTEXT ctx( m_gal );
+
+    if( !ctx.IsUpdating() )
+        return;
+
+    if( m_gal->HasRetainedScene() )
+        m_gal->SetSceneScale( m_scale );
+
+    for( const LAYER_ITEM_PAIR& pair : stale )
+        updateItemGeometry( pair.first, pair.second );
+
+    if( m_gal->HasRetainedScene() && !m_useDrawPriority )
+    {
+        // The camera path uploads the already placed groups, so a zoom and the net names it redraws
+        // still go out as one camera frame
+        const bool cameraOnly = m_cameraDirtyOnly || !IsDirty();
+
+        MarkTargetDirty( TARGET_CACHED );
+        m_cameraDirtyOnly = cameraOnly;
+        return;
+    }
+
+    MarkTargetDirty( TARGET_CACHED );
+    markSceneEdited();
 }
 
 
@@ -1923,12 +2768,17 @@ void VIEW::ShowPreview( bool aShow )
 
 void VIEW::SyncLayerVisibilityCache()
 {
+    // Tools ask for this once per item they look at, far more often than a layer changes
+    if( !m_layerCachesStale )
+        return;
+
     for( const auto& layer : m_layers )
     {
         m_layerVisibilityCache[ layer.first ] = layer.second.visible;
         m_layerCachedFlagCache[ layer.first ] = (layer.second.target == TARGET_CACHED);
     }
+
+    m_layerCachesStale = false;
 }
 
 } // namespace KIGFX
-

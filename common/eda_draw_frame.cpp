@@ -360,9 +360,8 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( int aFlags )
         m_lastToolbarIconSize = settings->m_Appearance.toolbar_icon_size;
     }
 
-#ifndef __WXMAC__
+    // A rendering engine change in Preferences applies in place
     resolveCanvasType();
-#endif
 
     // Notify all tools the preferences have changed
     if( m_toolManager )
@@ -527,9 +526,12 @@ bool EDA_DRAW_FRAME::GetOverrideLocks() const
 
 bool EDA_DRAW_FRAME::IsGridVisible()
 {
-    wxCHECK( config(), true );
+    APP_SETTINGS_BASE* cfg = config();
 
-    return GetWindowSettings( config() )->grid.show;
+    if( !cfg )
+        return true;
+
+    return GetWindowSettings( cfg )->grid.show;
 }
 
 
@@ -557,9 +559,12 @@ void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
 
 bool EDA_DRAW_FRAME::IsGridOverridden()
 {
-    wxCHECK( config(), false );
+    APP_SETTINGS_BASE* cfg = config();
 
-    return GetWindowSettings( config() )->grid.overrides_enabled;
+    if( !cfg )
+        return false;
+
+    return GetWindowSettings( cfg )->grid.overrides_enabled;
 }
 
 
@@ -949,12 +954,6 @@ void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 
 EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
 {
-#ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays so there's really only one game
-    // in town for Mac
-    return EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-#endif
-
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
     if( COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
@@ -972,6 +971,12 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
             canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
         }
     }
+
+#ifdef __WXMAC__
+    // Cairo doesn't handle Retina displays, so it is not a valid screen backend on Mac
+    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#endif
 
     return canvasType;
 }

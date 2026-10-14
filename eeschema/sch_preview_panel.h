@@ -39,7 +39,7 @@ class SCH_PREVIEW_PANEL : public EDA_DRAW_PANEL_GAL
 public:
     SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                       GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+                       GAL_TYPE aGalType = GAL_TYPE_MODERN );
 
     ~SCH_PREVIEW_PANEL() override;
 

@@ -72,6 +72,9 @@ if( APPLE )
     # Apple, in their infinite wisdom, has decided to mark OpenGL as deprecated.
     # Luckily we can silence warnings about its deprecation.
     add_compile_definitions( GL_SILENCE_DEPRECATION=1 )
+
+    # Per-source LANGUAGE OBJCXX on the Metal backend only takes effect once the language is enabled here.
+    enable_language( OBJCXX )
 endif()
 
 # Create a flag to identify the non-Apple unix systems
@@ -778,6 +781,7 @@ mark_as_advanced( KICAD_BIN
     KICAD_TEMPLATE )
 
 include( Functions )
+include( RHIShaderCompilation )
 
 include( ExternalProject )
 

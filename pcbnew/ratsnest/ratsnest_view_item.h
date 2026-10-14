@@ -29,6 +29,7 @@
 
 #include <memory>
 #include <eda_item.h>
+#include <layer_ids.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <project/net_settings.h>
@@ -40,7 +41,21 @@ class CONNECTIVITY_DATA;
 class RATSNEST_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData );
+    /**
+     * The lines an item draws. A retained scene caches the board's lines apart from those of
+     * moving items, which change every frame.
+     */
+    enum class PART
+    {
+        ALL,
+        BOARD,
+        LOCAL
+    };
+
+    /** The local part is drawn on a UI layer, which every canvas keeps on its overlay */
+    static constexpr int LOCAL_LAYER = static_cast<int>( LAYER_UI_START ) + 2;
+
+    RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData, PART aPart = PART::ALL );
 
     const BOX2I ViewBBox() const override;
 
@@ -70,6 +85,14 @@ public:
      */
     static VECTOR2D CurveControlPoint( const VECTOR2D& aSource, const VECTOR2D& aTarget );
 
+    /**
+     * Return true when an input to the board's lines other than connectivity has changed since the
+     * last call, or the last draw found the connectivity locked and drew nothing.
+     */
+    bool BoardInputsChanged( KIGFX::VIEW* aView );
+
+    const std::shared_ptr<CONNECTIVITY_DATA>& GetConnectivity() const { return m_data; }
+
     bool HitTest( const VECTOR2I& aPoint, int aAccuracy = 0 ) const override
     {
         return false;   // Not selectable
@@ -86,6 +109,9 @@ public:
 
 protected:
     std::shared_ptr<CONNECTIVITY_DATA> m_data;      ///< Object containing ratsnest data.
+    PART                               m_part;
+    size_t                             m_boardInputs = 0;   /**< see BoardInputsChanged() */
+    mutable bool                       m_drawSkipped = false;
 };
 
 

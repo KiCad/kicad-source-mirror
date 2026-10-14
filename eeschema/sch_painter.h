@@ -124,6 +124,11 @@ private:
     bool isUnitAndConversionShown( const SCH_ITEM* aItem ) const;
 
     float getShadowWidth( bool aForHighlight ) const;
+
+    /**
+     * Whether a text item is drawn as bitmap text at this zoom, see SCH_ITEM::RenderAsBitmap().
+     */
+    bool renderAsBitmap( const SCH_ITEM* aItem ) const;
     COLOR4D getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
                             bool aDimmed = false, bool aIgnoreNets = false ) const;
     KIFONT::FONT* getFont( const EDA_TEXT* aText ) const;

@@ -54,7 +54,21 @@
     },
     "nng",
     "protobuf",
-    "zstd"
+    "zstd",
+    {
+      "name": "vulkan-headers",
+      "platform": "windows"
+    },
+    {
+      "name": "glslang",
+      "features": [ "tools" ],
+      "host": true
+    },
+    {
+      "name": "spirv-tools",
+      "features": [ "tools" ],
+      "host": true
+    }
   ],
   "overrides": [
     {

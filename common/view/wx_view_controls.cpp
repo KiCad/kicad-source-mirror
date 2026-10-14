@@ -219,6 +219,8 @@ void WX_VIEW_CONTROLS::LoadSettings()
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
+    EDA_DRAW_PANEL_GAL::NoteInput();
+
 #ifdef KICAD_GAL_PROFILE
     latencyProbeRepaintToMotion.Checkpoint("motion-event");
     wxLogTrace( traceGalProfile, "%s", latencyProbeRepaintToMotion.to_string() );
@@ -298,6 +300,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
         else
             m_updateCursor = true;
 
+        repaintRetained();
         aEvent.Skip();
         return;
     }
@@ -422,12 +425,23 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     else
         m_updateCursor = true;
 
+    // EDA_DRAW_PANEL_GAL::OnEvent repaints after the tools see the motion. Painting here would draw
+    // the cursor ahead of what the tools draw for it.
     aEvent.Skip();
+}
+
+
+void WX_VIEW_CONTROLS::repaintRetained()
+{
+    if( m_view->GetGAL() && m_view->GetGAL()->HasRetainedScene() )
+        m_parentPanel->Refresh();
 }
 
 
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
+    EDA_DRAW_PANEL_GAL::NoteInput();
+
     const double wheelPanSpeed = 0.001;
     const int    axis = aEvent.GetWheelAxis();
 
@@ -442,11 +456,12 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         if( !m_settings.m_horizontalPan )
             return;
 
-        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false )
+        VECTOR2D scrollVec = m_view->ToWorld( m_view->GetGAL()->GetLayoutPixelSize(), false )
                              * ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
 
         m_view->SetCenter( m_view->GetCenter() + VECTOR2D( scrollVec.x, 0.0 ) );
         refreshMouse( true );
+        repaintRetained();
         return;
     }
 
@@ -511,11 +526,12 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             // Refresh the zoom level and mouse position on message panel
             // (mouse position has not changed, only the zoom level has changed):
             refreshMouse( true );
+            repaintRetained();
         }
         else
         {
             // Scrolling
-            VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false )
+            VECTOR2D scrollVec = m_view->ToWorld( m_view->GetGAL()->GetLayoutPixelSize(), false )
                                  * ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
             double scrollX = 0.0;
             double scrollY = 0.0;
@@ -534,6 +550,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
             m_view->SetCenter( m_view->GetCenter() + delta );
             refreshMouse( true );
+            repaintRetained();
         }
 
         // Do not skip this event, otherwise wxWidgets will fire
@@ -554,6 +571,7 @@ void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
     VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
     m_view->SetScale( m_view->GetScale() * ( aEvent.GetMagnification() + 1.0f ), anchor );
 
+    repaintRetained();
     aEvent.Skip();
 }
 
@@ -721,6 +739,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
         m_view->SetCenter( m_view->GetCenter() + dir );
 
         refreshMouse( true );
+        repaintRetained();
 
         m_panTimer.Start();
     }
@@ -752,6 +771,14 @@ void WX_VIEW_CONTROLS::onZoomGesture( wxZoomGestureEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onPanGesture( wxPanGestureEvent& aEvent )
 {
+    // GTK reports a left button drag as a pan when the panel itself takes the mouse. That drag
+    // belongs to the tools.
+    if( wxGetMouseState().LeftIsDown() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     VECTOR2I screenDelta( aEvent.GetDelta().x, aEvent.GetDelta().y );
 
     ApplyPanAndZoomGesture( screenDelta, 1.0, VECTOR2D() );
@@ -826,7 +853,7 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
             wxCHECK_MSG( false, /* void */, wxT( "Unhandled event type" ) );
         }
 
-        VECTOR2D scroll = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) * dist;
+        VECTOR2D scroll = m_view->ToWorld( m_view->GetGAL()->GetLayoutPixelSize(), false ) * dist;
 
         double scrollX = 0.0;
         double scrollY = 0.0;

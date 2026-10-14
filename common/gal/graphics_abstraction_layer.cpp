@@ -180,6 +180,17 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 }
 
 
+void GAL::DrawTrack( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                     double aWidth, const COLOR4D& aColor )
+{
+    SetFillColor( aColor );
+    SetStrokeColor( aColor );
+    SetIsFill( true );
+    SetIsStroke( false );
+    DrawSegment( aStart, aEnd, aWidth );
+}
+
+
 void GAL::ResetTextAttributes()
 {
      // Tiny but non-zero - this will always need setting
@@ -203,7 +214,8 @@ void GAL::ComputeWorldScreenMatrix()
     MATRIX3x3D translation;
     translation.SetIdentity();
     // We're deliberately dividing integers to avoid fractional pixel offsets.
-    translation.SetTranslation( VECTOR2D( m_screenSize.x/2, m_screenSize.y/2 ) );
+    const VECTOR2I layoutSize = GetLayoutPixelSize();
+    translation.SetTranslation( VECTOR2D( layoutSize.x / 2, layoutSize.y / 2 ) );
 
     MATRIX3x3D rotate;
     rotate.SetIdentity();
@@ -353,7 +365,7 @@ void GAL::drawGridCoverageShape( const GRID_SOURCE& aSrc )
     }
     else if( aSrc.kind == GRID_SOURCE::KIND::CARTESIAN )
     {
-        DrawRectangle( VECTOR2D( -aSrc.extent.x, -aSrc.extent.y ), aSrc.extent );
+        DrawRectangle( -aSrc.extent, aSrc.extent );
     }
     else if( rMax > 0.0 && phiMax >= 2 * M_PI - 1e-6 )
     {

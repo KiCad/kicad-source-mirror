@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,15 +32,13 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_renderingSizer->SetFlexibleDirection( wxBOTH );
 	m_renderingSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_rbAccelerated = new wxRadioButton( this, wxID_ANY, _("Accelerated Graphics"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_rbAccelerated->SetToolTip( _("Hardware-accelerated graphics (recommended)") );
+	wxString m_canvasTypeChoices[] = { _("Accelerated Graphics") };
+	int m_canvasTypeNChoices = sizeof( m_canvasTypeChoices ) / sizeof( wxString );
+	m_canvasType = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_canvasTypeNChoices, m_canvasTypeChoices, 0 );
+	m_canvasType->SetSelection( 0 );
+	m_canvasType->SetToolTip( _("Accelerated uses your GPU (recommended). Fallback uses software rendering for computers that do not support hardware acceleration. RHI is a new experimental GPU rendering engine (Vulkan, or Metal on macOS).") );
 
-	m_renderingSizer->Add( m_rbAccelerated, 0, wxLEFT, 5 );
-
-	m_rbFallback = new wxRadioButton( this, wxID_ANY, _("Fallback Graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_rbFallback->SetToolTip( _("Software graphics (for computers which do not support KiCad's hardware acceleration requirements)") );
-
-	m_renderingSizer->Add( m_rbFallback, 0, wxLEFT, 5 );
+	m_renderingSizer->Add( m_canvasType, 0, wxLEFT, 5 );
 
 
 	bLeftSizer->Add( m_renderingSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

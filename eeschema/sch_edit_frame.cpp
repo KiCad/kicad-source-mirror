@@ -1159,6 +1159,10 @@ void SCH_EDIT_FRAME::HardRedraw()
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
 
+    // The modern canvas only re-emits cached geometry for dirty items, so the new sheet's static
+    // pool would otherwise stay empty
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+
     if( SCH_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>() )
         selectionTool->Reset( TOOL_BASE::REDRAW );
 

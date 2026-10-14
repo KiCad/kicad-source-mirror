@@ -20,6 +20,7 @@
 #ifndef CURSOR_STORE__H
 #define CURSOR_STORE__H
 
+#include <gal/gal.h>
 #include <wx/cursor.h>
 
 #include <map>
@@ -101,7 +102,7 @@ enum class KICURSOR
  * This can be used to lazily construct cursors as needed for specific
  * applications.
  */
-class CURSOR_STORE
+class GAL_API CURSOR_STORE
 {
 public:
     /**

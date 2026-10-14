@@ -212,6 +212,80 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 }
 
 
+bool PCB_RENDER_SETTINGS::IsCanvasFadedLayer( int aLayer ) const
+{
+    if( aLayer < 0 || aLayer >= MAX_LAYERS_FOR_VIEW || !m_canvasFadedLayers.test( aLayer ) )
+        return false;
+
+    // These through-hole pads follow the via layer's colour and activity, not their own
+    if( IsPadCopperLayer( aLayer ) && pcbconfig() && pcbconfig()->m_Display.m_UseViaColorForNormalTHPadstacks )
+        return false;
+
+    return true;
+}
+
+
+bool PCB_RENDER_SETTINGS::GetLayerDim( int aLayer, COLOR4D& aToward, double& aKeep ) const
+{
+    if( !IsCanvasFadedLayer( aLayer ) )
+        return false;
+
+    auto          it = m_layerColors.find( LAYER_PCB_BACKGROUND );
+    const COLOR4D background = it == m_layerColors.end() ? COLOR4D::BLACK : it->second;
+
+    // Net highlight fades every item it does not highlight towards black
+    aToward = COLOR4D::BLACK;
+    aKeep = m_highlightEnabled ? m_highlightFactor : 1.0;
+
+    // Mirrors GetColor in dimmed high contrast, where zones, pad and via copper and clearance
+    // outlines follow their copper layer
+    int base = aLayer;
+
+    if( IsZoneFillLayer( aLayer ) )
+        base = aLayer - LAYER_ZONE_START;
+    else if( IsPadCopperLayer( aLayer ) )
+        base = aLayer - LAYER_PAD_COPPER_START;
+    else if( IsViaCopperLayer( aLayer ) )
+        base = aLayer - LAYER_VIA_COPPER_START;
+    else if( IsClearanceLayer( aLayer ) )
+        base = aLayer - LAYER_CLEARANCE_START;
+
+    if( m_hiContrastEnabled && !m_highContrastLayers.empty() && m_ContrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED
+        && !m_highContrastLayers.count( base ) )
+    {
+        const double contrast = base == Edge_Cuts ? std::max( m_hiContrastFactor, 0.3f ) : m_hiContrastFactor;
+
+        // GetColor mixes c * keep with the background, which equals one fade keeping keep * contrast
+        // of c towards a colour with the same background share
+        const double keep = aKeep * contrast;
+        const double share = keep < 1.0 ? ( 1.0 - contrast ) / ( 1.0 - keep ) : 0.0;
+
+        aToward = COLOR4D( background.r * share, background.g * share, background.b * share, 1.0 );
+        aKeep = keep;
+    }
+
+    return true;
+}
+
+
+bool PCB_RENDER_SETTINGS::IsDimExempt( const VIEW_ITEM* aItem ) const
+{
+    const BOARD_ITEM* item = dynamic_cast<const BOARD_ITEM*>( aItem );
+
+    if( !item )
+        return false;
+
+    // Must match the items GetColor leaves out of high contrast dimming
+    if( item->IsBrightened() || item->IsSelected() )
+        return true;
+
+    if( m_highlightEnabled && item->IsConnected() && item->IsOnCopperLayer() )
+        return m_highlightNetcodes.count( static_cast<const BOARD_CONNECTED_ITEM*>( item )->GetNetCode() ) > 0;
+
+    return false;
+}
+
+
 COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) const
 {
     int netCode = -1;
@@ -407,10 +481,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         }
         else if( m_highlightEnabled )
         {
-            // Highlight brightens objects on all layers and darkens everything else for contrast
+            // Highlight brightens objects on all layers and darkens everything else. The canvas
+            // darkens layers it fades itself, see GetLayerDim.
             if( highlighted )
                 netColor.Brighten( m_highlightFactor );
-            else
+            else if( !IsCanvasFadedLayer( originalLayer ) )
                 netColor.Darken( 1.0 - m_highlightFactor );
         }
 
@@ -424,7 +499,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
             auto it_hi = m_layerColorsHi.find( aLayer );
             color = it_hi == m_layerColorsHi.end() ? color.Brightened( m_highlightFactor ) : it_hi->second;
         }
-        else
+        else if( !IsCanvasFadedLayer( originalLayer ) )
         {
             auto it_dark = m_layerColorsDark.find( aLayer );
             color = it_dark == m_layerColorsDark.end() ? color.Darkened( 1.0 - m_highlightFactor ) : it_dark->second;
@@ -554,8 +629,9 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
                 else
                     color = COLOR4D::CLEAR;
             }
-            else
+            else if( !IsCanvasFadedLayer( originalLayer ) )
             {
+                // The canvas fades the other layers as a whole, see GetLayerDim
                 it = m_layerColors.find( LAYER_PCB_BACKGROUND );
                 COLOR4D backgroundColor = it == m_layerColors.end() ? COLOR4D::BLACK : it->second;
 
@@ -898,15 +974,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     }
     else if( IsCopperLayer( aLayer ) || IsSolderMaskLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
-        // Draw a regular track
         bool outline_mode = pcbconfig()
                             && !pcbconfig()->m_Display.m_DisplayPcbTrackFill
                             && aLayer != LAYER_LOCKED_ITEM_SHADOW;
-        m_gal->SetStrokeColor( color );
-        m_gal->SetFillColor( color );
-        m_gal->SetIsStroke( outline_mode );
-        m_gal->SetIsFill( not outline_mode );
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
         if( IsSolderMaskLayer( aLayer ) )
             track_width = track_width + aTrack->GetSolderMaskExpansion() * 2;
@@ -914,7 +984,19 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
             track_width = track_width + m_lockedShadowMargin;
 
-        m_gal->DrawSegment( start, end, track_width );
+        if( !outline_mode )
+        {
+            // Tracks are the most common primitive, so they bypass the generic fill and stroke path
+            m_gal->DrawTrack( VECTOR2D( start ), VECTOR2D( end ), track_width, color );
+        }
+        else
+        {
+            m_gal->SetStrokeColor( color );
+            m_gal->SetIsStroke( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->DrawSegment( start, end, track_width );
+        }
     }
 
     // Clearance lines
@@ -1229,6 +1311,10 @@ bool PCB_PAINTER::HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const
 
         return via->GetSecondaryDrillSize().value_or( 0 ) <= 0 && via->GetTertiaryDrillSize().value_or( 0 ) <= 0;
     }
+
+    // A cached image takes its opacity from the settings, which only a repaint can apply
+    case PCB_REFERENCE_IMAGE_T:
+        return false;
 
     // A zone's outline and hatch are drawn opaque whatever the zone opacity, so its outline does not
     // take the zone's colour
@@ -2138,257 +2224,298 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     }
     else if( drawShape )
     {
-        VECTOR2I pad_size = aPad->GetSize( pcbLayer );
-        VECTOR2I margin;
+        // Simple pad shapes skip GetEffectiveShape() and tessellation. Chamfered and trapezoid pads
+        // stay generic since the typed encoding has only one corner parameter.
+        PAD_SHAPE padShape = aPad->GetShape( pcbLayer );
 
-        auto getExpansion =
-                [&]( PCB_LAYER_ID layer )
-                {
-                    VECTOR2I expansion;
-
-                    switch( aLayer )
-                    {
-                    case F_Mask:
-                    case B_Mask:
-                        expansion.x = expansion.y = aPad->GetSolderMaskExpansion( layer );
-                        break;
-
-                    case F_Paste:
-                    case B_Paste:
-                        expansion = aPad->GetSolderPasteMargin( layer );
-                        break;
-
-                    default:
-                        expansion.x = expansion.y = 0;
-                        break;
-                    }
-
-                    return expansion;
-                };
-
-        if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+        if( m_gal->SupportsTypedPads()
+            && !outline_mode
+            && aLayer != LAYER_LOCKED_ITEM_SHADOW
+            && aLayer != F_Mask && aLayer != B_Mask
+            && aLayer != F_Paste && aLayer != B_Paste
+            && padShape != PAD_SHAPE::CUSTOM
+            && padShape != PAD_SHAPE::CHAMFERED_RECT
+            && padShape != PAD_SHAPE::TRAPEZOID
+            && ( !IsCopperLayer( pcbLayer )
+                 || aPad->GetPostMachiningKnockout( pcbLayer ) == 0 ) )
         {
-            LSET visibleLayers = aPad->GetLayerSet();
+            VECTOR2I padSize = aPad->GetSize( pcbLayer );
+            double halfWidth = padSize.x / 2.0;
+            double halfHeight = padSize.y / 2.0;
+            VECTOR2D center( aPad->ShapePos( pcbLayer ) );
+            double rotation = aPad->GetOrientation().AsRadians();
+            float shapeType;
 
-            if( aPad->GetBoard() )
+            switch( padShape )
             {
-                visibleLayers &= aPad->GetBoard()->GetVisibleLayers();
-                visibleLayers &= aPad->GetBoard()->GetEnabledLayers();
+            case PAD_SHAPE::CIRCLE:    shapeType = 0.0f; break;
+            case PAD_SHAPE::RECTANGLE: shapeType = 1.0f; break;
+            case PAD_SHAPE::ROUNDRECT: shapeType = 2.0f; break;
+            case PAD_SHAPE::OVAL:      shapeType = 4.0f; break;
+            default:                   shapeType = 0.0f; break;
             }
 
-            for( PCB_LAYER_ID layer : visibleLayers )
-                margin = std::max( margin, getExpansion( layer ) );
+            double cornerRadius = 0.0;
 
-            margin.x += m_lockedShadowMargin / 2;
-            margin.y += m_lockedShadowMargin / 2;
+            if( padShape == PAD_SHAPE::ROUNDRECT )
+                cornerRadius = aPad->GetRoundRectCornerRadius( pcbLayer );
+
+            m_gal->DrawPad( center, halfWidth, halfHeight, cornerRadius, shapeType,
+                            rotation, color );
         }
         else
         {
-            margin = getExpansion( pcbLayer );
-        }
+            VECTOR2I pad_size = aPad->GetSize( pcbLayer );
+            VECTOR2I margin;
 
-        std::unique_ptr<PAD>            dummyPad;
-        std::shared_ptr<SHAPE_COMPOUND> shapes;
+            auto getExpansion =
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        VECTOR2I expansion;
 
-        // Drawing components of compound shapes in outline mode produces a mess.
-        bool simpleShapes = !outline_mode;
+                        switch( aLayer )
+                        {
+                        case F_Mask:
+                        case B_Mask:
+                            expansion.x = expansion.y = aPad->GetSolderMaskExpansion( layer );
+                            break;
 
-        if( simpleShapes )
-        {
-            if( ( margin.x != margin.y && aPad->GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM )
-                || ( aPad->GetShape( pcbLayer ) == PAD_SHAPE::ROUNDRECT
-                     && ( margin.x < 0 || margin.y < 0 ) ) )
+                        case F_Paste:
+                        case B_Paste:
+                            expansion = aPad->GetSolderPasteMargin( layer );
+                            break;
+
+                        default:
+                            expansion.x = expansion.y = 0;
+                            break;
+                        }
+
+                        return expansion;
+                    };
+
+            if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
             {
-                // Our algorithms below (polygon inflation in particular) can't handle differential
-                // inflation along separate axes.  So for those cases we build a dummy pad instead,
-                // and inflate it.
+                LSET visibleLayers = aPad->GetLayerSet();
 
-                // Margin is added to both sides.  If the total margin is larger than the pad
-                // then don't display this layer
-                if( pad_size.x + 2 * margin.x <= 0 || pad_size.y + 2 * margin.y <= 0 )
-                    return;
-
-                dummyPad.reset( static_cast<PAD*>( aPad->Duplicate( IGNORE_PARENT_GROUP ) ) );
-
-                int initial_radius = dummyPad->GetRoundRectCornerRadius( pcbLayer );
-
-                dummyPad->SetSize( pcbLayer, pad_size + margin + margin );
-
-                if( dummyPad->GetShape( pcbLayer ) == PAD_SHAPE::ROUNDRECT )
+                if( aPad->GetBoard() )
                 {
-                    // To keep the right margin around the corners, we need to modify the corner radius.
-                    // We must have only one radius correction, so use the smallest absolute margin.
-                    int radius_margin = std::max( margin.x, margin.y );     // radius_margin is < 0
-                    dummyPad->SetRoundRectCornerRadius( pcbLayer, std::max( initial_radius + radius_margin, 0 ) );
+                    visibleLayers &= aPad->GetBoard()->GetVisibleLayers();
+                    visibleLayers &= aPad->GetBoard()->GetEnabledLayers();
                 }
 
-                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape( pcbLayer ) );
-                margin.x = margin.y = 0;
+                for( PCB_LAYER_ID layer : visibleLayers )
+                    margin = std::max( margin, getExpansion( layer ) );
+
+                margin.x += m_lockedShadowMargin / 2;
+                margin.y += m_lockedShadowMargin / 2;
             }
             else
             {
-                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( pcbLayer ) );
+                margin = getExpansion( pcbLayer );
             }
 
-            // The dynamic cast above will fail if the pad returned the hole shape or a null shape
-            // instead of a SHAPE_COMPOUND, which happens if we're on a copper layer and the pad has
-            // no shape on that layer.
-            if( !shapes )
-                return;
+            std::unique_ptr<PAD>            dummyPad;
+            std::shared_ptr<SHAPE_COMPOUND> shapes;
 
-            if( aPad->GetShape( pcbLayer ) == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
+            // Drawing components of compound shapes in outline mode produces a mess.
+            bool simpleShapes = !outline_mode;
+
+            if( simpleShapes )
             {
-                // We can't draw as shapes because we don't know which edges are internal and which
-                // are external (so we don't know when to apply the margin and when not to).
-                simpleShapes = false;
-            }
-
-            for( const SHAPE* shape : shapes->Shapes() )
-            {
-                if( !simpleShapes )
-                    break;
-
-                switch( shape->Type() )
+                if( ( margin.x != margin.y && aPad->GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM )
+                    || ( aPad->GetShape( pcbLayer ) == PAD_SHAPE::ROUNDRECT
+                         && ( margin.x < 0 || margin.y < 0 ) ) )
                 {
-                case SH_SEGMENT:
-                case SH_CIRCLE:
-                case SH_RECT:
-                case SH_SIMPLE:
-                    // OK so far
-                    break;
+                    // Our algorithms below (polygon inflation in particular) can't handle differential
+                    // inflation along separate axes.  So for those cases we build a dummy pad instead,
+                    // and inflate it.
 
-                default:
-                    // Not OK
-                    simpleShapes = false;
-                    break;
+                    // Margin is added to both sides.  If the total margin is larger than the pad
+                    // then don't display this layer
+                    if( pad_size.x + 2 * margin.x <= 0 || pad_size.y + 2 * margin.y <= 0 )
+                        return;
+
+                    dummyPad.reset( static_cast<PAD*>( aPad->Duplicate( IGNORE_PARENT_GROUP ) ) );
+
+                    int initial_radius = dummyPad->GetRoundRectCornerRadius( pcbLayer );
+
+                    dummyPad->SetSize( pcbLayer, pad_size + margin + margin );
+
+                    if( dummyPad->GetShape( pcbLayer ) == PAD_SHAPE::ROUNDRECT )
+                    {
+                        // To keep the right margin around the corners, we need to modify the corner radius.
+                        // We must have only one radius correction, so use the smallest absolute margin.
+                        int radius_margin = std::max( margin.x, margin.y );     // radius_margin is < 0
+                        dummyPad->SetRoundRectCornerRadius( pcbLayer, std::max( initial_radius + radius_margin, 0 ) );
+                    }
+
+                    shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape( pcbLayer ) );
+                    margin.x = margin.y = 0;
                 }
-            }
-        }
-
-        const auto drawOneSimpleShape =
-                [&]( const SHAPE& aShape )
+                else
                 {
-                    switch( aShape.Type() )
+                    shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( pcbLayer ) );
+                }
+
+                // The dynamic cast above will fail if the pad returned the hole shape or a null shape
+                // instead of a SHAPE_COMPOUND, which happens if we're on a copper layer and the pad has
+                // no shape on that layer.
+                if( !shapes )
+                    return;
+
+                if( aPad->GetShape( pcbLayer ) == PAD_SHAPE::CUSTOM && ( margin.x || margin.y ) )
+                {
+                    // We can't draw as shapes because we don't know which edges are internal and which
+                    // are external (so we don't know when to apply the margin and when not to).
+                    simpleShapes = false;
+                }
+
+                for( const SHAPE* shape : shapes->Shapes() )
+                {
+                    if( !simpleShapes )
+                        break;
+
+                    switch( shape->Type() )
                     {
                     case SH_SEGMENT:
-                    {
-                        const SHAPE_SEGMENT& seg = (const SHAPE_SEGMENT&) aShape;
-                        int                  effectiveWidth = seg.GetWidth() + 2 * margin.x;
-
-                        if( effectiveWidth > 0 )
-                            m_gal->DrawSegment( seg.GetSeg().A, seg.GetSeg().B, effectiveWidth );
-
-                        break;
-                    }
-
                     case SH_CIRCLE:
-                    {
-                        const SHAPE_CIRCLE& circle = (const SHAPE_CIRCLE&) aShape;
-                        int                 effectiveRadius = circle.GetRadius() + margin.x;
-
-                        if( effectiveRadius > 0 )
-                            m_gal->DrawCircle( circle.GetCenter(), effectiveRadius );
-
-                        break;
-                    }
-
                     case SH_RECT:
-                    {
-                        const SHAPE_RECT& r = (const SHAPE_RECT&) aShape;
-                        VECTOR2I          pos = r.GetPosition();
-                        VECTOR2I          effectiveMargin = margin;
-
-                        if( effectiveMargin.x < 0 )
-                        {
-                            // A negative margin just produces a smaller rect.
-                            VECTOR2I effectiveSize = r.GetSize() + effectiveMargin;
-
-                            if( effectiveSize.x > 0 && effectiveSize.y > 0 )
-                                m_gal->DrawRectangle( pos - effectiveMargin, pos + effectiveSize );
-                        }
-                        else if( effectiveMargin.x > 0 )
-                        {
-                            // A positive margin produces a larger rect, but with rounded corners
-                            m_gal->DrawRectangle( r.GetPosition(), r.GetPosition() + r.GetSize() );
-
-                            // Use segments to produce the margin with rounded corners
-                            m_gal->DrawSegment( pos,
-                                                pos + VECTOR2I( r.GetWidth(), 0 ),
-                                                effectiveMargin.x * 2 );
-                            m_gal->DrawSegment( pos + VECTOR2I( r.GetWidth(), 0 ),
-                                                pos + r.GetSize(),
-                                                effectiveMargin.x * 2 );
-                            m_gal->DrawSegment( pos + r.GetSize(),
-                                                pos + VECTOR2I( 0, r.GetHeight() ),
-                                                effectiveMargin.x * 2 );
-                            m_gal->DrawSegment( pos + VECTOR2I( 0, r.GetHeight() ),
-                                                pos,
-                                                effectiveMargin.x * 2 );
-                        }
-                        else
-                        {
-                            m_gal->DrawRectangle( r.GetPosition(), r.GetPosition() + r.GetSize() );
-                        }
-
-                        break;
-                    }
-
                     case SH_SIMPLE:
-                    {
-                        const SHAPE_SIMPLE& poly = static_cast<const SHAPE_SIMPLE&>( aShape );
-
-                        if( poly.PointCount() < 2 ) // Careful of empty pads
-                            break;
-
-                        if( margin.x < 0 ) // The poly shape must be deflated
-                        {
-                            SHAPE_POLY_SET outline;
-                            outline.NewOutline();
-
-                            for( int ii = 0; ii < poly.PointCount(); ++ii )
-                                outline.Append( poly.CPoint( ii ) );
-
-                            outline.Deflate( -margin.x, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
-
-                            m_gal->DrawPolygon( outline );
-                        }
-                        else
-                        {
-                            m_gal->DrawPolygon( poly.Vertices() );
-                        }
-
-                        // Now add on a rounded margin (using segments) if the margin > 0
-                        if( margin.x > 0 )
-                        {
-                            for( int ii = 0; ii < (int) poly.GetSegmentCount(); ++ii )
-                            {
-                                SEG seg = poly.GetSegment( ii );
-                                m_gal->DrawSegment( seg.A, seg.B, margin.x * 2 );
-                            }
-                        }
-
+                        // OK so far
                         break;
-                    }
 
                     default:
-                        // Better not get here; we already pre-flighted the shapes...
+                        // Not OK
+                        simpleShapes = false;
                         break;
                     }
-                };
+                }
+            }
 
-        if( simpleShapes )
-        {
-            for( const SHAPE* shape : shapes->Shapes() )
-                drawOneSimpleShape( *shape );
-        }
-        else
-        {
-            // This is expensive.  Avoid if possible.
-            SHAPE_POLY_SET polySet;
-            aPad->TransformShapeToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x, m_maxError, ERROR_INSIDE );
-            m_gal->DrawPolygon( polySet );
-        }
+            const auto drawOneSimpleShape =
+                    [&]( const SHAPE& aShape )
+                    {
+                        switch( aShape.Type() )
+                        {
+                        case SH_SEGMENT:
+                        {
+                            const SHAPE_SEGMENT& seg = (const SHAPE_SEGMENT&) aShape;
+                            int                  effectiveWidth = seg.GetWidth() + 2 * margin.x;
 
+                            if( effectiveWidth > 0 )
+                                m_gal->DrawSegment( seg.GetSeg().A, seg.GetSeg().B, effectiveWidth );
+
+                            break;
+                        }
+
+                        case SH_CIRCLE:
+                        {
+                            const SHAPE_CIRCLE& circle = (const SHAPE_CIRCLE&) aShape;
+                            int                 effectiveRadius = circle.GetRadius() + margin.x;
+
+                            if( effectiveRadius > 0 )
+                                m_gal->DrawCircle( circle.GetCenter(), effectiveRadius );
+
+                            break;
+                        }
+
+                        case SH_RECT:
+                        {
+                            const SHAPE_RECT& r = (const SHAPE_RECT&) aShape;
+                            VECTOR2I          pos = r.GetPosition();
+                            VECTOR2I          effectiveMargin = margin;
+
+                            if( effectiveMargin.x < 0 )
+                            {
+                                // A negative margin just produces a smaller rect.
+                                VECTOR2I effectiveSize = r.GetSize() + effectiveMargin;
+
+                                if( effectiveSize.x > 0 && effectiveSize.y > 0 )
+                                    m_gal->DrawRectangle( pos - effectiveMargin, pos + effectiveSize );
+                            }
+                            else if( effectiveMargin.x > 0 )
+                            {
+                                // A positive margin produces a larger rect, but with rounded corners
+                                m_gal->DrawRectangle( r.GetPosition(), r.GetPosition() + r.GetSize() );
+
+                                // Use segments to produce the margin with rounded corners
+                                m_gal->DrawSegment( pos,
+                                                    pos + VECTOR2I( r.GetWidth(), 0 ),
+                                                    effectiveMargin.x * 2 );
+                                m_gal->DrawSegment( pos + VECTOR2I( r.GetWidth(), 0 ),
+                                                    pos + r.GetSize(),
+                                                    effectiveMargin.x * 2 );
+                                m_gal->DrawSegment( pos + r.GetSize(),
+                                                    pos + VECTOR2I( 0, r.GetHeight() ),
+                                                    effectiveMargin.x * 2 );
+                                m_gal->DrawSegment( pos + VECTOR2I( 0, r.GetHeight() ),
+                                                    pos,
+                                                    effectiveMargin.x * 2 );
+                            }
+                            else
+                            {
+                                m_gal->DrawRectangle( r.GetPosition(), r.GetPosition() + r.GetSize() );
+                            }
+
+                            break;
+                        }
+
+                        case SH_SIMPLE:
+                        {
+                            const SHAPE_SIMPLE& poly = static_cast<const SHAPE_SIMPLE&>( aShape );
+
+                            if( poly.PointCount() < 2 ) // Careful of empty pads
+                                break;
+
+                            if( margin.x < 0 ) // The poly shape must be deflated
+                            {
+                                SHAPE_POLY_SET outline;
+                                outline.NewOutline();
+
+                                for( int ii = 0; ii < poly.PointCount(); ++ii )
+                                    outline.Append( poly.CPoint( ii ) );
+
+                                outline.Deflate( -margin.x, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
+
+                                m_gal->DrawPolygon( outline );
+                            }
+                            else
+                            {
+                                m_gal->DrawPolygon( poly.Vertices() );
+                            }
+
+                            // Now add on a rounded margin (using segments) if the margin > 0
+                            if( margin.x > 0 )
+                            {
+                                for( int ii = 0; ii < (int) poly.GetSegmentCount(); ++ii )
+                                {
+                                    SEG seg = poly.GetSegment( ii );
+                                    m_gal->DrawSegment( seg.A, seg.B, margin.x * 2 );
+                                }
+                            }
+
+                            break;
+                        }
+
+                        default:
+                            // Better not get here; we already pre-flighted the shapes...
+                            break;
+                        }
+                    };
+
+            if( simpleShapes )
+            {
+                for( const SHAPE* shape : shapes->Shapes() )
+                    drawOneSimpleShape( *shape );
+            }
+            else
+            {
+                // This is expensive.  Avoid if possible.
+                SHAPE_POLY_SET polySet;
+                aPad->TransformShapeToPolygon( polySet, ToLAYER_ID( aLayer ), margin.x, m_maxError, ERROR_INSIDE );
+                m_gal->DrawPolygon( polySet );
+            }
+        }
     }
 
     if( !m_pcbSettings.IsPrinting() && IsCopperLayer( pcbLayer ) && aPad->GetDrillSizeX() > 0 )
@@ -3421,20 +3548,22 @@ void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
     {
         const COLOR4D color = m_pcbSettings.GetColor( aFootprint, aLayer );
 
-        // Keep the size and width constant, not related to the scale because the anchor
-        // is just a marker on screen
-        double anchorSize = 5.0 / m_gal->GetWorldScale();           // 5 pixels size
-        double anchorThickness = 1.0 / m_gal->GetWorldScale();      // 1 pixels width
+        // A fixed pixel size at any zoom, which the shader rebuilds from the live projection
+        double worldScale = m_gal->GetWorldScaleForScreenSpace();
+        double anchorSize = 5.0 / worldScale;
+        double anchorThickness = 1.0 / worldScale;
 
-        // Draw anchor
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
         m_gal->SetLineWidth( anchorThickness );
+        m_gal->SetScreenSpaceMode( true );
 
         VECTOR2D center = aFootprint->GetPosition();
         m_gal->DrawLine( center - VECTOR2D( anchorSize, 0 ), center + VECTOR2D( anchorSize, 0 ) );
         m_gal->DrawLine( center - VECTOR2D( 0, anchorSize ), center + VECTOR2D( 0, anchorSize ) );
+
+        m_gal->SetScreenSpaceMode( false );
     }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW && m_frameType == FRAME_PCB_EDITOR )    // happens only if locked

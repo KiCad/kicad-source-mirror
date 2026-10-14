@@ -122,6 +122,9 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     SCH_CONNECTIVITY::RENDER_SCOPE renderScope;
     draw( item, aLayer, false );
 
+    // A shadow's pixel width belongs to the item that asked for it
+    m_gal->SetStrokePixelPad( 0.0 );
+
     return false;
 }
 
@@ -292,12 +295,28 @@ KIFONT::FONT* SCH_PAINTER::getFont( const EDA_TEXT* aItem ) const
 }
 
 
+bool SCH_PAINTER::renderAsBitmap( const SCH_ITEM* aItem ) const
+{
+    // Asked as a scale limit so a zoom that stays on one side of it keeps what was drawn
+    const double limit = aItem->BitmapWorldScaleLimit();
+
+    return limit > 0.0 && m_gal->WorldScaleBelow( limit );
+}
+
+
 float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 {
-    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
-
     int milsWidth = aForHighlight ? eeconfig()->m_Selection.highlight_thickness
                                   : eeconfig()->m_Selection.selection_thickness;
+
+    // The canvas adds the pixel part, so a zoom need not redraw the shadow
+    if( m_gal->SupportsStrokePixelPad() )
+    {
+        m_gal->SetStrokePixelPad( milsWidth );
+        return (float) schIUScale.MilsToIU( milsWidth );
+    }
+
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
@@ -1169,7 +1188,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 static const float BITMAP_FONT_SIZE_THRESHOLD = 3.5;
 
                 // Any text non bitmappable?
-                return aTextSize * aGal.GetWorldScale() < BITMAP_FONT_SIZE_THRESHOLD;
+                return aTextSize > 0 && aGal.WorldScaleBelow( BITMAP_FONT_SIZE_THRESHOLD / aTextSize );
             };
 
     // Helper function for drawing braces around multi-line text
@@ -1611,10 +1630,20 @@ void SCH_PAINTER::drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows )
         return;
 
     // In order for the anchors to be visible but unobtrusive, their size must factor in the
-    // current zoom level.
-    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
-    int radius = KiROUND( std::fabs( matrix.GetScale().x * TEXT_ANCHOR_SIZE ) / 25.0 )
-                     + schIUScale.MilsToIU( TEXT_ANCHOR_SIZE );
+    // current zoom level.  A canvas that can add pixels to a stroke's length does that when it draws.
+    const bool lengthPad = m_gal->SupportsStrokeLengthPad();
+    int        radius = schIUScale.MilsToIU( TEXT_ANCHOR_SIZE );
+
+    if( lengthPad )
+    {
+        m_gal->SetStrokeLengthPad( TEXT_ANCHOR_SIZE / 25.0 );
+    }
+    else
+    {
+        const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+
+        radius += KiROUND( std::fabs( matrix.GetScale().x * TEXT_ANCHOR_SIZE ) / 25.0 );
+    }
 
     COLOR4D color = aDrawingShadows ? m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS )
                                     : m_schSettings.GetLayerColor( LAYER_SCHEMATIC_ANCHOR );
@@ -1626,6 +1655,9 @@ void SCH_PAINTER::drawAnchor( const VECTOR2I& aPos, bool aDrawingShadows )
 
     m_gal->DrawLine( aPos - VECTOR2I( radius, 0 ), aPos + VECTOR2I( radius, 0 ) );
     m_gal->DrawLine( aPos - VECTOR2I( 0, radius ), aPos + VECTOR2I( 0, radius ) );
+
+    if( lengthPad )
+        m_gal->SetStrokeLengthPad( 0.0 );
 }
 
 
@@ -2357,7 +2389,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         if( aText->Type() == SCH_TEXT_T )
             text_offset += aText->GetOffsetToMatchSCH_FIELD( nullptr );
 
-        if( nonCached( aText ) && aText->RenderAsBitmap( m_gal->GetWorldScale() )
+        if( nonCached( aText ) && renderAsBitmap( aText )
                                && !shownText.Contains( wxT( "\n" ) ) )
         {
             attrs.m_StrokeWidth += shadowWidth;
@@ -3069,7 +3101,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             }
         }
 
-        if( nonCached( aField ) && aField->RenderAsBitmap( m_gal->GetWorldScale() ) )
+        if( nonCached( aField ) && renderAsBitmap( aField ) )
         {
             attrs.m_StrokeWidth += shadowWidth;
             bitmapText( *m_gal, shownText, textpos, attrs );

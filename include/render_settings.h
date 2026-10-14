@@ -202,6 +202,23 @@ public:
      */
     virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const = 0;
 
+    /**
+     * Get how the canvas fades a whole layer, see GAL::SetSceneLayerDim(). GetColor leaves that fade out
+     * of the layer's colours.
+     *
+     * @param aLayer is the VIEW layer id.
+     * @param aToward receives the colour the layer fades towards.
+     * @param aKeep receives the share of each colour kept, 1 when the layer is not dimmed.
+     * @return false for a layer whose items GetColor dims itself.
+     */
+    virtual bool GetLayerDim( int aLayer, COLOR4D& aToward, double& aKeep ) const { return false; }
+
+    /**
+     * Return true for an item that keeps its colour on a layer the canvas fades, such as a
+     * selected item in high contrast.
+     */
+    virtual bool IsDimExempt( const VIEW_ITEM* aItem ) const { return false; }
+
     float GetDrawingSheetLineWidth() const { return m_drawingSheetLineWidth; }
 
     int GetDefaultPenWidth() const { return m_defaultPenWidth; }

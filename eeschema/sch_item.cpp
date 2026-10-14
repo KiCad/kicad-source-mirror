@@ -1049,13 +1049,22 @@ int SCH_ITEM::GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const
 
 bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 {
+    return aWorldScale < BitmapWorldScaleLimit();
+}
+
+
+double SCH_ITEM::BitmapWorldScaleLimit() const
+{
     if( HasHypertext() )
-        return false;
+        return 0.0;
 
     if( const EDA_TEXT* text = dynamic_cast<const EDA_TEXT*>( this ) )
-        return text->GetTextHeight() * aWorldScale < BITMAP_FONT_SIZE_THRESHOLD;
+    {
+        if( text->GetTextHeight() > 0 )
+            return BITMAP_FONT_SIZE_THRESHOLD / static_cast<double>( text->GetTextHeight() );
+    }
 
-    return false;
+    return 0.0;
 }
 
 

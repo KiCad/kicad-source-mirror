@@ -20,6 +20,7 @@
 
 #include "panel_symbol_chooser.h"
 
+#include <class_draw_panel_gal.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <kiface_base.h>
@@ -369,7 +370,7 @@ void PANEL_SYMBOL_CHOOSER::OnChar( wxKeyEvent& aEvent )
 
 wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
 {
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE::GAL_TYPE_OPENGL;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE::GAL_TYPE_MODERN;
 
     if( m_frame->GetCanvas() )
         backend = m_frame->GetCanvas()->GetBackend();

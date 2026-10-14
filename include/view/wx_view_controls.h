@@ -156,6 +156,12 @@ private:
     void handleCursorCapture( int x, int y );
 
     /**
+     * Repaint only when the canvas keeps a retained scene. Other canvases repaint from the refresh
+     * the mouse event posts.
+     */
+    void repaintRetained();
+
+    /**
      * Send an event to refresh mouse position.
      *
      * It is mostly used for notifying the tools that the cursor position in the world

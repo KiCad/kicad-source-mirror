@@ -101,7 +101,7 @@ DIALOG_IMPORT_SYMBOL_SELECT::DIALOG_IMPORT_SYMBOL_SELECT( SYMBOL_EDIT_FRAME* aPa
                            nullptr, this );
 
     m_preview = new SYMBOL_PREVIEW_WIDGET( m_previewPanel, &Kiway(), false,
-                                           EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+                                           m_frame->GetCanvas()->GetBackend() );
     m_previewSizer->Add( m_preview, 1, wxEXPAND, 0 );
     m_previewPanel->Layout();
     m_unitChoice->Enable( false );

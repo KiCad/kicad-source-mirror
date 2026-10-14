@@ -280,7 +280,7 @@ public:
     /**
      * Enable drawing the triangulation outlines with a visible color.
      *
-     * @note This only affects the OpenGL GAL.
+     * @note This only affects screen rendering, not Cairo printing or plotting.
      *
      * Setting name: "StrokeTriangulation"
      * Valid values: 0 or 1
@@ -1106,6 +1106,24 @@ public:
      * Default value: true
      */
     bool m_EnableGLResetRecovery;
+
+    /**
+     * Enable Vulkan validation layers for debugging.
+     *
+     * Setting name: "EnableVulkanValidation"
+     * Valid values: true or false
+     * Default value: false
+     */
+    bool m_EnableVulkanValidation;
+
+    /**
+     * Thread priority for the RHI render thread.
+     *
+     * Setting name: "RenderThreadPriority"
+     * Valid values: "low", "normal", "high"
+     * Default value: "normal"
+     */
+    wxString m_RenderThreadPriority;
 
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}

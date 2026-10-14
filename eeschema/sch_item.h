@@ -380,6 +380,11 @@ public:
     bool RenderAsBitmap( double aWorldScale ) const override;
 
     /**
+     * The world scale below which the item is drawn as bitmap text, or 0 if it never is.
+     */
+    double BitmapWorldScaleLimit() const;
+
+    /**
      * Return a measure of how likely the other object is to represent the same
      * object.
      *

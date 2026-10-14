@@ -31,7 +31,7 @@ class PL_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 public:
     PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                       GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+                       GAL_TYPE aGalType = GAL_TYPE_MODERN );
 
     virtual ~PL_DRAW_PANEL_GAL();
 

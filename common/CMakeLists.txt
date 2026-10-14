@@ -22,6 +22,9 @@ include_directories(
 # Get the GAL Target
 add_subdirectory( gal )
 
+# Get the RHI (Rendering Hardware Interface) library
+add_subdirectory( rhi )
+
 # Get the netlist reader library
 add_subdirectory( netlist_reader )
 
@@ -388,6 +391,16 @@ set( KICOMMON_SRCS
     startwizard/startwizard_provider_settings.cpp
     )
 
+if( APPLE )
+    list( APPEND KICOMMON_SRCS rhi/rhi_metal_view.mm )
+    set_source_files_properties( rhi/rhi_metal_view.mm
+        PROPERTIES
+            LANGUAGE OBJCXX
+            COMPILE_FLAGS "-fobjc-arc"
+            SKIP_PRECOMPILE_HEADERS ON
+    )
+endif()
+
 if( UNIX AND NOT APPLE )
     list( APPEND KICOMMON_SRCS
         spacenav/libspnav_driver.cpp
@@ -450,6 +463,14 @@ target_link_libraries( kicommon
    	${HarfBuzz_LIBRARIES}
 	${Fontconfig_LIBRARIES}
     )
+
+if( APPLE )
+    target_link_libraries( kicommon
+        "-framework Metal"
+        "-framework QuartzCore"
+        "-framework AppKit"
+    )
+endif()
 
 
 if( KICAD_USE_SENTRY )

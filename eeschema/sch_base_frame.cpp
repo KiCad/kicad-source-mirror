@@ -441,8 +441,11 @@ void SCH_BASE_FRAME::RefreshZoomDependentItems()
 
         for( EDA_ITEM* item : selection )
         {
-            if( item->RenderAsBitmap( view->GetGAL()->GetWorldScale() ) != item->IsShownAsBitmap()
-                    || item->IsType( KIGFX::SCH_PAINTER::g_ScaledSelectionTypes ) )
+            // A canvas that pads shadow strokes itself only needs updating when bitmap text toggles
+            const bool scaled = !view->GetGAL()->SupportsStrokePixelPad()
+                                && item->IsType( KIGFX::SCH_PAINTER::g_ScaledSelectionTypes );
+
+            if( item->RenderAsBitmap( view->GetGAL()->GetWorldScale() ) != item->IsShownAsBitmap() || scaled )
             {
                 view->Update( item, KIGFX::REPAINT );
 
@@ -504,6 +507,7 @@ void SCH_BASE_FRAME::SyncView()
     if( m_toolManager )
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
+    // Callers change text such as references without updating the items, so every cache is stale
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }
 
