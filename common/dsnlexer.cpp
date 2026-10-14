@@ -242,6 +242,22 @@ int DSNLEXER::findToken( const std::string& tok ) const
 
         if( it != keywordsLookup->end() )
             return it->second;
+
+        // The Specctra DSN grammar is case-insensitive and the keyword table is lowercase
+        if( specctraMode )
+        {
+            std::string lower;
+
+            lower.reserve( tok.size() );
+
+            for( char cc : tok )
+                lower += std::tolower( cc );
+
+            it = keywordsLookup->find( lower.c_str() );
+
+            if( it != keywordsLookup->end() )
+                return it->second;
+        }
     }
 
     return DSN_SYMBOL;      // not a keyword, some arbitrary symbol.
