@@ -28,6 +28,7 @@
 #include <board_item.h>
 #include <pcb_shape.h>
 
+#include <constraints/pcb_constraint.h>
 #include <geometry/corner_operations.h>
 
 /**
@@ -188,6 +189,13 @@ protected:
      * @param aSeg the new line geometry
      */
     bool ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aItem, const std::optional<SEG>& aSeg );
+
+    /**
+     * @brief Hold each line to a shape just inserted at their shared corner, in place of the
+     * coincident constraint that held the two lines to each other.
+     */
+    void SplitCornerConstraint( const CONSTRAINT_MEMBER& aCornerA, const CONSTRAINT_MEMBER& aCornerB,
+                                const CONSTRAINT_MEMBER& aInsertedForA, const CONSTRAINT_MEMBER& aInsertedForB );
 
     /**
      * @brief Access the handler for making changes to the board

@@ -27,6 +27,8 @@
 #include <geometry/shape_utils.h>
 #include <geometry/vector_utils.h>
 
+#include <board.h>
+#include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <tools/pcb_tool_utils.h>
@@ -91,6 +93,51 @@ bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aLine
     }
 
     return removed;
+}
+
+
+void ITEM_MODIFICATION_ROUTINE::SplitCornerConstraint( const CONSTRAINT_MEMBER& aCornerA,
+                                                       const CONSTRAINT_MEMBER& aCornerB,
+                                                       const CONSTRAINT_MEMBER& aInsertedForA,
+                                                       const CONSTRAINT_MEMBER& aInsertedForB )
+{
+    BOARD_ITEM* container = GetBoard();
+    BOARD*      board = container ? container->GetBoard() : nullptr;
+
+    if( !board )
+        return;
+
+    std::vector<PCB_CONSTRAINT*> constraints( board->Constraints().begin(), board->Constraints().end() );
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+        constraints.insert( constraints.end(), footprint->Constraints().begin(), footprint->Constraints().end() );
+
+    for( PCB_CONSTRAINT* constraint : constraints )
+    {
+        if( constraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::COINCIDENT )
+            continue;
+
+        std::vector<CONSTRAINT_MEMBER>& members = constraint->Members();
+
+        if( members.size() != 2 )
+            continue;
+
+        if( !( ( members[0] == aCornerA && members[1] == aCornerB )
+               || ( members[0] == aCornerB && members[1] == aCornerA ) ) )
+        {
+            continue;
+        }
+
+        GetHandler().MarkItemModified( *constraint );
+        members = { aCornerA, aInsertedForA };
+
+        auto split = std::make_unique<PCB_CONSTRAINT>( constraint->GetParent(), PCB_CONSTRAINT_TYPE::COINCIDENT );
+        split->AddMember( aCornerB.m_item, aCornerB.m_anchor, aCornerB.m_index );
+        split->AddMember( aInsertedForB.m_item, aInsertedForB.m_anchor, aInsertedForB.m_index );
+
+        GetHandler().AddNewItem( std::move( split ) );
+        return;
+    }
 }
 
 
@@ -175,13 +222,29 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
 
     CHANGE_HANDLER& handler = GetHandler();
 
+    const KIID     arcId = tArc->m_Uuid;
+    const VECTOR2I arcStart = tArc->GetStart();
+
     handler.AddNewItem( std::move( tArc ) );
+
+    // GetSharedEndpoints hands back a pointer into the segment, so A means the line's start
+    const CONSTRAINT_ANCHOR cornerA = a_pt == &seg_a.A ? CONSTRAINT_ANCHOR::START : CONSTRAINT_ANCHOR::END;
+    const CONSTRAINT_ANCHOR cornerB = b_pt == &seg_b.A ? CONSTRAINT_ANCHOR::START : CONSTRAINT_ANCHOR::END;
 
     *a_pt = t1newPoint;
     *b_pt = t2newPoint;
 
-    ModifyLineOrDeleteIfZeroLength( aLineA, seg_a );
-    ModifyLineOrDeleteIfZeroLength( aLineB, seg_b );
+    const bool removedA = ModifyLineOrDeleteIfZeroLength( aLineA, seg_a );
+    const bool removedB = ModifyLineOrDeleteIfZeroLength( aLineB, seg_b );
+
+    if( !removedA && !removedB )
+    {
+        const CONSTRAINT_ANCHOR arcForA = t1newPoint == arcStart ? CONSTRAINT_ANCHOR::START : CONSTRAINT_ANCHOR::END;
+        const CONSTRAINT_ANCHOR arcForB = t2newPoint == arcStart ? CONSTRAINT_ANCHOR::START : CONSTRAINT_ANCHOR::END;
+
+        SplitCornerConstraint( { aLineA.m_Uuid, cornerA }, { aLineB.m_Uuid, cornerB }, { arcId, arcForA },
+                               { arcId, arcForB } );
+    }
 
     AddSuccess();
 }

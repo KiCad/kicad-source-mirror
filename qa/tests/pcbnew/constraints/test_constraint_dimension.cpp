@@ -44,6 +44,8 @@
 #include <constraints/board_constraint_adapter.h>
 #include <constraints/constraint_builder.h>
 
+#include <tools/item_modification_routine.h>
+
 #include "constraint_test_utils.h"
 
 using namespace KI_TEST;
@@ -1503,6 +1505,75 @@ BOOST_AUTO_TEST_CASE( ValueModePropertySurface )
 
     // A Driven dimension accepts anything the setter will ignore so no veto there
     BOOST_CHECK( !valueProp->Validate( wxAny( wxString( wxS( "0" ) ) ), unbound ) );
+}
+
+
+// Filleting a constrained corner puts an arc between the lines so each line binds to the arc
+BOOST_AUTO_TEST_CASE( FilletRebindsCornerCoincidentToArc )
+{
+    BOARD board;
+
+    PCB_SHAPE* lineA = addSegment( board, VECTOR2I( 0, 0 ), VECTOR2I( 10 * MM, 0 ) );
+    PCB_SHAPE* lineB = addSegment( board, VECTOR2I( 10 * MM, 0 ), VECTOR2I( 10 * MM, 10 * MM ) );
+
+    const CONSTRAINT_MEMBER cornerA( lineA->m_Uuid, CONSTRAINT_ANCHOR::END );
+    const CONSTRAINT_MEMBER cornerB( lineB->m_Uuid, CONSTRAINT_ANCHOR::START );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::COINCIDENT, { cornerB, cornerA } );
+
+    PCB_SHAPE* arc = nullptr;
+
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER handler(
+            [&]( std::unique_ptr<BOARD_ITEM> aItem )
+            {
+                if( aItem->Type() == PCB_SHAPE_T )
+                    arc = static_cast<PCB_SHAPE*>( aItem.get() );
+
+                board.Add( aItem.release() );
+            },
+            []( BOARD_ITEM& )
+            {
+            },
+            [&]( BOARD_ITEM& aItem )
+            {
+                board.Remove( &aItem );
+            } );
+
+    LINE_FILLET_ROUTINE fillet( &board, handler, 1 * MM );
+    fillet.ProcessLinePair( *lineA, *lineB );
+
+    BOOST_REQUIRE( arc );
+
+    auto heldTogether = [&]( const CONSTRAINT_MEMBER& aFirst, const CONSTRAINT_MEMBER& aSecond )
+    {
+        for( const PCB_CONSTRAINT* constraint : board.Constraints() )
+        {
+            if( constraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::COINCIDENT )
+                continue;
+
+            const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
+
+            if( members.size() != 2 )
+                continue;
+
+            if( ( members[0] == aFirst && members[1] == aSecond ) || ( members[0] == aSecond && members[1] == aFirst ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    const CONSTRAINT_MEMBER arcStart( arc->m_Uuid, CONSTRAINT_ANCHOR::START );
+    const CONSTRAINT_MEMBER arcEnd( arc->m_Uuid, CONSTRAINT_ANCHOR::END );
+
+    // Which end of the arc meets which line is the routine's business
+    BOOST_CHECK( ( heldTogether( arcStart, cornerA ) && heldTogether( arcEnd, cornerB ) )
+                 || ( heldTogether( arcStart, cornerB ) && heldTogether( arcEnd, cornerA ) ) );
+
+    // The two lines no longer touch so a constraint still joining them is false
+    BOOST_CHECK( !heldTogether( cornerA, cornerB ) );
 }
 
 
