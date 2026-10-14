@@ -109,7 +109,7 @@ namespace DSN
 {
 
 
-void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
+void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename, REPORTER* aReporter )
 {
     SPECCTRA_DB db;
 
@@ -119,7 +119,7 @@ void ExportBoardToSpecctraFile( BOARD* aBoard, const wxString& aFullFilename )
 
     // Build the board outlines *before* flipping footprints
     if( !db.BuiltBoardOutlines( aBoard ) )
-        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
+        ReportWarning( aReporter, _( "Board outline is malformed. Run DRC for a full analysis." ) );
 
     // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
     // temporarily flip any footprints which are on the back side of the board to the front,

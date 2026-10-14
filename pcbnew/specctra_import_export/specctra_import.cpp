@@ -549,17 +549,19 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
 
     if( skipped > 0 )
     {
-        wxLogWarning( wxString::Format( _( "%d session item(s) were skipped due to unresolved "
-                                           "reference, layer, or padstack." ), skipped ) );
+        ReportWarning( m_reporter, wxString::Format( _( "%d session item(s) were skipped due to unresolved "
+                                                        "reference, layer, or padstack." ),
+                                                     skipped ) );
     }
 }
 
 
-bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit )
+bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit, REPORTER* aReporter )
 {
     SPECCTRA_DB db;
     LOCALE_IO   toggle;
 
+    db.SetReporter( aReporter );
     db.LoadSESSION( fullFileName );
     db.FromSESSION( aBoard, aCommit );
 
