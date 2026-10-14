@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-13 20:51+0000\n"
+"PO-Revision-Date: 2026-10-15 03:56+0000\n"
 "Last-Translator: EdizonTN <edizontn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -292,7 +292,7 @@ msgstr "&Súbor"
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_footprint_editor.cpp:273
 #: pcbnew/menubar_pcb_editor.cpp:511
 msgid "&Edit"
-msgstr "&Editovať"
+msgstr "&Upraviť"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142 eeschema/menubar.cpp:382
 #: eeschema/sim/toolbars_simulator_frame.cpp:176
@@ -11613,15 +11613,15 @@ msgstr "Otvoriť súbor"
 
 #: common/pth_hole_size.cpp:94
 msgid "A (General)"
-msgstr ""
+msgstr "A (Všeobecná)"
 
 #: common/pth_hole_size.cpp:95
 msgid "B (Moderate)"
-msgstr ""
+msgstr "B (Stredná)"
 
 #: common/pth_hole_size.cpp:96
 msgid "C (High density)"
-msgstr ""
+msgstr "C (Vysoká)"
 
 #: common/rc_item.cpp:526 eeschema/erc/erc_item.cpp:440
 msgid "Excluded warning: "
@@ -19233,7 +19233,7 @@ msgstr "Typ"
 #: eeschema/dialogs/dialog_sim_model.cpp:863
 #: eeschema/dialogs/dialog_sim_model.cpp:900
 msgid "Not Connected"
-msgstr "Nespojené"
+msgstr "Nepripojený"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1005
 #, c-format
@@ -19520,7 +19520,7 @@ msgstr "Štýl tela:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:554
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:601
 msgid "Angle:"
-msgstr "Uhol:"
+msgstr "Rotácia:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:153
 msgid "+90"
@@ -19542,7 +19542,7 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:159
 msgid "Mirror:"
-msgstr "Zrkadlo:"
+msgstr "Zrkadenie:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Not mirrored"
@@ -19602,7 +19602,7 @@ msgstr "Upraviť symbol..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:269
 #: eeschema/tools/sch_actions.cpp:1325
 msgid "Edit Library Symbol..."
-msgstr "Upraviť symbol knižnice..."
+msgstr "Upraviť symbol v knižnici..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:307
 #: eeschema/sch_pin.cpp:2360
@@ -52906,14 +52906,11 @@ msgid ""
 msgstr ""
 "### Príklady\n"
 "\n"
-"\n"
 "    (verzia 2)\n"
-"\n"
 "\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
 "       (condition \"A.hasNetclass('HV')\"))\n"
-"\n"
 "\n"
 "\n"
 "    (rule HV\n"
@@ -52922,12 +52919,10 @@ msgstr ""
 "       (condition \"A.hasNetclass('HV')\"))\n"
 "\n"
 "\n"
-"\n"
 "    (rule HV_HV\n"
 "       # Väčšia izolačná vzdialenosť medzi vodičmi HV\n"
 "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
 "       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
-"\n"
 "\n"
 "\n"
 "    (rule HV_unshielded\n"
@@ -52936,18 +52931,15 @@ msgstr ""
 "       (condition \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"))\n"
 "\n"
 "\n"
-"\n"
 "    (rule heavy_thermals\n"
 "       # Širšie tepelné prepojenia\n"
 "       (constraint thermal_spoke_width (min 0.5mm))\n"
 "       (condition \"A.hasNetclass('HV')\"))\n"
 "\n"
-"\n"
 "    # Celková dĺžka všetkých spojov v reťazci sietí SIG_A\n"
 "    (rule sig_group_length\n"
 "       (constraint net_chain_length (min 40mm) (max 60mm))\n"
 "       (condition \"A.Net.NetChain == 'SIG_A'\") )\n"
-"\n"
 "\n"
 "    # Celkové oneskorenie šírenia signálu vo všetkých spojoch reťazca "
 "CLK_GRP\n"
@@ -52956,16 +52948,13 @@ msgstr ""
 "yes))\n"
 "       (condition \"A.Net.NetChain == 'CLK_GRP'\") )\n"
 "\n"
-"\n"
 "    # --- Pravidlá pre reťazce sietí: viacero sietí prechádzajúcich cez "
 "sériové pasívne súčiastky ---\n"
-"\n"
 "\n"
 "    # Rovnaký efekt ako sig_group_length, ale s použitím inNetChain().\n"
 "    (rule \"DDR_DQ chain length\"\n"
 "       (constraint net_chain_length (min 40mm) (max 60mm))\n"
 "       (condition \"A.inNetChain('DDR_DQ*')\") )\n"
-"\n"
 "\n"
 "    # Odbočky z hlavnej vetvy ľubovoľného DDR reťazca nesmú byť dlhšie ako 2 "
 "mm.\n"
@@ -52973,13 +52962,11 @@ msgstr ""
 "       (constraint stub_length (max 2mm))\n"
 "       (condition \"A.inNetChain('DDR_*')\") )\n"
 "\n"
-"\n"
 "    # Každý reťazec v triede HighSpeed musí mať neprerušenú návratovú cestu "
 "na vrstve B.Cu.\n"
 "    (rule \"HS return path\"\n"
 "       (constraint return_path (layer \"B.Cu\"))\n"
 "       (condition \"A.inNetChainClass('HighSpeed')\") )\n"
-"\n"
 "\n"
 "    # Menšia izolačná vzdialenosť pre všetky siete patriace do reťazca.\n"
 "    (rule \"chain members tighter clearance\"\n"
