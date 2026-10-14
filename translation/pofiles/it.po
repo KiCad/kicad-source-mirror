@@ -11,6 +11,7 @@
 # Luca Mattii <luca@glgprograms.it>, 2025, 2026.
 # Giuseppe Finizia <giuseppe.finizia@gmail.com>, 2026.
 # Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
+# Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>, 2026.
 #
 # db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 # db: di una frase: negli altri casi può risultare molto inelegante
@@ -118,8 +119,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 07:12+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"PO-Revision-Date: 2026-10-15 03:56+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
 "Language: it\n"
@@ -127,7 +128,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -2871,7 +2872,7 @@ msgstr "Icone"
 
 #: common/dialog_about/AboutDialog_main.cpp:1190
 msgid "Package Developers"
-msgstr "Sviluppo pacchetti"
+msgstr "Sviluppatori di package"
 
 #: common/dialog_about/dialog_about.cpp:104
 #, c-format
@@ -2916,7 +2917,7 @@ msgstr "Traduttori"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "Packagers"
-msgstr "Pacchetti"
+msgstr "Sviluppatori di pacchetti"
 
 #: common/dialog_about/dialog_about.cpp:153
 msgid "License"
@@ -6719,7 +6720,7 @@ msgstr "Gestione plugin e contenuti"
 #: common/dialogs/panel_packages_and_updates_base.cpp:50
 #: common/dialogs/panel_startwizard_privacy_base.cpp:30
 msgid "Check for package updates on startup"
-msgstr "Controlla aggiornamenti pacchetti all'avvio"
+msgstr "Controllo aggiornamento pacchetti all'avvio"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:60
 msgid "Library Package Handling"
@@ -8061,7 +8062,7 @@ msgstr "Editor fogli di disegno"
 
 #: common/eda_base_frame.cpp:1731
 msgid "Packages and Updates"
-msgstr "Aggiornamento pacchetti"
+msgstr "Pacchetti e aggiornamenti"
 
 #: common/eda_base_frame.cpp:1740
 msgid "Maintenance"
@@ -17318,7 +17319,7 @@ msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:68
 msgid "Number of units per package:"
-msgstr "Numero di &parti per contenitore:"
+msgstr "Numero di unità per contenitore:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:92
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:302
@@ -25565,8 +25566,8 @@ msgid ""
 "Native power units for '%s' have ambiguous package identity; their symbol "
 "definitions were kept separate."
 msgstr ""
-"Le unità di elaborazione native per '%s' hanno un'identità del pacchetto "
-"ambigua; le definizioni dei loro simboli sono state mantenute separate."
+"Le unità di potenza native per '%s' hanno un'identità pacchetto ambigua; le "
+"definizioni dei loro simboli sono state mantenute separate."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:2895
 #, c-format
@@ -27447,11 +27448,11 @@ msgstr "Mancante [Nome File]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:952
 msgid "Package model name cannot be empty."
-msgstr "Il nome del modello del pacchetto non può essere vuoto."
+msgstr "Il nome del modello del contenitore non può essere vuoto."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:957
 msgid "Checking package model "
-msgstr "Controllo modello pacchetto "
+msgstr "Controllo modello contenitore "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:964
 msgid "Manufacturer cannot be empty."
@@ -28927,7 +28928,7 @@ msgstr "Fallito il salvataggio del backup su \"%s\"."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1712
 #, c-format
 msgid "Error opening unpacked library directory: '%s'."
-msgstr "Errore nell'apertura cartella libreria decompressa: '%s'."
+msgstr "Errore nell'apertura cartella libreria spacchettata: '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1722
 #, c-format
@@ -29152,7 +29153,7 @@ msgstr "Salva libreria '%s' come..."
 #: eeschema/symbol_editor/symbol_editor.cpp:1604
 #, c-format
 msgid "Save Library '%s' As Packed Library..."
-msgstr "Salva libreria '%s' come libreria compressa..."
+msgstr "Salva libreria '%s' come libreria impacchettata..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1641
 #, c-format
@@ -29708,6 +29709,8 @@ msgstr "Confronta schema con la cronologia locale..."
 msgid ""
 "Diff the current schematic against the most recent local-history snapshot"
 msgstr ""
+"Confronta lo schema attuale con l'istantanea più recente della cronologia "
+"locale"
 
 #: eeschema/tools/sch_actions.cpp:83
 msgid "Show Bus Syntax Help"
@@ -29812,34 +29815,32 @@ msgid "Save the current library to a new file"
 msgstr "Salva la libreria corrente in un nuovo file"
 
 #: eeschema/tools/sch_actions.cpp:202
-#, fuzzy
 msgid "Save Library As Packed..."
-msgstr "Salva libreria come..."
+msgstr "Salva libreria come impacchettata..."
 
 #: eeschema/tools/sch_actions.cpp:203
-#, fuzzy
 msgid "Save the current unpacked library to a new packed library file"
-msgstr "Salva la libreria corrente in un nuovo file"
+msgstr ""
+"Salva la libreria attualmente spacchettata in un nuovo file di libreria "
+"impacchettata"
 
 #: eeschema/tools/sch_actions.cpp:209
-#, fuzzy
 msgid "Save Library As Unpacked..."
-msgstr "Salva libreria come..."
+msgstr "Salva libreria come spacchettata..."
 
 #: eeschema/tools/sch_actions.cpp:210
-#, fuzzy
 msgid "Save the current packed library to a new unpacked library folder"
-msgstr "Salva la libreria corrente in un nuovo file"
+msgstr ""
+"Salva la libreria impacchettata corrente in una nuova cartella libreria "
+"spacchettata"
 
 #: eeschema/tools/sch_actions.cpp:215 pcbnew/tools/pcb_actions.cpp:1344
-#, fuzzy
 msgid "Compare Library with File..."
-msgstr "Commit file..."
+msgstr "Confronta libreria con file..."
 
 #: eeschema/tools/sch_actions.cpp:216
-#, fuzzy
 msgid "Diff the current symbol library against another .kicad_sym file"
-msgstr "Salva la libreria corrente in un nuovo file"
+msgstr "Confronta la libreria di simboli corrente con un altro file .kicad_sym"
 
 #: eeschema/tools/sch_actions.cpp:223
 msgid "New Symbol..."
@@ -29933,34 +29934,28 @@ msgid "Remove inheritance from symbol"
 msgstr "Rimuovi ereditarietà dal simbolo"
 
 #: eeschema/tools/sch_actions.cpp:323
-#, fuzzy
 msgid "Next Symbol Tab"
-msgstr "Unità simbolo successiva"
+msgstr "Scheda simbolo successiva"
 
 #: eeschema/tools/sch_actions.cpp:324
-#, fuzzy
 msgid "Switch to the next open symbol tab"
-msgstr "Passa a una scheda dei modelli di sistema"
+msgstr "Passa alla scheda simbolo aperta successiva"
 
 #: eeschema/tools/sch_actions.cpp:329
-#, fuzzy
 msgid "Previous Symbol Tab"
-msgstr "Unità simbolo precedente"
+msgstr "Scheda simbolo precedente"
 
 #: eeschema/tools/sch_actions.cpp:330
-#, fuzzy
 msgid "Switch to the previous open symbol tab"
-msgstr "Passa pista al precedente strato di rame abilitato"
+msgstr "Passa alla scheda simbolo aperta precedente"
 
 #: eeschema/tools/sch_actions.cpp:335
-#, fuzzy
 msgid "Close Symbol Tab"
-msgstr "Scegli simbolo"
+msgstr "Chiudi scheda simbolo"
 
 #: eeschema/tools/sch_actions.cpp:336
-#, fuzzy
 msgid "Close the active symbol tab"
-msgstr "Rinomina il simbolo selezionato"
+msgstr "Chiudi la scheda simbolo attiva"
 
 #: eeschema/tools/sch_actions.cpp:341 eeschema/tools/sch_actions.cpp:1332
 msgid "Bulk Edit Symbol Fields..."
@@ -30154,9 +30149,8 @@ msgid "Save selected group to linked design block"
 msgstr "Salva il gruppo selezionato sul blocco progetto collegato"
 
 #: eeschema/tools/sch_actions.cpp:572
-#, fuzzy
 msgid "Place/Remove No Connect Flags"
-msgstr "Piazza indicatori N/C"
+msgstr "Piazza/rimuovi indicatori N/C"
 
 #: eeschema/tools/sch_actions.cpp:583
 msgid "Place Junctions"
@@ -30258,14 +30252,12 @@ msgid "Draw Circles"
 msgstr "Disegna cerchi"
 
 #: eeschema/tools/sch_actions.cpp:755
-#, fuzzy
 msgid "Draw Ellipses"
-msgstr "Disegna linee"
+msgstr "Disegna ellissi"
 
 #: eeschema/tools/sch_actions.cpp:764 pcbnew/tools/pcb_actions.cpp:390
-#, fuzzy
 msgid "Draw Elliptical Arcs"
-msgstr "Disegna archi"
+msgstr "Disegna archi ellittici"
 
 #: eeschema/tools/sch_actions.cpp:773 pcbnew/tools/pcb_actions.cpp:401
 msgid "Draw Arcs"
@@ -30273,49 +30265,58 @@ msgstr "Disegna archi"
 
 #: eeschema/tools/sch_actions.cpp:782 pcbnew/tools/pcb_actions.cpp:409
 msgid "Draw Arc: Center, Start, End"
-msgstr ""
+msgstr "Disegna arco: centro, inizio, fine"
 
 #: eeschema/tools/sch_actions.cpp:783 pcbnew/tools/pcb_actions.cpp:410
 msgid "Draw arcs by clicking the center, the start point, then the end point"
 msgstr ""
+"Disegna archi facendo clic sul centro, sul punto iniziale e poi sul punto "
+"finale"
 
 #: eeschema/tools/sch_actions.cpp:792 pcbnew/tools/pcb_actions.cpp:419
 msgid "Draw Arc: Start, End, Midpoint"
-msgstr ""
+msgstr "Disegna arco: inizio, fine, punto medio"
 
 #: eeschema/tools/sch_actions.cpp:793 pcbnew/tools/pcb_actions.cpp:420
 msgid ""
 "Draw arcs by clicking the start point, the end point, then a point on the arc"
 msgstr ""
+"Disegna archi facendo clic sul punto iniziale, sul punto finale e poi su un "
+"punto dell'arco"
 
 #: eeschema/tools/sch_actions.cpp:802 pcbnew/tools/pcb_actions.cpp:429
 msgid "Draw Arc: Start, End, Center"
-msgstr ""
+msgstr "Disegna arco: inizio, fine, centro"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:430
 msgid "Draw arcs by clicking the start point, the end point, then the center"
 msgstr ""
+"Disegna archi facendo clic sul punto iniziale, sul punto finale e poi sul "
+"centro"
 
 #: eeschema/tools/sch_actions.cpp:812 pcbnew/tools/pcb_actions.cpp:439
-#, fuzzy
 msgid "Draw Arc: Tangent"
-msgstr "Disegna rettangoli"
+msgstr "Disegna arco: tangente"
 
 #: eeschema/tools/sch_actions.cpp:813 pcbnew/tools/pcb_actions.cpp:440
 msgid ""
 "Draw arcs tangent to the previous arc or to the line or arc ending at the "
 "start point"
 msgstr ""
+"Traccia archi tangenti all'arco precedente oppure alla linea o all'arco che "
+"termina nel punto iniziale"
 
 #: eeschema/tools/sch_actions.cpp:822 pcbnew/tools/pcb_actions.cpp:449
 msgid "Draw Arc: Start, Direction, End"
-msgstr ""
+msgstr "Disegna arco: inizio, direzione, fine"
 
 #: eeschema/tools/sch_actions.cpp:823 pcbnew/tools/pcb_actions.cpp:450
 msgid ""
 "Draw arcs by clicking the start point, a point giving the start direction, "
 "then the end point"
 msgstr ""
+"Disegna archi facendo clic sul punto iniziale, su un punto che definisce la "
+"direzione iniziale e infine sul punto finale"
 
 #: eeschema/tools/sch_actions.cpp:847 pcbnew/tools/pcb_actions.cpp:475
 msgid "Draw Bezier Curve"
@@ -30485,13 +30486,15 @@ msgid "Update symbol to include any changes from the library"
 msgstr "Aggiorna simbolo per includere qualunque cambiamento dalla libreria"
 
 #: eeschema/tools/sch_actions.cpp:1059
-#, fuzzy
 msgid "Assign an alternate library symbol for this design variant"
-msgstr "Assegna un simbolo diverso dalla libreria"
+msgstr ""
+"Assegna un simbolo di libreria alternativo per questa variante di progetto"
 
 #: eeschema/tools/sch_actions.cpp:1066
 msgid "Remove the variant symbol override and revert to the base symbol"
 msgstr ""
+"Rimuovi la sovrascrittura del simbolo della variante e ripristina il simbolo "
+"di base"
 
 #: eeschema/tools/sch_actions.cpp:1072 pcbnew/tools/pcb_actions.cpp:1835
 msgid "Assign Netclass..."
@@ -30586,13 +30589,12 @@ msgid "Symbol Properties..."
 msgstr "Proprietà simbolo..."
 
 #: eeschema/tools/sch_actions.cpp:1167
-#, fuzzy
 msgid "Symbol Pin Maps..."
-msgstr "Pin simbolo"
+msgstr "Pin simbolo mappato..."
 
 #: eeschema/tools/sch_actions.cpp:1168
 msgid "Edit the symbol's pin-to-pad maps and associated footprints"
-msgstr ""
+msgstr "Modifica la mappatura pin-piazzola e le impronte associate del simbolo"
 
 #: eeschema/tools/sch_actions.cpp:1174
 msgid "Pin Table..."
@@ -30662,60 +30664,56 @@ msgid "Highlight wires and pins of a net"
 msgstr "Evidenzia fili e pin di un collegamento"
 
 #: eeschema/tools/sch_actions.cpp:1243 pcbnew/tools/pcb_actions.cpp:2011
-#, fuzzy
 msgid "Highlight Net Chain"
-msgstr "Evidenzia collegamenti in %s"
+msgstr "Evidenzia catena di net"
 
 #: eeschema/tools/sch_actions.cpp:1244
-#, fuzzy
 msgid "Highlight the net chain under the cursor"
-msgstr "Evidenzia collegamento sotto il puntatore"
+msgstr "Evidenzia la catena di net sotto il puntatore"
 
 #: eeschema/tools/sch_actions.cpp:1250
 #: eeschema/tools/sch_editor_control.cpp:1253
-#, fuzzy
 msgid "Remove from Net Chain"
-msgstr "Rimuovi dalla selezione"
+msgstr "Rimuovi dalla catena di net"
 
 #: eeschema/tools/sch_actions.cpp:1251
 msgid ""
 "Remove the selected net from its net chain by disabling propagation on the "
 "bridging component(s)"
 msgstr ""
+"Rimuove la net selezionata dalla relativa catena di net disabilitando la "
+"propagazione sui componenti di collegamento"
 
 #: eeschema/tools/sch_actions.cpp:1256
-#, fuzzy
 msgid "Replace Terminal Pin"
-msgstr "Sostituisci tutti i pin esistenti"
+msgstr "Sostituisci pin termici"
 
 #: eeschema/tools/sch_actions.cpp:1261
 #: eeschema/tools/sch_editor_control.cpp:1618
-#, fuzzy
 msgid "Name Net Chain"
-msgstr "Dimensioni testo nome"
+msgstr "Nome catena di net"
 
 #: eeschema/tools/sch_actions.cpp:1262
-#, fuzzy
 msgid "Assign a name to the net chain"
-msgstr "Assegna una netclass ai collegamenti che corrispondono al modello"
+msgstr "Assegna un nome alla catena di net"
 
 #: eeschema/tools/sch_actions.cpp:1267
 msgid "Create Net Chain Between Pins"
-msgstr ""
+msgstr "Crea catena di net tra piedini"
 
 #: eeschema/tools/sch_actions.cpp:1268
-#, fuzzy
 msgid "Create a new net chain connecting the two selected pins"
-msgstr "Crea l'intersezione dei poligoni selezionati"
+msgstr "Crea una nuova catena di net che connette i due pin selezionati"
 
 #: eeschema/tools/sch_actions.cpp:1273
-#, fuzzy
 msgid "Create Net Chain..."
-msgstr "Crea impronta..."
+msgstr "Crea catena di net..."
 
 #: eeschema/tools/sch_actions.cpp:1274
 msgid "Detect net chain paths through passives and create a named net chain"
 msgstr ""
+"Rileva i percorsi della catena di net attraverso i passivi e crea una catena "
+"di net con nome"
 
 #: eeschema/tools/sch_actions.cpp:1280
 msgid "Show/hide the net navigator"
