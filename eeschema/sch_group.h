@@ -65,16 +65,16 @@ public:
 
     std::unordered_set<SCH_ITEM*> GetSchItems() const;
 
-    /*
+    /**
      * Search for highest level group inside of aScope, containing item.
      *
      * @param aScope restricts the search to groups within the group scope.
      * @param isSymbolEditor true if we should stop promoting at the symbol level
      * @return group inside of aScope, containing item, if exists, otherwise, nullptr
      */
-    static EDA_GROUP* TopLevelGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEditor );
+    static EDA_GROUP* TopLevelGroup( const SCH_ITEM& aItem, const EDA_GROUP* aScope, bool isSymbolEditor );
 
-    static bool WithinScope( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor );
+    static bool WithinScope( const SCH_ITEM& aItem, const SCH_GROUP* aScope, bool isSymbolEditor );
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 

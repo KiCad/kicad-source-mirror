@@ -1104,7 +1104,7 @@ BOOST_AUTO_TEST_CASE( PlacedStackCommitState )
         // Parented to the stack and promotable to it, which is how selection works.
         BOOST_CHECK_EQUAL( via->GetParentGroup(), static_cast<EDA_GROUP*>( stack ) );
 
-        EDA_GROUP* top = PCB_GROUP::TopLevelGroup( via, nullptr, false );
+        EDA_GROUP* top = PCB_GROUP::TopLevelGroup( *via, nullptr, false );
         BOOST_CHECK_EQUAL( top, static_cast<EDA_GROUP*>( stack ) );
 
         // No leftover edit flags that would make items invisible to hit testing.
@@ -1414,7 +1414,7 @@ BOOST_AUTO_TEST_CASE( PlacedStackClickCollection )
     {
         if( collector[i]->Type() == PCB_VIA_T )
         {
-            BOOST_CHECK_EQUAL( PCB_GROUP::TopLevelGroup( collector[i], nullptr, false ),
+            BOOST_CHECK_EQUAL( PCB_GROUP::TopLevelGroup( *collector[i], nullptr, false ),
                                static_cast<EDA_GROUP*>( stack ) );
         }
     }

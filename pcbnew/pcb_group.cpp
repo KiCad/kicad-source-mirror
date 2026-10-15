@@ -145,17 +145,17 @@ std::unordered_set<BOARD_ITEM*> PCB_GROUP::GetBoardItems() const
  * @return if not in the footprint editor and aItem is in a footprint, returns the
  * footprint's parent group. Otherwise, returns the aItem's parent group.
  */
-EDA_GROUP* getClosestGroup( BOARD_ITEM* aItem, bool isFootprintEditor )
+static EDA_GROUP* getClosestGroup( const BOARD_ITEM& aItem, bool isFootprintEditor )
 {
-    if( !isFootprintEditor && aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
-        return aItem->GetParent()->GetParentGroup();
+    if( !isFootprintEditor && aItem.GetParent() && aItem.GetParent()->Type() == PCB_FOOTPRINT_T )
+        return aItem.GetParent()->GetParentGroup();
     else
-        return aItem->GetParentGroup();
+        return aItem.GetParentGroup();
 }
 
 
 /// Returns the top level group inside the aScope group, or nullptr
-EDA_GROUP* getNestedGroup( BOARD_ITEM* aItem, EDA_GROUP* aScope, bool isFootprintEditor )
+static EDA_GROUP* getNestedGroup( const BOARD_ITEM& aItem, const EDA_GROUP* aScope, bool isFootprintEditor )
 {
     EDA_GROUP* group = getClosestGroup( aItem, isFootprintEditor );
 
@@ -169,13 +169,13 @@ EDA_GROUP* getNestedGroup( BOARD_ITEM* aItem, EDA_GROUP* aScope, bool isFootprin
 }
 
 
-EDA_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* aItem, EDA_GROUP* aScope, bool isFootprintEditor )
+EDA_GROUP* PCB_GROUP::TopLevelGroup( const BOARD_ITEM& aItem, const EDA_GROUP* aScope, bool isFootprintEditor )
 {
     return getNestedGroup( aItem, aScope, isFootprintEditor );
 }
 
 
-bool PCB_GROUP::WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor )
+bool PCB_GROUP::WithinScope( const BOARD_ITEM& aItem, const PCB_GROUP* aScope, bool isFootprintEditor )
 {
     EDA_GROUP* group = getClosestGroup( aItem, isFootprintEditor );
 

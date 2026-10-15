@@ -4472,8 +4472,8 @@ void PCB_SELECTION_TOOL::select( EDA_ITEM* aItem )
             return;
     }
 
-    if( m_enteredGroup && !PCB_GROUP::WithinScope( static_cast<BOARD_ITEM*>( aItem ), m_enteredGroup,
-                                                   m_isFootprintEditor ) )
+    if( m_enteredGroup
+        && !PCB_GROUP::WithinScope( *static_cast<BOARD_ITEM*>( aItem ), m_enteredGroup, m_isFootprintEditor ) )
     {
         ExitGroup();
     }
@@ -5141,11 +5141,11 @@ bool PCB_SELECTION_TOOL::ReportFilteredLockedItems()
 }
 
 
-bool PCB_SELECTION_TOOL::HasLockedDescendant( const BOARD_ITEM* aItem )
+bool PCB_SELECTION_TOOL::HasLockedDescendant( const BOARD_ITEM& aItem )
 {
     bool lockedDescendant = false;
 
-    aItem->RunOnChildren(
+    aItem.RunOnChildren(
             [&]( BOARD_ITEM* curr_item )
             {
                 if( !curr_item->GetParentFootprint() && curr_item->IsLocked() )
@@ -5157,11 +5157,11 @@ bool PCB_SELECTION_TOOL::HasLockedDescendant( const BOARD_ITEM* aItem )
 }
 
 
-bool PCB_SELECTION_TOOL::itemIsSelectableAsConnected( BOARD_ITEM& aItem, PCB_GROUP* aEnteredGroup,
+bool PCB_SELECTION_TOOL::itemIsSelectableAsConnected( const BOARD_ITEM& aItem, const PCB_GROUP* aEnteredGroup,
                                                       bool aIsFootprintEditor )
 {
     if( aEnteredGroup )
-        return PCB_GROUP::WithinScope( &aItem, aEnteredGroup, aIsFootprintEditor );
+        return PCB_GROUP::WithinScope( aItem, aEnteredGroup, aIsFootprintEditor );
 
     EDA_GROUP* parent = aItem.GetParentGroup();
 
@@ -5169,7 +5169,7 @@ bool PCB_SELECTION_TOOL::itemIsSelectableAsConnected( BOARD_ITEM& aItem, PCB_GRO
     if( !parent )
         return true;
 
-    PCB_GROUP& group = static_cast<PCB_GROUP&>( *parent->AsEdaItem() );
+    const PCB_GROUP& group = static_cast<const PCB_GROUP&>( *parent->AsEdaItem() );
 
     // Some generators opt-in to select-through-connection (e.g. tuning patterns)
     if( group.Type() == PCB_GENERATOR_T )
@@ -5196,11 +5196,11 @@ void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aColl
         // Iterate from the back so we don't have to worry about removals.
         for( int i = (int) aCollector.GetCount() - 1; i >= 0; --i )
         {
-            BOARD_ITEM* item = aCollector[i];
+            BOARD_ITEM& item = *aCollector[i];
 
-            if( item->IsLocked() || HasLockedDescendant( item ) )
+            if( item.IsLocked() || HasLockedDescendant( item ) )
             {
-                aCollector.Remove( item );
+                aCollector.Remove( &item );
                 m_lockedItemsFiltered = true;
             }
         }
@@ -5249,7 +5249,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
             start = fp;
 
         // If a group is entered, disallow selections of objects outside the group.
-        if( m_enteredGroup && !PCB_GROUP::WithinScope( item, m_enteredGroup, m_isFootprintEditor ) )
+        if( m_enteredGroup && !PCB_GROUP::WithinScope( *item, m_enteredGroup, m_isFootprintEditor ) )
         {
             aCollector.Remove( item );
             continue;
@@ -5274,7 +5274,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 
         if( !selectableParent )
         {
-            if( EDA_GROUP* top = PCB_GROUP::TopLevelGroup( start, m_enteredGroup, m_isFootprintEditor ) )
+            if( EDA_GROUP* top = PCB_GROUP::TopLevelGroup( *start, m_enteredGroup, m_isFootprintEditor ) )
             {
                 if( top->AsEdaItem() != item )
                 {

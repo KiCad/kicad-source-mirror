@@ -311,7 +311,7 @@ public:
      * footprint move rigidly with it, so only descendants outside a parent footprint count
      * (group members, see issue 6841).
      */
-    static bool HasLockedDescendant( const BOARD_ITEM* aItem );
+    static bool HasLockedDescendant( const BOARD_ITEM& aItem );
 
     /**
      * True if an item may be selected by connection expansion.
@@ -320,7 +320,8 @@ public:
      * Otherwise, it qualifies if it belongs to no group, or if its parent group is a generator
      * that opts in through PCB_GENERATOR::IsSelectableAsConnected().
      */
-    static bool itemIsSelectableAsConnected( BOARD_ITEM& aItem, PCB_GROUP* aEnteredGroup, bool aIsFootprintEditor );
+    static bool itemIsSelectableAsConnected( const BOARD_ITEM& aItem, const PCB_GROUP* aEnteredGroup,
+                                             bool aIsFootprintEditor );
 
     /**
      * True if the Render tab's Footprints Front/Back switches leave aItem drawn, mirroring the

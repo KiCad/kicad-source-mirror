@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE( LockedFieldDoesNotPinFootprint )
 
     BOOST_CHECK( !footprint->IsLocked() );
     BOOST_CHECK( footprint->Reference().IsLocked() );
-    BOOST_CHECK( !PCB_SELECTION_TOOL::HasLockedDescendant( footprint ) );
+    BOOST_CHECK( !PCB_SELECTION_TOOL::HasLockedDescendant( *footprint ) );
 }
 
 
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE( LockedGraphicDoesNotPinFootprint )
     shape->SetLocked( true );
     footprint->Add( shape );
 
-    BOOST_CHECK( !PCB_SELECTION_TOOL::HasLockedDescendant( footprint ) );
+    BOOST_CHECK( !PCB_SELECTION_TOOL::HasLockedDescendant( *footprint ) );
 }
 
 
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE( LockedMemberPinsGroup )
     group->AddItem( shape );
     board->Add( group );
 
-    BOOST_CHECK( PCB_SELECTION_TOOL::HasLockedDescendant( group ) );
+    BOOST_CHECK( PCB_SELECTION_TOOL::HasLockedDescendant( *group ) );
 }
 
 
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE( LockedFootprintPinsGroup )
     group->AddItem( footprint );
     board->Add( group );
 
-    BOOST_CHECK( PCB_SELECTION_TOOL::HasLockedDescendant( group ) );
+    BOOST_CHECK( PCB_SELECTION_TOOL::HasLockedDescendant( *group ) );
 }
 
 
@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE( LockedFieldDoesNotPinGroupHoldingFootprint )
     group->AddItem( footprint );
     board->Add( group );
 
-    BOOST_CHECK( !PCB_SELECTION_TOOL::HasLockedDescendant( group ) );
+    BOOST_CHECK( !PCB_SELECTION_TOOL::HasLockedDescendant( *group ) );
 }
 
 

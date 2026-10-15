@@ -143,22 +143,22 @@ std::unordered_set<SCH_ITEM*> SCH_GROUP::GetSchItems() const
  * @return if not in the symbol editor and aItem is in a symbol, returns the
  * symbol's parent group. Otherwise, returns the aItem's parent group.
  */
-EDA_GROUP* getClosestGroup( SCH_ITEM* aItem, bool isSymbolEditor )
+static EDA_GROUP* getClosestGroup( const SCH_ITEM& aItem, bool isSymbolEditor )
 {
     // In the schematic editor, items with either symbols or sheets as their parents (e.g., fields,
     // pins, sheet pins, etc.) don't get their own groups and instead follow the group of their parent
     // object.
-    if( !isSymbolEditor && aItem->GetParent() && aItem->GetParent()->Type() == SCH_SYMBOL_T )
-        return static_cast<SCH_SYMBOL*>( aItem->GetParent() )->GetParentGroup();
-    else if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_SHEET_T )
-        return static_cast<SCH_SHEET*>( aItem->GetParent() )->GetParentGroup();
+    if( !isSymbolEditor && aItem.GetParent() && aItem.GetParent()->Type() == SCH_SYMBOL_T )
+        return static_cast<SCH_SYMBOL*>( aItem.GetParent() )->GetParentGroup();
+    else if( aItem.GetParent() && aItem.GetParent()->Type() == SCH_SHEET_T )
+        return static_cast<SCH_SHEET*>( aItem.GetParent() )->GetParentGroup();
     else
-        return aItem->GetParentGroup();
+        return aItem.GetParentGroup();
 }
 
 
 /// Returns the top level group inside the aScope group, or nullptr
-EDA_GROUP* getNestedGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEditor )
+static EDA_GROUP* getNestedGroup( const SCH_ITEM& aItem, const EDA_GROUP* aScope, bool isSymbolEditor )
 {
     EDA_GROUP* group = getClosestGroup( aItem, isSymbolEditor );
 
@@ -177,13 +177,13 @@ EDA_GROUP* getNestedGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEdit
 }
 
 
-EDA_GROUP* SCH_GROUP::TopLevelGroup( SCH_ITEM* aItem, EDA_GROUP* aScope, bool isSymbolEditor )
+EDA_GROUP* SCH_GROUP::TopLevelGroup( const SCH_ITEM& aItem, const EDA_GROUP* aScope, bool isSymbolEditor )
 {
     return getNestedGroup( aItem, aScope, isSymbolEditor );
 }
 
 
-bool SCH_GROUP::WithinScope( SCH_ITEM* aItem, SCH_GROUP* aScope, bool isSymbolEditor )
+bool SCH_GROUP::WithinScope( const SCH_ITEM& aItem, const SCH_GROUP* aScope, bool isSymbolEditor )
 {
     EDA_GROUP* group = getClosestGroup( aItem, isSymbolEditor );
 

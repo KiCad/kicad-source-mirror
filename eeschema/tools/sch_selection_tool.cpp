@@ -3043,8 +3043,8 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
             item->SetFlags( SHOW_ELEC_TYPE );
 
         // If the pin lives inside a group that is already being selected, don't also select the pin.
-        if( EDA_GROUP* group = SCH_GROUP::TopLevelGroup( static_cast<SCH_ITEM*>( item ), m_enteredGroup,
-                                                         m_isSymbolEditor ) )
+        if( EDA_GROUP* group =
+                    SCH_GROUP::TopLevelGroup( *static_cast<SCH_ITEM*>( item ), m_enteredGroup, m_isSymbolEditor ) )
         {
             if( collector.HasItem( group->AsEdaItem() ) )
             {
@@ -3113,7 +3113,7 @@ void SCH_SELECTION_TOOL::FilterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
             start = sym;
 
         // If a group is entered, disallow selections of objects outside the group.
-        if( m_enteredGroup && !SCH_GROUP::WithinScope( item, m_enteredGroup, m_isSymbolEditor ) )
+        if( m_enteredGroup && !SCH_GROUP::WithinScope( *item, m_enteredGroup, m_isSymbolEditor ) )
         {
             aCollector.Remove( item );
             continue;
@@ -3121,8 +3121,8 @@ void SCH_SELECTION_TOOL::FilterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
 
         // If any element is a member of a group, replace those elements with the top containing
         // group.
-        if( EDA_GROUP* top = promoteToGroups ? SCH_GROUP::TopLevelGroup( start, m_enteredGroup, m_isSymbolEditor )
-                                             : nullptr )
+        if( EDA_GROUP* top =
+                    promoteToGroups ? SCH_GROUP::TopLevelGroup( *start, m_enteredGroup, m_isSymbolEditor ) : nullptr )
         {
             if( top->AsEdaItem() != item )
             {
@@ -4196,7 +4196,7 @@ void SCH_SELECTION_TOOL::select( EDA_ITEM* aItem )
     // Don't group when we select new items, the schematic editor selects all new items for moving.
     // The PCB editor doesn't need this logic because it doesn't select new items for moving.
     if( m_enteredGroup && !aItem->IsNew()
-        && !SCH_GROUP::WithinScope( static_cast<SCH_ITEM*>( aItem ), m_enteredGroup, m_isSymbolEditor ) )
+        && !SCH_GROUP::WithinScope( *static_cast<SCH_ITEM*>( aItem ), m_enteredGroup, m_isSymbolEditor ) )
     {
         ExitGroup();
     }
