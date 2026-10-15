@@ -3561,7 +3561,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
-    m_selectionTool->ReportFilteredLockedItems();
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 1;
 
     if( !selection.Empty() )
     {
