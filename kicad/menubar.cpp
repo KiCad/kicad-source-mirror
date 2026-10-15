@@ -234,7 +234,6 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::viewGerbers );
-    toolsMenu->Add( KICAD_MANAGER_ACTIONS::convertImage );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::showCalculator );
     toolsMenu->Add( KICAD_MANAGER_ACTIONS::editDrawingSheet );
 

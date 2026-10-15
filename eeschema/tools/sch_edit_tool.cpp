@@ -39,6 +39,9 @@
 #include <algorithm>
 #include <set>
 #include <string_utils.h>
+#include <bitmap_base.h>
+#include <bitmap_tracing.h>
+#include <dialogs/dialog_convert_image_to_outlines.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
@@ -3889,6 +3892,109 @@ int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::ConvertImageToOutlines( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != SCH_BITMAP_T )
+        return 0;
+
+    SCH_BITMAP*      image = static_cast<SCH_BITMAP*>( selection[0] );
+    REFERENCE_IMAGE& refImage = image->GetReferenceImage();
+    BITMAP_BASE&     bitmap = refImage.MutableImage();
+
+    if( !bitmap.GetImageData() )
+        return 0;
+
+    const wxImage source = *bitmap.GetImageData();
+
+    auto showPreview = [&]( double aThreshold, bool aInvert )
+    {
+        bitmap.BeginPreviewImage( ConvertImageToBilevel( source, aThreshold, aInvert ) );
+        m_frame->GetCanvas()->GetView()->Update( image );
+        m_frame->GetCanvas()->ForceRefresh();
+    };
+
+    // The schematic has no layer for the user to choose.
+    DIALOG_CONVERT_IMAGE_TO_OUTLINES dialog( m_frame, wxArrayString(), 0, showPreview );
+
+    showPreview( dialog.GetThreshold(), dialog.GetInvert() );
+
+    int result = dialog.ShowModal();
+
+    bitmap.EndPreviewImage();
+    m_frame->GetCanvas()->GetView()->Update( image );
+
+    if( result != wxID_OK )
+    {
+        m_frame->GetCanvas()->ForceRefresh();
+        return 0;
+    }
+
+    wxImage bilevel = ConvertImageToBilevel( source, dialog.GetThreshold(), dialog.GetInvert() );
+
+    VECTOR2I size = refImage.GetSize();
+    double   scaleX = (double) size.x / bilevel.GetWidth();
+    double   scaleY = (double) size.y / bilevel.GetHeight();
+
+    WX_STRING_REPORTER reporter;
+    SHAPE_POLY_SET     traced = TraceBilevelImage( bilevel, scaleX, scaleY, reporter );
+    wxString           warnings = reporter.GetMessages();
+
+    warnings.Trim();
+
+    const int icon = warnings.IsEmpty() ? wxICON_INFORMATION : wxICON_WARNING;
+
+    if( traced.IsEmpty() )
+    {
+        wxString message = warnings.IsEmpty() ? _( "No shapes to trace at this threshold." ) : warnings;
+
+        m_frame->GetCanvas()->ForceRefresh();
+        m_frame->GetInfoBar()->ShowMessageFor( message, 4000, icon );
+        return 0;
+    }
+
+    // The traced outlines start at the top left corner of the image.
+    VECTOR2I   origin = refImage.GetPosition() - size / 2;
+    SCH_COMMIT commit( m_toolMgr );
+    SCH_GROUP* group = new SCH_GROUP( m_frame->GetScreen() );
+
+    for( int ii = 0; ii < traced.OutlineCount(); ii++ )
+    {
+        SHAPE_LINE_CHAIN outline = traced.Outline( ii );
+
+        outline.Move( origin );
+
+        SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY );
+
+        shape->SetFillMode( FILL_T::FILLED_SHAPE );
+        shape->SetStroke( STROKE_PARAMS( -1 ) );
+
+        for( int jj = 0; jj < outline.PointCount(); jj++ )
+            shape->AddPoint( outline.CPoint( jj ) );
+
+        shape->AddPoint( outline.CPoint( 0 ) );
+
+        group->AddItem( shape );
+        commit.Add( shape, m_frame->GetScreen() );
+    }
+
+    commit.Remove( image, m_frame->GetScreen() );
+    commit.Add( group, m_frame->GetScreen() );
+    commit.Push( _( "Convert Image to Outlines" ) );
+
+    wxString message = wxString::Format( wxPLURAL( "Added %d shape.", "Added %d shapes.", traced.OutlineCount() ),
+                                         traced.OutlineCount() );
+
+    if( !warnings.IsEmpty() )
+        message << wxS( " " ) << warnings;
+
+    m_frame->GetInfoBar()->ShowMessageFor( message, 4000, icon );
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::DdAddImage( const TOOL_EVENT& aEvent )
 {
     wxString* filename = aEvent.Parameter<wxString*>();
@@ -4220,6 +4326,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditPageNumber,     SCH_ACTIONS::editPageNumber.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::DdAppendFile,       SCH_ACTIONS::ddAppendFile.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ConvertImageToOutlines, SCH_ACTIONS::convertImageToOutlines.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DdAddImage,        SCH_ACTIONS::ddAddImage.MakeEvent() );
     // clang-format on
 }

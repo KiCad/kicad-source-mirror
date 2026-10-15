@@ -39,14 +39,12 @@ public:
     enum GFX_FILE_T
     {
         DXF,
-        SVG
+        SVG,
+        BITMAP
     };
 
     /// Vector containing all GFX_FILE_T values that can be imported.
-    std::vector<GFX_FILE_T> GetImportableFileTypes() const
-    {
-        return { DXF, SVG };
-    }
+    std::vector<GFX_FILE_T> GetImportableFileTypes() const { return { DXF, SVG, BITMAP }; }
 
     /// Return a plugin that handles a specific file extension.
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPluginByExt( const wxString& aExtension ) const;

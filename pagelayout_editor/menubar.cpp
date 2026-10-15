@@ -129,6 +129,7 @@ void PL_EDITOR_FRAME::doReCreateMenuBar()
     placeMenu->Add( PL_ACTIONS::placeImage );
 
     placeMenu->AppendSeparator();
+    placeMenu->Add( PL_ACTIONS::placeImportedGraphics );
     placeMenu->Add( PL_ACTIONS::appendImportedDrawingSheet );
 
     placeMenu->AppendSeparator();

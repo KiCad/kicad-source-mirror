@@ -19,7 +19,6 @@
         <binary>pcbnew</binary>
         <binary>gerbview</binary>
         <binary>pl_editor</binary>
-        <binary>bitmap2component</binary>
         <binary>pcb_calculator</binary>
         <mediatype>application/x-gerber</mediatype>
         <mediatype>application/x-excellon</mediatype>

@@ -321,6 +321,11 @@ bool PCB_SELECTION_TOOL::Init()
     auto tableCellSelection = SELECTION_CONDITIONS::MoreThan( 0 )
                                 && SELECTION_CONDITIONS::OnlyTypes( tableCellTypes );
 
+    SELECTION_CONDITION referenceImageSelection = []( const SELECTION& aSel )
+    {
+        return aSel.GetSize() == 1 && static_cast<BOARD_ITEM*>( *aSel.begin() )->Type() == PCB_REFERENCE_IMAGE_T;
+    };
+
     SELECTION_CONDITION netItemSelection = []( const SELECTION& aSel )
     {
         if( aSel.GetSize() != 1 )
@@ -344,6 +349,7 @@ bool PCB_SELECTION_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::applyDesignBlockLayout, applyDesignBlockLayoutCondition, 1 );
     menu.AddItem( PCB_ACTIONS::placeLinkedDesignBlock,  groupEnterCondition, 1 );
     menu.AddItem( PCB_ACTIONS::saveToLinkedDesignBlock, groupEnterCondition, 1 );
+    menu.AddItem( PCB_ACTIONS::convertImageToOutlines, referenceImageSelection, 1 );
     menu.AddItem( PCB_ACTIONS::clearHighlight,          haveHighlight,       1 );
     menu.AddSeparator(                                  haveHighlight,       1 );
 

@@ -29,13 +29,6 @@ elseif( UNIX )
 
     # All the desktop files take two passes: First they are configured to replace the variables,
     # then they are translated from the binary directory
-    configure_file( ${PROJECT_SOURCE_DIR}/resources/linux/launchers/org.kicad.bitmap2component.desktop.in
-                    ${PROJECT_BINARY_DIR}/resources/linux/launchers/org.kicad.bitmap2component.desktop.in
-                    @ONLY )
-    linux_metadata_translation( ${PROJECT_BINARY_DIR}/resources/linux/launchers/org.kicad.bitmap2component.desktop.in
-                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/${KICAD_APP_PREFIX}.bitmap2component.desktop
-                                ${PROJECT_SOURCE_DIR}/translation/pofiles )
-
     configure_file( ${PROJECT_SOURCE_DIR}/resources/linux/launchers/org.kicad.eeschema.desktop.in
                     ${PROJECT_BINARY_DIR}/resources/linux/launchers/org.kicad.eeschema.desktop.in
                     @ONLY )
@@ -86,7 +79,6 @@ elseif( UNIX )
 
     add_custom_target( metadata ALL
                        DEPENDS ${PROJECT_BINARY_DIR}/resources/linux/metainfo/${KICAD_APP_NAME}.metainfo.xml
-                               ${PROJECT_BINARY_DIR}/resources/linux/launchers/${KICAD_APP_PREFIX}.bitmap2component.desktop
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/${KICAD_APP_PREFIX}.eeschema.desktop
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/${KICAD_APP_PREFIX}.gerbview.desktop
                                ${PROJECT_BINARY_DIR}/resources/linux/launchers/${KICAD_APP_NAME}.desktop

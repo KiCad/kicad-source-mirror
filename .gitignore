@@ -71,7 +71,6 @@ qa/data/**/~*.lck
 qa/data/**/.history
 
 # MacOS package info created by CMake
-bitmap2component/Info.plist
 cvpcb/Info.plist
 eeschema/Info.plist
 gerbview/Info.plist

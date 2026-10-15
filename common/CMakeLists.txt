@@ -580,6 +580,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_kicad_diff_base.cpp
     dialogs/dialog_kicad_merge_3way.cpp
     dialogs/dialog_kicad_merge_3way_base.cpp
+    dialogs/dialog_convert_image_to_outlines.cpp
     dialogs/dialog_color_picker.cpp
     dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
@@ -597,6 +598,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_hotkey_list.cpp
     dialogs/dialog_import_choose_project.cpp
     dialogs/dialog_import_choose_project_base.cpp
+    dialogs/dialog_import_gfx.cpp
+    dialogs/dialog_import_gfx_base.cpp
     dialogs/dialog_multi_unit_entry.cpp
     dialogs/dialog_page_settings_base.cpp
     dialogs/dialog_paste_special.cpp
@@ -849,6 +852,7 @@ set ( COMMON_TRANSLINE_CALCULATION_SRCS
     )
 
 set( COMMON_IMPORT_GFX_SRCS
+    import_gfx/bitmap_import_plugin.cpp
     import_gfx/graphics_import_mgr.cpp
     import_gfx/graphics_importer.cpp
     import_gfx/graphics_importer_buffer.cpp
@@ -874,6 +878,7 @@ set( COMMON_SRCS
     base_screen.cpp
     bin_mod.cpp
     bitmap_base.cpp
+    bitmap_tracing.cpp
     board_printout.cpp
     clipboard.cpp
     column_formatter.cpp
@@ -1048,6 +1053,7 @@ target_link_libraries( common
     gal
     nanosvg
     dxflib_qcad
+    potrace
     tinyspline_lib
     nlohmann_json
     compoundfilereader

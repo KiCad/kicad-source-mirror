@@ -27,6 +27,9 @@
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
 
+#include <dialogs/dialog_import_gfx.h>
+#include <import_gfx/graphics_importer_pl_editor.h>
+
 #include "pl_editor_frame.h"
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
@@ -391,10 +394,70 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 }
 
 
+int PL_DRAWING_TOOLS::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
+{
+    auto importer = std::make_unique<GRAPHICS_IMPORTER_PL_EDITOR>();
+
+    // The dialog takes the importer, but the items have to be fetched back out of it.
+    GRAPHICS_IMPORTER_PL_EDITOR* sink = importer.get();
+
+    // A drawing sheet has nothing to group items into.
+    DIALOG_IMPORT_GFX dlg( m_frame, std::move( importer ), false );
+
+    if( aEvent.HasParameter() )
+        dlg.SetFilenameOverride( *aEvent.Parameter<wxString*>() );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return 0;
+
+    std::vector<std::unique_ptr<DS_DATA_ITEM>>& items = sink->GetDataItems();
+
+    if( items.empty() )
+    {
+        DisplayInfoMessage( m_frame, _( "No graphic items found in file." ) );
+        return 0;
+    }
+
+    m_frame->SaveCopyInUndoList();
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    for( std::unique_ptr<DS_DATA_ITEM>& item : items )
+    {
+        DS_DATA_ITEM* dataItem = item.release();
+
+        DS_DATA_MODEL::GetTheInstance().Append( dataItem );
+
+        // Builds the item's drawable shapes and puts them in the view.
+        m_frame->SyncDataItem( dataItem );
+
+        for( DS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
+            m_selectionTool->AddItemToSel( drawItem, true );
+    }
+
+    items.clear();
+
+    m_frame->OnModify();
+    m_frame->GetCanvas()->Refresh();
+
+    PL_SELECTION& selection = m_selectionTool->GetSelection();
+
+    // Hand the items to the move tool the way Paste does, so they jump to the cursor.
+    if( dlg.IsPlacementInteractive() && !selection.Empty() )
+    {
+        selection.SetReferencePoint( selection.GetTopLeftItem()->GetPosition() );
+        m_toolMgr->PostAction( PL_ACTIONS::move );
+    }
+
+    return 0;
+}
+
+
 void PL_DRAWING_TOOLS::setTransitions()
 {
     Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::drawLine.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::drawRectangle.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::placeText.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::placeImage.MakeEvent() );
+    Go( &PL_DRAWING_TOOLS::PlaceImportedGraphics, PL_ACTIONS::placeImportedGraphics.MakeEvent() );
 }

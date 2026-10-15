@@ -83,6 +83,9 @@ public:
     int DdAppendFile( const TOOL_EVENT& aEvent );
     int DdAddImage( const TOOL_EVENT& aEvent );
 
+    /// Trace a placed image into filled graphics and replace it with them.
+    int ConvertImageToOutlines( const TOOL_EVENT& aEvent );
+
     /// Modify Attributes (DNP, Exclude, etc.)  All attributes are
     /// set to true unless all symbols already have the attribute set to true.
     int SetAttribute( const TOOL_EVENT& aEvent );

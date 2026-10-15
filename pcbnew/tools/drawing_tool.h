@@ -210,6 +210,11 @@ public:
     int PlaceReferenceImage( const TOOL_EVENT& aEvent );
 
     /**
+     * Trace a placed reference image into filled graphics and replace it with them.
+     */
+    int ConvertImageToOutlines( const TOOL_EVENT& aEvent );
+
+    /**
      * Place a reference 0D point
      */
     int PlacePoint( const TOOL_EVENT& aEvent );

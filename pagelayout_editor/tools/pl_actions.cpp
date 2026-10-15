@@ -32,6 +32,8 @@
 #undef _
 #define _(s) s
 
+// clang-format off
+
 
 // PL_DRAWING_TOOLS
 //
@@ -70,6 +72,16 @@ TOOL_ACTION PL_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::image )
         .Flags( AF_ACTIVATE )
         .Parameter( DS_DATA_ITEM::DS_BITMAP ) );
+
+
+TOOL_ACTION PL_ACTIONS::placeImportedGraphics( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveDrawing.placeImportedGraphics" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'F' )
+        .FriendlyName( _( "Import Graphics..." ) )
+        .Tooltip( _( "Import 2D drawing file" ) )
+        .Icon( BITMAPS::import_vector )
+        .Flags( AF_ACTIVATE ) );
 
 
 // PL_EDIT_TOOL
@@ -123,3 +135,5 @@ TOOL_ACTION PL_ACTIONS::layoutEditMode( TOOL_ACTION_ARGS()
         .Tooltip( _( "Text placeholders are shown as ${keyword} tokens" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::pagelayout_special_view_mode  ) );
+
+// clang-format on

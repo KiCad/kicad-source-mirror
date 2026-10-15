@@ -27,11 +27,14 @@
 
 #include <dialogs/dialog_text_properties.h>
 #include <eeschema_settings.h>
-#include <import_gfx/dialog_import_gfx_sch.h>
+#include <dialogs/dialog_import_gfx.h>
+#include <import_gfx/graphics_importer_lib_symbol.h>
+#include <import_gfx/graphics_importer_sch.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_actions.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <sch_group.h>
 #include <sch_line.h>
 #include <sch_shape.h>
 #include <sch_textbox.h>
@@ -996,7 +999,20 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    DIALOG_IMPORT_GFX_SCH dlg( frame() );
+    std::unique_ptr<GRAPHICS_IMPORTER> importer;
+
+    if( IsSymbolEditor() )
+    {
+        SYMBOL_EDIT_FRAME* symFrame = frame<SYMBOL_EDIT_FRAME>();
+        importer = std::make_unique<GRAPHICS_IMPORTER_LIB_SYMBOL>( symFrame->GetCurSymbol(), symFrame->GetUnit() );
+    }
+    else
+    {
+        importer = std::make_unique<GRAPHICS_IMPORTER_SCH>();
+    }
+
+    // A symbol holds its own draw items, so a group on the screen would not be saved with it.
+    DIALOG_IMPORT_GFX dlg( frame(), std::move( importer ), !IsSymbolEditor() );
 
     // Set filename on drag-and-drop
     if( aEvent.HasParameter() )
@@ -1023,6 +1039,16 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
     std::vector<SCH_ITEM*> selectedItems;
     SCH_SELECTION          preview;
     SCH_COMMIT             commit( m_toolMgr );
+    SCH_GROUP*             group = nullptr;
+
+    if( !IsSymbolEditor() && dlg.ShouldGroupItems() && list.size() >= 2 )
+    {
+        group = new SCH_GROUP( frame()->GetScreen() );
+
+        newItems.push_back( group );
+        selectedItems.push_back( group );
+        preview.Add( group );
+    }
 
     auto commitImport =
             [&]( const std::vector<SCH_ITEM*>& aItems )
@@ -1058,8 +1084,12 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
         wxCHECK2_MSG( item, continue, wxString::Format( "Bad item type: ", eda_item->Type() ) );
 
         newItems.push_back( item );
-        selectedItems.push_back( item );
         preview.Add( item );
+
+        if( group )
+            group->AddItem( item );
+        else
+            selectedItems.push_back( item );
     }
 
     if( !dlg.IsPlacementInteractive() )

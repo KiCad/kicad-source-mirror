@@ -71,7 +71,6 @@
 #include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_table_properties.h>
-#include <import_gfx/dialog_import_gfx_sch.h>
 #include <sync_sheet_pin/sheet_synchronization_agent.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>

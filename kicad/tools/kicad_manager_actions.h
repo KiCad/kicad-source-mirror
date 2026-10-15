@@ -43,7 +43,6 @@ public:
     static TOOL_ACTION editPCB;
     static TOOL_ACTION editFootprints;
     static TOOL_ACTION viewGerbers;
-    static TOOL_ACTION convertImage;
     static TOOL_ACTION showCalculator;
     static TOOL_ACTION editDrawingSheet;
     static TOOL_ACTION openTextEditor;

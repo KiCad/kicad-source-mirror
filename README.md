@@ -32,7 +32,6 @@ GitLab CI pipeline status can be viewed for Linux and Windows builds of the late
 ## Subdirectories
 
 * [3d-viewer](3d-viewer)         - Sourcecode of the 3D viewer
-* [bitmap2component](bitmap2component)  - Sourcecode of the bitmap to PCB artwork converter
 * [cmake](cmake)      - Modules for the CMAKE build tool
 * [common](common)            - Sourcecode of the common library
 * [cvpcb](cvpcb)             - Sourcecode of the CvPCB tool

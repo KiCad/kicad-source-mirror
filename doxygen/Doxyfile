@@ -996,7 +996,6 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ../3d-viewer \
-                         ../bitmap2component \
                          ../common \
                          ../cvpcb \
                          ../eeschema \

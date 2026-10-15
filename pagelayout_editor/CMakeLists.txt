@@ -35,6 +35,8 @@ set( PL_EDITOR_SRCS
     menubar.cpp
     toolbars_pl_editor.cpp
 
+    import_gfx/graphics_importer_pl_editor.cpp
+
     tools/pl_actions.cpp
     tools/pl_selection.cpp
     tools/pl_selection_tool.cpp

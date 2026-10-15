@@ -13,7 +13,6 @@ ICON_SOURCES = "../../resources/bitmaps_png/sources/light/"
 
 # (sourcename, (dest1, dest2, ...), output_dir)
 ICONS = [
-    # ("bitmap2component", ("bitmap2component",), "../../bitmap2component"),
     # ("cvpcb", ("cvpcb", "cvpcb_doc"), "../../cvpcb"),
     # ("eeschema", ("eeschema", "eeschema_doc"), "../../eeschema"),
     ("libedit", ("libedit", "libedit_doc"), "../../eeschema"),

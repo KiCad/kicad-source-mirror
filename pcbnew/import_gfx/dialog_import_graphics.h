@@ -33,7 +33,6 @@ class DIALOG_IMPORT_GRAPHICS : public DIALOG_IMPORT_GRAPHICS_BASE
 {
 public:
     DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent );
-    ~DIALOG_IMPORT_GRAPHICS();
 
     /**
      * @return a list of items imported from a vector graphics file.
@@ -73,8 +72,31 @@ public:
 private:
     // Virtual event handlers
     void onBrowseFiles( wxCommandEvent& event ) override;
-    void onFilename( wxCommandEvent& event );
+    void onFilenameChanged( wxCommandEvent& event ) override;
+    void onThresholdChanged( wxScrollEvent& event ) override;
+    void onInvertChanged( wxCommandEvent& event ) override;
+    void onScaleChanged( wxCommandEvent& event ) override;
+    void onWidthChanged( wxCommandEvent& event ) override;
+    void onHeightChanged( wxCommandEvent& event ) override;
+    void onLockAspectChanged( wxCommandEvent& event ) override;
     void onUpdateUI( wxUpdateUIEvent& event ) override;
+
+    /// Read the chosen file, which is where the preview and the source size come from.
+    void loadSourceFile();
+
+    /// Show the image controls only when the chosen file is a raster image.
+    void updateImageControls();
+
+    void updatePreview();
+
+    /// Offer the size fields only when the source has a size to scale.
+    void updateSizeControls();
+
+    /// Write the scale into the size fields.
+    void sizeFromScale();
+
+    /// Work the scale out from a size the user typed.
+    void scaleFromSize( bool aFromWidth );
 
 private:
     PCB_BASE_FRAME*                           m_parent;
@@ -85,6 +107,19 @@ private:
     UNIT_BINDER          m_yOrigin;
     UNIT_BINDER          m_defaultLineWidth;
     UNIT_BINDER          m_tolerance;
+    UNIT_BINDER          m_importWidth;
+    UNIT_BINDER          m_importHeight;
+
+    wxImage  m_previewSource;
+
+    /// The file the source size and the preview were taken from.
+    wxString m_sourcePath;
+
+    /// Size of the source file's contents in mm, (0,0) when it has none to report.
+    VECTOR2D m_sourceSizeMM;
+
+    double m_xScale;
+    double m_yScale;
 
     wxString m_filenameOverride;
 };

@@ -345,6 +345,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_acceptedExts.emplace( FILEEXT::KiCadFootprintLibPathExtension, &ACTIONS::ddAddLibrary );
     m_acceptedExts.emplace( FILEEXT::KiCadFootprintFileExtension, &PCB_ACTIONS::ddImportFootprint );
+    m_acceptedExts.emplace( FILEEXT::PngFileExtension, &PCB_ACTIONS::ddPlaceReferenceImage );
+    m_acceptedExts.emplace( FILEEXT::JpegFileExtension, &PCB_ACTIONS::ddPlaceReferenceImage );
+    m_acceptedExts.emplace( wxS( "jpeg" ), &PCB_ACTIONS::ddPlaceReferenceImage );
     DragAcceptFiles( true );
 
     FinishAUIInitialization();

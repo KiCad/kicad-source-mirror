@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <wx/bitmap.h>
 #include <wx/image.h>
 
@@ -182,6 +184,21 @@ public:
     bool SetImage( const wxImage& aImage );
 
     /**
+     * Show finished pixels in place of the image, without disturbing the scale or the
+     * resolution.
+     *
+     * Used for a temporary view, such as a conversion preview. Any rotation or mirroring
+     * already in the image is taken as final. Calling this again replaces the view;
+     * EndPreviewImage() puts the real image back.
+     */
+    void BeginPreviewImage( const wxImage& aImage );
+
+    /**
+     * Put back the image a preview stood in for, and do nothing if none is showing.
+     */
+    void EndPreviewImage();
+
+    /**
      * Write the bitmap data to \a aOutStream.
      *
      * This writes binary data, not hexadecimal strings
@@ -302,6 +319,19 @@ private:
                                     ///< with #m_pixelSizeIu, controls the actual draw size.
     mutable wxMemoryBuffer m_imageData; ///< Cached encoded image data (PNG/JPEG).
     wxBitmapType   m_imageType;     ///< The image type (png, jpeg, etc.).
+
+    /// Everything a preview image stands in for, kept so it can be put back exactly.
+    struct PREVIEW_SAVE
+    {
+        wxImage   m_image;
+        wxImage   m_originalImage;
+        KIID      m_imageId;
+        EDA_ANGLE m_rotation;
+        bool      m_isMirroredX;
+        bool      m_isMirroredY;
+    };
+
+    std::optional<PREVIEW_SAVE> m_previewSave; ///< Set only while a preview is showing.
 
     wxImage*  m_image;              ///< The raw, uncompressed image data.
     wxImage*  m_originalImage;      ///< Raw image data, not transformed by rotate/mirror.

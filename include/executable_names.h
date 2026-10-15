@@ -31,7 +31,6 @@ extern const wxString CVPCB_EXE;
 extern const wxString PCBNEW_EXE;
 extern const wxString EESCHEMA_EXE;
 extern const wxString GERBVIEW_EXE;
-extern const wxString BITMAPCONVERTER_EXE;
 extern const wxString PCB_CALCULATOR_EXE;
 extern const wxString PL_EDITOR_EXE;
 

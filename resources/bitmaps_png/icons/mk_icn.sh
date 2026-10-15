@@ -16,7 +16,6 @@ ICON_FILES="icon_3d.svg
             icon_gerbview.svg
             icon_kicad.svg
             icon_kicad_nightly.svg
-            icon_bitmap2component.svg
             icon_pcbcalculator.svg
             icon_pagelayout_editor.svg
             icon_cvpcb.svg

@@ -12,8 +12,7 @@ SIZES="16x16
        512x512
        1024x1024"
 
-ICONS="bitmap2component
-       eeschema
+ICONS="eeschema
        gerbview
        kicad
        pagelayout_editor
@@ -111,10 +110,6 @@ do
         pcbcalculator)
             # mismatch in the pcbcalculator icon names
             png2icns ../pcb_calculator/pcb_calculator.icns ${output}
-            ;;
-        bitmap2component)
-            # bitmap2component does not have associated documents
-            png2icns ../${pgm}/${pgm}.icns ${output}
             ;;
         eeschema)
             png2icns ../${pgm}/${pgm}.icns ${output}

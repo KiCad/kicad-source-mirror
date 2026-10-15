@@ -581,6 +581,51 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 }
 
 
+void BITMAP_BASE::BeginPreviewImage( const wxImage& aImage )
+{
+    if( !m_image || !m_originalImage || !aImage.IsOk() )
+        return;
+
+    // Only the first call has the real image to save.
+    if( !m_previewSave )
+        m_previewSave = PREVIEW_SAVE{ *m_image, *m_originalImage, m_imageId, m_rotation, m_isMirroredX, m_isMirroredY };
+
+    // The renderers do not agree on which of the two they draw, so both have to change.
+    *m_image = aImage;
+    *m_originalImage = aImage;
+
+    // The caller hands over finished pixels, so a stored turn would be applied twice.
+    m_rotation = ANGLE_0;
+    m_isMirroredX = false;
+    m_isMirroredY = false;
+
+    m_bitmapDirty = true;
+
+    // The encoded data is left alone, unlike a real change to the pixels: it still holds the
+    // picture, so anything that writes the document while a preview is up, such as an autosave,
+    // saves the image and not the stand-in.  A renderer caching by id does have to be told that
+    // what it draws has changed.
+    m_imageId = KIID();
+}
+
+
+void BITMAP_BASE::EndPreviewImage()
+{
+    if( !m_previewSave )
+        return;
+
+    *m_image = m_previewSave->m_image;
+    *m_originalImage = m_previewSave->m_originalImage;
+    m_imageId = m_previewSave->m_imageId;
+    m_rotation = m_previewSave->m_rotation;
+    m_isMirroredX = m_previewSave->m_isMirroredX;
+    m_isMirroredY = m_previewSave->m_isMirroredY;
+
+    m_bitmapDirty = true;
+    m_previewSave.reset();
+}
+
+
 void BITMAP_BASE::ConvertToGreyscale()
 {
     if( m_image )

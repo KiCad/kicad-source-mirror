@@ -75,7 +75,6 @@ set( BMAPS_SMALL
     git_good_check
     git_modified
     git_out_of_date
-    icon_bitmap2component_16
     icon_eeschema_16
     icon_gerbview_16
     icon_kicad_16
@@ -344,7 +343,6 @@ set( BMAPS_MID
     hole_to_hole_clearance
     hole_to_copper_clearance
     hv45mode
-    icon_bitmap2component_24
     icon_cvpcb_24
     icon_eeschema_24
     icon_footprint_browser
@@ -621,7 +619,6 @@ set( BMAPS_24
 
 # 32 x 32 for icon sets
 set( BMAPS_32
-    icon_bitmap2component_32
     icon_eeschema_32
     icon_gerbview_32
     icon_kicad_32
@@ -645,7 +642,6 @@ set( BMAPS_BIG
     icon_libedit
     icon_modedit
     icon_pcbnew
-    icon_bitmap2component
     icon_pagelayout_editor
     icon_pcbcalculator
     icon_pcm
@@ -672,7 +668,6 @@ set( BMAPS_64
     icon_modedit
     icon_pcbnew
     icon_pagelayout_editor
-    icon_bitmap2component
     icon_pcbcalculator
     icon_pcm
     )
@@ -688,7 +683,6 @@ set( BMAPS_128
     icon_modedit
     icon_pcbnew
     icon_pagelayout_editor
-    icon_bitmap2component
     icon_pcbcalculator
     icon_pcm
     )
@@ -704,7 +698,6 @@ set( BMAPS_256
     icon_modedit
     icon_pcbnew
     icon_pagelayout_editor
-    icon_bitmap2component
     icon_pcbcalculator
     icon_pcm
     )

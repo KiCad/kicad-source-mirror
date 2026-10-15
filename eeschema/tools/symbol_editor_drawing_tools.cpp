@@ -38,7 +38,6 @@
 #include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
-#include <import_gfx/dialog_import_gfx_sch.h>
 
 
 KIID SYMBOL_EDITOR_DRAWING_TOOLS::g_lastPin;

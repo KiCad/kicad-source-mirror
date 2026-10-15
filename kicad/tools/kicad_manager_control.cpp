@@ -1015,8 +1015,6 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) )
         execFile = GERBVIEW_EXE;
-    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::convertImage ) )
-        execFile = BITMAPCONVERTER_EXE;
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::showCalculator ) )
         execFile = PCB_CALCULATOR_EXE;
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editDrawingSheet ) )
@@ -1129,8 +1127,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editSymbols.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editPCB.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,         KICAD_MANAGER_ACTIONS::editFootprints.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::viewGerbers.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::convertImage.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute, KICAD_MANAGER_ACTIONS::viewGerbers.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::showCalculator.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::editDrawingSheet.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,            KICAD_MANAGER_ACTIONS::openTextEditor.MakeEvent() );

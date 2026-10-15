@@ -119,8 +119,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     case FACE_CVPCB:            name = KIFACE_PREFIX "cvpcb";               break;
     case FACE_GERBVIEW:         name = KIFACE_PREFIX "gerbview";            break;
     case FACE_PL_EDITOR:        name = KIFACE_PREFIX "pl_editor";           break;
-    case FACE_PCB_CALCULATOR:   name = KIFACE_PREFIX "pcb_calculator";      break;
-    case FACE_BMP2CMP:          name = KIFACE_PREFIX "bitmap2component";    break;
+    case FACE_PCB_CALCULATOR: name = KIFACE_PREFIX "pcb_calculator"; break;
 
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
@@ -374,9 +373,6 @@ KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
 
     case FRAME_CALC:
         return FACE_PCB_CALCULATOR;
-
-    case FRAME_BM2CMP:
-        return FACE_BMP2CMP;
 
     default:
         return FACE_T( -1 );

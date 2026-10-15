@@ -171,9 +171,6 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
     addLauncher( KICAD_MANAGER_ACTIONS::viewGerbers, BITMAPS::icon_gerbview,
                  _( "Preview Gerber files" ) );
 
-    addLauncher( KICAD_MANAGER_ACTIONS::convertImage, BITMAPS::icon_bitmap2component,
-                 _( "Convert bitmap images to schematic symbols or PCB footprints" ) );
-
     addLauncher( KICAD_MANAGER_ACTIONS::showCalculator, BITMAPS::icon_pcbcalculator,
                  _( "Show tools for calculating resistance, current capacity, etc." ) );
 

@@ -1078,12 +1078,6 @@ add_subdirectory( doxygen )
 configure_file( ${PROJECT_SOURCE_DIR}/cmake/config.h.cmake
     ${CMAKE_BINARY_DIR}/config.h )
 
-# Generate the shared S-expression file-format version header for standalone tools
-# (bitmap2component) that cannot link pcbnew/eeschema. The values are extracted from the
-# authoritative ledgers so they can never drift.
-include( ${KICAD_CMAKE_MODULE_PATH}/WriteSexprVersionHeader.cmake )
-
-
 #================================================
 # "make uninstall" rules
 #================================================
@@ -1126,7 +1120,6 @@ add_subdirectory( eeschema )
 add_subdirectory( gerbview )
 add_subdirectory( pcbnew )
 add_subdirectory( pagelayout_editor )
-add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
 add_subdirectory( plugins )             # 3D plugins must be built before kicad
 add_subdirectory( cvpcb )               # must be after pcbnew

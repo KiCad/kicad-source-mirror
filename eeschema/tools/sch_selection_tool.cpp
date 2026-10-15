@@ -690,6 +690,11 @@ bool SCH_SELECTION_TOOL::Init()
                 return aSel.GetSize() >= 1 && aSel.OnlyContains( { SCH_SYMBOL_T } );
             };
 
+    SELECTION_CONDITION imageSelection = []( const SELECTION& aSel )
+    {
+        return aSel.GetSize() == 1 && aSel.OnlyContains( { SCH_BITMAP_T } );
+    };
+
     std::shared_ptr<NET_CHAIN_MENU> netChainMenu = std::make_shared<NET_CHAIN_MENU>();
     netChainMenu->SetTool( this );
     m_menu->RegisterSubMenu( netChainMenu );
@@ -699,6 +704,7 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddItem( ACTIONS::groupLeave,                  inGroupCondition,    1 );
     menu.AddItem( SCH_ACTIONS::placeLinkedDesignBlock,  groupEnterCondition, 1 );
     menu.AddItem( SCH_ACTIONS::saveToLinkedDesignBlock, groupEnterCondition, 1 );
+    menu.AddItem( SCH_ACTIONS::convertImageToOutlines,  imageSelection,      1 );
     menu.AddItem( SCH_ACTIONS::clearHighlight,          haveHighlight && SCH_CONDITIONS::Idle, 1 );
     menu.AddSeparator(                                  haveHighlight && SCH_CONDITIONS::Idle, 1 );
 

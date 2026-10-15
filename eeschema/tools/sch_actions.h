@@ -115,6 +115,7 @@ public:
     static TOOL_ACTION drawPolygon;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
+    static TOOL_ACTION        convertImageToOutlines;
     static TOOL_ACTION undoLastSegment;
     static TOOL_ACTION switchSegmentPosture;
     static TOOL_ACTION drawRuleArea;

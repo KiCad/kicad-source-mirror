@@ -67,6 +67,11 @@ const static std::vector<TYPE_TO_EXTS> type_to_ext_cases = {
             { "svg" },
             "Scalable Vector Graphics",
     },
+    {
+            GRAPHICS_IMPORT_MGR::GFX_FILE_T::BITMAP,
+            { "png", "jpg", "jpeg", "bmp", "gif" },
+            "Bitmap image",
+    },
 };
 
 /**

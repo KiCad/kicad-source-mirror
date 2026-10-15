@@ -6,7 +6,6 @@ ICON="kicad
       pcbnew
       eeschema
       gerbview
-      bitmap2component
       pcbcalculator"
 
 SIZE="16x16

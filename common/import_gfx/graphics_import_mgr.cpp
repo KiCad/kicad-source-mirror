@@ -22,6 +22,7 @@
 #include "graphics_import_mgr.h"
 
 #include <eda_item.h>
+#include "bitmap_import_plugin.h"
 #include "dxf_import_plugin.h"
 #include "svg_import_plugin.h"
 
@@ -35,6 +36,7 @@ std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPlugin( GFX_FILE
     {
     case DXF: ret = std::make_unique<DXF_IMPORT_PLUGIN>();             break;
     case SVG: ret = std::make_unique<SVG_IMPORT_PLUGIN>();             break;
+    case BITMAP: ret = std::make_unique<BITMAP_IMPORT_PLUGIN>(); break;
     default:  throw std::runtime_error( "Unhandled graphics format" ); break;
     }
 

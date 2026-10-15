@@ -300,7 +300,6 @@ if( APPLE )
         endfunction( move_to_main_bundle )
 
         # move all app bundles
-        move_to_main_bundle( \"bitmap2component.app\" \"Image Converter.app\" )
         move_to_main_bundle( \"eeschema.app\" \"Schematic Editor.app\" )
         move_to_main_bundle( \"gerbview.app\" \"GerbView.app\" )
         move_to_main_bundle( \"pcb_calculator.app\" \"PCB Calculator.app\" )

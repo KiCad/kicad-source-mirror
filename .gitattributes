@@ -29,6 +29,8 @@ common/bitmap_info.cpp      generated
 **/dialog*/*_base.h         generated
 **/sim/*_base.cpp           generated
 **/sim/*_base.h             generated
+**/import_gfx/*_base.cpp    generated
+**/import_gfx/*_base.h      generated
 pcb_calculator/calculator_panels/*_base.cpp    generated
 pcb_calculator/calculator_panels/*_base.h      generated
 

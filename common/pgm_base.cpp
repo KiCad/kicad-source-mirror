@@ -328,8 +328,7 @@ wxString PGM_BASE::DesktopAppIdForProgram( const wxString& aPgmName )
     if( aPgmName == wxT( "kicad" ) )
         return wxT( KICAD_DESKTOP_APP_NAME );
 
-    if( aPgmName == wxT( "eeschema" ) || aPgmName == wxT( "pcbnew" )
-        || aPgmName == wxT( "gerbview" ) || aPgmName == wxT( "bitmap2component" )
+    if( aPgmName == wxT( "eeschema" ) || aPgmName == wxT( "pcbnew" ) || aPgmName == wxT( "gerbview" )
         || aPgmName == wxT( "pcb_calculator" ) )
     {
         // pcb_calculator installs as pcbcalculator to satisfy freedesktop naming rules.

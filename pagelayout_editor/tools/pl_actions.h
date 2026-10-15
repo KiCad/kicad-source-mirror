@@ -35,6 +35,7 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeText;
     static TOOL_ACTION placeImage;
+    static TOOL_ACTION placeImportedGraphics;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawLine;
     static TOOL_ACTION appendImportedDrawingSheet;

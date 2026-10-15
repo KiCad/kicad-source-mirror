@@ -54,8 +54,6 @@ enum FRAME_T
 
     FRAME_PL_EDITOR,
 
-    FRAME_BM2CMP,
-
     FRAME_CALC,
 
     /// Top-level host for the 3-way merge resolution dialog. Lives in the

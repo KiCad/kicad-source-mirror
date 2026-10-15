@@ -154,14 +154,15 @@ bool PGM_KICAD::OnPgmInit()
     {
         wxString name;
         FRAME_T  type;
+        // clang-format off
     } frameTypes[] = { { wxT( "pcb" ), FRAME_PCB_EDITOR },
                        { wxT( "fpedit" ), FRAME_FOOTPRINT_EDITOR },
                        { wxT( "sch" ), FRAME_SCH },
                        { wxT( "calc" ), FRAME_CALC },
-                       { wxT( "bm2cmp" ), FRAME_BM2CMP },
                        { wxT( "ds" ), FRAME_PL_EDITOR },
                        { wxT( "gerb" ), FRAME_GERBER },
                        { wxT( "" ), FRAME_T_COUNT } };
+    // clang-format on
 
     wxString frameName;
 

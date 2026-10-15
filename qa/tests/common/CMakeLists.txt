@@ -36,6 +36,7 @@ set( QA_COMMON_SRCS
     test_backup_settings.cpp
     test_base_set.cpp
     test_bitmap_base.cpp
+    test_bitmap_tracing.cpp
     test_clipboard.cpp
     test_collector.cpp
     test_color4d.cpp

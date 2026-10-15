@@ -46,10 +46,6 @@ LAUNCHERS_VALID=1
 echo ""
 echo "Validating desktop launcher files"
 
-# Bitmap2component
-desktop-file-validate $KICAD_LAUNCHER_DIR/org.kicad.bitmap2component.desktop
-[ $? -ne 0 ] && LAUNCHERS_VALID=0
-
 # Eeschema standalone
 desktop-file-validate $KICAD_LAUNCHER_DIR/org.kicad.eeschema.desktop
 [ $? -ne 0 ] && LAUNCHERS_VALID=0
@@ -108,7 +104,6 @@ echo "Installing desktop files for testing"
 mkdir -p ~/.local/share/applications
 
 # For some reason, desktop-file-install doesn't seem to actually install it properly, so just copy them
-cp $KICAD_LAUNCHER_DIR/org.kicad.bitmap2component.desktop ~/.local/share/applications/
 cp $KICAD_LAUNCHER_DIR/org.kicad.eeschema.desktop ~/.local/share/applications/
 cp $KICAD_LAUNCHER_DIR/org.kicad.gerbview.desktop ~/.local/share/applications/
 cp $KICAD_LAUNCHER_DIR/org.kicad.kicad.desktop ~/.local/share/applications/

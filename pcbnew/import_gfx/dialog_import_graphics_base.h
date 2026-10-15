@@ -27,9 +27,12 @@ class STD_BITMAP_BUTTON;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/choice.h>
-#include <wx/statline.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/slider.h>
+#include <wx/statbmp.h>
+#include <wx/panel.h>
+#include <wx/statline.h>
 #include <wx/valtext.h>
 #include <wx/radiobut.h>
 #include <wx/bmpcbox.h>
@@ -50,11 +53,23 @@ class DIALOG_IMPORT_GRAPHICS_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_importScaleLabel;
 		wxTextCtrl* m_importScaleCtrl;
+		wxStaticText* m_importWidthLabel;
+		wxTextCtrl* m_importWidthCtrl;
+		wxStaticText* m_importWidthUnits;
+		wxStaticText* m_importHeightLabel;
+		wxTextCtrl* m_importHeightCtrl;
+		wxStaticText* m_importHeightUnits;
+		wxCheckBox* m_aspectRatioCheckbox;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
 		wxStaticText* m_dxfUnitsLabel;
 		wxChoice* m_dxfUnitsChoice;
+		wxPanel* m_imagePanel;
+		wxStaticText* m_thresholdLabel;
+		wxSlider* m_thresholdSlider;
+		wxCheckBox* m_cbInvertColors;
+		wxStaticBitmap* m_previewBitmap;
 		wxStaticLine* m_staticline2;
 		wxCheckBox* m_placeAtCheckbox;
 		wxStaticText* m_xLabel;
@@ -80,12 +95,19 @@ class DIALOG_IMPORT_GRAPHICS_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onFilenameChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBrowseFiles( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onScaleChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onWidthChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onHeightChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLockAspectChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onThresholdChanged( wxScrollEvent& event ) { event.Skip(); }
+		virtual void onInvertChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Vector Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_IMPORT_GRAPHICS_BASE();
 

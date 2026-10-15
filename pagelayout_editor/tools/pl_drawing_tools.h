@@ -51,6 +51,9 @@ public:
     int DrawShape( const TOOL_EVENT& aEvent );
     int PlaceItem( const TOOL_EVENT& aEvent );
 
+    /// Import a graphics file as drawing sheet items.
+    int PlaceImportedGraphics( const TOOL_EVENT& aEvent );
+
 private:
     /// Set up handlers for various events.
     void setTransitions() override;

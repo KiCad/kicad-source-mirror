@@ -29,7 +29,9 @@
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
+#include <bitmap_tracing.h>
 #include <dialogs/dialog_barcode_properties.h>
+#include <dialogs/dialog_convert_image_to_outlines.h>
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -857,9 +859,32 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     if( m_inDrawingTool )
         return 0;
 
-    REENTRANCY_GUARD     guard( &m_inDrawingTool );
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    PCB_REFERENCE_IMAGE* image = aEvent.Parameter<PCB_REFERENCE_IMAGE*>();
+    PCB_REFERENCE_IMAGE* image = nullptr;
+
+    // A dropped file arrives as its name.
+    if( aEvent.IsAction( &PCB_ACTIONS::ddPlaceReferenceImage ) )
+    {
+        wxString* filename = aEvent.Parameter<wxString*>();
+
+        if( !filename )
+            return 0;
+
+        image = new PCB_REFERENCE_IMAGE( m_frame->GetModel() );
+
+        if( !image->GetReferenceImage().ReadImageFile( *filename ) )
+        {
+            wxMessageBox( wxString::Format( _( "Could not load image from '%s'." ), *filename ) );
+            delete image;
+            return 0;
+        }
+    }
+    else
+    {
+        image = aEvent.Parameter<PCB_REFERENCE_IMAGE*>();
+    }
+
     bool                 immediateMode = image != nullptr;
     PCB_GRID_HELPER      grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     bool                 ignorePrimePosition = false;
@@ -879,8 +904,13 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     if( image )
     {
         image->SetPosition( cursorPos );
+        image->SetFlags( IS_NEW | IS_MOVING );
+        image->SetLayer( m_frame->GetActiveLayer() );
+
         m_view->ClearPreview();
         m_view->AddToPreview( image, false );   // Add, but not give ownership
+        m_view->RecacheAllItems();              // Bitmaps are cached in Opengl
+        selectionTool->AddItemToSel( image, false );
     }
 
     auto setCursor =
@@ -2252,6 +2282,127 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     if( selection().Empty() )
         m_frame->SetMsgPanel( board() );
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::ConvertImageToOutlines( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection[0]->Type() != PCB_REFERENCE_IMAGE_T )
+        return 0;
+
+    PCB_REFERENCE_IMAGE* image = static_cast<PCB_REFERENCE_IMAGE*>( selection[0] );
+    REFERENCE_IMAGE&     refImage = image->GetReferenceImage();
+    BITMAP_BASE&         bitmap = refImage.MutableImage();
+
+    if( !bitmap.GetImageData() )
+        return 0;
+
+    const wxImage source = *bitmap.GetImageData();
+
+    std::vector<PCB_LAYER_ID> layerIds;
+    wxArrayString             layerNames;
+    int                       selectedLayer = 0;
+
+    for( PCB_LAYER_ID layer : m_board->GetEnabledLayers().UIOrder() )
+    {
+        if( layer == image->GetLayer() )
+            selectedLayer = (int) layerIds.size();
+
+        layerIds.push_back( layer );
+        layerNames.Add( m_board->GetLayerName( layer ) );
+    }
+
+    auto showPreview = [&]( double aThreshold, bool aInvert )
+    {
+        bitmap.BeginPreviewImage( ConvertImageToBilevel( source, aThreshold, aInvert ) );
+        m_view->Update( image );
+        m_frame->GetCanvas()->ForceRefresh();
+    };
+
+    DIALOG_CONVERT_IMAGE_TO_OUTLINES dialog( m_frame, layerNames, selectedLayer, showPreview );
+
+    showPreview( dialog.GetThreshold(), dialog.GetInvert() );
+
+    int result = dialog.ShowModal();
+
+    bitmap.EndPreviewImage();
+    m_view->Update( image );
+
+    if( result != wxID_OK )
+    {
+        m_frame->GetCanvas()->ForceRefresh();
+        return 0;
+    }
+
+    wxImage bilevel = ConvertImageToBilevel( source, dialog.GetThreshold(), dialog.GetInvert() );
+
+    VECTOR2I size = refImage.GetSize();
+    double   scaleX = (double) size.x / bilevel.GetWidth();
+    double   scaleY = (double) size.y / bilevel.GetHeight();
+
+    WX_STRING_REPORTER reporter;
+    SHAPE_POLY_SET     traced = TraceBilevelImage( bilevel, scaleX, scaleY, reporter );
+    wxString           warnings = reporter.GetMessages();
+
+    warnings.Trim();
+
+    const int icon = warnings.IsEmpty() ? wxICON_INFORMATION : wxICON_WARNING;
+
+    if( traced.IsEmpty() )
+    {
+        wxString message = warnings.IsEmpty() ? _( "No shapes to trace at this threshold." ) : warnings;
+
+        m_frame->GetCanvas()->ForceRefresh();
+        m_frame->GetInfoBar()->ShowMessageFor( message, 4000, icon );
+        return 0;
+    }
+
+    // The traced outlines start at the top left corner of the image.
+    VECTOR2I     origin = refImage.GetPosition() - size / 2;
+    PCB_LAYER_ID layer = layerIds[dialog.GetLayerSelection()];
+
+    BOARD_COMMIT commit( m_frame );
+    PCB_GROUP*   group = new PCB_GROUP( m_frame->GetModel() );
+
+    for( int ii = 0; ii < traced.OutlineCount(); ii++ )
+    {
+        SHAPE_LINE_CHAIN outline = traced.Outline( ii );
+
+        outline.Move( origin );
+
+        PCB_SHAPE* shape = new PCB_SHAPE( m_frame->GetModel() );
+
+        shape->SetShape( SHAPE_T::POLY );
+        shape->SetFilled( true );
+        shape->SetLayer( layer );
+        shape->SetPolyShape( outline );
+        shape->SetStroke( STROKE_PARAMS( 0 ) );
+
+        group->AddItem( shape );
+        commit.Add( shape );
+    }
+
+    commit.Remove( image );
+    commit.Add( group );
+    commit.Push( _( "Convert Image to Outlines" ) );
+
+    wxString message = wxString::Format( wxPLURAL( "Added %d shape.", "Added %d shapes.", traced.OutlineCount() ),
+                                         traced.OutlineCount() );
+
+    if( !warnings.IsEmpty() )
+        message << wxS( " " ) << warnings;
+
+    m_frame->GetInfoBar()->ShowMessageFor( message, 4000, icon );
 
     return 0;
 }
@@ -4857,9 +5008,11 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceMicroviaStack,    PCB_ACTIONS::placeViaStack.MakeEvent() );
     Go( &DRAWING_TOOL::PlacePoint,            PCB_ACTIONS::placePoint.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceReferenceImage,   PCB_ACTIONS::placeReferenceImage.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceReferenceImage,   PCB_ACTIONS::ddPlaceReferenceImage.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,             PCB_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::DrawTable,             PCB_ACTIONS::drawTable.MakeEvent() );
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawTextBox.MakeEvent() );
+    Go( &DRAWING_TOOL::ConvertImageToOutlines, PCB_ACTIONS::convertImageToOutlines.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::ddImportGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,             PCB_ACTIONS::setAnchor.MakeEvent() );

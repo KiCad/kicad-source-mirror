@@ -369,9 +369,9 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
 #if !defined(BUILD_KIWAY_DLL)
 
-    // Only bitmap2component and pcb_calculator use this code currently, as they
-    // are not split to use single_top as a link image separate from a *.kiface.
-    // i.e. they are single part link images so don't need to load a *.kiface.
+    // Only pcb_calculator uses this code currently, as it is not split to use
+    // single_top as a link image separate from a *.kiface.
+    // i.e. it is a single part link image so doesn't need to load a *.kiface.
 
     // Get the getter, it is statically linked into this binary image.
     KIFACE_GETTER_FUNC* ki_getter = &KIFACE_GETTER;

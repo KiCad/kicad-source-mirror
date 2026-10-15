@@ -16,7 +16,7 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
     set( sign_list "${target}/Contents/Applications/eeschema.app/Contents/MacOS/eeschema"
             "${target}/Contents/Applications/eeschema.app"
             "${target}/Contents/Applications/gerbview.app/Contents/MacOS/gerbview"
-            "${target}/Contents/Applications/gerbview.app"  "${target}/Contents/Applications/pcbnew.app/Contents/MacOS/pcbnew" "${target}/Contents/Applications/pcbnew.app" "${target}/Contents/Applications/bitmap2component.app/Contents/MacOS/bitmap2component" "${target}/Contents/Applications/bitmap2component.app" "${target}/Contents/Applications/pcb_calculator.app/Contents/MacOS/pcb_calculator" "${target}/Contents/Applications/pcb_calculator.app" "${target}/Contents/Applications/pl_editor.app/Contents/MacOS/pl_editor" "${target}/Contents/Applications/pl_editor.app")
+            "${target}/Contents/Applications/gerbview.app"  "${target}/Contents/Applications/pcbnew.app/Contents/MacOS/pcbnew" "${target}/Contents/Applications/pcbnew.app" "${target}/Contents/Applications/pcb_calculator.app/Contents/MacOS/pcb_calculator" "${target}/Contents/Applications/pcb_calculator.app" "${target}/Contents/Applications/pl_editor.app/Contents/MacOS/pl_editor" "${target}/Contents/Applications/pl_editor.app")
 
     # add all the dylibs from contents/frameworks
     file( GLOB framework_dylibs "${target}/Contents/Frameworks/*.dylib" )

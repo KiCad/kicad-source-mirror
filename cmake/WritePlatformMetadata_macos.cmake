@@ -30,10 +30,6 @@ include( ${KICAD_CMAKE_MODULE_PATH}/KiCadFullVersion.cmake )
 
 
 # Configure each plist file from the respurces directory and store it in the build directory
-configure_file( ${PROJECT_SOURCE_DIR}/resources/macos/plist/bitmap2component.Info.plist.in
-                ${PROJECT_BINARY_DIR}/bitmap2component/Info.plist
-                @ONLY )
-
 configure_file( ${PROJECT_SOURCE_DIR}/resources/macos/plist/eeschema.Info.plist.in
                 ${PROJECT_BINARY_DIR}/eeschema/Info.plist
                 @ONLY )

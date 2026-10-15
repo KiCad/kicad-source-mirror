@@ -868,6 +868,13 @@ TOOL_ACTION SCH_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<SCH_BITMAP*>( nullptr ) );
 
+TOOL_ACTION SCH_ACTIONS::convertImageToOutlines( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.convertImageToOutlines" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Convert to Outlines..." ) )
+        .Tooltip( _( "Trace the image into schematic graphics" ) )
+        .Icon( BITMAPS::image ) );
+
 TOOL_ACTION SCH_ACTIONS::drawRuleArea( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawRuleArea" )
         .Scope( AS_GLOBAL )

@@ -225,8 +225,7 @@ int COMMON_CONTROL::Execute( const wxString& aExecutible, const wxString& aParam
 
     bool isKicadBinary = false;
 
-    if( aExecutible == GERBVIEW_EXE || aExecutible == BITMAPCONVERTER_EXE
-        || aExecutible == PCB_CALCULATOR_EXE || aExecutible == PL_EDITOR_EXE
+    if( aExecutible == GERBVIEW_EXE || aExecutible == PCB_CALCULATOR_EXE || aExecutible == PL_EDITOR_EXE
         || aExecutible == EESCHEMA_EXE || aExecutible == PCBNEW_EXE )
     {
         isKicadBinary = true;
