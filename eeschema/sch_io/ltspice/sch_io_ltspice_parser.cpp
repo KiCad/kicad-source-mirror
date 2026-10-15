@@ -1635,7 +1635,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     aPin->SetShape( GRAPHIC_PINSHAPE::LINE );
     aPin->SetPosition( ToKicadCoords( lt_pin.PinLocation ) );
 
-    int pinLen = std::max( schIUScale.MilsToIU( 1 ), ToKicadCoords( lt_pin.NameOffSet - 8 ) );
+    int pinLen = std::max( schIUScale.MilsToIU( 10 ), ToKicadCoords( lt_pin.NameOffSet - 8 ) );
     aPin->SetLength( pinLen );
 
     switch( lt_pin.PinJustification )
@@ -1665,6 +1665,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
         for( const LTSPICE_SCHEMATIC::LINE& line : aLTSymbol.Lines )
         {
             EDA_ANGLE lineAngle( line.End - line.Start );
+            lineAngle.Normalize();
 
             BOX2I bbox;
             bbox.Merge( line.Start );
@@ -1673,16 +1674,16 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
             if( lineAngle.IsHorizontal() )
             {
                 if( lt_pin.PinLocation == bbox.GetOrigin() )
-                    aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
-                else if( lt_pin.PinLocation == bbox.GetEnd() )
                     aPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+                else if( lt_pin.PinLocation == bbox.GetEnd() )
+                    aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
             }
             else if( lineAngle.IsVertical() )
             {
                 if( lt_pin.PinLocation == bbox.GetOrigin() )
-                    aPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
-                else if( lt_pin.PinLocation == bbox.GetEnd() )
                     aPin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
+                else if( lt_pin.PinLocation == bbox.GetEnd() )
+                    aPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
             }
         }
     }
