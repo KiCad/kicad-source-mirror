@@ -115,6 +115,9 @@ private:
 
     bool getQuoteChar();
 
+    /// Wraps an identifier in the driver's quote character, doubling any it contains
+    std::string quoted( const std::string& aIdentifier ) const;
+
     std::string columnsFor( const std::string& aTable );
 
     /// The caller must already hold m_queryMutex.

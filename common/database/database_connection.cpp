@@ -338,6 +338,17 @@ bool DATABASE_CONNECTION::getQuoteChar()
 }
 
 
+std::string DATABASE_CONNECTION::quoted( const std::string& aIdentifier ) const
+{
+    std::string quote( 1, m_quoteChar );
+    std::string escaped = aIdentifier;
+
+    boost::replace_all( escaped, quote, quote + quote );
+
+    return quote + escaped + quote;
+}
+
+
 std::string DATABASE_CONNECTION::columnsFor( const std::string& aTable )
 {
     if( !m_columnCache.count( aTable ) )
@@ -357,7 +368,7 @@ std::string DATABASE_CONNECTION::columnsFor( const std::string& aTable )
     std::string ret;
 
     for( const auto& [ columnName, columnType ] : m_columnCache[aTable] )
-        ret += fmt::format( "{}{}{}, ", m_quoteChar, columnName, m_quoteChar );
+        ret += quoted( columnName ) + ", ";
 
     // strip tailing ', '
     ret.resize( ret.length() - 2 );
@@ -440,10 +451,8 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 
     std::string cacheKey = fmt::format( "{}{}{}", tableName, columnName, aWhere.second );
 
-    std::string queryStr = fmt::format( "SELECT {} FROM {}{}{} WHERE {}{}{} = ?",
-                                        columnsFor( tableName ),
-                                        m_quoteChar, tableName, m_quoteChar,
-                                        m_quoteChar, columnName, m_quoteChar );
+    std::string queryStr = fmt::format( "SELECT {} FROM {} WHERE {} = ?", columnsFor( tableName ),
+                                        quoted( tableName ), quoted( columnName ) );
     nanodbc::string query = fromUTF8( queryStr );
 
     PROF_TIMER timer;
@@ -568,9 +577,8 @@ bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const st
     {
         nanodbc::statement statement( *m_conn );
 
-        nanodbc::string query = fromUTF8( fmt::format( "SELECT {} FROM {}{}{}",
-                                                       columnsFor( aTable ),
-                                                       m_quoteChar, aTable, m_quoteChar ) );
+        nanodbc::string query = fromUTF8( fmt::format( "SELECT {} FROM {}", columnsFor( aTable ),
+                                                       quoted( aTable ) ) );
 
         PROF_TIMER timer;
 

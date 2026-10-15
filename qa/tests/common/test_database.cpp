@@ -18,8 +18,12 @@
 * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <filesystem>
+#include <random>
+
 #include <fmt/format.h>
 #include <boost/test/unit_test.hpp>
+#include <nanodbc/nanodbc.h>
 
 #include <database/database_connection.h>
 
@@ -107,6 +111,72 @@ BOOST_AUTO_TEST_CASE( GeneratedColumns )
     // Also verify regular columns still work
     BOOST_CHECK( result.count( "Value" ) );
     BOOST_CHECK_EQUAL( std::any_cast<std::string>( result.at( "Value" ) ), "10K" );
+}
+
+
+/// A throwaway SQLite database whose tables are created by the test
+struct SCRATCH_DATABASE
+{
+    SCRATCH_DATABASE() :
+            m_path( std::filesystem::temp_directory_path()
+                    / fmt::format( "kicad_qa_{}.sqlite", std::random_device()() ) )
+    {
+    }
+
+    ~SCRATCH_DATABASE()
+    {
+        std::error_code ec;
+        std::filesystem::remove( m_path, ec );
+    }
+
+    std::string ConnectionString() const
+    {
+        return fmt::format( "Driver={{SQLite3}};Database={}", m_path.string() );
+    }
+
+    void Execute( const std::string& aSql ) const
+    {
+        std::string         cs = ConnectionString();
+        nanodbc::connection conn( nanodbc::string( cs.begin(), cs.end() ) );
+        nanodbc::execute( conn, nanodbc::string( aSql.begin(), aSql.end() ) );
+    }
+
+    std::filesystem::path m_path;
+};
+
+
+// Embedded quote characters in table and column names must be doubled in the generated SQL
+BOOST_AUTO_TEST_CASE( QuoteCharactersInIdentifiers )
+{
+    SCRATCH_DATABASE db;
+    db.Execute( "CREATE TABLE \"Part \"\"A\"\"\" (\"Part ID\" TEXT, \"Va\"\"lue\" TEXT)" );
+    db.Execute( "INSERT INTO \"Part \"\"A\"\"\" VALUES ('P1', '10K'), ('P2', '22K')" );
+
+    const std::string table = "Part \"A\"";
+    const std::string column = "Va\"lue";
+
+    {
+        DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+        BOOST_REQUIRE( dc.IsConnected() );
+        BOOST_REQUIRE( dc.CacheTableInfo( table, { "Part ID", column } ) );
+
+        std::vector<DATABASE_CONNECTION::ROW> rows;
+        BOOST_REQUIRE_MESSAGE( dc.SelectAll( table, "Part ID", rows ), dc.GetLastError() );
+        BOOST_CHECK_EQUAL( rows.size(), 2 );
+    }
+
+    {
+        DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+        BOOST_REQUIRE( dc.IsConnected() );
+        BOOST_REQUIRE( dc.CacheTableInfo( table, { "Part ID", column } ) );
+
+        // A zero-size row cache forces the direct query
+        dc.SetCacheParams( 0, 0 );
+
+        DATABASE_CONNECTION::ROW result;
+        BOOST_REQUIRE_MESSAGE( dc.SelectOne( table, std::make_pair( "Part ID", "P2" ), result ), dc.GetLastError() );
+        BOOST_CHECK_EQUAL( std::any_cast<std::string>( result.at( column ) ), "22K" );
+    }
 }
 
 
