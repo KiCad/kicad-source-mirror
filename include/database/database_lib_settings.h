@@ -148,4 +148,17 @@ private:
     nlohmann::json m_librariesConfig;
 };
 
+/**
+ * DSN passwords that are not saved in the (often shared) library file live in the system keyring,
+ * keyed by DSN and user name so every library on the same login shares one entry.
+ *
+ * @return false when the source has no DSN login or the keyring holds no password for it
+ */
+KICOMMON_API bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword );
+
+/**
+ * Fills in the source password from the keyring, but only when the library file did not supply one.
+ */
+KICOMMON_API void ResolveDatabasePassword( DATABASE_SOURCE& aSource );
+
 #endif //KICAD_DATABASE_LIB_SETTINGS_H

@@ -551,6 +551,8 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
                     THROW_IO_ERRORF( _( "Could not load database library: settings file %s missing or invalid" ),
                                      aSettingsPath );
                 }
+
+                ResolveDatabasePassword( m_settings->m_Source );
             };
 
     if( !m_settings && !aSettingsPath.IsEmpty() )

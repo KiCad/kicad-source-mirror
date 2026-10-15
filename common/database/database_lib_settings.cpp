@@ -24,6 +24,7 @@
 #include <set>
 
 #include <database/database_lib_settings.h>
+#include <kiplatform/secrets.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <wildcards_and_files_ext.h>
@@ -273,4 +274,33 @@ bool DATABASE_LIB_SETTINGS::Store()
 wxString DATABASE_LIB_SETTINGS::getFileExt() const
 {
     return FILEEXT::DatabaseLibraryFileExtension;
+}
+
+
+static wxString passwordService( const DATABASE_SOURCE& aSource )
+{
+    return wxS( "KiCad ODBC:" ) + wxString::FromUTF8( aSource.dsn );
+}
+
+
+bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword )
+{
+    // Without a user name the DSN supplies its own credentials, so the keyring is not consulted
+    if( !aSource.connection_string.empty() || aSource.dsn.empty() || aSource.username.empty() )
+        return false;
+
+    wxString secret;
+
+    if( !KIPLATFORM::SECRETS::GetSecret( passwordService( aSource ), wxString::FromUTF8( aSource.username ), secret ) )
+        return false;
+
+    aPassword = secret.utf8_string();
+    return true;
+}
+
+
+void ResolveDatabasePassword( DATABASE_SOURCE& aSource )
+{
+    if( aSource.password.empty() )
+        GetDatabasePassword( aSource, aSource.password );
 }
