@@ -279,6 +279,8 @@ public:
     bool LoadFromRawFile( const wxString& aPath );
 
 protected:
+    /// @return the file contents as loaded, before migration and parameter storage
+    const nlohmann::json& originalJson() const;
 
     /**
      * Registers a migration from one schema version to another.  If the schema version in the file

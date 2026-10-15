@@ -112,13 +112,22 @@ public:
 
     virtual ~DATABASE_LIB_SETTINGS() {}
 
-    DATABASE_SOURCE m_Source;
+    DATABASE_SOURCE m_Source{};
 
     std::vector<DATABASE_LIB_TABLE> m_Tables;
 
-    DATABASE_CACHE_SETTINGS m_Cache;
+    DATABASE_CACHE_SETTINGS m_Cache{};
 
-    bool m_GloballyUniqueKeys;
+    bool m_GloballyUniqueKeys = false;
+
+    /// Records the scalars as loaded; runs before a schema migration writes the file back
+    void Load() override;
+
+    /**
+     * Stores parameters, then restores the raw file value of every scalar the caller left unchanged
+     * so that hand-edited or newer-format values survive a save.
+     */
+    bool Store() override;
 
 protected:
     wxString getFileExt() const override;
@@ -127,6 +136,14 @@ private:
     /// Missing or mistyped keys load as defaults so one incomplete entry cannot stop the others
     static DATABASE_LIB_TABLE tableFromJson( const nlohmann::json& aEntry );
     static DATABASE_FIELD_MAPPING fieldFromJson( const nlohmann::json& aEntry );
+
+    /// Scalar settings as parsed at load, so Store() can tell which ones the caller changed
+    struct LOADED_SCALARS
+    {
+        DATABASE_SOURCE         source{};
+        DATABASE_CACHE_SETTINGS cache{};
+        bool                    globallyUniqueKeys = false;
+    } m_loaded;
 
     nlohmann::json m_librariesConfig;
 };

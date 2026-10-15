@@ -21,8 +21,10 @@
 #include <core/kicad_algo.h>
 #include <json_common.h>
 #include <algorithm>
+#include <set>
 
 #include <database/database_lib_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <wildcards_and_files_ext.h>
 
@@ -181,6 +183,90 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
 
                            return true;
                        } );
+}
+
+
+/// Objects that hold scalar settings rather than library tables
+static constexpr const char* c_scalarParents[] = { "/source", "/cache" };
+
+
+/// Nested params cannot store into a non-object parent, so replace a malformed one before storing
+static void normalizeScalarParents( JSON_SETTINGS_INTERNALS& aInternals )
+{
+    for( const char* parent : c_scalarParents )
+    {
+        nlohmann::json::json_pointer ptr( parent );
+
+        if( aInternals.contains( ptr ) && !aInternals[ptr].is_object() )
+            aInternals[ptr] = nlohmann::json::object();
+    }
+}
+
+
+void DATABASE_LIB_SETTINGS::Load()
+{
+    JSON_SETTINGS::Load();
+
+    m_loaded = { m_Source, m_Cache, m_GloballyUniqueKeys };
+}
+
+
+bool DATABASE_LIB_SETTINGS::Store()
+{
+    normalizeScalarParents( *Internals() );
+
+    bool modified = JSON_SETTINGS::Store();
+
+    const nlohmann::json& original = originalJson();
+
+    // A new file gets every key written
+    if( !original.is_object() || original.empty() )
+        return modified;
+
+    const std::vector<std::pair<std::string, bool>> unchanged = {
+        { "source.dsn", m_Source.dsn == m_loaded.source.dsn },
+        { "source.username", m_Source.username == m_loaded.source.username },
+        { "source.password", m_Source.password == m_loaded.source.password },
+        { "source.connection_string", m_Source.connection_string == m_loaded.source.connection_string },
+        { "source.timeout_seconds", m_Source.timeout == m_loaded.source.timeout },
+        { "cache.max_size", m_Cache.max_size == m_loaded.cache.max_size },
+        { "cache.max_age", m_Cache.max_age == m_loaded.cache.max_age },
+        { "globally_unique_keys", m_GloballyUniqueKeys == m_loaded.globallyUniqueKeys }
+    };
+
+    std::set<std::string> editedParents;
+
+    for( const auto& [path, isUnchanged] : unchanged )
+    {
+        nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( path );
+
+        if( !isUnchanged )
+        {
+            editedParents.insert( ptr.parent_pointer().to_string() );
+            continue;
+        }
+
+        if( original.contains( ptr ) )
+            ( *Internals() )[ptr] = original[ptr];
+        else if( Internals()->contains( ptr.parent_pointer() ) )
+            ( *Internals() )[ptr.parent_pointer()].erase( ptr.back() );
+    }
+
+    // Base Store() creates parent objects, so restore wholly untouched ones to their raw form
+    for( const char* parent : c_scalarParents )
+    {
+        nlohmann::json::json_pointer ptr( parent );
+
+        if( editedParents.contains( parent ) )
+            continue;
+
+        if( original.contains( ptr ) )
+            ( *Internals() )[ptr] = original[ptr];
+        else
+            Internals()->erase( ptr.back() );
+    }
+
+    return modified;
 }
 
 

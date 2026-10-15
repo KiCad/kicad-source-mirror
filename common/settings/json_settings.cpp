@@ -562,6 +562,12 @@ bool JSON_SETTINGS::flushToStore()
 }
 
 
+const nlohmann::json& JSON_SETTINGS::originalJson() const
+{
+    return m_internals->m_original;
+}
+
+
 std::string JSON_SETTINGS::formatFileContents()
 {
     LOCALE_IO dummy;
