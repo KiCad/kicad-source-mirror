@@ -168,6 +168,8 @@ void TEARDROP_MANAGER::ensureCopperIndex() const
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
         footprint->RunOnChildren( indexCopper, RECURSE_MODE::RECURSE );
+
+    m_copperRTree.Build();
 }
 
 

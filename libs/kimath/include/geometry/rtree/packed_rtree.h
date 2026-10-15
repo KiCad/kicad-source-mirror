@@ -99,8 +99,7 @@ public:
      * @return Number of items reported to visitor
      */
     template <class VISITOR>
-    int Search( const ELEMTYPE aMin[NUMDIMS], const ELEMTYPE aMax[NUMDIMS],
-                VISITOR& aVisitor ) const
+    int Search( const ELEMTYPE aMin[NUMDIMS], const ELEMTYPE aMax[NUMDIMS], VISITOR& aVisitor ) const
     {
         if( m_size == 0 )
             return 0;
@@ -183,8 +182,7 @@ public:
             m_items.reserve( aCount );
         }
 
-        void Add( const ELEMTYPE aMin[NUMDIMS], const ELEMTYPE aMax[NUMDIMS],
-                  const DATATYPE& aData )
+        void Add( const ELEMTYPE aMin[NUMDIMS], const ELEMTYPE aMax[NUMDIMS], const DATATYPE& aData )
         {
             ITEM item;
             item.data = aData;
@@ -245,10 +243,8 @@ public:
 
                     if( range > 0.0 )
                     {
-                        double normalized = ( static_cast<double>( center ) - globalMin[d] )
-                                            / range;
-                        coords[d] = static_cast<uint32_t>(
-                                normalized * static_cast<double>( UINT32_MAX ) );
+                        double normalized = ( static_cast<double>( center ) - globalMin[d] )  / range;
+                        coords[d] = static_cast<uint32_t>( normalized * static_cast<double>( UINT32_MAX ) );
                     }
                     else
                     {
@@ -300,8 +296,7 @@ public:
 
             // Allocate SoA bounds storage and counts
             for( int axis = 0; axis < NUMDIMS * 2; ++axis )
-                tree.m_bounds[axis].resize( totalNodes * FANOUT,
-                                            std::numeric_limits<ELEMTYPE>::max() );
+                tree.m_bounds[axis].resize( totalNodes * FANOUT, std::numeric_limits<ELEMTYPE>::max() );
 
             tree.m_counts.resize( totalNodes, 0 );
 
@@ -411,10 +406,9 @@ private:
             // Test all FANOUT children at once via SIMD overlap mask.
             // Each bounds array is contiguous for FANOUT slots at [nodeIdx * FANOUT].
             size_t base = aNodeIdx * FANOUT;
-            uint32_t mask = OverlapMask2D<ELEMTYPE, FANOUT>(
-                    &m_bounds[0][base], &m_bounds[1][base],
-                    &m_bounds[2][base], &m_bounds[3][base],
-                    m_counts[aNodeIdx], aMin, aMax );
+            uint32_t mask = OverlapMask2D<ELEMTYPE, FANOUT>( &m_bounds[0][base], &m_bounds[1][base],
+                                                             &m_bounds[2][base], &m_bounds[3][base],
+                                                             m_counts[aNodeIdx], aMin, aMax );
 
             if( aLevel == 0 )
             {
@@ -450,11 +444,8 @@ private:
 
                     size_t childGlobalIdx = childLevelOffset + nodeOffset * FANOUT + i;
 
-                    if( !searchNode( aLevel - 1, childGlobalIdx, aMin, aMax, aVisitor,
-                                     aFound ) )
-                    {
+                    if( !searchNode( aLevel - 1, childGlobalIdx, aMin, aMax, aVisitor, aFound ) )
                         return false;
-                    }
                 }
             }
         }
@@ -489,15 +480,11 @@ private:
                 {
                     if( childOverlaps( aNodeIdx, i, aMin, aMax ) )
                     {
-                        size_t childBaseIdx =
-                                ( aNodeIdx - m_levelOffsets[aLevel] ) * FANOUT + i;
+                        size_t childBaseIdx = ( aNodeIdx - m_levelOffsets[aLevel] ) * FANOUT + i;
                         size_t childGlobalIdx = childLevelOffset + childBaseIdx;
 
-                        if( !searchNode( aLevel - 1, childGlobalIdx, aMin, aMax, aVisitor,
-                                         aFound ) )
-                        {
+                        if( !searchNode( aLevel - 1, childGlobalIdx, aMin, aMax, aVisitor, aFound ) )
                             return false;
-                        }
                     }
                 }
             }
