@@ -1642,7 +1642,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
     FOOTPRINT* footprint = board ? nullptr : dynamic_cast<FOOTPRINT*>( aParent );
 
     // For footprint parents, build a one-time lookup map instead of scanning children
-    // on every call.  For board parents, use the board's existing item-by-id cache.
+    // on every call.  For board parents, resolve using BOARD::ResolveItem(), which
+    // goes to the board's item index cache and re-binds stale entries.
     std::unordered_map<KIID, BOARD_ITEM*> fpItemMap;
 
     if( footprint )
@@ -1660,10 +1661,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
             {
                 if( board )
                 {
-                    const auto& cache = board->GetItemByIdCache();
-                    auto        it = cache.find( aId );
-
-                    return it != cache.end() ? it->second : nullptr;
+                    return board->ResolveItem( aId, true );
                 }
                 else if( footprint )
                 {
@@ -8461,10 +8459,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveConstraints( BOARD_ITEM* aParent )
             {
                 if( board )
                 {
-                    const auto& cache = board->GetItemByIdCache();
-                    auto        it = cache.find( aId );
-
-                    return it != cache.end() ? it->second : nullptr;
+                    return board->ResolveItem( aId, true );
                 }
                 else if( footprint )
                 {

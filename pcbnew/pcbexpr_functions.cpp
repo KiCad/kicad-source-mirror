@@ -717,13 +717,13 @@ bool searchAreas( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
     {
         KIID target( aArg );
 
-        // Use the board's item-by-ID cache for O(1) lookup instead of O(n) iteration.
-        // The cache includes both board zones and zones inside footprints.
-        const auto& cache = aBoard->GetItemByIdCache();
-        auto        it = cache.find( target );
+        // Resolve through the board's item index: it re-binds stale entries and includes
+        // both board zones and zones inside footprints. In the normal path, it gives
+        // an O(1) lookup for the item by its UUID.
+        BOARD_ITEM* item = aBoard->ResolveItem( target, true );
 
-        if( it != cache.end() && it->second->Type() == PCB_ZONE_T )
-            return aFunc( static_cast<ZONE*>( it->second ) );
+        if( item && item->Type() == PCB_ZONE_T )
+            return aFunc( static_cast<ZONE*>( item ) );
 
         return false;
     }
