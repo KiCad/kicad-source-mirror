@@ -131,12 +131,12 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
     {
-        if( model->GetValueAsBool( row, 0 ) )
+        if( model->GetValueAsBool( row, COL_ENABLED ) )
             showDeactivate = true;
         else
             showActivate = true;
 
-        if( model->GetValueAsBool( row, 1 ) )
+        if( model->GetValueAsBool( row, COL_VISIBLE ) )
             showUnsetVisible = true;
         else
             showSetVisible = true;
@@ -191,7 +191,7 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED;
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
-            model->SetValueAsBool( row, 0, selected_state );
+            model->SetValueAsBool( row, COL_ENABLED, selected_state );
 
         // Ensure the new state (on/off) of the widgets is immediately shown:
         m_grid->Refresh();
@@ -202,7 +202,7 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_SET_VISIBLE;
 
         for( int row = m_sel_row_start; row < m_sel_row_start + m_sel_row_count; ++row )
-            model->SetValueAsBool( row, 1, selected_state );
+            model->SetValueAsBool( row, COL_VISIBLE, selected_state );
 
         // Ensure the new state (on/off) of the widgets is immediately shown:
         m_grid->Refresh();
