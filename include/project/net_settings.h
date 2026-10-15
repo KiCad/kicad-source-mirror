@@ -219,8 +219,8 @@ private:
      * to provide missing defaults. The netclasses vector will be sorted by priority 1st and then
      * name alphabetically
      */
-    void makeEffectiveNetclass( std::shared_ptr<NETCLASS>& effectiveNetclass,
-                                std::vector<NETCLASS*>&    netclasses ) const;
+    void makeEffectiveNetclass( std::shared_ptr<NETCLASS>&               effectiveNetclass,
+                                std::vector<std::shared_ptr<NETCLASS>>& netclasses ) const;
 
     /// @brief Adds any missing fields to the given netclass from the default netclass
     /// @returns true if any fields were added from the default netclass

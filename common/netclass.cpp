@@ -292,6 +292,18 @@ const std::vector<NETCLASS*>& NETCLASS::GetConstituentNetclasses() const
 void NETCLASS::SetConstituentNetclasses( std::vector<NETCLASS*>&& constituents )
 {
     m_constituents = std::move( constituents );
+    m_constituentOwners.clear();
+}
+
+
+void NETCLASS::SetConstituentOwners( std::vector<std::shared_ptr<NETCLASS>>&& aConstituents )
+{
+    m_constituents.clear();
+
+    for( const std::shared_ptr<NETCLASS>& nc : aConstituents )
+        m_constituents.push_back( nc.get() );
+
+    m_constituentOwners = std::move( aConstituents );
 }
 
 
