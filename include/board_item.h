@@ -20,7 +20,6 @@
 
 #pragma once
 
-
 #include <map>
 
 #include <core/mirror.h>
@@ -32,8 +31,9 @@
 #include <lset.h>
 #include <stroke_params.h>
 #include <geometry/eda_angle.h>
-#include "macros.h"
-#include "drc/drc_rule.h"
+#include <macros.h>
+#include <drc/drc_constraint_types.h>
+
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;

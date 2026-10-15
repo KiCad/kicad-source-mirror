@@ -21,14 +21,13 @@
 #define BOARD_INSPECTION_TOOL_H
 
 #include <dialogs/dialog_book_reporter.h>
-#include <drc/drc_rule.h>
-#include <drc/drc_engine.h>
 #include <pcb_edit_frame.h>
 #include <rc_item.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_tool_base.h>
 
 class CONNECTIVITY_DATA;
+class DRC_ENGINE;
 class FOOTPRINT_DIFF_WIDGET;
 
 

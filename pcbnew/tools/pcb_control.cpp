@@ -20,6 +20,10 @@
  */
 
 #include "pcb_control.h"
+
+#include <wx/hyperlink.h>
+#include <wx/filename.h>
+
 #include "convert_basic_shapes_to_polygon.h"
 
 #include <advanced_config.h>
@@ -71,7 +75,6 @@
 #include <filename_resolver.h>
 #include <3d_cache/3d_cache.h>
 #include <embedded_files.h>
-#include <wx/filename.h>
 #include <zone.h>
 #include <confirm.h>
 #include <kidialog.h>
@@ -79,6 +82,8 @@
 #include <core/kicad_algo.h>
 #include <dialogs/hotkey_cycle_popup.h>
 #include <dialogs/dialog_map_layers.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_rule.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 #include <kicad_clipboard.h>
 #include <origin_viewitem.h>
@@ -96,7 +101,6 @@
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
 #include <pcb_io/pcb_io.h>
-#include <wx/hyperlink.h>
 
 
 using namespace std::placeholders;

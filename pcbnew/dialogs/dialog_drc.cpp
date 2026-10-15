@@ -21,6 +21,12 @@
 
 #include "dialog_drc.h"
 
+#include <wx/app.h>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <wx/statusbr.h>
+#include <wx/wupdlock.h>
+
 #include <bitmaps.h>
 #include <confirm.h>
 #include <core/throttle.h>
@@ -28,8 +34,10 @@
 #include <kiface_base.h>
 #include <macros.h>
 #include <pad.h>
+#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_report.h>
+#include <drc/drc_rule.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -40,11 +48,6 @@
 #include <pcb_marker.h>
 #include <pcb_track.h>
 #include <pgm_base.h>
-#include <wx/app.h>
-#include <wx/filedlg.h>
-#include <wx/msgdlg.h>
-#include <wx/statusbr.h>
-#include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
 #include <widgets/std_bitmap_button.h>
