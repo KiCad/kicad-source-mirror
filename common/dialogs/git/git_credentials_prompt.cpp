@@ -37,7 +37,10 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
     if( dlg.ShowModal() != wxID_OK )
         return false;
 
-    aCommon->SetUsername( dlg.GetUsername() );
+    // An ssh remote's user comes from its address, and the server refuses a different one.
+    if( dlg.GetConnType() != KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
+        aCommon->SetUsername( dlg.GetUsername() );
+
     aCommon->SetPassword( dlg.GetPassword() );
 
     if( dlg.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH && !dlg.GetSSHKey().IsEmpty() )
@@ -53,7 +56,8 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
     // A correction only in the session would be reverted by the next attach.
     if( aProject )
     {
-        aProject->GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
+        if( dlg.GetConnType() != KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
+            aProject->GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
 
         if( dlg.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH && !dlg.GetSSHKey().IsEmpty() )
             aProject->GetLocalSettings().m_GitSSHKey = dlg.GetSSHKey();

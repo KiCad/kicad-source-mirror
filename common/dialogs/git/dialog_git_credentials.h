@@ -40,6 +40,9 @@ protected:
 
 private:
     void updateFieldsForConnType();
+
+    /// On macOS a disabled wxRadioBox reports its first entry, so the type is kept here.
+    KIGIT_COMMON::GIT_CONN_TYPE m_connType;
 };
 
 #endif // DIALOG_GIT_CREDENTIALS_H

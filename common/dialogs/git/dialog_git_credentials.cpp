@@ -22,7 +22,8 @@
 DIALOG_GIT_CREDENTIALS::DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxString& aUrl,
                                                 KIGIT_COMMON::GIT_CONN_TYPE aConnType, const wxString& aDefaultUsername,
                                                 const wxString& aDefaultSSHKey ) :
-        DIALOG_GIT_CREDENTIALS_BASE( aParent )
+        DIALOG_GIT_CREDENTIALS_BASE( aParent ),
+        m_connType( aConnType )
 {
     m_urlLabel->SetLabel( aUrl );
     m_userCtrl->SetValue( aDefaultUsername );
@@ -30,7 +31,7 @@ DIALOG_GIT_CREDENTIALS::DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxStrin
     if( !aDefaultSSHKey.IsEmpty() )
         m_keyPicker->SetFileName( wxFileName( aDefaultSSHKey ) );
 
-    if( aConnType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
+    if( m_connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
         m_authChoice->SetSelection( 1 );
     else
         m_authChoice->SetSelection( 0 );
@@ -51,6 +52,11 @@ DIALOG_GIT_CREDENTIALS::DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxStrin
 
 void DIALOG_GIT_CREDENTIALS::OnConnTypeChanged( wxCommandEvent& aEvent )
 {
+    if( m_authChoice->GetSelection() == 1 )
+        m_connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH;
+    else
+        m_connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS;
+
     updateFieldsForConnType();
     aEvent.Skip();
 }
@@ -58,7 +64,7 @@ void DIALOG_GIT_CREDENTIALS::OnConnTypeChanged( wxCommandEvent& aEvent )
 
 void DIALOG_GIT_CREDENTIALS::updateFieldsForConnType()
 {
-    bool ssh = ( m_authChoice->GetSelection() == 1 );
+    bool ssh = ( m_connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
 
     m_keyLabel->Enable( ssh );
     m_keyPicker->Enable( ssh );
@@ -92,10 +98,7 @@ wxString DIALOG_GIT_CREDENTIALS::GetSSHKey() const
 
 KIGIT_COMMON::GIT_CONN_TYPE DIALOG_GIT_CREDENTIALS::GetConnType() const
 {
-    if( m_authChoice->GetSelection() == 1 )
-        return KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH;
-
-    return KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS;
+    return m_connType;
 }
 
 
