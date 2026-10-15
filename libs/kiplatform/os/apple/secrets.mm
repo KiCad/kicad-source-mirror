@@ -85,6 +85,12 @@ bool KIPLATFORM::SECRETS::GetSecret(const wxString& aService, const wxString& aK
 }
 
 
+bool KIPLATFORM::SECRETS::GetSecretNoPrompt(const wxString& aService, const wxString& aKey, wxString& aValue)
+{
+    return GetSecret(aService, aKey, aValue);
+}
+
+
 bool KIPLATFORM::SECRETS::DeleteSecret(const wxString& aService, const wxString& aKey)
 {
     wxScopedCharBuffer utf8Service = aService.utf8_str();

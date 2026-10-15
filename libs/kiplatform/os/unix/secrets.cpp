@@ -93,6 +93,54 @@ namespace KIPLATFORM
             return true;
         }
 
+        bool GetSecretNoPrompt( const wxString& aService, const wxString& aKey, wxString& aSecret )
+        {
+            GError* error = nullptr;
+            wxScopedCharBuffer utf8Service = aService.utf8_str();
+            wxScopedCharBuffer utf8Key = aKey.utf8_str();
+            GHashTable* attributes = secret_attributes_build( &schema,
+                                                              "service", utf8Service.data(),
+                                                              "key", utf8Key.data(),
+                                                              nullptr );
+
+            // Without SECRET_SEARCH_UNLOCK, items in a locked collection come back locked and unread
+            GList* items = secret_service_search_sync( nullptr, &schema, attributes,
+                                                       static_cast<SecretSearchFlags>( SECRET_SEARCH_ALL
+                                                                                       | SECRET_SEARCH_LOAD_SECRETS ),
+                                                       nullptr, &error );
+            g_hash_table_unref( attributes );
+
+            if( error )
+            {
+                g_error_free( error );
+                return false;
+            }
+
+            bool found = false;
+
+            for( GList* it = items; it && !found; it = it->next )
+            {
+                SecretItem* item = SECRET_ITEM( it->data );
+
+                if( secret_item_get_locked( item ) )
+                    continue;
+
+                if( SecretValue* value = secret_item_get_secret( item ) )
+                {
+                    if( const gchar* text = secret_value_get_text( value ) )
+                    {
+                        aSecret = wxString::FromUTF8( text );
+                        found = true;
+                    }
+
+                    secret_value_unref( value );
+                }
+            }
+
+            g_list_free_full( items, g_object_unref );
+            return found;
+        }
+
         bool DeleteSecret( const wxString& aService, const wxString& aKey )
         {
             GError* error = nullptr;

@@ -31,6 +31,12 @@ namespace KIPLATFORM
 
         bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret );
 
+        /**
+         * Like GetSecret(), but never waits on the user. A locked keyring is reported as not found
+         * instead of showing an unlock prompt, so it is safe on paths that must not block.
+         */
+        bool GetSecretNoPrompt( const wxString& aService, const wxString& aKey, wxString& aSecret );
+
         bool DeleteSecret( const wxString& aService, const wxString& aKey );
 
     }

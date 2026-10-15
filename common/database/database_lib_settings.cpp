@@ -291,7 +291,8 @@ bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword
 
     wxString secret;
 
-    if( !KIPLATFORM::SECRETS::GetSecret( passwordService( aSource ), wxString::FromUTF8( aSource.username ), secret ) )
+    if( !KIPLATFORM::SECRETS::GetSecretNoPrompt( passwordService( aSource ), wxString::FromUTF8( aSource.username ),
+                                                 secret ) )
         return false;
 
     aPassword = secret.utf8_string();
