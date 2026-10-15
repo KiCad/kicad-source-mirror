@@ -200,11 +200,14 @@ void TEARDROP_MANAGER::createAndAddTeardropWithMask( BOARD_COMMIT& aCommit,
 {
     ZONE* new_teardrop = createTeardrop( aTeardropVariant, aPoints, aSourceTrack, aUuid );
     m_board->Add( new_teardrop, ADD_MODE::BULK_INSERT );
+
     m_createdTdList.push_back( new_teardrop );
 
     // The next teardrop has to see this one, or two of them flare into the same gap.
-    ensureCopperIndex();
-    m_copperRTree.Insert( new_teardrop, new_teardrop->GetLayer(), CLEARANCE_CONSTRAINT );
+    BOX2I     bbox = new_teardrop->Outline()->BBox();
+    const int bmin[2] = { bbox.GetX(), bbox.GetY() };
+    const int bmax[2] = { bbox.GetRight(), bbox.GetBottom() };
+    m_createdTdRTree[aSourceTrack->GetLayer()].Insert( bmin, bmax, new_teardrop );
 
     aCommit.Added( new_teardrop );
 

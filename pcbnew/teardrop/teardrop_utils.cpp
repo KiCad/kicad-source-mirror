@@ -334,19 +334,44 @@ bool TEARDROP_MANAGER::collidesWithOtherNets( const std::vector<VECTOR2I>& aPoin
                 return itemNet <= 0 && touchesTeardropAnchor( aItem );
             };
 
-    auto resolveClearance =
-            [&]( BOARD_ITEM* aItem, int* aClearance ) -> bool
+    auto collides =
+            [&]( BOARD_ITEM* aItem, const SHAPE* aShape ) -> bool
             {
                 if( alg::contains( aExempt, aItem ) || isSameConductor( aItem ) )
                     return false;
 
-                *aClearance = pairClearance( aSourceTrack, aItem, layer );
-                return true;
+                return teardrop.Collide( aShape, pairClearance( aSourceTrack, aItem, layer ) );
             };
 
     // The radius has to cover the widest clearance anything can demand, or an obstacle with a
-    // generous one of its own is never offered to the resolver.
-    return m_copperRTree.CheckColliding( &teardrop, layer, m_board->GetMaxClearanceValue(), resolveClearance );
+    // generous one of its own is never tested.
+    BOX2I box = teardrop.BBox();
+    box.Inflate( m_board->GetMaxClearanceValue() );
+
+    for( DRC_RTREE::ITEM_WITH_SHAPE* item : m_copperRTree.Overlapping( layer, box ).m_items )
+    {
+        if( collides( item->parent, item->shape ) )
+            return true;
+    }
+
+    auto it = m_createdTdRTree.find( layer );
+
+    if( it == m_createdTdRTree.end() )
+        return false;
+
+    const int bmin[2] = { box.GetX(), box.GetY() };
+    const int bmax[2] = { box.GetRight(), box.GetBottom() };
+    bool      collision = false;
+
+    auto visit =
+            [&]( ZONE* aCreated ) -> bool
+            {
+                collision = collides( aCreated, aCreated->GetEffectiveShape( layer ).get() );
+                return !collision;
+            };
+
+    it->second.Search( bmin, bmax, visit );
+    return collision;
 }
 
 

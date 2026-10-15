@@ -26,6 +26,7 @@
 #include <tool/tool_manager.h>
 #include <board.h>
 #include <drc/drc_rtree.h>
+#include <geometry/rtree/dynamic_rtree.h>
 #include "teardrop_parameters.h"
 
 class BOARD;
@@ -338,7 +339,10 @@ private:
     TRACK_BUFFER              m_trackLookupList;
     std::vector<ZONE*>        m_createdTdList;  // list of new created teardrops
 
-    /// Every copper item plus the teardrops built so far, to keep teardrops off other nets.
+    /// The teardrops of this pass by layer, since m_copperRTree cannot take inserts once built.
+    std::map<PCB_LAYER_ID, KIRTREE::DYNAMIC_RTREE<ZONE*, int, 2>> m_createdTdRTree;
+
+    /// Every copper item on the board before this pass, to keep teardrops off other nets.
     mutable DRC_RTREE         m_copperRTree;
     mutable bool              m_copperIndexed;
 
