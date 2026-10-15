@@ -29,8 +29,8 @@ bitmaps_png/cpp_*/*.cpp     generated
 common/bitmap_info.cpp      generated
 
 # wxFormBuilder-generated files
-**/dialog*/*_base.cpp       generated
-**/dialog*/*_base.h         generated
+**/dialog*/**/*_base.cpp    generated
+**/dialog*/**/*_base.h      generated
 **/sim/*_base.cpp           generated
 **/sim/*_base.h             generated
 **/import_gfx/*_base.cpp    generated
