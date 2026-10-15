@@ -3444,6 +3444,25 @@ bool EDIT_TOOL::CanDuplicateSelection( const SELECTION& aSelection )
 }
 
 
+/**
+ * Handle items that have been duplicated. For example, notify the pad tool
+ * about duplicated pads.
+ */
+static void recordDuplicatedItems( TOOL_MANAGER* aToolMgr, const std::vector<BOARD_ITEM*>& aItems )
+{
+    PAD_TOOL* padTool = aToolMgr->GetTool<PAD_TOOL>();
+
+    if( !padTool )
+        return;
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        if( PAD* pad = dynamic_cast<PAD*>( item ) )
+            padTool->RecordMasterPad( *pad );
+    }
+}
+
+
 int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -3625,9 +3644,15 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         // If items were duplicated, pick them up
         if( doMoveSelection( aEvent, &commit, true ) )
+        {
             commit.Push( _( "Duplicate" ) );
+
+            recordDuplicatedItems( m_toolMgr, new_items );
+        }
         else
+        {
             commit.Revert();
+        }
 
         // Deselect the duplicated item if we originally started as a hover selection
         if( is_hover )

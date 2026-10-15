@@ -380,6 +380,12 @@ PAD_TOOL::~PAD_TOOL()
 }
 
 
+void PAD_TOOL::RecordMasterPad( const PAD& aPad )
+{
+    m_masterPadProvider->RecordNewMasterPad( aPad );
+}
+
+
 void PAD_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason == MODEL_RELOAD )

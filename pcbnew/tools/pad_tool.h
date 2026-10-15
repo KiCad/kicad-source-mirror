@@ -67,6 +67,11 @@ public:
     void SetLastPadNumber( const wxString& aPadNumber ) { m_lastPadNumber = aPadNumber; }
 
     /**
+     * Record @a aPad as the template for the next pad of its type placed.
+     */
+    void RecordMasterPad( const PAD& aPad );
+
+    /**
      * Recombine an exploded pad (or one produced with overlapping polygons in an older version).
      * @param aPad the pad to run the recombination algorithm on
      * @param aIsDryRun if true the list will be generated but no changes will be made
