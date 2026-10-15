@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-15 03:56+0000\n"
+"PO-Revision-Date: 2026-10-16 07:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25156,28 +25156,30 @@ msgstr ""
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3255
 #, c-format
 msgid "OrCAD source net '%s' remains disconnected after local repair:%s"
-msgstr ""
+msgstr "OrCADソースネット '%s' はローカル修復後も切断されたままです: %s"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3367
 #, c-format
 msgid "Cannot uniquely map OrCAD source pin %zu of '%s'."
-msgstr ""
+msgstr "OrCADのソースピン %zu ( '%s' ) を一意にマップできません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3686
 #, c-format
 msgid "Cannot place OrCAD label '%s' without a wire intersection."
-msgstr ""
+msgstr "配線の交点なしで OrCAD ラベル '%s' を配置することはできません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3706
 #, c-format
 msgid "Cannot place OrCAD interface '%s' clear of wires and pins."
-msgstr ""
+msgstr "OrCADインターフェース '%s' をワイヤやピンから離して配置できません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:6170
 #, c-format
 msgid ""
 "Page '%s': cannot determine the source net for interface '%s' at (%d, %d)."
 msgstr ""
+"ページ '%s': インターフェース '%s' のソースネットを (%d, %d)で特定できません"
+"。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7245
 #, c-format
@@ -25201,7 +25203,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Page '%s': cannot place port '%s' at (%d, %d) without a wire intersection."
-msgstr ""
+msgstr "ページ '%s': ポート '%s' を (%d, %d) に配線の交点なしに配置できません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7849
 #, c-format
