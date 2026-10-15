@@ -179,6 +179,14 @@ public:
      */
     virtual std::vector<ZONE*> GetZonesNeedingRefillAfterUpdate() const { return {}; }
 
+    /**
+     * Indicates whether the generator can be selected as a connected entity.
+     *
+     * For example, "Select Connected" on a track should select a tuning pattern
+     * on that track.
+     */
+    virtual bool IsSelectableAsConnected() const { return false; }
+
 protected:
     wxString m_generatorType;
 

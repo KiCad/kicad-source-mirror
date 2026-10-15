@@ -2396,9 +2396,9 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
     auto connectivity = board()->GetConnectivity();
 
     // Don't let expansion select outside an entered group, or select() would ExitGroup mid-walk.
-    auto inScope = [this]( BOARD_ITEM* aItem )
+    const auto inScope = [this]( BOARD_ITEM* aItem )
     {
-        return isWithinEnteredGroup( aItem, m_enteredGroup, m_isFootprintEditor );
+        return itemIsSelectableAsConnected( *aItem, m_enteredGroup, m_isFootprintEditor );
     };
 
     std::set<PAD*>                     startPadSet;
@@ -5157,14 +5157,33 @@ bool PCB_SELECTION_TOOL::HasLockedDescendant( const BOARD_ITEM* aItem )
 }
 
 
-bool PCB_SELECTION_TOOL::isWithinEnteredGroup( BOARD_ITEM* aItem, PCB_GROUP* aEnteredGroup, bool aIsFootprintEditor )
+bool PCB_SELECTION_TOOL::itemIsSelectableAsConnected( BOARD_ITEM& aItem, PCB_GROUP* aEnteredGroup,
+                                                      bool aIsFootprintEditor )
 {
     if( aEnteredGroup )
-        return PCB_GROUP::WithinScope( aItem, aEnteredGroup, aIsFootprintEditor );
+        return PCB_GROUP::WithinScope( &aItem, aEnteredGroup, aIsFootprintEditor );
 
-    // Not entered: keep expansion at the top level so it can't reach into a group and
-    // silently pull the whole group into a later delete.
-    return aItem->GetParentGroup() == nullptr;
+    EDA_GROUP* parent = aItem.GetParentGroup();
+
+    // If the item has no parent group, it is considered selectable as connected.
+    if( !parent )
+        return true;
+
+    PCB_GROUP& group = static_cast<PCB_GROUP&>( *parent->AsEdaItem() );
+
+    // Some generators opt-in to select-through-connection (e.g. tuning patterns)
+    if( group.Type() == PCB_GENERATOR_T )
+    {
+        const PCB_GENERATOR& generator = static_cast<const PCB_GENERATOR&>( group );
+
+        if( generator.IsSelectableAsConnected() )
+            return true;
+    }
+
+    // The item is not in an entered group, and not otherwise selectable via connection
+    // Disallow, so that expansion cannot reach into a group and silently pull
+    // the whole group into a later delete (issue 24967).
+    return false;
 }
 
 

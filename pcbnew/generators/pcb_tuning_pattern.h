@@ -341,6 +341,12 @@ public:
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
+    /**
+     * Indicates that the tuning pattern can be selected as a connected entity:
+     * when the selection crosses one, it is included as part of the connected selection.
+     */
+    bool IsSelectableAsConnected() const override { return true; }
+
     const VECTOR2I& GetEnd() const { return m_end; }
     void            SetEnd( const VECTOR2I& aValue ) { m_end = aValue; }
 

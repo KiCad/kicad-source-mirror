@@ -43,7 +43,11 @@ static PCB_TRACK* addSegment( BOARD& aBoard, PCB_LAYER_ID aLayer, const VECTOR2I
 }
 
 
-BOOST_AUTO_TEST_CASE( ExpansionCrossesAStackWithoutSelectingIt )
+/**
+ * Test that selecting a track connected to a via stack expands the selection to include the stack as
+ * it crosses, in the same way that a selection expansion selects normal vias as it crosses them.
+ */
+BOOST_AUTO_TEST_CASE( ExpansionSelectsTheStackItCrosses )
 {
     // view must outlive board so board items unregister from a live view at teardown.
     KIGFX::PCB_VIEW view;
@@ -83,8 +87,7 @@ BOOST_AUTO_TEST_CASE( ExpansionCrossesAStackWithoutSelectingIt )
 
     BOOST_CHECK( segIn->IsSelected() );
     BOOST_CHECK_MESSAGE( segOut->IsSelected(), "expansion should reach across the stack" );
-
-    BOOST_CHECK_MESSAGE( !stack->IsSelected(), "generator members stay out of the expansion" );
+    BOOST_CHECK_MESSAGE( stack->IsSelected(), "expansion should select the stack it crosses" );
 }
 
 
@@ -128,7 +131,7 @@ BOOST_AUTO_TEST_CASE( ExpansionCrossesAMultiHopStackedStack )
 
     BOOST_CHECK( segIn->IsSelected() );
     BOOST_CHECK_MESSAGE( segOut->IsSelected(), "expansion must reach the track on the layer the stack lands on" );
-    BOOST_CHECK( !stack->IsSelected() );
+    BOOST_CHECK( stack->IsSelected() );
 }
 
 
