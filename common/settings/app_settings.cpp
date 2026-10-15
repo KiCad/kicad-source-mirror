@@ -571,6 +571,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.show",
             &aWindow->grid.show, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.show_major",
+            &aWindow->grid.show_major, true ) );
+
     m_params.emplace_back( new PARAM_ENUM<KIGFX::GRID_STYLE>( aJsonPath + ".grid.style",
             &aWindow->grid.style, KIGFX::GRID_STYLE::DOTS, KIGFX::GRID_STYLE::DOTS,
             KIGFX::GRID_STYLE::SMALL_CROSS ) );

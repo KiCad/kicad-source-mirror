@@ -68,6 +68,8 @@ bool PANEL_GAL_OPTIONS::TransferDataToWindow()
 
     m_gridMinSpacing->SetValue( m_cfg->m_Window.grid.min_spacing );
 
+    m_cbShowMajor->SetValue( m_cfg->m_Window.grid.show_major );
+
     if( m_cfg->m_Window.cursor.cross_hair_mode == KIGFX::CROSS_HAIR_MODE::SMALL_CROSS )
         m_rbSmallCrosshairs->SetValue( true );
     else if( m_cfg->m_Window.cursor.cross_hair_mode == KIGFX::CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL )
@@ -94,6 +96,8 @@ bool PANEL_GAL_OPTIONS::TransferDataFromWindow()
         m_cfg->m_Window.grid.line_width = m_gridThicknessList[ m_gridLineWidth->GetSelection() ];
 
     m_cfg->m_Window.grid.min_spacing = m_gridMinSpacing->GetValue();
+
+    m_cfg->m_Window.grid.show_major = m_cbShowMajor->GetValue();
 
     if( m_rbFullWindowCrosshairs->GetValue() )
         m_cfg->m_Window.cursor.cross_hair_mode = KIGFX::CROSS_HAIR_MODE::FULLSCREEN_CROSS;

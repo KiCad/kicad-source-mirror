@@ -157,6 +157,16 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
         refresh = true;
     }
 
+    {
+        // For now we only allow 10 or none, but it could be made adjustable (e.g. 5?)
+        const int newInterval = m_options.m_gridShowMajor ? 10 : 0;
+        if( m_gridTick != newInterval )
+        {
+            m_gridTick = newInterval;
+            refresh = true;
+        }
+    }
+
     if( m_options.m_axesEnabled != m_axesEnabled )
     {
         m_axesEnabled = m_options.m_axesEnabled;

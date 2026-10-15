@@ -78,6 +78,7 @@ struct GRID_SETTINGS
     double               line_width;
     double               min_spacing;
     bool                 show;
+    bool                 show_major;
     KIGFX::GRID_STYLE    style;
     KIGFX::GRID_SNAPPING snap;
     bool                 force_component_snap;

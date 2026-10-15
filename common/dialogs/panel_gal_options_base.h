@@ -21,8 +21,8 @@
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
-#include <wx/gbsizer.h>
 #include <wx/checkbox.h>
+#include <wx/gbsizer.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@ class PANEL_GAL_OPTIONS_BASE : public wxPanel
 		wxStaticText* l_gridMinSpacing;
 		wxSpinCtrl* m_gridMinSpacing;
 		wxStaticText* l_gridMinSpacingUnits;
+		wxCheckBox* m_cbShowMajor;
 		wxStaticText* m_stGridLabel;
 		wxStaticLine* m_staticline2;
 		wxRadioButton* m_rbSmallCrosshairs;

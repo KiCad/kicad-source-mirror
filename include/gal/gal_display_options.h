@@ -101,6 +101,9 @@ namespace KIGFX
         /// Minimum pixel distance between displayed grid lines
         double m_gridMinSpacing;
 
+        /// Whether or not to show major grid lines
+        bool m_gridShowMajor;
+
         /// Whether or not to draw the coordinate system axes
         bool m_axesEnabled;
 
@@ -127,4 +130,3 @@ namespace KIGFX
 #endif
 
 #endif
-

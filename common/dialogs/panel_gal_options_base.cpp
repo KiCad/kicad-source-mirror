@@ -69,6 +69,10 @@ PANEL_GAL_OPTIONS_BASE::PANEL_GAL_OPTIONS_BASE( wxWindow* parent, wxWindowID id,
 	l_gridMinSpacingUnits->Wrap( -1 );
 	gbGridSettings->Add( l_gridMinSpacingUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	m_cbShowMajor = new wxCheckBox( this, wxID_ANY, _("Show major grid"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbShowMajor->SetValue(true);
+	gbGridSettings->Add( m_cbShowMajor, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
+
 
 	gbGridSettings->AddGrowableCol( 1 );
 
