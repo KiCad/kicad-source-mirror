@@ -25,8 +25,8 @@
 #ifndef PCBNEW_CONNECTIVITY_ITEMS_H
 #define PCBNEW_CONNECTIVITY_ITEMS_H
 
-#include <geometry/rtree/packed_rtree.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/shape_poly_tri_index.h>
 
 #include <algorithm>
 #include <atomic>
@@ -288,8 +288,6 @@ private:
  */
 class CN_ZONE_LAYER : public CN_ITEM
 {
-    using TRI_RTREE = KIRTREE::PACKED_RTREE<const SHAPE*, int, 2>;
-
 public:
     CN_ZONE_LAYER( ZONE* aParent, PCB_LAYER_ID aLayer, int aSubpolyIndex ) :
             CN_ITEM( aParent, false ),
@@ -305,20 +303,18 @@ public:
         SetLayers( aLayer, aLayer );
     }
 
-    void BuildRTree()
+    void BuildIndexes()
     {
         if( m_zone->IsTeardropArea() )
             return;
 
         m_triangulatedPolys.clear();
-        m_rTree = TRI_RTREE();
+        m_triIndex.reset();
 
         std::shared_ptr<SHAPE_POLY_SET> fillPoly = m_zone->GetFilledPolysList( m_layer );
 
         if( !fillPoly )
             return;
-
-        size_t triangleCount = 0;
 
         for( unsigned int ii = 0; ii < fillPoly->TriangulatedPolyCount(); ++ii )
         {
@@ -330,38 +326,10 @@ public:
             // Deep copy the triangulated polygon. The copy constructor copies the vertex storage
             // and updates all TRI parent pointers to reference our owned copy. This ensures the
             // triangles remain valid even if the zone is refilled on another thread.
-            m_triangulatedPolys.push_back(
-                    std::make_unique<SHAPE_POLY_SET::TRIANGULATED_POLYGON>( *triangleSet ) );
-
-            triangleCount += m_triangulatedPolys.back()->GetTriangleCount();
+            m_triangulatedPolys.push_back( std::make_unique<SHAPE_POLY_SET::TRIANGULATED_POLYGON>( *triangleSet ) );
         }
 
-        // A fill is triangulated once and then only queried, so pack the index in one pass
-        // rather than run the R*-tree subtree choice once per triangle
-        TRI_RTREE::Builder builder;
-        builder.Reserve( triangleCount );
-
-        for( const auto& triPoly : m_triangulatedPolys )
-        {
-            const std::deque<VECTOR2I>& verts = triPoly->Vertices();
-
-            for( const SHAPE_POLY_SET::TRIANGULATED_POLYGON::TRI& tri : triPoly->Triangles() )
-            {
-                const VECTOR2I& va = verts[tri.a];
-                const VECTOR2I& vb = verts[tri.b];
-                const VECTOR2I& vc = verts[tri.c];
-
-                // The box TRI::BBox() returns, without its out-of-line virtual call
-                const int mmin[2] = { std::min( { va.x, vb.x, vc.x } ),
-                                      std::min( { va.y, vb.y, vc.y } ) };
-                const int mmax[2] = { std::max( { va.x, vb.x, vc.x } ),
-                                      std::max( { va.y, vb.y, vc.y } ) };
-
-                builder.Add( mmin, mmax, &tri );
-            }
-        }
-
-        m_rTree = builder.Build();
+        m_triIndex = std::make_unique<TRIANGULATION_INDEX>( m_triangulatedPolys );
     }
 
     int SubpolyIndex() const { return m_subpolyIndex; }
@@ -376,25 +344,7 @@ public:
         if( m_zone->IsTeardropArea() )
             return m_outline.Collide( p );
 
-        int  min[2] = { p.x, p.y };
-        int  max[2] = { p.x, p.y };
-        bool collision = false;
-
-        auto visitor =
-                [&]( const SHAPE* aShape ) -> bool
-                {
-                    if( aShape->Collide( p ) )
-                    {
-                        collision = true;
-                        return false;
-                    }
-
-                    return true;
-                };
-
-        m_rTree.Search( min, max, visitor );
-
-        return collision;
+        return AnyTriangleHit( m_triIndex.get(), m_triangulatedPolys, p );
     }
 
     PCB_LAYER_ID GetLayer() { return m_layer; }
@@ -430,26 +380,7 @@ public:
         if( m_zone->IsTeardropArea() )
             return aRefShape->Collide( &m_outline, 0 );
 
-        BOX2I bbox = aRefShape->BBox();
-        int  min[2] = { bbox.GetX(), bbox.GetY() };
-        int  max[2] = { bbox.GetRight(), bbox.GetBottom() };
-        bool collision = false;
-
-        auto visitor =
-                [&]( const SHAPE* aShape ) -> bool
-                {
-                    if( aRefShape->Collide( aShape ) )
-                    {
-                        collision = true;
-                        return false;
-                    }
-
-                    return true;
-                };
-
-        m_rTree.Search( min, max, visitor );
-
-        return collision;
+        return AnyTriangleHit( m_triIndex.get(), m_triangulatedPolys, aRefShape );
     }
 
     bool HasSingleConnection();
@@ -462,10 +393,8 @@ private:
 
     /// Owned deep copies of triangulated polygons (includes vertex storage that TRI references)
     std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> m_triangulatedPolys;
-    TRI_RTREE                                                          m_rTree;
+    std::unique_ptr<TRIANGULATION_INDEX>                               m_triIndex;
 };
-
-
 
 
 class CN_LIST

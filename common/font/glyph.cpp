@@ -151,13 +151,13 @@ void OUTLINE_GLYPH::Triangulate( std::function<void( const VECTOR2I& aPt1,
 }
 
 
-void OUTLINE_GLYPH::CacheTriangulation( bool aSimplify, const TASK_SUBMITTER& aSubmitter )
+void OUTLINE_GLYPH::CacheTriangulation( bool aSimplify, const TASK_SUBMITTER& aSubmitter, bool aBuildIndexes )
 {
     // Only call CacheTriangulation if it has never been done before.  Otherwise we'll hash
     // the triangulation to see if it has been edited, and glyphs are invariant after creation.
 
     if( TriangulatedPolyCount() == 0 )
-        SHAPE_POLY_SET::CacheTriangulation( aSimplify );
+        SHAPE_POLY_SET::CacheTriangulation( aSimplify, {}, aBuildIndexes );
 }
 
 
