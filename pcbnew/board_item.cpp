@@ -25,6 +25,7 @@
 #include <i18n_utility.h>
 #include <macros.h>
 #include <board.h>
+#include <board_item_index.h>
 #include <board_design_settings.h>
 #include <board_design_settings_defaults.h>
 #include <lset.h>
@@ -106,8 +107,8 @@ BOARD* BOARD_ITEM::GetBoard()
 BOARD_ITEM::~BOARD_ITEM()
 {
     // Backup for code paths that skip ::Remove(). Do not use the parent chain, it may be freed.
-    if( m_boardCacheOwner )
-        m_boardCacheOwner->UncacheItem( *this );
+    if( m_owningIndex )
+        m_owningIndex->UnbindItem( *this );
 }
 
 
@@ -122,10 +123,11 @@ void BOARD_ITEM::SetUuid( const KIID& aUuid )
     if( m_Uuid == aUuid )
         return;
 
-    // Use the owner, not GetBoard(). The parent chain may name a wrong or dead board.
-    if( BOARD* board = m_boardCacheOwner )
+    // Use the index that holds us, not GetBoard(). The parent chain may name a wrong or dead
+    // board.
+    if( BOARD_ITEM_INDEX* owningIndex = m_owningIndex )
     {
-        board->RebindItemUuid( *this, aUuid );
+        owningIndex->Rebind( *this, aUuid );
         return;
     }
 

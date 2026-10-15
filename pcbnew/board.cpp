@@ -330,7 +330,7 @@ void BOARD::bumpDrillModelFor( const std::vector<BOARD_ITEM*>& aItems )
 
 BOARD::~BOARD()
 {
-    // Clears m_boardCacheOwner as it goes. Items that outlive the board rely on that to know
+    // Clears m_owningIndex as it goes. Items that outlive the board rely on that to know
     // ~BOARD_ITEM must not walk their parent chain back into freed memory
     ClearItemByIdCache();
 

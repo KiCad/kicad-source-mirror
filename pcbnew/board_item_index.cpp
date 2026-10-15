@@ -49,9 +49,9 @@ void BOARD_ITEM_INDEX::BindItem( BOARD_ITEM& aItem )
     if( m_owner.IsFootprintHolder() )
         return;
 
-    // Hand the item to this board. A stale owner cannot evict it.
-    if( aItem.m_boardCacheOwner && aItem.m_boardCacheOwner != &m_owner )
-        aItem.m_boardCacheOwner->UncacheItem( aItem );
+    // Hand the item to this index. A stale index cannot evict it.
+    if( aItem.m_owningIndex && aItem.m_owningIndex != this )
+        aItem.m_owningIndex->UnbindItem( aItem );
 
     // Called once per item on load, so probe and insert in one lookup per map and pay for the
     // aliasing fixups only when a key was already taken
@@ -75,15 +75,15 @@ void BOARD_ITEM_INDEX::BindItem( BOARD_ITEM& aItem )
         if( auto prev = m_idsByItem.find( idIt->second );
             prev != m_idsByItem.end() && prev->second == aItem.m_Uuid )
         {
-            idIt->second->m_boardCacheOwner = nullptr;
+            idIt->second->m_owningIndex = nullptr;
             m_idsByItem.erase( prev );
         }
 
         idIt->second = &aItem;
     }
 
-    // Set owner last, a half-done update then reads as not indexed
-    aItem.m_boardCacheOwner = &m_owner;
+    // Set the owning index last, a half-done update then reads as not indexed
+    aItem.m_owningIndex = this;
 }
 
 
@@ -101,7 +101,7 @@ void BOARD_ITEM_INDEX::Unbind( const KIID& aId )
     if( auto cached = m_idsByItem.find( item );
         cached != m_idsByItem.end() && cached->second == aId )
     {
-        item->m_boardCacheOwner = nullptr;
+        item->m_owningIndex = nullptr;
         m_idsByItem.erase( cached );
     }
 }
@@ -109,8 +109,8 @@ void BOARD_ITEM_INDEX::Unbind( const KIID& aId )
 
 void BOARD_ITEM_INDEX::UnbindItem( const BOARD_ITEM& aItem )
 {
-    // Clear owner first, the item no longer points to this board
-    aItem.m_boardCacheOwner = nullptr;
+    // Clear the link first, the item no longer points to this index
+    aItem.m_owningIndex = nullptr;
 
     if( auto cached = m_idsByItem.find( &aItem ); cached != m_idsByItem.end() )
     {
@@ -134,7 +134,7 @@ void BOARD_ITEM_INDEX::UnbindItem( const BOARD_ITEM& aItem )
 void BOARD_ITEM_INDEX::Clear()
 {
     for( const auto& [item, id] : m_idsByItem )
-        item->m_boardCacheOwner = nullptr;
+        item->m_owningIndex = nullptr;
 
     m_itemsById.clear();
     m_idsByItem.clear();

@@ -1731,14 +1731,6 @@ public:
 
     void UncacheChildrenById( const BOARD_ITEM& aParent ) { m_itemIndex.UnbindChildren( aParent ); }
 
-    /**
-     * Remove every cache entry that still points to @a aItem.
-     *
-     * Safe to call from ~BOARD_ITEM and UUID-rebind paths: avoids evicting live items that
-     * share the same UUID while still purging stale aliases after in-place UUID changes.
-     */
-    void UncacheItem( const BOARD_ITEM& aItem ) { m_itemIndex.UnbindItem( aItem ); }
-
     void ClearItemByIdCache() { m_itemIndex.Clear(); }
 
     // --------- Item order comparators ---------
