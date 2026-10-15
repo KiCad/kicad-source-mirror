@@ -262,6 +262,7 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
         AddPin( pin.release() );
     }
 
+    kiapi::common::UnpackCustomProperties( sheet.custom_properties(), *this );
     return true;
 }
 

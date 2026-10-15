@@ -240,6 +240,7 @@ bool SCH_FIELD::Deserialize( const kiapi::schematic::types::SchematicField& fiel
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
         SetPosition( kiapi::common::UnpackVector2( field.text().position(), aScale ) );
 
+    kiapi::common::UnpackCustomProperties( field.custom_properties(), *this );
     return result;
 }
 
