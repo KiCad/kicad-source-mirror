@@ -40,14 +40,20 @@ namespace KIPLATFORM
             GError* error = nullptr;
             wxString display = aService + ":" + aKey;
 
+            // libsecret takes UTF-8, not the locale encoding
+            wxScopedCharBuffer utf8Display = display.utf8_str();
+            wxScopedCharBuffer utf8Secret = aSecret.utf8_str();
+            wxScopedCharBuffer utf8Service = aService.utf8_str();
+            wxScopedCharBuffer utf8Key = aKey.utf8_str();
+
             secret_password_store_sync( &schema,
                                         SECRET_COLLECTION_DEFAULT,
-                                        display.mb_str(),   // Display name
-                                        aSecret.mb_str(),   // Secret value
+                                        utf8Display.data(), // Display name
+                                        utf8Secret.data(),  // Secret value
                                         nullptr,
                                         &error,
-                                        "service", aService.ToStdString().c_str(),
-                                        "key", aKey.ToStdString().c_str(),
+                                        "service", utf8Service.data(),
+                                        "key", utf8Key.data(),
                                         nullptr );
 
             if( error )
@@ -62,11 +68,13 @@ namespace KIPLATFORM
         bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret )
         {
             GError* error = nullptr;
+            wxScopedCharBuffer utf8Service = aService.utf8_str();
+            wxScopedCharBuffer utf8Key = aKey.utf8_str();
             gchar* secret = secret_password_lookup_sync( &schema,
                                                          nullptr,
                                                          &error,
-                                                         "service", aService.ToStdString().c_str(),
-                                                         "key", aKey.ToStdString().c_str(),
+                                                         "service", utf8Service.data(),
+                                                         "key", utf8Key.data(),
                                                          nullptr );
 
             if( error )
@@ -75,7 +83,11 @@ namespace KIPLATFORM
                 return false;
             }
 
-            aSecret = secret;
+            // libsecret reports a missing entry as a null secret with no error
+            if( !secret )
+                return false;
+
+            aSecret = wxString::FromUTF8( secret );
             g_free( secret );
 
             return true;
@@ -84,12 +96,14 @@ namespace KIPLATFORM
         bool DeleteSecret( const wxString& aService, const wxString& aKey )
         {
             GError* error = nullptr;
+            wxScopedCharBuffer utf8Service = aService.utf8_str();
+            wxScopedCharBuffer utf8Key = aKey.utf8_str();
 
             secret_password_clear_sync( &schema,
                                         nullptr,
                                         &error,
-                                        "service", aService.ToStdString().c_str(),
-                                        "key", aKey.ToStdString().c_str(),
+                                        "service", utf8Service.data(),
+                                        "key", utf8Key.data(),
                                         nullptr );
 
             if( error )
