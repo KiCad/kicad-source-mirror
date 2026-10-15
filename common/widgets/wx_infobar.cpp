@@ -227,11 +227,17 @@ void WX_INFOBAR::onThemeChange( wxSysColourChangedEvent& aEvent )
     SetBackgroundColour( bg );
     SetForegroundColour( fg );
 
+    // The close button bitmaps are filled with the old background, so put a new button in its place
     if( wxBitmapButton* btn = GetCloseButton() )
     {
-        wxString tooltip = btn->GetToolTipText();
-        RemoveAllButtons();
-        AddCloseButton( tooltip );
+        wxBitmapButton* fresh = wxBitmapButton::NewCloseButton( this, ID_CLOSE_INFOBAR );
+#ifdef __WXMAC__
+        fresh->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
+#endif
+        fresh->SetToolTip( btn->GetToolTipText() );
+        GetSizer()->Replace( btn, fresh, true );
+        btn->Destroy();
+        Layout();
     }
 }
 

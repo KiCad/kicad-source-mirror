@@ -312,6 +312,8 @@ void PCB_BASE_EDIT_FRAME::onDarkModeToggle( wxSysColourChangedEvent& aEvent )
 
     if( viewer )
         viewer->OnDarkModeToggle();
+
+    aEvent.Skip();
 }
 
 
