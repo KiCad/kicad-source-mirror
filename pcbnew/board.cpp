@@ -1633,10 +1633,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
     // Index only after the item is accepted and parented, so a rejected item never lingers as a
     // dangling cache entry and an indexed item can always reach its board through its parent.
-    CacheItemById( aBoardItem );
+    CacheItemById( *aBoardItem );
 
     if( aBoardItem->Type() == PCB_FOOTPRINT_T || BaseType( aBoardItem->Type() ) == PCB_TABLE_T )
-        CacheChildrenById( aBoardItem );
+        CacheChildrenById( *aBoardItem );
 
     if( !aSkipConnectivity )
         m_connectivity->Add( aBoardItem );
@@ -1743,7 +1743,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     case PCB_FOOTPRINT_T:
         std::erase( m_footprints, aBoardItem );
-        UncacheChildrenById( aBoardItem );
+        UncacheChildrenById( *aBoardItem );
 
         break;
 
@@ -1772,7 +1772,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         std::erase( m_drawings, aBoardItem );
 
         if( BaseType( aBoardItem->Type() ) == PCB_TABLE_T )
-            UncacheChildrenById( aBoardItem );
+            UncacheChildrenById( *aBoardItem );
 
         break;
 
@@ -2147,12 +2147,12 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     // Cache the item and return it.
     // The item MUST match the requested UUID.
     const auto cacheAndReturn =
-            [&]( BOARD_ITEM* aItem ) -> BOARD_ITEM*
+            [&]( BOARD_ITEM& aItem ) -> BOARD_ITEM*
             {
-                wxASSERT_MSG( aItem->m_Uuid == aID,
+                wxASSERT_MSG( aItem.m_Uuid == aID,
                               wxT( "BOARD::ResolveItem() must only return an item that carries the requested UUID" ) );
                 CacheItemById( aItem );
-                return aItem;
+                return &aItem;
             };
 
     // Linear scan fallback for items not in the cache.  Any hit is cached so
@@ -2161,36 +2161,36 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     for( PCB_GROUP* group : m_groups )
     {
         if( group->m_Uuid == aID )
-            return cacheAndReturn( group );
+            return cacheAndReturn( *group );
     }
 
     for( PCB_CONSTRAINT* constraint : m_constraints )
     {
         if( constraint->m_Uuid == aID )
-            return cacheAndReturn( constraint );
+            return cacheAndReturn( *constraint );
     }
 
     for( PCB_GENERATOR* generator : m_generators )
     {
         if( generator->m_Uuid == aID )
-            return cacheAndReturn( generator );
+            return cacheAndReturn( *generator );
     }
 
     for( PCB_TRACK* track : Tracks() )
     {
         if( track->m_Uuid == aID )
-            return cacheAndReturn( track );
+            return cacheAndReturn( *track );
     }
 
     for( FOOTPRINT* footprint : Footprints() )
     {
         if( footprint->m_Uuid == aID )
-            return cacheAndReturn( footprint );
+            return cacheAndReturn( *footprint );
 
         for( PAD* pad : footprint->Pads() )
         {
             if( pad->m_Uuid == aID )
-                return cacheAndReturn( pad );
+                return cacheAndReturn( *pad );
         }
 
         for( PCB_FIELD* field : footprint->GetFields() )
@@ -2198,74 +2198,74 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
             wxCHECK2( field, continue );
 
             if( field && field->m_Uuid == aID )
-                return cacheAndReturn( field );
+                return cacheAndReturn( *field );
         }
 
         for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
         {
             if( PCB_TABLECELL* cell = findTableCell( drawing, aID ) )
-                return cacheAndReturn( cell );
+                return cacheAndReturn( *cell );
 
             if( drawing->m_Uuid == aID )
-                return cacheAndReturn( drawing );
+                return cacheAndReturn( *drawing );
         }
 
         for( BOARD_ITEM* zone : footprint->Zones() )
         {
             if( zone->m_Uuid == aID )
-                return cacheAndReturn( zone );
+                return cacheAndReturn( *zone );
         }
 
         for( PCB_GROUP* group : footprint->Groups() )
         {
             if( group->m_Uuid == aID )
-                return cacheAndReturn( group );
+                return cacheAndReturn( *group );
         }
 
         for( PCB_CONSTRAINT* constraint : footprint->Constraints() )
         {
             if( constraint->m_Uuid == aID )
-                return cacheAndReturn( constraint );
+                return cacheAndReturn( *constraint );
         }
 
         for( PCB_POINT* point : footprint->Points() )
         {
             if( point->m_Uuid == aID )
-                return cacheAndReturn( point );
+                return cacheAndReturn( *point );
         }
     }
 
     for( ZONE* zone : Zones() )
     {
         if( zone->m_Uuid == aID )
-            return cacheAndReturn( zone );
+            return cacheAndReturn( *zone );
     }
 
     for( BOARD_ITEM* drawing : Drawings() )
     {
         if( PCB_TABLECELL* cell = findTableCell( drawing, aID ) )
-            return cacheAndReturn( cell );
+            return cacheAndReturn( *cell );
 
         if( drawing->m_Uuid == aID )
-            return cacheAndReturn( drawing );
+            return cacheAndReturn( *drawing );
     }
 
     for( PCB_MARKER* marker : m_markers )
     {
         if( marker->m_Uuid == aID )
-            return cacheAndReturn( marker );
+            return cacheAndReturn( *marker );
     }
 
     for( PCB_POINT* point : m_points )
     {
         if( point->m_Uuid == aID )
-            return cacheAndReturn( point );
+            return cacheAndReturn( *point );
     }
 
     for( NETINFO_ITEM* netInfo : m_NetInfo )
     {
         if( netInfo->m_Uuid == aID )
-            return cacheAndReturn( netInfo );
+            return cacheAndReturn( *netInfo );
     }
 
     if( m_Uuid == aID )
@@ -2295,7 +2295,7 @@ int BOARD::RepairDuplicateItemUuids()
                 if( ids.count( aItem->m_Uuid ) )
                 {
                     duplicates++;
-                    RebindItemUuid( aItem, KIID() );
+                    RebindItemUuid( *aItem, KIID() );
                 }
 
                 ids.insert( aItem->m_Uuid );

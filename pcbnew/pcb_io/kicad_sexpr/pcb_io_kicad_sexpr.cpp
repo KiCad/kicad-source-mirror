@@ -2977,8 +2977,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
     // DeepClone() used by the clipboard) the cache contains the originals, not our clones, so
     // skip the validation in that case and trust the member pointers.
     //
-    // BOARD::IsItemIndexedById() probes the board's inverse pointer index without dereferencing
-    // the candidate, so it is safe to call on a possibly-dangling member.
+    // IsItemIndexedById() is explicitly safe to call on possibly-dangling pointers.
     bool validateAgainstBoard = m_board && m_board->IsItemIndexedById( aGroup );
 
     memberIds.Alloc( aGroup->GetItems().size() );

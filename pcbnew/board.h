@@ -734,7 +734,7 @@ public:
     /**
      * Rebind the UUID of an attached item and keep the item-by-id cache coherent.
      */
-    void RebindItemUuid( BOARD_ITEM* aItem, const KIID& aNewId ) { m_itemIndex.Rebind( aItem, aNewId ); }
+    void RebindItemUuid( BOARD_ITEM& aItem, const KIID& aNewId ) { m_itemIndex.Rebind( aItem, aNewId ); }
 
     /**
      * Rebind duplicate attached-item UUIDs so each live board item has a unique ID.
@@ -1705,6 +1705,12 @@ public:
      */
     const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const { return m_itemIndex.Map(); }
 
+    /**
+     * Return true if @a aItem is currently indexed.
+     *
+     * This does NOT dereference the pointer, so it is safe to call even if
+     * the item has been deleted.
+     */
     bool IsItemIndexedById( const BOARD_ITEM* aItem ) const { return m_itemIndex.IsIndexed( aItem ); }
 
     /**
@@ -1713,17 +1719,17 @@ public:
      * This is called by FOOTPRINT::Add() when items are added to footprints that are already
      * on the board, to keep the cache in sync.
      */
-    void CacheItemById( BOARD_ITEM* aItem ) const { m_itemIndex.BindItem( aItem ); }
+    void CacheItemById( BOARD_ITEM& aItem ) const { m_itemIndex.BindItem( aItem ); }
 
-    void CacheItemSubtreeById( BOARD_ITEM* aItem ) { m_itemIndex.BindSubtree( aItem ); }
+    void CacheItemSubtreeById( BOARD_ITEM& aItem ) { m_itemIndex.BindSubtree( aItem ); }
 
-    void CacheChildrenById( const BOARD_ITEM* aParent ) { m_itemIndex.BindChildren( aParent ); }
+    void CacheChildrenById( const BOARD_ITEM& aParent ) { m_itemIndex.BindChildren( aParent ); }
 
     /// Uncache an item and its children.  Pointer-keyed, so a temporary copy sharing the UUID
     /// of a live item is left alone.
-    void UncacheItemSubtreeById( const BOARD_ITEM* aItem ) { m_itemIndex.UnbindSubtree( aItem ); }
+    void UncacheItemSubtreeById( const BOARD_ITEM& aItem ) { m_itemIndex.UnbindSubtree( aItem ); }
 
-    void UncacheChildrenById( const BOARD_ITEM* aParent ) { m_itemIndex.UnbindChildren( aParent ); }
+    void UncacheChildrenById( const BOARD_ITEM& aParent ) { m_itemIndex.UnbindChildren( aParent ); }
 
     /**
      * Remove every cache entry that still points to @a aItem.
@@ -1731,7 +1737,7 @@ public:
      * Safe to call from ~BOARD_ITEM and UUID-rebind paths: avoids evicting live items that
      * share the same UUID while still purging stale aliases after in-place UUID changes.
      */
-    void UncacheItemByPtr( const BOARD_ITEM* aItem ) { m_itemIndex.UnbindByPtr( aItem ); }
+    void UncacheItem( const BOARD_ITEM& aItem ) { m_itemIndex.UnbindItem( aItem ); }
 
     void ClearItemByIdCache() { m_itemIndex.Clear(); }
 

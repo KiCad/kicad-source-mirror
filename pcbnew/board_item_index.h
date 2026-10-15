@@ -68,7 +68,7 @@ public:
     /**
      * Index @a aItem, replacing any previous entry for its UUID or address.
      */
-    void BindItem( BOARD_ITEM* aItem );
+    void BindItem( BOARD_ITEM& aItem );
 
     /**
      * Remove an item from the item-by-id cache.
@@ -79,7 +79,7 @@ public:
      * Drop @a aItem itself.  Pointer-keyed, so a temporary copy sharing its UUID is left alone,
      * and safe to call from ~BOARD_ITEM and the UUID rebind paths.
      */
-    void UnbindByPtr( const BOARD_ITEM* aItem );
+    void UnbindItem( const BOARD_ITEM& aItem );
 
     /**
      * Drop every entry, clearing each item's link back to the board.
@@ -89,14 +89,21 @@ public:
     /**
      * Move @a aItem to @a aNewId, keeping the index in step with the item.
      */
-    void Rebind( BOARD_ITEM* aItem, const KIID& aNewId );
+    void Rebind( BOARD_ITEM& aItem, const KIID& aNewId );
 
-    void BindSubtree( BOARD_ITEM* aItem );
-    void BindChildren( const BOARD_ITEM* aParent );
-    void UnbindSubtree( const BOARD_ITEM* aItem );
-    void UnbindChildren( const BOARD_ITEM* aParent );
+    void BindSubtree( BOARD_ITEM& aItem );
+    void BindChildren( const BOARD_ITEM& aParent );
+    void UnbindSubtree( const BOARD_ITEM& aItem );
+    void UnbindChildren( const BOARD_ITEM& aParent );
 
     const std::unordered_map<KIID, BOARD_ITEM*>& Map() const { return m_itemsById; }
+
+    /**
+     * Return true if @a aItem is currently indexed.
+     *
+     * This does NOT dereference the pointer, so it is safe to call even if
+     * the item has been deleted.
+     */
     bool IsIndexed( const BOARD_ITEM* aItem ) const { return m_idsByItem.contains( aItem ); }
 
 private:

@@ -766,7 +766,7 @@ BOOST_AUTO_TEST_CASE( ResolveItemIdentityCachePurgedOnDestruction )
 
     PAD* pad = new PAD( footprint );
     footprint->Pads().push_back( pad );
-    board.CacheItemById( pad );
+    board.CacheItemById( *pad );
 
     const KIID padId = pad->m_Uuid;
 
@@ -812,7 +812,7 @@ BOOST_AUTO_TEST_CASE( IndexedItemSurvivesBoardDestruction )
 
     PAD* pad = new PAD( footprint );
     footprint->Pads().push_back( pad );
-    board->CacheItemById( pad );
+    board->CacheItemById( *pad );
 
     BOOST_REQUIRE( pad->IsIndexedInBoard() );
 

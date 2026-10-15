@@ -114,7 +114,7 @@ void PCB_TABLE::CopyFrom( const BOARD_ITEM* aOther )
     m_rowHeights = other->m_rowHeights;
 
     if( board )
-        board->UncacheChildrenById( this );
+        board->UncacheChildrenById( *this );
 
     ClearCells();
 
@@ -122,7 +122,7 @@ void PCB_TABLE::CopyFrom( const BOARD_ITEM* aOther )
         AddCell( static_cast<PCB_TABLECELL*>( cell->Clone() ) );
 
     if( board )
-        board->CacheChildrenById( this );
+        board->CacheChildrenById( *this );
 }
 
 

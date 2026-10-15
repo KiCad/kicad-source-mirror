@@ -107,7 +107,7 @@ BOARD_ITEM::~BOARD_ITEM()
 {
     // Backup for code paths that skip ::Remove(). Do not use the parent chain, it may be freed.
     if( m_boardCacheOwner )
-        m_boardCacheOwner->UncacheItemByPtr( this );
+        m_boardCacheOwner->UncacheItem( *this );
 }
 
 
@@ -125,7 +125,7 @@ void BOARD_ITEM::SetUuid( const KIID& aUuid )
     // Use the owner, not GetBoard(). The parent chain may name a wrong or dead board.
     if( BOARD* board = m_boardCacheOwner )
     {
-        board->RebindItemUuid( this, aUuid );
+        board->RebindItemUuid( *this, aUuid );
         return;
     }
 
@@ -353,7 +353,7 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
     // which would leave the cache holding dangling pointers to the destroyed children.
     if( board )
     {
-        board->UncacheChildrenById( this );
+        board->UncacheChildrenById( *this );
     }
 
     swapData( aImage );
@@ -365,7 +365,7 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
 
     if( board )
     {
-        board->CacheChildrenById( this );
+        board->CacheChildrenById( *this );
     }
 }
 

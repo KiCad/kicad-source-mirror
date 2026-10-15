@@ -687,7 +687,7 @@ bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aIn
 
     // If this footprint is on a board, uncache all items before clearing
     if( BOARD* board = GetBoard() )
-        board->UncacheChildrenById( this );
+        board->UncacheChildrenById( *this );
 
     Pads().clear();
     GraphicalItems().clear();
@@ -1134,7 +1134,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // If this footprint is on a board, uncache all items before deleting them
     if( BOARD* board = GetBoard() )
-        board->UncacheChildrenById( this );
+        board->UncacheChildrenById( *this );
 
     // Move the fields
     for( PCB_FIELD* field : m_fields )
@@ -1274,7 +1274,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     // If this footprint is on a board, uncache all items before deleting them
     if( BOARD* board = GetBoard() )
-        board->UncacheChildrenById( this );
+        board->UncacheChildrenById( *this );
 
     std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
@@ -1908,7 +1908,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     // Skip caching for copy-constructed footprints (inherited board ptr but not a real member).
     if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
     {
-        board->CacheItemSubtreeById( aBoardItem );
+        board->CacheItemSubtreeById( *aBoardItem );
 
         // A pad arriving here never passes through BOARD::Add, so this is the only chance to
         // invalidate the drill caches
@@ -2041,7 +2041,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     {
         if( board->IsItemIndexedById( this ) )
         {
-            board->UncacheItemSubtreeById( aBoardItem );
+            board->UncacheItemSubtreeById( *aBoardItem );
             board->noteDrillModelChange( aBoardItem );
         }
 

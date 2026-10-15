@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_CASE( RebindItemUuidUpdatesCacheAtomically )
     const KIID newId;
 
     board->Add( shape.release() );
-    board->RebindItemUuid( liveShape, newId );
+    board->RebindItemUuid( *liveShape, newId );
 
     BOOST_CHECK( liveShape->m_Uuid == newId );
     BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE( CacheItemByIdCanonicalizesRewrittenUuid )
     board->Add( shape.release() );
 
     const_cast<KIID&>( liveShape->m_Uuid ) = newId;
-    board->CacheItemById( liveShape );
+    board->CacheItemById( *liveShape );
 
     BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
     BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
