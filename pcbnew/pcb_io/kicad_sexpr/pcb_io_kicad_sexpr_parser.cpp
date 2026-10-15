@@ -4234,9 +4234,9 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             break;
 
         default:
-            Expecting( "layer, width, fill, tstamp, uuid, locked, net, status, "
-                       "solder_mask_margin, center, major_radius, minor_radius, "
-                       "rotation_angle, start_angle, end_angle, start_shape, or end_shape" );
+            Expecting( "layer, width, fill, tstamp, uuid, locked, net, status, solder_mask_margin, center, "
+                       "major_radius, minor_radius, rotation_angle, start_angle, end_angle, start_shape, "
+                       "end_shape, or custom_property" );
         }
     }
 
@@ -4390,7 +4390,7 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
             break;
 
         default:
-            Expecting( "at, layer, scale, data, locked or uuid" );
+            Expecting( "at, layer, scale, data, locked, uuid, or custom_property" );
         }
     }
 
@@ -4606,9 +4606,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
 
         default:
             if( parentFP )
-                Expecting( "layer, hide, effects, locked, render_cache or tstamp" );
+                Expecting( "layer, hide, effects, locked, render_cache, tstamp, uuid, or custom_property" );
             else
-                Expecting( "layer, effects, locked, render_cache or tstamp" );
+                Expecting( "layer, effects, locked, render_cache, tstamp, uuid, or custom_property" );
         }
     }
 
@@ -4777,7 +4777,8 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
             break;
 
         default:
-            Expecting( "at, layer, size, text, text_height, type, ecc_level, locked, hide, knockout, margins or uuid" );
+            Expecting( "at, layer, size, text, text_height, type, ecc_level, locked, hide, knockout, margins, "
+                       "uuid, or custom_property" );
         }
     }
 
@@ -4982,12 +4983,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
             if( dynamic_cast<PCB_TABLECELL*>( aTextBox ) != nullptr )
             {
                 Expecting( "locked, start, pts, angle, width, margins, knockout, layer, effects, "
-                           "span, render_cache, uuid or tstamp" );
+                           "span, render_cache, uuid, tstamp, or custom_property" );
             }
             else
             {
                 Expecting( "locked, start, pts, angle, width, stroke, border, margins, knockout,"
-                           "layer, effects, render_cache, uuid or tstamp" );
+                           "layer, effects, render_cache, uuid, tstamp, or custom_property" );
             }
         }
     }
@@ -5476,8 +5477,8 @@ PCB_GENERATED_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTable( std::unique
     // manufacturing inputs that table artwork would corrupt rather than document
     if( !DocumentationLayers().Contains( aTable->GetLayer() ) )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Invalid %s: not on a documentation layer" ), aTable->GetFriendlyName() ) );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid %s: not on a documentation layer" ),
+                                          aTable->GetFriendlyName() ) );
     }
 
     return aTable.release();
@@ -5615,8 +5616,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
         case T_leader:     dim = std::make_unique<PCB_DIM_LEADER>( aParent );     break;
         case T_center:     dim = std::make_unique<PCB_DIM_CENTER>( aParent );     break;
         case T_radial:     dim = std::make_unique<PCB_DIM_RADIAL>( aParent );     break;
-        default:           wxFAIL_MSG( wxT( "Cannot parse unknown dimension type " )
-                                       + GetTokenString( CurTok() ) );
+        default:           wxFAIL_MSG( wxT( "Cannot parse unknown dimension type " ) + GetTokenString( CurTok() ) );
         }
 
         NeedRIGHT();
@@ -5797,8 +5797,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
                 default:
                     std::cerr << "Unknown format token: " << GetTokenString( token ) << std::endl;
-                    Expecting( "prefix, suffix, units, units_format, precision, override_value, "
-                               "suppress_zeroes" );
+                    Expecting( "prefix, suffix, units, units_format, precision, override_value, suppress_zeroes" );
                 }
             }
             break;
@@ -6025,7 +6024,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
 
         default:
             Expecting( "layer, tstamp, uuid, gr_text, feature1, feature2, crossbar, arrow1a, "
-                       "arrow1b, arrow2a, or arrow2b" );
+                       "arrow1b, arrow2a, arrow2b, locked, or custom_property" );
         }
     }
 
@@ -6987,12 +6986,11 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             break;
 
         default:
-            Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, variant, "
-                       "autoplace_cost90, autoplace_cost180, attr, clearance, "
-                       "embedded_files, fp_arc, fp_circle, fp_curve, fp_line, fp_poly, "
-                       "fp_rect, fp_text, pad, group, generator, model, path, solder_mask_margin, "
-                       "solder_paste_margin, solder_paste_margin_ratio, tags, thermal_gap, "
-                       "version, zone, zone_connect, or component_classes" );
+            Expecting( "at, descr, locked, placed, tedit, tstamp, uuid, variant, autoplace_cost90, "
+                       "autoplace_cost180, attr, clearance, embedded_files, fp_arc, fp_circle, fp_curve, "
+                       "fp_line, fp_poly, fp_rect, fp_text, pad, group, generator, model, path, "
+                       "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, tags, "
+                       "thermal_gap, version, zone, zone_connect, component_classes, or custom_property" );
         }
     }
 
@@ -7732,7 +7730,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                        "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, uuid, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
                        "pinfunction, pintype, zone_connect, thermal_width, thermal_gap, padstack, "
-                       "teardrops, front_post_machining, or back_post_machining" );
+                       "teardrops, front_post_machining, back_post_machining, or custom_property" );
         }
     }
 

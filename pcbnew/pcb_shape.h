@@ -43,6 +43,8 @@ public:
 
     ~PCB_SHAPE() override;
 
+    EDA_ITEM* AsEdaItem() override { return this; }
+
     void CopyFrom( const BOARD_ITEM* aOther ) override;
 
     static bool ClassOf( const EDA_ITEM* aItem )

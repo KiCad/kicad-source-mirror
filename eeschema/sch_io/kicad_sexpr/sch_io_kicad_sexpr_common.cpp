@@ -246,6 +246,7 @@ void formatArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aArc, bool aIsPrivate,
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aArc->AsEdaItem() );
     aFormatter->Print( ")" );
 }
 
@@ -268,6 +269,7 @@ void formatCircle( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aCircle, bool aIsPriv
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aCircle->AsEdaItem() );
     aFormatter->Print( ")" );
 }
 
@@ -292,6 +294,7 @@ void formatRect( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aRect, bool aIsPrivate,
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aRect->AsEdaItem() );
     aFormatter->Print( ")" );
 }
 
@@ -322,6 +325,7 @@ void formatBezier( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aBezier, bool aIsPriv
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aBezier->AsEdaItem() );
     aFormatter->Print( ")" );
 }
 
@@ -360,6 +364,7 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool aIsPriv
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aPolyLine->AsEdaItem() );
     aFormatter->Print( ")" );
 }
 
@@ -383,6 +388,7 @@ void formatEllipse( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aEllipse, bool aIsPr
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aEllipse->AsEdaItem() );
     aFormatter->Print( ")" );
 }
 
@@ -409,5 +415,6 @@ void formatEllipseArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aEllipseArc, bool
     if( aLocked )
         KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
 
+    KICAD_FORMAT::FormatCustomProperties( aFormatter, *aEllipseArc->AsEdaItem() );
     aFormatter->Print( ")" );
 }

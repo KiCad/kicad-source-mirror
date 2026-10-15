@@ -37,6 +37,8 @@ public:
 
     virtual ~SCH_SHAPE() override {}
 
+    EDA_ITEM* AsEdaItem() override { return this; }
+
     void Serialize( google::protobuf::Any& aContainer ) const override;
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
 

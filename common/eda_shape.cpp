@@ -133,7 +133,12 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
     {
         auto arc = static_cast<const SHAPE_ARC&>( aShape );
         m_shape = SHAPE_T::ARC;
-        SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
+
+        if( arc.IsClockwise() )
+            SetArcGeometry( arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
+        else
+            SetArcGeometry( arc.GetP1(), arc.GetArcMid(), arc.GetP0() );
+
         SetWidth( arc.GetWidth() );
         break;
     }

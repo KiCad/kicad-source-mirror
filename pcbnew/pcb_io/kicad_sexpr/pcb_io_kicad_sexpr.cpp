@@ -1187,6 +1187,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
 
         if( aShape->GetCornerRadius() > 0 )
             m_out->Print( " (radius %s)", formatInternalUnits( aShape->GetLibraryCornerRadius() ).c_str() );
+
         break;
 
     case SHAPE_T::CIRCLE:

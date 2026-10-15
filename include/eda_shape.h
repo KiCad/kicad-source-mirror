@@ -97,6 +97,8 @@ public:
 
     virtual ~EDA_SHAPE();
 
+    virtual EDA_ITEM* AsEdaItem() { return nullptr; }
+
     void SwapShape( EDA_SHAPE* aImage );
 
     void Serialize( google::protobuf::Any &aContainer ) const override;

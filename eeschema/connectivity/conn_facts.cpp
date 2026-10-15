@@ -206,7 +206,7 @@ LIBRARY_SYMBOL_FACT ExtractLibrarySymbolFact( const LIB_SYMBOL& aSymbol )
 
     for( const SCH_ITEM& drawing : aSymbol.GetDrawItems()[SCH_SHAPE_T] )
     {
-        const auto& shape = static_cast<const SCH_SHAPE&>( drawing );
+        const SCH_SHAPE& shape = static_cast<const SCH_SHAPE&>( drawing );
         result.shapes.push_back( { shape.m_Uuid, shape.GetUnit(), shape.GetBodyStyle(), shape.IsPrivate(),
                                   shape.GetPosition(), shape } );
     }
@@ -270,17 +270,19 @@ bool LIBRARY_SYMBOL_FACT::Matches( const LIBRARY_SYMBOL_FACT& aOther, int aCompa
     if( !attributes.Matches( aOther.attributes, aCompareFlags ) )
         return false;
 
-    auto lessShape = []( const LIBRARY_SHAPE_FACT* a, const LIBRARY_SHAPE_FACT* b )
-    {
-        return a->Compare( *b, ~FLAGS::UUID ) < 0;
-    };
+    auto lessShape =
+            []( const LIBRARY_SHAPE_FACT* a, const LIBRARY_SHAPE_FACT* b )
+            {
+                return a->Compare( *b, ~FLAGS::UUID ) < 0;
+            };
+
     std::set<const LIBRARY_SHAPE_FACT*, decltype( lessShape )> lhsShapes( lessShape );
     std::set<const LIBRARY_SHAPE_FACT*, decltype( lessShape )> rhsShapes( lessShape );
 
-    for( const auto& shape : shapes )
+    for( const LIBRARY_SHAPE_FACT& shape : shapes )
         lhsShapes.insert( &shape );
 
-    for( const auto& shape : aOther.shapes )
+    for( const LIBRARY_SHAPE_FACT& shape : aOther.shapes )
         rhsShapes.insert( &shape );
 
     if( lhsShapes.size() != rhsShapes.size() )
@@ -292,53 +294,53 @@ bool LIBRARY_SYMBOL_FACT::Matches( const LIBRARY_SYMBOL_FACT& aOther, int aCompa
             return false;
     }
 
-    auto findPin = []( const LIBRARY_SYMBOL_FACT& aSource, const PIN_COMPARISON_DATA& aPin )
-            -> const PIN_COMPARISON_DATA*
-    {
-        const auto& candidates = aSource.inheritedPins ? *aSource.inheritedPins : aSource.pins;
-
-        for( const auto& candidate : candidates )
-        {
-            if( candidate.number == aPin.number
-                && ( !aPin.unit || !candidate.unit || aPin.unit == candidate.unit )
-                && ( !aPin.bodyStyle || !candidate.bodyStyle || aPin.bodyStyle == candidate.bodyStyle ) )
+    auto findPin =
+            []( const LIBRARY_SYMBOL_FACT& aSource, const PIN_COMPARISON_DATA& aPin )  -> const PIN_COMPARISON_DATA*
             {
-                return &candidate;
-            }
-        }
+                const auto& candidates = aSource.inheritedPins ? *aSource.inheritedPins : aSource.pins;
 
-        return nullptr;
-    };
+                for( const PIN_COMPARISON_DATA& candidate : candidates )
+                {
+                    if( candidate.number == aPin.number
+                        && ( !aPin.unit || !candidate.unit || aPin.unit == candidate.unit )
+                        && ( !aPin.bodyStyle || !candidate.bodyStyle || aPin.bodyStyle == candidate.bodyStyle ) )
+                    {
+                        return &candidate;
+                    }
+                }
 
-    for( const auto& pin : pins )
+                return nullptr;
+            };
+
+    for( const PIN_COMPARISON_DATA& pin : pins )
     {
-        const auto* other = findPin( aOther, pin );
+        const PIN_COMPARISON_DATA* other = findPin( aOther, pin );
 
         if( !other || pin.Compare( *other, aCompareFlags ) != 0 )
             return false;
     }
 
-    for( const auto& pin : aOther.pins )
+    for( const PIN_COMPARISON_DATA& pin : aOther.pins )
     {
         if( !findPin( *this, pin ) )
             return false;
     }
 
-    auto findField = []( const LIBRARY_SYMBOL_FACT& aSource, const LIBRARY_FIELD_FACT& aField )
-            -> const LIBRARY_FIELD_FACT*
-    {
-        for( const auto& candidate : aSource.fields )
-        {
-            if( aField.mandatory ? candidate.id == aField.id : candidate.name == aField.name )
-                return &candidate;
-        }
+    auto findField =
+            []( const LIBRARY_SYMBOL_FACT& aSource, const LIBRARY_FIELD_FACT& aField ) -> const LIBRARY_FIELD_FACT*
+            {
+                for( const LIBRARY_FIELD_FACT& candidate : aSource.fields )
+                {
+                    if( aField.mandatory ? candidate.id == aField.id : candidate.name == aField.name )
+                        return &candidate;
+                }
 
-        return nullptr;
-    };
+                return nullptr;
+            };
 
-    for( const auto& field : fields )
+    for( const LIBRARY_FIELD_FACT& field : fields )
     {
-        const auto* other = findField( aOther, field );
+        const LIBRARY_FIELD_FACT* other = findField( aOther, field );
 
         if( !other )
         {
@@ -353,7 +355,7 @@ bool LIBRARY_SYMBOL_FACT::Matches( const LIBRARY_SYMBOL_FACT& aOther, int aCompa
 
     if( aCompareFlags & FLAGS::MISSING_FIELDS )
     {
-        for( const auto& field : aOther.fields )
+        for( const LIBRARY_FIELD_FACT& field : aOther.fields )
         {
             if( !findField( *this, field ) )
                 return false;
@@ -366,10 +368,11 @@ bool LIBRARY_SYMBOL_FACT::Matches( const LIBRARY_SYMBOL_FACT& aOther, int aCompa
 int LIBRARY_SHAPE_FACT::Compare( const LIBRARY_SHAPE_FACT& aOther, int aCompareFlags ) const
 {
     // Subtraction can overflow at extreme coordinates and flip the order the shape sets rely on
-    const auto sign = []( int aLeft, int aRight )
-    {
-        return ( aLeft > aRight ) - ( aLeft < aRight );
-    };
+    const auto sign =
+            []( int aLeft, int aRight )
+            {
+                return ( aLeft > aRight ) - ( aLeft < aRight );
+            };
 
     if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT )
     {
@@ -575,7 +578,7 @@ SCREEN_FACTS ExtractScreenFacts( const SCH_SCREEN& aScreen, std::shared_ptr<cons
             }
 
             result.footprints.push_back( { symbol.m_Uuid, symbol.GetPosition(),
-                    library ? library->GetFPFilters() : wxArrayString() } );
+                                           library ? library->GetFPFilters() : wxArrayString() } );
 
             if( auto maps = ExtractPinMapFacts( symbol ) )
                 result.pinMaps.push_back( std::move( *maps ) );
