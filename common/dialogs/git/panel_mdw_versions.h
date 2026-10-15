@@ -21,6 +21,7 @@
 #ifndef PANEL_MDW_VERSIONS_H
 #define PANEL_MDW_VERSIONS_H
 
+#include <dialogs/git/workspace_item_files.h>
 #include <mdw/client/mdw_client_types.h>
 #include <mdw/client/mdw_compare_doc.h>
 #include <mdw/client/mdw_op.h>
@@ -66,8 +67,8 @@ public:
     /**
      * List the versions of aItem on aSource, ending any read or download of the item shown before.
      *
-     * The first of aWorkingFiles, the file the user edits, is listed above the versions as the Working copy when it
-     * differs from them, and Save Copy writes over none of them. A source that lists local changes under aLocalRoot
+     * The edited file of aWorkingFiles is listed above the versions as the Working copy when it differs from them,
+     * and Save Copy writes over none of aWorkingFiles. A source that lists local changes under aLocalRoot
      * says so, read once and kept until RefreshChanges(). One that cannot is asked to download its newest version,
      * once per version and save of the file, to compare it with the file.
      *
@@ -77,10 +78,14 @@ public:
      *                    cut down to and the versions are named by. It is empty for a file.
      */
     void SetItem( const std::shared_ptr<MDW_SOURCE>& aSource, const MDW_ITEM_REF& aItem, const wxString& aLocalRoot,
-                  const std::vector<wxString>& aWorkingFiles, EDA_BASE_FRAME* aFrame, const wxString& aMemberName );
+                  const WORKSPACE_WORKING_FILES& aWorkingFiles, EDA_BASE_FRAME* aFrame,
+                  const wxString& aMemberName );
 
     /// Read the source's local changes again, after a listing or a check in made them stale.
     void RefreshChanges();
+
+    /// Replace the working files of the shown item aItemId once found after SetItem(), unless the edited file differs.
+    void SetWorkingFiles( const wxString& aItemId, const WORKSPACE_WORKING_FILES& aWorkingFiles );
 
     /// Forget the item and end any read or download of it.
     void Clear();
@@ -208,8 +213,8 @@ private:
     std::shared_ptr<MDW_SOURCE>         m_source;
     MDW_ITEM_REF                        m_item;
     wxString                            m_localRoot;
-    wxString                            m_checkoutPath; ///< The first of m_workingFiles
-    std::vector<wxString>               m_workingFiles;
+    wxString                            m_checkoutPath; ///< The edited file of m_workingFiles
+    WORKSPACE_WORKING_FILES             m_workingFiles;
     wxString                            m_memberName;
     wxString                            m_workingCopy; ///< m_checkoutPath when it differs from the versions
     std::set<wxString>                  m_modified;

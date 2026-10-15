@@ -226,11 +226,12 @@ BOOST_AUTO_TEST_CASE( LabelWithPathCharactersStaysOneName )
 BOOST_AUTO_TEST_CASE( CopyOntoTheCheckoutIsRefused )
 {
     KI_TEST::SCOPED_TEMP_DIR temp( wxS( "mdw-copy" ) );
-    const wxString           checkout = temp.ChildPathStr( wxS( "board.kicad_pcb" ) );
+    const wxString                checkout = temp.ChildPathStr( wxS( "board.kicad_pcb" ) );
+    const WORKSPACE_WORKING_FILES working( checkout );
 
-    BOOST_CHECK( !MdwCopyTargetRefusal( checkout, { checkout } ).IsEmpty() );
-    BOOST_CHECK( !MdwCopyTargetRefusal( temp.PathStr() + wxS( "/./board.kicad_pcb" ), { checkout } ).IsEmpty() );
-    BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "board-3.kicad_pcb" ) ), { checkout } ).IsEmpty() );
+    BOOST_CHECK( !MdwCopyTargetRefusal( checkout, working ).IsEmpty() );
+    BOOST_CHECK( !MdwCopyTargetRefusal( temp.PathStr() + wxS( "/./board.kicad_pcb" ), working ).IsEmpty() );
+    BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "board-3.kicad_pcb" ) ), working ).IsEmpty() );
 }
 
 
@@ -244,17 +245,66 @@ BOOST_AUTO_TEST_CASE( CopyOntoTheRecordedCheckoutIsRefused )
     item.relative_path = wxS( "amp-board-rev-b.kicad_sch" );
 
     const std::map<wxString, wxString> recorded = { { wxS( "amp-board.kicad_sch" ), item.item_id } };
-    const std::vector<wxString>        working = WorkspaceWorkingFiles( recorded, temp.PathStr(), item );
+    const WORKSPACE_WORKING_FILES      working = WorkspaceWorkingFiles( recorded, temp.PathStr(), item );
 
     const wxString edited = temp.ChildPathStr( wxS( "amp-board.kicad_sch" ) );
 
     // Compare lists the edited file as the Working copy
-    BOOST_REQUIRE( !working.empty() );
-    BOOST_CHECK( wxFileName( working.front() ).SameAs( wxFileName( edited ) ) );
+    BOOST_CHECK( wxFileName( working.edited ).SameAs( wxFileName( edited ) ) );
 
     BOOST_CHECK( !MdwCopyTargetRefusal( edited, working ).IsEmpty() );
     BOOST_CHECK( !MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "amp-board-rev-b.kicad_sch" ) ), working ).IsEmpty() );
     BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "amp-board-v2.kicad_sch" ) ), working ).IsEmpty() );
+}
+
+
+// Git names files from the repository root, so one outside the project has no checkout path and is still edited
+BOOST_AUTO_TEST_CASE( CopyOntoARepositoryFileOutsideTheProjectIsRefused )
+{
+    KI_TEST::SCOPED_TEMP_DIR temp( wxS( "mdw-copy" ) );
+    const wxString           design = temp.ChildPathStr( wxS( "design" ) );
+
+    MDW_ITEM_INFO item;
+    item.item_id = wxS( "notes.md" );
+
+    const WORKSPACE_WORKING_FILES working = WorkspaceWorkingFiles( {}, design, item, temp.PathStr() );
+    const wxString                edited = temp.ChildPathStr( wxS( "notes.md" ) );
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( edited, working ).IsEmpty() );
+    BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "notes-3.md" ) ), working ).IsEmpty() );
+
+    // The project's read of local changes leaves it out, so its state stays unknown rather than unchanged
+    BOOST_CHECK( working.edited.IsEmpty() );
+
+    // An id that would leave the tree protects nothing outside it
+    item.item_id = wxS( "../notes.md" );
+    BOOST_CHECK( WorkspaceWorkingFiles( {}, design, item, temp.PathStr() ).All().empty() );
+}
+
+
+// With Git integration off the repository may go unfound, and the file outside the project is still edited
+BOOST_AUTO_TEST_CASE( CopyOverAnExistingFileIsRefusedWithoutTheRepository )
+{
+    KI_TEST::SCOPED_TEMP_DIR temp( wxS( "mdw-copy" ) );
+    const wxString           edited = temp.ChildPathStr( wxS( "notes.md" ) );
+
+    MDW_ITEM_INFO item;
+    item.item_id = wxS( "notes.md" );
+
+    const WORKSPACE_WORKING_FILES working =
+            WorkspaceWorkingFiles( {}, temp.ChildPathStr( wxS( "design" ) ), item, wxString() );
+
+    std::ofstream( temp.Path() / "notes.md" ) << "mine";
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( edited, working ).IsEmpty() );
+    BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "notes-3.md" ) ), working ).IsEmpty() );
+
+    // A checkout recorded in another file leaves the repository original just as unfound
+    const WORKSPACE_WORKING_FILES recorded = WorkspaceWorkingFiles( { { wxS( "notes-mine.md" ), item.item_id } },
+                                                                    temp.ChildPathStr( wxS( "design" ) ), item,
+                                                                    wxString() );
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( edited, recorded ).IsEmpty() );
 }
 
 
@@ -286,7 +336,9 @@ BOOST_AUTO_TEST_CASE( CopyThroughASymlinkedFolderIsRefused )
         return;
     }
 
-    BOOST_CHECK( !MdwCopyTargetRefusal( target, { FromFsPath( project / "board.kicad_pcb" ) } ).IsEmpty() );
+    const WORKSPACE_WORKING_FILES working( FromFsPath( project / "board.kicad_pcb" ) );
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( target, working ).IsEmpty() );
 }
 
 
@@ -303,8 +355,9 @@ BOOST_AUTO_TEST_CASE( CopyThatCannotBeCheckedIsRefused )
 
     std::error_code ec;
     const bool      searchable = std::filesystem::exists( locked / "board.kicad_pcb", ec ) || !ec;
-    const wxString  refusal = MdwCopyTargetRefusal( FromFsPath( locked / "board.kicad_pcb" ),
-                                                    { temp.ChildPathStr( wxS( "board.kicad_pcb" ) ) } );
+    const wxString  refusal =
+            MdwCopyTargetRefusal( FromFsPath( locked / "board.kicad_pcb" ),
+                                  WORKSPACE_WORKING_FILES( temp.ChildPathStr( wxS( "board.kicad_pcb" ) ) ) );
 
     std::filesystem::permissions( locked, std::filesystem::perms::owner_all );
 

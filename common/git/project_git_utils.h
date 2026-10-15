@@ -121,6 +121,14 @@ public:
                                                      const wxString& aCanonicalWorkDir );
 
     /**
+     * The working folder of the repository holding aProjectDir, keeping the symlinks of aProjectDir, found on disk
+     * whether or not the project has the repository attached.
+     *
+     * @return The folder, or empty when no repository with a working folder holds aProjectDir.
+     */
+    static wxString RepositoryWorkingFolder( const wxString& aProjectDir );
+
+    /**
      * Test whether an absolute file path lives inside the current project directory.
      *
      * The git repository may span more than the KiCad project (the project is often a

@@ -218,7 +218,7 @@ void PANEL_MDW_VERSIONS::Clear()
     m_newestFor.clear();
     m_item = MDW_ITEM_REF();
     m_checkoutPath.clear();
-    m_workingFiles.clear();
+    m_workingFiles = WORKSPACE_WORKING_FILES();
     m_workingCopy.clear();
     m_revisions.clear();
     m_olderUnread = false;
@@ -301,8 +301,18 @@ void PANEL_MDW_VERSIONS::RefreshChanges()
 }
 
 
+void PANEL_MDW_VERSIONS::SetWorkingFiles( const wxString& aItemId, const WORKSPACE_WORKING_FILES& aWorkingFiles )
+{
+    // The status and Working copy row follow the edited file, so a change to it waits for the next SetItem()
+    if( aItemId != m_item.item_id || aWorkingFiles.edited != m_workingFiles.edited )
+        return;
+
+    m_workingFiles = aWorkingFiles;
+}
+
+
 void PANEL_MDW_VERSIONS::SetItem( const std::shared_ptr<MDW_SOURCE>& aSource, const MDW_ITEM_REF& aItem,
-                                  const wxString& aLocalRoot, const std::vector<wxString>& aWorkingFiles,
+                                  const wxString& aLocalRoot, const WORKSPACE_WORKING_FILES& aWorkingFiles,
                                   EDA_BASE_FRAME* aFrame, const wxString& aMemberName )
 {
     Clear();
@@ -318,7 +328,7 @@ void PANEL_MDW_VERSIONS::SetItem( const std::shared_ptr<MDW_SOURCE>& aSource, co
     m_localRoot = aLocalRoot;
     m_item = aItem;
     m_workingFiles = aWorkingFiles;
-    m_checkoutPath = aWorkingFiles.empty() ? wxString() : aWorkingFiles.front();
+    m_checkoutPath = aWorkingFiles.edited;
     m_memberName = aMemberName;
     m_frame = aFrame;
 
@@ -764,7 +774,11 @@ void PANEL_MDW_VERSIONS::onCompare()
 wxString PANEL_MDW_VERSIONS::copyFolder() const
 {
     if( m_memberName.IsEmpty() )
-        return wxFileName( m_checkoutPath ).GetPath();
+    {
+        const std::vector<wxString> files = m_workingFiles.All();
+
+        return files.empty() ? wxString() : wxFileName( files.front() ).GetPath();
+    }
 
     // A member's file lives in the team library's checkout, where a copy would sit as an untracked file
     if( m_frame && !m_frame->Prj().IsNullProject() )
@@ -939,7 +953,6 @@ void PANEL_MDW_VERSIONS::onSaveCopy( long aRow )
     const MDW_REVISION                revision = m_revisions[aRow - ( hasWorkingCopy() ? 1 : 0 )];
     const std::shared_ptr<MDW_SOURCE> source = m_source;
     const MDW_ITEM_REF                item = m_item;
-    const std::vector<wxString>       workingFiles = m_workingFiles;
     const wxString                    memberName = m_memberName;
     const unsigned                    generation = m_itemGeneration;
     const wxFileName                  checkout( m_checkoutPath );
@@ -957,9 +970,11 @@ void PANEL_MDW_VERSIONS::onSaveCopy( long aRow )
 
     wildcard = wildcard.IsEmpty() ? FILEEXT::AllFilesWildcard() : wildcard + wxS( "|" ) + FILEEXT::AllFilesWildcard();
 
-    wxFileDialog dialog( this, _( "Save Copy" ), copyFolder(),
-                         MdwRevisionCopyName( checkout.GetFullName(), memberName, revision ), wildcard,
-                         wxFD_SAVE );
+    // A file no read covers has no edited path, and is still named by its item
+    const wxString fileName = m_checkoutPath.IsEmpty() ? MdwItemFileName( item ) : checkout.GetFullName();
+
+    wxFileDialog dialog( this, _( "Save Copy" ), copyFolder(), MdwRevisionCopyName( fileName, memberName, revision ),
+                         wildcard, wxFD_SAVE );
 
     wxWeakRef<PANEL_MDW_VERSIONS> self( this );
 
@@ -971,13 +986,21 @@ void PANEL_MDW_VERSIONS::onSaveCopy( long aRow )
         return;
 
     const wxString target = dialog.GetPath();
-    const wxString refusal = MdwCopyTargetRefusal( target, workingFiles );
 
-    if( !refusal.IsEmpty() )
+    // The repository search can answer under either modal, so each check reads the working files as they are now
+    auto refused = [&]()
     {
+        const wxString refusal = MdwCopyTargetRefusal( target, m_workingFiles );
+
+        if( refusal.IsEmpty() )
+            return false;
+
         DisplayErrorMessage( this, refusal );
+        return true;
+    };
+
+    if( refused() )
         return;
-    }
 
     // Only a file there now was offered for replacing, so one made during the download is kept
     const bool replace = wxFileName::FileExists( target );
@@ -990,7 +1013,7 @@ void PANEL_MDW_VERSIONS::onSaveCopy( long aRow )
 #endif
 
     // The question is modal as well, so the panel may be gone or showing another item
-    if( !self || generation != m_itemGeneration || m_copying )
+    if( !self || generation != m_itemGeneration || m_copying || refused() )
         return;
 
     MDW_ITEM_REF shown = item;

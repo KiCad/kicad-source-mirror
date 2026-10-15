@@ -48,10 +48,35 @@ KICOMMON_API wxString WorkspaceCheckoutPath( const wxString& aProjectDir, const 
 KICOMMON_API wxString WorkspaceCheckinPath( const std::map<wxString, wxString>& aRecorded, const wxString& aProjectDir,
                                             const MDW_ITEM_INFO& aItem );
 
-/// The files Save Copy must never replace for aItem. The first is the file the user edits, the one a check in uploads
-/// or else where a check out writes, then where a check out writes when a rename on the server has moved it
-KICOMMON_API std::vector<wxString> WorkspaceWorkingFiles( const std::map<wxString, wxString>& aRecorded,
-                                                          const wxString& aProjectDir, const MDW_ITEM_INFO& aItem );
+/// The files a user edits for one item, which Save Copy must never replace
+struct KICOMMON_API WORKSPACE_WORKING_FILES
+{
+    explicit WORKSPACE_WORKING_FILES( const wxString& aEdited = wxEmptyString );
+
+    /// Every file Save Copy must never replace, the edited one first
+    std::vector<wxString> All() const;
+
+    /// The file the project's read of local changes covers, listed as the Working copy. Empty when there is none
+    wxString edited;
+
+    /// Further files the user edits, whose changes no read covers, so their state stays unknown
+    std::vector<wxString> others;
+
+    /// The user edits a file that could not be found, so no existing file may be replaced
+    bool unresolved = false;
+};
+
+/**
+ * The files of aItem. The edited one is the file a check in uploads, or else where a check out writes. Where a check
+ * out writes after a rename on the server has moved it is another.
+ *
+ * aWorktree is set for a source that edits files in place and names items by their path from the root of its working
+ * tree. The item's file there is then another working file, even outside the project. It is empty when that tree
+ * could not be found, which leaves an item with no path in the project unresolved.
+ */
+KICOMMON_API WORKSPACE_WORKING_FILES WorkspaceWorkingFiles( const std::map<wxString, wxString>& aRecorded,
+                                                            const wxString& aProjectDir, const MDW_ITEM_INFO& aItem,
+                                                            const std::optional<wxString>& aWorktree = std::nullopt );
 
 /// The display path of aFolder below the folder named aParentName, which is empty for a root
 KICOMMON_API wxString WorkspaceFolderName( const wxString& aParentName, const MDW_FOLDER& aFolder );
@@ -111,7 +136,8 @@ KICOMMON_API wxString MdwRevisionCopyName( const wxString& aFileName, const wxSt
                                            const MDW_REVISION& aRevision );
 
 /// Why a copy may not be written to aTarget, or empty when it may. aWorkingFiles are the files it must not replace,
-/// matched by the file an existing path opens rather than by its spelling. A path that cannot be checked is refused.
-KICOMMON_API wxString MdwCopyTargetRefusal( const wxString& aTarget, const std::vector<wxString>& aWorkingFiles );
+/// matched by the file an existing path opens rather than by its spelling. A path that cannot be checked is refused,
+/// as is any existing file when aWorkingFiles is unresolved.
+KICOMMON_API wxString MdwCopyTargetRefusal( const wxString& aTarget, const WORKSPACE_WORKING_FILES& aWorkingFiles );
 
 #endif // WORKSPACE_ITEM_FILES_H

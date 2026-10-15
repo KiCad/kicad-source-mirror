@@ -48,6 +48,7 @@
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
 class MDW_SESSION;
+struct WORKSPACE_WORKING_FILES;
 class wxButton;
 class wxDataViewEvent;
 class wxStaticText;
@@ -319,6 +320,15 @@ private:
     /// True when the source's files are edited in place and committed rather than checked out and in.
     bool editsInPlace() const;
 
+    /// The files the user edits for aItem, which Save Copy must never replace.
+    WORKSPACE_WORKING_FILES workingFiles( const MDW_ITEM_INFO& aItem );
+
+    /**
+     * The working tree of the repository holding the project, or empty when none holds it. It is also empty until
+     * the first call's search off the UI thread answers, which then updates the shown item's working files.
+     */
+    wxString projectWorktree();
+
     GIT_ADVANCED_DIALOG*         m_dialog;
     EDA_BASE_FRAME*              m_frame;
     std::vector<MDW_ITEM_INFO>   m_items;
@@ -358,6 +368,9 @@ private:
     bool                       m_queryHasMore = false;
     std::weak_ptr<MDW_SOURCE>  m_querySource;
     int                        m_sashPos = 0; ///< In DIPs, so the tree keeps its width across a DPI change
+    std::optional<wxString>    m_worktree;    ///< From projectWorktree(), empty for no repository, unset until found
+    wxString                   m_worktreeFor; ///< The project folder m_worktree is found for
+    std::weak_ptr<MDW_SESSION> m_worktreeSession; ///< Runs the lookup for m_worktreeFor until it answers
 
     wxObjectDataPtr<WORKSPACE_TREE_MODEL> m_model;
     wxDataViewColumn*                     m_nameColumn = nullptr;

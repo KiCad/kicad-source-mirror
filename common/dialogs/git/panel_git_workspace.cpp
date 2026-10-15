@@ -34,6 +34,7 @@
 #include <kidialog.h>
 #include <kiway.h>
 #include <eda_base_frame.h>
+#include <git/project_git_utils.h>
 #include <launch_ext.h>
 #include <lib_id.h>
 #include <libraries/library_manager.h>
@@ -1111,9 +1112,7 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
         item.item_id = aItem.item_id;
 
         m_versions->SetItem( MDW_CLIENT::Get().ProjectSource(), item, m_frame->Prj().GetProjectDirectory(),
-                             WorkspaceWorkingFiles( m_frame->Prj().GetLocalSettings().WorkspaceItems(),
-                                                    m_frame->Prj().GetProjectPath(), aItem ),
-                             m_frame, wxString() );
+                             workingFiles( aItem ), m_frame, wxString() );
     }
     else
     {
@@ -1167,8 +1166,8 @@ void PANEL_GIT_WORKSPACE::showMemberDetail( const WORKSPACE_TREE_NODE& aNode )
     {
         std::shared_ptr<const MDW_LIBRARY_COPY> copy = MDW_LIBRARY_SOURCES::Get().SharedCopy( lib.marker );
 
-        m_versions->SetItem( lib.binding.source, selectedRef(), copy ? copy->local_root : wxString(), { memberFile() },
-                             m_frame, aNode.name );
+        m_versions->SetItem( lib.binding.source, selectedRef(), copy ? copy->local_root : wxString(),
+                             WORKSPACE_WORKING_FILES( memberFile() ), m_frame, aNode.name );
     }
     else
     {
@@ -2061,6 +2060,58 @@ void PANEL_GIT_WORKSPACE::SelectItem( const wxString& aItemId )
 
     // ChangeValue sends no event, and a running search must end with the box emptied
     onSearch();
+}
+
+
+WORKSPACE_WORKING_FILES PANEL_GIT_WORKSPACE::workingFiles( const MDW_ITEM_INFO& aItem )
+{
+    std::optional<wxString> worktree;
+
+    // Git names files from the repository root, and one outside the project is still edited in place there
+    if( editsInPlace() )
+        worktree = projectWorktree();
+
+    return WorkspaceWorkingFiles( m_frame->Prj().GetLocalSettings().WorkspaceItems(), m_frame->Prj().GetProjectPath(),
+                                  aItem, worktree );
+}
+
+
+wxString PANEL_GIT_WORKSPACE::projectWorktree()
+{
+    const wxString               projectDir = m_frame->Prj().GetProjectDirectory();
+    std::shared_ptr<MDW_SESSION> current = session();
+
+    // A replaced session's worker drops its queued lookup, so only an answer or a live lookup is waited on
+    if( projectDir == m_worktreeFor && ( m_worktree || ( current && m_worktreeSession.lock() == current ) ) )
+        return m_worktree.value_or( wxString() );
+
+    if( !current )
+        return wxString();
+
+    m_worktreeFor = projectDir;
+    m_worktree.reset();
+    m_worktreeSession = current;
+
+    // Found from disk, as Git integration can be off for a project whose Workspace stays bound. Off the UI thread,
+    // since an unavailable share can block, and a miss is kept so it is not probed again
+    current->RunAsync<wxString>(
+            this,
+            [projectDir]()
+            {
+                return KIGIT::PROJECT_GIT_UTILS::RepositoryWorkingFolder( projectDir );
+            },
+            [this, projectDir]( wxString aWorktree )
+            {
+                if( projectDir != m_worktreeFor )
+                    return;
+
+                m_worktree = aWorktree;
+
+                if( !m_member && !m_selected.IsEmpty() && m_selectedItem.item_id == m_selected )
+                    m_versions->SetWorkingFiles( m_selectedItem.item_id, workingFiles( m_selectedItem ) );
+            } );
+
+    return wxString();
 }
 
 

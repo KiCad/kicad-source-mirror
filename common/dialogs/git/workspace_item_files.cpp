@@ -25,12 +25,53 @@
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 
+#include <wx/arrstr.h>
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/intl.h>
 
 #include <algorithm>
 #include <filesystem>
+
+
+namespace
+{
+
+/// aItemId, a path from the root of the working tree aWorktree, as a local path. Each part is taken as written, so a
+/// backslash in a POSIX name stays in the name. Empty without a tree or for an id that would leave it
+wxString worktreePath( const wxString& aWorktree, const wxString& aItemId )
+{
+    if( aWorktree.IsEmpty() || aItemId.IsEmpty() || aItemId.StartsWith( wxS( "/" ) ) )
+        return wxString();
+
+#ifdef __WINDOWS__
+    // A separator here, so the name would reach another file
+    if( aItemId.Contains( wxS( "\\" ) ) )
+        return wxString();
+#endif
+
+    wxFileName     file = wxFileName::DirName( aWorktree );
+    wxArrayString  parts = wxSplit( aItemId, '/', '\0' );
+    const wxString name = parts.Last();
+
+    if( name.IsEmpty() || name == wxS( "." ) || name == wxS( ".." ) || name.Contains( wxS( ":" ) ) )
+        return wxString();
+
+    parts.RemoveAt( parts.size() - 1 );
+
+    for( const wxString& part : parts )
+    {
+        if( part.IsEmpty() || part == wxS( "." ) || part == wxS( ".." ) || part.Contains( wxS( ":" ) ) )
+            return wxString();
+
+        file.AppendDir( part );
+    }
+
+    file.SetFullName( name );
+    return file.GetFullPath();
+}
+
+} // namespace
 
 
 wxString WorkspaceCheckoutPath( const wxString& aProjectDir, const MDW_ITEM_INFO& aItem )
@@ -77,20 +118,53 @@ wxString WorkspaceCheckinPath( const std::map<wxString, wxString>& aRecorded, co
 }
 
 
-std::vector<wxString> WorkspaceWorkingFiles( const std::map<wxString, wxString>& aRecorded,
-                                             const wxString& aProjectDir, const MDW_ITEM_INFO& aItem )
+WORKSPACE_WORKING_FILES::WORKSPACE_WORKING_FILES( const wxString& aEdited ) :
+        edited( aEdited )
 {
-    const wxString checkout = WorkspaceCheckoutPath( aProjectDir, aItem );
-    const wxString checkin = WorkspaceCheckinPath( aRecorded, aProjectDir, aItem );
+}
 
+
+std::vector<wxString> WORKSPACE_WORKING_FILES::All() const
+{
     std::vector<wxString> files;
 
-    if( !checkin.IsEmpty() )
-        files.push_back( checkin );
+    if( !edited.IsEmpty() )
+        files.push_back( edited );
 
-    if( !checkout.IsEmpty() && checkout != checkin )
-        files.push_back( checkout );
+    files.insert( files.end(), others.begin(), others.end() );
+    return files;
+}
 
+
+WORKSPACE_WORKING_FILES WorkspaceWorkingFiles( const std::map<wxString, wxString>& aRecorded,
+                                               const wxString& aProjectDir, const MDW_ITEM_INFO& aItem,
+                                               const std::optional<wxString>& aWorktree )
+{
+    const wxString checkout = WorkspaceCheckoutPath( aProjectDir, aItem );
+
+    WORKSPACE_WORKING_FILES files( WorkspaceCheckinPath( aRecorded, aProjectDir, aItem ) );
+
+    if( files.edited.IsEmpty() )
+        files.edited = checkout;
+    else if( !checkout.IsEmpty() && checkout != files.edited )
+        files.others.push_back( checkout );
+
+    const wxString              tracked = worktreePath( aWorktree.value_or( wxString() ), aItem.item_id );
+    const std::vector<wxString> known = files.All();
+
+    // A repository file outside the project has no checkout path, and the project's read of changes leaves it out
+    if( !tracked.IsEmpty()
+        && std::ranges::none_of( known,
+                                 [&]( const wxString& aFile )
+                                 {
+                                     return wxFileName( aFile ).SameAs( wxFileName( tracked ) );
+                                 } ) )
+    {
+        files.others.push_back( tracked );
+    }
+
+    // A recorded checkout elsewhere is still not the repository file the user may edit in place
+    files.unresolved = aWorktree && tracked.IsEmpty() && checkout.IsEmpty();
     return files;
 }
 
@@ -249,14 +323,26 @@ wxString MdwRevisionCopyName( const wxString& aFileName, const wxString& aMember
 }
 
 
-wxString MdwCopyTargetRefusal( const wxString& aTarget, const std::vector<wxString>& aWorkingFiles )
+wxString MdwCopyTargetRefusal( const wxString& aTarget, const WORKSPACE_WORKING_FILES& aWorkingFiles )
 {
     namespace fs = std::filesystem;
 
     const fs::path target = ToFsPath( aTarget );
     const wxString unknown = _( "Could not check whether that is your working file. Choose another file." );
 
-    for( const wxString& working : aWorkingFiles )
+    if( aWorkingFiles.unresolved )
+    {
+        std::error_code ec;
+        const bool      targetExists = fs::exists( target, ec );
+
+        if( ec )
+            return unknown;
+
+        if( targetExists )
+            return _( "Could not find your working file, so Save Copy replaces no file. Choose a new name." );
+    }
+
+    for( const wxString& working : aWorkingFiles.All() )
     {
         if( working.IsEmpty() )
             continue;

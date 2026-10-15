@@ -363,6 +363,18 @@ static wxString canonicalDir( const wxString& aPath )
 }
 
 
+wxString PROJECT_GIT_UTILS::RepositoryWorkingFolder( const wxString& aProjectDir )
+{
+    GitRepositoryPtr repo( GetRepositoryForFile( aProjectDir.utf8_str() ) );
+    const char*      workdir = repo ? git_repository_workdir( repo.get() ) : nullptr;
+
+    if( !workdir )
+        return wxString();
+
+    return ComputeSymlinkPreservingWorkDir( aProjectDir, wxString::FromUTF8( workdir ) );
+}
+
+
 wxString PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( const wxString& aUserProjectPath,
                                                              const wxString& aCanonicalWorkDir )
 {
