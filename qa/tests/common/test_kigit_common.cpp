@@ -1941,6 +1941,16 @@ BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsFindsAFilteredFile )
     BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo/proj" ) ).ToStdString(), "proj/" );
     BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo" ) ).IsEmpty() );
     BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/other/proj" ) ).IsEmpty() );
+
+#ifdef __WINDOWS__
+    // The working directory comes from libgit2 and the project path from KiCad, so the two
+    // can disagree about separators and about case. Windows does not care about either.
+    BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "C:\\repo" ), wxS( "C:/repo/proj" ) ).ToStdString(),
+                       "proj/" );
+    BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "c:\\Repo\\" ), wxS( "C:\\repo\\Proj" ) ).ToStdString(),
+                       "Proj/" );
+    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "C:\\repo" ), wxS( "D:\\repo\\proj" ) ).IsEmpty() );
+#endif
 }
 
 
