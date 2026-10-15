@@ -44,6 +44,64 @@ DATABASE_FIELD_MAPPING::DATABASE_FIELD_MAPPING( const std::string& aColumn, cons
 }
 
 
+DATABASE_FIELD_MAPPING DATABASE_LIB_SETTINGS::fieldFromJson( const nlohmann::json& aEntry )
+{
+    return DATABASE_FIELD_MAPPING( fetchOrDefault<std::string>( aEntry, "column" ),
+                                   fetchOrDefault<std::string>( aEntry, "name" ),
+                                   fetchOrDefault<bool>( aEntry, "visible_on_add" ),
+                                   fetchOrDefault<bool>( aEntry, "visible_in_chooser" ),
+                                   fetchOrDefault<bool>( aEntry, "show_name" ),
+                                   fetchOrDefault<bool>( aEntry, "inherit_properties" ) );
+}
+
+
+DATABASE_LIB_TABLE DATABASE_LIB_SETTINGS::tableFromJson( const nlohmann::json& aEntry )
+{
+    DATABASE_LIB_TABLE table;
+
+    table.name           = fetchOrDefault<std::string>( aEntry, "name" );
+    table.table          = fetchOrDefault<std::string>( aEntry, "table" );
+    table.key_col        = fetchOrDefault<std::string>( aEntry, "key" );
+    table.symbols_col    = fetchOrDefault<std::string>( aEntry, "symbols" );
+    table.footprints_col = fetchOrDefault<std::string>( aEntry, "footprints" );
+    table.pins_col       = fetchOrDefault<std::string>( aEntry, "pins" );
+
+    // Sanitize library display names; currently only `/` is removed because we
+    // use it as a separator and allow it in symbol names.
+    std::erase( table.name, '/' );
+
+    if( aEntry.contains( "properties" ) && aEntry["properties"].is_object() )
+    {
+        const nlohmann::json& propJson = aEntry["properties"];
+
+        table.properties.description = fetchOrDefault<std::string>( propJson, "description" );
+
+        table.properties.footprint_filters = fetchOrDefault<std::string>( propJson, "footprint_filters" );
+
+        table.properties.keywords = fetchOrDefault<std::string>( propJson, "keywords" );
+
+        table.properties.exclude_from_bom = fetchOrDefault<std::string>( propJson, "exclude_from_bom" );
+
+        table.properties.exclude_from_board = fetchOrDefault<std::string>( propJson, "exclude_from_board" );
+
+        table.properties.exclude_from_sim = fetchOrDefault<std::string>( propJson, "exclude_from_sim" );
+    }
+
+    if( aEntry.contains( "fields" ) && aEntry["fields"].is_array() )
+    {
+        for( const nlohmann::json& fieldJson : aEntry["fields"] )
+        {
+            if( fieldJson.empty() || !fieldJson.is_object() )
+                continue;
+
+            table.fields.emplace_back( fieldFromJson( fieldJson ) );
+        }
+    }
+
+    return table;
+}
+
+
 DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::NONE, dblibSchemaVersion )
 {
@@ -79,60 +137,7 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                     if( entry.empty() || !entry.is_object() )
                         continue;
 
-                    DATABASE_LIB_TABLE table;
-
-                    table.name           = entry["name"].get<std::string>();
-                    table.table          = entry["table"].get<std::string>();
-                    table.key_col        = entry["key"].get<std::string>();
-                    table.symbols_col    = entry["symbols"].get<std::string>();
-                    table.footprints_col = entry["footprints"].get<std::string>();
-                    table.pins_col = fetchOrDefault<std::string>( entry, "pins" );
-
-                    // Sanitize library display names; currently only `/` is removed because we
-                    // use it as a separator and allow it in symbol names.
-                    std::erase( table.name, '/' );
-
-                    if( entry.contains( "properties" ) && entry["properties"].is_object() )
-                    {
-                        const nlohmann::json& propJson = entry["properties"];
-
-                        table.properties.description =
-                                    fetchOrDefault<std::string>( propJson, "description" );
-
-                        table.properties.footprint_filters =
-                                    fetchOrDefault<std::string>( propJson, "footprint_filters" );
-
-                        table.properties.keywords =
-                                    fetchOrDefault<std::string>( propJson, "keywords" );
-
-                        table.properties.exclude_from_bom =
-                                    fetchOrDefault<std::string>( propJson, "exclude_from_bom" );
-
-                        table.properties.exclude_from_board =
-                                    fetchOrDefault<std::string>( propJson, "exclude_from_board" );
-
-                        table.properties.exclude_from_sim =
-                                    fetchOrDefault<std::string>( propJson, "exclude_from_sim" );
-                    }
-
-                    if( entry.contains( "fields" ) && entry["fields"].is_array() )
-                    {
-                        for( const nlohmann::json& fieldJson : entry["fields"] )
-                        {
-                            if( fieldJson.empty() || !fieldJson.is_object() )
-                                continue;
-
-                            table.fields.emplace_back( DATABASE_FIELD_MAPPING(
-                                    fetchOrDefault<std::string>( fieldJson, "column" ),
-                                    fetchOrDefault<std::string>( fieldJson, "name" ),
-                                    fetchOrDefault<bool>( fieldJson, "visible_on_add" ),
-                                    fetchOrDefault<bool>( fieldJson, "visible_in_chooser" ),
-                                    fetchOrDefault<bool>( fieldJson, "show_name" ),
-                                    fetchOrDefault<bool>( fieldJson, "inherit_properties" ) ) );
-                        }
-                    }
-
-                    m_Tables.emplace_back( std::move( table ) );
+                    m_Tables.emplace_back( tableFromJson( entry ) );
                 }
             },
             {} ) );

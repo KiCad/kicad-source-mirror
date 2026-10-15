@@ -124,6 +124,10 @@ protected:
     wxString getFileExt() const override;
 
 private:
+    /// Missing or mistyped keys load as defaults so one incomplete entry cannot stop the others
+    static DATABASE_LIB_TABLE tableFromJson( const nlohmann::json& aEntry );
+    static DATABASE_FIELD_MAPPING fieldFromJson( const nlohmann::json& aEntry );
+
     nlohmann::json m_librariesConfig;
 };
 
