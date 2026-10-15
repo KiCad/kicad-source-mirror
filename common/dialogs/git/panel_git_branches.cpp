@@ -306,7 +306,7 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -379,7 +379,7 @@ void PANEL_GIT_BRANCHES::onForcePush()
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -452,8 +452,7 @@ void PANEL_GIT_BRANCHES::onForcePush()
 
                             if( result == PushResult::Busy )
                             {
-                                DisplayInfoMessage( this, _( "Another git operation is in progress. "
-                                                             "Try again in a moment." ) );
+                                DisplayInfoMessage( this, KIGIT::BusyMessage() );
                                 return;
                             }
 

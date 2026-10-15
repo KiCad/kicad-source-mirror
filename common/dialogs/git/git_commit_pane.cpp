@@ -675,7 +675,7 @@ void GIT_COMMIT_PANE::setAuthor()
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -691,7 +691,7 @@ void GIT_COMMIT_PANE::setAuthor()
 
     if( !lock.owns_lock() )
     {
-        DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+        DisplayInfoMessage( this, KIGIT::BusyMessage() );
         return;
     }
 
@@ -1106,7 +1106,7 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
 
     if( !lock.owns_lock() )
     {
-        setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+        setBusy( false, KIGIT::BusyMessage() );
         return;
     }
 
@@ -1172,7 +1172,7 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
 
     if( !lock.owns_lock() )
     {
-        setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+        setBusy( false, KIGIT::BusyMessage() );
         return;
     }
 
@@ -1290,9 +1290,9 @@ bool GIT_COMMIT_PANE::transferCanStart()
     // The panel disables its own buttons for this, but the advanced window's reach here too.
     if( m_headDetached )
     {
-        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, so there "
-                                     "is nothing to send or receive. In the Advanced Git window, choose "
-                                     "Branches and double click a branch to go back to it." ) );
+        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, so it cannot be "
+                                     "committed or pushed from here. In the Advanced Git window, choose Branches "
+                                     "and double click a branch to go back to it." ) );
         return false;
     }
 
@@ -1320,7 +1320,7 @@ void GIT_COMMIT_PANE::Pull()
 
         if( !probe.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
     }
@@ -1360,7 +1360,7 @@ void GIT_COMMIT_PANE::Push()
 
         if( !probe.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
     }
@@ -1387,7 +1387,7 @@ void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
 
         if( !probe.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1424,7 +1424,7 @@ void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
 
         if( !lock.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1502,7 +1502,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
             if( !probe.owns_lock() )
             {
-                setBusy( false, _( "Another git operation is in progress." ) );
+                setBusy( false, KIGIT::BusyMessage() );
                 return;
             }
         }
@@ -1588,7 +1588,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
         if( !lock.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1709,7 +1709,7 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
 
         if( !lock.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1778,7 +1778,7 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     // it as one.
     if( result == PushResult::Busy )
     {
-        setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+        setBusy( false, KIGIT::BusyMessage() );
         return;
     }
 
@@ -1814,7 +1814,7 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
             if( !lock.owns_lock() )
             {
-                setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+                setBusy( false, KIGIT::BusyMessage() );
                 return;
             }
 
@@ -1891,7 +1891,7 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
     // is released. Holding it here would stall every other git surface until the box is closed.
     if( prepareBusy )
     {
-        setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+        setBusy( false, KIGIT::BusyMessage() );
         return;
     }
 
@@ -2161,7 +2161,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
     bool                  dirty = anyEditorDirty();
     std::vector<wxString> outside;
-    wxString              lfsExample;
+    wxString              lfsMessage;
 
     if( !dirty )
     {
@@ -2169,15 +2169,13 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
         if( !lock.owns_lock() )
         {
-            setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+            setBusy( false, KIGIT::BusyMessage() );
             return;
         }
 
         dirty = aCommon->HasUncommittedTrackedChanges();
 
-        wxString prefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( aCommon->GetProjectDir(),
-                                                                   m_frame->Prj().GetProjectPath() );
-        KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( aCommon->GetRepo(), prefix, &lfsExample );
+        lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( aCommon.get(), m_frame->Prj() );
 
         // The list shows this project only. A change elsewhere in the repository blocks the
         // merge just the same, and has to be named or the user is asked to commit nothing.
@@ -2185,13 +2183,10 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
             outside = ChangedTrackedFilesOutsideProject( m_frame->Prj() );
     }
 
-    if( !lfsExample.IsEmpty() )
+    if( !lfsMessage.IsEmpty() )
     {
         setBusy( false, _( "This project uses Git LFS." ) );
-        DisplayErrorMessage( this, wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad "
-                                                        "cannot read or write. Use git on the command line "
-                                                        "for this repository." ),
-                                                     lfsExample ) );
+        DisplayErrorMessage( this, lfsMessage );
         return;
     }
 

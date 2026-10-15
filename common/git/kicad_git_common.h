@@ -736,6 +736,10 @@ APIEXPORT wxString ComposeCommitMessage( const wxString& aSummary, const wxStrin
 /// Split a commit message into its first line and the description after the first blank line.
 APIEXPORT void SplitCommitMessage( const wxString& aMessage, wxString& aSummary, wxString& aDescription );
 
+/// What every caller says when it finds the session already busy. One wording, so the same
+/// condition does not reach the user in three different sentences.
+APIEXPORT wxString BusyMessage();
+
 } // namespace KIGIT
 
 

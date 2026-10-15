@@ -1888,7 +1888,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1929,7 +1929,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1987,7 +1987,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
 
             if( !branchLock.owns_lock() )
             {
-                DisplayInfoMessage( m_parent, _( "Another git operation is in progress. Try again in a moment." ) );
+                DisplayInfoMessage( m_parent, KIGIT::BusyMessage() );
                 return;
             }
 
@@ -2011,7 +2011,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
 
         if( !dirtyLock.owns_lock() )
         {
-            DisplayInfoMessage( m_parent, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( m_parent, KIGIT::BusyMessage() );
             return;
         }
 
@@ -2040,7 +2040,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
 
     if( !lock.owns_lock() )
     {
-        DisplayInfoMessage( m_parent, _( "Another git operation is in progress. Try again in a moment." ) );
+        DisplayInfoMessage( m_parent, KIGIT::BusyMessage() );
         return;
     }
 

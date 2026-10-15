@@ -2644,6 +2644,12 @@ void CollectDiffDeltas( git_diff*                                           aDif
 }
 
 
+wxString BusyMessage()
+{
+    return _( "Another git operation is in progress. Try again in a moment." );
+}
+
+
 wxString ComposeCommitMessage( const wxString& aSummary, const wxString& aDescription, const wxString& aSignOff )
 {
     wxString message = aSummary;

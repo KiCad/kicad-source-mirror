@@ -941,7 +941,7 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -1019,32 +1019,27 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
     }
 
     bool     detached = false;
-    wxString lfsExample;
+    wxString lfsMessage;
 
     {
         std::unique_lock<std::mutex> lock = common->TryLockAction();
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
         detached = common->IsHeadDetached();
 
-        wxString prefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( common->GetProjectDir(),
-                                                                   m_frame->Prj().GetProjectPath() );
-        KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( common->GetRepo(), prefix, &lfsExample );
+        lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( common.get(), m_frame->Prj() );
     }
 
     // A restore writes the committed version over the files on disk, and for an LFS file that
     // is the placeholder rather than the design.
-    if( !lfsExample.IsEmpty() )
+    if( !lfsMessage.IsEmpty() )
     {
-        DisplayErrorMessage( this, wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad "
-                                                        "cannot read or write. Use git on the command line "
-                                                        "for this repository." ),
-                                                     lfsExample ) );
+        DisplayErrorMessage( this, lfsMessage );
         return;
     }
 
@@ -1120,7 +1115,7 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 

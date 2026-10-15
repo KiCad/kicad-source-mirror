@@ -362,7 +362,7 @@ void PANEL_GIT_STASHES::onStashSave()
 
     if( busy )
     {
-        DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+        DisplayInfoMessage( this, KIGIT::BusyMessage() );
         return;
     }
 

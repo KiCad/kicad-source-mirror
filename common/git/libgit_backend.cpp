@@ -979,7 +979,7 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     if( git_repository_head( &head, aHandler->GetRepo() ) != 0 )
     {
         git_remote_disconnect( remote );
-        aHandler->AddErrorString( _( "Could not get repository head" ) );
+        aHandler->AddErrorString( _( "Could not get the repository head." ) );
         return PushResult::Error;
     }
 
@@ -1566,7 +1566,7 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
         if( !lock.owns_lock() )
         {
             wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Could not lock mutex" );
-            aHandler->AddErrorString( _( "Another git operation is in progress." ) );
+            aHandler->AddErrorString( KIGIT::BusyMessage() );
             return false;
         }
     }
@@ -1786,7 +1786,7 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 
     if( branchRefName.empty() )
     {
-        aHandler->AddErrorString( _( "Could not get repository head" ) );
+        aHandler->AddErrorString( _( "Could not get the repository head." ) );
         return PullResult::Error;
     }
 
@@ -1876,7 +1876,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
     if( !lock.owns_lock() )
     {
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Could not lock mutex" );
-        aHandler->AddErrorString( _( "Another git operation is in progress." ) );
+        aHandler->AddErrorString( KIGIT::BusyMessage() );
         return PullResult::Error;
     }
 
@@ -2034,7 +2034,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( git_repository_head( &rawRef, aHandler->GetRepo() ) )
     {
-        aHandler->AddErrorString( _( "Could not get repository head" ) );
+        aHandler->AddErrorString( _( "Could not get the repository head." ) );
         return PullResult::Error;
     }
 
@@ -2891,7 +2891,7 @@ bool remergeInMemory( git_repository* aRepo, const wxString& aPinnedTheirsOid, K
 
     if( git_reference_name_to_id( &oursOid, aRepo, "HEAD" ) != GIT_OK )
     {
-        aError = _( "Could not read the repository head." );
+        aError = _( "Could not get the repository head." );
         return false;
     }
 

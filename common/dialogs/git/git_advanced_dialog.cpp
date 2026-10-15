@@ -497,7 +497,7 @@ void GIT_ADVANCED_DIALOG::onFetch()
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 
@@ -506,7 +506,7 @@ void GIT_ADVANCED_DIALOG::onFetch()
 
     if( !hasRemote )
     {
-        DisplayInfoMessage( this, _( "No remote is configured to fetch from." ) );
+        DisplayInfoMessage( this, _( "No remote is configured to get changes from." ) );
         return;
     }
 
@@ -620,7 +620,7 @@ void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON& 
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
         }
 

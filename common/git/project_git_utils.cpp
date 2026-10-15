@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <project.h>
 #include <text_eval/text_eval_environment.h>
 #include "project_git_utils.h"
 #include "git_backend.h"
@@ -351,6 +352,23 @@ namespace
     }
 
 } // namespace
+
+
+wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon, PROJECT& aProject )
+{
+    if( !aCommon || !aCommon->GetRepo() )
+        return wxEmptyString;
+
+    wxString prefix = ProjectPrefix( aCommon->GetProjectDir(), aProject.GetProjectPath() );
+    wxString example;
+
+    if( !ProjectUsesGitLfs( aCommon->GetRepo(), prefix, &example ) )
+        return wxEmptyString;
+
+    return wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad cannot read or "
+                                "write. Use git on the command line for this repository." ),
+                             example );
+}
 
 
 bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( git_repository* aRepo, const wxString& aProjectPrefix, wxString* aExample )

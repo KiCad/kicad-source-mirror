@@ -114,8 +114,7 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
 
     if( !lock.owns_lock() )
     {
-        wxMessageBox( _( "Another git operation is in progress. Try again in a moment." ), _( "Compare Branches" ),
-                      wxOK | wxICON_INFORMATION, this );
+        wxMessageBox( KIGIT::BusyMessage(), _( "Compare Branches" ), wxOK | wxICON_INFORMATION, this );
         return;
     }
 
@@ -226,8 +225,7 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
 
     if( !lock.owns_lock() )
     {
-        wxMessageBox( _( "Another git operation is in progress. Try again in a moment." ), _( "Compare File" ),
-                      wxOK | wxICON_INFORMATION, this );
+        wxMessageBox( KIGIT::BusyMessage(), _( "Compare File" ), wxOK | wxICON_INFORMATION, this );
         return;
     }
 

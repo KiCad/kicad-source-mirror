@@ -28,6 +28,7 @@
 #include <import_export.h>
 
 class KIGIT_COMMON;
+class PROJECT;
 
 namespace KIGIT
 {
@@ -157,6 +158,14 @@ public:
      */
     static bool ProjectUsesGitLfs( git_repository* aRepo, const wxString& aProjectPrefix,
                                    wxString* aExample = nullptr );
+
+    /**
+     * The message to show when this project keeps a file in Git LFS, empty when it does not.
+     *
+     * Three callers refuse the same way, so the scope, the scan and the wording live here
+     * rather than three times over.
+     */
+    static wxString LfsRefusal( KIGIT_COMMON* aCommon, PROJECT& aProject );
 
     /**
      * Write a file as it exists at a git ref to a path on disk, so a committed version can

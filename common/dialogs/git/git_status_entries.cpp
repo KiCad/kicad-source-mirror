@@ -411,7 +411,7 @@ bool ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent )
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( aParent, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( aParent, KIGIT::BusyMessage() );
             return false;
         }
 
@@ -444,7 +444,7 @@ bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( aParent, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( aParent, KIGIT::BusyMessage() );
             return false;
         }
 
@@ -479,7 +479,7 @@ bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( aParent, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( aParent, KIGIT::BusyMessage() );
             return false;
         }
 
@@ -580,7 +580,7 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( PROJECT& aProject )
 
 bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose )
 {
-    wxString lfsExample;
+    wxString lfsMessage;
 
     if( std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon() )
     {
@@ -588,24 +588,19 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
+            DisplayInfoMessage( aFrame, KIGIT::BusyMessage() );
             return false;
         }
 
         if( common->GetRepo() )
         {
-            wxString prefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( common->GetProjectDir(),
-                                                                       aFrame->Prj().GetProjectPath() );
-            KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( common->GetRepo(), prefix, &lfsExample );
+            lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( common.get(), aFrame->Prj() );
         }
     }
 
-    if( !lfsExample.IsEmpty() )
+    if( !lfsMessage.IsEmpty() )
     {
-        DisplayErrorMessage( aFrame, wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad "
-                                                          "cannot read or write. Use git on the command line "
-                                                          "for this repository." ),
-                                                       lfsExample ) );
+        DisplayErrorMessage( aFrame, lfsMessage );
         return false;
     }
 
@@ -869,7 +864,7 @@ bool MaterializeWorkingFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorksp
 
         if( !lock.owns_lock() )
         {
-            aSides.error = _( "Another git operation is in progress. Try again in a moment." );
+            aSides.error = KIGIT::BusyMessage();
             return false;
         }
 
@@ -956,7 +951,7 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
 
     if( busy )
     {
-        DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
+        DisplayInfoMessage( aFrame, KIGIT::BusyMessage() );
         return;
     }
 
@@ -1015,7 +1010,7 @@ bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspa
 
     if( !lock.owns_lock() )
     {
-        aSides.error = _( "Another git operation is in progress. Try again in a moment." );
+        aSides.error = KIGIT::BusyMessage();
         return false;
     }
 
