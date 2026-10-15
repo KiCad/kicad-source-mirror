@@ -399,18 +399,19 @@ std::vector<PROPERTY_BASE*> FOOTPRINT::GetDynamicProperties() const
     const BOARD* board = GetBoard();
     bool isFPedit = board && board->IsFootprintHolder();
 
-    auto getOrCreate = [&]( const wxString& aName )
-    {
-        auto it = m_dynamicPropertyCache.find( aName );
+    auto getOrCreate =
+            [&]( const wxString& aName )
+            {
+                auto it = m_fieldPropsStorageCache.find( aName );
 
-        if( it == m_dynamicPropertyCache.end() )
-        {
-            auto prop = std::make_unique<PCB_FOOTPRINT_FIELD_PROPERTY>( aName );
-            it = m_dynamicPropertyCache.emplace( aName, std::move( prop ) ).first;
-        }
+                if( it == m_fieldPropsStorageCache.end() )
+                {
+                    auto prop = std::make_unique<PCB_FOOTPRINT_FIELD_PROPERTY>( aName );
+                    it = m_fieldPropsStorageCache.emplace( aName, std::move( prop ) ).first;
+                }
 
-        return it->second.get();
-    };
+                return it->second.get();
+            };
 
     for( PCB_FIELD* field : GetFields() )
     {

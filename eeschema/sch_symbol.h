@@ -53,6 +53,8 @@ class LEGACY_SYMBOL_LIBS;
 class SCH_SCREEN;
 class SCH_COMMIT;
 class SCH_SHAPE;
+class SCH_SYMBOL_FIELD_PROPERTY;
+
 
 namespace kiapi::schematic::types
 {
@@ -1139,10 +1141,13 @@ private:
 
     std::vector<SCH_FIELD>                 m_fields;        ///< Variable length list of fields.
 
-    /// Per-object cache of dynamic property descriptors for custom fields and
-    /// effective pin-map entries, keyed by descriptor name and populated
-    /// lazily.
-    mutable std::map<wxString, std::unique_ptr<PROPERTY_BASE>> m_dynamicPropertyCache;
+    /// Per-object cache of dynamic property descriptors for custom fields, keyed by descriptor name
+    /// and populated lazily.  Entries linger after a key is removed but are simply not enumerated.
+    mutable std::map<wxString, std::unique_ptr<SCH_SYMBOL_FIELD_PROPERTY>> m_fieldPropsStorageCache;
+
+    /// Same for effective pin-map entries.  We can't combine these because they're indexed by name
+    /// and could have collisions.  Entries linger after a key is removed but are simply not enumerated.
+    mutable std::map<wxString, std::unique_ptr<PROPERTY_BASE>> m_pinMapPropsStorageCache;
 
     std::unique_ptr<LIB_SYMBOL>            m_part;          ///< A flattened copy of the #LIB_SYMBOL from the
                                                             ///< #PROJECT object's libraries.

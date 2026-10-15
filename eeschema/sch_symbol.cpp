@@ -717,13 +717,27 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties( const SCH_SHEET_PA
 {
     std::vector<PROPERTY_BASE*> props;
 
-    auto getOrCreate =
-            [&]( const wxString& aName, std::unique_ptr<PROPERTY_BASE> aProp )
+    auto getOrCreateFieldProperty =
+            [&]( const wxString& aName )
             {
-                auto it = m_dynamicPropertyCache.find( aName );
+                auto it = m_fieldPropsStorageCache.find( aName );
 
-                if( it == m_dynamicPropertyCache.end() )
-                    it = m_dynamicPropertyCache.emplace( aName, std::move( aProp ) ).first;
+                if( it == m_fieldPropsStorageCache.end() )
+                {
+                    auto prop = std::make_unique<SCH_SYMBOL_FIELD_PROPERTY>( aName );
+                    it = m_fieldPropsStorageCache.emplace( aName, std::move( prop ) ).first;
+                }
+
+                return it->second.get();
+            };
+
+    auto getOrCreatePinMapProperty =
+            [&]( const wxString& aName, const std::function<std::unique_ptr<PROPERTY_BASE>()>& aCreator )
+            {
+                auto it = m_pinMapPropsStorageCache.find( aName );
+
+                if( it == m_pinMapPropsStorageCache.end() )
+                    it = m_pinMapPropsStorageCache.emplace( aName, aCreator() ).first;
 
                 return it->second.get();
             };
@@ -741,7 +755,7 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties( const SCH_SHEET_PA
         if( PROPERTY_MANAGER::Instance().GetProperty( TYPE_HASH( SCH_SYMBOL ), name ) )
             continue;
 
-        props.push_back( getOrCreate( name, std::make_unique<SCH_SYMBOL_FIELD_PROPERTY>( name ) ) );
+        props.push_back( getOrCreateFieldProperty( name ) );
     }
 
     std::vector<const SCH_FIELD*> userFields;
@@ -763,7 +777,7 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties( const SCH_SHEET_PA
     for( const SCH_FIELD* field : userFields )
     {
         const wxString& name = field->GetUntranslatedName();
-        props.push_back( getOrCreate( name, std::make_unique<SCH_SYMBOL_FIELD_PROPERTY>( name ) ) );
+        props.push_back( getOrCreateFieldProperty( name ) );
     }
 
     for( PROPERTY_BASE* prop : GetCustomPropertiesAsInspectables() )
@@ -772,10 +786,21 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties( const SCH_SHEET_PA
     // Pin Map group: only meaningful when the symbol carries at least one effective associated footprint.
     if( HasEffectiveAssociatedFootprint() )
     {
-        props.push_back(
-                getOrCreate( PIN_MAP_FOOTPRINT_PROP, std::make_unique<SCH_SYMBOL_PIN_MAP_FOOTPRINT_PROPERTY>() ) );
-        props.push_back( getOrCreate( PIN_MAP_MODE_PROP, std::make_unique<SCH_SYMBOL_PIN_MAP_MODE_PROPERTY>() ) );
-        props.push_back( getOrCreate( PIN_MAP_NAME_PROP, std::make_unique<SCH_SYMBOL_PIN_MAP_NAME_PROPERTY>() ) );
+        props.push_back( getOrCreatePinMapProperty( PIN_MAP_FOOTPRINT_PROP,
+                []()
+                {
+                    return std::make_unique<SCH_SYMBOL_PIN_MAP_FOOTPRINT_PROPERTY>();
+                } ) );
+        props.push_back( getOrCreatePinMapProperty( PIN_MAP_MODE_PROP,
+                []()
+                {
+                    return std::make_unique<SCH_SYMBOL_PIN_MAP_MODE_PROPERTY>();
+                } ) );
+        props.push_back( getOrCreatePinMapProperty( PIN_MAP_NAME_PROP,
+                []()
+                {
+                    return std::make_unique<SCH_SYMBOL_PIN_MAP_NAME_PROPERTY>();
+                } ) );
 
         // One read-only row per symbol pin under a collapsible group, showing
         // the effective pad each pin resolves to.
@@ -790,8 +815,11 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties( const SCH_SHEET_PA
 
                     const wxString propName = PIN_MAP_ENTRY_PREFIX + number;
 
-                    props.push_back( getOrCreate(
-                            propName, std::make_unique<SCH_SYMBOL_PIN_MAP_ENTRY_PROPERTY>( propName, number ) ) );
+                    props.push_back( getOrCreatePinMapProperty( propName,
+                            [&]()
+                            {
+                                return std::make_unique<SCH_SYMBOL_PIN_MAP_ENTRY_PROPERTY>( propName, number );
+                            } ) );
                 }
             }
         }

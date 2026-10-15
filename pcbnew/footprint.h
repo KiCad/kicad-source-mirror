@@ -1501,7 +1501,9 @@ private:
     mutable std::mutex                                     m_geometry_cache_mutex;
     mutable std::unique_ptr<FOOTPRINT_GEOMETRY_CACHE_DATA> m_geometry_cache;
 
-    mutable std::map<wxString, std::unique_ptr<PCB_FOOTPRINT_FIELD_PROPERTY>> m_dynamicPropertyCache;
+    /// Per-object cache of dynamic property descriptors for custom fields, keyed by descriptor name
+    /// and populated lazily.  Entries linger after a key is removed but are simply not enumerated.
+    mutable std::map<wxString, std::unique_ptr<PCB_FOOTPRINT_FIELD_PROPERTY>> m_fieldPropsStorageCache;
 
     // A list of pad groups, each of which is allowed to short nets within their group.
     // A pad group is a comma-separated list of pad numbers.

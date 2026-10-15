@@ -161,7 +161,7 @@ void EDA_ITEM::SetParent( EDA_ITEM* aParent )
 void EDA_ITEM::RemoveCustomProperty( const wxString& aKey )
 {
     m_customProperties.erase( aKey );
-    m_dynamicCustomPropsCache.erase( aKey );
+    m_customPropsStorageCache.erase( aKey );
 }
 
 
@@ -208,12 +208,12 @@ std::vector<PROPERTY_BASE*> EDA_ITEM::GetCustomPropertiesAsInspectables() const
     {
         (void) value;
 
-        auto it = m_dynamicCustomPropsCache.find( key );
+        auto it = m_customPropsStorageCache.find( key );
 
-        if( it == m_dynamicCustomPropsCache.end() )
+        if( it == m_customPropsStorageCache.end() )
         {
-            it = m_dynamicCustomPropsCache.emplace(
-                    key, std::make_unique<EDA_CUSTOM_PROPERTY>( key, ownerHash ) ).first;
+            auto prop = std::make_unique<EDA_CUSTOM_PROPERTY>( key, ownerHash );
+            it = m_customPropsStorageCache.emplace( key, std::move( prop ) ).first;
         }
 
         props.push_back( it->second.get() );
