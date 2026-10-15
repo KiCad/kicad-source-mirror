@@ -313,6 +313,68 @@ public:
         return true;
     }
 
+    /**
+     * Fetch all footprints and deserialize the one whose reference designator matches aReference.
+     * Returns false (with @a m_lastError set) if not found or on a transport failure.
+     */
+    bool GetFootprintByReference( const kiapi::common::types::DocumentSpecifier& aDocument, const wxString& aReference,
+                                  FOOTPRINT* aFootprint )
+    {
+        wxCHECK( aFootprint, false );
+
+        kiapi::common::commands::GetItems request;
+        *request.mutable_header()->mutable_document() = aDocument;
+        request.add_types( kiapi::common::types::KOT_PCB_FOOTPRINT );
+
+        kiapi::common::ApiResponse response;
+
+        if( !send( request, response ) )
+        {
+            m_lastError = wxS( "Failed to send command" );
+            return false;
+        }
+
+        if( response.status().status() != kiapi::common::AS_OK )
+        {
+            m_lastError = response.status().error_message();
+            return false;
+        }
+
+        kiapi::common::commands::GetItemsResponse itemsResponse;
+
+        if( !response.message().UnpackTo( &itemsResponse ) )
+        {
+            m_lastError = wxS( "Failed to unpack GetItemsResponse" );
+            return false;
+        }
+
+        if( itemsResponse.status() != kiapi::common::types::IRS_OK )
+        {
+            m_lastError = wxString::Format( wxS( "GetItems returned non-OK status: %s" ),
+                                            magic_enum::enum_name( itemsResponse.status() ) );
+            return false;
+        }
+
+        for( const google::protobuf::Any& item : itemsResponse.items() )
+        {
+            FOOTPRINT candidate( nullptr );
+
+            if( !candidate.Deserialize( item ) )
+                continue;
+
+            const PCB_FIELD* reference = std::as_const( candidate ).GetField( FIELD_T::REFERENCE );
+
+            if( reference && reference->GetText() == aReference )
+            {
+                *aFootprint = std::move( candidate );
+                return true;
+            }
+        }
+
+        m_lastError = wxS( "No footprint with reference " ) + aReference;
+        return false;
+    }
+
     bool CloseDocument( const kiapi::common::types::DocumentSpecifier* aDocument,
                         kiapi::common::ApiStatusCode*                  aStatus = nullptr )
     {

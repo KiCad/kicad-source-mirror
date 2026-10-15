@@ -365,7 +365,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
     // A single unresolvable place, wire, or via (e.g. a uniquified fiducial id or an unknown layer
     // from a foreign router) must not sink the whole session, so skipped items are counted and
     // reported once at the end.
-    int skipped = 0;
+    m_skippedCount = 0;
 
     if( m_session->placement )
     {
@@ -383,7 +383,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
 
                 if( !footprint )
                 {
-                    ++skipped;
+                    ++m_skippedCount;
                     continue;
                 }
 
@@ -440,7 +440,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
     // Item-local failures (unknown layer id, missing padstack) throw from the make* helpers; run
     // each item through this guard so one bad wire or via is dropped instead of aborting.
     auto skipOnError =
-            [&skipped]( auto&& aBuild )
+            [this]( auto&& aBuild )
             {
                 try
                 {
@@ -448,7 +448,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
                 }
                 catch( const IO_ERROR& )
                 {
-                    ++skipped;
+                    ++m_skippedCount;
                 }
             };
 
@@ -547,16 +547,17 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
         }
     }
 
-    if( skipped > 0 )
+    if( m_skippedCount > 0 )
     {
         ReportWarning( m_reporter, wxString::Format( _( "%d session item(s) were skipped due to unresolved "
                                                         "reference, layer, or padstack." ),
-                                                     skipped ) );
+                                                     m_skippedCount ) );
     }
 }
 
 
-bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit, REPORTER* aReporter )
+bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit,
+                            REPORTER* aReporter, int* aSkippedCount )
 {
     SPECCTRA_DB db;
     LOCALE_IO   toggle;
@@ -564,6 +565,9 @@ bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT&
     db.SetReporter( aReporter );
     db.LoadSESSION( fullFileName );
     db.FromSESSION( aBoard, aCommit );
+
+    if( aSkippedCount )
+        *aSkippedCount = db.GetSkippedCount();
 
     return true;
 }

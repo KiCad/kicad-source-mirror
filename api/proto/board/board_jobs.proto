@@ -482,6 +482,13 @@ message RunBoardJobExportGencad
     bool use_unique_pins = 6;
 }
 
+// Exports a board to Specctra DSN format.  Returns RunJobResponse.
+// Since: 11.0
+message RunBoardJobExportSpecctraDsn
+{
+    kiapi.common.types.RunJobSettings job_settings = 1;
+}
+
 enum Ipc2581Version
 {
     IPC2581V_UNKNOWN = 0;

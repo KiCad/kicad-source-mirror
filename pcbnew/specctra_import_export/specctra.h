@@ -3641,6 +3641,7 @@ public:
         m_top_via_layer = 0;
         m_bot_via_layer = 0;
         m_reporter = nullptr;
+        m_skippedCount = 0;
     }
 
     void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
@@ -3725,6 +3726,12 @@ public:
      * @param aBoard The BOARD to convert to a PCB.
      */
     void FromBOARD( BOARD* aBoard );
+
+    /**
+     * Return the number of session items skipped during the last FromSESSION() call due to
+     * unresolved reference, layer, or padstack.
+     */
+    int GetSkippedCount() const { return m_skippedCount; }
 
     /**
      * Add the entire #SESSION info to a #BOARD but does not write it out.
@@ -3979,6 +3986,9 @@ private:
     /// used during FromSESSION() only, memory for it is not owned here.
     UNIT_RES*                m_routeResolution;
 
+    /// count of session items skipped during the last FromSESSION() call.
+    int                      m_skippedCount;
+
     /// a copy to avoid passing as an argument, memory for it is not owned here.
     BOARD*                   m_sessionBoard;
 
@@ -4003,9 +4013,10 @@ private:
  * @param fullFileName specctra session file name
  * @param aCommit commit for undo/redo and view updates
  * @param aReporter optional reporter for warnings
+ * @param aSkippedCount optional output for the number of session items skipped
  */
 bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit,
-                            REPORTER* aReporter = nullptr );
+                            REPORTER* aReporter = nullptr, int* aSkippedCount = nullptr );
 
 
 }           // namespace DSN

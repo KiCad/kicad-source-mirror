@@ -332,6 +332,28 @@ message ImportNetlistResponse
   string report = 4;
 }
 
+// Imports a Specctra session file into the board: repositions footprints, deletes unlocked
+// existing tracks and vias, and adds the tracks and vias routed in the external router session.
+// Locked tracks and vias are skipped (they are exported as fixed and omitted from the session
+// by design).
+// Since: 11.0
+message ImportSpecctraSession
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  // Path to the Specctra session file (.ses).
+  string session_path = 2;
+}
+
+message ImportSpecctraSessionResponse
+{
+  // Number of session items skipped due to unresolved reference, layer, or padstack.
+  uint32 skipped_count = 1;
+
+  // Human-readable report of what was imported and any warnings or errors.
+  string report = 2;
+}
+
 /*
  * Blocking operations
  */

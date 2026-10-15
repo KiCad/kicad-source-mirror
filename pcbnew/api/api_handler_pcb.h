@@ -124,6 +124,9 @@ private:
     HANDLER_RESULT<ImportNetlistResponse> handleImportNetlist(
             const HANDLER_CONTEXT<ImportNetlist>& aCtx );
 
+    HANDLER_RESULT<ImportSpecctraSessionResponse> handleImportSpecctraSession(
+            const HANDLER_CONTEXT<ImportSpecctraSession>& aCtx );
+
     HANDLER_RESULT<BoardEditorAppearanceSettings> handleGetBoardEditorAppearanceSettings(
             const HANDLER_CONTEXT<GetBoardEditorAppearanceSettings>& aCtx );
 
@@ -183,6 +186,9 @@ private:
 
     HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportGencad(
             const HANDLER_CONTEXT<RunBoardJobExportGencad>& aCtx );
+
+    HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportSpecctraDsn(
+            const HANDLER_CONTEXT<RunBoardJobExportSpecctraDsn>& aCtx );
 
     HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportIpc2581(
             const HANDLER_CONTEXT<RunBoardJobExportIpc2581>& aCtx );

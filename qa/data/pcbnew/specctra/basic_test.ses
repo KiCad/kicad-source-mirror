@@ -1,0 +1,20 @@
+# Used against qa/data/pcbnew/cli/basic_test/basic_test.kicad_pcb
+
+(session basic_test.ses
+  (base_design basic_test.dsn)
+  (placement
+    (resolution um 10)
+    (component TestPoint:TestPoint_Pad_3.0x3.0mm
+      (place J1 0 0 front 0)
+    )
+  )
+  (routes
+    (resolution um 10)
+    (library_out )
+    (network_out
+      (net "GND"
+        (wire (path "F.Cu" 1600  500000 0  1500000 0))
+      )
+    )
+  )
+)
