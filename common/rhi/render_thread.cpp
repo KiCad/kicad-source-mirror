@@ -420,6 +420,7 @@ bool RENDER_THREAD::runFenced( std::function<void()> aWork, std::chrono::millise
     std::future<void> completed = done->get_future();
 
     RHI_CMD_FENCE fence;
+    fence.flushFrames = static_cast<bool>( aWork );
     fence.onComplete = [done, work = std::move( aWork )]()
     {
         if( work )
@@ -1166,6 +1167,10 @@ void RENDER_THREAD::ProcessActiveWindows( bool aIgnorePacing )
 
             if( std::unique_ptr<FRAME_PACKET> packet = frameMailbox->Load() )
             {
+                // A canvas queues a packet's uploads before submitting it, but may have submitted it while this
+                // thread drew other windows, after the loop's drain. Its buffers must exist before it is drawn.
+                DrainUploadQueue();
+
                 ws->drawDesc        = std::move( packet->drawDesc );
                 ws->staticDrawDesc  = std::move( packet->staticDrawDesc );
                 ws->dynamicDrawDesc = std::move( packet->dynamicDrawDesc );
@@ -1598,7 +1603,12 @@ bool RENDER_THREAD::RenderWindow( WINDOW_STATE& aWS )
             aWS.presentSuccessCount++;
             aWS.lastPresentedGeneration = aWS.requestedGeneration;
             presented = true;
-            m_presented.store( true, std::memory_order_release );
+
+            if( aWS.presentSuccessCount == 1 )
+            {
+                std::lock_guard<std::mutex> lock( m_presentedMutex );
+                m_presentedWindows.insert( aWS.windowId );
+            }
         }
     }
 
@@ -2379,9 +2389,13 @@ void RENDER_THREAD::HandleFence( const RHI_CMD_FENCE& aCmd )
     DrainUploadQueue();
 
     // Frames requested ahead of the fence are drawn before it fires, so its sender sees their results.
-    // Refresh pacing would hold them back, so it does not apply here.
-    if( std::ranges::any_of( m_windows, []( const auto& aEntry ) { return aEntry.second.active; } ) )
+    // Refresh pacing would hold them back, so it does not apply here. A plain fence skips this, so closing
+    // one canvas does not wait on drawing the others that share the thread.
+    if( aCmd.flushFrames
+        && std::ranges::any_of( m_windows, []( const auto& aEntry ) { return aEntry.second.active; } ) )
+    {
         ProcessActiveWindows( true );
+    }
 
     if( aCmd.onComplete )
         aCmd.onComplete();
@@ -2504,9 +2518,32 @@ void RENDER_THREAD::OnDeviceLost()
     m_uploadQueue.clear();
     m_deviceLost.store( true, std::memory_order_release );
 
-    // The owner may otherwise not look until something else asks for a frame
-    if( m_onDeviceLost )
-        m_onDeviceLost();
+    // The owners may otherwise not look until something else asks for a frame
+    std::lock_guard<std::mutex> lock( m_deviceLostMutex );
+
+    for( const auto& [owner, listener] : m_deviceLostListeners )
+        listener();
+}
+
+
+bool RENDER_THREAD::HasPresented( RHI_WINDOW_ID aWindowId ) const
+{
+    std::lock_guard<std::mutex> lock( m_presentedMutex );
+    return m_presentedWindows.contains( aWindowId );
+}
+
+
+void RENDER_THREAD::AddDeviceLostListener( const void* aOwner, std::function<void()> aListener )
+{
+    std::lock_guard<std::mutex> lock( m_deviceLostMutex );
+    m_deviceLostListeners[aOwner] = std::move( aListener );
+}
+
+
+void RENDER_THREAD::RemoveDeviceLostListener( const void* aOwner )
+{
+    std::lock_guard<std::mutex> lock( m_deviceLostMutex );
+    m_deviceLostListeners.erase( aOwner );
 }
 
 

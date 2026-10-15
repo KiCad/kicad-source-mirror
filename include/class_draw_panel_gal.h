@@ -518,8 +518,8 @@ protected:
 
     wxWindow*                m_statusPopup;
 
-    /** Owns the RHI device and GPU context */
-    std::unique_ptr<KIGFX::RENDER_THREAD> m_renderThread;
+    /** The render thread that owns the RHI device, shared by every canvas, see GAL_MODERN::AcquireRenderThread() */
+    std::shared_ptr<KIGFX::RENDER_THREAD> m_renderThread;
 
     /** The UI thread's access to the device. Must be destroyed before m_renderThread. */
     std::unique_ptr<KIGFX::RHI_DEVICE_PROXY> m_deviceProxy;
@@ -557,8 +557,6 @@ protected:
 
     /** Fixed in the constructor from the parent frame's editor */
     KIGFX::RHI_LINE_PIPELINE_KIND m_linePipelineKind = KIGFX::RHI_LINE_PIPELINE_KIND::PCB_TRACKS;
-
-    static std::atomic<uint32_t> s_nextWindowId;
 
     /// Optional overlay for drawing transient debug objects
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;

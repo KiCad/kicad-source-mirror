@@ -27,6 +27,7 @@
 #include <rhi/rhi_projection.h>
 #include <rhi/rhi_cull_runs.h>
 #include <rhi/render_thread.h>
+#include <rhi/rhi_platform_device.h>
 #include <rhi/rhi_glyph_atlas.h>
 #include <bitmap_base.h>
 #include <gal/bitmap_texture.h>
@@ -45,8 +46,10 @@
 #include <exception>
 #include <iterator>
 #include <tuple>
+#include <atomic>
 #include <limits>
 #include <memory>
+#include <mutex>
 #include <cmath>
 #include <utility>
 
@@ -185,7 +188,52 @@ GAL_MODERN::GAL_MODERN( GAL_DISPLAY_OPTIONS& aOptions, RHI_DEVICE_PROXY& aDevice
 }
 
 
+std::shared_ptr<RENDER_THREAD> GAL_MODERN::AcquireRenderThread( bool aEnableValidation )
+{
+    static std::mutex                   s_mutex;
+    static std::weak_ptr<RENDER_THREAD> s_shared;
+
+    std::lock_guard<std::mutex> lock( s_mutex );
+
+    std::shared_ptr<RENDER_THREAD> thread = s_shared.lock();
+
+    if( thread && !thread->IsDeviceLost() )
+        return thread;
+
+    // The lost device goes before its replacement is made, or there would be two. Canvases still holding
+    // it find a stopped thread and rebuild onto the new one when they repaint.
+    if( thread )
+        thread->Shutdown();
+
+    thread = std::make_shared<RENDER_THREAD>(
+            [aEnableValidation]()
+            {
+                return RhiCreatePlatformDevice( aEnableValidation );
+            } );
+
+    if( !thread->Start() )
+        thread.reset();
+
+    s_shared = thread;
+    return thread;
+}
+
+
+uint32_t GAL_MODERN::AllocateWindowId()
+{
+    static std::atomic<uint32_t> s_nextWindowId{ 1 };
+
+    return s_nextWindowId++;
+}
+
+
 GAL_MODERN::~GAL_MODERN()
+{
+    DestroyBuffers();
+}
+
+
+void GAL_MODERN::DestroyBuffers()
 {
     // Destroyed now rather than retired, as nothing will draw them again
     m_persistentTargets = false;
@@ -230,7 +278,8 @@ GAL_MODERN::~GAL_MODERN()
             m_deviceProxy.DestroyTexture( entry.texture );
     }
 
-    m_bitmapTextureCache.clear();
+    // A second call, from the destructor after the canvas tore down, then has nothing to destroy
+    ReleaseBuffers();
 }
 
 

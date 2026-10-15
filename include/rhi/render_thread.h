@@ -42,6 +42,7 @@
 #include <optional>
 #include <thread>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 
@@ -144,14 +145,20 @@ public:
     bool IsDeviceLost() const { return m_deviceLost.load( std::memory_order_acquire ); }
 
     /**
-     * @return true once a frame reached a window, which tells a working device from one that cannot draw.
+     * @return true once a frame of \a aWindowId reached the screen, which tells a device that works for that
+     *         window from one that cannot draw it. Other canvases may share the device.
      */
-    bool HasPresented() const { return m_presented.load( std::memory_order_acquire ); }
+    bool HasPresented( RHI_WINDOW_ID aWindowId ) const;
 
     /**
-     * Called on the render thread when the device is lost. Set before Start().
+     * Call \a aListener on the render thread when the device is lost. Each owner has one listener.
      */
-    void SetDeviceLostHandler( std::function<void()> aHandler ) { m_onDeviceLost = std::move( aHandler ); }
+    void AddDeviceLostListener( const void* aOwner, std::function<void()> aListener );
+
+    /**
+     * Once this returns, the owner's listener is not running and will not be called.
+     */
+    void RemoveDeviceLostListener( const void* aOwner );
 
     /**
      * Compute the physical pixel backing size from logical size and DPI scale, at least 1x1.
@@ -279,9 +286,14 @@ private:
     /** Set by producers and cleared by the drain so the loop can sleep without missing uploads. */
     std::atomic<bool> m_uploadsPending{ false };
     std::atomic<bool> m_deviceLost{ false };
-    std::atomic<bool> m_presented{ false };
 
-    std::function<void()> m_onDeviceLost;
+    /** Held while a listener runs, so removing one waits for it to return */
+    std::mutex                                             m_deviceLostMutex;
+    std::unordered_map<const void*, std::function<void()>> m_deviceLostListeners;
+
+    /** Window IDs are never reused, so an entry outliving its window is harmless */
+    mutable std::mutex                m_presentedMutex;
+    std::unordered_set<RHI_WINDOW_ID> m_presentedWindows;
 
     std::atomic<int>  m_loopPhase{ 0 };     /**< see GetLoopPhase() */
 

@@ -28,6 +28,7 @@
 
 #include <array>
 #include <map>
+#include <memory>
 #include <optional>
 #include <unordered_map>
 #include <vector>
@@ -158,7 +159,25 @@ public:
         return m_screenSize + VECTOR2I( m_centringPad, m_centringPad );
     }
 
-    /** Drop all GPU handles without destroying them, before the render thread and its device go away */
+    /**
+     * Return the render thread every RHI canvas in the process shares, starting it on first use and replacing
+     * one whose device was lost. NVIDIA's DXGI-layered present aborts the process when a second device creates
+     * a swapchain. It lives in the GAL library because each kiface links its own copy of the RHI code.
+     *
+     * @return nullptr if the device could not be created.
+     */
+    static std::shared_ptr<RENDER_THREAD> AcquireRenderThread( bool aEnableValidation );
+
+    /** @return a window ID no other canvas in the process has, whichever kiface it belongs to */
+    static uint32_t AllocateWindowId();
+
+    /**
+     * Destroy every GPU resource this GAL holds and forget the handles. The render thread is shared with
+     * other canvases, so nothing else would free them.
+     */
+    void DestroyBuffers();
+
+    /** Drop all GPU handles without destroying them */
     void ReleaseBuffers()
     {
         auto release = []( GEOMETRY_BUFFER_SET& bs )
@@ -196,11 +215,6 @@ public:
 
         m_retiredBuffers.clear();
         m_retiredTextures.clear();
-
-        /**
-         * The dying device frees these textures itself. Forgetting them keeps ~GAL_MODERN from
-         * destroying them through a dangling device.
-         */
         m_bitmapTextureCache.clear();
     }
 

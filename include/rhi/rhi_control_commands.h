@@ -78,6 +78,9 @@ struct RHI_CMD_SWAPCHAIN_DESTROY
 struct RHI_CMD_FENCE
 {
     std::function<void()> onComplete;
+
+    /** Draw the frames requested before the fence, for a reader of their pixels */
+    bool flushFrames = false;
 };
 
 

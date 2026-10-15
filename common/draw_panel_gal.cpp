@@ -42,8 +42,6 @@
 #include <gal/opengl/gpu_oom_error.h>
 #include <gal/cairo/cairo_gal.h>
 #include <gal/gal_modern.h>
-#include <rhi/rhi_device.h>
-#include <rhi/rhi_platform_device.h>
 #include <rhi/render_thread.h>
 #include <rhi/rhi_device_proxy.h>
 #include <rhi/swapchain_controller.h>
@@ -87,8 +85,6 @@
 
 // Counts inputs to any canvas so the render thread never holds back a frame that answers one
 static std::atomic<uint64_t> s_inputSerial{ 0 };
-
-std::atomic<uint32_t> EDA_DRAW_PANEL_GAL::s_nextWindowId{ 1 };
 
 
 static KIGFX::RHI_LINE_PIPELINE_KIND DetermineLinePipelineKind( const EDA_DRAW_FRAME* aFrame )
@@ -400,13 +396,24 @@ void EDA_DRAW_PANEL_GAL::teardownModernRenderInfra()
     }
 
     if( auto* galModern = dynamic_cast<KIGFX::GAL_MODERN*>( m_gal ) )
-        galModern->ReleaseBuffers();
+        galModern->DestroyBuffers();
 
-    // The proxy references the render thread. ReleaseBuffers() left no proxy call outstanding.
+    // The proxy references the render thread. DestroyBuffers() left no proxy call outstanding.
     m_deviceProxy.reset();
 
-    // Joining the render thread keeps queued uploads from reading the GAL's geometry after it goes
-    m_renderThread.reset();
+    if( m_renderThread )
+    {
+        m_renderThread->RemoveDeviceLostListener( this );
+
+        // Other canvases keep the thread running, so the uploads still queued from this one are applied
+        // before its GAL and geometry go. A thread that stopped will not read them.
+        while( !m_renderThread->WaitForFence() && m_renderThread->IsRunning() )
+        {
+        }
+
+        m_renderThread.reset();
+    }
+
     m_frameMailbox.reset();
     m_hasLastFullDrawDesc = false;
 
@@ -621,8 +628,8 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
     if( m_backend == GAL_TYPE_MODERN && m_renderThread && m_renderThread->IsDeviceLost() )
     {
-        // A device lost before it ever presented gives way to the fallback rather than retrying forever
-        if( m_renderThread->HasPresented() )
+        // A device lost before it ever presented this canvas gives way to the fallback rather than retrying forever
+        if( m_renderThread->HasPresented( m_windowId ) )
         {
             m_backend = GAL_TYPE_NONE;
 
@@ -1444,33 +1451,23 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             if( EDA_DRAW_FRAME::CanvasFailed( GAL_TYPE_MODERN ) )
                 return abandonRhiCanvas( wxEmptyString );
 
-            bool enableValidation = ADVANCED_CFG::GetCfg().m_EnableVulkanValidation;
+            m_renderThread = KIGFX::GAL_MODERN::AcquireRenderThread( ADVANCED_CFG::GetCfg().m_EnableVulkanValidation );
 
-            auto deviceFactory = [enableValidation]() -> std::unique_ptr<RHI_DEVICE>
+            if( m_renderThread )
             {
-                return RhiCreatePlatformDevice( enableValidation );
-            };
+                wxLogTrace( traceRhi, wxS( "DrawPanel: render thread acquired" ) );
 
-            m_renderThread = std::make_unique<KIGFX::RENDER_THREAD>(
-                    std::move( deviceFactory ) );
-
-            // A repaint sees the loss and rebuilds the canvas. The thread is joined before the panel is
-            // destroyed, and wx drops anything still queued for it.
-            m_renderThread->SetDeviceLostHandler(
-                    [this]()
-                    {
-                        CallAfter(
-                                [this]()
-                                {
-                                    Refresh();
-                                } );
-                    } );
-
-            wxLogTrace( traceRhi, wxS( "DrawPanel: starting render thread" ) );
-
-            if( m_renderThread->Start() )
-            {
-                wxLogTrace( traceRhi, wxS( "DrawPanel: render thread started" ) );
+                // A repaint sees the loss and rebuilds the canvas. The listener is removed before the panel
+                // is destroyed, and wx drops anything still queued for it.
+                m_renderThread->AddDeviceLostListener( this,
+                        [this]()
+                        {
+                            CallAfter(
+                                    [this]()
+                                    {
+                                        Refresh();
+                                    } );
+                        } );
 
                 // The render thread owns the device, so the UI thread reaches it only through the proxy
                 m_deviceProxy = std::make_unique<KIGFX::RHI_DEVICE_PROXY>( *m_renderThread );
@@ -1484,7 +1481,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
                 // Only the track shader draws the glyphs of the font atlas
                 galModern->SetBitmapGlyphs( m_linePipelineKind == KIGFX::RHI_LINE_PIPELINE_KIND::PCB_TRACKS );
 
-                m_windowId = s_nextWindowId++;
+                m_windowId = KIGFX::GAL_MODERN::AllocateWindowId();
                 m_frameMailbox = std::make_unique<KIGFX::FRAME_MAILBOX>();
                 m_swapchainCtrl = std::make_unique<KIGFX::SWAPCHAIN_CONTROLLER>(
                         *m_renderThread, m_windowId );
@@ -1502,10 +1499,6 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             }
             else
             {
-                wxLogTrace( traceRhi, wxS( "DrawPanel: render thread start FAILED" ) );
-
-                m_renderThread.reset();
-
                 return abandonRhiCanvas( wxEmptyString );
             }
 
