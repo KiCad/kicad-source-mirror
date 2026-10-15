@@ -170,7 +170,19 @@ bool DATABASE_CONNECTION::Connect()
     m_tables.clear();
 
     if( IsConnected() )
+    {
         getQuoteChar();
+
+        try
+        {
+            m_patternEscape = toUTF8( m_conn->get_info<nanodbc::string>( SQL_SEARCH_PATTERN_ESCAPE ) );
+        }
+        catch( std::exception& e )
+        {
+            m_patternEscape.clear();
+            wxLogTrace( traceDatabase, wxT( "Pattern escape unavailable: %s" ), e.what() );
+        }
+    }
 
     return IsConnected();
 }
@@ -229,7 +241,7 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
     try
     {
         nanodbc::catalog catalog( *m_conn );
-        nanodbc::catalog::tables tables = catalog.find_tables( fromUTF8( aTable ) );
+        nanodbc::catalog::tables tables = catalog.find_tables( fromUTF8( escapePattern( aTable ) ) );
 
         if( !tables.next() )
         {
@@ -244,7 +256,7 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
         try
         {
             nanodbc::catalog::columns columns =
-                    catalog.find_columns( NANODBC_TEXT( "" ), tables.table_name() );
+                    catalog.find_columns( NANODBC_TEXT( "" ), fromUTF8( escapePattern( key ) ) );
 
             std::set<std::string> columnsInCatalog;
 
@@ -346,6 +358,26 @@ std::string DATABASE_CONNECTION::quoted( const std::string& aIdentifier ) const
     boost::replace_all( escaped, quote, quote + quote );
 
     return quote + escaped + quote;
+}
+
+
+std::string DATABASE_CONNECTION::escapePattern( const std::string& aName ) const
+{
+    // Without an escape character the driver offers no way to match a name literally
+    if( m_patternEscape.empty() )
+        return aName;
+
+    std::string escaped;
+
+    for( char c : aName )
+    {
+        if( c == '_' || c == '%' || c == m_patternEscape.front() )
+            escaped += m_patternEscape;
+
+        escaped += c;
+    }
+
+    return escaped;
 }
 
 

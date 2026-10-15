@@ -118,6 +118,9 @@ private:
     /// Wraps an identifier in the driver's quote character, doubling any it contains
     std::string quoted( const std::string& aIdentifier ) const;
 
+    /// Escapes catalog search pattern characters so a name matches only itself
+    std::string escapePattern( const std::string& aName ) const;
+
     std::string columnsFor( const std::string& aTable );
 
     /// The caller must already hold m_queryMutex.
@@ -140,6 +143,8 @@ private:
     long m_timeout;
 
     char m_quoteChar;
+
+    std::string m_patternEscape;
 
     mutable std::mutex m_queryMutex;
 

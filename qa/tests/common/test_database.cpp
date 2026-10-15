@@ -180,4 +180,27 @@ BOOST_AUTO_TEST_CASE( QuoteCharactersInIdentifiers )
 }
 
 
+// A table name is a catalog search pattern, so underscore and percent must match only themselves
+BOOST_AUTO_TEST_CASE( PatternCharactersInTableNames )
+{
+    SCRATCH_DATABASE db;
+
+    // The distractors come first and match the unescaped pattern "Part_%Data"
+    db.Execute( "CREATE TABLE PartAData (\"Part ID\" TEXT, Value TEXT)" );
+    db.Execute( "CREATE TABLE PartABCData (\"Part ID\" TEXT, Value TEXT)" );
+    db.Execute( "CREATE TABLE \"Part_%Data\" (\"Part ID\" TEXT, Value TEXT)" );
+    db.Execute( "INSERT INTO PartAData VALUES ('P1', 'wrong A')" );
+    db.Execute( "INSERT INTO PartABCData VALUES ('P1', 'wrong ABC')" );
+    db.Execute( "INSERT INTO \"Part_%Data\" VALUES ('P1', 'right')" );
+
+    DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+    BOOST_REQUIRE( dc.IsConnected() );
+    BOOST_REQUIRE( dc.CacheTableInfo( "Part_%Data", { "Part ID", "Value" } ) );
+
+    DATABASE_CONNECTION::ROW result;
+    BOOST_REQUIRE_MESSAGE( dc.SelectOne( "Part_%Data", std::make_pair( "Part ID", "P1" ), result ), dc.GetLastError() );
+    BOOST_CHECK_EQUAL( std::any_cast<std::string>( result.at( "Value" ) ), "right" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
