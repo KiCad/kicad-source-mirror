@@ -10,3 +10,6 @@ including Werror is a bad idea.
 Note: The cpp and header file have been modified to remove the #ifdef _clang_ from the
 includes. This was needed when nanodbc changed the standard library, but now with GCC 13,
 this is needed when building with the GCC standard library and clang.
+
+Note: recent_error() has been modified to copy the whole SQLSTATE.  size() already excludes
+the terminator, so subtracting one more dropped the last character ("08001" became "0800").

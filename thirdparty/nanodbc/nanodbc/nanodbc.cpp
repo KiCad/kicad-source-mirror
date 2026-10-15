@@ -540,8 +540,8 @@ recent_error(SQLHANDLE handle, SQLSMALLINT handle_type, long& native, std::strin
     if (size(sql_state) > 0)
     {
         state.clear();
-        state.reserve(size(sql_state) - 1);
-        for (std::size_t idx = 0; idx != size(sql_state) - 1; ++idx)
+        state.reserve(size(sql_state));
+        for (std::size_t idx = 0; idx != size(sql_state); ++idx)
         {
             state.push_back(static_cast<char>(sql_state[idx]));
         }
