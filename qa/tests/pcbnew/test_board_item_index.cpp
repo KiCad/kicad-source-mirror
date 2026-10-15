@@ -27,9 +27,81 @@
 #include <pcb_shape.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
+#include <pcb_track.h>
 
 
 BOOST_AUTO_TEST_SUITE( BoardItemIndex )
+
+
+BOOST_AUTO_TEST_CASE( ResolveItemIdentityCachePurgedOnDestruction )
+{
+    BOARD board;
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    board.Add( footprint );
+
+    PAD* pad = new PAD( footprint );
+    footprint->Pads().push_back( pad );
+    board.CacheItemById( *pad );
+
+    const KIID padId = pad->m_Uuid;
+
+    BOOST_REQUIRE( board.IsItemIndexedById( pad ) );
+    BOOST_REQUIRE_EQUAL( board.ResolveItem( padId, true ), static_cast<BOARD_ITEM*>( pad ) );
+
+    // Detach the pad from the footprint without FOOTPRINT::Remove()'s surgical eviction, leaving it
+    // parented to the still-board-attached footprint, then free it directly.  This stands in for the
+    // producer paths that free a board-parented item without touching the identity cache; only the
+    // ~BOARD_ITEM safety net can then keep ResolveItem() from returning a freed pointer.
+    std::deque<PAD*>& pads = footprint->Pads();
+    pads.erase( std::find( pads.begin(), pads.end(), pad ) );
+    delete pad;
+
+    BOOST_CHECK( board.ResolveItem( padId, true ) == nullptr );
+}
+
+
+// A never-indexed item parented to a freed board must not touch that board on destruction, the
+// crash from the "KiCad master crashes" report (follow-up to ac12a1c820).
+BOOST_AUTO_TEST_CASE( UncachedItemSurvivesBoardDestruction )
+{
+    BOARD*   board = new BOARD();
+    PCB_VIA* dummy = new PCB_VIA( board );
+
+    BOOST_REQUIRE( !dummy->IsIndexedInBoard() );
+
+    delete board;
+
+    BOOST_CHECK_NO_THROW( delete dummy );
+}
+
+
+// The indexed counterpart of the case above.  ~BOARD must clear the membership flag as it drops
+// the index, or a survivor still believes it is indexed and walks its parent chain into the
+// freed board.
+BOOST_AUTO_TEST_CASE( IndexedItemSurvivesBoardDestruction )
+{
+    BOARD*     board = new BOARD();
+    FOOTPRINT* footprint = new FOOTPRINT( board );
+
+    board->Add( footprint );
+
+    PAD* pad = new PAD( footprint );
+    footprint->Pads().push_back( pad );
+    board->CacheItemById( *pad );
+
+    BOOST_REQUIRE( pad->IsIndexedInBoard() );
+
+    // Detach without FOOTPRINT::Remove() so the board frees the footprint while the pad lives on,
+    // still parented to it.  This is the ownership hand-off the safety net in ~BOARD_ITEM covers.
+    std::deque<PAD*>& pads = footprint->Pads();
+    pads.erase( std::find( pads.begin(), pads.end(), pad ) );
+
+    delete board;
+
+    BOOST_CHECK( !pad->IsIndexedInBoard() );
+    BOOST_CHECK_NO_THROW( delete pad );
+}
 
 
 BOOST_AUTO_TEST_CASE( SwapItemDataReindexesFootprintChildren )
