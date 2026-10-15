@@ -56,6 +56,7 @@ SYMBOL_LIBRARY_ADAPTER::SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
 
 SYMBOL_LIBRARY_ADAPTER::~SYMBOL_LIBRARY_ADAPTER()
 {
+    resetProjectCache();
     evictOwnedGlobalEntries();
 }
 

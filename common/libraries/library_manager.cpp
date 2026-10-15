@@ -73,7 +73,16 @@ LIBRARY_MANAGER::LIBRARY_MANAGER( const PROJECT* aProject ) : m_project( aProjec
 }
 
 
-LIBRARY_MANAGER::~LIBRARY_MANAGER() = default;
+LIBRARY_MANAGER::~LIBRARY_MANAGER()
+{
+    // Adapters join plugin worker threads that still query the row cache, so they must die before it
+    std::map<LIBRARY_TABLE_TYPE, std::unique_ptr<LIBRARY_MANAGER_ADAPTER>> adapters;
+
+    {
+        std::scoped_lock lock( m_adaptersMutex );
+        adapters.swap( m_adapters );
+    }
+}
 
 
 const PROJECT& LIBRARY_MANAGER::Project() const
@@ -708,13 +717,16 @@ void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
 
 bool LIBRARY_MANAGER::RemoveAdapter( LIBRARY_TABLE_TYPE aType, LIBRARY_MANAGER_ADAPTER* aAdapter )
 {
-    std::scoped_lock lock( m_adaptersMutex );
+    std::unique_ptr<LIBRARY_MANAGER_ADAPTER> retired;
+    std::scoped_lock                         lock( m_adaptersMutex );
     if( !m_adapters.contains( aType ) )
         return false;
 
     if( m_adapters[aType].get() != aAdapter )
         return false;
 
+    // The adapter joins plugin worker threads, so it must not be destroyed under the adapters mutex
+    retired = std::move( m_adapters[aType] );
     m_adapters.erase( aType );
     return true;
 }
@@ -1137,7 +1149,9 @@ void LIBRARY_MANAGER_ADAPTER::resetProjectCache()
 {
     abortLoad();
 
-    std::unique_lock lock( m_librariesMutex );
+    // Declared before the lock so plugins die after it is released; their worker threads may need it
+    std::vector<std::unique_ptr<IO_BASE>> retired;
+    std::unique_lock                      lock( m_librariesMutex );
 
     // Reset entries in place rather than erasing them. Erasing would let
     // fetchIfLoaded() fall through to globalLibs() for any nickname that is
@@ -1146,7 +1160,10 @@ void LIBRARY_MANAGER_ADAPTER::resetProjectCache()
     // later prunes any sentinels whose nicknames are no longer in the rebuilt
     // project table, so stale shadowing cannot persist.
     for( auto& entry : m_libraries )
+    {
+        retired.push_back( std::move( entry.second.plugin ) );
         entry.second = LIB_DATA{};
+    }
 }
 
 
@@ -1174,9 +1191,12 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
 
     abortLoad();
 
+    // Plugins die after unlocking; their worker threads may need the mutex
+    std::map<wxString, LIB_DATA> retired;
+
     {
         std::unique_lock lock( globalLibsMutex() );
-        globalLibs().clear();
+        retired.swap( globalLibs() );
     }
 }
 
@@ -1185,14 +1205,16 @@ void LIBRARY_MANAGER_ADAPTER::evictOwnedGlobalEntries()
 {
     abortLoad();
 
-    std::unique_lock lock( globalLibsMutex() );
+    // Declared before the lock so plugins die after it is released
+    std::vector<std::map<wxString, LIB_DATA>::node_type> retired;
+    std::unique_lock                                     lock( globalLibsMutex() );
 
     // Drop entries this adapter owns, identified by global_owner rather than the row pointer,
     // which another manager could reuse at the same address after this manager frees its tables.
     for( auto it = globalLibs().begin(); it != globalLibs().end(); )
     {
         if( it->second.global_owner == this )
-            it = globalLibs().erase( it );
+            retired.push_back( globalLibs().extract( it++ ) );
         else
             ++it;
     }
@@ -1242,14 +1264,17 @@ void LIBRARY_MANAGER_ADAPTER::ProjectTablesReloaded(
     // same-named global library from HasLibrary() / fetchIfLoaded() / etc.
     // GetRow() is safe to call here: loadTables() reset m_rowCache before
     // building the new table, and async loads were aborted in phase 1.
-    std::unique_lock lock( m_librariesMutex );
+    // Declared before the lock so any plugin loaded since the reset dies after it is released
+    std::vector<std::map<wxString, LIB_DATA>::node_type> retired;
+    std::unique_lock                                     lock( m_librariesMutex );
 
-    std::erase_if( m_libraries,
-                   [this]( const auto& aEntry )
-                   {
-                       return !m_manager.GetRow( Type(), aEntry.first,
-                                                 LIBRARY_TABLE_SCOPE::PROJECT ).has_value();
-                   } );
+    for( auto it = m_libraries.begin(); it != m_libraries.end(); )
+    {
+        if( !m_manager.GetRow( Type(), it->first, LIBRARY_TABLE_SCOPE::PROJECT ).has_value() )
+            retired.push_back( m_libraries.extract( it++ ) );
+        else
+            ++it;
+    }
 }
 
 
@@ -1593,7 +1618,8 @@ void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIB
             [&]( LIBRARY_TABLE_SCOPE aScopeToReload, std::map<wxString, LIB_DATA>& aTarget,
                  std::shared_mutex& aMutex )
             {
-                bool wasLoaded = false;
+                bool                                    wasLoaded = false;
+                std::map<wxString, LIB_DATA>::node_type retired;
 
                 {
                     std::unique_lock lock( aMutex );
@@ -1602,9 +1628,12 @@ void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIB
                     if( it != aTarget.end() && it->second.plugin )
                     {
                         wasLoaded = true;
-                        aTarget.erase( it );
+                        retired = aTarget.extract( it );
                     }
                 }
+
+                // Destroyed unlocked since the plugin's worker thread may be blocked on aMutex
+                retired = {};
 
                 if( wasLoaded )
                 {
@@ -1787,16 +1816,23 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString
 
             if( LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( row ); plugin.has_value() )
             {
-                std::unique_lock lock( aMutex );
+                // Declared before the lock so a losing candidate dies unlocked; its worker may need the mutex
+                std::unique_ptr<IO_BASE> candidate( *plugin );
+                std::unique_lock         lock( aMutex );
+                LIB_DATA&                slot = aTarget[row->Nickname()];
 
-                aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
-                aTarget[ row->Nickname() ].row = row;
-                aTarget[ row->Nickname() ].plugin.reset( *plugin );
+                // Another creator may have installed a plugin while the lock was released
+                if( !slot.plugin )
+                {
+                    slot.status.load_status = LOAD_STATUS::LOADING;
+                    slot.row = row;
+                    slot.plugin = std::move( candidate );
 
-                if( aScope == LIBRARY_TABLE_SCOPE::GLOBAL )
-                    aTarget[ row->Nickname() ].global_owner = this;
+                    if( aScope == LIBRARY_TABLE_SCOPE::GLOBAL )
+                        slot.global_owner = this;
+                }
 
-                return &aTarget.at( aNickname );
+                return &slot;
             }
             else
             {

@@ -57,6 +57,7 @@ struct KICOMMON_API LIB_STATUS
 /// Storage for an actual loaded library (including library content owned by the plugin)
 struct KICOMMON_API LIB_DATA
 {
+    /// Never destroyed while holding the map's mutex; a plugin's worker thread may be blocked on it
     std::unique_ptr<IO_BASE> plugin;
     const LIBRARY_TABLE_ROW* row = nullptr;
     LIB_STATUS               status;
@@ -240,7 +241,8 @@ protected:
     /// globalLibs() cache. The cached LIB_DATA::row pointers reference this manager's tables, so
     /// they must be dropped before the manager is destroyed or a later manager's fetchIfLoaded()
     /// would dereference freed rows. Derived destructors must call this while globalLibs() is
-    /// still resolvable.
+    /// still resolvable. Derived destructors must also call resetProjectCache() so plugin worker
+    /// threads are joined while the derived adapter is still alive.
     void evictOwnedGlobalEntries();
 
     /// Aborts any async load in progress; blocks until fully done aborting
