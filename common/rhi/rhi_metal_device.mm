@@ -836,16 +836,20 @@ RHI_PipelineHandle RHI_METAL_DEVICE::CreatePipeline( const RHI_PIPELINE_DESC& de
         if( !pipelineState )
             return {};
 
-        id<MTLDepthStencilState> depthStencilState = nil;
+        // A depth-less pipeline still gets a state, the default that always passes and never writes. Binding nil
+        // to clear the previous pipeline's test faults on Apple GPUs.
+        MTLDepthStencilDescriptor* dsDesc = [[MTLDepthStencilDescriptor alloc] init];
 
         if( desc.depthStencil.depthTestEnable )
         {
-            MTLDepthStencilDescriptor* dsDesc = [[MTLDepthStencilDescriptor alloc] init];
             dsDesc.depthCompareFunction = TranslateCompareOp( desc.depthStencil.depthCompareOp );
             dsDesc.depthWriteEnabled = desc.depthStencil.depthWriteEnable;
-
-            depthStencilState = [m_device newDepthStencilStateWithDescriptor:dsDesc];
         }
+
+        id<MTLDepthStencilState> depthStencilState = [m_device newDepthStencilStateWithDescriptor:dsDesc];
+
+        if( !depthStencilState )
+            return {};
 
         RHI_PipelineHandle handle = m_pipelinePool.Allocate();
 
@@ -1333,7 +1337,7 @@ void RHI_METAL_DEVICE::BindPipeline( RHI_PipelineHandle pipeline )
 
     [m_activeEncoder setRenderPipelineState:it->second.pipelineState];
 
-    // Nil restores the default state so a depth-less pipeline does not inherit the previous pipeline's test
+    // Every pipeline has a state, so a depth-less one does not inherit the previous pipeline's test
     [m_activeEncoder setDepthStencilState:it->second.depthStencil];
 
     m_boundPipeline = pipeline;
