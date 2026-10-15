@@ -797,4 +797,34 @@ BOOST_AUTO_TEST_CASE( SharedParserGroupPrefixBoundaryUsesSourceSpelling )
 }
 
 
+// A composite held by an item outlives a netclass edit until resync, so it must keep its
+// constituents alive or GetName() reads freed names
+BOOST_AUTO_TEST_CASE( CompositeOwnsConstituents )
+{
+    NET_SETTINGS            settings( nullptr, "" );
+    std::weak_ptr<NETCLASS> weakSignal;
+
+    {
+        std::shared_ptr<NETCLASS> signal = std::make_shared<NETCLASS>( wxS( "Signal" ), false );
+        weakSignal = signal;
+        settings.SetNetclass( wxS( "Signal" ), signal );
+    }
+
+    settings.SetNetclassLabelAssignment( wxS( "N1" ), { wxS( "Signal" ) } );
+
+    std::shared_ptr<NETCLASS> composite = settings.GetEffectiveNetClass( wxS( "N1" ) );
+
+    BOOST_REQUIRE_EQUAL( composite->GetConstituentNetclasses().size(), 2u );
+
+    settings.ClearNetclasses();
+
+    BOOST_REQUIRE( !weakSignal.expired() );
+    BOOST_CHECK_EQUAL( composite->GetName(), wxString( "Signal,Default" ) );
+
+    composite.reset();
+
+    BOOST_CHECK( weakSignal.expired() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
