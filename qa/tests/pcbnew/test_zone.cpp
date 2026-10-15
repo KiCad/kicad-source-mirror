@@ -31,6 +31,9 @@
 #include <padstack.h>
 #include <pcb_painter.h>
 #include <pcb_track.h>
+#include <tool/tool_manager.h>
+#include <tools/zone_create_helper.h>
+#include <view/view.h>
 #include <zone.h>
 #include <zone_utils.h>
 
@@ -687,6 +690,35 @@ BOOST_AUTO_TEST_CASE( LibraryParityDetectsCutoutCountChange )
 
     BOOST_CHECK_MESSAGE( twoCutouts->FootprintNeedsUpdate( oneCutout, BOARD_ITEM::COMPARE_FLAGS::DRC ),
                          "A changed cutout count with equal total vertices must report a mismatch" );
+}
+
+
+/**
+ * Add a Similar Zone must not copy the source zone's name as is (AIR 945).
+ */
+BOOST_AUTO_TEST_CASE( SimilarZoneGetsUniqueName )
+{
+    KIGFX::VIEW   view;
+    TOOL_MANAGER  toolMgr;
+    DRAWING_TOOL* drawingTool = new DRAWING_TOOL();
+
+    toolMgr.SetEnvironment( &m_board, &view, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( drawingTool );
+
+    const VECTOR2I size( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
+
+    ZONE* named = CreateSquareZone( m_board, F_Cu, VECTOR2I( 0, 0 ), size ).release();
+    named->SetZoneName( wxS( "GND_POUR" ) );
+    m_board.Add( named );
+
+    ZONE* unnamed = CreateSquareZone( m_board, F_Cu, VECTOR2I( 0, 0 ), size ).release();
+    m_board.Add( unnamed );
+
+    ZONE_CREATE_HELPER::PARAMS params{ false, false, F_Cu, ZONE_MODE::SIMILAR, named, LEADER_MODE::DIRECT };
+    ZONE_CREATE_HELPER         helper( *drawingTool, params );
+
+    BOOST_CHECK_EQUAL( helper.createZoneFromExisting( *named )->GetZoneName(), wxS( "GND_POUR_1" ) );
+    BOOST_CHECK( helper.createZoneFromExisting( *unnamed )->GetZoneName().IsEmpty() );
 }
 
 
