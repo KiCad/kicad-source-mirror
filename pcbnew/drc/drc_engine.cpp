@@ -2819,11 +2819,13 @@ std::vector<BOARD_ITEM*> collectShowMatchCandidates( BOARD* aBoard, SHOWMATCH_DO
     if( !aBoard )
         return items;
 
-    for( const auto& [kiid, item] : aBoard->GetItemByIdCache() )
-    {
-        if( matchesShowMatchDomain( item, aDomain ) )
-            items.push_back( item );
-    }
+    aBoard->RunOnChildren(
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( matchesShowMatchDomain( aItem, aDomain ) )
+                    items.push_back( aItem );
+            },
+            RECURSE_MODE::RECURSE );
 
     return items;
 }
@@ -2984,63 +2986,65 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& 
             ftCache->Rebuild( m_board );
     }
 
-    BOARD_ITEM_SET items = m_board->GetItemSet();
     size_t totalItems = 0;
     size_t skippedItems = 0;
     size_t noLayerItems = 0;
     size_t checkedItems = 0;
 
-    for( auto& [kiid, item] : m_board->GetItemByIdCache() )
-    {
-        totalItems++;
-
-        // Skip items that don't have visible geometry or can't be meaningfully matched
-        switch( item->Type() )
-        {
-        case PCB_NETINFO_T:
-        case PCB_GENERATOR_T:
-        case PCB_GROUP_T:
-        case PCB_CONSTRAINT_T:
-            skippedItems++;
-            continue;
-
-        default:
-            break;
-        }
-
-        LSET itemLayers = item->GetLayerSet();
-
-        if( itemLayers.none() )
-        {
-            noLayerItems++;
-            continue;
-        }
-
-        checkedItems++;
-        bool matched = false;
-
-        for( PCB_LAYER_ID layer : itemLayers )
-        {
-            if( condition.EvaluateFor( item, nullptr, static_cast<int>( aConstraint ), layer,
-                                    aReporter ? aReporter : m_logReporter ) )
+    const auto applyConditionToItemFunc =
+            [&]( BOARD_ITEM* aItem )
             {
-                matches.push_back( item );
-                wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
-                            wxS( "[ShowMatches] engine: match type=%d kiid=%s layer=%d" ),
-                            (int) item->Type(), kiid.AsString(), (int) layer );
-                matched = true;
-                break; // No need to check other layers
-            }
-        }
+                totalItems++;
 
-        // Log a few non-matching items to help debug condition issues
-        if( !matched && matches.size() == 0 && checkedItems <= 5 )
-        {
-            wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
-                        wxS( "[ShowMatches] engine: no-match sample type=%d kiid=%s layers=%s" ),
-                        (int) item->Type(), kiid.AsString(), itemLayers.FmtHex() );
-        }
-    }
+                // Skip items that don't have visible geometry or can't be meaningfully matched
+                switch( aItem->Type() )
+                {
+                case PCB_NETINFO_T:
+                case PCB_GENERATOR_T:
+                case PCB_GROUP_T:
+                case PCB_CONSTRAINT_T:
+                    skippedItems++;
+                    return;
+
+                default:
+                    break;
+                }
+
+                LSET itemLayers = aItem->GetLayerSet();
+
+                if( itemLayers.none() )
+                {
+                    noLayerItems++;
+                    return;
+                }
+
+                checkedItems++;
+                bool matched = false;
+
+                for( PCB_LAYER_ID layer : itemLayers )
+                {
+                    if( condition.EvaluateFor( aItem, nullptr, static_cast<int>( aConstraint ), layer,
+                                               aReporter ? aReporter : m_logReporter ) )
+                    {
+                        matches.push_back( aItem );
+                        wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
+                                    wxS( "[ShowMatches] engine: match type=%d kiid=%s layer=%d" ),
+                                    (int) aItem->Type(), aItem->m_Uuid.AsString(), (int) layer );
+                        matched = true;
+                        break; // No need to check other layers
+                    }
+                }
+
+                // Log a few non-matching items to help debug condition issues
+                if( !matched && matches.size() == 0 && checkedItems <= 5 )
+                {
+                    wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
+                                wxS( "[ShowMatches] engine: no-match sample type=%d kiid=%s layers=%s" ),
+                                (int) aItem->Type(), aItem->m_Uuid.AsString(), itemLayers.FmtHex() );
+                }
+            };
+
+    m_board->RunOnChildren( applyConditionToItemFunc, RECURSE_MODE::RECURSE );
 
     wxLogTrace( wxS( "KI_TRACE_DRC_RULE_EDITOR" ),
                 wxS( "[ShowMatches] engine stats: total=%zu skipped=%zu noLayer=%zu checked=%zu" ),

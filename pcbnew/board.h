@@ -1699,19 +1699,18 @@ public:
     // --------- Items-by-index facades ---------
 
     /**
-     * The board's item identity index, used by ResolveItem() and for item lifecycle management.
-     *
-     * This map is owned and maintained by the board's #BOARD_ITEM_INDEX.
-     */
-    const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const { return m_itemIndex.Map(); }
-
-    /**
      * Return true if @a aItem is currently indexed.
      *
      * This does NOT dereference the pointer, so it is safe to call even if
      * the item has been deleted.
      */
     bool IsItemIndexedById( const BOARD_ITEM* aItem ) const { return m_itemIndex.IsIndexed( aItem ); }
+
+    /**
+     * Return true if an index entry for @a aId exists. Use ResolveItem() if you need
+     * to have the index verify the item's existence and repair cache misses.
+     */
+    bool IsItemIndexedById( const KIID& aId ) const { return m_itemIndex.IsIndexed( aId ); }
 
     /**
      * Add an item to the item-by-id cache.

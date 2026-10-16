@@ -168,8 +168,8 @@ BOOST_AUTO_TEST_CASE( ResolvingNewUuidPurgesStaleOldAlias )
     const_cast<KIID&>( liveShape->m_Uuid ) = newId;
 
     BOOST_CHECK_EQUAL( board->ResolveItem( newId, true ), liveShape );
-    BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
-    BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
+    BOOST_CHECK( board->IsItemIndexedById( newId ) );
+    BOOST_CHECK( !board->IsItemIndexedById( oldId ) );
 
     delete board;
 }
@@ -188,8 +188,8 @@ BOOST_AUTO_TEST_CASE( RebindItemUuidUpdatesCacheAtomically )
     board->RebindItemUuid( *liveShape, newId );
 
     BOOST_CHECK( liveShape->m_Uuid == newId );
-    BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
-    BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
+    BOOST_CHECK( !board->IsItemIndexedById( oldId ) );
+    BOOST_CHECK( board->IsItemIndexedById( newId ) );
     BOOST_CHECK_EQUAL( board->ResolveItem( newId, true ), liveShape );
 
     delete board;
@@ -212,8 +212,8 @@ BOOST_AUTO_TEST_CASE( AttachedChildSetUuidRebindsCache )
     livePad->SetUuid( newId );
 
     BOOST_CHECK( livePad->m_Uuid == newId );
-    BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
-    BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
+    BOOST_CHECK( !board->IsItemIndexedById( oldId ) );
+    BOOST_CHECK( board->IsItemIndexedById( newId ) );
     BOOST_CHECK_EQUAL( board->ResolveItem( newId, true ), livePad );
 
     delete board;
@@ -234,8 +234,8 @@ BOOST_AUTO_TEST_CASE( CacheItemByIdCanonicalizesRewrittenUuid )
     const_cast<KIID&>( liveShape->m_Uuid ) = newId;
     board->CacheItemById( *liveShape );
 
-    BOOST_CHECK( !board->GetItemByIdCache().contains( oldId ) );
-    BOOST_CHECK( board->GetItemByIdCache().contains( newId ) );
+    BOOST_CHECK( !board->IsItemIndexedById( oldId ) );
+    BOOST_CHECK( board->IsItemIndexedById( newId ) );
     BOOST_CHECK_EQUAL( board->ResolveItem( newId, true ), liveShape );
 
     delete board;
@@ -298,7 +298,7 @@ BOOST_AUTO_TEST_CASE( RemovingResolvedChildEvictsCacheOnFootprintHolder )
 
     // Remove and destroy the pad through the footprint, as a footprint edit does.
     liveFootprint->Remove( pad );
-    const bool staleEntrySurvived = board->GetItemByIdCache().contains( padId );
+    const bool staleEntrySurvived = board->IsItemIndexedById( padId );
 
     delete pad;
     delete board;
@@ -328,8 +328,8 @@ BOOST_AUTO_TEST_CASE( TableCellResolvesToTheCellNotItsTable )
 
     // Caching the table under the cell's id also made the two lookups evict each other.
     BOOST_CHECK_EQUAL( board.ResolveItem( cellId, true ), cell );
-    BOOST_CHECK( board.GetItemByIdCache().contains( tableId ) );
-    BOOST_CHECK( board.GetItemByIdCache().contains( cellId ) );
+    BOOST_CHECK( board.IsItemIndexedById( tableId ) );
+    BOOST_CHECK( board.IsItemIndexedById( cellId ) );
 }
 
 

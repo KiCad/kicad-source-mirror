@@ -96,7 +96,11 @@ public:
     void UnbindSubtree( const BOARD_ITEM& aItem );
     void UnbindChildren( const BOARD_ITEM& aParent );
 
-    const std::unordered_map<KIID, BOARD_ITEM*>& Map() const { return m_itemsById; }
+    /**
+     * Return true if a forward entry for @a aId exists.  The entry may be stale; use Find()
+     * for a verified lookup.
+     */
+    bool IsIndexed( const KIID& aId ) const { return m_itemsById.contains( aId ); }
 
     /**
      * Return true if @a aItem is currently indexed.

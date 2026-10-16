@@ -2109,25 +2109,22 @@ void PCB_WRITER_V10::format( const PCB_GROUP* aGroup ) const
 {
     wxArrayString memberIds;
 
-    if( m_board )
+    // Validate member pointers against the board cache to avoid use-after-free on dangling
+    // pointers (e.g. when a group held a reference to a deleted item).  This validation only
+    // applies when the group itself is part of m_board; for groups created off-board (e.g. a
+    // DeepClone() used by the clipboard) the cache contains the originals, not our clones, so
+    // skip the validation in that case and trust the member pointers.
+    //
+    // IsItemIndexedById() is explicitly safe to call on possibly-dangling pointers.
+    bool validateAgainstBoard = m_board && m_board->IsItemIndexedById( aGroup );
+
+    for( EDA_ITEM* member : aGroup->GetItems() )
     {
-        const auto& cache = m_board->GetItemByIdCache();
-
-        std::unordered_set<const EDA_ITEM*> validPtrs;
-
-        for( const auto& [uuid, item] : cache )
-            validPtrs.insert( item );
-
-        for( EDA_ITEM* member : aGroup->GetItems() )
+        if( !validateAgainstBoard
+                || m_board->IsItemIndexedById( static_cast<const BOARD_ITEM*>( member ) ) )
         {
-            if( validPtrs.count( member ) )
-                memberIds.Add( member->m_Uuid.AsString() );
-        }
-    }
-    else
-    {
-        for( EDA_ITEM* member : aGroup->GetItems() )
             memberIds.Add( member->m_Uuid.AsString() );
+        }
     }
 
     if( memberIds.empty() )
