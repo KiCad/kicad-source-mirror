@@ -1576,38 +1576,21 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             // Check if this footprint is the active one for this variant
             bool isAssociatedFootprint = fpidsEquivalent( footprint->GetFPID(), info.variantFPID );
 
+            // If this footprint is not active, and it's not one of multiple footprints that share
+            // a RefDes (one per variant), then it doesn't need variant info for it.
+            if( !isAssociatedFootprint && aFootprints.size() <= 1 )
+                continue;
+
+            excessVariants.erase( info.name );
+            bool targetDnp = variant.m_hasDnp ? variant.m_dnp : baseFootprintDnp;
+            bool currentDnp = currentVariant ? currentVariant->GetDNP() : effectiveFootprintDnp;
+
             // When multiple footprints share a RefDes (one per variant), a footprint that is not
             // the active choice for this variant must be DNP for it so the 3D viewer and other
             // consumers hide it.  The base footprint carries no global DNP flag, so it needs an
             // explicit per-variant override; non-base footprints are already globally DNP above.
             if( !isAssociatedFootprint )
-            {
-                if( aFootprints.size() > 1 )
-                {
-                    excessVariants.erase( info.name );
-                    bool currentDnp = currentVariant ? currentVariant->GetDNP() : effectiveFootprintDnp;
-
-                    if( !currentDnp )
-                    {
-                        printAttributeMessage( true, _( "Do not place" ), info.name );
-
-                        if( !m_isDryRun )
-                        {
-                            if( FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name ) )
-                                fpVariant->SetDNP( true );
-                        }
-
-                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-                        changed = true;
-                    }
-                }
-
-                continue;
-            }
-
-            excessVariants.erase( info.name );
-            bool targetDnp = variant.m_hasDnp ? variant.m_dnp : baseFootprintDnp;
-            bool currentDnp = currentVariant ? currentVariant->GetDNP() : effectiveFootprintDnp;
+                targetDnp = true;
 
             if( currentDnp != targetDnp )
             {
