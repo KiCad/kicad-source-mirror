@@ -81,4 +81,5 @@ private:
     size_t m_severitiesPage;
     size_t m_embeddedFilesPage;
     size_t m_tuningProfilesPage;
+    bool   m_initComplete;
 };

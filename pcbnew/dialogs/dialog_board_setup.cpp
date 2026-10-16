@@ -87,7 +87,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_netclassesPage( 0 ),
         m_customRulesPage( 0 ),
         m_severitiesPage( 0 ),
-        m_tuningProfilesPage( 0 )
+        m_tuningProfilesPage( 0 ),
+        m_initComplete( false )
 {
     SetEvtHandlerEnabled( false );
 
@@ -279,6 +280,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
             },
             _( "Embedded Files" ) );
 
+    m_initComplete = true;
+
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
 
@@ -347,7 +350,7 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 
     size_t page = aEvent.GetSelection();
 
-    if( m_physicalStackupPage > 0 )     // Don't run this during initialization
+    if( m_initComplete )
     {
         if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage || page == m_netclassesPage
             || page == m_tuningProfilesPage || page == m_zonesPage )

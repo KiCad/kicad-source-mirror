@@ -594,9 +594,13 @@ void PANEL_SETUP_LAYERS::SyncCopperLayers( int aNumCopperLayers )
     m_pcb = &temp;
     transferDataFromWindow();
 
-    for( size_t ii = 0; ii < m_enabledLayers.size(); ii++ )
+    for( int ii = 0; ii < (int) m_enabledLayers.size(); ii++ )
     {
-        if( IsCopperLayer( int( ii ) ) )
+        if( IsCopperLayer( ToLAYER_ID( ii ) ) )
+            m_enabledLayers.reset( ii );
+        else if( getCheckBox( ToLAYER_ID( ii ) ) && getCheckBox( ToLAYER_ID( ii ) )->IsChecked() )
+            m_enabledLayers.set( ii );
+        else
             m_enabledLayers.reset( ii );
     }
 
