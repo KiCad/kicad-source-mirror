@@ -597,7 +597,8 @@ VECTOR2I SCH_IO_LTSPICE_PARSER::ToKicadFontSize( int aLTFontSize )
                 return VECTOR2I( schIUScale.MilsToIU( mils ), schIUScale.MilsToIU( mils ) );
             };
 
-    if( aLTFontSize == 1 )      return MILS_SIZE( 36 );
+    if( aLTFontSize == 0 )      return MILS_SIZE( 20 );
+    else if( aLTFontSize == 1 ) return MILS_SIZE( 36 );
     else if( aLTFontSize == 2 ) return MILS_SIZE( 42 );
     else if( aLTFontSize == 3 ) return MILS_SIZE( 50 );
     else if( aLTFontSize == 4 ) return MILS_SIZE( 60 );
@@ -1561,7 +1562,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
             field->SetPosition( ToKicadCoords( lt_window.Position ) );
             field->SetTextSize( ToKicadFontSize( lt_window.FontSize ) );
 
-            if( lt_window.FontSize == 0 )
+            if( lt_window.Justification == LTSPICE_SCHEMATIC::JUSTIFICATION::NONE )
                 field->SetVisible( false );
 
             setTextJustification( field, lt_window.Justification );
