@@ -515,7 +515,10 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     // when no marker fired (matching the drawing-sheet path below).
                     if( testAssertion( item, textItem->GetText(), item->GetPosition(), item->GetLayer() ) )
                     {
-                        // Don't run unresolved test
+                        // Skip unresolved-variable test.
+                        // Yes, the assertion message could have an unresolved variable in it, but it's
+                        // going to end up in the DRC window anyway, so there's not much sense in double-
+                        // reporting it.
                     }
                     else if( varRefRegEx.Matches( ExpandEnvVarSubstitutions( textItem->GetShownText( FOR_ERC_DRC ),
                                                                              nullptr /*project already done*/ ) ) )

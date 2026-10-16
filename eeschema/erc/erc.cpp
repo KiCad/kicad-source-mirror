@@ -739,7 +739,10 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                                       SCH_CONNECTIVITY::ExtractTextAssertions( text->GetText() ),
                                       text->GetPosition() ) )
                 {
-                    // Don't run unresolved test
+                    // Skip unresolved-variable test.
+                    // Yes, the assertion message could have an unresolved variable in it, but it's
+                    // going to end up in the ERC window anyway, so there's not much sense in double-
+                    // reporting it.
                 }
                 else if( varRefRegEx.Matches( text->GetShownText( FOR_ERC_DRC ) ) )
                 {
