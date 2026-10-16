@@ -27,6 +27,7 @@
 #include <wx/file.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 
 #include <advanced_config.h>
 #include <board.h>
@@ -793,7 +794,13 @@ void PADS_PCB_CONVERTER::WriteDiffPairRules( const wxString& aFileName,
 
     // An import must not destroy rules the user already has. Creating exclusively both refuses an
     // existing file and closes the race a FileExists test would leave open
-    wxFile rulesFile( fn.GetFullPath(), wxFile::write_excl );
+    wxFile rulesFile;
+
+    {
+        // Refusal is expected and reported below, so keep wx from raising its own error
+        wxLogNull noLog;
+        rulesFile.Open( fn.GetFullPath(), wxFile::write_excl );
+    }
 
     if( !rulesFile.IsOpened() )
     {
