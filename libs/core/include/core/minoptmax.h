@@ -17,10 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MINOPTMAX_PROTO_H
-#define MINOPTMAX_PROTO_H
+#pragma once
 
 #include <limits>
+#include <algorithm>
 
 template<class T=int>
 class MINOPTMAX
@@ -63,5 +63,3 @@ private:
     bool m_hasOpt = false;
     bool m_hasMax = false;
 };
-
-#endif
