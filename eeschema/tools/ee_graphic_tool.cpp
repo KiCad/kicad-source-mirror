@@ -824,7 +824,9 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, st
         started = true;
     }
 
-    while( TOOL_EVENT* evt = Wait() )
+    TOOL_EVENT* evt = nullptr;
+
+    while( ( evt = Wait() ) )
     {
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
@@ -956,6 +958,10 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, st
                 frame()->SetMsgPanel( parent );
         }
     }
+
+    // A shutdown must end the caller's loop rather than start another shape
+    if( !evt )
+        cancelled = true;
 
     preview.Remove( aShape.get() );
     m_view->Remove( &aBehavior.GetAssistant() );

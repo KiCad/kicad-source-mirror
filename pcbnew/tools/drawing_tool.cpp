@@ -3031,8 +3031,10 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
     if( aStartingPoint )
         m_toolMgr->PrimeTool( *aStartingPoint );
 
+    TOOL_EVENT* evt = nullptr;
+
     // Main loop: keep receiving events
-    while( TOOL_EVENT* evt = Wait() )
+    while( ( evt = Wait() ) )
     {
         setCursor();
 
@@ -3388,6 +3390,13 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
         }
     }
 
+    // A shutdown must end the caller's loop rather than start another shape
+    if( !evt )
+    {
+        cleanup();
+        cancelled = true;
+    }
+
     if( !isLocalOriginSet ) // reset the relative coordinate if it was not set before
         m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
 
@@ -3537,8 +3546,10 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
         started = true;
     }
 
+    TOOL_EVENT* evt = nullptr;
+
     // Main loop: keep receiving events
-    while( TOOL_EVENT* evt = Wait() )
+    while( ( evt = Wait() ) )
     {
         if( started )
             m_frame->SetMsgPanel( graphic );
@@ -3765,6 +3776,13 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
             else
                 frame()->SetMsgPanel( board() );
         }
+    }
+
+    // A shutdown must end the caller's loop rather than start another shape
+    if( !evt )
+    {
+        cleanup();
+        cancelled = true;
     }
 
     preview.Remove( graphic );
@@ -4547,10 +4565,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             DRAWING_TOOL* drawingTool = m_frame->GetToolManager()->GetTool<DRAWING_TOOL>();
             drawingTool->SetContextMenu( &menu, CMENU_NOW );
 
-            int  selectedNetCode = -1;
-            bool cancelled = false;
+            int         selectedNetCode = -1;
+            bool        cancelled = false;
+            TOOL_EVENT* evt = nullptr;
 
-            while( TOOL_EVENT* evt = drawingTool->Wait() )
+            while( ( evt = drawingTool->Wait() ) )
             {
                 if( evt->Action() == TA_CHOICE_MENU_UPDATE )
                 {
@@ -4577,7 +4596,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            if( cancelled )
+            // A shutdown is not a net choice
+            if( cancelled || !evt )
                 return std::optional<int>();
             else
                 return selectedNetCode;
