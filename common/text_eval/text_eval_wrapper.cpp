@@ -304,21 +304,23 @@ struct SI_PREFIX_HANDLER
         double   multiplier;
     };
 
-    static constexpr std::array<PREFIX, 18> prefixes = { { { U'a', 1e-18 },
-                                                           { U'f', 1e-15 },
-                                                           { U'p', 1e-12 },
-                                                           { U'n', 1e-9 },
-                                                           { U'u', 1e-6 },
-                                                           { U'µ', 1e-6 },
-                                                           { U'μ', 1e-6 }, // Various micro symbols
-                                                           { U'm', 1e-3 },
-                                                           { U'k', 1e3 },
-                                                           { U'K', 1e3 },
-                                                           { U'M', 1e6 },
-                                                           { U'G', 1e9 },
-                                                           { U'T', 1e12 },
-                                                           { U'P', 1e15 },
-                                                           { U'E', 1e18 } } };
+    static constexpr auto prefixes = std::to_array<PREFIX>( { { U'a', 1e-18 },
+                                                              { U'f', 1e-15 },
+                                                              { U'p', 1e-12 },
+                                                              { U'n', 1e-9 },
+                                                              { U'u', 1e-6 },
+                                                              { U'µ', 1e-6 },
+                                                              { U'μ', 1e-6 }, // Various micro symbols
+                                                              { U'm', 1e-3 },
+                                                              { U'R', 1.0 },  // RKM unity markers
+                                                              { U'F', 1.0 },
+                                                              { U'k', 1e3 },
+                                                              { U'K', 1e3 },
+                                                              { U'M', 1e6 },
+                                                              { U'G', 1e9 },
+                                                              { U'T', 1e12 },
+                                                              { U'P', 1e15 },
+                                                              { U'E', 1e18 } } );
 
     static constexpr bool is_si_prefix( UnicodeCodepoint auto cp ) noexcept
     {
@@ -479,6 +481,21 @@ private:
         return peek_pos < m_text.size() ? m_text[peek_pos] : U'\0';
     }
 
+    bool at_exponent() const noexcept
+    {
+        char32_t c = current_char();
+
+        if( c != U'e' && c != U'E' )
+            return false;
+
+        size_t offset = 1;
+
+        if( peek_char( offset ) == U'+' || peek_char( offset ) == U'-' )
+            ++offset;
+
+        return CLASSIFIER::is_digit( peek_char( offset ) );
+    }
+
     void advance_position( size_t count = 1 ) noexcept
     {
         for( size_t i = 0; i < count && m_pos < m_text.size(); ++i )
@@ -634,6 +651,26 @@ private:
         number_text.reserve( 32 );
 
         double multiplier = 1.0;
+        bool   hasPrefix = false;
+
+        // R and F carry no scale, so only accept them as RKM markers, never ahead of a unit like 1Rin
+        auto canConsumePrefix = [&]( char32_t aPrefix )
+        {
+            if( !SI_HANDLER::is_si_prefix( aPrefix ) )
+                return false;
+
+            if( aPrefix == U'R' || aPrefix == U'F' )
+                return !CLASSIFIER::is_alpha( peek_char() ) && peek_char() != U'_';
+
+            return true;
+        };
+
+        auto consumePrefix = [&]( char32_t aPrefix )
+        {
+            multiplier = SI_HANDLER::get_multiplier( aPrefix );
+            hasPrefix = true;
+            advance_position();
+        };
 
         // Parse integer part
         while( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
@@ -653,6 +690,10 @@ private:
             {
                 number_text.push_back( U'.' );
                 advance_position();
+            }
+            else if( at_exponent() )
+            {
+                // Leave 3E3 for the exponent parser rather than reading E as exa
             }
             else if( m_context == TOKENIZER_CONTEXT::EXPRESSION && CLASSIFIER::is_alpha( c ) )
             {
@@ -687,26 +728,27 @@ private:
                         // This is a valid unit - don't treat the first character as SI prefix
                         // The unit parsing will happen later
                     }
-                    else if( SI_HANDLER::is_si_prefix( c ) )
+                    else if( canConsumePrefix( c ) )
                     {
                         // Not a valid unit, so treat as SI prefix
-                        multiplier = SI_HANDLER::get_multiplier( c );
-                        advance_position();
+                        consumePrefix( c );
                     }
                 }
-                else if( SI_HANDLER::is_si_prefix( c ) )
+                else if( canConsumePrefix( c ) )
                 {
                     // No alphabetic characters following, so treat as SI prefix
-                    multiplier = SI_HANDLER::get_multiplier( c );
-                    advance_position();
+                    consumePrefix( c );
                 }
             }
-            else if( SI_HANDLER::is_si_prefix( c ) )
+            else if( canConsumePrefix( c ) )
             {
                 // In text context, treat as SI prefix
-                multiplier = SI_HANDLER::get_multiplier( c );
-                advance_position();
+                consumePrefix( c );
             }
+
+            // RKM notation (3k3, 4R7) puts the multiplier where the decimal point goes
+            if( hasPrefix && m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
+                number_text.push_back( U'.' );
         }
 
         // Parse fractional part
@@ -717,58 +759,37 @@ private:
         }
 
         // Check for scientific notation (e.g., 1e-3, 3.5E6)
-        if( m_pos < m_text.size() )
+        if( at_exponent() )
         {
-            char32_t c = current_char();
+            // Parse scientific notation exponent
+            number_text.push_back( current_char() ); // Add 'e' or 'E'
+            advance_position();
 
-            if( c == U'e' || c == U'E' )
+            // Optional sign
+            if( m_pos < m_text.size() && ( current_char() == U'+' || current_char() == U'-' ) )
             {
-                // Look ahead to see if this is scientific notation (followed by +, -, or digit)
-                size_t temp_pos = m_pos + 1;
-                bool   is_scientific = false;
+                number_text.push_back( current_char() );
+                advance_position();
+            }
 
-                if( temp_pos < m_text.size() )
+            // Exponent digits (required)
+            if( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
+            {
+                while( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
                 {
-                    char32_t next = m_text[temp_pos];
-                    if( next == U'+' || next == U'-' || CLASSIFIER::is_digit( next ) )
-                    {
-                        is_scientific = true;
-                    }
-                }
-
-                if( is_scientific )
-                {
-                    // Parse scientific notation exponent
-                    number_text.push_back( c ); // Add 'e' or 'E'
+                    number_text.push_back( current_char() );
                     advance_position();
-
-                    // Optional sign
-                    if( m_pos < m_text.size() && ( current_char() == U'+' || current_char() == U'-' ) )
-                    {
-                        number_text.push_back( current_char() );
-                        advance_position();
-                    }
-
-                    // Exponent digits (required)
-                    if( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
-                    {
-                        while( m_pos < m_text.size() && CLASSIFIER::is_digit( current_char() ) )
-                        {
-                            number_text.push_back( current_char() );
-                            advance_position();
-                        }
-                    }
-                    else
-                    {
-                        // Invalid scientific notation - will fail in conversion
-                        add_error( "Invalid scientific notation: missing exponent digits" );
-                    }
                 }
+            }
+            else
+            {
+                // Invalid scientific notation - will fail in conversion
+                add_error( "Invalid scientific notation: missing exponent digits" );
             }
         }
 
         // Check for SI prefix after fractional part (for numbers like 0.3M)
-        if( m_pos < m_text.size() && multiplier == 1.0 )
+        if( m_pos < m_text.size() && !hasPrefix )
         {
             char32_t c = current_char();
 
@@ -798,19 +819,17 @@ private:
                     std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( potential_unit );
                     KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
 
-                    if( parsed_unit == KIEVAL_UNIT_CONV::Unit::Invalid && SI_HANDLER::is_si_prefix( c ) )
+                    if( parsed_unit == KIEVAL_UNIT_CONV::Unit::Invalid && canConsumePrefix( c ) )
                     {
                         // Not a valid unit, so treat as SI prefix
-                        multiplier = SI_HANDLER::get_multiplier( c );
-                        advance_position();
+                        consumePrefix( c );
                     }
                 }
             }
-            else if( SI_HANDLER::is_si_prefix( c ) )
+            else if( canConsumePrefix( c ) )
             {
                 // In text context, treat as SI prefix
-                multiplier = SI_HANDLER::get_multiplier( c );
-                advance_position();
+                consumePrefix( c );
             }
         }
 

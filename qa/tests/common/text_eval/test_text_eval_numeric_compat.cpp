@@ -740,4 +740,31 @@ BOOST_AUTO_TEST_CASE( UnitParsingPriority )
     BOOST_CHECK_CLOSE( wxAtof( result ), 2.54, 0.01 );
 }
 
+/**
+ * Component values in RKM notation, where the multiplier letter doubles as the decimal point.
+ */
+BOOST_AUTO_TEST_CASE( RkmComponentValues )
+{
+    const std::vector<std::pair<wxString, double>> cases = {
+        { "@{330R/2}", 165.0 }, { "@{3k3/2}", 1650.0 }, { "@{3M3}", 3.3e6 },
+        { "@{4F7}", 4.7 },      { "@{3E3}", 3000.0 },   { "@{1E+sqrt(4)}", 1e18 },
+    };
+
+    for( const auto& [input, expected] : cases )
+    {
+        EXPRESSION_EVALUATOR evaluator;
+        wxString             result = evaluator.Evaluate( input );
+
+        BOOST_TEST_CONTEXT( input )
+        {
+            BOOST_CHECK( !evaluator.HasErrors() );
+            BOOST_CHECK_CLOSE( wxAtof( result ), expected, 0.01 );
+        }
+    }
+
+    EXPRESSION_EVALUATOR evaluator;
+    evaluator.Evaluate( "@{1Rin}" );
+    BOOST_CHECK( evaluator.HasErrors() );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
