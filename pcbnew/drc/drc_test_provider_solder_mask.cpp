@@ -491,7 +491,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 
     std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aRefLayer );
 
-    m_itemTree->QueryColliding( aItem, aRefLayer, aTargetLayer,
+    m_itemTree->QueryColliding(
+            aItem, aRefLayer, aTargetLayer,
             // Filter:
             [&]( BOARD_ITEM* other ) -> bool
             {
@@ -569,7 +570,6 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             // Visitor:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                PAD* otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
                 auto otherItemShape = other->GetEffectiveShape( aTargetLayer );
                 int  otherNet = -1;
 
@@ -590,12 +590,6 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     // Copper-to-aperture uses the solder-mask-to-copper-clearance
                     clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
                 }
-
-                if( pad )
-                    clearance += pad->GetSolderMaskExpansion( aRefLayer );
-
-                if( otherPad )
-                    clearance += otherPad->GetSolderMaskExpansion( aTargetLayer );
 
                 if( itemShape->Collide( otherItemShape.get(), clearance, &actual, &pos ) )
                 {
@@ -642,7 +636,10 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
                                                               PCB_LAYER_ID aMaskLayer, PCB_LAYER_ID aTargetLayer )
 {
-    PAD* pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
+    std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aMaskLayer );
+    BOX2I                  apertureBBox( aItemBBox );
+
+    apertureBBox.Merge( itemShape->BBox() );
 
     for( ZONE* zone : m_board->m_DRCCopperZones )
     {
@@ -659,11 +656,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
                 continue;
         }
 
-        BOX2I inflatedBBox( aItemBBox );
+        BOX2I inflatedBBox( apertureBBox );
         int   clearance = m_board->GetDesignSettings().m_SolderMaskToCopperClearance;
-
-        if( pad )
-            clearance += pad->GetSolderMaskExpansion( aTargetLayer );
 
         inflatedBBox.Inflate( clearance );
 
@@ -674,10 +668,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
         int        actual;
         VECTOR2I   pos;
 
-        std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aMaskLayer );
-
-        if( zoneTree && zoneTree->QueryColliding( aItemBBox, itemShape.get(), aTargetLayer, clearance,
-                                                  &actual, &pos ) )
+        if( zoneTree
+            && zoneTree->QueryColliding( apertureBBox, itemShape.get(), aTargetLayer, clearance, &actual, &pos ) )
         {
             // Simple mask apertures aren't associated with copper items, so they only constitute
             // a bridge when they expose other copper items having at least two distinct nets.

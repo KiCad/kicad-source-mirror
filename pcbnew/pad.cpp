@@ -1311,17 +1311,51 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFl
                  wxString::Format( wxT( "Null shape in PAD::GetEffectiveShape for layer %s." ),
                                    magic_enum::enum_name( effectiveLayer ) ) );
 
+    std::shared_ptr<SHAPE> shape = drawCache.m_effectiveShapes.at( effectiveLayer );
+
+    if( IsSolderMaskLayer( aLayer ) )
+    {
+        if( int expansion = GetSolderMaskExpansion( aLayer ) )
+            shape = getMaskShape( aLayer, expansion );
+    }
+
     // In some cases we want to add in any backdrill or post-machining
     if( ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT || aUsage == SILK_CLEARANCE_CONSTRAINT )
             && IsBackdrilledOrPostMachined( aLayer ) )
     {
         std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
-        effective_compound->AddShape( drawCache.m_effectiveShapes.at( effectiveLayer ) );
+        effective_compound->AddShape( shape );
         effective_compound->AddShape( GetEffectiveHoleShape( aLayer, aUsage ) );
         return effective_compound;
     }
 
-    return drawCache.m_effectiveShapes.at( effectiveLayer );
+    return shape;
+}
+
+
+std::shared_ptr<SHAPE_COMPOUND> PAD::getMaskShape( PCB_LAYER_ID aLayer, int aExpansion ) const
+{
+    {
+        std::lock_guard<std::mutex> RAII_lock( m_maskShapeMutex );
+        auto                        it = m_maskShapes.find( aLayer );
+
+        if( it != m_maskShapes.end() && it->second.first == aExpansion )
+            return it->second.second;
+    }
+
+    // Built outside the lock because this can re-enter the pad through the rule engine
+    SHAPE_POLY_SET aperture;
+    TransformShapeToPolygon( aperture, aLayer, aExpansion, GetMaxError(), ERROR_OUTSIDE );
+
+    std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
+
+    for( int ii = 0; ii < aperture.OutlineCount(); ++ii )
+        shape->AddShape( new SHAPE_SIMPLE( aperture.COutline( ii ) ) );
+
+    std::lock_guard<std::mutex> RAII_lock( m_maskShapeMutex );
+    m_maskShapes[aLayer] = { aExpansion, shape };
+
+    return shape;
 }
 
 
@@ -1378,6 +1412,11 @@ void PAD::BuildEffectiveShapes() const
 
     drawCache.m_effectiveBoundingBox = BOX2I();
     drawCache.m_effectiveShapes.clear();
+
+    {
+        std::lock_guard<std::mutex> RAII_maskLock( m_maskShapeMutex );
+        m_maskShapes.clear();
+    }
 
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )

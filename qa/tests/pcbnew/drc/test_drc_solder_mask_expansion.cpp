@@ -224,6 +224,18 @@ struct SILK_MASK_EXPANSION_FIXTURE
         bds.m_TentViasFront = false;
         bds.m_TentViasBack = false;
 
+        FOOTPRINT* footprint = new FOOTPRINT( m_board.get() );
+        m_board->Add( footprint );
+
+        PAD* pad = new PAD( footprint );
+        pad->SetAttribute( PAD_ATTRIB::PTH );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+        pad->SetPrimaryDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.5 ), pcbIUScale.mmToIU( 0.5 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu, B_Cu, F_Mask, B_Mask } ) );
+        pad->SetPosition( VECTOR2I( 0, 0 ) );
+        footprint->Add( pad );
+
         PCB_VIA* via = new PCB_VIA( m_board.get() );
         via->SetLayerPair( F_Cu, B_Cu );
         via->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 10.0 ), 0 ) );
@@ -284,4 +296,21 @@ BOOST_FIXTURE_TEST_CASE( SilkInsideViaMaskOpeningIsReported, SILK_MASK_EXPANSION
 
     BOOST_CHECK_MESSAGE( CountMaskViolations() == 1, "silk clear of the via copper but inside its mask opening was not "
                                                      "reported" );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( SilkInsidePadMaskOpeningIsReported, SILK_MASK_EXPANSION_FIXTURE )
+{
+    AddSilkLine( -2.0, 2.0, -0.625 );
+
+    BOOST_CHECK_MESSAGE( CountMaskViolations() == 1, "silk clear of the pad copper but inside its mask opening was not "
+                                                     "reported" );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( SilkOutsidePadMaskOpeningIsNotReported, SILK_MASK_EXPANSION_FIXTURE )
+{
+    AddSilkLine( -2.0, 2.0, 0.75 );
+
+    BOOST_CHECK_MESSAGE( CountMaskViolations() == 0, "silk clear of the pad mask opening was reported" );
 }

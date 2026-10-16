@@ -1107,6 +1107,8 @@ private:
 
     PAD_DRAW_CACHE_DATA& getDrawCache() const;
 
+    std::shared_ptr<SHAPE_COMPOUND> getMaskShape( PCB_LAYER_ID aLayer, int aExpansion ) const;
+
     void doCheckPad( PCB_LAYER_ID aLayer, UNITS_PROVIDER* aUnitsProvider, bool aForPadProperties,
                      const std::function<void( int aErrorCode, const wxString& aMsg )>& aErrorHandler ) const;
 
@@ -1124,6 +1126,10 @@ private:
     mutable std::mutex m_dataMutex;
 
     mutable std::unique_ptr<PAD_DRAW_CACHE_DATA> m_drawCache;
+
+    // Mask apertures, keyed by expansion because that comes from settings, not geometry
+    mutable std::mutex                                                              m_maskShapeMutex;
+    mutable std::map<PCB_LAYER_ID, std::pair<int, std::shared_ptr<SHAPE_COMPOUND>>> m_maskShapes;
 
     mutable int       m_effectiveBoundingRadius;
 

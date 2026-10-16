@@ -242,13 +242,15 @@ public:
         // shapes
         std::unordered_map<BOARD_ITEM*, bool> filterResults;
 
+        std::shared_ptr<SHAPE> refShape = aRefItem->GetEffectiveShape( aRefLayer );
+
+        // A mask aperture reaches past the item's copper bounding box, so cover both
         BOX2I box = aRefItem->GetBoundingBox();
+        box.Merge( refShape->BBox() );
         box.Inflate( aClearance );
 
         int min[2] = { box.GetX(),     box.GetY() };
         int max[2] = { box.GetRight(), box.GetBottom() };
-
-        std::shared_ptr<SHAPE> refShape = aRefItem->GetEffectiveShape( aRefLayer );
 
         int count = 0;
 
