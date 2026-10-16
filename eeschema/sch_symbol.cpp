@@ -1990,7 +1990,7 @@ void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride, 
     {
         instance->m_Variants[aVariantName].m_PinMapOverride = aOverride;
     }
-    else if( !aOverride.IsDefault() )
+    else if( aOverride != m_pinMapOverride )
     {
         SCH_SYMBOL_VARIANT variant( aVariantName );
 
