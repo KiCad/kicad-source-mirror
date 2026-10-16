@@ -26,9 +26,12 @@
 #import <QuartzCore/CAMetalLayer.h>
 #import <QuartzCore/CATransaction.h>
 
+#include <algorithm>
+#include <array>
 #include <chrono>
 #include <condition_variable>
 #include <cstring>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -48,6 +51,12 @@ public:
     const char*     GetName() const override;
     RHI_BACKEND     GetBackend() const override;
     bool            IsInitialized() const override;
+    bool                        SupportsCompute() const override;
+    RHI_COMPUTE_DEVICE_LIMITS   ComputeDeviceLimits() const override;
+    RHI_ComputePipelineHandle   CreateComputePipeline( const RHI_COMPUTE_PIPELINE_DESC& aDesc ) override;
+    void                        DestroyComputePipeline( RHI_ComputePipelineHandle aHandle ) override;
+    RHI_COMPUTE_PIPELINE_LIMITS ComputePipelineLimits( RHI_ComputePipelineHandle aHandle ) const override;
+    RHI_COMPUTE_RESULT          ExecuteCompute( const RHI_COMPUTE_JOB& aJob ) override;
 
     RHI_BufferHandle ReserveBufferHandle() override;
     bool             RealizeBuffer( RHI_BufferHandle handle, const RHI_BUFFER_DESC& desc ) override;
@@ -178,6 +187,17 @@ private:
         RHI_PIPELINE_DESC         desc;
         MTLPrimitiveType           primitiveType   = MTLPrimitiveTypeTriangle;
     };
+
+    struct METAL_COMPUTE_PIPELINE_ALLOCATION
+    {
+        id<MTLComputePipelineState> pipeline = nil;
+        RHI_COMPUTE_PIPELINE_DESC   desc;
+    };
+
+    RHI_HANDLE_POOL<RHI_TAG_COMPUTE_PIPELINE>                       m_computePipelinePool;
+    std::unordered_map<uint32_t, METAL_COMPUTE_PIPELINE_ALLOCATION> m_computePipelines;
+    std::map<std::string, id<MTLLibrary>>                           m_computeLibraries;
+    bool                                                            m_computeDeviceLost = false;
 
     struct MetalRenderPassAllocation
     {
@@ -442,6 +462,8 @@ RHI_METAL_DEVICE::~RHI_METAL_DEVICE()
     m_surfaces.clear();
     m_framebuffers.clear();
     m_pipelines.clear();
+    m_computePipelines.clear();
+    m_computeLibraries.clear();
     m_shaders.clear();
     m_textures.clear();
     m_buffers.clear();
@@ -496,6 +518,417 @@ bool RHI_METAL_DEVICE::IsInitialized() const
 }
 
 
+// Compute operations
+
+bool RHI_METAL_DEVICE::SupportsCompute() const
+{
+    return m_initialized && !m_computeDeviceLost;
+}
+
+
+RHI_COMPUTE_DEVICE_LIMITS RHI_METAL_DEVICE::ComputeDeviceLimits() const
+{
+    if( !SupportsCompute() )
+        return {};
+
+    MTLSize                   size = m_device.maxThreadsPerThreadgroup;
+    RHI_COMPUTE_DEVICE_LIMITS limits;
+    limits.maxWorkgroupSize = { static_cast<uint32_t>( size.width ), static_cast<uint32_t>( size.height ),
+                                static_cast<uint32_t>( size.depth ) };
+    limits.maxWorkgroupInvocations = static_cast<uint32_t>( size.width );
+    limits.maxDispatchGroups = { UINT32_MAX, UINT32_MAX, UINT32_MAX };
+    limits.maxSharedMemoryBytes = m_device.maxThreadgroupMemoryLength;
+    limits.maxStorageBufferRange = m_device.maxBufferLength;
+    limits.minStorageBufferOffsetAlignment = 256;
+    return limits;
+}
+
+
+RHI_ComputePipelineHandle RHI_METAL_DEVICE::CreateComputePipeline( const RHI_COMPUTE_PIPELINE_DESC& aDesc )
+{
+    if( !SupportsCompute() || !RhiValidateComputePipelineDesc( aDesc ) || !aDesc.shader.msl || !aDesc.shader.mslSize )
+    {
+        return {};
+    }
+
+    const auto     limits = ComputeDeviceLimits();
+    const uint64_t threads = uint64_t( aDesc.workgroupX ) * aDesc.workgroupY;
+
+    if( aDesc.workgroupX > limits.maxWorkgroupSize[0] || aDesc.workgroupY > limits.maxWorkgroupSize[1]
+        || threads > limits.maxWorkgroupInvocations )
+    {
+        return {};
+    }
+
+    for( const auto& layout : aDesc.bindGroupLayouts )
+    {
+        for( const auto& entry : layout.entries )
+        {
+            if( ( entry.type != RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER && entry.binding >= 31 )
+                || ( entry.type == RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER && entry.binding >= 16 ) )
+            {
+                return {};
+            }
+        }
+    }
+
+    @autoreleasepool
+    {
+        std::vector<RHI_SPECIALIZATION_CONSTANT> constants = aDesc.constants;
+        constants.push_back( { RHI_SPEC_ID_WORKGROUP_X, aDesc.workgroupX } );
+        constants.push_back( { RHI_SPEC_ID_WORKGROUP_Y, aDesc.workgroupY } );
+        std::sort( constants.begin(), constants.end(),
+                   []( const auto& aLeft, const auto& aRight )
+                   {
+                       return aLeft.id < aRight.id;
+                   } );
+        std::string                                key( aDesc.shader.msl, aDesc.shader.mslSize );
+        NSMutableDictionary<NSString*, NSObject*>* macros = [NSMutableDictionary dictionary];
+
+        // spirv-cross turns array-sizing constants into macros and ignores function constants for them
+        for( const auto& constant : constants )
+        {
+            key += ':' + std::to_string( constant.id ) + '=' + std::to_string( constant.value );
+            NSString* name = [NSString stringWithFormat:@"SPIRV_CROSS_CONSTANT_ID_%u", constant.id];
+            macros[name] = [NSString stringWithFormat:@"%uu", constant.value];
+        }
+
+        id<MTLLibrary> library = nil;
+        auto           cached = m_computeLibraries.find( key );
+
+        if( cached != m_computeLibraries.end() )
+            library = cached->second;
+        else
+        {
+            NSString*          source = [[NSString alloc] initWithBytes:aDesc.shader.msl
+                                                        length:aDesc.shader.mslSize
+                                                      encoding:NSUTF8StringEncoding];
+            MTLCompileOptions* options = [[MTLCompileOptions alloc] init];
+            options.preprocessorMacros = macros;
+            NSError* error = nil;
+            library = [m_device newLibraryWithSource:source options:options error:&error];
+
+            if( !library )
+            {
+                wxLogTrace( traceRhi, wxS( "Metal compute library: %s" ), error.localizedDescription.UTF8String );
+                return {};
+            }
+
+            m_computeLibraries.emplace( key, library );
+        }
+
+        id<MTLFunction> base = [library newFunctionWithName:@"main0"];
+
+        if( !base )
+            return {};
+
+        MTLFunctionConstantValues* values = [[MTLFunctionConstantValues alloc] init];
+        bool                       hasFunctionConstants = false;
+
+        // Array-sized specializations can disappear from reflection after macro expansion
+
+        for( MTLFunctionConstant* declared in base.functionConstantsDictionary.allValues )
+        {
+            auto constant = std::find_if( constants.begin(), constants.end(),
+                                          [&]( const auto& aConstant )
+                                          {
+                                              return aConstant.id == declared.index;
+                                          } );
+
+            if( constant == constants.end() )
+                continue;
+
+            if( declared.type == MTLDataTypeBool )
+            {
+                bool value = constant->value != 0;
+                [values setConstantValue:&value type:declared.type atIndex:declared.index];
+            }
+            else if( declared.type == MTLDataTypeUInt || declared.type == MTLDataTypeInt
+                     || declared.type == MTLDataTypeFloat )
+            {
+                [values setConstantValue:&constant->value type:declared.type atIndex:declared.index];
+            }
+            else
+            {
+                return {};
+            }
+
+            hasFunctionConstants = true;
+        }
+
+        NSError*        error = nil;
+        id<MTLFunction> function = base;
+
+        if( hasFunctionConstants )
+            function = [library newFunctionWithName:@"main0" constantValues:values error:&error];
+
+        if( !function )
+            return {};
+
+        id<MTLComputePipelineState> pipeline = [m_device newComputePipelineStateWithFunction:function error:&error];
+
+        if( !pipeline || threads > pipeline.maxTotalThreadsPerThreadgroup
+            || pipeline.staticThreadgroupMemoryLength > limits.maxSharedMemoryBytes )
+        {
+            return {};
+        }
+
+        auto handle = m_computePipelinePool.Allocate();
+
+        if( !handle )
+            return {};
+
+        METAL_COMPUTE_PIPELINE_ALLOCATION allocation;
+        allocation.pipeline = pipeline;
+        allocation.desc = aDesc;
+        allocation.desc.shader = {};
+        m_computePipelines.emplace( RhiHandleIndex( handle ), std::move( allocation ) );
+        return handle;
+    }
+}
+
+
+void RHI_METAL_DEVICE::DestroyComputePipeline( RHI_ComputePipelineHandle aHandle )
+{
+    if( !m_computePipelinePool.IsValid( aHandle ) )
+        return;
+
+    RhiReleasePooledResource( m_computePipelines, m_computePipelinePool, aHandle.value );
+}
+
+
+RHI_COMPUTE_PIPELINE_LIMITS RHI_METAL_DEVICE::ComputePipelineLimits( RHI_ComputePipelineHandle aHandle ) const
+{
+    if( !m_computePipelinePool.IsValid( aHandle ) )
+        return {};
+
+    auto pipeline = m_computePipelines.find( RhiHandleIndex( aHandle ) );
+
+    if( pipeline == m_computePipelines.end() )
+        return {};
+
+    return { static_cast<uint32_t>( pipeline->second.pipeline.maxTotalThreadsPerThreadgroup ),
+             static_cast<uint32_t>( pipeline->second.pipeline.threadExecutionWidth ) };
+}
+
+
+RHI_COMPUTE_RESULT RHI_METAL_DEVICE::ExecuteCompute( const RHI_COMPUTE_JOB& aJob )
+{
+    using OP = RHI_COMPUTE_JOB::OP;
+
+    if( !SupportsCompute() )
+        return m_computeDeviceLost ? RHI_COMPUTE_RESULT::DEVICE_LOST : RHI_COMPUTE_RESULT::INVALID;
+
+    const RHI_COMPUTE_DEVICE_LIMITS limits = ComputeDeviceLimits();
+    RHI_COMPUTE_JOB_LOOKUP          lookup;
+
+    lookup.pipeline = [this]( RHI_ComputePipelineHandle aHandle ) -> const RHI_COMPUTE_PIPELINE_DESC*
+    {
+        auto it = m_computePipelines.find( RhiHandleIndex( aHandle ) );
+        return m_computePipelinePool.IsValid( aHandle ) && it != m_computePipelines.end() ? &it->second.desc
+                                                                                         : nullptr;
+    };
+
+    // Metal binds each resource per dispatch, so a group is only usable while all of them are alive
+    lookup.groupLayout = [&]( RHI_BindGroupHandle aHandle ) -> const RHI_BIND_GROUP_LAYOUT_DESC*
+    {
+        auto group = m_bindGroups.find( RhiHandleIndex( aHandle ) );
+
+        if( !m_bindGroupPool.IsValid( aHandle ) || group == m_bindGroups.end() )
+            return nullptr;
+
+        auto layout = m_bindGroupLayouts.find( RhiHandleIndex( group->second.desc.layout ) );
+
+        if( !m_bindGroupLayoutPool.IsValid( group->second.desc.layout ) || layout == m_bindGroupLayouts.end() )
+            return nullptr;
+
+        for( const RHI_BIND_GROUP_RESOURCE& resource : group->second.desc.entries )
+        {
+            const RHI_BINDING_ENTRY* entry = layout->second.desc.Find( resource.binding );
+
+            if( !entry )
+                return nullptr;
+
+            if( entry->type == RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER )
+            {
+                if( !m_texturePool.IsValid( resource.textureHandle )
+                    || m_textures.find( RhiHandleIndex( resource.textureHandle ) ) == m_textures.end() )
+                {
+                    return nullptr;
+                }
+
+                continue;
+            }
+
+            auto buffer = m_buffers.find( RhiHandleIndex( resource.bufferHandle ) );
+
+            if( !m_bufferPool.IsValid( resource.bufferHandle ) || buffer == m_buffers.end()
+                || resource.offset % limits.minStorageBufferOffsetAlignment )
+            {
+                return nullptr;
+            }
+        }
+
+        return &layout->second.desc;
+    };
+
+    lookup.storageRange = [this]( RHI_BufferHandle aHandle, size_t aOffset, size_t aBytes )
+    {
+        auto it = m_buffers.find( RhiHandleIndex( aHandle ) );
+        return m_bufferPool.IsValid( aHandle ) && it != m_buffers.end()
+               && it->second.desc.type == RHI_BUFFER_TYPE::STORAGE
+               && RhiRangeWithinBuffer( aOffset, aBytes, it->second.desc.sizeBytes );
+    };
+
+    if( m_renderPassActive || !RhiValidateComputeJob( aJob, limits, lookup ) )
+        return RHI_COMPUTE_RESULT::INVALID;
+
+    const METAL_COMPUTE_PIPELINE_ALLOCATION*             pipeline = nullptr;
+    std::array<RHI_BindGroupHandle, RHI_MAX_BIND_GROUPS> groups{};
+
+    @autoreleasepool
+    {
+        SyncSubmittedPasses();
+        id<MTLCommandBuffer>         commandBuffer = nil;
+        id<MTLComputeCommandEncoder> encoder = nil;
+        std::vector<uint8_t>         pushConstants;
+        const auto finish = [&]() -> RHI_COMPUTE_RESULT
+        {
+            if( encoder )
+            {
+                [encoder endEncoding];
+                encoder = nil;
+            }
+
+            if( !commandBuffer )
+                return RHI_COMPUTE_RESULT::OK;
+
+            [commandBuffer commit];
+            [commandBuffer waitUntilCompleted];
+            const bool failed = commandBuffer.status != MTLCommandBufferStatusCompleted;
+            commandBuffer = nil;
+
+            if( failed )
+            {
+                m_computeDeviceLost = true;
+                return RHI_COMPUTE_RESULT::DEVICE_LOST;
+            }
+
+            return RHI_COMPUTE_RESULT::OK;
+        };
+
+        for( const auto& command : aJob.Commands() )
+        {
+            switch( command.op )
+            {
+            case OP::UPLOAD:
+            case OP::READBACK:
+            {
+                // Waiting makes CPU access coherent and preserves transfers recorded between dispatches
+                auto result = finish();
+
+                if( result != RHI_COMPUTE_RESULT::OK )
+                    return result;
+
+                if( !command.bytes )
+                    break;
+
+                auto&    allocation = m_buffers.at( RhiHandleIndex( command.buffer ) );
+                uint8_t* bytes = static_cast<uint8_t*>( allocation.buffer.contents ) + command.offset;
+
+                if( command.op == OP::UPLOAD )
+                    std::memcpy( bytes, command.data.data(), command.bytes );
+                else
+                    std::memcpy( command.destination, bytes, command.bytes );
+
+                break;
+            }
+
+            case OP::BIND:
+                pipeline = &m_computePipelines.at( RhiHandleIndex( command.pipeline ) );
+                pushConstants.clear();
+                break;
+
+            case OP::BIND_GROUP: groups[command.index] = command.group; break;
+
+            case OP::PUSH_CONSTANTS: pushConstants = command.data; break;
+
+            case OP::BARRIER:
+
+                if( encoder )
+                    [encoder memoryBarrierWithScope:MTLBarrierScopeBuffers];
+
+                break;
+
+            case OP::DISPATCH:
+            {
+                if( !commandBuffer )
+                {
+                    commandBuffer = [m_commandQueue commandBuffer];
+
+                    if( !commandBuffer )
+                    {
+                        m_computeDeviceLost = true;
+                        return RHI_COMPUTE_RESULT::DEVICE_LOST;
+                    }
+                }
+
+                if( !encoder )
+                {
+                    encoder = [commandBuffer computeCommandEncoder];
+
+                    if( !encoder )
+                    {
+                        m_computeDeviceLost = true;
+                        return RHI_COMPUTE_RESULT::DEVICE_LOST;
+                    }
+                }
+
+                [encoder setComputePipelineState:pipeline->pipeline];
+
+                if( !pushConstants.empty() )
+                    [encoder setBytes:pushConstants.data()
+                               length:pushConstants.size()
+                              atIndex:PUSH_CONSTANT_BUFFER_INDEX];
+
+                for( size_t index = 0; index < pipeline->desc.bindGroupLayouts.size(); ++index )
+                {
+                    if( pipeline->desc.bindGroupLayouts[index].entries.empty() )
+                        continue;
+
+                    const auto& group = m_bindGroups.at( RhiHandleIndex( groups[index] ) ).desc;
+
+                    for( const auto& resource : group.entries )
+                    {
+                        auto* entry = pipeline->desc.bindGroupLayouts[index].Find( resource.binding );
+
+                        if( entry->type == RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER )
+                        {
+                            [encoder setTexture:m_textures.at( RhiHandleIndex( resource.textureHandle ) ).texture
+                                        atIndex:resource.binding];
+                            [encoder setSamplerState:TextureSampler() atIndex:resource.binding];
+                        }
+                        else
+                        {
+                            [encoder setBuffer:m_buffers.at( RhiHandleIndex( resource.bufferHandle ) ).buffer
+                                        offset:resource.offset
+                                       atIndex:resource.binding];
+                        }
+                    }
+                }
+
+                [encoder dispatchThreadgroups:MTLSizeMake( command.groupsX, command.groupsY, 1 )
+                        threadsPerThreadgroup:MTLSizeMake( pipeline->desc.workgroupX, pipeline->desc.workgroupY, 1 )];
+                break;
+            }
+            }
+        }
+
+        return finish();
+    }
+}
+
+
 // Buffer operations
 
 RHI_BufferHandle RHI_METAL_DEVICE::ReserveBufferHandle()
@@ -519,8 +952,9 @@ bool RHI_METAL_DEVICE::RealizeBuffer( RHI_BufferHandle handle, const RHI_BUFFER_
     {
         // Managed keeps a CPU-visible mirror so UpdateBuffer can write through the contents pointer
         // while Metal synchronises the GPU copy.
-        MTLResourceOptions options = desc.mappable ? MTLResourceStorageModeShared
-                                                   : MTLResourceStorageModeManaged;
+        MTLResourceOptions options = ( desc.mappable || desc.type == RHI_BUFFER_TYPE::STORAGE )
+                                             ? MTLResourceStorageModeShared
+                                             : MTLResourceStorageModeManaged;
 
         id<MTLBuffer> mtlBuffer = [m_device newBufferWithLength:desc.sizeBytes
                                                         options:options];
@@ -984,7 +1418,7 @@ void RHI_METAL_DEVICE::EncodeBindGroup( id<MTLRenderCommandEncoder> encoder,
         const bool     fragment = !!( stages & RHI_SHADER_STAGE::FRAGMENT );
         const uint32_t index = resource.binding;
 
-        if( type == RHI_BINDING_TYPE::UNIFORM_BUFFER )
+        if( type != RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER )
         {
             auto bufIt = m_buffers.find( RhiHandleIndex( resource.bufferHandle ) );
 

@@ -1,4 +1,6 @@
 set( RHI_SRCS
+    gpu_compute.cpp
+    rhi_compute.cpp
     rhi_bind_group.cpp
     rhi_compositor.cpp
     rhi_device_proxy.cpp

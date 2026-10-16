@@ -26,6 +26,7 @@
 #include <rhi/rhi_handle.h>
 #include <rhi/rhi_deferred_release.h>
 #include <rhi/rhi_buffer.h>
+#include <rhi/rhi_compute.h>
 #include <rhi/rhi_texture.h>
 #include <rhi/rhi_shader.h>
 #include <rhi/rhi_pipeline.h>
@@ -65,6 +66,16 @@ class RHI_DEVICE
 {
 public:
     virtual ~RHI_DEVICE() = default;
+
+    /** Compute defaults keep backends without compute support usable for graphics. */
+    virtual bool                        SupportsCompute() const { return false; }
+    virtual RHI_COMPUTE_DEVICE_LIMITS   ComputeDeviceLimits() const { return {}; }
+    virtual RHI_ComputePipelineHandle   CreateComputePipeline( const RHI_COMPUTE_PIPELINE_DESC& ) { return {}; }
+    virtual void                        DestroyComputePipeline( RHI_ComputePipelineHandle ) {}
+    virtual RHI_COMPUTE_PIPELINE_LIMITS ComputePipelineLimits( RHI_ComputePipelineHandle ) const { return {}; }
+
+    /** Submit, wait for completion, and copy all readbacks before returning. */
+    virtual RHI_COMPUTE_RESULT ExecuteCompute( const RHI_COMPUTE_JOB& ) { return RHI_COMPUTE_RESULT::INVALID; }
 
     /** Backend and GPU name for display, such as "Vulkan (GeForce RTX 3080)". */
     virtual const char* GetName() const = 0;

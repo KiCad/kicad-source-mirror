@@ -26,7 +26,8 @@ enum class RHI_BUFFER_TYPE
 {
     VERTEX,
     INDEX,
-    UNIFORM
+    UNIFORM,
+    STORAGE
 };
 
 struct RHI_BUFFER_DESC

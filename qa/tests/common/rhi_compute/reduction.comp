@@ -1,0 +1,41 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#version 450
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+layout(set = 0, binding = 1, std430) readonly buffer Input { float values[]; };
+layout(set = 0, binding = 2, std430) buffer Output { float partials[]; };
+shared float scratch[gl_WorkGroupSize.x * gl_WorkGroupSize.y];
+void main()
+{
+    uint local = gl_LocalInvocationIndex;
+    scratch[local] = abs(values[gl_GlobalInvocationID.x]);
+    barrier();
+
+    for (uint stride = gl_WorkGroupSize.x * gl_WorkGroupSize.y / 2; stride > 0; stride >>= 1)
+    {
+        if (local < stride)
+            scratch[local] = max(scratch[local], scratch[local + stride]);
+
+        barrier();
+    }
+
+    if (local == 0)
+        partials[gl_WorkGroupID.x] = scratch[0];
+}

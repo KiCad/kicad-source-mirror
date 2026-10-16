@@ -1,0 +1,31 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#version 450
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+layout(constant_id = 2) const uint RB = 0;
+layout(set = 0, binding = 1, std430) buffer Output { uint cells[]; };
+layout(push_constant) uniform Params { uint width; uint height; } p;
+void main()
+{
+    uvec2 xy = gl_GlobalInvocationID.xy;
+
+    if (xy.x < p.width && xy.y < p.height && ((xy.x + xy.y) & 1u) == RB)
+        cells[xy.y * p.width + xy.x] = 17u + RB;
+}

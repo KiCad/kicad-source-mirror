@@ -26,7 +26,8 @@
 enum class RHI_SHADER_TYPE
 {
     VERTEX,
-    FRAGMENT
+    FRAGMENT,
+    COMPUTE
 };
 
 /** The bytecode is SPIR-V on Vulkan and MSL source text on Metal. */

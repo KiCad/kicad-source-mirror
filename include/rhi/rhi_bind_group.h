@@ -31,7 +31,9 @@ constexpr int RHI_MAX_BIND_GROUPS = 4;
 enum class RHI_BINDING_TYPE
 {
     UNIFORM_BUFFER,
-    COMBINED_TEXTURE_SAMPLER
+    COMBINED_TEXTURE_SAMPLER,
+    STORAGE_BUFFER,
+    STORAGE_BUFFER_READONLY
 };
 
 /** Bit flags for the shader stages that see a binding. */
@@ -40,7 +42,8 @@ enum class RHI_SHADER_STAGE : uint32_t
     NONE     = 0,
     VERTEX   = 1u << 0,
     FRAGMENT = 1u << 1,
-    ALL      = ( 1u << 0 ) | ( 1u << 1 )
+    COMPUTE  = 1u << 2,
+    ALL      = ( 1u << 0 ) | ( 1u << 1 )  /**< Graphics stages only, compute is opted into explicitly */
 };
 
 inline RHI_SHADER_STAGE operator&( RHI_SHADER_STAGE a, RHI_SHADER_STAGE b )
@@ -90,6 +93,9 @@ struct RHI_BIND_GROUP_LAYOUT_DESC
      */
     bool Validate() const;
 
+    /** @return true if both layouts declare the same bindings with the same types and stages. */
+    bool IsCompatible( const RHI_BIND_GROUP_LAYOUT_DESC& aOther ) const;
+
     /** @return nullptr when no entry has @p aBinding. */
     const RHI_BINDING_ENTRY* Find( uint32_t aBinding ) const
     {
@@ -101,7 +107,7 @@ struct RHI_BIND_GROUP_LAYOUT_DESC
 
 
 /**
- * A UNIFORM_BUFFER binding sets bufferHandle, a COMBINED_TEXTURE_SAMPLER binding sets textureHandle.
+ * Buffer bindings set bufferHandle; a COMBINED_TEXTURE_SAMPLER binding sets textureHandle.
  * The binding must exist in the group's layout with that type, which backends do not check.
  */
 struct RHI_BIND_GROUP_RESOURCE

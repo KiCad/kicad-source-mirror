@@ -188,6 +188,7 @@ struct VulkanFunctions
     PFN_vkEnumeratePhysicalDevices               EnumeratePhysicalDevices = nullptr;
     PFN_vkEnumerateDeviceExtensionProperties     EnumerateDeviceExtensionProperties = nullptr;
     PFN_vkGetPhysicalDeviceProperties            GetPhysicalDeviceProperties = nullptr;
+    PFN_vkGetPhysicalDeviceProperties2           GetPhysicalDeviceProperties2 = nullptr;
     PFN_vkGetPhysicalDeviceFeatures2             GetPhysicalDeviceFeatures2 = nullptr;
     PFN_vkGetPhysicalDeviceQueueFamilyProperties GetPhysicalDeviceQueueFamilyProperties = nullptr;
     PFN_vkCreateDevice                           CreateDevice = nullptr;
@@ -219,6 +220,8 @@ struct VulkanFunctions
     PFN_vkCreatePipelineCache        CreatePipelineCache = nullptr;
     PFN_vkDestroyPipelineCache       DestroyPipelineCache = nullptr;
     PFN_vkCreateGraphicsPipelines    CreateGraphicsPipelines = nullptr;
+    PFN_vkCreateComputePipelines     CreateComputePipelines = nullptr;
+    PFN_vkCmdDispatch                CmdDispatch = nullptr;
     PFN_vkDestroyPipeline            DestroyPipeline = nullptr;
     PFN_vkCreateRenderPass           CreateRenderPass = nullptr;
     PFN_vkDestroyRenderPass          DestroyRenderPass = nullptr;
@@ -307,6 +310,13 @@ public:
     RHI_BACKEND     GetBackend() const override;
     uint32_t        MaxTextureSize() const override { return m_maxTextureSize; }
     bool            IsInitialized() const override;
+
+    bool                        SupportsCompute() const override;
+    RHI_COMPUTE_DEVICE_LIMITS   ComputeDeviceLimits() const override;
+    RHI_ComputePipelineHandle   CreateComputePipeline( const RHI_COMPUTE_PIPELINE_DESC& aDesc ) override;
+    void                        DestroyComputePipeline( RHI_ComputePipelineHandle aHandle ) override;
+    RHI_COMPUTE_PIPELINE_LIMITS ComputePipelineLimits( RHI_ComputePipelineHandle aHandle ) const override;
+    RHI_COMPUTE_RESULT          ExecuteCompute( const RHI_COMPUTE_JOB& aJob ) override;
 
     RHI_BufferHandle  ReserveBufferHandle() override;
     bool              RealizeBuffer( RHI_BufferHandle handle, const RHI_BUFFER_DESC& desc ) override;
@@ -427,6 +437,7 @@ private:
         void*           mappedPtr  = nullptr;
         size_t          size       = 0;
         bool            mappable   = false;
+        RHI_BUFFER_TYPE type = RHI_BUFFER_TYPE::VERTEX;
 
         // Serial of the last submitted pass that reads this buffer, see SyncSubmittedPasses()
         uint64_t        lastUseSerial = 0;
@@ -464,6 +475,11 @@ private:
 
     // Every Vulkan device takes 2D images at least this large
     uint32_t           m_maxTextureSize   = 4096;
+
+    VkPhysicalDeviceLimits m_deviceLimits{};
+    bool                   m_computeQueue = false;
+    uint32_t               m_computeSubgroupSize = 0;
+    bool                   m_storageDescriptors = false;
 
     VulkanFunctions    m_vk;
     std::string        m_deviceName;
@@ -526,6 +542,15 @@ private:
     RHI_HANDLE_POOL<RHI_TAG_PIPELINE>                   m_pipelinePool;
     std::unordered_map<uint32_t, PipelineAllocation>     m_pipelines;
 
+    struct ComputePipelineAllocation
+    {
+        PipelineAllocation        native;
+        RHI_COMPUTE_PIPELINE_DESC desc; // shader blob cleared, kept for job validation
+    };
+
+    RHI_HANDLE_POOL<RHI_TAG_COMPUTE_PIPELINE>               m_computePipelinePool;
+    std::unordered_map<uint32_t, ComputePipelineAllocation> m_computePipelines;
+
     struct BindGroupLayoutAllocation
     {
         VkDescriptorSetLayout     layout    = VK_NULL_HANDLE;
@@ -556,6 +581,7 @@ private:
     {
         VkDescriptorSet           descriptorSet = VK_NULL_HANDLE;
         VkDescriptorPool          pool          = VK_NULL_HANDLE;
+        RHI_BindGroupLayoutHandle layout;
 
         // Pool indices of the buffers this group binds, marked in use when the group is bound
         std::vector<uint32_t>     bufferIndices;
@@ -903,6 +929,7 @@ bool RHI_VULKAN_DEVICE::CreateVkInstance( bool enableValidation )
     LOAD_INST_FN( EnumeratePhysicalDevices );
     LOAD_INST_FN( EnumerateDeviceExtensionProperties );
     LOAD_INST_FN( GetPhysicalDeviceProperties );
+    LOAD_INST_FN( GetPhysicalDeviceProperties2 );
     LOAD_INST_FN( GetPhysicalDeviceFeatures2 );
     LOAD_INST_FN( GetPhysicalDeviceQueueFamilyProperties );
     LOAD_INST_FN( CreateDevice );
@@ -1054,6 +1081,8 @@ bool RHI_VULKAN_DEVICE::CreateLogicalDevice()
     if( m_graphicsQueueFamily == UINT32_MAX )
         return false;
 
+    m_computeQueue = ( queueFamilies[m_graphicsQueueFamily].queueFlags & VK_QUEUE_COMPUTE_BIT ) != 0;
+
     float queuePriority = 1.0f;
     VkDeviceQueueCreateInfo queueInfo{};
     queueInfo.sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -1176,6 +1205,8 @@ void RHI_VULKAN_DEVICE::LoadDeviceFunctions()
     LOAD_DEV_FN( CreatePipelineCache );
     LOAD_DEV_FN( DestroyPipelineCache );
     LOAD_DEV_FN( CreateGraphicsPipelines );
+    LOAD_DEV_FN( CreateComputePipelines );
+    LOAD_DEV_FN( CmdDispatch );
     LOAD_DEV_FN( DestroyPipeline );
     LOAD_DEV_FN( CreateRenderPass );
     LOAD_DEV_FN( DestroyRenderPass );
@@ -1231,6 +1262,20 @@ void RHI_VULKAN_DEVICE::ReadDeviceProperties()
 
     m_deviceName = std::string( "Vulkan (" ) + props.deviceName + ")";
     m_maxTextureSize = props.limits.maxImageDimension2D;
+    m_deviceLimits = props.limits;
+
+    if( m_vk.GetPhysicalDeviceProperties2 )
+    {
+        VkPhysicalDeviceSubgroupProperties subgroup{};
+        subgroup.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES;
+        VkPhysicalDeviceProperties2 properties{};
+        properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        properties.pNext = &subgroup;
+        m_vk.GetPhysicalDeviceProperties2( m_physicalDevice, &properties );
+
+        if( subgroup.supportedStages & VK_SHADER_STAGE_COMPUTE_BIT )
+            m_computeSubgroupSize = subgroup.subgroupSize;
+    }
 }
 
 
@@ -1259,6 +1304,8 @@ VkBufferUsageFlags RHI_VULKAN_DEVICE::TranslateBufferUsage( RHI_BUFFER_TYPE type
                                            | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
     case RHI_BUFFER_TYPE::INDEX:    return VK_BUFFER_USAGE_INDEX_BUFFER_BIT
                                            | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+    case RHI_BUFFER_TYPE::STORAGE:
+        return VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
     case RHI_BUFFER_TYPE::UNIFORM:  return VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
                                            | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
     }
@@ -1862,6 +1909,9 @@ RHI_VULKAN_DEVICE::~RHI_VULKAN_DEVICE()
         for( auto& [index, pipe] : m_pipelines )
             destroyPipeline( pipe );
 
+        for( auto& [index, pipe] : m_computePipelines )
+            destroyPipeline( pipe.native );
+
         for( auto& [index, shader] : m_shaders )
             m_vk.DestroyShaderModule( m_device, shader.module, nullptr );
 
@@ -2234,6 +2284,7 @@ bool RHI_VULKAN_DEVICE::RealizeBuffer( RHI_BufferHandle handle, const RHI_BUFFER
     ba.mappedPtr  = desc.mappable ? allocationInfo.pMappedData : nullptr;
     ba.size       = desc.sizeBytes;
     ba.mappable   = desc.mappable;
+    ba.type = desc.type;
 
     return true;
 }
@@ -2500,6 +2551,8 @@ static VkDescriptorType TranslateBindingType( RHI_BINDING_TYPE type )
     switch( type )
     {
     case RHI_BINDING_TYPE::UNIFORM_BUFFER:          return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    case RHI_BINDING_TYPE::STORAGE_BUFFER:
+    case RHI_BINDING_TYPE::STORAGE_BUFFER_READONLY: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     case RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     }
 
@@ -2516,6 +2569,9 @@ static VkShaderStageFlags TranslateShaderStage( RHI_SHADER_STAGE stages )
 
     if( ( stages & RHI_SHADER_STAGE::FRAGMENT ) != RHI_SHADER_STAGE::NONE )
         flags |= VK_SHADER_STAGE_FRAGMENT_BIT;
+
+    if( ( stages & RHI_SHADER_STAGE::COMPUTE ) != RHI_SHADER_STAGE::NONE )
+        flags |= VK_SHADER_STAGE_COMPUTE_BIT;
 
     return flags;
 }
@@ -2894,6 +2950,386 @@ VkDescriptorSetLayout RHI_VULKAN_DEVICE::createSetLayout( const RHI_BIND_GROUP_L
 }
 
 
+bool RHI_VULKAN_DEVICE::SupportsCompute() const
+{
+    return m_initialized && m_computeQueue && m_vk.CreateComputePipelines && m_vk.CmdDispatch;
+}
+
+
+RHI_COMPUTE_DEVICE_LIMITS RHI_VULKAN_DEVICE::ComputeDeviceLimits() const
+{
+    if( !SupportsCompute() )
+        return {};
+
+    RHI_COMPUTE_DEVICE_LIMITS limits;
+
+    for( size_t i = 0; i < 3; ++i )
+    {
+        limits.maxWorkgroupSize[i] = m_deviceLimits.maxComputeWorkGroupSize[i];
+        limits.maxDispatchGroups[i] = m_deviceLimits.maxComputeWorkGroupCount[i];
+    }
+
+    limits.maxWorkgroupInvocations = m_deviceLimits.maxComputeWorkGroupInvocations;
+    limits.maxSharedMemoryBytes = m_deviceLimits.maxComputeSharedMemorySize;
+    limits.maxStorageBufferRange = m_deviceLimits.maxStorageBufferRange;
+    limits.minStorageBufferOffsetAlignment = m_deviceLimits.minStorageBufferOffsetAlignment;
+    return limits;
+}
+
+
+RHI_ComputePipelineHandle RHI_VULKAN_DEVICE::CreateComputePipeline( const RHI_COMPUTE_PIPELINE_DESC& aDesc )
+{
+    std::lock_guard<std::recursive_mutex> lock( m_deviceMutex );
+
+    size_t bindings = 0;
+
+    for( const RHI_BIND_GROUP_LAYOUT_DESC& layout : aDesc.bindGroupLayouts )
+        bindings += layout.entries.size();
+
+    // Exceeding a descriptor limit is undefined behaviour rather than a reported error
+    if( !SupportsCompute() || !RhiValidateComputePipelineDesc( aDesc )
+        || aDesc.workgroupX > m_deviceLimits.maxComputeWorkGroupSize[0]
+        || aDesc.workgroupY > m_deviceLimits.maxComputeWorkGroupSize[1]
+        || uint64_t( aDesc.workgroupX ) * aDesc.workgroupY > m_deviceLimits.maxComputeWorkGroupInvocations
+        || aDesc.pushConstantBytes > m_deviceLimits.maxPushConstantsSize
+        || bindings > m_deviceLimits.maxPerStageDescriptorStorageBuffers
+        || bindings > m_deviceLimits.maxPerStageResources )
+    {
+        return {};
+    }
+
+    RHI_ShaderHandle shader = CreateShader( { RHI_SHADER_TYPE::COMPUTE, aDesc.shader.spirv, aDesc.shader.spirvSize } );
+
+    if( !shader )
+        return {};
+
+    ComputePipelineAllocation allocation;
+    allocation.desc = aDesc;
+    allocation.desc.shader = {};
+
+    auto fail = [&]() -> RHI_ComputePipelineHandle
+    {
+        destroyPipeline( allocation.native );
+        DestroyShader( shader );
+        return {};
+    };
+
+    for( const auto& layout : aDesc.bindGroupLayouts )
+    {
+        VkDescriptorSetLayout native = createSetLayout( layout );
+
+        if( !native )
+            return fail();
+
+        allocation.native.dsLayouts.push_back( native );
+    }
+
+    VkPushConstantRange pushRange{};
+    pushRange.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+    pushRange.size = aDesc.pushConstantBytes;
+    VkPipelineLayoutCreateInfo layoutInfo{};
+    layoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    layoutInfo.setLayoutCount = static_cast<uint32_t>( allocation.native.dsLayouts.size() );
+    layoutInfo.pSetLayouts = allocation.native.dsLayouts.data();
+    layoutInfo.pushConstantRangeCount = aDesc.pushConstantBytes ? 1 : 0;
+    layoutInfo.pPushConstantRanges = aDesc.pushConstantBytes ? &pushRange : nullptr;
+
+    if( m_vk.CreatePipelineLayout( m_device, &layoutInfo, nullptr, &allocation.native.layout ) != VK_SUCCESS )
+        return fail();
+
+    std::vector<uint32_t>                 values{ aDesc.workgroupX, aDesc.workgroupY };
+    std::vector<VkSpecializationMapEntry> entries{ { RHI_SPEC_ID_WORKGROUP_X, 0, sizeof( uint32_t ) },
+                                                   { RHI_SPEC_ID_WORKGROUP_Y, sizeof( uint32_t ),
+                                                     sizeof( uint32_t ) } };
+
+    for( const auto& constant : aDesc.constants )
+    {
+        entries.push_back(
+                { constant.id, static_cast<uint32_t>( values.size() * sizeof( uint32_t ) ), sizeof( uint32_t ) } );
+        values.push_back( constant.value );
+    }
+
+    VkSpecializationInfo specialization{};
+    specialization.mapEntryCount = static_cast<uint32_t>( entries.size() );
+    specialization.pMapEntries = entries.data();
+    specialization.dataSize = values.size() * sizeof( uint32_t );
+    specialization.pData = values.data();
+    VkComputePipelineCreateInfo pipelineInfo{};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+    pipelineInfo.stage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    pipelineInfo.stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+    pipelineInfo.stage.module = m_shaders.at( RhiHandleIndex( shader ) ).module;
+    pipelineInfo.stage.pName = "main";
+    pipelineInfo.stage.pSpecializationInfo = &specialization;
+    pipelineInfo.layout = allocation.native.layout;
+
+    if( m_vk.CreateComputePipelines( m_device, m_pipelineCache, 1, &pipelineInfo, nullptr, &allocation.native.pipeline )
+        != VK_SUCCESS )
+    {
+        return fail();
+    }
+
+    RHI_ComputePipelineHandle handle = m_computePipelinePool.Allocate();
+
+    if( !handle )
+        return fail();
+
+    DestroyShader( shader );
+    m_computePipelines.emplace( RhiHandleIndex( handle ), std::move( allocation ) );
+    return handle;
+}
+
+
+void RHI_VULKAN_DEVICE::DestroyComputePipeline( RHI_ComputePipelineHandle aHandle )
+{
+    std::lock_guard<std::recursive_mutex> lock( m_deviceMutex );
+
+    if( !m_computePipelinePool.IsValid( aHandle ) )
+        return;
+
+    auto it = m_computePipelines.find( RhiHandleIndex( aHandle ) );
+
+    if( it != m_computePipelines.end() )
+    {
+        // Compute submissions finish before returning, so no frame retirement is needed
+        destroyPipeline( it->second.native );
+        m_computePipelines.erase( it );
+    }
+
+    m_computePipelinePool.Release( aHandle );
+}
+
+
+RHI_COMPUTE_PIPELINE_LIMITS RHI_VULKAN_DEVICE::ComputePipelineLimits( RHI_ComputePipelineHandle aHandle ) const
+{
+    if( !m_computePipelinePool.IsValid( aHandle )
+        || m_computePipelines.find( RhiHandleIndex( aHandle ) ) == m_computePipelines.end() )
+    {
+        return {};
+    }
+
+    return { m_deviceLimits.maxComputeWorkGroupInvocations, m_computeSubgroupSize };
+}
+
+
+RHI_COMPUTE_RESULT RHI_VULKAN_DEVICE::ExecuteCompute( const RHI_COMPUTE_JOB& aJob )
+{
+    using OP = RHI_COMPUTE_JOB::OP;
+
+    std::lock_guard<std::recursive_mutex> lock( m_deviceMutex );
+
+    RHI_COMPUTE_JOB_LOOKUP lookup;
+
+    lookup.pipeline = [this]( RHI_ComputePipelineHandle aHandle ) -> const RHI_COMPUTE_PIPELINE_DESC*
+    {
+        auto it = m_computePipelines.find( RhiHandleIndex( aHandle ) );
+        return m_computePipelinePool.IsValid( aHandle ) && it != m_computePipelines.end() ? &it->second.desc : nullptr;
+    };
+
+    lookup.groupLayout = [this]( RHI_BindGroupHandle aHandle ) -> const RHI_BIND_GROUP_LAYOUT_DESC*
+    {
+        auto group = m_bindGroups.find( RhiHandleIndex( aHandle ) );
+
+        if( !m_bindGroupPool.IsValid( aHandle ) || group == m_bindGroups.end() )
+            return nullptr;
+
+        auto layout = m_bindGroupLayouts.find( RhiHandleIndex( group->second.layout ) );
+        return layout != m_bindGroupLayouts.end() ? &layout->second.desc : nullptr;
+    };
+
+    lookup.storageRange = [this]( RHI_BufferHandle aHandle, size_t aOffset, size_t aBytes )
+    {
+        auto it = m_buffers.find( RhiHandleIndex( aHandle ) );
+        return m_bufferPool.IsValid( aHandle ) && it != m_buffers.end() && it->second.type == RHI_BUFFER_TYPE::STORAGE
+               && RhiRangeWithinBuffer( aOffset, aBytes, it->second.size );
+    };
+
+    if( !SupportsCompute() || !RhiValidateComputeJob( aJob, ComputeDeviceLimits(), lookup ) )
+        return RHI_COMPUTE_RESULT::INVALID;
+
+    struct READBACK
+    {
+        VkBuffer                        buffer = VK_NULL_HANDLE;
+        VmaAllocation                   allocation = VK_NULL_HANDLE;
+        void*                           mapped = nullptr;
+        const RHI_COMPUTE_JOB::COMMAND* command = nullptr;
+    };
+
+    std::vector<int>      staging;
+    std::vector<READBACK> readbacks;
+
+    // Uploads come from the shared staging pool, readbacks need host-readable buffers of their own
+    auto release = [&]()
+    {
+        for( int index : staging )
+            ReleaseStaging( index );
+
+        for( const READBACK& readback : readbacks )
+            vmaDestroyBuffer( m_allocator, readback.buffer, readback.allocation );
+    };
+
+    auto fail = [&]( VkResult aResult )
+    {
+        release();
+        return aResult == VK_ERROR_DEVICE_LOST ? RHI_COMPUTE_RESULT::DEVICE_LOST : RHI_COMPUTE_RESULT::INVALID;
+    };
+
+    VkCommandBuffer cmd = VK_NULL_HANDLE;
+
+    if( !allocateCommandBuffer( cmd ) )
+        return fail( VK_ERROR_OUT_OF_HOST_MEMORY );
+
+    VkResult result = beginOneTimeCommands( cmd );
+
+    if( result != VK_SUCCESS )
+    {
+        m_vk.FreeCommandBuffers( m_device, m_commandPool, 1, &cmd );
+        return fail( result );
+    }
+
+    auto barrier = [&]( VkPipelineStageFlags aSrcStage, VkAccessFlags aSrcAccess, VkPipelineStageFlags aDstStage,
+                        VkAccessFlags aDstAccess )
+    {
+        VkMemoryBarrier memory{};
+        memory.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memory.srcAccessMask = aSrcAccess;
+        memory.dstAccessMask = aDstAccess;
+        m_vk.CmdPipelineBarrier( cmd, aSrcStage, aDstStage, 0, 1, &memory, 0, nullptr, 0, nullptr );
+    };
+
+    const VkPipelineStageFlags work = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT;
+    const VkAccessFlags        workAccess = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT
+                                     | VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+
+    // Waiting on the queue makes the previous job's writes available but not visible to this one
+    barrier( VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_ACCESS_MEMORY_WRITE_BIT, work, workAccess );
+
+    const ComputePipelineAllocation*                     pipeline = nullptr;
+    std::array<RHI_BindGroupHandle, RHI_MAX_BIND_GROUPS> bound{};
+
+    for( const RHI_COMPUTE_JOB::COMMAND& command : aJob.Commands() )
+    {
+        switch( command.op )
+        {
+        case OP::UPLOAD:
+        case OP::READBACK:
+        {
+            if( !command.bytes )
+                break;
+
+            VkBuffer     host = VK_NULL_HANDLE;
+            VkBufferCopy copy{};
+            copy.size = command.bytes;
+
+            if( command.op == OP::UPLOAD )
+            {
+                const int index = stageData( command.data.data(), command.bytes, host );
+
+                if( index < 0 )
+                {
+                    m_vk.FreeCommandBuffers( m_device, m_commandPool, 1, &cmd );
+                    return fail( VK_ERROR_OUT_OF_DEVICE_MEMORY );
+                }
+
+                staging.push_back( index );
+                copy.dstOffset = command.offset;
+            }
+            else
+            {
+                VkBufferCreateInfo info{};
+                info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+                info.size = command.bytes;
+                info.usage = VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+                VmaAllocationCreateInfo allocInfo{};
+                allocInfo.usage = VMA_MEMORY_USAGE_AUTO_PREFER_HOST;
+                allocInfo.flags = VMA_ALLOCATION_CREATE_MAPPED_BIT | VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT;
+                VmaAllocationInfo mapped{};
+                READBACK          readback{ VK_NULL_HANDLE, VK_NULL_HANDLE, nullptr, &command };
+                result = vmaCreateBuffer( m_allocator, &info, &allocInfo, &readback.buffer, &readback.allocation,
+                                          &mapped );
+
+                if( result != VK_SUCCESS )
+                {
+                    m_vk.FreeCommandBuffers( m_device, m_commandPool, 1, &cmd );
+                    return fail( result );
+                }
+
+                readback.mapped = mapped.pMappedData;
+                readbacks.push_back( readback );
+                host = readback.buffer;
+                copy.srcOffset = command.offset;
+            }
+
+            VkBuffer device = m_buffers.at( RhiHandleIndex( command.buffer ) ).buffer;
+
+            barrier( work, workAccess, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                     VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT );
+            m_vk.CmdCopyBuffer( cmd, command.op == OP::UPLOAD ? host : device, command.op == OP::UPLOAD ? device : host,
+                                1, &copy );
+            barrier( VK_PIPELINE_STAGE_TRANSFER_BIT, VK_ACCESS_TRANSFER_WRITE_BIT, work | VK_PIPELINE_STAGE_HOST_BIT,
+                     workAccess | VK_ACCESS_HOST_READ_BIT );
+            break;
+        }
+
+        case OP::BIND:
+            pipeline = &m_computePipelines.at( RhiHandleIndex( command.pipeline ) );
+            m_vk.CmdBindPipeline( cmd, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline->native.pipeline );
+            break;
+
+        case OP::BIND_GROUP: bound[command.index] = command.group; break;
+
+        case OP::PUSH_CONSTANTS:
+            m_vk.CmdPushConstants( cmd, pipeline->native.layout, VK_SHADER_STAGE_COMPUTE_BIT, 0,
+                                   static_cast<uint32_t>( command.bytes ), command.data.data() );
+            break;
+
+        case OP::DISPATCH:
+            for( size_t i = 0; i < pipeline->desc.bindGroupLayouts.size(); ++i )
+            {
+                if( pipeline->desc.bindGroupLayouts[i].entries.empty() )
+                    continue;
+
+                VkDescriptorSet set = m_bindGroups.at( RhiHandleIndex( bound[i] ) ).descriptorSet;
+                m_vk.CmdBindDescriptorSets( cmd, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline->native.layout,
+                                            static_cast<uint32_t>( i ), 1, &set, 0, nullptr );
+            }
+
+            m_vk.CmdDispatch( cmd, command.groupsX, command.groupsY, 1 );
+            break;
+
+        case OP::BARRIER:
+            barrier( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_ACCESS_SHADER_WRITE_BIT,
+                     VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT );
+            break;
+        }
+    }
+
+    result = m_vk.EndCommandBuffer( cmd );
+
+    if( result == VK_SUCCESS )
+        result = submitCommands( cmd );
+
+    if( result == VK_SUCCESS )
+        result = m_vk.QueueWaitIdle( m_graphicsQueue );
+
+    m_vk.FreeCommandBuffers( m_device, m_commandPool, 1, &cmd );
+
+    if( result != VK_SUCCESS )
+        return fail( result );
+
+    OnQueueIdle();
+
+    for( const READBACK& readback : readbacks )
+    {
+        vmaInvalidateAllocation( m_allocator, readback.allocation, 0, readback.command->bytes );
+        std::memcpy( readback.command->destination, readback.mapped, readback.command->bytes );
+    }
+
+    release();
+    return RHI_COMPUTE_RESULT::OK;
+}
+
+
 RHI_BindGroupLayoutHandle RHI_VULKAN_DEVICE::CreateBindGroupLayout(
         const RHI_BIND_GROUP_LAYOUT_DESC& desc )
 {
@@ -2920,6 +3356,12 @@ RHI_BindGroupLayoutHandle RHI_VULKAN_DEVICE::CreateBindGroupLayout(
 
     m_bindGroupLayouts[idx].layout = vkLayout;
     m_bindGroupLayouts[idx].desc   = desc;
+
+    for( const RHI_BINDING_ENTRY& entry : desc.entries )
+    {
+        if( entry.type == RHI_BINDING_TYPE::STORAGE_BUFFER || entry.type == RHI_BINDING_TYPE::STORAGE_BUFFER_READONLY )
+            m_storageDescriptors = true;
+    }
 
     return handle;
 }
@@ -2950,13 +3392,15 @@ VkDescriptorPool RHI_VULKAN_DEVICE::AcquireDescriptorPool()
     VkDescriptorPoolSize poolSizes[] = {
         { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,         setsPerPool * 2 },
         { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,  setsPerPool },
+        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,          setsPerPool * 16 },
     };
 
     VkDescriptorPoolCreateInfo poolInfo{};
     poolInfo.sType         = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     poolInfo.maxSets       = setsPerPool;
-    poolInfo.poolSizeCount = static_cast<uint32_t>( std::size( poolSizes ) );
+    // Storage descriptors are last, so graphics-only devices leave them out of the pool
+    poolInfo.poolSizeCount = static_cast<uint32_t>( std::size( poolSizes ) ) - ( m_storageDescriptors ? 0 : 1 );
     poolInfo.pPoolSizes    = poolSizes;
 
     VkDescriptorPool pool = VK_NULL_HANDLE;
@@ -3079,7 +3523,7 @@ RHI_BindGroupHandle RHI_VULKAN_DEVICE::CreateBindGroup( const RHI_BIND_GROUP_DES
         write.descriptorCount = 1;
         write.descriptorType  = TranslateBindingType( bindType );
 
-        if( bindType == RHI_BINDING_TYPE::UNIFORM_BUFFER )
+        if( bindType != RHI_BINDING_TYPE::COMBINED_TEXTURE_SAMPLER )
         {
             if( !m_bufferPool.IsValid( res.bufferHandle ) )
             {
@@ -3173,6 +3617,7 @@ RHI_BindGroupHandle RHI_VULKAN_DEVICE::CreateBindGroup( const RHI_BIND_GROUP_DES
     BindGroupAllocation& bga = m_bindGroups[idx];
     bga.descriptorSet = dset;
     bga.pool          = pool;
+    bga.layout = desc.layout;
     bga.bufferIndices.clear();
 
     for( const auto& entry : desc.entries )
@@ -3183,7 +3628,6 @@ RHI_BindGroupHandle RHI_VULKAN_DEVICE::CreateBindGroup( const RHI_BIND_GROUP_DES
 
     return handle;
 }
-
 
 void RHI_VULKAN_DEVICE::DestroyBindGroup( RHI_BindGroupHandle handle )
 {

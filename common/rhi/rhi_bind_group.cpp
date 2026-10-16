@@ -47,3 +47,20 @@ bool RHI_BIND_GROUP_LAYOUT_DESC::Validate() const
 
     return true;
 }
+
+
+bool RHI_BIND_GROUP_LAYOUT_DESC::IsCompatible( const RHI_BIND_GROUP_LAYOUT_DESC& aOther ) const
+{
+    if( entries.size() != aOther.entries.size() )
+        return false;
+
+    for( const RHI_BINDING_ENTRY& entry : entries )
+    {
+        const RHI_BINDING_ENTRY* other = aOther.Find( entry.binding );
+
+        if( !other || other->type != entry.type || other->stages != entry.stages )
+            return false;
+    }
+
+    return true;
+}
