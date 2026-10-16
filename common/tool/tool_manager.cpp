@@ -769,6 +769,8 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
 {
     bool handled = false;
 
+    std::vector<COROUTINE<int, const TOOL_EVENT&>*> reactivated;
+
     wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::dispatchInternal - received event: %s" ),
                 aEvent.Format() );
 
@@ -807,6 +809,10 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s" ),
                         st->theTool->GetName(), aEvent.Format() );
 
+            bool ownActivation = aEvent.IsActivate() && st->initialEvent.IsActivate()
+                                 && st->initialEvent.Matches( aEvent );
+            auto resumed = st->cofunc;
+
             setActiveState( st );
             bool end = !st->cofunc->Resume();
 
@@ -814,6 +820,10 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             {
                 it = finishTool( st );
                 increment = false;
+            }
+            else if( ownActivation )
+            {
+                reactivated.push_back( resumed );
             }
 
             // If the tool did not request the event be passed to other tools, we're done
@@ -844,6 +854,14 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             {
                 if( tr.first.Matches( aEvent ) )
                 {
+                    // The live handler owns its reactivation, so a nested copy would only duplicate it
+                    if( st->cofunc && alg::contains( reactivated, st->cofunc ) )
+                    {
+                        handled = true;
+                        finished = true;
+                        break;
+                    }
+
                     auto func_copy = tr.second;
 
                     if( !aEvent.FirstResponder() )
