@@ -661,6 +661,9 @@ private:
 
     void reportLibraryNotEnabled( const wxString& aNickname );
 
+    /// Load a footprint another frame named, leaving no stale selection in the tree
+    void openLibraryFootprint( const LIB_ID& aFPID );
+
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_ID                      m_centerItemOnIdle;
 

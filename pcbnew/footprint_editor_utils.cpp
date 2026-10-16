@@ -437,6 +437,16 @@ void FOOTPRINT_EDIT_FRAME::reportLibraryNotEnabled( const wxString& aNickname )
 }
 
 
+void FOOTPRINT_EDIT_FRAME::openLibraryFootprint( const LIB_ID& aFPID )
+{
+    LoadFootprintFromLibrary( aFPID );
+
+    // Save As and the other library actions act on the tree's selection, which still names the previous part
+    if( m_treePane )
+        GetLibTree()->Unselect();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     const std::string& payload = mail.GetPayload();
@@ -473,7 +483,7 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             }
 
             // The tree of an editor created for this mail has no rows until the preload ends
-            LoadFootprintFromLibrary( LIB_ID( libNickname, fpFileName.GetName() ) );
+            openLibraryFootprint( LIB_ID( libNickname, fpFileName.GetName() ) );
         }
 
         break;
@@ -494,7 +504,7 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 break;
             }
 
-            LoadFootprintFromLibrary( fpId );
+            openLibraryFootprint( fpId );
             Raise();
         }
 
