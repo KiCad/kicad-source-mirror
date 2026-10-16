@@ -558,8 +558,6 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         return;
 
-    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
-
     EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" );
     wxString           dummy;
     wxString*          lastDir;
@@ -634,23 +632,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             doAdd = addDuplicates;
         }
 
-        if( doAdd && cur_grid()->AppendRows( 1 ) )
-        {
-            int last_row = cur_grid()->GetNumberRows() - 1;
-
-            cur_grid()->SetCellValue( last_row, COL_NICKNAME, nickname );
-            cur_grid()->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( fileType ) );
-
-            // try to use path normalized to an environmental variable or project path
-            wxString path = NormalizePath( filePath, &envVars, m_project->GetProjectPath() );
-
-            // Do not use the project path in the global library table.  This will almost
-            // assuredly be wrong for a different project.
-            if( m_notebook->GetSelection() == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
-                path = fn.GetFullPath();
-
-            cur_grid()->SetCellValue( last_row, COL_URI, path );
-        }
+        if( doAdd )
+            appendLibraryRow( nickname, fileType, filePath );
     }
 
     if( !files.IsEmpty() )
@@ -658,6 +641,29 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         cur_grid()->MakeCellVisible( cur_grid()->GetNumberRows() - 1, COL_ENABLED );
         cur_grid()->SetGridCursor( cur_grid()->GetNumberRows() - 1, COL_NICKNAME );
     }
+}
+
+
+void PANEL_SYM_LIB_TABLE::appendLibraryRow( const wxString& aNickname, SCH_IO_MGR::SCH_FILE_T aType,
+                                            const wxString& aFilePath )
+{
+    if( !cur_grid()->AppendRows( 1 ) )
+        return;
+
+    int last_row = cur_grid()->GetNumberRows() - 1;
+
+    cur_grid()->SetCellValue( last_row, COL_NICKNAME, aNickname );
+    cur_grid()->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( aType ) );
+
+    // try to use path normalized to an environmental variable or project path
+    wxString path = NormalizePath( aFilePath, &Pgm().GetLocalEnvVariables(), m_project->GetProjectPath() );
+
+    // Do not use the project path in the global library table.  This will almost
+    // assuredly be wrong for a different project.
+    if( m_notebook->GetSelection() == 0 && path.Contains( wxT( "${KIPRJMOD}" ) ) )
+        path = wxFileName( aFilePath ).GetFullPath();
+
+    cur_grid()->SetCellValue( last_row, COL_URI, path );
 }
 
 
