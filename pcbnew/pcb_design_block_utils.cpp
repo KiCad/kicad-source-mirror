@@ -499,9 +499,9 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     }
 
     // Get all selected items
-    PCB_SELECTION selection = m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+    PCB_SELECTION selectionCopy = m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
-    if( selection.Empty() )
+    if( selectionCopy.Empty() )
     {
         DisplayErrorMessage( this, _( "Please select some items to save as a design block." ) );
         return false;
@@ -512,9 +512,9 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     PCB_GROUP*               group = nullptr;
     std::vector<BOARD_ITEM*> extraItems;
 
-    if( selection.Size() == 1 )
+    if( selectionCopy.Size() == 1 )
     {
-        EDA_ITEM* item = selection.Front();
+        EDA_ITEM* item = selectionCopy.Front();
 
         if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
             group = static_cast<PCB_GROUP*>( item );
@@ -523,7 +523,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     {
         std::vector<PCB_GROUP*> linkedGroups;
 
-        for( EDA_ITEM* item : selection )
+        for( EDA_ITEM* item : selectionCopy )
         {
             if( item->Type() == PCB_GROUP_T && static_cast<PCB_GROUP*>( item )->GetDesignBlockLibId() == aLibId )
                 linkedGroups.push_back( static_cast<PCB_GROUP*>( item ) );
@@ -542,19 +542,19 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
 
     if( group )
     {
-        for( EDA_ITEM* item : selection )
+        for( EDA_ITEM* item : selectionCopy )
         {
             if( item != group && item->IsBOARD_ITEM() )
                 extraItems.push_back( static_cast<BOARD_ITEM*>( item ) );
         }
 
-        selection.Remove( group );
+        selectionCopy.Remove( group );
 
         // Don't recurse. If we have a group of groups the user probably intends the inner groups to be saved.
         group->RunOnChildren(
                 [&]( EDA_ITEM* aItem )
                 {
-                    selection.Add( aItem );
+                    selectionCopy.Add( aItem );
                 },
                 RECURSE_MODE::NO_RECURSE );
     }
@@ -574,14 +574,14 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     if( !blk->GetBoardFile().IsEmpty() && !checkOverwriteDbLayout( this, aLibId ) )
         return false;
 
-    if( !saveSelectionToDesignBlock( aLibId.GetLibNickname(), selection, *blk ) )
+    if( !saveSelectionToDesignBlock( aLibId.GetLibNickname(), selectionCopy, *blk ) )
         return false;
 
     // If we had a group, extend it with the extra items and reselect it
     if( group )
     {
-        selection.Clear();
-        selection.Add( group );
+        m_toolManager->RunAction( ACTIONS::selectionClear );
+        m_toolManager->RunAction( ACTIONS::selectItem, group );
 
         BOARD_COMMIT commit( m_toolManager );
         bool         changed = false;
@@ -626,7 +626,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
 
         int addedCount = 0;
 
-        for( EDA_ITEM* edaItem : selection )
+        for( EDA_ITEM* edaItem : selectionCopy )
         {
             if( !edaItem->IsBOARD_ITEM() )
                 continue;
@@ -653,7 +653,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
             commit.Push( _( "Group Items" ) );
 
             m_toolManager->RunAction( ACTIONS::selectionClear );
-            m_toolManager->RunAction( ACTIONS::selectItem, newGroup->AsEdaItem() );
+            m_toolManager->RunAction( ACTIONS::selectItem, newGroup );
         }
         else
         {
