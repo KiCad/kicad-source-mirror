@@ -107,11 +107,10 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
             UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
             wxString report;
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
+            BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
             for( const DRC_ITEM& item : violations )
-                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
+                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver );
 
             BOOST_ERROR( wxString::Format( "DRC regression: %s\n"
                                            "%d violations found (expected 0)\n"
@@ -203,11 +202,10 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
             UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
             wxString report;
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
+            BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
             for( const DRC_ITEM& item : violations )
-                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
+                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver );
 
             BOOST_ERROR( wxString::Format( "DRC regression: %s\n"
                                            "%d violations found (expected %d)\n"
@@ -270,11 +268,10 @@ BOOST_FIXTURE_TEST_CASE( DRCZoneFalsePositiveRegressions, DRC_REGRESSION_TEST_FI
             UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
             wxString report;
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
+            BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
             for( const DRC_ITEM& item : violations )
-                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
+                report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver );
 
             BOOST_ERROR( wxString::Format( "DRC zone regression: %s\n"
                                            "%d violations found (expected 0)\n"
@@ -319,17 +316,16 @@ BOOST_FIXTURE_TEST_CASE( DRCTeardropOverCopperField, DRC_REGRESSION_TEST_FIXTURE
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_board->FillItemMap( itemMap );
+    BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
     auto involvesCopperField =
             [&]( const DRC_ITEM& aItem )
             {
                 for( const KIID& id : { aItem.GetMainItemID(), aItem.GetAuxItemID() } )
                 {
-                    auto it = itemMap.find( id );
+                    const EDA_ITEM* resolved = resolver.ResolveItemById( id );
 
-                    if( it != itemMap.end() && it->second->Type() == PCB_FIELD_T )
+                    if( resolved && resolved->Type() == PCB_FIELD_T )
                         return true;
                 }
 
@@ -349,7 +345,7 @@ BOOST_FIXTURE_TEST_CASE( DRCTeardropOverCopperField, DRC_REGRESSION_TEST_FIXTURE
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
 
         for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
     }
 
     // Exactly one short: the visible field bridges the two nets; the hidden field does not.

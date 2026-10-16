@@ -89,11 +89,10 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskNPTHBridge, DRC_NPTH_MASK_BRIDGE_FIXTURE )
     {
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
 
-        std::map<KIID, EDA_ITEM*> itemMap;
-        m_board->FillItemMap( itemMap );
+        BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
         for( const std::shared_ptr<DRC_ITEM>& item : bridgeViolations )
-            BOOST_TEST_MESSAGE( item->ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item->ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
     }
 
     // Everything exposed by the F.Mask polygon is either GND (zone, vias) or

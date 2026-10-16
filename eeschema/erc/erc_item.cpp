@@ -503,11 +503,10 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
 }
 
 
-wxString ERC_ITEM::getItemDescription( EDA_ITEM* aItem, int aIndex,
-                                       UNITS_PROVIDER* aUnitsProvider ) const
+wxString ERC_ITEM::getItemDescription( EDA_ITEM* aItem, int aIndex, UNITS_PROVIDER* aUnitsProvider ) const
 {
     SCH_ITEM*  schItem = dynamic_cast<SCH_ITEM*>( aItem );
-    SCHEMATIC* sch     = schItem ? schItem->Schematic() : nullptr;
+    SCHEMATIC* sch = schItem ? schItem->Schematic() : nullptr;
 
     const std::optional<SCH_SHEET_PATH>& explicitSheet = aIndex == 0 ? m_mainItemSheet : m_auxItemSheet;
     const std::optional<SCH_SHEET_PATH>& itemSheet = explicitSheet ? explicitSheet : m_sheetSpecificPath;
@@ -538,4 +537,20 @@ wxString ERC_ITEM::getItemDescription( EDA_ITEM* aItem, int aIndex,
     savedSheet.UpdateAllScreenReferences();
 
     return desc;
+}
+
+
+EDA_ITEM* SCH_RC_ITEM_RESOLVER::doResolveItemById( const KIID& aKiid ) const
+{
+    if( !m_itemsBuilt )
+    {
+        m_sheetList.FillItemMap( m_items );
+        m_itemsBuilt = true;
+    }
+
+    auto it = m_items.find( aKiid );
+    if( it != m_items.end() )
+        return it->second;
+
+    return nullptr;
 }

@@ -2355,51 +2355,6 @@ int BOARD::RepairDuplicateItemUuids()
 }
 
 
-void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
-{
-    // the board itself
-    aMap[m_Uuid] = this;
-
-    for( PCB_TRACK* track : Tracks() )
-        aMap[track->m_Uuid] = track;
-
-    for( FOOTPRINT* footprint : Footprints() )
-    {
-        aMap[footprint->m_Uuid] = footprint;
-
-        for( PAD* pad : footprint->Pads() )
-            aMap[pad->m_Uuid] = pad;
-
-        aMap[footprint->Reference().m_Uuid] = &footprint->Reference();
-        aMap[footprint->Value().m_Uuid] = &footprint->Value();
-
-        for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
-            aMap[drawing->m_Uuid] = drawing;
-    }
-
-    for( ZONE* zone : Zones() )
-        aMap[zone->m_Uuid] = zone;
-
-    for( BOARD_ITEM* drawing : Drawings() )
-        aMap[drawing->m_Uuid] = drawing;
-
-    for( PCB_MARKER* marker : m_markers )
-        aMap[marker->m_Uuid] = marker;
-
-    for( PCB_GROUP* group : m_groups )
-        aMap[group->m_Uuid] = group;
-
-    for( PCB_CONSTRAINT* constraint : m_constraints )
-        aMap[constraint->m_Uuid] = constraint;
-
-    for( PCB_POINT* point : m_points )
-        aMap[point->m_Uuid] = point;
-
-    for( PCB_GENERATOR* generator : m_generators )
-        aMap[generator->m_Uuid] = generator;
-}
-
-
 wxString BOARD::ConvertCrossReferencesToKIIDs( const wxString& aSource ) const
 {
     wxString newbuf;

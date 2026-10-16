@@ -73,8 +73,7 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutDisallowViasAndTracks, DRC_KEEPOUT_TEST_FIXTU
     int trackViolations = 0;
     int viaViolations = 0;
 
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_board->FillItemMap( itemMap );
+    BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
     for( const DRC_ITEM& item : violations )
     {
@@ -83,12 +82,12 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutDisallowViasAndTracks, DRC_KEEPOUT_TEST_FIXTU
         if( id == niluuid )
             continue;
 
-        auto it = itemMap.find( id );
+        const EDA_ITEM* resolved = resolver.ResolveItemById( id );
 
-        if( it == itemMap.end() )
+        if( !resolved )
             continue;
 
-        switch( it->second->Type() )
+        switch( resolved->Type() )
         {
         case PCB_VIA_T:   viaViolations++;   break;
         case PCB_TRACE_T: trackViolations++; break;
@@ -112,7 +111,7 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutDisallowViasAndTracks, DRC_KEEPOUT_TEST_FIXTU
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
 
         for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
     }
 }
 
@@ -127,8 +126,7 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutFootprintExcludesItself, DRC_KEEPOUT_TEST_FIX
 {
     KI_TEST::LoadBoard( m_settingsManager, "issue24924/keepout_self_exclude", m_board );
 
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_board->FillItemMap( itemMap );
+    BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
     int                    footprintViolations = 0;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -150,9 +148,9 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutFootprintExcludesItself, DRC_KEEPOUT_TEST_FIX
                 if( aItem->GetErrorCode() != DRCE_ALLOWED_ITEMS )
                     return;
 
-                auto it = itemMap.find( aItem->GetMainItemID() );
+                const EDA_ITEM* resolved = resolver.ResolveItemById( aItem->GetMainItemID() );
 
-                if( it != itemMap.end() && it->second->Type() == PCB_FOOTPRINT_T )
+                if( resolved && resolved->Type() == PCB_FOOTPRINT_T )
                     footprintViolations++;
             } );
 
@@ -205,11 +203,10 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutNoClearanceInflation, DRC_KEEPOUT_TEST_FIXTUR
     if( !violations.empty() )
     {
         UNITS_PROVIDER            unitsProvider( pcbIUScale, EDA_UNITS::MM );
-        std::map<KIID, EDA_ITEM*> itemMap;
-        m_board->FillItemMap( itemMap );
+        BOARD_RC_ITEM_RESOLVER    resolver( *m_board );
 
         for( const DRC_ITEM& item : violations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
     }
 
     BOOST_CHECK_MESSAGE( violations.empty(),

@@ -745,8 +745,6 @@ public:
      */
     int RepairDuplicateItemUuids();
 
-    void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
-
     /**
      * Convert cross-references back and forth between ${refDes:field} and ${kiid:field}
      */

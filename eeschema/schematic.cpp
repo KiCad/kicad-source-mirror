@@ -2664,7 +2664,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
         // If a SCH_RULE_AREA was changed, we need to add all past and present contained items to
         // update their connectivity
-        std::map<KIID, EDA_ITEM*> itemMap;
+        std::unordered_map<KIID, EDA_ITEM*> itemMap;
         list.FillItemMap( itemMap );
 
         auto addPastAndPresentContainedItems =
@@ -3305,4 +3305,3 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
         }
     }
 }
-

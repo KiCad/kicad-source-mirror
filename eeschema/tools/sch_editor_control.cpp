@@ -2492,7 +2492,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         existingRefsSet.insert( ref.GetRef() );
 
     // Build UUID map for fetching last-resolved-properties
-    std::map<KIID, EDA_ITEM*> itemMap;
+    std::unordered_map<KIID, EDA_ITEM*> itemMap;
     hierarchy.FillItemMap( itemMap );
 
     // Keep track of pasted sheets and symbols for the different paths to the hierarchy.

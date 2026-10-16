@@ -93,13 +93,12 @@ BOOST_FIXTURE_TEST_CASE( DRCSkew, DRC_REGRESSION_TEST_FIXTURE )
         {
             UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
+            BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
             for( const DRC_ITEM& item : violations )
             {
                 BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                     itemMap ) );
+                                                     resolver ) );
             }
 
             BOOST_ERROR( wxString::Format( "DRC skew: %s, failed (violations found %d expected %d)",

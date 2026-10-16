@@ -18,9 +18,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-#include "wx/html/m_templ.h"
-#include "wx/html/styleparams.h"
 #include "core/kicad_algo.h"
 #include <algorithm>
 #include <drc/drc_item.h>
@@ -719,3 +716,8 @@ void DRC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
         m_board->Delete( marker );
 }
 
+
+EDA_ITEM* BOARD_RC_ITEM_RESOLVER::doResolveItemById( const KIID& aKiid ) const
+{
+    return m_board.ResolveItem( aKiid, true );
+}

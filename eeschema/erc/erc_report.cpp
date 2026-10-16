@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "erc/erc_report.h"
+
 #include <wx/ffile.h>
 #include <wx/string.h>
 
@@ -26,7 +28,7 @@
 #include <schematic.h>
 #include <string_utils.h>
 #include <build_version.h>
-#include "erc_report.h"
+#include <erc/erc_item.h>
 #include <eda_units.h>
 #include <erc/erc.h>
 #include <fstream>
@@ -68,14 +70,12 @@ wxString ERC_REPORT::GetTextReport()
     msg += wxString::Format( wxT( "Report includes: %s\n" ),
                              formatSeverities( m_reportedSeverities ) );
 
-    std::map<KIID, EDA_ITEM*> itemMap;
-
     int            err_count = 0;
     int            warn_count = 0;
     int            total_count = 0;
     SCH_SHEET_LIST sheetList = m_sch->BuildSheetListSortedByPageNumbers();
 
-    sheetList.FillItemMap( itemMap );
+    SCH_RC_ITEM_RESOLVER itemResolver( sheetList );
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
@@ -111,7 +111,7 @@ wxString ERC_REPORT::GetTextReport()
             default:                                 break;
             }
 
-            msg << item->ShowReport( &unitsProvider, severity, itemMap );
+            msg << item->ShowReport( &unitsProvider, severity, itemResolver );
         }
     }
 
@@ -161,7 +161,6 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     std::ofstream jsonFileStream( aFullFileName.fn_str() );
 
     UNITS_PROVIDER            unitsProvider( schIUScale, m_reportUnits );
-    std::map<KIID, EDA_ITEM*> itemMap;
 
     RC_JSON::ERC_REPORT reportHead;
     wxFileName          fn( m_sch->GetFileName() );
@@ -181,8 +180,8 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     if( m_reportedSeverities & RPT_SEVERITY_EXCLUSION )
         reportHead.included_severities.push_back( wxS( "exclusion" ) );
 
-    SCH_SHEET_LIST sheetList = m_sch->Hierarchy();
-    sheetList.FillItemMap( itemMap );
+    SCH_SHEET_LIST       sheetList = m_sch->Hierarchy();
+    SCH_RC_ITEM_RESOLVER itemResolver( sheetList );
 
     ERC_SETTINGS& settings = m_sch->ErcSettings();
 
@@ -212,7 +211,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
             SEVERITY severity = settings.GetSeverity( item->GetErrorCode() );
 
             RC_JSON::VIOLATION violation;
-            item->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
+            item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
 
             jsonSheet.violations.push_back( violation );
         }

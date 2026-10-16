@@ -146,33 +146,15 @@ BOOST_DATA_TEST_CASE_F( DRC_REGRESSION_TEST_FIXTURE, DRCCopperSliver,
     {
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
-        std::map<KIID, EDA_ITEM*> itemMap;
+        BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
-        // Safely build the item map with error handling
-        try
-        {
-            m_board->FillItemMap( itemMap );
-        }
-        catch( const std::exception& e )
-        {
-            BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, exception in FillItemMap: %s",
-                                           test.first, e.what() ) );
-            return;
-        }
-        catch( ... )
-        {
-            BOOST_ERROR( wxString::Format( "DRC copper sliver: %s, unknown exception in FillItemMap",
-                                           test.first ) );
-            return;
-        }
-
-        // Safely report violations with bounds checking
+        // Report violations with bounds checking
         for( size_t i = 0; i < violations.size() && i < 100; ++i ) // Limit output to prevent excessive logging
         {
             try
             {
                 const DRC_ITEM& item = violations[i];
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
             }
             catch( const std::exception& e )
             {

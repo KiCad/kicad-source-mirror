@@ -18,6 +18,7 @@
  */
 
 #include "drc_report.h"
+#include "eda_item.h"
 
 #include <fstream>
 
@@ -62,12 +63,10 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
     if( fp == nullptr )
         return false;
 
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_board->FillItemMap( itemMap );
-
     UNITS_PROVIDER         unitsProvider( pcbIUScale, m_reportUnits );
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    int                    count;
+    BOARD_RC_ITEM_RESOLVER itemResolver( *m_board );
+    int                    count = 0;
 
     wxFileName fn( m_board->GetFileName() );
     fprintf( fp, "** Drc report for %s **\n", TO_UTF8( fn.GetFullName() ) );
@@ -88,7 +87,7 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
         if( severity == RPT_SEVERITY_EXCLUSION )
             severity = bds.GetSeverity( item->GetErrorCode() );
 
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemResolver ) ) );
     }
 
     count = m_ratsnestProvider->GetCount();
@@ -100,7 +99,7 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
         const std::shared_ptr<RC_ITEM>& item = m_ratsnestProvider->GetItem( i );
         SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
 
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemResolver ) ) );
     }
 
     count = m_fpWarningsProvider->GetCount();
@@ -112,7 +111,7 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
         const std::shared_ptr<RC_ITEM>& item = m_fpWarningsProvider->GetItem( i );
         SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
 
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemResolver ) ) );
     }
 
     fprintf( fp, "\n** Ignored checks **\n" );
@@ -145,10 +144,9 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 {
     std::ofstream jsonFileStream( aFullFileName.fn_str() );
 
-    UNITS_PROVIDER            unitsProvider( pcbIUScale, m_reportUnits );
-    BOARD_DESIGN_SETTINGS&    bds = m_board->GetDesignSettings();
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_board->FillItemMap( itemMap );
+    UNITS_PROVIDER         unitsProvider( pcbIUScale, m_reportUnits );
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    BOARD_RC_ITEM_RESOLVER itemResolver( *m_board );
 
     RC_JSON::DRC_REPORT reportHead;
 
@@ -178,7 +176,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
             severity = bds.GetSeverity( item->GetErrorCode() );
 
         RC_JSON::VIOLATION violation;
-        item->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
+        item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
 
         reportHead.violations.push_back( violation );
     }
@@ -189,7 +187,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
 
         RC_JSON::VIOLATION violation;
-        item->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
+        item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
 
         reportHead.unconnected_items.push_back( violation );
     }
@@ -201,7 +199,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
 
         RC_JSON::VIOLATION violation;
-        item->GetJsonViolation( violation, &unitsProvider, severity, itemMap );
+        item->GetJsonViolation( violation, &unitsProvider, severity, itemResolver );
 
         reportHead.schematic_parity.push_back( violation );
     }

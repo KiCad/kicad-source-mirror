@@ -28,8 +28,8 @@
 #define CLASS_DRAWSHEET_PATH_H
 
 #include <map>
-#include <memory>
 #include <optional>
+#include <unordered_map>
 
 #include <kiid.h>
 #include <lib_id.h>
@@ -652,7 +652,7 @@ public:
     /**
      * Fill an item cache for temporary use when many items need to be fetched.
      */
-    void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
+    void FillItemMap( std::unordered_map<KIID, EDA_ITEM*>& aMap ) const;
 
     /**
      * Add a #SCH_REFERENCE object to \a aReferences for each symbol in the list of sheets.

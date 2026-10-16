@@ -78,8 +78,7 @@ BOOST_FIXTURE_TEST_CASE( DRCIssue23469_ReferenceReducesEdgeClearance, DRC_ISSUE2
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
 
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_board->FillItemMap( itemMap );
+    BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
     // Count violations where at least one (or both) of the affected items belong to a
     // footprint whose reference designator matches aRef.  aRequireBothItems is used to
@@ -98,12 +97,12 @@ BOOST_FIXTURE_TEST_CASE( DRCIssue23469_ReferenceReducesEdgeClearance, DRC_ISSUE2
                         if( uuid == niluuid )
                             continue;
 
-                        auto it = itemMap.find( uuid );
+                        const EDA_ITEM* resolved = resolver.ResolveItemById( uuid );
 
-                        if( it == itemMap.end() )
+                        if( !resolved )
                             continue;
 
-                        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( it->second );
+                        const BOARD_ITEM* boardItem = dynamic_cast<const BOARD_ITEM*>( resolved );
 
                         if( !boardItem )
                             continue;
@@ -136,10 +135,10 @@ BOOST_FIXTURE_TEST_CASE( DRCIssue23469_ReferenceReducesEdgeClearance, DRC_ISSUE2
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
 
         for( const DRC_ITEM& item : edgeViolations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
 
         for( const DRC_ITEM& item : holeViolations )
-            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver ) );
     }
 
     // Without the custom rules J1 violates the board defaults, so the clean

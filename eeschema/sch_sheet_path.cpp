@@ -1385,7 +1385,7 @@ SCH_ITEM* SCH_SHEET_PATH::ResolveItem( const KIID& aID ) const
 }
 
 
-void SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
+void SCH_SHEET_LIST::FillItemMap( std::unordered_map<KIID, EDA_ITEM*>& aMap ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {

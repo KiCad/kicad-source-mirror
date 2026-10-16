@@ -328,4 +328,21 @@ private:
 };
 
 
+/**
+ * Implements the RC_ITEM_RESOLVER interface to resolve PCB items by their KIID.
+ */
+class BOARD_RC_ITEM_RESOLVER : public RC_ITEM_RESOLVER
+{
+public:
+    explicit BOARD_RC_ITEM_RESOLVER( const BOARD& aBoard ) :
+            m_board( aBoard )
+    {
+    }
+
+    EDA_ITEM* doResolveItemById( const KIID& aKiid ) const override;
+
+private:
+    const BOARD& m_board;
+};
+
 #endif      // DRC_ITEM_H

@@ -76,8 +76,7 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 }
 
 
-wxString RC_ITEM::getItemDescription( EDA_ITEM* aItem, int /*aIndex*/,
-                                      UNITS_PROVIDER* aUnitsProvider ) const
+wxString RC_ITEM::getItemDescription( EDA_ITEM* aItem, int /*aIndex*/, UNITS_PROVIDER* aUnitsProvider ) const
 {
     return aItem->GetItemDescription( aUnitsProvider, true );
 }
@@ -103,7 +102,7 @@ wxString RC_ITEM::getSeverityString( SEVERITY aSeverity )
 
 
 wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
-                              const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+                              const RC_ITEM_RESOLVER& aResolver ) const
 {
     wxString severity = getSeverityString( aSeverity );
     bool     excluded = m_parent && m_parent->IsTreatedAsExcluded();
@@ -111,18 +110,8 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     if( excluded )
         severity += wxT( " (excluded)" );
 
-    EDA_ITEM* mainItem = nullptr;
-    EDA_ITEM* auxItem = nullptr;
-
-    auto ii = aItemMap.find( GetMainItemID() );
-
-    if( ii != aItemMap.end() )
-        mainItem = ii->second;
-
-    ii = aItemMap.find( GetAuxItemID() );
-
-    if( ii != aItemMap.end() )
-        auxItem = ii->second;
+    EDA_ITEM* mainItem = aResolver.ResolveItemById( GetMainItemID() );
+    EDA_ITEM* auxItem = aResolver.ResolveItemById( GetAuxItemID() );
 
     wxString errorMessage = HYPERLINK_DV_RENDERER::StripMarkup( GetErrorMessage( false ) );
     wxString ruleDesc = HYPERLINK_DV_RENDERER::StripMarkup( GetViolatingRuleDesc( false ) );
@@ -160,8 +149,8 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
 }
 
 
-void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider,
-                                SEVERITY aSeverity, const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
+                                const RC_ITEM_RESOLVER& aResolver ) const
 {
     aViolation.severity = getSeverityString( aSeverity );
     aViolation.description = HYPERLINK_DV_RENDERER::StripMarkup( GetErrorMessage( false ) );
@@ -177,18 +166,8 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
         aViolation.excluded = false;
     }
 
-    EDA_ITEM* mainItem = nullptr;
-    EDA_ITEM* auxItem = nullptr;
-
-    auto ii = aItemMap.find( GetMainItemID() );
-
-    if( ii != aItemMap.end() )
-        mainItem = ii->second;
-
-    ii = aItemMap.find( GetAuxItemID() );
-
-    if( ii != aItemMap.end() )
-        auxItem = ii->second;
+    EDA_ITEM* mainItem = aResolver.ResolveItemById( GetMainItemID() );
+    EDA_ITEM* auxItem = aResolver.ResolveItemById( GetAuxItemID() );
 
     if( mainItem )
     {

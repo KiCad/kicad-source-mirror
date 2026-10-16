@@ -81,11 +81,10 @@ static void runLineEndingMatrixDrcTest( SETTINGS_MANAGER& aSettingsManager, std:
     UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
     wxString                  report;
-    std::map<KIID, EDA_ITEM*> itemMap;
-    aBoard->FillItemMap( itemMap );
+    BOARD_RC_ITEM_RESOLVER    resolver( *aBoard );
 
     for( const DRC_ITEM& item : violations )
-        report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
+        report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver );
 
     BOOST_ERROR( wxString::Format( "DRC line ending matrix: %s\n"
                                    "%d violations found (expected %d)\n"
@@ -144,11 +143,10 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE
         UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCH );
 
         wxString report;
-        std::map<KIID, EDA_ITEM*> itemMap;
-        m_board->FillItemMap( itemMap );
+        BOARD_RC_ITEM_RESOLVER resolver( *m_board );
 
         for( const DRC_ITEM& item : violations )
-            report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap );
+            report += item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, resolver );
 
         BOOST_ERROR( wxString::Format( "DRC copper graphics: %s\n"
                                        "%d violations found (expected %d)\n"
