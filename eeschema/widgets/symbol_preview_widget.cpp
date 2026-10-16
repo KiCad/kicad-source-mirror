@@ -259,7 +259,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 }
 
 
-void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBodyStyle )
+void SYMBOL_PREVIEW_WIDGET::DisplayPart( const LIB_SYMBOL* aSymbol, int aUnit, int aBodyStyle )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 

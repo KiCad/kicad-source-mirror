@@ -100,8 +100,8 @@ struct KICOMMON_API DATABASE_LIB_TABLE
 
 struct KICOMMON_API DATABASE_CACHE_SETTINGS
 {
-    int max_size;    ///< Maximum number of single-row results to cache
-    int max_age;     ///< Max age of cached rows before they expire, in seconds
+    int max_size;    ///< Maximum number of tables to cache, each holding the rows read from it
+    int max_age;     ///< Max age of a cached table before it expires, in seconds
 };
 
 
