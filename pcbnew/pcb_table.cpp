@@ -97,6 +97,7 @@ void PCB_TABLE::CopyFrom( const BOARD_ITEM* aOther )
 {
     wxCHECK( aOther && aOther->Type() == PCB_TABLE_T, /* void */ );
 
+    BOARD*           board = GetBoard();
     const PCB_TABLE* other = static_cast<const PCB_TABLE*>( aOther );
 
     BOARD_ITEM::CopyFrom( aOther );
@@ -112,10 +113,16 @@ void PCB_TABLE::CopyFrom( const BOARD_ITEM* aOther )
     m_colWidths = other->m_colWidths;
     m_rowHeights = other->m_rowHeights;
 
+    if( board )
+        board->UncacheChildrenById( this );
+
     ClearCells();
 
     for( PCB_TABLECELL* cell : other->m_cells )
         AddCell( static_cast<PCB_TABLECELL*>( cell->Clone() ) );
+
+    if( board )
+        board->CacheChildrenById( this );
 }
 
 
