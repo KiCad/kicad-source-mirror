@@ -42,5 +42,6 @@ public:
 
 protected:
     std::map<wxString, wxString> m_variants;    // variant to variant-description map
+    wxString                     m_currentVariant;
 };
 
