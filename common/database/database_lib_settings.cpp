@@ -271,6 +271,13 @@ bool DATABASE_LIB_SETTINGS::Store()
 }
 
 
+void DATABASE_LIB_SETTINGS::ResolvePassword( const DATABASE_SECRET_LOOKUP& aLookup )
+{
+    ResolveDatabasePassword( m_Source, aLookup );
+    m_loaded.source.password = m_Source.password;
+}
+
+
 wxString DATABASE_LIB_SETTINGS::getFileExt() const
 {
     return FILEEXT::DatabaseLibraryFileExtension;
@@ -283,16 +290,33 @@ static wxString passwordService( const DATABASE_SOURCE& aSource )
 }
 
 
-bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword )
+DATABASE_SECRET_LOOKUP DefaultDatabaseSecretLookup()
+{
+    return KIPLATFORM::SECRETS::GetSecretNoPrompt;
+}
+
+
+bool IsNoPromptSecretLookup( const DATABASE_SECRET_LOOKUP& aLookup )
+{
+    using NO_PROMPT_FN = bool ( * )( const wxString&, const wxString&, wxString& );
+
+    const NO_PROMPT_FN* target = aLookup.target<NO_PROMPT_FN>();
+
+    return target && *target == &KIPLATFORM::SECRETS::GetSecretNoPrompt;
+}
+
+
+bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword,
+                          const DATABASE_SECRET_LOOKUP& aLookup )
 {
     // Without a user name the DSN supplies its own credentials, so the keyring is not consulted
     if( !aSource.connection_string.empty() || aSource.dsn.empty() || aSource.username.empty() )
         return false;
 
-    wxString secret;
+    DATABASE_SECRET_LOOKUP lookup = aLookup ? aLookup : DefaultDatabaseSecretLookup();
+    wxString               secret;
 
-    if( !KIPLATFORM::SECRETS::GetSecretNoPrompt( passwordService( aSource ), wxString::FromUTF8( aSource.username ),
-                                                 secret ) )
+    if( !lookup( passwordService( aSource ), wxString::FromUTF8( aSource.username ), secret ) )
         return false;
 
     aPassword = secret.utf8_string();
@@ -300,8 +324,8 @@ bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword
 }
 
 
-void ResolveDatabasePassword( DATABASE_SOURCE& aSource )
+void ResolveDatabasePassword( DATABASE_SOURCE& aSource, const DATABASE_SECRET_LOOKUP& aLookup )
 {
     if( aSource.password.empty() )
-        GetDatabasePassword( aSource, aSource.password );
+        GetDatabasePassword( aSource, aSource.password, aLookup );
 }

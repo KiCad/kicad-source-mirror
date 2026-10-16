@@ -22,6 +22,7 @@
 #define KICAD_DATABASE_LIB_SETTINGS_H
 
 #include <json_common.h>
+#include <functional>
 #include <settings/json_settings.h>
 #include <wx/string.h>
 
@@ -105,6 +106,11 @@ struct KICOMMON_API DATABASE_CACHE_SETTINGS
 };
 
 
+/**
+ * Keyring lookup signature, matching KIPLATFORM::SECRETS::GetSecretNoPrompt.
+ */
+using DATABASE_SECRET_LOOKUP = std::function<bool( const wxString& aService, const wxString& aKey, wxString& aSecret )>;
+
 class KICOMMON_API DATABASE_LIB_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -129,6 +135,12 @@ public:
      */
     bool Store() override;
 
+    /**
+     * Fills in the source password from the keyring when the file has none. The password is
+     * treated as loaded, so Store() never writes it back to the file.
+     */
+    void ResolvePassword( const DATABASE_SECRET_LOOKUP& aLookup = nullptr );
+
 protected:
     wxString getFileExt() const override;
 
@@ -149,16 +161,29 @@ private:
 };
 
 /**
+ * The lookup used when none is injected, which must never prompt to unlock the keyring.
+ */
+KICOMMON_API DATABASE_SECRET_LOOKUP DefaultDatabaseSecretLookup();
+
+/**
+ * @return true when aLookup is the system keyring lookup that never prompts to unlock it.
+ */
+KICOMMON_API bool IsNoPromptSecretLookup( const DATABASE_SECRET_LOOKUP& aLookup );
+
+/**
  * DSN passwords that are not saved in the (often shared) library file live in the system keyring,
  * keyed by DSN and user name so every library on the same login shares one entry.
  *
+ * @param aLookup replaces the system keyring when set, for tests.
  * @return false when the source has no DSN login or the keyring holds no password for it
  */
-KICOMMON_API bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword );
+KICOMMON_API bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::string& aPassword,
+                                       const DATABASE_SECRET_LOOKUP& aLookup = nullptr );
 
 /**
  * Fills in the source password from the keyring, but only when the library file did not supply one.
  */
-KICOMMON_API void ResolveDatabasePassword( DATABASE_SOURCE& aSource );
+KICOMMON_API void ResolveDatabasePassword( DATABASE_SOURCE& aSource,
+                                           const DATABASE_SECRET_LOOKUP& aLookup = nullptr );
 
 #endif //KICAD_DATABASE_LIB_SETTINGS_H

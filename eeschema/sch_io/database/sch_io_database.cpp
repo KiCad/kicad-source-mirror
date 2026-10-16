@@ -552,7 +552,7 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
                                      aSettingsPath );
                 }
 
-                ResolveDatabasePassword( m_settings->m_Source );
+                m_settings->ResolvePassword();
             };
 
     if( !m_settings && !aSettingsPath.IsEmpty() )
