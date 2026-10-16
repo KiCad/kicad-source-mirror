@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-16 07:51+0000\n"
+"PO-Revision-Date: 2026-10-17 10:36+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25246,6 +25246,8 @@ msgid ""
 "Native power units for '%s' have ambiguous package identity; their symbol "
 "definitions were kept separate."
 msgstr ""
+"'%s' の電源ユニットはあいまいなパッケージ識別です; それらは別のシンボルとして"
+"保持されました。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:2895
 #, c-format
@@ -25271,12 +25273,12 @@ msgstr "OrCADのストリームサイズがファイルサイズを超過して�
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:315
 #, c-format
 msgid "The OrCAD CIS variant '%s' has no definition stream."
-msgstr ""
+msgstr "OrCAD CIS バリアント '%s\" は定義ストリームがありません。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:328
 #, c-format
 msgid "The OrCAD CIS variant '%s' references an unknown property group."
-msgstr ""
+msgstr "OrCAD CIS バリアント '%s\" は不明なプロパティグループを参照しています。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:372
 #, c-format
@@ -25343,6 +25345,8 @@ msgid ""
 "The design does not name its root schematic; the first schematic folder is "
 "used instead."
 msgstr ""
+"デザインはルート回路図に名前を付けていません;最初の回路図フォルダーが使用され"
+"ます。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:658
 #, c-format
@@ -25350,6 +25354,8 @@ msgid ""
 "The design names '%s' as its root schematic, but no such folder is present; "
 "the first schematic folder is used instead."
 msgstr ""
+"デザインは '%s\" をルート回路図に指定していますが、そのようなフォルダーは存在"
+"しません: 最初の回路図フォルダーが使用されます。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:714
 #, c-format
@@ -30362,28 +30368,28 @@ msgstr "円弧を描画"
 
 #: eeschema/tools/sch_actions.cpp:782 pcbnew/tools/pcb_actions.cpp:409
 msgid "Draw Arc: Center, Start, End"
-msgstr ""
+msgstr "円弧を描画: 中心,始点,終点"
 
 #: eeschema/tools/sch_actions.cpp:783 pcbnew/tools/pcb_actions.cpp:410
 msgid "Draw arcs by clicking the center, the start point, then the end point"
-msgstr ""
+msgstr "中心、始点、終点を順にクリックして円弧を描画"
 
 #: eeschema/tools/sch_actions.cpp:792 pcbnew/tools/pcb_actions.cpp:419
 msgid "Draw Arc: Start, End, Midpoint"
-msgstr ""
+msgstr "円弧を描画: 中心,始点,中点"
 
 #: eeschema/tools/sch_actions.cpp:793 pcbnew/tools/pcb_actions.cpp:420
 msgid ""
 "Draw arcs by clicking the start point, the end point, then a point on the arc"
-msgstr ""
+msgstr "始点、終点、円弧上の点を順にクリックして円弧を描画"
 
 #: eeschema/tools/sch_actions.cpp:802 pcbnew/tools/pcb_actions.cpp:429
 msgid "Draw Arc: Start, End, Center"
-msgstr ""
+msgstr "円弧を描画: 始点,終点,中心"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:430
 msgid "Draw arcs by clicking the start point, the end point, then the center"
-msgstr ""
+msgstr "始点、終点、中心を順にクリックして円弧を描画"
 
 #: eeschema/tools/sch_actions.cpp:812 pcbnew/tools/pcb_actions.cpp:439
 msgid "Draw Arc: Tangent"
@@ -30393,17 +30399,17 @@ msgstr "円弧を描画: 接線"
 msgid ""
 "Draw arcs tangent to the previous arc or to the line or arc ending at the "
 "start point"
-msgstr ""
+msgstr "前の円弧や線や円弧の終点を起点として接線として円弧を描画"
 
 #: eeschema/tools/sch_actions.cpp:822 pcbnew/tools/pcb_actions.cpp:449
 msgid "Draw Arc: Start, Direction, End"
-msgstr ""
+msgstr "円弧を描画: 始点,方向,終点"
 
 #: eeschema/tools/sch_actions.cpp:823 pcbnew/tools/pcb_actions.cpp:450
 msgid ""
 "Draw arcs by clicking the start point, a point giving the start direction, "
 "then the end point"
-msgstr ""
+msgstr "始点、開始方向、終点を順にクリックして円弧を描画"
 
 #: eeschema/tools/sch_actions.cpp:847 pcbnew/tools/pcb_actions.cpp:475
 msgid "Draw Bezier Curve"
@@ -31493,6 +31499,8 @@ msgid ""
 "Multiple body styles are not supported on symbols with alternate pin "
 "functions."
 msgstr ""
+"複数のボディスタイルは、代替ピン機能を持つシンボルではサポートされていません"
+"。"
 
 #: eeschema/tools/sch_align_tool.cpp:358
 #: pcbnew/tools/align_distribute_tool.cpp:432
@@ -35285,7 +35293,7 @@ msgstr "'未実装(DNP)'が指定されたコンポーネントを除外する"
 
 #: kicad/cli/command_pcb_export_idf.cpp:78
 msgid "Only use explicitly-set footprint heights to create IDFv3 shapes"
-msgstr ""
+msgstr "IDFv3形状を作成するには明示的に設定されたフットプリント高さのみを使用する"
 
 #: kicad/cli/command_pcb_export_idf.cpp:83
 msgid "Footprint field to export as the part number to the IDF library"
@@ -35341,7 +35349,7 @@ msgstr "DPI解像度(デフォルト %d)"
 #: kicad/cli/command_pcb_export_png.cpp:109
 msgid ""
 "Use the color theme background color instead of a transparent background"
-msgstr ""
+msgstr "透明な背景の代わりにカラーテーマの背景色を使用する"
 
 #: kicad/cli/command_pcb_export_png.cpp:147
 #: kicad/cli/command_sch_export_plot.cpp:222
@@ -44693,7 +44701,7 @@ msgstr "*** フットプリント ライブラリが見つかりません ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:405
 msgid ": (shifted/rotated to match pad positions)"
-msgstr ""
+msgstr ": (パッド位置に合わせて 横滑り/回転)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:407
 msgid ": (no changes)"
@@ -45023,7 +45031,7 @@ msgstr "[未指定]の部品を無視"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:140
 msgid "Calculate component height from 3D models"
-msgstr ""
+msgstr "3Dモデルから部品高さを計算する"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:142
 msgid ""
@@ -45031,6 +45039,9 @@ msgid ""
 "exported with the height from its tallest visible 3D model.  When disabled, "
 "footprints without an explicit height will not be included in the IDF file."
 msgstr ""
+"有効にすると、明示的に高さが指定されていないフットプリントは最も高い表示され"
+"ている3Dモデルの高さでエクスポートされます。  無効にすると、明示的に高さが指"
+"定されていないフットプリントはIDFファイルに含まれません。"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:149
 msgid "Part number field:"
@@ -45120,7 +45131,7 @@ msgstr "プロダクト名:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:114
 msgid "Product model name in ODB++"
-msgstr ""
+msgstr "ODB++のプロダクトモデル名"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:118
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:144
@@ -45704,7 +45715,7 @@ msgstr "一致する値が見つかりません : %s"
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1126
 #, c-format
 msgid "%zu rows have no value to match"
-msgstr ""
+msgstr "%zu 行に一致する値がありません"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1137
 msgid "Expression is empty"
@@ -46676,7 +46687,7 @@ msgstr "テーブルには一つ以上のカラムが必要です。"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:305
 msgid "The columns are too wide in total."
-msgstr ""
+msgstr "列の幅が全体的に広すぎます。"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:57
 msgid "Decimal places:"
@@ -48164,7 +48175,7 @@ msgstr "アウトセット（輪郭作成）アイテム"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:181
 msgid "Open the through-hole size calculator"
-msgstr ""
+msgstr "スルーホール サイズ 計算機を開く"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:188
 #: pcbnew/dialogs/dialog_pad_properties_base.h:328 pcbnew/pad.cpp:3925
@@ -49318,15 +49329,16 @@ msgstr ""
 "ように最適化されます。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:137
-#, fuzzy
 msgid "Keep coupling between differential pairs"
-msgstr "差動ペアを配線"
+msgstr "差動ペアの間を保持"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:139
 msgid ""
 "When enabled, dragging one track belonging to a differential pair drags the "
 "other, maintaining their coupling,"
 msgstr ""
+"有効になっている場合、差動ペアに属する片方の配線をドラッグすると、もう一方の"
+"配線も一緒にドラッグされ、その結合が維持されます,"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:64
 msgid "Interactive Router Settings"
@@ -50785,7 +50797,7 @@ msgstr "セクション"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
 msgid "ODB++"
-msgstr ""
+msgstr "ODB++"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
 msgid "IPC-2581"
@@ -50796,6 +50808,8 @@ msgid ""
 "Choose sections to include. Intentional shorts are written when the board "
 "has net ties."
 msgstr ""
+"含めるセクションを選択してください。意図的ショートは基板にネットタイがある場"
+"合に記載されます。"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:101
 #: pcbnew/dialogs/panel_fab_export_content.cpp:397
@@ -50804,7 +50818,7 @@ msgstr "基板付帯情報"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:109
 msgid "intentional shorts"
-msgstr ""
+msgstr "意図的ショート"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:196
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
