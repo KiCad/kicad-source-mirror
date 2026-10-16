@@ -29,6 +29,7 @@
 #include <fmt/core.h>
 #include <ki_exception.h>
 #include <macros.h>
+#include <core/kicad_algo.h>
 #include <string_utils.h>
 #include <widgets/kistatusbar.h>
 #include <wx_filename.h>
@@ -295,6 +296,16 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
                 converted += wxT( "{return}" );
             else
                 converted += c;
+        }
+        else if( aContext == CTX_REGEX )
+        {
+            const wxString regExCtrlChars = wxT( ".^$*+?{}()[]~|\\" );
+
+            if( regExCtrlChars.Contains( c ) )
+            {
+                converted += wxT( "\\" );
+                converted += c;
+            }
         }
         else
         {
