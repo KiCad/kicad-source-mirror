@@ -84,8 +84,8 @@ static constexpr int SCH_VER_CUSTOM_PROPERTIES = 20260830;
 
 // The formats this feature was built for. If a version moves past its constant, a new feature
 // landed and the rules or denylist may be stale. Review the keywords, then update these.
-static constexpr int SCH_DOWNGRADE_COVERED = 20260830;
-static constexpr int SYMLIB_DOWNGRADE_COVERED = 20260830;
+static constexpr int SCH_DOWNGRADE_COVERED = 20261015;
+static constexpr int SYMLIB_DOWNGRADE_COVERED = 20261015;
 
 
 static bool isEllipse( const SCH_ITEM* aItem )
