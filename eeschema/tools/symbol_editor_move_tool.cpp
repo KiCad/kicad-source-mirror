@@ -435,6 +435,10 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
     } while( ( evt = Wait() ) );  // Assignment intentional; not equality test
 
+    // A shutdown abandons the move rather than committing it
+    if( !evt )
+        restore_state = true;
+
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
     controls->SetAutoPan( false );

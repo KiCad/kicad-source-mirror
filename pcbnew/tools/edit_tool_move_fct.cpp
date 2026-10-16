@@ -1793,6 +1793,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
     } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
+    // A shutdown abandons the move rather than committing it
+    if( !evt )
+        restore_state = true;
+
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
     if( showCourtyardConflicts )
         drc_on_move->ClearConflicts( m_toolMgr->GetView() );

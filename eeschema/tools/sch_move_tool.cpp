@@ -1099,6 +1099,10 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
+    // A shutdown abandons the move rather than committing it
+    if( !evt )
+        restore_state = true;
+
     SCH_SHEET* targetSheet = hoverSheet;
 
     if( selectionHasSheetPins || ( selectionIsGraphicsOnly && !lastCtrlDown ) )

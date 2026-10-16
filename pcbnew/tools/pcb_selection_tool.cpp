@@ -1047,10 +1047,9 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag, bool
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )
     {
-        if( aOnDrag )
-            Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
+        bool shutdown = aOnDrag && !Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
 
-        if( !doSelectionMenu( &collector ) )
+        if( shutdown || !doSelectionMenu( &collector ) )
         {
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
