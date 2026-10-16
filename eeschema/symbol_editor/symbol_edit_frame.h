@@ -569,6 +569,11 @@ private:
     /// retry the rest later. aSync resyncs the tree even when nothing was read again.
     void refreshStaleLibraries( bool aSync );
 
+    /// Select, expand and centre aNickname in the tree, or return false when the tree has no row for it yet
+    bool selectTreeLibrary( const wxString& aNickname );
+
+    void reportLibraryNotEnabled( const wxString& aNickname );
+
     void saveSymbolCopyAs( bool aOpenCopy );
 
     /**
@@ -820,6 +825,9 @@ private:
     /// Buffered libraries a reload may have changed on disk that refreshStaleLibraries() could not read again yet
     std::set<wxString> m_staleLibraries;
     wxTimer            m_staleLibrariesTimer;
+
+    /// A library opened before the tree had its row, selected once a reload fills the tree
+    wxString m_pendingTreeLibrary;
 
     // Guards against re-entering tab activation while a tab is being created or restored, since
     // AddTab() activates synchronously.

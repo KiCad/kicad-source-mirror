@@ -256,6 +256,12 @@ public:
     /// or nullopt if the library is not found in any table.
     std::optional<LIB_STATUS> LoadLibraryEntry( const wxString& aNickname );
 
+    /// Synchronously loads aNickname for an editor asked to open it before a background load reached it.
+    /// A library already loaded under a row that aNickname's effective row shadows does not count.
+    /// @return false, without contacting the library, when the effective row is missing or disabled, and false when
+    ///         the load fails.
+    bool LoadEnabledLibrary( const wxString& aNickname );
+
     /// Return true if the given nickname exists and is not a read-only library
     virtual bool IsWritable( const wxString& aNickname ) const;
 

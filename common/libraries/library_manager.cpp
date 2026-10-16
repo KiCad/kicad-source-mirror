@@ -2160,6 +2160,21 @@ std::optional<LIB_STATUS> LIBRARY_MANAGER_ADAPTER::LoadLibraryEntry( const wxStr
 }
 
 
+bool LIBRARY_MANAGER_ADAPTER::LoadEnabledLibrary( const wxString& aNickname )
+{
+    std::optional<LIBRARY_TABLE_ROW*> row = GetRow( aNickname );
+
+    if( !row || ( *row )->Disabled() )
+        return false;
+
+    // HasLibrary follows the project row's precedence, where IsLibraryLoaded can answer for a shadowed global
+    if( !HasLibrary( aNickname ) )
+        LoadLibraryEntry( aNickname );
+
+    return HasLibrary( aNickname );
+}
+
+
 void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIBRARY_TABLE_SCOPE aScope )
 {
     // Drain the async load before erasing, else a worker mid-enumerate writes status through the

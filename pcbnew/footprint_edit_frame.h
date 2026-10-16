@@ -659,6 +659,8 @@ private:
      */
     bool activeBoardOwnedByTab() const;
 
+    void reportLibraryNotEnabled( const wxString& aNickname );
+
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_ID                      m_centerItemOnIdle;
 

@@ -427,6 +427,16 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
 }
 
 
+void FOOTPRINT_EDIT_FRAME::reportLibraryNotEnabled( const wxString& aNickname )
+{
+    wxString msg = wxString::Format( _( "The footprint library '%s' is not enabled in the current configuration." ),
+                                     aNickname );
+
+    msg += wxS( "\n" ) + _( "Use Manage Footprint Libraries to edit the configuration." );
+    DisplayErrorMessage( this, _( "Footprint library not enabled." ), msg );
+}
+
+
 void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 {
     const std::string& payload = mail.GetPayload();
@@ -455,23 +465,15 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
             libNickname = ( *optRow )->Nickname();
 
-            if( !adapter->HasLibrary( libNickname, true ) )
+            // An editor created for this mail starts its library preload only afterwards
+            if( !adapter->LoadEnabledLibrary( libNickname ) )
             {
-                msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
-                            libNickname );
-                msg += wxS( "\n" ) + _( "Use Manage Footprint Libraries to edit the configuration." );
-                DisplayErrorMessage( this, _( "Footprint library not enabled." ), msg );
+                reportLibraryNotEnabled( libNickname );
                 break;
             }
 
-            LIB_ID  fpId( libNickname, fpFileName.GetName() );
-
-            if( m_treePane )
-            {
-                m_treePane->GetLibTree()->SelectLibId( fpId );
-                wxCommandEvent event( EVT_LIBITEM_CHOSEN );
-                wxPostEvent( m_treePane, event );
-            }
+            // The tree of an editor created for this mail has no rows until the preload ends
+            LoadFootprintFromLibrary( LIB_ID( libNickname, fpFileName.GetName() ) );
         }
 
         break;
@@ -482,6 +484,16 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         if( fpId.Parse( wxString::FromUTF8( payload ) ) == -1 && fpId.IsValid() )
         {
+            FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+            const wxString             nickname = fpId.GetLibNickname();
+
+            // An editor created for this mail starts its library preload only afterwards
+            if( !adapter->LoadEnabledLibrary( nickname ) )
+            {
+                reportLibraryNotEnabled( nickname );
+                break;
+            }
+
             LoadFootprintFromLibrary( fpId );
             Raise();
         }

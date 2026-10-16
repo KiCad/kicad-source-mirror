@@ -120,6 +120,7 @@
 #include <iterator>
 #include <map>
 #include <set>
+#include <utility>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
@@ -2138,22 +2139,18 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
             libNickname = ( *libTableRow )->Nickname();
 
-            if( !adapter->HasLibrary( libNickname, true ) )
+            // An editor created for this mail starts its library preload only afterwards
+            if( !adapter->LoadEnabledLibrary( libNickname ) )
             {
-                msg.Printf( _( "The symbol library '%s' is not enabled in the current configuration." ),
-                            UnescapeString( libNickname ) );
-                msg += wxS( "\n" ) + _( "Use Manage Symbol Libraries to edit the configuration." );
-                DisplayErrorMessage( this, _( "Symbol library not enabled." ), msg );
+                reportLibraryNotEnabled( libNickname );
                 break;
             }
 
-            if( m_treePane )
-            {
-                LIB_ID id( libNickname, wxEmptyString );
-                GetLibTree()->SelectLibId( id );
-                GetLibTree()->ExpandLibId( id );
-                GetLibTree()->CenterLibId( id );
-            }
+            // A new editor's tree gets its rows only from the preload's reload
+            if( !m_treePane || selectTreeLibrary( libNickname ) )
+                m_pendingTreeLibrary.clear();
+            else
+                m_pendingTreeLibrary = libNickname;
         }
 
         break;
@@ -2165,7 +2162,19 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         if( badPos == -1 && libId.IsValid() )
         {
-            LoadSymbol( libId, 1, BODY_STYLE::BASE );
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+            const wxString          nickname = libId.GetLibNickname();
+
+            // An editor created for this mail starts its library preload only afterwards
+            if( !adapter->LoadEnabledLibrary( nickname ) )
+            {
+                reportLibraryNotEnabled( nickname );
+                break;
+            }
+
+            if( LoadSymbol( libId, 1, BODY_STYLE::BASE ) )
+                m_pendingTreeLibrary.clear();
+
             Raise();
         }
 
@@ -2191,6 +2200,10 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         // Untouched buffers hold the files as they were, and a pull may have changed them since
         m_staleLibraries.merge( m_libMgr->GetBufferedLibraries() );
         refreshStaleLibraries( true );
+
+        if( !m_pendingTreeLibrary.IsEmpty() && selectTreeLibrary( m_pendingTreeLibrary ) )
+            m_pendingTreeLibrary.clear();
+
         break;
     }
 
@@ -2711,6 +2724,30 @@ void SYMBOL_EDIT_FRAME::refreshTeamPart( bool aReload, bool aKeepUnresolved )
         m_teamPart.SetDigest( KICAD_DIFF::SymbolDigest( *m_symbol ),
                               KICAD_DIFF::SymbolDigest( *m_symbol, KICAD_DIFF::SYMBOL_DIGEST::MEMBER ) );
     }
+}
+
+
+void SYMBOL_EDIT_FRAME::reportLibraryNotEnabled( const wxString& aNickname )
+{
+    wxString msg = wxString::Format( _( "The symbol library '%s' is not enabled in the current configuration." ),
+                                     UnescapeString( aNickname ) );
+
+    msg += wxS( "\n" ) + _( "Use Manage Symbol Libraries to edit the configuration." );
+    DisplayErrorMessage( this, _( "Symbol library not enabled." ), msg );
+}
+
+
+bool SYMBOL_EDIT_FRAME::selectTreeLibrary( const wxString& aNickname )
+{
+    LIB_ID id( aNickname, wxEmptyString );
+
+    if( !m_libMgr->GetAdapter()->FindItem( id ) )
+        return false;
+
+    GetLibTree()->SelectLibId( id );
+    GetLibTree()->ExpandLibId( id );
+    GetLibTree()->CenterLibId( id );
+    return true;
 }
 
 
