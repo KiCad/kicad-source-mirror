@@ -1085,10 +1085,10 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
                     || ( width < constraint.m_Value.Min() )
                     || ( width > constraint.m_Value.Max() ) )
             {
-                sizes.SetTrackWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+                sizes.SetTrackWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.PinnedOpt() ) );
             }
 
-            if( sizes.TrackWidth() == constraint.m_Value.Opt() )
+            if( sizes.TrackWidth() == constraint.m_Value.PinnedOpt() )
                 sizes.SetWidthSource( constraint.GetName() );
             else if( sizes.TrackWidth() == bds.m_TrackMinWidth )
                 sizes.SetWidthSource( _( "board minimum track width" ) );
@@ -1115,10 +1115,10 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
                     || ( sizes.DiffPairWidth() < constraint.m_Value.Min() )
                     || ( sizes.DiffPairWidth() > constraint.m_Value.Max() ) )
             {
-                sizes.SetDiffPairWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.Opt() ) );
+                sizes.SetDiffPairWidth( std::max( bds.m_TrackMinWidth, constraint.m_Value.PinnedOpt() ) );
             }
 
-            if( sizes.DiffPairWidth() == constraint.m_Value.Opt() )
+            if( sizes.DiffPairWidth() == constraint.m_Value.PinnedOpt() )
                 sizes.SetDiffPairWidthSource( constraint.GetName() );
             else
                 sizes.SetDiffPairWidthSource( _( "board minimum track width" ) );
@@ -1133,10 +1133,10 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
                     || ( sizes.DiffPairGap() < constraint.m_Value.Min() )
                     || ( sizes.DiffPairGap() > constraint.m_Value.Max() ) )
             {
-                sizes.SetDiffPairGap( std::max( bds.m_MinClearance, constraint.m_Value.Opt() ) );
+                sizes.SetDiffPairGap( std::max( bds.m_MinClearance, constraint.m_Value.PinnedOpt() ) );
             }
 
-            if( sizes.DiffPairGap() == constraint.m_Value.Opt() )
+            if( sizes.DiffPairGap() == constraint.m_Value.PinnedOpt() )
                 sizes.SetDiffPairGapSource( constraint.GetName() );
             else
                 sizes.SetDiffPairGapSource( _( "board minimum clearance" ) );
