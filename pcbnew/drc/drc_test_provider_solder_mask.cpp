@@ -480,10 +480,8 @@ bool DRC_TEST_PROVIDER_SOLDER_MASK::checkItemMask( BOARD_ITEM* aItem, int aTestN
 void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
                                                           PCB_LAYER_ID aRefLayer, PCB_LAYER_ID aTargetLayer )
 {
-    PAD*       pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
-    PCB_VIA*   via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
-    PCB_SHAPE* shape = aItem->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( aItem ) : nullptr;
-    int        itemNet = -1;
+    PAD* pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
+    int  itemNet = -1;
 
     std::optional<DRC_CONSTRAINT> itemConstraint;
     DRC_CONSTRAINT                otherConstraint;
@@ -571,11 +569,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
             // Visitor:
             [&]( BOARD_ITEM* other ) -> bool
             {
-                PAD*       otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
-                PCB_VIA*   otherVia = other->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( other ) : nullptr;
-                PCB_SHAPE* otherShape = other->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( other ) : nullptr;
-                auto       otherItemShape = other->GetEffectiveShape( aTargetLayer );
-                int        otherNet = -1;
+                PAD* otherPad = other->Type() == PCB_PAD_T ? static_cast<PAD*>( other ) : nullptr;
+                auto otherItemShape = other->GetEffectiveShape( aTargetLayer );
+                int  otherNet = -1;
 
                 if( other->IsConnected() )
                     otherNet = static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetCode();
@@ -597,17 +593,9 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 
                 if( pad )
                     clearance += pad->GetSolderMaskExpansion( aRefLayer );
-                else if( via && !via->IsTented( aRefLayer ) )
-                    clearance += via->GetSolderMaskExpansion();
-                else if( shape )
-                    clearance += shape->GetSolderMaskExpansion();
 
                 if( otherPad )
                     clearance += otherPad->GetSolderMaskExpansion( aTargetLayer );
-                else if( otherVia && !otherVia->IsTented( aTargetLayer ) )
-                    clearance += otherVia->GetSolderMaskExpansion();
-                else if( otherShape )
-                    clearance += otherShape->GetSolderMaskExpansion();
 
                 if( itemShape->Collide( otherItemShape.get(), clearance, &actual, &pos ) )
                 {
@@ -654,9 +642,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
 void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem, const BOX2I& aItemBBox,
                                                               PCB_LAYER_ID aMaskLayer, PCB_LAYER_ID aTargetLayer )
 {
-    PAD*       pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
-    PCB_VIA*   via = aItem->Type() == PCB_VIA_T ? static_cast<PCB_VIA*>( aItem ) : nullptr;
-    PCB_SHAPE* shape = aItem->Type() == PCB_SHAPE_T ? static_cast<PCB_SHAPE*>( aItem ) : nullptr;
+    PAD* pad = aItem->Type() == PCB_PAD_T ? static_cast<PAD*>( aItem ) : nullptr;
 
     for( ZONE* zone : m_board->m_DRCCopperZones )
     {
@@ -678,10 +664,6 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
         if( pad )
             clearance += pad->GetSolderMaskExpansion( aTargetLayer );
-        else if( via && !via->IsTented( aTargetLayer ) )
-            clearance += via->GetSolderMaskExpansion();
-        else if( shape )
-            clearance += shape->GetSolderMaskExpansion();
 
         inflatedBBox.Inflate( clearance );
 

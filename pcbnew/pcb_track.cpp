@@ -3184,6 +3184,9 @@ std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
         {
             PCB_LAYER_ID cuLayer = m_padStack.EffectiveLayerFor( aLayer );
             diameter = GetWidth( cuLayer );
+
+            if( IsSolderMaskLayer( aLayer ) )
+                diameter += 2 * GetSolderMaskExpansion();
         }
     }
     else

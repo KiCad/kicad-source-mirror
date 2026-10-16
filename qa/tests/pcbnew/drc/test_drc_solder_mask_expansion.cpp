@@ -28,6 +28,8 @@
 #include <drc/drc_engine.h>
 #include <core/profile.h>
 #include <settings/settings_manager.h>
+#include <drc/drc_item.h>
+#include <widgets/report_severity.h>
 
 
 struct DRC_SOLDER_MASK_EXPANSION_TEST_FIXTURE
@@ -207,4 +209,79 @@ BOOST_FIXTURE_TEST_CASE( SolderMaskExpansionPerformance, DRC_SOLDER_MASK_EXPANSI
                          wxString::Format( "GetSolderMaskExpansion too slow: %0.1f ms for %d calls",
                                            timer.msecs(), totalCalls ) );
 #endif
+}
+
+
+struct SILK_MASK_EXPANSION_FIXTURE
+{
+    SILK_MASK_EXPANSION_FIXTURE() :
+            m_board( std::make_unique<BOARD>() )
+    {
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        bds.m_SolderMaskExpansion = pcbIUScale.mmToIU( 0.1 );
+        bds.m_SolderMaskMinWidth = 0;
+        bds.m_TentViasFront = false;
+        bds.m_TentViasBack = false;
+
+        PCB_VIA* via = new PCB_VIA( m_board.get() );
+        via->SetLayerPair( F_Cu, B_Cu );
+        via->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 10.0 ), 0 ) );
+        via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.8 ) );
+        via->SetDrill( pcbIUScale.mmToIU( 0.4 ) );
+        m_board->Add( via );
+
+        m_board->BuildConnectivity();
+
+        std::shared_ptr<DRC_ENGINE> engine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+        engine->InitEngine( wxFileName() );
+        bds.m_DRCEngine = engine;
+    }
+
+    void AddSilkLine( double aFromMM, double aToMM, double aOffsetMM )
+    {
+        PCB_SHAPE* line = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+        int        y = pcbIUScale.mmToIU( aOffsetMM );
+
+        line->SetLayer( F_SilkS );
+        line->SetStart( VECTOR2I( pcbIUScale.mmToIU( aFromMM ), y ) );
+        line->SetEnd( VECTOR2I( pcbIUScale.mmToIU( aToMM ), y ) );
+        line->SetWidth( pcbIUScale.mmToIU( 0.15 ) );
+        m_board->Add( line );
+    }
+
+    int CountMaskViolations()
+    {
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+        int                    count = 0;
+
+        for( int code = 0; code < DRCE_LAST; ++code )
+            bds.m_DRCSeverities[code] = SEVERITY::RPT_SEVERITY_IGNORE;
+
+        bds.m_DRCSeverities[DRCE_SILK_MASK_CLEARANCE] = SEVERITY::RPT_SEVERITY_ERROR;
+
+        bds.m_DRCEngine->SetViolationHandler(
+                [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I&, int,
+                     const std::function<void( PCB_MARKER* )>& )
+                {
+                    if( aItem->GetErrorCode() == DRCE_SILK_MASK_CLEARANCE )
+                        ++count;
+                } );
+
+        bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+        bds.m_DRCEngine->ClearViolationHandler();
+
+        return count;
+    }
+
+    std::unique_ptr<BOARD> m_board;
+};
+
+
+BOOST_FIXTURE_TEST_CASE( SilkInsideViaMaskOpeningIsReported, SILK_MASK_EXPANSION_FIXTURE )
+{
+    AddSilkLine( 8.0, 12.0, -0.525 );
+
+    BOOST_CHECK_MESSAGE( CountMaskViolations() == 1, "silk clear of the via copper but inside its mask opening was not "
+                                                     "reported" );
 }

@@ -1761,7 +1761,12 @@ const BOX2I PCB_SHAPE::GetBoundingBox() const
 
 std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
-    return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapesWithLineEndings( GetEffectiveWidth() ) );
+    int width = GetEffectiveWidth();
+
+    if( IsSolderMaskLayer( aLayer ) && HasSolderMask() && IsCopperLayer( GetLayer() ) )
+        width += 2 * GetSolderMaskExpansion();
+
+    return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapesWithLineEndings( width ) );
 }
 
 
