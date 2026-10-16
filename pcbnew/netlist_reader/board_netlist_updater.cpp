@@ -2315,7 +2315,20 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
 
             if( match )
-                matchingFootprints.push_back( footprint );
+            {
+                if( footprint->IsBoardOnly() )
+                {
+                    msg.Printf( _( "Found a footprint matching %s, but the footprint's 'Not in schematic' "
+                                   "flag indicates there should be no matching symbol." ),
+                                component->GetReference() );
+                    m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+                    ++m_warningCount;
+                }
+                else
+                {
+                    matchingFootprints.push_back( footprint );
+                }
+            }
 
             if( footprint == lastPreexistingFootprint )
             {
