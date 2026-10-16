@@ -2198,7 +2198,9 @@ int ERC_TESTER::TestMultUnitPinConflicts()
         }
     }
 
-    // Pick the reference net/pin deterministically, so the same conflict yields the same marker on every ERC run.
+    // Pick the reference net/pin deterministically, so the same conflict yields the same marker on every ERC
+    // run. While this won't necessarily match existing ERC exclusions, it will at least increase match fidelity
+    // on future saves/reads.
     std::vector<wxString> conflicted;
 
     for( const auto& [name, pins] : pinToNetMap )
