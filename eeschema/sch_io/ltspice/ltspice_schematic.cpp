@@ -957,11 +957,12 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
                 wxString justification = tokens[4];
                 wxString fontSize = tokens[5];
 
-                int        windowNumber = integerCheck( number, lineNumber, fileName );
+                LT_SYMBOL* symbol = &ascFile.Symbols.back();
                 LT_WINDOW* window = nullptr;
+                int        windowNumber = integerCheck( number, lineNumber, fileName );
 
                 // Overwrite an existing window from the symbol definition
-                for( LT_WINDOW& candidate : ascFile.Symbols.back().Windows )
+                for( LT_WINDOW& candidate : symbol->Windows )
                 {
                     if( candidate.WindowNumber == windowNumber )
                     {
@@ -972,8 +973,8 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
 
                 if( !window )
                 {
-                    ascFile.Symbols.back().Windows.emplace_back( LT_WINDOW() );
-                    window = &ascFile.Symbols.back().Windows.back();
+                    symbol->Windows.emplace_back( LT_WINDOW() );
+                    window = &symbol->Windows.back();
                 }
 
                 window->WindowNumber = windowNumber;
@@ -981,7 +982,7 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
                 window->Justification = getTextJustification( justification );
                 window->FontSize = integerCheck( fontSize, lineNumber, fileName );
 
-                ascFile.BoundingBox.Merge( window->Position );
+                ascFile.BoundingBox.Merge( symbol->Offset + window->Position );
             }
             else if( element == "SYMATTR" )
             {
