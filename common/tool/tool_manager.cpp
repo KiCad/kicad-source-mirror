@@ -569,31 +569,34 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != nullptr );
 
-    TOOL_ID id = aTool->GetId();
-
     while( isActive( aTool ) )
     {
-        TOOL_MANAGER::ID_LIST::iterator it = std::find( m_activeTools.begin(),
-                                                        m_activeTools.end(), id );
+        TOOL_STATE* st = m_toolState[aTool];
 
-        TOOL_STATE* st = m_toolIdIndex[*it];
-
-        // the tool state handler is waiting for events (i.e. called Wait() method)
-        if( !st || !st->pendingWait || !st->cofunc )
-            break;
-
-        // Wake up the tool and tell it to shutdown
+        // Pop() restores saved contexts without the flag
         st->shutdown = true;
-        st->pendingWait = false;
-        st->waitEvents.clear();
 
-        wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::ShutdownTool - Shutting down tool %s" ),
-                    st->theTool->GetName() );
+        if( st->cofunc && st->cofunc->Running() )
+        {
+            // An executing handler is up the native stack and unwinds at its next Wait()
+            if( !st->pendingWait )
+                break;
 
-        setActiveState( st );
+            // Wake up the tool and tell it to shutdown
+            st->pendingWait = false;
+            st->waitEvents.clear();
 
-        if( st->cofunc->Resume() )
-            break;
+            wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::ShutdownTool - Shutting down tool %s" ),
+                        st->theTool->GetName() );
+
+            setActiveState( st );
+
+            if( st->cofunc->Resume() )
+            {
+                wxFAIL_MSG( wxS( "Tool suspended again during shutdown" ) );
+                break;
+            }
+        }
 
         // finishTool() restores the previous context when the same tool was re-entered
         // Keep unwinding until every saved context has seen the shutdown request
@@ -737,6 +740,10 @@ void TOOL_MANAGER::RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc )
 TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE* st = m_toolState[aTool];
+
+    // A handler unwinding from shutdown must not suspend again, or nested loops outlive the resume
+    if( st->shutdown )
+        return nullptr;
 
     wxCHECK( !st->pendingWait, nullptr ); // everything collapses on two KiYield() in a row
 
