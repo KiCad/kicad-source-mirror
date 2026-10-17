@@ -160,7 +160,7 @@ bool PANEL_ZONE_PROPERTIES::TransferZoneSettingsToWindow()
     case ZONE_BORDER_DISPLAY_STYLE::NO_HATCH:         m_OutlineDisplayCtrl->SetSelection( 0 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE:    m_OutlineDisplayCtrl->SetSelection( 1 ); break;
     case ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL:    m_OutlineDisplayCtrl->SetSelection( 2 ); break;
-    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER: break;
+    case ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER:                                          break;
     }
 
     m_outlineHatchPitch.SetValue( m_settings->m_BorderHatchPitch );
@@ -370,15 +370,15 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     switch( m_PadInZoneOpt->GetSelection() )
     {
-    case 3: m_settings->SetPadConnection( ZONE_CONNECTION::NONE ); break;
+    case 3: m_settings->SetPadConnection( ZONE_CONNECTION::NONE );        break;
     case 2: m_settings->SetPadConnection( ZONE_CONNECTION::THT_THERMAL ); break;
-    case 1: m_settings->SetPadConnection( ZONE_CONNECTION::THERMAL ); break;
-    case 0: m_settings->SetPadConnection( ZONE_CONNECTION::FULL ); break;
+    case 1: m_settings->SetPadConnection( ZONE_CONNECTION::THERMAL );     break;
+    case 0: m_settings->SetPadConnection( ZONE_CONNECTION::FULL );        break;
     }
 
     switch( m_OutlineDisplayCtrl->GetSelection() )
     {
-    case 0: m_settings->m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH; break;
+    case 0: m_settings->m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;      break;
     case 1: m_settings->m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; break;
     case 2: m_settings->m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_FULL; break;
     }
@@ -435,7 +435,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     if( m_settings->m_FillMode != ZONE_FILL_MODE::COPPER_THIEVING )
     {
         m_settings->m_FillMode = m_cbHatched->GetValue() ? ZONE_FILL_MODE::HATCH_PATTERN
-                                                          : ZONE_FILL_MODE::POLYGONS;
+                                                         : ZONE_FILL_MODE::POLYGONS;
     }
     m_settings->m_HatchOrientation = m_gridStyleRotation.GetAngleValue();
     m_settings->m_HatchThickness = m_gridStyleThickness.GetIntValue();

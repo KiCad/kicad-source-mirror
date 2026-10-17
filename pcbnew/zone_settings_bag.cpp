@@ -88,30 +88,31 @@ void ZONE_SETTINGS_BAG::SwapPriority( ZONE* aZone, ZONE* otherZone )
 
 wxString ZONE_SETTINGS_BAG::GetUniqueZoneName( const BOARD& aBoard, const wxString& aBaseName, const ZONE* aZone ) const
 {
-    auto inUse = [&]( const wxString& aName )
-    {
-        for( ZONE* zone : aBoard.Zones() )
-        {
-            ZONE* working = zone;
+    auto inUse =
+            [&]( const wxString& aName )
+            {
+                for( ZONE* zone : aBoard.Zones() )
+                {
+                    ZONE* working = zone;
 
-            if( auto clone = m_zonesCloneMap.find( zone ); clone != m_zonesCloneMap.end() )
-                working = clone->second.get();
+                    if( auto clone = m_zonesCloneMap.find( zone ); clone != m_zonesCloneMap.end() )
+                        working = clone->second.get();
 
-            if( working == aZone )
-                continue;
+                    if( working == aZone )
+                        continue;
 
-            auto     settings = m_zoneSettings.find( working );
-            wxString name = working->GetZoneName();
+                    auto     settings = m_zoneSettings.find( working );
+                    wxString name = working->GetZoneName();
 
-            if( settings != m_zoneSettings.end() && settings->second )
-                name = settings->second->m_Name;
+                    if( settings != m_zoneSettings.end() && settings->second )
+                        name = settings->second->m_Name;
 
-            if( name == aName )
-                return true;
-        }
+                    if( name == aName )
+                        return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     return BOARD::MakeUniqueZoneName( aBaseName, inUse );
 }

@@ -1460,16 +1460,17 @@ void BOARD::FixupEmbeddedData()
 
 wxString BOARD::GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclude ) const
 {
-    auto inUse = [&]( const wxString& aName )
-    {
-        for( const ZONE* zone : m_zones )
-        {
-            if( zone != aExclude && zone->GetZoneName() == aName )
-                return true;
-        }
+    auto inUse =
+            [&]( const wxString& aName )
+            {
+                for( const ZONE* zone : m_zones )
+                {
+                    if( zone != aExclude && zone->GetZoneName() == aName )
+                        return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     return MakeUniqueZoneName( aBaseName, inUse );
 }
