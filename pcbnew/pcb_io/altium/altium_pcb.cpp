@@ -2055,6 +2055,7 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPc
         footprint->Reference().SetVisible( elem.nameon );
         footprint->Value().SetVisible( elem.commenton );
         footprint->SetLayer( elem.layer == ALTIUM_LAYER::TOP_LAYER ? F_Cu : B_Cu );
+        footprint->SetHeight( elem.height );
 
         m_components.emplace_back( footprint.get() );
         m_board->Add( footprint.release(), ADD_MODE::APPEND );

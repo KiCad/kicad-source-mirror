@@ -551,6 +551,7 @@ struct ACOMPONENT6
     bool         locked;
     bool         nameon;
     bool         commenton;
+    int          height;
     wxString     sourceUniqueID;
     wxString     sourceHierachicalPath;
     wxString     sourcedesignator;
