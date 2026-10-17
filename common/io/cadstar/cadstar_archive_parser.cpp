@@ -91,7 +91,9 @@ void CADSTAR_ARCHIVE_PARSER::TIMESTAMP::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
             || !GetXmlAttributeIDString( aNode, 3 ).ToLong( &Hour )
             || !GetXmlAttributeIDString( aNode, 4 ).ToLong( &Minute )
             || !GetXmlAttributeIDString( aNode, 5 ).ToLong( &Second ) )
+    {
         THROW_PARSING_IO_ERROR( wxT( "TIMESTAMP" ), wxString::Format( "HEADER" ) );
+    }
 }
 
 

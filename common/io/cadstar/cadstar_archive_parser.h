@@ -238,22 +238,22 @@ public:
     struct FORMAT : PARSER
     {
         wxString Type;
-        long     SomeInt; ///< It is unclear what this parameter is used for
-        long     Version; ///< Archive version number (e.g. for PCB: 19=> CADSTAR 17.0 archive,
-                          ///<  20=> CADSTAR 18.0 archive, 21 => CADSTAR 2018.0 / 2019.0 / 2020.0,
-                          ///<  etc.)
+        long     SomeInt = UNDEFINED_VALUE;  ///< It is unclear what this parameter is used for
+        long     Version = UNDEFINED_VALUE;  ///< Archive version number (e.g. for PCB: 19=> CADSTAR 17.0 archive,
+                                             ///<   20=> CADSTAR 18.0 archive, 21 => CADSTAR 2018.0/2019.0/2020.0,
+                                             ///<   etc.)
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
     struct TIMESTAMP : PARSER
     {
-        long Year;
-        long Month;
-        long Day;
-        long Hour;
-        long Minute;
-        long Second;
+        long Year = 0;
+        long Month = 0;
+        long Day = 0;
+        long Hour = 0;
+        long Minute = 0;
+        long Second = 0;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -271,7 +271,7 @@ public:
         wxString   JobFile;
         wxString   JobTitle;
         wxString   Generator;
-        RESOLUTION Resolution;
+        RESOLUTION Resolution = RESOLUTION::HUNDREDTH_MICRON;
         TIMESTAMP  Timestamp;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
