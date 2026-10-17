@@ -33,6 +33,30 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bBottomMargin->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 3 );
 
+	wxGridBagSizer* gbOtherOptions;
+	gbOtherOptions = new wxGridBagSizer( 0, 0 );
+	gbOtherOptions->SetFlexibleDirection( wxBOTH );
+	gbOtherOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticTextLayerSpacing = new wxStaticText( this, wxID_ANY, _("Layer spacing ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayerSpacing->Wrap( -1 );
+	gbOtherOptions->Add( m_staticTextLayerSpacing, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxLEFT|wxTOP, 5 );
+
+	m_layerScaleCtrl = new wxSpinCtrlDouble( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 1, 0.5 );
+	m_layerScaleCtrl->SetDigits( 2 );
+	gbOtherOptions->Add( m_layerScaleCtrl, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+
+	m_btnResetLayerScale = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	gbOtherOptions->Add( m_btnResetLayerScale, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+
+	gbOtherOptions->AddGrowableCol( 0 );
+
+	bBottomMargin->Add( gbOtherOptions, 1, wxEXPAND, 5 );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bBottomMargin->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
 
@@ -80,6 +104,8 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 	this->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnSetFocus ) );
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnSize ) );
 	m_panelLayers->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnSetFocus ), NULL, this );
+	m_layerScaleCtrl->Connect( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnLayerScaleChange ), NULL, this );
+	m_btnResetLayerScale->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnResetLayerSpacing ), NULL, this );
 	m_cbLayerPresets->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_3D_BASE::onLayerPresetChanged ), NULL, this );
 	m_cbViewports->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_3D_BASE::onViewportChanged ), NULL, this );
 	m_cbViewports->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( APPEARANCE_CONTROLS_3D_BASE::onUpdateViewportsCb ), NULL, this );
@@ -91,6 +117,8 @@ APPEARANCE_CONTROLS_3D_BASE::~APPEARANCE_CONTROLS_3D_BASE()
 	this->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnSetFocus ) );
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnSize ) );
 	m_panelLayers->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnSetFocus ), NULL, this );
+	m_layerScaleCtrl->Disconnect( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnLayerScaleChange ), NULL, this );
+	m_btnResetLayerScale->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( APPEARANCE_CONTROLS_3D_BASE::OnResetLayerSpacing ), NULL, this );
 	m_cbLayerPresets->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_3D_BASE::onLayerPresetChanged ), NULL, this );
 	m_cbViewports->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_3D_BASE::onViewportChanged ), NULL, this );
 	m_cbViewports->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( APPEARANCE_CONTROLS_3D_BASE::onUpdateViewportsCb ), NULL, this );

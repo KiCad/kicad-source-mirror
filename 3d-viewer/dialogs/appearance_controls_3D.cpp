@@ -55,6 +55,9 @@ static constexpr int ID_HIDE_ALL_COPPER_LAYERS = ID_SHOW_ALL_COPPER_LAYERS + 1;
 static constexpr int ID_SHOW_ALL_INNER_LAYERS  = ID_HIDE_ALL_COPPER_LAYERS + 1;
 static constexpr int ID_HIDE_ALL_INNER_LAYERS  = ID_SHOW_ALL_INNER_LAYERS + 1;
 
+/// Debounce delay for rebuilding the 3D view after control changes
+static constexpr int REBUILD_DELAY_MS = 250;
+
 /// Render Row abbreviation to reduce source width.
 #define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D
 
@@ -253,12 +256,20 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent, wx
     m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER(
             KiBitmapBundle( BITMAPS::visibility ), KiBitmapBundle( BITMAPS::visibility_off ) );
 
+    m_btnResetLayerScale->SetBitmap( KiBitmapBundle( BITMAPS::undo ) );
+    m_btnResetLayerScale->SetToolTip( _( "Reset layer spacing to the default" ) );
+    Layout();
+
+    m_redrawTriggerTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, &APPEARANCE_CONTROLS_3D::OnRedrawTriggerTimer, this, m_redrawTriggerTimer.GetId() );
+
     m_frame->Bind( EDA_LANG_CHANGED, &APPEARANCE_CONTROLS_3D::OnLanguageChanged, this );
 }
 
 
 APPEARANCE_CONTROLS_3D::~APPEARANCE_CONTROLS_3D()
 {
+    m_redrawTriggerTimer.Stop();
     m_frame->Unbind( EDA_LANG_CHANGED, &APPEARANCE_CONTROLS_3D::OnLanguageChanged, this );
 }
 
@@ -331,6 +342,36 @@ void APPEARANCE_CONTROLS_3D::OnLayerContextMenu( wxContextMenuEvent& aEvent )
     m_frame->GetAdapter().SetVisibleLayers( visibleLayers );
     syncLayerPresetSelection();
     UpdateLayerCtls();
+}
+
+
+void APPEARANCE_CONTROLS_3D::applyLayerSpacing()
+{
+    EDA_3D_VIEWER_SETTINGS& cfg = *m_frame->GetAdapter().m_Cfg;
+
+    cfg.m_Render.board_layer_thickness_scale = static_cast<float>( m_layerScaleCtrl->GetValue() );
+
+    // Rebuilding the scene is expensive and briefly clears the view, so wait until the user
+    // stops changing the value before triggering a rebuild.
+    m_redrawTriggerTimer.StartOnce( REBUILD_DELAY_MS );
+}
+
+
+void APPEARANCE_CONTROLS_3D::OnLayerScaleChange( wxSpinDoubleEvent& aEvent )
+{
+    applyLayerSpacing();
+}
+
+
+void APPEARANCE_CONTROLS_3D::OnResetLayerSpacing( wxCommandEvent& aEvent )
+{
+    m_layerScaleCtrl->SetValue( 1.0 );
+    applyLayerSpacing();
+}
+
+
+void APPEARANCE_CONTROLS_3D::OnRedrawTriggerTimer( wxTimerEvent& aEvent )
+{
     m_frame->NewDisplay( true );
 }
 
@@ -404,6 +445,9 @@ void APPEARANCE_CONTROLS_3D::OnDarkModeToggle()
 void APPEARANCE_CONTROLS_3D::CommonSettingsChanged()
 {
     rebuildControls();
+
+    if( EDA_3D_VIEWER_SETTINGS* cfg = m_frame->GetAdapter().m_Cfg )
+        m_layerScaleCtrl->SetValue( cfg->m_Render.board_layer_thickness_scale );
 
     UpdateLayerCtls();
 

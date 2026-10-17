@@ -296,6 +296,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
     // OpenGL options
     m_params.emplace_back( new PARAM<bool>( "render.opengl_copper_thickness",
                                             &m_Render.opengl_copper_thickness, false ) );
+    m_params.emplace_back( new PARAM<float>( "render.board_layer_thickness_scale",
+                                             &m_Render.board_layer_thickness_scale, 1.0f, 1.0f, 100.0f ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_show_model_bbox",
                                             &m_Render.show_model_bbox, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_show_off_board_silk",

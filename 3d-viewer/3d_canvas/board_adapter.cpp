@@ -509,6 +509,14 @@ void BOARD_ADAPTER::InitSettings( std::shared_ptr<REPORTER> aStatusReporter,
         }
     }
 
+    {
+        const float zScale = m_Cfg->m_Render.board_layer_thickness_scale;
+
+        // Scale the substrate thickness (only) according to the user-defined Z scale.
+        // Other layers don't get scaled.
+        m_boardBodyThickness3DU *= zScale;
+    }
+
     // Init  Z position of each layer
     // calculate z position for each copper layer
     // Zstart = -m_epoxyThickness / 2.0 is the z position of the back (bottom layer)

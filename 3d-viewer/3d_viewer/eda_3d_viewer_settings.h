@@ -94,6 +94,7 @@ public:
         bool opengl_holes_disableOnMove;
         bool opengl_render_bbox_only_OnMove;
         bool opengl_copper_thickness;
+        float board_layer_thickness_scale;
         bool show_model_bbox;
         bool show_off_board_silk;
         bool highlight_on_rollover;

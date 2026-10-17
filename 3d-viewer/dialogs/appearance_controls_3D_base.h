@@ -22,6 +22,13 @@
 #include <wx/panel.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/spinctrl.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/gbsizer.h>
 #include <wx/choice.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -39,6 +46,10 @@ class APPEARANCE_CONTROLS_3D_BASE : public WX_PANEL
 		wxBoxSizer* m_panelLayersSizer;
 		wxScrolledCanvas* m_windowLayers;
 		wxStaticLine* m_staticline1;
+		wxStaticText* m_staticTextLayerSpacing;
+		wxSpinCtrlDouble* m_layerScaleCtrl;
+		wxBitmapButton* m_btnResetLayerScale;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_presetsLabel;
 		wxChoice* m_cbLayerPresets;
 		wxStaticText* m_viewportsLabel;
@@ -47,6 +58,8 @@ class APPEARANCE_CONTROLS_3D_BASE : public WX_PANEL
 		// Virtual event handlers, override them in your derived class
 		virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
+		virtual void OnLayerScaleChange( wxSpinDoubleEvent& event ) { event.Skip(); }
+		virtual void OnResetLayerSpacing( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLayerPresetChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViewportChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateViewportsCb( wxUpdateUIEvent& event ) { event.Skip(); }
