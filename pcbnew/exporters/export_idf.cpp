@@ -917,16 +917,19 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
         {
             EXTRUDED_3D_BODY* extruded = bodyItem->MutableExtruded();
 
-            if( extruded->m_height <= 0 )
-                return;
-
-            standoffHeight = extruded->m_standoff;
-            body = extruded;
+            if( extruded->m_height > 0 )
+            {
+                standoffHeight = extruded->m_standoff;
+                body = extruded;
+            }
         }
 
         if( !body )
         {
-            int height = getMaxModelHeight( aFootprint );
+            int height = aFootprint->GetHeight();
+
+            if( height == 0 && m_settings->m_calculateHeightFromModels )
+                height = getMaxModelHeight( aFootprint );
 
             if( height == 0 )
                 return;
