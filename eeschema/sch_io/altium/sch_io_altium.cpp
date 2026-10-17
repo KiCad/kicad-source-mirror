@@ -1090,7 +1090,7 @@ wxString AltiumWrapBusLabel( const wxString& aText )
     // otherwise fan out into several members.  Quote such names so the bus-group reader in
     // NET_SETTINGS::ParseBusGroup keeps the whole name as a single member.
     if( aText.Contains( wxT( " " ) ) || aText.Contains( wxT( "," ) ) )
-        return wxT( "{\"" ) + aText + wxT( "\"}" );
+        return wxT( "{\"" ) + EscapeString( aText, CTX_QUOTED_STR ) + wxT( "\"}" );
 
     return wxT( "{" ) + aText + wxT( "}" );
 }
