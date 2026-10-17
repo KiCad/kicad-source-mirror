@@ -195,6 +195,7 @@
         "footprint_symbol_field_mismatch": "warning",
         "footprint_symbol_mismatch": "warning",
         "footprint_type_mismatch": "ignore",
+        "hole_aspect_ratio": "error",
         "hole_clearance": "error",
         "hole_near_hole": "error",
         "hole_to_hole": "warning",
@@ -369,8 +370,19 @@
       "via_stack_presets": [],
       "zones_allow_external_fillets": false
     },
+    "idf_export": {
+      "calculate_height_from_models": true,
+      "include_dnp": true,
+      "include_unspecified": true,
+      "origin_mode": 2,
+      "part_number_field": "Value",
+      "units": 0,
+      "user_origin_x": 0.0,
+      "user_origin_y": 0.0
+    },
     "ipc2581": {
       "bom_rev": "",
+      "custom_sections": false,
       "dist": "",
       "distpn": "",
       "internal_id": "",
