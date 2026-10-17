@@ -489,7 +489,20 @@ private:
      * @param aCadstarLength
      * @return
      */
-    int getKiCadLength( long long aCadstarLength )
+    int getKiCadLength( long long aCadstarLength, double aDefaultInMM )
+    {
+        if( aCadstarLength == UNDEFINED_VALUE )
+            return pcbIUScale.mmToIU( aDefaultInMM );
+
+        return aCadstarLength * KiCadUnitMultiplier;
+    }
+
+    /**
+     * @brief
+     * @param aCadstarLength
+     * @return
+     */
+    int getKiCadOffset( long long aCadstarLength )
     {
         return aCadstarLength * KiCadUnitMultiplier;
     }
