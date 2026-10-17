@@ -48,6 +48,8 @@
 #include <api/api_pcb_utils.h>
 #include <api/board/board_types.pb.h>
 
+#include "board_commit.h"
+
 
 ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         BOARD_CONNECTED_ITEM( aParent, PCB_ZONE_T ),
@@ -237,7 +239,37 @@ BOARD_ITEM* ZONE::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) cons
 
         // Give the copy its own name so it does not collide with the original (issue 23131)
         if( !newZone->GetZoneName().IsEmpty() )
-            newZone->SetZoneName( board->GetUniqueZoneName( newZone->GetZoneName(), newZone ) );
+        {
+            auto inUse =
+                    [&]( const wxString& aName )
+                    {
+                        for( const ZONE* zone : board->Zones() )
+                        {
+                            if( zone != newZone && zone->GetZoneName() == aName )
+                                return true;
+                        }
+
+                        // Check the commit as well.  The array tool adds many zones at once, which
+                        // only end up in the board's Zones() list after the commit has been pushed.
+                        if( aCommit )
+                        {
+                            for( const auto& [item, change_type] : aCommit->StagedItems() )
+                            {
+                                if( item->Type() == PCB_ZONE_T && ( change_type & CHT_ADD ) > 0 )
+                                {
+                                    ZONE* zone = static_cast<ZONE*>( item );
+
+                                    if( zone != newZone && zone->GetZoneName() == aName )
+                                        return true;
+                                }
+                            }
+                        }
+
+                        return false;
+                    };
+
+            newZone->SetZoneName( BOARD::MakeUniqueZoneName( newZone->GetZoneName(), inUse ) );
+        }
     }
 
     return dupe;

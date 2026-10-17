@@ -152,6 +152,17 @@ public:
 
     EDA_ITEM* GetFirst() const { return m_entries.empty() ? nullptr : m_entries[0].m_item; }
 
+    std::vector<std::pair<EDA_ITEM*, int>> StagedItems() const
+    {
+        std::vector<std::pair<EDA_ITEM*, int>> items;
+        items.reserve( m_entries.size() );
+
+        for( const COMMIT_LINE& entry : m_entries )
+            items.push_back( std::make_pair( entry.m_item, entry.m_type ) );
+
+        return items;
+    };
+
 protected:
     struct COMMIT_LINE
     {
