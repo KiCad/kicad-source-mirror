@@ -31,10 +31,10 @@
 #include <board.h>
 #include <dialogs/dialog_color_picker.h>
 #include <footprint.h>
-#include <layer_range.h>
 #include <3d_math.h>
-#include "3d_fastmath.h"
 #include <geometry/geometry_utils.h>
+#include <layer_ids.h>
+#include <layer_range.h>
 #include <lset.h>
 #include <pgm_base.h>
 #include <settings/color_settings.h>
@@ -801,6 +801,10 @@ void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
     m_Cfg->m_Render.show_plated_barrels            = aLayers.test( LAYER_3D_PLATED_BARRELS );
     m_Cfg->m_Render.show_copper_top                = aLayers.test( LAYER_3D_COPPER_TOP );
     m_Cfg->m_Render.show_copper_bottom             = aLayers.test( LAYER_3D_COPPER_BOTTOM );
+
+    for( int layer = LAYER_3D_COPPER_INNER_1; layer <= LAYER_3D_COPPER_INNER_30; ++layer )
+        m_Cfg->m_Render.show_copper_inner[layer - LAYER_3D_COPPER_INNER_1] = aLayers.test( layer );
+
     m_Cfg->m_Render.show_silkscreen_top            = aLayers.test( LAYER_3D_SILKSCREEN_TOP );
     m_Cfg->m_Render.show_silkscreen_bottom         = aLayers.test( LAYER_3D_SILKSCREEN_BOTTOM );
     m_Cfg->m_Render.show_soldermask_top            = aLayers.test( LAYER_3D_SOLDERMASK_TOP );
@@ -857,8 +861,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         }
 
         ret.set( LAYER_3D_PLATED_BARRELS,    true );
-        ret.set( LAYER_3D_COPPER_TOP,        true );
-        ret.set( LAYER_3D_COPPER_BOTTOM,     true );
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
+            ret.set( MapPCBLayerTo3DLayer( layer ), true );
+
         ret.set( LAYER_3D_SILKSCREEN_TOP,    true );
         ret.set( LAYER_3D_SILKSCREEN_BOTTOM, true );
         ret.set( LAYER_3D_USER_COMMENTS,     true );
@@ -894,6 +900,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
     ret.set( LAYER_3D_PLATED_BARRELS,    m_Cfg->m_Render.show_plated_barrels );
     ret.set( LAYER_3D_COPPER_TOP,        m_Cfg->m_Render.show_copper_top );
     ret.set( LAYER_3D_COPPER_BOTTOM,     m_Cfg->m_Render.show_copper_bottom );
+
+    for( int layer = LAYER_3D_COPPER_INNER_1; layer <= LAYER_3D_COPPER_INNER_30; ++layer )
+        ret.set( layer, m_Cfg->m_Render.show_copper_inner[layer - LAYER_3D_COPPER_INNER_1] );
+
     ret.set( LAYER_3D_SILKSCREEN_TOP,    m_Cfg->m_Render.show_silkscreen_top );
     ret.set( LAYER_3D_SILKSCREEN_BOTTOM, m_Cfg->m_Render.show_silkscreen_bottom );
     ret.set( LAYER_3D_SOLDERMASK_TOP,    m_Cfg->m_Render.show_soldermask_top );
@@ -932,8 +942,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
             return ret;
 
         ret.set( LAYER_3D_BOARD,             true );
-        ret.set( LAYER_3D_COPPER_TOP,        m_board->IsLayerVisible( F_Cu ) );
-        ret.set( LAYER_3D_COPPER_BOTTOM,     m_board->IsLayerVisible( B_Cu ) );
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
+            ret.set( MapPCBLayerTo3DLayer( layer ), m_board->IsLayerVisible( layer ) );
+
         ret.set( LAYER_3D_SILKSCREEN_TOP,    m_board->IsLayerVisible( F_SilkS ) );
         ret.set( LAYER_3D_SILKSCREEN_BOTTOM, m_board->IsLayerVisible( B_SilkS ) );
         ret.set( LAYER_3D_SOLDERMASK_TOP,    m_board->IsLayerVisible( F_Mask ) );
@@ -964,8 +976,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
             layers.set( commonLayer );
 
         ret.set( LAYER_3D_BOARD,             true );
-        ret.set( LAYER_3D_COPPER_TOP,        layers.test( F_Cu ) );
-        ret.set( LAYER_3D_COPPER_BOTTOM,     layers.test( B_Cu ) );
+
+        for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, m_copperLayersCount ) )
+            ret.set( MapPCBLayerTo3DLayer( layer ), layers.test( layer ) );
+
         ret.set( LAYER_3D_SILKSCREEN_TOP,    layers.test( F_SilkS ) );
         ret.set( LAYER_3D_SILKSCREEN_BOTTOM, layers.test( B_SilkS ) );
         ret.set( LAYER_3D_SOLDERMASK_TOP,    layers.test( F_Mask ) );
@@ -1005,6 +1019,10 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetDefaultVisibleLayers() const
     ret.set( LAYER_3D_PLATED_BARRELS,    true );
     ret.set( LAYER_3D_COPPER_TOP,        true );
     ret.set( LAYER_3D_COPPER_BOTTOM,     true );
+
+    for( int layer = LAYER_3D_COPPER_INNER_1; layer <= LAYER_3D_COPPER_INNER_30; ++layer )
+        ret.set( layer, true );
+
     ret.set( LAYER_3D_SILKSCREEN_TOP,    true );
     ret.set( LAYER_3D_SILKSCREEN_BOTTOM, true );
     ret.set( LAYER_3D_SOLDERMASK_TOP,    true );

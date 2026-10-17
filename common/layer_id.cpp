@@ -341,8 +341,13 @@ PCB_LAYER_ID Map3DLayerToPCBLayer( int aLayer )
     case LAYER_3D_USER_43:           return User_43;
     case LAYER_3D_USER_44:           return User_44;
     case LAYER_3D_USER_45:           return User_45;
-    default:               return UNDEFINED_LAYER;
+    default:                         break;
     }
+
+    if( aLayer >= LAYER_3D_COPPER_INNER_1 && aLayer <= LAYER_3D_COPPER_INNER_30 )
+        return static_cast<PCB_LAYER_ID>( In1_Cu + ( aLayer - LAYER_3D_COPPER_INNER_1 ) * 2 );
+
+    return UNDEFINED_LAYER;
 }
 
 
@@ -411,6 +416,11 @@ int MapPCBLayerTo3DLayer( PCB_LAYER_ID aLayer )
     case User_43:   return LAYER_3D_USER_43;
     case User_44:   return LAYER_3D_USER_44;
     case User_45:   return LAYER_3D_USER_45;
-    default:        return UNDEFINED_LAYER;
+    default:        break;
     }
+
+    if( IsInnerCopperLayer( aLayer ) )
+        return LAYER_3D_COPPER_INNER_1 + ( aLayer - In1_Cu ) / 2;
+
+    return UNDEFINED_LAYER;
 }

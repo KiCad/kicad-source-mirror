@@ -19,15 +19,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "eda_3d_viewer_settings.h"
+
+#include <wx/config.h>
+
 #include <fmt/format.h>
+
 #include <3d_enums.h>
 #include <common_ogl/ogl_attr_list.h>
+#include <layer_ids.h>
 #include <settings/parameters.h>
 #include <settings/json_settings_internals.h>
 #include <3d_canvas/board_adapter.h>
-#include <wx/config.h>
 
-#include "eda_3d_viewer_settings.h"
 
 using KIGFX::COLOR4D;
 
@@ -41,6 +45,10 @@ LAYER_PRESET_3D::LAYER_PRESET_3D( const wxString& aName ) :
     layers.set( LAYER_3D_PLATED_BARRELS );
     layers.set( LAYER_3D_COPPER_TOP );
     layers.set( LAYER_3D_COPPER_BOTTOM );
+
+    for( int layer = 0; layer < MAX_CU_LAYERS - 2; ++layer )
+        layers.set( LAYER_3D_COPPER_INNER_1 + layer );
+
     layers.set( LAYER_3D_SILKSCREEN_TOP );
     layers.set( LAYER_3D_SILKSCREEN_BOTTOM );
     layers.set( LAYER_3D_SOLDERMASK_TOP );
@@ -125,9 +133,18 @@ PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
     LAYER( "off_board_silk",      LAYER_3D_OFF_BOARD_SILK    );
     LAYER( "3d_axes", LAYER_GRID_AXES );
 
+    for( int layer = LAYER_3D_COPPER_INNER_1; layer <= LAYER_3D_COPPER_INNER_30; ++layer )
+    {
+        const int innerLayerIdx = layer - LAYER_3D_COPPER_INNER_1 + 1;
+        wxString name = wxString::Format( wxS( "copper_inner_%d" ), innerLayerIdx );
+        m_layerToLayerNameMap[layer] = name;
+        m_layerNameToLayerMap[name] = layer;
+    }
+
     for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
     {
-        wxString name = wxString::Format( wxS( "user_%d" ), layer - LAYER_3D_USER_1 + 1 );
+        const int userLayerIdx = layer - LAYER_3D_USER_1 + 1;
+        wxString name = wxString::Format( wxS( "user_%d" ), userLayerIdx );
         m_layerToLayerNameMap[layer] = name;
         m_layerNameToLayerMap[name] = layer;
     }
@@ -430,6 +447,14 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                             &m_Render.show_copper_bottom, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_copper_bottom",
                                             &m_Render.show_copper_top, true ) );
+
+    for( int layer = LAYER_3D_COPPER_INNER_1; layer <= LAYER_3D_COPPER_INNER_30; ++layer )
+    {
+        const int innerLayerIndex = layer - LAYER_3D_COPPER_INNER_1;
+        m_params.emplace_back( new PARAM<bool>( fmt::format( "render.show_copper_inner{}", innerLayerIndex + 1 ),
+                                                &m_Render.show_copper_inner[innerLayerIndex], true ) );
+    }
+
     m_params.emplace_back( new PARAM<bool>( "render.show_zones",
                                             &m_Render.show_zones, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_fp_references",

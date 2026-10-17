@@ -33,6 +33,7 @@
 #include <pcbnew_settings.h>
 #include <project.h>
 #include <board.h>
+#include <layer_range.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/eda_3d_actions.h>
@@ -45,8 +46,14 @@
 #include <wx/sizer.h>
 #include <wx/textdlg.h>
 #include <wx/checkbox.h>
+#include <wx/menu.h>
 
 #include <algorithm>
+
+static constexpr int ID_SHOW_ALL_COPPER_LAYERS = wxID_HIGHEST + 1;
+static constexpr int ID_HIDE_ALL_COPPER_LAYERS = ID_SHOW_ALL_COPPER_LAYERS + 1;
+static constexpr int ID_SHOW_ALL_INNER_LAYERS  = ID_HIDE_ALL_COPPER_LAYERS + 1;
+static constexpr int ID_HIDE_ALL_INNER_LAYERS  = ID_SHOW_ALL_INNER_LAYERS + 1;
 
 /// Render Row abbreviation to reduce source width.
 #define RR  APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D
@@ -136,14 +143,30 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
     RR( _HKI( "Background End" ),       LAYER_3D_BACKGROUND_BOTTOM, _HKI( "Background gradient end color" ) ),
 };
 
-// The list of IDs that can have colors coming from the board stackup, and cannot be
-// modified if use colors from stackup is activated
-static std::vector<int> inStackupColors{ LAYER_3D_BOARD,
-                                         LAYER_3D_COPPER_TOP, LAYER_3D_COPPER_BOTTOM,
-                                         LAYER_3D_SOLDERPASTE,
-                                         LAYER_3D_SILKSCREEN_TOP, LAYER_3D_SILKSCREEN_BOTTOM,
-                                         LAYER_3D_SOLDERMASK_TOP, LAYER_3D_SOLDERMASK_BOTTOM
-                                        };
+
+// The 3D viewer uses a single color for all copper layers.
+static bool isCopperLayer3D( int aLayer )
+{
+    return aLayer == LAYER_3D_COPPER_TOP
+        || aLayer == LAYER_3D_COPPER_BOTTOM
+        || aLayer == LAYER_3D_PLATED_BARRELS
+        || IsInnerCopperLayer( Map3DLayerToPCBLayer( aLayer ) );
+}
+
+
+// Layers that can have colors coming from the board stackup, and cannot be modified if
+// use colors from stackup is activated.
+static bool isStackupColorLayer3D( int aLayer )
+{
+    return aLayer == LAYER_3D_BOARD
+        || aLayer == LAYER_3D_SOLDERPASTE
+        || aLayer == LAYER_3D_SILKSCREEN_TOP
+        || aLayer == LAYER_3D_SILKSCREEN_BOTTOM
+        || aLayer == LAYER_3D_SOLDERMASK_TOP
+        || aLayer == LAYER_3D_SOLDERMASK_BOTTOM
+        || isCopperLayer3D( aLayer );
+}
+
 
 APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent, wxWindow* aFocusOwner ) :
         APPEARANCE_CONTROLS_3D_BASE( aParent ),
@@ -163,6 +186,7 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent, wx
     m_windowLayers->SetSizer( m_layersOuterSizer );
     m_windowLayers->SetScrollRate( 0, 5 );
     m_windowLayers->Bind( wxEVT_SET_FOCUS, &APPEARANCE_CONTROLS_3D::OnSetFocus, this );
+    m_panelLayers->Bind( wxEVT_CONTEXT_MENU, &APPEARANCE_CONTROLS_3D::OnLayerContextMenu, this );
 
     m_envOuterSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -244,6 +268,70 @@ wxSize APPEARANCE_CONTROLS_3D::GetBestSize() const
     DPI_SCALING_COMMON dpi( nullptr, m_frame );
     wxSize      size( 220 * dpi.GetScaleFactor(), 480 * dpi.GetScaleFactor() );
     return size;
+}
+
+
+void APPEARANCE_CONTROLS_3D::OnLayerContextMenu( wxContextMenuEvent& aEvent )
+{
+    wxMenu menu;
+
+    menu.Append( ID_SHOW_ALL_COPPER_LAYERS, _( "Show All Copper Layers" ) );
+    menu.Append( ID_HIDE_ALL_COPPER_LAYERS, _( "Hide All Copper Layers" ) );
+    menu.AppendSeparator();
+    menu.Append( ID_SHOW_ALL_INNER_LAYERS, _( "Show All Inner Layers" ) );
+    menu.Append( ID_HIDE_ALL_INNER_LAYERS, _( "Hide All Inner Layers" ) );
+
+    BOARD* board = m_frame->GetBoard();
+    bool   hasInnerLayers = board && board->GetCopperLayerCount() > 2;
+
+    menu.Enable( ID_SHOW_ALL_INNER_LAYERS, hasInnerLayers );
+    menu.Enable( ID_HIDE_ALL_INNER_LAYERS, hasInnerLayers );
+
+    std::bitset<LAYER_3D_END> visibleLayers = m_frame->GetAdapter().GetVisibleLayers();
+
+    auto setInnerCopperLayers =
+            [&]( bool aVisible )
+            {
+                if( !board )
+                    return;
+
+                for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, board->GetCopperLayerCount() ) )
+                {
+                    if( IsInnerCopperLayer( layer ) )
+                        visibleLayers.set( MapPCBLayerTo3DLayer( layer ), aVisible );
+                }
+            };
+
+    switch( GetPopupMenuSelectionFromUser( menu ) )
+    {
+    case ID_SHOW_ALL_COPPER_LAYERS:
+        visibleLayers.set( LAYER_3D_COPPER_TOP );
+        visibleLayers.set( LAYER_3D_COPPER_BOTTOM );
+        setInnerCopperLayers( true );
+        break;
+
+    case ID_HIDE_ALL_COPPER_LAYERS:
+        visibleLayers.reset( LAYER_3D_COPPER_TOP );
+        visibleLayers.reset( LAYER_3D_COPPER_BOTTOM );
+        setInnerCopperLayers( false );
+        break;
+
+    case ID_SHOW_ALL_INNER_LAYERS:
+        setInnerCopperLayers( true );
+        break;
+
+    case ID_HIDE_ALL_INNER_LAYERS:
+        setInnerCopperLayers( false );
+        break;
+
+    default:
+        return;
+    }
+
+    m_frame->GetAdapter().SetVisibleLayers( visibleLayers );
+    syncLayerPresetSelection();
+    UpdateLayerCtls();
+    m_frame->NewDisplay( true );
 }
 
 
@@ -468,8 +556,11 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
     default:
         visibleLayers.set( aLayer, isVisible );
 
-        if( aLayer >= LAYER_3D_USER_1 && aLayer <= LAYER_3D_USER_45 )
+        if( ( aLayer >= LAYER_3D_USER_1 && aLayer <= LAYER_3D_USER_45 )
+         || ( aLayer >= LAYER_3D_COPPER_INNER_1 && aLayer <= LAYER_3D_COPPER_INNER_30 ) )
+        {
             killFollow = true;
+        }
 
         break;
     }
@@ -508,37 +599,29 @@ void APPEARANCE_CONTROLS_3D::onColorSwatchChanged( COLOR_SWATCH* aSwatch )
     int     layer = aSwatch->GetId();
     COLOR4D newColor = aSwatch->GetSwatchColor();
 
-    colors[ layer ] = newColor;
-
     // The internals of the 3D viewer only supports a single color for copper, which must
     // be applied to all copper layers.
-    COLOR_SWATCH* otherSwatch = nullptr;
-
-    const std::vector<int> copperIndices{
-        LAYER_3D_COPPER_TOP,
-        LAYER_3D_COPPER_BOTTOM,
-        LAYER_3D_PLATED_BARRELS,
-    };
-
-    // If the changed swatch is one of the copper layers, we need to update the other copper layers
-    if( std::find( copperIndices.begin(), copperIndices.end(), layer ) != copperIndices.end() )
+    if( isCopperLayer3D( layer ) )
     {
-        for( int index : copperIndices )
+        for( const auto& [index, setting] : m_layerSettingsMap )
         {
-            if( layer != index && colors.count( index ) )
-            {
+            if( !isCopperLayer3D( index ) )
+                continue;
+
+            if( colors.count( index ) )
                 colors[index] = newColor;
-                otherSwatch = m_layerSettingsMap[index]->m_Ctl_color;
+
+            if( setting->m_Ctl_color )
+            {
+                // Don't send an event, because that will cause an event loop
+                setting->m_Ctl_color->SetSwatchColor( newColor, false );
             }
         }
     }
-
-    if( otherSwatch )
+    else
     {
-        // Don't send an event, because that will cause an event loop
-        otherSwatch->SetSwatchColor( newColor, false );
+        colors[layer] = newColor;
     }
-
 
     m_frame->GetAdapter().SetLayerColors( colors );
 
@@ -563,23 +646,24 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
     LSET                      enabled = m_frame->GetBoard()->GetEnabledLayers();
 
     m_layerSettings.clear();
+    m_layerSettingsMap.clear();
     m_layersOuterSizer->Clear( true );
     m_layersOuterSizer->AddSpacer( 5 );
 
     m_envOuterSizer->Clear( true );
 
-    auto appendLayer =
-            [&]( const std::unique_ptr<APPEARANCE_SETTING_3D>& aSetting )
+    const auto appendLayer =
+            [&]( const std::unique_ptr<APPEARANCE_SETTING_3D>& aSetting, int aColorLayer )
             {
                 wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
                 int         layer = aSetting->m_Id;
 
                 aSetting->m_Visible = visibleLayers.test( layer );
 
-                if( colors.count( layer ) )
+                if( colors.count( aColorLayer ) )
                 {
-                    COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowLayers, colors[ layer ], layer,
-                                                             COLOR4D::WHITE, defaultColors[ layer ],
+                    COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowLayers, colors[ aColorLayer ], layer,
+                                                             COLOR4D::WHITE, defaultColors[ aColorLayer ],
                                                              SWATCH_SMALL );
                     swatch->SetToolTip( _( "Left double click or middle click to change color" ) );
 
@@ -661,6 +745,27 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                 m_layersOuterSizer->AddSpacer( 2 );
             };
 
+    const auto appendInnerLayers =
+            [&]()
+            {
+                BOARD& board = *m_frame->GetBoard();
+
+                for( PCB_LAYER_ID boardLayer : LAYER_RANGE( F_Cu, B_Cu, board.GetCopperLayerCount() ) )
+                {
+                    if( !IsInnerCopperLayer( boardLayer ) || !enabled.test( boardLayer ) )
+                        continue;
+
+                    int      layerId = MapPCBLayerTo3DLayer( boardLayer );
+                    wxString label = board.GetLayerName( boardLayer );
+                    wxString tooltip = wxString::Format( _( "Show %s" ), label );
+
+                    m_layerSettings.emplace_back(
+                            std::make_unique<APPEARANCE_SETTING_3D>( label, layerId, tooltip ) );
+                    appendLayer( m_layerSettings.back(), LAYER_3D_COPPER_TOP );
+                    m_layerSettingsMap[layerId] = m_layerSettings.back().get();
+                }
+            };
+
     for( const APPEARANCE_SETTING_3D& s_setting : s_layerSettings )
     {
         m_layerSettings.emplace_back( std::make_unique<APPEARANCE_SETTING_3D>( s_setting ) );
@@ -673,14 +778,18 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
         else if( setting->m_Id >= LAYER_3D_USER_1 && setting->m_Id <= LAYER_3D_USER_45 )
         {
             if( enabled.test( Map3DLayerToPCBLayer( setting->m_Id ) ) )
-                appendLayer( setting );
+                appendLayer( setting, setting->m_Id );
         }
         else
         {
-            appendLayer( setting );
+            appendLayer( setting, setting->m_Id );
         }
 
         m_layerSettingsMap[setting->m_Id] = setting.get();
+
+        // Keep the inner copper rows next to the outer copper rows, in stack order.
+        if( setting->m_Id == LAYER_3D_COPPER_TOP )
+            appendInnerLayers();
     }
 
     m_sizerOuter->Layout();
@@ -703,11 +812,14 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
 
         if( setting->m_Ctl_color )
         {
-            setting->m_Ctl_color->SetSwatchColor( colors[ setting->m_Id ], false );
+            bool isCopper = isCopperLayer3D( setting->m_Id );
+            int  colorLayer = isCopper ? LAYER_3D_COPPER_TOP : setting->m_Id;
+
+            setting->m_Ctl_color->SetSwatchColor( colors[colorLayer], false );
 
             // if cfg->m_UseStackupColors is set, board colors cannot be modified locally, but
             // other colors can be
-            if( alg::contains( inStackupColors, setting->m_Id ) && cfg )
+            if( isStackupColorLayer3D( setting->m_Id ) && cfg )
                 setting->m_Ctl_color->SetReadOnly( cfg->m_UseStackupColors );
         }
     }

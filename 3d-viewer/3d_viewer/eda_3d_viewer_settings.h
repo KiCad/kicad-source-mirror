@@ -137,7 +137,7 @@ public:
         bool show_b_fab;
         bool show_f_courtyard;
         bool show_b_courtyard;
-        bool show_user[45];
+        bool show_user[MAX_USER_DEFINED_LAYERS];
         bool show_footprints_insert;
         bool show_footprints_normal;
         bool show_footprints_virtual;
@@ -150,6 +150,7 @@ public:
         bool show_solderpaste;
         bool show_copper_top;
         bool show_copper_bottom;
+        bool show_copper_inner[MAX_CU_LAYERS - 2];
         bool show_zones;
         bool show_fp_references;
         bool show_fp_values;

@@ -22,6 +22,8 @@
 
 #include <vector>
 
+#include <wx/event.h>
+
 #include <gal/color4d.h>
 #include <layer_ids.h>
 #include <3d_canvas/board_adapter.h>
@@ -142,6 +144,8 @@ public:
 protected:
     void OnSetFocus( wxFocusEvent& aEvent ) override;
     void OnSize( wxSizeEvent& aEvent ) override;
+
+    void OnLayerContextMenu( wxContextMenuEvent& aEvent );
     void OnLanguageChanged( wxCommandEvent& aEvent );
 
 private:
