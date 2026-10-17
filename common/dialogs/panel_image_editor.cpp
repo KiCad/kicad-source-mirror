@@ -187,9 +187,6 @@ void PANEL_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 
 void PANEL_IMAGE_EDITOR::TransferToImage( BITMAP_BASE& aItem )
 {
-    wxString msg = m_textCtrlScale->GetValue();
-    double   scale = 1.0;
-    msg.ToDouble( &scale );
-    m_workingImage->SetScale( scale );
+    m_workingImage->SetScale( m_scale.GetDoubleValue() );
     aItem.ImportData( *m_workingImage );
 }
