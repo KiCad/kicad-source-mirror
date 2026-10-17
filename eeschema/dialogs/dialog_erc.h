@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <wx/htmllbox.h>
 
 #include <dialog_erc_base.h>
@@ -35,7 +37,11 @@ wxDECLARE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
 #define DIALOG_ERC_WINDOW_NAME "DialogErcWindowName"
 
 
+class SCH_EDIT_FRAME;
 class SCH_MARKER;
+class SCHEMATIC;
+class RC_ITEMS_PROVIDER;
+class RC_TREE_MODEL;
 
 
 class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER_BASE
