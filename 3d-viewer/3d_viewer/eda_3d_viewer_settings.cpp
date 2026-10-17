@@ -251,13 +251,15 @@ void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
 
 
 ///! Update the schema version whenever a migration is required
-const int viewer3dSchemaVersion = 4;
+const int viewer3dSchemaVersion = 5;
 
 
 EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
         APP_SETTINGS_BASE( "3d_viewer", viewer3dSchemaVersion ),
         m_Render(),
-        m_Camera()
+        m_Camera(),
+        m_Viewer(),
+        m_Preview()
 {
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
                                             &m_AuiPanels.show_layer_manager, true ) );
@@ -471,8 +473,6 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                             &m_Render.differentiate_plated_copper, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.use_board_editor_copper_colors",
                                             &m_Render.use_board_editor_copper_colors, false ) );
-    m_params.emplace_back( new PARAM<bool>( "render.preview_show_board_body",
-                                            &m_Render.preview_show_board_body, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_missing_models", &m_Render.show_missing_models, false ) );
     m_params.emplace_back( new PARAM<bool>( "camera.animation_enabled",
                                             &m_Camera.animation_enabled, true ) );
@@ -480,8 +480,20 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                            &m_Camera.moving_speed_multiplier, 3 ) );
     m_params.emplace_back( new PARAM<double>( "camera.rotation_increment",
                                               &m_Camera.rotation_increment, 10.0 ) );
-    m_params.emplace_back( new PARAM<int>( "camera.projection_mode",
-                                           &m_Camera.projection_mode, 1 ) );
+
+    m_params.emplace_back( new PARAM_ENUM<PROJECTION_TYPE>( "main_view.projection_mode",
+                                                            &m_Viewer.projection_mode,
+                                                            PROJECTION_TYPE::PERSPECTIVE,
+                                                            PROJECTION_TYPE::ORTHO,
+                                                            PROJECTION_TYPE::PERSPECTIVE ) );
+
+    m_params.emplace_back( new PARAM_ENUM<PROJECTION_TYPE>( "preview.projection_mode",
+                                                            &m_Preview.projection_mode,
+                                                            PROJECTION_TYPE::ORTHO, // ortho is more suitable for previews
+                                                            PROJECTION_TYPE::ORTHO,
+                                                            PROJECTION_TYPE::PERSPECTIVE ) );
+    m_params.emplace_back( new PARAM<bool>( "preview.show_board_body",
+                                            &m_Preview.show_board_body, true ) );
 
     m_params.emplace_back( new PARAM<int>( "export_image.width", &m_ExportImage.width, 0 ) );
     m_params.emplace_back( new PARAM<int>( "export_image.height", &m_ExportImage.height, 0 ) );
@@ -600,6 +612,18 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                         preset["layers"] = mappedLayers;
                     }
                 }
+
+                return true;
+            } );
+
+    registerMigration( 4, 5,
+            [&]() -> bool
+            {
+                if( std::optional<int> optval = Get<int>( "camera.projection_mode" ) )
+                    Set( "main_view.projection_mode", *optval );
+
+                if( std::optional<bool> optval = Get<bool>( "render.preview_show_board_body" ) )
+                    Set( "preview.show_board_body", *optval );
 
                 return true;
             } );

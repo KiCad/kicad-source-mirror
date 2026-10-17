@@ -208,8 +208,8 @@ public:
     void SetMovingSpeedMultiplier( int aMultiplier ) { m_moving_speed_multiplier = aMultiplier; }
     int GetMovingSpeedMultiplier() const { return m_moving_speed_multiplier; }
 
-    int GetProjectionMode() const { return (int) m_camera.GetProjection(); };
-    void SetProjectionMode( int aMode ) { m_camera.SetProjection( (PROJECTION_TYPE) aMode ); }
+    PROJECTION_TYPE GetProjectionMode() const { return m_camera.GetProjection(); };
+    void SetProjectionMode( PROJECTION_TYPE aMode ) { m_camera.SetProjection( aMode ); }
 
     /**
      * Notify that the render engine was changed.

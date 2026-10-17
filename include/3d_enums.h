@@ -45,6 +45,13 @@ enum class CAMERA_TYPE
 
 // Do not modify the following enum numbers, they are saved in the config file and used in the UI
 
+/// Camera projection types
+enum class PROJECTION_TYPE
+{
+    ORTHO = 0,
+    PERSPECTIVE = 1
+};
+
 /// Grid types
 enum class GRID3D_TYPE
 {

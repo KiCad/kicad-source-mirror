@@ -851,7 +851,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         // The preview has one board-body button and no layer controls, so it cannot follow
         // the per-layer flags the 3D viewer's appearance panel writes: a mask switched off
         // there would leave the preview showing bare substrate with no way back.
-        if( m_Cfg->m_Render.preview_show_board_body )
+        if( m_Cfg->m_Preview.show_board_body )
         {
             ret.set( LAYER_3D_BOARD,             true );
             ret.set( LAYER_3D_SOLDERMASK_TOP,    true );

@@ -27,7 +27,7 @@
 #include <settings/app_settings.h>
 #include <settings/parameters.h>
 #include <project/board_project_settings.h>
-#include "render_settings.h"
+
 
 #define FOLLOW_PCB           wxT( "follow_pcb_editor" )
 #define FOLLOW_PLOT_SETTINGS wxT( "follow_plot_settings" )
@@ -159,7 +159,6 @@ public:
         bool clip_silk_on_via_annuli;
         bool differentiate_plated_copper;
         bool use_board_editor_copper_colors;    // OpenGL only
-        bool preview_show_board_body;
         bool show_missing_models; // Show placeholder for missing 3D models
 
         /**
@@ -175,12 +174,32 @@ public:
         }
     };
 
+    /**
+     * Common settings for all 3D viewers
+     */
     struct CAMERA_SETTINGS
     {
-        bool   animation_enabled;
-        int    moving_speed_multiplier;
-        double rotation_increment;
-        int    projection_mode;
+        bool            animation_enabled;
+        int             moving_speed_multiplier;
+        double          rotation_increment;
+    };
+
+    /**
+     * Settings for the main 3D viewer (and not previews)
+     */
+    struct VIEWER_SETTINGS
+    {
+        PROJECTION_TYPE projection_mode;
+    };
+
+    /**
+     * Settings for a 3D preview panel (e.g. footprint model preview),
+     * as opposed to the main 3D viewer.
+     */
+    struct PREVIEW_SETTINGS
+    {
+        PROJECTION_TYPE projection_mode;
+        bool            show_board_body;
     };
 
     struct EXPORT_IMAGE_SETTINGS
@@ -200,12 +219,14 @@ public:
 
     LAYER_PRESET_3D* FindPreset( const wxString& aName );
 
-    virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
+    bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
 public:
     AUI_PANELS            m_AuiPanels;
     RENDER_SETTINGS       m_Render;
     CAMERA_SETTINGS       m_Camera;
+    VIEWER_SETTINGS       m_Viewer;
+    PREVIEW_SETTINGS      m_Preview;
     EXPORT_IMAGE_SETTINGS m_ExportImage;
 
     bool                         m_UseStackupColors;
@@ -213,7 +234,7 @@ public:
     wxString                     m_CurrentPreset;
 
 protected:
-    virtual std::string getLegacyFrameName() const override { return "Viewer3DFrameName"; }
+    std::string getLegacyFrameName() const override { return "Viewer3DFrameName"; }
 
 private:
     bool migrateSchema0to1();

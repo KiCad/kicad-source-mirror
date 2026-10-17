@@ -32,11 +32,6 @@
 #include <vector>
 #include <3d_enums.h>
 
-enum class PROJECTION_TYPE
-{
-    ORTHO = 0,
-    PERSPECTIVE
-};
 
 /**
  * Frustum is a implementation based on a tutorial by

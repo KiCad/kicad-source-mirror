@@ -310,9 +310,13 @@ PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
     delete m_toolManager;
     delete m_actions;
 
-    // Restore the 3D viewer Render settings, that can be modified by the panel tools
+    // Restore the 3D viewer Render settings, that can be modified by the panel tools, and
+    // persist the projection, matching how the 3D viewer frame saves its camera settings.
     if( m_boardAdapter.m_Cfg )
+    {
         m_boardAdapter.m_Cfg->m_Render = m_initialRender;
+        m_boardAdapter.m_Cfg->m_Preview.projection_mode = m_currentCamera.GetProjection();
+    }
 
     // The canvas must stop its rendering worker before the board is destroyed.
     delete m_previewPane;
@@ -338,6 +342,8 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 
+    PROJECTION_TYPE projectionMode = PROJECTION_TYPE::ORTHO;
+
     if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
     {
         // Save the 3D viewer render settings, to restore it after closing the preview
@@ -347,8 +353,10 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
 
         m_previewPane->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_previewPane->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
-        m_previewPane->SetProjectionMode( cfg->m_Camera.projection_mode );
+        projectionMode = cfg->m_Preview.projection_mode;
     }
+
+    m_previewPane->SetProjectionMode( projectionMode );
 }
 
 
@@ -1146,7 +1154,7 @@ void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
     if( !cfg )
         return;
 
-    cfg->m_Render.preview_show_board_body = !cfg->m_Render.preview_show_board_body;
+    cfg->m_Preview.show_board_body = !cfg->m_Preview.show_board_body;
 
     m_previewPane->ReloadRequest();
     m_previewPane->Refresh();

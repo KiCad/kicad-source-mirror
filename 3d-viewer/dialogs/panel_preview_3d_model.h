@@ -207,16 +207,16 @@ private:
 
     void evalRotationValue( TEXT_CTRL_EVAL* aRotationControl );
 
-	void View3DISO( wxCommandEvent& event ) override
+    void View3DISO( wxCommandEvent& event ) override
     {
-	    m_currentCamera.ToggleProjection();
+        m_currentCamera.ToggleProjection();
         m_previewPane->Refresh();
     }
 
     // turn ON or OFF options to show the board body. If OFF, solder paste, soldermask
     // and board body are hidden, to allows a good view of the 3D model and its pads.
     // Useful for 3D model placement
-	void setBodyStyleView( wxCommandEvent& event ) override;
+    void setBodyStyleView( wxCommandEvent& event ) override;
 
 	void View3DLeft( wxCommandEvent& event ) override
     {
@@ -258,7 +258,7 @@ private:
     }
 
     void onModify();
-    
+
     void syncLocalEmbeddedFiles();
 
 private:
