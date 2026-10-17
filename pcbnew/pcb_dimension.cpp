@@ -510,7 +510,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
 
     text.Printf( format, EDA_UNIT_UTILS::UI::ToUserUnit( pcbIUScale, m_units, val ) );
 
-    if( m_suppressZeroes )
+    if( m_suppressZeroes && precision > 0 )
     {
         while( text.EndsWith( '0' ) )
         {
