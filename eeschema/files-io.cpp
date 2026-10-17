@@ -713,9 +713,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // Older files can omit implied junctions. Repair them before publishing connectivity;
         // repairing current files could instead connect an intentional wire crossing.
         const bool nativeNeedsFixup = schFileType == SCH_IO_MGR::SCH_KICAD
-                                && Schematic().RootScreen()->GetFileFormatVersionAtLoad()
-                                           < SEXPR_SCHEMATIC_FILE_VERSION;
+                            && Schematic().RootScreen()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION;
 
+        // Don't include in commit or call OnModify(); this fixup is necessary to move forward
+        // but isn't required in the older files.  If they discard this file and open it again,
+        // we'll just re-apply the fixup.
         if( schFileType == SCH_IO_MGR::SCH_LEGACY || nativeNeedsFixup )
             Schematic().FixupJunctionsAfterImport();
 
