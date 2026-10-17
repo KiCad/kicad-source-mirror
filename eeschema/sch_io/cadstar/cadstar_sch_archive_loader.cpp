@@ -384,25 +384,26 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
-        m_reporter->Report( wxString::Format( _( "The CADSTAR design contains variants which has "
-                                                 "no KiCad equivalent. Only the master variant "
-                                                 "('%s') was loaded." ),
+        // TODO: implement variant importing
+        m_reporter->Report( wxString::Format( _( "The CADSTAR design contains variants are not currently "
+                                                 "supported.  Only the master variant ('%s') was loaded." ),
                                               Schematic.VariantHierarchy.Variants.at( "V0" ).Name ),
                             RPT_SEVERITY_WARNING );
     }
 
     if( Schematic.Groups.size() > 0 )
     {
-        m_reporter->Report( _( "The CADSTAR design contains grouped items which has no KiCad "
-                               "equivalent. Any grouped items have been ungrouped." ),
+        // TODO: implement group importing
+        m_reporter->Report( _( "The CADSTAR design contains grouped items which are not currently supported.  "
+                               "Any grouped items have been ungrouped." ),
                             RPT_SEVERITY_WARNING );
     }
 
     if( Schematic.ReuseBlocks.size() > 0 )
     {
-        m_reporter->Report( _( "The CADSTAR design contains re-use blocks which has no KiCad "
-                               "equivalent. The re-use block information has been discarded during "
-                               "the import." ),
+        // TODO: implement design block importing
+        m_reporter->Report( _( "The CADSTAR design contains re-use blocks which are not curretly supported.  "
+                               "The re-use block information has been discarded during the import." ),
                             RPT_SEVERITY_WARNING );
     }
 
