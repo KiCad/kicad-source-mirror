@@ -78,7 +78,7 @@ int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
 
     // At EDA_3D_VIEWER_FRAME creation, the current board is loaded, so disable loading
     // the current board if the 3D frame is not yet created
-    if( frame()->Get3DViewerFrame() == nullptr )
+    if( frame()->GetOur3DViewerFrame() == nullptr )
         do_reload_board = false;
 
     EDA_3D_VIEWER_FRAME* draw3DFrame = frame()->CreateAndShow3D_Frame();

@@ -331,6 +331,9 @@ void FOOTPRINT_CHOOSER_FRAME::quiescePreview()
         m_preview3DCanvas->SetEvtHandlerEnabled( false );
     }
 
+    if( EDA_3D_VIEWER_FRAME* our3DViewer = GetOur3DViewerFrame() )
+        our3DViewer->Close( true );
+
     if( m_chooserPanel )
     {
         FOOTPRINT_PREVIEW_WIDGET* viewerPanel = m_chooserPanel->GetViewerPanel();
@@ -356,13 +359,10 @@ void FOOTPRINT_CHOOSER_FRAME::onExternalViewer3DEnable( wxCommandEvent& aEvent )
         if( m_grButton3DView->IsChecked() )
             Show3DViewerFrame();        // show external 3D viewer
     }
-    else
+    else if( EDA_3D_VIEWER_FRAME* viewer3D = GetOur3DViewerFrame() )
     {
         // Close the external 3D viewer frame, if it is still enabled
-        EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
-
-        if( viewer3D )
-            viewer3D->Close( true );
+        viewer3D->Close( true );
     }
 
     updatePanelsVisibility();
@@ -375,7 +375,7 @@ void FOOTPRINT_CHOOSER_FRAME::Show3DViewerFrame()
 
     // At EDA_3D_VIEWER_FRAME creation, the current board is loaded, so disable loading
     // the current board if the 3D frame is not yet created
-    if( Get3DViewerFrame() == nullptr )
+    if( GetOur3DViewerFrame() == nullptr )
         do_reload_board = false;
 
     EDA_3D_VIEWER_FRAME* draw3DFrame = CreateAndShow3D_Frame();
@@ -859,13 +859,10 @@ void FOOTPRINT_CHOOSER_FRAME::on3DviewReq( wxCommandEvent& event )
         {
             Show3DViewerFrame();
         }
-        else
+        else if( EDA_3D_VIEWER_FRAME* viewer3D = GetOur3DViewerFrame() )
         {
             // Close 3D viewer frame, if it is still enabled
-            EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
-
-            if( viewer3D )
-                viewer3D->Close( true );
+            viewer3D->Close( true );
         }
 
         m_show3DMode = true;
@@ -903,7 +900,7 @@ void FOOTPRINT_CHOOSER_FRAME::updateViews()
     if( m_quiesced )
         return;
 
-    EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
+    EDA_3D_VIEWER_FRAME* viewer3D = GetOur3DViewerFrame();
 
     if( m_preview3DCanvas->IsShown() )
     {

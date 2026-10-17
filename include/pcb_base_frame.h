@@ -98,7 +98,7 @@ public:
     /**
      * @return a reference to the child 3D viewer frame, when exists, or NULL
      */
-    EDA_3D_VIEWER_FRAME* Get3DViewerFrame();
+    EDA_3D_VIEWER_FRAME* GetOur3DViewerFrame();
 
     /**
      * Update the 3D view, if the viewer is opened by this frame.
