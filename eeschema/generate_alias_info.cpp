@@ -58,11 +58,25 @@ public:
             m_unit( aUnit )
     { }
 
+    FOOTPRINT_INFO_GENERATOR( const LIB_SYMBOL* aSymbol, int aUnit ) :
+            m_html( DescriptionFormat ),
+            m_libs( nullptr ),
+            m_lib_id( aSymbol ? aSymbol->GetLibId() : LIB_ID() ),
+            m_symbol( aSymbol ),
+            m_unit( aUnit )
+    { }
+
     /**
      * Generate the HTML internally.
      */
     void GenerateHtml()
     {
+        if( m_symbol )
+        {
+            fillFromSymbol();
+            return;
+        }
+
         wxCHECK_RET( m_libs, "Symbol library manager adapter pointer is not valid" );
 
         if( !m_lib_id.IsValid() )
@@ -86,17 +100,9 @@ public:
         }
 
         if( m_symbol )
-        {
-            SetHtmlName();
-            SetHtmlAliasOf();
-            SetHtmlDesc();
-            SetHtmlKeywords();
-            SetHtmlFieldTable();
-        }
+            fillFromSymbol();
         else
-        {
             ClearPlaceholders();
-        }
     }
 
     /**
@@ -108,6 +114,15 @@ public:
     }
 
 protected:
+    void fillFromSymbol()
+    {
+        SetHtmlName();
+        SetHtmlAliasOf();
+        SetHtmlDesc();
+        SetHtmlKeywords();
+        SetHtmlFieldTable();
+    }
+
     void SetHtmlName()
     {
         m_html.Replace( wxS( "__NAME__" ), EscapeHTML( UnescapeString( m_symbol->GetName() ) ) );
@@ -282,6 +297,14 @@ private:
 wxString GenerateAliasInfo( SYMBOL_LIBRARY_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit )
 {
     FOOTPRINT_INFO_GENERATOR gen( aLibs, aLibId, aUnit );
+    gen.GenerateHtml();
+    return gen.GetHtml();
+}
+
+
+wxString GenerateAliasInfo( const LIB_SYMBOL* aSymbol, int aUnit )
+{
+    FOOTPRINT_INFO_GENERATOR gen( aSymbol, aUnit );
     gen.GenerateHtml();
     return gen.GetHtml();
 }

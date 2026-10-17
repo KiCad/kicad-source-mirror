@@ -572,6 +572,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths",
             &m_FieldEditorPanel.field_widths, {} ) );
 
+    m_params.emplace_back( new PARAM_MAP<std::vector<std::string>>( "database_library.column_choices",
+            &m_DatabaseColumnChoices, {} ) );
+
     m_params.emplace_back( new PARAM<int>( "field_editor.selection_mode",
             &m_FieldEditorPanel.selection_mode, 0 ) );
 

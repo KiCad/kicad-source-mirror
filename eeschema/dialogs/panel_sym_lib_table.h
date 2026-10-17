@@ -59,9 +59,11 @@ private:
 
     void browseLibrariesHandler( wxCommandEvent& event );
 
+    /// Creates or opens a .kicad_dbl in the settings editor and adds it to the current table
+    void newDatabaseLibraryHandler( wxCommandEvent& event );
+
     /// Appends a row for aFilePath, storing the path relative to an environment variable if possible
     void appendLibraryRow( const wxString& aNickname, SCH_IO_MGR::SCH_FILE_T aType, const wxString& aFilePath );
-
     void appendRowHandler( wxCommandEvent& event ) override;
     void deleteRowHandler( wxCommandEvent& event ) override;
     void moveUpHandler( wxCommandEvent& event ) override;

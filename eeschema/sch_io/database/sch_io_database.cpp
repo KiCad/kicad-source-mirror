@@ -238,20 +238,6 @@ void SCH_IO_DATABASE::GetDefaultSymbolFields( std::vector<wxString>& aNames )
 }
 
 
-bool SCH_IO_DATABASE::TestConnection( wxString* aErrorMsg )
-{
-    if( m_conn && m_conn->IsConnected() )
-        return true;
-
-    connect();
-
-    if( aErrorMsg && ( !m_conn || !m_conn->IsConnected() ) )
-        *aErrorMsg = m_lastError;
-
-    return m_conn && m_conn->IsConnected();
-}
-
-
 size_t SCH_IO_DATABASE::computeSignature( const TABLE_RESULT_LIST& aTableResults ) const
 {
     size_t signature = 0;
@@ -296,10 +282,72 @@ size_t SCH_IO_DATABASE::computeSignature( const TABLE_RESULT_LIST& aTableResults
 }
 
 
+LIB_SYMBOL* SCH_IO_DATABASE::resolveSourceSymbol( const LIB_ID& aId )
+{
+    if( !m_adapter )
+        return nullptr;
+
+    if( !m_previewMode )
+        return m_adapter->LoadSymbol( aId );
+
+    std::optional<LIBRARY_TABLE_ROW*> row = m_adapter->GetRow( aId.GetLibNickname() );
+
+    // A database library would query its own tables, which the preview must not do
+    if( row && SCH_IO_MGR::EnumFromStr( ( *row )->Type() ) == SCH_IO_MGR::SCH_DATABASE )
+    {
+        reportIssue( PREVIEW_ISSUE::FIELD::SYMBOLS,
+                     wxString::Format( _( "Symbol '%s' is in a database library and is not previewed." ),
+                                       aId.Format().wx_str() ),
+                     RPT_SEVERITY_WARNING );
+        return nullptr;
+    }
+
+    // Not memoized; the pointer belongs to another library's cache, which a later load may rebuild
+    LIB_SYMBOL* symbol = m_adapter->LoadSymbol( aId );
+
+    if( !symbol )
+    {
+        reportIssue( PREVIEW_ISSUE::FIELD::SYMBOLS,
+                     wxString::Format( _( "Symbol '%s' was not found." ), aId.Format().wx_str() ),
+                     RPT_SEVERITY_WARNING );
+    }
+
+    return symbol;
+}
+
+
+std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
+                                                                        bool aConnectNow, const wxString& aBaseDir )
+{
+    const DATABASE_SOURCE& source = aSettings.m_Source;
+
+    if( source.connection_string.empty() )
+    {
+        return std::make_unique<DATABASE_CONNECTION>( source.dsn, source.username, source.password,
+                                                      source.timeout, aConnectNow );
+    }
+
+    std::string cs = source.connection_string;
+    wxString    baseDir = aBaseDir.IsEmpty() ? wxFileName( aSettings.GetFilename() ).GetPath() : aBaseDir;
+    std::string basePath( baseDir.ToUTF8() );
+
+    // Database drivers that use files operate on absolute paths, so provide a mechanism
+    // for specifying on-disk databases that live next to the kicad_dbl file
+    boost::replace_all( cs, "${CWD}", basePath );
+
+    return std::make_unique<DATABASE_CONNECTION>( cs, source.timeout, aConnectNow );
+}
+
+
 wxString SCH_IO_DATABASE::SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
                                             const DATABASE_CONNECTION::ROW& aRow, std::string* aRawKey )
 {
-    std::string rawName = std::any_cast<std::string>( aRow.at( aTable.key_col ) );
+    auto it = aRow.find( aTable.key_col );
+
+    if( it == aRow.end() )
+        return wxEmptyString;
+
+    std::string rawName = std::any_cast<std::string>( it->second );
     UTF8        sanitizedName = LIB_ID::FixIllegalChars( rawName, false );
     std::string prefix = ( aGloballyUniqueKeys || aTable.name.empty() ) ? "" : fmt::format( "{}/", aTable.name );
 
@@ -307,6 +355,82 @@ wxString SCH_IO_DATABASE::SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bo
         *aRawKey = rawName;
 
     return wxString( fmt::format( "{}{}", prefix, sanitizedName.c_str() ) );
+}
+
+
+std::vector<std::unique_ptr<LIB_SYMBOL>>
+SCH_IO_DATABASE::BuildPreviewSymbols( SYMBOL_LIBRARY_ADAPTER* aLibs, const DATABASE_LIB_TABLE& aTable,
+                                      bool aGloballyUniqueKeys, const std::vector<DATABASE_CONNECTION::ROW>& aRows,
+                                      PREVIEW_ISSUES* aIssues )
+{
+    SCH_IO_DATABASE preview;
+    preview.m_adapter = aLibs;
+    preview.m_previewIssues = aIssues;
+    preview.m_previewMode = true;
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> symbols;
+    std::map<wxString, std::pair<size_t, std::string>> listed;
+
+    for( const DATABASE_CONNECTION::ROW& row : aRows )
+    {
+        std::string rawKey;
+        wxString    name = SymbolNameForRow( aTable, aGloballyUniqueKeys, row, &rawKey );
+
+        if( name.IsEmpty() )
+            continue;
+
+        try
+        {
+            std::unique_ptr<LIB_SYMBOL> symbol = preview.loadSymbolFromRow( name, aTable, row );
+
+            if( !symbol )
+                continue;
+
+            // The library keeps the last row listed under a name, so the preview does the same
+            if( auto it = listed.find( name ); it != listed.end() )
+            {
+                if( it->second.second == rawKey )
+                {
+                    preview.reportIssue( PREVIEW_ISSUE::FIELD::REPEATED_KEY,
+                                         wxString::Format( _( "Key '%s' appears in more than one row; only the last "
+                                                              "row is kept." ),
+                                                           wxString::FromUTF8( rawKey ) ),
+                                         RPT_SEVERITY_WARNING );
+                }
+                else
+                {
+                    preview.reportIssue( PREVIEW_ISSUE::FIELD::KEY,
+                                         wxString::Format( _( "Keys '%s' and '%s' are both listed as '%s'; only the "
+                                                              "last is kept." ),
+                                                           wxString::FromUTF8( it->second.second ),
+                                                           wxString::FromUTF8( rawKey ), name ),
+                                         RPT_SEVERITY_WARNING );
+                }
+
+                symbols[it->second.first] = std::move( symbol );
+                it->second.second = rawKey;
+                continue;
+            }
+
+            listed[name] = { symbols.size(), rawKey };
+            symbols.push_back( std::move( symbol ) );
+        }
+        catch( const IO_ERROR& e )
+        {
+            preview.reportIssue( PREVIEW_ISSUE::FIELD::KEY, e.What(), RPT_SEVERITY_ERROR );
+        }
+    }
+
+    return symbols;
+}
+
+
+void SCH_IO_DATABASE::reportIssue( PREVIEW_ISSUE::FIELD aField, const wxString& aMessage, SEVERITY aSeverity ) const
+{
+    if( m_previewIssues )
+        m_previewIssues->push_back( { aField, aMessage } );
+    else
+        Report( aMessage, aSeverity );
 }
 
 
@@ -318,11 +442,11 @@ bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
     {
         for( const DATABASE_CONNECTION::ROW& result : results )
         {
-            if( !result.contains( table->key_col ) )
-                continue;
-
             std::string rawName;
             wxString    name = SymbolNameForRow( *table, m_settings->m_GloballyUniqueKeys, result, &rawName );
+
+            if( name.IsEmpty() )
+                continue;
 
             aSanitizedNameMap[name] = std::make_pair( table->name, rawName );
 
@@ -602,27 +726,6 @@ void SCH_IO_DATABASE::ensureConnection()
 }
 
 
-std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_LIB_SETTINGS& aSettings )
-{
-    const DATABASE_SOURCE& source = aSettings.m_Source;
-
-    if( source.connection_string.empty() )
-    {
-        return std::make_unique<DATABASE_CONNECTION>( source.dsn, source.username, source.password,
-                                                      source.timeout );
-    }
-
-    std::string cs = source.connection_string;
-    std::string basePath( wxFileName( aSettings.GetFilename() ).GetPath().ToUTF8() );
-
-    // Database drivers that use files operate on absolute paths, so provide a mechanism
-    // for specifying on-disk databases that live next to the kicad_dbl file
-    boost::replace_all( cs, "${CWD}", basePath );
-
-    return std::make_unique<DATABASE_CONNECTION>( cs, source.timeout );
-}
-
-
 void SCH_IO_DATABASE::connect()
 {
     wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
@@ -751,8 +854,9 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
             }
             else
             {
-                Report( wxString::Format( _( "'%s' is not a symbol; expected Library:Symbol." ), token ),
-                        RPT_SEVERITY_WARNING );
+                reportIssue( PREVIEW_ISSUE::FIELD::SYMBOLS,
+                             wxString::Format( _( "'%s' is not a symbol; expected Library:Symbol." ), token ),
+                             RPT_SEVERITY_WARNING );
             }
         }
 
@@ -786,7 +890,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
             {
                 std::lock_guard lock( m_symbolLoadMutex );
-                src = m_adapter->LoadSymbol( symbolId );
+                src = resolveSourceSymbol( symbolId );
             }
 
             if( src )
@@ -1008,9 +1112,10 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         {
             // Surface a malformed pin-map payload to the user instead of silently dropping it; the
             // symbol still loads without the map (issue #2282).
-            Report( wxString::Format( _( "Error parsing pin map for database symbol '%s': %s" ),
-                                      aSymbolName, e.what() ),
-                    RPT_SEVERITY_ERROR );
+            reportIssue( PREVIEW_ISSUE::FIELD::PIN_MAP,
+                         wxString::Format( _( "Error parsing pin map for database symbol '%s': %s" ), aSymbolName,
+                                           e.what() ),
+                         RPT_SEVERITY_ERROR );
         }
     }
 
@@ -1212,7 +1317,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 }
 
 
-DIALOG_SHIM* SCH_IO_DATABASE::CreateConfigurationDialog( wxWindow* aParent )
+DIALOG_SHIM* SCH_IO_DATABASE::CreateConfigurationDialog( wxWindow* aParent, const wxString& aLibraryPath )
 {
-    return new DIALOG_DATABASE_LIB_SETTINGS( aParent, this );
+    return new DIALOG_DATABASE_LIB_SETTINGS( aParent, aLibraryPath, m_adapter );
 }

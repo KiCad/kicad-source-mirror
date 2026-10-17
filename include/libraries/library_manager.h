@@ -203,9 +203,21 @@ public:
     /// Creates the library (i.e. saves to disk) for the given row if it exists
     bool CreateLibrary( const wxString& aNickname );
 
-    virtual bool SupportsConfigurationDialog( const wxString& aNickname ) const { return false; }
+    /**
+     * Configuration works from the row itself, so libraries that failed to load or are not yet
+     * committed to a table can still be configured.
+     */
+    virtual bool SupportsConfigurationDialog( const LIBRARY_TABLE_ROW& aRow ) const { return false; }
 
-    virtual int ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const { return wxID_CANCEL; }
+    /**
+     * Shows the plugin's configuration dialog for a library table row.  On OK, the committed library
+     * with the same nickname, type and URI in aScope is reloaded.
+     */
+    virtual int ShowConfigurationDialog( const LIBRARY_TABLE_ROW& aRow, LIBRARY_TABLE_SCOPE aScope,
+                                         wxWindow* aParent )
+    {
+        return wxID_CANCEL;
+    }
 
     virtual std::optional<LIBRARY_ERROR> LibraryError( const wxString& aNickname ) const;
 

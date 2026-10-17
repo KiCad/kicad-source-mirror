@@ -26,6 +26,9 @@
 #include <settings/json_settings.h>
 #include <wx/string.h>
 
+#include <map>
+#include <memory>
+
 
 enum class DATABASE_SOURCE_TYPE
 {
@@ -54,10 +57,15 @@ struct KICOMMON_API DATABASE_FIELD_MAPPING
     bool        visible_in_chooser; ///< Whether the column is shown by default in the chooser
     bool        show_name;   ///< Whether or not to show the field name as well as its value
     bool        inherit_properties; ///< Whether or not to inherit properties from symbol field
+    nlohmann::json source;          ///< Raw JSON as loaded; untouched keys are written back verbatim
+
+    DATABASE_FIELD_MAPPING();
 
     explicit DATABASE_FIELD_MAPPING( const std::string& aColumn, const std::string& aName,
                                      bool aVisibleOnAdd, bool aVisibleInChooser, bool aShowName,
                                      bool aInheritProperties );
+
+    void SetName( const std::string& aName );
 };
 
 
@@ -69,6 +77,8 @@ struct KICOMMON_API MAPPABLE_SYMBOL_PROPERTIES
     std::string exclude_from_sim;
     std::string exclude_from_bom;
     std::string exclude_from_board;
+
+    bool operator==( const MAPPABLE_SYMBOL_PROPERTIES& aOther ) const = default;
 };
 
 
@@ -96,6 +106,8 @@ struct KICOMMON_API DATABASE_LIB_TABLE
 
     MAPPABLE_SYMBOL_PROPERTIES properties;
     std::vector<DATABASE_FIELD_MAPPING> fields;
+
+    nlohmann::json source;         ///< Raw JSON as loaded; untouched keys are written back verbatim
 };
 
 
@@ -126,6 +138,9 @@ public:
 
     bool m_GloballyUniqueKeys = false;
 
+    std::string m_Name;
+    std::string m_Description;
+
     /// Records the scalars as loaded; runs before a schema migration writes the file back
     void Load() override;
 
@@ -145,20 +160,39 @@ protected:
     wxString getFileExt() const override;
 
 private:
+    static nlohmann::json tableToJson( const DATABASE_LIB_TABLE& aTable );
     /// Missing or mistyped keys load as defaults so one incomplete entry cannot stop the others
     static DATABASE_LIB_TABLE tableFromJson( const nlohmann::json& aEntry );
+    static nlohmann::json fieldToJson( const DATABASE_FIELD_MAPPING& aField );
     static DATABASE_FIELD_MAPPING fieldFromJson( const nlohmann::json& aEntry );
 
     /// Scalar settings as parsed at load, so Store() can tell which ones the caller changed
     struct LOADED_SCALARS
     {
+        std::string             name;
+        std::string             description;
         DATABASE_SOURCE         source{};
         DATABASE_CACHE_SETTINGS cache{};
         bool                    globallyUniqueKeys = false;
     } m_loaded;
-
-    nlohmann::json m_librariesConfig;
 };
+
+
+/**
+ * Loads a database library settings file without allowing the load itself (e.g. a schema
+ * migration) to write back to disk.  Callers must SetReadOnly( false ) around an explicit save.
+ *
+ * @param aLoaded is set to false when the file exists but could not be read; saving such
+ *                settings would replace the file with defaults
+ */
+KICOMMON_API std::unique_ptr<DATABASE_LIB_SETTINGS> LoadDatabaseLibSettingsReadOnly( const wxString& aPath,
+                                                                                     bool* aLoaded = nullptr );
+
+/**
+ * @return a file name without extension for a new settings file, derived from the library name the
+ *         user typed, or a generic name when that leaves nothing usable
+ */
+KICOMMON_API wxString DefaultDatabaseLibFileName( const wxString& aLibName );
 
 /**
  * The lookup used when none is injected, which must never prompt to unlock the keyring.
@@ -185,5 +219,11 @@ KICOMMON_API bool GetDatabasePassword( const DATABASE_SOURCE& aSource, std::stri
  */
 KICOMMON_API void ResolveDatabasePassword( DATABASE_SOURCE& aSource,
                                            const DATABASE_SECRET_LOOKUP& aLookup = nullptr );
+
+/**
+ * Stores the password for the source's DSN login in the system keyring, or removes the entry when
+ * the password is empty.
+ */
+KICOMMON_API bool StoreDatabasePassword( const DATABASE_SOURCE& aSource, const std::string& aPassword );
 
 #endif //KICAD_DATABASE_LIB_SETTINGS_H

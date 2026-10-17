@@ -164,6 +164,9 @@ public:
      */
     bool LastSaveFailed() const { return m_lastSaveFailed; }
 
+    /// @return true if the loaded file has a newer schema version than this build understands
+    bool IsFutureFormat() const { return m_isFutureFormat; }
+
     /**
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
      */

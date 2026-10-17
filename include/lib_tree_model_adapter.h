@@ -333,6 +333,9 @@ public:
     // Allows subclasses to nominate a context menu handler.
     virtual TOOL_INTERACTIVE* GetContextMenuTool() { return nullptr; }
 
+    /// Pinning writes to the project, so trees of libraries outside it must opt out
+    virtual bool CanPinLibraries() const { return true; }
+
     void PinLibrary( LIB_TREE_NODE* aTreeNode );
     void UnpinLibrary( LIB_TREE_NODE* aTreeNode );
 

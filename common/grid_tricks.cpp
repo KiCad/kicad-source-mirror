@@ -273,13 +273,13 @@ void GRID_TRICKS::onGridMotion( wxMouseEvent& aEvent )
     aEvent.Skip();
 
     wxPoint pt  = aEvent.GetPosition();
-    wxPoint pos = m_grid->CalcScrolledPosition( wxPoint( pt.x, pt.y ) );
+    wxPoint pos = m_grid->CalcUnscrolledPosition( wxPoint( pt.x, pt.y ) );
 
     int col = m_grid->XToCol( pos.x );
     int row = m_grid->YToRow( pos.y );
 
     // Empty tooltip if the cell doesn't exist or the column doesn't have tooltips
-    if( ( col == wxNOT_FOUND ) || ( row == wxNOT_FOUND ) || !m_tooltipEnabled[col] )
+    if( col < 0 || row < 0 || static_cast<size_t>( col ) >= m_tooltipEnabled.size() || !m_tooltipEnabled[col] )
     {
         m_grid->GetGridWindow()->SetToolTip( wxS( "" ) );
         return;

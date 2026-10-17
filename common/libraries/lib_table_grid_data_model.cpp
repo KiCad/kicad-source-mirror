@@ -120,8 +120,8 @@ wxString LIB_TABLE_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         if( !r.IsOk() )
             return r.ErrorDescription();
 
-        if( m_adapter && m_adapter->SupportsConfigurationDialog( r.Nickname() ) )
-            return _( "Edit settings" );
+        if( m_adapter && m_adapter->SupportsConfigurationDialog( r ) )
+            return _( "Edit library settings" );
         else if( r.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
             return _( "Open library table" );
 
@@ -175,7 +175,7 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
             return enhanceAttr( m_warningAttr, aRow, aCol, aKind );
         }
 
-        if( m_adapter && m_adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
+        if( m_adapter && m_adapter->SupportsConfigurationDialog( tableRow ) )
         {
             m_editSettingsAttr->IncRef();
             return enhanceAttr( m_editSettingsAttr, aRow, aCol, aKind );

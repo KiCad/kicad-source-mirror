@@ -349,6 +349,7 @@ set( EESCHEMA_WIDGETS
     widgets/sch_search_pane.cpp
     widgets/search_handlers.cpp
     widgets/symbol_filter_combobox.cpp
+    widgets/db_lib_preview_panel.cpp
     widgets/symbol_preview_widget.cpp
     widgets/symbol_tree_pane.cpp
     )

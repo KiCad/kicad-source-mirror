@@ -46,6 +46,17 @@ public:
 
     typedef std::map<std::string, std::any> ROW;
 
+    /// Why a connection attempt failed, as far as the driver's report tells
+    enum class FAILURE
+    {
+        UNKNOWN,
+        LOGIN,       ///< The server rejected the user name or password
+        UNREACHABLE, ///< Nothing answered at the server address, or it refused the connection
+        TIMEOUT,     ///< The server did not answer within the timeout
+        NO_DSN,      ///< The data source name is not configured
+        NO_DRIVER    ///< The driver named by the data source could not be loaded
+    };
+
     DATABASE_CONNECTION( const std::string& aDataSourceName, const std::string& aUsername,
                          const std::string& aPassword, int aTimeoutSeconds = DEFAULT_TIMEOUT,
                          bool aConnectNow = true );
@@ -102,6 +113,40 @@ public:
     bool SelectAll( const std::string& aTable, const std::string& aKey,
                     std::vector<ROW>& aResults );
 
+    /**
+     * Reads the first rows of a table with a forward-only cursor, bypassing the row cache.
+     * @param aTable the name of a table in the database
+     * @param aMaxRows stop fetching after this many rows; zero fetches only the column names
+     * @param aColumns will be filled with the column names in result order
+     * @param aRows will be filled with up to aMaxRows rows
+     * @return true if the query succeeded
+     */
+    bool SelectSample( const std::string& aTable, size_t aMaxRows, std::vector<std::string>& aColumns,
+                       std::vector<ROW>& aRows );
+
+    /**
+     * Lists the tables and views visible through this connection, sorted by name.
+     */
+    bool GetTables( std::vector<std::string>& aTables );
+
+    /**
+     * Lists the columns of a table in catalog order.
+     */
+    bool GetColumns( const std::string& aTable, std::vector<std::string>& aColumns );
+
+    /// A data source configured in the ODBC driver manager
+    struct DATA_SOURCE
+    {
+        std::string name;
+        std::string driver;
+    };
+
+    /// @return the data sources configured in the ODBC driver manager, with the driver each one uses
+    static std::vector<DATA_SOURCE> ListDataSourceDetails();
+
+    /// @return the driver names installed in the ODBC driver manager
+    static std::vector<std::string> ListDrivers();
+
     void ClearCache( const std::string& aTable )
     {
         if( m_cache )
@@ -109,6 +154,12 @@ public:
     }
 
     std::string GetLastError() const { return m_lastError; }
+
+    /// @return the SQLSTATE of the last driver error, or an empty string
+    std::string GetLastState() const { return m_lastState; }
+
+    /// Classifies a driver error from its SQLSTATE, falling back to its text since drivers disagree on states
+    static FAILURE ClassifyFailure( const std::string& aState, const std::string& aMessage );
 
 private:
     void init();
@@ -134,6 +185,7 @@ private:
     std::string m_connectionString;
 
     std::string m_lastError;
+    std::string m_lastState;
 
     std::map<std::string, std::string> m_tables;
 

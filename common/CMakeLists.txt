@@ -289,6 +289,7 @@ set( KICOMMON_SRCS
     widgets/wx_html_report_panel_base.cpp
     widgets/wx_html_report_box.cpp
 
+    database/database_autofill.cpp
     database/database_lib_settings.cpp
 
     design_block.cpp

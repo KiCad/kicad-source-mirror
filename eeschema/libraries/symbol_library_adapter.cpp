@@ -29,6 +29,7 @@
 
 #include <lib_symbol.h>
 #include <libraries/symbol_library_adapter.h>
+#include <sch_io/sch_io_mgr.h>
 
 #include <env_vars.h>
 #include <pgm_base.h>
@@ -440,28 +441,53 @@ std::vector<SUB_LIBRARY> SYMBOL_LIBRARY_ADAPTER::GetSubLibraries( const wxString
 }
 
 
-bool SYMBOL_LIBRARY_ADAPTER::SupportsConfigurationDialog( const wxString& aNickname ) const
+bool SYMBOL_LIBRARY_ADAPTER::SupportsConfigurationDialog( const LIBRARY_TABLE_ROW& aRow ) const
 {
-    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
-        return ( *result )->plugin->SupportsConfigurationDialog();
+    // Queried on every library table repaint, so ask each plugin type only once (UI thread only)
+    static std::map<SCH_IO_MGR::SCH_FILE_T, bool> s_supported;
 
-    return false;
+    SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( aRow.Type() );
+    auto                   it = s_supported.find( type );
+
+    if( it == s_supported.end() )
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( type ) );
+        it = s_supported.emplace( type, plugin && plugin->SupportsConfigurationDialog() ).first;
+    }
+
+    return it->second;
 }
 
 
-int SYMBOL_LIBRARY_ADAPTER::ShowConfigurationDialog( const wxString& aNickname, wxWindow* aParent ) const
+int SYMBOL_LIBRARY_ADAPTER::ShowConfigurationDialog( const LIBRARY_TABLE_ROW& aRow, LIBRARY_TABLE_SCOPE aScope,
+                                                     wxWindow* aParent )
 {
-    std::optional<const LIB_DATA*> optRow = fetchIfLoaded( aNickname );
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::EnumFromStr( aRow.Type() ) ) );
 
-    if( !optRow )
+    if( !plugin || !plugin->SupportsConfigurationDialog() )
         return wxID_CANCEL;
 
-    if( !( *optRow )->plugin->SupportsConfigurationDialog() )
+    plugin->SetLibraryManagerAdapter( this );
+
+    // Resolved like a normal load so a relative URI and ${CWD} in the connection string agree
+    wxString                     path = getUri( &aRow );
+    std::unique_ptr<DIALOG_SHIM> dialog( plugin->CreateConfigurationDialog( aParent, path ) );
+
+    if( !dialog )
         return wxID_CANCEL;
 
-    DIALOG_SHIM* dialog = ( *optRow )->plugin->CreateConfigurationDialog( aParent );
+    int ret = dialog->ShowModal();
 
-    return dialog->ShowModal();
+    if( ret == wxID_OK )
+    {
+        // An edited or new grid row is reloaded when the outer table is applied instead
+        std::optional<LIBRARY_TABLE_ROW*> committed = m_manager.GetRow( Type(), aRow.Nickname(), aScope );
+
+        if( committed && ( *committed )->URI() == aRow.URI() && ( *committed )->Type() == aRow.Type() )
+            ReloadLibraryEntry( aRow.Nickname(), aScope );
+    }
+
+    return ret;
 }
 
 

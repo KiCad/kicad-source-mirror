@@ -34,6 +34,7 @@
 #include <unordered_set>
 
 
+class LIB_ID;
 class LIBRARY_MANAGER_ADAPTER;
 class DATABASE_LIB_SETTINGS;
 struct DATABASE_LIB_TABLE;
@@ -95,21 +96,53 @@ public:
 
     bool SupportsConfigurationDialog() const override { return true; }
 
-    DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent ) override;
+    DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent, const wxString& aLibraryPath ) override;
 
     DATABASE_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
-    bool TestConnection( wxString* aErrorMsg = nullptr );
+    /// @return the symbol name a row is listed under, or empty if the row has no key
+    static wxString SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
+                                      const DATABASE_CONNECTION::ROW& aRow, std::string* aRawKey = nullptr );
 
     /**
      * Opens a connection described by aSettings, expanding ${CWD} in a connection string to the
      * directory holding the settings file.  The result may be disconnected; check IsConnected().
+     *
+     * @param aConnectNow false defers connecting to the caller's Connect(), e.g. on a worker thread
+     * @param aBaseDir replaces the settings file's directory for ${CWD}; used while the file has no path yet
      */
-    static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_LIB_SETTINGS& aSettings );
+    static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
+                                                                  bool aConnectNow = true,
+                                                                  const wxString& aBaseDir = wxEmptyString );
 
-    /// @return the symbol name a row is listed under; aRow must hold the table's key column
-    static wxString SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
-                                      const DATABASE_CONNECTION::ROW& aRow, std::string* aRawKey = nullptr );
+    /// A problem found while previewing, tagged with the setting that caused it
+    struct PREVIEW_ISSUE
+    {
+        enum class FIELD
+        {
+            KEY,          ///< The row as a whole, such as colliding keys or a row that could not be loaded
+            REPEATED_KEY, ///< A key that more than one row has
+            SYMBOLS,      ///< The symbols column
+            PIN_MAP       ///< The pin map column
+        };
+
+        FIELD    field;
+        wxString message;
+    };
+
+    using PREVIEW_ISSUES = std::vector<PREVIEW_ISSUE>;
+
+    /**
+     * Builds symbols from already-fetched rows exactly as the library would name and load them,
+     * without opening a connection.  References into database libraries are not resolved, so a
+     * preview never issues queries beyond the rows it was given.
+     *
+     * @param aLibs resolves the symbols column; may be null for metadata-only symbols
+     * @param aIssues receives per-row problems such as malformed pin maps; may be null
+     */
+    static std::vector<std::unique_ptr<LIB_SYMBOL>>
+    BuildPreviewSymbols( SYMBOL_LIBRARY_ADAPTER* aLibs, const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
+                         const std::vector<DATABASE_CONNECTION::ROW>& aRows, PREVIEW_ISSUES* aIssues );
 
 private:
     typedef std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> TABLE_RESULT_LIST;
@@ -133,6 +166,18 @@ private:
                                                    const DATABASE_CONNECTION::ROW& aRow );
 
     static std::optional<bool> boolFromAny( const std::any& aVal );
+
+    /// Resolves one entry of a row's symbols column through the library adapter
+    LIB_SYMBOL* resolveSourceSymbol( const LIB_ID& aId );
+
+    /// Reports to the preview's issue list when there is one, otherwise to the reporter
+    void reportIssue( PREVIEW_ISSUE::FIELD aField, const wxString& aMessage, SEVERITY aSeverity ) const;
+
+    /// Set on the throwaway instance behind BuildPreviewSymbols()
+    bool m_previewMode = false;
+
+    /// Collects the problems found while building a preview; null outside BuildPreviewSymbols()
+    PREVIEW_ISSUES* m_previewIssues = nullptr;
 
     SYMBOL_LIBRARY_ADAPTER* m_adapter;
 

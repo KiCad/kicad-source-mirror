@@ -207,10 +207,14 @@ public:
     virtual bool SupportsConfigurationDialog() const { return false; }
 
     /**
+     * @param aLibraryPath is the fully expanded path of the library to configure
      * @return a new instance of dialog that configures this plugin, or nullptr if this plugin
      *         does not support a configuration dialog.  Caller takes ownership.
      */
-    virtual DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent ) { return nullptr; }
+    virtual DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent, const wxString& aLibraryPath )
+    {
+        return nullptr;
+    }
 
     virtual void Report( const wxString& aText,
                          SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) const;

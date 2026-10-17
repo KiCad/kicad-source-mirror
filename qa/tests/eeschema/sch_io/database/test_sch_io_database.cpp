@@ -180,4 +180,56 @@ BOOST_AUTO_TEST_CASE( CreateConnectionExpandsCwdAndPrefersConnectionString )
 }
 
 
+/**
+ * The settings editor previews a table by running sampled rows through BuildPreviewSymbols, so its
+ * names must match the ones the library itself lists for that table.
+ */
+BOOST_AUTO_TEST_CASE( PreviewSymbolsMatchCachedNames )
+{
+    LIBRARY_MANAGER        manager;
+    SYMBOL_LIBRARY_ADAPTER adapter( manager );
+
+    SCH_IO_DATABASE plugin;
+    plugin.SetLibraryManagerAdapter( &adapter );
+
+    std::vector<LIB_SYMBOL*> listed;
+    BOOST_REQUIRE_NO_THROW( plugin.EnumerateSymbolLib( listed, wxString( QA_DBLIB_SETTINGS_PATH ) ) );
+
+    std::set<wxString> expected;
+
+    for( LIB_SYMBOL* symbol : listed )
+    {
+        if( symbol->GetName().StartsWith( wxS( "Resistors/" ) ) )
+            expected.insert( symbol->GetName() );
+
+        delete symbol;
+    }
+
+    BOOST_REQUIRE( !expected.empty() );
+
+    const DATABASE_LIB_SETTINGS& settings = *plugin.Settings();
+    auto table = std::find_if( settings.m_Tables.begin(), settings.m_Tables.end(),
+                               []( const DATABASE_LIB_TABLE& aTable )
+                               {
+                                   return aTable.name == "Resistors";
+                               } );
+    BOOST_REQUIRE( table != settings.m_Tables.end() );
+
+    std::unique_ptr<DATABASE_CONNECTION>  conn = SCH_IO_DATABASE::CreateConnection( settings );
+    std::vector<std::string>              columns;
+    std::vector<DATABASE_CONNECTION::ROW> rows;
+    BOOST_REQUIRE( conn->SelectSample( table->table, 100000, columns, rows ) );
+
+    std::set<wxString> previewed;
+
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol :
+         SCH_IO_DATABASE::BuildPreviewSymbols( &adapter, *table, settings.m_GloballyUniqueKeys, rows, nullptr ) )
+    {
+        previewed.insert( symbol->GetName() );
+    }
+
+    BOOST_CHECK( previewed == expected );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

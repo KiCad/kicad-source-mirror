@@ -348,5 +348,8 @@ public:
 
     bool                      m_RescueNeverShow;
 
+    /// Database columns the user mapped to each library role, most recent first, used to autofill
+    std::map<std::string, std::vector<std::string>> m_DatabaseColumnChoices;
+
     wxString                  m_lastSymbolLibDir;
 };

@@ -25,11 +25,18 @@
 
 class LIB_ID;
 class SYMBOL_LIBRARY_ADAPTER;
+class LIB_SYMBOL;
 
 /**
  * Return an HTML page describing a #LIB_ID in a #SYMBOL_LIBRARY_ADAPTER. This is suitable for inclusion
  * in a #HTML_WINDOW (wxHtmlWindow).
  */
 wxString GenerateAliasInfo( SYMBOL_LIBRARY_ADAPTER* aLibs, LIB_ID const& aLibId, int aUnit );
+
+/**
+ * Return an HTML page describing an already loaded symbol, for symbols that do not live in a
+ * library table.
+ */
+wxString GenerateAliasInfo( const LIB_SYMBOL* aSymbol, int aUnit );
 
 #endif // GENERATE_ALIAS_INFO_H
