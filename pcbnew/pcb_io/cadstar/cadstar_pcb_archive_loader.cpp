@@ -2140,12 +2140,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                     if( shape->GetShape() == SHAPE_T::ARC )
                     {
                         TransformArcToPolygon( poly, shape->GetStart(), shape->GetArcMid(), shape->GetEnd(),
-                                               copperWidth, ARC_HIGH_DEF, ERROR_LOC::ERROR_INSIDE );
+                                               copperWidth, pouredZone->GetMaxError(), ERROR_LOC::ERROR_INSIDE );
                     }
                     else
                     {
                         TransformOvalToPolygon( poly, shape->GetStart(), shape->GetEnd(), copperWidth,
-                                                ARC_HIGH_DEF, ERROR_LOC::ERROR_INSIDE );
+                                                pouredZone->GetMaxError(), ERROR_LOC::ERROR_INSIDE );
                     }
 
                     poly.ClearArcs();
@@ -2157,7 +2157,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             {
                 fill = getPolySetFromCadstarShape( csCopper.Shape, -1 );
                 fill.ClearArcs();
-                fill.Inflate( copperWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                fill.Inflate( copperWidth / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, pouredZone->GetMaxError() );
             }
 
             if( pouredZone->HasFilledPolysForLayer( getKiCadLayer( csCopper.LayerID ) ) )
@@ -3053,7 +3053,7 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
     polySet.ClearArcs();
 
     if( aLineThickness > 0 )
-        polySet.Inflate( aLineThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+        polySet.Inflate( aLineThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aContainer->GetMaxError() );
 
 #ifdef DEBUG
     for( int i = 0; i < polySet.OutlineCount(); ++i )
@@ -3760,8 +3760,8 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             [&]( ZONE* aLowerZone, ZONE* aHigherZone ) -> double
             {
                 SHAPE_POLY_SET intersectShape( *aHigherZone->Outline() );
-                intersectShape.Inflate( inflateValue( aLowerZone, aHigherZone ),
-                                        CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                intersectShape.Inflate( inflateValue( aLowerZone, aHigherZone ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                        aLowerZone->GetMaxError() );
 
                 SHAPE_POLY_SET lowerZoneFill( *aLowerZone->GetFilledPolysList( aLayer ) );
                 SHAPE_POLY_SET lowerZoneOutline( *aLowerZone->Outline() );
@@ -3779,10 +3779,12 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
             [&]( ZONE* aZoneA, ZONE* aZoneB ) -> double
             {
                 SHAPE_POLY_SET outLineA( *aZoneA->Outline() );
-                outLineA.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                outLineA.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                  aZoneA->GetMaxError() );
 
                 SHAPE_POLY_SET outLineB( *aZoneA->Outline() );
-                outLineB.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                outLineB.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                  aZoneA->GetMaxError() );
 
                 outLineA.BooleanIntersection( outLineB );
 
