@@ -64,6 +64,9 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxComboBox* m_orientationCtrl;
 		wxStaticText* m_BoardSideLabel;
 		wxChoice* m_BoardSideCtrl;
+		wxStaticText* m_heightLabel;
+		wxTextCtrl* m_heightCtrl;
+		wxStaticText* m_heightUnits;
 		wxCheckBox* m_cbLocked;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;

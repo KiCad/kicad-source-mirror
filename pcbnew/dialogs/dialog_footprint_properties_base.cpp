@@ -105,7 +105,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Position") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 4, 3, 1, 0 );
+	fgSizerPos = new wxFlexGridSizer( 5, 3, 1, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->AddGrowableRow( 2 );
 	fgSizerPos->SetFlexibleDirection( wxBOTH );
@@ -156,6 +156,24 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_BoardSideCtrl = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardSideCtrlNChoices, m_BoardSideCtrlChoices, 0 );
 	m_BoardSideCtrl->SetSelection( 1 );
 	fgSizerPos->Add( m_BoardSideCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+
+	fgSizerPos->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_heightLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_heightLabel->Wrap( -1 );
+	m_heightLabel->SetToolTip( _("Optional overall height specification for the footprint, independent from any 3D models.") );
+
+	fgSizerPos->Add( m_heightLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_heightCtrl = new wxTextCtrl( sbSizer7->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_heightCtrl->SetToolTip( _("Optional overall height specification for the footprint, independent from any 3D models.") );
+
+	fgSizerPos->Add( m_heightCtrl, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_heightUnits = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_heightUnits->Wrap( -1 );
+	fgSizerPos->Add( m_heightUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
 
 
 	sbSizer7->Add( fgSizerPos, 0, wxEXPAND, 5 );
@@ -424,6 +442,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_orientationCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCombobox ), NULL, this );
 	m_orientationCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnText ), NULL, this );
 	m_BoardSideCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
+	m_heightCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnText ), NULL, this );
 	m_cbLocked->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_componentType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
@@ -455,6 +474,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::~DIALOG_FOOTPRINT_PROPERTIES_BASE()
 	m_orientationCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCombobox ), NULL, this );
 	m_orientationCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnText ), NULL, this );
 	m_BoardSideCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
+	m_heightCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnText ), NULL, this );
 	m_cbLocked->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_componentType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_BASE::OnCheckBox ), NULL, this );

@@ -109,6 +109,7 @@ static constexpr int VER_SIM_EXCLUSION = 20260828;
 static constexpr int VER_VIA_STACK = 20260830;
 static constexpr int VER_CUSTOM_PROPERTIES = 20260831;
 static constexpr int VER_DRILL_DRAWINGS = 20260901;
+static constexpr int VER_FOOTPRINT_HEIGHT = 20261017;
 
 // The board format these rules were written against. When SEXPR_BOARD_FILE_VERSION moves past
 // it, ClassifyBoardForDowngrade asserts in debug builds until the new format is covered.
@@ -120,7 +121,7 @@ static constexpr int VER_DRILL_DRAWINGS = 20260901;
 // 3. Otherwise add a VER_ constant above, a BOARD_RULE row that counts and strips the feature,
 //    and a dated row in BOARD_TOKENS or BOARD_VALUES for each new node head or bareword value.
 // 4. Set this constant to the new version.
-static constexpr int BOARD_DOWNGRADE_COVERED = 20260930;
+static constexpr int BOARD_DOWNGRADE_COVERED = 20261017;
 
 
 static bool isEllipse( const BOARD_ITEM* aItem )
@@ -321,6 +322,12 @@ static void dropExtrudedBodiesFp( FOOTPRINT* aFootprint )
 }
 
 
+static void dropFootprintHeightsFp( FOOTPRINT* aFootprint )
+{
+    aFootprint->SetHeight( 0 );
+}
+
+
 static void dropPadSimTypesFp( FOOTPRINT* aFootprint )
 {
     for( PAD* pad : aFootprint->Pads() )
@@ -484,6 +491,27 @@ static void dropExtrudedBodies( BOARD* aBoard )
 {
     for( FOOTPRINT* fp : aBoard->Footprints() )
         dropExtrudedBodiesFp( fp );
+}
+
+
+static int countFootprintHeights( const BOARD* aBoard )
+{
+    int count = 0;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        if( fp->GetHeight() != 0 )
+            count++;
+    }
+
+    return count;
+}
+
+
+static void dropFootprintHeights( BOARD* aBoard )
+{
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+        dropFootprintHeightsFp( fp );
 }
 
 
@@ -2551,6 +2579,9 @@ static std::vector<BOARD_RULE> boardRules()
         { VER_EXTRUDED_BODY, DOWNGRADE_BUCKET::DROP, _( "Extruded 3D bodies" ),
           _( "No equivalent in the target. The 3D body is left out." ),
           countExtrudedBodies, dropExtrudedBodies, dropExtrudedBodiesFp },
+        { VER_FOOTPRINT_HEIGHT, DOWNGRADE_BUCKET::DROP, _( "Footprint overall height" ),
+          _( "No equivalent in the target. The footprint height is left out." ),
+          countFootprintHeights, dropFootprintHeights, dropFootprintHeightsFp },
         { VER_THIEVING, DOWNGRADE_BUCKET::BLOCK, _( "Copper-thieving zones" ),
           _( "A refill in the target would turn the pattern into solid copper." ),
           countThievingZones, nullptr },

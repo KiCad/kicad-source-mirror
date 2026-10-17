@@ -6247,6 +6247,11 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             NeedRIGHT();
             break;
 
+        case T_height:
+            footprint->SetHeight( parseBoardUnits( "footprint height" ) );
+            NeedRIGHT();
+            break;
+
         case T_property:
         {
             NeedSYMBOL();

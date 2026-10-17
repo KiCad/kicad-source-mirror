@@ -164,7 +164,8 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
         m_initialized( false ),
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
         m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
-        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits )
+        m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+        m_height( aParent, m_heightLabel, m_heightCtrl, m_heightUnits )
 {
     SetEvtHandlerEnabled( false );
 
@@ -335,6 +336,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     m_DocCtrl->SetValue( EscapeString( m_footprint->GetLibDescription(), CTX_LINE ) );
     m_KeywordCtrl->SetValue( m_footprint->GetKeywords() );
+
+    if( m_footprint->GetHeight() != 0 )
+        m_height.SetValue( m_footprint->GetHeight() );
+    else
+        m_height.SetValue( wxEmptyString );
 
     // Add the models to the panel
     (void) m_3dPanel->TransferDataToWindow();
@@ -760,6 +766,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
 
     m_footprint->SetLibDescription( UnescapeString( m_DocCtrl->GetValue() ) );
     m_footprint->SetKeywords( m_KeywordCtrl->GetValue() );
+    m_footprint->SetHeight( static_cast<int>( m_height.GetValue() ) );
 
     // Update fields
     if( editingCurrentFootprint )

@@ -238,6 +238,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_privateLayers    = aFootprint.m_privateLayers;
 
     m_3D_Drawings      = aFootprint.m_3D_Drawings;
+    m_height           = aFootprint.m_height;
 
     for( PCB_3D_BODY* body : aFootprint.m_bodies )
         Add( static_cast<PCB_3D_BODY*>( body->Clone() ), ADD_MODE::APPEND );
@@ -582,6 +583,9 @@ void FOOTPRINT::SerializeDefinition( kiapi::board::types::Footprint* aOutput ) c
             jumperGroup->add_pad_names( padName.ToUTF8() );
     }
 
+    if( GetHeight() > 0 )
+        kiapi::common::PackDistance( *aOutput->mutable_height(), GetHeight() );
+
     for( const PCB_FIELD* item : m_fields )
     {
         if( item->IsMandatory() )
@@ -689,6 +693,9 @@ bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aIn
     }
 
     SetPrivateLayers( privateLayers );
+
+    if( int height = kiapi::common::UnpackDistance( aInput.height() ); height > 0 )
+        SetHeight( height  );
 
     // Footprint items
     for( PCB_FIELD* field : m_fields )
@@ -1240,6 +1247,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings      = aOther.m_3D_Drawings;
+    m_height           = aOther.m_height;
     m_libDescription   = aOther.m_libDescription;
     m_keywords         = aOther.m_keywords;
     m_privateLayers    = aOther.m_privateLayers;
@@ -1402,6 +1410,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings   = aOther.m_3D_Drawings;
+    m_height        = aOther.m_height;
 
     for( PCB_3D_BODY* body : aOther.m_bodies )
         Add( static_cast<PCB_3D_BODY*>( body->Clone() ), ADD_MODE::APPEND );
@@ -5518,6 +5527,10 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
                     propertyFields );
+
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Height" ),
+                    &FOOTPRINT::SetHeight, &FOOTPRINT::GetHeight, PROPERTY_DISPLAY::PT_SIZE ),
+                    propertyFields ).SetIsCopyable();
 
         // Note: Also used by DRC engine
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Component Class" ),

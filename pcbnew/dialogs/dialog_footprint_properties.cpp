@@ -60,6 +60,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
         m_orientation( aParent, m_orientationLabel, m_orientationCtrl, nullptr ),
+        m_height( aParent, m_heightLabel, m_heightCtrl, m_heightUnits ),
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
         m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
         m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
@@ -154,6 +155,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_ModPositionY,
         m_orientationCtrl,
         m_BoardSideCtrl,
+        m_heightCtrl,
         m_cbLocked,
         m_componentType,
         m_cbExcludeFromSim,
@@ -289,6 +291,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_cbLocked->SetValue( m_footprint->IsLocked() );
     m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved or oriented on the canvas and can only be "
                                "selected when the 'Locked items' checkbox is checked in the selection filter." ) );
+
+    if( m_footprint->GetHeight() != 0 )
+        m_height.SetValue( m_footprint->GetHeight() );
+    else
+        m_height.SetValue( wxEmptyString );
 
     if( m_footprint->GetAttributes() & FP_THROUGH_HOLE )
         m_componentType->SetSelection( 0 );
@@ -683,6 +690,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     VECTOR2I pos( m_posX.GetValue(), m_posY.GetValue() );
     m_footprint->SetPosition( pos );
     m_footprint->SetLocked( m_cbLocked->GetValue() );
+    m_footprint->SetHeight( static_cast<int>( m_height.GetValue() ) );
 
     int attributes = 0;
 

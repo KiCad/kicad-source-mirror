@@ -134,6 +134,27 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	sbMetadataSizer->Add( fgSizerFPID, 1, wxEXPAND, 10 );
 
+	wxBoxSizer* bHeightSizer;
+	bHeightSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_heightLabel = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_heightLabel->Wrap( -1 );
+	m_heightLabel->SetToolTip( _("Optional overall height specification for the footprint, independent from any 3D models.") );
+
+	bHeightSizer->Add( m_heightLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_heightCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_heightCtrl->SetToolTip( _("Optional overall height specification for the footprint, independent from any 3D models.") );
+
+	bHeightSizer->Add( m_heightCtrl, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+	m_heightUnits = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_heightUnits->Wrap( -1 );
+	bHeightSizer->Add( m_heightUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
+
+
+	sbMetadataSizer->Add( bHeightSizer, 0, wxEXPAND, 5 );
+
 
 	bColumns->Add( sbMetadataSizer, 1, wxEXPAND|wxALL, 5 );
 
@@ -617,6 +638,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_FootprintNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_DocCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_KeywordCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
+	m_heightCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_componentType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnChoice ), NULL, this );
 	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_boardOnly->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
@@ -646,6 +668,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDIT
 	m_FootprintNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_DocCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_KeywordCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
+	m_heightCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnText ), NULL, this );
 	m_componentType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnChoice ), NULL, this );
 	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );
 	m_boardOnly->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnCheckBox ), NULL, this );

@@ -58,6 +58,9 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DocCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
+		wxStaticText* m_heightLabel;
+		wxTextCtrl* m_heightCtrl;
+		wxStaticText* m_heightUnits;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
 		wxCheckBox* m_cbExcludeFromSim;

@@ -430,6 +430,15 @@ public:
     PCB_3D_BODY&       EnsureBody();
     void               ClearBody();
 
+    /**
+     * The overall height of the footprint, or 0 if not specified.  This is independent of any
+     * individual 3D body / 3D model on a footprint.  It is used for IDF export when there isn't an
+     * explicit extruded body configured, and can also be used for custom rules and perhaps more
+     * things in the future.
+     */
+    int  GetHeight() const { return m_height; }
+    void SetHeight( int aHeight ) { m_height = aHeight; }
+
     // LIB_TREE_ITEM interface
     LIB_ID GetLIB_ID() const override { return m_fpid; }
     wxString GetName() const override { return m_fpid.GetLibItemName(); }
@@ -1496,6 +1505,7 @@ private:
     KIID            m_link;              // Temporary logical link used during editing
     std::deque<PCB_3D_BODY*> m_bodies; // 3D bodies (extruded or model), owned by pointer
     std::vector<FP_3DMODEL> m_3D_Drawings;       // 3D models.
+    int             m_height = 0;
 
     wxArrayString*          m_initial_comments;  // s-expression comments in the footprint,
                                                  //   lazily allocated only if needed for speed

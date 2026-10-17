@@ -85,6 +85,7 @@ private:
     UNIT_BINDER                      m_posX;
     UNIT_BINDER                      m_posY;
     UNIT_BINDER                      m_orientation;
+    UNIT_BINDER                      m_height;
 
     UNIT_BINDER                      m_netClearance;
     UNIT_BINDER                      m_solderMask;

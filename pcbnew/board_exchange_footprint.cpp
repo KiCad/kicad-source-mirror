@@ -250,6 +250,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     aNew->SetUuid( aExisting->m_Uuid );
     aNew->Reference().SetUuid( aExisting->Reference().m_Uuid );
     aNew->Value().SetUuid( aExisting->Value().m_Uuid );
+    aNew->SetHeight( aExisting->GetHeight() );
 
     std::vector<PAD*> oldPads;
     oldPads.reserve( aExisting->Pads().size() );

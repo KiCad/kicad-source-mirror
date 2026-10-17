@@ -1550,6 +1550,10 @@ message Footprint
   repeated google.protobuf.Any items = 11;
 
   JumperSettings jumpers = 12;
+
+  // Overall height of the footprint above the board surface (ignored if <= 0)
+  // Since: 11.0
+  kiapi.common.types.Distance height = 13;
 }
 
 // An instance of a footprint on a board

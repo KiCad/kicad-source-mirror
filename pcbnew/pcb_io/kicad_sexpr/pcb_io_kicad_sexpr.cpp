@@ -1486,6 +1486,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     if( !aFootprint->GetKeywords().IsEmpty() )
         m_out->Print( "(tags %s)", m_out->Quotew( aFootprint->GetKeywords() ).c_str() );
 
+    if( aFootprint->GetHeight() != 0 )
+        m_out->Print( "(height %s)", formatInternalUnits( aFootprint->GetHeight() ).c_str() );
+
     for( const PCB_FIELD* field : aFootprint->GetFields() )
     {
         if( !field )

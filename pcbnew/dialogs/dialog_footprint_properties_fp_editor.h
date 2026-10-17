@@ -104,6 +104,7 @@ private:
     UNIT_BINDER                m_netClearance;
     UNIT_BINDER                m_solderMask;
     MARGIN_OFFSET_BINDER       m_solderPaste;
+    UNIT_BINDER                m_height;
 
     wxControl*                 m_delayedFocusCtrl;
     NOTEBOOK_PAGES             m_delayedFocusPage;
