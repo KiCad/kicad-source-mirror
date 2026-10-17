@@ -311,7 +311,7 @@ public:
     {
         LINECODE_ID ID;
         wxString    Name;
-        long        Width;
+        long        Width = UNDEFINED_VALUE;
         LINESTYLE   Style = LINESTYLE::SOLID;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -320,9 +320,9 @@ public:
 
     struct HATCH : PARSER
     {
-        long Step;
-        long LineWidth;
-        long OrientAngle; ///< 1/1000 of a Degree
+        long Step = UNDEFINED_VALUE;
+        long LineWidth = UNDEFINED_VALUE;
+        long OrientAngle = UNDEFINED_VALUE; ///< 1/1000 of a Degree
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -345,12 +345,9 @@ public:
     struct FONT : PARSER
     {
         wxString Name  = wxT( "CADSTAR" );
-        long Modifier1 = FONT_NORMAL; ///< It seems this is related to weight. 400=Normal, 700=Bold.
-        long Modifier2 = 0;           ///< It seems this is always 0 regardless of settings
-        bool KerningPairs = false;    ///< From CADSTAR Help: "Kerning Pairs is for causing the
-                                      ///< system to automatically reduce the spacing between
-                                      ///< certain pairs of characters in order to improve the
-                                      ///< appearance of the text".
+        long Modifier1 = FONT_NORMAL;       ///< It seems this is related to weight. 400=Normal, 700=Bold.
+        long Modifier2 = 0;                 ///< It seems this is always 0 regardless of settings
+        bool KerningPairs = false;
         bool Italic = false;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -361,11 +358,12 @@ public:
     {
         TEXTCODE_ID ID;
         wxString    Name;
-        long        LineWidth;
-        long        Height;
-        long        Width; ///< Defaults to 0 if using system fonts or, if using CADSTAR font, default to
-                           ///< equal height (1:1 aspect ratio). Allows for system fonts to be rendered in
-                           ///< a different aspect ratio.
+        long        LineWidth = UNDEFINED_VALUE;
+        long        Height = UNDEFINED_VALUE;
+        long        Width = UNDEFINED_VALUE;      ///< Defaults to 0 if using system fonts or, if using CADSTAR
+                                                  ///<   font, defaults to equal height (1:1 aspect ratio). Allows
+                                                  ///<   for system fonts to be rendered in a different aspect
+                                                  ///<   ratio.
         FONT        Font;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -375,10 +373,10 @@ public:
     struct ROUTEREASSIGN : PARSER
     {
         LAYER_ID LayerID;
-        long     OptimalWidth;
-        long     MinWidth;
-        long     MaxWidth;
-        long     NeckedWidth;
+        long     OptimalWidth = UNDEFINED_VALUE;
+        long     MinWidth = UNDEFINED_VALUE;
+        long     MaxWidth = UNDEFINED_VALUE;
+        long     NeckedWidth = UNDEFINED_VALUE;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -388,10 +386,10 @@ public:
     {
         ROUTECODE_ID ID;
         wxString     Name;
-        long         OptimalWidth;
-        long         MinWidth;
-        long         MaxWidth;
-        long         NeckedWidth;
+        long         OptimalWidth = UNDEFINED_VALUE;
+        long         MinWidth = UNDEFINED_VALUE;
+        long         MaxWidth = UNDEFINED_VALUE;
+        long         NeckedWidth = UNDEFINED_VALUE;
 
         std::vector<ROUTEREASSIGN> RouteReassigns;
 
@@ -549,10 +547,10 @@ public:
     {
         GRID_TYPE Type;
         wxString  Name;
-        long      Param1; ///< Either Units or X step, depending on Type (see GRID_TYPE for
-                          ///< more details)
-        long      Param2; ///< Either Divisor or Y step, depending on Type (see GRID_TYPE for
-                          ///< more details)
+        long      Param1 = UNDEFINED_VALUE;    ///< Either Units or X step, depending on Type (see
+                                               ///<   GRID_TYPE for more details)
+        long      Param2 = UNDEFINED_VALUE;    ///< Either Divisor or Y step, depending on Type (see
+                                               ///<   GRID_TYPE for more details)
 
         static bool IsGrid( XNODE* aNode );
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
