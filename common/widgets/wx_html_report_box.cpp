@@ -97,8 +97,7 @@ wxString WX_HTML_REPORT_BOX::generateHtml( const wxString& aLine )
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     int    additionalLineSpacing = KiROUND( font.GetPixelSize().y * 0.6 );
 
-    return wxString::Format( wxT( "<img align=texttop height=%d width=0 src=#>%s<br>" ),
-                             additionalLineSpacing, aLine );
+    return wxString::Format( wxT( "%s<img align=texttop height=%d width=0 src=#><br>" ), aLine, additionalLineSpacing );
 }
 
 
