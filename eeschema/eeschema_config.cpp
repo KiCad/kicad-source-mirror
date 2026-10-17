@@ -22,6 +22,7 @@
 
 #include <confirm.h>
 #include <dialogs/dialog_schematic_setup.h>
+#include <dialogs/dialog_erc.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
 #include <dialogs/panel_base_display_options.h>
@@ -180,6 +181,9 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         RefreshOperatingPointDisplay();
         GetCanvas()->Refresh();
+
+        if( DIALOG_ERC* ercDialog = GetErcDialog() )
+            ercDialog->UpdateData();
     }
 }
 
