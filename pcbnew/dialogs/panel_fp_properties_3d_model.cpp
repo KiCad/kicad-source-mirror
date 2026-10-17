@@ -157,6 +157,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     m_modelsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     Bind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
     Bind( wxEVT_SIZE, &PANEL_FP_PROPERTIES_3D_MODEL::onSize, this );
+    m_splitter1->Bind( wxEVT_SPLITTER_SASH_POS_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::onSashPositionChanging, this );
     aParent->Bind( wxEVT_NOTEBOOK_PAGE_CHANGED, &PANEL_FP_PROPERTIES_3D_MODEL::onNotebookPageChanged, this );
     m_parentDialog->Bind( wxEVT_ACTIVATE, &PANEL_FP_PROPERTIES_3D_MODEL::onDialogActivateEvent, this );
 
@@ -179,6 +180,7 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
     // Unbind OnShowEvent to prevent unnecessary event handling.
     Unbind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
     Unbind( wxEVT_SIZE, &PANEL_FP_PROPERTIES_3D_MODEL::onSize, this );
+    m_splitter1->Unbind( wxEVT_SPLITTER_SASH_POS_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::onSashPositionChanging, this );
     GetParent()->Unbind( wxEVT_NOTEBOOK_PAGE_CHANGED, &PANEL_FP_PROPERTIES_3D_MODEL::onNotebookPageChanged, this );
 
     m_componentHeightCtrl->Unbind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
@@ -909,6 +911,9 @@ void PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent( wxShowEvent& aEvent )
 {
     postCustomPanelShownEventWithPredicate( static_cast<int>( aEvent.IsShown() ) );
     aEvent.Skip();
+
+    if( aEvent.IsShown() )
+        CallAfter( [this] { setDefaultSashPosition(); } );
 }
 
 
@@ -919,11 +924,21 @@ void PANEL_FP_PROPERTIES_3D_MODEL::onSize( wxSizeEvent& aEvent )
 }
 
 
+void PANEL_FP_PROPERTIES_3D_MODEL::onSashPositionChanging( wxSplitterEvent& aEvent )
+{
+    m_userSetSashPosition = true;
+    aEvent.Skip();
+}
+
+
 void PANEL_FP_PROPERTIES_3D_MODEL::setDefaultSashPosition()
 {
+    if( !m_splitter1->IsSplit() || m_userSetSashPosition )
+        return;
+
     const int page = GetSize().y;
 
-    if( m_sashPositioned || page <= 0 || !m_splitter1->IsSplit() )
+    if( page <= 0 )
         return;
 
     const int rowHeight = m_modelsGrid->GetDefaultRowSize();
@@ -932,17 +947,12 @@ void PANEL_FP_PROPERTIES_3D_MODEL::setDefaultSashPosition()
     const int maxGrid = std::max( minGrid, page / 3 );
     const int grid = std::clamp( m_modelsGrid->GetNumberRows() * rowHeight + chrome, minGrid, maxGrid );
 
-    // Everything else in the upper pane is fixed height, so the sash is that plus the grid.
-    m_modelsGrid->SetMinSize( wxSize( -1, minGrid ) );
-    const int sash = m_upperPanel->GetSizer()->GetMinSize().y - minGrid + grid;
+    m_modelsGrid->SetMinSize( wxSize( -1, grid ) );
+    const int content = m_upperPanel->GetSizer()->CalcMin().y;
+    const int minPane = m_splitter1->GetMinimumPaneSize();
 
-    // An early layout pass reports a page far shorter than the final one.  Wait for a size
-    // that leaves the preview a usable pane before locking the split in.
-    if( page - sash < m_splitter1->GetMinimumPaneSize() )
-        return;
-
-    m_splitter1->SetSashPosition( sash );
-    m_sashPositioned = true;
+    // Prevent collapsing part of the page when the window height is too small
+    m_splitter1->SetSashPosition( std::max( std::min( content, page - minPane ), minPane ) );
 }
 
 
@@ -961,8 +971,14 @@ void PANEL_FP_PROPERTIES_3D_MODEL::onNotebookPageChanged( wxBookCtrlEvent& aEven
     {
         // Native notebooks do not consistently emit show events when hiding their pages.
         const int selected = aEvent.GetSelection();
-        postCustomPanelShownEventWithPredicate( selected >= 0
-                && selected < (int) notebook->GetPageCount() && notebook->GetPage( selected ) == this );
+        bool      isSelected = selected >= 0
+                                    && selected < static_cast<int>( notebook->GetPageCount() )
+                                    && notebook->GetPage( selected ) == this;
+
+        postCustomPanelShownEventWithPredicate( isSelected );
+
+        if( isSelected )
+            CallAfter( [this] { setDefaultSashPosition(); } );
     }
 
     aEvent.Skip();
