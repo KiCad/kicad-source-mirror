@@ -3782,7 +3782,7 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
                 outLineA.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                   aZoneA->GetMaxError() );
 
-                SHAPE_POLY_SET outLineB( *aZoneA->Outline() );
+                SHAPE_POLY_SET outLineB( *aZoneB->Outline() );
                 outLineB.Inflate( inflateValue( aZoneA, aZoneB ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
                                   aZoneA->GetMaxError() );
 
