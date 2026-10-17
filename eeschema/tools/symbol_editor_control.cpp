@@ -749,7 +749,7 @@ int SYMBOL_EDITOR_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
     renderSettings->m_ShowPinsElectricalType = !renderSettings->m_ShowPinsElectricalType;
 
     // Update canvas
-    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
 
     return 0;
@@ -762,7 +762,7 @@ int SYMBOL_EDITOR_CONTROL::ShowPinNumbers( const TOOL_EVENT& aEvent )
     renderSettings->m_ShowPinNumbers = !renderSettings->m_ShowPinNumbers;
 
     // Update canvas
-    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
 
     return 0;
@@ -791,10 +791,9 @@ int SYMBOL_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
     SYMBOL_EDITOR_SETTINGS* cfg = m_frame->libeditconfig();
     cfg->m_ShowHiddenPins = !cfg->m_ShowHiddenPins;
 
-    getEditFrame<SYMBOL_EDIT_FRAME>()->GetRenderSettings()->m_ShowHiddenPins =
-            cfg->m_ShowHiddenPins;
+    getEditFrame<SYMBOL_EDIT_FRAME>()->GetRenderSettings()->m_ShowHiddenPins = cfg->m_ShowHiddenPins;
 
-    getView()->UpdateAllItems( KIGFX::REPAINT );
+    getView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
     return 0;
 }
@@ -810,7 +809,7 @@ int SYMBOL_EDITOR_CONTROL::ToggleHiddenFields( const TOOL_EVENT& aEvent )
 
     getEditFrame<SYMBOL_EDIT_FRAME>()->GetRenderSettings()->m_ShowHiddenFields = cfg->m_ShowHiddenFields;
 
-    getView()->UpdateAllItems( KIGFX::REPAINT );
+    getView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
     return 0;
 }
@@ -826,7 +825,7 @@ int SYMBOL_EDITOR_CONTROL::TogglePinAltIcons( const TOOL_EVENT& aEvent )
 
     m_frame->GetRenderSettings()->m_ShowPinAltIcons = cfg.m_ShowPinAltIcons;
 
-    getView()->UpdateAllItems( KIGFX::REPAINT );
+    getView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
     return 0;
 }

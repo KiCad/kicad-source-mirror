@@ -162,7 +162,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         GetRenderSettings()->SetGapLengthRatio( Schematic().Settings().m_DashedLineGapRatio );
 
         GetCanvas()->GetView()->MarkDirty();
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
 
         std::map<wxString, std::vector<wxString>> newAliases = Prj().GetProjectFile().m_BusAliases;
 
