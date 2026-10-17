@@ -1803,7 +1803,7 @@ void CADSTAR_ARCHIVE_PARSER::PART::DEFINITION::GATE::Parse( XNODE* aNode, PARSER
     ID        = GetXmlAttributeIDString( aNode, 0 );
     Name      = GetXmlAttributeIDString( aNode, 1 );
     Alternate = GetXmlAttributeIDString( aNode, 2 );
-    PinCount  = GetXmlAttributeIDLong( aNode, 3 );
+    PinCount  = GetXmlAttributeIDLong( aNode, 3, true /* is required */ );
 
     CheckNoChildNodes( aNode );
 }
@@ -2638,8 +2638,7 @@ wxString CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDString( XNODE* aNode, unsigned
 }
 
 
-long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID,
-                                                    bool aIsRequired )
+long CADSTAR_ARCHIVE_PARSER::GetXmlAttributeIDLong( XNODE* aNode, unsigned int aID, bool aIsRequired )
 {
     long retVal;
     bool success = GetXmlAttributeIDString( aNode, aID, aIsRequired ).ToLong( &retVal );

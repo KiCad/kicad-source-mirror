@@ -695,17 +695,17 @@ public:
 
     enum class ATTRUSAGE
     {
-        BOTH,      ///< From CADSTAR Help: Assigned to both Schematic symbols and PCB components,
-                   ///< and displayed on Schematic and PCB designs.
-        COMPONENT, ///< From CADSTAR Help: Assigned to PCB components and displayed on PCB designs
-        PART_DEFINITION, ///< From CADSTAR Help: Assigned to Parts library Definitions and displayed
-                         ///< by the Library searcher
-        PART_LIBRARY,    ///< From CADSTAR Help: Only used by non-Cadstar applications
-        SYMBOL,          ///< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
-                         ///< Schematic Designs
-        UNDEFINED ///< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
-                  ///< that the attributes that fall under this category are the ones associated
-                  ///< with the design itself (i.e. not inherited from the library)
+        BOTH,              ///< From CADSTAR Help: Assigned to both Schematic symbols and PCB components,
+                           ///< and displayed on Schematic and PCB designs.
+        COMPONENT,         ///< From CADSTAR Help: Assigned to PCB components and displayed on PCB designs
+        PART_DEFINITION,   ///< From CADSTAR Help: Assigned to Parts library Definitions and displayed
+                           ///< by the Library searcher
+        PART_LIBRARY,      ///< From CADSTAR Help: Only used by non-Cadstar applications
+        SYMBOL,            ///< From CADSTAR Help: Assigned to Schematic Symbols and displayed on
+                           ///< Schematic Designs
+        UNDEFINED          ///< Note: It seems that some attribute have no "ATTRUSAGE" defined. It appears
+                           ///< that the attributes that fall under this category are the ones associated
+                           ///< with the design itself (i.e. not inherited from the library)
     };
 
 
@@ -717,17 +717,18 @@ public:
         long          OrientAngle = 0;
         bool          Mirror      = false;
         bool          Fixed       = false;
-        JUSTIFICATION Justification =
-                JUSTIFICATION::LEFT; ///< Note: Justification has no effect on single lines of text
-        ALIGNMENT Alignment = ALIGNMENT::
-                NO_ALIGNMENT; ///< In CADSTAR The default alignment for a TEXT object (when
-                              ///< "(No Alignment()" is selected) Bottom Left of the *first line*.
-                              ///< Note that this is different from BOTTOM_LEFT (which is bottom
-                              ///< left of the whole text block)
+        JUSTIFICATION Justification = JUSTIFICATION::LEFT;   ///< Note: Justification has no effect on single
+                                                             ///<   lines of text.
+        ALIGNMENT     Alignment = ALIGNMENT:: NO_ALIGNMENT;  ///< In CADSTAR The default alignment for a TEXT
+                                                             ///<   object (when "(No Alignment()" is selected)
+                                                             ///<   Bottom Left of the *first line*.
+                                                             ///<   Note: this is different from BOTTOM_LEFT,
+                                                             ///<   which is bottom left of the whole text block.
 
         void         ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
         bool         ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
-        virtual void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -755,10 +756,10 @@ public:
         };
 
         ATTRIBUTE_ID ID;
-        wxString     Name; ///< Parenthesis aren't permitted in user attributes in CADSTAR. Any
-                           ///< Attributes in Parenthesis indicate an internal CADSTAR attribute
-                           ///< Examples: "(PartDescription)" "(PartDefinitionNameStem)",etc.
-                           ///TODO: create a list of all CADSTAR internal attribute names.
+        wxString     Name;     ///< Parenthesis aren't permitted in user attributes in CADSTAR. Any
+                               ///<   Attributes in Parenthesis indicate an internal CADSTAR attribute
+                               ///<   Examples: "(PartDescription)" "(PartDefinitionNameStem)",etc.
+                               ///<   TODO: create a list of all CADSTAR internal attribute names.
         ATTROWNER AttributeOwner = ATTROWNER::ALL_ITEMS;
         ATTRUSAGE AttributeUsage = ATTRUSAGE::UNDEFINED;
         bool      NoTransfer     = false; ///< True="All Design Types", False="Current Design Type"
@@ -863,9 +864,9 @@ public:
     {
         REUSEBLOCK_ID ID;
         wxString      Name;
-        wxString FileName; ///< Filename of the reuse block (usually a .pcb). Used for reloading
-        bool     Mirror      = false;
-        long     OrientAngle = 0;
+        wxString      FileName; ///< Filename of the reuse block (usually a .pcb). Used for reloading
+        bool          Mirror      = false;
+        long          OrientAngle = 0;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -877,10 +878,10 @@ public:
     struct REUSEBLOCKREF : PARSER
     {
         REUSEBLOCK_ID ReuseBlockID = wxEmptyString;
-        wxString ItemReference = wxEmptyString; ///< For Components, this references the designator
-                                                ///< in the reuse file.
-                                                ///< For net elements (such as vias, routes, etc.),
-                                                ///< coppers and templates, this parameter is blank.
+        wxString      ItemReference = wxEmptyString; ///< For Components, this references the designator
+                                                     ///<   in the reuse file.
+                                                     ///<   For net elements (such as vias, routes, etc.),
+                                                     ///<   coppers and templates, this parameter is blank.
 
         bool IsEmpty(); ///< Determines if this is empty (i.e. no design reuse associated)
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -903,12 +904,12 @@ public:
 
     struct FIGURE : PARSER
     {
-        FIGURE_ID   ID;
-        LINECODE_ID LineCodeID;
-        LAYER_ID    LayerID;
-        SHAPE       Shape; ///< Uses the component's coordinate frame if within a component
-                           ///< definition, otherwise uses the design's coordinate frame.
-        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
+        FIGURE_ID     ID;
+        LINECODE_ID   LineCodeID;
+        LAYER_ID      LayerID;
+        SHAPE         Shape;                      ///< Uses the component's coordinate frame if within a component
+                                                  ///<   definition, otherwise uses the design's coordinate frame.
+        GROUP_ID      GroupID = wxEmptyString;    ///< If not empty, this FIGURE is part of a group
         REUSEBLOCKREF ReuseBlockRef;
         SWAP_RULE     SwapRule = SWAP_RULE::BOTH; ///< Only applicable to Figures in Components
         bool          Fixed    = false;
@@ -931,11 +932,11 @@ public:
         SWAP_RULE     SwapRule      = SWAP_RULE::BOTH;
         JUSTIFICATION Justification = JUSTIFICATION::LEFT;     ///< Note: has no effect on single lines of text
         ALIGNMENT     Alignment     = ALIGNMENT::NO_ALIGNMENT; ///< In CADSTAR The default alignment for a TEXT object
-                                                               ///< (when "(No Alignment)" is selected) Bottom Left
-                                                               ///< of the *first line*.
-                                                               ///< Note that this is different from BOTTOM_LEFT
-                                                               ///< (which is bottom left of the whole text block)
-        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
+                                                               ///<   (when "(No Alignment)" is selected) Bottom Left
+                                                               ///<   of the *first line*.
+                                                               ///<   Note: this is different from BOTTOM_LEFT
+                                                               ///<   (which is bottom left of the whole text block)
+        GROUP_ID      GroupID = wxEmptyString;                 ///< If not empty, this FIGURE is part of a group
         REUSEBLOCKREF ReuseBlockRef;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
@@ -946,28 +947,27 @@ public:
     struct SYMDEF : PARSER
     {
         SYMDEF_ID ID;
-        wxString  ReferenceName; ///< This is the name which identifies the symbol in the library
-                                 ///< Multiple components may exist with the same ReferenceName.
-        wxString Alternate;      ///< This is in addition to ReferenceName. It allows defining
-                                 ///< different versions, views etc. of the same basic symbol.
-        POINT Origin;            ///< Origin of the component (this is used as the reference point
-                                 ///< when placing the component in the design)
-        bool Stub = false;       ///< When the CADSTAR Archive file is exported without the
-                                 ///< component library, if components on the board are still
-                                 ///< exported, the Reference and Alternate names will still be
-                                 ///< exported but the content is replaced with a "STUB" atom,
-                                 ///< requiring access to the original library for component
-                                 ///< definition.
-        long Version = UNDEFINED_VALUE; ///< Version is a sequential integer number to identify
-                                        ///< discrepancies between the library and the design.
+        wxString  ReferenceName;             ///< This is the name which identifies the symbol in the library.
+                                             ///<   Multiple components may exist with the same ReferenceName.
+        wxString  Alternate;                 ///< This is in addition to ReferenceName. It allows defining
+                                             ///<   different versions, views etc. of the same basic symbol.
+        POINT     Origin;                    ///< Origin of the component (this is used as the reference point
+                                             ///<   when placing the component in the design).
+        bool      Stub = false;              ///< When the CADSTAR Archive file is exported without the
+                                             ///<   component library, if components on the board are still
+                                             ///<   exported, the Reference and Alternate names will still be
+                                             ///<   exported but the content is replaced with a "STUB" atom,
+                                             ///<   requiring access to the original library for component
+                                             ///<   definition.
+        long      Version = UNDEFINED_VALUE; ///< Version is a sequential integer number to identify
+                                             ///<   discrepancies between the library and the design.
 
-        std::map<FIGURE_ID, FIGURE>           Figures;
-        std::map<TEXT_ID, TEXT>               Texts;
-        std::map<ATTRIBUTE_ID, TEXT_LOCATION> TextLocations;     ///< This contains location of
-                                                                 ///< any attributes, including
-                                                                 ///< designator position
-        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< These attributes might also
-                                                                 ///< have a location
+        std::map<FIGURE_ID, FIGURE>             Figures;
+        std::map<TEXT_ID, TEXT>                 Texts;
+        std::map<ATTRIBUTE_ID, TEXT_LOCATION>   TextLocations;     ///< This contains location of any attributes,
+                                                                   ///<   including designator position.
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;   ///< These attributes might also have a
+                                                                   ///<   location.
 
         wxString BuildLibName() const;
         void ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
@@ -983,10 +983,10 @@ public:
         {
             struct GATE : PARSER ///< "GATEDEFINITION" node name
             {
-                GATE_ID  ID;        ///< Usually "A", "B", "C", etc.
-                wxString Name;      ///< Symbol name in the symbol library
-                wxString Alternate; ///< Symbol alternate name in the symbol library
-                long     PinCount;  ///< Number of pins (terminals) in the symbol
+                GATE_ID  ID;                          ///< Usually "A", "B", "C", etc.
+                wxString Name;                        ///< Symbol name in the symbol library
+                wxString Alternate;                   ///< Symbol alternate name in the symbol library
+                long     PinCount = UNDEFINED_VALUE;  ///< Number of pins (terminals) in the symbol
 
                 void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
@@ -996,46 +996,37 @@ public:
             {
                 PART_DEFINITION_PIN_ID ID = UNDEFINED_VALUE;
 
-                wxString Identifier = wxEmptyString;      ///< This should match a pad identifier
-                                                          ///< in the component footprint
-                                                          ///< subnode="PINIDENTIFIER". It is
-                                                          ///< assumed that this could be empty in
-                                                          ///< earlier versions of CADSTAR
-                wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
-                                                          ///< displayed will be Identifier
-                                                          ///< (subnode="PINNAME")
-                                                          ///< This seems to be equivalent to "Pin
-                                                          ///< Number" in KiCad.
-                wxString Label = wxEmptyString;           ///< This Can be empty (subnode=
-                                                          ///< "PINLABEL")
-                                                          ///< From CADSTAR Help: "Pin
-                                                          ///< Labels are an optional replacement
-                                                          ///< for the free text sometimes placed
-                                                          ///< in schematic symbols. Using Pin
-                                                          ///< Labels instead has the advantage of
-                                                          ///< associating each piece of label
-                                                          ///< text with a particular pin. This
-                                                          ///< means that the text remains
-                                                          ///< correctly placed after any Gate and
-                                                          ///< Pin Swaps are Back Annotated to the
-                                                          ///< Schematic design."
-                                                          ///< This seems to be equivalent to "Pin
-                                                          ///< Name" in KiCad.
-                wxString Signal = wxEmptyString;          ///< Usually for Power/Ground pins,
-                                                          ///< (subnode="PINSIGNAL")
-                GATE_ID     TerminalGate;                 ///< (subnode="PINTERM", param0)
-                TERMINAL_ID TerminalPin;                  ///< (subnode="PINTERM", param1)
+                wxString    Identifier;       ///< This should match a pad identifier in the component footprint.
+                                              ///<   It is assumed that this could be empty in earlier versions
+                                              ///<   of CADSTAR.
+                                              ///<   subnode="PINIDENTIFIER"
+                wxString    Name;             ///< Can be empty. If empty the pin name displayed will be
+                                              ///<   Identifier.  This seems to be equivalent to "Pin Number" in
+                                              ///<   KiCad.
+                                              ///<   subnode="PINNAME"
+                wxString    Label;            ///< Can be empty.  From CADSTAR Help: "Pin Labels are an optional
+                                              ///<   replacement for the free text sometimes placed in schematic
+                                              ///<   symbols.  Using Pin Labels instead has the advantage of
+                                              ///<   associating each piece of label text with a particular pin.
+                                              ///<   This means that the text remains correctly placed after any
+                                              ///<   Gate and Pin Swaps are Back Annotated to the Schematic
+                                              ///<   design."  This seems to be equivalent to "Pin Name" in KiCad.
+                                              ///<   subnode="PINLABEL"
+                wxString    Signal;           ///< Usually for Power/Ground pins
+                                              ///<   subnode="PINSIGNAL"
+                GATE_ID     TerminalGate;     ///< (subnode="PINTERM", param0)
+                TERMINAL_ID TerminalPin;      ///< (subnode="PINTERM", param1)
 
                 CADSTAR_PIN_TYPE Type = CADSTAR_PIN_TYPE::UNCOMMITTED; ///< subnode="PINTYPE"
 
-                long Load = UNDEFINED_VALUE;              ///< The electrical current expected on
-                                                          ///< the pin (It is unclear what the units
-                                                          ///< are, but only accepted values are
-                                                          ///< integers) subnode ="PINLOAD"
+                long        Load = UNDEFINED_VALUE;       ///< The electrical current expected on the pin (it
+                                                          ///<   is unclear what the units are, but only accepted
+                                                          ///<   values are integers).
+                                                          ///<   subnode="PINLOAD"
                 CADSTAR_PIN_POSITION Position =
-                    CADSTAR_PIN_POSITION::TOP_RIGHT; ///< The pin names will use these positions
-                                                     ///< when the symbol is added to a design
-                                                     ///< subnode="PINPOSITION"
+                    CADSTAR_PIN_POSITION::TOP_RIGHT;      ///< The pin names will use these positions when the
+                                                          ///<   symbol is added to a design.
+                                                          ///<   subnode="PINPOSITION"
 
                 void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
@@ -1043,9 +1034,8 @@ public:
 
             struct PIN_EQUIVALENCE : PARSER ///< "PINEQUIVALENCE" Node name
             {
-                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< All the pins in this vector are
-                                                            ///< equivalent and can be swapped with
-                                                            ///< each other
+                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< All the pins in this vector are equivalent and
+                                                            ///<   can be swapped with each other
 
                 void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
@@ -1053,8 +1043,7 @@ public:
 
             struct SWAP_GATE : PARSER ///< "SWAPGATE" Node name (represents an "Element")
             {
-                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< The pins in this vector
-                                                            ///< describe a "gate"
+                std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< The pins in this vector describe a "gate"
 
                 void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
@@ -1062,49 +1051,44 @@ public:
 
             struct SWAP_GROUP : PARSER
             {
-                wxString GateName =
-                        wxEmptyString; ///< Optional. If not empty, should match the Name
-                                       ///< attribute of one of the gates defined in the
-                                       ///< part definition
+                wxString GateName;                ///< Optional. If not empty, should match the Name attribute of
+                                                  ///<   one of the gates defined in the part definition.
 
-                bool External = false; ///< Determines if this swap group is external (and internal)
-                                       ///< or internal only. External Gate swapping allows Gates on
-                                       ///< different components with the same Part Definition to
-                                       ///< swap with one another.
-                                       ///<
-                                       ///< The external swapping groups must be at the root level
-                                       ///< (i.e. they cannot be contained by other swapping groups)
+                bool     External = false;        ///< Determines if this swap group is external (and internal) or
+                                                  ///<   internal only. External Gate swapping allows Gates on
+                                                  ///<   different components with the same Part Definition to
+                                                  ///<   swap with one another.
+                                                  ///<
+                                                  ///<   The external swapping groups must be at the root level
+                                                  ///<   (i.e. they cannot be contained by other swapping groups).
 
-                std::vector<SWAP_GATE> SwapGates; ///< Each of the elements in this vector can be
-                                                  ///< swapped with each other - i.e. *all* of the
-                                                  ///< pins in each swap gate can be swapped with
-                                                  ///< *all* in another swap gate defined in this
-                                                  ///< vector
+                std::vector<SWAP_GATE> SwapGates; ///< Each of the elements in this vector can be swapped with
+                                                  ///<   each other - i.e. *all* of the pins in each swap gate
+                                                  ///<   can be swapped with *all* in another swap gate defined
+                                                  ///<   in this vector
 
                 void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
-            wxString Name; ///< This name can be different to the PART name
-            bool     HidePinNames =
-                    false; ///< Specifies whether to display the pin names/identifier in
-                           ///< the schematic symbol or not. E.g. it is useful to display
-                           ///< pin name information for integrated circuits but less so
-                           ///< for resistors and capacitors. (subnode HIDEPINNAMES)
+            wxString Name;                            ///< This name can be different to the PART name
+            bool     HidePinNames = false;            ///< Specifies whether to display the pin names/identifier
+                                                      ///<   in the schematic symbol or not. E.g. it is useful to
+                                                      ///<   display pin name information for integrated circuits
+                                                      ///<   but less so for resistors and capacitors.
+                                                      ///<   subnode="HIDEPINNAMES"
 
-            long MaxPinCount =
-                    UNDEFINED_VALUE; ///< Optional parameter which is used for specifying the number
-                                     ///< of electrical pins on the PCB component symbol to be
-                                     ///< used in the  part definition (this should not include
-                                     ///< mechanical pins for fixing etc.). This value must be less
-                                     ///< than or equal to than the number of pins on the PCB
-                                     ///< Component symbol.
+            long     MaxPinCount = UNDEFINED_VALUE;   ///< Optional parameter which is used for specifying the
+                                                      ///<   number of electrical pins on the PCB component
+                                                      ///<   symbol to be used in the  part definition (this
+                                                      ///<   should not include mechanical pins for fixing etc.).
+                                                      ///<   This value must be less than or equal to than the
+                                                      ///<   number of pins on the PCB Component symbol.
 
             std::map<GATE_ID, GATE>                 GateSymbols;
             std::map<PART_DEFINITION_PIN_ID, PIN>   Pins;
-            std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are
-                                                                     ///< defined within the part
-                                                                     ///< definition, whilst others
-                                                                     ///< are defined in the part
+            std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;  ///< Some attributes are defined within the
+                                                                      ///<   part definition, whilst others are
+                                                                      ///<   defined in the part.
             std::vector<PIN_EQUIVALENCE> PinEquivalences;
             std::vector<SWAP_GROUP>      SwapGroups;
 
@@ -1114,10 +1098,10 @@ public:
 
         struct PART_PIN : PARSER ///< "PARTPIN" node name
         {
-            PART_PIN_ID ID;
-            wxString         Name = wxEmptyString;
+            PART_PIN_ID      ID;
+            wxString         Name;
             CADSTAR_PIN_TYPE Type = CADSTAR_PIN_TYPE::UNCOMMITTED;
-            wxString         Identifier = wxEmptyString;
+            wxString         Identifier;
 
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
@@ -1127,19 +1111,18 @@ public:
         wxString                        Name;
         long                            Version;
         DEFINITION                      Definition;
-        std::map<PART_PIN_ID, PART_PIN> PartPins; ///< It is unclear why there are two "Pin"
-                                                  ///< structures in CPA files... PART_PIN seems to
-                                                  ///< be a reduced version of PART::DEFINITION::PIN
-                                                  ///< Therefore, PART_PIN is only included for
-                                                  ///< completeness of the parser, but won't be used
+        std::map<PART_PIN_ID, PART_PIN> PartPins;     ///< It is unclear why there are two "Pin" structures in
+                                                      ///<   CPA files... PART_PIN seems to be a reduced version
+                                                      ///<   of PART::DEFINITION::PIN.  Therefore, PART_PIN is
+                                                      ///<   only included for completeness of the parser, but
+                                                      ///<   won't be used.
 
         bool HidePinNames = false; ///< This seems to be a duplicate of DEFINITION::HidePinNames
                                    ///< Possibly only used in older file formats?
 
-        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are defined
-                                                                 ///< within the part definition,
-                                                                 ///< whilst others are defined in
-                                                                 ///< the part itself
+        std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< Some attributes are defined within the
+                                                                 ///<   part definition, whilst others are
+                                                                 ///<   defined in the part itself.
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -1157,11 +1140,10 @@ public:
     {
         struct JUNCTION : PARSER ///< "JPT" nodename.
         {
-            NETELEMENT_ID ID; ///< First character is "J"
+            NETELEMENT_ID ID;                        ///< First character is "J"
             LAYER_ID      LayerID;
             POINT         Location;
-            GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this JUNCTION is part of a
-                                                   ///< group
+            GROUP_ID      GroupID = wxEmptyString;   ///< If not empty, this JUNCTION is part of a group
             REUSEBLOCKREF ReuseBlockRef;
             bool          Fixed = false;
 
@@ -1191,23 +1173,24 @@ public:
             virtual ~CONNECTION() {}
         };
 
-        NET_ID       ID;
-        ROUTECODE_ID RouteCodeID = wxEmptyString;   ///< "NETCODE" subnode
-        long         SignalNum   = UNDEFINED_VALUE; ///< This is undefined if the net has been
-                                                    ///< given a name. "SIGNUM" subnode.
-        wxString Name = wxEmptyString; ///< This is undefined (wxEmptyString) if the net
-                                       ///< is unnamed. "SIGNAME" subnode
-        bool Highlight = false;
+        NET_ID            ID;
+        ROUTECODE_ID      RouteCodeID = wxEmptyString;    ///< "NETCODE" subnode
+        long              SignalNum   = UNDEFINED_VALUE;  ///< This is undefined if the net has been given a name.
+                                                          ///<   subnode="SIGNUM"
+        wxString          Name;                           ///< This is undefined (wxEmptyString) if the net is
+                                                          ///<   unnamed.
+                                                          ///<   subnode="SIGNAME"
+        bool              Highlight = false;
 
         std::map<NETELEMENT_ID, JUNCTION>       Junctions;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        NETCLASS_ID NetClassID =
-                wxEmptyString; ///< The net might not have a net class, in which case it will be
-                               ///<  wxEmptyString ("NETCLASSREF" subnode)
-        SPACING_CLASS_ID SpacingClassID =
-                wxEmptyString; ///< The net might not have a spacing class, in which case it will
-                               ///< be wxEmptyString ("SPACINGCLASS" subnode)
+        NETCLASS_ID       NetClassID = wxEmptyString;     ///< The net might not have a net class, in which case
+                                                          ///<   it will be wxEmptyString
+                                                          ///<   subnode="NETCLASSREF"
+        SPACING_CLASS_ID  SpacingClassID = wxEmptyString; ///< The net might not have a spacing class, in which
+                                                          ///<   case it will be wxEmptyString
+                                                          ///<   subnode="SPACINGCLASS"
 
         void ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
         bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
@@ -1218,25 +1201,23 @@ public:
     {
         DOCUMENTATION_SYMBOL_ID ID;
 
-        SYMDEF_ID SymdefID; ///< Normally documentation symbols only have TEXT, FIGURE and
-                            ///< TEXT_LOCATION objects which are all drawn on the "(Undefined)"
-                            ///< Layer. When used in the design, the user has to specify which
-                            ///< layer to draw it on.
-        LAYER_ID LayerID;   ///< Move all objects in the Symdef to this layer.
-        POINT    Origin;    ///< Origin of the component (this is used as the reference point
-                            ///< when placing the component in the design)
+        SYMDEF_ID SymdefID;                      ///< Normally documentation symbols only have TEXT, FIGURE and
+                                                 ///<   TEXT_LOCATION objects which are all drawn on the
+                                                 ///<   "(Undefined)" Layer.  When used in the design, the user
+                                                 ///<   has to specify which layer to draw it on.
+        LAYER_ID  LayerID;                       ///< Move all objects in the Symdef to this layer.
+        POINT     Origin;                        ///< Origin of the component (this is used as the reference point
+                                                 ///<   when placing the component in the design).
 
-        GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this component is part of a group
+        GROUP_ID      GroupID = wxEmptyString;   ///< If not empty, this component is part of a group.
         REUSEBLOCKREF ReuseBlockRef;
         long          OrientAngle = 0;
         bool          Mirror      = false;
         bool          Fixed       = false;
         READABILITY   Readability = READABILITY::BOTTOM_TO_TOP;
 
-        long ScaleRatioNumerator = 1;   ///< Documentation symbols can be arbitrarily scaled when
-                                        ///< added to a design
-        long ScaleRatioDenominator = 1; ///< Documentation symbols can be arbitrarily scaled when
-                                        ///< added to a design
+        long ScaleRatioNumerator = 1;   ///< Documentation symbols can be arbitrarily scaled when added to a design
+        long ScaleRatioDenominator = 1; ///< Documentation symbols can be arbitrarily scaled when added to a design
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
@@ -1266,7 +1247,7 @@ public:
 
     struct ATTRCOLORS : PARSER
     {
-        DFLTSETTINGS DefaultSettings;
+        DFLTSETTINGS                    DefaultSettings;
         std::map<ATTRIBUTE_ID, ATTRCOL> AttributeColors;
 
         bool IsVisible = true; // unclear what this represents - maybe all attributes are hidden?
