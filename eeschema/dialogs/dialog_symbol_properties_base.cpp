@@ -181,7 +181,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	bSizer11->Add( m_ShowPinNumButt, 0, wxALL, 3 );
 
 
-	bSizer11->Add( 30, 0, 0, wxEXPAND, 5 );
+	bSizer11->Add( 15, 0, 0, wxEXPAND, 5 );
 
 	m_ShowPinNameButt = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Show pin names"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowPinNameButt->SetValue(true);
@@ -191,6 +191,17 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 
 	sbGeneralProps->Add( bSizer11, 0, wxEXPAND|wxTOP, 13 );
+
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_LocalPower = new wxCheckBox( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Local power"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LocalPower->SetToolTip( _("Local power symbols create labels that are limited to the sheet in which they are used") );
+
+	bSizer12->Add( m_LocalPower, 0, wxALL, 3 );
+
+
+	sbGeneralProps->Add( bSizer12, 0, wxEXPAND, 13 );
 
 
 	bLowerSizer->Add( sbGeneralProps, 7, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -224,6 +235,9 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_cbExcludeFromPosFiles->SetToolTip( _("This is useful for adding symbols that should not be included in the \nexported position files used for pick and place machines") );
 
 	sbAttributes->Add( m_cbExcludeFromPosFiles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	sbAttributes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* ptSizer;
 	ptSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -389,6 +403,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_mirrorCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_ShowPinNumButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_LocalPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromSim->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromBoard->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromBom->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
@@ -422,6 +437,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::~DIALOG_SYMBOL_PROPERTIES_BASE()
 	m_mirrorCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnChoice ), NULL, this );
 	m_ShowPinNumButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_LocalPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromSim->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromBoard->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_cbExcludeFromBom->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );

@@ -637,7 +637,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     {
         m_ShowPinNumButt->SetValue( libSymbol->GetShowPinNumbers() );
         m_ShowPinNameButt->SetValue( libSymbol->GetShowPinNames() );
+        m_LocalPower->SetValue( libSymbol->IsLocalPower() );
     }
+
+    m_LocalPower->Enable( libSymbol && libSymbol->IsPower() );
 
     // Set the symbol's library name.
     m_tcLibraryID->SetValue( UnescapeString( m_symbol->GetLibId().Format() ) );
@@ -853,6 +856,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_symbol->SetShowPinNames( m_ShowPinNameButt->GetValue() );
     m_symbol->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
+    m_symbol->SetLocalPowerProp( m_LocalPower->GetValue() );
 
     // Restore m_Flag modified by SetUnit() and other change settings from the dialog
     m_symbol->ClearFlags();

@@ -63,6 +63,7 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_mirrorCtrl;
 		wxCheckBox* m_ShowPinNumButt;
 		wxCheckBox* m_ShowPinNameButt;
+		wxCheckBox* m_LocalPower;
 		wxCheckBox* m_cbExcludeFromSim;
 		wxCheckBox* m_cbExcludeFromBoard;
 		wxCheckBox* m_cbDNP;
