@@ -22,9 +22,9 @@
 
 #include <base_units.h>
 #include <board.h>
-#include <drc/drc_item.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pad_utils.h>
 #include <padstack.h>
 #include <units_provider.h>
 
@@ -38,20 +38,22 @@ namespace
 {
 
 /**
- * The error code and corresponding message for a single pad check error.
+ * The check code and corresponding message for a single pad check error.
  */
-using PAD_CHECK_MESSAGE = std::pair<int, wxString>;
+using PAD_CHECK_MESSAGE = std::pair<PAD_UTILS::PAD_CHECK_CODE, wxString>;
 
-bool hasMessageThatContains( const std::vector<PAD_CHECK_MESSAGE>& aMessages, int aCode, const wxString& aText )
+bool hasCheckResult( const std::vector<PAD_CHECK_MESSAGE>& aMessages,
+                     PAD_UTILS::PAD_CHECK_CODE aCode )
 {
-    const auto errorMessageContains =
+    const auto checkTypeIsFunc =
             [&]( const PAD_CHECK_MESSAGE& aMessage )
             {
-                return aMessage.first == aCode && aMessage.second.Contains( aText );
+                return aMessage.first == aCode;
             };
 
-    return std::any_of( aMessages.begin(), aMessages.end(), errorMessageContains );
+    return std::any_of( aMessages.begin(), aMessages.end(), checkTypeIsFunc );
 }
+
 } // namespace
 
 
@@ -91,12 +93,12 @@ struct PAD_CHECK_FIXTURE
         std::vector<PAD_CHECK_MESSAGE> messages;
 
         const auto errorHandler =
-                [&]( int aCode, const wxString& aMessage )
+                [&]( const PAD_UTILS::PAD_CHECK_RESULT& aResult )
                 {
-                    messages.emplace_back( aCode, aMessage );
+                    messages.emplace_back( aResult.code, aResult.message );
                 };
 
-        m_Pad.CheckPad( &units, false, errorHandler );
+        PAD_UTILS::CheckPad( m_Pad, units, false, errorHandler );
 
         return messages;
     }
@@ -110,7 +112,7 @@ BOOST_FIXTURE_TEST_CASE( InnerOnlySmdPadIsReported, PAD_CHECK_FIXTURE )
     const auto messages = runPadCheckOnPad();
 
     BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasMessageThatContains( messages, DRCE_PADSTACK, wxT( "no outer layers" ) ) );
+    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
 }
 
 
@@ -122,7 +124,7 @@ BOOST_FIXTURE_TEST_CASE( InnerOnlyConnPadIsReported, PAD_CHECK_FIXTURE )
     const auto messages = runPadCheckOnPad();
 
     BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasMessageThatContains( messages, DRCE_PADSTACK, wxT( "no outer layers" ) ) );
+    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
 }
 
 
@@ -134,7 +136,7 @@ BOOST_FIXTURE_TEST_CASE( InnerOnlySmdPadWithMaskIsReported, PAD_CHECK_FIXTURE )
 
     // The current checker reports the missing outer copper, not the mask issue itself.
     BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasMessageThatContains( messages, DRCE_PADSTACK, wxT( "no outer layers" ) ) );
+    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
 }
 
 
@@ -146,7 +148,7 @@ BOOST_FIXTURE_TEST_CASE( InnerOnlySmdPadWithPasteIsReported, PAD_CHECK_FIXTURE )
 
     // The current checker reports the missing outer copper, not the paste issue itself.
     BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasMessageThatContains( messages, DRCE_PADSTACK, wxT( "no outer layers" ) ) );
+    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
 }
 
 
@@ -175,7 +177,7 @@ BOOST_FIXTURE_TEST_CASE( BothOuterCopperSidesAreReported, PAD_CHECK_FIXTURE )
     const auto messages = runPadCheckOnPad();
 
     BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasMessageThatContains( messages, DRCE_PADSTACK, wxT( "both sides" ) ) );
+    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::SMD_BOTH_OUTER_SIDES ) );
 }
 
 
@@ -186,7 +188,7 @@ BOOST_FIXTURE_TEST_CASE( WrongSideMaskIsReported, PAD_CHECK_FIXTURE )
     const auto messages = runPadCheckOnPad();
 
     BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasMessageThatContains( messages, DRCE_PADSTACK, wxT( "different sides" ) ) );
+    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::SMD_MASK_WRONG_SIDE ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

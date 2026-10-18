@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "pad_utils.h"
 #include <dialog_footprint_checker.h>
 #include <widgets/appearance_controls.h>
 #include <tool/tool_manager.h>
@@ -91,7 +92,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     if( !footprint )
         return;
 
-    auto errorHandler =
+    const auto errorHandler =
             [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB, const BOARD_ITEM* aItemC,
                  int aErrorCode, const wxString& aMsg, const VECTOR2I& aPt )
             {
@@ -131,10 +132,16 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH, aMsg, { 0, 0 } );
             } );
 
-    footprint->CheckPads( m_frame,
-            [&]( const PAD* aPad, int aErrorCode, const wxString& aMsg )
+    footprint->CheckPads( *m_frame,
+            [&]( const PAD& aPad, const PAD_UTILS::PAD_CHECK_RESULT& aResult )
             {
-                errorHandler( aPad, nullptr, nullptr, aErrorCode, aMsg, aPad->GetPosition() );
+                const int drcError = ConvertPadCheckToDrcCode( aResult.code );
+
+                wxString detail;
+                if( !aResult.message.IsEmpty() )
+                    detail = wxString::Format( wxT( "(%s)" ), aResult.message );
+
+                errorHandler( &aPad, nullptr, nullptr, drcError, detail, aPad.GetPosition() );
             } );
 
     footprint->CheckShortingPads(
@@ -425,4 +432,3 @@ void DIALOG_FOOTPRINT_CHECKER::updateDisplayedCounts()
     m_exclusionsBadge->SetMaximumNumber( numExcluded );
     m_exclusionsBadge->UpdateNumber( numExcluded, RPT_SEVERITY_EXCLUSION );
 }
-

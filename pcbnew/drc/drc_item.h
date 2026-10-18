@@ -31,6 +31,17 @@ class DRC_TEST_PROVIDER;
 class PCB_MARKER;
 class BOARD;
 
+namespace PAD_UTILS
+{
+enum class PAD_CHECK_CODE;
+}
+
+/**
+ * Map a granular #PAD_UTILS::PAD_CHECK_CODE to the DRC error code
+ * used to report it at the DRC level (including reports and APIs).
+ */
+int ConvertPadCheckToDrcCode( PAD_UTILS::PAD_CHECK_CODE aCode );
+
 enum PCB_DRC_CODE
 {
     DRCE_FIRST = 1,

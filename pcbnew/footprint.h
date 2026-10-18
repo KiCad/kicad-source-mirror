@@ -36,6 +36,7 @@
 #include <jumper_group.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
+#include <pad_utils.h>
 #include <lib_id.h>
 #include <lib_tree_item.h>
 #include <list>
@@ -684,6 +685,8 @@ public:
      */
     void CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler );
 
+    using FP_PAD_CHECK_HANDLER = std::function<void( const PAD&, const PAD_UTILS::PAD_CHECK_RESULT& )>;
+
     /**
      * Run non-board-specific DRC checks on footprint's pads.  These are the checks supported by
      * both the PCB DRC and the Footprint Editor Footprint Checker.
@@ -691,8 +694,7 @@ public:
      * @param aUnitsProvider
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckPads( UNITS_PROVIDER* aUnitsProvider,
-                    const std::function<void( const PAD*, int, const wxString& )>& aErrorHandler );
+    void CheckPads( const UNITS_PROVIDER& aUnitsProvider, const FP_PAD_CHECK_HANDLER& aErrorHandler );
 
     /**
      * Check for overlapping, different-numbered, non-net-tie pads.

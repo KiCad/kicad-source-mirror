@@ -22,7 +22,6 @@
 
 #include "kiway_holder.h"
 #include "mail_type.h"
-#include <drc/drc_item.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board_commit.h>
@@ -36,6 +35,7 @@
 #include <geometry/shape_segment.h>
 #include <dialog_pad_properties.h>
 #include <dialogs/html_message_box.h>
+#include <drc/drc_item.h>
 #include <macros.h>
 #include <pad.h>
 #include <pad_utils.h>
@@ -1611,15 +1611,23 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
 
-    m_previewPad->CheckPad( m_parentFrame, true,
-            [&]( int errorCode, const wxString& msg )
+    PAD_UTILS::CheckPad( *m_previewPad, *m_parentFrame, true,
+            [&]( const PAD_UTILS::PAD_CHECK_RESULT& aResult )
             {
-                if( errorCode == DRCE_PADSTACK_INVALID )
-                    error_msgs.Add( _( "Error: " ) + msg );
-                else if( errorCode == DRCE_PADSTACK )
-                    warning_msgs.Add( _( "Warning: " ) + msg );
-                else if( errorCode == DRCE_PAD_TH_WITH_NO_HOLE )
+                int drcCode = ConvertPadCheckToDrcCode( aResult.code );
+
+                if( drcCode == DRCE_PADSTACK_INVALID )
+                {
+                    error_msgs.Add( wxString::Format( wxT( "Error: %s" ), aResult.message ) );
+                }
+                else if( drcCode == DRCE_PADSTACK )
+                {
+                    warning_msgs.Add( wxString::Format( wxT( "Warning: %s" ), aResult.message ) );
+                }
+                else if( drcCode == DRCE_PAD_TH_WITH_NO_HOLE )
+                {
                     error_msgs.Add( _( "Error: Through hole pad has no hole." ) );
+                }
             } );
 
     if( error_msgs.GetCount() || warning_msgs.GetCount() )

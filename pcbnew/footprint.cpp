@@ -4517,19 +4517,17 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
 }
 
 
-void FOOTPRINT::CheckPads( UNITS_PROVIDER* aUnitsProvider,
-                           const std::function<void( const PAD*, int,
-                                                     const wxString& )>& aErrorHandler )
+void FOOTPRINT::CheckPads( const UNITS_PROVIDER& aUnitsProvider, const FP_PAD_CHECK_HANDLER& aErrorHandler )
 {
     if( aErrorHandler == nullptr )
         return;
 
-    for( PAD* pad: Pads() )
+    for( const PAD* pad: Pads() )
     {
-        pad->CheckPad( aUnitsProvider, false,
-                [&]( int errorCode, const wxString& msg )
+        PAD_UTILS::CheckPad( *pad, aUnitsProvider, false,
+                [&]( const PAD_UTILS::PAD_CHECK_RESULT& aResult )
                 {
-                    aErrorHandler( pad, errorCode, msg );
+                    aErrorHandler( *pad, aResult );
                 } );
     }
 }
