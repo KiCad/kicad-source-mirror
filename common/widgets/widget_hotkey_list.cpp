@@ -76,8 +76,8 @@ public:
 class HK_PROMPT_DIALOG : public DIALOG_SHIM
 {
 public:
-    HK_PROMPT_DIALOG( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-                      const wxString& aName, const wxString& aCurrentKey ) :
+    HK_PROMPT_DIALOG( wxWindow* aParent, wxWindowID aId, const wxString& aTitle, const wxString& aName,
+                      const wxString& aCurrentKey ) :
             DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
     {
         wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -93,8 +93,7 @@ public:
          * key_label_0      key_label_1         /
          */
 
-        wxStaticText* inst_label = new wxStaticText( this, wxID_ANY, wxEmptyString,
-                                                     wxDefaultPosition, wxDefaultSize,
+        wxStaticText* inst_label = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                                                      wxALIGN_CENTRE_HORIZONTAL );
 
         inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to cancel..." ) );
@@ -147,8 +146,7 @@ public:
         SetInitialFocus( panelDisplayCurrent );
     }
 
-    static std::optional<long> PromptForKey( wxWindow* aParent, const wxString& aName,
-                                             const wxString& aCurrentKey )
+    static std::optional<long> PromptForKey( wxWindow* aParent, const wxString& aName, const wxString& aCurrentKey )
     {
         HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
 
@@ -393,8 +391,7 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
 
         if( IsReservedHotkey( key.value(), &reservedKeyName ) )
         {
-            wxString msg = wxString::Format( _( "'%s' is a reserved hotkey in KiCad and cannot "
-                                                "be assigned." ),
+            wxString msg = wxString::Format( _( "'%s' is a reserved hotkey in KiCad and cannot be assigned." ),
                                              reservedKeyName );
 
             DisplayErrorMessage( this, msg );
@@ -458,11 +455,11 @@ void WIDGET_HOTKEY_LIST::onContextMenu( wxTreeListEvent& aEvent )
     if( hkdata )
     {
         menu.Append( ID_EDIT_HOTKEY, _( "Edit..." ) );
-        menu.Append( ID_EDIT_ALT, _( "Edit Alternate..." ) );
-        menu.Append( ID_RESET, _( "Undo Changes" ) );
-        menu.Append( ID_CLEAR, _( "Clear Assigned Hotkey" ) );
-        menu.Append( ID_CLEAR_ALT, _( "Clear Assigned Alternate" ) );
-        menu.Append( ID_DEFAULT, _( "Restore Defaults" ) );
+        menu.Append( ID_EDIT_ALT,    _( "Edit Alternate..." ) );
+        menu.Append( ID_RESET,       _( "Undo Changes" ) );
+        menu.Append( ID_CLEAR,       _( "Clear Assigned Hotkey" ) );
+        menu.Append( ID_CLEAR_ALT,   _( "Clear Assigned Alternate" ) );
+        menu.Append( ID_DEFAULT,     _( "Restore Defaults" ) );
         menu.Append( wxID_SEPARATOR );
 
         PopupMenu( &menu );
@@ -520,9 +517,9 @@ bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
         return true;
 
     TOOL_ACTION* conflictingAction = conflictingHotKey->m_Actions[ 0 ];
-    wxString     msg = wxString::Format( _( "'%s' is already assigned to '%s' in section '%s'. "
-                                                "Both bindings are kept, but only one runs per key "
-                                                "press. Continue?" ),
+    wxString     msg = wxString::Format( _( "'%s' is already assigned to '%s' in section '%s'.  Both "
+                                            "bindings will be kept, but only one will run per key press.  "
+                                            "Continue?" ),
                                          KeyNameFromKeyCode( aKey ), conflictingAction->GetFriendlyName(),
                                          HOTKEY_STORE::GetSectionName( conflictingAction ) );
 

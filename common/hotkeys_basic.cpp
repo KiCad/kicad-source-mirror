@@ -441,17 +441,18 @@ int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
 
     // Overlay the current app's hotkey definitions onto the map
     for( const TOOL_ACTION* action : aActions )
-        hotkeys[ action->GetName() ] = std::pair<int, int>( action->GetHotKey(),
-                                                            action->GetHotKeyAlt() );
+        hotkeys[ action->GetName() ] = std::pair<int, int>( action->GetHotKey(), action->GetHotKeyAlt() );
 
     // Write entire hotkey set
     wxFFileOutputStream outStream( fn.GetFullPath() );
     wxTextOutputStream  txtStream( outStream, wxEOL_UNIX );
 
     for( const std::pair<const std::string, std::pair<int, int>>& entry : hotkeys )
+    {
         txtStream << entry.first
             << "\t" << KeyNameFromKeyCode( entry.second.first )
             << "\t" << KeyNameFromKeyCode( entry.second.second ) << endl;
+    }
 
     txtStream.Flush();
     outStream.Close();
