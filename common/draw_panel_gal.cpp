@@ -1392,6 +1392,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     if( aGalType == m_backend && m_gal != nullptr )
         return true;
 
+    VECTOR2D grid_origin = m_gal ? m_gal->GetGridOrigin() : VECTOR2D();
     VECTOR2D grid_size = m_gal ? m_gal->GetGridSize() : VECTOR2D();
     bool     grid_visibility = m_gal ? m_gal->GetGridVisibility() : true;
     double   worldUnitLength = m_gal ? m_gal->GetWorldUnitLength() : 0.0;
@@ -1483,12 +1484,10 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
                 m_windowId = KIGFX::GAL_MODERN::AllocateWindowId();
                 m_frameMailbox = std::make_unique<KIGFX::FRAME_MAILBOX>();
-                m_swapchainCtrl = std::make_unique<KIGFX::SWAPCHAIN_CONTROLLER>(
-                        *m_renderThread, m_windowId );
+                m_swapchainCtrl = std::make_unique<KIGFX::SWAPCHAIN_CONTROLLER>( *m_renderThread, m_windowId );
                 m_swapchainCtrl->SetFrameMailbox( m_frameMailbox.get() );
 
-                wxLogTrace( traceRhi, wxS( "DrawPanel: windowId=%u swapchainCtrl created" ),
-                            m_windowId );
+                wxLogTrace( traceRhi, wxS( "DrawPanel: windowId=%u swapchainCtrl created" ), m_windowId );
 
                 // The GDK background is set on the first paint, once the widget is laid out
                 KIPLATFORM::UI::PrepareForExternalRendering( this );
@@ -1588,6 +1587,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     clientSize.x = std::max( 10, clientSize.x + pad );
     clientSize.y = std::max( 10, clientSize.y + pad );
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
+
+    if( grid_origin != VECTOR2D() )
+        m_gal->SetGridOrigin( grid_origin );
 
     if( grid_size.x > 0 && grid_size.y > 0 )
         m_gal->SetGridSize( grid_size );
