@@ -77,9 +77,9 @@ public:
 
     ~MODEL_ZONES_OVERVIEW() override = default;
 
-    void EnableFitterByName( bool aEnable );
+    void EnableFilterByName( bool aEnable );
 
-    void EnableFitterByNet( bool aEnable );
+    void EnableFilterByNet( bool aEnable );
 
     void SetLayerFilter( PCB_LAYER_ID aLayer );
 

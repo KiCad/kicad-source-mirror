@@ -145,13 +145,13 @@ void MODEL_ZONES_OVERVIEW::GetValueByRow( wxVariant& aVariant, unsigned aRow, un
 }
 
 
-void MODEL_ZONES_OVERVIEW::EnableFitterByName( bool aEnable )
+void MODEL_ZONES_OVERVIEW::EnableFilterByName( bool aEnable )
 {
     m_sortByName = aEnable;
 }
 
 
-void MODEL_ZONES_OVERVIEW::EnableFitterByNet( bool aEnable )
+void MODEL_ZONES_OVERVIEW::EnableFilterByNet( bool aEnable )
 {
     m_sortByNet = aEnable;
 }
