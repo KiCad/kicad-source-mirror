@@ -450,7 +450,8 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
     for( auto& [type, desc] : m_supportedSymFiles )
-        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this, type );
+        browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this,
+                            type + FIRST_MENU_ID );
 
     browseMenu->Unbind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler,
                         this, ID_PANEL_SYM_LIB_KICAD_FOLDER );
