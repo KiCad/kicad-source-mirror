@@ -594,6 +594,27 @@ void SCH_IO_DATABASE::ensureConnection()
 }
 
 
+std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_LIB_SETTINGS& aSettings )
+{
+    const DATABASE_SOURCE& source = aSettings.m_Source;
+
+    if( source.connection_string.empty() )
+    {
+        return std::make_unique<DATABASE_CONNECTION>( source.dsn, source.username, source.password,
+                                                      source.timeout );
+    }
+
+    std::string cs = source.connection_string;
+    std::string basePath( wxFileName( aSettings.GetFilename() ).GetPath().ToUTF8() );
+
+    // Database drivers that use files operate on absolute paths, so provide a mechanism
+    // for specifying on-disk databases that live next to the kicad_dbl file
+    boost::replace_all( cs, "${CWD}", basePath );
+
+    return std::make_unique<DATABASE_CONNECTION>( cs, source.timeout );
+}
+
+
 void SCH_IO_DATABASE::connect()
 {
     wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
@@ -607,26 +628,7 @@ void SCH_IO_DATABASE::connect()
 
     if( !m_conn )
     {
-        std::unique_ptr<DATABASE_CONNECTION> newConn;
-
-        if( m_settings->m_Source.connection_string.empty() )
-        {
-            newConn = std::make_unique<DATABASE_CONNECTION>( m_settings->m_Source.dsn,
-                                                             m_settings->m_Source.username,
-                                                             m_settings->m_Source.password,
-                                                             m_settings->m_Source.timeout );
-        }
-        else
-        {
-            std::string cs = m_settings->m_Source.connection_string;
-            std::string basePath( wxFileName( m_settings->GetFilename() ).GetPath().ToUTF8() );
-
-            // Database drivers that use files operate on absolute paths, so provide a mechanism
-            // for specifying on-disk databases that live next to the kicad_dbl file
-            boost::replace_all( cs, "${CWD}", basePath );
-
-            newConn = std::make_unique<DATABASE_CONNECTION>( cs, m_settings->m_Source.timeout );
-        }
+        std::unique_ptr<DATABASE_CONNECTION> newConn = CreateConnection( *m_settings );
 
         if( !newConn->IsConnected() )
         {

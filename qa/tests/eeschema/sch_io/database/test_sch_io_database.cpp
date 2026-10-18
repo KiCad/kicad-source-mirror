@@ -150,4 +150,34 @@ BOOST_AUTO_TEST_CASE( FieldMappedDescriptionMatchesShownDescription )
 }
 
 
+/**
+ * CreateConnection() picks the connection string over the DSN when one is set, and expands
+ * ${CWD} to the folder holding the settings file.
+ */
+BOOST_AUTO_TEST_CASE( CreateConnectionExpandsCwdAndPrefersConnectionString )
+{
+    const std::string dblPath = KI_TEST::GetTestDataRootDir() + "dblib/qa_dblib_field_description.kicad_dbl";
+
+    DATABASE_LIB_SETTINGS settings( dblPath );
+    settings.SetReadOnly( true );
+    settings.LoadFromFile();
+
+    BOOST_REQUIRE( settings.m_Source.connection_string.find( "${CWD}" ) != std::string::npos );
+
+    // The database file is only found if ${CWD} became the settings folder
+    settings.m_Source.dsn = "qa_nonexistent_dsn";
+
+    std::unique_ptr<DATABASE_CONNECTION> conn = SCH_IO_DATABASE::CreateConnection( settings );
+
+    BOOST_REQUIRE( conn );
+    BOOST_CHECK_MESSAGE( conn->IsConnected(), conn->GetLastError() );
+
+    settings.m_Source.connection_string.clear();
+    conn = SCH_IO_DATABASE::CreateConnection( settings );
+
+    BOOST_REQUIRE( conn );
+    BOOST_CHECK( !conn->IsConnected() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

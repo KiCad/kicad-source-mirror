@@ -101,6 +101,12 @@ public:
 
     bool TestConnection( wxString* aErrorMsg = nullptr );
 
+    /**
+     * Opens a connection described by aSettings, expanding ${CWD} in a connection string to the
+     * directory holding the settings file.  The result may be disconnected; check IsConnected().
+     */
+    static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_LIB_SETTINGS& aSettings );
+
 private:
     typedef std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> TABLE_RESULT_LIST;
 
