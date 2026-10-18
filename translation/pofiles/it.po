@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-15 03:56+0000\n"
+"PO-Revision-Date: 2026-10-19 06:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -30740,9 +30740,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Imposta l'attributo di esclusione dalla scheda"
 
 #: eeschema/tools/sch_actions.cpp:1313
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Imposta l'attributo escludi dalla simulazione"
+msgstr "Imposta l'attributo di esclusione dai file di posizione"
 
 #: eeschema/tools/sch_actions.cpp:1319
 msgid "Set the do not populate attribute"
@@ -30872,9 +30871,8 @@ msgid "Import 2D drawing file"
 msgstr "Importa file di grafica 2D"
 
 #: eeschema/tools/sch_actions.cpp:1433
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "Schema non-KiCad..."
+msgstr "Importa schema non-KiCad..."
 
 #: eeschema/tools/sch_actions.cpp:1434
 msgid ""
@@ -31334,11 +31332,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1941
 msgid "Smith Chart"
-msgstr ""
+msgstr "Diagramma di Smith"
 
 #: eeschema/tools/sch_actions.cpp:1942
 msgid "Show S-parameter results on a Smith chart"
-msgstr ""
+msgstr "Visualizza i risultati dei parametri S su un diagramma di Smith"
 
 #: eeschema/tools/sch_actions.cpp:1947
 msgid "Dark Mode Plots"
@@ -31419,24 +31417,20 @@ msgid "Edit the description of an existing design variant."
 msgstr "Modifica la descrizione di una variante di progettazione esistente."
 
 #: eeschema/tools/sch_actions.cpp:2020
-#, fuzzy
 msgid "Rename Design Variant..."
-msgstr "Rinomina variante progetto"
+msgstr "Rinomina variante progetto..."
 
 #: eeschema/tools/sch_actions.cpp:2021
-#, fuzzy
 msgid "Rename an existing design variant."
-msgstr "Rimuovi una variante progetto esistente dallo schema."
+msgstr "Rinomina una variante progetto esistente."
 
 #: eeschema/tools/sch_actions.cpp:2026
-#, fuzzy
 msgid "Copy Design Variant..."
-msgstr "Copia variante progetto"
+msgstr "Copia variante progetto..."
 
 #: eeschema/tools/sch_actions.cpp:2027
-#, fuzzy
 msgid "Create a copy of an existing design variant."
-msgstr "Modifica la descrizione di una variante di progettazione esistente."
+msgstr "Crea una copia di una variante progetto esistente."
 
 #: eeschema/tools/sch_actions.h:35
 #, fuzzy
