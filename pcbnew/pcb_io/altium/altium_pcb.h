@@ -22,6 +22,7 @@
 #define ALTIUM_PCB_H
 
 #include <core/utf8.h>
+#include <geometry/shape_line_chain.h>
 #include <embedded_files.h>
 #include <functional>
 #include <layer_ids.h>
@@ -314,6 +315,8 @@ private:
     void HelperFillMechanicalLayerAssignments( const std::vector<ABOARD6_LAYER_STACKUP>& aStackup );
 
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
+    void HelperCreateBoardOutline( const SHAPE_LINE_CHAIN& aOutline );
+    void HelperFinishBoardOutline();
 
     void HelperSetZoneLayers( ZONE& aZone, const ALTIUM_LAYER aAltiumLayer );
     void HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aKeepoutRestrictions );
@@ -375,6 +378,12 @@ private:
     std::vector<FOOTPRINT*>              m_components;
     std::vector<ZONE*>                   m_polygons;
     std::vector<PCB_DIM_RADIAL*>         m_radialDimensions;
+
+    // The outline waits for every board cutout, since a cutout can run over the board edge
+    SHAPE_LINE_CHAIN              m_boardOutline;
+    std::vector<SHAPE_LINE_CHAIN> m_boardCutouts;
+    int                           m_outlineJogCount = 0;
+    int                           m_outlineJogLargest = 0;
     std::map<uint32_t, wxString>         m_unicodeStrings;
     std::vector<int>                     m_altiumToKicadNetcodes;
     std::map<wxString, wxString>         m_schematicNetNames; // upper cased name to schematic casing

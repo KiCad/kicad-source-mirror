@@ -504,6 +504,117 @@ void ALTIUM_PCB::checkpoint()
     }
 }
 
+// A courtyard has to be one closed outline, so open pieces on the layer, such as a centre cross,
+// are drawn on the fabrication layer of that side instead.
+static void MoveOpenCourtyardItems( BOARD& aBoard )
+{
+    // Ends that the courtyard builder chains together count as meeting
+    const int epsilon = pcbIUScale.mmToIU( 0.02 );
+
+    for( FOOTPRINT* footprint : aBoard.Footprints() )
+    {
+        for( PCB_LAYER_ID courtyard : { F_CrtYd, B_CrtYd } )
+        {
+            std::vector<PCB_SHAPE*> pieces;
+            std::vector<VECTOR2I>   nodes;
+            std::vector<int>        degree;
+
+            auto nodeAt =
+                    [&]( const VECTOR2I& aPt )
+                    {
+                        for( size_t i = 0; i < nodes.size(); i++ )
+                        {
+                            if( ( nodes[i] - aPt ).EuclideanNorm() <= epsilon )
+                                return static_cast<int>( i );
+                        }
+
+                        nodes.push_back( aPt );
+                        degree.push_back( 0 );
+                        return static_cast<int>( nodes.size() ) - 1;
+                    };
+
+            std::vector<std::pair<int, int>> ends;
+
+            for( BOARD_ITEM* item : footprint->GraphicalItems() )
+            {
+                if( item->GetLayer() != courtyard || item->Type() != PCB_SHAPE_T )
+                    continue;
+
+                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                if( shape->GetShape() != SHAPE_T::SEGMENT && shape->GetShape() != SHAPE_T::ARC )
+                    continue;
+
+                int a = nodeAt( shape->GetStart() );
+                int b = nodeAt( shape->GetEnd() );
+
+                // File coordinates drift by nanometres, so ends that nearly meet are made to meet
+                if( shape->GetShape() == SHAPE_T::SEGMENT )
+                {
+                    const int snap = pcbIUScale.mmToIU( 0.001 );
+
+                    if( ( nodes[a] - shape->GetStart() ).EuclideanNorm() <= snap )
+                        shape->SetStart( nodes[a] );
+
+                    if( ( nodes[b] - shape->GetEnd() ).EuclideanNorm() <= snap )
+                        shape->SetEnd( nodes[b] );
+                }
+
+                degree[a]++;
+                degree[b]++;
+                pieces.push_back( shape );
+                ends.emplace_back( a, b );
+            }
+
+            // An edge that hangs off the outline, directly or through other hanging edges, is open
+            std::vector<bool> hanging( pieces.size(), false );
+            std::vector<int>  open;
+
+            for( size_t i = 0; i < nodes.size(); i++ )
+            {
+                if( degree[i] == 1 )
+                    open.push_back( static_cast<int>( i ) );
+            }
+
+            while( !open.empty() )
+            {
+                const int node = open.back();
+                open.pop_back();
+
+                for( size_t i = 0; i < pieces.size(); i++ )
+                {
+                    if( hanging[i] || ( ends[i].first != node && ends[i].second != node ) )
+                        continue;
+
+                    hanging[i] = true;
+                    degree[ends[i].first]--;
+                    degree[ends[i].second]--;
+
+                    const int far = ends[i].first == node ? ends[i].second : ends[i].first;
+
+                    if( degree[far] == 1 )
+                        open.push_back( far );
+                }
+            }
+
+            // More than the two lines of a centre mark and nothing closed is an open courtyard, which
+            // stays on the layer for DRC to report
+            const bool anyClosed =
+                    std::any_of( hanging.begin(), hanging.end(), []( bool aHanging ) { return !aHanging; } );
+
+            if( !anyClosed && pieces.size() > 2 )
+                continue;
+
+            for( size_t i = 0; i < pieces.size(); i++ )
+            {
+                if( hanging[i] )
+                    pieces[i]->SetLayer( courtyard == F_CrtYd ? F_Fab : B_Fab );
+            }
+        }
+    }
+}
+
+
 void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFile,
                         const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping,
                         const std::map<std::string, UTF8>*           aProperties )
@@ -807,6 +918,10 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFi
     // Wait for every task before rethrowing so none outlives the parse
     fractureFutures.wait();
     fractureFutures.get();
+
+    HelperFinishBoardOutline();
+
+    MoveOpenCourtyardItems( *m_board );
 
     // Altium doesn't appear to store either the dimension value nor the dimensioned object in
     // the dimension record.  (Yes, there is a REFERENCE0OBJECTID, but it doesn't point to the
@@ -1545,6 +1660,7 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
         ++it;
     }
 
+    HelperShapeLineChainFromAltiumVertices( m_boardOutline, elem.board_vertices );
     HelperFillMechanicalLayerAssignments( elem.stackup );
     remapUnsureLayers( elem.stackup );
 
@@ -1571,7 +1687,6 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     }
 
     HelperBuildPadstackLayerIndex();
-    HelperCreateBoardOutline( elem.board_vertices );
     m_board->GetDesignSettings().SetBoardThickness( stackup.BuildBoardThicknessFromStackup() );
     designSettings.m_HasStackup = true;
 }
@@ -1870,8 +1985,9 @@ void ALTIUM_PCB::HelperFillMechanicalLayerAssignments( const std::vector<ABOARD6
             case ALTIUM_MECHKIND::COMPONENT_CENTER_TOP: target = F_Fab; break;
             case ALTIUM_MECHKIND::COMPONENT_CENTER_BOT: target = B_Fab; break;
 
-            case ALTIUM_MECHKIND::BOARD: target = Edge_Cuts; break;
-            case ALTIUM_MECHKIND::BOARD_SHAPE: target = Edge_Cuts; break;
+            // The board's own outline is the edge, so a drawing of the board shape would repeat it
+            case ALTIUM_MECHKIND::BOARD: target = m_boardOutline.PointCount() >= 3 ? Dwgs_User : Edge_Cuts; break;
+            case ALTIUM_MECHKIND::BOARD_SHAPE: target = m_boardOutline.PointCount() >= 3 ? Dwgs_User : Edge_Cuts; break;
             case ALTIUM_MECHKIND::V_CUT: target = Edge_Cuts; break;
 
             default: break;
@@ -1889,36 +2005,448 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
     SHAPE_LINE_CHAIN lineChain;
     HelperShapeLineChainFromAltiumVertices( lineChain, aVertices );
 
-    STROKE_PARAMS stroke( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ),
-                          LINE_STYLE::SOLID );
+    HelperCreateBoardOutline( lineChain );
+}
 
-    for( int i = 0; i <= lineChain.PointCount() && i != -1; i = lineChain.NextShape( i ) )
+
+namespace
+{
+struct OUTLINE_EDGE
+{
+    bool      isArc = false;
+    SHAPE_ARC arc;
+    SEG       seg;
+};
+
+
+std::vector<OUTLINE_EDGE> OutlineEdgesFromChain( const SHAPE_LINE_CHAIN& aChain )
+{
+    // vertices that differ by rounding leave edges DRC rejects as degenerate
+    const int minEdge = pcbIUScale.mmToIU( 0.001 );
+
+    std::vector<OUTLINE_EDGE> edges;
+
+    for( int i = 0; i <= aChain.PointCount() && i != -1; i = aChain.NextShape( i ) )
     {
-        if( lineChain.IsArcStart( i ) )
+        if( aChain.IsArcStart( i ) )
         {
-            const SHAPE_ARC& currentArc = lineChain.Arc( lineChain.ArcIndex( i ) );
+            edges.push_back( { true, aChain.Arc( aChain.ArcIndex( i ) ), SEG() } );
+        }
+        else if( aChain.Segment( i ).Length() > minEdge )
+        {
+            edges.push_back( { false, SHAPE_ARC(), aChain.Segment( i ) } );
+        }
+    }
 
-            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::ARC );
+    return edges;
+}
 
-            shape->SetStroke( stroke );
-            shape->SetLayer( Edge_Cuts );
-            shape->SetArcGeometry( currentArc.GetP0(), currentArc.GetArcMid(), currentArc.GetP1() );
 
-            m_board->Add( shape.release(), ADD_MODE::APPEND );
+// A short edge between two longer ones is a jog from rounding in the file. A jog that turns
+// back on its neighbours overlaps them, so drop it and let the neighbouring lines meet.
+void RemoveOutlineJogs( std::vector<OUTLINE_EDGE>& aEdges, int& aCount, int& aLargestMove )
+{
+    const int maxJog = pcbIUScale.mmToIU( 0.05 );
+
+    // Direction an edge runs in where it starts or where it ends
+    auto direction =
+            []( const OUTLINE_EDGE& aEdge, bool aAtEnd ) -> VECTOR2I
+            {
+                if( !aEdge.isArc )
+                    return aEdge.seg.B - aEdge.seg.A;
+
+                const VECTOR2I radius = ( aAtEnd ? aEdge.arc.GetP1() : aEdge.arc.GetP0() ) - aEdge.arc.GetCenter();
+
+                return aEdge.arc.IsClockwise() ? VECTOR2I( radius.y, -radius.x ) : VECTOR2I( -radius.y, radius.x );
+            };
+
+    for( bool changed = true; changed && aEdges.size() > 3; )
+    {
+        changed = false;
+
+        for( size_t i = 0; i < aEdges.size(); i++ )
+        {
+            OUTLINE_EDGE& jog = aEdges[i];
+            OUTLINE_EDGE& prev = aEdges[( i + aEdges.size() - 1 ) % aEdges.size()];
+            OUTLINE_EDGE& next = aEdges[( i + 1 ) % aEdges.size()];
+
+            if( jog.isArc || jog.seg.Length() > maxJog || ( prev.isArc && next.isArc ) )
+                continue;
+
+            if( ( !prev.isArc && prev.seg.Length() <= maxJog ) || ( !next.isArc && next.seg.Length() <= maxJog ) )
+                continue;
+
+            // Only a jog that doubles back on a neighbour overlaps it, a short chamfer is real geometry
+            const VECTOR2I jogDirection = jog.seg.B - jog.seg.A;
+
+            if( jogDirection.Dot( direction( prev, true ) ) >= 0 && jogDirection.Dot( direction( next, false ) ) >= 0 )
+                continue;
+
+            auto nearer = []( const SHAPE_ARC& aArc, const VECTOR2I& aPt )
+            {
+                return aArc.GetP0().Distance( aPt ) < aArc.GetP1().Distance( aPt ) ? aArc.GetP0() : aArc.GetP1();
+            };
+
+            VECTOR2I moved;
+
+            if( prev.isArc )
+            {
+                moved = nearer( prev.arc, jog.seg.A );
+                aLargestMove = std::max( aLargestMove, static_cast<int>( moved.Distance( next.seg.A ) ) );
+                next.seg.A = moved;
+            }
+            else if( next.isArc )
+            {
+                moved = nearer( next.arc, jog.seg.B );
+                aLargestMove = std::max( aLargestMove, static_cast<int>( moved.Distance( prev.seg.B ) ) );
+                prev.seg.B = moved;
+            }
+            else
+            {
+                aLargestMove = std::max( aLargestMove, static_cast<int>( prev.seg.B.Distance( next.seg.A ) ) );
+                next.seg.A = prev.seg.B;
+            }
+
+            aCount++;
+
+            aEdges.erase( aEdges.begin() + i );
+            changed = true;
+            break;
+        }
+    }
+}
+
+
+void AddOutlineEdges( BOARD& aBoard, const std::vector<OUTLINE_EDGE>& aEdges )
+{
+    STROKE_PARAMS stroke( aBoard.GetDesignSettings().GetLineThickness( Edge_Cuts ), LINE_STYLE::SOLID );
+
+    for( const OUTLINE_EDGE& edge : aEdges )
+    {
+        std::unique_ptr<PCB_SHAPE> shape;
+
+        if( edge.isArc )
+        {
+            shape = std::make_unique<PCB_SHAPE>( &aBoard, SHAPE_T::ARC );
+            shape->SetArcGeometry( edge.arc.GetP0(), edge.arc.GetArcMid(), edge.arc.GetP1() );
         }
         else
         {
-            const SEG& seg = lineChain.Segment( i );
-
-            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
-
-            shape->SetStroke( stroke );
-            shape->SetLayer( Edge_Cuts );
-            shape->SetStart( seg.A );
-            shape->SetEnd( seg.B );
-
-            m_board->Add( shape.release(), ADD_MODE::APPEND );
+            shape = std::make_unique<PCB_SHAPE>( &aBoard, SHAPE_T::SEGMENT );
+            shape->SetStart( edge.seg.A );
+            shape->SetEnd( edge.seg.B );
         }
+
+        shape->SetStroke( stroke );
+        shape->SetLayer( Edge_Cuts );
+
+        aBoard.Add( shape.release(), ADD_MODE::APPEND );
+    }
+}
+
+
+// How far along an edge a point on it lies, 0 at its start and 1 at its end
+double FractionAlongEdge( const OUTLINE_EDGE& aEdge, const VECTOR2I& aPt )
+{
+    if( !aEdge.isArc )
+    {
+        VECTOR2D along = aEdge.seg.B - aEdge.seg.A;
+        return VECTOR2D( aPt - aEdge.seg.A ).Dot( along ) / along.SquaredEuclideanNorm();
+    }
+
+    const VECTOR2I  centre = aEdge.arc.GetCenter();
+    const EDA_ANGLE sweep = aEdge.arc.GetCentralAngle();
+    EDA_ANGLE       turned = EDA_ANGLE( aPt - centre ) - EDA_ANGLE( aEdge.arc.GetP0() - centre );
+
+    if( sweep.AsDegrees() < 0 )
+        turned = -turned;
+
+    turned.Normalize();
+    return turned.AsDegrees() / std::abs( sweep.AsDegrees() );
+}
+
+
+VECTOR2I PointAlongEdge( const OUTLINE_EDGE& aEdge, double aFraction )
+{
+    if( aFraction <= 0 )
+        return aEdge.isArc ? aEdge.arc.GetP0() : aEdge.seg.A;
+
+    if( aFraction >= 1 )
+        return aEdge.isArc ? aEdge.arc.GetP1() : aEdge.seg.B;
+
+    if( !aEdge.isArc )
+        return aEdge.seg.A + KiROUND( VECTOR2D( aEdge.seg.B - aEdge.seg.A ) * aFraction );
+
+    VECTOR2I pt = aEdge.arc.GetP0();
+    RotatePoint( pt, aEdge.arc.GetCenter(), -aEdge.arc.GetCentralAngle() * aFraction );
+    return pt;
+}
+
+
+// An edge is part of the outline only where there is board on one side of it and none on the other
+bool BoundsMaterial( const OUTLINE_EDGE& aEdge, double aFraction, const SHAPE_POLY_SET& aMaterial )
+{
+    const double probe = pcbIUScale.mmToIU( 0.05 );
+    VECTOR2I     pt = PointAlongEdge( aEdge, aFraction );
+    VECTOR2D     normal;
+
+    if( aEdge.isArc )
+        normal = VECTOR2D( pt - aEdge.arc.GetCenter() ).Resize( 1.0 );
+    else
+        normal = VECTOR2D( aEdge.seg.B - aEdge.seg.A ).Perpendicular().Resize( 1.0 );
+
+    bool left = aMaterial.Contains( pt + KiROUND( normal * probe ) );
+    bool right = aMaterial.Contains( pt - KiROUND( normal * probe ) );
+
+    return left != right;
+}
+
+
+// The parts of the edges that lie inside, or outside, the region; a part on a cutter is kept only where it
+// bounds aMaterial
+std::vector<OUTLINE_EDGE> ClipOutlineEdges( const std::vector<OUTLINE_EDGE>&             aEdges,
+                                            const std::vector<const SHAPE_LINE_CHAIN*>& aCutters,
+                                            const SHAPE_POLY_SET& aRegion, bool aKeepInside,
+                                            const SHAPE_POLY_SET* aMaterial )
+{
+    const int                 onCutter = pcbIUScale.mmToIU( 0.005 );
+    std::vector<OUTLINE_EDGE> kept;
+
+    for( const OUTLINE_EDGE& edge : aEdges )
+    {
+        // Distance to the lines of a cutter, since the inside of a closed chain is at distance zero
+        auto nearCutter =
+                [&]( const VECTOR2I& aPt )
+                {
+                    for( const SHAPE_LINE_CHAIN* cutter : aCutters )
+                    {
+                        if( cutter->SquaredDistance( aPt, true ) <= SEG::Square( onCutter ) )
+                            return true;
+                    }
+
+                    return false;
+                };
+
+        SHAPE_LINE_CHAIN chain;
+
+        if( edge.isArc )
+        {
+            chain.Append( edge.arc );
+        }
+        else
+        {
+            chain.Append( edge.seg.A );
+            chain.Append( edge.seg.B );
+        }
+
+        std::vector<double> cuts = { 0.0, 1.0 };
+
+        for( const SHAPE_LINE_CHAIN* cutter : aCutters )
+        {
+            std::vector<SHAPE_LINE_CHAIN::INTERSECTION> crossings;
+            chain.Intersect( *cutter, crossings );
+
+            for( const SHAPE_LINE_CHAIN::INTERSECTION& crossing : crossings )
+                cuts.push_back( std::clamp( FractionAlongEdge( edge, crossing.p ), 0.0, 1.0 ) );
+        }
+
+        std::sort( cuts.begin(), cuts.end() );
+
+        // A vertex both chains share is reported twice, and a zero-length piece has no side
+        cuts.erase( std::unique( cuts.begin(), cuts.end(),
+                                 [&]( double aLeft, double aRight )
+                                 {
+                                     return PointAlongEdge( edge, aLeft ) == PointAlongEdge( edge, aRight );
+                                 } ),
+                    cuts.end() );
+
+        enum class SIDE { KEEP, DROP, UNSURE };
+
+        auto subEdge =
+                [&]( double aFrom, double aTo )
+                {
+                    if( aFrom <= 0.0 && aTo >= 1.0 )
+                        return edge;
+
+                    OUTLINE_EDGE piece = edge;
+                    VECTOR2I     start = PointAlongEdge( edge, aFrom );
+                    VECTOR2I     end = PointAlongEdge( edge, aTo );
+
+                    if( edge.isArc )
+                        piece.arc = SHAPE_ARC( start, PointAlongEdge( edge, ( aFrom + aTo ) / 2 ), end, 0 );
+                    else
+                        piece.seg = SEG( start, end );
+
+                    return piece;
+                };
+
+        auto classify =
+                [&]( size_t aPiece )
+                {
+                    OUTLINE_EDGE piece = subEdge( cuts[aPiece], cuts[aPiece + 1] );
+                    VECTOR2I     mid = PointAlongEdge( edge, ( cuts[aPiece] + cuts[aPiece + 1] ) / 2 );
+                    bool         keep = nearCutter( mid ) ? aMaterial && BoundsMaterial( piece, 0.5, *aMaterial )
+                                                          : aRegion.Contains( mid ) == aKeepInside;
+
+                    return keep ? SIDE::KEEP : SIDE::DROP;
+                };
+
+        auto span =
+                [&]( size_t aFrom, size_t aTo )
+                {
+                    return PointAlongEdge( edge, cuts[aFrom] ).Distance( PointAlongEdge( edge, cuts[aTo] ) );
+                };
+
+        std::vector<SIDE> sides;
+
+        // Pieces within the cutter tolerance cannot be classified reliably, so they are settled by run below
+        for( size_t i = 0; i + 1 < cuts.size(); i++ )
+            sides.push_back( span( i, i + 1 ) <= onCutter ? SIDE::UNSURE : classify( i ) );
+
+        for( size_t i = 0; i < sides.size(); )
+        {
+            if( sides[i] != SIDE::UNSURE )
+            {
+                i++;
+                continue;
+            }
+
+            size_t j = i;
+
+            while( j < sides.size() && sides[j] == SIDE::UNSURE )
+                j++;
+
+            bool hasNeighbour = i > 0 || j < sides.size();
+
+            // A short run joins a kept neighbour, while a long run of short pieces is still a real span
+            if( hasNeighbour && span( i, j ) <= onCutter )
+            {
+                bool nextToKept = ( i > 0 && sides[i - 1] == SIDE::KEEP )
+                                  || ( j < sides.size() && sides[j] == SIDE::KEEP );
+
+                for( size_t k = i; k < j; k++ )
+                    sides[k] = nextToKept ? SIDE::KEEP : SIDE::DROP;
+            }
+            else
+            {
+                for( size_t k = i; k < j; k++ )
+                    sides[k] = classify( k );
+            }
+
+            i = j;
+        }
+
+        // Each kept run is one piece, as a shared edge meets its cutter at every cutter vertex
+        for( size_t i = 0; i < sides.size(); )
+        {
+            if( sides[i] != SIDE::KEEP )
+            {
+                i++;
+                continue;
+            }
+
+            size_t j = i;
+
+            while( j < sides.size() && sides[j] == SIDE::KEEP )
+                j++;
+
+            kept.push_back( subEdge( cuts[i], cuts[j] ) );
+            i = j;
+        }
+    }
+
+    return kept;
+}
+} // namespace
+
+
+void ALTIUM_PCB::HelperCreateBoardOutline( const SHAPE_LINE_CHAIN& aOutline )
+{
+    std::vector<OUTLINE_EDGE> edges = OutlineEdgesFromChain( aOutline );
+
+    RemoveOutlineJogs( edges, m_outlineJogCount, m_outlineJogLargest );
+    AddOutlineEdges( *m_board, edges );
+}
+
+
+void ALTIUM_PCB::HelperFinishBoardOutline()
+{
+    SHAPE_LINE_CHAIN board = m_boardOutline;
+    board.SetClosed( true );
+
+    std::vector<OUTLINE_EDGE> edges = OutlineEdgesFromChain( m_boardOutline );
+    SHAPE_POLY_SET            region;
+    bool                      merged = false;
+
+    if( board.PointCount() >= 3 )
+        region.AddOutline( board );
+
+    std::vector<SHAPE_LINE_CHAIN> separate;
+    std::vector<const SHAPE_LINE_CHAIN*> applied = { &board };
+
+    // The cutouts must keep their addresses while they are referenced
+    std::vector<SHAPE_LINE_CHAIN> cutouts = m_boardCutouts;
+
+    for( SHAPE_LINE_CHAIN& cutout : cutouts )
+    {
+        cutout.SetClosed( true );
+
+        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> crossings;
+
+        if( board.PointCount() < 3 || cutout.PointCount() < 3 || board.Intersect( cutout, crossings ) == 0 )
+        {
+            separate.push_back( cutout );
+            continue;
+        }
+
+        // A cutout over the board edge reshapes the outline: keep the board edges outside it and the
+        // cutout edges inside the board, cutting arcs and lines only where they cross
+        SHAPE_POLY_SET cutArea;
+        cutArea.AddOutline( cutout );
+
+        // Boolean operations are not defined for arcs, and only the area is needed from the region
+        SHAPE_POLY_SET material = region.CloneDropTriangulation();
+        SHAPE_POLY_SET cutAreaFlat = cutArea.CloneDropTriangulation();
+        material.ClearArcs();
+        cutAreaFlat.ClearArcs();
+        material.BooleanSubtract( cutAreaFlat );
+
+        // The cutout is cut by the board and by every cutout already applied, as they all bound the material.
+        // A shared edge is taken from the board side, and only where the cut leaves board on one side of it
+        std::vector<OUTLINE_EDGE> kept = ClipOutlineEdges( edges, { &cutout }, cutArea, false, &material );
+        std::vector<OUTLINE_EDGE> inside =
+                ClipOutlineEdges( OutlineEdgesFromChain( cutout ), applied, region, true, nullptr );
+
+        kept.insert( kept.end(), inside.begin(), inside.end() );
+        edges = std::move( kept );
+        region = std::move( material );
+        applied.push_back( &cutout );
+        merged = true;
+    }
+
+    if( merged )
+    {
+        AddOutlineEdges( *m_board, edges );
+    }
+    else
+    {
+        HelperCreateBoardOutline( m_boardOutline );
+    }
+
+    for( const SHAPE_LINE_CHAIN& cutout : separate )
+        HelperCreateBoardOutline( cutout );
+
+    m_boardOutline.Clear();
+    m_boardCutouts.clear();
+
+    if( m_outlineJogCount > 0 && m_reporter )
+    {
+        m_reporter->Report( wxString::Format( _( "%d tiny jogs in the board outline were removed; the largest "
+                                                 "moved an outline end by %s." ),
+                                              m_outlineJogCount,
+                                              wxString::FromCDouble( pcbIUScale.IUTomm( m_outlineJogLargest ), 4 )
+                                                      + wxS( " mm" ) ),
+                            RPT_SEVERITY_WARNING );
     }
 }
 
@@ -3315,7 +3843,9 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem, co
 {
     if( aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
     {
-        HelperCreateBoardOutline( aElem.outline );
+        SHAPE_LINE_CHAIN cutout;
+        HelperShapeLineChainFromAltiumVertices( cutout, aElem.outline );
+        m_boardCutouts.push_back( std::move( cutout ) );
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || aElem.is_keepout )
     {
