@@ -18,10 +18,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _ODB_NETLIST_H_
-#define _ODB_NETLIST_H_
+#pragma once
 
-#include <wx/string.h>
+#include <map>
+#include <ostream>
+#include <string>
+#include <vector>
+
 
 // Structure for holding the ODB net point record.
 struct ODB_NET_RECORD
@@ -75,5 +78,3 @@ private:
                                std::ostream&                                  aStream,
                                const ODB_FORMAT&                              aFormat );
 };
-
-#endif // _ODB_NETLIST_H_

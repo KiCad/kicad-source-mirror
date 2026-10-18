@@ -18,29 +18,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "odb_netlist.h"
 
-#include <confirm.h>
-#include <gestfich.h>
-#include <kiface_base.h>
-#include <pcb_edit_frame.h>
-#include <trigo.h>
-#include <build_version.h>
-#include <macros.h>
-#include <wildcards_and_files_ext.h>
 #include <board.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+
 #include <exporters/fab_model/fab_pin.h>
 #include <exporters/fab_model/fab_test_points.h>
-#include <vector>
-#include <cctype>
-#include <odb_netlist.h>
-#include <wx/filedlg.h>
-#include <wx/log.h>
-#include "odb_defines.h"
-#include "odb_util.h"
-#include "pcb_io_odbpp.h"
+
+#include <odb_defines.h>
+#include <odb_util.h>
+#include <pcb_io_odbpp.h>
 
 
 // Compute the side code for a via.
