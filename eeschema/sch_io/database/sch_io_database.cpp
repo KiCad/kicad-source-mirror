@@ -736,7 +736,14 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
             id.Parse( std::string( token.ToUTF8() ) );
 
             if( id.IsValid() )
+            {
                 symbolIds.push_back( id );
+            }
+            else
+            {
+                Report( wxString::Format( _( "'%s' is not a symbol; expected Library:Symbol." ), token ),
+                        RPT_SEVERITY_WARNING );
+            }
         }
 
         // A row's Symbols column may resolve back into the same database library (issue #24249,
