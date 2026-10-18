@@ -905,8 +905,8 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
     if( m_boardAdapter.GetBackCountersinkPolys().OutlineCount() > 0 )
         board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
 
-    if( m_boardAdapter.GetBackdrillPolys().OutlineCount() > 0 )
-        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackdrillPolys() );
+    if( m_boardAdapter.GetSecondarydrillPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetSecondarydrillPolys() );
 
     if( m_boardAdapter.GetTertiarydrillPolys().OutlineCount() > 0 )
         board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
@@ -1082,10 +1082,9 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetFrontCounterborePolys() );
             poly.BooleanSubtract( m_boardAdapter.GetFrontCountersinkPolys() );
-            poly.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetSecondarydrillPolys() );
 
-            assignRenderPtr( m_platedPadsFront,
-                             generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly, F_Cu ) );
+            assignRenderPtr( m_platedPadsFront, generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly, F_Cu ) );
 
             // An entry for F_Cu must exist in m_layers or we'll never look at m_platedPadsFront
             if( m_layers.count( F_Cu ) == 0 )
@@ -1100,10 +1099,9 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetBackCounterborePolys() );
             poly.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
-            poly.BooleanSubtract( m_boardAdapter.GetBackdrillPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
 
-            assignRenderPtr( m_platedPadsBack,
-                             generateLayerList( m_boardAdapter.GetPlatedPadsBack(), &poly, B_Cu ) );
+            assignRenderPtr( m_platedPadsBack, generateLayerList( m_boardAdapter.GetPlatedPadsBack(), &poly, B_Cu ) );
 
             // An entry for B_Cu must exist in m_layers or we'll never look at m_platedPadsBack
             if( m_layers.count( B_Cu ) == 0 )

@@ -326,12 +326,12 @@ public:
     }
 
     /**
-     *  Get the backdrill and tertiary drill polygons.
+     *  Get the secondary and tertiary drill polygons.
      *
      */
-    const SHAPE_POLY_SET& GetBackdrillPolys() const noexcept
+    const SHAPE_POLY_SET& GetSecondarydrillPolys() const noexcept
     {
-        return m_BackdrillPolys;
+        return m_SecondarydrillPolys;
     }
 
     const SHAPE_POLY_SET& GetTertiarydrillPolys() const noexcept
@@ -584,8 +584,8 @@ private:
     MAP_POLY                m_layerHoleOdPolys;     ///< Hole outer diameters (per layer)
     MAP_POLY                m_layerHoleIdPolys;     ///< Hole inner diameters (per layer)
 
-    SHAPE_POLY_SET          m_BackdrillPolys;        ///< Board backdrill polygons B.Cu->in
-    SHAPE_POLY_SET          m_TertiarydrillPolys;    ///< Board tertiary drill polygons F.Cu->in
+    SHAPE_POLY_SET          m_SecondarydrillPolys;  ///< Board secondary dril polygons F.Cu->in
+    SHAPE_POLY_SET          m_TertiarydrillPolys;   ///< Board tertiary drill polygons B.Cu->in
 
     SHAPE_POLY_SET          m_NPTH_ODPolys;         ///< NPTH outer diameters
     SHAPE_POLY_SET          m_TH_ODPolys;           ///< PTH outer diameters
