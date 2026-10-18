@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-15 09:51+0000\n"
+"PO-Revision-Date: 2026-10-19 06:53+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -26805,9 +26805,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Imposta l'attributo di esclusione dalla scheda"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Imposta l'attributo escludi dalla simulazione"
+msgstr "Imposta l'attributo di esclusione dai file di posizione"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -26937,9 +26936,8 @@ msgid "Import 2D drawing file"
 msgstr "Importa file di grafica 2D"
 
 #: eeschema/tools/sch_actions.cpp:1218
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "Schema non-KiCad..."
+msgstr "Importa schema non-KiCad..."
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid ""
