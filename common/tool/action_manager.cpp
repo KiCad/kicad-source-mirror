@@ -53,9 +53,8 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
             groupName = group.value().GetName();
         }
 
-        wxLogTrace( kicadTraceToolStack,
-                    "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d, UI ID %d, "
-                    "group %s(%d), toolbar state %s",
+        wxLogTrace( kicadTraceToolStack, "ACTION_MANAGER::ACTION_MANAGER: Registering action %s with ID %d, UI ID %d, "
+                                         "group %s(%d), toolbar state %s",
                     action->m_name, action->m_id, action->GetUIId(), groupName, groupID,
                     action->m_toolbarState.to_string() );
 
@@ -86,8 +85,7 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
 }
 
 
-void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction,
-                                    const ACTION_CONDITIONS& aConditions )
+void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction, const ACTION_CONDITIONS& aConditions )
 {
     // Remove any existing handlers with the old conditions to ensure the UI layer doesn't have
     // stale data.
@@ -96,8 +94,7 @@ void ACTION_MANAGER::SetConditions( const TOOL_ACTION& aAction,
 
     m_uiConditions[aAction.GetId()] = aConditions;
 
-    wxLogTrace( kicadTraceToolStack,
-                wxS( "ACTION_MANAGER::SetConditions: Registering conditions for ID %d - %s" ),
+    wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::SetConditions: Registering conditions for ID %d - %s" ),
                 aAction.GetId(), aAction.GetName() );
 
     // Register a new handler with the new conditions
@@ -145,8 +142,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     if( key >= 'a' && key <= 'z' )
         key = std::toupper( key );
 
-    wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::RunHotKey Key: %s" ),
-                KeyNameFromKeyCode( aHotKey ) );
+    wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::RunHotKey Key: %s" ), KeyNameFromKeyCode( aHotKey ) );
 
     int                         matchedHotKey = key | mod;
     HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( matchedHotKey );
@@ -174,10 +170,10 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
     // Choose the action that has the highest priority on the active tools stack
     // If there is none, run the global action associated with the hot key
-    int highestPriority = -1, priority = -1;
-    const TOOL_ACTION* context = nullptr; // pointer to context action of the highest priority tool
-    std::vector<const TOOL_ACTION*> global; // pointers to global actions
-                                            // if there is no context action
+    int                             highestPriority = -1;
+    int                             priority = -1;
+    const TOOL_ACTION*              context = nullptr; // pointer to context action of the highest priority tool
+    std::vector<const TOOL_ACTION*> global;            // pointers to global actions if there are no context actions
 
     for( const TOOL_ACTION* action : actions )
     {
@@ -220,11 +216,9 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         if( const ACTION_CONDITIONS* aCond = GetCondition( *context ) )
             runAction = aCond->GetHotkeyCondition()( sel );
 
-        wxLogTrace( kicadTraceToolStack,
-                    wxS( "ACTION_MANAGER::RunHotKey %s context action: %s for hotkey %s" ),
+        wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::RunHotKey %s context action: %s for hotkey %s" ),
                     runAction ? wxS( "Running" ) : wxS( "Not running" ),
-                    context->GetName(),
-                    KeyNameFromKeyCode( aHotKey ) );
+                    context->GetName(), KeyNameFromKeyCode( aHotKey ) );
 
         if( runAction )
             return m_toolMgr->RunAction( *context );
@@ -238,19 +232,16 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
             if( const ACTION_CONDITIONS* aCond = GetCondition( *act ) )
                 runAction = aCond->GetHotkeyCondition()( sel );
 
-            wxLogTrace( kicadTraceToolStack,
-                        wxS( "ACTION_MANAGER::RunHotKey %s global action: %s for hotkey %s" ),
+            wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::RunHotKey %s global action: %s for hotkey %s" ),
                         runAction ? wxS( "Running" ) : wxS( "Not running" ),
-                        act->GetName(),
-                        KeyNameFromKeyCode( aHotKey ) );
+                        act->GetName(), KeyNameFromKeyCode( aHotKey ) );
 
             if( runAction && m_toolMgr->RunAction( *act ) )
                 return true;
         }
     }
 
-    wxLogTrace( kicadTraceToolStack,
-                wxS( "ACTION_MANAGER::RunHotKey No action found for key %s" ),
+    wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::RunHotKey No action found for key %s" ),
                 KeyNameFromKeyCode( aHotKey ) );
 
     return false;
@@ -263,18 +254,23 @@ std::string ACTION_MANAGER::FrameNamespacePrefix( FRAME_T aFrameType )
     {
     case FRAME_PCB_EDITOR:
     case FRAME_FOOTPRINT_EDITOR:
-    case FRAME_FOOTPRINT_VIEWER: return "pcbnew.";
+    case FRAME_FOOTPRINT_VIEWER:
+        return "pcbnew.";
 
     case FRAME_SCH:
     case FRAME_SCH_SYMBOL_EDITOR:
     case FRAME_SCH_VIEWER:
-    case FRAME_SIMULATOR: return "eeschema.";
+    case FRAME_SIMULATOR:
+        return "eeschema.";
 
-    case FRAME_GERBER: return "gerbview.";
+    case FRAME_GERBER:
+        return "gerbview.";
 
-    case FRAME_PL_EDITOR: return "plEditor.";
+    case FRAME_PL_EDITOR:
+        return "plEditor.";
 
-    default: return "";
+    default:
+        return "";
     }
 }
 
