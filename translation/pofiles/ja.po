@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-15 09:51+0000\n"
+"PO-Revision-Date: 2026-10-19 06:53+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -15707,7 +15707,7 @@ msgstr "ピン番号(&b):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr "ピン番号: 1から4文字のASCII文字および数字"
+msgstr "ピン番号: 1から4文字のASCII文字列または数字"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
 msgid "&X position:"
