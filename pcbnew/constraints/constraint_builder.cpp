@@ -23,6 +23,7 @@
 #include <cmath>
 #include <ranges>
 #include <set>
+#include <unordered_set>
 
 #include <base_units.h>
 #include <board.h>
@@ -34,6 +35,8 @@
 #include <geometry/shape_poly_set.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
 
 
 namespace
@@ -672,9 +675,13 @@ BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId )
 
     BOARD_ITEM* item = aBoard->ResolveItem( aId, true );
 
-    return item && ( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
-                   ? item
-                   : nullptr;
+    return IsConstrainableItem( item ) ? item : nullptr;
+}
+
+
+bool IsConstrainableItem( const BOARD_ITEM* aItem )
+{
+    return aItem && ( aItem->Type() == PCB_SHAPE_T || dynamic_cast<const PCB_DIMENSION_BASE*>( aItem ) );
 }
 
 
@@ -807,6 +814,70 @@ std::optional<KIID> NearestConstrainedShape( BOARD* aBoard, const std::vector<KI
     }
 
     return std::nullopt;
+}
+
+
+std::unordered_set<KIID> CollectMemberCandidateIds( BOARD* aBoard )
+{
+    std::unordered_set<KIID> ids;
+
+    if( !aBoard )
+        return ids;
+
+    auto collect =
+            [&]( const auto& aContainer )
+            {
+                for( BOARD_ITEM* item : aContainer )
+                {
+                    if( dynamic_cast<PCB_SHAPE*>( item ) || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+                        ids.insert( item->m_Uuid );
+
+                    if( PCB_TABLE* table = dynamic_cast<PCB_TABLE*>( item ) )
+                    {
+                        for( PCB_TABLECELL* cell : table->GetCells() )
+                            ids.insert( cell->m_Uuid );
+                    }
+                }
+            };
+
+    collect( aBoard->Drawings() );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+        collect( footprint->GraphicalItems() );
+
+    return ids;
+}
+
+
+std::vector<KIID> ConstrainedShapeIds( BOARD* aBoard )
+{
+    std::vector<KIID> ids;
+
+    if( !aBoard )
+        return ids;
+
+    std::unordered_set<KIID> onBoard = CollectMemberCandidateIds( aBoard );
+    std::unordered_set<KIID> seen;
+
+    auto collect =
+            [&]( const CONSTRAINTS& aConstraints )
+            {
+                for( PCB_CONSTRAINT* constraint : aConstraints )
+                {
+                    for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
+                    {
+                        if( onBoard.contains( member.m_item ) && seen.insert( member.m_item ).second )
+                            ids.push_back( member.m_item );
+                    }
+                }
+            };
+
+    collect( aBoard->Constraints() );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+        collect( footprint->Constraints() );
+
+    return ids;
 }
 
 

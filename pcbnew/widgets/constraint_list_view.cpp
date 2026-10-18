@@ -20,6 +20,7 @@
 #include <widgets/constraint_list_view.h>
 
 #include <set>
+#include <unordered_set>
 
 #include <wx/listctrl.h>
 
@@ -28,6 +29,7 @@
 
 #include <constraints/pcb_constraint.h>
 #include <constraints/board_constraint_adapter.h>
+#include <constraints/constraint_builder.h>
 
 
 void AddConstraintListColumns( wxListCtrl* aList )
@@ -52,11 +54,16 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
     std::set<KIID> conflicting( aDiag.conflicting.begin(), aDiag.conflicting.end() );
     std::set<KIID> redundant( aDiag.redundant.begin(), aDiag.redundant.end() );
 
+    // Resolving a member that is not on the board scans the whole board
+    std::unordered_set<KIID> onBoard = CollectMemberCandidateIds( aBoard );
+
     auto memberLabel =
             [&]( const CONSTRAINT_MEMBER& aMember ) -> wxString
             {
-                return ConstraintMemberLabel( aBoard->ResolveItem( aMember.m_item, true ),
-                                              aMember, aUnits );
+                BOARD_ITEM* item = onBoard.contains( aMember.m_item ) ? aBoard->ResolveItem( aMember.m_item, true )
+                                                                      : nullptr;
+
+                return ConstraintMemberLabel( item, aMember, aUnits );
             };
 
     auto addRows =

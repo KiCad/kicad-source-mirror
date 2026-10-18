@@ -27,12 +27,17 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 
+#include <algorithm>
+#include <memory>
 #include <set>
 
 #include <board.h>
+#include <footprint.h>
 #include <math/box2.h>
 #include <pcb_shape.h>
+#include <settings/settings_manager.h>
 #include <view/view.h>
 
 #include <constraints/pcb_constraint.h>
@@ -240,6 +245,37 @@ BOOST_AUTO_TEST_CASE( NearestConstrainedShapeUsesCandidatesOnly )
     delete seg;
 
     BOOST_CHECK( !NearestConstrainedShape( &board, candidates, VECTOR2I( 5 * MM, 1000 ), 5000 ).has_value() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ConstrainedShapeIdsDropsMissingMembers )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+    KI_TEST::LoadBoard( settingsManager, wxS( "api_kitchen_sink" ), board );
+
+    // The file's footprint constraints name shapes the footprint no longer has
+    auto hasConstraints = []( const FOOTPRINT* aFootprint ) { return !aFootprint->Constraints().empty(); };
+    auto fpIt = std::ranges::find_if( board->Footprints(), hasConstraints );
+    BOOST_REQUIRE( fpIt != board->Footprints().end() );
+
+    FOOTPRINT*      footprint = *fpIt;
+    PCB_CONSTRAINT* dangling = footprint->Constraints().front();
+    BOOST_REQUIRE( !dangling->GetMembers().empty() );
+    BOOST_REQUIRE( !board->ResolveItem( dangling->GetMembers().front().m_item, true ) );
+
+    auto shapeIt = std::ranges::find_if( footprint->GraphicalItems(),
+                                         []( BOARD_ITEM* aItem ) { return aItem->Type() == PCB_SHAPE_T; } );
+    BOOST_REQUIRE( shapeIt != footprint->GraphicalItems().end() );
+
+    PCB_CONSTRAINT* live = static_cast<PCB_CONSTRAINT*>( dangling->Clone() );
+    live->ResetUuid();
+    live->RemapKIIDs( { { dangling->GetMembers().front().m_item, ( *shapeIt )->m_Uuid } } );
+    footprint->Add( live );
+
+    std::vector<KIID> ids = ConstrainedShapeIds( board.get() );
+    BOOST_REQUIRE_EQUAL( ids.size(), 1 );
+    BOOST_CHECK( ids.front() == ( *shapeIt )->m_Uuid );
 }
 
 

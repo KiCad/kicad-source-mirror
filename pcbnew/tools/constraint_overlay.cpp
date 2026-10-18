@@ -24,6 +24,7 @@
 #include <limits>
 #include <ranges>
 #include <set>
+#include <unordered_set>
 
 #include <wx/image.h>
 
@@ -411,9 +412,24 @@ void CONSTRAINT_OVERLAY::render()
     std::set<KIID> erroredIds( diag.errored.begin(), diag.errored.end() );
     std::set<KIID> conflictingIds( diag.conflicting.begin(), diag.conflicting.end() );
 
+    // Gathered on first use so a render showing no badges skips the board walk
+    std::optional<std::unordered_set<KIID>> onBoardIds;
+
+    auto onBoard =
+            [&]( const KIID& aId )
+            {
+                if( !onBoardIds )
+                    onBoardIds = CollectMemberCandidateIds( m_board );
+
+                return onBoardIds->contains( aId );
+            };
+
     auto badgePosition =
             [&]( const CONSTRAINT_MEMBER& aFirst ) -> std::optional<VECTOR2I>
             {
+                if( !onBoard( aFirst.m_item ) )
+                    return std::nullopt;
+
                 if( std::optional<VECTOR2I> pos = ConstraintAnchorPosition( m_board, aFirst ) )
                     return pos;
 
@@ -513,6 +529,9 @@ void CONSTRAINT_OVERLAY::render()
 
                     for( const CONSTRAINT_MEMBER& member : members )
                     {
+                        if( !onBoard( member.m_item ) )
+                            continue;
+
                         if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( m_board->ResolveItem( member.m_item, true ) ) )
                         {
                             appendShapeSegs( shape, avoid );

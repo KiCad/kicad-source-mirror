@@ -99,13 +99,24 @@ bool ConstraintItemIsLocked( const BOARD_ITEM* aItem )
 }
 
 
+// A board-wide pass checks members against the board's ids first since a missing id costs a full
+// board scan in BOARD::ResolveItem()
+static BOARD_ITEM* resolveMember( BOARD* aBoard, const std::unordered_set<KIID>* aOnBoard, const KIID& aId )
+{
+    if( aOnBoard && !aOnBoard->contains( aId ) )
+        return nullptr;
+
+    return aBoard->ResolveItem( aId, true );
+}
+
+
 // Adjacency from a member KIID to the constraints touching it.  When @p aErrored is given, any
 // constraint that cannot be satisfied -- it has no members, or a member that does not resolve to a
 // constrainable item (a shape or dimension) -- is recorded there (error state), since such a
 // constraint never reaches the solver's per-cluster mapping where the remaining error cases are caught.
 static std::unordered_map<KIID, std::vector<PCB_CONSTRAINT*>>
 buildShapeConstraintMap( BOARD* aBoard, const std::vector<PCB_CONSTRAINT*>& aConstraints,
-                         std::vector<KIID>* aErrored = nullptr )
+                         std::vector<KIID>* aErrored = nullptr, const std::unordered_set<KIID>* aOnBoard = nullptr )
 {
     std::unordered_map<KIID, std::vector<PCB_CONSTRAINT*>> map;
 
@@ -119,7 +130,7 @@ buildShapeConstraintMap( BOARD* aBoard, const std::vector<PCB_CONSTRAINT*>& aCon
 
             // Members must resolve to a constrainable item (shape or dimension); a deleted or
             // wrong-typed item is an error.
-            if( aErrored && !ResolveConstrainableItem( aBoard, member.m_item ) )
+            if( aErrored && !IsConstrainableItem( resolveMember( aBoard, aOnBoard, member.m_item ) ) )
                 errored = true;
         }
 
@@ -174,13 +185,14 @@ static void collectConstraintCluster(
 // Resolve a set of KIIDs to the live items of type T among them, dropping other kinds and deleted
 // items.
 template <typename T>
-static std::vector<T*> resolveClusterItems( BOARD* aBoard, const std::unordered_set<KIID>& aIds )
+static std::vector<T*> resolveClusterItems( BOARD* aBoard, const std::unordered_set<KIID>& aIds,
+                                            const std::unordered_set<KIID>* aOnBoard )
 {
     std::vector<T*> items;
 
     for( const KIID& id : aIds )
     {
-        if( T* item = dynamic_cast<T*>( aBoard->ResolveItem( id, true ) ) )
+        if( T* item = dynamic_cast<T*>( resolveMember( aBoard, aOnBoard, id ) ) )
             items.push_back( item );
     }
 
@@ -188,16 +200,18 @@ static std::vector<T*> resolveClusterItems( BOARD* aBoard, const std::unordered_
 }
 
 
-static std::vector<PCB_SHAPE*> resolveClusterShapes( BOARD* aBoard, const std::unordered_set<KIID>& aIds )
+static std::vector<PCB_SHAPE*> resolveClusterShapes( BOARD* aBoard, const std::unordered_set<KIID>& aIds,
+                                                     const std::unordered_set<KIID>* aOnBoard = nullptr )
 {
-    return resolveClusterItems<PCB_SHAPE>( aBoard, aIds );
+    return resolveClusterItems<PCB_SHAPE>( aBoard, aIds, aOnBoard );
 }
 
 
 static std::vector<PCB_DIMENSION_BASE*> resolveClusterDimensions( BOARD* aBoard,
-                                                                  const std::unordered_set<KIID>& aIds )
+                                                                  const std::unordered_set<KIID>& aIds,
+                                                                  const std::unordered_set<KIID>* aOnBoard = nullptr )
 {
-    return resolveClusterItems<PCB_DIMENSION_BASE>( aBoard, aIds );
+    return resolveClusterItems<PCB_DIMENSION_BASE>( aBoard, aIds, aOnBoard );
 }
 
 
@@ -3515,12 +3529,13 @@ void ReSolveAfterShapeResize( BOARD* aBoard, PCB_SHAPE* aShape, std::vector<PCB_
 // constraints contributes nothing so its result stays empty
 static CLUSTER_DIAGNOSIS diagnoseSingleCluster( BOARD*                              aBoard,
                                                 const std::unordered_set<KIID>&     aClusterShapes,
-                                                const std::vector<PCB_CONSTRAINT*>& aClusterConstraints )
+                                                const std::vector<PCB_CONSTRAINT*>& aClusterConstraints,
+                                                const std::unordered_set<KIID>&     aOnBoard )
 {
     CLUSTER_DIAGNOSIS result;
 
-    std::vector<PCB_SHAPE*>          shapes = resolveClusterShapes( aBoard, aClusterShapes );
-    std::vector<PCB_DIMENSION_BASE*> dimensions = resolveClusterDimensions( aBoard, aClusterShapes );
+    std::vector<PCB_SHAPE*>          shapes = resolveClusterShapes( aBoard, aClusterShapes, &aOnBoard );
+    std::vector<PCB_DIMENSION_BASE*> dimensions = resolveClusterDimensions( aBoard, aClusterShapes, &aOnBoard );
 
     BOARD_CONSTRAINT_ADAPTER adapter;
 
@@ -3605,8 +3620,13 @@ BOARD_CONSTRAINT_DIAGNOSTICS DiagnoseBoardConstraints( BOARD* aBoard )
 
     std::vector<PCB_CONSTRAINT*> boardConstraints = collectAllConstraints( aBoard );
 
+    if( boardConstraints.empty() )
+        return result;
+
+    std::unordered_set<KIID> onBoard = CollectMemberCandidateIds( aBoard );
+
     std::unordered_map<KIID, std::vector<PCB_CONSTRAINT*>> shapeToConstraints =
-            buildShapeConstraintMap( aBoard, boardConstraints, &result.errored );
+            buildShapeConstraintMap( aBoard, boardConstraints, &result.errored, &onBoard );
 
     std::set<KIID> visitedShapes;
 
@@ -3621,7 +3641,7 @@ BOARD_CONSTRAINT_DIAGNOSTICS DiagnoseBoardConstraints( BOARD* aBoard )
                                   &visitedShapes );
 
         assembleClusterInto( result,
-                             diagnoseSingleCluster( aBoard, clusterShapes, clusterConstraints ) );
+                             diagnoseSingleCluster( aBoard, clusterShapes, clusterConstraints, onBoard ) );
     }
 
     dedupErrored( result );
@@ -3792,7 +3812,8 @@ static void hashConstraint( std::size_t& aSeed, const PCB_CONSTRAINT* aConstrain
 // A hash over every input diagnoseSingleCluster would solve on so any geometry value or membership
 // change invalidates the cached result err toward hashing more since a missed field leaves it stale
 static std::size_t hashCluster( BOARD* aBoard, const std::unordered_set<KIID>& aClusterShapes,
-                                const std::vector<PCB_CONSTRAINT*>& aClusterConstraints )
+                                const std::vector<PCB_CONSTRAINT*>& aClusterConstraints,
+                                const std::unordered_set<KIID>& aOnBoard )
 {
     std::size_t seed = 0;
 
@@ -3801,7 +3822,7 @@ static std::size_t hashCluster( BOARD* aBoard, const std::unordered_set<KIID>& a
 
     for( const KIID& id : ids )
     {
-        BOARD_ITEM* item = aBoard->ResolveItem( id, true );
+        BOARD_ITEM* item = resolveMember( aBoard, &aOnBoard, id );
 
         if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
             hashShape( seed, shape );
@@ -3839,10 +3860,18 @@ BOARD_CONSTRAINT_DIAGNOSTICS BOARD_CONSTRAINT_DIAGNOSER::Diagnose( BOARD* aBoard
 
     std::vector<PCB_CONSTRAINT*> boardConstraints = collectAllConstraints( aBoard );
 
+    if( boardConstraints.empty() )
+    {
+        m_cache.clear();
+        return result;
+    }
+
+    std::unordered_set<KIID> onBoard = CollectMemberCandidateIds( aBoard );
+
     // The map-scan errored dangling members is recomputed in full every call so it can never go
     // stale however aggressively the per-cluster diagnoses are cached
     std::unordered_map<KIID, std::vector<PCB_CONSTRAINT*>> shapeToConstraints =
-            buildShapeConstraintMap( aBoard, boardConstraints, &result.errored );
+            buildShapeConstraintMap( aBoard, boardConstraints, &result.errored, &onBoard );
 
     std::set<KIID>              visitedShapes;
     std::set<std::vector<KIID>> seenKeys;
@@ -3866,13 +3895,13 @@ BOARD_CONSTRAINT_DIAGNOSTICS BOARD_CONSTRAINT_DIAGNOSER::Diagnose( BOARD* aBoard
 
         std::sort( key.begin(), key.end() );
 
-        std::size_t hash = hashCluster( aBoard, clusterShapes, clusterConstraints );
+        std::size_t hash = hashCluster( aBoard, clusterShapes, clusterConstraints, onBoard );
         auto        it = m_cache.find( key );
 
         if( it == m_cache.end() || it->second.hash != hash )
         {
             CLUSTER_DIAGNOSIS cluster =
-                    diagnoseSingleCluster( aBoard, clusterShapes, clusterConstraints );
+                    diagnoseSingleCluster( aBoard, clusterShapes, clusterConstraints, onBoard );
             m_solveCount++;
             it = m_cache.insert_or_assign( key, CACHE_ENTRY{ hash, std::move( cluster ) } ).first;
         }

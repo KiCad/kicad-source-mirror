@@ -24,6 +24,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <unordered_set>
 #include <vector>
 
 #include <math/vector2d.h>
@@ -157,6 +158,10 @@ std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const V
 BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId );
 
 
+/// True when @p aItem is one ResolveConstrainableItem() accepts: a PCB_SHAPE or a dimension.
+bool IsConstrainableItem( const BOARD_ITEM* aItem );
+
+
 /// The shape whose outline is nearest aPos within aMaxDist. Circles, arcs and ellipses count
 /// only when aAllowCircle is set.  @p aLayer narrows the candidates to one layer; UNDEFINED_LAYER
 /// searches every visible layer.
@@ -256,6 +261,22 @@ double InitialConstraintValue( PCB_CONSTRAINT_TYPE aType, double aMeasured,
  */
 std::optional<KIID> NearestConstrainedShape( BOARD* aBoard, const std::vector<KIID>& aCandidates, const VECTOR2I& aPos,
                                              int aMaxDist );
+
+
+/**
+ * The ids of every item on @p aBoard a constraint member can resolve to (shapes, dimensions and
+ * table cells), gathered in one board walk.  Check members against it before BOARD::ResolveItem(),
+ * which scans the whole board for an id that is not on it.
+ */
+std::unordered_set<KIID> CollectMemberCandidateIds( BOARD* aBoard );
+
+
+/**
+ * The member ids of every board and footprint constraint that are on @p aBoard, in first reference
+ * order: the candidate set for NearestConstrainedShape(), which the hover test scans on every mouse
+ * move.
+ */
+std::vector<KIID> ConstrainedShapeIds( BOARD* aBoard );
 
 
 /**

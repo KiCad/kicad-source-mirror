@@ -329,33 +329,9 @@ const BOARD_CONSTRAINT_DIAGNOSTICS& CONSTRAINT_EDIT_TOOL::ensureDiagnosis()
 
 const std::vector<KIID>& CONSTRAINT_EDIT_TOOL::hoverCandidates()
 {
-    if( m_hoverCandidateIds )
-        return *m_hoverCandidateIds;
+    if( !m_hoverCandidateIds )
+        m_hoverCandidateIds = ConstrainedShapeIds( board() );
 
-    std::set<KIID>    seen;
-    std::vector<KIID> ids;
-
-    auto collect = [&]( const CONSTRAINTS& aConstraints )
-    {
-        for( PCB_CONSTRAINT* c : aConstraints )
-        {
-            for( const CONSTRAINT_MEMBER& m : c->GetMembers() )
-            {
-                if( seen.insert( m.m_item ).second )
-                    ids.push_back( m.m_item );
-            }
-        }
-    };
-
-    if( board() )
-    {
-        collect( board()->Constraints() );
-
-        for( FOOTPRINT* footprint : board()->Footprints() )
-            collect( footprint->Constraints() );
-    }
-
-    m_hoverCandidateIds = std::move( ids );
     return *m_hoverCandidateIds;
 }
 
