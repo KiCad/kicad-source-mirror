@@ -26,6 +26,8 @@
 #include <i18n_utility.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <board.h>
+#include <footprint.h>
 
 
 PCB_3D_BODY::PCB_3D_BODY( BOARD_ITEM* aParent ) :
