@@ -546,22 +546,24 @@ BACKDRILL_MODE PADSTACK::GetBackdrillMode() const
 
 void PADSTACK::SetBackdrillMode( BACKDRILL_MODE aMode )
 {
-    auto apply = [this]( bool aTop, bool aWant )
-    {
-        if( aWant )
-        {
-            DRILL_PROPS& drill = backdrillWriteSlot( aTop );
-            drill.start = aTop ? F_Cu : B_Cu;
-            drill.shape = PAD_DRILL_SHAPE::CIRCLE;
+    auto apply =
+            [this]( bool aTop, bool aWant )
+            {
+                if( aWant )
+                {
+                    DRILL_PROPS& drill = backdrillWriteSlot( aTop );
+                    drill.start = aTop ? F_Cu : B_Cu;
+                    drill.end = drill.start;                 // Must-cut a single copper layer
+                    drill.shape = PAD_DRILL_SHAPE::CIRCLE;
 
-            if( drill.size.x <= 0 )
-                drill.size = m_drill.size * 1.1; // Backdrill slightly larger than main drill
-        }
-        else
-        {
-            clearBackdrillSide( aTop );
-        }
-    };
+                    if( drill.size.x <= 0 )
+                        drill.size = m_drill.size * 1.1;     // Backdrill slightly larger than main drill
+                }
+                else
+                {
+                    clearBackdrillSide( aTop );
+                }
+            };
 
     apply( true, aMode == BACKDRILL_MODE::BACKDRILL_TOP || aMode == BACKDRILL_MODE::BACKDRILL_BOTH );
     apply( false, aMode == BACKDRILL_MODE::BACKDRILL_BOTTOM || aMode == BACKDRILL_MODE::BACKDRILL_BOTH );
