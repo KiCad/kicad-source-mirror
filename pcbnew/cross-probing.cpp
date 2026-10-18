@@ -496,8 +496,7 @@ static bool selectionSpecFromItem( const EDA_ITEM* aItem, SelectionSpec& aSpec )
 }
 
 
-void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems,
-                                           EDA_ITEM* aFocusItem, bool aForce )
+void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems, EDA_ITEM* aFocusItem, bool aForce )
 {
     SyncSelection sync;
 
@@ -668,10 +667,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 const wxString& netname = pad->GetShortNetname();
 
                 if( !netname.IsEmpty() )
-                {
-                    component->AddNet( pad->GetNumber(), netname, pad->GetPinFunction(),
-                                       pad->GetPinType() );
-                }
+                    component->AddNet( pad->GetNumber(), netname, pad->GetPinFunction(), pad->GetPinType() );
             }
 
             nlohmann::ordered_map<wxString, wxString> fields;
@@ -774,10 +770,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             // Only libraries that live under the source project are relocated; a plain path
             // prefix would also match a sibling directory sharing the project name's stem.
             wxFileName relFn( fn );
-            bool       isProjectLocal =
-                    !srcProjectPath.IsEmpty() && relFn.MakeRelativeTo( srcProjectPath )
-                    && !relFn.IsAbsolute()
-                    && !relFn.GetFullPath().StartsWith( wxS( ".." ) );
+            bool       isProjectLocal = !srcProjectPath.IsEmpty()
+                                            && relFn.MakeRelativeTo( srcProjectPath )
+                                            && !relFn.IsAbsolute()
+                                            && !relFn.GetFullPath().StartsWith( wxS( ".." ) );
 
             wxString libTableUri;
 
@@ -790,8 +786,9 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
                 wxFileName projectFn( projectPath, fn.GetFullName() );
 
-                if( fn.GetFullPath() != projectFn.GetFullPath() && !projectFn.FileExists()
-                    && !wxCopyFile( fn.GetFullPath(), projectFn.GetFullPath(), false ) )
+                if( fn.GetFullPath() != projectFn.GetFullPath()
+                        && !projectFn.FileExists()
+                        && !wxCopyFile( fn.GetFullPath(), projectFn.GetFullPath(), false ) )
                 {
                     wxLogError( _( "Error copying footprint library '%s'." ), fn.GetFullPath() );
                     continue;
@@ -846,7 +843,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     // Handled as API messages
     case MAIL_CROSS_PROBE:
     case MAIL_SELECTION:
-        if( ApiRequest request; request.ParseFromString( payload.c_str() ) )
+        if( ApiRequest request; request.ParseFromString( payload ) )
             m_apiHandler->Handle( request );
 
         break;
@@ -883,6 +880,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         std::map<std::string, UTF8> props;
 
         std::string key, value;
+
         do
         {
             if( !std::getline( ss, key, delim ) )
