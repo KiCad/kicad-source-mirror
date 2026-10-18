@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <io/common/plugin_common_choose_project.h>
 #include <io/io_base.h>
 #include <pcb_io/pcb_io_mgr.h>
 
@@ -104,6 +105,16 @@ public:
     {
         return {};
     }
+
+    /**
+     * Return the KiCad projects a project container splits into, one per board entry and one per PCB or schematic
+     * no entry names.  Plugins that do not support project containers return an empty list.
+     */
+    virtual std::vector<IMPORT_PROJECT_DESC> EnumerateProjectEntries( const wxString& aFileName ) const
+    {
+        return {};
+    }
+
     virtual bool CanReadBoard( const wxString& aFileName ) const;
 
     /**

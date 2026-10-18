@@ -283,6 +283,15 @@ BOOST_AUTO_TEST_CASE( EasyEdaProV3SchematicResolvesToGeneratedCache )
             BOOST_CHECK_MESSAGE( adapter->LoadSymbol( nick, name ) != nullptr,
                                  wxString::Format( "LIB_ID '%s:%s' does not resolve after "
                                                    "reconciliation", nick, name ) );
+            // netlist export skips a symbol whose embedded copy is cached under another id
+            if( symbol->GetLibSymbolRef() )
+            {
+                BOOST_CHECK_MESSAGE( screen->GetLibSymbols().count( symbol->GetSchSymbolLibraryName() ),
+                                     wxString::Format( "No embedded copy under '%s'",
+                                                       symbol->GetSchSymbolLibraryName() ) );
+                BOOST_CHECK( symbol->GetLibSymbolRef()->GetLIB_ID() == symbol->GetLibId() );
+            }
+
             resolved++;
         }
     }

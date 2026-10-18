@@ -42,6 +42,7 @@
 #include <trace_helpers.h>
 
 #include <map>
+#include <optional>
 #include <set>
 #include <libraries/symbol_library_adapter.h>
 #include <sch_sheet_path.h>
@@ -142,7 +143,22 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
 
         wxString ref = aSymbol->GetRef( &aSheet );
 
-        int minUnit = aSymbol->GetUnitSelection( &aSheet );
+        // ranked by unit then UUID so the pick does not depend on visiting order
+        using SOURCE = std::pair<int, KIID>;
+
+        std::optional<SOURCE>      valueSrc;
+        std::optional<SOURCE>      footprintSrc;
+        std::optional<SOURCE>      datasheetSrc;
+        std::optional<SOURCE>      descriptionSrc;
+
+        // a blank field ranks after any text so it never hides a higher unit's value
+        std::map<wxString, std::pair<bool, SOURCE>> fieldSrcs;
+
+        auto earlier =
+                []( const SOURCE& aNew, const std::optional<SOURCE>& aOld )
+                {
+                    return !aOld || aNew < *aOld;
+                };
 
         for( const SCH_SHEET_PATH& sheet : aSheetList )
         {
@@ -155,35 +171,47 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
                 if( ref2.CmpNoCase( ref ) != 0 )
                     continue;
 
-                int unit = symbol2->GetUnitSelection( &aSheet );
+                const SOURCE src{ symbol2->GetUnitSelection( &sheet ), symbol2->m_Uuid };
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
 
                 // Value
                 candidate = symbol2->GetValue( &sheet, m_resolveTextVars, m_exportVariant );
 
-                if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
+                if( !candidate.IsEmpty() && earlier( src, valueSrc ) )
+                {
                     value = candidate;
+                    valueSrc = src;
+                }
 
                 // Footprint
                 candidate = symbol2->GetFootprintFieldText( &sheet, m_resolveTextVars, m_exportVariant );
 
-                if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
+                if( !candidate.IsEmpty() && earlier( src, footprintSrc ) )
+                {
                     footprint = candidate;
+                    footprintSrc = src;
+                }
 
                 // Datasheet
                 candidate = symbol2->GetField( FIELD_T::DATASHEET )->GetShownText( &sheet, m_resolveTextVars,
                                                                                    m_exportVariant );
 
-                if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
+                if( !candidate.IsEmpty() && earlier( src, datasheetSrc ) )
+                {
                     datasheet = candidate;
+                    datasheetSrc = src;
+                }
 
                 // Description
                 candidate = symbol2->GetField( FIELD_T::DESCRIPTION )->GetShownText( &sheet, m_resolveTextVars,
                                                                                      m_exportVariant );
 
-                if( !candidate.IsEmpty() && ( unit < minUnit || description.IsEmpty() ) )
+                if( !candidate.IsEmpty() && earlier( src, descriptionSrc ) )
+                {
                     description = candidate;
+                    descriptionSrc = src;
+                }
 
                 // All non-mandatory fields
                 for( SCH_FIELD& field : symbol2->GetFields() )
@@ -191,11 +219,17 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
                     if( field.IsMandatory() || field.IsPrivate() )
                         continue;
 
-                    if( unit < minUnit || fields.count( field.GetName() ) == 0 )
-                        fields[field.GetName()] = field.GetShownText( &aSheet, m_resolveTextVars, m_exportVariant );
-                }
+                    candidate = field.GetShownText( &sheet, m_resolveTextVars, m_exportVariant );
 
-                minUnit = std::min( unit, minUnit );
+                    const std::pair<bool, SOURCE> rank{ candidate.IsEmpty(), src };
+                    auto                          known = fieldSrcs.find( field.GetName() );
+
+                    if( known == fieldSrcs.end() || rank < known->second )
+                    {
+                        fields[field.GetName()] = candidate;
+                        fieldSrcs.insert_or_assign( field.GetName(), rank );
+                    }
+                }
             }
         }
     }

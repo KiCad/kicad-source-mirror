@@ -19,8 +19,11 @@
 
 #include "footprint_import_reconciler.h"
 
+#include <algorithm>
 #include <map>
+#include <memory>
 #include <set>
+#include <tuple>
 #include <utility>
 
 #include <wx/dir.h>
@@ -55,16 +58,6 @@ FOOTPRINT_IMPORT_RECONCILER::FOOTPRINT_IMPORT_RECONCILER( FOOTPRINT_LIBRARY_ADAP
 
 namespace
 {
-// structural signature, flags same-name placed instances that differ
-wxString placedSignature( const FOOTPRINT* aFp )
-{
-    BOX2I bbox = aFp->GetBoundingBox( false );
-
-    return wxString::Format( wxS( "%zu:%zu:%lld:%lld" ), aFp->Pads().size(), aFp->GraphicalItems().size(),
-                             (long long) bbox.GetWidth(), (long long) bbox.GetHeight() );
-}
-
-
 std::multiset<wxString> padNumbers( const FOOTPRINT& aFp )
 {
     std::multiset<wxString> numbers;
@@ -80,6 +73,99 @@ std::multiset<wxString> padNumbers( const FOOTPRINT& aFp )
 bool sameInterface( const FOOTPRINT& aLhs, const FOOTPRINT& aRhs )
 {
     return padNumbers( aLhs ) == padNumbers( aRhs );
+}
+
+
+// unset and explicit default thermal settings resolve the same
+bool sameCopperOverrides( const PADSTACK& aLhs, const PADSTACK& aRhs, PCB_LAYER_ID aLayer )
+{
+    const PADSTACK::COPPER_LAYER_PROPS& lhs = aLhs.CopperLayer( aLayer );
+    const PADSTACK::COPPER_LAYER_PROPS& rhs = aRhs.CopperLayer( aLayer );
+
+    return lhs.zone_connection.value_or( ZONE_CONNECTION::INHERITED )
+                   == rhs.zone_connection.value_or( ZONE_CONNECTION::INHERITED )
+           && lhs.thermal_spoke_width == rhs.thermal_spoke_width
+           && aLhs.ThermalSpokeAngle( aLayer ) == aRhs.ThermalSpokeAngle( aLayer )
+           && lhs.thermal_gap == rhs.thermal_gap
+           && lhs.clearance == rhs.clearance
+           && ( aLhs.Shape( aLayer ) != PAD_SHAPE::CUSTOM || aLhs.AnchorShape( aLayer ) == aRhs.AnchorShape( aLayer ) );
+}
+
+
+// the parity check skips pad overrides and fab settings, yet updating from the library replaces them
+bool samePadOverrides( FOOTPRINT& aInstance, const FOOTPRINT& aDef )
+{
+    std::unique_ptr<FOOTPRINT> def( static_cast<FOOTPRINT*>( aDef.Clone() ) );
+
+    def->SetParent( aInstance.GetBoard() );
+
+    if( def->IsFlipped() != aInstance.IsFlipped() )
+        def->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
+
+    std::set<PAD*, FOOTPRINT::cmp_pads> lhs( aInstance.Pads().begin(), aInstance.Pads().end() );
+    std::set<PAD*, FOOTPRINT::cmp_pads> rhs( def->Pads().begin(), def->Pads().end() );
+
+    bool same = std::equal( lhs.begin(), lhs.end(), rhs.begin(), rhs.end(),
+                            []( const PAD* aLhs, const PAD* aRhs )
+                            {
+                                const PADSTACK& lhsStack = aLhs->Padstack();
+                                const PADSTACK& rhsStack = aRhs->Padstack();
+
+                                if( !( lhsStack.FrontOuterLayers() == rhsStack.FrontOuterLayers() )
+                                    || !( lhsStack.BackOuterLayers() == rhsStack.BackOuterLayers() )
+                                    || aLhs->GetCustomShapeInZoneOpt() != aRhs->GetCustomShapeInZoneOpt()
+                                    || !( aLhs->GetTeardropParams() == aRhs->GetTeardropParams() )
+                                    || aLhs->GetPadToDieDelay() != aRhs->GetPadToDieDelay()
+                                    || aLhs->GetSimElectricalType() != aRhs->GetSimElectricalType()
+                                    || aLhs->GetTopBackdrillSize() != aRhs->GetTopBackdrillSize()
+                                    || aLhs->GetTopBackdrillLayer() != aRhs->GetTopBackdrillLayer()
+                                    || aLhs->GetBottomBackdrillSize() != aRhs->GetBottomBackdrillSize()
+                                    || aLhs->GetBottomBackdrillLayer() != aRhs->GetBottomBackdrillLayer()
+                                    || !( lhsStack.FrontPostMachining() == rhsStack.FrontPostMachining() )
+                                    || !( lhsStack.BackPostMachining() == rhsStack.BackPostMachining() ) )
+                                {
+                                    return false;
+                                }
+
+                                bool layersMatch = true;
+
+                                // the stacks may group layers differently, so walk the layers of both
+                                auto check =
+                                        [&]( PCB_LAYER_ID aLayer )
+                                        {
+                                            layersMatch &= sameCopperOverrides( lhsStack, rhsStack, aLayer );
+                                        };
+
+                                lhsStack.ForEachUniqueLayer( check );
+                                rhsStack.ForEachUniqueLayer( check );
+
+                                return layersMatch;
+                            } );
+
+    // a parentless temporary must not touch the board timestamp when it is destroyed
+    def->SetParent( nullptr );
+
+    return same;
+}
+
+
+// cheap pose-independent key, so the full library comparison only runs between footprints that can be equal
+using POSE_SIGNATURE = std::tuple<size_t, size_t, size_t, long long, long long>;
+
+
+POSE_SIGNATURE poseSignature( const FOOTPRINT& aFp )
+{
+    std::unique_ptr<FOOTPRINT> pose( static_cast<FOOTPRINT*>( aFp.Clone() ) );
+
+    if( pose->IsFlipped() )
+        pose->Flip( pose->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+    pose->SetOrientation( ANGLE_0 );
+
+    BOX2I bbox = pose->GetBoundingBox( false );
+
+    return { pose->Pads().size(), pose->GraphicalItems().size(), pose->Zones().size(), (long long) bbox.GetWidth(),
+             (long long) bbox.GetHeight() };
 }
 
 
@@ -101,6 +187,13 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
 
     if( !aBoard )
         return result;
+
+    // a nickname with no footprint name links to nothing, and it would name a library that does not exist
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        if( fp->GetFPID().GetLibItemName().empty() && !fp->GetFPID().GetLibNickname().empty() )
+            fp->SetFPID( LIB_ID() );
+    }
 
     // source nickname + item name, so same-name parts from different libraries stay split
     using SOURCE_KEY = std::pair<wxString, wxString>;
@@ -170,7 +263,18 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
             // link only when it holds the same footprint.
             if( provenance.count( nick ) )
             {
-                if( !m_adapter.FootprintExists( nick, aName ) )
+                // some plugins throw for a footprint their library lacks
+                bool exists = false;
+
+                try
+                {
+                    exists = m_adapter.FootprintExists( nick, aName );
+                }
+                catch( const IO_ERROR& )
+                {
+                }
+
+                if( !exists )
                     continue;
             }
             else
@@ -228,9 +332,11 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         for( int suffix = 0; ; ++suffix )
         {
             wxString candidate = suffix ? wxString::Format( wxS( "%s_%d" ), aName, suffix ) : aName;
-            wxString fileName = candidate;
 
-            ReplaceIllegalFileNameChars( fileName, '_' );
+            // the library indexes items by file name, so the item name must already be a legal one
+            ReplaceIllegalFileNameChars( candidate, '_' );
+
+            wxString fileName = candidate;
             fileName.MakeLower();
 
             if( takenFiles.insert( fileName ).second )
@@ -245,55 +351,95 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
     std::vector<std::unique_ptr<FOOTPRINT>> placedDefs;
     std::vector<wxString>                   renameReports;
 
+    std::map<const FOOTPRINT*, wxString> cacheNameByInstance;
+
     for( const SOURCE_KEY& key : cacheKeys )
     {
         const wxString& name = key.second;
         FOOTPRINT*      def = findDef( key.first, name );
 
-        if( !def )
+        // each placed instance must equal the copy it is linked to, or updating from the library edits the board
+        struct ITEM
         {
-            const std::vector<FOOTPRINT*>& instances = instancesByKey[key];
+            FOOTPRINT*     m_Def;
+            POSE_SIGNATURE m_Signature;
+            wxString       m_CacheName;
+        };
 
-            if( instances.empty() )
-                continue;
+        std::vector<ITEM> items;
 
-            wxString firstSig = placedSignature( instances.front() );
+        if( def )
+            items.push_back( { def, poseSignature( *def ), wxString() } );
 
-            for( auto it = instances.begin() + 1; it != instances.end(); ++it )
+        for( FOOTPRINT* instance : instancesByKey[key] )
+        {
+            POSE_SIGNATURE signature = poseSignature( *instance );
+
+            auto match = std::find_if( items.begin(), items.end(),
+                                       [&]( const ITEM& aItem )
+                                       {
+                                           return aItem.m_Signature == signature
+                                                  && !instance->FootprintNeedsUpdate(
+                                                          aItem.m_Def, BOARD_ITEM::COMPARE_FLAGS::DRC )
+                                                  && samePadOverrides( *instance, *aItem.m_Def );
+                                       } );
+
+            if( match == items.end() )
             {
-                if( placedSignature( *it ) != firstSig )
+                placedDefs.emplace_back( static_cast<FOOTPRINT*>( instance->Clone() ) );
+                items.push_back( { placedDefs.back().get(), signature, wxString() } );
+                match = items.end() - 1;
+            }
+
+            // the cache name is bound lazily so only items that serve an instance are published
+            if( match->m_CacheName.IsEmpty() )
+            {
+                // one definition serving several source libraries stays a single cache item
+                auto known = cacheNameByDef.find( match->m_Def );
+
+                if( known != cacheNameByDef.end() )
                 {
-                    m_reporter.Report( wxString::Format( _( "Imported footprint '%s' has "
-                                                            "conflicting placed definitions; "
-                                                            "keeping the first." ), name ),
-                                       RPT_SEVERITY_WARNING );
-                    break;
+                    match->m_CacheName = known->second;
+                }
+                else
+                {
+                    match->m_CacheName = uniqueName( name );
+
+                    cacheNameByDef[match->m_Def] = match->m_CacheName;
+                    cacheDefs[match->m_CacheName] = match->m_Def;
                 }
             }
 
-            placedDefs.emplace_back( static_cast<FOOTPRINT*>( instances.front()->Clone() ) );
-            def = placedDefs.back().get();
+            cacheNameByInstance[instance] = match->m_CacheName;
         }
 
-        // one definition serving several source libraries stays a single cache item
-        if( auto it = cacheNameByDef.find( def ); it != cacheNameByDef.end() )
+        if( items.size() > 1 && !instancesByKey[key].empty() )
         {
-            cacheNameByKey[key] = it->second;
-            continue;
+            m_reporter.Report( wxString::Format( _( "Imported footprint '%s' has %zu differing placed "
+                                                    "versions; each is kept as its own library item." ),
+                                                 name, items.size() ),
+                               RPT_SEVERITY_INFO );
         }
 
-        wxString cacheName = uniqueName( name );
+        // a definition nothing is placed from still goes in under its own name
+        if( def && cacheNameByDef.find( def ) == cacheNameByDef.end() )
+        {
+            wxString cacheName = uniqueName( name );
 
-        cacheNameByDef[def] = cacheName;
-        cacheNameByKey[key] = cacheName;
-        cacheDefs[cacheName] = def;
+            cacheNameByDef[def] = cacheName;
+            cacheDefs[cacheName] = def;
+        }
 
-        if( cacheName != name )
+        if( !instancesByKey[key].empty() )
+            cacheNameByKey[key] = cacheNameByInstance[instancesByKey[key].front()];
+        else if( def )
+            cacheNameByKey[key] = cacheNameByDef[def];
+
+        if( cacheNameByKey.count( key ) && cacheNameByKey[key] != name )
         {
             renameReports.push_back(
                     wxString::Format( _( "Imported footprint '%s' from '%s' was renamed to '%s' "
-                                         "because another library supplies a different footprint "
-                                         "of that name." ), name, key.first, cacheName ) );
+                                         "in the import cache." ), name, key.first, cacheNameByKey[key] ) );
         }
     }
 
@@ -329,9 +475,17 @@ FOOTPRINT_IMPORT_RECONCILER::Reconcile( BOARD* aBoard,
         // empty resolution = cache-bound, resolves only once the cache is published
         if( it->second.IsEmpty() )
         {
-            auto cacheName = cacheNameByKey.find( key );
+            auto cacheName = cacheNameByInstance.find( fp );
 
-            if( result.m_cacheNickname.IsEmpty() || cacheName == cacheNameByKey.end() )
+            if( cacheName == cacheNameByInstance.end() )
+            {
+                auto byKey = cacheNameByKey.find( key );
+
+                if( byKey != cacheNameByKey.end() )
+                    cacheName = cacheNameByInstance.emplace( fp, byKey->second ).first;
+            }
+
+            if( result.m_cacheNickname.IsEmpty() || cacheName == cacheNameByInstance.end() )
             {
                 result.m_unresolved++;
                 continue;
@@ -571,4 +725,27 @@ ReconcileImportedFootprints( PCB_IO& aPlugin, BOARD& aBoard, PROJECT& aProject,
 
     return ReconcileImportedFootprints( std::move( definitions ), aBoard, aProject, aBoardPath,
                                         aProperties, aReporter );
+}
+
+
+std::map<wxString, wxString> ImportedFootprintIds( const BOARD& aBoard )
+{
+    std::map<wxString, wxString> ids;
+    std::set<wxString>           repeated;
+
+    for( const FOOTPRINT* footprint : aBoard.Footprints() )
+    {
+        const wxString& ref = footprint->GetReference();
+
+        if( ref.IsEmpty() || footprint->GetFPID().GetLibItemName().empty() )
+            continue;
+
+        if( !ids.emplace( ref, footprint->GetFPID().Format().wx_str() ).second )
+            repeated.insert( ref );
+    }
+
+    for( const wxString& ref : repeated )
+        ids.erase( ref );
+
+    return ids;
 }

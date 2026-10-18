@@ -126,4 +126,11 @@ ReconcileImportedFootprints( PCB_IO& aPlugin, BOARD& aBoard, PROJECT& aProject,
                              const wxString& aBoardPath,
                              const std::map<std::string, UTF8>* aProperties, REPORTER& aReporter );
 
+/**
+ * Map each board reference to the full LIB_ID of its footprint.
+ *
+ * A footprint with no name, and a reference used more than once, are left out.
+ */
+std::map<wxString, wxString> ImportedFootprintIds( const BOARD& aBoard );
+
 #endif // FOOTPRINT_IMPORT_RECONCILER_H

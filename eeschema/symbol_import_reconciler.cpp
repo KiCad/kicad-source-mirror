@@ -215,6 +215,10 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
             {
                 LIB_SYMBOL* def = findDef( ownNick, aName );
 
+                // importers that retain no definitions leave the placed copy to match against
+                if( !def )
+                    def = aSymbol->GetLibSymbolRef().get();
+
                 if( !def || !sameInterface( *candidate, *def ) )
                     continue;
             }
@@ -258,10 +262,12 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
 
     auto uniqueName = [&takenNames]( const wxString& aName )
     {
-        wxString candidate = aName;
+        // importers pass names a library cannot hold, such as ones with '<'
+        wxString legalName = LIB_ID::FixIllegalChars( aName, false ).wx_str();
+        wxString candidate = legalName;
 
         for( int suffix = 1; !takenNames.insert( candidate ).second; ++suffix )
-            candidate = wxString::Format( wxS( "%s_%d" ), aName, suffix );
+            candidate = wxString::Format( wxS( "%s_%d" ), legalName, suffix );
 
         return candidate;
     };
@@ -327,8 +333,7 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         {
             renameReports.push_back(
                     wxString::Format( _( "Imported symbol '%s' from '%s' was renamed to '%s' "
-                                         "because another library supplies a different symbol of "
-                                         "that name." ), name, key.first, cacheName ) );
+                                         "in the import cache." ), name, key.first, cacheName ) );
         }
     }
 
@@ -347,6 +352,25 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
         for( const wxString& report : renameReports )
             m_reporter.Report( report, RPT_SEVERITY_WARNING );
     }
+
+    // the screen caches each embedded copy under the id it was added with, so a new id needs a new entry
+    auto setLibId = []( SCH_SYMBOL* aSymbol, const LIB_ID& aLibId )
+    {
+        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aSymbol->GetParent() );
+        bool        moved = screen && screen->Remove( aSymbol );
+
+        aSymbol->SetLibId( aLibId );
+
+        // the embedded copy names itself in the netlist's library parts, so it follows the new id
+        if( aSymbol->UseLibIdLookup() && aSymbol->GetLibSymbolRef() )
+        {
+            aSymbol->GetLibSymbolRef()->SetName( aLibId.GetUniStringLibItemName() );
+            aSymbol->GetLibSymbolRef()->SetLibId( aLibId );
+        }
+
+        if( moved )
+            screen->Append( aSymbol );
+    };
 
     // re-point nicks to the resolved lib, cache-bound symbols also take their cache item name
     for( SCH_SYMBOL* symbol : symbols )
@@ -379,13 +403,13 @@ SYMBOL_IMPORT_RECONCILER::Reconcile( SCHEMATIC*                               aS
 
             libId.SetLibNickname( aCacheNickname );
             libId.SetLibItemName( cacheName->second );
-            symbol->SetLibId( libId );
+            setLibId( symbol, libId );
             result.m_linkedToCache++;
         }
         else
         {
             libId.SetLibNickname( it->second );
-            symbol->SetLibId( libId );
+            setLibId( symbol, libId );
             result.m_linkedToSource++;
         }
     }
@@ -572,14 +596,8 @@ ReconcileImportedSymbols( SCH_IO& aPlugin, SCHEMATIC& aSchematic, PROJECT& aProj
     }
     catch( const IO_ERROR& )
     {
-        return result;
+        // importer retains no definitions, the placed symbols are the fallback
     }
-
-    // Importers still writing their own project library during load (Eagle) must be left alone:
-    // with no definitions to interface-match, resolveSource would reject the library they just
-    // wrote and duplicate every symbol into the cache.  Drop this once they all publish here.
-    if( definitions.empty() )
-        return result;
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aProject );
 

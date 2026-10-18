@@ -464,10 +464,12 @@ set( EESCHEMA_SRCS
     files-io.cpp
     generate_alias_info.cpp
     gfx_import_utils.cpp
+    import_local_symbol_libs.cpp
     import_net_map.cpp
     junction_helpers.cpp
     lib_fields_data_model.cpp
     lib_symbol.cpp
+    link_imported_footprints.cpp
     menubar.cpp
     net_navigator.cpp
     picksymbol.cpp

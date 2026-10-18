@@ -23,7 +23,10 @@
 #include <kicommon.h>
 #include "job.h"
 #include "job_import_utils.h"
+#include <core/utf8.h>
 #include <map>
+#include <string>
+#include <vector>
 
 /**
  * Job to import a non-KiCad schematic file to KiCad format.
@@ -60,6 +63,13 @@ public:
     IMPORT_REPORT_FORMAT m_reportFormat = IMPORT_REPORT_FORMAT::NONE;
     wxString             m_reportFile;
     std::map<wxString, wxString> m_netNameMap;
+
+    /// Importer and library coordination properties, as IMPORT_PROJ_HELPER hands them to the editor.
+    std::map<std::string, UTF8> m_properties;
+
+    /// Directory of the source project and the symbol libraries it names, registered before the import.
+    wxString              m_sourceProjectDir;
+    std::vector<wxString> m_localLibraries;
 };
 
 #endif

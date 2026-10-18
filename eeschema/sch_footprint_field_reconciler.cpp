@@ -24,6 +24,7 @@
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_symbol.h>
+#include <string_utils.h>
 
 
 SCH_FOOTPRINT_FIELD_RECONCILER::SCH_FOOTPRINT_FIELD_RECONCILER(
@@ -73,7 +74,12 @@ SCH_FP_FIELD_RECONCILE_RESULT SCH_FOOTPRINT_FIELD_RECONCILER::Reconcile( SCHEMAT
                 continue;
             }
 
+            // the cache names items by their legal file name
+            wxString itemName = fpid.GetUniStringLibItemName();
+            ReplaceIllegalFileNameChars( itemName, '_' );
+
             fpid.SetLibNickname( m_cacheNickname );
+            fpid.SetLibItemName( itemName );
             symbol->SetFootprintFieldText( fpid.Format().wx_str() );
             result.m_relinkedToCache++;
         }

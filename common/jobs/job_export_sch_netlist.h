@@ -49,6 +49,10 @@ public:
 
     wxString m_filename;
 
+    // Netlist taken as a step of an import: the schematic is dropped afterwards, for a caller that unloads the
+    // project before the process ends, and an unannotated symbol is not reported
+    bool m_forImport = false;
+
     FORMAT format;
 
     bool m_spiceSaveAllVoltages;

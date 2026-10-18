@@ -118,7 +118,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
             {
                 wxString msg;
                 msg.Printf( _( "Value (%s) doesn't match symbol value (%s)" ),
-                            footprint->GetReference(), footprint->GetValue(),
+                            footprint->GetValue(),
                             component->GetValue() );
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );

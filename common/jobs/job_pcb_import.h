@@ -21,9 +21,13 @@
 #define JOB_PCB_IMPORT_H
 
 #include <kicommon.h>
+#include <core/utf8.h>
 #include <map>
+#include <string>
 #include <utility>
 #include <vector>
+
+#include <io/common/plugin_common_choose_project.h>
 
 #include "job.h"
 #include "job_import_utils.h"
@@ -72,8 +76,27 @@ public:
     /// Avoid promoting an individual board's source settings into shared project settings.
     bool m_isPartOfMultiBoardProject = false;
 
+    /// Netlist of the imported schematic, whose net names the board takes where the two agree.
+    wxString m_netlistFile;
+
+    /// Library coordination properties, as IMPORT_PROJ_HELPER hands them to the editor.
+    std::map<std::string, UTF8> m_properties;
+
+    /// Directory of the source project and the footprint libraries it names, registered before the import.
+    wxString              m_sourceProjectDir;
+    std::vector<wxString> m_localLibraries;
+
+    /// Board reference to footprint LIB_ID, filled in by an import.
+    std::map<wxString, wxString> m_footprintIds;
+
+    /// Set by a probe of a project archive that holds no board.
+    bool m_projectHasNoBoard = false;
+
     /// PCB document identifier and source name pairs found during a probe.
     std::vector<std::pair<wxString, wxString>> m_projectBoards;
+
+    /// KiCad projects the source project splits into, found during a probe.
+    std::vector<IMPORT_PROJECT_DESC> m_projectEntries;
 };
 
 #endif

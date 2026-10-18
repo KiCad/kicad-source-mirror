@@ -44,6 +44,7 @@
 #include <kiface_base.h>
 #include <kiway_mail.h>
 #include <string_utils.h>
+#include <netlist_reader/netlist_reader.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <gal/painter.h>
@@ -60,6 +61,12 @@
 #include <widgets/pcb_design_block_pane.h>
 #include <widgets/kistatusbar.h>
 #include <project_pcb.h>
+#include <footprint_import_reconciler.h>
+#include <import_local_footprint_libs.h>
+#include <import_net_reconciler.h>
+#include <import_proj_properties.h>
+#include <netlist_reader/pcb_netlist.h>
+#include <reporter.h>
 #include <footprint_library_adapter.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <pgm_base.h>
@@ -739,102 +746,17 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         std::stringstream ss( payload );
         std::string       file;
 
-        LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
-        FOOTPRINT_LIBRARY_ADAPTER*    adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
-        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
-                                                                LIBRARY_TABLE_SCOPE::PROJECT );
-
-        wxCHECK_RET( optTable.has_value(), "Could not load footprint lib table." );
-        LIBRARY_TABLE* table = optTable.value();
-
-        wxString projectPath = Prj().GetProjectPath();
-
         // First line of payload is the source project directory.
         std::string srcProjDir;
         std::getline( ss, srcProjDir, '\n' );
 
-        wxString              srcProjectPath = wxString::FromUTF8( srcProjDir );
-        std::vector<wxString> toLoad;
+        std::vector<wxString> libraries;
 
         while( std::getline( ss, file, '\n' ) )
-        {
-            if( file.empty() )
-                continue;
+            libraries.push_back( wxString::FromUTF8( file ) );
 
-            wxFileName             fn( wxString::FromUTF8( file ) );
-            PCB_IO_MGR::PCB_FILE_T type = PCB_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
-
-            if( type == PCB_IO_MGR::FILE_TYPE_NONE )
-            {
-                wxLogTrace( "KIWAY", "Unknown file type: %s", fn.GetFullPath() );
-                continue;
-            }
-
-            // Only libraries that live under the source project are relocated; a plain path
-            // prefix would also match a sibling directory sharing the project name's stem.
-            wxFileName relFn( fn );
-            bool       isProjectLocal = !srcProjectPath.IsEmpty()
-                                            && relFn.MakeRelativeTo( srcProjectPath )
-                                            && !relFn.IsAbsolute()
-                                            && !relFn.GetFullPath().StartsWith( wxS( ".." ) );
-
-            wxString libTableUri;
-
-            if( isProjectLocal )
-            {
-                // Copy a project-local library into the KiCad project directory and reference it
-                // with a project-relative path so the fp-lib-table stays portable.
-                if( !fn.FileExists() )
-                    continue;
-
-                wxFileName projectFn( projectPath, fn.GetFullName() );
-
-                if( fn.GetFullPath() != projectFn.GetFullPath()
-                        && !projectFn.FileExists()
-                        && !wxCopyFile( fn.GetFullPath(), projectFn.GetFullPath(), false ) )
-                {
-                    wxLogError( _( "Error copying footprint library '%s'." ), fn.GetFullPath() );
-                    continue;
-                }
-
-                libTableUri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
-            }
-            else
-            {
-                // External library referenced by absolute path. Preserve the original path.
-                libTableUri = fn.GetFullPath();
-            }
-
-            if( !table->HasRow( fn.GetName() ) )
-            {
-                LIBRARY_TABLE_ROW& row = table->InsertRow();
-                row.SetNickname( fn.GetName() );
-                row.SetURI( libTableUri );
-                row.SetType( PCB_IO_MGR::ShowType( type ) );
-                toLoad.emplace_back( fn.GetName() );
-            }
-        }
-
-        if( !toLoad.empty() )
-        {
-            bool success = true;
-
-            table->Save().map_error(
-                        [&]( const LIBRARY_ERROR& aError )
-                        {
-                            wxLogError( wxT( "Error saving project library table:\n\n" ) + aError.message );
-                            success = false;
-                        } );
-
-            if( success )
-            {
-                manager.AbortAsyncLoads();
-                manager.LoadProjectTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
-
-                for( const wxString& nick : toLoad )
-                    adapter->LoadOne( nick );
-            }
-        }
+        RegisterLocalFootprintLibraries( Prj(), wxString::FromUTF8( srcProjDir ), libraries,
+                                         WXLOG_REPORTER::GetInstance() );
 
         Kiway().ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
         Kiway().ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload );
@@ -853,6 +775,65 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
     case MAIL_PCB_UPDATE:
         m_toolManager->RunAction( ACTIONS::updatePcbFromSchematic );
+        break;
+
+    case MAIL_PCB_RECONCILE_NETS:
+    {
+        // an empty payload skips the schematic's annotation prompt, and reading the reply here avoids the
+        // dialogs of the update command, so an import never waits on the user
+        std::string netlistText;
+
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, netlistText, this );
+
+        if( netlistText.empty() )
+        {
+            WXLOG_REPORTER::GetInstance().Report( _( "The schematic gave no netlist, so the board nets keep their "
+                                                     "names.\n" ),
+                                                  RPT_SEVERITY_INFO );
+            break;
+        }
+
+        NETLIST netlist;
+
+        try
+        {
+            KICAD_NETLIST_READER reader( new STRING_LINE_READER( netlistText, _( "Eeschema netlist" ) ), &netlist );
+            reader.LoadNetlist();
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            WXLOG_REPORTER::GetInstance().Report( wxString::Format( _( "The schematic netlist could not be read, so "
+                                                                        "the board nets keep their names: %s\n" ),
+                                                                     ioe.What() ),
+                                                  RPT_SEVERITY_INFO );
+            break;
+        }
+
+        int renamed = ReconcileImportedReferences( *GetBoard(), netlist );
+
+        NET_RECONCILE_RESULT result = ReconcileImportedNetNames( *GetBoard(), netlist, WXLOG_REPORTER::GetInstance() );
+
+        int filled = FillImportedFootprintFields( *GetBoard(), netlist );
+
+        if( renamed > 0 || result.m_renamed > 0 || result.m_unconnectedAssigned > 0 || filled > 0 )
+            OnModify();
+
+        // the fields were changed behind the view's back, so it is rebuilt from the board
+        if( filled > 0 )
+        {
+            for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+                footprint->InvalidateGeometryCaches();
+
+            GetCanvas()->DisplayBoard( GetBoard() );
+            GetCanvas()->Refresh();
+        }
+
+        break;
+    }
+
+    case MAIL_PCB_GET_FOOTPRINT_IDS:
+        payload = TO_UTF8( IMPORT_PROJ_PROPS::JoinTaggedMap( IMPORT_PROJ_PROPS::FOOTPRINT_ID_MAP_TAG,
+                                                             ImportedFootprintIds( *GetBoard() ) ) );
         break;
 
     case MAIL_IMPORT_FILE:

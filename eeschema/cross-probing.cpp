@@ -28,7 +28,9 @@
 #include <kiway.h>
 #include <kiway_mail.h>
 #include <import_net_map.h>
+#include <import_local_symbol_libs.h>
 #include <import_proj_properties.h>
+#include <link_imported_footprints.h>
 #include <reporter.h>
 #include <connectivity/conn_navigation.h>
 #include <connectivity/conn_netchain_manager.h>
@@ -459,95 +461,17 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         std::stringstream ss( payload );
         std::string       file;
 
-        LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
-        SYMBOL_LIBRARY_ADAPTER*       adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                                LIBRARY_TABLE_SCOPE::PROJECT );
-
-        wxCHECK_RET( optTable.has_value(), "Could not load symbol lib table." );
-        LIBRARY_TABLE* table = optTable.value();
-
-        wxString projectPath = Prj().GetProjectPath();
-
         // First line of payload is the source project directory.
         std::string srcProjDir;
         std::getline( ss, srcProjDir, '\n' );
 
-        std::vector<wxString> toLoad;
+        std::vector<wxString> libraries;
 
         while( std::getline( ss, file, '\n' ) )
-        {
-            if( file.empty() )
-                continue;
+            libraries.push_back( wxString::FromUTF8( file ) );
 
-            wxFileName             fn( file );
-            IO_RELEASER<SCH_IO>    pi;
-            SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
-
-            if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
-            {
-                wxLogTrace( "KIWAY", "Unknown file type: %s", fn.GetFullPath() );
-                continue;
-            }
-
-            pi.reset( SCH_IO_MGR::FindPlugin( type ) );
-
-            wxString libTableUri;
-            bool     isProjectLocal = fn.GetFullPath().StartsWith( wxString( srcProjDir ) );
-
-            if( isProjectLocal )
-            {
-                // Project-local library: copy into the KiCad project directory and use a
-                // project-relative path so the sym-lib-table stays portable.
-                if( !fn.FileExists() )
-                    continue;
-
-                wxFileName projectFn( projectPath, fn.GetFullName() );
-
-                if( fn.GetFullPath() != projectFn.GetFullPath() && !projectFn.FileExists() )
-                    wxCopyFile( fn.GetFullPath(), projectFn.GetFullPath() );
-
-                libTableUri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
-            }
-            else
-            {
-                // External library referenced by absolute path. Preserve the original path.
-                libTableUri = fn.GetFullPath();
-            }
-
-            if( !table->HasRow( fn.GetName() ) )
-            {
-                LIBRARY_TABLE_ROW& row = table->InsertRow();
-                row.SetNickname( fn.GetName() );
-                row.SetURI( libTableUri );
-                row.SetType( SCH_IO_MGR::ShowType( type ) );
-                toLoad.emplace_back( fn.GetName() );
-            }
-        }
-
-        if( !toLoad.empty() )
-        {
-            bool success = true;
-
-            table->Save().map_error(
-                        [&]( const LIBRARY_ERROR& aError )
-                        {
-                            wxLogError( wxT( "Error saving project library table:\n\n" ) + aError.message );
-                            success = false;
-                        } );
-
-            if( success )
-            {
-                manager.AbortAsyncLoads();
-                manager.LoadProjectTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
-
-                std::ranges::for_each( toLoad,
-                                       [adapter]( const wxString& aNick )
-                                       {
-                                           adapter->LoadOne( aNick );
-                                       } );
-            }
-        }
+        RegisterLocalSymbolLibraries( Prj(), wxString::FromUTF8( srcProjDir ), libraries,
+                                      WXLOG_REPORTER::GetInstance() );
 
         Kiway().ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload );
@@ -631,6 +555,18 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();
+        break;
+    }
+
+    case MAIL_SCH_LINK_FOOTPRINTS:
+    {
+        std::optional<std::map<wxString, wxString>> footprints =
+                IMPORT_PROJ_PROPS::SplitTaggedMap( IMPORT_PROJ_PROPS::FOOTPRINT_ID_MAP_TAG,
+                                                   wxString::FromUTF8( payload ) );
+
+        if( footprints && LinkImportedFootprints( Schematic(), *footprints, WXLOG_REPORTER::GetInstance() ) > 0 )
+            OnModify();
+
         break;
     }
 

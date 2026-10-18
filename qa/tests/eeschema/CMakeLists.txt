@@ -195,6 +195,7 @@ set( QA_EESCHEMA_SRCS
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp
     test_eagle_plugin.cpp
+    test_link_imported_footprints.cpp
     test_sch_footprint_field_reconciler.cpp
     test_symbol_import_reconciler.cpp
     test_easyedapro_v3_import.cpp
@@ -277,6 +278,7 @@ set( QA_EESCHEMA_SRCS
     test_netlist_exporter_xml_chain_gating.cpp
     test_netlist_exporter_xml_stacked.cpp
     test_netlist_exporter_xml_terminal_pins.cpp
+    test_netlist_exporter_xml_unit_fields.cpp
     test_netlist_exporter_xml_nested_groups.cpp
     test_resolve_drivers.cpp
     test_hierarchy_driver_ranking.cpp

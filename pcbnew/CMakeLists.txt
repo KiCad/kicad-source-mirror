@@ -464,6 +464,8 @@ set( PCBNEW_CLASS_SRCS
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
     import_design_rules.cpp
+    import_local_footprint_libs.cpp
+    import_net_reconciler.cpp
     initpcb.cpp
     layer_pairs.cpp
     load_select_footprint.cpp

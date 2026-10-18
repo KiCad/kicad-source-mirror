@@ -24,8 +24,12 @@
 #include <eda_pattern_match.h>
 #include <project/net_settings.h>
 #include <board_connected_item.h>
+#include <footprint.h>
 #include <import_net_names.h>
+#include <import_net_reconciler.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <netinfo.h>
+#include <pcb_field.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
 #include <set>
@@ -82,6 +86,69 @@ BOOST_AUTO_TEST_CASE( RenamePreservesConnectedItemsAndBothNetIndexes )
         BOOST_CHECK_EQUAL( item->GetNetCode(), oldCode );
         BOOST_CHECK_EQUAL( item->GetNetname(), oldNet == net ? renamed : oldName );
     }
+}
+
+BOOST_AUTO_TEST_CASE( FootprintFieldsAreFilledNotOverwritten )
+{
+    FOOTPRINT* empty = board->FindFootprintByReference( wxS( "Q6" ) );
+    FOOTPRINT* held = board->FindFootprintByReference( wxS( "Q3" ) );
+    BOOST_REQUIRE( empty && held );
+
+    empty->SetValue( wxString() );
+    empty->GetField( wxS( "Description" ) )->SetText( wxString() );
+    held->SetValue( wxS( "KeepMe" ) );
+
+    NETLIST netlist;
+
+    for( const wxString& ref : { wxS( "Q6" ), wxS( "Q3" ) } )
+    {
+        COMPONENT* component = new COMPONENT( LIB_ID(), ref, wxS( "FromSchematic" ), KIID_PATH(), {} );
+        nlohmann::ordered_map<wxString, wxString> fields = { { wxS( "Reference" ), ref },
+                                                             { wxS( "Value" ), wxS( "FromSchematic" ) },
+                                                             { wxS( "Maker" ), wxS( "Acme" ) },
+                                                             { wxS( "Description" ), wxS( "Resistor" ) } };
+
+        if( ref == wxS( "Q6" ) )
+            fields[wxS( "Serial" )] = wxString();
+
+        component->SetFields( fields );
+        netlist.AddComponent( component );
+    }
+
+    PCB_FIELD* maker = new PCB_FIELD( held, FIELD_T::USER );
+    held->Add( maker );
+    maker->SetName( wxS( "Maker" ) );
+    maker->SetText( wxS( "Board" ) );
+    held->GetField( wxS( "Description" ) )->SetText( wxS( "Mine" ) );
+
+    BOOST_CHECK_EQUAL( FillImportedFootprintFields( *board, netlist ), 1 );
+    BOOST_CHECK_EQUAL( empty->GetValue(), wxS( "FromSchematic" ) );
+    BOOST_CHECK_EQUAL( empty->GetField( wxS( "Maker" ) )->GetText(), wxS( "Acme" ) );
+    BOOST_CHECK_EQUAL( empty->GetField( wxS( "Description" ) )->GetText(), wxS( "Resistor" ) );
+    BOOST_CHECK( empty->HasField( wxS( "Serial" ) ) );
+    BOOST_CHECK_EQUAL( held->GetValue(), wxS( "KeepMe" ) );
+    BOOST_CHECK_EQUAL( held->GetField( wxS( "Maker" ) )->GetText(), wxS( "Board" ) );
+    BOOST_CHECK_EQUAL( held->GetField( wxS( "Description" ) )->GetText(), wxS( "Mine" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ReferencesTakeTheSchematicSpelling )
+{
+    FOOTPRINT* lowered = board->FindFootprintByReference( wxS( "Q6" ) );
+    FOOTPRINT* named = board->FindFootprintByReference( wxS( "Q3" ) );
+    BOOST_REQUIRE( lowered && named );
+
+    lowered->SetReference( wxS( "q6" ) );
+    named->SetReference( wxS( "UNKQ3" ) );
+
+    NETLIST netlist;
+
+    for( const wxString& ref : { wxS( "Q6" ), wxS( "Q3" ) } )
+        netlist.AddComponent( new COMPONENT( LIB_ID(), ref, wxS( "V" ), KIID_PATH(), {} ) );
+
+    // UNK prefixes only a reference that starts with a non-letter, so UNKQ3 is its own reference
+    BOOST_CHECK_EQUAL( ReconcileImportedReferences( *board, netlist ), 1 );
+    BOOST_CHECK_EQUAL( lowered->GetReference(), wxS( "Q6" ) );
+    BOOST_CHECK_EQUAL( named->GetReference(), wxS( "UNKQ3" ) );
 }
 
 BOOST_AUTO_TEST_CASE( InvalidMappingsLeaveEveryNetUnchanged )

@@ -45,6 +45,9 @@ inline constexpr char SYM_CACHE_NICKNAME[] = "import_sym_cache_nickname";
 inline constexpr char SOURCE_SYM_LIBS[]    = "import_source_sym_libs";
 inline constexpr char NET_NAME_MAP[]       = "import_net_name_map";
 
+/// Source project file, present when the importer is handed a project's sheets rather than one file.
+inline constexpr char PROJECT_FILE[]       = "project_file";
+
 /// Separator joining a list value within a single property.
 inline constexpr char LIST_SEPARATOR = '\x1f';
 
@@ -81,35 +84,50 @@ inline std::vector<wxString> SplitList( const wxString& aValue )
 /// still distinguishable from an import that never ran.
 inline constexpr char NET_NAME_MAP_TAG[] = "netmap";
 
-/// Encode source-to-imported net names as a single property value.
-inline wxString JoinNetNameMap( const std::map<wxString, wxString>& aNames )
+/// Leading field marking a value as an encoded map from reference to footprint LIB_ID.
+inline constexpr char FOOTPRINT_ID_MAP_TAG[] = "fpids";
+
+/// Encode a string map as a single property value led by a tag.
+inline wxString JoinTaggedMap( const char* aTag, const std::map<wxString, wxString>& aPairs )
 {
     wxArrayString fields;
-    fields.Add( NET_NAME_MAP_TAG );
+    fields.Add( aTag );
 
-    for( const auto& [source, target] : aNames )
+    for( const auto& [key, value] : aPairs )
     {
-        fields.Add( source );
-        fields.Add( target );
+        fields.Add( key );
+        fields.Add( value );
     }
 
     return JoinList( fields );
 }
 
-/// Decode a net-name map property value, or nothing when the value is not one.
-inline std::optional<std::map<wxString, wxString>> SplitNetNameMap( const wxString& aValue )
+/// Decode a tagged string map property value, or nothing when the value is not one.
+inline std::optional<std::map<wxString, wxString>> SplitTaggedMap( const char* aTag, const wxString& aValue )
 {
     wxArrayString fields = wxSplit( aValue, LIST_SEPARATOR, '\0' );
 
-    if( fields.IsEmpty() || fields[0] != NET_NAME_MAP_TAG || fields.GetCount() % 2 == 0 )
+    if( fields.IsEmpty() || fields[0] != aTag || fields.GetCount() % 2 == 0 )
         return std::nullopt;
 
-    std::map<wxString, wxString> names;
+    std::map<wxString, wxString> pairs;
 
     for( size_t i = 1; i < fields.GetCount(); i += 2 )
-        names.emplace( fields[i], fields[i + 1] );
+        pairs.emplace( fields[i], fields[i + 1] );
 
-    return names;
+    return pairs;
+}
+
+/// Encode source-to-imported net names as a single property value.
+inline wxString JoinNetNameMap( const std::map<wxString, wxString>& aNames )
+{
+    return JoinTaggedMap( NET_NAME_MAP_TAG, aNames );
+}
+
+/// Decode a net-name map property value, or nothing when the value is not one.
+inline std::optional<std::map<wxString, wxString>> SplitNetNameMap( const wxString& aValue )
+{
+    return SplitTaggedMap( NET_NAME_MAP_TAG, aValue );
 }
 
 /// Read the footprint-import coordination properties out of a properties map.
