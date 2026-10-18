@@ -33,6 +33,7 @@
 #include <footprint.h>
 #include <ki_exception.h>
 #include <lib_id.h>
+#include <libeval_compiler/libeval_compiler.h>
 #include <netclass.h>
 #include <netinfo.h>
 #include <pad.h>
@@ -100,15 +101,6 @@ namespace
         return wxString::Format( wxS( "%s%llu.%04llumm" ), aDsu < 0 ? wxS( "-" ) : wxS( "" ),
                                  static_cast<unsigned long long>( magnitude / 10000 ),
                                  static_cast<unsigned long long>( magnitude % 10000 ) );
-    }
-
-
-    /// An expression string literal, whose only escape is \' so a final backslash cannot be held
-    wxString exprLiteral( const wxString& aText )
-    {
-        wxString text = aText;
-        text.Replace( wxS( "'" ), wxS( "\\'" ) );
-        return wxS( "'" ) + text + wxS( "'" );
     }
 
 
@@ -425,11 +417,13 @@ void PCB_BUILDER::buildNetClasses()
                 minimum = std::min( minimum, style->Width );
         }
 
-        if( minimum != std::numeric_limits<int32_t>::max() && minimum > 0 && !name.EndsWith( wxS( "\\" ) ) )
+        std::optional<wxString> literal = LIBEVAL::EscapeStringLiteral( name );
+
+        if( minimum != std::numeric_limits<int32_t>::max() && minimum > 0 && literal )
         {
             addRule( wxS( "Easy-PC net class " ) + source->Name + wxS( " minimum width" ),
                      wxS( "(constraint track_width (min " ) + mm( minimum ) + wxS( "))" ),
-                     wxS( "A.NetClass == " ) + exprLiteral( name ) );
+                     wxS( "A.NetClass == '" ) + *literal + wxS( "'" ) );
         }
     }
 

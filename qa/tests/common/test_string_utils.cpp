@@ -356,4 +356,11 @@ BOOST_AUTO_TEST_CASE( StringEscape )
 }
 
 
+BOOST_AUTO_TEST_CASE( RegexEscapeKeepsOrdinaryCharacters )
+{
+    BOOST_TEST( EscapeString( wxS( "DDR3_DQ0" ), CTX_REGEX ) == wxS( "DDR3_DQ0" ) );
+    BOOST_TEST( EscapeString( wxS( "+3.3V" ), CTX_REGEX ) == wxS( "\\+3\\.3V" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -35,7 +35,11 @@
 #include <thread_pool.h>
 
 #include <atomic>
+#include <set>
 #include <limits>
+#include <libeval_compiler/libeval_compiler.h>
+#include <netclass.h>
+#include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/tuning_profiles.h>
 
@@ -46,7 +50,7 @@
     - DRCE_INVALID_OUTLINE,                   ///< invalid board outline
     - DRCE_UNRESOLVED_VARIABLE,
     - DRCE_ASSERTION_FAILURE,                 ///< user-defined assertions
-    - DRCE_GENERIC_WARNING                    ///< user-defined warnings
+    - DRCE_GENERIC_WARNING                    ///< user-defined warnings, net classes that rules cannot name
     - DRCE_GENERIC_ERROR                      ///< user-defined errors
     - DRCE_MISSING_TUNING_PROFILES            ///< tuning profile for netc lass not defined
 */
@@ -130,6 +134,7 @@ private:
     void testTextVars();
     void testAssertions();
     void testMissingTuningProfiles();
+    void testUnquotableNetclasses();
 
     BOARD* m_board;
 };
@@ -610,9 +615,55 @@ void DRC_TEST_PROVIDER_MISC::testMissingTuningProfiles()
 }
 
 
+void DRC_TEST_PROVIDER_MISC::testUnquotableNetclasses()
+{
+    std::shared_ptr<NET_SETTINGS> netSettings = m_board->GetDesignSettings().m_NetSettings;
+    std::set<wxString>            names = { netSettings->GetDefaultNetclass()->GetName() };
+
+    for( const auto& [name, netclass] : netSettings->GetNetclasses() )
+        names.insert( netclass->GetName() );
+
+    // A label can assign a class nobody declared, so name the parts of a composite DRC_ENGINE dropped
+    for( const auto& [name, netclass] : netSettings->GetCompositeNetclasses() )
+    {
+        if( LIBEVAL::EscapeStringLiteral( netclass->GetName() ) )
+            continue;
+
+        for( const NETCLASS* constituent : netclass->GetConstituentNetclasses() )
+            names.insert( constituent->GetName() );
+    }
+
+    for( const wxString& name : names )
+    {
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING ) )
+            return;
+
+        // DRC_ENGINE drops the implicit rules of such a class, so its limits would go unchecked without a word
+        if( !LIBEVAL::EscapeStringLiteral( name ) )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_WARNING );
+            drcItem->SetErrorMessage( wxString::Format( _( "Net class '%s' cannot be used in rules; its clearance "
+                                                           "and width are not checked" ),
+                                                        name ) );
+
+            reportViolation( drcItem, VECTOR2I(), UNDEFINED_LAYER );
+        }
+    }
+}
+
+
 bool DRC_TEST_PROVIDER_MISC::Run()
 {
     m_board = m_drcEngine->GetBoard();
+
+    // Ahead of the text variable checks, which share the generic warning limit
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING ) )
+    {
+        if( !reportPhase( _( "Checking net class names..." ) ) )
+            return false; // DRC cancelled
+
+        testUnquotableNetclasses();
+    }
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_INVALID_OUTLINE ) )
     {

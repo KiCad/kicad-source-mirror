@@ -940,3 +940,32 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     default:                                 return std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( aBase );
     }
 }
+
+
+std::optional<DRC_RULE_EDITOR_UTILS::SELECTOR_CONDITION>
+DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( const wxString& aExpr )
+{
+    // Anchored at the end too, or a trailing comparison such as "== 0" would be dropped when the rule is saved
+    static wxRegEx netRe( wxT( "^NetName\\s*==\\s*'([^']*)'\\s*$" ) );
+    static wxRegEx netclassRe1( wxT( "^hasNetclass\\('([^']*)'\\)\\s*$" ) );
+    static wxRegEx netclassRe2( wxT( "^NetClass\\s*==\\s*'([^']*)'\\s*$" ) );
+    static wxRegEx intersectsRe( wxT( "^intersectsArea\\('([^']*)'\\)\\s*$" ) );
+    static wxRegEx enclosedRe( wxT( "^enclosedByArea\\('([^']*)'\\)\\s*$" ) );
+
+    if( netRe.Matches( aExpr ) )
+        return SELECTOR_CONDITION{ SELECTOR_KIND::NET, netRe.GetMatch( aExpr, 1 ) };
+
+    if( netclassRe1.Matches( aExpr ) )
+        return SELECTOR_CONDITION{ SELECTOR_KIND::NETCLASS, netclassRe1.GetMatch( aExpr, 1 ) };
+
+    if( netclassRe2.Matches( aExpr ) )
+        return SELECTOR_CONDITION{ SELECTOR_KIND::NETCLASS, netclassRe2.GetMatch( aExpr, 1 ) };
+
+    if( intersectsRe.Matches( aExpr ) )
+        return SELECTOR_CONDITION{ SELECTOR_KIND::INTERSECTS_AREA, intersectsRe.GetMatch( aExpr, 1 ) };
+
+    if( enclosedRe.Matches( aExpr ) )
+        return SELECTOR_CONDITION{ SELECTOR_KIND::ENCLOSED_BY_AREA, enclosedRe.GetMatch( aExpr, 1 ) };
+
+    return std::nullopt;
+}

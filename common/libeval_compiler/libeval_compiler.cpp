@@ -1469,4 +1469,15 @@ VALUE* UCODE::Run( CONTEXT* ctx )
 }
 
 
+std::optional<wxString> EscapeStringLiteral( const wxString& aText )
+{
+    if( aText.EndsWith( wxS( "\\" ) ) )
+        return std::nullopt;
+
+    wxString escaped = aText;
+    escaped.Replace( wxS( "'" ), wxS( "\\'" ) );
+    return escaped;
+}
+
+
 } // namespace LIBEVAL

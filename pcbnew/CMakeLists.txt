@@ -463,6 +463,7 @@ set( PCBNEW_CLASS_SRCS
     graphics_cleaner.cpp
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
+    import_design_rules.cpp
     initpcb.cpp
     layer_pairs.cpp
     load_select_footprint.cpp

@@ -35,6 +35,7 @@
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_condition.h>
+#include <libeval_compiler/libeval_compiler.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_item.h>
 #include <drc/drc_cache_generator.h>
@@ -266,8 +267,13 @@ void DRC_ENGINE::loadImplicitRules()
     auto makeNetclassRules =
             [&]( const std::shared_ptr<NETCLASS>& nc, bool isDefault )
             {
-                ncName = nc->GetName();
-                ncName.Replace( "'", "\\'" );
+                std::optional<wxString> literal = LIBEVAL::EscapeStringLiteral( nc->GetName() );
+
+                // DRC_TEST_PROVIDER_MISC reports the class, since a rule here cannot be compiled
+                if( !literal )
+                    return;
+
+                ncName = *literal;
 
                 if( nc->HasClearance() )
                 {
@@ -493,7 +499,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     auto addTuningDifferentialRules =
             [&]( const DELAY_PROFILE_TRACK_PROPAGATION_ENTRY& aLayerEntry, const wxString& aProfileName,
-                 const NETCLASS* aNetclass )
+                 const NETCLASS* aNetclass, const wxString& aNetclassName )
             {
                 if( aLayerEntry.GetWidth() <= 0 || aLayerEntry.GetDiffPairGap() <= 0 )
                     return;
@@ -504,7 +510,7 @@ void DRC_ENGINE::loadImplicitRules()
                 tuningRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
                 expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
-                                         aNetclass->GetName(),
+                                         aNetclassName,
                                          LSET::Name( aLayerEntry.GetSignalLayer() ) );
                 tuningRule->m_Condition = new DRC_RULE_CONDITION( expr );
 
@@ -522,7 +528,7 @@ void DRC_ENGINE::loadImplicitRules()
                 tuningRule2->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
                 expr2 = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
-                                          aNetclass->GetName(),
+                                          aNetclassName,
                                           LSET::Name( aLayerEntry.GetSignalLayer() ) );
                 tuningRule2->m_Condition = new DRC_RULE_CONDITION( expr2 );
 
@@ -544,7 +550,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format(
                             wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && AB.isCoupledDiffPair()" ),
-                            aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
+                            aNetclassName, LSET::Name( aLayerEntry.GetSignalLayer() ) );
                     diffPairClearanceRule->m_Condition = new DRC_RULE_CONDITION( expr );
 
                     DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
@@ -562,7 +568,9 @@ void DRC_ENGINE::loadImplicitRules()
         auto addNetclassTuningProfileRules =
                 [&tuningParams, &addTuningSingleRule, &addTuningDifferentialRules]( NETCLASS* aNetclass )
                 {
-                    if( aNetclass->HasTuningProfile() )
+                    std::optional<wxString> literal = LIBEVAL::EscapeStringLiteral( aNetclass->GetName() );
+
+                    if( aNetclass->HasTuningProfile() && literal )
                     {
                         const wxString        delayProfileName = aNetclass->GetTuningProfile();
                         const TUNING_PROFILE& profile = tuningParams->GetTuningProfile( delayProfileName );
@@ -573,9 +581,9 @@ void DRC_ENGINE::loadImplicitRules()
                                 continue;
 
                             if( profile.m_Type == TUNING_PROFILE::PROFILE_TYPE::SINGLE )
-                                addTuningSingleRule( entry, delayProfileName, aNetclass->GetName() );
+                                addTuningSingleRule( entry, delayProfileName, *literal );
                             else
-                                addTuningDifferentialRules( entry, delayProfileName, aNetclass );
+                                addTuningDifferentialRules( entry, delayProfileName, aNetclass, *literal );
                         }
                     }
                 };

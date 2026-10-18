@@ -288,6 +288,28 @@ public:
      * @return The layer clause string (e.g., "(layer \"F.CrtYd\")") or condition string.
      */
     static wxString TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType, bool aIsTop );
+
+    enum class SELECTOR_KIND
+    {
+        NET,
+        NETCLASS,
+        INTERSECTS_AREA,
+        ENCLOSED_BY_AREA
+    };
+
+    struct SELECTOR_CONDITION
+    {
+        SELECTOR_KIND kind;
+        wxString      operand;
+    };
+
+    /**
+     * Match a condition that a net, netclass or area selector can show.
+     *
+     * @param aExpr The condition with any A. or B. prefix removed.
+     * @return Nothing unless the whole condition is that one test, so anything more stays a custom query.
+     */
+    static std::optional<SELECTOR_CONDITION> ParseSelectorCondition( const wxString& aExpr );
 };
 
 #endif // DRC_RULE_EDITOR_UTILS_H_

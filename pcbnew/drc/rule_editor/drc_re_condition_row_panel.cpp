@@ -30,7 +30,7 @@
 #include <wx/bmpbuttn.h>
 #include <wx/stc/stc.h>
 #include <scintilla_tricks.h>
-#include <wx/regex.h>
+#include "drc_rule_editor_utils.h"
 #include <wx/log.h>
 
 static constexpr const wxChar* TRACE_COND = wxT( "KI_TRACE_DRC_RULE_EDITOR" );
@@ -248,39 +248,30 @@ bool DRC_RE_CONDITION_ROW_PANEL::ParseExpression( const wxString& aExpr )
         expr = expr.Mid( 2 );
     }
 
-    // Try to match known patterns
-    static wxRegEx netRe( wxT( "^NetName\\s*==\\s*'([^']*)'" ) );
-    static wxRegEx netclassRe1( wxT( "^hasNetclass\\('([^']*)'\\)" ) );
-    static wxRegEx netclassRe2( wxT( "^NetClass\\s*==\\s*'([^']*)'" ) );
-    static wxRegEx areaRe( wxT( "^(?:enclosedByArea|intersectsArea)\\('([^']*)'\\)" ) );
+    if( std::optional<DRC_RULE_EDITOR_UTILS::SELECTOR_CONDITION> cond =
+                DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( expr ) )
+    {
+        switch( cond->kind )
+        {
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::NET:
+            SetConditionType( CONDITION_TYPE::NET );
+            m_netSelector->SetSelectedNet( cond->operand );
+            return true;
 
-    if( netRe.Matches( expr ) )
-    {
-        wxLogTrace( TRACE_COND, wxS( "[ParseExpression] matched NET pattern" ) );
-        SetConditionType( CONDITION_TYPE::NET );
-        m_netSelector->SetSelectedNet( netRe.GetMatch( expr, 1 ) );
-        return true;
-    }
-    else if( netclassRe1.Matches( expr ) )
-    {
-        wxLogTrace( TRACE_COND, wxS( "[ParseExpression] matched NETCLASS (hasNetclass) pattern" ) );
-        SetConditionType( CONDITION_TYPE::NETCLASS );
-        m_netclassSelector->SetSelectedNetclass( netclassRe1.GetMatch( expr, 1 ) );
-        return true;
-    }
-    else if( netclassRe2.Matches( expr ) )
-    {
-        wxLogTrace( TRACE_COND, wxS( "[ParseExpression] matched NETCLASS (NetClass==) pattern" ) );
-        SetConditionType( CONDITION_TYPE::NETCLASS );
-        m_netclassSelector->SetSelectedNetclass( netclassRe2.GetMatch( expr, 1 ) );
-        return true;
-    }
-    else if( areaRe.Matches( expr ) )
-    {
-        wxLogTrace( TRACE_COND, wxS( "[ParseExpression] matched WITHIN_AREA pattern" ) );
-        SetConditionType( CONDITION_TYPE::WITHIN_AREA );
-        m_areaSelector->SetSelectedArea( areaRe.GetMatch( expr, 1 ) );
-        return true;
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::NETCLASS:
+            SetConditionType( CONDITION_TYPE::NETCLASS );
+            m_netclassSelector->SetSelectedNetclass( cond->operand );
+            return true;
+
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::INTERSECTS_AREA:
+            SetConditionType( CONDITION_TYPE::WITHIN_AREA );
+            m_areaSelector->SetSelectedArea( cond->operand );
+            return true;
+
+        // The area row writes intersectsArea, so it cannot hold this test
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::ENCLOSED_BY_AREA:
+            break;
+        }
     }
 
     // Fallback to custom query

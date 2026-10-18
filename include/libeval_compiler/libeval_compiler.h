@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <functional>
 #include <map>
+#include <optional>
 #include <string>
 #include <stack>
 
@@ -30,6 +31,7 @@
 
 #include <kicommon.h>
 #include <base_units.h>
+#include <eda_units.h>
 #include <wx/intl.h>
 
 #if defined(WIN32)
@@ -689,6 +691,16 @@ protected:
     std::vector<TREE_NODE*>  m_gcItems;
     std::vector<wxString*>   m_gcStrings;
 };
+
+
+/**
+ * Escape text for use between the quotes of an expression string.
+ *
+ * The tokenizer's only escape is \', so text ending in a backslash has no encoding.
+ *
+ * @return the escaped text without its quotes, or nothing if the text cannot be written.
+ */
+KICOMMON_API std::optional<wxString> EscapeStringLiteral( const wxString& aText );
 
 
 } // namespace LIBEVAL

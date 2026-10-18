@@ -302,10 +302,9 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             const wxString regExCtrlChars = wxT( ".^$*+?{}()[]~|\\" );
 
             if( regExCtrlChars.Contains( c ) )
-            {
                 converted += wxT( "\\" );
-                converted += c;
-            }
+
+            converted += c;
         }
         else
         {

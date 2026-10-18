@@ -2232,6 +2232,16 @@ BOOST_AUTO_TEST_CASE( IntegrationSplitRulePreservesOrder )
 }
 
 
+// A selector rebuilds only its own test, so anything more must stay a custom query
+BOOST_AUTO_TEST_CASE( SelectorConditionKeepsWholeTest )
+{
+    using KIND = DRC_RULE_EDITOR_UTILS::SELECTOR_KIND;
+
+    BOOST_CHECK( !DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( wxS( "hasNetclass('N') == 0" ) ) );
+    BOOST_CHECK( DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( wxS( "enclosedByArea('R')" ) )->kind
+                 == KIND::ENCLOSED_BY_AREA );
+}
+
 // ============================================================================
 // Condition Group Panel Tests
 // ============================================================================

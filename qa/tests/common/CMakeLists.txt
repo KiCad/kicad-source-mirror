@@ -135,6 +135,7 @@ set( QA_COMMON_SRCS
     test_wx_any_utils.cpp
     test_wx_filename.cpp
 
+    libeval/test_libeval_string_literal.cpp
     libeval/test_numeric_evaluator.cpp
 
     transline_calculations/test_coax.cpp

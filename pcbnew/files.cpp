@@ -36,6 +36,7 @@
 #include <board_loader.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <footprint_import_reconciler.h>
+#include <import_design_rules.h>
 #include <footprint_library_adapter.h>
 #include <import_proj_properties.h>
 #include <import_net_names.h>
@@ -88,6 +89,7 @@
 
 #include <wx/stdpaths.h>
 #include <wx/ffile.h>
+#include <wx/file.h>
 #include <wx/filedlg.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
@@ -629,6 +631,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( !is_new )
         CheckForAutosaveFiles( wx_filename.GetPath(), { FILEEXT::KiCadPcbFileExtension } );
 
+    // custom rules the importer derived, saved with the board once its name is known
+    wxString importedRules;
+
     if( is_new )
     {
         // Link the existing blank board to the new project
@@ -669,22 +674,24 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                                 : static_cast<REPORTER*>( &NULL_REPORTER::GetInstance() );
             loaderOptions.initialize_after_load = false;
 
-            if( aCtl & KICTL_IMPORT_LIB )
-            {
-                loaderOptions.post_load_hook =
-                        [&]( PCB_IO& aPlugin )
+            loaderOptions.post_load_hook =
+                    [&]( PCB_IO& aPlugin )
+                    {
+                        importedRules = aPlugin.GetImportedDesignRules();
+
+                        if( !( aCtl & KICTL_IMPORT_LIB ) )
+                            return;
+
+                        try
                         {
-                            try
-                            {
-                                for( FOOTPRINT* fp : aPlugin.GetImportedCachedLibraryFootprints() )
-                                    importedLibFootprints.emplace_back( fp );
-                            }
-                            catch( const IO_ERROR& )
-                            {
-                                // no cached library, reconcile from placed only
-                            }
-                        };
-            }
+                            for( FOOTPRINT* fp : aPlugin.GetImportedCachedLibraryFootprints() )
+                                importedLibFootprints.emplace_back( fp );
+                        }
+                        catch( const IO_ERROR& )
+                        {
+                            // no cached library, reconcile from placed only
+                        }
+                    };
 
             loaderOptions.plugin_configurator =
                     [&]( PCB_IO& aPlugin )
@@ -922,6 +929,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         GetBoard()->SetFileName( fname );
     }
+
+    SaveImportedDesignRules( importedRules, wxFileName( GetBoard()->GetDesignRulesPath() ), loadReporter );
 
     // Lock the file newly opened:
     m_file_checker.reset( lock.release() );

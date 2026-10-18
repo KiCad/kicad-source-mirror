@@ -9,7 +9,7 @@
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/stc/stc.h>
-#include <wx/regex.h>
+#include "drc_rule_editor_utils.h"
 
 DRC_RE_OBJECT_SELECTOR_PANEL::DRC_RE_OBJECT_SELECTOR_PANEL( wxWindow* parent, BOARD* board, const wxString& label ) :
         wxPanel( parent ),
@@ -126,44 +126,41 @@ void DRC_RE_OBJECT_SELECTOR_PANEL::ParseCondition( const wxString& aExpr, const 
     if( !prefix.IsEmpty() && expr.StartsWith( prefix + "." ) )
         expr = expr.Mid( prefix.Length() + 1 );
 
-    wxRegEx netRe( wxT( "^NetName\\s*==\\s*'([^']*)'" ) );
-    wxRegEx netclassRe1( wxT( "^hasNetclass\\('([^']*)'\\)" ) );
-    wxRegEx netclassRe2( wxT( "^NetClass\\s*==\\s*'([^']*)'" ) );
-    wxRegEx areaRe( wxT( "^(?:enclosedByArea|intersectsArea)\\('([^']*)'\\)" ) );
+    if( std::optional<DRC_RULE_EDITOR_UTILS::SELECTOR_CONDITION> cond =
+                DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( expr ) )
+    {
+        switch( cond->kind )
+        {
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::NET:
+            m_choice->SetSelection( 1 );
+            onChoice( wxCommandEvent() );
+            m_netSelector->SetSelectedNet( cond->operand );
+            return;
 
-    if( netRe.Matches( expr ) )
-    {
-        m_choice->SetSelection( 1 );
-        onChoice( wxCommandEvent() );
-        m_netSelector->SetSelectedNet( netRe.GetMatch( expr, 1 ) );
-        return;
-    }
-    else if( netclassRe1.Matches( expr ) )
-    {
-        m_choice->SetSelection( 2 );
-        onChoice( wxCommandEvent() );
-        m_netclassSelector->SetSelectedNetclass( netclassRe1.GetMatch( expr, 1 ) );
-        return;
-    }
-    else if( netclassRe2.Matches( expr ) )
-    {
-        m_choice->SetSelection( 2 );
-        onChoice( wxCommandEvent() );
-        m_netclassSelector->SetSelectedNetclass( netclassRe2.GetMatch( expr, 1 ) );
-        return;
-    }
-    else if( areaRe.Matches( expr ) )
-    {
-        m_choice->SetSelection( 3 );
-        onChoice( wxCommandEvent() );
-        m_areaSelector->SetSelectedArea( areaRe.GetMatch( expr, 1 ) );
-        return;
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::NETCLASS:
+            m_choice->SetSelection( 2 );
+            onChoice( wxCommandEvent() );
+            m_netclassSelector->SetSelectedNetclass( cond->operand );
+            return;
+
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::ENCLOSED_BY_AREA:
+            m_choice->SetSelection( 3 );
+            onChoice( wxCommandEvent() );
+            m_areaSelector->SetSelectedArea( cond->operand );
+            return;
+
+        // The area choice writes enclosedByArea, so it cannot hold this test
+        case DRC_RULE_EDITOR_UTILS::SELECTOR_KIND::INTERSECTS_AREA:
+            break;
+        }
     }
 
     m_choice->SetSelection( 4 );
     onChoice( wxCommandEvent() );
+
+    // The custom query is saved as written, so it keeps its object prefix
     if( m_customQueryCtrl )
-        m_customQueryCtrl->SetValue( expr );
+        m_customQueryCtrl->SetValue( aExpr );
 }
 
 

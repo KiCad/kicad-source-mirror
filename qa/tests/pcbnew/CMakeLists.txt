@@ -71,6 +71,7 @@ set( QA_PCBNEW_SRCS
     test_footprint.cpp
     test_footprint_editor_tabs.cpp
     test_footprint_import_reconciler.cpp
+    test_import_design_rules.cpp
     test_footprint_library_adapter.cpp
     test_footprint_load_save.cpp
     test_footprint_pad_fixup.cpp
@@ -220,6 +221,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_unconnected_items_exclusion_loss.cpp
     drc/test_drc_via_dangling.cpp
     drc/test_drc_keepout_disallow.cpp
+    drc/test_drc_netclass_literal.cpp
     drc/test_drc_tuning_profiles.cpp
     drc/test_drc_creepage.cpp
     drc/test_drc_creepage_issue20480.cpp
