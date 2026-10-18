@@ -924,7 +924,7 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
     if( aSecondLayer != B_Cu && ( aSecondLayer < aFirstLayer || aFirstLayer == B_Cu ) )
         std::swap( aFirstLayer, aSecondLayer );
 
-    int total = 0;
+    int  total = 0;
     bool start = false;
     bool half = false;
 
@@ -946,7 +946,9 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
                 half = true;
         }
         else if( !start )
+        {
             continue;
+        }
 
         // Reached the stop copper layer?  we're done
         if( start && ( layer != UNDEFINED_LAYER && layer == aSecondLayer ) )
@@ -979,7 +981,9 @@ bool IsPrmSpecified( const wxString& aPrmValue )
     if( !aPrmValue.IsEmpty()
         && ( aPrmValue.CmpNoCase( NotSpecifiedPrm() ) != 0 )
         && aPrmValue != wxGetTranslation( NotSpecifiedPrm() ) )
+    {
         return true;
+    }
 
     return false;
 }
