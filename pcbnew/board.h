@@ -815,6 +815,7 @@ public:
      * Replace @a aExisting with @a aNew, preserving connectivity and metadata.
      */
     void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
+                            FLIP_DIRECTION aFlipDirection,
                             bool aMatchPadPositions,
                             bool aDeleteExtraTexts = true,
                             bool aResetTextLayers = true,

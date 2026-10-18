@@ -1032,7 +1032,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     {
         // In the main board the new footprint replaces the old one (pos, orient, ref, value, connections
         // and properties are kept) and the sourceFootprint (old footprint) is deleted
-        mainpcb->ExchangeFootprint( sourceFootprint, newFootprint, commit, true /* match pad positions */ );
+        mainpcb->ExchangeFootprint( sourceFootprint, newFootprint, commit,
+                                    pcbframe->GetPcbNewSettings()->m_FlipDirection,
+                                    true /* match pad positions */ );
 
         commit.Push( _( "Update Footprint" ) );
     }

@@ -175,6 +175,7 @@ static std::vector<std::pair<T*, T*>> matchItemsBySimilarity( const std::vector<
 
 
 void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
+                               FLIP_DIRECTION aFlipDirection,
                                bool aMatchPadPositions,
                                bool aDeleteExtraTexts,
                                bool aResetTextLayers,
@@ -228,7 +229,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     aNew->SetPosition( position );
 
     if( aNew->GetLayer() != aExisting->GetLayer() )
-        aNew->Flip( aNew->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+        aNew->Flip( aNew->GetPosition(), aFlipDirection );
 
     if( aNew->GetOrientation() != orientation )
         aNew->SetOrientation( orientation );

@@ -381,6 +381,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     bool shifted = false;
 
     m_parent->GetBoard()->ExchangeFootprint( aFootprint, newFootprint, m_commit,
+                                             m_parent->GetPcbNewSettings()->m_FlipDirection,
                                              m_matchPadPositions->GetValue(),
                                              m_removeExtraBox->GetValue(),
                                              m_resetTextItemLayers->GetValue(),

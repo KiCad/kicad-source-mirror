@@ -438,7 +438,8 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
              // Expand the footprint pad layers
              newFootprint->FixUpPadsForBoard( m_board );
 
-             m_board->ExchangeFootprint( aFootprint, newFootprint, m_commit, true );
+             m_board->ExchangeFootprint( aFootprint, newFootprint, m_commit,
+                                         m_frame->GetPcbNewSettings()->m_FlipDirection, true );
 
              msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
                          aFootprint->GetReference(),
