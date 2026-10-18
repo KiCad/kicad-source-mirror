@@ -868,7 +868,7 @@ void ACTION_TOOLBAR::onRightUp( wxMouseEvent& aEvent )
     // Hit-test the tool ourselves so the whole button works.
     wxAuiToolBarItem* item = FindToolByPosition( aEvent.GetX(), aEvent.GetY() );
 
-    if( !item )
+    if( !item || ( item->GetState() & wxAUI_BUTTON_STATE_DISABLED ) != 0 )
     {
         aEvent.Skip();
         return;
