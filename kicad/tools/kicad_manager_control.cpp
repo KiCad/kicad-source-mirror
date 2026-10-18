@@ -165,20 +165,21 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     wxString userTemplatesPath;
     wxString systemTemplatesPath;
 
-    auto resolveTemplateDir = []( const wxString& aValue ) -> wxString
-    {
-        wxString resolved = ExpandEnvVarSubstitutions( aValue, nullptr );
+    auto resolveTemplateDir =
+            []( const wxString& aValue ) -> wxString
+            {
+                wxString resolved = ExpandEnvVarSubstitutions( aValue, nullptr );
 
-        // Skip values with unresolved references so we don't seed the selector with a
-        // bogus path that doesn't exist on disk.
-        if( resolved.Contains( wxT( "${" ) ) || resolved.Contains( wxT( "$(" ) ) )
-            return wxEmptyString;
+                // Skip values with unresolved references so we don't seed the selector with a
+                // bogus path that doesn't exist on disk.
+                if( resolved.Contains( wxT( "${" ) ) || resolved.Contains( wxT( "$(" ) ) )
+                    return wxEmptyString;
 
-        wxFileName templatePath;
-        templatePath.AssignDir( resolved );
-        templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-        return templatePath.GetFullPath();
-    };
+                wxFileName templatePath;
+                templatePath.AssignDir( resolved );
+                templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+                return templatePath.GetFullPath();
+            };
 
     ENV_VAR_MAP_CITER itUser = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 

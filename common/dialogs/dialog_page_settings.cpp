@@ -440,6 +440,7 @@ void DIALOG_PAGES_SETTINGS::OnComment9TextUpdated( wxCommandEvent& event )
 void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
 {
     wxDateTime datetime = m_PickDate->GetValue();
+
     wxString date =
     // We can choose different formats. Should probably be kept in sync with CURRENT_DATE
     // formatting in TITLE_BLOCK.
@@ -732,17 +733,21 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
         {
             path = expanded.GetPath();
         }
-        else if( !m_projectPath.IsEmpty() && inProject.HasName() && inProject.MakeAbsolute( m_projectPath )
-                 && inProject.FileExists() )
+        else if( !m_projectPath.IsEmpty()
+                    && inProject.HasName()
+                    && inProject.MakeAbsolute( m_projectPath )
+                    && inProject.FileExists() )
         {
             path = inProject.GetPath();
         }
         else
         {
             ENV_VAR_MAP_CITER itUser = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
+
             if( itUser != Pgm().GetLocalEnvVariables().end() && itUser->second.GetValue() != wxEmptyString )
             {
                 wxString resolved = ExpandEnvVarSubstitutions( itUser->second.GetValue(), &m_parentFrame->Prj() );
+
                 if( !resolved.Contains( wxT( "${" ) ) && !resolved.Contains( wxT( "$(" ) ) )
                 {
                     wxFileName resolvedFn;
