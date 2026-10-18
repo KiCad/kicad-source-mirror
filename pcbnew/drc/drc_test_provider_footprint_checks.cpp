@@ -21,7 +21,9 @@
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <footprint.h>
+#include <footprint_utils.h>
 #include <pad.h>
+#include <pad_utils.h>
 
 /*
     Footprint tests:
@@ -74,7 +76,7 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
     {
         if( !m_drcEngine->IsErrorLimitExceeded( DRCE_FOOTPRINT_TYPE_MISMATCH ) )
         {
-            footprint->CheckFootprintAttributes(
+            FOOTPRINT_UTILS::CheckFootprintAttributes( *footprint,
                     [&]( const wxString& aMsg )
                     {
                         errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH,
@@ -99,7 +101,7 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
         if( !m_drcEngine->IsErrorLimitExceeded( DRCE_PAD_TH_WITH_NO_HOLE )
                 || !m_drcEngine->IsErrorLimitExceeded( DRCE_PADSTACK ) )
         {
-            footprint->CheckPads( *m_drcEngine,
+            FOOTPRINT_UTILS::CheckPads( *footprint, *m_drcEngine,
                     [&]( const PAD& aPad, const PAD_UTILS::PAD_CHECK_RESULT& aResult )
                     {
                         const int drcPadErrorCode = ConvertPadCheckToDrcCode( aResult.code );
@@ -116,14 +118,14 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                     } );
         }
 
-        // Don't call footprint->CheckShortingPads().  At the board level we know about nets,
+        // Don't call FOOTPRINT_UTILS::CheckShortingPads().  At the board level we know about nets,
         // and the pads may have the same net even though they're distinct pads.
 
         if( footprint->IsNetTie() )
         {
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS ) )
             {
-                footprint->CheckNetTies(
+                FOOTPRINT_UTILS::CheckNetTies( *footprint,
                         [&]( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB,
                              const BOARD_ITEM* aItemC, const VECTOR2I& aPosition )
                         {
@@ -132,7 +134,7 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                         } );
             }
 
-            footprint->CheckNetTiePadGroups(
+            FOOTPRINT_UTILS::CheckNetTiePadGroups( *footprint,
                     [&]( const wxString& aMsg )
                     {
                         errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT, aMsg,

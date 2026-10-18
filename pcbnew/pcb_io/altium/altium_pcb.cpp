@@ -5740,7 +5740,7 @@ void ALTIUM_PCB::HelperSetFootprintMountingStyles()
 {
     // Altium has no per-component mounting style to copy, so derive it from the pads the way
     // KiCad's own footprint checker does.  Using the same heuristic keeps the imported value in
-    // agreement with FOOTPRINT::CheckFootprintAttributes(), which would otherwise report every
+    // agreement with FOOTPRINT_UTILS::CheckFootprintAttributes(), which would otherwise report every
     // footprint we just wrote as a type mismatch.
     //
     // Only m_components is walked, so importing into a board that already holds footprints

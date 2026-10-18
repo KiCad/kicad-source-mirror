@@ -36,10 +36,8 @@
 #include <jumper_group.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
-#include <pad_utils.h>
 #include <lib_id.h>
 #include <lib_tree_item.h>
-#include <list>
 
 #include <zones.h>
 #include <convert_shape_list_to_polygon.h>
@@ -673,59 +671,6 @@ public:
             m_fpStatus &= ~FP_to_PLACE;
     }
 
-    /**
-     * Test if footprint attributes for type (SMD/Through hole/Other) match the expected
-     * type based on the pads in the footprint.
-     * Footprints with plated through-hole pads should usually be marked through hole even if they
-     * also have SMD because they might not be auto-placed.  Exceptions to this might be shielded
-     * connectors.  Otherwise, footprints with SMD pads should be marked SMD.
-     * Footprints with no connecting pads should be marked "Unspecified"
-     *
-     * @param aErrorHandler callback to handle the error messages generated
-     */
-    void CheckFootprintAttributes( const std::function<void( const wxString& )>& aErrorHandler );
-
-    using FP_PAD_CHECK_HANDLER = std::function<void( const PAD&, const PAD_UTILS::PAD_CHECK_RESULT& )>;
-
-    /**
-     * Run non-board-specific DRC checks on footprint's pads.  These are the checks supported by
-     * both the PCB DRC and the Footprint Editor Footprint Checker.
-     *
-     * @param aUnitsProvider
-     * @param aErrorHandler callback to handle the error messages generated
-     */
-    void CheckPads( const UNITS_PROVIDER& aUnitsProvider, const FP_PAD_CHECK_HANDLER& aErrorHandler );
-
-    /**
-     * Check for overlapping, different-numbered, non-net-tie pads.
-     *
-     * @param aErrorHandler callback to handle the error messages generated
-     */
-    void CheckShortingPads( const std::function<void( const PAD*, const PAD*, int aErrorCode,
-                                                      const VECTOR2I& )>& aErrorHandler );
-
-    /**
-     * Check for un-allowed shorting of pads in net-tie footprints.  If two pads are shorted,
-     * they must both appear in one of the allowed-shorting lists.
-     *
-     * @param aErrorHandler callback to handle the error messages generated
-     */
-    void CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
-                                                 const BOARD_ITEM* bItem,
-                                                 const BOARD_ITEM* cItem,
-                                                 const VECTOR2I& )>& aErrorHandler );
-
-    /**
-     * Sanity check net-tie pad groups.  Pads cannot be listed more than once, and pad numbers
-     * must correspond to a pad.
-     *
-     * @param aErrorHandler callback to handle the error messages generated
-     */
-    void CheckNetTiePadGroups( const std::function<void( const wxString& )>& aErrorHandler );
-
-    void CheckClippedSilk( const std::function<void( BOARD_ITEM* aItemA,
-                                                     BOARD_ITEM* aItemB,
-                                                     const VECTOR2I& aPt )>& aErrorHandler );
     /**
      * Cache the pads that are allowed to connect to each other in the footprint.
      */
