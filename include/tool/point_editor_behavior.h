@@ -29,6 +29,7 @@
 #include <view/view_controls.h>
 
 class COMMIT;
+class REFERENCE_IMAGE;
 class SHAPE_POLY_SET;
 
 /**
@@ -347,17 +348,17 @@ private:
 };
 
 
-/**                                                                                                                   
- * Edit behavior for ELLIPSE and ELLIPSE_ARC shapes.                                                                  
- *                                                                               
- * Closed ellipse: 3 handles (center, major-axis endpoint, minor-axis endpoint).                                      
- * Elliptical arc: 5 handles (the above + arc start + arc end).                  
- *                                                                                                                    
- * Drag semantics:                             
- *  - Center: translate the whole ellipse.                                                                            
- *  - Major-end: set major radius + rotation (rotation follows the drag vector's world angle).                        
+/**
+ * Edit behavior for ELLIPSE and ELLIPSE_ARC shapes.
+ *
+ * Closed ellipse: 3 handles (center, major-axis endpoint, minor-axis endpoint).
+ * Elliptical arc: 5 handles (the above + arc start + arc end).
+ *
+ * Drag semantics:
+ *  - Center: translate the whole ellipse.
+ *  - Major-end: set major radius + rotation (rotation follows the drag vector's world angle).
  *  - Minor-end: set minor radius only (rotation preserved; drag is projected onto the minor axis).
- *  - Arc start/end: set the respective parametric angles.                                                            
+ *  - Arc start/end: set the respective parametric angles.
  */
 class EDA_ELLIPSE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 {
@@ -396,6 +397,51 @@ private:
 
     /// Inverse: the parametric angle of a world-space point relative to this ellipse.
     EDA_ANGLE parametricAngleOf( const VECTOR2I& aWorldPt ) const;
+};
+
+
+/**
+ * "Standard" reference image editing behavior.
+ *
+ * Works over the #REFERENCE_IMAGE basis of #PCB_REFERENCE_IMAGE and #SCH_BITMAP.
+ * Drag semantics:
+ *  - Corner handles: resize the image.
+ *  - Origin handle: move the transform origin.
+ */
+class REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+    enum REFIMG_POINTS
+    {
+        REFIMG_TOP_LEFT,
+        REFIMG_TOP_RIGHT,
+        REFIMG_BOT_RIGHT,
+        REFIMG_BOT_LEFT,
+        REFIMG_ORIGIN,
+
+        REFIMG_MAX_POINTS,
+    };
+
+public:
+    /**
+     * @param aImage the image to edit.
+     * @param aMinSize the smallest width and height the image may be scaled to, in IU.
+     */
+    REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR( REFERENCE_IMAGE& aImage, int aMinSize ) :
+            m_image( aImage ),
+            m_minSize( aMinSize )
+    {
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override;
+
+private:
+    REFERENCE_IMAGE& m_image;
+    int              m_minSize;
 };
 
 

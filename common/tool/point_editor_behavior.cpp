@@ -19,9 +19,13 @@
 
 #include "tool/point_editor_behavior.h"
 
+#include <algorithm>
+
 #include <advanced_config.h>
 #include <commit.h>
 #include <geometry/shape_poly_set.h>
+#include <math/util.h>
+#include <reference_image.h>
 
 
 void POLYGON_POINT_EDIT_BEHAVIOR::BuildForPolyOutline( EDIT_POINTS&          aPoints,
@@ -835,6 +839,109 @@ bool EDA_TABLECELL_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
     aPoints.Point( COL_WIDTH ).SetPosition( m_cell.GetEnd() - VECTOR2I( 0, m_cell.GetRectangleHeight() / 2 ) );
     aPoints.Point( ROW_HEIGHT ).SetPosition( m_cell.GetEnd() - VECTOR2I( m_cell.GetRectangleWidth() / 2, 0 ) );
     return true;
+}
+
+void REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
+{
+    const VECTOR2I topLeft = m_image.GetPosition() - m_image.GetSize() / 2;
+    const VECTOR2I botRight = m_image.GetPosition() + m_image.GetSize() / 2;
+
+    aPoints.AddPoint( topLeft );
+    aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+    aPoints.AddPoint( botRight );
+    aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+
+    aPoints.AddPoint( m_image.GetPosition() + m_image.GetTransformOriginOffset() );
+}
+
+
+bool REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+{
+    wxCHECK( aPoints.PointsSize() == REFIMG_MAX_POINTS, false );
+
+    const VECTOR2I topLeft = m_image.GetPosition() - m_image.GetSize() / 2;
+    const VECTOR2I botRight = m_image.GetPosition() + m_image.GetSize() / 2;
+
+    aPoints.Point( REFIMG_TOP_LEFT ).SetPosition( topLeft );
+    aPoints.Point( REFIMG_TOP_RIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
+    aPoints.Point( REFIMG_BOT_RIGHT ).SetPosition( botRight );
+    aPoints.Point( REFIMG_BOT_LEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
+    aPoints.Point( REFIMG_ORIGIN ).SetPosition( m_image.GetPosition() + m_image.GetTransformOriginOffset() );
+
+    return true;
+}
+
+
+void REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints,
+                                                      COMMIT& aCommit, std::vector<EDA_ITEM*>& aUpdatedItems )
+{
+    CHECK_POINT_COUNT( aPoints, REFIMG_MAX_POINTS );
+
+    const VECTOR2I topLeft = aPoints.Point( REFIMG_TOP_LEFT ).GetPosition();
+    const VECTOR2I topRight = aPoints.Point( REFIMG_TOP_RIGHT ).GetPosition();
+    const VECTOR2I botRight = aPoints.Point( REFIMG_BOT_RIGHT ).GetPosition();
+    const VECTOR2I botLeft = aPoints.Point( REFIMG_BOT_LEFT ).GetPosition();
+    const VECTOR2I xfrmOrigin = aPoints.Point( REFIMG_ORIGIN ).GetPosition();
+
+    if( isModified( aEditedPoint, aPoints.Point( REFIMG_ORIGIN ) ) )
+    {
+        // Moving the transform origin
+        // As the other points didn't move, we can get the image extent from them
+        m_image.SetTransformOriginOffset( xfrmOrigin - ( topLeft + botRight ) / 2 );
+        return;
+    }
+
+    const VECTOR2I oldOrigin = m_image.GetPosition() + m_image.GetTransformOriginOffset();
+    const VECTOR2I oldSize = m_image.GetSize();
+
+    OPT_VECTOR2I newCorner;
+    VECTOR2I     oldCorner = m_image.GetPosition();
+
+    if( isModified( aEditedPoint, aPoints.Point( REFIMG_TOP_LEFT ) ) )
+    {
+        newCorner = topLeft;
+        oldCorner -= oldSize / 2;
+    }
+    else if( isModified( aEditedPoint, aPoints.Point( REFIMG_TOP_RIGHT ) ) )
+    {
+        newCorner = topRight;
+        oldCorner -= VECTOR2I( -oldSize.x, oldSize.y ) / 2;
+    }
+    else if( isModified( aEditedPoint, aPoints.Point( REFIMG_BOT_LEFT ) ) )
+    {
+        newCorner = botLeft;
+        oldCorner -= VECTOR2I( oldSize.x, -oldSize.y ) / 2;
+    }
+    else if( isModified( aEditedPoint, aPoints.Point( REFIMG_BOT_RIGHT ) ) )
+    {
+        newCorner = botRight;
+        oldCorner += oldSize / 2;
+    }
+
+    if( !newCorner )
+        return;
+
+    // Turn in the respective vectors from the origin
+    *newCorner -= xfrmOrigin;
+    oldCorner -= oldOrigin;
+
+    // If we tried to cross the origin, clamp it to stop it
+    if( sign( newCorner->x ) != sign( oldCorner.x ) || sign( newCorner->y ) != sign( oldCorner.y ) )
+        *newCorner = VECTOR2I( 0, 0 );
+
+    const double newLength = newCorner->EuclideanNorm();
+    const double oldLength = oldCorner.EuclideanNorm();
+
+    double ratio = oldLength > 0 ? ( newLength / oldLength ) : 1.0;
+
+    // Clamp the scaling to the minimum image size the editor allows
+    const VECTOR2I newSize = oldSize * ratio;
+    const double   newWidth = std::max( newSize.x, m_minSize );
+    const double   newHeight = std::max( newSize.y, m_minSize );
+    ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
+
+    // SetImageScale keeps the transform origin in place, which is what the origin handle pins.
+    m_image.SetImageScale( m_image.GetImageScale() * ratio );
 }
 
 

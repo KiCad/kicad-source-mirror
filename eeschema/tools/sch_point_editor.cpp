@@ -140,12 +140,6 @@ enum RECTANGLE_LINES
 };
 
 
-enum REFIMAGE_POINTS
-{
-    REFIMG_ORIGIN = RECT_BOTRIGHT + 1
-};
-
-
 enum TABLECELL_POINTS
 {
     COL_WIDTH, ROW_HEIGHT
@@ -246,125 +240,6 @@ public:
 private:
     SCH_LINE&   m_line;
     SCH_SCREEN& m_screen;
-};
-
-class BITMAP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
-{
-public:
-    BITMAP_POINT_EDIT_BEHAVIOR( SCH_BITMAP& aBitmap ) :
-            m_bitmap( aBitmap )
-    {
-    }
-
-    void MakePoints( EDIT_POINTS& aPoints ) override
-    {
-        const REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
-        const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
-        const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
-
-        aPoints.AddPoint( topLeft );
-        aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-        aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-        aPoints.AddPoint( botRight );
-
-        aPoints.AddPoint( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
-    }
-
-    bool UpdatePoints( EDIT_POINTS& aPoints ) override
-    {
-        const REFERENCE_IMAGE& refImage = m_bitmap.GetReferenceImage();
-        const VECTOR2I         topLeft = refImage.GetPosition() - refImage.GetSize() / 2;
-        const VECTOR2I         botRight = refImage.GetPosition() + refImage.GetSize() / 2;
-
-        aPoints.Point( RECT_TOPLEFT ).SetPosition( topLeft );
-        aPoints.Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
-        aPoints.Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
-        aPoints.Point( RECT_BOTRIGHT ).SetPosition( botRight );
-
-        aPoints.Point( REFIMG_ORIGIN ).SetPosition( refImage.GetPosition() + refImage.GetTransformOriginOffset() );
-        return true;
-    }
-
-    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
-                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
-    {
-        REFERENCE_IMAGE& refImg = m_bitmap.GetReferenceImage();
-        const VECTOR2I   topLeft = aPoints.Point( RECT_TOPLEFT ).GetPosition();
-        const VECTOR2I   topRight = aPoints.Point( RECT_TOPRIGHT ).GetPosition();
-        const VECTOR2I   botLeft = aPoints.Point( RECT_BOTLEFT ).GetPosition();
-        const VECTOR2I   botRight = aPoints.Point( RECT_BOTRIGHT ).GetPosition();
-        const VECTOR2I   xfrmOrigin = aPoints.Point( REFIMG_ORIGIN ).GetPosition();
-
-        if( isModified( aEditedPoint, aPoints.Point( REFIMG_ORIGIN ) ) )
-        {
-            // Moving the transform origin
-            // As the other points didn't move, we can get the image extent from them
-            const VECTOR2I newOffset = xfrmOrigin - ( topLeft + botRight ) / 2;
-            refImg.SetTransformOriginOffset( newOffset );
-        }
-        else
-        {
-            const VECTOR2I oldOrigin = refImg.GetPosition() + refImg.GetTransformOriginOffset();
-            const VECTOR2I oldSize = refImg.GetSize();
-            const VECTOR2I pos = refImg.GetPosition();
-
-            OPT_VECTOR2I newCorner;
-            VECTOR2I     oldCorner = pos;
-
-            if( isModified( aEditedPoint, aPoints.Point( RECT_TOPLEFT ) ) )
-            {
-                newCorner = topLeft;
-                oldCorner -= oldSize / 2;
-            }
-            else if( isModified( aEditedPoint, aPoints.Point( RECT_TOPRIGHT ) ) )
-            {
-                newCorner = topRight;
-                oldCorner -= VECTOR2I( -oldSize.x, oldSize.y ) / 2;
-            }
-            else if( isModified( aEditedPoint, aPoints.Point( RECT_BOTLEFT ) ) )
-            {
-                newCorner = botLeft;
-                oldCorner -= VECTOR2I( oldSize.x, -oldSize.y ) / 2;
-            }
-            else if( isModified( aEditedPoint, aPoints.Point( RECT_BOTRIGHT ) ) )
-            {
-                newCorner = botRight;
-                oldCorner += oldSize / 2;
-            }
-
-            if( newCorner )
-            {
-                // Turn in the respective vectors from the origin
-                *newCorner -= xfrmOrigin;
-                oldCorner -= oldOrigin;
-
-                // If we tried to cross the origin, clamp it to stop it
-                if( sign( newCorner->x ) != sign( oldCorner.x )
-                    || sign( newCorner->y ) != sign( oldCorner.y ) )
-                {
-                    *newCorner = VECTOR2I( 0, 0 );
-                }
-
-                const double newLength = newCorner->EuclideanNorm();
-                const double oldLength = oldCorner.EuclideanNorm();
-
-                double ratio = oldLength > 0 ? ( newLength / oldLength ) : 1.0;
-
-                // Clamp the scaling to a minimum of 50 mils
-                VECTOR2I newSize = oldSize * ratio;
-                double newWidth = std::max( newSize.x, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
-                double newHeight = std::max( newSize.y, EDA_UNIT_UTILS::Mils2IU( schIUScale, 50 ) );
-                ratio = std::min( newWidth / oldSize.x, newHeight / oldSize.y );
-
-                // Also handles the origin offset
-                refImg.SetImageScale( refImg.GetImageScale() * ratio );
-            }
-        }
-        aUpdatedItems.push_back( &m_bitmap );
-    }
-
-private:
-    SCH_BITMAP& m_bitmap;
 };
 
 
@@ -1071,7 +946,8 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
     case SCH_BITMAP_T:
     {
         SCH_BITMAP& bitmap = static_cast<SCH_BITMAP&>( *aItem );
-        m_editBehavior = std::make_unique<BITMAP_POINT_EDIT_BEHAVIOR>( bitmap );
+        m_editBehavior = std::make_unique<REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR>( bitmap.GetReferenceImage(),
+                                                                                schIUScale.MilsToIU( 50 ) );
         break;
     }
     case SCH_LINE_T:
@@ -1563,7 +1439,9 @@ void SCH_POINT_EDITOR::updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit )
     if( !m_editBehavior )
         return;
 
-    std::vector<EDA_ITEM*> updatedItems;
+    // The edited item is always updated, so behaviors only report the other items they touch.
+    std::vector<EDA_ITEM*> updatedItems = { item };
+
     m_editBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
 
     for( EDA_ITEM* updatedItem : updatedItems )
