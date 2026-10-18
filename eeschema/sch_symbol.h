@@ -989,6 +989,8 @@ public:
     bool IsPower() const override;
     bool IsNormal() const override;
 
+    void SetLocalPowerProp( bool aLocal );
+
     bool GetShowPinNames() const override;
     void SetShowPinNames( bool aShow ) override;
 

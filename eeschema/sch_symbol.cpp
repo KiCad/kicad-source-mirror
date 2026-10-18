@@ -4139,6 +4139,9 @@ bool SCH_SYMBOL::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_
     if( IsPower() && ( GetValue( aInstance, FOR_NETNAME ) != symbol->GetValue( aInstance, FOR_NETNAME ) ) )
         return true;
 
+    if( IsLocalPower() != symbol->IsLocalPower() )
+        return true;
+
     if( m_pins.size() != symbol->m_pins.size() )
         return true;
 
@@ -4853,6 +4856,18 @@ bool SCH_SYMBOL::IsGlobalPower() const
 }
 
 
+void SCH_SYMBOL::SetLocalPowerProp( bool aLocal )
+{
+    if( !m_part || !m_part->IsPower() )
+        return;
+
+    if( aLocal )
+        m_part->SetLocalPower();
+    else
+        m_part->SetGlobalPower();
+}
+
+
 bool SCH_SYMBOL::IsPower() const
 {
     return IsLocalPower() || IsGlobalPower();
@@ -5435,6 +5450,17 @@ static struct SCH_SYMBOL_DESC
                             }
 
                             return choices;
+                        } );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Local Power" ), &SCH_SYMBOL::SetLocalPowerProp,
+                                                             &SCH_SYMBOL::IsLocalPower ) )
+                .SetAvailableFunc(
+                        []( INSPECTABLE* aItem ) -> bool
+                        {
+                            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                                return symbol->IsPower();
+
+                            return false;
                         } );
 
         const wxString groupAttributes = _HKI( "Attributes" );
