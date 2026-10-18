@@ -144,8 +144,8 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
     wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MANAGER::RunHotKey Key: %s" ), KeyNameFromKeyCode( aHotKey ) );
 
-    int                         matchedHotKey = key | mod;
-    HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( matchedHotKey );
+    int  matchedHotKey = key | mod;
+    auto it = m_actionHotKeys.find( matchedHotKey );
 
     // If no luck, try without Shift, to handle keys that require it
     // e.g. to get ? you need to press Shift+/ without US keyboard layout

@@ -221,25 +221,25 @@ private:
     void processHotKey( TOOL_ACTION* aAction, const std::map<std::string, int>& aLegacyMap,
                         const std::map<std::string, std::pair<int, int>>& aHotKeyMap );
 
+private:
     /// Tool manager needed to run actions
-    TOOL_MANAGER* m_toolMgr;
+    TOOL_MANAGER*                           m_toolMgr;
 
     /// Map for indexing actions by their names
-    std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
+    std::map<std::string, TOOL_ACTION*>     m_actionNameIndex;
 
     /// Map for recording actions that have custom UI IDs
-    std::map<int, TOOL_ACTION*> m_customUIIdIndex;
+    std::map<int, TOOL_ACTION*>             m_customUIIdIndex;
 
     /// Map for indexing actions by their hotkeys
-    typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
-    HOTKEY_LIST m_actionHotKeys;
+    std::map<int, std::list<TOOL_ACTION*> > m_actionHotKeys;
 
     /// Quick action<->hot key lookup
-    std::map<int, int> m_hotkeys;
+    std::map<int, int>                      m_hotkeys;
 
     /// Map the command ID that wx uses for the action to the UI conditions for the
     /// menu/toolbar items
-    std::map<int, ACTION_CONDITIONS> m_uiConditions;
+    std::map<int, ACTION_CONDITIONS>        m_uiConditions;
 };
 
 #endif /* ACTION_MANAGER_H_ */
