@@ -21,7 +21,7 @@
 
 #include <exception>
 
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway.h>
 #include <json_common.h>
 
@@ -120,13 +120,11 @@ FOOTPRINT_MATCH_RESULT QueryMatchingFootprints( KIWAY& aKiway, const FOOTPRINT_M
         if( !kiface )
             return returnFailure();
 
-        void* address = kiface->IfaceOrAddress( KIFACE_FILTER_FOOTPRINTS );
+        KIFACE_FILTER_FOOTPRINTS_SERVICE::Type filterFootprints =
+                GetKifaceService<KIFACE_FILTER_FOOTPRINTS_SERVICE>( kiface );
 
-        if( !address )
+        if( !filterFootprints )
             return returnFailure();
-
-        using FILTER_FUNC = wxString ( * )( const wxString& );
-        FILTER_FUNC filterFootprints = reinterpret_cast<FILTER_FUNC>( address );
 
         wxString response = filterFootprints( wxString::FromUTF8( request.dump() ) );
 
@@ -149,13 +147,11 @@ bool StartFootprintLibrariesLoad( KIWAY& aKiway )
         if( !kiface )
             return false;
 
-        void* address = kiface->IfaceOrAddress( KIFACE_TRIGGER_FOOTPRINTS_LOAD );
+        KIFACE_TRIGGER_FOOTPRINTS_LOAD_SERVICE::Type startLoad =
+                GetKifaceService<KIFACE_TRIGGER_FOOTPRINTS_LOAD_SERVICE>( kiface );
 
-        if( !address )
+        if( !startLoad )
             return false;
-
-        using LOAD_FUNC = bool ( * )();
-        LOAD_FUNC startLoad = reinterpret_cast<LOAD_FUNC>( address );
 
         return startLoad();
     }
@@ -176,13 +172,11 @@ float GetFootprintLibrariesLoadProgress( KIWAY& aKiway )
         if( !kiface )
             return 1.0f;
 
-        void* address = kiface->IfaceOrAddress( KIFACE_FOOTPRINTS_LOAD_PROGRESS );
+        KIFACE_FOOTPRINTS_LOAD_PROGRESS_SERVICE::Type getProgress =
+                GetKifaceService<KIFACE_FOOTPRINTS_LOAD_PROGRESS_SERVICE>( kiface );
 
-        if( !address )
+        if( !getProgress )
             return 1.0f;
-
-        using PROGRESS_FUNC = float ( * )();
-        PROGRESS_FUNC getProgress = reinterpret_cast<PROGRESS_FUNC>( address );
 
         return getProgress();
     }

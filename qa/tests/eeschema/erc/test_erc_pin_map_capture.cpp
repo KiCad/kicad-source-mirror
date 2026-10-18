@@ -23,7 +23,7 @@
 #include <set>
 #include <advanced_config.h>
 #include <erc/erc.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway.h>
 #include <lib_symbol.h>
 #include <locale_io.h>
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE( ERCUnmappedPinsBindSharedInstancePaths )
         void* IfaceOrAddress( int aId ) override
         {
             BOOST_REQUIRE_EQUAL( aId, KIFACE_FOOTPRINT_PAD_NUMBERS );
-            return reinterpret_cast<void*>( &Pads );
+            return KifaceServiceAddress<KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE>( &Pads );
         }
     } face;
 

@@ -33,7 +33,7 @@
 #include <api/headless_footprint_context.h>
 #include <api/headless_pcb_context.h>
 #include <kiface_base.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway_holder.h>
 #include <pcb_edit_frame.h>
 #include <macros.h>
@@ -631,33 +631,24 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         }
 
         case KIFACE_FILTER_FOOTPRINTS:
-        {
-            // Return function pointer for filtering footprints
-            // Signature: wxString (*)(const wxString& aFilterJson)
-            return reinterpret_cast<void*>( &filterFootprints );
-        }
+            return KifaceServiceAddress<KIFACE_FILTER_FOOTPRINTS_SERVICE>( &filterFootprints );
 
         case KIFACE_TRIGGER_FOOTPRINTS_LOAD:
-        {
             // Start the background load of the libraries filtered by filterFootprints
-            // Signature: void (*)()
-            return reinterpret_cast<void*>( &startFootprintLibraryLoad );
-        }
+            return KifaceServiceAddress<KIFACE_TRIGGER_FOOTPRINTS_LOAD_SERVICE>( &startFootprintLibraryLoad );
 
         case KIFACE_FOOTPRINTS_LOAD_PROGRESS:
-        {
             // Report how far the load started by startFootprintMatchLoad() has got
-            // Signature: float (*)()
-            return reinterpret_cast<void*>( &footprintLibraryLoadProgress );
-        }
+            return KifaceServiceAddress<KIFACE_FOOTPRINTS_LOAD_PROGRESS_SERVICE>( &footprintLibraryLoadProgress );
 
         case KIFACE_MERGE_DOCUMENT:
-            return reinterpret_cast<void*>( &pcbnewMergeExport );
+            return KifaceServiceAddress<KIFACE_MERGE_DOCUMENT_SERVICE>( &pcbnewMergeExport );
 
         case KIFACE_OPEN_DIFF_DIALOG:
-            return reinterpret_cast<void*>( &pcbnewOpenDiffDialogExport );
+            return KifaceServiceAddress<KIFACE_OPEN_DIFF_DIALOG_SERVICE>( &pcbnewOpenDiffDialogExport );
 
-        case KIFACE_ATTACH_DIFF_CANVASES: return reinterpret_cast<void*>( &pcbnewAttachDiffCanvasesExport );
+        case KIFACE_ATTACH_DIFF_CANVASES:
+            return KifaceServiceAddress<KIFACE_ATTACH_DIFF_CANVASES_SERVICE>( &pcbnewAttachDiffCanvasesExport );
 
         default:
             return nullptr;

@@ -25,7 +25,7 @@
 
 #include <trace_helpers.h>
 #include <connection_graph.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway.h>
 #include <lib_id.h>
 #include <sch_pin.h>
@@ -430,9 +430,10 @@ const std::set<wxString>& NETLIST_EXPORTER_BASE::footprintPads( const wxString& 
     {
         if( KIFACE* cvpcb = m_kiway->KiFACE( KIWAY::FACE_CVPCB ) )
         {
-            typedef void ( *PAD_NUMBERS_FN_PTR )( const wxString&, PROJECT*, std::set<wxString>& );
+            KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE::Type fetch =
+                    GetKifaceService<KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE>( cvpcb );
 
-            if( auto fetch = (PAD_NUMBERS_FN_PTR) cvpcb->IfaceOrAddress( KIFACE_FOOTPRINT_PAD_NUMBERS ) )
+            if( fetch )
                 fetch( aFootprintId, &m_schematic->Project(), pads );
         }
     }

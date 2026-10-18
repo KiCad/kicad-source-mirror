@@ -25,7 +25,7 @@
 
 #include <cli/exit_codes.h>
 #include <kiface_base.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway.h>
 
 #include <wx/translation.h>
@@ -69,15 +69,13 @@ int DispatchMerge( KIWAY& aKiway, DOC_KIND aKind, const wxString& aAncestor, con
                    const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
                    bool aSingleFile, REPORTER* aReporter )
 {
-    typedef int ( *MERGE_FN )( int, const wxString&, const wxString&, const wxString&,
-                               const wxString&, bool, bool, REPORTER* );
-
     KIFACE* kiface = aKiway.KiFACE( faceForKind( aKind ) );
 
     if( !kiface )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    MERGE_FN fn = reinterpret_cast<MERGE_FN>( kiface->IfaceOrAddress( KIFACE_MERGE_DOCUMENT ) );
+    KIFACE_MERGE_DOCUMENT_SERVICE::Type fn =
+            GetKifaceService<KIFACE_MERGE_DOCUMENT_SERVICE>( kiface );
 
     if( !fn )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -91,15 +89,13 @@ int DispatchOpenDiffDialog( KIWAY& aKiway, DOC_KIND aKind, const wxString& aFile
                             const wxString& aFileB, const wxString& aLabelA, const wxString& aLabelB,
                             wxWindow* aParent, REPORTER* aReporter )
 {
-    typedef int ( *OPEN_FN )( int, const wxString&, const wxString&, const wxString&,
-                              const wxString&, wxWindow*, REPORTER* );
-
     KIFACE* kiface = aKiway.KiFACE( faceForKind( aKind ) );
 
     if( !kiface )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    OPEN_FN fn = reinterpret_cast<OPEN_FN>( kiface->IfaceOrAddress( KIFACE_OPEN_DIFF_DIALOG ) );
+    KIFACE_OPEN_DIFF_DIALOG_SERVICE::Type fn =
+            GetKifaceService<KIFACE_OPEN_DIFF_DIALOG_SERVICE>( kiface );
 
     if( !fn )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -113,15 +109,13 @@ std::unique_ptr<DIFF_CANVAS_CONTEXT> DispatchAttachDiffCanvases( KIWAY& aKiway, 
                                                                  WIDGET_DIFF_CANVAS& aAfter, DOCUMENT_DIFF& aDiff,
                                                                  REPORTER* aReporter )
 {
-    typedef DIFF_CANVAS_CONTEXT* ( *ATTACH_FN )( int, const wxString&, const wxString&, WIDGET_DIFF_CANVAS*,
-                                                 WIDGET_DIFF_CANVAS*, DOCUMENT_DIFF*, REPORTER* );
-
     KIFACE* kiface = aKiway.KiFACE( faceForKind( aKind ) );
 
     if( !kiface )
         return nullptr;
 
-    ATTACH_FN fn = reinterpret_cast<ATTACH_FN>( kiface->IfaceOrAddress( KIFACE_ATTACH_DIFF_CANVASES ) );
+    KIFACE_ATTACH_DIFF_CANVASES_SERVICE::Type fn =
+            GetKifaceService<KIFACE_ATTACH_DIFF_CANVASES_SERVICE>( kiface );
 
     if( !fn )
         return nullptr;

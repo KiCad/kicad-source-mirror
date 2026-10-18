@@ -28,7 +28,7 @@
 #include <erc/erc.h>
 #include <erc/erc_exclusion.h>
 #include <json_common.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway.h>
 #include <lib_symbol.h>
 #include <locale_io.h>
@@ -457,7 +457,7 @@ BOOST_AUTO_TEST_CASE( ERCFootprintLinksBindSharedInstancePaths )
         void* IfaceOrAddress( int aId ) override
         {
             BOOST_REQUIRE_EQUAL( aId, KIFACE_TEST_FOOTPRINT_LINK );
-            return reinterpret_cast<void*>( &Check );
+            return KifaceServiceAddress<KIFACE_TEST_FOOTPRINT_LINK_SERVICE>( &Check );
         }
     } face;
 

@@ -65,7 +65,7 @@
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <thread_pool.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <symbol_library_query.h>
 #include <widgets/kistatusbar.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
@@ -748,25 +748,25 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         switch( aDataId )
         {
             case KIFACE_NETLIST_SCHEMATIC:
-                return (void*) generateSchematicNetlist;
+            return KifaceServiceAddress<KIFACE_NETLIST_SCHEMATIC_SERVICE>( &generateSchematicNetlist );
 
-            case KIFACE_FILTER_FOOTPRINT_USERS:
-                return reinterpret_cast<void*>( &filterFootprintUsers );
+        case KIFACE_FILTER_FOOTPRINT_USERS:
+            return KifaceServiceAddress<KIFACE_FILTER_FOOTPRINT_USERS_SERVICE>( &filterFootprintUsers );
 
-            case KIFACE_TRIGGER_SYMBOLS_LOAD:
-                return reinterpret_cast<void*>( &startSymbolLibraryLoad );
+        case KIFACE_TRIGGER_SYMBOLS_LOAD:
+            return KifaceServiceAddress<KIFACE_TRIGGER_SYMBOLS_LOAD_SERVICE>( &startSymbolLibraryLoad );
 
-            case KIFACE_SYMBOLS_LOAD_PROGRESS:
-                return reinterpret_cast<void*>( &symbolLibraryLoadProgress );
+        case KIFACE_SYMBOLS_LOAD_PROGRESS:
+            return KifaceServiceAddress<KIFACE_SYMBOLS_LOAD_PROGRESS_SERVICE>( &symbolLibraryLoadProgress );
 
-            case KIFACE_MERGE_DOCUMENT:
-                return reinterpret_cast<void*>( &eeschemaMergeExport );
+        case KIFACE_MERGE_DOCUMENT: return KifaceServiceAddress<KIFACE_MERGE_DOCUMENT_SERVICE>( &eeschemaMergeExport );
 
-            case KIFACE_OPEN_DIFF_DIALOG:
-                return reinterpret_cast<void*>( &eeschemaOpenDiffDialogExport );
+        case KIFACE_OPEN_DIFF_DIALOG:
+            return KifaceServiceAddress<KIFACE_OPEN_DIFF_DIALOG_SERVICE>( &eeschemaOpenDiffDialogExport );
 
-            case KIFACE_ATTACH_DIFF_CANVASES: return reinterpret_cast<void*>( &eeschemaAttachDiffCanvasesExport );
-            }
+        case KIFACE_ATTACH_DIFF_CANVASES:
+            return KifaceServiceAddress<KIFACE_ATTACH_DIFF_CANVASES_SERVICE>( &eeschemaAttachDiffCanvasesExport );
+        }
 
         return nullptr;
     }

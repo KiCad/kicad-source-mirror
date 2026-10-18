@@ -21,7 +21,7 @@
 
 #include <exception>
 
-#include <kiface_ids.h>
+#include <kiface_services.h>
 #include <kiway.h>
 #include <json_common.h>
 
@@ -196,13 +196,11 @@ FOOTPRINT_USERS_RESULT QueryFootprintUsers( KIWAY& aKiway, const FOOTPRINT_USERS
         if( !kiface )
             return returnFailure();
 
-        void* address = kiface->IfaceOrAddress( KIFACE_FILTER_FOOTPRINT_USERS );
+        KIFACE_FILTER_FOOTPRINT_USERS_SERVICE::Type filterUsers =
+                GetKifaceService<KIFACE_FILTER_FOOTPRINT_USERS_SERVICE>( kiface );
 
-        if( !address )
+        if( !filterUsers )
             return returnFailure();
-
-        using FILTER_FUNC = wxString ( * )( const wxString& );
-        FILTER_FUNC filterUsers = reinterpret_cast<FILTER_FUNC>( address );
 
         wxString response = filterUsers( aQuery.ToJsonStr() );
 
@@ -228,13 +226,11 @@ bool StartSymbolLibrariesLoad( KIWAY& aKiway )
         if( !kiface )
             return false;
 
-        void* address = kiface->IfaceOrAddress( KIFACE_TRIGGER_SYMBOLS_LOAD );
+        KIFACE_TRIGGER_SYMBOLS_LOAD_SERVICE::Type startLoad =
+                GetKifaceService<KIFACE_TRIGGER_SYMBOLS_LOAD_SERVICE>( kiface );
 
-        if( !address )
+        if( !startLoad )
             return false;
-
-        using LOAD_FUNC = bool ( * )();
-        LOAD_FUNC startLoad = reinterpret_cast<LOAD_FUNC>( address );
 
         return startLoad();
     }
@@ -255,13 +251,11 @@ float GetSymbolLibrariesLoadProgress( KIWAY& aKiway )
         if( !kiface )
             return 1.0f;
 
-        void* address = kiface->IfaceOrAddress( KIFACE_SYMBOLS_LOAD_PROGRESS );
+        KIFACE_SYMBOLS_LOAD_PROGRESS_SERVICE::Type getProgress =
+                GetKifaceService<KIFACE_SYMBOLS_LOAD_PROGRESS_SERVICE>( kiface );
 
-        if( !address )
+        if( !getProgress )
             return 1.0f;
-
-        using PROGRESS_FUNC = float ( * )();
-        PROGRESS_FUNC getProgress = reinterpret_cast<PROGRESS_FUNC>( address );
 
         return getProgress();
     }

@@ -25,7 +25,7 @@
 #include <set>
 
 #include "connection_graph.h"
-#include "kiface_ids.h"
+#include <kiface_services.h>
 #include <advanced_config.h>
 #include <connectivity/conn_facade.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
@@ -421,10 +421,8 @@ int ERC_TESTER::TestPinMap( KIFACE* aCvPcb, PROJECT* aProject )
     const bool checkDuplicate = m_settings.IsTestEnabled( ERCE_PIN_MAP_DUPLICATE_PAD );
     const bool checkBadPad = m_settings.IsTestEnabled( ERCE_PIN_MAP_BAD_PAD );
 
-    typedef void ( *PAD_NUMBERS_FN_PTR )( const wxString&, PROJECT*, std::set<wxString>& );
-
-    PAD_NUMBERS_FN_PTR padFetcher =
-            aCvPcb ? (PAD_NUMBERS_FN_PTR) aCvPcb->IfaceOrAddress( KIFACE_FOOTPRINT_PAD_NUMBERS ) : nullptr;
+    KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE::Type padFetcher =
+            GetKifaceService<KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE>( aCvPcb );
 
     std::map<wxString, std::set<wxString>> padCache;
 
@@ -3118,9 +3116,8 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
         ( *adapter )->BlockUntilLoaded();
     }
 
-    typedef int (*TESTER_FN_PTR)( const wxString&, PROJECT* );
-
-    TESTER_FN_PTR linkTester = (TESTER_FN_PTR) aCvPcb->IfaceOrAddress( KIFACE_TEST_FOOTPRINT_LINK );
+    KIFACE_TEST_FOOTPRINT_LINK_SERVICE::Type linkTester =
+            GetKifaceService<KIFACE_TEST_FOOTPRINT_LINK_SERVICE>( aCvPcb );
     ERC_MARKER_PLACER markers( *m_schematic );
 
     for( const auto& source : collectFootprints( *m_schematic ) )

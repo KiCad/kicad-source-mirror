@@ -30,7 +30,7 @@
 #include <cvpcb_mainframe.h>
 #include <settings/cvpcb_settings.h>
 #include <display_footprints_frame.h>
-#include <kiface_ids.h>
+#include <kiface_services.h>
 
 #include <memory>
 #include <optional>
@@ -146,9 +146,11 @@ static struct IFACE : public KIFACE_BASE
         switch( aDataId )
         {
         case KIFACE_TEST_FOOTPRINT_LINK:
-            return (void*) testFootprintLink;
+            return KifaceServiceAddress<KIFACE_TEST_FOOTPRINT_LINK_SERVICE>( &testFootprintLink );
 
-        case KIFACE_FOOTPRINT_PAD_NUMBERS: return (void*) getFootprintPadNumbers;
+        case KIFACE_FOOTPRINT_PAD_NUMBERS:
+            return KifaceServiceAddress<KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE>(
+                    &getFootprintPadNumbers );
 
         default:
             return nullptr;
