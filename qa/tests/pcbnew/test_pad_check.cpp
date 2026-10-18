@@ -19,6 +19,10 @@
 
 #include "math/vector2d.h"
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <boost/test/data/test_case.hpp>
+
+#include <algorithm>
+#include <vector>
 
 #include <base_units.h>
 #include <board.h>
@@ -28,30 +32,96 @@
 #include <padstack.h>
 #include <units_provider.h>
 
-#include <algorithm>
-#include <utility>
-#include <vector>
-
 BOOST_AUTO_TEST_SUITE( PadCheck )
 
 namespace
 {
+using PAD_CHECK_CODE = PAD_UTILS::PAD_CHECK_CODE;
 
 /**
- * The check code and corresponding message for a single pad check error.
+ * A named test case for the pad check layer/attribute matrix.
  */
-using PAD_CHECK_MESSAGE = std::pair<PAD_UTILS::PAD_CHECK_CODE, wxString>;
-
-bool hasCheckResult( const std::vector<PAD_CHECK_MESSAGE>& aMessages,
-                     PAD_UTILS::PAD_CHECK_CODE aCode )
+struct PAD_CHECK_TEST_CASE : public KI_TEST::NAMED_CASE
 {
-    const auto checkTypeIsFunc =
-            [&]( const PAD_CHECK_MESSAGE& aMessage )
-            {
-                return aMessage.first == aCode;
-            };
+    PAD_ATTRIB                  m_Attribute;
+    LSET                        m_Layers;
+    std::vector<PAD_CHECK_CODE> m_ExpectedCodes;
+};
 
-    return std::any_of( aMessages.begin(), aMessages.end(), checkTypeIsFunc );
+
+const std::vector<PAD_CHECK_TEST_CASE> padCheckCases = {
+    {
+            "inner-only SMD pad",
+            PAD_ATTRIB::SMD,
+            LSET( { In1_Cu, In2_Cu } ),
+            { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER },
+    },
+    {
+            "inner-only CONN pad",
+            PAD_ATTRIB::CONN,
+            LSET( { In1_Cu } ),
+            { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER },
+    },
+    // The current checker reports the missing outer copper, not the mask issue itself.
+    {
+            "inner-only SMD pad with front mask",
+            PAD_ATTRIB::SMD,
+            LSET( { In1_Cu, F_Mask } ),
+            { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER },
+    },
+    // The current checker reports the missing outer copper, not the paste issue itself.
+    {
+            "inner-only SMD pad with back paste",
+            PAD_ATTRIB::SMD,
+            LSET( { In2_Cu, B_Paste } ),
+            { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER },
+    },
+    {
+            "aperture pad with paste",
+            PAD_ATTRIB::SMD,
+            LSET( { F_Paste } ),
+            {}, // Not expected to trigger any pad check errors
+    },
+    {
+            "outer and inner SMD pad",
+            PAD_ATTRIB::SMD,
+            LSET( { F_Cu, In1_Cu, F_Mask, F_Paste } ),
+            {},
+    },
+    {
+            "both outer copper sides",
+            PAD_ATTRIB::SMD,
+            LSET( { F_Cu, B_Cu } ),
+            { PAD_CHECK_CODE::SMD_BOTH_OUTER_SIDES },
+    },
+    {
+            "wrong-side mask",
+            PAD_ATTRIB::SMD,
+            LSET( { B_Cu, F_Mask } ),
+            { PAD_CHECK_CODE::SMD_MASK_WRONG_SIDE },
+    },
+};
+
+
+void checkPadResults( const std::vector<PAD_UTILS::PAD_CHECK_RESULT>& aResults,
+                      const std::vector<PAD_CHECK_CODE>&              aExpectedCodes )
+{
+    std::vector<int> actualCodes;
+    actualCodes.reserve( aResults.size() );
+
+    for( const PAD_UTILS::PAD_CHECK_RESULT& message : aResults )
+        actualCodes.push_back( static_cast<int>( message.code ) );
+
+    std::vector<int> expectedCodes;
+    expectedCodes.reserve( aExpectedCodes.size() );
+
+    for( PAD_CHECK_CODE code : aExpectedCodes )
+        expectedCodes.push_back( static_cast<int>( code ) );
+
+    std::sort( actualCodes.begin(), actualCodes.end() );
+    std::sort( expectedCodes.begin(), expectedCodes.end() );
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( actualCodes.begin(), actualCodes.end(), expectedCodes.begin(), expectedCodes.end() );
 }
 
 } // namespace
@@ -81,21 +151,26 @@ struct PAD_CHECK_FIXTURE
         m_Pad.SetSize( PADSTACK::ALL_LAYERS, padSize );
     }
 
-    void setLayers( const PAD_ATTRIB& aAttrib, const LSET& aLayers )
+    void setLayers( PAD_ATTRIB aAttrib, const LSET& aLayers )
     {
         m_Pad.SetAttribute( aAttrib );
         m_Pad.SetLayerSet( aLayers );
     }
 
-    std::vector<PAD_CHECK_MESSAGE> runPadCheckOnPad()
+    /**
+     * Runs the pad check on the current pad and returns the results.
+     *
+     * @return A vector of PAD_CHECK_RESULT containing any issues found with the pad.
+     */
+    std::vector<PAD_UTILS::PAD_CHECK_RESULT> runPadCheckOnPad()
     {
-        UNITS_PROVIDER                 units( pcbIUScale, EDA_UNITS::MM );
-        std::vector<PAD_CHECK_MESSAGE> messages;
+        UNITS_PROVIDER                           units( pcbIUScale, EDA_UNITS::MM );
+        std::vector<PAD_UTILS::PAD_CHECK_RESULT> messages;
 
         const auto errorHandler =
                 [&]( const PAD_UTILS::PAD_CHECK_RESULT& aResult )
                 {
-                    messages.emplace_back( aResult.code, aResult.message );
+                    messages.push_back( aResult );
                 };
 
         PAD_UTILS::CheckPad( m_Pad, units, false, errorHandler );
@@ -105,90 +180,19 @@ struct PAD_CHECK_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_CASE( InnerOnlySmdPadIsReported, PAD_CHECK_FIXTURE )
+/**
+ * Run the simple pad check test cases data-driven tests
+ */
+BOOST_DATA_TEST_CASE_F( PAD_CHECK_FIXTURE, PadCheckCases, boost::unit_test::data::make( padCheckCases ), testCase )
 {
-    setLayers( PAD_ATTRIB::SMD, LSET( { In1_Cu, In2_Cu } ) );
+    BOOST_TEST_CONTEXT( testCase.m_CaseName )
+    {
+        setLayers( testCase.m_Attribute, testCase.m_Layers );
 
-    const auto messages = runPadCheckOnPad();
+        const auto messages = runPadCheckOnPad();
 
-    BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( InnerOnlyConnPadIsReported, PAD_CHECK_FIXTURE )
-{
-    m_Pad.SetAttribute( PAD_ATTRIB::CONN );
-    setLayers( PAD_ATTRIB::CONN, LSET( { In1_Cu } ) );
-
-    const auto messages = runPadCheckOnPad();
-
-    BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( InnerOnlySmdPadWithMaskIsReported, PAD_CHECK_FIXTURE )
-{
-    setLayers( PAD_ATTRIB::SMD, LSET( { In1_Cu, F_Mask } ) );
-
-    const auto messages = runPadCheckOnPad();
-
-    // The current checker reports the missing outer copper, not the mask issue itself.
-    BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( InnerOnlySmdPadWithPasteIsReported, PAD_CHECK_FIXTURE )
-{
-    setLayers( PAD_ATTRIB::SMD, LSET( { In2_Cu, B_Paste } ) );
-
-    const auto messages = runPadCheckOnPad();
-
-    // The current checker reports the missing outer copper, not the paste issue itself.
-    BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::PAD_NO_OUTER_COPPER ) );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( AperturePadWithPasteIsAllowed, PAD_CHECK_FIXTURE )
-{
-    setLayers( PAD_ATTRIB::SMD, LSET( { F_Paste } ) );
-
-    const auto messages = runPadCheckOnPad();
-    BOOST_CHECK( messages.empty() );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( OuterAndInnerSmdPadIsAllowed, PAD_CHECK_FIXTURE )
-{
-    setLayers( PAD_ATTRIB::SMD, LSET( { F_Cu, In1_Cu, F_Mask, F_Paste } ) );
-
-    const auto messages = runPadCheckOnPad();
-    BOOST_CHECK( messages.empty() );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( BothOuterCopperSidesAreReported, PAD_CHECK_FIXTURE )
-{
-    setLayers( PAD_ATTRIB::SMD, LSET( { F_Cu, B_Cu } ) );
-
-    const auto messages = runPadCheckOnPad();
-
-    BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::SMD_BOTH_OUTER_SIDES ) );
-}
-
-
-BOOST_FIXTURE_TEST_CASE( WrongSideMaskIsReported, PAD_CHECK_FIXTURE )
-{
-    setLayers( PAD_ATTRIB::SMD, LSET( { B_Cu, F_Mask } ) );
-
-    const auto messages = runPadCheckOnPad();
-
-    BOOST_CHECK_EQUAL( messages.size(), 1u );
-    BOOST_CHECK( hasCheckResult( messages, PAD_UTILS::PAD_CHECK_CODE::SMD_MASK_WRONG_SIDE ) );
+        checkPadResults( messages, testCase.m_ExpectedCodes );
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
