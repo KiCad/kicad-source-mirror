@@ -23,6 +23,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <pcb_generator.h>
+#include <pcb_track.h>
 #include <geometry/geometry_utils.h>
 #include <pcb_base_edit_frame.h>
 #include <router/pns_meander.h>
@@ -460,6 +461,9 @@ public:
 
     /// True when CreateNew() took the targets from a DRC length, chain length or skew rule.
     bool HasRuleTarget() const { return m_hasRuleTarget; }
+
+    /// True when any member track leaves the baseline between its end caps, or there is no baseline.
+    bool HasMeanders() const;
 
     /**
      * Adopt the tuning tool's working settings.  A rule-derived target is kept unless the tool settings

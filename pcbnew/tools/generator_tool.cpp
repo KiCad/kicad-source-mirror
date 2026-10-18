@@ -21,6 +21,7 @@
 #include "generator_tool.h"
 
 #include <collectors.h>
+#include <generators/pcb_tuning_pattern.h>
 #include <generators/pcb_via_stack.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
@@ -90,6 +91,9 @@ GENERATOR_TOOL::~GENERATOR_TOOL()
 void GENERATOR_TOOL::Reset( RESET_REASON aReason )
 {
     GENERATOR_TOOL_PNS_PROXY::Reset( aReason );
+
+    if( aReason != RUN )
+        m_selectedTuningPatterns.clear();
 }
 
 
@@ -366,6 +370,52 @@ int GENERATOR_TOOL::GenEditAction( const TOOL_EVENT& aEvent )
 }
 
 
+int GENERATOR_TOOL::RemoveDeselectedEmptyPatterns( const TOOL_EVENT& aEvent )
+{
+    std::set<KIID> selected;
+
+    for( EDA_ITEM* item : m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection() )
+    {
+        if( dynamic_cast<PCB_TUNING_PATTERN*>( item ) )
+            selected.insert( item->m_Uuid );
+    }
+
+    // Interactive tools share the generator router, so wait until they exit before editing copper
+    if( !frame()->ToolStackIsEmpty() )
+    {
+        m_selectedTuningPatterns.insert( selected.begin(), selected.end() );
+        return 0;
+    }
+
+    std::vector<PCB_TUNING_PATTERN*> emptyPatterns;
+
+    for( const KIID& id : m_selectedTuningPatterns )
+    {
+        if( selected.contains( id ) )
+            continue;
+
+        auto* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( board()->ResolveItem( id, true ) );
+
+        if( pattern && !pattern->IsLocked() && !pattern->HasFlag( IN_EDIT ) && !pattern->HasMeanders() )
+            emptyPatterns.push_back( pattern );
+    }
+
+    m_selectedTuningPatterns = std::move( selected );
+
+    BOARD_COMMIT commit( this );
+    int          commitFlags = 0;
+
+    for( PCB_TUNING_PATTERN* pattern : emptyPatterns )
+    {
+        pattern->Remove( this, board(), &commit );
+        commit.Push( _( "Remove Empty Tuning Pattern" ), commitFlags );
+        commitFlags |= APPEND_UNDO;
+    }
+
+    return 0;
+}
+
+
 void GENERATOR_TOOL::setTransitions()
 {
     // Generator actions
@@ -382,4 +432,8 @@ void GENERATOR_TOOL::setTransitions()
     Go( &GENERATOR_TOOL::GenEditAction,         PCB_ACTIONS::genRemove.MakeEvent() );
 
     Go( &GENERATOR_TOOL::MakeViaStackFromSelection, PCB_ACTIONS::makeViaStack.MakeEvent() );
+
+    Go( &GENERATOR_TOOL::RemoveDeselectedEmptyPatterns, EVENTS::SelectedEvent );
+    Go( &GENERATOR_TOOL::RemoveDeselectedEmptyPatterns, EVENTS::UnselectedEvent );
+    Go( &GENERATOR_TOOL::RemoveDeselectedEmptyPatterns, EVENTS::ClearedEvent );
 }

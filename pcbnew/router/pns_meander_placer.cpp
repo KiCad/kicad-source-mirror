@@ -230,6 +230,8 @@ bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength,
                              long long int aTargetMin, long long int aTargetMax )
 {
+    m_hasMeanders = false;
+
     if( m_currentStart == aP )
         return false;
 
@@ -319,6 +321,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int a
             if( m->Type() != MT_EMPTY )
             {
                 tuned.Append ( m->CLine( 0 ) );
+                m_hasMeanders |= m->IsMeander();
             }
         }
 

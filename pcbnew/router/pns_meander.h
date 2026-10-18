@@ -211,6 +211,14 @@ public:
     }
 
     /**
+     * @return true for an actual meander, false for corners, arcs and straight runs.
+     */
+    bool IsMeander() const
+    {
+        return m_type == MT_SINGLE || m_type == MT_START || m_type == MT_FINISH || m_type == MT_TURN;
+    }
+
+    /**
      * Set an auxiliary index of the segment being meandered in its original LINE.
      */
     void SetBaseIndex( int aIndex )

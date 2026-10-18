@@ -67,6 +67,11 @@ public:
 
     bool HasBaseline() const { return m_hasBaseline; }
 
+    /**
+     * Return true if the last Move() emitted at least one meander into the tuned path.
+     */
+    bool HasMeanders() const { return m_hasMeanders; }
+
     long long int TuningLengthDelta() const { return TuningLengthResult() - m_baselineLength; }
     int64_t TuningDelayDelta() const { return TuningDelayResult() - m_baselineDelay; }
 
@@ -174,6 +179,8 @@ protected:
     long long int m_baselineLength = 0;
     int64_t       m_baselineDelay = 0;
     bool          m_hasBaseline = false;
+
+    bool          m_hasMeanders = false;
 
     /// Active path length at Start().
     long long int m_startPathLength = 0;

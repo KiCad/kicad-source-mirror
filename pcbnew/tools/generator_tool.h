@@ -61,6 +61,9 @@ public:
     /// Wrap selected microvias and traces into a via stack.
     int MakeViaStackFromSelection( const TOOL_EVENT& aEvent );
 
+    /// Remove tuning patterns that were deselected without producing any meanders.
+    int RemoveDeselectedEmptyPatterns( const TOOL_EVENT& aEvent );
+
 private:
     /// Set up handlers for various events.
     void setTransitions() override;
@@ -71,6 +74,9 @@ private:
     /// destruction so this tool composes cleanly with other listeners.
     PROPERTY_LISTENER_SUBSCRIPTION m_boardItemListener;
     PROPERTY_LISTENER_SUBSCRIPTION m_generatorListener;
+
+    /// Tuning patterns selected as of the last selection event.
+    std::set<KIID> m_selectedTuningPatterns;
 };
 
 #endif

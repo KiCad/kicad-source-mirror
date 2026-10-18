@@ -216,6 +216,8 @@ bool DP_MEANDER_PLACER::pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPai
 
 bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
+    m_hasMeanders = false;
+
     // Reuse the chain-extras aggregate captured at Start(). Other nets in the chain are
     // not edited during a tuning session, so we don't need to walk the BOARD again.
     const long long extraDelay = m_chainExtrasValid ? m_chainExtrasDelay : 0;
@@ -512,6 +514,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
             {
                 tunedP.Append( m->CLine( 0 ) );
                 tunedN.Append( m->CLine( 1 ) );
+                m_hasMeanders |= m->IsMeander();
             }
         }
 

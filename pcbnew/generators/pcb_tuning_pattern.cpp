@@ -1832,6 +1832,62 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
 }
 
 
+bool PCB_TUNING_PATTERN::HasMeanders() const
+{
+    // Members can only be judged against a baseline, so keep patterns that lack one
+    if( !m_baseLine || m_baseLine->PointCount() < 2 )
+        return true;
+
+    std::vector<const SHAPE_LINE_CHAIN*> baseLines = { &*m_baseLine };
+
+    if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled && m_baseLineCoupled->PointCount() >= 2 )
+        baseLines.push_back( &*m_baseLineCoupled );
+
+    const int64_t halfWidth = m_trackWidth / 2;
+
+    // Stubs past the end caps project onto a baseline end and are not meanders
+    auto isMeanderPoint =
+            [&]( const VECTOR2I& aPt )
+            {
+                const SHAPE_LINE_CHAIN* nearestLine = nullptr;
+                VECTOR2I                nearestPt;
+                int64_t                 nearestDistSq = std::numeric_limits<int64_t>::max();
+
+                for( const SHAPE_LINE_CHAIN* line : baseLines )
+                {
+                    VECTOR2I pt = line->NearestPoint( aPt );
+                    int64_t  distSq = ( aPt - pt ).SquaredEuclideanNorm();
+
+                    if( distSq < nearestDistSq )
+                    {
+                        nearestLine = line;
+                        nearestPt = pt;
+                        nearestDistSq = distSq;
+                    }
+                }
+
+                return nearestDistSq > halfWidth * halfWidth && nearestPt != nearestLine->CPoint( 0 )
+                       && nearestPt != nearestLine->CLastPoint();
+            };
+
+    for( BOARD_ITEM* item : GetBoardItems() )
+    {
+        PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item );
+
+        if( !track )
+            continue;
+
+        if( isMeanderPoint( track->GetStart() ) || isMeanderPoint( track->GetEnd() ) )
+            return true;
+
+        if( track->Type() == PCB_ARC_T && isMeanderPoint( static_cast<PCB_ARC*>( track )->GetMid() ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( !IsSelected() && !IsNew() )
@@ -3059,10 +3115,42 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 BOARD_COMMIT commit( m_frame );
 
                 m_tuningPattern->EditStart( generatorTool, m_board, &commit );
-                m_tuningPattern->Update( generatorTool, m_board, &commit );
-                m_tuningPattern->EditFinish( generatorTool, m_board, &commit );
 
-                commit.Push( _( "Tune" ) );
+                bool updated = m_tuningPattern->Update( generatorTool, m_board, &commit );
+                auto* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( router->Placer() );
+
+                if( updated && placer && !placer->HasMeanders() )
+                {
+                    // A pattern without meanders would be an invisible group around a plain track
+                    PNS::MEANDER_PLACER_BASE::TUNING_STATUS status = placer->TuningStatus();
+
+                    m_tuningPattern->EditCancel( generatorTool, m_board, &commit );
+                    commit.Revert();
+                    router->SyncWorld();
+
+                    std::set<BOARD_ITEM*> routerItems;
+
+                    // Router-created copper never reaches the commit, so nothing else frees it
+                    for( const GENERATOR_PNS_CHANGES& changes : generatorTool->GetRouterChanges() )
+                        routerItems.insert( changes.addedItems.begin(), changes.addedItems.end() );
+
+                    generatorTool->ClearRouterChanges();
+
+                    for( BOARD_ITEM* item : routerItems )
+                        delete item;
+
+                    m_preview.FreeItems();
+                    m_view->Update( &m_preview );
+
+                    m_frame->ShowInfoBarWarning( wxString::Format( _( "No tuning pattern added: no meanders were "
+                                                                      "needed or would fit (%s)." ),
+                                                                   PCB_TUNING_PATTERN::StatusMessage( status ) ) );
+                }
+                else
+                {
+                    m_tuningPattern->EditFinish( generatorTool, m_board, &commit );
+                    commit.Push( _( "Tune" ) );
+                }
 
                 m_tuningPattern = nullptr;
                 m_pickerItem = nullptr;
