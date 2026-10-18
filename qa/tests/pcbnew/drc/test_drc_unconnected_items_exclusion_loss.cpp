@@ -47,10 +47,12 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <wx/string.h>
+#include <wx/utils.h>
 
 struct FileCleaner
 {
     std::vector<wxString> m_files_to_delete;
+    std::vector<wxString> m_dirs_to_delete;
 
     FileCleaner() = default;
     ~FileCleaner()
@@ -65,19 +67,24 @@ struct FileCleaner
                 }
             }
         }
+
+        for( const wxString& dir : m_dirs_to_delete )
+            wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
     }
 
     void AddFile( const wxString& f_path ) { m_files_to_delete.push_back( f_path ); }
+    void AddDir( const wxString& d_path ) { m_dirs_to_delete.push_back( d_path ); }
 };
 
-struct DRC_BASE_FIXTURE
+struct DRC_EXCLUSION_BASE_FIXTURE
 {
-    DRC_BASE_FIXTURE()
+    DRC_EXCLUSION_BASE_FIXTURE()
     {
     }
 
     std::string generate_uuid();
     bool        SaveBoardToFile( BOARD* board, const wxString& filename );
+    wxString    stageBoard( const wxString& aBoardNameStem, FileCleaner& aCleaner );
     void        loadBoardAndVerifyInitialExclusions( const wxString& aBoardNameStem, int aExpectedInitialExclusions );
     void        createAndVerifyInitialExclusionMarkers();
     int         createAndVerifyAdditionalUnconnectedExclusions( int aAdditionalExclusions, int aInitialExclusions );
@@ -88,35 +95,63 @@ struct DRC_BASE_FIXTURE
     void        reloadBoardAndVerifyExclusions( const wxString& aTempBoardStemName, int aExpectedExclusions );
 
 
+    // declared first so the staged files go after the settings manager has released their project locks
+    FileCleaner            m_tempFileCleaner;
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
+
+    ///< Folder in the test data, relative to it, that holds this test's private copy of the board
+    wxString m_stagedDir;
 };
 
-struct DRC_REGRESSION_TEST_FIXTURE : public DRC_BASE_FIXTURE
+struct DRC_EXCLUSION_REGRESSION_FIXTURE : public DRC_EXCLUSION_BASE_FIXTURE
 {
-    DRC_REGRESSION_TEST_FIXTURE() :
-            DRC_BASE_FIXTURE()
+    DRC_EXCLUSION_REGRESSION_FIXTURE() :
+            DRC_EXCLUSION_BASE_FIXTURE()
     {
     }
 };
 
 
-struct DRC_UNCONNECTED_SAVE_FIXTURE : public DRC_BASE_FIXTURE
+struct DRC_EXCLUSION_SAVE_FIXTURE : public DRC_EXCLUSION_BASE_FIXTURE
 {
-    DRC_UNCONNECTED_SAVE_FIXTURE() :
-            DRC_BASE_FIXTURE()
+    DRC_EXCLUSION_SAVE_FIXTURE() :
+            DRC_EXCLUSION_BASE_FIXTURE()
     {
         m_board = std::make_unique<BOARD>();
     }
 };
 
-std::string DRC_BASE_FIXTURE::generate_uuid()
+std::string DRC_EXCLUSION_BASE_FIXTURE::generate_uuid()
 {
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
     return boost::uuids::to_string( uuid );
 }
 
-void DRC_BASE_FIXTURE::loadBoardAndVerifyInitialExclusions( const wxString& aBoardNameStem,
+wxString DRC_EXCLUSION_BASE_FIXTURE::stageBoard( const wxString& aBoardNameStem, FileCleaner& aCleaner )
+{
+    // A project locks its file, so tests running at once must not share one
+    wxFileName dir( KI_TEST::GetPcbnewTestDataDir() + wxString::Format( "tmp_test_drc_%lu_", wxGetProcessId() )
+                            + aBoardNameStem,
+                    wxEmptyString );
+
+    BOOST_REQUIRE_MESSAGE( dir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ), "Create folder " << dir.GetPath() );
+    aCleaner.AddDir( dir.GetPath() );
+
+    for( const wxString& ext : { wxS( "kicad_pcb" ), wxS( "kicad_pro" ), wxS( "kicad_prl" ) } )
+    {
+        wxString source = KI_TEST::GetPcbnewTestDataDir() + aBoardNameStem + "." + ext;
+
+        if( wxFileName::Exists( source ) )
+            BOOST_REQUIRE( wxCopyFile( source, dir.GetPath() + wxFileName::GetPathSeparator() + aBoardNameStem + "."
+                                                       + ext ) );
+    }
+
+    m_stagedDir = dir.GetDirs().Last();
+    return m_stagedDir + "/" + aBoardNameStem;
+}
+
+void DRC_EXCLUSION_BASE_FIXTURE::loadBoardAndVerifyInitialExclusions( const wxString& aBoardNameStem,
                                                             int             aExpectedInitialExclusions )
 {
     KI_TEST::LoadBoard( m_settingsManager, aBoardNameStem, m_board );
@@ -132,7 +167,7 @@ void DRC_BASE_FIXTURE::loadBoardAndVerifyInitialExclusions( const wxString& aBoa
     BOOST_CHECK_EQUAL( initialExclusionsCount, (size_t) aExpectedInitialExclusions );
 }
 
-void DRC_BASE_FIXTURE::createAndVerifyInitialExclusionMarkers()
+void DRC_EXCLUSION_BASE_FIXTURE::createAndVerifyInitialExclusionMarkers()
 {
     const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     std::vector<PCB_MARKER*>     markers;
@@ -155,7 +190,7 @@ void DRC_BASE_FIXTURE::createAndVerifyInitialExclusionMarkers()
                         + " after adding initial markers." );
 }
 
-int DRC_BASE_FIXTURE::createAndVerifyAdditionalUnconnectedExclusions( int aAdditionalExclusions,
+int DRC_EXCLUSION_BASE_FIXTURE::createAndVerifyAdditionalUnconnectedExclusions( int aAdditionalExclusions,
                                                                       int aInitialExclusions )
 {
     for( int i = 0; i < aAdditionalExclusions; ++i )
@@ -189,7 +224,7 @@ int DRC_BASE_FIXTURE::createAndVerifyAdditionalUnconnectedExclusions( int aAddit
     return expectedExclusions;
 }
 
-void DRC_BASE_FIXTURE::runDrcOnBoard()
+void DRC_EXCLUSION_BASE_FIXTURE::runDrcOnBoard()
 {
     BOOST_TEST_MESSAGE( "Running DRC on board." );
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -202,11 +237,11 @@ void DRC_BASE_FIXTURE::runDrcOnBoard()
     BOOST_TEST_MESSAGE( "DRC done." );
 }
 
-void DRC_BASE_FIXTURE::saveBoardAndProjectToTempFiles( const wxString& aBoardNameStem, FileCleaner& aCleaner,
+void DRC_EXCLUSION_BASE_FIXTURE::saveBoardAndProjectToTempFiles( const wxString& aBoardNameStem, FileCleaner& aCleaner,
                                                        wxString& aTempBoardFullPath, wxString& aTempProjectFullPath,
                                                        wxString& aTempBoardStemName, bool aCopyBoardVerbatim )
 {
-    wxString tempPrefix = "tmp_test_drc_";
+    wxString tempPrefix = m_stagedDir + "/tmp_test_drc_";
     aTempBoardStemName = tempPrefix + aBoardNameStem.ToStdString();
     aTempBoardFullPath = KI_TEST::GetPcbnewTestDataDir() + aTempBoardStemName + ".kicad_pcb";
     aCleaner.AddFile( aTempBoardFullPath );
@@ -219,7 +254,8 @@ void DRC_BASE_FIXTURE::saveBoardAndProjectToTempFiles( const wxString& aBoardNam
     if( aCopyBoardVerbatim )
     {
         // Re-saving perturbs geometry slightly, which moves violation positions
-        boardSaved = wxCopyFile( KI_TEST::GetPcbnewTestDataDir() + aBoardNameStem + ".kicad_pcb", aTempBoardFullPath );
+        boardSaved = wxCopyFile( KI_TEST::GetPcbnewTestDataDir() + m_stagedDir + "/" + aBoardNameStem + ".kicad_pcb",
+                                 aTempBoardFullPath );
     }
     else
     {
@@ -233,7 +269,7 @@ void DRC_BASE_FIXTURE::saveBoardAndProjectToTempFiles( const wxString& aBoardNam
                            "Save project to temporary file: " << aTempProjectFullPath );
 }
 
-void DRC_BASE_FIXTURE::reloadBoardAndVerifyExclusions( const wxString& aTempBoardStemName, int aExpectedExclusions )
+void DRC_EXCLUSION_BASE_FIXTURE::reloadBoardAndVerifyExclusions( const wxString& aTempBoardStemName, int aExpectedExclusions )
 {
     // clear the current board to ensure a fresh load
     m_board.reset();
@@ -250,7 +286,7 @@ void DRC_BASE_FIXTURE::reloadBoardAndVerifyExclusions( const wxString& aTempBoar
     BOOST_CHECK_EQUAL( reloadedExclusionsCount, aExpectedExclusions );
 }
 
-bool DRC_BASE_FIXTURE::SaveBoardToFile( BOARD* board, const wxString& filename )
+bool DRC_EXCLUSION_BASE_FIXTURE::SaveBoardToFile( BOARD* board, const wxString& filename )
 {
     try
     {
@@ -264,7 +300,7 @@ bool DRC_BASE_FIXTURE::SaveBoardToFile( BOARD* board, const wxString& filename )
         return false;
     }
 }
-BOOST_FIXTURE_TEST_CASE( DRCUnconnectedExclusionsLoss, DRC_UNCONNECTED_SAVE_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( DRCUnconnectedExclusionsLoss, DRC_EXCLUSION_SAVE_FIXTURE )
 {
     // Test that unconnected item exclusions are not lost after multiple DRC runs.
     // This test is expected to fail if the bug (issue17429) is present.
@@ -277,10 +313,11 @@ BOOST_FIXTURE_TEST_CASE( DRCUnconnectedExclusionsLoss, DRC_UNCONNECTED_SAVE_FIXT
 
     for( const std::pair<wxString, int>& test_params : tests )
     {
-        wxString boardNameStem = test_params.first;
-        int      expectedInitialExclusions = test_params.second;
+        FileCleaner& tempFileCleaner = m_tempFileCleaner;
+        wxString    boardNameStem = test_params.first;
+        int         expectedInitialExclusions = test_params.second;
 
-        loadBoardAndVerifyInitialExclusions( boardNameStem, expectedInitialExclusions );
+        loadBoardAndVerifyInitialExclusions( stageBoard( boardNameStem, tempFileCleaner ), expectedInitialExclusions );
         createAndVerifyInitialExclusionMarkers();
         const int additionalExclusions = 5;
         int       expectedExclusions =
@@ -295,7 +332,7 @@ BOOST_FIXTURE_TEST_CASE( DRCUnconnectedExclusionsLoss, DRC_UNCONNECTED_SAVE_FIXT
     }
 }
 
-BOOST_FIXTURE_TEST_CASE( DRCUnconnectedItemsExclusionsSaveLoad, DRC_REGRESSION_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( DRCUnconnectedItemsExclusionsSaveLoad, DRC_EXCLUSION_REGRESSION_FIXTURE )
 {
     namespace fs = std::filesystem;
 
@@ -309,11 +346,11 @@ BOOST_FIXTURE_TEST_CASE( DRCUnconnectedItemsExclusionsSaveLoad, DRC_REGRESSION_T
 
     for( const std::pair<wxString, int>& test_params : tests )
     {
-        FileCleaner tempFileCleaner;
+        FileCleaner& tempFileCleaner = m_tempFileCleaner;
         wxString    boardNameStem = test_params.first;
         int         expectedInitialExclusions = test_params.second;
 
-        loadBoardAndVerifyInitialExclusions( boardNameStem, expectedInitialExclusions );
+        loadBoardAndVerifyInitialExclusions( stageBoard( boardNameStem, tempFileCleaner ), expectedInitialExclusions );
 
         wxString tempBoardFullPath, tempProjectFullPath, tempBoardStemName;
         saveBoardAndProjectToTempFiles( boardNameStem, tempFileCleaner, tempBoardFullPath, tempProjectFullPath,
@@ -368,16 +405,16 @@ static bool isCourtyardOverlap( PCB_MARKER* aMarker )
 }
 
 
-BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_REGRESSION_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_EXCLUSION_REGRESSION_FIXTURE )
 {
     // Exclude every violation on the board, write the exclusions to the project file, then load
     // the project back and run DRC again.  Nothing may be reported the second time round.  The
     // board file itself is copied rather than re-saved, so both runs see identical geometry.
 
-    FileCleaner tempFileCleaner;
+    FileCleaner& tempFileCleaner = m_tempFileCleaner;
     wxString    tempBoardPath, tempProjectPath, tempStem;
 
-    KI_TEST::LoadBoard( m_settingsManager, "issue25101", m_board );
+    KI_TEST::LoadBoard( m_settingsManager, stageBoard( "issue25101", tempFileCleaner ), m_board );
     BOOST_REQUIRE( m_board );
 
     runDrcAndCreateMarkers( m_board.get() );

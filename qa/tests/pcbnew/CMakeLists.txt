@@ -125,6 +125,7 @@ set( QA_PCBNEW_SRCS
     test_libeval_compiler.cpp
     test_reference_image_load.cpp
     test_complex_padstack_export.cpp
+    test_padstack_clone.cpp
     test_gencad_export.cpp
     test_idf_export.cpp
     test_d356_export.cpp

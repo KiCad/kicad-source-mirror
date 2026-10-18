@@ -26,6 +26,8 @@
 
 using namespace std;
 
+namespace
+{
 class A : public INSPECTABLE
 {
 public:
@@ -47,6 +49,7 @@ protected:
     int m_a = 0;
     wxPoint m_p;
 };
+} // namespace
 
 class B : public A
 {

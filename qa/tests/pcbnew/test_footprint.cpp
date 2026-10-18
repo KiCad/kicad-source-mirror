@@ -381,4 +381,35 @@ BOOST_AUTO_TEST_CASE( FootprintUpdateFieldsRestoresMissingMandatoryField )
 }
 
 
+BOOST_AUTO_TEST_CASE( FootprintRotationKeepsPolygonArcs )
+{
+    BOARD     board;
+    FOOTPRINT footprint( &board );
+
+    PCB_SHAPE* poly = new PCB_SHAPE( &footprint, SHAPE_T::POLY );
+
+    SHAPE_LINE_CHAIN circle;
+    circle.Append( SHAPE_ARC( VECTOR2I( 0, 0 ), VECTOR2I( pcbIUScale.mmToIU( 1 ), 0 ), ANGLE_360 ) );
+    circle.SetClosed( true );
+
+    poly->SetPolyShape( SHAPE_POLY_SET( circle ) );
+    poly->SetLayer( Cmts_User );
+    footprint.Add( poly );
+
+    footprint.SetOrientation( ANGLE_180 );
+
+    BOOST_CHECK_EQUAL( poly->GetPolyShape().Outline( 0 ).ArcCount(), 1 );
+    BOOST_CHECK_EQUAL( poly->GetLibraryPolyShape().Outline( 0 ).ArcCount(), 1 );
+
+    footprint.SetOrientation( ANGLE_0 );
+
+    BOOST_CHECK_EQUAL( poly->GetPolyShape().Outline( 0 ).ArcCount(), 1 );
+
+    // flipping mirrors the library copy, which must keep its arc for the next rotation
+    footprint.Flip( footprint.GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
+
+    BOOST_CHECK_EQUAL( poly->GetLibraryPolyShape().Outline( 0 ).ArcCount(), 1 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

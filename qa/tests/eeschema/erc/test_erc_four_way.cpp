@@ -32,6 +32,8 @@
 #include <sch_marker.h>
 #include <scoped_set_reset.h>
 
+namespace
+{
 struct ERC_REGRESSION_TEST_FIXTURE
 {
     ERC_REGRESSION_TEST_FIXTURE()
@@ -40,6 +42,7 @@ struct ERC_REGRESSION_TEST_FIXTURE
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
+} // namespace
 
 
 BOOST_FIXTURE_TEST_CASE( ERCFourWayJunctions, ERC_REGRESSION_TEST_FIXTURE )

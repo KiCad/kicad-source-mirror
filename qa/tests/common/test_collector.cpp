@@ -24,6 +24,8 @@
 #include <ostream>
 
 // Mock EDA_ITEM for testing
+namespace
+{
 class TEST_EDA_ITEM : public EDA_ITEM
 {
 public:
@@ -34,6 +36,7 @@ public:
     // Minimal required implementations for abstract methods
     EDA_ITEM* Clone() const override { return new TEST_EDA_ITEM( Type() ); }
 };
+} // namespace
 
 // Test collector that implements Inspect
 class TEST_COLLECTOR : public COLLECTOR

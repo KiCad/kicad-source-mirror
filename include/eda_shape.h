@@ -435,7 +435,7 @@ public:
     const ELLIPSE<int>& GetEllipse() const { return m_ellipse; }
 
     VECTOR2I getCenter() const;
-    void     SetCenter( const VECTOR2I& aCenter );
+    virtual void SetCenter( const VECTOR2I& aCenter );
 
     /**
      * Set the end point from the angle center and start.

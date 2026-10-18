@@ -110,7 +110,11 @@ void BOARD_ITEM_INDEX::Unbind( const KIID& aId )
 void BOARD_ITEM_INDEX::UnbindItem( const BOARD_ITEM& aItem )
 {
     // Clear the link first, the item no longer points to this index
-    aItem.m_owningIndex = nullptr;
+    const bool wasOwned = aItem.m_owningIndex == this;
+
+    // Another index may own the item, and it must keep the link to evict the item on destruction
+    if( wasOwned )
+        aItem.m_owningIndex = nullptr;
 
     if( auto cached = m_idsByItem.find( &aItem ); cached != m_idsByItem.end() )
     {
@@ -122,6 +126,11 @@ void BOARD_ITEM_INDEX::UnbindItem( const BOARD_ITEM& aItem )
         m_idsByItem.erase( cached );
         return;
     }
+
+    // An item this index never held has nothing to remove, and finding that out by scanning the whole map
+    // made every unbind of such an item cost as much as the board
+    if( !wasOwned )
+        return;
 
     std::erase_if( m_itemsById,
                    [&aItem]( const auto& entry )

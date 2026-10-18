@@ -31,6 +31,8 @@
 #include <settings/settings_manager.h>
 #include <locale_io.h>
 
+namespace
+{
 struct CONNECTIVITY_TEST_FIXTURE
 {
     CONNECTIVITY_TEST_FIXTURE()
@@ -39,6 +41,7 @@ struct CONNECTIVITY_TEST_FIXTURE
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
+} // namespace
 
 BOOST_FIXTURE_TEST_CASE( DestroyingAnotherSchematicPreservesPinCleanup, CONNECTIVITY_TEST_FIXTURE )
 {

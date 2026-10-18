@@ -19,6 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <chrono>
 #include <memory>
 
 #include <board.h>
@@ -348,6 +349,59 @@ BOOST_AUTO_TEST_CASE( FootprintTableCellResolvesByItsOwnId )
     board.ClearItemByIdCache();
 
     BOOST_CHECK_EQUAL( board.ResolveItem( cell->m_Uuid, true ), cell );
+}
+
+
+// Unbinding an item the index never held must not scan the whole index, or comparing a few footprints
+// against a large board costs as much as the board each time
+BOOST_AUTO_TEST_CASE( UnbindingForeignSubtreesDoesNotScanTheIndex )
+{
+    BOARD board;
+
+    for( int i = 0; i < 20000; i++ )
+    {
+        FOOTPRINT* footprint = new FOOTPRINT( &board );
+
+        for( int j = 0; j < 4; j++ )
+            footprint->Add( new PAD( footprint ), ADD_MODE::APPEND );
+
+        board.Add( footprint );
+    }
+
+    FOOTPRINT foreign( &board );
+
+    for( int j = 0; j < 20; j++ )
+        foreign.Add( new PAD( &foreign ), ADD_MODE::APPEND );
+
+    auto start = std::chrono::steady_clock::now();
+
+    for( int i = 0; i < 300; i++ )
+        board.UncacheItemSubtreeById( foreign );
+
+    std::chrono::duration<double> elapsed = std::chrono::steady_clock::now() - start;
+
+    BOOST_CHECK_LT( elapsed.count(), 5.0 );
+}
+
+
+// Unbinding through one board must leave another board's claim on the item intact, or the item
+// is never evicted from the owner when it is destroyed
+BOOST_AUTO_TEST_CASE( UnbindingThroughAnotherBoardKeepsTheOwner )
+{
+    BOARD owner;
+    BOARD other;
+
+    auto* pad = new PAD( nullptr );
+    KIID  id = pad->m_Uuid;
+
+    owner.CacheItemById( *pad );
+    other.UncacheItemSubtreeById( *pad );
+
+    BOOST_CHECK( owner.IsItemIndexedById( id ) );
+
+    delete pad;
+
+    BOOST_CHECK( !owner.IsItemIndexedById( id ) );
 }
 
 

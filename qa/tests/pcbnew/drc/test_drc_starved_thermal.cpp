@@ -31,6 +31,8 @@
 #include <settings/settings_manager.h>
 
 
+namespace
+{
 struct DRC_REGRESSION_TEST_FIXTURE
 {
     // clang-format off : suggestions look worse.
@@ -40,6 +42,7 @@ struct DRC_REGRESSION_TEST_FIXTURE
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
 };
+} // namespace
 
 
 BOOST_FIXTURE_TEST_CASE( DRCStarvedThermal, DRC_REGRESSION_TEST_FIXTURE )

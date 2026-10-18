@@ -8213,6 +8213,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     break;
 
                 case T_primitives:
+                    // the file lists every primitive of the layer, so none inherited from another layer stay
+                    aPad->DeletePrimitivesList( curLayer );
                     parsePAD_primitives( aPad, curLayer );
                     break;
 

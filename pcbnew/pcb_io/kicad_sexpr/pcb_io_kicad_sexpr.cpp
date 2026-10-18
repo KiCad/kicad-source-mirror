@@ -186,15 +186,11 @@ void FP_CACHE::Load()
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_footprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
 
-                // Collect any non-fatal parse warnings
+                // A warning leaves the footprint usable, and libraries load on worker threads that have no one to
+                // show a message to, so it is only traced
                 for( const wxString& warning : parser.GetParseWarnings() )
                 {
-                    if( !cacheError.IsEmpty() )
-                        cacheError += wxT( "\n\n" );
-
-                    cacheError += wxString::Format( _( "Warning in file '%s'" ) + '\n',
-                                                    fn.GetFullPath() );
-                    cacheError += warning;
+                    wxLogTrace( traceKicadPcbPlugin, wxT( "Warning in file '%s': %s" ), fn.GetFullPath(), warning );
                 }
             }
             catch( const IO_ERROR& ioe )
@@ -2504,6 +2500,10 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                 if( layer == F_Cu )
                     continue;
 
+                // Without a board there is no layer count, so list only the layers the pad defines
+                if( !board && !aPad->Padstack().HasExplicitDefinitionForLayer( layer ) )
+                    continue;
+
                 m_out->Print( "(layer %s", m_out->Quotew( LSET::Name( layer ) ).c_str() );
                 formatPadLayer( layer );
                 m_out->Print( ")" );
@@ -4158,6 +4158,9 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
             footprint->Flip( footprint->GetPosition(), cfg->m_FlipDirection );
         else
             footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+        // A left-right flip also turns the footprint half a turn
+        footprint->SetOrientation( ANGLE_0 );
     }
 
     // Detach it from the board and its group

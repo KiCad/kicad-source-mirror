@@ -94,10 +94,13 @@ static_assert(!std::is_constructible_v<any,
 
 static_assert( std::is_copy_constructible_v<std::tuple<any>> );
 
+namespace
+{
 struct A {
     A(const A&) = default;
     explicit A(any value);
 };
+} // namespace
 static_assert(std::is_copy_constructible_v<A>);
 
 BOOST_AUTO_TEST_SUITE( ki_any )

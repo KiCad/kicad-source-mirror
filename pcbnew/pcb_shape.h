@@ -198,6 +198,7 @@ public:
 
     void SetStart( const VECTOR2I& aStart ) override;
     void SetEnd( const VECTOR2I& aEnd ) override;
+    void SetCenter( const VECTOR2I& aCenter ) override;
 
     void SetCornerRadius( int aCornerRadius ) override;
 

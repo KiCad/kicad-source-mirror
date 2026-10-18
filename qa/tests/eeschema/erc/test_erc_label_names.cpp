@@ -37,6 +37,8 @@
 #include <locale_io.h>
 #include <scoped_set_reset.h>
 
+namespace
+{
 struct ERC_REGRESSION_TEST_FIXTURE
 {
     ERC_REGRESSION_TEST_FIXTURE() {}
@@ -44,6 +46,7 @@ struct ERC_REGRESSION_TEST_FIXTURE
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
+} // namespace
 
 
 static int CountErrorCode( SHEETLIST_ERC_ITEMS_PROVIDER& aErrors, int aErrorCode )

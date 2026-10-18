@@ -51,6 +51,68 @@
 #include <properties/property_mgr.h>
 
 
+// Move every vertex of the polygon through the transform. SetVertex turns the arc a vertex
+// belongs to into segments, so a uniform transform maps each arc as an arc and only a skewing
+// one is left to flatten them.
+static void transformPolyVertices( SHAPE_POLY_SET& aPoly, const TRANSFORM_TRS& aXform, bool aInverse )
+{
+    auto map = [&]( const VECTOR2I& aPt )
+    {
+        return aInverse ? aXform.InverseApply( aPt ) : aXform.Apply( aPt );
+    };
+
+    if( !aXform.IsUniformScale() )
+    {
+        for( auto it = aPoly.IterateWithHoles(); it; it++ )
+            aPoly.SetVertex( it.GetIndex(), map( *it ) );
+
+        return;
+    }
+
+    // a mirroring transform reverses the sweep of an arc
+    const bool mirrored = aXform.GetScaleX() * aXform.GetScaleY() < 0;
+
+    auto transformChain = [&]( SHAPE_LINE_CHAIN& aChain )
+    {
+        SHAPE_LINE_CHAIN mapped;
+
+        for( int i = 0; i < aChain.PointCount(); i++ )
+        {
+            int arcIndex = aChain.ArcIndex( i );
+
+            if( arcIndex < 0 )
+            {
+                mapped.Append( map( aChain.CPoint( i ) ) );
+                continue;
+            }
+
+            const SHAPE_ARC& arc = aChain.Arc( arcIndex );
+            EDA_ANGLE        sweep = arc.GetCentralAngle();
+
+            // three points fix an arc exactly, except a full circle whose ends coincide
+            if( arc.GetP0() != arc.GetP1() )
+                mapped.Append( SHAPE_ARC( map( arc.GetP0() ), map( arc.GetArcMid() ), map( arc.GetP1() ), 0 ) );
+            else
+                mapped.Append( SHAPE_ARC( map( arc.GetCenter() ), map( arc.GetP0() ), mirrored ? -sweep : sweep ) );
+
+            while( i + 1 < aChain.PointCount() && aChain.ArcIndex( i + 1 ) == arcIndex )
+                i++;
+        }
+
+        mapped.SetClosed( aChain.IsClosed() );
+        aChain = mapped;
+    };
+
+    for( int i = 0; i < aPoly.OutlineCount(); i++ )
+    {
+        transformChain( aPoly.Outline( i ) );
+
+        for( int j = 0; j < aPoly.HoleCount( i ); j++ )
+            transformChain( aPoly.Hole( i, j ) );
+    }
+}
+
+
 namespace
 {
 struct BOARD_ELLIPSE
@@ -899,15 +961,9 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
             mirrorPt( m_libBezierC2 );
         }
 
+        // Mirror() moves the arcs of the polygon as arcs, which a vertex at a time would turn into segments
         if( m_libShape == SHAPE_T::POLY )
-        {
-            for( auto it = m_libPoly.IterateWithHoles(); it; it++ )
-            {
-                VECTOR2I p = *it;
-                mirrorPt( p );
-                m_libPoly.SetVertex( it.GetIndex(), p );
-            }
-        }
+            m_libPoly.Mirror( libCenter, aFlipDirection );
 
         SetLayer( GetFlippedLayer( GetLayer() ) );
         rebakeFromTransform( xform );
@@ -961,6 +1017,13 @@ void PCB_SHAPE::SetStart( const VECTOR2I& aStart )
 void PCB_SHAPE::SetEnd( const VECTOR2I& aEnd )
 {
     EDA_SHAPE::SetEnd( aEnd );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetCenter( const VECTOR2I& aCenter )
+{
+    EDA_SHAPE::SetCenter( aCenter );
     syncLibCoords();
 }
 
@@ -1264,8 +1327,7 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
         SHAPE_POLY_SET& poly = GetPolyShape();
         poly = m_libPoly;
 
-        for( auto it = poly.IterateWithHoles(); it; it++ )
-            poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
+        transformPolyVertices( poly, xform, false );
 
         // m_libStart/m_libEnd are not seeded for POLY, skip the start/end fall-through below.
         return;
@@ -1330,8 +1392,7 @@ SHAPE_POLY_SET PCB_SHAPE::GetLibraryPolyShape() const
     {
         const TRANSFORM_TRS& xform = fp->GetTransform();
 
-        for( auto it = poly.IterateWithHoles(); it; it++ )
-            poly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
+        transformPolyVertices( poly, xform, true );
     }
 
     return poly;
@@ -1471,10 +1532,7 @@ void PCB_SHAPE::syncLibCoords()
         m_libPoly = GetPolyShape();
 
         if( hasXform )
-        {
-            for( auto it = m_libPoly.IterateWithHoles(); it; it++ )
-                m_libPoly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
-        }
+            transformPolyVertices( m_libPoly, xform, true );
 
         return;
     }

@@ -23,6 +23,8 @@
 #include <eda_item.h>
 
 // Minimal EDA_ITEM for testing
+namespace
+{
 class TEST_EDA_ITEM : public EDA_ITEM
 {
 public:
@@ -32,6 +34,7 @@ public:
 
     EDA_ITEM* Clone() const override { return new TEST_EDA_ITEM( Type() ); }
 };
+} // namespace
 
 
 // Simple COMMIT implementation for testing
