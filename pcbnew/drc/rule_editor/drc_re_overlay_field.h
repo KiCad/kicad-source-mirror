@@ -27,8 +27,8 @@
 
 class wxWindow;
 class wxControl;
-class wxStaticBitmap;
 class wxStaticText;
+class FIELD_WARNING_ICON;
 class UNIT_BINDER;
 
 
@@ -122,16 +122,21 @@ public:
     UNIT_BINDER* GetUnitBinder() const { return m_unitBinder; }
 
     /**
-     * Show or hide the error indicator icon adjacent to this field.
+     * Show the error icon inside the right end of this field, with a tooltip listing the error.
      *
-     * @param aShow true to display the error icon, false to hide it
+     * @param aMessage The reason the field is invalid
      */
-    void ShowError( bool aShow );
+    void ShowError( const wxString& aMessage );
+
+    /**
+     * Hide the error icon.
+     */
+    void ClearError();
 
     /**
      * @return true if the error icon is currently visible.
      */
-    bool IsShowingError() const { return m_showingError; }
+    bool IsShowingError() const;
 
     /**
      * @return The label control, or nullptr if no label was created.
@@ -161,8 +166,6 @@ public:
     void CreateLabels();
 
 private:
-    void createErrorIcon();
-
     wxWindow*            m_parent;
     wxString             m_fieldId;
     wxControl*           m_control;
@@ -172,8 +175,7 @@ private:
     Setter               m_setter;
     UNIT_BINDER*         m_unitBinder;
 
-    wxStaticBitmap*      m_errorIcon;
-    bool                 m_showingError;
+    FIELD_WARNING_ICON*  m_errorIcon; ///< Owned by the control's parent window, created on first error
 
     wxStaticText*        m_label;
     wxStaticText*        m_prefixLabel;

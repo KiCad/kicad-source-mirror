@@ -30,6 +30,7 @@
 #include <panel_setup_constraints_base.h>
 
 class BOARD;
+class FIELD_WARNING_ICON;
 class PAGED_DIALOG;
 class PCB_EDIT_FRAME;
 class wxCommandEvent;
@@ -49,14 +50,14 @@ private:
 
     void applyValues( BOARD_DESIGN_SETTINGS& aSettings ) const;
 
-    /// Show a warning icon, with the reason as its tooltip, beside each field whose value has an issue.
+    /// Show a warning icon, with the reason as its tooltip, over each field whose value has an issue.
     void updateWarnings();
 
     struct CONSTRAINT_FIELD
     {
-        wxString        m_Setting;
-        wxWindow*       m_Ctrl;
-        wxStaticBitmap* m_Warning;
+        wxString            m_Setting;
+        wxWindow*           m_Ctrl;
+        FIELD_WARNING_ICON* m_Warning;
     };
 
 public:

@@ -26,6 +26,7 @@
 #include <panel_setup_constraints.h>
 #include <panel_setup_constraints_base.h>
 #include <pcb_edit_frame.h>
+#include <widgets/field_warning_icon.h>
 #include <widgets/paged_dialog.h>
 #include <wx/treebook.h>
 #include <bitmaps.h>
@@ -81,35 +82,30 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         m_minGrooveWidthLabel->Show( false );
         m_minGrooveWidthCtrl->Show( false );
         m_minGrooveWidthUnits->Show( false );
-
-        // A reserved-space icon would leave an empty row behind
-        wxSizerItem* item = m_minGrooveWidthWarning->GetContainingSizer()->GetItem( m_minGrooveWidthWarning );
-        item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
     }
 
     m_fields = {
-        { wxS( "min_clearance" ),             m_clearanceCtrl,              m_clearanceWarning },
-        { wxS( "min_connection" ),            m_MinConnCtrl,                m_minConnWarning },
-        { wxS( "min_track_width" ),           m_TrackMinWidthCtrl,          m_trackMinWidthWarning },
-        { wxS( "min_via_annular_width" ),     m_ViaMinAnnulusCtrl,          m_viaMinAnnulusWarning },
-        { wxS( "min_via_diameter" ),          m_SetViasMinSizeCtrl,         m_viaMinSizeWarning },
-        { wxS( "min_through_hole_diameter" ), m_MinDrillCtrl,               m_minDrillWarning },
-        { wxS( "min_microvia_diameter" ),     m_uviaMinSizeCtrl,            m_uviaMinSizeWarning },
-        { wxS( "min_microvia_drill" ),        m_uviaMinDrillCtrl,           m_uviaMinDrillWarning },
-        { wxS( "min_hole_to_hole" ),          m_SetHoleToHoleCtrl,          m_holeToHoleWarning },
-        { wxS( "min_hole_clearance" ),        m_HoleClearanceCtrl,          m_holeClearanceWarning },
-        { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl,          m_silkClearanceWarning },
-        { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl,         m_minGrooveWidthWarning },
-        { wxS( "min_text_height" ),           m_textHeightCtrl,             m_textHeightWarning },
-        { wxS( "min_text_thickness" ),        m_textThicknessCtrl,          m_textThicknessWarning },
-        { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl,          m_edgeClearanceWarning },
-        { wxS( "max_error" ),                 m_maxErrorCtrl,               m_maxErrorWarning }
+        { wxS( "min_clearance" ),             m_clearanceCtrl,              nullptr },
+        { wxS( "min_connection" ),            m_MinConnCtrl,                nullptr },
+        { wxS( "min_track_width" ),           m_TrackMinWidthCtrl,          nullptr },
+        { wxS( "min_via_annular_width" ),     m_ViaMinAnnulusCtrl,          nullptr },
+        { wxS( "min_via_diameter" ),          m_SetViasMinSizeCtrl,         nullptr },
+        { wxS( "min_through_hole_diameter" ), m_MinDrillCtrl,               nullptr },
+        { wxS( "min_microvia_diameter" ),     m_uviaMinSizeCtrl,            nullptr },
+        { wxS( "min_microvia_drill" ),        m_uviaMinDrillCtrl,           nullptr },
+        { wxS( "min_hole_to_hole" ),          m_SetHoleToHoleCtrl,          nullptr },
+        { wxS( "min_hole_clearance" ),        m_HoleClearanceCtrl,          nullptr },
+        { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl,          nullptr },
+        { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl,         nullptr },
+        { wxS( "min_text_height" ),           m_textHeightCtrl,             nullptr },
+        { wxS( "min_text_thickness" ),        m_textThicknessCtrl,          nullptr },
+        { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl,          nullptr },
+        { wxS( "max_error" ),                 m_maxErrorCtrl,               nullptr }
     };
 
-    for( const CONSTRAINT_FIELD& field : m_fields )
+    for( CONSTRAINT_FIELD& field : m_fields )
     {
-        field.m_Warning->SetBitmap( KiBitmapBundle( BITMAPS::small_warning ) );
-        field.m_Warning->Hide();
+        field.m_Warning = new FIELD_WARNING_ICON( field.m_Ctrl );
 
         // Debounced so a half-typed value does not flash a warning
         field.m_Ctrl->Bind( wxEVT_TEXT,
@@ -272,8 +268,7 @@ void PANEL_SETUP_CONSTRAINTS::updateWarnings()
         auto it = messages.find( field.m_Setting );
         bool show = it != messages.end() && field.m_Ctrl->IsShown();
 
-        field.m_Warning->SetToolTip( show ? it->second : wxString() );
-        field.m_Warning->Show( show );
+        field.m_Warning->SetWarning( show ? it->second : wxString() );
     }
 }
 

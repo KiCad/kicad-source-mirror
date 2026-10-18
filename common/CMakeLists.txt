@@ -268,6 +268,7 @@ set( KICOMMON_SRCS
     grid_tricks.cpp
     widgets/aui_json_serializer.cpp
     widgets/bitmap_button.cpp
+    widgets/field_warning_icon.cpp
     widgets/grid_combobox.cpp
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp

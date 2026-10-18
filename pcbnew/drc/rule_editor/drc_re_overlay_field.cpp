@@ -19,11 +19,10 @@
 
 #include "drc_re_overlay_field.h"
 
-#include <bitmaps.h>
+#include <widgets/field_warning_icon.h>
 #include <widgets/unit_binder.h>
 
 #include <wx/control.h>
-#include <wx/statbmp.h>
 #include <wx/stattext.h>
 #include <wx/window.h>
 
@@ -39,7 +38,6 @@ DRC_RE_OVERLAY_FIELD::DRC_RE_OVERLAY_FIELD( wxWindow* aParent, const wxString& a
         m_setter( nullptr ),
         m_unitBinder( nullptr ),
         m_errorIcon( nullptr ),
-        m_showingError( false ),
         m_label( nullptr ),
         m_prefixLabel( nullptr )
 {
@@ -62,35 +60,25 @@ DRC_RE_OVERLAY_FIELD::~DRC_RE_OVERLAY_FIELD()
 }
 
 
-void DRC_RE_OVERLAY_FIELD::createErrorIcon()
+void DRC_RE_OVERLAY_FIELD::ShowError( const wxString& aMessage )
 {
-    if( m_errorIcon )
-        return;
+    if( !m_errorIcon )
+        m_errorIcon = new FIELD_WARNING_ICON( m_control );
 
-    m_errorIcon = new wxStaticBitmap( m_parent, wxID_ANY, KiBitmapBundle( BITMAPS::small_warning ) );
-
-    // Position the icon to the right of the control with a small gap
-    wxPoint controlPos = m_control->GetPosition();
-    wxSize controlSize = m_control->GetSize();
-    wxSize iconSize = m_errorIcon->GetSize();
-
-    int iconX = controlPos.x + controlSize.GetWidth() + 4;
-    int iconY = controlPos.y + ( controlSize.GetHeight() - iconSize.GetHeight() ) / 2;
-
-    m_errorIcon->SetPosition( wxPoint( iconX, iconY ) );
-    m_errorIcon->Hide();
+    m_errorIcon->SetWarning( aMessage );
 }
 
 
-void DRC_RE_OVERLAY_FIELD::ShowError( bool aShow )
+void DRC_RE_OVERLAY_FIELD::ClearError()
 {
-    if( aShow && !m_errorIcon )
-        createErrorIcon();
-
     if( m_errorIcon )
-        m_errorIcon->Show( aShow );
+        m_errorIcon->SetWarning( wxEmptyString );
+}
 
-    m_showingError = aShow;
+
+bool DRC_RE_OVERLAY_FIELD::IsShowingError() const
+{
+    return m_errorIcon && m_errorIcon->IsShown();
 }
 
 

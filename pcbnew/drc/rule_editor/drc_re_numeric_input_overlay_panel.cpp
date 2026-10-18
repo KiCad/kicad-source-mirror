@@ -25,6 +25,7 @@
 #include <dialogs/rule_editor_dialog_base.h>
 #include <eda_base_frame.h>
 #include <base_units.h>
+#include <i18n_utility.h>
 #include <widgets/unit_binder.h>
 
 #include <wx/textctrl.h>
@@ -147,15 +148,15 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
 
                 switch( numValidator->GetValidationState() )
                 {
-                case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::Empty: errorMsg = wxS( "Value is required." ); break;
+                case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::Empty: errorMsg = _( "Value is required." ); break;
                 case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotNumeric:
-                    errorMsg = wxS( "Value must be a number." );
+                    errorMsg = _( "Value must be a number." );
                     break;
                 case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotInteger:
-                    errorMsg = wxS( "Value must be a whole number." );
+                    errorMsg = _( "Value must be a whole number." );
                     break;
                 case VALIDATOR_NUMERIC_CTRL::VALIDATION_STATE::NotGreaterThanZero:
-                    errorMsg = wxS( "Value must be greater than 0." );
+                    errorMsg = _( "Value must be greater than 0." );
                     break;
                 default: break;
                 }
@@ -164,7 +165,7 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::ValidateInputs( int* aErrorCount,
                 {
                     ( *aErrorCount )++;
                     *aValidationMessage += DRC_RULE_EDITOR_UTILS::FormatErrorMessage( *aErrorCount, errorMsg );
-                    ShowFieldError( wxS( "value" ) );
+                    ShowFieldError( wxS( "value" ), errorMsg );
                     return false;
                 }
             }

@@ -80,8 +80,9 @@ public:
      * Show an error indicator on the specified field.
      *
      * @param aFieldId The string identifier of the field to highlight.
+     * @param aMessage The reason the field is invalid, shown as the icon's tooltip.
      */
-    void ShowFieldError( const wxString& aFieldId );
+    void ShowFieldError( const wxString& aFieldId, const wxString& aMessage );
 
 protected:
     /**

@@ -246,16 +246,16 @@ bool DRC_RE_BITMAP_OVERLAY_PANEL::TransferDataFromWindow()
 void DRC_RE_BITMAP_OVERLAY_PANEL::ClearFieldErrors()
 {
     for( const auto& field : m_fields )
-        field->ShowError( false );
+        field->ClearError();
 }
 
 
-void DRC_RE_BITMAP_OVERLAY_PANEL::ShowFieldError( const wxString& aFieldId )
+void DRC_RE_BITMAP_OVERLAY_PANEL::ShowFieldError( const wxString& aFieldId, const wxString& aMessage )
 {
     auto it = m_fieldIdMap.find( aFieldId );
 
     if( it != m_fieldIdMap.end() )
-        it->second->ShowError( true );
+        it->second->ShowError( aMessage );
 }
 
 
