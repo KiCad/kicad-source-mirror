@@ -417,6 +417,7 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
                                                   validationFailure->get()->Format( m_frame ) );
             m_frame->ShowInfoBarError( errorMsg );
             aEvent.Veto();
+            m_ValueChangeVetoed = true;
             return;
         }
 

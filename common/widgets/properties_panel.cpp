@@ -120,9 +120,9 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
 
 #if wxCHECK_VERSION( 3, 3, 0 )
-    m_grid->SetValidationFailureBehavior( wxPGVFBFlags::MarkCell );
+    m_grid->SetValidationFailureBehavior( wxPGVFBFlags::StayInProperty );
 #else
-    m_grid->SetValidationFailureBehavior( wxPG_VFB_MARK_CELL );
+    m_grid->SetValidationFailureBehavior( wxPG_VFB_STAY_IN_PROPERTY );
 #endif
 
 #if wxCHECK_VERSION( 3, 3, 0 )
@@ -829,7 +829,14 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
         // the grid, so it never steps between properties.  Intercept Tab here to commit any
         // pending edit and move selection to the next (or previous, with Shift) editable
         // property, wrapping around at the ends.
-        m_grid->CommitChangesFromEditor();
+
+        // wxPropertyGrid::PerformValidation() fails to return true when the event is vetoed
+        // (though the code looks like it does it).  Anyway, for now make sure that we catch
+        // it.
+        m_ValueChangeVetoed = false;
+
+        if( !m_grid->CommitChangesFromEditor() || m_ValueChangeVetoed )
+            return;
 
         const bool forward = !aEvent.ShiftDown();
 
@@ -916,7 +923,13 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
     if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER
         || aEvent.GetKeyCode() == WXK_DOWN || aEvent.GetKeyCode() == WXK_UP )
     {
-        m_grid->CommitChangesFromEditor();
+        // wxPropertyGrid::PerformValidation() fails to return true when the event is vetoed
+        // (though the code looks like it does it).  Anyway, for now make sure that we catch
+        // it.
+        m_ValueChangeVetoed = false;
+
+        if( !m_grid->CommitChangesFromEditor() || m_ValueChangeVetoed )
+            return;
 
         CallAfter(
                 [this]()

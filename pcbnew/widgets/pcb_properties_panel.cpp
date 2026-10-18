@@ -674,8 +674,7 @@ void PCB_PROPERTIES_PANEL::onContextMenu( wxCommandEvent& aEvent )
     case ID_CTX_ADD_CUSTOM_PROPERTY:    addBlankCustomProperty();                           break;
     case ID_CTX_REMOVE_FIELD:           removeField( m_contextMenuPropertyName );           break;
     case ID_CTX_REMOVE_CUSTOM_PROPERTY: removeCustomProperty( m_contextMenuPropertyName );  break;
-    default:
-        break;
+    default:                                                                                break;
     }
 }
 
@@ -981,6 +980,7 @@ void PCB_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
                                               validationFailure->get()->Format( m_frame ) );
         m_frame->ShowInfoBarError( errorMsg );
         aEvent.Veto();
+        m_ValueChangeVetoed = true;
         return;
     }
 
@@ -1252,9 +1252,18 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
                 PCB_CONSTRAINT* driving = SetDimensionValueMode(
                         board, dim, mode, length, overrideText,
-                        [&]( BOARD_ITEM* aItem ) { changes.Modify( aItem ); },
-                        [&]( BOARD_ITEM* aItem ) { changes.Add( aItem ); },
-                        [&]( BOARD_ITEM* aItem ) { changes.Remove( aItem ); } );
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            changes.Modify( aItem );
+                        },
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            changes.Add( aItem );
+                        },
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            changes.Remove( aItem );
+                        } );
 
                 if( driving )
                     drivingConstraints.push_back( driving );

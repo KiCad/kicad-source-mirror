@@ -173,6 +173,7 @@ protected:
 
 public:
     int                         m_SuppressGridChangeEvents;
+    bool                        m_ValueChangeVetoed;
 
 protected:
     std::vector<PROPERTY_BASE*> m_displayed;    // no ownership of pointers
