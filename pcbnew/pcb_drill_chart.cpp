@@ -313,13 +313,12 @@ std::unique_ptr<GENERATED_TABLE_CONTENT> PCB_DRILL_CHART::generate( const BOARD&
                 break;
 
             case DRILL_CHART_COLUMN_ID::SLOT_SIZE:
-                text = group.m_IsSlot
-                               ? wxString::Format( wxT( "%s x %s" ),
-                                                   FormatGeneratedTableLength( group.m_SizeXY.x, m_units,
-                                                                               m_precision ),
-                                                   FormatGeneratedTableLength( group.m_SizeXY.y, m_units,
-                                                                               m_precision ) )
-                               : NO_VALUE;
+                text = group.m_IsSlot ? wxString::Format( wxT( "%s x %s" ),
+                                                          FormatGeneratedTableLength( group.m_SizeXY.x, m_units,
+                                                                                      m_precision ),
+                                                          FormatGeneratedTableLength( group.m_SizeXY.y, m_units,
+                                                                                      m_precision ) )
+                                      : NO_VALUE;
                 break;
 
             case DRILL_CHART_COLUMN_ID::PLATING:
@@ -356,14 +355,13 @@ std::unique_ptr<GENERATED_TABLE_CONTENT> PCB_DRILL_CHART::generate( const BOARD&
             {
                 // Depth over diameter, the number a fabricator uses to judge plating
                 // difficulty. Needs a real stackup, so it stays an em dash without one
-                const int depth = aBoard.GetStackupOrDefault().GetLayerDistance(
-                        group.m_TopLayer, group.m_BottomLayer );
+                const int depth = aBoard.GetStackupOrDefault().GetLayerDistance( group.m_TopLayer,
+                                                                                 group.m_BottomLayer );
 
                 const int diameter = group.m_Diameter;
 
-                text = depth > 0 && diameter > 0
-                               ? wxString::Format( wxT( "%.1f:1" ), (double) depth / diameter )
-                               : NO_VALUE;
+                text = depth > 0 && diameter > 0 ? wxString::Format( wxT( "%.1f:1" ), (double) depth / diameter )
+                                                 : NO_VALUE;
                 break;
             }
 

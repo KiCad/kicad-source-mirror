@@ -2949,19 +2949,11 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
             addAttribute( p, "layerOrGroupRef", mustNotCutEntry->second );
         }
 
-        // MAX_STUB_LENGTH: the maximum residual copper allowed past the
-        // must-cut layer. KiCad has no explicit fabricator tolerance, so use
-        // half the dielectric thickness between must-cut and must-not-cut as
-        // a nominal midpoint. Falls back to zero if no inner signal exists.
-        int stubLength = 0;
-
-        if( mustNotCut != UNDEFINED_LAYER )
-        {
-            int dielectric = stackup.GetLayerDistance( aDrill.end, mustNotCut );
-
-            if( dielectric > 0 )
-                stubLength = dielectric / 2;
-        }
+        // MAX_STUB_LENGTH: the maximum residual copper allowed past the must-cut layer. KiCad has
+        // no explicit fabricator tolerance, so use half the dielectric thickness between must-cut
+        // and must-not-cut as a nominal midpoint. Falls back to zero if no inner signal exists.
+        int stubLength = mustNotCut == UNDEFINED_LAYER ? 0
+                                                       : stackup.GetDrillDepth( aDrill.start, aDrill.end );
 
         {
             wxXmlNode* bd = appendNode( specNode, "Backdrill" );

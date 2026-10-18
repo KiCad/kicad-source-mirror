@@ -974,6 +974,65 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
 }
 
 
+int BOARD_STACKUP::GetDrillDepth( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSecondLayer ) const
+{
+    int  total = 0;
+    bool half = false;
+    bool done = false;
+
+    auto processStackupItem =
+            [&]( const BOARD_STACKUP_ITEM* item )
+            {
+                // Will be UNDEFINED_LAYER for dielectrics
+                const PCB_LAYER_ID layer = item->GetBrdLayerId();
+
+                if( layer != UNDEFINED_LAYER && !IsCopperLayer( layer ) )
+                    return;   // Silk/mask layer
+
+                if( item->GetSublayersCount() > 0 )
+                {
+                    for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
+                    {
+                        const int subThickness = item->GetThickness( sublayer );
+                        total += half ? ( subThickness / 2 ) : subThickness;
+                    }
+                }
+                else if( IsCopperLayer( layer ) )
+                {
+                    total += BOARD_STACKUP_ITEM::GetCopperDefaultThickness();
+                }
+
+                if( half )
+                    done = true;
+                else if( layer == aSecondLayer )
+                    half = true;
+            };
+
+    if( aSecondLayer > aFirstLayer )
+    {
+        for( const BOARD_STACKUP_ITEM* item : m_list )
+        {
+            processStackupItem( item );
+
+            if( done )
+                return total;
+        }
+    }
+    else
+    {
+        for( const BOARD_STACKUP_ITEM* item : std::ranges::reverse_view( m_list ) )
+        {
+            processStackupItem( item );
+
+            if( done )
+                return total;
+        }
+    }
+
+    return total;
+}
+
+
 bool IsPrmSpecified( const wxString& aPrmValue )
 {
     // return true if the param value is specified:
