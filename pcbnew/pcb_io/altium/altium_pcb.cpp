@@ -5824,11 +5824,13 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
     bool isTextbox = aElem.isFrame && !aElem.isInverted; // Textbox knockout is not supported
 
     static const std::map<wxString, wxString> variableMap = {
-        { "LAYER_NAME", "LAYER" },
-        { "PRINT_DATE", "CURRENT_DATE"},
+        { "LAYER_NAME",              "LAYER"               },
+        { "PRINT_DATE",              "CURRENT_DATE"        },
+        { "PRINT_TIME",              "CURRENT_TIME_LOCALE" },
+        { "PCB_FILE_NAME_NO_PATH",   "FILENAME"            },
     };
 
-    wxString    kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
+    wxString    kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap, &m_specialStrings );
     BOARD_ITEM* item = pcbText.get();
     EDA_TEXT*   text = pcbText.get();
 
@@ -5869,7 +5871,9 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     BOARD_ITEM* item = fpText.get();
     EDA_TEXT*   text = fpText.get();
 
-    bool isTextbox = aElem.isFrame && !aElem.isInverted; // Textbox knockout is not supported
+    // A framed designator or comment still sets its field, which cannot be a textbox
+    bool isField = aElem.isDesignator || aElem.isComment;
+    bool isTextbox = aElem.isFrame && !aElem.isInverted && !isField; // Textbox knockout is not supported
     bool toAdd = false;
 
     if( aElem.isDesignator )
@@ -5893,8 +5897,10 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         { "DESIGNATOR", "REFERENCE" },
         { "COMMENT",    "VALUE" },
         { "VALUE",      "ALTIUM_VALUE" },
-        { "LAYER_NAME", "LAYER" },
-        { "PRINT_DATE", "CURRENT_DATE"},
+        { "LAYER_NAME",            "LAYER"               },
+        { "PRINT_DATE",            "CURRENT_DATE"        },
+        { "PRINT_TIME",            "CURRENT_TIME_LOCALE" },
+        { "PCB_FILE_NAME_NO_PATH", "FILENAME"            },
     };
 
     if( isTextbox )
@@ -5903,7 +5909,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         text = fpTextbox.get();
     }
 
-    wxString kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
+    wxString kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap, &m_specialStrings );
 
     text->SetText( kicadText );
 
@@ -6074,6 +6080,14 @@ void ALTIUM_PCB::HelperSetTextAlignmentAndPos( const ATEXT6& aElem, EDA_TEXT* aT
     int margin = aElem.isOffsetBorder ? aElem.text_offset_width : aElem.margin_border_width;
     int rectWidth = aElem.textbox_rect_width - margin * 2;
     int rectHeight = aElem.height;
+
+    // A frame justifies its text inside the margins of its own rectangle, not the glyph run
+    if( aElem.isFrame )
+    {
+        kposition.x += aElem.isMirrored ? -margin : margin;
+        kposition.y -= margin;
+        rectHeight = static_cast<int>( aElem.textbox_rect_height ) - margin * 2;
+    }
 
     // Altium auto-sizes the bounding box of a free string (non-frame text) from its own glyph
     // rasterizer, and stores a slightly different width for otherwise identical strings placed on

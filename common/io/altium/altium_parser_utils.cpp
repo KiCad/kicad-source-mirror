@@ -91,16 +91,50 @@ wxString AltiumPropertyToKiCadString( const wxString& aString )
 }
 
 
-// https://www.altium.com/documentation/altium-designer/sch-obj-textstringtext-string-ad#!special-strings
-wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&                     aString,
-                                                  const std::map<wxString, wxString>& aOverrides )
+wxString AltiumEscapeTextVars( const wxString& aText )
 {
-    if( aString.IsEmpty() || aString.at( 0 ) != '=' )
+    wxString result;
+    int      depth = 0;
+
+    for( size_t i = 0; i < aText.length(); i++ )
     {
-        return aString;
+        wxUniChar ch = aText[i];
+
+        // KiCad copies an escaped reference through its closing brace, so only the outermost one is escaped
+        if( depth == 0 && ( ch == '$' || ch == '@' ) && i + 1 < aText.length() && aText[i + 1] == '{' )
+        {
+            result += '\\';
+            result += ch;
+            result += '{';
+            depth = 1;
+            i++;
+            continue;
+        }
+
+        if( depth > 0 && ch == '{' )
+            depth++;
+        else if( depth > 0 && ch == '}' )
+            depth--;
+
+        result += ch;
     }
 
+    return result;
+}
+
+
+// https://www.altium.com/documentation/altium-designer/sch-obj-textstringtext-string-ad#!special-strings
+wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&                     aString,
+                                                  const std::map<wxString, wxString>& aOverrides,
+                                                  std::set<wxString>*                 aUnmapped )
+{
+    if( aString.IsEmpty() || aString.at( 0 ) != '=' )
+        return AltiumEscapeTextVars( aString );
+
     wxString result;
+
+    // adjacent quoted fragments are one literal, '$'+'{A}' included
+    wxString literal;
 
     size_t start = 1;
     size_t delimiter = 0;
@@ -120,7 +154,7 @@ wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&               
                 escaping_end = aString.size();
             }
 
-            result += aString.substr( text_start, escaping_end - text_start );
+            literal += aString.substr( text_start, escaping_end - text_start );
 
             start = escaping_end + 1;
         }
@@ -142,13 +176,18 @@ wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&               
 
                 if( overrideIt != aOverrides.end() )
                     specialString = overrideIt->second;
+                else if( aUnmapped )
+                    aUnmapped->insert( specialString );
 
-                result += wxString::Format( wxT( "${%s}" ), specialString );
+                result += AltiumEscapeTextVars( literal ) + wxString::Format( wxT( "${%s}" ), specialString );
+                literal.clear();
             }
 
             start = delimiter + 1;
         }
     } while( delimiter != wxString::npos );
+
+    result += AltiumEscapeTextVars( literal );
 
     return result;
 }
@@ -156,7 +195,8 @@ wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&               
 
 // https://www.altium.com/documentation/altium-designer/text-objects-pcb
 wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                     aString,
-                                                const std::map<wxString, wxString>& aOverrides )
+                                                const std::map<wxString, wxString>& aOverrides,
+                                                std::set<wxString>*                 aUnmapped )
 {
     if( aString.IsEmpty() )
         return aString;
@@ -168,16 +208,23 @@ wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                 
         str.UpperCase(); // matching is implemented using upper case strings
 
         auto it = aOverrides.find( str );
+
         if( it != aOverrides.end() )
             str = it->second;
+        else if( aUnmapped )
+            aUnmapped->insert( str );
 
         return wxString::Format( wxT( "${%s}" ), str );
     };
 
-    // special case: string starts with dot -> whole string is special string
+    // special case: string starts with dot -> whole string is special string, unless it is an assignment
     if( aString.at( 0 ) == '.' )
     {
         wxString specialString = aString.substr( 1 );
+
+        if( specialString.Contains( '=' ) )
+            return aString;
+
         return getVariable( specialString );
     }
 

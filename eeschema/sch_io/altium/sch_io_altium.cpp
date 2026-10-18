@@ -43,6 +43,7 @@
 #include <sch_pin.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
+#include <connection_graph.h>
 #include <sch_connection.h>
 #include <sch_symbol.h>
 #include <sch_junction.h>
@@ -708,14 +709,71 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
     m_errorMessages.clear();
 
+    if( aProperties && aProperties->count( "project_file" ) )
+    {
+        ApplyAltiumProjectParametersToProject( &m_schematic->Project(),
+                                               ParseAltiumProjectParameters( aProperties->at( "project_file" ) ) );
+    }
+
+    // anything still undefined has no value, which Altium shows as nothing, and a sheet parameter that
+    // Altium leaves as "*" is undefined unless the project gives it a value
+    for( const wxString& name : m_sheetSpecialStrings )
+        m_schematic->Project().GetTextVars().emplace( name, wxString() );
+
+    for( const wxString& name : m_unsetSheetParams )
+        m_schematic->Project().GetTextVars().emplace( name, wxString() );
+
     SCH_SCREENS allSheets( m_rootSheet );
-    allSheets.UpdateSymbolLinks( &LOAD_INFO_REPORTER::GetInstance() ); // Update all symbol library links for all sheets.
+
+    // a Comment naming a parameter the component lacks shows empty in Altium
+    std::map<SCH_SYMBOL*, bool> resolves;
+
+    for( const SCH_SHEET_PATH& path : SCH_SHEET_LIST( m_rootSheet ) )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*     symbol = static_cast<SCH_SYMBOL*>( item );
+            const wxString& text = symbol->GetField( FIELD_T::VALUE )->GetText();
+
+            // only a Comment that is nothing but one variable reference
+            if( !text.StartsWith( wxS( "${" ) ) || !text.EndsWith( wxS( "}" ) )
+                || text.find( '}', 2 ) != text.length() - 1 || text.find( wxS( "${" ), 2 ) != wxString::npos )
+            {
+                continue;
+            }
+
+            wxString name = text.Mid( 2, text.length() - 3 );
+            bool     known = m_schematic->Project().GetTextVars().count( name ) > 0;
+
+            for( const SCH_FIELD& field : symbol->GetFields() )
+                known |= field.GetName().IsSameAs( name, false );
+
+            known |= symbol->ResolveTextVar( &path, &name, wxEmptyString );
+            resolves[symbol] |= known;
+        }
+    }
+
+    for( const auto& [symbol, known] : resolves )
+    {
+        if( !known )
+            symbol->GetField( FIELD_T::VALUE )->SetText( wxEmptyString );
+    }
+
+    // symbols carry their own definitions, so a library that lacks them is not an error worth reporting
+    allSheets.UpdateSymbolLinks();
     allSheets.ClearEditFlags();
 
     // Apply Altium project variants to schematic symbols
     if( aProperties && aProperties->count( "project_file" ) )
     {
-        auto variants = ParseAltiumProjectVariants( aProperties->at( "project_file" ) );
+        const wxString& projectFile = aProperties->at( "project_file" );
+
+        auto variants = ParseAltiumProjectVariants( projectFile );
 
         if( !variants.empty() )
         {
@@ -827,6 +885,12 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
                 }
             }
         }
+    }
+
+    if( aProperties && aProperties->count( "project_file" )
+        && !AltiumPowerPortNamesTakePriority( aProperties->at( "project_file" ) ) )
+    {
+        NameNetsAfterNetLabels();
     }
 
     // Set up the default netclass wire & bus width based on imported wires & buses.
@@ -1017,6 +1081,9 @@ void SCH_IO_ALTIUM::CreateAliases()
 
             screen->Append( label );
         }
+
+        if( harness.m_ports.empty() )
+            continue;
 
         // Draw the bus line from the individual ports to the harness
 
@@ -1351,6 +1418,241 @@ void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
     }
 
     m_schematic->RefreshHierarchy();
+}
+
+
+// Net code of every connected item on every sheet, a promoted label standing in for its original
+using ITEM_NET_CODES = std::map<std::pair<KIID_PATH, const SCH_ITEM*>, int>;
+
+static ITEM_NET_CODES itemNetCodes( const CONNECTION_GRAPH&                          aGraph,
+                                    const std::map<const SCH_ITEM*, const SCH_ITEM*>& aOriginals )
+{
+    ITEM_NET_CODES codes;
+
+    for( const auto& [key, subgraphs] : aGraph.GetNetMap() )
+    {
+        for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        {
+            for( const SCH_ITEM* item : subgraph->GetItems() )
+            {
+                auto original = aOriginals.find( item );
+
+                codes[{ subgraph->GetSheet().Path(), original != aOriginals.end() ? original->second : item }] =
+                        key.Netcode;
+            }
+        }
+    }
+
+    return codes;
+}
+
+
+static bool sameNets( const ITEM_NET_CODES& aBefore, const ITEM_NET_CODES& aAfter )
+{
+    if( aBefore.size() != aAfter.size() )
+        return false;
+
+    std::map<int, int> forward;
+    std::map<int, int> backward;
+
+    for( const auto& [pin, code] : aBefore )
+    {
+        auto it = aAfter.find( pin );
+
+        if( it == aAfter.end() )
+            return false;
+
+        if( forward.emplace( code, it->second ).first->second != it->second
+            || backward.emplace( it->second, code ).first->second != code )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+void SCH_IO_ALTIUM::NameNetsAfterNetLabels()
+{
+    SCH_SHEET_LIST    hierarchy = m_schematic->Hierarchy();
+    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
+
+    graph->Recalculate( hierarchy, true );
+
+    struct NET_IDENTIFIERS
+    {
+        wxString                 name;
+        bool                     hasGlobalLabel = false;
+        bool                     hasGlobalPower = false;
+        std::set<wxString>       labelNames;
+        std::set<SCH_LABEL*>     labels;
+    };
+
+    std::map<int, NET_IDENTIFIERS>     nets;
+    std::map<wxString, std::set<int>>  globalNameNets;
+    std::map<SCH_LABEL*, std::set<int>> labelNets;
+
+    for( const auto& [key, subgraphs] : graph->GetNetMap() )
+    {
+        NET_IDENTIFIERS& net = nets[key.Netcode];
+        net.name = key.Name;
+
+        for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
+        {
+            for( SCH_ITEM* item : subgraph->GetItems() )
+            {
+                if( item->Type() == SCH_GLOBAL_LABEL_T )
+                {
+                    net.hasGlobalLabel = true;
+                    globalNameNets[subgraph->GetNameForDriver( item )].insert( key.Netcode );
+                }
+                else if( item->Type() == SCH_PIN_T && static_cast<SCH_PIN*>( item )->IsGlobalPower() )
+                {
+                    net.hasGlobalPower = true;
+                    globalNameNets[subgraph->GetNameForDriver( item )].insert( key.Netcode );
+                }
+                else if( item->Type() == SCH_LABEL_T
+                         && !wxString( static_cast<SCH_LABEL*>( item )->GetText() ).Trim().IsEmpty() )
+                {
+                    SCH_LABEL* label = static_cast<SCH_LABEL*>( item );
+
+                    net.labelNames.insert( label->GetText() );
+                    net.labels.insert( label );
+                    labelNets[label].insert( key.Netcode );
+                }
+            }
+        }
+    }
+
+    std::map<wxString, std::vector<int>> candidates;
+
+    for( const auto& [code, net] : nets )
+    {
+        // Altium's choice among several labels on one net is undocumented, so leave those alone
+        if( net.hasGlobalLabel || !net.hasGlobalPower || net.labelNames.size() != 1 )
+            continue;
+
+        const wxString& text = *net.labelNames.begin();
+        wxString        name = EscapeString( text, CTX_NETNAME );
+
+        if( name == net.name || text.Contains( wxS( "${" ) ) )
+            continue;
+
+        // A global label joins every global net of its name
+        if( auto it = globalNameNets.find( name );
+            it != globalNameNets.end()
+            && std::any_of( it->second.begin(), it->second.end(),
+                            [code]( int aCode )
+                            {
+                                return aCode != code;
+                            } ) )
+        {
+            continue;
+        }
+
+        // A label on a screen shared by several instances must sit on this net in all of them
+        if( std::all_of( net.labels.begin(), net.labels.end(),
+                         [&]( SCH_LABEL* aLabel )
+                         {
+                             return labelNets[aLabel].size() == 1;
+                         } ) )
+        {
+            candidates[name].push_back( code );
+        }
+    }
+
+    std::vector<std::pair<SCH_LABEL*, SCH_GLOBALLABEL*>> converted;
+    std::vector<wxString>                                promoted;
+
+    for( const auto& [name, codes] : candidates )
+    {
+        // Two power nets labelled alike would merge once the label is global
+        if( codes.size() != 1 )
+            continue;
+
+        promoted.push_back( name );
+
+        for( SCH_LABEL* label : nets[codes.front()].labels )
+        {
+            SCH_GLOBALLABEL* globalLabel = new SCH_GLOBALLABEL( label->GetPosition(), label->GetText() );
+
+            globalLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+            globalLabel->SetAttributes( *label, false );
+            globalLabel->SetSpinStyle( label->GetSpinStyle() );
+            globalLabel->GetField( FIELD_T::INTERSHEET_REFS )->SetVisible( false );
+
+            // Same mirroring as the change-label-type tool so the text keeps its side
+            if( label->GetSpinStyle() == SPIN_STYLE::SPIN::UP
+                || label->GetSpinStyle() == SPIN_STYLE::SPIN::BOTTOM )
+            {
+                globalLabel->MirrorVertically( label->GetPosition().y );
+            }
+            else
+            {
+                globalLabel->MirrorHorizontally( label->GetPosition().x );
+            }
+
+            converted.emplace_back( label, globalLabel );
+        }
+    }
+
+    if( converted.empty() )
+        return;
+
+    auto screenOf = []( SCH_ITEM* aItem )
+    {
+        return static_cast<SCH_SCREEN*>( aItem->GetParent() );
+    };
+
+    std::map<const SCH_ITEM*, const SCH_ITEM*> originals;
+
+    for( const auto& [label, globalLabel] : converted )
+        originals[globalLabel] = label;
+
+    ITEM_NET_CODES before = itemNetCodes( *graph, {} );
+
+    for( auto& [label, globalLabel] : converted )
+    {
+        SCH_SCREEN* screen = screenOf( label );
+        screen->Remove( label );
+        screen->Append( globalLabel );
+    }
+
+    graph->Recalculate( hierarchy, true );
+
+    if( sameNets( before, itemNetCodes( *graph, originals ) ) )
+    {
+        for( auto& [label, globalLabel] : converted )
+            delete label;
+
+        if( m_reporter )
+        {
+            for( const wxString& name : promoted )
+            {
+                m_reporter->Report( wxString::Format( _( "Net label '%s' made global so it names its net "
+                                                         "ahead of the power port, as in Altium." ),
+                                                      UnescapeString( name ) ),
+                                    RPT_SEVERITY_INFO );
+            }
+        }
+
+        return;
+    }
+
+    for( auto& [label, globalLabel] : converted )
+    {
+        SCH_SCREEN* screen = screenOf( globalLabel );
+        screen->Remove( globalLabel );
+        screen->Append( label );
+        delete globalLabel;
+    }
+
+    graph->Recalculate( hierarchy, true );
+
+    if( m_reporter )
+        m_reporter->Report( wxS( "Net labels kept local, a global label would have changed connectivity" ),
+                            RPT_SEVERITY_DEBUG );
 }
 
 
@@ -2744,21 +3046,34 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         static const std::map<wxString, wxString> variableMap = {
-            { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
             { "SHEETNUMBER",             "#"             },
             { "SHEETTOTAL",              "##"            },
             { "TITLE",                   "TITLE"         },  // including 1:1 maps makes it easier
             { "REVISION",                "REVISION"      },  //   to see that the list is complete
             { "DATE",                    "ISSUE_DATE"    },
             { "CURRENTDATE",             "CURRENT_DATE"  },
+            { "CURRENTTIME",             "CURRENT_TIME_LOCALE" },
             { "COMPANYNAME",             "COMPANY"       },
             { "DOCUMENTNAME",            "FILENAME"      },
             { "DOCUMENTFULLPATHANDNAME", "FILEPATH"      },
             { "PROJECTNAME",             "PROJECTNAME"   },
         };
 
-        wxString  kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
-        SCH_TEXT* textItem = new SCH_TEXT( elem.location + m_sheetOffset, kicadText );
+        std::set<wxString> unmapped;
+        wxString           kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap, &unmapped );
+        SCH_TEXT*          textItem = new SCH_TEXT( elem.location + m_sheetOffset, kicadText );
+
+        // a name outside the map is Altium's own, KiCad cannot resolve it
+        std::set<wxString> kicadNames;
+
+        for( const auto& [altiumName, kicadName] : variableMap )
+            kicadNames.insert( kicadName );
+
+        for( const wxString& name : unmapped )
+        {
+            if( !kicadNames.count( name ) )
+                m_sheetSpecialStrings.insert( name );
+        }
 
         SetTextPositioning( textItem, elem.justification, elem.orientation );
 
@@ -2889,7 +3204,7 @@ void SCH_IO_ALTIUM::AddTextBox( const ASCH_TEXT_FRAME *aElem )
     textBox->SetStart( sheetTopRight );
     textBox->SetEnd( sheetBottomLeft );
 
-    textBox->SetText( aElem->Text );
+    textBox->SetText( AltiumEscapeTextVars( aElem->Text ) );
 
     textBox->SetFillColor( GetColorFromInt( aElem->AreaColor ) );
 
@@ -2993,7 +3308,7 @@ void SCH_IO_ALTIUM::AddLibTextBox( const ASCH_TEXT_FRAME *aElem, std::vector<LIB
         textBox->SetEnd( GetRelativePosition( aElem->BottomLeft + m_sheetOffset, schsym ) );
     }
 
-    textBox->SetText( aElem->Text );
+    textBox->SetText( AltiumEscapeTextVars( aElem->Text ) );
 
     textBox->SetFillColor( GetColorFromInt( aElem->AreaColor ) );
 
@@ -5422,10 +5737,19 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
     if( elem.ownerindex <= 0 )
     {
         // This is some sheet parameter
-        if( elem.text == "*" )
-            return; // indicates parameter not set?
-
         wxString paramName = elem.name.Upper();
+
+        // an unset parameter still names a variable, which resolves to nothing
+        if( elem.text == "*" )
+        {
+            if( paramName != "SHEETNUMBER" && paramName != "TITLE" && paramName != "REVISION" && paramName != "DATE"
+                && paramName != "COMPANYNAME" )
+            {
+                m_unsetSheetParams.insert( paramName );
+            }
+
+            return;
+        }
 
         if( paramName == "SHEETNUMBER" )
         {

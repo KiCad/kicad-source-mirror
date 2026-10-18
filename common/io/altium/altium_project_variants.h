@@ -26,6 +26,8 @@
 
 #include <kiid.h>
 
+class PROJECT;
+
 /**
  * A single component variation within an Altium project variant.
  *
@@ -87,6 +89,27 @@ std::vector<ALTIUM_PROJECT_VARIANT> ParseAltiumProjectVariants( const wxString& 
  *         references emitted by AltiumPcbSpecialStringsToKiCadStrings.
  */
 std::map<wxString, wxString> ParseAltiumProjectParameters( const wxString& aPrjPcbPath );
+
+
+/**
+ * Read the project's Power Port Names Take Priority netlist option.
+ *
+ * Off, Altium's default, a net label names a net ahead of a power port on it.
+ *
+ * @param aPrjPcbPath Full path to the .PrjPcb file.
+ */
+bool AltiumPowerPortNamesTakePriority( const wxString& aPrjPcbPath );
+
+
+/**
+ * Register Altium project parameters as KiCad project text variables so that imported board
+ * text referencing special strings (e.g. ".PCB_Revision") resolves to its value.
+ *
+ * Existing project variables are not overwritten, and names that collide with KiCad's reserved
+ * or contextually resolved variables are skipped to preserve native resolution.
+ */
+void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
+                                            const std::map<wxString, wxString>& aParameters );
 
 
 /**

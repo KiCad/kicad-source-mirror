@@ -165,6 +165,13 @@ private:
     void EnsureSheetSymbolNames();
     wxFileName ResolveSheetFileName( const wxString& aParentPath, const wxString& aSheetFileName ) const;
     void NormalizeRepeatedSheetInstances();
+
+    /**
+     * Name power nets after their net labels, as Altium does unless Power Port Names Take
+     * Priority is set. A power pin outranks a local label here, so the label becomes global
+     * wherever that cannot change connectivity.
+     */
+    void NameNetsAfterNetLabels();
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
     void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol = nullsym,
                         std::vector<int>& aFontSize = nullint );

@@ -77,7 +77,7 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> sch_special_string_to_kicad_p
     { "$", "$", {} },
     { "{", "{", {} },
     { "}", "}", {} },
-    { "${A}", "${A}", {} }, // TODO: correct substitution
+    { "${A}", "\\${A}", {} },
     // Simple special strings
     { "=A", "${A}", {} },
     { "=A", "${C}", { { "A", "C" } } },
@@ -102,7 +102,8 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> sch_special_string_to_kicad_p
     { "='$'", "$", {} },
     { "='{'", "{", {} },
     { "='}'", "}", {} },
-    { "='${A}'", "${A}", {} }, // TODO: correct substitution
+    { "='${A}'", "\\${A}", {} },
+    { "='$'+'{A}'", "\\${A}", {} },
     { "='A'+'B'", "AB", {} },
     { "='A'+' '", "A ", {} },
     { "=' '+'B'", " B", {} },
@@ -160,6 +161,7 @@ static const std::vector<SPECIAL_STRINGS_TO_KICAD> pcb_special_string_to_kicad_p
     { "A  ", "A  ", {} },
     { "A=B", "A=B", {} },
     { "A=B+C", "A=B+C", {} },
+    { ".XXX = +/-.025", ".XXX = +/-.025", {} }, // a note that starts with a dot, not a special string
     { "A\nB", "A\nB", {} },
     { "A\tB", "A\tB", {} },
     { "This is a long text with spaces", "This is a long text with spaces", {} },

@@ -28,16 +28,37 @@
 
 #include <iostream>
 #include <math/vector2d.h>
+#include <set>
 
 LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
 
 wxString AltiumPropertyToKiCadString( const wxString& aString );
 
-wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&                     aString,
-                                                  const std::map<wxString, wxString>& aOverrides );
+/**
+ * Escape the KiCad variables and expressions in literal Altium text, which Altium shows as typed.
+ */
+wxString AltiumEscapeTextVars( const wxString& aText );
 
+/**
+ * Convert the special strings in Altium schematic text to KiCad variables.
+ *
+ * Literal text is escaped, since Altium shows a ${ or @{ in it as typed.
+ *
+ * @param[out] aUnmapped, when not null, collects each variable that is not an override.
+ */
+wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&                     aString,
+                                                  const std::map<wxString, wxString>& aOverrides,
+                                                  std::set<wxString>*                 aUnmapped = nullptr );
+
+/**
+ * Convert the special strings in Altium PCB text to KiCad variables.
+ *
+ * @param[out] aUnmapped, when not null, collects each variable that is not an override, which KiCad
+ *             cannot resolve by itself.
+ */
 wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                     aString,
-                                                const std::map<wxString, wxString>& aOverrides );
+                                                const std::map<wxString, wxString>& aOverrides,
+                                                std::set<wxString>*                 aUnmapped = nullptr );
 
 wxString AltiumPinNamesToKiCad( wxString& aString );
 

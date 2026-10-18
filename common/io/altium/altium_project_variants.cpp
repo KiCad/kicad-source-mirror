@@ -23,6 +23,8 @@
 #include <boost/uuid/string_generator.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
+#include <project.h>
+#include <set>
 #include <wx/fileconf.h>
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -156,6 +158,59 @@ std::map<wxString, wxString> ParseAltiumProjectParameters( const wxString& aPrjP
     }
 
     return parameters;
+}
+
+
+bool AltiumPowerPortNamesTakePriority( const wxString& aPrjPcbPath )
+{
+    wxFileConfig config( wxEmptyString, wxEmptyString, wxEmptyString, absoluteProjectPath( aPrjPcbPath ),
+                         wxCONFIG_USE_NO_ESCAPE_CHARACTERS );
+
+    return config.ReadLong( wxS( "Design/PowerPortNamesTakePriority" ), 0 ) != 0;
+}
+
+
+void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
+                                            const std::map<wxString, wxString>& aParameters )
+{
+    if( !aProject )
+        return;
+
+    // Names KiCad resolves contextually (board fields, title block, special strings). Importing
+    // them as project variables would shadow nothing useful and could surprise the user, so they
+    // are left to native resolution.
+    static const std::set<wxString> reserved = {
+        wxS( "LAYER" ),         wxS( "FILENAME" ),      wxS( "FILEPATH" ),
+        wxS( "PROJECTNAME" ),   wxS( "VARIANT" ),       wxS( "VARIANT_DESC" ),
+        wxS( "ISSUE_DATE" ),    wxS( "CURRENT_DATE" ),  wxS( "CURRENT_TIME_LOCALE" ),
+        wxS( "CURRENT_TIME_HH_MM_SS" ), wxS( "REVISION" ), wxS( "TITLE" ),
+        wxS( "COMPANY" ),       wxS( "COMMENT1" ),      wxS( "COMMENT2" ),
+        wxS( "COMMENT3" ),      wxS( "COMMENT4" ),      wxS( "COMMENT5" ),
+        wxS( "COMMENT6" ),      wxS( "COMMENT7" ),      wxS( "COMMENT8" ),
+        wxS( "COMMENT9" ),      wxS( "VCSHASH" ),       wxS( "VCSSHORTHASH" ),
+        wxS( "KICAD_VERSION" ), wxS( "PAPER" ),         wxS( "SHEETNAME" ),
+        wxS( "SHEETPATH" ),     wxS( "DRC_WARNING" ),   wxS( "DRC_ERROR" ),
+        wxS( "ERC_WARNING" ),   wxS( "ERC_ERROR" )
+    };
+
+    std::map<wxString, wxString>& textVars = aProject->GetTextVars();
+    bool                          added = false;
+
+    for( const auto& [name, value] : aParameters )
+    {
+        if( reserved.count( name ) )
+            continue;
+
+        // Don't clobber a variable the user (or a prior import step) already set.
+        if( textVars.count( name ) )
+            continue;
+
+        textVars[name] = value;
+        added = true;
+    }
+
+    if( added )
+        aProject->IncrementTextVarsTicker();
 }
 
 

@@ -26,6 +26,7 @@
 #include <functional>
 #include <layer_ids.h>
 #include <map>
+#include <set>
 #include <memory>
 #include <vector>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
@@ -167,6 +168,9 @@ public:
 
     std::unique_ptr<FOOTPRINT> ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
                                                const wxString&           aFootprintName );
+
+    /// Special strings in the parsed text that KiCad has no variable for.
+    const std::set<wxString>& GetSpecialStrings() const { return m_specialStrings; }
 
 private:
     void checkpoint();
@@ -405,6 +409,7 @@ private:
 
     PROGRESS_REPORTER* m_progressReporter;   ///< optional; may be nullptr
     REPORTER*          m_reporter;           ///< optional; may be nullptr
+    std::set<wxString> m_specialStrings;     ///< special strings in text that KiCad has no variable for
     unsigned           m_doneCount;
     unsigned           m_lastProgressCount;
     unsigned           m_totalCount;         ///< for progress reporting

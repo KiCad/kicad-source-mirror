@@ -121,50 +121,6 @@ void ApplyAltiumProjectVariantsToBoard( BOARD* aBoard,
     }
 }
 
-void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
-                                            const std::map<wxString, wxString>& aParameters )
-{
-    if( !aProject )
-        return;
-
-    // Names KiCad resolves contextually (board fields, title block, special strings). Importing
-    // them as project variables would shadow nothing useful and could surprise the user, so they
-    // are left to native resolution.
-    static const std::set<wxString> reserved = {
-        wxS( "LAYER" ),         wxS( "FILENAME" ),      wxS( "FILEPATH" ),
-        wxS( "PROJECTNAME" ),   wxS( "VARIANT" ),       wxS( "VARIANT_DESC" ),
-        wxS( "ISSUE_DATE" ),    wxS( "CURRENT_DATE" ),  wxS( "CURRENT_TIME_LOCALE" ),
-        wxS( "CURRENT_TIME_HH_MM_SS" ), wxS( "REVISION" ), wxS( "TITLE" ),
-        wxS( "COMPANY" ),       wxS( "COMMENT1" ),      wxS( "COMMENT2" ),
-        wxS( "COMMENT3" ),      wxS( "COMMENT4" ),      wxS( "COMMENT5" ),
-        wxS( "COMMENT6" ),      wxS( "COMMENT7" ),      wxS( "COMMENT8" ),
-        wxS( "COMMENT9" ),      wxS( "VCSHASH" ),       wxS( "VCSSHORTHASH" ),
-        wxS( "KICAD_VERSION" ), wxS( "PAPER" ),         wxS( "SHEETNAME" ),
-        wxS( "SHEETPATH" ),     wxS( "DRC_WARNING" ),   wxS( "DRC_ERROR" ),
-        wxS( "ERC_WARNING" ),   wxS( "ERC_ERROR" )
-    };
-
-    std::map<wxString, wxString>& textVars = aProject->GetTextVars();
-    bool                          added = false;
-
-    for( const auto& [name, value] : aParameters )
-    {
-        if( reserved.count( name ) )
-            continue;
-
-        // Don't clobber a variable the user (or a prior import step) already set.
-        if( textVars.count( name ) )
-            continue;
-
-        textVars[name] = value;
-        added = true;
-    }
-
-    if( added )
-        aProject->IncrementTextVarsTicker();
-}
-
-
 void LoadAltiumBoard( const wxString& aFileName, BOARD* aBoard,
                       const std::map<ALTIUM_PCB_DIR, std::string>& aMapping,
                       const std::map<std::string, UTF8>* aProperties, PROJECT* aProject,
@@ -174,10 +130,13 @@ void LoadAltiumBoard( const wxString& aFileName, BOARD* aBoard,
     // The compound-file constructor already translates CFB errors to IO_ERROR.
     ALTIUM_PCB_COMPOUND_FILE altiumPcbFile( aFileName );
 
+    std::set<wxString> specialStrings;
+
     try
     {
         ALTIUM_PCB pcb( aBoard, aProgressReporter, aLayerMappingHandler, aReporter );
         pcb.Parse( altiumPcbFile, aMapping, aProperties );
+        specialStrings = pcb.GetSpecialStrings();
     }
     catch( CFB::CFBException& exception )
     {
@@ -195,6 +154,13 @@ void LoadAltiumBoard( const wxString& aFileName, BOARD* aBoard,
 
         ApplyAltiumProjectParametersToProject( aProject,
                                                ParseAltiumProjectParameters( projectFile ) );
+    }
+
+    // what is still undefined has no value, which Altium shows as nothing
+    if( aProject )
+    {
+        for( const wxString& name : specialStrings )
+            aProject->GetTextVars().emplace( name, wxString() );
     }
 }
 

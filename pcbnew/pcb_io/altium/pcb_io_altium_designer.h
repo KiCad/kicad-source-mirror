@@ -43,17 +43,6 @@ void ApplyAltiumProjectVariantsToBoard( BOARD* aBoard,
                                         const std::vector<ALTIUM_PROJECT_VARIANT>& aVariants );
 
 
-/**
- * Register Altium project parameters as KiCad project text variables so that imported board
- * text referencing special strings (e.g. ".PCB_Revision") resolves to its value.
- *
- * Existing project variables are not overwritten, and names that collide with KiCad's reserved
- * or contextually resolved variables are skipped to preserve native resolution.
- */
-void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
-                                            const std::map<wxString, wxString>& aParameters );
-
-
 void LoadAltiumBoard( const wxString& aFileName, BOARD* aBoard,
                       const std::map<ALTIUM_PCB_DIR, std::string>& aMapping,
                       const std::map<std::string, UTF8>* aProperties, PROJECT* aProject,
