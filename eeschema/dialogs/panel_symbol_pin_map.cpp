@@ -518,10 +518,10 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
     auto currentFootprint =
             [&]() -> wxString
             {
-                for( const ASSOCIATED_FOOTPRINT& a : m_associations )
+                for( const ASSOCIATED_FOOTPRINT& assoc : m_associations )
                 {
-                    if( a.m_MapName == mapName )
-                        return a.m_FootprintLibId.GetUniStringLibId();
+                    if( assoc.m_MapName == mapName )
+                        return assoc.m_FootprintLibId.GetUniStringLibId();
                 }
 
                 return wxEmptyString;
@@ -540,9 +540,9 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
         return;
     }
 
-    for( const ASSOCIATED_FOOTPRINT& a : m_associations )
+    for( const ASSOCIATED_FOOTPRINT& assoc : m_associations )
     {
-        if( a.m_MapName != mapName && a.m_FootprintLibId == fpId && !fpid.IsEmpty() )
+        if( assoc.m_MapName != mapName && assoc.m_FootprintLibId == fpId && !fpid.IsEmpty() )
         {
             wxMessageBox( _( "That footprint is already assigned to another pin map." ), _( "Assign Footprint" ),
                           wxOK | wxICON_INFORMATION, this );
@@ -552,9 +552,9 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
     }
 
     m_associations.erase( std::remove_if( m_associations.begin(), m_associations.end(),
-                                          [&]( const ASSOCIATED_FOOTPRINT& a )
+                                          [&]( const ASSOCIATED_FOOTPRINT& assoc )
                                           {
-                                              return a.m_MapName == mapName;
+                                              return assoc.m_FootprintLibId == fpId && assoc.m_MapName == mapName;
                                           } ),
                           m_associations.end() );
 
