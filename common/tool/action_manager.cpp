@@ -263,11 +263,18 @@ std::string ACTION_MANAGER::FrameNamespacePrefix( FRAME_T aFrameType )
     case FRAME_SIMULATOR:
         return "eeschema.";
 
+    case FRAME_CVPCB:
+    case FRAME_CVPCB_DISPLAY:
+        return "cvpcb.";
+
     case FRAME_GERBER:
         return "gerbview.";
 
     case FRAME_PL_EDITOR:
         return "plEditor.";
+
+    case KICAD_MAIN_FRAME_T:
+        return "kicad.";
 
     default:
         return "";
