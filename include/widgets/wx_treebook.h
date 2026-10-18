@@ -44,7 +44,21 @@ public:
 
     wxWindow* ResolvePage( size_t aPage );
 
+    /**
+     * Build a page for indexing without enabling validation or settings writeback.
+     * Showing the page or calling ResolvePage() enables both.
+     */
+    wxWindow* ResolvePageForSearch( size_t aPage );
+
+    /**
+     * @return the page contents, or nullptr for a lazy page that has not been shown or resolved.
+     */
     wxWindow* GetResolvedPage( size_t aPage );
+
+    wxTreeItemId GetPageTreeItem( size_t aPage ) const { return m_treeIds[aPage]; }
+
+private:
+    bool m_resolvingForSearch;
 };
 
 

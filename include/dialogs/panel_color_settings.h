@@ -71,6 +71,12 @@ protected:
      */
     void createThemeList( const wxString& aCurrent );
 
+    /**
+     * @return the registered theme behind a theme list entry, or nullptr for the separator and "New Theme...".
+     *         Another panel may reload the themes after the list is built, which leaves its stored pointers stale.
+     */
+    COLOR_SETTINGS* themeAt( int aIndex ) const;
+
     void createSwatch( int aLayer, const wxString& aName );
 
     void updateColor( int aLayer, const KIGFX::COLOR4D& aColor );

@@ -27,6 +27,7 @@
 
 class WX_INFOBAR;
 class WX_TREEBOOK;
+class wxSearchCtrl;
 
 class PAGED_DIALOG : public DIALOG_SHIM
 {
@@ -77,6 +78,10 @@ protected:
     void         onTreeLeftDown( wxMouseEvent& aEvent );
     void         onTreeItemActivated( wxTreeEvent& aEvent );
 
+    void onSearchText( wxCommandEvent& aEvent );
+    void onSearchEnter( wxCommandEvent& aEvent );
+    void onSearchCharHook( wxKeyEvent& aEvent );
+
     WX_TREEBOOK* m_treebook;
     wxButton*    m_auxiliaryButton;
     wxButton*    m_resetButton;
@@ -84,7 +89,19 @@ protected:
     WX_INFOBAR*  m_infoBar;
 
 private:
+    void buildSearchIndex();
+
+    /**
+     * Bold the pages matching the search box and grey out the rest.
+     * @return the page to show: the current page if it matches, else the first matching page with controls,
+     *         or wxNOT_FOUND when nothing matches.
+     */
+    int applySearch();
+
     wxString    m_title;
+
+    wxSearchCtrl*                      m_searchCtrl;
+    std::vector<std::vector<wxString>> m_searchIndex; ///< Lowercased page title and labels, per page
 
     wxBoxSizer* m_buttonsSizer;
 

@@ -35,6 +35,8 @@
 #include <wx/menu.h>
 #include <wx/textdlg.h>
 
+#include <algorithm>
+
 // Button ID starting point
 constexpr int FIRST_BUTTON_ID = 1800;
 
@@ -96,7 +98,7 @@ bool PANEL_COLOR_SETTINGS::Show( bool show )
 
         if( themeSel >= 0 )
         {
-            COLOR_SETTINGS* settings = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( themeSel ) );
+            COLOR_SETTINGS* settings = themeAt( themeSel );
 
             if( settings )
                 *m_currentSettings = *settings;
@@ -176,7 +178,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
     }
     else
     {
-        COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( idx ) );
+        COLOR_SETTINGS* selected = themeAt( idx );
 
         if( selected->GetFilename() != m_currentSettings->GetFilename() )
         {
@@ -191,6 +193,26 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
             updateSwatches();
         }
     }
+}
+
+
+COLOR_SETTINGS* PANEL_COLOR_SETTINGS::themeAt( int aIndex ) const
+{
+    COLOR_SETTINGS* listed = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( aIndex ) );
+
+    std::vector<COLOR_SETTINGS*> themes = Pgm().GetSettingsManager().GetColorSettingsList();
+
+    // Prefer the original pointer because fallback themes can share the filename "user".
+    if( !listed || std::ranges::find( themes, listed ) != themes.end() )
+        return listed;
+
+    for( COLOR_SETTINGS* settings : themes )
+    {
+        if( settings->GetFilename() == listed->GetFilename() )
+            return settings;
+    }
+
+    return listed;
 }
 
 
@@ -253,8 +275,7 @@ void PANEL_COLOR_SETTINGS::createSwatch( int aLayer, const wxString& aName )
         onNewThemeSelected();
     }
 
-    void*           clientData = m_cbTheme->GetClientData( m_cbTheme->GetSelection() );
-    COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( clientData );
+    COLOR_SETTINGS* selected = themeAt( m_cbTheme->GetSelection() );
 
     int             id = FIRST_BUTTON_ID + aLayer;
     COLOR4D         defaultColor    = selected->GetDefaultColor( aLayer );
@@ -290,7 +311,7 @@ void PANEL_COLOR_SETTINGS::ShowColorContextMenu( wxMouseEvent& aEvent, int aLaye
 
     if( themeSel >= 0 )
     {
-        COLOR_SETTINGS* selected = static_cast<COLOR_SETTINGS*>( m_cbTheme->GetClientData( themeSel ) );
+        COLOR_SETTINGS* selected = themeAt( themeSel );
 
         wxCHECK_RET( selected, wxT( "Invalid color theme selected" ) );
 

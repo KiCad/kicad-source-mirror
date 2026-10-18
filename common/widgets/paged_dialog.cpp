@@ -18,6 +18,8 @@
  */
 
 #include <confirm.h>
+#include <core/profile.h>
+#include <trace_helpers.h>
 #include <widgets/resettable_panel.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_panel.h>
@@ -26,13 +28,25 @@
 #include <widgets/ui_common.h>
 
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/display.h>
 #include <wx/grid.h>
+#include <wx/hyperlink.h>
+#include <wx/log.h>
+#include <wx/radiobox.h>
+#include <wx/radiobut.h>
+#include <wx/settings.h>
 #include <wx/sizer.h>
+#include <wx/srchctrl.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/tokenzr.h>
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
 #include <wx/listctrl.h>
 #include <wx/stc/stc.h>
+#include <wx/utils.h>
+#include <wx/wupdlock.h>
 
 #include <paths.h>
 
@@ -46,15 +60,15 @@ std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
 
 
-PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
-                            bool aShowOpenFolder, const wxString& aAuxiliaryAction,
-                            const wxSize& aInitialSize ) :
+PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset, bool aShowOpenFolder,
+                            const wxString& aAuxiliaryAction, const wxSize& aInitialSize ) :
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, aInitialSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_auxiliaryButton( nullptr ),
         m_resetButton( nullptr ),
         m_openPrefsDirButton( nullptr ),
-        m_title( aTitle )
+        m_title( aTitle ),
+        m_searchCtrl( nullptr )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
@@ -67,6 +81,21 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     treebookPanel->SetBorders( false, false, false, true );
     wxBoxSizer* treebookSizer = new wxBoxSizer( wxVERTICAL );
     treebookPanel->SetSizer( treebookSizer );
+
+    m_searchCtrl = new wxSearchCtrl( treebookPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                     wxTE_PROCESS_ENTER );
+    m_searchCtrl->ShowCancelButton( true );
+    m_searchCtrl->SetDescriptiveText( _( "Search settings" ) );
+    treebookSizer->Add( m_searchCtrl, 0, wxTOP | wxBOTTOM | wxLEFT, 4 );
+
+    // The query is navigation state, not a setting
+    ExcludeFromControlUndoRedo( m_searchCtrl );
+    OptOut( m_searchCtrl );
+
+    // The sizes callers pass were chosen for a tree that started at the top of the dialog, and
+    // DIALOG_SHIM applies that size on the first open, so grow it by the row the search adds
+    if( m_initialSize != wxDefaultSize )
+        m_initialSize.y += m_searchCtrl->GetBestSize().y + 2 * FromDIP( 4 );
 
     m_treebook = new WX_TREEBOOK( treebookPanel, wxID_ANY );
     m_treebook->SetFont( KIUI::GetControlFont( this ) );
@@ -137,6 +166,11 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     m_treebook->Bind( wxEVT_TREEBOOK_PAGE_CHANGING, &PAGED_DIALOG::onPageChanging, this );
     m_treebook->GetTreeCtrl()->Bind( wxEVT_LEFT_DOWN, &PAGED_DIALOG::onTreeLeftDown, this );
     m_treebook->GetTreeCtrl()->Bind( wxEVT_TREE_ITEM_ACTIVATED, &PAGED_DIALOG::onTreeItemActivated, this );
+
+    m_searchCtrl->Bind( wxEVT_TEXT, &PAGED_DIALOG::onSearchText, this );
+    m_searchCtrl->Bind( wxEVT_SEARCH_CANCEL, &PAGED_DIALOG::onSearchText, this );
+    m_searchCtrl->Bind( wxEVT_SEARCH, &PAGED_DIALOG::onSearchEnter, this );
+    m_searchCtrl->Bind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onSearchCharHook, this );
 }
 
 
@@ -160,6 +194,14 @@ void PAGED_DIALOG::finishInitialization()
     ctrlSize.x += 20;
     m_treebook->GetTreeCtrl()->SetMinSize( ctrlSize );
     m_treebook->Layout();
+
+#ifdef __WXGTK__
+    // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
+    // See https://gitlab.com/kicad/code/kicad/-/issues/9019
+    m_searchCtrl->SetMinSize( wxSize( ctrlSize.x, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
+#else
+    m_searchCtrl->SetMinSize( wxSize( ctrlSize.x, -1 ) );
+#endif
 
     // Note: do NOT call finishDialogSettings() here.  At this point the lazy pages have not
     // yet been resolved, so the sizer minimum is computed from empty placeholder pages.
@@ -215,6 +257,11 @@ PAGED_DIALOG::~PAGED_DIALOG()
     m_treebook->Unbind( wxEVT_TREEBOOK_PAGE_CHANGING, &PAGED_DIALOG::onPageChanging, this );
     m_treebook->GetTreeCtrl()->Unbind( wxEVT_LEFT_DOWN, &PAGED_DIALOG::onTreeLeftDown, this );
     m_treebook->GetTreeCtrl()->Unbind( wxEVT_TREE_ITEM_ACTIVATED, &PAGED_DIALOG::onTreeItemActivated, this );
+
+    m_searchCtrl->Unbind( wxEVT_TEXT, &PAGED_DIALOG::onSearchText, this );
+    m_searchCtrl->Unbind( wxEVT_SEARCH_CANCEL, &PAGED_DIALOG::onSearchText, this );
+    m_searchCtrl->Unbind( wxEVT_SEARCH, &PAGED_DIALOG::onSearchEnter, this );
+    m_searchCtrl->Unbind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onSearchCharHook, this );
 }
 
 
@@ -468,6 +515,214 @@ void PAGED_DIALOG::onTreeItemActivated( wxTreeEvent& aEvent )
     if( aEvent.GetItem() == m_clickExpandedItem )
     {
         m_clickExpandedItem = wxTreeItemId();
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+static void collectSearchText( wxWindow* aWindow, std::vector<wxString>& aTexts )
+{
+    for( wxWindow* child : aWindow->GetChildren() )
+    {
+        // Inactive notebook pages are hidden but still part of the panel
+        if( !child->IsShown() && !dynamic_cast<wxBookCtrlBase*>( aWindow ) )
+            continue;
+
+        // wxRadioBox derives from wxStaticBox on MSW, so test it first
+        if( wxRadioBox* radioBox = dynamic_cast<wxRadioBox*>( child ) )
+        {
+            aTexts.push_back( radioBox->GetLabelText().Lower() );
+
+            for( unsigned int ii = 0; ii < radioBox->GetCount(); ++ii )
+                aTexts.push_back( wxStripMenuCodes( radioBox->GetString( ii ), wxStrip_Mnemonics ).Lower() );
+        }
+        else if( dynamic_cast<wxStaticText*>( child ) || dynamic_cast<wxCheckBox*>( child )
+                 || dynamic_cast<wxRadioButton*>( child ) || dynamic_cast<wxButton*>( child )
+                 || dynamic_cast<wxStaticBox*>( child ) || dynamic_cast<wxHyperlinkCtrl*>( child ) )
+        {
+            aTexts.push_back( static_cast<wxControl*>( child )->GetLabelText().Lower() );
+        }
+        else if( wxBookCtrlBase* book = dynamic_cast<wxBookCtrlBase*>( child ) )
+        {
+            for( size_t ii = 0; ii < book->GetPageCount(); ++ii )
+                aTexts.push_back( book->GetPageText( ii ).Lower() );
+        }
+        else if( wxGrid* grid = dynamic_cast<wxGrid*>( child ) )
+        {
+            for( int col = 0; col < grid->GetNumberCols(); ++col )
+                aTexts.push_back( grid->GetColLabelValue( col ).Lower() );
+        }
+
+        collectSearchText( child, aTexts );
+    }
+}
+
+
+void PAGED_DIALOG::buildSearchIndex()
+{
+    PROF_TIMER           timer;
+    wxBusyCursor         busy;
+    wxWindowUpdateLocker updateLock( m_treebook );
+
+    m_searchIndex.assign( m_treebook->GetPageCount(), {} );
+
+    for( size_t ii = 0; ii < m_searchIndex.size(); ++ii )
+    {
+        wxString title = m_treebook->GetPageText( ii );
+        int      parent = m_treebook->GetPageParent( ii );
+
+        // Lets "schematic colors" find the Colors page under Schematic Editor
+        if( parent != wxNOT_FOUND )
+            title = m_treebook->GetPageText( parent ) + wxS( " " ) + title;
+
+        m_searchIndex[ii].push_back( title.Lower() );
+        collectSearchText( m_treebook->ResolvePageForSearch( ii ), m_searchIndex[ii] );
+    }
+
+    timer.Stop();
+    wxLogTrace( traceUiProfile, wxS( "Indexing %zu pages of '%s' for search took %s." ), m_searchIndex.size(), m_title,
+                timer.to_string() );
+}
+
+
+int PAGED_DIALOG::applySearch()
+{
+    wxTreeCtrl*           tree = m_treebook->GetTreeCtrl();
+    size_t                count = m_treebook->GetPageCount();
+    std::vector<wxString> terms;
+    wxStringTokenizer     tokenizer( m_searchCtrl->GetValue().Lower(), wxS( " \t" ) );
+
+    while( tokenizer.HasMoreTokens() )
+        terms.push_back( tokenizer.GetNextToken() );
+
+    if( terms.empty() )
+    {
+        for( size_t ii = 0; ii < count; ++ii )
+        {
+            tree->SetItemTextColour( m_treebook->GetPageTreeItem( ii ), wxNullColour );
+            tree->SetItemBold( m_treebook->GetPageTreeItem( ii ), false );
+        }
+
+        return wxNOT_FOUND;
+    }
+
+    if( m_searchIndex.size() != count )
+        buildSearchIndex();
+
+    auto containsAllTerms = [&]( const wxString& aText )
+    {
+        for( const wxString& term : terms )
+        {
+            if( !aText.Contains( term ) )
+                return false;
+        }
+
+        return true;
+    };
+
+    std::vector<bool> matches( count, false );
+
+    for( size_t ii = 0; ii < count; ++ii )
+        matches[ii] = std::ranges::any_of( m_searchIndex[ii], containsAllTerms );
+
+    for( size_t ii = 0; ii < count; ++ii )
+    {
+        if( !matches[ii] )
+            continue;
+
+        for( int parent = m_treebook->GetPageParent( ii ); parent != wxNOT_FOUND;
+             parent = m_treebook->GetPageParent( parent ) )
+        {
+            matches[parent] = true;
+            m_treebook->ExpandNode( parent );
+        }
+    }
+
+    wxColour greyed = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    int      current = m_treebook->GetSelection();
+    int      target = wxNOT_FOUND;
+
+    for( size_t ii = 0; ii < count; ++ii )
+    {
+        tree->SetItemBold( m_treebook->GetPageTreeItem( ii ), matches[ii] );
+        tree->SetItemTextColour( m_treebook->GetPageTreeItem( ii ), matches[ii] ? wxNullColour : greyed );
+
+        // Keep the current match selected and skip empty category pages.
+        if( matches[ii] && !m_treebook->GetPage( ii )->GetChildren().IsEmpty()
+            && ( target == wxNOT_FOUND || static_cast<int>( ii ) == current ) )
+        {
+            target = static_cast<int>( ii );
+        }
+    }
+
+    return target;
+}
+
+
+void PAGED_DIALOG::onSearchText( wxCommandEvent& aEvent )
+{
+    // Consuming the cancel event stops the generic control from clearing itself
+    if( aEvent.GetEventType() == wxEVT_SEARCH_CANCEL )
+    {
+        m_searchCtrl->Clear();
+        return;
+    }
+
+    // Required to avoid interaction with SetHint()
+    aEvent.Skip();
+
+    wxWindow* focus = wxWindow::FindFocus();
+    bool      hadFocus = focus && ( focus == m_searchCtrl || focus->IsDescendant( m_searchCtrl ) );
+    long      selFrom = 0;
+    long      selTo = 0;
+
+    m_searchCtrl->GetSelection( &selFrom, &selTo );
+
+    int target = applySearch();
+
+    if( target != wxNOT_FOUND && target != m_treebook->GetSelection() )
+        m_treebook->SetSelection( target );
+
+    // Page construction can move focus. Keep focus on any error that prevents a page change.
+    bool vetoed = target != wxNOT_FOUND && target != m_treebook->GetSelection();
+
+    if( hadFocus && !vetoed )
+    {
+        // Refocusing selects the text on some platforms and the next key would replace the query
+        m_searchCtrl->SetFocus();
+        m_searchCtrl->SetSelection( selFrom, selTo );
+    }
+}
+
+
+void PAGED_DIALOG::onSearchEnter( wxCommandEvent& aEvent )
+{
+    int target = applySearch();
+
+    if( target == wxNOT_FOUND )
+        return;
+
+    if( target != m_treebook->GetSelection() )
+        m_treebook->SetSelection( target );
+
+    if( m_treebook->GetSelection() == target )
+        m_treebook->GetTreeCtrl()->SetFocus();
+}
+
+
+void PAGED_DIALOG::onSearchCharHook( wxKeyEvent& aEvent )
+{
+    // First Escape clears the query. A second closes the dialog.
+    // Handle this here so DIALOG_SHIM does not restore the old query.
+    if( aEvent.GetKeyCode() == WXK_ESCAPE )
+    {
+        if( !m_searchCtrl->IsEmpty() )
+            m_searchCtrl->Clear();
+        else
+            EmulateButtonClickIfPresent( wxID_CANCEL );
+
         return;
     }
 
