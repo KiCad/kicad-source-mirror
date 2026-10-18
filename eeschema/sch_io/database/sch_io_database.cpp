@@ -296,6 +296,20 @@ size_t SCH_IO_DATABASE::computeSignature( const TABLE_RESULT_LIST& aTableResults
 }
 
 
+wxString SCH_IO_DATABASE::SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
+                                            const DATABASE_CONNECTION::ROW& aRow, std::string* aRawKey )
+{
+    std::string rawName = std::any_cast<std::string>( aRow.at( aTable.key_col ) );
+    UTF8        sanitizedName = LIB_ID::FixIllegalChars( rawName, false );
+    std::string prefix = ( aGloballyUniqueKeys || aTable.name.empty() ) ? "" : fmt::format( "{}/", aTable.name );
+
+    if( aRawKey )
+        *aRawKey = rawName;
+
+    return wxString( fmt::format( "{}{}", prefix, sanitizedName.c_str() ) );
+}
+
+
 bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
         std::map<wxString, std::unique_ptr<LIB_SYMBOL>>& aSymbolCache,
         std::map<wxString, std::pair<std::string, std::string>>& aSanitizedNameMap )
@@ -307,14 +321,8 @@ bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
             if( !result.contains( table->key_col ) )
                 continue;
 
-            std::string rawName = std::any_cast<std::string>( result.at( table->key_col ) );
-            UTF8        sanitizedName = LIB_ID::FixIllegalChars( rawName, false );
-            std::string sanitizedKey = sanitizedName.c_str();
-            std::string prefix = ( m_settings->m_GloballyUniqueKeys || table->name.empty() )
-                                         ? ""
-                                         : fmt::format( "{}/", table->name );
-            std::string sanitizedDisplayName = fmt::format( "{}{}", prefix, sanitizedKey );
-            wxString    name( sanitizedDisplayName );
+            std::string rawName;
+            wxString    name = SymbolNameForRow( *table, m_settings->m_GloballyUniqueKeys, result, &rawName );
 
             aSanitizedNameMap[name] = std::make_pair( table->name, rawName );
 

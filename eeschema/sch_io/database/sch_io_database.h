@@ -107,6 +107,10 @@ public:
      */
     static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_LIB_SETTINGS& aSettings );
 
+    /// @return the symbol name a row is listed under; aRow must hold the table's key column
+    static wxString SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
+                                      const DATABASE_CONNECTION::ROW& aRow, std::string* aRawKey = nullptr );
+
 private:
     typedef std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> TABLE_RESULT_LIST;
 
