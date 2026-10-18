@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <connection_graph.h>
@@ -154,6 +155,52 @@ BOOST_AUTO_TEST_CASE( Issue22943_SourceLibrarySymbolLibId )
 }
 
 
+// A sheet may not take the file of the root or of a sheet the schematic already holds, or saving
+// would write one over the other
+BOOST_AUTO_TEST_CASE( SheetsClaimFilesNoOtherSheetSavesTo )
+{
+    KI_TEST::SCOPED_TEMP_DIR directory( "altium-sheet-files" );
+    const wxString          projectFile = directory.PathStr() + "/2_cubesat_bus.kicad_pro";
+    BOOST_REQUIRE( wxCopyFile( KI_TEST::GetEeschemaTestDataDir() + "issue13591.kicad_pro", projectFile ) );
+
+    SETTINGS_MANAGER         settings;
+    BOOST_REQUIRE( settings.LoadProject( projectFile ) );
+
+    SCHEMATIC schematic( nullptr );
+    schematic.SetProject( &settings.Prj() );
+    schematic.Reset();
+
+    auto sheetFiles =
+            []( SCH_SHEET* aSheet )
+            {
+                std::set<wxString> files;
+
+                for( SCH_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+                    files.insert( static_cast<SCH_SHEET*>( item )->GetFileName() );
+
+                return files;
+            };
+
+    SCH_IO_ALTIUM firstImport;
+    SCH_SHEET*    root = firstImport.LoadSchematicFile( dataFile( "1_cover.SchDoc" ), &schematic );
+    BOOST_REQUIRE( root );
+
+    const std::set<wxString> hostFiles = sheetFiles( root );
+    BOOST_CHECK( hostFiles.contains( wxS( "2_cubesat_bus_1.kicad_sch" ) ) );
+
+    std::map<std::string, UTF8> properties{ { "hierarchical_sheet_load", "1" } };
+    auto                        appended = std::make_unique<SCH_SHEET>( &schematic );
+    appended->SetFileName( dataFile( "1_cover.SchDoc" ) );
+
+    SCH_IO_ALTIUM secondImport;
+    BOOST_REQUIRE( secondImport.LoadSchematicFile( dataFile( "1_cover.SchDoc" ), &schematic, appended.get(),
+                                                   &properties ) );
+
+    for( const wxString& file : sheetFiles( appended.get() ) )
+        BOOST_CHECK_MESSAGE( !hostFiles.contains( file ), file << " is already saved by the host" );
+}
+
+
 // https://gitlab.com/kicad/code/kicad/-/issues/24861
 BOOST_AUTO_TEST_CASE( Issue24861_RepeatedSchematicChannels )
 {
@@ -213,6 +260,35 @@ BOOST_AUTO_TEST_CASE( Issue24861_RepeatedSchematicChannels )
                                                         wxT( "LED1_CH3" ) } ) );
     BOOST_CHECK( resistorReferences == std::set<wxString>( { wxT( "R1_CH1" ), wxT( "R1_CH2" ),
                                                              wxT( "R1_CH3" ) } ) );
+}
+
+
+// Repeated channels save one file, so they must share one screen and the top-level sheet uuid must
+// match its file uuid or the per-channel references are dropped when the project is reloaded
+BOOST_AUTO_TEST_CASE( RepeatedChannelsShareOneSavedScreen )
+{
+    SCH_IO_ALTIUM plugin;
+
+    std::map<std::string, UTF8> properties;
+    properties.emplace( "project_file", UTF8( issue24861DataFile( wxT( "Repeated_Schematic.PrjPcb" ) ) ) );
+    properties.emplace( "sch0", UTF8( issue24861DataFile( wxT( "Repeated_Schematic.SchDoc" ) ) ) );
+    properties.emplace( "sch1", UTF8( issue24861DataFile( wxT( "Channel.SchDoc" ) ) ) );
+
+    BOOST_REQUIRE( plugin.LoadSchematicFile( wxEmptyString, &m_schematic, nullptr, &properties ) );
+
+    const std::vector<SCH_SHEET*> topLevelSheets = m_schematic.GetTopLevelSheets();
+    BOOST_REQUIRE_EQUAL( topLevelSheets.size(), 1 );
+    BOOST_CHECK( topLevelSheets.front()->m_Uuid == topLevelSheets.front()->GetScreen()->GetUuid() );
+
+    std::set<SCH_SCREEN*> channelScreens;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic.Hierarchy() )
+    {
+        if( sheetPath.Last()->GetName().StartsWith( wxT( "CH" ) ) )
+            channelScreens.insert( sheetPath.LastScreen() );
+    }
+
+    BOOST_CHECK_EQUAL( channelScreens.size(), 1 );
 }
 
 

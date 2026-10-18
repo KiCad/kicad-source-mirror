@@ -22,6 +22,7 @@
 #define _SCH_IO_ALTIUM_H_
 
 #include <memory>
+#include <set>
 #include <sch_sheet_path.h>
 #include <vector>
 #include <sch_io/sch_io.h>
@@ -132,6 +133,14 @@ public:
 
     void ParseAltiumSch( const wxString& aFileName );
 
+    /// Give a sheet whose source file is missing an empty screen with a file of its own; aMissingFile
+    /// is empty for a converted signal harness.
+    void attachEmptySheetScreen( SCH_SHEET* aSheet, const wxString& aMissingFile );
+
+    /// Claim a file in the project folder for a sheet screen that neither the root nor another sheet
+    /// holds, suffixing aStem as needed.
+    wxString claimSheetFile( const wxString& aStem );
+
     /// Remove sheet symbols referencing a parse-stack file (an unrepresentable cycle), converting
     /// their pins to hierarchical labels and clearing their sheet-instance records.
     void pruneCyclicSheets( const std::vector<SCH_SHEET*>& aCyclicSheets, SCH_SCREEN* aScreen );
@@ -228,6 +237,7 @@ private:
     wxString       m_rootFilepath;      // The file path of the root sheet being imported
     SCH_SHEET*     m_rootSheet;         // The root sheet of the schematic being loaded..
     SCH_SHEET_PATH m_sheetPath;
+    std::set<wxString> m_unsetSheetParams;   // Sheet parameters Altium leaves as "*"
     SCHEMATIC*     m_schematic;         // Passed to Load(), the schematic object being loaded
     wxString       m_libName;           // Library name to save symbols
     bool           m_isIntLib;          // Flag to indicate Integrated Library
@@ -267,12 +277,36 @@ private:
     // Persists across sheets so variant application can match by Altium UniqueId
     std::map<const SCH_SYMBOL*, wxString> m_altiumSymbolToUid;
 
+    // Special strings sheet text refers to, which Altium resolves to nothing when no value exists
+    std::set<wxString> m_sheetSpecialStrings;
+
     // Cache the error messages to avoid duplicate messages
     std::unordered_map<wxString, SEVERITY > m_errorMessages;
 
     // Canonical parse-stack paths, ref-counted so a multi-page block holds all sibling members at
     // once. Breaks cyclic OrCad sheet references. See PARSE_FILE_GUARD.
     std::map<wxString, int> m_parsingFiles;
+
+    // Fully parsed sub-sheet screens by their ordered source files, shared by repeated channels
+    std::map<std::vector<wxString>, SCH_SCREEN*> m_loadedScreens;
+
+    // Empty screens of sheets whose source file is missing, by their KiCad file path
+    std::map<wxString, SCH_SCREEN*> m_missingScreens;
+
+    // The lower-cased files the sheet screens claimed
+    std::set<wxString> m_sheetFiles;
+
+    // The file the root or first project sheet is saved as, which no other sheet may take
+    wxString m_rootSheetFile;
+
+    // Parse keys of the source files read so far
+    std::set<wxString> m_parsedFiles;
+
+    // Lower-cased parse keys of the source files some sheet symbol shows
+    std::set<wxString> m_subsheetFiles;
+
+    // The schematic documents a project lists, which its sheet symbols name wherever they are
+    std::vector<wxFileName> m_projectDocuments;
 
     friend struct PARSE_FILE_GUARD;
 };
