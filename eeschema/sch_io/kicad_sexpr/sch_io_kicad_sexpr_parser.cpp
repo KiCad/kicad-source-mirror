@@ -4156,6 +4156,16 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
             NeedRIGHT();
             break;
 
+        case T_rotate:
+            refImage.SetOrientation( EDA_ANGLE( parseDouble( "image rotation" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+
+        case T_opacity:
+            refImage.SetOpacity( parseDouble( "image opacity" ) );
+            NeedRIGHT();
+            break;
+
         case T_scale:
         {
             const double scale = parseDouble( "image scale factor" );
@@ -4206,8 +4216,7 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
             parseCustomProperty( bitmap.get() );
             break;
 
-        default:
-            Expecting( "at, scale, uuid, data, locked, or custom_property" );
+        default: Expecting( "at, rotate, opacity, scale, uuid, data, locked, or custom_property" );
         }
     }
 

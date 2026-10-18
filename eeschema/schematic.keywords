@@ -130,6 +130,7 @@ offset
 on_board
 open_collector
 open_emitter
+opacity
 outline
 output_low
 unconnected
@@ -166,6 +167,7 @@ required
 rev
 reverse_hatch
 right
+rotate
 rotation_angle
 round
 rows

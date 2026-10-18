@@ -19,6 +19,8 @@
 
 #include "reference_image.h"
 
+#include <cmath>
+#include <cstdlib>
 #include <string>
 
 #include <wx/debug.h>
@@ -26,6 +28,7 @@
 
 #include <bitmap_base.h>
 #include <geometry/geometry_utils.h>
+#include <plotters/plotter.h>
 
 
 static bool compareImages( const BITMAP_BASE& aLeft, const BITMAP_BASE& aRight )
@@ -62,7 +65,11 @@ static bool compareImages( const BITMAP_BASE& aLeft, const BITMAP_BASE& aRight )
 
 
 REFERENCE_IMAGE::REFERENCE_IMAGE( const EDA_IU_SCALE& aIuScale ) :
-        m_iuScale( aIuScale ), m_pos( 0, 0 ), m_transformOriginOffset( 0, 0 ),
+        m_iuScale( aIuScale ),
+        m_pos( 0, 0 ),
+        m_transformOriginOffset( 0, 0 ),
+        m_orientation( ANGLE_0 ),
+        m_opacity( 1.0 ),
         m_bitmapBase( std::make_unique<BITMAP_BASE>() )
 {
     updatePixelSizeInIU();
@@ -70,8 +77,11 @@ REFERENCE_IMAGE::REFERENCE_IMAGE( const EDA_IU_SCALE& aIuScale ) :
 
 
 REFERENCE_IMAGE::REFERENCE_IMAGE( const REFERENCE_IMAGE& aOther ) :
-        m_iuScale( aOther.m_iuScale ), m_pos( aOther.m_pos ),
+        m_iuScale( aOther.m_iuScale ),
+        m_pos( aOther.m_pos ),
         m_transformOriginOffset( aOther.m_transformOriginOffset ),
+        m_orientation( aOther.m_orientation ),
+        m_opacity( aOther.m_opacity ),
         m_bitmapBase( std::make_unique<BITMAP_BASE>( *aOther.m_bitmapBase ) )
 {
     updatePixelSizeInIU();
@@ -102,6 +112,8 @@ REFERENCE_IMAGE& REFERENCE_IMAGE::operator=( const REFERENCE_IMAGE& aOther )
         }
         m_pos = aOther.m_pos;
         m_transformOriginOffset = aOther.m_transformOriginOffset;
+        m_orientation = aOther.m_orientation;
+        m_opacity = aOther.m_opacity;
         updatePixelSizeInIU();
     }
 
@@ -115,6 +127,12 @@ bool REFERENCE_IMAGE::operator==( const REFERENCE_IMAGE& aOther ) const
         return false;
 
     if( m_transformOriginOffset != aOther.m_transformOriginOffset )
+        return false;
+
+    if( m_orientation != aOther.m_orientation )
+        return false;
+
+    if( m_opacity != aOther.m_opacity )
         return false;
 
     if( m_bitmapBase->GetSize() != aOther.m_bitmapBase->GetSize() )
@@ -140,6 +158,12 @@ double REFERENCE_IMAGE::Similarity( const REFERENCE_IMAGE& aOther ) const
     if( m_pos != aOther.m_pos )
         similarity *= 0.9;
 
+    if( m_orientation != aOther.m_orientation )
+        similarity *= 0.9;
+
+    if( m_opacity != aOther.m_opacity )
+        similarity *= 0.9;
+
     if( m_bitmapBase->GetSize() != aOther.m_bitmapBase->GetSize() )
         similarity *= 0.9;
 
@@ -158,7 +182,30 @@ double REFERENCE_IMAGE::Similarity( const REFERENCE_IMAGE& aOther ) const
 
 BOX2I REFERENCE_IMAGE::GetBoundingBox() const
 {
-    return BOX2I::ByCenter( m_pos, m_bitmapBase->GetSize() );
+    return BOX2I::ByCenter( m_pos, boundingSize() );
+}
+
+
+VECTOR2I REFERENCE_IMAGE::boundingSize() const
+{
+    // Un-rotated size of the image.
+    const VECTOR2I  size = m_bitmapBase->GetSize();
+    const EDA_ANGLE angle = m_orientation.GetAngle();
+
+    if( angle.IsHorizontal() )
+        return size;
+
+    if( angle.IsVertical() )
+        return VECTOR2I{ size.y, size.x };
+
+    // The raster is stored unrotated, so its axis-aligned extent grows with the orientation.
+    const double angleCos = std::abs( angle.Cos() );
+    const double angleSin = std::abs( angle.Sin() );
+
+    const double w = size.x * angleCos + size.y * angleSin;
+    const double h = size.x * angleSin + size.y * angleCos;
+
+    return VECTOR2I{ KiROUND( w ), KiROUND( h ) };
 }
 
 
@@ -170,7 +217,7 @@ VECTOR2I REFERENCE_IMAGE::GetPosition() const
 
 void REFERENCE_IMAGE::SetPosition( const VECTOR2I& aPos )
 {
-    const BOX2D newBox = BOX2D::ByCenter( aPos, m_bitmapBase->GetSize() );
+    const BOX2D newBox = BOX2D::ByCenter( aPos, boundingSize() );
 
     if( !IsBOX2Safe( newBox ) )
         return;
@@ -241,7 +288,7 @@ void REFERENCE_IMAGE::scaleBy( double aRatio )
     const VECTOR2D currentOrigin = m_pos + m_transformOriginOffset;
     const VECTOR2D newOffset = m_transformOriginOffset * aRatio;
     const VECTOR2D newCenter = currentOrigin - newOffset;
-    const VECTOR2D newSize = m_bitmapBase->GetSize() * aRatio;
+    const VECTOR2D newSize = boundingSize() * aRatio;
 
     // The span of the image is limited to the size of the coordinate system
     if( !IsVec2SafeXY( newSize ) )
@@ -266,13 +313,16 @@ bool REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirecti
     VECTOR2I newPos = m_pos;
     MIRROR( newPos, aCentre, aFlipDirection );
 
-    const BOX2D newBox = BOX2D::ByCenter( newPos, m_bitmapBase->GetSize() );
+    const BOX2D newBox = BOX2D::ByCenter( newPos, boundingSize() );
 
     if( !IsBOX2Safe( newBox ) )
         return false;
 
     m_pos = newPos;
     m_bitmapBase->Mirror( aFlipDirection );
+
+    // A reflection reverses the sense of the stored rotation.
+    m_orientation = -m_orientation;
 
     MIRROR( m_transformOriginOffset, VECTOR2I( 0, 0 ), aFlipDirection );
     return true;
@@ -281,23 +331,28 @@ bool REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirecti
 
 void REFERENCE_IMAGE::Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle )
 {
-    EDA_ANGLE norm( aAngle.AsDegrees(), DEGREES_T );
-
     RotatePoint( m_pos, aCenter, aAngle );
+    RotatePoint( m_transformOriginOffset, aAngle );
 
-    norm.Normalize();
+    m_orientation += aAngle;
+}
 
-    // each call to m_bitmapBase->Rotate() rotates 90 degrees
-    int rotations = 0;
 
-    for( double ang = 45.0; ang < norm.AsDegrees(); ang += 90.0 )
-    {
-        m_bitmapBase->Rotate( true );
-        rotations++;
-    }
+EDA_ANGLE REFERENCE_IMAGE::GetOrientation() const
+{
+    return m_orientation.GetAngle();
+}
 
-    if( rotations > 0 )
-        RotatePoint( m_transformOriginOffset, EDA_ANGLE( rotations * 90.0, DEGREES_T ) );
+
+void REFERENCE_IMAGE::SetOrientation( const EDA_ANGLE& aAngle )
+{
+    m_orientation = aAngle;
+}
+
+
+void REFERENCE_IMAGE::SetOpacity( double aOpacity )
+{
+    m_opacity = std::clamp( aOpacity, 0.0, 1.0 );
 }
 
 
@@ -379,9 +434,79 @@ BITMAP_BASE& REFERENCE_IMAGE::MutableImage() const
 }
 
 
+void REFERENCE_IMAGE::PlotImage( PLOTTER* aPlotter, const VECTOR2I& aPos, const KIGFX::COLOR4D& aDefaultColor,
+                                 int aDefaultPensize ) const
+{
+    const wxImage* image = m_bitmapBase->GetImageData();
+
+    if( !image || !image->IsOk() )
+        return;
+
+    // These 2 lines are useful only for plotters that cannot plot a bitmap and plot a
+    // rectangle instead of the actual image.
+    aPlotter->SetColor( aDefaultColor );
+    aPlotter->SetCurrentLineWidth( aDefaultPensize );
+
+    const double    scaleFactor = m_bitmapBase->GetScalingFactor();
+    const EDA_ANGLE angle = m_orientation.GetAngle();
+    const bool      faded = m_opacity < 1.0;
+
+    if( angle.IsZero() && !faded )
+    {
+        aPlotter->PlotImage( *image, aPos, scaleFactor );
+        return;
+    }
+
+    // Avoid modifying the original image via the shared buffer.
+    wxImage turned = image->Copy();
+
+    if( angle == ANGLE_90 )
+    {
+        turned = turned.Rotate90( false );
+    }
+    else if( angle == ANGLE_180 )
+    {
+        turned = turned.Rotate180();
+    }
+    else if( angle == ANGLE_270 )
+    {
+        turned = turned.Rotate90( true );
+    }
+    else if( !angle.IsZero() )
+    {
+        // Avoid opaque corners after non-cardinal rotation
+        if( !turned.HasAlpha() )
+            turned.InitAlpha();
+
+        const wxPoint centerPoint( turned.GetWidth() / 2, turned.GetHeight() / 2 );
+        turned = turned.Rotate( angle.AsRadians(), centerPoint, true );
+    }
+
+    wxCHECK_MSG( turned.IsOk(), /* void */, wxT( "Failed to rotate image" ) );
+
+    // Apply fading if the image opacity is less than 1.0
+    if( faded )
+    {
+        if( !turned.HasAlpha() )
+            turned.InitAlpha();
+
+        unsigned char* alpha = turned.GetAlpha();
+        const int      pixels = turned.GetWidth() * turned.GetHeight();
+
+        // Post-multiply the alpha channel by the image overall opacity
+        for( int ii = 0; ii < pixels; ++ii )
+            alpha[ii] = static_cast<unsigned char>( KiROUND( alpha[ii] * m_opacity ) );
+    }
+
+    aPlotter->PlotImage( turned, aPos, scaleFactor );
+}
+
+
 void REFERENCE_IMAGE::SwapData( REFERENCE_IMAGE& aOther )
 {
     std::swap( m_pos, aOther.m_pos );
     std::swap( m_transformOriginOffset, aOther.m_transformOriginOffset );
+    std::swap( m_orientation, aOther.m_orientation );
+    std::swap( m_opacity, aOther.m_opacity );
     std::swap( m_bitmapBase, aOther.m_bitmapBase );
 }

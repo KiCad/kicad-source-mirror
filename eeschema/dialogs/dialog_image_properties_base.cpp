@@ -20,7 +20,7 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 	bMainSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 2, 3, 1, 0 );
+	fgSizerPos = new wxFlexGridSizer( 4, 3, 1, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->AddGrowableRow( 0 );
 	fgSizerPos->SetFlexibleDirection( wxBOTH );
@@ -47,6 +47,25 @@ DIALOG_IMAGE_PROPERTIES_BASE::DIALOG_IMAGE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_YPosUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_YPosUnit->Wrap( -1 );
 	fgSizerPos->Add( m_YPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_RotationLabel = new wxStaticText( this, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RotationLabel->Wrap( -1 );
+	fgSizerPos->Add( m_RotationLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT|wxRIGHT, 5 );
+
+	m_ModRotation = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerPos->Add( m_ModRotation, 0, wxEXPAND, 5 );
+
+	m_RotationUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RotationUnit->Wrap( -1 );
+	fgSizerPos->Add( m_RotationUnit, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_OpacityLabel = new wxStaticText( this, wxID_ANY, _("Opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OpacityLabel->Wrap( -1 );
+	fgSizerPos->Add( m_OpacityLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT|wxRIGHT, 5 );
+
+	m_ModOpacity = new wxSpinCtrlDouble( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1, 1.000000, 0.1 );
+	m_ModOpacity->SetDigits( 1 );
+	fgSizerPos->Add( m_ModOpacity, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( fgSizerPos, 0, wxEXPAND|wxALL, 8 );

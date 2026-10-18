@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/data/test_case.hpp>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
 #include <kiid.h>
@@ -36,6 +36,8 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+
+#include <wx/image.h>
 
 namespace
 {
@@ -316,4 +318,53 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImageRotateTransformOrigin, REFERENCE_IMAGE_BO
 
     BOOST_CHECK_EQUAL( refImage.GetPosition(), pos );
     BOOST_CHECK_EQUAL( refImage.GetTransformOriginOffset(), VECTOR2I( 100, -300 ) );
+}
+
+
+/**
+ * A rotation is stored on the image and applied when drawing, so the raster is never resampled
+ * and the bounding box follows the drawn orientation.
+ */
+BOOST_FIXTURE_TEST_CASE( ReferenceImageStoresRotation, REFERENCE_IMAGE_BOARD_FIXTURE )
+{
+    BOARD&               board = GetBoard();
+    PCB_REFERENCE_IMAGE& image = GetImage();
+
+    REFERENCE_IMAGE& refImage = image.GetReferenceImage();
+
+    wxImage raster( 42, 24 );
+    raster.SetRGB( wxRect( 0, 0, 42, 24 ), 0, 0, 0 );
+    BOOST_REQUIRE( refImage.SetImage( raster ) );
+
+    refImage.SetPosition( VECTOR2I( 1000, 2000 ) );
+
+    const VECTOR2I pos = refImage.GetPosition();
+    const VECTOR2I size = refImage.GetSize();
+
+    BOOST_REQUIRE( size.x != size.y );
+
+    refImage.Rotate( pos, ANGLE_45 );
+
+    BOOST_CHECK_EQUAL( refImage.GetOrientation(), ANGLE_45 );
+    BOOST_CHECK_EQUAL( refImage.GetPosition(), pos );
+    BOOST_CHECK_EQUAL( refImage.GetSize(), size );
+
+    // The axis-aligned box of a rotated rectangle spans |w cos| + |h sin|.
+    BOOST_CHECK_CLOSE( refImage.GetBoundingBox().GetWidth(), ( size.x + size.y ) * M_SQRT1_2, 0.001 );
+    BOOST_CHECK_CLOSE( refImage.GetBoundingBox().GetHeight(), ( size.x + size.y ) * M_SQRT1_2, 0.001 );
+
+    // A quarter turn is stored too, rather than messing with pixel data.
+    refImage.Rotate( pos, ANGLE_45 );
+
+    BOOST_CHECK_EQUAL( refImage.GetOrientation(), ANGLE_90 );
+    BOOST_CHECK_EQUAL( refImage.GetSize(), size );
+    // box is rotated 90 degrees, so width and height are swapped.
+    BOOST_CHECK_EQUAL( refImage.GetBoundingBox().GetWidth(), size.y );
+    BOOST_CHECK_EQUAL( refImage.GetBoundingBox().GetHeight(), size.x );
+
+    // Rotating back restores the unrotated extent.
+    refImage.Rotate( pos, ANGLE_270 );
+
+    BOOST_CHECK_EQUAL( refImage.GetOrientation(), ANGLE_0 );
+    BOOST_CHECK_EQUAL( refImage.GetBoundingBox().GetSize(), size );
 }

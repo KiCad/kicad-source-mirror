@@ -20,7 +20,6 @@
  */
 
 #include "drawing_tool.h"
-#include "geometry/shape_rect.h"
 #include "dialog_table_properties.h"
 
 #include <set>
@@ -2367,8 +2366,12 @@ int DRAWING_TOOL::ConvertImageToOutlines( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    // The traced outlines start at the top left corner of the image.
-    VECTOR2I     origin = refImage.GetPosition() - size / 2;
+    // Images are drawn rotated, so the traced outlines need to be moved and rotated accordingly.
+    VECTOR2I origin = refImage.GetPosition() - size / 2;
+
+    traced.Move( origin );
+    traced.Rotate( refImage.GetOrientation(), refImage.GetPosition() );
+
     PCB_LAYER_ID layer = layerIds[dialog.GetLayerSelection()];
 
     BOARD_COMMIT commit( m_frame );
@@ -2377,8 +2380,6 @@ int DRAWING_TOOL::ConvertImageToOutlines( const TOOL_EVENT& aEvent )
     for( int ii = 0; ii < traced.OutlineCount(); ii++ )
     {
         SHAPE_LINE_CHAIN outline = traced.Outline( ii );
-
-        outline.Move( origin );
 
         PCB_SHAPE* shape = new PCB_SHAPE( m_frame->GetModel() );
 

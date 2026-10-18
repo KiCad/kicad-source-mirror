@@ -81,10 +81,12 @@ static constexpr int SCH_VER_LINE_ENDINGS = 20260818;
 static constexpr int SYMLIB_VER_LINE_ENDINGS = 20260710;
 static constexpr int SCH_VER_ALTERNATE_SYMBOLS = 20260722;
 static constexpr int SCH_VER_CUSTOM_PROPERTIES = 20260830;
+static constexpr int SCH_VER_IMAGE_ROTATION = 20261025;
+static constexpr int SCH_VER_IMAGE_OPACITY = 20261025;
 
 // The formats this feature was built for. If a version moves past its constant, a new feature
 // landed and the rules or denylist may be stale. Review the keywords, then update these.
-static constexpr int SCH_DOWNGRADE_COVERED = 20261015;
+static constexpr int SCH_DOWNGRADE_COVERED = 20261025;
 static constexpr int SYMLIB_DOWNGRADE_COVERED = 20261015;
 
 
@@ -1058,6 +1060,19 @@ static void visitScreenItems( const SCH_SCREEN* aScreen, const std::function<voi
 }
 
 
+static int countScreenItems( const SCH_SCREEN* aScreen, const std::function<bool( EDA_ITEM* )>& aPredicate )
+{
+    int count = 0;
+    visitScreenItems( aScreen,
+                      [&]( EDA_ITEM* item )
+                      {
+                          if( aPredicate( item ) )
+                              ++count;
+                      } );
+    return count;
+}
+
+
 static bool isPostTargetTextVar( const wxString& aToken )
 {
     const wxString token = aToken.AfterLast( ':' );
@@ -1981,6 +1996,47 @@ static void dropLineEndings( SCH_SCREEN* aScreen )
 }
 
 
+static int countRotatedBitmaps( const SCH_SCREEN* aScreen )
+{
+    const auto isRotatedBitmap = []( const EDA_ITEM* aItem )
+    {
+        if( aItem->Type() != SCH_BITMAP_T )
+            return false;
+
+        const SCH_BITMAP& bitmap = static_cast<const SCH_BITMAP&>( *aItem );
+        return !bitmap.GetReferenceImage().GetOrientation().IsZero();
+    };
+
+    return countScreenItems( aScreen, isRotatedBitmap );
+}
+
+
+static int countBitmapsWithOpacity( const SCH_SCREEN* aScreen )
+{
+    const auto hasOpacity = []( const EDA_ITEM* aItem )
+    {
+        if( aItem->Type() != SCH_BITMAP_T )
+            return false;
+
+        const SCH_BITMAP& bitmap = static_cast<const SCH_BITMAP&>( *aItem );
+        return bitmap.GetReferenceImage().GetOpacity() != 1.0;
+    };
+
+    return countScreenItems( aScreen, hasOpacity );
+}
+
+
+static void dropBitmapOpacity( SCH_SCREEN* aScreen )
+{
+    visitScreenItems( aScreen,
+                      []( EDA_ITEM* aItem )
+                      {
+                          if( aItem->Type() == SCH_BITMAP_T )
+                              static_cast<SCH_BITMAP*>( aItem )->GetReferenceImage().SetOpacity( 1.0 );
+                      } );
+}
+
+
 // Same pattern as board_downgrade.cpp. One list drives both the report and the transform.
 struct SCREEN_RULE
 {
@@ -2000,6 +2056,7 @@ struct SCREEN_RULE
 
 static std::vector<SCREEN_RULE> screenRules()
 {
+    // clang-format off
     return {
         { SCH_VER_CUSTOM_PROPERTIES, DOWNGRADE_BUCKET::DROP, _( "Custom user properties" ),
           _( "Custom user-property metadata is removed." ),
@@ -2083,7 +2140,14 @@ static std::vector<SCREEN_RULE> screenRules()
         { SCH_VER_STACKED_PINS, DOWNGRADE_BUCKET::BLOCK, _( "Stacked pin numbers" ),
           _( "The target reads the brackets as one literal pin number and the netlist changes." ),
           countStackedPins, nullptr, countSymbolStackedPins },
+        { SCH_VER_IMAGE_ROTATION, DOWNGRADE_BUCKET::BLOCK, _( "Rotated reference images" ),
+          _( "The target cannot store an image rotation." ),
+          countRotatedBitmaps, nullptr },
+        { SCH_VER_IMAGE_OPACITY, DOWNGRADE_BUCKET::DROP, _( "Reference image opacity" ),
+          _( "The target cannot store an image opacity. Opacity will be ignored." ),
+          countBitmapsWithOpacity, dropBitmapOpacity },
     };
+    // clang-format on
 }
 
 
@@ -2332,6 +2396,7 @@ static constexpr DATED_TOKEN SCH_TOKENS[] = {
     { "entry", SCH_VER_PIN_MAPS },
     { "map", SCH_VER_PIN_MAPS },
     { "edit", SCH_VER_PIN_MAPS },
+    { "opacity", SCH_VER_IMAGE_OPACITY },
 };
 
 // Bareword values the target cannot parse. The node scan cannot see these.

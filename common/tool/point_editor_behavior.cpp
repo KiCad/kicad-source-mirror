@@ -841,17 +841,21 @@ bool EDA_TABLECELL_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
     return true;
 }
 
+
 void REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 {
-    const VECTOR2I topLeft = m_image.GetPosition() - m_image.GetSize() / 2;
-    const VECTOR2I botRight = m_image.GetPosition() + m_image.GetSize() / 2;
+    for( int i = 0; i < REFIMG_MAX_POINTS; ++i )
+        aPoints.AddPoint( {} );
 
-    aPoints.AddPoint( topLeft );
-    aPoints.AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-    aPoints.AddPoint( botRight );
-    aPoints.AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+    // Four lines to mark the corners of the bounding box.
+    aPoints.AddIndicatorLine( aPoints.Point( REFIMG_TOP_LEFT ), aPoints.Point( REFIMG_TOP_RIGHT ) );
+    aPoints.AddIndicatorLine( aPoints.Point( REFIMG_TOP_RIGHT ), aPoints.Point( REFIMG_BOT_RIGHT ) );
+    aPoints.AddIndicatorLine( aPoints.Point( REFIMG_BOT_RIGHT ), aPoints.Point( REFIMG_BOT_LEFT ) );
+    aPoints.AddIndicatorLine( aPoints.Point( REFIMG_BOT_LEFT ), aPoints.Point( REFIMG_TOP_LEFT ) );
 
-    aPoints.AddPoint( m_image.GetPosition() + m_image.GetTransformOriginOffset() );
+    aPoints.AddIndicatorLine( aPoints.Point( REFIMG_ORIGIN ), aPoints.Point( REFIMG_ROTATION ) );
+
+    UpdatePoints( aPoints );
 }
 
 
@@ -859,14 +863,29 @@ bool REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 {
     wxCHECK( aPoints.PointsSize() == REFIMG_MAX_POINTS, false );
 
-    const VECTOR2I topLeft = m_image.GetPosition() - m_image.GetSize() / 2;
-    const VECTOR2I botRight = m_image.GetPosition() + m_image.GetSize() / 2;
+    const VECTOR2I size = m_image.GetBoundingBox().GetSize();
+
+    const VECTOR2I topLeft = m_image.GetPosition() - size / 2;
+    const VECTOR2I botRight = m_image.GetPosition() + size / 2;
 
     aPoints.Point( REFIMG_TOP_LEFT ).SetPosition( topLeft );
     aPoints.Point( REFIMG_TOP_RIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
     aPoints.Point( REFIMG_BOT_RIGHT ).SetPosition( botRight );
     aPoints.Point( REFIMG_BOT_LEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
-    aPoints.Point( REFIMG_ORIGIN ).SetPosition( m_image.GetPosition() + m_image.GetTransformOriginOffset() );
+
+    const VECTOR2I origin = m_image.GetPosition() + m_image.GetTransformOriginOffset();
+    aPoints.Point( REFIMG_ORIGIN ).SetPosition( origin );
+
+    // The rotation handle extends above the image by a short distance (20%), anchored at the
+    // transform origin.
+    const EDA_ANGLE angle = m_image.GetOrientation();
+    const VECTOR2I  localOffset = GetRotated( m_image.GetTransformOriginOffset(), -angle );
+    const int       handleLength = localOffset.y + KiROUND( m_image.GetSize().y * 0.7 );
+
+    // Now we have the length of the handle, construct the vector
+    const VECTOR2I originToRot = GetRotated( VECTOR2I( 0, -handleLength ), angle );
+
+    aPoints.Point( REFIMG_ROTATION ).SetPosition( origin + originToRot );
 
     return true;
 }
@@ -891,8 +910,24 @@ void REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedP
         return;
     }
 
+    if( isModified( aEditedPoint, aPoints.Point( REFIMG_ROTATION ) ) )
+    {
+        // Rotating the image around the transform origin
+        const VECTOR2I origin = m_image.GetPosition() + m_image.GetTransformOriginOffset();
+        const VECTOR2I cursorVec = aEditedPoint.GetPosition() - origin;
+        const double   angle = std::atan2( -cursorVec.y, cursorVec.x );
+
+        // The angle handle is vertical, offset by 90 degrees from the horizontal.
+        const EDA_ANGLE target = EDA_ANGLE( angle, RADIANS_T ) - ANGLE_90;
+
+        // Rotate the image around the transform origin so that the handle
+        // aligns with the target angle.
+        m_image.Rotate( origin, target - m_image.GetOrientation() );
+        return;
+    }
+
     const VECTOR2I oldOrigin = m_image.GetPosition() + m_image.GetTransformOriginOffset();
-    const VECTOR2I oldSize = m_image.GetSize();
+    const VECTOR2I oldSize = m_image.GetBoundingBox().GetSize();
 
     OPT_VECTOR2I newCorner;
     VECTOR2I     oldCorner = m_image.GetPosition();

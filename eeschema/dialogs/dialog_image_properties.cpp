@@ -30,7 +30,8 @@ DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_B
         m_frame( aParent ),
         m_bitmap( aBitmap ),
         m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
-        m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit )
+        m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
+        m_rotation( aParent, m_RotationLabel, m_ModRotation, m_RotationUnit )
 {
     // Create the image editor page
     const REFERENCE_IMAGE& refImage = aBitmap.GetReferenceImage();
@@ -40,6 +41,7 @@ DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_B
 
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
+    m_rotation.SetUnits( EDA_UNITS::DEGREES );
 
     SetupStandardButtons();
 
@@ -51,6 +53,11 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataToWindow()
 {
     m_posX.SetValue( m_bitmap.GetPosition().x );
     m_posY.SetValue( m_bitmap.GetPosition().y );
+    m_rotation.SetAngleValue( m_bitmap.GetReferenceImage().GetOrientation() );
+
+    // A UNIT_BINDER only reads wxTextEntry and wxStaticText controls, so a spin control would
+    // silently report 0.
+    m_ModOpacity->SetValue( m_bitmap.GetReferenceImage().GetOpacity() );
 
     return m_imageEditor->TransferDataToWindow();
 }
@@ -72,6 +79,8 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
         m_imageEditor->TransferToImage( refImage.MutableImage() );
 
         m_bitmap.SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
+        refImage.SetOrientation( m_rotation.GetAngleValue() );
+        refImage.SetOpacity( m_ModOpacity->GetValue() );
 
         if( !commit.Empty() )
             commit.Push( _( "Image Properties" ) );

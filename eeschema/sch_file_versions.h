@@ -154,4 +154,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260818  // Line ending shapes
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260826  // Bold is a stroke-width multiplier; thickness stores the base width
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260830  // Custom user properties
-#define SEXPR_SCHEMATIC_FILE_VERSION 20261015  // Custom user properties for SCH_SHAPEs
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20261015  // Custom user properties for SCH_SHAPEs
+#define SEXPR_SCHEMATIC_FILE_VERSION   20261025  // Reference image rotation and opacity

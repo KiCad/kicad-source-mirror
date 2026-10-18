@@ -21,6 +21,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
+#include <wx/spinctrl.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
@@ -51,6 +52,11 @@ class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_WidthLabel;
 		wxTextCtrl* m_ModWidth;
 		wxStaticText* m_WidthUnit;
+		wxStaticText* m_RotationLabel;
+		wxTextCtrl* m_ModRotation;
+		wxStaticText* m_RotationUnit;
+		wxStaticText* m_OpacityLabel;
+		wxSpinCtrlDouble* m_ModOpacity;
 		wxCheckBox* m_cbLocked;
 		wxBoxSizer* m_imageSizer;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;

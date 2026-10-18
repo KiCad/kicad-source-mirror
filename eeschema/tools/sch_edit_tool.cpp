@@ -3976,16 +3976,18 @@ int SCH_EDIT_TOOL::ConvertImageToOutlines( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    // The traced outlines start at the top left corner of the image.
-    VECTOR2I   origin = refImage.GetPosition() - size / 2;
+    // Images are drawn rotated, so the traced outlines need to be moved and rotated accordingly.
+    VECTOR2I origin = refImage.GetPosition() - size / 2;
+
+    traced.Move( origin );
+    traced.Rotate( refImage.GetOrientation(), refImage.GetPosition() );
+
     SCH_COMMIT commit( m_toolMgr );
     SCH_GROUP* group = new SCH_GROUP( m_frame->GetScreen() );
 
     for( int ii = 0; ii < traced.OutlineCount(); ii++ )
     {
         SHAPE_LINE_CHAIN outline = traced.Outline( ii );
-
-        outline.Move( origin );
 
         SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY );
 

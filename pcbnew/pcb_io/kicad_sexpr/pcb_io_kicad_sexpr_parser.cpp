@@ -4350,6 +4350,22 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
             NeedRIGHT();
             break;
 
+        case T_rotate:
+        {
+            REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+            refImage.SetOrientation( EDA_ANGLE( parseDouble( "image rotation" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_opacity:
+        {
+            REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+            refImage.SetOpacity( parseDouble( "image opacity" ) );
+            NeedRIGHT();
+            break;
+        }
+
         case T_scale:
         {
             REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
@@ -4410,8 +4426,7 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
             parseCustomProperty( bitmap.get() );
             break;
 
-        default:
-            Expecting( "at, layer, scale, data, locked, uuid, or custom_property" );
+        default: Expecting( "at, layer, rotate, opacity, scale, data, locked, uuid, or custom_property" );
         }
     }
 

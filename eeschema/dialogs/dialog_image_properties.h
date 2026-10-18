@@ -46,6 +46,7 @@ private:
 
     UNIT_BINDER m_posX;
     UNIT_BINDER m_posY;
+    UNIT_BINDER m_rotation;
 };
 
 #endif

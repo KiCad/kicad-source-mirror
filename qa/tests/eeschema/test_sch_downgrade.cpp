@@ -38,6 +38,7 @@
 #include <sch_rule_area.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
+#include <sch_bitmap.h>
 #include <sch_label.h>
 #include <sch_text.h>
 #include <bus_alias.h>
@@ -96,6 +97,45 @@ BOOST_AUTO_TEST_CASE( EllipseIsLoweredForKicad10 )
 
     BOOST_CHECK( report.IsLossy() );
     BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::LOWER ), 1 );
+}
+
+
+// The target has no way to store an image rotation, so a turned image blocks the export.
+BOOST_AUTO_TEST_CASE( RotatedBitmapBlocks )
+{
+    SCH_SCREEN  screen;
+    SCH_BITMAP* bitmap = new SCH_BITMAP();
+    bitmap->GetReferenceImage().SetOrientation( ANGLE_90 );
+    screen.Append( bitmap );
+
+    COMPATIBILITY_REPORT report = ClassifyScreenForDowngrade( &screen, kicad10 );
+
+    BOOST_CHECK( report.IsBlocked() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::BLOCK ), 1 );
+
+    // An upright image is still exportable.
+    bitmap->GetReferenceImage().SetOrientation( ANGLE_0 );
+    BOOST_CHECK( !ClassifyScreenForDowngrade( &screen, kicad10 ).IsBlocked() );
+}
+
+
+// The target has no way to store an image opacity, so the export proceeds with full opacity.
+BOOST_AUTO_TEST_CASE( BitmapOpacityIsDropped )
+{
+    SCH_SCREEN  screen;
+    SCH_BITMAP* bitmap = new SCH_BITMAP();
+    bitmap->GetReferenceImage().SetOpacity( 0.4 );
+    screen.Append( bitmap );
+
+    COMPATIBILITY_REPORT report = ClassifyScreenForDowngrade( &screen, kicad10 );
+
+    BOOST_CHECK( !report.IsBlocked() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), 1 );
+
+    DowngradeScreenInPlace( &screen, kicad10 );
+
+    BOOST_CHECK_EQUAL( bitmap->GetReferenceImage().GetOpacity(), 1.0 );
+    BOOST_CHECK_EQUAL( ClassifyScreenForDowngrade( &screen, kicad10 ).Count( DOWNGRADE_BUCKET::DROP ), 0 );
 }
 
 

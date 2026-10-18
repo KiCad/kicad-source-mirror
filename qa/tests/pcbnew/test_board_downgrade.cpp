@@ -1085,6 +1085,45 @@ BOOST_AUTO_TEST_CASE( ImageScaleMigratedForV9 )
 }
 
 
+// The target has no way to store an image rotation, so an angled image blocks the export.
+BOOST_AUTO_TEST_CASE( RotatedReferenceImageBlocks )
+{
+    BOARD                board;
+    PCB_REFERENCE_IMAGE* image = new PCB_REFERENCE_IMAGE( &board );
+    image->GetReferenceImage().SetOrientation( EDA_ANGLE( 45.0, DEGREES_T ) );
+    board.Add( image );
+
+    COMPATIBILITY_REPORT report = ClassifyBoardForDowngrade( &board, kicad10 );
+
+    BOOST_CHECK( report.IsBlocked() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::BLOCK ), 1 );
+
+    // An upright image is still exportable.
+    image->GetReferenceImage().SetOrientation( ANGLE_0 );
+    BOOST_CHECK( !ClassifyBoardForDowngrade( &board, kicad10 ).IsBlocked() );
+}
+
+
+// The target has no way to store an image opacity, so the export proceeds with full opacity.
+BOOST_AUTO_TEST_CASE( ReferenceImageOpacityIsDropped )
+{
+    BOARD                board;
+    PCB_REFERENCE_IMAGE* image = new PCB_REFERENCE_IMAGE( &board );
+    image->GetReferenceImage().SetOpacity( 0.4 );
+    board.Add( image );
+
+    COMPATIBILITY_REPORT report = ClassifyBoardForDowngrade( &board, kicad10 );
+
+    BOOST_CHECK( !report.IsBlocked() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), 1 );
+
+    DowngradeBoardInPlace( &board, kicad10 );
+
+    BOOST_CHECK_EQUAL( image->GetReferenceImage().GetOpacity(), 1.0 );
+    BOOST_CHECK_EQUAL( ClassifyBoardForDowngrade( &board, kicad10 ).Count( DOWNGRADE_BUCKET::DROP ), 0 );
+}
+
+
 // The fail-closed gate: a post-10.0 token surviving in the output is caught, and lookalikes are not.
 BOOST_AUTO_TEST_CASE( VerifyGateCatchesUnsupportedTokens )
 {

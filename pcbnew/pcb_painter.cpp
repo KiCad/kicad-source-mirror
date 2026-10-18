@@ -3188,6 +3188,8 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
     const REFERENCE_IMAGE& refImg = aBitmap->GetReferenceImage();
     m_gal->Translate( refImg.GetPosition() );
 
+    m_gal->Rotate( -refImg.GetOrientation().AsRadians() );
+
     // When the image scale factor is not 1.0, we need to modify the actual as the image scale
     // factor is similar to a local zoom
     const double img_scale = refImg.GetImageScale();
@@ -3195,7 +3197,7 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
     if( img_scale != 1.0 )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
 
-    const double imgAlpha = m_pcbSettings.GetColor( aBitmap, aBitmap->GetLayer() ).a;
+    double imgAlpha = refImg.GetOpacity();
 
     if( aBitmap->IsSelected() || aBitmap->IsBrightened() )
     {
@@ -3217,13 +3219,15 @@ void PCB_PAINTER::draw( const PCB_REFERENCE_IMAGE* aBitmap, int aLayer )
 
         m_gal->DrawRectangle( origin, end );
 
-        // Keep reference images opaque when selected (and not moving). Otherwise cached layers
-        // will not be rendered under the selected image because cached layers are rendered
-        // after non-cached layers (e.g. bitmaps), which will have a closer Z order.
-        m_gal->DrawBitmap( refImg.GetImage(), aBitmap->IsMoving() ? imgAlpha : 1.0 );
+        // Give it a floor when selected so you can't lose it too easily
+        imgAlpha = std::max( imgAlpha, 0.1 );
     }
     else
-        m_gal->DrawBitmap( refImg.GetImage(), imgAlpha );
+    {
+        imgAlpha *= m_pcbSettings.GetColor( aBitmap, aBitmap->GetLayer() ).a;
+    }
+
+    m_gal->DrawBitmap( refImg.GetImage(), imgAlpha );
 
     m_gal->Restore();
 }

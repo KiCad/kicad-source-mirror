@@ -23,10 +23,13 @@
 
 #include <base_units.h>
 #include <core/mirror.h>
+#include <gal/color4d.h>
+#include <geometry/eda_angle.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
 
 class BITMAP_BASE;
+class PLOTTER;
 
 class wxMemoryBuffer;
 class wxImage;
@@ -87,7 +90,27 @@ public:
      */
     bool Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
+    /**
+     * Rotate the image about \a aCenter.
+     *
+     * The position and the transform origin follow \a aAngle exactly.  The rotation is stored
+     * rather than turned into the raster, so the image keeps its resolution and a save followed
+     * by a load is lossless for the formats that carry the rotation.
+     */
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle );
+
+    /**
+     * @return the rotation of the image content relative to the stored raster.
+     */
+    EDA_ANGLE GetOrientation() const;
+
+    /**
+     * Set the rotation of the image content relative to the stored raster.
+     */
+    void SetOrientation( const EDA_ANGLE& aAngle );
+
+    double GetOpacity() const { return m_opacity; }
+    void   SetOpacity( double aOpacity );
 
     /**
      * Read and store an image file.
@@ -131,6 +154,19 @@ public:
      */
     BITMAP_BASE& MutableImage() const;
 
+    /**
+     * Plot the image on a plotter, turned to its stored orientation.
+     *
+     * This may resample the image depending on the orientation.
+     *
+     * @param aPlotter the plotter to use.
+     * @param aPos the position of the center of the image.
+     * @param aDefaultColor the color used to plot the rectangle when bitmap is not supported.
+     * @param aDefaultPensize the pen size used to plot the rectangle when bitmap is not supported.
+     */
+    void PlotImage( PLOTTER* aPlotter, const VECTOR2I& aPos, const KIGFX::COLOR4D& aDefaultColor,
+                    int aDefaultPensize ) const;
+
 
     /**
      * Get the center of scaling, etc, relative to the image center (GetPosition()).
@@ -143,12 +179,23 @@ private:
 
     void updatePixelSizeInIU();
 
+    /**
+     * @return the size of the axis-aligned bounding box that contains the rotated image.
+     */
+    VECTOR2I boundingSize() const;
+
     const EDA_IU_SCALE& m_iuScale;
 
     VECTOR2I m_pos; ///< XY coordinates of center of the bitmap.
 
     /// Center of scaling, etc, relative to the image center.
     VECTOR2I m_transformOriginOffset;
+
+    /// Rotation of the image content relative to the raster, in [0, 360).
+    EDA_ORIENTATION m_orientation;
+
+    /// The opacity of the image, in the range [0, 1].
+    double m_opacity;
 
     std::unique_ptr<BITMAP_BASE> m_bitmapBase;
 };

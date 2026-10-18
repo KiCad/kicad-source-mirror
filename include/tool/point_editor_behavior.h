@@ -404,6 +404,11 @@ private:
  * "Standard" reference image editing behavior.
  *
  * Works over the #REFERENCE_IMAGE basis of #PCB_REFERENCE_IMAGE and #SCH_BITMAP.
+ *
+ * The corner handles sit on the image's bounding box, because the raster is stored upright and
+ * only turned when it is drawn.  A cardinal rotation puts the box corners on the image corners;
+ * any other angle leaves them on the drawn extent.
+ *
  * Drag semantics:
  *  - Corner handles: resize the image.
  *  - Origin handle: move the transform origin.
@@ -417,6 +422,7 @@ class REFERENCE_IMAGE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
         REFIMG_BOT_RIGHT,
         REFIMG_BOT_LEFT,
         REFIMG_ORIGIN,
+        REFIMG_ROTATION,
 
         REFIMG_MAX_POINTS,
     };

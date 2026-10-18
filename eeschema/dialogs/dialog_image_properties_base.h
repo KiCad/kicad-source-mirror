@@ -18,6 +18,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -38,6 +39,11 @@ class DIALOG_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_YPosLabel;
 		wxTextCtrl* m_ModPositionY;
 		wxStaticText* m_YPosUnit;
+		wxStaticText* m_RotationLabel;
+		wxTextCtrl* m_ModRotation;
+		wxStaticText* m_RotationUnit;
+		wxStaticText* m_OpacityLabel;
+		wxSpinCtrlDouble* m_ModOpacity;
 		wxBoxSizer* m_imageSizer;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
