@@ -31,6 +31,7 @@
 
 #include <functional>
 #include <map>
+#include <optional>
 
 
 class WIDGET_DIFF_CANVAS;
@@ -83,7 +84,10 @@ public:
         /// Draw a side on the canvas with the editor's own painter. The geometry above
         /// flattens every item to its bounding box, so without this a text change shows as an
         /// empty rectangle and all three sides look alike. Left empty, the geometry is used.
-        std::function<void( WIDGET_DIFF_CANVAS&, SIDE )> drawSide;
+        ///
+        /// The conflict being decided is passed so a document made of several sheets can draw
+        /// the one the conflict is on.
+        std::function<void( WIDGET_DIFF_CANVAS&, SIDE, const std::optional<KIID_PATH>& )> drawSide;
 
         /// Name an item the way the editor would, so a conflict can be told from its
         /// neighbours. Left empty, or returning nothing, falls back to the item's identifier.

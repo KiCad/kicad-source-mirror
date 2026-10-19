@@ -4415,8 +4415,9 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
             return wxEmptyString;
         };
 
-        ctx.drawSide =
-                [ancestor, ours, theirs, theme]( WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide )
+        ctx.drawSide = [ancestor, ours, theirs, theme]( WIDGET_DIFF_CANVAS&           aCanvas,
+                                                        DIALOG_KICAD_MERGE_3WAY::SIDE aSide,
+                                                        const std::optional<KIID_PATH>& )
         {
             BOARD*         board = nullptr;
             KIGFX::COLOR4D colour = theme.reference;

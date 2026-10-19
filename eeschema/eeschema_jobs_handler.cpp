@@ -3288,8 +3288,30 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
             return wxEmptyString;
         };
 
-        ctx.drawSide =
-                [&ancestor, &ours, &theirs, theme]( WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide )
+        // A conflict's path is its sheet path followed by the item, so dropping the item
+        // names the sheet it lives on.
+        auto screenForConflict = []( SCHEMATIC* aDoc, const std::optional<KIID_PATH>& aId ) -> SCH_SCREEN*
+        {
+            if( !aId.has_value() || aId->size() < 2 )
+                return aDoc->RootScreen();
+
+            KIID_PATH sheetPath = *aId;
+            sheetPath.pop_back();
+
+            SCH_SHEET_LIST sheets = aDoc->BuildSheetListSortedByPageNumbers();
+
+            if( std::optional<SCH_SHEET_PATH> path = sheets.GetSheetPathByKIIDPath( sheetPath ) )
+            {
+                if( SCH_SCREEN* screen = path->LastScreen() )
+                    return screen;
+            }
+
+            return aDoc->RootScreen();
+        };
+
+        ctx.drawSide = [&ancestor, &ours, &theirs, theme, screenForConflict]( WIDGET_DIFF_CANVAS&             aCanvas,
+                                                                              DIALOG_KICAD_MERGE_3WAY::SIDE   aSide,
+                                                                              const std::optional<KIID_PATH>& aId )
         {
             SCHEMATIC*     doc = nullptr;
             KIGFX::COLOR4D colour = theme.reference;
@@ -3307,7 +3329,10 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
             }
 
             if( doc )
-                KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, doc, nullptr, colour );
+            {
+                KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, doc, nullptr, colour, {}, {}, {},
+                                                           screenForConflict( doc, aId ) );
+            }
         };
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );

@@ -330,7 +330,7 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
     // The editor's painter draws the real items, so text reads as text. The canvas drops the
     // flattened geometry once it has them, and keeps the conflict highlight from the scene.
     if( m_context.drawSide )
-        m_context.drawSide( *m_canvas, activeSide() );
+        m_context.drawSide( *m_canvas, activeSide(), highlight );
 
     m_canvas->HighlightChange( highlight );
 
