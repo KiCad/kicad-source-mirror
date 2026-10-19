@@ -44,7 +44,6 @@
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/filename.h>
-#include <wx/utils.h>
 #include <wx/regex.h>
 
 #include "odb_test_utils.h"
@@ -52,18 +51,6 @@
 
 namespace
 {
-
-wxFileName MakeTempDir( const wxString& aPrefix )
-{
-    wxFileName tempDir( wxFileName::CreateTempFileName( wxString::Format( wxT( "kicad-%s-" ), aPrefix ) ) );
-
-    BOOST_REQUIRE( tempDir.FileExists() );
-    BOOST_REQUIRE( wxRemoveFile( tempDir.GetFullPath() ) );
-    BOOST_REQUIRE( tempDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-    return tempDir;
-}
-
 
 wxString ReadFile( const wxFileName& aPath )
 {
@@ -79,7 +66,7 @@ wxString ReadFile( const wxFileName& aPath )
 
 BOOST_AUTO_TEST_CASE( ODBNetlistCoordinatesMatchFeatures )
 {
-    wxFileName tempDir = MakeTempDir( wxT( "odb-netlist" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "odb-netlist" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
@@ -120,7 +107,7 @@ BOOST_AUTO_TEST_CASE( ODBNetlistCoordinatesMatchFeatures )
     board.Add( via );
 
     // Export ODB++
-    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    wxFileName odbRoot( tempDir.PathStr(), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
@@ -169,8 +156,4 @@ BOOST_AUTO_TEST_CASE( ODBNetlistCoordinatesMatchFeatures )
                          "Netlist should not contain aux-origin-shifted X coordinate 50.0" );
     BOOST_CHECK_MESSAGE( netlistContent.Contains( wxT( "100.0" ) ),
                          "Netlist should contain the raw pad X coordinate 100.0" );
-
-    // Clean up
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }

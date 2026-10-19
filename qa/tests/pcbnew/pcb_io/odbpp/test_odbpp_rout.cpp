@@ -21,7 +21,6 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 #include <algorithm>
-#include <fstream>
 #include <map>
 #include <memory>
 #include <set>

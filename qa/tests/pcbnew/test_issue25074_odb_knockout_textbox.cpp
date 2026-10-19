@@ -22,12 +22,12 @@
 #include <memory>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <boost/test/unit_test.hpp>
 
 #include <base_units.h>
 #include <board.h>
-#include <kiid.h>
 #include <pcb_shape.h>
 #include <pcb_textbox.h>
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
@@ -74,24 +74,19 @@ BOOST_AUTO_TEST_CASE( OdbKnockoutTextboxExport )
     BOOST_REQUIRE( textbox );
     BOOST_REQUIRE( textbox->IsKnockout() );
 
-    const fs::path outDir =
-            fs::temp_directory_path() / ( "kicad_qa_odb_knockout_25074_" + KIID().AsString().ToStdString() );
-
-    BOOST_REQUIRE( fs::create_directory( outDir ) );
+    KI_TEST::SCOPED_TEMP_DIR outDir( wxT( "kicad_qa_odb_knockout_25074" ) );
 
     PCB_IO_ODBPP                odbExporter;
     std::map<std::string, UTF8> props;
     props["units"] = "mm";
     props["sigfig"] = "6";
 
-    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( outDir.string(), *board, &props ) );
+    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( outDir.Path().string(), *board, &props ) );
 
-    const fs::path features = outDir / "steps" / "pcb" / "layers" / "b.silkscreen" / "features";
+    const fs::path features = outDir.Path() / "steps" / "pcb" / "layers" / "b.silkscreen" / "features";
 
     BOOST_REQUIRE_MESSAGE( fs::exists( features ), "ODB++ export produced no back silkscreen features file" );
 
     BOOST_CHECK_MESSAGE( countSurfaceRecords( features ) > 0,
                          "Knockout text box produced no surface features on the back silkscreen" );
-
-    fs::remove_all( outDir );
 }

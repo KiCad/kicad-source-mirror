@@ -49,21 +49,10 @@
 #include <wx/ffile.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
-#include <wx/utils.h>
 
 
 namespace
 {
-wxFileName MakeTempDir()
-{
-    wxFileName tempDir( wxFileName::GetTempDir(), wxEmptyString );
-    tempDir.AppendDir( wxString::Format( "kicad-backdrill-%llu", static_cast<unsigned long long>( wxGetUTCTime() ) ) );
-    BOOST_REQUIRE( tempDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-    return tempDir;
-}
-
-
 std::vector<wxString> ExportGerberDrill( BOARD& aBoard, const KI_TEST::SCOPED_TEMP_DIR& aDir )
 {
     GERBER_WRITER gerber( &aBoard );
@@ -142,8 +131,8 @@ BOOST_AUTO_TEST_CASE( GerberBackdrillDoesNotInheritViaProtection )
 
 BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "backdrill_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_cam_outputs" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "backdrill_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 6 );
@@ -167,9 +156,9 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     EXCELLON_WRITER excellon( &board );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
     excellon.SetFormat( true );
-    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, nullptr ) );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, nullptr ) );
 
-    wxFileName excellonFile( tempDir.GetFullPath(), wxT( "backdrill_board_Backdrills_Drill_1_4.drl" ) );
+    wxFileName excellonFile( tempDir.PathStr(), wxT( "backdrill_board_Backdrills_Drill_1_4.drl" ) );
     BOOST_REQUIRE( excellonFile.FileExists() );
 
     wxFFile excellonStream( excellonFile.GetFullPath(), wxT( "rb" ) );
@@ -179,7 +168,7 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     BOOST_CHECK( excellonContents.Contains( wxT( "; Backdrill" ) ) );
     BOOST_CHECK( excellonContents.Contains( wxT( "post-machining" ) ) );
 
-    wxFileName layerPairFile( tempDir.GetFullPath(), wxT( "backdrill_board-front-in3-backdrill.drl" ) );
+    wxFileName layerPairFile( tempDir.PathStr(), wxT( "backdrill_board-front-in3-backdrill.drl" ) );
     BOOST_REQUIRE( layerPairFile.FileExists() );
 
     wxFFile layerPairStream( layerPairFile.GetFullPath(), wxT( "rb" ) );
@@ -187,7 +176,7 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     BOOST_REQUIRE( layerPairStream.ReadAll( &layerPairContents ) );
     BOOST_CHECK( layerPairContents.Contains( wxT( "; backdrill" ) ) );
 
-    wxFileName pthFile( tempDir.GetFullPath(), wxT( "backdrill_board-PTH.drl" ) );
+    wxFileName pthFile( tempDir.PathStr(), wxT( "backdrill_board-PTH.drl" ) );
     BOOST_REQUIRE( pthFile.FileExists() );
 
     wxFFile pthStream( pthFile.GetFullPath(), wxT( "rb" ) );
@@ -198,9 +187,9 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     GERBER_WRITER gerber( &board );
     gerber.SetOptions( VECTOR2I( 0, 0 ) );
     gerber.SetFormat( 6 );
-    BOOST_REQUIRE( gerber.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, false, nullptr ) );
+    BOOST_REQUIRE( gerber.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, false, nullptr ) );
 
-    wxFileName gerberFile( tempDir.GetFullPath(), wxT( "backdrill_board_Backdrills_Drill_1_4-drl.gbr" ) );
+    wxFileName gerberFile( tempDir.PathStr(), wxT( "backdrill_board_Backdrills_Drill_1_4-drl.gbr" ) );
     BOOST_REQUIRE( gerberFile.FileExists() );
 
     wxFFile gerberStream( gerberFile.GetFullPath(), wxT( "rb" ) );
@@ -209,8 +198,7 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     BOOST_CHECK( gerberContents.Contains( wxT( "%TA.AperFunction,BackDrill*%" ) ) );
     BOOST_CHECK( gerberContents.Contains( wxT( "%TF.FileFunction,NonPlated,1,4,Blind,Drill*%" ) ) );
 
-    wxFileName gerberLayerPairFile( tempDir.GetFullPath(),
-                                    wxT( "backdrill_board-front-in3-backdrill-drl.gbr" ) );
+    wxFileName gerberLayerPairFile( tempDir.PathStr(), wxT( "backdrill_board-front-in3-backdrill-drl.gbr" ) );
     BOOST_REQUIRE( gerberLayerPairFile.FileExists() );
 
     wxFFile gerberLayerPairStream( gerberLayerPairFile.GetFullPath(), wxT( "rb" ) );
@@ -219,7 +207,7 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     BOOST_CHECK( gerberLayerPairContents.Contains( wxT( "%TF.FileFunction,NonPlated,1,4,Blind,Drill*%" ) ) );
     BOOST_CHECK( gerberLayerPairContents.Contains( wxT( "%TA.AperFunction,BackDrill*%" ) ) );
 
-    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    wxFileName odbRoot( tempDir.PathStr(), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
@@ -262,9 +250,6 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
     excellonStream.Close();
     layerPairStream.Close();
     pthStream.Close();
-
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -273,8 +258,8 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
 // backdrill operations never produced a drill file.
 BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "backdrill_pair_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_cam_front_back" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "backdrill_pair_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 6 );
@@ -305,16 +290,14 @@ BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
     EXCELLON_WRITER excellon( &board );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
     excellon.SetFormat( true );
-    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, nullptr ) );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, nullptr ) );
 
-    wxFileName topBackdrillFile( tempDir.GetFullPath(),
-                                 wxT( "backdrill_pair_board_Backdrills_Drill_1_2.drl" ) );
+    wxFileName topBackdrillFile( tempDir.PathStr(), wxT( "backdrill_pair_board_Backdrills_Drill_1_2.drl" ) );
     BOOST_CHECK_MESSAGE( topBackdrillFile.FileExists(),
                          "Front-side backdrill drill file should be produced" );
 
     // Start=B_Cu (UI index 6) drilled toward In3_Cu (UI index 4) in a 6-layer board
-    wxFileName bottomBackdrillFile( tempDir.GetFullPath(),
-                                    wxT( "backdrill_pair_board_Backdrills_Drill_6_4.drl" ) );
+    wxFileName bottomBackdrillFile( tempDir.PathStr(), wxT( "backdrill_pair_board_Backdrills_Drill_6_4.drl" ) );
     BOOST_CHECK_MESSAGE( bottomBackdrillFile.FileExists(),
                          "Back-side (tertiary) backdrill drill file should be produced" );
 
@@ -326,8 +309,6 @@ BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
         BOOST_CHECK( contents.Contains( wxT( "; Backdrill" ) ) );
         stream.Close();
     }
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -336,8 +317,8 @@ BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
 // (tertiary) backdrill. Both drill files must be produced.
 BOOST_AUTO_TEST_CASE( DualBackdrillSameViaCamOutputs )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "dual_backdrill_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_cam_dual" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "dual_backdrill_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 6 );
@@ -360,18 +341,13 @@ BOOST_AUTO_TEST_CASE( DualBackdrillSameViaCamOutputs )
     EXCELLON_WRITER excellon( &board );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
     excellon.SetFormat( true );
-    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false,
-                                                       nullptr ) );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, nullptr ) );
 
-    wxFileName topBackdrillFile( tempDir.GetFullPath(),
-                                 wxT( "dual_backdrill_board_Backdrills_Drill_1_2.drl" ) );
+    wxFileName topBackdrillFile( tempDir.PathStr(), wxT( "dual_backdrill_board_Backdrills_Drill_1_2.drl" ) );
     BOOST_CHECK( topBackdrillFile.FileExists() );
 
-    wxFileName bottomBackdrillFile( tempDir.GetFullPath(),
-                                    wxT( "dual_backdrill_board_Backdrills_Drill_6_4.drl" ) );
+    wxFileName bottomBackdrillFile( tempDir.PathStr(), wxT( "dual_backdrill_board_Backdrills_Drill_6_4.drl" ) );
     BOOST_CHECK( bottomBackdrillFile.FileExists() );
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -379,8 +355,8 @@ BOOST_AUTO_TEST_CASE( DualBackdrillSameViaCamOutputs )
 // GERBER_WRITER::SetFormat() precision was not passed to the plotter; output always used 4.6.
 BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "precision_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_gerber_drill_precision" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "precision_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
@@ -398,9 +374,9 @@ BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
     GERBER_WRITER gerber5( &board );
     gerber5.SetOptions( VECTOR2I( 0, 0 ) );
     gerber5.SetFormat( 5 );
-    BOOST_REQUIRE( gerber5.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, false, nullptr ) );
+    BOOST_REQUIRE( gerber5.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, false, nullptr ) );
 
-    wxFileName gerberFile5( tempDir.GetFullPath(), wxT( "precision_board-PTH-drl.gbr" ) );
+    wxFileName gerberFile5( tempDir.PathStr(), wxT( "precision_board-PTH-drl.gbr" ) );
     BOOST_REQUIRE( gerberFile5.FileExists() );
 
     wxFFile gerberStream5( gerberFile5.GetFullPath(), wxT( "rb" ) );
@@ -415,7 +391,7 @@ BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
     GERBER_WRITER gerber6( &board );
     gerber6.SetOptions( VECTOR2I( 0, 0 ) );
     gerber6.SetFormat( 6 );
-    BOOST_REQUIRE( gerber6.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, false, nullptr ) );
+    BOOST_REQUIRE( gerber6.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, false, nullptr ) );
 
     wxFFile gerberStream6( gerberFile5.GetFullPath(), wxT( "rb" ) );
     wxString gerberContents6;
@@ -424,8 +400,6 @@ BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
                          "Expected 'Fmt 4.6' in gerber header with precision=6" );
     BOOST_CHECK( !gerberContents6.Contains( wxT( "Fmt 4.5" ) ) );
     gerberStream6.Close();
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -434,8 +408,8 @@ BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
 // reversed layer order in the generated file name (e.g. "back-in2" instead of "in2-back").
 BOOST_AUTO_TEST_CASE( DrillFileLayerOrderInFilename )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "layer_order_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_drill_layer_order" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "layer_order_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 4 );
@@ -454,15 +428,13 @@ BOOST_AUTO_TEST_CASE( DrillFileLayerOrderInFilename )
     EXCELLON_WRITER excellon( &board );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
     excellon.SetFormat( true );
-    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, nullptr ) );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.PathStr(), true, false, nullptr ) );
 
     // Correct order: top inner layer first, then back layer.
-    wxFileName correctFile( tempDir.GetFullPath(), wxT( "layer_order_board-in2-back.drl" ) );
-    wxFileName reversedFile( tempDir.GetFullPath(), wxT( "layer_order_board-back-in2.drl" ) );
+    wxFileName correctFile( tempDir.PathStr(), wxT( "layer_order_board-in2-back.drl" ) );
+    wxFileName reversedFile( tempDir.PathStr(), wxT( "layer_order_board-back-in2.drl" ) );
     BOOST_CHECK_MESSAGE( correctFile.FileExists(), "Expected drill file 'in2-back' not found" );
     BOOST_CHECK_MESSAGE( !reversedFile.FileExists(), "Incorrectly named drill file 'back-in2' found" );
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -470,14 +442,14 @@ BOOST_AUTO_TEST_CASE( DrillFileLayerOrderInFilename )
 // GenDrillReportFile crashed when aReporter was null (the default)
 BOOST_AUTO_TEST_CASE( DrillReportNullReporter )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "test_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_drill_report_null" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "test_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
     board.SetFileName( boardFile.GetFullPath() );
 
-    wxFileName reportFile( tempDir.GetFullPath(), wxT( "test_board-drl.rpt" ) );
+    wxFileName reportFile( tempDir.PathStr(), wxT( "test_board-drl.rpt" ) );
 
     // Valid path with null reporter should succeed without crashing
     EXCELLON_WRITER excellon( &board );
@@ -493,8 +465,6 @@ BOOST_AUTO_TEST_CASE( DrillReportNullReporter )
 
     GERBER_WRITER gerber2( &board );
     BOOST_CHECK( !gerber2.GenDrillReportFile( wxT( "/nonexistent/path/report.rpt" ) ) );
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -503,8 +473,8 @@ BOOST_AUTO_TEST_CASE( DrillReportNullReporter )
 // printToolSummary() passed integer literal 0 instead of the FILE* to fmt::print()
 BOOST_AUTO_TEST_CASE( DrillReportWithTools )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "test_board_with_drills.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_drill_report_tools" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "test_board_with_drills.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
@@ -518,7 +488,7 @@ BOOST_AUTO_TEST_CASE( DrillReportWithTools )
     via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.60 ) );
     board.Add( via );
 
-    wxFileName reportFile( tempDir.GetFullPath(), wxT( "test_board_with_drills-drl.rpt" ) );
+    wxFileName reportFile( tempDir.PathStr(), wxT( "test_board_with_drills-drl.rpt" ) );
 
     EXCELLON_WRITER excellon( &board );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
@@ -532,8 +502,6 @@ BOOST_AUTO_TEST_CASE( DrillReportWithTools )
     BOOST_CHECK( reportContents.Contains( wxT( "T1" ) ) );
     BOOST_CHECK( reportContents.Contains( wxT( "0.300mm" ) ) );
     reportStream.Close();
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -545,8 +513,8 @@ BOOST_AUTO_TEST_CASE( DrillReportWithTools )
 // individual line segments is exported.
 BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "silk_rect_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_odb_unfilled_rect_silk" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "silk_rect_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
@@ -561,7 +529,7 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
     rect->SetWidth( pcbIUScale.mmToIU( 0.15 ) );
     board.Add( rect );
 
-    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    wxFileName odbRoot( tempDir.PathStr(), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
@@ -597,15 +565,12 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
 
     // The degenerate donut_rc symbol should not appear anymore.
     BOOST_CHECK( !silkContents.Contains( wxT( "donut_rc" ) ) );
-
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
 BOOST_AUTO_TEST_CASE( OdbPpDegenerateTrackArc )
 {
-    wxFileName tempDir = MakeTempDir();
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_odb_degenerate_track_arc" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
@@ -623,7 +588,7 @@ BOOST_AUTO_TEST_CASE( OdbPpDegenerateTrackArc )
 
     board.Add( arc );
 
-    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    wxFileName odbRoot( tempDir.PathStr(), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
@@ -661,17 +626,14 @@ BOOST_AUTO_TEST_CASE( OdbPpDegenerateTrackArc )
 
     BOOST_CHECK_EQUAL( lineCount, 1 );
     BOOST_CHECK_EQUAL( arcCount, 0 );
-
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
-// Export aBoard to a fresh ODB++ tree below aTempDir and return the root of that tree.  Symbol
+// Export aBoard to a fresh ODB++ tree below aParentDir and return the root of that tree.  Symbol
 // dimensions come out in micrometres because the file units are millimetres.
-static wxFileName ExportOdbTree( BOARD* aBoard, const wxFileName& aTempDir )
+static wxFileName ExportOdbTree( BOARD* aBoard, const std::filesystem::path& aParentDir )
 {
-    wxFileName odbRoot( aTempDir.GetFullPath(), wxEmptyString );
+    wxFileName odbRoot( wxString::FromUTF8( aParentDir.string() ), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
@@ -715,17 +677,14 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledCircleAnnulus )
     KI_TEST::LoadBoard( settingsManager, wxT( "issue25089/odb_circles" ), board );
     BOOST_REQUIRE( board );
 
-    wxFileName tempDir = MakeTempDir();
-    wxFileName odbRoot = ExportOdbTree( board.get(), tempDir );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_odb_unfilled_circle_annulus" ) );
+    wxFileName               odbRoot = ExportOdbTree( board.get(), tempDir.Path() );
 
     // Each copper circle is 2 mm across with a 0.1 mm stroke, so the ring spans radius
     // 0.95 mm to 1.05 mm
     wxString contents = ReadOdbLayerFeatures( odbRoot, wxT( "f.cu" ) );
     BOOST_CHECK_MESSAGE( contents.Contains( wxT( "donut_r2100.0x1900.0" ) ),
                          "Wrong copper annulus, features file holds:\n" + contents );
-
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -741,8 +700,8 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledCircleWithoutHole )
     KI_TEST::LoadBoard( settingsManager, wxT( "issue25089/odb_circle_edge_cases" ), board );
     BOOST_REQUIRE( board );
 
-    wxFileName tempDir = MakeTempDir();
-    wxFileName odbRoot = ExportOdbTree( board.get(), tempDir );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_odb_unfilled_circle_no_hole" ) );
+    wxFileName               odbRoot = ExportOdbTree( board.get(), tempDir.Path() );
 
     wxString frontContents = ReadOdbLayerFeatures( odbRoot, wxT( "f.cu" ) );
 
@@ -767,9 +726,6 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledCircleWithoutHole )
                                          + line );
         }
     }
-
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -801,8 +757,8 @@ PAD* AddSlotPad( FOOTPRINT* aFootprint, const VECTOR2I& aPos, PAD_ATTRIB aAttrib
 // plated drill layer just like NPTH slots on the non-plated layer.
 BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
 {
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "plated_slot_board.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_odb_plated_slot_drill" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "plated_slot_board.kicad_pcb" ) );
 
     BOARD board;
     board.SetCopperLayerCount( 2 );
@@ -818,7 +774,7 @@ BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
     AddSlotPad( fp, VECTOR2I( pcbIUScale.mmToIU( 60.0 ), pcbIUScale.mmToIU( 50.0 ) ),
                 PAD_ATTRIB::NPTH );
 
-    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    wxFileName odbRoot( tempDir.PathStr(), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
@@ -922,9 +878,6 @@ BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
     BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedToolsContents, wxT( "TYPE=NON_PLATED" ) ),
                        1 );
     BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedToolsContents, wxT( "TYPE=PLATED" ) ), 0 );
-
-    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -940,13 +893,13 @@ BOOST_AUTO_TEST_CASE( DrillReportBackdrillHoleCount )
     KI_TEST::LoadBoard( settingsManager, wxT( "issue25021/backdrill" ), board );
     BOOST_REQUIRE( board );
 
-    wxFileName tempDir = MakeTempDir();
-    wxFileName boardFile( tempDir.GetFullPath(), wxT( "backdrill.kicad_pcb" ) );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_backdrill_drill_report_hole_count" ) );
+    wxFileName               boardFile( tempDir.PathStr(), wxT( "backdrill.kicad_pcb" ) );
 
     // Keep the derived drill file names out of the source tree
     board->SetFileName( boardFile.GetFullPath() );
 
-    wxFileName reportFile( tempDir.GetFullPath(), wxT( "backdrill-drl.rpt" ) );
+    wxFileName reportFile( tempDir.PathStr(), wxT( "backdrill-drl.rpt" ) );
 
     EXCELLON_WRITER excellon( board.get() );
     excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
@@ -1019,6 +972,4 @@ BOOST_AUTO_TEST_CASE( DrillReportBackdrillHoleCount )
     // Plated through holes and the unplated summary must be unaffected
     BOOST_CHECK( reportContents.Contains( wxT( "Total plated holes count 4" ) ) );
     BOOST_CHECK( reportContents.Contains( wxT( "Total unplated holes count 0" ) ) );
-
-    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
