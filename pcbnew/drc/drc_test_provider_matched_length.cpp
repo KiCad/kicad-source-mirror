@@ -185,14 +185,18 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
         double   maxLength = 0;
         wxString maxNetname;
 
+        // The reference is compared with itself, so the minimum must not be applied to it.
+        const DRC_LENGTH_REPORT::ENTRY* referenceEntry = nullptr;
+
         if( !isTimeDomain )
         {
             for( const DRC_LENGTH_REPORT::ENTRY& ent : connections )
             {
-                if( ent.total > maxLength )
+                if( !referenceEntry || ent.total > maxLength )
                 {
                     maxLength = ent.total;
                     maxNetname = ent.netname;
+                    referenceEntry = &ent;
                 }
             }
         }
@@ -200,10 +204,11 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
         {
             for( const DRC_LENGTH_REPORT::ENTRY& ent : connections )
             {
-                if( ent.totalDelay > maxLength )
+                if( !referenceEntry || ent.totalDelay > maxLength )
                 {
                     maxLength = ent.totalDelay;
                     maxNetname = ent.netname;
+                    referenceEntry = &ent;
                 }
             }
         }
@@ -218,7 +223,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
 
             if( aConstraint.GetValue().HasMax() && abs( skew ) > aConstraint.GetValue().Max() )
                 fail_max = true;
-            else if( aConstraint.GetValue().HasMin() && abs( skew ) < aConstraint.GetValue().Min() )
+            else if( aConstraint.GetValue().HasMin() && &ent != referenceEntry
+                     && abs( skew ) < aConstraint.GetValue().Min() )
                 fail_min = true;
 
             if( fail_min || fail_max )
