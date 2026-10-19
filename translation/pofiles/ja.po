@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-19 06:53+0000\n"
+"PO-Revision-Date: 2026-10-20 10:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -2498,11 +2498,11 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:199
 msgid "Lead Development Team"
-msgstr "リード開発チーム"
+msgstr "開発チームのリーダー"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Alumni"
-msgstr "リード開発の引退者"
+msgstr "開発リーダの引退者"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Additional Contributions By"
