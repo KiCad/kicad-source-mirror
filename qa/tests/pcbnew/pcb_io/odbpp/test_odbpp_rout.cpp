@@ -86,12 +86,6 @@ const FIELDS* FindRow( const std::vector<FIELDS>& aRows, const std::string& aNam
 }
 
 
-std::unique_ptr<BOARD> LoadBoard( const std::string& aPath )
-{
-    return KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir() + aPath );
-}
-
-
 struct ROUT_SPAN
 {
     std::pair<std::string, std::string> m_start;
@@ -145,8 +139,7 @@ std::map<int, std::vector<ROUT_SPAN>> RoutChains( const std::vector<std::string>
 
 BOOST_AUTO_TEST_CASE( OdbCopperLayerTypesFollowBoardSetup )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "connect/connect.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "connect/connect.kicad_pcb" );
     BOOST_REQUIRE( board->GetLayerType( In1_Cu ) == LT_POWER );
     fs::path root = ExportOdb( *board, TempDir().Path() );
     std::vector<FIELDS> rows = MatrixLayers( root );
@@ -154,8 +147,7 @@ BOOST_AUTO_TEST_CASE( OdbCopperLayerTypesFollowBoardSetup )
     BOOST_REQUIRE( inner );
     BOOST_CHECK_EQUAL( inner->at( "TYPE" ), "POWER_GROUND" );
 
-    board = LoadBoard( "issue24089/issue24089.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24089/issue24089.kicad_pcb" );
     BOOST_REQUIRE( board->GetLayerType( F_Cu ) == LT_MIXED );
     root = ExportOdb( *board, TempDir().Path() );
     rows = MatrixLayers( root );
@@ -167,8 +159,7 @@ BOOST_AUTO_TEST_CASE( OdbCopperLayerTypesFollowBoardSetup )
 
 BOOST_AUTO_TEST_CASE( OdbRoutLayerCarriesEveryIsland )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "odbpp/two_board_islands.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/two_board_islands.kicad_pcb" );
     SHAPE_POLY_SET outlines;
     BOOST_REQUIRE( board->GetBoardPolygonOutlines( outlines, true ) );
     BOOST_REQUIRE_EQUAL( outlines.OutlineCount(), 2 );
@@ -212,8 +203,7 @@ BOOST_AUTO_TEST_CASE( OdbRoutLayerCarriesEveryIsland )
 
 BOOST_AUTO_TEST_CASE( OdbPlatedEdgesAreRoutPlated )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "issue24089/issue24089.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24089/issue24089.kicad_pcb" );
     BOOST_REQUIRE( board->GetDesignSettings().GetStackupDescriptor().m_EdgePlating );
     fs::path root = ExportOdb( *board, TempDir().Path() );
     ODB_PRODUCT product( root );
@@ -225,8 +215,7 @@ BOOST_AUTO_TEST_CASE( OdbPlatedEdgesAreRoutPlated )
     BOOST_CHECK( std::any_of( routLines.begin(), routLines.end(), []( const std::string& aLine )
                               { return aLine.rfind( "A ", 0 ) == 0; } ) );
 
-    board = LoadBoard( "issue19325/issue19325.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    board = KI_TEST::RequireBoardFromPcbnewQAData( "issue19325/issue19325.kicad_pcb" );
     root = ExportOdb( *board, TempDir().Path() );
     ODB_PRODUCT castellated( root );
     fs::path castRout( castellated.LayerFile( "rout", "features" ).ToStdWstring() );
@@ -238,8 +227,7 @@ BOOST_AUTO_TEST_CASE( OdbPlatedEdgesAreRoutPlated )
 
 BOOST_AUTO_TEST_CASE( OdbMaskPasteSilkReferenceCopper )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "issue24089/issue24089.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24089/issue24089.kicad_pcb" );
     fs::path root = ExportOdb( *board, TempDir().Path() );
     std::vector<FIELDS> rows = MatrixLayers( root );
 
@@ -297,8 +285,7 @@ BOOST_AUTO_TEST_CASE( OdbMaskPasteSilkReferenceCopper )
 
 BOOST_AUTO_TEST_CASE( OdbLayerTypeOverrides )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "issue24089/issue24089.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD>   board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24089/issue24089.kicad_pcb" );
     KI_TEST::SCOPED_TEMP_DIR dir( wxT( "odb_layer_type_overrides" ) );
     PCB_IO_ODBPP             plugin;
     ODB_EXPORT_OPTIONS       options;
@@ -333,8 +320,7 @@ BOOST_AUTO_TEST_CASE( OdbLayerTypeOverrides )
 
 BOOST_AUTO_TEST_CASE( OdbMatrixIdsAreUnique )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "issue24089/issue24089.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD>  board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24089/issue24089.kicad_pcb" );
     fs::path root = ExportOdb( *board, TempDir().Path() );
     std::vector<FIELDS> rows = MatrixLayers( root );
     std::set<unsigned long> ids;
@@ -373,8 +359,7 @@ BOOST_AUTO_TEST_CASE( OdbMatrixIdsAreUnique )
 
 BOOST_AUTO_TEST_CASE( OdbSlotsStayOnDrillAndGainRoutChains )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "odbpp/pad_roles.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/pad_roles.kicad_pcb" );
     fs::path root = ExportOdb( *board, TempDir().Path() );
     ODB_PRODUCT product( root );
     fs::path rout( product.LayerFile( "rout", "features" ).ToStdWstring() );
@@ -399,8 +384,7 @@ BOOST_AUTO_TEST_CASE( OdbSlotsStayOnDrillAndGainRoutChains )
 
     BOOST_CHECK( drillHasSlotLine );
 
-    board = LoadBoard( "odbpp/npth_pressfit_slot.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/npth_pressfit_slot.kicad_pcb" );
     root = ExportOdb( *board, TempDir().Path() );
     ODB_PRODUCT npthProduct( root );
     fs::path npthRout( npthProduct.LayerFile( "rout", "features" ).ToStdWstring() );
@@ -412,8 +396,7 @@ BOOST_AUTO_TEST_CASE( OdbSlotsStayOnDrillAndGainRoutChains )
 
 BOOST_AUTO_TEST_CASE( OdbApiKitchenSinkMatrixReferencesResolve )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "api_kitchen_sink.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "api_kitchen_sink.kicad_pcb" );
     fs::path root = ExportOdb( *board, TempDir().Path() );
     ODB_PRODUCT        product( root );
     std::set<wxString> ids;
@@ -431,8 +414,7 @@ BOOST_AUTO_TEST_CASE( OdbApiKitchenSinkMatrixReferencesResolve )
 
 BOOST_AUTO_TEST_CASE( OdbRoutDoesNotInferMissingBoardOutline )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "component_classes.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "component_classes.kicad_pcb" );
     SHAPE_POLY_SET outline;
     BOOST_CHECK( !board->GetBoardPolygonOutlines( outline, false ) );
     WX_STRING_REPORTER reporter;
@@ -447,8 +429,7 @@ BOOST_AUTO_TEST_CASE( OdbRoutDoesNotInferMissingBoardOutline )
 
 BOOST_AUTO_TEST_CASE( OdbCollidingLayerNamesKeepMatrixReferences )
 {
-    std::unique_ptr<BOARD> board = LoadBoard( "odbpp/layer_name_collisions.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/layer_name_collisions.kicad_pcb" );
     BOOST_REQUIRE_EQUAL( board->GetLayerName( F_Cu ), wxS( "Signal" ) );
     BOOST_REQUIRE_EQUAL( board->GetLayerName( In1_Cu ), wxS( "SiGnAl" ) );
     BOOST_REQUIRE_EQUAL( board->GetLayerName( B_Cu ), wxS( "SIGNAL" ) );

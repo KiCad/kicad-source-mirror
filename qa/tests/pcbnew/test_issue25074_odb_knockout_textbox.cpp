@@ -59,10 +59,7 @@ static int countSurfaceRecords( const fs::path& aFeaturesFile )
 BOOST_AUTO_TEST_CASE( OdbKnockoutTextboxExport )
 {
     SETTINGS_MANAGER       settingsManager;
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
-            KI_TEST::GetPcbnewTestDataDir() + "issue25074/knockout_textbox.kicad_pcb" );
-
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue25074/knockout_textbox.kicad_pcb" );
 
     // The crash needed a knockout text box specifically, so fail loudly if the
     // fixture ever loses the flag.

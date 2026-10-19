@@ -159,8 +159,7 @@ BOOST_AUTO_TEST_CASE( FootprintCutoutIsExported )
     const std::string sourceBoard = KI_TEST::GetPcbnewTestDataDir() + "issue5854.kicad_pcb";
     BOOST_REQUIRE_MESSAGE( std::filesystem::exists( sourceBoard ), "Missing test board " << sourceBoard );
 
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( sourceBoard );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue5854.kicad_pcb" );
 
     const std::filesystem::path outDir =
             std::filesystem::temp_directory_path() / "kicad_idf_cutout_test";
@@ -210,8 +209,7 @@ BOOST_AUTO_TEST_CASE( RotatedPolygonCutoutIsExported )
     const std::string sourceBoard = KI_TEST::GetPcbnewTestDataDir() + "issue5854.kicad_pcb";
     BOOST_REQUIRE_MESSAGE( std::filesystem::exists( sourceBoard ), "Missing test board " << sourceBoard );
 
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( sourceBoard );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue5854.kicad_pcb" );
     BOOST_REQUIRE( !board->Footprints().empty() );
 
     FOOTPRINT* footprint = board->Footprints().front();

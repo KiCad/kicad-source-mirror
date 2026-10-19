@@ -49,12 +49,7 @@
 
 BOOST_AUTO_TEST_CASE( RuleAreaDoesNotCauseSilkOrMaskViolationsIssue24177 )
 {
-    const std::string path = KI_TEST::GetPcbnewTestDataDir()
-                             + "issue24177/silk_rule_area.kicad_pcb";
-
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( path );
-
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24177/silk_rule_area.kicad_pcb" );
 
     // Zero violations is also what an empty board reports, so pin down the
     // geometry that has to be present for the counts below to mean anything.

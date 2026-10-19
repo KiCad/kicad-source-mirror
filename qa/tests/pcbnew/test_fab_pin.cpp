@@ -49,9 +49,7 @@ BOOST_AUTO_TEST_CASE( FabPinRoles )
 
     for( const char* boardName : boardNames )
     {
-        std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                            + boardName );
-        BOOST_REQUIRE_MESSAGE( board, boardName );
+        std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( boardName );
 
         for( const FOOTPRINT* footprint : board->Footprints() )
         {

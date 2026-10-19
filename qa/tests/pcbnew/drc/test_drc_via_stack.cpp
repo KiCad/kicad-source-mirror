@@ -100,12 +100,9 @@ struct VIA_STACK_DRC_FIXTURE
     // the development build.
     void loadBoard()
     {
-        m_board = KI_TEST::ReadBoardFromFileOrStream(
-                KI_TEST::GetPcbnewTestDataDir() + "drc_via_stack/"
-                + boost::unit_test::framework::current_test_case().p_name.get()
-                + ".kicad_pcb" );
+        const std::string boardName = boost::unit_test::framework::current_test_case().p_name.get();
 
-        BOOST_REQUIRE( m_board );
+        m_board = KI_TEST::RequireBoardFromPcbnewQAData( "drc_via_stack/" + boardName + ".kicad_pcb" );
     }
 
 

@@ -86,10 +86,7 @@ std::unique_ptr<BOARD> loadBoard( const char* aName )
 
     BOOST_REQUIRE( std::filesystem::exists( boardPath ) );
 
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( boardPath.string() );
-    BOOST_REQUIRE( board );
-
-    return board;
+    return KI_TEST::RequireBoardFromPcbnewQAData( aName );
 }
 
 

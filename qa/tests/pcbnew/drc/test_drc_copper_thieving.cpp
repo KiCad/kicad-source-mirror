@@ -47,10 +47,7 @@ struct DRC_COPPER_THIEVING_FIXTURE
 BOOST_FIXTURE_TEST_CASE( ThievingZoneProducesNoIsolatedCopperViolations,
                          DRC_COPPER_THIEVING_FIXTURE )
 {
-    m_board = KI_TEST::ReadBoardFromFileOrStream(
-            KI_TEST::GetPcbnewTestDataDir() + "drc_copper_thieving/copper_thieving.kicad_pcb" );
-
-    BOOST_REQUIRE( m_board );
+    m_board = KI_TEST::RequireBoardFromPcbnewQAData( "drc_copper_thieving/copper_thieving.kicad_pcb" );
 
     // A board with no thieving fill also reports no isolated copper, so confirm
     // the stamps the exclusion has to cover are actually present.

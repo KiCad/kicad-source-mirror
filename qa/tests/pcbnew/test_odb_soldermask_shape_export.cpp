@@ -106,10 +106,7 @@ static int countMaskSurfaceRecords( const fs::path& aRoot, bool& aFoundFile )
 BOOST_AUTO_TEST_CASE( OdbSolderMaskShapeExport )
 {
     SETTINGS_MANAGER       settingsManager;
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
-            KI_TEST::GetPcbnewTestDataDir() + "issue24690/soldermask_shape.kicad_pcb" );
-
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue24690/soldermask_shape.kicad_pcb" );
 
     // The export can only drop the mask opening if the mask-flagged shape is on
     // the board to begin with, so confirm the fixture still carries it.

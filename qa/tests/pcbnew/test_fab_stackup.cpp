@@ -30,9 +30,7 @@
 
 BOOST_AUTO_TEST_CASE( FabStackupSnapshotsRealBoard )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                       + "ipc2581/dielectric-sublayer.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "ipc2581/dielectric-sublayer.kicad_pcb" );
 
     BOARD_DESIGN_SETTINGS&           settings = board->GetDesignSettings();
     BOARD_STACKUP                    before = settings.GetStackupDescriptor();

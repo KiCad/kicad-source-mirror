@@ -150,8 +150,7 @@ BOOST_AUTO_TEST_CASE( FabPadLayerMatchesPlotterOnRealBoards )
 
     for( const std::string& path : paths )
     {
-        std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir() + path );
-        BOOST_REQUIRE( board );
+        std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( path );
         const int              maxError = board->GetDesignSettings().m_MaxError;
         SIMPLE_RENDER_SETTINGS renderSettings;
         int                    boardCompared = 0;

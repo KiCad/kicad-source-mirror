@@ -74,9 +74,8 @@ BOOST_AUTO_TEST_SUITE( OdbAttributesTests )
 
 BOOST_AUTO_TEST_CASE( FabComponentRowUsesSavedVariantFields )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "variant_test/variant_test.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "variant_test/variant_test.kicad_pcb" );
+
     const FOOTPRINT* resistor = nullptr;
 
     for( const FOOTPRINT* footprint : board->Footprints() )
@@ -96,9 +95,8 @@ BOOST_AUTO_TEST_CASE( FabComponentRowUsesSavedVariantFields )
 
 BOOST_AUTO_TEST_CASE( FabTestPointsKeepSavedBoardViaOrder )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "connect/connect.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "connect/connect.kicad_pcb" );
+
     BOOST_REQUIRE( board->BuildConnectivity() );
     std::vector<FAB_TEST_POINT> points = FabTestPoints( *board );
     BOOST_REQUIRE( !points.empty() );
@@ -128,9 +126,8 @@ BOOST_AUTO_TEST_CASE( FabTestPointsKeepSavedBoardViaOrder )
 
 BOOST_AUTO_TEST_CASE( FabAnonymousNetNamesFollowSavedNetCodes )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "odbpp/net_name_collision.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/net_name_collision.kicad_pcb" );
+
     std::map<int, wxString> names = FabAnonymousNetNames( *board );
     BOOST_REQUIRE_GT( names.size(), 1u );
     size_t ordinal = 0;
@@ -167,9 +164,7 @@ BOOST_AUTO_TEST_CASE( OdbPadUsageOptionOrderMatchesSpec )
 
 BOOST_AUTO_TEST_CASE( OdbFiducialPadUsage )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "odbpp/pad_roles.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/pad_roles.kicad_pcb" );
 
     size_t globals = CountPads( *board, PAD_PROP::FIDUCIAL_GLBL, F_Cu );
     size_t locals = CountPads( *board, PAD_PROP::FIDUCIAL_LOCAL, F_Cu );
@@ -187,9 +182,8 @@ BOOST_AUTO_TEST_CASE( OdbFiducialPadUsage )
 
 BOOST_AUTO_TEST_CASE( OdbTestPointFeatureAndCadnetFlag )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "odbpp/pad_roles.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/pad_roles.kicad_pcb" );
+
     BOOST_REQUIRE_EQUAL( CountPads( *board, PAD_PROP::TESTPOINT, F_Cu ), 1 );
 
     const PAD* testPoint = nullptr;
@@ -260,9 +254,8 @@ BOOST_AUTO_TEST_CASE( OdbTestPointFeatureAndCadnetFlag )
 
 BOOST_AUTO_TEST_CASE( OdbConnectedViaIsCadnetMidpoint )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "connect/connect.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "connect/connect.kicad_pcb" );
+
     BOOST_REQUIRE( board->BuildConnectivity() );
     const FAB_TEST_POINT* midpoint = nullptr;
     std::vector<FAB_TEST_POINT> points = FabTestPoints( *board );
@@ -316,9 +309,8 @@ BOOST_AUTO_TEST_CASE( OdbConnectedViaIsCadnetMidpoint )
 
 BOOST_AUTO_TEST_CASE( OdbPressFitUsesDrillToolComponentAndPinRoles )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "odbpp/pad_roles.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/pad_roles.kicad_pcb" );
+
     BOOST_REQUIRE_EQUAL( CountPads( *board, PAD_PROP::PRESSFIT, F_Cu ), 1 );
 
     fs::path root = ExportOdb( *board, TempDir().Path() );
@@ -374,9 +366,7 @@ BOOST_AUTO_TEST_CASE( OdbPressFitUsesDrillToolComponentAndPinRoles )
 
 BOOST_AUTO_TEST_CASE( OdbUnnumberedNpthUsesToolingHoleRole )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "odbpp/pad_roles.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "odbpp/pad_roles.kicad_pcb" );
 
     ODB_PRODUCT product( ExportOdb( *board, TempDir().Path() ) );
     wxString drillLayer;
@@ -397,9 +387,8 @@ BOOST_AUTO_TEST_CASE( OdbUnnumberedNpthUsesToolingHoleRole )
 
 BOOST_AUTO_TEST_CASE( OdbMicroviasUseLaserAttributesAndTools )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "padstacks.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "padstacks.kicad_pcb" );
+
     size_t microvias = 0;
 
     for( PCB_TRACK* track : board->Tracks() )
@@ -442,8 +431,8 @@ BOOST_AUTO_TEST_CASE( OdbNpthPressFitNeverUsesPressFitTool )
 
     for( const auto& [name, isSlot] : fixtures )
     {
-        std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir() + name );
-        BOOST_REQUIRE( board );
+        std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( name );
+
         size_t invalidPads = 0;
 
         for( const FOOTPRINT* footprint : board->Footprints() )
@@ -488,9 +477,8 @@ BOOST_AUTO_TEST_CASE( OdbNpthPressFitNeverUsesPressFitTool )
 
 BOOST_AUTO_TEST_CASE( OdbStepBoardThicknessMatchesDefaultStackup )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "custom_pads.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "custom_pads.kicad_pcb" );
+
     BOOST_REQUIRE( !board->GetDesignSettings().m_HasStackup );
 
     fs::path root = ExportOdb( *board, TempDir().Path() );
@@ -510,9 +498,7 @@ BOOST_AUTO_TEST_CASE( OdbStepBoardThicknessMatchesDefaultStackup )
 
 BOOST_AUTO_TEST_CASE( OdbCopperWeightFollowsOutputUnits )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "custom_pads.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "custom_pads.kicad_pcb" );
 
     // Produce an ODB++ export and check that the copper weight follows the output units.
     const auto checkCopperWeight =
@@ -542,9 +528,7 @@ BOOST_AUTO_TEST_CASE( OdbCopperWeightFollowsOutputUnits )
 
 BOOST_AUTO_TEST_CASE( OdbLayerMaterialHasUserAttributeDeclaration )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "ipc2581/dielectric-sublayer.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "ipc2581/dielectric-sublayer.kicad_pcb" );
 
     fs::path root = ExportOdb( *board, TempDir().Path() );
     ODB_PRODUCT product( root );
@@ -579,9 +563,7 @@ BOOST_AUTO_TEST_CASE( OdbLayerMaterialHasUserAttributeDeclaration )
 
 BOOST_AUTO_TEST_CASE( OdbBackdrillStopLayerFollowsMustCutCopper )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
-                                                                      + "issue25021/backdrill.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue25021/backdrill.kicad_pcb" );
 
     ODB_PRODUCT product( ExportOdb( *board, TempDir().Path() ) );
     const std::map<std::pair<wxString, wxString>, wxString> stopLayers = {

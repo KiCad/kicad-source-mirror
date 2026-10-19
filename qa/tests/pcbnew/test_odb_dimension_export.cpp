@@ -98,10 +98,7 @@ static int countSilkLineRecords( const fs::path& aRoot, bool& aFoundFile )
 BOOST_AUTO_TEST_CASE( OdbDimensionExport )
 {
     SETTINGS_MANAGER       settingsManager;
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
-            KI_TEST::GetPcbnewTestDataDir() + "issue20249/dimension.kicad_pcb" );
-
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue20249/dimension.kicad_pcb" );
 
     // A dimension with no geometry would export nothing and the test would pass
     // for the wrong reason.

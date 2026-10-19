@@ -1915,10 +1915,7 @@ BOOST_AUTO_TEST_CASE( MovingAStackReusesItsMembers )
 // alongside a deliberate file format change.
 BOOST_AUTO_TEST_CASE( GoldenFileStillLoads )
 {
-    std::string path = KI_TEST::GetPcbnewTestDataDir() + "via_stacks.kicad_pcb";
-
-    std::unique_ptr<BOARD> board = ::KI_TEST::ReadBoardFromFileOrStream( path );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "via_stacks.kicad_pcb" );
 
     BOOST_REQUIRE_EQUAL( board->Generators().size(), 2u );
 
@@ -2684,9 +2681,7 @@ private:
 // A drag regenerates inside one commit, so members added by an earlier motion event must be freed
 BOOST_AUTO_TEST_CASE( RegenerateFreesMembersAddedEarlierInTheCommit )
 {
-    std::unique_ptr<BOARD> board =
-            ::KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir() + "via_stacks.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "via_stacks.kicad_pcb" );
 
     TOOL_MANAGER mgr;
     mgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );

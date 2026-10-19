@@ -86,10 +86,8 @@ size_t CountContaining( const std::vector<wxString>& aFiles, const wxString& aPa
 
 BOOST_AUTO_TEST_CASE( GerberDrillBoardDefaultsCreateProtectionFiles )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
-            KI_TEST::GetPcbnewTestDataDir()
-            + "drc_via_stack/FillFromBoardHonoursTheBoardDefault.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board =
+            KI_TEST::RequireBoardFromPcbnewQAData( "drc_via_stack/FillFromBoardHonoursTheBoardDefault.kicad_pcb" );
     BOOST_REQUIRE( board->GetDesignSettings().m_FillVias );
     BOOST_REQUIRE( board->GetDesignSettings().m_TentViasFront );
 
@@ -112,9 +110,7 @@ BOOST_AUTO_TEST_CASE( GerberDrillBoardDefaultsCreateProtectionFiles )
 
 BOOST_AUTO_TEST_CASE( GerberBackdrillDoesNotInheritViaProtection )
 {
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
-            KI_TEST::GetPcbnewTestDataDir() + "issue25021/backdrill.kicad_pcb" );
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue25021/backdrill.kicad_pcb" );
     BOOST_REQUIRE( board->GetDesignSettings().m_TentViasFront );
     BOOST_REQUIRE( board->GetDesignSettings().m_TentViasBack );
 

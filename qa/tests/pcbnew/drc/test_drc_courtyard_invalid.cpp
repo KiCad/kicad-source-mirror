@@ -158,12 +158,8 @@ static void CheckInvalidsMatchExpected( BOARD& aBoard,
 
 void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase )
 {
-    const std::string path = KI_TEST::GetPcbnewTestDataDir() + "drc_courtyard/invalid/"
-                             + aCase.m_board_name + ".kicad_pcb";
-
-    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( path );
-
-    BOOST_REQUIRE( board );
+    std::unique_ptr<BOARD> board =
+            KI_TEST::RequireBoardFromPcbnewQAData( "drc_courtyard/invalid/" + aCase.m_board_name + ".kicad_pcb" );
 
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
