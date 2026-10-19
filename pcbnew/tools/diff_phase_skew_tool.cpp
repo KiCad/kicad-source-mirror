@@ -79,6 +79,8 @@ void DIFF_PHASE_SKEW_TOOL::Reset( const RESET_REASON aReason )
     delete m_router;
     delete m_iface; // Delete after m_router because PNS::NODE dtor needs m_ruleResolver
 
+    m_viewOverlay.reset();
+
     if( aReason == RESET_REASON::SHUTDOWN )
     {
         m_router = nullptr;
