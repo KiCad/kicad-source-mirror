@@ -132,7 +132,7 @@ namespace std
 // from the rules, so they share one cache entry.
 struct TEMP_CLEARANCE_CACHE_KEY
 {
-    struct SIDE
+    struct PARTICIPANT
     {
         const void* boardItem;
         const void* net;
@@ -141,47 +141,53 @@ struct TEMP_CLEARANCE_CACHE_KEY
         int         kind;
         bool        freePad;
 
-        bool operator==( const SIDE& o ) const
+        bool operator==( const PARTICIPANT& o ) const
         {
             return boardItem == o.boardItem && net == o.net && layerStart == o.layerStart && layerEnd == o.layerEnd
                    && kind == o.kind && freePad == o.freePad;
         }
 
-        bool operator<( const SIDE& o ) const
+        bool operator<( const PARTICIPANT& o ) const
         {
             if( boardItem != o.boardItem )
                 return boardItem < o.boardItem;
+
             if( net != o.net )
                 return net < o.net;
             if( layerStart != o.layerStart )
                 return layerStart < o.layerStart;
+
             if( layerEnd != o.layerEnd )
                 return layerEnd < o.layerEnd;
+
             if( kind != o.kind )
                 return kind < o.kind;
+
             return freePad < o.freePad;
         }
     };
 
-    SIDE A;
-    SIDE B;
-    bool Flag;
+    PARTICIPANT A;
+    PARTICIPANT B;
+    bool        Flag;
 
-    static SIDE makeSide( const PNS::ITEM* aItem )
+    static PARTICIPANT makeParticipant( const PNS::ITEM* aItem )
     {
-        return SIDE{ (const void*) aItem->BoardItem(),
-                     (const void*) aItem->Net(),
-                     aItem->Layers().Start(),
-                     aItem->Layers().End(),
-                     (int) aItem->Kind(),
-                     aItem->IsFreePad() };
+        const SHAPE* shape = aItem->Shape( aItem->Layer() );
+
+        return PARTICIPANT{ (const void*) aItem->BoardItem(),
+                            (const void*) aItem->Net(),
+                            aItem->Layers().Start(),
+                            aItem->Layers().End(),
+                            (int) aItem->Kind(),
+                            aItem->IsFreePad() };
     }
 
     TEMP_CLEARANCE_CACHE_KEY( const PNS::ITEM* aA, const PNS::ITEM* aB, bool aFlag ) :
             Flag( aFlag )
     {
-        SIDE sa = makeSide( aA );
-        SIDE sb = makeSide( aB );
+        PARTICIPANT sa = makeParticipant( aA );
+        PARTICIPANT sb = makeParticipant( aB );
 
         // Canonical order so the key is symmetric in (A, B)
         if( sb < sa )
@@ -208,7 +214,7 @@ struct hash<TEMP_CLEARANCE_CACHE_KEY>
     {
         size_t retval = 0xBADC0FFEE0DDF00D;
 
-        for( const TEMP_CLEARANCE_CACHE_KEY::SIDE* s : { &k.A, &k.B } )
+        for( const TEMP_CLEARANCE_CACHE_KEY::PARTICIPANT* s : { &k.A, &k.B } )
         {
             hash_combine( retval, hash<const void*>()( s->boardItem ), hash<const void*>()( s->net ),
                           hash<int>()( s->layerStart ), hash<int>()( s->layerEnd ), hash<int>()( s->kind ),
@@ -260,8 +266,7 @@ public:
     PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER_IFACE* aRouterIface );
     virtual ~PNS_PCBNEW_RULE_RESOLVER();
 
-    int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
-                   bool aUseClearanceEpsilon = true ) override;
+    int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB, bool aUseClearanceEpsilon = true ) override;
 
     bool HasUserDefinedPhysicalConstraint() override;
 
