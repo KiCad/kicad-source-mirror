@@ -1145,6 +1145,58 @@ BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
 }
 
 
+BOOST_AUTO_TEST_CASE( DiffWorkspaceKeepsExtractionsSeparateAndRemovesThem )
+{
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "board.kicad_pcb", "board version\n" ) );
+    writeFile( TempPath(), "schematics/root.kicad_sch", "root sheet\n" );
+    commitWorkingFile( repo.get(), "schematics/root.kicad_sch", "add root sheet" );
+    writeFile( TempPath(), "schematics/child.kicad_sch", "child sheet\n" );
+    commitWorkingFile( repo.get(), "schematics/child.kicad_sch", "add child sheet" );
+
+    wxString root;
+    wxString otherRoot;
+    wxString boardFile;
+    wxString schematicFile;
+
+    {
+        GIT_DIFF_WORKSPACE workspace;
+        BOOST_REQUIRE( workspace.IsOk() );
+        root = workspace.Root();
+        boardFile = workspace.Materialize( repo.get(), "HEAD", "board.kicad_pcb", KICAD_DIFF::DOC_KIND::PCB );
+        BOOST_REQUIRE( !boardFile.IsEmpty() );
+        BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( boardFile ) ), "board version\n" );
+
+        {
+            GIT_DIFF_WORKSPACE other;
+            BOOST_REQUIRE( other.IsOk() );
+            otherRoot = other.Root();
+            BOOST_CHECK( root != otherRoot );
+            wxString otherBoard = other.Materialize( repo.get(), "HEAD", "board.kicad_pcb", KICAD_DIFF::DOC_KIND::PCB );
+            BOOST_REQUIRE( !otherBoard.IsEmpty() );
+            BOOST_CHECK( boardFile != otherBoard );
+            BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( otherBoard ) ), "board version\n" );
+        }
+
+        BOOST_CHECK( !wxFileName::DirExists( otherRoot ) );
+        BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( boardFile ) ), "board version\n" );
+        BOOST_CHECK( workspace.Materialize( repo.get(), "missing-ref", "board.kicad_pcb", KICAD_DIFF::DOC_KIND::PCB )
+                             .IsEmpty() );
+
+        // A schematic extraction includes the child sheets beside its root sheet.
+        schematicFile =
+                workspace.Materialize( repo.get(), "HEAD", "schematics/root.kicad_sch", KICAD_DIFF::DOC_KIND::SCH );
+        BOOST_REQUIRE( !schematicFile.IsEmpty() );
+        BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( schematicFile ) ), "root sheet\n" );
+        wxFileName childFile( wxFileName( schematicFile ).GetPath(), wxS( "child.kicad_sch" ) );
+        BOOST_CHECK_EQUAL( readWorkingFile( childFile ), "child sheet\n" );
+    }
+
+    BOOST_CHECK( !wxFileName::DirExists( root ) );
+    BOOST_CHECK( !wxFileName::FileExists( boardFile ) );
+    BOOST_CHECK( !wxFileName::FileExists( schematicFile ) );
+}
+
+
 // GetTags resolves each tag to the commit it points at.
 BOOST_AUTO_TEST_CASE( GetTagsResolvesTagToCommit )
 {

@@ -31,9 +31,6 @@
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/richmsgdlg.h>
-#include <wx/stdpaths.h>
-#include <wx/time.h>
-#include <wx/utils.h>
 #include <wx/weakref.h>
 
 #include <reporter.h>
@@ -837,34 +834,14 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
 
 GIT_DIFF_WORKSPACE::GIT_DIFF_WORKSPACE()
 {
-    // Create the scratch directory with a non-recursive Mkdir so its final component cannot be
-    // an attacker-precreated symlink. Retry on collision rather than reusing a predictable name.
-    const wxString base =
-            wxStandardPaths::Get().GetTempDir() + wxFileName::GetPathSeparator()
-            + wxString::Format( wxS( "kicad_gitdiff_%lu_" ), static_cast<unsigned long>( wxGetProcessId() ) );
-    const unsigned millis = static_cast<unsigned>( wxGetLocalTimeMillis().GetLo() );
-
-    for( int attempt = 0; attempt < 16 && m_root.IsEmpty(); ++attempt )
-    {
-        wxString candidate = base + wxString::Format( wxS( "%d_%u" ), attempt, millis );
-
-        if( wxFileName::Mkdir( candidate, 0700, 0 ) )
-            m_root = candidate;
-    }
-}
-
-
-GIT_DIFF_WORKSPACE::~GIT_DIFF_WORKSPACE()
-{
-    if( !m_root.IsEmpty() && wxFileName::DirExists( m_root ) )
-        wxFileName::Rmdir( m_root, wxPATH_RMDIR_RECURSIVE );
+    m_root.MakeDirectory( wxS( "kicad_gitdiff_" ), 0700 );
 }
 
 
 wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString& aRef, const wxString& aRelPath,
                                           KICAD_DIFF::DOC_KIND aKind )
 {
-    if( m_root.IsEmpty() )
+    if( !IsOk() )
         return wxEmptyString;
 
     const wxString sep = wxFileName::GetPathSeparator();
@@ -873,7 +850,7 @@ wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString&
     // whole tree and the sub-sheets come along. A board is self-contained, so write just the blob.
     if( aKind == KICAD_DIFF::DOC_KIND::SCH )
     {
-        wxString dir = m_root + sep + wxString::Format( wxS( "s%d" ), m_slot++ );
+        wxString dir = Root() + sep + wxString::Format( wxS( "s%d" ), m_slot++ );
 
         if( !KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( aRepo, aRef, dir ) )
             return wxEmptyString;
@@ -883,7 +860,7 @@ wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString&
         return wxFileName::FileExists( path ) ? path : wxString( wxEmptyString );
     }
 
-    wxString path = m_root + sep + wxString::Format( wxS( "s%d_" ), m_slot++ ) + wxFileName( aRelPath ).GetFullName();
+    wxString path = Root() + sep + wxString::Format( wxS( "s%d_" ), m_slot++ ) + wxFileName( aRelPath ).GetFullName();
 
     if( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( aRepo, aRef, aRelPath, path ) )
         return wxEmptyString;

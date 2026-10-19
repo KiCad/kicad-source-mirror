@@ -69,8 +69,9 @@ public:
     /// Create an empty file with a unique name after @a aPrefix
     bool MakeFile( const wxString& aPrefix );
 
-    /// Create an empty directory with a unique name after @a aPrefix
-    bool MakeDirectory( const wxString& aPrefix );
+    /// Create an empty directory with a unique name after @a aPrefix.
+    /// On POSIX, aPermissions sets the access mode, subject to the process umask.
+    bool MakeDirectory( const wxString& aPrefix, int aPermissions = wxS_DIR_DEFAULT );
 
     const wxString& Path() const { return m_path; }
 

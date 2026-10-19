@@ -23,6 +23,7 @@
 #include <functional>
 #include <vector>
 
+#include <gestfich.h>
 #include <git/git_editor_snapshot.h>
 #include <widgets/file_checklist_ctrl.h>
 #include <diff_merge/diff_doc_kind.h>
@@ -44,16 +45,15 @@ class GIT_DIFF_WORKSPACE
 {
 public:
     GIT_DIFF_WORKSPACE();
-    ~GIT_DIFF_WORKSPACE();
 
     GIT_DIFF_WORKSPACE( const GIT_DIFF_WORKSPACE& ) = delete;
     GIT_DIFF_WORKSPACE& operator=( const GIT_DIFF_WORKSPACE& ) = delete;
 
     /// True when the scratch directory was created.
-    bool IsOk() const { return !m_root.IsEmpty(); }
+    bool IsOk() const { return !m_root.Path().IsEmpty(); }
 
     /// The scratch directory, for callers that lay out their own files (e.g. footprint libraries).
-    const wxString& Root() const { return m_root; }
+    const wxString& Root() const { return m_root.Path(); }
 
     /// Extract aRelPath at aRef into a uniquely named slot and return the path to load, or an
     /// empty string when that version does not exist or could not be written.
@@ -61,8 +61,8 @@ public:
                           KICAD_DIFF::DOC_KIND aKind );
 
 private:
-    wxString m_root;
-    int      m_slot = 0;
+    SCOPED_TEMP_PATH m_root;
+    int              m_slot = 0;
 };
 
 /**
