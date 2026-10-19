@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-19 06:51+0000\n"
+"PO-Revision-Date: 2026-10-20 07:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -2699,11 +2699,11 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:1153
 msgid "Lead Development Team"
-msgstr "リード開発チーム"
+msgstr "開発チームのリーダー"
 
 #: common/dialog_about/AboutDialog_main.cpp:1154
 msgid "Lead Development Alumni"
-msgstr "リード開発の引退者"
+msgstr "開発リーダの引退者"
 
 #: common/dialog_about/AboutDialog_main.cpp:1155
 msgid "Additional Contributions By"
@@ -36011,9 +36011,8 @@ msgid "<value set at runtime>"
 msgstr "<value set at runtime>"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:64
-#, fuzzy
 msgid "Expanded command:"
-msgstr "拡張コマンド:"
+msgstr "展開されたコマンド:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:88
 msgid "Record output messages"
@@ -39819,15 +39818,15 @@ msgstr "IPC 製造 レベル :"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:268
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:34
 msgid "Lead shape:"
-msgstr "リード 形状 :"
+msgstr "リード線の形状 :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:269
 msgid "Lead size:"
-msgstr "リード サイズ :"
+msgstr "リード線のサイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:271
 msgid "Effective lead size:"
-msgstr "有功 リード サイズ :"
+msgstr "有効なリード線サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:276
 msgid "Minimum hole size:"
@@ -39854,7 +39853,7 @@ msgstr "推奨穴サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:279
 msgid "Hole clearance over max. lead:"
-msgstr "最大リードに対する穴のクリアランス :"
+msgstr "最大リード線に対する穴のクリアランス :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:281
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:173
@@ -39877,12 +39876,12 @@ msgstr "%s 要約"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
 #, c-format
 msgid "Maximum lead diameter + %smm"
-msgstr "最大リード直径 + %smm"
+msgstr "最大リード線直径 + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:463
 #, c-format
 msgid "Minimum lead diameter + %smm"
-msgstr "最小リード直径 + %smm"
+msgstr "最小リード線直径 + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:485
 msgid "Side length:"
@@ -39913,17 +39912,15 @@ msgstr "標準穴サイズ"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:122
 msgid "Level:"
-msgstr "レベル:"
+msgstr "製造 レベル:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:134
-#, fuzzy
 msgid "Round to:"
-msgstr "ラウンド"
+msgstr "廻り:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:145
-#, fuzzy
 msgid "Rounding:"
-msgstr "ラウンド"
+msgstr "廻りかた:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:149
 msgid "Nearest"
@@ -39939,7 +39936,7 @@ msgstr "結果"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:211
 msgid "Show minimum lead size"
-msgstr "最小リードサイズを表示"
+msgstr "最小リード線サイズを表示"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:214
 msgid "Show minimum hole size"
@@ -66527,9 +66524,8 @@ msgid "Drill Groups..."
 msgstr "ドリル グループ..."
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Inspect drill groups and assign symbols"
-msgstr "前の未割り当てのシンボルを選択"
+msgstr "ドリルグループを検査して記号を割り当てる"
 
 #: pcbnew/tools/pcb_actions.cpp:533
 msgid "Place Point"
@@ -66627,9 +66623,8 @@ msgid "Place a stacked or staggered microvia stack"
 msgstr "スタック型マイクロビアかスタッガード型マイクロビアを配置"
 
 #: pcbnew/tools/pcb_actions.cpp:702
-#, fuzzy
 msgid "Create Stack from Selection"
-msgstr "選択対象から配線を作成"
+msgstr "選択からスタックを作成"
 
 #: pcbnew/tools/pcb_actions.cpp:703
 msgid "Wrap the selected microvias and traces into a microvia stack"
@@ -66947,14 +66942,12 @@ msgid "Copy selected properties from a source item to compatible target items"
 msgstr "選択したプロパティのソースから互換性のあるターゲット項目にコピーする"
 
 #: pcbnew/tools/pcb_actions.cpp:1245
-#, fuzzy
 msgid "Match Properties Settings..."
-msgstr "ページ プレビュー設定..."
+msgstr "プロパティ一致設定..."
 
 #: pcbnew/tools/pcb_actions.cpp:1246
-#, fuzzy
 msgid "Choose the properties copied by Match Properties"
-msgstr "パッド プロパティをデフォルトのパッド プロパティにコピー"
+msgstr "一致するプロパティからコピーするプロパティを選択する"
 
 #: pcbnew/tools/pcb_actions.cpp:1255
 msgid "Create Array..."
@@ -67025,14 +67018,12 @@ msgid "Export edited footprint to file"
 msgstr "編集したフットプリントをファイルにエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1337
-#, fuzzy
 msgid "Export Current Footprint as SVG..."
-msgstr "現在のフットプリントをエクスポート..."
+msgstr "現在のフットプリントをSVGとしてエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1338
-#, fuzzy
 msgid "Export the current footprint to an SVG file"
-msgstr "ファイルへ現在のフットプリントをエクスポート"
+msgstr "現在のフットプリントをSVGファイルでエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 msgid "Diff the current footprint library against another .pretty directory"
@@ -68531,9 +68522,8 @@ msgid "Show relative skew of diff pair tracks"
 msgstr "異なるペア配線の相対遅延差（スキュー）を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:3351
-#, fuzzy
 msgid "Adds a subgrid to the board"
-msgstr "基板にグリッド アイテムを追加する"
+msgstr "基板にサブ グリッドを追加する"
 
 #: pcbnew/tools/pcb_control.cpp:159 pcbnew/tools/pcb_control.cpp:189
 msgid "Add Footprint Library"
@@ -68773,9 +68763,8 @@ msgid "Every documentation layer already has a drill map."
 msgstr "すべてのドキュメントレイヤーにはすでにドリルマップがあります。"
 
 #: pcbnew/tools/pcb_control.cpp:3130
-#, fuzzy
 msgid "Place Drill Map"
-msgstr "ビアを配置"
+msgstr "ドリル マップを配置"
 
 #: pcbnew/tools/pcb_control.cpp:3284
 msgid "Embed 3D Models"
@@ -70030,9 +70019,8 @@ msgid "Scale footprint with pads?"
 msgstr "パッドでフットプリントを拡大／縮小しますか？"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:1397
-#, fuzzy
 msgid "All spans"
-msgstr "すべてのページ"
+msgstr "すべてのスパン"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:1406
 msgid " (backdrill)"
@@ -70179,7 +70167,6 @@ msgid "Squares"
 msgstr "正方形/四角形"
 
 #: pcbnew/zone.cpp:2326
-#, fuzzy
 msgid "Design Block"
 msgstr "デザインブロック"
 
