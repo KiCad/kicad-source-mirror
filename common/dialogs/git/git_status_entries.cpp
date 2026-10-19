@@ -491,7 +491,7 @@ bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
     if( result != BranchResult::Success )
     {
         DisplayErrorMessage( aParent, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
-                             KIGIT_COMMON::GetLastGitError() );
+                             resultError.IsEmpty() ? KIGIT_COMMON::GetLastGitError() : resultError );
         return false;
     }
 

@@ -970,7 +970,7 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
         return;
 
     m_dialog->RunGitAction(
-            [message]( KIGIT_COMMON& aCommon )
+            [message]( KIGIT_COMMON& aCommon, wxString& aDetail )
             {
                 GIT_CONFIG_HANDLER configHandler( &aCommon );
                 GitUserConfig      userConfig = configHandler.GetUserConfig();
@@ -980,7 +980,11 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
                         commitHandler.PerformAmend( {}, message, userConfig.authorName, userConfig.authorEmail );
 
                 // The amend exists on the stale-index path, so it is not a failure.
-                return result == CommitResult::Success || result == CommitResult::SuccessIndexStale;
+                if( result == CommitResult::Success || result == CommitResult::SuccessIndexStale )
+                    return true;
+
+                aDetail = commitHandler.GetErrorString();
+                return false;
             },
             _( "Could not amend the commit." ) );
 }

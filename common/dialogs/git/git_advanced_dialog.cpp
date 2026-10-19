@@ -609,11 +609,24 @@ bool GIT_ADVANCED_DIALOG::SessionStillCurrent()
 void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON& )>& aFn, const wxString& aError,
                                         bool aRewritesWorkingTree )
 {
+    RunGitAction(
+            [&aFn]( KIGIT_COMMON& aCommon, wxString& )
+            {
+                return aFn( aCommon );
+            },
+            aError, aRewritesWorkingTree );
+}
+
+
+void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON&, wxString& )>& aFn,
+                                        const wxString& aError, bool aRewritesWorkingTree )
+{
     if( !SessionStillCurrent() )
         return;
 
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
     bool                          ok = false;
+    wxString                      detail;
 
     {
         // libgit2 is not safe for concurrent use of one repository, so take the git action lock
@@ -626,7 +639,7 @@ void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON& 
             return;
         }
 
-        ok = aFn( *common );
+        ok = aFn( *common, detail );
     }
 
     if( !ok )
@@ -639,7 +652,7 @@ void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON& 
             common->NotifyRefreshListeners();
         }
 
-        DisplayErrorMessage( this, aError, KIGIT_COMMON::GetLastGitError() );
+        DisplayErrorMessage( this, aError, detail.IsEmpty() ? KIGIT_COMMON::GetLastGitError() : detail );
         return;
     }
 

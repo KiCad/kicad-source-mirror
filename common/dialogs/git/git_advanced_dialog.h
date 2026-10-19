@@ -85,6 +85,11 @@ public:
     void RunGitAction( const std::function<bool( KIGIT_COMMON& )>& aFn, const wxString& aError,
                        bool aRewritesWorkingTree = false );
 
+    /// As above, for an action with a message of its own: what it writes to aDetail is shown
+    /// in place of libgit2's text.
+    void RunGitAction( const std::function<bool( KIGIT_COMMON&, wxString& aDetail )>& aFn, const wxString& aError,
+                       bool aRewritesWorkingTree = false );
+
     /// True while the frame's git session is still the one this window's lists were filled
     /// from. On a mismatch the window is stale: it closes itself and the action must abort.
     bool SessionStillCurrent();
