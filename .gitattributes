@@ -20,6 +20,10 @@
 *.txt       kicad-cmake-source
 *.md        text=auto
 
+# Keep LF so shell scripts and git hooks run under any bash, not only Git for Windows
+*.sh        text eol=lf
+.githooks/**    text eol=lf
+
 # Compiled bitmap sources
 bitmaps_png/cpp_*/*.cpp     generated
 common/bitmap_info.cpp      generated

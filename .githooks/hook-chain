@@ -4,9 +4,11 @@
 # To use:
 #  * create a directory called <hookname>.d
 #  * add scripts to this directory (executable)
-#  * ln -s hook-chain <hookname>
+#  * create an executable <hookname> that runs
+#      HOOKCHAIN_NAME=<hookname> exec "$(dirname "$0")/hook-chain" "$@"
 #
-# Now the scripts in that directory should be called in order.
+# Now the scripts in that directory should be called in order.  A wrapper is
+# used instead of a symlink because Windows checkouts turn symlinks into text files.
 #
 # Set $HOOKCHAIN_DEBUG to see the names of invoked scripts.
 #
@@ -14,7 +16,7 @@
 # https://stackoverflow.com/questions/8730514/chaining-git-hooks
 #
 
-hookname=`basename $0`
+hookname=${HOOKCHAIN_NAME:-`basename $0`}
 
 # Temp file for stdin, cleared at exit
 FILE=`mktemp`
@@ -38,7 +40,7 @@ do
 
         if [ $status -ne 0 ]; then
             echo "Hook $hook failed with error code $status"
-            echo "To commit anyway, use --no-verify"
+            echo "To bypass the hook, use --no-verify"
             exit $status
         else
             if [ "$HOOKCHAIN_DEBUG" ]; then
