@@ -28,28 +28,24 @@ class GIT_ADVANCED_DIALOG;
 
 
 /**
- * The advanced git window's Repository page: the name and email this repository records
- * commits with, and the remote it talks to.
+ * Show the repository's author and open the shared identity editor.
  */
 class PANEL_GIT_REPOSITORY : public PANEL_GIT_REPOSITORY_BASE
 {
 public:
     PANEL_GIT_REPOSITORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
 
-    /// Fill the fields from the repository's git configuration, read on a worker.
+    /// Read the repository identity on a worker and update the display.
     void Populate();
 
 private:
-    void onSave();
+    void onEditAuthor();
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
 
-    /// True once the user has typed in either field. A refresh then leaves them alone, since
-    /// a background fetch must not take away what is being written.
-    bool m_identityEdited = false;
-
     KIGIT_QUERY m_configQuery;
+    KIGIT_QUERY m_editQuery;
 };
 
 #endif // PANEL_GIT_REPOSITORY_H

@@ -70,6 +70,9 @@ public:
     /// root. Empty shows every commit again.
     void ShowHistoryForFile( const wxString& aPath );
 
+    /// Open the Changes page to amend the selected history commit.
+    void ShowAmend( const wxString& aCommitHash );
+
     /// Close the live window, for when the project it was filled from goes away.
     static void CloseActive();
 

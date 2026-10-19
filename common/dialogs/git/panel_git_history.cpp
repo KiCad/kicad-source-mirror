@@ -32,7 +32,6 @@
 #include <wx/menu.h>
 #include <wx/mstream.h>
 #include <wx/richmsgdlg.h>
-#include <wx/textdlg.h>
 
 #include <picosha2.h>
 
@@ -44,8 +43,6 @@
 #include <dialogs/git/git_ui_utils.h>
 #include <diff_merge/diff_scene.h>
 #include <eda_base_frame.h>
-#include <git/git_commit_handler.h>
-#include <git/git_config_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/project_git_utils.h>
 #include <kicad_curl/kicad_curl_easy.h>
@@ -395,7 +392,7 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
                                  ShowGitCommitDiff( m_frame, hash, this );
                          } );
 
-    // Amending is offered on the newest commit only, and only while it has not been pushed.
+    // The Changes page checks whether the selected commit can still be amended.
     m_historyList->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
                          [this]( wxDataViewEvent& aEvent )
                          {
@@ -421,9 +418,9 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
                              menu.Bind(
                                      wxEVT_MENU,
-                                     [this]( wxCommandEvent& )
+                                     [this, hash]( wxCommandEvent& )
                                      {
-                                         onAmendLastCommit();
+                                         m_dialog->ShowAmend( hash );
                                      },
                                      1 );
                              menu.Bind(
@@ -941,102 +938,6 @@ void PANEL_GIT_HISTORY::applyAvatar( const wxString& aEmail, int aDiameter, cons
 }
 
 
-void PANEL_GIT_HISTORY::onAmendLastCommit()
-{
-    if( !m_dialog->SessionStillCurrent() )
-        return;
-
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-
-    struct AMEND_INFO
-    {
-        wxString message;
-        bool     hasLocalCommits = false;
-        bool     hasIdentity = false;
-        bool     detached = false;
-        bool     loaded = false;
-    };
-
-    auto info = std::make_shared<AMEND_INFO>();
-
-    m_actionQuery.Run(
-            common,
-            [info]( KIGIT_COMMON& aCommon )
-            {
-                info->detached = aCommon.IsHeadDetached();
-                info->hasLocalCommits = aCommon.HasLocalCommits();
-                info->hasIdentity = KIGIT::HasGitIdentity( aCommon );
-                info->message = aCommon.GetLastCommitMessage();
-                info->message.Trim();
-                info->loaded = true;
-            },
-            [this, common, info]()
-            {
-                if( !info->loaded || m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
-                {
-                    return;
-                }
-
-                if( info->detached )
-                {
-                    DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, "
-                                                 "so there is no commit to amend. Double click a branch to go "
-                                                 "back to it first." ) );
-                    return;
-                }
-
-                // Only an unpushed commit can be amended without diverging from the remote.
-                if( !info->hasLocalCommits )
-                {
-                    DisplayInfoMessage( this, _( "The last commit has already been pushed, "
-                                                 "so it cannot be amended." ) );
-                    return;
-                }
-
-                amendLastCommit( info->message, info->hasIdentity );
-            } );
-}
-
-
-void PANEL_GIT_HISTORY::amendLastCommit( const wxString& aLastMessage, bool aHasIdentity )
-{
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-
-    wxTextEntryDialog dlg( this, _( "Commit message:" ), _( "Amend Last Commit" ), aLastMessage,
-                           wxTextEntryDialogStyle | wxTE_MULTILINE );
-
-    if( dlg.ShowModal() != wxID_OK || dlg.GetValue().Trim().IsEmpty() )
-        return;
-
-    wxString message = dlg.GetValue();
-
-    if( !KIGIT::EnsureGitIdentity( this, common.get(), aHasIdentity ) )
-        return;
-
-    if( m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
-        return;
-
-    m_dialog->RunGitAction(
-            [message]( KIGIT_COMMON& aCommon, wxString& aDetail )
-            {
-                GIT_CONFIG_HANDLER configHandler( &aCommon );
-                GitUserConfig      userConfig = configHandler.GetUserConfig();
-
-                GIT_COMMIT_HANDLER commitHandler( aCommon.GetRepo() );
-                CommitResult       result =
-                        commitHandler.PerformAmend( {}, message, userConfig.authorName, userConfig.authorEmail );
-
-                // The amend exists on the stale-index path, so it is not a failure.
-                if( result == CommitResult::Success || result == CommitResult::SuccessIndexStale )
-                    return true;
-
-                aDetail = commitHandler.GetErrorString();
-                return false;
-            },
-            _( "Could not amend the commit." ) );
-}
-
-
 void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
 {
     if( !m_dialog->SessionStillCurrent() )
@@ -1047,7 +948,7 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
     struct RESTORE_INFO
     {
         wxString lfsMessage;
-        bool     hasIdentity = false;
+        KIGIT::GIT_IDENTITY identity;
         bool     detached = false;
         bool     loaded = false;
     };
@@ -1060,7 +961,7 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
             {
                 info->detached = aCommon.IsHeadDetached();
                 info->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
-                info->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                info->identity = KIGIT::ReadGitIdentity( aCommon );
                 info->loaded = true;
             },
             [this, common, info, aCommitHash]()
@@ -1085,12 +986,12 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
                     return;
                 }
 
-                restoreVersion( aCommitHash, info->hasIdentity );
+                restoreVersion( aCommitHash, info->identity );
             } );
 }
 
 
-void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, bool aHasIdentity )
+void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const KIGIT::GIT_IDENTITY& aIdentity )
 {
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
@@ -1132,7 +1033,7 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, bool aHasId
         return;
 
     // The restore commit needs an identity to be recorded with.
-    if( !KIGIT::EnsureGitIdentity( this, common.get(), aHasIdentity ) )
+    if( !KIGIT::EnsureGitIdentity( this, m_frame, common, aIdentity ) )
         return;
 
     if( m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )

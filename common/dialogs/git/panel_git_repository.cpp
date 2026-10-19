@@ -21,16 +21,14 @@
 
 #include <memory>
 
-#include <confirm.h>
 #include <dialogs/git/git_advanced_dialog.h>
-#include <dialogs/git/git_ui_utils.h>
+#include <dialogs/git/git_credentials_prompt.h>
 #include <eda_base_frame.h>
-#include <git/git_backend.h>
-#include <git/git_config_handler.h>
 #include <git/kicad_git_common.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>
+#include <wx/utils.h>
 
 
 PANEL_GIT_REPOSITORY::PANEL_GIT_REPOSITORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame ) :
@@ -38,86 +36,64 @@ PANEL_GIT_REPOSITORY::PANEL_GIT_REPOSITORY( wxWindow* aParent, GIT_ADVANCED_DIAL
         m_dialog( aDialog ),
         m_frame( aFrame )
 {
+    m_repoUserName->SetEditable( false );
+    m_repoUserEmail->SetEditable( false );
+    m_identityNote->SetLabel( _( "Edits apply to this repository only." ) );
+    m_saveButton->SetLabel( _( "Edit Author..." ) );
     m_saveButton->Bind( wxEVT_BUTTON,
                         [this]( wxCommandEvent& )
                         {
-                            onSave();
+                            onEditAuthor();
                         } );
-
-    // Populate uses ChangeValue, which sends no event, so only the user reaches this.
-    auto edited = [this]( wxCommandEvent& )
-    {
-        m_identityEdited = true;
-    };
-
-    m_repoUserName->Bind( wxEVT_TEXT, edited );
-    m_repoUserEmail->Bind( wxEVT_TEXT, edited );
 }
 
 
 void PANEL_GIT_REPOSITORY::Populate()
 {
-    // Anything at all signals a refresh, a finished fetch included, and the identity is not
-    // what changed. Replacing half typed text would lose it.
-    if( m_identityEdited || !m_dialog->SessionStillCurrent() )
+    if( !m_dialog->SessionStillCurrent() )
         return;
 
-    auto userConfig = std::make_shared<GitUserConfig>();
-
-    // The fallback is application state, so copy it before the worker reads the repository.
-    userConfig->authorName = Pgm().GetCommonSettings()->m_Git.authorName;
-    userConfig->authorEmail = Pgm().GetCommonSettings()->m_Git.authorEmail;
+    auto identity = std::make_shared<KIGIT::GIT_IDENTITY>();
 
     m_configQuery.Run(
             m_frame->Prj().GetGitCommon(),
-            [userConfig]( KIGIT_COMMON& aCommon )
+            [identity]( KIGIT_COMMON& aCommon )
             {
-                GIT_CONFIG_HANDLER configHandler( &aCommon );
-                wxString           value;
-
-                if( GetGitBackend()->GetConfigString( &configHandler, "user.name", value ) )
-                    userConfig->authorName = value;
-
-                if( GetGitBackend()->GetConfigString( &configHandler, "user.email", value ) )
-                    userConfig->authorEmail = value;
+                *identity = KIGIT::ReadGitIdentity( aCommon );
             },
-            [this, userConfig]()
+            [this, identity]()
             {
-                // The user may have begun editing after the query was queued.
-                if( !m_dialog->SessionStillCurrent() || m_identityEdited )
+                if( !m_dialog->SessionStillCurrent() )
                     return;
 
-                m_repoUserName->ChangeValue( userConfig->authorName );
-                m_repoUserEmail->ChangeValue( userConfig->authorEmail );
+                GitUserConfig config =
+                        KIGIT::ResolveGitIdentity( *identity, Pgm().GetCommonSettings()->m_Git, wxGetUserName() );
+                m_repoUserName->ChangeValue( config.authorName );
+                m_repoUserEmail->ChangeValue( config.authorEmail );
             } );
 }
 
 
-void PANEL_GIT_REPOSITORY::onSave()
+void PANEL_GIT_REPOSITORY::onEditAuthor()
 {
-    wxString name = m_repoUserName->GetValue().Trim().Trim( false );
-    wxString email = m_repoUserEmail->GetValue().Trim().Trim( false );
-
-    wxString reason;
-
-    if( !KIGIT::ValidateIdentity( name, email, reason ) )
-    {
-        DisplayErrorMessage( this, reason );
+    if( !m_dialog->SessionStillCurrent() )
         return;
-    }
 
-    m_configQuery.Cancel();
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+    auto                          identity = std::make_shared<KIGIT::GIT_IDENTITY>();
+    m_saveButton->Disable();
 
-    m_dialog->RunGitAction(
-            [this, name, email]( KIGIT_COMMON& aCommon )
+    m_editQuery.Run(
+            common,
+            [identity]( KIGIT_COMMON& aCommon )
             {
-                if( !aCommon.SetUserConfig( name, email ) )
-                    return false;
-
-                // Follow the repository again only after saving succeeds. A busy or failed
-                // save must leave the edited identity protected from a later refresh.
-                m_identityEdited = false;
-                return true;
+                *identity = KIGIT::ReadGitIdentity( aCommon );
             },
-            _( "Could not save the git configuration." ) );
+            [this, common, identity]()
+            {
+                m_saveButton->Enable();
+
+                if( m_dialog->SessionStillCurrent() )
+                    KIGIT::EditGitIdentity( this, m_frame, common, *identity );
+            } );
 }

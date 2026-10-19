@@ -354,6 +354,16 @@ void GIT_ADVANCED_DIALOG::ShowHistoryForFile( const wxString& aPath )
 }
 
 
+void GIT_ADVANCED_DIALOG::ShowAmend( const wxString& aCommitHash )
+{
+    if( !SessionStillCurrent() )
+        return;
+
+    m_book->SetSelection( 0 );
+    m_changesPane->BeginAmend( aCommitHash );
+}
+
+
 wxWindow* GIT_ADVANCED_DIALOG::buildChangesPage( wxWindow* aBook )
 {
     wxPanel*    panel = new wxPanel( aBook );

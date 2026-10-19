@@ -41,6 +41,7 @@
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/weakref.h>
 
 #include <wx/choicdlg.h>
 
@@ -56,7 +57,6 @@
 #include <git/kicad_git_common.h>
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
-#include <git/git_backend.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
 #include <git/git_pull_handler.h>
@@ -65,6 +65,7 @@
 #include <kiplatform/environment.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <project/project_local_settings.h>
 #include <settings/common_settings.h>
 #include <thread>
 #include <wildcards_and_files_ext.h>
@@ -103,6 +104,25 @@ static std::pair<wxString, wxString> commitHead( git_repository* aRepo )
         state.second = wxString::FromUTF8( git_oid_tostr_s( &oid ) );
 
     return state;
+}
+
+
+// Check again under the action lock before amending. A push can change eligibility without moving HEAD.
+static wxString amendRefusal( KIGIT_COMMON& aCommon, const std::pair<wxString, wxString>& aExpectedHead )
+{
+    if( aExpectedHead.second.IsEmpty() || aExpectedHead != commitHead( aCommon.GetRepo() ) )
+        return _( "The branch or its last commit changed. Select the commit to amend again." );
+
+    if( aCommon.IsHeadDetached() || aCommon.IsHeadUnborn() )
+        return _( "Switch to a branch before amending its last commit." );
+
+    if( aCommon.IsOperationInProgress() )
+        return _( "Finish or abandon the current Git operation before amending a commit." );
+
+    if( !aCommon.HasLocalCommits() )
+        return _( "Only an unpushed commit can be amended." );
+
+    return wxEmptyString;
 }
 
 
@@ -380,7 +400,6 @@ void GIT_COMMIT_PANE::SetFileSelectedHandler( std::function<void( const wxString
 GIT_COMMIT_PANE::~GIT_COMMIT_PANE()
 {
     m_refresh.Cancel();
-    m_messageQuery.Cancel();
     m_actionQuery.Cancel();
 
     // The window's Pull and Push run through this pane, so it goes when the pane goes.
@@ -410,7 +429,6 @@ void GIT_COMMIT_PANE::syncListener()
         GIT_ADVANCED_DIALOG::CloseActive();
 
     m_refresh.Cancel();
-    m_messageQuery.Cancel();
     m_actionQuery.Cancel();
 
     if( m_actionPending )
@@ -420,6 +438,8 @@ void GIT_COMMIT_PANE::syncListener()
     }
     m_hasRepo = false;
 
+    m_amendCheckbox->SetValue( false );
+    m_amendHead = {};
     m_listenerAttached = true;
 
     // The remembered paths describe the previous project's file list, so a path that repeats in
@@ -535,11 +555,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
     // published commit can never be rewritten from here.
     m_canAmend = aStatus.hasLocalCommits && !m_headDetached && !m_operationInProgress;
 
-    if( !m_canAmend )
-        m_amendCheckbox->SetValue( false );
-
-    // A file the user unticked must stay unticked across a refresh, or returning to the project
-    // manager would re-include it. Newly appeared files stay ticked.
+    // Preserve unticked files across refreshes. New files start unchecked while amending.
     std::set<wxString> stillChecked;
 
     for( const wxString& path : m_checklist->GetCheckedPaths() )
@@ -547,7 +563,8 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
 
     for( FILE_CHECKLIST_ENTRY& entry : entries )
     {
-        if( m_shownPaths.count( entry.path ) && !stillChecked.count( entry.path ) )
+        if( ( m_shownPaths.count( entry.path ) && !stillChecked.count( entry.path ) )
+            || ( m_amendCheckbox->IsChecked() && !m_shownPaths.count( entry.path ) ) )
             entry.checked = false;
     }
 
@@ -623,7 +640,6 @@ void GIT_COMMIT_PANE::ReloadAdvancedWindow()
 
 void GIT_COMMIT_PANE::showDisabledState()
 {
-    m_messageQuery.Cancel();
     m_actionQuery.Cancel();
 
     if( m_actionPending )
@@ -650,6 +666,7 @@ void GIT_COMMIT_PANE::showDisabledState()
 
     m_canAmend = false;
     m_amendCheckbox->SetValue( false );
+    m_amendHead = {};
     updateMessageVisibility( false );
 
     setStatusText( _( "Version control is turned off in Preferences." ) );
@@ -732,59 +749,26 @@ void GIT_COMMIT_PANE::onSettings( wxCommandEvent& aEvent )
 void GIT_COMMIT_PANE::setAuthor()
 {
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    auto                          identity = std::make_shared<GitUserConfig>();
-    identity->authorName = Pgm().GetCommonSettings()->m_Git.authorName;
-    identity->authorEmail = Pgm().GetCommonSettings()->m_Git.authorEmail;
+    auto                          identity = std::make_shared<KIGIT::GIT_IDENTITY>();
 
     runActionQuery(
             common,
             [identity]( KIGIT_COMMON& aSession )
             {
-                GIT_CONFIG_HANDLER handler( &aSession );
-                wxString           value;
-
-                if( GetGitBackend()->GetConfigString( &handler, "user.name", value ) )
-                    identity->authorName = value;
-
-                if( GetGitBackend()->GetConfigString( &handler, "user.email", value ) )
-                    identity->authorEmail = value;
+                *identity = KIGIT::ReadGitIdentity( aSession );
             },
             [this, common, identity]()
             {
-                if( !KIGIT::PromptGitIdentity( this, _( "Set Author" ), identity->authorName, identity->authorEmail ) )
-                {
-                    return;
-                }
-
-                if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown() )
-                    return;
-
-                std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
-
-                if( !lock.owns_lock() )
-                    return;
-
-                bool saved = common->SetUserConfig( identity->authorName, identity->authorEmail );
-                lock.unlock();
-
-                if( !saved )
-                {
-                    DisplayErrorMessage( this, _( "Could not save the name and email to the repository." ) );
-                    return;
-                }
-
-                // The Repository page shows the same name and email.
-                common->NotifyRefreshListeners();
+                KIGIT::EditGitIdentity( this, m_frame, common, *identity );
             },
             _( "Reading author..." ) );
 }
-
 
 void GIT_COMMIT_PANE::updateMessageVisibility( bool aHasChanges )
 {
     // A commit is possible with listed changes, unsaved editor changes, or an amend. Both callers
     // share this, so the fields cannot disappear while the buttons still ask for a message.
-    bool show = aHasChanges || m_editorsDirty || ( m_canAmend && m_amendCheckbox->IsChecked() );
+    bool show = aHasChanges || m_editorsDirty || m_amendCheckbox->IsChecked();
 
     m_summary->Show( show );
     m_summaryCount->Show( show );
@@ -792,7 +776,7 @@ void GIT_COMMIT_PANE::updateMessageVisibility( bool aHasChanges )
 
     // The options box stays for a message only amend, with just the amend tick in it.
     m_optionsSizer->ShowItems( show || m_canAmend );
-    m_amendCheckbox->Show( m_canAmend );
+    m_amendCheckbox->Show( m_canAmend || m_amendCheckbox->IsChecked() );
     m_signOffCheckbox->Show( show );
     m_newBranchCheckbox->Show( show );
     m_newBranchName->Show( show );
@@ -857,7 +841,7 @@ void GIT_COMMIT_PANE::updateCommitButton()
         m_pullButton->UnsetToolTip();
 
     bool hasCheckedChanges = !m_checklist->GetCheckedPaths().empty();
-    bool amend = m_canAmend && m_amendCheckbox->IsChecked();
+    bool amend = m_amendCheckbox->IsChecked();
     bool newBranch = !amend && m_newBranchCheckbox->IsChecked();
     bool hasMessage = !m_summary->GetValue().Trim().IsEmpty();
     bool hasBranchName = !newBranch || !m_newBranchName->GetValue().Trim().IsEmpty();
@@ -881,10 +865,12 @@ void GIT_COMMIT_PANE::updateCommitButton()
         // A message-only amend needs no checked files, just a message.
         mainLabel = _( "Amend" );
         menuLabel = _( "Amend and Push" );
-        mainEnabled = hasMessage;
-        menuEnabled = hasMessage;
+        mainEnabled = hasMessage && m_canAmend;
+        menuEnabled = hasMessage && m_canAmend;
 
-        if( !hasMessage )
+        if( !m_canAmend )
+            blocked = _( "This commit can no longer be amended. Untick Amend to start a new commit." );
+        else if( !hasMessage )
             blocked = _( "Write a summary to amend the last commit." );
     }
     else if( hasCheckedChanges || m_editorsDirty )
@@ -1536,49 +1522,112 @@ void GIT_COMMIT_PANE::finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCom
 
 void GIT_COMMIT_PANE::onAmendToggled( wxCommandEvent& aEvent )
 {
-    m_messageQuery.Cancel();
-
-    // Ticking the box offers the last commit's message as the starting point, since an amend
-    // usually keeps or touches up the existing text.
-    if( m_amendCheckbox->IsChecked() && m_summary->GetValue().Trim().IsEmpty()
-        && m_description->GetValue().Trim().IsEmpty() )
+    if( m_amendCheckbox->IsChecked() )
     {
-        std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-        auto                          last = std::make_shared<wxString>();
-
-        m_messageQuery.Run(
-                common,
-                [last]( KIGIT_COMMON& aCommon )
-                {
-                    *last = aCommon.GetLastCommitMessage();
-                },
-                [this, common, last]()
-                {
-                    if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown()
-                        || !m_amendCheckbox->IsChecked() || last->IsEmpty() || !m_summary->GetValue().Trim().IsEmpty()
-                        || !m_description->GetValue().Trim().IsEmpty() )
-                    {
-                        return;
-                    }
-
-                    wxString summary, description;
-                    KIGIT::SplitCommitMessage( *last, summary, description );
-                    m_summary->SetValue( summary );
-                    setDescription( description );
-                    updateCommitButton();
-                } );
+        BeginAmend();
+        return;
     }
 
+    m_amendHead = {};
     updateMessageVisibility( m_checklist->IsShown() );
     Layout();
-
     updateCommitButton();
+}
+
+
+void GIT_COMMIT_PANE::BeginAmend( const wxString& aExpectedCommit )
+{
+    struct AMEND_INFO
+    {
+        std::pair<wxString, wxString> head;
+        wxString                      message;
+        wxString                      refusal;
+    };
+
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+    auto                          info = std::make_shared<AMEND_INFO>();
+
+    runActionQuery(
+            common,
+            [info, aExpectedCommit]( KIGIT_COMMON& aSession )
+            {
+                info->head = commitHead( aSession.GetRepo() );
+                info->refusal = amendRefusal( aSession, info->head );
+
+                if( !aExpectedCommit.IsEmpty() && aExpectedCommit != info->head.second )
+                    info->refusal = _( "The selected commit is no longer the last commit on this branch." );
+
+                if( info->refusal.IsEmpty() )
+                {
+                    wxString summary, description;
+                    KIGIT::SplitCommitMessage( aSession.GetLastCommitMessage(), summary, description );
+                    info->message = KIGIT::ComposeCommitMessage( summary, description, wxEmptyString );
+                }
+            },
+            [this, common, info, aExpectedCommit]()
+            {
+                if( !info->refusal.IsEmpty() )
+                {
+                    if( m_amendHead.second.IsEmpty() )
+                        m_amendCheckbox->SetValue( false );
+
+                    RefreshFileList();
+                    DisplayInfoMessage( this, info->refusal );
+                    return;
+                }
+
+                bool                       fromHistory = !aExpectedCommit.IsEmpty();
+                wxString                   draft = GetCommitMessage();
+                wxWeakRef<GIT_COMMIT_PANE> pane( this );
+                wxWeakRef<EDA_BASE_FRAME>  frame( m_frame );
+
+                if( fromHistory && !draft.IsEmpty() && draft != info->message
+                    && !IsOK( this, _( "Replace the current commit message with the selected commit's message?" ) ) )
+                {
+                    return;
+                }
+
+                if( !pane || pane->IsBeingDeleted() || !frame || frame->IsBeingDeleted()
+                    || common != frame->Prj().GetGitCommon() || common->IsShuttingDown()
+                    || !Pgm().GetCommonSettings()->m_Git.enableGit
+                    || frame->Prj().GetLocalSettings().m_GitIntegrationDisabled )
+                {
+                    return;
+                }
+
+                if( GetCommitMessage() != draft )
+                    return;
+
+                m_canAmend = true;
+                m_amendHead = info->head;
+                m_amendCheckbox->SetValue( true );
+                m_newBranchCheckbox->SetValue( false );
+
+                // History starts with a message-only amend. Files can be selected on this form.
+                if( fromHistory )
+                    m_checklist->SetAllChecked( false );
+
+                // Keep a draft when the user ticks Amend while composing a message.
+                if( fromHistory || draft.IsEmpty() )
+                {
+                    SetCommitMessage( info->message );
+
+                    if( m_messageChangedHandler )
+                        m_messageChangedHandler();
+                }
+
+                updateMessageVisibility( m_checklist->IsShown() );
+                Layout();
+                updateCommitButton();
+                m_summary->SetFocus();
+            },
+            _( "Reading last commit..." ) );
 }
 
 
 struct GIT_COMMIT_PANE::COMMIT_REQUEST
 {
-    bool                          hasIdentity = false;
+    KIGIT::GIT_IDENTITY           identity;
     bool                          amend = false;
     bool                          newBranch = false;
     bool                          andPush = false;
@@ -1591,6 +1640,7 @@ struct GIT_COMMIT_PANE::COMMIT_REQUEST
     wxString                      projectPath;
     wxString                      projectName;
     wxString                      lfsMessage;
+    wxString                      amendRefusal;
     std::vector<wxString>         files;
     std::set<wxString>            beforeSave;
     std::pair<wxString, wxString> head;
@@ -1612,7 +1662,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     if( !common->GetRepo() )
         return;
 
-    const bool amend = m_canAmend && m_amendCheckbox->IsChecked();
+    const bool amend = m_amendCheckbox->IsChecked();
     const bool newBranch = !amend && m_newBranchCheckbox->IsChecked();
     wxString   branchName = m_newBranchName->GetValue();
     branchName.Trim( true ).Trim( false );
@@ -1632,6 +1682,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
     auto request = std::make_shared<COMMIT_REQUEST>();
     request->amend = amend;
+    request->head = m_amendHead;
     request->newBranch = newBranch;
     request->andPush = aAndPush;
     request->signOff = m_signOffCheckbox->IsChecked();
@@ -1650,8 +1701,12 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
             common,
             [request]( KIGIT_COMMON& aCommon )
             {
-                request->head = commitHead( aCommon.GetRepo() );
-                request->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                if( request->amend )
+                    request->amendRefusal = amendRefusal( aCommon, request->head );
+                else
+                    request->head = commitHead( aCommon.GetRepo() );
+
+                request->identity = KIGIT::ReadGitIdentity( aCommon );
                 request->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
 
                 for( const FILE_CHECKLIST_ENTRY& entry :
@@ -1670,6 +1725,13 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
 void GIT_COMMIT_PANE::saveForCommit( std::shared_ptr<KIGIT_COMMON> aCommon, std::shared_ptr<COMMIT_REQUEST> aRequest )
 {
+    if( !aRequest->amendRefusal.IsEmpty() )
+    {
+        DisplayInfoMessage( this, aRequest->amendRefusal );
+        aCommon->NotifyRefreshListeners();
+        return;
+    }
+
     if( !aRequest->displayedBranch.IsEmpty()
         && aRequest->head.first != wxS( "refs/heads/" ) + aRequest->displayedBranch )
     {
@@ -1744,7 +1806,7 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     }
 
     // A fresh machine has no git identity yet, and the commit cannot be recorded without one.
-    if( !KIGIT::EnsureGitIdentity( this, common.get(), aRequest.hasIdentity ) )
+    if( !KIGIT::EnsureGitIdentity( this, m_frame, common, aRequest.identity ) )
         return;
 
     if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown() )
@@ -1770,6 +1832,19 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
                                          "Review the changes and commit again." ) );
             common->NotifyRefreshListeners();
             return;
+        }
+
+        if( amend )
+        {
+            wxString refusal = amendRefusal( *common, aRequest.head );
+
+            if( !refusal.IsEmpty() )
+            {
+                lock.unlock();
+                DisplayInfoMessage( this, refusal );
+                common->NotifyRefreshListeners();
+                return;
+            }
         }
 
         GIT_CONFIG_HANDLER configHandler( common.get() );
@@ -1828,6 +1903,7 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
         setDescription( wxEmptyString );
     }
     m_amendCheckbox->SetValue( false );
+    m_amendHead = {};
     m_newBranchCheckbox->SetValue( false );
     m_newBranchName->Clear();
     common->NotifyRefreshListeners();
@@ -2080,7 +2156,7 @@ struct GIT_COMMIT_PANE::MERGE_PREPARATION
     wxString                            rootDir;
     wxString                            error;
     std::vector<KIGIT_CONFLICT_SIDES>   conflicts;
-    bool                                hasIdentity = false;
+    KIGIT::GIT_IDENTITY                 identity;
     bool                                rebaseConfigured = false;
     bool                                prepared = false;
 };
@@ -2100,7 +2176,7 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
                     return;
 
                 preparation->rebaseConfigured = aSession.IsPullRebaseConfigured();
-                preparation->hasIdentity = KIGIT::HasGitIdentity( aSession );
+                preparation->identity = KIGIT::ReadGitIdentity( aSession );
                 preparation->rootDir = aSession.GetGitRootDirectory();
                 preparation->prepared = aSession.GetMergeConflicts(
                         preparation->workspace->Root() + wxFileName::GetPathSeparator() + wxS( "stages" ),
@@ -2169,7 +2245,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
 
     // The merge commit needs an identity whatever the user decides about the files, so it is
     // asked for before any merging. Cancelling it then costs no work.
-    if( !KIGIT::EnsureGitIdentity( this, aCommon.get(), aPreparation->hasIdentity ) )
+    if( !KIGIT::EnsureGitIdentity( this, m_frame, aCommon, aPreparation->identity ) )
     {
         setBusy( false, _( "Getting changes was cancelled. Your files are unchanged." ) );
         return;
@@ -2445,7 +2521,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
     struct CHECK
     {
-        bool                hasIdentity = false;
+        KIGIT::GIT_IDENTITY identity;
         GIT_WORKTREE_STATUS worktree;
     };
 
@@ -2456,7 +2532,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
             aCommon,
             [result, projectPath]( KIGIT_COMMON& aSession )
             {
-                result->hasIdentity = KIGIT::HasGitIdentity( aSession );
+                result->identity = KIGIT::ReadGitIdentity( aSession );
                 result->worktree = ReadGitWorktreeStatus( aSession, projectPath );
             },
             [this, aCommon, aThenPush, result]()
@@ -2466,7 +2542,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
                 // A non-fast-forward pull creates a commit, so obtain its identity before
                 // the worker can change files. The repository check was in the query above.
-                if( !KIGIT::EnsureGitIdentity( this, aCommon.get(), result->hasIdentity ) )
+                if( !KIGIT::EnsureGitIdentity( this, m_frame, aCommon, result->identity ) )
                     return;
 
                 if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )

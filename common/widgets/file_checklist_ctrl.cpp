@@ -142,6 +142,21 @@ public:
         Cleared();
     }
 
+    void SetAllChecked( bool aChecked )
+    {
+        // Update every row before notifying listeners.
+        for( const std::unique_ptr<CHECKLIST_NODE>& section : m_sectionNodes )
+            m_data.SetSectionChecked( section->section, aChecked );
+
+        for( const std::unique_ptr<CHECKLIST_NODE>& section : m_sectionNodes )
+        {
+            for( const std::unique_ptr<CHECKLIST_NODE>& child : section->children )
+                ValueChanged( wxDataViewItem( child.get() ), COL_CHECK );
+
+            ValueChanged( wxDataViewItem( section.get() ), COL_CHECK );
+        }
+    }
+
     std::vector<wxString> CheckedPaths() const { return m_data.CheckedPaths(); }
 
     wxString PathFor( const wxDataViewItem& aItem ) const
@@ -342,6 +357,12 @@ void FILE_CHECKLIST_CTRL::SetEntries( const std::vector<FILE_CHECKLIST_ENTRY>& a
 
     for( const wxDataViewItem& section : sections )
         Expand( section );
+}
+
+
+void FILE_CHECKLIST_CTRL::SetAllChecked( bool aChecked )
+{
+    m_model->SetAllChecked( aChecked );
 }
 
 

@@ -19,6 +19,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <dialogs/git/git_credentials_prompt.h>
 #include <dialogs/git/git_status_entries.h>
 #include <dialogs/git/git_transfer.h>
 #include <dialogs/git/git_ui_utils.h>
@@ -31,6 +32,7 @@
 #include <qa_utils/git_test_fixture.h>
 
 #include <git2.h>
+#include <git2/sys/repository.h>
 
 #include <wx/app.h>
 #include <wx/file.h>
@@ -1377,7 +1379,6 @@ BOOST_AUTO_TEST_CASE( SetUserConfigPersists )
 
     BOOST_CHECK( common.SetUserConfig( "New Name", "new@example.com" ) );
 
-    // Read it back with libgit2 directly. GIT_CONFIG_HANDLER needs a backend the harness lacks.
     git_config* config = nullptr;
     BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo ), GIT_OK );
     KIGIT::GitConfigPtr configPtr( config );
@@ -1391,6 +1392,62 @@ BOOST_AUTO_TEST_CASE( SetUserConfigPersists )
     BOOST_REQUIRE_EQUAL( git_config_get_entry( &emailEntry, config, "user.email" ), GIT_OK );
     BOOST_CHECK_EQUAL( wxString::FromUTF8( emailEntry->value ).ToStdString(), "new@example.com" );
     git_config_entry_free( emailEntry );
+}
+
+
+BOOST_AUTO_TEST_CASE( GitIdentityUsesRepositoryValuesBeforeCustomDefaults )
+{
+    KIGIT::GitRepositoryPtr repo =
+            KI_TEST::InitGitRepository( TempPath(), "main", "Repository Author", "repository@example.com" );
+    KIGIT_COMMON common( repo.get() );
+    auto         lock = common.LockAction();
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo.get() ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+
+    // Keep the user's global Git identity out of this test.
+    git_config* local = nullptr;
+    BOOST_REQUIRE_EQUAL( git_config_open_level( &local, config, GIT_CONFIG_LEVEL_LOCAL ), GIT_OK );
+    KIGIT::GitConfigPtr localPtr( local );
+    BOOST_REQUIRE_EQUAL( git_repository_set_config( repo.get(), local ), GIT_OK );
+
+    COMMON_SETTINGS::GIT preferences{};
+    preferences.useDefaultAuthor = false;
+    preferences.authorName = wxS( "Custom Author" );
+    preferences.authorEmail = wxS( "custom@example.com" );
+
+    KIGIT::GIT_IDENTITY identity = KIGIT::ReadGitIdentity( common );
+    BOOST_CHECK( identity.configured );
+    GitUserConfig resolved = KIGIT::ResolveGitIdentity( identity, preferences, wxS( "OS User" ) );
+    BOOST_CHECK_EQUAL( resolved.authorName, wxS( "Repository Author" ) );
+    BOOST_CHECK_EQUAL( resolved.authorEmail, wxS( "repository@example.com" ) );
+
+    BOOST_REQUIRE_EQUAL( git_config_delete_entry( local, "user.email" ), GIT_OK );
+    identity = KIGIT::ReadGitIdentity( common );
+    BOOST_CHECK( !identity.configured );
+    resolved = KIGIT::ResolveGitIdentity( identity, preferences, wxS( "OS User" ) );
+    BOOST_CHECK_EQUAL( resolved.authorName, wxS( "Repository Author" ) );
+    BOOST_CHECK_EQUAL( resolved.authorEmail, wxS( "custom@example.com" ) );
+
+    BOOST_REQUIRE_EQUAL( git_config_delete_entry( local, "user.name" ), GIT_OK );
+    identity = KIGIT::ReadGitIdentity( common );
+    BOOST_CHECK( !identity.configured );
+    resolved = KIGIT::ResolveGitIdentity( identity, preferences, wxS( "OS User" ) );
+    BOOST_CHECK_EQUAL( resolved.authorName, wxS( "Custom Author" ) );
+    BOOST_CHECK_EQUAL( resolved.authorEmail, wxS( "custom@example.com" ) );
+
+    // Default mode must not revive custom values left in Preferences.
+    preferences.useDefaultAuthor = true;
+    resolved = KIGIT::ResolveGitIdentity( identity, preferences, wxS( "OS User" ) );
+    BOOST_CHECK_EQUAL( resolved.authorName, wxS( "OS User" ) );
+    BOOST_CHECK( resolved.authorEmail.IsEmpty() );
+
+    preferences.useDefaultAuthor = false;
+    preferences.authorName.clear();
+    resolved = KIGIT::ResolveGitIdentity( identity, preferences, wxS( "OS User" ) );
+    BOOST_CHECK_EQUAL( resolved.authorName, wxS( "OS User" ) );
+    BOOST_CHECK_EQUAL( resolved.authorEmail, wxS( "custom@example.com" ) );
 }
 
 

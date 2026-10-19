@@ -78,6 +78,9 @@ public:
     /// lands here too.
     void Push();
 
+    /// Prepare the amend form. A history entry supplies its hash and starts with no files selected.
+    void BeginAmend( const wxString& aExpectedCommit = wxEmptyString );
+
     /// Called when a transfer starts and when it ends, so an owning window can follow along.
     void SetBusyChangedHandler( std::function<void( bool )> aHandler ) { m_busyChangedHandler = aHandler; }
 
@@ -229,8 +232,11 @@ private:
     /// True when an open editor held unsaved changes at the last refresh.
     bool m_editorsDirty;
 
-    /// True while the last commit is unpushed, so it may still be amended from here.
+    /// Whether the current branch allows an amend. A refresh must not change an active amend into a commit.
     bool m_canAmend = false;
+
+    /// The branch and commit chosen when amend started. Keep them fixed while editing.
+    std::pair<wxString, wxString> m_amendHead;
 
     /// The description box's hint, a label laid over it while it is empty. Null where the box
     /// shows its own.
@@ -287,7 +293,6 @@ private:
 
     /// Coalesce refreshes while a repository read is running, and discard stale results.
     KIGIT_QUERY m_refresh;
-    KIGIT_QUERY m_messageQuery;
     KIGIT_QUERY m_actionQuery;
     bool        m_actionPending = false;
 };

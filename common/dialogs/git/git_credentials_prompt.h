@@ -20,8 +20,13 @@
 #ifndef GIT_CREDENTIALS_PROMPT_H
 #define GIT_CREDENTIALS_PROMPT_H
 
+#include <git/git_config_handler.h>
+#include <settings/common_settings.h>
+
+#include <memory>
 #include <wx/string.h>
 
+class EDA_BASE_FRAME;
 class wxWindow;
 class KIGIT_COMMON;
 class PROJECT;
@@ -42,27 +47,28 @@ namespace KIGIT
  */
 bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr );
 
-/// Whether the repository can form a commit author identity. The caller holds the session's
-/// action lock. Read this on a worker before showing an identity prompt.
-bool HasGitIdentity( KIGIT_COMMON& aCommon );
+/// Repository values and whether Git can use them to record a commit.
+struct GIT_IDENTITY
+{
+    GitUserConfig config;
+    bool          configured = false;
+};
 
-/**
- * Make sure the repository has a name and email to record commits with. When missing, asks
- * once and stores the answer in the repository's configuration. aHasIdentity is the result
- * read during the operation's worker preflight, so this function only prompts and writes.
- *
- * @return False when an identity is still missing, because the user declined or it could not
- *         be saved.
- */
-bool EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aHasIdentity );
+/// Read on a worker while holding the session's action lock.
+GIT_IDENTITY ReadGitIdentity( KIGIT_COMMON& aCommon );
 
-/**
- * Ask for the name and email to record commits with. @p aName and @p aEmail hold the starting
- * values and receive the answer.
- *
- * @return False when the user cancelled.
- */
-bool PromptGitIdentity( wxWindow* aParent, const wxString& aTitle, wxString& aName, wxString& aEmail );
+/// Fill missing values from custom preferences, then use the OS user name if needed.
+GitUserConfig ResolveGitIdentity( const GIT_IDENTITY& aIdentity, const COMMON_SETTINGS::GIT& aPreferences,
+                                  const wxString& aUserName );
+
+/// Edit the repository's author and refresh Git views after saving. UI thread only.
+/// Refuse to save if the frame changes project while the dialog is open.
+bool EditGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const std::shared_ptr<KIGIT_COMMON>& aCommon,
+                      const GIT_IDENTITY& aIdentity );
+
+/// Open the same editor when the worker snapshot has no usable Git identity.
+bool EnsureGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const std::shared_ptr<KIGIT_COMMON>& aCommon,
+                        const GIT_IDENTITY& aIdentity );
 
 } // namespace KIGIT
 

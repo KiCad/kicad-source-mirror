@@ -353,8 +353,8 @@ void PANEL_GIT_STASHES::onStashSave()
 
     struct PREFLIGHT
     {
-        wxString lfsMessage;
-        bool     hasIdentity = false;
+        wxString            lfsMessage;
+        KIGIT::GIT_IDENTITY identity;
     };
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
@@ -365,7 +365,7 @@ void PANEL_GIT_STASHES::onStashSave()
             [preflight]( KIGIT_COMMON& aCommon )
             {
                 preflight->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
-                preflight->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                preflight->identity = KIGIT::ReadGitIdentity( aCommon );
             },
             [this, common, preflight]()
             {
@@ -379,7 +379,7 @@ void PANEL_GIT_STASHES::onStashSave()
                 }
 
                 // Stashing writes a commit object, so it needs an author identity like a commit does.
-                if( !KIGIT::EnsureGitIdentity( this, common.get(), preflight->hasIdentity ) )
+                if( !KIGIT::EnsureGitIdentity( this, m_frame, common, preflight->identity ) )
                     return;
 
                 // Unsaved editor changes are written to disk here, so they are part of what gets

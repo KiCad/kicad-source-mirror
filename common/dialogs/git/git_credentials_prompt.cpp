@@ -22,9 +22,14 @@
 #include <dialogs/git/dialog_git_identity.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <confirm.h>
+#include <eda_base_frame.h>
 #include <wx/utils.h>
+#include <wx/weakref.h>
 #include <mutex>
+#include <git/git_backend.h>
 #include <git/kicad_git_common.h>
+#include <git/kicad_git_memory.h>
+#include <pgm_base.h>
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <kiplatform/secrets.h>
@@ -71,27 +76,79 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
 }
 
 
-bool KIGIT::HasGitIdentity( KIGIT_COMMON& aCommon )
+KIGIT::GIT_IDENTITY KIGIT::ReadGitIdentity( KIGIT_COMMON& aCommon )
 {
+    GIT_IDENTITY identity;
+
     if( !aCommon.GetRepo() )
-        return false;
+        return identity;
+
+    GIT_CONFIG_HANDLER handler( &aCommon );
+    identity.config.hasName = GetGitBackend()->GetConfigString( &handler, "user.name", identity.config.authorName );
+    identity.config.hasEmail = GetGitBackend()->GetConfigString( &handler, "user.email", identity.config.authorEmail );
 
     git_signature* signature = nullptr;
-    int            result = git_signature_default( &signature, aCommon.GetRepo() );
-    git_signature_free( signature );
-    return result == GIT_OK;
+    identity.configured = git_signature_default( &signature, aCommon.GetRepo() ) == GIT_OK;
+    GitSignaturePtr signaturePtr( signature );
+    return identity;
 }
 
 
-bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aHasIdentity )
+GitUserConfig KIGIT::ResolveGitIdentity( const GIT_IDENTITY& aIdentity, const COMMON_SETTINGS::GIT& aPreferences,
+                                         const wxString& aUserName )
 {
-    if( !aCommon || !aCommon->GetRepo() || aHasIdentity )
-        return true;
+    GitUserConfig config = aIdentity.config;
 
-    wxString name = wxGetUserName();
-    wxString email;
+    if( !aPreferences.useDefaultAuthor )
+    {
+        if( config.authorName.IsEmpty() )
+            config.authorName = aPreferences.authorName;
 
-    if( !PromptGitIdentity( aParent, _( "Introduce Yourself" ), name, email ) )
+        if( config.authorEmail.IsEmpty() )
+            config.authorEmail = aPreferences.authorEmail;
+    }
+
+    if( config.authorName.IsEmpty() )
+        config.authorName = aUserName;
+
+    return config;
+}
+
+
+namespace
+{
+
+bool identitySessionCurrent( EDA_BASE_FRAME* aFrame, const std::shared_ptr<KIGIT_COMMON>& aCommon )
+{
+    return aFrame && !aFrame->IsBeingDeleted() && aCommon && !aCommon->IsShuttingDown() && aCommon->GetRepo()
+           && aFrame->Prj().GetGitCommon() == aCommon && Pgm().GetCommonSettings()->m_Git.enableGit
+           && !aFrame->Prj().GetLocalSettings().m_GitIntegrationDisabled;
+}
+
+} // namespace
+
+
+bool KIGIT::EditGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const std::shared_ptr<KIGIT_COMMON>& aCommon,
+                             const GIT_IDENTITY& aIdentity )
+{
+    if( !identitySessionCurrent( aFrame, aCommon ) )
+        return false;
+
+    wxWeakRef<EDA_BASE_FRAME> frame( aFrame );
+    wxWeakRef<wxWindow>       parent( aParent );
+    GitUserConfig config = ResolveGitIdentity( aIdentity, Pgm().GetCommonSettings()->m_Git, wxGetUserName() );
+
+    {
+        DIALOG_GIT_IDENTITY dlg( aParent, _( "Set Author" ), config.authorName, config.authorEmail );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return false;
+
+        config.authorName = dlg.GetName();
+        config.authorEmail = dlg.GetEmail();
+    }
+
+    if( !parent || parent->IsBeingDeleted() || !identitySessionCurrent( frame.get(), aCommon ) )
         return false;
 
     bool saved = false;
@@ -102,7 +159,10 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aH
         if( !lock.owns_lock() )
             return false;
 
-        saved = aCommon->SetUserConfig( name, email );
+        if( !identitySessionCurrent( frame.get(), aCommon ) )
+            return false;
+
+        saved = aCommon->SetUserConfig( config.authorName, config.authorEmail );
     }
 
     if( !saved )
@@ -111,18 +171,16 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aH
         return false;
     }
 
+    aCommon->NotifyRefreshListeners();
     return true;
 }
 
 
-bool KIGIT::PromptGitIdentity( wxWindow* aParent, const wxString& aTitle, wxString& aName, wxString& aEmail )
+bool KIGIT::EnsureGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const std::shared_ptr<KIGIT_COMMON>& aCommon,
+                               const GIT_IDENTITY& aIdentity )
 {
-    DIALOG_GIT_IDENTITY dlg( aParent, aTitle, aName, aEmail );
-
-    if( dlg.ShowModal() != wxID_OK )
+    if( !identitySessionCurrent( aFrame, aCommon ) )
         return false;
 
-    aName = dlg.GetName();
-    aEmail = dlg.GetEmail();
-    return true;
+    return aIdentity.configured || EditGitIdentity( aParent, aFrame, aCommon, aIdentity );
 }

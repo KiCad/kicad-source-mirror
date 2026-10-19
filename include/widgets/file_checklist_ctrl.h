@@ -99,6 +99,8 @@ public:
 
     void SetEntries( const std::vector<FILE_CHECKLIST_ENTRY>& aEntries );
 
+    void SetAllChecked( bool aChecked );
+
     std::vector<wxString> GetCheckedPaths() const;
 
     /// Path of the file row for aItem, or empty for a section header or invalid item.

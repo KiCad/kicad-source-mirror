@@ -41,6 +41,10 @@ struct KIGIT_BRANCH_INFO;
 struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
 struct KIGIT_HISTORY_FILTER;
+namespace KIGIT
+{
+struct GIT_IDENTITY;
+}
 
 
 /**
@@ -97,14 +101,10 @@ private:
     /// row for aEmail. Does nothing when the bytes are empty (no web avatar).
     void applyAvatar( const wxString& aEmail, int aDiameter, const std::string& aBytes );
 
-    /// Amend the newest, not yet pushed commit's message.
-    void onAmendLastCommit();
-    void amendLastCommit( const wxString& aLastMessage, bool aHasIdentity );
-
     /// Restore the project as it was at the given commit, recorded as a new commit on top of
     /// the current head.
     void onRestoreVersion( const wxString& aCommitHash );
-    void restoreVersion( const wxString& aCommitHash, bool aHasIdentity );
+    void restoreVersion( const wxString& aCommitHash, const KIGIT::GIT_IDENTITY& aIdentity );
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;

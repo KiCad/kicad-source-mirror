@@ -461,8 +461,8 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     // the first commit work instead of failing.
     struct IDENTITY_RESULT
     {
-        bool read = false;
-        bool hasIdentity = false;
+        bool                read = false;
+        KIGIT::GIT_IDENTITY identity;
     };
 
     auto common = Prj().GetGitCommon();
@@ -472,7 +472,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
             common,
             [identity]( KIGIT_COMMON& aCommon )
             {
-                identity->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                identity->identity = KIGIT::ReadGitIdentity( aCommon );
                 identity->read = true;
             },
             [this, common, identity]()
@@ -484,7 +484,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
                     return;
                 }
 
-                KIGIT::EnsureGitIdentity( m_frame, common.get(), identity->hasIdentity );
+                KIGIT::EnsureGitIdentity( m_frame, m_frame, common, identity->identity );
             } );
 
     KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
