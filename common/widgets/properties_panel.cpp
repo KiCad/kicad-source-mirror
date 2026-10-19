@@ -879,13 +879,17 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
 
     if( aEvent.GetKeyCode() == 'C' && aEvent.GetModifiers() == wxMOD_CONTROL )
     {
-        if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
+        // Let an open editor run it's own internal copy action
+        if( !m_grid->IsEditorFocused() )
         {
-            if( wxTheClipboard->Open() )
+            if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
             {
-                wxTheClipboard->SetData( new wxTextDataObject( prop->GetValueAsString() ) );
-                wxTheClipboard->Close();
-                return;
+                if( wxTheClipboard->Open() )
+                {
+                    wxTheClipboard->SetData( new wxTextDataObject( prop->GetValueAsString() ) );
+                    wxTheClipboard->Close();
+                    return;
+                }
             }
         }
     }
