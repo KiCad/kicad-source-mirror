@@ -30,6 +30,7 @@
 #include <core/typeinfo.h>
 #include <layer_ids.h>
 #include <sch_io/ltspice/ltspice_schematic.h>
+#include <stroke_params.h>
 
 
 class EDA_TEXT;
