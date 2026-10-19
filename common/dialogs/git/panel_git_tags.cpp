@@ -221,7 +221,7 @@ void PANEL_GIT_TAGS::onCheckoutTag()
         return;
 
     m_dialog->RefuseOverUncommittedWork(
-            [this, name]()
+            [this, name]( const GIT_WORKTREE_STATUS& aStatus )
             {
                 if( !IsOK( this, wxString::Format( _( "Check out tag '%s'? This shows an old snapshot of the "
                                                       "project. To keep any commits you make here, create a new "
@@ -232,7 +232,7 @@ void PANEL_GIT_TAGS::onCheckoutTag()
                     return;
                 }
 
-                if( !m_dialog->ConfirmWorkingTreeChange() )
+                if( !m_dialog->ConfirmWorkingTreeChange( aStatus ) )
                     return;
 
                 m_dialog->RunGitAction(

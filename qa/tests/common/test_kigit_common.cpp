@@ -19,6 +19,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <dialogs/git/git_status_entries.h>
 #include <dialogs/git/git_transfer.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
@@ -2464,6 +2465,161 @@ BOOST_AUTO_TEST_CASE( HasUncommittedTrackedChangesIgnoresUntracked )
     }
 
     BOOST_CHECK( common.HasUncommittedTrackedChanges() );
+}
+
+
+BOOST_AUTO_TEST_CASE( WorktreeRefusalPrioritizesUnsavedDocumentAndLibraryEditors )
+{
+    GIT_WORKTREE_STATUS status;
+    status.checked = true;
+    status.hasTrackedChanges = true;
+    status.lfsMessage = wxS( "Git LFS prevents this rewrite." );
+    status.outsideProject = { wxS( "other/board.kicad_pcb" ) };
+
+    const std::vector<wxString> editors = { wxS( "Schematic Editor" ), wxS( "Footprint Editor" ) };
+    wxString                    message = status.RefusalMessage( editors );
+
+    BOOST_CHECK( message.Contains( "Schematic Editor" ) );
+    BOOST_CHECK( message.Contains( "Footprint Editor" ) );
+    BOOST_CHECK( message.Contains( "unsaved changes" ) );
+    BOOST_CHECK( message.Contains( "Save or discard" ) );
+    BOOST_CHECK( !message.Contains( "Git LFS" ) );
+    BOOST_CHECK( !message.Contains( "other/board.kicad_pcb" ) );
+
+    wxString stashMessage = status.RefusalMessage( editors, true );
+    BOOST_CHECK( stashMessage.Contains( "Schematic Editor" ) );
+    BOOST_CHECK( stashMessage.Contains( "Footprint Editor" ) );
+    BOOST_CHECK( stashMessage.Contains( "unsaved changes" ) );
+    BOOST_CHECK( stashMessage.Contains( "Save or discard" ) );
+    BOOST_CHECK( stashMessage.Contains( "before stashing" ) );
+
+    // A failed disk check must still explain the unsaved work the user can resolve first.
+    status.checked = false;
+    BOOST_CHECK_EQUAL( status.RefusalMessage( editors ).ToStdString(), message.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( WorktreeStatusRefusesUnavailableAndFailedReads )
+{
+    SCOPED_GIT_BACKEND libgit;
+    KIGIT_COMMON       unavailable( nullptr );
+    auto               unavailableLock = unavailable.LockAction();
+
+    BOOST_CHECK( !GIT_WORKTREE_STATUS{}.RefusalMessage( {} ).IsEmpty() );
+
+    GIT_WORKTREE_STATUS missing = ReadGitWorktreeStatus( unavailable, wxEmptyString );
+    BOOST_CHECK( !missing.checked );
+    BOOST_CHECK( missing.RefusalMessage( {} ).Contains( "Could not check" ) );
+    BOOST_CHECK( !missing.RefusalMessage( {} ).Contains( "Stash Changes" ) );
+    BOOST_CHECK( !missing.RefusalMessage( {}, true ).IsEmpty() );
+
+    // A repository without a working tree makes libgit2's status read fail.
+    ScopedTempDir   tmp;
+    git_repository* rawRepo = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &rawRepo, tmp.path.utf8_str(), 1 ), GIT_OK );
+    KIGIT::GitRepositoryPtr repo( rawRepo );
+    KIGIT_COMMON            common( repo.get() );
+    auto                    lock = common.LockAction();
+
+    GIT_WORKTREE_STATUS failed = ReadGitWorktreeStatus( common, tmp.path );
+    BOOST_CHECK( !failed.checked );
+    BOOST_CHECK( failed.RefusalMessage( {} ).Contains( "Could not check" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( WorktreeStatusAllowsCleanAndUntrackedFiles )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "board.kicad_pcb", "original\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+    auto                    lock = common.LockAction();
+
+    GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, tmp.path );
+    BOOST_CHECK( clean.checked );
+    BOOST_CHECK( !clean.hasTrackedChanges );
+    BOOST_CHECK( clean.RefusalMessage( {} ).IsEmpty() );
+
+    writeFile( tmp.path, "notes.txt", "untracked notes\n" );
+
+    GIT_WORKTREE_STATUS untracked = ReadGitWorktreeStatus( common, tmp.path );
+    BOOST_CHECK( untracked.checked );
+    BOOST_CHECK( !untracked.hasTrackedChanges );
+    BOOST_CHECK( untracked.outsideProject.empty() );
+    BOOST_CHECK( untracked.RefusalMessage( {} ).IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( WorktreeStatusExplainsTrackedChangesInsideAndOutsideTheProject )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "README.txt", "repository\n" ) );
+
+    const wxString projectPath = tmp.path + wxS( "/project" );
+    BOOST_REQUIRE( wxFileName::Mkdir( projectPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( tmp.path + wxS( "/project2" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    writeFile( tmp.path, "project/board.kicad_pcb", "project board\n" );
+    commitWorkingFile( repo.get(), "project/board.kicad_pcb", "add project" );
+    writeFile( tmp.path, "project2/board.kicad_pcb", "sibling board\n" );
+    commitWorkingFile( repo.get(), "project2/board.kicad_pcb", "add sibling" );
+
+    KIGIT_COMMON common( repo.get() );
+    auto         lock = common.LockAction();
+    writeFile( tmp.path, "project/board.kicad_pcb", "edited project board\n" );
+
+    GIT_WORKTREE_STATUS inside = ReadGitWorktreeStatus( common, projectPath );
+    BOOST_CHECK( inside.checked );
+    BOOST_CHECK( inside.hasTrackedChanges );
+    BOOST_CHECK( inside.outsideProject.empty() );
+    BOOST_CHECK( inside.RefusalMessage( {} ).Contains( "Stash Changes" ) );
+    BOOST_CHECK( inside.RefusalMessage( {}, true ).IsEmpty() );
+
+    writeFile( tmp.path, "project2/board.kicad_pcb", "edited sibling board\n" );
+    writeFile( tmp.path, "project2/notes.txt", "untracked sibling notes\n" );
+
+    GIT_WORKTREE_STATUS outside = ReadGitWorktreeStatus( common, projectPath );
+    BOOST_CHECK( outside.checked );
+    BOOST_CHECK( outside.hasTrackedChanges );
+    BOOST_REQUIRE_EQUAL( outside.outsideProject.size(), 1 );
+    BOOST_CHECK_EQUAL( outside.outsideProject.front().ToStdString(), "project2/board.kicad_pcb" );
+
+    wxString message = outside.RefusalMessage( {} );
+    BOOST_CHECK( message.Contains( "project2/board.kicad_pcb" ) );
+    BOOST_CHECK( !message.Contains( "project/board.kicad_pcb" ) );
+    BOOST_CHECK( !message.Contains( "notes.txt" ) );
+    BOOST_CHECK( outside.RefusalMessage( {}, true ).IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( WorktreeStatusDistinguishesGitLfsFromUncommittedChanges )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "board.kicad_pcb", "original\n" ) );
+
+    writeFile( tmp.path, ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
+    commitWorkingFile( repo.get(), ".gitattributes", "route step files through lfs" );
+    writeFile( tmp.path, "case.step", "ISO-10303-21;\n" );
+    commitWorkingFile( repo.get(), "case.step", "add the enclosure" );
+
+    KIGIT_COMMON common( repo.get() );
+    auto         lock = common.LockAction();
+
+    GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, tmp.path );
+    BOOST_CHECK( clean.checked );
+    BOOST_CHECK( !clean.hasTrackedChanges );
+    BOOST_CHECK( clean.RefusalMessage( {} ).Contains( "Git LFS" ) );
+    BOOST_CHECK( clean.RefusalMessage( {} ).Contains( "case.step" ) );
+
+    writeFile( tmp.path, "board.kicad_pcb", "edited board\n" );
+
+    GIT_WORKTREE_STATUS dirty = ReadGitWorktreeStatus( common, tmp.path );
+    BOOST_CHECK( dirty.checked );
+    BOOST_CHECK( dirty.hasTrackedChanges );
+    BOOST_CHECK( dirty.RefusalMessage( {} ).Contains( "Git LFS" ) );
+    BOOST_CHECK( !dirty.RefusalMessage( {} ).Contains( "Stash Changes" ) );
+    BOOST_CHECK( dirty.RefusalMessage( {}, true ).Contains( "Git LFS" ) );
 }
 
 

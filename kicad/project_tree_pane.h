@@ -43,6 +43,7 @@
 
 
 class KICAD_MANAGER_FRAME;
+class KIGIT_QUERY;
 class PROJECT_TREE_ITEM;
 class PROJECT_TREE;
 
@@ -284,6 +285,13 @@ private:
     std::future<void>       m_gitStatusIconTask;
 
     std::weak_ptr<KIGIT_COMMON> m_gitListenerSession;
+
+    /// Preserve the shortcut targets while the context menu runs its event loop.
+    std::vector<wxString>       m_gitMenuBranches;
+    std::weak_ptr<KIGIT_COMMON> m_gitMenuSession;
+
+    /// Owns the branch-switch preflight and suppresses callbacks when the project closes.
+    std::unique_ptr<KIGIT_QUERY> m_branchQuery;
 
     std::mutex                                       m_gitTreeCacheMutex;
     std::unordered_map<wxString, wxTreeItemId>       m_gitTreeCache;

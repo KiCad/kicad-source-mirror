@@ -431,14 +431,13 @@ struct WORKTREE_QUERY_CONTEXT
 // These checks precede UI confirmations, so they are snapshots rather than part of a write
 // transaction. The backend still validates the working tree under the mutation's own lock.
 void checkProjectWorktree( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUERY& aQuery,
-                           std::function<void( const wxString& )> aReady, std::function<void()> aFinished = {} )
+                           std::function<void( const wxString&, const GIT_WORKTREE_STATUS& )> aReady,
+                           std::function<void()>                                              aFinished = {} )
 {
     struct OUTCOME
     {
-        bool     checked = false;
-        bool     dirty = false;
-        wxString currentBranch;
-        wxString lfsMessage;
+        GIT_WORKTREE_STATUS worktree;
+        wxString            currentBranch;
     };
 
     wxString projectPath = aFrame->Prj().GetProjectPath();
@@ -449,36 +448,22 @@ void checkProjectWorktree( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUER
             context->session,
             [outcome, projectPath]( KIGIT_COMMON& aCommon )
             {
-                outcome->dirty = aCommon.HasUncommittedTrackedChanges();
                 outcome->currentBranch = aCommon.GetCurrentBranchName();
-                outcome->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, projectPath );
-                outcome->checked = true;
+                outcome->worktree = ReadGitWorktreeStatus( aCommon, projectPath );
             },
             [context, outcome, aReady, aFinished]()
             {
                 auto proceed = [&]()
                 {
-                    if( !context->IsCurrent() || !outcome->checked )
+                    if( !context->IsCurrent() )
                     {
                         return;
                     }
 
-                    if( !outcome->lfsMessage.IsEmpty() )
-                    {
-                        DisplayErrorMessage( context->parent, outcome->lfsMessage );
+                    if( !ProjectSafeToRewrite( context->frame, context->parent, outcome->worktree ) )
                         return;
-                    }
 
-                    if( outcome->dirty || DocumentEditorsDirty( context->frame->Kiway() )
-                        || !LibraryEditorsWithUnsavedChanges( context->frame->Kiway() ).empty() )
-                    {
-                        DisplayInfoMessage( context->parent,
-                                            _( "There are changes that are not committed yet, and this would run over "
-                                               "them. Commit them first, or set them aside with Stash Changes." ) );
-                        return;
-                    }
-
-                    aReady( outcome->currentBranch );
+                    aReady( outcome->currentBranch, outcome->worktree );
                 };
 
                 proceed();
@@ -494,12 +479,12 @@ void checkProjectWorktree( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUER
 
 
 void ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUERY& aQuery,
-                                    std::function<void()> aReady )
+                                    std::function<void( const GIT_WORKTREE_STATUS& )> aReady )
 {
     checkProjectWorktree( aFrame, aParent, aQuery,
-                          [aReady]( const wxString& )
+                          [aReady]( const wxString&, const GIT_WORKTREE_STATUS& aStatus )
                           {
-                              aReady();
+                              aReady( aStatus );
                           } );
 }
 
@@ -519,7 +504,7 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
 
     checkProjectWorktree(
             aFrame, aParent, aQuery,
-            [context, aBranch]( const wxString& aCurrentBranch )
+            [context, aBranch]( const wxString& aCurrentBranch, const GIT_WORKTREE_STATUS& aStatus )
             {
                 const wxWeakRef<EDA_BASE_FRAME>&     frame = context->frame;
                 const wxWeakRef<wxWindow>&           parent = context->parent;
@@ -541,8 +526,9 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
                     return;
                 }
 
-                // Save rather than close: a close would take the frame hosting the caller with it.
-                if( !PrepareEditorsForGitOperation( frame, GIT_EDITOR_PREP::WORKING_TREE ) )
+                // The confirmation may have allowed new edits. Saving them here would create
+                // the uncommitted files that the checkout refuses to overwrite.
+                if( !ProjectSafeToRewrite( frame, parent, aStatus ) )
                     return;
 
                 if( !context->IsCurrent() )
@@ -566,6 +552,11 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
                     GIT_BRANCH_HANDLER handler( common.get() );
                     result = handler.SwitchToBranch( aBranch );
                     resultError = handler.GetErrorString();
+
+                    // The next transfer must use the new branch's upstream and credentials.
+                    // Update them before releasing the same lock that protects the checkout.
+                    if( result == BranchResult::Success )
+                        common->UpdateCurrentBranchInfo();
                 }
 
                 if( result == BranchResult::Conflict )
@@ -635,9 +626,9 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, 
 
     for( const auto& [path, fileStatus] : handler.GetFileStatus( wxEmptyString, /* changed only */ true ) )
     {
-        if( fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_UNTRACKED
-            || fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED
-            || fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT )
+        // The display status groups untracked and staged new files together. Only raw flags
+        // distinguish changes to tracked files from untracked siblings that do not block this.
+        if( ( fileStatus.gitStatus & ~( GIT_STATUS_WT_NEW | GIT_STATUS_IGNORED ) ) == GIT_STATUS_CURRENT )
         {
             continue;
         }
@@ -654,6 +645,101 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, 
     }
 
     return paths;
+}
+
+
+GIT_WORKTREE_STATUS ReadGitWorktreeStatus( KIGIT_COMMON& aCommon, const wxString& aProjectPath )
+{
+    GIT_WORKTREE_STATUS status;
+
+    if( !aCommon.GetRepo() )
+        return status;
+
+    status.hasTrackedChanges = aCommon.HasUncommittedTrackedChanges( &status.checked );
+    status.lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, aProjectPath );
+
+    // A sibling project's tracked edits block the same repository-wide rewrite.
+    if( status.hasTrackedChanges )
+        status.outsideProject = ChangedTrackedFilesOutsideProject( aCommon, aProjectPath );
+
+    return status;
+}
+
+
+wxString GIT_WORKTREE_STATUS::RefusalMessage( const std::vector<wxString>& aUnsavedEditors,
+                                              bool                         aAllowTrackedChanges ) const
+{
+    if( !aUnsavedEditors.empty() )
+    {
+        wxString listed;
+
+        for( const wxString& name : aUnsavedEditors )
+            listed += wxString::Format( wxS( "\n    - %s" ), name );
+
+        wxString message = aAllowTrackedChanges
+                                   ? _( "The following editors have unsaved changes:%s\n\n"
+                                        "Save or discard those changes before stashing." )
+                                   : _( "The following editors have unsaved changes:%s\n\n"
+                                        "Save or discard those changes first. If saving leaves uncommitted "
+                                        "files, commit or stash them before trying again." );
+
+        return wxString::Format( message, listed );
+    }
+
+    if( !checked )
+        return _( "Could not check the working files. Try again before rewriting project files." );
+
+    if( !lfsMessage.IsEmpty() )
+        return lfsMessage;
+
+    if( !hasTrackedChanges || aAllowTrackedChanges )
+        return wxEmptyString;
+
+    if( !outsideProject.empty() )
+    {
+        wxString listed;
+
+        for( const wxString& path : outsideProject )
+            listed += wxS( "\n    " ) + path;
+
+        return wxString::Format( _( "There are uncommitted changes elsewhere in this repository:%s\n\n"
+                                    "Commit or discard them from that project first, then try again." ),
+                                 listed );
+    }
+
+    return _( "There are changes that are not committed yet, and this would run over them. "
+              "Commit them first, or set them aside with Stash Changes." );
+}
+
+
+bool ProjectSafeToRewrite( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const GIT_WORKTREE_STATUS& aStatus,
+                           bool aAllowTrackedChanges )
+{
+    std::vector<wxString> unsaved;
+
+    const std::pair<FRAME_T, wxString> editors[] = {
+        { FRAME_SCH, _( "Schematic Editor" ) },
+        { FRAME_PCB_EDITOR, _( "PCB Editor" ) },
+    };
+
+    for( const auto& [type, name] : editors )
+    {
+        KIWAY_PLAYER* player = aFrame->Kiway().Player( type, false );
+
+        if( player && player->IsContentModified() )
+            unsaved.push_back( name );
+    }
+
+    std::vector<wxString> libraries = LibraryEditorsWithUnsavedChanges( aFrame->Kiway() );
+    unsaved.insert( unsaved.end(), libraries.begin(), libraries.end() );
+
+    wxString message = aStatus.RefusalMessage( unsaved, aAllowTrackedChanges );
+
+    if( message.IsEmpty() )
+        return true;
+
+    DisplayInfoMessage( aParent ? aParent : aFrame, message );
+    return false;
 }
 
 

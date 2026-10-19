@@ -40,6 +40,7 @@ class PANEL_GIT_STASHES;
 class PANEL_GIT_REPOSITORY;
 class PANEL_GIT_TAGS;
 class wxSplitterWindow;
+struct GIT_WORKTREE_STATUS;
 
 
 /**
@@ -97,9 +98,13 @@ public:
     /// before an action rewrites files on disk. Returns false to abort the action.
     bool ConfirmWorkingTreeChange();
 
+    /// Recheck unsaved editors against the clean-tree snapshot after a confirmation, then
+    /// snapshot their documents for reload. Does not save editors or create dirty files.
+    bool ConfirmWorkingTreeChange( const GIT_WORKTREE_STATUS& aStatus );
+
     /// Check the working tree and LFS on a worker, then continue on the UI thread only when
     /// nothing is uncommitted or unsaved. Saving first would create changes that block it.
-    void RefuseOverUncommittedWork( std::function<void()> aReady );
+    void RefuseOverUncommittedWork( std::function<void( const GIT_WORKTREE_STATUS& )> aReady );
 
     /// Reload the editors from disk and refresh the panels, after an operation rewrote files.
     void FinishWorkingTreeChange();

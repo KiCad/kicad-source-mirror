@@ -113,6 +113,32 @@ std::vector<wxString> LibraryEditorsWithUnsavedChanges( KIWAY& aKiway );
 std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, const wxString& aProjectPath );
 
 /**
+ * Repository state used before an operation that requires a clean working tree. Read on a
+ * worker and combined with live editor state on the UI thread, so unsaved work is never
+ * mistaken for an uncommitted file. Stash creation uses the tracked state after saving editors.
+ */
+struct GIT_WORKTREE_STATUS
+{
+    bool                  checked = false;
+    bool                  hasTrackedChanges = false;
+    wxString              lfsMessage;
+    std::vector<wxString> outsideProject;
+
+    /// Empty when rewriting is allowed. Unsaved editors take precedence over disk changes.
+    /// Stash creation allows tracked changes because it records them before rewriting files.
+    wxString RefusalMessage( const std::vector<wxString>& aUnsavedEditors, bool aAllowTrackedChanges = false ) const;
+};
+
+/// Read tracked changes and Git LFS using a captured project path. The caller holds the action
+/// lock on a worker. An unavailable repository leaves checked false and cannot authorize a rewrite.
+GIT_WORKTREE_STATUS ReadGitWorktreeStatus( KIGIT_COMMON& aCommon, const wxString& aProjectPath );
+
+/// Combine the repository snapshot with live editor state and explain any refusal. Called on
+/// the UI thread before rewriting files, and again after a confirmation that could allow edits.
+bool ProjectSafeToRewrite( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const GIT_WORKTREE_STATUS& aStatus,
+                           bool aAllowTrackedChanges = false );
+
+/**
  * Record the on-disk identity of the open documents, before an operation that may rewrite
  * them. Takes the KIWAY rather than a frame, because the completion that consumes the
  * snapshot must outlive the window that took it.
@@ -132,13 +158,14 @@ void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore );
 /**
  * Check the working tree and Git LFS on a worker, then run aReady on the UI thread when the
  * operation can proceed. Otherwise explain why it is refused. Rechecks unsaved editor changes
- * and the current session after the read. aQuery belongs to the window starting the action.
+ * and the current session after the read. aReady receives the snapshot to recheck editors after
+ * any confirmation. aQuery belongs to the window starting the action.
  */
 void ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUERY& aQuery,
-                                    std::function<void()> aReady );
+                                    std::function<void( const GIT_WORKTREE_STATUS& )> aReady );
 
 /**
- * Check the working tree on a worker, then confirm switching to aBranch and save the open
+ * Check the working tree on a worker, then confirm switching to aBranch and recheck unsaved
  * editors. On success the editors reload and every Git surface refreshes. aQuery belongs to
  * the window starting the action and cancels the continuation when that window closes.
  * aFinished runs after success or refusal, while the owner still exists.

@@ -315,8 +315,8 @@ public:
     size_t GetUnmergedCommitCount( const wxString& aBranch ) const;
 
     // True when tracked files hold uncommitted changes, staged or not. Untracked files do not
-    // count: a merge leaves them alone.
-    bool HasUncommittedTrackedChanges() const;
+    // count: a merge leaves them alone. aReadOk distinguishes a clean tree from a failed read.
+    bool HasUncommittedTrackedChanges( bool* aReadOk = nullptr ) const;
 
     // The full messages of the newest commits from HEAD, newest first, with repeats dropped.
     std::vector<wxString> GetRecentCommitMessages( size_t aMax ) const;

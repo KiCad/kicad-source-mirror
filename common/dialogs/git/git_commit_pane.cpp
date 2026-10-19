@@ -784,15 +784,7 @@ void GIT_COMMIT_PANE::setAuthor()
 
 bool GIT_COMMIT_PANE::anyEditorDirty() const
 {
-    for( FRAME_T type : { FRAME_SCH, FRAME_PCB_EDITOR } )
-    {
-        KIWAY_PLAYER* player = m_frame->Kiway().Player( type, false );
-
-        if( player && player->IsContentModified() )
-            return true;
-    }
-
-    return false;
+    return DocumentEditorsDirty( m_frame->Kiway() );
 }
 
 
@@ -2057,24 +2049,19 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     {
         // Getting their changes needs a clean tree. Files left unticked at the commit, or edits
         // still in an editor, block it, and offering the click anyway would only fail later.
-        auto dirty = std::make_shared<bool>( true );
+        auto     worktree = std::make_shared<GIT_WORKTREE_STATUS>();
+        wxString projectPath = m_frame->Prj().GetProjectPath();
 
         runActionQuery(
                 aCommon,
-                [dirty]( KIGIT_COMMON& aSession )
+                [worktree, projectPath]( KIGIT_COMMON& aSession )
                 {
-                    *dirty = aSession.HasUncommittedTrackedChanges();
+                    *worktree = ReadGitWorktreeStatus( aSession, projectPath );
                 },
-                [this, aCommon, dirty]()
+                [this, aCommon, worktree]()
                 {
-                    if( *dirty || anyEditorDirty() )
-                    {
-                        DisplayInfoMessage( this, _( "Someone else pushed changes first. Before their changes can "
-                                                     "be brought in, commit or discard the changes that were "
-                                                     "left out of this commit. Then use Get Changes and push "
-                                                     "again." ) );
+                    if( !ProjectSafeToRewrite( m_frame, this, *worktree ) )
                         return;
-                    }
 
                     if( IsOK( this, _( "Someone else pushed changes first.\n\n"
                                        "Get their changes and push again?" ) )
@@ -2467,31 +2454,10 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
         return;
     }
 
-    // The merge and the conflict resolution both need a clean state, and committing first is the
-    // one path that cannot lose the work. Saving here would only manufacture dirty files.
-    std::vector<wxString> libraryEditors = LibraryEditorsWithUnsavedChanges( m_frame->Kiway() );
-
-    if( !libraryEditors.empty() )
-    {
-        wxString listed;
-
-        for( const wxString& name : libraryEditors )
-            listed += wxString::Format( wxS( "\n    - %s" ), name );
-
-        setBusy( false, _( "Save your library changes first." ) );
-        DisplayInfoMessage( this, wxString::Format( _( "The following editors have unsaved changes, and getting "
-                                                       "changes could rewrite the libraries they are editing:%s"
-                                                       "\n\nSave or discard those changes first." ),
-                                                    listed ) );
-        return;
-    }
-
     struct CHECK
     {
-        bool                  hasIdentity = false;
-        bool                  dirty = false;
-        wxString              lfsMessage;
-        std::vector<wxString> outside;
+        bool                hasIdentity = false;
+        GIT_WORKTREE_STATUS worktree;
     };
 
     auto     result = std::make_shared<CHECK>();
@@ -2502,51 +2468,12 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
             [result, projectPath]( KIGIT_COMMON& aSession )
             {
                 result->hasIdentity = KIGIT::HasGitIdentity( aSession );
-                result->dirty = aSession.HasUncommittedTrackedChanges();
-                result->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aSession, projectPath );
-
-                // A sibling project's tracked edits block the same repository-wide merge.
-                if( result->dirty )
-                    result->outside = ChangedTrackedFilesOutsideProject( aSession, projectPath );
+                result->worktree = ReadGitWorktreeStatus( aSession, projectPath );
             },
             [this, aCommon, aThenPush, result]()
             {
-                if( !result->lfsMessage.IsEmpty() )
-                {
-                    setBusy( false, _( "This project uses Git LFS." ) );
-                    DisplayErrorMessage( this, result->lfsMessage );
+                if( !ProjectSafeToRewrite( m_frame, this, result->worktree ) )
                     return;
-                }
-
-                if( result->dirty || anyEditorDirty() || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
-                {
-                    setBusy( false, _( "Commit your changes first." ) );
-
-                    if( !result->outside.empty() )
-                    {
-                        wxString listed;
-
-                        for( const wxString& path : result->outside )
-                            listed += wxS( "\n    " ) + path;
-
-                        DisplayInfoMessage( this,
-                                            wxString::Format( _( "There are uncommitted changes elsewhere in this "
-                                                                 "repository:%s\n\nCommit or discard them from that "
-                                                                 "project first, then get changes again." ),
-                                                              listed ) );
-                    }
-                    else
-                    {
-                        DisplayInfoMessage( this,
-                                            _( "There are changes that are not committed yet, and getting changes "
-                                               "would run over them. Commit them first, then get changes again. To "
-                                               "set them aside instead, use Stash Changes in the Advanced Git "
-                                               "window." ) );
-                    }
-
-                    return;
-                }
-
 
                 // A non-fast-forward pull creates a commit, so obtain its identity before
                 // the worker can change files. The repository check was in the query above.
@@ -2554,6 +2481,10 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
                     return;
 
                 if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )
+                    return;
+
+                // The identity prompt can allow new editor changes while it is open.
+                if( !ProjectSafeToRewrite( m_frame, this, result->worktree ) )
                     return;
 
                 startPull( aCommon, aThenPush );

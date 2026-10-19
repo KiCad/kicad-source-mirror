@@ -250,8 +250,11 @@ wxString KIGIT_COMMON::GetLastCommitMessage() const
 }
 
 
-bool KIGIT_COMMON::HasUncommittedTrackedChanges() const
+bool KIGIT_COMMON::HasUncommittedTrackedChanges( bool* aReadOk ) const
 {
+    if( aReadOk )
+        *aReadOk = false;
+
     if( !m_repo )
         return false;
 
@@ -265,6 +268,9 @@ bool KIGIT_COMMON::HasUncommittedTrackedChanges() const
         return false;
 
     KIGIT::GitStatusListPtr statusListPtr( statusList );
+
+    if( aReadOk )
+        *aReadOk = true;
 
     return git_status_list_entrycount( statusList ) > 0;
 }

@@ -272,10 +272,9 @@ void PANEL_GIT_STASHES::restoreSelectedStash( bool aRemoveAfterApply )
     if( id.IsEmpty() )
         return;
 
-    // Applying needs a clean tree, so saving the editors first would only turn unsaved edits
-    // into the very changes that block it. Ask for a commit up front instead.
+    // Applying needs a clean tree, so report unsaved editors before asking to rewrite files.
     m_dialog->RefuseOverUncommittedWork(
-            [this, id, aRemoveAfterApply]()
+            [this, id, aRemoveAfterApply]( const GIT_WORKTREE_STATUS& aStatus )
             {
                 wxString question = aRemoveAfterApply ? _( "Apply this stash and remove it from the list?" )
                                                       : _( "Apply this stash to the working tree?" );
@@ -283,7 +282,7 @@ void PANEL_GIT_STASHES::restoreSelectedStash( bool aRemoveAfterApply )
                 if( !IsOK( this, question ) )
                     return;
 
-                if( !m_dialog->ConfirmWorkingTreeChange() )
+                if( !m_dialog->ConfirmWorkingTreeChange( aStatus ) )
                     return;
 
                 m_dialog->RunGitAction(
@@ -398,8 +397,8 @@ void PANEL_GIT_STASHES::checkStashChanges()
 {
     struct OUTCOME
     {
-        bool hasTrackedChanges = false;
-        bool hasNewFilesOnly = false;
+        GIT_WORKTREE_STATUS worktree;
+        bool                hasNewFilesOnly = false;
     };
 
     wxString projectPath = m_frame->Prj().GetProjectPath();
@@ -411,8 +410,8 @@ void PANEL_GIT_STASHES::checkStashChanges()
             m_frame->Prj().GetGitCommon(),
             [outcome, projectPath, projectName, dark]( KIGIT_COMMON& aCommon )
             {
-                outcome->hasTrackedChanges = aCommon.HasUncommittedTrackedChanges();
-                outcome->hasNewFilesOnly = !outcome->hasTrackedChanges
+                outcome->worktree = ReadGitWorktreeStatus( aCommon, projectPath );
+                outcome->hasNewFilesOnly = !outcome->worktree.hasTrackedChanges
                                            && !BuildGitChangeEntries( aCommon, projectPath, projectName, dark ).empty();
             },
             [this, outcome]()
@@ -420,7 +419,10 @@ void PANEL_GIT_STASHES::checkStashChanges()
                 if( !m_dialog->SessionStillCurrent() )
                     return;
 
-                if( !outcome->hasTrackedChanges )
+                if( !ProjectSafeToRewrite( m_frame, this, outcome->worktree, /* allow tracked changes */ true ) )
+                    return;
+
+                if( !outcome->worktree.hasTrackedChanges )
                 {
                     // A stash only includes files that have been committed before. When the only changes
                     // are brand new files, saying "no changes" would contradict what the panel shows.
@@ -445,13 +447,8 @@ void PANEL_GIT_STASHES::checkStashChanges()
 
                 // Editing can resume while either the status read or the description dialog runs.
                 // Do not rewrite a document whose editor has acquired fresh unsaved changes.
-                if( DocumentEditorsDirty( m_frame->Kiway() )
-                    || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
-                {
-                    DisplayInfoMessage( this,
-                                        _( "An editor has unsaved changes. Save or discard them before stashing." ) );
+                if( !ProjectSafeToRewrite( m_frame, this, outcome->worktree, /* allow tracked changes */ true ) )
                     return;
-                }
 
                 wxString message = dlg.GetValue().Trim( true ).Trim( false );
 

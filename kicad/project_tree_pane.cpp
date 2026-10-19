@@ -21,6 +21,7 @@
 
 #include <stack>
 #include <dialogs/git/git_status_entries.h>
+#include <dialogs/git/git_transfer.h>
 #include <git/git_backend.h>
 
 #include <wx/regex.h>
@@ -35,6 +36,7 @@
 #include <wx/dcclient.h>
 #include <wx/progdlg.h>
 #include <wx/settings.h>
+#include <wx/weakref.h>
 
 #include <frame_type.h>
 #include <kiway.h>
@@ -67,7 +69,6 @@
 #include <git/git_pull_handler.h>
 #include <git/kicad_git_compat.h>
 #include <git/git_init_handler.h>
-#include <git/git_branch_handler.h>
 #include <git/git_status_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
@@ -210,7 +211,8 @@ END_EVENT_TABLE()
 wxDECLARE_EVENT( UPDATE_ICONS, wxCommandEvent );
 
 PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
-        wxSashLayoutWindow( parent, ID_LEFT_FRAME, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxTAB_TRAVERSAL )
+        wxSashLayoutWindow( parent, ID_LEFT_FRAME, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxTAB_TRAVERSAL ),
+        m_branchQuery( std::make_unique<KIGIT_QUERY>() )
 {
     m_Parent = parent;
     m_TreeProject = nullptr;
@@ -246,6 +248,8 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
 PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 {
+    m_branchQuery->Cancel();
+
     Unbind( wxEVT_FSWATCHER,
             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ), this );
     Unbind( wxEVT_SYS_COLOUR_CHANGED,
@@ -984,20 +988,22 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 
         // Reading the branch list walks the repository. On contention the submenu is built
         // without the shortcuts rather than reading it concurrently.
-        std::vector<wxString> branchNames;
+        std::shared_ptr<KIGIT_COMMON> common = gitCommon();
+        m_gitMenuBranches.clear();
+        m_gitMenuSession = common;
 
         {
-            std::unique_lock<std::mutex> branchLock = gitCommon()->TryLockAction();
+            std::unique_lock<std::mutex> branchLock = common->TryLockAction();
 
             if( branchLock.owns_lock() )
-                branchNames = gitCommon()->GetBranchNames();
+                m_gitMenuBranches = common->GetBranchNames();
         }
 
         // Skip the first one (that is the current branch)
-        for( size_t ii = 1; ii < branchNames.size() && ii < 6; ++ii )
+        for( size_t ii = 1; ii < m_gitMenuBranches.size() && ii < 6; ++ii )
         {
-            wxString msg = _( "Switch to branch " ) + branchNames[ii];
-            vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_BRANCH + ii, branchNames[ii], msg );
+            wxString msg = _( "Switch to branch " ) + m_gitMenuBranches[ii];
+            vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_BRANCH + ii, m_gitMenuBranches[ii], msg );
             vcs_menuitem->Enable( vcs_can_switch );
         }
 
@@ -1608,6 +1614,10 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
 void PROJECT_TREE_PANE::EmptyTreePrj()
 {
+    m_branchQuery->Cancel();
+    m_gitMenuBranches.clear();
+    m_gitMenuSession.reset();
+
     // Make sure we don't try to inspect the tree after we've deleted its items.
     shutdownFileWatcher();
 
@@ -1617,6 +1627,8 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
 
 void PROJECT_TREE_PANE::WaitForGitOperations()
 {
+    m_branchQuery->Cancel();
+
     if( gitRepo() )
     {
         std::shared_ptr<KIGIT_COMMON> common = gitCommon();
@@ -1689,6 +1701,9 @@ void PROJECT_TREE_PANE::WaitForGitOperations()
 
 void PROJECT_TREE_PANE::releaseGitRepo()
 {
+    m_branchQuery->Cancel();
+    m_gitMenuBranches.clear();
+    m_gitMenuSession.reset();
     Prj().ReleaseGitCommon();
 }
 
@@ -1705,6 +1720,10 @@ void PROJECT_TREE_PANE::syncGitListener()
 
     if( m_gitListenerSession.lock() == common )
         return;
+
+    m_branchQuery->Cancel();
+    m_gitMenuBranches.clear();
+    m_gitMenuSession.reset();
 
     if( std::shared_ptr<KIGIT_COMMON> previous = m_gitListenerSession.lock() )
         previous->RemoveRefreshListener( this );
@@ -1958,7 +1977,9 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
 void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
 {
-    if( !gitRepo() )
+    std::shared_ptr<KIGIT_COMMON> common = gitCommon();
+
+    if( !common->GetRepo() || common->IsShuttingDown() )
         return;
 
     wxString branchName;
@@ -1966,10 +1987,17 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
 
     if( aEvent.GetId() == ID_GIT_SWITCH_BRANCH )
     {
-        DIALOG_GIT_SWITCH dlg( wxGetTopLevelParent( this ), gitRepo() );
+        wxWeakRef<PROJECT_TREE_PANE> self( this );
+        DIALOG_GIT_SWITCH            dlg( wxGetTopLevelParent( this ), common->GetRepo() );
 
         int retval = dlg.ShowModal();
         branchName = dlg.GetBranchName();
+
+        if( !self || self->IsBeingDeleted() || common->IsShuttingDown() || self->gitCommon() != common
+            || !Pgm().GetCommonSettings()->m_Git.enableGit || Prj().GetLocalSettings().m_GitIntegrationDisabled )
+        {
+            return;
+        }
 
         if( retval == wxID_ADD )
             createRequested = true;
@@ -1978,107 +2006,60 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     }
     else
     {
-        std::vector<wxString> branches;
+        int branchIndex = aEvent.GetId() - ID_GIT_SWITCH_BRANCH;
+
+        if( m_gitMenuSession.lock() != common || branchIndex < 0
+            || static_cast<size_t>( branchIndex ) >= m_gitMenuBranches.size() )
+        {
+            return;
+        }
+
+        branchName = m_gitMenuBranches[branchIndex];
+    }
+
+    if( !createRequested )
+    {
+        SwitchProjectToBranch( m_Parent, this, branchName, *m_branchQuery );
+        return;
+    }
+
+    // Keep Add subject to the same worktree checks before creating the branch. The shared
+    // switch helper then owns confirmation, editor checks, checkout, and reload.
+    auto createBranch = [this, common, branchName]( const GIT_WORKTREE_STATUS& )
+    {
+        if( IsBeingDeleted() || m_Parent->IsBeingDeleted() || gitCommon() != common || common->IsShuttingDown()
+            || !Pgm().GetCommonSettings()->m_Git.enableGit || Prj().GetLocalSettings().m_GitIntegrationDisabled )
+        {
+            return;
+        }
+
+        int      result;
+        wxString error;
 
         {
-            // Reading the branch list walks the repository, so take the action lock for the read
-            // itself. It is released again before the switch below re-takes it.
-            std::unique_lock<std::mutex> branchLock = gitCommon()->TryLockAction();
+            std::unique_lock<std::mutex> lock = common->TryLockAction();
 
-            if( !branchLock.owns_lock() )
+            if( !lock.owns_lock() )
             {
-                DisplayInfoMessage( m_parent, KIGIT::BusyMessage() );
+                DisplayInfoMessage( this, KIGIT::BusyMessage() );
                 return;
             }
 
-            branches = gitCommon()->GetBranchNames();
+            result = KIGIT::PROJECT_GIT_UTILS::CreateBranch( common->GetRepo(), branchName );
+            error = KIGIT_COMMON::GetLastGitError();
         }
 
-        int branchIndex = aEvent.GetId() - ID_GIT_SWITCH_BRANCH;
-
-        if( branchIndex < 0 || static_cast<size_t>( branchIndex ) >= branches.size() )
-            return;
-
-        branchName = branches[branchIndex];
-    }
-
-    // Switching refuses over uncommitted work, so saving the editors first would only turn
-    // unsaved edits into the very changes that block it. Ask for a commit up front instead.
-    bool dirty = false;
-
-    {
-        std::unique_lock<std::mutex> dirtyLock = gitCommon()->TryLockAction();
-
-        if( !dirtyLock.owns_lock() )
+        if( result != GIT_OK )
         {
-            DisplayInfoMessage( m_parent, KIGIT::BusyMessage() );
+            DisplayErrorMessage( this, _( "Could not create the branch." ), error );
             return;
         }
 
-        dirty = gitCommon()->HasUncommittedTrackedChanges();
-    }
+        SwitchProjectToBranch( m_Parent, this, branchName, *m_branchQuery );
+        common->NotifyRefreshListeners();
+    };
 
-    if( dirty || DocumentEditorsDirty( m_Parent->Kiway() )
-        || !LibraryEditorsWithUnsavedChanges( m_Parent->Kiway() ).empty() )
-    {
-        DisplayInfoMessage( m_parent, _( "There are changes that are not committed yet, and switching branches "
-                                         "would run over them. Commit them first, or set them aside with Stash "
-                                         "Changes in the Advanced window." ) );
-        return;
-    }
-
-    // Switching rewrites the working tree under the open editors, so this path gives the same
-    // protections as the advanced window's: save first, then reload what actually changed.
-    if( !PrepareEditorsForGitOperation( m_Parent, GIT_EDITOR_PREP::WORKING_TREE ) )
-        return;
-
-    EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( m_Parent->Kiway() );
-
-    // The commit panels work on this same repository from worker threads, so the branch change
-    // takes the action lock.
-    std::unique_lock<std::mutex> lock = gitCommon()->TryLockAction();
-
-    if( !lock.owns_lock() )
-    {
-        DisplayInfoMessage( m_parent, KIGIT::BusyMessage() );
-        return;
-    }
-
-    if( createRequested )
-        KIGIT::PROJECT_GIT_UTILS::CreateBranch( gitRepo(), branchName );
-
-    GIT_BRANCH_HANDLER branchHandler( gitCommon().get() );
-
-    wxLogTrace( traceGit, wxS( "onGitSwitchBranch: Switching to branch '%s'" ), branchName );
-
-    BranchResult switchResult = branchHandler.SwitchToBranch( branchName );
-    wxString     switchError = branchHandler.GetErrorString();
-
-    if( switchResult == BranchResult::Success )
-        gitCommon()->UpdateCurrentBranchInfo();
-
-    // Release before reporting. A message box runs its own event loop, and would hold the lock
-    // for as long as it is on screen.
-    lock.unlock();
-
-    // Local changes blocking the switch are something the user can act on, so report them as
-    // guidance the way the advanced window does, not as a failure.
-    if( switchResult == BranchResult::Conflict )
-    {
-        DisplayInfoMessage( m_parent, switchError );
-        return;
-    }
-
-    if( switchResult != BranchResult::Success )
-    {
-        DisplayError( m_parent, switchError );
-        return;
-    }
-
-    ReloadOpenEditors( m_Parent->Kiway(), docsBefore );
-    gitCommon()->NotifyRefreshListeners();
-
-    m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
+    ProjectClearOfUncommittedWork( m_Parent, this, *m_branchQuery, std::move( createBranch ) );
 }
 
 

@@ -596,16 +596,16 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
 }
 
 
-void GIT_ADVANCED_DIALOG::RefuseOverUncommittedWork( std::function<void()> aReady )
+void GIT_ADVANCED_DIALOG::RefuseOverUncommittedWork( std::function<void( const GIT_WORKTREE_STATUS& )> aReady )
 {
     if( !SessionStillCurrent() )
         return;
 
     ProjectClearOfUncommittedWork( m_parent, this, m_actionQuery,
-                                   [this, aReady]()
+                                   [this, aReady]( const GIT_WORKTREE_STATUS& aStatus )
                                    {
                                        if( SessionStillCurrent() )
-                                           aReady();
+                                           aReady( aStatus );
                                    } );
 }
 
@@ -621,6 +621,16 @@ bool GIT_ADVANCED_DIALOG::ConfirmWorkingTreeChange()
         return false;
 
     if( !SessionStillCurrent() )
+        return false;
+
+    m_docsBeforeChange = CaptureOpenEditorDocs( m_parent->Kiway() );
+    return true;
+}
+
+
+bool GIT_ADVANCED_DIALOG::ConfirmWorkingTreeChange( const GIT_WORKTREE_STATUS& aStatus )
+{
+    if( !SessionStillCurrent() || !ProjectSafeToRewrite( m_parent, this, aStatus ) )
         return false;
 
     m_docsBeforeChange = CaptureOpenEditorDocs( m_parent->Kiway() );
