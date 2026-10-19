@@ -77,6 +77,7 @@ private:
     void arrangeAllLayersList( const LSEQ& aSeq );
     void transferPlotParamsToJob();
     void updatePdfColorOptions();
+    void updateJobOutputLabel();
 
 private:
     PCB_EDIT_FRAME*     m_editFrame;
