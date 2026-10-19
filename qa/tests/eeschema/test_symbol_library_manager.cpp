@@ -224,6 +224,35 @@ BOOST_AUTO_TEST_CASE( NewSymbolCreation )
 
 
 /**
+ * A power symbol's Value field is its net name, and the symbol properties dialog no longer
+ * forces that field to match the symbol name. Creation is the only place left that fills it
+ * in, so a new power symbol arriving with an empty Value would place an unnamed net.
+ */
+BOOST_AUTO_TEST_CASE( NewPowerSymbolSeedsValueFromName )
+{
+    NEW_SYMBOL_PROPERTIES props;
+
+    props.name = wxS( "+5V" );
+    props.reference = wxS( "#PWR" );
+    props.unitCount = 1;
+    props.pinNameInside = false;
+    props.pinTextPosition = 0;
+    props.powerSymbol = true;
+    props.showPinNumber = false;
+    props.showPinName = false;
+    props.unitsInterchangeable = true;
+    props.includeInBom = false;
+    props.includeOnBoard = false;
+    props.alternateBodyStyle = false;
+
+    std::unique_ptr<LIB_SYMBOL> symbol = LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( props, nullptr );
+
+    BOOST_REQUIRE( symbol->IsGlobalPower() );
+    BOOST_CHECK_EQUAL( symbol->GetValueField().GetText(), props.name );
+}
+
+
+/**
  * Test that LIB_BUFFER correctly deletes symbols from the library file when saved.
  *
  * This test verifies the fix for the bug where deleting a derived symbol from the symbol

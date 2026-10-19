@@ -74,7 +74,16 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( const NEW_
             new_symbol->SetPinNameOffset( 0 );
         }
 
-        ( aProps.powerSymbol ) ? new_symbol->SetGlobalPower() : new_symbol->SetNormal();
+        if( aProps.powerSymbol )
+        {
+            new_symbol->SetGlobalPower();
+            new_symbol->GetValueField().SetText( aProps.name );
+        }
+        else
+        {
+            new_symbol->SetNormal();
+        }
+
         new_symbol->SetShowPinNumbers( aProps.showPinNumber );
         new_symbol->SetShowPinNames( aProps.showPinName );
         new_symbol->LockUnits( !aProps.unitsInterchangeable );
