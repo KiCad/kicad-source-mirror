@@ -455,6 +455,10 @@ void PROJECT_GIT_UTILS::SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommo
     if( !aCommon )
         return;
 
+    // Raised before any exit below, so a session being let go never reads as live whatever
+    // state it is in.
+    aCommon->SetShuttingDown( true );
+
     git_repository* repo = aCommon->GetRepo();
 
     if( !repo )
@@ -467,8 +471,6 @@ void PROJECT_GIT_UTILS::SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommo
         aCommon->SetRepo( nullptr );
         return;
     }
-
-    aCommon->SetShuttingDown( true );
 
     {
         std::unique_lock<std::mutex> gitLock = aCommon->TryLockAction();
