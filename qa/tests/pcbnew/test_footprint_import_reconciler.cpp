@@ -55,17 +55,10 @@
 namespace
 {
 /// Stage a fresh, private project directory and wire up the global library manager for it.
-wxString stageProject( const wxString& aStem )
+wxString stageProject( const std::filesystem::path& aProjectRoot, const wxString& aStem )
 {
     wxString sep = wxFileName::GetPathSeparator();
-    wxString dir = wxStandardPaths::Get().GetTempDir() + sep + aStem + wxT( "-fpreconcile-qa" );
-
-    if( wxDirExists( dir ) )
-        wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
-
-    wxFileName::Mkdir( dir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-    wxString projectPath = dir + sep + aStem + wxT( ".kicad_pro" );
+    wxString projectPath = wxString::FromUTF8( aProjectRoot.string() ) + sep + aStem + wxT( ".kicad_pro" );
 
     Pgm().GetSettingsManager().LoadProject( projectPath );
     Pgm().GetLibraryManager().LoadProjectTables(
@@ -200,7 +193,8 @@ BOOST_AUTO_TEST_SUITE( FootprintImportReconciler )
 // fails on revert, since Eagle FPIDs keep empty nicknames
 BOOST_AUTO_TEST_CASE( EagleBoardResolvesToGeneratedCache )
 {
-    wxString projectPath = stageProject( wxS( "eagle_fpreconcile" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "eagle_fpreconcile" ) );
+    wxString                 projectPath = stageProject( projectDir.Path(), wxS( "eagle_fpreconcile" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     wxFileName brdFn( KI_TEST::GetEeschemaTestDataDir() );
@@ -275,7 +269,8 @@ BOOST_AUTO_TEST_CASE( EagleBoardResolvesToGeneratedCache )
 // and resolve through the adapter
 BOOST_AUTO_TEST_CASE( AltiumBoardResolvesToGeneratedCache )
 {
-    stageProject( wxS( "altium_fpreconcile" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "altium_fpreconcile" ) );
+    stageProject( projectDir.Path(), wxS( "altium_fpreconcile" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     std::string dataPath =
@@ -331,7 +326,8 @@ BOOST_AUTO_TEST_CASE( AltiumBoardResolvesToGeneratedCache )
 // fails on revert, since LoadBoard then publishes its own .pretty beside the archive
 BOOST_AUTO_TEST_CASE( EasyEdaProV3BoardResolvesToGeneratedCache )
 {
-    stageProject( wxS( "easyedapro_v3_fpreconcile" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "easyedapro_v3_fpreconcile" ) );
+    stageProject( projectDir.Path(), wxS( "easyedapro_v3_fpreconcile" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     IMPORTED_BOARD sample = importSampleBoard( project, "easyedapro_v3_fpreconcile_src" );
@@ -393,7 +389,8 @@ BOOST_AUTO_TEST_CASE( EasyEdaProV3BoardResolvesToGeneratedCache )
 // the imported definition; without the provenance check the footprint relinks to the wrong part
 BOOST_AUTO_TEST_CASE( CollidingNicknameDoesNotStealTheLink )
 {
-    stageProject( wxS( "fpreconcile_collide" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "fpreconcile_collide" ) );
+    stageProject( projectDir.Path(), wxS( "fpreconcile_collide" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     IMPORTED_BOARD      sample = importSampleBoard( project, "fpreconcile_collide_src" );
@@ -431,7 +428,8 @@ BOOST_AUTO_TEST_CASE( CollidingNicknameDoesNotStealTheLink )
 // cache; keying the cache by the bare name alone dropped the second and relinked its instance
 BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
 {
-    stageProject( wxS( "fpreconcile_namecollide" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "fpreconcile_namecollide" ) );
+    stageProject( projectDir.Path(), wxS( "fpreconcile_namecollide" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     std::string dataPath =
@@ -536,7 +534,8 @@ BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
 // the generated path, so publishing must not rewrite its URI
 BOOST_AUTO_TEST_CASE( ExistingUserRowIsNotRepurposed )
 {
-    stageProject( wxS( "fpreconcile_row" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "fpreconcile_row" ) );
+    stageProject( projectDir.Path(), wxS( "fpreconcile_row" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     IMPORTED_BOARD sample = importSampleBoard( project, "fpreconcile_row_src" );
@@ -578,7 +577,8 @@ BOOST_AUTO_TEST_CASE( ExistingUserRowIsNotRepurposed )
 // and no not-found, over the same adapter path Update PCB from Schematic uses
 BOOST_AUTO_TEST_CASE( ReconciledFootprintsResolveViaNetlistUpdater )
 {
-    stageProject( wxS( "eagle_netlist_roundtrip" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "eagle_netlist_roundtrip" ) );
+    stageProject( projectDir.Path(), wxS( "eagle_netlist_roundtrip" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     wxFileName brdFn( KI_TEST::GetEeschemaTestDataDir() );

@@ -35,6 +35,7 @@
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <boost/test/unit_test.hpp>
 
 #include <pcbnew_utils/board_file_utils.h>
@@ -161,12 +162,9 @@ BOOST_AUTO_TEST_CASE( FootprintCutoutIsExported )
 
     std::unique_ptr<BOARD> board = KI_TEST::RequireBoardFromPcbnewQAData( "issue5854.kicad_pcb" );
 
-    const std::filesystem::path outDir =
-            std::filesystem::temp_directory_path() / "kicad_idf_cutout_test";
-    std::filesystem::create_directories( outDir );
+    KI_TEST::SCOPED_TEMP_DIR outDir( wxS( "kicad_idf_cutout_test" ) );
 
-    const std::filesystem::path emnPath = outDir / "cutout.emn";
-    std::filesystem::remove( emnPath );
+    const std::filesystem::path emnPath = outDir.Path() / "cutout.emn";
 
     JOB_EXPORT_PCB_IDF job;
     job.m_originMode = IDF_SETTINGS::COORD_ORIGIN::USER;
@@ -197,8 +195,6 @@ BOOST_AUTO_TEST_CASE( FootprintCutoutIsExported )
     CheckLoopContainsPoints( loops.at( 1 ),
                              { start, VECTOR2I( end.x, start.y ), end,
                                VECTOR2I( start.x, end.y ) } );
-
-    std::filesystem::remove_all( outDir );
 }
 
 
@@ -215,12 +211,9 @@ BOOST_AUTO_TEST_CASE( RotatedPolygonCutoutIsExported )
     FOOTPRINT* footprint = board->Footprints().front();
     footprint->Rotate( footprint->GetPosition(), EDA_ANGLE( 45.0, DEGREES_T ) );
 
-    const std::filesystem::path outDir =
-            std::filesystem::temp_directory_path() / "kicad_idf_poly_cutout_test";
-    std::filesystem::create_directories( outDir );
+    KI_TEST::SCOPED_TEMP_DIR outDir( wxS( "kicad_idf_poly_cutout_test" ) );
 
-    const std::filesystem::path emnPath = outDir / "poly_cutout.emn";
-    std::filesystem::remove( emnPath );
+    const std::filesystem::path emnPath = outDir.Path() / "poly_cutout.emn";
 
     JOB_EXPORT_PCB_IDF job;
     job.m_originMode = IDF_SETTINGS::COORD_ORIGIN::USER;
@@ -251,8 +244,6 @@ BOOST_AUTO_TEST_CASE( RotatedPolygonCutoutIsExported )
         corners.push_back( chain.CPoint( ii ) );
 
     CheckLoopContainsPoints( loops.at( 1 ), corners );
-
-    std::filesystem::remove_all( outDir );
 }
 
 

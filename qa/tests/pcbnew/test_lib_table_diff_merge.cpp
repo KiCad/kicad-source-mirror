@@ -22,6 +22,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
 #include <diff_merge/pcb_differ.h>
@@ -43,15 +44,6 @@ using namespace KICAD_DIFF;
 
 namespace
 {
-
-wxString uniqueSuffix()
-{
-    static int counter = 0;
-    return wxString::Format( wxS( "%d_%d" ),
-                             static_cast<int>( wxGetUTCTimeMillis().GetValue() & 0xffffff ),
-                             ++counter );
-}
-
 
 wxString writeProjectFile( BOARD& aBoard, const std::string& aFileName,
                             const wxString& aContent )
@@ -95,7 +87,10 @@ const PROPERTY_DELTA* findProperty( const ITEM_CHANGE& aChange, const wxString& 
 
 struct LIB_TABLE_DIFF_MERGE_FIXTURE
 {
-    LIB_TABLE_DIFF_MERGE_FIXTURE()
+    LIB_TABLE_DIFF_MERGE_FIXTURE() :
+            m_ancDir( wxS( "kicad_libtbl_anc" ) ),
+            m_oursDir( wxS( "kicad_libtbl_ours" ) ),
+            m_theirsDir( wxS( "kicad_libtbl_theirs" ) )
     {
         KI_TEST::LoadBoard( m_settingsAnc, "complex_hierarchy", m_ancestor );
         KI_TEST::LoadBoard( m_settingsOurs, "complex_hierarchy", m_ours );
@@ -105,27 +100,12 @@ struct LIB_TABLE_DIFF_MERGE_FIXTURE
         BOOST_REQUIRE( m_ours );
         BOOST_REQUIRE( m_theirs );
 
-        wxString tmp = wxStandardPaths::Get().GetTempDir();
-        m_ancDir    = tmp + wxFILE_SEP_PATH + wxS( "kicad_libtbl_anc_" ) + uniqueSuffix();
-        m_oursDir   = tmp + wxFILE_SEP_PATH + wxS( "kicad_libtbl_ours_" ) + uniqueSuffix();
-        m_theirsDir = tmp + wxFILE_SEP_PATH + wxS( "kicad_libtbl_theirs_" ) + uniqueSuffix();
-
-        for( const wxString& d : { m_ancDir, m_oursDir, m_theirsDir } )
-            BOOST_REQUIRE( wxFileName::Mkdir( d, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-        m_ancestor->SetFileName( m_ancDir + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
-        m_ours    ->SetFileName( m_oursDir + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
-        m_theirs  ->SetFileName( m_theirsDir + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
+        m_ancestor->SetFileName( m_ancDir.PathStr() + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
+        m_ours->SetFileName( m_oursDir.PathStr() + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
+        m_theirs->SetFileName( m_theirsDir.PathStr() + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
     }
 
-    ~LIB_TABLE_DIFF_MERGE_FIXTURE()
-    {
-        for( const wxString& d : { m_ancDir, m_oursDir, m_theirsDir } )
-        {
-            if( !d.IsEmpty() && wxFileName::DirExists( d ) )
-                wxFileName::Rmdir( d, wxPATH_RMDIR_RECURSIVE );
-        }
-    }
+    ~LIB_TABLE_DIFF_MERGE_FIXTURE() = default;
 
     SETTINGS_MANAGER       m_settingsAnc;
     SETTINGS_MANAGER       m_settingsOurs;
@@ -133,9 +113,9 @@ struct LIB_TABLE_DIFF_MERGE_FIXTURE
     std::unique_ptr<BOARD> m_ancestor;
     std::unique_ptr<BOARD> m_ours;
     std::unique_ptr<BOARD> m_theirs;
-    wxString               m_ancDir;
-    wxString               m_oursDir;
-    wxString               m_theirsDir;
+    KI_TEST::SCOPED_TEMP_DIR m_ancDir;
+    KI_TEST::SCOPED_TEMP_DIR m_oursDir;
+    KI_TEST::SCOPED_TEMP_DIR m_theirsDir;
 };
 
 

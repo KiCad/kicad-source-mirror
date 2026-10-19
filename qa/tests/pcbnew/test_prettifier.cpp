@@ -17,13 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <algorithm>
 #include <filesystem>
 #include <fstream>
-#include <fmt/format.h>
-#include <fmt/std.h>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
@@ -54,10 +52,7 @@ BOOST_FIXTURE_TEST_CASE( BoardAndFootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
     std::unique_ptr<BOARD_ITEM_CONTAINER> original, prettified, golden;
     PCB_IO_KICAD_SEXPR plugin;
 
-    std::string tempLibPath = fmt::format( "{}/prettifier.pretty",
-                                           std::filesystem::temp_directory_path() );
-    std::filesystem::remove_all( tempLibPath );
-    std::filesystem::create_directory( tempLibPath );
+    KI_TEST::SCOPED_TEMP_DIR tempLib( wxS( "prettifier" ) );
 
     for( const wxString& testCase : cases )
     {
@@ -65,11 +60,10 @@ BOOST_FIXTURE_TEST_CASE( BoardAndFootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
 
         BOOST_TEST_CONTEXT( testCaseName )
         {
-            std::string inPath = fmt::format( "{}prettifier/{}", KI_TEST::GetPcbnewTestDataDir(),
-                                              testCaseName );
+            const std::filesystem::path inPath =
+                    std::filesystem::path( KI_TEST::GetPcbnewTestDataDir() ) / "prettifier" / testCaseName;
 
-            std::ifstream inFp;
-            inFp.open( inPath );
+            std::ifstream inFp( inPath );
             BOOST_REQUIRE( inFp.is_open() );
 
             std::stringstream inBuf;
@@ -88,9 +82,9 @@ BOOST_FIXTURE_TEST_CASE( BoardAndFootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
             KICAD_FORMAT::Prettify( inData );
 
             // For diagnosis of test failures
-            std::string tempPath = fmt::format( "{}/{}", tempLibPath, testCaseName );
-            std::ofstream tempFp;
-            tempFp.open( tempPath );
+            std::filesystem::path tempPath = tempLib.CreateChildFile( testCase );
+            std::ofstream         tempFp( tempPath );
+
             BOOST_REQUIRE( tempFp.is_open() );
             tempFp << inData;
             tempFp.close();
@@ -116,11 +110,10 @@ BOOST_FIXTURE_TEST_CASE( BoardAndFootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
             std::string base = testCase.BeforeLast( '.' ).ToStdString();
             std::string ext  = testCase.AfterLast( '.' ).ToStdString();
 
-            std::string goldenPath = fmt::format( "{}prettifier/{}_formatted.{}",
-                                                  KI_TEST::GetPcbnewTestDataDir(), base, ext );
+            const std::filesystem::path goldenPath = std::filesystem::path( KI_TEST::GetPcbnewTestDataDir() )
+                                                     / "prettifier" / ( base + "_formatted." + ext );
 
-            std::ifstream goldFp;
-            goldFp.open( goldenPath );
+            std::ifstream goldFp( goldenPath );
             BOOST_REQUIRE( goldFp.is_open() );
 
             std::stringstream goldenBuf;
@@ -128,10 +121,6 @@ BOOST_FIXTURE_TEST_CASE( BoardAndFootprintPrettifier, PRETTIFIER_TEST_FIXTURE )
 
             BOOST_REQUIRE_MESSAGE( goldenBuf.str().compare( inData ) == 0,
                                    "Formatting result doesn't match golden!" );
-
-             std::filesystem::remove( tempPath );
         }
     }
-
-    std::filesystem::remove_all( tempLibPath );
 }

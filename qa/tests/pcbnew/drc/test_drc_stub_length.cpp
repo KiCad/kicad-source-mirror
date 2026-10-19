@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 
 #include <pcbnew_utils/board_file_utils.h>
 
@@ -67,10 +68,9 @@ BOOST_AUTO_TEST_CASE( StubLengthFiresOnIntermediateNetOnly )
 {
     namespace fs = std::filesystem;
 
-    fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_stub_length";
-    fs::create_directories( tmpDir );
+    KI_TEST::SCOPED_TEMP_DIR tmpDir( wxS( "kicad_drc_stub_length" ) );
 
-    fs::path druPath = tmpDir / "stub_length.kicad_dru";
+    fs::path druPath = tmpDir.Path() / "stub_length.kicad_dru";
 
     {
         std::ofstream druOut( druPath );
@@ -172,10 +172,9 @@ BOOST_AUTO_TEST_CASE( StubLengthQuietOnTwoNetChain )
 {
     namespace fs = std::filesystem;
 
-    fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_stub_length";
-    fs::create_directories( tmpDir );
+    KI_TEST::SCOPED_TEMP_DIR tmpDir( wxS( "kicad_drc_stub_length_2net" ) );
 
-    fs::path druPath = tmpDir / "stub_length_2net.kicad_dru";
+    fs::path druPath = tmpDir.Path() / "stub_length_2net.kicad_dru";
 
     // Two-net chain: every member owns a terminal pad assignment, so no member
     // is a stub. With the 30 mm trace on each net, a per-net stub_length would
@@ -270,10 +269,9 @@ BOOST_AUTO_TEST_CASE( StubLengthIncludesPadToDie )
 {
     namespace fs = std::filesystem;
 
-    fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_stub_length";
-    fs::create_directories( tmpDir );
+    KI_TEST::SCOPED_TEMP_DIR tmpDir( wxS( "kicad_drc_stub_length_pad_to_die" ) );
 
-    fs::path druPath = tmpDir / "stub_length_pad_to_die.kicad_dru";
+    fs::path druPath = tmpDir.Path() / "stub_length_pad_to_die.kicad_dru";
 
     // Three-net chain whose middle net (MID_B) is a stub. The stub's routed
     // copper is a short 2 mm trace, well under the 5 mm budget. A 10 mm

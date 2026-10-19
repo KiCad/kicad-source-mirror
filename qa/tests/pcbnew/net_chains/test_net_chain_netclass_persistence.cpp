@@ -38,6 +38,7 @@
 
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 
 #include <wx/filefn.h>
 #include <wx/filename.h>
@@ -70,19 +71,16 @@ const wxString LABEL_NETCLASS = wxS( "NC_3" );
 
 struct FIXTURE
 {
-    FIXTURE()
+    FIXTURE() :
+            m_dir( wxS( "kicad-qa-issue25065" ) )
     {
         // The project is saved and reloaded repeatedly, so work on copies rather than the
         // checked-in data.
         wxString srcDir = wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() ) + wxS( "issue25065/" );
+        wxString sep = wxFileName::GetPathSeparator();
 
-        m_dir.AssignDir( wxStandardPaths::Get().GetTempDir() );
-        m_dir.AppendDir( wxS( "kicad-qa-issue25065" ) );
-        m_dir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-        BOOST_REQUIRE( m_dir.DirExists() );
-
-        m_boardPath = m_dir.GetPathWithSep() + wxS( "issue25065.kicad_pcb" );
-        m_projectPath = m_dir.GetPathWithSep() + wxS( "issue25065.kicad_pro" );
+        m_boardPath = m_dir.PathStr() + sep + wxS( "issue25065.kicad_pcb" );
+        m_projectPath = m_dir.PathStr() + sep + wxS( "issue25065.kicad_pro" );
 
         BOOST_REQUIRE( wxCopyFile( srcDir + wxS( "issue25065.kicad_pcb" ), m_boardPath ) );
         BOOST_REQUIRE( wxCopyFile( srcDir + wxS( "issue25065.kicad_pro" ), m_projectPath ) );
@@ -91,7 +89,6 @@ struct FIXTURE
     ~FIXTURE()
     {
         closeBoard();
-        m_dir.Rmdir( wxPATH_RMDIR_RECURSIVE );
     }
 
     /// Load the project and board from the temp copies, as opening the board editor would.
@@ -154,9 +151,9 @@ struct FIXTURE
 
     SETTINGS_MANAGER       m_manager;
     std::unique_ptr<BOARD> m_board;
-    wxFileName             m_dir;
-    wxString               m_boardPath;
-    wxString               m_projectPath;
+    KI_TEST::SCOPED_TEMP_DIR m_dir;
+    wxString                 m_boardPath;
+    wxString                 m_projectPath;
 };
 
 

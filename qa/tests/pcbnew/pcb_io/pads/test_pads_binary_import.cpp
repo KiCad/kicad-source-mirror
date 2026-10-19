@@ -21,6 +21,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 
 #include <pcb_io/pads/pcb_io_pads_binary.h>
 #include <pcb_io/pads/pcb_io_pads.h>
@@ -50,7 +51,6 @@
 #include <project/net_settings.h>
 #include <algorithm>
 #include <array>
-#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -124,13 +124,10 @@ static std::shared_ptr<BOARD> CachedLoad( const wxString& aFilename, bool aBinar
     {
         if( aBinary )
         {
-            static const std::filesystem::path stagedRoot =
-                    std::filesystem::temp_directory_path()
-                    / ( "kicad_pads_binary_cached_"
-                        + std::to_string( std::chrono::steady_clock::now().time_since_epoch().count() ) );
-            const std::filesystem::path source( aFilename.ToStdString() );
-            const std::filesystem::path stagedDirectory =
-                    stagedRoot / std::to_string( std::hash<std::string>{}( key ) );
+            static const KI_TEST::SCOPED_TEMP_DIR stagedRoot( wxS( "kicad_pads_binary_cached" ) );
+            const std::filesystem::path           source( aFilename.ToStdString() );
+            const std::filesystem::path           stagedDirectory =
+                    stagedRoot.Path() / std::to_string( std::hash<std::string>{}( key ) );
             const std::filesystem::path stagedPath = stagedDirectory / source.filename();
 
             std::filesystem::create_directories( stagedDirectory );

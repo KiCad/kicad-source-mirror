@@ -22,6 +22,7 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
 #include <diff_merge/pcb_differ.h>
@@ -87,7 +88,10 @@ const PROPERTY_DELTA* findProperty( const ITEM_CHANGE& aChange, const wxString& 
 
 struct CUSTOM_DRC_DIFF_MERGE_FIXTURE
 {
-    CUSTOM_DRC_DIFF_MERGE_FIXTURE()
+    CUSTOM_DRC_DIFF_MERGE_FIXTURE() :
+            m_ancDir( wxS( "kicad_drc_anc" ) ),
+            m_oursDir( wxS( "kicad_drc_ours" ) ),
+            m_theirsDir( wxS( "kicad_drc_theirs" ) )
     {
         KI_TEST::LoadBoard( m_settingsAnc, "complex_hierarchy", m_ancestor );
         KI_TEST::LoadBoard( m_settingsOurs, "complex_hierarchy", m_ours );
@@ -101,20 +105,9 @@ struct CUSTOM_DRC_DIFF_MERGE_FIXTURE
         // Writing a sibling .kicad_dru would then collide across all three
         // sides.  Move each board to its own temp directory so the sibling
         // rule files live in distinct places.
-        wxString tmp = wxStandardPaths::Get().GetTempDir();
-        m_ancDir   = ( wxFileName( tmp, wxEmptyString ).GetPath() + wxFILE_SEP_PATH
-                     + wxS( "kicad_drc_anc_" ) + uniqueSuffix() );
-        m_oursDir  = ( wxFileName( tmp, wxEmptyString ).GetPath() + wxFILE_SEP_PATH
-                     + wxS( "kicad_drc_ours_" ) + uniqueSuffix() );
-        m_theirsDir = ( wxFileName( tmp, wxEmptyString ).GetPath() + wxFILE_SEP_PATH
-                      + wxS( "kicad_drc_theirs_" ) + uniqueSuffix() );
-
-        for( const wxString& d : { m_ancDir, m_oursDir, m_theirsDir } )
-            BOOST_REQUIRE( wxFileName::Mkdir( d, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-        m_ancestor->SetFileName( m_ancDir + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
-        m_ours    ->SetFileName( m_oursDir + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
-        m_theirs  ->SetFileName( m_theirsDir + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
+        m_ancestor->SetFileName( m_ancDir.PathStr() + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
+        m_ours->SetFileName( m_oursDir.PathStr() + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
+        m_theirs->SetFileName( m_theirsDir.PathStr() + wxFILE_SEP_PATH + wxS( "board.kicad_pcb" ) );
     }
 
     ~CUSTOM_DRC_DIFF_MERGE_FIXTURE()
@@ -125,24 +118,11 @@ struct CUSTOM_DRC_DIFF_MERGE_FIXTURE
                 wxRemoveFile( path );
         }
 
-        for( const wxString& d : { m_ancDir, m_oursDir, m_theirsDir } )
-        {
-            if( !d.IsEmpty() && wxFileName::DirExists( d ) )
-                wxFileName::Rmdir( d, wxPATH_RMDIR_RECURSIVE );
-        }
     }
 
     void recordCreatedFile( const wxString& aPath )
     {
         m_createdFiles.push_back( aPath );
-    }
-
-    static wxString uniqueSuffix()
-    {
-        static int counter = 0;
-        return wxString::Format( wxS( "%d_%d" ),
-                                 static_cast<int>( wxGetUTCTimeMillis().GetValue() & 0xffffff ),
-                                 ++counter );
     }
 
     SETTINGS_MANAGER       m_settingsAnc;
@@ -152,9 +132,9 @@ struct CUSTOM_DRC_DIFF_MERGE_FIXTURE
     std::unique_ptr<BOARD> m_ours;
     std::unique_ptr<BOARD> m_theirs;
     std::vector<wxString>  m_createdFiles;
-    wxString               m_ancDir;
-    wxString               m_oursDir;
-    wxString               m_theirsDir;
+    KI_TEST::SCOPED_TEMP_DIR m_ancDir;
+    KI_TEST::SCOPED_TEMP_DIR m_oursDir;
+    KI_TEST::SCOPED_TEMP_DIR m_theirsDir;
 };
 
 

@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 
 #include <pcbnew_utils/board_file_utils.h>
 
@@ -59,10 +60,9 @@ BOOST_AUTO_TEST_CASE( PerNetLengthFiresAlongsideChainLength )
 {
     namespace fs = std::filesystem;
 
-    fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_length_chain";
-    fs::create_directories( tmpDir );
+    KI_TEST::SCOPED_TEMP_DIR tmpDir( wxS( "kicad_drc_length_chain" ) );
 
-    fs::path druPath = tmpDir / "len_chain.kicad_dru";
+    fs::path druPath = tmpDir.Path() / "len_chain.kicad_dru";
 
     {
         std::ofstream druOut( druPath );

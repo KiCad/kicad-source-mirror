@@ -520,9 +520,7 @@ BOOST_AUTO_TEST_CASE( Issue24642_AppendBoardPromptsOnlyOnNameMismatch )
  */
 BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
 {
-    auto tmpLib = std::filesystem::temp_directory_path() / "qa_fp_save_netinfo.pretty";
-    std::filesystem::remove_all( tmpLib );
-    std::filesystem::create_directories( tmpLib );
+    KI_TEST::SCOPED_TEMP_DIR tmpLib( wxS( "qa_fp_save_netinfo" ) );
 
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
@@ -558,9 +556,9 @@ BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
     BOOST_REQUIRE_EQUAL( zone->GetNet(), net );
 
     // Save into the scratch library via the public library-save API.  Must not throw.
-    BOOST_REQUIRE_NO_THROW( kicadPlugin.FootprintSave( tmpLib.string(), fp ) );
+    BOOST_REQUIRE_NO_THROW( kicadPlugin.FootprintSave( tmpLib.Path().string(), fp ) );
 
-    auto savedFile = tmpLib / "test_fp_save_netinfo.kicad_mod";
+    auto savedFile = tmpLib.Path() / "test_fp_save_netinfo.kicad_mod";
     BOOST_REQUIRE( std::filesystem::exists( savedFile ) );
 
     std::ifstream in( savedFile );
@@ -572,7 +570,7 @@ BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
     BOOST_REQUIRE( !in.bad() );
 
     // Windows refuses to unlink a file that still has an open handle, so release it before the
-    // remove_all() below.
+    // scoped directory teardown.
     in.close();
 
     const std::string contents = ss.str();
@@ -615,8 +613,6 @@ BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
     BOOST_CHECK_EQUAL( detachedPad->GetNet(), NETINFO_LIST::OrphanedItem() );
     BOOST_CHECK_EQUAL( detachedShape->GetNet(), NETINFO_LIST::OrphanedItem() );
     BOOST_CHECK_EQUAL( detachedZone->GetNet(), NETINFO_LIST::OrphanedItem() );
-
-    std::filesystem::remove_all( tmpLib );
 }
 
 
