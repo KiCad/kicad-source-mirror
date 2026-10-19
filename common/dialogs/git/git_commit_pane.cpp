@@ -1528,14 +1528,15 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     // memory, and leaving those out would commit less than the button promises.
     if( preSaveOk )
     {
+        // The local settings file is dirtied by the save itself, not by the user, so it is
+        // deliberately absent here.
         auto isProjectDocument = []( const wxString& aPath )
         {
             wxString ext = wxFileName( aPath ).GetExt();
 
             return ext.CmpNoCase( FILEEXT::KiCadSchematicFileExtension ) == 0
                    || ext.CmpNoCase( FILEEXT::KiCadPcbFileExtension ) == 0
-                   || ext.CmpNoCase( FILEEXT::ProjectFileExtension ) == 0
-                   || ext.CmpNoCase( FILEEXT::ProjectLocalSettingsFileExtension ) == 0;
+                   || ext.CmpNoCase( FILEEXT::ProjectFileExtension ) == 0;
         };
 
         std::unique_lock<std::mutex> rescanLock = common->TryLockAction();
