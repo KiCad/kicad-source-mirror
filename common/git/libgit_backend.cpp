@@ -642,7 +642,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
     git_signature* author = nullptr;
 
-    if( git_signature_now( &author, aAuthorName.mb_str(), aAuthorEmail.mb_str() ) != 0 )
+    if( git_signature_now( &author, aAuthorName.utf8_string().c_str(), aAuthorEmail.utf8_string().c_str() ) != 0 )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to create author signature: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
@@ -662,8 +662,9 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
     const git_commit** parentsPtr = parent ? parents : nullptr;
 #endif
 
-    if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr,
-                           aMessage.mb_str(), tree, parentsCount, parentsPtr ) != 0 )
+    if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr, aMessage.utf8_string().c_str(), tree,
+                           parentsCount, parentsPtr )
+        != 0 )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to create commit: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
@@ -848,7 +849,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     KIGIT::GitTreePtr treePtr( tree );
     git_signature*    author = nullptr;
 
-    if( git_signature_now( &author, aAuthorName.mb_str(), aAuthorEmail.mb_str() ) != 0 )
+    if( git_signature_now( &author, aAuthorName.utf8_string().c_str(), aAuthorEmail.utf8_string().c_str() ) != 0 )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to create author signature: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
@@ -858,7 +859,8 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     KIGIT::GitSignaturePtr authorPtr( author );
     git_oid                oid;
 
-    if( git_commit_amend( &oid, headCommit, "HEAD", author, author, nullptr, aMessage.mb_str(), tree ) != 0 )
+    if( git_commit_amend( &oid, headCommit, "HEAD", author, author, nullptr, aMessage.utf8_string().c_str(), tree )
+        != 0 )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to amend commit: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
@@ -1221,7 +1223,7 @@ bool LIBGIT_BACKEND::GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxStri
     KIGIT::GitConfigPtr configPtr( config );
 
     git_config_entry* entry = nullptr;
-    int result = git_config_get_entry( &entry, config, aKey.mb_str() );
+    int                      result = git_config_get_entry( &entry, config, aKey.utf8_string().c_str() );
     KIGIT::GitConfigEntryPtr entryPtr( entry );
 
     if( result != GIT_OK || entry == nullptr )
@@ -1238,7 +1240,7 @@ bool LIBGIT_BACKEND::GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxStri
 bool LIBGIT_BACKEND::IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath )
 {
     git_repository* repo = nullptr;
-    int error = git_repository_open( &repo, aPath.mb_str() );
+    int             error = git_repository_open( &repo, aPath.utf8_string().c_str() );
 
     if( error == 0 )
     {
@@ -1261,7 +1263,7 @@ InitResult LIBGIT_BACKEND::InitializeRepository( GIT_INIT_HANDLER* aHandler, con
 
     git_repository* repo = nullptr;
 
-    if( git_repository_init( &repo, aPath.mb_str(), 0 ) != GIT_OK )
+    if( git_repository_init( &repo, aPath.utf8_string().c_str(), 0 ) != GIT_OK )
     {
         if( repo )
             git_repository_free( repo );
@@ -1375,10 +1377,10 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
 
 static bool lookup_branch_reference( git_repository* repo, const wxString& aBranchName, git_reference** aReference )
 {
-    if( git_reference_lookup( aReference, repo, aBranchName.mb_str() ) == GIT_OK )
+    if( git_reference_lookup( aReference, repo, aBranchName.utf8_string().c_str() ) == GIT_OK )
         return true;
 
-    if( git_reference_dwim( aReference, repo, aBranchName.mb_str() ) == GIT_OK )
+    if( git_reference_dwim( aReference, repo, aBranchName.utf8_string().c_str() ) == GIT_OK )
         return true;
 
     return false;
@@ -1408,7 +1410,7 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
     const char* branchRefName = git_reference_name( branchRef );
     git_object* branchObj = nullptr;
 
-    if( git_revparse_single( &branchObj, repo, aBranchName.mb_str() ) != GIT_OK )
+    if( git_revparse_single( &branchObj, repo, aBranchName.utf8_string().c_str() ) != GIT_OK )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to find branch head for '%s': %s" ),
                                                     aBranchName, KIGIT_COMMON::GetLastGitError() ) );
@@ -2621,7 +2623,9 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
     git_commit*         commit = reinterpret_cast<git_commit*>( peeled );
     git_reference*      branchRef = nullptr;
 
-    if( int error = git_branch_create( &branchRef, aRepo, aBranchName.mb_str(), commit, 0 ); error != GIT_OK )
+    std::string name = aBranchName.utf8_string();
+
+    if( int error = git_branch_create( &branchRef, aRepo, name.c_str(), commit, 0 ); error != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to create branch: %s", KIGIT_COMMON::GetLastGitError() );
         return error;
