@@ -37,6 +37,20 @@
 namespace KICAD_DIFF
 {
 
+DIFF_COLOR_THEME DIFF_COLOR_THEME::ForText( bool aDarkTheme )
+{
+    DIFF_COLOR_THEME theme;
+
+    if( aDarkTheme )
+    {
+        for( KIGFX::COLOR4D* color : { &theme.added, &theme.removed, &theme.modified, &theme.conflict } )
+            *color = color->Brightened( 0.4 );
+    }
+
+    return theme;
+}
+
+
 KIGFX::COLOR4D ThemeColorFor( const DIFF_COLOR_THEME& aTheme, CATEGORY aCategory )
 {
     switch( aCategory )

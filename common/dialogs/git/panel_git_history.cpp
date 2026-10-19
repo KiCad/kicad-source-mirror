@@ -309,11 +309,10 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_commitFiles->AppendColumn( wxS( "+" ), wxLIST_FORMAT_RIGHT, FromDIP( 50 ) );
     m_commitFiles->AppendColumn( wxS( "-" ), wxLIST_FORMAT_RIGHT, FromDIP( 50 ) );
 
-    // The line counts take the colours the diff uses, lifted a little on a dark background.
-    KICAD_DIFF::DIFF_COLOR_THEME theme;
-    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
-    m_commitAdded->SetForegroundColour( ( dark ? theme.added.Brightened( 0.4 ) : theme.added ).ToColour() );
-    m_commitRemoved->SetForegroundColour( ( dark ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour() );
+    // Use the diff colors for the line counts.
+    const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
+    m_commitAdded->SetForegroundColour( theme.added.ToColour() );
+    m_commitRemoved->SetForegroundColour( theme.removed.ToColour() );
 
     // The detail pane appears once a commit is selected, and the diff area once a file is picked.
     m_historySashPos = FromDIP( 460 );

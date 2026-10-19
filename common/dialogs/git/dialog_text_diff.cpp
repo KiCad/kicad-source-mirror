@@ -45,12 +45,10 @@ void FillTextDiffControl( wxStyledTextCtrl* aCtrl, const std::vector<KIGIT::TEXT
     stc->StyleClearAll();
     stc->SetMarginWidth( 1, 0 );
 
-    // The palette the structural diff uses. Its defaults assume a light background.
-    KICAD_DIFF::DIFF_COLOR_THEME theme;
-    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
+    const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
 
-    stc->StyleSetForeground( STYLE_ADDED, ( dark ? theme.added.Brightened( 0.4 ) : theme.added ).ToColour() );
-    stc->StyleSetForeground( STYLE_REMOVED, ( dark ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour() );
+    stc->StyleSetForeground( STYLE_ADDED, theme.added.ToColour() );
+    stc->StyleSetForeground( STYLE_REMOVED, theme.removed.ToColour() );
 
     for( const KIGIT::TEXT_DIFF_LINE& line : aLines )
     {

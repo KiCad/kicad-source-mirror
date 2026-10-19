@@ -345,8 +345,7 @@ void GIT_COMMIT_PANE::layoutWide()
     heading->SetFont( heading->GetFont().Bold() );
     column->Insert( 0, heading, 0, wxLEFT | wxRIGHT | wxTOP, 8 );
 
-    // The summary takes the diff's colours for its line counts, lifted a little on a dark
-    // background.
+    // Use the diff colors for the summary's line counts.
     wxStaticBoxSizer* summary = new wxStaticBoxSizer( wxVERTICAL, this, _( "Summary" ) );
     wxWindow*         box = summary->GetStaticBox();
 
@@ -354,10 +353,9 @@ void GIT_COMMIT_PANE::layoutWide()
     m_summaryAdded = new wxStaticText( box, wxID_ANY, wxEmptyString );
     m_summaryRemoved = new wxStaticText( box, wxID_ANY, wxEmptyString );
 
-    KICAD_DIFF::DIFF_COLOR_THEME theme;
-    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
-    m_summaryAdded->SetForegroundColour( ( dark ? theme.added.Brightened( 0.4 ) : theme.added ).ToColour() );
-    m_summaryRemoved->SetForegroundColour( ( dark ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour() );
+    const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
+    m_summaryAdded->SetForegroundColour( theme.added.ToColour() );
+    m_summaryRemoved->SetForegroundColour( theme.removed.ToColour() );
 
     wxBoxSizer* lines = new wxBoxSizer( wxHORIZONTAL );
     lines->Add( m_summaryAdded, 0, wxRIGHT, 8 );

@@ -110,8 +110,8 @@ void KIGIT::UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, in
 // does not.
 void KIGIT::MarkDestructive( wxButton* aButton )
 {
-    KICAD_DIFF::DIFF_COLOR_THEME theme;
-    wxColour colour = ( KIPLATFORM::UI::IsDarkTheme() ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour();
+    const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
+    wxColour                           colour = theme.removed.ToColour();
 
     aButton->SetLabelMarkup( wxString::Format( wxS( "<span foreground='%s'>%s</span>" ),
                                                colour.GetAsString( wxC2S_HTML_SYNTAX ), aButton->GetLabel() ) );

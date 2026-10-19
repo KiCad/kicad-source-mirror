@@ -64,41 +64,32 @@
 #include <wildcards_and_files_ext.h>
 
 
-// False for a status that is not a working-tree change worth showing.
-// The status word, its icon, and its colour, which is the one the diff draws that kind of
-// change with, lifted a little on a dark background.
+// Fill the status label, icon and color. Return false for changes the checklist does not show.
 static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, BITMAPS& aIcon, wxColour& aColour,
-                             bool aDarkTheme )
+                             const KICAD_DIFF::DIFF_COLOR_THEME& aTheme )
 {
-    KICAD_DIFF::DIFF_COLOR_THEME theme;
-
-    auto colour = [aDarkTheme]( const KIGFX::COLOR4D& aBase )
-    {
-        return ( aDarkTheme ? aBase.Brightened( 0.4 ) : aBase ).ToColour();
-    };
-
     switch( aStatus )
     {
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED:
         aWord = _( "Modified" );
         aIcon = BITMAPS::git_modified;
-        aColour = colour( theme.modified );
+        aColour = aTheme.modified.ToColour();
         return true;
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED:
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_UNTRACKED:
         aWord = _( "New" );
         aIcon = BITMAPS::git_add;
-        aColour = colour( theme.added );
+        aColour = aTheme.added.ToColour();
         return true;
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED:
         aWord = _( "Deleted" );
         aIcon = BITMAPS::git_delete;
-        aColour = colour( theme.removed );
+        aColour = aTheme.removed.ToColour();
         return true;
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CONFLICTED:
         aWord = _( "Conflict" );
         aIcon = BITMAPS::git_conflict;
-        aColour = colour( theme.conflict );
+        aColour = aTheme.conflict.ToColour();
         return true;
     default: return false;
     }
@@ -119,6 +110,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
     wxString           workDir = handler.GetWorkingDirectory();
 
     std::map<wxString, FileStatus> statusMap = handler.GetFileStatus( *prefix, /* changed only */ true );
+    const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( aDarkTheme );
 
     for( const auto& [path, fileStatus] : statusMap )
     {
@@ -126,7 +118,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         BITMAPS  icon = BITMAPS::INVALID_BITMAP;
         wxColour colour;
 
-        if( !statusToDisplay( fileStatus.status, word, icon, colour, aDarkTheme ) )
+        if( !statusToDisplay( fileStatus.status, word, icon, colour, theme ) )
             continue;
 
         if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, aProjectPath ) )

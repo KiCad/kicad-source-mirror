@@ -269,11 +269,13 @@ inline const EDA_IU_SCALE& IuScaleForDocKind( DOC_KIND aKind )
 
 
 /**
- * Color theme. Defaults are tuned for light backgrounds; the interactive
- * widget overrides per the user's theme.
+ * Diff colors with defaults for light backgrounds. Use ForText for status labels and text diffs.
  */
 struct KICOMMON_API DIFF_COLOR_THEME
 {
+    /// Resolve change colors for UI text. Pass the desktop theme captured on the UI thread.
+    static DIFF_COLOR_THEME ForText( bool aDarkTheme );
+
     KIGFX::COLOR4D added = KIGFX::COLOR4D( 0.20, 0.65, 0.20, 1.0 );      // green
     KIGFX::COLOR4D removed = KIGFX::COLOR4D( 0.80, 0.20, 0.20, 1.0 );    // red
     KIGFX::COLOR4D modified = KIGFX::COLOR4D( 0.85, 0.65, 0.10, 1.0 );   // amber
