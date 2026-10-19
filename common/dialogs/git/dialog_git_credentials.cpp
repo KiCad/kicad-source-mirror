@@ -25,6 +25,8 @@ DIALOG_GIT_CREDENTIALS::DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxStrin
         DIALOG_GIT_CREDENTIALS_BASE( aParent ),
         m_connType( aConnType )
 {
+    OptOut( this );
+
     m_urlLabel->SetLabel( aUrl );
     m_userCtrl->SetValue( aDefaultUsername );
 

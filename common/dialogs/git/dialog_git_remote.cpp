@@ -25,6 +25,8 @@
 DIALOG_GIT_REMOTE::DIALOG_GIT_REMOTE( wxWindow* aParent, const wxString& aName, const wxString& aUrl ) :
         DIALOG_GIT_REMOTE_BASE( aParent, wxID_ANY, aName.IsEmpty() ? _( "Add Remote" ) : _( "Edit Remote" ) )
 {
+    OptOut( this );
+
     m_nameCtrl->SetValue( aName );
     m_urlCtrl->SetValue( aUrl );
 

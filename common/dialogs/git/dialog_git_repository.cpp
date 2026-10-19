@@ -44,6 +44,8 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         m_prevFile( wxEmptyString ),
         m_tempRepo( false )
 {
+    OptOut( this );
+
     m_txtURL->SetFocus();
 
     if( !m_repository )

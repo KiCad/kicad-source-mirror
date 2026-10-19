@@ -1040,6 +1040,28 @@ void DIALOG_SHIM::OptOut( wxWindow* aWindow )
     PROPERTY_HOLDER* props = new PROPERTY_HOLDER();
     props->SetProperty( "persist", false );
     aWindow->SetClientData( props );
+
+    if( aWindow == this )
+    {
+        COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+        if( settings )
+        {
+            std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
+            auto        dlgIt = settings->CsInternals().m_dialogControlValues.find( dialogKey );
+
+            if( dlgIt != settings->CsInternals().m_dialogControlValues.end() )
+            {
+                // A dialog opting out may already have saved sensitive controls in an older
+                // version. Keep its geometry while removing those stale control values.
+                std::erase_if( dlgIt->second,
+                               []( const auto& aEntry )
+                               {
+                                   return aEntry.first != "__geometry";
+                               } );
+            }
+        }
+    }
 }
 
 

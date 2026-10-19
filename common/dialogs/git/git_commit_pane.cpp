@@ -598,7 +598,8 @@ void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 
     // Editing does not announce itself to the pane, so watch for the unsaved editor state
     // changing while the pane is visible. The refresh runs only on the transition.
-    if( m_transfer.IsBusy() || m_refreshRetryTimer.IsRunning() || !IsShownOnScreen() )
+    if( !Pgm().GetCommonSettings()->m_Git.enableGit || m_transfer.IsBusy() || m_refreshRetryTimer.IsRunning()
+        || !IsShownOnScreen() )
         return;
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();

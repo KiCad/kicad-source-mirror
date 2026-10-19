@@ -70,6 +70,7 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
     if( wxSizer* treeSizer = m_panelTree->GetSizer() )
     {
         wxSearchCtrl* search = new wxSearchCtrl( m_panelTree, wxID_ANY );
+        OptOut( search );
         search->SetDescriptiveText( _( "Filter changes…" ) );
         search->ShowCancelButton( true );
 

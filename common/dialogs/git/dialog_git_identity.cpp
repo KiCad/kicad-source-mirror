@@ -27,6 +27,8 @@ DIALOG_GIT_IDENTITY::DIALOG_GIT_IDENTITY( wxWindow* aParent, const wxString& aTi
                                           const wxString& aEmail ) :
         DIALOG_GIT_IDENTITY_BASE( aParent, wxID_ANY, aTitle )
 {
+    OptOut( this );
+
     m_nameCtrl->SetValue( aName );
     m_emailCtrl->SetValue( aEmail );
 

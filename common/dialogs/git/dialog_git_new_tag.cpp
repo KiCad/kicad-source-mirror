@@ -27,6 +27,8 @@
 DIALOG_GIT_NEW_TAG::DIALOG_GIT_NEW_TAG( wxWindow* aParent ) :
         DIALOG_GIT_NEW_TAG_BASE( aParent )
 {
+    OptOut( this );
+
     m_hint->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
     SetupStandardButtons();

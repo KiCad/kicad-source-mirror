@@ -696,13 +696,13 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
                     return false;
                 }
             }
+
+            // Saving editors can update the project file; a commit may include that change.
+            // Commit Anyway leaves both the editors and the project file untouched.
+            if( aPurpose == GIT_EDITOR_PREP::COMMIT )
+                aFrame->GetSettingsManager()->SaveProject();
         }
     }
-
-    // Only a commit wants the project file written. Before a merge it would leave the file
-    // dirty, and libgit2 refuses to check out over that.
-    if( aPurpose == GIT_EDITOR_PREP::COMMIT )
-        aFrame->GetSettingsManager()->SaveProject();
 
     return true;
 }
