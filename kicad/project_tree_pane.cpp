@@ -50,6 +50,7 @@
 #include <confirm.h>
 #include <dialogs/git/dialog_git_credentials.h>
 #include <dialogs/git/git_credentials_prompt.h>
+#include <dialogs/git/git_ui_utils.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialogs/git/dialog_git_switch.h>
 #include <gestfich.h>
@@ -1901,15 +1902,11 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
     wxString existingURL;
 
     {
-        // Reading the remote touches the repository, so serialize it. The lock is released before
-        // the modal below, which must never be shown while it is held.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        // Read the remote under the lock, then release it before opening the dialog.
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
-        }
 
         git_remote* remote = nullptr;
 
@@ -1942,18 +1939,17 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
     wxString setupError;
 
     {
-        // Writing the remote rewrites the repository config, so it has to be serialized against
-        // the background fetch and the commit panels' workers.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        // Update the remote config and cached branch info under the same lock.
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
-        }
 
         setupOk = initHandler.SetupRemote( remoteConfig );
         setupError = initHandler.GetErrorString();
+
+        if( setupOk )
+            common->UpdateCurrentBranchInfo();
     }
 
     if( !setupOk )
@@ -1963,13 +1959,6 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
     }
 
     saveAcceptedRemoteSettings( Prj(), remoteConfig );
-
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( lock.owns_lock() )
-            common->UpdateCurrentBranchInfo();
-    }
 
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
 }
@@ -2037,13 +2026,10 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
         wxString error;
 
         {
-            std::unique_lock<std::mutex> lock = common->TryLockAction();
+            std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
             if( !lock.owns_lock() )
-            {
-                DisplayInfoMessage( this, KIGIT::BusyMessage() );
                 return;
-            }
 
             result = KIGIT::PROJECT_GIT_UTILS::CreateBranch( common->GetRepo(), branchName );
             error = KIGIT_COMMON::GetLastGitError();

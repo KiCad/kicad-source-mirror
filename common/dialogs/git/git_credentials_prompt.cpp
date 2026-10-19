@@ -20,6 +20,7 @@
 #include <dialogs/git/git_credentials_prompt.h>
 #include <dialogs/git/dialog_git_credentials.h>
 #include <dialogs/git/dialog_git_identity.h>
+#include <dialogs/git/git_ui_utils.h>
 #include <confirm.h>
 #include <wx/utils.h>
 #include <mutex>
@@ -96,14 +97,10 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aH
     bool saved = false;
 
     {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, aParent );
 
         if( !lock.owns_lock() )
-        {
-            DisplayErrorMessage( aParent, _( "Another git operation is in progress, so the name and email were "
-                                             "not saved. Try again in a moment." ) );
             return false;
-        }
 
         saved = aCommon->SetUserConfig( name, email );
     }

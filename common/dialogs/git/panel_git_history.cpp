@@ -1175,13 +1175,10 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const wxStr
     wxString      error;
 
     {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
-        }
 
         result = common->RestoreVersion( aCommitHash, aProjectPrefix, error );
     }

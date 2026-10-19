@@ -379,7 +379,7 @@ void PANEL_GIT_BRANCHES::onForcePush()
 {
     if( m_push.IsBusy() )
     {
-        DisplayInfoMessage( this, _( "A transfer is already running." ) );
+        KIGIT::ShowBusyMessage( this );
         return;
     }
 
@@ -497,7 +497,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
                 if( outcome->result == PushResult::Busy )
                 {
-                    DisplayInfoMessage( this, KIGIT::BusyMessage() );
+                    KIGIT::ShowBusyMessage( this );
                     return;
                 }
 

@@ -27,6 +27,7 @@
 #include <git/kicad_git_memory.h>
 #include <git/project_git_utils.h>
 #include <dialogs/git/git_status_entries.h>
+#include <dialogs/git/git_ui_utils.h>
 #include <diff_merge/merge_dispatch.h>
 #include <kiway.h>
 #include <reporter.h>
@@ -108,15 +109,11 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
         return;
     }
 
-    // libgit2 is not safe for concurrent use of one repository, so serialize repository access
-    // on the git action lock while resolving the refs and comparing them.
-    std::unique_lock<std::mutex> lock = m_common->TryLockAction();
+    // Hold the lock while resolving and comparing refs.
+    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *m_common, this );
 
     if( !lock.owns_lock() )
-    {
-        wxMessageBox( KIGIT::BusyMessage(), _( "Compare Branches" ), wxOK | wxICON_INFORMATION, this );
         return;
-    }
 
     // Validate each ref resolves and peels to a tree; CompareRefs needs a
     // tree on both sides.
@@ -219,15 +216,11 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
         return;
     }
 
-    // libgit2 is not safe for concurrent use of one repository, so serialize repository access
-    // on the git action lock while extracting the blobs. It is unlocked before the diff opens.
-    std::unique_lock<std::mutex> lock = m_common->TryLockAction();
+    // Extract both versions under the lock, then release it before opening the diff.
+    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *m_common, this );
 
     if( !lock.owns_lock() )
-    {
-        wxMessageBox( KIGIT::BusyMessage(), _( "Compare File" ), wxOK | wxICON_INFORMATION, this );
         return;
-    }
 
     const bool     hasBase  = file.status != KIGIT::FILE_CHANGE_STATUS::ADDED;
     const bool     hasHead  = file.status != KIGIT::FILE_CHANGE_STATUS::REMOVED;

@@ -41,6 +41,7 @@
 #include <confirm.h>
 #include <dialogs/git/dialog_text_diff.h>
 #include <dialogs/git/git_transfer.h>
+#include <dialogs/git/git_ui_utils.h>
 #include <diff_merge/diff_doc_kind.h>
 #include <diff_merge/diff_scene.h>
 #include <diff_merge/merge_dispatch.h>
@@ -541,13 +542,10 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
                 wxString        resultError;
 
                 {
-                    std::unique_lock<std::mutex> lock = common->TryLockAction();
+                    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, parent );
 
                     if( !lock.owns_lock() )
-                    {
-                        DisplayInfoMessage( parent, KIGIT::BusyMessage() );
                         return;
-                    }
 
                     GIT_BRANCH_HANDLER handler( common.get() );
                     result = handler.SwitchToBranch( aBranch );

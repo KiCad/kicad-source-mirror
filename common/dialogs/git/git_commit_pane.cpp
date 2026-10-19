@@ -758,13 +758,10 @@ void GIT_COMMIT_PANE::setAuthor()
                 if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown() )
                     return;
 
-                std::unique_lock<std::mutex> lock = common->TryLockAction();
+                std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
                 if( !lock.owns_lock() )
-                {
-                    DisplayInfoMessage( this, KIGIT::BusyMessage() );
                     return;
-                }
 
                 bool saved = common->SetUserConfig( identity->authorName, identity->authorEmail );
                 lock.unlock();
@@ -991,7 +988,10 @@ void GIT_COMMIT_PANE::onNewBranchToggled( wxCommandEvent& aEvent )
 void GIT_COMMIT_PANE::onBranchChosen( wxCommandEvent& aEvent )
 {
     if( m_actionPending || m_transfer.IsBusy() )
+    {
+        KIGIT::ShowBusyMessage( this );
         return;
+    }
 
     wxString branch = m_branchChoice->GetStringSelection();
     m_actionPending = true;
@@ -1261,13 +1261,10 @@ void GIT_COMMIT_PANE::confirmDiscardFile( std::shared_ptr<KIGIT_COMMON> aCommon,
 
     // Dropping the staged entry before touching the file means a contended lock or an index
     // failure leaves everything unchanged.
-    std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, this );
 
     if( !lock.owns_lock() )
-    {
-        setBusy( false, KIGIT::BusyMessage() );
         return;
-    }
 
     // The question above ran without the lock, so the project may have closed meanwhile.
     if( !aCommon->GetRepo() )
@@ -1372,11 +1369,10 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
 
 bool GIT_COMMIT_PANE::transferCanStart()
 {
-    // The advanced window reaches these too, with this panel's own labels out of sight, so
-    // the refusal is a message box.
+    // The Advanced window also calls this, with the panel's status out of sight.
     if( m_transfer.IsBusy() || m_actionPending )
     {
-        DisplayInfoMessage( this, _( "A transfer is already running." ) );
+        KIGIT::ShowBusyMessage( this );
         return false;
     }
 
@@ -1523,13 +1519,10 @@ void GIT_COMMIT_PANE::finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCom
     bool            ok = false;
 
     {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, this );
 
         if( !lock.owns_lock() )
-        {
-            setBusy( false, KIGIT::BusyMessage() );
             return;
-        }
 
         ok = aCommon->AbandonOperation( error );
     }
@@ -1614,7 +1607,10 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     syncListener();
 
     if( m_actionPending || m_transfer.IsBusy() )
+    {
+        KIGIT::ShowBusyMessage( this );
         return;
+    }
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
@@ -1766,15 +1762,11 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     wxString     previousBranch;
 
     {
-        // Committing writes to the repository, so hold the shared lock across it. If another
-        // panel is pushing or pulling, the lock is busy: tell the user instead of racing.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        // Keep the lock through branch creation and the commit.
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
-        {
-            setBusy( false, KIGIT::BusyMessage() );
             return;
-        }
 
         if( aRequest.head != commitHead( common->GetRepo() ) )
         {
@@ -1856,7 +1848,10 @@ void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std
                                       std::function<void()> aDone, const wxString& aStatus )
 {
     if( m_actionPending || m_transfer.IsBusy() )
+    {
+        KIGIT::ShowBusyMessage( this );
         return;
+    }
 
     m_actionPending = true;
     setBusy( true, aStatus );
@@ -2019,11 +2014,10 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
-    // Lock contention with another panel's operation is not a push failure, so do not report
-    // it as one.
     if( result == PushResult::Busy )
     {
-        setBusy( false, KIGIT::BusyMessage() );
+        setBusy( false, wxEmptyString );
+        KIGIT::ShowBusyMessage( this );
         return;
     }
 

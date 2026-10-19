@@ -26,8 +26,27 @@
 #include <wx/string.h>
 #include <wx/splitter.h>
 
+#include <confirm.h>
 #include <diff_merge/diff_scene.h>
+#include <git/kicad_git_common.h>
 #include <kiplatform/ui.h>
+
+
+void KIGIT::ShowBusyMessage( wxWindow* aParent )
+{
+    DisplayInfoMessage( aParent, BusyMessage() );
+}
+
+
+std::unique_lock<std::mutex> KIGIT::TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent )
+{
+    std::unique_lock<std::mutex> lock = aCommon.TryLockAction();
+
+    if( !lock.owns_lock() )
+        ShowBusyMessage( aParent );
+
+    return lock;
+}
 
 
 wxString KIGIT::RelativeDate( const wxDateTime& aWhen )

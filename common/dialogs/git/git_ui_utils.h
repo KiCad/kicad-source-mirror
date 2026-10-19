@@ -20,6 +20,9 @@
 #ifndef GIT_UI_UTILS_H
 #define GIT_UI_UTILS_H
 
+#include <mutex>
+
+class KIGIT_COMMON;
 class wxButton;
 class wxDateTime;
 class wxListCtrl;
@@ -29,6 +32,13 @@ class wxWindow;
 
 namespace KIGIT
 {
+
+/// Show a busy message for a user action. UI thread only.
+void ShowBusyMessage( wxWindow* aParent );
+
+/// Try the action lock and show a busy message if it is unavailable.
+/// UI thread only. Check owns_lock() before using the repository.
+[[nodiscard]] std::unique_lock<std::mutex> TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent );
 
 /// "just now", "3 hours ago", or the ISO date once it is more than a month old.
 wxString RelativeDate( const wxDateTime& aWhen );

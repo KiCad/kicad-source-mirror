@@ -486,8 +486,14 @@ void GIT_ADVANCED_DIALOG::populateTopBar()
 
 void GIT_ADVANCED_DIALOG::onFetch()
 {
-    if( !SessionStillCurrent() || m_fetch.IsBusy() || m_fetchQuery.IsBusy() )
+    if( !SessionStillCurrent() )
         return;
+
+    if( m_fetch.IsBusy() || m_fetchQuery.IsBusy() )
+    {
+        KIGIT::ShowBusyMessage( this );
+        return;
+    }
 
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
     auto                          hasRemote = std::make_shared<bool>( false );
@@ -693,15 +699,11 @@ void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON&,
     wxString                      detail;
 
     {
-        // libgit2 is not safe for concurrent use of one repository, so take the git action lock
-        // for the mutation. It is released before the refresh broadcast.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        // Release the lock before reloading editors and refreshing other Git views.
+        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
             return;
-        }
 
         ok = aFn( *common, detail );
     }
