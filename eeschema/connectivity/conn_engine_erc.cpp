@@ -1141,6 +1141,41 @@ std::vector<SOURCE_LOCATION> ENGINE::EmptyLabels() const
     return result;
 }
 
+std::vector<SOURCE_LOCATION> ENGINE::EmptyPowerValues() const
+{
+    wxASSERT( wxThread::IsMain() );
+    std::vector<SOURCE_LOCATION> result;
+
+    for( INST_ID instance : instancesInPageOrder() )
+    {
+        for( const ITEM_FACT& fact : m_inputs.InstanceScreenFacts( instance ).items )
+        {
+            for( const PIN_FACT& pin : fact.pins )
+            {
+                // Only a power pin owned by a power symbol takes its net name from the value.
+                // A hidden power input on an ordinary symbol is named from the pin instead.
+                if( ( !pin.globalPower && !pin.localPower ) || ( !pin.globalPowerParent && !pin.localPowerParent ) )
+                {
+                    continue;
+                }
+
+                if( const auto* text = m_inputs.Text( { pin.id, instance } ) )
+                {
+                    wxString name = text->value.name;
+
+                    if( name.Trim( false ).Trim( true ).IsEmpty() )
+                    {
+                        result.push_back( { m_keys.Instance( instance ), pin.id, pin.position } );
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
 std::vector<SOURCE_LOCATION> ENGINE::WiredImplicitPowerPins() const
 {
     wxASSERT( wxThread::IsMain() );

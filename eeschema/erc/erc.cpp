@@ -759,6 +759,58 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 }
 
 
+int ERC_TESTER::TestEmptyPowerValues()
+{
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        return reportSourceErrors( *m_schematic, ERCE_EMPTY_POWER_VALUE,
+                                   m_schematic->Connectivity().Engine().EmptyPowerValues() );
+    }
+
+    int errors = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
+            {
+                if( !pin->IsGlobalPower() && !pin->IsLocalPower() )
+                    continue;
+
+                const SYMBOL* parent = pin->GetLibPin() ? pin->GetLibPin()->GetParentSymbol() : nullptr;
+
+                // A hidden power input on an ordinary symbol is named from the pin, not the value
+                if( !parent || ( !parent->IsGlobalPower() && !parent->IsLocalPower() ) )
+                    continue;
+
+                wxString name = symbol->GetValue( &sheet, FOR_NETNAME );
+
+                if( name.Trim( false ).Trim( true ).IsEmpty() )
+                {
+                    auto ercItem = ERC_ITEM::Create( ERCE_EMPTY_POWER_VALUE );
+                    ercItem->SetItems( pin );
+                    ercItem->SetItemsSheetPaths( sheet );
+                    ercItem->SetSheetSpecificPath( sheet );
+
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), pin->GetPosition() );
+                    screen->Append( marker );
+                    errors++;
+                }
+
+                break;
+            }
+        }
+    }
+
+    return errors;
+}
+
+
 int ERC_TESTER::TestEmptyLabelNames()
 {
     if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
@@ -3485,6 +3537,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking field names..." ) );
 
         TestFieldNameWhitespace();
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_EMPTY_POWER_VALUE ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking for empty power symbol values..." ) );
+
+        TestEmptyPowerValues();
     }
 
     if( m_settings.IsTestEnabled( ERCE_EMPTY_LABEL_NAME ) )

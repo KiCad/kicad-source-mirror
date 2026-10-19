@@ -178,6 +178,9 @@ ERC_ITEM ERC_ITEM::fieldNameWhitespace( ERCE_FIELD_NAME_WHITESPACE,
 ERC_ITEM ERC_ITEM::emptyLabelName( ERCE_EMPTY_LABEL_NAME, _HKI( "Label has an empty name" ),
                                    wxT( "empty_label_name" ) );
 
+ERC_ITEM ERC_ITEM::emptyPowerValue( ERCE_EMPTY_POWER_VALUE, _HKI( "Power symbol has an empty value" ),
+                                    wxT( "empty_power_value" ) );
+
 ERC_ITEM ERC_ITEM::pinMapBadPad( ERCE_PIN_MAP_BAD_PAD,
                                  _HKI( "Pin map references a pad that does not exist on the footprint" ),
                                  wxT( "pin_map_bad_pad" ) );
@@ -280,7 +283,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
           ERC_ITEM::isolatedPinLabel, ERC_ITEM::singleGlobalLabel, ERC_ITEM::sameLocalGlobalLabel,
           ERC_ITEM::sameLocalGlobalPower, ERC_ITEM::wireDangling, ERC_ITEM::busEntryNeeded, ERC_ITEM::endpointOffGrid,
           ERC_ITEM::fourWayJunction, ERC_ITEM::labelMultipleWires, ERC_ITEM::unconnectedWireEndpoint,
-          ERC_ITEM::emptyLabelName, ERC_ITEM::wiredImplicitPower,
+          ERC_ITEM::emptyLabelName, ERC_ITEM::emptyPowerValue, ERC_ITEM::wiredImplicitPower,
 
           ERC_ITEM::heading_conflicts, ERC_ITEM::duplicateReference, ERC_ITEM::pinTableWarning,
           ERC_ITEM::differentUnitValue, ERC_ITEM::differentUnitFootprint, ERC_ITEM::differentUnitNet,
@@ -297,8 +300,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
           //                 ERC_ITEM::busLabelSyntax,
           ERC_ITEM::libSymbolIssues, ERC_ITEM::libSymbolMismatch, ERC_ITEM::footprintLinkIssues,
           ERC_ITEM::footprintFilters, ERC_ITEM::extraUnits, ERC_ITEM::missingUnits, ERC_ITEM::missingInputPin,
-          ERC_ITEM::missingBidiPin, ERC_ITEM::missingPowerInputPin,
-          ERC_ITEM::variantSymbolInvalid, ERC_ITEM::variantSymbolIncompatible,
+          ERC_ITEM::missingBidiPin, ERC_ITEM::missingPowerInputPin, ERC_ITEM::variantSymbolInvalid,
+          ERC_ITEM::variantSymbolIncompatible,
 
           // ERC_ITEM types with no user-editable severities
           // NOTE: this MUST be the last grouping in the list!
@@ -363,6 +366,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_STACKED_PIN_SYNTAX:      return std::make_shared<ERC_ITEM>( stackedPinName );
     case ERCE_FIELD_NAME_WHITESPACE:   return std::make_shared<ERC_ITEM>( fieldNameWhitespace );
     case ERCE_EMPTY_LABEL_NAME: return std::make_shared<ERC_ITEM>( emptyLabelName );
+    case ERCE_EMPTY_POWER_VALUE: return std::make_shared<ERC_ITEM>( emptyPowerValue );
     case ERCE_PIN_MAP_BAD_PAD: return std::make_shared<ERC_ITEM>( pinMapBadPad );
     case ERCE_PIN_MAP_UNMAPPED_PIN: return std::make_shared<ERC_ITEM>( pinMapUnmappedPin );
     case ERCE_PIN_MAP_DUPLICATE_PAD: return std::make_shared<ERC_ITEM>( pinMapDuplicatePad );

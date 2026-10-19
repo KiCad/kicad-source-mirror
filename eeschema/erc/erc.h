@@ -102,6 +102,11 @@ public:
     int TestEmptyLabelNames();
 
     /**
+     * Check for power symbols whose value resolves to nothing, leaving their net unnamed.
+     */
+    int TestEmptyPowerValues();
+
+    /**
      * Test if all units of each multiunit symbol have the same footprint assigned.
      * @return The error count.
      */

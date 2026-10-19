@@ -238,6 +238,7 @@ private:
     static ERC_ITEM stackedPinName;
     static ERC_ITEM fieldNameWhitespace;
     static ERC_ITEM emptyLabelName;
+    static ERC_ITEM emptyPowerValue;
     static ERC_ITEM pinMapBadPad;
     static ERC_ITEM pinMapUnmappedPin;
     static ERC_ITEM pinMapDuplicatePad;

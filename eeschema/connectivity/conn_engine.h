@@ -453,6 +453,7 @@ public:
 
     /** Labels whose raw text is empty or only white space, on every instance. */
     std::vector<SOURCE_LOCATION>         EmptyLabels() const;
+    std::vector<SOURCE_LOCATION>         EmptyPowerValues() const;
 
     /** Field names with leading or trailing white space, sorted by instance, owner and field. */
     std::vector<FIELD_NAME_ERROR>        InvalidFieldNames() const;
