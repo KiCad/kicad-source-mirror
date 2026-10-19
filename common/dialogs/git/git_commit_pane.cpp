@@ -47,6 +47,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialogs/git/git_credentials_prompt.h>
+#include <dialogs/git/git_ui_utils.h>
 #include <diff_merge/merge_dispatch.h>
 #include <kiplatform/ui.h>
 #include <diff_merge/diff_scene.h>
@@ -365,24 +366,15 @@ GIT_COMMIT_PANE::~GIT_COMMIT_PANE()
     // The window's Pull and Push run through this pane, so it goes when the pane goes.
     GIT_ADVANCED_DIALOG::CloseForPane( this );
 
-    // A transfer still running holds this pane, so stop it and wait. The wait ends at the
-    // transfer's next callback, or at the network timeouts while it is still connecting.
-    bool transferInFlight = m_networkBusy;
-
+    // A transfer outlives this pane, so ask it to stop and let it finish on its own. Its
+    // completion refreshes the other windows, so nothing has to be reported here.
     if( m_networkCancel )
         m_networkCancel->store( true );
 
-    if( m_networkWorker.joinable() )
-        m_networkWorker.join();
+    m_alive.reset();
 
     if( std::shared_ptr<KIGIT_COMMON> common = m_listenerSession.lock() )
-    {
         common->RemoveRefreshListener( this );
-
-        // The completion queued on this pane goes with it, so the other windows are told here.
-        if( transferInFlight )
-            common->NotifyRefreshListeners();
-    }
 }
 
 
@@ -1731,35 +1723,42 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
     KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
     m_networkCancel = token;
 
-    // Never the shared compute pool. A libgit2 network read parked there stalls DRC,
-    // zone filling and library loading.
-    if( m_networkWorker.joinable() )
-        m_networkWorker.join();
+    // The registry owns the thread, so closing the window during a transfer does not wait for
+    // the socket. Never the shared compute pool either: a libgit2 network read parked there
+    // stalls DRC, zone filling and library loading.
+    std::weak_ptr<bool> alive = m_alive;
 
-    m_networkWorker = std::thread(
-            [this, aCommon, token]()
-            {
-                aCommon->ClearAuthFailure();
+    auto work = [this, aCommon, token, alive]()
+    {
+        aCommon->ClearAuthFailure();
 
-                GIT_PUSH_HANDLER handler( aCommon.get() );
-                handler.SetCancelToken( token );
-                PushResult       result = handler.PerformPush();
-                wxString         error = handler.GetErrorString();
-                bool             authFailure = aCommon->WasAuthFailure();
+        GIT_PUSH_HANDLER handler( aCommon.get() );
+        handler.SetCancelToken( token );
+        PushResult result = handler.PerformPush();
+        wxString   error = handler.GetErrorString();
+        bool       authFailure = aCommon->WasAuthFailure();
 
-                // This operation's own token, so a cancel aimed at something else is not
-                // reported here and this one's is not left behind for the next operation.
-                bool cancelled = handler.IsThisOperationCancelled();
+        // This operation's own token, so a cancel aimed at something else is not
+        // reported here and this one's is not left behind for the next operation.
+        bool cancelled = handler.IsThisOperationCancelled();
 
-                CallAfter(
-                        [this, aCommon, result, error, authFailure, cancelled]()
-                        {
-                            if( result == PushResult::Success )
-                                aCommon->NotifyRefreshListeners();
+        // The other surfaces need this even when the pane that started the push has gone.
+        if( result == PushResult::Success )
+            KIGIT::CallOnUi(
+                    [aCommon]()
+                    {
+                        aCommon->NotifyRefreshListeners();
+                    } );
 
-                            onPushDone( aCommon, static_cast<int>( result ), error, authFailure, cancelled );
-                        } );
-            } );
+        KIGIT::CallIfAlive( alive,
+                            [this, aCommon, result, error, authFailure, cancelled]()
+                            {
+                                onPushDone( aCommon, static_cast<int>( result ), error, authFailure, cancelled );
+                            } );
+    };
+
+    if( !KIGIT::StartTransfer( "git push", std::move( work ) ) )
+        setBusy( false, _( "Could not start the push." ) );
 }
 
 
@@ -2231,40 +2230,50 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
     EDITOR_SNAPSHOT docsBefore = m_docsBeforePull;
 
-    // Never the shared compute pool. A libgit2 network read parked there stalls DRC,
-    // zone filling and library loading.
-    if( m_networkWorker.joinable() )
-        m_networkWorker.join();
+    // The registry owns the thread, so closing the window during a transfer does not wait for
+    // the socket. Never the shared compute pool either: a libgit2 network read parked there
+    // stalls DRC, zone filling and library loading.
+    std::weak_ptr<bool> alive = m_alive;
 
-    m_networkWorker = std::thread(
-            [this, aCommon, aThenPush, docsBefore, token]()
-            {
-                aCommon->ClearAuthFailure();
+    // The KIWAY outlives this pane, so the editors are still reached when the pane has gone.
+    KIWAY* kiway = &m_frame->Kiway();
 
-                GIT_PULL_HANDLER handler( aCommon.get() );
-                handler.SetCancelToken( token );
-                PullResult       result = handler.PerformPull();
-                wxString         error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
-                bool             authFailure = aCommon->WasAuthFailure();
+    auto work = [this, aCommon, aThenPush, docsBefore, token, alive, kiway]()
+    {
+        aCommon->ClearAuthFailure();
 
-                // This operation's own token, so a cancel aimed at something else is not
-                // reported here and this one's is not left behind for the next operation.
-                bool cancelled = handler.IsThisOperationCancelled();
+        GIT_PULL_HANDLER handler( aCommon.get() );
+        handler.SetCancelToken( token );
+        PullResult result = handler.PerformPull();
+        wxString   error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
+        bool       authFailure = aCommon->WasAuthFailure();
 
-                CallAfter(
-                        [this, aCommon, result, error, authFailure, aThenPush, docsBefore, cancelled]()
-                        {
-                            // A merge that failed partway can still have written files, so the
-                            // editors are brought up to date whatever the outcome. Nothing
-                            // reloads when nothing changed on disk.
-                            ReloadOpenEditors( m_frame->Kiway(), docsBefore );
+        // This operation's own token, so a cancel aimed at something else is not
+        // reported here and this one's is not left behind for the next operation.
+        bool cancelled = handler.IsThisOperationCancelled();
 
-                            if( result == PullResult::Success || result == PullResult::FastForward )
-                                aCommon->NotifyRefreshListeners();
+        KIGIT::CallOnUi(
+                [aCommon, docsBefore, result, kiway]()
+                {
+                    // A merge that failed partway can still have written files, so the
+                    // editors are brought up to date whatever the outcome. Nothing
+                    // reloads when nothing changed on disk.
+                    ReloadOpenEditors( *kiway, docsBefore );
 
-                            onPullDone( aCommon, static_cast<int>( result ), error, authFailure, aThenPush, cancelled );
-                        } );
-            } );
+                    if( result == PullResult::Success || result == PullResult::FastForward )
+                        aCommon->NotifyRefreshListeners();
+                } );
+
+        KIGIT::CallIfAlive( alive,
+                            [this, aCommon, result, error, authFailure, aThenPush, cancelled]()
+                            {
+                                onPullDone( aCommon, static_cast<int>( result ), error, authFailure, aThenPush,
+                                            cancelled );
+                            } );
+    };
+
+    if( !KIGIT::StartTransfer( "git pull", std::move( work ) ) )
+        setBusy( false, _( "Could not start getting changes." ) );
 }
 
 

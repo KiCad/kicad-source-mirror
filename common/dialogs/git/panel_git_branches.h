@@ -22,7 +22,6 @@
 
 #include <atomic>
 #include <memory>
-#include <thread>
 
 #include <wx/timer.h>
 
@@ -46,9 +45,8 @@ public:
     /// Fill the list from the repository's branches. The caller holds the git action lock.
     void Populate();
 
-    /// Stop a force push still running and wait for it. True when one had been started, so the
-    /// caller can tell the other windows the refresh it owed them will not come.
-    bool StopTransfer();
+    /// Ask a force push still running to stop. It finishes on its own.
+    void StopTransfer();
 
 private:
     /// Refill the list after the search text changed.
@@ -68,9 +66,11 @@ private:
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
 
-    /// The push this page started, and its token, so closing can stop it and wait.
-    std::thread                        m_pushWorker;
+    /// The token of the push this page started, so closing can ask it to stop.
     std::shared_ptr<std::atomic<bool>> m_pushCancel;
+
+    /// A push can outlive the page, so its completion checks this before touching it.
+    std::shared_ptr<bool> m_alive = std::make_shared<bool>( true );
 
     bool m_pushBusy = false;
 

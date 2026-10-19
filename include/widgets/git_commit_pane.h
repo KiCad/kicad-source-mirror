@@ -23,7 +23,6 @@
 #include <atomic>
 #include <functional>
 #include <memory>
-#include <thread>
 #include <set>
 
 #include <wx/timer.h>
@@ -236,8 +235,8 @@ private:
     /// while the task is still queued and has no handler yet.
     std::shared_ptr<std::atomic<bool>> m_networkCancel;
 
-    /// The push or pull running for this pane, joined before the pane goes.
-    std::thread m_networkWorker;
+    /// A transfer can outlive the pane, so its completion checks this before touching it.
+    std::shared_ptr<bool> m_alive = std::make_shared<bool>( true );
 
     /// Told when a transfer starts and ends. Empty unless an owning window asked.
     std::function<void( bool )> m_busyChangedHandler;

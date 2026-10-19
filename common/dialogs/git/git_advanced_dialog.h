@@ -23,7 +23,6 @@
 #include <atomic>
 #include <functional>
 #include <memory>
-#include <thread>
 
 #include <wx/timer.h>
 
@@ -126,9 +125,11 @@ private:
     EDITOR_SNAPSHOT m_docsBeforeChange;
 
 
-    /// The fetch the top bar started, and its token, so closing can stop it and wait.
-    std::thread                        m_fetchWorker;
+    /// The token of the fetch the top bar started, so closing can ask it to stop.
     std::shared_ptr<std::atomic<bool>> m_fetchCancel;
+
+    /// A fetch can outlive the window, so its completion checks this before touching it.
+    std::shared_ptr<bool> m_alive = std::make_shared<bool>( true );
 
     EDA_BASE_FRAME*  m_parent;
     GIT_COMMIT_PANE* m_pane;
