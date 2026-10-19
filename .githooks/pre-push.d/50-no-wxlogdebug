@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# Rejects pushes that add wxLogDebug calls.
+#
+# Git passes "<local ref> <local oid> <remote ref> <remote oid>" on stdin for each pushed ref.
+
+remote="$1"
+zero=$(git hash-object --stdin < /dev/null | tr '0-9a-f' '0')
+checker="$(git rev-parse --show-toplevel)/tools/check_wxlogdebug.sh"
+status=0
+
+while read -r local_ref local_oid remote_ref remote_oid; do
+    # Deleting a remote ref adds nothing
+    if [ "$local_oid" = "$zero" ]; then
+        continue
+    fi
+
+    base="$remote_oid"
+
+    # New branch, or a remote tip we have not fetched, so compare against the remote default branch
+    if [ "$base" = "$zero" ] || ! git cat-file -e "${base}^{commit}" 2> /dev/null; then
+        base=""
+
+        for candidate in "refs/remotes/${remote}/HEAD" "refs/remotes/${remote}/master"; do
+            if git rev-parse --quiet --verify "$candidate" > /dev/null; then
+                base=$(git merge-base "$local_oid" "$candidate")
+                break
+            fi
+        done
+    fi
+
+    if [ -z "$base" ]; then
+        echo "WARNING: no base commit for ${local_ref}; skipping wxLogDebug check"
+        continue
+    fi
+
+    if ! "$checker" "$base" "$local_oid"; then
+        status=1
+    fi
+done
+
+exit $status

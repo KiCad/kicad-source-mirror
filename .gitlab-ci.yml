@@ -21,3 +21,4 @@ include:
   - local: '/.gitlab/linux-metadata-validate.yml'
   - local: '/.gitlab/doxygen.yml'
   - local: '/.gitlab/mr_formatting.yml'
+  - local: '/.gitlab/source_checks.yml'

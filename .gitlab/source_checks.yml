@@ -1,0 +1,22 @@
+##########################################################################
+# Reject wxLogDebug calls added by a push or merge request
+##########################################################################
+# Pushes diff against the previous branch tip and merge requests diff against
+# the merge base.  A new branch has no previous tip, so its MR pipeline covers it.
+check_wxlogdebug:
+  stage: test
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
+  script:
+    - BASE_SHA="${CI_MERGE_REQUEST_DIFF_BASE_SHA:-$CI_COMMIT_BEFORE_SHA}"
+    - |
+      if [ -z "$(echo "${BASE_SHA}" | tr -d 0)" ]; then
+        echo "No base commit for this pipeline; skipping"
+        exit 0
+      fi
+    # The CI clone is shallow, so the base commit may need fetching.  MR bases live in the target project
+    - git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null ||
+      git fetch --depth=1 "${CI_MERGE_REQUEST_PROJECT_URL:-origin}" "${BASE_SHA}"
+    - ./tools/check_wxlogdebug.sh "${BASE_SHA}" "${CI_COMMIT_SHA}"

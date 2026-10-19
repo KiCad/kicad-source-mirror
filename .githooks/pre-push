@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+# A real file rather than a symlink so the hook also runs on Windows checkouts
+
+HOOKCHAIN_NAME=pre-push exec "$(dirname "$0")/hook-chain" "$@"
