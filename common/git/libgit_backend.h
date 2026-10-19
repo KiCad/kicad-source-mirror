@@ -46,8 +46,6 @@ public:
 
     PushResult Push( GIT_PUSH_HANDLER* aHandler, bool aForce = false ) override;
 
-    bool HasChangedFiles( GIT_STATUS_HANDLER* aHandler ) override;
-
     std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
                                                   bool aChangedOnly ) override;
 
@@ -60,7 +58,6 @@ public:
 
     wxString GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler ) override;
 
-    wxString GetWorkingDirectory( GIT_CONFIG_HANDLER* aHandler ) override;
     bool GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxString& aKey,
                           wxString& aValue ) override;
 
@@ -69,7 +66,6 @@ public:
     bool SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig& aConfig ) override;
 
     BranchResult SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const wxString& aBranchName ) override;
-    bool BranchExists( GIT_BRANCH_HANDLER* aHandler, const wxString& aBranchName ) override;
 
     bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) override;
     PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) override;

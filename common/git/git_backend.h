@@ -107,8 +107,6 @@ public:
 
     virtual PushResult Push( GIT_PUSH_HANDLER* aHandler, bool aForce = false ) = 0;
 
-    virtual bool HasChangedFiles( GIT_STATUS_HANDLER* aHandler ) = 0;
-
     virtual std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
                                                           bool aChangedOnly ) = 0;
 
@@ -121,7 +119,6 @@ public:
 
     virtual wxString GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler ) = 0;
 
-    virtual wxString GetWorkingDirectory( GIT_CONFIG_HANDLER* aHandler ) = 0;
     virtual bool GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxString& aKey,
                                   wxString& aValue ) = 0;
 
@@ -130,7 +127,6 @@ public:
     virtual bool SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig& aConfig ) = 0;
 
     virtual BranchResult SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const wxString& aBranchName ) = 0;
-    virtual bool BranchExists( GIT_BRANCH_HANDLER* aHandler, const wxString& aBranchName ) = 0;
 
     virtual bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) = 0;
     virtual PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) = 0;

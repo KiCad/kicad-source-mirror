@@ -45,12 +45,6 @@ public:
      */
     GitUserConfig GetUserConfig();
 
-    /**
-     * Get the repository working directory path
-     * @return Working directory path, or empty string if not available
-     */
-    wxString GetWorkingDirectory();
-
 private:
     /**
      * Get a string value from git config

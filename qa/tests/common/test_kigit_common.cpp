@@ -2751,9 +2751,9 @@ BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
                 } ) );
 
         BOOST_REQUIRE( waitForQuery(
-                [this, &transfer]()
+                [&transfer]()
                 {
-                    return !transfer.IsBusy() && Backend()->OrphanRegistry().TrackedCount() == 0;
+                    return !transfer.IsBusy();
                 } ) );
     }
 
@@ -2784,11 +2784,7 @@ BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
     release.set_value();
 
     BOOST_CHECK( started );
-    BOOST_REQUIRE( waitForQuery(
-            [this]()
-            {
-                return Backend()->OrphanRegistry().TrackedCount() == 0;
-            } ) );
+    BOOST_REQUIRE_EQUAL( Backend()->OrphanRegistry().JoinAll( std::chrono::seconds( 5 ) ), 0u );
     wxTheApp->ProcessPendingEvents();
     BOOST_CHECK( !completed );
     BOOST_CHECK( !wrongThread->load() );
@@ -2866,10 +2862,12 @@ BOOST_AUTO_TEST_CASE( QueryCancelDropsPendingWorkAndQueuedCompletion )
     KIGIT_QUERY             query;
     bool                    completed = false;
     auto                    worked = std::make_shared<std::atomic<unsigned>>( 0 );
+    std::shared_ptr<int>    workerLifetime = std::make_shared<int>( 0 );
+    std::weak_ptr<int>      workerWatch = workerLifetime;
 
     query.Run(
             session,
-            [worked]( KIGIT_COMMON& )
+            [worked, workerLifetime]( KIGIT_COMMON& )
             {
                 worked->fetch_add( 1 );
             },
@@ -2877,14 +2875,15 @@ BOOST_AUTO_TEST_CASE( QueryCancelDropsPendingWorkAndQueuedCompletion )
             {
                 completed = true;
             } );
+    workerLifetime.reset();
 
-    // Wait for the worker without pumping events: its completion is now queued on the UI.
+    // The worker drops its capture after posting completion. Leave that event queued.
     const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
 
-    while( Backend()->OrphanRegistry().TrackedCount() && std::chrono::steady_clock::now() < deadline )
+    while( !workerWatch.expired() && std::chrono::steady_clock::now() < deadline )
         std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
 
-    BOOST_REQUIRE_EQUAL( Backend()->OrphanRegistry().TrackedCount(), 0u );
+    BOOST_REQUIRE( workerWatch.expired() );
     query.Run(
             session,
             [worked]( KIGIT_COMMON& )

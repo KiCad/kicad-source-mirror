@@ -42,12 +42,6 @@ public:
     virtual ~GIT_STATUS_HANDLER();
 
     /**
-     * Check if the repository has any changed files
-     * @return True if there are uncommitted changes, false otherwise
-     */
-    bool HasChangedFiles();
-
-    /**
      * Get detailed file status for all files in the specified path
      * @param aPathspec Path specification to filter files (empty for all files)
      * @param aChangedOnly Omit unmodified tracked files, for callers that only list changes

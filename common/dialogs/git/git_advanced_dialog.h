@@ -106,9 +106,6 @@ public:
     /// nothing is uncommitted or unsaved. Saving first would create changes that block it.
     void RefuseOverUncommittedWork( std::function<void( const GIT_WORKTREE_STATUS& )> aReady );
 
-    /// Reload the editors from disk and refresh the panels, after an operation rewrote files.
-    void FinishWorkingTreeChange();
-
     /// Switch the working tree to the named branch, after confirming, then refresh.
     void SwitchToBranch( const wxString& aBranch );
 

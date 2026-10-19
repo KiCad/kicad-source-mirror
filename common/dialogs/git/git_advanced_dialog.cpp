@@ -645,15 +645,6 @@ bool GIT_ADVANCED_DIALOG::ConfirmWorkingTreeChange( const GIT_WORKTREE_STATUS& a
 }
 
 
-void GIT_ADVANCED_DIALOG::FinishWorkingTreeChange()
-{
-    ReloadOpenEditors( m_parent->Kiway(), m_docsBeforeChange );
-
-    // Refreshes this window and the docked panel through the shared registry.
-    m_parent->Prj().GetGitCommon()->NotifyRefreshListeners();
-}
-
-
 bool GIT_ADVANCED_DIALOG::SessionStillCurrent()
 {
     if( IsBeingDeleted() || m_parent->IsBeingDeleted() )

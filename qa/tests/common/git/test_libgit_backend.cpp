@@ -1019,7 +1019,7 @@ BOOST_AUTO_TEST_CASE( PerformPull_NamesUntrackedFileBlockingFastForward )
     PullResult result = handler.PerformPull();
 
     BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::DirtyWorkdir ) );
-    BOOST_CHECK( handler.PeekErrorString().Contains( wxT( "theirs.txt" ) ) );
+    BOOST_CHECK( handler.GetErrorString().Contains( wxT( "theirs.txt" ) ) );
 
     git_oid headAfter;
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo, "HEAD" ), GIT_OK );
@@ -1073,7 +1073,7 @@ BOOST_AUTO_TEST_CASE( PerformPull_NamesUntrackedFileBlockingMerge )
     PullResult result = handler.PerformPull();
 
     BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::DirtyWorkdir ) );
-    BOOST_CHECK( handler.PeekErrorString().Contains( wxT( "theirs.txt" ) ) );
+    BOOST_CHECK( handler.GetErrorString().Contains( wxT( "theirs.txt" ) ) );
     BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
 
     git_oid headAfter;
@@ -2258,19 +2258,11 @@ BOOST_AUTO_TEST_CASE( ProjectGitCommon_ReleaseDefersFreeWhileActionMutexHeld )
     project->ReleaseGitCommon();
 
     BOOST_CHECK( common->GetRepo() != nullptr );
-    BOOST_CHECK( GetGitBackend()->OrphanRegistry().TrackedCount() >= 1 );
 
     allowUnlock.set_value();
     worker.join();
 
-    auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
-
-    while( GetGitBackend()->OrphanRegistry().TrackedCount() > 0 && std::chrono::steady_clock::now() < deadline )
-    {
-        std::this_thread::sleep_for( std::chrono::milliseconds( 20 ) );
-    }
-
-    BOOST_CHECK_EQUAL( GetGitBackend()->OrphanRegistry().TrackedCount(), 0 );
+    BOOST_REQUIRE_EQUAL( GetGitBackend()->OrphanRegistry().JoinAll( std::chrono::seconds( 5 ) ), 0u );
     BOOST_CHECK( common->GetRepo() == nullptr );
 }
 

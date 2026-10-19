@@ -36,15 +36,6 @@ public:
     }
 
     /**
-     * @brief Get the current branch name
-     * @return The current branch name
-     */
-    wxString GetCurrentBranchName() const
-    {
-        return m_common->GetCurrentBranchName();
-    }
-
-    /**
      * @brief Get a list of project directories
      * @return A vector of project directories
      */
@@ -60,15 +51,6 @@ public:
     git_repository* GetRepo() const
     {
         return m_common->GetRepo();
-    }
-
-    /**
-     * @brief Get a pair of sets of files that differ locally from the remote repository
-     * @return A pair of sets of files that differ locally from the remote repository
-     */
-    std::pair<std::set<wxString>, std::set<wxString>> GetDifferentFiles() const
-    {
-        return m_common->GetDifferentFiles();
     }
 
     /**
@@ -114,15 +96,6 @@ public:
     }
 
     /**
-     * @brief Get the password
-     * @return The password
-     */
-    wxString GetPassword() const
-    {
-        return m_common->GetPassword();
-    }
-
-    /**
      * @brief Set the username
      * @param aUsername The username
      */
@@ -156,15 +129,6 @@ public:
     wxString GetRemotename() const
     {
         return m_common->GetRemotename();
-    }
-
-    /**
-     * @brief Get the git root directory
-     * @return The git root directory
-     */
-    wxString GetGitRootDirectory() const
-    {
-        return m_common->GetGitRootDirectory();
     }
 
     /**

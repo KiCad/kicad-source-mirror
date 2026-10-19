@@ -32,12 +32,6 @@ GIT_BRANCH_HANDLER::~GIT_BRANCH_HANDLER()
 {}
 
 
-bool GIT_BRANCH_HANDLER::BranchExists( const wxString& aBranchName )
-{
-    return GetGitBackend()->BranchExists( this, aBranchName );
-}
-
-
 BranchResult GIT_BRANCH_HANDLER::SwitchToBranch( const wxString& aBranchName )
 {
     return GetGitBackend()->SwitchToBranch( this, aBranchName );

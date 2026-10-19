@@ -43,21 +43,6 @@ KIGIT_ORPHAN_REGISTRY::~KIGIT_ORPHAN_REGISTRY()
 }
 
 
-size_t KIGIT_ORPHAN_REGISTRY::TrackedCount() const
-{
-    std::lock_guard<std::mutex> lock( m_mutex );
-    size_t                      count = 0;
-
-    for( const ENTRY& entry : m_entries )
-    {
-        if( !entry.m_state->m_done.load( std::memory_order_acquire ) )
-            ++count;
-    }
-
-    return count;
-}
-
-
 size_t KIGIT_ORPHAN_REGISTRY::JoinAll( std::chrono::milliseconds aTimeout )
 {
     const auto deadline = std::chrono::steady_clock::now() + aTimeout;

@@ -46,13 +46,6 @@ public:
      * @return BranchResult indicating the outcome of the operation
      */
     BranchResult SwitchToBranch( const wxString& aBranchName );
-
-    /**
-     * Check if a branch exists
-     * @param aBranchName Name of the branch to check
-     * @return True if branch exists, false otherwise
-     */
-    bool BranchExists( const wxString& aBranchName );
 };
 
 #endif // GIT_BRANCH_HANDLER_H

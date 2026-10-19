@@ -38,9 +38,3 @@ PullResult GIT_PULL_HANDLER::PerformPull()
 {
     return GetGitBackend()->PerformPull( this );
 }
-
-
-const std::vector<std::pair<std::string, std::vector<CommitDetails>>>&GIT_PULL_HANDLER::GetFetchResults() const
-{
-    return m_fetchResults;
-}

@@ -43,30 +43,10 @@ public:
         return static_cast<KIGIT_COMMON::GIT_CONN_TYPE>( m_ConnType->GetSelection() );
     }
 
-    void     SetRepoName( const wxString& aName ) { m_txtName->SetValue( aName ); }
     wxString GetRepoName() const { return m_txtName->GetValue(); }
 
     void     SetRepoURL( const wxString& aURL ) { m_txtURL->SetValue( aURL ); }
     wxString GetRepoURL() const { return m_txtURL->GetValue(); }
-
-    /**
-     * @brief Get the Bare Repo U R L object
-     *
-     * @return wxString without the protocol
-     */
-    wxString GetBareRepoURL() const
-    {
-        wxString url = m_txtURL->GetValue();
-
-        if( url.StartsWith( "https://" ) )
-            url = url.Mid( 8 );
-        else if( url.StartsWith( "http://" ) )
-            url = url.Mid( 7 );
-        else if( url.StartsWith( "ssh://" ) )
-            url = url.Mid( 6 );
-
-        return url;
-    }
 
     const wxString& GetFullURL() const { return m_fullURL; }
 

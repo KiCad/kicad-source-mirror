@@ -37,14 +37,6 @@ public:
         return m_errorStrings;
     }
 
-    wxString PeekErrorString() const
-    {
-        if( m_errorStrings.empty() )
-            return _( "No error" );
-        else
-            return m_errorStrings.back();
-    }
-
     wxString GetErrorString()
     {
         if( m_errorStrings.empty() )
@@ -63,11 +55,6 @@ public:
     void AddErrorString( const std::string aErrorString )
     {
         m_errorStrings.emplace_back( aErrorString );
-    }
-
-    void ClearErrorStrings()
-    {
-        m_errorStrings.clear();
     }
 
 private:

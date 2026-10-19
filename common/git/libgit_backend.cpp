@@ -45,38 +45,7 @@
 #include <optional>
 #include <set>
 #include <string>
-#include <time.h>
 #include <vector>
-
-static std::string getFirstLineFromCommitMessage( const std::string& aMessage )
-{
-    if( aMessage.empty() )
-        return aMessage;
-
-    size_t firstLineEnd = aMessage.find_first_of( '\n' );
-
-    if( firstLineEnd != std::string::npos )
-        return aMessage.substr( 0, firstLineEnd );
-
-    return aMessage;
-}
-
-
-static std::string getFormattedCommitDate( const git_time& aTime )
-{
-    char   dateBuffer[64];
-    time_t time = static_cast<time_t>( aTime.time );
-    struct tm timeInfo;
-
-#ifdef _WIN32
-    localtime_s( &timeInfo, &time );
-#else
-    gmtime_r( &time, &timeInfo );
-#endif
-
-    strftime( dateBuffer, sizeof( dateBuffer ), "%Y-%b-%d %H:%M:%S", &timeInfo );
-    return dateBuffer;
-}
 
 
 // libgit2 phrases a rejected login several ways, so match the class and prompt for credentials.
@@ -1052,35 +1021,6 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 }
 
 
-bool LIBGIT_BACKEND::HasChangedFiles( GIT_STATUS_HANDLER* aHandler )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return false;
-
-    git_status_options opts;
-    git_status_init_options( &opts, GIT_STATUS_OPTIONS_VERSION );
-
-    opts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
-    opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX
-                 | GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;
-
-    git_status_list* status_list = nullptr;
-
-    if( git_status_list_new( &status_list, repo, &opts ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to get status list: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    KIGIT::GitStatusListPtr status_list_ptr( status_list );
-    bool hasChanges = ( git_status_list_entrycount( status_list ) > 0 );
-
-    return hasChanges;
-}
-
-
 std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
                                                               bool aChangedOnly )
 {
@@ -1210,12 +1150,6 @@ void LIBGIT_BACKEND::UpdateRemoteStatus( GIT_STATUS_HANDLER* aHandler,
 
 
 wxString LIBGIT_BACKEND::GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler )
-{
-    return aHandler->GetProjectDir();
-}
-
-
-wxString LIBGIT_BACKEND::GetWorkingDirectory( GIT_CONFIG_HANDLER* aHandler )
 {
     return aHandler->GetProjectDir();
 }
@@ -1514,23 +1448,6 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
 
     wxLogTrace( traceGit, "Successfully switched to branch '%s'", aBranchName );
     return BranchResult::Success;
-}
-
-
-bool LIBGIT_BACKEND::BranchExists( GIT_BRANCH_HANDLER* aHandler, const wxString& aBranchName )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return false;
-
-    git_reference* branchRef = nullptr;
-    bool exists = lookup_branch_reference( repo, aBranchName, &branchRef );
-
-    if( branchRef )
-        git_reference_free( branchRef );
-
-    return exists;
 }
 
 
@@ -2019,7 +1936,6 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
     KIGIT::GitReferencePtr headRef( rawRef );
 
     git_oid     updatedRefOid;
-    const char* currentBranchName = git_reference_name( rawRef );
     const char* branch_shorthand = git_reference_shorthand( rawRef );
     wxString remote_name = aHandler->GetRemotename();
     wxString    remoteBranchName;
@@ -2187,50 +2103,6 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
         // Branch and files already match, so this is leftover merge state, not a failed pull.
         wxLogTrace( traceGit, "handleFastForward: state cleanup failed after a completed fast-forward: %s",
                     KIGIT_COMMON::GetLastGitError() );
-    }
-
-    git_revwalk* revWalker = nullptr;
-
-    if( git_revwalk_new( &revWalker, aHandler->GetRepo() ) != GIT_OK )
-    {
-        aHandler->AddErrorString( _( "Failed to initialize revision walker." ) );
-        return PullResult::Error;
-    }
-
-    KIGIT::GitRevWalkPtr revWalkerPtr( revWalker );
-    git_revwalk_sorting( revWalker, GIT_SORT_TIME );
-
-    if( git_revwalk_push_glob( revWalker, currentBranchName ) != GIT_OK )
-    {
-        aHandler->AddErrorString( _( "Failed to push reference to revision walker." ) );
-        return PullResult::Error;
-    }
-
-    std::pair<std::string, std::vector<CommitDetails>>& branchCommits = aHandler->m_fetchResults.emplace_back();
-    branchCommits.first = currentBranchName;
-
-    git_oid commitOid;
-
-    while( git_revwalk_next( &commitOid, revWalker ) == GIT_OK )
-    {
-        git_commit* commit = nullptr;
-
-        if( git_commit_lookup( &commit, aHandler->GetRepo(), &commitOid ) )
-        {
-            aHandler->AddErrorString( wxString::Format( _( "Could not lookup commit '%s'" ),
-                                                        git_oid_tostr_s( &commitOid ) ) );
-            return PullResult::Error;
-        }
-
-        KIGIT::GitCommitPtr commitPtr( commit );
-
-        CommitDetails details;
-        details.m_sha = git_oid_tostr_s( &commitOid );
-        details.m_firstLine = getFirstLineFromCommitMessage( git_commit_message( commit ) );
-        details.m_author = git_commit_author( commit )->name;
-        details.m_date = getFormattedCommitDate( git_commit_author( commit )->when );
-
-        branchCommits.second.push_back( details );
     }
 
     return PullResult::FastForward;

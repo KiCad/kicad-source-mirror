@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE( JoinAllCompletesFastWork )
 
     BOOST_CHECK_EQUAL( stuck, 0u );
     BOOST_CHECK_EQUAL( counter.load(), 4 );
-    BOOST_CHECK_EQUAL( registry.TrackedCount(), 0u );
+    BOOST_CHECK_EQUAL( registry.JoinAll( std::chrono::milliseconds( 0 ) ), 0u );
 }
 
 
@@ -89,9 +89,8 @@ BOOST_AUTO_TEST_CASE( JoinAllTimesOutOnStuckWork )
     BOOST_CHECK_EQUAL( stuck, 1u );
     BOOST_CHECK( elapsed < std::chrono::seconds( 2 ) );
 
-    // After JoinAll the registry is empty even though the thread kept
-    // running.  Release the worker now so it can exit cleanly; it was
-    // detached when JoinAll gave up on it.
+    // The detached worker no longer participates in joins.
+    BOOST_CHECK_EQUAL( registry.JoinAll( std::chrono::milliseconds( 0 ) ), 0u );
 
     {
         std::lock_guard<std::mutex> lock( releaseMutex );
@@ -109,7 +108,6 @@ BOOST_AUTO_TEST_CASE( JoinAllTimesOutOnStuckWork )
         std::this_thread::sleep_for( std::chrono::milliseconds( 5 ) );
 
     BOOST_CHECK( workerFinished.load() );
-    BOOST_CHECK_EQUAL( registry.TrackedCount(), 0u );
 }
 
 

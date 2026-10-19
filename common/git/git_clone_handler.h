@@ -33,16 +33,12 @@ public:
 
     bool PerformClone();
 
-    void SetBranch( const wxString& aBranch ) { m_branch = aBranch; }
-    wxString GetBranch() const { return m_branch; }
-
     void SetClonePath( const wxString& aPath ) { m_clonePath = aPath; }
     wxString GetClonePath() const { return m_clonePath; }
 
     void SetRemote( const wxString& aRemote ) { GetCommon()->SetRemote( aRemote ); }
 
 private:
-    wxString m_branch;
     wxString m_clonePath;
 };
 

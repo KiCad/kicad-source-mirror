@@ -23,19 +23,6 @@
 #include <git/git_repo_mixin.h>
 #include <import_export.h>
 
-#include <vector>
-#include <string>
-#include <wx/string.h>
-
-// Structure to store commit details
-struct CommitDetails
-{
-    std::string m_sha;
-    std::string m_firstLine;
-    std::string m_author;
-    std::string m_date;
-};
-
 // Enum for result codes, error codes are negative, success codes are positive
 enum class PullResult : int
 {
@@ -48,22 +35,14 @@ enum class PullResult : int
     FastForward
 };
 
-class LIBGIT_BACKEND;
-
 class APIEXPORT GIT_PULL_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
-    friend class LIBGIT_BACKEND;
     GIT_PULL_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_PULL_HANDLER();
 
     bool       PerformFetch( bool aSkipLock = false );
     PullResult PerformPull();
-
-    const std::vector<std::pair<std::string, std::vector<CommitDetails>>>& GetFetchResults() const;
-
-private:
-    std::vector<std::pair<std::string, std::vector<CommitDetails>>> m_fetchResults;
 };
 
 #endif // _GIT_PULL_HANDLER_H_
