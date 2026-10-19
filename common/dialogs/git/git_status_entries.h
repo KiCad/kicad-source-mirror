@@ -113,9 +113,11 @@ EDITOR_SNAPSHOT CaptureOpenEditorDocs( KIWAY& aKiway );
  * Tell the open board and schematic editors to reload from disk. Only a document whose files
  * changed since aBefore is reloaded, because reloading discards undo history and the view
  * state. An editor holding unsaved changes to one asks whether to reload or keep the edits.
- * Settings changes reach editors whose document did not reload. An empty aBefore reloads all.
+ * Settings changes reach editors whose document did not reload.
+ *
+ * aBefore must come from CaptureOpenEditorDocs() taken before the operation.
  */
-void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore = {} );
+void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore );
 
 /**
  * True when nothing in the project is waiting to be committed. Otherwise tells the user, since

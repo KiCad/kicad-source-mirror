@@ -39,7 +39,7 @@ struct FILE_STAMP
 
 /**
  * The files making up one open document, each with its on-disk identity. An empty map means
- * the capture was unavailable, which callers treat as "assume changed".
+ * the document had no files on disk.
  */
 struct DOCUMENT_SNAPSHOT
 {
@@ -48,7 +48,8 @@ struct DOCUMENT_SNAPSHOT
 
 /**
  * What the open editors and the project settings looked like on disk before an operation
- * that may rewrite them. A default constructed snapshot asks for an unconditional reload.
+ * that may rewrite them. A default constructed snapshot holds no entries, so every file found
+ * afterwards counts as changed.
  */
 struct EDITOR_SNAPSHOT
 {

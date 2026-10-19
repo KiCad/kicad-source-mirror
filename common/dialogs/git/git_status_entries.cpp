@@ -346,7 +346,7 @@ void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore )
 {
     // Reread the settings first, so a reloading editor gets the fresh values and the next save
     // does not write the old ones back.
-    bool settingsChanged = !aBefore.settings.files.empty() && !( aBefore.settings.files == settingsSnapshot().files );
+    bool settingsChanged = !changedFilesBetween( aBefore.settings, settingsSnapshot() ).empty();
 
     if( settingsChanged )
     {
@@ -356,47 +356,40 @@ void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore )
         prj.GetLocalSettings().LoadFromFile( prj.GetProjectPath() );
     }
 
+    const DOCUMENT_SNAPSHOT noFiles;
+
     for( const EDITOR_DOC& doc : g_editorDocs )
     {
         if( !aKiway.Player( doc.frameType, false ) )
             continue;
 
         // Reloading throws away undo history and the view state, so only do it for a document
-        // whose file actually changed on disk. An empty snapshot means "reload regardless",
-        // which is what a caller that could not take one wants.
-        DOCUMENT_SNAPSHOT after = documentSnapshot( aKiway, doc.frameType );
-        std::string       payload;
+        // whose file actually changed on disk.
+        auto                     it = aBefore.editors.find( doc.frameType );
+        const DOCUMENT_SNAPSHOT& before = it == aBefore.editors.end() ? noFiles : it->second;
+        std::set<wxString>       changed = changedFilesBetween( before, documentSnapshot( aKiway, doc.frameType ) );
 
-        auto it = aBefore.editors.find( doc.frameType );
-
-        if( it != aBefore.editors.end() && !it->second.files.empty() )
+        if( changed.empty() )
         {
-            std::set<wxString> changed = changedFilesBetween( it->second, after );
-
-            if( changed.empty() )
+            // Settings that changed on their own still have to reach the live editor: the board
+            // caches resolved netclasses per net, and routing would keep using the old values.
+            if( settingsChanged )
             {
-                // The document did not change, so nothing reloads. Settings that changed on
-                // their own still have to reach the live editor: the board caches resolved
-                // netclasses per net, and routing would keep using the old values.
-                if( settingsChanged )
-                {
-                    std::string settingsPayload;
-                    aKiway.ExpressMail( doc.frameType, doc.settingsMail, settingsPayload );
-                }
-
-                continue;
+                std::string settingsPayload;
+                aKiway.ExpressMail( doc.frameType, doc.settingsMail, settingsPayload );
             }
 
-            // The editor skips the reload when no changed file belongs to its document. The schematic
-            // snapshot spans the repository, and another project's change must not cost this one its undo.
-            wxString joined;
-
-            for( const wxString& path : changed )
-                joined += path + wxS( "\n" );
-
-            payload = joined.utf8_string();
+            continue;
         }
 
+        // The editor skips the reload when no changed file belongs to its document. The schematic
+        // snapshot spans the repository, and another project's change must not cost this one its undo.
+        wxString joined;
+
+        for( const wxString& path : changed )
+            joined += path + wxS( "\n" );
+
+        std::string payload = joined.utf8_string();
         aKiway.ExpressMail( doc.frameType, doc.reloadMail, payload );
     }
 }
