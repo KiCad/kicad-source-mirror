@@ -96,8 +96,7 @@ public:
 
     bool SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail ) override;
 
-    RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash, const wxString& aProjectPrefix,
-                                  wxString& aError ) override;
+    RestoreResult RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash, wxString& aError ) override;
 
     bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) override;
 

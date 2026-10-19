@@ -111,39 +111,15 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
 {
     std::vector<FILE_CHECKLIST_ENTRY> entries;
 
-    if( !aCommon.GetRepo() )
+    const std::optional<wxString> prefix = aCommon.GetProjectPrefix();
+
+    if( !prefix )
         return entries;
 
     GIT_STATUS_HANDLER handler( &aCommon );
     wxString           workDir = handler.GetWorkingDirectory();
-    wxString           projectPath = aProjectPath;
-    wxString           projectName = aProjectName;
 
-    // Walk only the project folder, since the rest of the repository is filtered out below
-    // anyway. The trailing slash keeps a sibling folder sharing the prefix out. An empty scope
-    // means the project is the whole repository, or its folder could not be worked out.
-    wxString scope;
-
-    {
-        wxString project = projectPath;
-        wxString root = workDir;
-
-        project.Replace( wxS( "\\" ), wxS( "/" ) );
-        root.Replace( wxS( "\\" ), wxS( "/" ) );
-
-        if( !root.EndsWith( wxS( "/" ) ) )
-            root += wxS( "/" );
-
-        if( project.StartsWith( root ) )
-        {
-            scope = project.Mid( root.length() );
-
-            if( !scope.IsEmpty() && !scope.EndsWith( wxS( "/" ) ) )
-                scope += wxS( "/" );
-        }
-    }
-
-    std::map<wxString, FileStatus> statusMap = handler.GetFileStatus( scope, /* changed only */ true );
+    std::map<wxString, FileStatus> statusMap = handler.GetFileStatus( *prefix, /* changed only */ true );
 
     for( const auto& [path, fileStatus] : statusMap )
     {
@@ -154,7 +130,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         if( !statusToDisplay( fileStatus.status, word, icon, colour, aDarkTheme ) )
             continue;
 
-        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, projectPath ) )
+        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, aProjectPath ) )
             continue;
 
         wxFileName fn( path );
@@ -165,7 +141,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         bool untracked = ( fileStatus.gitStatus & GIT_STATUS_WT_NEW )
                          && !( fileStatus.gitStatus & GIT_STATUS_INDEX_NEW );
 
-        if( untracked && KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( fn, projectName ) )
+        if( untracked && KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( fn, aProjectName ) )
             continue;
 
         // A local settings file nobody has committed is this user's own, not a project change.
@@ -654,7 +630,7 @@ GIT_WORKTREE_STATUS ReadGitWorktreeStatus( KIGIT_COMMON& aCommon, const wxString
         return status;
 
     status.hasTrackedChanges = aCommon.HasUncommittedTrackedChanges( &status.checked );
-    status.lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, aProjectPath );
+    status.lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
 
     // A sibling project's tracked edits block the same repository-wide rewrite.
     if( status.hasTrackedChanges )

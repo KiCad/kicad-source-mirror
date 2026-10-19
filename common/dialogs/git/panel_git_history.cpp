@@ -1049,10 +1049,8 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
     struct RESTORE_INFO
     {
         wxString lfsMessage;
-        wxString projectPrefix;
         bool     hasIdentity = false;
         bool     detached = false;
-        bool     prefixKnown = false;
         bool     loaded = false;
     };
 
@@ -1060,31 +1058,11 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
 
     m_actionQuery.Run(
             common,
-            [info, projectPath = m_frame->Prj().GetProjectPath()]( KIGIT_COMMON& aCommon )
+            [info]( KIGIT_COMMON& aCommon )
             {
                 info->detached = aCommon.IsHeadDetached();
-                info->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, projectPath );
+                info->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
                 info->hasIdentity = KIGIT::HasGitIdentity( aCommon );
-
-                // A repository can hold several projects. Restore only this project's folder.
-                wxString workDir = aCommon.GetProjectDir();
-                wxString path = projectPath;
-                workDir.Replace( wxS( "\\" ), wxS( "/" ) );
-                path.Replace( wxS( "\\" ), wxS( "/" ) );
-
-                if( !workDir.EndsWith( wxS( "/" ) ) )
-                    workDir += wxS( "/" );
-
-                if( path.StartsWith( workDir ) )
-                {
-                    info->projectPrefix = path.Mid( workDir.length() );
-
-                    while( info->projectPrefix.EndsWith( wxS( "/" ) ) )
-                        info->projectPrefix.RemoveLast();
-
-                    info->prefixKnown = true;
-                }
-
                 info->loaded = true;
             },
             [this, common, info, aCommitHash]()
@@ -1094,7 +1072,7 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
                     return;
                 }
 
-                // An LFS restore would write placeholders over the actual designs.
+                // Refuse an unknown project folder or LFS files before asking to restore.
                 if( !info->lfsMessage.IsEmpty() )
                 {
                     DisplayErrorMessage( this, info->lfsMessage );
@@ -1109,20 +1087,12 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
                     return;
                 }
 
-                // An empty prefix is valid at the repository root, but not when lookup failed.
-                if( !info->prefixKnown )
-                {
-                    DisplayErrorMessage( this, _( "Could not work out which folder this project occupies in the "
-                                                  "repository, so nothing was restored." ) );
-                    return;
-                }
-
-                restoreVersion( aCommitHash, info->projectPrefix, info->hasIdentity );
+                restoreVersion( aCommitHash, info->hasIdentity );
             } );
 }
 
 
-void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix, bool aHasIdentity )
+void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, bool aHasIdentity )
 {
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
@@ -1180,7 +1150,7 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const wxStr
         if( !lock.owns_lock() )
             return;
 
-        result = common->RestoreVersion( aCommitHash, aProjectPrefix, error );
+        result = common->RestoreVersion( aCommitHash, error );
     }
 
     switch( result )

@@ -3136,18 +3136,28 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
 }
 
 
-RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
-                                              const wxString& aProjectPrefix, wxString& aError )
+RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash, wxString& aError )
 {
-    if( !aRepo )
+    git_repository* repo = aCommon.GetRepo();
+
+    if( !repo )
     {
         aError = _( "The project has no git repository." );
         return RestoreResult::Error;
     }
 
+    const std::optional<wxString> projectPrefix = aCommon.GetProjectPrefix();
+
+    if( !projectPrefix )
+    {
+        aError = _( "Could not work out which folder this project occupies in the repository, "
+                    "so nothing was restored." );
+        return RestoreResult::Error;
+    }
+
     git_object* targetObj = nullptr;
 
-    if( git_revparse_single( &targetObj, aRepo, aCommitHash.utf8_string().c_str() ) != GIT_OK )
+    if( git_revparse_single( &targetObj, repo, aCommitHash.utf8_string().c_str() ) != GIT_OK )
     {
         aError = _( "Could not find that version." );
         return RestoreResult::Error;
@@ -3157,7 +3167,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
     git_commit*         targetCommit = nullptr;
 
     if( git_object_type( targetObj ) != GIT_OBJECT_COMMIT
-        || git_commit_lookup( &targetCommit, aRepo, git_object_id( targetObj ) ) != GIT_OK )
+        || git_commit_lookup( &targetCommit, repo, git_object_id( targetObj ) ) != GIT_OK )
     {
         aError = _( "Could not find that version." );
         return RestoreResult::Error;
@@ -3176,7 +3186,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
 
     git_reference* headRef = nullptr;
 
-    if( git_repository_head( &headRef, aRepo ) != GIT_OK )
+    if( git_repository_head( &headRef, repo ) != GIT_OK )
     {
         aError = _( "Could not get the repository head." );
         return RestoreResult::Error;
@@ -3206,9 +3216,10 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
     KIGIT::GitTreePtr effectiveTreePtr;
     git_tree*         effectiveTree = targetTree;
 
-    if( !aProjectPrefix.IsEmpty() )
+    if( !projectPrefix->IsEmpty() )
     {
-        std::string     prefixUtf8( aProjectPrefix.utf8_string() );
+        // libgit2 expects the folder path without a trailing slash.
+        std::string     prefixUtf8( projectPrefix->BeforeLast( '/' ).utf8_string() );
         git_tree_entry* subtreeEntry = nullptr;
 
         if( git_tree_entry_bypath( &subtreeEntry, targetTree, prefixUtf8.c_str() ) != GIT_OK )
@@ -3233,7 +3244,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
 
         git_oid combinedOid;
 
-        if( git_tree_create_updated( &combinedOid, aRepo, headTree, 1, &update ) != GIT_OK )
+        if( git_tree_create_updated( &combinedOid, repo, headTree, 1, &update ) != GIT_OK )
         {
             aError = wxString::Format( _( "Could not build the restored content: %s" ),
                                        KIGIT_COMMON::GetLastGitError() );
@@ -3242,7 +3253,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
 
         git_tree* combined = nullptr;
 
-        if( git_tree_lookup( &combined, aRepo, &combinedOid ) != GIT_OK )
+        if( git_tree_lookup( &combined, repo, &combinedOid ) != GIT_OK )
         {
             aError = _( "Could not build the restored content." );
             return RestoreResult::Error;
@@ -3262,7 +3273,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
 
         git_status_list* statusList = nullptr;
 
-        if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        if( git_status_list_new( &statusList, repo, &statusOpts ) != GIT_OK )
         {
             aError = _( "Could not read the repository status." );
             return RestoreResult::Error;
@@ -3306,7 +3317,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
 
     git_signature* signature = nullptr;
 
-    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    if( git_signature_default( &signature, repo ) != GIT_OK )
     {
         aError = _( "Could not create a commit signature. Set user.name and user.email in your "
                     "git configuration." );
@@ -3324,7 +3335,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
     wxString          message = wxString::Format( _( "Restore version %s" ), shortHash );
     git_oid           restoreCommitOid;
 
-    if( git_commit_create( &restoreCommitOid, aRepo, nullptr, signature, signature, nullptr,
+    if( git_commit_create( &restoreCommitOid, repo, nullptr, signature, signature, nullptr,
                            message.utf8_string().c_str(), effectiveTree, 1, parents )
         != GIT_OK )
     {
@@ -3334,7 +3345,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxStr
 
     wxString gitError;
 
-    switch( publishPreparedCommit( aRepo, effectiveTree, restoreCommitOid, headRef, headCommit, "restore", gitError ) )
+    switch( publishPreparedCommit( repo, effectiveTree, restoreCommitOid, headRef, headCommit, "restore", gitError ) )
     {
     case PUBLISH_RESULT::PUBLISHED: return RestoreResult::Restored;
 

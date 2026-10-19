@@ -84,7 +84,7 @@ PROJECT::~PROJECT()
 std::shared_ptr<KIGIT_COMMON> PROJECT::GetGitCommon() const
 {
     if( !m_gitCommon )
-        m_gitCommon = std::make_shared<KIGIT_COMMON>( nullptr );
+        m_gitCommon = std::make_shared<KIGIT_COMMON>( nullptr, GetProjectPath() );
 
     return m_gitCommon;
 }
@@ -235,6 +235,7 @@ void PROJECT::setProjectFullName( const wxString& aFullPathAndName )
     // data using the Clear() function.
     if( m_project_name.GetFullPath() != candidate_path.GetFullPath() )
     {
+        ReleaseGitCommon();
         Clear();            // clear the data when the project changes.
 
         wxLogTrace( tracePathsAndFiles, "%s: old:'%s' new:'%s'", __func__,

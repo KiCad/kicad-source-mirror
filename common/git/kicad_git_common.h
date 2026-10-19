@@ -29,6 +29,7 @@
 #include <atomic>
 #include <functional>
 #include <mutex>
+#include <optional>
 #include <set>
 #include <utility>
 #include <vector>
@@ -201,7 +202,9 @@ class APIEXPORT KIGIT_COMMON
 {
 
 public:
-    KIGIT_COMMON( git_repository* aRepo );
+    /// aProjectPath is the absolute project directory. Leave it empty for handlers that
+    /// do not need a project folder.
+    KIGIT_COMMON( git_repository* aRepo, const wxString& aProjectPath = wxEmptyString );
     KIGIT_COMMON( const KIGIT_COMMON& aOther );
     ~KIGIT_COMMON();
 
@@ -387,10 +390,9 @@ public:
 
     /**
      * Restore the project as it was at aCommitHash, recorded as a new commit on top of the
-     * current head. aProjectPrefix is the project directory relative to the repository root,
-     * and only that subtree is restored. Empty restores the whole tree.
+     * current head. Only the session's project folder is restored.
      */
-    RestoreResult RestoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix, wxString& aError );
+    RestoreResult RestoreVersion( const wxString& aCommitHash, wxString& aError );
 
     /**
      * Put the given working directory relative paths back to their committed state. A path
@@ -449,16 +451,18 @@ public:
     wxString GetRemoteNameOrDefault() const;
 
     /**
-     * Set the project directory path, preserving any symlinks in the path.
-     * This is used to ensure git status paths match the paths used in the project tree.
+     * Keep symlinks in the repository path so Git status paths match the project tree.
      */
     void SetProjectDir( const wxString& aProjectDir ) { m_projectDir = aProjectDir; }
 
     /**
-     * Get the project directory path. If a symlink-preserving path was set via
-     * SetProjectDir(), returns that path. Otherwise falls back to git_repository_workdir().
+     * Return the path set by SetProjectDir(), or the repository's working directory.
      */
     wxString GetProjectDir() const;
+
+    /// Project folder relative to the repository, with a trailing slash. An empty string
+    /// means the repository root. No value means the folder is unknown.
+    std::optional<wxString> GetProjectPrefix() const;
 
     /// Why binding a repository last failed, for the panels to show. Empty on success.
     void            SetAttachError( const wxString& aError ) { m_attachError = aError; }
@@ -590,7 +594,8 @@ public:
 protected:
     git_repository* m_repo;
 
-    wxString m_projectDir;  // Project directory path preserving symlinks
+    wxString m_projectDir;  // Repository working directory preserving symlinks
+    wxString m_projectPath; // Project directory captured when the session was created
     wxString m_attachError;
 
     GIT_CONN_TYPE m_connType;

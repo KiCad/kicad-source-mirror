@@ -3480,7 +3480,7 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
     char firstHash[GIT_OID_HEXSZ + 1] = { 0 };
     git_oid_tostr( firstHash, sizeof( firstHash ), &firstOid );
 
-    KIGIT_COMMON common( repo );
+    KIGIT_COMMON common( repo, repoPath() );
     wxString     error;
 
     // Refuses over uncommitted changes.
@@ -3490,8 +3490,7 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
         f << "uncommitted\n";
     }
 
-    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), wxEmptyString, error )
-                 == RestoreResult::Dirty );
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::Dirty );
 
     {
         std::ofstream f( trackedFile.ToStdString() );
@@ -3499,8 +3498,7 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
     }
 
     // Restores as a new commit whose parent is the current head.
-    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( firstHash ), wxEmptyString, error )
-                                   == RestoreResult::Restored,
+    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::Restored,
                            "RestoreVersion failed: " + error.ToStdString() );
 
     git_oid newHead;
@@ -3517,8 +3515,7 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
     BOOST_CHECK_EQUAL( content, "initial\n" );
 
     // Restoring the same version again is a no-op.
-    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), wxEmptyString, error )
-                 == RestoreResult::AlreadyCurrent );
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::AlreadyCurrent );
 
     git_repository_free( repo );
 }
@@ -3529,28 +3526,25 @@ BOOST_AUTO_TEST_CASE( RestoreScopesToProjectDirectory )
 {
     BOOST_TEST_REQUIRE( ready() );
 
-    git_repository* repo = openRepo();
-    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
 
-    const wxString sep = wxFileName::GetPathSeparator();
+    git_oid rootOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &rootOid, repo.get(), "HEAD" ), GIT_OK );
+    createCommit( repo.get(), "projects/board/f.txt", "a1\n", "A v1" );
+    git_oid bothV1 = createCommit( repo.get(), "projects/board2/g.txt", "b1\n", "B v1" );
 
-    BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "proj_a" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-    BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "proj_b" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-    createCommit( repo, wxT( "proj_a/f.txt" ), wxT( "a1\n" ), wxT( "A v1" ) );
-    git_oid bothV1 = createCommit( repo, wxT( "proj_b/g.txt" ), wxT( "b1\n" ), wxT( "B v1" ) );
-
-    createCommit( repo, wxT( "proj_a/f.txt" ), wxT( "a2\n" ), wxT( "A v2" ) );
-    createCommit( repo, wxT( "proj_b/g.txt" ), wxT( "b2\n" ), wxT( "B v2" ) );
+    createCommit( repo.get(), "projects/board/f.txt", "a2\n", "A v2" );
+    createCommit( repo.get(), "projects/board2/g.txt", "b2\n", "B v2" );
 
     char v1Hash[GIT_OID_HEXSZ + 1] = { 0 };
     git_oid_tostr( v1Hash, sizeof( v1Hash ), &bothV1 );
 
-    KIGIT_COMMON common( repo );
-    wxString     error;
+    const wxString projectPath = repoPath() + wxS( "/projects/board" );
+    KIGIT_COMMON   common( repo.get(), projectPath );
+    wxString       error;
 
-    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( v1Hash ), wxS( "proj_a" ), error )
-                                   == RestoreResult::Restored,
+    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( v1Hash ), error ) == RestoreResult::Restored,
                            "RestoreVersion failed: " + error.ToStdString() );
 
     auto readAll = []( const wxString& aPath )
@@ -3560,21 +3554,73 @@ BOOST_AUTO_TEST_CASE( RestoreScopesToProjectDirectory )
     };
 
     // The restored project went back, the sibling stayed current.
-    BOOST_CHECK_EQUAL( readAll( repoPath() + sep + wxT( "proj_a" ) + sep + wxT( "f.txt" ) ), "a1\n" );
-    BOOST_CHECK_EQUAL( readAll( repoPath() + sep + wxT( "proj_b" ) + sep + wxT( "g.txt" ) ), "b2\n" );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board/f.txt" ) ), "a1\n" );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board2/g.txt" ) ), "b2\n" );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/file.txt" ) ), "initial\n" );
 
     // A version from before the project's folder existed is refused, not emptied.
-    git_object* rootObj = nullptr;
-    BOOST_REQUIRE_EQUAL( git_revparse_single( &rootObj, repo, "HEAD~5" ), GIT_OK );
-
     char rootHash[GIT_OID_HEXSZ + 1] = { 0 };
-    git_oid_tostr( rootHash, sizeof( rootHash ), git_object_id( rootObj ) );
-    git_object_free( rootObj );
+    git_oid_tostr( rootHash, sizeof( rootHash ), &rootOid );
 
-    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( rootHash ), wxS( "proj_a" ), error )
-                 == RestoreResult::Error );
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( rootHash ), error ) == RestoreResult::Error );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board/f.txt" ) ), "a1\n" );
 
-    git_repository_free( repo );
+#ifndef __WINDOWS__
+    // A symlink to the project must restore the same folder.
+    const wxString projectLink = TempPath() + wxS( "/project-link" );
+    BOOST_REQUIRE_EQUAL( symlink( projectPath.utf8_str(), projectLink.utf8_str() ), 0 );
+    createCommit( repo.get(), "projects/board/f.txt", "a3\n", "A v3" );
+
+    KIGIT_COMMON linkedProject( repo.get(), projectLink );
+    BOOST_REQUIRE_MESSAGE( linkedProject.RestoreVersion( wxString::FromUTF8( v1Hash ), error )
+                                   == RestoreResult::Restored,
+                           "RestoreVersion failed: " + error.ToStdString() );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board/f.txt" ) ), "a1\n" );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board2/g.txt" ) ), "b2\n" );
+#endif
+}
+
+
+BOOST_AUTO_TEST_CASE( RestoreRefusesUnknownOrOutsideProject )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
+
+    git_oid firstOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &firstOid, repo.get(), "HEAD" ), GIT_OK );
+    git_oid currentOid = createCommit( repo.get(), "file.txt", "second\n", "Second version" );
+
+    char firstHash[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( firstHash, sizeof( firstHash ), &firstOid );
+
+    const wxString outsidePath = repoPath() + wxS( "2" );
+    BOOST_REQUIRE( wxFileName::Mkdir( outsidePath ) );
+    const std::vector<wxString> projectPaths = { wxEmptyString, TempPath(), outsidePath };
+
+    for( const wxString& projectPath : projectPaths )
+    {
+        KIGIT_COMMON common( repo.get(), projectPath );
+        wxString     error;
+
+        BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::Error );
+        BOOST_CHECK( !error.IsEmpty() );
+
+        git_oid afterOid;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &afterOid, repo.get(), "HEAD" ), GIT_OK );
+        BOOST_CHECK( git_oid_equal( &currentOid, &afterOid ) );
+
+        unsigned int status = 0;
+        BOOST_REQUIRE_EQUAL( git_status_file( &status, repo.get(), "file.txt" ), GIT_OK );
+        BOOST_CHECK_EQUAL( status, GIT_STATUS_CURRENT );
+
+        wxString contents;
+        wxFile   file( repoPath() + wxS( "/file.txt" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE( file.ReadAll( &contents ) );
+        BOOST_CHECK_EQUAL( contents.ToStdString(), "second\n" );
+    }
 }
 
 
@@ -3623,7 +3669,7 @@ BOOST_AUTO_TEST_CASE( RestoreRefusesUntrackedCollision )
     char withNotesHash[GIT_OID_HEXSZ + 1] = { 0 };
     git_oid_tostr( withNotesHash, sizeof( withNotesHash ), &withNotesOid );
 
-    KIGIT_COMMON common( repo );
+    KIGIT_COMMON common( repo, repoPath() );
     wxString     error;
 
     // A new, never committed notes.txt collides with the version being restored.
@@ -3646,14 +3692,13 @@ BOOST_AUTO_TEST_CASE( RestoreRefusesUntrackedCollision )
         return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
     };
 
-    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), wxEmptyString, error )
-                 == RestoreResult::Dirty );
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), error ) == RestoreResult::Dirty );
     BOOST_CHECK_EQUAL( readAll( notesFile ), "precious\n" );
 
     // With the colliding file gone, the harmless untracked one alone does not block.
     wxRemoveFile( notesFile );
 
-    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), wxEmptyString, error )
+    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), error )
                                    == RestoreResult::Restored,
                            "RestoreVersion failed: " + error.ToStdString() );
     BOOST_CHECK_EQUAL( readAll( notesFile ), "keep\n" );

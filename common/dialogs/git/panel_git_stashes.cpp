@@ -358,14 +358,13 @@ void PANEL_GIT_STASHES::onStashSave()
     };
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    wxString                      projectPath = m_frame->Prj().GetProjectPath();
     auto                          preflight = std::make_shared<PREFLIGHT>();
 
     m_actionQuery.Run(
             common,
-            [preflight, projectPath]( KIGIT_COMMON& aCommon )
+            [preflight]( KIGIT_COMMON& aCommon )
             {
-                preflight->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, projectPath );
+                preflight->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
                 preflight->hasIdentity = KIGIT::HasGitIdentity( aCommon );
             },
             [this, common, preflight]()

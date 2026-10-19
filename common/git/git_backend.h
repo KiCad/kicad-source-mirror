@@ -37,6 +37,7 @@ class GIT_CONFIG_HANDLER;
 class GIT_INIT_HANDLER;
 class GIT_BRANCH_HANDLER;
 class GIT_PULL_HANDLER;
+class KIGIT_COMMON;
 struct RemoteConfig;
 struct git_repository;
 enum class InitResult;
@@ -157,8 +158,7 @@ public:
 
     virtual bool SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail ) = 0;
 
-    virtual RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
-                                          const wxString& aProjectPrefix, wxString& aError ) = 0;
+    virtual RestoreResult RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash, wxString& aError ) = 0;
 
     virtual bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) = 0;
 

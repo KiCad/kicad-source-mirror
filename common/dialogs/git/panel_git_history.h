@@ -103,7 +103,7 @@ private:
     /// Restore the project as it was at the given commit, recorded as a new commit on top of
     /// the current head.
     void onRestoreVersion( const wxString& aCommitHash );
-    void restoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix, bool aHasIdentity );
+    void restoreVersion( const wxString& aCommitHash, bool aHasIdentity );
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;

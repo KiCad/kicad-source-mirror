@@ -22,13 +22,13 @@
 
 #include <git2.h>
 #include <memory>
+#include <optional>
 #include <string>
 #include <wx/string.h>
 #include <wx/filename.h>
 #include <import_export.h>
 
 class KIGIT_COMMON;
-class PROJECT;
 
 namespace KIGIT
 {
@@ -142,10 +142,10 @@ public:
     /**
      * The project's folder inside the repository, ending in a slash.
      *
-     * Empty when the project sits at the repository root, or when it is outside the repository.
-     * Forward slashes, as libgit2 reports paths.
+     * An empty string means the repository root. No value means either path is
+     * missing or the project is outside the repository. Uses forward slashes for libgit2.
      */
-    static wxString ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath );
+    static std::optional<wxString> ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath );
 
     /// Whether git routes @p aPath through the Git LFS filter.
     static bool PathUsesGitLfs( git_repository* aRepo, const wxString& aPath );
@@ -156,20 +156,13 @@ public:
      * libgit2 runs no filter program, so every operation that writes such a file writes the
      * placeholder text instead of the file. @p aExample receives the first one found.
      */
-    static bool ProjectUsesGitLfs( git_repository* aRepo, const wxString& aProjectPrefix,
-                                   wxString* aExample = nullptr );
+    static bool ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString* aExample = nullptr );
 
     /**
-     * The message to show when this project keeps a file in Git LFS, empty when it does not.
-     *
-     * Three callers refuse the same way, so the scope, the scan and the wording live here
-     * rather than three times over.
+     * Return a refusal message for LFS files or an unknown project folder, otherwise empty.
+     * The caller holds the session's action lock.
      */
-    static wxString LfsRefusal( KIGIT_COMMON* aCommon, PROJECT& aProject );
-
-    /// Worker variant using the project path copied on the UI thread. The caller holds the
-    /// session's action lock.
-    static wxString LfsRefusal( KIGIT_COMMON* aCommon, const wxString& aProjectPath );
+    static wxString LfsRefusal( KIGIT_COMMON* aCommon );
 
     /**
      * Write a file as it exists at a git ref to a path on disk, so a committed version can

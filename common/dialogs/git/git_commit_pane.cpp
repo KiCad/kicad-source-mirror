@@ -1657,7 +1657,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
             {
                 request->head = commitHead( aCommon.GetRepo() );
                 request->hasIdentity = KIGIT::HasGitIdentity( aCommon );
-                request->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, request->projectPath );
+                request->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
 
                 for( const FILE_CHECKLIST_ENTRY& entry :
                      BuildGitChangeEntries( aCommon, request->projectPath, request->projectName, request->darkTheme ) )

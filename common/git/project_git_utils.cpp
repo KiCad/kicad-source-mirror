@@ -17,7 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <project.h>
 #include <text_eval/text_eval_environment.h>
 #include "project_git_utils.h"
 #include "git_backend.h"
@@ -249,7 +248,7 @@ bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxS
 }
 
 
-static wxString prefixUnder( const wxString& aWorkDir, const wxString& aProjectPath )
+static std::optional<wxString> prefixUnder( const wxString& aWorkDir, const wxString& aProjectPath )
 {
     wxString workDir = aWorkDir;
     wxString projectPath = aProjectPath;
@@ -264,26 +263,27 @@ static wxString prefixUnder( const wxString& aWorkDir, const wxString& aProjectP
         projectPath += wxS( "/" );
 
 #ifdef __WINDOWS__
-    // The two come from different places, libgit2 and the project, and Windows does not care
-    // which case either of them used.
+    // Windows paths can differ in case.
     if( !projectPath.Lower().StartsWith( workDir.Lower() ) )
-        return wxEmptyString;
+        return std::nullopt;
 #else
     if( !projectPath.StartsWith( workDir ) )
-        return wxEmptyString;
+        return std::nullopt;
 #endif
 
     return projectPath.Mid( workDir.length() );
 }
 
 
-wxString PROJECT_GIT_UTILS::ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath )
+std::optional<wxString> PROJECT_GIT_UTILS::ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath )
 {
-    wxString prefix = prefixUnder( aWorkDir, aProjectPath );
+    if( aWorkDir.IsEmpty() || aProjectPath.IsEmpty() )
+        return std::nullopt;
 
-    // The project can be reached through a symlink the working directory does not share, and
-    // then the two only line up once both are resolved.
-    if( prefix.IsEmpty() )
+    std::optional<wxString> prefix = prefixUnder( aWorkDir, aProjectPath );
+
+    // Resolve symlinks when the project and repository use different paths to the same folder.
+    if( !prefix )
         prefix = prefixUnder( canonicalDir( aWorkDir ), canonicalDir( aProjectPath ) );
 
     return prefix;
@@ -354,21 +354,20 @@ namespace
 } // namespace
 
 
-wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon, PROJECT& aProject )
-{
-    return LfsRefusal( aCommon, aProject.GetProjectPath() );
-}
-
-
-wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon, const wxString& aProjectPath )
+wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon )
 {
     if( !aCommon || !aCommon->GetRepo() )
         return wxEmptyString;
 
-    wxString prefix = ProjectPrefix( aCommon->GetProjectDir(), aProjectPath );
+    if( !aCommon->GetProjectPrefix() )
+    {
+        return _( "Could not work out which folder this project occupies in the repository, "
+                  "so the operation was cancelled." );
+    }
+
     wxString example;
 
-    if( !ProjectUsesGitLfs( aCommon->GetRepo(), prefix, &example ) )
+    if( !ProjectUsesGitLfs( *aCommon, &example ) )
         return wxEmptyString;
 
     return wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad cannot read or "
@@ -377,19 +376,22 @@ wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon, const wxString& a
 }
 
 
-bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( git_repository* aRepo, const wxString& aProjectPrefix, wxString* aExample )
+bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString* aExample )
 {
-    if( !aRepo )
+    const std::optional<wxString> prefix = aCommon.GetProjectPrefix();
+
+    if( !prefix )
         return false;
 
+    git_repository* repo = aCommon.GetRepo();
     git_oid headOid;
 
-    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) != GIT_OK )
+    if( git_reference_name_to_id( &headOid, repo, "HEAD" ) != GIT_OK )
         return false;
 
     git_commit* head = nullptr;
 
-    if( git_commit_lookup( &head, aRepo, &headOid ) != GIT_OK )
+    if( git_commit_lookup( &head, repo, &headOid ) != GIT_OK )
         return false;
 
     KIGIT::GitCommitPtr headPtr( head );
@@ -399,7 +401,7 @@ bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( git_repository* aRepo, const wxString
         return false;
 
     KIGIT::GitTreePtr treePtr( tree );
-    LFS_WALK          walk{ aRepo, aProjectPrefix.utf8_string(), wxEmptyString };
+    LFS_WALK          walk{ repo, prefix->utf8_string(), wxEmptyString };
 
     git_tree_walk( tree, GIT_TREEWALK_PRE, lfsWalkEntry, &walk );
 

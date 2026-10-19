@@ -1099,7 +1099,9 @@ BOOST_AUTO_TEST_CASE( SymlinkedProjectFolderStillFindsItsPrefix )
     wxString deepProject = deepLink + wxS( "/" );
     wxString deepWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( deepProject, canonicalWorkDir );
     BOOST_CHECK_EQUAL( deepWorkDir.ToStdString(), canonicalWorkDir.ToStdString() );
-    BOOST_CHECK_EQUAL( KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( deepWorkDir, deepProject ).ToStdString(), "proj/" );
+    std::optional<wxString> deepPrefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( deepWorkDir, deepProject );
+    BOOST_REQUIRE( deepPrefix );
+    BOOST_CHECK_EQUAL( deepPrefix->ToStdString(), "proj/" );
     BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( repoRoot + wxS( "/proj/p.kicad_pro" ), deepProject ) );
     BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( repoRoot + wxS( "/elsewhere/x.txt" ), deepProject ) );
 
@@ -1107,7 +1109,9 @@ BOOST_AUTO_TEST_CASE( SymlinkedProjectFolderStillFindsItsPrefix )
     wxString topProject = rootLink + wxS( "/proj/" );
     wxString topWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( topProject, canonicalWorkDir );
     BOOST_CHECK_EQUAL( topWorkDir.ToStdString(), ( rootLink + wxS( "/" ) ).ToStdString() );
-    BOOST_CHECK_EQUAL( KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( topWorkDir, topProject ).ToStdString(), "proj/" );
+    std::optional<wxString> topPrefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( topWorkDir, topProject );
+    BOOST_REQUIRE( topPrefix );
+    BOOST_CHECK_EQUAL( topPrefix->ToStdString(), "proj/" );
 }
 #endif
 
@@ -1814,8 +1818,9 @@ BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsFindsAFilteredFile )
 
     git_repository*         repo = makeRepoWithCommit( TempPath(), "board.kicad_pcb", "(kicad_pcb)\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
+    KIGIT_COMMON            common( repo, TempPath() );
 
-    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxEmptyString ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( common ) );
 
     writeFile( TempPath(), ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
     commitWorkingFile( repo, ".gitattributes", "route step files through lfs" );
@@ -1826,25 +1831,65 @@ BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsFindsAFilteredFile )
     BOOST_CHECK( !PROJECT_GIT_UTILS::PathUsesGitLfs( repo, wxS( "board.kicad_pcb" ) ) );
 
     wxString example;
-    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxEmptyString, &example ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectUsesGitLfs( common, &example ) );
     BOOST_CHECK_EQUAL( example.ToStdString(), "case.step" );
 
     // A project folder that holds none of the filtered files is left alone.
-    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxS( "elsewhere/" ) ) );
+    const wxString elsewhere = TempPath() + wxS( "/elsewhere" );
+    BOOST_REQUIRE( wxFileName::Mkdir( elsewhere ) );
+    KIGIT_COMMON otherProject( repo, elsewhere );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( otherProject ) );
 
-    BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo/proj" ) ).ToStdString(), "proj/" );
-    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo" ) ).IsEmpty() );
-    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/other/proj" ) ).IsEmpty() );
+    std::optional<wxString> prefix = PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo/proj" ) );
+    BOOST_REQUIRE( prefix );
+    BOOST_CHECK_EQUAL( prefix->ToStdString(), "proj/" );
+    prefix = PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo" ) );
+    BOOST_REQUIRE( prefix );
+    BOOST_CHECK( prefix->IsEmpty() );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/other/proj" ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo2/proj" ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxEmptyString ) );
 
 #ifdef __WINDOWS__
     // The working directory comes from libgit2 and the project path from KiCad, so the two
     // can disagree about separators and about case. Windows does not care about either.
-    BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "C:\\repo" ), wxS( "C:/repo/proj" ) ).ToStdString(),
-                       "proj/" );
-    BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "c:\\Repo\\" ), wxS( "C:\\repo\\Proj" ) ).ToStdString(),
-                       "Proj/" );
-    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "C:\\repo" ), wxS( "D:\\repo\\proj" ) ).IsEmpty() );
+    prefix = PROJECT_GIT_UTILS::ProjectPrefix( wxS( "C:\\repo" ), wxS( "C:/repo/proj" ) );
+    BOOST_REQUIRE( prefix );
+    BOOST_CHECK_EQUAL( prefix->ToStdString(), "proj/" );
+    prefix = PROJECT_GIT_UTILS::ProjectPrefix( wxS( "c:\\Repo\\" ), wxS( "C:\\repo\\Proj" ) );
+    BOOST_REQUIRE( prefix );
+    BOOST_CHECK_EQUAL( prefix->ToStdString(), "Proj/" );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectPrefix( wxS( "C:\\repo" ), wxS( "D:\\repo\\proj" ) ) );
 #endif
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsStaysWithinTheSessionProject )
+{
+    using KIGIT::PROJECT_GIT_UTILS;
+
+    KIGIT::GitRepositoryPtr repo = KI_TEST::InitGitRepository( TempPath() );
+    writeFile( TempPath(), ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
+    commitWorkingFile( repo.get(), ".gitattributes", "use lfs" );
+    writeFile( TempPath(), "projects/board/board.kicad_pcb", "(kicad_pcb)\n" );
+    commitWorkingFile( repo.get(), "projects/board/board.kicad_pcb", "add project" );
+    writeFile( TempPath(), "projects/board2/case.step", "sibling enclosure\n" );
+    commitWorkingFile( repo.get(), "projects/board2/case.step", "add sibling enclosure" );
+
+    KIGIT_COMMON common( repo.get(), TempPath() + wxS( "/projects/board" ) );
+    wxString     example;
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( common, &example ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::LfsRefusal( &common ).IsEmpty() );
+
+    KIGIT_COMMON unknownProject( repo.get() );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::LfsRefusal( &unknownProject ).IsEmpty() );
+
+    writeFile( TempPath(), "projects/board/models/case.step", "project enclosure\n" );
+    commitWorkingFile( repo.get(), "projects/board/models/case.step", "add project enclosure" );
+
+    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectUsesGitLfs( common, &example ) );
+    BOOST_CHECK_EQUAL( example.ToStdString(), "projects/board/models/case.step" );
+    BOOST_CHECK( PROJECT_GIT_UTILS::LfsRefusal( &common ).Contains( example ) );
 }
 
 
@@ -2264,7 +2309,7 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusRefusesUnavailableAndFailedReads )
 BOOST_AUTO_TEST_CASE( WorktreeStatusAllowsCleanAndUntrackedFiles )
 {
     KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "board.kicad_pcb", "original\n" ) );
-    KIGIT_COMMON            common( repo.get() );
+    KIGIT_COMMON            common( repo.get(), TempPath() );
     auto                    lock = common.LockAction();
 
     GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, TempPath() );
@@ -2294,7 +2339,7 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusExplainsTrackedChangesInsideAndOutsideThePro
     writeFile( TempPath(), "project2/board.kicad_pcb", "sibling board\n" );
     commitWorkingFile( repo.get(), "project2/board.kicad_pcb", "add sibling" );
 
-    KIGIT_COMMON common( repo.get() );
+    KIGIT_COMMON common( repo.get(), projectPath );
     auto         lock = common.LockAction();
     writeFile( TempPath(), "project/board.kicad_pcb", "edited project board\n" );
 
@@ -2331,7 +2376,7 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusDistinguishesGitLfsFromUncommittedChanges )
     writeFile( TempPath(), "case.step", "ISO-10303-21;\n" );
     commitWorkingFile( repo.get(), "case.step", "add the enclosure" );
 
-    KIGIT_COMMON common( repo.get() );
+    KIGIT_COMMON common( repo.get(), TempPath() );
     auto         lock = common.LockAction();
 
     GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, TempPath() );

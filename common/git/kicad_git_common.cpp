@@ -21,6 +21,7 @@
 #include "kicad_git_memory.h"
 #include "git_repo_mixin.h"
 #include "git_backend.h"
+#include "project_git_utils.h"
 
 #include <git/git_progress.h>
 #include <git/kicad_git_compat.h>
@@ -51,9 +52,13 @@ wxWindow*& KIGIT::ActiveAdvancedGitWindow()
 }
 
 
-KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
-        m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 ),
-        m_nextPublicKey( 0 ), m_secretFetched( false )
+KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo, const wxString& aProjectPath ) :
+        m_repo( aRepo ),
+        m_projectPath( aProjectPath ),
+        m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ),
+        m_testedTypes( 0 ),
+        m_nextPublicKey( 0 ),
+        m_secretFetched( false )
 {}
 
 
@@ -61,6 +66,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         // Initialize base class and member variables
         m_repo( aOther.m_repo ),
         m_projectDir( aOther.m_projectDir ),
+        m_projectPath( aOther.m_projectPath ),
         m_connType( aOther.m_connType ),
         m_remote( aOther.m_remote ),
         m_hostname( aOther.m_hostname ),
@@ -101,6 +107,15 @@ wxString KIGIT_COMMON::GetProjectDir() const
     }
 
     return wxEmptyString;
+}
+
+
+std::optional<wxString> KIGIT_COMMON::GetProjectPrefix() const
+{
+    if( !m_repo || !git_repository_workdir( m_repo ) )
+        return std::nullopt;
+
+    return KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( GetProjectDir(), m_projectPath );
 }
 
 
@@ -1692,10 +1707,9 @@ bool KIGIT_COMMON::SetUserConfig( const wxString& aName, const wxString& aEmail 
 }
 
 
-RestoreResult KIGIT_COMMON::RestoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix,
-                                            wxString& aError )
+RestoreResult KIGIT_COMMON::RestoreVersion( const wxString& aCommitHash, wxString& aError )
 {
-    return GetGitBackend()->RestoreVersion( m_repo, aCommitHash, aProjectPrefix, aError );
+    return GetGitBackend()->RestoreVersion( *this, aCommitHash, aError );
 }
 
 
