@@ -108,6 +108,32 @@ std::vector<PROPERTY_BASE*> PROPERTY_MANAGER::GetProperties( const INSPECTABLE* 
 }
 
 
+std::vector<PROPERTY_BASE*>
+PROPERTY_MANAGER::GetCommonDynamicProperties( const std::vector<const INSPECTABLE*>& aObjects ) const
+{
+    if( aObjects.empty() )
+        return {};
+
+    std::vector<PROPERTY_BASE*> common = aObjects.front()->GetDynamicProperties();
+
+    for( size_t ii = 1; ii < aObjects.size() && !common.empty(); ++ii )
+    {
+        std::set<wxString> names;
+
+        for( PROPERTY_BASE* prop : aObjects[ii]->GetDynamicProperties() )
+            names.insert( prop->Name() );
+
+        std::erase_if( common,
+                       [&]( PROPERTY_BASE* aProp )
+                       {
+                           return !names.contains( aProp->Name() );
+                       } );
+    }
+
+    return common;
+}
+
+
 const std::map<PROPERTY_BASE*, int>& PROPERTY_MANAGER::GetDisplayOrder( TYPE_ID aType ) const
 {
     if( m_dirty )

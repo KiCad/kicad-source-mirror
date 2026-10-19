@@ -3324,8 +3324,6 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
         }
     }
 
-    view()->UpdateAllLayersColor();
-
     m_frame->GetCanvas()->ForceRefresh();
 
     if( m_selection.Size() > 0 )
