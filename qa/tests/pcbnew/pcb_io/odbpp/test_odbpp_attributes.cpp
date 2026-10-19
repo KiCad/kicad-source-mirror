@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cmath>
 #include <cctype>
-#include <fstream>
 #include <memory>
 #include <map>
 #include <sstream>
@@ -38,6 +37,7 @@
 #include <netinfo.h>
 #include <pad.h>
 #include <pcb_track.h>
+
 #include <pcbnew/exporters/fab_model/fab_component_row.h>
 #include <pcbnew/exporters/fab_model/fab_net_names.h>
 #include <pcbnew/exporters/fab_model/fab_test_points.h>
@@ -48,6 +48,29 @@
 
 namespace fs = std::filesystem;
 
+
+enum ODB_NP_FIELD_INDEX
+{
+    NP_IDX_NET_NUM = 0,
+    NP_IDX_RADIUS = 1,
+    NP_IDX_X_COORD = 2,
+    NP_IDX_Y_COORD = 3,
+
+    NP_IDX_SIDE = 4,
+
+    // When there is no w/h
+    NP_IDX_DRILL_EPOINT = 5,
+    NP_IDX_DRILL_EXP = 6,
+
+    // When there is no drill, there is w/h before epoint and exp
+    NP_IDX_NODRILL_W = 5,
+    NP_IDX_NODRILL_H = 6,
+    NP_IDX_NODRILL_EPOINT = 7,
+    NP_IDX_NODRILL_EXP = 8,
+};
+
+
+BOOST_AUTO_TEST_SUITE( OdbAttributesTests )
 
 BOOST_AUTO_TEST_CASE( FabComponentRowUsesSavedVariantFields )
 {
@@ -199,18 +222,34 @@ BOOST_AUTO_TEST_CASE( OdbTestPointFeatureAndCadnetFlag )
         while( stream >> token )
             fields.push_back( token );
 
-        if( fields.size() < 9 || fields[0].empty() || !std::isdigit( fields[0][0] ) )
+        if( fields.size() <= NP_IDX_NODRILL_EXP )
             continue;
 
-        double x = std::stod( fields[2] );
-        double y = std::stod( fields[3] );
-        double padX = pcbIUScale.IUTomm( testPoint->GetPosition().x );
-        double padY = -pcbIUScale.IUTomm( testPoint->GetPosition().y );
+        const std::string& netNum = fields[NP_IDX_NET_NUM];
 
+        if( netNum.empty() || !std::isdigit( static_cast<unsigned char>( netNum[0] ) ) )
+            continue;
+
+        const double x = std::stod( fields[NP_IDX_X_COORD] );
+        const double y = std::stod( fields[NP_IDX_Y_COORD] );
+        const double padX = pcbIUScale.IUTomm( testPoint->GetPosition().x );
+        const double padY = -pcbIUScale.IUTomm( testPoint->GetPosition().y );
+
+        // Find the matching pad in the netlist by comparing coordinates
         if( std::abs( x - padX ) < 0.00001 && std::abs( y - padY ) < 0.00001 )
         {
-            BOOST_CHECK_EQUAL( fields[7], "e" );
-            BOOST_CHECK_EQUAL( fields.back(), "t" );
+            BOOST_TEST_MESSAGE( "Cadnet net number " << netNum << " found at coordinates (" << x << ", " << y << ")" );
+
+            const bool isTestPoint = std::find( fields.begin(), fields.end(), "t" ) != fields.end();
+
+            // Non-drilled cadnet points carry the fixed 0.002 placeholder radius
+            // (netlist would be 0)
+            // (The spec isn't that clear here, but if w/h don't exist we don't know the
+            // index for epoint)
+            BOOST_CHECK_EQUAL( fields[NP_IDX_RADIUS], "0.002" );
+
+            BOOST_CHECK_EQUAL( fields[NP_IDX_NODRILL_EPOINT], "e" );
+            BOOST_CHECK( isTestPoint );
             ++taggedPoints;
         }
     }
@@ -243,23 +282,30 @@ BOOST_AUTO_TEST_CASE( OdbConnectedViaIsCadnetMidpoint )
 
     for( const std::string& line : ReadLines( root / "steps" / "pcb" / "netlists" / "cadnet" / "netlist" ) )
     {
-        std::istringstream stream( line );
+        std::istringstream       stream( line );
         std::vector<std::string> fields;
-        std::string token;
+        std::string              token;
 
         while( stream >> token )
             fields.push_back( token );
 
-        if( fields.size() < 8 || fields.back() != "v" || fields[0] != std::to_string( midpoint->m_netCode ) )
+        const bool isVia = std::find( fields.begin(), fields.end(), "v" ) != fields.end();
+
+        if( fields.size() <= NP_IDX_DRILL_EXP || !isVia || fields[NP_IDX_NET_NUM] != std::to_string( midpoint->m_netCode ) )
             continue;
 
         double x = pcbIUScale.IUTomm( midpoint->m_position.x );
         double y = -pcbIUScale.IUTomm( midpoint->m_position.y );
 
-        if( std::abs( std::stod( fields[2] ) - x ) < 0.00001
-            && std::abs( std::stod( fields[3] ) - y ) < 0.00001 )
+        if( std::abs( std::stod( fields[NP_IDX_X_COORD] ) - x ) < 0.00001
+            && std::abs( std::stod( fields[NP_IDX_Y_COORD] ) - y ) < 0.00001 )
         {
-            BOOST_CHECK_EQUAL( fields[5], "m" );
+            const double radius = std::stod( fields[NP_IDX_RADIUS] );
+
+            // must have non-zero radius for drilled via fields
+            BOOST_CHECK( radius > 0 );
+
+            BOOST_CHECK_EQUAL( fields[NP_IDX_DRILL_EPOINT], "m" );
             found = true;
         }
     }
@@ -561,3 +607,5 @@ BOOST_AUTO_TEST_CASE( OdbBackdrillStopLayerFollowsMustCutCopper )
 
     BOOST_CHECK_EQUAL( checked, stopLayers.size() );
 }
+
+BOOST_AUTO_TEST_SUITE_END()
