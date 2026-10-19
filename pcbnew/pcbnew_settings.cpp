@@ -366,6 +366,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
     m_params.emplace_back( new PARAM<COLOR4D>( "diff_phase_skew.unknown_color",
             &m_DiffPhaseSkewSettings.m_UnknownSkewColor, COLOR4D( 0.5, 0.5, 0.5, 1.0 ) ) );
 
+    m_params.emplace_back( new PARAM<bool>( "diff_phase_skew.use_log_scale",
+            &m_DiffPhaseSkewSettings.m_UseLogScale, false ) );
+
     registerMigration( 0, 1,
             [&]()
             {
