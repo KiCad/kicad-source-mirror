@@ -341,6 +341,36 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
                     n++;
                 }
+                else if( BaseType( dwg->Type() ) == PCB_TABLE_T )
+                {
+                    // A drill chart is a table for clearance purposes, so a PCB_TABLE_T mask
+                    // has to reach one or its artwork escapes DRC entirely
+                    if( typeMask[ PCB_TABLE_T ] )
+                    {
+                        if( !aFunc( dwg ) )
+                            return n;
+
+                        n++;
+                    }
+
+                    if( typeMask[ PCB_TABLECELL_T ] )
+                    {
+                        for( PCB_TABLECELL* cell : static_cast<PCB_TABLE*>( dwg )->GetCells() )
+                        {
+                            if( !aFunc( cell ) )
+                                return n;
+
+                            n++;
+                        }
+                    }
+                }
+                else if( typeMask[ PCB_BARCODE_T ] && dwg->Type() == PCB_BARCODE_T )
+                {
+                    if( !aFunc( dwg ) )
+                        return n;
+
+                    n++;
+                }
             }
         }
 
