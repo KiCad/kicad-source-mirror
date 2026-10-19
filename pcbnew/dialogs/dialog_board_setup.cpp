@@ -287,6 +287,10 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
 
     SetEvtHandlerEnabled( true );
 
+    // Bound after DIALOG_SHIM's handlers so these run first
+    Bind( wxEVT_BUTTON, &DIALOG_BOARD_SETUP::onCancelButton, this, wxID_CANCEL );
+    Bind( wxEVT_CLOSE_WINDOW, &DIALOG_BOARD_SETUP::onCloseWindow, this );
+
     finishDialogSettings();
 
     if( Prj().IsReadOnly() )
@@ -303,6 +307,49 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
 
 DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 {
+    Unbind( wxEVT_BUTTON, &DIALOG_BOARD_SETUP::onCancelButton, this, wxID_CANCEL );
+    Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_BOARD_SETUP::onCloseWindow, this );
+}
+
+
+bool DIALOG_BOARD_SETUP::canDiscardChanges()
+{
+    auto* rules = static_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( m_customRulesPage ) );
+
+    if( !rules || !rules->IsModified() )
+        return true;
+
+    return OKOrCancelDialog( this, _( "Confirmation" ), _( "Discard changes to custom rules?" ), wxEmptyString,
+                             _( "Discard Changes" ) ) == wxID_OK;
+}
+
+
+void DIALOG_BOARD_SETUP::onCancelButton( wxCommandEvent& aEvent )
+{
+    if( canDiscardChanges() )
+        aEvent.Skip();
+}
+
+
+void DIALOG_BOARD_SETUP::onCloseWindow( wxCloseEvent& aEvent )
+{
+    if( aEvent.CanVeto() && !canDiscardChanges() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_BOARD_SETUP::onPageChanging( wxBookCtrlEvent& aEvent )
+{
+    // Rules are written to disk only on OK so Cancel can still discard them
+    if( aEvent.GetOldSelection() == (int) m_customRulesPage )
+        return;
+
+    PAGED_DIALOG::onPageChanging( aEvent );
 }
 
 

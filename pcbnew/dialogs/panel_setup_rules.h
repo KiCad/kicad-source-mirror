@@ -40,6 +40,11 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
+    /**
+     * @return true if the rules text differs from what was loaded and can be saved.
+     */
+    bool IsModified() const;
+
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 

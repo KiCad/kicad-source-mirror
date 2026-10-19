@@ -19,7 +19,6 @@
 
 #include <bitmaps.h>
 #include <common.h>
-#include <confirm.h>
 #include <kiplatform/io.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/paged_dialog.h>
@@ -108,21 +107,23 @@ PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
 
 void PANEL_SETUP_RULES::onCharHook( wxKeyEvent& aEvent )
 {
+    // Route Escape through the dialog's cancel handler so unsaved rules get a discard prompt
     if( aEvent.GetKeyCode() == WXK_ESCAPE && !m_textEditor->AutoCompActive() )
     {
-        if( m_originalText != m_textEditor->GetText() )
-        {
-            if( IsOK( wxGetTopLevelParent( this ), _( "Cancel Changes?" ) ) )
-            {
-                m_textEditor->SetText( m_originalText );
-                m_textEditor->SelectAll();
-            }
-
-            return;
-        }
+        wxPostEvent( PAGED_DIALOG::GetDialog( this ), wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
+        return;
     }
 
     aEvent.Skip();
+}
+
+
+bool PANEL_SETUP_RULES::IsModified() const
+{
+    if( m_frame->Prj().IsNullProject() || !m_frame->GetBoard() )
+        return false;
+
+    return m_originalText != m_textEditor->GetText();
 }
 
 
@@ -1118,13 +1119,7 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
 
 bool PANEL_SETUP_RULES::TransferDataFromWindow()
 {
-    if( m_originalText == m_textEditor->GetText() )
-        return true;
-
-    if( m_frame->Prj().IsNullProject() )
-        return true;
-
-    if( !m_frame->GetBoard() )
+    if( !IsModified() )
         return true;
 
     wxString rulesFilepath = m_frame->GetBoard()->GetDesignRulesPath();
