@@ -441,6 +441,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
         pgProp->SetValue( commonVal );
         pgProp->ChangeFlag( wxPG_PROP_READONLY, !writeable );
+
+        // If it's no longer writable any pending edits will be lost.  Life's tough.
+        if( !writeable && pgProp == m_grid->GetSelection() && m_grid->IsEditorFocused() )
+            m_grid->CommitChangesFromEditor();
     }
 
     if( !existingProps.empty() && existingProps == availableProps )
