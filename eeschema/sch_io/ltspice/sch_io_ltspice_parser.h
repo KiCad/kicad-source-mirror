@@ -20,18 +20,15 @@
  */
 
 /**
- * @brief Parses the datastructure produced by the LTSPICE_SCHEMATIC into a KiCad
+ * @brief Parses the data structure produced by LTSPICE_SCHEMATIC into a KiCad
  * schematic file.
  */
 
 #ifndef LTSPICE_SCH_PARSER_H
 #define LTSPICE_SCH_PARSER_H
 
-#include <sch_io/sch_io_mgr.h>
-#include <pin_type.h>
 #include <core/typeinfo.h>
 #include <layer_ids.h>
-#include <plotters/plotter.h>
 #include <sch_io/ltspice/ltspice_schematic.h>
 
 
@@ -66,6 +63,9 @@ class SCH_SHAPE;
 class SCH_IO_LTSPICE_PARSER
 {
 public:
+    // Field for storing LTspice symbol's InstName in SCH_SHEET.
+    static constexpr const wxChar* LT_INSTNAME_FIELD = wxS( "LT_InstName" );
+
     explicit SCH_IO_LTSPICE_PARSER( LTSPICE_SCHEMATIC* aLTSchematic ) :
             m_lt_schematic( aLTSchematic ),
             m_powerSymbolIndex( 0 )
@@ -78,9 +78,8 @@ public:
      *
      * @param aCoordinate coordinate(i.e scale) in ltspice.
      */
-    int ToKicadCoords( int aCoordinate );
+    int      ToKicadCoords( int aCoordinate );
     VECTOR2I ToKicadCoords( const VECTOR2I& aPos );
-
     VECTOR2I ToKicadFontSize( int aLTFontSize );
 
     /**
@@ -88,191 +87,144 @@ public:
      *
      * @param aCoordinate coordinate(i.e scale) in ltspice.
      */
-    int ToLtSpiceCoords( int aCoordinate );
+    int      ToLtSpiceCoords( int aCoordinate );
+    VECTOR2I ToLtSpiceCoords( const VECTOR2I& aPos );
 
     /**
-     * Function responsible for loading the .asc and .asy files in intermediate data structure.
+     * Create KiCad items based on LTspice data.
      *
-     * @param aSheet variable representing the current sheet.
-     * @param mapOfFiles a string map containing all the data from .asc and .asy files.
+     * @param aScreen the screen to add the items to.
+     * @param aLT_ASCs the LTspice ASC file data.
+     * @param aUniqueAscNames the symbol names to import as subsheets instead of symbols.
+     * @param aMapOfScreens the map of screens to assign screens to new subsheets.
+     * @param aOriginOffset the offset to apply to the items (in KiCad units).
      */
-    void Parse( SCH_SHEET_PATH* aSheet, std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
-                const std::vector<wxString>& aAsyFileNames );
+    void CreateItems( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, SCH_SCREEN* aScreen,
+                      const std::vector<wxString>& aUniqueAscNames, std::map<wxString, SCH_SCREEN*>& aMapOfScreens,
+                      VECTOR2I aOriginOffset );
+
 
 
     /**
-     * Method for plotting Lines from Asy files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
+     * Create a library-symbol line from LTspice symbol data.
      */
-    void CreateLines( LIB_SYMBOL* aSymbol, LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
+    void CreateSymLine( LIB_SYMBOL* aSymbol, const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
                       SCH_SHAPE* aShape );
 
     /**
-     * Method for plotting Schematic Lines from Asy files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the circle is represented.
+     * Create KiCad symbol objects and subsheets from ASC data.
      */
-    void CreateLines( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHEET_PATH* aSheet );
+    void CreateKicadSymbolsAndSubsheets( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, SCH_SCREEN* aScreen,
+                                         const std::vector<wxString>&     aUniqueAscNames,
+                                         std::map<wxString, SCH_SCREEN*>& aMapOfScreens );
 
     /**
-     * Main Method for loading indermediate data to kicacd object from asy files
-     *
-     * @param aAscfiles array object representing asc files.
-     * @param aSheet a object on which the symbols are represented.
+     * Create a library symbol from LTspice symbol data.
      */
-    void CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
-                             std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
-                             const std::vector<wxString>& aAsyFiles );
-
     void CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol, LIB_SYMBOL* aLibSymbol );
 
     /**
-     * Methods for rotating and mirroring objects
+     * Rotate and mirror a shape according to LTspice symbol flags.
      */
-    void RotateMirror( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSchSymbol );
-    void RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SHAPE* aShape );
+    void RotateMirrorShape( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SHAPE* aShape );
 
     /**
-     * Method for plotting wires
-     *
-     * @param aLTSymbol object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the symbols is represented.
+     * Rotate and mirror a point according to LTspice symbol flags.
      */
-    void CreateWires( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                      SCH_SHEET_PATH* aSheet );
+    VECTOR2I RotateMirror( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, const VECTOR2I& aPoint );
 
     /**
-     * Main method for loading intermediate data structure from Asc file to kicad.
-     *
-     * @param outLT_ASCs
-     * @param aSheet a object on which the circle is represented.
+     * Set KiCad symbol orientation based on LTspice symbol orientation.
      */
-    void CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
-                               std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs );
+    void AssignSymOrientation( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSchSymbol );
 
     /**
-     * Method for plotting Bustap from Asc files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the circle is represented.
+     * Create schematic items from ASC data.
      */
-    void CreateBusEntry( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    void CreateKicadSCH_ITEMs( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, SCH_SCREEN* aScreen );
 
     /**
-     * Method for plotting Iopin from Asc files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the circle is represented.
+     * Create a schematic bus tap from ASC data.
      */
-    void CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    void AddAscBusEntry( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen );
 
     /**
-     * Method for plotting Line from Asc files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the circle is represented.
+     * Create a schematic I/O pin from ASC data.
      */
-    void CreateLine( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    void AddAscIopin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen );
 
     /**
-     * Method for plotting circle from Asc files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the circle is represented.
+     * Create a schematic line from ASC data.
      */
-    void CreateCircle( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    void AddAscLine( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen );
 
     /**
-     * Method for plotting Arc from Asc files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the Arc is represented.
+     * Create a schematic circle from ASC data.
      */
-    void CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    void AddAscCircle( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen );
 
     /**
-     * Method for plotting rectangle from Asc files
-     *
-     * @param aAscfile object representing asc file.
-     * @param aIndex index.
-     * @param aSheet a object on which the rectangle is represented.
+     * Create a schematic arc from ASC data.
      */
-    void CreateRect( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
+    void AddAscArc( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen );
+
+    /**
+     * Create a schematic rectangle from ASC data.
+     */
+    void AddAscRect( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen );
+
+    SCH_SHEET* AddAscSymAsSubsheet( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
+                               SCH_SCREEN* aScreen );
 
     /**
      * Create schematic text.
      */
     SCH_TEXT* CreateSCH_TEXT( const VECTOR2I& aOffset, const wxString& aText, int aFontSize,
-                          LTSPICE_SCHEMATIC::JUSTIFICATION aJustification );
+                           LTSPICE_SCHEMATIC::JUSTIFICATION aJustification );
 
     /**
-     * Create a schematic wire.
+     * Create a schematic wire from ASC data.
      */
-    void CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet,
+    void AddAscWire( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen,
                      SCH_LAYER_ID aLayer );
 
     /**
-     * Create a power symbol.
-     * @param aWires Schematic wires.  (Allows us to correctly orient the power symbol.)
+     * Create a power symbol for the schematic.
      */
     SCH_SYMBOL* CreatePowerSymbol( const VECTOR2I& aOffset, const wxString& aValue, int aFontSize,
-                                   SCH_SHEET_PATH* aSheet,
+                                   SCH_SCREEN* aScreen,
                                    std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires );
 
     /**
-     * Create a label.
-     * @param aType Currently supported types: SCH_LABEL_T, SCH_DIRECTIVE_LABEL_T
+     * Create a schematic label.
      */
-    SCH_LABEL_BASE* CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset, const wxString& aValue,
-                                     int aFontSize, std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires );
-
-    void CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSymbol,
-                       SCH_SHEET_PATH* aSheet );
+    SCH_LABEL_BASE* CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset, const wxString& aValue, int aFontSize,
+                                     SCH_SCREEN* aScreen );
 
     /**
-     * Create a symbol rect.
+     * Create and configure symbol fields from LTspice symbol data.
      */
-    void CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aRectangle );
+    void AddSymFields( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSymbol );
 
     /**
-     * Create a schematic rect.
+     * Create a symbol rectangle from LTspice symbol data.
      */
-    void CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHEET_PATH* aSheet );
+    void CreateSymRect( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aRectangle );
 
     /**
-     * Create a pin from an asy file.
+     * Create a symbol pin from LTspice symbol data.
      */
-    void CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_PIN* aPin );
+    void CreateSymPin( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_PIN* aPin );
 
     /**
-     * Create a symbol arc.
+     * Create a symbol arc from LTspice symbol data.
      */
-    void CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aArc );
+    void CreateSymArc( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aArc );
 
     /**
-     * Create a schematic arc.
+     * Create a symbol circle from LTspice symbol data.
      */
-    void CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHEET_PATH* aSheet );
-
-    /**
-     * Create a symbol circle.
-     */
-    void CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aCircle );
-
-    /**
-     * Create a schematic circle.
-     */
-    void CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHEET_PATH* aSheet );
+    void CreateSymCircle( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aCircle );
 
 private:
     int getLineWidth( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth );
