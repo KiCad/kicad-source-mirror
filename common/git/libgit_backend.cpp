@@ -480,6 +480,114 @@ static bool refuseWhileOperationInProgress( git_repository* aRepo, git_index* aI
 }
 
 
+// What Commit and Amend do identically: take the index over as scratch space, remember what it
+// held, stage the chosen files over a base tree, and refuse if anything moved underneath while
+// the tree was being built. Only the base tree and the commit call itself differ between them.
+struct COMMIT_STAGING
+{
+    git_index*                            index = nullptr;
+    KIGIT::GitIndexPtr                    indexPtr;
+    std::set<std::string>                 selectedPaths;
+    std::map<std::string, SELECTED_STATE> selectedAtStart;
+    std::map<std::string, SELECTED_STATE> indexAtStart;
+    bool                                  haveIndexAtStart = false;
+    git_oid                               headAtStart = {};
+    bool                                  hadHeadAtStart = false;
+    SCRATCH_INDEX_GUARD                   scratchGuard;
+    std::vector<STAGED_ENTRY>             committedEntries;
+
+    /// Read the index, record what it holds and take it over. False leaves the reason in aError.
+    bool Begin( git_repository* aRepo, const std::vector<wxString>& aFiles, wxString& aError )
+    {
+        if( git_repository_index( &index, aRepo ) != 0 )
+        {
+            aError = wxString::Format( _( "Failed to get repository index: %s" ), KIGIT_COMMON::GetLastGitError() );
+            return false;
+        }
+
+        indexPtr.reset( index );
+
+        // The action lock only serializes KiCad, so read what is on disk before judging it.
+        git_index_read( index, 1 );
+
+        wxString blockedError;
+
+        if( refuseWhileOperationInProgress( aRepo, index, blockedError ) )
+        {
+            aError = blockedError;
+            return false;
+        }
+
+        for( const wxString& file : aFiles )
+            selectedPaths.insert( file.utf8_string() );
+
+        selectedAtStart = readSelectedState( index, selectedPaths );
+        haveIndexAtStart = wholeStateOnDisk( index, indexAtStart );
+        hadHeadAtStart = git_reference_name_to_id( &headAtStart, aRepo, "HEAD" ) == GIT_OK;
+
+        // Armed last, so an early return above leaves the real index alone.
+        scratchGuard.index = index;
+        return true;
+    }
+
+    /// Stage the chosen files over whatever the index already holds and write the tree they
+    /// make. False leaves the reason in aError.
+    bool BuildTree( git_repository* aRepo, const std::vector<wxString>& aFiles, KIGIT::GitTreePtr& aTreeOut,
+                    wxString& aError )
+    {
+        if( !applySelectedPaths( aRepo, index, aFiles ) )
+        {
+            aError = wxString::Format( _( "Failed to add file to index: %s" ), KIGIT_COMMON::GetLastGitError() );
+            return false;
+        }
+
+        // Writing this scratch index is what would unstage everything staged outside KiCad, so
+        // only the tree it describes is written.
+        for( const std::string& path : selectedPaths )
+        {
+            if( const git_index_entry* entry = git_index_get_bypath( index, path.c_str(), 0 ) )
+                committedEntries.push_back( { path, *entry } );
+        }
+
+        git_oid treeId;
+
+        if( git_index_write_tree( &treeId, index ) != 0 )
+        {
+            aError = wxString::Format( _( "Failed to write tree: %s" ), KIGIT_COMMON::GetLastGitError() );
+            return false;
+        }
+
+        git_tree* tree = nullptr;
+
+        if( git_tree_lookup( &tree, aRepo, &treeId ) != 0 )
+        {
+            aError = wxString::Format( _( "Failed to lookup tree: %s" ), KIGIT_COMMON::GetLastGitError() );
+            return false;
+        }
+
+        aTreeOut.reset( tree );
+
+        // Nothing is written yet, so the scratch guard puts the real index back on the way out.
+        if( branchMovedSince( aRepo, headAtStart, hadHeadAtStart ) )
+        {
+            aError = _( "The branch moved while this was running, so nothing was "
+                        "committed. Review the changes and try again." );
+            return false;
+        }
+
+        if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
+            || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
+        {
+            aError = _( "The staged files changed outside KiCad while this ran. Nothing "
+                        "was committed. Review the changes and try again." );
+            return false;
+        }
+
+        return true;
+    }
+};
+
+
 CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
                                      const wxString& aMessage, const wxString& aAuthorName,
                                      const wxString& aAuthorEmail )
@@ -489,42 +597,16 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
     if( !repo )
         return CommitResult::Error;
 
-    git_index* index = nullptr;
+    COMMIT_STAGING staging;
+    wxString       stagingError;
 
-    if( git_repository_index( &index, repo ) != 0 )
+    if( !staging.Begin( repo, aFiles, stagingError ) )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to get repository index: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddErrorString( stagingError );
         return CommitResult::Error;
     }
 
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    // The action lock only serializes KiCad, so read what is on disk before judging it.
-    git_index_read( index, 1 );
-
-    wxString blockedError;
-
-    if( refuseWhileOperationInProgress( repo, index, blockedError ) )
-    {
-        aHandler->AddErrorString( blockedError );
-        return CommitResult::Error;
-    }
-
-    std::set<std::string> selectedPaths;
-
-    for( const wxString& file : aFiles )
-        selectedPaths.insert( file.utf8_string() );
-
-    std::map<std::string, SELECTED_STATE> selectedAtStart = readSelectedState( index, selectedPaths );
-
-    std::map<std::string, SELECTED_STATE> indexAtStart;
-    bool                                  haveIndexAtStart = wholeStateOnDisk( index, indexAtStart );
-
-    git_oid headAtStart;
-    bool    hadHeadAtStart = git_reference_name_to_id( &headAtStart, repo, "HEAD" ) == GIT_OK;
-
-    SCRATCH_INDEX_GUARD scratchGuard{ index, true };
+    git_index* index = staging.index;
 
     // Start from the HEAD tree, not the index, so the commit holds exactly the listed files.
     if( git_repository_head_unborn( repo ) == 0 )
@@ -564,57 +646,15 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
         return CommitResult::Error;
     }
 
-    if( !applySelectedPaths( repo, index, aFiles ) )
+    KIGIT::GitTreePtr treePtr;
+
+    if( !staging.BuildTree( repo, aFiles, treePtr, stagingError ) )
     {
-        aHandler->AddErrorString(
-                wxString::Format( _( "Failed to add file to index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddErrorString( stagingError );
         return CommitResult::Error;
     }
 
-    // Writing this scratch index is what would unstage everything staged outside KiCad.
-    std::vector<STAGED_ENTRY> committedEntries;
-
-    for( const std::string& path : selectedPaths )
-    {
-        if( const git_index_entry* entry = git_index_get_bypath( index, path.c_str(), 0 ) )
-            committedEntries.push_back( { path, *entry } );
-    }
-
-    git_oid tree_id;
-
-    if( git_index_write_tree( &tree_id, index ) != 0 )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to write tree: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    git_tree* tree = nullptr;
-
-    if( git_tree_lookup( &tree, repo, &tree_id ) != 0 )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to lookup tree: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    KIGIT::GitTreePtr treePtr( tree );
-
-    // Nothing is written yet, so the scratch guard puts the real index back on the way out.
-    if( branchMovedSince( repo, headAtStart, hadHeadAtStart ) )
-    {
-        aHandler->AddErrorString( _( "The branch moved while this was running, so nothing was "
-                                     "committed. Review the changes and try again." ) );
-        return CommitResult::Error;
-    }
-
-    if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
-        || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
-    {
-        aHandler->AddErrorString( _( "The staged files changed outside KiCad while this ran. Nothing "
-                                     "was committed. Review the changes and try again." ) );
-        return CommitResult::Error;
-    }
+    git_tree* tree = treePtr.get();
 
     git_commit* parent = nullptr;
 
@@ -673,8 +713,8 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
     }
 
     // The commit exists, so only the index is left. If anything restaged meanwhile, leave it.
-    if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
-        || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
+    if( selectedPathsRestaged( index, staging.selectedPaths, staging.selectedAtStart )
+        || ( staging.haveIndexAtStart && indexChangedSince( index, staging.indexAtStart ) ) )
     {
         git_index_read( index, 1 );
         aHandler->AddErrorString( _( "The commit was created, but the list of staged files was left "
@@ -683,7 +723,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
         return CommitResult::SuccessIndexStale;
     }
 
-    REPUBLISH_RESULT republished = republishIndex( index, committedEntries, selectedPaths );
+    REPUBLISH_RESULT republished = republishIndex( index, staging.committedEntries, staging.selectedPaths );
 
     if( republished == REPUBLISH_RESULT::CHANGED_EXTERNALLY )
     {
@@ -700,7 +740,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
         return CommitResult::SuccessIndexStale;
     }
 
-    scratchGuard.armed = false;
+    staging.scratchGuard.armed = false;
 
     return CommitResult::Success;
 }
@@ -741,42 +781,16 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     }
 
     KIGIT::GitCommitPtr headCommitPtr( headCommit );
-    git_index*          index = nullptr;
+    COMMIT_STAGING      staging;
+    wxString            stagingError;
 
-    if( git_repository_index( &index, repo ) != 0 )
+    if( !staging.Begin( repo, aFiles, stagingError ) )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to get repository index: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddErrorString( stagingError );
         return CommitResult::Error;
     }
 
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    // The action lock only serializes KiCad, so read what is on disk before judging it.
-    git_index_read( index, 1 );
-
-    wxString blockedError;
-
-    if( refuseWhileOperationInProgress( repo, index, blockedError ) )
-    {
-        aHandler->AddErrorString( blockedError );
-        return CommitResult::Error;
-    }
-
-    std::set<std::string> selectedPaths;
-
-    for( const wxString& file : aFiles )
-        selectedPaths.insert( file.utf8_string() );
-
-    std::map<std::string, SELECTED_STATE> selectedAtStart = readSelectedState( index, selectedPaths );
-
-    std::map<std::string, SELECTED_STATE> indexAtStart;
-    bool                                  haveIndexAtStart = wholeStateOnDisk( index, indexAtStart );
-
-    git_oid headAtStart;
-    bool    hadHeadAtStart = git_reference_name_to_id( &headAtStart, repo, "HEAD" ) == GIT_OK;
-
-    SCRATCH_INDEX_GUARD scratchGuard{ index, true };
+    git_index* index = staging.index;
 
     // The commit being amended, not its parent, or files it already held would disappear.
     git_tree* headTree = nullptr;
@@ -797,57 +811,15 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
         return CommitResult::Error;
     }
 
-    if( !applySelectedPaths( repo, index, aFiles ) )
+    KIGIT::GitTreePtr treePtr;
+
+    if( !staging.BuildTree( repo, aFiles, treePtr, stagingError ) )
     {
-        aHandler->AddErrorString(
-                wxString::Format( _( "Failed to add file to index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddErrorString( stagingError );
         return CommitResult::Error;
     }
 
-    // See Commit(): the scratch index is not written, only the tree it describes.
-    std::vector<STAGED_ENTRY> committedEntries;
-
-    for( const std::string& path : selectedPaths )
-    {
-        if( const git_index_entry* entry = git_index_get_bypath( index, path.c_str(), 0 ) )
-            committedEntries.push_back( { path, *entry } );
-    }
-
-    git_oid tree_id;
-
-    if( git_index_write_tree( &tree_id, index ) != 0 )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to write tree: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    git_tree* tree = nullptr;
-
-    if( git_tree_lookup( &tree, repo, &tree_id ) != 0 )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to lookup tree: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return CommitResult::Error;
-    }
-
-    KIGIT::GitTreePtr treePtr( tree );
-
-    // Nothing is written yet, so the scratch guard puts the real index back on the way out.
-    if( branchMovedSince( repo, headAtStart, hadHeadAtStart ) )
-    {
-        aHandler->AddErrorString( _( "The branch moved while this was running, so nothing was "
-                                     "committed. Review the changes and try again." ) );
-        return CommitResult::Error;
-    }
-
-    if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
-        || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
-    {
-        aHandler->AddErrorString( _( "The staged files changed outside KiCad while this ran. Nothing "
-                                     "was committed. Review the changes and try again." ) );
-        return CommitResult::Error;
-    }
+    git_tree* tree = treePtr.get();
 
     git_signature* author = nullptr;
 
@@ -870,8 +842,8 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     }
 
     // The commit exists, so only the index is left. If anything restaged meanwhile, leave it.
-    if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
-        || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
+    if( selectedPathsRestaged( index, staging.selectedPaths, staging.selectedAtStart )
+        || ( staging.haveIndexAtStart && indexChangedSince( index, staging.indexAtStart ) ) )
     {
         git_index_read( index, 1 );
         aHandler->AddErrorString( _( "The commit was created, but the list of staged files was left "
@@ -880,7 +852,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
         return CommitResult::SuccessIndexStale;
     }
 
-    REPUBLISH_RESULT republished = republishIndex( index, committedEntries, selectedPaths );
+    REPUBLISH_RESULT republished = republishIndex( index, staging.committedEntries, staging.selectedPaths );
 
     if( republished == REPUBLISH_RESULT::CHANGED_EXTERNALLY )
     {
@@ -897,7 +869,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
         return CommitResult::SuccessIndexStale;
     }
 
-    scratchGuard.armed = false;
+    staging.scratchGuard.armed = false;
 
     return CommitResult::Success;
 }
