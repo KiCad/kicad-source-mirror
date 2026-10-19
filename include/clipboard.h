@@ -39,12 +39,6 @@ struct CLIPBOARD_MIME_DATA
     /// When set, SaveClipboard() adds this using the platform-native format
     /// (PNG on GTK, CF_DIB on Windows, TIFF on macOS).
     std::optional<wxBitmap> m_image;
-
-    /// When true and m_mimeType is "image/png", m_data contains pre-encoded PNG bytes.
-    /// SaveClipboard() will add this via wxCustomDataObject as the preferred format,
-    /// providing fast clipboard access for apps that support raw PNG data.
-    /// m_image should also be set for compatibility with image editors.
-    bool m_useRawPngData = false;
 };
 
 /**
@@ -107,13 +101,13 @@ bool EncodeImageToPng( const wxImage& aImage, wxMemoryBuffer& aOutput );
 /**
  * Adds pre-encoded PNG data to clipboard in a platform-specific way.
  *
- * On Windows: Adds empty CF_BITMAP marker and "PNG" format entry
+ * On Windows: Adds the "PNG" format entry first, then CF_DIB flattened onto white from aFallbackImage if given
  * On GTK: Adds as wxDF_BITMAP (which maps to image/png)
  * On macOS: Falls back to wxBitmapDataObject with the provided image
  *
  * @param aData Clipboard composite to add PNG to
  * @param aPngData Pre-encoded PNG bytes
- * @param aFallbackImage Optional image for macOS fallback (required on macOS)
+ * @param aFallbackImage Image for the CF_DIB entry on Windows (optional) and macOS fallback (required on macOS)
  * @return true on success
  */
 bool AddPngToClipboardData( wxDataObjectComposite* aData, const wxMemoryBuffer& aPngData,
