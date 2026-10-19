@@ -72,6 +72,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_import_reconciler.cpp
     test_footprint_library_adapter.cpp
     test_footprint_load_save.cpp
+    test_footprint_pad_fixup.cpp
     test_footprint_realignment.cpp
     test_cross_probe_selection.cpp
     test_footprint_transform_sync.cpp
