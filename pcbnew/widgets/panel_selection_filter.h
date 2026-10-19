@@ -69,6 +69,7 @@ private:
     void onPopupSelection( wxCommandEvent& aEvent );
 
     void flashCheckbox( wxCheckBox* aBox );
+    wxColour flashColour( int aStep ) const;
     void onFlashTimer( wxTimerEvent& aEvent );
     void OnFlashEvent( PCB_SELECTION_FILTER_EVENT& aEvent );
     void onPanelPaint( wxPaintEvent& aEvent );
@@ -80,7 +81,6 @@ private:
     std::map<wxCheckBox*, int>               m_flashCounters;
     wxTimer                                  m_flashTimer;
     int                                      m_flashSteps;
-    wxColour                                 m_defaultBg;
 };
 
 
