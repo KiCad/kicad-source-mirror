@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-17 10:36+0000\n"
+"PO-Revision-Date: 2026-10-19 06:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -17707,7 +17707,7 @@ msgstr "ピン番号(&b):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr "ピン番号: 1から4文字のASCII文字および数字"
+msgstr "ピン番号: 1から4文字のASCII文字列または数字"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:58
 msgid "&X position:"
@@ -25152,6 +25152,8 @@ msgid ""
 "OrCAD net repair joins source nets '%s' and '%s' at '%s' on sheet '%s' (net "
 "'%s')."
 msgstr ""
+"OrCADネット修復はソースネット '%s' と '%s' を '%s' (シート '%s' 上)(ネット "
+"'%s')で結合します。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3255
 #, c-format
@@ -39911,7 +39913,7 @@ msgstr "標準穴サイズ"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:122
 msgid "Level:"
-msgstr ""
+msgstr "レベル:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:134
 #, fuzzy
@@ -44544,12 +44546,11 @@ msgstr "形状 %d"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:78
 msgid "From / To"
-msgstr ""
+msgstr "もと / さき"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:79
-#, fuzzy
 msgid "Ops"
-msgstr "ps"
+msgstr "Ops"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:80
 msgid "Sites"
@@ -44560,7 +44561,6 @@ msgid "Profile:"
 msgstr "プロファイル:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:30
-#, fuzzy
 msgid "Freeze assignments"
 msgstr "割り当てを固定"
 
@@ -47674,9 +47674,9 @@ msgid "Staggered stacks need a pitch greater than zero."
 msgstr "スタッガード型のスタックはピッチが０より大きい必要があります。"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "The pitch must be %s or less."
-msgstr "テキストの幅は %s 以上でなければなりません。"
+msgstr "ピッチは %s 以下である必要があります。"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:363
@@ -47691,9 +47691,8 @@ msgstr "終了レイヤー:"
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
 #: pcbnew/generators/pcb_via_stack.cpp:1597
-#, fuzzy
 msgid "Stacked"
-msgstr "基板積層構造"
+msgstr "スタック化された"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
@@ -47714,15 +47713,13 @@ msgid "Via hole:"
 msgstr "ビア穴:"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:82
-#, fuzzy
 msgid "Use netclass values"
 msgstr "ネットクラスの値を使用"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:91
 #: pcbnew/generators/pcb_via_stack.cpp:1668
-#, fuzzy
 msgid "Copper-filled"
-msgstr "銅"
+msgstr "導体充填"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:94
 #: pcbnew/generators/pcb_via_stack.cpp:1673 pcbnew/pcb_track.cpp:3281
@@ -47737,9 +47734,8 @@ msgstr "ピッチ(\\(\\lambda/10\\) 〜 \\(\\lambda/20\\) 以下):"
 #: pcbnew/dialogs/dialog_microvia_stack_base.h:64
 #: pcbnew/generators/pcb_via_stack.cpp:75 pcbnew/generators/pcb_via_stack.h:63
 #: pcbnew/generators/pcb_via_stack.h:66
-#, fuzzy
 msgid "Microvia Stack"
-msgstr "マイクロビア"
+msgstr "スタック型マイクロビア"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:434
 msgid "Auto-migrate 3D model references"
@@ -48446,9 +48442,8 @@ msgid "Oblong"
 msgstr "楕円形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
-#, fuzzy
 msgid "Show hole size calculator"
-msgstr "ネット インスペクターを表示"
+msgstr "穴サイズ計算機を表示"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:492
 msgid "Specify pad to die length"
@@ -49734,9 +49729,8 @@ msgid "Radius must be greater than 0"
 msgstr "半径は０より大きくする必要があります"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:483
-#, fuzzy
 msgid "Arc must have at least 2 distinct points"
-msgstr "円弧は３個のポイントが必要です"
+msgstr "円弧はすくなくとも異なる２点を持っている必要があります"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:497
 #, c-format
@@ -50928,7 +50922,7 @@ msgstr "バリアント毎に１つのパッケージ"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
 msgid "One package, all variants inside"
-msgstr ""
+msgstr "一つのパッケージにすべてのバリアントを入れる"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:83
 msgid "Variant output"
@@ -50936,7 +50930,7 @@ msgstr "出力バリアント"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:87
 msgid "${VARIANT} is replaced per package"
-msgstr ""
+msgstr "${VARIANT} はパッケージごとに置き換えられます"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:91
 msgid "Includes:"
@@ -51107,7 +51101,7 @@ msgstr "高さは有効な数値ではありません。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1045
 msgid "Standoff height is not a valid number."
-msgstr ""
+msgstr "スタンドオフ高さは有効な数値ではありません。"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1098
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1103
@@ -51147,7 +51141,7 @@ msgstr "3D モデル"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:81
 msgid "Choose the folder used when opening the 3D model picker"
-msgstr ""
+msgstr "3Dモデル選択を開く際に使用するフォルダを選択してください"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:98
 msgid "Enable extruded 3D model for this footprint"
@@ -51624,11 +51618,11 @@ msgstr "厳選された形状"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
 msgid "Letters"
-msgstr ""
+msgstr "文字列"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
 msgid "Curated shapes, then letters"
-msgstr ""
+msgstr "厳選された形状、文字列"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:57
 msgid "Symbol size:"
@@ -51640,11 +51634,11 @@ msgstr "シンボル 線幅:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:82
 msgid "Keep existing symbol assignments when holes change"
-msgstr ""
+msgstr "穴を変更しても既存シンボル割り当てを保持する"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:89
 msgid "Close and Edit Drill Groups..."
-msgstr ""
+msgstr "ドリルグループを閉じて編集する..."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
@@ -54041,7 +54035,7 @@ msgstr "プリセット名:"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
 msgid "New Microvia Stack Preset"
-msgstr ""
+msgstr "新しいスタック型マイクロビア プリセット"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:131
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:172
@@ -55070,7 +55064,7 @@ msgstr "'layer' キーワードはすでに存在します。"
 #: pcbnew/drc/drc_rule_parser.cpp:402
 #, c-format
 msgid "Item 'B' is not available for a single-item constraint in rule '%s'."
-msgstr ""
+msgstr "ルール '%s' においてアイテム 'B' はシングルアイテム制約では使えません。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:420
 msgid "Missing component class name."
@@ -56043,17 +56037,17 @@ msgstr "(%s 最大直径 %s; 現状 %s、%s 上)"
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:168
 #, c-format
 msgid "Stack is %d hops deep, limit is %d"
-msgstr ""
+msgstr "スタックは %d ホップ深さです。制限は %d"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:292
 #, c-format
 msgid "The stackup gives the dielectric between %s and %s as core"
-msgstr ""
+msgstr "積層構造は誘電体 %s と %s の間をコアとして示します"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:337
 #, c-format
 msgid "Crosses %s dielectric: aspect ratio %.2f exceeds the %.2f limit"
-msgstr ""
+msgstr "横切る %s 誘電体: アスペクト比 %.2f が %.2f 制限を超過しています"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:338
 msgid "an unnamed"
@@ -56183,7 +56177,7 @@ msgstr "時間領域(ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:92
 msgid "The values are picoseconds instead of a length"
-msgstr ""
+msgstr "値は長さではなくピコ秒です"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:60
 msgid "Allow 0°"
@@ -56429,6 +56423,10 @@ msgid ""
 "A 0.1 mm hole drilled 0.075 mm deep gives 0.75.\n"
 "Most fabs allow 0.75 to 1.0. A deeper hole is harder to plate."
 msgstr ""
+"許容される最大の穴の深さを穴の幅で割った値。\n"
+"0.1 mmの穴を深さ0.075 mmで加工すると、0.75となる。 \n"
+"多くの製造工場では0.75から1.0を許容している。 穴が深くなると、メッキが難しく"
+"なる。"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:231
 msgid "Minimum drill diameter"
@@ -56729,7 +56727,7 @@ msgstr "SYM"
 
 #: pcbnew/drill/drill_chart_template.cpp:39
 msgid "DRILL DIA"
-msgstr ""
+msgstr "DRILL DIA"
 
 #: pcbnew/drill/drill_chart_template.cpp:40
 msgid "Drill diameter"
@@ -56737,7 +56735,7 @@ msgstr "ドリル直径"
 
 #: pcbnew/drill/drill_chart_template.cpp:41
 msgid "SLOT W x L"
-msgstr ""
+msgstr "SLOT W x L"
 
 #: pcbnew/drill/drill_chart_template.cpp:42
 msgid "Slot size"
@@ -56745,7 +56743,7 @@ msgstr "スロット サイズ"
 
 #: pcbnew/drill/drill_chart_template.cpp:43
 msgid "PLATED"
-msgstr ""
+msgstr "PLATED"
 
 #: pcbnew/drill/drill_chart_template.cpp:45
 msgid "OPS"
@@ -56757,7 +56755,7 @@ msgstr "オペレーション数"
 
 #: pcbnew/drill/drill_chart_template.cpp:47
 msgid "SITE COUNT"
-msgstr ""
+msgstr "SITE COUNT"
 
 #: pcbnew/drill/drill_chart_template.cpp:48
 #, fuzzy
@@ -56766,11 +56764,11 @@ msgstr "ピン数"
 
 #: pcbnew/drill/drill_chart_template.cpp:49
 msgid "FROM / TO"
-msgstr ""
+msgstr "FROM / TO"
 
 #: pcbnew/drill/drill_chart_template.cpp:51
 msgid "OPERATION"
-msgstr ""
+msgstr "OPERATION"
 
 #: pcbnew/drill/drill_chart_template.cpp:52
 msgid "Operation"
@@ -56778,7 +56776,7 @@ msgstr "操作"
 
 #: pcbnew/drill/drill_chart_template.cpp:53
 msgid "PROTECTION"
-msgstr ""
+msgstr "PROTECTION"
 
 #: pcbnew/drill/drill_chart_template.cpp:54
 msgid "Protection"
@@ -56786,7 +56784,7 @@ msgstr "保護"
 
 #: pcbnew/drill/drill_chart_template.cpp:55
 msgid "BACKDRILL STUB"
-msgstr ""
+msgstr "BACKDRILL STUB"
 
 #: pcbnew/drill/drill_chart_template.cpp:56
 msgid "Backdrill stub"
@@ -56794,7 +56792,7 @@ msgstr "バックドリル スタブ"
 
 #: pcbnew/drill/drill_chart_template.cpp:57
 msgid "ASPECT RATIO"
-msgstr ""
+msgstr "ASPECT RATIO"
 
 #: pcbnew/drill/drill_chart_template.cpp:58
 msgid "Aspect ratio"
@@ -56802,7 +56800,7 @@ msgstr "アスペクト比"
 
 #: pcbnew/drill/drill_chart_template.cpp:59
 msgid "DESCRIPTION"
-msgstr ""
+msgstr "DESCRIPTION"
 
 #: pcbnew/drill/drill_chart_template.cpp:122
 #, c-format
@@ -57446,7 +57444,7 @@ msgstr "不正なインポート済のネット名マップ。"
 
 #: pcbnew/files.cpp:736
 msgid "Cannot apply imported net-name map to the board."
-msgstr ""
+msgstr "インポートされたネット名マップを基板に適用できません。"
 
 #: pcbnew/files.cpp:748 pcbnew/files.cpp:761
 #, c-format
@@ -58219,10 +58217,12 @@ msgid ""
 "The selected microvias have different diameters or hole sizes. A microvia "
 "stack uses one size for every hop."
 msgstr ""
+"選択したマイクロビアは直径または穴のサイズが異なります。 スタック型"
+"マイクロビアは各ホップはすべて同じサイズを使用します。"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1189
 msgid "The microvia stack layers are not present on this board."
-msgstr ""
+msgstr "この基板にはスタック型マイクロビア レイヤーが存在しません。"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1346
 msgid "Microvia stack location violates DRC."
@@ -58252,7 +58252,7 @@ msgstr "ビアの直径"
 
 #: pcbnew/generators/pcb_via_stack.h:68
 msgid "Edit Microvia Stack"
-msgstr ""
+msgstr "スタック型マイクロビアを編集"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:68
 #: pcbnew/generators/pcb_via_stitch.h:73 pcbnew/generators/pcb_via_stitch.h:76
@@ -58606,11 +58606,15 @@ msgid ""
 "Cannot rename net '%s' to '%s': net zero and empty names are reserved for "
 "unconnected items."
 msgstr ""
+"ネットを '%s\" から '%s' に名の変更ができません: ネットのゼロ や空欄は未接続"
+"のアイテム用として予約されています。"
 
 #: pcbnew/netinfo_list.cpp:367
 #, c-format
 msgid "Cannot rename net '%s' to '%s': another net would have the same name."
 msgstr ""
+"ネットを '%s\" から '%s' に名の変更ができません: 別のネットが同じ名前をすでに"
+"持っています。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:93
 #, c-format
@@ -60634,7 +60638,7 @@ msgstr "'%s' は有効なProtel Autotraxファイルではありません。"
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:198
 #, c-format
 msgid "Autotrax import: %d pad(s) with a target shape were skipped."
-msgstr ""
+msgstr "Autotraxインポート: ターゲット形状のパッドが %d 個スキップされました。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:205
 #, c-format
@@ -60649,12 +60653,16 @@ msgid ""
 "Autotrax import: %d pad(s) ask for a ground or power plane connection, which "
 "is not imported."
 msgstr ""
+"Autotraxインポート: 電源プレーンまたはグランド接続を要求するパッド %d 個は"
+"インポートされません。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:220
 #, c-format
 msgid ""
 "Autotrax import: %d item(s) on a layer with no KiCad equivalent were skipped."
 msgstr ""
+"Autotraxインポート: KiCadに相当するものがないレイヤーの %d 個のアイテムは"
+"スキップされました。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:715
 #, c-format
@@ -60667,6 +60675,8 @@ msgid ""
 "Autotrax import: net '%s' node '%s' matches pads in more than one footprint "
 "and was not connected."
 msgstr ""
+"Autotraxインポート: ネット '%s' ノード '%s' は複数のフットプリントのパッドに"
+"一致したため接続されませんでした。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:846
 msgid "Autotrax import: keepout layer used as the board outline."
@@ -62038,7 +62048,7 @@ msgstr "フットプリントのテキスト タイプに %s は使用できま�
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5315
 msgid "Invalid drill map: not on a documentation layer"
-msgstr ""
+msgstr "無効なドリルマップ: ドキュメントレイヤー上にありません"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5477
 #, c-format
@@ -62169,15 +62179,15 @@ msgstr "ODB++付帯情報の生成に失敗しました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:595
 msgid "ODB++ layer name override is empty or collides; using automatic name."
-msgstr ""
+msgstr "ODB++レイヤーの上書きが空欄あるいは衝突しています: 自動の名前を使います。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:619
 msgid "Invalid ODB++ layer type override; using automatic type."
-msgstr ""
+msgstr "ODB++レイヤー タイプの上書きが不正です: 自動のタイプを使います。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:676
 msgid "ODB++ partial drill layer omitted because a span layer is excluded."
-msgstr ""
+msgstr "ODB++部分ドリル レイヤーはスパン レイヤーが省略されているため除外されました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1357
 msgid "Failed to generate ODB++ stackup."
@@ -62185,7 +62195,7 @@ msgstr "ODB++積層構造の生成に失敗しました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1430
 msgid "Board outline is not closed; ODB++ rout layer has no board contour."
-msgstr ""
+msgstr "基板外形が閉じていません: ODB++の配線レイヤーには基板外形がありません。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:148
 msgid "Output path is not a directory"
@@ -62260,7 +62270,7 @@ msgstr ""
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:522
 #, c-format
 msgid "Exception in ODB++ generation: %s"
-msgstr ""
+msgstr "ODB++生成中の例外: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:532
 msgid "Compressing output"
@@ -62295,11 +62305,11 @@ msgstr "不明なODB++セクションキー。"
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:622
 #, c-format
 msgid "ODB++ variant names adjusted after conversion:%s"
-msgstr ""
+msgstr "変換で調整されたODB++バリアント名: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:627
 msgid "ODB++ variant list exceeds 1000 characters; list attributes omitted."
-msgstr ""
+msgstr "ODB++バリアント リストが1000文字を超過しています; リスト属性を省略しました。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:638
 #, c-format
@@ -62308,7 +62318,7 @@ msgstr "不明な基板のバリアント '%s'."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:691
 msgid "ODB++ variant output names collide after conversion."
-msgstr ""
+msgstr "ODB++バリアント出力名が変換後に重複しています。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:166
 msgid "Creating ODB++ Structure"
@@ -62321,29 +62331,33 @@ msgstr "基板を ODB++ としてエクスポート中"
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:260
 msgid "ODB++ package section added because components reference packages."
 msgstr ""
+"ODB++コンポーネントが製造データパッケージを参照しているため、"
+"パッケージセクションを追加しました。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:268
 msgid "Ignoring invalid ODB++ layer override."
-msgstr ""
+msgstr "不正なODB++レイヤーの上書きを無視します。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:287
 #, c-format
 msgid ""
 "ODB++ precision %d is below the minimum of %d for these units; using %d."
-msgstr ""
+msgstr "ODB++精度 %d はユニットの最小値 %d を下まわっています; %d を使います。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:293
 #, c-format
 msgid "ODB++ precision %d is above the maximum of %d; using %d."
-msgstr ""
+msgstr "ODB++精度 %d はユニットの最大値 %d をこえています; %d を使います。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:304
 msgid "ODB++ fabrication data includes EDA nets for intentional shorts."
-msgstr ""
+msgstr "ODB++基板製造用データには意図的なショートのためのEDAネットが含まれています。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:313
 msgid "ODB++ export failed. See the messages above for the cause."
 msgstr ""
+"ODB++エクスポートに失敗しました。原因については上記メッセージを確認してくださ"
+"い。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:72
 msgid "ODB++ Production File"
@@ -63583,22 +63597,22 @@ msgid "must be mm, in, mil, deg, fs, or ps"
 msgstr "mm、in、mil、deg、fs、または ps でなければなりません"
 
 #: pcbnew/pcbexpr_functions.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing 'from' pad argument (footprint reference designator followed by "
 "hyphen and pad number) to %s."
 msgstr ""
-"%s へのフットプリント識別子引数 (A、B、またはリファレンス指定子) がありませ"
-"ん。"
+"‘from’ パッド引数 (フットプリント参照指定子の後にハイフンとパッド番号) が %s "
+"にありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing 'to' pad argument (footprint reference designator followed by hyphen "
 "and pad number) to %s."
 msgstr ""
-"%s へのフットプリント識別子引数 (A、B、またはリファレンス指定子) がありませ"
-"ん。"
+"‘to’ パッド引数 (フットプリント参照指定子の後にハイフンとパッド番号) が %s に"
+"ありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:119
 #, c-format
@@ -63671,9 +63685,9 @@ msgid "Missing field name argument to %s."
 msgstr "%sへのフィールド名引数がありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:1702 pcbnew/pcbexpr_functions.cpp:1744
-#, fuzzy, c-format
+#, c-format
 msgid "Missing netclass name argument to %s."
-msgstr "'%s' へのレイヤー名引数がありません。"
+msgstr "ネットクラス名引数が %s にありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:1783
 #, c-format
@@ -63681,9 +63695,9 @@ msgid "Missing component class name argument to %s."
 msgstr "%s へのコンポーネント クラス名引数がありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:1833 pcbnew/pcbexpr_functions.cpp:1877
-#, fuzzy, c-format
+#, c-format
 msgid "Missing property name argument to %s."
-msgstr "%s へのグループ名引数がありません。"
+msgstr "プロパティ名引数が %s にありません。"
 
 #: pcbnew/pcbnew.cpp:1349 pcbnew/pcbnew.cpp:1362
 msgid "Loading Footprint Libraries"
@@ -63874,9 +63888,9 @@ msgid "No PCB importer recognizes the file format of '%s'\n"
 msgstr "プリント基板インポートは '%s' ファイル フォーマットを認識できません\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to inspect board project: %s\n"
-msgstr "マージされたプロジェクト ファイルの保存に失敗しました: '%s'\n"
+msgstr "基板プロジェクトの検査に失敗しました: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3569
 #, c-format
@@ -64147,13 +64161,15 @@ msgstr "現在の配線パターンの最後にマイクロビアを追加しま
 
 #: pcbnew/router/router_tool.cpp:238
 msgid "Place Microvia Stack at Track End"
-msgstr ""
+msgstr "配線の終点にスタック型マイクロビアを配置"
 
 #: pcbnew/router/router_tool.cpp:239
 msgid ""
 "Drops the active microvia stack preset at the end of the currently routed "
 "track and continues on the target layer."
 msgstr ""
+"現在配線されている配線の終点にアクティブなスタック型マイクロビアプリセットを"
+"配置し、 対象レイヤーで続行します。"
 
 #: pcbnew/router/router_tool.cpp:249
 msgid "Select Layer and Place Through Via..."
@@ -64351,10 +64367,12 @@ msgstr "ルーターのログを保存"
 msgid ""
 "No microvia stack presets defined. Add one in Board Setup, Microvia Stacks."
 msgstr ""
+"スタック型マイクロビアが定義されていません。[基板の設定...]で追加してください"
+"。"
 
 #: pcbnew/router/router_tool.cpp:1234
 msgid "The microvia stack preset layers are not present on this board."
-msgstr ""
+msgstr "スタック型マイクロビア プリセット レイヤーはこの基板上に存在しません。"
 
 #: pcbnew/router/router_tool.cpp:1244
 #, c-format
@@ -64362,11 +64380,12 @@ msgid ""
 "The microvia stack runs between %s and %s. Route on one of those layers to "
 "place it."
 msgstr ""
+"スタック型マイクロビアは %s と %s の間を通ります。これらのいずれかのレイヤー"
+"で配線してください。"
 
 #: pcbnew/router/router_tool.cpp:1274
-#, fuzzy
 msgid "Could not end the track here for a microvia stack."
-msgstr "比較のためこの用紙を開くことができません。"
+msgstr "ここでスタック型マイクロビアのために配線を終端することができませんでした。"
 
 #: pcbnew/router/router_tool.cpp:1664
 msgid "Via needs 2 different layers."
@@ -64378,7 +64397,7 @@ msgstr "配線は導体レイヤーのみです。"
 
 #: pcbnew/router/router_tool.cpp:1825
 msgid "Expand Microvia Stacks"
-msgstr ""
+msgstr "スタック型マイクロビアを展開"
 
 #: pcbnew/router/router_tool.cpp:2375
 msgid "Differential pair members cannot be optimized."
@@ -64573,14 +64592,12 @@ msgid "Control to select the via diameter"
 msgstr "ビア直径を選択するためのコントロール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:128
-#, fuzzy
 msgid "Microvia stack selector"
-msgstr "マイクロビアのパッド直径"
+msgstr "スタック型マイクロビアの選択"
 
 #: pcbnew/toolbars_pcb_editor.cpp:129
-#, fuzzy
 msgid "Control to select the microvia stack preset"
-msgstr "ビア直径を選択するためのコントロール"
+msgstr "スタック型マイクロビア プリセットを選択するためのコントロール"
 
 #: pcbnew/toolbars_pcb_editor.cpp:133
 msgid "Control to select the current variant"
@@ -64615,6 +64632,8 @@ msgstr ""
 #: pcbnew/toolbars_pcb_editor.cpp:479
 msgid "Select the microvia stack preset placed by the microvia stack tool."
 msgstr ""
+"スタック型マイクロビアツールによって配置したスタック型マイクロビア プリセット"
+"を選択する。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:688
 msgid "Track: use netclass width"
@@ -64639,9 +64658,8 @@ msgid "Via: %s (%s)"
 msgstr "ビア: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:786
-#, fuzzy
 msgid "Microvia stack: none defined"
-msgstr "不正テーブル: セルが定義されていません"
+msgstr "スタック型マイクロビア: 定義されていません"
 
 #: pcbnew/toolbars_pcb_editor.cpp:789
 #, c-format
@@ -64649,9 +64667,8 @@ msgid "Microvia stack: %s"
 msgstr "マイクロビア スタック: %s"
 
 #: pcbnew/toolbars_pcb_editor.cpp:792
-#, fuzzy
 msgid "Edit Pre-defined Microvia Stacks..."
-msgstr "定義済みのサイズを編集..."
+msgstr "定義済みのスタック型マイクロビアを編集..."
 
 #: pcbnew/tools/align_distribute_tool.cpp:62
 msgid "Align/Distribute"
@@ -65493,9 +65510,8 @@ msgid "Move Footprint Anchor"
 msgstr "フットプリントのアンカーを移動"
 
 #: pcbnew/tools/drawing_tool.cpp:2647 pcbnew/tools/pcb_actions.cpp:3350
-#, fuzzy
 msgid "Place Sub-grid"
-msgstr "格子状グリッド"
+msgstr "サブ グリッドを配置"
 
 #: pcbnew/tools/drawing_tool.cpp:4385
 msgid "Select Net:"
@@ -65706,12 +65722,16 @@ msgstr "すべての接続されているパッドを交換"
 #: pcbnew/tools/edit_tool_move_fct.cpp:117
 msgid "Cannot swap nets: connected items would receive conflicting nets."
 msgstr ""
+"ネットを交換できません: 接続されているアイテムが矛盾するネットを受けることに"
+"なります。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:144
 msgid ""
 "Cannot swap nets of locked pads or connected copper unless Override Locks is "
 "enabled."
 msgstr ""
+"ロックされたパッドや接続されている導体のネットは、 ロックを無視が有効になって"
+"いない場合は交換できません。"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:387
 #: pcbnew/tools/edit_tool_move_fct.cpp:429 pcbnew/tools/pcb_actions.cpp:1079
@@ -65843,11 +65863,13 @@ msgid ""
 "A microvia stack needs two or more microvias on the same net, each spanning "
 "one layer step, with no gap between them."
 msgstr ""
+"スタック型マイクロビアは同じネット上でそれぞれが一つのレイヤー分のステップを"
+"横断する二つ以上のマイクロビアを必要とし、 それらの間にはギャップがあってはな"
+"りません。"
 
 #: pcbnew/tools/generator_tool.cpp:258
-#, fuzzy
 msgid "Create Microvia Stack"
-msgstr "ビア ステッチを作成"
+msgstr "スタック型マイクロビアを作成"
 
 #: pcbnew/tools/generator_tool.cpp:310
 msgid "Regenerate Selected"
@@ -65864,31 +65886,27 @@ msgstr "この形状に複数の形状が合致します。"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:130
 msgid "That shape is too small or too near a full circle to work with."
-msgstr ""
+msgstr "その形状は非常に小さいかほぼ完全な円であるので使えません。"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:132
-#, fuzzy
 msgid "That shape is locked."
-msgstr "選択したアイテムはロックされています。"
+msgstr "形状はロックされています。"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:158
-#, fuzzy
 msgid "There is nothing to reach in that direction."
-msgstr "このファイル タイプを扱えるプラグインがありません。"
+msgstr "その方向には到達すべきものがなにも在りません。"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:159 pcbnew/tools/pcb_actions.cpp:1182
-#, fuzzy
 msgid "Extend Line or Arc"
-msgstr "交差するまで線を延長"
+msgstr "線または円弧を延長"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:170
 msgid "Nothing crosses the shape here."
-msgstr ""
+msgstr "形状を横切るものががここにはありません。"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:171 pcbnew/tools/pcb_actions.cpp:1189
-#, fuzzy
 msgid "Trim Shape"
-msgstr "始点形状"
+msgstr "形状をトリミングする"
 
 #: pcbnew/tools/item_modification_routine.cpp:106
 msgid "Unable to fillet the selected lines."
@@ -65995,58 +66013,50 @@ msgid "Some of the items could not be outset."
 msgstr "いくつかのアイテムはアウトセット（輪郭作成）できませんでした。"
 
 #: pcbnew/tools/match_properties.cpp:58
-#, fuzzy
 msgid "Tracks and Arcs"
-msgstr "配線とビア:"
+msgstr "配線と円弧"
 
 #: pcbnew/tools/match_properties.cpp:63
-#, fuzzy
 msgid "Text Boxes"
 msgstr "テキスト ボックス"
 
 #: pcbnew/tools/match_properties.cpp:69
-#, fuzzy
 msgid "Table Cells"
-msgstr "テーブルセル"
+msgstr "テーブル セル"
 
 #: pcbnew/tools/match_properties.cpp:70
-#, fuzzy
 msgid "Targets"
 msgstr "対象"
 
 #: pcbnew/tools/match_properties.cpp:71
-#, fuzzy
 msgid "Reference Images"
 msgstr "参照画像"
 
 #: pcbnew/tools/match_properties.cpp:72
-#, fuzzy
 msgid "Barcodes"
 msgstr "バーコード"
 
 #: pcbnew/tools/match_properties.cpp:242
-#, fuzzy
 msgid "Common to Several Kinds"
-msgstr "すべてのユニットで統一化"
+msgstr "いくつかの種類が共通する"
 
 #: pcbnew/tools/match_properties.cpp:441
 msgid "The source and target have no properties in common."
-msgstr ""
+msgstr "ソースとターゲットには共通のプロパティがありません。"
 
 #: pcbnew/tools/match_properties.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Could not apply property '%s' to the target item."
-msgstr "リファレンス '%s' からツリーを検索できませんでした。"
+msgstr "プロパティ '%s' をターゲットに適用できませんでした。"
 
 #: pcbnew/tools/match_properties.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "The value for property '%s' is not valid for the target item."
-msgstr "フットプリントライブラリ '%s' は現在の設定では有効化されていません。"
+msgstr "プロパティ '%s' の値はターゲットで有効ではありません。"
 
 #: pcbnew/tools/match_properties_tool.cpp:58
-#, fuzzy
 msgid "Match Properties Settings"
-msgstr "パッド プロパティ 警告"
+msgstr "一致するプロパティ設定"
 
 #: pcbnew/tools/match_properties_tool.cpp:65
 #, c-format
@@ -66058,33 +66068,32 @@ msgid "Check All"
 msgstr "すべてチェック"
 
 #: pcbnew/tools/match_properties_tool.cpp:141
-#, fuzzy
 msgid "Uncheck All"
-msgstr "すべて選択解除"
+msgstr "すべての選択解除"
 
 #: pcbnew/tools/match_properties_tool.cpp:227
 msgid "Nothing to copy.  The target already matches the source."
-msgstr ""
+msgstr "コピーするものがありません:  すでにターゲットとソースは一致しています。"
 
 #: pcbnew/tools/match_properties_tool.cpp:235 pcbnew/tools/pcb_actions.cpp:1236
-#, fuzzy
 msgid "Match Properties"
-msgstr "基本プロパティ"
+msgstr "一致プロパティ"
 
 #: pcbnew/tools/match_properties_tool.cpp:248
 msgid "Select one item to copy properties from."
-msgstr ""
+msgstr "プロパティのコピーする項目を一つ選択する。"
 
 #: pcbnew/tools/match_properties_tool.cpp:256
-#, fuzzy
 msgid "The selected source item has no properties to match."
-msgstr "リファレンス 領域にフットプリントが見つかりません。"
+msgstr "選択したソースには一致するプロパティがありません。"
 
 #: pcbnew/tools/match_properties_tool.cpp:264
 msgid ""
 "No properties are enabled for this kind of item.  Press <ctrl>+<,> to choose "
 "some."
 msgstr ""
+"この項目には有効になっているプロパティがありません; いくつか選択するには "
+"<ctrl>+<,> を押す。"
 
 #: pcbnew/tools/match_properties_tool.cpp:307
 #, c-format
@@ -66092,10 +66101,12 @@ msgid ""
 "Click or drag over the items to copy to.\n"
 "%d properties enabled; <ctrl>+<,> for settings."
 msgstr ""
+"コピーするアイテムをドラッグまたはクリックしてください。\n"
+"%d 個のプロパティが有効になっている; 設定は<ctrl>+<,>を使う。"
 
 #: pcbnew/tools/match_properties_tool.cpp:375
 msgid "The Match Properties source no longer exists."
-msgstr ""
+msgstr "一致するプロパティソースは存在しなくなった。"
 
 #: pcbnew/tools/multichannel_tool.cpp:140
 msgid "Topology mismatch"
@@ -66135,7 +66146,6 @@ msgstr "対象グループにペアレント グループがありません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1026
 #: pcbnew/tools/multichannel_tool.cpp:1098
-#, fuzzy
 msgid "Repeat Layout"
 msgstr "配置を繰り返す"
 
@@ -66199,7 +66209,6 @@ msgstr ""
 "域を自動生成できません。"
 
 #: pcbnew/tools/multichannel_tool.cpp:2531
-#, fuzzy
 msgid "Auto-generate Placement Rule Areas"
 msgstr "配置ルール 領域を自動生成"
 
@@ -66506,13 +66515,12 @@ msgid "Add a drill chart that tracks the board's holes"
 msgstr "基板の穴を追跡するドリル表を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:519
-#, fuzzy
 msgid "Add Drill Map"
-msgstr "ピン マップを追加"
+msgstr "ドリル マップを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Draw drill symbols at the holes on a documentation layer"
-msgstr ""
+msgstr "ドキュメントレイヤーに穴のドリル記号を描画する"
 
 #: pcbnew/tools/pcb_actions.cpp:527
 msgid "Drill Groups..."
@@ -66625,7 +66633,7 @@ msgstr "選択対象から配線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:703
 msgid "Wrap the selected microvias and traces into a microvia stack"
-msgstr ""
+msgstr "選択したマイクロビアと配線をスタック型マイクロビアにまとめる"
 
 #: pcbnew/tools/pcb_actions.cpp:722
 msgid "Add a Zone Cutout"
@@ -66907,12 +66915,12 @@ msgstr "他の線と交差するまで線を延長"
 
 #: pcbnew/tools/pcb_actions.cpp:1183
 msgid "Hover a graphical line or arc to extend it until it meets another"
-msgstr ""
+msgstr "グラフィカル ラインまたは円弧をほかのものに接するまで延長する"
 
 #: pcbnew/tools/pcb_actions.cpp:1190
 msgid ""
 "Hover the part of a graphical shape to remove between the nearest crossings"
-msgstr ""
+msgstr "グラフィカル形状のパーツにあわせてもっとも近い交点の間を削除する"
 
 #: pcbnew/tools/pcb_actions.cpp:1197
 msgid "Merge selected polygons into a single polygon"
@@ -66936,7 +66944,7 @@ msgstr "選択したアイテムと導体接続を削除"
 
 #: pcbnew/tools/pcb_actions.cpp:1237
 msgid "Copy selected properties from a source item to compatible target items"
-msgstr ""
+msgstr "選択したプロパティのソースから互換性のあるターゲット項目にコピーする"
 
 #: pcbnew/tools/pcb_actions.cpp:1245
 #, fuzzy
@@ -68758,11 +68766,11 @@ msgstr "ドリル表を配置"
 #: pcbnew/tools/pcb_control.cpp:3025
 #, c-format
 msgid "Layer '%s' is hidden; nothing will be shown until you make it visible."
-msgstr ""
+msgstr "レイヤー'%s' は非表示; 表示にあなたがするまでなにも表示されません。"
 
 #: pcbnew/tools/pcb_control.cpp:3117
 msgid "Every documentation layer already has a drill map."
-msgstr ""
+msgstr "すべてのドキュメントレイヤーにはすでにドリルマップがあります。"
 
 #: pcbnew/tools/pcb_control.cpp:3130
 #, fuzzy
