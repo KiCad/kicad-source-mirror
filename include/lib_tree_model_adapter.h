@@ -66,8 +66,7 @@
  * - `SetFilter()` - set whether the view is restricted to power parts
  * - `ShowUnits()` - set whether units are displayed
  * - `SetPreselectNode()` - set a node to highlight when not searching
- * - `AddLibrary()` - populate the model with all aliases in a library
- * - `AddAliasList()` - populate the model with a specific list of aliases
+ * - `DoAddLibrary()` - populate the model with all aliases in a library
  *
  * Quick summary of methods used by the View:
  *
@@ -75,7 +74,6 @@
  * - `AttachTo()` - pass in the wxDataViewCtrl
  * - `GetAliasFor()` - get the LIB_ALIAS* for a selected item
  * - `GetUnitFor()` - get the unit for a selected item
- * - `GetComponentsCount()` - count the aliases loaded
  *
  * Methods implemented as part of wxDataViewModel:
  *
@@ -83,13 +81,10 @@
  * - `IsContainer()` - whether an item is a parent
  * - `GetParent()` - return the parent of an item, or invalid if root
  * - `GetChildren()` - get the children of an item
- * - `GetColumnCount()` - get the number of columns in the view
- * - `GetColumnType()` - get the data type shown in each column
  * - `GetValue()` - get the data shown in a cell
  * - `SetValue()` - edit the data in a cell (does nothing)
  * - `GetAttr()` - get any per-item formatting
  * - `Compare()` - compare two rows, for sorting
- * - `HasDefaultCompare()` - whether sorted by default
  */
 
 #include <project.h>
