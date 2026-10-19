@@ -329,7 +329,7 @@ private:
 
 
 FILE_CHECKLIST_CTRL::FILE_CHECKLIST_CTRL( wxWindow* aParent, wxWindowID aId ) :
-        wxDataViewCtrl( aParent, aId, wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES ),
+        WX_DATAVIEWCTRL( aParent, aId, wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES ),
         m_model( new FILE_CHECKLIST_MODEL() )
 {
     AssociateModel( m_model.get() );
@@ -351,12 +351,7 @@ FILE_CHECKLIST_CTRL::~FILE_CHECKLIST_CTRL()
 void FILE_CHECKLIST_CTRL::SetEntries( const std::vector<FILE_CHECKLIST_ENTRY>& aEntries )
 {
     m_model->SetEntries( aEntries );
-
-    wxDataViewItemArray sections;
-    m_model->GetChildren( wxDataViewItem(), sections );
-
-    for( const wxDataViewItem& section : sections )
-        Expand( section );
+    ExpandAll();
 }
 
 

@@ -23,6 +23,7 @@
 #include <functional>
 #include <utility>
 
+#include <kicommon.h>
 #include <wx/dataview.h>
 
 /**
@@ -81,7 +82,7 @@ private:
  * These should probably be sent upstream, since they may be useful to others, but for now
  * just extend the class with them ourselves.
  */
-class WX_DATAVIEWCTRL : public wxDataViewCtrl
+class KICOMMON_API WX_DATAVIEWCTRL : public wxDataViewCtrl
 {
 public:
     // Just take all constructors

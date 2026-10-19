@@ -281,6 +281,7 @@ set( KICOMMON_SRCS
     widgets/ui_common.cpp
     widgets/up_down_tree.cpp
     widgets/wx_collapsible_pane.cpp
+    widgets/wx_dataviewctrl.cpp
     widgets/wx_grid.cpp
     widgets/wx_data_view_hyperlink_renderer.cpp
     widgets/wx_html_report_panel.cpp
@@ -744,7 +745,6 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_aui_utils.cpp
     widgets/wx_busy_indicator.cpp
     widgets/wx_combobox.cpp
-    widgets/wx_dataviewctrl.cpp
     widgets/wx_debounced_action.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_listbox.cpp

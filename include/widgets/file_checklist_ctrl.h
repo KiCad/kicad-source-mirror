@@ -23,10 +23,10 @@
 #include <map>
 #include <vector>
 
-#include <wx/dataview.h>
 #include <wx/string.h>
 
 #include <bitmaps/bitmaps_list.h>
+#include <widgets/wx_dataviewctrl.h>
 #include <wx/colour.h>
 #include <kicommon.h>
 
@@ -38,7 +38,7 @@
 struct KICOMMON_API FILE_CHECKLIST_ENTRY
 {
     wxString section;
-    wxString path;    ///< Row identity, and the hover text.
+    wxString path;    ///< Row identity.
     wxString label;   ///< Shown in place of the path.
     wxString status;  ///< Free text, e.g. "Modified".
     wxColour statusColour; ///< Text colour for the status, or the default when not set.
@@ -91,7 +91,7 @@ class FILE_CHECKLIST_MODEL;
  * The control is git-agnostic. Callers describe rows with FILE_CHECKLIST_ENTRY and ask
  * back for the checked paths.
  */
-class KICOMMON_API FILE_CHECKLIST_CTRL : public wxDataViewCtrl
+class KICOMMON_API FILE_CHECKLIST_CTRL : public WX_DATAVIEWCTRL
 {
 public:
     FILE_CHECKLIST_CTRL( wxWindow* aParent, wxWindowID aId = wxID_ANY );
