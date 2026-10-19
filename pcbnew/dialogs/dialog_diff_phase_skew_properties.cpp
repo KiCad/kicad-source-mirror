@@ -63,6 +63,7 @@ bool DIALOG_DIFF_PHASE_SKEW_PROPERTIES::TransferDataFromWindow()
     m_settings->m_ZeroSkewColor = m_zeroSwatch->GetSwatchColor();
     m_settings->m_PositiveSkewColor = m_positiveSwatch->GetSwatchColor();
     m_settings->m_NegativeSkewColor = m_negativeSwatch->GetSwatchColor();
+    m_settings->m_UnknownSkewColor = m_unknownSwatch->GetSwatchColor();
     m_settings->m_UseLogScale = m_logScale->GetValue();
 
     return true;
