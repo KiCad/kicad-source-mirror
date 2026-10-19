@@ -212,7 +212,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         m_hasUnpushedCommits( false ),
         m_hasRemote( false ),
         m_headDetached( false ),
-        m_remoteAhead( false ),
+        m_upstreamAhead( false ),
         m_operationInProgress( false ),
         m_operation( GitOperation::None ),
         m_editorsDirty( false )
@@ -442,7 +442,7 @@ struct GIT_COMMIT_PANE::STATUS
     bool                              hasRemote = false;
     bool                              headDetached = false;
     bool                              operationInProgress = false;
-    bool                              remoteAhead = false;
+    bool                              upstreamAhead = false;
     GitOperation                      operation = GitOperation::None;
     wxString                          attachError;
     wxString                          currentBranch;
@@ -484,7 +484,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
                 status->headDetached = aCommon.IsHeadDetached();
                 status->operationInProgress = aCommon.IsOperationInProgress();
                 status->operation = aCommon.OperationInProgress();
-                status->remoteAhead = aCommon.HasUpstreamCommits();
+                status->upstreamAhead = aCommon.HasUpstreamCommits();
                 status->branches = aCommon.GetBranches();
                 KIGIT::SortBranchesForDisplay( status->branches );
                 status->currentBranch = aCommon.GetCurrentBranchName();
@@ -519,7 +519,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
     m_headDetached = aStatus.headDetached;
     m_operationInProgress = aStatus.operationInProgress;
     m_operation = aStatus.operation;
-    m_remoteAhead = aStatus.remoteAhead;
+    m_upstreamAhead = aStatus.upstreamAhead;
 
     // Without a remote there is nowhere to push to, so local commits are not waiting for it.
     m_hasUnpushedCommits = aStatus.hasLocalCommits && m_hasRemote;
@@ -598,8 +598,8 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
                               "the project in the project manager and choose Version Control." ) );
         else if( m_editorsDirty )
             setStatusText( _( "The open editors have unsaved changes. Committing saves them first." ) );
-        else if( m_remoteAhead )
-            setStatusText( _( "The remote has changes this project does not. Get Changes brings them in." ) );
+        else if( m_upstreamAhead )
+            setStatusText( _( "The tracked branch has changes this project does not. Get Changes brings them in." ) );
         else if( m_hasUnpushedCommits )
             setStatusText( _( "Committed changes are waiting to be pushed." ) );
         else
@@ -637,7 +637,7 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_headDetached = false;
     m_operationInProgress = false;
     m_operation = GitOperation::None;
-    m_remoteAhead = false;
+    m_upstreamAhead = false;
     m_editorsDirty = false;
 
     m_shownPaths.clear();
@@ -857,8 +857,8 @@ void GIT_COMMIT_PANE::updateCommitButton()
 
     // The empty state label only shows when there is nothing to commit, so the button carries
     // the notice the rest of the time.
-    if( m_remoteAhead )
-        m_pullButton->SetToolTip( _( "The remote has commits this project does not have." ) );
+    if( m_upstreamAhead )
+        m_pullButton->SetToolTip( _( "The tracked branch has commits this project does not have." ) );
     else
         m_pullButton->UnsetToolTip();
 

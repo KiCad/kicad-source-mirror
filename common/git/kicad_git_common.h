@@ -76,6 +76,14 @@ struct KIGIT_BRANCH_INFO
 };
 
 
+// Commit counts between two references.
+struct KIGIT_AHEAD_BEHIND
+{
+    size_t ahead = 0;  ///< Commits only in the first reference.
+    size_t behind = 0; ///< Commits only in the second reference.
+};
+
+
 // What the Branches page's detail pane shows about one branch.
 struct KIGIT_BRANCH_DETAIL
 {
@@ -87,8 +95,9 @@ struct KIGIT_BRANCH_DETAIL
     wxString   email;
     wxString   message;
     wxString   upstream; ///< The branch this one tracks, or empty.
-    size_t     ahead = 0;
-    size_t     behind = 0;
+
+    /// Comparison with upstream, if it could be read.
+    std::optional<KIGIT_AHEAD_BEHIND> divergence;
 };
 
 
@@ -296,7 +305,8 @@ public:
     // don't loop forever.
     std::atomic<unsigned>& TestedTypes() { return m_testedTypes; }
 
-    // Returns true if the repository has local commits that have not been pushed
+    /// True when HEAD has commits its upstream does not, or has no upstream yet.
+    /// False for a detached or unborn HEAD.
     bool HasLocalCommits() const;
 
     /// True when the upstream branch has commits the current branch does not.
@@ -308,9 +318,8 @@ public:
     /// True when HEAD points at a commit rather than a branch, as after checking out a tag.
     bool IsHeadDetached() const;
 
-    /// How many commits aBranch holds that the current HEAD does not, which deleting it would
-    /// lose. Zero when the branch is fully merged or cannot be read.
-    size_t GetUnmergedCommitCount( const wxString& aBranch ) const;
+    /// Commits in aBranch that HEAD does not contain. No value when either cannot be read.
+    std::optional<size_t> GetUnmergedCommitCount( const wxString& aBranch ) const;
 
     // True when tracked files hold uncommitted changes, staged or not. Untracked files do not
     // count: a merge leaves them alone. aReadOk distinguishes a clean tree from a failed read.
@@ -619,6 +628,9 @@ protected:
     friend class LIBGIT_BACKEND;
 
 private:
+    /// Count commits unique to aBranch and aBase. No value if the history cannot be read.
+    std::optional<KIGIT_AHEAD_BEHIND> compareRefs( const git_reference* aBranch, const git_reference* aBase ) const;
+
     CANCEL_TOKEN ActiveCancelToken() const
     {
         std::lock_guard<std::mutex> lock( m_operationMutex );

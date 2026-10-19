@@ -246,16 +246,23 @@ void PANEL_GIT_BRANCHES::fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail )
     wxString sync;
 
     if( aDetail.upstream.IsEmpty() )
-        sync = _( "Not tracking a remote branch." );
-    else if( aDetail.ahead == 0 && aDetail.behind == 0 )
-        sync = wxString::Format( _( "Up to date with %s." ), aDetail.upstream );
-    else if( aDetail.behind == 0 )
-        sync = wxString::Format( _( "%zu commits ahead of %s." ), aDetail.ahead, aDetail.upstream );
-    else if( aDetail.ahead == 0 )
-        sync = wxString::Format( _( "%zu commits behind %s." ), aDetail.behind, aDetail.upstream );
+        sync = _( "Not tracking another branch." );
+    else if( !aDetail.divergence )
+        sync = wxString::Format( _( "Could not compare with %s." ), aDetail.upstream );
     else
-        sync = wxString::Format( _( "%zu commits ahead and %zu behind %s." ), aDetail.ahead, aDetail.behind,
-                                 aDetail.upstream );
+    {
+        const KIGIT_AHEAD_BEHIND& counts = *aDetail.divergence;
+
+        if( counts.ahead == 0 && counts.behind == 0 )
+            sync = wxString::Format( _( "Up to date with %s." ), aDetail.upstream );
+        else if( counts.behind == 0 )
+            sync = wxString::Format( _( "%zu commits ahead of %s." ), counts.ahead, aDetail.upstream );
+        else if( counts.ahead == 0 )
+            sync = wxString::Format( _( "%zu commits behind %s." ), counts.behind, aDetail.upstream );
+        else
+            sync = wxString::Format( _( "%zu commits ahead and %zu behind %s." ), counts.ahead, counts.behind,
+                                     aDetail.upstream );
+    }
 
     m_branchSync->SetLabel( sync );
 
@@ -316,9 +323,9 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
 
     struct OUTCOME
     {
-        wxString current;
-        size_t   unmerged = 0;
-        bool     checked = false;
+        wxString              current;
+        std::optional<size_t> unmerged;
+        bool                  checked = false;
     };
 
     auto outcome = std::make_shared<OUTCOME>();
@@ -342,21 +349,25 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
                     return;
                 }
 
-                // Deleting drops any commit no other branch reaches, and git offers no way back a
-                // beginner would find, so say what is at stake before asking.
+                if( !outcome->unmerged )
+                {
+                    DisplayErrorMessage( this, _( "Could not compare this branch with the current version." ) );
+                    return;
+                }
+
                 wxString question;
 
-                if( outcome->unmerged == 1 )
+                if( *outcome->unmerged == 1 )
                 {
-                    question = wxString::Format( _( "Branch '%s' has one commit that is not on the current branch. "
-                                                    "Deleting it loses that commit.\n\nDelete it anyway?" ),
+                    question = wxString::Format( _( "Branch '%s' has one commit that is not in the current version."
+                                                    "\n\nDelete it anyway?" ),
                                                  name );
                 }
-                else if( outcome->unmerged > 1 )
+                else if( *outcome->unmerged > 1 )
                 {
-                    question = wxString::Format( _( "Branch '%s' has %zu commits that are not on the current branch. "
-                                                    "Deleting it loses them.\n\nDelete it anyway?" ),
-                                                 name, outcome->unmerged );
+                    question = wxString::Format( _( "Branch '%s' has %zu commits that are not in the current version."
+                                                    "\n\nDelete it anyway?" ),
+                                                 name, *outcome->unmerged );
                 }
                 else
                 {

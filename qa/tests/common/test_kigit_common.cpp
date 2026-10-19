@@ -940,6 +940,10 @@ BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
 
     BOOST_REQUIRE( common.IsHeadUnborn() );
     BOOST_CHECK( common.GetBranches().empty() );
+    BOOST_CHECK( !common.HasLocalCommits() );
+    BOOST_CHECK( !common.HasUpstreamCommits() );
+    BOOST_CHECK( !common.GetUnmergedCommitCount( "main" ) );
+    BOOST_CHECK( !common.GetBranchDetail( "main" ).divergence );
 
     // There is no commit to start a branch at, which is why the method below exists.
     BOOST_CHECK( !common.CreateBranch( wxS( "rev-a" ) ) );
@@ -1456,10 +1460,16 @@ BOOST_AUTO_TEST_CASE( DetachedHeadHasNoLocalCommits )
     // On a branch with no upstream the commit really is unpublished.
     BOOST_REQUIRE( !common.IsHeadDetached() );
     BOOST_CHECK( common.HasLocalCommits() );
+    BOOST_CHECK( !common.HasUpstreamCommits() );
 
     BOOST_REQUIRE( common.CheckoutTag( "v1.0" ) );
     BOOST_REQUIRE( common.IsHeadDetached() );
     BOOST_CHECK( !common.HasLocalCommits() );
+    BOOST_CHECK( !common.HasUpstreamCommits() );
+
+    std::optional<size_t> count = common.GetUnmergedCommitCount( "main" );
+    BOOST_REQUIRE( count );
+    BOOST_CHECK_EQUAL( *count, 0u );
 }
 
 
@@ -1490,15 +1500,16 @@ BOOST_AUTO_TEST_CASE( CheckoutTagDetachesHead )
 }
 
 
-// The count is what deleting the branch would lose: its commits that HEAD does not reach.
-BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
+BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatHeadDoesNotContain )
 {
     git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
     KIGIT_COMMON            common( repo );
 
     BOOST_REQUIRE( common.CreateBranch( "feature" ) );
-    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "feature" ), 0u );
+    std::optional<size_t> count = common.GetUnmergedCommitCount( "feature" );
+    BOOST_REQUIRE( count );
+    BOOST_CHECK_EQUAL( *count, 0u );
 
     BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/feature" ), GIT_OK );
 
@@ -1511,9 +1522,13 @@ BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
     commitWorkingFile( repo, wxS( "file.txt" ), "only on feature" );
     BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/main" ), GIT_OK );
 
-    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "feature" ), 1u );
-    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "main" ), 0u );
-    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "no-such-branch" ), 0u );
+    count = common.GetUnmergedCommitCount( "feature" );
+    BOOST_REQUIRE( count );
+    BOOST_CHECK_EQUAL( *count, 1u );
+    count = common.GetUnmergedCommitCount( "main" );
+    BOOST_REQUIRE( count );
+    BOOST_CHECK_EQUAL( *count, 0u );
+    BOOST_CHECK( !common.GetUnmergedCommitCount( "no-such-branch" ) );
 }
 
 
@@ -1739,15 +1754,111 @@ BOOST_AUTO_TEST_CASE( GetBranchDetailReportsTipAndUpstream )
     BOOST_CHECK_EQUAL( detail.email.ToStdString(), "qa@example.com" );
     BOOST_CHECK_EQUAL( detail.message.ToStdString(), "second\n\nWith a body." );
     BOOST_CHECK_EQUAL( detail.upstream.ToStdString(), "base" );
-    BOOST_CHECK_EQUAL( detail.ahead, 1u );
-    BOOST_CHECK_EQUAL( detail.behind, 0u );
+    BOOST_REQUIRE( detail.divergence );
+    BOOST_CHECK_EQUAL( detail.divergence->ahead, 1u );
+    BOOST_CHECK_EQUAL( detail.divergence->behind, 0u );
 
     KIGIT_BRANCH_DETAIL base = common.GetBranchDetail( wxS( "base" ) );
     BOOST_REQUIRE( base.found );
     BOOST_CHECK( base.upstream.IsEmpty() );
+    BOOST_CHECK( !base.divergence );
     BOOST_CHECK_EQUAL( base.message.ToStdString(), "initial" );
 
     BOOST_CHECK( !common.GetBranchDetail( wxS( "nowhere" ) ).found );
+}
+
+
+BOOST_AUTO_TEST_CASE( BranchComparisonsUseTheSelectedBranchAndItsOwnUpstream )
+{
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "initial\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+    BOOST_REQUIRE( common.CreateBranch( "selected" ) );
+    BOOST_REQUIRE( common.CreateBranch( "main-upstream" ) );
+
+    auto commitOn = [&]( const char* aBranch, const char* aMessage )
+    {
+        wxString ref = wxS( "refs/heads/" ) + wxString::FromUTF8( aBranch );
+        BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), ref.utf8_str() ), GIT_OK );
+        writeFile( TempPath(), "file.txt", aMessage );
+        commitWorkingFile( repo.get(), "file.txt", aMessage );
+    };
+
+    commitOn( "selected", "selected one" );
+    BOOST_REQUIRE( common.CreateBranch( "selected-upstream" ) );
+    commitOn( "selected", "selected two" );
+    commitOn( "selected-upstream", "selected upstream one" );
+    commitOn( "main-upstream", "main upstream one" );
+    commitOn( "main-upstream", "main upstream two" );
+    commitOn( "main-upstream", "main upstream three" );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/main" ), GIT_OK );
+
+    auto setUpstream = [&]( const char* aBranch, const char* aUpstream )
+    {
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_branch_lookup( &ref, repo.get(), aBranch, GIT_BRANCH_LOCAL ), GIT_OK );
+        KIGIT::GitReferencePtr refPtr( ref );
+        BOOST_REQUIRE_EQUAL( git_branch_set_upstream( ref, aUpstream ), GIT_OK );
+    };
+
+    setUpstream( "main", "main-upstream" );
+    setUpstream( "selected", "selected-upstream" );
+
+    // The selected branch and its upstream each have one new commit.
+    KIGIT_BRANCH_DETAIL selected = common.GetBranchDetail( "selected" );
+    BOOST_REQUIRE( selected.found );
+    BOOST_CHECK_EQUAL( selected.upstream.ToStdString(), "selected-upstream" );
+    BOOST_REQUIRE( selected.divergence );
+    BOOST_CHECK_EQUAL( selected.divergence->ahead, 1u );
+    BOOST_CHECK_EQUAL( selected.divergence->behind, 1u );
+
+    // Both selected branch commits are missing from HEAD.
+    std::optional<size_t> count = common.GetUnmergedCommitCount( "selected" );
+    BOOST_REQUIRE( count );
+    BOOST_CHECK_EQUAL( *count, 2u );
+
+    KIGIT_BRANCH_DETAIL main = common.GetBranchDetail( "main" );
+    BOOST_REQUIRE( main.divergence );
+    BOOST_CHECK_EQUAL( main.divergence->ahead, 0u );
+    BOOST_CHECK_EQUAL( main.divergence->behind, 3u );
+    BOOST_CHECK( !common.HasLocalCommits() );
+    BOOST_CHECK( common.HasUpstreamCommits() );
+
+    commitOn( "main", "local main one" );
+    main = common.GetBranchDetail( "main" );
+    BOOST_REQUIRE( main.divergence );
+    BOOST_CHECK_EQUAL( main.divergence->ahead, 1u );
+    BOOST_CHECK_EQUAL( main.divergence->behind, 3u );
+    BOOST_CHECK( common.HasLocalCommits() );
+    BOOST_CHECK( common.HasUpstreamCommits() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BranchComparisonsStayUnknownWhenReferencesCannotBeRead )
+{
+    KIGIT_COMMON unavailable( nullptr );
+    BOOST_CHECK( !unavailable.HasLocalCommits() );
+    BOOST_CHECK( !unavailable.HasUpstreamCommits() );
+    BOOST_CHECK( !unavailable.GetUnmergedCommitCount( "main" ) );
+    BOOST_CHECK( !unavailable.GetBranchDetail( "main" ).divergence );
+
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "initial\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+
+    // The reference exists, but its commit is missing.
+    writeFile( TempPath(), ".git/refs/heads/broken", "1111111111111111111111111111111111111111\n" );
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo.get() ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( config, "branch.main.remote", "." ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( config, "branch.main.merge", "refs/heads/broken" ), GIT_OK );
+
+    KIGIT_BRANCH_DETAIL detail = common.GetBranchDetail( "main" );
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK_EQUAL( detail.upstream.ToStdString(), "broken" );
+    BOOST_CHECK( !detail.divergence );
+    BOOST_CHECK( !common.HasLocalCommits() );
+    BOOST_CHECK( !common.HasUpstreamCommits() );
+    BOOST_CHECK( !common.GetUnmergedCommitCount( "broken" ) );
 }
 
 

@@ -222,7 +222,7 @@ private:
     bool m_headDetached;
 
     /// True when the upstream has commits this project does not, so Get Changes has work to do.
-    bool m_remoteAhead;
+    bool m_upstreamAhead;
 
     /// True while a merge or rebase is in progress. The network button then reads Abandon.
     bool m_operationInProgress;

@@ -635,11 +635,7 @@ KIGIT_BRANCH_DETAIL KIGIT_COMMON::GetBranchDetail( const wxString& aBranch ) con
     if( git_branch_name( &upstreamName, upstream ) == GIT_OK )
         detail.upstream = wxString::FromUTF8( upstreamName );
 
-    const git_oid* local = git_reference_target( ref );
-    const git_oid* remote = git_reference_target( upstream );
-
-    if( local && remote )
-        git_graph_ahead_behind( &detail.ahead, &detail.behind, m_repo, local, remote );
+    detail.divergence = compareRefs( ref, upstream );
 
     return detail;
 }
@@ -849,69 +845,60 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
 }
 
 
+std::optional<KIGIT_AHEAD_BEHIND> KIGIT_COMMON::compareRefs( const git_reference* aBranch,
+                                                             const git_reference* aBase ) const
+{
+    if( !m_repo || !aBranch || !aBase )
+        return std::nullopt;
+
+    git_object* branchCommit = nullptr;
+
+    if( git_reference_peel( &branchCommit, aBranch, GIT_OBJECT_COMMIT ) != GIT_OK )
+        return std::nullopt;
+
+    KIGIT::GitObjectPtr branchPtr( branchCommit );
+    git_object*         baseCommit = nullptr;
+
+    if( git_reference_peel( &baseCommit, aBase, GIT_OBJECT_COMMIT ) != GIT_OK )
+        return std::nullopt;
+
+    KIGIT::GitObjectPtr basePtr( baseCommit );
+    KIGIT_AHEAD_BEHIND  counts;
+
+    int result = git_graph_ahead_behind( &counts.ahead, &counts.behind, m_repo, git_object_id( branchCommit ),
+                                         git_object_id( baseCommit ) );
+
+    if( result != GIT_OK )
+        return std::nullopt;
+
+    return counts;
+}
+
+
 bool KIGIT_COMMON::HasLocalCommits() const
 {
-    if( !m_repo )
-        return false;
-
-    // A detached HEAD is on no branch, so it has no upstream to be ahead of. Reading that
-    // missing upstream as unpushed work would answer a question that was not asked.
-    if( IsHeadDetached() )
+    if( !m_repo || IsHeadDetached() )
         return false;
 
     git_reference* head = nullptr;
-    git_reference* remote_head = nullptr;
 
     if( git_repository_head( &head, m_repo ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to get HEAD: %s", KIGIT_COMMON::GetLastGitError() );
         return false;
-    }
 
     KIGIT::GitReferencePtr headPtr( head );
+    git_reference*         upstream = nullptr;
+    int                    result = git_branch_upstream( &upstream, head );
 
-    if( git_branch_upstream( &remote_head, head ) != GIT_OK )
+    if( result != GIT_OK )
     {
-        // No remote branch, so we have local commits (new repo?)
-        wxLogTrace( traceGit, "Failed to get remote HEAD: %s", KIGIT_COMMON::GetLastGitError() );
-        return true;
+        // Treat a branch without an upstream as unpublished.
+        return result == GIT_ENOTFOUND;
     }
 
-    KIGIT::GitReferencePtr remoteHeadPtr( remote_head );
-    const git_oid*         head_oid = git_reference_target( head );
-    const git_oid*         remote_oid = git_reference_target( remote_head );
-    git_revwalk*           walker = nullptr;
+    KIGIT::GitReferencePtr            upstreamPtr( upstream );
+    std::optional<KIGIT_AHEAD_BEHIND> counts = compareRefs( head, upstream );
 
-    if( git_revwalk_new( &walker, m_repo ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to create revwalker: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    KIGIT::GitRevWalkPtr walkerPtr( walker );
-
-    if( !head_oid || git_revwalk_push( walker, head_oid ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to push commits: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    if( remote_oid && git_revwalk_hide( walker, remote_oid ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to push/hide commits: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    git_oid oid;
-
-    // If we can't walk to the next commit, then we are at or behind the remote
-    if( git_revwalk_next( &oid, walker ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to walk to next commit: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    return true;
+    return counts && counts->ahead > 0;
 }
 
 
@@ -954,47 +941,36 @@ bool KIGIT_COMMON::HasUpstreamCommits() const
     if( git_branch_upstream( &upstream, head ) != GIT_OK )
         return false;
 
-    KIGIT::GitReferencePtr upstreamPtr( upstream );
-    const git_oid*         headOid = git_reference_target( head );
-    const git_oid*         upstreamOid = git_reference_target( upstream );
+    KIGIT::GitReferencePtr            upstreamPtr( upstream );
+    std::optional<KIGIT_AHEAD_BEHIND> counts = compareRefs( head, upstream );
 
-    if( !headOid || !upstreamOid )
-        return false;
-
-    size_t ahead = 0;
-    size_t behind = 0;
-
-    if( git_graph_ahead_behind( &ahead, &behind, m_repo, headOid, upstreamOid ) != GIT_OK )
-        return false;
-
-    return behind > 0;
+    return counts && counts->behind > 0;
 }
 
 
-size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
+std::optional<size_t> KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 {
     if( !m_repo )
-        return 0;
+        return std::nullopt;
 
-    git_reference* branchRef = nullptr;
+    git_reference* branch = nullptr;
 
-    if( git_branch_lookup( &branchRef, m_repo, aBranch.utf8_string().c_str(), GIT_BRANCH_LOCAL ) != GIT_OK )
-        return 0;
+    if( git_branch_lookup( &branch, m_repo, aBranch.utf8_string().c_str(), GIT_BRANCH_LOCAL ) != GIT_OK )
+        return std::nullopt;
 
-    KIGIT::GitReferencePtr branchPtr( branchRef );
-    const git_oid*         branchOid = git_reference_target( branchRef );
-    git_oid                headOid;
+    KIGIT::GitReferencePtr branchPtr( branch );
+    git_reference*         head = nullptr;
 
-    if( !branchOid || git_reference_name_to_id( &headOid, m_repo, "HEAD" ) != GIT_OK )
-        return 0;
+    if( git_repository_head( &head, m_repo ) != GIT_OK )
+        return std::nullopt;
 
-    size_t ahead = 0;
-    size_t behind = 0;
+    KIGIT::GitReferencePtr            headPtr( head );
+    std::optional<KIGIT_AHEAD_BEHIND> counts = compareRefs( branch, head );
 
-    if( git_graph_ahead_behind( &ahead, &behind, m_repo, branchOid, &headOid ) != GIT_OK )
-        return 0;
+    if( !counts )
+        return std::nullopt;
 
-    return ahead;
+    return counts->ahead;
 }
 
 
