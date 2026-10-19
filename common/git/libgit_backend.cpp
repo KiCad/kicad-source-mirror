@@ -495,7 +495,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to get repository index: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
-    return CommitResult::Error;
+        return CommitResult::Error;
     }
 
     KIGIT::GitIndexPtr indexPtr( index );
@@ -598,6 +598,8 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
         return CommitResult::Error;
     }
 
+    KIGIT::GitTreePtr treePtr( tree );
+
     // Nothing is written yet, so the scratch guard puts the real index back on the way out.
     if( branchMovedSince( repo, headAtStart, hadHeadAtStart ) )
     {
@@ -614,7 +616,6 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
         return CommitResult::Error;
     }
 
-    KIGIT::GitTreePtr treePtr( tree );
     git_commit* parent = nullptr;
 
     if( git_repository_head_unborn( repo ) == 0 )
@@ -830,6 +831,8 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
         return CommitResult::Error;
     }
 
+    KIGIT::GitTreePtr treePtr( tree );
+
     // Nothing is written yet, so the scratch guard puts the real index back on the way out.
     if( branchMovedSince( repo, headAtStart, hadHeadAtStart ) )
     {
@@ -846,8 +849,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
         return CommitResult::Error;
     }
 
-    KIGIT::GitTreePtr treePtr( tree );
-    git_signature*    author = nullptr;
+    git_signature* author = nullptr;
 
     if( git_signature_now( &author, aAuthorName.utf8_string().c_str(), aAuthorEmail.utf8_string().c_str() ) != 0 )
     {
