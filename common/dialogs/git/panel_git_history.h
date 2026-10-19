@@ -120,6 +120,10 @@ private:
     /// Author email for each history row, so a fetched avatar can find its rows.
     std::vector<wxString> m_historyEmails;
 
+    /// Whether each row's commit is the one HEAD points at. With every branch listed, the top
+    /// row can belong to another branch, and only HEAD's commit can be amended.
+    std::vector<bool> m_historyAtHead;
+
     /// Fetched web avatars, keyed by author email.
     std::map<wxString, wxBitmap> m_avatarCache;
 

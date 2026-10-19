@@ -19,6 +19,7 @@
 
 #include <dialogs/git/panel_git_history.h>
 
+#include <algorithm>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -418,8 +419,10 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
                              wxMenu menu;
 
-                             // Amending rewrites the newest commit, so it is offered there only.
-                             if( row == 0 )
+                             // Amending rewrites the commit HEAD points at. With every branch
+                             // listed the top row can be another branch's, so the row has to be
+                             // HEAD's own commit and not merely the newest one shown.
+                             if( row < static_cast<int>( m_historyAtHead.size() ) && m_historyAtHead[row] )
                                  menu.Append( 1, _( "Amend Last Commit..." ) );
 
                              menu.Append( 2, _( "Restore This Version" ) );
@@ -728,6 +731,7 @@ void PANEL_GIT_HISTORY::Populate()
     m_fillingHistory = true;
     m_historyList->DeleteAllItems();
     m_historyEmails.clear();
+    m_historyAtHead.clear();
 
     appendHistoryRows( commits, 0 );
 
@@ -800,6 +804,7 @@ void PANEL_GIT_HISTORY::appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO>&
         m_historyList->AppendItem( row );
 
         m_historyEmails.push_back( c.email );
+        m_historyAtHead.push_back( std::find( c.refs.begin(), c.refs.end(), wxS( "HEAD" ) ) != c.refs.end() );
 
         if( showAvatars )
             requestAvatar( c.email, diameter );
@@ -935,6 +940,7 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
 
     wxString lastMessage;
     bool     hasLocalCommits = false;
+    bool     headDetached = false;
 
     {
         std::unique_lock<std::mutex> lock = common->TryLockAction();
@@ -945,9 +951,17 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
             return;
         }
 
+        headDetached = common->IsHeadDetached();
         hasLocalCommits = common->HasLocalCommits();
         lastMessage = common->GetLastCommitMessage();
         lastMessage.Trim();
+    }
+
+    if( headDetached )
+    {
+        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, so there "
+                                     "is no commit to amend. Double click a branch to go back to it first." ) );
+        return;
     }
 
     // Rewriting a commit that is already on the remote would diverge the branch, so only an

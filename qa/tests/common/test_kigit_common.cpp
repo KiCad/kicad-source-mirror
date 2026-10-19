@@ -1515,6 +1515,29 @@ BOOST_AUTO_TEST_CASE( StashPopKeepsStashWhenItConflicts )
 }
 
 
+// A detached HEAD is on no branch, so it has no upstream. That missing upstream must not read
+// as unpushed work, while a branch without one still does.
+BOOST_AUTO_TEST_CASE( DetachedHeadHasNoLocalCommits )
+{
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateTag( "v1.0" ) );
+
+    // On a branch with no upstream the commit really is unpublished.
+    BOOST_REQUIRE( !common.IsHeadDetached() );
+    BOOST_CHECK( common.HasLocalCommits() );
+
+    BOOST_REQUIRE( common.CheckoutTag( "v1.0" ) );
+    BOOST_REQUIRE( common.IsHeadDetached() );
+    BOOST_CHECK( !common.HasLocalCommits() );
+}
+
+
 // CheckoutTag puts the working tree at the tagged commit with HEAD detached.
 BOOST_AUTO_TEST_CASE( CheckoutTagDetachesHead )
 {

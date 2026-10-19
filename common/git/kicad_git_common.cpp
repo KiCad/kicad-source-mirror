@@ -939,6 +939,11 @@ bool KIGIT_COMMON::HasLocalCommits() const
     if( !m_repo )
         return false;
 
+    // A detached HEAD is on no branch, so it has no upstream to be ahead of. Reading that
+    // missing upstream as unpushed work would answer a question that was not asked.
+    if( IsHeadDetached() )
+        return false;
+
     git_reference* head = nullptr;
     git_reference* remote_head = nullptr;
 
