@@ -77,11 +77,23 @@ PANEL_GIT_BRANCHES::PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* 
                           } );
 
     // Double-clicking a branch switches the working tree to it.
-    m_branchesList->SetToolTip( _( "Double click a branch to switch the project to it." ) );
+    m_branchesList->SetToolTip( _( "Double click a local branch to switch the project to it." ) );
     m_branchesList->Bind( wxEVT_LIST_ITEM_ACTIVATED,
                           [this]( wxListEvent& aEvent )
                           {
-                              m_dialog->SwitchToBranch( m_branchesList->GetItemText( aEvent.GetIndex(), 0 ) );
+                              int row = aEvent.GetIndex();
+
+                              // A remote branch is someone else's work to start from, not
+                              // somewhere to stand, so New Branch is the way to take it up.
+                              if( row < static_cast<int>( m_branchIsRemote.size() ) && m_branchIsRemote[row] )
+                              {
+                                  DisplayInfoMessage( this, _( "This branch is on the remote. Select it and "
+                                                               "press New Branch to start your own branch "
+                                                               "from it." ) );
+                                  return;
+                              }
+
+                              m_dialog->SwitchToBranch( m_branchesList->GetItemText( row, 0 ) );
                           } );
 
     m_newBranchButton->Bind( wxEVT_BUTTON,
@@ -130,6 +142,7 @@ void PANEL_GIT_BRANCHES::Populate()
 
     m_fillingBranches = true;
     m_branchesList->DeleteAllItems();
+    m_branchIsRemote.clear();
 
     for( const KIGIT_BRANCH_INFO& branch : branches )
     {
@@ -148,6 +161,7 @@ void PANEL_GIT_BRANCHES::Populate()
 
         m_branchesList->SetItem( idx, 2, branch.tipHash );
         m_branchesList->SetItem( idx, 3, KIGIT::RelativeDate( branch.when ) );
+        m_branchIsRemote.push_back( branch.isRemote );
 
         // Keep the selection where it was, or start on the current branch.
         if( branch.name == selected || ( selected.IsEmpty() && branch.isCurrent ) )

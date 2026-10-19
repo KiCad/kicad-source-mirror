@@ -34,7 +34,6 @@ struct BranchData
 {
     wxString commitString;
     time_t   lastUpdated;
-    bool     isRemote;
 };
 
 class DIALOG_GIT_SWITCH : public DIALOG_SHIM

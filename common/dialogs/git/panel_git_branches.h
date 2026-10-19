@@ -21,6 +21,7 @@
 #define PANEL_GIT_BRANCHES_H
 
 #include <atomic>
+#include <vector>
 #include <memory>
 
 #include <wx/timer.h>
@@ -65,6 +66,10 @@ private:
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
+
+    /// Whether each listed row is a remote-tracking branch. Those are shown but cannot be
+    /// switched to, so the row has to say which it is.
+    std::vector<bool> m_branchIsRemote;
 
     /// The token of the push this page started, so closing can ask it to stop.
     std::shared_ptr<std::atomic<bool>> m_pushCancel;

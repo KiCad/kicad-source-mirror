@@ -2849,6 +2849,54 @@ BOOST_AUTO_TEST_CASE( Amend_KeepsFilesAlreadyInCommit )
 
 
 // A switch that would overwrite local changes must report a conflict and change nothing.
+// A remote-tracking branch cannot be stood on. Checking one out could only attach HEAD to a
+// local branch of the same name, which may be at another commit, so it is refused outright and
+// nothing on disk is touched.
+BOOST_AUTO_TEST_CASE( SwitchToBranch_RefusesARemoteBranch )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid localTip = createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "local" ) );
+
+    git_commit* tipCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &tipCommit, repo, &localTip ), GIT_OK );
+    KIGIT::GitCommitPtr tipPtr( tipCommit );
+
+    git_reference* localBranch = nullptr;
+    BOOST_REQUIRE_EQUAL( git_branch_create( &localBranch, repo, "feature", tipCommit, 0 ), GIT_OK );
+    git_reference_free( localBranch );
+
+    // origin/feature further along than the local branch of the same name, as a fetch leaves it.
+    git_oid        remoteTip = createDetachedCommit( repo, localTip, wxT( "file.txt" ), "remote\n", "remote" );
+    git_reference* tracking = nullptr;
+    BOOST_REQUIRE_EQUAL( git_reference_create( &tracking, repo, "refs/remotes/origin/feature", &remoteTip, 1, nullptr ),
+                         GIT_OK );
+    git_reference_free( tracking );
+
+    KIGIT_COMMON       common( repo );
+    GIT_BRANCH_HANDLER handler( &common );
+
+    BOOST_CHECK( handler.SwitchToBranch( wxT( "origin/feature" ) ) == BranchResult::Error );
+    BOOST_CHECK_MESSAGE( handler.GetErrorString().Contains( wxS( "remote" ) ),
+                         "the refusal should say the branch is on the remote, got: "
+                                 + handler.GetErrorString().ToStdString() );
+
+    // Nothing moved and nothing was written.
+    git_oid headNow;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headNow, &localTip ) );
+
+    std::ifstream f( ( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) ).ToStdString() );
+    std::string   content( ( std::istreambuf_iterator<char>( f ) ), std::istreambuf_iterator<char>() );
+    BOOST_CHECK_EQUAL( content, "local\n" );
+
+    git_repository_free( repo );
+}
+
+
 BOOST_AUTO_TEST_CASE( SwitchToBranch_ReportsConflictOverLocalChanges )
 {
     BOOST_TEST_REQUIRE( ready() );

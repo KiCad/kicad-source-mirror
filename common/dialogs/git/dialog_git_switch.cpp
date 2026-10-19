@@ -271,8 +271,9 @@ void DIALOG_GIT_SWITCH::GetBranches()
     KIGIT::GitReferencePtr currentBranch( currentBranchReference );
     m_currentBranch = git_reference_shorthand( currentBranchReference );
 
-    // Initialize branch iterator
-    git_branch_iterator_new( &branchIterator, m_repository, GIT_BRANCH_ALL );
+    // Local only. A remote-tracking branch cannot be switched to, so offering one would only
+    // lead to a refusal.
+    git_branch_iterator_new( &branchIterator, m_repository, GIT_BRANCH_LOCAL );
     KIGIT::GitBranchIteratorPtr branchIteratorPtr( branchIterator );
 
     // Iterate over local branches
@@ -302,7 +303,6 @@ void DIALOG_GIT_SWITCH::GetBranches()
         BranchData branchData;
         branchData.commitString = git_commit_message( commit );
         branchData.lastUpdated = static_cast<time_t>( git_commit_time( commit ) );
-        branchData.isRemote = branchType == GIT_BRANCH_REMOTE;
 
         m_branches[git_reference_shorthand( branchReference )] = branchData;
     }
