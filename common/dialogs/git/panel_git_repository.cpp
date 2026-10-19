@@ -38,19 +38,33 @@ PANEL_GIT_REPOSITORY::PANEL_GIT_REPOSITORY( wxWindow* aParent, GIT_ADVANCED_DIAL
                         {
                             onSave();
                         } );
+
+    // Populate uses ChangeValue, which sends no event, so only the user reaches this.
+    auto edited = [this]( wxCommandEvent& )
+    {
+        m_identityEdited = true;
+    };
+
+    m_repoUserName->Bind( wxEVT_TEXT, edited );
+    m_repoUserEmail->Bind( wxEVT_TEXT, edited );
 }
 
 
 void PANEL_GIT_REPOSITORY::Populate()
 {
+    // Anything at all signals a refresh, a finished fetch included, and the identity is not
+    // what changed. Replacing half typed text would lose it.
+    if( m_identityEdited )
+        return;
+
     // The caller holds the git action lock.
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
     GIT_CONFIG_HANDLER configHandler( common.get() );
     GitUserConfig      userConfig = configHandler.GetUserConfig();
 
-    m_repoUserName->SetValue( userConfig.authorName );
-    m_repoUserEmail->SetValue( userConfig.authorEmail );
+    m_repoUserName->ChangeValue( userConfig.authorName );
+    m_repoUserEmail->ChangeValue( userConfig.authorEmail );
 }
 
 
@@ -66,6 +80,10 @@ void PANEL_GIT_REPOSITORY::onSave()
         DisplayErrorMessage( this, reason );
         return;
     }
+
+    // The save is what the fields were being held for, so the page follows the repository
+    // again from here.
+    m_identityEdited = false;
 
     m_dialog->RunGitAction(
             [name, email]( KIGIT_COMMON& aCommon )

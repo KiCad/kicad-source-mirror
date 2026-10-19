@@ -44,6 +44,10 @@ private:
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
+
+    /// True once the user has typed in either field. A refresh then leaves them alone, since
+    /// a background fetch must not take away what is being written.
+    bool m_identityEdited = false;
 };
 
 #endif // PANEL_GIT_REPOSITORY_H
