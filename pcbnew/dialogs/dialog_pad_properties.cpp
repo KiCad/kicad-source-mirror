@@ -334,9 +334,10 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
-    GAL_DISPLAY_OPTIONS_IMPL opts = m_parent->GetGalDisplayOptions();
     COLOR_SETTINGS*            colorSettings = m_parent->GetColorSettings();
 
+    // Warning: the opts data life time must be at least the dialog life time
+    static GAL_DISPLAY_OPTIONS_IMPL opts = m_parent->GetGalDisplayOptions();
     opts.m_forceDisplayCursor = false;
 
     // Initialize the canvas to display the pad
