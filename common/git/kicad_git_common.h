@@ -300,6 +300,9 @@ public:
     /// True when the upstream branch has commits the current branch does not.
     bool HasUpstreamCommits() const;
 
+    /// True when the repository is set to rebase rather than merge when getting changes.
+    bool IsPullRebaseConfigured() const;
+
     /// True when HEAD points at a commit rather than a branch, as after checking out a tag.
     bool IsHeadDetached() const;
 

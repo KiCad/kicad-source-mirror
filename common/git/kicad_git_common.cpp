@@ -1026,6 +1026,23 @@ bool KIGIT_COMMON::IsHeadDetached() const
 }
 
 
+bool KIGIT_COMMON::IsPullRebaseConfigured() const
+{
+    if( !m_repo )
+        return false;
+
+    git_config* config = nullptr;
+
+    if( git_repository_config( &config, m_repo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr configPtr( config );
+    int                 rebase = 0;
+
+    return git_config_get_bool( &rebase, config, "pull.rebase" ) == GIT_OK && rebase;
+}
+
+
 bool KIGIT_COMMON::HasUpstreamCommits() const
 {
     if( !m_repo )

@@ -1515,6 +1515,43 @@ BOOST_AUTO_TEST_CASE( StashPopKeepsStashWhenItConflicts )
 }
 
 
+// Whether the project rebases when getting changes is read with git's own bool parser, so every
+// spelling git accepts counts.
+BOOST_AUTO_TEST_CASE( PullRebaseConfigIsReadAsGitReadsIt )
+{
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    // Unset means merge, as git does.
+    BOOST_CHECK( !common.IsPullRebaseConfigured() );
+
+    auto setRebase = [repo]( const char* aValue )
+    {
+        git_config* cfg = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
+        KIGIT::GitConfigPtr cfgPtr( cfg );
+        BOOST_REQUIRE_EQUAL( git_config_set_string( cfg, "pull.rebase", aValue ), GIT_OK );
+    };
+
+    for( const char* yes : { "true", "yes", "on", "1" } )
+    {
+        setRebase( yes );
+        BOOST_CHECK_MESSAGE( common.IsPullRebaseConfigured(), std::string( "pull.rebase=" ) + yes );
+    }
+
+    for( const char* no : { "false", "no", "off", "0" } )
+    {
+        setRebase( no );
+        BOOST_CHECK_MESSAGE( !common.IsPullRebaseConfigured(), std::string( "pull.rebase=" ) + no );
+    }
+}
+
+
 // A detached HEAD is on no branch, so it has no upstream. That missing upstream must not read
 // as unpushed work, while a branch without one still does.
 BOOST_AUTO_TEST_CASE( DetachedHeadHasNoLocalCommits )

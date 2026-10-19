@@ -1848,6 +1848,27 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
 {
     setBusy( false, wxEmptyString );
 
+    // A conflicted rebase was already abandoned by the time it got here, and settling it from
+    // this window can only produce a merge commit. Someone who asked for rebases is told that
+    // before one is made.
+    bool rebaseConfigured = false;
+
+    {
+        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+
+        if( lock.owns_lock() )
+            rebaseConfigured = aCommon->IsPullRebaseConfigured();
+    }
+
+    if( rebaseConfigured
+        && !IsOK( this, _( "This project is set to rebase when getting changes, but a conflict can only be "
+                           "settled here by merging. Carry on and make a merge commit, or cancel and rebase "
+                           "from a git command line?" ) ) )
+    {
+        setBusy( false, _( "Getting changes was cancelled. Your files are unchanged." ) );
+        return;
+    }
+
     // The merge commit needs an identity whatever the user decides about the files, so it is
     // asked for before any merging. Cancelling it then costs no work.
     if( !KIGIT::EnsureGitIdentity( this, aCommon.get() ) )
