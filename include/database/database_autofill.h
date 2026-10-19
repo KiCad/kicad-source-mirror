@@ -28,6 +28,7 @@
 
 #include <kicommon.h>
 #include <wx/string.h>
+#include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
 
 /**
  * Guesses the table and column mappings of a new database library from their names.
