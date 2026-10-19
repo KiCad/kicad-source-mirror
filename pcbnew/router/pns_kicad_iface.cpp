@@ -116,10 +116,13 @@ namespace std
     template <>
     struct hash<CLEARANCE_CACHE_KEY>
     {
-        std::size_t operator()( const CLEARANCE_CACHE_KEY& k ) const
+        std::size_t operator()( const CLEARANCE_CACHE_KEY& k ) const noexcept
         {
             size_t retval = 0xBADC0FFEE0DDF00D;
-            hash_combine( retval, hash<const void*>()( k.A ), hash<const void*>()( k.B ),
+
+            hash_combine( retval,
+                          hash<const void*>()( k.A ),
+                          hash<const void*>()( k.B ),
                           hash<int>()( k.Flag ) );
             return retval;
         }
@@ -136,6 +139,8 @@ struct TEMP_CLEARANCE_CACHE_KEY
     {
         const void* boardItem;
         const void* net;
+        VECTOR2I    start;
+        VECTOR2I    end;
         int         layerStart;
         int         layerEnd;
         int         kind;
@@ -143,8 +148,12 @@ struct TEMP_CLEARANCE_CACHE_KEY
 
         bool operator==( const PARTICIPANT& o ) const
         {
-            return boardItem == o.boardItem && net == o.net && layerStart == o.layerStart && layerEnd == o.layerEnd
-                   && kind == o.kind && freePad == o.freePad;
+            return boardItem == o.boardItem
+                    && net == o.net
+                    && start == o.start && end == o.end
+                    && layerStart == o.layerStart && layerEnd == o.layerEnd
+                    && kind == o.kind
+                    && freePad == o.freePad;
         }
 
         bool operator<( const PARTICIPANT& o ) const
@@ -154,6 +163,13 @@ struct TEMP_CLEARANCE_CACHE_KEY
 
             if( net != o.net )
                 return net < o.net;
+
+            if( start < o.start )
+                return start < o.start;
+
+            if( end < o.end )
+                return end < o.end;
+
             if( layerStart != o.layerStart )
                 return layerStart < o.layerStart;
 
@@ -177,6 +193,8 @@ struct TEMP_CLEARANCE_CACHE_KEY
 
         return PARTICIPANT{ (const void*) aItem->BoardItem(),
                             (const void*) aItem->Net(),
+                            shape ? shape->GetStart() : VECTOR2I(),
+                            shape ? shape->GetEnd() : VECTOR2I(),
                             aItem->Layers().Start(),
                             aItem->Layers().End(),
                             (int) aItem->Kind(),
@@ -207,24 +225,29 @@ struct TEMP_CLEARANCE_CACHE_KEY
 
 namespace std
 {
-template <>
-struct hash<TEMP_CLEARANCE_CACHE_KEY>
-{
-    std::size_t operator()( const TEMP_CLEARANCE_CACHE_KEY& k ) const
+    template <>
+    struct hash<TEMP_CLEARANCE_CACHE_KEY>
     {
-        size_t retval = 0xBADC0FFEE0DDF00D;
-
-        for( const TEMP_CLEARANCE_CACHE_KEY::PARTICIPANT* s : { &k.A, &k.B } )
+        std::size_t operator()( const TEMP_CLEARANCE_CACHE_KEY& k ) const noexcept
         {
-            hash_combine( retval, hash<const void*>()( s->boardItem ), hash<const void*>()( s->net ),
-                          hash<int>()( s->layerStart ), hash<int>()( s->layerEnd ), hash<int>()( s->kind ),
-                          hash<bool>()( s->freePad ) );
-        }
+            size_t retval = 0xBADC0FFEE0DDF00D;
 
-        hash_combine( retval, hash<bool>()( k.Flag ) );
-        return retval;
-    }
-};
+            for( const TEMP_CLEARANCE_CACHE_KEY::PARTICIPANT* s : { &k.A, &k.B } )
+            {
+                hash_combine( retval,
+                              hash<const void*>()( s->boardItem ),
+                              hash<const void*>()( s->net ),
+                              hash<int>()( s->start.x ), hash<int>()( s->start.y ),
+                              hash<int>()( s->end.x ), hash<int>()( s->end.y ),
+                              hash<int>()( s->layerStart ), hash<int>()( s->layerEnd ),
+                              hash<int>()( s->kind ),
+                              hash<bool>()( s->freePad ) );
+            }
+
+            hash_combine( retval, hash<bool>()( k.Flag ) );
+            return retval;
+        }
+    };
 } // namespace std
 
 
@@ -238,9 +261,9 @@ struct HULL_CACHE_KEY
     bool operator==( const HULL_CACHE_KEY& other ) const
     {
         return item == other.item
-            && clearance == other.clearance
-            && walkaroundThickness == other.walkaroundThickness
-            && layer == other.layer;
+                && clearance == other.clearance
+                && walkaroundThickness == other.walkaroundThickness
+                && layer == other.layer;
     }
 };
 
@@ -249,11 +272,15 @@ namespace std
     template <>
     struct hash<HULL_CACHE_KEY>
     {
-        std::size_t operator()( const HULL_CACHE_KEY& k ) const
+        std::size_t operator()( const HULL_CACHE_KEY& k ) const noexcept
         {
             size_t retval = 0xBADC0FFEE0DDF00D;
-            hash_combine( retval, hash<const void*>()( k.item ), hash<int>()( k.clearance ),
-                          hash<int>()( k.walkaroundThickness ), hash<int>()( k.layer ) );
+
+            hash_combine( retval,
+                          hash<const void*>()( k.item ),
+                          hash<int>()( k.clearance ),
+                          hash<int>()( k.walkaroundThickness ),
+                          hash<int>()( k.layer ) );
             return retval;
         }
     };
