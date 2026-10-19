@@ -27,6 +27,13 @@
 #include <lib_id.h>
 
 
+static bool isGridReadOnly( WX_GRID* aGrid )
+{
+    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+    return model && model->Table().IsReadOnly();
+}
+
+
 LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) :
         GRID_TRICKS( aGrid )
 {
@@ -62,7 +69,7 @@ void LIB_TABLE_GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
                                 : wxString::Format( _( "Error loading library '%s'" ), row.Nickname() );
 
         // The settings dialog reports load errors itself and is where they get fixed
-        if( adapter->SupportsConfigurationDialog( row ) )
+        if( adapter->SupportsConfigurationDialog( row ) && !isGridReadOnly( m_grid ) )
         {
             if( adapter->ShowConfigurationDialog( row, model->Table().Scope(), wxGetTopLevelParent( m_grid ) )
                 != wxID_CANCEL )
@@ -355,18 +362,17 @@ bool LIB_TABLE_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 {
     if( aEvent.GetCol() == COL_OPTIONS )
     {
+        if( isGridReadOnly( m_grid ) )
+        {
+            wxBell();
+            return true;
+        }
+
         optionsEditor( aEvent.GetRow() );
         return true;
     }
 
     return false;
-}
-
-
-static bool isGridReadOnly( WX_GRID* aGrid )
-{
-    LIB_TABLE_GRID_DATA_MODEL* model = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
-    return model && model->Table().IsReadOnly();
 }
 
 
