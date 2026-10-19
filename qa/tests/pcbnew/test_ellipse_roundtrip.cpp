@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
@@ -27,47 +28,11 @@
 
 #include <pcbnew_utils/board_file_utils.h>
 
-#include <wx/filename.h>
-#include <wx/stdpaths.h>
-
 #include <filesystem>
 #include <memory>
 
 
 BOOST_AUTO_TEST_SUITE( EllipseRoundTrip )
-
-
-namespace
-{
-
-/**
- * Temporary directory holder that cleans up on destruction. Keeps the file on disk
- * for the lifetime of the test so save-then-load is possible.
- */
-class TEMP_FILE_HOLDER
-{
-public:
-    TEMP_FILE_HOLDER( const std::string& aPrefix, const std::string& aSuffix )
-    {
-        std::filesystem::path dir = std::filesystem::temp_directory_path() / aPrefix;
-        std::filesystem::create_directories( dir );
-        m_path = dir / ( "board" + aSuffix );
-    }
-
-    ~TEMP_FILE_HOLDER()
-    {
-        std::error_code ec;
-        std::filesystem::remove( m_path, ec );
-        std::filesystem::remove( m_path.parent_path(), ec );
-    }
-
-    const std::filesystem::path& Path() const { return m_path; }
-
-private:
-    std::filesystem::path m_path;
-};
-
-} // namespace
 
 
 BOOST_AUTO_TEST_CASE( ClosedEllipseRoundTrip )
@@ -85,11 +50,13 @@ BOOST_AUTO_TEST_CASE( ClosedEllipseRoundTrip )
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
     // Save to a temp file.
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_closed", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_closed" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
+
+    KI_TEST::DumpBoardToFile( *board, boardFile.string() );
 
     // Reload the file.
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( boardFile.string() );
     BOOST_REQUIRE( reloaded );
 
     // Find the ellipse in the reloaded board and verify parameters.
@@ -133,10 +100,12 @@ BOOST_AUTO_TEST_CASE( EllipseArcRoundTrip )
     shape->SetWidth( 200 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_arc", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_arc" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -179,10 +148,12 @@ BOOST_AUTO_TEST_CASE( EllipseStrokeAndFillRoundTrip )
     shape->SetFillMode( FILL_T::FILLED_SHAPE );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_stroke_fill", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_stroke_fill" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -220,10 +191,12 @@ BOOST_AUTO_TEST_CASE( EllipseLockedRoundTrip )
     shape->SetLocked( true );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_locked", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_locked" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -258,10 +231,12 @@ BOOST_AUTO_TEST_CASE( EllipseNegativeRotationRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_negrot", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_negrot" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -298,10 +273,12 @@ BOOST_AUTO_TEST_CASE( EllipseArcStartEqualsEndRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_start_eq_end", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_start_eq_end" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -337,10 +314,12 @@ BOOST_AUTO_TEST_CASE( EllipseMinimumRadiiRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_minradii", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_minradii" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -376,10 +355,12 @@ BOOST_AUTO_TEST_CASE( EllipseLargeRadiiRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_largeradii", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_largeradii" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -421,10 +402,12 @@ BOOST_AUTO_TEST_CASE( FootprintEllipseRoundTrip )
 
     board->Add( fp.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_fp", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_fp" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     FOOTPRINT* fpFound = reloaded->Footprints().empty() ? nullptr : reloaded->Footprints().front();
@@ -472,10 +455,12 @@ BOOST_AUTO_TEST_CASE( FootprintEllipseArcRoundTrip )
 
     board->Add( fp.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_fp_arc", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_fp_arc" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     FOOTPRINT* fpFound = reloaded->Footprints().empty() ? nullptr : reloaded->Footprints().front();
@@ -519,10 +504,12 @@ BOOST_AUTO_TEST_CASE( EllipseArcWrapAroundAnglesRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_wraparound", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_wraparound" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -560,10 +547,12 @@ BOOST_AUTO_TEST_CASE( EllipseArcNegativeStartAngleRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_negstart", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_negstart" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -599,10 +588,12 @@ BOOST_AUTO_TEST_CASE( EllipseOnEdgeCutsRoundTrip )
     shape->SetWidth( 150 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_edgecuts", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_edgecuts" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;
@@ -637,10 +628,12 @@ BOOST_AUTO_TEST_CASE( EllipseOnBackCopperRoundTrip )
     shape->SetWidth( 200 );
     board->Add( shape.release(), ADD_MODE::APPEND, true );
 
-    TEMP_FILE_HOLDER tmp( "kicad_qa_ellipse_roundtrip_bcu", ".kicad_pcb" );
-    KI_TEST::DumpBoardToFile( *board, tmp.Path().string() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_ellipse_roundtrip_bcu" );
+    std::filesystem::path    boardFile = tmp.Path() / "board.kicad_pcb";
 
-    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.Path().string() );
+    KI_TEST::DumpBoardToFile( *board, boardFile );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFile( boardFile );
     BOOST_REQUIRE( reloaded );
 
     PCB_SHAPE* found = nullptr;

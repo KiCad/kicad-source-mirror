@@ -114,6 +114,12 @@ std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
 }
 
 
+std::unique_ptr<BOARD> ReadBoardFromFile( const std::filesystem::path& aFilename )
+{
+    return ReadBoardFromFileOrStream( aFilename.string() );
+}
+
+
 std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
                                                           std::istream& aFallback )
 {
@@ -138,6 +144,12 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFi
     }
 
     return ReadItemFromStream<FOOTPRINT>( *in_stream );
+}
+
+
+std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename )
+{
+    return ReadFootprintFromFileOrStream( aFilename.string() );
 }
 
 

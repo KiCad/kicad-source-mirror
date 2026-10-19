@@ -103,8 +103,12 @@ template <typename ITEM> std::unique_ptr<ITEM> ReadItemFromStream( std::istream&
 std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
                                                   std::istream& aFallback = std::cin );
 
+std::unique_ptr<BOARD> ReadBoardFromFile( const std::filesystem::path& aFilename );
+
 std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
                                                           std::istream& aFallback = std::cin );
+
+std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename );
 
 } // namespace KI_TEST
 
