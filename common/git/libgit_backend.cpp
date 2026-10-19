@@ -3524,11 +3524,88 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
     }
 
     KIGIT::GitObjectPtr headPtr( head );
+    git_tree*           headTree = nullptr;
 
-    if( git_reset( aRepo, head, GIT_RESET_HARD, nullptr ) != GIT_OK )
+    if( git_object_peel( reinterpret_cast<git_object**>( &headTree ), head, GIT_OBJECT_TREE ) != GIT_OK )
     {
         aError = KIGIT_COMMON::GetLastGitError();
         return false;
+    }
+
+    KIGIT::GitTreePtr headTreePtr( headTree );
+    git_index*        index = nullptr;
+
+    if( git_repository_index( &index, aRepo ) != GIT_OK )
+    {
+        aError = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    KIGIT::GitIndexPtr indexPtr( index );
+
+    // Only what the operation touched, as git's own merge abort does. Going back over the whole
+    // repository would throw away uncommitted work in files it never went near, and a
+    // repository can hold more than one project.
+    std::set<std::string> touched;
+
+    // A conflicted file has no stage zero, so the diff below does not report it.
+    git_index_conflict_iterator* conflicts = nullptr;
+
+    if( git_index_conflict_iterator_new( &conflicts, index ) == GIT_OK )
+    {
+        const git_index_entry* ancestor = nullptr;
+        const git_index_entry* ours = nullptr;
+        const git_index_entry* theirs = nullptr;
+
+        while( git_index_conflict_next( &ancestor, &ours, &theirs, conflicts ) == GIT_OK )
+        {
+            for( const git_index_entry* entry : { ancestor, ours, theirs } )
+            {
+                if( entry && entry->path )
+                    touched.insert( entry->path );
+            }
+        }
+
+        git_index_conflict_iterator_free( conflicts );
+    }
+
+    git_diff* diff = nullptr;
+
+    if( git_diff_tree_to_index( &diff, aRepo, headTree, index, nullptr ) != GIT_OK )
+    {
+        aError = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    KIGIT::GitDiffPtr diffPtr( diff );
+
+    KIGIT::CollectDiffDeltas( diff,
+                              [&touched]( const git_diff_delta& aDelta )
+                              {
+                                  if( aDelta.old_file.path )
+                                      touched.insert( aDelta.old_file.path );
+
+                                  if( aDelta.new_file.path )
+                                      touched.insert( aDelta.new_file.path );
+                              } );
+
+    if( !touched.empty() )
+    {
+        std::vector<char*> paths;
+
+        for( const std::string& path : touched )
+            paths.push_back( const_cast<char*>( path.c_str() ) );
+
+        git_checkout_options checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+        checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE;
+        checkoutOpts.paths.strings = paths.data();
+        checkoutOpts.paths.count = paths.size();
+
+        if( git_checkout_head( aRepo, &checkoutOpts ) != GIT_OK )
+        {
+            aError = KIGIT_COMMON::GetLastGitError();
+            return false;
+        }
     }
 
     if( git_repository_state_cleanup( aRepo ) != GIT_OK )

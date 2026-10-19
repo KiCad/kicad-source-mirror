@@ -1309,6 +1309,83 @@ BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedMerge )
 // A bisect is a search, not a half-finished change. Resetting and clearing its bookkeeping
 // leaves the project on whichever commit the search had reached, with no way back to where it
 // started.
+// Abandoning goes back to the last commit for the files the operation touched. Uncommitted work
+// in a file it never went near is somebody's own, and a repository can hold several projects.
+BOOST_AUTO_TEST_CASE( AbandonOperation_KeepsWorkTheOperationDidNotTouch )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // A second tracked file, committed before the branch point so neither side changes it.
+    createCommit( repo, wxT( "bystander.txt" ), wxT( "keep\n" ), wxT( "Add bystander" ) );
+
+    git_oid base;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &base, repo, "HEAD" ), GIT_OK );
+
+    git_oid sideEdit = createDetachedCommit( repo, base, wxT( "file.txt" ), "side\n", "Side change" );
+
+    // The side also brings a file of its own, which the merge stages as an addition.
+    git_oid side = createDetachedCommit( repo, sideEdit, wxT( "fromside.txt" ), "new\n", "Side addition" );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    // The user's own edit, in a file the merge has no business in.
+    wxString bystanderPath = repoPath() + wxFileName::GetPathSeparator() + wxT( "bystander.txt" );
+    {
+        std::ofstream f( bystanderPath.ToStdString() );
+        f << "my own work\n";
+    }
+
+    {
+        git_annotated_commit* sideCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_annotated_commit_lookup( &sideCommit, repo, &side ), GIT_OK );
+
+        const git_annotated_commit* heads[1] = { sideCommit };
+        git_checkout_options        checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+        checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_ALLOW_CONFLICTS;
+
+        BOOST_REQUIRE_EQUAL( git_merge( repo, heads, 1, nullptr, &checkoutOpts ), GIT_OK );
+        git_annotated_commit_free( sideCommit );
+    }
+
+    BOOST_REQUIRE_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_MERGE );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_REQUIRE_MESSAGE( common.AbandonOperation( error ), error );
+
+    // The merge is gone and its file is back.
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    KIGIT::GitIndexPtr indexPtr( index );
+    BOOST_CHECK( !git_index_has_conflicts( index ) );
+
+    {
+        std::ifstream f( ( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) ).ToStdString() );
+        std::string   content( ( std::istreambuf_iterator<char>( f ) ), std::istreambuf_iterator<char>() );
+        BOOST_CHECK_EQUAL( content, "local\n" );
+    }
+
+    // The file the merge brought in is gone again, as git's own abort leaves it.
+    BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator()
+                                          + wxT( "fromside.txt" ) ) );
+
+    // And the edit the merge never touched is still there.
+    {
+        std::ifstream f( bystanderPath.ToStdString() );
+        std::string   content( ( std::istreambuf_iterator<char>( f ) ), std::istreambuf_iterator<char>() );
+        BOOST_CHECK_EQUAL( content, "my own work\n" );
+    }
+
+    git_repository_free( repo );
+}
+
+
 BOOST_AUTO_TEST_CASE( AbandonOperation_RefusesDuringABisect )
 {
     BOOST_TEST_REQUIRE( ready() );
