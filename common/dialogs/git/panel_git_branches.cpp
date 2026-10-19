@@ -142,6 +142,7 @@ void PANEL_GIT_BRANCHES::Populate()
             [branches]( KIGIT_COMMON& aCommon )
             {
                 *branches = aCommon.GetBranches();
+                KIGIT::SortBranchesForDisplay( *branches );
             },
             [this, branches]()
             {

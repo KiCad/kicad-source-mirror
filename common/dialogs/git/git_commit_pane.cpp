@@ -437,19 +437,19 @@ void GIT_COMMIT_PANE::syncListener()
 
 struct GIT_COMMIT_PANE::STATUS
 {
-    bool                                   hasRepo = false;
-    bool                                   hasLocalCommits = false;
-    bool                                   hasRemote = false;
-    bool                                   headDetached = false;
-    bool                                   operationInProgress = false;
-    bool                                   remoteAhead = false;
-    GitOperation                           operation = GitOperation::None;
-    wxString                               attachError;
-    wxString                               currentBranch;
-    std::vector<FILE_CHECKLIST_ENTRY>      entries;
-    std::vector<std::pair<wxString, bool>> branches;
-    std::vector<wxString>                  recentMessages;
-    std::pair<int, int>                    lineStats{ 0, 0 };
+    bool                              hasRepo = false;
+    bool                              hasLocalCommits = false;
+    bool                              hasRemote = false;
+    bool                              headDetached = false;
+    bool                              operationInProgress = false;
+    bool                              remoteAhead = false;
+    GitOperation                      operation = GitOperation::None;
+    wxString                          attachError;
+    wxString                          currentBranch;
+    std::vector<FILE_CHECKLIST_ENTRY> entries;
+    std::vector<KIGIT_BRANCH_INFO>    branches;
+    std::vector<wxString>             recentMessages;
+    std::pair<int, int>               lineStats{ 0, 0 };
 };
 
 
@@ -485,7 +485,8 @@ void GIT_COMMIT_PANE::RefreshFileList()
                 status->operationInProgress = aCommon.IsOperationInProgress();
                 status->operation = aCommon.OperationInProgress();
                 status->remoteAhead = aCommon.HasUpstreamCommits();
-                status->branches = aCommon.GetAllBranches();
+                status->branches = aCommon.GetBranches();
+                KIGIT::SortBranchesForDisplay( status->branches );
                 status->currentBranch = aCommon.GetCurrentBranchName();
                 status->recentMessages = aCommon.GetRecentCommitMessages( 10 );
 
@@ -1030,10 +1031,10 @@ void GIT_COMMIT_PANE::populateBranches( const STATUS& aStatus )
         return;
 
     // Only a local branch can take a commit.
-    for( const auto& [name, isRemote] : aStatus.branches )
+    for( const KIGIT_BRANCH_INFO& branch : aStatus.branches )
     {
-        if( !isRemote )
-            m_branchChoice->Append( name );
+        if( !branch.isRemote )
+            m_branchChoice->Append( branch.name );
     }
 
     wxString current = aStatus.currentBranch;

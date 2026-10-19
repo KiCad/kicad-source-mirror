@@ -199,7 +199,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_GIT_INITIALIZE_PROJECT, PROJECT_TREE_PANE::onGitInitializeProject )
     EVT_MENU( ID_GIT_REMOTE_SETTINGS, PROJECT_TREE_PANE::onGitRemoteSettings )
     EVT_MENU( ID_GIT_SWITCH_BRANCH, PROJECT_TREE_PANE::onGitSwitchBranch )
-    EVT_MENU_RANGE( ID_GIT_SWITCH_QUICK1, ID_GIT_SWITCH_QUICK5 + 1, PROJECT_TREE_PANE::onGitSwitchBranch )
+    EVT_MENU_RANGE( ID_GIT_SWITCH_QUICK1, ID_GIT_SWITCH_QUICK5, PROJECT_TREE_PANE::onGitSwitchBranch )
     EVT_MENU( ID_GIT_REMOVE_VCS, PROJECT_TREE_PANE::onGitRemoveVCS )
 
     EVT_MENU( ID_JOBS_RUN, PROJECT_TREE_PANE::onRunSelectedJobsFile )
@@ -992,19 +992,32 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         std::shared_ptr<KIGIT_COMMON> common = gitCommon();
         m_gitMenuBranches.clear();
         m_gitMenuSession = common;
+        std::vector<KIGIT_BRANCH_INFO> branches;
 
         {
             std::unique_lock<std::mutex> branchLock = common->TryLockAction();
 
             if( branchLock.owns_lock() )
-                m_gitMenuBranches = common->GetBranchNames();
+                branches = common->GetBranches();
         }
 
-        // Skip the first one (that is the current branch)
-        for( size_t ii = 1; ii < m_gitMenuBranches.size() && ii < 6; ++ii )
+        KIGIT::SortBranchesForDisplay( branches );
+
+        for( const KIGIT_BRANCH_INFO& branch : branches )
+        {
+            if( branch.isRemote || branch.isCurrent )
+                continue;
+
+            m_gitMenuBranches.push_back( branch.name );
+
+            if( m_gitMenuBranches.size() == 5 )
+                break;
+        }
+
+        for( size_t ii = 0; ii < m_gitMenuBranches.size(); ++ii )
         {
             wxString msg = _( "Switch to branch " ) + m_gitMenuBranches[ii];
-            vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_BRANCH + ii, m_gitMenuBranches[ii], msg );
+            vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_QUICK1 + ii, m_gitMenuBranches[ii], msg );
             vcs_menuitem->Enable( vcs_can_switch );
         }
 
@@ -1971,52 +1984,79 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     if( !common->GetRepo() || common->IsShuttingDown() )
         return;
 
-    wxString branchName;
-    bool     createRequested = false;
-
     if( aEvent.GetId() == ID_GIT_SWITCH_BRANCH )
     {
+        struct BRANCHES
+        {
+            std::vector<KIGIT_BRANCH_INFO> entries;
+            bool                           loaded = false;
+        };
+
+        auto                         branches = std::make_shared<BRANCHES>();
         wxWeakRef<PROJECT_TREE_PANE> self( this );
-        DIALOG_GIT_SWITCH            dlg( wxGetTopLevelParent( this ), common->GetRepo() );
 
-        int retval = dlg.ShowModal();
-        branchName = dlg.GetBranchName();
+        m_branchQuery->Run(
+                common,
+                [branches]( KIGIT_COMMON& aCommon )
+                {
+                    branches->entries = aCommon.GetBranches();
+                    branches->loaded = true;
+                },
+                [self, common, branches]()
+                {
+                    if( !branches->loaded || !self || self->IsBeingDeleted() || self->m_Parent->IsBeingDeleted()
+                        || common->IsShuttingDown() || self->gitCommon() != common
+                        || !Pgm().GetCommonSettings()->m_Git.enableGit
+                        || Prj().GetLocalSettings().m_GitIntegrationDisabled )
+                    {
+                        return;
+                    }
 
-        if( !self || self->IsBeingDeleted() || common->IsShuttingDown() || self->gitCommon() != common
-            || !Pgm().GetCommonSettings()->m_Git.enableGit || Prj().GetLocalSettings().m_GitIntegrationDisabled )
-        {
-            return;
-        }
+                    DIALOG_GIT_SWITCH dlg( wxGetTopLevelParent( self->m_Parent ), std::move( branches->entries ) );
+                    int               retval = dlg.ShowModal();
 
-        if( retval == wxID_ADD )
-            createRequested = true;
-        else if( retval != wxID_OK )
-            return;
+                    if( !self || self->IsBeingDeleted() || common->IsShuttingDown() || self->gitCommon() != common )
+                        return;
+
+                    if( retval == wxID_OK || retval == wxID_ADD )
+                        self->switchGitBranch( common, dlg.GetBranchName(), retval == wxID_ADD );
+                } );
+
+        return;
     }
-    else
+
+    int branchIndex = aEvent.GetId() - ID_GIT_SWITCH_QUICK1;
+
+    if( m_gitMenuSession.lock() != common || branchIndex < 0
+        || static_cast<size_t>( branchIndex ) >= m_gitMenuBranches.size() )
     {
-        int branchIndex = aEvent.GetId() - ID_GIT_SWITCH_BRANCH;
-
-        if( m_gitMenuSession.lock() != common || branchIndex < 0
-            || static_cast<size_t>( branchIndex ) >= m_gitMenuBranches.size() )
-        {
-            return;
-        }
-
-        branchName = m_gitMenuBranches[branchIndex];
+        return;
     }
 
-    if( !createRequested )
+    switchGitBranch( common, m_gitMenuBranches[branchIndex], false );
+}
+
+
+void PROJECT_TREE_PANE::switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranchName,
+                                         bool aCreate )
+{
+    if( IsBeingDeleted() || m_Parent->IsBeingDeleted() || gitCommon() != aCommon || aCommon->IsShuttingDown()
+        || !Pgm().GetCommonSettings()->m_Git.enableGit || Prj().GetLocalSettings().m_GitIntegrationDisabled )
     {
-        SwitchProjectToBranch( m_Parent, this, branchName, *m_branchQuery );
+        return;
+    }
+
+    if( !aCreate )
+    {
+        SwitchProjectToBranch( m_Parent, this, aBranchName, *m_branchQuery );
         return;
     }
 
     // Keep Add subject to the same worktree checks before creating the branch. The shared
     // switch helper then owns confirmation, editor checks, checkout, and reload.
-    auto createBranch = [this, common, branchName]( const GIT_WORKTREE_STATUS& )
+    auto createBranch = [this, aCommon, aBranchName]( const GIT_WORKTREE_STATUS& )
     {
-        if( IsBeingDeleted() || m_Parent->IsBeingDeleted() || gitCommon() != common || common->IsShuttingDown()
+        if( IsBeingDeleted() || m_Parent->IsBeingDeleted() || gitCommon() != aCommon || aCommon->IsShuttingDown()
             || !Pgm().GetCommonSettings()->m_Git.enableGit || Prj().GetLocalSettings().m_GitIntegrationDisabled )
         {
             return;
@@ -2026,12 +2066,12 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
         wxString error;
 
         {
-            std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+            std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, this );
 
             if( !lock.owns_lock() )
                 return;
 
-            result = KIGIT::PROJECT_GIT_UTILS::CreateBranch( common->GetRepo(), branchName );
+            result = KIGIT::PROJECT_GIT_UTILS::CreateBranch( aCommon->GetRepo(), aBranchName );
             error = KIGIT_COMMON::GetLastGitError();
         }
 
@@ -2041,8 +2081,8 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
             return;
         }
 
-        SwitchProjectToBranch( m_Parent, this, branchName, *m_branchQuery );
-        common->NotifyRefreshListeners();
+        SwitchProjectToBranch( m_Parent, this, aBranchName, *m_branchQuery );
+        aCommon->NotifyRefreshListeners();
     };
 
     ProjectClearOfUncommittedWork( m_Parent, this, *m_branchQuery, std::move( createBranch ) );

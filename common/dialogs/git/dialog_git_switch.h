@@ -22,24 +22,19 @@
 #define DIALOG_GIT_SWITCH_H
 
 #include <dialog_shim.h>
+#include <git/kicad_git_common.h>
 #include <wx/timer.h>
-#include <git2.h>
+#include <vector>
 
 class wxButton;
 class wxListView;
 class wxTextCtrl;
 class wxListEvent;
 
-struct BranchData
-{
-    wxString commitString;
-    time_t   lastUpdated;
-};
-
 class DIALOG_GIT_SWITCH : public DIALOG_SHIM
 {
 public:
-    DIALOG_GIT_SWITCH(wxWindow* aParent, git_repository* aRepository);
+    DIALOG_GIT_SWITCH( wxWindow* aParent, std::vector<KIGIT_BRANCH_INFO> aBranches );
     virtual ~DIALOG_GIT_SWITCH();
 
     wxString GetBranchName() const;
@@ -52,7 +47,7 @@ private:
     void OnCancelButton(wxCommandEvent& event);
     void OnTextChanged(wxCommandEvent& event);
     void OnTimer(wxTimerEvent& event);
-    void GetBranches();
+    bool branchExists( const wxString& aName ) const;
 
     wxListView* m_branchList;
     wxTextCtrl* m_branchNameText;
@@ -61,11 +56,9 @@ private:
 
     wxString m_currentBranch;
 
-    git_repository* m_repository;
     wxString m_lastEnteredText;
-    bool m_existingBranch;
 
-    std::map<wxString, BranchData> m_branches;
+    std::vector<KIGIT_BRANCH_INFO> m_branches;
 
     void StartTimer();
     void StopTimer();

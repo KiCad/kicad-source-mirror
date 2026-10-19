@@ -25,7 +25,6 @@
 #include <string>
 #include <atomic>
 #include <thread>
-#include <utility>
 #include <vector>
 
 #include <wx/bitmap.h>
@@ -37,6 +36,7 @@
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
 class GIT_FILE_DIFF_AREA;
+struct KIGIT_BRANCH_INFO;
 struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
 struct KIGIT_HISTORY_FILTER;
@@ -56,7 +56,7 @@ public:
     void Populate();
 
     /// Offer every branch in the branch filter, keeping the current choice.
-    void SetBranches( const std::vector<std::pair<wxString, bool>>& aBranches );
+    void SetBranches( const std::vector<KIGIT_BRANCH_INFO>& aBranches );
 
     /// Narrow the list to the commits that changed aPath, a file or folder relative to the
     /// repository root. Empty shows every commit again.

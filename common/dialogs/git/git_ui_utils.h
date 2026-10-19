@@ -21,8 +21,10 @@
 #define GIT_UI_UTILS_H
 
 #include <mutex>
+#include <vector>
 
 class KIGIT_COMMON;
+struct KIGIT_BRANCH_INFO;
 class wxButton;
 class wxDateTime;
 class wxListCtrl;
@@ -39,6 +41,10 @@ void ShowBusyMessage( wxWindow* aParent );
 /// Try the action lock and show a busy message if it is unavailable.
 /// UI thread only. Check owns_lock() before using the repository.
 [[nodiscard]] std::unique_lock<std::mutex> TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent );
+
+/// Put the current branch first, then local and remote branches with the newest tips first.
+/// Use the name to break ties. Callers can choose a different order.
+void SortBranchesForDisplay( std::vector<KIGIT_BRANCH_INFO>& aBranches );
 
 /// "just now", "3 hours ago", or the ISO date once it is more than a month old.
 wxString RelativeDate( const wxDateTime& aWhen );

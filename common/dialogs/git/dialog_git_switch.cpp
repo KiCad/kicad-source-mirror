@@ -20,37 +20,36 @@
 
 #include "dialog_git_switch.h"
 
-#include <git/kicad_git_memory.h>
-#include <trace_helpers.h>
-
 #include <wx/button.h>
-#include <wx/checkbox.h>
 #include <wx/listctrl.h>
-#include <wx/log.h>
 #include <wx/event.h>
 #include <wx/sizer.h>
 #include <wx/timer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 
-#include <git2.h>
+#include <algorithm>
+#include <utility>
 
 
-// Strip the "* " / "  " prefix used to mark the current branch in the list.
-static wxString stripBranchMarker( const wxString& aName )
-{
-    if( aName.StartsWith( wxS( "* " ) ) || aName.StartsWith( wxS( "  " ) ) )
-        return aName.Mid( 2 );
-
-    return aName;
-}
-
-
-DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, git_repository* aRepository ) :
+DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, std::vector<KIGIT_BRANCH_INFO> aBranches ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Git Branch Switch" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
-        m_timer( this ), m_repository( aRepository )
+        m_timer( this ),
+        m_branches( std::move( aBranches ) )
 {
+    // Only local branches can be checked out. Keep the picker alphabetical.
+    std::erase_if( m_branches,
+                   []( const KIGIT_BRANCH_INFO& aBranch )
+                   {
+                       return aBranch.isRemote;
+                   } );
+    std::sort( m_branches.begin(), m_branches.end(),
+               []( const KIGIT_BRANCH_INFO& aFirst, const KIGIT_BRANCH_INFO& aSecond )
+               {
+                   return aFirst.name < aSecond.name;
+               } );
+
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
     // Add explanation text
@@ -96,9 +95,8 @@ DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, git_repository* aReposi
     SetSizerAndFit( sizer );
 
     finishDialogSettings();
-
-    m_existingBranch = false;
 }
+
 
 DIALOG_GIT_SWITCH::~DIALOG_GIT_SWITCH()
 {
@@ -106,28 +104,28 @@ DIALOG_GIT_SWITCH::~DIALOG_GIT_SWITCH()
     Unbind( wxEVT_TIMER, &DIALOG_GIT_SWITCH::OnTimer, this, m_timer.GetId() );
 }
 
+
 void DIALOG_GIT_SWITCH::PopulateBranchList()
 {
     m_branchList->DeleteAllItems();
-
-    // Get the branches
-    GetBranches();
+    m_currentBranch.clear();
 
     long currentIndex = -1;
 
     // Populate the list
-    for( auto& [ name, data ] : m_branches )
+    for( const KIGIT_BRANCH_INFO& branch : m_branches )
     {
-        wxDateTime lastUpdated( data.lastUpdated );
-        wxString   lastUpdatedString = lastUpdated.Format();
-        wxString   displayName = ( name == m_currentBranch ? wxS( "* " ) : wxS( "  " ) ) + name;
+        wxString displayName = ( branch.isCurrent ? wxS( "* " ) : wxS( "  " ) ) + branch.name;
 
         long itemIndex = m_branchList->InsertItem( m_branchList->GetItemCount(), displayName );
-        m_branchList->SetItem( itemIndex, 1, data.commitString );
-        m_branchList->SetItem( itemIndex, 2, lastUpdatedString );
+        m_branchList->SetItem( itemIndex, 1, branch.message );
+        m_branchList->SetItem( itemIndex, 2, branch.when.Format() );
 
-        if( name == m_currentBranch )
+        if( branch.isCurrent )
+        {
+            m_currentBranch = branch.name;
             currentIndex = itemIndex;
+        }
     }
 
     m_branchList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
@@ -147,9 +145,9 @@ void DIALOG_GIT_SWITCH::OnBranchListDClick( wxListEvent& aEvent )
 {
     int selection = aEvent.GetIndex();
 
-    if( selection != wxNOT_FOUND )
+    if( selection >= 0 && static_cast<size_t>( selection ) < m_branches.size() )
     {
-        wxString branchName = stripBranchMarker( m_branchList->GetItemText( selection ) );
+        const wxString& branchName = m_branches[selection].name;
         m_branchNameText->SetValue( branchName );
 
         if( branchName != m_currentBranch )
@@ -162,9 +160,9 @@ void DIALOG_GIT_SWITCH::OnBranchListSelection( wxListEvent& aEvent )
 {
     int selection = aEvent.GetIndex();
 
-    if( selection != wxNOT_FOUND )
+    if( selection >= 0 && static_cast<size_t>( selection ) < m_branches.size() )
     {
-        wxString branchName = stripBranchMarker( m_branchList->GetItemText( selection ) );
+        const wxString& branchName = m_branches[selection].name;
         m_branchNameText->SetValue( branchName );
         m_switchButton->SetLabel( _( "Switch" ) );
         m_switchButton->Enable( branchName != m_currentBranch );
@@ -177,21 +175,10 @@ void DIALOG_GIT_SWITCH::OnBranchListSelection( wxListEvent& aEvent )
     }
 }
 
-void DIALOG_GIT_SWITCH::OnSwitchButton(wxCommandEvent& aEvent)
+
+void DIALOG_GIT_SWITCH::OnSwitchButton( wxCommandEvent& aEvent )
 {
-    wxString branchName = m_branchNameText->GetValue();
-
-    // Check if the branch name exists
-    bool branchExists = m_branches.count(branchName);
-
-    if (branchExists)
-    {
-        EndModal(wxID_OK); // Return Switch code
-    }
-    else
-    {
-        EndModal(wxID_ADD); // Return Add code
-    }
+    EndModal( branchExists( m_branchNameText->GetValue() ) ? wxID_OK : wxID_ADD );
 }
 
 
@@ -228,10 +215,7 @@ void DIALOG_GIT_SWITCH::OnTimer( wxTimerEvent& aEvt )
 
     m_lastEnteredText = branchName;
 
-    // Check if the branch name exists
-    bool branchExists = m_branches.count( branchName );
-
-    if( branchExists )
+    if( branchExists( branchName ) )
     {
         m_switchButton->SetLabel( _( "Switch" ) );
         m_switchButton->Enable( branchName != m_currentBranch );
@@ -250,60 +234,11 @@ void DIALOG_GIT_SWITCH::OnTextChanged( wxCommandEvent& aEvt )
 }
 
 
-void DIALOG_GIT_SWITCH::GetBranches()
+bool DIALOG_GIT_SWITCH::branchExists( const wxString& aName ) const
 {
-    // Clear the branch list
-    m_branches.clear();
-
-    git_branch_iterator* branchIterator = nullptr;
-    git_branch_t         branchType;
-
-    // Get Current Branch
-    git_reference* currentBranchReference = nullptr;
-    git_repository_head( &currentBranchReference, m_repository );
-
-    if( !currentBranchReference )
-    {
-        wxLogTrace( traceGit, "Failed to get current branch" );
-        return;
-    }
-
-    KIGIT::GitReferencePtr currentBranch( currentBranchReference );
-    m_currentBranch = git_reference_shorthand( currentBranchReference );
-
-    // Local only. A remote-tracking branch cannot be switched to, so offering one would only
-    // lead to a refusal.
-    git_branch_iterator_new( &branchIterator, m_repository, GIT_BRANCH_LOCAL );
-    KIGIT::GitBranchIteratorPtr branchIteratorPtr( branchIterator );
-
-    // Iterate over local branches
-    git_reference* branchReference = nullptr;
-    while( git_branch_next( &branchReference, &branchType, branchIterator ) == 0 )
-    {
-        KIGIT::GitReferencePtr branchReferencePtr( branchReference );
-
-        // Get the branch OID
-        const git_oid* branchOid = git_reference_target( branchReference );
-
-        // Skip this branch if it doesn't have an OID
-        if( !branchOid )
-            continue;
-
-        git_commit* commit = nullptr;
-
-        if( git_commit_lookup( &commit, m_repository, branchOid ) )
-        {
-            // Skip this branch if it doesn't have a commit
-            continue;
-        }
-
-        KIGIT::GitCommitPtr commitPtr( commit );
-
-        // Retrieve commit details
-        BranchData branchData;
-        branchData.commitString = git_commit_message( commit );
-        branchData.lastUpdated = static_cast<time_t>( git_commit_time( commit ) );
-
-        m_branches[git_reference_shorthand( branchReference )] = branchData;
-    }
+    return std::any_of( m_branches.begin(), m_branches.end(),
+                        [&aName]( const KIGIT_BRANCH_INFO& aBranch )
+                        {
+                            return aBranch.name == aName;
+                        } );
 }

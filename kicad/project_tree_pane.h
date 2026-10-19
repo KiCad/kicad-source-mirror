@@ -173,6 +173,7 @@ private:
      * Switch to a different branch in the git repository
      */
     void onGitSwitchBranch( wxCommandEvent& event );
+    void switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranchName, bool aCreate );
 
     /**
      * Remove the git repository from the current project directory

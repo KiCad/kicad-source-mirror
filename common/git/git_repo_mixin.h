@@ -45,15 +45,6 @@ public:
     }
 
     /**
-     * @brief Get a list of branch names
-     * @return A vector of branch names
-     */
-    std::vector<wxString> GetBranchNames() const
-    {
-        return m_common->GetBranchNames();
-    }
-
-    /**
      * @brief Get a list of project directories
      * @return A vector of project directories
      */

@@ -64,13 +64,14 @@ struct KIGIT_STASH_DETAIL
 };
 
 
-// One branch, as the Branches page lists it.
+// A local or remote branch and its tip commit.
 struct KIGIT_BRANCH_INFO
 {
     wxString   name;
     bool       isRemote = false;
     bool       isCurrent = false;
     wxString   tipHash; ///< Short hash of the commit the branch points at.
+    wxString   message; ///< Full message of the tip commit.
     wxDateTime when;    ///< That commit's time.
 };
 
@@ -221,14 +222,8 @@ public:
     /// action lock when capturing this alongside the branch name for a later operation.
     wxString GetHeadCommitId() const;
 
-    std::vector<wxString> GetBranchNames() const;
-
-    /// Every branch in the repository, local and remote-tracking. The bool is true for a
-    /// remote-tracking branch. The current branch is first, then the rest newest first.
-    std::vector<std::pair<wxString, bool>> GetAllBranches() const;
-
-    // Every branch with its tip: the current one first, then local branches newest first, then
-    // remote ones newest first.
+    /// Local and remote branches with their tip commits. Symbolic aliases are omitted.
+    /// Callers choose the display order.
     std::vector<KIGIT_BRANCH_INFO> GetBranches() const;
 
     // One branch's tip commit and how it stands to the branch it tracks. Not found leaves the

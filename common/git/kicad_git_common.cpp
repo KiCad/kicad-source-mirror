@@ -255,83 +255,6 @@ bool KIGIT_COMMON::HasUncommittedTrackedChanges( bool* aReadOk ) const
 }
 
 
-std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
-{
-    if( !m_repo )
-        return {};
-
-    std::vector<wxString> branchNames;
-    std::map<git_time_t, wxString> branchNamesMap;
-    wxString firstName;
-
-    git_branch_iterator* branchIterator = nullptr;
-
-    if( git_branch_iterator_new( &branchIterator, m_repo, GIT_BRANCH_LOCAL ) )
-    {
-        wxLogTrace( traceGit, "Failed to get branch iterator" );
-        return branchNames;
-    }
-
-    KIGIT::GitBranchIteratorPtr branchIteratorPtr( branchIterator );
-    git_reference*              branchReference = nullptr;
-    git_branch_t                branchType;
-
-    // Only GIT_ITEROVER means the end. Any other error leaves the reference invalid.
-    while( true )
-    {
-        branchReference = nullptr;
-
-        int rc = git_branch_next( &branchReference, &branchType, branchIterator );
-
-        if( rc == GIT_ITEROVER )
-            break;
-
-        if( rc != GIT_OK )
-        {
-            wxLogTrace( traceGit, "Failed to iterate branches: %s", KIGIT_COMMON::GetLastGitError() );
-            break;
-        }
-
-        const char* branchName = "";
-        KIGIT::GitReferencePtr branchReferencePtr( branchReference );
-
-        if( git_branch_name( &branchName, branchReference ) )
-        {
-            wxLogTrace( traceGit, "Failed to get branch name in iter loop" );
-            continue;
-        }
-
-        const git_oid* commitId = git_reference_target( branchReference );
-
-        git_commit* commit = nullptr;
-
-        if( git_commit_lookup( &commit, m_repo, commitId ) )
-        {
-            wxLogTrace( traceGit, "Failed to get commit in iter loop" );
-            continue;
-        }
-
-        KIGIT::GitCommitPtr commitPtr( commit );
-        git_time_t          commitTime = git_commit_time( commit );
-
-        if( git_branch_is_head( branchReference ) )
-            firstName = branchName;
-        else
-            branchNamesMap.emplace( commitTime, branchName );
-    }
-
-    // Add the current branch to the top of the list
-    if( !firstName.IsEmpty() )
-        branchNames.push_back( firstName );
-
-    // Add the remaining branches in order from newest to oldest
-    for( auto rit = branchNamesMap.rbegin(); rit != branchNamesMap.rend(); ++rit )
-        branchNames.push_back( rit->second );
-
-    return branchNames;
-}
-
-
 namespace
 {
 
@@ -400,17 +323,6 @@ KIGIT::FILE_CHANGE_STATUS deltaStatus( git_delta_t aDelta )
 }
 
 } // namespace
-
-
-std::vector<std::pair<wxString, bool>> KIGIT_COMMON::GetAllBranches() const
-{
-    std::vector<std::pair<wxString, bool>> branches;
-
-    for( const KIGIT_BRANCH_INFO& branch : GetBranches() )
-        branches.emplace_back( branch.name, branch.isRemote );
-
-    return branches;
-}
 
 
 wxDateTime KIGIT_COMMON::GetLastFetchTime() const
@@ -603,9 +515,7 @@ std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
     if( !m_repo )
         return {};
 
-    KIGIT_BRANCH_INFO                            current;
-    std::multimap<git_time_t, KIGIT_BRANCH_INFO> localByTime;
-    std::multimap<git_time_t, KIGIT_BRANCH_INFO> remoteByTime;
+    std::vector<KIGIT_BRANCH_INFO> branches;
 
     git_branch_iterator* branchIterator = nullptr;
 
@@ -638,6 +548,10 @@ std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
         const char*            branchName = "";
         KIGIT::GitReferencePtr branchReferencePtr( branchReference );
 
+        // origin/HEAD and other symbolic aliases do not name a separate branch.
+        if( git_reference_type( branchReference ) != GIT_REFERENCE_DIRECT )
+            continue;
+
         if( git_branch_name( &branchName, branchReference ) )
         {
             wxLogTrace( traceGit, "Failed to get branch name in iter loop" );
@@ -647,7 +561,7 @@ std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
         const git_oid* commitId = git_reference_target( branchReference );
         git_commit*    commit = nullptr;
 
-        if( git_commit_lookup( &commit, m_repo, commitId ) )
+        if( !commitId || git_commit_lookup( &commit, m_repo, commitId ) != GIT_OK )
         {
             wxLogTrace( traceGit, "Failed to get commit in iter loop" );
             continue;
@@ -659,28 +573,13 @@ std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
         KIGIT_BRANCH_INFO info;
         info.name = wxString::FromUTF8( branchName );
         info.isRemote = branchType == GIT_BRANCH_REMOTE;
-        info.isCurrent = !info.isRemote && git_branch_is_head( branchReference );
+        info.isCurrent = !info.isRemote && git_branch_is_head( branchReference ) == 1;
         info.tipHash = shortHashOf( commitId );
+        info.message = wxString::FromUTF8( git_commit_message( commit ) );
         info.when = wxDateTime( static_cast<time_t>( commitTime ) );
 
-        if( info.isCurrent )
-            current = info;
-        else if( info.isRemote )
-            remoteByTime.emplace( commitTime, info );
-        else
-            localByTime.emplace( commitTime, info );
+        branches.push_back( std::move( info ) );
     }
-
-    std::vector<KIGIT_BRANCH_INFO> branches;
-
-    if( !current.name.IsEmpty() )
-        branches.push_back( current );
-
-    for( auto rit = localByTime.rbegin(); rit != localByTime.rend(); ++rit )
-        branches.push_back( rit->second );
-
-    for( auto rit = remoteByTime.rbegin(); rit != remoteByTime.rend(); ++rit )
-        branches.push_back( rit->second );
 
     return branches;
 }

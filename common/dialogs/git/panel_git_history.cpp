@@ -509,13 +509,13 @@ void PANEL_GIT_HISTORY::reloadHistory()
 }
 
 
-void PANEL_GIT_HISTORY::SetBranches( const std::vector<std::pair<wxString, bool>>& aBranches )
+void PANEL_GIT_HISTORY::SetBranches( const std::vector<KIGIT_BRANCH_INFO>& aBranches )
 {
     m_historyBranch->Clear();
     m_historyBranch->Append( _( "All Branches" ) );
 
-    for( const auto& [name, isRemote] : aBranches )
-        m_historyBranch->Append( name );
+    for( const KIGIT_BRANCH_INFO& branch : aBranches )
+        m_historyBranch->Append( branch.name );
 
     if( m_historyBranchName.IsEmpty() || !m_historyBranch->SetStringSelection( m_historyBranchName ) )
     {

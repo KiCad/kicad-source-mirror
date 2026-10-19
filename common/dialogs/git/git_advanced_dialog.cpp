@@ -444,9 +444,9 @@ void GIT_ADVANCED_DIALOG::populateTopBar()
 {
     struct RESULT
     {
-        wxString                               current;
-        wxString                               root;
-        std::vector<std::pair<wxString, bool>> branches;
+        wxString                       current;
+        wxString                       root;
+        std::vector<KIGIT_BRANCH_INFO> branches;
     };
 
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
@@ -458,7 +458,8 @@ void GIT_ADVANCED_DIALOG::populateTopBar()
             {
                 result->current = aCommon.GetCurrentBranchName();
                 result->root = aCommon.GetGitRootDirectory();
-                result->branches = aCommon.GetAllBranches();
+                result->branches = aCommon.GetBranches();
+                KIGIT::SortBranchesForDisplay( result->branches );
             },
             [this, common, result]()
             {
@@ -470,10 +471,10 @@ void GIT_ADVANCED_DIALOG::populateTopBar()
                 m_branchChoice->Clear();
 
                 // Only a local branch can be checked out here. Remote ones are on the Branches page.
-                for( const auto& [name, isRemote] : result->branches )
+                for( const KIGIT_BRANCH_INFO& branch : result->branches )
                 {
-                    if( !isRemote )
-                        m_branchChoice->Append( name );
+                    if( !branch.isRemote )
+                        m_branchChoice->Append( branch.name );
                 }
 
                 m_branchChoice->SetStringSelection( result->current );

@@ -21,6 +21,7 @@
 
 #include <dialogs/git/git_status_entries.h>
 #include <dialogs/git/git_transfer.h>
+#include <dialogs/git/git_ui_utils.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <git/project_git_utils.h>
@@ -938,6 +939,7 @@ BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
     KIGIT_COMMON common( repo );
 
     BOOST_REQUIRE( common.IsHeadUnborn() );
+    BOOST_CHECK( common.GetBranches().empty() );
 
     // There is no commit to start a branch at, which is why the method below exists.
     BOOST_CHECK( !common.CreateBranch( wxS( "rev-a" ) ) );
@@ -956,6 +958,7 @@ BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
 
     BOOST_CHECK_EQUAL( std::string( git_reference_symbolic_target( head ) ), "refs/heads/rev-a" );
     BOOST_CHECK( common.IsHeadUnborn() );
+    BOOST_CHECK( common.GetBranches().empty() );
 }
 
 
@@ -1269,19 +1272,23 @@ BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
 
     KIGIT_COMMON common( repo );
 
-    std::vector<wxString> names = common.GetBranchNames();
-    BOOST_REQUIRE_EQUAL( names.size(), 1u );
-    wxString original = names[0];
+    std::vector<KIGIT_BRANCH_INFO> branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 1u );
+    wxString original = branches[0].name;
 
     BOOST_CHECK( common.CreateBranch( "feature" ) );
-    names = common.GetBranchNames();
-    BOOST_REQUIRE_EQUAL( names.size(), 2u );
-    BOOST_CHECK( std::find( names.begin(), names.end(), wxS( "feature" ) ) != names.end() );
+    branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 2u );
+    BOOST_CHECK( std::any_of( branches.begin(), branches.end(),
+                              []( const KIGIT_BRANCH_INFO& aBranch )
+                              {
+                                  return aBranch.name == wxS( "feature" ) && !aBranch.isRemote;
+                              } ) );
 
     BOOST_CHECK( common.DeleteBranch( "feature" ) );
-    names = common.GetBranchNames();
-    BOOST_REQUIRE_EQUAL( names.size(), 1u );
-    BOOST_CHECK_EQUAL( names[0], original );
+    branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 1u );
+    BOOST_CHECK_EQUAL( branches[0].name, original );
 }
 
 
@@ -1537,7 +1544,7 @@ BOOST_AUTO_TEST_CASE( RemoteRoundTripAndUserinfoStripped )
 
 
 // Branches created at the same HEAD share a timestamp. A std::map keyed on it would drop one.
-BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
+BOOST_AUTO_TEST_CASE( GetBranchesKeepsBranchesSharingACommitTime )
 {
     git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
@@ -1546,25 +1553,24 @@ BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
     BOOST_REQUIRE( common.CreateBranch( "alpha" ) );
     BOOST_REQUIRE( common.CreateBranch( "beta" ) );
 
-    std::vector<std::pair<wxString, bool>> all = common.GetAllBranches();
+    std::vector<KIGIT_BRANCH_INFO> branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 3u );
+    std::set<wxString> names;
 
-    bool haveAlpha = false;
-    bool haveBeta = false;
-
-    for( const auto& [name, isRemote] : all )
+    for( const KIGIT_BRANCH_INFO& branch : branches )
     {
-        if( name == wxS( "alpha" ) )
-            haveAlpha = true;
-        else if( name == wxS( "beta" ) )
-            haveBeta = true;
+        names.insert( branch.name );
+        BOOST_CHECK( !branch.isRemote );
+        BOOST_CHECK( branch.when == branches.front().when );
     }
 
-    BOOST_CHECK_MESSAGE( haveAlpha && haveBeta,
-                         "both same-commit-time branches must appear, got " + std::to_string( all.size() ) );
+    BOOST_CHECK_EQUAL( names.count( wxS( "main" ) ), 1u );
+    BOOST_CHECK_EQUAL( names.count( wxS( "alpha" ) ), 1u );
+    BOOST_CHECK_EQUAL( names.count( wxS( "beta" ) ), 1u );
 }
 
 
-// The Branches page lists every branch with the commit it points at, the current one first.
+// Branch listings carry the tip commit and identify the current branch.
 BOOST_AUTO_TEST_CASE( GetBranchesCarriesTipAndCurrent )
 {
     git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
@@ -1574,7 +1580,8 @@ BOOST_AUTO_TEST_CASE( GetBranchesCarriesTipAndCurrent )
     BOOST_REQUIRE( common.CreateBranch( "older" ) );
 
     writeFile( TempPath(), "file.txt", "v2\n" );
-    commitWorkingFile( repo, "file.txt", "second" );
+    const char* message = "second\n\nA full commit message.\n";
+    commitWorkingFile( repo, "file.txt", message );
 
     std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 10 );
     BOOST_REQUIRE_EQUAL( commits.size(), 2u );
@@ -1593,15 +1600,116 @@ BOOST_AUTO_TEST_CASE( GetBranchesCarriesTipAndCurrent )
     std::vector<KIGIT_BRANCH_INFO> branches = common.GetBranches();
     BOOST_REQUIRE_EQUAL( branches.size(), 2u );
 
-    BOOST_CHECK_EQUAL( branches[0].name.ToStdString(), "main" );
-    BOOST_CHECK( branches[0].isCurrent );
-    BOOST_CHECK( !branches[0].isRemote );
-    BOOST_CHECK_EQUAL( branches[0].tipHash.ToStdString(), hashOf( "second" ) );
-    BOOST_CHECK( branches[0].when.IsValid() );
+    for( const KIGIT_BRANCH_INFO& branch : branches )
+    {
+        BOOST_CHECK( !branch.isRemote );
+        BOOST_CHECK( branch.when.IsValid() );
 
-    BOOST_CHECK_EQUAL( branches[1].name.ToStdString(), "older" );
-    BOOST_CHECK( !branches[1].isCurrent );
-    BOOST_CHECK_EQUAL( branches[1].tipHash.ToStdString(), hashOf( "initial" ) );
+        if( branch.name == wxS( "main" ) )
+        {
+            BOOST_CHECK( branch.isCurrent );
+            BOOST_CHECK_EQUAL( branch.tipHash.ToStdString(), hashOf( "second" ) );
+            BOOST_CHECK_EQUAL( branch.message.ToStdString(), message );
+        }
+        else
+        {
+            BOOST_CHECK_EQUAL( branch.name.ToStdString(), "older" );
+            BOOST_CHECK( !branch.isCurrent );
+            BOOST_CHECK_EQUAL( branch.tipHash.ToStdString(), hashOf( "initial" ) );
+            BOOST_CHECK_EQUAL( branch.message.ToStdString(), "initial" );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( GetBranchesDistinguishesRemoteNamesAndSkipsSymbolicAliases )
+{
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "v1\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+    BOOST_REQUIRE( common.CreateBranch( "origin/topic" ) );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo.get(), "HEAD" ), GIT_OK );
+    git_reference* remote = nullptr;
+    BOOST_REQUIRE_EQUAL( git_reference_create( &remote, repo.get(), "refs/remotes/origin/topic", &headOid, 0, nullptr ),
+                         GIT_OK );
+    KIGIT::GitReferencePtr remotePtr( remote );
+
+    git_reference* alias = nullptr;
+    BOOST_REQUIRE_EQUAL( git_reference_symbolic_create( &alias, repo.get(), "refs/remotes/origin/HEAD",
+                                                        "refs/remotes/origin/topic", 0, nullptr ),
+                         GIT_OK );
+    KIGIT::GitReferencePtr aliasPtr( alias );
+
+    std::vector<KIGIT_BRANCH_INFO> branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 3u );
+    unsigned int localCount = 0;
+    unsigned int remoteCount = 0;
+
+    for( const KIGIT_BRANCH_INFO& branch : branches )
+    {
+        if( branch.name == wxS( "origin/topic" ) )
+        {
+            if( branch.isRemote )
+                ++remoteCount;
+            else
+                ++localCount;
+
+            BOOST_CHECK( !branch.isCurrent );
+        }
+        else
+        {
+            BOOST_CHECK_EQUAL( branch.name.ToStdString(), "main" );
+            BOOST_CHECK( branch.isCurrent );
+            BOOST_CHECK( !branch.isRemote );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( localCount, 1u );
+    BOOST_CHECK_EQUAL( remoteCount, 1u );
+
+    BOOST_REQUIRE_EQUAL( git_repository_set_head_detached( repo.get(), &headOid ), GIT_OK );
+    branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 3u );
+    BOOST_CHECK( std::none_of( branches.begin(), branches.end(),
+                               []( const KIGIT_BRANCH_INFO& aBranch )
+                               {
+                                   return aBranch.isCurrent;
+                               } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SortBranchesForDisplayGroupsBranchesAndBreaksTimeTies )
+{
+    const wxDateTime older( 1, wxDateTime::Jan, 2020 );
+    const wxDateTime newer( 2, wxDateTime::Jan, 2020 );
+
+    auto branch = []( const wxString& aName, const wxDateTime& aWhen, bool aRemote = false, bool aCurrent = false )
+    {
+        KIGIT_BRANCH_INFO info;
+        info.name = aName;
+        info.when = aWhen;
+        info.isRemote = aRemote;
+        info.isCurrent = aCurrent;
+        return info;
+    };
+
+    std::vector<KIGIT_BRANCH_INFO> branches = {
+        branch( "origin/unknown", wxDateTime(), true ), branch( "b-tie", older ),
+        branch( "origin/z-new", newer, true ),          branch( "a-undated", wxDateTime() ),
+        branch( "origin/a-old", older, true ),          branch( "z-new", newer ),
+        branch( "main", wxDateTime(), false, true ),    branch( "a-tie", older )
+    };
+
+    KIGIT::SortBranchesForDisplay( branches );
+
+    const std::vector<wxString> expected = { "main",      "z-new",        "a-tie",        "b-tie",
+                                             "a-undated", "origin/z-new", "origin/a-old", "origin/unknown" };
+
+    BOOST_REQUIRE_EQUAL( branches.size(), expected.size() );
+
+    for( size_t i = 0; i < expected.size(); ++i )
+        BOOST_CHECK_EQUAL( branches[i].name.ToStdString(), expected[i].ToStdString() );
 }
 
 

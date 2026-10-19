@@ -19,6 +19,8 @@
 
 #include <dialogs/git/git_ui_utils.h>
 
+#include <algorithm>
+
 #include <wx/button.h>
 #include <wx/datetime.h>
 #include <wx/intl.h>
@@ -46,6 +48,28 @@ std::unique_lock<std::mutex> KIGIT::TryLockAction( KIGIT_COMMON& aCommon, wxWind
         ShowBusyMessage( aParent );
 
     return lock;
+}
+
+
+void KIGIT::SortBranchesForDisplay( std::vector<KIGIT_BRANCH_INFO>& aBranches )
+{
+    std::sort( aBranches.begin(), aBranches.end(),
+               []( const KIGIT_BRANCH_INFO& aLeft, const KIGIT_BRANCH_INFO& aRight )
+               {
+                   if( aLeft.isCurrent != aRight.isCurrent )
+                       return aLeft.isCurrent;
+
+                   if( aLeft.isRemote != aRight.isRemote )
+                       return !aLeft.isRemote;
+
+                   if( aLeft.when.IsValid() != aRight.when.IsValid() )
+                       return aLeft.when.IsValid();
+
+                   if( aLeft.when.IsValid() && aLeft.when != aRight.when )
+                       return aLeft.when > aRight.when;
+
+                   return aLeft.name < aRight.name;
+               } );
 }
 
 
