@@ -74,7 +74,7 @@ private:
  * action lock. This function never reads a live PROJECT or UI settings.
  */
 std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, const wxString& aProjectPath,
-                                                         const wxString& aProjectName, bool aDarkTheme );
+                                                         bool aDarkTheme );
 
 /**
  * What the caller is about to do, which decides the wording and whether the project file is

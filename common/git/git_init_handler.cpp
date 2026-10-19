@@ -21,6 +21,7 @@
 #include "git_backend.h"
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/project_git_utils.h>
 #include <paths.h>
 #include <trace_helpers.h>
 
@@ -36,17 +37,10 @@
 #include <wx/tokenzr.h>
 
 
-// Seed the project .gitignore with KiCad-generated paths that should never be
-// committed (local history, backups, autosaves, lock files, footprint cache,
-// project-local settings which may hold remote URLs and usernames).
-// An existing file belongs to the team, so it is never read and never written.
+// Seed a new .gitignore with the same generated paths the change list hides.
+// An existing file belongs to the team and is left alone.
 static void ensureProjectGitignore( const wxString& aProjectPath )
 {
-    static const wxString kicadEntries[] = {
-        wxS( ".history/" ),     wxS( "*-backups/" ), wxS( "_autosave-*" ),
-        wxS( "fp-info-cache" ), wxS( "~*.lck" ),     wxS( "*.kicad_prl" ),
-    };
-
     wxFileName ignoreFile( aProjectPath, wxS( ".gitignore" ) );
 
     if( ignoreFile.FileExists() )
@@ -60,7 +54,7 @@ static void ensureProjectGitignore( const wxString& aProjectPath )
 
     wxString contents = wxS( "# KiCad-generated files and directories.\n" );
 
-    for( const wxString& entry : kicadEntries )
+    for( const wxString& entry : KIGIT::PROJECT_GIT_UTILS::TransientGitIgnorePatterns() )
         contents += entry + wxS( "\n" );
 
     // A half written file would be taken for the team's own on every later init.

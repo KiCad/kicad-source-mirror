@@ -106,7 +106,7 @@ static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, 
 
 
 std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, const wxString& aProjectPath,
-                                                         const wxString& aProjectName, bool aDarkTheme )
+                                                         bool aDarkTheme )
 {
     std::vector<FILE_CHECKLIST_ENTRY> entries;
 
@@ -132,21 +132,6 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, aProjectPath ) )
             continue;
 
-        wxFileName fn( path );
-
-        // Only files git does not know at all are hidden. One that is tracked, or staged to be,
-        // is carried by a commit and blocks a merge, so hiding it would leave the user with
-        // nothing to commit and no way forward.
-        bool untracked = ( fileStatus.gitStatus & GIT_STATUS_WT_NEW )
-                         && !( fileStatus.gitStatus & GIT_STATUS_INDEX_NEW );
-
-        if( untracked && KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( fn, aProjectName ) )
-            continue;
-
-        // A local settings file nobody has committed is this user's own, not a project change.
-        if( untracked && fn.GetExt().CmpNoCase( FILEEXT::ProjectLocalSettingsFileExtension ) == 0 )
-            continue;
-
         // The commit handler stages paths relative to the working directory.
         wxString relativePath = path;
 
@@ -156,6 +141,30 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
 #ifdef __WINDOWS__
         relativePath.Replace( wxS( "\\" ), wxS( "/" ) );
 #endif
+
+        // Only files git does not know at all are hidden. One that is tracked, or staged to be,
+        // is carried by a commit and blocks a merge, so hiding it would leave the user with
+        // nothing to commit and no way forward.
+        bool untracked = ( fileStatus.gitStatus & GIT_STATUS_WT_NEW )
+                         && !( fileStatus.gitStatus & GIT_STATUS_INDEX_NEW );
+
+        if( untracked )
+        {
+            // Use the session prefix so a project opened through a symlink has the same paths.
+            const wxString pathPrefix = relativePath.Left( prefix->length() );
+
+#ifdef __WINDOWS__
+            bool inProject = pathPrefix.CmpNoCase( *prefix ) == 0;
+#else
+            bool inProject = pathPrefix == *prefix;
+#endif
+
+            if( inProject
+                && KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( relativePath.Mid( prefix->length() ) ) ) )
+            {
+                continue;
+            }
+        }
 
         FILE_CHECKLIST_ENTRY entry;
         entry.section = _( "Changes" );

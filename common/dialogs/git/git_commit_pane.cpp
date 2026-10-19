@@ -487,7 +487,6 @@ void GIT_COMMIT_PANE::RefreshFileList()
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
     wxString                      projectPath = m_frame->Prj().GetProjectPath();
-    wxString                      projectName = m_frame->Prj().GetProjectName();
     bool                          dark = KIPLATFORM::UI::IsDarkTheme();
     bool                          countLines = m_summaryFiles != nullptr;
     auto                          status = std::make_shared<STATUS>();
@@ -495,10 +494,10 @@ void GIT_COMMIT_PANE::RefreshFileList()
 
     m_refresh.Run(
             common,
-            [status, projectPath, projectName, dark, countLines]( KIGIT_COMMON& aCommon )
+            [status, projectPath, dark, countLines]( KIGIT_COMMON& aCommon )
             {
                 status->hasRepo = true;
-                status->entries = BuildGitChangeEntries( aCommon, projectPath, projectName, dark );
+                status->entries = BuildGitChangeEntries( aCommon, projectPath, dark );
                 status->hasLocalCommits = aCommon.HasLocalCommits();
                 status->hasRemote = aCommon.HasPushAndPullRemote();
                 status->headDetached = aCommon.IsHeadDetached();
@@ -1638,7 +1637,6 @@ struct GIT_COMMIT_PANE::COMMIT_REQUEST
     wxString                      summary;
     wxString                      description;
     wxString                      projectPath;
-    wxString                      projectName;
     wxString                      lfsMessage;
     wxString                      amendRefusal;
     std::vector<wxString>         files;
@@ -1692,7 +1690,6 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     request->description = m_description->GetValue();
     request->files = std::move( files );
     request->projectPath = m_frame->Prj().GetProjectPath();
-    request->projectName = m_frame->Prj().GetProjectName();
     request->darkTheme = KIPLATFORM::UI::IsDarkTheme();
 
     // Snapshot immediately before saving. Using the last displayed status could sweep files
@@ -1710,7 +1707,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
                 request->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
 
                 for( const FILE_CHECKLIST_ENTRY& entry :
-                     BuildGitChangeEntries( aCommon, request->projectPath, request->projectName, request->darkTheme ) )
+                     BuildGitChangeEntries( aCommon, request->projectPath, request->darkTheme ) )
                 {
                     request->beforeSave.insert( entry.path );
                 }
@@ -1770,8 +1767,8 @@ void GIT_COMMIT_PANE::saveForCommit( std::shared_ptr<KIGIT_COMMON> aCommon, std:
             {
                 std::set<wxString> already( aRequest->files.begin(), aRequest->files.end() );
 
-                for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries(
-                             aSession, aRequest->projectPath, aRequest->projectName, aRequest->darkTheme ) )
+                for( const FILE_CHECKLIST_ENTRY& entry :
+                     BuildGitChangeEntries( aSession, aRequest->projectPath, aRequest->darkTheme ) )
                 {
                     wxString ext = wxFileName( entry.path ).GetExt();
                     bool     document = ext.CmpNoCase( FILEEXT::KiCadSchematicFileExtension ) == 0

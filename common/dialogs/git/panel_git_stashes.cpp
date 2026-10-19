@@ -401,17 +401,16 @@ void PANEL_GIT_STASHES::checkStashChanges()
     };
 
     wxString projectPath = m_frame->Prj().GetProjectPath();
-    wxString projectName = m_frame->Prj().GetProjectName();
     bool     dark = KIPLATFORM::UI::IsDarkTheme();
     auto     outcome = std::make_shared<OUTCOME>();
 
     m_actionQuery.Run(
             m_frame->Prj().GetGitCommon(),
-            [outcome, projectPath, projectName, dark]( KIGIT_COMMON& aCommon )
+            [outcome, projectPath, dark]( KIGIT_COMMON& aCommon )
             {
                 outcome->worktree = ReadGitWorktreeStatus( aCommon, projectPath );
                 outcome->hasNewFilesOnly = !outcome->worktree.hasTrackedChanges
-                                           && !BuildGitChangeEntries( aCommon, projectPath, projectName, dark ).empty();
+                                           && !BuildGitChangeEntries( aCommon, projectPath, dark ).empty();
             },
             [this, outcome]()
             {

@@ -28,7 +28,6 @@
 #include "kicad_git_memory.h"
 #include <wx/string.h>
 #include <string_utils.h>
-#include <wildcards_and_files_ext.h>
 
 #ifndef __WINDOWS__
 #include <climits>
@@ -412,54 +411,82 @@ bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString
 }
 
 
-bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile, const wxString& aProjectName )
+const std::vector<wxString>& PROJECT_GIT_UTILS::TransientGitIgnorePatterns()
 {
-    if( aFile.GetExt().CmpNoCase( FILEEXT::LockFileExtension ) == 0 )
-        return true;
+    static const std::vector<wxString> patterns = {
+        wxS( ".history/" ),
+        wxS( "*-backups/" ),
+        wxS( "_autosave-*" ),
+        wxS( "fp-info-cache" ),
+        wxS( "~*" ),
+        wxS( "*.[lL][cC][kK]" ),
+        wxS( "*-bak" ),
+        wxS( "*.[kK][iI][cC][aA][dD]_[pP][rR][lL]" ),
 
-    // The backup suffix lands on the full name, as in "board.kicad_pcb-bak", so it cannot be
-    // matched against the extension.
-    if( aFile.GetFullName().StartsWith( FILEEXT::LockFilePrefix )
-        || aFile.GetFullName().EndsWith( FILEEXT::BackupFileSuffix ) )
+        // The conflict resolver keeps the original suffix or adds a number from 1 to 99.
+        wxS( "*.mine" ),
+        wxS( "*.mine.[0-9]" ),
+        wxS( "*.mine.[0-9][0-9]" ),
+        wxS( "*.theirs" ),
+        wxS( "*.theirs.[0-9]" ),
+        wxS( "*.theirs.[0-9][0-9]" ),
+    };
+
+    return patterns;
+}
+
+
+namespace
+{
+
+    using PATHSPEC_PTR = std::unique_ptr<git_pathspec, decltype( &git_pathspec_free )>;
+
+    // A slash limits a rule to directories. The other rules also match directory names in Git.
+    PATHSPEC_PTR transientPathspec( bool aDirectory )
     {
-        return true;
-    }
+        std::vector<std::string> patterns;
 
-    // In the default .gitignore, but a repository that came with its own never got those
-    // entries.
-    if( aFile.GetFullName().StartsWith( wxS( "_autosave-" ) ) || aFile.GetFullName() == wxS( "fp-info-cache" ) )
-        return true;
-
-    // What the conflict resolver keeps beside a file so the replaced version is recoverable.
-    {
-        wxString recovery = aFile.GetExt();
-
-        // A second copy beside the same file is numbered, as in "board.kicad_pcb.mine.1", so
-        // there the word sits one extension further in.
-        if( !recovery.IsEmpty() && recovery.find_first_not_of( wxS( "0123456789" ) ) == wxString::npos )
-            recovery = wxFileName( aFile.GetName() ).GetExt();
-
-        if( recovery == wxS( "mine" ) || recovery == wxS( "theirs" ) )
-            return true;
-    }
-
-    // Archived project backups
-    if( !aProjectName.IsEmpty() )
-    {
-        wxString backups = aProjectName + wxT( "-backups" );
-
-        for( const wxString& dir : aFile.GetDirs() )
+        for( wxString pattern : PROJECT_GIT_UTILS::TransientGitIgnorePatterns() )
         {
-            if( dir == backups )
-                return true;
+            if( pattern.EndsWith( wxS( "/" ) ) )
+            {
+                if( !aDirectory )
+                    continue;
+
+                pattern.RemoveLast();
+            }
+
+            patterns.push_back( pattern.utf8_string() );
         }
+
+        std::vector<char*> paths;
+
+        for( std::string& pattern : patterns )
+            paths.push_back( pattern.data() );
+
+        git_strarray  pathArray = { paths.data(), paths.size() };
+        git_pathspec* spec = nullptr;
+
+        if( git_pathspec_new( &spec, &pathArray ) != GIT_OK )
+            return PATHSPEC_PTR( nullptr, git_pathspec_free );
+
+        return PATHSPEC_PTR( spec, git_pathspec_free );
     }
 
-    // Local project history. Any component, since .history holds a git repository of its own
-    // and its internals sit several levels down.
+} // namespace
+
+
+bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile )
+{
+    static const PATHSPEC_PTR filePatterns = transientPathspec( false );
+    static const PATHSPEC_PTR directoryPatterns = transientPathspec( true );
+
+    if( filePatterns && git_pathspec_matches_path( filePatterns.get(), 0, aFile.GetFullName().utf8_str() ) )
+        return true;
+
     for( const wxString& dir : aFile.GetDirs() )
     {
-        if( dir.StartsWith( wxS( ".history" ) ) )
+        if( directoryPatterns && git_pathspec_matches_path( directoryPatterns.get(), 0, dir.utf8_str() ) )
             return true;
     }
 

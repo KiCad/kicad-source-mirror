@@ -24,6 +24,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 #include <wx/string.h>
 #include <wx/filename.h>
 #include <import_export.h>
@@ -131,13 +132,12 @@ public:
      */
     static void SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommon, const std::string& aLabel );
 
-    /**
-     * True for a file a commit should never offer: lock files, autosaves, backups, the
-     * archived backups directory and the local history directory.
-     *
-     * @param aProjectName Base name of the project, used to match its backups directory.
-     */
-    static bool IsTransientGitFile( const wxFileName& aFile, const wxString& aProjectName );
+    /// Shared patterns for new .gitignore files and the untracked-file filter.
+    static const std::vector<wxString>& TransientGitIgnorePatterns();
+
+    /// Match a project-relative path against the shared transient patterns.
+    /// Callers must keep tracked and staged files visible even when their names match.
+    static bool IsTransientGitFile( const wxFileName& aFile );
 
     /**
      * The project's folder inside the repository, ending in a slash.

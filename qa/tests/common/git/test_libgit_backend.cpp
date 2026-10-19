@@ -26,6 +26,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <dialogs/git/git_status_entries.h>
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
 #include <git/kicad_git_common.h>
@@ -52,6 +53,7 @@
 
 #include <fstream>
 #include <future>
+#include <set>
 #include <thread>
 
 #include <wx/ffile.h>
@@ -226,6 +228,17 @@ struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
         git_buf_dispose( &buf );
         git_config_free( cfg );
         return result;
+    }
+
+
+    void useEmptyGlobalIgnore( git_repository* aRepo )
+    {
+        KI_TEST::WriteGitFile( tempBase(), wxS( "global-ignore" ), "" );
+        const wxString path = tempBase() + wxS( "/global-ignore" );
+        git_config*    rawConfig = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &rawConfig, aRepo ), GIT_OK );
+        KIGIT::GitConfigPtr config( rawConfig );
+        BOOST_REQUIRE_EQUAL( git_config_set_string( config.get(), "core.excludesfile", path.utf8_str() ), GIT_OK );
     }
 
 
@@ -1991,8 +2004,6 @@ BOOST_AUTO_TEST_CASE( Amend_UnbornBranchReturnsError )
 }
 
 
-// The seeded entries are the KiCad transients: .history/, *-backups/, _autosave-*, fp-info-cache
-// and ~*.lck.
 BOOST_AUTO_TEST_CASE( InitializeRepository_SeedsGitignoreWithKicadEntries )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -2004,22 +2015,64 @@ BOOST_AUTO_TEST_CASE( InitializeRepository_SeedsGitignoreWithKicadEntries )
     GIT_INIT_HANDLER handler( &common );
 
     InitResult result = handler.InitializeRepository( freshDir );
-    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( InitResult::Success ) );
+    BOOST_REQUIRE_EQUAL( static_cast<int>( result ), static_cast<int>( InitResult::Success ) );
 
     wxFileName gitignoreFile( freshDir, wxT( ".gitignore" ) );
     BOOST_TEST_REQUIRE( gitignoreFile.FileExists() );
 
-    wxString contents;
+    KIGIT::GitRepositoryPtr repo( common.GetRepo() );
+    common.SetRepo( nullptr );
+    BOOST_REQUIRE( repo );
+    useEmptyGlobalIgnore( repo.get() );
+
+    const std::pair<const char*, bool> cases[] = {
+        { "board.kicad_pcb", false },
+        { "lib.kicad_sym", false },
+        { "board.kicad_pcb-bak", true },
+        { "board.lck", true },
+        { "board.LCK", true },
+        { "~board.kicad_pcb", true },
+        { "proj.kicad_prl", true },
+        { "upper.KiCaD_PrL", true },
+        { "proj-backups/board.zip", true },
+        { "data-proj-backups/board.kicad_pcb", true },
+        { "nested/proj-backups/old/board.zip", true },
+        { "proj-backups-old/board.kicad_pcb", false },
+        { ".history/board.kicad_pcb", true },
+        { ".history/.git/objects/ab/cdef", true },
+        { ".history-notes/board.kicad_pcb", false },
+        { "named/.history", false },
+        { "named/proj-backups", false },
+        { "_autosave-board.kicad_pcb", true },
+        { "_autosave-design/board.kicad_pcb", true },
+        { "fp-info-cache", true },
+        { "fp-info-cache.kicad_pcb", false },
+        { "cache.kicad_prl/board.kicad_pcb", true },
+        { "board.kicad_pcb.mine", true },
+        { "board.kicad_pcb.theirs", true },
+        { "board.kicad_pcb.mine.1", true },
+        { "board.kicad_pcb.theirs.17", true },
+        { "board.kicad_pcb.mine.99", true },
+        { "board.kicad_pcb.mine.100", false },
+        { "board.kicad_pcb.mine.1notes", false },
+        { "board.kicad_pcb.theirs.notes", false },
+        { "board.mine.kicad_pcb", false },
+        { "board.kicad_pcb.1", false },
+    };
+
+    for( const auto& [path, transient] : cases )
     {
-        wxFFile f( gitignoreFile.GetFullPath(), wxT( "r" ) );
-        f.ReadAll( &contents );
+        BOOST_TEST_CONTEXT( path )
+        {
+            KI_TEST::WriteGitFile( freshDir, wxString::FromUTF8( path ), "test file\n" );
+            int ignored = 0;
+            BOOST_REQUIRE_EQUAL( git_ignore_path_is_ignored( &ignored, repo.get(), path ), GIT_OK );
+            BOOST_CHECK_EQUAL( ignored != 0, transient );
+            BOOST_CHECK_EQUAL( KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( path ) ), transient );
+        }
     }
 
-    BOOST_CHECK( contents.Contains( wxT( ".history/" ) ) );
-    BOOST_CHECK( contents.Contains( wxT( "*-backups/" ) ) );
-    BOOST_CHECK( contents.Contains( wxT( "_autosave-*" ) ) );
-    BOOST_CHECK( contents.Contains( wxT( "fp-info-cache" ) ) );
-    BOOST_CHECK( contents.Contains( wxT( "~*.lck" ) ) );
+    repo.reset();
 
     if( wxFileName::DirExists( freshDir ) )
         wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );
@@ -2317,59 +2370,81 @@ BOOST_AUTO_TEST_CASE( CommitKeepsAPathThatIsNotARegularFile )
 #endif
 
 
-BOOST_AUTO_TEST_CASE( IsTransientGitFile_ExcludesTransientFilesOnly )
+BOOST_AUTO_TEST_CASE( IsTransientGitFile_HandlesDosPaths )
 {
     using KIGIT::PROJECT_GIT_UTILS;
 
-    // Real design files are kept.
-    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb" ), wxT( "proj" ) ) );
-    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/lib.kicad_sym" ), wxT( "proj" ) ) );
-
-    // Backup files are excluded.
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile(
-            wxFileName( "proj/board.kicad_pcb" + FILEEXT::BackupFileSuffix ), wxT( "proj" ) ) );
-
-    // Lock files are excluded.
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile(
-            wxFileName( wxString::Format( "proj/board.%s", FILEEXT::LockFileExtension ) ), wxT( "proj" ) ) );
-
-    // The archived backups directory is excluded.
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "root/proj-backups/board.zip" ), wxT( "proj" ) ) );
-
-    // A directory whose name merely ends with the project's own is not that project's backups.
-    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "root/data-proj-backups/board.kicad_pcb" ),
-                                                         wxT( "proj" ) ) );
-
-    // The local history directory is excluded.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj\\.history\\board.kicad_pcb", wxPATH_DOS ) ) );
     BOOST_CHECK(
-            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/.history/board.kicad_pcb" ), wxT( "proj" ) ) );
+            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj\\data-proj-backups\\board.zip", wxPATH_DOS ) ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj\\settings.KICAD_PRL", wxPATH_DOS ) ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj\\board.kicad_pcb.theirs.99", wxPATH_DOS ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile(
+            wxFileName( "proj\\.history-notes\\board.kicad_pcb", wxPATH_DOS ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj\\board.kicad_pcb.mine.100", wxPATH_DOS ) ) );
+}
 
-    // .history holds a git repository of its own, so its internals sit deeper than one level.
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/.history/.git/objects/ab/cdef" ),
-                                                        wxT( "proj" ) ) );
 
-    // A repository that already had a .gitignore of its own never receives KiCad's entries, so
-    // the checklist has to recognise these on its own.
-    BOOST_CHECK(
-            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/_autosave-board.kicad_pcb" ), wxT( "proj" ) ) );
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/fp-info-cache" ), wxT( "proj" ) ) );
+BOOST_AUTO_TEST_CASE( BuildGitChangeEntries_KeepsTrackedAndStagedTransientFiles )
+{
+    BOOST_REQUIRE( ready() );
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
+    useEmptyGlobalIgnore( repo.get() );
 
-    // The copies the conflict resolver leaves beside a file are recovery aids, not project files.
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.mine" ), wxT( "proj" ) ) );
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.theirs" ), wxT( "proj" ) ) );
+    // An ancestor outside the project must not hide its files.
+    const wxString prefix = wxS( "workspace-backups/project/" );
+    const wxString projectPath = repoPath() + wxS( "/" ) + prefix;
+    KI_TEST::WriteGitFile( repoPath(), prefix + wxS( ".gitignore" ), "" );
+    KI_TEST::WriteGitFile( repoPath(), prefix + wxS( "tracked.kicad_prl" ), "original settings\n" );
+    KI_TEST::WriteGitFile( repoPath(), prefix + wxS( "deleted.kicad_pcb.mine" ), "original recovery\n" );
+    KI_TEST::CommitAllGitFiles( repo.get(), wxS( "Track files the user chose to keep" ) );
 
-    // A second copy beside the same file is numbered, so the recovery word is not the extension.
-    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.mine.1" ), wxT( "proj" ) ) );
-    BOOST_CHECK(
-            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.theirs.17" ), wxT( "proj" ) ) );
+    KI_TEST::WriteGitFile( repoPath(), prefix + wxS( "tracked.kicad_prl" ), "changed settings with more data\n" );
+    BOOST_REQUIRE( wxRemoveFile( projectPath + wxS( "deleted.kicad_pcb.mine" ) ) );
+    KI_TEST::WriteGitFile( repoPath(), prefix + wxS( "staged.kicad_prl" ), "staged settings\n" );
 
-    // But the words only count at the end. A design file merely named after one is the user's.
-    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.mine.kicad_pcb" ), wxT( "proj" ) ) );
-    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.1" ), wxT( "proj" ) ) );
+    git_index* rawIndex = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &rawIndex, repo.get() ), GIT_OK );
+    KIGIT::GitIndexPtr index( rawIndex );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), ( prefix + wxS( "staged.kicad_prl" ) ).utf8_str() ),
+                         GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index.get() ), GIT_OK );
 
-    // A design file that merely mentions one of those names is still a design file.
-    BOOST_CHECK(
-            !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/fp-info-cache.kicad_pcb" ), wxT( "proj" ) ) );
+    const char* untracked[] = {
+        "board.kicad_pcb",           "untracked.kicad_prl",       "board.kicad_pcb.theirs.17",
+        "_autosave-board.kicad_pcb", "project-backups/board.zip", ".history/revisions/board.kicad_pcb",
+    };
+
+    for( const char* path : untracked )
+        KI_TEST::WriteGitFile( repoPath(), prefix + wxString::FromUTF8( path ), "new file\n" );
+
+    const std::set<wxString> expected = {
+        prefix + wxS( "board.kicad_pcb" ),
+        prefix + wxS( "tracked.kicad_prl" ),
+        prefix + wxS( "deleted.kicad_pcb.mine" ),
+        prefix + wxS( "staged.kicad_prl" ),
+    };
+
+    auto checkEntries = [&repo, &expected]( const wxString& aProjectPath )
+    {
+        KIGIT_COMMON                 common( repo.get(), aProjectPath );
+        std::unique_lock<std::mutex> lock = common.LockAction();
+        std::set<wxString>           paths;
+
+        for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries( common, aProjectPath, false ) )
+            paths.insert( entry.path );
+
+        BOOST_CHECK_EQUAL_COLLECTIONS( paths.begin(), paths.end(), expected.begin(), expected.end() );
+    };
+
+    checkEntries( projectPath );
+
+#ifndef __WINDOWS__
+    const wxString alias = tempBase() + wxS( "/project-alias" );
+    BOOST_REQUIRE_EQUAL( symlink( projectPath.utf8_str(), alias.utf8_str() ), 0 );
+    checkEntries( alias );
+#endif
 }
 
 
