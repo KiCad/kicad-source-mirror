@@ -923,8 +923,8 @@ void ACTION_TOOLBAR::onMouseClick( wxMouseEvent& aEvent )
 
     if( item )
     {
-        // Ensure there is no active palette
-        if( m_palette )
+        // The release that ends the long press must not close the palette it opened
+        if( aEvent.LeftDown() && m_palette )
         {
             m_palette->Hide();
             m_palette->Destroy();
