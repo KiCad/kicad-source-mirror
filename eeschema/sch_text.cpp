@@ -246,7 +246,7 @@ void SCH_TEXT::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
     VECTOR2I offset = pt - GetTextPos();
 
-    Rotate90( false );
+    Rotate90( !aRotateCCW );
 
     SetTextPos( GetTextPos() + offset );
 }
