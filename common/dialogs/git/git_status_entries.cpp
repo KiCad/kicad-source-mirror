@@ -51,6 +51,7 @@
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
 #include <kiway.h>
+#include <kiway_player.h>
 #include <kiplatform/ui.h>
 #include <mail_type.h>
 #include <pgm_base.h>

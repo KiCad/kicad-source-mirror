@@ -20,6 +20,8 @@
 #ifndef GIT_CREDENTIALS_PROMPT_H
 #define GIT_CREDENTIALS_PROMPT_H
 
+#include <wx/string.h>
+
 class wxWindow;
 class KIGIT_COMMON;
 class PROJECT;

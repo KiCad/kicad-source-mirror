@@ -69,6 +69,7 @@
 
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
 
 
 using namespace kiapi::common::commands;

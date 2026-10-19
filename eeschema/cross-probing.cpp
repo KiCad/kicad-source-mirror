@@ -55,6 +55,7 @@
 #include <widgets/kistatusbar.h>
 #include <wx/filefn.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
 #include <trace_helpers.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wxString* aReference,

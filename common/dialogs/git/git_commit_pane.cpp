@@ -22,6 +22,7 @@
 #include <dialogs/git/git_status_entries.h>
 #include <frame_type.h>
 #include <kiway.h>
+#include <kiway_player.h>
 #include <mail_type.h>
 
 #include <algorithm>
