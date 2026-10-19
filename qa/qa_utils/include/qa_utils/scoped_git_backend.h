@@ -23,8 +23,7 @@
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
 
-/// Installs a real LIBGIT_BACKEND and initializes libgit2 for this object's lifetime, so a
-/// fixture cannot leak either into a later suite.
+/// Install a real backend for a test and restore the previous backend afterwards.
 class SCOPED_GIT_BACKEND
 {
 public:
@@ -37,7 +36,7 @@ public:
 
     ~SCOPED_GIT_BACKEND()
     {
-        SetGitBackend( nullptr );
+        SetGitBackend( m_previous );
         m_backend->Shutdown();
         delete m_backend;
     }
@@ -48,6 +47,7 @@ public:
     LIBGIT_BACKEND* Backend() const { return m_backend; }
 
 private:
+    GIT_BACKEND*    m_previous = GetGitBackend();
     LIBGIT_BACKEND* m_backend = nullptr;
 };
 

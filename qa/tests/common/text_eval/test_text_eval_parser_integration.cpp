@@ -25,12 +25,12 @@
 #include <qa_utils/env_var_utils.h>
 #include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/git_test_fixture.h>
+#include <qa_utils/scoped_git_backend.h>
 
 // Code under test
 #include <common.h>
-#include <git/git_backend.h>
 #include <git/kicad_git_memory.h>
-#include <git/libgit_backend.h>
 #include <git/project_git_utils.h>
 #include <text_eval/text_eval_environment.h>
 #include <text_eval/text_eval_vcs.h>
@@ -50,21 +50,7 @@ BOOST_AUTO_TEST_SUITE( TextEvalParserIntegration )
 
 BOOST_AUTO_TEST_CASE( VcsNativeProjectContextPaths )
 {
-    struct BACKEND_SCOPE
-    {
-        GIT_BACKEND* previous = GetGitBackend();
-        LIBGIT_BACKEND backend;
-        BACKEND_SCOPE()
-        {
-            backend.Init();
-            SetGitBackend( &backend );
-        }
-        ~BACKEND_SCOPE()
-        {
-            SetGitBackend( previous );
-            backend.Shutdown();
-        }
-    } backend;
+    SCOPED_GIT_BACKEND       backend;
     KI_TEST::SCOPED_TEMP_DIR owner( "text-vcs-owner" );
     const wxString projectFile = owner.PathStr() + "/multinetclasses.kicad_pro";
     const wxString source = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
@@ -72,27 +58,17 @@ BOOST_AUTO_TEST_CASE( VcsNativeProjectContextPaths )
     BOOST_REQUIRE( wxCopyFile( source, projectFile ) );
     BOOST_REQUIRE( wxMkdir( owner.PathStr() + "/sub" ) );
     BOOST_REQUIRE( wxCopyFile( source, owner.PathStr() + "/sub/multinetclasses.kicad_pro" ) );
-    git_repository* rawRepo = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_init( &rawRepo, owner.PathStr().ToUTF8().data(), 0 ), 0 );
-    KIGIT::GitRepositoryPtr repo( rawRepo );
-    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/owner" ), 0 );
+    KIGIT::GitRepositoryPtr repo =
+            KI_TEST::InitGitRepository( owner.PathStr(), "owner", "Connectivity QA", "qa@example.invalid" );
+
+    // Stage the project files even if the user's ignore rules match them.
     git_index* rawIndex = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_index( &rawIndex, repo.get() ), 0 );
+    BOOST_REQUIRE_EQUAL( git_repository_index( &rawIndex, repo.get() ), GIT_OK );
     KIGIT::GitIndexPtr index( rawIndex );
-    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), "multinetclasses.kicad_pro" ), 0 );
-    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), "sub/multinetclasses.kicad_pro" ), 0 );
-    git_oid treeId;
-    BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeId, index.get() ), 0 );
-    BOOST_REQUIRE_EQUAL( git_index_write( index.get() ), 0 );
-    git_tree* rawTree = nullptr;
-    BOOST_REQUIRE_EQUAL( git_tree_lookup( &rawTree, repo.get(), &treeId ), 0 );
-    KIGIT::GitTreePtr tree( rawTree );
-    git_signature* rawSignature = nullptr;
-    BOOST_REQUIRE_EQUAL( git_signature_now( &rawSignature, "Connectivity QA", "qa@example.invalid" ), 0 );
-    KIGIT::GitSignaturePtr signature( rawSignature );
-    git_oid commitId;
-    BOOST_REQUIRE_EQUAL( git_commit_create_v( &commitId, repo.get(), "HEAD", signature.get(), signature.get(),
-                                             nullptr, "Native project", tree.get(), 0 ), 0 );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), "multinetclasses.kicad_pro" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), "sub/multinetclasses.kicad_pro" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index.get() ), GIT_OK );
+    KI_TEST::CommitGitIndex( repo.get(), "Native project" );
     const wxString previous = TEXT_EVAL_VCS::GetContextPath();
     const auto evaluateVcs = []( const wxString& expression )
     {
@@ -146,12 +122,7 @@ BOOST_AUTO_TEST_CASE( VcsNativeProjectContextPaths )
             BOOST_CHECK_EQUAL( evaluateVcs( "@{vcsbranch()}" ), "owner" );
         }
 
-        git_commit* rawCommit = nullptr;
-        BOOST_REQUIRE_EQUAL( git_commit_lookup( &rawCommit, repo.get(), &commitId ), 0 );
-        KIGIT::GitCommitPtr original( rawCommit );
-        git_oid changedId;
-        BOOST_REQUIRE_EQUAL( git_commit_create_v( &changedId, repo.get(), "HEAD", signature.get(), signature.get(),
-                                                 nullptr, "Next native project", tree.get(), 1, original.get() ), 0 );
+        git_oid        changedId = KI_TEST::CommitGitIndex( repo.get(), "Next native project" );
         git_reference* rawBranch = nullptr;
         BOOST_REQUIRE_EQUAL( git_reference_create( &rawBranch, repo.get(), "refs/heads/changed",
                                                    &changedId, 0, nullptr ), 0 );

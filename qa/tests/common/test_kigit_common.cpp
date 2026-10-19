@@ -26,7 +26,8 @@
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
 #include <git/git_push_handler.h>
-#include <qa_utils/scoped_git_backend.h>
+#include <qa_utils/file_utils.h>
+#include <qa_utils/git_test_fixture.h>
 
 #include <git2.h>
 
@@ -46,7 +47,6 @@
 #include <set>
 #include <stdexcept>
 #include <thread>
-#include <cstdlib>
 
 #ifndef __WINDOWS__
 #include <unistd.h>
@@ -123,135 +123,21 @@ const char* c_pkcs8Encrypted = "-----BEGIN ENCRYPTED PRIVATE KEY-----\n"
                                "-----END ENCRYPTED PRIVATE KEY-----\n";
 
 
-struct ScopedTempDir
-{
-    wxString path;
-
-    ScopedTempDir()
-    {
-        auto now = std::chrono::steady_clock::now().time_since_epoch();
-        long long ticks = std::chrono::duration_cast<std::chrono::nanoseconds>( now ).count();
-
-        wxString base = wxFileName::GetTempDir();
-        wxFileName fn;
-        fn.AssignDir( base );
-        fn.AppendDir( wxString::Format( "kicad-qa-git-%lld-%p", ticks, this ) );
-        wxFileName::Mkdir( fn.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-#ifdef __WXMAC__
-        // Store the realpath-resolved form.  libgit2 canonicalizes the repo workdir with
-        // realpath(3), so on macOS -- where /var is a symlink to /private/var -- any path
-        // derived from the repo differs textually from the one we built above unless we
-        // resolve symlinks here too.  Comparisons against GetGitRootDirectory() rely on this.
-        char* resolved = realpath( fn.GetPath().utf8_string().c_str(), nullptr );
-
-        if( resolved )
-        {
-            path = wxString::FromUTF8( resolved );
-            free( resolved );
-        }
-        else
-        {
-            path = fn.GetPath();
-        }
-#else
-        path = fn.GetPath();
-#endif
-    }
-
-    ~ScopedTempDir()
-    {
-        if( !path.IsEmpty() )
-            wxFileName::Rmdir( path, wxPATH_RMDIR_RECURSIVE );
-    }
-};
-
-
 // Initialize a git repository at the given path with one initial commit on "main"
 git_repository* makeRepoWithCommit( const wxString& aRepoPath, const wxString& aFileName,
                                     const std::string& aFileContents )
 {
-    git_repository* repo = nullptr;
-    git_repository_init_options init_opts = GIT_REPOSITORY_INIT_OPTIONS_INIT;
-    init_opts.flags = GIT_REPOSITORY_INIT_MKPATH;
-    init_opts.initial_head = "main";
-
-    BOOST_REQUIRE_EQUAL( git_repository_init_ext( &repo, aRepoPath.utf8_string().c_str(),
-                                                  &init_opts ),
-                         GIT_OK );
-
-    // Write a file
-    wxFileName filePath( aRepoPath, aFileName );
-    {
-        std::ofstream f( filePath.GetFullPath().utf8_string() );
-        f << aFileContents;
-    }
-
-    // Configure user
-    git_config* cfg = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
-    KIGIT::GitConfigPtr cfgPtr( cfg );
-    git_config_set_string( cfg, "user.name", "QA Test" );
-    git_config_set_string( cfg, "user.email", "qa@example.com" );
-
-    // Stage and commit
-    git_index* index = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
-    KIGIT::GitIndexPtr indexPtr( index );
-    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, aFileName.utf8_string().c_str() ), GIT_OK );
-    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
-
-    git_oid tree_oid;
-    BOOST_REQUIRE_EQUAL( git_index_write_tree( &tree_oid, index ), GIT_OK );
-
-    git_tree* tree = nullptr;
-    BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, repo, &tree_oid ), GIT_OK );
-    KIGIT::GitTreePtr treePtr( tree );
-
-    git_signature* sig = nullptr;
-    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
-    KIGIT::GitSignaturePtr sigPtr( sig );
-
-    git_oid commit_oid;
-    BOOST_REQUIRE_EQUAL( git_commit_create( &commit_oid, repo, "HEAD", sig, sig, nullptr,
-                                            "initial", tree, 0, nullptr ),
-                         GIT_OK );
-
-    return repo;
+    KIGIT::GitRepositoryPtr repo = KI_TEST::InitGitRepository( aRepoPath );
+    KI_TEST::WriteGitFile( aRepoPath, aFileName, aFileContents );
+    KI_TEST::CommitGitFile( repo.get(), aFileName, "initial" );
+    return repo.release();
 }
 
 
 // Stage aFileName from the working tree and commit it on top of HEAD.
 void commitWorkingFile( git_repository* aRepo, const wxString& aFileName, const char* aMessage )
 {
-    git_index* index = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_index( &index, aRepo ), GIT_OK );
-    KIGIT::GitIndexPtr indexPtr( index );
-    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, aFileName.utf8_string().c_str() ), GIT_OK );
-    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
-
-    git_oid treeOid;
-    BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeOid, index ), GIT_OK );
-
-    git_tree* tree = nullptr;
-    BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, aRepo, &treeOid ), GIT_OK );
-    KIGIT::GitTreePtr treePtr( tree );
-
-    git_oid headOid;
-    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, aRepo, "HEAD" ), GIT_OK );
-
-    git_commit* parent = nullptr;
-    BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, aRepo, &headOid ), GIT_OK );
-    KIGIT::GitCommitPtr parentPtr( parent );
-
-    git_signature* sig = nullptr;
-    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
-    KIGIT::GitSignaturePtr sigPtr( sig );
-
-    const git_commit* parents[1] = { parent };
-    git_oid           commitOid;
-    BOOST_REQUIRE_EQUAL( git_commit_create( &commitOid, aRepo, "HEAD", sig, sig, nullptr, aMessage, tree, 1, parents ),
-                         GIT_OK );
+    KI_TEST::CommitGitFile( aRepo, aFileName, aMessage );
 }
 
 
@@ -264,8 +150,7 @@ std::string readWorkingFile( const wxFileName& aFile )
 
 void writeFile( const wxString& aRepoPath, const wxString& aFileName, const char* aContent )
 {
-    std::ofstream f( ( aRepoPath + wxS( "/" ) + aFileName ).utf8_string() );
-    f << aContent;
+    KI_TEST::WriteGitFile( aRepoPath, aFileName, aContent );
 }
 
 
@@ -317,17 +202,14 @@ struct UI_CALLBACK_CAPTURE
 } // namespace
 
 
-BOOST_AUTO_TEST_SUITE( KiGitCommon )
+BOOST_FIXTURE_TEST_SUITE( KiGitCommon, KI_TEST::GIT_TEST_FIXTURE )
 
 
 // git_repository_path() returns a path ending in /.git/, which broke the popup-menu test for
 // whether a project lives at the repository root.
 BOOST_AUTO_TEST_CASE( GitRootDirectoryReturnsWorkdir )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir tmp;
-
-    git_repository* repo = makeRepoWithCommit( tmp.path, "file.txt", "data\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "data\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -343,7 +225,7 @@ BOOST_AUTO_TEST_CASE( GitRootDirectoryReturnsWorkdir )
     rootFn.AssignDir( root );
     rootFn.MakeAbsolute();
     wxFileName tmpFn;
-    tmpFn.AssignDir( tmp.path );
+    tmpFn.AssignDir( TempPath() );
     tmpFn.MakeAbsolute();
     BOOST_CHECK_EQUAL( rootFn.GetFullPath().ToStdString(), tmpFn.GetFullPath().ToStdString() );
 }
@@ -352,10 +234,7 @@ BOOST_AUTO_TEST_CASE( GitRootDirectoryReturnsWorkdir )
 // The remote need not be called origin.
 BOOST_AUTO_TEST_CASE( HasPushAndPullRemoteAcceptsNonOriginName )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir tmp;
-
-    git_repository* repo = makeRepoWithCommit( tmp.path, "file.txt", "data\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "data\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     // No remotes configured.
@@ -375,10 +254,7 @@ BOOST_AUTO_TEST_CASE( HasPushAndPullRemoteAcceptsNonOriginName )
 
 BOOST_AUTO_TEST_CASE( HasPushAndPullRemoteFindsOrigin )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir tmp;
-
-    git_repository* repo = makeRepoWithCommit( tmp.path, "file.txt", "data\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "data\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     git_remote* remote = nullptr;
@@ -396,10 +272,7 @@ BOOST_AUTO_TEST_CASE( HasPushAndPullRemoteFindsOrigin )
 // modified set, falsely flagging every file as ahead of the remote.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesEmptyWithoutUpstream )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir tmp;
-
-    git_repository* repo = makeRepoWithCommit( tmp.path, "file.txt", "data\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "data\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -418,16 +291,13 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesEmptyWithoutUpstream )
 // commit has no parent, so its whole tree landed in the AHEAD set.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesHandlesUnrelatedHistories )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir tmp;
-
     // Local root commit with two files.  The bug previously listed both as AHEAD.
-    git_repository* repo = makeRepoWithCommit( tmp.path, "untouched.txt", "stable\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "untouched.txt", "stable\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     // Add a second file to local HEAD so we have more than the bare initial tree.
     {
-        wxFileName extra( tmp.path, wxS( "second.txt" ) );
+        wxFileName    extra( TempPath(), wxS( "second.txt" ) );
         std::ofstream f( extra.GetFullPath().utf8_string() );
         f << "more\n";
     }
@@ -521,15 +391,12 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesHandlesUnrelatedHistories )
 // Files present unchanged in both trees must not show up as ahead.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsOnlyTouchedFilesWhenAhead )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir tmp;
-
     // Initial commit becomes the shared base.  Two files: only one will be modified later.
-    git_repository* repo = makeRepoWithCommit( tmp.path, "untouched.txt", "stable\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "untouched.txt", "stable\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     {
-        wxFileName extra( tmp.path, wxS( "touched.txt" ) );
+        wxFileName    extra( TempPath(), wxS( "touched.txt" ) );
         std::ofstream f( extra.GetFullPath().utf8_string() );
         f << "v1\n";
     }
@@ -590,7 +457,7 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsOnlyTouchedFilesWhenAhead )
 
     // Local-only commit modifying just touched.txt.
     {
-        wxFileName extra( tmp.path, wxS( "touched.txt" ) );
+        wxFileName    extra( TempPath(), wxS( "touched.txt" ) );
         std::ofstream f( extra.GetFullPath().utf8_string() );
         f << "v2\n";
     }
@@ -670,10 +537,7 @@ BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionRejectsNonKeys )
 // land in the BEHIND (remote) set and not in the AHEAD (local) set.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsRemoteOnlyFilesWhenBehind )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "untouched.txt", "stable\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "untouched.txt", "stable\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     git_reference* head = nullptr;
@@ -689,7 +553,7 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsRemoteOnlyFilesWhenBehind )
     // Build a tree that adds remote_only.txt on top of the base, then commit it without moving
     // HEAD so the local branch stays behind.
     {
-        wxFileName    extra( tmp.path, wxS( "remote_only.txt" ) );
+        wxFileName    extra( TempPath(), wxS( "remote_only.txt" ) );
         std::ofstream f( extra.GetFullPath().utf8_string() );
         f << "from remote\n";
     }
@@ -874,9 +738,7 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsEmptyWithoutRepo )
 
 BOOST_AUTO_TEST_CASE( GetRecentCommitsHonorsAnAlreadyCancelledOperation )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     KIGIT_COMMON            common( repo.get() );
     auto                    lock = common.LockAction();
 
@@ -899,15 +761,12 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsHonorsAnAlreadyCancelledOperation )
 // and honors the requested maximum.
 BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     // Add a second commit on top of the first.
     {
-        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        wxFileName    fn( TempPath(), wxS( "file.txt" ) );
         std::ofstream f( fn.GetFullPath().utf8_string() );
         f << "v2\n";
     }
@@ -964,10 +823,7 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
 // the walk covers every branch, so a commit on a side branch shows up too.
 BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByBranchAndSearch )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     // A side branch with one commit of its own, then back on main for one more.
@@ -983,11 +839,11 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByBranchAndSearch )
     KIGIT::GitReferencePtr sidePtr( side );
 
     BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/side" ), GIT_OK );
-    writeFile( tmp.path, "side.txt", "side\n" );
+    writeFile( TempPath(), "side.txt", "side\n" );
     commitWorkingFile( repo, "side.txt", "side work" );
 
     BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/main" ), GIT_OK );
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "main work" );
 
     KIGIT_COMMON common( repo );
@@ -1035,10 +891,7 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByBranchAndSearch )
 // the branches and the tags are.
 BOOST_AUTO_TEST_CASE( GetRecentCommitsNamesRefsOnEachCommit )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     git_oid firstOid;
@@ -1051,7 +904,7 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsNamesRefsOnEachCommit )
     git_oid tagOid;
     BOOST_REQUIRE_EQUAL( git_tag_create_lightweight( &tagOid, repo, "v1.0", first, 0 ), GIT_OK );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "second" );
 
     KIGIT_COMMON common( repo );
@@ -1074,15 +927,12 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsNamesRefsOnEachCommit )
 // naming a branch means pointing HEAD at it and letting the first commit create it.
 BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
     git_repository*             repo = nullptr;
     git_repository_init_options opts = GIT_REPOSITORY_INIT_OPTIONS_INIT;
     opts.flags = GIT_REPOSITORY_INIT_MKPATH;
     opts.initial_head = "main";
 
-    BOOST_REQUIRE_EQUAL( git_repository_init_ext( &repo, tmp.path.utf8_string().c_str(), &opts ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_repository_init_ext( &repo, TempPath().utf8_string().c_str(), &opts ), GIT_OK );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1112,13 +962,10 @@ BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
 // The History page shows a commit's whole message in its detail pane, summary line and body.
 BOOST_AUTO_TEST_CASE( GetCommitDetailCarriesTheWholeMessage )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "Route the power rails\n\nBody line one.\nBody line two.\n" );
 
     KIGIT_COMMON        common( repo );
@@ -1131,15 +978,12 @@ BOOST_AUTO_TEST_CASE( GetCommitDetailCarriesTheWholeMessage )
 
 BOOST_AUTO_TEST_CASE( GetCommitDetailCountsLinesPerFile )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "one\ntwo\nthree\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "one\ntwo\nthree\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     // Change one line of the existing file and add a new file in the same commit.
-    writeFile( tmp.path, "file.txt", "one\n2\nthree\n" );
-    writeFile( tmp.path, "new.txt", "a\nb\n" );
+    writeFile( TempPath(), "file.txt", "one\n2\nthree\n" );
+    writeFile( TempPath(), "new.txt", "a\nb\n" );
 
     {
         git_index* index = nullptr;
@@ -1194,16 +1038,13 @@ BOOST_AUTO_TEST_CASE( GetCommitDetailCountsLinesPerFile )
 // backup files. The line counts sit beside that list, so they must cover the same files.
 BOOST_AUTO_TEST_CASE( WorkingTreeLineStatsCountOnlyTheFilesGiven )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "readme.txt", "root\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "readme.txt", "root\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    BOOST_REQUIRE( wxFileName::Mkdir( tmp.path + wxS( "/mine" ) ) );
-    BOOST_REQUIRE( wxFileName::Mkdir( tmp.path + wxS( "/theirs" ) ) );
-    writeFile( tmp.path, wxS( "mine/board.txt" ), "one\ntwo\n" );
-    writeFile( tmp.path, wxS( "theirs/board.txt" ), "one\ntwo\n" );
+    BOOST_REQUIRE( wxFileName::Mkdir( TempPath() + wxS( "/mine" ) ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( TempPath() + wxS( "/theirs" ) ) );
+    writeFile( TempPath(), wxS( "mine/board.txt" ), "one\ntwo\n" );
+    writeFile( TempPath(), wxS( "theirs/board.txt" ), "one\ntwo\n" );
 
     {
         git_index* index = nullptr;
@@ -1217,9 +1058,9 @@ BOOST_AUTO_TEST_CASE( WorkingTreeLineStatsCountOnlyTheFilesGiven )
     commitWorkingFile( repo, wxS( "readme.txt" ), "two projects\n" );
 
     // One line added in this project, three in the other, and an untracked lock file.
-    writeFile( tmp.path, wxS( "mine/board.txt" ), "one\ntwo\nthree\n" );
-    writeFile( tmp.path, wxS( "theirs/board.txt" ), "one\ntwo\na\nb\nc\n" );
-    writeFile( tmp.path, wxS( "mine/~board.lck" ), "locked\n" );
+    writeFile( TempPath(), wxS( "mine/board.txt" ), "one\ntwo\nthree\n" );
+    writeFile( TempPath(), wxS( "theirs/board.txt" ), "one\ntwo\na\nb\nc\n" );
+    writeFile( TempPath(), wxS( "mine/~board.lck" ), "locked\n" );
 
     KIGIT_COMMON common( repo );
 
@@ -1240,17 +1081,15 @@ BOOST_AUTO_TEST_CASE( WorkingTreeLineStatsCountOnlyTheFilesGiven )
 // altogether, so the folder has to be worked out from the resolved paths instead.
 BOOST_AUTO_TEST_CASE( SymlinkedProjectFolderStillFindsItsPrefix )
 {
-    ScopedTempDir tmp;
-
-    wxString repoRoot = tmp.path + wxS( "/real/repo" );
+    wxString repoRoot = TempPath() + wxS( "/real/repo" );
     BOOST_REQUIRE( wxFileName::Mkdir( repoRoot + wxS( "/proj" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
     writeFile( repoRoot, wxS( "proj/p.kicad_pro" ), "{}\n" );
 
-    wxString deepLink = tmp.path + wxS( "/deep" );
+    wxString deepLink = TempPath() + wxS( "/deep" );
     BOOST_REQUIRE_EQUAL( symlink( ( repoRoot + wxS( "/proj" ) ).utf8_string().c_str(), deepLink.utf8_string().c_str() ),
                          0 );
 
-    wxString rootLink = tmp.path + wxS( "/top" );
+    wxString rootLink = TempPath() + wxS( "/top" );
     BOOST_REQUIRE_EQUAL( symlink( repoRoot.utf8_string().c_str(), rootLink.utf8_string().c_str() ), 0 );
 
     const wxString canonicalWorkDir = repoRoot + wxS( "/" );
@@ -1276,13 +1115,10 @@ BOOST_AUTO_TEST_CASE( SymlinkedProjectFolderStillFindsItsPrefix )
 // WriteBlobToFile materializes a file's committed content, used to feed the diff viewer.
 BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "hello world\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "hello world\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    wxString dest = tmp.path + wxFileName::GetPathSeparator() + wxS( "extracted.txt" );
+    wxString dest = TempPath() + wxFileName::GetPathSeparator() + wxS( "extracted.txt" );
 
     BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( repo, wxS( "HEAD" ), wxS( "file.txt" ), dest ) );
 
@@ -1301,10 +1137,7 @@ BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
 // GetTags resolves each tag to the commit it points at.
 BOOST_AUTO_TEST_CASE( GetTagsResolvesTagToCommit )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON emptyCommon( nullptr );
@@ -1331,10 +1164,7 @@ BOOST_AUTO_TEST_CASE( GetTagsResolvesTagToCommit )
 // GetStashes lists the repository's stashes.
 BOOST_AUTO_TEST_CASE( GetStashesListsStash )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1342,7 +1172,7 @@ BOOST_AUTO_TEST_CASE( GetStashesListsStash )
 
     // Dirty the working tree so there is something to stash.
     {
-        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        wxFileName    fn( TempPath(), wxS( "file.txt" ) );
         std::ofstream f( fn.GetFullPath().utf8_string() );
         f << "v2\n";
     }
@@ -1365,17 +1195,14 @@ BOOST_AUTO_TEST_CASE( GetStashesListsStash )
 // earlier listing would act on the wrong stash. The id stays with its own stash.
 BOOST_AUTO_TEST_CASE( StashIdStaysWithItsStashWhenAnotherIsAdded )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
 
     auto dirtyAndStash = [&]( const char* aContent, const wxString& aMessage )
     {
-        wxFileName fn( tmp.path, wxS( "file.txt" ) );
+        wxFileName fn( TempPath(), wxS( "file.txt" ) );
 
         {
             std::ofstream f( fn.GetFullPath().utf8_string() );
@@ -1409,18 +1236,15 @@ BOOST_AUTO_TEST_CASE( StashIdStaysWithItsStashWhenAnotherIsAdded )
 // StashSave puts the committed content back, and the stash restores the edits afterwards.
 BOOST_AUTO_TEST_CASE( StashSaveRoundTrip )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     BOOST_REQUIRE( common.StashSave( wxT( "set aside for pull" ) ) );
 
-    wxFileName fn( tmp.path, wxS( "file.txt" ) );
+    wxFileName fn( TempPath(), wxS( "file.txt" ) );
     BOOST_CHECK_EQUAL( readWorkingFile( fn ), "v1\n" );
 
     std::vector<KIGIT_STASH_INFO> stashes = common.GetStashes();
@@ -1436,10 +1260,7 @@ BOOST_AUTO_TEST_CASE( StashSaveRoundTrip )
 // CreateBranch and DeleteBranch add and remove a local branch.
 BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1463,10 +1284,7 @@ BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
 // CreateTag and DeleteTag add and remove a lightweight tag.
 BOOST_AUTO_TEST_CASE( CreateAndDeleteTag )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1485,10 +1303,7 @@ BOOST_AUTO_TEST_CASE( CreateAndDeleteTag )
 // SetUserConfig writes user.name and user.email to the repository config.
 BOOST_AUTO_TEST_CASE( SetUserConfigPersists )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1515,15 +1330,12 @@ BOOST_AUTO_TEST_CASE( SetUserConfigPersists )
 // StashDrop removes a stash from the list.
 BOOST_AUTO_TEST_CASE( StashDropRemovesStash )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     BOOST_REQUIRE( common.StashSave( wxS( "work in progress" ) ) );
 
     BOOST_REQUIRE_EQUAL( common.GetStashes().size(), 1u );
@@ -1535,15 +1347,12 @@ BOOST_AUTO_TEST_CASE( StashDropRemovesStash )
 // Apply leaves the stash in the list. Pop removes it.
 BOOST_AUTO_TEST_CASE( StashApplyKeepsAndStashPopRemoves )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     BOOST_REQUIRE( common.StashSave( wxS( "wip" ) ) );
     BOOST_REQUIRE_EQUAL( common.GetStashes().size(), 1u );
 
@@ -1564,21 +1373,18 @@ BOOST_AUTO_TEST_CASE( StashApplyKeepsAndStashPopRemoves )
 // libgit2 reports a conflicting apply as success, so pop would drop the only copy of the work.
 BOOST_AUTO_TEST_CASE( StashPopKeepsStashWhenItConflicts )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
     KIGIT_COMMON            common( repo );
 
-    wxFileName fn( tmp.path, wxS( "file.txt" ) );
+    wxFileName fn( TempPath(), wxS( "file.txt" ) );
 
-    writeFile( tmp.path, "file.txt", "stashed\n" );
+    writeFile( TempPath(), "file.txt", "stashed\n" );
     BOOST_REQUIRE( common.StashSave( wxS( "wip" ) ) );
     BOOST_REQUIRE_EQUAL( common.GetStashes().size(), 1u );
 
     // A different change to the same line, committed, so the stash no longer applies cleanly.
-    writeFile( tmp.path, "file.txt", "committed\n" );
+    writeFile( TempPath(), "file.txt", "committed\n" );
     commitWorkingFile( repo, wxS( "file.txt" ), "conflicting change" );
 
     BOOST_CHECK( !common.StashPop( 0 ) );
@@ -1596,10 +1402,7 @@ BOOST_AUTO_TEST_CASE( StashPopKeepsStashWhenItConflicts )
 // spelling git accepts counts.
 BOOST_AUTO_TEST_CASE( PullRebaseConfigIsReadAsGitReadsIt )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1633,10 +1436,7 @@ BOOST_AUTO_TEST_CASE( PullRebaseConfigIsReadAsGitReadsIt )
 // as unpushed work, while a branch without one still does.
 BOOST_AUTO_TEST_CASE( DetachedHeadHasNoLocalCommits )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1655,10 +1455,7 @@ BOOST_AUTO_TEST_CASE( DetachedHeadHasNoLocalCommits )
 // CheckoutTag puts the working tree at the tagged commit with HEAD detached.
 BOOST_AUTO_TEST_CASE( CheckoutTagDetachesHead )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1668,7 +1465,7 @@ BOOST_AUTO_TEST_CASE( CheckoutTagDetachesHead )
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &tagged, repo, "HEAD" ), GIT_OK );
 
     // A later commit, so the checkout has to move both the tree and HEAD back.
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "second" );
 
     BOOST_CHECK( !common.IsHeadDetached() );
@@ -1678,17 +1475,14 @@ BOOST_AUTO_TEST_CASE( CheckoutTagDetachesHead )
     git_oid headNow;
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
     BOOST_CHECK( git_oid_equal( &headNow, &tagged ) );
-    BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( tmp.path, "file.txt" ) ), "v1\n" );
+    BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( TempPath(), "file.txt" ) ), "v1\n" );
 }
 
 
 // The count is what deleting the branch would lose: its commits that HEAD does not reach.
 BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
     KIGIT_COMMON            common( repo );
 
@@ -1697,7 +1491,7 @@ BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
 
     BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/feature" ), GIT_OK );
 
-    wxFileName fn( tmp.path, wxS( "file.txt" ) );
+    wxFileName fn( TempPath(), wxS( "file.txt" ) );
     {
         std::ofstream f( fn.GetFullPath().utf8_string() );
         f << "v2\n";
@@ -1712,13 +1506,10 @@ BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
 }
 
 
-// Remotes round-trip, and neither getter returns an embedded user:password.
+// Remotes round-trip without returning embedded user credentials.
 BOOST_AUTO_TEST_CASE( RemoteRoundTripAndUserinfoStripped )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1733,9 +1524,8 @@ BOOST_AUTO_TEST_CASE( RemoteRoundTripAndUserinfoStripped )
 
     BOOST_CHECK( common.SetRemoteUrl( "origin", "https://u:secret@example.com/y.git" ) );
 
-    // The password must not surface through GetRemotes or GetRemoteUrl.
+    // The password must not surface through GetRemotes.
     BOOST_CHECK_EQUAL( common.GetRemotes()[0].second.ToStdString(), "https://example.com/y.git" );
-    BOOST_CHECK_EQUAL( common.GetRemoteUrl().ToStdString(), "https://example.com/y.git" );
 
     BOOST_CHECK( common.RemoveRemote( "origin" ) );
     BOOST_CHECK( common.GetRemotes().empty() );
@@ -1745,10 +1535,7 @@ BOOST_AUTO_TEST_CASE( RemoteRoundTripAndUserinfoStripped )
 // Branches created at the same HEAD share a timestamp. A std::map keyed on it would drop one.
 BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1776,16 +1563,13 @@ BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
 // The Branches page lists every branch with the commit it points at, the current one first.
 BOOST_AUTO_TEST_CASE( GetBranchesCarriesTipAndCurrent )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
     BOOST_REQUIRE( common.CreateBranch( "older" ) );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "second" );
 
     std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 10 );
@@ -1820,16 +1604,13 @@ BOOST_AUTO_TEST_CASE( GetBranchesCarriesTipAndCurrent )
 // The detail pane shows a branch's tip commit and how far it is from the branch it tracks.
 BOOST_AUTO_TEST_CASE( GetBranchDetailReportsTipAndUpstream )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
     BOOST_REQUIRE( common.CreateBranch( "base" ) );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "second\n\nWith a body." );
 
     // Track the local branch, which git allows, so no remote is needed to see ahead and behind.
@@ -1861,16 +1642,13 @@ BOOST_AUTO_TEST_CASE( GetBranchDetailReportsTipAndUpstream )
 // New Branch in the detail pane starts the branch where the selected one is, not at HEAD.
 BOOST_AUTO_TEST_CASE( CreateBranchStartsAtTheGivenBranch )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
     BOOST_REQUIRE( common.CreateBranch( "base" ) );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "second" );
 
     BOOST_REQUIRE( common.CreateBranch( "feature", "base" ) );
@@ -1888,10 +1666,7 @@ BOOST_AUTO_TEST_CASE( CreateBranchStartsAtTheGivenBranch )
 // a repository that never fetched does not have.
 BOOST_AUTO_TEST_CASE( GetLastFetchTimeReadsFetchHead )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1918,10 +1693,7 @@ BOOST_AUTO_TEST_CASE( GetLastFetchTimeReadsFetchHead )
 // all added.
 BOOST_AUTO_TEST_CASE( GetWorkingTreeLineStatsCountsEditsAndNewFiles )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "one\ntwo\nthree\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "one\ntwo\nthree\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1930,8 +1702,8 @@ BOOST_AUTO_TEST_CASE( GetWorkingTreeLineStatsCountsEditsAndNewFiles )
     BOOST_CHECK_EQUAL( clean.first, 0 );
     BOOST_CHECK_EQUAL( clean.second, 0 );
 
-    writeFile( tmp.path, "file.txt", "one\n2\nthree\n" );
-    writeFile( tmp.path, "new.txt", "a\nb\n" );
+    writeFile( TempPath(), "file.txt", "one\n2\nthree\n" );
+    writeFile( TempPath(), "new.txt", "a\nb\n" );
 
     std::pair<int, int> dirty = common.GetWorkingTreeLineStats( { wxS( "file.txt" ), wxS( "new.txt" ) } );
     BOOST_CHECK_EQUAL( dirty.first, 3 );
@@ -1943,10 +1715,7 @@ BOOST_AUTO_TEST_CASE( GetWorkingTreeLineStatsCountsEditsAndNewFiles )
 // and the files it changes, a new file included.
 BOOST_AUTO_TEST_CASE( GetStashDetailNamesBranchCommitAndFiles )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -1954,8 +1723,8 @@ BOOST_AUTO_TEST_CASE( GetStashDetailNamesBranchCommitAndFiles )
     std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 1 );
     BOOST_REQUIRE_EQUAL( commits.size(), 1u );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
-    writeFile( tmp.path, "new.txt", "n\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
+    writeFile( TempPath(), "new.txt", "n\n" );
 
     {
         git_index* index = nullptr;
@@ -1995,25 +1764,15 @@ BOOST_AUTO_TEST_CASE( GetStashDetailNamesBranchCommitAndFiles )
 // entry at that path differs from its parent's, so a folder catches changes anywhere under it.
 BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByPath )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    // The shared helper takes a bare file name, so the nested files are written here.
-    auto writeNested = [&]( const char* aRelPath, const char* aContent )
-    {
-        std::ofstream f( ( tmp.path + wxS( "/" ) + aRelPath ).utf8_string() );
-        f << aContent;
-    };
-
-    wxFileName::Mkdir( tmp.path + wxS( "/sub" ) );
-    writeNested( "sub/a.txt", "a\n" );
+    wxFileName::Mkdir( TempPath() + wxS( "/sub" ) );
+    writeFile( TempPath(), "sub/a.txt", "a\n" );
     commitWorkingFile( repo, "sub/a.txt", "add a" );
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "edit file" );
-    writeNested( "sub/b.txt", "b\n" );
+    writeFile( TempPath(), "sub/b.txt", "b\n" );
     commitWorkingFile( repo, "sub/b.txt", "add b" );
 
     KIGIT_COMMON         common( repo );
@@ -2052,17 +1811,15 @@ BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsFindsAFilteredFile )
 {
     using KIGIT::PROJECT_GIT_UTILS;
 
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
 
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "board.kicad_pcb", "(kicad_pcb)\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "board.kicad_pcb", "(kicad_pcb)\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxEmptyString ) );
 
-    writeFile( tmp.path, ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
+    writeFile( TempPath(), ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
     commitWorkingFile( repo, ".gitattributes", "route step files through lfs" );
-    writeFile( tmp.path, "case.step", "ISO-10303-21;\n" );
+    writeFile( TempPath(), "case.step", "ISO-10303-21;\n" );
     commitWorkingFile( repo, "case.step", "add the enclosure" );
 
     BOOST_CHECK( PROJECT_GIT_UTILS::PathUsesGitLfs( repo, wxS( "case.step" ) ) );
@@ -2095,10 +1852,7 @@ BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsFindsAFilteredFile )
 // page dates a commit by the committer time, so the Tags page has to agree.
 BOOST_AUTO_TEST_CASE( GetTagDetailDatesALightweightTagByCommitterTime )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     git_signature* authored = nullptr;
@@ -2144,10 +1898,7 @@ BOOST_AUTO_TEST_CASE( GetTagDetailDatesALightweightTagByCommitterTime )
 
 BOOST_AUTO_TEST_CASE( GetTagDetailReadsAnnotatedAndLightweightTags )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -2187,10 +1938,7 @@ BOOST_AUTO_TEST_CASE( GetTagDetailReadsAnnotatedAndLightweightTags )
 // The Tags page lists newest first. A tag on a tree has no commit and so no date, and goes last.
 BOOST_AUTO_TEST_CASE( GetTagsListsNewestFirstAndKeepsTagsWithoutCommits )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -2230,19 +1978,16 @@ BOOST_AUTO_TEST_CASE( GetTagsListsNewestFirstAndKeepsTagsWithoutCommits )
 // first, a message that was used twice listed once, and only what HEAD can reach.
 BOOST_AUTO_TEST_CASE( GetRecentCommitMessagesListsDistinctMessagesNewestFirst )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
     commitWorkingFile( repo, "file.txt", "Update BOM\n\nSecond pass.\n" );
-    writeFile( tmp.path, "file.txt", "v3\n" );
+    writeFile( TempPath(), "file.txt", "v3\n" );
     commitWorkingFile( repo, "file.txt", "Route power\n" );
-    writeFile( tmp.path, "file.txt", "v4\n" );
+    writeFile( TempPath(), "file.txt", "v4\n" );
     commitWorkingFile( repo, "file.txt", "Update BOM\n\nSecond pass.\n" );
-    writeFile( tmp.path, "file.txt", "v5\n" );
+    writeFile( TempPath(), "file.txt", "v5\n" );
     commitWorkingFile( repo, "file.txt", "   \n\n" );
 
     KIGIT_COMMON          common( repo );
@@ -2258,9 +2003,9 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitMessagesListsDistinctMessagesNewestFirst )
     BOOST_CHECK( KIGIT_COMMON( nullptr ).GetRecentCommitMessages( 10 ).empty() );
 
     // A repository with no commit yet has nothing to offer either.
-    ScopedTempDir   empty;
-    git_repository* unborn = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_init( &unborn, empty.path.utf8_string().c_str(), 0 ), GIT_OK );
+    KI_TEST::SCOPED_TEMP_DIR empty( wxS( "kicad-qa-git-empty" ) );
+    git_repository*          unborn = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &unborn, empty.PathStr().utf8_string().c_str(), 0 ), GIT_OK );
     KIGIT::GitRepositoryPtr unbornPtr( unborn );
     BOOST_CHECK( KIGIT_COMMON( unborn ).GetRecentCommitMessages( 10 ).empty() );
 }
@@ -2321,13 +2066,10 @@ BOOST_AUTO_TEST_CASE( ComposeAndSplitCommitMessage )
 // must leave the uncommitted work in place, since the two branches share the same tree.
 BOOST_AUTO_TEST_CASE( SwitchToBranchAtHeadKeepsUncommittedChanges )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( TempPath(), "file.txt", "v2\n" );
 
     KIGIT_COMMON common( repo );
     BOOST_REQUIRE( common.CreateBranch( "topic" ) );
@@ -2337,7 +2079,7 @@ BOOST_AUTO_TEST_CASE( SwitchToBranchAtHeadKeepsUncommittedChanges )
                            handler.GetErrorString() );
 
     BOOST_CHECK_EQUAL( common.GetCurrentBranchName(), wxS( "topic" ) );
-    BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( tmp.path, "file.txt" ) ), "v2\n" );
+    BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( TempPath(), "file.txt" ) ), "v2\n" );
     BOOST_CHECK( common.HasUncommittedTrackedChanges() );
 }
 
@@ -2376,10 +2118,7 @@ BOOST_AUTO_TEST_CASE( SetRemoteStripsUserinfoContainingAtSign )
 // Called after editing a remote, so a later push authenticates against the new server.
 BOOST_AUTO_TEST_CASE( UpdateCurrentBranchInfoRefreshesChangedRemoteUrl )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -2439,10 +2178,7 @@ BOOST_AUTO_TEST_CASE( IsWithinProjectPathHandlesMixedSeparators )
 // getting changes, since a merge leaves them alone.
 BOOST_AUTO_TEST_CASE( HasUncommittedTrackedChangesIgnoresUntracked )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -2450,7 +2186,7 @@ BOOST_AUTO_TEST_CASE( HasUncommittedTrackedChangesIgnoresUntracked )
 
     // An untracked file alone does not count.
     {
-        wxFileName    fn( tmp.path, wxS( "notes.txt" ) );
+        wxFileName    fn( TempPath(), wxS( "notes.txt" ) );
         std::ofstream f( fn.GetFullPath().utf8_string() );
         f << "scratch\n";
     }
@@ -2459,7 +2195,7 @@ BOOST_AUTO_TEST_CASE( HasUncommittedTrackedChangesIgnoresUntracked )
 
     // A modified tracked file does.
     {
-        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        wxFileName    fn( TempPath(), wxS( "file.txt" ) );
         std::ofstream f( fn.GetFullPath().utf8_string() );
         f << "v2\n";
     }
@@ -2501,7 +2237,6 @@ BOOST_AUTO_TEST_CASE( WorktreeRefusalPrioritizesUnsavedDocumentAndLibraryEditors
 
 BOOST_AUTO_TEST_CASE( WorktreeStatusRefusesUnavailableAndFailedReads )
 {
-    SCOPED_GIT_BACKEND libgit;
     KIGIT_COMMON       unavailable( nullptr );
     auto               unavailableLock = unavailable.LockAction();
 
@@ -2514,14 +2249,13 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusRefusesUnavailableAndFailedReads )
     BOOST_CHECK( !missing.RefusalMessage( {}, true ).IsEmpty() );
 
     // A repository without a working tree makes libgit2's status read fail.
-    ScopedTempDir   tmp;
     git_repository* rawRepo = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_init( &rawRepo, tmp.path.utf8_str(), 1 ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_repository_init( &rawRepo, TempPath().utf8_str(), 1 ), GIT_OK );
     KIGIT::GitRepositoryPtr repo( rawRepo );
     KIGIT_COMMON            common( repo.get() );
     auto                    lock = common.LockAction();
 
-    GIT_WORKTREE_STATUS failed = ReadGitWorktreeStatus( common, tmp.path );
+    GIT_WORKTREE_STATUS failed = ReadGitWorktreeStatus( common, TempPath() );
     BOOST_CHECK( !failed.checked );
     BOOST_CHECK( failed.RefusalMessage( {} ).Contains( "Could not check" ) );
 }
@@ -2529,20 +2263,18 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusRefusesUnavailableAndFailedReads )
 
 BOOST_AUTO_TEST_CASE( WorktreeStatusAllowsCleanAndUntrackedFiles )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "board.kicad_pcb", "original\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "board.kicad_pcb", "original\n" ) );
     KIGIT_COMMON            common( repo.get() );
     auto                    lock = common.LockAction();
 
-    GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, tmp.path );
+    GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, TempPath() );
     BOOST_CHECK( clean.checked );
     BOOST_CHECK( !clean.hasTrackedChanges );
     BOOST_CHECK( clean.RefusalMessage( {} ).IsEmpty() );
 
-    writeFile( tmp.path, "notes.txt", "untracked notes\n" );
+    writeFile( TempPath(), "notes.txt", "untracked notes\n" );
 
-    GIT_WORKTREE_STATUS untracked = ReadGitWorktreeStatus( common, tmp.path );
+    GIT_WORKTREE_STATUS untracked = ReadGitWorktreeStatus( common, TempPath() );
     BOOST_CHECK( untracked.checked );
     BOOST_CHECK( !untracked.hasTrackedChanges );
     BOOST_CHECK( untracked.outsideProject.empty() );
@@ -2552,21 +2284,19 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusAllowsCleanAndUntrackedFiles )
 
 BOOST_AUTO_TEST_CASE( WorktreeStatusExplainsTrackedChangesInsideAndOutsideTheProject )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "README.txt", "repository\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "README.txt", "repository\n" ) );
 
-    const wxString projectPath = tmp.path + wxS( "/project" );
+    const wxString projectPath = TempPath() + wxS( "/project" );
     BOOST_REQUIRE( wxFileName::Mkdir( projectPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-    BOOST_REQUIRE( wxFileName::Mkdir( tmp.path + wxS( "/project2" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-    writeFile( tmp.path, "project/board.kicad_pcb", "project board\n" );
+    BOOST_REQUIRE( wxFileName::Mkdir( TempPath() + wxS( "/project2" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    writeFile( TempPath(), "project/board.kicad_pcb", "project board\n" );
     commitWorkingFile( repo.get(), "project/board.kicad_pcb", "add project" );
-    writeFile( tmp.path, "project2/board.kicad_pcb", "sibling board\n" );
+    writeFile( TempPath(), "project2/board.kicad_pcb", "sibling board\n" );
     commitWorkingFile( repo.get(), "project2/board.kicad_pcb", "add sibling" );
 
     KIGIT_COMMON common( repo.get() );
     auto         lock = common.LockAction();
-    writeFile( tmp.path, "project/board.kicad_pcb", "edited project board\n" );
+    writeFile( TempPath(), "project/board.kicad_pcb", "edited project board\n" );
 
     GIT_WORKTREE_STATUS inside = ReadGitWorktreeStatus( common, projectPath );
     BOOST_CHECK( inside.checked );
@@ -2575,8 +2305,8 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusExplainsTrackedChangesInsideAndOutsideThePro
     BOOST_CHECK( inside.RefusalMessage( {} ).Contains( "Stash Changes" ) );
     BOOST_CHECK( inside.RefusalMessage( {}, true ).IsEmpty() );
 
-    writeFile( tmp.path, "project2/board.kicad_pcb", "edited sibling board\n" );
-    writeFile( tmp.path, "project2/notes.txt", "untracked sibling notes\n" );
+    writeFile( TempPath(), "project2/board.kicad_pcb", "edited sibling board\n" );
+    writeFile( TempPath(), "project2/notes.txt", "untracked sibling notes\n" );
 
     GIT_WORKTREE_STATUS outside = ReadGitWorktreeStatus( common, projectPath );
     BOOST_CHECK( outside.checked );
@@ -2594,27 +2324,25 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusExplainsTrackedChangesInsideAndOutsideThePro
 
 BOOST_AUTO_TEST_CASE( WorktreeStatusDistinguishesGitLfsFromUncommittedChanges )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "board.kicad_pcb", "original\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "board.kicad_pcb", "original\n" ) );
 
-    writeFile( tmp.path, ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
+    writeFile( TempPath(), ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
     commitWorkingFile( repo.get(), ".gitattributes", "route step files through lfs" );
-    writeFile( tmp.path, "case.step", "ISO-10303-21;\n" );
+    writeFile( TempPath(), "case.step", "ISO-10303-21;\n" );
     commitWorkingFile( repo.get(), "case.step", "add the enclosure" );
 
     KIGIT_COMMON common( repo.get() );
     auto         lock = common.LockAction();
 
-    GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, tmp.path );
+    GIT_WORKTREE_STATUS clean = ReadGitWorktreeStatus( common, TempPath() );
     BOOST_CHECK( clean.checked );
     BOOST_CHECK( !clean.hasTrackedChanges );
     BOOST_CHECK( clean.RefusalMessage( {} ).Contains( "Git LFS" ) );
     BOOST_CHECK( clean.RefusalMessage( {} ).Contains( "case.step" ) );
 
-    writeFile( tmp.path, "board.kicad_pcb", "edited board\n" );
+    writeFile( TempPath(), "board.kicad_pcb", "edited board\n" );
 
-    GIT_WORKTREE_STATUS dirty = ReadGitWorktreeStatus( common, tmp.path );
+    GIT_WORKTREE_STATUS dirty = ReadGitWorktreeStatus( common, TempPath() );
     BOOST_CHECK( dirty.checked );
     BOOST_CHECK( dirty.hasTrackedChanges );
     BOOST_CHECK( dirty.RefusalMessage( {} ).Contains( "Git LFS" ) );
@@ -2627,10 +2355,7 @@ BOOST_AUTO_TEST_CASE( WorktreeStatusDistinguishesGitLfsFromUncommittedChanges )
 // the file rather than only throwing away an edit. The panel says so, and asks first.
 BOOST_AUTO_TEST_CASE( DiscardingAConflictedPathSettlesIt )
 {
-    SCOPED_GIT_BACKEND libgit;
-    ScopedTempDir      tmp;
-
-    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "one\ntwo\nthree\n" );
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "one\ntwo\nthree\n" );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
     KIGIT_COMMON common( repo );
@@ -2666,9 +2391,7 @@ BOOST_AUTO_TEST_CASE( DiscardingAConflictedPathSettlesIt )
 
 BOOST_AUTO_TEST_CASE( ForcePushRejectsAChangedConfirmedTarget )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     KIGIT_COMMON            common( repo.get() );
 
     git_oid head;
@@ -2697,7 +2420,7 @@ BOOST_AUTO_TEST_CASE( ForcePushRejectsAChangedConfirmedTarget )
 
     // Advancing the confirmed branch must also be rejected, with the branch name unchanged.
     BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/main" ), GIT_OK );
-    writeFile( tmp.path, wxS( "file.txt" ), "two\n" );
+    writeFile( TempPath(), wxS( "file.txt" ), "two\n" );
     commitWorkingFile( repo.get(), wxS( "file.txt" ), "second" );
     BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).Contains( targetChanged ) );
 
@@ -2709,9 +2432,7 @@ BOOST_AUTO_TEST_CASE( ForcePushRejectsAChangedConfirmedTarget )
 
 BOOST_AUTO_TEST_CASE( PushWaitsForQueryLockAndHonorsCancellation )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     KIGIT_COMMON            common( repo.get() );
     GIT_PUSH_HANDLER        handler( &common );
     handler.SetWaitForActionLock( true );
@@ -2743,13 +2464,12 @@ BOOST_AUTO_TEST_CASE( PushWaitsForQueryLockAndHonorsCancellation )
     // No remote is configured. Reaching remote lookup would have added an error, so an empty
     // error list confirms cancellation stopped the operation before any network preparation.
     BOOST_CHECK( handler.GetErrorStrings().empty() );
-    BOOST_CHECK( !common.ActiveCancelToken() );
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 1 ).size(), 1u );
 }
 
 
 BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
 {
-    SCOPED_GIT_BACKEND  libgit;
     auto                wrongThread = std::make_shared<std::atomic<bool>>( false );
     UI_CALLBACK_CAPTURE capture( wrongThread );
     bool                completed = false;
@@ -2767,9 +2487,9 @@ BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
                 } ) );
 
         BOOST_REQUIRE( waitForQuery(
-                [&transfer, &libgit]()
+                [this, &transfer]()
                 {
-                    return !transfer.IsBusy() && libgit.Backend()->OrphanRegistry().TrackedCount() == 0;
+                    return !transfer.IsBusy() && Backend()->OrphanRegistry().TrackedCount() == 0;
                 } ) );
     }
 
@@ -2801,9 +2521,9 @@ BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
 
     BOOST_CHECK( started );
     BOOST_REQUIRE( waitForQuery(
-            [&libgit]()
+            [this]()
             {
-                return libgit.Backend()->OrphanRegistry().TrackedCount() == 0;
+                return Backend()->OrphanRegistry().TrackedCount() == 0;
             } ) );
     wxTheApp->ProcessPendingEvents();
     BOOST_CHECK( !completed );
@@ -2813,9 +2533,7 @@ BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
 
 BOOST_AUTO_TEST_CASE( QuerySerializesAndKeepsOnlyTheLatestRequest )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
     KIGIT_QUERY             query;
 
@@ -2879,9 +2597,7 @@ BOOST_AUTO_TEST_CASE( QuerySerializesAndKeepsOnlyTheLatestRequest )
 
 BOOST_AUTO_TEST_CASE( QueryCancelDropsPendingWorkAndQueuedCompletion )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
     KIGIT_QUERY             query;
     bool                    completed = false;
@@ -2901,10 +2617,10 @@ BOOST_AUTO_TEST_CASE( QueryCancelDropsPendingWorkAndQueuedCompletion )
     // Wait for the worker without pumping events: its completion is now queued on the UI.
     const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
 
-    while( libgit.Backend()->OrphanRegistry().TrackedCount() && std::chrono::steady_clock::now() < deadline )
+    while( Backend()->OrphanRegistry().TrackedCount() && std::chrono::steady_clock::now() < deadline )
         std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
 
-    BOOST_REQUIRE_EQUAL( libgit.Backend()->OrphanRegistry().TrackedCount(), 0u );
+    BOOST_REQUIRE_EQUAL( Backend()->OrphanRegistry().TrackedCount(), 0u );
     query.Run(
             session,
             [worked]( KIGIT_COMMON& )
@@ -2929,9 +2645,7 @@ BOOST_AUTO_TEST_CASE( QueryCancelDropsPendingWorkAndQueuedCompletion )
 
 BOOST_AUTO_TEST_CASE( QueryDestructionDoesNotWaitAndPinsTheSession )
 {
-    SCOPED_GIT_BACKEND          libgit;
-    ScopedTempDir               tmp;
-    KIGIT::GitRepositoryPtr     repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr     repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     auto                        session = std::make_shared<KIGIT_COMMON>( repo.get() );
     std::weak_ptr<KIGIT_COMMON> watched = session;
     auto                        query = std::make_unique<KIGIT_QUERY>();
@@ -2974,9 +2688,7 @@ BOOST_AUTO_TEST_CASE( QueryDestructionDoesNotWaitAndPinsTheSession )
 
 BOOST_AUTO_TEST_CASE( QuerySkipsUnavailableSessionsAndCompletesOnUi )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     KIGIT_QUERY             query;
     auto                    worked = std::make_shared<std::atomic<bool>>( false );
     std::thread::id         completionThread;
@@ -3020,7 +2732,7 @@ BOOST_AUTO_TEST_CASE( QuerySkipsUnavailableSessionsAndCompletesOnUi )
     BOOST_CHECK( completionThread == std::this_thread::get_id() );
     BOOST_CHECK( !worked->load() );
 
-    libgit.Backend()->OrphanRegistry().JoinAll( std::chrono::seconds( 1 ) );
+    Backend()->OrphanRegistry().JoinAll( std::chrono::seconds( 1 ) );
     completionThread = {};
     query.Run( session, work, done );
     BOOST_CHECK( !query.IsBusy() );
@@ -3030,9 +2742,7 @@ BOOST_AUTO_TEST_CASE( QuerySkipsUnavailableSessionsAndCompletesOnUi )
 
 BOOST_AUTO_TEST_CASE( QueryExceptionStillCompletesAndCompletionCanDestroyOwner )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
     auto                    query = std::make_unique<KIGIT_QUERY>();
     wxLogNull               noLog;
@@ -3054,15 +2764,13 @@ BOOST_AUTO_TEST_CASE( QueryExceptionStillCompletesAndCompletionCanDestroyOwner )
                 return !query;
             } ) );
     BOOST_CHECK( session->TryLockAction().owns_lock() );
-    BOOST_CHECK( !session->ActiveCancelToken() );
+    BOOST_CHECK_EQUAL( session->GetRecentCommits( 1 ).size(), 1u );
 }
 
 
 BOOST_AUTO_TEST_CASE( QueryExceptionStillStartsThePendingRequest )
 {
-    SCOPED_GIT_BACKEND      libgit;
-    ScopedTempDir           tmp;
-    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( TempPath(), "file.txt", "one\n" ) );
     auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
     KIGIT_QUERY             query;
     wxLogNull               noLog;

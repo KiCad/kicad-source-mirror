@@ -28,8 +28,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <text_eval/text_eval_vcs.h>
-#include <qa_utils/scoped_git_backend.h>
-#include <git2.h>
+#include <qa_utils/git_test_fixture.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
@@ -51,119 +50,26 @@ static const char* TEST_COMMIT_MSG   = "Initial test commit";
  * Fixture that creates a temporary git repo with one committed file.
  * This gives every VCS function a known, deterministic environment.
  */
-struct VCS_TEST_FIXTURE
+struct VCS_TEST_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
 {
-    VCS_TEST_FIXTURE()
+    VCS_TEST_FIXTURE() :
+            m_originalDir( wxGetCwd() )
     {
-        m_originalDir = wxGetCwd();
-
-        m_tempDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
-                    + wxString::Format( "kicad_vcs_test_%ld", wxGetProcessId() );
-
-        wxFileName::Mkdir( m_tempDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-        m_repoReady = initRepo();
-
-        if( m_repoReady )
-            wxSetWorkingDirectory( m_tempDir );
+        KIGIT::GitRepositoryPtr repo =
+                KI_TEST::InitGitRepository( TempPath(), "main", TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+        KI_TEST::WriteGitFile( TempPath(), "test.txt", "test content\n" );
+        KI_TEST::CommitGitFile( repo.get(), "test.txt", TEST_COMMIT_MSG );
+        BOOST_REQUIRE( wxSetWorkingDirectory( TempPath() ) );
     }
 
-    ~VCS_TEST_FIXTURE()
-    {
-        wxSetWorkingDirectory( m_originalDir );
+    ~VCS_TEST_FIXTURE() { wxSetWorkingDirectory( m_originalDir ); }
 
-        if( wxFileName::DirExists( m_tempDir ) )
-            wxFileName::Rmdir( m_tempDir, wxPATH_RMDIR_RECURSIVE );
-    }
-
-    bool            repoReady() const { return m_repoReady; }
-    const wxString& tempDir() const { return m_tempDir; }
-    const wxString& originalDir() const { return m_originalDir; }
+    const wxString& tempDir() const { return TempPath(); }
 
 private:
-    bool initRepo()
-    {
-        git_repository* repo = nullptr;
-
-        if( git_repository_init( &repo, m_tempDir.ToUTF8().data(), 0 ) != 0 )
-            return false;
-
-        // Configure author identity
-        git_config* config = nullptr;
-
-        if( git_repository_config( &config, repo ) == 0 )
-        {
-            git_config_set_string( config, "user.name", TEST_AUTHOR_NAME );
-            git_config_set_string( config, "user.email", TEST_AUTHOR_EMAIL );
-            git_config_free( config );
-        }
-
-        // Write a file into the working tree
-        wxString filePath = m_tempDir + wxFileName::GetPathSeparator() + wxT( "test.txt" );
-
-        {
-            std::ofstream f( filePath.ToStdString() );
-            f << "test content\n";
-        }
-
-        // Stage it
-        git_index* index = nullptr;
-
-        if( git_repository_index( &index, repo ) != 0 )
-        {
-            git_repository_free( repo );
-            return false;
-        }
-
-        git_index_add_bypath( index, "test.txt" );
-        git_index_write( index );
-
-        // Build a tree from the index
-        git_oid treeOid;
-
-        if( git_index_write_tree( &treeOid, index ) != 0 )
-        {
-            git_index_free( index );
-            git_repository_free( repo );
-            return false;
-        }
-
-        git_index_free( index );
-
-        git_tree* tree = nullptr;
-
-        if( git_tree_lookup( &tree, repo, &treeOid ) != 0 )
-        {
-            git_repository_free( repo );
-            return false;
-        }
-
-        // Create the initial commit (no parents)
-        git_signature* sig = nullptr;
-
-        if( git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ) != 0 )
-        {
-            git_tree_free( tree );
-            git_repository_free( repo );
-            return false;
-        }
-
-        git_oid commitOid;
-        int     err = git_commit_create_v( &commitOid, repo, "HEAD", sig, sig, nullptr,
-                                           TEST_COMMIT_MSG, tree, 0 );
-
-        git_signature_free( sig );
-        git_tree_free( tree );
-        git_repository_free( repo );
-        return err == 0;
-    }
-
     // These tests exercise cwd-based discovery independently of projects loaded by other tests.
     TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE m_context{ wxString() };
-    SCOPED_GIT_BACKEND                m_backend;
-    wxString        m_originalDir;
-    wxString        m_tempDir;
-    bool            m_repoReady;
+    wxString                          m_originalDir;
 };
 
 
@@ -174,8 +80,6 @@ BOOST_FIXTURE_TEST_SUITE( TextEvalParserVcs, VCS_TEST_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( VcsIdentifierFormatting )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     struct TestCase
@@ -216,8 +120,6 @@ BOOST_AUTO_TEST_CASE( VcsIdentifierFormatting )
  */
 BOOST_AUTO_TEST_CASE( VcsBranchAndAuthorInfo )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     auto branch = evaluator.Evaluate( "@{vcsbranch()}" );
@@ -255,8 +157,6 @@ BOOST_AUTO_TEST_CASE( VcsBranchAndAuthorInfo )
  */
 BOOST_AUTO_TEST_CASE( VcsDirtyStatus )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     struct TestCase
@@ -284,8 +184,6 @@ BOOST_AUTO_TEST_CASE( VcsDirtyStatus )
  */
 BOOST_AUTO_TEST_CASE( VcsDirtySuffix )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     const std::vector<std::string> cases = {
@@ -306,8 +204,6 @@ BOOST_AUTO_TEST_CASE( VcsDirtySuffix )
  */
 BOOST_AUTO_TEST_CASE( VcsLabelsAndDistance )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     const std::vector<std::string> cases = {
@@ -341,8 +237,6 @@ BOOST_AUTO_TEST_CASE( VcsLabelsAndDistance )
  */
 BOOST_AUTO_TEST_CASE( VcsCommitDate )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     struct TestCase
@@ -379,8 +273,6 @@ BOOST_AUTO_TEST_CASE( VcsCommitDate )
  */
 BOOST_AUTO_TEST_CASE( VcsPerformance )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -407,8 +299,6 @@ BOOST_AUTO_TEST_CASE( VcsPerformance )
  */
 BOOST_AUTO_TEST_CASE( VcsMixedExpressions )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     EXPRESSION_EVALUATOR evaluator;
     evaluator.SetVariable( wxString( "PROJECT" ), wxString( "MyProject" ) );
 
@@ -441,8 +331,6 @@ BOOST_AUTO_TEST_CASE( VcsMixedExpressions )
  */
 BOOST_AUTO_TEST_CASE( VcsContextPathOverride )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     // Move the process cwd somewhere that is definitely not a git repo, mirroring the
     // kicad-cli situation where the user runs the binary from an arbitrary directory.
     wxString scratchDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
@@ -468,7 +356,7 @@ BOOST_AUTO_TEST_CASE( VcsContextPathOverride )
         BOOST_CHECK_EQUAL( noContext.ToStdString(), std::string( "<unknown>" ) );
 
         // With the override in place, the same expression resolves from the repo anchored
-        // at m_tempDir regardless of cwd.
+        // at the temporary repository regardless of cwd.
         {
             TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE scope( tempDir() );
 
@@ -510,8 +398,6 @@ BOOST_AUTO_TEST_CASE( VcsContextPathOverride )
  */
 BOOST_AUTO_TEST_CASE( VcsContextPathSetByLoadProject )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     wxString scratchDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
                           + wxString::Format( "kicad_vcs_loadproject_%ld", wxGetProcessId() );
 
@@ -575,8 +461,6 @@ BOOST_AUTO_TEST_CASE( VcsContextPathSetByLoadProject )
 // The context is process-wide, so a manager that dies with a project loaded leaves it stale.
 BOOST_AUTO_TEST_CASE( VcsContextClearedWhenSettingsManagerDies )
 {
-    BOOST_TEST_REQUIRE( repoReady() );
-
     wxString projectPath = tempDir() + wxFileName::GetPathSeparator() + wxT( "ctx.kicad_pro" );
 
     {

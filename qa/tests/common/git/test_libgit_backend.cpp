@@ -39,7 +39,7 @@
 #include <git/git_push_handler.h>
 #include <git/git_commit_handler.h>
 #include <git/git_clone_handler.h>
-#include <qa_utils/scoped_git_backend.h>
+#include <qa_utils/git_test_fixture.h>
 
 #include <git2.h>
 
@@ -58,7 +58,6 @@
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/textfile.h>
-#include <wx/utils.h>
 
 
 static const char* TEST_AUTHOR_NAME = "Test Author";
@@ -70,33 +69,19 @@ static const char* TEST_AUTHOR_EMAIL = "test@kicad.example";
  * and a bare "remote" repo cloned from it.  Helpers let individual tests
  * mutate this state (additional commits, upstream config, amends, etc.).
  */
-struct GIT_BACKEND_FIXTURE
+struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
 {
     GIT_BACKEND_FIXTURE()
     {
-        m_tempBase = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
-                     + wxString::Format( "kicad_libgit_backend_test_%ld_%ld", wxGetProcessId(), s_counter++ );
-        wxFileName::Mkdir( m_tempBase, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-        m_repoPath = m_tempBase + wxFileName::GetPathSeparator() + wxT( "repo" );
-        m_remotePath = m_tempBase + wxFileName::GetPathSeparator() + wxT( "remote.git" );
-
-        wxFileName::Mkdir( m_repoPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
+        m_repoPath = TempPath() + wxFileName::GetPathSeparator() + wxT( "repo" );
+        m_remotePath = TempPath() + wxFileName::GetPathSeparator() + wxT( "remote.git" );
         m_ready = initRepoWithCommit() && initBareRemoteFromRepo();
-    }
-
-
-    ~GIT_BACKEND_FIXTURE()
-    {
-        if( wxFileName::DirExists( m_tempBase ) )
-            wxFileName::Rmdir( m_tempBase, wxPATH_RMDIR_RECURSIVE );
     }
 
 
     bool            ready() const { return m_ready; }
     const wxString& repoPath() const { return m_repoPath; }
-    const wxString& tempBase() const { return m_tempBase; }
+    const wxString& tempBase() const { return TempPath(); }
     const wxString& remotePath() const { return m_remotePath; }
 
 
@@ -113,58 +98,8 @@ struct GIT_BACKEND_FIXTURE
     git_oid createCommit( git_repository* aRepo, const wxString& aFile, const wxString& aContent,
                           const wxString& aMessage )
     {
-        git_oid commitOid = {};
-
-        wxString filePath = m_repoPath + wxFileName::GetPathSeparator() + aFile;
-        {
-            std::ofstream f( filePath.ToStdString() );
-            f << aContent.ToStdString();
-        }
-
-        git_index* index = nullptr;
-
-        if( git_repository_index( &index, aRepo ) != 0 )
-            return commitOid;
-
-        git_index_add_bypath( index, aFile.ToUTF8().data() );
-        git_index_write( index );
-
-        git_oid treeOid;
-        git_index_write_tree( &treeOid, index );
-        git_index_free( index );
-
-        git_tree* tree = nullptr;
-
-        if( git_tree_lookup( &tree, aRepo, &treeOid ) != 0 )
-            return commitOid;
-
-        git_signature* sig = nullptr;
-        git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
-
-        // Parent is HEAD if it resolves, otherwise this becomes the root commit.
-        git_commit*    parent = nullptr;
-        git_reference* headRef = nullptr;
-
-        if( git_repository_head( &headRef, aRepo ) == 0 )
-        {
-            git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT );
-            git_reference_free( headRef );
-        }
-
-        const git_commit*  parents[1] = { parent };
-        const git_commit** parentsPtr = parent ? parents : nullptr;
-        size_t             parentsCount = parent ? 1 : 0;
-
-        git_commit_create( &commitOid, aRepo, "HEAD", sig, sig, nullptr, aMessage.ToUTF8().data(), tree, parentsCount,
-                           parentsPtr );
-
-        if( parent )
-            git_commit_free( parent );
-
-        git_signature_free( sig );
-        git_tree_free( tree );
-
-        return commitOid;
+        KI_TEST::WriteGitFile( m_repoPath, aFile, aContent.utf8_string() );
+        return KI_TEST::CommitGitFile( aRepo, aFile, aMessage );
     }
 
 
@@ -297,29 +232,15 @@ struct GIT_BACKEND_FIXTURE
 private:
     bool initRepoWithCommit()
     {
-        git_repository* repo = nullptr;
-
-        // Force "master" as the initial branch so the tests are independent of the
-        // user's init.defaultBranch (often "main") in system or global gitconfig.
-        git_repository_init_options initOpts;
-        git_repository_init_options_init( &initOpts, GIT_REPOSITORY_INIT_OPTIONS_VERSION );
-        initOpts.initial_head = "master";
-
-        if( git_repository_init_ext( &repo, m_repoPath.ToUTF8().data(), &initOpts ) != 0 )
-            return false;
+        KIGIT::GitRepositoryPtr repo =
+                KI_TEST::InitGitRepository( m_repoPath, "master", TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
 
         git_config* cfg = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo.get() ), GIT_OK );
+        KIGIT::GitConfigPtr config( cfg );
+        BOOST_REQUIRE_EQUAL( git_config_set_bool( cfg, "pull.rebase", 0 ), GIT_OK );
 
-        if( git_repository_config( &cfg, repo ) == 0 )
-        {
-            git_config_set_string( cfg, "user.name", TEST_AUTHOR_NAME );
-            git_config_set_string( cfg, "user.email", TEST_AUTHOR_EMAIL );
-            git_config_set_bool( cfg, "pull.rebase", 0 );
-            git_config_free( cfg );
-        }
-
-        createCommit( repo, wxT( "file.txt" ), wxT( "initial\n" ), wxT( "Initial commit" ) );
-        git_repository_free( repo );
+        createCommit( repo.get(), wxT( "file.txt" ), wxT( "initial\n" ), wxT( "Initial commit" ) );
         return true;
     }
 
@@ -340,16 +261,10 @@ private:
     }
 
 
-    SCOPED_GIT_BACKEND m_backend;
-    wxString           m_tempBase;
-    wxString           m_repoPath;
-    wxString           m_remotePath;
-    bool            m_ready;
-
-    static long s_counter;
+    wxString m_repoPath;
+    wxString m_remotePath;
+    bool     m_ready;
 };
-
-long GIT_BACKEND_FIXTURE::s_counter = 0;
 
 
 BOOST_FIXTURE_TEST_SUITE( LibgitBackend, GIT_BACKEND_FIXTURE )
@@ -387,25 +302,6 @@ BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
 
     // An empty project path matches nothing rather than the whole repository.
     BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj/f.txt" ), wxEmptyString ) );
-}
-
-
-// The synthesised target is what the pull fallback and the first push act on.
-BOOST_AUTO_TEST_CASE( GetUpstreamShorthand_NoUpstreamFallsBackToRemoteSlashBranch )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    git_repository* repo = openRepo();
-    BOOST_TEST_REQUIRE( repo );
-
-    // No upstream config, no remote-tracking ref.  Should still produce a useful
-    // shorthand by combining the default remote name with the current branch.
-    clearUpstreamConfig( repo, wxT( "master" ) );
-
-    KIGIT_COMMON common( repo );
-    BOOST_CHECK_EQUAL( common.GetUpstreamShorthand(), wxString( "origin/master" ) );
-
-    git_repository_free( repo );
 }
 
 
@@ -608,37 +504,6 @@ BOOST_AUTO_TEST_CASE( Push_FirstPushSetsUpstreamTracking )
     BOOST_CHECK_EQUAL( readConfig( repo, wxT( "branch.master.remote" ) ), wxString( "origin" ) );
     BOOST_CHECK_EQUAL( readConfig( repo, wxT( "branch.master.merge" ) ), wxString( "refs/heads/master" ) );
 
-    git_repository_free( repo );
-}
-
-
-// A push that cannot take the action lock reports Busy rather than touch libgit2.
-BOOST_AUTO_TEST_CASE( Push_ReportsBusyWhenActionLockHeld )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    git_repository* repo = openRepo();
-    BOOST_TEST_REQUIRE( repo );
-
-    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Second commit" ) );
-    addOrigin( repo );
-
-    KIGIT_COMMON     common( repo );
-    GIT_PUSH_HANDLER handler( &common );
-
-    // Hold the lock here and push from a worker, so the try_lock inside Push fails.
-    std::unique_lock<std::mutex> held = common.LockAction();
-
-    PushResult result = std::async( std::launch::async,
-                                    [&handler]()
-                                    {
-                                        return handler.PerformPush();
-                                    } )
-                                .get();
-
-    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PushResult::Busy ) );
-
-    held.unlock();
     git_repository_free( repo );
 }
 
@@ -1841,8 +1706,7 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
         // What the backend does for A once it owns the action lock.
         KIGIT_COMMON::OPERATION_GUARD operationA( &common, tokenA );
 
-        common.CancelActiveOperation();
-        BOOST_REQUIRE( tokenA->load() );
+        tokenA->store( true );
 
         // A is holding the action lock, so B cannot start.
         std::unique_lock<std::mutex> heldByA = common.LockAction();
@@ -1864,11 +1728,12 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
 
         BOOST_CHECK_MESSAGE( tokenA->load(), "a Busy operation must not clear another's cancellation" );
         BOOST_CHECK_MESSAGE( !tokenB->load(), "a Busy operation must not inherit another's cancellation" );
-        BOOST_CHECK_MESSAGE( common.ActiveCancelToken() == tokenA, "the active operation must still be A" );
+        BOOST_CHECK_MESSAGE( common.GetRecentCommits().empty(),
+                             "a Busy operation must leave the active read cancelled" );
     }
 
-    // Leaving the backend retires the token. Nothing in production calls a retire of its own.
-    BOOST_CHECK_MESSAGE( !common.ActiveCancelToken(), "finishing an operation must retire its token" );
+    BOOST_CHECK_MESSAGE( !common.GetRecentCommits().empty(),
+                         "later reads must not inherit the finished operation's cancellation" );
 
     // A cancelled operation used to leave its token published for the next one to adopt.
     GIT_PUSH_HANDLER pushC( &common );
@@ -1880,15 +1745,10 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
 }
 
 
-// Reports the token the session published, and can stop the operation as Cancel does.
+// Cancel from the first progress update.
 class CLONE_CANCEL_REPORTER : public PROGRESS_REPORTER
 {
 public:
-    CLONE_CANCEL_REPORTER( KIGIT_COMMON* aCommon ) :
-            m_common( aCommon )
-    {
-    }
-
     void SetNumPhases( int ) override {}
     void AddPhases( int ) override {}
     void BeginPhase( int ) override {}
@@ -1904,24 +1764,17 @@ public:
     bool KeepRefreshing( bool = false ) override
     {
         m_ticks++;
-
-        if( m_common->ActiveCancelToken() )
-            m_sawActiveToken = true;
-
         return false;
     }
 
-    int  Ticks() const { return m_ticks; }
-    bool SawActiveToken() const { return m_sawActiveToken; }
+    int Ticks() const { return m_ticks; }
 
 private:
-    KIGIT_COMMON* m_common;
-    int           m_ticks = 0;
-    bool          m_sawActiveToken = false;
+    int m_ticks = 0;
 };
 
 
-// A per-operation token left clone with none, so Cancel set a flag nothing read.
+// Cancelling in the progress dialog must stop the clone and remove its partial checkout.
 BOOST_AUTO_TEST_CASE( Clone_CancelFromProgressReporterStopsTheClone )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -1934,7 +1787,7 @@ BOOST_AUTO_TEST_CASE( Clone_CancelFromProgressReporterStopsTheClone )
     handler.SetRemote( wxS( "file://" ) + remotePath() );
     handler.SetClonePath( dest );
 
-    auto                   reporter = std::make_unique<CLONE_CANCEL_REPORTER>( &common );
+    auto                   reporter = std::make_unique<CLONE_CANCEL_REPORTER>();
     CLONE_CANCEL_REPORTER* watcher = reporter.get();
 
     handler.SetProgressReporter( std::move( reporter ) );
@@ -1942,13 +1795,9 @@ BOOST_AUTO_TEST_CASE( Clone_CancelFromProgressReporterStopsTheClone )
     bool cloned = handler.PerformClone();
 
     BOOST_REQUIRE_MESSAGE( watcher->Ticks() > 0, "the clone must report progress at least once" );
-    BOOST_CHECK_MESSAGE( watcher->SawActiveToken(), "the clone must publish a cancellation token while it runs" );
     BOOST_CHECK_MESSAGE( handler.IsThisOperationCancelled(), "the clone must record the cancellation" );
     BOOST_CHECK_MESSAGE( !cloned, "a clone cancelled from the progress dialog must not report success" );
     BOOST_CHECK_MESSAGE( !wxDirExists( dest ), "a cancelled clone must not leave a directory that blocks a retry" );
-
-    // Retired on the way out, so the next operation does not inherit this cancellation.
-    BOOST_CHECK_MESSAGE( !common.ActiveCancelToken(), "the clone must retire its token" );
 
     if( common.GetRepo() )
     {

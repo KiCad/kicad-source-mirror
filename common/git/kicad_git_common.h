@@ -434,9 +434,6 @@ public:
 
     wxString GetRemotename() const;
 
-    /// Returns the URL of the repository's remote, or an empty string when there is none.
-    wxString GetRemoteUrl() const;
-
     /// Returns every remote as a (name, URL) pair.
     std::vector<std::pair<wxString, wxString>> GetRemotes() const;
 
@@ -450,10 +447,6 @@ public:
     /// Returns GetRemotename() when non-empty, otherwise "origin".  Centralizes the
     /// fallback policy used by push/pull/fetch paths.
     wxString GetRemoteNameOrDefault() const;
-
-    /// Returns the upstream shorthand for the current branch (e.g. "origin/master"),
-    /// or an empty string when there is no current branch.
-    wxString GetUpstreamShorthand() const;
 
     /**
      * Set the project directory path, preserving any symlinks in the path.
@@ -524,21 +517,6 @@ public:
     using CANCEL_TOKEN = std::shared_ptr<std::atomic<bool>>;
 
     static CANCEL_TOKEN NewCancelToken() { return std::make_shared<std::atomic<bool>>( false ); }
-
-    /// Cancel whichever operation is running now. Nothing happens when none is.
-    void CancelActiveOperation()
-    {
-        std::lock_guard<std::mutex> lock( m_operationMutex );
-
-        if( m_activeCancel )
-            m_activeCancel->store( true );
-    }
-
-    CANCEL_TOKEN ActiveCancelToken() const
-    {
-        std::lock_guard<std::mutex> lock( m_operationMutex );
-        return m_activeCancel;
-    }
 
     /// Publishes a token for as long as its operation runs. Constructed once the action lock
     /// is held, so Cancel can only reach the operation that owns the repository.
@@ -641,6 +619,12 @@ protected:
     friend class LIBGIT_BACKEND;
 
 private:
+    CANCEL_TOKEN ActiveCancelToken() const
+    {
+        std::lock_guard<std::mutex> lock( m_operationMutex );
+        return m_activeCancel;
+    }
+
     void updatePublicKeys();
 
     /// Body of SetSSHKey, for callers that already hold m_credentialsMutex.
