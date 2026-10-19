@@ -87,8 +87,9 @@ enum class GIT_EDITOR_PREP
 };
 
 /**
- * Save any open editors before a git operation, prompting when the schematic or board editor has
- * unsaved changes. Returns false when the user cancelled or a save failed.
+ * Offer to save unsaved schematic and board edits before a git operation. Returns false when
+ * the user cancelled or a save failed. Library edits must be saved or discarded in their editor
+ * before a working tree rewrite. They do not block a commit or take part in its save prompt.
  *
  * When the working tree is about to be rewritten the only choices are to save or to cancel,
  * since a stale editor's next save would overwrite whatever arrived. The project file is
@@ -101,8 +102,12 @@ enum class GIT_EDITOR_PREP
  */
 bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose, bool* aSavedEditors = nullptr );
 
-/// True when the schematic or board editor holds unsaved changes.
+/// Unsaved schematic or board edits can be saved for a commit, even with no changes on disk.
+/// Library edits do not count. Call on the UI thread.
 bool DocumentEditorsDirty( KIWAY& aKiway );
+
+/// Unsaved document or library edits block operations that rewrite files. Call on the UI thread.
+bool EditorsDirty( KIWAY& aKiway );
 
 /// Names of the library editors holding unsaved changes. They cannot be saved by mail, so an
 /// operation that rewrites files refuses until the user saves or discards them.

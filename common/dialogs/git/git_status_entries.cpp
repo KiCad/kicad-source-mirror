@@ -22,6 +22,7 @@
 #include <fstream>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <sys/stat.h>
 #include <mutex>
@@ -50,6 +51,7 @@
 #include <git/kicad_git_common.h>
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
+#include <i18n_utility.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <mail_type.h>
@@ -550,38 +552,85 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
 }
 
 
-bool DocumentEditorsDirty( KIWAY& aKiway )
+namespace
 {
-    for( FRAME_T type : { FRAME_SCH, FRAME_PCB_EDITOR } )
+
+enum class EDITOR_SCOPE
+{
+    DOCUMENTS,
+    LIBRARIES,
+    ALL
+};
+
+
+struct GIT_EDITOR
+{
+    FRAME_T               frameType;
+    const wxChar*         label;
+    std::optional<MAIL_T> saveMail; ///< Library editors cannot be saved by mail.
+};
+
+
+const GIT_EDITOR g_gitEditors[] = {
+    { FRAME_SCH, _HKI( "Schematic Editor" ), MAIL_SCH_SAVE },
+    { FRAME_PCB_EDITOR, _HKI( "PCB Editor" ), MAIL_PCB_SAVE },
+    { FRAME_SCH_SYMBOL_EDITOR, _HKI( "Symbol Editor" ), std::nullopt },
+    { FRAME_FOOTPRINT_EDITOR, _HKI( "Footprint Editor" ), std::nullopt },
+};
+
+
+// Keep editor identifiers across prompts, since a prompt can outlive an editor window.
+std::vector<const GIT_EDITOR*> dirtyEditors( KIWAY& aKiway, EDITOR_SCOPE aScope )
+{
+    std::vector<const GIT_EDITOR*> dirty;
+
+    for( const GIT_EDITOR& editor : g_gitEditors )
     {
-        KIWAY_PLAYER* player = aKiway.Player( type, false );
+        bool document = editor.saveMail.has_value();
+
+        if( ( aScope == EDITOR_SCOPE::DOCUMENTS && !document ) || ( aScope == EDITOR_SCOPE::LIBRARIES && document ) )
+        {
+            continue;
+        }
+
+        KIWAY_PLAYER* player = aKiway.Player( editor.frameType, false );
 
         if( player && player->IsContentModified() )
-            return true;
+            dirty.push_back( &editor );
     }
 
-    return false;
+    return dirty;
+}
+
+
+std::vector<wxString> dirtyEditorNames( KIWAY& aKiway, EDITOR_SCOPE aScope )
+{
+    std::vector<wxString> names;
+
+    for( const GIT_EDITOR* editor : dirtyEditors( aKiway, aScope ) )
+        names.push_back( wxGetTranslation( editor->label ) );
+
+    return names;
+}
+
+} // namespace
+
+
+bool DocumentEditorsDirty( KIWAY& aKiway )
+{
+    return !dirtyEditors( aKiway, EDITOR_SCOPE::DOCUMENTS ).empty();
+}
+
+
+bool EditorsDirty( KIWAY& aKiway )
+{
+    return !dirtyEditors( aKiway, EDITOR_SCOPE::ALL ).empty();
 }
 
 
 std::vector<wxString> LibraryEditorsWithUnsavedChanges( KIWAY& aKiway )
 {
-    std::vector<wxString> names;
-
-    const std::pair<FRAME_T, wxString> editors[] = {
-        { FRAME_SCH_SYMBOL_EDITOR, _( "Symbol Editor" ) },
-        { FRAME_FOOTPRINT_EDITOR, _( "Footprint Editor" ) },
-    };
-
-    for( const auto& [type, name] : editors )
-    {
-        KIWAY_PLAYER* player = aKiway.Player( type, false );
-
-        if( player && player->IsContentModified() )
-            names.push_back( name );
-    }
-
-    return names;
+    return dirtyEditorNames( aKiway, EDITOR_SCOPE::LIBRARIES );
 }
 
 
@@ -686,24 +735,7 @@ wxString GIT_WORKTREE_STATUS::RefusalMessage( const std::vector<wxString>& aUnsa
 bool ProjectSafeToRewrite( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const GIT_WORKTREE_STATUS& aStatus,
                            bool aAllowTrackedChanges )
 {
-    std::vector<wxString> unsaved;
-
-    const std::pair<FRAME_T, wxString> editors[] = {
-        { FRAME_SCH, _( "Schematic Editor" ) },
-        { FRAME_PCB_EDITOR, _( "PCB Editor" ) },
-    };
-
-    for( const auto& [type, name] : editors )
-    {
-        KIWAY_PLAYER* player = aFrame->Kiway().Player( type, false );
-
-        if( player && player->IsContentModified() )
-            unsaved.push_back( name );
-    }
-
-    std::vector<wxString> libraries = LibraryEditorsWithUnsavedChanges( aFrame->Kiway() );
-    unsaved.insert( unsaved.end(), libraries.begin(), libraries.end() );
-
+    std::vector<wxString> unsaved = dirtyEditorNames( aFrame->Kiway(), EDITOR_SCOPE::ALL );
     wxString message = aStatus.RefusalMessage( unsaved, aAllowTrackedChanges );
 
     if( message.IsEmpty() )
@@ -739,34 +771,14 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
         }
     }
 
-    struct DIRTY_EDITOR
-    {
-        FRAME_T  frameType;
-        MAIL_T   saveMail;
-        wxString label;
-    };
-
-    const DIRTY_EDITOR candidates[] = {
-        { FRAME_SCH, MAIL_SCH_SAVE, _( "Schematic Editor" ) },
-        { FRAME_PCB_EDITOR, MAIL_PCB_SAVE, _( "PCB Editor" ) },
-    };
-
-    std::vector<const DIRTY_EDITOR*> dirty;
-
-    for( const DIRTY_EDITOR& d : candidates )
-    {
-        KIWAY_PLAYER* frame = aFrame->Kiway().Player( d.frameType, false );
-
-        if( frame && frame->IsContentModified() )
-            dirty.push_back( &d );
-    }
+    std::vector<const GIT_EDITOR*> dirty = dirtyEditors( aFrame->Kiway(), EDITOR_SCOPE::DOCUMENTS );
 
     if( !dirty.empty() )
     {
         wxString listed;
 
-        for( const DIRTY_EDITOR* d : dirty )
-            listed += wxString::Format( wxS( "\n    - %s" ), d->label );
+        for( const GIT_EDITOR* editor : dirty )
+            listed += wxString::Format( wxS( "\n    - %s" ), wxGetTranslation( editor->label ) );
 
         wxString message;
         long     style = wxYES_DEFAULT | wxICON_WARNING | wxCENTER;
@@ -806,20 +818,20 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
 
         if( answer == wxID_YES )
         {
-            for( const DIRTY_EDITOR* d : dirty )
+            for( const GIT_EDITOR* editor : dirty )
             {
                 std::string payload;
-                aFrame->Kiway().ExpressMail( d->frameType, d->saveMail, payload );
+                aFrame->Kiway().ExpressMail( editor->frameType, *editor->saveMail, payload );
 
                 if( payload != "success" )
                 {
-                    DisplayErrorMessage( aFrame, wxString::Format( _( "Could not save %s." ), d->label ) );
+                    DisplayErrorMessage(
+                            aFrame, wxString::Format( _( "Could not save %s." ), wxGetTranslation( editor->label ) ) );
                     return false;
                 }
             }
 
-            // Saving editors can update the project file; a commit may include that change.
-            // Commit Anyway leaves both the editors and the project file untouched.
+            // Include project changes from saving editors only when the user chose to save.
             if( aPurpose == GIT_EDITOR_PREP::COMMIT )
                 aFrame->GetSettingsManager()->SaveProject();
 

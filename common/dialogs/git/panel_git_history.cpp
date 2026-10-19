@@ -44,7 +44,6 @@
 #include <dialogs/git/git_ui_utils.h>
 #include <diff_merge/diff_scene.h>
 #include <eda_base_frame.h>
-#include <frame_type.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
 #include <git/kicad_git_common.h>
@@ -52,7 +51,6 @@
 #include <kicad_curl/kicad_curl_easy.h>
 #include <kiplatform/ui.h>
 #include <kiway.h>
-#include <kiway_player.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>
@@ -1096,27 +1094,29 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, bool aHasId
 {
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
-    // Edits still in an editor's memory pass the backend's disk check, and the reload prompt would
-    // then ask about them only after the restore commit exists, too late to choose.
-    for( FRAME_T type : { FRAME_SCH, FRAME_PCB_EDITOR } )
+    // Check unsaved edits before creating the restore commit and again after the prompts.
+    auto editorsReady = [this]()
     {
-        KIWAY_PLAYER* player = m_frame->Kiway().Player( type, false );
-
-        if( player && player->IsContentModified() )
+        if( DocumentEditorsDirty( m_frame->Kiway() ) )
         {
             DisplayInfoMessage( this, _( "There are unsaved changes in the open editors. Commit them "
                                          "first, so the restore stays a separate step that can be "
                                          "undone." ) );
-            return;
+            return false;
         }
-    }
 
-    if( !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
-    {
-        DisplayInfoMessage( this, _( "A library editor has unsaved changes. Save or discard them first, so "
-                                     "the restore does not overwrite what it is editing." ) );
+        if( !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+        {
+            DisplayInfoMessage( this, _( "A library editor has unsaved changes. Save or discard them first, so "
+                                         "the restore does not overwrite what it is editing." ) );
+            return false;
+        }
+
+        return true;
+    };
+
+    if( !editorsReady() )
         return;
-    }
 
     wxRichMessageDialog confirm( this,
                                  wxString::Format( _( "Restore this project's files as they were at version %s?\n\n"
@@ -1136,6 +1136,9 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, bool aHasId
         return;
 
     if( m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
+        return;
+
+    if( !editorsReady() )
         return;
 
     // The restore rewrites files the editors have open, so snapshot them for a scoped reload.

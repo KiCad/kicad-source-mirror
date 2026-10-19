@@ -529,7 +529,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
 
     // Edits still only in an editor's memory are not in the git status yet, but the commit flow
     // saves the editors first, so they are committable and the controls must allow it.
-    m_editorsDirty = aStatus.hasRepo && anyEditorDirty();
+    m_editorsDirty = aStatus.hasRepo && DocumentEditorsDirty( m_frame->Kiway() );
 
     // Amending is offered only while the last commit has not been pushed, so an already
     // published commit can never be rewritten from here.
@@ -683,7 +683,7 @@ void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
         || !IsShownOnScreen() )
         return;
 
-    bool dirty = m_hasRepo && anyEditorDirty();
+    bool dirty = m_hasRepo && DocumentEditorsDirty( m_frame->Kiway() );
 
     if( dirty != m_editorsDirty )
         RefreshFileList();
@@ -777,12 +777,6 @@ void GIT_COMMIT_PANE::setAuthor()
                 common->NotifyRefreshListeners();
             },
             _( "Reading author..." ) );
-}
-
-
-bool GIT_COMMIT_PANE::anyEditorDirty() const
-{
-    return DocumentEditorsDirty( m_frame->Kiway() );
 }
 
 
@@ -1209,7 +1203,7 @@ void GIT_COMMIT_PANE::confirmDiscardFile( std::shared_ptr<KIGIT_COMMON> aCommon,
                                           bool aConflicted, wxString aRoot )
 {
     // An unsaved editor's next save would undo the discard, so settle that first.
-    if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+    if( EditorsDirty( m_frame->Kiway() ) )
     {
         DisplayInfoMessage( this, _( "An editor has unsaved changes. Save or revert them before discarding "
                                      "files, so the discard is not undone by the next save." ) );
@@ -1254,7 +1248,7 @@ void GIT_COMMIT_PANE::confirmDiscardFile( std::shared_ptr<KIGIT_COMMON> aCommon,
     if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )
         return;
 
-    if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+    if( EditorsDirty( m_frame->Kiway() ) )
         return;
 
     // Snapshot first, so an editor showing the file reloads the committed version afterwards.
@@ -1483,7 +1477,7 @@ void GIT_COMMIT_PANE::finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCom
             return false;
         }
 
-        if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+        if( EditorsDirty( m_frame->Kiway() ) )
         {
             DisplayInfoMessage( this, _( "The open editors have unsaved changes. Save or revert them first, so it "
                                          "is clear what is being abandoned." ) );
@@ -1627,7 +1621,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
     // Unsaved editor changes still count, because the save below produces files the rescan
     // picks up. With local commits waiting the button reads "Push".
-    if( files.empty() && !amend && !anyEditorDirty() )
+    if( files.empty() && !amend && !DocumentEditorsDirty( m_frame->Kiway() ) )
     {
         if( !aAndPush || !m_hasUnpushedCommits )
             return;
@@ -2145,7 +2139,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
             return false;
         }
 
-        if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+        if( EditorsDirty( m_frame->Kiway() ) )
         {
             DisplayInfoMessage( this, _( "The open editors have unsaved changes. Save or revert them before "
                                          "resolving the merge." ) );

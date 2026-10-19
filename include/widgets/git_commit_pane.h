@@ -195,10 +195,6 @@ private:
     /// The label the network button carries while an operation is in progress.
     wxString abandonLabel() const;
 
-    /// True when the schematic or board editor holds unsaved changes. Those are committable
-    /// even with a clean working tree, because the commit flow saves the editors first.
-    bool anyEditorDirty() const;
-
     /// Register a refresh listener with the project's current git session, re-registering
     /// if the session changed since last time (it is recreated when a project is loaded).
     void syncListener();
