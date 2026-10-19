@@ -1285,7 +1285,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint( bool aSkipConfirmation )
             const wxString oldKey = m_activeTab ? m_activeTab->GetTabKey() : wxString();
 
             freeUndoRedoCommandsWithItems( m_undoList, m_redoList );
-            installFootprintOnActiveBoard( restored.release() );
+            ReloadFootprint( restored.release() );
 
             // The tab is keyed on the footprint name, which the revert may have rolled back
             if( m_activeTab && m_activeTab->GetTabKey() != oldKey )

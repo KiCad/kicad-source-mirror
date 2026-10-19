@@ -64,6 +64,8 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
         {
             m_tabsPanel->SelectTab( existing );
 
+            setFPWatcher( GetBoard()->GetFirstFootprint() );
+
             m_treePane->GetLibTree()->ExpandLibId( aFPID );
 
             m_centerItemOnIdle = aFPID;

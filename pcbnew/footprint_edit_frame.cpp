@@ -921,17 +921,6 @@ bool FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( FOOTPRINT* aFootprint, bo
 }
 
 
-void FOOTPRINT_EDIT_FRAME::installFootprintOnActiveBoard( FOOTPRINT* aFootprint )
-{
-    ReloadFootprint( aFootprint );
-
-    if( IsCurrentFPFromBoard() )
-        setFPWatcher( nullptr );
-    else
-        setFPWatcher( aFootprint );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 {
     // Opening from the library is a preview that the next library-open reuses; editing promotes it
@@ -939,7 +928,12 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
     if( prepareFootprintTabHandoff( aFootprint, m_tabsPanel != nullptr ) )
         findOrCreateFootprintTab( aFootprint->GetFPID(), true );
 
-    installFootprintOnActiveBoard( aFootprint );
+    ReloadFootprint( aFootprint );
+
+    if( IsCurrentFPFromBoard() )
+        setFPWatcher( nullptr );
+    else
+        setFPWatcher( aFootprint );
 }
 
 
@@ -1083,6 +1077,13 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
     GetCanvas()->UpdateColors();
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    FOOTPRINT* activeFootprint = GetBoard()->GetFirstFootprint();
+
+    if( IsCurrentFPFromBoard() )
+        setFPWatcher( nullptr );
+    else
+        setFPWatcher( activeFootprint );
 
     if( !aCtx )
     {
@@ -1558,6 +1559,8 @@ void FOOTPRINT_EDIT_FRAME::RefreshLibraryFootprintTab( const FOOTPRINT& aFootpri
     if( ctx->IsModified() )
         return;
 
+    // We have to activate this footprint to work on it.  We'll switch back to the user-selected
+    // tab afterwards.
     activateFootprintTab( ctx );
 
     // The old history contains pointers into the footprint ReloadFootprint is about to delete.
@@ -1566,19 +1569,13 @@ void FOOTPRINT_EDIT_FRAME::RefreshLibraryFootprintTab( const FOOTPRINT& aFootpri
 
     FOOTPRINT* replacement = static_cast<FOOTPRINT*>( aFootprint.Clone() );
     replacement->SetParent( nullptr );
-    installFootprintOnActiveBoard( replacement );
+    ReloadFootprint( replacement );
     replacement->ClearFlags();
     ClearModify();
 
+    // Switch back to the user-selected tab.
     if( originalActive && originalActive != ctx )
         activateFootprintTab( originalActive );
-
-    FOOTPRINT* activeFootprint = GetBoard()->GetFirstFootprint();
-
-    if( IsCurrentFPFromBoard() )
-        setFPWatcher( nullptr );
-    else
-        setFPWatcher( activeFootprint );
 
     UpdateView();
     GetCanvas()->ForceRefresh();

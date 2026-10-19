@@ -497,14 +497,6 @@ private:
     FOOTPRINT_EDITOR_TAB_CONTEXT* findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootprint );
 
     /**
-     * Replace the active board's footprint with aFootprint and re-point the file watcher at it.
-     *
-     * Takes ownership. Does no tab bookkeeping, so callers that need a tab for aFootprint must open
-     * it first.
-     */
-    void installFootprintOnActiveBoard( FOOTPRINT* aFootprint );
-
-    /**
      * Make aCtx the active tab, borrowing its board without deleting the outgoing one.
      */
     void activateFootprintTab( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx );
