@@ -110,13 +110,15 @@ PANEL_GIT_BRANCHES::~PANEL_GIT_BRANCHES()
 
 bool PANEL_GIT_BRANCHES::StopTransfer()
 {
-    bool started = m_pushWorker.joinable();
+    bool started = m_pushBusy;
 
     if( m_pushCancel )
         m_pushCancel->store( true );
 
     if( m_pushWorker.joinable() )
         m_pushWorker.join();
+
+    m_pushBusy = false;
 
     return started;
 }
@@ -355,7 +357,7 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
 
 void PANEL_GIT_BRANCHES::onForcePush()
 {
-    if( m_pushWorker.joinable() )
+    if( m_pushBusy )
     {
         DisplayInfoMessage( this, _( "A transfer is already running." ) );
         return;
@@ -423,6 +425,7 @@ void PANEL_GIT_BRANCHES::onForcePush()
     if( m_pushWorker.joinable() )
         m_pushWorker.join();
 
+    m_pushBusy = true;
     m_pushWorker = std::thread(
             [this, common, token]()
             {
@@ -441,6 +444,10 @@ void PANEL_GIT_BRANCHES::onForcePush()
                 CallAfter(
                         [this, common, result, error, authFailure, cancelled]()
                         {
+                            // The transfer is over however it ended, and the retry below
+                            // starts another one.
+                            m_pushBusy = false;
+
                             if( cancelled )
                                 return;
 

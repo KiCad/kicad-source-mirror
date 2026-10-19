@@ -72,6 +72,8 @@ private:
     std::thread                        m_pushWorker;
     std::shared_ptr<std::atomic<bool>> m_pushCancel;
 
+    bool m_pushBusy = false;
+
     /// Re-runs the reload once when it had to skip because another git operation held the
     /// action lock.
     wxTimer m_retryTimer;
