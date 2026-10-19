@@ -165,22 +165,22 @@ bool PCB_IO_AUTOTRAX::mapLayer( int aLayer, const FOOTPRINT* aFootprint, PCB_LAY
 
     switch( aLayer )
     {
-    case LAYER_TOP_COPPER: aResult = F_Cu; return true;
-    case LAYER_MID1: aResult = In1_Cu; return true;
-    case LAYER_MID2: aResult = In2_Cu; return true;
-    case LAYER_MID3: aResult = In3_Cu; return true;
-    case LAYER_MID4: aResult = In4_Cu; return true;
-    case LAYER_BOTTOM_COPPER: aResult = B_Cu; return true;
-    case LAYER_TOP_SILK: aResult = F_SilkS; return true;
-    case LAYER_BOTTOM_SILK: aResult = B_SilkS; return true;
-    case LAYER_GND_PLANE: aResult = In5_Cu; return true;
-    case LAYER_POWER_PLANE: aResult = In6_Cu; return true;
-    case LAYER_BOARD: aResult = Edge_Cuts; return true;
-    case LAYER_KEEPOUT: aResult = aFootprint ? User_1 : m_keepoutLayer; return true;
-    case LAYER_MULTI: aResult = F_Cu; return true; // through-all features
-    default:
-        // 0 (unset) has no KiCad target and is dropped.
-        return false;
+    case LAYER_TOP_COPPER:    aResult = F_Cu;                        return true;
+    case LAYER_MID1:          aResult = In1_Cu;                      return true;
+    case LAYER_MID2:          aResult = In2_Cu;                      return true;
+    case LAYER_MID3:          aResult = In3_Cu;                      return true;
+    case LAYER_MID4:          aResult = In4_Cu;                      return true;
+    case LAYER_BOTTOM_COPPER: aResult = B_Cu;                        return true;
+    case LAYER_TOP_SILK:      aResult = F_SilkS;                     return true;
+    case LAYER_BOTTOM_SILK:   aResult = B_SilkS;                     return true;
+    case LAYER_GND_PLANE:     aResult = In5_Cu;                      return true;
+    case LAYER_POWER_PLANE:   aResult = In6_Cu;                      return true;
+    case LAYER_BOARD:         aResult = Edge_Cuts;                   return true;
+    case LAYER_KEEPOUT:       aResult = aFootprint ? User_1
+                                                   : m_keepoutLayer; return true;
+    case LAYER_MULTI:         aResult = F_Cu;                        return true; // through-all features
+    default:                  return false;                                       // 0 (unset) has no KiCad target
+                                                                                  //   and is dropped.
     }
 }
 
@@ -293,10 +293,11 @@ static std::vector<ARC_SPAN> arcSpansFromSegments( int aSegments )
     if( aSegments <= 0 || aSegments >= 15 )
         return { { 0.0, 360.0 } };
 
-    auto isSet = [&]( int aQuadrant )
-    {
-        return ( aSegments >> ( ( aQuadrant + 4 ) % 4 ) ) & 1;
-    };
+    auto isSet =
+            [&]( int aQuadrant )
+            {
+                return ( aSegments >> ( ( aQuadrant + 4 ) % 4 ) ) & 1;
+            };
 
     std::vector<ARC_SPAN> spans;
 
@@ -386,11 +387,13 @@ void PCB_IO_AUTOTRAX::emitArc( const ARC& aArc, FOOTPRINT* aFootprint )
 
     // A point on the circle for an angle in the Y-up file frame. toBoard()
     // applies the Y flip so the resulting geometry lands in KiCad space.
-    auto pointAt = [&]( double aDeg )
-    {
-        double rad = aDeg * M_PI / 180.0;
-        return toBoard( aArc.centerX + aArc.radius * std::cos( rad ), aArc.centerY + aArc.radius * std::sin( rad ) );
-    };
+    auto pointAt =
+            [&]( double aDeg )
+            {
+                double rad = aDeg * M_PI / 180.0;
+                return toBoard( aArc.centerX + aArc.radius * std::cos( rad ),
+                                aArc.centerY + aArc.radius * std::sin( rad ) );
+            };
 
     for( const ARC_SPAN& span : arcSpansFromSegments( aArc.segments ) )
     {
@@ -497,7 +500,9 @@ void PCB_IO_AUTOTRAX::emitPad( const AUTOTRAX::PAD& aPad, FOOTPRINT* aFootprint 
 
     switch( aPad.shape )
     {
-    case 2: pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE ); break;
+    case 2:
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+        break;
 
     case 3: // octagon, approximated by chamfering all four corners
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
@@ -505,7 +510,9 @@ void PCB_IO_AUTOTRAX::emitPad( const AUTOTRAX::PAD& aPad, FOOTPRINT* aFootprint 
         pad->SetChamferPositions( PADSTACK::ALL_LAYERS, RECT_CHAMFER_ALL );
         break;
 
-    case 4: pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT ); break;
+    case 4:
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+        break;
 
     default:
         pad->SetShape( PADSTACK::ALL_LAYERS, ( aPad.xSize == aPad.ySize ) ? PAD_SHAPE::CIRCLE : PAD_SHAPE::OVAL );
@@ -713,15 +720,17 @@ void PCB_IO_AUTOTRAX::assignNets( const std::vector<NET_NODE>& aNodes )
         else if( owners.empty() )
         {
             reporter().Report( wxString::Format( _( "Autotrax import: net '%s' node '%s' matches no pad." ),
-                                               node.netName, node.node ),
-                             RPT_SEVERITY_WARNING );
+                                                 node.netName,
+                                                 node.node ),
+                               RPT_SEVERITY_WARNING );
         }
         else
         {
             reporter().Report( wxString::Format( _( "Autotrax import: net '%s' node '%s' matches pads in more than "
-                                                  "one footprint and was not connected." ),
-                                               node.netName, node.node ),
-                             RPT_SEVERITY_WARNING );
+                                                    "one footprint and was not connected." ),
+                                                 node.netName,
+                                                 node.node ),
+                               RPT_SEVERITY_WARNING );
         }
     }
 }
@@ -750,74 +759,90 @@ void PCB_IO_AUTOTRAX::buildBoard( const BOARD_DATA& aData )
     BOX2D keepoutBox;
     BOX2D drilledBox;
 
-    auto noteLayer = [&]( int aLayer, bool aFree )
-    {
-        switch( aLayer )
-        {
-        case AUTOTRAX::LAYER_MID1: innerNeeded = std::max( innerNeeded, 1 ); break;
-        case AUTOTRAX::LAYER_MID2: innerNeeded = std::max( innerNeeded, 2 ); break;
-        case AUTOTRAX::LAYER_MID3: innerNeeded = std::max( innerNeeded, 3 ); break;
-        case AUTOTRAX::LAYER_MID4: innerNeeded = std::max( innerNeeded, 4 ); break;
-        case AUTOTRAX::LAYER_GND_PLANE: innerNeeded = std::max( innerNeeded, 5 ); break;
-        case AUTOTRAX::LAYER_POWER_PLANE: innerNeeded = std::max( innerNeeded, 6 ); break;
-        case AUTOTRAX::LAYER_BOARD: boardLayerUsed = true; break;
-        case AUTOTRAX::LAYER_KEEPOUT: ( aFree ? freeKeepoutUsed : componentKeepoutUsed ) = true; break;
-        default: break;
-        }
-    };
+    auto noteLayer =
+            [&]( int aLayer, bool aFree )
+            {
+                switch( aLayer )
+                {
+                case AUTOTRAX::LAYER_MID1:        innerNeeded = std::max( innerNeeded, 1 ); break;
+                case AUTOTRAX::LAYER_MID2:        innerNeeded = std::max( innerNeeded, 2 ); break;
+                case AUTOTRAX::LAYER_MID3:        innerNeeded = std::max( innerNeeded, 3 ); break;
+                case AUTOTRAX::LAYER_MID4:        innerNeeded = std::max( innerNeeded, 4 ); break;
+                case AUTOTRAX::LAYER_GND_PLANE:   innerNeeded = std::max( innerNeeded, 5 ); break;
+                case AUTOTRAX::LAYER_POWER_PLANE: innerNeeded = std::max( innerNeeded, 6 ); break;
 
-    auto noteOutline = [&]( int aLayer, bool aFree, const BOX2D& aBox )
-    {
-        noteLayer( aLayer, aFree );
+                case AUTOTRAX::LAYER_BOARD:
+                    boardLayerUsed = true;
+                    break;
 
-        if( aFree && aLayer == AUTOTRAX::LAYER_KEEPOUT )
-            keepoutBox.Merge( aBox );
-    };
+                case AUTOTRAX::LAYER_KEEPOUT:
+                    if( aFree )
+                        freeKeepoutUsed = true;
+                    else
+                        componentKeepoutUsed = true;
 
-    auto noteText = [&]( const TEXT& aText, bool aFree )
-    {
-        noteLayer( aText.layer, aFree );
-        maxYmils = std::max( maxYmils, aText.y );
-    };
+                    break;
+
+                default:
+                    break;
+                }
+            };
+
+    auto noteOutline =
+            [&]( int aLayer, bool aFree, const BOX2D& aBox )
+            {
+                noteLayer( aLayer, aFree );
+
+                if( aFree && aLayer == AUTOTRAX::LAYER_KEEPOUT )
+                    keepoutBox.Merge( aBox );
+            };
+
+    auto noteText =
+            [&]( const TEXT& aText, bool aFree )
+            {
+                noteLayer( aText.layer, aFree );
+                maxYmils = std::max( maxYmils, aText.y );
+            };
 
     // BOARD_DATA and COMPONENT share the same six primitive members, so one
     // generic walk covers both the free primitives and each component's.
-    auto scan = [&]( const auto& aContainer, bool aFree )
-    {
-        for( const TRACK& t : aContainer.tracks )
-        {
-            noteOutline( t.layer, aFree, spanBox( t.x1, t.y1, t.x2, t.y2 ) );
-            maxYmils = std::max( { maxYmils, t.y1, t.y2 } );
-        }
+    auto scan =
+            [&]( const auto& aContainer, bool aFree )
+            {
+                for( const TRACK& t : aContainer.tracks )
+                {
+                    noteOutline( t.layer, aFree, spanBox( t.x1, t.y1, t.x2, t.y2 ) );
+                    maxYmils = std::max( { maxYmils, t.y1, t.y2 } );
+                }
 
-        for( const ARC& a : aContainer.arcs )
-        {
-            noteOutline( a.layer, aFree, arcBox( a ) );
-            maxYmils = std::max( maxYmils, a.centerY + a.radius );
-        }
+                for( const ARC& a : aContainer.arcs )
+                {
+                    noteOutline( a.layer, aFree, arcBox( a ) );
+                    maxYmils = std::max( maxYmils, a.centerY + a.radius );
+                }
 
-        for( const VIA& v : aContainer.vias )
-        {
-            drilledBox.Merge( VECTOR2D( v.x, v.y ) );
-            maxYmils = std::max( maxYmils, v.y );
-        }
+                for( const VIA& v : aContainer.vias )
+                {
+                    drilledBox.Merge( VECTOR2D( v.x, v.y ) );
+                    maxYmils = std::max( maxYmils, v.y );
+                }
 
-        // emitPad() keeps only top, bottom and multi layer pads, so their layer needs no note
-        for( const AUTOTRAX::PAD& p : aContainer.pads )
-        {
-            drilledBox.Merge( VECTOR2D( p.x, p.y ) );
-            maxYmils = std::max( maxYmils, p.y );
-        }
+                // emitPad() keeps only top, bottom and multi layer pads, so their layer needs no note
+                for( const AUTOTRAX::PAD& p : aContainer.pads )
+                {
+                    drilledBox.Merge( VECTOR2D( p.x, p.y ) );
+                    maxYmils = std::max( maxYmils, p.y );
+                }
 
-        for( const FILL& f : aContainer.fills )
-        {
-            noteOutline( f.layer, aFree, spanBox( f.x1, f.y1, f.x2, f.y2 ) );
-            maxYmils = std::max( { maxYmils, f.y1, f.y2 } );
-        }
+                for( const FILL& f : aContainer.fills )
+                {
+                    noteOutline( f.layer, aFree, spanBox( f.x1, f.y1, f.x2, f.y2 ) );
+                    maxYmils = std::max( { maxYmils, f.y1, f.y2 } );
+                }
 
-        for( const TEXT& s : aContainer.texts )
-            noteText( s, aFree );
-    };
+                for( const TEXT& s : aContainer.texts )
+                    noteText( s, aFree );
+            };
 
     scan( aData, true );
 
@@ -836,15 +861,14 @@ void PCB_IO_AUTOTRAX::buildBoard( const BOARD_DATA& aData )
     m_maxY = toIU( maxYmils );
 
     // Only free outlines can be the board edge; footprint Edge_Cuts would join the board outline
-    bool keepoutIsEdge = keepoutBox.IsValid() && !boardLayerUsed
-                         && ( !drilledBox.IsValid() || keepoutBox.Contains( drilledBox ) );
+    bool keepoutIsEdge = keepoutBox.IsValid()
+                            && !boardLayerUsed
+                            && ( !drilledBox.IsValid() || keepoutBox.Contains( drilledBox ) );
 
     m_keepoutLayer = keepoutIsEdge ? Edge_Cuts : User_1;
 
     if( keepoutIsEdge )
-    {
         reporter().Report( _( "Autotrax import: keepout layer used as the board outline." ), RPT_SEVERITY_INFO );
-    }
 
     if( componentKeepoutUsed || ( freeKeepoutUsed && !keepoutIsEdge ) )
     {
