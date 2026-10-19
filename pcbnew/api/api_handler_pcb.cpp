@@ -503,8 +503,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
 
     BOARD* board = this->board();
     std::vector<BOARD_ITEM*> items;
-    std::set<KICAD_T> typesRequested, typesInserted;
-    bool handledAnything = false;
+    std::set<KICAD_T> typesRequested, typesHandled;
 
     std::vector<KICAD_T> requestedTypes = parseRequestedItemTypes( aCtx.Request.types() );
 
@@ -515,7 +514,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
     {
         typesRequested.emplace( type );
 
-        if( typesInserted.count( type ) )
+        if( typesHandled.count( type ) )
             continue;
 
         switch( type )
@@ -523,36 +522,21 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-            handledAnything = true;
-            std::copy( board->Tracks().begin(), board->Tracks().end(),
-                       std::back_inserter( items ) );
-            typesInserted.insert( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } );
+            std::ranges::copy( board->Tracks(), std::back_inserter( items ) );
+            typesHandled.insert( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } );
             break;
 
         case PCB_PAD_T:
-        {
-            handledAnything = true;
-
             for( FOOTPRINT* fp : board->Footprints() )
-            {
-                std::copy( fp->Pads().begin(), fp->Pads().end(),
-                           std::back_inserter( items ) );
-            }
+                std::ranges::copy( fp->Pads(), std::back_inserter( items ) );
 
-            typesInserted.insert( PCB_PAD_T );
+            typesHandled.insert( PCB_PAD_T );
             break;
-        }
 
         case PCB_FOOTPRINT_T:
-        {
-            handledAnything = true;
-
-            std::copy( board->Footprints().begin(), board->Footprints().end(),
-                       std::back_inserter( items ) );
-
-            typesInserted.insert( PCB_FOOTPRINT_T );
+            std::ranges::copy( board->Footprints(), std::back_inserter( items ) );
+            typesHandled.insert( PCB_FOOTPRINT_T );
             break;
-        }
 
         case PCB_SHAPE_T:
         case PCB_TABLE_T:
@@ -561,114 +545,51 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
         case PCB_BARCODE_T:
         case PCB_REFERENCE_IMAGE_T:
         case PCB_GRID_ITEM_T:
-        {
-            handledAnything = true;
-            bool inserted = false;
-
-            for( BOARD_ITEM* item : board->Drawings() )
-            {
-                if( item->Type() == type )
-                {
-                    items.emplace_back( item );
-                    inserted = true;
-                }
-            }
-
-            if( inserted )
-                typesInserted.insert( type );
-
-            break;
-        }
-
         case PCB_DIMENSION_T:
-        {
-            handledAnything = true;
-            bool inserted = false;
-
             for( BOARD_ITEM* item : board->Drawings() )
             {
-                switch (item->Type()) {
-                    case PCB_DIM_ALIGNED_T:
-                    case PCB_DIM_CENTER_T:
-                    case PCB_DIM_RADIAL_T:
-                    case PCB_DIM_ORTHOGONAL_T:
-                    case PCB_DIM_LEADER_T:
-                        items.emplace_back( item );
-                        inserted = true;
-                        break;
-                    default:
-                        break;
-                }
+                if( item->Type() == type || BaseType( item->Type() ) == type )
+                    items.emplace_back( item );
             }
-            // we have to add the dimension subtypes to the requested to get them out
-            typesRequested.insert( {PCB_DIM_ALIGNED_T, PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T, PCB_DIM_LEADER_T } );
 
-            if( inserted )
-                typesInserted.insert( {PCB_DIM_ALIGNED_T, PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T, PCB_DIM_LEADER_T } );
-
+            typesHandled.insert( type );
             break;
-        }
 
         case PCB_ZONE_T:
-        {
-            handledAnything = true;
-
-            std::copy( board->Zones().begin(), board->Zones().end(),
-                       std::back_inserter( items ) );
-
-            typesInserted.insert( PCB_ZONE_T );
+            std::ranges::copy( board->Zones(), std::back_inserter( items ) );
+            typesHandled.insert( PCB_ZONE_T );
             break;
-        }
 
         case PCB_GROUP_T:
-        {
-            handledAnything = true;
-
-            std::copy( board->Groups().begin(), board->Groups().end(),
-                       std::back_inserter( items ) );
-
-            typesInserted.insert( PCB_GROUP_T );
+            std::ranges::copy( board->Groups(), std::back_inserter( items ) );
+            typesHandled.insert( PCB_GROUP_T );
             break;
-        }
+
         case PCB_POINT_T:
-        {
-            handledAnything = true;
-            std::copy( board->Points().begin(), board->Points().end(), std::back_inserter( items ) );
-            typesInserted.insert( PCB_POINT_T );
+            std::ranges::copy( board->Points(), std::back_inserter( items ) );
+            typesHandled.insert( PCB_POINT_T );
             break;
-        }
 
         case PCB_3D_BODY_T:
-        {
             // Not supported on a board context yet
             break;
-        }
 
         case PCB_GENERATOR_T:
-        {
-            handledAnything = true;
             std::ranges::copy( board->Generators(), std::back_inserter( items ) );
-            typesInserted.insert( PCB_GENERATOR_T );
+            typesHandled.insert( PCB_GENERATOR_T );
             break;
-        }
 
         case PCB_CONSTRAINT_T:
-        {
-            handledAnything = true;
-
-            std::copy( board->Constraints().begin(), board->Constraints().end(),
-                       std::back_inserter( items ) );
-
-            typesInserted.insert( PCB_CONSTRAINT_T );
+            std::ranges::copy( board->Constraints(), std::back_inserter( items ) );
+            typesHandled.insert( PCB_CONSTRAINT_T );
             break;
-        }
 
         default:
             break;
         }
     }
 
-    if( !handledAnything )
+    if( typesHandled.empty() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -678,7 +599,7 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
 
     for( const BOARD_ITEM* item : items )
     {
-        if( !typesRequested.count( item->Type() ) )
+        if( !typesRequested.count( item->Type() ) && !typesRequested.count( BaseType( item->Type() ) ) )
             continue;
 
         google::protobuf::Any itemBuf;
