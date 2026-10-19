@@ -935,10 +935,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 {
-    VECTOR2I start( aTrack->GetStart() );
-    VECTOR2I end( aTrack->GetEnd() );
-    int      track_width = aTrack->GetWidth();
-    COLOR4D  color       = m_pcbSettings.GetColor( aTrack, aLayer );
+    const VECTOR2I& start       = aTrack->GetStart();
+    const VECTOR2I& end         = aTrack->GetEnd();
+    int             track_width = aTrack->GetWidth();
+    COLOR4D         color       = m_pcbSettings.GetColor( aTrack, aLayer );
 
     // If a chain highlight is active and the track belongs to the highlighted chain, and the chain
     // has a colour override configured on the board, prefer that colour.  Only do this when we're
@@ -1030,13 +1030,11 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
     viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
     viewport.Normalize();
 
-    int num_char = (int) aNetName.size();
+    // Calc the approximate size of the netname (assume square chars)
+    int nameSize = (int) aNetName.size() * aSeg.GetWidth();
 
     // Check if the track is long enough to have a netname displayed
-    int         seg_minlength = aSeg.GetWidth() * num_char;
-    SEG::ecoord seg_minlength_sq = (SEG::ecoord)seg_minlength * seg_minlength;
-
-    if( aSeg.GetSeg().SquaredLength() < seg_minlength_sq )
+    if( aSeg.GetSeg().SquaredLength() < SEG::Square( nameSize ) )
         return;
 
     double    textSize = aSeg.GetWidth();
@@ -1122,7 +1120,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     EDA_ANGLE angle = aArc->GetAngle();
 
     // GetRadius() clamps a runaway centre but GetCenter() does not, thus the two disagree and
-    // the copper draws far from the track.  The plotter substitutes the chord for this reason
+    // the copper draws far from the track.  The plotter substitutes the chord for this reason.
     bool degenerate = aArc->IsDegenerated( 10 /* in IU */ );
 
     if( IsNetnameLayer( aLayer ) )
@@ -1146,10 +1144,11 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
             return;
         }
 
-        // Arc length must accommodate the label width.
-        double arcLen = std::abs( radius * angle.AsRadians() );
+        // Calc the approximate size of the netname (assume square chars)
+        int nameSize = (int) netname.size() * width;
 
-        if( arcLen < (double) width * (double) netname.size() )
+        // Arc length must accommodate the label length.
+        if( aArc->GetLength() < nameSize )
             return;
 
         // Tangent at the arc midpoint is perpendicular to the radius there.

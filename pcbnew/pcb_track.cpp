@@ -2441,21 +2441,32 @@ double PCB_TRACK::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
                 return LOD_HIDE;
         }
 
-        VECTOR2I start( GetStart() );
-        VECTOR2I end( GetEnd() );
-
-        // Calc the approximate size of the netname (assume square chars)
-        SEG::ecoord nameSize = GetDisplayNetname().size() * GetWidth();
-
-        if( VECTOR2I( end - start ).SquaredEuclideanNorm() < nameSize * nameSize )
-            return LOD_HIDE;
-
         BOX2I clipBox = BOX2ISafe( aView->GetViewport() );
 
-        ClipLine( &clipBox, start.x, start.y, end.x, end.y );
+        // Calc the approximate size of the netname (assume square chars)
+        int nameSize = (int) GetDisplayNetname().size() * GetWidth();
 
-        if( VECTOR2I( end - start ).SquaredEuclideanNorm() == 0 )
-            return LOD_HIDE;
+        if( Type() == PCB_ARC_T )
+        {
+            if( KiROUND( GetLength() ) < nameSize )
+                return LOD_HIDE;
+
+            if( !clipBox.Intersects( GetBoundingBox() ) )
+                return LOD_HIDE;
+        }
+        else if( Type() == PCB_TRACE_T )
+        {
+            VECTOR2I start( GetStart() );
+            VECTOR2I end( GetEnd() );
+
+            if( VECTOR2I( end - start ).SquaredEuclideanNorm() < SEG::Square( nameSize ) )
+                return LOD_HIDE;
+
+            ClipLine( &clipBox, start.x, start.y, end.x, end.y );
+
+            if( VECTOR2I( end - start ).SquaredEuclideanNorm() == 0 )
+                return LOD_HIDE;
+        }
 
         // Netnames will be shown only if zoom is appropriate
         return lodScaleForThreshold( aView, m_width, pcbIUScale.mmToIU( 4.0 ) );
