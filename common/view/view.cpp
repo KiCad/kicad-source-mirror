@@ -499,7 +499,6 @@ void VIEW::unlinkItem( VIEW_ITEM* aItem )
     {
         if( aItem->m_viewPrivData->m_view != nullptr && aItem->m_viewPrivData->m_view != this )
         {
-            wxLogDebug( wxT( "VIEW::Remove: item %s belongs to a different view" ), aItem->GetClass() );
             return;
         }
 
@@ -1070,14 +1069,6 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 
         if( source == m_layers.end() || !m_layers.count( to ) )
             continue;
-
-        // Every caller permutes or compacts, so two sources landing on one destination means the
-        // caller built a bad map and the loser's items are about to be discarded
-        if( destinations.count( to ) )
-        {
-            wxLogDebug( wxT( "VIEW::ReorderLayerData: layer %d also maps to %d, which already "
-                             "takes a layer; its items will be lost" ), from, to );
-        }
 
         moved.emplace( from, source->second );
         destinations.insert( to );

@@ -557,7 +557,6 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aStart, c
         if( !std::isfinite( x ) || !std::isfinite( y )
             || std::abs( x ) > max_coord || std::abs( y ) > max_coord )
         {
-            wxLogDebug( wxT( "Arc approximation overflow: falling back to straight segment." ) );
             aPolyline.Clear();
             aPolyline.Append( aStart );
             aPolyline.Append( aEnd );

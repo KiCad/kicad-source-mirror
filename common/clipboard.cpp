@@ -305,10 +305,7 @@ bool EncodeImageToPng( const wxImage& aImage, wxMemoryBuffer& aOutput )
     wxBufferedOutputStream bufferedStream( memStream );
 
     if( !imageCopy.SaveFile( bufferedStream, wxBITMAP_TYPE_PNG ) )
-    {
-        wxLogDebug( wxS( "Failed to encode PNG" ) );
         return false;
-    }
 
     bufferedStream.Close();
 

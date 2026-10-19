@@ -396,7 +396,8 @@ void BOARD_ITEM::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
                                           int aClearance, int aError, ERROR_LOC aErrorLoc,
                                           bool ignoreLineWidth ) const
 {
-    wxLogDebug( wxT( "%s doesn't implement TransformShapeToPolygon()" ), GetClass() );
+    wxCHECK_MSG( false, /* void */,
+                 wxString::Format( wxT( "%s doesn't implement TransformShapeToPolygon()" ), GetClass() ) );
 }
 
 

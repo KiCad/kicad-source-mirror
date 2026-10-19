@@ -232,10 +232,7 @@ bool LoadCookies( wxWebView* aWebView, const wxString& aSourceFile )
     ComPtr<ICoreWebView2CookieManager> cookieManager;
 
     if( FAILED( webView2->get_CookieManager( &cookieManager ) ) )
-    {
-        wxLogDebug( "Failed to get cookie manager" );
         return false;
-    }
 
     // Read JSON file (binary mode)
     wxFFile file( aSourceFile, "rb" );

@@ -165,11 +165,7 @@ void PROJECT::setProjectFullName( const wxString& aFullPathAndName )
         wxString ext = m_project_name.GetExt();
 
         if( !ext.IsEmpty() && ext != FILEEXT::ProjectFileExtension )
-        {
-            wxLogDebug( wxT( "Project file has unexpected extension '%s', expected '%s'" ), ext,
-                        FILEEXT::ProjectFileExtension );
             m_project_name.SetExt( FILEEXT::ProjectFileExtension );
-        }
     }
 }
 

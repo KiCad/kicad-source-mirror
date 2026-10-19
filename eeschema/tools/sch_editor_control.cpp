@@ -1971,10 +1971,6 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
                         data->Add( htmlObj );
                     }
                 }
-                else
-                {
-                    wxLogDebug( wxS( "Failed to generate bitmap for clipboard" ) );
-                }
 
                 // Add SVG data
                 wxMemoryBuffer svgBuffer;
@@ -1984,10 +1980,6 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
                     wxCustomDataObject* svgObj = new wxCustomDataObject( wxDataFormat( "image/svg+xml" ) );
                     svgObj->SetData( svgBuffer.GetDataLen(), svgBuffer.GetData() );
                     data->Add( svgObj );
-                }
-                else
-                {
-                    wxLogDebug( wxS( "Failed to generate SVG for clipboard" ) );
                 }
             }
 

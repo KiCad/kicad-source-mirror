@@ -568,8 +568,6 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( LIB_SYMBOL* aSymbol,
         aSymbol->SetExcludedFromSim( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
         aSymbol->SetExcludedFromPosFiles( aValue == wxS( "1" ) );
-    else
-        wxLogDebug( "Unknown attribute name: %s", aAttributeName );
 }
 
 

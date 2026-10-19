@@ -46,10 +46,7 @@ public:
     void Link( LINKED_ITEM* aLink )
     {
         if( alg::contains( m_links, aLink ) )
-        {
-            wxLogDebug( wxT( "PNS LINK_HOLDER::Link: item %p already linked to %p" ), aLink, this );
             return;
-        }
 
         m_links.push_back( aLink );
     }
