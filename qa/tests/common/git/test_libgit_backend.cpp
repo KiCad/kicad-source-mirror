@@ -1372,8 +1372,7 @@ BOOST_AUTO_TEST_CASE( AbandonOperation_KeepsWorkTheOperationDidNotTouch )
     }
 
     // The file the merge brought in is gone again, as git's own abort leaves it.
-    BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator()
-                                          + wxT( "fromside.txt" ) ) );
+    BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "fromside.txt" ) ) );
 
     // And the edit the merge never touched is still there.
     {
@@ -2517,6 +2516,15 @@ BOOST_AUTO_TEST_CASE( IsTransientGitFile_ExcludesTransientFilesOnly )
     // The copies the conflict resolver leaves beside a file are recovery aids, not project files.
     BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.mine" ), wxT( "proj" ) ) );
     BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.theirs" ), wxT( "proj" ) ) );
+
+    // A second copy beside the same file is numbered, so the recovery word is not the extension.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.mine.1" ), wxT( "proj" ) ) );
+    BOOST_CHECK(
+            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.theirs.17" ), wxT( "proj" ) ) );
+
+    // But the words only count at the end. A design file merely named after one is the user's.
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.mine.kicad_pcb" ), wxT( "proj" ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.1" ), wxT( "proj" ) ) );
 
     // A design file that merely mentions one of those names is still a design file.
     BOOST_CHECK(

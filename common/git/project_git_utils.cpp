@@ -423,8 +423,17 @@ bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile, const wxStr
         return true;
 
     // What the conflict resolver keeps beside a file so the replaced version is recoverable.
-    if( aFile.GetExt() == wxS( "mine" ) || aFile.GetExt() == wxS( "theirs" ) )
-        return true;
+    {
+        wxString recovery = aFile.GetExt();
+
+        // A second copy beside the same file is numbered, as in "board.kicad_pcb.mine.1", so
+        // there the word sits one extension further in.
+        if( !recovery.IsEmpty() && recovery.find_first_not_of( wxS( "0123456789" ) ) == wxString::npos )
+            recovery = wxFileName( aFile.GetName() ).GetExt();
+
+        if( recovery == wxS( "mine" ) || recovery == wxS( "theirs" ) )
+            return true;
+    }
 
     // Archived project backups
     if( !aProjectName.IsEmpty() )
