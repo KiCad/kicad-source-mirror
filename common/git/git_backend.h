@@ -59,6 +59,16 @@ enum class CommitResult
     Cancelled
 };
 
+// What finishing a merge did to the working files. A partial write leaves the recovery copies
+// as the user's only route back, so the caller must keep them.
+enum class MergeCommitResult
+{
+    Success,
+    FailedCleanly,
+    FailedPartially
+};
+
+
 class APIEXPORT GIT_BACKEND
 {
 public:
@@ -161,10 +171,10 @@ public:
                                     wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
                                     wxString& aError ) = 0;
 
-    virtual bool CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
-                                     const wxString&                                   aTheirsOid,
-                                     const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                     wxString&                                         aError ) = 0;
+    virtual MergeCommitResult CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
+                                                  const wxString&                                   aTheirsOid,
+                                                  const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                                  wxString&                                         aError ) = 0;
 
 protected:
     KIGIT_ORPHAN_REGISTRY m_orphanRegistry;

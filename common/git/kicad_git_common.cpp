@@ -1770,9 +1770,9 @@ bool KIGIT_COMMON::GetMergeConflicts( const wxString& aStageDir, wxString& aHead
 }
 
 
-bool KIGIT_COMMON::CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
-                                       const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                       wxString&                                         aError )
+MergeCommitResult KIGIT_COMMON::CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
+                                                    const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                                    wxString&                                         aError )
 {
     return GetGitBackend()->CreateMergedCommit( m_repo, aExpectedHeadOid, aTheirsOid, aResolvedFiles, aError );
 }

@@ -2534,8 +2534,10 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
     BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
 
     // Refuse to apply resolutions against a moved head.
-    BOOST_CHECK( !common.CreateMergedCommit( wxT( "0000000000000000000000000000000000000000" ), theirsOid,
-                                             { { conflicts[0].path, conflicts[0].oursFile } }, error ) );
+    BOOST_CHECK_EQUAL(
+            static_cast<int>( common.CreateMergedCommit( wxT( "0000000000000000000000000000000000000000" ), theirsOid,
+                                                         { { conflicts[0].path, conflicts[0].oursFile } }, error ) ),
+            static_cast<int>( MergeCommitResult::FailedCleanly ) );
 
     // A background fetch can move FETCH_HEAD while the user resolves. The pinned commit id must
     // win over whatever FETCH_HEAD says by then.
@@ -2549,8 +2551,9 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
         f << "edited during resolution\n";
     }
 
-    BOOST_CHECK(
-            !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].oursFile } }, error ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( common.CreateMergedCommit(
+                               headOid, theirsOid, { { conflicts[0].path, conflicts[0].oursFile } }, error ) ),
+                       static_cast<int>( MergeCommitResult::FailedCleanly ) );
 
     {
         std::ofstream f( trackedFile.ToStdString() );
@@ -2572,7 +2575,11 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
         f << "merged\n";
         f.close();
 
-        BOOST_CHECK( !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, lockedMerged } }, error ) );
+        // The lock also blocks the rollback, so the working files are left part way. The caller
+        // keeps its recovery copies on this result.
+        BOOST_CHECK_EQUAL( static_cast<int>( common.CreateMergedCommit(
+                                   headOid, theirsOid, { { conflicts[0].path, lockedMerged } }, error ) ),
+                           static_cast<int>( MergeCommitResult::FailedPartially ) );
 
         git_oid headNow;
         BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
@@ -2611,7 +2618,9 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
             f << "merged\n";
         }
 
-        BOOST_CHECK( !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, refMerged } }, error ) );
+        BOOST_CHECK_EQUAL( static_cast<int>( common.CreateMergedCommit( headOid, theirsOid,
+                                                                        { { conflicts[0].path, refMerged } }, error ) ),
+                           static_cast<int>( MergeCommitResult::FailedCleanly ) );
 
         // The branch did not move and the working file is back at the pre-merge content.
         git_oid headNow;
@@ -2640,9 +2649,9 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
         f << "merged\n";
     }
 
-    BOOST_REQUIRE_MESSAGE(
-            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, mergedFile } }, error ),
-            "CreateMergedCommit failed: " + error.ToStdString() );
+    BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, mergedFile } }, error )
+                                   == MergeCommitResult::Success,
+                           "CreateMergedCommit failed: " + error.ToStdString() );
 
     // HEAD is now a merge commit of both sides, the working file carries the resolution, and no
     // merge state is left behind.
@@ -2702,7 +2711,8 @@ BOOST_AUTO_TEST_CASE( MergeConflictFinishesWithAnUntrackedFilePresent )
     }
 
     BOOST_CHECK_MESSAGE(
-            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].theirsFile } }, error ),
+            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].theirsFile } }, error )
+                    == MergeCommitResult::Success,
             "refused with an untracked file present: " + error.ToStdString() );
 
     git_repository_free( repo );
@@ -2784,7 +2794,8 @@ BOOST_AUTO_TEST_CASE( MergeConflictRenameTakeTheirsLandsOnNewPath )
     for( const KIGIT_CONFLICT_SIDES& c : conflicts )
         resolved.emplace_back( c.path, c.hasTheirs ? c.theirsFile : wxString() );
 
-    BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, resolved, error ), error );
+    BOOST_REQUIRE_MESSAGE(
+            common.CreateMergedCommit( headOid, theirsOid, resolved, error ) == MergeCommitResult::Success, error );
 
     wxString workdir = wxString::FromUTF8( git_repository_workdir( repo ) );
     bool     renamedExists = wxFileExists( workdir + wxT( "renamed.txt" ) );
@@ -3734,9 +3745,9 @@ BOOST_AUTO_TEST_CASE( MergeConflictKeepsDeletion )
     BOOST_CHECK( conflicts[0].hasTheirs );
 
     // Keep the deletion: an empty resolved path, not the extracted empty placeholder file.
-    BOOST_REQUIRE_MESSAGE(
-            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, wxString() } }, error ),
-            "CreateMergedCommit failed: " + error.ToStdString() );
+    BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, wxString() } }, error )
+                                   == MergeCommitResult::Success,
+                           "CreateMergedCommit failed: " + error.ToStdString() );
 
     git_oid newHead;
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &newHead, repo, "HEAD" ), GIT_OK );

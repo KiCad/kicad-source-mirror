@@ -2090,7 +2090,7 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
         savedCopies.push_back( saved );
     }
 
-    bool ok = false;
+    MergeCommitResult result = MergeCommitResult::FailedCleanly;
 
     // The lock was released while the user resolved, and the background fetch may hold it now.
     // Throwing the resolutions away would mean doing every file again, so let the user retry.
@@ -2100,7 +2100,7 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
 
         if( lock.owns_lock() )
         {
-            ok = aCommon->CreateMergedCommit( headOid, theirsOid, resolved, error );
+            result = aCommon->CreateMergedCommit( headOid, theirsOid, resolved, error );
             break;
         }
 
@@ -2112,17 +2112,24 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
         }
     }
 
-    if( !ok )
+    if( result == MergeCommitResult::FailedCleanly )
     {
-        // The merge wrote nothing, so the copies it would have explained are removed with it.
+        // Nothing reached the files, so the copies that would have explained it go too.
         discardSavedCopies();
+    }
+    else
+    {
+        // Whatever was written has to reach the editors and panels, and a partial write leaves
+        // the saved copies as the only way back to the old version.
+        ReloadOpenEditors( m_frame->Kiway(), m_docsBeforePull );
+        aCommon->NotifyRefreshListeners();
+    }
+
+    if( result != MergeCommitResult::Success )
+    {
         DisplayErrorMessage( this, _( "Could not finish the merge." ), error );
         return;
     }
-
-    // The merge rewrote working files, so bring the editors and panels up to date.
-    ReloadOpenEditors( m_frame->Kiway(), m_docsBeforePull );
-    aCommon->NotifyRefreshListeners();
 
     if( aThenPush )
         submitPush( aCommon );

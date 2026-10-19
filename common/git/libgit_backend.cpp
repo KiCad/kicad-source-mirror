@@ -3660,15 +3660,15 @@ bool LIBGIT_BACKEND::GetMergeConflicts( git_repository* aRepo, const wxString& a
 }
 
 
-bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
-                                         const wxString&                                   aTheirsOid,
-                                         const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                         wxString&                                         aError )
+MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
+                                                      const wxString&                                   aTheirsOid,
+                                                      const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                                      wxString&                                         aError )
 {
     if( !aRepo )
     {
         aError = _( "The project has no git repository." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     // The lock is released while the user resolves, so anything dirty now appeared during
@@ -3684,7 +3684,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
         if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
         {
             aError = _( "Could not read the repository status." );
-            return false;
+            return MergeCommitResult::FailedCleanly;
         }
 
         KIGIT::GitStatusListPtr statusListPtr( statusList );
@@ -3694,7 +3694,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
             aError = _( "Files changed while the conflicts were being resolved, and finishing the "
                         "merge would overwrite those changes. Get changes again to redo the merge "
                         "with the current files." );
-            return false;
+            return MergeCommitResult::FailedCleanly;
         }
     }
 
@@ -3703,7 +3703,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
     KIGIT::GitCommitPtr theirs;
 
     if( !remergeInMemory( aRepo, aTheirsOid, mergedIndex, ours, theirs, aError ) )
-        return false;
+        return MergeCommitResult::FailedCleanly;
 
     char oidStr[GIT_OID_HEXSZ + 1] = { 0 };
     git_oid_tostr( oidStr, sizeof( oidStr ), git_commit_id( ours.get() ) );
@@ -3712,7 +3712,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
     if( aExpectedHeadOid != wxString::FromUTF8( oidStr ) )
     {
         aError = _( "The repository changed while resolving. Get changes again." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     for( const auto& [path, resolvedFile] : aResolvedFiles )
@@ -3730,7 +3730,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
             if( git_index_conflict_remove( mergedIndex.get(), pathUtf8.c_str() ) != GIT_OK )
             {
                 aError = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
-                return false;
+                return MergeCommitResult::FailedCleanly;
             }
 
             continue;
@@ -3741,7 +3741,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
         if( !in )
         {
             aError = wxString::Format( _( "Could not read the resolved file for '%s'." ), path );
-            return false;
+            return MergeCommitResult::FailedCleanly;
         }
 
         std::string bytes( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
@@ -3751,7 +3751,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
         if( git_blob_create_from_buffer( &blobOid, aRepo, bytes.data(), bytes.size() ) != GIT_OK )
         {
             aError = wxString::Format( _( "Could not store the resolved file for '%s'." ), path );
-            return false;
+            return MergeCommitResult::FailedCleanly;
         }
 
         git_index_entry entry;
@@ -3764,14 +3764,14 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
             || git_index_add( mergedIndex.get(), &entry ) != GIT_OK )
         {
             aError = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
-            return false;
+            return MergeCommitResult::FailedCleanly;
         }
     }
 
     if( git_index_has_conflicts( mergedIndex.get() ) )
     {
         aError = _( "Not every conflict was resolved." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     git_oid treeOid;
@@ -3779,7 +3779,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
     if( git_index_write_tree_to( &treeOid, mergedIndex.get(), aRepo ) != GIT_OK )
     {
         aError = _( "Could not write the merge result." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     git_tree* tree = nullptr;
@@ -3787,7 +3787,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
     if( git_tree_lookup( &tree, aRepo, &treeOid ) != GIT_OK )
     {
         aError = _( "Could not write the merge result." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     KIGIT::GitTreePtr treePtr( tree );
@@ -3798,7 +3798,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
     {
         aError = _( "Could not create a commit signature. Set user.name and user.email in your "
                     "git configuration." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     KIGIT::GitSignaturePtr signaturePtr( signature );
@@ -3808,7 +3808,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
     if( git_repository_head( &headRef, aRepo ) != GIT_OK )
     {
         aError = _( "Could not get the repository head." );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     KIGIT::GitReferencePtr headRefPtr( headRef );
@@ -3824,7 +3824,7 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
         != GIT_OK )
     {
         aError = wxString::Format( _( "Could not create merge commit: %s" ), KIGIT_COMMON::GetLastGitError() );
-        return false;
+        return MergeCommitResult::FailedCleanly;
     }
 
     // Bring the working tree and the real index to the merged content.
@@ -3832,30 +3832,30 @@ bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& 
 
     switch( publishPreparedCommit( aRepo, tree, mergeCommitOid, headRef, ours.get(), "merge", gitError ) )
     {
-    case PUBLISH_RESULT::PUBLISHED: return true;
+    case PUBLISH_RESULT::PUBLISHED: return MergeCommitResult::Success;
 
     case PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK:
         aError = wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
-        return false;
+        return MergeCommitResult::FailedCleanly;
 
     case PUBLISH_RESULT::CHECKOUT_FAILED_PARTIAL:
         aError = wxString::Format( _( "Could not update the working files, and they may be partially "
                                       "changed: %s" ),
                                    gitError );
-        return false;
+        return MergeCommitResult::FailedPartially;
 
     case PUBLISH_RESULT::RECORD_FAILED_ROLLED_BACK:
         aError = wxString::Format( _( "Could not record the merge commit, so nothing was changed: %s" ), gitError );
-        return false;
+        return MergeCommitResult::FailedCleanly;
 
     case PUBLISH_RESULT::RECORD_FAILED_PARTIAL:
         aError = wxString::Format( _( "Could not record the merge commit, and the working files may "
                                       "have been changed: %s" ),
                                    gitError );
-        return false;
+        return MergeCommitResult::FailedPartially;
     }
 
-    return false;
+    return MergeCommitResult::FailedCleanly;
 }
 
 

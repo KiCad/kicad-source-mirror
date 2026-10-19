@@ -108,9 +108,10 @@ public:
     bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                             std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError ) override;
 
-    bool CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
-                             const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                             wxString&                                         aError ) override;
+    MergeCommitResult CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
+                                          const wxString&                                   aTheirsOid,
+                                          const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                          wxString&                                         aError ) override;
 
 private:
     PullResult handleFastForward( GIT_PULL_HANDLER* aHandler );

@@ -20,6 +20,7 @@
 #ifndef _GIT_COMMON_H_
 #define _GIT_COMMON_H_
 
+#include <git/git_backend.h>
 #include <git/git_compare_handler.h>
 #include <git/kicad_git_errors.h>
 #include <import_export.h>
@@ -412,8 +413,9 @@ public:
      * aTheirsOid pins the remote commit, so a background fetch cannot change what gets merged.
      * An empty resolved-file path records "the file is deleted".
      */
-    bool CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
-                             const std::vector<std::pair<wxString, wxString>>& aResolvedFiles, wxString& aError );
+    MergeCommitResult CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
+                                          const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                          wxString&                                         aError );
 
     // Returns true if the repository has a remote that can be pushed to pulled from
     bool HasPushAndPullRemote() const;
