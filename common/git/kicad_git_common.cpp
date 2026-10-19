@@ -178,21 +178,41 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
 
 wxString KIGIT_COMMON::GetPassword()
 {
-    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    wxString remote;
+    wxString username;
 
-    if( !m_secretFetched )
     {
-        if( m_connType != GIT_CONN_TYPE::GIT_CONN_LOCAL && !m_remote.IsEmpty() )
-        {
-            wxString secret;
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
 
-            if( KIPLATFORM::SECRETS::GetSecret( m_remote, m_username, secret ) )
-                m_password = secret;
+        if( m_secretFetched )
+            return m_password;
+
+        if( m_connType == GIT_CONN_TYPE::GIT_CONN_LOCAL || m_remote.IsEmpty() )
+        {
+            m_secretFetched = true;
+            return m_password;
         }
 
-        m_secretFetched = true;
+        remote = m_remote;
+        username = m_username;
     }
 
+    // The lock is not held here: asking the operating system can raise a permission dialog, so
+    // it finishes only once a person has decided.
+    wxString secret;
+    bool     found = KIPLATFORM::SECRETS::GetSecret( remote, username, secret );
+
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
+    // The user may have typed a password, or changed the remote, while the keychain was being
+    // asked. Either way this answer is about the wrong thing and is dropped.
+    if( m_secretFetched || m_remote != remote || m_username != username )
+        return m_password;
+
+    if( found )
+        m_password = secret;
+
+    m_secretFetched = true;
     return m_password;
 }
 
