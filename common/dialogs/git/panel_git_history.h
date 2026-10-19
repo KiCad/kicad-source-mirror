@@ -32,6 +32,7 @@
 
 #include <dialogs/git/panel_git_history_base.h>
 #include <dialogs/git/git_transfer.h>
+#include <widgets/wx_debounced_action.h>
 
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
@@ -139,7 +140,7 @@ private:
     KIGIT_QUERY m_actionQuery;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
-    wxTimer m_historySearchTimer;
+    WX_DEBOUNCED_ACTION m_historySearchDebounce;
 
     /// Polls whether the user scrolled near the end of the history, which is the one portable
     /// way to notice scrolling on every wxDataViewCtrl port, native ones included.

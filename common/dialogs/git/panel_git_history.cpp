@@ -280,7 +280,13 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
         m_dialog( aDialog ),
         m_frame( aFrame ),
         m_historyRefsColumn( nullptr ),
-        m_fileDiff( nullptr )
+        m_fileDiff( nullptr ),
+        m_historySearchDebounce(
+                [this]()
+                {
+                    reloadHistory();
+                },
+                300 )
 {
     m_historySearch->SetDescriptiveText( _( "Search history" ) );
     m_historyPathRow->ShowItems( false );
@@ -321,15 +327,6 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_fileDiff = new GIT_FILE_DIFF_AREA( m_detailSplitter, m_frame );
     m_fileDiff->Hide();
 
-    m_historySearchTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                reloadHistory();
-            },
-            m_historySearchTimer.GetId() );
-
     m_historyScrollTimer.SetOwner( this );
     Bind(
             wxEVT_TIMER,
@@ -356,7 +353,7 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
                                m_detailQuery.Cancel();
                                m_historyScrollTimer.Stop();
                                hideFileDiff();
-                               m_historySearchTimer.Start( 300, wxTIMER_ONE_SHOT );
+                               m_historySearchDebounce.Restart();
                            } );
 
     m_historyBranch->Bind( wxEVT_CHOICE,
@@ -472,6 +469,8 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
 PANEL_GIT_HISTORY::~PANEL_GIT_HISTORY()
 {
+    m_historySearchDebounce.Cancel();
+    m_historyScrollTimer.Stop();
     m_historyQuery.Cancel();
     m_detailQuery.Cancel();
     m_actionQuery.Cancel();
@@ -504,6 +503,7 @@ KIGIT_HISTORY_FILTER PANEL_GIT_HISTORY::historyFilter() const
 
 void PANEL_GIT_HISTORY::reloadHistory()
 {
+    m_historySearchDebounce.Cancel();
     m_historyLimit = 50;
     Populate();
 }

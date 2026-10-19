@@ -23,7 +23,7 @@
 
 #include <dialog_shim.h>
 #include <git/kicad_git_common.h>
-#include <wx/timer.h>
+#include <widgets/wx_debounced_action.h>
 #include <vector>
 
 class wxButton;
@@ -46,22 +46,19 @@ private:
     void OnSwitchButton(wxCommandEvent& event);
     void OnCancelButton(wxCommandEvent& event);
     void OnTextChanged(wxCommandEvent& event);
-    void OnTimer(wxTimerEvent& event);
+    void updateSwitchButton();
     bool branchExists( const wxString& aName ) const;
 
     wxListView* m_branchList;
     wxTextCtrl* m_branchNameText;
     wxButton* m_switchButton;
-    wxTimer m_timer;
+    WX_DEBOUNCED_ACTION m_branchNameDebounce;
 
     wxString m_currentBranch;
 
     wxString m_lastEnteredText;
 
     std::vector<KIGIT_BRANCH_INFO> m_branches;
-
-    void StartTimer();
-    void StopTimer();
 };
 
 #endif // DIALOG_GIT_SWITCH_H

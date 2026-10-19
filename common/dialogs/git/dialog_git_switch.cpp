@@ -24,7 +24,6 @@
 #include <wx/listctrl.h>
 #include <wx/event.h>
 #include <wx/sizer.h>
-#include <wx/timer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 
@@ -35,7 +34,12 @@
 DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, std::vector<KIGIT_BRANCH_INFO> aBranches ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Git Branch Switch" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
-        m_timer( this ),
+        m_branchNameDebounce(
+                [this]()
+                {
+                    updateSwitchButton();
+                },
+                500 ),
         m_branches( std::move( aBranches ) )
 {
     // Only local branches can be checked out. Keep the picker alphabetical.
@@ -86,7 +90,6 @@ DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, std::vector<KIGIT_BRANC
     Bind( wxEVT_BUTTON, &DIALOG_GIT_SWITCH::OnSwitchButton, this, m_switchButton->GetId() );
     Bind( wxEVT_BUTTON, &DIALOG_GIT_SWITCH::OnCancelButton, this, cancelButton->GetId() );
     Bind( wxEVT_TEXT, &DIALOG_GIT_SWITCH::OnTextChanged, this, m_branchNameText->GetId() );
-    Bind( wxEVT_TIMER, &DIALOG_GIT_SWITCH::OnTimer, this, m_timer.GetId() );
 
     // Populate branch list
     PopulateBranchList();
@@ -100,8 +103,7 @@ DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, std::vector<KIGIT_BRANC
 
 DIALOG_GIT_SWITCH::~DIALOG_GIT_SWITCH()
 {
-    StopTimer();
-    Unbind( wxEVT_TIMER, &DIALOG_GIT_SWITCH::OnTimer, this, m_timer.GetId() );
+    m_branchNameDebounce.Cancel();
 }
 
 
@@ -194,19 +196,7 @@ wxString DIALOG_GIT_SWITCH::GetBranchName() const
 }
 
 
-void DIALOG_GIT_SWITCH::StartTimer()
-{
-    m_timer.Start( 500, true );
-}
-
-
-void DIALOG_GIT_SWITCH::StopTimer()
-{
-    m_timer.Stop();
-}
-
-
-void DIALOG_GIT_SWITCH::OnTimer( wxTimerEvent& aEvt )
+void DIALOG_GIT_SWITCH::updateSwitchButton()
 {
     wxString branchName = m_branchNameText->GetValue();
 
@@ -230,7 +220,7 @@ void DIALOG_GIT_SWITCH::OnTimer( wxTimerEvent& aEvt )
 
 void DIALOG_GIT_SWITCH::OnTextChanged( wxCommandEvent& aEvt )
 {
-    StartTimer();
+    m_branchNameDebounce.Restart();
 }
 
 
