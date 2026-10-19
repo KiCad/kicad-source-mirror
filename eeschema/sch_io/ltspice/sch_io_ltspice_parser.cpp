@@ -943,7 +943,7 @@ SCH_SHEET* SCH_IO_LTSPICE_PARSER::AddAscSymAsSubsheet( LTSPICE_SCHEMATIC::LT_ASC
 {
     SCH_SHEET* sch_sheet = new SCH_SHEET( aScreen->Schematic() );
 
-    sch_sheet->AddField( SCH_FIELD( sch_sheet, FIELD_T::USER, SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD ) );
+    sch_sheet->AddField( SCH_FIELD( sch_sheet, FIELD_T::SHEET_USER, SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD ) );
 
     SCH_FIELD* instNameField = sch_sheet->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD );
     SCH_FIELD* sheetNameField = sch_sheet->GetField( FIELD_T::SHEET_NAME );
