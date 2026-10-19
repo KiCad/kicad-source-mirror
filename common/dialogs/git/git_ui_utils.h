@@ -20,10 +20,6 @@
 #ifndef GIT_UI_UTILS_H
 #define GIT_UI_UTILS_H
 
-#include <functional>
-#include <memory>
-#include <string>
-
 class wxButton;
 class wxDateTime;
 class wxListCtrl;
@@ -48,28 +44,6 @@ wxString SelectedText( wxListCtrl* aList, int aColumn );
 
 /// Check a name and email for recording commits. False leaves the reason in aError.
 bool ValidateIdentity( const wxString& aName, const wxString& aEmail, wxString& aError );
-
-/**
- * Run aFn on the UI thread.
- *
- * For a transfer that outlives the window that started it. The work is queued on the
- * application rather than on that window, because the window may be part way through its own
- * destructor, and queueing onto a handler being destroyed is a race.
- */
-void CallOnUi( std::function<void()> aFn );
-
-/// As CallOnUi, for work that touches the window that started the transfer. aWatch is locked
-/// on the UI thread, so a window that has gone is never touched.
-void CallIfAlive( const std::weak_ptr<bool>& aWatch, std::function<void()> aFn );
-
-/**
- * Run aWork on a thread the orphan registry owns.
- *
- * The registry joins with a bounded timeout at shutdown and detaches whatever has not
- * finished, so a window closing mid transfer never waits for the socket. False when no
- * thread could be started, which only happens once shutdown has begun.
- */
-bool StartTransfer( const std::string& aLabel, std::function<void()> aWork );
 
 } // namespace KIGIT
 

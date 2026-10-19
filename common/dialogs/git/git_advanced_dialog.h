@@ -27,6 +27,7 @@
 #include <wx/timer.h>
 
 #include <dialogs/git/dialog_git_advanced_base.h>
+#include <dialogs/git/git_transfer.h>
 
 class EDA_BASE_FRAME;
 #include <git/git_editor_snapshot.h>
@@ -130,11 +131,8 @@ private:
     EDITOR_SNAPSHOT m_docsBeforeChange;
 
 
-    /// The token of the fetch the top bar started, so closing can ask it to stop.
-    std::shared_ptr<std::atomic<bool>> m_fetchCancel;
-
-    /// A fetch can outlive the window, so its completion checks this before touching it.
-    std::shared_ptr<bool> m_alive = std::make_shared<bool>( true );
+    /// The fetch the top bar started.
+    KIGIT_TRANSFER m_fetch;
 
     EDA_BASE_FRAME*  m_parent;
     GIT_COMMIT_PANE* m_pane;

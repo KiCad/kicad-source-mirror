@@ -22,6 +22,7 @@
 #include <bitmaps.h>
 #include <dialogs/git/git_file_diff_area.h>
 #include <dialogs/git/git_status_entries.h>
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <dialogs/git/panel_git_branches.h>
 #include <dialogs/git/panel_git_history.h>
@@ -291,14 +292,9 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
-    // A push or fetch outlives this window, so ask it to stop and let it finish on its own.
-    // Its completion refreshes the other windows, so nothing has to be reported here.
+    // A push or fetch outlives this window, and its completion refreshes the other windows, so
+    // nothing has to be reported here. The transfers stop themselves as they go.
     m_branchesPage->StopTransfer();
-
-    if( m_fetchCancel )
-        m_fetchCancel->store( true );
-
-    m_alive.reset();
 
     if( std::shared_ptr<KIGIT_COMMON> session = m_listenerSession.lock() )
         session->RemoveRefreshListener( this );
@@ -508,56 +504,62 @@ void GIT_ADVANCED_DIALOG::onFetch()
     m_fetchButton->Disable();
     Layout();
 
-    // Never the shared compute pool. A libgit2 network read parked there stalls DRC, zone
-    // filling and library loading.
-    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
-    m_fetchCancel = token;
-
-    std::weak_ptr<bool> alive = m_alive;
-
-    auto work = [this, common, token, alive]()
+    // Carried rather than captured by reference, because Start returns before the work runs.
+    struct OUTCOME
     {
-        common->ClearAuthFailure();
-
-        GIT_PULL_HANDLER handler( common.get() );
-        handler.SetCancelToken( token );
-        bool     fetched = handler.PerformFetch();
-        wxString error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
-        bool     authFailure = common->WasAuthFailure();
-
-        // This operation's own token, so a fetch that never became active cannot
-        // consume a cancel belonging to the transfer that is running.
-        bool cancelled = handler.IsThisOperationCancelled();
-
-        // The other surfaces need this even when the window that started the fetch has gone.
-        if( fetched && !cancelled )
-            KIGIT::CallOnUi(
-                    [common]()
-                    {
-                        common->NotifyRefreshListeners();
-                    } );
-
-        KIGIT::CallIfAlive( alive,
-                            [this, common, fetched, error, authFailure, cancelled]()
-                            {
-                                m_fetchButton->SetLabel( _( "Fetch" ) );
-                                m_fetchButton->Enable();
-                                Layout();
-
-                                if( cancelled || fetched )
-                                    return;
-
-                                if( authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_parent->Prj() ) )
-                                {
-                                    onFetch();
-                                    return;
-                                }
-
-                                DisplayErrorMessage( this, _( "Fetch failed." ), error );
-                            } );
+        bool     fetched = false;
+        wxString error;
+        bool     authFailure = false;
+        bool     cancelled = false;
     };
 
-    if( !KIGIT::StartTransfer( "git fetch", std::move( work ) ) )
+    auto outcome = std::make_shared<OUTCOME>();
+
+    bool started = m_fetch.Start(
+            "git fetch",
+            [common, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            {
+                common->ClearAuthFailure();
+
+                GIT_PULL_HANDLER handler( common.get() );
+                handler.SetCancelToken( aToken );
+                outcome->fetched = handler.PerformFetch();
+                outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
+                outcome->authFailure = common->WasAuthFailure();
+
+                // This operation's own token, so a fetch that never became active cannot
+                // consume a cancel belonging to the transfer that is running.
+                outcome->cancelled = handler.IsThisOperationCancelled();
+
+                // The other surfaces need this even when the window that started it has gone.
+                if( outcome->fetched && !outcome->cancelled )
+                {
+                    KIGIT::CallOnUi(
+                            [common]()
+                            {
+                                common->NotifyRefreshListeners();
+                            } );
+                }
+            },
+            [this, common, outcome]()
+            {
+                m_fetchButton->SetLabel( _( "Fetch" ) );
+                m_fetchButton->Enable();
+                Layout();
+
+                if( outcome->cancelled || outcome->fetched )
+                    return;
+
+                if( outcome->authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_parent->Prj() ) )
+                {
+                    onFetch();
+                    return;
+                }
+
+                DisplayErrorMessage( this, _( "Fetch failed." ), outcome->error );
+            } );
+
+    if( !started )
     {
         m_fetchButton->SetLabel( _( "Fetch" ) );
         m_fetchButton->Enable();

@@ -28,6 +28,7 @@
 #include <wx/timer.h>
 
 #include <dialogs/git/git_commit_pane_base.h>
+#include <dialogs/git/git_transfer.h>
 #include <git/git_editor_snapshot.h>
 
 class EDA_BASE_FRAME;
@@ -227,16 +228,10 @@ private:
     /// True while the main button reads Push, with nothing left to commit.
     bool m_commitButtonPushes = false;
 
-    /// True while a push or pull worker is running. The Get Changes button then reads Cancel
-    /// and requests cancellation of the running transfer.
-    bool m_networkBusy;
 
-    /// The token of the push or pull this panel submitted last. Held so Cancel reaches it even
-    /// while the task is still queued and has no handler yet.
-    std::shared_ptr<std::atomic<bool>> m_networkCancel;
+    /// The push or pull this panel submitted last.
+    KIGIT_TRANSFER m_transfer;
 
-    /// A transfer can outlive the pane, so its completion checks this before touching it.
-    std::shared_ptr<bool> m_alive = std::make_shared<bool>( true );
 
     /// Told when a transfer starts and ends. Empty unless an owning window asked.
     std::function<void( bool )> m_busyChangedHandler;

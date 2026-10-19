@@ -20,12 +20,11 @@
 #ifndef PANEL_GIT_BRANCHES_H
 #define PANEL_GIT_BRANCHES_H
 
-#include <atomic>
 #include <vector>
-#include <memory>
 
 #include <wx/timer.h>
 
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/panel_git_branches_base.h>
 
 class EDA_BASE_FRAME;
@@ -71,13 +70,8 @@ private:
     /// switched to, so the row has to say which it is.
     std::vector<bool> m_branchIsRemote;
 
-    /// The token of the push this page started, so closing can ask it to stop.
-    std::shared_ptr<std::atomic<bool>> m_pushCancel;
-
-    /// A push can outlive the page, so its completion checks this before touching it.
-    std::shared_ptr<bool> m_alive = std::make_shared<bool>( true );
-
-    bool m_pushBusy = false;
+    /// The force push this page started.
+    KIGIT_TRANSFER m_push;
 
     /// Re-runs the reload once when it had to skip because another git operation held the
     /// action lock.

@@ -19,7 +19,6 @@
 
 #include <dialogs/git/git_ui_utils.h>
 
-#include <wx/app.h>
 #include <wx/button.h>
 #include <wx/datetime.h>
 #include <wx/intl.h>
@@ -28,7 +27,6 @@
 #include <wx/splitter.h>
 
 #include <diff_merge/diff_scene.h>
-#include <git/git_backend.h>
 #include <kiplatform/ui.h>
 
 
@@ -103,32 +101,4 @@ wxString KIGIT::SelectedText( wxListCtrl* aList, int aColumn )
         return wxEmptyString;
 
     return aList->GetItemText( sel, aColumn );
-}
-
-
-void KIGIT::CallOnUi( std::function<void()> aFn )
-{
-    if( !wxTheApp )
-        return;
-
-    wxTheApp->CallAfter( std::move( aFn ) );
-}
-
-
-void KIGIT::CallIfAlive( const std::weak_ptr<bool>& aWatch, std::function<void()> aFn )
-{
-    CallOnUi(
-            [aWatch, fn = std::move( aFn )]()
-            {
-                if( aWatch.lock() )
-                    fn();
-            } );
-}
-
-
-bool KIGIT::StartTransfer( const std::string& aLabel, std::function<void()> aWork )
-{
-    GIT_BACKEND* backend = GetGitBackend();
-
-    return backend && backend->OrphanRegistry().Register( aLabel, std::move( aWork ) );
 }

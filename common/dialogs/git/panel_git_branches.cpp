@@ -19,6 +19,7 @@
 
 #include <dialogs/git/panel_git_branches.h>
 
+#include <memory>
 #include <mutex>
 #include <vector>
 
@@ -28,6 +29,7 @@
 #include <confirm.h>
 #include <dialogs/git/git_advanced_dialog.h>
 #include <dialogs/git/git_credentials_prompt.h>
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <eda_base_frame.h>
 #include <git/git_push_handler.h>
@@ -122,11 +124,7 @@ PANEL_GIT_BRANCHES::~PANEL_GIT_BRANCHES()
 
 void PANEL_GIT_BRANCHES::StopTransfer()
 {
-    if( m_pushCancel )
-        m_pushCancel->store( true );
-
-    m_alive.reset();
-    m_pushBusy = false;
+    m_push.Cancel();
 }
 
 
@@ -365,7 +363,7 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
 
 void PANEL_GIT_BRANCHES::onForcePush()
 {
-    if( m_pushBusy )
+    if( m_push.IsBusy() )
     {
         DisplayInfoMessage( this, _( "A transfer is already running." ) );
         return;
@@ -425,66 +423,63 @@ void PANEL_GIT_BRANCHES::onForcePush()
     if( confirm.ShowModal() != wxID_YES )
         return;
 
-    // Never the shared compute pool. A libgit2 network read parked there stalls DRC, zone
-    // filling and library loading.
-    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
-    m_pushCancel = token;
-
-    std::weak_ptr<bool> alive = m_alive;
-
-    auto work = [this, common, token, alive]()
+    // Carried rather than captured by reference, because Start returns before the work runs.
+    struct OUTCOME
     {
-        common->ClearAuthFailure();
-
-        GIT_PUSH_HANDLER handler( common.get() );
-        handler.SetCancelToken( token );
-        PushResult result = handler.PerformPush( true );
-        wxString   error = handler.GetErrorString();
-        bool       authFailure = common->WasAuthFailure();
-
-        // This operation's own token, so a force push that never became active cannot
-        // consume a cancel belonging to the transfer that is running.
-        bool cancelled = handler.IsThisOperationCancelled();
-
-        // The other surfaces need this even when the page that started the push has gone.
-        if( result == PushResult::Success && !cancelled )
-            KIGIT::CallOnUi(
-                    [common]()
-                    {
-                        common->NotifyRefreshListeners();
-                    } );
-
-        KIGIT::CallIfAlive( alive,
-                            [this, common, result, error, authFailure, cancelled]()
-                            {
-                                // The transfer is over however it ended, and the retry below
-                                // starts another one.
-                                m_pushBusy = false;
-
-                                if( cancelled || result == PushResult::Success )
-                                    return;
-
-                                if( result == PushResult::Busy )
-                                {
-                                    DisplayInfoMessage( this, KIGIT::BusyMessage() );
-                                    return;
-                                }
-
-                                if( authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_frame->Prj() ) )
-                                {
-                                    onForcePush();
-                                    return;
-                                }
-
-                                DisplayErrorMessage( this, _( "Force push failed." ), error );
-                            } );
+        PushResult result = PushResult::Error;
+        wxString   error;
+        bool       authFailure = false;
+        bool       cancelled = false;
     };
 
-    m_pushBusy = true;
+    auto outcome = std::make_shared<OUTCOME>();
 
-    if( !KIGIT::StartTransfer( "git force push", std::move( work ) ) )
-    {
-        m_pushBusy = false;
+    bool started = m_push.Start(
+            "git force push",
+            [common, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            {
+                common->ClearAuthFailure();
+
+                GIT_PUSH_HANDLER handler( common.get() );
+                handler.SetCancelToken( aToken );
+                outcome->result = handler.PerformPush( true );
+                outcome->error = handler.GetErrorString();
+                outcome->authFailure = common->WasAuthFailure();
+
+                // This operation's own token, so a force push that never became active cannot
+                // consume a cancel belonging to the transfer that is running.
+                outcome->cancelled = handler.IsThisOperationCancelled();
+
+                // The other surfaces need this even when the page that started it has gone.
+                if( outcome->result == PushResult::Success && !outcome->cancelled )
+                {
+                    KIGIT::CallOnUi(
+                            [common]()
+                            {
+                                common->NotifyRefreshListeners();
+                            } );
+                }
+            },
+            [this, common, outcome]()
+            {
+                if( outcome->cancelled || outcome->result == PushResult::Success )
+                    return;
+
+                if( outcome->result == PushResult::Busy )
+                {
+                    DisplayInfoMessage( this, KIGIT::BusyMessage() );
+                    return;
+                }
+
+                if( outcome->authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_frame->Prj() ) )
+                {
+                    onForcePush();
+                    return;
+                }
+
+                DisplayErrorMessage( this, _( "Force push failed." ), outcome->error );
+            } );
+
+    if( !started )
         DisplayInfoMessage( this, _( "Could not start the force push." ) );
-    }
 }

@@ -47,6 +47,7 @@
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialogs/git/git_credentials_prompt.h>
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <diff_merge/merge_dispatch.h>
 #include <kiplatform/ui.h>
@@ -189,8 +190,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         m_remoteAhead( false ),
         m_operationInProgress( false ),
         m_operation( GitOperation::None ),
-        m_editorsDirty( false ),
-        m_networkBusy( false )
+        m_editorsDirty( false )
 {
     m_summary->SetHint( _( "Summarize your changes..." ) );
     m_newBranchName->SetHint( _( "Branch name" ) );
@@ -366,13 +366,8 @@ GIT_COMMIT_PANE::~GIT_COMMIT_PANE()
     // The window's Pull and Push run through this pane, so it goes when the pane goes.
     GIT_ADVANCED_DIALOG::CloseForPane( this );
 
-    // A transfer outlives this pane, so ask it to stop and let it finish on its own. Its
-    // completion refreshes the other windows, so nothing has to be reported here.
-    if( m_networkCancel )
-        m_networkCancel->store( true );
-
-    m_alive.reset();
-
+    // The transfer outlives this pane, and its completion refreshes the other windows, so
+    // nothing has to be reported here. Asking it to stop is the destructor's own job.
     if( std::shared_ptr<KIGIT_COMMON> common = m_listenerSession.lock() )
         common->RemoveRefreshListener( this );
 }
@@ -603,7 +598,7 @@ void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 
     // Editing does not announce itself to the pane, so watch for the unsaved editor state
     // changing while the pane is visible. The refresh runs only on the transition.
-    if( m_networkBusy || m_refreshRetryTimer.IsRunning() || !IsShownOnScreen() )
+    if( m_transfer.IsBusy() || m_refreshRetryTimer.IsRunning() || !IsShownOnScreen() )
         return;
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
@@ -765,7 +760,7 @@ void GIT_COMMIT_PANE::updateCommitButton()
 {
     // While a transfer runs the busy state owns the controls. Checklist or message edits
     // must not re-enable the buttons under it.
-    if( m_networkBusy )
+    if( m_transfer.IsBusy() )
         return;
 
     if( m_operationInProgress )
@@ -955,7 +950,7 @@ void GIT_COMMIT_PANE::populateBranches( KIGIT_COMMON& aCommon )
     wxString current = aCommon.GetCurrentBranchName();
 
     m_branchChoice->SetStringSelection( current );
-    m_branchChoice->Enable( !m_networkBusy && !m_headDetached && !m_operationInProgress );
+    m_branchChoice->Enable( !m_transfer.IsBusy() && !m_headDetached && !m_operationInProgress );
 
     // The box ellipsizes, so the whole name is only readable here.
     m_branchChoice->SetToolTip( current );
@@ -1059,7 +1054,7 @@ void GIT_COMMIT_PANE::updateSummary()
 
 void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
 {
-    if( m_networkBusy )
+    if( m_transfer.IsBusy() )
         return;
 
     wxString path = m_checklist->GetItemPath( aEvent.GetItem() );
@@ -1244,10 +1239,9 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
 
     // While a transfer runs this button reads Cancel. The transfer callbacks poll the flag and
     // abort on their next tick, and the completion then reports the cancellation.
-    if( m_networkBusy )
+    if( m_transfer.IsBusy() )
     {
-        if( m_networkCancel )
-            m_networkCancel->store( true );
+        m_transfer.Cancel();
 
         m_frame->SetStatusText( _( "Cancelling..." ) );
         return;
@@ -1267,7 +1261,7 @@ bool GIT_COMMIT_PANE::transferCanStart()
 {
     // The advanced window reaches these too, with this panel's own labels out of sight, so
     // the refusal is a message box.
-    if( m_networkBusy )
+    if( m_transfer.IsBusy() )
     {
         DisplayInfoMessage( this, _( "A transfer is already running." ) );
         return false;
@@ -1651,8 +1645,6 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
 void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 {
-    m_networkBusy = aBusy;
-
     m_commitButton->Enable( !aBusy );
     m_amendCheckbox->Enable( !aBusy );
     m_signOffCheckbox->Enable( !aBusy );
@@ -1719,46 +1711,50 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
 
     setBusy( true, _( "Pushing..." ) );
 
-    // Made here rather than in the worker, so Cancel pressed while the task is still queued
-    // reaches this operation instead of being discarded when it starts.
-    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
-    m_networkCancel = token;
-
-    // The registry owns the thread, so closing the window during a transfer does not wait for
-    // the socket. Never the shared compute pool either: a libgit2 network read parked there
-    // stalls DRC, zone filling and library loading.
-    std::weak_ptr<bool> alive = m_alive;
-
-    auto work = [this, aCommon, token, alive]()
+    // Carried rather than captured by reference, because Start returns before the work runs.
+    struct OUTCOME
     {
-        aCommon->ClearAuthFailure();
-
-        GIT_PUSH_HANDLER handler( aCommon.get() );
-        handler.SetCancelToken( token );
-        PushResult result = handler.PerformPush();
-        wxString   error = handler.GetErrorString();
-        bool       authFailure = aCommon->WasAuthFailure();
-
-        // This operation's own token, so a cancel aimed at something else is not
-        // reported here and this one's is not left behind for the next operation.
-        bool cancelled = handler.IsThisOperationCancelled();
-
-        // The other surfaces need this even when the pane that started the push has gone.
-        if( result == PushResult::Success )
-            KIGIT::CallOnUi(
-                    [aCommon]()
-                    {
-                        aCommon->NotifyRefreshListeners();
-                    } );
-
-        KIGIT::CallIfAlive( alive,
-                            [this, aCommon, result, error, authFailure, cancelled]()
-                            {
-                                onPushDone( aCommon, static_cast<int>( result ), error, authFailure, cancelled );
-                            } );
+        PushResult result = PushResult::Error;
+        wxString   error;
+        bool       authFailure = false;
+        bool       cancelled = false;
     };
 
-    if( !KIGIT::StartTransfer( "git push", std::move( work ) ) )
+    auto outcome = std::make_shared<OUTCOME>();
+
+    bool started = m_transfer.Start(
+            "git push",
+            [aCommon, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            {
+                aCommon->ClearAuthFailure();
+
+                GIT_PUSH_HANDLER handler( aCommon.get() );
+                handler.SetCancelToken( aToken );
+                outcome->result = handler.PerformPush();
+                outcome->error = handler.GetErrorString();
+                outcome->authFailure = aCommon->WasAuthFailure();
+
+                // This operation's own token, so a cancel aimed at something else is not
+                // reported here and this one's is not left behind for the next operation.
+                outcome->cancelled = handler.IsThisOperationCancelled();
+
+                // The other surfaces need this even when the pane that started it has gone.
+                if( outcome->result == PushResult::Success )
+                {
+                    KIGIT::CallOnUi(
+                            [aCommon]()
+                            {
+                                aCommon->NotifyRefreshListeners();
+                            } );
+                }
+            },
+            [this, aCommon, outcome]()
+            {
+                onPushDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->authFailure,
+                            outcome->cancelled );
+            } );
+
+    if( !started )
         setBusy( false, _( "Could not start the push." ) );
 }
 
@@ -2248,60 +2244,63 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
     setBusy( true, _( "Getting changes..." ) );
 
-    // Made here rather than in the worker, so Cancel pressed while the task is still queued
-    // reaches this operation instead of being discarded when it starts.
-    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
-    m_networkCancel = token;
-
     // Record what the open documents look like on disk now, so only the ones the merge actually
     // rewrites are reloaded afterwards.
     m_docsBeforePull = CaptureOpenEditorDocs( m_frame->Kiway() );
 
     EDITOR_SNAPSHOT docsBefore = m_docsBeforePull;
 
-    // The registry owns the thread, so closing the window during a transfer does not wait for
-    // the socket. Never the shared compute pool either: a libgit2 network read parked there
-    // stalls DRC, zone filling and library loading.
-    std::weak_ptr<bool> alive = m_alive;
-
     // The KIWAY outlives this pane, so the editors are still reached when the pane has gone.
     KIWAY* kiway = &m_frame->Kiway();
 
-    auto work = [this, aCommon, aThenPush, docsBefore, token, alive, kiway]()
+    // Carried rather than captured by reference, because Start returns before the work runs.
+    struct OUTCOME
     {
-        aCommon->ClearAuthFailure();
-
-        GIT_PULL_HANDLER handler( aCommon.get() );
-        handler.SetCancelToken( token );
-        PullResult result = handler.PerformPull();
-        wxString   error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
-        bool       authFailure = aCommon->WasAuthFailure();
-
-        // This operation's own token, so a cancel aimed at something else is not
-        // reported here and this one's is not left behind for the next operation.
-        bool cancelled = handler.IsThisOperationCancelled();
-
-        KIGIT::CallOnUi(
-                [aCommon, docsBefore, result, kiway]()
-                {
-                    // A merge that failed partway can still have written files, so the
-                    // editors are brought up to date whatever the outcome. Nothing
-                    // reloads when nothing changed on disk.
-                    ReloadOpenEditors( *kiway, docsBefore );
-
-                    if( result == PullResult::Success || result == PullResult::FastForward )
-                        aCommon->NotifyRefreshListeners();
-                } );
-
-        KIGIT::CallIfAlive( alive,
-                            [this, aCommon, result, error, authFailure, aThenPush, cancelled]()
-                            {
-                                onPullDone( aCommon, static_cast<int>( result ), error, authFailure, aThenPush,
-                                            cancelled );
-                            } );
+        PullResult result = PullResult::Error;
+        wxString   error;
+        bool       authFailure = false;
+        bool       cancelled = false;
     };
 
-    if( !KIGIT::StartTransfer( "git pull", std::move( work ) ) )
+    auto outcome = std::make_shared<OUTCOME>();
+
+    bool started = m_transfer.Start(
+            "git pull",
+            [aCommon, docsBefore, kiway, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            {
+                aCommon->ClearAuthFailure();
+
+                GIT_PULL_HANDLER handler( aCommon.get() );
+                handler.SetCancelToken( aToken );
+                outcome->result = handler.PerformPull();
+                outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
+                outcome->authFailure = aCommon->WasAuthFailure();
+
+                // This operation's own token, so a cancel aimed at something else is not
+                // reported here and this one's is not left behind for the next operation.
+                outcome->cancelled = handler.IsThisOperationCancelled();
+
+                PullResult result = outcome->result;
+
+                KIGIT::CallOnUi(
+                        [aCommon, docsBefore, result, kiway]()
+                        {
+                            // A merge that failed partway can still have written files, so the
+                            // editors are brought up to date whatever the outcome. Nothing
+                            // reloads when nothing changed on disk.
+                            ReloadOpenEditors( *kiway, docsBefore );
+
+                            if( result == PullResult::Success || result == PullResult::FastForward )
+                                aCommon->NotifyRefreshListeners();
+                        } );
+            },
+            [this, aCommon, aThenPush, outcome]()
+            {
+                onPullDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->authFailure,
+                            aThenPush, outcome->cancelled );
+            } );
+
+    if( !started )
         setBusy( false, _( "Could not start getting changes." ) );
 }
 
