@@ -76,7 +76,6 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     SetMinSize( GetBestSize() );
 
     m_flashSteps = 10;
-    m_defaultBg = GetBackgroundColour();
     m_flashTimer.SetOwner( this );
     Bind( wxEVT_TIMER, &PANEL_SELECTION_FILTER::onFlashTimer, this );
     aParent->Bind( EVT_PCB_SELECTION_FILTER_FLASH, &PANEL_SELECTION_FILTER::OnFlashEvent, this );
@@ -87,10 +86,14 @@ PANEL_SELECTION_FILTER::~PANEL_SELECTION_FILTER()
 {
     // Stop any active flashing
     m_flashTimer.Stop();
+
+#ifndef __WXMSW__
     if( !m_flashCounters.empty() )
     {
         Unbind( wxEVT_PAINT, &PANEL_SELECTION_FILTER::onPanelPaint, this );
     }
+#endif
+
     m_flashCounters.clear();
 
     m_frame->Unbind( EDA_LANG_CHANGED, &PANEL_SELECTION_FILTER::OnLanguageChanged, this );
@@ -248,23 +251,33 @@ void PANEL_SELECTION_FILTER::flashCheckbox( wxCheckBox* aBox )
     if( !aBox )
         return;
 
-    // If already flashing, just reset the counter
-    if( m_flashCounters.find( aBox ) != m_flashCounters.end() )
-    {
-        m_flashCounters[aBox] = m_flashSteps;
-        return;
-    }
-
+#ifdef __WXMSW__
+    // Native MSW checkboxes paint over the panel, so tint the box itself
     m_flashCounters[aBox] = m_flashSteps;
-    m_defaultBg = aBox->GetBackgroundColour();
-
+    aBox->SetBackgroundColour( flashColour( m_flashSteps ) );
+    aBox->Refresh();
+#else
     // Bind paint event to this panel if not already bound
-    if( m_flashCounters.size() == 1 )
+    if( m_flashCounters.empty() )
     {
         Bind( wxEVT_PAINT, &PANEL_SELECTION_FILTER::onPanelPaint, this );
     }
 
+    m_flashCounters[aBox] = m_flashSteps;
     Refresh();
+#endif
+}
+
+
+wxColour PANEL_SELECTION_FILTER::flashColour( int aStep ) const
+{
+    // Blend from the panel, never from a box that may still carry a flash colour
+    wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+    wxColour bg = GetBackgroundColour();
+
+    return wxColour( ( highlight.Red() * aStep + bg.Red() * ( m_flashSteps - aStep ) ) / m_flashSteps,
+                     ( highlight.Green() * aStep + bg.Green() * ( m_flashSteps - aStep ) ) / m_flashSteps,
+                     ( highlight.Blue() * aStep + bg.Blue() * ( m_flashSteps - aStep ) ) / m_flashSteps );
 }
 
 
@@ -273,6 +286,12 @@ void PANEL_SELECTION_FILTER::onFlashTimer( wxTimerEvent& aEvent )
     for( auto it = m_flashCounters.begin(); it != m_flashCounters.end(); )
     {
         int step = --( it->second );
+
+#ifdef __WXMSW__
+        // wxNullColour drops the override so the box inherits the panel colour again
+        it->first->SetBackgroundColour( step > 0 ? flashColour( step ) : wxNullColour );
+        it->first->Refresh();
+#endif
 
         if( step <= 0 )
             it = m_flashCounters.erase( it );
@@ -283,11 +302,16 @@ void PANEL_SELECTION_FILTER::onFlashTimer( wxTimerEvent& aEvent )
     if( m_flashCounters.empty() )
     {
         m_flashTimer.Stop();
+
+#ifndef __WXMSW__
         // Unbind paint event when no more flashing
         Unbind( wxEVT_PAINT, &PANEL_SELECTION_FILTER::onPanelPaint, this );
+#endif
     }
 
+#ifndef __WXMSW__
     Refresh();
+#endif
 }
 
 
@@ -312,11 +336,7 @@ void PANEL_SELECTION_FILTER::onPanelPaint( wxPaintEvent& aEvent )
             wxRect checkboxRect( checkboxPos, checkboxSize );
 
             // Calculate blended color based on current flash step
-            wxColour highlight = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-            wxColour blend(
-                ( highlight.Red() * step + m_defaultBg.Red() * ( m_flashSteps - step ) ) / m_flashSteps,
-                ( highlight.Green() * step + m_defaultBg.Green() * ( m_flashSteps - step ) ) / m_flashSteps,
-                ( highlight.Blue() * step + m_defaultBg.Blue() * ( m_flashSteps - step ) ) / m_flashSteps );
+            wxColour blend = flashColour( step );
 
             // Draw semi-transparent overlay
             wxColour overlayColor( blend.Red(), blend.Green(), blend.Blue(), 128 );
@@ -371,6 +391,7 @@ void PANEL_SELECTION_FILTER::OnFlashEvent( PCB_SELECTION_FILTER_EVENT& aEvent )
     if( aOptions.otherItems )
         flashCheckbox( m_cbOtherItems );
 
-    if( !m_flashCounters.empty() )
+    // Restarting a running timer on every event would stall the fade
+    if( !m_flashCounters.empty() && !m_flashTimer.IsRunning() )
         m_flashTimer.Start( 50 );
 }
