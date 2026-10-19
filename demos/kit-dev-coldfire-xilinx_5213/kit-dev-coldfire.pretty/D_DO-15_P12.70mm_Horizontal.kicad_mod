@@ -1,14 +1,14 @@
 (footprint "D_DO-15_P12.70mm_Horizontal"
-	(version 20241229)
+	(version 20260206)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(layer "F.Cu")
 	(descr "Diode, DO-15 series, Axial, Horizontal, pin pitch=12.7mm, , length*diameter=7.6*3.6mm^2, , http://www.diodes.com/_files/packages/DO-15.pdf")
 	(tags "Diode DO-15 series Axial Horizontal pin pitch 12.7mm  length 7.6mm diameter 3.6mm")
 	(property "Reference" "REF**"
 		(at 6.35 -2.92 0)
 		(layer "F.SilkS")
-		(uuid "aa161d20-3f8e-4baa-9848-816c26c99b42")
+		(uuid "fab5c56c-e3d7-4276-9aff-1eb08b726f8a")
 		(effects
 			(font
 				(size 0.6 0.6)
@@ -19,7 +19,7 @@
 	(property "Value" "1N4004"
 		(at 6.35 2.92 0)
 		(layer "F.Fab")
-		(uuid "a3890373-0d16-4052-bb98-3e0eba77bd88")
+		(uuid "cc6fc4d3-b46b-4bfb-af93-2ed0edde7bcd")
 		(effects
 			(font
 				(size 0.6 0.6)
@@ -32,7 +32,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "0672c588-42a1-4456-8749-138eb935ab13")
+		(uuid "a1045f4b-6857-4a99-942d-3eaf4293ac7b")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -45,7 +45,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "c46137ab-2316-4303-b72a-d8996b4d6df4")
+		(uuid "23adcd06-4e74-46af-88ea-93178cbf9b32")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -54,6 +54,7 @@
 		)
 	)
 	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
 	(fp_line
 		(start 1.44 0)
 		(end 2.43 0)
@@ -62,7 +63,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "bb547cdb-d100-4df6-ba9e-719fb81bc7a5")
+		(uuid "e99f6e45-9e4f-44f4-9cc6-f01b1c2d1e49")
 	)
 	(fp_line
 		(start 2.43 -1.92)
@@ -72,7 +73,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "39b4c2bc-08ae-4208-ba3a-00a265a8653c")
+		(uuid "bb39f743-b963-4788-a5d9-6f9e6e8d9ecc")
 	)
 	(fp_line
 		(start 2.43 1.92)
@@ -82,7 +83,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "cc8ab441-36c6-4fd4-8fdb-d5f9752adf6f")
+		(uuid "9542e144-85b4-4c3a-8907-94d2cbfffdc8")
 	)
 	(fp_line
 		(start 3.57 -1.92)
@@ -92,7 +93,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "9f2d0a56-5563-428f-8ef8-e87c72c13bd5")
+		(uuid "103a2286-76ba-4370-be83-e707d98c81e2")
 	)
 	(fp_line
 		(start 3.69 -1.92)
@@ -102,7 +103,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "5b5be873-f4a4-4918-96fb-70a1216f96bb")
+		(uuid "083db759-20b4-4353-b5f6-d8e5787c582d")
 	)
 	(fp_line
 		(start 3.81 -1.92)
@@ -112,7 +113,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "73b71751-3d71-4b42-94da-9f7e459bb3da")
+		(uuid "52dfbea1-56c0-4f02-9d45-8f2784bc0aeb")
 	)
 	(fp_line
 		(start 10.27 -1.92)
@@ -122,7 +123,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "f59e0d9d-f04d-4e7f-b8b9-3e0fb6af02d9")
+		(uuid "67eb8e3f-02b5-4c99-a91c-bc1362a2a832")
 	)
 	(fp_line
 		(start 10.27 1.92)
@@ -132,7 +133,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "524f96a0-9df0-4d76-bda8-5ab8d156be73")
+		(uuid "6d71e539-228a-49c1-b85b-f30e10c157f3")
 	)
 	(fp_line
 		(start 11.26 0)
@@ -142,7 +143,7 @@
 			(type solid)
 		)
 		(layer "F.SilkS")
-		(uuid "6e3d4bcf-5bb4-4cc1-afad-3863dd48faa8")
+		(uuid "f3e6c1f0-851a-42d9-acd1-727ba4582250")
 	)
 	(fp_line
 		(start -1.45 -2.05)
@@ -152,7 +153,7 @@
 			(type solid)
 		)
 		(layer "F.CrtYd")
-		(uuid "c108123e-ceca-4ace-824c-c62b5a2e7804")
+		(uuid "ec0e0509-60e9-4787-bac2-6a8354a1c6d5")
 	)
 	(fp_line
 		(start -1.45 2.05)
@@ -162,7 +163,7 @@
 			(type solid)
 		)
 		(layer "F.CrtYd")
-		(uuid "6da68fe9-e386-41d9-a7bc-0d6dc4a6c6c5")
+		(uuid "63cb9c13-31b7-4107-91e3-b3154739e14c")
 	)
 	(fp_line
 		(start 14.15 -2.05)
@@ -172,7 +173,7 @@
 			(type solid)
 		)
 		(layer "F.CrtYd")
-		(uuid "be79e463-0637-4700-b54e-dda0eeafebbb")
+		(uuid "790e6182-3216-4997-a390-465c53ac524a")
 	)
 	(fp_line
 		(start 14.15 2.05)
@@ -182,7 +183,7 @@
 			(type solid)
 		)
 		(layer "F.CrtYd")
-		(uuid "2764885e-d447-4e74-88cd-697643900a8d")
+		(uuid "2eaebe7d-8cbe-4e17-a5c6-a92420eede35")
 	)
 	(fp_line
 		(start 0 0)
@@ -192,7 +193,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "d8d134ff-9ccd-49ca-97ff-4c96d496b227")
+		(uuid "a7ab700c-ca00-425d-b02e-ee34245c2a36")
 	)
 	(fp_line
 		(start 2.55 -1.8)
@@ -202,7 +203,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "86f02698-e7a8-415f-8ba1-2d09081850a4")
+		(uuid "cb51637a-b090-49db-a58c-227d718c88a9")
 	)
 	(fp_line
 		(start 2.55 1.8)
@@ -212,7 +213,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "7c012a9d-cc92-4f1a-a446-77bc33f65419")
+		(uuid "1e65933e-9f1d-418f-8391-bbc29bebb98b")
 	)
 	(fp_line
 		(start 3.59 -1.8)
@@ -222,7 +223,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "4ee586ae-8d9f-46ec-a723-e71bb075f2ad")
+		(uuid "9bc68450-2b16-44b1-b662-f618f6540681")
 	)
 	(fp_line
 		(start 3.69 -1.8)
@@ -232,7 +233,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "b65681fa-1d3a-407e-94c0-a57255063434")
+		(uuid "00c903a2-9338-4232-a470-bed699abbcdc")
 	)
 	(fp_line
 		(start 3.79 -1.8)
@@ -242,7 +243,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "bd033e69-0d39-4dbf-82b5-88241ae6c756")
+		(uuid "cddc148b-1342-4625-a38c-9980e62a2320")
 	)
 	(fp_line
 		(start 10.15 -1.8)
@@ -252,7 +253,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "6ad888d7-f839-4929-a93a-40629d258c26")
+		(uuid "eb1c44c5-6f15-4bb5-b226-eb7a22ed8bb5")
 	)
 	(fp_line
 		(start 10.15 1.8)
@@ -262,7 +263,7 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "9a919d64-9862-4b8e-ba5a-640c13f68662")
+		(uuid "fcfc5660-8eec-4c05-80ea-8a9be931d44c")
 	)
 	(fp_line
 		(start 12.7 0)
@@ -272,12 +273,12 @@
 			(type solid)
 		)
 		(layer "F.Fab")
-		(uuid "3aad367e-45e7-4fd2-8007-b9c80d48956f")
+		(uuid "f01eab60-bebb-43b6-9b45-cce1ba03569f")
 	)
 	(fp_text user "${REFERENCE}"
 		(at 6.92 0 0)
 		(layer "F.Fab")
-		(uuid "be3f93bb-6601-48cc-b54c-7bf629f6c651")
+		(uuid "3c3a4a66-7493-4175-ad49-a013724f48e5")
 		(effects
 			(font
 				(size 0.6 0.6)
@@ -291,7 +292,7 @@
 		(drill 1.2)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "d2e66230-f62c-42cb-b780-2c209ebdb1f8")
+		(uuid "25c4b2e5-edef-42b0-a323-6d8b8b3bf8d7")
 	)
 	(pad "2" thru_hole oval
 		(at 12.7 0)
@@ -299,10 +300,10 @@
 		(drill 1.2)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "e4eaf833-1622-46d5-bbf3-bfdb27b27759")
+		(uuid "c37b5a06-856f-4f66-81a5-34356cc0869e")
 	)
 	(embedded_fonts no)
-	(model "${KICAD6_3DMODEL_DIR}/Diode_THT.3dshapes/D_DO-15_P12.70mm_Horizontal.wrl"
+	(model "${KICAD10_3DMODEL_DIR}/Diode_THT.3dshapes/D_DO-15_P12.70mm_Horizontal.step"
 		(offset
 			(xyz 0 0 0)
 		)
