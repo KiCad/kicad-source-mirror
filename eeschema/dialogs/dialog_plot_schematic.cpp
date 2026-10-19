@@ -80,6 +80,13 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
         m_sdbSizer1Apply->Hide();
         m_openFileAfterPlot->Hide();
 
+        if( !m_job->GetOutputPathIsDirectory() )
+        {
+            m_outputPathLabel->SetLabel( _( "Output file:" ) );
+            m_outputPath->SetToolTip( _( "Target file for the plot. Can be absolute or relative to the schematic "
+                                         "main file location." ) );
+        }
+
         SetupStandardButtons();
     }
 
