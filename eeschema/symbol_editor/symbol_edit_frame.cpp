@@ -2172,6 +2172,23 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 break;
             }
 
+            SYMBOL_AVAILABILITY availability = m_libMgr->SymbolAvailability( libId.GetLibItemName(), nickname );
+
+            if( availability == SYMBOL_AVAILABILITY::RENAMED_OR_DELETED )
+            {
+                reportSymbolRenamedOrDeleted( libId );
+                break;
+            }
+
+            // The part can have left its library since the request named it
+            if( availability == SYMBOL_AVAILABILITY::MISSING )
+            {
+                DisplayErrorMessage( this, wxString::Format( _( "Symbol '%s' was not found in library '%s'." ),
+                                                             UnescapeString( libId.GetLibItemName() ),
+                                                             UnescapeString( nickname ) ) );
+                break;
+            }
+
             if( LoadSymbol( libId, 1, BODY_STYLE::BASE ) )
                 m_pendingTreeLibrary.clear();
 
@@ -2724,6 +2741,17 @@ void SYMBOL_EDIT_FRAME::refreshTeamPart( bool aReload, bool aKeepUnresolved )
         m_teamPart.SetDigest( KICAD_DIFF::SymbolDigest( *m_symbol ),
                               KICAD_DIFF::SymbolDigest( *m_symbol, KICAD_DIFF::SYMBOL_DIGEST::MEMBER ) );
     }
+}
+
+
+void SYMBOL_EDIT_FRAME::reportSymbolRenamedOrDeleted( const LIB_ID& aLibId )
+{
+    wxString msg = wxString::Format( _( "Symbol '%s' was renamed or deleted in the Symbol Editor." ),
+                                     UnescapeString( aLibId.GetLibItemName() ) );
+    wxString extra =
+            wxString::Format( _( "Save or revert library '%s' first." ), UnescapeString( aLibId.GetLibNickname() ) );
+
+    DisplayErrorMessage( this, msg, extra );
 }
 
 

@@ -494,6 +494,31 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
 }
 
 
+std::optional<SYMBOL_AVAILABILITY> SYMBOL_LIBRARY_MANAGER::BufferAvailability( const wxString& aSymbolName,
+                                                                               const wxString& aLibrary ) const
+{
+    auto it = m_libs.find( aLibrary );
+
+    if( it == m_libs.end() )
+        return std::nullopt;
+
+    return it->second.Availability( aSymbolName );
+}
+
+
+SYMBOL_AVAILABILITY SYMBOL_LIBRARY_MANAGER::SymbolAvailability( const wxString& aSymbolName,
+                                                                const wxString& aLibrary ) const
+{
+    if( std::optional<SYMBOL_AVAILABILITY> buffered = BufferAvailability( aSymbolName, aLibrary ) )
+        return *buffered;
+
+    if( PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() )->SymbolExists( aLibrary, aSymbolName ) )
+        return SYMBOL_AVAILABILITY::IN_LIBRARY;
+
+    return SYMBOL_AVAILABILITY::MISSING;
+}
+
+
 SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aSymbolName, const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
@@ -1917,6 +1942,27 @@ std::shared_ptr<SYMBOL_BUFFER> LIB_BUFFER::GetBuffer( const wxString& aSymbolNam
     }
 
     return std::shared_ptr<SYMBOL_BUFFER>( nullptr );
+}
+
+
+std::optional<SYMBOL_AVAILABILITY> LIB_BUFFER::Availability( const wxString& aName ) const
+{
+    if( GetBuffer( aName ) )
+        return SYMBOL_AVAILABILITY::BUFFERED;
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_symbols )
+    {
+        if( buf->GetOriginal().GetName() == aName )
+            return SYMBOL_AVAILABILITY::RENAMED_OR_DELETED;
+    }
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_deleted )
+    {
+        if( buf->GetOriginal().GetName() == aName || buf->GetSymbol().GetName() == aName )
+            return SYMBOL_AVAILABILITY::RENAMED_OR_DELETED;
+    }
+
+    return std::nullopt;
 }
 
 

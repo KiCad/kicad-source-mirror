@@ -282,6 +282,19 @@ LIB_SYMBOL* SYMBOL_LIBRARY_ADAPTER::LoadSymbol( const wxString& aNickname, const
 }
 
 
+bool SYMBOL_LIBRARY_ADAPTER::SymbolExists( const wxString& aNickname, const wxString& aName )
+{
+    try
+    {
+        return LoadSymbol( aNickname, aName ) != nullptr;
+    }
+    catch( const IO_ERROR& )
+    {
+        return false;
+    }
+}
+
+
 SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxString& aNickname,
                                                                    std::unique_ptr<LIB_SYMBOL> aSymbol, bool aOverwrite )
 {

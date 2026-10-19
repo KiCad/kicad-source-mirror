@@ -574,6 +574,8 @@ private:
 
     void reportLibraryNotEnabled( const wxString& aNickname );
 
+    void reportSymbolRenamedOrDeleted( const LIB_ID& aLibId );
+
     void saveSymbolCopyAs( bool aOpenCopy );
 
     /**

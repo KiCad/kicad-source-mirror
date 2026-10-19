@@ -115,6 +115,10 @@ public:
         return LoadSymbol( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
     }
 
+    /// True when the loaded library @a aNickname holds @a aName, read from the library itself rather than from an
+    /// editor's buffer. A library that cannot be read holds nothing.
+    bool SymbolExists( const wxString& aNickname, const wxString& aName );
+
     /**
      * The set of return values from SaveSymbol() below.
      */

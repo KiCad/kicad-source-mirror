@@ -504,6 +504,25 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 break;
             }
 
+            bool exists = false;
+
+            // The part can have left its library since the request named it
+            try
+            {
+                exists = adapter->FootprintExists( nickname, fpId.GetLibItemName() );
+            }
+            catch( const IO_ERROR& )
+            {
+                // An unreadable footprint cannot be opened either
+            }
+
+            if( !exists )
+            {
+                DisplayErrorMessage( this, wxString::Format( _( "Footprint '%s' was not found in library '%s'." ),
+                                                             fpId.GetLibItemName().wx_str(), nickname ) );
+                break;
+            }
+
             openLibraryFootprint( fpId );
             Raise();
         }

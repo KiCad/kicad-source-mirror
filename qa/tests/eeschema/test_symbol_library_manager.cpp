@@ -857,6 +857,45 @@ BOOST_AUTO_TEST_CASE( RenamedSymbolLosesItsOldName )
 }
 
 
+/**
+ * Opening a name the editor renamed must not read the old symbol back into a second buffer, which the save would
+ * keep beside the new name.
+ */
+BOOST_AUTO_TEST_CASE( RenamedSymbolIsNotReopenedFromTheFile )
+{
+    wxString dir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( dir );
+    wxFileName::Mkdir( dir );
+
+    wxFileName source( KI_TEST::GetTestDataRootDir(), wxS( "Device.kicad_sym" ) );
+    source.AppendDir( wxS( "libraries" ) );
+    source.AppendDir( wxS( "test_project" ) );
+
+    wxString path = wxFileName( dir, wxS( "Device.kicad_sym" ) ).GetFullPath();
+    BOOST_REQUIRE( wxCopyFile( source.GetFullPath(), path ) );
+
+    LIB_BUFFER libBuffer( wxS( "Device" ) );
+    bufferSymbols( libBuffer, path, { wxS( "C" ) } );
+
+    std::shared_ptr<SYMBOL_BUFFER> buf = libBuffer.GetBuffer( wxS( "C" ) );
+    BOOST_REQUIRE( buf );
+
+    renameBuffer( libBuffer, *buf, wxS( "C_Renamed" ) );
+    BOOST_CHECK( libBuffer.Availability( wxS( "C_Renamed" ) ) == SYMBOL_AVAILABILITY::BUFFERED );
+
+    // An open reads the file only for a name no buffer decides, as the Symbol Editor does
+    if( !libBuffer.Availability( wxS( "C" ) ) )
+        bufferSymbols( libBuffer, path, { wxS( "C" ) } );
+
+    saveLibrary( libBuffer, path );
+
+    BOOST_CHECK( inLibrary( path, wxS( "C_Renamed" ) ) );
+    BOOST_CHECK( !inLibrary( path, wxS( "C" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 /*
  * A pull can change a library under the editor's buffers. Saving one edited symbol must keep what the
  * file now holds for the others, and leave its derived symbols derived.

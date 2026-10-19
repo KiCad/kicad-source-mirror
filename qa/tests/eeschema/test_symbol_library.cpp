@@ -604,6 +604,10 @@ BOOST_AUTO_TEST_CASE( UnloadedProjectRowShadowsLoadedGlobal )
     // An editor asked for a part of it loads the project library, not the shadowed global one
     BOOST_CHECK( adapter->LoadEnabledLibrary( kDeviceLibNickname ) );
     BOOST_CHECK( adapter->HasLibrary( kDeviceLibNickname ) );
+
+    // A Workspace Open checks the part against the library itself before raising the editor
+    BOOST_CHECK( adapter->SymbolExists( kDeviceLibNickname, wxS( "C" ) ) );
+    BOOST_CHECK( !adapter->SymbolExists( kDeviceLibNickname, wxS( "NoSuchSymbol" ) ) );
 }
 
 

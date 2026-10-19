@@ -207,11 +207,23 @@ void SYMBOL_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 bool SYMBOL_EDIT_FRAME::LoadSymbolFromLib( const wxString& aLibName, const wxString& aSymbolName, int aUnit,
                                            int aBodyStyle )
 {
-    LIB_SYMBOL* symbol = nullptr;
+    LIB_SYMBOL*                        symbol = nullptr;
+    std::optional<SYMBOL_AVAILABILITY> buffered = m_libMgr->BufferAvailability( aSymbolName, aLibName );
+
+    // Reading a renamed or deleted name back from the file makes a second buffer, which the save then keeps
+    if( buffered == SYMBOL_AVAILABILITY::RENAMED_OR_DELETED )
+    {
+        reportSymbolRenamedOrDeleted( LIB_ID( aLibName, aSymbolName ) );
+        return false;
+    }
 
     try
     {
-        symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( aLibName, aSymbolName );
+        // An unsaved rename is only in its buffer
+        if( buffered == SYMBOL_AVAILABILITY::BUFFERED )
+            symbol = m_libMgr->GetBufferedSymbol( aSymbolName, aLibName );
+        else
+            symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( aLibName, aSymbolName );
     }
     catch( const IO_ERROR& ioe )
     {

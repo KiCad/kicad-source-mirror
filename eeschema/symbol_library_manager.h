@@ -28,6 +28,7 @@
 #include <deque>
 #include <set>
 #include <memory>
+#include <optional>
 #include <wx/arrstr.h>
 #include <sch_io/sch_io_mgr.h>
 #include <sch_screen.h>
@@ -46,6 +47,16 @@ enum class SYMBOL_NAME_FILTER
     ALL,
     ROOT_ONLY,
     DERIVED_ONLY
+};
+
+
+/// Whether a symbol a caller names can be opened, judged by the editor's buffers before the library file
+enum class SYMBOL_AVAILABILITY
+{
+    BUFFERED,           ///< A buffer holds it under that name, saved or not
+    RENAMED_OR_DELETED, ///< A buffer renamed or deleted it and the library is not saved yet
+    IN_LIBRARY,         ///< No buffer holds it and the library file has it
+    MISSING
 };
 
 
@@ -181,6 +192,12 @@ public:
 
     /// Return a symbol buffer with #LIB_SYMBOL holding a symbolic alias.
     std::shared_ptr<SYMBOL_BUFFER> GetBuffer( const wxString& aAlias ) const;
+
+    /**
+     * BUFFERED when a buffer's working copy is named aName, otherwise RENAMED_OR_DELETED when a pending rename or
+     * delete took aName, otherwise std::nullopt for the library file to decide.
+     */
+    std::optional<SYMBOL_AVAILABILITY> Availability( const wxString& aName ) const;
 
     /// Return all buffered symbols.
     const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& GetBuffers() const { return m_symbols; }
@@ -365,6 +382,16 @@ public:
      * buffered).
      */
     bool SymbolExists( const wxString& aSymbolName, const wxString& aLibrary ) const;
+
+    /// The buffer's verdict on aSymbolName, std::nullopt when no buffer of aLibrary decides it
+    std::optional<SYMBOL_AVAILABILITY> BufferAvailability( const wxString& aSymbolName,
+                                                           const wxString& aLibrary ) const;
+
+    /**
+     * Whether aSymbolName can be opened from aLibrary. The buffers answer first, so a name a pending rename or
+     * delete took is never read back from the file into a second buffer, which the save would then keep.
+     */
+    SYMBOL_AVAILABILITY SymbolAvailability( const wxString& aSymbolName, const wxString& aLibrary ) const;
 
     /**
      * Return true if the symbol name is already in use in the specified library.
