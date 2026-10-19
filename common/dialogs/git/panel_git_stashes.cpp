@@ -242,9 +242,11 @@ void PANEL_GIT_STASHES::restoreSelectedStash( bool aRemoveAfterApply )
     if( !m_dialog->SessionStillCurrent() )
         return;
 
-    long sel = m_stashesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    // Resolved before the dialogs below. Each runs a nested event loop in which a refresh can
+    // rebuild the list, and a row number would then stand for a different stash.
+    wxString id = stashIdForRow( m_stashesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) );
 
-    if( sel == -1 )
+    if( id.IsEmpty() )
         return;
 
     // Applying needs a clean tree, so saving the editors first would only turn unsaved edits
@@ -260,8 +262,6 @@ void PANEL_GIT_STASHES::restoreSelectedStash( bool aRemoveAfterApply )
 
     if( !m_dialog->ConfirmWorkingTreeChange() )
         return;
-
-    wxString id = stashIdForRow( sel );
 
     m_dialog->RunGitAction(
             [id, aRemoveAfterApply]( KIGIT_COMMON& aCommon )
@@ -298,15 +298,15 @@ void PANEL_GIT_STASHES::onStashDrop()
     if( !m_dialog->SessionStillCurrent() )
         return;
 
-    long sel = m_stashesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    // Resolved before the confirmation, which runs a nested event loop in which a refresh can
+    // rebuild the list and renumber the rows.
+    wxString id = stashIdForRow( m_stashesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) );
 
-    if( sel == -1 )
+    if( id.IsEmpty() )
         return;
 
     if( !IsOK( this, _( "Drop this stash? This cannot be undone." ) ) )
         return;
-
-    wxString id = stashIdForRow( sel );
 
     m_dialog->RunGitAction(
             [id]( KIGIT_COMMON& aCommon )
