@@ -34,14 +34,14 @@
 # The Hobbit <dasfilter@posteo.de>, 2026.
 # genericprinter0815 <genericprinter0815@users.noreply.hosted.weblate.org>, 2026.
 # Frank Sonnenberg <audiofrank@users.noreply.hosted.weblate.org>, 2026.
+# Karl SCHUH <karls0@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-15 03:56+0000\n"
-"Last-Translator: Frank Sonnenberg "
-"<audiofrank@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-19 06:51+0000\n"
+"Last-Translator: Karl SCHUH <karls0@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -9132,9 +9132,8 @@ msgid "Could not read file: %s"
 msgstr "Konnte Datei nicht lesen: %s"
 
 #: common/gestfich.cpp:842
-#, fuzzy
 msgid "Cannot create temporary archive file"
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
+msgstr "Kann keine temporäre Archiv erstellen"
 
 #: common/gestfich.cpp:880
 #, fuzzy
@@ -9142,9 +9141,8 @@ msgid "Write error"
 msgstr "Erzeuge Fehler"
 
 #: common/gestfich.cpp:884
-#, fuzzy
 msgid "Cannot flush or close temporary file"
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
+msgstr "Kann temporäre Datei nicht schließen oder entfernen"
 
 #: common/gestfich.cpp:893
 msgid "Cannot replace archive"
@@ -12080,9 +12078,8 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 #: common/table_io.cpp:40
-#, fuzzy
 msgid "Select data file"
-msgstr "Datei auswählen"
+msgstr "Daten-Datei auswählen"
 
 #: common/tool/action_menu.cpp:220 common/tool/action_menu.cpp:225
 #, c-format
@@ -13567,9 +13564,8 @@ msgid "Close Other Tabs"
 msgstr "Andere Tabs schließen"
 
 #: common/widgets/editor_tabs_panel.cpp:642
-#, fuzzy
 msgid "Close Tabs to the Right"
-msgstr "Tabs rechts von Diesem schließen"
+msgstr "Tabulatoren rechts von Diesem schließen"
 
 #: common/widgets/editor_tabs_panel.cpp:643
 msgid "Close All Tabs"
@@ -35321,7 +35317,7 @@ msgstr ""
 
 #: kicad/cli/command_mergetool.cpp:141
 msgid "Cannot find the main kicad binary alongside kicad-cli.\n"
-msgstr ""
+msgstr "Kann das kicad-Hauptprogramm neben dem kicad-cli nicht finden.\n"
 
 #: kicad/cli/command_mergetool.cpp:166
 #, c-format
@@ -59470,7 +59466,7 @@ msgstr "Via-Durchmesser"
 
 #: pcbnew/generators/pcb_via_stack.h:68
 msgid "Edit Microvia Stack"
-msgstr ""
+msgstr "Microvia Stack bearbeiten"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:68
 #: pcbnew/generators/pcb_via_stitch.h:73 pcbnew/generators/pcb_via_stitch.h:76
@@ -63665,7 +63661,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:313
 msgid "ODB++ export failed. See the messages above for the cause."
-msgstr ""
+msgstr "ODB++ Export fehlgeschlagen. Siehe den Grund in obiger Nachricht."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:72
 msgid "ODB++ Production File"
@@ -65725,7 +65721,7 @@ msgstr "Leiterbahnen nur auf Kupferlagen."
 
 #: pcbnew/router/router_tool.cpp:1825
 msgid "Expand Microvia Stacks"
-msgstr ""
+msgstr "Microvia Stacks erweitern"
 
 #: pcbnew/router/router_tool.cpp:2375
 #, fuzzy
