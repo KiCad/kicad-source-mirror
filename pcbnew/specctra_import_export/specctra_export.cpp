@@ -927,11 +927,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             continue;
 
         // IMAGE object coordinates are relative to the IMAGE not absolute board coordinates.
-        ZONE untransformedZone( *zone );
-
-        EDA_ANGLE angle = -aFootprint->GetOrientation();
-        angle.Normalize();
-        untransformedZone.Rotate( aFootprint->GetPosition(), angle );
+        SHAPE_POLY_SET boardOutline = zone->GetBoardOutline();
 
         // keepout areas have a type. types are
         // T_place_keepout, T_via_keepout, T_wire_keepout,
@@ -967,11 +963,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             bool is_first_point = true;
             VECTOR2I startpoint;
 
-            for( iterator = untransformedZone.IterateWithHoles(); iterator; iterator++ )
+            for( iterator = boardOutline.IterateWithHoles(); iterator; iterator++ )
             {
-                VECTOR2I point( iterator->x, iterator->y );
-
-                point -= aFootprint->GetPosition();
+                VECTOR2I point = aFootprint->GetTransform().InverseApply( VECTOR2I( iterator->x, iterator->y ) );
 
                 if( is_first_point )
                 {

@@ -31,7 +31,9 @@
 #include <footprint.h>
 #include <layer_ids.h>
 #include <locale_io.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
+#include <zone.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <specctra_import_export/specctra.h>
@@ -189,6 +191,62 @@ BOOST_AUTO_TEST_CASE( SpecctraExportDuplicateEmptyRefs )
 
 // Allegro Specctra writes zone fills as (wire (poly ...)) — an abbreviation of (polygon).
 // Parsing must accept that token and skip the pour geometry (zones stay on the board).
+// A rule area inside a rotated footprint must be exported in the footprint's frame, like its pads:
+// the keepout polygon of the image is the library-frame outline, whatever the placement.
+BOOST_AUTO_TEST_CASE( SpecctraExportRotatedFootprintKeepout )
+{
+    LOCALE_IO toggle;
+    BOARD     board;
+
+    // A board outline, which the export requires.
+    const VECTOR2I corners[4] = { { 0, 0 }, { pcbIUScale.mmToIU( 150 ), 0 },
+                                  { pcbIUScale.mmToIU( 150 ), pcbIUScale.mmToIU( 100 ) },
+                                  { 0, pcbIUScale.mmToIU( 100 ) } };
+
+    for( int i = 0; i < 4; ++i )
+    {
+        PCB_SHAPE* edge = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+        edge->SetLayer( Edge_Cuts );
+        edge->SetStart( corners[i] );
+        edge->SetEnd( corners[( i + 1 ) % 4] );
+        board.Add( edge );
+    }
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    footprint->SetReference( wxS( "K1" ) );
+    footprint->SetPosition( { pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) } );
+    footprint->SetOrientation( ANGLE_90 );
+
+    // Library frame: x 1..3 mm, y 0.5..1.5 mm.
+    ZONE* keepout = new ZONE( footprint );
+    keepout->SetIsRuleArea( true );
+    keepout->SetDoNotAllowTracks( true );
+    keepout->SetDoNotAllowVias( true );
+    keepout->SetLayer( F_Cu );
+    keepout->AppendCorner( { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 0.5 ) }, -1 );
+    keepout->AppendCorner( { pcbIUScale.mmToIU( 3 ), pcbIUScale.mmToIU( 0.5 ) }, -1 );
+    keepout->AppendCorner( { pcbIUScale.mmToIU( 3 ), pcbIUScale.mmToIU( 1.5 ) }, -1 );
+    keepout->AppendCorner( { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1.5 ) }, -1 );
+    footprint->Add( keepout );
+    board.Add( footprint );
+
+    TEMP_FILE out( wxT( "kicad_specctra_keepout_" ) );
+    BOOST_REQUIRE_NO_THROW( ExportBoardToSpecctraFile( &board, out.Str() ) );
+
+    const std::string dsn = slurp( out.Path() );
+    const size_t      image = dsn.find( "(image " );
+    BOOST_REQUIRE( image != std::string::npos );
+    const std::string imageText = dsn.substr( image, dsn.find( "(network", image ) - image );
+
+    // DSN points are in micrometres with y up: the library-frame corners, not a rotated copy.
+    BOOST_CHECK_MESSAGE( imageText.find( "(keepout" ) != std::string::npos, imageText );
+    BOOST_CHECK_MESSAGE( imageText.find( "1000 -500" ) != std::string::npos, imageText );
+    BOOST_CHECK_MESSAGE( imageText.find( "3000 -1500" ) != std::string::npos, imageText );
+    BOOST_CHECK_MESSAGE( imageText.find( "3000 -500" ) != std::string::npos, imageText );
+    BOOST_CHECK_MESSAGE( imageText.find( "1000 -1500" ) != std::string::npos, imageText );
+}
+
+
 BOOST_AUTO_TEST_CASE( SpecctraImportAllegroPolyWire )
 {
     LOCALE_IO              toggle;
