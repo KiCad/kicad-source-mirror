@@ -33,19 +33,14 @@
 
 struct LTSPICE_FILE
 {
-    wxString       ElementName;
-    VECTOR2I       Offset;
-    int            ParentIndex;
-    SCH_SHEET*     Sheet;
-    SCH_SCREEN*    Screen;
-    SCH_SHEET_PATH SheetPath;
+    wxString ElementName;
+    VECTOR2I Offset;
+    int      SourceLine;
 
-    LTSPICE_FILE( const wxString& aElementName, const VECTOR2I& aOffset ) :
+    LTSPICE_FILE( const wxString& aElementName, const VECTOR2I& aOffset, int aSourceLine ) :
             ElementName( aElementName.Lower() ),
             Offset( aOffset ),
-            ParentIndex( 0 ),
-            Sheet( nullptr ),
-            Screen( nullptr )
+            SourceLine( aSourceLine )
     { }
 
     bool operator<( const LTSPICE_FILE& t ) const
@@ -242,6 +237,7 @@ public:
     struct LT_SYMBOL
     {
         wxString                     Name;
+        wxString                     AsyKey;
         SYMBOLTYPE                   SymbolType;
         VECTOR2I                     Offset;
         std::map<wxString, wxString> SymAttributes;
@@ -251,7 +247,6 @@ public:
         std::vector<LT_WINDOW>       Windows;
         std::vector<ARC>             Arcs;
         std::vector<RECTANGLE>       Rectangles;
-        std::vector<WIRE>            Wires;
         ORIENTATION                  SymbolOrientation;
     };
 
@@ -282,7 +277,6 @@ public:
     explicit LTSPICE_SCHEMATIC( const wxString& aFilename, const wxFileName& aLTspiceDataDir,
                                 REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter ) :
             m_reporter( aReporter ),
-            m_schematic( nullptr ),
             m_ltspiceDataDir( aLTspiceDataDir )
     {}
 
@@ -298,6 +292,16 @@ public:
      */
     void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxFileName& aLibraryFileName,
                REPORTER* aReporter );
+
+    /**
+     * Return "amp.kicad_sch" for "foo/amp" when both keys are one .asc, else "foo_amp.kicad_sch".
+     */
+    wxString GetSchematicFileName( const wxString& aAscKey ) const;
+
+    /**
+     * Return "amp" for "foo/amp" when both keys are one .asy, else "foo_amp".
+     */
+    wxString GetSymbolName( const wxString& aSymbolName ) const;
 
     /**
      * Used to get file path for Asc and Asy files.
@@ -338,19 +342,15 @@ public:
     std::map<wxString, wxString> ReadAsyFiles( const std::vector<LTSPICE_FILE>& aSourceFiles,
                                                const std::map<wxString, wxString>& aAsyFileMap );
 
-    std::map<wxString, wxString> ReadAsyFile( const LTSPICE_FILE& aSourceFile,
-                                              const std::map<wxString, wxString>& aAsyFileMap );
-
     /**
      * Build Intermediate data structure.
+     * 
+     * @param aAscFilesContent map of filenames and content from asc files.
      * @return LT_ASC struct filled with all info from asc and asy files.
      */
-    std::vector<LT_ASC> StructureBuilder();
+    std::map<wxString, LT_ASC> ParseAscFiles( const std::map<wxString, wxString>& aAscFilesContent );
 
-    LT_SYMBOL SymbolBuilder( const wxString& aAscFileName, LT_ASC& aAscFile );
-
-    LT_SYMBOL SymbolBuilder( const wxString& aAscFileName, const wxString& aAsyFileContent,
-                             LT_ASC& aAscFile );
+    LT_SYMBOL ParseSymbol( const wxString& aSymbolName, const wxString& aAsyFileContent, LT_ASC& aAscFile );
 
     LT_SYMBOL MakeDummySymbol( const wxString& aAscFileName );
 
@@ -436,11 +436,14 @@ private:
     static SYMBOLTYPE getSymbolType( const wxString& aValue );
 
 private:
-    REPORTER*            m_reporter;
-    SCHEMATIC*           m_schematic;
-    wxFileName           m_ltspiceDataDir;
+    REPORTER*  m_reporter;
+    wxFileName m_ltspiceDataDir;
 
-    std::map<wxString, std::map<wxString, wxString>> m_fileCache;
+    std::map<wxString, wxString> m_ascFileCache;
+    std::map<wxString, wxString> m_asyFileCache;
+
+    std::map<wxString, wxString> m_ascNamesMap;
+    std::map<wxString, wxString> m_asyNamesMap;
 };
 
 #endif // LTSPICE_SCHEMATIC_LOADER_H

@@ -39,8 +39,7 @@ int SCH_IO_LTSPICE::GetModifyHash() const
 }
 
 
-SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                              SCH_SHEET*             aAppendToMe,
+SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe,
                                               const std::map<std::string, UTF8>* aProperties )
 {
     wxASSERT( !aFileName || aSchematic );
@@ -143,11 +142,6 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
     {
         m_reporter->Report( e.What(), RPT_SEVERITY_ERROR );
     }
-
-    aSchematic->CurrentSheet().UpdateAllScreenReferences();
-
-    // fixing all junctions at the end
-    aSchematic->FixupJunctionsAfterImport();
 
     return rootSheet;
 }

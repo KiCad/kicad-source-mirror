@@ -24,15 +24,21 @@
  * schematic file.
  */
 
+#include <core/map_helpers.h>
 #include <sch_io/ltspice/sch_io_ltspice_parser.h>
 #include <sch_io/ltspice/ltspice_schematic.h>
 #include <schematic.h>
+#include <sch_collectors.h>
 #include <sch_line.h>
 #include <sch_label.h>
 #include <sch_text.h>
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
+#include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_bus_entry.h>
+#include <string_utils.h>
+#include <trigo.h>
 #include <wx/buffer.h>
 #include <wx/ffile.h>
 #include <wx/filename.h>
@@ -237,307 +243,221 @@ static bool convertPwlFileToNgspice( const wxFileName& aSourceFile, const wxFile
 }
 
 
-void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
-                                   std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
-                                   const std::vector<wxString>& aAsyFileNames )
+void SCH_IO_LTSPICE_PARSER::CreateItems( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, SCH_SCREEN* aScreen,
+                                         const std::vector<wxString>&     aUniqueAscNames,
+                                         std::map<wxString, SCH_SCREEN*>& aMapOfScreens, VECTOR2I aOriginOffset )
 {
-    // Center created objects in Kicad page
-    BOX2I bbox;
+    m_originOffset = aOriginOffset;
+    
+    CreateKicadSymbolsAndSubsheets( aAscfile, aScreen, aUniqueAscNames, aMapOfScreens );
+    CreateKicadSCH_ITEMs( aAscfile, aScreen );
 
-    for( const LTSPICE_SCHEMATIC::LT_ASC& asc : outLT_ASCs )
-        bbox.Merge( asc.BoundingBox );
+    SCHEMATIC* schematic = aScreen->Schematic();
 
-    m_originOffset = { 0, 0 };
-    bbox.SetOrigin( ToKicadCoords( bbox.GetOrigin() ) );
-    bbox.SetSize( ToKicadCoords( bbox.GetSize() ) );
-
-    VECTOR2I pageSize = aSheet->LastScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
-    int      grid = schIUScale.MilsToIU( 50 );
-    int      margin = grid * 10;
-
-    m_originOffset = ( pageSize / 2 ) - bbox.GetCenter();
-
-    if( bbox.GetWidth() > pageSize.x - margin )
-        m_originOffset.x = margin - bbox.GetLeft();
-
-    if( bbox.GetHeight() > pageSize.y - margin )
-        m_originOffset.y = margin - bbox.GetTop();
-
-    m_originOffset = ( m_originOffset / grid ) * grid;
-
-    CreateKicadSYMBOLs( aSheet, outLT_ASCs, aAsyFileNames );
-    CreateKicadSCH_ITEMs( aSheet, outLT_ASCs );
-
-    // Convert LTspice standard device libs to UTF-8 into ltspice_cmp/ and .include them.
-    wxString projectPath;
-    wxString includeText;
-
-    if( SCHEMATIC* schematic = aSheet->LastScreen()->Schematic() )
-        projectPath = schematic->Project().GetProjectPath();
-
-    if( !projectPath.IsEmpty() )
+    if( schematic && schematic->RootScreen() == aScreen )
     {
-        wxFileName cmpDir( m_lt_schematic->GetLTspiceDataDir().GetFullPath(), wxEmptyString );
-        cmpDir.AppendDir( wxS( "cmp" ) );
+        // Convert LTspice standard device libs to UTF-8 into ltspice_cmp/ and .include them.
+        wxString projectPath = schematic->Project().GetProjectPath();
+        wxString includeText;
 
-        wxFileName outDir( projectPath, wxEmptyString );
-        outDir.AppendDir( wxS( "ltspice_cmp" ) );
-        outDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-        for( const wxString name :
-             { wxS( "standard.dio" ), wxS( "standard.bjt" ), wxS( "standard.jft" ), wxS( "standard.mos" ) } )
+        if( !projectPath.IsEmpty() )
         {
-            includeText << wxS( ".include ltspice_cmp/" ) << name << wxS( "\n" );
+            wxFileName cmpDir( m_lt_schematic->GetLTspiceDataDir().GetFullPath(), wxEmptyString );
+            cmpDir.AppendDir( wxS( "cmp" ) );
 
-            wxFileName src = cmpDir;
-            src.SetFullName( name );
+            wxFileName outDir( projectPath, wxEmptyString );
+            outDir.AppendDir( wxS( "ltspice_cmp" ) );
+            outDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-            if( !src.FileExists() )
-                continue;
-
-            wxFileName dst = outDir;
-            dst.SetFullName( name );
-
-            if( dst.FileExists() )
-                continue;
-
-            wxFFile in( src.GetFullPath(), wxS( "rb" ) );
-
-            if( !in.IsOpened() )
-                continue;
-
-            wxFileOffset len = in.Length();
-
-            if( len <= 0 )
-                continue;
-
-            wxMemoryBuffer buffer( static_cast<size_t>( len ) );
-            void*          writePtr = buffer.GetWriteBuf( static_cast<size_t>( len ) );
-
-            if( !writePtr || in.Read( writePtr, len ) != static_cast<size_t>( len ) )
-                continue;
-
-            buffer.UngetWriteBuf( static_cast<size_t>( len ) );
-
-            const char* data = static_cast<const char*>( buffer.GetData() );
-            wxString    text;
-
-            // UTF-16 LE looks like c \0 c \0 ...; else try UTF-8, then CP1252.
-            if( len >= 4 && ( len % 2 ) == 0 && data[1] == 0 && data[3] == 0 )
-                text = wxString( data, wxMBConvUTF16LE(), len );
-            else
-                text = wxString::FromUTF8( data, len );
-
-            if( text.empty() )
-                text = wxString( data, wxCSConv( wxFONTENCODING_CP1252 ), len );
-
-            wxFFile out( dst.GetFullPath(), wxS( "wb" ) );
-
-            if( !out.IsOpened() )
-                continue;
-
-            out.Write( text, wxConvUTF8 );
-        }
-    }
-
-    // Add filesource subcircuit template for PWL file sources
-    includeText << wxS( "\n" );
-    includeText << wxS( ".subckt pwl_file outp outn file=\"\" timerelative=1\n" );
-    includeText << wxS( "Afs %vd([outp outn]) filesrc\n" );
-    includeText << wxS( ".model filesrc filesource (file={file} amploffset=[0] amplscale=[1] timeoffset=0 "
-                        "timescale=1 timerelative={timerelative})\n" );
-    includeText << wxS( ".ends\n" );
-
-    if( !includeText.IsEmpty() )
-    {
-        SCH_TEXT* textItem = new SCH_TEXT( VECTOR2I( 0, 0 ), includeText );
-
-        textItem->SetVisible( true );
-        textItem->SetMultilineAllowed( true );
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-
-        aSheet->LastScreen()->Append( textItem );
-    }
-}
-
-
-void SCH_IO_LTSPICE_PARSER::CreateLines( LIB_SYMBOL* aSymbol,
-                                         LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                         int aIndex, SCH_SHAPE* shape )
-{
-    LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
-
-    shape->AddPoint( ToKicadCoords( lt_line.End ) );
-    shape->AddPoint( ToKicadCoords( lt_line.Start ) );
-    shape->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
-}
-
-
-void SCH_IO_LTSPICE_PARSER::CreateLines( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                         SCH_SHEET_PATH* aSheet )
-{
-    LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
-    SCH_SHAPE*               shape = new SCH_SHAPE( SHAPE_T::POLY );
-
-    shape->AddPoint( ToKicadCoords( lt_line.End ) );
-    shape->AddPoint( ToKicadCoords( lt_line.Start ) );
-    shape->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
-
-    shape->Move( ToKicadCoords( aLTSymbol.Offset ) + m_originOffset );
-    RotateMirrorShape( aLTSymbol, shape );
-
-    aSheet->LastScreen()->Append( shape );
-}
-
-
-void SCH_IO_LTSPICE_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
-                                                std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
-                                                const std::vector<wxString>& aAsyFiles )
-{
-    for( LTSPICE_SCHEMATIC::LT_ASC& lt_asc : outLT_ASCs )
-    {
-        std::vector<LTSPICE_SCHEMATIC::LT_SYMBOL> symbols = lt_asc.Symbols;
-        std::map<wxString, LIB_SYMBOL*>           existingSymbol;
-        std::map<wxString, SCH_SYMBOL*>           existingSchematicSymbol;
-
-        for( LTSPICE_SCHEMATIC::LT_SYMBOL& lt_symbol : symbols )
-        {
-            if( !alg::contains( aAsyFiles, lt_symbol.Name ) )
+            for( const wxString name :
+                 { wxS( "standard.dio" ), wxS( "standard.bjt" ), wxS( "standard.jft" ), wxS( "standard.mos" ) } )
             {
-                LIB_SYMBOL* lib_symbol;
+                includeText << wxS( ".include ltspice_cmp/" ) << name << wxS( "\n" );
 
-                if( existingSymbol.count( lt_symbol.Name ) == 0 )
-                {
-                    lib_symbol = new LIB_SYMBOL( lt_symbol.Name );
+                wxFileName src = cmpDir;
+                src.SetFullName( name );
 
-                    CreateSymbol( lt_symbol, lib_symbol );
+                if( !src.FileExists() )
+                    continue;
 
-                    existingSymbol.emplace( lt_symbol.Name, lib_symbol );
-                }
+                wxFileName dst = outDir;
+                dst.SetFullName( name );
+
+                if( dst.FileExists() )
+                    continue;
+
+                wxFFile in( src.GetFullPath(), wxS( "rb" ) );
+
+                if( !in.IsOpened() )
+                    continue;
+
+                wxFileOffset len = in.Length();
+
+                if( len <= 0 )
+                    continue;
+
+                wxMemoryBuffer buffer( static_cast<size_t>( len ) );
+                void*          writePtr = buffer.GetWriteBuf( static_cast<size_t>( len ) );
+
+                if( !writePtr || in.Read( writePtr, len ) != static_cast<size_t>( len ) )
+                    continue;
+
+                buffer.UngetWriteBuf( static_cast<size_t>( len ) );
+
+                const char* data = static_cast<const char*>( buffer.GetData() );
+                wxString    text;
+
+                // UTF-16 LE looks like c \0 c \0 ...; else try UTF-8, then CP1252.
+                if( len >= 4 && ( len % 2 ) == 0 && data[1] == 0 && data[3] == 0 )
+                    text = wxString( data, wxMBConvUTF16LE(), len );
                 else
-                {
-                    lib_symbol = existingSymbol[lt_symbol.Name];
-                }
+                    text = wxString::FromUTF8( data, len );
 
-                LIB_ID      libId( wxS( "ltspice" ), lt_symbol.Name );
-                SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, aSheet, 1 );
+                if( text.empty() )
+                    text = wxString( data, wxCSConv( wxFONTENCODING_CP1252 ), len );
 
-                CreateFields( lt_symbol, sch_symbol, aSheet );
+                wxFFile out( dst.GetFullPath(), wxS( "wb" ) );
 
-                for( int j = 0; j < (int) lt_symbol.Wires.size(); j++ )
-                    CreateWires( lt_symbol, j, aSheet );
+                if( !out.IsOpened() )
+                    continue;
 
-                sch_symbol->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
-                RotateMirror( lt_symbol, sch_symbol );
-
-                aSheet->LastScreen()->Append( sch_symbol );
+                out.Write( text, wxConvUTF8 );
             }
-            else
-            {
-                for( int j = 0; j < (int) lt_symbol.Lines.size(); j++ )
-                    CreateLines( lt_symbol, j, aSheet );
+        }
 
-                for( int j = 0; j < (int) lt_symbol.Circles.size(); j++ )
-                    CreateCircle( lt_symbol, j, aSheet );
+        // Add filesource subcircuit template for PWL file sources
+        includeText << wxS( "\n" );
+        includeText << wxS( ".subckt pwl_file outp outn file=\"\" timerelative=1\n" );
+        includeText << wxS( "Afs %vd([outp outn]) filesrc\n" );
+        includeText << wxS( ".model filesrc filesource (file={file} amploffset=[0] amplscale=[1] timeoffset=0 "
+                            "timescale=1 timerelative={timerelative})\n" );
+        includeText << wxS( ".ends\n" );
 
-                for( int j = 0; j < (int) lt_symbol.Arcs.size(); j++ )
-                    CreateArc( lt_symbol, j, aSheet );
+        if( !includeText.IsEmpty() )
+        {
+            SCH_TEXT* textItem = new SCH_TEXT( VECTOR2I( 0, 0 ), includeText );
 
-                for( int j = 0; j < (int) lt_symbol.Rectangles.size(); j++ )
-                    CreateRect( lt_symbol, j, aSheet );
+            textItem->SetVisible( true );
+            textItem->SetMultilineAllowed( true );
+            textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
-                // Calculating bounding box
-                BOX2I bbox;
-
-                LTSPICE_SCHEMATIC::LT_SYMBOL tempSymbol;
-                LTSPICE_FILE                 tempAsyFile( lt_symbol.Name + ".asy", { 0, 0 } );
-                LTSPICE_SCHEMATIC::LT_ASC    dummyAsc;
-
-                tempSymbol = m_lt_schematic->SymbolBuilder( lt_symbol.Name, dummyAsc );
-
-                LIB_SYMBOL* tempLibSymbol = new LIB_SYMBOL( lt_symbol.Name );
-                CreateSymbol( tempSymbol, tempLibSymbol );
-
-                bbox = tempLibSymbol->GetBoundingBox();
-
-                int topLeftX = lt_symbol.Offset.x + ToLtSpiceCoords( bbox.GetOrigin().x );
-                int topLeftY = lt_symbol.Offset.y + ToLtSpiceCoords( bbox.GetOrigin().y );
-                int botRightX = lt_symbol.Offset.x
-                                   + ToLtSpiceCoords( bbox.GetOrigin().x )
-                                   + ToLtSpiceCoords( bbox.GetSize().x );
-                int botRightY = lt_symbol.Offset.y
-                                   + ToLtSpiceCoords( bbox.GetOrigin().y )
-                                   + ToLtSpiceCoords( bbox.GetSize().y );
-
-                for( LTSPICE_SCHEMATIC::LT_PIN& pin : lt_symbol.Pins )
-                {
-                    VECTOR2I pinPos = pin.PinLocation;
-
-                    for( LTSPICE_SCHEMATIC::WIRE& wire : lt_asc.Wires )
-                    {
-                        if( wire.Start == ( pinPos + lt_symbol.Offset ) )
-                        {
-                            //wire is vertical
-                            if( wire.End.x == ( pinPos + lt_symbol.Offset ).x )
-                            {
-                                if( wire.End.y <= topLeftY )
-                                    wire.Start = VECTOR2I( wire.Start.x, topLeftY + 3 );
-                                else if( wire.End.y >= botRightY )
-                                    wire.Start = VECTOR2I( wire.Start.x, botRightY );
-                                else if( wire.End.y < botRightY && wire.End.y > topLeftY )
-                                    wire.Start = VECTOR2I( topLeftX, wire.Start.y );
-                            }
-                            //wire is horizontal
-                            else if( wire.End.y == ( pinPos + lt_symbol.Offset ).y )
-                            {
-                                if( wire.End.x <= topLeftX )
-                                    wire.Start = VECTOR2I( topLeftX, wire.Start.y );
-                                else if( wire.End.x >= botRightX )
-                                    wire.Start = VECTOR2I( botRightX, wire.Start.y );
-                                else if( wire.End.x < botRightX && wire.End.x > topLeftX )
-                                    wire.Start = VECTOR2I( botRightX, wire.Start.y );
-                            }
-                        }
-                        else if( wire.End == ( pinPos + lt_symbol.Offset ) )
-                        {
-                            //wire is Vertical
-                            if( wire.Start.x == ( pinPos + lt_symbol.Offset ).x )
-                            {
-                                if( wire.Start.y <= topLeftY )
-                                    wire.End = VECTOR2I( wire.End.x, topLeftY );
-                                else if( wire.Start.y > botRightY )
-                                    wire.End = VECTOR2I( wire.End.x, botRightY );
-                                else if( wire.Start.y < botRightY && wire.End.y > topLeftY )
-                                    wire.End = VECTOR2I( wire.End.x, botRightY );
-                            }
-                            //wire is Horizontal
-                            else if( wire.Start.y == ( pinPos + lt_symbol.Offset ).y )
-                            {
-                                if( wire.Start.x <= topLeftX )
-                                    wire.End = VECTOR2I( topLeftX, wire.End.y );
-                                else if( wire.Start.x >= botRightX )
-                                    wire.End = VECTOR2I( botRightX, wire.End.y );
-                                else if( wire.Start.x < botRightX && wire.Start.x > topLeftX )
-                                    wire.End = VECTOR2I( botRightX, wire.End.y );
-                            }
-                        }
-                    }
-                }
-            }
+            aScreen->Append( textItem );
         }
     }
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol,
-                                          LIB_SYMBOL*                   aLibSymbol )
+void SCH_IO_LTSPICE_PARSER::CreateSymLine( LIB_SYMBOL* aSymbol, const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
+                                           int aIndex, SCH_SHAPE* shape )
+{
+    const LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
+
+    shape->AddPoint( ToKicadCoords( lt_line.End ) );
+    shape->AddPoint( ToKicadCoords( lt_line.Start ) );
+    shape->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
+}
+
+
+void SCH_IO_LTSPICE_PARSER::CreateKicadSymbolsAndSubsheets( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, SCH_SCREEN* aScreen,
+                                                            const std::vector<wxString>&     aUniqueAscNames,
+                                                            std::map<wxString, SCH_SCREEN*>& aMapOfScreens )
+{
+    std::map<wxString, LIB_SYMBOL*> existingSymbol;
+
+    for( LTSPICE_SCHEMATIC::LT_SYMBOL& lt_symbol : aAscfile.Symbols )
+    {
+        wxString libName = m_lt_schematic->GetSymbolName( lt_symbol.Name );
+
+        if( lt_symbol.AsyKey.IsEmpty() || !alg::contains( aUniqueAscNames, lt_symbol.AsyKey ) )
+        {
+            LIB_SYMBOL* lib_symbol;
+
+            if( existingSymbol.count( libName ) == 0 )
+            {
+                lib_symbol = new LIB_SYMBOL( libName );
+
+                CreateSymbol( lt_symbol, lib_symbol );
+
+                existingSymbol.emplace( libName, lib_symbol );
+            }
+            else
+            {
+                lib_symbol = existingSymbol[libName];
+            }
+
+            LIB_ID      libId( wxS( "ltspice" ), libName );
+            SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, nullptr, 1 );
+
+            AddSymFields( lt_symbol, sch_symbol );
+            AssignSymOrientation( lt_symbol, sch_symbol );
+
+            sch_symbol->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
+
+            aScreen->Append( sch_symbol );
+        }
+        else
+        {
+            for( int j = 0; j < (int) lt_symbol.Lines.size(); j++ )
+            {
+                SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY );
+
+                CreateSymLine( nullptr, lt_symbol, j, shape );
+                RotateMirrorShape( lt_symbol, shape );
+                shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
+
+                aScreen->Append( shape );
+            }
+
+            for( int j = 0; j < (int) lt_symbol.Circles.size(); j++ )
+            {
+                SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::CIRCLE );
+
+                CreateSymCircle( lt_symbol, j, shape );
+                RotateMirrorShape( lt_symbol, shape );
+                shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
+
+                aScreen->Append( shape );
+            }
+
+            for( int j = 0; j < (int) lt_symbol.Arcs.size(); j++ )
+            {
+                SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::ARC );
+
+                CreateSymArc( lt_symbol, j, shape );
+                RotateMirrorShape( lt_symbol, shape );
+                shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
+
+                aScreen->Append( shape );
+            }
+
+            for( int j = 0; j < (int) lt_symbol.Rectangles.size(); j++ )
+            {
+                SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::RECTANGLE );
+
+                CreateSymRect( lt_symbol, j, shape );
+                RotateMirrorShape( lt_symbol, shape );
+                shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
+
+                aScreen->Append( shape );
+            }
+
+            SCH_SHEET* sch_sheet = AddAscSymAsSubsheet( aAscfile, lt_symbol, aScreen );
+
+            if( aMapOfScreens.contains( lt_symbol.AsyKey ) )
+                sch_sheet->SetScreen( aMapOfScreens.at( lt_symbol.AsyKey ) );
+        }
+    }
+}
+
+
+void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol, LIB_SYMBOL* aLibSymbol )
 {
     for( int j = 0; j < (int) aLtSymbol.Lines.size(); j++ )
     {
         SCH_SHAPE* line = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
-        CreateLines( aLibSymbol, aLtSymbol, j, line );
+        CreateSymLine( aLibSymbol, aLtSymbol, j, line );
         aLibSymbol->AddDrawItem( line );
     }
 
@@ -545,7 +465,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
     {
         SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
-        CreateCircle( aLtSymbol, j, circle );
+        CreateSymCircle( aLtSymbol, j, circle );
         aLibSymbol->AddDrawItem( circle );
     }
 
@@ -553,7 +473,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
     {
         SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
 
-        CreateArc( aLtSymbol, j, arc );
+        CreateSymArc( aLtSymbol, j, arc );
         aLibSymbol->AddDrawItem( arc );
     }
 
@@ -561,7 +481,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
     {
         SCH_SHAPE* rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
-        CreateRect( aLtSymbol, j, rectangle );
+        CreateSymRect( aLtSymbol, j, rectangle );
         aLibSymbol->AddDrawItem( rectangle );
     }
 
@@ -569,7 +489,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
     {
         SCH_PIN* pin = new SCH_PIN( aLibSymbol );
 
-        CreatePin( aLtSymbol, j, pin );
+        CreateSymPin( aLtSymbol, j, pin );
         aLibSymbol->AddDrawItem( pin );
     }
 
@@ -615,12 +535,61 @@ int SCH_IO_LTSPICE_PARSER::ToLtSpiceCoords( int aCoordinate )
 }
 
 
-void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                               SCH_SHAPE* aShape )
+VECTOR2I SCH_IO_LTSPICE_PARSER::ToLtSpiceCoords( const VECTOR2I& aPos )
+{
+    return VECTOR2I( ToLtSpiceCoords( aPos.x ), ToLtSpiceCoords( aPos.y ) );
+}
+
+
+VECTOR2I SCH_IO_LTSPICE_PARSER::RotateMirror( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, const VECTOR2I& aPoint )
+{
+    VECTOR2I p = aPoint;
+
+    switch( aLTSymbol.SymbolOrientation )
+    {
+    case LTSPICE_SCHEMATIC::ORIENTATION::R90:
+        RotatePoint( p, -ANGLE_90 );
+        break;
+
+    case LTSPICE_SCHEMATIC::ORIENTATION::R180:
+        RotatePoint( p, -ANGLE_180 );
+        break;
+
+    case LTSPICE_SCHEMATIC::ORIENTATION::R270:
+        RotatePoint( p, -ANGLE_270 );
+        break;
+
+    case LTSPICE_SCHEMATIC::ORIENTATION::M0:
+        p.x = -p.x;
+        break;
+
+    case LTSPICE_SCHEMATIC::ORIENTATION::M90:
+        p.y = -p.y;
+        RotatePoint( p, -ANGLE_90 );
+        break;
+
+    case LTSPICE_SCHEMATIC::ORIENTATION::M180:
+        p.y = -p.y;
+        break;
+
+    case LTSPICE_SCHEMATIC::ORIENTATION::M270:
+        p.y = -p.y;
+        RotatePoint( p, -ANGLE_270 );
+        break;
+
+    default:
+        break;
+    }
+
+    return p;
+}
+
+
+void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SHAPE* aShape )
 {
     if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R90 )
     {
-        aShape->Rotate( VECTOR2I(), true );
+        aShape->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R180 )
     {
@@ -629,11 +598,11 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R270 )
     {
-        aShape->Rotate( VECTOR2I(), false );
+        aShape->Rotate( VECTOR2I(), true );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M0 )
     {
-        aShape->MirrorVertically( 0 );
+        aShape->MirrorHorizontally( 0 );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M90 )
     {
@@ -642,7 +611,7 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M180 )
     {
-        aShape->MirrorHorizontally( 0 );
+        aShape->MirrorVertically( 0 );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M270 )
     {
@@ -652,8 +621,7 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
 }
 
 
-void SCH_IO_LTSPICE_PARSER::RotateMirror( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                          SCH_SYMBOL* aSchSymbol )
+void SCH_IO_LTSPICE_PARSER::AssignSymOrientation( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSchSymbol )
 {
     if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R0 )
     {
@@ -693,118 +661,76 @@ void SCH_IO_LTSPICE_PARSER::RotateMirror( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateWires( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                         SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, SCH_SCREEN* aScreen )
 {
-    SCH_LINE* segment = new SCH_LINE();
+    for( int j = 0; j < (int) aAscfile.Lines.size(); j++ )
+        AddAscLine( aAscfile, j, aScreen );
 
-    segment->SetLineWidth( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ) );
-    segment->SetLineStyle( LINE_STYLE::SOLID );
+    for( int j = 0; j < (int) aAscfile.Circles.size(); j++ )
+        AddAscCircle( aAscfile, j, aScreen );
 
-    segment->SetStartPoint( aLTSymbol.Wires[aIndex].Start );
-    segment->SetEndPoint( aLTSymbol.Wires[aIndex].End );
+    for( int j = 0; j < (int) aAscfile.Arcs.size(); j++ )
+        AddAscArc( aAscfile, j, aScreen );
 
-    aSheet->LastScreen()->Append( segment );
-}
+    for( int j = 0; j < (int) aAscfile.Rectangles.size(); j++ )
+        AddAscRect( aAscfile, j, aScreen );
 
+    for( int j = 0; j < (int) aAscfile.Bustap.size(); j++ )
+        AddAscBusEntry( aAscfile, j, aScreen );
 
-void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
-                                                  std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
-{
-    SCH_SCREEN* screen = aSheet->LastScreen();
+    for( int j = 0; j < (int) aAscfile.Wires.size(); j++ )
+        AddAscWire( aAscfile, j, aScreen, SCH_LAYER_ID::LAYER_WIRE );
 
-    for( LTSPICE_SCHEMATIC::LT_ASC& lt_asc : outLT_ASCs )
+    for( int j = 0; j < (int) aAscfile.Iopins.size(); j++ )
+        AddAscIopin( aAscfile, j, aScreen );
+
+    for( const LTSPICE_SCHEMATIC::FLAG& lt_flag : aAscfile.Flags )
     {
-        for( int j = 0; j < (int) lt_asc.Lines.size(); j++ )
-            CreateLine( lt_asc, j, aSheet );
-
-        for( int j = 0; j < (int) lt_asc.Circles.size(); j++ )
-            CreateCircle( lt_asc, j, aSheet );
-
-        for( int j = 0; j < (int) lt_asc.Arcs.size(); j++ )
-            CreateArc( lt_asc, j, aSheet );
-
-        for( int j = 0; j < (int) lt_asc.Rectangles.size(); j++ )
-            CreateRect( lt_asc, j, aSheet );
-
-        for( int j = 0; j < (int) lt_asc.Bustap.size(); j++ )
-            CreateBusEntry( lt_asc, j, aSheet );
-
-        /**
-        *
-        *NOTE: This current code is used for plotting sch sheet pins on the sheet, we are working on
-        * finding how to place the pin on the intersection of line and sheet.
-        *
-        *
-        if( aSubSchematicStructure )
+        if( lt_flag.Value == wxS( "0" ) )
         {
-            SCH_HIERLABEL* sheetPin =
-                    new SCH_SHEET_PIN( aRootSheet, VECTOR2I(), lt_asc.Flags[index].Value );
-
-            sheetPin->SetText( "PIN" );
-            sheetPin->SetPosition( VECTOR2I(
-                    schIUScale.MilsToIU( rescale( 50, 592, 16 ) ),
-                    schIUScale.MilsToIU( rescale( 50, 133, 16 ) ) ) );
-            sheetPin->SetVisible( true );
-            aRootSheet->AddPin( (SCH_SHEET_PIN*) sheetPin );
-        }*/
-
-        for( int j = 0; j < (int) lt_asc.Wires.size(); j++ )
-            CreateWire( lt_asc, j, aSheet, SCH_LAYER_ID::LAYER_WIRE );
-
-        for( int j = 0; j < (int) lt_asc.Iopins.size(); j++ )
-            CreatePin( lt_asc, j, aSheet );
-
-        for( const LTSPICE_SCHEMATIC::FLAG& lt_flag : lt_asc.Flags )
-        {
-            if( lt_flag.Value == wxS( "0" ) )
-            {
-                screen->Append( CreatePowerSymbol( lt_flag.Offset, lt_flag.Value, lt_flag.FontSize,
-                                                   aSheet, lt_asc.Wires ) );
-            }
-            else
-            {
-                screen->Append( CreateSCH_LABEL( SCH_GLOBAL_LABEL_T, lt_flag.Offset, lt_flag.Value,
-                                                 lt_flag.FontSize, lt_asc.Wires ) );
-            }
+            aScreen->Append(
+                    CreatePowerSymbol( lt_flag.Offset, lt_flag.Value, lt_flag.FontSize, aScreen, aAscfile.Wires ) );
         }
-
-        for( const LTSPICE_SCHEMATIC::TEXT& lt_text : lt_asc.Texts )
+        else
         {
-            screen->Append( CreateSCH_TEXT( lt_text.Offset, convertLtSpiceTextToNgspice( lt_text.Value ),
-                                            lt_text.FontSize, lt_text.Justification ) );
-        }
+            KICAD_T labelType = aScreen->Schematic()->RootScreen() == aScreen ? SCH_GLOBAL_LABEL_T : SCH_LABEL_T;
 
-        for( const LTSPICE_SCHEMATIC::DATAFLAG& lt_flag : lt_asc.DataFlags )
-        {
-            screen->Append( CreateSCH_LABEL( SCH_DIRECTIVE_LABEL_T, lt_flag.Offset,
-                                             lt_flag.Expression, lt_flag.FontSize, lt_asc.Wires ) );
+            aScreen->Append( CreateSCH_LABEL( labelType, lt_flag.Offset, lt_flag.Value, lt_flag.FontSize, aScreen ) );
         }
+    }
+
+    for( const LTSPICE_SCHEMATIC::TEXT& lt_text : aAscfile.Texts )
+    {
+        aScreen->Append( CreateSCH_TEXT( lt_text.Offset, convertLtSpiceTextToNgspice( lt_text.Value ), lt_text.FontSize,
+                                         lt_text.Justification ) );
+    }
+
+    for( const LTSPICE_SCHEMATIC::DATAFLAG& lt_flag : aAscfile.DataFlags )
+    {
+        aScreen->Append( CreateSCH_LABEL( SCH_DIRECTIVE_LABEL_T, lt_flag.Offset, lt_flag.Expression, lt_flag.FontSize,
+                                          aScreen ) );
     }
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateBusEntry( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                            SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::AddAscBusEntry( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen )
 {
     LTSPICE_SCHEMATIC::BUSTAP& bustap = aAscfile.Bustap[aIndex];
 
     for( int k = 0; k < (int) aAscfile.Wires.size(); k++ )
     {
-        if( ( aAscfile.Wires[k].Start == bustap.Start )
-            || ( aAscfile.Wires[k].End == bustap.Start ) )
+        if( ( aAscfile.Wires[k].Start == bustap.Start ) || ( aAscfile.Wires[k].End == bustap.Start ) )
         {
-            CreateWire( aAscfile, k, aSheet, SCH_LAYER_ID::LAYER_BUS );
+            AddAscWire( aAscfile, k, aScreen, SCH_LAYER_ID::LAYER_BUS );
             aAscfile.Wires.erase( aAscfile.Wires.begin() + k );
         }
     }
 
-    SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( ToKicadCoords( { bustap.Start.x,
-                                                                            bustap.Start.y - 16 } ) );
+    SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( ToKicadCoords( { bustap.Start.x, bustap.Start.y - 16 } ) );
 
     busEntry->SetSize( { ToKicadCoords( 16 ), ToKicadCoords( 16 ) } );
 
-    aSheet->LastScreen()->Append( busEntry );
+    aScreen->Append( busEntry );
 }
 
 
@@ -814,74 +740,178 @@ LABEL_FLAG_SHAPE getLabelShape( LTSPICE_SCHEMATIC::POLARITY aPolarity )
         return LABEL_FLAG_SHAPE::L_INPUT;
     else if( aPolarity == LTSPICE_SCHEMATIC::POLARITY::OUTPUT )
         return LABEL_FLAG_SHAPE::L_OUTPUT;
-    else
+    else if( aPolarity == LTSPICE_SCHEMATIC::POLARITY::BIDIR )
         return LABEL_FLAG_SHAPE::L_BIDI;
+    else
+        return LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                       SCH_SHEET_PATH* aSheet )
+SPIN_STYLE autoLabelOrientation( SCH_SCREEN* aScreen, VECTOR2I aLabelPos, SPIN_STYLE aDefaultSpin )
 {
-    LTSPICE_SCHEMATIC::IOPIN& iopin = aAscfile.Iopins[aIndex];
-    wxString                  ioPinName;
+    // Detect label orientation based on connections
+    std::set<SPIN_STYLE> preferredSpins;
+
+    SCH_COLLECTOR collector;
+    collector.Collect( aScreen, { SCH_LINE_T, SCH_PIN_T, SCH_SHEET_PIN_T }, aLabelPos );
+
+    for( EDA_ITEM* item : collector )
+    {
+        if( SCH_LINE* wire = dynamic_cast<SCH_LINE*>( item ) )
+        {
+            if( !wire->IsWire() )
+                continue;
+
+            BOX2I wireBox;
+            wireBox.Merge( wire->GetStartPoint() );
+            wireBox.Merge( wire->GetEndPoint() );
+
+            VECTOR2I minPt = wireBox.GetOrigin();
+            VECTOR2I maxPt = wireBox.GetEnd();
+
+            EDA_ANGLE wireAngle = wire->Angle().Normalized();
+
+            if( wireAngle.IsHorizontal() )
+            {
+                if( aLabelPos == minPt )
+                    preferredSpins.emplace( SPIN_STYLE::LEFT );
+                else if( aLabelPos == maxPt )
+                    preferredSpins.emplace( SPIN_STYLE::RIGHT );
+                else
+                    preferredSpins.emplace( SPIN_STYLE::UP );
+            }
+            else if( wireAngle.IsVertical() )
+            {
+                if( aLabelPos == minPt )
+                    preferredSpins.emplace( SPIN_STYLE::UP );
+                else if( aLabelPos == maxPt )
+                    preferredSpins.emplace( SPIN_STYLE::BOTTOM );
+                else
+                    preferredSpins.emplace( SPIN_STYLE::LEFT );
+            }
+        }
+        else if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( item ) )
+        {
+            TRANSFORM transform;
+
+            if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( pin->GetParentSymbol() ) )
+                transform = symbol->GetTransform();
+
+            switch( pin->PinDrawOrient( transform ) )
+            {
+            case PIN_ORIENTATION::PIN_RIGHT: preferredSpins.emplace( SPIN_STYLE::LEFT ); break;
+            case PIN_ORIENTATION::PIN_LEFT: preferredSpins.emplace( SPIN_STYLE::RIGHT ); break;
+            case PIN_ORIENTATION::PIN_UP: preferredSpins.emplace( SPIN_STYLE::BOTTOM ); break;
+            case PIN_ORIENTATION::PIN_DOWN: preferredSpins.emplace( SPIN_STYLE::UP ); break;
+            default: break;
+            }
+        }
+        else if( SCH_SHEET_PIN* sheetPin = dynamic_cast<SCH_SHEET_PIN*>( item ) )
+        {
+            switch( sheetPin->GetSpinStyle() )
+            {
+            case SPIN_STYLE::LEFT: preferredSpins.emplace( SPIN_STYLE::RIGHT ); break;
+            case SPIN_STYLE::RIGHT: preferredSpins.emplace( SPIN_STYLE::LEFT ); break;
+            case SPIN_STYLE::BOTTOM: preferredSpins.emplace( SPIN_STYLE::UP ); break;
+            case SPIN_STYLE::UP: preferredSpins.emplace( SPIN_STYLE::BOTTOM ); break;
+            default: break;
+            }
+        }
+    }
+
+    if( preferredSpins.size() == 1 )
+    {
+        return *preferredSpins.begin();
+    }
+    else if( preferredSpins.size() == 2 )
+    {
+        if( preferredSpins.contains( SPIN_STYLE::UP ) )
+            return SPIN_STYLE::UP;
+        else if( preferredSpins.contains( SPIN_STYLE::BOTTOM ) )
+            return SPIN_STYLE::BOTTOM;
+    }
+    else if( preferredSpins.size() == 3 )
+    {
+        if( preferredSpins.contains( SPIN_STYLE::UP ) && preferredSpins.contains( SPIN_STYLE::BOTTOM ) )
+        {
+            if( preferredSpins.contains( SPIN_STYLE::LEFT ) )
+                return SPIN_STYLE::LEFT;
+            else if( preferredSpins.contains( SPIN_STYLE::RIGHT ) )
+                return SPIN_STYLE::RIGHT;
+        }
+        else if( preferredSpins.contains( SPIN_STYLE::LEFT ) && preferredSpins.contains( SPIN_STYLE::RIGHT ) )
+        {
+            if( preferredSpins.contains( SPIN_STYLE::UP ) )
+                return SPIN_STYLE::UP;
+            else if( preferredSpins.contains( SPIN_STYLE::BOTTOM ) )
+                return SPIN_STYLE::BOTTOM;
+        }
+    }
+
+    return aDefaultSpin;
+}
+
+
+void SCH_IO_LTSPICE_PARSER::AddAscIopin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen )
+{
+    const LTSPICE_SCHEMATIC::IOPIN& iopin = aAscfile.Iopins[aIndex];
+    wxString                        ioPinName;
 
     for( unsigned int k = 0; k < aAscfile.Flags.size(); k++ )
     {
-        if( ( aAscfile.Flags[k].Offset.x == iopin.Location.x )
-            && ( aAscfile.Flags[k].Offset.y == iopin.Location.y ) )
+        if( ( aAscfile.Flags[k].Offset.x == iopin.Location.x ) && ( aAscfile.Flags[k].Offset.y == iopin.Location.y ) )
         {
             ioPinName = aAscfile.Flags[k].Value;
             aAscfile.Flags.erase( aAscfile.Flags.begin() + k );
         }
     }
 
-    SCH_HIERLABEL* sheetPin =
-            new SCH_HIERLABEL( ToKicadCoords( iopin.Location ), ioPinName, SCH_HIER_LABEL_T );
-
-    sheetPin->Move( m_originOffset );
-
+    VECTOR2I       pinLoc = ToKicadCoords( iopin.Location ) + m_originOffset;
+    SCH_HIERLABEL* sheetPin = new SCH_HIERLABEL( pinLoc, ioPinName, SCH_HIER_LABEL_T );
     sheetPin->SetShape( getLabelShape( iopin.Polarity ) );
-    aSheet->LastScreen()->Append( sheetPin );
+    sheetPin->SetSpinStyle( autoLabelOrientation( aScreen, pinLoc, SPIN_STYLE::RIGHT ) );
+
+    sheetPin->AutoplaceFields( aScreen, AUTOPLACE_AUTO );
+    sheetPin->SetFlags( IS_NEW );
+
+    aScreen->Append( sheetPin );
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateLine( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                        SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::AddAscLine( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen )
 {
-    LTSPICE_SCHEMATIC::LINE& lt_line = aAscfile.Lines[aIndex];
-    SCH_LINE* line = new SCH_LINE( ToKicadCoords( lt_line.Start ), SCH_LAYER_ID::LAYER_NOTES );
+    const LTSPICE_SCHEMATIC::LINE& lt_line = aAscfile.Lines[aIndex];
+    SCH_LINE*                      line = new SCH_LINE( ToKicadCoords( lt_line.Start ), SCH_LAYER_ID::LAYER_NOTES );
 
     line->SetEndPoint( ToKicadCoords( lt_line.End ) );
     line->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
     line->Move( m_originOffset );
 
-    aSheet->LastScreen()->Append( line );
+    aScreen->Append( line );
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                          SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::AddAscCircle( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen )
 {
-    LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aAscfile.Circles[aIndex];
-    SCH_SHAPE*                 circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
+    const LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aAscfile.Circles[aIndex];
+    SCH_SHAPE*                       circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
 
     VECTOR2I c = ( lt_circle.TopLeft + lt_circle.BotRight ) / 2;
-    int r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
+    int      r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
 
     circle->SetPosition( ToKicadCoords( c ) );
     circle->SetEnd( ToKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
     circle->SetStroke( getStroke( lt_circle.LineWidth, lt_circle.LineStyle ) );
     circle->Move( m_originOffset );
 
-    aSheet->LastScreen()->Append( circle );
+    aScreen->Append( circle );
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                       SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::AddAscArc( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen )
 {
-    LTSPICE_SCHEMATIC::ARC& lt_arc = aAscfile.Arcs[aIndex];
-    SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
+    const LTSPICE_SCHEMATIC::ARC& lt_arc = aAscfile.Arcs[aIndex];
+    SCH_SHAPE*                    arc = new SCH_SHAPE( SHAPE_T::ARC );
 
     arc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
     arc->SetEnd( ToKicadCoords( lt_arc.ArcEnd ) );
@@ -889,22 +919,135 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int 
     arc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
     arc->Move( m_originOffset );
 
-    aSheet->LastScreen()->Append( arc );
+    aScreen->Append( arc );
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                        SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::AddAscRect( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen )
 {
-    LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aAscfile.Rectangles[aIndex];
-    SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
+    const LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aAscfile.Rectangles[aIndex];
+    SCH_SHAPE*                          rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
     rectangle->SetPosition( ToKicadCoords( lt_rect.TopLeft ) );
     rectangle->SetEnd( ToKicadCoords( lt_rect.BotRight ) );
     rectangle->SetStroke( getStroke( lt_rect.LineWidth, lt_rect.LineStyle ) );
     rectangle->Move( m_originOffset );
 
-    aSheet->LastScreen()->Append( rectangle );
+    aScreen->Append( rectangle );
+}
+
+
+SCH_SHEET* SCH_IO_LTSPICE_PARSER::AddAscSymAsSubsheet( LTSPICE_SCHEMATIC::LT_ASC&          aAscfile,
+                                                       const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
+                                                       SCH_SCREEN*                         aScreen )
+{
+    SCH_SHEET* sch_sheet = new SCH_SHEET( aScreen->Schematic() );
+
+    sch_sheet->AddField( SCH_FIELD( sch_sheet, FIELD_T::USER, SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD ) );
+
+    SCH_FIELD* instNameField = sch_sheet->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD );
+    SCH_FIELD* sheetNameField = sch_sheet->GetField( FIELD_T::SHEET_NAME );
+    SCH_FIELD* fileNameSheet = sch_sheet->GetField( FIELD_T::SHEET_FILENAME );
+
+    wxString instName = get_def( aLTSymbol.SymAttributes, wxS( "INSTNAME" ), wxS( "_" ) );
+    wxString sanitizedName = aLTSymbol.Name;
+
+    ReplaceIllegalFileNameChars( sanitizedName, '_' );
+
+    wxString sheetName = sanitizedName + ':' + instName;
+
+    instNameField->SetText( instName );
+    instNameField->SetVisible( false );
+
+    sheetNameField->SetText( sheetName );
+    sheetNameField->SetVisible( false );
+
+    fileNameSheet->SetText( m_lt_schematic->GetSchematicFileName( aLTSymbol.AsyKey ) );
+    fileNameSheet->SetVisible( false );
+
+    BOX2I bboxLT;
+
+    for( const LTSPICE_SCHEMATIC::LT_PIN& pin : aLTSymbol.Pins )
+    {
+        bboxLT.Merge( RotateMirror( aLTSymbol, pin.PinLocation ) );
+    }
+
+    for( const LTSPICE_SCHEMATIC::RECTANGLE& rect : aLTSymbol.Rectangles )
+    {
+        bboxLT.Merge( RotateMirror( aLTSymbol, rect.TopLeft ) );
+        bboxLT.Merge( RotateMirror( aLTSymbol, rect.BotRight ) );
+    }
+
+    for( const LTSPICE_SCHEMATIC::CIRCLE& circle : aLTSymbol.Circles )
+    {
+        bboxLT.Merge( RotateMirror( aLTSymbol, circle.TopLeft ) );
+        bboxLT.Merge( RotateMirror( aLTSymbol, circle.BotRight ) );
+    }
+
+    for( const LTSPICE_SCHEMATIC::ARC& arc : aLTSymbol.Arcs )
+    {
+        bboxLT.Merge( RotateMirror( aLTSymbol, arc.TopLeft ) );
+        bboxLT.Merge( RotateMirror( aLTSymbol, arc.BotRight ) );
+    }
+
+    for( const LTSPICE_SCHEMATIC::LINE& line : aLTSymbol.Lines )
+    {
+        bboxLT.Merge( RotateMirror( aLTSymbol, line.Start ) );
+        bboxLT.Merge( RotateMirror( aLTSymbol, line.End ) );
+    }
+
+    if( bboxLT.GetWidth() == 0 )
+        bboxLT.Inflate( 16, 0 );
+
+    if( bboxLT.GetHeight() == 0 )
+        bboxLT.Inflate( 0, 16 );
+
+    sch_sheet->SetPosition( ToKicadCoords( aLTSymbol.Offset + bboxLT.GetOrigin() ) + m_originOffset );
+    sch_sheet->SetSize( ToKicadCoords( bboxLT.GetSize() ) );
+    sch_sheet->SetBorderWidth( schIUScale.MilsToIU( 1 ) );
+
+    for( const LTSPICE_SCHEMATIC::LT_PIN& pin : aLTSymbol.Pins )
+    {
+        wxString name = get_def( pin.PinAttribute, wxS( "PinName" ) );
+        VECTOR2I absPinPosLT = aLTSymbol.Offset + RotateMirror( aLTSymbol, pin.PinLocation );
+
+        SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( sch_sheet, absPinPosLT, name );
+
+        if( pin.PinJustification != LTSPICE_SCHEMATIC::JUSTIFICATION::NONE )
+            sheetPin->SetSchTextSize( schIUScale.MilsToIU( 40 ) ); // Match LTspice size
+        else
+            sheetPin->SetSchTextSize( schIUScale.MilsToIU( 10 ) ); // Supposed to be invisible
+
+        sheetPin->ConstrainOnEdge( ToKicadCoords( absPinPosLT ) + m_originOffset, true );
+        sch_sheet->AddPin( sheetPin );
+
+        VECTOR2I absPinPosNewLT = ToLtSpiceCoords( sheetPin->GetPosition() - m_originOffset );
+
+        // Reconnect wires/iopins/flags to the sheet pin
+        for( LTSPICE_SCHEMATIC::WIRE& wire : aAscfile.Wires )
+        {
+            if( wire.Start == absPinPosLT )
+                wire.Start = absPinPosNewLT;
+            if( wire.End == absPinPosLT )
+                wire.End = absPinPosNewLT;
+        }
+
+        for( LTSPICE_SCHEMATIC::IOPIN& iopin : aAscfile.Iopins )
+        {
+            if( iopin.Location == absPinPosLT )
+                iopin.Location = absPinPosNewLT;
+        }
+
+        for( LTSPICE_SCHEMATIC::FLAG& flag : aAscfile.Flags )
+        {
+            if( flag.Offset == absPinPosLT )
+                flag.Offset = absPinPosNewLT;
+        }
+    }
+
+    aScreen->Append( sch_sheet );
+
+    return sch_sheet;
 }
 
 
@@ -1028,8 +1171,7 @@ void SCH_IO_LTSPICE_PARSER::setTextJustification( EDA_TEXT*                     
 }
 
 
-SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( const VECTOR2I& aOffset, const wxString& aText,
-                                                 int aFontSize,
+SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( const VECTOR2I& aOffset, const wxString& aText, int aFontSize,
                                                  LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
 {
     VECTOR2I  pos = ToKicadCoords( aOffset ) + m_originOffset;
@@ -1045,8 +1187,8 @@ SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( const VECTOR2I& aOffset, const 
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                        SCH_SHEET_PATH* aSheet, SCH_LAYER_ID aLayer )
+void SCH_IO_LTSPICE_PARSER::AddAscWire( const LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SCREEN* aScreen,
+                                        SCH_LAYER_ID aLayer )
 {
     SCH_LINE* segment = new SCH_LINE();
 
@@ -1057,17 +1199,16 @@ void SCH_IO_LTSPICE_PARSER::CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int
     segment->SetStartPoint( ToKicadCoords( aAscfile.Wires[aIndex].Start ) + m_originOffset );
     segment->SetEndPoint( ToKicadCoords( aAscfile.Wires[aIndex].End ) + m_originOffset );
 
-    aSheet->LastScreen()->Append( segment );
+    aScreen->Append( segment );
 }
 
 
-SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
-                                                      const wxString& aValue,
-                                                      int aFontSize, SCH_SHEET_PATH* aSheet,
+SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset, const wxString& aValue, int aFontSize,
+                                                      SCH_SCREEN*                           aScreen,
                                                       std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
 {
     LIB_SYMBOL* lib_symbol = new LIB_SYMBOL( wxS( "GND" ) );
-    SCH_SHAPE*  shape = new SCH_SHAPE( SHAPE_T::POLY,LAYER_DEVICE );
+    SCH_SHAPE*  shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
     shape->AddPoint( ToKicadCoords( { 16, 0 } ) );
     shape->AddPoint( ToKicadCoords( { -16, 0 } ) );
@@ -1076,8 +1217,7 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
     shape->AddPoint( ToKicadCoords( { -16, 0 } ) );
     shape->AddPoint( ToKicadCoords( { 0, 15 } ) );
 
-    shape->SetStroke( STROKE_PARAMS( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ),
-                                     LINE_STYLE::SOLID ) );
+    shape->SetStroke( STROKE_PARAMS( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ), LINE_STYLE::SOLID ) );
 
     lib_symbol->AddDrawItem( shape );
     lib_symbol->SetGlobalPower();
@@ -1090,75 +1230,50 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
     pin->SetShape( GRAPHIC_PINSHAPE::LINE );
     lib_symbol->AddDrawItem( pin );
 
-    LIB_ID libId( wxS( "ltspice" ), wxS( "GND" ) );
-    SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, aSheet, 1 );
+    LIB_ID      libId( wxS( "ltspice" ), wxS( "GND" ) );
+    SCH_SYMBOL* sch_symbol = new SCH_SYMBOL( *lib_symbol, libId, nullptr, 1 );
 
-    sch_symbol->SetRef( aSheet, wxString::Format( wxS( "#GND%03d" ), m_powerSymbolIndex++ ) );
+    sch_symbol->GetField( FIELD_T::REFERENCE )->SetText( wxString::Format( wxS( "#GND%03d" ), m_powerSymbolIndex++ ) );
     sch_symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
     sch_symbol->SetValueFieldText( wxS( "0" ) );
     sch_symbol->GetField( FIELD_T::VALUE )->SetTextSize( ToKicadFontSize( aFontSize ) );
     sch_symbol->GetField( FIELD_T::VALUE )->SetVisible( false );
 
-    sch_symbol->Move( ToKicadCoords( aOffset ) + m_originOffset );
+    VECTOR2I pos = ToKicadCoords( aOffset ) + m_originOffset;
+    sch_symbol->Move( pos );
 
-    for( LTSPICE_SCHEMATIC::WIRE& wire : aWires )
+    switch( autoLabelOrientation( aScreen, pos, SPIN_STYLE::BOTTOM ) )
     {
-        if( aOffset == wire.Start )
-        {
-            if( wire.Start.x == wire.End.x )
-            {
-                if( wire.Start.y < wire.End.y )
-                {
-                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                }
-            }
-            else
-            {
-                if( wire.Start.x < wire.End.x )
-                    sch_symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
-                else if( wire.Start.x > wire.End.x )
-                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-            }
-        }
-        else if( aOffset == wire.End )
-        {
-            if( wire.Start.x == wire.End.x )
-            {
-                if( wire.Start.y > wire.End.y )
-                {
-                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                }
-            }
-            else
-            {
-                if( wire.Start.x < wire.End.x )
-                    sch_symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
-                else if( wire.Start.x > wire.End.x )
-                    sch_symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
-            }
-        }
+    case SPIN_STYLE::BOTTOM: sch_symbol->SetOrientation( SYM_ORIENT_0 ); break;
+    case SPIN_STYLE::RIGHT:  sch_symbol->SetOrientation( SYM_ORIENT_90 ); break;
+    case SPIN_STYLE::UP:     sch_symbol->SetOrientation( SYM_ORIENT_180 ); break;
+    case SPIN_STYLE::LEFT:   sch_symbol->SetOrientation( SYM_ORIENT_270 ); break;
+    default: break;
     }
 
     return sch_symbol;
 }
 
 
-SCH_LABEL_BASE*
-SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
-                                        const wxString& aValue, int aFontSize,
-                                        std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
+SCH_LABEL_BASE* SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset, const wxString& aValue,
+                                                        int aFontSize, SCH_SCREEN* aScreen )
 {
     SCH_LABEL_BASE* label = nullptr;
 
+    if( aType == SCH_LABEL_T )
+    {
+        label = new SCH_LABEL();
+
+        label->SetText( aValue );
+        label->SetTextSize( ToKicadFontSize( aFontSize ) );
+    }
+    else
     if( aType == SCH_GLOBAL_LABEL_T )
     {
         label = new SCH_GLOBALLABEL();
 
         label->SetText( aValue );
         label->SetTextSize( ToKicadFontSize( aFontSize ) );
-        label->SetSpinStyle( SPIN_STYLE::UP );
     }
     else if( aType == SCH_DIRECTIVE_LABEL_T )
     {
@@ -1172,7 +1287,6 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
         field.SetVisible( true );
 
         label->AddField( field );
-        label->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
     }
     else
     {
@@ -1182,65 +1296,23 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
     if( label )
     {
         label->SetPosition( ToKicadCoords( aOffset ) + m_originOffset );
+        label->SetSpinStyle( autoLabelOrientation( aScreen, label->GetPosition(), SPIN_STYLE::RIGHT ) );
+        label->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
         label->SetVisible( true );
     }
-
-    std::vector<SPIN_STYLE> preferredSpins;
-
-    for( LTSPICE_SCHEMATIC::WIRE& wire : aWires )
-    {
-        if( aOffset == wire.Start )
-        {
-            if( wire.Start.x == wire.End.x )
-            {
-                if( wire.Start.y < wire.End.y )
-                    preferredSpins.emplace_back( SPIN_STYLE::UP );
-                else if( wire.Start.y > wire.End.y )
-                    preferredSpins.emplace_back( SPIN_STYLE::BOTTOM );
-            }
-            else
-            {
-                if( wire.Start.x < wire.End.x )
-                    preferredSpins.emplace_back( SPIN_STYLE::LEFT );
-                else if( wire.Start.x > wire.End.x )
-                    preferredSpins.emplace_back( SPIN_STYLE::RIGHT );
-            }
-        }
-        else if( aOffset == wire.End )
-        {
-            if( wire.Start.x == wire.End.x )
-            {
-                if( wire.Start.y > wire.End.y )
-                    preferredSpins.emplace_back( SPIN_STYLE::UP );
-                else if( wire.Start.y < wire.End.y )
-                    preferredSpins.emplace_back( SPIN_STYLE::BOTTOM );
-            }
-            else
-            {
-                if( wire.Start.x > wire.End.x )
-                    preferredSpins.emplace_back( SPIN_STYLE::LEFT );
-                else if( wire.Start.x < wire.End.x )
-                    preferredSpins.emplace_back( SPIN_STYLE::RIGHT );
-            }
-        }
-    }
-
-    if( preferredSpins.size() == 1 )
-        label->SetSpinStyle( preferredSpins.front() );
 
     return label;
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                          SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::AddSymFields( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SYMBOL* aSymbol )
 {
     wxString symbolName = aLTSymbol.Name.Upper();
-    wxString type = aLTSymbol.SymAttributes[wxS( "TYPE" )].Upper();
-    wxString prefix = aLTSymbol.SymAttributes[wxS( "PREFIX" )].Upper();
-    wxString instName = aLTSymbol.SymAttributes[wxS( "INSTNAME" )].Upper();
-    wxString value = aLTSymbol.SymAttributes[wxS( "VALUE" )];
-    wxString value2 = aLTSymbol.SymAttributes[wxS( "VALUE2" )];
+    wxString type = get_def( aLTSymbol.SymAttributes, wxS( "TYPE" ) ).Upper();
+    wxString prefix = get_def( aLTSymbol.SymAttributes, wxS( "PREFIX" ) ).Upper();
+    wxString instName = get_def( aLTSymbol.SymAttributes, wxS( "INSTNAME" ) ).Upper();
+    wxString value = get_def( aLTSymbol.SymAttributes, wxS( "VALUE" ) );
+    wxString value2 = get_def( aLTSymbol.SymAttributes, wxS( "VALUE2" ) );
 
     if( value.IsEmpty() )
     {
@@ -1390,7 +1462,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     }
     else
     {
-        wxString libFile = aLTSymbol.SymAttributes[wxS( "MODELFILE" )];
+        wxString libFile = get_def( aLTSymbol.SymAttributes, wxS( "MODELFILE" ) );
 
         if( prefix == wxS( "X" ) )
         {
@@ -1409,7 +1481,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
             addField( wxS( "Sim.Name" ), symbolName );
         }
 
-        wxString spiceLine = aLTSymbol.SymAttributes[wxS( "SPICELINE" )];
+        wxString spiceLine = get_def( aLTSymbol.SymAttributes, wxS( "SPICELINE" ) );
 
         if( type == wxS( "X" ) )
         {
@@ -1430,13 +1502,13 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     }
 
     // Set this at the end, as we may have changed the variables
-    aSymbol->SetRef( aSheet, instName );
+    aSymbol->GetField( FIELD_T::REFERENCE )->SetText( instName );
     aSymbol->SetValueFieldText( value );
 
     if( !value2.IsEmpty() )
         addField( wxS( "Value2" ), value2 );
 
-    for( LTSPICE_SCHEMATIC::LT_WINDOW& lt_window : aLTSymbol.Windows )
+    for( const LTSPICE_SCHEMATIC::LT_WINDOW& lt_window : aLTSymbol.Windows )
     {
         SCH_FIELD* field = nullptr;
 
@@ -1571,42 +1643,24 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                        SCH_SHAPE* aRectangle )
+void SCH_IO_LTSPICE_PARSER::CreateSymRect( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
+                                           SCH_SHAPE* aRectangle )
 {
-    LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
+    const LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
 
     aRectangle->SetPosition( ToKicadCoords( lt_rect.BotRight ) );
     aRectangle->SetEnd( ToKicadCoords( lt_rect.TopLeft ) );
-    aRectangle->SetStroke( getStroke(  lt_rect.LineWidth, lt_rect.LineStyle ) );
+    aRectangle->SetStroke( getStroke( lt_rect.LineWidth, lt_rect.LineStyle ) );
 
-    if( aLTSymbol.SymAttributes[wxS( "PREFIX" )] == wxS( "X" ) )
+    if( get_def( aLTSymbol.SymAttributes, wxS( "PREFIX" ) ) == wxS( "X" ) )
         aRectangle->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                        SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::CreateSymPin( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_PIN* aPin )
 {
-    LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
-    SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
-
-    rectangle->SetPosition( ToKicadCoords( lt_rect.BotRight ) );
-    rectangle->SetEnd( ToKicadCoords( lt_rect.TopLeft ) );
-    rectangle->SetStroke( getStroke( lt_rect.LineWidth, lt_rect.LineStyle ) );
-
-    rectangle->Move( aLTSymbol.Offset );
-    RotateMirrorShape( aLTSymbol, rectangle );
-
-    aSheet->LastScreen()->Append( rectangle );
-}
-
-
-void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       SCH_PIN* aPin )
-{
-    LTSPICE_SCHEMATIC::LT_PIN& lt_pin = aLTSymbol.Pins[aIndex];
-    wxString                   device = aLTSymbol.Name.Lower();
+    const LTSPICE_SCHEMATIC::LT_PIN& lt_pin = aLTSymbol.Pins[aIndex];
+    wxString                         device = aLTSymbol.Name.Lower();
 
     if( aLTSymbol.Pins.size() == 2 && ( device == wxS( "res" )
                                      || device == wxS( "cap" )
@@ -1617,7 +1671,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     }
     else
     {
-        aPin->SetName( lt_pin.PinAttribute[ wxS( "PinName" ) ] );
+        aPin->SetName( get_def( lt_pin.PinAttribute, wxS( "PinName" ) ) );
 
         if( lt_pin.PinJustification == LTSPICE_SCHEMATIC::JUSTIFICATION::NONE )
             aPin->SetNameTextSize( 0 );
@@ -1626,7 +1680,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     aPin->SetNumber( wxString::Format( wxS( "%d" ), aIndex + 1 ) );
 
     // Prefer LTspice SpiceOrder for pin numbers
-    wxString spiceOrder = lt_pin.PinAttribute[ wxS( "SpiceOrder" ) ];
+    wxString spiceOrder = get_def( lt_pin.PinAttribute, wxS( "SpiceOrder" ) );
     long     spiceOrderNum = 0;
 
     if( spiceOrder.ToLong( &spiceOrderNum ) && spiceOrderNum > 0 )
@@ -1691,10 +1745,9 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       SCH_SHAPE* aArc )
+void SCH_IO_LTSPICE_PARSER::CreateSymArc( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aArc )
 {
-    LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
+    const LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
 
     aArc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
     aArc->SetStart( ToKicadCoords( lt_arc.ArcEnd ) );
@@ -1703,51 +1756,13 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       SCH_SHEET_PATH* aSheet )
+void SCH_IO_LTSPICE_PARSER::CreateSymCircle( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
+                                             SCH_SHAPE* aCircle )
 {
-    LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
-    SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
-
-    arc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
-    arc->SetStart( ToKicadCoords( lt_arc.ArcEnd ) );
-    arc->SetEnd( ToKicadCoords( lt_arc.ArcStart ) );
-    arc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
-
-    arc->Move( ToKicadCoords( aLTSymbol.Offset ) + m_originOffset );
-    RotateMirrorShape( aLTSymbol, arc );
-
-    aSheet->LastScreen()->Append( arc );
-}
-
-
-void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                          SCH_SHEET_PATH* aSheet )
-{
-    LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aLTSymbol.Circles[aIndex];
-    SCH_SHAPE*                 circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
+    const LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aLTSymbol.Circles[aIndex];
 
     VECTOR2I c = ( lt_circle.TopLeft + lt_circle.BotRight ) / 2;
-    int r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
-
-    circle->SetPosition( ToKicadCoords( c ) );
-    circle->SetEnd( ToKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
-    circle->SetStroke( getStroke( lt_circle.LineWidth, lt_circle.LineStyle ) );
-
-    circle->Move( aLTSymbol.Offset );
-    RotateMirrorShape( aLTSymbol, circle );
-
-    aSheet->LastScreen()->Append( circle );
-}
-
-
-void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                          SCH_SHAPE* aCircle )
-{
-    LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aLTSymbol.Circles[aIndex];
-
-    VECTOR2I c = ( lt_circle.TopLeft + lt_circle.BotRight ) / 2;
-    int r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
+    int      r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
 
     aCircle->SetPosition( ToKicadCoords( c ) );
     aCircle->SetEnd( ToKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );

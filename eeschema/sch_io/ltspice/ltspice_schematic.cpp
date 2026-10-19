@@ -33,193 +33,266 @@
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <page_info.h>
 #include <project.h>
+#include <lib_id.h>
 #include <richio.h>
+#include <string_utils.h>
 #include <algorithm>
 
 
-// ASC SYMBOL lines look like: SYMBOL [folder\]name ...
-// Examples: "res", "Misc\signal", "SomeFolder\opamp".
+// Files are found in this order: foo/amp.asy, then bar/amp.asy.
+// The map is then:
+//   "foo/amp" -> foo/amp.asy
+//   "amp"     -> foo/amp.asy
+//   "bar/amp" -> bar/amp.asy
 //
-// We index each .asy under its real path and as a bare name.  If the ASC uses a
-// folder that is not in the LTspice library tree, try the bare name so the same
-// symbol still loads.
-static wxString resolveAsyMapKey( const std::map<wxString, wxString>& aMap, const wxString& aName )
+// "foo/amp" returns "amp", because "amp" is foo/amp.asy.
+// "bar/amp" returns "bar/amp", because "amp" is foo/amp.asy, not bar/amp.asy.
+static wxString getShortestKey( const std::map<wxString, wxString>& aMap, const wxString& aName )
 {
     wxString key = aName.Lower();
     key.Replace( '\\', '/' );
 
-    if( aMap.find( key ) != aMap.end() )
+    if( aMap.contains( key ) )
+    {
+        while( key.Contains( '/' ) )
+        {
+            wxString shorter = key.AfterFirst( '/' );
+
+            if( !aMap.contains( shorter ) || aMap.at( shorter ) != aMap.at( key ) )
+                break;
+
+            key = shorter;
+        }
+
         return key;
+    }
+    else
+    {
+        key = key.AfterLast( '/' );
 
-    wxString base = key.AfterLast( '/' );
-
-    if( !base.IsEmpty() && aMap.find( base ) != aMap.end() )
-        return base;
+        if( aMap.contains( key ) )
+            return key;
+    }
 
     return {};
 }
 
 
-void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-                              const wxFileName& aLibraryFileName, REPORTER* aReporter )
+wxString LTSPICE_SCHEMATIC::GetSchematicFileName( const wxString& aAscKey ) const
 {
-    std::map<wxString, wxString> mapOfAscFiles;
-    std::map<wxString, wxString> mapOfAsyFiles;
+    wxString name = getShortestKey( m_ascNamesMap, aAscKey );
+
+    if( name.IsEmpty() )
+        name = aAscKey.Lower();
+
+    ReplaceIllegalFileNameChars( name, '_' );
+
+    return name + '.' + FILEEXT::KiCadSchematicFileExtension;
+}
+
+
+wxString LTSPICE_SCHEMATIC::GetSymbolName( const wxString& aSymbolName ) const
+{
+    wxString name = getShortestKey( m_asyNamesMap, aSymbolName );
+
+    return LIB_ID::FixIllegalChars( name, false ).wx_str();
+}
+
+
+void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxFileName& aLibraryFileName,
+                              REPORTER* aReporter )
+{
+    m_ascFileCache.clear();
+    m_asyFileCache.clear();
+    m_ascNamesMap.clear();
+    m_asyNamesMap.clear();
 
     // Library paths to search (Give highest priority to files contained in same directory)
-    GetAscAndAsyFilePaths( aLibraryFileName.GetPath(), false, mapOfAscFiles, mapOfAsyFiles );
+    GetAscAndAsyFilePaths( aLibraryFileName.GetPath(), false, m_ascNamesMap, m_asyNamesMap );
 
     // TODO: Custom paths go here (non-recursive)
 
     // Default LTspice libs
-    GetAscAndAsyFilePaths( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ), true, mapOfAscFiles,
-                           mapOfAsyFiles );
+    GetAscAndAsyFilePaths( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ), true, m_ascNamesMap, m_asyNamesMap );
+    GetAscAndAsyFilePaths( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ), true, m_ascNamesMap, m_asyNamesMap );
 
-    GetAscAndAsyFilePaths( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ), true, mapOfAscFiles,
-                           mapOfAsyFiles );
+    wxString              rootElementName = aLibraryFileName.GetName().Lower();
+    std::vector<wxString> uniqueAscNameKeys;
 
-    m_schematic = aSchematic;
-
-    std::queue<wxString> ascFileQueue;
-    ascFileQueue.push( aLibraryFileName.GetName().Lower() );
-
-    LTSPICE_FILE rootAscFile( ascFileQueue.front(), { 0, 0 } );
-
-    rootAscFile.Sheet = aRootSheet;
-    rootAscFile.Screen = new SCH_SCREEN();
-
-    int parentSheetIndex = 0;
-
-    // Asc files who are subschematic in nature
-    std::vector<LTSPICE_FILE> ascFiles;
-
-    ascFiles.push_back( rootAscFile );
-
-    while( !ascFileQueue.empty() )
+    std::function<void( const wxString& )> collectHierarchy;
+    collectHierarchy = [&]( const wxString& aAscNameKey )
     {
-        SCH_SCREEN* screen = nullptr;
+        uniqueAscNameKeys.push_back( aAscNameKey );
 
-        // Reading the .asc file
-        wxString ascFilePath = mapOfAscFiles[ ascFileQueue.front() ];
-        wxString buffer = SafeReadFile( ascFilePath, "r" );
+        if( !m_ascNamesMap.contains( aAscNameKey ) )
+        {
+            aReporter->Report( wxString::Format( _( "Missing '%s' schematic file" ), aAscNameKey + wxS( ".asc" ) ),
+                               RPT_SEVERITY_ERROR );
+            return;
+        }
+
+        wxString buffer = SafeReadFile( m_ascNamesMap.at( aAscNameKey ), wxS( "r" ) );
+        m_ascFileCache[m_ascNamesMap.at( aAscNameKey )] = buffer;
 
         std::vector<LTSPICE_FILE> newSubSchematicElements = GetSchematicElements( buffer );
 
-        std::erase_if( newSubSchematicElements,
-                        [&mapOfAscFiles]( const LTSPICE_FILE& ii )
-                        {
-                            return mapOfAscFiles[ii.ElementName].IsEmpty();
-                        } );
-
         for( LTSPICE_FILE& newSubSchematicElement : newSubSchematicElements )
         {
-            wxString asyName = newSubSchematicElement.ElementName;
-            wxString asyKey = resolveAsyMapKey( mapOfAsyFiles, asyName );
+            wxString asyKey = getShortestKey( m_asyNamesMap, newSubSchematicElement.ElementName );
+
+            if( alg::contains( uniqueAscNameKeys, asyKey ) )
+                continue;
 
             if( asyKey.IsEmpty() )
                 continue;
 
-            wxString asyBuffer = SafeReadFile( mapOfAsyFiles.at( asyKey ), "r" );
+            wxString asyBuffer = SafeReadFile( m_asyNamesMap.at( asyKey ), wxS( "r" ) );
+            m_asyFileCache[m_asyNamesMap.at( asyKey )] = asyBuffer;
 
             if( IsAsySubsheet( asyBuffer ) )
-            {
-                if( !screen )
-                    screen = new SCH_SCREEN( m_schematic );
-
-                newSubSchematicElement.ParentIndex = parentSheetIndex;
-                newSubSchematicElement.Screen = screen;
-                newSubSchematicElement.Sheet = new SCH_SHEET();
-
-                ascFileQueue.push( newSubSchematicElement.ElementName );
-                ascFiles.push_back( newSubSchematicElement );
-            }
+                collectHierarchy( asyKey );
         }
+    };
 
-        ascFileQueue.pop();
+    collectHierarchy( rootElementName );
 
-        parentSheetIndex++;
+    std::map<wxString, LTSPICE_SCHEMATIC::LT_ASC> parsedAscFiles = ParseAscFiles( m_ascFileCache );
+    std::map<wxString, SCH_SCREEN*>               mapOfScreens;
+
+    // Create a SCH_SCREEN for each unique .asc file
+    for( const wxString& elementName : uniqueAscNameKeys )
+    {
+        SCH_SCREEN* screen;
+
+        if( elementName == rootElementName )
+            screen = aRootSheet->GetScreen();
+        else
+            screen = new SCH_SCREEN( aSchematic );
+
+        screen->SetFileName( aSchematic->Project().GetProjectPath() + GetSchematicFileName( elementName ) );
+
+        mapOfScreens[elementName] = screen;
     }
 
-    for( unsigned int i = 0; i < ascFiles.size(); i++ )
+    // Create KiCad items for each .asc file
+    for( const wxString& elementName : uniqueAscNameKeys )
     {
-        // Reading the .asc file
-        wxString buffer = SafeReadFile( mapOfAscFiles[ascFiles[i].ElementName], wxS( "r" ) );
-
-        // Getting the keywords to read
-        {
-            std::vector<LTSPICE_FILE> sourceFiles = GetSchematicElements( buffer );
-
-            m_fileCache[ wxS( "asyFiles" ) ] = ReadAsyFiles( sourceFiles, mapOfAsyFiles );
-            m_fileCache[ wxS( "ascFiles" ) ][ wxS( "parentFile" ) ] = buffer;
-
-            for( const LTSPICE_FILE& file : sourceFiles )
-                wxASSERT( file.Sheet == nullptr && file.Screen == nullptr );
-        }
-
-        SCH_SHEET_PATH     curSheetPath;
         SCH_IO_LTSPICE_PARSER parser( this );
 
-        if( i > 0 )
+        if( !m_ascNamesMap.contains( elementName ) )
+            continue;
+
+        if( !parsedAscFiles.contains( m_ascNamesMap[elementName] ) )
+            continue;
+
+        LTSPICE_SCHEMATIC::LT_ASC& ascFile = parsedAscFiles[m_ascNamesMap[elementName]];
+        SCH_SCREEN*                screen = mapOfScreens[elementName];
+
+        const int grid = schIUScale.MilsToIU( 50 );
+        const int margin = grid * 10;
+        VECTOR2I  pageSize;
+        BOX2I     bbox;
+
+        bbox.Merge( parser.ToKicadCoords( ascFile.BoundingBox.GetOrigin() ) );
+        bbox.Merge( parser.ToKicadCoords( ascFile.BoundingBox.GetEnd() ) );
+
+        // Set smallest page size to fit all elements
+        for( const PAGE_SIZE_TYPE& sizeType : { PAGE_SIZE_TYPE::A5, PAGE_SIZE_TYPE::A4, PAGE_SIZE_TYPE::A3,
+                                                PAGE_SIZE_TYPE::A2, PAGE_SIZE_TYPE::A1, PAGE_SIZE_TYPE::A0 } )
         {
-            SCH_SHEET* curSheet = ascFiles[i].Sheet;
-            std::map   tempAsyMap = ReadAsyFile( ascFiles[i], mapOfAsyFiles );
-            wxString   ascFileName = ascFiles[i].ElementName;
-            LT_ASC     dummyAsc;
-            LT_SYMBOL  tempSymbol = SymbolBuilder( ascFileName, tempAsyMap[ascFileName], dummyAsc );
-            LIB_SYMBOL tempLibSymbol( ascFiles[i].ElementName );
+            PAGE_INFO pageInfo( sizeType, false );
 
-            parser.CreateSymbol( tempSymbol, &tempLibSymbol );
+            screen->SetPageSettings( pageInfo );
+            pageSize = KiROUND( pageInfo.GetSizeIU( schIUScale.IU_PER_MILS ) );
 
-            BOX2I bbox = tempLibSymbol.GetBoundingBox();
-
-            curSheet->SetSize( bbox.GetSize() );
-            curSheet->SetPosition( parser.ToKicadCoords( ascFiles[i].Offset ) + bbox.GetOrigin() );
-            curSheet->SetParent( ascFiles[ascFiles[i].ParentIndex].Sheet );
-
-            SCH_FIELD* sheetNameField = curSheet->GetField( FIELD_T::SHEET_NAME );
-            SCH_FIELD* fileNameSheet = curSheet->GetField( FIELD_T::SHEET_FILENAME );
-            wxString   sheetName = wxString::Format( wxS( "%s-subsheet-%d" ),
-                                                     ascFiles[i].ElementName,
-                                                     i );
-
-            sheetNameField->SetText( sheetName );
-            fileNameSheet->SetText( sheetName + ".kicad_sch" );
-
-            curSheet->SetScreen( ascFiles[i].Screen );
-
-            curSheetPath = ascFiles[ascFiles[i].ParentIndex].SheetPath;
-            curSheetPath.push_back( curSheet );
-
-            ascFiles[i].SheetPath = curSheetPath;
-
-            ascFiles[ascFiles[i].ParentIndex].Sheet->GetScreen()->Append( curSheet );
-
-            curSheet->GetScreen()->SetFileName( m_schematic->Project().GetProjectPath() + sheetName + ".kicad_sch" );
-        }
-        else
-        {
-            SCH_SHEET* curSheet = ascFiles[i].Sheet;
-
-            ascFiles[i].SheetPath.push_back( curSheet );
-            curSheetPath = ascFiles[i].SheetPath;
+            if( bbox.GetWidth() + margin < pageSize.x && bbox.GetHeight() + margin < pageSize.y )
+                break;
         }
 
-        std::vector<wxString> subSchematicAsyFiles;
-
-        for( const LTSPICE_FILE& ascFile : ascFiles )
-            subSchematicAsyFiles.push_back( ascFile.ElementName );
+        VECTOR2I originOffset = ( ( pageSize / 2 ) - bbox.GetCenter() ) / grid * grid;
 
         try
         {
-            std::vector<LTSPICE_SCHEMATIC::LT_ASC> lt_ascs = StructureBuilder();
-            parser.Parse( &curSheetPath, lt_ascs, subSchematicAsyFiles );
+            parser.CreateItems( ascFile, screen, uniqueAscNameKeys, mapOfScreens, originOffset );
         }
         catch( IO_ERROR& e )
         {
             aReporter->Report( e.What(), RPT_SEVERITY_ERROR );
         }
     }
+
+    SCH_SHEET_LIST sheets = aSchematic->BuildUnorderedSheetList();
+
+    // Number sheets in LTspice InstName order (parents before children, X2 before X10).
+    std::sort( sheets.begin(), sheets.end(),
+               []( const SCH_SHEET_PATH& a, const SCH_SHEET_PATH& b )
+               {
+                   size_t len = std::min( a.size(), b.size() );
+
+                   for( size_t i = 0; i < len; ++i )
+                   {
+                       SCH_SHEET* sheetA = a.at( i );
+                       SCH_SHEET* sheetB = b.at( i );
+
+                       if( sheetA->m_Uuid == sheetB->m_Uuid )
+                           continue;
+
+                       const SCH_FIELD* fieldA = sheetA->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD );
+                       const SCH_FIELD* fieldB = sheetB->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD );
+                       int              cmp = StrNumCmp( fieldA ? fieldA->GetText() : wxString(),
+                                                         fieldB ? fieldB->GetText() : wxString(), true );
+
+                       if( cmp != 0 )
+                           return cmp < 0;
+
+                       return sheetA->m_Uuid < sheetB->m_Uuid;
+                   }
+
+                   return a.size() < b.size();
+               } );
+
+    sheets.SetInitialPageNumbers();
+
+    sheets.SortByHierarchicalPageNumbers( true );
+    sheets.CheckForMissingSymbolInstances( aSchematic->Project().GetProjectName() );
+
+    // Update references of all symbols in the schematic to include instance path suffixes ("R1_X4_X1")
+    for( SCH_SHEET_PATH& path : sheets )
+    {
+        if( path.size() <= 1 )
+            continue;
+
+        wxString suffix;
+
+        for( size_t i = 1; i < path.size(); ++i )
+        {
+            suffix += wxS( "_" );
+
+            if( SCH_FIELD* instNameField = path.at( i )->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD ) )
+                suffix += instNameField->GetText();
+        }
+
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            wxString    ref = symbol->GetRef( &path );
+
+            symbol->SetRef( &path, ref + suffix );
+        }
+    }
+
+    for( const SCH_SHEET_PATH& path : sheets )
+        path.UpdateAllScreenReferences();
+
+    // Fixing all junctions at the end
+    aSchematic->FixupJunctionsAfterImport();
 }
 
 
@@ -299,22 +372,6 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
 }
 
 
-std::map<wxString, wxString> LTSPICE_SCHEMATIC::ReadAsyFile( const LTSPICE_FILE&                 aSourceFile,
-                                                             const std::map<wxString, wxString>& aAsyFileMap )
-{
-    std::map<wxString, wxString> resultantMap;
-
-    wxString fileName = aSourceFile.ElementName;
-    // resolveAsyMapKey may match by bare name if the folder is unknown.
-    wxString mapKey = resolveAsyMapKey( aAsyFileMap, fileName );
-
-    if( !mapKey.IsEmpty() )
-        resultantMap[fileName] = SafeReadFile( aAsyFileMap.at( mapKey ), wxS( "r" ) );
-
-    return resultantMap;
-}
-
-
 std::map<wxString, wxString> LTSPICE_SCHEMATIC::ReadAsyFiles( const std::vector<LTSPICE_FILE>&    aSourceFiles,
                                                               const std::map<wxString, wxString>& aAsyFileMap )
 {
@@ -323,8 +380,7 @@ std::map<wxString, wxString> LTSPICE_SCHEMATIC::ReadAsyFiles( const std::vector<
     for( const LTSPICE_FILE& source : aSourceFiles )
     {
         wxString fileName = source.ElementName;
-        // resolveAsyMapKey may match by bare name if the folder is unknown.
-        wxString mapKey = resolveAsyMapKey( aAsyFileMap, fileName );
+        wxString mapKey = getShortestKey( aAsyFileMap, fileName );
 
         if( !mapKey.IsEmpty() )
             resultantMap[fileName] = SafeReadFile( aAsyFileMap.at( mapKey ), wxS( "r" ) );
@@ -339,9 +395,9 @@ std::vector<LTSPICE_FILE> LTSPICE_SCHEMATIC::GetSchematicElements( const wxStrin
     std::vector<LTSPICE_FILE> resultantArray;
     wxArrayString             lines = wxSplit( aAscFile, '\n' );
 
-    for( const wxString& line : lines )
+    for( int i = 0; i < (int) lines.GetCount(); i++ )
     {
-        wxArrayString tokens = wxSplit( line, ' ' );
+        wxArrayString tokens = wxSplit( lines[i], ' ' );
 
         if( tokens.size() >= 4 && tokens[0].Upper() == wxS( "SYMBOL" ) )
         {
@@ -353,7 +409,7 @@ std::vector<LTSPICE_FILE> LTSPICE_SCHEMATIC::GetSchematicElements( const wxStrin
 
             elementName.Replace( '\\', '/' );
 
-            LTSPICE_FILE asyFile( elementName, VECTOR2I( (int) posX, (int) posY ) );
+            LTSPICE_FILE asyFile( elementName, VECTOR2I( (int) posX, (int) posY ), i + 1 );
 
             resultantArray.push_back( asyFile );
         }
@@ -365,20 +421,15 @@ std::vector<LTSPICE_FILE> LTSPICE_SCHEMATIC::GetSchematicElements( const wxStrin
 
 bool LTSPICE_SCHEMATIC::IsAsySubsheet( const wxString& aAsyFile )
 {
-    wxStringTokenizer lines( aAsyFile, "\n" );
+    wxStringTokenizer lines( aAsyFile, "\r\n", wxTOKEN_STRTOK );
 
     while( lines.HasMoreTokens() )
     {
-        wxStringTokenizer parts( lines.GetNextToken(), " " );
-
-        if( parts.GetNextToken().IsSameAs( wxS( "SYMATTR" ), false )
-            && parts.GetNextToken().IsSameAs( wxS( "Prefix" ), false ) )
-        {
-            return false;
-        }
+        if( lines.GetNextToken().IsSameAs( wxS( "SymbolType BLOCK" ), false ) )
+            return true;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -556,25 +607,13 @@ void LTSPICE_SCHEMATIC::removeCarriageReturn( wxString& elementFromLine )
 }
 
 
-LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& aAscFileName, LT_ASC& aAscFile )
-{
-    const std::map<wxString, wxString>& asyFiles = m_fileCache[wxS( "asyFiles" )];
-    wxString                            key = resolveAsyMapKey( asyFiles, aAscFileName );
-
-    if( !asyFiles.count( key ) )
-        THROW_IO_ERRORF( _( "Symbol '%s.asy' not found" ), aAscFileName );
-
-    return SymbolBuilder( aAscFileName, asyFiles.at( key ), aAscFile );
-}
-
-LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& aAscFileName,
-                                                               const wxString& aAsyFileContent,
-                                                               LT_ASC& aAscFile )
+LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::ParseSymbol( const wxString& aSymbolName,
+                                                             const wxString& aAsyFileContent, LT_ASC& aAscFile )
 {
     LT_SYMBOL lt_symbol;
     int       lineNumber = 1;
 
-    lt_symbol.Name = aAscFileName;
+    lt_symbol.Name = aSymbolName;
     lt_symbol.SymbolType = LTSPICE_SCHEMATIC::SYMBOLTYPE::CELL;
     lt_symbol.SymbolOrientation = LTSPICE_SCHEMATIC::ORIENTATION::R0;
 
@@ -591,7 +630,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 
         if( element == "LINE" )
         {
-            tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, aSymbolName );
 
             wxString lineWidth = tokens[1];
             wxString startPointX = tokens[2];
@@ -601,15 +640,15 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 
             LINE lt_line;
             lt_line.LineWidth = getLineWidth( lineWidth );
-            lt_line.Start = pointCheck( startPointX, startPointY, lineNumber, aAscFileName );
-            lt_line.End = pointCheck( endPointX, endPointY, lineNumber, aAscFileName );
+            lt_line.Start = pointCheck( startPointX, startPointY, lineNumber, aSymbolName );
+            lt_line.End = pointCheck( endPointX, endPointY, lineNumber, aSymbolName );
 
             int lineStyleNumber = 0;  // default
 
             if( tokens.size() == 7 )
             {
                 wxString lineStyle = tokens[6];
-                lineStyleNumber = integerCheck( lineStyle, lineNumber, aAscFileName );
+                lineStyleNumber = integerCheck( lineStyle, lineNumber, aSymbolName );
             }
 
             lt_line.LineStyle = getLineStyle( lineStyleNumber );
@@ -618,7 +657,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
         }
         else if( element == "RECTANGLE" )
         {
-            tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, aSymbolName );
 
             wxString lineWidth = tokens[1];
             wxString botRightX = tokens[2];
@@ -628,15 +667,15 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 
             RECTANGLE rect;
             rect.LineWidth = getLineWidth( lineWidth );
-            rect.BotRight = pointCheck( botRightX, botRightY, lineNumber, aAscFileName );
-            rect.TopLeft = pointCheck( topLeftX, topRightY, lineNumber, aAscFileName );
+            rect.BotRight = pointCheck( botRightX, botRightY, lineNumber, aSymbolName );
+            rect.TopLeft = pointCheck( topLeftX, topRightY, lineNumber, aSymbolName );
 
             int lineStyleNumber = 0;  // default
 
             if( tokens.size() == 7 )
             {
                 wxString lineStyle = tokens[6];
-                lineStyleNumber = integerCheck( lineStyle, lineNumber, aAscFileName );
+                lineStyleNumber = integerCheck( lineStyle, lineNumber, aSymbolName );
             }
 
             rect.LineStyle = getLineStyle( lineStyleNumber );
@@ -649,7 +688,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
              *  The Circle is enclosed in the square which is represented by bottomRight and
              *  topLeft coordinates.
              */
-            tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 6, 7, lineNumber, aSymbolName );
 
             wxString lineWidth = tokens[1];
             wxString botRightX = tokens[2];
@@ -659,15 +698,15 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 
             CIRCLE circle;
             circle.LineWidth = getLineWidth( lineWidth );
-            circle.BotRight = pointCheck( botRightX, botRightY, lineNumber, aAscFileName );
-            circle.TopLeft = pointCheck( topLeftX, topRightY, lineNumber, aAscFileName );
+            circle.BotRight = pointCheck( botRightX, botRightY, lineNumber, aSymbolName );
+            circle.TopLeft = pointCheck( topLeftX, topRightY, lineNumber, aSymbolName );
 
             int lineStyleNumber = 0;  // default
 
             if( tokens.size() == 7 )
             {
                 wxString lineStyle = tokens[6];
-                lineStyleNumber = integerCheck( lineStyle, lineNumber, aAscFileName );
+                lineStyleNumber = integerCheck( lineStyle, lineNumber, aSymbolName );
             }
 
             circle.LineStyle = getLineStyle( lineStyleNumber );
@@ -681,7 +720,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
              *  coordinates are given.
              *  The arc is drawn counterclockwise from the starting point to the ending point.
              */
-            tokensSizeRangeCheck( tokens.size(), 10, 11, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 10, 11, lineNumber, aSymbolName );
 
             wxString lineWidth = tokens[1];
             wxString botRightX = tokens[2];
@@ -695,17 +734,17 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 
             ARC arc;
             arc.LineWidth = getLineWidth( lineWidth );
-            arc.BotRight = pointCheck( botRightX, botRightY, lineNumber, aAscFileName );
-            arc.TopLeft = pointCheck( topLeftX, topRightY, lineNumber, aAscFileName );
-            arc.ArcStart = pointCheck( arcStartPointX, arcStartPointY, lineNumber, aAscFileName );
-            arc.ArcEnd = pointCheck( arcEndPointX, arcEndPointY, lineNumber, aAscFileName );
+            arc.BotRight = pointCheck( botRightX, botRightY, lineNumber, aSymbolName );
+            arc.TopLeft = pointCheck( topLeftX, topRightY, lineNumber, aSymbolName );
+            arc.ArcStart = pointCheck( arcStartPointX, arcStartPointY, lineNumber, aSymbolName );
+            arc.ArcEnd = pointCheck( arcEndPointX, arcEndPointY, lineNumber, aSymbolName );
 
             int lineStyleNumber = 0;  // default
 
             if( tokens.size() == 11 )
             {
                 wxString lineStyle = tokens[10];
-                lineStyleNumber = integerCheck( lineStyle, lineNumber, aAscFileName );
+                lineStyleNumber = integerCheck( lineStyle, lineNumber, aSymbolName );
             }
 
             arc.LineStyle = getLineStyle( lineStyleNumber );
@@ -714,7 +753,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
         }
         else if( element == "WINDOW" )
         {
-            tokensSizeRangeCheck( tokens.size(), 6, 6, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 6, 6, lineNumber, aSymbolName );
 
             wxString number = tokens[1];
             wxString windowPosX = tokens[2];
@@ -723,10 +762,10 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
             wxString fontSize = tokens[5];
 
             LT_WINDOW window;
-            window.WindowNumber = integerCheck( number, lineNumber, aAscFileName );
-            window.Position = pointCheck( windowPosX, windowPosY, lineNumber, aAscFileName );
+            window.WindowNumber = integerCheck( number, lineNumber, aSymbolName );
+            window.Position = pointCheck( windowPosX, windowPosY, lineNumber, aSymbolName );
             window.Justification = getTextJustification( justification );
-            window.FontSize = integerCheck( fontSize, lineNumber, aAscFileName );
+            window.FontSize = integerCheck( fontSize, lineNumber, aSymbolName );
 
             // LTSpice appears to ignore hidden property from .asy files
             if( window.FontSize == 0 )
@@ -738,7 +777,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
         {
             aggregateAttributeValue( tokens, 2 );
 
-            tokensSizeRangeCheck( tokens.size(), 3, INT_MAX, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 3, INT_MAX, lineNumber, aSymbolName );
 
             wxString key = tokens[1];
             wxString value = tokens[2];
@@ -750,7 +789,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
         }
         else if( element == "PIN" )
         {
-            tokensSizeRangeCheck( tokens.size(), 5, 5, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 5, 5, lineNumber, aSymbolName );
 
             wxString pinLocationX = tokens[1];
             wxString pinLocationY = tokens[2];
@@ -758,9 +797,9 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
             wxString nameOffSet = tokens[4];
 
             LT_PIN pin;
-            pin.PinLocation = pointCheck( pinLocationX, pinLocationY, lineNumber,aAscFileName );
+            pin.PinLocation = pointCheck( pinLocationX, pinLocationY, lineNumber,aSymbolName );
             pin.PinJustification = getPinJustification( Justification );
-            pin.NameOffSet = integerCheck( nameOffSet, lineNumber, aAscFileName );
+            pin.NameOffSet = integerCheck( nameOffSet, lineNumber, aSymbolName );
 
             lt_symbol.Pins.push_back( pin );
         }
@@ -768,7 +807,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
         {
             aggregateAttributeValue( tokens, 2 );
 
-            tokensSizeRangeCheck( tokens.size(), 3, INT_MAX, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 3, INT_MAX, lineNumber, aSymbolName );
 
             wxString name = tokens[1];
             wxString Value = tokens[2];
@@ -777,7 +816,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
         }
         else if( element == "SYMBOLTYPE" )
         {
-            tokensSizeRangeCheck( tokens.size(), 2, 2, lineNumber, aAscFileName );
+            tokensSizeRangeCheck( tokens.size(), 2, 2, lineNumber, aSymbolName );
 
             wxString symbolType = tokens[1];
 
@@ -796,28 +835,29 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::MakeDummySymbol( const wxString&
     LT_SYMBOL lt_symbol;
 
     lt_symbol.Name = aAscFileName;
+    lt_symbol.AsyKey = aAscFileName.Lower();
     lt_symbol.SymbolType = LTSPICE_SCHEMATIC::SYMBOLTYPE::CELL;
     lt_symbol.SymbolOrientation = LTSPICE_SCHEMATIC::ORIENTATION::R0;
 
     RECTANGLE rect;
-    rect.LineWidth = getLineWidth( "NORMAL" );
-    rect.LineStyle = LINESTYLE::SOLID;
-    rect.BotRight = VECTOR2I( 20, 20 );
-    rect.TopLeft = VECTOR2I( -20, -20 );
-
+    rect.LineWidth = LINEWIDTH::Wide;
+    rect.LineStyle = LINESTYLE::DASH;
+    rect.BotRight = VECTOR2I( 50, 50 );
+    rect.TopLeft = VECTOR2I( -50, -50 );
     lt_symbol.Rectangles.push_back( rect );
 
     return lt_symbol;
 }
 
 
-std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
+std::map<wxString, LTSPICE_SCHEMATIC::LT_ASC>
+LTSPICE_SCHEMATIC::ParseAscFiles( const std::map<wxString, wxString>& aAscFilesContent )
 {
-    // Initialising Symbol Struct
+    // Initialising Schematic Struct
 
-    std::vector<LT_ASC> ascFiles;
+    std::map<wxString, LT_ASC> ascFiles;
 
-    for( const auto& [ fileName, contents ] : m_fileCache[ wxS( "ascFiles" ) ] )
+    for( const auto& [ fileName, contents ] : aAscFilesContent )
     {
         LT_ASC                 ascFile;
         std::vector<LT_SYMBOL> symbolArray;
@@ -865,7 +905,24 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
 
                 try
                 {
-                    LT_SYMBOL lt_symbol = SymbolBuilder( symbolName, ascFile );
+                    wxString key = getShortestKey( m_asyNamesMap, symbolName );
+
+                    if( !m_asyNamesMap.contains( key ) )
+                    {
+                        wxString fullName = wxFileName( fileName ).GetFullName();
+
+                        THROW_IO_ERROR(
+                                wxString::Format( _( "Missing symbol file '%s.asy', referenced from '%s' at line %d" ),
+                                                  symbolName, fullName, lineNumber ) );
+                    }
+
+                    if( !m_asyFileCache.contains( m_asyNamesMap.at( key ) ) )
+                        THROW_IO_ERROR( wxString::Format( _( "Unable to read '%s'" ), m_asyNamesMap.at( key ) ) );
+
+                    LT_SYMBOL lt_symbol =
+                            ParseSymbol( symbolName, m_asyFileCache.at( m_asyNamesMap.at( key ) ), ascFile );
+
+                    lt_symbol.AsyKey = key;
                     lt_symbol.Offset = pointCheck( posX, posY, lineNumber, fileName );
                     lt_symbol.SymbolOrientation = getSymbolRotationOrMirror( rotate_mirror_option );
 
@@ -1193,7 +1250,7 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
             lineNumber++;
         }
 
-        ascFiles.push_back( std::move( ascFile ) );
+        ascFiles[fileName] = std::move( ascFile );
     }
 
     return ascFiles;
