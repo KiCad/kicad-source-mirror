@@ -958,11 +958,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 break;
         }
 
-        // Clear the modified flag and release the lock the way the Revert action does, so the
-        // open path does not ask about saving the stale content over the file that just arrived.
-        GetScreen()->SetContentModified( false );
-        ReleaseFile();
-        OpenProjectFiles( std::vector<wxString>( 1, file ), KICTL_REVERT );
+        ReloadFromDisk();
         break;
     }
 

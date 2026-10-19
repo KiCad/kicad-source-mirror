@@ -66,6 +66,7 @@
 #include <symbol_import_reconciler.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_navigate_tool.h>
 #include <trace_helpers.h>
@@ -93,6 +94,35 @@
 #include "widgets/filedlg_hook_save_project.h"
 #include "widgets/panel_remote_symbol.h"
 #include "save_project_utils.h"
+
+
+bool SCH_EDIT_FRAME::ReloadFromDisk()
+{
+    wxString file = Schematic().GetFileName();
+
+    if( file.IsEmpty() )
+        return false;
+
+    // Resolve the filename before changing sheets.
+    file = Prj().AbsolutePath( file );
+
+    if( GetCurrentSheet().Last() != &Schematic().Root() )
+    {
+        // Use the hierarchy's root path so it includes the root sheet's KIID.
+        SCH_SHEET_PATH rootSheetPath = Schematic().Hierarchy().at( 0 );
+        GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
+    }
+
+    // The caller already handled confirmation, so skip the save prompt.
+    SCH_SCREENS screens( Schematic().Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->SetContentModified( false );
+
+    ReleaseFile();
+    return OpenProjectFiles( std::vector<wxString>( 1, file ), KICTL_REVERT );
+}
+
 
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {

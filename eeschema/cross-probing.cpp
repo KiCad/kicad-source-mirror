@@ -700,9 +700,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     case MAIL_SCH_RELOAD:
     {
         // A git operation rewrote files on disk. Reload the schematic so the editor matches.
-        wxString file = Schematic().GetFileName();
-
-        if( file.IsEmpty() )
+        if( Schematic().GetFileName().IsEmpty() )
             break;
 
         SCH_SCREENS screens( Schematic().Root() );
@@ -750,19 +748,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 break;
         }
 
-        // As the Revert action does: reload from the root sheet and clear the modified flags, so
-        // nothing offers to save the stale content over what just arrived.
-        if( GetCurrentSheet().Last() != &Schematic().Root() )
-        {
-            SCH_SHEET_PATH rootSheetPath = Schematic().Hierarchy().at( 0 );
-            GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
-        }
-
-        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-            screen->SetContentModified( false );
-
-        ReleaseFile();
-        OpenProjectFiles( std::vector<wxString>( 1, file ), KICTL_REVERT );
+        ReloadFromDisk();
         break;
     }
 

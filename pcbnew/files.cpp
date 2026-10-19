@@ -316,11 +316,7 @@ int BOARD_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
     if( !IsOK( m_frame, wxString::Format( _( "Revert '%s' to last version saved?" ), fn.GetFullPath() ) ) )
         return false;
 
-    m_frame->GetScreen()->SetContentModified( false );    // do not prompt the user for changes
-
-    m_frame->ReleaseFile();
-
-    return m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
+    return m_frame->ReloadFromDisk();
 }
 
 
@@ -469,6 +465,22 @@ int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard, bool aShowUserMsg )
     }
 
     return std::max( 0, edgeWidth / 2 );
+}
+
+
+bool PCB_EDIT_FRAME::ReloadFromDisk()
+{
+    wxString fileName = GetBoard()->GetFileName();
+
+    if( fileName.IsEmpty() )
+        return false;
+
+    fileName = Prj().AbsolutePath( fileName );
+
+    // The caller already handled confirmation, so skip the save prompt.
+    GetScreen()->SetContentModified( false );
+    ReleaseFile();
+    return OpenProjectFiles( std::vector<wxString>( 1, fileName ), KICTL_REVERT );
 }
 
 

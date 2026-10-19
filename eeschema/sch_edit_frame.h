@@ -501,6 +501,14 @@ public:
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
+    /**
+     * Reload the schematic and all its sheets from disk.
+     * The caller handles confirmation before unsaved edits are discarded.
+     *
+     * @return false when there is no filename or the reload fails.
+     */
+    bool ReloadFromDisk();
+
     void SetSchematic( SCHEMATIC* aSchematic );
 
     wxString GetCurrentFileName() const override;

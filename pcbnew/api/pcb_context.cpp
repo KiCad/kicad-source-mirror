@@ -114,9 +114,7 @@ public:
         if( fn.GetFullPath().IsEmpty() || !wxFileExists( fn.GetFullPath() ) )
             return false;
 
-        m_frame->GetScreen()->SetContentModified( false );
-        m_frame->ReleaseFile();
-        return m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
+        return m_frame->ReloadFromDisk();
     }
 
 private:

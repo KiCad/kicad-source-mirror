@@ -422,48 +422,13 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
-    SCHEMATIC& schematic = m_frame->Schematic();
-    SCH_SHEET& root = schematic.Root();
-
-    // Save original sheet path to restore if user cancels
-    SCH_SHEET_PATH originalSheet = m_frame->GetCurrentSheet();
-    bool wasOnSubsheet = ( m_frame->GetCurrentSheet().Last() != &root );
-
-    // Navigate to root sheet first (needed for proper reload), but don't repaint yet
-    if( wasOnSubsheet )
-    {
-        // Use the properly constructed root sheet path from the hierarchy
-        // (manually pushing root creates a path with empty KIID which causes assertions)
-        SCH_SHEET_PATH rootSheetPath = schematic.Hierarchy().at( 0 );
-
-        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                               &rootSheetPath );
-        // Don't call wxSafeYield() here - avoid repainting the root sheet before the dialog
-    }
-
     wxString msg;
-    msg.Printf( _( "Revert '%s' (and all sub-sheets) to last version saved?" ), schematic.GetFileName() );
+    msg.Printf( _( "Revert '%s' (and all sub-sheets) to last version saved?" ), m_frame->Schematic().GetFileName() );
 
     if( !IsOK( m_frame, msg ) )
-    {
-        // User cancelled - navigate back to original sheet
-        if( wasOnSubsheet )
-        {
-            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet,
-                                                                   &originalSheet );
-            wxSafeYield();
-        }
+        return 0;
 
-        return false;
-    }
-
-    SCH_SCREENS screenList( schematic.Root() );
-
-    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
-        screen->SetContentModified( false );    // do not prompt the user for changes
-
-    m_frame->ReleaseFile();
-    m_frame->OpenProjectFiles( std::vector<wxString>( 1, schematic.GetFileName() ), KICTL_REVERT );
+    m_frame->ReloadFromDisk();
 
     return 0;
 }

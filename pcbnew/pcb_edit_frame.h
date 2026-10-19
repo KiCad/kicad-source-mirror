@@ -392,6 +392,14 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
+     * Reload the board from disk.
+     * The caller handles confirmation before unsaved edits are discarded.
+     *
+     * @return false when there is no filename or the reload fails.
+     */
+    bool ReloadFromDisk();
+
+    /**
      * Write the board data structures to \a a aFileName.
      *
      * Create a backup when requested and update flags (modified and saved flags).
