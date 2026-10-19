@@ -3944,4 +3944,70 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutGroupAreaGroupsIntoTargetGroup, MULTICHANNE
 }
 
 
+// Repeating onto a group of design-block groups must leave each footprint in its block group
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutGroupAreaKeepsNestedGroups, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    for( const wxString& name : { wxString( wxT( "FirstChannel" ) ), wxString( wxT( "SecondChannel" ) ) } )
+    {
+        RULE_AREA* candidate = findGroupRuleAreaByName( mtTool, name );
+        BOOST_REQUIRE( candidate );
+        candidate->m_generateEnabled = true;
+    }
+
+    mtTool->AutogenerateRuleAreas( TOOL_EVENT() );
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* refArea = findRuleAreaByPlacementGroup( mtTool, wxT( "FirstChannel" ) );
+    RULE_AREA* targetArea = findRuleAreaByPlacementGroup( mtTool, wxT( "SecondChannel" ) );
+    BOOST_REQUIRE( refArea && targetArea );
+
+    std::vector<PCB_GROUP*> refGroups = findGroupsByName( m_board.get(), wxT( "FirstChannel" ) );
+    std::vector<PCB_GROUP*> targetGroups = findGroupsByName( m_board.get(), wxT( "SecondChannel" ) );
+    BOOST_REQUIRE_EQUAL( refGroups.size(), 1 );
+    BOOST_REQUIRE_EQUAL( targetGroups.size(), 1 );
+
+    auto countTracks = [&]( PCB_GROUP* aGroup )
+    {
+        return std::count_if( m_board->Tracks().begin(), m_board->Tracks().end(),
+                              [&]( PCB_TRACK* aTrack )
+                              {
+                                  return aGroup->ContainsItem( aTrack );
+                              } );
+    };
+
+    long refTracks = countTracks( refGroups[0] );
+    BOOST_REQUIRE( refTracks > 0 );
+
+    // The rule-area overload is what Apply Design Block Layout drives
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    wxString err;
+    int      result = mtTool->RepeatLayout( TOOL_EVENT(), *refArea, *targetArea, opts, nullptr, &err );
+    BOOST_REQUIRE_MESSAGE( result >= 0, wxString::Format( "RepeatLayout failed: %s", err ) );
+
+    for( EDA_ITEM* member : targetGroups[0]->GetItems() )
+        BOOST_CHECK_MESSAGE( member->Type() != PCB_FOOTPRINT_T, "footprint pulled out of its nested block group" );
+
+    // Routing held by the nested block groups is replaced, not duplicated
+    BOOST_CHECK_EQUAL( countTracks( targetGroups[0] ), refTracks );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

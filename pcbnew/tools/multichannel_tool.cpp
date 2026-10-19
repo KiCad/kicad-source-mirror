@@ -143,6 +143,31 @@ static void ShowTopologyMismatchReasons( wxWindow* aParent, const wxString& aSum
 }
 
 
+static void collectGroupFootprints( EDA_GROUP* aGroup, std::set<FOOTPRINT*>& aOut )
+{
+    for( EDA_ITEM* item : aGroup->GetItems() )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+            aOut.insert( static_cast<FOOTPRINT*>( item ) );
+        else if( item->Type() == PCB_GROUP_T )
+            collectGroupFootprints( static_cast<PCB_GROUP*>( item ), aOut );
+    }
+}
+
+
+static void collectGroupBoardItems( EDA_GROUP* aGroup, std::set<BOARD_ITEM*>& aOut )
+{
+    for( EDA_ITEM* item : aGroup->GetItems() )
+    {
+        // A generator's own bounding box already covers its children (meander arcs).
+        if( item->Type() == PCB_GROUP_T )
+            collectGroupBoardItems( static_cast<PCB_GROUP*>( item ), aOut );
+        else if( item->IsBOARD_ITEM() )
+            aOut.insert( static_cast<BOARD_ITEM*>( item ) );
+    }
+}
+
+
 MULTICHANNEL_TOOL::MULTICHANNEL_TOOL() : PCB_TOOL_BASE( "pcbnew.Multichannel" )
 {
 }
@@ -311,17 +336,17 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
 
             if( group )
             {
-                for( EDA_ITEM* member : group->GetItems() )
+                std::set<BOARD_ITEM*> members;
+                collectGroupBoardItems( group, members );
+
+                for( BOARD_ITEM* boardItem : members )
                 {
-                    if( member->Type() == PCB_FOOTPRINT_T || member->Type() == PCB_GROUP_T
-                        || member->Type() == PCB_GENERATOR_T || member->Type() == PCB_TABLECELL_T )
+                    if( boardItem->Type() == PCB_FOOTPRINT_T || boardItem->Type() == PCB_GENERATOR_T
+                        || boardItem->Type() == PCB_TABLECELL_T )
                         continue;
 
-                    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( member ) )
-                    {
-                        if( !boardItem->IsConnected() || boardItem->Type() == PCB_ZONE_T )
-                            aItems.insert( boardItem );
-                    }
+                    if( !boardItem->IsConnected() || boardItem->Type() == PCB_ZONE_T )
+                        aItems.insert( boardItem );
                 }
             }
 
@@ -415,31 +440,6 @@ MULTICHANNEL_TOOL::queryComponentsInComponentClass( const wxString& aComponentCl
     }
 
     return rv;
-}
-
-
-static void collectGroupFootprints( EDA_GROUP* aGroup, std::set<FOOTPRINT*>& aOut )
-{
-    for( EDA_ITEM* item : aGroup->GetItems() )
-    {
-        if( item->Type() == PCB_FOOTPRINT_T )
-            aOut.insert( static_cast<FOOTPRINT*>( item ) );
-        else if( item->Type() == PCB_GROUP_T )
-            collectGroupFootprints( static_cast<PCB_GROUP*>( item ), aOut );
-    }
-}
-
-
-static void collectGroupBoardItems( EDA_GROUP* aGroup, std::set<BOARD_ITEM*>& aOut )
-{
-    for( EDA_ITEM* item : aGroup->GetItems() )
-    {
-        // A generator's own bounding box already covers its children (meander arcs).
-        if( item->Type() == PCB_GROUP_T )
-            collectGroupBoardItems( static_cast<PCB_GROUP*>( item ), aOut );
-        else if( item->IsBOARD_ITEM() )
-            aOut.insert( static_cast<BOARD_ITEM*>( item ) );
-    }
 }
 
 
@@ -1017,6 +1017,10 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
         for( BOARD_ITEM* item : compat.m_groupableItems )
         {
+            // Items already in a nested group stay there so the nesting survives
+            if( group->ContainsItem( item ) )
+                continue;
+
             commit.Modify( item );
             group->AddItem( item );
         }
@@ -1089,6 +1093,9 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
             for( BOARD_ITEM* item : compatData.m_groupableItems )
             {
+                if( group->ContainsItem( item ) )
+                    continue;
+
                 commit.Modify( item );
                 group->AddItem( item );
             }
@@ -1437,7 +1444,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
         if( aTargetArea->m_group )
         {
-            for( EDA_ITEM* member : aTargetArea->m_group->GetItems() )
+            std::set<BOARD_ITEM*> members;
+            collectGroupBoardItems( aTargetArea->m_group, members );
+
+            for( BOARD_ITEM* member : members )
             {
                 if( member->Type() == PCB_FOOTPRINT_T )
                 {
@@ -1460,10 +1470,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( aRefArea->m_designBlockItems.count( item ) )
                 continue;
 
-            // Design block apply: replace only the group's own routing and loose routing on the
-            // group's nets. Other groups' routing belongs to stacked instances (issue 24767).
+            // Design block apply: replace only the group's own routing, nested groups included, and
+            // loose routing on the group's nets. Other groups' routing belongs to stacked instances (issue 24767).
             // Everything else is unrelated and just sits inside the block's area (issue 24944).
-            if( aTargetArea->m_group && item->GetParentGroup() != aTargetArea->m_group )
+            if( aTargetArea->m_group && !aTargetArea->m_group->ContainsItem( item ) )
             {
                 if( item->GetParentGroup() )
                     continue;
@@ -1543,7 +1553,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             if( targetGroup )
             {
-                for( EDA_ITEM* member : targetGroup->GetItems() )
+                std::set<BOARD_ITEM*> members;
+                collectGroupBoardItems( targetGroup, members );
+
+                for( BOARD_ITEM* member : members )
                 {
                     if( member->Type() == PCB_GENERATOR_T )
                         targetGenerators.push_back( static_cast<PCB_GENERATOR*>( member ) );
