@@ -137,7 +137,7 @@ private:
 
     FOOTPRINT_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
-    void reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB );
+    void reportClearance( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB );
 
     void filterCollectorForInspection( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aPos );
 

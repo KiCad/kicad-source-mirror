@@ -986,16 +986,16 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 }
 
 
-void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aItemB )
+void BOARD_INSPECTION_TOOL::reportClearance( const BOARD_ITEM* aItemA, const BOARD_ITEM* aItemB )
 {
     wxCHECK( m_frame && aItemA && aItemB, /* void */ );
 
-    BOARD_ITEM* a = aItemA;
-    BOARD_ITEM* b = aItemB;
+    const BOARD_ITEM* a = aItemA;
+    const BOARD_ITEM* b = aItemB;
 
     if( a->Type() == PCB_GROUP_T )
     {
-        PCB_GROUP* ag = static_cast<PCB_GROUP*>( a );
+        const PCB_GROUP* ag = static_cast<const PCB_GROUP*>( a );
 
         if( ag->GetItems().empty() )
         {
@@ -1003,12 +1003,12 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
             return;
         }
 
-        a = static_cast<BOARD_ITEM*>( *ag->GetItems().begin() );
+        a = static_cast<const BOARD_ITEM*>( *ag->GetItems().begin() );
     }
 
     if( b->Type() == PCB_GROUP_T )
     {
-        PCB_GROUP* bg = static_cast<PCB_GROUP*>( b );
+        const PCB_GROUP* bg = static_cast<const PCB_GROUP*>( b );
 
         if( bg->GetItems().empty() )
         {
@@ -1016,18 +1016,18 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
             return;
         }
 
-        b = static_cast<BOARD_ITEM*>( *bg->GetItems().begin() );
+        b = static_cast<const BOARD_ITEM*>( *bg->GetItems().begin() );
     }
 
     if( !a || !b )
         return;
 
-    auto checkFootprint =
-            [&]( FOOTPRINT* footprint ) -> BOARD_ITEM*
+    const auto checkFootprint =
+            [&]( const FOOTPRINT* footprint ) -> const BOARD_ITEM*
             {
-                PAD* foundPad = nullptr;
+                const PAD* foundPad = nullptr;
 
-                for( PAD* pad : footprint->Pads() )
+                for( const PAD* pad : footprint->Pads() )
                 {
                     if( !foundPad || pad->SameLogicalPadAs( foundPad ) )
                         foundPad = pad;
@@ -1042,10 +1042,10 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
             };
 
     if( a->Type() == PCB_FOOTPRINT_T )
-        a = checkFootprint( static_cast<FOOTPRINT*>( a ) );
+        a = checkFootprint( static_cast<const FOOTPRINT*>( a ) );
 
     if( b->Type() == PCB_FOOTPRINT_T )
-        b = checkFootprint( static_cast<FOOTPRINT*>( b ) );
+        b = checkFootprint( static_cast<const FOOTPRINT*>( b ) );
 
     if( !a || !b )
         return;
@@ -1061,18 +1061,19 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
     else if( !a->IsConnected() && b->IsConnected() )
         std::swap( a, b );
 
-    WX_HTML_REPORT_BOX*   r = nullptr;
-    PCB_LAYER_ID          active = m_frame->GetActiveLayer();
-    LSET                  layerIntersection = a->GetLayerSet() & b->GetLayerSet();
-    LSET                  copperIntersection = layerIntersection & LSET::AllCuMask();
-    BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
-    BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
-    ZONE*                 zone = dynamic_cast<ZONE*>( a );
-    PAD*                  pad = dynamic_cast<PAD*>( b );
-    FOOTPRINT*            aFP = dynamic_cast<FOOTPRINT*>( a );
-    FOOTPRINT*            bFP = dynamic_cast<FOOTPRINT*>( b );
-    DRC_CONSTRAINT        constraint;
-    int                   clearance = 0;
+    WX_HTML_REPORT_BOX* r = nullptr;
+    PCB_LAYER_ID        active = m_frame->GetActiveLayer();
+    LSET                layerIntersection = a->GetLayerSet() & b->GetLayerSet();
+    LSET                copperIntersection = layerIntersection & LSET::AllCuMask();
+    DRC_CONSTRAINT      constraint;
+    int                 clearance = 0;
+
+    const BOARD_CONNECTED_ITEM* ac = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
+    const BOARD_CONNECTED_ITEM* bc = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
+    const ZONE*                 zone = dynamic_cast<const ZONE*>( a );
+    const PAD*                  pad = dynamic_cast<const PAD*>( b );
+    const FOOTPRINT*            aFP = dynamic_cast<const FOOTPRINT*>( a );
+    const FOOTPRINT*            bFP = dynamic_cast<const FOOTPRINT*>( b );
 
     bool compileError = false;
     bool courtyardError = false;
@@ -1369,26 +1370,26 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
         }
     }
 
-    auto isOnCorrespondingLayer=
-            [&]( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, wxString* aWarning )
+    const auto isOnCorrespondingLayer=
+            [&]( const BOARD_ITEM& aItem, PCB_LAYER_ID aLayer, wxString* aWarning )
             {
-                if( aItem->IsOnLayer( aLayer ) )
+                if( aItem.IsOnLayer( aLayer ) )
                     return true;
 
                 PCB_LAYER_ID correspondingMask =   IsFrontLayer( aLayer ) ? F_Mask : B_Mask;
                 PCB_LAYER_ID correspondingCopper = IsFrontLayer( aLayer ) ? F_Cu   : B_Cu;
 
-                if( aItem->IsOnLayer( aLayer ) )
+                if( aItem.IsOnLayer( aLayer ) )
                     return true;
 
-                if( aItem->IsOnLayer( correspondingMask ) )
+                if( aItem.IsOnLayer( correspondingMask ) )
                     return true;
 
-                if( aItem->IsTented( correspondingMask ) && aItem->IsOnLayer( correspondingCopper ) )
+                if( aItem.IsTented( correspondingMask ) && aItem.IsOnLayer( correspondingCopper ) )
                 {
                     *aWarning = wxString::Format( _( "Note: %s is tented; clearance will only be "
                                                      "applied to holes." ),
-                                                  getItemDescription( aItem ) );
+                                                  getItemDescription( &aItem ) );
                     return true;
                 }
 
@@ -1399,8 +1400,8 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
     {
         wxString warning;
 
-        if( ( a->IsOnLayer( layer ) && isOnCorrespondingLayer( b, layer, &warning ) )
-            || ( b->IsOnLayer( layer ) && isOnCorrespondingLayer( a, layer, &warning ) ) )
+        if( ( a->IsOnLayer( layer ) && isOnCorrespondingLayer( *b, layer, &warning ) )
+            || ( b->IsOnLayer( layer ) && isOnCorrespondingLayer( *a, layer, &warning ) ) )
         {
             r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
             reportHeader( _( "Silkscreen clearance resolution for:" ), a, b, layer, r );
