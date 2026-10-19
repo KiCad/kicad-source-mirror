@@ -857,7 +857,9 @@ void PCB_IO_AUTOTRAX::buildBoard( const BOARD_DATA& aData )
         }
     }
 
-    m_board->SetCopperLayerCount( 2 + innerNeeded );
+    if( m_board->GetCopperLayerCount() < 2 + innerNeeded )
+        m_board->SetCopperLayerCount( 2 + innerNeeded );
+
     m_maxY = toIU( maxYmils );
 
     // Only free outlines can be the board edge; footprint Edge_Cuts would join the board outline
