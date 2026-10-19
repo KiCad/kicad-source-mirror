@@ -131,8 +131,7 @@ void ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator );
  * A text control validator used for validating the text allowed in fields.
  *
  * - The reference field does not accept spaces.
- * - The value field does not accept spaces in the symbol library editor because in symbol
- *   libraries, the value field is the symbol name in the library.
+ * - The sheet name field does not accept forward slashes.
  */
 class FIELD_VALIDATOR : public wxTextValidator
 {
