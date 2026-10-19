@@ -19,25 +19,32 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <dialogs/git/git_transfer.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
+#include <git/git_push_handler.h>
 #include <qa_utils/scoped_git_backend.h>
 
 #include <git2.h>
 
+#include <wx/app.h>
 #include <wx/file.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/string.h>
 #include <wx/stdpaths.h>
 
 #include <chrono>
 #include <algorithm>
 #include <fstream>
+#include <future>
 #include <iterator>
 #include <memory>
 #include <set>
+#include <stdexcept>
+#include <thread>
 #include <cstdlib>
 
 #ifndef __WINDOWS__
@@ -259,6 +266,52 @@ void writeFile( const wxString& aRepoPath, const wxString& aFileName, const char
     std::ofstream f( ( aRepoPath + wxS( "/" ) + aFileName ).utf8_string() );
     f << aContent;
 }
+
+
+// Query completions use the application's event queue, just as they do for a dialog.
+bool waitForQuery( const std::function<bool()>& aFinished )
+{
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
+
+    while( !aFinished() && std::chrono::steady_clock::now() < deadline )
+    {
+        wxTheApp->ProcessPendingEvents();
+        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+    }
+
+    return aFinished();
+}
+
+
+// Like wxWeakRef, every copy and destruction of this callback capture must stay on the UI
+// thread. A shared pointee alone would miss copies made and destroyed while posting an event.
+struct UI_CALLBACK_CAPTURE
+{
+    explicit UI_CALLBACK_CAPTURE( std::shared_ptr<std::atomic<bool>> aWrongThread ) :
+            wrongThread( std::move( aWrongThread ) ),
+            uiThread( std::this_thread::get_id() )
+    {
+    }
+
+    UI_CALLBACK_CAPTURE( const UI_CALLBACK_CAPTURE& aOther ) :
+            wrongThread( aOther.wrongThread ),
+            uiThread( aOther.uiThread )
+    {
+        if( std::this_thread::get_id() != uiThread )
+            wrongThread->store( true );
+    }
+
+    UI_CALLBACK_CAPTURE( UI_CALLBACK_CAPTURE&& ) = default;
+
+    ~UI_CALLBACK_CAPTURE()
+    {
+        if( wrongThread && std::this_thread::get_id() != uiThread )
+            wrongThread->store( true );
+    }
+
+    std::shared_ptr<std::atomic<bool>> wrongThread;
+    std::thread::id                    uiThread;
+};
 
 } // namespace
 
@@ -815,6 +868,29 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsEmptyWithoutRepo )
 {
     KIGIT_COMMON common( nullptr );
     BOOST_CHECK( common.GetRecentCommits( 10 ).empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( GetRecentCommitsHonorsAnAlreadyCancelledOperation )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+    auto                    lock = common.LockAction();
+
+    BOOST_REQUIRE_EQUAL( common.GetRecentCommits( 10 ).size(), 1u );
+
+    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
+    token->store( true );
+
+    {
+        KIGIT_COMMON::OPERATION_GUARD operation( &common, token );
+        BOOST_CHECK( common.GetRecentCommits( 10 ).empty() );
+    }
+
+    // Cancellation belongs to that operation. A later history read must still work.
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 10 ).size(), 1u );
 }
 
 
@@ -2429,6 +2505,452 @@ BOOST_AUTO_TEST_CASE( DiscardingAConflictedPathSettlesIt )
 
     BOOST_CHECK_MESSAGE( !common.IsPathConflicted( wxS( "file.txt" ) ),
                          "discarding left the file still needing resolution" );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForcePushRejectsAChangedConfirmedTarget )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+
+    git_oid head;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head, repo.get(), "HEAD" ), GIT_OK );
+    const wxString confirmedHead = wxString::FromUTF8( git_oid_tostr_s( &head ) );
+    const wxString confirmedBranch = common.GetCurrentBranchName();
+
+    auto forcePushError = [&common]( const wxString& aBranch, const wxString& aHeadOid )
+    {
+        GIT_PUSH_HANDLER handler( &common );
+        handler.SetExpectedTarget( aBranch, aHeadOid );
+        BOOST_CHECK_EQUAL( static_cast<int>( handler.PerformPush( true ) ), static_cast<int>( PushResult::Error ) );
+        return handler.GetErrorString();
+    };
+
+    // A matching target gets past confirmation validation. With no remote configured it
+    // stops at lookup, so none of these checks can start a network connection.
+    BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).Contains( "Could not lookup remote" ) );
+
+    const wxString targetChanged = wxS( "The branch or its last commit changed while the push was waiting." );
+
+    // Switching branches must be rejected even when both branches name the same commit.
+    BOOST_REQUIRE( common.CreateBranch( wxS( "other" ) ) );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/other" ), GIT_OK );
+    BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).Contains( targetChanged ) );
+
+    // Advancing the confirmed branch must also be rejected, with the branch name unchanged.
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo.get(), "refs/heads/main" ), GIT_OK );
+    writeFile( tmp.path, wxS( "file.txt" ), "two\n" );
+    commitWorkingFile( repo.get(), wxS( "file.txt" ), "second" );
+    BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).Contains( targetChanged ) );
+
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head, repo.get(), "HEAD" ), GIT_OK );
+    BOOST_CHECK( forcePushError( confirmedBranch, wxString::FromUTF8( git_oid_tostr_s( &head ) ) )
+                         .Contains( "Could not lookup remote" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PushWaitsForQueryLockAndHonorsCancellation )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT_COMMON            common( repo.get() );
+    GIT_PUSH_HANDLER        handler( &common );
+    handler.SetWaitForActionLock( true );
+
+    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
+    handler.SetCancelToken( token );
+
+    auto               lock = common.LockAction();
+    std::promise<void> entered;
+    auto               ready = entered.get_future();
+    auto               result = std::async( std::launch::async,
+                                            [&handler, &entered]()
+                                            {
+                                  entered.set_value();
+                                  return handler.PerformPush();
+                                            } );
+
+    const bool started = ready.wait_for( std::chrono::seconds( 5 ) ) == std::future_status::ready;
+    const bool waited = result.wait_for( std::chrono::milliseconds( 50 ) ) == std::future_status::timeout;
+    token->store( true );
+    lock.unlock();
+
+    BOOST_CHECK( started );
+    BOOST_CHECK( waited );
+    BOOST_REQUIRE( result.wait_for( std::chrono::seconds( 5 ) ) == std::future_status::ready );
+    BOOST_CHECK_EQUAL( static_cast<int>( result.get() ), static_cast<int>( PushResult::Error ) );
+    BOOST_CHECK( handler.IsThisOperationCancelled() );
+
+    // No remote is configured. Reaching remote lookup would have added an error, so an empty
+    // error list confirms cancellation stopped the operation before any network preparation.
+    BOOST_CHECK( handler.GetErrorStrings().empty() );
+    BOOST_CHECK( !common.ActiveCancelToken() );
+}
+
+
+BOOST_AUTO_TEST_CASE( TransferCompletionCapturesStayOnUiThread )
+{
+    SCOPED_GIT_BACKEND  libgit;
+    auto                wrongThread = std::make_shared<std::atomic<bool>>( false );
+    UI_CALLBACK_CAPTURE capture( wrongThread );
+    bool                completed = false;
+
+    {
+        KIGIT_TRANSFER transfer;
+        BOOST_REQUIRE( transfer.Start(
+                "completion capture",
+                []( const KIGIT_COMMON::CANCEL_TOKEN& )
+                {
+                },
+                [capture, &completed]()
+                {
+                    completed = true;
+                } ) );
+
+        BOOST_REQUIRE( waitForQuery(
+                [&transfer, &libgit]()
+                {
+                    return !transfer.IsBusy() && libgit.Backend()->OrphanRegistry().TrackedCount() == 0;
+                } ) );
+    }
+
+    BOOST_CHECK( completed );
+    BOOST_CHECK( !wrongThread->load() );
+
+    auto               entered = std::make_shared<std::promise<void>>();
+    std::promise<void> release;
+    auto               ready = entered->get_future();
+    auto               proceed = release.get_future().share();
+    auto               transfer = std::make_unique<KIGIT_TRANSFER>();
+    completed = false;
+
+    BOOST_REQUIRE( transfer->Start(
+            "destroyed completion owner",
+            [entered, proceed]( const KIGIT_COMMON::CANCEL_TOKEN& )
+            {
+                entered->set_value();
+                proceed.wait();
+            },
+            [capture, &completed]()
+            {
+                completed = true;
+            } ) );
+
+    const bool started = ready.wait_for( std::chrono::seconds( 5 ) ) == std::future_status::ready;
+    transfer.reset();
+    release.set_value();
+
+    BOOST_CHECK( started );
+    BOOST_REQUIRE( waitForQuery(
+            [&libgit]()
+            {
+                return libgit.Backend()->OrphanRegistry().TrackedCount() == 0;
+            } ) );
+    wxTheApp->ProcessPendingEvents();
+    BOOST_CHECK( !completed );
+    BOOST_CHECK( !wrongThread->load() );
+}
+
+
+BOOST_AUTO_TEST_CASE( QuerySerializesAndKeepsOnlyTheLatestRequest )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
+    KIGIT_QUERY             query;
+
+    auto               entered = std::make_shared<std::promise<void>>();
+    std::promise<void> release;
+    auto               ready = entered->get_future();
+    auto               proceed = release.get_future().share();
+    auto               worked = std::make_shared<std::atomic<unsigned>>( 0 );
+    auto               workerThread = std::make_shared<std::thread::id>();
+    unsigned           completed = 0;
+
+    query.Run(
+            session,
+            [worked, workerThread, proceed, entered]( KIGIT_COMMON& )
+            {
+                *workerThread = std::this_thread::get_id();
+                worked->fetch_or( 1 );
+                entered->set_value();
+                proceed.wait();
+            },
+            [&completed]()
+            {
+                completed |= 1;
+            } );
+
+    BOOST_REQUIRE( ready.wait_for( std::chrono::seconds( 5 ) ) == std::future_status::ready );
+    BOOST_CHECK( *workerThread != std::this_thread::get_id() );
+    BOOST_CHECK( !session->TryLockAction().owns_lock() );
+
+    query.Run(
+            session,
+            [worked]( KIGIT_COMMON& )
+            {
+                worked->fetch_or( 2 );
+            },
+            [&completed]()
+            {
+                completed |= 2;
+            } );
+    query.Run(
+            session,
+            [worked]( KIGIT_COMMON& )
+            {
+                worked->fetch_or( 4 );
+            },
+            [&completed]()
+            {
+                completed |= 4;
+            } );
+    release.set_value();
+
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query.IsBusy();
+            } ) );
+    BOOST_CHECK_EQUAL( worked->load(), 5u );
+    BOOST_CHECK_EQUAL( completed, 4u );
+}
+
+
+BOOST_AUTO_TEST_CASE( QueryCancelDropsPendingWorkAndQueuedCompletion )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
+    KIGIT_QUERY             query;
+    bool                    completed = false;
+    auto                    worked = std::make_shared<std::atomic<unsigned>>( 0 );
+
+    query.Run(
+            session,
+            [worked]( KIGIT_COMMON& )
+            {
+                worked->fetch_add( 1 );
+            },
+            [&completed]()
+            {
+                completed = true;
+            } );
+
+    // Wait for the worker without pumping events: its completion is now queued on the UI.
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
+
+    while( libgit.Backend()->OrphanRegistry().TrackedCount() && std::chrono::steady_clock::now() < deadline )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+
+    BOOST_REQUIRE_EQUAL( libgit.Backend()->OrphanRegistry().TrackedCount(), 0u );
+    query.Run(
+            session,
+            [worked]( KIGIT_COMMON& )
+            {
+                worked->fetch_add( 1 );
+            },
+            [&completed]()
+            {
+                completed = true;
+            } );
+    query.Cancel();
+
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query.IsBusy();
+            } ) );
+    BOOST_CHECK_EQUAL( worked->load(), 1u );
+    BOOST_CHECK( !completed );
+}
+
+
+BOOST_AUTO_TEST_CASE( QueryDestructionDoesNotWaitAndPinsTheSession )
+{
+    SCOPED_GIT_BACKEND          libgit;
+    ScopedTempDir               tmp;
+    KIGIT::GitRepositoryPtr     repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    auto                        session = std::make_shared<KIGIT_COMMON>( repo.get() );
+    std::weak_ptr<KIGIT_COMMON> watched = session;
+    auto                        query = std::make_unique<KIGIT_QUERY>();
+
+    auto               entered = std::make_shared<std::promise<void>>();
+    std::promise<void> release;
+    auto               ready = entered->get_future();
+    auto               proceed = release.get_future().share();
+    bool               completed = false;
+
+    query->Run(
+            session,
+            [proceed, entered]( KIGIT_COMMON& )
+            {
+                entered->set_value();
+                proceed.wait();
+            },
+            [&completed]()
+            {
+                completed = true;
+            } );
+
+    BOOST_REQUIRE( ready.wait_for( std::chrono::seconds( 5 ) ) == std::future_status::ready );
+    session.reset();
+    const auto start = std::chrono::steady_clock::now();
+    query.reset();
+    BOOST_CHECK( std::chrono::steady_clock::now() - start < std::chrono::seconds( 1 ) );
+    BOOST_CHECK( !watched.expired() );
+    release.set_value();
+
+    BOOST_REQUIRE( waitForQuery(
+            [&watched]()
+            {
+                return watched.expired();
+            } ) );
+    wxTheApp->ProcessPendingEvents();
+    BOOST_CHECK( !completed );
+}
+
+
+BOOST_AUTO_TEST_CASE( QuerySkipsUnavailableSessionsAndCompletesOnUi )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    KIGIT_QUERY             query;
+    auto                    worked = std::make_shared<std::atomic<bool>>( false );
+    std::thread::id         completionThread;
+
+    auto work = [worked]( KIGIT_COMMON& )
+    {
+        worked->store( true );
+    };
+    auto done = [&completionThread]()
+    {
+        completionThread = std::this_thread::get_id();
+    };
+
+    query.Run( nullptr, work, done );
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query.IsBusy();
+            } ) );
+    BOOST_CHECK( completionThread == std::this_thread::get_id() );
+
+    auto session = std::make_shared<KIGIT_COMMON>( nullptr );
+    completionThread = {};
+    query.Run( session, work, done );
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query.IsBusy();
+            } ) );
+    BOOST_CHECK( completionThread == std::this_thread::get_id() );
+
+    session->SetRepo( repo.get() );
+    session->SetShuttingDown( true );
+    completionThread = {};
+    query.Run( session, work, done );
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query.IsBusy();
+            } ) );
+    BOOST_CHECK( completionThread == std::this_thread::get_id() );
+    BOOST_CHECK( !worked->load() );
+
+    libgit.Backend()->OrphanRegistry().JoinAll( std::chrono::seconds( 1 ) );
+    completionThread = {};
+    query.Run( session, work, done );
+    BOOST_CHECK( !query.IsBusy() );
+    BOOST_CHECK( completionThread == std::this_thread::get_id() );
+}
+
+
+BOOST_AUTO_TEST_CASE( QueryExceptionStillCompletesAndCompletionCanDestroyOwner )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
+    auto                    query = std::make_unique<KIGIT_QUERY>();
+    wxLogNull               noLog;
+
+    query->Run(
+            session,
+            []( KIGIT_COMMON& )
+            {
+                throw std::runtime_error( "query failed" );
+            },
+            [&query]()
+            {
+                query.reset();
+            } );
+
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query;
+            } ) );
+    BOOST_CHECK( session->TryLockAction().owns_lock() );
+    BOOST_CHECK( !session->ActiveCancelToken() );
+}
+
+
+BOOST_AUTO_TEST_CASE( QueryExceptionStillStartsThePendingRequest )
+{
+    SCOPED_GIT_BACKEND      libgit;
+    ScopedTempDir           tmp;
+    KIGIT::GitRepositoryPtr repo( makeRepoWithCommit( tmp.path, "file.txt", "one\n" ) );
+    auto                    session = std::make_shared<KIGIT_COMMON>( repo.get() );
+    KIGIT_QUERY             query;
+    wxLogNull               noLog;
+
+    auto               entered = std::make_shared<std::promise<void>>();
+    std::promise<void> release;
+    auto               ready = entered->get_future();
+    auto               proceed = release.get_future().share();
+    auto               worked = std::make_shared<std::atomic<bool>>( false );
+    unsigned           completed = 0;
+
+    query.Run(
+            session,
+            [entered, proceed]( KIGIT_COMMON& )
+            {
+                entered->set_value();
+                proceed.wait();
+                throw 1;
+            },
+            [&completed]()
+            {
+                completed |= 1;
+            } );
+
+    BOOST_REQUIRE( ready.wait_for( std::chrono::seconds( 5 ) ) == std::future_status::ready );
+    query.Run(
+            session,
+            [worked]( KIGIT_COMMON& )
+            {
+                worked->store( true );
+            },
+            [&completed]()
+            {
+                completed |= 2;
+            } );
+    release.set_value();
+
+    BOOST_REQUIRE( waitForQuery(
+            [&query]()
+            {
+                return !query.IsBusy();
+            } ) );
+    BOOST_CHECK( worked->load() );
+    BOOST_CHECK_EQUAL( completed, 2u );
 }
 
 

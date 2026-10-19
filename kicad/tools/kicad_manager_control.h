@@ -22,6 +22,7 @@
 #define KICAD_MANAGER_CONTROL_H
 
 #include <tool/tool_interactive.h>
+#include <dialogs/git/git_transfer.h>
 #include <mutex>
 
 
@@ -86,6 +87,9 @@ private:
 private:
     KICAD_MANAGER_FRAME* m_frame;           ///< Pointer to the currently used edit/draw frame.
     bool                 m_inShowPlayer;    ///< Re-entrancy guard
+
+    /// Read the identity after cloning. Closing or resetting the tool suppresses its prompt.
+    KIGIT_QUERY m_identityQuery;
 };
 
 #endif

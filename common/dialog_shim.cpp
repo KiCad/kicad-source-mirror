@@ -1052,8 +1052,6 @@ void DIALOG_SHIM::OptOut( wxWindow* aWindow )
 
             if( dlgIt != settings->CsInternals().m_dialogControlValues.end() )
             {
-                // A dialog opting out may already have saved sensitive controls in an older
-                // version. Keep its geometry while removing those stale control values.
                 std::erase_if( dlgIt->second,
                                []( const auto& aEntry )
                                {

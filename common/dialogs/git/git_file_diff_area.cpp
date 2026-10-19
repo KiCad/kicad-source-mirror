@@ -36,6 +36,7 @@
 #include <eda_draw_frame.h>
 #include <git/text_diff.h>
 #include <kiway.h>
+#include <project.h>
 #include <reporter.h>
 #include <view/view.h>
 #include <widgets/widget_diff_canvas.h>
@@ -77,6 +78,16 @@ std::string readAll( const wxString& aFile )
     std::ifstream in( aFile.fn_str(), std::ios::binary );
     return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
 }
+
+
+struct FILE_DIFF_RESULT
+{
+    // Keep the extracted files until the UI has loaded the drawing documents.
+    std::unique_ptr<GIT_DIFF_WORKSPACE> workspace;
+    GIT_FILE_SIDES                      sides;
+    std::vector<KIGIT::TEXT_DIFF_LINE>  textLines;
+    bool                                ready = false;
+};
 
 } // namespace
 
@@ -132,6 +143,8 @@ GIT_FILE_DIFF_AREA::GIT_FILE_DIFF_AREA( wxWindow* aParent, EDA_BASE_FRAME* aFram
 
 GIT_FILE_DIFF_AREA::~GIT_FILE_DIFF_AREA()
 {
+    m_query.Cancel();
+
     // The canvases still point at the documents, so the documents go first.
     m_diffContext.reset();
 }
@@ -139,31 +152,65 @@ GIT_FILE_DIFF_AREA::~GIT_FILE_DIFF_AREA()
 
 void GIT_FILE_DIFF_AREA::Clear()
 {
+    m_query.Cancel();
     destroyCanvases();
 }
 
 
-void GIT_FILE_DIFF_AREA::ShowFile( const MATERIALIZE& aMaterialize, const wxString& aBeforeLabel,
-                                   const wxString& aAfterLabel )
+void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession, const MATERIALIZE& aMaterialize,
+                                   const wxString& aBeforeLabel, const wxString& aAfterLabel )
 {
-    GIT_DIFF_WORKSPACE workspace;
+    showNote( _( "Loading comparison..." ) );
 
-    if( !workspace.IsOk() )
-    {
-        showNote( _( "Could not create a temporary directory for the diff." ) );
-        return;
-    }
+    auto result = std::make_shared<FILE_DIFF_RESULT>();
+    result->sides.error = _( "Could not compare this file." );
 
-    wxBusyCursor   busy;
-    GIT_FILE_SIDES sides;
+    m_query.Run(
+            aSession,
+            [result, aMaterialize]( KIGIT_COMMON& aCommon )
+            {
+                result->workspace = std::make_unique<GIT_DIFF_WORKSPACE>();
 
-    if( !aMaterialize( workspace, sides ) )
-    {
-        showNote( sides.error );
-        return;
-    }
+                if( !result->workspace->IsOk() )
+                {
+                    result->sides.error = _( "Could not create a temporary directory for the diff." );
+                    return;
+                }
 
-    showDiff( sides, aBeforeLabel, aAfterLabel );
+                if( !aMaterialize( aCommon, *result->workspace, result->sides ) )
+                    return;
+
+                if( result->sides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+                {
+                    std::string before = readAll( result->sides.before );
+                    std::string after = readAll( result->sides.after );
+
+                    if( KIGIT::TextLooksBinary( before ) || KIGIT::TextLooksBinary( after ) )
+                    {
+                        result->sides.error = _( "This is not a plain text file, so there is no comparison to show." );
+                        return;
+                    }
+
+                    result->textLines =
+                            KIGIT::BuildTextDiff( KIGIT::SplitTextLines( before ), KIGIT::SplitTextLines( after ) );
+                }
+
+                result->ready = true;
+            },
+            [this, result, aSession, aBeforeLabel, aAfterLabel]()
+            {
+                if( m_frame->Prj().GetGitCommon() != aSession )
+                    return;
+
+                if( !result->ready )
+                {
+                    showNote( result->sides.error );
+                    return;
+                }
+
+                // Kiface loading and canvas creation must stay on the UI thread.
+                showDiff( result->sides, result->textLines, aBeforeLabel, aAfterLabel );
+            } );
 }
 
 
@@ -179,13 +226,13 @@ void GIT_FILE_DIFF_AREA::showNote( const wxString& aNote )
 }
 
 
-void GIT_FILE_DIFF_AREA::showDiff( const GIT_FILE_SIDES& aSides, const wxString& aBeforeLabel,
-                                   const wxString& aAfterLabel )
+void GIT_FILE_DIFF_AREA::showDiff( const GIT_FILE_SIDES& aSides, const std::vector<KIGIT::TEXT_DIFF_LINE>& aTextLines,
+                                   const wxString& aBeforeLabel, const wxString& aAfterLabel )
 {
-    bool shown = false;
+    bool shown = true;
 
     if( aSides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
-        shown = showTextDiff( aSides.before, aSides.after );
+        showTextDiff( aTextLines );
     else if( aSides.kind == KICAD_DIFF::DOC_KIND::SCH || aSides.kind == KICAD_DIFF::DOC_KIND::PCB )
         shown = showDrawingDiff( aSides.kind, aSides.before, aSides.after, aBeforeLabel, aAfterLabel );
     else
@@ -196,25 +243,14 @@ void GIT_FILE_DIFF_AREA::showDiff( const GIT_FILE_SIDES& aSides, const wxString&
 }
 
 
-bool GIT_FILE_DIFF_AREA::showTextDiff( const wxString& aBefore, const wxString& aAfter )
+void GIT_FILE_DIFF_AREA::showTextDiff( const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines )
 {
-    std::string contentA = readAll( aBefore );
-    std::string contentB = readAll( aAfter );
-
-    if( KIGIT::TextLooksBinary( contentA ) || KIGIT::TextLooksBinary( contentB ) )
-    {
-        showNote( _( "This is not a plain text file, so there is no comparison to show." ) );
-        return false;
-    }
-
     destroyCanvases();
-    FillTextDiffControl( m_textDiff,
-                         KIGIT::BuildTextDiff( KIGIT::SplitTextLines( contentA ), KIGIT::SplitTextLines( contentB ) ) );
+    FillTextDiffControl( m_textDiff, aLines );
     m_note->Hide();
     m_canvasSplitter->Hide();
     GetSizer()->Show( m_legend, false );
     m_textDiff->Show();
-    return true;
 }
 
 

@@ -34,11 +34,13 @@
 #include <wx/stdpaths.h>
 #include <wx/time.h>
 #include <wx/utils.h>
+#include <wx/weakref.h>
 
 #include <reporter.h>
 
 #include <confirm.h>
 #include <dialogs/git/dialog_text_diff.h>
+#include <dialogs/git/git_transfer.h>
 #include <diff_merge/diff_doc_kind.h>
 #include <diff_merge/diff_scene.h>
 #include <diff_merge/merge_dispatch.h>
@@ -52,12 +54,12 @@
 #include <git/project_git_utils.h>
 #include <kiway.h>
 #include <kiway_player.h>
-#include <kiplatform/ui.h>
 #include <mail_type.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
@@ -65,14 +67,14 @@
 // False for a status that is not a working-tree change worth showing.
 // The status word, its icon, and its colour, which is the one the diff draws that kind of
 // change with, lifted a little on a dark background.
-static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, BITMAPS& aIcon, wxColour& aColour )
+static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, BITMAPS& aIcon, wxColour& aColour,
+                             bool aDarkTheme )
 {
     KICAD_DIFF::DIFF_COLOR_THEME theme;
-    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
 
-    auto colour = [dark]( const KIGFX::COLOR4D& aBase )
+    auto colour = [aDarkTheme]( const KIGFX::COLOR4D& aBase )
     {
-        return ( dark ? aBase.Brightened( 0.4 ) : aBase ).ToColour();
+        return ( aDarkTheme ? aBase.Brightened( 0.4 ) : aBase ).ToColour();
     };
 
     switch( aStatus )
@@ -103,19 +105,18 @@ static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, 
 }
 
 
-std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject )
+std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, const wxString& aProjectPath,
+                                                         const wxString& aProjectName, bool aDarkTheme )
 {
     std::vector<FILE_CHECKLIST_ENTRY> entries;
 
-    std::shared_ptr<KIGIT_COMMON> common = aProject.GetGitCommon();
-
-    if( !common->GetRepo() )
+    if( !aCommon.GetRepo() )
         return entries;
 
-    GIT_STATUS_HANDLER handler( common.get() );
+    GIT_STATUS_HANDLER handler( &aCommon );
     wxString           workDir = handler.GetWorkingDirectory();
-    wxString           projectPath = aProject.GetProjectPath();
-    wxString           projectName = aProject.GetProjectName();
+    wxString           projectPath = aProjectPath;
+    wxString           projectName = aProjectName;
 
     // Walk only the project folder, since the rest of the repository is filtered out below
     // anyway. The trailing slash keeps a sibling folder sharing the prefix out. An empty scope
@@ -149,7 +150,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject )
         BITMAPS  icon = BITMAPS::INVALID_BITMAP;
         wxColour colour;
 
-        if( !statusToDisplay( fileStatus.status, word, icon, colour ) )
+        if( !statusToDisplay( fileStatus.status, word, icon, colour, aDarkTheme ) )
             continue;
 
         if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, projectPath ) )
@@ -395,109 +396,195 @@ void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore )
 }
 
 
-bool ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent )
+namespace
 {
-    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
-    bool                          dirty = false;
 
+// Keep window trackers together on the UI thread. Worker dispatch copies only this context's
+// shared pointer, so it never adds or removes weak-reference nodes on a live window.
+struct WORKTREE_QUERY_CONTEXT
+{
+    WORKTREE_QUERY_CONTEXT( EDA_BASE_FRAME* aFrame, wxWindow* aParent ) :
+            frame( aFrame ),
+            parent( aParent ? aParent : aFrame ),
+            session( aFrame->Prj().GetGitCommon() )
     {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( aParent, KIGIT::BusyMessage() );
-            return false;
-        }
-
-        dirty = common->HasUncommittedTrackedChanges();
     }
 
-    if( dirty || DocumentEditorsDirty( aFrame->Kiway() )
-        || !LibraryEditorsWithUnsavedChanges( aFrame->Kiway() ).empty() )
+    bool IsAlive() const
     {
-        DisplayInfoMessage( aParent, _( "There are changes that are not committed yet, and this would run over "
-                                        "them. Commit them first, or set them aside with Stash Changes." ) );
-        return false;
+        return frame.get() && parent.get() && !frame->IsBeingDeleted() && !parent->IsBeingDeleted();
     }
 
-    return true;
+    bool IsCurrent() const
+    {
+        return IsAlive() && !session->IsShuttingDown() && frame->Prj().GetGitCommon() == session
+               && Pgm().GetCommonSettings()->m_Git.enableGit
+               && !frame->Prj().GetLocalSettings().m_GitIntegrationDisabled;
+    }
+
+    wxWeakRef<EDA_BASE_FRAME>     frame;
+    wxWeakRef<wxWindow>           parent;
+    std::shared_ptr<KIGIT_COMMON> session;
+};
+
+
+// These checks precede UI confirmations, so they are snapshots rather than part of a write
+// transaction. The backend still validates the working tree under the mutation's own lock.
+void checkProjectWorktree( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUERY& aQuery,
+                           std::function<void( const wxString& )> aReady, std::function<void()> aFinished = {} )
+{
+    struct OUTCOME
+    {
+        bool     checked = false;
+        bool     dirty = false;
+        wxString currentBranch;
+        wxString lfsMessage;
+    };
+
+    wxString projectPath = aFrame->Prj().GetProjectPath();
+    auto     context = std::make_shared<WORKTREE_QUERY_CONTEXT>( aFrame, aParent );
+    auto     outcome = std::make_shared<OUTCOME>();
+
+    aQuery.Run(
+            context->session,
+            [outcome, projectPath]( KIGIT_COMMON& aCommon )
+            {
+                outcome->dirty = aCommon.HasUncommittedTrackedChanges();
+                outcome->currentBranch = aCommon.GetCurrentBranchName();
+                outcome->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, projectPath );
+                outcome->checked = true;
+            },
+            [context, outcome, aReady, aFinished]()
+            {
+                auto proceed = [&]()
+                {
+                    if( !context->IsCurrent() || !outcome->checked )
+                    {
+                        return;
+                    }
+
+                    if( !outcome->lfsMessage.IsEmpty() )
+                    {
+                        DisplayErrorMessage( context->parent, outcome->lfsMessage );
+                        return;
+                    }
+
+                    if( outcome->dirty || DocumentEditorsDirty( context->frame->Kiway() )
+                        || !LibraryEditorsWithUnsavedChanges( context->frame->Kiway() ).empty() )
+                    {
+                        DisplayInfoMessage( context->parent,
+                                            _( "There are changes that are not committed yet, and this would run over "
+                                               "them. Commit them first, or set them aside with Stash Changes." ) );
+                        return;
+                    }
+
+                    aReady( outcome->currentBranch );
+                };
+
+                proceed();
+
+                if( aFinished && context->IsAlive() )
+                {
+                    aFinished();
+                }
+            } );
+}
+
+} // namespace
+
+
+void ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUERY& aQuery,
+                                    std::function<void()> aReady )
+{
+    checkProjectWorktree( aFrame, aParent, aQuery,
+                          [aReady]( const wxString& )
+                          {
+                              aReady();
+                          } );
 }
 
 
-bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxString& aBranch )
+void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxString& aBranch, KIGIT_QUERY& aQuery,
+                            std::function<void()> aFinished )
 {
     if( aBranch.IsEmpty() )
-        return false;
-
-    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
-    wxString                      current;
-
-    // Reading the current branch touches the repository, so do it under the lock too.
     {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        if( aFinished )
+            aFinished();
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( aParent, KIGIT::BusyMessage() );
-            return false;
-        }
-
-        current = common->GetCurrentBranchName();
+        return;
     }
 
-    if( aBranch == current )
-        return false;
+    auto context = std::make_shared<WORKTREE_QUERY_CONTEXT>( aFrame, aParent );
 
-    // Switching refuses over uncommitted work, so saving the editors first would only turn
-    // unsaved edits into the very changes that block it. Ask for a commit up front instead.
-    if( !ProjectClearOfUncommittedWork( aFrame, aParent ) )
-        return false;
+    checkProjectWorktree(
+            aFrame, aParent, aQuery,
+            [context, aBranch]( const wxString& aCurrentBranch )
+            {
+                const wxWeakRef<EDA_BASE_FRAME>&     frame = context->frame;
+                const wxWeakRef<wxWindow>&           parent = context->parent;
+                const std::shared_ptr<KIGIT_COMMON>& common = context->session;
 
-    if( !IsOK( aParent, wxString::Format( _( "Switch to branch '%s'? This replaces the project files "
-                                             "on disk with that branch's version." ),
-                                          aBranch ) ) )
-    {
-        return false;
-    }
+                if( aBranch == aCurrentBranch )
+                    return;
 
-    // Save rather than close: a close would take the frame hosting the caller with it.
-    if( !PrepareEditorsForGitOperation( aFrame, GIT_EDITOR_PREP::WORKING_TREE ) )
-        return false;
+                if( !IsOK( parent, wxString::Format( _( "Switch to branch '%s'? This replaces the project files "
+                                                        "on disk with that branch's version." ),
+                                                     aBranch ) ) )
+                {
+                    return;
+                }
 
-    EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( aFrame->Kiway() );
-    BranchResult    result = BranchResult::Error;
-    wxString        resultError;
+                // The confirmation runs a nested event loop and may have closed the project.
+                if( !context->IsCurrent() )
+                {
+                    return;
+                }
 
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+                // Save rather than close: a close would take the frame hosting the caller with it.
+                if( !PrepareEditorsForGitOperation( frame, GIT_EDITOR_PREP::WORKING_TREE ) )
+                    return;
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( aParent, KIGIT::BusyMessage() );
-            return false;
-        }
+                if( !context->IsCurrent() )
+                {
+                    return;
+                }
 
-        GIT_BRANCH_HANDLER handler( common.get() );
-        result = handler.SwitchToBranch( aBranch );
-        resultError = handler.GetErrorString();
-    }
+                EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( frame->Kiway() );
+                BranchResult    result = BranchResult::Error;
+                wxString        resultError;
 
-    if( result == BranchResult::Conflict )
-    {
-        DisplayInfoMessage( aParent, resultError );
-        return false;
-    }
+                {
+                    std::unique_lock<std::mutex> lock = common->TryLockAction();
 
-    if( result != BranchResult::Success )
-    {
-        DisplayErrorMessage( aParent, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
-                             resultError.IsEmpty() ? KIGIT_COMMON::GetLastGitError() : resultError );
-        return false;
-    }
+                    if( !lock.owns_lock() )
+                    {
+                        DisplayInfoMessage( parent, KIGIT::BusyMessage() );
+                        return;
+                    }
 
-    ReloadOpenEditors( aFrame->Kiway(), docsBefore );
-    common->NotifyRefreshListeners();
-    return true;
+                    GIT_BRANCH_HANDLER handler( common.get() );
+                    result = handler.SwitchToBranch( aBranch );
+                    resultError = handler.GetErrorString();
+                }
+
+                if( result == BranchResult::Conflict )
+                {
+                    DisplayInfoMessage( parent, resultError );
+                    return;
+                }
+
+                if( result != BranchResult::Success )
+                {
+                    DisplayErrorMessage( parent, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
+                                         resultError.IsEmpty() ? KIGIT_COMMON::GetLastGitError() : resultError );
+                    return;
+                }
+
+                ReloadOpenEditors( frame->Kiway(), docsBefore );
+                common->NotifyRefreshListeners();
+            },
+            std::move( aFinished ) );
 }
 
 
@@ -536,17 +623,15 @@ std::vector<wxString> LibraryEditorsWithUnsavedChanges( KIWAY& aKiway )
 }
 
 
-std::vector<wxString> ChangedTrackedFilesOutsideProject( PROJECT& aProject )
+std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, const wxString& aProjectPath )
 {
-    std::vector<wxString>         paths;
-    std::shared_ptr<KIGIT_COMMON> common = aProject.GetGitCommon();
+    std::vector<wxString> paths;
 
-    if( !common->GetRepo() )
+    if( !aCommon.GetRepo() )
         return paths;
 
-    GIT_STATUS_HANDLER handler( common.get() );
+    GIT_STATUS_HANDLER handler( &aCommon );
     wxString           workDir = handler.GetWorkingDirectory();
-    wxString           projectPath = aProject.GetProjectPath();
 
     for( const auto& [path, fileStatus] : handler.GetFileStatus( wxEmptyString, /* changed only */ true ) )
     {
@@ -557,7 +642,7 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( PROJECT& aProject )
             continue;
         }
 
-        if( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, projectPath ) )
+        if( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, aProjectPath ) )
             continue;
 
         wxString relativePath = path;
@@ -572,31 +657,10 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( PROJECT& aProject )
 }
 
 
-bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose )
+bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose, bool* aSavedEditors )
 {
-    wxString lfsMessage;
-
-    if( std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon() )
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( aFrame, KIGIT::BusyMessage() );
-            return false;
-        }
-
-        if( common->GetRepo() )
-        {
-            lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( common.get(), aFrame->Prj() );
-        }
-    }
-
-    if( !lfsMessage.IsEmpty() )
-    {
-        DisplayErrorMessage( aFrame, lfsMessage );
-        return false;
-    }
+    if( aSavedEditors )
+        *aSavedEditors = false;
 
     // Rewriting a library an editor holds would let its next save overwrite what arrived.
     if( aPurpose == GIT_EDITOR_PREP::WORKING_TREE )
@@ -701,6 +765,9 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
             // Commit Anyway leaves both the editors and the project file untouched.
             if( aPurpose == GIT_EDITOR_PREP::COMMIT )
                 aFrame->GetSettingsManager()->SaveProject();
+
+            if( aSavedEditors )
+                *aSavedEditors = true;
         }
     }
 
@@ -765,117 +832,171 @@ wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString&
 }
 
 
-static void showTextFileDiff( wxWindow* aParent, const wxString& aRelativePath, const wxString& aFileA,
-                              const wxString& aFileB )
+namespace
 {
-    auto readAll = []( const wxString& aPath ) -> std::string
+
+/**
+ * One full comparison request. The completion owns this object until its query finishes.
+ * Widgets are weak references used only on the UI thread, so closing either window drops
+ * the result without waiting for extraction.
+ */
+struct MODAL_GIT_DIFF_REQUEST
+{
+    MODAL_GIT_DIFF_REQUEST( EDA_BASE_FRAME* aFrame, wxWindow* aParent ) :
+            frame( aFrame ),
+            parent( aParent ),
+            session( aFrame->Prj().GetGitCommon() )
     {
-        if( aPath.IsEmpty() )
-            return std::string();
-
-        std::ifstream in( aPath.fn_str(), std::ios::binary );
-        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
-    };
-
-    std::string contentA = readAll( aFileA );
-    std::string contentB = readAll( aFileB );
-
-    if( KIGIT::TextLooksBinary( contentA ) || KIGIT::TextLooksBinary( contentB ) )
-    {
-        DisplayInfoMessage( aParent, wxString::Format( _( "'%s' is not a plain text file. KiCad compares "
-                                                          "design files and text files only, so there "
-                                                          "is no comparison to show." ),
-                                                       aRelativePath ) );
-        return;
     }
 
-    std::vector<KIGIT::TEXT_DIFF_LINE> lines =
-            KIGIT::BuildTextDiff( KIGIT::SplitTextLines( contentA ), KIGIT::SplitTextLines( contentB ) );
+    bool IsCurrent() const
+    {
+        return frame.get() && parent.get() && !frame->IsBeingDeleted() && !parent->IsBeingDeleted()
+               && frame->Prj().GetGitCommon() == session && !session->IsShuttingDown();
+    }
 
-    DIALOG_TEXT_DIFF dlg( aParent, aRelativePath, lines );
-    dlg.ShowModal();
+    wxWeakRef<EDA_BASE_FRAME>     frame;
+    wxWeakRef<wxWindow>           parent;
+    std::shared_ptr<KIGIT_COMMON> session;
+    KIGIT_QUERY                   query;
+};
+
+
+struct MODAL_GIT_DIFF_RESULT
+{
+    std::unique_ptr<GIT_DIFF_WORKSPACE> workspace;
+    GIT_FILE_SIDES                      sides;
+    std::vector<KIGIT::TEXT_DIFF_LINE>  textLines;
+    bool                                ready = false;
+};
+
+
+std::string readDiffText( const wxString& aPath )
+{
+    if( aPath.IsEmpty() )
+        return {};
+
+    std::ifstream in( aPath.fn_str(), std::ios::binary );
+    return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
 }
 
 
-// Shared by the working-copy and history diffs. An empty path on either side means that side
-// of the document does not exist.
-static void presentFileDiff( KIWAY& aKiway, KICAD_DIFF::DOC_KIND aKind, const wxString& aRelativePath,
-                             const wxString& aFileA, const wxString& aFileB, const wxString& aLabelA,
-                             const wxString& aLabelB, wxWindow* aParent )
+// A named file can be loaded directly. Otherwise ShowGitCommitDiff obtains the choice first.
+// An empty commit hash compares HEAD with the working copy.
+void loadModalGitDiff( const std::shared_ptr<MODAL_GIT_DIFF_REQUEST>& aRequest, const wxString& aRelativePath,
+                       const wxString& aCommitHash )
 {
-    if( aKind == KICAD_DIFF::DOC_KIND::UNKNOWN )
-    {
-        showTextFileDiff( aParent, aRelativePath, aFileA, aFileB );
-        return;
-    }
+    auto result = std::make_shared<MODAL_GIT_DIFF_RESULT>();
+    result->sides.error = _( "Could not compare this file." );
 
-    WX_STRING_REPORTER reporter;
-    KICAD_DIFF::DispatchOpenDiffDialog( aKiway, aKind, aFileA, aFileB, aLabelA, aLabelB, aParent, &reporter );
+    aRequest->query.Run(
+            aRequest->session,
+            [result, aRelativePath, aCommitHash]( KIGIT_COMMON& aCommon )
+            {
+                result->workspace = std::make_unique<GIT_DIFF_WORKSPACE>();
 
-    if( reporter.HasMessage() )
-        DisplayErrorMessage( aParent, _( "Could not open the diff." ), reporter.GetMessages() );
+                if( !result->workspace->IsOk() )
+                {
+                    result->sides.error = _( "Could not create a temporary directory for the diff." );
+                    return;
+                }
+
+                bool materialized =
+                        aCommitHash.IsEmpty()
+                                ? MaterializeWorkingFile( aCommon, *result->workspace, aRelativePath, result->sides )
+                                : MaterializeCommitFile( aCommon, *result->workspace, aCommitHash, aRelativePath,
+                                                         result->sides );
+
+                if( !materialized )
+                    return;
+
+                if( result->sides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+                {
+                    std::string before = readDiffText( result->sides.before );
+                    std::string after = readDiffText( result->sides.after );
+
+                    if( KIGIT::TextLooksBinary( before ) || KIGIT::TextLooksBinary( after ) )
+                    {
+                        result->sides.error = wxString::Format(
+                                _( "'%s' is not a plain text file. KiCad compares design files and text files "
+                                   "only, so there is no comparison to show." ),
+                                aRelativePath );
+                        return;
+                    }
+
+                    result->textLines =
+                            KIGIT::BuildTextDiff( KIGIT::SplitTextLines( before ), KIGIT::SplitTextLines( after ) );
+                }
+
+                result->ready = true;
+            },
+            [aRequest, result, aRelativePath, aCommitHash]()
+            {
+                if( !aRequest->IsCurrent() )
+                    return;
+
+                wxWindow* parent = aRequest->parent.get();
+
+                if( !result->ready )
+                {
+                    if( !result->sides.error.IsEmpty() )
+                        DisplayInfoMessage( parent, result->sides.error );
+
+                    return;
+                }
+
+                if( result->sides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+                {
+                    DIALOG_TEXT_DIFF dlg( parent, aRelativePath, result->textLines );
+                    dlg.ShowModal();
+                    return;
+                }
+
+                wxString beforeLabel = aCommitHash.IsEmpty()
+                                               ? _( "BASE (HEAD)" )
+                                               : wxString::Format( _( "BASE (parent of %s)" ), aCommitHash );
+                wxString afterLabel = aCommitHash.IsEmpty() ? _( "WORKING (changes)" )
+                                                            : wxString::Format( _( "WORKING (%s)" ), aCommitHash );
+
+                // The owning kiface loads and displays documents on the UI thread. Keep the
+                // scratch files alive until the modal comparison has closed.
+                WX_STRING_REPORTER reporter;
+                KICAD_DIFF::DispatchOpenDiffDialog( aRequest->frame->Kiway(), result->sides.kind, result->sides.before,
+                                                    result->sides.after, beforeLabel, afterLabel, parent, &reporter );
+
+                if( aRequest->IsCurrent() && reporter.HasMessage() )
+                    DisplayErrorMessage( parent, _( "Could not open the diff." ), reporter.GetMessages() );
+            } );
 }
+
+} // namespace
 
 
 void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
 {
-    if( !aFrame->Prj().GetGitCommon()->GetRepo() )
-        return;
-
-    GIT_DIFF_WORKSPACE workspace;
-
-    if( !workspace.IsOk() )
-    {
-        DisplayInfoMessage( aFrame, _( "Could not create a temporary directory for the diff." ) );
-        return;
-    }
-
-    GIT_FILE_SIDES sides;
-
-    if( !MaterializeWorkingFile( aFrame, workspace, aRelativePath, sides ) )
-    {
-        DisplayInfoMessage( aFrame, sides.error );
-        return;
-    }
-
-    presentFileDiff( aFrame->Kiway(), sides.kind, aRelativePath, sides.before, sides.after, _( "BASE (HEAD)" ),
-                     _( "WORKING (changes)" ), aFrame );
+    auto request = std::make_shared<MODAL_GIT_DIFF_REQUEST>( aFrame, aFrame );
+    loadModalGitDiff( request, aRelativePath, wxEmptyString );
 }
 
 
-bool MaterializeWorkingFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
+bool MaterializeWorkingFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
                              GIT_FILE_SIDES& aSides )
 {
-    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+    git_repository* repo = aCommon.GetRepo();
+
+    if( !repo )
+        return false;
 
     aSides.kind = KICAD_DIFF::DocKindFromExtension( aRelativePath );
 
-    bool inHead = true;
+    GIT_STATUS_HANDLER handler( &aCommon );
+    aSides.after = handler.GetWorkingDirectory() + aRelativePath;
 
-    {
-        // Hold the git action lock only while reading, then release it before any modal dialog.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+    // A new file has no committed version, so that side stays empty and shows as added.
+    bool inHead = aCommon.IsPathInHead( aRelativePath );
 
-        if( !lock.owns_lock() )
-        {
-            aSides.error = KIGIT::BusyMessage();
-            return false;
-        }
-
-        git_repository* repo = common->GetRepo();
-
-        if( !repo )
-            return false;
-
-        GIT_STATUS_HANDLER handler( common.get() );
-        aSides.after = handler.GetWorkingDirectory() + aRelativePath;
-
-        // A new file has no committed version, so that side stays empty and shows as added.
-        if( common->IsPathInHead( aRelativePath ) )
-            aSides.before = aWorkspace.Materialize( repo, wxT( "HEAD" ), aRelativePath, aSides.kind );
-        else
-            inHead = false;
-    }
+    if( inHead )
+        aSides.before = aWorkspace.Materialize( repo, wxT( "HEAD" ), aRelativePath, aSides.kind );
 
     if( inHead && aSides.before.IsEmpty() )
     {
@@ -895,121 +1016,85 @@ bool MaterializeWorkingFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorksp
 void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow,
                         const wxString& aRelativePath )
 {
-    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
-    git_repository*               repo = common->GetRepo();
-
-    if( !repo )
-        return;
-
-    GIT_DIFF_WORKSPACE workspace;
-
-    if( !workspace.IsOk() )
-    {
-        DisplayInfoMessage( aFrame, _( "Could not create a temporary directory for the diff." ) );
-        return;
-    }
-
-    std::vector<wxString> changedPaths;
-    wxString              parentRef;
-    bool                  busy = false;
-
-    {
-        // Hold the git action lock only while reading, then release it before any modal dialog.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            busy = true;
-        }
-        else
-        {
-            // A root commit has no "<hash>^". An empty base ref compares it against the empty
-            // tree, so its files show as added.
-            git_object* commitObj = nullptr;
-
-            if( git_revparse_single( &commitObj, repo, aCommitHash.utf8_string().c_str() ) == GIT_OK )
-            {
-                if( git_object_type( commitObj ) == GIT_OBJECT_COMMIT
-                    && git_commit_parentcount( reinterpret_cast<git_commit*>( commitObj ) ) > 0 )
-                {
-                    parentRef = aCommitHash + wxT( "^" );
-                }
-
-                git_object_free( commitObj );
-            }
-
-            for( const KIGIT::CHANGED_FILE& file : KIGIT::CompareRefs( repo, parentRef, aCommitHash ) )
-                changedPaths.push_back( file.path );
-        }
-    }
-
-    if( busy )
-    {
-        DisplayInfoMessage( aFrame, KIGIT::BusyMessage() );
-        return;
-    }
+    auto request = std::make_shared<MODAL_GIT_DIFF_REQUEST>( aFrame, aParentWindow ? aParentWindow : aFrame );
 
     // A caller that named a file knows its own list, which for a stash also holds the files
-    // that were untracked. Those are not in the diff above.
-    if( aRelativePath.IsEmpty() && changedPaths.empty() )
+    // that were untracked. Those are not in the parent-to-commit diff used by the chooser.
+    if( !aRelativePath.IsEmpty() )
     {
-        DisplayInfoMessage( aFrame, _( "This commit has no file changes to show." ) );
+        loadModalGitDiff( request, aRelativePath, aCommitHash );
         return;
     }
 
-    wxWindow* diffParent = aParentWindow ? aParentWindow : static_cast<wxWindow*>( aFrame );
+    auto changedPaths = std::make_shared<std::vector<wxString>>();
 
-    // The diff viewer shows one file at a time, so let the user pick which one unless the
-    // caller already did.
-    wxString chosen = aRelativePath.IsEmpty() ? changedPaths.front() : aRelativePath;
+    request->query.Run(
+            request->session,
+            [changedPaths, aCommitHash]( KIGIT_COMMON& aCommon )
+            {
+                git_repository* repo = aCommon.GetRepo();
+                wxString        parentRef;
+                git_object*     commitObj = nullptr;
 
-    if( aRelativePath.IsEmpty() && changedPaths.size() > 1 )
-    {
-        wxArrayString choices;
+                // A root commit has no parent, so compare it against the empty tree.
+                if( git_revparse_single( &commitObj, repo, aCommitHash.utf8_string().c_str() ) == GIT_OK )
+                {
+                    if( git_object_type( commitObj ) == GIT_OBJECT_COMMIT
+                        && git_commit_parentcount( reinterpret_cast<git_commit*>( commitObj ) ) > 0 )
+                    {
+                        parentRef = aCommitHash + wxT( "^" );
+                    }
 
-        for( const wxString& path : changedPaths )
-            choices.Add( path );
+                    git_object_free( commitObj );
+                }
 
-        int sel = wxGetSingleChoiceIndex( _( "This commit changed more than one file. "
-                                             "Select one to compare:" ),
-                                          _( "Select File to Compare" ), choices, diffParent );
+                for( const KIGIT::CHANGED_FILE& file : KIGIT::CompareRefs( repo, parentRef, aCommitHash ) )
+                    changedPaths->push_back( file.path );
+            },
+            [request, changedPaths, aCommitHash]()
+            {
+                if( !request->IsCurrent() )
+                    return;
 
-        if( sel < 0 )
-            return;
+                wxWindow* parent = request->parent.get();
 
-        chosen = changedPaths[sel];
-    }
+                if( changedPaths->empty() )
+                {
+                    DisplayInfoMessage( parent, _( "This commit has no file changes to show." ) );
+                    return;
+                }
 
-    GIT_FILE_SIDES sides;
+                wxString chosen = changedPaths->front();
 
-    if( !MaterializeCommitFile( aFrame, workspace, aCommitHash, chosen, sides ) )
-    {
-        if( !sides.error.IsEmpty() )
-            DisplayInfoMessage( diffParent, sides.error );
+                if( changedPaths->size() > 1 )
+                {
+                    wxArrayString choices;
 
-        return;
-    }
+                    for( const wxString& path : *changedPaths )
+                        choices.Add( path );
 
-    presentFileDiff( aFrame->Kiway(), sides.kind, chosen, sides.before, sides.after,
-                     wxString::Format( _( "BASE (parent of %s)" ), aCommitHash ),
-                     wxString::Format( _( "WORKING (%s)" ), aCommitHash ), diffParent );
+                    int sel = wxGetSingleChoiceIndex( _( "This commit changed more than one file. "
+                                                         "Select one to compare:" ),
+                                                      _( "Select File to Compare" ), choices, parent );
+
+                    if( sel < 0 )
+                        return;
+
+                    chosen = ( *changedPaths )[sel];
+                }
+
+                // A modal chooser may have processed a project close or switch.
+                if( request->IsCurrent() )
+                    loadModalGitDiff( request, chosen, aCommitHash );
+            } );
 }
 
 
-bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
+bool MaterializeCommitFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
                             const wxString& aRelativePath, GIT_FILE_SIDES& aSides )
 {
-    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    if( !lock.owns_lock() )
-    {
-        aSides.error = KIGIT::BusyMessage();
-        return false;
-    }
-
     // The caller may have run a chooser since it last looked, so the project may have closed.
-    git_repository* repo = common->GetRepo();
+    git_repository* repo = aCommon.GetRepo();
 
     if( !repo )
         return false;

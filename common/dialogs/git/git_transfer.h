@@ -22,7 +22,9 @@
 #define GIT_TRANSFER_H
 
 #include <functional>
+#include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 
 #include <git/kicad_git_common.h>
@@ -84,6 +86,8 @@ public:
      *
      * aWork is given the cancellation to hand its handler. aDone runs once aWork has returned,
      * and only while this object is still alive, so it may touch the owning window freely.
+     * aWork captures must be safe to copy and destroy on a worker. UI references belong only
+     * in aDone, including when captures share a context object.
      * False when no thread could be started, which only happens once shutdown has begun.
      */
     bool Start( const std::string& aLabel, const std::function<void( const KIGIT_COMMON::CANCEL_TOKEN& )>& aWork,
@@ -97,7 +101,62 @@ private:
     /// is still queued and has no handler yet.
     KIGIT_COMMON::CANCEL_TOKEN m_cancel;
 
+    /// Created and cleared on the UI thread. The worker carries only this shared holder, so
+    /// captured wxWeakRefs are never copied or destroyed on the worker, even during shutdown.
+    std::shared_ptr<std::function<void()>> m_completion;
+
     bool m_busy = false;
+};
+
+
+/**
+ * Read repository state without blocking the UI. All methods are called on the UI thread.
+ *
+ * One request runs at a time. A newer request replaces any pending request and suppresses the
+ * running request's completion, so a slow read cannot overwrite a newer selection. Closing
+ * the owner cancels pending work and never waits for the worker.
+ */
+class KIGIT_QUERY
+{
+public:
+    KIGIT_QUERY() = default;
+    ~KIGIT_QUERY();
+
+    KIGIT_QUERY( const KIGIT_QUERY& ) = delete;
+    KIGIT_QUERY& operator=( const KIGIT_QUERY& ) = delete;
+
+    /**
+     * Run aWork under the session's action lock on a worker, then aDone on the UI thread.
+     *
+     * aWork must capture its inputs and result storage by value and must not touch windows.
+     * The session stays alive until the worker returns. If it has no repository or is shutting
+     * down, aWork is skipped and aDone can display the result's initial, empty state.
+     * Exceptions are reported on the UI thread and still deliver aDone. Build each result
+     * before assigning it to shared storage so an exception leaves that result empty.
+     */
+    void Run( std::shared_ptr<KIGIT_COMMON> aSession, std::function<void( KIGIT_COMMON& )> aWork,
+              std::function<void()> aDone );
+
+    /// Suppress the running completion and discard pending work. Does not wait for a read.
+    void Cancel();
+
+    /// Remains true until the running worker returns, including after Cancel().
+    bool IsBusy() const { return m_transfer.IsBusy(); }
+
+private:
+    struct REQUEST
+    {
+        std::shared_ptr<KIGIT_COMMON>        session;
+        std::function<void( KIGIT_COMMON& )> work;
+        std::function<void()>                done;
+        uint64_t                             generation;
+    };
+
+    void start( REQUEST aRequest );
+
+    KIGIT_TRANSFER         m_transfer;
+    std::optional<REQUEST> m_pending;
+    uint64_t               m_generation = 0;
 };
 
 #endif // GIT_TRANSFER_H

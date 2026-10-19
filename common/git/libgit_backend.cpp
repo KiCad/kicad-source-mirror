@@ -156,7 +156,7 @@ bool LIBGIT_BACKEND::IsLibraryAvailable()
 bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
 {
     KIGIT_COMMON* common = aHandler->GetCommon();
-    std::unique_lock<std::mutex> lock( common->m_gitActionMutex, std::try_to_lock );
+    std::unique_lock<std::mutex> lock = aHandler->GetActionLock();
 
     if( !lock.owns_lock() )
     {
@@ -166,6 +166,9 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
 
     // Without this the progress dialog's Cancel would set a token nothing reads.
     KIGIT_COMMON::OPERATION_GUARD operation( common, aHandler->CancelToken() );
+
+    if( aHandler->IsThisOperationCancelled() )
+        return false;
 
     wxFileName clonePath( aHandler->GetClonePath() );
 
@@ -878,7 +881,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 {
     KIGIT_COMMON*                common = aHandler->GetCommon();
-    std::unique_lock<std::mutex> lock( common->m_gitActionMutex, std::try_to_lock );
+    std::unique_lock<std::mutex> lock = aHandler->GetActionLock();
 
     if( !lock.owns_lock() )
     {
@@ -886,9 +889,44 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
         return PushResult::Busy;
     }
 
-    // A close while this waited in the queue frees the repository, so check it under the lock.
-    if( !aHandler->GetRepo() )
+    // Publish cancellation only after taking the action lock. A cancelled or closing project
+    // must not start network work when a preceding read finally releases the repository.
+    KIGIT_COMMON::OPERATION_GUARD operation( common, aHandler->CancelToken() );
+
+    if( aHandler->IsThisOperationCancelled() || !aHandler->GetRepo() )
         return PushResult::Error;
+
+    const wxString targetChanged = _( "The branch or its last commit changed while the push was waiting. "
+                                      "Review the changes and try again." );
+
+    auto matchesExpectedTarget = [aHandler]( git_reference* aHead )
+    {
+        if( !aHandler->HasExpectedTarget() )
+            return true;
+
+        if( !aHead || !git_reference_is_branch( aHead ) )
+            return false;
+
+        const git_oid* oid = git_reference_target( aHead );
+        wxString       branch = wxString::FromUTF8( git_reference_shorthand( aHead ) );
+        wxString       commit = oid ? wxString::FromUTF8( git_oid_tostr_s( oid ) ) : wxString();
+        return aHandler->MatchesExpectedTarget( branch, commit );
+    };
+
+    // Reject a changed confirmation before connecting to the remote. The target is checked
+    // again when selecting the ref below, because another program can update Git during a connect.
+    if( aHandler->HasExpectedTarget() )
+    {
+        git_reference* expectedHead = nullptr;
+        git_repository_head( &expectedHead, aHandler->GetRepo() );
+        KIGIT::GitReferencePtr expectedHeadPtr( expectedHead );
+
+        if( !matchesExpectedTarget( expectedHead ) )
+        {
+            aHandler->AddErrorString( targetChanged );
+            return PushResult::Error;
+        }
+    }
 
     PushResult result = PushResult::Success;
 
@@ -917,9 +955,6 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     git_proxy_options proxyOpts;
     git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
     proxyOpts.type = GIT_PROXY_AUTO;
-    // Published under the lock, so Cancel reaches this push and no other.
-    KIGIT_COMMON::OPERATION_GUARD operation( common, aHandler->CancelToken() );
-
     // Cancelled while this task was still queued, so it must not start network work.
     if( aHandler->IsThisOperationCancelled() )
         return PushResult::Error;
@@ -968,6 +1003,13 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
         git_remote_disconnect( remote );
         aHandler->AddErrorString( _( "This project is showing an old snapshot rather than a branch, so there "
                                      "is nothing to push. Go back to a branch first." ) );
+        return PushResult::Error;
+    }
+
+    if( !matchesExpectedTarget( head ) )
+    {
+        git_remote_disconnect( remote );
+        aHandler->AddErrorString( targetChanged );
         return PushResult::Error;
     }
 
@@ -1496,18 +1538,12 @@ bool LIBGIT_BACKEND::BranchExists( GIT_BRANCH_HANDLER* aHandler, const wxString&
 
 bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
 {
-    if( !aHandler->GetRepo() )
-    {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - No repository found" );
-        return false;
-    }
-
     // A pull already holds the lock when it fetches, and relocking from the owner is undefined.
     std::unique_lock<std::mutex> lock;
 
     if( !aSkipLock )
     {
-        lock = std::unique_lock<std::mutex>( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
+        lock = aHandler->GetActionLock();
 
         if( !lock.owns_lock() )
         {
@@ -1517,8 +1553,14 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
         }
     }
 
-    // A close while this waited in the queue frees the repository, so check it under the lock.
-    if( !aHandler->GetRepo() )
+    // A nested fetch must not republish or retire the pull's token while the pull still runs.
+    std::optional<KIGIT_COMMON::OPERATION_GUARD> operation;
+
+    if( !aSkipLock )
+        operation.emplace( aHandler->GetCommon(), aHandler->CancelToken() );
+
+    // A close or cancellation while waiting also applies before reading remote configuration.
+    if( aHandler->IsThisOperationCancelled() || !aHandler->GetRepo() )
         return false;
 
     wxString    remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
@@ -1547,12 +1589,6 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
 
     // Do not SetShuttingDown( false ) here. A close or a preference change can raise the flag
     // after this fetch starts, and clearing it would strand the caller on the transfer.
-
-    // A nested fetch must not republish or retire the pull's token while the pull still runs.
-    std::optional<KIGIT_COMMON::OPERATION_GUARD> operation;
-
-    if( !aSkipLock )
-        operation.emplace( aHandler->GetCommon(), aHandler->CancelToken() );
 
     // Cancelled while this task was still queued, so it must not start network work.
     if( aHandler->IsThisOperationCancelled() )
@@ -1817,7 +1853,7 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 {
     PullResult result = PullResult::Success;
-    std::unique_lock<std::mutex> lock( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
+    std::unique_lock<std::mutex> lock = aHandler->GetActionLock();
 
     if( !lock.owns_lock() )
     {
@@ -1826,14 +1862,10 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
         return PullResult::Error;
     }
 
-    // A close while this waited in the queue frees the repository, so check it under the lock.
-    if( !aHandler->GetRepo() )
-        return PullResult::Error;
-
     // The pull owns cancellation for the whole operation, the fetch inside it included.
     KIGIT_COMMON::OPERATION_GUARD operation( aHandler->GetCommon(), aHandler->CancelToken() );
 
-    if( aHandler->IsThisOperationCancelled() )
+    if( aHandler->IsThisOperationCancelled() || !aHandler->GetRepo() )
         return PullResult::Error;
 
     if( !PerformFetch( aHandler, true ) )

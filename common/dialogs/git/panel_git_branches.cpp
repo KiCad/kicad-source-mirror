@@ -20,7 +20,6 @@
 #include <dialogs/git/panel_git_branches.h>
 
 #include <memory>
-#include <mutex>
 #include <vector>
 
 #include <wx/richmsgdlg.h>
@@ -56,15 +55,6 @@ PANEL_GIT_BRANCHES::PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* 
     m_branchSashPos = FromDIP( 460 );
     m_branchesSplitter->Unsplit( m_branchDetail );
 
-    m_retryTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                reloadBranches();
-            },
-            m_retryTimer.GetId() );
-
     m_branchSearch->Bind( wxEVT_TEXT,
                           [this]( wxCommandEvent& )
                           {
@@ -76,6 +66,16 @@ PANEL_GIT_BRANCHES::PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* 
                           {
                               if( !m_fillingBranches )
                                   showBranchDetail( m_branchesList->GetItemText( aEvent.GetIndex(), 0 ) );
+                          } );
+
+    m_branchesList->Bind( wxEVT_LIST_ITEM_DESELECTED,
+                          [this]( wxListEvent& )
+                          {
+                              if( !m_fillingBranches
+                                  && m_branchesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) == -1 )
+                              {
+                                  hideBranchDetail();
+                              }
                           } );
 
     // Double-clicking a branch switches the working tree to it.
@@ -130,93 +130,101 @@ void PANEL_GIT_BRANCHES::StopTransfer()
 
 void PANEL_GIT_BRANCHES::Populate()
 {
-    // The caller holds the git action lock.
-    std::shared_ptr<KIGIT_COMMON>  common = m_frame->Prj().GetGitCommon();
-    std::vector<KIGIT_BRANCH_INFO> branches = common->GetBranches();
-    wxString                       search = m_branchSearch->GetValue().Lower();
-    wxString                       selected = KIGIT::SelectedText( m_branchesList, 0 );
-    wxString                       current;
-    long                           selectRow = wxNOT_FOUND;
+    if( !m_dialog->SessionStillCurrent() )
+        return;
 
-    m_fillingBranches = true;
-    m_branchesList->DeleteAllItems();
-    m_branchIsRemote.clear();
+    m_detailQuery.Cancel();
 
-    for( const KIGIT_BRANCH_INFO& branch : branches )
-    {
-        if( branch.isCurrent )
-            current = branch.name;
+    auto branches = std::make_shared<std::vector<KIGIT_BRANCH_INFO>>();
 
-        if( !search.IsEmpty() && !branch.name.Lower().Contains( search ) )
-            continue;
+    m_listQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [branches]( KIGIT_COMMON& aCommon )
+            {
+                *branches = aCommon.GetBranches();
+            },
+            [this, branches]()
+            {
+                if( !m_dialog->SessionStillCurrent() )
+                    return;
 
-        long idx = m_branchesList->InsertItem( m_branchesList->GetItemCount(), branch.name );
+                // Preserve selections and search edits made while the repository was being read.
+                wxString search = m_branchSearch->GetValue().Lower();
+                wxString selected = KIGIT::SelectedText( m_branchesList, 0 );
+                long     selectRow = wxNOT_FOUND;
 
-        if( branch.isCurrent )
-            m_branchesList->SetItem( idx, 1, _( "current" ) );
-        else if( branch.isRemote )
-            m_branchesList->SetItem( idx, 1, _( "remote" ) );
+                m_detailQuery.Cancel();
+                m_fillingBranches = true;
+                m_branchesList->DeleteAllItems();
+                m_branchIsRemote.clear();
 
-        m_branchesList->SetItem( idx, 2, branch.tipHash );
-        m_branchesList->SetItem( idx, 3, KIGIT::RelativeDate( branch.when ) );
-        m_branchIsRemote.push_back( branch.isRemote );
+                for( const KIGIT_BRANCH_INFO& branch : *branches )
+                {
+                    if( !search.IsEmpty() && !branch.name.Lower().Contains( search ) )
+                        continue;
 
-        // Keep the selection where it was, or start on the current branch.
-        if( branch.name == selected || ( selected.IsEmpty() && branch.isCurrent ) )
-            selectRow = idx;
-    }
+                    long idx = m_branchesList->InsertItem( m_branchesList->GetItemCount(), branch.name );
 
-    int shown = m_branchesList->GetItemCount();
-    m_branchCount->SetLabel( shown == 1 ? _( "1 branch" ) : wxString::Format( _( "%d branches" ), shown ) );
+                    if( branch.isCurrent )
+                        m_branchesList->SetItem( idx, 1, _( "current" ) );
+                    else if( branch.isRemote )
+                        m_branchesList->SetItem( idx, 1, _( "remote" ) );
 
-    if( selectRow != wxNOT_FOUND )
-    {
-        m_branchesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-        fillBranchDetail( common->GetBranchDetail( m_branchesList->GetItemText( selectRow, 0 ) ) );
-    }
-    else
-    {
-        hideBranchDetail();
-    }
+                    m_branchesList->SetItem( idx, 2, branch.tipHash );
+                    m_branchesList->SetItem( idx, 3, KIGIT::RelativeDate( branch.when ) );
+                    m_branchIsRemote.push_back( branch.isRemote );
 
-    m_fillingBranches = false;
+                    // Keep the selection where it was, or start on the current branch.
+                    if( branch.name == selected || ( selected.IsEmpty() && branch.isCurrent ) )
+                        selectRow = idx;
+                }
+
+                int shown = m_branchesList->GetItemCount();
+                m_branchCount->SetLabel( shown == 1 ? _( "1 branch" ) : wxString::Format( _( "%d branches" ), shown ) );
+
+                if( selectRow != wxNOT_FOUND )
+                {
+                    m_branchesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+                    showBranchDetail( m_branchesList->GetItemText( selectRow, 0 ) );
+                }
+                else
+                {
+                    hideBranchDetail();
+                }
+
+                m_fillingBranches = false;
+            } );
 }
 
 
 void PANEL_GIT_BRANCHES::reloadBranches()
 {
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    if( !lock.owns_lock() )
-    {
-        m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-        return;
-    }
-
     Populate();
 }
 
 
 void PANEL_GIT_BRANCHES::showBranchDetail( const wxString& aBranch )
 {
-    if( aBranch.IsEmpty() )
-    {
-        hideBranchDetail();
+    hideBranchDetail();
+
+    if( aBranch.IsEmpty() || !m_dialog->SessionStillCurrent() )
         return;
-    }
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+    auto detail = std::make_shared<KIGIT_BRANCH_DETAIL>();
 
-    // The reload keeps the selection and fills the pane then.
-    if( !lock.owns_lock() )
-    {
-        m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-        return;
-    }
-
-    fillBranchDetail( common->GetBranchDetail( aBranch ) );
+    m_detailQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [detail, aBranch]( KIGIT_COMMON& aCommon )
+            {
+                *detail = aCommon.GetBranchDetail( aBranch );
+            },
+            [this, detail, aBranch]()
+            {
+                if( m_dialog->SessionStillCurrent() && KIGIT::SelectedText( m_branchesList, 0 ) == aBranch )
+                {
+                    fillBranchDetail( *detail );
+                }
+            } );
 }
 
 
@@ -259,6 +267,7 @@ void PANEL_GIT_BRANCHES::fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail )
 
 void PANEL_GIT_BRANCHES::hideBranchDetail()
 {
+    m_detailQuery.Cancel();
     KIGIT::UnsplitKeepingSash( m_branchesSplitter, m_branchDetail, m_branchSashPos );
 }
 
@@ -304,60 +313,65 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
         return;
     }
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    wxString                      current;
-    size_t                        unmerged = 0;
-
-    // Reading the current branch touches the repository, so do it under the lock.
+    struct OUTCOME
     {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        wxString current;
+        size_t   unmerged = 0;
+        bool     checked = false;
+    };
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
-            return;
-        }
+    auto outcome = std::make_shared<OUTCOME>();
 
-        current = common->GetCurrentBranchName();
-        unmerged = common->GetUnmergedCommitCount( name );
-    }
-
-    if( name == current )
-    {
-        DisplayErrorMessage( this, _( "You cannot delete the branch you are on." ) );
-        return;
-    }
-
-    // Deleting drops any commit no other branch reaches, and git offers no way back a
-    // beginner would find, so say what is at stake before asking.
-    wxString question;
-
-    if( unmerged == 1 )
-    {
-        question = wxString::Format( _( "Branch '%s' has one commit that is not on the current branch. "
-                                        "Deleting it loses that commit.\n\nDelete it anyway?" ),
-                                     name );
-    }
-    else if( unmerged > 1 )
-    {
-        question = wxString::Format( _( "Branch '%s' has %zu commits that are not on the current branch. "
-                                        "Deleting it loses them.\n\nDelete it anyway?" ),
-                                     name, unmerged );
-    }
-    else
-    {
-        question = wxString::Format( _( "Delete branch '%s'?" ), name );
-    }
-
-    if( !IsOK( this, question ) )
-        return;
-
-    m_dialog->RunGitAction(
-            [name]( KIGIT_COMMON& aCommon )
+    m_actionQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [outcome, name]( KIGIT_COMMON& aCommon )
             {
-                return aCommon.DeleteBranch( name );
+                outcome->current = aCommon.GetCurrentBranchName();
+                outcome->unmerged = aCommon.GetUnmergedCommitCount( name );
+                outcome->checked = true;
             },
-            wxString::Format( _( "Could not delete branch '%s'." ), name ) );
+            [this, outcome, name]()
+            {
+                if( !m_dialog->SessionStillCurrent() || !outcome->checked )
+                    return;
+
+                if( name == outcome->current )
+                {
+                    DisplayErrorMessage( this, _( "You cannot delete the branch you are on." ) );
+                    return;
+                }
+
+                // Deleting drops any commit no other branch reaches, and git offers no way back a
+                // beginner would find, so say what is at stake before asking.
+                wxString question;
+
+                if( outcome->unmerged == 1 )
+                {
+                    question = wxString::Format( _( "Branch '%s' has one commit that is not on the current branch. "
+                                                    "Deleting it loses that commit.\n\nDelete it anyway?" ),
+                                                 name );
+                }
+                else if( outcome->unmerged > 1 )
+                {
+                    question = wxString::Format( _( "Branch '%s' has %zu commits that are not on the current branch. "
+                                                    "Deleting it loses them.\n\nDelete it anyway?" ),
+                                                 name, outcome->unmerged );
+                }
+                else
+                {
+                    question = wxString::Format( _( "Delete branch '%s'?" ), name );
+                }
+
+                if( !IsOK( this, question ) )
+                    return;
+
+                m_dialog->RunGitAction(
+                        [name]( KIGIT_COMMON& aCommon )
+                        {
+                            return aCommon.DeleteBranch( name );
+                        },
+                        wxString::Format( _( "Could not delete branch '%s'." ), name ) );
+            } );
 }
 
 
@@ -372,57 +386,68 @@ void PANEL_GIT_BRANCHES::onForcePush()
     if( !m_dialog->SessionStillCurrent() )
         return;
 
+    struct OUTCOME
+    {
+        wxString branch;
+        wxString headOid;
+        wxString upstream;
+        bool     hasRemote = false;
+        bool     detached = false;
+        bool     checked = false;
+    };
+
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+    auto                          outcome = std::make_shared<OUTCOME>();
 
-    if( !common->GetRepo() )
-        return;
+    m_actionQuery.Run(
+            common,
+            [outcome]( KIGIT_COMMON& aCommon )
+            {
+                outcome->hasRemote = aCommon.HasPushAndPullRemote();
+                outcome->detached = aCommon.IsHeadDetached();
+                outcome->branch = aCommon.GetCurrentBranchName();
+                outcome->headOid = aCommon.GetHeadCommitId();
 
-    wxString branch;
-    wxString upstream;
-    bool     hasRemote = false;
-    bool     detached = false;
+                // Push targets the same-named remote ref, even with a differently named upstream.
+                outcome->upstream = aCommon.GetRemoteNameOrDefault() + wxS( "/" ) + outcome->branch;
+                outcome->checked = true;
+            },
+            [this, common, outcome]()
+            {
+                if( !m_dialog->SessionStillCurrent() || !outcome->checked || m_push.IsBusy() )
+                    return;
 
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+                if( outcome->detached )
+                {
+                    DisplayInfoMessage( this,
+                                        _( "This project is showing an old snapshot rather than a branch, so there "
+                                           "is no branch to push. Double click a branch to go back to it first." ) );
+                    return;
+                }
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
-            return;
-        }
+                if( !outcome->hasRemote )
+                {
+                    DisplayInfoMessage( this, _( "No remote is configured to push to." ) );
+                    return;
+                }
 
-        hasRemote = common->HasPushAndPullRemote();
-        detached = common->IsHeadDetached();
-        branch = common->GetCurrentBranchName();
+                wxRichMessageDialog confirm(
+                        this,
+                        wxString::Format( _( "Force push replaces '%s' with your local '%s'.\n\n"
+                                             "Commits that exist only on the remote will be lost." ),
+                                          outcome->upstream, outcome->branch ),
+                        _( "Force Push" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+                confirm.SetYesNoLabels( _( "Force &Push" ), _( "Cancel" ) );
 
-        // Push sends the branch to its same-named ref on the remote, regardless of any
-        // differently named upstream, so the warning must name that actual target.
-        upstream = common->GetRemoteNameOrDefault() + wxS( "/" ) + branch;
-    }
+                if( confirm.ShowModal() == wxID_YES && m_dialog->SessionStillCurrent() )
+                    startForcePush( common, outcome->branch, outcome->headOid );
+            } );
+}
 
-    if( detached )
-    {
-        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, so there "
-                                     "is no branch to push. Double click a branch to go back to it first." ) );
-        return;
-    }
 
-    if( !hasRemote )
-    {
-        DisplayInfoMessage( this, _( "No remote is configured to push to." ) );
-        return;
-    }
-
-    wxRichMessageDialog confirm( this,
-                                 wxString::Format( _( "Force push replaces '%s' with your local '%s'.\n\n"
-                                                      "Commits that exist only on the remote will be lost." ),
-                                                   upstream, branch ),
-                                 _( "Force Push" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
-    confirm.SetYesNoLabels( _( "Force &Push" ), _( "Cancel" ) );
-
-    if( confirm.ShowModal() != wxID_YES )
-        return;
-
+void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aExpectedBranch,
+                                         const wxString& aExpectedHeadOid )
+{
     // Carried rather than captured by reference, because Start returns before the work runs.
     struct OUTCOME
     {
@@ -436,15 +461,17 @@ void PANEL_GIT_BRANCHES::onForcePush()
 
     bool started = m_push.Start(
             "git force push",
-            [common, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, outcome, aExpectedBranch, aExpectedHeadOid]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
-                common->ClearAuthFailure();
+                aCommon->ClearAuthFailure();
 
-                GIT_PUSH_HANDLER handler( common.get() );
+                GIT_PUSH_HANDLER handler( aCommon.get() );
                 handler.SetCancelToken( aToken );
+                handler.SetWaitForActionLock( true );
+                handler.SetExpectedTarget( aExpectedBranch, aExpectedHeadOid );
                 outcome->result = handler.PerformPush( true );
                 outcome->error = handler.GetErrorString();
-                outcome->authFailure = common->WasAuthFailure();
+                outcome->authFailure = aCommon->WasAuthFailure();
 
                 // This operation's own token, so a force push that never became active cannot
                 // consume a cancel belonging to the transfer that is running.
@@ -454,14 +481,17 @@ void PANEL_GIT_BRANCHES::onForcePush()
                 if( outcome->result == PushResult::Success && !outcome->cancelled )
                 {
                     KIGIT::CallOnUi(
-                            [common]()
+                            [aCommon]()
                             {
-                                common->NotifyRefreshListeners();
+                                aCommon->NotifyRefreshListeners();
                             } );
                 }
             },
-            [this, common, outcome]()
+            [this, aCommon, outcome]()
             {
+                if( !m_dialog->SessionStillCurrent() )
+                    return;
+
                 if( outcome->cancelled || outcome->result == PushResult::Success )
                     return;
 
@@ -471,7 +501,7 @@ void PANEL_GIT_BRANCHES::onForcePush()
                     return;
                 }
 
-                if( outcome->authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_frame->Prj() ) )
+                if( outcome->authFailure && KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
                 {
                     onForcePush();
                     return;

@@ -167,6 +167,10 @@ public:
      */
     static wxString LfsRefusal( KIGIT_COMMON* aCommon, PROJECT& aProject );
 
+    /// Worker variant using the project path copied on the UI thread. The caller holds the
+    /// session's action lock.
+    static wxString LfsRefusal( KIGIT_COMMON* aCommon, const wxString& aProjectPath );
+
     /**
      * Write a file as it exists at a git ref to a path on disk, so a committed version can
      * be diffed. False for an empty ref or path, or one that is not a blob.

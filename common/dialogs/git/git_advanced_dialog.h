@@ -24,8 +24,6 @@
 #include <functional>
 #include <memory>
 
-#include <wx/timer.h>
-
 #include <dialogs/git/dialog_git_advanced_base.h>
 #include <dialogs/git/git_transfer.h>
 
@@ -95,13 +93,13 @@ public:
     /// from. On a mismatch the window is stale: it closes itself and the action must abort.
     bool SessionStillCurrent();
 
-    /// Before an action that rewrites files on disk, save the open editors and snapshot their
-    /// documents. Returns false to abort the action.
+    /// After the asynchronous LFS check, save the open editors and snapshot their documents
+    /// before an action rewrites files on disk. Returns false to abort the action.
     bool ConfirmWorkingTreeChange();
 
-    /// Before an action that needs a clean tree, refuse while anything is uncommitted or unsaved,
-    /// since saving the editors would only create the changes that block it. False to abort.
-    bool RefuseOverUncommittedWork();
+    /// Check the working tree and LFS on a worker, then continue on the UI thread only when
+    /// nothing is uncommitted or unsaved. Saving first would create changes that block it.
+    void RefuseOverUncommittedWork( std::function<void()> aReady );
 
     /// Reload the editors from disk and refresh the panels, after an operation rewrote files.
     void FinishWorkingTreeChange();
@@ -125,6 +123,7 @@ private:
 
     /// Fetch from the remote on a worker, then refresh every surface.
     void onFetch();
+    void startFetch( std::shared_ptr<KIGIT_COMMON> aCommon );
 
     /// On-disk identity of the open documents, taken by ConfirmWorkingTreeChange() so only the
     /// documents an operation actually rewrote are reloaded.
@@ -149,17 +148,19 @@ private:
     GIT_COMMIT_PANE*    m_changesPane;
     GIT_FILE_DIFF_AREA* m_workingDiff;
 
-    /// Move the refresh listener onto the project's current git session, in case a project
-    /// reload has replaced it since the window opened.
+    /// Attach once to the project's session. A replacement closes this window so old rows and
+    /// pending query results cannot be applied to a different project.
     void syncListener();
 
-    /// The git session this window is currently listening to for refreshes. Weak so a project
-    /// reload can replace the session and this window follows it instead of pinning the old one.
     std::weak_ptr<KIGIT_COMMON> m_listenerSession;
+    bool                        m_listenerAttached = false;
 
-    /// Re-runs ReloadPages once when it had to skip because another git operation held the
-    /// action lock, so a window opened during a background fetch does not stay empty.
-    wxTimer m_reloadRetryTimer;
+    /// Reads the top bar and history branch choices without holding up the UI.
+    KIGIT_QUERY m_reloadQuery;
+
+    /// Preflight reads for actions that may replace the working tree.
+    KIGIT_QUERY m_actionQuery;
+    KIGIT_QUERY m_fetchQuery;
 
     /// Where the user left the sash between the Changes page's list and its diff area.
     int m_changesSashPos = 0;

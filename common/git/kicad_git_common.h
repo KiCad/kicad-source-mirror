@@ -214,6 +214,10 @@ public:
 
     wxString GetCurrentBranchName() const;
 
+    /// Full commit ID at HEAD, or empty for an unborn or missing HEAD. The caller holds the
+    /// action lock when capturing this alongside the branch name for a later operation.
+    wxString GetHeadCommitId() const;
+
     std::vector<wxString> GetBranchNames() const;
 
     /// Every branch in the repository, local and remote-tracking. The bool is true for a

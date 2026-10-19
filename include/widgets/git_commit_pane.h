@@ -25,8 +25,6 @@
 #include <memory>
 #include <set>
 
-#include <wx/timer.h>
-
 #include <dialogs/git/git_commit_pane_base.h>
 #include <dialogs/git/git_transfer.h>
 #include <git/git_editor_snapshot.h>
@@ -94,6 +92,7 @@ private:
 
     /// Drop an in-progress merge or rebase and return the project to its last commit.
     void abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon );
+    void finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon, const std::vector<wxString>& aOutside );
     void onAmendToggled( wxCommandEvent& aEvent );
     void onNewBranchToggled( wxCommandEvent& aEvent );
     void onBranchChosen( wxCommandEvent& aEvent );
@@ -102,10 +101,16 @@ private:
     void onFileActivated( wxDataViewEvent& aEvent );
     void onChecklistContextMenu( wxDataViewEvent& aEvent );
     void discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath );
+    void confirmDiscardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath, bool aTracked,
+                             bool aConflicted, wxString aRoot );
 
     /// Commit the checked files (or amend the last commit when the amend box is ticked), then
     /// push when aAndPush is set. Both halves of the commit button land here.
     void doCommit( bool aAndPush );
+
+    struct COMMIT_REQUEST;
+    void saveForCommit( std::shared_ptr<KIGIT_COMMON> aCommon, std::shared_ptr<COMMIT_REQUEST> aRequest );
+    void finishCommit( std::shared_ptr<KIGIT_COMMON> aCommon, const COMMIT_REQUEST& aRequest );
     void onChecklistChanged( wxDataViewEvent& aEvent );
     void onMessageChanged( wxCommandEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
@@ -129,12 +134,16 @@ private:
     /// layout has one.
     void updateSummary();
 
-    /// Fill the branch dropdown with the local branches, the current one selected. The caller
-    /// holds the git action lock.
-    void populateBranches( KIGIT_COMMON& aCommon );
+    struct STATUS;
 
-    /// Fill the Recent messages dropdown from the log. The caller holds the git action lock.
-    void populateRecentMessages( KIGIT_COMMON& aCommon );
+    /// Apply a completed repository snapshot on the UI thread.
+    void applyStatus( const STATUS& aStatus );
+
+    /// Fill the branch dropdown from the completed snapshot.
+    void populateBranches( const STATUS& aStatus );
+
+    /// Fill the Recent messages dropdown from the completed snapshot.
+    void populateRecentMessages( const std::vector<wxString>& aMessages );
 
     /// Where the platform has no hint for a multi line box, a label lies over the description
     /// box while it is empty.
@@ -147,18 +156,27 @@ private:
     /// Enable or disable the controls while a network operation runs, showing a status.
     void setBusy( bool aBusy, const wxString& aStatus );
 
-    // Only these submit methods start a worker thread. The on*Done continuations run back on
-    // the UI thread, so credential prompts and confirmations stay there.
+    /// Read an action's prerequisites off the UI thread, then resume only in the same project.
+    void runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std::function<void( KIGIT_COMMON& )> aWork,
+                         std::function<void()> aDone, const wxString& aStatus );
+
+    // The on*Done continuations run back on the UI thread, so credential prompts and
+    // confirmations stay there.
     void submitPush( std::shared_ptr<KIGIT_COMMON> aCommon );
+    void startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead );
     void onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError, bool aAuthFailure,
                      bool aCancelled );
     /// aThenPush pushes after a successful pull, which belongs only to the rejected-push
     /// recovery flow. A plain Get Changes leaves local commits unpublished.
     void submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush );
+    void startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush );
 
     /// Resolve a conflicted pull file by file, using the visual merge tool for design files,
     /// then create the merge commit. Cancelling leaves the repository exactly as it was.
     void resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush );
+    struct MERGE_PREPARATION;
+    void finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush,
+                                        std::shared_ptr<MERGE_PREPARATION> aPreparation );
     void onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError, bool aAuthFailure,
                      bool aThenPush, bool aCancelled );
 
@@ -196,6 +214,9 @@ private:
     bool m_hasUnpushedCommits;
 
     bool m_hasRemote;
+
+    /// Whether the last completed status snapshot had a repository.
+    bool m_hasRepo = false;
 
     /// True when HEAD is a commit rather than a branch, so nothing can be committed or pushed.
     bool m_headDetached;
@@ -268,10 +289,11 @@ private:
     /// Lines the working tree adds and removes against HEAD, read at the last refresh.
     std::pair<int, int> m_lineStats;
 
-    /// Re-runs RefreshFileList once when it had to skip because another git operation held the
-    /// action lock. The background fetch can hold it for a whole network round trip and does
-    /// not broadcast a refresh, so without a retry the list would stay stale.
-    wxTimer m_refreshRetryTimer;
+    /// Coalesce refreshes while a repository read is running, and discard stale results.
+    KIGIT_QUERY m_refresh;
+    KIGIT_QUERY m_messageQuery;
+    KIGIT_QUERY m_actionQuery;
+    bool        m_actionPending = false;
 };
 
 #endif // GIT_COMMIT_PANE_H

@@ -20,7 +20,11 @@
 
 #include <dialogs/git/git_transfer.h>
 
+#include <exception>
+
 #include <wx/app.h>
+#include <wx/intl.h>
+#include <wx/log.h>
 
 #include <git/git_backend.h>
 
@@ -57,6 +61,9 @@ KIGIT_TRANSFER::~KIGIT_TRANSFER()
 {
     Cancel();
     m_alive.reset();
+
+    if( m_completion )
+        *m_completion = {};
 }
 
 
@@ -78,23 +85,169 @@ bool KIGIT_TRANSFER::Start( const std::string&                                  
     std::weak_ptr<bool>        alive = m_alive;
     KIGIT_COMMON::CANCEL_TOKEN token = m_cancel;
 
+    if( m_completion )
+        *m_completion = {};
+
+    auto completion = std::make_shared<std::function<void()>>( aDone );
+    m_completion = completion;
     m_busy = true;
 
-    bool started = KIGIT::StartTransfer( aLabel,
-                                         [this, alive, token, aWork, aDone]()
-                                         {
-                                             aWork( token );
+    bool started = false;
 
-                                             KIGIT::CallIfAlive( alive,
-                                                                 [this, aDone]()
-                                                                 {
-                                                                     m_busy = false;
-                                                                     aDone();
-                                                                 } );
-                                         } );
+    try
+    {
+        started = KIGIT::StartTransfer( aLabel,
+                                        [this, alive, token, aWork, completion]()
+                                        {
+                                            aWork( token );
+
+                                            KIGIT::CallOnUi(
+                                                    [this, alive, completion]()
+                                                    {
+                                                        // Empty the holder on the UI thread even if its owner
+                                                        // has gone. The worker may release its copy afterwards.
+                                                        std::function<void()> done = std::move( *completion );
+                                                        *completion = {};
+
+                                                        if( alive.lock() && m_completion == completion )
+                                                        {
+                                                            m_completion.reset();
+                                                            m_busy = false;
+
+                                                            if( done )
+                                                                done();
+                                                        }
+                                                    } );
+                                        } );
+    }
+    catch( ... )
+    {
+        // A failed thread construction must not leave its owner waiting for a completion
+        // which cannot arrive.
+        *completion = {};
+        m_completion.reset();
+        m_busy = false;
+        throw;
+    }
 
     if( !started )
+    {
+        *completion = {};
+        m_completion.reset();
         m_busy = false;
+    }
 
     return started;
+}
+
+
+KIGIT_QUERY::~KIGIT_QUERY()
+{
+    Cancel();
+}
+
+
+void KIGIT_QUERY::Run( std::shared_ptr<KIGIT_COMMON> aSession, std::function<void( KIGIT_COMMON& )> aWork,
+                       std::function<void()> aDone )
+{
+    REQUEST request{ std::move( aSession ), std::move( aWork ), std::move( aDone ), ++m_generation };
+
+    if( m_transfer.IsBusy() )
+    {
+        m_pending = std::move( request );
+        m_transfer.Cancel();
+        return;
+    }
+
+    start( std::move( request ) );
+}
+
+
+void KIGIT_QUERY::Cancel()
+{
+    ++m_generation;
+    m_pending.reset();
+    m_transfer.Cancel();
+}
+
+
+void KIGIT_QUERY::start( REQUEST aRequest )
+{
+    auto error = std::make_shared<std::exception_ptr>();
+
+    auto done = [this, error, generation = aRequest.generation, complete = std::move( aRequest.done )]()
+    {
+        if( m_pending )
+        {
+            REQUEST next = std::move( *m_pending );
+            m_pending.reset();
+            start( std::move( next ) );
+            return;
+        }
+
+        if( generation != m_generation )
+            return;
+
+        // The completion may destroy this query along with its window. Do not touch members
+        // after calling it. Logging is also left to the UI thread, where the target can show it.
+        if( complete )
+            complete();
+
+        if( *error )
+        {
+            try
+            {
+                std::rethrow_exception( *error );
+            }
+            catch( const std::exception& e )
+            {
+                wxLogError( _( "Could not read the Git repository: %s" ), wxString::FromUTF8( e.what() ) );
+            }
+            catch( ... )
+            {
+                wxLogError( _( "Could not read the Git repository." ) );
+            }
+        }
+    };
+
+    bool started = false;
+
+    try
+    {
+        started = m_transfer.Start(
+                "read repository",
+                [error, session = std::move( aRequest.session ),
+                 work = std::move( aRequest.work )]( const KIGIT_COMMON::CANCEL_TOKEN& aCancel )
+                {
+                    try
+                    {
+                        if( !session || aCancel->load() || session->IsShuttingDown() )
+                            return;
+
+                        std::unique_lock<std::mutex> lock = session->LockAction();
+
+                        if( aCancel->load() || session->IsShuttingDown() || !session->GetRepo() )
+                            return;
+
+                        KIGIT_COMMON::OPERATION_GUARD operation( session.get(), aCancel );
+
+                        if( !aCancel->load() && work )
+                            work( *session );
+                    }
+                    catch( ... )
+                    {
+                        // Let the transfer post its completion even when a read throws, or this
+                        // query would stay busy and never start the latest pending request.
+                        *error = std::current_exception();
+                    }
+                },
+                done );
+    }
+    catch( ... )
+    {
+        *error = std::current_exception();
+    }
+
+    if( !started )
+        done();
 }

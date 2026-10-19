@@ -208,6 +208,15 @@ public:
 
     const KIGIT_COMMON::CANCEL_TOKEN& CancelToken() const { return m_cancelToken; }
 
+    /// Worker transfers may wait for a background read to finish. UI callers keep the default
+    /// nonblocking behavior and report a busy repository instead.
+    void SetWaitForActionLock( bool aWait ) { m_waitForActionLock = aWait; }
+
+    std::unique_lock<std::mutex> GetActionLock() const
+    {
+        return m_waitForActionLock ? m_common->LockAction() : m_common->TryLockAction();
+    }
+
     bool IsThisOperationCancelled() const { return m_cancelToken->load(); }
 
     void CancelThisOperation() { m_cancelToken->store( true ); }
@@ -216,6 +225,7 @@ public:
 private:
     KIGIT_COMMON*              m_common;
     KIGIT_COMMON::CANCEL_TOKEN m_cancelToken;
+    bool                       m_waitForActionLock = false;
 };
 
 

@@ -33,3 +33,17 @@ PushResult GIT_PUSH_HANDLER::PerformPush( bool aForce )
 {
     return GetGitBackend()->Push( this, aForce );
 }
+
+
+void GIT_PUSH_HANDLER::SetExpectedTarget( const wxString& aBranch, const wxString& aHeadOid )
+{
+    m_hasExpectedTarget = true;
+    m_expectedBranch = aBranch;
+    m_expectedHeadOid = aHeadOid;
+}
+
+
+bool GIT_PUSH_HANDLER::MatchesExpectedTarget( const wxString& aBranch, const wxString& aHeadOid ) const
+{
+    return !m_hasExpectedTarget || ( m_expectedBranch == aBranch && m_expectedHeadOid == aHeadOid );
+}

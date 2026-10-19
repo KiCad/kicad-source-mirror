@@ -321,15 +321,6 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_fileDiff = new GIT_FILE_DIFF_AREA( m_detailSplitter, m_frame );
     m_fileDiff->Hide();
 
-    m_retryTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                refresh();
-            },
-            m_retryTimer.GetId() );
-
     m_historySearchTimer.SetOwner( this );
     Bind(
             wxEVT_TIMER,
@@ -359,6 +350,12 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_historySearch->Bind( wxEVT_TEXT,
                            [this]( wxCommandEvent& )
                            {
+                               // A completed older search must not replace the list while the
+                               // debounce timer is waiting for the new text.
+                               m_historyQuery.Cancel();
+                               m_detailQuery.Cancel();
+                               m_historyScrollTimer.Stop();
+                               hideFileDiff();
                                m_historySearchTimer.Start( 300, wxTIMER_ONE_SHOT );
                            } );
 
@@ -475,6 +472,9 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
 PANEL_GIT_HISTORY::~PANEL_GIT_HISTORY()
 {
+    m_historyQuery.Cancel();
+    m_detailQuery.Cancel();
+    m_actionQuery.Cancel();
     m_avatarCancel = true;
 
     for( std::thread& worker : m_avatarWorkers )
@@ -505,21 +505,6 @@ KIGIT_HISTORY_FILTER PANEL_GIT_HISTORY::historyFilter() const
 void PANEL_GIT_HISTORY::reloadHistory()
 {
     m_historyLimit = 50;
-    refresh();
-}
-
-
-void PANEL_GIT_HISTORY::refresh()
-{
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    if( !lock.owns_lock() )
-    {
-        m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-        return;
-    }
-
     Populate();
 }
 
@@ -551,6 +536,11 @@ void PANEL_GIT_HISTORY::SetBranches( const std::vector<std::pair<wxString, bool>
 
 void PANEL_GIT_HISTORY::showCommitDetail( const wxString& aHash )
 {
+    m_detailQuery.Cancel();
+
+    if( m_detailHash != aHash )
+        clearCommitDetail();
+
     m_detailHash = aHash;
 
     if( aHash.IsEmpty() )
@@ -559,17 +549,22 @@ void PANEL_GIT_HISTORY::showCommitDetail( const wxString& aHash )
         return;
     }
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    // The reload puts the selection back on this commit and fills the pane then.
-    if( !lock.owns_lock() )
-    {
-        m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+    if( !m_dialog->SessionStillCurrent() )
         return;
-    }
 
-    fillCommitDetail( common->GetCommitDetail( aHash ) );
+    auto detail = std::make_shared<KIGIT_COMMIT_DETAIL>();
+
+    m_detailQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [detail, hash = aHash]( KIGIT_COMMON& aCommon )
+            {
+                *detail = aCommon.GetCommitDetail( hash );
+            },
+            [this, detail]()
+            {
+                if( m_dialog->SessionStillCurrent() )
+                    fillCommitDetail( *detail );
+            } );
 }
 
 
@@ -645,8 +640,7 @@ void PANEL_GIT_HISTORY::fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail )
         }
     }
 
-    // The caller holds the git action lock and the render needs it too, so the file is picked
-    // with the handler quiet and the render follows once the lock is free.
+    // Select a path filter's file without letting selection events start a duplicate diff.
     if( !m_historyPath.IsEmpty() )
     {
         long row = m_commitFiles->FindItem( -1, m_historyPath );
@@ -657,11 +651,7 @@ void PANEL_GIT_HISTORY::fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail )
             m_commitFiles->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
             m_fillingHistory = false;
 
-            CallAfter(
-                    [this, path = m_historyPath]()
-                    {
-                        showFileDiff( path );
-                    } );
+            showFileDiff( m_historyPath );
         }
     }
 
@@ -708,9 +698,11 @@ void PANEL_GIT_HISTORY::showFileDiff( const wxString& aPath )
     wxString afterLabel = wxString::Format( _( "WORKING (%s)" ), m_detailHash );
 
     m_fileDiff->ShowFile(
-            [&]( GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
+            m_frame->Prj().GetGitCommon(),
+            [hash = m_detailHash, path = aPath]( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace,
+                                                 GIT_FILE_SIDES& aSides )
             {
-                return MaterializeCommitFile( m_frame, aWorkspace, m_detailHash, aPath, aSides );
+                return MaterializeCommitFile( aCommon, aWorkspace, hash, path, aSides );
             },
             beforeLabel, afterLabel );
 
@@ -721,10 +713,32 @@ void PANEL_GIT_HISTORY::showFileDiff( const wxString& aPath )
 
 void PANEL_GIT_HISTORY::Populate()
 {
-    // The caller holds the git action lock.
-    std::vector<KIGIT_COMMIT_INFO> commits =
-            m_frame->Prj().GetGitCommon()->GetRecentCommits( m_historyLimit, historyFilter() );
+    m_detailQuery.Cancel();
+    hideFileDiff();
+    m_historyScrollTimer.Stop();
 
+    if( !m_dialog->SessionStillCurrent() )
+        return;
+
+    auto   commits = std::make_shared<std::vector<KIGIT_COMMIT_INFO>>();
+    size_t limit = m_historyLimit;
+
+    m_historyQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [commits, limit, filter = historyFilter()]( KIGIT_COMMON& aCommon )
+            {
+                *commits = aCommon.GetRecentCommits( limit, filter );
+            },
+            [this, commits, limit]()
+            {
+                if( m_dialog->SessionStillCurrent() )
+                    fillHistory( *commits, limit );
+            } );
+}
+
+
+void PANEL_GIT_HISTORY::fillHistory( const std::vector<KIGIT_COMMIT_INFO>& aCommits, size_t aLimit )
+{
     // Emptying the list drops its selection, which clears the shown hash, so keep it aside.
     wxString shown = m_detailHash;
 
@@ -733,36 +747,33 @@ void PANEL_GIT_HISTORY::Populate()
     m_historyEmails.clear();
     m_historyAtHead.clear();
 
-    appendHistoryRows( commits, 0 );
+    appendHistoryRows( aCommits, 0 );
 
-    m_historyComplete = commits.size() < m_historyLimit;
+    m_historyComplete = aCommits.size() < aLimit;
 
     // Put the selection back on the commit the detail pane showed, if it is still listed, or
     // start on the newest commit so the pane is never empty while there is something to show.
-    m_detailHash.clear();
+    wxString selected;
 
     for( int row = 0; row < m_historyList->GetItemCount() && !shown.IsEmpty(); ++row )
     {
         if( m_historyList->GetTextValue( row, 3 ) == shown )
         {
             m_historyList->SelectRow( row );
-            m_detailHash = shown;
+            selected = shown;
             break;
         }
     }
 
-    if( m_detailHash.IsEmpty() && m_historyList->GetItemCount() > 0 )
+    if( selected.IsEmpty() && m_historyList->GetItemCount() > 0 )
     {
         m_historyList->SelectRow( 0 );
-        m_detailHash = m_historyList->GetTextValue( 0, 3 );
+        selected = m_historyList->GetTextValue( 0, 3 );
     }
 
     m_fillingHistory = false;
 
-    if( m_detailHash.IsEmpty() )
-        clearCommitDetail();
-    else
-        fillCommitDetail( m_frame->Prj().GetGitCommon()->GetCommitDetail( m_detailHash ) );
+    showCommitDetail( selected );
 
     // Scrolling near the end grows the window. Poll for it, because native wxDataViewCtrl
     // ports deliver no portable scroll events.
@@ -814,7 +825,8 @@ void PANEL_GIT_HISTORY::appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO>&
 
 void PANEL_GIT_HISTORY::onHistoryScrollTick()
 {
-    if( m_historyComplete || !m_historyList || !m_historyList->IsShownOnScreen() )
+    if( m_historyComplete || m_historyQuery.IsBusy() || !m_historyList || !m_historyList->IsShownOnScreen()
+        || !m_dialog->SessionStillCurrent() )
         return;
 
     int itemCount = m_historyList->GetItemCount();
@@ -836,26 +848,29 @@ void PANEL_GIT_HISTORY::onHistoryScrollTick()
     if( row != wxNOT_FOUND && row < itemCount - 5 )
         return;
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    // Busy: try again on the next tick.
-    if( !lock.owns_lock() )
-        return;
-
     m_historyLimit += 50;
 
-    std::vector<KIGIT_COMMIT_INFO> commits = common->GetRecentCommits( m_historyLimit, historyFilter() );
+    auto   commits = std::make_shared<std::vector<KIGIT_COMMIT_INFO>>();
+    size_t limit = m_historyLimit;
 
-    lock.unlock();
+    m_historyQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [commits, limit, filter = historyFilter()]( KIGIT_COMMON& aCommon )
+            {
+                *commits = aCommon.GetRecentCommits( limit, filter );
+            },
+            [this, commits, limit, itemCount]()
+            {
+                if( !m_dialog->SessionStillCurrent() )
+                    return;
 
-    // Append only the new rows, so the scroll position stays where the user is reading.
-    appendHistoryRows( commits, itemCount );
+                // Append only the new rows, so the scroll position stays where the user is reading.
+                appendHistoryRows( *commits, itemCount );
+                m_historyComplete = commits->size() < limit;
 
-    m_historyComplete = commits.size() < m_historyLimit;
-
-    if( m_historyComplete )
-        m_historyScrollTimer.Stop();
+                if( m_historyComplete )
+                    m_historyScrollTimer.Stop();
+            } );
 }
 
 
@@ -935,44 +950,61 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
-    if( !common->GetRepo() )
-        return;
-
-    wxString lastMessage;
-    bool     hasLocalCommits = false;
-    bool     headDetached = false;
-
+    struct AMEND_INFO
     {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        wxString message;
+        bool     hasLocalCommits = false;
+        bool     hasIdentity = false;
+        bool     detached = false;
+        bool     loaded = false;
+    };
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
-            return;
-        }
+    auto info = std::make_shared<AMEND_INFO>();
 
-        headDetached = common->IsHeadDetached();
-        hasLocalCommits = common->HasLocalCommits();
-        lastMessage = common->GetLastCommitMessage();
-        lastMessage.Trim();
-    }
+    m_actionQuery.Run(
+            common,
+            [info]( KIGIT_COMMON& aCommon )
+            {
+                info->detached = aCommon.IsHeadDetached();
+                info->hasLocalCommits = aCommon.HasLocalCommits();
+                info->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                info->message = aCommon.GetLastCommitMessage();
+                info->message.Trim();
+                info->loaded = true;
+            },
+            [this, common, info]()
+            {
+                if( !info->loaded || m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
+                {
+                    return;
+                }
 
-    if( headDetached )
-    {
-        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, so there "
-                                     "is no commit to amend. Double click a branch to go back to it first." ) );
-        return;
-    }
+                if( info->detached )
+                {
+                    DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, "
+                                                 "so there is no commit to amend. Double click a branch to go "
+                                                 "back to it first." ) );
+                    return;
+                }
 
-    // Rewriting a commit that is already on the remote would diverge the branch, so only an
-    // unpushed commit can be amended.
-    if( !hasLocalCommits )
-    {
-        DisplayInfoMessage( this, _( "The last commit has already been pushed, so it cannot be amended." ) );
-        return;
-    }
+                // Only an unpushed commit can be amended without diverging from the remote.
+                if( !info->hasLocalCommits )
+                {
+                    DisplayInfoMessage( this, _( "The last commit has already been pushed, "
+                                                 "so it cannot be amended." ) );
+                    return;
+                }
 
-    wxTextEntryDialog dlg( this, _( "Commit message:" ), _( "Amend Last Commit" ), lastMessage,
+                amendLastCommit( info->message, info->hasIdentity );
+            } );
+}
+
+
+void PANEL_GIT_HISTORY::amendLastCommit( const wxString& aLastMessage, bool aHasIdentity )
+{
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+
+    wxTextEntryDialog dlg( this, _( "Commit message:" ), _( "Amend Last Commit" ), aLastMessage,
                            wxTextEntryDialogStyle | wxTE_MULTILINE );
 
     if( dlg.ShowModal() != wxID_OK || dlg.GetValue().Trim().IsEmpty() )
@@ -980,7 +1012,10 @@ void PANEL_GIT_HISTORY::onAmendLastCommit()
 
     wxString message = dlg.GetValue();
 
-    if( !KIGIT::EnsureGitIdentity( this, common.get() ) )
+    if( !KIGIT::EnsureGitIdentity( this, common.get(), aHasIdentity ) )
+        return;
+
+    if( m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
         return;
 
     m_dialog->RunGitAction(
@@ -1011,8 +1046,85 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
-    if( !common->GetRepo() )
-        return;
+    struct RESTORE_INFO
+    {
+        wxString lfsMessage;
+        wxString projectPrefix;
+        bool     hasIdentity = false;
+        bool     detached = false;
+        bool     prefixKnown = false;
+        bool     loaded = false;
+    };
+
+    auto info = std::make_shared<RESTORE_INFO>();
+
+    m_actionQuery.Run(
+            common,
+            [info, projectPath = m_frame->Prj().GetProjectPath()]( KIGIT_COMMON& aCommon )
+            {
+                info->detached = aCommon.IsHeadDetached();
+                info->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, projectPath );
+                info->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+
+                // A repository can hold several projects. Restore only this project's folder.
+                wxString workDir = aCommon.GetProjectDir();
+                wxString path = projectPath;
+                workDir.Replace( wxS( "\\" ), wxS( "/" ) );
+                path.Replace( wxS( "\\" ), wxS( "/" ) );
+
+                if( !workDir.EndsWith( wxS( "/" ) ) )
+                    workDir += wxS( "/" );
+
+                if( path.StartsWith( workDir ) )
+                {
+                    info->projectPrefix = path.Mid( workDir.length() );
+
+                    while( info->projectPrefix.EndsWith( wxS( "/" ) ) )
+                        info->projectPrefix.RemoveLast();
+
+                    info->prefixKnown = true;
+                }
+
+                info->loaded = true;
+            },
+            [this, common, info, aCommitHash]()
+            {
+                if( !info->loaded || m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
+                {
+                    return;
+                }
+
+                // An LFS restore would write placeholders over the actual designs.
+                if( !info->lfsMessage.IsEmpty() )
+                {
+                    DisplayErrorMessage( this, info->lfsMessage );
+                    return;
+                }
+
+                // A restore commit on a detached HEAD is lost on the next branch switch.
+                if( info->detached )
+                {
+                    DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch. "
+                                                 "Double click a branch on the Branches page first, then restore." ) );
+                    return;
+                }
+
+                // An empty prefix is valid at the repository root, but not when lookup failed.
+                if( !info->prefixKnown )
+                {
+                    DisplayErrorMessage( this, _( "Could not work out which folder this project occupies in the "
+                                                  "repository, so nothing was restored." ) );
+                    return;
+                }
+
+                restoreVersion( aCommitHash, info->projectPrefix, info->hasIdentity );
+            } );
+}
+
+
+void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix, bool aHasIdentity )
+{
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
     // Edits still in an editor's memory pass the backend's disk check, and the reload prompt would
     // then ask about them only after the restore commit exists, too late to choose.
@@ -1036,75 +1148,6 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
         return;
     }
 
-    bool     detached = false;
-    wxString lfsMessage;
-
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
-            return;
-        }
-
-        detached = common->IsHeadDetached();
-
-        lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( common.get(), m_frame->Prj() );
-    }
-
-    // A restore writes the committed version over the files on disk, and for an LFS file that
-    // is the placeholder rather than the design.
-    if( !lfsMessage.IsEmpty() )
-    {
-        DisplayErrorMessage( this, lfsMessage );
-        return;
-    }
-
-    // A restore commit made on a detached HEAD belongs to no branch and is lost on the next
-    // switch.
-    if( detached )
-    {
-        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch. "
-                                     "Double click a branch on the Branches page first, then restore." ) );
-        return;
-    }
-
-    // Restore only this project's folder. A repository can hold several projects, and rewinding
-    // the whole tree from one project's window would rewind the others too.
-    wxString projectPrefix;
-    bool     prefixKnown = false;
-
-    {
-        wxString workDir = common->GetProjectDir();
-        wxString projectPath = m_frame->Prj().GetProjectPath();
-
-        workDir.Replace( wxS( "\\" ), wxS( "/" ) );
-        projectPath.Replace( wxS( "\\" ), wxS( "/" ) );
-
-        if( !workDir.EndsWith( wxS( "/" ) ) )
-            workDir += wxS( "/" );
-
-        if( projectPath.StartsWith( workDir ) )
-        {
-            projectPrefix = projectPath.Mid( workDir.length() );
-
-            while( projectPrefix.EndsWith( wxS( "/" ) ) )
-                projectPrefix.RemoveLast();
-
-            prefixKnown = true;
-        }
-    }
-
-    // An empty prefix means the whole tree, which is right for a project at the repository root
-    // but wrong when the project's folder could not be worked out at all.
-    if( !prefixKnown )
-    {
-        DisplayErrorMessage( this, _( "Could not work out which folder this project occupies in the "
-                                      "repository, so nothing was restored." ) );
-        return;
-    }
-
     wxRichMessageDialog confirm( this,
                                  wxString::Format( _( "Restore this project's files as they were at version %s?\n\n"
                                                       "They are replaced with that version, recorded as a new "
@@ -1119,7 +1162,10 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
         return;
 
     // The restore commit needs an identity to be recorded with.
-    if( !KIGIT::EnsureGitIdentity( this, common.get() ) )
+    if( !KIGIT::EnsureGitIdentity( this, common.get(), aHasIdentity ) )
+        return;
+
+    if( m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
         return;
 
     // The restore rewrites files the editors have open, so snapshot them for a scoped reload.
@@ -1137,7 +1183,7 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
             return;
         }
 
-        result = common->RestoreVersion( aCommitHash, projectPrefix, error );
+        result = common->RestoreVersion( aCommitHash, aProjectPrefix, error );
     }
 
     switch( result )
@@ -1154,33 +1200,40 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
     case RestoreResult::Dirty:
     {
         // The restore checks the whole repository, while the checklist shows this project only.
-        std::vector<wxString> outside;
+        auto outside = std::make_shared<std::vector<wxString>>();
 
-        {
-            std::unique_lock<std::mutex> lock = common->TryLockAction();
+        m_actionQuery.Run(
+                common,
+                [outside, path = m_frame->Prj().GetProjectPath()]( KIGIT_COMMON& aCommon )
+                {
+                    *outside = ChangedTrackedFilesOutsideProject( aCommon, path );
+                },
+                [this, common, outside]()
+                {
+                    if( m_frame->Prj().GetGitCommon() != common || !m_dialog->SessionStillCurrent() )
+                        return;
 
-            if( lock.owns_lock() )
-                outside = ChangedTrackedFilesOutsideProject( m_frame->Prj() );
-        }
+                    if( !outside->empty() )
+                    {
+                        wxString listed;
 
-        if( !outside.empty() )
-        {
-            wxString listed;
+                        for( const wxString& path : *outside )
+                            listed += wxS( "\n    " ) + path;
 
-            for( const wxString& path : outside )
-                listed += wxS( "\n    " ) + path;
-
-            DisplayInfoMessage( this, wxString::Format( _( "There are uncommitted changes elsewhere in this "
-                                                           "repository:%s\n\nCommit or discard them from that "
-                                                           "project first, or set them aside with Stash "
-                                                           "Changes." ),
-                                                        listed ) );
-        }
-        else
-        {
-            DisplayInfoMessage( this, _( "There are uncommitted changes. Commit them first, so the "
-                                         "restore stays a separate step that can be undone." ) );
-        }
+                        DisplayInfoMessage(
+                                this,
+                                wxString::Format(
+                                        _( "There are uncommitted changes elsewhere in this repository:%s\n\n"
+                                           "Commit or discard them from that project first, or set them aside with "
+                                           "Stash Changes." ),
+                                        listed ) );
+                    }
+                    else
+                    {
+                        DisplayInfoMessage( this, _( "There are uncommitted changes. Commit them first, so the "
+                                                     "restore stays a separate step that can be undone." ) );
+                    }
+                } );
 
         break;
     }

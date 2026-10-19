@@ -43,6 +43,20 @@ public:
     ~GIT_PUSH_HANDLER();
 
     PushResult PerformPush( bool aForce = false );
+
+    /// Pin the branch and full HEAD commit ID confirmed by the caller, so a queued push
+    /// cannot publish a different target after another operation changes the repository.
+    void SetExpectedTarget( const wxString& aBranch, const wxString& aHeadOid );
+
+    bool HasExpectedTarget() const { return m_hasExpectedTarget; }
+
+    /// True without an expectation, or when both values match the captured target.
+    bool MatchesExpectedTarget( const wxString& aBranch, const wxString& aHeadOid ) const;
+
+private:
+    bool     m_hasExpectedTarget = false;
+    wxString m_expectedBranch;
+    wxString m_expectedHeadOid;
 };
 
 #endif // _GIT_PUSH_HANDLER_H_

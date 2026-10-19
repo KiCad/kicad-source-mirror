@@ -42,14 +42,19 @@ namespace KIGIT
  */
 bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr );
 
+/// Whether the repository can form a commit author identity. The caller holds the session's
+/// action lock. Read this on a worker before showing an identity prompt.
+bool HasGitIdentity( KIGIT_COMMON& aCommon );
+
 /**
  * Make sure the repository has a name and email to record commits with. When missing, asks
- * once and stores the answer in the repository's configuration.
+ * once and stores the answer in the repository's configuration. aHasIdentity is the result
+ * read during the operation's worker preflight, so this function only prompts and writes.
  *
  * @return False when an identity is still missing, because the user declined or it could not
  *         be saved.
  */
-bool EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon );
+bool EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aHasIdentity );
 
 /**
  * Ask for the name and email to record commits with. @p aName and @p aEmail hold the starting

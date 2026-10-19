@@ -20,6 +20,7 @@
 #ifndef PANEL_GIT_REPOSITORY_H
 #define PANEL_GIT_REPOSITORY_H
 
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/panel_git_repository_base.h>
 
 class EDA_BASE_FRAME;
@@ -35,8 +36,7 @@ class PANEL_GIT_REPOSITORY : public PANEL_GIT_REPOSITORY_BASE
 public:
     PANEL_GIT_REPOSITORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
 
-    /// Fill the fields from the repository's git configuration. The caller holds the git
-    /// action lock.
+    /// Fill the fields from the repository's git configuration, read on a worker.
     void Populate();
 
 private:
@@ -48,6 +48,8 @@ private:
     /// True once the user has typed in either field. A refresh then leaves them alone, since
     /// a background fetch must not take away what is being written.
     bool m_identityEdited = false;
+
+    KIGIT_QUERY m_configQuery;
 };
 
 #endif // PANEL_GIT_REPOSITORY_H

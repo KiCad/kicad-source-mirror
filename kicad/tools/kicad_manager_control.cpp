@@ -80,6 +80,7 @@ KICAD_MANAGER_CONTROL::KICAD_MANAGER_CONTROL() :
 
 void KICAD_MANAGER_CONTROL::Reset( RESET_REASON aReason )
 {
+    m_identityQuery.Cancel();
     m_frame = getEditFrame<KICAD_MANAGER_FRAME>();
 }
 
@@ -458,7 +459,33 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
     // A machine cloning for the first time usually has no git identity yet. Asking now makes
     // the first commit work instead of failing.
-    KIGIT::EnsureGitIdentity( m_frame, Prj().GetGitCommon().get() );
+    struct IDENTITY_RESULT
+    {
+        bool read = false;
+        bool hasIdentity = false;
+    };
+
+    auto common = Prj().GetGitCommon();
+    auto identity = std::make_shared<IDENTITY_RESULT>();
+
+    m_identityQuery.Run(
+            common,
+            [identity]( KIGIT_COMMON& aCommon )
+            {
+                identity->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                identity->read = true;
+            },
+            [this, common, identity]()
+            {
+                if( !identity->read || !m_frame || m_frame->IsBeingDeleted() || !common || common->IsShuttingDown()
+                    || Prj().GetGitCommon() != common || !Pgm().GetCommonSettings()->m_Git.enableGit
+                    || Prj().GetLocalSettings().m_GitIntegrationDisabled )
+                {
+                    return;
+                }
+
+                KIGIT::EnsureGitIdentity( m_frame, common.get(), identity->hasIdentity );
+            } );
 
     KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();

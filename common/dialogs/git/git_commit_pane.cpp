@@ -56,6 +56,7 @@
 #include <git/kicad_git_common.h>
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
+#include <git/git_backend.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
 #include <git/git_pull_handler.h>
@@ -78,6 +79,30 @@ enum
     ID_OPEN_ADVANCED = wxID_HIGHEST + 1,
     ID_SET_AUTHOR
 };
+}
+
+
+// Pin both the branch (including an unborn one) and its tip while a commit's status reads run.
+// The caller holds the action lock, just as it does when validating this before the write.
+static std::pair<wxString, wxString> commitHead( git_repository* aRepo )
+{
+    std::pair<wxString, wxString> state;
+    git_reference*                head = nullptr;
+
+    if( git_reference_lookup( &head, aRepo, "HEAD" ) == GIT_OK )
+    {
+        if( const char* target = git_reference_symbolic_target( head ) )
+            state.first = wxString::FromUTF8( target );
+
+        git_reference_free( head );
+    }
+
+    git_oid oid;
+
+    if( git_reference_name_to_id( &oid, aRepo, "HEAD" ) == GIT_OK )
+        state.second = wxString::FromUTF8( git_oid_tostr_s( &oid ) );
+
+    return state;
 }
 
 
@@ -268,15 +293,6 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     Bind( wxEVT_SIZE, &GIT_COMMIT_PANE::onSize, this );
     Bind( wxEVT_IDLE, &GIT_COMMIT_PANE::onIdle, this );
 
-    m_refreshRetryTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                RefreshFileList();
-            },
-            m_refreshRetryTimer.GetId() );
-
     // Inside the advanced window the page is wide enough for the list and the message side
     // by side.
     m_inAdvancedWindow = aParent != aFrame;
@@ -363,6 +379,10 @@ void GIT_COMMIT_PANE::SetFileSelectedHandler( std::function<void( const wxString
 
 GIT_COMMIT_PANE::~GIT_COMMIT_PANE()
 {
+    m_refresh.Cancel();
+    m_messageQuery.Cancel();
+    m_actionQuery.Cancel();
+
     // The window's Pull and Push run through this pane, so it goes when the pane goes.
     GIT_ADVANCED_DIALOG::CloseForPane( this );
 
@@ -389,6 +409,17 @@ void GIT_COMMIT_PANE::syncListener()
     if( m_listenerAttached )
         GIT_ADVANCED_DIALOG::CloseActive();
 
+    m_refresh.Cancel();
+    m_messageQuery.Cancel();
+    m_actionQuery.Cancel();
+
+    if( m_actionPending )
+    {
+        m_actionPending = false;
+        setBusy( false, wxEmptyString );
+    }
+    m_hasRepo = false;
+
     m_listenerAttached = true;
 
     // The remembered paths describe the previous project's file list, so a path that repeats in
@@ -404,6 +435,24 @@ void GIT_COMMIT_PANE::syncListener()
 }
 
 
+struct GIT_COMMIT_PANE::STATUS
+{
+    bool                                   hasRepo = false;
+    bool                                   hasLocalCommits = false;
+    bool                                   hasRemote = false;
+    bool                                   headDetached = false;
+    bool                                   operationInProgress = false;
+    bool                                   remoteAhead = false;
+    GitOperation                           operation = GitOperation::None;
+    wxString                               attachError;
+    wxString                               currentBranch;
+    std::vector<FILE_CHECKLIST_ENTRY>      entries;
+    std::vector<std::pair<wxString, bool>> branches;
+    std::vector<wxString>                  recentMessages;
+    std::pair<int, int>                    lineStats{ 0, 0 };
+};
+
+
 void GIT_COMMIT_PANE::RefreshFileList()
 {
     syncListener();
@@ -411,57 +460,79 @@ void GIT_COMMIT_PANE::RefreshFileList()
     // A session attached before the preference was turned off is still bound.
     if( !Pgm().GetCommonSettings()->m_Git.enableGit )
     {
+        m_refresh.Cancel();
         showDisabledState();
         return;
     }
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+    wxString                      projectPath = m_frame->Prj().GetProjectPath();
+    wxString                      projectName = m_frame->Prj().GetProjectName();
+    bool                          dark = KIPLATFORM::UI::IsDarkTheme();
+    bool                          countLines = m_summaryFiles != nullptr;
+    auto                          status = std::make_shared<STATUS>();
+    status->attachError = common->GetAttachError();
 
-    // Retry shortly rather than wait, since a background fetch can hold the lock for a whole
-    // network round trip.
-    std::unique_lock<std::mutex> lock = common->TryLockAction();
+    m_refresh.Run(
+            common,
+            [status, projectPath, projectName, dark, countLines]( KIGIT_COMMON& aCommon )
+            {
+                status->hasRepo = true;
+                status->entries = BuildGitChangeEntries( aCommon, projectPath, projectName, dark );
+                status->hasLocalCommits = aCommon.HasLocalCommits();
+                status->hasRemote = aCommon.HasPushAndPullRemote();
+                status->headDetached = aCommon.IsHeadDetached();
+                status->operationInProgress = aCommon.IsOperationInProgress();
+                status->operation = aCommon.OperationInProgress();
+                status->remoteAhead = aCommon.HasUpstreamCommits();
+                status->branches = aCommon.GetAllBranches();
+                status->currentBranch = aCommon.GetCurrentBranchName();
+                status->recentMessages = aCommon.GetRecentCommitMessages( 10 );
 
-    if( !lock.owns_lock() )
-    {
-        m_refreshRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-        return;
-    }
+                if( countLines )
+                {
+                    std::set<wxString> changed;
 
-    std::vector<FILE_CHECKLIST_ENTRY> entries = BuildGitChangeEntries( m_frame->Prj() );
-    bool                              hasLocalCommits = common->GetRepo() && common->HasLocalCommits();
-    m_hasRemote = common->GetRepo() && common->HasPushAndPullRemote();
-    m_headDetached = common->GetRepo() && common->IsHeadDetached();
-    m_operationInProgress = common->GetRepo() && common->IsOperationInProgress();
-    m_operation = common->GetRepo() ? common->OperationInProgress() : GitOperation::None;
-    m_remoteAhead = common->GetRepo() && common->HasUpstreamCommits();
+                    for( const FILE_CHECKLIST_ENTRY& entry : status->entries )
+                        changed.insert( entry.path );
+
+                    status->lineStats = aCommon.GetWorkingTreeLineStats( changed );
+                }
+            },
+            [this, common, status]()
+            {
+                if( m_frame->Prj().GetGitCommon() == common && !common->IsShuttingDown()
+                    && Pgm().GetCommonSettings()->m_Git.enableGit )
+                {
+                    applyStatus( *status );
+                }
+            } );
+}
+
+
+void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
+{
+    std::vector<FILE_CHECKLIST_ENTRY> entries = aStatus.entries;
+    m_hasRepo = aStatus.hasRepo;
+    m_hasRemote = aStatus.hasRemote;
+    m_headDetached = aStatus.headDetached;
+    m_operationInProgress = aStatus.operationInProgress;
+    m_operation = aStatus.operation;
+    m_remoteAhead = aStatus.remoteAhead;
 
     // Without a remote there is nowhere to push to, so local commits are not waiting for it.
-    m_hasUnpushedCommits = hasLocalCommits && m_hasRemote;
-
-    m_lineStats = { 0, 0 };
-
-    if( common->GetRepo() && m_summaryFiles )
-    {
-        std::set<wxString> changed;
-
-        for( const FILE_CHECKLIST_ENTRY& entry : entries )
-            changed.insert( entry.path );
-
-        m_lineStats = common->GetWorkingTreeLineStats( changed );
-    }
-
-    populateBranches( *common );
-    populateRecentMessages( *common );
-
-    lock.unlock();
+    m_hasUnpushedCommits = aStatus.hasLocalCommits && m_hasRemote;
+    m_lineStats = aStatus.lineStats;
+    populateBranches( aStatus );
+    populateRecentMessages( aStatus.recentMessages );
 
     // Edits still only in an editor's memory are not in the git status yet, but the commit flow
     // saves the editors first, so they are committable and the controls must allow it.
-    m_editorsDirty = common->GetRepo() && anyEditorDirty();
+    m_editorsDirty = aStatus.hasRepo && anyEditorDirty();
 
     // Amending is offered only while the last commit has not been pushed, so an already
     // published commit can never be rewritten from here.
-    m_canAmend = hasLocalCommits && !m_headDetached && !m_operationInProgress;
+    m_canAmend = aStatus.hasLocalCommits && !m_headDetached && !m_operationInProgress;
 
     if( !m_canAmend )
         m_amendCheckbox->SetValue( false );
@@ -519,9 +590,9 @@ void GIT_COMMIT_PANE::RefreshFileList()
     {
         if( !Pgm().GetCommonSettings()->m_Git.enableGit )
             setStatusText( _( "Version control is turned off in Preferences." ) );
-        else if( !common->GetRepo() && !common->GetAttachError().IsEmpty() )
-            setStatusText( common->GetAttachError() );
-        else if( !common->GetRepo() )
+        else if( !aStatus.hasRepo && !aStatus.attachError.IsEmpty() )
+            setStatusText( aStatus.attachError );
+        else if( !aStatus.hasRepo )
             setStatusText( _( "This project is not under version control. To set it up, right click "
                               "the project in the project manager and choose Version Control." ) );
         else if( m_editorsDirty )
@@ -551,6 +622,15 @@ void GIT_COMMIT_PANE::ReloadAdvancedWindow()
 
 void GIT_COMMIT_PANE::showDisabledState()
 {
+    m_messageQuery.Cancel();
+    m_actionQuery.Cancel();
+
+    if( m_actionPending )
+    {
+        m_actionPending = false;
+        setBusy( false, wxEmptyString );
+    }
+    m_hasRepo = false;
     m_hasUnpushedCommits = false;
     m_hasRemote = false;
     m_headDetached = false;
@@ -598,12 +678,11 @@ void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 
     // Editing does not announce itself to the pane, so watch for the unsaved editor state
     // changing while the pane is visible. The refresh runs only on the transition.
-    if( !Pgm().GetCommonSettings()->m_Git.enableGit || m_transfer.IsBusy() || m_refreshRetryTimer.IsRunning()
+    if( !Pgm().GetCommonSettings()->m_Git.enableGit || m_transfer.IsBusy() || m_actionPending || m_refresh.IsBusy()
         || !IsShownOnScreen() )
         return;
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    bool                          dirty = common->GetRepo() && anyEditorDirty();
+    bool dirty = m_hasRepo && anyEditorDirty();
 
     if( dirty != m_editorsDirty )
         RefreshFileList();
@@ -652,49 +731,54 @@ void GIT_COMMIT_PANE::onSettings( wxCommandEvent& aEvent )
 void GIT_COMMIT_PANE::setAuthor()
 {
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+    auto                          identity = std::make_shared<GitUserConfig>();
+    identity->authorName = Pgm().GetCommonSettings()->m_Git.authorName;
+    identity->authorEmail = Pgm().GetCommonSettings()->m_Git.authorEmail;
 
-    if( !common->GetRepo() )
-        return;
+    runActionQuery(
+            common,
+            [identity]( KIGIT_COMMON& aSession )
+            {
+                GIT_CONFIG_HANDLER handler( &aSession );
+                wxString           value;
 
-    wxString name;
-    wxString email;
+                if( GetGitBackend()->GetConfigString( &handler, "user.name", value ) )
+                    identity->authorName = value;
 
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+                if( GetGitBackend()->GetConfigString( &handler, "user.email", value ) )
+                    identity->authorEmail = value;
+            },
+            [this, common, identity]()
+            {
+                if( !KIGIT::PromptGitIdentity( this, _( "Set Author" ), identity->authorName, identity->authorEmail ) )
+                {
+                    return;
+                }
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
-            return;
-        }
+                if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown() )
+                    return;
 
-        GitUserConfig userConfig = GIT_CONFIG_HANDLER( common.get() ).GetUserConfig();
-        name = userConfig.authorName;
-        email = userConfig.authorEmail;
-    }
+                std::unique_lock<std::mutex> lock = common->TryLockAction();
 
-    if( !KIGIT::PromptGitIdentity( this, _( "Set Author" ), name, email ) )
-        return;
+                if( !lock.owns_lock() )
+                {
+                    DisplayInfoMessage( this, KIGIT::BusyMessage() );
+                    return;
+                }
 
-    std::unique_lock<std::mutex> lock = common->TryLockAction();
+                bool saved = common->SetUserConfig( identity->authorName, identity->authorEmail );
+                lock.unlock();
 
-    if( !lock.owns_lock() )
-    {
-        DisplayInfoMessage( this, KIGIT::BusyMessage() );
-        return;
-    }
+                if( !saved )
+                {
+                    DisplayErrorMessage( this, _( "Could not save the name and email to the repository." ) );
+                    return;
+                }
 
-    bool saved = common->SetUserConfig( name, email );
-    lock.unlock();
-
-    if( !saved )
-    {
-        DisplayErrorMessage( this, _( "Could not save the name and email to the repository." ) );
-        return;
-    }
-
-    // The Repository page shows the same name and email.
-    common->NotifyRefreshListeners();
+                // The Repository page shows the same name and email.
+                common->NotifyRefreshListeners();
+            },
+            _( "Reading author..." ) );
 }
 
 
@@ -761,7 +845,7 @@ void GIT_COMMIT_PANE::updateCommitButton()
 {
     // While a transfer runs the busy state owns the controls. Checklist or message edits
     // must not re-enable the buttons under it.
-    if( m_transfer.IsBusy() )
+    if( m_transfer.IsBusy() || m_actionPending )
         return;
 
     if( m_operationInProgress )
@@ -914,10 +998,22 @@ void GIT_COMMIT_PANE::onNewBranchToggled( wxCommandEvent& aEvent )
 
 void GIT_COMMIT_PANE::onBranchChosen( wxCommandEvent& aEvent )
 {
-    SwitchProjectToBranch( m_frame, this, m_branchChoice->GetStringSelection() );
+    if( m_actionPending || m_transfer.IsBusy() )
+        return;
 
-    // A refused switch leaves the choice on a branch the project is not on.
-    RefreshFileList();
+    wxString branch = m_branchChoice->GetStringSelection();
+    m_actionPending = true;
+    setBusy( true, _( "Checking branch..." ) );
+
+    SwitchProjectToBranch( m_frame, this, branch, m_actionQuery,
+                           [this]()
+                           {
+                               m_actionPending = false;
+                               setBusy( false, wxEmptyString );
+
+                               // A refused switch leaves the choice on a branch the project is not on.
+                               RefreshFileList();
+                           } );
 }
 
 
@@ -930,37 +1026,37 @@ void GIT_COMMIT_PANE::onShowDiff( wxCommandEvent& aEvent )
 }
 
 
-void GIT_COMMIT_PANE::populateBranches( KIGIT_COMMON& aCommon )
+void GIT_COMMIT_PANE::populateBranches( const STATUS& aStatus )
 {
     m_branchChoice->Clear();
-    m_branchRow->ShowItems( aCommon.GetRepo() != nullptr );
+    m_branchRow->ShowItems( aStatus.hasRepo );
 
     // The advanced window is reachable without a repository, as the old button was.
     m_settingsButton->Show();
 
-    if( !aCommon.GetRepo() )
+    if( !aStatus.hasRepo )
         return;
 
     // Only a local branch can take a commit.
-    for( const auto& [name, isRemote] : aCommon.GetAllBranches() )
+    for( const auto& [name, isRemote] : aStatus.branches )
     {
         if( !isRemote )
             m_branchChoice->Append( name );
     }
 
-    wxString current = aCommon.GetCurrentBranchName();
+    wxString current = aStatus.currentBranch;
 
     m_branchChoice->SetStringSelection( current );
-    m_branchChoice->Enable( !m_transfer.IsBusy() && !m_headDetached && !m_operationInProgress );
+    m_branchChoice->Enable( !m_transfer.IsBusy() && !m_actionPending && !m_headDetached && !m_operationInProgress );
 
     // The box ellipsizes, so the whole name is only readable here.
     m_branchChoice->SetToolTip( current );
 }
 
 
-void GIT_COMMIT_PANE::populateRecentMessages( KIGIT_COMMON& aCommon )
+void GIT_COMMIT_PANE::populateRecentMessages( const std::vector<wxString>& aMessages )
 {
-    m_recentMessageTexts = aCommon.GetRepo() ? aCommon.GetRecentCommitMessages( 10 ) : std::vector<wxString>();
+    m_recentMessageTexts = aMessages;
 
     // A dropdown always shows its selection, so the first entry is the caption.
     m_recentMessages->Clear();
@@ -1055,7 +1151,7 @@ void GIT_COMMIT_PANE::updateSummary()
 
 void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
 {
-    if( m_transfer.IsBusy() )
+    if( m_transfer.IsBusy() || m_actionPending )
         return;
 
     wxString path = m_checklist->GetItemPath( aEvent.GetItem() );
@@ -1091,24 +1187,34 @@ void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
 
 void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath )
 {
-    std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
-
-    if( !lock.owns_lock() )
+    struct FILE_STATE
     {
-        setBusy( false, KIGIT::BusyMessage() );
-        return;
-    }
+        bool     tracked = false;
+        bool     conflicted = false;
+        wxString root;
+    };
 
-    if( !aCommon->GetRepo() )
-        return;
+    auto state = std::make_shared<FILE_STATE>();
 
-    bool     tracked = aCommon->IsPathInHead( aPath );
-    bool     conflicted = aCommon->IsPathConflicted( aPath );
-    wxString rootDir = aCommon->GetGitRootDirectory();
+    runActionQuery(
+            aCommon,
+            [state, aPath]( KIGIT_COMMON& aSession )
+            {
+                state->tracked = aSession.IsPathInHead( aPath );
+                state->conflicted = aSession.IsPathConflicted( aPath );
+                state->root = aSession.GetGitRootDirectory();
+            },
+            [this, aCommon, aPath, state]()
+            {
+                confirmDiscardFile( aCommon, aPath, state->tracked, state->conflicted, state->root );
+            },
+            _( "Checking changes..." ) );
+}
 
-    // The confirmation is modal, so it must not run while the action lock is held.
-    lock.unlock();
 
+void GIT_COMMIT_PANE::confirmDiscardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath, bool aTracked,
+                                          bool aConflicted, wxString aRoot )
+{
     // An unsaved editor's next save would undo the discard, so settle that first.
     if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
     {
@@ -1120,7 +1226,7 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
     wxString name = wxFileName( aPath ).GetFullName();
     wxString question;
 
-    if( conflicted )
+    if( aConflicted )
     {
         // Putting back what HEAD holds also clears the conflict, so the file is settled rather
         // than only reverted.
@@ -1130,7 +1236,7 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
                                         "resolving." ),
                                      name );
     }
-    else if( tracked )
+    else if( aTracked )
     {
         question = wxString::Format( _( "Throw away the changes to '%s'?\n\n"
                                         "The file goes back to the last committed version." ),
@@ -1144,12 +1250,18 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
     }
 
     wxMessageDialog dlg( this, question, _( "Discard Changes" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING );
-    dlg.SetYesNoLabels( conflicted  ? _( "Resolve" )
-                        : tracked ? _( "Discard" )
-                                  : _( "Move to Trash" ),
+    dlg.SetYesNoLabels( aConflicted ? _( "Resolve" )
+                        : aTracked  ? _( "Discard" )
+                                    : _( "Move to Trash" ),
                         _( "Cancel" ) );
 
     if( dlg.ShowModal() != wxID_YES )
+        return;
+
+    if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )
+        return;
+
+    if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
         return;
 
     // Snapshot first, so an editor showing the file reloads the committed version afterwards.
@@ -1157,7 +1269,7 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
 
     // Dropping the staged entry before touching the file means a contended lock or an index
     // failure leaves everything unchanged.
-    lock = aCommon->TryLockAction();
+    std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
 
     if( !lock.owns_lock() )
     {
@@ -1181,12 +1293,12 @@ void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const 
 
     lock.unlock();
 
-    if( !tracked )
+    if( !aTracked )
     {
-        if( !rootDir.EndsWith( wxS( "/" ) ) )
-            rootDir += wxS( "/" );
+        if( !aRoot.EndsWith( wxS( "/" ) ) )
+            aRoot += wxS( "/" );
 
-        wxFileName fullPath( rootDir + aPath );
+        wxFileName fullPath( aRoot + aPath );
 
         // A previous discard can have removed the file already, so a missing file is done,
         // not an error.
@@ -1238,6 +1350,14 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
     if( !common->GetRepo() )
         return;
 
+    if( m_actionPending )
+    {
+        m_actionQuery.Cancel();
+        m_actionPending = false;
+        setBusy( false, _( "Cancelled." ) );
+        return;
+    }
+
     // While a transfer runs this button reads Cancel. The transfer callbacks poll the flag and
     // abort on their next tick, and the completion then reports the cancellation.
     if( m_transfer.IsBusy() )
@@ -1262,7 +1382,7 @@ bool GIT_COMMIT_PANE::transferCanStart()
 {
     // The advanced window reaches these too, with this panel's own labels out of sight, so
     // the refusal is a message box.
-    if( m_transfer.IsBusy() )
+    if( m_transfer.IsBusy() || m_actionPending )
     {
         DisplayInfoMessage( this, _( "A transfer is already running." ) );
         return false;
@@ -1303,21 +1423,6 @@ void GIT_COMMIT_PANE::Pull()
         return;
     }
 
-    {
-        std::unique_lock<std::mutex> probe = common->TryLockAction();
-
-        if( !probe.owns_lock() )
-        {
-            setBusy( false, KIGIT::BusyMessage() );
-            return;
-        }
-    }
-
-    // A pull that is not a fast forward creates a merge commit, which needs an author
-    // identity. Asking now beats failing after the merge has already touched the files.
-    if( !KIGIT::EnsureGitIdentity( this, common.get() ) )
-        return;
-
     submitPull( common, false );
 }
 
@@ -1343,56 +1448,74 @@ void GIT_COMMIT_PANE::Push()
         return;
     }
 
-    {
-        std::unique_lock<std::mutex> probe = common->TryLockAction();
-
-        if( !probe.owns_lock() )
-        {
-            setBusy( false, KIGIT::BusyMessage() );
-            return;
-        }
-    }
-
     submitPush( common );
 }
 
 
 void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
 {
+    struct PREPARATION
+    {
+        std::vector<wxString> outside;
+        bool                  ready = false;
+    };
+
+    auto           preparation = std::make_shared<PREPARATION>();
+    const wxString projectPath = m_frame->Prj().GetProjectPath();
+
+    runActionQuery(
+            aCommon,
+            [preparation, projectPath]( KIGIT_COMMON& aSession )
+            {
+                // Going back to the last commit covers the whole repository, so work in a
+                // sibling project has to be named before the user agrees.
+                preparation->outside = ChangedTrackedFilesOutsideProject( aSession, projectPath );
+                preparation->ready = true;
+            },
+            [this, aCommon, preparation]()
+            {
+                if( preparation->ready )
+                    finishAbandonOperation( aCommon, preparation->outside );
+            },
+            _( "Checking working files..." ) );
+}
+
+
+void GIT_COMMIT_PANE::finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon,
+                                              const std::vector<wxString>&  aOutside )
+{
     // Saving would only turn unsaved edits into changes that are then thrown away, so ask for
     // a decision in the editors first rather than offer a save.
-    if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+    auto canAbandon = [this, aCommon]()
     {
-        DisplayInfoMessage( this, _( "The open editors have unsaved changes. Save or revert them first, so it "
-                                     "is clear what is being abandoned." ) );
-        return;
-    }
-
-    std::vector<wxString> outside;
-
-    {
-        std::unique_lock<std::mutex> probe = aCommon->TryLockAction();
-
-        if( !probe.owns_lock() )
+        if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown()
+            || !Pgm().GetCommonSettings()->m_Git.enableGit )
         {
-            setBusy( false, KIGIT::BusyMessage() );
-            return;
+            return false;
         }
 
-        // Going back to the last commit covers the whole repository, so work in a sibling
-        // project goes too and has to be named before the user agrees.
-        outside = ChangedTrackedFilesOutsideProject( m_frame->Prj() );
-    }
+        if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+        {
+            DisplayInfoMessage( this, _( "The open editors have unsaved changes. Save or revert them first, so it "
+                                         "is clear what is being abandoned." ) );
+            return false;
+        }
+
+        return true;
+    };
+
+    if( !canAbandon() )
+        return;
 
     wxString question = wxString::Format( _( "Abandon the %s and go back to the last commit?\n\n"
                                              "Changes made to the files since that commit are discarded." ),
                                           operationNoun() );
 
-    if( !outside.empty() )
+    if( !aOutside.empty() )
     {
         wxString listed;
 
-        for( const wxString& path : outside )
+        for( const wxString& path : aOutside )
             listed += wxS( "\n    " ) + path;
 
         question += wxString::Format( _( "\n\nThis also discards uncommitted changes elsewhere in this "
@@ -1400,7 +1523,7 @@ void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
                                       listed );
     }
 
-    if( !IsOK( this, question ) )
+    if( !IsOK( this, question ) || !canAbandon() )
         return;
 
     EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( m_frame->Kiway() );
@@ -1433,26 +1556,37 @@ void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
 
 void GIT_COMMIT_PANE::onAmendToggled( wxCommandEvent& aEvent )
 {
+    m_messageQuery.Cancel();
+
     // Ticking the box offers the last commit's message as the starting point, since an amend
     // usually keeps or touches up the existing text.
     if( m_amendCheckbox->IsChecked() && m_summary->GetValue().Trim().IsEmpty()
         && m_description->GetValue().Trim().IsEmpty() )
     {
         std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-        std::unique_lock<std::mutex>  lock = common->TryLockAction();
+        auto                          last = std::make_shared<wxString>();
 
-        if( lock.owns_lock() && common->GetRepo() )
-        {
-            wxString last = common->GetLastCommitMessage();
+        m_messageQuery.Run(
+                common,
+                [last]( KIGIT_COMMON& aCommon )
+                {
+                    *last = aCommon.GetLastCommitMessage();
+                },
+                [this, common, last]()
+                {
+                    if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown()
+                        || !m_amendCheckbox->IsChecked() || last->IsEmpty() || !m_summary->GetValue().Trim().IsEmpty()
+                        || !m_description->GetValue().Trim().IsEmpty() )
+                    {
+                        return;
+                    }
 
-            if( !last.IsEmpty() )
-            {
-                wxString summary, description;
-                KIGIT::SplitCommitMessage( last, summary, description );
-                m_summary->SetValue( summary );
-                setDescription( description );
-            }
-        }
+                    wxString summary, description;
+                    KIGIT::SplitCommitMessage( *last, summary, description );
+                    m_summary->SetValue( summary );
+                    setDescription( description );
+                    updateCommitButton();
+                } );
     }
 
     updateMessageVisibility( m_checklist->IsShown() );
@@ -1462,9 +1596,33 @@ void GIT_COMMIT_PANE::onAmendToggled( wxCommandEvent& aEvent )
 }
 
 
+struct GIT_COMMIT_PANE::COMMIT_REQUEST
+{
+    bool                          hasIdentity = false;
+    bool                          amend = false;
+    bool                          newBranch = false;
+    bool                          andPush = false;
+    bool                          signOff = false;
+    bool                          darkTheme = false;
+    wxString                      displayedBranch;
+    wxString                      branchName;
+    wxString                      summary;
+    wxString                      description;
+    wxString                      projectPath;
+    wxString                      projectName;
+    wxString                      lfsMessage;
+    std::vector<wxString>         files;
+    std::set<wxString>            beforeSave;
+    std::pair<wxString, wxString> head;
+};
+
+
 void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 {
     syncListener();
+
+    if( m_actionPending || m_transfer.IsBusy() )
+        return;
 
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
@@ -1485,72 +1643,114 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
         if( !aAndPush || !m_hasUnpushedCommits )
             return;
 
-        {
-            std::unique_lock<std::mutex> probe = common->TryLockAction();
-
-            if( !probe.owns_lock() )
-            {
-                setBusy( false, KIGIT::BusyMessage() );
-                return;
-            }
-        }
-
         submitPush( common );
         return;
     }
 
-    // Snapshot before saving, so the rescan can tell files the save dirtied from files that changed
-    // for another reason. Keying it on the last refresh would sweep in files the user never saw.
-    bool               preSaveOk = false;
-    std::set<wxString> preSavePaths;
+    auto request = std::make_shared<COMMIT_REQUEST>();
+    request->amend = amend;
+    request->newBranch = newBranch;
+    request->andPush = aAndPush;
+    request->signOff = m_signOffCheckbox->IsChecked();
+    request->branchName = branchName;
+    request->displayedBranch = m_branchChoice->GetStringSelection();
+    request->summary = m_summary->GetValue();
+    request->description = m_description->GetValue();
+    request->files = std::move( files );
+    request->projectPath = m_frame->Prj().GetProjectPath();
+    request->projectName = m_frame->Prj().GetProjectName();
+    request->darkTheme = KIPLATFORM::UI::IsDarkTheme();
 
+    // Snapshot immediately before saving. Using the last displayed status could sweep files
+    // the user never saw into the commit when the editors save.
+    runActionQuery(
+            common,
+            [request]( KIGIT_COMMON& aCommon )
+            {
+                request->head = commitHead( aCommon.GetRepo() );
+                request->hasIdentity = KIGIT::HasGitIdentity( aCommon );
+                request->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon, request->projectPath );
+
+                for( const FILE_CHECKLIST_ENTRY& entry :
+                     BuildGitChangeEntries( aCommon, request->projectPath, request->projectName, request->darkTheme ) )
+                {
+                    request->beforeSave.insert( entry.path );
+                }
+            },
+            [this, common, request]()
+            {
+                saveForCommit( common, request );
+            },
+            _( "Checking changes..." ) );
+}
+
+
+void GIT_COMMIT_PANE::saveForCommit( std::shared_ptr<KIGIT_COMMON> aCommon, std::shared_ptr<COMMIT_REQUEST> aRequest )
+{
+    if( !aRequest->displayedBranch.IsEmpty()
+        && aRequest->head.first != wxS( "refs/heads/" ) + aRequest->displayedBranch )
     {
-        std::unique_lock<std::mutex> preLock = common->TryLockAction();
-
-        if( preLock.owns_lock() )
-        {
-            preSaveOk = true;
-
-            for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries( m_frame->Prj() ) )
-                preSavePaths.insert( entry.path );
-        }
+        DisplayInfoMessage( this, _( "The branch changed while preparing the commit. "
+                                     "Review the changes and commit again." ) );
+        aCommon->NotifyRefreshListeners();
+        return;
     }
 
-    if( !PrepareEditorsForGitOperation( m_frame, GIT_EDITOR_PREP::COMMIT ) )
+    if( !aRequest->lfsMessage.IsEmpty() )
+    {
+        DisplayErrorMessage( this, aRequest->lfsMessage );
+        return;
+    }
+
+    bool saved = false;
+
+    if( !PrepareEditorsForGitOperation( m_frame, GIT_EDITOR_PREP::COMMIT, &saved ) )
         return;
 
-    // A save can dirty design files that were not in the list, for example a board edited only in
-    // memory, and leaving those out would commit less than the button promises.
-    if( preSaveOk )
+    if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )
+        return;
+
+    // Commit Anyway approves only the selected files. Nothing was saved to discover here.
+    if( !saved )
     {
-        // The local settings file is dirtied by the save itself, not by the user, so it is
-        // deliberately absent here.
-        auto isProjectDocument = []( const wxString& aPath )
-        {
-            wxString ext = wxFileName( aPath ).GetExt();
-
-            return ext.CmpNoCase( FILEEXT::KiCadSchematicFileExtension ) == 0
-                   || ext.CmpNoCase( FILEEXT::KiCadPcbFileExtension ) == 0
-                   || ext.CmpNoCase( FILEEXT::ProjectFileExtension ) == 0;
-        };
-
-        std::unique_lock<std::mutex> rescanLock = common->TryLockAction();
-
-        if( rescanLock.owns_lock() )
-        {
-            std::set<wxString> already( files.begin(), files.end() );
-
-            for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries( m_frame->Prj() ) )
-            {
-                if( !preSavePaths.count( entry.path ) && !already.count( entry.path )
-                    && isProjectDocument( entry.path ) )
-                {
-                    files.push_back( entry.path );
-                    already.insert( entry.path );
-                }
-            }
-        }
+        finishCommit( aCommon, *aRequest );
+        return;
     }
+
+    // Saving can create design changes that were only in editor memory. Local settings are
+    // absent because saving itself dirties them, without an edit by the user.
+    runActionQuery(
+            aCommon,
+            [aRequest]( KIGIT_COMMON& aSession )
+            {
+                std::set<wxString> already( aRequest->files.begin(), aRequest->files.end() );
+
+                for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries(
+                             aSession, aRequest->projectPath, aRequest->projectName, aRequest->darkTheme ) )
+                {
+                    wxString ext = wxFileName( entry.path ).GetExt();
+                    bool     document = ext.CmpNoCase( FILEEXT::KiCadSchematicFileExtension ) == 0
+                                        || ext.CmpNoCase( FILEEXT::KiCadPcbFileExtension ) == 0
+                                        || ext.CmpNoCase( FILEEXT::ProjectFileExtension ) == 0;
+
+                    if( document && !aRequest->beforeSave.count( entry.path ) && already.insert( entry.path ).second )
+                        aRequest->files.push_back( entry.path );
+                }
+            },
+            [this, aCommon, aRequest]()
+            {
+                finishCommit( aCommon, *aRequest );
+            },
+            _( "Checking saved changes..." ) );
+}
+
+
+void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const COMMIT_REQUEST& aRequest )
+{
+    const std::vector<wxString>& files = aRequest.files;
+    const bool                   amend = aRequest.amend;
+    const bool                   newBranch = aRequest.newBranch;
+    const wxString&              branchName = aRequest.branchName;
 
     // Entered on the strength of unsaved editor changes alone, but the user declined the save,
     // so nothing reached the working tree and there is nothing to commit.
@@ -1561,7 +1761,10 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     }
 
     // A fresh machine has no git identity yet, and the commit cannot be recorded without one.
-    if( !KIGIT::EnsureGitIdentity( this, common.get() ) )
+    if( !KIGIT::EnsureGitIdentity( this, common.get(), aRequest.hasIdentity ) )
+        return;
+
+    if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown() )
         return;
 
     CommitResult result = CommitResult::Error;
@@ -1581,14 +1784,23 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
             return;
         }
 
+        if( aRequest.head != commitHead( common->GetRepo() ) )
+        {
+            lock.unlock();
+            DisplayInfoMessage( this, _( "The branch or its last commit changed while preparing the commit. "
+                                         "Review the changes and commit again." ) );
+            common->NotifyRefreshListeners();
+            return;
+        }
+
         GIT_CONFIG_HANDLER configHandler( common.get() );
         GitUserConfig      userConfig = configHandler.GetUserConfig();
         wxString           signOff;
 
-        if( m_signOffCheckbox->IsChecked() )
+        if( aRequest.signOff )
             signOff = wxString::Format( wxS( "%s <%s>" ), userConfig.authorName, userConfig.authorEmail );
 
-        wxString message = KIGIT::ComposeCommitMessage( m_summary->GetValue(), m_description->GetValue(), signOff );
+        wxString message = KIGIT::ComposeCommitMessage( aRequest.summary, aRequest.description, signOff );
 
         // The new branch starts at HEAD, so switching to it leaves the working tree as it is.
         if( newBranch )
@@ -1630,22 +1842,58 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
         return;
     }
 
-    m_summary->Clear();
-    setDescription( wxEmptyString );
+    // The other commit pane can still edit the shared message while this one is preparing.
+    if( m_summary->GetValue() == aRequest.summary && m_description->GetValue() == aRequest.description )
+    {
+        m_summary->Clear();
+        setDescription( wxEmptyString );
+    }
     m_amendCheckbox->SetValue( false );
     m_newBranchCheckbox->SetValue( false );
     m_newBranchName->Clear();
     common->NotifyRefreshListeners();
 
-    if( aAndPush )
+    if( aRequest.andPush )
         submitPush( common );
     else
         setBusy( false, _( "Committed." ) );
 }
 
 
+void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std::function<void( KIGIT_COMMON& )> aWork,
+                                      std::function<void()> aDone, const wxString& aStatus )
+{
+    if( m_actionPending || m_transfer.IsBusy() )
+        return;
+
+    m_actionPending = true;
+    setBusy( true, aStatus );
+    auto read = std::make_shared<bool>( false );
+
+    m_actionQuery.Run(
+            aCommon,
+            [read, work = std::move( aWork )]( KIGIT_COMMON& aSession )
+            {
+                work( aSession );
+                *read = true;
+            },
+            [this, aCommon, read, done = std::move( aDone )]()
+            {
+                m_actionPending = false;
+                setBusy( false, wxEmptyString );
+
+                if( *read && aCommon == m_frame->Prj().GetGitCommon() && !aCommon->IsShuttingDown()
+                    && aCommon->GetRepo() && Pgm().GetCommonSettings()->m_Git.enableGit )
+                {
+                    done();
+                }
+            } );
+}
+
+
 void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 {
+    m_checklist->Enable( !aBusy );
     m_commitButton->Enable( !aBusy );
     m_amendCheckbox->Enable( !aBusy );
     m_signOffCheckbox->Enable( !aBusy );
@@ -1681,35 +1929,40 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 
 void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
 {
-    // Version control can be removed while a transfer runs, and leaving the busy state behind
-    // would disable the panel for good.
-    if( !aCommon->GetRepo() )
+    struct TARGET
     {
-        setBusy( false, wxEmptyString );
-        return;
-    }
+        bool     hasRemote = false;
+        wxString branch;
+        wxString head;
+    };
 
-    // Another panel's push or pull worker shares this repository, so reading the remote
-    // configuration takes the action lock too.
-    {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+    auto target = std::make_shared<TARGET>();
 
-        if( !lock.owns_lock() )
-        {
-            setBusy( false, KIGIT::BusyMessage() );
-            return;
-        }
+    runActionQuery(
+            aCommon,
+            [target]( KIGIT_COMMON& aSession )
+            {
+                target->hasRemote = aSession.HasPushAndPullRemote();
+                target->branch = aSession.GetCurrentBranchName();
+                target->head = aSession.GetHeadCommitId();
+            },
+            [this, aCommon, target]()
+            {
+                if( !target->hasRemote )
+                {
+                    setBusy( false, _( "Committed. No remote is configured to push to." ) );
+                    aCommon->NotifyRefreshListeners();
+                    return;
+                }
 
-        // A project with no remote is committed locally only. Report that instead of failing a push.
-        if( !aCommon->HasPushAndPullRemote() )
-        {
-            lock.unlock();
-            setBusy( false, _( "Committed. No remote is configured to push to." ) );
-            aCommon->NotifyRefreshListeners();
-            return;
-        }
-    }
+                startPush( aCommon, target->branch, target->head );
+            },
+            _( "Checking remote..." ) );
+}
 
+
+void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead )
+{
     setBusy( true, _( "Pushing..." ) );
 
     // Carried rather than captured by reference, because Start returns before the work runs.
@@ -1725,11 +1978,13 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
 
     bool started = m_transfer.Start(
             "git push",
-            [aCommon, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, outcome, aBranch, aHead]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
                 aCommon->ClearAuthFailure();
 
                 GIT_PUSH_HANDLER handler( aCommon.get() );
+                handler.SetWaitForActionLock( true );
+                handler.SetExpectedTarget( aBranch, aHead );
                 handler.SetCancelToken( aToken );
                 outcome->result = handler.PerformPush();
                 outcome->error = handler.GetErrorString();
@@ -1800,38 +2055,36 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     // again, rather than force over them.
     if( result == PushResult::NonFastForward )
     {
-        setBusy( false, wxEmptyString );
-
         // Getting their changes needs a clean tree. Files left unticked at the commit, or edits
         // still in an editor, block it, and offering the click anyway would only fail later.
-        bool dirty = anyEditorDirty();
+        auto dirty = std::make_shared<bool>( true );
 
-        if( !dirty )
-        {
-            std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+        runActionQuery(
+                aCommon,
+                [dirty]( KIGIT_COMMON& aSession )
+                {
+                    *dirty = aSession.HasUncommittedTrackedChanges();
+                },
+                [this, aCommon, dirty]()
+                {
+                    if( *dirty || anyEditorDirty() )
+                    {
+                        DisplayInfoMessage( this, _( "Someone else pushed changes first. Before their changes can "
+                                                     "be brought in, commit or discard the changes that were "
+                                                     "left out of this commit. Then use Get Changes and push "
+                                                     "again." ) );
+                        return;
+                    }
 
-            if( !lock.owns_lock() )
-            {
-                setBusy( false, KIGIT::BusyMessage() );
-                return;
-            }
-
-            dirty = aCommon->HasUncommittedTrackedChanges();
-        }
-
-        if( dirty )
-        {
-            DisplayInfoMessage( this, _( "Someone else pushed changes first. Before their changes can be "
-                                         "brought in, commit or discard the changes that were left out of "
-                                         "this commit. Then use Get Changes and push again." ) );
-            return;
-        }
-
-        if( IsOK( this, _( "Someone else pushed changes first.\n\n"
-                           "Get their changes and push again?" ) ) )
-        {
-            submitPull( aCommon, true );
-        }
+                    if( IsOK( this, _( "Someone else pushed changes first.\n\n"
+                                       "Get their changes and push again?" ) )
+                        && aCommon == m_frame->Prj().GetGitCommon() && !aCommon->IsShuttingDown()
+                        && Pgm().GetCommonSettings()->m_Git.enableGit )
+                    {
+                        submitPull( aCommon, true );
+                    }
+                },
+                _( "Checking working files..." ) );
 
         return;
     }
@@ -1841,23 +2094,92 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 }
 
 
+// The worker owns the materialized conflict files until the UI finishes resolving them. A
+// cancelled query drops the same object, so scratch files cannot outlive an abandoned flow.
+struct GIT_COMMIT_PANE::MERGE_PREPARATION
+{
+    std::unique_ptr<GIT_DIFF_WORKSPACE> workspace;
+    wxString                            headOid;
+    wxString                            theirsOid;
+    wxString                            rootDir;
+    wxString                            error;
+    std::vector<KIGIT_CONFLICT_SIDES>   conflicts;
+    bool                                hasIdentity = false;
+    bool                                rebaseConfigured = false;
+    bool                                prepared = false;
+};
+
+
 void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush )
 {
-    setBusy( false, wxEmptyString );
+    auto preparation = std::make_shared<MERGE_PREPARATION>();
+
+    runActionQuery(
+            aCommon,
+            [preparation]( KIGIT_COMMON& aSession )
+            {
+                preparation->workspace = std::make_unique<GIT_DIFF_WORKSPACE>();
+
+                if( !preparation->workspace->IsOk() )
+                    return;
+
+                preparation->rebaseConfigured = aSession.IsPullRebaseConfigured();
+                preparation->hasIdentity = KIGIT::HasGitIdentity( aSession );
+                preparation->rootDir = aSession.GetGitRootDirectory();
+                preparation->prepared = aSession.GetMergeConflicts(
+                        preparation->workspace->Root() + wxFileName::GetPathSeparator() + wxS( "stages" ),
+                        preparation->headOid, preparation->theirsOid, preparation->conflicts, preparation->error );
+            },
+            [this, aCommon, aThenPush, preparation]()
+            {
+                finishPullConflictPreparation( aCommon, aThenPush, preparation );
+            },
+            _( "Preparing the merge..." ) );
+}
+
+
+void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush,
+                                                     std::shared_ptr<MERGE_PREPARATION> aPreparation )
+{
+    if( !aPreparation->workspace || !aPreparation->workspace->IsOk() )
+    {
+        DisplayErrorMessage( this, _( "Could not create a temporary directory for the merge." ) );
+        return;
+    }
+
+    if( !aPreparation->prepared )
+    {
+        DisplayErrorMessage( this, _( "Could not prepare the merge." ), aPreparation->error );
+        return;
+    }
+
+    // Editors remain usable while the repository is read and while another editor's merge
+    // tool is open. Refuse to reload over anything typed during either interval.
+    auto canResolve = [this, aCommon]()
+    {
+        if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown()
+            || !Pgm().GetCommonSettings()->m_Git.enableGit )
+        {
+            return false;
+        }
+
+        if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+        {
+            DisplayInfoMessage( this, _( "The open editors have unsaved changes. Save or revert them before "
+                                         "resolving the merge." ) );
+            return false;
+        }
+
+        return true;
+    };
+
+    if( !canResolve() )
+        return;
 
     // A conflicted rebase was already abandoned by the time it got here, and settling it from
     // this window can only produce a merge commit. Someone who asked for rebases is told that
     // before one is made.
-    bool rebaseConfigured = false;
-
-    {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
-
-        if( lock.owns_lock() )
-            rebaseConfigured = aCommon->IsPullRebaseConfigured();
-    }
-
-    if( rebaseConfigured
+    if( aPreparation->rebaseConfigured
         && !IsOK( this, _( "This project is set to rebase when getting changes, but a conflict can only be "
                            "settled here by merging. Carry on and make a merge commit, or cancel and rebase "
                            "from a git command line?" ) ) )
@@ -1866,59 +2188,26 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
         return;
     }
 
+    if( !canResolve() )
+        return;
+
     // The merge commit needs an identity whatever the user decides about the files, so it is
     // asked for before any merging. Cancelling it then costs no work.
-    if( !KIGIT::EnsureGitIdentity( this, aCommon.get() ) )
+    if( !KIGIT::EnsureGitIdentity( this, aCommon.get(), aPreparation->hasIdentity ) )
     {
         setBusy( false, _( "Getting changes was cancelled. Your files are unchanged." ) );
         return;
     }
 
-    GIT_DIFF_WORKSPACE workspace;
-
-    if( !workspace.IsOk() )
-    {
-        DisplayErrorMessage( this, _( "Could not create a temporary directory for the merge." ) );
+    if( !canResolve() )
         return;
-    }
 
-    const wxString sep = wxFileName::GetPathSeparator();
-
-    wxString                          headOid;
-    wxString                          theirsOid;
-    wxString                          error;
-    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
-
-    bool prepared = false;
-    bool prepareBusy = false;
-
-    {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            prepareBusy = true;
-        }
-        else
-        {
-            prepared = aCommon->GetMergeConflicts( workspace.Root() + sep + wxS( "stages" ), headOid, theirsOid,
-                                                   conflicts, error );
-        }
-    }
-
-    // A modal dialog runs its own event loop, so reporting the outcome happens after the lock
-    // is released. Holding it here would stall every other git surface until the box is closed.
-    if( prepareBusy )
-    {
-        setBusy( false, KIGIT::BusyMessage() );
-        return;
-    }
-
-    if( !prepared )
-    {
-        DisplayErrorMessage( this, _( "Could not prepare the merge." ), error );
-        return;
-    }
+    GIT_DIFF_WORKSPACE&                      workspace = *aPreparation->workspace;
+    const wxString                           sep = wxFileName::GetPathSeparator();
+    const wxString&                          headOid = aPreparation->headOid;
+    const wxString&                          theirsOid = aPreparation->theirsOid;
+    const std::vector<KIGIT_CONFLICT_SIDES>& conflicts = aPreparation->conflicts;
+    wxString                                 error;
 
     std::vector<std::pair<wxString, wxString>> resolved;
 
@@ -1937,6 +2226,9 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
 
     for( size_t ii = 0; ii < conflicts.size(); )
     {
+        if( !canResolve() )
+            return;
+
         const KIGIT_CONFLICT_SIDES& conflict = conflicts[ii];
         KICAD_DIFF::DOC_KIND        kind = KICAD_DIFF::DocKindFromExtension( conflict.path );
 
@@ -2057,9 +2349,12 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
         ++ii;
     }
 
+    if( !canResolve() )
+        return;
+
     // Written before the merge is published, so a copy that cannot be made stops the merge
     // rather than losing the version it was meant to protect.
-    wxString rootDir = aCommon->GetGitRootDirectory();
+    wxString rootDir = aPreparation->rootDir;
 
     if( !rootDir.EndsWith( wxS( "/" ) ) )
         rootDir += wxS( "/" );
@@ -2114,6 +2409,12 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
     // Throwing the resolutions away would mean doing every file again, so let the user retry.
     while( true )
     {
+        if( !canResolve() )
+        {
+            discardSavedCopies();
+            return;
+        }
+
         std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
 
         if( lock.owns_lock() )
@@ -2185,64 +2486,84 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
         return;
     }
 
-    bool                  dirty = anyEditorDirty();
-    std::vector<wxString> outside;
-    wxString              lfsMessage;
-
-    if( !dirty )
+    struct CHECK
     {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+        bool                  hasIdentity = false;
+        bool                  dirty = false;
+        wxString              lfsMessage;
+        std::vector<wxString> outside;
+    };
 
-        if( !lock.owns_lock() )
-        {
-            setBusy( false, KIGIT::BusyMessage() );
-            return;
-        }
+    auto     result = std::make_shared<CHECK>();
+    wxString projectPath = m_frame->Prj().GetProjectPath();
 
-        dirty = aCommon->HasUncommittedTrackedChanges();
+    runActionQuery(
+            aCommon,
+            [result, projectPath]( KIGIT_COMMON& aSession )
+            {
+                result->hasIdentity = KIGIT::HasGitIdentity( aSession );
+                result->dirty = aSession.HasUncommittedTrackedChanges();
+                result->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aSession, projectPath );
 
-        lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( aCommon.get(), m_frame->Prj() );
+                // A sibling project's tracked edits block the same repository-wide merge.
+                if( result->dirty )
+                    result->outside = ChangedTrackedFilesOutsideProject( aSession, projectPath );
+            },
+            [this, aCommon, aThenPush, result]()
+            {
+                if( !result->lfsMessage.IsEmpty() )
+                {
+                    setBusy( false, _( "This project uses Git LFS." ) );
+                    DisplayErrorMessage( this, result->lfsMessage );
+                    return;
+                }
 
-        // The list shows this project only. A change elsewhere in the repository blocks the
-        // merge just the same, and has to be named or the user is asked to commit nothing.
-        if( dirty )
-            outside = ChangedTrackedFilesOutsideProject( m_frame->Prj() );
-    }
+                if( result->dirty || anyEditorDirty() || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+                {
+                    setBusy( false, _( "Commit your changes first." ) );
 
-    if( !lfsMessage.IsEmpty() )
-    {
-        setBusy( false, _( "This project uses Git LFS." ) );
-        DisplayErrorMessage( this, lfsMessage );
-        return;
-    }
+                    if( !result->outside.empty() )
+                    {
+                        wxString listed;
 
-    if( dirty )
-    {
-        setBusy( false, _( "Commit your changes first." ) );
+                        for( const wxString& path : result->outside )
+                            listed += wxS( "\n    " ) + path;
 
-        if( !outside.empty() )
-        {
-            wxString listed;
+                        DisplayInfoMessage( this,
+                                            wxString::Format( _( "There are uncommitted changes elsewhere in this "
+                                                                 "repository:%s\n\nCommit or discard them from that "
+                                                                 "project first, then get changes again." ),
+                                                              listed ) );
+                    }
+                    else
+                    {
+                        DisplayInfoMessage( this,
+                                            _( "There are changes that are not committed yet, and getting changes "
+                                               "would run over them. Commit them first, then get changes again. To "
+                                               "set them aside instead, use Stash Changes in the Advanced Git "
+                                               "window." ) );
+                    }
 
-            for( const wxString& path : outside )
-                listed += wxS( "\n    " ) + path;
+                    return;
+                }
 
-            DisplayInfoMessage( this, wxString::Format( _( "There are uncommitted changes elsewhere in this "
-                                                           "repository:%s\n\nCommit or discard them from that "
-                                                           "project first, then get changes again." ),
-                                                        listed ) );
-        }
-        else
-        {
-            DisplayInfoMessage( this, _( "There are changes that are not committed yet, and getting changes "
-                                         "would run over them. Commit them first, then get changes again. To "
-                                         "set them aside instead, use Stash Changes in the Advanced Git "
-                                         "window." ) );
-        }
 
-        return;
-    }
+                // A non-fast-forward pull creates a commit, so obtain its identity before
+                // the worker can change files. The repository check was in the query above.
+                if( !KIGIT::EnsureGitIdentity( this, aCommon.get(), result->hasIdentity ) )
+                    return;
 
+                if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )
+                    return;
+
+                startPull( aCommon, aThenPush );
+            },
+            _( "Checking changes..." ) );
+}
+
+
+void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush )
+{
     setBusy( true, _( "Getting changes..." ) );
 
     // Record what the open documents look like on disk now, so only the ones the merge actually
@@ -2272,6 +2593,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
                 aCommon->ClearAuthFailure();
 
                 GIT_PULL_HANDLER handler( aCommon.get() );
+                handler.SetWaitForActionLock( true );
                 handler.SetCancelToken( aToken );
                 outcome->result = handler.PerformPull();
                 outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();

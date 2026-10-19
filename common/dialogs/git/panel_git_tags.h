@@ -20,8 +20,7 @@
 #ifndef PANEL_GIT_TAGS_H
 #define PANEL_GIT_TAGS_H
 
-#include <wx/timer.h>
-
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/panel_git_tags_base.h>
 
 class EDA_BASE_FRAME;
@@ -38,7 +37,7 @@ class PANEL_GIT_TAGS : public PANEL_GIT_TAGS_BASE
 public:
     PANEL_GIT_TAGS( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
 
-    /// Fill the list from the repository's tags. The caller holds the git action lock.
+    /// Fill the list from the repository's tags. The repository is read on a worker.
     void Populate();
 
 private:
@@ -54,9 +53,9 @@ private:
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
 
-    /// Re-runs the reload once when it had to skip because another git operation held the
-    /// action lock.
-    wxTimer m_retryTimer;
+    /// List and detail reads share the session lock without waiting on the UI thread.
+    KIGIT_QUERY m_listQuery;
+    KIGIT_QUERY m_detailQuery;
 
     /// Where the user left the sash between the list and its detail pane.
     int m_tagSashPos = 0;

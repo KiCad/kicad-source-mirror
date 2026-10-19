@@ -356,10 +356,16 @@ namespace
 
 wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon, PROJECT& aProject )
 {
+    return LfsRefusal( aCommon, aProject.GetProjectPath() );
+}
+
+
+wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon, const wxString& aProjectPath )
+{
     if( !aCommon || !aCommon->GetRepo() )
         return wxEmptyString;
 
-    wxString prefix = ProjectPrefix( aCommon->GetProjectDir(), aProject.GetProjectPath() );
+    wxString prefix = ProjectPrefix( aCommon->GetProjectDir(), aProjectPath );
     wxString example;
 
     if( !ProjectUsesGitLfs( aCommon->GetRepo(), prefix, &example ) )

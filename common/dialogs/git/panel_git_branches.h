@@ -22,8 +22,6 @@
 
 #include <vector>
 
-#include <wx/timer.h>
-
 #include <dialogs/git/git_transfer.h>
 #include <dialogs/git/panel_git_branches_base.h>
 
@@ -42,7 +40,7 @@ public:
     PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
     ~PANEL_GIT_BRANCHES() override;
 
-    /// Fill the list from the repository's branches. The caller holds the git action lock.
+    /// Fill the list from the repository's branches. The repository is read on a worker.
     void Populate();
 
     /// Ask a force push still running to stop. It finishes on its own.
@@ -62,6 +60,8 @@ private:
 
     /// Force push the current branch, after an explicit confirmation.
     void onForcePush();
+    void startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aExpectedBranch,
+                         const wxString& aExpectedHeadOid );
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
@@ -73,9 +73,12 @@ private:
     /// The force push this page started.
     KIGIT_TRANSFER m_push;
 
-    /// Re-runs the reload once when it had to skip because another git operation held the
-    /// action lock.
-    wxTimer m_retryTimer;
+    /// List and detail reads share the session lock without waiting on the UI thread.
+    KIGIT_QUERY m_listQuery;
+    KIGIT_QUERY m_detailQuery;
+
+    /// Reads needed before an action's confirmation, separate from list refreshes.
+    KIGIT_QUERY m_actionQuery;
 
     /// Where the user left the sash between the list and its detail pane.
     int m_branchSashPos = 0;

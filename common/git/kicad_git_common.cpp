@@ -176,6 +176,17 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
 }
 
 
+wxString KIGIT_COMMON::GetHeadCommitId() const
+{
+    git_oid oid;
+
+    if( !m_repo || git_reference_name_to_id( &oid, m_repo, "HEAD" ) != GIT_OK )
+        return wxEmptyString;
+
+    return wxString::FromUTF8( git_oid_tostr_s( &oid ) );
+}
+
+
 wxString KIGIT_COMMON::GetPassword()
 {
     wxString remote;
@@ -1197,8 +1208,9 @@ bool commitTouchesPath( git_commit* aCommit, const std::string& aPath )
 std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, const KIGIT_HISTORY_FILTER& aFilter ) const
 {
     std::vector<KIGIT_COMMIT_INFO> commits;
+    CANCEL_TOKEN                   cancel = ActiveCancelToken();
 
-    if( !m_repo )
+    if( !m_repo || IsShuttingDown() || ( cancel && cancel->load() ) )
         return commits;
 
     git_revwalk* walker = nullptr;
@@ -1243,6 +1255,11 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, cons
 
     while( commits.size() < aMax && git_revwalk_next( &oid, walker ) == GIT_OK )
     {
+        // A search without matches can walk the entire repository. Let a newer query or a
+        // closing project release the action lock before that walk reaches its end.
+        if( ( cancel && cancel->load() ) || IsShuttingDown() )
+            break;
+
         git_commit* commit = nullptr;
 
         if( git_commit_lookup( &commit, m_repo, &oid ) != GIT_OK )

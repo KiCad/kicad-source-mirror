@@ -22,14 +22,14 @@
 
 #include <functional>
 
-#include <wx/timer.h>
+#include <wx/datetime.h>
 
+#include <dialogs/git/git_transfer.h>
 #include <dialogs/git/panel_git_remotes_base.h>
 
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
 class KIGIT_COMMON;
-class wxDateTime;
 
 
 /**
@@ -41,7 +41,7 @@ class PANEL_GIT_REMOTES : public PANEL_GIT_REMOTES_BASE
 public:
     PANEL_GIT_REMOTES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
 
-    /// Fill the list from the repository's remotes. The caller holds the git action lock.
+    /// Fill the list from the repository's remotes. The repository is read on a worker.
     void Populate();
 
 private:
@@ -60,9 +60,9 @@ private:
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
 
-    /// Re-runs the reload once when it had to skip because another git operation held the
-    /// action lock.
-    wxTimer m_retryTimer;
+    /// The list and its shared fetch timestamp are read together on a worker.
+    KIGIT_QUERY m_listQuery;
+    wxDateTime  m_lastFetched;
 
     /// Where the user left the sash between the list and its detail pane.
     int m_remoteSashPos = 0;

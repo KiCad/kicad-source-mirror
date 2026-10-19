@@ -20,6 +20,7 @@
 #ifndef GIT_STATUS_ENTRIES_H
 #define GIT_STATUS_ENTRIES_H
 
+#include <functional>
 #include <vector>
 
 #include <git/git_editor_snapshot.h>
@@ -28,7 +29,8 @@
 
 class EDA_BASE_FRAME;
 class KIWAY;
-class PROJECT;
+class KIGIT_COMMON;
+class KIGIT_QUERY;
 class wxWindow;
 struct git_repository;
 
@@ -67,8 +69,12 @@ private:
  * Build the file checklist entries for the project's changed files, transient files filtered
  * out and each path stored relative to the working directory. Shared by the docked commit
  * panel and the advanced window so both show the same list.
+ *
+ * Uses project values and the theme captured on the UI thread. The caller holds the session's
+ * action lock. This function never reads a live PROJECT or UI settings.
  */
-std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject );
+std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, const wxString& aProjectPath,
+                                                         const wxString& aProjectName, bool aDarkTheme );
 
 /**
  * What the caller is about to do, which decides the wording and whether the project file is
@@ -76,7 +82,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject );
  */
 enum class GIT_EDITOR_PREP
 {
-    COMMIT,      ///< The working files are about to be committed, so the project file is saved too.
+    COMMIT,      ///< Saving dirty editors for a commit also saves the project file.
     WORKING_TREE ///< The working files are about to be rewritten, by a pull, branch switch or stash.
 };
 
@@ -87,9 +93,13 @@ enum class GIT_EDITOR_PREP
  * When the working tree is about to be rewritten the only choices are to save or to cancel,
  * since a stale editor's next save would overwrite whatever arrived. The project file is
  * written only for a commit, because before a merge it would dirty the file and fail the
- * checkout.
+ * checkout. The caller must first check LfsRefusal on a worker before saving editors.
+ *
+ * @param aSavedEditors When supplied, receives true only after dirty editors were successfully
+ *                      saved. False for Commit Anyway or when no editor needed saving, so a
+ *                      caller need not rescan for changes produced by an editor save.
  */
-bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose );
+bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose, bool* aSavedEditors = nullptr );
 
 /// True when the schematic or board editor holds unsaved changes.
 bool DocumentEditorsDirty( KIWAY& aKiway );
@@ -99,8 +109,8 @@ bool DocumentEditorsDirty( KIWAY& aKiway );
 std::vector<wxString> LibraryEditorsWithUnsavedChanges( KIWAY& aKiway );
 
 /// Repository relative paths of tracked files changed outside the project directory, which
-/// the checklist does not show. The caller holds the git action lock.
-std::vector<wxString> ChangedTrackedFilesOutsideProject( PROJECT& aProject );
+/// the checklist does not show. Uses a captured project path. The caller holds the action lock.
+std::vector<wxString> ChangedTrackedFilesOutsideProject( KIGIT_COMMON& aCommon, const wxString& aProjectPath );
 
 /**
  * Record the on-disk identity of the open documents, before an operation that may rewrite
@@ -120,17 +130,21 @@ EDITOR_SNAPSHOT CaptureOpenEditorDocs( KIWAY& aKiway );
 void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore );
 
 /**
- * True when nothing in the project is waiting to be committed. Otherwise tells the user, since
- * an operation that rewrites the working tree would run over that work.
+ * Check the working tree and Git LFS on a worker, then run aReady on the UI thread when the
+ * operation can proceed. Otherwise explain why it is refused. Rechecks unsaved editor changes
+ * and the current session after the read. aQuery belongs to the window starting the action.
  */
-bool ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent );
+void ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent, KIGIT_QUERY& aQuery,
+                                    std::function<void()> aReady );
 
 /**
- * Switch the project to the local branch aBranch, after the user confirms and the open editors
- * are saved. Refused over uncommitted work. On success the editors reload and every git
- * surface is told to refresh. Returns true when the switch happened.
+ * Check the working tree on a worker, then confirm switching to aBranch and save the open
+ * editors. On success the editors reload and every Git surface refreshes. aQuery belongs to
+ * the window starting the action and cancels the continuation when that window closes.
+ * aFinished runs after success or refusal, while the owner still exists.
  */
-bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxString& aBranch );
+void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxString& aBranch, KIGIT_QUERY& aQuery,
+                            std::function<void()> aFinished = {} );
 
 /**
  * Open the diff for a changed file, comparing the committed version at HEAD with the working
@@ -166,18 +180,19 @@ struct GIT_FILE_SIDES
 
 /**
  * Write both sides of one file a commit changed into aWorkspace, the parent's version and the
- * commit's. False, with the error set, when the repository is busy, the commit did not change
- * the file, or a side could not be read.
+ * commit's. False, with the error set, when the commit did not change the file or a side could
+ * not be read. The caller holds the session's action lock and keeps the workspace alive until
+ * the UI has finished using the materialized documents.
  */
-bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
+bool MaterializeCommitFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
                             const wxString& aRelativePath, GIT_FILE_SIDES& aSides );
 
 /**
  * Write the committed version of a file into aWorkspace and name its working copy beside it.
- * False, with the error set, when the repository is busy or the committed side could not be
- * read.
+ * False, with the error set, when the committed side could not be read. The caller holds the
+ * session's action lock and keeps the workspace alive until the UI has loaded its documents.
  */
-bool MaterializeWorkingFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
+bool MaterializeWorkingFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
                              GIT_FILE_SIDES& aSides );
 
 #endif // GIT_STATUS_ENTRIES_H

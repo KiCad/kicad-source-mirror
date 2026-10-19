@@ -32,6 +32,7 @@
 #include <wx/timer.h>
 
 #include <dialogs/git/panel_git_history_base.h>
+#include <dialogs/git/git_transfer.h>
 
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
@@ -51,12 +52,10 @@ public:
     PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
     ~PANEL_GIT_HISTORY() override;
 
-    /// Fill the list from the repository's recent commits, up to the current window. The caller
-    /// holds the git action lock.
+    /// Load the repository's recent commits in the background, up to the current window.
     void Populate();
 
-    /// Offer every branch in the branch filter, keeping the current choice. The caller holds the
-    /// git action lock.
+    /// Offer every branch in the branch filter, keeping the current choice.
     void SetBranches( const std::vector<std::pair<wxString, bool>>& aBranches );
 
     /// Narrow the list to the commits that changed aPath, a file or folder relative to the
@@ -67,8 +66,8 @@ private:
     /// Restart the history at the first window after the search or branch filter changed.
     void reloadHistory();
 
-    /// Refill the list at its current window, or retry shortly if another operation holds the lock.
-    void refresh();
+    /// Apply a loaded history window, keeping the currently selected commit when possible.
+    void fillHistory( const std::vector<KIGIT_COMMIT_INFO>& aCommits, size_t aLimit );
 
     /// The search text and branch the page is narrowed to.
     KIGIT_HISTORY_FILTER historyFilter() const;
@@ -99,10 +98,12 @@ private:
 
     /// Amend the newest, not yet pushed commit's message.
     void onAmendLastCommit();
+    void amendLastCommit( const wxString& aLastMessage, bool aHasIdentity );
 
     /// Restore the project as it was at the given commit, recorded as a new commit on top of
     /// the current head.
     void onRestoreVersion( const wxString& aCommitHash );
+    void restoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix, bool aHasIdentity );
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;
@@ -130,9 +131,12 @@ private:
     /// Emails whose avatar fetch was already started, so each is fetched at most once.
     std::set<wxString> m_avatarRequested;
 
-    /// Re-runs the reload once when it had to skip because another git operation held the
-    /// action lock.
-    wxTimer m_retryTimer;
+    /// Listing and selection have separate requests so choosing a commit does not cancel paging.
+    KIGIT_QUERY m_historyQuery;
+    KIGIT_QUERY m_detailQuery;
+
+    /// Read action preconditions without delaying history selection or scrolling.
+    KIGIT_QUERY m_actionQuery;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
     wxTimer m_historySearchTimer;

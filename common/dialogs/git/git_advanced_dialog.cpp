@@ -48,7 +48,10 @@
 #include <git/kicad_git_common.h>
 #include <kiplatform/ui.h>
 #include <kiway.h>
+#include <pgm_base.h>
 #include <project.h>
+#include <project/project_local_settings.h>
+#include <settings/common_settings.h>
 #include <thread>
 #include <widgets/git_commit_pane.h>
 #include <widgets/ui_common.h>
@@ -82,15 +85,6 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_workingDiff( nullptr )
 {
     m_hash_key = "GitAdvancedDialog";
-
-    m_reloadRetryTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                ReloadPages();
-            },
-            m_reloadRetryTimer.GetId() );
 
     m_book->SetFont( KIUI::GetControlFont( this ) );
 
@@ -284,6 +278,10 @@ void GIT_ADVANCED_DIALOG::CloseForPane( GIT_COMMIT_PANE* aPane )
 
 GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
 {
+    m_reloadQuery.Cancel();
+    m_actionQuery.Cancel();
+    m_fetchQuery.Cancel();
+
     // The panel usually outlives this window, so it must not be left calling into it. When the
     // panel went first it cleared this and dropped the pointer.
     if( m_pane )
@@ -305,12 +303,15 @@ void GIT_ADVANCED_DIALOG::syncListener()
 {
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
 
-    if( m_listenerSession.lock() == common )
-        return;
+    if( m_listenerAttached )
+    {
+        // Pending reads belong to the original session just as much as the displayed rows do.
+        // Never rebind this window and accept an old result into a new project's controls.
+        if( m_listenerSession.lock() != common )
+            SessionStillCurrent();
 
-    // Loading a project replaces the git session, so move the listener to the new one.
-    if( std::shared_ptr<KIGIT_COMMON> previous = m_listenerSession.lock() )
-        previous->RemoveRefreshListener( this );
+        return;
+    }
 
     common->AddRefreshListener( this,
                                 [this]()
@@ -318,6 +319,7 @@ void GIT_ADVANCED_DIALOG::syncListener()
                                     ReloadPages();
                                 } );
     m_listenerSession = common;
+    m_listenerAttached = true;
 }
 
 
@@ -325,21 +327,12 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
 {
     syncListener();
 
-    // Reading the repository takes the shared lock. Retry shortly rather than wait, because the
-    // background fetch can hold it for a network round trip.
-    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    if( !lock.owns_lock() )
-    {
-        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+    if( !SessionStillCurrent() )
         return;
-    }
 
     populateTopBar();
     m_historyPage->Populate();
     m_branchesPage->Populate();
-    m_historyPage->SetBranches( common->GetAllBranches() );
     m_remotesPage->Populate();
     m_stashesPage->Populate();
     m_tagsPage->Populate();
@@ -426,9 +419,10 @@ void GIT_ADVANCED_DIALOG::showWorkingDiff( const wxString& aPath )
     wxString baseLabel = branch.IsEmpty() ? _( "BASE (HEAD)" ) : wxString::Format( _( "BASE (%s)" ), branch );
 
     m_workingDiff->ShowFile(
-            [&]( GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
+            m_parent->Prj().GetGitCommon(),
+            [path = aPath]( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
             {
-                return MaterializeWorkingFile( m_parent, aWorkspace, aPath, aSides );
+                return MaterializeWorkingFile( aCommon, aWorkspace, path, aSides );
             },
             baseLabel, _( "WORKING (changes)" ) );
 
@@ -442,64 +436,93 @@ void GIT_ADVANCED_DIALOG::SwitchToBranch( const wxString& aBranch )
     if( !SessionStillCurrent() )
         return;
 
-    SwitchProjectToBranch( m_parent, this, aBranch );
+    SwitchProjectToBranch( m_parent, this, aBranch, m_actionQuery );
 }
 
 
 void GIT_ADVANCED_DIALOG::populateTopBar()
 {
-    // The caller holds the git action lock.
-    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
-    wxString                      current = common->GetCurrentBranchName();
-    wxFileName                    root = wxFileName::DirName( common->GetGitRootDirectory() );
-
-    m_repoName->SetLabel( root.GetDirs().empty() ? root.GetFullPath() : root.GetDirs().Last() );
-
-    m_branchChoice->Clear();
-
-    // Only a local branch can be checked out from here. Remote ones are on the Branches page.
-    for( const auto& [name, isRemote] : common->GetAllBranches() )
+    struct RESULT
     {
-        if( !isRemote )
-            m_branchChoice->Append( name );
-    }
+        wxString                               current;
+        wxString                               root;
+        std::vector<std::pair<wxString, bool>> branches;
+    };
 
-    m_branchChoice->SetStringSelection( current );
-    m_branchChoice->InvalidateBestSize();
-    Layout();
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    auto                          result = std::make_shared<RESULT>();
+
+    m_reloadQuery.Run(
+            common,
+            [result]( KIGIT_COMMON& aCommon )
+            {
+                result->current = aCommon.GetCurrentBranchName();
+                result->root = aCommon.GetGitRootDirectory();
+                result->branches = aCommon.GetAllBranches();
+            },
+            [this, common, result]()
+            {
+                if( common != m_parent->Prj().GetGitCommon() || common->IsShuttingDown() )
+                    return;
+
+                wxFileName root = wxFileName::DirName( result->root );
+                m_repoName->SetLabel( root.GetDirs().empty() ? root.GetFullPath() : root.GetDirs().Last() );
+                m_branchChoice->Clear();
+
+                // Only a local branch can be checked out here. Remote ones are on the Branches page.
+                for( const auto& [name, isRemote] : result->branches )
+                {
+                    if( !isRemote )
+                        m_branchChoice->Append( name );
+                }
+
+                m_branchChoice->SetStringSelection( result->current );
+                m_historyPage->SetBranches( result->branches );
+                m_branchChoice->InvalidateBestSize();
+                Layout();
+            } );
 }
 
 
 void GIT_ADVANCED_DIALOG::onFetch()
 {
-    if( !SessionStillCurrent() )
+    if( !SessionStillCurrent() || m_fetch.IsBusy() || m_fetchQuery.IsBusy() )
         return;
 
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    auto                          hasRemote = std::make_shared<bool>( false );
 
-    if( !common->GetRepo() )
-        return;
+    m_fetchButton->SetLabel( _( "Fetching..." ) );
+    m_fetchButton->Disable();
+    Layout();
 
-    bool hasRemote = false;
+    m_fetchQuery.Run(
+            common,
+            [hasRemote]( KIGIT_COMMON& aCommon )
+            {
+                *hasRemote = aCommon.HasPushAndPullRemote();
+            },
+            [this, common, hasRemote]()
+            {
+                if( !SessionStillCurrent() )
+                    return;
 
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+                if( !*hasRemote )
+                {
+                    m_fetchButton->SetLabel( _( "Fetch" ) );
+                    m_fetchButton->Enable();
+                    Layout();
+                    DisplayInfoMessage( this, _( "No remote is configured to get changes from." ) );
+                    return;
+                }
 
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, KIGIT::BusyMessage() );
-            return;
-        }
+                startFetch( common );
+            } );
+}
 
-        hasRemote = common->HasPushAndPullRemote();
-    }
 
-    if( !hasRemote )
-    {
-        DisplayInfoMessage( this, _( "No remote is configured to get changes from." ) );
-        return;
-    }
-
+void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
+{
     m_fetchButton->SetLabel( _( "Fetching..." ) );
     m_fetchButton->Disable();
     Layout();
@@ -517,15 +540,16 @@ void GIT_ADVANCED_DIALOG::onFetch()
 
     bool started = m_fetch.Start(
             "git fetch",
-            [common, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
-                common->ClearAuthFailure();
+                aCommon->ClearAuthFailure();
 
-                GIT_PULL_HANDLER handler( common.get() );
+                GIT_PULL_HANDLER handler( aCommon.get() );
                 handler.SetCancelToken( aToken );
+                handler.SetWaitForActionLock( true );
                 outcome->fetched = handler.PerformFetch();
                 outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
-                outcome->authFailure = common->WasAuthFailure();
+                outcome->authFailure = aCommon->WasAuthFailure();
 
                 // This operation's own token, so a fetch that never became active cannot
                 // consume a cancel belonging to the transfer that is running.
@@ -535,14 +559,17 @@ void GIT_ADVANCED_DIALOG::onFetch()
                 if( outcome->fetched && !outcome->cancelled )
                 {
                     KIGIT::CallOnUi(
-                            [common]()
+                            [aCommon]()
                             {
-                                common->NotifyRefreshListeners();
+                                aCommon->NotifyRefreshListeners();
                             } );
                 }
             },
-            [this, common, outcome]()
+            [this, aCommon, outcome]()
             {
+                if( !SessionStillCurrent() )
+                    return;
+
                 m_fetchButton->SetLabel( _( "Fetch" ) );
                 m_fetchButton->Enable();
                 Layout();
@@ -550,7 +577,7 @@ void GIT_ADVANCED_DIALOG::onFetch()
                 if( outcome->cancelled || outcome->fetched )
                     return;
 
-                if( outcome->authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_parent->Prj() ) )
+                if( outcome->authFailure && KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj() ) )
                 {
                     onFetch();
                     return;
@@ -569,17 +596,31 @@ void GIT_ADVANCED_DIALOG::onFetch()
 }
 
 
-bool GIT_ADVANCED_DIALOG::RefuseOverUncommittedWork()
+void GIT_ADVANCED_DIALOG::RefuseOverUncommittedWork( std::function<void()> aReady )
 {
-    return ProjectClearOfUncommittedWork( m_parent, this );
+    if( !SessionStillCurrent() )
+        return;
+
+    ProjectClearOfUncommittedWork( m_parent, this, m_actionQuery,
+                                   [this, aReady]()
+                                   {
+                                       if( SessionStillCurrent() )
+                                           aReady();
+                                   } );
 }
 
 
 bool GIT_ADVANCED_DIALOG::ConfirmWorkingTreeChange()
 {
+    if( !SessionStillCurrent() )
+        return false;
+
     // Save rather than close: this window is parented to the frame hosting the panel, so a close
     // would destroy that frame and this dialog with it, mid-call.
     if( !PrepareEditorsForGitOperation( m_parent, GIT_EDITOR_PREP::WORKING_TREE ) )
+        return false;
+
+    if( !SessionStillCurrent() )
         return false;
 
     m_docsBeforeChange = CaptureOpenEditorDocs( m_parent->Kiway() );
@@ -598,11 +639,22 @@ void GIT_ADVANCED_DIALOG::FinishWorkingTreeChange()
 
 bool GIT_ADVANCED_DIALOG::SessionStillCurrent()
 {
-    // The rows were filled from the previous session. Acting on the new one could delete an
-    // identically named branch, or the same numbered stash, in a project that never showed them.
-    if( m_listenerSession.lock() == m_parent->Prj().GetGitCommon() )
-        return true;
+    if( IsBeingDeleted() || m_parent->IsBeingDeleted() )
+        return false;
 
+    std::shared_ptr<KIGIT_COMMON> session = m_listenerSession.lock();
+
+    if( m_listenerAttached && session && !session->IsShuttingDown() && session == m_parent->Prj().GetGitCommon()
+        && Pgm().GetCommonSettings()->m_Git.enableGit && !m_parent->Prj().GetLocalSettings().m_GitIntegrationDisabled )
+    {
+        return true;
+    }
+
+    // A window and its pending reads belong to the session it opened with. Once it changes,
+    // close rather than act on identically named branches or files in another project.
+    m_reloadQuery.Cancel();
+    m_actionQuery.Cancel();
+    m_fetchQuery.Cancel();
     Close();
     return false;
 }

@@ -19,7 +19,7 @@
 
 #include <dialogs/git/panel_git_tags.h>
 
-#include <mutex>
+#include <memory>
 
 #include <confirm.h>
 #include <dialogs/git/dialog_git_new_tag.h>
@@ -45,26 +45,21 @@ PANEL_GIT_TAGS::PANEL_GIT_TAGS( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog,
     m_tagSashPos = FromDIP( 460 );
     m_tagsSplitter->Unsplit( m_tagDetail );
 
-    m_retryTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-                std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-                if( lock.owns_lock() )
-                    Populate();
-                else
-                    m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-            },
-            m_retryTimer.GetId() );
-
     m_tagsList->Bind( wxEVT_LIST_ITEM_SELECTED,
                       [this]( wxListEvent& aEvent )
                       {
                           if( !m_fillingTags )
                               showTagDetail( m_tagsList->GetItemText( aEvent.GetIndex(), 0 ) );
+                      } );
+
+    m_tagsList->Bind( wxEVT_LIST_ITEM_DESELECTED,
+                      [this]( wxListEvent& )
+                      {
+                          if( !m_fillingTags
+                              && m_tagsList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) == -1 )
+                          {
+                              hideTagDetail();
+                          }
                       } );
 
     m_checkoutTagButton->Bind( wxEVT_BUTTON,
@@ -87,60 +82,81 @@ PANEL_GIT_TAGS::PANEL_GIT_TAGS( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog,
 
 void PANEL_GIT_TAGS::Populate()
 {
-    // The caller holds the git action lock.
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    wxString                      selected = KIGIT::SelectedText( m_tagsList, 0 );
-    long                          selectRow = wxNOT_FOUND;
+    if( !m_dialog->SessionStillCurrent() )
+        return;
 
-    m_fillingTags = true;
-    m_tagsList->DeleteAllItems();
+    m_detailQuery.Cancel();
 
-    for( const KIGIT_TAG_INFO& t : common->GetTags() )
-    {
-        long idx = m_tagsList->InsertItem( m_tagsList->GetItemCount(), t.name );
-        m_tagsList->SetItem( idx, 1, t.hash );
-        m_tagsList->SetItem( idx, 2, KIGIT::RelativeDate( t.when ) );
+    auto tags = std::make_shared<std::vector<KIGIT_TAG_INFO>>();
 
-        if( t.name == selected || ( selected.IsEmpty() && idx == 0 ) )
-            selectRow = idx;
-    }
+    m_listQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [tags]( KIGIT_COMMON& aCommon )
+            {
+                *tags = aCommon.GetTags();
+            },
+            [this, tags]()
+            {
+                if( !m_dialog->SessionStillCurrent() )
+                    return;
 
-    int shown = m_tagsList->GetItemCount();
-    m_tagCount->SetLabel( shown == 1 ? _( "1 tag" ) : wxString::Format( _( "%d tags" ), shown ) );
+                wxString selected = KIGIT::SelectedText( m_tagsList, 0 );
+                long     selectRow = wxNOT_FOUND;
 
-    if( selectRow != wxNOT_FOUND )
-    {
-        m_tagsList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-        fillTagDetail( common->GetTagDetail( m_tagsList->GetItemText( selectRow, 0 ) ) );
-    }
-    else
-    {
-        hideTagDetail();
-    }
+                m_detailQuery.Cancel();
+                m_fillingTags = true;
+                m_tagsList->DeleteAllItems();
 
-    m_fillingTags = false;
+                for( const KIGIT_TAG_INFO& t : *tags )
+                {
+                    long idx = m_tagsList->InsertItem( m_tagsList->GetItemCount(), t.name );
+                    m_tagsList->SetItem( idx, 1, t.hash );
+                    m_tagsList->SetItem( idx, 2, KIGIT::RelativeDate( t.when ) );
+
+                    if( t.name == selected || ( selected.IsEmpty() && idx == 0 ) )
+                        selectRow = idx;
+                }
+
+                int shown = m_tagsList->GetItemCount();
+                m_tagCount->SetLabel( shown == 1 ? _( "1 tag" ) : wxString::Format( _( "%d tags" ), shown ) );
+
+                if( selectRow != wxNOT_FOUND )
+                {
+                    m_tagsList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+                    showTagDetail( m_tagsList->GetItemText( selectRow, 0 ) );
+                }
+                else
+                {
+                    hideTagDetail();
+                }
+
+                m_fillingTags = false;
+            } );
 }
 
 
 void PANEL_GIT_TAGS::showTagDetail( const wxString& aTag )
 {
-    if( aTag.IsEmpty() )
-    {
-        hideTagDetail();
+    hideTagDetail();
+
+    if( aTag.IsEmpty() || !m_dialog->SessionStillCurrent() )
         return;
-    }
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+    auto detail = std::make_shared<KIGIT_TAG_DETAIL>();
 
-    // The reload keeps the selection and fills the pane then.
-    if( !lock.owns_lock() )
-    {
-        m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-        return;
-    }
-
-    fillTagDetail( common->GetTagDetail( aTag ) );
+    m_detailQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [detail, aTag]( KIGIT_COMMON& aCommon )
+            {
+                *detail = aCommon.GetTagDetail( aTag );
+            },
+            [this, detail, aTag]()
+            {
+                if( m_dialog->SessionStillCurrent() && KIGIT::SelectedText( m_tagsList, 0 ) == aTag )
+                {
+                    fillTagDetail( *detail );
+                }
+            } );
 }
 
 
@@ -167,6 +183,7 @@ void PANEL_GIT_TAGS::fillTagDetail( const KIGIT_TAG_DETAIL& aDetail )
 
 void PANEL_GIT_TAGS::hideTagDetail()
 {
+    m_detailQuery.Cancel();
     KIGIT::UnsplitKeepingSash( m_tagsSplitter, m_tagDetail, m_tagSashPos );
 }
 
@@ -203,27 +220,29 @@ void PANEL_GIT_TAGS::onCheckoutTag()
     if( name.IsEmpty() )
         return;
 
-    if( !m_dialog->RefuseOverUncommittedWork() )
-        return;
-
-    if( !IsOK( this, wxString::Format( _( "Check out tag '%s'? This shows an old snapshot of the "
-                                          "project. To keep any commits you make here, create a new "
-                                          "branch before committing. Switching away without one "
-                                          "leaves those commits outside every branch." ),
-                                       name ) ) )
-    {
-        return;
-    }
-
-    if( !m_dialog->ConfirmWorkingTreeChange() )
-        return;
-
-    m_dialog->RunGitAction(
-            [name]( KIGIT_COMMON& aCommon )
+    m_dialog->RefuseOverUncommittedWork(
+            [this, name]()
             {
-                return aCommon.CheckoutTag( name );
-            },
-            wxString::Format( _( "Could not check out tag '%s'." ), name ), /* rewrites working tree */ true );
+                if( !IsOK( this, wxString::Format( _( "Check out tag '%s'? This shows an old snapshot of the "
+                                                      "project. To keep any commits you make here, create a new "
+                                                      "branch before committing. Switching away without one "
+                                                      "leaves those commits outside every branch." ),
+                                                   name ) ) )
+                {
+                    return;
+                }
+
+                if( !m_dialog->ConfirmWorkingTreeChange() )
+                    return;
+
+                m_dialog->RunGitAction(
+                        [name]( KIGIT_COMMON& aCommon )
+                        {
+                            return aCommon.CheckoutTag( name );
+                        },
+                        wxString::Format( _( "Could not check out tag '%s'." ), name ),
+                        /* rewrites working tree */ true );
+            } );
 }
 
 

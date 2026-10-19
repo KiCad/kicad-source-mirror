@@ -19,7 +19,7 @@
 
 #include <dialogs/git/panel_git_remotes.h>
 
-#include <mutex>
+#include <memory>
 
 #include <wx/datetime.h>
 
@@ -46,26 +46,21 @@ PANEL_GIT_REMOTES::PANEL_GIT_REMOTES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_remoteSashPos = FromDIP( 460 );
     m_remotesSplitter->Unsplit( m_remoteDetail );
 
-    m_retryTimer.SetOwner( this );
-    Bind(
-            wxEVT_TIMER,
-            [this]( wxTimerEvent& )
-            {
-                std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-                std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-                if( lock.owns_lock() )
-                    Populate();
-                else
-                    m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-            },
-            m_retryTimer.GetId() );
-
     m_remotesList->Bind( wxEVT_LIST_ITEM_SELECTED,
                          [this]( wxListEvent& aEvent )
                          {
                              if( !m_fillingRemotes )
                                  showRemoteDetail( m_remotesList->GetItemText( aEvent.GetIndex(), 0 ) );
+                         } );
+
+    m_remotesList->Bind( wxEVT_LIST_ITEM_DESELECTED,
+                         [this]( wxListEvent& )
+                         {
+                             if( !m_fillingRemotes
+                                 && m_remotesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) == -1 )
+                             {
+                                 hideRemoteDetail();
+                             }
                          } );
 
     m_editUrlButton->Bind( wxEVT_BUTTON,
@@ -88,38 +83,61 @@ PANEL_GIT_REMOTES::PANEL_GIT_REMOTES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
 void PANEL_GIT_REMOTES::Populate()
 {
-    // The caller holds the git action lock.
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    wxString                      selected = KIGIT::SelectedText( m_remotesList, 0 );
-    long                          selectRow = wxNOT_FOUND;
+    if( !m_dialog->SessionStillCurrent() )
+        return;
 
-    m_fillingRemotes = true;
-    m_remotesList->DeleteAllItems();
-
-    for( const auto& [name, url] : common->GetRemotes() )
+    struct OUTCOME
     {
-        long idx = m_remotesList->InsertItem( m_remotesList->GetItemCount(), name );
-        m_remotesList->SetItem( idx, 1, url );
+        std::vector<std::pair<wxString, wxString>> remotes;
+        wxDateTime                                 fetched;
+    };
 
-        // Keep the selection where it was, or start on the first remote.
-        if( name == selected || ( selected.IsEmpty() && idx == 0 ) )
-            selectRow = idx;
-    }
+    auto outcome = std::make_shared<OUTCOME>();
 
-    int shown = m_remotesList->GetItemCount();
-    m_remoteCount->SetLabel( shown == 1 ? _( "1 remote" ) : wxString::Format( _( "%d remotes" ), shown ) );
+    m_listQuery.Run(
+            m_frame->Prj().GetGitCommon(),
+            [outcome]( KIGIT_COMMON& aCommon )
+            {
+                outcome->remotes = aCommon.GetRemotes();
+                outcome->fetched = aCommon.GetLastFetchTime();
+            },
+            [this, outcome]()
+            {
+                if( !m_dialog->SessionStillCurrent() )
+                    return;
 
-    if( selectRow != wxNOT_FOUND )
-    {
-        m_remotesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-        fillRemoteDetail( m_remotesList->GetItemText( selectRow, 0 ), common->GetLastFetchTime() );
-    }
-    else
-    {
-        hideRemoteDetail();
-    }
+                wxString selected = KIGIT::SelectedText( m_remotesList, 0 );
+                long     selectRow = wxNOT_FOUND;
 
-    m_fillingRemotes = false;
+                m_fillingRemotes = true;
+                m_remotesList->DeleteAllItems();
+                m_lastFetched = outcome->fetched;
+
+                for( const auto& [name, url] : outcome->remotes )
+                {
+                    long idx = m_remotesList->InsertItem( m_remotesList->GetItemCount(), name );
+                    m_remotesList->SetItem( idx, 1, url );
+
+                    // Keep the selection where it was, or start on the first remote.
+                    if( name == selected || ( selected.IsEmpty() && idx == 0 ) )
+                        selectRow = idx;
+                }
+
+                int shown = m_remotesList->GetItemCount();
+                m_remoteCount->SetLabel( shown == 1 ? _( "1 remote" ) : wxString::Format( _( "%d remotes" ), shown ) );
+
+                if( selectRow != wxNOT_FOUND )
+                {
+                    m_remotesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+                    showRemoteDetail( m_remotesList->GetItemText( selectRow, 0 ) );
+                }
+                else
+                {
+                    hideRemoteDetail();
+                }
+
+                m_fillingRemotes = false;
+            } );
 }
 
 
@@ -131,17 +149,8 @@ void PANEL_GIT_REMOTES::showRemoteDetail( const wxString& aRemote )
         return;
     }
 
-    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-    std::unique_lock<std::mutex>  lock = common->TryLockAction();
-
-    // The reload keeps the selection and fills the pane then.
-    if( !lock.owns_lock() )
-    {
-        m_retryTimer.Start( 1000, wxTIMER_ONE_SHOT );
-        return;
-    }
-
-    fillRemoteDetail( aRemote, common->GetLastFetchTime() );
+    // FETCH_HEAD belongs to the repository, so every remote shares the listing's timestamp.
+    fillRemoteDetail( aRemote, m_lastFetched );
 }
 
 

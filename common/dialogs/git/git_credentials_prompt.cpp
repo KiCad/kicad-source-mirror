@@ -70,26 +70,22 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
 }
 
 
-bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon )
+bool KIGIT::HasGitIdentity( KIGIT_COMMON& aCommon )
 {
-    if( !aCommon || !aCommon->GetRepo() )
+    if( !aCommon.GetRepo() )
+        return false;
+
+    git_signature* signature = nullptr;
+    int            result = git_signature_default( &signature, aCommon.GetRepo() );
+    git_signature_free( signature );
+    return result == GIT_OK;
+}
+
+
+bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon, bool aHasIdentity )
+{
+    if( !aCommon || !aCommon->GetRepo() || aHasIdentity )
         return true;
-
-    {
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
-
-        // Contended means another operation is running, and the caller's own will report it.
-        if( !lock.owns_lock() )
-            return true;
-
-        git_signature* sig = nullptr;
-
-        if( git_signature_default( &sig, aCommon->GetRepo() ) == GIT_OK )
-        {
-            git_signature_free( sig );
-            return true;
-        }
-    }
 
     wxString name = wxGetUserName();
     wxString email;
