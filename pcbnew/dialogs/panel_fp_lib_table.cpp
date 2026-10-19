@@ -761,10 +761,10 @@ void PANEL_FP_LIB_TABLE::onNotebookPageCloseRequest( wxAuiNotebookEvent& aEvent 
 
     if( LIB_TABLE_NOTEBOOK_PANEL* panel = dynamic_cast<LIB_TABLE_NOTEBOOK_PANEL*>( page ) )
     {
-        if( panel->GetClosable() )
+        if( panel->GetClosable() && panel->GetCanClose() )
         {
-            if( !panel->GetCanClose() )
-                aEvent.Veto();
+            m_parent->m_ProjectTableChanged = true;
+            m_parent->m_GlobalTableChanged = true;
         }
         else
         {
@@ -931,7 +931,12 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
         LIB_TABLE_NOTEBOOK_PANEL* panel = static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( ii ) );
 
         if( panel->TableModified() )
+        {
             success &= panel->SaveTable();
+
+            m_parent->m_ProjectTableChanged = true;
+            m_parent->m_GlobalTableChanged = true;
+        }
     }
 
     m_suppressNotebookPageEvents = success;
