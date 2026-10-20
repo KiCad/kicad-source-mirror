@@ -43,6 +43,8 @@ protected:
     bool TryBefore( wxEvent& aEvent ) override;
     bool Show( bool show ) override;
 
+    void advanceSelection();
+
 protected:
     bool      m_tabState;
     bool      m_receivingEvents;

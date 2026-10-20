@@ -18,6 +18,7 @@
  */
 
 #include <dialogs/eda_view_switcher.h>
+#include <kiplatform/ui.h>
 
 #include <wx/utils.h>
 
@@ -41,6 +42,10 @@ EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aI
 {
     m_listBox->InsertItems( aItems, 0 );
     m_listBox->SetSelection( std::min( 0, (int) m_listBox->GetCount() - 1 ) );
+
+    // Without key state polling the tab press that opened the switcher is never seen, so count it now.
+    if( !KIPLATFORM::UI::SupportsKeyState() )
+        advanceSelection();
 
     int width = 0;
     int height = 0;
@@ -96,6 +101,20 @@ bool EDA_VIEW_SWITCHER::Show( bool aShow )
 }
 
 
+void EDA_VIEW_SWITCHER::advanceSelection()
+{
+    int count = (int) m_listBox->GetCount();
+
+    if( count == 0 )
+        return;
+
+    bool backward = wxGetKeyState( WXK_SHIFT ) && m_ctrlKey != WXK_SHIFT;
+    int  idx = m_listBox->GetSelection() + ( backward ? -1 : 1 );
+
+    m_listBox->SetSelection( ( idx + count ) % count );
+}
+
+
 // OK, this is *really* annoying, but wxWidgets doesn't give us key-down events while the
 // control key is being held down.  So we can't use OnKeyDown() or OnCharHook() and instead
 // must rely on watching key states in TryBefore().
@@ -105,6 +124,9 @@ bool EDA_VIEW_SWITCHER::Show( bool aShow )
 //
 // So we have to keep a state machine of the tab key.
 //
+// wxGetKeyState() cannot query non-modifier keys on Wayland, but char hook events do arrive there
+// with the control key held, so tab and escape come from those events instead.
+//
 bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
 {
     if( !m_receivingEvents )
@@ -112,28 +134,36 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
         return DIALOG_SHIM::TryBefore( aEvent );
     }
 
+    if( !KIPLATFORM::UI::SupportsKeyState() )
+    {
+        if( aEvent.GetEventType() == wxEVT_CHAR_HOOK )
+        {
+            int keyCode = static_cast<wxKeyEvent&>( aEvent ).GetKeyCode();
+
+            if( keyCode == WXK_TAB )
+            {
+                advanceSelection();
+                return true;
+            }
+
+            if( keyCode == WXK_ESCAPE )
+            {
+                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL ) );
+                return true;
+            }
+        }
+
+        if( !wxGetKeyState( m_ctrlKey ) )
+            wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+
+        return DIALOG_SHIM::TryBefore( aEvent );
+    }
+
     // Check for tab key leading edge
     if( !m_tabState && wxGetKeyState( WXK_TAB ) )
     {
         m_tabState = true;
-
-        int idx = m_listBox->GetSelection();
-
-        if( wxGetKeyState( WXK_SHIFT ) && m_ctrlKey != WXK_SHIFT )
-        {
-            if( --idx < 0 )
-                m_listBox->SetSelection( (int) m_listBox->GetCount() - 1 );
-            else
-                m_listBox->SetSelection( idx );
-        }
-        else
-        {
-            if( ++idx >= (int) m_listBox->GetCount() )
-                m_listBox->SetSelection( 0 );
-            else
-                m_listBox->SetSelection( idx );
-        }
-
+        advanceSelection();
         return true;
     }
 
