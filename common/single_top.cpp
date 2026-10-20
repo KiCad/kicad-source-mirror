@@ -88,6 +88,8 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
         GetKiCadThreadPool().purge();
         GetKiCadThreadPool().wait();
 
+        // Library preloads aren't in the threadpool, but KIWAY::OnKifaceEnd() will cancel them
+
         Kiway.OnKiwayEnd();
 
         m_api_server.reset();
