@@ -823,6 +823,28 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::ParseSymbol( const wxString& aSy
 
             lt_symbol.Windows.push_back( window );
         }
+        else if( element == "TEXT" )
+        {
+            aggregateAttributeValue( tokens, 5 );
+
+            tokensSizeRangeCheck( tokens.size(), 6, INT_MAX, lineNumber, aSymbolName );
+
+            wxString positionX = tokens[1];
+            wxString positionY = tokens[2];
+            wxString justification = tokens[3];
+            wxString fontSize = tokens[4];
+            wxString value = tokens[5];
+
+            TEXT text;
+            text.Offset = pointCheck( positionX, positionY, lineNumber, aSymbolName );
+            text.Justification = getTextJustification( justification );
+            text.FontSize = integerCheck( fontSize, lineNumber, aSymbolName );
+            text.Value = value;
+
+            text.Value.Replace( wxS( "\\n" ), wxS( "\n" ) );
+
+            lt_symbol.Texts.push_back( text );
+        }
         else if( element == "SYMATTR" )
         {
             aggregateAttributeValue( tokens, 2 );

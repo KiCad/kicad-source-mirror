@@ -125,9 +125,9 @@ public:
     void CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol, LIB_SYMBOL* aLibSymbol );
 
     /**
-     * Rotate and mirror a shape according to LTspice symbol flags.
+     * Rotate and mirror an item according to LTspice symbol flags.
      */
-    void RotateMirrorShape( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SHAPE* aShape );
+    void RotateMirrorItem( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_ITEM* aItem );
 
     /**
      * Rotate and mirror a point according to LTspice symbol flags.
@@ -226,6 +226,11 @@ public:
      * Create a symbol circle from LTspice symbol data.
      */
     void CreateSymCircle( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aCircle );
+
+    /**
+     * Create a symbol text from LTspice symbol data.
+     */
+    void CreateSymText( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_TEXT* aText );
 
 private:
     int getLineWidth( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth );
