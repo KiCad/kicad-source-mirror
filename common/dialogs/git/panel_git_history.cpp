@@ -443,11 +443,18 @@ PANEL_GIT_HISTORY::PANEL_GIT_HISTORY( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_commitFiles->Bind( wxEVT_LIST_ITEM_RIGHT_CLICK,
                          [this]( wxListEvent& aEvent )
                          {
+                             // Read before the menu, which runs an event loop of its own in
+                             // which a refresh can rebuild the list and retire the row.
+                             wxString path = m_commitFiles->GetItemText( aEvent.GetIndex(), 0 );
+
+                             if( path.IsEmpty() )
+                                 return;
+
                              wxMenu menu;
                              menu.Append( 1, _( "Show History for This File" ) );
 
                              if( GetPopupMenuSelectionFromUser( menu ) == 1 )
-                                 ShowHistoryForFile( m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
+                                 ShowHistoryForFile( path );
                          } );
 
     // Double-clicking opens the full comparison window for it.
