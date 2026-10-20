@@ -107,22 +107,6 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     m_modelZonesOverview->SetLayerFilter( UNDEFINED_LAYER );
     m_layerFilter->SetSelection( 0 );
 
-    m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(), m_viewZonesOverview->GetSelection() );
-
-    if( m_modelZonesOverview->GetCount() )
-        SelectZoneTableItem( m_modelZonesOverview->GetItem( 0 ) );
-    else
-        m_panelZoneProperties->SetZone( nullptr );
-
-    // Control values set before the dialog is shown may not render, so re-apply them once
-    // it is on screen (issue 24797).
-    CallAfter(
-            [this]()
-            {
-                if( m_panelZoneProperties->GetZone() )
-                    m_panelZoneProperties->TransferZoneSettingsToWindow();
-            } );
-
     Layout();
     m_MainBoxSizer->Fit( this );
     finishDialogSettings();
@@ -143,14 +127,13 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     Bind( wxEVT_CHECKBOX, &DIALOG_ZONE_MANAGER::OnCheckBoxClicked, this );
     Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIdle, this );
     Bind( wxEVT_CHAR_HOOK, &DIALOG_ZONE_MANAGER::OnDialogCharHook, this );
-    Bind(
-            wxEVT_BOOKCTRL_PAGE_CHANGED,
-            [this]( wxNotebookEvent& aEvent )
-            {
-                Layout();
-                SelectZoneOnCanvas( m_panelZoneProperties->GetZone(), m_zonePreviewNotebook->GetCurrentLayer() );
-            },
-            m_zonePreviewNotebook->GetId() );
+    Bind( wxEVT_BOOKCTRL_PAGE_CHANGED,
+          [this]( wxNotebookEvent& aEvent )
+          {
+              Layout();
+              SelectZoneOnCanvas( m_panelZoneProperties->GetZone(), m_zonePreviewNotebook->GetCurrentLayer() );
+          },
+          m_zonePreviewNotebook->GetId() );
 
     m_canvasSelectReady = true;
 }
@@ -161,6 +144,22 @@ DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
 
 bool DIALOG_ZONE_MANAGER::TransferDataToWindow()
 {
+    m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(), m_viewZonesOverview->GetSelection() );
+
+    if( m_modelZonesOverview->GetCount() )
+        SelectZoneTableItem( m_modelZonesOverview->GetItem( 0 ) );
+    else
+        m_panelZoneProperties->SetZone( nullptr );
+
+    // Control values set before the dialog is shown may not render, so re-apply them once
+    // it is on screen (issue 24797).
+    CallAfter(
+            [this]()
+            {
+                if( m_panelZoneProperties->GetZone() )
+                    m_panelZoneProperties->TransferZoneSettingsToWindow();
+            } );
+
     return true;
 }
 
