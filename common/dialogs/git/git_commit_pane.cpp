@@ -544,8 +544,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
     populateBranches( aStatus );
     populateRecentMessages( aStatus.recentMessages );
 
-    // Edits still only in an editor's memory are not in the git status yet, but the commit flow
-    // saves the editors first, so they are committable and the controls must allow it.
+    // Allow saving unsaved editor changes for review even when no files are listed yet.
     m_editorsDirty = aStatus.hasRepo && DocumentEditorsDirty( m_frame->Kiway() );
 
     // Amending is offered only while the last commit has not been pushed, so an already
@@ -611,7 +610,8 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
             setStatusText( _( "This project is not under version control. To set it up, right click "
                               "the project in the project manager and choose Version Control." ) );
         else if( m_editorsDirty )
-            setStatusText( _( "The open editors have unsaved changes. Committing saves them first." ) );
+            setStatusText( _( "The open editors have unsaved changes. Save them to review the files "
+                              "before committing." ) );
         else if( m_upstreamAhead )
             setStatusText( _( "The tracked branch has changes this project does not. Get Changes brings them in." ) );
         else if( m_hasUnpushedCommits )
@@ -872,8 +872,7 @@ void GIT_COMMIT_PANE::updateCommitButton()
     }
     else if( hasCheckedChanges || m_editorsDirty )
     {
-        // Unsaved editor changes count because the commit flow saves them first, then commits
-        // what the save produced.
+        // The commit button also starts saving unsaved editor changes for review.
         mainEnabled = hasMessage && hasBranchName;
         menuEnabled = hasMessage && hasBranchName;
 
@@ -1629,16 +1628,13 @@ struct GIT_COMMIT_PANE::COMMIT_REQUEST
     bool                          newBranch = false;
     bool                          andPush = false;
     bool                          signOff = false;
-    bool                          darkTheme = false;
     wxString                      displayedBranch;
     wxString                      branchName;
     wxString                      summary;
     wxString                      description;
-    wxString                      projectPath;
     wxString                      lfsMessage;
     wxString                      amendRefusal;
     std::vector<wxString>         files;
-    std::set<wxString>            beforeSave;
     std::pair<wxString, wxString> head;
 };
 
@@ -1665,8 +1661,8 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
     std::vector<wxString> files = m_checklist->GetCheckedPaths();
 
-    // Unsaved editor changes still count, because the save below produces files the rescan
-    // picks up. With local commits waiting the button reads "Push".
+    // Unsaved editor changes can be saved for review. With only local commits waiting,
+    // the button reads "Push".
     if( files.empty() && !amend && !DocumentEditorsDirty( m_frame->Kiway() ) )
     {
         if( !aAndPush || !m_hasUnpushedCommits )
@@ -1687,11 +1683,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     request->summary = m_summary->GetValue();
     request->description = m_description->GetValue();
     request->files = std::move( files );
-    request->projectPath = m_frame->Prj().GetProjectPath();
-    request->darkTheme = KIPLATFORM::UI::IsDarkTheme();
 
-    // Snapshot immediately before saving. Using the last displayed status could sweep files
-    // the user never saw into the commit when the editors save.
     runActionQuery(
             common,
             [request]( KIGIT_COMMON& aCommon )
@@ -1703,12 +1695,6 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
                 request->identity = KIGIT::ReadGitIdentity( aCommon );
                 request->lfsMessage = KIGIT::PROJECT_GIT_UTILS::LfsRefusal( &aCommon );
-
-                for( const FILE_CHECKLIST_ENTRY& entry :
-                     BuildGitChangeEntries( aCommon, request->projectPath, request->darkTheme ) )
-                {
-                    request->beforeSave.insert( entry.path );
-                }
             },
             [this, common, request]()
             {
@@ -1750,38 +1736,14 @@ void GIT_COMMIT_PANE::saveForCommit( std::shared_ptr<KIGIT_COMMON> aCommon, std:
     if( aCommon != m_frame->Prj().GetGitCommon() || aCommon->IsShuttingDown() )
         return;
 
-    // Commit Anyway approves only the selected files. Nothing was saved to discover here.
-    if( !saved )
+    if( saved )
     {
-        finishCommit( aCommon, *aRequest );
+        // Saving can change which files belong in the commit. Show them before committing.
+        aCommon->NotifyRefreshListeners();
         return;
     }
 
-    // Saving can create design changes that were only in editor memory. Local settings are
-    // absent because saving itself dirties them, without an edit by the user.
-    runActionQuery(
-            aCommon,
-            [aRequest]( KIGIT_COMMON& aSession )
-            {
-                std::set<wxString> already( aRequest->files.begin(), aRequest->files.end() );
-
-                for( const FILE_CHECKLIST_ENTRY& entry :
-                     BuildGitChangeEntries( aSession, aRequest->projectPath, aRequest->darkTheme ) )
-                {
-                    wxString ext = wxFileName( entry.path ).GetExt();
-                    bool     document = ext.CmpNoCase( FILEEXT::KiCadSchematicFileExtension ) == 0
-                                        || ext.CmpNoCase( FILEEXT::KiCadPcbFileExtension ) == 0
-                                        || ext.CmpNoCase( FILEEXT::ProjectFileExtension ) == 0;
-
-                    if( document && !aRequest->beforeSave.count( entry.path ) && already.insert( entry.path ).second )
-                        aRequest->files.push_back( entry.path );
-                }
-            },
-            [this, aCommon, aRequest]()
-            {
-                finishCommit( aCommon, *aRequest );
-            },
-            _( "Checking saved changes..." ) );
+    finishCommit( aCommon, *aRequest );
 }
 
 

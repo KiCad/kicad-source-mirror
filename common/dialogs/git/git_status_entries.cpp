@@ -796,7 +796,7 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
         else
         {
             message = wxString::Format( _( "The following editors have unsaved changes:%s\n\n"
-                                           "Save them before committing?" ),
+                                           "Save them and review the updated file list before committing?" ),
                                         listed );
             style |= wxYES_NO | wxCANCEL;
         }
@@ -806,7 +806,7 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
         if( aPurpose == GIT_EDITOR_PREP::WORKING_TREE )
             dlg.SetYesNoLabels( _( "&Save and Continue" ), _( "Cancel" ) );
         else
-            dlg.SetYesNoCancelLabels( _( "&Save and Commit" ), _( "Commit &Anyway" ), _( "Cancel" ) );
+            dlg.SetYesNoCancelLabels( _( "&Save and Review" ), _( "Commit &Anyway" ), _( "Cancel" ) );
 
         int answer = dlg.ShowModal();
 
