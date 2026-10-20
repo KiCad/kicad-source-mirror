@@ -148,7 +148,9 @@ public:
     static std::optional<wxString> ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath );
 
     /// Whether git routes @p aPath through the Git LFS filter.
-    static bool PathUsesGitLfs( git_repository* aRepo, const wxString& aPath );
+    /// aCommit reads the attributes that commit carries rather than the ones in hand, for
+    /// judging a version before it is checked out.
+    static bool PathUsesGitLfs( git_repository* aRepo, const wxString& aPath, const git_oid* aCommit = nullptr );
 
     /**
      * Whether any committed file in the project's folder goes through Git LFS.
@@ -156,7 +158,8 @@ public:
      * libgit2 runs no filter program, so every operation that writes such a file writes the
      * placeholder text instead of the file. @p aExample receives the first one found.
      */
-    static bool ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString* aExample = nullptr );
+    static bool ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString* aExample = nullptr,
+                                   const git_oid* aCommit = nullptr );
 
     /**
      * Return a refusal message for LFS files or an unknown project folder, otherwise empty.

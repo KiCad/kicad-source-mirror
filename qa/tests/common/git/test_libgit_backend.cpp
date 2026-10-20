@@ -372,6 +372,58 @@ BOOST_AUTO_TEST_CASE( FetchHeadMarksAtMostOneBranchToMerge )
 }
 
 
+// KiCad cannot read or write Git LFS, so an operation that would put a pointer file where a
+// design file belongs is refused. The remote can start using LFS at any time, so the commit
+// being merged has to be judged, not the one already held.
+BOOST_AUTO_TEST_CASE( PerformPull_RefusesACommitThatBringsGitLfs )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+    BOOST_REQUIRE( addOrigin( repo ) );
+    BOOST_REQUIRE( setUpstreamConfig( repo, wxT( "master" ) ) );
+
+    // The remote starts keeping design files in LFS, and moves master on to that commit.
+    {
+        git_repository* bare = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &bare, remotePath().ToUTF8().data() ), GIT_OK );
+        KIGIT::GitRepositoryPtr barePtr( bare );
+
+        git_oid base;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &base, bare, "refs/heads/master" ), GIT_OK );
+
+        git_oid attrs = createDetachedCommit( bare, base, wxT( ".gitattributes" ), "*.kicad_pcb filter=lfs -text\n",
+                                              "Track boards with LFS" );
+
+        git_oid board =
+                createDetachedCommit( bare, attrs, wxT( "board.kicad_pcb" ),
+                                      "version https://git-lfs.github.com/spec/v1\n"
+                                      "oid sha256:0000000000000000000000000000000000000000000000000000000000000000\n"
+                                      "size 1\n",
+                                      "Add the board" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, bare, "refs/heads/master", &board, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+    }
+
+    KIGIT_COMMON     common( repo, repoPath() );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_MESSAGE( result != PullResult::Success && result != PullResult::FastForward,
+                         "the pull should refuse a commit that brings Git LFS in" );
+    BOOST_CHECK_MESSAGE( handler.GetErrorString().Upper().Contains( wxS( "LFS" ) ),
+                         "the refusal should name Git LFS, got: " + handler.GetErrorString().ToStdString() );
+
+    // Above all, the pointer text must not have been written where the board belongs.
+    BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "board.kicad_pcb" ) ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
 {
     const wxString project = wxT( "/repo/proj/" );

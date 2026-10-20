@@ -1855,6 +1855,22 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
         return PullResult::Error;
     }
 
+    // KiCad runs no filter program, so merging a version that keeps design files in Git LFS
+    // would put pointer text where the design belongs. Judged before anything is written.
+    if( KIGIT_COMMON* common = aHandler->GetCommon() )
+    {
+        wxString example;
+
+        if( KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( *common, &example, &pull_merge_oid ) )
+        {
+            aHandler->AddErrorString( wxString::Format(
+                    _( "The changes being fetched keep '%s' in Git LFS, which KiCad cannot read or write. "
+                       "Use git on the command line for this repository." ),
+                    example ) );
+            return PullResult::Error;
+        }
+    }
+
     git_annotated_commit* fetchhead_commit;
 
     if( git_annotated_commit_lookup( &fetchhead_commit, aHandler->GetRepo(), &pull_merge_oid ) )

@@ -289,14 +289,23 @@ std::optional<wxString> PROJECT_GIT_UTILS::ProjectPrefix( const wxString& aWorkD
 }
 
 
-bool PROJECT_GIT_UTILS::PathUsesGitLfs( git_repository* aRepo, const wxString& aPath )
+bool PROJECT_GIT_UTILS::PathUsesGitLfs( git_repository* aRepo, const wxString& aPath, const git_oid* aCommit )
 {
     if( !aRepo || aPath.IsEmpty() )
         return false;
 
-    const char* value = nullptr;
+    const char*      value = nullptr;
+    git_attr_options opts = GIT_ATTR_OPTIONS_INIT;
+    opts.flags = GIT_ATTR_CHECK_INDEX_THEN_FILE;
 
-    if( git_attr_get( &value, aRepo, GIT_ATTR_CHECK_INDEX_THEN_FILE, aPath.utf8_string().c_str(), "filter" ) != GIT_OK )
+    if( aCommit )
+    {
+        // The rules a version carries decide what its own files are, whatever is in hand.
+        opts.flags |= GIT_ATTR_CHECK_INCLUDE_COMMIT;
+        git_oid_cpy( &opts.attr_commit_id, aCommit );
+    }
+
+    if( git_attr_get_ext( &value, aRepo, &opts, aPath.utf8_string().c_str(), "filter" ) != GIT_OK )
     {
         return false;
     }
@@ -313,6 +322,7 @@ namespace
         git_repository* repo;
         std::string     prefix;
         wxString        example;
+        const git_oid*  commit = nullptr;
     };
 
 
@@ -341,7 +351,7 @@ namespace
         if( path.compare( 0, walk->prefix.length(), walk->prefix ) != 0 )
             return 0;
 
-        if( PROJECT_GIT_UTILS::PathUsesGitLfs( walk->repo, wxString::FromUTF8( path.c_str() ) ) )
+        if( PROJECT_GIT_UTILS::PathUsesGitLfs( walk->repo, wxString::FromUTF8( path.c_str() ), walk->commit ) )
         {
             walk->example = wxString::FromUTF8( path.c_str() );
             return -1;
@@ -375,7 +385,7 @@ wxString PROJECT_GIT_UTILS::LfsRefusal( KIGIT_COMMON* aCommon )
 }
 
 
-bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString* aExample )
+bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString* aExample, const git_oid* aCommit )
 {
     const std::optional<wxString> prefix = aCommon.GetProjectPrefix();
 
@@ -383,24 +393,26 @@ bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( const KIGIT_COMMON& aCommon, wxString
         return false;
 
     git_repository* repo = aCommon.GetRepo();
-    git_oid headOid;
+    git_oid         commitOid;
 
-    if( git_reference_name_to_id( &headOid, repo, "HEAD" ) != GIT_OK )
+    if( aCommit )
+        git_oid_cpy( &commitOid, aCommit );
+    else if( git_reference_name_to_id( &commitOid, repo, "HEAD" ) != GIT_OK )
         return false;
 
-    git_commit* head = nullptr;
+    git_commit* commit = nullptr;
 
-    if( git_commit_lookup( &head, repo, &headOid ) != GIT_OK )
+    if( git_commit_lookup( &commit, repo, &commitOid ) != GIT_OK )
         return false;
 
-    KIGIT::GitCommitPtr headPtr( head );
+    KIGIT::GitCommitPtr commitPtr( commit );
     git_tree*           tree = nullptr;
 
-    if( git_commit_tree( &tree, head ) != GIT_OK )
+    if( git_commit_tree( &tree, commit ) != GIT_OK )
         return false;
 
     KIGIT::GitTreePtr treePtr( tree );
-    LFS_WALK          walk{ repo, prefix->utf8_string(), wxEmptyString };
+    LFS_WALK          walk{ repo, prefix->utf8_string(), wxEmptyString, aCommit };
 
     git_tree_walk( tree, GIT_TREEWALK_PRE, lfsWalkEntry, &walk );
 
