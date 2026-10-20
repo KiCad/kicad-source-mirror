@@ -106,6 +106,10 @@ public:
     /// Path of the file row for aItem, or empty for a section header or invalid item.
     wxString GetItemPath( const wxDataViewItem& aItem ) const;
 
+    /// WX_DATAVIEWCTRL drops tooltips for every data view it is the base of. This one shows
+    /// the tooltip its owner sets.
+    void DoSetToolTipText( const wxString& aTip ) override { wxDataViewCtrl::DoSetToolTipText( aTip ); }
+
 private:
     wxObjectDataPtr<FILE_CHECKLIST_MODEL> m_model;
 };
