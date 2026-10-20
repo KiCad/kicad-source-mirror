@@ -1422,14 +1422,8 @@ bool KIGIT_COMMON::IsHeadUnborn() const
 
 bool KIGIT_COMMON::StartUnbornBranch( const wxString& aName )
 {
-    if( !m_repo || aName.IsEmpty() || !IsHeadUnborn() )
-        return false;
-
-    // Pointing HEAD at a name does not check it the way creating a branch does, so a name git
-    // would refuse has to be caught here.
-    int valid = 0;
-
-    if( git_branch_name_is_valid( &valid, aName.utf8_string().c_str() ) != GIT_OK || !valid )
+    // Pointing HEAD at a name does not check it the way creating a branch does.
+    if( !m_repo || !IsHeadUnborn() || !KIGIT::BranchNameError( aName ).IsEmpty() )
         return false;
 
     wxString ref = wxS( "refs/heads/" ) + aName;
@@ -1440,7 +1434,7 @@ bool KIGIT_COMMON::StartUnbornBranch( const wxString& aName )
 
 bool KIGIT_COMMON::CreateBranch( const wxString& aName, const wxString& aFrom )
 {
-    if( !m_repo || aName.IsEmpty() )
+    if( !m_repo || !KIGIT::BranchNameError( aName ).IsEmpty() )
         return false;
 
     return GetGitBackend()->CreateBranch( m_repo, aName, aFrom ) == 0;
@@ -2550,6 +2544,34 @@ void CollectDiffDeltas( git_diff*                                           aDif
 
         aCallback( *delta );
     }
+}
+
+
+wxString BranchNameError( const wxString& aName )
+{
+    if( aName.IsEmpty() )
+        return _( "Enter a name for the branch." );
+
+    // git refuses all of these, but says so in its own words. Name them while the user can
+    // still fix the name.
+    if( aName.Contains( wxS( " " ) ) )
+        return _( "A branch name cannot contain spaces." );
+
+    if( aName.StartsWith( wxS( "-" ) ) )
+        return _( "A branch name cannot start with a dash." );
+
+    if( aName.Contains( wxS( ".." ) ) )
+        return _( "A branch name cannot contain two dots in a row." );
+
+    if( aName.EndsWith( wxS( "/" ) ) )
+        return _( "A branch name cannot end with a slash." );
+
+    int valid = 0;
+
+    if( git_branch_name_is_valid( &valid, aName.utf8_string().c_str() ) != GIT_OK || !valid )
+        return wxString::Format( _( "'%s' is not a valid branch name." ), aName );
+
+    return wxEmptyString;
 }
 
 

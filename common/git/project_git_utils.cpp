@@ -52,7 +52,7 @@ int PROJECT_GIT_UTILS::CreateBranch( git_repository* aRepo, const wxString& aBra
 {
     GIT_BACKEND* backend = GetGitBackend();
 
-    if( !backend )
+    if( !backend || !KIGIT::BranchNameError( aBranchName ).IsEmpty() )
         return -1;
 
     return backend->CreateBranch( aRepo, aBranchName, wxEmptyString );

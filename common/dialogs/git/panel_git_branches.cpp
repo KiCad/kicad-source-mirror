@@ -289,10 +289,21 @@ void PANEL_GIT_BRANCHES::onNewBranch()
     wxString from = KIGIT::SelectedText( m_branchesList, 0 );
     wxString prompt =
             from.IsEmpty() ? _( "New branch name:" ) : wxString::Format( _( "New branch from '%s', name:" ), from );
-    wxString name = wxGetTextFromUser( prompt, _( "New Branch" ), wxEmptyString, this );
+    wxString name;
+    wxString nameError;
 
-    if( name.IsEmpty() )
-        return;
+    do
+    {
+        if( !nameError.IsEmpty() )
+            DisplayErrorMessage( this, nameError );
+
+        name = wxGetTextFromUser( prompt, _( "New Branch" ), name, this );
+
+        if( name.IsEmpty() || !m_dialog->SessionStillCurrent() )
+            return;
+
+        nameError = KIGIT::BranchNameError( name );
+    } while( !nameError.IsEmpty() );
 
     m_dialog->RunGitAction(
             [name, from]( KIGIT_COMMON& aCommon )

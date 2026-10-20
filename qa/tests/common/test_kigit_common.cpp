@@ -822,6 +822,39 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
 }
 
 
+// A branch name the user typed is checked before git sees it, so the refusal names the
+// mistake instead of quoting libgit2.
+BOOST_AUTO_TEST_CASE( BranchNameErrorNamesTheMistake )
+{
+    BOOST_CHECK( KIGIT::BranchNameError( wxS( "feature/new-thing" ) ).IsEmpty() );
+    BOOST_CHECK( KIGIT::BranchNameError( wxS( "fix_25074" ) ).IsEmpty() );
+
+    BOOST_CHECK( !KIGIT::BranchNameError( wxEmptyString ).IsEmpty() );
+    BOOST_CHECK( KIGIT::BranchNameError( wxS( "two words" ) ).Contains( wxS( "spaces" ) ) );
+    BOOST_CHECK( KIGIT::BranchNameError( wxS( "-lead" ) ).Contains( wxS( "dash" ) ) );
+    BOOST_CHECK( KIGIT::BranchNameError( wxS( "a..b" ) ).Contains( wxS( "dots" ) ) );
+    BOOST_CHECK( KIGIT::BranchNameError( wxS( "trailing/" ) ).Contains( wxS( "slash" ) ) );
+
+    // Caught by git itself rather than by a named rule.
+    BOOST_CHECK( !KIGIT::BranchNameError( wxS( "with~tilde" ) ).IsEmpty() );
+    BOOST_CHECK( !KIGIT::BranchNameError( wxS( "with:colon" ) ).IsEmpty() );
+    BOOST_CHECK( !KIGIT::BranchNameError( wxS( "ends.lock" ) ).IsEmpty() );
+}
+
+
+// The check belongs to branch creation, not to the one dialog that prompts for a name.
+BOOST_AUTO_TEST_CASE( CreateBranchRefusesAnInvalidName )
+{
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    BOOST_CHECK( !common.CreateBranch( wxS( "two words" ) ) );
+    BOOST_CHECK( !common.CreateBranch( wxS( "a..b" ) ) );
+    BOOST_CHECK( common.CreateBranch( wxS( "feature/ok" ) ) );
+}
+
 // Git stores commit text as opaque bytes. A repository written on Windows can hold ISO 8859-1,
 // and decoding it strictly as UTF-8 would leave the whole row blank.
 BOOST_AUTO_TEST_CASE( CommitTextThatIsNotUtf8StillReads )

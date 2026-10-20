@@ -753,6 +753,10 @@ APIEXPORT wxString ComposeCommitMessage( const wxString& aSummary, const wxStrin
 /// Split a commit message into its first line and the description after the first blank line.
 APIEXPORT void SplitCommitMessage( const wxString& aMessage, wxString& aSummary, wxString& aDescription );
 
+/// Empty when aName is a branch name git would accept, otherwise why it would not, in the
+/// words to show the user.
+APIEXPORT wxString BranchNameError( const wxString& aName );
+
 /// Decode text that came out of a repository. Git stores it as bytes with no encoding, so a
 /// repository written on Windows can carry ISO 8859-1, which FromUTF8 alone would blank.
 APIEXPORT wxString DecodeRepoText( const char* aText );

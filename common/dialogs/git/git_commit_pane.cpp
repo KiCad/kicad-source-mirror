@@ -1660,6 +1660,16 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     wxString   branchName = m_newBranchName->GetValue();
     branchName.Trim( true ).Trim( false );
 
+    if( newBranch )
+    {
+        if( wxString nameError = KIGIT::BranchNameError( branchName ); !nameError.IsEmpty() )
+        {
+            DisplayErrorMessage( this, nameError );
+            m_newBranchName->SetFocus();
+            return;
+        }
+    }
+
     std::vector<wxString> files = m_checklist->GetCheckedPaths();
 
     // Unsaved editor changes can be saved for review. With only local commits waiting,

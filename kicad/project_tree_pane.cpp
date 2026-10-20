@@ -2061,6 +2061,12 @@ void PROJECT_TREE_PANE::switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, 
         return;
     }
 
+    if( wxString nameError = KIGIT::BranchNameError( aBranchName ); !nameError.IsEmpty() )
+    {
+        DisplayErrorMessage( this, nameError );
+        return;
+    }
+
     // Keep Add subject to the same worktree checks before creating the branch. The shared
     // switch helper then owns confirmation, editor checks, checkout, and reload.
     auto createBranch = [this, aCommon, aBranchName]( const GIT_WORKTREE_STATUS& )
