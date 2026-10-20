@@ -822,6 +822,51 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
 }
 
 
+// Git stores commit text as opaque bytes. A repository written on Windows can hold ISO 8859-1,
+// and decoding it strictly as UTF-8 would leave the whole row blank.
+BOOST_AUTO_TEST_CASE( CommitTextThatIsNotUtf8StillReads )
+{
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    git_reference* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &head, repo ), GIT_OK );
+    KIGIT::GitReferencePtr headPtr( head );
+
+    git_commit* parent = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, repo, git_reference_target( head ) ), GIT_OK );
+    KIGIT::GitCommitPtr parentPtr( parent );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, parent ), GIT_OK );
+    KIGIT::GitTreePtr treePtr( tree );
+
+    // "Jorg" and "Cafe fix" with the accented letters as single Latin-1 bytes.
+    const char* latin1Author = "J\xf6rg";
+    const char* latin1Summary = "Caf\xe9 fix";
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, latin1Author, "qa@example.com" ), GIT_OK );
+    KIGIT::GitSignaturePtr sigPtr( sig );
+
+    const git_commit* parents[1] = { parent };
+    git_oid           oid;
+    BOOST_REQUIRE_EQUAL( git_commit_create( &oid, repo, "HEAD", sig, sig, nullptr, latin1Summary, tree, 1, parents ),
+                         GIT_OK );
+
+    KIGIT_COMMON common( repo );
+
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 1 );
+    BOOST_REQUIRE_EQUAL( commits.size(), 1u );
+    BOOST_CHECK_EQUAL( commits[0].summary.ToStdString(), wxString::FromUTF8( "Caf\xc3\xa9 fix" ).ToStdString() );
+    BOOST_CHECK_EQUAL( commits[0].author.ToStdString(), wxString::FromUTF8( "J\xc3\xb6rg" ).ToStdString() );
+
+    KIGIT_COMMIT_DETAIL detail = common.GetCommitDetail( commits[0].hash );
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK( !detail.message.IsEmpty() );
+    BOOST_CHECK( !detail.author.IsEmpty() );
+}
+
 // The History page can narrow the log to one branch or to a search text. With no branch named
 // the walk covers every branch, so a commit on a side branch shows up too.
 BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByBranchAndSearch )

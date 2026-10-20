@@ -225,7 +225,7 @@ wxString KIGIT_COMMON::GetLastCommitMessage() const
     KIGIT::GitCommitPtr commitPtr( commit );
     const char*         message = git_commit_message( commit );
 
-    return message ? wxString::FromUTF8( message ) : wxString();
+    return message ? KIGIT::DecodeRepoText( message ) : wxString();
 }
 
 
@@ -292,7 +292,7 @@ std::map<std::string, std::vector<wxString>> collectRefNames( git_repository* aR
         KIGIT::GitObjectPtr targetPtr( target );
 
         std::string hash = git_oid_tostr_s( git_object_id( target ) );
-        names[hash].push_back( wxString::FromUTF8( git_reference_shorthand( ref ) ) );
+        names[hash].push_back( KIGIT::DecodeRepoText( git_reference_shorthand( ref ) ) );
     }
 
     return names;
@@ -372,7 +372,7 @@ KIGIT_STASH_DETAIL KIGIT_COMMON::GetStashDetail( const wxString& aId ) const
     wxString raw;
 
     if( const char* message = git_commit_message( commit ) )
-        raw = wxString::FromUTF8( message );
+        raw = KIGIT::DecodeRepoText( message );
 
     raw.Trim();
     detail.message = raw;
@@ -571,11 +571,11 @@ std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
         git_time_t          commitTime = git_commit_time( commit );
 
         KIGIT_BRANCH_INFO info;
-        info.name = wxString::FromUTF8( branchName );
+        info.name = KIGIT::DecodeRepoText( branchName );
         info.isRemote = branchType == GIT_BRANCH_REMOTE;
         info.isCurrent = !info.isRemote && git_branch_is_head( branchReference ) == 1;
         info.tipHash = shortHashOf( commitId );
-        info.message = wxString::FromUTF8( git_commit_message( commit ) );
+        info.message = KIGIT::DecodeRepoText( git_commit_message( commit ) );
         info.when = wxDateTime( static_cast<time_t>( commitTime ) );
 
         branches.push_back( std::move( info ) );
@@ -614,12 +614,12 @@ KIGIT_BRANCH_DETAIL KIGIT_COMMON::GetBranchDetail( const wxString& aBranch ) con
 
     if( const git_signature* author = git_commit_author( commit ) )
     {
-        detail.author = wxString::FromUTF8( author->name );
-        detail.email = wxString::FromUTF8( author->email );
+        detail.author = KIGIT::DecodeRepoText( author->name );
+        detail.email = KIGIT::DecodeRepoText( author->email );
     }
 
     if( const char* message = git_commit_message( commit ) )
-        detail.message = wxString::FromUTF8( message );
+        detail.message = KIGIT::DecodeRepoText( message );
 
     detail.message.Trim();
 
@@ -633,7 +633,7 @@ KIGIT_BRANCH_DETAIL KIGIT_COMMON::GetBranchDetail( const wxString& aBranch ) con
     const char*            upstreamName = "";
 
     if( git_branch_name( &upstreamName, upstream ) == GIT_OK )
-        detail.upstream = wxString::FromUTF8( upstreamName );
+        detail.upstream = KIGIT::DecodeRepoText( upstreamName );
 
     detail.divergence = compareRefs( ref, upstream );
 
@@ -1006,7 +1006,7 @@ std::vector<wxString> KIGIT_COMMON::GetRecentCommitMessages( size_t aMax ) const
         wxString            message;
 
         if( const char* text = git_commit_message( commit ) )
-            message = wxString::FromUTF8( text );
+            message = KIGIT::DecodeRepoText( text );
 
         message.Trim();
 
@@ -1134,12 +1134,12 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, cons
         info.hash = shortHashOf( &oid );
 
         if( const char* summary = git_commit_summary( commit ) )
-            info.summary = wxString::FromUTF8( summary );
+            info.summary = KIGIT::DecodeRepoText( summary );
 
         if( const git_signature* author = git_commit_author( commit ) )
         {
-            info.author = wxString::FromUTF8( author->name );
-            info.email = wxString::FromUTF8( author->email );
+            info.author = KIGIT::DecodeRepoText( author->name );
+            info.email = KIGIT::DecodeRepoText( author->email );
         }
 
         info.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
@@ -1194,14 +1194,14 @@ KIGIT_COMMIT_DETAIL KIGIT_COMMON::GetCommitDetail( const wxString& aHash ) const
     detail.shortHash = shortHashOf( oid );
 
     if( const char* message = git_commit_message( commit ) )
-        detail.message = wxString::FromUTF8( message );
+        detail.message = KIGIT::DecodeRepoText( message );
 
     detail.message.Trim();
 
     if( const git_signature* author = git_commit_author( commit ) )
     {
-        detail.author = wxString::FromUTF8( author->name );
-        detail.email = wxString::FromUTF8( author->email );
+        detail.author = KIGIT::DecodeRepoText( author->name );
+        detail.email = KIGIT::DecodeRepoText( author->email );
     }
 
     detail.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
@@ -1302,7 +1302,7 @@ int collectStash( size_t aIndex, const char* aMessage, const git_oid* aStashId, 
 
     KIGIT_STASH_INFO info;
     info.index = aIndex;
-    info.message = wxString::FromUTF8( aMessage ? aMessage : "" );
+    info.message = KIGIT::DecodeRepoText( aMessage );
 
     char hash[GIT_OID_HEXSZ + 1] = { 0 };
     git_oid_tostr( hash, sizeof( hash ), aStashId );
@@ -1352,7 +1352,7 @@ std::vector<KIGIT_TAG_INFO> KIGIT_COMMON::GetTags() const
 
     for( size_t i = 0; i < tagNames.count; ++i )
     {
-        wxString         tagName = wxString::FromUTF8( tagNames.strings[i] );
+        wxString         tagName = KIGIT::DecodeRepoText( tagNames.strings[i] );
         KIGIT_TAG_DETAIL detail = GetTagDetail( tagName );
         KIGIT_TAG_INFO   info;
         info.name = tagName;
@@ -1531,14 +1531,14 @@ KIGIT_TAG_DETAIL KIGIT_COMMON::GetTagDetail( const wxString& aName ) const
         who = git_commit_author( commit );
 
     if( message )
-        detail.message = wxString::FromUTF8( message );
+        detail.message = KIGIT::DecodeRepoText( message );
 
     detail.message.Trim();
 
     if( who )
     {
-        detail.author = wxString::FromUTF8( who->name );
-        detail.email = wxString::FromUTF8( who->email );
+        detail.author = KIGIT::DecodeRepoText( who->name );
+        detail.email = KIGIT::DecodeRepoText( who->email );
         detail.when = wxDateTime( static_cast<time_t>( annotated ? who->when.time : git_commit_time( commit ) ) );
     }
 
@@ -2550,6 +2550,20 @@ void CollectDiffDeltas( git_diff*                                           aDif
 
         aCallback( *delta );
     }
+}
+
+
+wxString DecodeRepoText( const char* aText )
+{
+    if( !aText || !*aText )
+        return wxString();
+
+    wxString decoded = wxString::FromUTF8( aText );
+
+    if( !decoded.IsEmpty() )
+        return decoded;
+
+    return wxString( aText, wxConvISO8859_1 );
 }
 
 

@@ -753,6 +753,10 @@ APIEXPORT wxString ComposeCommitMessage( const wxString& aSummary, const wxStrin
 /// Split a commit message into its first line and the description after the first blank line.
 APIEXPORT void SplitCommitMessage( const wxString& aMessage, wxString& aSummary, wxString& aDescription );
 
+/// Decode text that came out of a repository. Git stores it as bytes with no encoding, so a
+/// repository written on Windows can carry ISO 8859-1, which FromUTF8 alone would blank.
+APIEXPORT wxString DecodeRepoText( const char* aText );
+
 /// What every caller says when it finds the session already busy. One wording, so the same
 /// condition does not reach the user in three different sentences.
 APIEXPORT wxString BusyMessage();
