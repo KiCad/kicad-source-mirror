@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-06 23:06+0300\n"
+"POT-Creation-Date: 2026-10-21 01:38+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -10050,6 +10050,13 @@ msgstr "Plot All Pages"
 msgid "Plot Current Page"
 msgstr "Plot Current Page"
 
+msgid ""
+"Target file for the plot. Can be absolute or relative to the schematic main "
+"file location."
+msgstr ""
+"Target file for the plot. Can be absolute or relative to the schematic main "
+"file location."
+
 msgid "Select Output Directory"
 msgstr "Select Output Directory"
 
@@ -14492,6 +14499,10 @@ msgid "Invalid library ID"
 msgstr "Invalid library ID"
 
 #, c-format
+msgid "Missing '%s' schematic file"
+msgstr "Missing '%s' schematic file"
+
+#, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr "File at '%s' was ignored. Using previously found file at '%s' instead."
 
@@ -14537,8 +14548,12 @@ msgid "Expecting CELL or BLOCK"
 msgstr "Expecting CELL or BLOCK"
 
 #, c-format
-msgid "Symbol '%s.asy' not found"
-msgstr "Symbol '%s.asy' not found"
+msgid "Missing symbol file '%s.asy', referenced from '%s' at line %d"
+msgstr "Missing symbol file '%s.asy', referenced from '%s' at line %d"
+
+#, c-format
+msgid "Unable to read '%s'"
+msgstr "Unable to read '%s'"
 
 #, c-format
 msgid ""
@@ -20537,6 +20552,9 @@ msgstr "Add new library to global library table"
 msgid "Add new library to project library table"
 msgstr "Add new library to project library table"
 
+msgid "Use relative path"
+msgstr "Use relative path"
+
 msgid "Show import issues"
 msgstr "Show import issues"
 
@@ -26246,6 +26264,12 @@ msgstr "Board Data"
 msgid "Project is missing or read-only. Some settings will not be editable."
 msgstr "Project is missing or read-only. Some settings will not be editable."
 
+msgid "Discard changes to custom rules?"
+msgstr "Discard changes to custom rules?"
+
+msgid "Discard Changes"
+msgstr "Discard Changes"
+
 #, c-format
 msgid ""
 "Error importing settings from board:\n"
@@ -26860,6 +26884,9 @@ msgstr "Thickness:"
 
 msgid "Text thickness"
 msgstr "Text thickness"
+
+msgid "Adjust the text thickness"
+msgstr "Adjust the text thickness"
 
 msgid "Text orientation"
 msgstr "Text orientation"
@@ -28631,9 +28658,6 @@ msgstr "Visible  (fields only)"
 msgid "Keep upright"
 msgstr "Keep upright"
 
-msgid "Adjust the text thickness"
-msgstr "Adjust the text thickness"
-
 msgid "Center on footprint"
 msgstr "Center on footprint"
 
@@ -29571,6 +29595,13 @@ msgstr "Move current selection down"
 
 msgid "Generate Drill Files..."
 msgstr "Generate Drill Files…"
+
+msgid ""
+"Target file for the plot. Can be absolute or relative to the board file "
+"location."
+msgstr ""
+"Target file for the plot. Can be absolute or relative to the board file "
+"location."
 
 msgid "Select Fab Layers"
 msgstr "Select Fab Layers"
@@ -31542,9 +31573,6 @@ msgstr ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the absolute clearance "
 "value."
-
-msgid "Cancel Changes?"
-msgstr "Cancel Changes?"
 
 msgid "Show Matching Items"
 msgstr "Show Matching Items"
@@ -36967,6 +36995,15 @@ msgstr "Suppress Trailing Zeroes"
 
 msgid "Arrow Direction"
 msgstr "Arrow Direction"
+
+msgid "Arrow Length"
+msgstr "Arrow Length"
+
+msgid "Extension Line Offset"
+msgstr "Extension Line Offset"
+
+msgid "Text Position"
+msgstr "Text Position"
 
 msgid "Keep Aligned with Dimension"
 msgstr "Keep Aligned with Dimension"
@@ -43998,6 +44035,13 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#, c-format
+#~ msgid "Symbol '%s.asy' not found"
+#~ msgstr "Symbol '%s.asy' not found"
+
+#~ msgid "Cancel Changes?"
+#~ msgstr "Cancel Changes?"
 
 #~ msgid "EDA"
 #~ msgstr "EDA"
@@ -58704,9 +58748,6 @@ msgstr "Could not create user scripting path %s."
 
 #~ msgid "Open Anyway"
 #~ msgstr "Open Anyway"
-
-#~ msgid "Discard Changes"
-#~ msgstr "Discard Changes"
 
 #~ msgid "Apply to all"
 #~ msgstr "Apply to all"
