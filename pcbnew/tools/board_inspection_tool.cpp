@@ -200,14 +200,17 @@ std::unique_ptr<DRC_ENGINE> BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompile
 }
 
 
-bool isNPTHPad( BOARD_ITEM* aItem )
+bool isNPTHPad( const BOARD_ITEM& aItem )
 {
-    return aItem->Type() == PCB_PAD_T
-            && static_cast<PAD*>( aItem )->GetAttribute() == PAD_ATTRIB::NPTH;
+    if( aItem.Type() != PCB_PAD_T )
+        return false;
+
+    const PAD& pad = static_cast<const PAD&>( aItem );
+    return pad.GetAttribute() == PAD_ATTRIB::NPTH;
 }
 
 
-wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
+wxString BOARD_INSPECTION_TOOL::getItemDescription( const BOARD_ITEM* aItem )
 {
     // Null items have no description
     if( !aItem )
@@ -215,9 +218,9 @@ wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
 
     wxString msg = aItem->GetItemDescription( m_frame, true );
 
-    if( aItem->IsConnected() && !isNPTHPad( aItem ) )
+    if( aItem->IsConnected() && !isNPTHPad( *aItem ) )
     {
-        BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+        const BOARD_CONNECTED_ITEM* cItem = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
 
         msg += wxS( " " )
                + wxString::Format( _( "[netclass %s]" ),
@@ -432,14 +435,14 @@ void BOARD_INSPECTION_TOOL::reportCompileError( REPORTER* r )
 }
 
 
-void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a, REPORTER* r )
+void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, const BOARD_ITEM* a, REPORTER* r )
 {
     r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
     r->Report( wxT( "<ul><li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li></ul>" ) );
 }
 
 
-void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b,
+void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, const BOARD_ITEM* a, const BOARD_ITEM* b,
                                           REPORTER* r )
 {
     r->Report( wxT( "<h7>" ) + EscapeHTML( aTitle ) + wxT( "</h7>" ) );
@@ -448,7 +451,7 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
 }
 
 
-void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b,
+void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, const BOARD_ITEM* a, const BOARD_ITEM* b,
                                           PCB_LAYER_ID aLayer, REPORTER* r )
 {
     wxString layerStr = _( "Layer" ) + wxS( " " ) + m_frame->GetBoard()->GetLayerName( aLayer );
@@ -546,11 +549,11 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     wxCHECK( drcTool && m_frame, /* void */ );
 
-    BOARD_ITEM*           a = m_frame->GetBoard()->ResolveItem( aDRCItem->GetMainItemID() );
-    BOARD_ITEM*           b = m_frame->GetBoard()->ResolveItem( aDRCItem->GetAuxItemID() );
-    BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
-    BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
-    PCB_LAYER_ID          layer = m_frame->GetActiveLayer();
+    BOARD_ITEM*                 a = m_frame->GetBoard()->ResolveItem( aDRCItem->GetMainItemID() );
+    BOARD_ITEM*                 b = m_frame->GetBoard()->ResolveItem( aDRCItem->GetAuxItemID() );
+    const BOARD_CONNECTED_ITEM* ac = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
+    const BOARD_CONNECTED_ITEM* bc = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
+    PCB_LAYER_ID                layer = m_frame->GetActiveLayer();
 
     if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
     {

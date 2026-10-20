@@ -127,12 +127,13 @@ private:
 
     std::unique_ptr<DRC_ENGINE> makeDRCEngine( bool* aCompileError, bool* aCourtyardError );
 
-    wxString getItemDescription( BOARD_ITEM* aItem );
+    wxString getItemDescription( const BOARD_ITEM* aItem );
 
     void reportCompileError( REPORTER* r );
-    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, REPORTER* r );
-    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, REPORTER* r );
-    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer, REPORTER* r );
+    void reportHeader( const wxString& aTitle, const BOARD_ITEM* a, REPORTER* r );
+    void reportHeader( const wxString& aTitle, const BOARD_ITEM* a, const BOARD_ITEM* b, REPORTER* r );
+    void reportHeader( const wxString& aTitle, const BOARD_ITEM* a, const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
+                       REPORTER* r );
 
     FOOTPRINT_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
