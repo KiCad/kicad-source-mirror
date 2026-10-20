@@ -418,7 +418,21 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
  */
 static bool arrayHasStackedPositions( const ARRAY_OPTIONS& aOptions, const VECTOR2I& aPos )
 {
-    std::set<std::pair<VECTOR2I, EDA_ANGLE>> placements;
+    struct sort_placements
+    {
+        bool operator()( const std::pair<VECTOR2I, EDA_ANGLE>& lhs, const std::pair<VECTOR2I, EDA_ANGLE>& rhs ) const
+        {
+            if( lhs.first.x != rhs.first.x )
+                return lhs.first.x < rhs.first.x;
+
+            if( lhs.first.y != rhs.first.y )
+                return lhs.first.y < rhs.first.y;
+
+            return lhs.second < rhs.second;
+        }
+    };
+
+    std::set<std::pair<VECTOR2I, EDA_ANGLE>, sort_placements> placements;
 
     for( int ii = 0; ii < aOptions.GetArraySize(); ++ii )
     {
