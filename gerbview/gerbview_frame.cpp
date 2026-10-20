@@ -184,6 +184,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     resolveCanvasType();
 
     SwitchCanvas( m_canvasType );
+    FinishAUIInitialization();
 
     setupUnits( config() );
 
