@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-19 06:51+0000\n"
+"PO-Revision-Date: 2026-10-20 22:34+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -31433,19 +31433,20 @@ msgid "Create a copy of an existing design variant."
 msgstr "Crea una copia di una variante progetto esistente."
 
 #: eeschema/tools/sch_actions.h:35
-#, fuzzy
 msgid ""
 "Alternate pin functions are not available on symbols with multiple body "
 "styles."
 msgstr ""
-"Assegnazioni pin alternative non disponibili per i simboli con stili di "
-"corpo multipli."
+"Funzioni pin alternative non disponibili per i simboli con stili di corpo "
+"multipli."
 
 #: eeschema/tools/sch_actions.h:38
 msgid ""
 "Multiple body styles are not supported on symbols with alternate pin "
 "functions."
 msgstr ""
+"Non sono supportate configurazioni multiple del corpo per i simboli che "
+"presentano funzioni alternative dei pin."
 
 #: eeschema/tools/sch_align_tool.cpp:358
 #: pcbnew/tools/align_distribute_tool.cpp:432
@@ -31526,9 +31527,8 @@ msgid "Add Wire to Bus Entry"
 msgstr "Aggiungi filo ad un bus"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1525
-#, fuzzy
 msgid "Remove No Connect Flag"
-msgstr "Aggiungi indicatore non connesso"
+msgstr "Rimuovi indicatore non connesso"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1534
 msgid "Junction location contains no joinable wires and/or pins."
@@ -31576,19 +31576,16 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Premere <ESC> per annullare la creazione del foglio."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3188
-#, fuzzy
 msgid "Modify Sheet Pin"
 msgstr "Modifica pin foglio"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3194
-#, fuzzy
 msgid "Modify Schematic Item"
 msgstr "Modifica elemento schema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3304
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "Autopiazza tutti i pin fogli"
+msgstr "Autopiazza pin fogli"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3351
 msgid "No sub schematic found in the current project"
@@ -31739,11 +31736,14 @@ msgid ""
 "Change Symbol is not available when a design variant is active. Use Set "
 "Variant Symbol or switch to the default variant first."
 msgstr ""
+"«Cambia simbolo» non è disponibile quando è attiva una variante di progetto. "
+"Utilizzare «Imposta simbolo variante» oppure passare prima alla variante "
+"predefinita."
 
 #: eeschema/tools/sch_edit_tool.cpp:2788
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load symbol '%s' from library."
-msgstr "Impossibile caricare il simbolo '%s' dalla libreria '%s'."
+msgstr "Impossibile caricare il simbolo '%s' dalla libreria."
 
 #: eeschema/tools/sch_edit_tool.cpp:2805
 #, c-format
@@ -31751,32 +31751,34 @@ msgid ""
 "The selected symbol '%s' is not pin-compatible with the base symbol '%s'.\n"
 "\n"
 msgstr ""
+"Il simbolo selezionato '%s' non è pin-compatibile col simbolo base '%s'.\n"
+"\n"
 
 #: eeschema/tools/sch_edit_tool.cpp:2813
 msgid "Choose a symbol with equivalent pins and pin positions."
-msgstr ""
+msgstr "Scegli un simbolo con pin e posizioni dei pin equivalenti."
 
 #: eeschema/tools/sch_edit_tool.cpp:2814
 msgid "Variant Symbol Compatibility"
-msgstr ""
+msgstr "Compatibilità simboli varianti"
 
 #: eeschema/tools/sch_edit_tool.cpp:2827
-#, fuzzy
 msgid "Set Variant Symbol"
-msgstr "Variabili testo"
+msgstr "Imposta simbolo variante"
 
 #: eeschema/tools/sch_edit_tool.cpp:2976 eeschema/tools/sch_edit_tool.cpp:3033
 #: eeschema/tools/symbol_editor_edit_tool.cpp:875
 #: pcbnew/tools/edit_tool.cpp:2354
 msgid "Use Properties panel to edit properties common to selected items."
 msgstr ""
+"Utilizza il pannello Proprietà per modificare le proprietà comuni agli "
+"elementi selezionati."
 
 #: eeschema/tools/sch_edit_tool.cpp:3025
 #: eeschema/tools/symbol_editor_edit_tool.cpp:867
 #: pcbnew/tools/edit_tool.cpp:2346
-#, fuzzy
 msgid "Show Properties panel"
-msgstr "Mostra gestione proprietà"
+msgstr "Mostra pannello proprietà"
 
 #: eeschema/tools/sch_edit_tool.cpp:3159
 msgid "Edit Sheet Properties"
@@ -31818,9 +31820,8 @@ msgid "Edit Netclasses..."
 msgstr "Modifica netclass..."
 
 #: eeschema/tools/sch_edit_tool.cpp:4021 eeschema/tools/sch_edit_tool.cpp:4075
-#, fuzzy
 msgid "Remove Empty Label"
-msgstr "Elimina esportatore"
+msgstr "Elimina etichetta vuoto"
 
 #: eeschema/tools/sch_editor_control.cpp:445
 #, c-format
@@ -31862,29 +31863,26 @@ msgid "No connected net selected."
 msgstr "Nessun collegamento (net) connesso selezionato."
 
 #: eeschema/tools/sch_editor_control.cpp:1592
-#, fuzzy
 msgid "Unable to replace the net chain terminal pin."
-msgstr "Fallita creazione della catena di net."
+msgstr "Fallito rimpiazzo del pin terminale della catena di net."
 
 #: eeschema/tools/sch_editor_control.cpp:1618
-#, fuzzy
 msgid "Net chain name:"
-msgstr "Nome collegamento:"
+msgstr "Nome catena di net:"
 
 #: eeschema/tools/sch_editor_control.cpp:1631
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rename net chain '%s' to '%s'."
-msgstr "Fallita creazione cartella '%s'."
+msgstr "Fallita rinomina della catena di net '%s' a '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:1667
-#, fuzzy
 msgid "No potential net chain connects the selected pins."
-msgstr "Impossibile stondare le linee selezionate."
+msgstr "Nessuna potenziale catena di net collega i pin selezionati."
 
 #: eeschema/tools/sch_editor_control.cpp:1676
-#, fuzzy, c-format
+#, c-format
 msgid "The selected pins are already in net chain '%s'."
-msgstr "La cartella selezionata è già un progetto Git."
+msgstr "I pin selezionati si trovano già nella catena di net '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:1686
 #: eeschema/tools/sch_selection_tool.cpp:431
@@ -31893,9 +31891,9 @@ msgid "Create Net Chain between %s:%s and %s:%s"
 msgstr "Crea una catena di net tra %s:%s e %s:%s"
 
 #: eeschema/tools/sch_editor_control.cpp:1758
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create net chain '%s'."
-msgstr "Impossibile creare '%s'."
+msgstr "Impossibile creare la catena di net '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:2359 pcbnew/tools/pcb_control.cpp:1173
 msgid ""
@@ -31938,6 +31936,9 @@ msgid ""
 "Bulk Edit Symbol Library Links is not available when a design variant is "
 "active. Switch to the default variant first."
 msgstr ""
+"La modifica in blocco dei collegamenti alla libreria di simboli non è "
+"disponibile quando è attiva una variante di progettazione. Passare "
+"innanzitutto alla variante predefinita."
 
 #: eeschema/tools/sch_editor_control.cpp:3665
 #, c-format
@@ -31962,13 +31963,14 @@ msgstr "Nessuna corrispondenza trovata."
 
 #: eeschema/tools/sch_group_tool.cpp:42 eeschema/tools/sch_group_tool.cpp:68
 #: pcbnew/tools/pcb_group_tool.cpp:45 pcbnew/tools/pcb_group_tool.cpp:60
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Alcuni degli elementi potrebbero non essere stati resi outset."
+msgstr "Alcuni elementi selezionati non possono essere raggruppati."
 
 #: eeschema/tools/sch_group_tool.cpp:53 eeschema/tools/sch_group_tool.cpp:61
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Gli elementi figlio non possono essere raggruppati separatamente dal loro "
+"elemento genitore."
 
 #: eeschema/tools/sch_group_tool.cpp:90 pcbnew/tools/pcb_group_tool.cpp:82
 msgid "Click on new member..."
@@ -32044,30 +32046,26 @@ msgid "Visual"
 msgstr "Visuale"
 
 #: eeschema/tools/sch_inspection_tool.cpp:596
-#, fuzzy
 msgid "Choose Schematic to Compare With"
-msgstr "Scegli schema"
+msgstr "Scegli lo schema con cui effettuare il confronto"
 
 #: eeschema/tools/sch_inspection_tool.cpp:607
-#, fuzzy
 msgid "Select a KiCad s-expression schematic file (.kicad_sch)."
-msgstr "File di schemi elettrici KiCad s-expression"
+msgstr "Seleziona un file di schema KiCad in formato s-expression (.kicad_sch)."
 
 #: eeschema/tools/sch_inspection_tool.cpp:624
 #: eeschema/tools/sch_inspection_tool.cpp:689
-#, fuzzy
 msgid "Select a schematic file from another project to compare."
 msgstr ""
-"Accoda i contenuti di un foglio schema da un altro progetto al foglio "
-"corrente"
+"Seleziona un file di schema da un altro progetto per effettuare un confronto."
 
 #: eeschema/tools/sch_inspection_tool.cpp:651
 #: eeschema/tools/sch_inspection_tool.cpp:658
 #: pcbnew/tools/board_inspection_tool.cpp:2103
 #: pcbnew/tools/board_inspection_tool.cpp:2110
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load project for %s"
-msgstr "Fallito pull del progetto"
+msgstr "Fallito caricamento progetto per %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:675
 #: eeschema/tools/sch_inspection_tool.cpp:698
@@ -32075,37 +32073,34 @@ msgstr "Fallito pull del progetto"
 #: eeschema/tools/sch_inspection_tool.cpp:1195
 #: pcbnew/tools/board_inspection_tool.cpp:2136
 #: pcbnew/tools/board_inspection_tool.cpp:2143
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s"
-msgstr "Fallito caricamento di \"%s\"."
+msgstr "Fallito caricamento di %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:865
 msgid "Save the schematic before comparing against local history."
-msgstr ""
+msgstr "Salva lo schema prima di confrontarlo con la cronologia locale."
 
 #: eeschema/tools/sch_inspection_tool.cpp:876
 #: pcbnew/tools/board_inspection_tool.cpp:2188
-#, fuzzy
 msgid "No local history snapshots for this project."
-msgstr "Disabilita l'integrazione Git per questo progetto"
+msgstr "Nessuna istantanea della cronologia locale per questo progetto."
 
 #: eeschema/tools/sch_inspection_tool.cpp:914
 msgid "No local history snapshots change this schematic."
-msgstr ""
+msgstr "Nessuna istantanea della cronologia locale modifica questo schema."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1109
 #: eeschema/tools/sch_inspection_tool.cpp:1261
 #: pcbnew/tools/board_inspection_tool.cpp:2360
 #: pcbnew/tools/board_inspection_tool.cpp:2404
-#, fuzzy
 msgid "Could not compare against the selected snapshot."
-msgstr "Impossibile aprire il percorso modelli '%s'"
+msgstr "Impossibile eseguire il confronto rispetto all'istantanea selezionata."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1216
 #: eeschema/tools/sch_inspection_tool.cpp:1237
-#, fuzzy
 msgid "Could not open this sheet for comparison."
-msgstr "Impossibile aprire il file di libreria."
+msgstr "Impossibile aprire questo foglio per il confronto."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1359
 msgid "No datasheet defined."
@@ -32169,30 +32164,26 @@ msgid "Add Corner"
 msgstr "Aggiungi angolo"
 
 #: eeschema/tools/sch_selection_tool.cpp:168
-#, fuzzy
 msgid "Replace terminal pin"
-msgstr "Sostituisci tutti i pin esistenti"
+msgstr "Sostituisci pin terminale"
 
 #: eeschema/tools/sch_selection_tool.cpp:205
 #: pcbnew/tools/pcb_selection_tool.cpp:159
-#, fuzzy
 msgid "Terminal A"
-msgstr "Tipo a 3 terminali"
+msgstr "Terminale A"
 
 #: eeschema/tools/sch_selection_tool.cpp:206
 #: pcbnew/tools/pcb_selection_tool.cpp:160
-#, fuzzy
 msgid "Terminal B"
-msgstr "Tipo a 3 terminali"
+msgstr "Terminale B"
 
 #: eeschema/tools/sch_selection_tool.cpp:248
-#, fuzzy
 msgid "Net Chain..."
-msgstr "Rotazione..."
+msgstr "Catena di net..."
 
 #: eeschema/tools/sch_selection_tool.cpp:407
 msgid "(No net chain actions)"
-msgstr ""
+msgstr "(nessuna azione catena di net)"
 
 #: eeschema/tools/simulator_control.cpp:103
 msgid "Open Simulation Workbook"
@@ -32288,32 +32279,29 @@ msgid "Failed to update library with flattened symbol"
 msgstr "Fallito aggiornamento libreria con simbolo appiattito"
 
 #: eeschema/tools/symbol_editor_control.cpp:1093
-#, fuzzy
 msgid "Switch to Tab"
-msgstr "Passa a diramazione"
+msgstr "Passa alla scheda"
 
 #: eeschema/tools/symbol_editor_control.cpp:1146
-#, fuzzy
 msgid "Select a library to compare against a file."
-msgstr "Seleziona una cartella per esportare i file"
+msgstr "Seleziona una libreria da confrontare con un file."
 
 #: eeschema/tools/symbol_editor_control.cpp:1150
 msgid "Choose Library to Compare With"
-msgstr ""
+msgstr "Scegli la libreria con cui effettuare il confronto"
 
 #: eeschema/tools/symbol_editor_control.cpp:1163
-#, fuzzy
 msgid "Select a KiCad symbol library file (.kicad_sym)."
-msgstr "File di librerie di simboli KiCad"
+msgstr "Seleziona un file di libreria di simboli KiCad (.kicad_sym)."
 
 #: eeschema/tools/symbol_editor_control.cpp:1194
 #: eeschema/tools/symbol_editor_control.cpp:1200
 #: pcbnew/tools/board_inspection_tool.cpp:2130
 #: pcbnew/tools/footprint_editor_control.cpp:748
 #: pcbnew/tools/footprint_editor_control.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s: %s"
-msgstr "Impossibile caricare la pagina '%s': %s"
+msgstr "Impossibile caricare %s: %s"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:293
 msgid "Place Pin"
@@ -32384,32 +32372,36 @@ msgstr "Ripeti pin"
 #: eeschema/variant_symbol_utils.cpp:57
 #, c-format
 msgid "Candidate has %d unit(s), base requires %d"
-msgstr ""
+msgstr "Il candidato ha %d unità, la base ne richiede %d"
 
 #: eeschema/variant_symbol_utils.cpp:68
 #, c-format
 msgid "Candidate has %d body style(s), base requires %d"
-msgstr ""
+msgstr "Il candidato presenta %d stili del corpo; la base ne richiede %d"
 
 #: eeschema/variant_symbol_utils.cpp:125
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' not found in candidate"
-msgstr ""
+msgstr "Unità %d, stile del corpo %d: pin '%s' non trovato nel candidato"
 
 #: eeschema/variant_symbol_utils.cpp:142
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' position mismatch (%d,%d) vs (%d,%d)"
 msgstr ""
+"Unità %d, stile del corpo %d: discrepanza nella posizione del pin '%s' "
+"(%d,%d) rispetto a (%d,%d)"
 
 #: eeschema/variant_symbol_utils.cpp:158
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' type mismatch ('%s' vs '%s')"
 msgstr ""
+"Unità %d, stile corpo %d: discrepanza di tipo per il pin '%s' ('%s' contro "
+"'%s')"
 
 #: eeschema/variant_symbol_utils.cpp:177
 #, c-format
 msgid "Unit %d, body style %d: candidate has extra pin '%s'"
-msgstr ""
+msgstr "Unità %d, tipo di corpo %d: il candidato presenta un pin in più '%s'"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this schematic"
@@ -32483,14 +32475,12 @@ msgid "Enter page number for sheet path %s"
 msgstr "Inserire numero pagina per il percorso foglio %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:694
-#, fuzzy
 msgid "Change Page Number"
 msgstr "Modifica numero pagina"
 
 #: eeschema/widgets/hierarchy_pane.cpp:762
-#, fuzzy
 msgid "Rename Sheet"
-msgstr "Rinomina collegamento"
+msgstr "Rinomina foglio"
 
 #: eeschema/widgets/hierarchy_pane.cpp:853
 #, c-format
@@ -32518,6 +32508,7 @@ msgstr "Contenuto compressione vuoto."
 #, c-format
 msgid "Decompressed size %llu exceeds limit %llu."
 msgstr ""
+"La dimensione dopo la decompressione, pari a %llu, supera il limite di %llu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:143
 #, c-format
@@ -32526,41 +32517,35 @@ msgstr "Connessione ZSTD fallita: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:183
 msgid "Reload current provider page"
-msgstr ""
+msgstr "Ricarica la pagina corrente del fornitore"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:188
-#, fuzzy
 msgid "Configure remote providers"
-msgstr "Configura le sorgenti dati remote."
+msgstr "Configura i fornitori remoti"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:326
-#, fuzzy
 msgid "No remote providers configured."
-msgstr "Nessun branch upstream configurato."
+msgstr "Nessun fornitore remoto configurato."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:401
-#, fuzzy
 msgid "Unable to load remote provider metadata."
-msgstr "Fallito caricamento dati remoti per '%s'."
+msgstr "Fallito caricamento metadati fornitori remoti."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:646
 msgid "A remote provider sign-in flow is already in progress."
-msgstr ""
+msgstr "Procedura di accesso a fornitore remoto già in corso."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:678
-#, fuzzy
 msgid "Unable to start the local OAuth callback listener."
-msgstr "Impossibile avviare l'accesso locale."
+msgstr "Impossibile avviare il listener locale per il callback OAuth."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:688
-#, fuzzy
 msgid "Unable to open the system browser for sign-in."
-msgstr "Impossibile aprire '%s' in scrittura."
+msgstr "Impossibile aprire il browser di sistema per l'accesso."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:718
-#, fuzzy
 msgid "Failed to delete stored remote provider tokens."
-msgstr "Impossibile analizzare il repository locale repository.json."
+msgstr "Impossibile eliminare i token del provider remoto memorizzati."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:758
 #, c-format
@@ -32574,16 +32559,16 @@ msgstr "Identificatore di sessione mancante."
 #: eeschema/widgets/panel_remote_symbol.cpp:774
 msgid "Session identifier did not match the active provider session."
 msgstr ""
+"L'identificativo della sessione non corrisponde alla sessione attiva del "
+"provider."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:862
-#, fuzzy
 msgid "No remote provider is currently selected."
-msgstr "Zoom agli elementi correntemente selezionati"
+msgstr "Al momento non è selezionato alcun fornitore remoto."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:983
-#, fuzzy
 msgid "Unable to process provider payload."
-msgstr "Impossibile memorizzare il contenuto."
+msgstr "Impossibile elaborare il payload del fornitore."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:989
 #, c-format
@@ -32604,14 +32589,13 @@ msgid "No schematic editor is available to store symbols."
 msgstr "Non è disponibile alcun editor schemi per memorizzare i simboli."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1099
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Impossibile aggiungere dai componente"
+msgstr "Impossibile analizzare l'elenco dei componenti: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1105
-#, fuzzy
 msgid "Component list must be a non-empty array."
-msgstr "L'elenco dei componenti deve essere un array."
+msgstr "L'elenco componenti deve essere un array non vuoto."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1126
 msgid "Component entries must be objects."
@@ -32632,26 +32616,27 @@ msgstr "Tipo di contenuto impronta non supportato."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1372
 msgid "Remote provider metadata is not loaded."
-msgstr ""
+msgstr "Metadati del fornitore remoto non caricati."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1402
 msgid ""
 "Manifest assets require asset_type, content_type, size_bytes, and "
 "download_url."
 msgstr ""
+"Gli asset nel manifest richiedono asset_type, content_type, size_bytes e "
+"download_url."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1438
 msgid "Remote provider sign-in was cancelled or failed."
-msgstr ""
+msgstr "Accesso al fornitore remoto annullato o non riuscito."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1449
 msgid "Remote provider sign-in failed."
-msgstr ""
+msgstr "Accesso al fornitore remoto non riuscito."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1465
-#, fuzzy
 msgid "Failed to store remote provider tokens securely."
-msgstr "Fallito il push dei cambiamenti sul repository remoto."
+msgstr "Impossibile archiviare in modo sicuro i token del fornitore remoto."
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:185
@@ -32724,9 +32709,8 @@ msgid "Invalid footprint specified"
 msgstr "Impronta specificata non valida"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:770
-#, fuzzy
 msgid "Compatibility Warnings:"
-msgstr "Modalità compatibile:"
+msgstr "Avvertenze sulla compatibilità:"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:38
 msgid "Place as sheet"
@@ -32772,14 +32756,12 @@ msgstr ""
 #: pcbnew/widgets/pcb_properties_panel.cpp:642
 #: pcbnew/widgets/pcb_properties_panel.cpp:661
 #: pcbnew/widgets/pcb_properties_panel.cpp:784
-#, fuzzy
 msgid "Add Custom Property"
-msgstr "Aggiungi gruppo personalizzato..."
+msgstr "Aggiungi proprietà personalizzata"
 
 #: eeschema/widgets/sch_properties_panel.cpp:82
-#, fuzzy
 msgid "Edit Pin Map..."
-msgstr "Modifica pin"
+msgstr "Modifica mappa pin..."
 
 #: eeschema/widgets/sch_properties_panel.cpp:527
 #: pcbnew/widgets/pcb_properties_panel.cpp:1293
@@ -32788,25 +32770,22 @@ msgstr "Modifica proprietà"
 
 #: eeschema/widgets/sch_properties_panel.cpp:667
 #: pcbnew/widgets/pcb_properties_panel.cpp:629
-#, fuzzy
 msgid "Rename Property"
-msgstr "Rinomina collegamento"
+msgstr "Rinomina proprietà"
 
 #: eeschema/widgets/sch_properties_panel.cpp:692
 #: eeschema/widgets/sch_properties_panel.cpp:885
 #: pcbnew/widgets/pcb_properties_panel.cpp:654
 #: pcbnew/widgets/pcb_properties_panel.cpp:818
-#, fuzzy
 msgid "Remove Field"
-msgstr "Rimuovi file"
+msgstr "Rimuovi campo"
 
 #: eeschema/widgets/sch_properties_panel.cpp:698
 #: eeschema/widgets/sch_properties_panel.cpp:910
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:840
-#, fuzzy
 msgid "Remove Custom Property"
-msgstr "Rimuovi tutti i gruppi personalizzati"
+msgstr "Rimuovi proprietà personalizzata"
 
 #: eeschema/widgets/search_handlers.cpp:176
 msgid "Excl. Sim"
@@ -32821,9 +32800,8 @@ msgid "Excl. Board"
 msgstr "Escl. scheda"
 
 #: eeschema/widgets/search_handlers.cpp:179
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Escludi dai file di posizionamento"
+msgstr "Escl. file posiz."
 
 #: eeschema/widgets/search_handlers.cpp:493
 msgid "Hierarchical"
@@ -33517,9 +33495,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Il file zip '%s' non può essere aperto."
 
 #: gerbview/files.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Impossibile creare il file temporaneo '%s'.</b>"
+msgstr "Impossibile creare file temporaneo per decomprimere '%s'."
 
 #: gerbview/files.cpp:539
 #, c-format
@@ -33532,9 +33510,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Impossibile creare il file temporaneo '%s'.</b>"
 
 #: gerbview/files.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Impossibile creare il file temporaneo '%s'.</b>"
+msgstr "<b>Impossibile scrivere sul file temporaneo '%s'.</b>"
 
 #: gerbview/files.cpp:630
 #, c-format
