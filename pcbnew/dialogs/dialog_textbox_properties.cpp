@@ -136,7 +136,7 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     m_separator4->SetIsSeparator();
 
     m_autoTextThickness->SetIsCheckButton();
-    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::link ) );
 
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.

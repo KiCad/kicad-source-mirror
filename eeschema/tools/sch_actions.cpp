@@ -1345,7 +1345,7 @@ TOOL_ACTION SCH_ACTIONS::editSymbolLibraryLinks( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Bulk Edit Symbol Library Links..." ) )
         .Tooltip( _( "Edit a table of links between schematic and library symbols" ) )
-        .Icon( BITMAPS::edit_cmp_symb_links ) );
+        .Icon( BITMAPS::link ) );
 
 TOOL_ACTION SCH_ACTIONS::assignFootprints( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.assignFootprints" )

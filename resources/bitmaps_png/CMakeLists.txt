@@ -276,7 +276,6 @@ set( BMAPS_MID
     edit_comp_ref
     edit_comp_value
     editor
-    edit_cmp_symb_links
     edit
     edge_to_copper_clearance
     enter_sheet
@@ -385,6 +384,7 @@ set( BMAPS_MID
     library_table
     lines_any
     lines90
+    link
     list_nets
     load_drill
     load_gerber

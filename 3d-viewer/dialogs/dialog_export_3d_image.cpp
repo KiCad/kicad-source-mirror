@@ -26,8 +26,10 @@
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/statline.h>
+#include <wx/gbsizer.h>
 
 #include <bitmaps.h>
+#include <widgets/bitmap_button.h>
 
 
 DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aCanvasSize,
@@ -36,20 +38,34 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
                      wxDEFAULT_DIALOG_STYLE ),
         m_cfg( aCfg ),
         m_originalSize( aCanvasSize ),
-        m_width( aCfg && aCfg->width > 0 ? aCfg->width : aCanvasSize.GetWidth() ),
-        m_height( aCfg && aCfg->height > 0 ? aCfg->height : aCanvasSize.GetHeight() ),
-        m_xResolution( aCfg ? aCfg->x_resolution : 300.0 ),
-        m_yResolution( aCfg ? aCfg->y_resolution : 300.0 ),
-        m_lockAspectRatio( aCfg ? aCfg->lock_aspect_ratio : true ),
-        m_sizeUnits( aCfg ? static_cast<SIZE_UNITS>( aCfg->size_units ) : SIZE_UNITS::PIXELS ),
-        m_resolutionUnits( aCfg ? static_cast<RESOLUTION_UNITS>( aCfg->resolution_units )
-                                : RESOLUTION_UNITS::PIXELS_PER_INCH )
+        m_width( aCanvasSize.GetWidth() ),
+        m_height( aCanvasSize.GetHeight() ),
+        m_xResolution( 300.0 ),
+        m_yResolution( 300.0 ),
+        m_lockAspectRatio( true ),
+        m_sizeUnits( SIZE_UNITS::PIXELS ),
+        m_resolutionUnits( RESOLUTION_UNITS::PIXELS_PER_INCH )
 {
     m_aspectRatio = static_cast<double>(m_width) / static_cast<double>(m_height);
 
     // State is persisted through EXPORT_IMAGE_SETTINGS, so opt out of the generic
     // control-state save and restore.
     OptOut( this );
+
+    if( aCfg )
+    {
+        if( aCfg->width )
+            m_width = aCfg->width;
+
+        if( aCfg->height )
+            m_height = aCfg->height;
+
+        m_xResolution = aCfg->x_resolution;
+        m_yResolution = aCfg->y_resolution;
+        m_lockAspectRatio = aCfg->lock_aspect_ratio;
+        m_sizeUnits = static_cast<SIZE_UNITS>( aCfg->size_units );
+        m_resolutionUnits = static_cast<RESOLUTION_UNITS>( aCfg->resolution_units );
+    }
 
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -58,20 +74,23 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     imageSizeHeader->SetFont( imageSizeHeader->GetFont().Bold() );
     mainSizer->Add( imageSizeHeader, 0, wxLEFT | wxTOP, 10 );
 
-    wxFlexGridSizer* sizeGrid = new wxFlexGridSizer( 2, 4, 5, 5 );
-    sizeGrid->AddGrowableCol( 1 );
+    wxGridBagSizer* sizeGrid = new wxGridBagSizer( 5, 2 );
+    sizeGrid->SetFlexibleDirection( wxHORIZONTAL );
+    sizeGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     // Width row
-    sizeGrid->Add( new wxStaticText( this, wxID_ANY, _( "Width:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    sizeGrid->Add( new wxStaticText( this, wxID_ANY, _( "Width:" ) ), {0, 0}, {1, 1}, wxALIGN_CENTER_VERTICAL );
     m_spinWidth = new wxSpinCtrlDouble( this, wxID_ANY );
     m_spinWidth->SetRange( 1, 50000 );
     m_spinWidth->SetDigits( 0 );
-    sizeGrid->Add( m_spinWidth, 1, wxEXPAND );
+    sizeGrid->Add( m_spinWidth, {0, 1}, {1, 1}, wxALIGN_CENTER_VERTICAL );
 
     // Lock button - will span 2 rows
-    m_lockButton = new wxBitmapButton( this, wxID_ANY,
-                                       KiBitmapBundle( m_lockAspectRatio ? BITMAPS::locked : BITMAPS::unlocked ) );
-    sizeGrid->Add( m_lockButton, 0, wxALIGN_CENTER | wxALL, 2 );
+    m_lockButton = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
+    m_lockButton->SetBitmap( KiBitmapBundle( BITMAPS::link ) );
+	m_lockButton->SetToolTip( _( "Lock/unlock aspect ratio" ) );
+    m_lockButton->SetIsCheckButton();
+    sizeGrid->Add( m_lockButton, {0, 2}, {2, 1}, wxALIGN_CENTER | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 10 );
 
     // Size units choice
     m_choiceSizeUnits = new wxChoice( this, wxID_ANY );
@@ -80,17 +99,15 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     m_choiceSizeUnits->Append( _( "mm" ) );
     m_choiceSizeUnits->Append( _( "in" ) );
     m_choiceSizeUnits->SetSelection( static_cast<int>( m_sizeUnits ) );
-    sizeGrid->Add( m_choiceSizeUnits, 0, wxEXPAND );
+    m_choiceSizeUnits->SetMinSize( wxSize( 100, -1 ) );     // Try to keep two units choice boxes the same size
+    sizeGrid->Add( m_choiceSizeUnits, {0, 4}, {2, 1}, wxALIGN_CENTER_VERTICAL | wxLEFT, 15 );
 
     // Height row
-    sizeGrid->Add( new wxStaticText( this, wxID_ANY, _( "Height:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    sizeGrid->Add( new wxStaticText( this, wxID_ANY, _( "Height:" ) ), {1, 0}, {1, 1}, wxALIGN_CENTER_VERTICAL );
     m_spinHeight = new wxSpinCtrlDouble( this, wxID_ANY );
     m_spinHeight->SetRange( 1, 50000 );
     m_spinHeight->SetDigits( 0 );
-    sizeGrid->Add( m_spinHeight, 1, wxEXPAND );
-
-    sizeGrid->AddSpacer( 0 ); // Empty space where lock button is
-    sizeGrid->AddSpacer( 0 ); // Empty space for units column
+    sizeGrid->Add( m_spinHeight, {1, 1}, {1, 1}, wxALIGN_CENTER_VERTICAL );
 
     mainSizer->Add( sizeGrid, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10 );
 
@@ -100,44 +117,47 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     mainSizer->Add( m_pixelSizeLabel, 0, wxLEFT | wxTOP, 10 );
 
     // Separator
+    mainSizer->AddSpacer( 15 );
     wxStaticLine* line = new wxStaticLine( this );
-    mainSizer->Add( line, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10 );
+    mainSizer->Add( line, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
 
     // Resolution section
     wxStaticText* resolutionHeader = new wxStaticText( this, wxID_ANY, _( "Resolution" ) );
     resolutionHeader->SetFont( resolutionHeader->GetFont().Bold() );
     mainSizer->Add( resolutionHeader, 0, wxLEFT | wxTOP, 10 );
 
-    wxFlexGridSizer* resGrid = new wxFlexGridSizer( 2, 3, 5, 5 );
-    resGrid->AddGrowableCol( 1 );
+    wxGridBagSizer* resGrid = new wxGridBagSizer( 5, 2 );
+    resGrid->SetFlexibleDirection( wxHORIZONTAL );
+    resGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     // X Resolution row
-    resGrid->Add( new wxStaticText( this, wxID_ANY, _( "X resolution:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    resGrid->Add( new wxStaticText( this, wxID_ANY, _( "X resolution:" ) ), {0, 0}, {1, 1}, wxALIGN_CENTER_VERTICAL );
     m_spinXResolution = new wxSpinCtrlDouble( this, wxID_ANY );
     m_spinXResolution->SetRange( 1, 10000 );
     m_spinXResolution->SetDigits( 3 );
-    resGrid->Add( m_spinXResolution, 1, wxEXPAND );
+    resGrid->Add( m_spinXResolution, {0, 1}, {1, 1}, wxEXPAND );
 
     // Resolution units choice
     m_choiceResolutionUnits = new wxChoice( this, wxID_ANY );
     m_choiceResolutionUnits->Append( _( "pixels/in" ) );
     m_choiceResolutionUnits->Append( _( "pixels/mm" ) );
+    m_choiceResolutionUnits->SetMinSize( wxSize( 100, -1 ) );     // Try to keep two units choice boxes the same size
     m_choiceResolutionUnits->SetSelection( static_cast<int>( m_resolutionUnits ) );
-    resGrid->Add( m_choiceResolutionUnits, 0, wxEXPAND );
+    resGrid->Add( m_choiceResolutionUnits, {0, 2}, {2, 1}, wxALIGN_CENTER_VERTICAL | wxLEFT, 15 );
 
     // Y Resolution row
-    resGrid->Add( new wxStaticText( this, wxID_ANY, _( "Y resolution:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    resGrid->Add( new wxStaticText( this, wxID_ANY, _( "Y resolution:" ) ), {1, 0}, {1, 1}, wxALIGN_CENTER_VERTICAL );
     m_spinYResolution = new wxSpinCtrlDouble( this, wxID_ANY );
     m_spinYResolution->SetRange( 1, 10000 );
     m_spinYResolution->SetDigits( 3 );
-    resGrid->Add( m_spinYResolution, 1, wxEXPAND );
-    resGrid->AddSpacer( 0 ); // Empty space for units column
+    resGrid->Add( m_spinYResolution, {1, 1}, {1, 1}, wxEXPAND );
 
-    mainSizer->Add( resGrid, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10 );
+    mainSizer->Add( resGrid, 0, wxEXPAND | wxALL, 10 );
+    mainSizer->AddSpacer( 5 );
 
     // Dialog buttons
     wxStdDialogButtonSizer* btnSizer = CreateStdDialogButtonSizer( wxOK | wxCANCEL );
-    mainSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 10 );
+    mainSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 5 );
 
     SetSizerAndFit( mainSizer );
     Centre();
@@ -145,6 +165,7 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     // Set initial values AFTER creating all controls
     m_spinWidth->SetValue( m_width );
     m_spinHeight->SetValue( m_height );
+    m_lockButton->Check( m_lockAspectRatio );
     m_spinXResolution->SetValue( m_xResolution );
     m_spinYResolution->SetValue( m_yResolution );
     UpdatePixelSize();
@@ -200,14 +221,7 @@ void DIALOG_EXPORT_3D_IMAGE::OnLockToggle( wxCommandEvent& aEvent )
     m_lockAspectRatio = !m_lockAspectRatio;
 
     if( m_lockAspectRatio )
-    {
-        m_lockButton->SetBitmap( KiBitmapBundle( BITMAPS::locked ) );
         UpdateAspectRatio();
-    }
-    else
-    {
-        m_lockButton->SetBitmap( KiBitmapBundle( BITMAPS::unlocked ) );
-    }
 }
 
 

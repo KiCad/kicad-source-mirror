@@ -27,6 +27,9 @@
 #include <wx/stattext.h>
 #include <wx/bmpbuttn.h>
 
+class BITMAP_BUTTON;
+
+
 enum class SIZE_UNITS
 {
     PIXELS,
@@ -47,13 +50,13 @@ public:
     DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aCanvasSize,
                             EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* aCfg );
 
-    wxSize GetSize() const { return wxSize( m_width, m_height ); }
+    wxSize GetImageSize() const { return wxSize( m_width, m_height ); }
     double GetXResolution() const { return m_xResolution; }
     double GetYResolution() const { return m_yResolution; }
 
-private:
     bool TransferDataFromWindow() override;
 
+private:
     void OnLockToggle( wxCommandEvent& aEvent );
     void OnWidthChange( wxSpinDoubleEvent& aEvent );
     void OnHeightChange( wxSpinDoubleEvent& aEvent );
@@ -62,7 +65,8 @@ private:
     void OnSizeUnitChange( wxCommandEvent& aEvent );
     void OnResolutionUnitChange( wxCommandEvent& aEvent );
 
-    wxSize GetPixelSize( double aWidth, double aHeight, double aXResolution, double aYResolution, SIZE_UNITS aSizeUnits ) const;
+    wxSize GetPixelSize( double aWidth, double aHeight, double aXResolution, double aYResolution,
+                         SIZE_UNITS aSizeUnits ) const;
     void UpdatePixelSize();
     void UpdateAspectRatio();
     void ConvertSizeUnits( SIZE_UNITS aFromUnit, SIZE_UNITS aToUnit );
@@ -70,23 +74,23 @@ private:
 
 private:
     EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* m_cfg;
-    wxSize m_originalSize;
-    int m_width;
-    int m_height;
-    double m_xResolution;
-    double m_yResolution;
-    double m_aspectRatio;
-    bool m_lockAspectRatio;
+    wxSize             m_originalSize;
+    int                m_width;
+    int                m_height;
+    double             m_xResolution;
+    double             m_yResolution;
+    double             m_aspectRatio;
+    bool               m_lockAspectRatio;
 
-    SIZE_UNITS m_sizeUnits;
-    RESOLUTION_UNITS m_resolutionUnits;
+    SIZE_UNITS         m_sizeUnits;
+    RESOLUTION_UNITS   m_resolutionUnits;
 
-    wxSpinCtrlDouble* m_spinWidth;
-    wxSpinCtrlDouble* m_spinHeight;
-    wxSpinCtrlDouble* m_spinXResolution;
-    wxSpinCtrlDouble* m_spinYResolution;
-    wxChoice* m_choiceSizeUnits;
-    wxChoice* m_choiceResolutionUnits;
-    wxBitmapButton* m_lockButton;
-    wxStaticText* m_pixelSizeLabel;
+    wxSpinCtrlDouble*  m_spinWidth;
+    wxSpinCtrlDouble*  m_spinHeight;
+    wxSpinCtrlDouble*  m_spinXResolution;
+    wxSpinCtrlDouble*  m_spinYResolution;
+    wxChoice*          m_choiceSizeUnits;
+    wxChoice*          m_choiceResolutionUnits;
+    BITMAP_BUTTON*     m_lockButton;
+    wxStaticText*      m_pixelSizeLabel;
 };

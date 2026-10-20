@@ -146,7 +146,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     m_fontCtrl->RefreshFonts();
 
     m_autoTextThickness->SetIsCheckButton();
-    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::link ) );
 
     m_layerFilter->SetBoardFrame( m_parent );
     m_layerFilter->SetLayersHotkeys( false );

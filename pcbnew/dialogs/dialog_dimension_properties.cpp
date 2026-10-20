@@ -134,7 +134,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_separator3->SetIsSeparator();
 
     m_autoTextThickness->SetIsCheckButton();
-    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::link ) );
 
     // Fix the size after hiding/showing some of the properties
     Layout();

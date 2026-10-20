@@ -411,7 +411,7 @@ int EDA_3D_CONTROLLER::ExportImage( const TOOL_EVENT& aEvent )
     DIALOG_EXPORT_3D_IMAGE  dlg( viewer, currentSize, cfg ? &cfg->m_ExportImage : nullptr );
 
     if( dlg.ShowModal() == wxID_OK )
-        viewer->ExportImage( fmt, dlg.GetSize() );
+        viewer->ExportImage( fmt, dlg.GetImageSize() );
 
     return 0;
 }

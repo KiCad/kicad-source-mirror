@@ -134,7 +134,7 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME*  
     m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
 
     m_autoTextThickness->SetIsCheckButton();
-    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::link ) );
 
     SetupStandardButtons();
     Layout();

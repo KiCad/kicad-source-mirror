@@ -2697,7 +2697,7 @@ TOOL_ACTION PCB_ACTIONS::showFootprintAssociations( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Footprint Associations" ) )
         .Tooltip( _( "Show footprint library and schematic symbol associations" ) )
-        .Icon( BITMAPS::edit_cmp_symb_links ) );
+        .Icon( BITMAPS::link ) );
 
 //Geographic re-annotation tool
 TOOL_ACTION PCB_ACTIONS::boardReannotate( TOOL_ACTION_ARGS()
