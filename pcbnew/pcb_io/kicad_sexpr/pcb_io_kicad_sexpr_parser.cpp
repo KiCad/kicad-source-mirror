@@ -6927,8 +6927,15 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
         case T_point:
         {
-            PCB_POINT* point = parsePCB_POINT();
+            PCB_POINT*     point = parsePCB_POINT();
+            const VECTOR2I filePos = point->GetPosition();
+
             footprint->Add( point, ADD_MODE::APPEND, true );
+
+            // Legacy files stored footprint points in board frame
+            if( m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM )
+                point->SetPosition( filePos );
+
             break;
         }
 
