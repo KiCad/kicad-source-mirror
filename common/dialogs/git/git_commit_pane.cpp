@@ -1338,12 +1338,14 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
     }
 
     // While a transfer runs this button reads Cancel. The transfer callbacks poll the flag and
-    // abort on their next tick, and the completion then reports the cancellation.
+    // abort on their next tick, and the completion then reports the cancellation. A stalled
+    // connection runs no callbacks until it times out, so the cancel cannot be prompt.
     if( m_transfer.IsBusy() )
     {
         m_transfer.Cancel();
 
-        m_frame->SetStatusText( _( "Cancelling..." ) );
+        m_pullButton->Enable( false );
+        m_frame->SetStatusText( _( "Cancelling. A stalled connection stops only when it times out." ) );
         return;
     }
 
