@@ -549,10 +549,7 @@ OPENGL_GAL::~OPENGL_GAL()
         if( m_instanceCounter == 0 )
         {
             if( gl_mgr->LockCtx( m_glMainContext, this ) && m_isBitmapFontLoaded )
-            {
                 glDeleteTextures( 1, &g_fontTexture );
-                m_isBitmapFontLoaded = false;
-            }
 
             gl_mgr->UnlockCtx( m_glMainContext );
             gl_mgr->DestroyCtx( m_glMainContext );
@@ -561,6 +558,10 @@ OPENGL_GAL::~OPENGL_GAL()
                         m_glMainContext );
 
             m_glMainContext = nullptr;
+
+            // The texture dies with the context even when it could not be made current to delete it
+            g_fontTexture = 0;
+            m_isBitmapFontLoaded = false;
         }
     }
 }
