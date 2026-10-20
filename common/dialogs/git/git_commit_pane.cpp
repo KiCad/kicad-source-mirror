@@ -610,9 +610,6 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
         else if( !aStatus.hasRepo )
             setStatusText( _( "This project is not under version control. To set it up, right click "
                               "the project in the project manager and choose Version Control." ) );
-        else if( m_editorsDirty )
-            setStatusText( _( "The open editors have unsaved changes. Save them to review the files "
-                              "before committing." ) );
         else if( m_upstreamAhead )
             setStatusText( _( "The tracked branch has changes this project does not. Get Changes brings them in." ) );
         else if( m_hasUnpushedCommits )
@@ -898,11 +895,26 @@ void GIT_COMMIT_PANE::updateCommitButton()
     m_commitAndPushItem->SetItemLabel( menuLabel );
     m_commitAndPushItem->Enable( menuEnabled );
 
+    // Unsaved editor changes are a fact about the commit the user is about to make, so this
+    // goes beside the file list rather than only where there is nothing else to say.
+    wxString reason;
+
+    if( m_editorsDirty )
+        reason = _( "The open editors have unsaved changes. Committing offers to save them first." );
+
     if( !blocked.IsEmpty() )
-        setStatusText( blocked );
+    {
+        if( !reason.IsEmpty() )
+            reason += wxS( "\n" );
+
+        reason += blocked;
+    }
+
+    if( !reason.IsEmpty() )
+        setStatusText( reason );
 
     // With nothing listed the empty state owns the line and has already set its own text.
-    bool showReason = !blocked.IsEmpty() || m_shownPaths.empty();
+    bool showReason = !reason.IsEmpty() || m_shownPaths.empty();
 
     if( m_emptyLabel->IsShown() != showReason )
     {
