@@ -453,6 +453,11 @@ void DIALOG_SHIM::SetPosition( const wxPoint& aNewPosition )
 
 void DIALOG_SHIM::focusParentCanvas( bool aDeferUntilFrameActive )
 {
+    // A dialog can be hidden while its parent frame is part way through its own destructor,
+    // where the frame's overrides are gone and GetToolCanvas() is pure again.
+    if( m_parentFrame && m_parentFrame->IsBeingDeleted() )
+        return;
+
     wxWindow* toolCanvas = m_parentFrame ? m_parentFrame->GetToolCanvas() : nullptr;
     wxWindow* target = toolCanvas ? toolCanvas : m_parent;
 
