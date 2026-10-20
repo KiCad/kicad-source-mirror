@@ -270,6 +270,7 @@ void GIT_ADVANCED_DIALOG::CloseForPane( GIT_COMMIT_PANE* aPane )
     if( activeDialog() && activeDialog()->m_pane == aPane )
     {
         aPane->SetBusyChangedHandler( nullptr );
+        aPane->SetMessageChangedHandler( nullptr );
         activeDialog()->m_pane = nullptr;
         CloseActive();
     }
@@ -285,7 +286,10 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
     // The panel usually outlives this window, so it must not be left calling into it. When the
     // panel went first it cleared this and dropped the pointer.
     if( m_pane )
+    {
         m_pane->SetBusyChangedHandler( nullptr );
+        m_pane->SetMessageChangedHandler( nullptr );
+    }
 
     if( activeDialog() == this )
         setActiveDialog( nullptr );
@@ -325,6 +329,10 @@ void GIT_ADVANCED_DIALOG::syncListener()
 
 void GIT_ADVANCED_DIALOG::SetPaneTransferBusy( bool aBusy, const wxString& aStatus )
 {
+    // Two forms on one project, so both follow the transfer.
+    if( m_changesPane )
+        m_changesPane->SetTransferBusy( aBusy, aStatus );
+
     if( m_pane )
         m_pane->SetTransferBusy( aBusy, aStatus );
 }
@@ -332,7 +340,9 @@ void GIT_ADVANCED_DIALOG::SetPaneTransferBusy( bool aBusy, const wxString& aStat
 
 void GIT_ADVANCED_DIALOG::ShowTransferProgress( const wxString& aText )
 {
-    if( m_pane )
+    if( m_changesPane )
+        m_changesPane->ShowTransferProgress( aText );
+    else if( m_pane )
         m_pane->ShowTransferProgress( aText );
 }
 
@@ -410,6 +420,13 @@ wxWindow* GIT_ADVANCED_DIALOG::buildChangesPage( wxWindow* aBook )
                 [this]()
                 {
                     m_pane->SetCommitMessage( m_changesPane->GetCommitMessage() );
+                } );
+
+        // SetCommitMessage writes with ChangeValue, so neither form echoes back into the other.
+        m_pane->SetMessageChangedHandler(
+                [this]()
+                {
+                    m_changesPane->SetCommitMessage( m_pane->GetCommitMessage() );
                 } );
     }
 
