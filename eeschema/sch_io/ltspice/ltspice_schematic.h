@@ -247,6 +247,7 @@ public:
         std::vector<LT_WINDOW>       Windows;
         std::vector<ARC>             Arcs;
         std::vector<RECTANGLE>       Rectangles;
+        std::vector<TEXT>            Texts;
         ORIENTATION                  SymbolOrientation;
     };
 

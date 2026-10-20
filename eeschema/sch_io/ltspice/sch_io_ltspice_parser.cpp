@@ -403,7 +403,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSymbolsAndSubsheets( LTSPICE_SCHEMATIC::L
                 SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY );
 
                 CreateSymLine( nullptr, lt_symbol, j, shape );
-                RotateMirrorShape( lt_symbol, shape );
+                RotateMirrorItem( lt_symbol, shape );
                 shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
 
                 aScreen->Append( shape );
@@ -414,7 +414,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSymbolsAndSubsheets( LTSPICE_SCHEMATIC::L
                 SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::CIRCLE );
 
                 CreateSymCircle( lt_symbol, j, shape );
-                RotateMirrorShape( lt_symbol, shape );
+                RotateMirrorItem( lt_symbol, shape );
                 shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
 
                 aScreen->Append( shape );
@@ -425,7 +425,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSymbolsAndSubsheets( LTSPICE_SCHEMATIC::L
                 SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::ARC );
 
                 CreateSymArc( lt_symbol, j, shape );
-                RotateMirrorShape( lt_symbol, shape );
+                RotateMirrorItem( lt_symbol, shape );
                 shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
 
                 aScreen->Append( shape );
@@ -436,10 +436,21 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSymbolsAndSubsheets( LTSPICE_SCHEMATIC::L
                 SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
                 CreateSymRect( lt_symbol, j, shape );
-                RotateMirrorShape( lt_symbol, shape );
+                RotateMirrorItem( lt_symbol, shape );
                 shape->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
 
                 aScreen->Append( shape );
+            }
+
+            for( int j = 0; j < (int) lt_symbol.Texts.size(); j++ )
+            {
+                SCH_TEXT* text = new SCH_TEXT( VECTOR2I(), wxEmptyString );
+
+                CreateSymText( lt_symbol, j, text );
+                RotateMirrorItem( lt_symbol, text );
+                text->Move( ToKicadCoords( lt_symbol.Offset ) + m_originOffset );
+
+                aScreen->Append( text );
             }
 
             SCH_SHEET* sch_sheet = AddAscSymAsSubsheet( aAscfile, lt_symbol, aScreen );
@@ -483,6 +494,14 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
 
         CreateSymRect( aLtSymbol, j, rectangle );
         aLibSymbol->AddDrawItem( rectangle );
+    }
+
+    for( int j = 0; j < (int) aLtSymbol.Texts.size(); j++ )
+    {
+        SCH_TEXT* text = new SCH_TEXT( VECTOR2I(), wxEmptyString, LAYER_DEVICE );
+
+        CreateSymText( aLtSymbol, j, text );
+        aLibSymbol->AddDrawItem( text );
     }
 
     for( int j = 0; j < (int) aLtSymbol.Pins.size(); j++ )
@@ -585,38 +604,38 @@ VECTOR2I SCH_IO_LTSPICE_PARSER::RotateMirror( const LTSPICE_SCHEMATIC::LT_SYMBOL
 }
 
 
-void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_SHAPE* aShape )
+void SCH_IO_LTSPICE_PARSER::RotateMirrorItem( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, SCH_ITEM* aItem )
 {
     if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R90 )
     {
-        aShape->Rotate( VECTOR2I(), false );
+        aItem->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R180 )
     {
-        aShape->Rotate( VECTOR2I(), false );
-        aShape->Rotate( VECTOR2I(), false );
+        aItem->Rotate( VECTOR2I(), false );
+        aItem->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R270 )
     {
-        aShape->Rotate( VECTOR2I(), true );
+        aItem->Rotate( VECTOR2I(), true );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M0 )
     {
-        aShape->MirrorHorizontally( 0 );
+        aItem->MirrorHorizontally( 0 );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M90 )
     {
-        aShape->MirrorVertically( 0 );
-        aShape->Rotate( VECTOR2I(), false );
+        aItem->MirrorVertically( 0 );
+        aItem->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M180 )
     {
-        aShape->MirrorVertically( 0 );
+        aItem->MirrorVertically( 0 );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M270 )
     {
-        aShape->MirrorVertically( 0 );
-        aShape->Rotate( VECTOR2I(), true );
+        aItem->MirrorVertically( 0 );
+        aItem->Rotate( VECTOR2I(), true );
     }
 }
 
@@ -1760,4 +1779,16 @@ void SCH_IO_LTSPICE_PARSER::CreateSymCircle( const LTSPICE_SCHEMATIC::LT_SYMBOL&
     aCircle->SetStroke( getStroke( lt_circle.LineWidth, lt_circle.LineStyle ) );
 }
 
+
+void SCH_IO_LTSPICE_PARSER::CreateSymText( const LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_TEXT* aText )
+{
+    const LTSPICE_SCHEMATIC::TEXT& lt_text = aLTSymbol.Texts[aIndex];
+
+    aText->SetText( lt_text.Value );
+    aText->SetPosition( ToKicadCoords( lt_text.Offset ) );
+    aText->SetTextSize( ToKicadFontSize( lt_text.FontSize ) );
+    aText->SetVisible( true );
+
+    setTextJustification( aText, lt_text.Justification );
+}
 
