@@ -424,6 +424,29 @@ BOOST_AUTO_TEST_CASE( PerformPull_RefusesACommitThatBringsGitLfs )
 }
 
 
+// Cancel has to reach a push that is already writing objects, as it does a fetch that is
+// already receiving them. libgit2 abandons the transfer when the progress callback refuses.
+BOOST_AUTO_TEST_CASE( PushProgressStopsWhenTheOperationIsCancelled )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PUSH_HANDLER handler( &common );
+
+    // Running normally, the push carries on.
+    BOOST_CHECK_EQUAL( push_transfer_progress_cb( 1, 10, 128, &handler ), 0 );
+
+    handler.CancelThisOperation();
+
+    BOOST_CHECK_MESSAGE( push_transfer_progress_cb( 2, 10, 256, &handler ) != 0,
+                         "a cancelled push should stop at its next progress tick" );
+}
+
+
 BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
 {
     const wxString project = wxT( "/repo/proj/" );

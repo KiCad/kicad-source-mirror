@@ -2312,6 +2312,12 @@ extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aT
     long long         progress = 100;
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
+    if( parent->IsThisOperationCancelled() )
+    {
+        wxLogTrace( traceGit, "Push progress cancelled" );
+        return GIT_EUSER;
+    }
+
     if( aTotal != 0 )
     {
         progress = ( aCurrent * 100ll ) / aTotal;
