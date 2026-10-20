@@ -64,6 +64,8 @@
 #include <wx/log.h>
 #include <kiplatform/ui.h>
 
+#include "widgets/kistatusbar.h"
+
 #if defined(__linux__) || defined(__FreeBSD__)
 #include <spacenav/spnav_2d_plugin.h>
 #else
@@ -142,41 +144,42 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     configureToolbars();
     RecreateToolbars();
 
-    wxStatusBar* stsbar = GetStatusBar();
-    int          spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+    if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+    {
+        int spacer = KIUI::GetTextSize( wxT( "M" ), statusBar ).x * 2;
 
-    int dims[] = {
+        int dims[] = {
 
-        // balance of status bar on far left is set to a default or whatever is left over.
-        -1,
+            // balance of status bar on far left is set to a default or whatever is left over.
+            -1,
 
-        // When using GetTextSize() remember the width of '1' is not the same
-        // as the width of '0' unless the font is fixed width, and it usually won't be.
+            // When using GetTextSize() remember the width of '1' is not the same
+            // as the width of '0' unless the font is fixed width, and it usually won't be.
 
-        // zoom:
-        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + spacer,
+            // zoom:
+            KIUI::GetTextSize( wxT( "Z 762000" ), statusBar ).x + spacer,
 
-        // cursor coords
-        KIUI::GetTextSize( wxT( "X 0234.567  Y 0234.567" ), stsbar ).x + spacer,
+            // cursor coords
+            KIUI::GetTextSize( wxT( "X 0234.567  Y 0234.567" ), statusBar ).x + spacer,
 
-        // delta distances
-        KIUI::GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), stsbar ).x + spacer,
+            // delta distances
+            KIUI::GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), statusBar ).x + spacer,
 
-        // grid size
-        KIUI::GetTextSize( wxT( "grid 0234.567" ), stsbar ).x + spacer,
+            // grid size
+            KIUI::GetTextSize( wxT( "grid 0234.567" ), statusBar ).x + spacer,
 
-        // Coord origin (use the bigger message)
-        KIUI::GetTextSize( _( "coord origin: Right Bottom page corner" ), stsbar ).x + spacer,
+            // Coord origin (use the bigger message)
+            KIUI::GetTextSize( _( "coord origin: Right Bottom page corner" ), statusBar ).x + spacer,
 
-        // units display, Inches is bigger than mm
-        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + spacer,
+            // units display, Inches is bigger than mm
+            KIUI::GetTextSize( _( "Inches" ), statusBar ).x + spacer,
 
-        // constraint mode
-        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x + spacer
-    };
+            // constraint mode
+            KIUI::GetTextSize( _( "Constrain to H, V, 45" ), statusBar ).x + spacer
+        };
 
-    if( stsbar )
-        stsbar->SetFieldsCount( arrayDim( dims ), dims );
+        statusBar->SetFieldsCount( arrayDim( dims ), dims );
+    }
 
     m_auimgr.SetManagedWindow( this );
 
