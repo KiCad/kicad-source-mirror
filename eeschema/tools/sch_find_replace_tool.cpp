@@ -327,7 +327,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 
                 for( SCH_SHEET_PATH& sheet : paths )
                 {
-                    if( afterSheet && !freshSession )
+                    if( afterSheet && ( isReversed || !freshSession ) )
                     {
                         if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
                             afterSheet = nullptr;
