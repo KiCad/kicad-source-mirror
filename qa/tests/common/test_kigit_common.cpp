@@ -822,6 +822,20 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
 }
 
 
+// A project can be open before it is ever put under version control, so a session with no
+// repository is a normal state and not a programming error.
+BOOST_AUTO_TEST_CASE( SessionWithoutARepositoryAnswersQuietly )
+{
+    KIGIT_COMMON common( nullptr );
+
+    BOOST_CHECK( common.GetCurrentBranchName().IsEmpty() );
+    BOOST_CHECK( common.GetProjectDirs().empty() );
+    BOOST_CHECK( !common.HasPushAndPullRemote() );
+    BOOST_CHECK( common.GetRemotename().IsEmpty() );
+
+    BOOST_CHECK_NO_THROW( common.UpdateCurrentBranchInfo() );
+}
+
 // A branch name the user typed is checked before git sees it, so the refusal names the
 // mistake instead of quoting libgit2.
 BOOST_AUTO_TEST_CASE( BranchNameErrorNamesTheMistake )

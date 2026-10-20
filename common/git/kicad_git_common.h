@@ -208,6 +208,12 @@ struct KIGIT_CONFLICT_SIDES
 };
 
 
+/**
+ * The project's git session. A project can be open before it is ever put under version
+ * control, and integration can be turned off for it, so a session with no repository is a
+ * normal state rather than a programming error. Every method answers empty, false or nothing
+ * in that case.
+ */
 class APIEXPORT KIGIT_COMMON
 {
 
