@@ -20,43 +20,43 @@ DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BA
 	m_headerLabel->Wrap( 580 );
 	m_mainSizer->Add( m_headerLabel, 0, wxALL|wxEXPAND, 10 );
 
-	m_conflictsGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_conflictsGrid->CreateGrid( 0, 5 );
-	m_conflictsGrid->EnableEditing( true );
-	m_conflictsGrid->EnableGridLines( true );
-	m_conflictsGrid->EnableDragGridSize( false );
-	m_conflictsGrid->SetMargins( 0, 0 );
+	m_grid->CreateGrid( 0, 5 );
+	m_grid->EnableEditing( true );
+	m_grid->EnableGridLines( true );
+	m_grid->EnableDragGridSize( false );
+	m_grid->SetMargins( 0, 0 );
 
 	// Columns
-	m_conflictsGrid->SetColSize( 0, 60 );
-	m_conflictsGrid->SetColSize( 1, 80 );
-	m_conflictsGrid->SetColSize( 2, 140 );
-	m_conflictsGrid->SetColSize( 3, 160 );
-	m_conflictsGrid->SetColSize( 4, 140 );
-	m_conflictsGrid->EnableDragColMove( false );
-	m_conflictsGrid->EnableDragColSize( true );
-	m_conflictsGrid->SetColLabelValue( 0, _("Reference") );
-	m_conflictsGrid->SetColLabelValue( 1, _("Sheet") );
-	m_conflictsGrid->SetColLabelValue( 2, _("Field") );
-	m_conflictsGrid->SetColLabelValue( 3, _("Value") );
-	m_conflictsGrid->SetColLabelValue( 4, _("Action") );
-	m_conflictsGrid->SetColLabelSize( 22 );
-	m_conflictsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+	m_grid->SetColSize( 0, 72 );
+	m_grid->SetColSize( 1, 140 );
+	m_grid->SetColSize( 2, 120 );
+	m_grid->SetColSize( 3, 100 );
+	m_grid->SetColSize( 4, 180 );
+	m_grid->EnableDragColMove( false );
+	m_grid->EnableDragColSize( true );
+	m_grid->SetColLabelValue( 0, _("Reference") );
+	m_grid->SetColLabelValue( 1, _("Sheet") );
+	m_grid->SetColLabelValue( 2, _("Field") );
+	m_grid->SetColLabelValue( 3, _("Value") );
+	m_grid->SetColLabelValue( 4, _("Action") );
+	m_grid->SetColLabelSize( 22 );
+	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_conflictsGrid->EnableDragRowSize( false );
-	m_conflictsGrid->SetRowLabelSize( 0 );
-	m_conflictsGrid->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
+	m_grid->EnableDragRowSize( false );
+	m_grid->SetRowLabelSize( 0 );
+	m_grid->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
 
 	// Label Appearance
 
 	// Cell Defaults
-	m_conflictsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_conflictsGrid->SetMinSize( wxSize( 600,200 ) );
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_grid->SetMinSize( wxSize( 660,200 ) );
 
-	m_mainSizer->Add( m_conflictsGrid, 1, wxALL|wxEXPAND, 10 );
+	m_mainSizer->Add( m_grid, 1, wxALL|wxEXPAND, 10 );
 
 	wxBoxSizer* m_bulkApplySizer;
 	m_bulkApplySizer = new wxBoxSizer( wxHORIZONTAL );
@@ -109,7 +109,7 @@ DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BA
 
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onInitDialog ) );
-	m_conflictsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onActionCellChanged ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onActionCellChanged ), NULL, this );
 	m_bulkApplyCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onBulkApplyToggled ), NULL, this );
 	m_stdButtonsSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onApplyAndContinue ), NULL, this );
 }
@@ -118,7 +118,7 @@ DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::~DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_B
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onInitDialog ) );
-	m_conflictsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onActionCellChanged ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onActionCellChanged ), NULL, this );
 	m_bulkApplyCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onBulkApplyToggled ), NULL, this );
 	m_stdButtonsSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE::onApplyAndContinue ), NULL, this );
 

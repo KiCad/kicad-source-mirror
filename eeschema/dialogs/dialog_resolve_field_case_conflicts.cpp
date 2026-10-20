@@ -24,21 +24,24 @@
 #include <sch_commit.h>
 #include <wx/grid.h>
 
+#include "grid_tricks.h"
 
-DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::DIALOG_RESOLVE_FIELD_CASE_CONFLICTS(
-        wxWindow* aParent, SCH_EDIT_FRAME* aFrame,
-        std::vector<FIELD_CASE_CONFLICT> aConflicts ) :
+
+DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::DIALOG_RESOLVE_FIELD_CASE_CONFLICTS( wxWindow* aParent, SCH_EDIT_FRAME* aFrame,
+                                                                          std::vector<FIELD_CASE_CONFLICT> conflicts ) :
         DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE( aParent ),
         m_frame( aFrame ),
-        m_conflicts( std::move( aConflicts ) ),
+        m_conflicts( std::move( conflicts ) ),
         m_rowAction( m_conflicts.size(), ACTION_KEEP_FIRST )
 {
-    m_conflictsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
-    m_headerLabel->SetLabel( wxString::Format(
-            _( "%zu symbols have user fields whose names differ only in case. "
-               "Choose how to resolve each before opening the table." ),
-            m_conflicts.size() ) );
+    m_headerLabel->SetLabel( wxString::Format( _( "%zu symbols have user fields whose names differ only in case. "
+                                                  "Choose how to resolve each before opening the table." ),
+                                               m_conflicts.size() ) );
+
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->SetupColumnAutosizer( 3 );
 
     populateGrid();
 
@@ -49,49 +52,53 @@ DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::DIALOG_RESOLVE_FIELD_CASE_CONFLICTS(
 }
 
 
+DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::~DIALOG_RESOLVE_FIELD_CASE_CONFLICTS()
+{
+    // destroy GRID_TRICKS before m_conflictsGrid.
+    m_grid->PopEventHandler( true );
+}
+
+
 void DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::populateGrid()
 {
-    wxGrid* g = m_conflictsGrid;
-    g->BeginBatch();
+    m_grid->BeginBatch();
 
-    if( g->GetNumberRows() > 0 )
-        g->DeleteRows( 0, g->GetNumberRows() );
+    if( m_grid->GetNumberRows() > 0 )
+        m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
 
-    g->AppendRows( static_cast<int>( m_conflicts.size() ) );
+    m_grid->AppendRows( static_cast<int>( m_conflicts.size() ) );
 
     for( size_t i = 0; i < m_conflicts.size(); ++i )
     {
         const FIELD_CASE_CONFLICT& c = m_conflicts[i];
 
-        g->SetCellValue( i, 0, c.reference );
-        g->SetCellValue( i, 1, c.sheetPath.PathHumanReadable( false ) );
+        m_grid->SetCellValue( i, 0, c.reference );
+        m_grid->SetCellValue( i, 1, c.sheetPath.PathHumanReadable( false ) );
 
         wxString fieldsLabel = wxString::Format( "%s\n%s",
                                                  c.variants[0].first,
                                                  c.variants[1].first );
 
         wxString valuesLabel = wxString::Format( "%s\n%s",
-                                                 c.variants[0].second.IsEmpty()
-                                                         ? wxString( _( "(empty)" ) )
-                                                         : c.variants[0].second,
-                                                 c.variants[1].second.IsEmpty()
-                                                         ? wxString( _( "(empty)" ) )
-                                                         : c.variants[1].second );
+                                                 c.variants[0].second.IsEmpty() ? wxString( _( "(empty)" ) )
+                                                                                : c.variants[0].second,
+                                                 c.variants[1].second.IsEmpty() ? wxString( _( "(empty)" ) )
+                                                                                : c.variants[1].second );
 
-        g->SetCellValue( i, 2, fieldsLabel );
-        g->SetCellValue( i, 3, valuesLabel );
+        m_grid->SetCellValue( i, 2, fieldsLabel );
+        m_grid->SetCellValue( i, 3, valuesLabel );
 
         wxArrayString choices;
         choices.Add( wxString::Format( _( "Keep '%s'" ), c.variants[0].first ) );
         choices.Add( wxString::Format( _( "Keep '%s'" ), c.variants[1].first ) );
         choices.Add( _( "Join values" ) );
 
-        g->SetCellEditor( i, 4, new wxGridCellChoiceEditor( choices, false ) );
-        g->SetCellValue( i, 4, choices[0] );
+        m_grid->SetCellEditor( i, 4, new wxGridCellChoiceEditor( choices, false ) );
+        m_grid->SetCellValue( i, 4, choices[0] );
     }
 
-    g->AutoSizeRows();
-    g->EndBatch();
+    m_grid->AutoSizeRows();
+    m_grid->EndBatch();
 }
 
 
@@ -107,11 +114,8 @@ DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::findSiblingRows( int aRow ) const
 
     for( size_t i = 0; i < m_conflicts.size(); ++i )
     {
-        if( static_cast<int>( i ) != aRow
-            && m_conflicts[i].caseFoldedKey.IsSameAs( key, false ) )
-        {
+        if( static_cast<int>( i ) != aRow && m_conflicts[i].caseFoldedKey.IsSameAs( key, false ) )
             siblings.push_back( static_cast<int>( i ) );
-        }
     }
 
     return siblings;
@@ -129,7 +133,7 @@ void DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::onActionCellChanged( wxGridEvent& even
         return;
     }
 
-    wxString choice = m_conflictsGrid->GetCellValue( row, 4 );
+    wxString choice = m_grid->GetCellValue( row, 4 );
     ACTION   action = ACTION_KEEP_FIRST;
 
     if( choice.Contains( m_conflicts[row].variants[1].first ) )
@@ -144,7 +148,7 @@ void DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::onActionCellChanged( wxGridEvent& even
         for( int sibling : findSiblingRows( row ) )
         {
             m_rowAction[sibling] = action;
-            m_conflictsGrid->SetCellValue( sibling, 4, choice );
+            m_grid->SetCellValue( sibling, 4, choice );
         }
     }
 

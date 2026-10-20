@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/wx_grid.h"
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -36,7 +37,7 @@ class DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_headerLabel;
-		wxGrid* m_conflictsGrid;
+		WX_GRID* m_grid;
 		wxCheckBox* m_bulkApplyCheckbox;
 		wxStaticText* m_separatorLabel;
 		wxTextCtrl* m_separatorCtrl;
@@ -54,7 +55,7 @@ class DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Resolve Field Name Conflicts"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Resolve Field Name Conflicts"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_RESOLVE_FIELD_CASE_CONFLICTS_BASE();
 
