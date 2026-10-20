@@ -224,7 +224,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 compFields.erase( GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
                 compFields.erase( wxT( "Component Class" ) );
 
-                const wxString datasheetName = GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED );
+                const wxString datasheetName = GetCanonicalFieldName( FIELD_T::DATASHEET );
 
                 // Boards from 9.0.3+ store a "~" datasheet that the 10.0 schematic loader reads as empty
                 auto isBlank =
