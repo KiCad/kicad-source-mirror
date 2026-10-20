@@ -584,6 +584,66 @@ protected:
     std::string encodeByteString( const std::string& aBytes );
 
 protected:
+    /**
+     * The PDF cross-reference table.
+     *
+     * This is a table of file offsets for each PDF object "handle" (int)
+     */
+    class XREF_TABLE
+    {
+    public:
+        void Reset()
+        {
+            m_offsets.assign( 1, 0 );
+        }
+
+        /**
+         * Allocate a new PDF object handle. Object 0 is reserved by the PDF
+         * format and is never handed out.
+         *
+         * You must fill in the file offset for this handle using SetOffset()
+         * before the object is useable.
+         *
+         * @return The newly allocated handle.
+         */
+        int Allocate()
+        {
+            m_offsets.push_back( 0 );
+            return static_cast<int>( m_offsets.size() ) - 1;
+        }
+
+        /**
+         * Is the given PDF object handle in the table?
+         */
+        bool IsValid( int aHandle ) const
+        {
+            return aHandle > 0 && aHandle < static_cast<int>( m_offsets.size() );
+        }
+
+        /**
+         * Set the file offset for a given PDF object handle.
+         *
+         * @param aHandle The PDF object handle.
+         * @param aOffset The file offset where the object starts.
+         */
+        void SetOffset( int aHandle, long aOffset )
+        {
+            wxASSERT_MSG( IsValid( aHandle ), "PDF object handle is not valid" );
+            wxASSERT_MSG( aOffset >= 0, "PDF object offset must be non-negative" );
+
+            if( IsValid( aHandle ) )
+                m_offsets[aHandle] = aOffset;
+        }
+
+        const std::vector<long>& Entries() const
+        {
+            return m_offsets;
+        }
+
+    private:
+        std::vector<long> m_offsets = { 0 };
+    };
+
     int               m_pageTreeHandle;           ///< Handle to the root of the page tree object.
     int               m_fontResDictHandle;        ///< Font resource dictionary.
     int               m_imgResDictHandle;         ///< Image resource dictionary.
@@ -599,7 +659,7 @@ protected:
     FILE*             m_workFile;                 ///< Temporary file to construct the stream before zipping.
 
     /// The PDF xref offset table.
-    std::vector<long>                                           m_xrefTable;
+    XREF_TABLE m_xrefTable;
 
     /// List of user-space page numbers for resolving internal hyperlinks.
     std::vector<wxString>                                       m_pageNumbers;

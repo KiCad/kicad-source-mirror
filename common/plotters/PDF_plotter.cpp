@@ -710,8 +710,7 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
 
 int PDF_PLOTTER::allocPdfObject()
 {
-    m_xrefTable.push_back( 0 );
-    return m_xrefTable.size() - 1;
+    return m_xrefTable.Allocate();
 }
 
 
@@ -720,10 +719,13 @@ int PDF_PLOTTER::startPdfObject( int aHandle )
     wxASSERT( m_outputFile );
     wxASSERT( !m_workFile );
 
-    if( aHandle < 0 )
+    if( !m_xrefTable.IsValid( aHandle ) )
+    {
+        wxASSERT_MSG( aHandle < 0, "PDF object handle given was not previously allocated" );
         aHandle = allocPdfObject();
+    }
 
-    m_xrefTable[aHandle] = ftell( m_outputFile );
+    m_xrefTable.SetOffset( aHandle, ftell( m_outputFile ) );
     fmt::println( m_outputFile, "{} 0 obj", aHandle );
     return aHandle;
 }
@@ -1190,8 +1192,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
 
     // First things first: the customary null object
     m_pageHandles.clear();
-    m_xrefTable.clear();
-    m_xrefTable.push_back( 0 );
+    m_xrefTable.Reset();
     m_pageNumbers.clear();
     m_hyperlinksInPage.clear();
     m_hyperlinkMenusInPage.clear();
@@ -2111,14 +2112,16 @@ bool PDF_PLOTTER::EndPlot()
        be 20 bytes long, and object zero must be done in that way). Also
        the offset must be kept along for the trailer */
     long xref_start = ftell( m_outputFile );
+    const std::vector<long>& xrefEntries = m_xrefTable.Entries();
+
     fmt::print( m_outputFile,
                 "xref\n"
                 "0 {}\n"
                 "0000000000 65535 f \n",
-                m_xrefTable.size() );
+                xrefEntries.size() );
 
-    for( unsigned i = 1; i < m_xrefTable.size(); i++ )
-        fmt::print( m_outputFile, "{:010d} 00000 n \n", m_xrefTable[i] );
+    for( unsigned i = 1; i < xrefEntries.size(); i++ )
+        fmt::print( m_outputFile, "{:010d} 00000 n \n", xrefEntries[i] );
 
     // Done the xref, go for the trailer
     fmt::print( m_outputFile,
@@ -2127,7 +2130,7 @@ bool PDF_PLOTTER::EndPlot()
                 "startxref\n"
                 "{}\n" // The offset we saved before
                 "%%EOF\n",
-                m_xrefTable.size(),
+                xrefEntries.size(),
                 catalogHandle,
                 infoDictHandle,
                 xref_start );
