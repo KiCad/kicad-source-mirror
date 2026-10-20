@@ -446,14 +446,18 @@ void PCB_IO_EAGLE::loadBoard( const wxString& aFileName, BOARD& aBoard, bool aIs
         m_board->m_LegacyNetclassesLoaded = true;
         m_board->m_LegacyDesignSettingsLoaded = true;
 
+        fn.SetExt( wxT( "kicad_dru" ) );
+
         // Only emit a design rules sidecar when the Eagle board carried an actual
         // clearance matrix. A version-only file has no rules and is just clutter.
         if( m_customRules.Contains( wxT( "(rule " ) ) )
         {
-            fn.SetExt( wxT( "kicad_dru" ) );
-
             wxFile rulesFile( fn.GetFullPath(), wxFile::write );
             rulesFile.Write( m_customRules );
+        }
+        else if( fn.FileExists() )
+        {
+            wxRemoveFile( fn.GetFullPath() );
         }
 
         // should be empty, else missing m_xpath->pop()
