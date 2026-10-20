@@ -545,17 +545,46 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 }
 
 
-bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aName, bool focusFirst )
+bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aName, bool focusFirst,
+                                                   bool aDeferError )
 {
     wxString tmp = aName;
 
     tmp.Trim( true );
     tmp.Trim( false );
 
+    // Re-opening the cell editor inside a CELL_CHANGING handler leaves wx 3.3 with a freed active editor
+    auto report =
+            [&]( const wxString& aMsg, int aErrorRow )
+            {
+                if( aDeferError )
+                {
+                    // The row may be deleted or moved before this runs, so only report on the same netclass
+                    wxString rowName = m_netclassGrid->GetCellValue( aErrorRow, GRID_NAME );
+
+                    CallAfter(
+                            [this, aMsg, aErrorRow, rowName]()
+                            {
+                                PAGED_DIALOG* dialog = PAGED_DIALOG::GetDialog( this );
+
+                                if( !dialog || !dialog->IsShown() || aErrorRow >= m_netclassGrid->GetNumberRows()
+                                    || m_netclassGrid->GetCellValue( aErrorRow, GRID_NAME ) != rowName )
+                                {
+                                    return;
+                                }
+
+                                dialog->SetError( aMsg, this, m_netclassGrid, aErrorRow, GRID_NAME );
+                            } );
+                }
+                else
+                {
+                    PAGED_DIALOG::GetDialog( this )->SetError( aMsg, this, m_netclassGrid, aErrorRow, GRID_NAME );
+                }
+            };
+
     if( tmp.IsEmpty() )
     {
-        wxString msg =  _( "Netclass must have a name." );
-        PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid, aRow, GRID_NAME );
+        report( _( "Netclass must have a name." ), aRow );
         return false;
     }
 
@@ -563,9 +592,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
     {
         if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( tmp ) == 0 )
         {
-            wxString msg = _( "Netclass name already in use." );
-            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii,
-                                                       GRID_NAME );
+            report( _( "Netclass name already in use." ), focusFirst ? aRow : ii );
             return false;
         }
     }
@@ -598,7 +625,7 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging( wxGridEvent& event )
 {
     if( event.GetCol() == GRID_NAME )
     {
-        if( validateNetclassName( event.GetRow(), event.GetString() ) )
+        if( validateNetclassName( event.GetRow(), event.GetString(), true, true ) )
         {
             wxString oldName = m_netclassGrid->GetCellValue( event.GetRow(), GRID_NAME );
             wxString newName = event.GetString();

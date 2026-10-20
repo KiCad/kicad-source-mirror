@@ -69,7 +69,8 @@ private:
 
     void onUnitsChanged( wxCommandEvent& aEvent );
 
-    bool validateNetclassName( int aRow, const wxString& aName, bool focusFirst = true );
+    bool validateNetclassName( int aRow, const wxString& aName, bool focusFirst = true,
+                               bool aDeferError = false );
     bool validateNetclassClearance( int aRow );
 
     void rebuildNetclassDropdowns();
