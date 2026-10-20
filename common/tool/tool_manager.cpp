@@ -489,21 +489,14 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     if( aTool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
 
+    auto it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
+
     // If the tool is already active, bring it to the top of the active tools stack
-    if( isActive( aTool ) )
+    if( it != m_activeTools.end() )
     {
-        auto it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
-
-        if( it != m_activeTools.end() )
-        {
-            if( it != m_activeTools.begin() )
-            {
-                m_activeTools.erase( it );
-                m_activeTools.push_front( id );
-            }
-
-            return false;
-        }
+        // Splice keeps the node, so dispatchInternal() can still iterate from it
+        m_activeTools.splice( m_activeTools.begin(), m_activeTools, it );
+        return false;
     }
 
     setActiveState( m_toolIdIndex[id] );
