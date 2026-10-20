@@ -28,6 +28,7 @@
 #include <bitmaps/bitmaps_list.h>
 #include <widgets/wx_dataviewctrl.h>
 #include <wx/colour.h>
+#include <wx/event.h>
 #include <kicommon.h>
 
 
@@ -107,11 +108,18 @@ public:
     wxString GetItemPath( const wxDataViewItem& aItem ) const;
 
     /// WX_DATAVIEWCTRL drops tooltips for every data view it is the base of. This one shows
-    /// the tooltip its owner sets.
-    void DoSetToolTipText( const wxString& aTip ) override { wxDataViewCtrl::DoSetToolTipText( aTip ); }
+    /// them, and remembers what the owner asked for so the row tooltip can give way to it.
+    void DoSetToolTipText( const wxString& aTip ) override;
 
 private:
+    /// wxDataViewCtrl sends no mouse moves, so the hovered row is read on idle. LIB_TREE
+    /// tracks its preview the same way.
+    void onIdle( wxIdleEvent& aEvent );
+
     wxObjectDataPtr<FILE_CHECKLIST_MODEL> m_model;
+
+    wxString m_ownerTooltip; ///< What the owner set, shown when no row has more to say.
+    wxString m_shownTooltip; ///< What is on screen, so an unchanged hover is left alone.
 };
 
 #endif // FILE_CHECKLIST_CTRL_H
