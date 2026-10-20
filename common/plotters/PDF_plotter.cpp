@@ -234,22 +234,37 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 }
 
 
+int PDF_PLOTTER::getExtGStateHandleForAlpha( double aAlpha )
+{
+    auto [it, inserted] = m_alphaToExtGStateHandles.try_emplace( aAlpha );
+
+    if( inserted )
+        it->second = allocPdfObject();
+
+    return it->second;
+}
+
+
 void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
     wxASSERT( m_workFile );
 
-    // PDF treats all colors as opaque, so the best we can do with alpha is generate an
-    // appropriate blended color assuming white paper.
-    if( a < 1.0 )
-    {
-        r = ( r * a ) + ( 1 - a );
-        g = ( g * a ) + ( 1 - a );
-        b = ( b * a ) + ( 1 - a );
-    }
-
     fmt::println( m_workFile, "{} {} {} rg {} {} {} RG",
                   encodeDoubleForPlotter( r ), encodeDoubleForPlotter( g ), encodeDoubleForPlotter( b ),
                   encodeDoubleForPlotter( r ), encodeDoubleForPlotter( g ), encodeDoubleForPlotter( b ) );
+
+    // PDF sets opacity through the graphics state
+    // It is 'sticky' and remains in effect until changed by another graphics state operator
+    // So change it if it differs from the current alpha value
+    if( a != m_currentAlpha )
+    {
+        const int extGStateHandle = getExtGStateHandleForAlpha( a );
+
+        // Apply that ExtGState to this context.
+        fmt::println( m_workFile, "/GS{} gs", extGStateHandle );
+
+        m_currentAlpha = a;
+    }
 }
 
 
@@ -862,6 +877,9 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
     // will be initialized to a the right value in pdf file by the first item to plot
     m_currentPenWidth = 0;
 
+    // Each page content stream starts with a default graphics state
+    m_currentAlpha = 1.0;
+
     if( !m_3dExportMode )
     {
         // Open the content stream; the page object will go later
@@ -1074,11 +1092,13 @@ void PDF_PLOTTER::ClosePage()
                 "/Resources <<\n"
                 "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
                 "    /Font {} 0 R\n"
-                "    /XObject {} 0 R >>\n"
+                "    /XObject {} 0 R\n"
+                "    /ExtGState {} 0 R >>\n"
                 "/MediaBox [0 0 {} {}]\n",
                 m_pageTreeHandle,
                 m_fontResDictHandle,
                 m_imgResDictHandle,
+                m_extGStateResDictHandle,
                 encodeDoubleForPlotter( psPaperSize.x ),
                 encodeDoubleForPlotter( psPaperSize.y ) );
 
@@ -1200,6 +1220,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
     m_hyperlinkMenuHandles.clear();
     m_bookmarksInPage.clear();
     m_imageHandles.clear();
+    m_alphaToExtGStateHandles.clear();
     m_totalOutlineNodes = 0;
     m_usedBase14Fonts = false;
 
@@ -1228,6 +1249,8 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
     m_fontResDictHandle = allocPdfObject();
 
     m_imgResDictHandle = allocPdfObject();
+
+    m_extGStateResDictHandle = allocPdfObject();
 
     m_jsNamesHandle = allocPdfObject();
 
@@ -1618,6 +1641,31 @@ void PDF_PLOTTER::endPlotEmitResources()
 
     fmt::println( m_outputFile, ">>" );
     closePdfObject();
+
+    // Graphics state objects.
+    // For now, we have only alpha-setting graphics state objects.
+    // If we we had other types of graphics state objects, we would handle them here as well.
+    // We re-use the handle as the resource name: handle 42 -> '/GS42'
+    {
+        // First, write out all the external graphics state objects one at a time
+        for( const auto& [alpha, handle] : m_alphaToExtGStateHandles )
+        {
+            startPdfObject( handle );
+            fmt::println( m_outputFile, "<< /Type /ExtGState /ca {} /CA {} >>", encodeDoubleForPlotter( alpha ),
+                          encodeDoubleForPlotter( alpha ) );
+            closePdfObject();
+        }
+
+        // Now write out the external graphics state resource dictionary
+        startPdfObject( m_extGStateResDictHandle );
+        fmt::println( m_outputFile, "<<" );
+
+        for( const auto& [alpha, handle] : m_alphaToExtGStateHandles )
+            fmt::println( m_outputFile, "    /GS{} {} 0 R", handle, handle );
+
+        fmt::println( m_outputFile, ">>" );
+        closePdfObject();
+    }
 
     // Emit images with optional SMask for transparency
     for( const auto& [imgHandle, image] : m_imageHandles )

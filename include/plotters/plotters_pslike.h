@@ -256,6 +256,7 @@ public:
             m_pageTreeHandle( 0 ),
             m_fontResDictHandle( 0 ),
             m_imgResDictHandle( 0 ),
+            m_extGStateResDictHandle( 0 ),
             m_jsNamesHandle( 0 ),
             m_pageStreamHandle( -1 ),
             m_streamLengthHandle( 0 ),
@@ -264,6 +265,7 @@ public:
             m_3dModelHandle( -1 ),
             m_3dExportMode( false ),
             m_usedBase14Fonts( false ),
+            m_currentAlpha( 1.0 ),
             m_strokeFontManager( nullptr ),
             m_outlineFontManager( nullptr )
     {
@@ -517,6 +519,9 @@ protected:
      * PDF supports colors fully. It actually has distinct fill and pen colors,
      * but we set both at the same time.
      *
+     * Alpha is emitted as an ExtGState that contains that alpha value.
+     * A new ExtGState object is allocated if the alpha value has not been used before.
+     *
      * XXX Keeping them divided could result in a minor optimization in
      * Eeschema filled shapes, but would propagate to all the other plot
      * engines. Also arcs are filled as pies but only the arc is stroked so
@@ -531,6 +536,14 @@ protected:
      * only, no output is done.
      */
     int allocPdfObject();
+
+    /**
+     * Return the ExtGState resource handle for the given alpha, allocating a new object the
+     * first time that alpha is used.
+     *
+     * @param aAlpha The alpha value [0.0 - 1.0]
+     */
+    int getExtGStateHandleForAlpha( double aAlpha );
 
     /**
      * Open a new PDF object and returns the handle if the parameter is -1.
@@ -647,6 +660,7 @@ protected:
     int               m_pageTreeHandle;           ///< Handle to the root of the page tree object.
     int               m_fontResDictHandle;        ///< Font resource dictionary.
     int               m_imgResDictHandle;         ///< Image resource dictionary.
+    int               m_extGStateResDictHandle;   ///< Graphics state resource dictionary.
     int               m_jsNamesHandle;            ///< Handle for Names dictionary with JS.
     std::vector<int>  m_pageHandles;              ///< Handles to the page objects.
     int               m_pageStreamHandle;         ///< Handle of the page content object.
@@ -684,6 +698,12 @@ protected:
 
     /// Set when the non-embeddable font fallback references the base-14 /KicadFont* resources.
     bool                          m_usedBase14Fonts;
+
+    /// Alpha currently set in the page graphics state (PDF starts each page with 1.0).
+    double m_currentAlpha = 1.0;
+
+    /// Graphics state objects keyed by alpha
+    std::map<double, int> m_alphaToExtGStateHandles;
 
     std::unique_ptr<PDF_STROKE_FONT_MANAGER>  m_strokeFontManager;
     std::unique_ptr<PDF_OUTLINE_FONT_MANAGER> m_outlineFontManager;
