@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-19 06:53+0000\n"
+"PO-Revision-Date: 2026-10-20 22:34+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -27650,9 +27650,8 @@ msgid "Modify schematic item"
 msgstr "Modifica elemento schema"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3860
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "Autopiazza tutti i pin fogli"
+msgstr "Autopiazza pin fogli"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3907
 msgid "No sub schematic found in the current project"
@@ -27930,13 +27929,14 @@ msgstr "Nessuna corrispondenza trovata."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Alcuni degli elementi potrebbero non essere stati resi outset."
+msgstr "Alcuni elementi selezionati non possono essere raggruppati."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Gli elementi figlio non possono essere raggruppati separatamente dal loro "
+"elemento genitore."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -28341,6 +28341,7 @@ msgstr "Contenuto compressione vuoto."
 #, c-format
 msgid "Decompressed size %llu exceeds limit %llu."
 msgstr ""
+"La dimensione dopo la decompressione, pari a %llu, supera il limite di %llu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:143
 #, c-format
@@ -28349,41 +28350,35 @@ msgstr "Connessione ZSTD fallita: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:183
 msgid "Reload current provider page"
-msgstr ""
+msgstr "Ricarica la pagina corrente del fornitore"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:188
-#, fuzzy
 msgid "Configure remote providers"
-msgstr "Configura le sorgenti dati remote."
+msgstr "Configura i fornitori remoti"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:326
-#, fuzzy
 msgid "No remote providers configured."
-msgstr "Nessun branch upstream configurato."
+msgstr "Nessun fornitore remoto configurato."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:401
-#, fuzzy
 msgid "Unable to load remote provider metadata."
-msgstr "Fallito caricamento dati remoti per '%s'."
+msgstr "Fallito caricamento metadati fornitori remoti."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:646
 msgid "A remote provider sign-in flow is already in progress."
-msgstr ""
+msgstr "Procedura di accesso a fornitore remoto già in corso."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:678
-#, fuzzy
 msgid "Unable to start the local OAuth callback listener."
-msgstr "Impossibile avviare l'accesso locale."
+msgstr "Impossibile avviare il listener locale per il callback OAuth."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:688
-#, fuzzy
 msgid "Unable to open the system browser for sign-in."
-msgstr "Impossibile aprire '%s' in scrittura."
+msgstr "Impossibile aprire il browser di sistema per l'accesso."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:718
-#, fuzzy
 msgid "Failed to delete stored remote provider tokens."
-msgstr "Impossibile analizzare il repository locale repository.json."
+msgstr "Impossibile eliminare i token del provider remoto memorizzati."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:758
 #, c-format
@@ -28397,16 +28392,16 @@ msgstr "Identificatore di sessione mancante."
 #: eeschema/widgets/panel_remote_symbol.cpp:774
 msgid "Session identifier did not match the active provider session."
 msgstr ""
+"L'identificativo della sessione non corrisponde alla sessione attiva del "
+"provider."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:862
-#, fuzzy
 msgid "No remote provider is currently selected."
-msgstr "Zoom agli elementi correntemente selezionati"
+msgstr "Al momento non è selezionato alcun fornitore remoto."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:983
-#, fuzzy
 msgid "Unable to process provider payload."
-msgstr "Impossibile memorizzare il contenuto."
+msgstr "Impossibile elaborare il payload del fornitore."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:989
 #, c-format
@@ -28427,14 +28422,13 @@ msgid "No schematic editor is available to store symbols."
 msgstr "Non è disponibile alcun editor schemi per memorizzare i simboli."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1099
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Impossibile aggiungere dai componente"
+msgstr "Impossibile analizzare l'elenco dei componenti: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1105
-#, fuzzy
 msgid "Component list must be a non-empty array."
-msgstr "L'elenco dei componenti deve essere un array."
+msgstr "L'elenco componenti deve essere un array non vuoto."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1126
 msgid "Component entries must be objects."
@@ -28455,26 +28449,27 @@ msgstr "Tipo di contenuto impronta non supportato."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1372
 msgid "Remote provider metadata is not loaded."
-msgstr ""
+msgstr "Metadati del fornitore remoto non caricati."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1402
 msgid ""
 "Manifest assets require asset_type, content_type, size_bytes, and "
 "download_url."
 msgstr ""
+"Gli asset nel manifest richiedono asset_type, content_type, size_bytes e "
+"download_url."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1438
 msgid "Remote provider sign-in was cancelled or failed."
-msgstr ""
+msgstr "Accesso al fornitore remoto annullato o non riuscito."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1449
 msgid "Remote provider sign-in failed."
-msgstr ""
+msgstr "Accesso al fornitore remoto non riuscito."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1465
-#, fuzzy
 msgid "Failed to store remote provider tokens securely."
-msgstr "Fallito il push dei cambiamenti sul repository remoto."
+msgstr "Impossibile archiviare in modo sicuro i token del fornitore remoto."
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:180
@@ -28598,9 +28593,8 @@ msgid "Excl. Board"
 msgstr "Escl. scheda"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Escludi dai file di posizionamento"
+msgstr "Escl. file posiz."
 
 #: eeschema/widgets/search_handlers.cpp:481
 msgid "Hierarchical"
@@ -29287,9 +29281,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Il file zip '%s' non può essere aperto."
 
 #: gerbview/files.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Impossibile creare il file temporaneo '%s'.</b>"
+msgstr "Impossibile creare file temporaneo per decomprimere '%s'."
 
 #: gerbview/files.cpp:510
 #, c-format
@@ -29302,9 +29296,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Impossibile creare il file temporaneo '%s'.</b>"
 
 #: gerbview/files.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Impossibile creare il file temporaneo '%s'.</b>"
+msgstr "<b>Impossibile scrivere sul file temporaneo '%s'.</b>"
 
 #: gerbview/files.cpp:603
 #, c-format
