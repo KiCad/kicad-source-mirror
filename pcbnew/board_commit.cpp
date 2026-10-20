@@ -524,12 +524,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                         {
                             parentFP->Remove( boardItem );
                             connectivity->Remove( boardItem );
+                            itemsChanged.push_back( parentFP );
                         }
                     }
                     else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
                     {
                         parentFP->Remove( boardItem );
                         connectivity->Remove( boardItem );
+                        itemsChanged.push_back( parentFP );
                     }
                     else
                     {
@@ -561,11 +563,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     if( m_isFootprintEditor )
                     {
                         if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
+                        {
                             parentFP->Remove( boardItem );
+                            itemsChanged.push_back( parentFP );
+                        }
                     }
                     else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
                     {
                         parentFP->Remove( boardItem );
+                        itemsChanged.push_back( parentFP );
                     }
                     else
                     {
@@ -929,11 +935,15 @@ void BOARD_COMMIT::RevertToCheckpoint( int aCheckpoint )
                 if( m_isFootprintEditor )
                 {
                     if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
+                    {
                         parentFP->Remove( boardItem );
+                        itemsChanged.push_back( parentFP );
+                    }
                 }
                 else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
                 {
                     parentFP->Remove( boardItem );
+                    itemsChanged.push_back( parentFP );
                 }
                 else
                 {
@@ -965,12 +975,14 @@ void BOARD_COMMIT::RevertToCheckpoint( int aCheckpoint )
                 {
                     parentFP->Add( boardItem, ADD_MODE::INSERT );
                     connectivity->Add( boardItem );
+                    itemsChanged.push_back( parentFP );
                 }
             }
             else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
             {
                 parentFP->Add( boardItem, ADD_MODE::INSERT );
                 connectivity->Add( boardItem );
+                itemsChanged.push_back( parentFP );
             }
             else
             {
