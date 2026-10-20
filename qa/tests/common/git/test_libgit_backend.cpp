@@ -1470,6 +1470,53 @@ BOOST_AUTO_TEST_CASE( AbandonOperation_RefusesDuringABisect )
 }
 
 
+BOOST_AUTO_TEST_CASE( AbandonOperation_RefusesAnInteractiveRebaseInOurWords )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    const wxString sep = wxFileName::GetPathSeparator();
+
+    // What `git rebase -i` leaves behind. libgit2 cannot open one, so the abort fails.
+    const wxString rebaseDir = repoPath() + sep + wxT( ".git" ) + sep + wxT( "rebase-merge" );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( rebaseDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    git_oid head;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head, repo, "HEAD" ), GIT_OK );
+
+    const std::string headHash = git_oid_tostr_s( &head );
+
+    auto writeRebaseFile = [&]( const wxString& aName, const std::string& aText )
+    {
+        std::ofstream out( ( rebaseDir + sep + aName ).ToStdString() );
+        out << aText << "\n";
+    };
+
+    writeRebaseFile( wxT( "interactive" ), "" );
+    writeRebaseFile( wxT( "head-name" ), "refs/heads/master" );
+    writeRebaseFile( wxT( "onto" ), headHash );
+    writeRebaseFile( wxT( "orig-head" ), headHash );
+
+    BOOST_REQUIRE_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_REBASE_INTERACTIVE );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_CHECK( !common.AbandonOperation( error ) );
+    BOOST_CHECK_MESSAGE( error.Contains( wxT( "another program" ) ), error );
+    BOOST_CHECK_MESSAGE( !error.Lower().Contains( wxT( "not supported" ) ), error );
+
+    for( const wxString& name : { wxT( "interactive" ), wxT( "head-name" ), wxT( "onto" ), wxT( "orig-head" ) } )
+        wxRemoveFile( rebaseDir + sep + name );
+
+    wxFileName::Rmdir( rebaseDir );
+    git_repository_free( repo );
+}
+
+
 BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedRebase )
 {
     BOOST_TEST_REQUIRE( ready() );

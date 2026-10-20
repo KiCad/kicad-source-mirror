@@ -3328,6 +3328,11 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
         return false;
     }
 
+    // One wording for every rebase we cannot end. The user cannot act on the difference
+    // between the states.
+    const wxString rebaseIsAnotherProgram =
+            _( "This rebase was started by another program, and only that program can finish or abort it." );
+
     switch( git_repository_state( aRepo ) )
     {
     case GIT_REPOSITORY_STATE_NONE: return true;
@@ -3341,7 +3346,7 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
 
         if( git_rebase_open( &rebase, aRepo, nullptr ) != GIT_OK )
         {
-            aError = KIGIT_COMMON::GetLastGitError();
+            aError = rebaseIsAnotherProgram;
             return false;
         }
 
@@ -3349,7 +3354,7 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
 
         if( git_rebase_abort( rebase ) != GIT_OK )
         {
-            aError = KIGIT_COMMON::GetLastGitError();
+            aError = rebaseIsAnotherProgram;
             return false;
         }
 
@@ -3366,7 +3371,7 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
     case GIT_REPOSITORY_STATE_REBASE:
     case GIT_REPOSITORY_STATE_APPLY_MAILBOX:
     case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE:
-        aError = _( "This rebase was started by another program, and only that program can finish or abort it." );
+        aError = rebaseIsAnotherProgram;
         return false;
 
     default: break;
