@@ -1,0 +1,36 @@
+(version 1)
+
+(rule "time_length"
+	(condition "A.NetClass == 'Default'")
+	(constraint length (min 10ps) (max 100ps)))
+
+(rule "time_skew"
+	(condition "A.NetClass == 'Default'")
+	(constraint skew (max 5ps)))
+
+(rule "space_length"
+	(condition "A.NetClass == 'Default'")
+	(constraint length (max 30mm)))
+
+(rule "ChainStubBudget"
+    (condition "A.NetClass == 'Default'")
+    (constraint stub_length (min 0mm) (max 5mm))
+)
+
+(rule "ChainReturnPath"
+    (condition "A.NetClass == 'Default'")
+    (constraint return_path (layer "B.Cu") (net "GND"))
+)
+
+(rule "ChainLength"
+    (condition "A.NetClass == 'Default'")
+    (constraint net_chain_length (min 40mm) (max 60mm))
+)
+
+(rule "Microvia depth"
+    (constraint microvia_stack_depth (max 2))
+)
+
+(rule "Microvia aspect"
+    (constraint hole_aspect_ratio (max 1))
+)

@@ -43,16 +43,16 @@ public:
     {
     }
 
-    bool Create( wxString* aError )
+    bool Create( wxString* aError, const wxString& aRulesName = wxS( "api_kitchen_sink.kicad_dru" ) )
     {
         wxString   testDataDir = wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() );
         wxFileName srcPcb( testDataDir, wxS( "api_kitchen_sink.kicad_pcb" ) );
         wxFileName srcPro( testDataDir, wxS( "api_kitchen_sink.kicad_pro" ) );
-        wxFileName srcDru( testDataDir, wxS( "api_kitchen_sink.kicad_dru" ) );
+        wxFileName srcDru( testDataDir + wxFileName::GetPathSeparator() + aRulesName );
 
         wxFileName dstPcb( m_tempRoot.PathStr(), srcPcb.GetFullName() );
         wxFileName dstPro( m_tempRoot.PathStr(), srcPro.GetFullName() );
-        wxFileName dstDru( m_tempRoot.PathStr(), srcDru.GetFullName() );
+        wxFileName dstDru( m_tempRoot.PathStr(), wxS( "api_kitchen_sink.kicad_dru" ) );
 
         if( !wxCopyFile( srcPcb.GetFullPath(), dstPcb.GetFullPath(), true )
             || !wxCopyFile( srcPro.GetFullPath(), dstPro.GetFullPath(), true )
@@ -532,6 +532,70 @@ BOOST_FIXTURE_TEST_CASE( SetCustomDesignRules_RoundTripSingleRule, API_SERVER_E2
     BOOST_CHECK( setResponse.status() == kiapi::board::commands::CRS_VALID );
     BOOST_CHECK_EQUAL( num_rules, response.rules_size() + 1 );
     BOOST_CHECK_EQUAL( setResponse.rules( num_rules - 1 ).name(), "api_roundtrip_rule" );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( SetCustomDesignRules_RoundTripIsLossless, API_SERVER_E2E_FIXTURE )
+{
+    BOOST_REQUIRE_MESSAGE( Start(), LastError() );
+
+    TEMP_KITCHEN_SINK_COPY fixtureCopy;
+    wxString               copyError;
+
+    BOOST_REQUIRE_MESSAGE( fixtureCopy.Create( &copyError, wxS( "issue25846/custom_rules.kicad_dru" ) ),
+                           copyError );
+
+    kiapi::common::types::DocumentSpecifier document;
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( fixtureCopy.BoardPath(), &document ),
+                           "OpenDocument failed: " + Client().LastError() );
+
+    kiapi::board::commands::CustomRulesResponse getResponse;
+    wxString                                    error;
+
+    BOOST_REQUIRE_MESSAGE( SendGetCustomDesignRules( Client(), document, &getResponse, &error ),
+                           "GetCustomDesignRules failed: " + error );
+    BOOST_REQUIRE( getResponse.status() == kiapi::board::commands::CRS_VALID );
+    BOOST_REQUIRE_GT( getResponse.rules_size(), 0 );
+
+    bool sawReturnPath = false;
+
+    for( const kiapi::board::CustomRule& rule : getResponse.rules() )
+    {
+        for( const kiapi::board::CustomRuleConstraint& constraint : rule.constraints() )
+        {
+            if( constraint.type() != kiapi::board::CRCT_NET_CHAIN_RETURN_PATH )
+                continue;
+
+            sawReturnPath = true;
+            BOOST_CHECK_EQUAL( constraint.return_path().reference_layer(), "B.Cu" );
+            BOOST_CHECK_EQUAL( constraint.return_path().reference_net(), "GND" );
+        }
+    }
+
+    BOOST_CHECK( sawReturnPath );
+
+    kiapi::board::commands::SetCustomDesignRules setRequest;
+    *setRequest.mutable_board() = document;
+    setRequest.mutable_rules()->CopyFrom( getResponse.rules() );
+
+    kiapi::common::ApiResponse setApiResponse;
+
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( setRequest, &setApiResponse ),
+                           "SetCustomDesignRules failed to send: " + Client().LastError() );
+    BOOST_REQUIRE_MESSAGE( setApiResponse.status().status() == kiapi::common::AS_OK,
+                           setApiResponse.status().error_message() );
+
+    kiapi::board::commands::CustomRulesResponse setResponse;
+    BOOST_REQUIRE( setApiResponse.message().UnpackTo( &setResponse ) );
+    BOOST_REQUIRE( setResponse.status() == kiapi::board::commands::CRS_VALID );
+    BOOST_REQUIRE_EQUAL( setResponse.rules_size(), getResponse.rules_size() );
+
+    for( int ii = 0; ii < getResponse.rules_size(); ++ii )
+    {
+        BOOST_CHECK_MESSAGE( setResponse.rules( ii ).SerializeAsString() == getResponse.rules( ii ).SerializeAsString(),
+                             getResponse.rules( ii ).name() << " changed in the round trip" );
+    }
 }
 
 

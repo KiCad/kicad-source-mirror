@@ -313,17 +313,30 @@ message CustomRuleDisallowSettings
   repeated CustomRuleDisallowType types = 1;
 }
 
+// Since: 11.0
+message CustomRuleReturnPathSettings
+{
+  // Layer name as written in the rules file
+  string reference_layer = 1;
+
+  // Optional net name or wildcard limiting which zones count
+  string reference_net = 2;
+}
+
 message CustomRuleConstraint
 {
   CustomRuleConstraintType type = 1;
   optional string name = 2;
 
   oneof value {
-    // nanometers, picoseconds, or unitless depending on constraint type
+    // nanometers, attoseconds, thousandths (hole aspect ratio), or unitless depending on constraint type
     kiapi.common.types.MinOptMax numeric = 3;
     CustomRuleDisallowSettings disallow = 4;
     kiapi.board.types.ZoneConnectionStyle zone_connection = 5;
     string assertion_expression = 6;
+
+    // Since: 11.0
+    CustomRuleReturnPathSettings return_path = 7;
   }
 
   // grab bag of stuff; may be refactored to more specific messages later
