@@ -385,7 +385,11 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
                     question = wxString::Format( _( "Delete branch '%s'?" ), name );
                 }
 
-                if( !IsOK( this, question ) )
+                wxRichMessageDialog confirm( this, question, _( "Delete Branch" ),
+                                             wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+                confirm.SetYesNoLabels( _( "&Delete" ), _( "Cancel" ) );
+
+                if( confirm.ShowModal() != wxID_YES || !m_dialog->SessionStillCurrent() )
                     return;
 
                 m_dialog->RunGitAction(
