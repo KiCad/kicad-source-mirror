@@ -2207,6 +2207,8 @@ int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString&
 }
 
 
+// libgit2 marks at most one entry to merge, the branch the current one tracks, so the name is
+// not needed to tell them apart. FetchHeadMarksAtMostOneBranchToMerge holds that to account.
 extern "C" int fetchhead_foreach_cb( const char*, const char*,
                                      const git_oid* aOID, unsigned int aIsMerge, void* aPayload )
 {

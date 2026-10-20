@@ -287,6 +287,91 @@ BOOST_FIXTURE_TEST_SUITE( LibgitBackend, GIT_BACKEND_FIXTURE )
 
 // The single scope predicate behind every checklist, so a file elsewhere in the repository
 // cannot leak into a project commit (issue #15910).
+// Getting changes keeps whichever FETCH_HEAD entry libgit2 marked to merge, without reading
+// its name. That is only sound while at most one entry is ever marked, so the assumption is
+// checked here rather than left for a reader to take on trust.
+BOOST_AUTO_TEST_CASE( FetchHeadMarksAtMostOneBranchToMerge )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+    BOOST_REQUIRE( addOrigin( repo ) );
+
+    // Two more branches on the remote, named either side of the current one alphabetically.
+    {
+        git_repository* bare = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &bare, remotePath().ToUTF8().data() ), GIT_OK );
+        KIGIT::GitRepositoryPtr barePtr( bare );
+
+        git_oid head;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head, bare, "HEAD" ), GIT_OK );
+
+        for( const char* name : { "refs/heads/aaa", "refs/heads/zzz" } )
+        {
+            git_reference* ref = nullptr;
+            BOOST_REQUIRE_EQUAL( git_reference_create( &ref, bare, name, &head, 1, nullptr ), GIT_OK );
+            git_reference_free( ref );
+        }
+    }
+
+    struct MARKED
+    {
+        int                      total = 0;
+        std::vector<std::string> names;
+    };
+
+    auto collect = []( git_repository* aRepo )
+    {
+        MARKED marked;
+
+        auto cb = []( const char* aName, const char*, const git_oid*, unsigned int aIsMerge, void* aPayload ) -> int
+        {
+            MARKED* m = static_cast<MARKED*>( aPayload );
+            m->total++;
+
+            if( aIsMerge )
+                m->names.push_back( std::string( aName ? aName : "" ) );
+
+            return 0;
+        };
+
+        BOOST_REQUIRE_EQUAL( git_repository_fetchhead_foreach( aRepo, cb, &marked ), GIT_OK );
+        return marked;
+    };
+
+    KIGIT_COMMON common( repo );
+
+    // Add Version Control wires up origin without per-branch tracking. Nothing is marked, so the
+    // by-name fallback below the callback is what chooses the branch.
+    {
+        BOOST_REQUIRE( clearUpstreamConfig( repo, wxT( "master" ) ) );
+
+        GIT_PULL_HANDLER handler( &common );
+        BOOST_REQUIRE_MESSAGE( handler.PerformFetch(), handler.GetErrorString() );
+
+        MARKED marked = collect( repo );
+        BOOST_CHECK_EQUAL( marked.total, 3 );
+        BOOST_CHECK_EQUAL( marked.names.size(), 0u );
+    }
+
+    // With tracking configured exactly one is marked, and it is the branch being tracked, so
+    // keeping the last one keeps the right one.
+    {
+        BOOST_REQUIRE( setUpstreamConfig( repo, wxT( "master" ) ) );
+
+        GIT_PULL_HANDLER handler( &common );
+        BOOST_REQUIRE_MESSAGE( handler.PerformFetch(), handler.GetErrorString() );
+
+        MARKED marked = collect( repo );
+        BOOST_CHECK_EQUAL( marked.total, 3 );
+        BOOST_REQUIRE_EQUAL( marked.names.size(), 1u );
+        BOOST_CHECK_EQUAL( marked.names[0], "refs/heads/master" );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
 {
     const wxString project = wxT( "/repo/proj/" );
