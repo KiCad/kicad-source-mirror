@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -155,6 +155,12 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_e48->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e96->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e192->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_minText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMinKillFocus ), NULL, this );
+	m_minText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMinTextEnter ), NULL, this );
+	m_valueText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onValueKillFocus ), NULL, this );
+	m_valueText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onValueTextEnter ), NULL, this );
+	m_maxText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMaxKillFocus ), NULL, this );
+	m_maxText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMaxTextEnter ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
@@ -171,12 +177,6 @@ TUNER_SLIDER_BASE::TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id, const wxP
 	m_slider->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderChanged ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderChanged ), NULL, this );
 	m_slider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderChanged ), NULL, this );
-	m_maxText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMaxKillFocus ), NULL, this );
-	m_maxText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMaxTextEnter ), NULL, this );
-	m_valueText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onValueKillFocus ), NULL, this );
-	m_valueText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onValueTextEnter ), NULL, this );
-	m_minText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMinKillFocus ), NULL, this );
-	m_minText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMinTextEnter ), NULL, this );
 	m_saveBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onSave ), NULL, this );
 	m_closeBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onClose ), NULL, this );
 }
@@ -191,6 +191,12 @@ TUNER_SLIDER_BASE::~TUNER_SLIDER_BASE()
 	m_e48->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e96->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
 	m_e192->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onESeries ), NULL, this );
+	m_minText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMinKillFocus ), NULL, this );
+	m_minText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMinTextEnter ), NULL, this );
+	m_valueText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onValueKillFocus ), NULL, this );
+	m_valueText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onValueTextEnter ), NULL, this );
+	m_maxText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMaxKillFocus ), NULL, this );
+	m_maxText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMaxTextEnter ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderScroll ), NULL, this );
@@ -207,12 +213,6 @@ TUNER_SLIDER_BASE::~TUNER_SLIDER_BASE()
 	m_slider->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderChanged ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderChanged ), NULL, this );
 	m_slider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( TUNER_SLIDER_BASE::onSliderChanged ), NULL, this );
-	m_maxText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMaxKillFocus ), NULL, this );
-	m_maxText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMaxTextEnter ), NULL, this );
-	m_valueText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onValueKillFocus ), NULL, this );
-	m_valueText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onValueTextEnter ), NULL, this );
-	m_minText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TUNER_SLIDER_BASE::onMinKillFocus ), NULL, this );
-	m_minText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( TUNER_SLIDER_BASE::onMinTextEnter ), NULL, this );
 	m_saveBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onSave ), NULL, this );
 	m_closeBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( TUNER_SLIDER_BASE::onClose ), NULL, this );
 

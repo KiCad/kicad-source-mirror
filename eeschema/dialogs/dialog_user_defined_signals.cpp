@@ -52,21 +52,16 @@ DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aPare
     for( const auto& [ id, signal ] : *m_signals )
         addGridRow( signal, id );
 
-    // wxGrid takes its line colour from the system theme, where it can come out all but
-    // indistinguishable from the cell background, leaving nothing between one expression and the
-    // next.  Derive one that stays visible in either theme, the way WX_GRID does for its header
-    // borders, but a touch lighter since these run the width of the grid.
+    // The theme's line colour can match the cell background; derive a visible one.
     KIGFX::COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
     KIGFX::COLOR4D fg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
     m_grid->SetGridLineColour( fg.Mix( bg, 0.35 ).ToColour() );
     m_grid->EnableGridLines( true );
 
-    // The default highlight is thick enough to swallow the grid lines of the row it lands on.
+    // The default highlight hides the grid lines of its row.
     m_grid->SetCellHighlightPenWidth( 1 );
 
-    // wxGrid numbers its rows for us, which is exactly the entry index we want beside each
-    // expression.  wxFormBuilder had the label column switched off.
     m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
     m_addButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -75,10 +70,7 @@ DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aPare
     SetupStandardButtons();
     Layout();
 
-    // The expression column was a fixed 400px from the form designer, so it left a dead strip
-    // down the right of the panel however wide the dialog was dragged.  Listen on the grid, not
-    // on the dialog: the dialog's size event arrives before its sizer has laid the grid out, so
-    // measuring there reads the previous geometry.
+    // Bound on the grid: the dialog's size event arrives before layout.
     m_grid->Bind( wxEVT_SIZE,
                   [this]( wxSizeEvent& aEvent )
                   {
@@ -86,7 +78,6 @@ DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aPare
                       aEvent.Skip();
                   } );
 
-    // Nothing is laid out yet at this point, so measure once it is.
     CallAfter(
             [this]()
             {
@@ -108,8 +99,7 @@ void DIALOG_USER_DEFINED_SIGNALS::adjustGridColumns()
     if( m_grid->GetRowLabelSize() != indexWidth )
         m_grid->SetRowLabelSize( indexWidth );
 
-    // Column 1 carries the signal's internal id and is deliberately zero-width, so the
-    // expression column gets everything the index column and the scrollbar leave behind.
+    // Column 1 holds the signal id and is zero-width; the expression column takes the rest.
     int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x - indexWidth;
 
     if( width > 0 && width != m_grid->GetColSize( 0 ) )
@@ -181,31 +171,24 @@ void DIALOG_USER_DEFINED_SIGNALS::onDeleteSignal( wxCommandEvent& event )
 }
 
 
-/**
- * Strip the " (gain)" / " (phase)" / " (amplitude)" decoration the AC and S-parameter modes add
- * to a signal name, leaving the bare name an expression can actually refer to.
- */
-static wxString stripSignalSuffix( const wxString& aSignal )
-{
-    for( const wxString& suffix : { _( " (gain)" ), _( " (phase)" ), _( " (amplitude)" ) } )
-    {
-        if( aSignal.EndsWith( suffix ) )
-            return aSignal.Left( aSignal.Length() - suffix.Length() );
-    }
-
-    return aSignal;
-}
-
-
-/**
- * @return true if every '(' in @a aExpression has a matching ')'.
- */
+/// @return true if every '(' in @a aExpression has a matching ')'.
 static bool parensBalanced( const wxString& aExpression )
 {
-    int depth = 0;
+    int  depth = 0;
+    bool inQuote = false;
 
     for( wxUniChar ch : aExpression )
     {
+        // Quoted net names may contain parentheses.
+        if( ch == '"' )
+        {
+            inQuote = !inQuote;
+            continue;
+        }
+
+        if( inQuote )
+            continue;
+
         if( ch == '(' )
         {
             depth++;
@@ -221,13 +204,7 @@ static bool parensBalanced( const wxString& aExpression )
 }
 
 
-/**
- * Pull the V()/I()/P() references out of a SPICE expression, normalised to an upper-case prefix
- * and with any quoting stripped, so they can be compared against the signals list.
- *
- * Everything else -- operators, numbers, the maths functions -- is ngspice's business; the point
- * here is only to get at the names that have to line up with the schematic.
- */
+/// Extract the V()/I()/P() references from an expression, upper-cased and unquoted.
 static std::vector<wxString> extractSignalRefs( const wxString& aExpression )
 {
     std::vector<wxString> refs;
@@ -235,7 +212,7 @@ static std::vector<wxString> extractSignalRefs( const wxString& aExpression )
 
     for( size_t ii = 0; ii < len; ++ii )
     {
-        // Only a whole identifier counts: the 'v' in "div(" is not a voltage.
+        // Whole identifiers only: the 'v' in "div(" is not a voltage.
         if( ii > 0 && ( wxIsalnum( aExpression[ii - 1] ) || aExpression[ii - 1] == '_' ) )
             continue;
 
@@ -244,19 +221,49 @@ static std::vector<wxString> extractSignalRefs( const wxString& aExpression )
         if( prefix != 'V' && prefix != 'I' && prefix != 'P' )
             continue;
 
-        if( ii + 1 >= len || aExpression[ii + 1] != '(' )
+        size_t open = ii + 1;
+
+        // VDB(), VM(), VP(), VR(), VI() and the I forms name a V() or I().
+        if( prefix != 'P' )
+        {
+            static const wxString variants[] = { wxS( "DB" ), wxS( "M" ), wxS( "P" ), wxS( "R" ), wxS( "I" ) };
+
+            for( const wxString& variant : variants )
+            {
+                size_t after = open + variant.length();
+
+                if( after < len && aExpression.Mid( open, variant.length() ).Upper() == variant
+                    && aExpression[after] == '(' )
+                {
+                    open = after;
+                    break;
+                }
+            }
+        }
+
+        if( open >= len || aExpression[open] != '(' )
             continue;
 
-        // Walk to the matching close paren, splitting the argument list as we go: V(a,b) names
-        // two nets.
+        // V(a,b) names two nets.
         std::vector<wxString> args;
         wxString              arg;
         int                   depth = 0;
-        size_t                jj = ii + 1;
+        bool                  inQuote = false;
+        size_t                jj = open;
 
         for( ; jj < len; ++jj )
         {
             wxUniChar ch = aExpression[jj];
+
+            if( ch == '"' )
+                inQuote = !inQuote;
+
+            // Quoted net names may contain parentheses and commas.
+            if( inQuote || ch == '"' )
+            {
+                arg += ch;
+                continue;
+            }
 
             if( ch == '(' )
             {
@@ -286,10 +293,8 @@ static std::vector<wxString> extractSignalRefs( const wxString& aExpression )
             each.Replace( wxS( "\"" ), wxEmptyString );
             each.Trim( true ).Trim( false );
 
-            double dummy;
-
-            // V(0) is ground, and a bare number is never a net name.
-            if( each.IsEmpty() || each.ToCDouble( &dummy ) )
+            // Ground isn't in the signal list; other numbers are valid node names.
+            if( each.IsEmpty() || each == wxS( "0" ) || each.IsSameAs( wxS( "GND" ), false ) )
                 continue;
 
             refs.push_back( wxString( prefix ) + wxS( "(" ) + each + wxS( ")" ) );
@@ -309,7 +314,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onCheckSyntax( wxCommandEvent& event )
 
     std::vector<wxString> signals = m_frame->Signals();
 
-    if( signals.empty() )
+    if( signals.empty() && m_frame->Netnames().empty() )
     {
         m_infoBar->ShowMessageFor( _( "There are no signals to check against yet.  Run the "
                                       "simulation first." ),
@@ -317,19 +322,32 @@ void DIALOG_USER_DEFINED_SIGNALS::onCheckSyntax( wxCommandEvent& event )
         return;
     }
 
-    // The signals list carries the schematic's own capitalisation, and that is what an expression
-    // has to match: applyUserDefinedSignals() looks net names up case-sensitively before quoting
-    // them for ngspice, and an unquoted "/BASE" arrives there as a division rather than a net.
+    // Quoted net names are case-sensitive.
     std::set<wxString>           known;
     std::map<wxString, wxString> knownByLower;
 
     for( const wxString& signal : signals )
     {
-        wxString name = stripSignalSuffix( signal );
+        wxString name = SimSignalBaseName( signal );
 
         known.insert( name );
         knownByLower.emplace( name.Lower(), name );
     }
+
+    // Voltages are valid whether or not all voltages are saved.
+    for( const wxString& netname : m_frame->Netnames() )
+    {
+        wxString name = wxString::Format( wxS( "V(%s)" ), netname );
+
+        known.insert( name );
+        knownByLower.emplace( name.Lower(), name );
+    }
+
+    // Component voltages are expanded in any case.
+    std::set<wxString> deviceVoltages;
+
+    for( const wxString& name : m_frame->DeviceVoltages() )
+        deviceVoltages.insert( name.Lower() );
 
     wxArrayString problems;
 
@@ -357,7 +375,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onCheckSyntax( wxCommandEvent& event )
 
         for( const wxString& ref : refs )
         {
-            if( known.count( ref ) )
+            if( known.count( ref ) || deviceVoltages.count( ref.Lower() ) )
                 continue;
 
             auto it = knownByLower.find( ref.Lower() );
@@ -365,7 +383,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onCheckSyntax( wxCommandEvent& event )
             if( it != knownByLower.end() )
             {
                 problems.Add( wxString::Format( _( "%s: %s is spelled %s in the schematic.  The "
-                                                   "capitalisation has to match, or the name "
+                                                   "capitalization has to match, or the name "
                                                    "reaches ngspice unquoted and the expression "
                                                    "fails to parse." ),
                                                 EscapeHTML( expr ), EscapeHTML( ref ), EscapeHTML( it->second ) ) );
@@ -378,8 +396,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onCheckSyntax( wxCommandEvent& event )
         }
     }
 
-    // Two nets differing only in case are distinct in the schematic but collapse into one in
-    // ngspice, so an expression naming either of them is ambiguous no matter how it's spelled.
+    // Nets differing only in case are the same net in ngspice.
     std::map<wxString, std::set<wxString>> netsByLower;
 
     for( const wxString& netname : m_frame->Netnames() )
@@ -395,7 +412,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onCheckSyntax( wxCommandEvent& event )
         for( const wxString& spelling : spellings )
             list += ( list.IsEmpty() ? wxString() : wxS( ", " ) ) + spelling;
 
-        problems.Add( wxString::Format( _( "Nets %s differ only in capitalisation; ngspice cannot "
+        problems.Add( wxString::Format( _( "Nets %s differ only in capitalization; ngspice cannot "
                                            "tell them apart." ),
                                         EscapeHTML( list ) ) );
     }
@@ -425,41 +442,30 @@ void DIALOG_USER_DEFINED_SIGNALS::onScintillaCharAdded( wxStyledTextEvent &aEven
 
     auto addToken = [&]( const wxString& aToken )
     {
-        // Case-insensitive, so a simulator vector never re-adds a signal already offered in the
-        // schematic's own spelling.
+        // Case-insensitive, so vectors don't re-add signals already offered.
         if( !aToken.IsEmpty() && seen.insert( aToken.Lower() ).second )
             tokens.push_back( aToken );
     };
 
-    // Signals() appends the user-defined signals to the schematic's own, and those are whole
-    // expressions ("V(/base) - V(/ve)"), not names -- completing one inside another expression
-    // would only paste a copy of it.  Skip them; the rows being edited are right there in the
-    // grid anyway.
+    // Skip user-defined signals: they are whole expressions, not names.
     std::set<wxString> userDefined;
 
     for( const auto& [id, signal] : m_frame->UserDefinedSignals() )
         userDefined.insert( signal );
 
-    // Suggestions have to carry the schematic's capitalisation.  applyUserDefinedSignals() finds
-    // net names by matching them case-sensitively before quoting them, so accepting a lower-case
-    // suggestion produces an expression whose '/' reaches ngspice as a division operator.  The
-    // signals list spells them the way the schematic does; the simulator's vectors do not, since
-    // ngspice downcases every node name as it parses the netlist.
+    // ngspice lower-cases vectors; offer the schematic's spelling.
     for( const wxString& signal : m_frame->Signals() )
     {
         if( !userDefined.count( signal ) )
-            addToken( stripSignalSuffix( signal ) );
+            addToken( SimSignalBaseName( signal ) );
     }
 
-    // ...which leaves the vectors that aren't KiCad signals at all, such as the sweep variable
-    // ("time", "frequency").  Those have no schematic spelling to preserve, and are only
-    // available once a simulation has run.  The "userN" vectors are skipped for the same reason
-    // as the expressions above: they *are* the user-defined signals, under an internal name.
+    // Vectors without a schematic spelling ("time", "frequency"), except the internal "userN" ones.
     for( const wxString& vector : m_frame->SimPlotVectors() )
     {
         wxString digits;
 
-        // Match "user<N>" exactly, so a net that happens to be called "user_clk" is unaffected.
+        // Exactly "user<N>", so a net called "user_clk" is unaffected.
         if( vector.Lower().StartsWith( wxS( "user" ), &digits ) && !digits.IsEmpty()
             && digits.find_first_not_of( wxS( "0123456789" ) ) == wxString::npos )
         {

@@ -591,14 +591,14 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     addParamsForWindow( &m_Simulator.window, "simulator.window", 500, 400 );
 
-    m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_width",
-            &m_Simulator.view.plot_panel_width, 0 ) );
+    // New keys: the old layout's "plot_panel_width" and "signal_panel_height" don't apply.
+    m_params.emplace_back( new PARAM<int>( "simulator.side_panel_width", &m_Simulator.view.side_panel_width, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_height",
             &m_Simulator.view.plot_panel_height, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "simulator.signal_panel_height",
-            &m_Simulator.view.signal_panel_height, 0 ) );
+    m_params.emplace_back(
+            new PARAM<int>( "simulator.signals_tuners_height", &m_Simulator.view.signals_tuners_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.cursors_panel_height",
             &m_Simulator.view.cursors_panel_height, 0 ) );
@@ -906,6 +906,7 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<int>(    aCfg, "PlotFormat",        "plot.format" );
     ret &= fromLegacy<bool>(   aCfg, "PlotFrameRef",      "plot.frame_reference" );
 
+    // clang-format off
     ret &= fromLegacy<int>(    aCfg, "SIM_PLOT_FRAMEPos_x",       "simulator.window.pos_x" );
     ret &= fromLegacy<int>(    aCfg, "SIM_PLOT_FRAMEPos_y",       "simulator.window.pos_y" );
     ret &= fromLegacy<int>(    aCfg, "SIM_PLOT_FRAMESize_x",      "simulator.window.size_x" );
@@ -913,11 +914,10 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>(   aCfg, "SIM_PLOT_FRAMEMaximized",   "simulator.window.maximized" );
     ret &= fromLegacyString(   aCfg, "SIM_PLOT_FRAMEPerspective", "simulator.window.perspective" );
     ret &= fromLegacyString(   aCfg, "SIM_PLOT_FRAMEMostRecentlyUsedPath", "simulator.mru_path" );
-    ret &= fromLegacy<int>(    aCfg, "SimPlotPanelWidth",        "simulator.plot_panel_width" );
     ret &= fromLegacy<int>(    aCfg, "SimPlotPanelHeight",       "simulator.plot_panel_height" );
-    ret &= fromLegacy<int>(    aCfg, "SimSignalPanelHeight",     "simulator.signal_panel_height" );
     ret &= fromLegacy<int>(    aCfg, "SimCursorsPanelHeight",    "simulator.cursors_panel_height" );
     ret &= fromLegacy<bool>(   aCfg, "SimPlotWhiteBg",           "simulator.white_background" );
+    // clang-format on
 
     ret &= fromLegacy<int>(  aCfg, "SymbolChooserHSashPosition", "symbol_chooser.sash_pos_h" );
     ret &= fromLegacy<int>(  aCfg, "SymbolChooserVSashPosition", "symbol_chooser.sash_pos_v" );

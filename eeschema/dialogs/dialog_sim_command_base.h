@@ -23,9 +23,7 @@
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/panel.h>
-#include <wx/statbox.h>
 #include <wx/checkbox.h>
-#include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
@@ -34,6 +32,8 @@
 #include <wx/srchctrl.h>
 #include <wx/checklst.h>
 #include <wx/simplebook.h>
+#include <wx/statbox.h>
+#include <wx/spinctrl.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 

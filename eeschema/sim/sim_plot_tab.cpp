@@ -146,10 +146,7 @@ public:
 
     wxString GetUnits() const { return m_unit; }
 
-    /// Change the quantity this axis measures.  A .dc sweep can be re-targeted from a voltage
-    /// source to a resistance without the tab (and so the axis) being rebuilt, and the cached
-    /// base name has to go with the unit, or formatLabels() keeps re-applying the old title
-    /// over whatever SetName() was last given.
+    /// Change the quantity this axis measures, e.g. when a .dc sweep is re-targeted.
     void SetUnits( const wxString& aUnit )
     {
         m_unit = aUnit;
@@ -179,10 +176,7 @@ private:
 
         do
         {
-            // Only the labels produced by *this* pass decide whether another digit is needed.
-            // Leaving the flag set from an earlier pass runs the loop all the way out to
-            // MAX_DISAMBIGUATION_DIGITS every time, so ticks that are distinct at 3 decimals
-            // still get printed with 6 -- wide enough to be clipped by the axis margin.
+            // Only this pass's labels decide whether another digit is needed.
             duplicateLabels = false;
 
             for( size_t ii = 0; ii < T_PARENT::m_tickLabels.size(); ++ii )
@@ -198,8 +192,7 @@ private:
         }
         while( duplicateLabels && ++digits <= MAX_DISAMBIGUATION_DIGITS );
 
-        // Ticks this close together can't be told apart at any digit count we're willing to
-        // print, so the extra decimals bought nothing but width.  Go back to the short form.
+        // Indistinguishable at any digit count; go back to the short form.
         if( duplicateLabels && digits > minDigits )
         {
             for( mpScaleBase::TICK_LABEL& l : T_PARENT::m_tickLabels )
@@ -1914,8 +1907,7 @@ void SIM_VIEW::updateAxes( int aNewTraceType )
     if( m_axis_y3 )
         m_axis_y3->SetFont( KIUI::GetStatusFont( this ) );
 
-    // Update visibility first: the margins below depend on whether the Power axis is
-    // currently showing any traces, not merely on whether the axis object has ever existed.
+    // Visibility first: the margins depend on it.
     UpdateAxisVisibility();
     UpdateMargins();
 }
@@ -1923,17 +1915,23 @@ void SIM_VIEW::updateAxes( int aNewTraceType )
 
 void SIM_VIEW::UpdateMargins()
 {
+    if( !m_inMarginRefit )
+        m_marginRefits = 0;
+
     int  oldLeft = GetMarginLeft();
     int  oldRight = GetMarginRight();
     int  left = calcLeftMargin();
     bool tranOrDC = m_plotTab->GetSimType() == ST_TRAN || m_plotTab->GetSimType() == ST_DC;
 
-    // m_axis_y3 is created once, lazily, and never destroyed -- so its mere existence isn't
-    // enough to justify the wide margin; only reserve it while Power actually has traces to
-    // show, or the extra margin is never reclaimed once Power is disabled again.
+    auto userOr = [this]( int aIndex, int aAuto )
+    {
+        return m_userMargins[aIndex] >= 0 ? m_userMargins[aIndex] : aAuto;
+    };
+
+    // Reserve the Power margin only while the Power axis has traces.
     if( tranOrDC && m_axis_y3 && m_axis_y3->IsVisible() )
     {
-        SetMargins( 30, 160, calcBottomMargin(), left );
+        SetMargins( userOr( 0, 30 ), userOr( 1, 160 ), userOr( 2, calcBottomMargin() ), left );
 
         if( m_axis_y2 )
             m_axis_y2->SetNameAlign( mpALIGN_BORDER_RIGHT );
@@ -1943,30 +1941,21 @@ void SIM_VIEW::UpdateMargins()
     }
     else if( tranOrDC )
     {
-        SetMargins( 30, 70, calcBottomMargin(), left );
+        SetMargins( userOr( 0, 30 ), userOr( 1, 70 ), userOr( 2, calcBottomMargin() ), left );
 
         if( m_axis_y2 )
             m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
     }
     else
     {
-        // The other analyses have no third axis to make room for; keep the margins they were
-        // set up with and just let the left one follow the tick labels.
-        SetMargins( GetMarginTop(), GetMarginRight(), calcBottomMargin(), left );
+        // No third axis; only the left and bottom margins follow the plot.
+        SetMargins( userOr( 0, 30 ), userOr( 1, 70 ), userOr( 2, calcBottomMargin() ), left );
     }
 
-    // The margins are part of the plot-area geometry that Fit() bakes into m_scaleX/m_posX
-    // (and their Y counterparts), so changing them invalidates the data->pixel transform in
-    // exactly the same way resizing the window does.  SetMargins() only stores the numbers,
-    // so without re-fitting, the traces and gridlines keep being drawn through the transform
-    // computed for the old, wider plot area and spill across the reclaimed strip -- which is
-    // precisely where the Power axis then draws itself.  Re-fit to the *current* desired
-    // bounds (rather than plain Fit(), which would discard the user's zoom/pan), the same way
-    // OnSize() does.  Fit() repaints, so this covers the refresh too.
+    // Margins feed the data->pixel transform, so re-fit to the desired bounds (keeping zoom/pan).
     if( GetMarginRight() != oldRight || GetMarginLeft() != oldLeft )
     {
-        // SyncXView() would push this view's freshly margin-derived X scale onto its siblings,
-        // which keep their own margins and so need their own scale to show the same X range.
+        // Siblings have their own margins, so don't mirror the X range onto them.
         m_suppressXSync = true;
         Fit( m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax );
         m_suppressXSync = false;
@@ -2027,8 +2016,7 @@ void SIM_VIEW::prepareDCAxes( int aNewTraceType )
         }
         else if( LIN_SCALE<mpScaleX>* linScale = dynamic_cast<LIN_SCALE<mpScaleX>*>( m_axis_x ) )
         {
-            // Editing the command keeps the tab's existing axes, so a sweep re-pointed from a
-            // voltage source at a resistor would otherwise go on labelling its ticks in volts.
+            // Re-targeted sweeps keep their axes; update the unit.
             linScale->SetUnits( unit );
         }
 
@@ -2060,6 +2048,17 @@ void SIM_VIEW::prepareDCAxes( int aNewTraceType )
 }
 
 
+void SIM_VIEW::SetUserMargins( int aTop, int aRight, int aBottom, int aLeft )
+{
+    const int margins[4] = { aTop, aRight, aBottom, aLeft };
+
+    for( int ii = 0; ii < 4; ++ii )
+        m_userMargins[ii] = std::max( margins[ii], -1 );
+
+    UpdateMargins();
+}
+
+
 int SIM_VIEW::calcBottomMargin() const
 {
     wxClientDC dc( const_cast<SIM_VIEW*>( this ) );
@@ -2068,45 +2067,58 @@ int SIM_VIEW::calcBottomMargin() const
     int tx, ty;
     dc.GetTextExtent( wxT( "0" ), &tx, &ty );
 
-    // Tick label row, a gap, the axis name row below it, and a little breathing room.
     return ( ty * 2 ) + 20;
 }
 
 
 int SIM_VIEW::calcLeftMargin() const
 {
-    // The label widths below were measured by the axis itself, in the font it draws with, so
-    // this needs no device context of its own -- which also keeps it safe to call from the tail
-    // of a paint, where a second DC on the same window would be asking for trouble.
-    int width = MIN_MARGIN_LEFT;
+    // Uses the axis' own label widths, so it is safe to call at the end of a paint.
+    int labels = 0;
+    int user = -1;
 
-    // mpScaleY::Plot() right-aligns an mpALIGN_LEFT axis's labels 4px inside the plot area, so
-    // anything wider than the margin is drawn at a negative x and clipped by the window.  Take
-    // the widest label of any view in the tab: they share an X axis and have to share a margin.
+    // Labels are inset 4px and clip beyond the margin.  All views share the widest margin.
     for( SIM_VIEW* view : m_plotTab->GetViews() )
     {
         if( view->m_axis_y1 && view->m_axis_y1->IsVisible() )
-            width = std::max( width, view->m_axis_y1->GetMaxLabelWidth() + LABEL_MARGIN_PADDING );
+            labels = std::max( labels, view->m_axis_y1->GetMaxLabelWidth() + LABEL_MARGIN_PADDING );
+
+        user = std::max( user, view->m_userMargins[3] );
     }
 
-    return width;
+    // A user-entered margin replaces the default minimum, but still makes room for the labels.
+    return std::max( user >= 0 ? user : MIN_MARGIN_LEFT, labels );
 }
 
 
 void SIM_VIEW::onPaintFinished()
 {
-    // Label widths are only known once the scales have formatted and measured them, which
-    // happens while painting.  A wider left margin doesn't feed back into the Y range (that
-    // follows the top and bottom margins), so re-checking here settles after one extra pass.
-    if( m_marginCheckPending || calcLeftMargin() == GetMarginLeft() )
+    // Label widths are only known after painting; re-check once afterwards.
+    if( m_marginCheckPending )
         return;
 
+    int needed = calcLeftMargin();
+    int current = GetMarginLeft();
+
+    // Grow at once, but don't follow every small shrink (see MARGIN_SHRINK_SLACK).
+    if( needed == current || ( needed < current && current - needed <= MARGIN_SHRINK_SLACK ) )
+    {
+        m_marginRefits = 0;
+        return;
+    }
+
+    if( m_marginRefits >= MAX_MARGIN_REFITS )
+        return;
+
+    m_marginRefits++;
     m_marginCheckPending = true;
 
     CallAfter(
             [this]()
             {
+                m_inMarginRefit = true;
                 UpdateMargins();
+                m_inMarginRefit = false;
                 m_marginCheckPending = false;
             } );
 }
@@ -2116,11 +2128,13 @@ void SIM_VIEW::EnsureThirdYAxisExists()
 {
     if( !m_axis_y3 )
     {
-        SetMargins( 30, 160, calcBottomMargin(), 70 );
         m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_BORDER_RIGHT );
         m_axis_y3->SetNameAlign( mpALIGN_BORDER_RIGHT );
         m_axis_y3->SetMasterScale( m_axis_y1 );
         AddLayer( m_axis_y3 );
+
+        // Reserve the Power margin, honouring user margins.
+        UpdateMargins();
     }
 
     if( m_axis_y3 )
@@ -2658,6 +2672,13 @@ SIM_VIEW* SIM_PLOT_TAB::AddView()
     m_views.push_back( view );
     m_viewsSizer->Add( view, 1, wxALL | wxEXPAND, 1 );
 
+    // User margins apply to the whole tab.
+    if( m_views.size() > 1 )
+    {
+        view->SetUserMargins( m_views[0]->GetUserMargin( 0 ), m_views[0]->GetUserMargin( 1 ),
+                              m_views[0]->GetUserMargin( 2 ), m_views[0]->GetUserMargin( 3 ) );
+    }
+
     UpdatePlotColors();
 
     if( m_views.size() > 1 )
@@ -2974,9 +2995,7 @@ void SIM_PLOT_TAB::UpdatePlotColors()
     {
         view->SetColourTheme( bg, fg, axis );
 
-        // The legend paints over the traces, so a transparent background leaves its labels
-        // competing with whatever runs behind them.  Fill it from the plot background and frame
-        // it, so it reads as a panel rather than as floating text.
+        // Opaque, framed background so the labels stay readable over traces.
         if( view->m_legend )
         {
             view->m_legend->SetBrush( wxBrush( bg ) );
@@ -3112,7 +3131,9 @@ void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
         penStyle = wxPENSTYLE_SOLID;
 
     trace->SetPen( wxPen( trace->GetTraceColour(), m_traceWidth, penStyle ) );
-    m_sessionTraceColors[trace->GetName()] = trace->GetTraceColour();
+
+    // Keyed by vector: the layer name may be renamed.
+    m_sessionTraceColors[trace->GetVectorName()] = trace->GetTraceColour();
 }
 
 
@@ -3164,9 +3185,7 @@ TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType, SIM_
         aView->AddLayer( (mpLayer*) trace );
         aView->RaiseOverlays();
 
-        // The trace wasn't registered yet when updateAxes() ran above, so its axis may still
-        // be showing stale visibility/margins (e.g. a freshly-created but still-hidden Power
-        // axis) -- refresh both now that the trace actually exists.
+        // The trace didn't exist when updateAxes() ran; refresh visibility and margins now.
         aView->UpdateAxisVisibility();
         aView->UpdateMargins();
     }

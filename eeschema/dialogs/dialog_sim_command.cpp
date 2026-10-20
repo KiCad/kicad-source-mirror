@@ -224,9 +224,7 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 {
     if( const SIM_PLOT_TAB* plotTab = dynamic_cast<const SIM_PLOT_TAB*>( aSimTab ) )
     {
-        // Showing a sizer shows everything nested inside it, so the box has to be settled before
-        // the individual axes rather than after, or it un-hides the ones this analysis hasn't
-        // got.  A box with all three hidden is just a labelled void, so it goes too.
+        // Before the axis sizers: showing a sizer shows its children.
         m_axisScalesSizer->Show( !plotTab->GetLabelY1().IsEmpty() || !plotTab->GetLabelY2().IsEmpty()
                                  || !plotTab->GetLabelY3().IsEmpty() );
 
@@ -290,10 +288,20 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 #define GET_STR( val ) EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED, \
                                                                  val, false /* no units */ )
 
-        m_marginLeft->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginLeft() ) );
-        m_marginTop->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginTop() ) );
-        m_marginRight->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginRight() ) );
-        m_marginBottom->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginBottom() ) );
+        // An empty margin follows the plot; the hint shows its current value.
+        auto showMargin = [&]( wxTextCtrl* aCtrl, int aIndex, int aCurrent )
+        {
+            int user = plotTab->GetUserMargin( aIndex );
+
+            aCtrl->SetValue( user >= 0 ? GET_STR( user ) : wxString() );
+            aCtrl->SetHint( GET_STR( aCurrent ) );
+            aCtrl->SetToolTip( _( "Leave empty to follow the plot." ) );
+        };
+
+        showMargin( m_marginTop, 0, plotTab->GetPlotWin()->GetMarginTop() );
+        showMargin( m_marginRight, 1, plotTab->GetPlotWin()->GetMarginRight() );
+        showMargin( m_marginBottom, 2, plotTab->GetPlotWin()->GetMarginBottom() );
+        showMargin( m_marginLeft, 3, plotTab->GetPlotWin()->GetMarginLeft() );
     }
 }
 
@@ -637,10 +645,16 @@ void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
         plotTab->SetDottedSecondary( m_dottedSecondary->GetValue() );
         plotTab->SetTraceWidth( m_lineWidth->GetValue() );
 
-        plotTab->GetPlotWin()->SetMarginLeft( TO_INT( m_marginLeft ) );
-        plotTab->GetPlotWin()->SetMarginRight( TO_INT( m_marginRight ) );
-        plotTab->GetPlotWin()->SetMarginTop( TO_INT( m_marginTop ) );
-        plotTab->GetPlotWin()->SetMarginBottom( TO_INT( m_marginBottom ) );
+        // An empty margin follows the plot.
+        auto userMargin = []( wxTextCtrl* aCtrl )
+        {
+            wxString text = aCtrl->GetValue();
+
+            return text.Trim( true ).Trim( false ).IsEmpty() ? -1 : TO_INT( aCtrl );
+        };
+
+        plotTab->SetUserMargins( userMargin( m_marginTop ), userMargin( m_marginRight ), userMargin( m_marginBottom ),
+                                 userMargin( m_marginLeft ) );
 
         plotTab->GetPlotWin()->AdjustLimitedView();
         plotTab->GetPlotWin()->UpdateAll();
@@ -808,9 +822,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
             m_dcEnable2->SetValue( true );
         }
 
-        // updateDCUnits() only runs from the source-type handlers, and those don't fire when
-        // the choices are set programmatically above -- so reopening a ".dc R4 1k 100k 100"
-        // left the start/stop/step units reading "V" from the form designer's default.
+        // updateDCUnits() doesn't fire when the choices are set programmatically.
         auto refreshUnits = [&]( wxChoice* aTypeChoice, wxStaticText* aStart, wxStaticText* aEnd, wxStaticText* aStep )
         {
             wxString  type = getStringSelection( aTypeChoice ).Upper();

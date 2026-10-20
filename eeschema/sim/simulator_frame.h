@@ -48,15 +48,15 @@ class ACTION_TOOLBAR;
 class SPICE_SIMULATOR;
 
 
-/**
- * One line of simulator console output, tagged with the severity it was reported at so the
- * console UI can filter by All / Warnings / Errors.
- */
 struct SIM_CONSOLE_ENTRY
 {
     SEVERITY severity;
     wxString text;
 };
+
+
+/// @return \a aSignal without its " (gain)", " (phase)" or " (amplitude)" suffix.
+wxString SimSignalBaseName( const wxString& aSignal );
 
 
 /**
@@ -132,10 +132,11 @@ public:
      */
     const std::vector<wxString> Signals();
 
-    /**
-     * @return the schematic net names, with their exact capitalisation.
-     */
+    /// @return the schematic net names.
     const std::vector<wxString>& Netnames();
+
+    /// @return the component voltages, such as "V(R1)".
+    std::vector<wxString> DeviceVoltages();
 
     const std::map<int, wxString>& UserDefinedSignals();
 
@@ -207,7 +208,7 @@ public:
 
     wxString GetCurrentSimCommand() const;
     SIM_TYPE GetCurrentSimType() const;
-    int      GetCurrentOptions() const;
+    int GetCurrentOptions() const;
 
     bool SimFinished() const { return m_simFinished; }
 
@@ -246,17 +247,17 @@ private:
     void onExit( wxCommandEvent& event );
 
 private:
-    SCH_EDIT_FRAME*     m_schematicFrame;
-    ACTION_TOOLBAR*     m_toolBar;
-    SIMULATOR_FRAME_UI* m_ui;
+    SCH_EDIT_FRAME*                      m_schematicFrame;
+    ACTION_TOOLBAR*                      m_toolBar;
+    SIMULATOR_FRAME_UI*                  m_ui;
 
     std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
     SIM_CONSOLE_REPORTER*                m_consoleReporter;
     SIM_FRAME_STATE_LISTENER*            m_stateListener;
     std::shared_ptr<SPICE_CIRCUIT_MODEL> m_circuitModel;
 
-    bool m_simFinished;
-    bool m_workbookModified;
+    bool                                 m_simFinished;
+    bool                                 m_workbookModified;
 };
 
 // Commands

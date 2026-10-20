@@ -272,9 +272,9 @@ public:
     {
         struct VIEW
         {
-            int  plot_panel_width;
+            int  side_panel_width;
             int  plot_panel_height;
-            int  signal_panel_height;
+            int  signals_tuners_height;
             int  cursors_panel_height;
             int  center_panel_width;
             bool white_background;

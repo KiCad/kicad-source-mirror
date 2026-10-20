@@ -36,8 +36,7 @@ public:
 private:
     void addGridRow( const wxString& aValue, int aId );
 
-    /// Keep the row-label (entry index) column wide enough for the highest number, and give the
-    /// expression column everything left over.
+    /// Size the index column to its widest number and give the rest to the expression column.
     void adjustGridColumns();
 
     void onAddSignal( wxCommandEvent& event ) override;

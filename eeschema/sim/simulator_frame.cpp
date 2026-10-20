@@ -64,10 +64,7 @@
 static WX_STRING_REPORTER s_reporter;
 
 
-/**
- * A #REPORTER that keeps each reported line's severity alongside its text, so the console
- * can be filtered by severity (All / Warnings / Errors) instead of just showing one flat blob.
- */
+/// A #REPORTER that keeps each line's severity so the console can be filtered.
 class SIM_SEVERITY_STRING_REPORTER : public REPORTER
 {
 public:
@@ -75,8 +72,7 @@ public:
     {
         REPORTER::Report( aText, aSeverity );
 
-        // Each reported message is a line of its own, so terminate it here.  (Text appended
-        // directly to the console by the UI carries its own line breaks.)
+        // Each reported message is its own line.
         m_entries.push_back( { aSeverity, aText + wxS( "\n" ) } );
         return *this;
     }
@@ -119,7 +115,7 @@ class SIM_FRAME_STATE_LISTENER : public SIM_STATE_LISTENER
 {
 public:
     SIM_FRAME_STATE_LISTENER( SIMULATOR_FRAME* aParent ) :
-            m_parent( aParent )
+        m_parent( aParent )
     {
     }
 
@@ -129,9 +125,9 @@ public:
 
         switch( aNewState )
         {
-        case SIM_IDLE: event = new wxCommandEvent( EVT_SIM_FINISHED ); break;
-        case SIM_RUNNING: event = new wxCommandEvent( EVT_SIM_STARTED ); break;
-        default: wxFAIL; return;
+        case SIM_IDLE:    event = new wxCommandEvent( EVT_SIM_FINISHED ); break;
+        case SIM_RUNNING: event = new wxCommandEvent( EVT_SIM_STARTED );  break;
+        default:          wxFAIL;                                         return;
         }
 
         wxQueueEvent( m_parent, event );
@@ -143,14 +139,14 @@ private:
 
 
 BEGIN_EVENT_TABLE( SIMULATOR_FRAME, KIWAY_PLAYER )
-EVT_MENU( wxID_EXIT, SIMULATOR_FRAME::onExit )
-EVT_MENU( wxID_CLOSE, SIMULATOR_FRAME::onExit )
+    EVT_MENU( wxID_EXIT, SIMULATOR_FRAME::onExit )
+    EVT_MENU( wxID_CLOSE, SIMULATOR_FRAME::onExit )
 END_EVENT_TABLE()
 
 
 SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-        KIWAY_PLAYER( aKiway, aParent, FRAME_SIMULATOR, _( "Simulator" ), wxDefaultPosition, wxDefaultSize,
-                      wxDEFAULT_FRAME_STYLE, wxT( "simulator" ), unityScale ),
+        KIWAY_PLAYER( aKiway, aParent, FRAME_SIMULATOR, _( "Simulator" ), wxDefaultPosition,
+                      wxDefaultSize, wxDEFAULT_FRAME_STYLE, wxT( "simulator" ), unityScale ),
         m_schematicFrame( nullptr ),
         m_toolBar( nullptr ),
         m_ui( nullptr ),
@@ -239,10 +235,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_ui->InitWorkbook();
     m_ui->FlushSimConsole();
 
-    // InitWorkbook() goes straight to SIMULATOR_FRAME_UI::LoadWorkbook(), so it bypasses the
-    // modified-flag reset that SIMULATOR_FRAME::LoadWorkbook() does.  Opening the simulator is
-    // not a modification, so clear the flag once the events raised while building the tabs have
-    // been processed.
+    // InitWorkbook() bypasses SIMULATOR_FRAME::LoadWorkbook()'s modified-flag reset.
     CallAfter(
             [this]()
             {
@@ -338,7 +331,7 @@ WINDOW_SETTINGS* SIMULATOR_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
         return &cfg->m_Simulator.window;
 
     wxFAIL_MSG( wxT( "SIMULATOR not running with EESCHEMA_SETTINGS" ) );
-    return &aCfg->m_Window; // non-null fail-safe
+    return &aCfg->m_Window;     // non-null fail-safe
 }
 
 
@@ -415,11 +408,13 @@ void SIMULATOR_FRAME::showNetlistErrors( const WX_STRING_REPORTER& aReporter )
 
     if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_UNDEFINED | RPT_SEVERITY_ERROR ) )
     {
-        DisplayErrorMessage( this, _( "Errors during netlist generation." ), wxJoin( lines, '\n' ) );
+        DisplayErrorMessage( this, _( "Errors during netlist generation." ),
+                             wxJoin( lines, '\n' ) );
     }
     else if( aReporter.HasMessageOfSeverity( RPT_SEVERITY_WARNING ) )
     {
-        DisplayInfoMessage( this, _( "Warnings during netlist generation." ), wxJoin( lines, '\n' ) );
+        DisplayInfoMessage( this, _( "Warnings during netlist generation." ),
+                             wxJoin( lines, '\n' ) );
     }
 }
 
@@ -433,7 +428,8 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
 
     m_schematicFrame->PrepareForNetlist();
 
-    bool success = m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(), s_reporter );
+    bool success = m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions,
+                                        Prj().GetProjectPath(), s_reporter );
 
     m_schematicFrame->RefreshConnectivity( true );
     showNetlistErrors( s_reporter );
@@ -446,7 +442,8 @@ void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSi
 {
     s_reporter.Clear();
 
-    m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(), s_reporter );
+    m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, Prj().GetProjectPath(),
+                         s_reporter );
 
     m_schematicFrame->RefreshConnectivity( true );
     showNetlistErrors( s_reporter );
@@ -478,7 +475,8 @@ void SIMULATOR_FRAME::destroyTabPlot( SIM_TAB* aSimTab )
         long spectral = ( noiseNumber % 2 == 0 ) ? noiseNumber - 1 : noiseNumber;
 
         m_simulator->Command( wxString::Format( wxT( "destroy noise%ld" ), spectral ).ToStdString() );
-        m_simulator->Command( wxString::Format( wxT( "destroy noise%ld" ), spectral + 1 ).ToStdString() );
+        m_simulator->Command(
+                wxString::Format( wxT( "destroy noise%ld" ), spectral + 1 ).ToStdString() );
     }
     else
     {
@@ -539,7 +537,7 @@ void SIMULATOR_FRAME::StartSimulation()
     else
     {
         if( m_ui->GetSimTabIndex( simTab ) == 0
-            && m_circuitModel->GetSchTextSimCommand() != simTab->GetLastSchTextSimCommand() )
+                && m_circuitModel->GetSchTextSimCommand() != simTab->GetLastSchTextSimCommand() )
         {
             if( simTab->GetLastSchTextSimCommand().IsEmpty()
                 || IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
@@ -604,6 +602,12 @@ const std::vector<wxString>& SIMULATOR_FRAME::Netnames()
 }
 
 
+std::vector<wxString> SIMULATOR_FRAME::DeviceVoltages()
+{
+    return m_ui->DeviceVoltages();
+}
+
+
 const std::map<int, wxString>& SIMULATOR_FRAME::UserDefinedSignals()
 {
     return m_ui->UserDefinedSignals();
@@ -648,11 +652,10 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
 
         // Successfully loading a workbook does not count as modifying it.  Clear the modified
         // flag after all the EVT_WORKBOOK_MODIFIED events have been processed.
-        CallAfter(
-                [this]()
-                {
-                    m_workbookModified = false;
-                } );
+        CallAfter( [this]()
+                   {
+                       m_workbookModified = false;
+                   } );
 
         return true;
     }
@@ -710,7 +713,8 @@ bool SIMULATOR_FRAME::EditAnalysis()
     if( !simTab )
         return false;
 
-    m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS, s_reporter );
+    m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
+                                               s_reporter );
 
     showNetlistErrors( s_reporter );
 
@@ -746,10 +750,10 @@ bool SIMULATOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
 
         return HandleUnsavedChanges( this, _( "Save changes to workbook?" ),
-                                     [&]() -> bool
-                                     {
-                                         return SaveWorkbook( Prj().AbsolutePath( filename.GetFullName() ) );
-                                     } );
+                [&]() -> bool
+                {
+                    return SaveWorkbook( Prj().AbsolutePath( filename.GetFullName() ) );
+                } );
     }
 
     return true;
@@ -779,43 +783,49 @@ void SIMULATOR_FRAME::setupUIConditions()
 {
     EDA_BASE_FRAME::setupUIConditions();
 
-    ACTION_MANAGER* mgr = m_toolManager->GetActionManager();
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
     wxASSERT( mgr );
 
-    auto showGridCondition = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->IsGridShown();
-    };
+    auto showGridCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->IsGridShown();
+            };
 
-    auto showLegendCondition = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->IsLegendShown();
-    };
+    auto showLegendCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->IsLegendShown();
+            };
 
-    auto showDottedCondition = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->GetDottedSecondary();
-    };
+    auto showDottedCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetDottedSecondary();
+            };
 
-    auto darkModePlotCondition = [this]( const SELECTION& aSel )
-    {
-        return m_ui->DarkModePlots();
-    };
+    auto darkModePlotCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return m_ui->DarkModePlots();
+            };
 
-    auto smithChartCondition = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->IsSmithMode();
-    };
+    auto smithChartCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->IsSmithMode();
+            };
 
-    auto haveSPPlot = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->GetSimType() == ST_SP;
-    };
+    auto haveSPPlot =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetSimType() == ST_SP;
+            };
 
     auto trackCursorCondition = [this]( const SELECTION& aSel )
     {
@@ -823,37 +833,43 @@ void SIMULATOR_FRAME::setupUIConditions()
         return plotTab && plotTab->IsTrackCursorEnabled();
     };
 
-    auto simRunning = [this]( const SELECTION& aSel )
-    {
-        return m_simulator && m_simulator->IsRunning();
-    };
+    auto simRunning =
+            [this]( const SELECTION& aSel )
+            {
+                return m_simulator && m_simulator->IsRunning();
+            };
 
-    auto simFinished = [this]( const SELECTION& aSel )
-    {
-        return m_simFinished;
-    };
+    auto simFinished =
+            [this]( const SELECTION& aSel )
+            {
+                return m_simFinished;
+            };
 
-    auto haveSim = [this]( const SELECTION& aSel )
-    {
-        return GetCurrentSimTab() != nullptr;
-    };
+    auto haveSim =
+            [this]( const SELECTION& aSel )
+            {
+                return GetCurrentSimTab() != nullptr;
+            };
 
-    auto havePlot = [this]( const SELECTION& aSel )
-    {
-        return dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) != nullptr;
-    };
+    auto havePlot =
+            [this]( const SELECTION& aSel )
+            {
+                return dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) != nullptr;
+            };
 
-    auto haveZoomUndo = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->GetPlotWin()->UndoZoomStackSize() > 0;
-    };
+    auto haveZoomUndo =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetPlotWin()->UndoZoomStackSize() > 0;
+            };
 
-    auto haveZoomRedo = [this]( const SELECTION& aSel )
-    {
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
-        return plotTab && plotTab->GetPlotWin()->RedoZoomStackSize() > 0;
-    };
+    auto haveZoomRedo =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetPlotWin()->RedoZoomStackSize() > 0;
+            };
 
     // clang-format off
     auto isSimConsoleShown =
@@ -880,7 +896,7 @@ void SIMULATOR_FRAME::setupUIConditions()
     // clang-format on
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
-#define CHECK( x ) ACTION_CONDITIONS().Check( x )
+#define CHECK( x )  ACTION_CONDITIONS().Check( x )
     // clang-format off
     mgr->SetConditions( SCH_ACTIONS::openWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( SCH_ACTIONS::saveWorkbook,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
@@ -939,7 +955,7 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
     // the time the file is written. So gives a slice of time to fully finish the work:
     if( m_simulator->IsRunning() )
     {
-        int max_time = 40; // For a max timeout = 2s
+        int max_time = 40;      // For a max timeout = 2s
 
         do
         {

@@ -1328,10 +1328,7 @@ mpScaleY::mpScaleY( const wxString& name, int flags, bool ticks )
 
 void mpScaleY::Plot( wxDC& dc, mpWindow& w )
 {
-    // A freshly-created axis that has never had ExtendDataRange() called on it yet (e.g. a
-    // Power axis painted before its first trace's data has been assigned) has m_minV == m_maxV,
-    // which would divide by zero below and poison m_scale/m_offset with +/-inf and, through
-    // computeSlaveTicks(), NaN. Pad it the same way ExtendDataRange() pads a degenerate range.
+    // An axis that was never ranged has m_minV == m_maxV.
     if( mpIsDegenerateRange( m_minV, m_maxV ) )
         mpPadDegenerateRange( m_minV, m_maxV );
 
@@ -1440,9 +1437,7 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
         // Draw axis name
         dc.GetTextExtent( m_name, &tx, &ty );
 
-        // The name is centred on the axis line, but a long one -- "Voltage (measured) (V)" on a
-        // DC sweep, say -- is wider than twice the margin it sits in, so centring would start it
-        // off the edge of the window and clip it.  Keep it inside.
+        // Keep long names inside the window.
         int nameX = orgx - ( tx / 2 );
         nameX = std::min( nameX, w.GetScrX() - tx );
         nameX = std::max( nameX, 0 );
@@ -1793,10 +1788,7 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax, const wx
     double newDesiredYmin = yMin;
     double newDesiredYmax = yMax;
 
-    // The Y bounds come straight from the layers' bounding boxes, so a trace that's constant
-    // to within the solver's tolerance hands us a range only an ULP or two wide (or none at
-    // all).  Fitting to that magnifies the noise to fill the plot and leaves every tick label
-    // rounding to the same number; widen it to something that can be scaled and labelled.
+    // Near-constant data gives a range too narrow to label.
     if( mpIsDegenerateRange( yMin, yMax ) )
     {
         mpPadDegenerateRange( yMin, yMax );
@@ -2252,11 +2244,7 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
     targetDC->SetTextForeground( m_fgColour );
     targetDC->DrawRectangle( 0, 0, m_scrX, m_scrY );
 
-    // Draw all the layers, info layers (the legend, the cursors) last.  Those are overlays and
-    // have to sit on top of the data, but paint order is just insertion order: a legend created
-    // with the view is added long before any trace, so the traces would draw straight over its
-    // background.  Dragging it used to be the only cure -- onMouseLeftDown() re-adds the layer
-    // being moved, which pushes it to the end of the list.
+    // Info layers (legend, cursors) paint over the traces.
     for( int pass = 0; pass < 2; ++pass )
     {
         const bool infoPass = ( pass == 1 );
@@ -2266,12 +2254,7 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
             if( layer->IsInfo() != infoPass )
                 continue;
 
-            // Layers are free to change the DC's state -- CURSOR, for one, sets its own text
-            // colour -- and that must not leak into whatever paints after them.  A Y axis added
-            // to an existing view (the Power axis appears only once a power signal is plotted)
-            // lands after any cursor layer, and would otherwise draw its tick labels and name in
-            // the cursor's colour, which against a dark plot can be the background colour itself:
-            // an axis that silently renders nothing.
+            // Undo any text colour the previous layer set.
             targetDC->SetTextForeground( m_fgColour );
             layer->Plot( *targetDC, *this );
         }

@@ -110,8 +110,7 @@ enum
 };
 
 
-/// Signals-tree context menu.  These live in their own range because the tree is not a
-/// GRID_TRICKS client; the "..._BASE" ids have an index added to them.
+/// Signals-tree context menu ids; "..._BASE" ids have an index added.
 enum
 {
     MYID_TREE_COPY = 30000,
@@ -125,14 +124,7 @@ enum
 };
 
 
-/**
- * The signal's plot indicator: a filled dot in the trace colour when it's plotted, a hollow
- * grey ring when it isn't.
- *
- * Rendered by hand into an alpha channel rather than drawn through a wxMemoryDC so it composites
- * cleanly over the row background (including the selection highlight) without needing a mask
- * colour, which a trace could otherwise collide with.
- */
+/// Plot indicator: a dot in the trace colour when plotted, a hollow ring otherwise.
 static wxBitmapBundle makeSignalDot( const wxColour& aColor, bool aFilled )
 {
     const int    size = 12;
@@ -174,31 +166,38 @@ static wxBitmapBundle makeSignalDot( const wxColour& aColor, bool aFilled )
 }
 
 
-/**
- * The height every cell in both simulator trees reports.
- *
- * Deliberately a constant (per font size) rather than something measured off the cell: wxGTK
- * asks a renderer for its size for rows that have never been realized -- everything below the
- * fold, and everything at all before the frame is first drawn -- and the answer it gets back in
- * that state is wildly wrong, leaving those rows many times too tall.  Since no row here has any
- * reason to be a different height from its neighbours, the sturdy fix is to never measure.
- */
+wxBitmapBundle SIMULATOR_FRAME_UI::signalDot( const wxColour& aColor, bool aFilled )
+{
+    // The key must match the colour makeSignalDot() draws.
+    const wxColour colour = aFilled ? aColor : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+
+    for( const SIGNAL_DOT& dot : m_signalDotCache )
+    {
+        if( dot.filled == aFilled && dot.colour == colour )
+            return dot.bitmap;
+    }
+
+    if( m_signalDotCache.size() >= SIGNAL_DOT_CACHE_LIMIT )
+        m_signalDotCache.clear();
+
+    wxBitmapBundle bitmap = makeSignalDot( aColor, aFilled );
+    m_signalDotCache.push_back( { colour, aFilled, bitmap } );
+
+    return bitmap;
+}
+
+
+/// Fixed row height for every tree cell: wxGTK mis-measures unrealized rows.
 static int simTreeRowHeight( wxWindow* aWindow )
 {
-    // 16 is only a fallback for a renderer that isn't attached to a view yet.
+    // Fallback for a renderer not yet attached to a view.
     int fontHeight = aWindow ? aWindow->GetCharHeight() : 16;
 
     return std::max( fontHeight, 12 );
 }
 
 
-/**
- * Draws the plain-text cell (the "Plot" / "Value" column) for both simulator trees.
- *
- * The stock text renderer measures the cell, which is exactly what has to be avoided -- wxGTK
- * takes the tallest cell in a row, so leaving even one column to the stock renderer is enough to
- * reintroduce the oversized rows.
- */
+/// Draws the plain-text cell of both trees without measuring it (see simTreeRowHeight()).
 class SIM_TREE_TEXT_RENDERER : public wxDataViewCustomRenderer
 {
 public:
@@ -235,12 +234,7 @@ private:
 };
 
 
-/**
- * Draws the "[dot] name" cell for both simulator trees.
- *
- * See simTreeRowHeight(): the height reported here is a constant, never a measurement of the
- * cell's contents.
- */
+/// Draws the "[dot] name" cell of both trees without measuring it (see simTreeRowHeight()).
 class SIM_TREE_ICON_TEXT_RENDERER : public wxDataViewCustomRenderer
 {
 public:
@@ -266,8 +260,7 @@ public:
     {
         int width = GetTextExtent( m_value.GetText() ).x + bitmapSize().x + gap();
 
-        // Never report a zero size: wxDataViewCtrl treats that as "use the default", which is
-        // exactly the guesswork this renderer exists to avoid.
+        // A zero size would make wxDataViewCtrl fall back to measuring.
         return wxSize( std::max( width, 1 ), simTreeRowHeight( GetView() ) );
     }
 
@@ -304,14 +297,7 @@ private:
 };
 
 
-/**
- * A two-column grouped tree: a name column (icon + text) and a free-text value column.
- *
- * Both the signals panel (grouped by signal kind, value = the view it's plotted on) and the
- * measurements panel (grouped by signal, value = the measured result) are built on this.  The
- * model holds only what it takes to draw a row; the owner refreshes the per-leaf state and
- * everything interactive is reached from the context menu.
- */
+/// Two-column grouped tree (name + value) shared by the signals and measurements panels.
 class SIM_TREE_MODEL : public wxDataViewModel
 {
 public:
@@ -330,38 +316,37 @@ public:
         {
         }
 
-        wxString                           name;
+        wxString name;
+        wxString key; ///< Group identity, independent of the label; empty for leaves.
+
         NODE*                              parent;
         std::vector<std::unique_ptr<NODE>> children;
 
-        // Leaf state, refreshed by the owner.  The icon is cached here because GetValue() is
-        // called for every visible row on every repaint.
+        // Leaf state; the icon is cached because GetValue() runs per repaint.
         wxString       value;
         wxBitmapBundle icon;
         bool           greyed = false;
 
-        // Leaf payload: for signals the plotted state and trace colour (used to decide when the
-        // icon needs redrawing); for measurements the index into SIM_PLOT_TAB::Measurements().
+        // Leaf payload: plotted state and colour for signals, the measurement index for measurements.
         bool     plotted = false;
         wxColour color;
         int      index = -1;
 
-        /// A node is a container exactly when it has children, so groups can nest.
+        /// A node with children is a group, so groups can nest.
         bool IsGroup() const { return !children.empty(); }
     };
 
-    /// One leaf as handed to SetContents().
     struct ENTRY
     {
         wxString name;
         int      index = -1;
     };
 
-    /// One group as handed to SetContents().  Groups may nest (component voltages sit inside
-    /// the voltages group); a group with neither entries nor sub-groups is dropped.
+    /// One group passed to SetContents().  Empty groups are dropped.
     struct GROUP
     {
         wxString           name;
+        wxString           key; ///< See NODE::key.
         std::vector<ENTRY> entries;
         std::vector<GROUP> subGroups;
 
@@ -378,8 +363,6 @@ public:
 
     SIM_TREE_MODEL() = default;
 
-    /// Replace the whole tree.  Group labels are used verbatim, so any item count has to be
-    /// baked in by the caller.
     void SetContents( const std::vector<GROUP>& aGroups )
     {
         m_groups.clear();
@@ -395,7 +378,6 @@ public:
         Cleared();
     }
 
-    /// Every container node, at any depth (used to expand the whole tree).
     std::vector<NODE*> Groups() const
     {
         std::vector<NODE*> groups;
@@ -406,7 +388,6 @@ public:
         return groups;
     }
 
-    /// Every leaf node, at any depth.
     std::vector<NODE*> Leaves() const
     {
         std::vector<NODE*> leaves;
@@ -505,6 +486,7 @@ private:
     static std::unique_ptr<NODE> buildGroup( const GROUP& aGroup, NODE* aParent )
     {
         std::unique_ptr<NODE> node = std::make_unique<NODE>( aGroup.name, aParent );
+        node->key = aGroup.key;
 
         for( const ENTRY& entry : aGroup.entries )
         {
@@ -576,15 +558,16 @@ void CURSORS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
 void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
-    auto getSignalName = [this]( int row ) -> wxString
-    {
-        wxString signal = m_grid->GetCellValue( row, COL_CURSOR_SIGNAL );
+    auto getSignalName =
+            [this]( int row ) -> wxString
+            {
+                wxString signal = m_grid->GetCellValue( row, COL_CURSOR_SIGNAL );
 
-        if( signal.EndsWith( "[2 - 1]" ) )
-            signal = signal.Left( signal.length() - 7 );
+                if( signal.EndsWith( "[2 - 1]" ) )
+                    signal = signal.Left( signal.length() - 7 );
 
-        return signal;
-    };
+                return signal;
+            };
 
     if( event.GetId() == MYID_FORMAT_VALUE )
     {
@@ -637,6 +620,18 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
         m_plotNumber( 0 ),
         m_refreshTimer( this, ID_SIM_REFRESH )
 {
+    // The base class' idle handlers would override the sash positions SetSubWindowsSashSize() restores.
+    m_splitterLeftRight->Disconnect(
+            wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterLeftRightOnIdle ), nullptr, this );
+    m_splitterCenterRight->Disconnect(
+            wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterCenterRightOnIdle ), nullptr, this );
+    m_splitterPlotAndConsole->Disconnect(
+            wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterPlotAndConsoleOnIdle ), nullptr, this );
+    m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterSignalsOnIdle ),
+                                   nullptr, this );
+    m_splitterCursors->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIMULATOR_FRAME_UI_BASE::m_splitterCursorsOnIdle ),
+                                   nullptr, this );
+
     // Get the previous size and position of windows:
     LoadSettings( m_schematicFrame->eeconfig() );
 
@@ -653,6 +648,16 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
     m_cursorsGrid->wxGrid::SetLabelFont( KIUI::GetStatusFont( this ) );
 
     m_cursorsGrid->PushEventHandler( new CURSORS_GRID_TRICKS( this, m_cursorsGrid ) );
+
+    // Ctrl+C, as advertised in the context menu.
+    m_signalsTree->Bind( wxEVT_CHAR_HOOK,
+                         [this]( wxKeyEvent& aEvent )
+                         {
+                             if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'C' )
+                                 copySignalNames( getSelectedSignals( wxDataViewItem() ) );
+                             else
+                                 aEvent.Skip();
+                         } );
 
     m_signalsModel = new SIM_TREE_MODEL();
     m_signalsTree->AssociateModel( m_signalsModel );
@@ -684,8 +689,7 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
 
     applyTreeRowHeight();
 
-    // The frame isn't shown yet, and a workbook loaded at startup populates the trees before it
-    // is; re-apply once everything is realized so GTK doesn't keep a height measured too early.
+    // Re-apply once realized so GTK doesn't keep a height measured too early.
     CallAfter(
             [this]()
             {
@@ -711,8 +715,7 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
 
     Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_FRAME_UI::onPlotCursorUpdate, this );
 
-    Bind(
-            wxEVT_TIMER,
+    Bind( wxEVT_TIMER,
             [&]( wxTimerEvent& aEvent )
             {
                 OnSimRefresh( false );
@@ -756,7 +759,7 @@ void SIMULATOR_FRAME_UI::CustomCursorsInit()
             m_cursorFormatsDyn[index].push_back( m_cursorFormats[index][index2] );
     }
 
-    // Cursors 1 and 2 always exist; the next one created gets the next number up.
+    // Cursors 1 and 2 always exist.
     m_customCursorsCnt = static_cast<int>( std::size( m_cursorFormats ) );
 }
 
@@ -780,15 +783,20 @@ void SIMULATOR_FRAME_UI::CreateNewCursor()
 
 void SIMULATOR_FRAME_UI::DeleteCursor()
 {
-    // Cursors 1 and 2 are permanent; only the extra ones can be deleted, last one first.
+    // Cursors 1 and 2 are permanent; delete the extras last-first.
     if( m_customCursorsCnt <= static_cast<int>( std::size( m_cursorFormats ) ) )
         return;
 
     int doomed = m_customCursorsCnt - 1;
 
-    // Detach the cursor from whichever trace is carrying it before dropping its format.
-    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
+    // Any tab may hold it; a leftover would index past the formats popped below.
+    for( size_t ii = 0; ii < m_plotNotebook->GetPageCount(); ++ii )
     {
+        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( m_plotNotebook->GetPage( ii ) );
+
+        if( !plotTab )
+            continue;
+
         for( const auto& [name, trace] : plotTab->GetTraces() )
         {
             if( trace->HasCursor( doomed ) )
@@ -825,14 +833,28 @@ void SIMULATOR_FRAME_UI::ShowChangedLanguage()
 
     m_filter->SetHint( _( "Filter" ) );
 
+    m_consoleFilterAll->SetLabel( _( "All" ) );
+    m_consoleFilterWarnings->SetLabel( _( "Warnings" ) );
+    m_consoleFilterErrors->SetLabel( _( "Errors" ) );
+    m_panelConsole->Layout();
+
     if( m_signalsTree->GetColumnCount() >= 2 )
     {
         m_signalsTree->GetColumn( SIM_TREE_MODEL::COL_NAME )->SetTitle( _( "Signal" ) );
         m_signalsTree->GetColumn( SIM_TREE_MODEL::COL_VALUE )->SetTitle( _( "Plot" ) );
     }
 
-    // The group labels are translated as the tree is built.
     rebuildSignalsTree( m_filter->GetValue() );
+
+    if( m_measurementsTree->GetColumnCount() >= 2 )
+    {
+        m_measurementsTree->GetColumn( SIM_TREE_MODEL::COL_NAME )->SetTitle( _( "Measurement" ) );
+        m_measurementsTree->GetColumn( SIM_TREE_MODEL::COL_VALUE )->SetTitle( _( "Value" ) );
+    }
+
+    // Group names and function labels are set by the rebuild.
+    std::map<wxString, wxString> measurementValues = shownMeasurementValues();
+    rebuildMeasurementsTree( &measurementValues );
 
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_NAME, _( "Cursor" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_SIGNAL, _( "Signal" ) );
@@ -862,9 +884,9 @@ void SIMULATOR_FRAME_UI::LoadSettings( EESCHEMA_SETTINGS* aCfg )
     const EESCHEMA_SETTINGS::SIMULATOR& settings = aCfg->m_Simulator;
 
     // Read subwindows sizes (should be > 0 )
-    m_splitterLeftRightSashPosition = settings.view.plot_panel_width;
+    m_splitterLeftRightSashPosition = settings.view.side_panel_width;
     m_splitterPlotAndConsoleSashPosition = settings.view.plot_panel_height;
-    m_splitterSignalsSashPosition = settings.view.signal_panel_height;
+    m_splitterSignalsSashPosition = settings.view.signals_tuners_height;
     m_splitterCursorsSashPosition = settings.view.cursors_panel_height;
     m_splitterCenterRightSashPosition = settings.view.center_panel_width;
     m_darkMode = !settings.view.white_background;
@@ -878,9 +900,15 @@ void SIMULATOR_FRAME_UI::SaveSettings( EESCHEMA_SETTINGS* aCfg )
 {
     EESCHEMA_SETTINGS::SIMULATOR& settings = aCfg->m_Simulator;
 
-    settings.view.plot_panel_width = m_splitterLeftRight->GetSashPosition();
-    settings.view.plot_panel_height = m_splitterPlotAndConsole->GetSashPosition();
-    settings.view.signal_panel_height = m_splitterSignals->GetSashPosition();
+    // A hidden panel's splitter is unsplit; save where its sash will go back to.
+    auto sashPosition = []( wxSplitterWindow* aSplitter, int aHiddenPosition )
+    {
+        return aSplitter->IsSplit() ? aSplitter->GetSashPosition() : aHiddenPosition;
+    };
+
+    settings.view.side_panel_width = sashPosition( m_splitterLeftRight, m_splitterLeftRightSashPosition );
+    settings.view.plot_panel_height = sashPosition( m_splitterPlotAndConsole, m_splitterPlotAndConsoleSashPosition );
+    settings.view.signals_tuners_height = m_splitterSignals->GetSashPosition();
     settings.view.cursors_panel_height = m_splitterCursors->GetSashPosition();
     settings.view.center_panel_width = m_splitterCenterRight->GetSashPosition();
     settings.view.white_background = !m_darkMode;
@@ -918,7 +946,7 @@ void SIMULATOR_FRAME_UI::InitWorkbook()
         {
             WX_INFOBAR* infobar = m_simulatorFrame->GetInfoBar();
             wxString    msg = wxString::Format( _( "Workbook file '%s' not found. Loading simulation settings from "
-                                                      "schematic." ),
+                                                    "schematic." ),
                                                 filename.GetFullPath() );
             infobar->ShowMessageFor( msg, 8000, wxICON_WARNING );
 
@@ -973,26 +1001,23 @@ void SIMULATOR_FRAME_UI::SetSubWindowsSashSize()
 void sortSignals( std::vector<wxString>& signals )
 {
     std::sort( signals.begin(), signals.end(),
-               []( const wxString& lhs, const wxString& rhs )
-               {
-                   // Sort voltages first
-                   if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
-                       return true;
-                   else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
-                       return false;
+            []( const wxString& lhs, const wxString& rhs )
+            {
+                // Sort voltages first
+                if( lhs.Upper().StartsWith( 'V' ) && !rhs.Upper().StartsWith( 'V' ) )
+                    return true;
+                else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
+                    return false;
 
-                   return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
-               } );
+                return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
+            } );
 }
 
 
-/// Defined below, next to the signal-name mapping it belongs with.
 wxString vectorNameFromSignalId( int aUserDefinedSignalId );
 
 
-/// Strip the " (gain)" / " (phase)" / " (amplitude)" decoration the AC and S-parameter modes
-/// add, leaving the bare signal name.
-static wxString baseSignalName( const wxString& aSignal )
+wxString SimSignalBaseName( const wxString& aSignal )
 {
     for( const wxString& suffix : { _( " (gain)" ), _( " (phase)" ), _( " (amplitude)" ) } )
     {
@@ -1004,7 +1029,25 @@ static wxString baseSignalName( const wxString& aSignal )
 }
 
 
-/// The group a signal belongs to in the signals tree.
+/// Signal identity across language changes: the translated suffix becomes a tag.
+static wxString signalViewKey( const wxString& aSignal )
+{
+    wxString tag;
+
+    if( aSignal.EndsWith( _( " (gain)" ) ) )
+        tag = wxS( "gain" );
+    else if( aSignal.EndsWith( _( " (phase)" ) ) )
+        tag = wxS( "phase" );
+    else if( aSignal.EndsWith( _( " (amplitude)" ) ) )
+        tag = wxS( "amplitude" );
+
+    if( tag.IsEmpty() )
+        return aSignal;
+
+    return SimSignalBaseName( aSignal ) + wxString( wxUniChar( 0x1f ) ) + tag;
+}
+
+
 enum SIGNAL_GROUP
 {
     SIGGRP_VOLTAGES = 0,
@@ -1017,7 +1060,7 @@ enum SIGNAL_GROUP
 };
 
 
-/// Bucket a signal by the prefix convention the netlist exporter uses ("V(..)", "I(..)", ...).
+/// Bucket a signal by its netlist-exporter prefix ("V(..)", "I(..)", ...).
 static SIGNAL_GROUP signalGroup( const wxString& aSignal, bool aUserDefined )
 {
     if( aUserDefined )
@@ -1049,14 +1092,26 @@ static wxString signalGroupLabel( SIGNAL_GROUP aGroup )
 }
 
 
+/// The language-independent counterpart of signalGroupLabel().
+static wxString signalGroupKey( SIGNAL_GROUP aGroup )
+{
+    switch( aGroup )
+    {
+    case SIGGRP_VOLTAGES: return wxS( "voltages" );
+    case SIGGRP_CURRENTS: return wxS( "currents" );
+    case SIGGRP_POWER: return wxS( "power" );
+    case SIGGRP_USER_DEFINED: return wxS( "user-defined" );
+    default: return wxS( "other" );
+    }
+}
+
+
 void SIMULATOR_FRAME_UI::applyTreeRowHeight()
 {
     if( !m_signalsTree || !m_measurementsTree )
         return;
 
-    // Left to itself, wxGTK re-measures an invalidated container row against its expanded
-    // subtree, so a signal group balloons to the height of all its measurements.  Neither tree
-    // uses wxDV_VARIABLE_LINE_HEIGHT, so a uniform height is what we want anyway.
+    // wxGTK re-measures invalidated container rows against their subtree; use a uniform height.
     int rowHeight = std::max( m_signalsTree->GetCharHeight(), FromDIP( 12 ) ) + FromDIP( 6 );
 
     m_signalsTree->SetRowHeight( rowHeight );
@@ -1064,22 +1119,13 @@ void SIMULATOR_FRAME_UI::applyTreeRowHeight()
 }
 
 
-/// Identity of a group row that survives a rebuild: the group names from the root down, with the
-/// " [12]" signal count stripped off so the key doesn't change when the count does.
+/// Group identity across rebuilds and language changes.
 static wxString signalTreeGroupKey( const SIM_TREE_MODEL::NODE* aGroup )
 {
     wxString key;
 
     for( const SIM_TREE_MODEL::NODE* node = aGroup; node; node = node->parent )
-    {
-        wxString name = node->name;
-        size_t   countAt = name.rfind( wxS( " [" ) );
-
-        if( countAt != wxString::npos && name.EndsWith( wxS( "]" ) ) )
-            name = name.Left( countAt );
-
-        key = name + wxS( "/" ) + key;
-    }
+        key = node->key + wxS( "/" ) + key;
 
     return key;
 }
@@ -1090,10 +1136,22 @@ void SIMULATOR_FRAME_UI::rebuildSignalsTree( wxString aFilter )
     if( !m_signalsModel )
         return;
 
+    // Both "" and "*" match everything.
+    bool filtering = !aFilter.IsEmpty() && aFilter != wxS( "*" );
+
+    // A filtered tree is force-expanded, so don't record its state.
+    if( !m_signalsTreeFiltered )
+    {
+        for( SIM_TREE_MODEL::NODE* group : m_signalsModel->Groups() )
+            m_signalGroupExpanded[signalTreeGroupKey( group )] =
+                    m_signalsTree->IsExpanded( SIM_TREE_MODEL::ToItem( group ) );
+    }
+
     SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
     if( !plotPanel )
     {
+        m_signalsTreeFiltered = filtering;
         m_signalsModel->SetContents( {} );
         return;
     }
@@ -1166,9 +1224,8 @@ void SIMULATOR_FRAME_UI::rebuildSignalsTree( wxString aFilter )
         if( !matcher.Find( signal.Upper() ) )
             continue;
 
-        // Component voltages are voltages, but they get their own sub-group so they don't swamp
-        // the node voltages -- there's one for every two-terminal part in the schematic.
-        if( m_deviceVoltageIds.count( baseSignalName( signal ) ) > 0 )
+        // Component voltages get a sub-group so they don't swamp the node voltages.
+        if( m_deviceVoltageIds.count( SimSignalBaseName( signal ) ) > 0 )
             componentVoltages.push_back( signal );
         else
             buckets[signalGroup( signal, userDefined.count( signal ) > 0 )].push_back( signal );
@@ -1179,7 +1236,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsTree( wxString aFilter )
         std::sort( aNames.begin(), aNames.end(),
                    []( const wxString& lhs, const wxString& rhs )
                    {
-                       return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+                       return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
                    } );
     };
 
@@ -1219,37 +1276,27 @@ void SIMULATOR_FRAME_UI::rebuildSignalsTree( wxString aFilter )
 
             SIM_TREE_MODEL::GROUP components;
             components.name = wxString::Format( wxS( "%s [%zu]" ), _( "Components" ), componentVoltages.size() );
+            components.key = wxS( "components" );
             components.entries = toEntries( componentVoltages );
             group.subGroups.push_back( components );
         }
 
         group.name = wxString::Format( wxS( "%s [%zu]" ), signalGroupLabel( groupId ), count );
+        group.key = signalGroupKey( groupId );
         groups.push_back( group );
     }
 
-    // SetContents() replaces every node, so the control forgets which groups were collapsed.
-    // Record that first, keyed on something that survives the rebuild.
-    std::map<wxString, bool> wasExpanded;
-
-    for( SIM_TREE_MODEL::NODE* group : m_signalsModel->Groups() )
-        wasExpanded[signalTreeGroupKey( group )] = m_signalsTree->IsExpanded( SIM_TREE_MODEL::ToItem( group ) );
-
     m_signalsModel->SetContents( groups );
-
-    // A collapsed group hides its signals, which is rarely what's wanted for a group the user has
-    // not seen before (and never while filtering).  One they collapsed themselves must stay that
-    // way though, or unrelated rebuilds -- adding or removing a view, say -- spring the tree open.
-    bool filtering = aFilter != wxS( "*" );
 
     for( SIM_TREE_MODEL::NODE* group : m_signalsModel->Groups() )
     {
-        auto it = wasExpanded.find( signalTreeGroupKey( group ) );
+        auto it = m_signalGroupExpanded.find( signalTreeGroupKey( group ) );
 
-        if( !filtering && it != wasExpanded.end() && !it->second )
-            continue;
-
-        m_signalsTree->Expand( SIM_TREE_MODEL::ToItem( group ) );
+        if( filtering || it == m_signalGroupExpanded.end() || it->second )
+            m_signalsTree->Expand( SIM_TREE_MODEL::ToItem( group ) );
     }
+
+    m_signalsTreeFiltered = filtering;
 
     applyTreeRowHeight();
     updateSignalsTree();
@@ -1280,15 +1327,13 @@ void SIMULATOR_FRAME_UI::updateSignalsTree()
         wxString vectorName = vectorNameFromSignalName( plotTab, leaf->name, &traceType );
         TRACE*   trace = plotTab ? plotTab->GetTrace( vectorName, traceType ) : nullptr;
 
-        // A trace can exist but not be plotted on any view (e.g. after its view was removed);
-        // such an orphan is shown the same as a never-plotted signal.
         bool plotted = trace && trace->GetView();
 
         wxColour color = plotted ? trace->GetPen().GetColour() : wxColour();
 
-        // Rebuilding the dot is comparatively expensive, so only do it when it would change.
+        // Rebuilding the dot is expensive; only when it changes.
         if( leaf->plotted != plotted || leaf->color != color || !leaf->icon.IsOk() )
-            leaf->icon = makeSignalDot( color, plotted );
+            leaf->icon = signalDot( color, plotted );
 
         leaf->plotted = plotted;
         leaf->color = color;
@@ -1296,9 +1341,41 @@ void SIMULATOR_FRAME_UI::updateSignalsTree()
         leaf->value = plotted ? getViewLabel( plotTab, trace->GetView() ) : wxString();
 
         if( plotted )
-            m_lastSignalView[plotTab][leaf->name] = plotTab->GetViewIndex( trace->GetView() );
+            m_lastSignalView[plotTab][signalViewKey( leaf->name )] = plotTab->GetViewIndex( trace->GetView() );
 
         m_signalsModel->ItemChanged( SIM_TREE_MODEL::ToItem( leaf ) );
+    }
+
+    // The measurement groups show the same dots.
+    if( refreshMeasurementGroupIcons() )
+    {
+        std::map<wxString, wxString> values = shownMeasurementValues();
+        rebuildMeasurementsTree( &values );
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::copySignalNames( const std::vector<wxString>& aSignals )
+{
+    if( aSignals.empty() )
+        return;
+
+    wxLogNull doNotLog; // disable logging of failed clipboard actions
+    wxString  txt;
+
+    for( const wxString& signal : aSignals )
+    {
+        if( !txt.IsEmpty() )
+            txt += '\r';
+
+        txt += signal;
+    }
+
+    if( wxTheClipboard->Open() )
+    {
+        wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+        wxTheClipboard->Close();
     }
 }
 
@@ -1318,7 +1395,6 @@ std::vector<wxString> SIMULATOR_FRAME_UI::getSelectedSignals( const wxDataViewIt
             signals.push_back( node->name );
     }
 
-    // Right-clicking outside the selection acts on the clicked row instead.
     SIM_TREE_MODEL::NODE* clicked = SIM_TREE_MODEL::ToNode( aClickedItem );
 
     if( clicked && !clicked->IsGroup() && std::find( signals.begin(), signals.end(), clicked->name ) == signals.end() )
@@ -1340,9 +1416,9 @@ SIM_VIEW* SIMULATOR_FRAME_UI::lastSignalView( SIM_PLOT_TAB* aPlotTab, const wxSt
 
     if( tabIt != m_lastSignalView.end() )
     {
-        auto signalIt = tabIt->second.find( aSignal );
+        auto signalIt = tabIt->second.find( signalViewKey( aSignal ) );
 
-        // The remembered view may have been removed since; fall back to the first one.
+        // The remembered view may be gone.
         if( signalIt != tabIt->second.end() && signalIt->second >= 0 && signalIt->second < aPlotTab->GetViewCount() )
         {
             return aPlotTab->GetView( signalIt->second );
@@ -1466,25 +1542,23 @@ void SIMULATOR_FRAME_UI::rebuildDeviceVoltages()
     m_deviceVoltageExprs.clear();
     m_deviceVoltageVectors.clear();
 
-    // The ids below are handed out afresh, so anything a plot was told about the old ones no
-    // longer means what it did.
+    // Ids are re-evaluated per plot.
     m_appliedDeviceVoltages.clear();
 
     auto isGround = []( const wxString& aNet )
     {
-        return aNet == wxS( "GND" ) || aNet == wxS( "0" );
+        return aNet.IsSameAs( wxS( "GND" ), false ) || aNet == wxS( "0" );
     };
 
     if( !circuitModel() )
         return;
 
-    int nextId = DEVICE_VOLTAGE_ID_BASE;
+    const std::set<wxString> nets = circuitModel()->GetNets();
 
     for( const SPICE_ITEM& item : circuitModel()->GetItems() )
     {
-        // Only two-terminal devices: for anything with more pins "the voltage across it" has no
-        // single meaning.
-        if( !item.model || item.model->GetPinCount() != 2 || item.pinNetNames.size() != 2 )
+        // Only enabled two-pin parts have a voltage across them.
+        if( !item.model || !item.model->IsEnabled() || item.model->GetPinCount() != 2 || item.pinNetNames.size() != 2 )
             continue;
 
         wxString netA = item.pinNetNames[0];
@@ -1502,14 +1576,12 @@ void SIMULATOR_FRAME_UI::rebuildDeviceVoltages()
         wxString refName = item.model->SpiceGenerator().ItemName( item );
         wxString name = wxString::Format( wxS( "V(%s)" ), refName );
 
-        // A net could legitimately be called "R1", in which case V(R1) is already taken by that
-        // node's voltage and we'd be shadowing it.
-        if( std::find( m_netnames.begin(), m_netnames.end(), refName ) != m_netnames.end() )
+        // A net named "R1" owns V(R1).  m_netnames may be stale, so ask the model.
+        if( nets.count( refName ) )
             continue;
 
         wxString expr;
 
-        // Referencing v(0) works, but leaving the ground term out is tidier in the console.
         if( isGround( netB ) )
             expr = wxString::Format( wxS( "V(%s)" ), netA );
         else if( isGround( netA ) )
@@ -1517,10 +1589,17 @@ void SIMULATOR_FRAME_UI::rebuildDeviceVoltages()
         else
             expr = wxString::Format( wxS( "V(%s) - V(%s)" ), netA, netB );
 
-        m_deviceVoltageIds[name] = nextId;
-        m_deviceVoltageExprs[nextId] = expr;
-        m_deviceVoltageVectors[vectorNameFromSignalId( nextId )] = nextId;
-        nextId++;
+        // Keep a device's id across netlist changes so existing traces stay valid.
+        auto [reg, isNew] = m_deviceVoltageIdRegistry.try_emplace( name, m_nextDeviceVoltageId );
+
+        if( isNew )
+            m_nextDeviceVoltageId++;
+
+        int id = reg->second;
+
+        m_deviceVoltageIds[name] = id;
+        m_deviceVoltageExprs[id] = expr;
+        m_deviceVoltageVectors[vectorNameFromSignalId( id )] = id;
     }
 }
 
@@ -1529,17 +1608,12 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
 {
     m_signals.clear();
 
-    // m_netnames was never cleared here, so every rebuild appended another copy of the whole
-    // net list; it feeds the SPICE net-name quoting (and now the component-voltage naming), so
-    // it needs to track the current netlist rather than accumulate.
     m_netnames.clear();
 
     m_deviceVoltageIds.clear();
     m_deviceVoltageExprs.clear();
     m_deviceVoltageVectors.clear();
 
-    // The ids below are handed out afresh, so anything a plot was told about the old ones no
-    // longer means what it did.
     m_appliedDeviceVoltages.clear();
 
     int      options = m_simulatorFrame->GetCurrentOptions();
@@ -1579,6 +1653,15 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
         }
     };
 
+    // Quoting needs every net, whatever the analysis or saved signals.
+    for( const wxString& netname : circuitModel()->GetNets() )
+    {
+        if( netname.IsSameAs( wxS( "GND" ), false ) || netname == "0" || netname.StartsWith( unconnected ) )
+            continue;
+
+        m_netnames.emplace_back( netname );
+    }
+
     if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
         && ( simType == ST_TRAN || simType == ST_DC || simType == ST_AC || simType == ST_FFT ) )
     {
@@ -1587,20 +1670,20 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
             if( netname.IsSameAs( wxS( "GND" ), false ) || netname == "0" || netname.StartsWith( unconnected ) )
                 continue;
 
-            m_netnames.emplace_back( netname );
             addSignal( wxString::Format( wxS( "V(%s)" ), netname ) );
         }
     }
 
-    // Component voltages are derived from the node voltages, so they're only available when
-    // those are being saved.
-    if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
-        && ( simType == ST_TRAN || simType == ST_DC || simType == ST_AC || simType == ST_FFT ) )
+    if( simType == ST_TRAN || simType == ST_DC || simType == ST_AC || simType == ST_FFT )
     {
+        // Always resolved, so workbook V(R1) traces survive; listed only when all voltages are saved.
         rebuildDeviceVoltages();
 
-        for( const auto& [name, id] : m_deviceVoltageIds )
-            addSignal( name );
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
+        {
+            for( const auto& [name, id] : m_deviceVoltageIds )
+                addSignal( name );
+        }
     }
 
     if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
@@ -1679,7 +1762,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
             wxString directiveParams;
 
             if( line.StartsWith( wxS( ".SAVE" ), &directiveParams )
-                || line.StartsWith( wxS( ".PROBE" ), &directiveParams ) )
+                    || line.StartsWith( wxS( ".PROBE" ), &directiveParams ) )
             {
                 wxStringTokenizer paramsTokenizer( directiveParams, " \t", wxTOKEN_STRTOK );
 
@@ -1727,7 +1810,7 @@ void SIMULATOR_FRAME_UI::OnFilterMouseMoved( wxMouseEvent& aEvent )
 #if defined( __WXOSX__ ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_filter->GetScreenRect();
-    int     buttonWidth = ctrlRect.GetHeight(); // Presume buttons are square
+    int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
 
     if( m_filter->IsSearchButtonVisible() && pos.x < buttonWidth )
         SetCursor( wxCURSOR_ARROW );
@@ -1742,6 +1825,22 @@ void SIMULATOR_FRAME_UI::OnFilterMouseMoved( wxMouseEvent& aEvent )
 wxString vectorNameFromSignalId( int aUserDefinedSignalId )
 {
     return wxString::Format( wxS( "user%d" ), aUserDefinedSignalId );
+}
+
+
+/// True for the "user<N>" vectors backing user-defined signals and component voltages.
+static bool isUserSignalVector( const wxString& aVectorName )
+{
+    if( !aVectorName.StartsWith( wxS( "user" ) ) || aVectorName.Length() == 4 )
+        return false;
+
+    for( size_t ii = 4; ii < aVectorName.Length(); ++ii )
+    {
+        if( aVectorName[ii] < '0' || aVectorName[ii] > '9' )
+            return false;
+    }
+
+    return true;
 }
 
 
@@ -1854,6 +1953,8 @@ wxString SIMULATOR_FRAME_UI::signalNameFromVectorName( const wxString& aVectorNa
         suffix = _( " (phase)" );
     else if( aVectorName.EndsWith( _( " (gain)" ) ) )
         suffix = _( " (gain)" );
+    else if( aVectorName.EndsWith( _( " (amplitude)" ) ) )
+        suffix = _( " (amplitude)" );
 
     wxString vectorName = aVectorName.Left( aVectorName.Length() - suffix.Length() );
 
@@ -1863,9 +1964,7 @@ wxString SIMULATOR_FRAME_UI::signalNameFromVectorName( const wxString& aVectorNa
             return signal + suffix;
     }
 
-    // Component voltage ids are handed out on the fly from the netlist, so the name is the only
-    // stable thing about them -- the workbook stores it too rather than pinning itself to
-    // whatever id this session happened to assign.
+    // The name is the stable identity; ids are assigned per session.
     for( const auto& [name, id] : m_deviceVoltageIds )
     {
         if( vectorName == vectorNameFromSignalId( id ) )
@@ -1896,8 +1995,6 @@ void SIMULATOR_FRAME_UI::onSignalsTreeActivated( wxDataViewEvent& aEvent )
         return;
     }
 
-    // Toggle the signal on/off.  Turning it back on restores it to the view it was last plotted
-    // on; a different view can be picked from the context menu.
     if( node->plotted )
     {
         setSignalView( node->name, nullptr );
@@ -1920,6 +2017,9 @@ void SIMULATOR_FRAME_UI::onSignalsTreeActivated( wxDataViewEvent& aEvent )
 }
 
 
+static const std::vector<wxString>& measurementFunctions();
+
+
 void SIMULATOR_FRAME_UI::onSignalsTreeContextMenu( wxDataViewEvent& aEvent )
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
@@ -1939,7 +2039,6 @@ void SIMULATOR_FRAME_UI::onSignalsTreeContextMenu( wxDataViewEvent& aEvent )
         TRACE*          trace = plotTab->GetTrace( vectorName, traceType );
         bool            single = m_signalsMenuSignals.size() == 1;
 
-        // Plot on...
         wxMenu*       viewMenu = new wxMenu;
         wxArrayString viewChoices = getViewChoices( plotTab );
 
@@ -1986,7 +2085,15 @@ void SIMULATOR_FRAME_UI::onSignalsTreeContextMenu( wxDataViewEvent& aEvent )
 
         if( simType == ST_TRAN || simType == ST_AC || simType == ST_DC || simType == ST_SP )
         {
-            menu.Append( MYID_MEASURE_ALL, _( "Add Measurements" ) );
+            wxMenuItem* measureItem = menu.Append( MYID_MEASURE_ALL, _( "Add Measurements" ) );
+            wxString    measured;
+
+            // Phase traces have no MEAS equivalent.
+            measureItem->Enable( std::any_of( m_signalsMenuSignals.begin(), m_signalsMenuSignals.end(),
+                                              [&]( const wxString& aSignal )
+                                              {
+                                                  return measurementSignal( aSignal, measured );
+                                              } ) );
 
             if( simType == ST_TRAN )
             {
@@ -2081,7 +2188,7 @@ void SIMULATOR_FRAME_UI::onSignalsTreeMenuSelection( wxCommandEvent& aEvent )
         wxString vectorName = vectorNameFromSignalName( plotTab, signals.front(), &traceType );
         TRACE*   activeTrace = plotTab->GetTrace( vectorName, traceType );
 
-        // Cursors are really radio buttons: enabling one on a signal takes it off every other.
+        // Cursors act as radio buttons: enabling one takes it off every other signal.
         bool enable = !( activeTrace && activeTrace->HasCursor( cursorId ) );
 
         if( enable && activeTrace )
@@ -2134,23 +2241,7 @@ void SIMULATOR_FRAME_UI::onSignalsTreeMenuSelection( wxCommandEvent& aEvent )
     }
     else if( id == MYID_TREE_COPY )
     {
-        wxLogNull doNotLog; // disable logging of failed clipboard actions
-        wxString  txt;
-
-        for( const wxString& signal : signals )
-        {
-            if( !txt.IsEmpty() )
-                txt += '\r';
-
-            txt += signal;
-        }
-
-        if( wxTheClipboard->Open() )
-        {
-            wxTheClipboard->SetData( new wxTextDataObject( txt ) );
-            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-            wxTheClipboard->Close();
-        }
+        copySignalNames( signals );
     }
     else if( id == MYID_TREE_NEW_CURSOR )
     {
@@ -2163,7 +2254,7 @@ void SIMULATOR_FRAME_UI::onSignalsTreeMenuSelection( wxCommandEvent& aEvent )
     else if( id == MYID_MEASURE_ALL )
     {
         for( const wxString& signal : signals )
-            AddAllMeasurements( signal );
+            AddMeasurements( signal, measurementFunctions() );
     }
     else if( id == MYID_FOURIER )
     {
@@ -2185,6 +2276,12 @@ void SIMULATOR_FRAME_UI::onSignalsTreeMenuSelection( wxCommandEvent& aEvent )
 
         for( const wxString& signal : signals )
             DoFourier( signal, fundamental );
+
+        // The results are only printed to the console.
+        if( !IsSimConsoleShown() )
+            ToggleSimConsole();
+
+        FlushSimConsole();
     }
 }
 
@@ -2260,7 +2357,6 @@ void SIMULATOR_FRAME_UI::onCursorsGridCellChanged( wxGridEvent& aEvent )
 }
 
 
-/// The measurement functions offered for an analysis, in the order they're listed.
 static const std::vector<wxString>& measurementFunctions()
 {
     static const std::vector<wxString> funcs = { wxS( "MIN" ), wxS( "MAX" ),    wxS( "AVG" ),    wxS( "RMS" ),
@@ -2292,7 +2388,6 @@ static void splitMeasurement( const wxString& aCmd, wxString& aFunc, wxString& a
 }
 
 
-/// The human-readable name of a measurement function, for the tree's name column.
 static wxString measurementFunctionLabel( const wxString& aFunc, SIM_TYPE aSimType )
 {
     bool     freqDomain = aSimType == ST_AC || aSimType == ST_SP;
@@ -2319,24 +2414,83 @@ static wxString measurementFunctionLabel( const wxString& aFunc, SIM_TYPE aSimTy
 }
 
 
+/// True for a single V(...) reference, not a compound expression.
+static bool isSingleVoltageRef( const wxString& aExpression )
+{
+    if( aExpression.Length() < 4 || !aExpression.Upper().StartsWith( wxS( "V(" ) ) )
+        return false;
+
+    int depth = 0;
+
+    for( size_t ii = 1; ii < aExpression.Length(); ++ii )
+    {
+        if( aExpression[ii] == '(' )
+        {
+            depth++;
+        }
+        else if( aExpression[ii] == ')' && --depth == 0 )
+        {
+            return ii == aExpression.Length() - 1;
+        }
+    }
+
+    return false;
+}
+
+
+/// True if MEAS takes \a aSignal as it is: a vector name, or a V(), VDB(), ..., I() reference.
+static bool isMeasVector( const wxString& aSignal )
+{
+    static const std::set<wxString> refs = { wxS( "V" ),  wxS( "VDB" ), wxS( "VM" ), wxS( "VP" ),
+                                             wxS( "VR" ), wxS( "VI" ),  wxS( "I" ) };
+
+    int open = aSignal.Find( '(' );
+
+    if( open == wxNOT_FOUND )
+        return !aSignal.IsEmpty() && aSignal.find_first_of( wxS( " +-*/^," ) ) == wxString::npos;
+
+    if( !refs.count( aSignal.Left( open ).Upper() ) )
+        return false;
+
+    int  depth = 0;
+    bool quoted = false;
+
+    for( size_t ii = open; ii < aSignal.Length(); ++ii )
+    {
+        if( aSignal[ii] == '"' )
+            quoted = !quoted;
+        else if( quoted )
+            continue;
+        else if( aSignal[ii] == '(' )
+            depth++;
+        else if( aSignal[ii] == ')' && --depth == 0 )
+            return ii == aSignal.Length() - 1;
+    }
+
+    return false;
+}
+
+
 bool SIMULATOR_FRAME_UI::measurementSignal( const wxString& aSignal, wxString& aResult ) const
 {
-    // A phase trace has nothing meaningful to measure.
+    // Suffixes are translated, so their length varies.
     if( aSignal.EndsWith( _( " (phase)" ) ) )
         return false;
 
-    aResult = aSignal;
+    wxString suffix;
 
-    if( aResult.EndsWith( _( " (gain)" ) ) || aResult.EndsWith( _( " (amplitude)" ) ) )
-    {
-        aResult = aResult.Left( aResult.length() - 7 );
+    if( aSignal.EndsWith( _( " (gain)" ) ) )
+        suffix = _( " (gain)" );
+    else if( aSignal.EndsWith( _( " (amplitude)" ) ) )
+        suffix = _( " (amplitude)" );
 
-        // Component voltages keep their name: they resolve to a derived vector (see
-        // UpdateMeasurement()), and rewriting them to vdb() would leave a name that neither
-        // that substitution nor ngspice can resolve.
-        if( aResult.Upper().StartsWith( wxS( "V(" ) ) && !m_deviceVoltageIds.count( aResult ) )
-            aResult = wxS( "vdb" ) + aResult.Mid( 1 );
-    }
+    aResult = aSignal.Left( aSignal.Length() - suffix.Length() );
+
+    // Gain and amplitude are plotted in dB.
+    if( !suffix.IsEmpty() && isSingleVoltageRef( aResult ) )
+        aResult = wxS( "vdb" ) + aResult.Mid( 1 );
+    else if( suffix == _( " (gain)" ) )
+        aResult = wxS( "db(" ) + aResult + wxS( ")" );
 
     return true;
 }
@@ -2382,7 +2536,27 @@ void SIMULATOR_FRAME_UI::DeleteMeasurement( int aIndex )
 }
 
 
-void SIMULATOR_FRAME_UI::rebuildMeasurementsTree()
+std::map<wxString, wxString> SIMULATOR_FRAME_UI::shownMeasurementValues() const
+{
+    std::map<wxString, wxString> values;
+    SIM_PLOT_TAB*                plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+
+    if( !plotTab || !m_measurementsModel )
+        return values;
+
+    const std::vector<std::pair<wxString, wxString>>& measurements = plotTab->Measurements();
+
+    for( SIM_TREE_MODEL::NODE* leaf : m_measurementsModel->Leaves() )
+    {
+        if( leaf->index >= 0 && leaf->index < (int) measurements.size() )
+            values[measurements[leaf->index].first] = leaf->value;
+    }
+
+    return values;
+}
+
+
+void SIMULATOR_FRAME_UI::rebuildMeasurementsTree( const std::map<wxString, wxString>* aKeepValues )
 {
     if( !m_measurementsModel )
         return;
@@ -2397,8 +2571,6 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsTree()
 
     SIM_TYPE simType = plotTab->GetSimType();
 
-    // Group by signal, keeping the signals in the order they were first measured so that adding
-    // a measurement doesn't reshuffle the panel.
     std::vector<wxString>                                  order;
     std::map<wxString, std::vector<SIM_TREE_MODEL::ENTRY>> bySignal;
 
@@ -2412,10 +2584,13 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsTree()
         if( signal.IsEmpty() ) // a measurement we can't parse; file it under its own text
             signal = measurements[ii].first;
 
-        if( bySignal.find( signal ) == bySignal.end() )
+        // ngspice ignores case, so "MAX v(d1)" joins the V(D1) group under its first spelling.
+        wxString key = signal.Lower();
+
+        if( bySignal.find( key ) == bySignal.end() )
             order.push_back( signal );
 
-        bySignal[signal].push_back( { measurementFunctionLabel( func, simType ), ii } );
+        bySignal[key].push_back( { measurementFunctionLabel( func, simType ), ii } );
     }
 
     std::vector<SIM_TREE_MODEL::GROUP> groups;
@@ -2424,24 +2599,39 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsTree()
     {
         SIM_TREE_MODEL::GROUP group;
         group.name = signal;
-        group.entries = bySignal[signal];
+        group.entries = bySignal[signal.Lower()];
         groups.push_back( group );
     }
 
     m_measurementsModel->SetContents( groups );
 
-    // Seed the group dots before anything expands: SetContents() has already raised Cleared(),
-    // so the view reloads every row from scratch and no per-item notification is needed.  That
-    // matters because notifying a container row makes wxGTK re-measure it against its expanded
-    // subtree, ballooning the row to the height of all its children -- which is exactly why the
-    // signals tree, whose containers are never notified, has never shown the problem.
+    // Each MEAS is an ngspice round trip and a console echo; evaluate only new ones.
+    std::vector<int> toEvaluate;
+
+    for( SIM_TREE_MODEL::NODE* leaf : m_measurementsModel->Leaves() )
+    {
+        if( aKeepValues )
+        {
+            if( auto kept = aKeepValues->find( measurements[leaf->index].first ); kept != aKeepValues->end() )
+            {
+                leaf->value = kept->second;
+                continue;
+            }
+        }
+
+        toEvaluate.push_back( leaf->index );
+    }
+
+    // Seed the group dots before expanding; notifying container rows inflates them in wxGTK.
     refreshMeasurementGroupIcons();
 
     for( SIM_TREE_MODEL::NODE* group : m_measurementsModel->Groups() )
         m_measurementsTree->Expand( SIM_TREE_MODEL::ToItem( group ) );
 
     applyTreeRowHeight();
-    updateMeasurementValues();
+
+    for( int index : toEvaluate )
+        UpdateMeasurement( index );
 }
 
 
@@ -2451,21 +2641,49 @@ bool SIMULATOR_FRAME_UI::refreshMeasurementGroupIcons()
         return false;
 
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+    SIM_TYPE      simType = plotTab ? plotTab->GetSimType() : ST_UNKNOWN;
+    bool          magnitude = simType == ST_AC || ( simType == ST_SP && !plotTab->IsSmithMode() );
     bool          changed = false;
 
-    // Each group is a signal, so give it the same trace dot the signals tree shows.  Note this
-    // deliberately raises no model notification: see rebuildMeasurementsTree().
+    // No notification: see rebuildMeasurementsTree().
     for( SIM_TREE_MODEL::NODE* group : m_measurementsModel->Groups() )
     {
+        wxString signal = group->name;
+
+        // Groups are named by the MEAS signal; undo measurementSignal() to find the plotted trace.
+        if( magnitude )
+        {
+            if( signal.Upper().StartsWith( wxS( "VDB(" ) ) )
+                signal = wxS( "V" ) + signal.Mid( 3 );
+            else if( simType == ST_AC && signal.StartsWith( wxS( "db(" ) ) && signal.EndsWith( wxS( ")" ) ) )
+                signal = signal.Mid( 3, signal.Length() - 4 );
+
+            signal += simType == ST_AC ? _( " (gain)" ) : _( " (amplitude)" );
+        }
+
         int      traceType = SPT_UNKNOWN;
-        wxString vectorName = vectorNameFromSignalName( plotTab, group->name, &traceType );
+        wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
         TRACE*   trace = plotTab ? plotTab->GetTrace( vectorName, traceType ) : nullptr;
+
+        // A typed measurement may differ in case from the plotted signal.
+        if( !trace && plotTab )
+        {
+            for( const auto& [id, candidate] : plotTab->GetTraces() )
+            {
+                if( candidate->GetDisplayName().IsSameAs( signal, false ) )
+                {
+                    trace = candidate;
+                    break;
+                }
+            }
+        }
+
         bool     plotted = trace && trace->GetView();
         wxColour color = plotted ? trace->GetPen().GetColour() : wxColour();
 
         if( group->plotted != plotted || group->color != color || !group->icon.IsOk() )
         {
-            group->icon = makeSignalDot( color, plotted );
+            group->icon = signalDot( color, plotted );
             group->plotted = plotted;
             group->color = color;
             changed = true;
@@ -2491,8 +2709,7 @@ void SIMULATOR_FRAME_UI::updateMeasurements()
     if( !m_measurementsModel )
         return;
 
-    // A group's dot can only change when the traces did (a run finished, a colour was edited).
-    // Rather than notify the container row -- which is what inflates it -- reload the tree.
+    // Reload instead of notifying container rows, which inflates them.
     if( refreshMeasurementGroupIcons() )
         rebuildMeasurementsTree();
     else
@@ -2515,8 +2732,7 @@ std::vector<int> SIMULATOR_FRAME_UI::getSelectedMeasurements( const wxDataViewIt
             rows.push_back( node->index );
     }
 
-    // Right-clicking outside the selection acts on the clicked row instead; right-clicking a
-    // signal group acts on all of its measurements.
+    // Right-clicking a group acts on all its measurements.
     SIM_TREE_MODEL::NODE* clicked = SIM_TREE_MODEL::ToNode( aClickedItem );
 
     if( clicked && clicked->IsGroup() )
@@ -2585,14 +2801,15 @@ void SIMULATOR_FRAME_UI::onMeasurementsTreeMenuSelection( wxCommandEvent& aEvent
     }
     else if( aEvent.GetId() == MYID_DELETE_MEASUREMENT )
     {
-        // Deleting shifts the indices of everything after it, so work from the back.
-        std::vector<int> rows = m_measurementsMenuRows;
+        std::vector<int>             rows = m_measurementsMenuRows;
+        std::map<wxString, wxString> values = shownMeasurementValues();
+
         std::sort( rows.begin(), rows.end(), std::greater<>() );
 
         for( int row : rows )
             DeleteMeasurement( row );
 
-        rebuildMeasurementsTree();
+        rebuildMeasurementsTree( &values );
         OnModify();
     }
     else if( aEvent.GetId() == MYID_MEASUREMENT_ADD )
@@ -2611,21 +2828,19 @@ void SIMULATOR_FRAME_UI::OnUpdateUI( wxUpdateUIEvent& event )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
-        wxPoint legendPos = plotTab->GetLegendPosition();
+        mpWindow* plotWin = plotTab->GetPlotWin();
+        wxSize    plotWinSize = plotWin ? plotWin->GetSize() : wxSize();
 
-        if( legendPos != plotTab->m_LastLegendPosition )
+        if( plotWinSize != plotTab->m_LastPlotWinSize )
         {
-            mpWindow* plotWin = plotTab->GetPlotWin();
-            wxSize    plotWinSize = plotWin ? plotWin->GetSize() : wxSize();
-
-            // mpInfoLegend::Plot() rescales the legend's position whenever the plot window
-            // changes size, so a move that comes with a resize isn't the user dragging it.
-            // Without this the frame's initial layout alone would mark the workbook modified.
-            if( plotWinSize == plotTab->m_LastPlotWinSize )
-                OnModify();
-
-            plotTab->m_LastLegendPosition = legendPos;
+            // A resize moves the legend too; don't report that as a drag.
             plotTab->m_LastPlotWinSize = plotWinSize;
+            plotTab->m_LastLegendPosition = plotTab->GetLegendPosition();
+        }
+        else if( wxPoint legendPos = plotTab->GetLegendPosition(); legendPos != plotTab->m_LastLegendPosition )
+        {
+            plotTab->m_LastLegendPosition = legendPos;
+            OnModify();
         }
     }
 }
@@ -2714,7 +2929,7 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             switch( plotTab->GetSimType() )
             {
             case ST_TRAN:
-                if( signalType.StartsWith( 'P' ) )
+                if ( signalType.StartsWith( 'P' ) )
                     units = wxS( "J" );
                 else
                     units += wxS( ".s" );
@@ -2726,15 +2941,17 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             case ST_DISTO:
             case ST_NOISE:
             case ST_FFT:
-            case ST_SENS: // If there is a vector, it is frequency
+            case ST_SENS:       // If there is a vector, it is frequency
                 units += wxS( "·Hz" );
                 break;
 
-            case ST_DC: // Could be a lot of things : V, A, deg C, ohm, ...
-            case ST_OP: // There is no vector for integration
-            case ST_PZ: // There is no vector for integration
-            case ST_TF: // There is no vector for integration
-            default: units += wxS( "·?" ); break;
+            case ST_DC:         // Could be a lot of things : V, A, deg C, ohm, ...
+            case ST_OP:         // There is no vector for integration
+            case ST_PZ:         // There is no vector for integration
+            case ST_TF:         // There is no vector for integration
+            default:
+                units += wxS( "·?" );
+                break;
             }
         }
 
@@ -2744,18 +2961,51 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
 
     if( m_simulatorFrame->SimFinished() )
     {
-        // A component voltage such as "V(R1)" is our own label, not something ngspice can
-        // resolve -- there is no node called R1.  Swap it for the vector the expression was
-        // evaluated into, or the measurement just comes back empty.
         wxString measExpr = text;
-        wxString measFunc, measSignal;
+        wxString measFunc, measSignal, measParams;
 
         splitMeasurement( text, measFunc, measSignal );
 
-        if( auto it = m_deviceVoltageIds.find( measSignal ); it != m_deviceVoltageIds.end() )
+        // "MAX V(out) from=1m to=2m": the parameters are not part of the signal.
+        if( int eq = measSignal.Find( '=' ); eq != wxNOT_FOUND )
         {
-            ensureDeviceVoltage( it->second );
-            measExpr = measFunc + wxS( " " ) + vectorNameFromSignalId( it->second );
+            int start = eq;
+
+            while( start > 0 && measSignal[start - 1] == ' ' )
+                start--;
+
+            while( start > 0 && ( wxIsalpha( measSignal[start - 1] ) || measSignal[start - 1] == '_' ) )
+                start--;
+
+            measParams = wxS( " " ) + measSignal.Mid( start );
+            measSignal = measSignal.Left( start ).Trim();
+        }
+
+        // WHEN, FIND, TRIG etc. have their own syntax.
+        bool simpleFunc = std::any_of( measurementFunctions().begin(), measurementFunctions().end(),
+                                       [&]( const wxString& aFunc )
+                                       {
+                                           return measFunc.IsSameAs( aFunc, false );
+                                       } );
+
+        if( simpleFunc && !measSignal.IsEmpty() )
+        {
+            wxString spiceSig = spiceSignal( measSignal );
+
+            // MEAS takes a single vector, not an expression.
+            if( spiceSig != measSignal || !isMeasVector( measSignal ) )
+            {
+                if( !isUserSignalVector( spiceSig ) )
+                {
+                    wxString vector = wxString::Format( wxS( "meas_signal_%u" ), aRow );
+
+                    simulator()->Command(
+                            ( wxS( "let " ) + vector + wxS( " = " ) + quoteNetNames( spiceSig ) ).ToStdString() );
+                    spiceSig = vector;
+                }
+
+                measExpr = measFunc + wxS( " " ) + spiceSig + measParams;
+            }
         }
 
         wxString cmd = wxString::Format( wxS( "meas %s %s %s" ), simType, resultName, measExpr );
@@ -2772,7 +3022,6 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
 }
 
 
-/// Push a computed value into whichever tree leaf carries \a aIndex.
 void SIMULATOR_FRAME_UI::setMeasurementValue( int aIndex, const wxString& aValue )
 {
     if( !m_measurementsModel )
@@ -2831,8 +3080,7 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
         {
             DisplayErrorMessage( nullptr, e.What() );
 
-            // The slider ctor throws after its page may have been created for it; don't leave an
-            // empty tab behind for a tuner that never materialized.
+            // Don't leave an empty tab behind when the slider ctor throws.
             pruneEmptyTunerPages();
         }
     }
@@ -2875,13 +3123,10 @@ wxScrolledWindow* SIMULATOR_FRAME_UI::getOrCreateTunerPage( TUNER_GROUP aGroup )
 
     wxScrolledWindow* page = new wxScrolledWindow( m_tunerNotebook, wxID_ANY );
 
-    // A tab can still fill up on a design with many of one device, so let it scroll rather than
-    // clipping its last tuners the way the single stacked column used to.
+    // Scroll rather than clip when a tab fills up.
     page->SetScrollRate( 0, 5 );
     page->SetSizer( new wxBoxSizer( wxVERTICAL ) );
 
-    // Keep the tabs in the canonical group order however the tuners happen to be added, so a page
-    // doesn't move around under the user.
     size_t pos = 0;
 
     for( int ii = 0; ii < aGroup; ++ii )
@@ -2969,7 +3214,7 @@ void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
     m_tuners.remove( aTuner );
 
     if( std::find( m_multiRunState.tuners.begin(), m_multiRunState.tuners.end(), aTuner )
-        != m_multiRunState.tuners.end() )
+            != m_multiRunState.tuners.end() )
     {
         clearMultiRunState( true );
     }
@@ -3007,14 +3252,16 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
             return; // Don't create duplicates
     }
 
+    std::map<wxString, wxString> values = shownMeasurementValues();
+
     measurements.emplace_back( aCmd, wxString() );
 
-    rebuildMeasurementsTree();
+    rebuildMeasurementsTree( &values );
     OnModify();
 }
 
 
-void SIMULATOR_FRAME_UI::AddAllMeasurements( const wxString& aSignal )
+void SIMULATOR_FRAME_UI::AddMeasurements( const wxString& aSignal, const std::vector<wxString>& aFunctions )
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
@@ -3027,9 +3274,10 @@ void SIMULATOR_FRAME_UI::AddAllMeasurements( const wxString& aSignal )
         return;
 
     std::vector<std::pair<wxString, wxString>>& measurements = plotTab->Measurements();
+    std::map<wxString, wxString>                values = shownMeasurementValues();
     bool                                        added = false;
 
-    for( const wxString& func : measurementFunctions() )
+    for( const wxString& func : aFunctions )
     {
         wxString cmd = func + wxS( " " ) + signal;
         bool     duplicate = false;
@@ -3053,14 +3301,15 @@ void SIMULATOR_FRAME_UI::AddAllMeasurements( const wxString& aSignal )
     if( !added )
         return;
 
-    rebuildMeasurementsTree();
+    rebuildMeasurementsTree( &values );
     OnModify();
 }
 
 
 void SIMULATOR_FRAME_UI::DoFourier( const wxString& aSignal, const wxString& aFundamental )
 {
-    wxString cmd = wxString::Format( wxS( "fourier %s %s" ), SPICE_VALUE( aFundamental ).ToSpiceString(), aSignal );
+    wxString signal = spiceSignal( SimSignalBaseName( aSignal ) );
+    wxString cmd = wxString::Format( wxS( "fourier %s %s" ), SPICE_VALUE( aFundamental ).ToSpiceString(), signal );
 
     simulator()->Command( cmd.ToStdString() );
 }
@@ -3213,7 +3462,8 @@ double SIMULATOR_FRAME_UI::getSmithPortImpedance( const wxString& aVectorName )
         const SIM_MODEL::PARAM* portnumParam = item.model->FindParam( "portnum" );
         long                    portnum = 0;
 
-        if( !portnumParam || !wxString( SIM_VALUE::ToSpice( portnumParam->value ) ).ToLong( &portnum )
+        if( !portnumParam
+            || !wxString( SIM_VALUE::ToSpice( portnumParam->value ) ).ToLong( &portnum )
             || portnum != responsePort )
         {
             continue;
@@ -3243,18 +3493,16 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
         aView = existing && existing->GetView() ? existing->GetView() : aPlotTab->GetDefaultView();
     }
 
-    // A trace is created under its simulator vector name, which for a user-defined signal or a
-    // component voltage is an opaque "user<N>".  The legend draws GetDisplayName(), so give it
-    // the name the user actually chose.
+    // Only user vectors have a display name; skip the lookup for the rest.
     auto nameTrace = [this]( TRACE* aTrace, const wxString& aName )
     {
-        if( aTrace )
-        {
-            wxString displayName = signalNameFromVectorName( aName );
+        if( !aTrace || !isUserSignalVector( aName ) )
+            return;
 
-            if( displayName != aTrace->GetName() )
-                aTrace->SetName( displayName );
-        }
+        wxString displayName = signalNameFromVectorName( aName );
+
+        if( displayName != aTrace->GetName() )
+            aTrace->SetName( displayName );
     };
 
     if( !m_simulatorFrame->SimFinished() && !simulator()->IsRunning() )
@@ -3301,14 +3549,10 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 
     unsigned int size = aDataX->size();
 
-    // Nothing to fetch when the caller only wants the trace emptied -- and asking anyway is
-    // actively harmful for the synthesised "userN" vectors: applyUserDefinedSignals() hasn't
-    // run for this plot yet, so ngspice answers every mid-run refresh with
-    // "Error: vector userN not found!" in the console.
+    // Don't fetch when only clearing: the "userN" vectors don't exist mid-run.
     if( !aClearData )
     {
-        // Component voltages are evaluated only when something shows one, so this may be the
-        // first time this plot has been asked for it.
+        // Evaluated on demand, so this may be the first request for this plot.
         ensureDeviceVoltage( simVectorName );
 
         switch( simType )
@@ -3359,8 +3603,9 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
     int             sweepCount = 1;
     size_t          sweepSize = std::numeric_limits<size_t>::max();
 
-    if( simType == ST_DC && circuitModel()->ParseDCCommand( aPlotTab->GetSimCommand(), &source1, &source2 )
-        && !source2.m_source.IsEmpty() )
+    if( simType == ST_DC
+            && circuitModel()->ParseDCCommand( aPlotTab->GetSimCommand(), &source1, &source2 )
+            && !source2.m_source.IsEmpty() )
     {
         SPICE_VALUE v = ( source2.m_vend - source2.m_vstart ) / source2.m_vincrement;
 
@@ -3502,6 +3747,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 wxString SIMULATOR_FRAME_UI::quoteNetNames( const wxString& aExpression ) const
 {
     std::vector<bool> mask( aExpression.length(), false );
+    std::vector<bool> userQuoted( aExpression.length(), false );
 
     auto isNetnameChar = []( wxUniChar aChar ) -> bool
     {
@@ -3526,43 +3772,36 @@ wxString SIMULATOR_FRAME_UI::quoteNetNames( const wxString& aExpression ) const
         return false;
     };
 
+    // Leave names the user already quoted alone.
+    bool inQuote = false;
+
+    for( size_t i = 0; i < aExpression.length(); ++i )
+    {
+        if( aExpression[i] == '"' )
+            inQuote = !inQuote;
+
+        userQuoted[i] = inQuote || aExpression[i] == '"';
+    }
+
     for( const wxString& netname : m_netnames )
     {
         size_t pos = aExpression.find( netname );
 
         while( pos != wxString::npos )
         {
-            for( size_t i = 0; i < netname.length(); ++i )
-                mask[pos + i] = true; // Mark the positions of the netname
+            size_t end = pos + netname.length();
+
+            // Whole names only: not "IN" in "SIN(", nor "A" in net "A-B".
+            bool whole = ( pos == 0 || !isNetnameChar( aExpression[pos - 1] ) )
+                         && ( end == aExpression.length() || !isNetnameChar( aExpression[end] ) );
+
+            if( whole && !userQuoted[pos] )
+            {
+                for( size_t i = pos; i < end; ++i )
+                    mask[i] = true; // Mark the positions of the netname
+            }
 
             pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
-        }
-    }
-
-    for( size_t i = 0; i < aExpression.length(); ++i )
-    {
-        if( !mask[i] || ( i > 0 && mask[i - 1] ) )
-            continue;
-
-        size_t j = i + 1;
-
-        while( j < aExpression.length() )
-        {
-            if( mask[j] )
-            {
-                ++j;
-                continue;
-            }
-
-            if( isNetnameChar( aExpression[j] ) )
-            {
-                mask[j] = true;
-                ++j;
-            }
-            else
-            {
-                break;
-            }
         }
     }
 
@@ -3617,19 +3856,93 @@ void SIMULATOR_FRAME_UI::ensureDeviceVoltage( const wxString& aVectorName )
 }
 
 
+wxString SIMULATOR_FRAME_UI::expandDeviceVoltages( const wxString& aExpression ) const
+{
+    // VDB(R1), VM(R1), ... wrap the difference in the ngspice function they stand for.
+    static const std::pair<wxString, wxString> forms[] = {
+        { wxS( "V" ), wxS( "" ) },    { wxS( "VDB" ), wxS( "db" ) },  { wxS( "VM" ), wxS( "mag" ) },
+        { wxS( "VP" ), wxS( "ph" ) }, { wxS( "VR" ), wxS( "real" ) }, { wxS( "VI" ), wxS( "imag" ) }
+    };
+
+    wxString result = aExpression;
+
+    for( const auto& [name, id] : m_deviceVoltageIds )
+    {
+        auto expr = m_deviceVoltageExprs.find( id );
+
+        if( expr == m_deviceVoltageExprs.end() )
+            continue;
+
+        for( const auto& [prefix, function] : forms )
+        {
+            wxString pattern = prefix + name.Mid( 1 ); // name is "V(R1)"
+            wxString replacement = function + wxS( "(" ) + expr->second + wxS( ")" );
+            size_t   pos = 0;
+
+            while( ( pos = result.Upper().find( pattern.Upper(), pos ) ) != wxString::npos )
+            {
+                // "IV(R1)" is a different function.
+                if( pos > 0 && ( wxIsalnum( result[pos - 1] ) || result[pos - 1] == '_' ) )
+                {
+                    pos += pattern.length();
+                    continue;
+                }
+
+                result.replace( pos, pattern.length(), replacement );
+                pos += replacement.length();
+            }
+        }
+    }
+
+    return result;
+}
+
+
+wxString SIMULATOR_FRAME_UI::spiceSignal( const wxString& aSignal )
+{
+    for( const auto& [id, signal] : m_userDefinedSignals )
+    {
+        if( aSignal == signal )
+            return vectorNameFromSignalId( id );
+    }
+
+    for( const auto& [name, id] : m_deviceVoltageIds )
+    {
+        if( aSignal.IsSameAs( name, false ) )
+        {
+            ensureDeviceVoltage( id );
+            return vectorNameFromSignalId( id );
+        }
+    }
+
+    // A parenthesised user-defined signal, as in "db(V(a)-V(b))", is its vector.
+    wxString expanded = aSignal;
+
+    for( const auto& [id, signal] : m_userDefinedSignals )
+        expanded.Replace( wxS( "(" ) + signal + wxS( ")" ), wxS( "(" ) + vectorNameFromSignalId( id ) + wxS( ")" ) );
+
+    expanded = expandDeviceVoltages( expanded );
+
+    if( expanded == aSignal )
+        return aSignal;
+
+    return quoteNetNames( expanded );
+}
+
+
 void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 {
     constexpr const char* cmd = "let user{} = {}";
 
     for( const auto& [id, signal] : m_userDefinedSignals )
     {
-        simulator()->Command( "echo " + fmt::format( cmd, id, signal.ToStdString() ) );
-        simulator()->Command( fmt::format( cmd, id, quoteNetNames( signal ).ToStdString() ) );
+        wxString expanded = expandDeviceVoltages( signal );
+
+        simulator()->Command( "echo " + fmt::format( cmd, id, expanded.ToStdString() ) );
+        simulator()->Command( fmt::format( cmd, id, quoteNetNames( expanded ).ToStdString() ) );
     }
 
-    // Component voltages are evaluated the same way, but only when something actually asks for
-    // one -- see ensureDeviceVoltage().  Whatever this plot had is gone if it was rebuilt, so
-    // start it over.
+    // Component voltages are re-evaluated on demand for this plot.
     if( simulator() )
         m_appliedDeviceVoltages.erase( simulator()->CurrentPlotName() );
 }
@@ -3721,6 +4034,10 @@ bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
 }
 
 
+/// Workbook keys for the plot margins, in SIM_VIEW::GetUserMargin() order.
+static const char* const MARGIN_KEYS[4] = { "top", "right", "bottom", "left" };
+
+
 bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 {
     wxFFileInputStream fp( aPath, wxT( "rt" ) );
@@ -3738,13 +4055,13 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
         for( const nlohmann::json& tab_js : js["tabs"] )
         {
             wxString simCommand;
-            int      simOptions =
-                    NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
+            int      simOptions = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS
+                                    | NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS;
 
             if( !tab_js.contains( "commands" ) || !tab_js["commands"].is_array() )
                 continue;
 
-            for( const nlohmann::json& cmd : tab_js["commands"] )
+            for( const nlohmann::json& cmd : tab_js[ "commands" ] )
             {
                 if( cmd == ".kicad adjustpaths" )
                     simOptions |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
@@ -3777,7 +4094,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( tab_js.contains( "measurements" ) && tab_js["measurements"].is_array() )
                 {
-                    for( const nlohmann::json& m_js : tab_js["measurements"] )
+                    for( const nlohmann::json& m_js : tab_js[ "measurements" ] )
                     {
                         plotTab->Measurements().emplace_back( wxString( m_js.value( "expr", "" ) ),
                                                               wxString( m_js.value( "format", "" ) ) );
@@ -3873,18 +4190,39 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( tab_js.contains( "legend" ) )
                 {
-                    const nlohmann::json& legend_js = tab_js["legend"];
+                    const nlohmann::json& legend_js = tab_js[ "legend" ];
                     plotTab->SetLegendPosition( wxPoint( legend_js.value( "x", 0 ), legend_js.value( "y", 0 ) ) );
                     plotTab->ShowLegend( true );
                 }
 
-                if( tab_js.contains( "margins" ) )
+                // Only user-entered margins are pinned; the others follow the plot.
                 {
-                    const nlohmann::json& margins_js = tab_js[ "margins" ];
-                    plotTab->GetPlotWin()->SetMargins( margins_js.value( "top",    30 ),
-                                                       margins_js.value( "right",  70 ),
-                                                       margins_js.value( "bottom", 45 ),
-                                                       margins_js.value( "left",   70 ) );
+                    int userMargins[4] = { -1, -1, -1, -1 };
+
+                    if( tab_js.contains( "userMargins" ) && tab_js["userMargins"].is_object() )
+                    {
+                        const nlohmann::json& user_js = tab_js["userMargins"];
+
+                        for( int idx = 0; idx < 4; ++idx )
+                            userMargins[idx] = user_js.value( MARGIN_KEYS[idx], -1 );
+                    }
+                    else if( tab_js.contains( "margins" ) && tab_js["margins"].is_object() )
+                    {
+                        // Older workbooks saved every margin.  Values other than the old fixed defaults
+                        // (30, 70 or 160, 45, 70) were entered by the user.
+                        const nlohmann::json& margins_js = tab_js["margins"];
+                        const int             defaults[4] = { 30, 70, 45, 70 };
+
+                        for( int idx = 0; idx < 4; ++idx )
+                        {
+                            int value = margins_js.value( MARGIN_KEYS[idx], defaults[idx] );
+
+                            if( value != defaults[idx] && !( idx == 1 && value == 160 ) )
+                                userMargins[idx] = value;
+                        }
+                    }
+
+                    plotTab->SetUserMargins( userMargins[0], userMargins[1], userMargins[2], userMargins[3] );
                 }
             }
         }
@@ -3950,9 +4288,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 m_cursorFormatsDyn[formatSlot][1].FromString( yFormat );
         };
 
-        // The traces below are looked up by signal name, and a component voltage only resolves to
-        // its vector once the netlist has been walked.  rebuildSignalsList() does that, but not
-        // until after the workbook has finished loading.
+        // Component voltages resolve only after the netlist has been walked.
         rebuildDeviceVoltages();
 
         for( const auto& [plotTab, traces_js] : traceInfo )
@@ -3964,26 +4300,6 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( signalName.IsEmpty() || traceType == SPT_UNKNOWN )
                     continue;
-
-                // Workbooks written before component voltages were saved by name recorded the
-                // evaluated vector instead ("user1000000").  Map it back, or the trace asks ngspice
-                // for a vector whose id this session may never hand out again.
-                if( signalName.StartsWith( wxS( "user" ) ) )
-                {
-                    long legacyId = 0;
-
-                    if( signalName.Mid( 4 ).ToLong( &legacyId ) && legacyId >= DEVICE_VOLTAGE_ID_BASE )
-                    {
-                        for( const auto& [name, id] : m_deviceVoltageIds )
-                        {
-                            if( id == (int) legacyId )
-                            {
-                                signalName = name;
-                                break;
-                            }
-                        }
-                    }
-                }
 
                 wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
 
@@ -3997,7 +4313,13 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( trace )
                 {
-                    trace->SetName( signalName );
+                    // The trace adds the " (gain)" / " (phase)" suffix itself.
+                    wxString traceName = signalName;
+
+                    if( traceType & ( SPT_AC_GAIN | SPT_AC_PHASE ) )
+                        traceName = SimSignalBaseName( signalName );
+
+                    trace->SetName( traceName );
 
                     int yScaleIndex = trace_js.contains( "yScaleView" ) ? (int) trace_js["yScaleView"]
                                                                         : viewIndex;
@@ -4142,8 +4464,8 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
         if( !( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_EVENTS ) )
             commands_js.push_back( ".kicad esavenone" );
 
-        nlohmann::json tab_js = nlohmann::json(
-                { { "analysis", SPICE_SIMULATOR::TypeToName( simType, true ) }, { "commands", commands_js } } );
+        nlohmann::json tab_js = nlohmann::json( { { "analysis", SPICE_SIMULATOR::TypeToName( simType, true ) },
+                                                  { "commands", commands_js } } );
 
         if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab ) )
         {
@@ -4153,9 +4475,9 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             {
                 nlohmann::json trace_js =
                         nlohmann::json( { { "trace_type", (int) trace->GetType() },
-                                          { "signal",     signalNameFromVectorName( trace->GetDisplayName() ) },
-                                          { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() },
-                                          { "view",       plotTab->GetViewIndex( trace->GetView() ) },
+                                          { "signal", signalNameFromVectorName( trace->GetDisplayName() ) },
+                                          { "color", COLOR4D( trace->GetTraceColour() ).ToCSSString() },
+                                          { "view", plotTab->GetViewIndex( trace->GetView() ) },
                                           { "yScaleView", plotTab->GetViewIndex( trace->GetYScaleView() ) } } );
 
                 for( int ii = 1; ii <= m_customCursorsCnt; ii++ )
@@ -4174,7 +4496,8 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
             for( const auto& [measurement, format] : plotTab->Measurements() )
             {
-                measurements_js.push_back( nlohmann::json( { { "expr", measurement }, { "format", format } } ) );
+                measurements_js.push_back( nlohmann::json( { { "expr",   measurement },
+                                                             { "format", format } } ) );
             }
 
             tab_js["traces"] = traces_js;
@@ -4247,16 +4570,27 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
             if( plotTab->IsLegendShown() )
             {
-                tab_js["legend"] = nlohmann::json(
-                        { { "x", plotTab->GetLegendPosition().x }, { "y", plotTab->GetLegendPosition().y } } );
+                tab_js["legend"] = nlohmann::json( { { "x", plotTab->GetLegendPosition().x },
+                                                     { "y", plotTab->GetLegendPosition().y } } );
             }
 
             mpWindow* plotWin = plotTab->GetPlotWin();
 
-            tab_js["margins"] = nlohmann::json( { { "left", plotWin->GetMarginLeft() },
-                                                  { "right", plotWin->GetMarginRight() },
-                                                  { "top", plotWin->GetMarginTop() },
+            tab_js["margins"] = nlohmann::json( { { "left",   plotWin->GetMarginLeft() },
+                                                  { "right",  plotWin->GetMarginRight() },
+                                                  { "top",    plotWin->GetMarginTop() },
                                                   { "bottom", plotWin->GetMarginBottom() } } );
+
+            // "margins" is what older versions read; "userMargins" holds only what the user entered.
+            nlohmann::json userMargins_js = nlohmann::json::object();
+
+            for( int idx = 0; idx < 4; ++idx )
+            {
+                if( plotTab->GetUserMargin( idx ) >= 0 )
+                    userMargins_js[MARGIN_KEYS[idx]] = plotTab->GetUserMargin( idx );
+            }
+
+            tab_js["userMargins"] = userMargins_js;
         }
 
         tabs_js.push_back( tab_js );
@@ -4305,14 +4639,16 @@ SIM_TRACE_TYPE SIMULATOR_FRAME_UI::getXAxisType( SIM_TYPE aType ) const
     switch( aType )
     {
     /// @todo SPT_LOG_FREQUENCY
-    case ST_AC: return SPT_LIN_FREQUENCY;
-    case ST_SP: return SPT_LIN_FREQUENCY;
-    case ST_FFT: return SPT_LIN_FREQUENCY;
-    case ST_DC: return SPT_SWEEP;
-    case ST_TRAN: return SPT_TIME;
+    case ST_AC:    return SPT_LIN_FREQUENCY;
+    case ST_SP:    return SPT_LIN_FREQUENCY;
+    case ST_FFT:   return SPT_LIN_FREQUENCY;
+    case ST_DC:    return SPT_SWEEP;
+    case ST_TRAN:  return SPT_TIME;
     case ST_NOISE: return SPT_LIN_FREQUENCY;
 
-    default: wxFAIL_MSG( wxString::Format( wxS( "Unhandled simulation type: %d" ), (int) aType ) ); return SPT_UNKNOWN;
+    default:
+        wxFAIL_MSG( wxString::Format( wxS( "Unhandled simulation type: %d" ), (int) aType ) );
+        return SPT_UNKNOWN;
     }
 }
 
@@ -4340,17 +4676,27 @@ wxString SIMULATOR_FRAME_UI::getNoiseSource() const
 
 void SIMULATOR_FRAME_UI::TogglePanel( wxPanel* aPanel, wxSplitterWindow* aSplitterWindow, int& aSashPosition )
 {
-    bool isShown = aPanel->IsShown();
-
-    if( isShown )
+    // Unsplit: a sash parked at an edge still leaves the minimum pane size blank.
+    if( aSplitterWindow->IsSplit() )
+    {
         aSashPosition = aSplitterWindow->GetSashPosition();
+        m_hiddenPanelFirst[aSplitterWindow] = aSplitterWindow->GetWindow1() == aPanel;
+        aSplitterWindow->Unsplit( aPanel );
+    }
+    else
+    {
+        // Once unsplit, the remaining pane is window 1.
+        wxWindow* other = aSplitterWindow->GetWindow1();
+        bool      first = m_hiddenPanelFirst[aSplitterWindow];
+        wxWindow* window1 = first ? static_cast<wxWindow*>( aPanel ) : other;
+        wxWindow* window2 = first ? other : static_cast<wxWindow*>( aPanel );
 
-    aPanel->Show( !isShown );
+        if( aSplitterWindow->GetSplitMode() == wxSPLIT_VERTICAL )
+            aSplitterWindow->SplitVertically( window1, window2, aSashPosition );
+        else
+            aSplitterWindow->SplitHorizontally( window1, window2, aSashPosition );
+    }
 
-    aSplitterWindow->SetSashInvisible( isShown );
-    aSplitterWindow->SetSashPosition( isShown ? -1 : aSashPosition, true );
-
-    aSplitterWindow->UpdateSize();
     m_parent->Refresh();
     m_parent->Layout();
 }
@@ -4499,8 +4845,8 @@ void SIMULATOR_FRAME_UI::ToggleSmithChart()
 
             if( !seen )
             {
-                shownVectors.push_back(
-                        { stashed.vectorName, stashed.displayName, stashed.baseType, plotTab->GetDefaultView() } );
+                shownVectors.push_back( { stashed.vectorName, stashed.displayName, stashed.baseType,
+                                          plotTab->GetDefaultView() } );
             }
         }
     }
@@ -4602,8 +4948,8 @@ void SIMULATOR_FRAME_UI::ToggleSmithChart()
         {
             const SMITH_STASHED_CURSOR* stashed = findStashed( saved.id, saved.vectorName );
 
-            if( restoreCursor( saved.id, saved.vectorName, saved.baseType, stashed ? stashed->subType : SPT_SP_AMP,
-                               saved.coordX ) )
+            if( restoreCursor( saved.id, saved.vectorName, saved.baseType,
+                               stashed ? stashed->subType : SPT_SP_AMP, saved.coordX ) )
             {
                 restoredIds.push_back( saved.id );
             }
@@ -4921,13 +5267,14 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
                 }
             };
 
-    auto formatValue = [this]( double aValue, int aCursorId, int aCol ) -> wxString
-    {
-        if( ( !m_simulatorFrame->SimFinished() && aCol == 1 ) || std::isnan( aValue ) )
-            return wxS( "--" );
-        else
-            return SPICE_VALUE( aValue ).ToString( m_cursorFormatsDyn[aCursorId][aCol] );
-    };
+    auto formatValue =
+            [this]( double aValue, int aCursorId, int aCol ) -> wxString
+            {
+                if( ( !m_simulatorFrame->SimFinished() && aCol == 1 ) || std::isnan( aValue ) )
+                    return wxS( "--" );
+                else
+                    return SPICE_VALUE( aValue ).ToString( m_cursorFormatsDyn[aCursorId][aCol] );
+            };
 
     for( const auto& [name, trace] : plotTab->GetTraces() )
     {
@@ -5118,8 +5465,6 @@ void SIMULATOR_FRAME_UI::OnConsoleFilterChanged( wxCommandEvent& aEvent )
     else
         m_consoleFilter = SIM_CONSOLE_FILTER::ALL;
 
-    // Keep the three buttons mutually exclusive (they're independent wxToggleButtons, not a
-    // radio group).
     m_consoleFilterAll->SetValue( m_consoleFilter == SIM_CONSOLE_FILTER::ALL );
     m_consoleFilterWarnings->SetValue( m_consoleFilter == SIM_CONSOLE_FILTER::WARNINGS );
     m_consoleFilterErrors->SetValue( m_consoleFilter == SIM_CONSOLE_FILTER::ERRORS );
@@ -5132,8 +5477,7 @@ void SIMULATOR_FRAME_UI::OnConsoleFilterChanged( wxCommandEvent& aEvent )
             shown += entry.text;
     }
 
-    // One write, and ChangeValue() rather than Clear() + AppendText() so the widget isn't
-    // repainted empty on the way past.
+    // ChangeValue() avoids a repaint with an empty widget.
     m_simConsole->ChangeValue( shown );
     m_simConsole->SetInsertionPointEnd();
 }
@@ -5141,9 +5485,7 @@ void SIMULATOR_FRAME_UI::OnConsoleFilterChanged( wxCommandEvent& aEvent )
 
 void SIMULATOR_FRAME_UI::FlushSimConsole()
 {
-    // AppendText is slow on MSW, so we use the buffered report lines: every entry is kept (the
-    // severity filter needs them all), but the run's output reaches the widget in one write
-    // rather than one per line.
+    // AppendText is slow on MSW; write the buffered lines at once.
     std::vector<SIM_CONSOLE_ENTRY> entries = m_simulatorFrame->TakeSimReportEntries();
     wxString                       shown;
 
@@ -5171,6 +5513,17 @@ std::vector<wxString> SIMULATOR_FRAME_UI::SimPlotVectors() const
         signals.emplace_back( vec );
 
     return signals;
+}
+
+
+std::vector<wxString> SIMULATOR_FRAME_UI::DeviceVoltages() const
+{
+    std::vector<wxString> names;
+
+    for( const auto& [name, id] : m_deviceVoltageIds )
+        names.push_back( name );
+
+    return names;
 }
 
 
@@ -5289,12 +5642,8 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             int      traceType = SPT_UNKNOWN;
             wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
 
-            // Component voltages live in m_signals but are computed the same way user-defined
-            // signals are -- a "let userN = ..." that applyUserDefinedSignals() only issues on
-            // the final refresh, into whichever plot is current then.  Every run gets a fresh
-            // plot, so mid-run there's nothing to read; treat them like the other synthesised
-            // signals and clear the trace instead.
-            bool synthesised = m_deviceVoltageIds.count( baseSignalName( signal ) ) > 0;
+            // Not defined until the final refresh; clear the trace mid-run.
+            bool synthesised = m_deviceVoltageIds.count( SimSignalBaseName( signal ) ) > 0;
 
             if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
                 traceMap[trace] = { vectorName, traceType, synthesised && !aFinal };
@@ -5385,11 +5734,13 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             {
             case SPT_VOLTAGE: value.Append( wxS( "V" ) ); break;
             case SPT_CURRENT: value.Append( wxS( "A" ) ); break;
-            case SPT_POWER: value.Append( wxS( "W" ) ); break;
-            default: value.Append( wxS( "?" ) ); break;
+            case SPT_POWER:   value.Append( wxS( "W" ) ); break;
+            default:          value.Append( wxS( "?" ) ); break;
             }
 
-            msg.Printf( wxT( "%s%s\n" ), ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ), value );
+            msg.Printf( wxT( "%s%s\n" ),
+                        ( signal + wxT( ":" ) ).Pad( padding, wxUniChar( ' ' ) ),
+                        value );
 
             appendConsoleText( msg );
 

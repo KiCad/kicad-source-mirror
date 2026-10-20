@@ -106,17 +106,7 @@
 class WXDLLIMPEXP_MATHPLOT mpLayer;
 
 
-/**
- * @return true if [aMin, aMax] is too narrow, too close to zero, or too far from finite to be
- *         scaled and labelled meaningfully.
- *
- * A "constant" simulator output still wobbles by an ULP or two from one timestep to the next,
- * and fitting an axis to that wobble magnifies noise to fill the plot: every tick then rounds
- * to the same printed value, so the axis reads "5.000000" (or "0.000000") all the way down.
- * The 1e-9 relative floor is where labelling gives out -- an SI-scaled magnitude is under 1000
- * and the labels carry at most 6 decimals -- and 1e-18 is the smallest SI prefix there is, so
- * below that there's nothing left to rescale to either.
- */
+/// @return true if [aMin, aMax] is non-finite, empty, or too narrow relative to the values to label.
 inline bool mpIsDegenerateRange( double aMin, double aMax )
 {
     if( !std::isfinite( aMin ) || !std::isfinite( aMax ) )
@@ -125,14 +115,11 @@ inline bool mpIsDegenerateRange( double aMin, double aMax )
     double span = aMax - aMin;
     double magnitude = std::max( std::abs( aMin ), std::abs( aMax ) );
 
-    if( !( span > 0.0 ) || magnitude < 1e-18 )
-        return true;
-
-    return span <= magnitude * 1e-9;
+    return !( span > 0.0 ) || span <= magnitude * 1e-9;
 }
 
 
-/// Widen a degenerate range into one that can be scaled and labelled, keeping it centred.
+/// Widen a degenerate range around its midpoint.  A constant zero is padded by +/-1.
 inline void mpPadDegenerateRange( double& aMin, double& aMax )
 {
     double mid = ( aMin + aMax ) / 2.0;
@@ -140,8 +127,7 @@ inline void mpPadDegenerateRange( double& aMin, double& aMax )
     if( !std::isfinite( mid ) )
         mid = 0.0;
 
-    // Historically this padded by a flat +/-1, which is invisible next to a value of, say, 1e6.
-    double pad = std::max( std::abs( mid ) * 1e-3, 1.0 );
+    double pad = mid != 0.0 ? std::abs( mid ) * 1e-3 : 1.0;
 
     aMin = mid - pad;
     aMax = mid + pad;
@@ -458,9 +444,7 @@ protected:
     wxRect  m_dim;          // !< The bounding rectangle of the box. It may be resized dynamically
                             //    by the Plot method.
     wxPoint m_reference;    // !< Holds the reference point for movements
-                            //    NB: the background brush is mpLayer::m_brush.  This class used to
-                            //    shadow it with one of its own, which made mpLayer::SetBrush() a
-                            //    silent no-op for every info layer.
+                            // The background brush is mpLayer::m_brush.
     int     m_winX;         // !< Holds the mpWindow size. Used to rescale position when window is
     int     m_winY;         //    resized.
 
@@ -777,8 +761,6 @@ public:
         return m_absVisibleMaxV;
     }
 
-    /// Width, in pixels, of the widest tick label as of the last paint.  Only meaningful once
-    /// the scale has been drawn at least once (computeLabelExtents() runs from Plot()).
     int GetMaxLabelWidth() const { return m_maxLabelWidth; }
 
     void SetAxisMinMax( bool lock, double minV, double maxV )
@@ -1387,9 +1369,7 @@ protected:
 
     void OnPaint( wxPaintEvent& event );             // !< Paint handler, will plot all attached layers
 
-    /// Called at the end of OnPaint(), once every layer has drawn and the scales have
-    /// recomputed their tick labels.  Lets a derived class react to metrics that only become
-    /// known during a paint, such as how much room the labels actually need.
+    /// Called at the end of OnPaint(), once the scales have measured their labels.
     virtual void onPaintFinished() {}
 
     void OnSize( wxSizeEvent& event );               // !< Size handler, will update scroll bar sizes
