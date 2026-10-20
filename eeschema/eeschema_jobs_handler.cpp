@@ -717,13 +717,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !aBomJob->m_bomPresetName.IsEmpty() )
     {
         // Find the preset
-        const BOM_PRESET* schPreset = nullptr;
+        std::optional<BOM_PRESET> schPreset;
 
         for( const BOM_PRESET& p : BOM_PRESET::BuiltInPresets() )
         {
             if( p.name == aBomJob->m_bomPresetName )
             {
-                schPreset = &p;
+                schPreset = p;
                 break;
             }
         }
@@ -732,7 +732,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         {
             if( p.name == aBomJob->m_bomPresetName )
             {
-                schPreset = &p;
+                schPreset = p;
                 break;
             }
         }
