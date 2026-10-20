@@ -48,10 +48,13 @@ public:
     void     SetRepoURL( const wxString& aURL ) { m_txtURL->SetValue( aURL ); }
     wxString GetRepoURL() const { return m_txtURL->GetValue(); }
 
-    const wxString& GetFullURL() const { return m_fullURL; }
-
     void     SetUsername( const wxString& aUsername ) { m_txtUsername->SetValue( aUsername ); }
-    wxString GetUsername() const { return m_txtUsername->GetValue(); }
+
+    wxString GetUsername() const
+    {
+        KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( GetRepoURL() );
+        return parsed.username.IsEmpty() ? m_txtUsername->GetValue() : parsed.username;
+    }
 
     void     SetPassword( const wxString& aPassword ) { m_txtPassword->SetValue( aPassword ); }
     wxString GetPassword() const { return m_txtPassword->GetValue(); }
@@ -90,11 +93,7 @@ private:
     void updateURLData();
     bool extractClipboardData();
 
-    std::tuple<bool,wxString,wxString,wxString> isValidHTTPS( const wxString& url );
-    std::tuple<bool,wxString, wxString> isValidSSH( const wxString& url );
-
     git_repository* m_repository;
-    wxString        m_fullURL;
     wxString        m_incomeURL;
 
     wxString        m_prevFile;

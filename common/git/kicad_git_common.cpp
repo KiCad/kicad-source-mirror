@@ -2005,27 +2005,8 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
 
 KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 {
-    wxString remote;
-
-    {
-        std::lock_guard<std::mutex> lock( m_credentialsMutex );
-        remote = m_remote;
-    }
-
-    if( remote.IsEmpty() )
-        remote = GetRemotename();
-
-    if( remote.StartsWith( "https://" ) || remote.StartsWith( "http://" ) )
-    {
-        return GIT_CONN_TYPE::GIT_CONN_HTTPS;
-    }
-    else if( remote.StartsWith( "ssh://" ) || remote.StartsWith( "git@" ) || remote.StartsWith( "git+ssh://" )
-             || remote.EndsWith( ".git" ) )
-    {
-        return GIT_CONN_TYPE::GIT_CONN_SSH;
-    }
-
-    return GIT_CONN_TYPE::GIT_CONN_LOCAL;
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    return m_connType;
 }
 
 
@@ -2039,7 +2020,7 @@ static size_t findUserinfoAt( const wxString& aUrl )
         return wxString::npos;
 
     size_t hostStart = protoSep + 3;
-    size_t pathStart = aUrl.find( '/', hostStart );
+    size_t pathStart = aUrl.find_first_of( "/?#", hostStart );
     size_t searchEnd = ( pathStart == wxString::npos ) ? aUrl.length() : pathStart;
 
     if( searchEnd <= hostStart )
@@ -2051,7 +2032,7 @@ static size_t findUserinfoAt( const wxString& aUrl )
 }
 
 
-// The copy kept for display, tracing and the keychain key must not carry the secret.
+// Display and trace output must not carry the secret.
 static wxString stripUrlUserinfo( const wxString& aUrl )
 {
     size_t at = findUserinfoAt( aUrl );
@@ -2060,6 +2041,93 @@ static wxString stripUrlUserinfo( const wxString& aUrl )
         return aUrl;
 
     return aUrl.Left( aUrl.find( "://" ) + 3 ) + aUrl.Mid( at + 1 );
+}
+
+
+KIGIT_COMMON::REMOTE_URL KIGIT_COMMON::ParseRemoteURL( const wxString& aURL )
+{
+    REMOTE_URL result;
+    result.url = aURL;
+
+    size_t schemeEnd = aURL.find( "://" );
+    size_t hostStart = 0;
+    size_t hostEnd;
+
+    if( schemeEnd != wxString::npos )
+    {
+        wxString scheme = aURL.Left( schemeEnd ).Lower();
+
+        if( scheme == "https" || scheme == "http" )
+            result.connType = GIT_CONN_TYPE::GIT_CONN_HTTPS;
+        else if( scheme == "ssh" || scheme == "git+ssh" )
+            result.connType = GIT_CONN_TYPE::GIT_CONN_SSH;
+        else
+            return result;
+
+        hostStart = schemeEnd + 3;
+        hostEnd = aURL.find_first_of( "/?#", hostStart );
+        size_t at = findUserinfoAt( aURL );
+
+        if( at != wxString::npos )
+        {
+            wxString credentials = aURL.Mid( hostStart, at - hostStart );
+            size_t   colon = credentials.find( ':' );
+            result.username = credentials.Left( colon );
+
+            if( colon != wxString::npos )
+                result.password = credentials.Mid( colon + 1 );
+
+            wxString userPrefix;
+
+            if( result.connType == GIT_CONN_TYPE::GIT_CONN_SSH && !result.username.IsEmpty() )
+                userPrefix = result.username + "@";
+
+            result.url = aURL.Left( hostStart ) + userPrefix + aURL.Mid( at + 1 );
+            hostStart = at + 1;
+        }
+    }
+    else
+    {
+        // A colon before the path marks an SCP address, except for Windows drive paths.
+        if( aURL.length() >= 2 && wxIsalpha( aURL[0] ) && aURL[1] == ':' )
+            return result;
+
+        hostEnd = aURL.find( ':' );
+        size_t bracket = aURL.find( '[' );
+
+        if( bracket != wxString::npos && bracket < hostEnd )
+        {
+            size_t endBracket = aURL.find( ']', bracket );
+
+            if( endBracket != wxString::npos )
+                hostEnd = aURL.find( ':', endBracket + 1 );
+        }
+
+        size_t slash = aURL.find_first_of( "/\\" );
+
+        if( hostEnd == wxString::npos || hostEnd == 0 || ( slash != wxString::npos && slash < hostEnd ) )
+        {
+            return result;
+        }
+
+        result.connType = GIT_CONN_TYPE::GIT_CONN_SSH;
+        size_t at = aURL.Left( hostEnd ).find( '@' );
+
+        if( at != wxString::npos )
+        {
+            result.username = aURL.Left( at );
+            hostStart = at + 1;
+        }
+    }
+
+    wxString host = aURL.Mid( hostStart, hostEnd == wxString::npos ? wxString::npos : hostEnd - hostStart );
+
+    if( host.StartsWith( "[" ) )
+        result.hostname = host.AfterFirst( '[' ).BeforeFirst( ']' );
+    else
+        result.hostname = host.BeforeFirst( ':' );
+
+    return result;
 }
 
 
@@ -2072,74 +2140,16 @@ void KIGIT_COMMON::updateConnectionType()
 
 void KIGIT_COMMON::updateConnectionTypeUnlocked()
 {
-    if( m_remote.StartsWith( "https://" ) || m_remote.StartsWith( "http://" ) )
-        m_connType = GIT_CONN_TYPE::GIT_CONN_HTTPS;
-    else if( m_remote.StartsWith( "ssh://" ) || m_remote.StartsWith( "git@" ) || m_remote.StartsWith( "git+ssh://" ) )
-        m_connType = GIT_CONN_TYPE::GIT_CONN_SSH;
-    else
-        m_connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
+    REMOTE_URL parsed = ParseRemoteURL( m_remote );
+    m_connType = parsed.connType;
+    m_remote = parsed.url;
+    m_hostname = parsed.hostname;
 
-    if( m_connType != GIT_CONN_TYPE::GIT_CONN_LOCAL )
-    {
-        wxString uri = m_remote;
-        size_t   atPos = findUserinfoAt( uri );
+    if( !parsed.username.IsEmpty() )
+        m_username = parsed.username;
 
-        if( atPos != wxString::npos )
-        {
-            size_t   hostStart = uri.find( "://" ) + 3;
-            wxString credentials = uri.Mid( hostStart, atPos - hostStart );
-            size_t   colonPos = credentials.find( ':' );
-
-            if( colonPos != wxString::npos )
-            {
-                m_username = credentials.Left( colonPos );
-                m_password = credentials.Mid( colonPos + 1 );
-            }
-            else
-            {
-                m_username = credentials;
-            }
-        }
-        else if( uri.find( "://" ) == wxString::npos )
-        {
-            // scp-style git@host:path, where the leading token is an ssh user name.
-            size_t scpAt = uri.find( '@' );
-
-            if( scpAt != wxString::npos )
-                m_username = uri.Left( scpAt );
-        }
-
-        if( m_remote.StartsWith( "git@" ) )
-        {
-            // SSH format: git@hostname:path
-            size_t colonPos = m_remote.find( ':' );
-
-            if( colonPos != wxString::npos )
-                m_hostname = m_remote.Mid( 4, colonPos - 4 );
-        }
-        else
-        {
-            // other URL format: proto://[user@]hostname/path
-            size_t   hostStart = m_remote.find( "://" ) + 3;
-            size_t hostEnd = m_remote.find( '/', hostStart );
-            wxString host;
-
-            if( hostEnd != wxString::npos )
-                host = m_remote.Mid( hostStart, hostEnd - hostStart );
-            else
-                host = m_remote.Mid( hostStart );
-
-            // The last '@', as findUserinfoAt explains.
-            atPos = host.rfind( '@' );
-
-            if( atPos != wxString::npos )
-                m_hostname = host.Mid( atPos + 1 );
-            else
-                m_hostname = host;
-        }
-
-        m_remote = stripUrlUserinfo( m_remote );
-    }
+    if( !parsed.password.IsEmpty() )
+        m_password = parsed.password;
 
     m_secretFetched = !m_password.IsEmpty();
 }

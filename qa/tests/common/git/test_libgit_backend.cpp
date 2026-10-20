@@ -2143,6 +2143,107 @@ BOOST_AUTO_TEST_CASE( Amend_UnbornBranchReturnsError )
 }
 
 
+BOOST_AUTO_TEST_CASE( SetupRemote_PreservesSshSchemePortAndUsername )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
+
+    KIGIT_COMMON     common( repo.get() );
+    GIT_INIT_HANDLER handler( &common );
+    RemoteConfig     config;
+    config.url = wxS( "ssh://runner@192.168.1.55:29022/srv/git/repos/l3-auth-30.git" );
+    config.username = wxS( "saved-user" );
+    config.password = wxS( "key-passphrase" );
+    config.connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH;
+
+    BOOST_REQUIRE( handler.SetupRemote( config ) );
+    BOOST_CHECK_EQUAL( readConfig( repo.get(), wxS( "remote.origin.url" ) ).ToStdString(), config.url.ToStdString() );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), config.url.ToStdString() );
+    BOOST_CHECK_EQUAL( common.GetUsername().ToStdString(), "runner" );
+    BOOST_CHECK_EQUAL( common.GetPassword().ToStdString(), "key-passphrase" );
+    BOOST_CHECK( common.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
+}
+
+
+BOOST_AUTO_TEST_CASE( SetupRemote_UpdatesExistingOriginWithScpAddress )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
+    BOOST_REQUIRE( addOrigin( repo.get() ) );
+
+    KIGIT_COMMON     common( repo.get() );
+    GIT_INIT_HANDLER handler( &common );
+    RemoteConfig     config;
+    config.url = wxS( "runner@host:path/repo" );
+    config.username = wxS( "saved-user" );
+    config.connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH;
+
+    BOOST_REQUIRE( handler.SetupRemote( config ) );
+    BOOST_CHECK_EQUAL( readConfig( repo.get(), wxS( "remote.origin.url" ) ).ToStdString(), config.url.ToStdString() );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), config.url.ToStdString() );
+    BOOST_CHECK_EQUAL( common.GetUsername().ToStdString(), "runner" );
+    BOOST_CHECK( common.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
+}
+
+
+BOOST_AUTO_TEST_CASE( SetupRemote_ExtractsHttpCredentialsWithoutPersistingThem )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
+
+    KIGIT_COMMON     common( repo.get() );
+    GIT_INIT_HANDLER handler( &common );
+    RemoteConfig     config;
+    config.url = wxS( "https://url-user:pa@ss:word@example.com:8443/x/y@z.git" );
+    config.username = wxS( "saved-user" );
+    config.connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS;
+
+    BOOST_REQUIRE( handler.SetupRemote( config ) );
+    BOOST_CHECK_EQUAL( readConfig( repo.get(), wxS( "remote.origin.url" ) ).ToStdString(),
+                       "https://example.com:8443/x/y@z.git" );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "https://example.com:8443/x/y@z.git" );
+    BOOST_CHECK_EQUAL( common.GetUsername().ToStdString(), "url-user" );
+    BOOST_CHECK_EQUAL( common.GetPassword().ToStdString(), "pa@ss:word" );
+    BOOST_CHECK( common.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS );
+
+    // A password typed separately replaces the one pasted in the URL.
+    config.password = wxS( "typed@pass:word" );
+    BOOST_REQUIRE( handler.SetupRemote( config ) );
+    BOOST_CHECK_EQUAL( readConfig( repo.get(), wxS( "remote.origin.url" ) ).ToStdString(),
+                       "https://example.com:8443/x/y@z.git" );
+    BOOST_CHECK_EQUAL( common.GetPassword().ToStdString(), "typed@pass:word" );
+}
+
+
+BOOST_AUTO_TEST_CASE( SetupRemote_KeepsSeparateHttpCredentialsForImmediateFetch )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_REQUIRE( repo );
+
+    KIGIT_COMMON     common( repo.get() );
+    GIT_INIT_HANDLER handler( &common );
+    RemoteConfig     config;
+    config.url = wxS( "http://example.com/repo.git" );
+    config.username = wxS( "alice" );
+    config.password = wxS( "typed@pass:word" );
+    config.connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS;
+
+    BOOST_REQUIRE( handler.SetupRemote( config ) );
+    BOOST_CHECK_EQUAL( readConfig( repo.get(), wxS( "remote.origin.url" ) ).ToStdString(), config.url.ToStdString() );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), config.url.ToStdString() );
+    BOOST_CHECK_EQUAL( common.GetUsername().ToStdString(), "alice" );
+    BOOST_CHECK_EQUAL( common.GetPassword().ToStdString(), "typed@pass:word" );
+}
+
+
 BOOST_AUTO_TEST_CASE( InitializeRepository_SeedsGitignoreWithKicadEntries )
 {
     BOOST_TEST_REQUIRE( ready() );

@@ -2488,6 +2488,125 @@ BOOST_AUTO_TEST_CASE( SetRemoteStripsUserinfoContainingAtSign )
 }
 
 
+BOOST_AUTO_TEST_CASE( ParseRemoteURLPreservesSSHAddress )
+{
+    struct TEST_CASE
+    {
+        const char* url;
+        const char* username;
+        const char* hostname;
+    };
+
+    const TEST_CASE cases[] = {
+        { "ssh://runner@192.168.1.55:29022/srv/git/repos/l3-auth-30.git", "runner", "192.168.1.55" },
+        { "ssh://192.168.1.55:29022/srv/git/repos/l3-auth-30.git", "", "192.168.1.55" },
+        { "git+ssh://runner@example.com:2222/srv/repo", "runner", "example.com" },
+        { "git@example.com:team/repo.git", "git", "example.com" },
+        { "runner@example.com:team/repo", "runner", "example.com" },
+        { "example.com:team/repo", "", "example.com" },
+        { "ssh://runner@[2001:db8::1]:2222/srv/repo", "runner", "2001:db8::1" },
+        { "runner@[2001:db8::1]:team/repo", "runner", "2001:db8::1" },
+    };
+
+    for( const TEST_CASE& test : cases )
+    {
+        BOOST_TEST_CONTEXT( test.url )
+        {
+            KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( wxString::FromUTF8( test.url ) );
+
+            BOOST_CHECK_EQUAL( parsed.url.ToStdString(), test.url );
+            BOOST_CHECK_EQUAL( parsed.username.ToStdString(), test.username );
+            BOOST_CHECK_EQUAL( parsed.hostname.ToStdString(), test.hostname );
+            BOOST_CHECK( parsed.password.IsEmpty() );
+            BOOST_CHECK( parsed.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( ParseRemoteURLKeepsPortWhenExtractingCredentials )
+{
+    struct TEST_CASE
+    {
+        const char*                 input;
+        const char*                 address;
+        const char*                 username;
+        const char*                 password;
+        KIGIT_COMMON::GIT_CONN_TYPE connType;
+    };
+
+    const TEST_CASE cases[] = {
+        { "https://alice:pa@ss@example.com:8443/team/repo@branch.git", "https://example.com:8443/team/repo@branch.git",
+          "alice", "pa@ss", KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS },
+        { "http://alice:secret@example.com:8080/team/repo", "http://example.com:8080/team/repo", "alice", "secret",
+          KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS },
+        { "https://example.com:8443/team/repo@branch.git", "https://example.com:8443/team/repo@branch.git", "", "",
+          KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS },
+        { "ssh://runner:pa@ss@example.com:29022/srv/repo", "ssh://runner@example.com:29022/srv/repo", "runner", "pa@ss",
+          KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH },
+    };
+
+    for( const TEST_CASE& test : cases )
+    {
+        BOOST_TEST_CONTEXT( test.input )
+        {
+            KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( wxString::FromUTF8( test.input ) );
+
+            BOOST_CHECK_EQUAL( parsed.url.ToStdString(), test.address );
+            BOOST_CHECK_EQUAL( parsed.username.ToStdString(), test.username );
+            BOOST_CHECK_EQUAL( parsed.password.ToStdString(), test.password );
+            BOOST_CHECK_EQUAL( parsed.hostname.ToStdString(), "example.com" );
+            BOOST_CHECK( parsed.connType == test.connType );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( ParseRemoteURLKeepsLocalPaths )
+{
+    const char* paths[] = {
+        "/srv/git/repos/project.git",     "../repos/project.git",
+        "./repos/project:backup.git",     "C:/repos/project.git",
+        "C:\\repos\\project.git",         "C:project.git",
+        "\\\\server\\repos\\project.git", "file:///srv/git/repos/project.git",
+        "file:///C:/repos/project.git",
+    };
+
+    for( const char* path : paths )
+    {
+        BOOST_TEST_CONTEXT( path )
+        {
+            KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( wxString::FromUTF8( path ) );
+
+            BOOST_CHECK_EQUAL( parsed.url.ToStdString(), path );
+            BOOST_CHECK( parsed.username.IsEmpty() );
+            BOOST_CHECK( parsed.password.IsEmpty() );
+            BOOST_CHECK( parsed.hostname.IsEmpty() );
+            BOOST_CHECK( parsed.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( SetRemotePreservesSSHAddressAndAcceptsLocalReplacement )
+{
+    KIGIT_COMMON   common( nullptr );
+    const wxString sshURL = wxS( "ssh://runner@192.168.1.55:29022/srv/git/repos/l3-auth-30.git" );
+
+    common.SetUsername( wxS( "previous-user" ) );
+    common.SetRemote( sshURL );
+
+    BOOST_CHECK_EQUAL( common.GetRemote(), sshURL );
+    BOOST_CHECK_EQUAL( common.GetUsername(), wxS( "runner" ) );
+    BOOST_CHECK( common.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
+
+    common.SetRemote( wxS( "/srv/git/repos/local.git" ) );
+
+    BOOST_CHECK_EQUAL( common.GetRemote(), wxS( "/srv/git/repos/local.git" ) );
+    BOOST_CHECK( common.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL );
+}
+
+
 // Called after editing a remote, so a later push authenticates against the new server.
 BOOST_AUTO_TEST_CASE( UpdateCurrentBranchInfoRefreshesChangedRemoteUrl )
 {

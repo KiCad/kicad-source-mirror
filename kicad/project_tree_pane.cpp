@@ -1936,6 +1936,14 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
     DIALOG_GIT_REPOSITORY dlg( topLevelParent, repo, existingURL );
     dlg.SetTitle( _( "Configure Default Remote" ) );
 
+    // Credentials are stored separately from the remote URL.
+    KIGIT_COMMON credentials( nullptr );
+    credentials.SetUsername( common->GetUsername() );
+    credentials.SetRemote( existingURL );
+    dlg.SetUsername( credentials.GetUsername() );
+    dlg.SetPassword( credentials.GetPassword() );
+    dlg.SetRepoSSHPath( Prj().GetLocalSettings().m_GitSSHKey );
+
     if( dlg.ShowModal() != wxID_OK )
         return;
 

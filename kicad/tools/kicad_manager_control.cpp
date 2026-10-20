@@ -422,7 +422,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
     GIT_CLONE_HANDLER cloneHandler( &cloneCommon );
 
-    cloneHandler.SetRemote( dlg.GetFullURL() );
+    cloneHandler.SetRemote( dlg.GetRepoURL() );
     cloneHandler.SetClonePath( pro.GetPath() );
     cloneHandler.SetUsername( dlg.GetUsername() );
     cloneHandler.SetPassword( dlg.GetPassword() );

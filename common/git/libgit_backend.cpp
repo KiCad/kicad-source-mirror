@@ -1243,68 +1243,18 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
         return false;
     }
 
-    aHandler->GetCommon()->SetUsername( aConfig.username );
-    aHandler->GetCommon()->SetPassword( aConfig.password );
-    aHandler->GetCommon()->SetSSHKey( aConfig.sshKey );
-
-    git_remote* remote = nullptr;
-    wxString fullURL;
-
-    if( aConfig.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
-    {
-        wxString userPrefix;
-
-        if( !aConfig.url.Contains( "@" ) && !aConfig.username.IsEmpty() )
-            userPrefix = aConfig.username + "@";
-
-        if( aConfig.url.StartsWith( "ssh://" ) )
-            fullURL = "ssh://" + userPrefix + aConfig.url.Mid( 6 );
-        else if( aConfig.url.Contains( ":" ) )
-            fullURL = userPrefix + aConfig.url;
-        else
-            fullURL = "ssh://" + userPrefix + aConfig.url;
-    }
-    else if( aConfig.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS )
-    {
-        fullURL = aConfig.url.StartsWith( "https" ) ? "https://" : "http://";
-
-        if( !aConfig.username.empty() )
-        {
-            fullURL.append( aConfig.username );
-
-            if( !aConfig.password.empty() )
-            {
-                fullURL.append( wxS( ":" ) );
-                fullURL.append( aConfig.password );
-            }
-
-            fullURL.append( wxS( "@" ) );
-        }
-
-        wxString bareURL = aConfig.url;
-
-        if( bareURL.StartsWith( "https://" ) )
-            bareURL = bareURL.Mid( 8 );
-        else if( bareURL.StartsWith( "http://" ) )
-            bareURL = bareURL.Mid( 7 );
-
-        fullURL.append( bareURL );
-    }
-    else
-    {
-        fullURL = aConfig.url;
-    }
-
-    int error;
+    KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( aConfig.url );
+    git_remote*              remote = nullptr;
+    int                      error;
 
     if( git_remote_lookup( &remote, repo, "origin" ) == GIT_OK )
     {
         KIGIT::GitRemotePtr remotePtr( remote );
-        error = git_remote_set_url( repo, "origin", fullURL.ToStdString().c_str() );
+        error = git_remote_set_url( repo, "origin", parsed.url.utf8_str() );
     }
     else
     {
-        error = git_remote_create_with_fetchspec( &remote, repo, "origin", fullURL.ToStdString().c_str(),
+        error = git_remote_create_with_fetchspec( &remote, repo, "origin", parsed.url.utf8_str(),
                                                   "+refs/heads/*:refs/remotes/origin/*" );
         KIGIT::GitRemotePtr remotePtr( remote );
     }
@@ -1316,9 +1266,13 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
         return false;
     }
 
-    // Sync the remote URL onto common so subsequent fetch/push see the right
-    // connection type; otherwise credentials_cb short-circuits as local.
-    aHandler->GetCommon()->SetRemote( fullURL );
+    // SetRemote clears cached credentials, so apply the accepted credentials afterwards.
+    // The username embedded in the address takes precedence over a saved username.
+    KIGIT_COMMON* common = aHandler->GetCommon();
+    common->SetRemote( parsed.url );
+    common->SetUsername( parsed.username.IsEmpty() ? aConfig.username : parsed.username );
+    common->SetPassword( aConfig.password.IsEmpty() ? parsed.password : aConfig.password );
+    common->SetSSHKey( aConfig.sshKey );
 
     wxLogTrace( traceGit, "Successfully set up remote origin" );
     return true;

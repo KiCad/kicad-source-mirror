@@ -276,6 +276,18 @@ public:
         GIT_CONN_LAST
     };
 
+    /// A transport address with any embedded credentials extracted.
+    struct REMOTE_URL
+    {
+        wxString      url; ///< Keeps the SSH username, scheme and port, but never a password.
+        wxString      username;
+        wxString      password;
+        wxString      hostname;
+        GIT_CONN_TYPE connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
+    };
+
+    static REMOTE_URL ParseRemoteURL( const wxString& aURL );
+
     wxString GetUsername() const
     {
         std::lock_guard<std::mutex> lock( m_credentialsMutex );
