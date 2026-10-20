@@ -53,6 +53,7 @@
 #include <string_utils.h>
 #include <footprint_library_adapter.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <pcb_marker.h>
 #include <pcb_painter.h>
 #include <pcb_shape.h>
 #include <widgets/appearance_controls.h>
@@ -568,6 +569,36 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
     bool courtyardError = false;
     std::unique_ptr<DRC_ENGINE> drcEngine = makeDRCEngine( &compileError, &courtyardError );
 
+    // Use the same principal-layer policy as the DRC dialog's cross-probe.
+    PCB_MARKER* marker = nullptr;
+
+    for( PCB_MARKER* candidate : m_frame->GetBoard()->Markers() )
+    {
+        if( candidate->GetRCItem() == aDRCItem )
+        {
+            marker = candidate;
+            break;
+        }
+    }
+
+    // Pull out the principal layer for this DRC item if there is one.
+    //
+    // Note: some tests evaluate the constraint with UNDEFINED_LAYER, so a
+    // rule's (layer ...) restriction is not checked against the item's layer
+    // (DRC_TEST_PROVIDER_EDGE_CLEARANCE, for example). When we evaluate
+    // the constraint later, match the provider's layer choice in those cases so
+    // the resolution agrees with the DRC run.
+
+    {
+        PCB_LAYER_ID principalLayer = UNDEFINED_LAYER;
+        LSET         violationLayers;
+
+        DRC_ITEM::GetViolationLayers( m_frame->GetBoard(), aDRCItem, marker, principalLayer, violationLayers );
+
+        if( principalLayer > UNDEFINED_LAYER )
+            layer = principalLayer;
+    }
+
     WX_HTML_REPORT_BOX* r = nullptr;
     DRC_CONSTRAINT      constraint;
     int                 clearance = 0;
@@ -726,7 +757,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, a, b, layer, r );
+        // Hole tests were done with UNDEFINED_LAYER
+        constraint = drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
 
         r->Report( "" );
         r->Report( wxString::Format( _( "Resolved hole size constraints: min %s; max %s." ),
@@ -800,7 +832,8 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         if( compileError )
             reportCompileError( r );
 
-        constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, layer, r );
+        // Edge clearance test is done with UNDEFINED_LAYER
+        constraint = drcEngine->EvalRules( EDGE_CLEARANCE_CONSTRAINT, a, b, UNDEFINED_LAYER, r );
         clearance = constraint.m_Value.Min();
         clearanceStr = m_frame->StringFromValue( clearance, true );
 
@@ -809,35 +842,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         break;
 
     case DRCE_CLEARANCE:
-        if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )
-        {
-            layer = a->GetLayer();
-        }
-        else if( b->Type() == PCB_TRACE_T || b->Type() == PCB_ARC_T )
-        {
-            layer = b->GetLayer();
-        }
-        else if( a->Type() == PCB_PAD_T
-               && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
-        {
-            PAD* pad = static_cast<PAD*>( a );
-
-            if( pad->IsOnLayer( F_Cu ) )
-                layer = F_Cu;
-            else
-                layer = B_Cu;
-        }
-        else if( b->Type() == PCB_PAD_T
-               && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB::SMD )
-        {
-            PAD* pad = static_cast<PAD*>( b );
-
-            if( pad->IsOnLayer( F_Cu ) )
-                layer = F_Cu;
-            else
-                layer = B_Cu;
-        }
-
+    {
         r = dialog->AddHTMLPage( _( "Clearance" ) );
         reportHeader( _( "Clearance resolution for:" ), a, b, layer, r );
 
@@ -880,7 +885,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
         }
 
         break;
-
+    }
     case DRCE_ASSERTION_FAILURE:
         r = dialog->AddHTMLPage( _( "Assertions" ) );
         reportHeader( _( "Assertions for:" ), a, r );

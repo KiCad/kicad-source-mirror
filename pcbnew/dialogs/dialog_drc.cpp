@@ -660,10 +660,10 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         return;
     }
 
-    PCB_LAYER_ID principalLayer;
+    PCB_LAYER_ID principalLayer = UNDEFINED_LAYER;
     LSET         violationLayers;
-    BOARD_ITEM*  a = board->ResolveItem( rc_item->GetMainItemID(), true );
-    BOARD_ITEM*  b = board->ResolveItem( rc_item->GetAuxItemID(), true );
+    const BOARD_ITEM*  a = board->ResolveItem( rc_item->GetMainItemID(), true );
+    const BOARD_ITEM*  b = board->ResolveItem( rc_item->GetAuxItemID(), true );
 
     auto focus = [&]( BOARD_ITEM* aItem )
     {
