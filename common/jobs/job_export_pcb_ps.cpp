@@ -32,23 +32,24 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PS::GEN_MODE,
 
 JOB_EXPORT_PCB_PS::JOB_EXPORT_PCB_PS() :
         JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST, "ps", false ),
-        m_genMode( GEN_MODE::MULTI ), m_trackWidthCorrection( 0.0 ),
-        m_XScaleAdjust( 1.0 ), m_YScaleAdjust( 1.0 ), m_forceA4( false ),
+        m_genMode( GEN_MODE::MULTI ),
+        m_trackWidthCorrection( 0.0 ),
+        m_XScaleAdjust( 1.0 ),
+        m_YScaleAdjust( 1.0 ),
+        m_forceA4( false ),
         m_useGlobalSettings( true )
 {
     m_plotDrawingSheet = false;
 
     m_params.emplace_back( new JOB_PARAM<double>( "scale", &m_scale, m_scale ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme",
-            &m_colorTheme, m_colorTheme ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "color_theme", &m_colorTheme, m_colorTheme ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
     m_params.emplace_back( new JOB_PARAM<double>( "track_width_correction",
-            &m_trackWidthCorrection, m_trackWidthCorrection ) );
+                                                  &m_trackWidthCorrection, m_trackWidthCorrection ) );
     m_params.emplace_back( new JOB_PARAM<double>( "x_scale_factor", &m_XScaleAdjust, m_XScaleAdjust) );
     m_params.emplace_back( new JOB_PARAM<double>( "y_scale_factor", &m_YScaleAdjust, m_YScaleAdjust) );
     m_params.emplace_back( new JOB_PARAM<bool>( "force_a4", &m_forceA4, m_forceA4) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "use_global_settings",
-            &m_useGlobalSettings, m_useGlobalSettings) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_global_settings", &m_useGlobalSettings, m_useGlobalSettings) );
 }
 
 
