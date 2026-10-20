@@ -48,8 +48,10 @@
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 
+#ifndef __WINDOWS__
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
 
 #include <fstream>
 #include <future>
@@ -2548,7 +2550,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
     // checkout.
     wxString trackedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
     {
-        std::ofstream f( trackedFile.ToStdString() );
+        std::ofstream f( trackedFile.ToStdString(), std::ios::binary );
         f << "edited during resolution\n";
     }
 
@@ -2557,7 +2559,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
                        static_cast<int>( MergeCommitResult::FailedCleanly ) );
 
     {
-        std::ofstream f( trackedFile.ToStdString() );
+        std::ofstream f( trackedFile.ToStdString(), std::ios::binary );
         f << "mine\n";
     }
 
@@ -2572,7 +2574,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
 
     {
         wxString      lockedMerged = tempBase() + wxFileName::GetPathSeparator() + wxT( "locked_merged.txt" );
-        std::ofstream f( lockedMerged.ToStdString() );
+        std::ofstream f( lockedMerged.ToStdString(), std::ios::binary );
         f << "merged\n";
         f.close();
 
@@ -2592,6 +2594,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
 
     wxRemoveFile( indexLock );
 
+#ifndef __WINDOWS__
     // A failure after the checkout, injected here by making the branch ref unwritable, must
     // roll the working files back automatically. The operation required a clean tree, so the
     // rollback is lossless by construction. Directory permissions do not bind root.
@@ -2635,18 +2638,19 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
         std::string   rolled( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
         BOOST_CHECK_EQUAL( rolled, "mine\n" );
     }
+#endif
 
     // The branch did not move, so the half-written file is an ordinary local modification. Put it
     // back the way a user cleaning up would, so the retry starts from a clean tree.
     {
-        std::ofstream f( trackedFile.ToStdString() );
+        std::ofstream f( trackedFile.ToStdString(), std::ios::binary );
         f << "mine\n";
     }
 
     // Resolve with fresh content and finish the merge.
     wxString mergedFile = tempBase() + wxFileName::GetPathSeparator() + wxT( "merged.txt" );
     {
-        std::ofstream f( mergedFile.ToStdString() );
+        std::ofstream f( mergedFile.ToStdString(), std::ios::binary );
         f << "merged\n";
     }
 
@@ -3193,8 +3197,7 @@ BOOST_AUTO_TEST_CASE( Commit_HandlesNonAsciiPaths )
 
     auto writeAll = [&]( const wxString& aName, const std::string& aContent )
     {
-        std::ofstream f( ( workDir + aName ).ToStdString(), std::ios::binary );
-        f << aContent;
+        KI_TEST::WriteGitFile( repoPath(), aName, aContent );
     };
 
     auto inHeadTree = [&]( const std::string& aPath )
@@ -3742,14 +3745,14 @@ BOOST_AUTO_TEST_CASE( RestoreRefusesUntrackedCollision )
     // A new, never committed notes.txt collides with the version being restored.
     wxString notesFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "notes.txt" );
     {
-        std::ofstream f( notesFile.ToStdString() );
+        std::ofstream f( notesFile.ToStdString(), std::ios::binary );
         f << "precious\n";
     }
 
     // An untracked file the old version does not carry must not block anything.
     wxString unrelatedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "unrelated.txt" );
     {
-        std::ofstream f( unrelatedFile.ToStdString() );
+        std::ofstream f( unrelatedFile.ToStdString(), std::ios::binary );
         f << "scratch\n";
     }
 

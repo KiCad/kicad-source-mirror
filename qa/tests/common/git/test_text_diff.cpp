@@ -181,8 +181,8 @@ BOOST_AUTO_TEST_CASE( OversizedPairFallsBackToWholeFileDiff )
 
     for( int ii = 0; ii < 2001; ii++ )
     {
-        oldLines.push_back( ii == 1000 ? wxT( "shared" ) : wxString::Format( wxT( "old %d" ), ii ) );
-        newLines.push_back( ii == 1000 ? wxT( "shared" ) : wxString::Format( wxT( "new %d" ), ii ) );
+        oldLines.push_back( ii == 1000 ? wxString( wxT( "shared" ) ) : wxString::Format( wxT( "old %d" ), ii ) );
+        newLines.push_back( ii == 1000 ? wxString( wxT( "shared" ) ) : wxString::Format( wxT( "new %d" ), ii ) );
     }
 
     std::vector<TEXT_DIFF_LINE> diff = KIGIT::BuildTextDiff( oldLines, newLines );
