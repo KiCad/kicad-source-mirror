@@ -2784,6 +2784,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     // Store the highlighted netcode in the current board (for dialogs for instance)
     if( enableHighlight && net >= 0 )
     {
+        m_HighlightedNetChain.clear();
         m_currentlyHighlighted = netcodes;
         board->SetHighLightNet( net );
         board->HighLightON();
@@ -2800,6 +2801,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     }
     else
     {
+        m_HighlightedNetChain.clear();
         m_currentlyHighlighted.clear();
         board->ResetNetHighLight();
         m_frame->SetMsgPanel( board );
