@@ -1,4 +1,8 @@
 (fp_lib_table
-  (version 7)
-  (lib (name "complex_hierarchy")(type "KiCad")(uri "${KIPRJMOD}/complex_hierarchy.pretty")(options "")(descr ""))
+	(version 7)
+	(lib (name "complex_hierarchy") (type "KiCad") (uri "${KIPRJMOD}/complex_hierarchy.pretty") (options "") (descr ""))
+	(lib (name "TerminalBlock_Altech") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/TerminalBlock_Altech.pretty") (options "") (descr ""))
+	(lib (name "Package_TO_SOT_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Package_TO_SOT_THT.pretty") (options "") (descr ""))
+	(lib (name "Diode_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Diode_THT.pretty") (options "") (descr ""))
+	(lib (name "Potentiometer_THT") (type "KiCad") (uri "${KICAD10_FOOTPRINT_DIR}/Potentiometer_THT.pretty") (options "") (descr ""))
 )
