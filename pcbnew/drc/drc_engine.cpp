@@ -2501,10 +2501,27 @@ bool DRC_ENGINE::HasConditionalConstraint( DRC_CONSTRAINT_T aConstraintId )
 }
 
 
+bool DRC_ENGINE::HasUserDefinedConstraint( DRC_CONSTRAINT_T aConstraintId )
+{
+    auto it = m_constraintMap.find( aConstraintId );
+
+    if( it != m_constraintMap.end() )
+    {
+        for( DRC_ENGINE_CONSTRAINT* c : *it->second )
+        {
+            if( c->parentRule && !c->parentRule->IsImplicit() )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 bool DRC_ENGINE::HasUserDefinedPhysicalConstraint()
 {
-    return HasConditionalConstraint( PHYSICAL_CLEARANCE_CONSTRAINT )
-           || HasConditionalConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT );
+    return HasUserDefinedConstraint( PHYSICAL_CLEARANCE_CONSTRAINT )
+           || HasUserDefinedConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT );
 }
 
 

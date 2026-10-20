@@ -295,6 +295,7 @@ public:
 
     bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint, bool aUnconditionalOnly = false );
     bool HasConditionalConstraint( DRC_CONSTRAINT_T aConstraintId );
+    bool HasUserDefinedConstraint( DRC_CONSTRAINT_T aConstraintId );
     bool HasUserDefinedPhysicalConstraint();
     std::set<int> QueryDistinctConstraints( DRC_CONSTRAINT_T aConstraintId );
 
