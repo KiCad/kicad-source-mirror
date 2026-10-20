@@ -169,6 +169,11 @@ void TUNING_STATUS_VIEW_ITEM::SetCurrent( const double aCurrent, const wxString&
 void TUNING_STATUS_VIEW_ITEM::SetIsTimeDomain( const bool aIsTimeDomain )
 {
     m_isTimeDomain = aIsTimeDomain;
+
+    const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
+    m_chainMinText = m_frame->MessageTextFromValue( m_chainMin, false, unitType );
+    m_chainMaxText = m_frame->MessageTextFromValue( m_chainMax, false, unitType );
 }
 
 
