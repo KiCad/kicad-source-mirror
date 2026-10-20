@@ -28,6 +28,7 @@
 #include <string>
 
 #include <git/kicad_git_common.h>
+#include <widgets/progress_reporter_base.h>
 
 namespace KIGIT
 {
@@ -66,6 +67,29 @@ bool StartTransfer( const std::string& aLabel, std::function<void()> aWork );
  * transfer itself runs on a thread the orphan registry owns, so closing the window does not
  * wait for the socket, and the completion is delivered only while this object still exists.
  */
+/**
+ * A progress reporter that writes a line of text instead of opening a dialog over the editor.
+ * libgit2's callbacks drive it from a worker, so each line is handed to the UI thread and
+ * dropped once the window that started the transfer has gone.
+ *
+ * aShow must be safe to copy and destroy on a worker, so it may hold a raw window pointer but
+ * never a wxWeakRef. It runs only on the UI thread and only while aAlive holds.
+ */
+class KIGIT_STATUS_REPORTER : public PROGRESS_REPORTER_BASE
+{
+public:
+    KIGIT_STATUS_REPORTER( const std::weak_ptr<bool>& aAlive, std::function<void( const wxString& )> aShow );
+
+protected:
+    bool updateUI() override;
+
+private:
+    std::weak_ptr<bool>                    m_alive;
+    std::function<void( const wxString& )> m_show;
+    wxString                               m_lastShown;
+};
+
+
 class KIGIT_TRANSFER
 {
 public:
@@ -77,6 +101,9 @@ public:
 
     /// True while a transfer started here is still running.
     bool IsBusy() const { return m_busy; }
+
+    /// Dropped when this object goes. Hand it to a reporter so its updates stop with it.
+    std::weak_ptr<bool> Alive() const { return m_alive; }
 
     /// Ask the running transfer to stop. It finishes on its own time.
     void Cancel();

@@ -67,6 +67,9 @@ public:
     /// Read the project's git status and repopulate the list.
     void RefreshFileList();
 
+    /// Show a line of transfer progress. Called from the UI thread by a KIGIT_STATUS_REPORTER.
+    void ShowTransferProgress( const wxString& aText );
+
     /// Reload the advanced window when it is open, for a preferences change it also shows.
     void ReloadAdvancedWindow();
 

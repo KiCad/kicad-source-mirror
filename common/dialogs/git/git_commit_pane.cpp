@@ -1931,6 +1931,12 @@ void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std
 }
 
 
+void GIT_COMMIT_PANE::ShowTransferProgress( const wxString& aText )
+{
+    m_frame->SetStatusText( aText );
+}
+
+
 void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 {
     m_checklist->Enable( !aBusy );
@@ -2018,11 +2024,18 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
 
     bool started = m_transfer.Start(
             "git push",
-            [aCommon, outcome, aBranch, aHead]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, outcome, aBranch, aHead, alive = m_transfer.Alive(),
+             pane = this]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
                 aCommon->ClearAuthFailure();
 
                 GIT_PUSH_HANDLER handler( aCommon.get() );
+                handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
+                        alive,
+                        [pane]( const wxString& aText )
+                        {
+                            pane->ShowTransferProgress( aText );
+                        } ) );
                 handler.SetWaitForActionLock( true );
                 handler.SetExpectedTarget( aBranch, aHead );
                 handler.SetCancelToken( aToken );
@@ -2566,11 +2579,18 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
 
     bool started = m_transfer.Start(
             "git pull",
-            [aCommon, docsBefore, kiway, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, docsBefore, kiway, outcome, alive = m_transfer.Alive(),
+             pane = this]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
                 aCommon->ClearAuthFailure();
 
                 GIT_PULL_HANDLER handler( aCommon.get() );
+                handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
+                        alive,
+                        [pane]( const wxString& aText )
+                        {
+                            pane->ShowTransferProgress( aText );
+                        } ) );
                 handler.SetWaitForActionLock( true );
                 handler.SetCancelToken( aToken );
                 outcome->result = handler.PerformPull();

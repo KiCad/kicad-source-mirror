@@ -488,11 +488,18 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
     bool started = m_push.Start(
             "git force push",
-            [aCommon, outcome, aExpectedBranch, aExpectedHeadOid]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, outcome, aExpectedBranch, aExpectedHeadOid, alive = m_push.Alive(),
+             dialog = m_dialog]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
                 aCommon->ClearAuthFailure();
 
                 GIT_PUSH_HANDLER handler( aCommon.get() );
+                handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
+                        alive,
+                        [dialog]( const wxString& aText )
+                        {
+                            dialog->ShowTransferProgress( aText );
+                        } ) );
                 handler.SetCancelToken( aToken );
                 handler.SetWaitForActionLock( true );
                 handler.SetExpectedTarget( aExpectedBranch, aExpectedHeadOid );

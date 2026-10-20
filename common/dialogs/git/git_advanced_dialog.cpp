@@ -323,6 +323,13 @@ void GIT_ADVANCED_DIALOG::syncListener()
 }
 
 
+void GIT_ADVANCED_DIALOG::ShowTransferProgress( const wxString& aText )
+{
+    if( m_pane )
+        m_pane->ShowTransferProgress( aText );
+}
+
+
 void GIT_ADVANCED_DIALOG::ReloadPages()
 {
     syncListener();
@@ -557,11 +564,17 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
 
     bool started = m_fetch.Start(
             "git fetch",
-            [aCommon, outcome]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+            [aCommon, outcome, alive = m_fetch.Alive(), dialog = this]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
                 aCommon->ClearAuthFailure();
 
                 GIT_PULL_HANDLER handler( aCommon.get() );
+                handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
+                        alive,
+                        [dialog]( const wxString& aText )
+                        {
+                            dialog->ShowTransferProgress( aText );
+                        } ) );
                 handler.SetCancelToken( aToken );
                 handler.SetWaitForActionLock( true );
                 outcome->fetched = handler.PerformFetch();

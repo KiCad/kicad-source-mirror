@@ -81,6 +81,9 @@ public:
 
     void ReloadPages();
 
+    /// Show a line of transfer progress on the hosted commit panel's status line.
+    void ShowTransferProgress( const wxString& aText );
+
     /// Run a repository write under the action lock, then refresh every surface on success.
     /// Shows a busy message if the lock is held, or aError if the action returns false. Set
     /// aRewritesWorkingTree for operations that change the files the editors have open, so they

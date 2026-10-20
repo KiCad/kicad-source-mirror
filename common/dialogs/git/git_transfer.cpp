@@ -57,6 +57,39 @@ bool KIGIT::StartTransfer( const std::string& aLabel, std::function<void()> aWor
 }
 
 
+KIGIT_STATUS_REPORTER::KIGIT_STATUS_REPORTER( const std::weak_ptr<bool>&             aAlive,
+                                              std::function<void( const wxString& )> aShow ) :
+        PROGRESS_REPORTER_BASE( 1 ),
+        m_alive( aAlive ),
+        m_show( std::move( aShow ) )
+{
+}
+
+
+bool KIGIT_STATUS_REPORTER::updateUI()
+{
+    wxString text;
+
+    {
+        std::lock_guard<std::mutex> lock( m_mutex );
+        text = m_rptMessage;
+    }
+
+    if( text == m_lastShown )
+        return true;
+
+    m_lastShown = text;
+
+    KIGIT::CallIfAlive( m_alive,
+                        [show = m_show, text]()
+                        {
+                            show( text );
+                        } );
+
+    return true;
+}
+
+
 KIGIT_TRANSFER::~KIGIT_TRANSFER()
 {
     Cancel();
