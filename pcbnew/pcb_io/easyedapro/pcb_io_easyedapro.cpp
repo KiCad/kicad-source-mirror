@@ -137,11 +137,12 @@ BOARD* PCB_IO_EASYEDAPRO::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
         }
         else
         {
-            std::map<wxString, wxString> prjPcbNames = project.at( "pcbs" );
 
-            if( prjPcbNames.size() == 1 )
+            std::map<wxString, nlohmann::json> prjPcbData = project.at( "pcbs" );
+
+            if( prjPcbData.size() == 1 )
             {
-                pcbToLoad = prjPcbNames.begin()->first;
+                pcbToLoad = prjPcbData.begin()->first;
             }
             else
             {

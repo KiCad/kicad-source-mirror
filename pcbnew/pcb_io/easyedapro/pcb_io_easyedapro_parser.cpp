@@ -737,14 +737,18 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
 
         nlohmann::json polyData = padShape.at( 1 );
 
-        std::vector<std::unique_ptr<PCB_SHAPE>> results =
-                ParsePoly( aFootprint, polyData, true, false );
+        SHAPE_LINE_CHAIN contour = ParseContour( polyData, false );
+        wxASSERT( contour.PointCount() > 2 );
 
-        for( auto& shape : results )
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::POLY );
+
+        if( contour.PointCount() > 2 )
         {
+            contour.SetClosed( true );
+            shape->SetFilled( true );
+            shape->SetPolyShape( contour );
             shape->SetLayer( klayer );
             shape->SetWidth( 0 );
-
             shape->Move( -pad->GetPosition() );
 
             pad->AddPrimitive( PADSTACK::ALL_LAYERS, shape.release() );

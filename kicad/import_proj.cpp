@@ -182,10 +182,6 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
     {
         nlohmann::json project = EASYEDAPRO::ReadProjectOrDeviceFile( fname.GetFullPath() );
 
-        std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = project.at( "schematics" );
-        std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = project.at( "boards" );
-        std::map<wxString, wxString>                  prjPcbNames = project.at( "pcbs" );
-
         std::vector<IMPORT_PROJECT_DESC> toImport =
                 EASYEDAPRO::ProjectToSelectorDialog( project, false, false );
 

@@ -426,6 +426,9 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
             partUnits[line.at( 1 )] = ++totalUnits;
     }
 
+    if( totalUnits == 0 )
+        totalUnits = 1;
+
     symInfo.partUnits = partUnits;
     ksymbol->SetUnitCount( totalUnits, false );
 
