@@ -579,6 +579,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         if( subRef.IsEmpty() )
             subRef = LIB_SYMBOL::LetterSubReference( row + 1, 'A' );
 
+        // For empty names we only check letter reference for collsions, which means the user _could_
+        // end up with a collision if they name a unit with a digit, and then use the symbol in a
+        // schematic which uses .digit, -digit or _digit notation for units.  We'll leave that to ERC
+        // to catch.
+
         if( !seenSubRefs.insert( subRef.Upper() ).second )
         {
             m_delayedErrorMessage = wxString::Format( _( "The unit name '%s' is already in use." ), subRef );
