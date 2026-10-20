@@ -37,13 +37,6 @@ protected:
     void onApplyAndContinue( wxCommandEvent& event ) override;
 
 private:
-    enum ACTION
-    {
-        ACTION_KEEP_FIRST,
-        ACTION_KEEP_SECOND,
-        ACTION_JOIN
-    };
-
     void populateGrid();
     void applyResolutions();
 
@@ -52,5 +45,5 @@ private:
 private:
     SCH_EDIT_FRAME*                  m_frame;
     std::vector<FIELD_CASE_CONFLICT> m_conflicts;
-    std::vector<ACTION>              m_rowAction;
+    std::vector<int>                 m_rowAction;
 };
