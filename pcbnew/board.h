@@ -1350,6 +1350,11 @@ public:
         return m_netChainColors;
     }
 
+    void ClearNetChainColors()
+    {
+        m_netChainColors.clear();
+    }
+
     /**
      * Return the set of netname candidates for netclass assignment.
      */
