@@ -901,23 +901,22 @@ void FIELDS_TABLE_DATA_MODEL_BASE::RestoreUndoState( const wxString& aState )
     // empty vs. not-present
     m_dataStore.clear();
 
-    for( auto it = j.begin(); it != j.end(); ++it )
+    for( auto j_it = j.begin(); j_it != j.end(); ++j_it )
     {
-        KIID_PATH key( wxString::FromUTF8( it.key().c_str() ) );
-        auto&     fields = m_dataStore[key];
+        KIID_PATH                              key( wxString::FromUTF8( j_it.key().c_str() ) );
+        std::map<wxString, FIELD_STORE_VALUE>& fields = m_dataStore[key];
 
-        for( auto fit = it.value().begin(); fit != it.value().end(); ++fit )
+        for( auto j_field_it = j_it.value().begin(); j_field_it != j_it.value().end(); ++j_field_it )
         {
-            FIELD_STORE_VALUE& field = fields[wxString::FromUTF8( fit.key().c_str() )];
-            field.m_present = fit.value().at( "present" ).get<bool>();
-            field.m_baselinePresent = fit.value().at( "baseline_present" ).get<bool>();
+            FIELD_STORE_VALUE& field = fields[wxString::FromUTF8( j_field_it.key().c_str() )];
+            field.m_present = j_field_it.value().at( "present" ).get<bool>();
+            field.m_baselinePresent = j_field_it.value().at( "baseline_present" ).get<bool>();
 
-            for( const auto& [variant, state] : fit.value().at( "variants" ).items() )
+            for( const auto& [variant, state] : j_field_it.value().at( "variants" ).items() )
             {
-                field.m_variants[wxString::FromUTF8( variant )] = {
-                    wxString::FromUTF8( state.at( 0 ).get<std::string>() ),
-                    wxString::FromUTF8( state.at( 1 ).get<std::string>() )
-                };
+                field.m_variants[wxString::FromUTF8( variant )] =
+                                                            { wxString::FromUTF8( state.at( 0 ).get<std::string>() ),
+                                                              wxString::FromUTF8( state.at( 1 ).get<std::string>() ) };
             }
         }
     }
