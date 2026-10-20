@@ -785,7 +785,13 @@ BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate )
     PushResult result = handler.PerformPush();
 
     BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PushResult::Error ) );
-    BOOST_CHECK( !handler.GetErrorString().IsEmpty() );
+
+    // A reason that went missing reads back as the words "No error".
+    const std::vector<wxString>& errors = handler.GetErrorStrings();
+
+    BOOST_REQUIRE_EQUAL( errors.size(), 1u );
+    BOOST_CHECK_MESSAGE( !errors.front().EndsWith( wxS( "No error" ) ),
+                         "the refusal lost git's reason: " + errors.front().ToStdString() );
 
     git_repository_free( repo );
 }
