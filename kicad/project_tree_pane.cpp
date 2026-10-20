@@ -776,14 +776,15 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool can_delete = true;
     bool run_jobs = false;
 
-    bool vcs_has_repo = gitRepo() != nullptr;
-    bool vcs_can_init    = !vcs_has_repo;
-    bool vcs_can_set_remote = vcs_has_repo;
     bool gitIntegrationDisabled = Prj().GetLocalSettings().m_GitIntegrationDisabled;
+    bool vcs_enabled = !gitIntegrationDisabled;
+    bool vcs_has_repo = gitRepo() != nullptr;
+    bool vcs_can_init = vcs_enabled && !vcs_has_repo;
+    bool vcs_can_set_remote = vcs_enabled && vcs_has_repo;
     // Disable/Enable is a per-project preference toggle, so it's available whenever we
     // detected a repository for this project or integration is currently disabled.
     bool vcs_can_remove = vcs_has_repo || gitIntegrationDisabled;
-    bool vcs_can_switch  = vcs_has_repo;
+    bool vcs_can_switch = vcs_enabled && vcs_has_repo;
     bool vcs_menu        = Pgm().GetCommonSettings()->m_Git.enableGit;
 
     // Check if the libgit2 library is available via backend
