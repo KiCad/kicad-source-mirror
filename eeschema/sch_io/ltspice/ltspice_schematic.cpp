@@ -32,6 +32,7 @@
 #include <wx/tokenzr.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <page_info.h>
 #include <project.h>
@@ -222,6 +223,40 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, cons
             aReporter->Report( e.What(), RPT_SEVERITY_ERROR );
         }
     }
+
+    // Fix label casing
+    std::set<SCH_SCREEN*> visitedScreens;
+
+    std::function<void( SCH_SCREEN*, const std::map<wxString, wxString>& )> fixLabelCase;
+    fixLabelCase = [&]( SCH_SCREEN* aScreen, const std::map<wxString, wxString>& aLabelMap )
+    {
+        for( SCH_ITEM* item : aScreen->Items() )
+        {
+            if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item ) )
+            {
+                SCH_SCREEN* sheetScreen = sheet->GetScreen();
+
+                if( visitedScreens.contains( sheetScreen ) )
+                    continue;
+
+                visitedScreens.insert( sheetScreen );
+
+                std::map<wxString, wxString> childLabelMap;
+
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                    childLabelMap[pin->GetText().Lower()] = pin->GetText();
+
+                fixLabelCase( sheetScreen, childLabelMap );
+            }
+            else if( SCH_LABEL_BASE* lbl = dynamic_cast<SCH_LABEL_BASE*>( item ) )
+            {
+                if( aLabelMap.contains( lbl->GetText().Lower() ) )
+                    lbl->SetText( aLabelMap.at( lbl->GetText().Lower() ) );
+            }
+        }
+    };
+
+    fixLabelCase( aRootSheet->GetScreen(), {} );
 
     SCH_SHEET_LIST sheets = aSchematic->BuildUnorderedSheetList();
 
