@@ -297,7 +297,9 @@ bool RenderSceneToPng( const DIFF_SCENE& aScene, const wxString& aOutputPath,
     for( CATEGORY cat : PAINT_ORDER )
         renderShapes( plotter, ShapesFor( scene, cat ) );
 
-    plotter.EndPlot();
+    if( !plotter.EndPlot() )
+        return false;
+
     return true;
 }
 

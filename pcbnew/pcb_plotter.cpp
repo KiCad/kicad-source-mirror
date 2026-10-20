@@ -124,8 +124,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
     LSEQ layersToPlot;
     LSEQ commonLayers;
 
-    const bool isPdfMultiPage =
-            ( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle );
+    const bool isPdfMultiPage = ( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle );
 
     if( aOutputPathIsSingle && !m_plotOpts.GetDXFMultiLayeredExportOption() && !isPdfMultiPage )
     {
@@ -140,7 +139,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         commonLayers = aCommonLayers;
     }
 
-    int finalPageCount = 0;
+    int                                            finalPageCount = 0;
     std::vector<std::pair<PCB_LAYER_ID, wxString>> layersToExport;
 
     // Skip the disabled copper layers and build the layer ID -> layer name mapping for plotter
@@ -290,14 +289,14 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
             }
 
             // last page
-            if( (plot_format != PLOT_FORMAT::PDF && plot_format != PLOT_FORMAT::DXF)
-                    || (!m_plotOpts.m_PDFSingle && !m_plotOpts.GetDXFMultiLayeredExportOption())
-                    || i == aLayersToPlot.size() - 1
-                    || pageNum == finalPageCount )
+            if( ( plot_format != PLOT_FORMAT::PDF && plot_format != PLOT_FORMAT::DXF )
+                || ( !m_plotOpts.m_PDFSingle && !m_plotOpts.GetDXFMultiLayeredExportOption() )
+                || i == aLayersToPlot.size() - 1
+                || pageNum == finalPageCount )
             {
                 try
                 {
-                    plotter->EndPlot();
+                    success &= plotter->EndPlot();
                 }
                 catch( ... )
                 {

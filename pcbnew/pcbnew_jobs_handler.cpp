@@ -2290,13 +2290,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     }
 
     PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName, sheetPath );
+    bool     success = false;
 
     if( plotter )
     {
         PlotBoardLayers( brd, plotter, aGerberJob->m_plotLayerSequence, plotOpts );
-        plotter->EndPlot();
+        success = plotter->EndPlot();
     }
-    else
+
+    if( !success )
     {
         m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;

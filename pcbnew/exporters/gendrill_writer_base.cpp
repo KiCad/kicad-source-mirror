@@ -840,10 +840,10 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         max_line_len = std::max( max_line_len, text_len + plot_diam );
     }
 
-    plotter->EndPlot();
+    bool success = plotter->EndPlot();
     delete plotter;
 
-    return true;
+    return success;
 }
 
 
