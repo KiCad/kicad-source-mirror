@@ -44,7 +44,7 @@ bool init_unit_test()
 
     boost::unit_test::framework::master_test_suite().p_name.value = "Common library module tests";
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__ )
     wxApp::SetInstance( new wxApp );
 #endif
 

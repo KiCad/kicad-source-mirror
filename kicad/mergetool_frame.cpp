@@ -99,7 +99,7 @@ int MERGETOOL_FRAME::RunMerge()
                                                             m_paths.output, /* interactive */ true,
                                                             singleFile, &reporter );
 
-    if( reporter.HasMessage() )
+    if( exitCode != CLI::EXIT_CODES::ERR_CANCELLED && reporter.HasMessage() )
     {
         // Surface the kiface's diagnostics to the terminal so a `git mergetool`
         // invocation can see what happened even when the dialog was dismissed.

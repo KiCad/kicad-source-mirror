@@ -3242,8 +3242,6 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
 
-    // A cancelled dialog leaves plan unresolved and falls through to the
-    // marker flow below.
     if( aInteractive && !plan.Resolved() )
     {
         if( !Pgm().IsGUI() )
@@ -3337,8 +3335,11 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
 
-        if( dlg.ShowModal() == wxID_APPLY )
-            plan = dlg.GetResolvedPlan();
+        // Cancelling leaves the conflicts unresolved and the files untouched.
+        if( dlg.ShowModal() != wxID_APPLY )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        plan = dlg.GetResolvedPlan();
     }
 
     // Snapshot of the plan before the applier moves it; drives the

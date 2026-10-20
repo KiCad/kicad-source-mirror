@@ -40,6 +40,9 @@ namespace CLI
         /// No plugin for the requested face recognized the input file format.  Used quietly by the
         /// import jobs so the top-level import command can probe the other face before failing.
         static const int ERR_UNKNOWN_FILE_FORMAT = 7;
+
+        /// The user cancelled the operation.
+        static const int ERR_CANCELLED = 8;
     };
 }
 

@@ -18,6 +18,7 @@
  */
 
 #include <widgets/git_commit_pane.h>
+#include <cli/exit_codes.h>
 #include <dialogs/git/git_advanced_dialog.h>
 #include <dialogs/git/git_status_entries.h>
 #include <frame_type.h>
@@ -2322,7 +2323,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
             if( rc != 0 )
             {
                 // Cancelled or failed. Offer the choices for this file again.
-                if( reporter.HasMessage() )
+                if( rc != CLI::EXIT_CODES::ERR_CANCELLED && reporter.HasMessage() )
                     DisplayErrorMessage( this, _( "The merge tool did not produce a result." ),
                                          reporter.GetMessages() );
 

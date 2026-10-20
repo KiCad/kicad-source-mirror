@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,8 +57,11 @@ DIALOG_KICAD_MERGE_3WAY_BASE::DIALOG_KICAD_MERGE_3WAY_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* sbResolutionBox;
 	sbResolutionBox = new wxStaticBoxSizer( new wxStaticBox( m_panelResolution, wxID_ANY, _("Pick a side") ), wxHORIZONTAL );
 
-	m_radioOurs = new wxRadioButton( sbResolutionBox->GetStaticBox(), wxID_ANY, _("Ours"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_radioOurs->SetValue( true );
+	m_radioUnresolved = new wxRadioButton( sbResolutionBox->GetStaticBox(), wxID_ANY, _("Unresolved"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_radioUnresolved->SetValue( true );
+	sbResolutionBox->Add( m_radioUnresolved, 0, wxALL, 5 );
+
+	m_radioOurs = new wxRadioButton( sbResolutionBox->GetStaticBox(), wxID_ANY, _("Ours"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbResolutionBox->Add( m_radioOurs, 0, wxALL, 5 );
 
 	m_radioTheirs = new wxRadioButton( sbResolutionBox->GetStaticBox(), wxID_ANY, _("Theirs"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -95,6 +98,7 @@ DIALOG_KICAD_MERGE_3WAY_BASE::DIALOG_KICAD_MERGE_3WAY_BASE( wxWindow* parent, wx
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnClose ) );
 	m_listConflicts->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnConflictSelected ), NULL, this );
+	m_radioUnresolved->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
 	m_radioOurs->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
 	m_radioTheirs->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
 	m_radioAncestor->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
@@ -107,6 +111,7 @@ DIALOG_KICAD_MERGE_3WAY_BASE::~DIALOG_KICAD_MERGE_3WAY_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnClose ) );
 	m_listConflicts->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnConflictSelected ), NULL, this );
+	m_radioUnresolved->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
 	m_radioOurs->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
 	m_radioTheirs->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );
 	m_radioAncestor->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_KICAD_MERGE_3WAY_BASE::OnResolutionChanged ), NULL, this );

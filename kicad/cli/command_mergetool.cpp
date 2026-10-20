@@ -51,6 +51,7 @@ static int translateExitCode( int aKicadExit )
     switch( aKicadExit )
     {
     case SUCCESS:                       return 0;
+    case ERR_CANCELLED: return 1;
     case ERR_RC_VIOLATIONS:             return 2;   // unresolved conflicts
     case ERR_INVALID_INPUT_FILE:
     case ERR_INVALID_OUTPUT_CONFLICT:   return 3;   // I/O or parse error

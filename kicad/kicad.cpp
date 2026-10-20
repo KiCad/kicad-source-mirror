@@ -441,6 +441,9 @@ bool PGM_KICAD::OnPgmInit()
 
     if( mergetoolFrame )
     {
+        // Closing the host frame must not replace the merge result with an exit code of zero.
+        App().SetExitOnFrameDelete( false );
+
         // Stay hidden; the merge dialog is its own modal. The frame just needs
         // to be the wxApp top window so the modal has a parent and the wxApp
         // loop has something to drive. Defer the run via CallAfter so the

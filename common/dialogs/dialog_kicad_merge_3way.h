@@ -38,17 +38,15 @@ class WIDGET_DIFF_CANVAS;
 
 
 /**
- * 3-way merge resolution dialog (Phase 8).
+ * Resolve a three-way merge by choosing a version for each conflicting item.
  *
  * Takes a MERGE_PLAN with unresolved items and lets the user pick which side
  * to keep for each. Stores the per-item resolution choice back into the
  * plan. On Apply, the plan is returned via GetResolvedPlan() with every
  * conflict assigned a concrete kind (TAKE_OURS / TAKE_THEIRS / TAKE_ANCESTOR).
  *
- * Future revision: replace the text detail view with a GAL canvas plus the
- * three ancestor/ours/theirs thumbnails the plan calls for. Today the dialog
- * is text-based so the resolution workflow can run headlessly under Cairo
- * for the mergetool app even on systems without OpenGL.
+ * Unanswered conflicts stay unresolved. The canvas previews a version only
+ * after the user selects it.
  */
 class DIALOG_KICAD_MERGE_3WAY : public DIALOG_KICAD_MERGE_3WAY_BASE
 {
@@ -122,7 +120,7 @@ private:
     /// side selection changes.
     void rebuildCanvas();
 
-    SIDE activeSide() const;
+    std::optional<SIDE> activeSide() const;
 
     /// The item's name from the editor, or aFallback when there is none.
     wxString describe( const KIID_PATH& aId, const wxString& aFallback ) const;

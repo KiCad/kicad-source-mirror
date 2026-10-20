@@ -106,6 +106,9 @@ DIALOG_KICAD_MERGE_3WAY::DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent,
         m_plan( aPlan ),
         m_context( std::move( aContext ) )
 {
+    // Choices belong to this merge, so do not restore them from another dialog.
+    OptOut( this );
+
     // Splice a GAL-backed conflict viewer into the resolution panel's sizer
     // when one is present. The original .fbp emits a text-only layout; we
     // augment it programmatically here rather than re-authoring the .fbp.
@@ -131,9 +134,11 @@ DIALOG_KICAD_MERGE_3WAY::DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent,
     }
     else
     {
-        m_labelDetail->SetLabel( wxString::Format( _( "%zu conflict(s) require resolution." ),
-                                                   m_conflictActionIndex.size() ) );
+        m_listConflicts->SetSelection( 0 );
+        showConflict( 0 );
     }
+
+    m_sdbSizerApply->Enable( KICAD_DIFF::CollectUnresolvedConflicts( m_plan, m_conflictActionIndex ).empty() );
 
     Layout();
 
@@ -205,10 +210,7 @@ void DIALOG_KICAD_MERGE_3WAY::OnCancel( wxCommandEvent& aEvent )
 
 void DIALOG_KICAD_MERGE_3WAY::OnApply( wxCommandEvent& aEvent )
 {
-    // Only mark resolved if every conflict has a concrete TAKE_* choice.
-    // KEEP / MERGE_PROPS at this point mean the user hasn't actually picked
-    // a side; without this guard the dialog would silently accept the
-    // engine's default resolution and lose user intent.
+    // Every conflict needs an explicit choice before the plan can be applied.
     const std::vector<KIID_PATH> stillUnresolved =
             KICAD_DIFF::CollectUnresolvedConflicts( m_plan, m_conflictActionIndex );
 
@@ -244,21 +246,32 @@ void DIALOG_KICAD_MERGE_3WAY::OnResolutionChanged( wxCommandEvent& aEvent )
     std::size_t              actionIdx = m_conflictActionIndex[m_currentConflict];
     KICAD_DIFF::ITEM_RESOLUTION& action = m_plan.actions[actionIdx];
 
-    if( m_radioOurs->GetValue() )          action.kind = KICAD_DIFF::ITEM_RES::TAKE_OURS;
-    else if( m_radioTheirs->GetValue() )   action.kind = KICAD_DIFF::ITEM_RES::TAKE_THEIRS;
-    else if( m_radioAncestor->GetValue() ) action.kind = KICAD_DIFF::ITEM_RES::TAKE_ANCESTOR;
+    if( m_radioUnresolved->GetValue() )
+        action.kind = KICAD_DIFF::ITEM_RES::KEEP;
+    else if( m_radioOurs->GetValue() )
+        action.kind = KICAD_DIFF::ITEM_RES::TAKE_OURS;
+    else if( m_radioTheirs->GetValue() )
+        action.kind = KICAD_DIFF::ITEM_RES::TAKE_THEIRS;
+    else if( m_radioAncestor->GetValue() )
+        action.kind = KICAD_DIFF::ITEM_RES::TAKE_ANCESTOR;
 
-    // Side selection also drives which geometry the canvas displays so the
-    // user can preview each candidate's context.
-    rebuildCanvas();
+    m_sdbSizerApply->Enable( KICAD_DIFF::CollectUnresolvedConflicts( m_plan, m_conflictActionIndex ).empty() );
+    showConflict( m_currentConflict );
 }
 
 
-DIALOG_KICAD_MERGE_3WAY::SIDE DIALOG_KICAD_MERGE_3WAY::activeSide() const
+std::optional<DIALOG_KICAD_MERGE_3WAY::SIDE> DIALOG_KICAD_MERGE_3WAY::activeSide() const
 {
-    if( m_radioTheirs->GetValue() )   return SIDE::THEIRS;
-    if( m_radioAncestor->GetValue() ) return SIDE::ANCESTOR;
-    return SIDE::OURS;
+    if( m_radioOurs->GetValue() )
+        return SIDE::OURS;
+
+    if( m_radioTheirs->GetValue() )
+        return SIDE::THEIRS;
+
+    if( m_radioAncestor->GetValue() )
+        return SIDE::ANCESTOR;
+
+    return std::nullopt;
 }
 
 
@@ -267,10 +280,19 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
     if( !m_canvas )
         return;
 
+    const std::optional<SIDE> side = activeSide();
+
+    if( !side )
+    {
+        m_canvas->SetContextItems( {} );
+        m_canvas->SetScene( {} );
+        return;
+    }
+
     KICAD_DIFF::DIFF_SCENE scene;
     const std::map<KIID_PATH, BOX2I>* primaryBBoxes = nullptr;
 
-    switch( activeSide() )
+    switch( *side )
     {
     case SIDE::OURS:
         scene.referenceGeometry = m_context.oursGeometry;
@@ -330,7 +352,7 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
     // The editor's painter draws the real items, so text reads as text. The canvas drops the
     // flattened geometry once it has them, and keeps the conflict highlight from the scene.
     if( m_context.drawSide )
-        m_context.drawSide( *m_canvas, activeSide(), highlight );
+        m_context.drawSide( *m_canvas, *side, highlight );
 
     m_canvas->HighlightChange( highlight );
 
@@ -389,12 +411,19 @@ void DIALOG_KICAD_MERGE_3WAY::showConflict( int aIndex )
 
     m_labelDetail->SetLabel( wxString::Format( _( "Conflict on %s" ), describe( action.id, action.id.AsString() ) ) );
 
-    m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action ) );
+    // Select one radio explicitly. Native radio groups cannot always clear every button.
+    switch( action.kind )
+    {
+    case KICAD_DIFF::ITEM_RES::TAKE_OURS: m_radioOurs->SetValue( true ); break;
+    case KICAD_DIFF::ITEM_RES::TAKE_THEIRS: m_radioTheirs->SetValue( true ); break;
+    case KICAD_DIFF::ITEM_RES::TAKE_ANCESTOR: m_radioAncestor->SetValue( true ); break;
+    default: m_radioUnresolved->SetValue( true ); break;
+    }
 
-    // Sync the radio buttons to the current resolution.
-    m_radioOurs->SetValue(     action.kind == KICAD_DIFF::ITEM_RES::TAKE_OURS );
-    m_radioTheirs->SetValue(   action.kind == KICAD_DIFF::ITEM_RES::TAKE_THEIRS );
-    m_radioAncestor->SetValue( action.kind == KICAD_DIFF::ITEM_RES::TAKE_ANCESTOR );
+    if( m_radioUnresolved->GetValue() )
+        m_textDetail->SetValue( _( "Unresolved. Pick Ours, Theirs, or Ancestor to preview and keep that version." ) );
+    else
+        m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action ) );
 
     rebuildCanvas();
 }

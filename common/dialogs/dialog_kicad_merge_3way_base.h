@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,6 +45,7 @@ class DIALOG_KICAD_MERGE_3WAY_BASE : public DIALOG_SHIM
 		wxPanel* m_panelResolution;
 		wxStaticText* m_labelDetail;
 		wxTextCtrl* m_textDetail;
+		wxRadioButton* m_radioUnresolved;
 		wxRadioButton* m_radioOurs;
 		wxRadioButton* m_radioTheirs;
 		wxRadioButton* m_radioAncestor;
