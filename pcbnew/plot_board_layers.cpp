@@ -567,7 +567,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                         if( sameXYClearance )
                         {
                             int originalRadius = pad->GetRoundRectCornerRadius( aLayer );
-                            int newRadius      = std::max( 0, originalRadius + mask_clearance );
+                            int newRadius      = std::max( 0, originalRadius + mask_clearance + width_adj / 2 );
                             pad->SetSize( aLayer, padPlotsSize );
                             pad->SetRoundRectCornerRadius( aLayer, newRadius );
                         }
