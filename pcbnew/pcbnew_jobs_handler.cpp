@@ -2825,11 +2825,6 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
-    if( plotOpts.GetSketchPadsOnFabLayers() )
-    {
-        plotOpts.SetPlotPadNumbers( true );
-    }
-
     if( !PlotFootprintToSVG( *aFootprint, *Pgm().GetSettingsManager().GetProject( "" ), &aSvgJob->GetVarOverrides(),
                              plotOpts, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
                              outputFile.GetFullPath(), m_reporter ) )
