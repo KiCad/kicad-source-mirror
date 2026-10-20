@@ -486,6 +486,8 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
     auto outcome = std::make_shared<OUTCOME>();
 
+    m_dialog->SetPaneTransferBusy( true, _( "Pushing..." ) );
+
     bool started = m_push.Start(
             "git force push",
             [aCommon, outcome, aExpectedBranch, aExpectedHeadOid, alive = m_push.Alive(),
@@ -526,6 +528,8 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                 if( !m_dialog->SessionStillCurrent() )
                     return;
 
+                m_dialog->SetPaneTransferBusy( false );
+
                 if( outcome->cancelled || outcome->result == PushResult::Success )
                     return;
 
@@ -545,5 +549,8 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
             } );
 
     if( !started )
+    {
+        m_dialog->SetPaneTransferBusy( false );
         DisplayInfoMessage( this, _( "Could not start the force push." ) );
+    }
 }

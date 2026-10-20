@@ -323,6 +323,13 @@ void GIT_ADVANCED_DIALOG::syncListener()
 }
 
 
+void GIT_ADVANCED_DIALOG::SetPaneTransferBusy( bool aBusy, const wxString& aStatus )
+{
+    if( m_pane )
+        m_pane->SetTransferBusy( aBusy, aStatus );
+}
+
+
 void GIT_ADVANCED_DIALOG::ShowTransferProgress( const wxString& aText )
 {
     if( m_pane )
@@ -518,6 +525,7 @@ void GIT_ADVANCED_DIALOG::onFetch()
 
     m_fetchButton->SetLabel( _( "Fetching..." ) );
     m_fetchButton->Disable();
+    SetPaneTransferBusy( true, _( "Fetching..." ) );
     Layout();
 
     m_fetchQuery.Run(
@@ -602,6 +610,7 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
 
                 m_fetchButton->SetLabel( _( "Fetch" ) );
                 m_fetchButton->Enable();
+                SetPaneTransferBusy( false );
                 Layout();
 
                 if( outcome->cancelled || outcome->fetched )
@@ -620,6 +629,7 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
     {
         m_fetchButton->SetLabel( _( "Fetch" ) );
         m_fetchButton->Enable();
+        SetPaneTransferBusy( false );
         Layout();
         DisplayInfoMessage( this, _( "Could not start the fetch." ) );
     }

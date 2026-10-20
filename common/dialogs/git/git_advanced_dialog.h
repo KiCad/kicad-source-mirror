@@ -81,6 +81,10 @@ public:
 
     void ReloadPages();
 
+    /// Put the hosted commit panel into, or out of, its transfer state, for a transfer this
+    /// window or one of its pages started.
+    void SetPaneTransferBusy( bool aBusy, const wxString& aStatus = wxEmptyString );
+
     /// Show a line of transfer progress on the hosted commit panel's status line.
     void ShowTransferProgress( const wxString& aText );
 

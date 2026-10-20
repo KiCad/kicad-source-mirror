@@ -67,6 +67,11 @@ public:
     /// Read the project's git status and repopulate the list.
     void RefreshFileList();
 
+    /// Put the panel into the state it uses while a transfer runs, for one started elsewhere.
+    /// The advanced window hosts this panel, so a fetch or a force push begun from there must
+    /// disable the same controls. A transfer this panel started keeps the state until it ends.
+    void SetTransferBusy( bool aBusy, const wxString& aStatus = wxEmptyString );
+
     /// Show a line of transfer progress. Called from the UI thread by a KIGIT_STATUS_REPORTER.
     void ShowTransferProgress( const wxString& aText );
 

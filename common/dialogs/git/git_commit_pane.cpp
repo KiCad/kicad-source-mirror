@@ -1931,6 +1931,15 @@ void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std
 }
 
 
+void GIT_COMMIT_PANE::SetTransferBusy( bool aBusy, const wxString& aStatus )
+{
+    if( !aBusy && m_transfer.IsBusy() )
+        return;
+
+    setBusy( aBusy, aStatus );
+}
+
+
 void GIT_COMMIT_PANE::ShowTransferProgress( const wxString& aText )
 {
     m_frame->SetStatusText( aText );
