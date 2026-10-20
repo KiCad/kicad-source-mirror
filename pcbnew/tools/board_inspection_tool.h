@@ -103,8 +103,6 @@ public:
         return !m_currentlyHighlighted.empty();
     }
 
-    wxString m_highlightedNetChain;
-
 private:
     /// Diff the board at aOtherPath against the live one and show the dialog.
     int showBoardComparison( const wxString& aOtherPath, const wxString& aProjectPath,
@@ -134,8 +132,7 @@ private:
     void reportCompileError( REPORTER* r );
     void reportHeader( const wxString& aTitle, BOARD_ITEM* a, REPORTER* r );
     void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, REPORTER* r );
-    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer,
-                       REPORTER* r );
+    void reportHeader( const wxString& aTitle, BOARD_ITEM* a, BOARD_ITEM* b, PCB_LAYER_ID aLayer, REPORTER* r );
 
     FOOTPRINT_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
@@ -144,8 +141,10 @@ private:
     void filterCollectorForInspection( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aPos );
 
     BOARD_ITEM* pickItemForInspection( const TOOL_EVENT& aEvent, const wxString& aPrompt,
-                                       const std::vector<KICAD_T>& aTypes,
-                                       BOARD_ITEM* aLockedHighlight );
+                                       const std::vector<KICAD_T>& aTypes, BOARD_ITEM* aLockedHighlight );
+
+public:
+    wxString            m_HighlightedNetChain;
 
 private:
     PCB_EDIT_FRAME*     m_frame;    // Pointer to the currently used edit frame.
