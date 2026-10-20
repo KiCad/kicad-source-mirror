@@ -363,7 +363,7 @@ BOOST_AUTO_TEST_CASE( CollectUnresolved_KeepIsUnresolved )
 }
 
 
-BOOST_AUTO_TEST_CASE( CollectUnresolved_MergePropsIsUnresolved )
+BOOST_AUTO_TEST_CASE( CollectUnresolved_MergePropsIsADecision )
 {
     const KIID_PATH idA = MakePath( 3200 );
 
@@ -371,9 +371,7 @@ BOOST_AUTO_TEST_CASE( CollectUnresolved_MergePropsIsUnresolved )
     ITEM_RESOLUTION a; a.id = idA; a.kind = ITEM_RES::MERGE_PROPS;
     plan.actions.push_back( a );
 
-    auto unresolved = CollectUnresolvedConflicts( plan, { 0 } );
-    BOOST_REQUIRE_EQUAL( unresolved.size(), 1u );
-    BOOST_CHECK( unresolved[0] == idA );
+    BOOST_CHECK( CollectUnresolvedConflicts( plan, { 0 } ).empty() );
 }
 
 

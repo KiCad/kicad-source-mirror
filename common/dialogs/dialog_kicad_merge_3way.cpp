@@ -249,32 +249,29 @@ void DIALOG_KICAD_MERGE_3WAY::OnResolutionChanged( wxCommandEvent& aEvent )
     std::size_t              actionIdx = m_conflictActionIndex[m_currentConflict];
     KICAD_DIFF::ITEM_RESOLUTION& action = m_plan.actions[actionIdx];
 
-    if( m_radioUnresolved->GetValue() )
-        action.kind = KICAD_DIFF::ITEM_RES::KEEP;
-    else if( m_radioOurs->GetValue() )
+    if( m_radioOurs->GetValue() )
         action.kind = KICAD_DIFF::ITEM_RES::TAKE_OURS;
     else if( m_radioTheirs->GetValue() )
         action.kind = KICAD_DIFF::ITEM_RES::TAKE_THEIRS;
     else if( m_radioAncestor->GetValue() )
         action.kind = KICAD_DIFF::ITEM_RES::TAKE_ANCESTOR;
+    else if( m_hasMergedEdit[m_currentConflict] )
+        action.kind = KICAD_DIFF::ITEM_RES::MERGE_PROPS;
 
     m_sdbSizerApply->Enable( KICAD_DIFF::CollectUnresolvedConflicts( m_plan, m_conflictActionIndex ).empty() );
     showConflict( m_currentConflict );
 }
 
 
-std::optional<DIALOG_KICAD_MERGE_3WAY::SIDE> DIALOG_KICAD_MERGE_3WAY::activeSide() const
+DIALOG_KICAD_MERGE_3WAY::SIDE DIALOG_KICAD_MERGE_3WAY::activeSide() const
 {
-    if( m_radioOurs->GetValue() )
-        return SIDE::OURS;
-
     if( m_radioTheirs->GetValue() )
         return SIDE::THEIRS;
 
     if( m_radioAncestor->GetValue() )
         return SIDE::ANCESTOR;
 
-    return std::nullopt;
+    return SIDE::OURS;
 }
 
 
@@ -283,19 +280,10 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
     if( !m_canvas )
         return;
 
-    const std::optional<SIDE> side = activeSide();
-
-    if( !side )
-    {
-        m_canvas->SetContextItems( {} );
-        m_canvas->SetScene( {} );
-        return;
-    }
-
     KICAD_DIFF::DIFF_SCENE scene;
     const std::map<KIID_PATH, BOX2I>* primaryBBoxes = nullptr;
 
-    switch( *side )
+    switch( activeSide() )
     {
     case SIDE::OURS:
         scene.referenceGeometry = m_context.oursGeometry;
@@ -355,7 +343,7 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
     // The editor's painter draws the real items, so text reads as text. The canvas drops the
     // flattened geometry once it has them, and keeps the conflict highlight from the scene.
     if( m_context.drawSide )
-        m_context.drawSide( *m_canvas, *side, highlight );
+        m_context.drawSide( *m_canvas, activeSide(), highlight );
 
     m_canvas->HighlightChange( highlight );
 
@@ -388,12 +376,14 @@ void DIALOG_KICAD_MERGE_3WAY::buildList()
 {
     m_listConflicts->Clear();
     m_conflictActionIndex.clear();
+    m_hasMergedEdit.clear();
 
     for( const KICAD_DIFF::CONFLICT_LIST_ENTRY& entry
                 : KICAD_DIFF::BuildConflictList( m_plan ) )
     {
         m_listConflicts->Append( describe( entry.id, entry.label ) );
         m_conflictActionIndex.push_back( entry.actionIndex );
+        m_hasMergedEdit.push_back( m_plan.actions[entry.actionIndex].kind == KICAD_DIFF::ITEM_RES::MERGE_PROPS );
     }
 }
 
@@ -412,9 +402,13 @@ void DIALOG_KICAD_MERGE_3WAY::showConflict( int aIndex )
     std::size_t actionIdx = m_conflictActionIndex[aIndex];
     const KICAD_DIFF::ITEM_RESOLUTION& action = m_plan.actions[actionIdx];
 
-    m_labelDetail->SetLabel( wxString::Format( _( "Conflict on %s" ), describe( action.id, action.id.AsString() ) ) );
+    const bool offersMerge = m_hasMergedEdit[aIndex];
 
-    // Select one radio explicitly. Native radio groups cannot always clear every button.
+    // A native radio group cannot clear every button, so the fourth one holds whatever is
+    // not a side.
+    m_radioUnresolved->SetLabel( offersMerge ? _( "Merge both changes" ) : _( "Not decided yet" ) );
+    m_radioUnresolved->Enable( offersMerge );
+
     switch( action.kind )
     {
     case KICAD_DIFF::ITEM_RES::TAKE_OURS: m_radioOurs->SetValue( true ); break;
@@ -423,10 +417,35 @@ void DIALOG_KICAD_MERGE_3WAY::showConflict( int aIndex )
     default: m_radioUnresolved->SetValue( true ); break;
     }
 
-    if( m_radioUnresolved->GetValue() )
-        m_textDetail->SetValue( _( "Unresolved. Pick Ours, Theirs, or Ancestor to preview and keep that version." ) );
+    // The canvas never draws the combined result, so say which document it is showing.
+    wxString shown;
+
+    switch( activeSide() )
+    {
+    case SIDE::OURS: shown = _( "showing your version" ); break;
+    case SIDE::THEIRS: shown = _( "showing their version" ); break;
+    case SIDE::ANCESTOR: shown = _( "showing the common version" ); break;
+    }
+
+    m_labelDetail->SetLabel(
+            wxString::Format( _( "Conflict on %s, %s" ), describe( action.id, action.id.AsString() ), shown ) );
+
+    if( action.kind == KICAD_DIFF::ITEM_RES::MERGE_PROPS )
+    {
+        // The detail box does not wrap, so the lines are broken here.
+        m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action )
+                                + _( "\n\nBoth sides changed this item, and their edits are combined.\n"
+                                     "Where both changed the same thing, your version is kept.\n"
+                                     "Pick a side to take that version whole instead." ) );
+    }
+    else if( m_radioUnresolved->GetValue() )
+    {
+        m_textDetail->SetValue( _( "Pick Ours, Theirs, or Ancestor to preview and keep that version." ) );
+    }
     else
+    {
         m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action ) );
+    }
 
     rebuildCanvas();
 }

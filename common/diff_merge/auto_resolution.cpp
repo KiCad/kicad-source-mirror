@@ -200,8 +200,8 @@ CollectUnresolvedConflicts( const MERGE_PLAN&                aPlan,
 
         const ITEM_RESOLUTION& a = aPlan.actions[actionIdx];
 
-        if( a.kind != ITEM_RES::TAKE_OURS && a.kind != ITEM_RES::TAKE_THEIRS
-            && a.kind != ITEM_RES::TAKE_ANCESTOR )
+        if( a.kind != ITEM_RES::TAKE_OURS && a.kind != ITEM_RES::TAKE_THEIRS && a.kind != ITEM_RES::TAKE_ANCESTOR
+            && a.kind != ITEM_RES::MERGE_PROPS )
         {
             out.push_back( a.id );
         }

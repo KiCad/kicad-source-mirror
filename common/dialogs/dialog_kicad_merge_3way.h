@@ -123,13 +123,19 @@ private:
     /// side selection changes.
     void rebuildCanvas();
 
-    std::optional<SIDE> activeSide() const;
+    /// The side the canvas previews. Ours when none is picked, because a merge keeps ours
+    /// wherever both sides changed the same thing.
+    SIDE activeSide() const;
 
     /// The item's name from the editor, or aFallback when there is none.
     wxString describe( const KIID_PATH& aId, const wxString& aFallback ) const;
 
     KICAD_DIFF::MERGE_PLAN          m_plan;
     CONFLICT_CONTEXT                m_context;
+
+    /// True where the engine combined both sides' edits, in the order of m_conflictActionIndex.
+    /// Read before any choice is made, so picking a side does not retract the offer.
+    std::vector<bool>               m_hasMergedEdit;
 
     /// Indices into m_plan.actions matching the order of m_listConflicts.
     std::vector<std::size_t>        m_conflictActionIndex;
