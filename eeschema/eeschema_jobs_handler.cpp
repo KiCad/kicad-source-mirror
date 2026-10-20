@@ -19,6 +19,7 @@
  */
 
 #include "eeschema_jobs_handler.h"
+#include <diff_merge/merge_dispatch.h>
 #include <algorithm>
 #include <common.h>
 #include <pgm_base.h>
@@ -2911,7 +2912,6 @@ int EESCHEMA_JOBS_HANDLER::JobSymDiff( JOB* aJob )
 // Dispatched from the project manager / PR-review dialog via KIWAY.
 // ============================================================================
 #include <dialogs/dialog_kicad_diff.h>
-#include <diff_merge/merge_dispatch.h>
 #include <diff_merge/sch_diff_canvas_context.h>
 #include <widgets/widget_diff_canvas.h>
 #include <diff_merge/sch_geometry_extractor.h>
@@ -3233,6 +3233,18 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
+    auto loadedVersion = []( const SCHEMATIC* aSch )
+    {
+        return aSch->RootScreen() ? aSch->RootScreen()->GetFileFormatVersionAtLoad() : 0;
+    };
+
+    const wxString formatNotice =
+            KICAD_DIFF::OlderFormatNotice( loadedVersion( ancestor.doc.get() ), loadedVersion( ours.doc.get() ),
+                                           loadedVersion( theirs.doc.get() ), SEXPR_SCHEMATIC_FILE_VERSION );
+
+    if( !formatNotice.IsEmpty() )
+        m_reporter->Report( formatNotice + wxS( "\n" ), RPT_SEVERITY_WARNING );
+
     KICAD_DIFF::SCH_DIFFER ourDiff( ancestor.doc.get(), ours.doc.get() );
     KICAD_DIFF::SCH_DIFFER theirDiff( ancestor.doc.get(), theirs.doc.get() );
 
@@ -3254,6 +3266,7 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 
         const KICAD_DIFF::DIFF_COLOR_THEME        theme;
         DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
+        ctx.formatNotice = formatNotice;
 
         if( ancestor.doc )
             ctx.ancestorGeometry = KICAD_DIFF::ExtractSchematicGeometry( *ancestor.doc, theme.reference );

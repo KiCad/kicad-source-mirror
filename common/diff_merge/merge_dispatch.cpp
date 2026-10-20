@@ -28,6 +28,8 @@
 #include <kiface_ids.h>
 #include <kiway.h>
 
+#include <wx/translation.h>
+
 
 namespace KICAD_DIFF
 {
@@ -48,6 +50,19 @@ KIWAY::FACE_T faceForKind( DOC_KIND aKind )
     }
 }
 } // namespace
+
+
+wxString OlderFormatNotice( int aAncestorVersion, int aOursVersion, int aTheirsVersion, int aCurrentVersion )
+{
+    if( aAncestorVersion >= aCurrentVersion && aOursVersion >= aCurrentVersion && aTheirsVersion >= aCurrentVersion )
+    {
+        return wxEmptyString;
+    }
+
+    return _( "One of the files being merged was written by an older version of KiCad.\n\n"
+              "The merged file is written in the current file format, whichever side is kept. "
+              "KiCad cannot write the older format back." );
+}
 
 
 int DispatchMerge( KIWAY& aKiway, DOC_KIND aKind, const wxString& aAncestor, const wxString& aOurs,

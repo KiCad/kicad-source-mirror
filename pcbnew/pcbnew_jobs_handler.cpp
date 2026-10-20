@@ -19,6 +19,7 @@
  */
 
 #include <import_net_names.h>
+#include <diff_merge/merge_dispatch.h>
 #include <richio.h>
 #include <string_utils.h>
 #include <wx/crt.h>
@@ -4362,6 +4363,13 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
+    const wxString formatNotice =
+            KICAD_DIFF::OlderFormatNotice( ancestor->GetFileFormatVersionAtLoad(), ours->GetFileFormatVersionAtLoad(),
+                                           theirs->GetFileFormatVersionAtLoad(), SEXPR_BOARD_FILE_VERSION );
+
+    if( !formatNotice.IsEmpty() )
+        m_reporter->Report( formatNotice + wxS( "\n" ), RPT_SEVERITY_WARNING );
+
     KICAD_DIFF::PCB_DIFFER ourDiff( ancestor, ours );
     KICAD_DIFF::PCB_DIFFER theirDiff( ancestor, theirs );
 
@@ -4385,6 +4393,7 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
         // boards behind the conflict bbox highlight.
         const KICAD_DIFF::DIFF_COLOR_THEME        theme;
         DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
+        ctx.formatNotice = formatNotice;
         ctx.ancestorGeometry = KICAD_DIFF::ExtractBoardGeometry( *ancestor, theme.reference );
         ctx.oursGeometry = KICAD_DIFF::ExtractBoardGeometry( *ours, theme.reference );
         ctx.theirsGeometry = KICAD_DIFF::ExtractBoardGeometry( *theirs, theme.comparison );
@@ -4743,7 +4752,6 @@ int PCBNEW_JOBS_HANDLER::JobFpDiff( JOB* aJob )
 // Dispatched from the project manager / PR-review dialog via KIWAY.
 // ============================================================================
 #include <dialogs/dialog_kicad_diff.h>
-#include <diff_merge/merge_dispatch.h>
 #include <diff_merge/pcb_diff_canvas_context.h>
 #include <widgets/widget_diff_canvas.h>
 #include <diff_merge/pcb_geometry_extractor.h>

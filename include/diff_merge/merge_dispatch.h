@@ -46,6 +46,14 @@ namespace KICAD_DIFF
 struct DOCUMENT_DIFF;
 
 /**
+ * Empty when every side is already in the current file format. Otherwise the warning to give
+ * before the merge, because the result is written with the current writer whichever side the
+ * user keeps, and KiCad cannot write an older format back.
+ */
+KICOMMON_API wxString OlderFormatNotice( int aAncestorVersion, int aOursVersion, int aTheirsVersion,
+                                         int aCurrentVersion );
+
+/**
  * Run a 3-way document/library merge by calling the owning kiface's
  * KIFACE_MERGE_DOCUMENT function export (chosen from @p aKind). This is the
  * non-job bridge used by the CLI merge subcommands and the mergetool frame.

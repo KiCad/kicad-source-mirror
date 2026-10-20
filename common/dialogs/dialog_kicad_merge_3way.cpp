@@ -125,6 +125,9 @@ DIALOG_KICAD_MERGE_3WAY::DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent,
         m_panelResolution->Layout();
     }
 
+    if( !m_context.formatNotice.IsEmpty() )
+        m_labelIntro->SetLabel( m_labelIntro->GetLabel() + wxS( "\n\n" ) + m_context.formatNotice );
+
     buildList();
 
     if( m_conflictActionIndex.empty() )

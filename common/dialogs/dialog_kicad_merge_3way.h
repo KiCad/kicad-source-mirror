@@ -87,6 +87,9 @@ public:
         /// the one the conflict is on.
         std::function<void( WIDGET_DIFF_CANVAS&, SIDE, const std::optional<KIID_PATH>& )> drawSide;
 
+        /// Shown with the instructions when the merge cannot keep a side's file format.
+        wxString formatNotice;
+
         /// Name an item the way the editor would, so a conflict can be told from its
         /// neighbours. Left empty, or returning nothing, falls back to the item's identifier.
         std::function<wxString( const KIID_PATH& )> describeItem;
