@@ -2026,6 +2026,9 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
         TUNING_STATUS_VIEW_ITEM* statusItem = new TUNING_STATUS_VIEW_ITEM( aFrame );
 
+        // The unit type must be known before any value text is formatted
+        statusItem->SetIsTimeDomain( m_settings.m_isTimeDomain );
+
         if( m_tuningMode == DIFF_PAIR_SKEW )
         {
             if( m_settings.m_isTimeDomain )
@@ -2060,8 +2063,6 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                 }
             }
         }
-
-        statusItem->SetIsTimeDomain( m_settings.m_isTimeDomain );
 
         if( m_tuningMode == DIFF_PAIR_SKEW )
         {
