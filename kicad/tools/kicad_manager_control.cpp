@@ -491,6 +491,13 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
     Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
 
+    // The session attached when the project loaded, so it takes nothing more from the settings.
+    if( common )
+    {
+        common->SetUsername( dlg.GetUsername() );
+        common->SetSSHKey( dlg.GetRepoSSHPath() );
+    }
+
     if( dlg.GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
         Prj().GetLocalSettings().m_GitRepoType = "ssh";
     else if( dlg.GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS )
