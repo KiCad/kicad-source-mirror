@@ -769,9 +769,7 @@ SPIN_STYLE autoLabelOrientation( SCH_SCREEN* aScreen, VECTOR2I aLabelPos, SPIN_S
             VECTOR2I minPt = wireBox.GetOrigin();
             VECTOR2I maxPt = wireBox.GetEnd();
 
-            EDA_ANGLE wireAngle = wire->Angle().Normalized();
-
-            if( wireAngle.IsHorizontal() )
+            if( wireBox.GetWidth() >= wireBox.GetHeight() ) // Mostly horizontal
             {
                 if( aLabelPos == minPt )
                     preferredSpins.emplace( SPIN_STYLE::LEFT );
@@ -780,7 +778,7 @@ SPIN_STYLE autoLabelOrientation( SCH_SCREEN* aScreen, VECTOR2I aLabelPos, SPIN_S
                 else
                     preferredSpins.emplace( SPIN_STYLE::UP );
             }
-            else if( wireAngle.IsVertical() )
+            else // Mostly vertical
             {
                 if( aLabelPos == minPt )
                     preferredSpins.emplace( SPIN_STYLE::UP );
@@ -1719,21 +1717,18 @@ void SCH_IO_LTSPICE_PARSER::CreateSymPin( const LTSPICE_SCHEMATIC::LT_SYMBOL& aL
         // Auto-detect based on connected lines
         for( const LTSPICE_SCHEMATIC::LINE& line : aLTSymbol.Lines )
         {
-            EDA_ANGLE lineAngle( line.End - line.Start );
-            lineAngle.Normalize();
-
             BOX2I bbox;
             bbox.Merge( line.Start );
             bbox.Merge( line.End );
 
-            if( lineAngle.IsHorizontal() )
+            if( bbox.GetWidth() >= bbox.GetHeight() ) // Mostly horizontal
             {
                 if( lt_pin.PinLocation == bbox.GetOrigin() )
                     aPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
                 else if( lt_pin.PinLocation == bbox.GetEnd() )
                     aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
             }
-            else if( lineAngle.IsVertical() )
+            else // Mostly vertical
             {
                 if( lt_pin.PinLocation == bbox.GetOrigin() )
                     aPin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
