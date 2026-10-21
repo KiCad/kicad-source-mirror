@@ -22,6 +22,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <zone.h>
 #include <font/fontconfig.h>
 #include <gestfich.h>
@@ -199,19 +200,69 @@ void PCB_IO_SPRINT_LAYOUT::loadBoard( const wxString& aFileName, BOARD& aBoard, 
     {
         // Parse into a scratch board, then copy the design's items into the caller's
         // board.  The destination keeps its own setup when merging.
-        std::unique_ptr<BOARD> scratchBoard = std::make_unique<BOARD>();
+        std::unique_ptr<BOARD>         scratchBoard = std::make_unique<BOARD>();
+        std::map<EDA_ITEM*, EDA_ITEM*> ptrMap;
 
         if( !parser.CreateBoard( *scratchBoard, m_loadedFootprints, boardIndex ) )
             THROW_IO_ERRORF( _( "Failed to create board from Sprint Layout file '%s'" ), aFileName );
 
-        for( FOOTPRINT* fp : scratchBoard->Footprints() )
-            aBoard.Add( static_cast<FOOTPRINT*>( fp->Clone() ) );
+        for( NETINFO_ITEM* netInfo : scratchBoard->GetNetInfo() )
+        {
+            NETINFO_ITEM* newNetInfo = static_cast<NETINFO_ITEM*>( netInfo->Clone() );
+            ptrMap[netInfo] = newNetInfo;
+            aBoard.Add( newNetInfo );
+        }
 
-        for( BOARD_ITEM* item : scratchBoard->Drawings() )
-            aBoard.Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
+        for( FOOTPRINT* fp : scratchBoard->Footprints() )
+        {
+            FOOTPRINT* newFP = static_cast<FOOTPRINT*>( fp->Clone() );
+            ptrMap[ fp ] = newFP;
+            aBoard.Add( newFP );
+        }
+
+        for( BOARD_ITEM* drawing : scratchBoard->Drawings() )
+        {
+            BOARD_ITEM* newDrawing = static_cast<BOARD_ITEM*>( drawing->Clone() );
+            ptrMap[drawing] = newDrawing;
+            aBoard.Add( newDrawing );
+        }
 
         for( ZONE* zone : scratchBoard->Zones() )
-            aBoard.Add( static_cast<ZONE*>( zone->Clone() ) );
+        {
+            ZONE* newZone = static_cast<ZONE*>( zone->Clone() );
+            ptrMap[zone] = newZone;
+            aBoard.Add( newZone );
+        }
+
+        for( PCB_GROUP* group : scratchBoard->Groups() )
+        {
+            PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( group->Clone() );
+            ptrMap[group] = newGroup;
+            aBoard.Add( newGroup );
+        }
+
+        // Rebuild groups
+        for( PCB_GROUP* group : scratchBoard->Groups() )
+        {
+            PCB_GROUP* newGroup = static_cast<PCB_GROUP*>( ptrMap[ group ] );
+
+            newGroup->GetItems().clear();
+
+            for( EDA_ITEM* member : group->GetItems() )
+            {
+                if( ptrMap.count( member ) )
+                    newGroup->AddItem( ptrMap[ member ] );
+            }
+        }
+
+        // Rebuild zone nets
+        for( ZONE* zone : scratchBoard->Zones() )
+        {
+            ZONE* newZone = static_cast<ZONE*>( ptrMap[zone] );
+
+            if( newZone && newZone->GetNet() )
+                newZone->SetNet( static_cast<NETINFO_ITEM*>( ptrMap[ newZone->GetNet() ] ) );
+        }
     }
 }
 
