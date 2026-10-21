@@ -236,8 +236,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     }
     catch( ... )
     {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
-                    wxT( "Unknown exception during SpaceMouse initialization" ) );
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), wxT( "Unknown exception during SpaceMouse initialization" ) );
     }
 
     m_boardAdapter.SetBoard( m_dummyBoard );
@@ -441,9 +440,10 @@ const S3DMODEL* PANEL_PREVIEW_3D_MODEL::alignmentModel()
     }
 
     syncLocalEmbeddedFiles();
-    return m_boardAdapter.Get3dCacheManager()->GetModel(
-            m_parentModelList->at( m_selected ).m_Filename, basePath,
-            { m_dummyFootprint->GetEmbeddedFiles(), m_dummyBoard->GetEmbeddedFiles() } );
+    return m_boardAdapter.Get3dCacheManager()->GetModel( m_parentModelList->at( m_selected ).m_Filename,
+                                                         basePath,
+                                                         { m_dummyFootprint->GetEmbeddedFiles(),
+                                                           m_dummyBoard->GetEmbeddedFiles() } );
 }
 
 
@@ -673,10 +673,10 @@ bool PANEL_PREVIEW_3D_MODEL::pickAlignment( const RAY& aRay )
         pads.push_back( std::move( item ) );
     }
 
-    const auto& rotation = m_parentModelList->at( m_selected ).m_Rotation;
-    m_alignSolutions = MODEL_ALIGN::SolveAlignment(
-            m_alignRegions, m_alignSeed, MODEL_ALIGN::BuildPadGroup( pads, clickedIndex ), pads,
-            glm::dvec3( -rotation.x, -rotation.y, -rotation.z ) );
+    const VECTOR3D& rotation = m_parentModelList->at( m_selected ).m_Rotation;
+    m_alignSolutions = MODEL_ALIGN::SolveAlignment( m_alignRegions, m_alignSeed,
+                                                    MODEL_ALIGN::BuildPadGroup( pads, clickedIndex ),
+                                                    pads, glm::dvec3( -rotation.x, -rotation.y, -rotation.z ) );
 
     if( m_alignSolutions.empty() )
     {
@@ -855,9 +855,9 @@ std::optional<size_t> PANEL_PREVIEW_3D_MODEL::alignmentRegionAt( const RAY& aRay
     if( !m_alignGeometry || !canAlign() )
         return std::nullopt;
 
-    std::optional<EDA_3D_CANVAS::MODEL_HIT> hit =
-            m_previewPane->PickModel( aRay, *m_alignGeometry, m_parentModelList->at( m_selected ),
-                                      *m_dummyFootprint );
+    std::optional<EDA_3D_CANVAS::MODEL_HIT> hit = m_previewPane->PickModel( aRay, *m_alignGeometry,
+                                                                            m_parentModelList->at( m_selected ),
+                                                                            *m_dummyFootprint );
 
     if( !hit )
         return std::nullopt;
@@ -1385,9 +1385,7 @@ void PANEL_PREVIEW_3D_MODEL::onPanelShownEvent( wxCommandEvent& aEvent )
         cancelAlignment();
 
     if( m_spaceMouse )
-    {
         m_spaceMouse->SetFocus( static_cast<bool>( aEvent.GetInt() ) );
-    }
 
     aEvent.Skip();
 }
@@ -1407,8 +1405,7 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
     for( FP_3DMODEL& model : *m_parentModelList )
     {
         if( m_alignState == ALIGN_STATE::PICK_FOOTPRINT
-            || ( m_alignState == ALIGN_STATE::PICK_MODEL
-                 && &model != &m_parentModelList->at( m_selected ) ) )
+            || ( m_alignState == ALIGN_STATE::PICK_MODEL && &model != &m_parentModelList->at( m_selected ) ) )
         {
             continue;
         }
@@ -1450,10 +1447,7 @@ void PANEL_PREVIEW_3D_MODEL::syncLocalEmbeddedFiles()
     if( m_localEmbeddedFiles )
     {
         for( const auto& [name, file] : m_localEmbeddedFiles->EmbeddedFileMap() )
-        {
-            m_dummyFootprint->AddFile(
-                    new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
-        }
+            m_dummyFootprint->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
     }
 }
 
