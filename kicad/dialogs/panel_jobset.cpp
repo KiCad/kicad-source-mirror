@@ -203,7 +203,9 @@ public:
             m_bitmapOutputType->SetBitmap( KiBitmapBundle( jobTypeInfo.bitmap ) );
         }
 
+#ifndef _WIN32
         m_pathInfo->SetFont( KIUI::GetSmallInfoFont( this ) );
+#endif
         UpdatePathInfo( aDestination->GetPathInfo() );
         UpdateStatus();
     }
