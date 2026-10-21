@@ -31,6 +31,7 @@ set( QA_PCBNEW_SRCS
 
     # test compilation units (start test_)
     test_dimension_zero_suppression.cpp
+    test_bbox_3d.cpp
     test_3d_viewer_layer_presets.cpp
     test_array_pad_name_provider.cpp
     test_barcode_load_save.cpp

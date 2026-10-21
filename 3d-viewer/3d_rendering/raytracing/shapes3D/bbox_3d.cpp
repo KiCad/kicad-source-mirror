@@ -153,7 +153,7 @@ unsigned int BBOX_3D::MaxDimension() const
     if( extent.y > extent.x )
         result = 1;
 
-    if( extent.z > extent.y )
+    if( extent.z > extent[result] )
         result = 2;
 
     return result;
