@@ -289,6 +289,9 @@ private:
     /// Told when the message is edited. Empty unless an owning window asked.
     std::function<void()> m_messageChangedHandler;
 
+    /// True while the branch box holds a phrase rather than a branch, so nothing reads it as one.
+    bool m_branchChoiceIsPlaceholder = false;
+
     std::function<void( const wxString& )> m_fileSelectedHandler;
 
     // The summary box of the wide layout. Null in the docked panel.

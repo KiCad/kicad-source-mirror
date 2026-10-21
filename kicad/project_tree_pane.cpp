@@ -1026,7 +1026,8 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
                                      _( "Switch to a different branch" ) );
         vcs_menuitem->Enable( vcs_can_switch );
 
-        vcs_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Switch to Branch" ), branch_submenu );
+        vcs_menuitem = vcs_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Switch to Branch" ), branch_submenu );
+        vcs_menuitem->Enable( vcs_can_switch );
 
         vcs_submenu->AppendSeparator();
 

@@ -306,6 +306,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_branchChoice->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onBranchChosen, this );
     m_recentMessages->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onRecentMessage, this );
     m_showDiffButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onShowDiff, this );
+    m_showDiffButton->SetToolTip( _( "Show what changed in the selected file. Pick a file in the list first." ) );
     m_description->Bind( wxEVT_TEXT,
                          [this]( wxCommandEvent& )
                          {
@@ -917,6 +918,17 @@ void GIT_COMMIT_PANE::updateCommitButton()
     if( m_editorsDirty )
         reason = _( "The open editors have unsaved changes. Committing offers to save them first." );
 
+    // A disabled control shows no tooltip, so the one line the panel has says why Get Changes
+    // is off.
+    if( m_hasRepo && !m_hasRemote && !m_headDetached && !m_operationInProgress )
+    {
+        if( !reason.IsEmpty() )
+            reason += wxS( "\n" );
+
+        reason += _( "This project has no remote, so there is nothing to get changes from or push to. "
+                     "Add one from the Remotes page of the Advanced Git window." );
+    }
+
     if( !blocked.IsEmpty() )
     {
         if( !reason.IsEmpty() )
@@ -1043,8 +1055,19 @@ void GIT_COMMIT_PANE::populateBranches( const STATUS& aStatus )
 
     wxString current = aStatus.currentBranch;
 
+    // Detached, or no commits yet, leaves no branch to show. Say which rather than leave the
+    // box blank. Nothing reads the phrase as a branch name.
+    m_branchChoiceIsPlaceholder = current.IsEmpty();
+
+    if( m_branchChoiceIsPlaceholder )
+    {
+        current = m_headDetached ? _( "Not on a branch" ) : _( "No commits yet" );
+        m_branchChoice->Append( current );
+    }
+
     m_branchChoice->SetStringSelection( current );
-    m_branchChoice->Enable( !m_transfer.IsBusy() && !m_actionPending && !m_headDetached && !m_operationInProgress );
+    m_branchChoice->Enable( !m_branchChoiceIsPlaceholder && !m_transfer.IsBusy() && !m_actionPending && !m_headDetached
+                            && !m_operationInProgress );
 
     // The box ellipsizes, so the whole name is only readable here.
     m_branchChoice->SetToolTip( current );
@@ -1719,7 +1742,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     request->andPush = aAndPush;
     request->signOff = m_signOffCheckbox->IsChecked();
     request->branchName = branchName;
-    request->displayedBranch = m_branchChoice->GetStringSelection();
+    request->displayedBranch = m_branchChoiceIsPlaceholder ? wxString() : m_branchChoice->GetStringSelection();
     request->summary = m_summary->GetValue();
     request->description = m_description->GetValue();
     request->files = std::move( files );
