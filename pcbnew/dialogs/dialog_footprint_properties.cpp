@@ -934,6 +934,8 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnPageChanging( wxNotebookEvent& aEvent )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
         aEvent.Veto();
+
+    m_3dPanel->UpdateEmbeddedFiles();
 }
 
 

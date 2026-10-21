@@ -341,6 +341,13 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 }
 
 
+void PANEL_FP_PROPERTIES_3D_MODEL::UpdateEmbeddedFiles()
+{
+    if( m_previewPane && m_filesPanel )
+        m_previewPane->SetEmbeddedFilesDelegate( m_filesPanel->GetLocalFiles() );
+}
+
+
 void PANEL_FP_PROPERTIES_3D_MODEL::ReloadModelsFromFootprint()
 {
     wxString default_path;

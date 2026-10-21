@@ -1241,6 +1241,8 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnPageChanging( wxNotebookEvent& aEv
 
     if( !m_customUserLayersGrid->CommitPendingChanges() )
         aEvent.Veto();
+
+    m_3dPanel->UpdateEmbeddedFiles();
 }
 
 

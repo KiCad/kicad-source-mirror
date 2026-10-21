@@ -57,6 +57,7 @@ public:
     bool Validate() override;
     bool CommitPendingChanges();
 
+    void UpdateEmbeddedFiles();
     void ReloadModelsFromFootprint();
 
     std::vector<FP_3DMODEL>& GetModelList() { return m_shapes3D_list; }
