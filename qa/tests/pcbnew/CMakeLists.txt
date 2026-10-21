@@ -240,6 +240,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_circle_prune.cpp
     drc/test_creepage_engine_parity.cpp
     drc/test_creepage_engine_incremental.cpp
+    drc/test_drc_copper_outside_board_issue14650.cpp
     drc/test_drc_invalid_outline_issue24078.cpp
     drc/test_drc_invalid_outline_issue24241.cpp
     drc/test_drc_silk_rule_area_issue24177.cpp

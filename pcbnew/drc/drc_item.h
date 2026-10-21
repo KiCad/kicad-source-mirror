@@ -139,7 +139,9 @@ enum PCB_DRC_CODE
     DRCE_VIA_STITCH_OVERLAP, // Two same-net via-stitching zones overlap — placement priority
                              // is undefined in the overlap, leading to nondeterministic vias.
 
-    DRCE_LAST = DRCE_VIA_STITCH_OVERLAP
+    DRCE_COPPER_OUTSIDE_BOARD, // copper item lies entirely outside the board outline
+
+    DRCE_LAST = DRCE_COPPER_OUTSIDE_BOARD
 };
 
 
@@ -225,6 +227,7 @@ private:
     static DRC_ITEM creepage;
     static DRC_ITEM tracksCrossing;
     static DRC_ITEM edgeClearance;
+    static DRC_ITEM copperOutsideBoard;
     static DRC_ITEM zonesIntersect;
     static DRC_ITEM isolatedCopper;
     static DRC_ITEM starvedThermal;

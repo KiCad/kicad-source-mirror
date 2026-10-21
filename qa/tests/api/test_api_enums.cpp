@@ -308,6 +308,7 @@ BOOST_AUTO_TEST_CASE( DesignRuleType )
                                 DRCE_MICROVIA_STACK_DEPTH,
                                 DRCE_HOLE_ASPECT_RATIO,
                                 DRCE_MICROVIA_CROSSES_CORE,
+                                DRCE_COPPER_OUTSIDE_BOARD,
                                 DRCE_OVERLAPPING_FOOTPRINTS,
                                 DRCE_MISSING_COURTYARD,
                                 DRCE_MALFORMED_COURTYARD,

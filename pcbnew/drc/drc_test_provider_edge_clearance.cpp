@@ -44,6 +44,7 @@
     Errors generated:
     - DRCE_EDGE_CLEARANCE
     - DRCE_SILK_EDGE_CLEARANCE
+    - DRCE_COPPER_OUTSIDE_BOARD
 */
 
 enum SILK_DISPOSITION {
@@ -71,10 +72,28 @@ public:
     virtual const wxString GetName() const override { return wxT( "edge_clearance" ); }
 
 private:
+    struct WORK_UNIT
+    {
+        BOARD_ITEM*            item;
+        PCB_LAYER_ID           shapeLayer;
+        std::shared_ptr<SHAPE> shape;
+    };
+
+    // Half-open range of an item's per-layer entries in the work unit list
+    struct COPPER_ITEM_UNITS
+    {
+        BOARD_ITEM* item;
+        size_t      first;
+        size_t      last;
+    };
+
     void resolveSilkDisposition( BOARD_ITEM* aItem, const SHAPE* aItemShape, const SHAPE_POLY_SET& aBoardOutline );
 
     bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID shapeLayer, BOARD_ITEM* other,
                           DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode );
+
+    void testCopperOutsideBoard( const std::vector<WORK_UNIT>& aWorkUnits,
+                                 const std::vector<COPPER_ITEM_UNITS>& aCopperItems );
 
 private:
     std::vector<PAD*> m_castellatedPads;
@@ -260,9 +279,58 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
 }
 
 
+void DRC_TEST_PROVIDER_EDGE_CLEARANCE::testCopperOutsideBoard( const std::vector<WORK_UNIT>& aWorkUnits,
+                                                               const std::vector<COPPER_ITEM_UNITS>& aCopperItems )
+{
+    // Rebuilt rather than read from BoardOutline(), which keeps partial contours of a malformed outline
+    SHAPE_POLY_SET outline;
+
+    if( !m_board->GetBoardPolygonOutlines( outline, false ) || outline.OutlineCount() == 0 )
+        return;
+
+    outline.Fracture();
+    outline.BuildBBoxCaches();
+
+    // Collide() triangulates lazily, which would stall every worker behind the first one
+    outline.CacheTriangulation( false, {}, true );
+
+    auto testItem =
+            [&]( const int idx ) -> size_t
+            {
+                if( m_drcEngine->IsCancelled() || m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_OUTSIDE_BOARD ) )
+                    return 0;
+
+                const COPPER_ITEM_UNITS& copperItem = aCopperItems[idx];
+
+                for( size_t ii = copperItem.first; ii < copperItem.last; ++ii )
+                {
+                    if( outline.Collide( aWorkUnits[ii].shape.get() ) )
+                        return 0;
+                }
+
+                BOARD_ITEM*  item = copperItem.item;
+                PCB_LAYER_ID layer = aWorkUnits[copperItem.first].shapeLayer;
+
+                if( layer == UNDEFINED_LAYER )
+                    layer = item->GetLayer();
+
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_COPPER_OUTSIDE_BOARD );
+                drcItem->SetItems( item );
+                reportViolation( drcItem, item->GetPosition(), layer );
+                return 1;
+            };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    auto         futures = tp.submit_loop( 0, aCopperItems.size(), testItem );
+
+    futures.wait();
+}
+
+
 bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 {
-    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE ) )
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_EDGE_CLEARANCE )
+        || !m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_OUTSIDE_BOARD ) )
     {
         if( !reportPhase( _( "Checking copper to board edge clearances..." ) ) )
             return false;    // DRC cancelled
@@ -407,14 +475,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
      * zones with many layers become many separate work units rather than one heavy item.
      * Pre-fetching shapes avoids per-zone mutex contention during parallel testing.
      */
-    struct WORK_UNIT
-    {
-        BOARD_ITEM*            item;
-        PCB_LAYER_ID           shapeLayer;
-        std::shared_ptr<SHAPE> shape;
-    };
-
-    std::vector<WORK_UNIT> workUnits;
+    std::vector<WORK_UNIT>         workUnits;
+    std::vector<COPPER_ITEM_UNITS> copperItems;
 
     forEachGeometryItem( s_allBasicItems, LSET::AllLayersMask(),
             [&]( BOARD_ITEM *item ) -> bool
@@ -462,11 +524,17 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     layersToTest = { UNDEFINED_LAYER };
                 }
 
+                size_t firstUnit = workUnits.size();
+
                 for( PCB_LAYER_ID layer : layersToTest )
                 {
                     workUnits.push_back(
                             { item, layer, item->GetEffectiveShape( layer ) } );
                 }
+
+                // Zone fills are already clipped to the board outline
+                if( item->Type() != PCB_ZONE_T && item->IsOnCopperLayer() )
+                    copperItems.push_back( { item, firstUnit, workUnits.size() } );
 
                 return true;
             } );
@@ -571,6 +639,9 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
         futures.wait_for( std::chrono::milliseconds( 250 ) );
     }
+
+    if( !m_drcEngine->IsCancelled() && !m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_OUTSIDE_BOARD ) )
+        testCopperOutsideBoard( workUnits, copperItems );
 
     return !m_drcEngine->IsCancelled();
 }
