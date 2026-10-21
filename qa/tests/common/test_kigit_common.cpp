@@ -822,6 +822,25 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
 }
 
 
+// Git does not check the address itself, so this is only here to catch a typo before every
+// commit carries it.
+BOOST_AUTO_TEST_CASE( IdentityEmailMustLookLikeAnAddress )
+{
+    wxString error;
+
+    BOOST_CHECK( KIGIT::ValidateIdentity( wxT( "A Name" ), wxT( "a@b.c" ), error ) );
+    BOOST_CHECK( KIGIT::ValidateIdentity( wxT( "A Name" ), wxT( "first.last+tag@example.co.uk" ), error ) );
+
+    BOOST_CHECK( !KIGIT::ValidateIdentity( wxEmptyString, wxT( "a@b.c" ), error ) );
+    BOOST_CHECK( !KIGIT::ValidateIdentity( wxT( "   " ), wxT( "a@b.c" ), error ) );
+
+    for( const wxString& bad : { wxT( "a@" ), wxT( "@" ), wxT( "@@" ), wxT( "a@b" ), wxT( "@b.c" ), wxT( "a b@c.d" ),
+                                 wxT( "a@b.c@d.e" ), wxT( "a@.c" ), wxT( "a@b." ) } )
+    {
+        BOOST_CHECK_MESSAGE( !KIGIT::ValidateIdentity( wxT( "A Name" ), bad, error ), bad );
+    }
+}
+
 // A project can be open before it is ever put under version control, so a session with no
 // repository is a normal state and not a programming error.
 BOOST_AUTO_TEST_CASE( SessionWithoutARepositoryAnswersQuietly )

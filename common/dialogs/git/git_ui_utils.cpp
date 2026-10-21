@@ -118,15 +118,42 @@ void KIGIT::MarkDestructive( wxButton* aButton )
 }
 
 
+// Git records the address without checking it, so this only catches a typo before every
+// commit carries it. A local part, one at sign, and a domain with a dot inside it.
+static bool looksLikeAnEmailAddress( const wxString& aEmail )
+{
+    const size_t at = aEmail.find( '@' );
+
+    if( at == wxString::npos || at == 0 || aEmail.find( '@', at + 1 ) != wxString::npos )
+        return false;
+
+    const wxString domain = aEmail.Mid( at + 1 );
+    const size_t   dot = domain.find( '.' );
+
+    if( dot == wxString::npos || dot == 0 || dot + 1 == domain.length() )
+        return false;
+
+    for( const wxUniChar& c : aEmail )
+    {
+        if( wxIsspace( c ) )
+            return false;
+    }
+
+    return true;
+}
+
+
 bool KIGIT::ValidateIdentity( const wxString& aName, const wxString& aEmail, wxString& aError )
 {
-    if( aName.IsEmpty() )
+    wxString name = aName;
+
+    if( name.Trim( true ).Trim( false ).IsEmpty() )
     {
         aError = _( "Enter your name. It is recorded as the author of your commits." );
         return false;
     }
 
-    if( !aEmail.Contains( wxS( "@" ) ) )
+    if( !looksLikeAnEmailAddress( aEmail ) )
     {
         aError = _( "Enter a valid email address. It is recorded as the author of your commits." );
         return false;
