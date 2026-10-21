@@ -895,7 +895,7 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
 
 wxString LIB_SYMBOL::GetFootprint() const
 {
-    SCH_FIELD* field = GetField( FIELD_T::FOOTPRINT );
+    const SCH_FIELD* field = GetField( FIELD_T::FOOTPRINT );
 
     if( !field )
         return wxEmptyString;
