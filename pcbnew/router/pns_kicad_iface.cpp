@@ -1293,7 +1293,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     // First try to pick up diff pair width from starting track, if enabled
     if( bds.m_UseConnectedTrackWidth && aStartItem )
         found = inheritTrackWidthAndDpGap( aStartItem, aStartPosition, &diffPairWidth, &diffPairGap );
- 
+
     // Next, pick up gap from netclass, and width also if we didn't get a starting width above
     if( bds.UseNetClassDiffPair() && aStartItem )
     {
@@ -1709,6 +1709,7 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
 
     case PAD_ATTRIB::CONN:
     case PAD_ATTRIB::SMD:
+    case PAD_ATTRIB::NON_COMPONENT:
     {
         bool is_copper = false;
 

@@ -163,6 +163,8 @@ private:
     bool            m_isFpEditor;       // true if the caller is the footprint editor
     PCB_LAYER_ID    m_editLayer;        // Which copper layer of the padstack is being edited
     std::map<int, PCB_LAYER_ID> m_editLayerCtrlMap;
+    /// Enabled copper layers offered for NON_COMPONENT pads
+    std::vector<PCB_LAYER_ID>   m_nonComponentLayers;
 
     std::vector<std::shared_ptr<PCB_SHAPE>> m_primitives;     // the custom shape primitives in
                                                               // local coords, orient 0

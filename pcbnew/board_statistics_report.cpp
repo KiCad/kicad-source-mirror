@@ -117,6 +117,8 @@ void InitializeBoardStatisticsData( BOARD_STATISTICS_DATA& aData )
     aData.padEntries.push_back(
             BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>( PAD_ATTRIB::CONN, _( "Connector:" ), "connector" ) );
     aData.padEntries.push_back( BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>( PAD_ATTRIB::NPTH, _( "NPTH:" ), "npth" ) );
+    aData.padEntries.push_back(
+            BOARD_STATISTICS_INFO_ENTRY<PAD_ATTRIB>( PAD_ATTRIB::NON_COMPONENT, _( "Non-component:" ), "non_component" ) );
 
     aData.padPropertyEntries.push_back(
             BOARD_STATISTICS_INFO_ENTRY<PAD_PROP>( PAD_PROP::CASTELLATED, _( "Castellated:" ), "castellated" ) );

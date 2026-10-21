@@ -2167,7 +2167,9 @@ int FOOTPRINT::GetLikelyAttribute() const
 
             break;
 
-        default:
+        case PAD_ATTRIB::NON_COMPONENT:
+        case PAD_ATTRIB::CONN:
+        case PAD_ATTRIB::NPTH:
             break;
         }
     }
@@ -4543,8 +4545,10 @@ bool FOOTPRINT::HasThroughHolePads() const
 {
     for( PAD* pad : Pads() )
     {
-        if( pad->GetAttribute() != PAD_ATTRIB::SMD )
+        if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
+        {
             return true;
+        }
     }
 
     return false;

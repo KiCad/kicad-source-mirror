@@ -69,10 +69,11 @@ types::PadType ToProtoEnum( PAD_ATTRIB aValue )
 {
     switch( aValue )
     {
-    case PAD_ATTRIB::PTH:   return types::PadType::PT_PTH;
-    case PAD_ATTRIB::SMD:   return types::PadType::PT_SMD;
-    case PAD_ATTRIB::CONN:  return types::PadType::PT_EDGE_CONNECTOR;
-    case PAD_ATTRIB::NPTH:  return types::PadType::PT_NPTH;
+    case PAD_ATTRIB::PTH:           return types::PadType::PT_PTH;
+    case PAD_ATTRIB::SMD:           return types::PadType::PT_SMD;
+    case PAD_ATTRIB::CONN:          return types::PadType::PT_EDGE_CONNECTOR;
+    case PAD_ATTRIB::NPTH:          return types::PadType::PT_NPTH;
+    case PAD_ATTRIB::NON_COMPONENT: return types::PadType::PT_NON_COMPONENT;
 
     default:
         wxCHECK_MSG( false, types::PadType::PT_UNKNOWN,
@@ -91,6 +92,7 @@ PAD_ATTRIB FromProtoEnum( types::PadType aValue )
     case types::PadType::PT_SMD:            return PAD_ATTRIB::SMD;
     case types::PadType::PT_EDGE_CONNECTOR: return PAD_ATTRIB::CONN;
     case types::PadType::PT_NPTH:           return PAD_ATTRIB::NPTH;
+    case types::PadType::PT_NON_COMPONENT:  return PAD_ATTRIB::NON_COMPONENT;
 
     default:
         wxCHECK_MSG( false,  PAD_ATTRIB::PTH,

@@ -719,7 +719,9 @@ void LENGTH_DELAY_CALCULATION::optimiseVias(
         {
             PCB_LAYER_ID padSideLayer;
 
-            if( coincidentPad->GetAttribute() == PAD_ATTRIB::SMD || coincidentPad->GetAttribute() == PAD_ATTRIB::CONN )
+            if( coincidentPad->GetAttribute() == PAD_ATTRIB::SMD
+                || coincidentPad->GetAttribute() == PAD_ATTRIB::CONN
+                || coincidentPad->GetAttribute() == PAD_ATTRIB::NON_COMPONENT )
             {
                 padSideLayer = *coincidentPad->Padstack().LayerSet().CuStack().begin();
             }

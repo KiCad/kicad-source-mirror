@@ -21,9 +21,11 @@
 
 #include <algorithm>
 
+#include <wx/debug.h>
 #include <wx/intl.h>
 
 #include <convert_basic_shapes_to_polygon.h>
+#include <footprint.h>
 #include <geometry/shape_segment.h>
 #include <math/util.h>
 #include <pad.h>
@@ -60,6 +62,22 @@ void PAD_UTILS::RemoveAllDrillsFromPadstack( PADSTACK& aPadstack )
     aPadstack.TertiaryDrill() = {};
     aPadstack.FrontPostMachining() = {};
     aPadstack.BackPostMachining() = {};
+}
+
+
+wxString PAD_UTILS::GetPadAttributeString( PAD_ATTRIB aAttrib )
+{
+    switch( aAttrib )
+    {
+        case PAD_ATTRIB::PTH:           return _( "Through-hole" );
+        case PAD_ATTRIB::SMD:           return _( "SMD" );
+        case PAD_ATTRIB::NPTH:          return _( "NPTH" );
+        case PAD_ATTRIB::CONN:          return _( "Connector" );
+        case PAD_ATTRIB::NON_COMPONENT: return _( "Non-component" );
+    }
+
+    wxFAIL_MSG( wxT( "Invalid pad attribute" ) );
+    return _( "Unknown" );
 }
 
 
@@ -251,6 +269,35 @@ void checkPadLayer( const PAD& aPad, PCB_LAYER_ID aLayer, const UNITS_PROVIDER& 
 void PAD_UTILS::CheckPad( const PAD& aPad, const UNITS_PROVIDER& aUnitsProvider, bool aForPadProperties,
                           const PAD_CHECK_HANDLER& aErrorHandler )
 {
+    const wxString padTypeString = PAD_UTILS::GetPadAttributeString( aPad.GetAttribute() );
+
+    /**
+     * Check single-sided copper pads have mask and paste layers on the same side.
+     * Applies to SMD, CONN, NON_COMPONENT
+     */
+    const auto checkTechLayerSide = [&]()
+    {
+        if( ( aPad.IsOnLayer( F_Cu ) && aPad.IsOnLayer( B_Mask ) ) ||
+            ( aPad.IsOnLayer( B_Cu ) && aPad.IsOnLayer( F_Mask ) ) )
+        {
+            aErrorHandler( {
+                    PAD_CHECK_CODE::MASK_WRONG_SIDE,
+                    wxString::Format( _( "%s pad has copper and mask layers on different sides of the board" ),
+                                    padTypeString ),
+            } );
+        }
+
+        if( ( aPad.IsOnLayer( F_Cu ) && aPad.IsOnLayer( B_Paste ) ) ||
+            ( aPad.IsOnLayer( B_Cu ) && aPad.IsOnLayer( F_Paste ) ) )
+        {
+            aErrorHandler( {
+                    PAD_CHECK_CODE::PASTE_WRONG_SIDE,
+                    wxString::Format( _( "%s pad has copper and paste layers on different sides of the board" ),
+                                    padTypeString ),
+            } );
+        }
+    };
+
     aPad.Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
@@ -330,45 +377,73 @@ void PAD_UTILS::CheckPad( const PAD& aPad, const UNITS_PROVIDER& aUnitsProvider,
     {
         if( drill_size.x > 0 || drill_size.y > 0 )
         {
-            aErrorHandler( { PAD_CHECK_CODE::SMD_HAS_HOLE, _( "SMD pad has a hole" ) } );
+            aErrorHandler(
+                    { PAD_CHECK_CODE::UNEXPECTED_HOLE, wxString::Format( _( "%s pad has a hole" ), padTypeString ) } );
         }
 
-        LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
+        const LSET copperLayers = padlayers_mask & LSET::AllCuMask();
 
-        if( aPad.IsOnLayer( F_Cu ) && aPad.IsOnLayer( B_Cu ) )
+        if( copperLayers.count() > 1 )
         {
-            aErrorHandler( { PAD_CHECK_CODE::SMD_BOTH_OUTER_SIDES,
-                             _( "SMD pad has copper on both sides of the board" ) } );
+            aErrorHandler( { PAD_CHECK_CODE::MULTIPLE_COPPER_LAYERS,
+                             wxString::Format( _( "%s pad has more than one copper layer" ), padTypeString ) } );
         }
-        else if( aPad.IsOnLayer( F_Cu ) )
+
+        // SMD also includes aperture pads without copper on any layers
+        if( ( copperLayers.any() ) )
         {
-            if( aPad.IsOnLayer( B_Mask ) )
+            if( ( copperLayers & LSET{ F_Cu, B_Cu } ).none() )
             {
-                aErrorHandler( { PAD_CHECK_CODE::SMD_MASK_WRONG_SIDE,
-                                 _( "SMD pad has copper and mask layers on different sides of the board" ) } );
+                aErrorHandler( { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER,
+                                 wxString::Format( _( "%s pad has no outer layers" ), padTypeString ) } );
             }
-            else if( aPad.IsOnLayer( B_Paste ) )
-            {
-                aErrorHandler( { PAD_CHECK_CODE::SMD_PASTE_WRONG_SIDE,
-                                 _( "SMD pad has copper and paste layers on different sides of the board" ) } );
-            }
+
+            checkTechLayerSide();
         }
-        else if( aPad.IsOnLayer( B_Cu ) )
+
+        break;
+    }
+    case PAD_ATTRIB::NON_COMPONENT:
+    {
+        if( drill_size.x > 0 || drill_size.y > 0 )
         {
-            if( aPad.IsOnLayer( F_Mask ) )
-            {
-                aErrorHandler( { PAD_CHECK_CODE::SMD_MASK_WRONG_SIDE,
-                                 _( "SMD pad has copper and mask layers on different sides of the board" ) } );
-            }
-            else if( aPad.IsOnLayer( F_Paste ) )
-            {
-                aErrorHandler( { PAD_CHECK_CODE::SMD_PASTE_WRONG_SIDE,
-                                 _( "SMD pad has copper and paste layers on different sides of the board" ) } );
-            }
+            aErrorHandler(
+                    { PAD_CHECK_CODE::UNEXPECTED_HOLE, wxString::Format( _( "%s pad has a hole" ), padTypeString ) } );
         }
-        else if( innerlayers_mask.count() != 0 )
+
+        const LSET copperLayers = padlayers_mask & LSET::AllCuMask();
+
+        if( copperLayers.none() )
         {
-            aErrorHandler( { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER, _( "SMD pad has no outer layers" ) } );
+            aErrorHandler( { PAD_CHECK_CODE::NON_COMPONENT_NO_COPPER,
+                             wxString::Format( _( "%s pad has no copper layers" ), padTypeString ) } );
+            break;
+        }
+
+        if( copperLayers.count() > 1 )
+        {
+            aErrorHandler( { PAD_CHECK_CODE::MULTIPLE_COPPER_LAYERS,
+                             wxString::Format( _( "%s pad has more than one copper layer" ), padTypeString ) } );
+        }
+
+        if( ( copperLayers & LSET::ExternalCuMask() ).none()
+            && ( padlayers_mask & LSET( { F_Mask, B_Mask, F_Paste, B_Paste } ) ).any() )
+        {
+            aErrorHandler( { PAD_CHECK_CODE::NON_COMPONENT_TECH_ON_INNER,
+                             wxString::Format( _( "%s pad on an inner layer cannot have mask or paste layers" ),
+                                               padTypeString ) } );
+        }
+
+        checkTechLayerSide();
+
+        const FOOTPRINT* parentFp = aPad.GetParentFootprint();
+
+        if( parentFp && parentFp->GetStackupMode() == FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS
+            && ( copperLayers & LSET::InternalCuMask() ).any() )
+        {
+            aErrorHandler( { PAD_CHECK_CODE::NON_COMPONENT_INNER_NEEDS_CUSTOM_STACKUP,
+                             wxString::Format( _( "%s pad on inner layers requires a custom footprint stackup" ),
+                                               padTypeString ) } );
         }
 
         break;

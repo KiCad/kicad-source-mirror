@@ -308,7 +308,8 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     PAD* pad = static_cast<PAD*>( item );
 
                     if( pad->GetAttribute() == PAD_ATTRIB::SMD
-                            || pad->GetAttribute() == PAD_ATTRIB::CONN )
+                            || pad->GetAttribute() == PAD_ATTRIB::CONN
+                            || pad->GetAttribute() == PAD_ATTRIB::NON_COMPONENT )
                     {
                         if( disabledLayers.Contains( pad->GetPrincipalLayer() ) )
                             badLayer = item->GetLayer();

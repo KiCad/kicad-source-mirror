@@ -54,7 +54,10 @@ const std::vector<PAD_CHECK_TEST_CASE> padCheckCases = {
             "inner-only SMD pad",
             PAD_ATTRIB::SMD,
             LSET( { In1_Cu, In2_Cu } ),
-            { PAD_CHECK_CODE::PAD_NO_OUTER_COPPER },
+            {
+                    PAD_CHECK_CODE::PAD_NO_OUTER_COPPER,
+                    PAD_CHECK_CODE::MULTIPLE_COPPER_LAYERS,
+            },
     },
     {
             "inner-only CONN pad",
@@ -86,19 +89,49 @@ const std::vector<PAD_CHECK_TEST_CASE> padCheckCases = {
             "outer and inner SMD pad",
             PAD_ATTRIB::SMD,
             LSET( { F_Cu, In1_Cu, F_Mask, F_Paste } ),
-            {},
+            { PAD_CHECK_CODE::MULTIPLE_COPPER_LAYERS },
     },
     {
             "both outer copper sides",
             PAD_ATTRIB::SMD,
             LSET( { F_Cu, B_Cu } ),
-            { PAD_CHECK_CODE::SMD_BOTH_OUTER_SIDES },
+            { PAD_CHECK_CODE::MULTIPLE_COPPER_LAYERS },
     },
     {
             "wrong-side mask",
             PAD_ATTRIB::SMD,
             LSET( { B_Cu, F_Mask } ),
-            { PAD_CHECK_CODE::SMD_MASK_WRONG_SIDE },
+            { PAD_CHECK_CODE::MASK_WRONG_SIDE },
+    },
+    {
+            "non-component front pad",
+            PAD_ATTRIB::NON_COMPONENT,
+            LSET( { F_Cu } ),
+            {},
+    },
+    {
+            "non-component inner pad",
+            PAD_ATTRIB::NON_COMPONENT,
+            LSET( { In2_Cu } ),
+            {},
+    },
+    {
+            "non-component inner pad with front mask",
+            PAD_ATTRIB::NON_COMPONENT,
+            LSET( { In1_Cu, F_Mask } ),
+            { PAD_CHECK_CODE::NON_COMPONENT_TECH_ON_INNER },
+    },
+    {
+            "non-component multiple copper layers",
+            PAD_ATTRIB::NON_COMPONENT,
+            LSET( { F_Cu, In1_Cu } ),
+            { PAD_CHECK_CODE::MULTIPLE_COPPER_LAYERS },
+    },
+    {
+            "non-component no copper",
+            PAD_ATTRIB::NON_COMPONENT,
+            LSET( { F_Mask } ),
+            { PAD_CHECK_CODE::NON_COMPONENT_NO_COPPER },
     },
 };
 
@@ -142,6 +175,10 @@ struct PAD_CHECK_FIXTURE
             m_Pad( &m_Footprint )
     {
         m_Board.SetBoardUse( BOARD_USE::FPHOLDER );
+
+        // Inner-layer copper-only pads are only legal with a custom footprint stackup.
+        m_Footprint.SetStackupMode( FOOTPRINT_STACKUP::CUSTOM_LAYERS );
+        m_Footprint.SetStackupLayers( LSET::AllCuMask( 4 ) );
 
         m_Pad.SetAttribute( PAD_ATTRIB::SMD );
         m_Pad.SetPadstackMode( PADSTACK::MODE::NORMAL );
@@ -193,6 +230,25 @@ BOOST_DATA_TEST_CASE_F( PAD_CHECK_FIXTURE, PadCheckCases, boost::unit_test::data
 
         checkPadResults( messages, testCase.m_ExpectedCodes );
     }
+}
+
+
+// SetAttribute() clears the drill, so the hole case cannot use the data table.
+BOOST_FIXTURE_TEST_CASE( CopperOnlyPadWithHole, PAD_CHECK_FIXTURE )
+{
+    setLayers( PAD_ATTRIB::NON_COMPONENT, LSET( { F_Cu } ) );
+    m_Pad.SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.5 ), pcbIUScale.mmToIU( 0.5 ) ) );
+
+    checkPadResults( runPadCheckOnPad(), { PAD_CHECK_CODE::UNEXPECTED_HOLE } );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( CopperOnlyInnerPadNeedsCustomStackup, PAD_CHECK_FIXTURE )
+{
+    m_Footprint.SetStackupMode( FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS );
+    setLayers( PAD_ATTRIB::NON_COMPONENT, LSET( { In1_Cu } ) );
+
+    checkPadResults( runPadCheckOnPad(), { PAD_CHECK_CODE::NON_COMPONENT_INNER_NEEDS_CUSTOM_STACKUP } );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

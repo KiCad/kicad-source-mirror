@@ -297,6 +297,24 @@ BOOST_AUTO_TEST_CASE( CustomFootprintStackupBlocksKicad9 )
 }
 
 
+// Non-component pads (20261031) cannot be represented by older writers for now.
+// (Probably they can be approximated, but needs some thought)
+BOOST_AUTO_TEST_CASE( NonComponentPadBlocksOlderTargets )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    board.Add( fp );
+
+    PAD* pad = new PAD( fp );
+    pad->SetAttribute( PAD_ATTRIB::NON_COMPONENT );
+    pad->SetLayerSet( LSET( { F_Cu } ) );
+    fp->Add( pad );
+
+    BOOST_CHECK_EQUAL( ClassifyBoardForDowngrade( &board, kicad10 ).Count( DOWNGRADE_BUCKET::BLOCK ), 1 );
+    BOOST_CHECK_EQUAL( ClassifyBoardForDowngrade( &board, kicad9 ).Count( DOWNGRADE_BUCKET::BLOCK ), 1 );
+}
+
+
 // Per-zone layer properties (20250302) postdate 9.0, so they are dropped like the board-level
 // zone defaults.
 BOOST_AUTO_TEST_CASE( ZoneLayerPropertiesDroppedForKicad9 )

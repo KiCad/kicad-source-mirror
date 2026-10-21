@@ -142,7 +142,9 @@ void IPC356D_WRITER::appendPadRecords( BOARD* aPcb, const std::vector<FAB_TEST_P
         rk.midpoint = rk.pin.IsEmpty();
         rk.drill = point.m_drill;
         rk.hole = ( rk.drill != 0 );
-        rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD || pad->GetAttribute() == PAD_ATTRIB::CONN;
+        rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD
+            || pad->GetAttribute() == PAD_ATTRIB::CONN
+            || pad->GetAttribute() == PAD_ATTRIB::NON_COMPONENT;
         rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
         rk.x_location = point.m_position.x - origin.x;
         rk.y_location = origin.y - point.m_position.y;

@@ -699,6 +699,8 @@ enum PadType
   PT_SMD = 2;
   PT_EDGE_CONNECTOR = 3;
   PT_NPTH = 4;
+  // Since 11.0
+  PT_NON_COMPONENT = 5;
 }
 
 enum PadSimElectricalType

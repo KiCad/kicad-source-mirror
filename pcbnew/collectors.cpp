@@ -184,7 +184,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         boardItem = pad;
 
         if( ( pad->GetAttribute() != PAD_ATTRIB::SMD ) &&
-            ( pad->GetAttribute() != PAD_ATTRIB::CONN ) )  // a hole is present, so multiple layers
+            ( pad->GetAttribute() != PAD_ATTRIB::CONN ) &&
+            ( pad->GetAttribute() != PAD_ATTRIB::NON_COMPONENT ) )  // a hole is present, so multiple layers
         {
             // proceed to the common tests below, but without the parent footprint test,
             // by leaving footprint==NULL, but having pad != null

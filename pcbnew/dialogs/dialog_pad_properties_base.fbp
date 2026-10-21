@@ -304,7 +304,7 @@
                                   <property name="caption"></property>
                                   <property name="caption_visible">1</property>
                                   <property name="center_pane">0</property>
-                                  <property name="choices">&quot;Through-hole&quot; &quot;SMD&quot; &quot;Edge Connector&quot; &quot;NPTH, Mechanical&quot; &quot;SMD Aperture&quot;</property>
+                                  <property name="choices">&quot;Through-hole&quot; &quot;SMD&quot; &quot;Edge Connector&quot; &quot;NPTH, Mechanical&quot; &quot;SMD Aperture&quot; &quot;Copper Only&quot;</property>
                                   <property name="close_button">1</property>
                                   <property name="context_help"></property>
                                   <property name="context_menu">1</property>

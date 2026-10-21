@@ -95,6 +95,9 @@ void ODB_NET_LIST::InitNetPoints( std::map<size_t, std::vector<ODB_NET_RECORD>>&
         {
             const PAD* pad = point.m_pad;
 
+            // TODO (JB): ODB++ represents inner net points with side "I" and a
+            // ld=<layer UID> reference (optional for T/D). But we don't have a layer map yet.
+            // Currently, we skip inner net points.
             if( !point.m_front && !point.m_back )
                 continue;
 
@@ -108,7 +111,9 @@ void ODB_NET_LIST::InitNetPoints( std::map<size_t, std::vector<ODB_NET_RECORD>>&
             record.refdes = pad->GetParentFootprint()->GetReference();
             record.hole = pad->HasHole();
             record.drill_radius = record.hole ? point.m_drill / 2 : 0;
-            record.smd = pad->GetAttribute() == PAD_ATTRIB::SMD || pad->GetAttribute() == PAD_ATTRIB::CONN;
+            record.smd = pad->GetAttribute() == PAD_ATTRIB::SMD
+                || pad->GetAttribute() == PAD_ATTRIB::CONN
+                || pad->GetAttribute() == PAD_ATTRIB::NON_COMPONENT;
             record.mechanical = pad->GetAttribute() == PAD_ATTRIB::NPTH;
             record.testpoint = GetFabPadRole( *pad ) == FAB_PAD_ROLE::TESTPOINT;
 

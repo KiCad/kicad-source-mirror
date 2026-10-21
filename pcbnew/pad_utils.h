@@ -29,6 +29,9 @@ class PAD;
 class PADSTACK;
 class UNITS_PROVIDER;
 
+enum class PAD_ATTRIB;
+
+
 namespace PAD_UTILS
 {
 
@@ -53,6 +56,15 @@ double GetDefaultIpcRoundingRatio( const PAD& aPad, PCB_LAYER_ID aLayer );
  */
 void RemoveAllDrillsFromPadstack( PADSTACK& aPadstack );
 
+
+/**
+ * Get the human-readable string for a pad attribute
+ *
+ * Used for UI display and error messages.
+ *
+ * Note: you have to handle 'aperture' outside this function.
+ */
+wxString GetPadAttributeString( PAD_ATTRIB aAttrib );
 
 /**
  * A specific pad check finding reason.
@@ -84,10 +96,10 @@ enum class PAD_CHECK_CODE
     CUSTOM_SHAPE_NOT_SINGLE_POLYGON,
     TH_NO_HOLE,
     PTH_NO_OUTER_COPPER,
-    SMD_HAS_HOLE,
-    SMD_BOTH_OUTER_SIDES,
-    SMD_MASK_WRONG_SIDE,
-    SMD_PASTE_WRONG_SIDE,
+    UNEXPECTED_HOLE,
+    MULTIPLE_COPPER_LAYERS,
+    MASK_WRONG_SIDE,
+    PASTE_WRONG_SIDE,
     PAD_NO_OUTER_COPPER,
     CONN_HAS_PASTE,
     FIDUCIAL_NOT_PLATED,
@@ -97,6 +109,9 @@ enum class PAD_CHECK_CODE
     BGA_NOT_SMD,
     MECHANICAL_NOT_PTH,
     PRESSFIT_NOT_PTH,
+    NON_COMPONENT_NO_COPPER,
+    NON_COMPONENT_TECH_ON_INNER,
+    NON_COMPONENT_INNER_NEEDS_CUSTOM_STACKUP,
 };
 
 

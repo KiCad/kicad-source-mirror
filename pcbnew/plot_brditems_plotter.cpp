@@ -228,6 +228,12 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
                 metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONNECTORPAD );
             break;
 
+        case PAD_ATTRIB::NON_COMPONENT: // Non-component only pads on any layer
+            // For now, keep the existing "Conductor" logic above, but this can be changed later if needed.
+            // For example:
+            // metadata.SetApertureAttrib( "internal" );
+            break;
+
         case PAD_ATTRIB::SMD:        // SMD pads (on external copper layer only)
                                      // with solder paste and mask
             if( plotOnExternalCopperLayer )

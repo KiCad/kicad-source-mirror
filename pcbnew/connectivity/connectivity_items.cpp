@@ -160,6 +160,7 @@ CN_ITEM* CN_LIST::Add( PAD* pad )
      case PAD_ATTRIB::SMD:
      case PAD_ATTRIB::NPTH:
      case PAD_ATTRIB::CONN:
+     case PAD_ATTRIB::NON_COMPONENT:
      {
         LSEQ lmsk = pad->GetLayerSet().CuStack();
 

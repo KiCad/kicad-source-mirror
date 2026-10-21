@@ -42,6 +42,7 @@
 #include <kiplatform/ui.h>
 #include <pin_numbers.h>
 #include <board_commit.h>
+#include <pad_utils.h>
 #include <reporter.h>
 #include <table_io.h>
 #include <wildcards_and_files_ext.h>
@@ -87,17 +88,7 @@ static wxString GetPadTypeString( const PAD& aPad )
         return _( "Aperture" );
 
     const PAD_ATTRIB attrib = aPad.GetAttribute();
-
-    switch( attrib )
-    {
-    case PAD_ATTRIB::PTH:  return _( "Through-hole" );
-    case PAD_ATTRIB::SMD:  return _( "SMD" );
-    case PAD_ATTRIB::CONN: return _( "Connector" );
-    case PAD_ATTRIB::NPTH: return _( "NPTH" );
-    // No default - handle all cases
-    }
-
-    return wxEmptyString;
+    return PAD_UTILS::GetPadAttributeString( attrib );
 }
 
 
@@ -136,6 +127,21 @@ static void SetPadTypeFromString( PAD& aPad, const wxString& aType )
     else if( MatchTranslationOrNative( aType, _HKI( "Connector" ), false ) )
     {
         aPad.SetAttribute( PAD_ATTRIB::CONN );
+    }
+    else if( MatchTranslationOrNative( aType, _HKI( "Non-component" ), false ) )
+    {
+        if( aPad.GetAttribute() != PAD_ATTRIB::NON_COMPONENT )
+        {
+            // Take the first set copper layer as the default for non-component pads.
+            const LSET currCu = aPad.GetLayerSet() & LSET::AllCuMask();
+
+            if( !currCu.any() )
+                aPad.SetLayerSet( LSET{ F_Cu } );
+            else
+                aPad.SetLayerSet( LSET{ currCu.CuStack().front() } );
+
+            aPad.SetAttribute( PAD_ATTRIB::NON_COMPONENT );
+        }
     }
     else if( MatchTranslationOrNative( aType, _HKI( "NPTH" ), false ) )
     {
@@ -450,11 +456,12 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     // Type column editor (attribute)
     attr = new wxGridCellAttr;
     wxArrayString typeNames;
-    typeNames.push_back( _( "Through-hole" ) ); // PTH
-    typeNames.push_back( _( "SMD" ) );          // SMD
-    typeNames.push_back( _( "Connector" ) );    // CONN SMD? (use CONN?)
-    typeNames.push_back( _( "NPTH" ) );         // NPTH
-    typeNames.push_back( _( "Aperture" ) );     // inferred copper-less
+    typeNames.push_back( _( "Through-hole" ) );  // PTH
+    typeNames.push_back( _( "SMD" ) );           // SMD
+    typeNames.push_back( _( "Connector" ) );     // CONN SMD? (use CONN?)
+    typeNames.push_back( _( "NPTH" ) );          // NPTH
+    typeNames.push_back( _( "Non-component" ) ); // NON_COMPONENT
+    typeNames.push_back( _( "Aperture" ) );      // inferred copper-less
     attr->SetEditor( new GRID_CELL_COMBOBOX( typeNames ) );
     m_grid->SetColAttr( COL_TYPE, attr );
 

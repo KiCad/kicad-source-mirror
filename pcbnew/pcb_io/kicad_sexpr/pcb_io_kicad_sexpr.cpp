@@ -1992,14 +1992,15 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
             }
         };
 
-    const char* type;
+    const char* type = nullptr;
 
     switch( aPad->GetAttribute() )
     {
-    case PAD_ATTRIB::PTH:    type = "thru_hole";      break;
-    case PAD_ATTRIB::SMD:    type = "smd";            break;
-    case PAD_ATTRIB::CONN:   type = "connect";        break;
-    case PAD_ATTRIB::NPTH:   type = "np_thru_hole";   break;
+    case PAD_ATTRIB::PTH:           type = "thru_hole";      break;
+    case PAD_ATTRIB::SMD:           type = "smd";            break;
+    case PAD_ATTRIB::CONN:          type = "connect";        break;
+    case PAD_ATTRIB::NON_COMPONENT: type = "non_component";  break;
+    case PAD_ATTRIB::NPTH:          type = "np_thru_hole";   break;
 
     default:
         THROW_IO_ERRORF( _( "unknown pad attribute: %d" ), aPad->GetAttribute() );

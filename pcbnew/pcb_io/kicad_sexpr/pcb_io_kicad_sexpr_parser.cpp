@@ -24,6 +24,7 @@
  */
 
 #include "layer_ids.h"
+#include "pcb_lexer.h"
 #include <cerrno>
 #include <charconv>
 #include <cmath>
@@ -7352,12 +7353,16 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         pad->SetAttribute( PAD_ATTRIB::CONN );
         break;
 
+    case T_non_component:
+        pad->SetAttribute( PAD_ATTRIB::NON_COMPONENT );
+        break;
+
     case T_np_thru_hole:
         pad->SetAttribute( PAD_ATTRIB::NPTH );
         break;
 
     default:
-        Expecting( "thru_hole, smd, connect, or np_thru_hole" );
+        Expecting( "thru_hole, smd, connect, non_component, or np_thru_hole" );
     }
 
     token = NextTok();
@@ -7501,10 +7506,16 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             // than 0 used to fix a bunch of debug assertions even though it is defined as a
             // through hole pad.  Wouldn't a though hole pad with no drill be a surface mount
             // pad (or a conn pad which is a smd pad with no solder paste)?
-            if( pad->GetAttribute() != PAD_ATTRIB::SMD && pad->GetAttribute() != PAD_ATTRIB::CONN )
-                pad->SetLibDrillSize( drillSize );
-            else
+            if( pad->GetAttribute() == PAD_ATTRIB::SMD
+                || pad->GetAttribute() == PAD_ATTRIB::CONN
+                || pad->GetAttribute() == PAD_ATTRIB::NON_COMPONENT )
+            {
                 pad->SetLibDrillSize( VECTOR2I( 0, 0 ) );
+            }
+            else
+            {
+                pad->SetLibDrillSize( drillSize );
+            }
 
             break;
         }
