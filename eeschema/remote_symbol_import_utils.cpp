@@ -72,8 +72,7 @@ wxString RemoteLibraryPrefix()
 }
 
 
-bool WriteRemoteBinaryFile( const wxFileName& aOutput, const std::vector<uint8_t>& aPayload,
-                            wxString& aError )
+bool WriteRemoteBinaryFile( const wxFileName& aOutput, const std::vector<uint8_t>& aPayload, wxString& aError )
 {
     if( aPayload.empty() )
     {
@@ -148,13 +147,11 @@ bool EnsureRemoteDestinationRoot( wxFileName& aOutDir, wxString& aError )
 
 
 bool EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE aTableType, const wxFileName& aLibraryPath,
-                                const wxString& aNickname, bool aGlobalTable, bool aStrict,
-                                wxString& aError )
+                               const wxString& aNickname, bool aGlobalTable, bool aStrict, wxString& aError )
 {
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    std::optional<LIBRARY_TABLE*> tableOpt = manager.Table(
-            aTableType,
-            aGlobalTable ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT );
+    auto             tableOpt = manager.Table( aTableType, aGlobalTable ? LIBRARY_TABLE_SCOPE::GLOBAL
+                                                                        : LIBRARY_TABLE_SCOPE::PROJECT );
 
     if( !tableOpt )
     {
@@ -237,8 +234,8 @@ bool SaveRemoteSymbolToLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxFileNa
 }
 
 
-bool PlaceRemoteDownloadedSymbol( SCH_EDIT_FRAME* aFrame, const wxString& aNickname,
-                                  const wxString& aLibItemName, wxString& aError )
+bool PlaceRemoteDownloadedSymbol( SCH_EDIT_FRAME* aFrame, const wxString& aNickname, const wxString& aLibItemName,
+                                  wxString& aError )
 {
     if( !aFrame )
     {
@@ -274,15 +271,15 @@ bool PlaceRemoteDownloadedSymbol( SCH_EDIT_FRAME* aFrame, const wxString& aNickn
     }
 
     aFrame->Raise();
-    toolMgr->PostAction( SCH_ACTIONS::placeSymbol,
-                         SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true, symbol->IsMultiUnit() } );
+    toolMgr->PostAction( SCH_ACTIONS::placeSymbol, SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol,
+                                                                                     true,
+                                                                                     symbol->IsMultiUnit() } );
     return true;
 }
 
 
 std::unique_ptr<LIB_SYMBOL> LoadRemoteSymbolFromPayload( const std::vector<uint8_t>& aPayload,
-                                                        const wxString& aLibItemName,
-                                                        wxString& aError )
+                                                        const wxString& aLibItemName, wxString& aError )
 {
     if( aPayload.empty() )
     {
@@ -350,9 +347,9 @@ std::unique_ptr<LIB_SYMBOL> LoadRemoteSymbolFromPayload( const std::vector<uint8
 
 LIB_ID BuildRemoteLibId( const wxString& aResolvedLibrary, const wxString& aResolvedItemName )
 {
-    const wxString nickname =
-            RemoteLibraryPrefix() + wxS( "_" )
-            + SanitizeRemoteFileComponent( aResolvedLibrary, wxS( "footprints" ), true );
+    const wxString nickname = RemoteLibraryPrefix()
+                               + wxS( "_" )
+                               + SanitizeRemoteFileComponent( aResolvedLibrary, wxS( "footprints" ), true );
 
     const wxString itemName = SanitizeRemoteFileComponent( aResolvedItemName, wxS( "footprint" ) );
 
