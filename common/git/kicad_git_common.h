@@ -318,6 +318,10 @@ public:
     }
     void SetSSHKey( const wxString& aSSHKey );
 
+    /// The key this session prefers, which is the one the project was set up with. Empty
+    /// when none is known.
+    wxString GetSSHKey() const;
+
     // Holds a temporary variable that can be used by the authentication callback
     // to remember which types of authentication have been tested so that we
     // don't loop forever.

@@ -1872,6 +1872,14 @@ void KIGIT_COMMON::SetSSHKey( const wxString& aKey )
 }
 
 
+wxString KIGIT_COMMON::GetSSHKey() const
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
+    return m_publicKeys.empty() ? wxString() : m_publicKeys.front();
+}
+
+
 void KIGIT_COMMON::setSSHKeyUnlocked( const wxString& aKey )
 {
     auto it = std::find( m_publicKeys.begin(), m_publicKeys.end(), aKey );

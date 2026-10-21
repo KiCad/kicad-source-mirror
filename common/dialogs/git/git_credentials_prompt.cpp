@@ -37,8 +37,10 @@
 
 bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject )
 {
+    // The dialog seeds its picker from this, so a project that already knows its key does
+    // not make the user find it again.
     DIALOG_GIT_CREDENTIALS dlg( aParent, aCommon->GetRemote(), aCommon->GetConnType(), aCommon->GetUsername(),
-                                wxEmptyString );
+                                aCommon->GetSSHKey() );
 
     if( dlg.ShowModal() != wxID_OK )
         return false;
