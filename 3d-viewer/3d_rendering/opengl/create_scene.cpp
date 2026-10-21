@@ -29,10 +29,7 @@
 #include <pcb_track.h>
 #include "convert_basic_shapes_to_polygon.h"
 #include <lset.h>
-#include <project.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
-#include <footprint_library_adapter.h>
-#include <project_pcb.h>
 #include <geometry/shape_poly_set.h>
 #include <thread_pool.h>
 
@@ -1918,26 +1915,7 @@ void RENDER_3D_OPENGL::load3dModels( std::stop_token aStop )
     // Go for all footprints
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        wxString libraryName = footprint->GetFPID().GetLibNickname();
-        wxString footprintBasePath = wxEmptyString;
-
-        if( m_boardAdapter.GetBoard()->GetProject() )
-        {
-            try
-            {
-                // FindRow() can throw an exception
-                std::optional<LIBRARY_TABLE_ROW*> fpRow =
-                    PROJECT_PCB::FootprintLibAdapter( m_boardAdapter.GetBoard()->GetProject() )
-                            ->GetRow( libraryName );
-
-                if( fpRow )
-                    footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
-            }
-            catch( ... )
-            {
-                // Do nothing if the libraryName is not found in lib table
-            }
-        }
+        const wxString footprintBasePath = m_boardAdapter.GetFootprintLibraryPath( footprint );
 
         for( const FP_3DMODEL& fp_model : footprint->Models() )
         {

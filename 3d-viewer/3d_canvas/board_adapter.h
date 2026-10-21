@@ -98,6 +98,13 @@ public:
     bool IsFootprintShown( const FOOTPRINT* aFootprint ) const;
 
     /**
+     * Return the directory of @a aFootprint's library.
+     *
+     * 3D model filenames stored relative to that library are resolved against this path.
+     */
+    wxString GetFootprintLibraryPath( const FOOTPRINT* aFootprint ) const;
+
+    /**
      * Set current board to be rendered.
      *
      * @param aBoard board to process.

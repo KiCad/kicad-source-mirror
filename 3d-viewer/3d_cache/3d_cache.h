@@ -77,6 +77,11 @@ public:
     bool SetProject( PROJECT* aProject );
 
     /**
+     * Return the project bound by SetProject(), or nullptr if none has been set.
+     */
+    PROJECT* GetProject() const { return m_project; }
+
+    /**
      * Set the filename resolver's pointer to the application's PGM_BASE instance.
      *
      * The pointer is used to extract the local environment variables.
