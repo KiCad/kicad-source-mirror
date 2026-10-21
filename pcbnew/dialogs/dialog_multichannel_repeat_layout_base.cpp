@@ -125,6 +125,16 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE::DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( 
 
 	bSizer13->Add( m_cbIncludeLockedComponents, 0, wxBOTTOM, 5 );
 
+	m_cbLinkAreas = new wxCheckBox( this, wxID_ANY, _("Link these areas"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbLinkAreas->SetToolTip( _("Update Linked Layouts copies a selected area to the others. Unlink Layout detaches it") );
+
+	bSizer13->Add( m_cbLinkAreas, 0, wxBOTTOM, 5 );
+
+	m_cbLooseMatching = new wxCheckBox( this, wxID_ANY, _("Allow loose matching"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbLooseMatching->SetToolTip( _("Also offer channels that lack some of the selected parts on the edge of the circuit; those parts are left out of every channel") );
+
+	bSizer13->Add( m_cbLooseMatching, 0, wxBOTTOM, 5 );
+
 
 	fgSizer3->Add( bSizer13, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 

@@ -45,6 +45,7 @@
 
 #include <chrono>
 #include <memory>
+#include <set>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -534,6 +535,7 @@ private:
 
     /// if resetting UUIDs, record new ones to update groups with.
     KIID_MAP            m_resetKIIDMap;
+    std::set<KIID>      m_linkedZones;       ///< Zones read with a link set or anchor
 
     bool                m_showLegacySegmentZoneWarning;
     bool                m_showLegacy5ZoneWarning;

@@ -708,6 +708,10 @@ public:
     static TOOL_ACTION ddPlaceReferenceImage;
 
     static TOOL_ACTION repeatLayout;
+    static TOOL_ACTION updateLinkedLayouts;
+    static TOOL_ACTION unlinkLayout;
+    static TOOL_ACTION expandToMatchingTopology;
+    static TOOL_ACTION expandToLargestTopology;
     static TOOL_ACTION generatePlacementRuleAreas;
 
     /// Footprint wizard frame actions:

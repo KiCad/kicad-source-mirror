@@ -87,6 +87,7 @@ component_class
 component_classes
 connect
 connect_pads
+connected_routing
 constant
 constraint
 copperpour
@@ -103,10 +104,14 @@ drill_symbol_profile
 filter
 freeze_assignments
 group_by
+group_items
 guide_cross
 key
+link
+locked_items
 mark
 npth
+other_items
 outline
 convexhull
 copper_line_width

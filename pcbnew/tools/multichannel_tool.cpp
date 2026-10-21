@@ -21,6 +21,13 @@
 #include <board_commit.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection.h>
+#include <tools/pcb_selection_tool.h>
+#include <tool/action_menu.h>
+#include <tool/conditional_menu.h>
+#include <tool/selection_conditions.h>
+#include <tool/tool_menu.h>
+#include <bitmaps.h>
+#include <eda_group.h>
 
 #include <dialogs/dialog_multichannel_generate_rule_areas.h>
 #include <dialogs/dialog_multichannel_repeat_layout.h>
@@ -41,12 +48,19 @@
 #include <pad.h>
 #include <pcb_text.h>
 #include <component_classes/component_class.h>
+#include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/topo_match.h>
 #include <algorithm>
 #include <pcb_track.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_picker_tool.h>
+#include <tools/generator_tool.h>
+#include <router/router_tool.h>
+#include <router/pns_router.h>
+#include <geometry/shape_rect.h>
+#include <scoped_set_reset.h>
+#include <trigo.h>
 #include <chrono>
 #include <core/profile.h>
 #include <thread_pool.h>
@@ -168,6 +182,25 @@ static void collectGroupBoardItems( EDA_GROUP* aGroup, std::set<BOARD_ITEM*>& aO
 }
 
 
+// A linked channel made with its items grouped is exactly its group, so an update repeats what the first copy did
+static EDA_GROUP* linkedChannelGroup( const BOARD* aBoard, const RULE_AREA* aArea )
+{
+    ZONE* zone = aArea->m_zone;
+
+    if( !zone || aArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK || zone->GetLinkSet() == niluuid
+        || !zone->GetRepeatOptions().m_groupItems )
+    {
+        return nullptr;
+    }
+
+    // Scratch zones carry the board pointer too, so membership is by the board's own index
+    if( aBoard->ResolveItem( zone->m_Uuid, true ) != zone )
+        return nullptr;
+
+    return zone->GetParentGroup();
+}
+
+
 MULTICHANNEL_TOOL::MULTICHANNEL_TOOL() : PCB_TOOL_BASE( "pcbnew.Multichannel" )
 {
 }
@@ -178,6 +211,181 @@ MULTICHANNEL_TOOL::~MULTICHANNEL_TOOL()
 
 }
 
+
+void MULTICHANNEL_TOOL::Reset( RESET_REASON aReason )
+{
+    PCB_TOOL_BASE::Reset( aReason );
+
+    if( aReason == MODEL_RELOAD || aReason == SUPERMODEL_RELOAD || aReason == SHUTDOWN )
+        closeRepeatDialog();
+}
+
+static void makePlacementArea( ZONE* aZone, const SHAPE_LINE_CHAIN& aOutline )
+{
+    aZone->SetIsRuleArea( true );
+    aZone->SetLayerSet( LSET::AllCuMask() );
+    aZone->SetPlacementAreaEnabled( true );
+    aZone->SetDoNotAllowZoneFills( false );
+    aZone->SetDoNotAllowVias( false );
+    aZone->SetDoNotAllowTracks( false );
+    aZone->SetDoNotAllowPads( false );
+    aZone->SetDoNotAllowFootprints( false );
+    aZone->AddPolygon( aOutline );
+    aZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+}
+
+
+// Touching edges do not count, so channels may share a border
+static bool outlinesOverlap( const SHAPE_POLY_SET& aA, const SHAPE_POLY_SET& aB )
+{
+    if( !aA.BBox().Intersects( aB.BBox() ) )
+        return false;
+
+    SHAPE_POLY_SET overlap = aA;
+    overlap.BooleanIntersection( aB );
+    return !overlap.IsEmpty();
+}
+
+
+// The matched pair holding the anchor footprint. An anchor outside the reference area falls back to the
+// first pair, so the group is not shifted to center alignment
+static const std::pair<FOOTPRINT* const, FOOTPRINT*>& anchorPair( const TMATCH::COMPONENT_MATCHES& aMatches,
+                                                                  const KIID&                      aAnchor )
+{
+    auto it = std::ranges::find_if( aMatches, [&]( const auto& aPair ) { return aPair.first->m_Uuid == aAnchor; } );
+    return it != aMatches.end() ? *it : *aMatches.begin();
+}
+
+
+// The outline aTarget takes on when aRef is repeated onto it, and the transform that produces it
+static SHAPE_LINE_CHAIN repeatedOutline( const RULE_AREA* aRef, const RULE_AREA* aTarget, const KIID& aAnchor,
+                                         const TMATCH::COMPONENT_MATCHES& aMatches, VECTOR2I& aDisp, EDA_ANGLE& aRot )
+{
+    aDisp = aTarget->m_center - aRef->m_center;
+    aRot = ANGLE_0;
+
+    if( aAnchor != niluuid && !aMatches.empty() )
+    {
+        const auto& [refAnchorFp, targetAnchorFp] = anchorPair( aMatches, aAnchor );
+        VECTOR2I    oldpos = refAnchorFp->GetPosition();
+
+        aRot = targetAnchorFp->GetOrientation() - refAnchorFp->GetOrientation();
+        RotatePoint( oldpos, aRot );
+        aDisp = targetAnchorFp->GetPosition() - oldpos;
+    }
+
+    SHAPE_LINE_CHAIN outline( aRef->m_zone->Outline()->COutline( 0 ) );
+    outline.Rotate( aRot, VECTOR2I( 0, 0 ) );
+    outline.Move( aDisp );
+    return outline;
+}
+
+
+// The linked rule areas the selection stands for, whether as the area, a group holding it or a part of its channel
+static std::set<ZONE*> linkedAreasIn( const SELECTION& aSelection )
+{
+    std::set<ZONE*> zones;
+
+    auto asLinked = []( EDA_ITEM* aItem ) -> ZONE*
+                    {
+                        if( aItem->Type() != PCB_ZONE_T )
+                            return nullptr;
+
+                        ZONE* zone = static_cast<ZONE*>( aItem );
+                        return zone->GetIsRuleArea() && zone->GetLinkSet() != niluuid ? zone : nullptr;
+                    };
+
+    // True when the group directly holds a linked area
+    auto addFrom = [&]( EDA_GROUP* aGroup )
+                   {
+                       bool found = false;
+
+                       for( EDA_ITEM* child : aGroup->GetItems() )
+                       {
+                           if( ZONE* zone = asLinked( child ) )
+                           {
+                               zones.insert( zone );
+                               found = true;
+                           }
+                       }
+
+                       return found;
+                   };
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        // What is selected by name wins over the channels around it
+        if( ZONE* zone = asLinked( item ) )
+        {
+            zones.insert( zone );
+            continue;
+        }
+
+        EDA_GROUP* group = item->Type() == PCB_GROUP_T ? static_cast<PCB_GROUP*>( item ) : item->GetParentGroup();
+
+        while( group && !addFrom( group ) )
+            group = group->AsEdaItem()->GetParentGroup();
+    }
+
+    return zones;
+}
+
+
+ZONE* MULTICHANNEL_TOOL::ChannelZone( const PCB_GROUP* aGroup )
+{
+    for( EDA_ITEM* child : aGroup->GetItems() )
+    {
+        if( child->Type() == PCB_ZONE_T )
+        {
+            ZONE* zone = static_cast<ZONE*>( child );
+
+            if( zone->GetIsRuleArea() && zone->GetPlacementAreaEnabled() )
+                return zone;
+        }
+    }
+
+    return nullptr;
+}
+
+
+class MULTICHANNEL_CONTEXT_MENU : public CONDITIONAL_MENU
+{
+public:
+    MULTICHANNEL_CONTEXT_MENU( TOOL_INTERACTIVE* aTool ) : CONDITIONAL_MENU( aTool )
+    {
+        SetIcon( BITMAPS::mode_module );
+        SetTitle( _( "Multi-Channel" ) );
+
+        // A channel is repeated again through its Properties
+        auto offChannel =
+                []( const SELECTION& aSelection )
+                {
+                    for( EDA_ITEM* item : aSelection )
+                    {
+                        if( item->Type() != PCB_GROUP_T )
+                            continue;
+
+                        if( MULTICHANNEL_TOOL::ChannelZone( static_cast<PCB_GROUP*>( item ) ) )
+                            return false;
+                    }
+
+                    return true;
+                };
+
+        auto oneLinked = []( const SELECTION& aSelection ) { return linkedAreasIn( aSelection ).size() == 1; };
+        auto anyLinked = []( const SELECTION& aSelection ) { return !linkedAreasIn( aSelection ).empty(); };
+
+        AddItem( PCB_ACTIONS::expandToMatchingTopology, SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
+        AddItem( PCB_ACTIONS::expandToLargestTopology, SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
+        AddItem( PCB_ACTIONS::repeatLayout, offChannel );
+        AddItem( PCB_ACTIONS::updateLinkedLayouts, oneLinked );
+        AddItem( PCB_ACTIONS::unlinkLayout, anyLinked );
+    }
+
+    ACTION_MENU* create() const override { return new MULTICHANNEL_CONTEXT_MENU( m_tool ); }
+};
+
+
 void MULTICHANNEL_TOOL::ShowMismatchDetails( wxWindow* aParent, const wxString& aSummary,
                                              const std::vector<wxString>& aReasons ) const
 {
@@ -186,10 +394,32 @@ void MULTICHANNEL_TOOL::ShowMismatchDetails( wxWindow* aParent, const wxString& 
 }
 
 
+bool MULTICHANNEL_TOOL::Init()
+{
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    wxCHECK( selTool, false );
+
+    TOOL_MENU& selToolMenu = selTool->GetToolMenu();
+
+    std::shared_ptr<MULTICHANNEL_CONTEXT_MENU> menu = std::make_shared<MULTICHANNEL_CONTEXT_MENU>( this );
+    selToolMenu.RegisterSubMenu( menu );
+
+    selToolMenu.GetMenu().AddMenu( menu.get(),
+                                   SELECTION_CONDITIONS::HasTypes( { PCB_FOOTPRINT_T, PCB_GROUP_T, PCB_ZONE_T } ),
+                                   100 );
+
+    return true;
+}
+
+
 void MULTICHANNEL_TOOL::setTransitions()
 {
     Go( &MULTICHANNEL_TOOL::AutogenerateRuleAreas, PCB_ACTIONS::generatePlacementRuleAreas.MakeEvent() );
     Go( &MULTICHANNEL_TOOL::repeatLayout, PCB_ACTIONS::repeatLayout.MakeEvent() );
+    Go( &MULTICHANNEL_TOOL::updateLinkedLayouts, PCB_ACTIONS::updateLinkedLayouts.MakeEvent() );
+    Go( &MULTICHANNEL_TOOL::unlinkLayout, PCB_ACTIONS::unlinkLayout.MakeEvent() );
+    Go( &MULTICHANNEL_TOOL::expandToMatchingTopology, PCB_ACTIONS::expandToMatchingTopology.MakeEvent() );
+    Go( &MULTICHANNEL_TOOL::expandToLargestTopology, PCB_ACTIONS::expandToLargestTopology.MakeEvent() );
 }
 
 
@@ -308,7 +538,51 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
             }
         }
 
+        if( aRuleArea->m_fromSelection )
+        {
+            const BOX2I areaBox = aRuleArea->m_zone->Outline()->BBox();
+
+            auto inside =
+                    [&]( BOARD_ITEM* aItem )
+                    {
+                        return ( aRuleArea->m_zone->GetLayerSet() & aItem->GetLayerSet() ).any()
+                               && areaBox.Contains( aItem->GetBoundingBox() );
+                    };
+
+            for( ZONE* zone : board()->Zones() )
+            {
+                if( !zone->GetIsRuleArea() && inside( zone ) )
+                    aItems.insert( zone );
+            }
+
+            for( BOARD_ITEM* drawing : board()->Drawings() )
+            {
+                if( !drawing->IsConnected() && !drawing->GetParentGroup() && inside( drawing ) )
+                    aItems.insert( drawing );
+            }
+        }
+
         return aItems.size() > 0;
+    }
+
+    if( EDA_GROUP* group = linkedChannelGroup( board(), aRuleArea ) )
+    {
+        std::set<BOARD_ITEM*> members;
+        collectGroupBoardItems( group, members );
+
+        for( BOARD_ITEM* boardItem : members )
+        {
+            if( boardItem == aRuleArea->m_zone || boardItem->Type() == PCB_FOOTPRINT_T
+                || boardItem->Type() == PCB_GENERATOR_T || boardItem->Type() == PCB_TABLECELL_T )
+            {
+                continue;
+            }
+
+            if( !boardItem->IsConnected() || boardItem->Type() == PCB_ZONE_T )
+                aItems.insert( boardItem );
+        }
+
+        return true;
     }
 
     // The design-block apply target uses a scratch zone not on the board, so enclosedByArea()
@@ -705,18 +979,6 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
 }
 
 
-RULE_AREA* MULTICHANNEL_TOOL::findRAByName( const wxString& aName )
-{
-    for( RULE_AREA& ra : m_areas.m_areas )
-    {
-        if( ra.m_ruleName == aName )
-            return &ra;
-    }
-
-    return nullptr;
-}
-
-
 void MULTICHANNEL_TOOL::UpdatePickedItem( const EDA_ITEM* aItem )
 {
     if( aItem )
@@ -763,7 +1025,20 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( refRAs.size() != 1 )
+    closeRepeatDialog();
+
+    // Plain parts with no rule area are the reference, and the channels repeating them are discovered
+    if( refRAs.empty() && ( selection().HasType( PCB_FOOTPRINT_T ) || selection().HasType( PCB_GROUP_T ) ) )
+    {
+        StartRepeatFromSelection( std::vector<EDA_ITEM*>( selection().begin(), selection().end() ) );
+
+        if( !m_areas.m_refRA )
+        {
+            frame()->ShowInfoBarMsg( _( "Select the footprints of the circuit to repeat." ), true );
+            return 0;
+        }
+    }
+    else if( refRAs.size() != 1 )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectItemInteractively,
                               PCB_PICKER_TOOL::INTERACTIVE_PARAMS {
@@ -777,27 +1052,1228 @@ int MULTICHANNEL_TOOL::repeatLayout( const TOOL_EVENT& aEvent )
 
         return 0;
     }
-
-    FindExistingRuleAreas();
-
-    int status = CheckRACompatibility( refRAs.front() );
-
-    if( status < 0 )
-        return status;
-
-    if( m_areas.m_areas.size() <= 1 )
+    else
     {
-        frame()->ShowInfoBarError( _( "No Rule Areas to repeat layout to have been found." ), true );
+        FindExistingRuleAreas();
+
+        int status = CheckRACompatibility( refRAs.front() );
+
+        if( status < 0 )
+            return status;
+
+        if( m_areas.m_areas.size() <= 1 )
+        {
+            frame()->ShowInfoBarError( _( "No Rule Areas to repeat layout to have been found." ), true );
+            return 0;
+        }
+
+        const KIID& linkSet = refRAs.front()->GetLinkSet();
+        m_areas.m_options = refRAs.front()->GetRepeatOptions();
+        m_areas.m_linkAreas = linkSet != niluuid;
+
+        // A linked source's set is the user's previous choice
+        for( auto& [area, compat] : m_areas.m_compatMap )
+            compat.m_doCopy = compat.m_isOk && ( linkSet == niluuid || area->m_zone->GetLinkSet() == linkSet );
+    }
+
+    // The view's preview group can be gone since the board loaded, so it is set up again as the router does
+    getView()->InitPreview();
+
+    // Not modal, so the board can be panned and zoomed while the preview shows the result
+    m_dialog = new DIALOG_MULTICHANNEL_REPEAT_LAYOUT( frame(), this );
+    m_dialog->Bind( wxEVT_CLOSE_WINDOW, &MULTICHANNEL_TOOL::onRepeatDialogClosed, this );
+    m_dialog->Show( true );
+    UpdateRepeatPreview();
+    return 0;
+}
+
+
+// A net that belongs to a channel reaches at most one footprint outside it (a connector or the neighbouring
+// block). Rails and buses reach many, so they never tie a channel together
+static bool isChannelNet( const std::vector<FOOTPRINT*>& aOwners, const std::set<FOOTPRINT*>& aChannel )
+{
+    return std::ranges::count_if( aOwners, [&]( FOOTPRINT* aFp ) { return !aChannel.contains( aFp ); } ) <= 1;
+}
+
+
+static std::set<int> channelNets( const std::map<int, std::vector<FOOTPRINT*>>& aNetOwners,
+                                  const std::set<FOOTPRINT*>&                    aChannel )
+{
+    std::set<int> nets;
+
+    for( const auto& [net, owners] : aNetOwners )
+    {
+        if( owners.size() > 1 && isChannelNet( owners, aChannel )
+            && std::ranges::any_of( owners, [&]( FOOTPRINT* aFp ) { return aChannel.contains( aFp ); } ) )
+        {
+            nets.insert( net );
+        }
+    }
+
+    return nets;
+}
+
+
+// Moves aItem into aGroup, staging the group it leaves so undo restores that membership too
+static void stageAddToGroup( BOARD_COMMIT& aCommit, EDA_GROUP* aGroup, BOARD_ITEM* aItem )
+{
+    if( EDA_GROUP* old = aItem->GetParentGroup() )
+    {
+        if( old == aGroup || old->AsEdaItem()->Type() == PCB_GENERATOR_T )
+            return;
+
+        aCommit.Modify( old->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+    }
+
+    aCommit.Modify( aItem );
+    aGroup->AddItem( aItem );
+}
+
+
+static std::set<int> padNets( const FOOTPRINT* aFp, const std::set<int>& aAmong )
+{
+    std::set<int> nets;
+
+    for( const PAD* pad : aFp->Pads() )
+    {
+        if( aAmong.contains( pad->GetNetCode() ) )
+            nets.insert( pad->GetNetCode() );
+    }
+
+    return nets;
+}
+
+
+// Repeated sheets give every instance the same symbol UUIDs under its own instance path
+static std::vector<TMATCH::COMPONENT_MATCHES> matchSheetInstances( BOARD* aBoard, const std::set<FOOTPRINT*>& aRef )
+{
+    using PATH = std::vector<KIID>;
+
+    std::optional<PATH> refPrefix;
+
+    for( FOOTPRINT* fp : aRef )
+    {
+        const KIID_PATH& path = fp->GetPath();
+
+        if( path.size() < 2 )
+            return {};
+
+        if( !refPrefix )
+            refPrefix = PATH( path.begin(), path.end() - 1 );
+
+        size_t depth = std::min( refPrefix->size(), path.size() - 1 );
+        auto   diff = std::mismatch( refPrefix->begin(), refPrefix->begin() + depth, path.begin() );
+
+        refPrefix->resize( diff.first - refPrefix->begin() );
+    }
+
+    if( !refPrefix || refPrefix->empty() )
+        return {};
+
+    const size_t depth = refPrefix->size();
+
+    auto rest =
+            [&]( const KIID_PATH& aPath )
+            {
+                return PATH( aPath.begin() + depth, aPath.end() );
+            };
+
+    std::map<PATH, FOOTPRINT*> refByRest;
+
+    for( FOOTPRINT* fp : aRef )
+        refByRest[rest( fp->GetPath() )] = fp;
+
+    std::map<PATH, TMATCH::COMPONENT_MATCHES> instances;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        const KIID_PATH& path = fp->GetPath();
+
+        if( aRef.contains( fp ) || path.size() <= depth )
+            continue;
+
+        PATH prefix( path.begin(), path.begin() + depth );
+
+        if( prefix == *refPrefix )
+            continue;
+
+        if( auto it = refByRest.find( rest( path ) ); it != refByRest.end() && it->second->GetFPID() == fp->GetFPID() )
+            instances[prefix][it->second] = fp;
+    }
+
+    std::vector<TMATCH::COMPONENT_MATCHES> result;
+
+    for( auto& [prefix, matches] : instances )
+        result.push_back( std::move( matches ) );
+
+    return result;
+}
+
+
+// Pairs the reference footprints, in growth order from the seed, with board footprints that sit on the same
+// mirrored nets, backtracking on dead ends. With aLoose a leaf may stay unmatched
+struct FLAT_MATCHER
+{
+    const std::map<int, std::vector<FOOTPRINT*>>& m_netOwners;
+    const std::set<int>&                          m_internal;
+    const std::set<FOOTPRINT*>&                   m_leaves;
+    const std::set<FOOTPRINT*>&                   m_claimed;
+    const std::vector<FOOTPRINT*>&                m_order;
+    bool                                          m_loose;
+
+    TMATCH::COMPONENT_MATCHES m_map = {};
+    std::set<FOOTPRINT*>      m_used = {};
+    std::map<int, int>        m_netMap = {};
+    std::set<int>             m_netsTaken = {};
+    int                       m_budget = 10000;
+
+    bool bind( FOOTPRINT* aRef, FOOTPRINT* aTarget, std::vector<int>& aAdded )
+    {
+        for( PAD* pad : aRef->Pads() )
+        {
+            int net = pad->GetNetCode();
+
+            if( !m_internal.contains( net ) )
+                continue;
+
+            const PAD* peer = aTarget->FindPadByNumber( pad->GetNumber() );
+
+            if( !peer )
+                return false;
+
+            int peerNet = peer->GetNetCode();
+
+            if( auto it = m_netMap.find( net ); it != m_netMap.end() )
+            {
+                if( it->second != peerNet )
+                    return false;
+            }
+            else
+            {
+                if( peerNet <= 0 || m_netsTaken.contains( peerNet ) )
+                    return false;
+
+                m_netMap[net] = peerNet;
+                m_netsTaken.insert( peerNet );
+                aAdded.push_back( net );
+            }
+        }
+
+        return true;
+    }
+
+    // Pairs m_order[aIndex] with aChoice and matches the rest, undoing the pairing on a dead end
+    bool pair( size_t aIndex, FOOTPRINT* aChoice )
+    {
+        FOOTPRINT*       ref = m_order[aIndex];
+        std::vector<int> added;
+
+        if( bind( ref, aChoice, added ) )
+        {
+            m_map[ref] = aChoice;
+            m_used.insert( aChoice );
+
+            if( extend( aIndex + 1 ) )
+                return true;
+
+            m_map.erase( ref );
+            m_used.erase( aChoice );
+        }
+
+        for( int net : added )
+        {
+            m_netsTaken.erase( m_netMap[net] );
+            m_netMap.erase( net );
+        }
+
+        return false;
+    }
+
+    bool extend( size_t aIndex )
+    {
+        if( aIndex == m_order.size() )
+            return true;
+
+        if( --m_budget < 0 )
+            return false;
+
+        FOOTPRINT* ref = m_order[aIndex];
+
+        // One mapped net is enough to bound the choices; bind() checks the rest
+        auto mapped = std::ranges::find_if( ref->Pads(),
+                                            [&]( PAD* aPad ) { return m_netMap.contains( aPad->GetNetCode() ); } );
+
+        if( mapped != ref->Pads().end() )
+        {
+            for( FOOTPRINT* fp : m_netOwners.at( m_netMap.at( ( *mapped )->GetNetCode() ) ) )
+            {
+                if( !m_claimed.contains( fp ) && !m_used.contains( fp ) && fp->GetFPID() == ref->GetFPID()
+                    && pair( aIndex, fp ) )
+                {
+                    return true;
+                }
+
+                if( m_budget < 0 )
+                    return false;
+            }
+        }
+
+        // A leaf may stay unmatched; the caller works out which parts were left out
+        return m_loose && m_leaves.contains( ref ) && extend( aIndex + 1 );
+    }
+};
+
+
+void MULTICHANNEL_TOOL::StartRepeatFromSelection( const std::vector<EDA_ITEM*>& aItems )
+{
+    m_areas = RULE_AREAS_DATA();
+
+    // The channels become groups, so copies join them
+    m_areas.m_options.m_groupItems = true;
+
+    for( EDA_ITEM* item : aItems )
+    {
+        if( item->Type() == PCB_GROUP_T )
+            collectGroupBoardItems( static_cast<PCB_GROUP*>( item ), m_areas.m_selectedItems );
+        else if( item->IsBOARD_ITEM() && !static_cast<BOARD_ITEM*>( item )->GetParentFootprint() )
+            m_areas.m_selectedItems.insert( static_cast<BOARD_ITEM*>( item ) );
+    }
+
+    for( BOARD_ITEM* item : m_areas.m_selectedItems )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+            m_areas.m_selectedFootprints.insert( static_cast<FOOTPRINT*>( item ) );
+    }
+
+    DiscoverRepeatCandidates( false );
+
+    // A session without a reference must not divert later rule area repeats into the selection flow
+    if( !m_areas.m_refRA )
+        m_areas = RULE_AREAS_DATA();
+}
+
+
+// The footprints on each net, in board order
+static std::map<int, std::vector<FOOTPRINT*>> buildNetOwners( const BOARD* aBoard )
+{
+    std::map<int, std::vector<FOOTPRINT*>> netOwners;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            std::vector<FOOTPRINT*>& owners = netOwners[pad->GetNetCode()];
+
+            if( pad->GetNetCode() > 0 && ( owners.empty() || owners.back() != fp ) )
+                owners.push_back( fp );
+        }
+    }
+
+    return netOwners;
+}
+
+
+std::vector<RULE_AREA_COMPAT_DATA> MULTICHANNEL_TOOL::findMatches( const std::set<FOOTPRINT*>& selected,
+                                                                  bool                        aLoose )
+{
+    std::map<int, std::vector<FOOTPRINT*>> netOwners = buildNetOwners( board() );
+
+    std::set<int>        internal = channelNets( netOwners, selected );
+    std::set<FOOTPRINT*> leaves;
+
+    for( FOOTPRINT* fp : selected )
+    {
+        if( padNets( fp, internal ).size() <= 1 )
+            leaves.insert( fp );
+    }
+
+    std::vector<RULE_AREA_COMPAT_DATA> found;
+
+    // Kept when it lacks no selected part, or only leaves under loose matching
+    auto classify =
+            [&]( RULE_AREA_COMPAT_DATA& aCandidate )
+            {
+                for( FOOTPRINT* fp : selected )
+                {
+                    if( !aCandidate.m_discovered.contains( fp ) )
+                        aCandidate.m_unmatched.insert( fp );
+                }
+
+                aCandidate.m_doCopy = true;
+
+                return aCandidate.m_unmatched.empty()
+                       || ( aLoose && std::ranges::all_of( aCandidate.m_unmatched,
+                                                           [&]( FOOTPRINT* aFp ) { return leaves.contains( aFp ); } ) );
+            };
+
+    for( TMATCH::COMPONENT_MATCHES& matches : matchSheetInstances( board(), selected ) )
+    {
+        RULE_AREA_COMPAT_DATA candidate;
+        candidate.m_discovered = std::move( matches );
+
+        if( classify( candidate ) )
+            found.push_back( std::move( candidate ) );
+    }
+
+    if( found.empty() )
+    {
+        std::map<LIB_ID, int> fpidCount;
+
+        for( FOOTPRINT* fp : board()->Footprints() )
+            fpidCount[fp->GetFPID()]++;
+
+        // The rarest part keeps the number of seeds low; a leaf may be the part a channel lacks
+        FOOTPRINT* seed = *std::ranges::min_element( selected,
+                [&]( FOOTPRINT* aA, FOOTPRINT* aB )
+                {
+                    return std::make_pair( leaves.contains( aA ), fpidCount[aA->GetFPID()] )
+                           < std::make_pair( leaves.contains( aB ), fpidCount[aB->GetFPID()] );
+                } );
+
+        std::vector<FOOTPRINT*> order = { seed };
+
+        for( size_t i = 0; i < order.size(); ++i )
+        {
+            for( int net : padNets( order[i], internal ) )
+            {
+                for( FOOTPRINT* fp : netOwners[net] )
+                {
+                    if( selected.contains( fp ) && std::ranges::find( order, fp ) == order.end() )
+                        order.push_back( fp );
+                }
+            }
+        }
+
+        std::set<FOOTPRINT*> claimed = selected;
+
+        for( FOOTPRINT* twin : board()->Footprints() )
+        {
+            if( claimed.contains( twin ) || twin->GetFPID() != seed->GetFPID() )
+                continue;
+
+            FLAT_MATCHER          matcher{ netOwners, internal, leaves, claimed, order, aLoose };
+            RULE_AREA_COMPAT_DATA candidate;
+            bool                  ok = matcher.pair( 0, twin );
+
+            if( matcher.m_budget < 0 )
+            {
+                candidate.m_discovered = { { seed, twin } };
+                candidate.m_searchLimit = true;
+                found.push_back( std::move( candidate ) );
+                continue;
+            }
+
+            candidate.m_discovered = matcher.m_map;
+
+            if( !ok || !classify( candidate ) )
+                continue;
+
+            // Rails are judged against both channels together, whichever channels were found first
+            RULE_AREA               refArea;
+            RULE_AREA               targetArea;
+            std::set<FOOTPRINT*>    both;
+            std::unordered_set<int> rails;
+
+            for( const auto& [ref, target] : candidate.m_discovered )
+            {
+                refArea.m_components.insert( ref );
+                targetArea.m_components.insert( target );
+                both.insert( { ref, target } );
+            }
+
+            for( FOOTPRINT* fp : both )
+            {
+                for( PAD* pad : fp->Pads() )
+                {
+                    if( pad->GetNetCode() > 0 && !isChannelNet( netOwners[pad->GetNetCode()], both ) )
+                        rails.insert( pad->GetNetCode() );
+                }
+            }
+
+            // A flat match is only a guess until the topology agrees, so it claims nothing before that
+            RULE_AREA_COMPAT_DATA check;
+
+            if( !resolveConnectionTopology( &refArea, &targetArea, check, {}, rails ) )
+                continue;
+
+            claimed.insert( targetArea.m_components.begin(), targetArea.m_components.end() );
+            found.push_back( std::move( candidate ) );
+        }
+    }
+
+    return found;
+}
+
+
+void MULTICHANNEL_TOOL::DiscoverRepeatCandidates( bool aLoose )
+{
+    const std::set<FOOTPRINT*>& selected = m_areas.m_selectedFootprints;
+    PROF_TIMER                  timer;
+
+    m_areas.m_refRA = nullptr;
+    m_focusArea = nullptr;
+    m_areas.m_compatMap.clear();
+    m_areas.m_areas.clear();
+    m_areas.m_scratchItems.clear();
+
+    if( selected.empty() )
+        return;
+
+    std::vector<RULE_AREA_COMPAT_DATA> found = findMatches( selected, aLoose );
+
+    // Filled before any pointer to its elements is taken
+    m_areas.m_areas.reserve( found.size() + 1 );
+
+    auto addArea =
+            [&]( const SHAPE_LINE_CHAIN& aOutline, const std::set<FOOTPRINT*>& aFootprints,
+                 PLACEMENT_SOURCE_T aSourceType ) -> RULE_AREA&
+            {
+                ZONE*      zone = new ZONE( board() );
+                PCB_GROUP* group = new PCB_GROUP( board() );
+
+                m_areas.m_scratchItems.emplace_back( zone );
+                m_areas.m_scratchItems.emplace_back( group );
+                makePlacementArea( zone, aOutline );
+
+                RULE_AREA& area = m_areas.m_areas.emplace_back();
+                area.m_zone = zone;
+                area.m_group = group;
+                area.m_components = aFootprints;
+                area.m_center = aOutline.Centre();
+                area.m_sourceType = aSourceType;
+                return area;
+            };
+
+    // The selection is copied as given, like a design block, rather than by what its area encloses
+    addArea( buildRAOutline( m_areas.m_selectedItems, 100000 ), selected, PLACEMENT_SOURCE_T::DESIGN_BLOCK )
+            .m_fromSelection = true;
+
+    for( const RULE_AREA_COMPAT_DATA& candidate : found )
+    {
+        std::set<FOOTPRINT*> targets;
+
+        for( const auto& [ref, target] : candidate.m_discovered )
+            targets.insert( target );
+
+        addArea( buildRAOutline( targets, 100000 ), targets, PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+    }
+
+    m_areas.m_refRA = &m_areas.m_areas.front();
+
+    for( size_t i = 0; i < found.size(); ++i )
+        m_areas.m_compatMap[&m_areas.m_areas[i + 1]] = std::move( found[i] );
+
+    // A candidate that fails on its own starts unticked, so its missing parts do not shrink the others
+    updateSelectionCore();
+    bool unticked = false;
+
+    for( auto& [area, compat] : m_areas.m_compatMap )
+    {
+        unticked |= compat.m_doCopy && !compat.m_isOk;
+        compat.m_doCopy &= compat.m_isOk;
+    }
+
+    if( unticked )
+        updateSelectionCore();
+
+    wxLogTrace( traceMultichannelTool, wxT( "Discovery: %s, %d candidates" ), timer.to_string(),
+                (int) m_areas.m_compatMap.size() );
+}
+
+
+std::set<FOOTPRINT*> MULTICHANNEL_TOOL::ExpandToMatchingTopology( const std::set<FOOTPRINT*>& aSeed, bool aLargest )
+{
+    // Each trial runs a full discovery, so a large board cannot be searched without limit
+    int budget = 400;
+
+    auto hasTwin =
+            [&]( const std::set<FOOTPRINT*>& aSet )
+            {
+                budget--;
+
+                return std::ranges::any_of( findMatches( aSet, false ),
+                                            []( const RULE_AREA_COMPAT_DATA& aMatch )
+                                            {
+                                                return !aMatch.m_searchLimit;
+                                            } );
+            };
+
+    std::set<FOOTPRINT*> result = aSeed;
+
+    if( result.empty() || !hasTwin( result ) )
+        return result;
+
+    // A sheet instance is the largest set a hierarchical design repeats
+    const KIID_PATH& path = ( *aSeed.begin() )->GetPath();
+
+    if( aLargest && path.size() >= 2 )
+    {
+        std::set<FOOTPRINT*> sheet;
+
+        for( FOOTPRINT* fp : board()->Footprints() )
+        {
+            const KIID_PATH& other = fp->GetPath();
+
+            if( other.size() == path.size() && std::equal( path.begin(), path.end() - 1, other.begin() ) )
+                sheet.insert( fp );
+        }
+
+        bool holdsSeed = std::ranges::all_of( aSeed, [&]( FOOTPRINT* aFp ) { return sheet.contains( aFp ); } );
+
+        if( sheet.size() > result.size() && holdsSeed && hasTwin( sheet ) )
+        {
+            return sheet;
+        }
+    }
+
+    std::map<int, std::vector<FOOTPRINT*>> netOwners = buildNetOwners( board() );
+
+    // Rails and buses reach too many parts to tie a channel together
+    constexpr size_t maxOwners = 12;
+
+    std::set<FOOTPRINT*> rejected;
+    bool                 grew = true;
+
+    while( grew && budget > 0 )
+    {
+        grew = false;
+
+        // A step only reaches the parts next to what the pass started with
+        const std::set<FOOTPRINT*> frontier = result;
+
+        for( const auto& [net, owners] : netOwners )
+        {
+            if( owners.size() > maxOwners || !std::ranges::any_of( owners, [&]( FOOTPRINT* aFp )
+                                                                   { return frontier.contains( aFp ); } ) )
+            {
+                continue;
+            }
+
+            for( FOOTPRINT* fp : owners )
+            {
+                if( budget <= 0 )
+                    break;
+
+                if( result.contains( fp ) || rejected.contains( fp ) )
+                    continue;
+
+                std::set<FOOTPRINT*> trial = result;
+                trial.insert( fp );
+
+                if( hasTwin( trial ) )
+                {
+                    result = std::move( trial );
+                    grew = true;
+                }
+                else
+                {
+                    rejected.insert( fp );
+                }
+            }
+        }
+
+        // A part refused alone may fit once its neighbours are in
+        if( grew )
+            rejected.clear();
+
+        if( !aLargest )
+            break;
+    }
+
+    return result;
+}
+
+
+int MULTICHANNEL_TOOL::expandToMatchingTopology( const TOOL_EVENT& aEvent )
+{
+    return expandSelection( false );
+}
+
+
+int MULTICHANNEL_TOOL::expandToLargestTopology( const TOOL_EVENT& aEvent )
+{
+    return expandSelection( true );
+}
+
+
+int MULTICHANNEL_TOOL::expandSelection( bool aLargest )
+{
+    std::set<FOOTPRINT*> seed;
+
+    for( EDA_ITEM* item : selection() )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+            seed.insert( static_cast<FOOTPRINT*>( item ) );
+        else if( item->Type() == PCB_GROUP_T )
+            collectGroupFootprints( static_cast<PCB_GROUP*>( item ), seed );
+    }
+
+    if( seed.empty() )
+    {
+        frame()->ShowInfoBarMsg( _( "Select a footprint to expand from." ), true );
         return 0;
     }
 
-    DIALOG_MULTICHANNEL_REPEAT_LAYOUT dialog( frame(), this );
-    int ret = dialog.ShowModal();
+    std::set<FOOTPRINT*> expanded = ExpandToMatchingTopology( seed, aLargest );
 
-    if( ret != wxID_OK )
+    if( expanded.size() == seed.size() )
+    {
+        frame()->ShowInfoBarMsg( _( "No larger topology repeats elsewhere on the board." ), true );
+        return 0;
+    }
+
+    EDA_ITEMS items( expanded.begin(), expanded.end() );
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &items );
+
+    frame()->ShowInfoBarMsg( wxString::Format( _( "Selected %d parts that repeat elsewhere." ), (int) expanded.size() ),
+                             true );
+    return 0;
+}
+
+
+void MULTICHANNEL_TOOL::updateSelectionCore()
+{
+    RULE_AREA*           ref = m_areas.m_refRA;
+    std::set<FOOTPRINT*> pruned;
+
+    if( !ref )
+        return;
+
+    // Every channel keeps only the parts all ticked channels share
+    for( const auto& [area, compat] : m_areas.m_compatMap )
+    {
+        if( compat.m_doCopy )
+            pruned.insert( compat.m_unmatched.begin(), compat.m_unmatched.end() );
+    }
+
+    ref->m_components.clear();
+    ref->m_designBlockItems.clear();
+
+    for( BOARD_ITEM* item : m_areas.m_selectedItems )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T && pruned.contains( static_cast<FOOTPRINT*>( item ) ) )
+            continue;
+
+        ref->m_designBlockItems.insert( item );
+
+        if( item->Type() == PCB_FOOTPRINT_T )
+            ref->m_components.insert( static_cast<FOOTPRINT*>( item ) );
+    }
+
+    if( ref->m_components.empty() )
+    {
+        for( auto& [area, compat] : m_areas.m_compatMap )
+        {
+            compat.m_isOk = false;
+            compat.m_errorMsg = _( "The ticked channels share no selected part" );
+        }
+
+        return;
+    }
+
+    // The anchor must be shared by all channels; the biggest part is the one placed first
+    if( !std::ranges::any_of( ref->m_components,
+                              [&]( FOOTPRINT* aFp ) { return aFp->m_Uuid == m_areas.m_options.m_anchor; } ) )
+    {
+        m_areas.m_options.m_anchor = niluuid;
+        int64_t biggest = -1;
+
+        for( FOOTPRINT* fp : ref->m_components )
+        {
+            if( int64_t area = fp->GetBoundingBox( false ).GetArea(); area > biggest )
+            {
+                biggest = area;
+                m_areas.m_options.m_anchor = fp->m_Uuid;
+            }
+        }
+    }
+
+    for( auto& [area, compat] : m_areas.m_compatMap )
+    {
+        area->m_components.clear();
+
+        for( FOOTPRINT* fp : ref->m_components )
+        {
+            if( auto it = compat.m_discovered.find( fp ); it != compat.m_discovered.end() )
+                area->m_components.insert( it->second );
+        }
+
+        if( compat.m_searchLimit )
+        {
+            compat.m_isOk = false;
+            compat.m_errorMsg = _( "Search limit reached" );
+            continue;
+        }
+
+        if( !resolveConnectionTopology( ref, area, compat ) )
+            continue;
+
+        if( !compat.m_unmatched.empty() )
+            compat.m_errorMsg = wxString::Format( _( "Loose: prunes %s" ), JoinReferences( compat.m_unmatched ) );
+
+        // Copying clears the target by its outline, so it has to be where the copy will land
+        VECTOR2I  disp;
+        EDA_ANGLE rot;
+
+        area->m_zone->RemoveAllContours();
+        area->m_zone->AddPolygon( repeatedOutline( ref, area, m_areas.m_options.m_anchor, compat.m_matchingComponents,
+                                                   disp, rot ) );
+    }
+}
+
+
+int MULTICHANNEL_TOOL::applySelectionRepeat()
+{
+    RULE_AREA*              ref = m_areas.m_refRA;
+    std::vector<RULE_AREA*> channels = { ref };
+    BOARD_COMMIT            commit( GetManager(), true, false );
+
+    for( auto& [area, compat] : m_areas.m_compatMap )
+    {
+        if( compat.m_doCopy && compat.m_isOk )
+            channels.push_back( area );
+    }
+
+    if( channels.size() < 2 )
         return 0;
 
-    return RepeatLayout( aEvent, refRAs.front() );
+    auto addToBoard =
+            [&]( BOARD_ITEM* aItem )
+            {
+                auto it = std::ranges::find_if( m_areas.m_scratchItems,
+                                                [&]( const auto& aScratch ) { return aScratch.get() == aItem; } );
+                commit.Add( it->release() );
+            };
+
+    std::set<wxString> names;
+
+    for( PCB_GROUP* group : board()->Groups() )
+        names.insert( group->GetName() );
+
+    for( RULE_AREA* area : channels )
+    {
+        // Each channel is named after its counterpart of the anchor
+        RULE_AREA* matched = area == ref ? channels[1] : area;
+        const auto& [refAnchor, targetAnchor] =
+                anchorPair( m_areas.m_compatMap[matched].m_matchingComponents, m_areas.m_options.m_anchor );
+        FOOTPRINT* anchor = area == ref ? refAnchor : targetAnchor;
+
+        wxString name = BOARD::MakeUniqueZoneName( wxString::Format( _( "%s channel" ), anchor->GetReference() ),
+                                                   [&]( const wxString& aName ) { return names.contains( aName ); } );
+        names.insert( name );
+
+        area->m_group->SetName( name );
+        area->m_zone->SetZoneName( name );
+
+        // A channel that is exactly one sheet instance keeps following the schematic
+        wxString sheet = anchor->GetSheetname();
+        bool     wholeSheet = queryComponentsInSheet( sheet ) == area->m_components;
+
+        area->m_zone->SetPlacementAreaSourceType( wholeSheet ? PLACEMENT_SOURCE_T::SHEETNAME
+                                                             : PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+        area->m_zone->SetPlacementAreaSource( wholeSheet ? sheet : area->m_group->GetName() );
+
+        addToBoard( area->m_zone );
+        addToBoard( area->m_group );
+        stageAddToGroup( commit, area->m_group, area->m_zone );
+
+        for( FOOTPRINT* fp : area->m_components )
+            stageAddToGroup( commit, area->m_group, fp );
+    }
+
+    for( EDA_ITEM* item : ref->m_designBlockItems )
+    {
+        if( item->Type() != PCB_FOOTPRINT_T )
+            stageAddToGroup( commit, ref->m_group, static_cast<BOARD_ITEM*>( item ) );
+    }
+
+    // What the area of the parts brings along is part of the channel, so linked updates repeat it too
+    std::set<BOARD_ITEM*> found;
+
+    if( m_areas.m_options.m_copyRouting )
+    {
+        std::set<int> nets;
+
+        for( FOOTPRINT* fp : ref->m_components )
+        {
+            for( PAD* pad : fp->Pads() )
+                nets.insert( pad->GetNetCode() );
+        }
+
+        for( BOARD_CONNECTED_ITEM* item : findRepeatRouting( ref, nets, m_areas.m_options ) )
+            found.insert( item );
+    }
+
+    if( m_areas.m_options.m_copyOtherItems )
+        findOtherItemsInRuleArea( ref, found );
+
+    for( BOARD_ITEM* item : found )
+    {
+        if( !item->GetParentGroup() && !ref->m_designBlockItems.contains( item ) )
+            stageAddToGroup( commit, ref->m_group, item );
+    }
+
+    if( m_areas.m_linkAreas )
+    {
+        std::vector<RULE_AREA*> targets;
+
+        for( RULE_AREA* area : channels )
+        {
+            if( area != ref )
+                targets.push_back( area );
+        }
+
+        linkAreas( commit, ref->m_zone, targets );
+    }
+
+    applyRepeat( commit );
+
+    // Pushing delivers the model change, which ends the session and frees ref
+    EDA_ITEM* refGroup = ref->m_group->AsEdaItem();
+    int       created = (int) channels.size();
+
+    commit.Push( _( "Repeat Layout" ) );
+
+    // Editing the old loose selection would leave the reference area behind
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+    m_toolMgr->RunAction( ACTIONS::selectItem, refGroup );
+
+    if( Pgm().IsGUI() )
+    {
+        frame()->ShowInfoBarMsg( wxString::Format( m_areas.m_linkAreas ? _( "Created %d linked channels." )
+                                                                       : _( "Created %d channels." ),
+                                                   created ),
+                                 true );
+    }
+
+    return 0;
+}
+
+
+wxString MULTICHANNEL_TOOL::JoinReferences( const std::set<FOOTPRINT*>& aFootprints )
+{
+    wxArrayString refs;
+
+    for( FOOTPRINT* fp : aFootprints )
+        refs.push_back( fp->GetReference() );
+
+    refs.Sort();
+    return wxJoin( refs, ',' );
+}
+
+
+void MULTICHANNEL_TOOL::RefreshRepeat()
+{
+    if( m_areas.FromSelection() )
+        updateSelectionCore();
+
+    UpdateRepeatPreview();
+}
+
+
+int MULTICHANNEL_TOOL::ApplyRepeat()
+{
+    clearRepeatPreview();
+
+    if( m_areas.FromSelection() )
+        return applySelectionRepeat();
+
+    return RepeatLayout( TOOL_EVENT(), m_areas.m_refRA->m_zone );
+}
+
+
+void MULTICHANNEL_TOOL::UpdateRepeatPreview()
+{
+    KIGFX::VIEW* view = getView();
+
+    clearRepeatPreview();
+
+    if( !view || !m_areas.m_refRA )
+        return;
+
+    PROF_TIMER timer;
+
+    // The copy is staged and reverted; only clones of its result stay on screen
+    auto                  savedCompat = m_areas.m_compatMap;
+    REPEAT_LAYOUT_OPTIONS savedOptions = m_areas.m_options;
+    BOARD_COMMIT          commit( GetManager(), true, false );
+
+    // Grouping changes nothing visible and would stage edits to unrelated groups
+    m_areas.m_options.m_groupItems = false;
+    applyRepeat( commit );
+
+    auto show =
+            [&]( BOARD_ITEM* aItem )
+            {
+                // Group and generator clones share members, so those are shown one member at a time
+                if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
+                {
+                    aItem->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                          {
+                                              view->AddToPreview( aChild->Clone(), true );
+                                          },
+                                          RECURSE_MODE::RECURSE );
+                    return;
+                }
+
+                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( aItem->Clone() );
+                clone->SetBrightened();
+                view->AddToPreview( clone, true );
+                clone->RunOnChildren( [&]( BOARD_ITEM* aChild ) { view->AddToPreview( aChild, false ); },
+                                      RECURSE_MODE::RECURSE );
+            };
+
+    for( const auto& [area, compat] : m_areas.m_compatMap )
+    {
+        for( BOARD_ITEM* item : compat.m_affectedItems )
+            m_previewHidden.push_back( item->m_Uuid );
+
+        for( BOARD_ITEM* item : compat.m_groupableItems )
+            show( item );
+    }
+
+    // Marks and ratsnest follow the parts to where the copy puts them
+    for( const auto& [area, compat] : m_areas.m_compatMap )
+    {
+        for( BOARD_ITEM* item : compat.m_affectedItems )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+
+                m_previewBoxes[fp] = fp->GetBoundingBox( false );
+            }
+        }
+    }
+
+    if( !m_previewBoxes.empty() )
+    {
+        std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
+        std::vector<BOARD_ITEM*>           moved;
+
+        for( const auto& [fp, box] : m_previewBoxes )
+            moved.push_back( fp );
+
+        for( BOARD_ITEM* fp : moved )
+            connectivity->Update( fp );
+
+        connectivity->RecalculateRatsnest();
+
+        auto movedPad =
+                [&]( const std::shared_ptr<const CN_ANCHOR>& aNode )
+                {
+                    BOARD_CONNECTED_ITEM* parent = aNode->Parent();
+
+                    return parent && parent->Type() == PCB_PAD_T
+                           && m_previewBoxes.contains( parent->GetParentFootprint() );
+                };
+
+        for( const CN_EDGE& edge : connectivity->GetRatsnestForItems( moved ) )
+        {
+            const std::shared_ptr<const CN_ANCHOR>& a = edge.GetSourceNode();
+            const std::shared_ptr<const CN_ANCHOR>& b = edge.GetTargetNode();
+
+            if( a && b && !a->Dirty() && !b->Dirty() && ( movedPad( a ) || movedPad( b ) ) )
+                m_previewRatsnest.emplace_back( a->Pos(), b->Pos() );
+        }
+    }
+
+    // Revert swaps in fresh footprint children, so the originals are hidden only once it is done
+    commit.Revert();
+    setPreviewHidden( true );
+    hideMovedRatsnest();
+    m_areas.m_compatMap = std::move( savedCompat );
+    m_areas.m_options = savedOptions;
+    canvas()->Refresh();
+    HighlightRepeatAreas( m_focusArea );
+    wxLogTrace( traceMultichannelTool, wxT( "Preview: %s" ), timer.to_string() );
+}
+
+
+void MULTICHANNEL_TOOL::hideMovedRatsnest()
+{
+    if( m_previewBoxes.empty() )
+        return;
+
+    // Lines at the old positions would otherwise sit beside the previewed ones
+    std::vector<BOARD_ITEM*> moved;
+
+    for( const auto& [fp, box] : m_previewBoxes )
+        moved.push_back( fp );
+
+    board()->GetConnectivity()->BlockRatsnestItems( moved );
+    canvas()->RedrawRatsnest();
+}
+
+
+std::set<BOARD_CONNECTED_ITEM*> MULTICHANNEL_TOOL::findRepeatRouting( RULE_AREA* aArea, const std::set<int>& aNets,
+                                                                      const REPEAT_LAYOUT_OPTIONS& aOpts )
+{
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
+    std::set<BOARD_CONNECTED_ITEM*>    scanned;
+    std::set<BOARD_CONNECTED_ITEM*>    routing;
+
+    findRoutingInRuleArea( aArea, scanned );
+
+    for( BOARD_CONNECTED_ITEM* item : scanned )
+    {
+        if( aNets.contains( item->GetNetCode() ) )
+            routing.insert( item );
+    }
+
+    // A linked channel's group already holds everything it carries
+    if( aOpts.m_connectedRoutingOnly || linkedChannelGroup( board(), aArea ) )
+        return routing;
+
+    const std::set<BOARD_CONNECTED_ITEM*> inside = routing;
+
+    for( BOARD_CONNECTED_ITEM* item : inside )
+    {
+        if( item->Type() == PCB_PAD_T )
+            continue;
+
+        for( CN_ITEM* cnItem : connectivity->GetConnectivityAlgo()->ItemEntry( item ).GetItems() )
+        {
+            for( CN_ITEM* touching : cnItem->ConnectedItems() )
+            {
+                BOARD_CONNECTED_ITEM* next = touching->Valid() ? touching->Parent() : nullptr;
+
+                if( !next || ( next->Type() != PCB_TRACE_T && next->Type() != PCB_ARC_T && next->Type() != PCB_VIA_T ) )
+                    continue;
+
+                // Tracks of a meander travel with their generator
+                EDA_GROUP* parent = next->GetParentGroup();
+
+                if( parent && parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
+                    continue;
+
+                if( next->GetNetCode() == item->GetNetCode() && aNets.contains( next->GetNetCode() ) )
+                    routing.insert( next );
+            }
+        }
+    }
+
+    return routing;
+}
+
+
+void MULTICHANNEL_TOOL::HighlightRepeatAreas( const RULE_AREA* aArea )
+{
+    KIGFX::VIEW* view = getView();
+
+    if( !view )
+        return;
+
+    m_focusArea = aArea;
+
+    if( !m_highlight )
+        m_highlight = view->MakeOverlay();
+
+    m_highlight->Clear();
+
+    auto mark =
+            [&]( const RULE_AREA* aMarked, const KIGFX::COLOR4D& aColor )
+            {
+                m_highlight->SetIsStroke( true );
+                m_highlight->SetIsFill( true );
+                m_highlight->SetStrokeColor( aColor.WithAlpha( 0.9 ) );
+                m_highlight->SetFillColor( aColor.WithAlpha( 0.08 ) );
+                m_highlight->SetLineWidth( pcbIUScale.mmToIU( 0.2 ) );
+
+                for( FOOTPRINT* fp : aMarked->m_components )
+                {
+                    auto  moved = m_previewBoxes.find( fp );
+                    BOX2I box = moved != m_previewBoxes.end() ? moved->second : fp->GetBoundingBox( false );
+
+                    m_highlight->Rectangle( box.GetOrigin(), box.GetEnd() );
+                }
+            };
+
+    if( m_areas.m_refRA )
+        mark( m_areas.m_refRA, KIGFX::COLOR4D( 0.1, 0.8, 0.3, 1.0 ) );
+
+    if( aArea )
+        mark( aArea, KIGFX::COLOR4D( 1.0, 0.6, 0.1, 1.0 ) );
+
+    m_highlight->SetIsFill( false );
+    m_highlight->SetStrokeColor( KIGFX::COLOR4D( 0.6, 0.8, 1.0, 0.8 ) );
+    m_highlight->SetLineWidth( pcbIUScale.mmToIU( 0.05 ) );
+
+    for( const SEG& line : m_previewRatsnest )
+        m_highlight->Line( line.A, line.B );
+
+    view->Update( m_highlight.get() );
+    canvas()->Refresh();
+}
+
+
+void MULTICHANNEL_TOOL::clearRepeatPreview()
+{
+    KIGFX::VIEW* view = getView();
+
+    if( !view )
+        return;
+
+    view->ClearPreview();
+    setPreviewHidden( false );
+    m_previewHidden.clear();
+
+    if( !m_previewBoxes.empty() )
+    {
+        board()->GetConnectivity()->ClearLocalRatsnest();
+        canvas()->RedrawRatsnest();
+    }
+
+    m_previewBoxes.clear();
+    m_previewRatsnest.clear();
+
+    if( m_highlight )
+    {
+        view->Remove( m_highlight.get() );
+        m_highlight.reset();
+    }
+
+    canvas()->Refresh();
+}
+
+
+void MULTICHANNEL_TOOL::setPreviewHidden( bool aHide )
+{
+    KIGFX::VIEW* view = getView();
+
+    // Hidden items may have been deleted since, so they are found again by UUID
+    for( const KIID& id : m_previewHidden )
+    {
+        BOARD_ITEM* item = board()->ResolveItem( id, true );
+
+        if( !item || !view->HasItem( item ) )
+            continue;
+
+        view->Hide( item, aHide );
+        item->RunOnChildren( [&]( BOARD_ITEM* aChild ) { view->Hide( aChild, aHide ); }, RECURSE_MODE::NO_RECURSE );
+    }
+}
+
+
+void MULTICHANNEL_TOOL::closeRepeatDialog()
+{
+    if( m_dialog )
+        m_dialog->Close( true );
+}
+
+
+void MULTICHANNEL_TOOL::onRepeatDialogClosed( wxCloseEvent& aEvent )
+{
+    clearRepeatPreview();
+    m_focusArea = nullptr;
+
+    m_dialog->Unbind( wxEVT_CLOSE_WINDOW, &MULTICHANNEL_TOOL::onRepeatDialogClosed, this );
+    m_dialog->Destroy();
+    m_dialog = nullptr;
+
+    m_areas = RULE_AREAS_DATA();
 }
 
 
@@ -977,24 +2453,13 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     // the whole group. This keeps Apply Design Block Layout from moving the group to wherever
     // the source design block happened to be placed.
     if( aRefArea.m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK
-        && aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !aOptions.m_anchorFp )
+        && aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && aOptions.m_anchor == niluuid )
     {
         if( !compat.m_matchingComponents.empty() )
-            aOptions.m_anchorFp = compat.m_matchingComponents.begin()->first;
+            aOptions.m_anchor = compat.m_matchingComponents.begin()->first->m_Uuid;
     }
 
-    if( !copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, aOptions, compat ) )
-    {
-        auto errMsg = wxString::Format( _( "Could not copy the layout from '%s' to '%s'." ),
-                                        aRefArea.m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
-
-        if( !aExternalCommit )
-            commit.Revert();
-
-        reportError( errMsg );
-
-        return -1;
-    }
+    copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, aOptions, compat );
 
     if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
     {
@@ -1033,11 +2498,9 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 }
 
 
-int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
+int MULTICHANNEL_TOOL::applyRepeat( BOARD_COMMIT& aCommit )
 {
     int totalCopied = 0;
-
-    BOARD_COMMIT commit( GetManager(), true, false );
 
     for( auto& [targetArea, compatData] : m_areas.m_compatMap )
     {
@@ -1051,21 +2514,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         if( !compatData.m_isOk )
             continue;
 
-        if( !copyRuleAreaContents( m_areas.m_refRA, targetArea, &commit, m_areas.m_options, compatData ) )
-        {
-            auto errMsg = wxString::Format( _( "Could not copy the layout from '%s' to '%s'." ),
-                                            m_areas.m_refRA->m_zone->GetZoneName(), targetArea->m_zone->GetZoneName() );
-
-            commit.Revert();
-
-            if( Pgm().IsGUI() )
-                frame()->ShowInfoBarError( errMsg, true );
-
-            return -1;
-        }
-
+        copyRuleAreaContents( m_areas.m_refRA, targetArea, &aCommit, m_areas.m_options, compatData );
         totalCopied++;
-        wxSafeYield();
     }
 
     if( m_areas.m_options.m_groupItems )
@@ -1081,25 +2531,41 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 
             if( group )
             {
-                commit.Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+                aCommit.Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
             }
             else
             {
-                pruneExistingGroups( commit, compatData.m_affectedItems );
+                pruneExistingGroups( aCommit, compatData.m_affectedItems );
 
                 group = new PCB_GROUP( board() );
-                commit.Add( group->AsEdaItem() );
+                aCommit.Add( group->AsEdaItem() );
             }
 
             for( BOARD_ITEM* item : compatData.m_groupableItems )
-            {
-                if( group->ContainsItem( item ) )
-                    continue;
-
-                commit.Modify( item );
-                group->AddItem( item );
-            }
+                stageAddToGroup( aCommit, group, item );
         }
+    }
+
+    return totalCopied;
+}
+
+
+int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
+{
+    BOARD_COMMIT commit( GetManager(), true, false );
+    int          totalCopied = applyRepeat( commit );
+
+    if( m_areas.m_linkAreas )
+    {
+        std::vector<RULE_AREA*> targets;
+
+        for( const auto& [targetArea, compatData] : m_areas.m_compatMap )
+        {
+            if( compatData.m_doCopy && compatData.m_isOk )
+                targets.push_back( targetArea );
+        }
+
+        linkAreas( commit, aRefZone, targets );
     }
 
     commit.Push( _( "Repeat Layout" ) );
@@ -1111,33 +2577,270 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
 }
 
 
-wxString MULTICHANNEL_TOOL::stripComponentIndex( const wxString& aRef ) const
+void MULTICHANNEL_TOOL::detachArea( BOARD_COMMIT& aCommit, ZONE* aZone )
 {
-    wxString rv;
+    if( aZone->GetBoard() )
+        aCommit.Modify( aZone );
 
-    // fixme: i'm pretty sure this can be written in a simpler way, but I really suck at figuring
-    // out which wx's built in functions would do it for me. And I hate regexps :-)
-    for( auto k : aRef )
-    {
-        if( !k.IsAscii() )
-            break;
-
-        char c;
-        k.GetAsChar( &c );
-
-        if( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c == '_' ) )
-            rv.Append( k );
-        else
-            break;
-    }
-
-    return rv;
+    aZone->SetLinkSet( niluuid );
+    aZone->SetRepeatOptions( REPEAT_LAYOUT_OPTIONS() );
 }
 
 
-int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_CONNECTED_ITEM*>& aOutput,
-                                              std::shared_ptr<CONNECTIVITY_DATA> aConnectivity,
-                                              const SHAPE_POLY_SET& aRAPoly, const REPEAT_LAYOUT_OPTIONS& aOpts ) const
+void MULTICHANNEL_TOOL::linkAreas( BOARD_COMMIT& aCommit, ZONE* aRefZone, const std::vector<RULE_AREA*>& aTargets )
+{
+    const REPEAT_LAYOUT_OPTIONS& opts = m_areas.m_options;
+    const KIID                   linkSet;
+    std::set<KIID>               oldSets;
+
+    // New zones are not on the board yet, so the commit has nothing to snapshot
+    auto join = [&]( ZONE* aZone, const KIID& aAnchor )
+                {
+                    if( aZone->GetBoard() )
+                        aCommit.Modify( aZone );
+
+                    REPEAT_LAYOUT_OPTIONS own = opts;
+                    own.m_anchor = aAnchor;
+
+                    if( aZone->GetLinkSet() != niluuid )
+                        oldSets.insert( aZone->GetLinkSet() );
+
+                    aZone->SetLinkSet( linkSet );
+                    aZone->SetRepeatOptions( own );
+                };
+
+    join( aRefZone, opts.m_anchor );
+
+    for( RULE_AREA* target : aTargets )
+    {
+        const TMATCH::COMPONENT_MATCHES& matches = m_areas.m_compatMap[target].m_matchingComponents;
+        KIID                             anchor = niluuid;
+
+        // Each area keeps its own counterpart of the anchor, so any of them can be the source later
+        if( opts.m_anchor != niluuid && !matches.empty() )
+            anchor = anchorPair( matches, opts.m_anchor ).second->m_Uuid;
+
+        join( target->m_zone, anchor );
+    }
+
+    // Peers that were left out stay linked to each other unless they are alone
+    dropLoneLinks( aCommit, oldSets );
+}
+
+
+void MULTICHANNEL_TOOL::dropLoneLinks( BOARD_COMMIT& aCommit, const std::set<KIID>& aSets )
+{
+    std::map<KIID, std::vector<ZONE*>> members;
+
+    for( ZONE* zone : board()->Zones() )
+    {
+        if( aSets.contains( zone->GetLinkSet() ) )
+            members[zone->GetLinkSet()].push_back( zone );
+    }
+
+    for( const auto& [linkSet, zones] : members )
+    {
+        if( zones.size() < 2 )
+            detachArea( aCommit, zones.front() );
+    }
+}
+
+
+bool MULTICHANNEL_TOOL::routerBusy() const
+{
+    // A router keeps its own copy of the board while routing; editing under it leaves it stale
+    ROUTER_TOOL*    router = m_toolMgr->GetTool<ROUTER_TOOL>();
+    GENERATOR_TOOL* generators = m_toolMgr->GetTool<GENERATOR_TOOL>();
+
+    return ( router && router->RoutingInProgress() )
+           || ( generators && generators->Router() && generators->Router()->RoutingInProgress() );
+}
+
+
+int MULTICHANNEL_TOOL::updateLinkedLayouts( const TOOL_EVENT& aEvent )
+{
+    std::set<ZONE*> sources = linkedAreasIn( selection() );
+
+    if( sources.size() != 1 )
+    {
+        frame()->ShowInfoBarMsg( sources.empty() ? _( "Select a linked Rule Area, or a part of one, to update the "
+                                                      "others from." )
+                                                 : _( "Select items from a single linked channel." ),
+                                 true );
+        return 0;
+    }
+
+    if( routerBusy() )
+    {
+        frame()->ShowInfoBarWarning( _( "Finish routing before updating linked layouts." ), true );
+        return 0;
+    }
+
+    UpdateLinkedLayouts( *sources.begin() );
+    return 0;
+}
+
+
+int MULTICHANNEL_TOOL::unlinkLayout( const TOOL_EVENT& aEvent )
+{
+    std::set<ZONE*> members = linkedAreasIn( selection() );
+
+    if( members.empty() )
+        frame()->ShowInfoBarMsg( _( "Select a linked Rule Area, or a part of one, to unlink." ), true );
+    else
+        UnlinkAreas( members );
+
+    return 0;
+}
+
+
+void MULTICHANNEL_TOOL::UnlinkAreas( const std::set<ZONE*>& aZones )
+{
+    BOARD_COMMIT   commit( GetManager(), true, false );
+    std::set<KIID> oldSets;
+
+    for( ZONE* zone : aZones )
+    {
+        if( zone->GetLinkSet() != niluuid )
+            oldSets.insert( zone->GetLinkSet() );
+
+        detachArea( commit, zone );
+    }
+
+    dropLoneLinks( commit, oldSets );
+    commit.Push( _( "Unlink Layout" ) );
+}
+
+
+bool MULTICHANNEL_TOOL::UpdateLinkedLayouts( ZONE* aSource )
+{
+    // The dialog's session lives in the same data this rebuilds
+    closeRepeatDialog();
+
+    FindExistingRuleAreas();
+
+    RULE_AREA*                ref = nullptr;
+    std::vector<RULE_AREA*>   linked;
+    std::map<FOOTPRINT*, int> footprintUse;
+
+    for( RULE_AREA& area : m_areas.m_areas )
+    {
+        if( area.m_zone->GetLinkSet() == niluuid )
+            continue;
+
+        linked.push_back( &area );
+
+        if( area.m_zone == aSource )
+            ref = &area;
+
+        for( FOOTPRINT* fp : area.m_components )
+            footprintUse[fp]++;
+    }
+
+    if( !ref )
+        return false;
+
+    // A target sharing parts with another linked area would overwrite that area's layout
+    auto sharesParts =
+            [&]( RULE_AREA* aArea )
+            {
+                return std::ranges::any_of( aArea->m_components,
+                                            [&]( FOOTPRINT* aFp ) { return footprintUse[aFp] > 1; } );
+            };
+
+    // Copper is cleared and copied by area, unless both ends hold exactly their own group's items
+    auto overlapsOtherArea =
+            [&]( RULE_AREA* aArea, const SHAPE_POLY_SET& aOutline )
+            {
+                return std::ranges::any_of( linked,
+                                            [&]( RULE_AREA* aOther )
+                                            {
+                                                return aOther != aArea
+                                                       && outlinesOverlap( aOutline, *aOther->m_zone->Outline() );
+                                            } );
+            };
+
+    const bool refGrouped = linkedChannelGroup( board(), ref ) != nullptr;
+
+    // A source lying over another linked area would copy that area's contents too
+    if( sharesParts( ref ) || ( !refGrouped && overlapsOtherArea( ref, *ref->m_zone->Outline() ) ) )
+    {
+        if( Pgm().IsGUI() )
+        {
+            frame()->ShowInfoBarWarning(
+                    wxString::Format( _( "'%s' overlaps another linked Rule Area." ), ref->m_ruleName ), true );
+        }
+
+        return false;
+    }
+
+    BOARD_COMMIT                commit( GetManager(), true, false );
+    std::vector<wxString>       problems;
+    std::vector<SHAPE_POLY_SET> acceptedOutlines;
+
+    m_areas.m_refRA = ref;
+    m_areas.m_options = aSource->GetRepeatOptions();
+    m_areas.m_compatMap.clear();
+
+    for( RULE_AREA* target : linked )
+    {
+        if( target == ref || target->m_zone->GetLinkSet() != aSource->GetLinkSet() )
+            continue;
+
+        RULE_AREA_COMPAT_DATA& compat = m_areas.m_compatMap[target];
+
+        if( !resolveConnectionTopology( ref, target, compat ) )
+        {
+            problems.push_back( wxString::Format( wxT( "'%s': %s" ), target->m_ruleName, compat.m_errorMsg ) );
+            continue;
+        }
+
+        // Unless both ends are grouped, copying clears the target by area, so both its outline now and the
+        // one the copy gives it must stay clear of every other linked area
+        VECTOR2I       disp;
+        EDA_ANGLE      rot;
+        SHAPE_POLY_SET repeated( repeatedOutline( ref, target, m_areas.m_options.m_anchor,
+                                                  compat.m_matchingComponents, disp, rot ) );
+
+        bool overlapsAccepted = std::ranges::any_of( acceptedOutlines,
+                                                     [&]( const SHAPE_POLY_SET& aOther )
+                                                     {
+                                                         return outlinesOverlap( repeated, aOther );
+                                                     } );
+
+        bool scoped = refGrouped && linkedChannelGroup( board(), target ) != nullptr;
+
+        if( sharesParts( target )
+            || ( !scoped && ( overlapsAccepted || overlapsOtherArea( target, *target->m_zone->Outline() )
+                              || overlapsOtherArea( target, repeated ) ) ) )
+        {
+            problems.push_back(
+                    wxString::Format( _( "'%s' overlaps another linked Rule Area." ), target->m_ruleName ) );
+            continue;
+        }
+
+        compat.m_doCopy = true;
+        acceptedOutlines.push_back( std::move( repeated ) );
+    }
+
+    int copied = applyRepeat( commit );
+
+    if( !problems.empty() && Pgm().IsGUI() )
+    {
+        frame()->ShowInfoBarWarning(
+                wxString::Format( _( "Some linked Rule Areas were not updated. %s" ), JoinMismatchReasons( problems ) ),
+                true );
+    }
+
+    if( !copied )
+        return false;
+
+    commit.Push( _( "Update Linked Layouts" ), SKIP_ENTERED_GROUP );
+    return true;
+}
+
+
+int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOARD_CONNECTED_ITEM*>& aOutput ) const
 {
     if( !aRuleArea || !aRuleArea->m_zone )
         return 0;
@@ -1179,12 +2882,40 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
             }
         }
 
-        return (int) aOutput.size();
+        if( !aRuleArea->m_fromSelection )
+            return (int) aOutput.size();
+
+        count = (int) aOutput.size();
+    }
+
+    if( EDA_GROUP* group = linkedChannelGroup( board(), aRuleArea ) )
+    {
+        std::set<BOARD_ITEM*> members;
+        collectGroupBoardItems( group, members );
+
+        for( BOARD_ITEM* member : members )
+        {
+            BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( member );
+
+            if( !bci || bci->Type() == PCB_PAD_T || bci->Type() == PCB_ZONE_T || !bci->IsConnected() )
+                continue;
+
+            if( EDA_GROUP* parent = bci->GetParentGroup() )
+            {
+                if( parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
+                    continue;
+            }
+
+            aOutput.insert( bci );
+            count++;
+        }
+
+        return count;
     }
 
     // The design-block apply target uses a scratch zone not on the board, so enclosedByArea()
     // below finds nothing. Match routing against the zone outline directly.
-    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT || aRuleArea->m_fromSelection )
     {
         bool zoneOnBoard = false;
 
@@ -1200,6 +2931,7 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
         if( !zoneOnBoard )
         {
             const SHAPE_POLY_SET& areaOutline = *aRuleArea->m_zone->Outline();
+            const BOX2I           areaBox = areaOutline.BBox();
             int                   maxError = board()->GetDesignSettings().m_MaxError;
 
             auto enclosedByZone = [&]( BOARD_CONNECTED_ITEM* aItem )
@@ -1214,8 +2946,11 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
                         return;
                 }
 
-                if( !( aRuleArea->m_zone->GetLayerSet() & aItem->GetLayerSet() ).any() )
+                if( !( aRuleArea->m_zone->GetLayerSet() & aItem->GetLayerSet() ).any()
+                    || !areaBox.Contains( aItem->GetBoundingBox() ) )
+                {
                     return;
+                }
 
                 SHAPE_POLY_SET itemShape;
                 aItem->TransformShapeToPolygon( itemShape, aItem->GetLayer(), 0, maxError, ERROR_OUTSIDE );
@@ -1264,6 +2999,8 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
     wxString ruleText = wxString::Format( wxT( "A.enclosedByArea('%s')" ),
                                           aRuleArea->m_zone->m_Uuid.AsString() );
 
+    const BOX2I zoneBox = aRuleArea->m_zone->Outline()->BBox();
+
     auto testAndAdd =
             [&]( BOARD_CONNECTED_ITEM* aItem )
             {
@@ -1275,6 +3012,13 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
                 {
                     if( parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
                         return;
+                }
+
+                // Items outside the area's box cannot be enclosed, so skip the costly evaluation
+                if( !( aRuleArea->m_zone->GetLayerSet() & aItem->GetLayerSet() ).any()
+                    || !zoneBox.Intersects( aItem->GetBoundingBox() ) )
+                {
+                    return;
                 }
 
                 ctx.SetItems( aItem, aItem );
@@ -1303,54 +3047,35 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
 }
 
 
-bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
-                                              BOARD_COMMIT* aCommit, REPEAT_LAYOUT_OPTIONS aOpts,
-                                              RULE_AREA_COMPAT_DATA& aCompatData )
+void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aTargetArea, BOARD_COMMIT* aCommit,
+                                              REPEAT_LAYOUT_OPTIONS aOpts, RULE_AREA_COMPAT_DATA& aCompatData )
 {
-    // copy RA shapes first
-    SHAPE_LINE_CHAIN refOutline = aRefArea->m_zone->Outline()->COutline( 0 );
-    SHAPE_LINE_CHAIN targetOutline = aTargetArea->m_zone->Outline()->COutline( 0 );
+    VECTOR2I         disp;
+    EDA_ANGLE        rot;
+    SHAPE_LINE_CHAIN newTargetOutline =
+            repeatedOutline( aRefArea, aTargetArea, aOpts.m_anchor, aCompatData.m_matchingComponents, disp, rot );
 
-    FOOTPRINT* targetAnchorFp = nullptr;
-    VECTOR2I disp = aTargetArea->m_center - aRefArea->m_center;
-    EDA_ANGLE rot = EDA_ANGLE( 0 );
+    // Reference net to the net of the first matching target pad, built once for all copied items
+    const bool         hasMatches = !aCompatData.m_matchingComponents.empty();
+    std::map<int, int> netMap;
 
-    if( aOpts.m_anchorFp )
+    for( const auto& [refFP, targetFP] : aCompatData.m_matchingComponents )
     {
-        for( const auto& [refFP, targetFP] : aCompatData.m_matchingComponents )
+        for( const PAD* refPad : refFP->Pads() )
         {
-            if( refFP->GetReference() == aOpts.m_anchorFp->GetReference() )
-                targetAnchorFp = targetFP;
-        }
+            if( refPad->GetNetCode() <= 0 )
+                continue;
 
-        // If the dialog-selected anchor reference doesn't exist in the target area (e.g. refs don't match),
-        // fall back to the first matched pair to avoid center-alignment shifting the whole group.
-        if( !targetAnchorFp && !aCompatData.m_matchingComponents.empty() )
-            targetAnchorFp = aCompatData.m_matchingComponents.begin()->second;
+            std::vector<const PAD*> targetPads = targetFP->GetPads( refPad->GetNumber() );
 
-        if( targetAnchorFp )
-        {
-            VECTOR2I oldpos = aOpts.m_anchorFp->GetPosition();
-            rot = EDA_ANGLE( targetAnchorFp->GetOrientationDegrees() - aOpts.m_anchorFp->GetOrientationDegrees() );
-            aOpts.m_anchorFp->Rotate( VECTOR2( 0, 0 ), EDA_ANGLE( rot ) );
-            oldpos = aOpts.m_anchorFp->GetPosition();
-            VECTOR2I newpos = targetAnchorFp->GetPosition();
-            disp = newpos - oldpos;
-            aOpts.m_anchorFp->Rotate( VECTOR2( 0, 0 ), EDA_ANGLE( -rot ) );
+            if( !targetPads.empty() )
+                netMap.emplace( refPad->GetNetCode(), targetPads[0]->GetNetCode() );
         }
     }
 
     SHAPE_POLY_SET refPoly;
-    refPoly.AddOutline( refOutline );
+    refPoly.AddOutline( aRefArea->m_zone->Outline()->COutline( 0 ) );
     refPoly.CacheTriangulation();
-
-    SHAPE_POLY_SET targetPoly;
-
-    SHAPE_LINE_CHAIN newTargetOutline( refOutline );
-    newTargetOutline.Rotate( rot, VECTOR2( 0, 0 ) );
-    newTargetOutline.Move( disp );
-    targetPoly.AddOutline( newTargetOutline );
-    targetPoly.CacheTriangulation();
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
 
@@ -1436,11 +3161,27 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 targc.insert( pad->GetNetCode() );
         }
 
-        findRoutingInRuleArea( aTargetArea, targetRouting, connectivity, targetPoly, aOpts );
-        findRoutingInRuleArea( aRefArea, refRouting, connectivity, refPoly, aOpts );
+        // What is removed from the target spans the same run as what is copied from the reference
+        if( aRefArea->ScansContents() )
+        {
+            targetRouting = findRepeatRouting( aTargetArea, targc, aOpts );
+            refRouting = findRepeatRouting( aRefArea, refc, aOpts );
+        }
+        else
+        {
+            findRoutingInRuleArea( aTargetArea, targetRouting );
+            findRoutingInRuleArea( aRefArea, refRouting );
+        }
 
-        // Nets used by the target group's own items, footprint pads included.
+        // Nets used by the target group's own items, footprint pads included. Taken from the area's
+        // footprints too, since a channel created from a selection fills its group only when applied
         std::set<int> targetGroupNets;
+
+        for( FOOTPRINT* fp : aTargetArea->m_components )
+        {
+            for( PAD* pad : fp->Pads() )
+                targetGroupNets.insert( pad->GetNetCode() );
+        }
 
         if( aTargetArea->m_group )
         {
@@ -1449,16 +3190,34 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             for( BOARD_ITEM* member : members )
             {
-                if( member->Type() == PCB_FOOTPRINT_T )
-                {
-                    for( PAD* pad : static_cast<FOOTPRINT*>( member )->Pads() )
-                        targetGroupNets.insert( pad->GetNetCode() );
-                }
-                else if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( member ) )
-                {
+                if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( member ) )
                     targetGroupNets.insert( bci->GetNetCode() );
-                }
             }
+        }
+
+        // A channel made from a selection or a link replaces loose routing only on its own nets; buses
+        // and rails it shares stay. A design block replaces it on every net of the group
+        const bool    channelScope = aRefArea->m_fromSelection || linkedChannelGroup( board(), aTargetArea );
+        std::set<int> targetChannelNets;
+
+        for( int net : targetGroupNets )
+        {
+            if( !channelScope )
+            {
+                targetChannelNets.insert( net );
+                continue;
+            }
+
+            std::vector<FOOTPRINT*> owners;
+
+            for( BOARD_CONNECTED_ITEM* pad : connectivity->GetNetItems( net, { PCB_PAD_T } ) )
+            {
+                if( std::ranges::find( owners, pad->GetParentFootprint() ) == owners.end() )
+                    owners.push_back( pad->GetParentFootprint() );
+            }
+
+            if( isChannelNet( owners, aTargetArea->m_components ) )
+                targetChannelNets.insert( net );
         }
 
         for( BOARD_CONNECTED_ITEM* item : targetRouting )
@@ -1481,14 +3240,14 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 if( item->IsLocked() )
                     continue;
 
-                if( item->GetNetCode() <= 0 || !targetGroupNets.contains( item->GetNetCode() ) )
+                if( item->GetNetCode() <= 0 || !targetChannelNets.contains( item->GetNetCode() ) )
                     continue;
             }
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
-            if( aOpts.m_connectedRoutingOnly && !targc.contains( item->GetNetCode() ) )
+            if( ( aOpts.m_connectedRoutingOnly || aRefArea->ScansContents() ) && !targc.contains( item->GetNetCode() ) )
                 continue;
 
             // item already removed
@@ -1513,7 +3272,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
-            if( aOpts.m_connectedRoutingOnly && !refc.contains( item->GetNetCode() ) )
+            if( ( aOpts.m_connectedRoutingOnly || aRefArea->ScansContents() ) && !refc.contains( item->GetNetCode() ) )
                 continue;
 
             if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
@@ -1524,7 +3283,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Duplicate( false ) );
 
-            fixupNet( item, copied, aCompatData.m_matchingComponents );
+            fixupNet( item, copied, hasMatches, netMap );
             fixupParentGroup( item, copied );
 
             copied->Rotate( VECTOR2( 0, 0 ), rot );
@@ -1537,6 +3296,19 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         // block apply has an exact item list, other rule areas resolve them by area.
         std::vector<PCB_GENERATOR*> refGenerators;
         std::vector<PCB_GENERATOR*> targetGenerators;
+
+        auto appendGenerators =
+                [&]( EDA_GROUP* aGroup, std::vector<PCB_GENERATOR*>& aOut )
+                {
+                    std::set<BOARD_ITEM*> members;
+                    collectGroupBoardItems( aGroup, members );
+
+                    for( BOARD_ITEM* member : members )
+                    {
+                        if( member->Type() == PCB_GENERATOR_T )
+                            aOut.push_back( static_cast<PCB_GENERATOR*>( member ) );
+                    }
+                };
 
         if( aRefArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
         {
@@ -1552,31 +3324,36 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 targetGroup = ( *aTargetArea->m_components.begin() )->GetParentGroup();
 
             if( targetGroup )
-            {
-                std::set<BOARD_ITEM*> members;
-                collectGroupBoardItems( targetGroup, members );
-
-                for( BOARD_ITEM* member : members )
-                {
-                    if( member->Type() == PCB_GENERATOR_T )
-                        targetGenerators.push_back( static_cast<PCB_GENERATOR*>( member ) );
-                }
-            }
+                appendGenerators( targetGroup, targetGenerators );
         }
         else
         {
-            const SHAPE_LINE_CHAIN& refOut = aRefArea->m_zone->Outline()->COutline( 0 );
-            const SHAPE_LINE_CHAIN& targetOut = aTargetArea->m_zone->Outline()->COutline( 0 );
+            // Each side takes its generators from its group when it is a linked channel, else from its outline
+            EDA_GROUP* refGroup = linkedChannelGroup( board(), aRefArea );
+            EDA_GROUP* targetGroup = linkedChannelGroup( board(), aTargetArea );
 
-            for( PCB_GENERATOR* gen : board()->Generators() )
+            if( refGroup )
+                appendGenerators( refGroup, refGenerators );
+
+            if( targetGroup )
+                appendGenerators( targetGroup, targetGenerators );
+
+            if( !refGroup || !targetGroup )
             {
-                if( gen->GetGeneratorType() != wxT( "tuning_pattern" ) )
-                    continue;
+                const SHAPE_LINE_CHAIN& refOut = aRefArea->m_zone->Outline()->COutline( 0 );
+                const SHAPE_LINE_CHAIN& targetOut = aTargetArea->m_zone->Outline()->COutline( 0 );
 
-                if( gen->HitTest( refOut, false ) )
-                    refGenerators.push_back( gen );
-                else if( gen->HitTest( targetOut, false ) )
-                    targetGenerators.push_back( gen );
+                for( PCB_GENERATOR* gen : board()->Generators() )
+                {
+                    if( gen->GetGeneratorType() != wxT( "tuning_pattern" ) )
+                        continue;
+
+                    if( !refGroup && gen->HitTest( refOut, false ) )
+                        refGenerators.push_back( gen );
+                    else if( !targetGroup && !( refGroup && gen->HitTest( refOut, false ) )
+                             && gen->HitTest( targetOut, false ) )
+                        targetGenerators.push_back( gen );
+                }
             }
         }
 
@@ -1593,6 +3370,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                     },
                     RECURSE_MODE::RECURSE );
             aCommit->Remove( gen );
+            aCompatData.m_affectedItems.insert( gen );
         }
 
         for( PCB_GENERATOR* gen : refGenerators )
@@ -1621,7 +3399,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                         child->ClearFlags();
 
                         if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( child ) )
-                            fixupNet( bci, bci, aCompatData.m_matchingComponents );
+                            fixupNet( bci, bci, hasMatches, netMap );
 
                         aCommit->Add( child );
                     },
@@ -1715,7 +3493,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 }
 
                 ZONE* targetZone = static_cast<ZONE*>( item->Duplicate( false ) );
-                fixupNet( zone, targetZone, aCompatData.m_matchingComponents );
+                fixupNet( zone, targetZone, hasMatches, netMap );
 
                 copied = targetZone;
             }
@@ -1766,6 +3544,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             // For regular Rule Area repeat, ignore source footprints outside the reference area.
             // For Design Block apply, use the exact source item set collected from the block.
             if( aRefArea->m_sourceType != PLACEMENT_SOURCE_T::DESIGN_BLOCK
+                && !linkedChannelGroup( board(), aRefArea )
                 && !refFP->GetEffectiveShape( refFP->GetLayer() )->Collide( &refPoly, 0 ) )
             {
                 continue;
@@ -1952,8 +3731,6 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
     aTargetArea->m_zone->AddPolygon( newTargetOutline );
     aTargetArea->m_zone->UnHatchBorder();
     aTargetArea->m_zone->HatchBorder();
-
-    return true;
 }
 
 /**
@@ -1961,41 +3738,20 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
  *
  */
 void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
-                                  TMATCH::COMPONENT_MATCHES& aComponentMatches )
+                                  bool aHasMatches,
+                                  const std::map<int, int>& aNetMap )
 {
     // Copy as no-net.
-    if( aComponentMatches.empty() )
+    if( !aHasMatches )
     {
         aTarget->SetNetCode( 0 );
         return;
     }
 
-    auto                                     connectivity = board()->GetConnectivity();
-    const std::vector<BOARD_CONNECTED_ITEM*> refConnectedPads = connectivity->GetNetItems( aRef->GetNetCode(),
-                                                                                           { PCB_PAD_T } );
+    auto it = aNetMap.find( aRef->GetNetCode() );
 
-    for( const BOARD_CONNECTED_ITEM* refConItem : refConnectedPads )
-    {
-        if( refConItem->Type() != PCB_PAD_T )
-            continue;
-
-        const PAD* refPad = static_cast<const PAD*>( refConItem );
-        FOOTPRINT* sourceFootprint = refPad->GetParentFootprint();
-
-        if( aComponentMatches.contains( sourceFootprint ) )
-        {
-            const FOOTPRINT*        targetFootprint = aComponentMatches[sourceFootprint];
-            std::vector<const PAD*> targetFpPads = targetFootprint->GetPads( refPad->GetNumber() );
-
-            if( !targetFpPads.empty() )
-            {
-                int targetNetCode = targetFpPads[0]->GetNet()->GetNetCode();
-                aTarget->SetNetCode( targetNetCode );
-
-                break;
-            }
-        }
-    }
+    if( it != aNetMap.end() )
+        aTarget->SetNetCode( it->second );
 }
 
 
@@ -2124,7 +3880,8 @@ static bool matchBySymbolInstancePath( const std::set<FOOTPRINT*>& aRef, const s
 
 bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                                    RULE_AREA_COMPAT_DATA& aMatches,
-                                                   const TMATCH::ISOMORPHISM_PARAMS& aParams )
+                                                   const TMATCH::ISOMORPHISM_PARAMS& aParams,
+                                                   const std::unordered_set<int>& aExtraGlobalNets )
 {
     using namespace TMATCH;
 
@@ -2203,7 +3960,7 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
                 return true;
             };
 
-    std::unordered_set<int> globalNets;
+    std::unordered_set<int> globalNets = aExtraGlobalNets;
 
     for( const auto& [netCode, areas] : netInternalAreas )
     {
@@ -2341,6 +4098,8 @@ bool MULTICHANNEL_TOOL::pruneExistingGroups( COMMIT& aCommit,
 
 int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 {
+    closeRepeatDialog();
+
     if( Pgm().IsGUI() )
     {
         GeneratePotentialRuleAreas();
@@ -2491,17 +4250,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
                     newZone->GetZoneName(),
                     (int) ra.m_components.size() );
 
-        newZone->SetIsRuleArea( true );
-        newZone->SetLayerSet( LSET::AllCuMask() );
-        newZone->SetPlacementAreaEnabled( true );
-        newZone->SetDoNotAllowZoneFills( false );
-        newZone->SetDoNotAllowVias( false );
-        newZone->SetDoNotAllowTracks( false );
-        newZone->SetDoNotAllowPads( false );
-        newZone->SetDoNotAllowFootprints( false );
-
-        newZone->AddPolygon( raOutline );
-        newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+        makePlacementArea( newZone.get(), raOutline );
 
         for( ZONE* oldZone : oldZones )
             commit.Remove( oldZone );

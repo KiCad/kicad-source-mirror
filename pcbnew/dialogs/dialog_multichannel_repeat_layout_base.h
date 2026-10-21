@@ -47,6 +47,8 @@ class DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbCopyOtherItems;
 		wxCheckBox* m_cbGroupItems;
 		wxCheckBox* m_cbIncludeLockedComponents;
+		wxCheckBox* m_cbLinkAreas;
+		wxCheckBox* m_cbLooseMatching;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;

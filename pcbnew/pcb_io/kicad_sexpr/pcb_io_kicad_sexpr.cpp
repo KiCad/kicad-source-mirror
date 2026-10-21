@@ -3590,6 +3590,24 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
             break;
         }
 
+        if( aZone->GetLinkSet() != niluuid )
+        {
+            const REPEAT_LAYOUT_OPTIONS& opts = aZone->GetRepeatOptions();
+
+            m_out->Print( "(link %s", m_out->Quotew( aZone->GetLinkSet().AsString() ).c_str() );
+            KICAD_FORMAT::FormatBool( m_out, "placement", opts.m_copyPlacement );
+            KICAD_FORMAT::FormatBool( m_out, "routing", opts.m_copyRouting );
+            KICAD_FORMAT::FormatBool( m_out, "connected_routing", opts.m_connectedRoutingOnly );
+            KICAD_FORMAT::FormatBool( m_out, "other_items", opts.m_copyOtherItems );
+            KICAD_FORMAT::FormatBool( m_out, "group_items", opts.m_groupItems );
+            KICAD_FORMAT::FormatBool( m_out, "locked_items", opts.m_includeLockedItems );
+
+            if( opts.m_anchor != niluuid )
+                m_out->Print( "(anchor %s)", m_out->Quotew( opts.m_anchor.AsString() ).c_str() );
+
+            m_out->Print( ")" );
+        }
+
         m_out->Print( ")" );
     }
 

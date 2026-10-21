@@ -59,6 +59,7 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         m_isRuleArea( false ),
         m_placementAreaEnabled( false ),
         m_placementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME ),
+        m_linkSet( niluuid ),
         m_teardropType( TEARDROP_TYPE::TD_NONE ),
         m_PadConnection( ZONE_CONNECTION::NONE ),
         m_ZoneClearance( 0 ),
@@ -144,6 +145,8 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone, PCB_LAYER_ID aLayer )
     m_placementAreaEnabled    = aZone.m_placementAreaEnabled;
     m_placementAreaSourceType = aZone.m_placementAreaSourceType;
     m_placementAreaSource     = aZone.m_placementAreaSource;
+    m_linkSet                 = aZone.m_linkSet;
+    m_repeatOptions           = aZone.m_repeatOptions;
 
     m_fillMode = aZone.m_fillMode; // solid vs. hatched
 
@@ -1186,6 +1189,9 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
         if( GetPlacementAreaEnabled() )
             aList.emplace_back( _( "Placement source" ), UnescapeString( GetPlacementAreaSource() ) );
+
+        if( m_linkSet != niluuid )
+            aList.emplace_back( _( "Layout link" ), _( "Linked" ) );
     }
     else if( IsOnCopperLayer() )
     {

@@ -285,6 +285,16 @@ static PCB_REFERENCE_IMAGE* addTransformFeatures( BOARD& aBoard )
     buriedVia->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
     aBoard.Add( buriedVia );
 
+    ZONE* linkedArea = new ZONE( &aBoard );
+    linkedArea->SetIsRuleArea( true );
+    linkedArea->SetLayer( F_Cu );
+    linkedArea->SetPlacementAreaEnabled( true );
+    linkedArea->SetLinkSet( KIID() );
+    linkedArea->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    linkedArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), 0 ), -1 );
+    linkedArea->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ), -1 );
+    aBoard.Add( linkedArea );
+
     aBoard.GetDesignSettings().m_ZoneLayerProperties[F_Cu].hatching_offset = VECTOR2I( 100, 100 );
 
     for( BOARD_STACKUP_ITEM* item : aBoard.GetDesignSettings().GetStackupDescriptor().GetList() )
@@ -325,6 +335,7 @@ static void checkBoardTransformCoverage( const COMPATIBILITY_REPORT& aReport, co
                     { wxT( "Custom properties" ), 20260831, DOWNGRADE_BUCKET::DROP },
                     { wxT( "Drill charts and maps" ), 20260901, DOWNGRADE_BUCKET::DROP },
                     { wxT( "Drill symbol configuration" ), 20260901, DOWNGRADE_BUCKET::DROP },
+                    { wxT( "Linked placement rule areas" ), 20261018, DOWNGRADE_BUCKET::DROP },
                     { wxT( "Net chains" ), 20260512, DOWNGRADE_BUCKET::DROP },
                     { wxT( "Ellipse graphics" ), 20260508, DOWNGRADE_BUCKET::LOWER },
                     { wxT( "Extruded 3D bodies" ), 20260410, DOWNGRADE_BUCKET::DROP },

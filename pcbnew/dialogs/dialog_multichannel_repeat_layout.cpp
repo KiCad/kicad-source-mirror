@@ -28,6 +28,7 @@
 #include <zone.h>
 #include <board.h>
 #include <footprint.h>
+#include <algorithm>
 
 
 DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_FRAME* aFrame,
@@ -35,7 +36,6 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_F
         DIALOG_MULTICHANNEL_REPEAT_LAYOUT_BASE( aFrame ),
         m_parentTool( aParentTool )
 {
-    m_board = aFrame->GetBoard();
     m_detailsIcon = KiBitmapBundleDef( BITMAPS::help, 16 );
 
     m_raGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_raGrid ) ) );
@@ -45,6 +45,40 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_F
     m_raGrid->SetupColumnAutosizer( 1 );
 
     m_raGrid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &DIALOG_MULTICHANNEL_REPEAT_LAYOUT::OnGridCellLeftClick, this );
+
+    // The parts of the row under the cursor are marked on the board next to the reference parts
+    m_raGrid->Bind( wxEVT_GRID_SELECT_CELL,
+                    [this]( wxGridEvent& aEvent )
+                    {
+                        int row = aEvent.GetRow();
+
+                        if( row >= 0 && row < static_cast<int>( m_targetRAs.size() ) )
+                            m_parentTool->HighlightRepeatAreas( m_targetRAs[row].m_targetRA );
+
+                        aEvent.Skip();
+                    } );
+
+    // Ticks and the anchor reshape the channels; the other options only change the preview
+    m_raGrid->Bind( wxEVT_GRID_CELL_CHANGED, [this]( wxGridEvent& ) { onOptionChanged(); } );
+    m_refAnchorFp->Bind( wxEVT_CHOICE, [this]( wxCommandEvent& ) { onOptionChanged(); } );
+
+    Bind( wxEVT_CHECKBOX,
+          [this]( wxCommandEvent& )
+          {
+              readWindow();
+              m_parentTool->UpdateRepeatPreview();
+          } );
+
+    m_cbLooseMatching->Bind( wxEVT_CHECKBOX,
+                             [this]( wxCommandEvent& )
+                             {
+                                 m_parentTool->DiscoverRepeatCandidates( m_cbLooseMatching->GetValue() );
+                                 m_parentTool->UpdateRepeatPreview();
+                                 TransferDataToWindow();
+                             } );
+
+    // Not modal, so Cancel has to close the dialog itself
+    Bind( wxEVT_BUTTON, [this]( wxCommandEvent& ) { Close(); }, wxID_CANCEL );
 
     Layout();
     SetupStandardButtons();
@@ -57,16 +91,13 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::~DIALOG_MULTICHANNEL_REPEAT_LAYOUT()
     m_raGrid->PopEventHandler( true );
 }
 
-bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
+
+void DIALOG_MULTICHANNEL_REPEAT_LAYOUT::readWindow()
 {
-    auto data = m_parentTool->GetData();
+    RULE_AREAS_DATA* data = m_parentTool->GetData();
 
     for( size_t i = 0; i < m_targetRAs.size(); i++ )
-    {
-        wxString doCopy = m_raGrid->GetCellValue( i, 0 );
-
-        data->m_compatMap[m_targetRAs[i].m_targetRA].m_doCopy = !doCopy.CompareTo( wxT( "1" ) ) ? true : false;
-    }
+        data->m_compatMap[m_targetRAs[i].m_targetRA].m_doCopy = m_raGrid->GetCellValue( i, 0 ) == wxT( "1" );
 
     data->m_options.m_copyPlacement = m_cbCopyPlacement->GetValue();
     data->m_options.m_copyRouting = m_cbCopyRouting->GetValue();
@@ -74,20 +105,38 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
     data->m_options.m_copyOtherItems = m_cbCopyOtherItems->GetValue();
     data->m_options.m_groupItems = m_cbGroupItems->GetValue();
     data->m_options.m_includeLockedItems = m_cbIncludeLockedComponents->GetValue();
+    data->m_linkAreas = m_cbLinkAreas->GetValue();
+    data->m_options.m_anchor = niluuid;
 
-    if( m_refAnchorFp->GetString( m_refAnchorFp->GetSelection() ) == "" )
+    // A duplicate reference designator outside the area must not become the anchor
+    for( FOOTPRINT* fp : data->m_refRA->m_components )
     {
-        data->m_options.m_anchorFp = nullptr;
+        if( fp->GetReference() == m_refAnchorFp->GetStringSelection() )
+            data->m_options.m_anchor = fp->m_Uuid;
     }
-    else
-    {
-        for( FOOTPRINT* fp : m_board->Footprints() )
-        {
-            if( fp->GetReference() == m_refAnchorFp->GetString( m_refAnchorFp->GetSelection() ) )
-                data->m_options.m_anchorFp = fp;
-        }
-    }
+}
 
+
+void DIALOG_MULTICHANNEL_REPEAT_LAYOUT::onOptionChanged()
+{
+    readWindow();
+
+    // Rebuilding the grid from inside one of its own events is not safe
+    CallAfter( [this]()
+               {
+                   m_parentTool->RefreshRepeat();
+                   TransferDataToWindow();
+               } );
+}
+
+
+bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
+{
+    readWindow();
+    m_parentTool->ApplyRepeat();
+
+    // This dialog is not modal, so it closes itself
+    Close();
     return true;
 }
 
@@ -95,17 +144,25 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataFromWindow()
 bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
 {
     RULE_AREAS_DATA* data = m_parentTool->GetData();
+    const KIID&      linkSet = data->m_refRA->m_zone->GetLinkSet();
+
+    m_targetRAs.clear();
 
     for( const auto& [ruleArea, ruleAreaData] : data->m_compatMap )
     {
         TABLE_ENTRY ent;
+        bool        linked = linkSet != niluuid && ruleArea->m_zone->GetLinkSet() == linkSet;
 
-        ent.m_doCopy = ruleAreaData.m_isOk;
-        ent.m_errMsg = ruleAreaData.m_errorMsg;
+        ent.m_doCopy = ruleAreaData.m_doCopy;
+        ent.m_errMsg = linked && ruleAreaData.m_isOk ? _( "OK (linked)" ) : ruleAreaData.m_errorMsg;
         ent.m_isOK = ruleAreaData.m_isOk;
         ent.m_raName = ruleArea->m_ruleName;
         ent.m_targetRA = ruleArea;
         ent.m_mismatchReasons = ruleAreaData.m_mismatchReasons;
+
+        // A discovered channel is named after its parts until it is created
+        if( ent.m_raName.IsEmpty() )
+            ent.m_raName = MULTICHANNEL_TOOL::JoinReferences( ruleArea->m_components );
 
         m_targetRAs.push_back( ent );
     }
@@ -129,7 +186,7 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
     for( TABLE_ENTRY& entry : m_targetRAs )
     {
         m_raGrid->SetCellValue( i, 1, entry.m_raName );
-        m_raGrid->SetCellValue( i, 2, entry.m_isOK ? _( "OK" ) : entry.m_errMsg );
+        m_raGrid->SetCellValue( i, 2, entry.m_errMsg );
         m_raGrid->SetCellValue( i, 3, wxString() );
         m_raGrid->SetCellRenderer( i, 0, new wxGridCellBoolRenderer);
         m_raGrid->SetCellEditor( i, 0, new wxGridCellBoolEditor);
@@ -149,7 +206,10 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
 
     m_raGrid->Fit();
 
-    m_refRAName->SetLabelText( data->m_refRA->m_zone->GetZoneName() );
+    m_refRAName->SetLabelText( data->FromSelection()
+                                       ? wxString::Format( _( "%d selected footprints" ),
+                                                           (int) data->m_selectedFootprints.size() )
+                                       : data->m_refRA->m_zone->GetZoneName() );
 
     wxArrayString refFpNames;
     refFpNames.push_back( "" );
@@ -161,12 +221,23 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
     m_refAnchorFp->Set( refFpNames );
     m_refAnchorFp->SetSelection( 0 );
 
+    for( FOOTPRINT* fp : data->m_refRA->m_components )
+    {
+        if( fp->m_Uuid == data->m_options.m_anchor )
+            m_refAnchorFp->SetStringSelection( fp->GetReference() );
+    }
+
     m_cbCopyPlacement->SetValue( data->m_options.m_copyPlacement );
     m_cbCopyRouting->SetValue( data->m_options.m_copyRouting );
     m_cbCopyOnlyConnectedRouting->SetValue( data->m_options.m_connectedRoutingOnly );
     m_cbGroupItems->SetValue( data->m_options.m_groupItems );
     m_cbCopyOtherItems->SetValue( data->m_options.m_copyOtherItems );
     m_cbIncludeLockedComponents->SetValue( data->m_options.m_includeLockedItems );
+    m_cbLinkAreas->SetValue( data->m_linkAreas );
+
+    // Channels made from a selection are always groups; loose matching only applies to discovery
+    m_cbGroupItems->Enable( !data->FromSelection() );
+    m_cbLooseMatching->Enable( data->FromSelection() );
 
     return true;
 }

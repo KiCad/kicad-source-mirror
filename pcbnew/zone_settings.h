@@ -32,6 +32,7 @@
 #include <zones.h>
 #include <geometry/eda_angle.h>
 #include <teardrop/teardrop_types.h>
+#include <kiid.h>
 
 class PCB_BASE_FRAME;
 class wxDataViewListCtrl;
@@ -112,6 +113,23 @@ enum class PLACEMENT_SOURCE_T
     COMPONENT_CLASS,
     GROUP_PLACEMENT,
     DESIGN_BLOCK
+};
+
+/**
+ * Options for copying a placement rule area onto the others linked to it.  Every linked area stores the same
+ * options, so any of them can be the source of an update.
+ */
+struct REPEAT_LAYOUT_OPTIONS
+{
+    bool m_copyRouting = true;
+    bool m_connectedRoutingOnly = false;
+    bool m_copyPlacement = true;
+    bool m_copyOtherItems = true;
+    bool m_groupItems = false;
+    bool m_includeLockedItems = true;
+    KIID m_anchor = niluuid;       ///< This area's own anchor footprint, or niluuid for the area center
+
+    bool operator==( const REPEAT_LAYOUT_OPTIONS& aOther ) const = default;
 };
 
 /**

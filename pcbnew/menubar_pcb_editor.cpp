@@ -473,7 +473,11 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     multichannelSubmenu->SetTitle( _( "Multi-Channel" ) );
     multichannelSubmenu->SetIcon( BITMAPS::mode_module );
     multichannelSubmenu->Add( PCB_ACTIONS::generatePlacementRuleAreas );
+    multichannelSubmenu->Add( PCB_ACTIONS::expandToMatchingTopology );
+    multichannelSubmenu->Add( PCB_ACTIONS::expandToLargestTopology );
     multichannelSubmenu->Add( PCB_ACTIONS::repeatLayout );
+    multichannelSubmenu->Add( PCB_ACTIONS::updateLinkedLayouts );
+    multichannelSubmenu->Add( PCB_ACTIONS::unlinkLayout );
 
     toolsMenu->Add( multichannelSubmenu );
 

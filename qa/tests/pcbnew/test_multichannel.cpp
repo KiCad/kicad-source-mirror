@@ -35,6 +35,10 @@
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
 #include <tools/multichannel_tool.h>
+#include <board_commit.h>
+#include <wx/filename.h>
+#include <wx/ffile.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <connectivity/topo_match.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_utils.h>
@@ -1398,8 +1402,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
     BOOST_CHECK_MESSAGE( result >= 0, "RepeatLayout failed" );
@@ -1548,8 +1551,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutRotatesFieldsOnce, MULTICHANNEL_T
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
     BOOST_REQUIRE_MESSAGE( result >= 0, "RepeatLayout failed" );
@@ -1687,8 +1689,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutMatchesBySymbolPathWhenTopologyDi
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
 
@@ -1818,8 +1819,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsDuplicateSilkText, MULTICHAN
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     wxString err;
     int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
@@ -1923,8 +1923,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutGraphicsOnlyBlock, MULTICHANNEL_T
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     wxString err;
     int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
@@ -2037,8 +2036,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeCopperIsNoNet, MULTI
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     wxString err;
     int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
@@ -2142,8 +2140,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeReapplyReplaces, MUL
                                        .m_copyPlacement = true,
                                        .m_copyOtherItems = true,
                                        .m_groupItems = false,
-                                       .m_includeLockedItems = true,
-                                       .m_anchorFp = nullptr };
+                                       .m_includeLockedItems = true };
 
         int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
 
@@ -2268,8 +2265,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsOtherGroupRouting, MULTICHAN
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     wxString err;
     int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
@@ -2395,8 +2391,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsUnrelatedRouting, MULTICHANN
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     wxString err;
     int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
@@ -3009,8 +3004,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutUnmirrorsIdenticalReceptacles, MU
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = false,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
     BOOST_REQUIRE_MESSAGE( result >= 0, "RepeatLayout failed" );
@@ -3995,8 +3989,7 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutGroupAreaKeepsNestedGroups, MULTICHANNEL_TE
                                    .m_copyPlacement = true,
                                    .m_copyOtherItems = true,
                                    .m_groupItems = false,
-                                   .m_includeLockedItems = true,
-                                   .m_anchorFp = nullptr };
+                                   .m_includeLockedItems = true };
 
     wxString err;
     int      result = mtTool->RepeatLayout( TOOL_EVENT(), *refArea, *targetArea, opts, nullptr, &err );
@@ -4007,6 +4000,421 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutGroupAreaKeepsNestedGroups, MULTICHANNEL_TE
 
     // Routing held by the nested block groups is replaced, not duplicated
     BOOST_CHECK_EQUAL( countTracks( targetGroups[0] ), refTracks );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( LinkedRuleAreas, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22548/issue22548", m_board );
+
+    TOOL_MANAGER toolMgr;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, new MOCK_TOOLS_HOLDER );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* refArea = findSheetRuleAreaByPath( mtTool, wxT( "/Untitled Sheet/" ) );
+    BOOST_REQUIRE( refArea );
+    BOOST_REQUIRE_EQUAL( refArea->m_components.size(), 1 );
+
+    ZONE*      refZone = refArea->m_zone;
+    FOOTPRINT* refFp = *refArea->m_components.begin();
+
+    mtTool->CheckRACompatibility( refZone );
+
+    for( auto& [area, compat] : mtTool->GetData()->m_compatMap )
+        compat.m_doCopy = true;
+
+    mtTool->GetData()->m_linkAreas = true;
+    BOOST_REQUIRE_EQUAL( mtTool->RepeatLayout( TOOL_EVENT(), refZone ), 0 );
+
+    std::vector<ZONE*> peers;
+
+    for( auto& [area, compat] : mtTool->GetData()->m_compatMap )
+        peers.push_back( area->m_zone );
+
+    BOOST_REQUIRE_EQUAL( peers.size(), 3 );
+
+    for( ZONE* peer : peers )
+        BOOST_CHECK( peer->GetLinkSet() == refZone->GetLinkSet() );
+
+    FOOTPRINT*     sharedFp = *mtTool->GetData()->m_compatMap.begin()->first->m_components.begin();
+    FOOTPRINT*     cleanFp = nullptr;
+    ZONE*          cleanZone = nullptr;
+    const VECTOR2I delta( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 2 ) );
+
+    // A copy of a linked target selects the same parts, so that target may not be updated
+    ZONE* duplicate = static_cast<ZONE*>( peers[0]->Clone() );
+    duplicate->ResetUuid();
+    m_board->Add( duplicate );
+
+    for( auto& [area, compat] : mtTool->GetData()->m_compatMap )
+    {
+        if( area->m_zone == peers[0] )
+            sharedFp = *area->m_components.begin();
+        else if( area->m_zone == peers[2] )
+            cleanFp = *area->m_components.begin();
+    }
+
+    cleanZone = peers[2];
+    BOOST_REQUIRE( sharedFp && cleanFp );
+
+    const VECTOR2I sharedPos = sharedFp->GetPosition();
+    const VECTOR2I cleanPos = cleanFp->GetPosition();
+    const VECTOR2I refPos = refFp->GetPosition();
+
+    BOARD_COMMIT commit( &toolMgr, true, false );
+    commit.Modify( refFp );
+    refFp->Move( delta );
+    commit.Push( wxT( "Move reference" ) );
+
+    // Edits wait for the explicit update
+    BOOST_CHECK_EQUAL( cleanFp->GetPosition(), cleanPos );
+    BOOST_CHECK( mtTool->UpdateLinkedLayouts( refZone ) );
+    BOOST_CHECK_EQUAL( sharedFp->GetPosition(), sharedPos );
+    BOOST_CHECK_EQUAL( cleanFp->GetPosition(), cleanPos + delta );
+
+    // Any peer can be the source, so the reference follows a target that is updated from
+    const VECTOR2I half( delta.x / 2, delta.y / 2 );
+
+    BOARD_COMMIT peerCommit( &toolMgr, true, false );
+    peerCommit.Modify( cleanFp );
+    cleanFp->Move( -half );
+    peerCommit.Push( wxT( "Move target" ) );
+
+    BOOST_CHECK( mtTool->UpdateLinkedLayouts( cleanZone ) );
+    BOOST_CHECK_EQUAL( refFp->GetPosition(), refPos + delta - half );
+
+    m_board->Remove( duplicate );
+    delete duplicate;
+
+    // Re-linking a pair from either side leaves the other peers on the old set
+    const KIID oldSet = refZone->GetLinkSet();
+
+    for( ZONE* source : { refZone, peers[0] } )
+    {
+        ZONE* other = source == refZone ? peers[0] : refZone;
+
+        mtTool->FindExistingRuleAreas();
+        mtTool->CheckRACompatibility( source );
+
+        for( auto& [area, compat] : mtTool->GetData()->m_compatMap )
+            compat.m_doCopy = area->m_zone == other;
+
+        mtTool->GetData()->m_linkAreas = true;
+        BOOST_REQUIRE_EQUAL( mtTool->RepeatLayout( TOOL_EVENT(), source ), 0 );
+
+        BOOST_CHECK( refZone->GetLinkSet() == peers[0]->GetLinkSet() );
+        BOOST_CHECK( refZone->GetLinkSet() != oldSet );
+        BOOST_CHECK( peers[1]->GetLinkSet() == oldSet );
+        BOOST_CHECK( peers[2]->GetLinkSet() == oldSet );
+    }
+
+    // The link and its options survive the file, and appended copies get a link set of their own
+    const KIID     pairSet = refZone->GetLinkSet();
+    wxString       path = wxFileName::CreateTempFileName( wxT( "linked_rule_areas" ) );
+    PCB_IO_KICAD_SEXPR io;
+    wxString       text;
+
+    io.SaveBoard( path, *m_board );
+
+    std::unique_ptr<BOARD> reloaded = io.LoadBoard( path );
+
+    wxFFile( path ).ReadAll( &text );
+    io.LoadAndAppendBoard( path, *m_board );
+    wxRemoveFile( path );
+    BOOST_REQUIRE( reloaded );
+
+    for( ZONE* zone : { refZone, peers[0], peers[1], peers[2] } )
+    {
+        ZONE* loaded = dynamic_cast<ZONE*>( reloaded->ResolveItem( zone->m_Uuid, true ) );
+
+        BOOST_REQUIRE( loaded );
+        BOOST_CHECK( loaded->GetLinkSet() == zone->GetLinkSet() );
+        BOOST_CHECK( loaded->GetRepeatOptions() == zone->GetRepeatOptions() );
+    }
+
+    std::set<KIID> appendedSets;
+
+    for( const ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetLinkSet() != niluuid && zone->GetLinkSet() != pairSet && zone->GetLinkSet() != oldSet )
+            appendedSets.insert( zone->GetLinkSet() );
+    }
+
+    BOOST_CHECK_EQUAL( appendedSets.size(), 2 );
+
+    // Only linked areas write the link, and the options live inside it
+    BOOST_CHECK_EQUAL( text.Clone().Replace( wxT( "(link " ), wxT( "" ) ), 4 );
+    BOOST_CHECK_EQUAL( text.Clone().Replace( wxT( "(repeat" ), wxT( "" ) ), 0 );
+
+    // A set of one links nothing, so unlinking one of a pair frees the other too
+    mtTool->UnlinkAreas( { peers[1] } );
+
+    BOOST_CHECK( peers[1]->GetLinkSet() == niluuid );
+    BOOST_CHECK( peers[2]->GetLinkSet() == niluuid );
+    BOOST_CHECK( peers[2]->GetRepeatOptions() == REPEAT_LAYOUT_OPTIONS() );
+    BOOST_CHECK( refZone->GetLinkSet() == pairSet );
+}
+
+
+static std::vector<EDA_ITEM*> sheetFootprints( BOARD* aBoard, const wxString& aSheet )
+{
+    std::vector<EDA_ITEM*> items;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        if( fp->GetSheetname() == aSheet )
+            items.push_back( fp );
+    }
+
+    return items;
+}
+
+
+// A part whose every net reaches beyond its channel, such as a decoupler between two rails
+static FOOTPRINT* railOnlyPart( BOARD* aBoard, const wxString& aSheet )
+{
+    std::set<int> outsideNets;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        if( fp->GetSheetname() != aSheet )
+        {
+            for( PAD* pad : fp->Pads() )
+                outsideNets.insert( pad->GetNetCode() );
+        }
+    }
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        auto outside = [&]( PAD* aPad ) { return outsideNets.contains( aPad->GetNetCode() ); };
+
+        if( fp->GetSheetname() == aSheet && std::ranges::all_of( fp->Pads(), outside ) )
+        {
+            return fp;
+        }
+    }
+
+    return nullptr;
+}
+
+
+struct REPEAT_TOOL_FIXTURE : public MULTICHANNEL_TEST_FIXTURE
+{
+    REPEAT_TOOL_FIXTURE()
+    {
+        KI_TEST::LoadBoard( m_settingsManager, "vme-wren", m_board );
+        m_toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, new MOCK_TOOLS_HOLDER );
+        m_tool = new MULTICHANNEL_TOOL;
+        m_toolMgr.RegisterTool( m_tool );
+    }
+
+    int candidates()
+    {
+        return std::ranges::count_if( m_tool->GetData()->m_compatMap,
+                                      []( const auto& aEntry ) { return aEntry.second.m_isOk; } );
+    }
+
+    TOOL_MANAGER       m_toolMgr;
+    MULTICHANNEL_TOOL* m_tool = nullptr;
+};
+
+
+BOOST_FIXTURE_TEST_CASE( RepeatFromSelection, REPEAT_TOOL_FIXTURE )
+{
+    const wxString         ref = wxT( "/io_drivers_pp/bank0/out01/" );
+    std::vector<EDA_ITEM*> selected = sheetFootprints( m_board.get(), ref );
+
+    BOOST_REQUIRE_EQUAL( selected.size(), 11 );
+
+    // Channels are found as sheet instances, and one part finds its counterpart in each
+    m_tool->StartRepeatFromSelection( selected );
+    BOOST_CHECK_EQUAL( candidates(), 15 );
+
+    for( const auto& [area, compat] : m_tool->GetData()->m_compatMap )
+    {
+        BOOST_CHECK_EQUAL( area->m_components.size(), 11 );
+        BOOST_CHECK( compat.m_unmatched.empty() );
+    }
+
+    std::vector<EDA_ITEM*> few( selected.begin(), selected.begin() + 4 );
+
+    m_tool->StartRepeatFromSelection( few );
+    BOOST_CHECK_EQUAL( candidates(), 15 );
+
+    // Expanding one part reaches the whole sheet instance
+    std::set<FOOTPRINT*> sheet;
+
+    for( EDA_ITEM* item : selected )
+        sheet.insert( static_cast<FOOTPRINT*>( item ) );
+
+    BOOST_CHECK( m_tool->ExpandToMatchingTopology( { *sheet.begin() }, true ) == sheet );
+
+    // Linked repeat places every channel part at its anchor counterpart and copies the routing in the area
+    const size_t areasBefore = std::ranges::count_if(
+            m_board->Zones(), []( ZONE* aZone ) { return aZone->GetPlacementAreaEnabled(); } );
+    const size_t tracksBefore = m_board->Tracks().size();
+
+    m_tool->StartRepeatFromSelection( selected );
+    BOOST_REQUIRE_EQUAL( candidates(), 15 );
+    m_tool->GetData()->m_linkAreas = true;
+
+    FOOTPRINT* anchor = nullptr;
+
+    for( FOOTPRINT* fp : m_tool->GetData()->m_refRA->m_components )
+    {
+        if( fp->m_Uuid == m_tool->GetData()->m_options.m_anchor )
+            anchor = fp;
+    }
+
+    BOOST_REQUIRE( anchor );
+
+    std::vector<std::pair<FOOTPRINT*, VECTOR2I>> expected;
+    FOOTPRINT*                                   probeRef = nullptr;
+    FOOTPRINT*                                   probeTarget = nullptr;
+
+    for( const auto& [area, compat] : m_tool->GetData()->m_compatMap )
+    {
+        FOOTPRINT* targetAnchor = compat.m_matchingComponents.at( anchor );
+
+        if( targetAnchor->GetOrientation() != anchor->GetOrientation() )
+            continue;
+
+        for( const auto& [refFp, targetFp] : compat.m_matchingComponents )
+        {
+            expected.emplace_back( targetFp,
+                                   targetAnchor->GetPosition() + refFp->GetPosition() - anchor->GetPosition() );
+
+            if( !probeRef && refFp != anchor )
+            {
+                probeRef = refFp;
+                probeTarget = targetFp;
+            }
+        }
+    }
+
+    BOOST_REQUIRE( probeRef );
+    BOOST_CHECK_EQUAL( m_tool->ApplyRepeat(), 0 );
+    BOOST_CHECK_GT( m_board->Tracks().size(), tracksBefore );
+
+    for( const auto& [fp, pos] : expected )
+        BOOST_CHECK_EQUAL( fp->GetPosition(), pos );
+
+    std::vector<ZONE*> created;
+    std::set<KIID>     linkSets;
+    std::set<KIID>     anchors;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->GetPlacementAreaEnabled() )
+            continue;
+
+        created.push_back( zone );
+
+        if( zone->GetLinkSet() != niluuid )
+        {
+            linkSets.insert( zone->GetLinkSet() );
+            anchors.insert( zone->GetRepeatOptions().m_anchor );
+        }
+    }
+
+    // Every channel, the reference included, is a peer holding the anchor part of its own
+    BOOST_CHECK_EQUAL( created.size(), areasBefore + 16 );
+    BOOST_CHECK_EQUAL( linkSets.size(), 1 );
+    BOOST_CHECK_EQUAL( anchors.size(), 16 );
+
+    // A part dragged out of the reference outline still follows on update
+    ZONE* refZone = *std::ranges::find_if( created, [&]( ZONE* aZone )
+                                           { return aZone->GetRepeatOptions().m_anchor == anchor->m_Uuid; } );
+
+    const VECTOR2I outside( refZone->Outline()->BBox().GetRight() + 10000000, probeRef->GetPosition().y );
+    const VECTOR2I delta = outside - probeRef->GetPosition();
+    const VECTOR2I targetBefore = probeTarget->GetPosition();
+
+    probeRef->SetPosition( outside );
+    BOOST_CHECK( m_tool->UpdateLinkedLayouts( refZone ) );
+    BOOST_CHECK_EQUAL( probeTarget->GetPosition(), targetBefore + delta );
+
+    // Repeating unlinked areas again replaces what was copied, boundary segments included. The first
+    // repeats settle the target outlines, after which every repeat starts from identical geometry
+    m_tool->UnlinkAreas( std::set<ZONE*>( created.begin(), created.end() ) );
+
+    auto repeat =
+            [&]()
+            {
+                m_tool->FindExistingRuleAreas();
+                m_tool->CheckRACompatibility( refZone );
+
+                for( auto& [area, compat] : m_tool->GetData()->m_compatMap )
+                    compat.m_doCopy = true;
+
+                m_tool->GetData()->m_options.m_connectedRoutingOnly = false;
+                m_tool->GetData()->m_options.m_groupItems = false;
+                BOOST_REQUIRE( m_tool->RepeatLayout( TOOL_EVENT(), refZone ) >= 0 );
+            };
+
+    repeat();
+    repeat();
+
+    const size_t tracksAfterSettling = m_board->Tracks().size();
+
+    repeat();
+    BOOST_CHECK_EQUAL( m_board->Tracks().size(), tracksAfterSettling );
+
+    // The channel missing a leaf is only offered loosely, and prunes that part from every channel
+    FOOTPRINT* leaf = railOnlyPart( m_board.get(), wxT( "/io_drivers_pp/bank1/out23/" ) );
+
+    BOOST_REQUIRE( leaf );
+    m_board->Remove( leaf );
+    delete leaf;
+
+    m_tool->StartRepeatFromSelection( sheetFootprints( m_board.get(), ref ) );
+    BOOST_CHECK_EQUAL( candidates(), 14 );
+
+    m_tool->DiscoverRepeatCandidates( true );
+    BOOST_CHECK_EQUAL( candidates(), 15 );
+    BOOST_CHECK_EQUAL( m_tool->GetData()->m_refRA->m_components.size(), 10 );
+
+    // Without symbol paths the channels are found by their connections alone, and expansion steps
+    // outward by shared nets
+    for( FOOTPRINT* fp : m_board->Footprints() )
+        fp->SetPath( KIID_PATH() );
+
+    m_tool->StartRepeatFromSelection( sheetFootprints( m_board.get(), ref ) );
+    BOOST_CHECK_EQUAL( candidates(), 0 );
+
+    m_tool->DiscoverRepeatCandidates( true );
+    BOOST_CHECK_EQUAL( candidates(), 15 );
+    BOOST_CHECK_EQUAL( m_tool->GetData()->m_refRA->m_components.size(), 9 );
+
+    FOOTPRINT* seed = nullptr;
+
+    for( EDA_ITEM* item : sheetFootprints( m_board.get(), ref ) )
+    {
+        if( static_cast<FOOTPRINT*>( item )->GetReference().StartsWith( wxT( "IC" ) ) )
+            seed = static_cast<FOOTPRINT*>( item );
+    }
+
+    BOOST_REQUIRE( seed );
+
+    std::set<FOOTPRINT*> step = m_tool->ExpandToMatchingTopology( { seed }, false );
+    std::set<int>        seedNets;
+
+    for( PAD* pad : seed->Pads() )
+        seedNets.insert( pad->GetNetCode() );
+
+    BOOST_CHECK_GT( step.size(), 1 );
+
+    for( FOOTPRINT* fp : step )
+    {
+        BOOST_CHECK( fp == seed || std::ranges::any_of( fp->Pads(), [&]( PAD* aPad )
+                                                        { return aPad->GetNetCode() > 0
+                                                                 && seedNets.contains( aPad->GetNetCode() ); } ) );
+    }
 }
 
 

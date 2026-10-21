@@ -108,6 +108,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::init()
     m_layerIndices.clear();
     m_layerMasks.clear();
     m_resetKIIDMap.clear();
+    m_linkedZones.clear();
 
     // Add untranslated default (i.e. English) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
@@ -1603,6 +1604,27 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             ZONE* z = static_cast<ZONE*>( zone );
 
             z->SetLayerSetAndRemoveUnusedFills( z->GetLayerSet() & layers );
+        }
+    }
+
+    // Appended items get fresh UUIDs, so remap the links read in this parse and leave existing zones alone
+    // A link set is no item, so appended copies of one set get a set of their own
+    std::map<KIID, KIID> appendedSets;
+
+    for( ZONE* z : m_board->Zones() )
+    {
+        if( !m_linkedZones.contains( z->m_Uuid ) )
+            continue;
+
+        if( m_appendToExisting && z->GetLinkSet() != niluuid )
+            z->SetLinkSet( appendedSets.try_emplace( z->GetLinkSet(), KIID() ).first->second );
+
+        REPEAT_LAYOUT_OPTIONS opts = z->GetRepeatOptions();
+
+        if( auto it = m_resetKIIDMap.find( opts.m_anchor.AsString() ); it != m_resetKIIDMap.end() )
+        {
+            opts.m_anchor = it->second;
+            z->SetRepeatOptions( opts );
         }
     }
 
@@ -9826,9 +9848,46 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     break;
                 }
+                case T_link:
+                {
+                    REPEAT_LAYOUT_OPTIONS opts;
+
+                    NeedSYMBOL();
+                    zone->SetLinkSet( KIID( CurStr() ) );
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_placement: opts.m_copyPlacement = parseBool(); break;
+                        case T_routing: opts.m_copyRouting = parseBool(); break;
+                        case T_connected_routing: opts.m_connectedRoutingOnly = parseBool(); break;
+                        case T_other_items: opts.m_copyOtherItems = parseBool(); break;
+                        case T_group_items: opts.m_groupItems = parseBool(); break;
+                        case T_locked_items: opts.m_includeLockedItems = parseBool(); break;
+                        case T_anchor:
+                            NeedSYMBOL();
+                            opts.m_anchor = KIID( CurStr() );
+                            break;
+                        default:
+                            Expecting( "placement, routing, connected_routing, other_items, group_items, "
+                                       "locked_items or anchor" );
+                        }
+
+                        NeedRIGHT();
+                    }
+
+                    zone->SetRepeatOptions( opts );
+
+                    // The loop already consumed the closing paren
+                    continue;
+                }
                 default:
                 {
-                    Expecting( "enabled, sheetname, component_class, or group" );
+                    Expecting( "enabled, sheetname, component_class, group or link" );
                     break;
                 }
                 }
@@ -10200,6 +10259,10 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     // Clear flags used in zone edition:
     zone->SetNeedRefill( false );
+
+    // By UUID, since the caller may still discard the zone
+    if( zone->GetLinkSet() != niluuid || zone->GetRepeatOptions().m_anchor != niluuid )
+        m_linkedZones.insert( zone->m_Uuid );
 
     return zone.release();
 }

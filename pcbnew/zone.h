@@ -839,6 +839,13 @@ public:
     PLACEMENT_SOURCE_T GetPlacementAreaSourceType() const       { return m_placementAreaSourceType; }
     void SetPlacementAreaSourceType( PLACEMENT_SOURCE_T aType ) { m_placementAreaSourceType = aType; }
 
+    /// The set of placement rule areas that share one layout, or niluuid when this one is not linked
+    const KIID& GetLinkSet() const                              { return m_linkSet; }
+    void SetLinkSet( const KIID& aLinkSet )                     { m_linkSet = aLinkSet; }
+
+    const REPEAT_LAYOUT_OPTIONS& GetRepeatOptions() const       { return m_repeatOptions; }
+    void SetRepeatOptions( const REPEAT_LAYOUT_OPTIONS& aOpts ) { m_repeatOptions = aOpts; }
+
     bool GetDoNotAllowZoneFills() const  { return m_doNotAllowZoneFills; }
     bool GetDoNotAllowVias() const       { return m_doNotAllowVias; }
     bool GetDoNotAllowTracks() const     { return m_doNotAllowTracks; }
@@ -971,6 +978,8 @@ protected:
     bool                  m_placementAreaEnabled;
     PLACEMENT_SOURCE_T    m_placementAreaSourceType;
     wxString              m_placementAreaSource;
+    KIID                  m_linkSet;
+    REPEAT_LAYOUT_OPTIONS m_repeatOptions;
 
     /**
      * A zone outline can be a teardrop zone with different rules for priority

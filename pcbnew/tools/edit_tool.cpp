@@ -55,6 +55,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/constraint_edit_tool.h>
 #include <tools/edit_tool.h>
+#include <tools/multichannel_tool.h>
 #include <tools/graphic_edit.h>
 #include <tools/item_modification_routine.h>
 #include <tools/pcb_picker_tool.h>
@@ -2332,6 +2333,12 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             tableDlg.ShowQuasiModal(); // Scintilla's auto-complete requires quasiModal
         }
+    }
+    else if( selection.Size() == 1 && selection.Front()->Type() == PCB_GROUP_T
+             && MULTICHANNEL_TOOL::ChannelZone( static_cast<PCB_GROUP*>( selection.Front() ) ) )
+    {
+        // A repeated channel is edited through the Repeat Layout dialog, which applies to the whole set
+        m_toolMgr->RunAction( PCB_ACTIONS::repeatLayout );
     }
     else if( selection.Size() == 1 && selection.Front()->IsBOARD_ITEM() )
     {

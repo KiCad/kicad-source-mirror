@@ -1731,8 +1731,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                                           .m_copyPlacement = true,
                                           .m_copyOtherItems = true,
                                           .m_groupItems = false,
-                                          .m_includeLockedItems = true,
-                                          .m_anchorFp = nullptr };
+                                          .m_includeLockedItems = true };
 
         // Give the appended block's auto-generated nets a private namespace so they cannot fuse by
         // name with a different part's net on the board, which would corrupt the topology match
