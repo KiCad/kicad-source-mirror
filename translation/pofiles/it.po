@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-20 22:34+0000\n"
+"PO-Revision-Date: 2026-10-22 11:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -1176,14 +1176,12 @@ msgid "Hide All Copper Layers"
 msgstr "Nascondi tutti gli strati in rame"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:281
-#, fuzzy
 msgid "Show All Inner Layers"
-msgstr "Mostra solo gli strati interni"
+msgstr "Mostra strati interni"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:282
-#, fuzzy
 msgid "Hide All Inner Layers"
-msgstr "Nascondi tutti gli strati in rame"
+msgstr "Nascondi strati interni"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:668
 msgid "Left double click or middle click to change color"
@@ -1202,9 +1200,9 @@ msgid "Show or hide %s"
 msgstr "Mostra o nascondi %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:760
-#, fuzzy, c-format
+#, c-format
 msgid "Show %s"
-msgstr "Mostra pagina %s"
+msgstr "Mostra %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:837
 #: pcbnew/widgets/appearance_controls.cpp:2758
@@ -1355,9 +1353,8 @@ msgid "Width:"
 msgstr "Larghezza:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:91
-#, fuzzy
 msgid "Lock/unlock aspect ratio"
-msgstr "Blocca o sblocca gli elementi selezionati"
+msgstr "Blocca/sblocca rapporto dimensioni"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:97
 #: common/dialogs/panel_gal_options_base.cpp:57
@@ -2121,9 +2118,9 @@ msgid "Error allocating memory for potrace bitmap"
 msgstr "Errore di allocazione memoria per bitmap potrace"
 
 #: common/bitmap_tracing.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Error allocating parameters: %s"
-msgstr "Errore nel caricare un'impronta: %s"
+msgstr "Errore nell'allocazione parametri: %s"
 
 #: common/bitmap_tracing.cpp:200
 #, fuzzy, c-format
