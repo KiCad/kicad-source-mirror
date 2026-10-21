@@ -1140,20 +1140,31 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
                     const SHAPE_POLY_SET& origPoly = aShape->GetPolyShape();
 
-                    // Stroke the unfractured outline so degenerate near-zero-width
-                    // spikes (which Fracture() collapses but the editor still draws as
-                    // thick lines) are preserved in the plot output (issue #24143).
+                    // Stroke the unfractured outline so degenerate near-zero-width spikes (which Fracture()
+                    // collapses but the editor still draws as thick lines) are preserved in the plot output
+                    // (issue #24143).
                     if( thickness > 0 )
                     {
-                        for( int jj = 0; jj < origPoly.OutlineCount(); ++jj )
-                            plotStrokeOutline( origPoly.COutline( jj ), jj );
+                        if( m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && isSolidFill )
+                        {
+                            // We can't split outline and fill into separate instructions for DXF as it
+                            // doesn't do fills, so we need the outline to be drawn only once (and include
+                            // any thick edge).
+                        }
+                        else
+                        {
+                            for( int jj = 0; jj < origPoly.OutlineCount(); ++jj )
+                                plotStrokeOutline( origPoly.COutline( jj ), jj );
+
+                            thickness = 0;
+                        }
                     }
 
                     if( !isSolidFill )
                         break;
 
-                    // Fracture before plotting the fill to avoid invalid gerber regions
-                    // from self-intersecting or overlapping outlines.
+                    // Fracture before plotting the fill to avoid invalid gerber regions generated from
+                    // self-intersecting or overlapping outlines.
                     SHAPE_POLY_SET tmpPoly = origPoly.CloneDropTriangulation();
                     tmpPoly.Fracture();
 
@@ -1169,11 +1180,11 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                         {
                             GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
-                            gbr_plotter->PlotPolyAsRegion( poly, FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+                            gbr_plotter->PlotPolyAsRegion( poly, FILL_T::FILLED_SHAPE, thickness, &gbr_metadata );
                         }
                         else
                         {
-                            m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, 0, getMetadata() );
+                            m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, thickness, getMetadata() );
                         }
                     }
                 }

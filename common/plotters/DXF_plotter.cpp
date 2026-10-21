@@ -1526,7 +1526,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         TransformOvalToPolygon( bufferOutline, aCornerList[ ii - 1 ], aCornerList[ ii ],
-            aWidth, GetPlotterArcHighDef(), ERROR_INSIDE );
+                                aWidth, GetPlotterArcHighDef(), ERROR_INSIDE );
     }
 
     // enter the initial polygon:
