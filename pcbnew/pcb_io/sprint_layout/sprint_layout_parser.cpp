@@ -1854,10 +1854,9 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     text->Rotate( newCenter, EDA_ANGLE( -rotation, DEGREES_T ) );
 
     if( add )
-    {
         aContainer->Add( text );
-        processItemGroups( text, aObj, aGidToItems );
-    }
+
+    processItemGroups( text, aObj, aGidToItems );
 }
 
 
