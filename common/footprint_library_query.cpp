@@ -134,7 +134,6 @@ FOOTPRINT_MATCH_RESULT QueryMatchingFootprints( KIWAY& aKiway, const FOOTPRINT_M
     }
     catch( const std::exception& )
     {
-        return returnFailure();
     }
 
     return returnFailure();
@@ -162,7 +161,6 @@ bool StartFootprintLibrariesLoad( KIWAY& aKiway )
     }
     catch( const std::exception& )
     {
-        return false;
     }
 
     return false;

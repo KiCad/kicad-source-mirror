@@ -210,7 +210,6 @@ FOOTPRINT_USERS_RESULT QueryFootprintUsers( KIWAY& aKiway, const FOOTPRINT_USERS
     }
     catch( const std::exception& )
     {
-        return returnFailure();
     }
 
     return returnFailure();
@@ -241,7 +240,6 @@ bool StartSymbolLibrariesLoad( KIWAY& aKiway )
     }
     catch( const std::exception& )
     {
-        return false;
     }
 
     return false;
