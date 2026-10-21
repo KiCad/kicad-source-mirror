@@ -347,11 +347,17 @@ std::unique_ptr<LIB_SYMBOL> LoadRemoteSymbolFromPayload( const std::vector<uint8
 
 LIB_ID BuildRemoteLibId( const wxString& aResolvedLibrary, const wxString& aResolvedItemName )
 {
-    const wxString nickname = RemoteLibraryPrefix()
+    wxString nickname = RemoteLibraryPrefix()
                                + wxS( "_" )
                                + SanitizeRemoteFileComponent( aResolvedLibrary, wxS( "footprints" ), true );
 
-    const wxString itemName = SanitizeRemoteFileComponent( aResolvedItemName, wxS( "footprint" ) );
+    if( nickname.EndsWith( wxT( ".pretty" ) ) )
+        nickname = nickname.BeforeLast( '.' );
+
+    wxString itemName = SanitizeRemoteFileComponent( aResolvedItemName, wxS( "footprint" ) );
+
+    if( itemName.EndsWith( wxT( ".kicad_mod" ) ) )
+        itemName = itemName.BeforeLast( '.' );
 
     LIB_ID id;
     id.SetLibNickname( nickname );

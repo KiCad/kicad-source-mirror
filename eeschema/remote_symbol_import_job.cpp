@@ -167,10 +167,7 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
         wxFileName libDir = fpRoot;
         libDir.AppendDir( nickname + wxS( ".pretty" ) );
 
-        wxString fileName = fpLibId.GetUniStringLibItemName();
-
-        if( !fileName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
-            fileName += wxS( ".kicad_mod" );
+        wxString fileName = fpLibId.GetUniStringLibItemName() + wxS( ".kicad_mod" );
 
         wxFileName outFile( libDir );
         outFile.SetFullName( fileName );
