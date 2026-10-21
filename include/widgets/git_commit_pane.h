@@ -106,7 +106,6 @@ private:
     void finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon, const std::vector<wxString>& aOutside );
     void onAmendToggled( wxCommandEvent& aEvent );
     void onNewBranchToggled( wxCommandEvent& aEvent );
-    void onBranchChosen( wxCommandEvent& aEvent );
     void onRecentMessage( wxCommandEvent& aEvent );
     void onShowDiff( wxCommandEvent& aEvent );
     void onFileActivated( wxDataViewEvent& aEvent );
@@ -289,8 +288,8 @@ private:
     /// Told when the message is edited. Empty unless an owning window asked.
     std::function<void()> m_messageChangedHandler;
 
-    /// True while the branch box holds a phrase rather than a branch, so nothing reads it as one.
-    bool m_branchChoiceIsPlaceholder = false;
+    /// The branch a commit will land on, empty when detached or before the first commit.
+    wxString m_currentBranch;
 
     std::function<void( const wxString& )> m_fileSelectedHandler;
 

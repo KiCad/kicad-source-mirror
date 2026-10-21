@@ -303,7 +303,6 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
                                updateCommitButton();
                            } );
     m_newBranchCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onNewBranchToggled, this );
-    m_branchChoice->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onBranchChosen, this );
     m_recentMessages->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onRecentMessage, this );
     m_showDiffButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onShowDiff, this );
     m_showDiffButton->SetToolTip( _( "Show what changed in the selected file. Pick a file in the list first." ) );
@@ -339,8 +338,6 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
 
     // Sized by hand, or a long branch name would set the width of the whole row. Wide enough
     // for an ordinary name, with the tooltip carrying the rest when one is longer.
-    m_branchChoice->SetMinSize( FromDIP( wxSize( 170, -1 ) ) );
-    KIPLATFORM::UI::EllipsizeChoiceBox( m_branchChoice );
 
     // Measured while every control is still shown.
     m_minDockWidth = GetSizer()->CalcMin().x;
@@ -671,7 +668,7 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_checklist->SetEntries( {} );
     m_checklist->Show( false );
     m_changesRow->ShowItems( false );
-    m_branchChoice->Clear();
+    m_branchName->SetLabel( wxEmptyString );
     m_branchRow->ShowItems( false );
     m_settingsButton->Show();
 
@@ -1002,30 +999,6 @@ void GIT_COMMIT_PANE::onNewBranchToggled( wxCommandEvent& aEvent )
 }
 
 
-void GIT_COMMIT_PANE::onBranchChosen( wxCommandEvent& aEvent )
-{
-    if( m_actionPending || m_transfer.IsBusy() )
-    {
-        KIGIT::ShowBusyMessage( this );
-        return;
-    }
-
-    wxString branch = m_branchChoice->GetStringSelection();
-    m_actionPending = true;
-    setBusy( true, _( "Checking branch..." ) );
-
-    SwitchProjectToBranch( m_frame, this, branch, m_actionQuery,
-                           [this]()
-                           {
-                               m_actionPending = false;
-                               setBusy( false, wxEmptyString );
-
-                               // A refused switch leaves the choice on a branch the project is not on.
-                               RefreshFileList();
-                           } );
-}
-
-
 void GIT_COMMIT_PANE::onShowDiff( wxCommandEvent& aEvent )
 {
     wxString path = m_checklist->GetItemPath( m_checklist->GetSelection() );
@@ -1037,7 +1010,7 @@ void GIT_COMMIT_PANE::onShowDiff( wxCommandEvent& aEvent )
 
 void GIT_COMMIT_PANE::populateBranches( const STATUS& aStatus )
 {
-    m_branchChoice->Clear();
+    m_branchName->SetLabel( wxEmptyString );
     m_branchRow->ShowItems( aStatus.hasRepo );
 
     // The advanced window is reachable without a repository, as the old button was.
@@ -1046,31 +1019,19 @@ void GIT_COMMIT_PANE::populateBranches( const STATUS& aStatus )
     if( !aStatus.hasRepo )
         return;
 
-    // Only a local branch can take a commit.
-    for( const KIGIT_BRANCH_INFO& branch : aStatus.branches )
-    {
-        if( !branch.isRemote )
-            m_branchChoice->Append( branch.name );
-    }
+    // This says where a commit will land. Switching branch is a different act, and it belongs
+    // to the project tree and the advanced window, which is where the surfaces for it are.
+    m_currentBranch = aStatus.currentBranch;
 
-    wxString current = aStatus.currentBranch;
+    wxString shown = m_currentBranch;
 
-    // Detached, or no commits yet, leaves no branch to show. Say which rather than leave the
-    // box blank. Nothing reads the phrase as a branch name.
-    m_branchChoiceIsPlaceholder = current.IsEmpty();
+    // Detached, or no commits yet, leaves no branch to name. Say which rather than show
+    // nothing at all.
+    if( shown.IsEmpty() )
+        shown = m_headDetached ? _( "Not on a branch" ) : _( "No commits yet" );
 
-    if( m_branchChoiceIsPlaceholder )
-    {
-        current = m_headDetached ? _( "Not on a branch" ) : _( "No commits yet" );
-        m_branchChoice->Append( current );
-    }
-
-    m_branchChoice->SetStringSelection( current );
-    m_branchChoice->Enable( !m_branchChoiceIsPlaceholder && !m_transfer.IsBusy() && !m_actionPending && !m_headDetached
-                            && !m_operationInProgress );
-
-    // The box ellipsizes, so the whole name is only readable here.
-    m_branchChoice->SetToolTip( current );
+    m_branchName->SetLabel( shown );
+    m_branchRow->Layout();
 }
 
 
@@ -1742,7 +1703,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     request->andPush = aAndPush;
     request->signOff = m_signOffCheckbox->IsChecked();
     request->branchName = branchName;
-    request->displayedBranch = m_branchChoiceIsPlaceholder ? wxString() : m_branchChoice->GetStringSelection();
+    request->displayedBranch = m_currentBranch;
     request->summary = m_summary->GetValue();
     request->description = m_description->GetValue();
     request->files = std::move( files );
@@ -1992,7 +1953,6 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
     m_signOffCheckbox->Enable( !aBusy );
     m_newBranchCheckbox->Enable( !aBusy );
     m_newBranchName->Enable( !aBusy && m_newBranchCheckbox->IsChecked() );
-    m_branchChoice->Enable( !aBusy && !m_headDetached && !m_operationInProgress );
     m_recentMessages->Enable( !aBusy );
     m_summary->Enable( !aBusy );
     m_description->Enable( !aBusy );
