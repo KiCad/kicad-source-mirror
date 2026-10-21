@@ -96,14 +96,7 @@ static void append_decompressed_streams( std::string& aBuffer )
 
         if( dataLen > 0 )
         {
-            // Trailing newline after the zlib payload is common in PDF writers; strip it so
-            // inflate does not see leftover input.
-            while( dataLen > 0
-                   && ( aBuffer[dataStart + dataLen - 1] == '\n' || aBuffer[dataStart + dataLen - 1] == '\r' ) )
-            {
-                --dataLen;
-            }
-
+            // Trailing CR/LF bytes may belong to the compressed checksum; zlib ignores any extra input.
             const unsigned char* data = reinterpret_cast<const unsigned char*>( aBuffer.data() + dataStart );
             z_stream             zs{};
             zs.next_in = const_cast<Bytef*>( data );
@@ -122,7 +115,8 @@ static void append_decompressed_streams( std::string& aBuffer )
                     zs.avail_out = static_cast<uInt>( out.size() - zs.total_out );
                     ret = inflate( &zs, Z_FINISH );
 
-                    if( ret == Z_STREAM_END || ret != Z_BUF_ERROR )
+                    // More output space cannot repair incomplete input.
+                    if( ret != Z_BUF_ERROR || zs.avail_out != 0 )
                         break;
 
                     out.resize( out.size() * 2 );
