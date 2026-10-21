@@ -259,6 +259,12 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
         wxFileName outFile( symbolDir );
         outFile.SetFullName( nickname + wxS( ".kicad_sym" ) );
 
+        if( strictLibraryTables && symbolName.IsEmpty() )
+        {
+            aError = _( "No symbol asset specified." );
+            return false;
+        }
+
         if( !validateSymbolPayload( fetched.payload, symbolName, aError ) )
             return false;
 
@@ -266,21 +272,24 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
         // already pointing at the local LIB_IDs of the bundle's footprints.
         std::unique_ptr<LIB_SYMBOL> loaded = LoadRemoteSymbolFromPayload( fetched.payload, symbolName, aError );
 
-        if( !loaded )
-            return false;
+        if( loaded )
+        {
+            loaded->SetName( symbolName );
+            LIB_ID savedId;
+            savedId.SetLibNickname( nickname );
+            savedId.SetLibItemName( symbolName );
+            loaded->SetLibId( savedId );
 
-        loaded->SetName( symbolName );
-        LIB_ID savedId;
-        savedId.SetLibNickname( nickname );
-        savedId.SetLibItemName( symbolName );
-        loaded->SetLibId( savedId );
-
-        ApplyFootprintLinks( *loaded, footprintLinks );
+            ApplyFootprintLinks( *loaded, footprintLinks );
+        }
 
         symbolDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
         if( strictLibraryTables )
         {
+            if( !loaded )
+                return false;
+
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
 
             if( !adapter )
@@ -324,7 +333,7 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
             }
         }
 
-        importedSymbol = true;
+        importedSymbol = loaded != nullptr;
         placedNickname = nickname;
         placedSymbolName = symbolName;
     }
