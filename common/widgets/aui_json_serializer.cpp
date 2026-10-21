@@ -342,8 +342,8 @@ public:
 
             if( actualPane )
             {
-                // Toolbar depth follows icon size and DPI, a saved one clips the icons
-                if( actualPane->IsToolbar() )
+                // Fixed docks size to content that follows DPI, a saved physical size clips them
+                if( actualPane->HasFlag( wxAuiPaneInfo::optionDockFixed ) )
                     pane.dock_size = 0;
 
                 pane.name = actualPane->name;
