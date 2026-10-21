@@ -766,6 +766,18 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     // Ensure item is selected (Under Windows right click does not select the item)
     m_TreeProject->SelectItem( curr_item );
 
+    // The tree control still uses the clicked item after this returns, so a menu command
+    // that closes the project must not run inside the click.
+    CallAfter(
+            [this]
+            {
+                showContextMenu();
+            } );
+}
+
+
+void PROJECT_TREE_PANE::showContextMenu()
+{
     std::vector<PROJECT_TREE_ITEM*> selection = GetSelectedData();
 
     bool can_switch_to_project = true;

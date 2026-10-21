@@ -116,6 +116,8 @@ private:
      */
     void onRight( wxTreeEvent& Event );
 
+    void showContextMenu();
+
     /**
      * Call the text editor to open the selected file in the tree project
      */
