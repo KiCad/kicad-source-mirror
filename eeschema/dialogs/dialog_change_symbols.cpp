@@ -628,6 +628,20 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
         }
     }
 
+    // Snapshot before symbols leave their screens so a prefix change cannot reuse a taken ref
+    std::set<wxString>           usedRefs;
+    std::map<wxString, wxString> renamedRefs;
+
+    for( const SCH_SHEET_PATH& path : frame->Schematic().Hierarchy() )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        wxCHECK2( screen, continue );
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+            usedRefs.insert( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ) );
+    }
+
     // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
     // library symbols in the schematic file.
     for( const auto& [ symbol, symbol_change_info ] : symbols )
@@ -731,13 +745,34 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
 
                         for( const SCH_SHEET_PATH& instance : symbol_change_info.m_Instances )
                         {
-                            wxString ref = symbol->GetRef( &instance );
-                            int      number = UTIL::GetRefDesNumber( ref );
+                            wxString oldRef = symbol->GetRef( &instance );
+                            int      number = UTIL::GetRefDesNumber( oldRef );
+                            wxString ref;
+                            auto     renamed = renamedRefs.find( oldRef );
 
-                            if( number >= 0 )
-                                ref.Printf( wxS( "%s%d" ), prefix, number );
-                            else
+                            if( number < 0 )
+                            {
                                 ref = UTIL::GetRefDesUnannotated( prefix );
+                            }
+                            else if( renamed != renamedRefs.end()
+                                     && UTIL::GetRefDesPrefix( renamed->second ) == prefix )
+                            {
+                                // Keep the units of a multi-unit symbol together
+                                ref = renamed->second;
+                            }
+                            else
+                            {
+                                ref.Printf( wxS( "%s%d" ), prefix, number );
+
+                                if( ref != oldRef )
+                                {
+                                    while( usedRefs.count( ref ) )
+                                        ref.Printf( wxS( "%s%d" ), prefix, ++number );
+
+                                    usedRefs.insert( ref );
+                                    renamedRefs[oldRef] = ref;
+                                }
+                            }
 
                             symbol->SetRef( &instance, ref );
                         }
