@@ -2480,8 +2480,21 @@ bool LIBGIT_BACKEND::StashSave( git_repository* aRepo, const wxString& aMessage 
         return false;
 
     KIGIT::GitSignaturePtr signaturePtr( signature );
-    std::string            message = aMessage.utf8_string();
-    git_oid                stashOid;
+
+    // libgit2 stashes from an unstamped index copy that trusts racily clean entries, so an edit made in the
+    // index's timestamp tick is stashed as unchanged and then reverted. Writing the index smudges those entries
+    git_index* index = nullptr;
+
+    if( git_repository_index( &index, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitIndexPtr indexPtr( index );
+
+    if( git_index_read( index, true ) != GIT_OK || git_index_write( index ) != GIT_OK )
+        return false;
+
+    std::string message = aMessage.utf8_string();
+    git_oid     stashOid;
 
     return git_stash_save( &stashOid, aRepo, signature, message.empty() ? nullptr : message.c_str(), GIT_STASH_DEFAULT )
            == GIT_OK;
