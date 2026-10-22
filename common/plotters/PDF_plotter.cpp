@@ -3026,11 +3026,13 @@ void PDF_PLOTTER::Plot3DModel( const wxString& aSourcePath, const std::vector<PD
         int viewHandle = allocPdfObject();
         startPdfObject( viewHandle );
 
+        const std::string encodedName = encodeStringForPlotter( wxString::FromUTF8( view.m_name ) );
+
         fmt::print( m_outputFile,
                     "<<\n"
                     "/Type /3DView\n"
-                    "/XN ({})\n"
-                    "/IN ({})\n"
+                    "/XN {}\n"
+                    "/IN {}\n"
                     "/MS /M\n"
                     "/C2W [{:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f} {:f}]\n"
                     "/CO {:f}\n"
@@ -3045,7 +3047,8 @@ void PDF_PLOTTER::Plot3DModel( const wxString& aSourcePath, const std::vector<PD
                     "/Type /3DLightingScheme\n"
                     "/Subtype /CAD>>\n"
                     ">>\n",
-                    view.m_name, view.m_name, view.m_cameraMatrix[0],
+                    encodedName, encodedName,
+                    view.m_cameraMatrix[0],
                     view.m_cameraMatrix[1],
                     view.m_cameraMatrix[2], view.m_cameraMatrix[3], view.m_cameraMatrix[4],
                     view.m_cameraMatrix[5], view.m_cameraMatrix[6], view.m_cameraMatrix[7],
