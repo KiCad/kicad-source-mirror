@@ -117,6 +117,13 @@ public:
     /// Buffer copies of a library's symbols, linking each derived copy to its buffered parent
     void BufferOriginals( std::vector<LIB_SYMBOL*> aOriginals );
 
+    /**
+     * Buffer a copy of \a aSymbol as read from the library, buffering its parent first when no buffer holds it.
+     *
+     * @throw IO_ERROR without buffering anything when a pending rename or delete took the parent's name.
+     */
+    LIB_SYMBOL* BufferLibrarySymbol( const LIB_SYMBOL& aSymbol );
+
     /// Create a new buffer to store a symbol. #LIB_BUFFER takes ownership of \a aCopy.
     bool CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen, bool aNew = false );
 

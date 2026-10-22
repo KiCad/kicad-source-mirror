@@ -896,6 +896,44 @@ BOOST_AUTO_TEST_CASE( RenamedSymbolIsNotReopenedFromTheFile )
 }
 
 
+/**
+ * Opening a derived symbol whose parent the editor renamed must not read the parent back into a second buffer,
+ * which the save would keep beside the new name.
+ */
+BOOST_AUTO_TEST_CASE( RenamedParentIsNotReopenedForAChild )
+{
+    wxString dir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( dir );
+    wxFileName::Mkdir( dir );
+
+    wxString path = wxFileName( dir, wxS( "4xxx.kicad_sym" ) ).GetFullPath();
+    BOOST_REQUIRE( wxCopyFile( KI_TEST::GetEeschemaTestDataDir() + "/libs/4xxx.kicad_sym", path ) );
+
+    LIB_BUFFER libBuffer( wxS( "4xxx" ) );
+    bufferSymbols( libBuffer, path, { wxS( "4016" ) } );
+
+    std::shared_ptr<SYMBOL_BUFFER> buf = libBuffer.GetBuffer( wxS( "4016" ) );
+    BOOST_REQUIRE( buf );
+
+    renameBuffer( libBuffer, *buf, wxS( "4016_Renamed" ) );
+
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        LIB_SYMBOL*         child = plugin->LoadSymbol( path, wxS( "4066" ) );
+
+        BOOST_REQUIRE( child && child->IsDerived() );
+        BOOST_CHECK_THROW( libBuffer.BufferLibrarySymbol( *child ), IO_ERROR );
+    }
+
+    saveLibrary( libBuffer, path );
+
+    BOOST_CHECK( inLibrary( path, wxS( "4016_Renamed" ) ) );
+    BOOST_CHECK( !inLibrary( path, wxS( "4016" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 /*
  * A pull can change a library under the editor's buffers. Saving one edited symbol must keep what the
  * file now holds for the others, and leave its derived symbols derived.

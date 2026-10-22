@@ -1001,7 +1001,11 @@ int SYMBOL_EDITOR_CONTROL::FlattenSymbol( const TOOL_EVENT& aEvent )
     if( editFrame->RefuseReleasedChange( symId.GetLibNickname(), symId.GetLibItemName() ) )
         return 0;
 
-    const LIB_SYMBOL*           symbol = libMgr.GetBufferedSymbol( symId.GetLibItemName(), symId.GetLibNickname() );
+    const LIB_SYMBOL* symbol = libMgr.GetBufferedSymbol( symId.GetLibItemName(), symId.GetLibNickname() );
+
+    if( !symbol )
+        return 0;
+
     std::unique_ptr<LIB_SYMBOL> flatSymbol = symbol->Flatten();
     wxCHECK_MSG( flatSymbol, 0, _( "Failed to flatten symbol" ) );
 

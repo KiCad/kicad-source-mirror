@@ -268,7 +268,10 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbol( LIB_SYMBOL* aEntry, const wxString
         rebuildMenuAndToolbar = true;
 
     LIB_SYMBOL* lib_symbol = m_libMgr->GetBufferedSymbol( aEntry->GetName(), aLibrary );
-    wxCHECK( lib_symbol, false );
+
+    // GetBufferedSymbol has already reported why
+    if( !lib_symbol )
+        return false;
 
     // Activating the tab installs these, the outgoing tab must first save the frame's own
     const int unit = aUnit > 0 ? aUnit : 1;

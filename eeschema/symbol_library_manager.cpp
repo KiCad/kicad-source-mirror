@@ -450,33 +450,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
             if( symbol == nullptr )
                 THROW_IO_ERROR( _( "Symbol not found." ) );
 
-            LIB_SYMBOL* bufferedParent = nullptr;
-
-            // Create parent symbols on demand so parent symbol can be set.
-            if( symbol->IsDerived() )
-            {
-                std::shared_ptr<LIB_SYMBOL> parent = symbol->GetParent().lock();
-                wxCHECK_MSG( parent, nullptr, wxString::Format( "Derived symbol '%s' found with undefined parent.",
-                                                                symbol->GetName() ) );
-
-                // Check if the parent symbol buffer has already be created.
-                bufferedParent = libBuf.GetSymbol( parent->GetName() );
-
-                if( !bufferedParent )
-                {
-                    std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *parent );
-                    bufferedParent = newParent.get();
-                    libBuf.CreateBuffer( std::move( newParent ), std::make_unique<SCH_SCREEN>() );
-                }
-            }
-
-            std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
-            bufferedSymbol = newSymbol.get();
-
-            if( bufferedParent )
-                newSymbol->SetParent( bufferedParent );
-
-            libBuf.CreateBuffer( std::move( newSymbol ), std::make_unique<SCH_SCREEN>() );
+            bufferedSymbol = libBuf.BufferLibrarySymbol( *symbol );
         }
         catch( const IO_ERROR& e )
         {
@@ -1942,6 +1916,50 @@ std::shared_ptr<SYMBOL_BUFFER> LIB_BUFFER::GetBuffer( const wxString& aSymbolNam
     }
 
     return std::shared_ptr<SYMBOL_BUFFER>( nullptr );
+}
+
+
+LIB_SYMBOL* LIB_BUFFER::BufferLibrarySymbol( const LIB_SYMBOL& aSymbol )
+{
+    LIB_SYMBOL* bufferedParent = nullptr;
+
+    // Create parent symbols on demand so parent symbol can be set.
+    if( aSymbol.IsDerived() )
+    {
+        std::shared_ptr<LIB_SYMBOL> parent = aSymbol.GetParent().lock();
+        wxCHECK_MSG( parent, nullptr,
+                     wxString::Format( "Derived symbol '%s' found with undefined parent.", aSymbol.GetName() ) );
+
+        // Check if the parent symbol buffer has already be created.
+        bufferedParent = GetSymbol( parent->GetName() );
+
+        // A second buffer under a name a pending rename or delete took would be saved beside it
+        if( !bufferedParent && Availability( parent->GetName() ) == SYMBOL_AVAILABILITY::RENAMED_OR_DELETED )
+        {
+            wxString msg = wxString::Format( _( "Symbol '%s' was renamed or deleted in the Symbol Editor." ),
+                                             UnescapeString( parent->GetName() ) );
+
+            msg << wxS( " " )
+                << wxString::Format( _( "Save or revert library '%s' first." ), UnescapeString( m_libName ) );
+            THROW_IO_ERROR( msg );
+        }
+
+        if( !bufferedParent )
+        {
+            std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *parent );
+            bufferedParent = newParent.get();
+            CreateBuffer( std::move( newParent ), std::make_unique<SCH_SCREEN>() );
+        }
+    }
+
+    std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( aSymbol );
+    LIB_SYMBOL*                 bufferedSymbol = newSymbol.get();
+
+    if( bufferedParent )
+        newSymbol->SetParent( bufferedParent );
+
+    CreateBuffer( std::move( newSymbol ), std::make_unique<SCH_SCREEN>() );
+    return bufferedSymbol;
 }
 
 
