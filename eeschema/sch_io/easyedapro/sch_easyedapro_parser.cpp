@@ -458,6 +458,10 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
         }
         else if( type == wxS( "TEXT" ) )
         {
+            // an unplaced text has a null position and nothing to draw
+            if( !line.at( 2 ).is_number() || !line.at( 3 ).is_number() )
+                continue;
+
             VECTOR2D pos( line.at( 2 ), line.at( 3 ) );
             double   angle = line.at( 4 ).is_number() ? line.at( 4 ).get<double>() : 0.0;
             wxString textStr = line.at( 5 );
@@ -868,6 +872,10 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
         }
         else if( type == wxS( "TEXT" ) )
         {
+            // an unplaced text has a null position and nothing to draw
+            if( !line.at( 2 ).is_number() || !line.at( 3 ).is_number() )
+                continue;
+
             VECTOR2D pos( line.at( 2 ), line.at( 3 ) );
             double   angle = line.at( 4 ).is_number() ? line.at( 4 ).get<double>() : 0.0;
             wxString textStr = line.at( 5 );
