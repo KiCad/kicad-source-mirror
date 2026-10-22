@@ -103,10 +103,7 @@ bool PROJECT::AttachGitRepository()
     // First attach only, or every panel refresh would undo what the credentials prompt
     // corrected on the live session.
     if( m_localSettings )
-    {
-        common->SetUsername( m_localSettings->m_GitRepoUsername );
         common->SetSSHKey( m_localSettings->m_GitSSHKey );
-    }
 
     wxFileName      fn( GetProjectFullName() );
     wxString        projectDir = fn.GetPath();
@@ -142,6 +139,10 @@ bool PROJECT::AttachGitRepository()
     }
 
     common->UpdateCurrentBranchInfo();
+
+    // Reading the URL clears a username it does not name, and one it does name wins
+    if( m_localSettings && common->GetUsername().IsEmpty() )
+        common->SetUsername( m_localSettings->m_GitRepoUsername );
 
     return true;
 }

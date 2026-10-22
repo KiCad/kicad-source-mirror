@@ -458,6 +458,13 @@ public:
     // Updates the password and remote information for the repository given the current branch
     void UpdateCurrentBranchInfo();
 
+    /**
+     * Bind the session to the URL a transfer is about to connect to. An unchanged URL keeps the
+     * session credentials, so a password corrected in the prompt outlives a stale one in the URL.
+     * A changed URL replaces the username and password with its own, clearing any it lacks.
+     */
+    void SyncRemoteUrl( const wxString& aRawUrl );
+
     wxString GetGitRootDirectory() const;
 
     wxString GetRemotename() const;
@@ -626,6 +633,7 @@ protected:
 
     GIT_CONN_TYPE m_connType;
     wxString m_remote;      // This is the full connection string
+    wxString m_urlUsername; // The username m_remote was parsed with, which HTTPS strips from it
     wxString m_hostname;    // This is just the hostname without the protocol, username, or password
     wxString m_username;
     wxString m_password;
@@ -672,6 +680,7 @@ private:
     void updateConnectionTypeUnlocked();
 
     std::vector<wxString> m_publicKeys;
+    wxString m_publicKeysHost; // The host m_publicKeys was gathered for
     int m_nextPublicKey;
     bool m_secretFetched;
 

@@ -35,11 +35,18 @@
 #include <wx/log.h>
 #include <wx/textfile.h>
 #include <wx/utils.h>
+#include <cerrno>
+#include <cstdlib>
 #include <cstring>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
+
+#ifndef _WIN32
+#include <pwd.h>
+#include <unistd.h>
+#endif
 
 static wxString stripUrlUserinfo( const wxString& aUrl );
 
@@ -69,6 +76,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         m_projectPath( aOther.m_projectPath ),
         m_connType( aOther.m_connType ),
         m_remote( aOther.m_remote ),
+        m_urlUsername( aOther.m_urlUsername ),
         m_hostname( aOther.m_hostname ),
         m_username( aOther.m_username ),
         m_password( aOther.m_password ),
@@ -77,6 +85,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         // The mutex is default-initialized, not copied
         m_gitActionMutex(),
         m_publicKeys( aOther.m_publicKeys ),
+        m_publicKeysHost( aOther.m_publicKeysHost ),
         m_nextPublicKey( aOther.m_nextPublicKey ),
         m_secretFetched( aOther.m_secretFetched )
 {
@@ -1916,15 +1925,47 @@ wxString KIGIT_COMMON::GetGitRootDirectory() const
 }
 
 
+// wxGetenv converts through an unlocked static buffer except on MSVC, and key discovery runs on any thread
+static wxString homeDir()
+{
+#ifdef _WIN32
+    return wxGetHomeDir();
+#else
+    if( const char* home = std::getenv( "HOME" ); home && *home )
+        return wxString( home, wxConvLibc );
+
+    passwd            entry;
+    passwd*           found = nullptr;
+    std::vector<char> buffer( 1024 );
+    int               rc;
+
+    while( ( rc = getpwuid_r( getuid(), &entry, buffer.data(), buffer.size(), &found ) ) == ERANGE )
+        buffer.resize( buffer.size() * 2 );
+
+    if( rc == 0 && found && found->pw_dir )
+        return wxString( found->pw_dir, wxConvLibc );
+
+    return wxEmptyString;
+#endif
+}
+
+
 void KIGIT_COMMON::updatePublicKeys()
 {
-    // Deadlocks if the credentials lock is already held. UpdateCurrentBranchInfo releases it
+    // Deadlocks if the credentials lock is already held. SyncRemoteUrl releases it
     // first for that reason.
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
 
     m_publicKeys.clear();
+    m_publicKeysHost = m_hostname;
 
-    wxFileName keyFile( wxGetHomeDir(), wxEmptyString );
+    const wxString home = homeDir();
+
+    // An empty home would make every key path relative to the working directory
+    if( home.IsEmpty() )
+        return;
+
+    wxFileName keyFile( home, wxEmptyString );
     keyFile.AppendDir( ".ssh" );
     keyFile.SetFullName( "id_rsa" );
 
@@ -1947,7 +1988,7 @@ void KIGIT_COMMON::updatePublicKeys()
         m_publicKeys.push_back( keyFile.GetFullPath() );
 
     // Parse SSH config file for hostname information
-    wxFileName sshConfig( wxGetHomeDir(), wxEmptyString );
+    wxFileName sshConfig( home, wxEmptyString );
     sshConfig.AppendDir( ".ssh" );
     sshConfig.SetFullName( "config" );
 
@@ -1976,7 +2017,7 @@ void KIGIT_COMMON::updatePublicKeys()
 
                 // Expand ~ to home directory if present
                 if( keyPath.StartsWith( "~" ) )
-                    keyPath.Replace( "~", wxGetHomeDir(), false );
+                    keyPath.Replace( "~", home, false );
 
                 // The lock is already held, so not through the locking entry point.
                 if( wxFileName::FileExists( keyPath ) )
@@ -2004,22 +2045,44 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
 
     if( git_remote_lookup( &remote, m_repo, remote_name.ToStdString().c_str() ) == GIT_OK )
     {
+        // UTF-8 as the transfers read it, or a non-ASCII path would look changed on every fetch
         if( const char* remoteUrl = git_remote_url( remote ) )
-            url = remoteUrl;
+            url = wxString::FromUTF8( remoteUrl );
 
         git_remote_free( remote );
     }
 
+    SyncRemoteUrl( url );
+}
+
+
+void KIGIT_COMMON::SyncRemoteUrl( const wxString& aRawUrl )
+{
+    REMOTE_URL parsed = ParseRemoteURL( aRawUrl );
+    bool       keysStale = false;
+
     {
-        // The authentication callback reads these on a worker thread, so update them together.
+        // The authentication callback reads these on a worker thread, so update them together
         std::lock_guard<std::mutex> lock( m_credentialsMutex );
-        m_remote = url;
-        m_password.clear();
-        m_secretFetched = false;
-        updateConnectionTypeUnlocked();
+
+        // HTTPS drops the username from the stored URL, so it is compared on its own
+        if( parsed.url != m_remote || parsed.username != m_urlUsername )
+        {
+            m_remote = parsed.url;
+            m_urlUsername = parsed.username;
+            m_connType = parsed.connType;
+            m_hostname = parsed.hostname;
+            m_username = parsed.username;
+            m_password = parsed.password;
+            m_secretFetched = !m_password.IsEmpty();
+        }
+
+        // SetRemote can move the host without gathering keys, so compare against the gathered list
+        keysStale = m_hostname != m_publicKeysHost;
     }
 
-    updatePublicKeys();
+    if( keysStale )
+        updatePublicKeys();
 }
 
 
@@ -2163,6 +2226,7 @@ void KIGIT_COMMON::updateConnectionTypeUnlocked()
     REMOTE_URL parsed = ParseRemoteURL( m_remote );
     m_connType = parsed.connType;
     m_remote = parsed.url;
+    m_urlUsername = parsed.username;
     m_hostname = parsed.hostname;
 
     if( !parsed.username.IsEmpty() )

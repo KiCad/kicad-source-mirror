@@ -164,9 +164,10 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
     git_repository* newRepo = nullptr;
-    wxString        remote = common->m_remote;
+    wxString        remote = common->GetRemote();
+    std::string     remoteUtf8 = remote.utf8_string();
 
-    if( git_clone( &newRepo, remote.mbc_str(), aHandler->GetClonePath().mbc_str(), &cloneOptions ) != 0 )
+    if( git_clone( &newRepo, remoteUtf8.c_str(), aHandler->GetClonePath().mbc_str(), &cloneOptions ) != 0 )
     {
         aHandler->AddErrorString( wxString::Format( _( "Could not clone repository '%s' : %s" ),
                                                     remote,
@@ -911,6 +912,12 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 
     KIGIT::GitRemotePtr remotePtr(remote);
 
+    // The URL may have changed outside KiCad, and libgit2 connects to the push URL when there is one
+    const char* pushUrl = git_remote_pushurl( remote ) ? git_remote_pushurl( remote ) : git_remote_url( remote );
+
+    if( pushUrl )
+        common->SyncRemoteUrl( wxString::FromUTF8( pushUrl ) );
+
     git_remote_callbacks remoteCallbacks;
     git_remote_init_callbacks( &remoteCallbacks, GIT_REMOTE_CALLBACKS_VERSION );
     remoteCallbacks.sideband_progress = progress_cb;
@@ -1446,6 +1453,10 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     }
 
     KIGIT::GitRemotePtr remotePtr( remote );
+
+    // The URL may have changed outside KiCad, so the credentials follow what libgit2 connects to
+    if( const char* url = git_remote_url( remote ) )
+        aHandler->GetCommon()->SyncRemoteUrl( wxString::FromUTF8( url ) );
 
     git_remote_callbacks remoteCallbacks;
     git_remote_init_callbacks( &remoteCallbacks, GIT_REMOTE_CALLBACKS_VERSION );
