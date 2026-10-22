@@ -29,6 +29,7 @@
 #include <math/box2.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
+#include <set>
 
 
 struct LTSPICE_FILE
@@ -437,8 +438,9 @@ private:
     static SYMBOLTYPE getSymbolType( const wxString& aValue );
 
 private:
-    REPORTER*  m_reporter;
-    wxFileName m_ltspiceDataDir;
+    REPORTER*          m_reporter;
+    std::set<wxString> m_missingSymbols;
+    wxFileName         m_ltspiceDataDir;
 
     std::map<wxString, wxString> m_ascFileCache;
     std::map<wxString, wxString> m_asyFileCache;

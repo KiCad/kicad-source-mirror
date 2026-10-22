@@ -1003,8 +1003,9 @@ LTSPICE_SCHEMATIC::ParseAscFiles( const std::map<wxString, wxString>& aAscFilesC
                 }
                 catch( IO_ERROR& e )
                 {
-                    if( m_reporter )
-                        m_reporter->Report( e.What(), RPT_SEVERITY_ERROR );
+                    // the box stands in for the part, so this is not an error, and once per symbol is enough
+                    if( m_reporter && m_missingSymbols.insert( symbolName.Lower() ).second )
+                        m_reporter->Report( e.What(), RPT_SEVERITY_WARNING );
 
                     // Use dummy symbol
                     LT_SYMBOL lt_symbol = MakeDummySymbol( symbolName );
