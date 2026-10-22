@@ -883,7 +883,7 @@ void SCH_COMMIT::RevertToCheckpoint( int aCheckpoint )
     if( frame )
         frame->RecalculateConnections( nullptr, NO_CLEANUP );
 
-    m_entries.erase( m_entries.begin() + aCheckpoint, m_entries.end() );
+    dropEntriesAfter( aCheckpoint );
 }
 
 

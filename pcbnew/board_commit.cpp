@@ -1070,7 +1070,7 @@ void BOARD_COMMIT::RevertToCheckpoint( int aCheckpoint )
         }
     }
 
-    m_entries.erase( m_entries.begin() + aCheckpoint, m_entries.end() );
+    dropEntriesAfter( aCheckpoint );
 }
 
 

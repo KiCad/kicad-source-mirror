@@ -181,6 +181,26 @@ protected:
         m_entries.clear();
     }
 
+    void dropEntriesAfter( int aCheckpoint )
+    {
+        m_entries.erase( m_entries.begin() + aCheckpoint, m_entries.end() );
+
+        m_addedItems.clear();
+        m_changedItems.clear();
+        m_deletedItems.clear();
+
+        for( const COMMIT_LINE& entry : m_entries )
+        {
+            switch( entry.m_type & CHT_TYPE )
+            {
+            case CHT_ADD: m_addedItems.insert( { entry.m_item, entry.m_screen } ); break;
+            case CHT_REMOVE: m_deletedItems.insert( { entry.m_item, entry.m_screen } ); break;
+            case CHT_MODIFY: m_changedItems.insert( { entry.m_item, entry.m_screen } ); break;
+            default: break;
+            }
+        }
+    }
+
     virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = nullptr,
                             BASE_SCREEN *aScreen = nullptr );
 

@@ -371,5 +371,34 @@ BOOST_AUTO_TEST_CASE( UpdateOutsideAnEditIsInert )
 }
 
 
+BOOST_AUTO_TEST_CASE( RevertedCommitStagesTheSameItemAgain )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    PCB_SHAPE* shape = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+    shape->SetStart( VECTOR2I( 0, 0 ) );
+    shape->SetEnd( VECTOR2I( 100000, 0 ) );
+    board.Add( shape );
+
+    BOARD_COMMIT commit( dummyTool );
+
+    commit.Modify( shape );
+    BOOST_REQUIRE( !commit.Empty() );
+
+    shape->SetEnd( VECTOR2I( 200000, 0 ) );
+    commit.Revert();
+    BOOST_REQUIRE( commit.Empty() );
+    BOOST_REQUIRE( shape->GetEnd() == VECTOR2I( 100000, 0 ) );
+
+    commit.Modify( shape );
+    BOOST_CHECK( !commit.Empty() );
+    BOOST_CHECK_EQUAL( commit.GetStatus( shape ), CHT_MODIFY );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
