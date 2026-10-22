@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-22 11:51+0000\n"
+"PO-Revision-Date: 2026-10-23 15:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -2123,16 +2123,16 @@ msgid "Error allocating parameters: %s"
 msgstr "Errore nell'allocazione parametri: %s"
 
 #: common/bitmap_tracing.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Error tracing bitmap: %s"
-msgstr "Errore leggendo l'immagine %s."
+msgstr "Errore nel tracciare la bitmap: %s"
 
 #: common/bitmap_tracing.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "%d region of the image could not be traced."
 msgid_plural "%d regions of the image could not be traced."
-msgstr[0] "Alcuni dei poligoni potrebbero non essere stati sottratti."
-msgstr[1] "Alcuni dei poligoni potrebbero non essere stati sottratti."
+msgstr[0] "%d regione dell'immagine non è stata tracciata."
+msgstr[1] "%d regioni dell'immagine non sono state tracciate."
 
 #: common/column_formatter.cpp:27
 msgid "True"
@@ -3028,9 +3028,8 @@ msgid "Configure Paths"
 msgstr "Configurazione percorsi"
 
 #: common/dialogs/dialog_convert_image_to_outlines.cpp:33
-#, fuzzy
 msgid "Convert to Outlines"
-msgstr "Converti in zona"
+msgstr "Converti in contorni"
 
 #: common/dialogs/dialog_convert_image_to_outlines.cpp:41
 #: common/dialogs/dialog_import_gfx_base.cpp:232
@@ -4021,15 +4020,13 @@ msgstr "1,0"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:134
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:56
-#, fuzzy
 msgid "Imported width:"
-msgstr "Larghezza raggio:"
+msgstr "Larghezza importata:"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:145
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:69
-#, fuzzy
 msgid "Imported height:"
-msgstr "Forma importata"
+msgstr "Altezza importata:"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:159
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:85
@@ -4060,15 +4057,13 @@ msgid "Default units:"
 msgstr "Unità predefinite:"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:227
-#, fuzzy
 msgid "Image Parameters"
-msgstr "Parametri importazione"
+msgstr "Parametri immagine"
 
 #: common/dialogs/dialog_import_gfx_base.h:100
 #: pcbnew/import_gfx/dialog_import_graphics_base.h:110
-#, fuzzy
 msgid "Import Graphics File"
-msgstr "Importa grafiche"
+msgstr "Importa file grafiche"
 
 #: common/dialogs/dialog_kicad_diff.cpp:65
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:57
@@ -6091,9 +6086,8 @@ msgid "Minimum grid spacing:"
 msgstr "Spaziatura minima griglia:"
 
 #: common/dialogs/panel_gal_options_base.cpp:72
-#, fuzzy
 msgid "Show major grid"
-msgstr "Mostra griglia"
+msgstr "Mostra griglia maggiore"
 
 #: common/dialogs/panel_gal_options_base.cpp:84 common/layer_id.cpp:111
 #: common/layer_id.cpp:152 eeschema/sim/simulator_frame_ui.cpp:776
