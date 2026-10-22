@@ -607,6 +607,82 @@ BOOST_FIXTURE_TEST_CASE( WholeClusterMoveWithFixedPoint, DRAG_FIXTURE )
 }
 
 
+// A pin grounds its own point and nothing else, so a free corner in the same cluster still drags.
+BOOST_FIXTURE_TEST_CASE( DragFreeCornerBesideFixedPoint, DRAG_FIXTURE )
+{
+    PCB_SHAPE* bottom = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* right = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    addCoincident( bottom, CONSTRAINT_ANCHOR::END, right, CONSTRAINT_ANCHOR::START );
+
+    PCB_CONSTRAINT* pinned = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    pinned->AddMember( bottom->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( pinned );
+
+    BOARD_CONSTRAINT_DRAG_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, CONSTRAINT_MEMBER( right->m_Uuid, CONSTRAINT_ANCHOR::START ) ) );
+    BOOST_REQUIRE( !session.HasBaseConflict() );
+
+    right->SetStart( { 12 * MM, 3 * MM } );
+    CONSTRAINT_DIAGNOSIS diagnosis = session.Solve( { 12 * MM, 3 * MM }, nullptr, {}, false, false );
+
+    BOOST_CHECK( diagnosis.solved );
+    BOOST_CHECK( diagnosis.conflicting.empty() );
+    BOOST_CHECK_LE( ( right->GetStart() - VECTOR2I( 12 * MM, 3 * MM ) ).EuclideanNorm(), 1000 );
+    BOOST_CHECK_LE( ( bottom->GetEnd() - right->GetStart() ).EuclideanNorm(), 1000 );
+    BOOST_CHECK_EQUAL( bottom->GetStart(), VECTOR2I( 0, 0 ) );
+}
+
+
+// Standing still is always feasible, so a pinned cluster keeps its snapping instead of reporting
+// itself unusable on every frame.
+BOOST_FIXTURE_TEST_CASE( PinnedClusterStaysSnappableAtRest, DRAG_FIXTURE )
+{
+    PCB_SHAPE* bottom = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* right = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    addCoincident( bottom, CONSTRAINT_ANCHOR::END, right, CONSTRAINT_ANCHOR::START );
+
+    PCB_CONSTRAINT* pinned = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    pinned->AddMember( bottom->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( pinned );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { bottom, right }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 0, 0 };
+    SNAP_RESULT result = session.ResolveCandidates( context, {} );
+
+    BOOST_CHECK( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( result.position, VECTOR2I( 0, 0 ) );
+}
+
+
+// Moving part of a cluster still works when the pin sits on a shape left behind.
+BOOST_FIXTURE_TEST_CASE( PartialClusterMoveBesideFixedPoint, DRAG_FIXTURE )
+{
+    PCB_SHAPE* bottom = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* right = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    addCoincident( bottom, CONSTRAINT_ANCHOR::END, right, CONSTRAINT_ANCHOR::START );
+
+    PCB_CONSTRAINT* pinned = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    pinned->AddMember( bottom->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( pinned );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { right }, { 10 * MM, 0 } ) );
+
+    std::vector<PCB_SHAPE*> moved;
+    BOOST_REQUIRE( session.Solve( { 13 * MM, 4 * MM }, &moved, {} ) );
+
+    BOOST_CHECK_EQUAL( right->GetStart(), VECTOR2I( 13 * MM, 4 * MM ) );
+    BOOST_CHECK_EQUAL( bottom->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_LE( ( bottom->GetEnd() - right->GetStart() ).EuclideanNorm(), 1000 );
+}
+
+
 // Dragging one circle's centre re-derives a concentric neighbor (centre-anchor drag on a
 // non-segment shape).
 BOOST_FIXTURE_TEST_CASE( DragCircleCentreMovesConcentricNeighbor, DRAG_FIXTURE )
