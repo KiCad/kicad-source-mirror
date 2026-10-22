@@ -50,6 +50,7 @@
 
 #include <plotters/pdf_stroke_font.h>
 #include <plotters/pdf_outline_font.h>
+#include <plotters/pdf_unicode.h>
 #include <plotters/plotters_pslike.h>
 #include <geometry/shape_rect.h>
 #include <text_eval/text_eval_wrapper.h>
@@ -68,8 +69,8 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
     // returns a string compatible with PDF string convention from a unicode string.
     // if the initial text is only ASCII7, return the text between ( and ) for a good readability
-    // if the initial text contains non ASCII7, return the text between < and > encoded using 16
-    // bit hexadecimal (4 digits) per wide char (unicode 16)
+    // if the initial text contains non ASCII7, return the text between < and > encoded using
+    // UTF-16 BE (big-endian).
     std::string result;
 
     // Is aText only ASCII7 ?
@@ -88,22 +89,25 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
     {
         result = '(';
 
-        for( unsigned ii = 0; ii < aText.Len(); ii++ )
+        for( size_t ii = 0; ii < aText.Len(); ii++ )
         {
             unsigned int code = aText[ii];
 
-            // These characters must be escaped
-            switch( code )
+            if( code == '(' || code == ')' || code == '\\' )
             {
-            case '(':
-            case ')':
-            case '\\':
+                // These characters must be escaped.
                 result += '\\';
-                KI_FALLTHROUGH;
-
-            default:
-                result += code;
-                break;
+                result += static_cast<char>( code );
+            }
+            else if( code < 0x20 )
+            {
+                // Control characters (inc. null) are not illegal in principle,
+                // but we use octal escapes for them to avoid confusing parsers.
+                result += fmt::format( "\\{:03o}", code );
+            }
+            else
+            {
+                result += static_cast<char>( code );
             }
         }
 
@@ -111,12 +115,13 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
     }
     else
     {
+        // UTF-16BE text string with BOM.
         result = "<FEFF";
 
         for( size_t ii = 0; ii < aText.Len(); ii++ )
         {
             unsigned int code = aText[ii];
-            result += fmt::format("{:04X}", code);
+            result += FormatPdfUtf16Hex( static_cast<uint32_t>( code ) );
         }
 
         result += '>';

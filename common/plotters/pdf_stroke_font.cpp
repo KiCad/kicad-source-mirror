@@ -29,26 +29,11 @@
 #include <font/glyph.h>
 #include <font/glyph_types.h>
 #include <advanced_config.h>
+#include <plotters/pdf_unicode.h>
 
 namespace
 {
 static constexpr int MAX_SIMPLE_FONT_CODES = 256;
-
-static std::string formatUnicodeHex( uint32_t aCodepoint )
-{
-    if( aCodepoint <= 0xFFFF )
-        return fmt::format( "{:04X}", aCodepoint );
-
-    if( aCodepoint <= 0x10FFFF )
-    {
-        uint32_t value = aCodepoint - 0x10000;
-        uint16_t high = 0xD800 + ( value >> 10 );
-        uint16_t low = 0xDC00 + ( value & 0x3FF );
-        return fmt::format( "{:04X}{:04X}", high, low );
-    }
-
-    return std::string( "003F" );
-}
 } // anonymous namespace
 
 
@@ -352,7 +337,7 @@ std::string PDF_STROKE_FONT_SUBSET::BuildToUnicodeCMap() const
             continue;
 
         fmt::format_to( std::back_inserter( buffer ), "<{:02X}> <{}>\n", glyph.m_code,
-                        formatUnicodeHex( static_cast<uint32_t>( glyph.m_unicode ) ) );
+                        FormatPdfUtf16Hex( static_cast<uint32_t>( glyph.m_unicode ) ) );
     }
 
     fmt::format_to( std::back_inserter( buffer ), "endbfchar\n" );
@@ -550,4 +535,3 @@ std::vector<PDF_STROKE_FONT_SUBSET*> PDF_STROKE_FONT_MANAGER::AllSubsets() const
     }
     return out;
 }
-

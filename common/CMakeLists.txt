@@ -799,6 +799,7 @@ set( PLOTTERS_CONTROL_SRCS
     plotters/PDF_plotter.cpp
     plotters/pdf_stroke_font.cpp
     plotters/pdf_outline_font.cpp
+    plotters/pdf_unicode.cpp
     plotters/PNG_plotter.cpp
     plotters/PS_plotter.cpp
     plotters/SVG_plotter.cpp
