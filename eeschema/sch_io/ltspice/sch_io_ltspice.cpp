@@ -87,10 +87,20 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         rootSheet->SyncUuidToScreen();
     }
 
+    // An explicit library location wins over the places LTspice installs itself
+    wxString   libOverride;
+    wxFileName ltspiceDataDir;
+
+    if( wxGetEnv( wxS( "KICAD_LTSPICE_LIB" ), &libOverride ) && wxDirExists( libOverride ) )
+        ltspiceDataDir = wxFileName( libOverride, wxEmptyString );
+
     // Windows path: C:\Users\USERNAME\AppData\Local\LTspice\lib
-    wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserLocalDataPath(), wxEmptyString );
-    ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
-    ltspiceDataDir.AppendDir( wxS( "lib" ) );
+    if( !ltspiceDataDir.IsOk() )
+    {
+        ltspiceDataDir = wxFileName( KIPLATFORM::ENV::GetUserLocalDataPath(), wxEmptyString );
+        ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
+        ltspiceDataDir.AppendDir( wxS( "lib" ) );
+    }
 
     if( !ltspiceDataDir.DirExists() )
     {
@@ -111,7 +121,7 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
     }
 #endif
 
-    if( !ltspiceDataDir.DirExists() )
+    if( !ltspiceDataDir.DirExists() && wxDirExists( KIPLATFORM::ENV::GetDocumentsPath() ) )
     {
         // See if user has older version of LTspice installed
         // (e.g. C:\Users\USERNAME\Documents\LTspiceXVII\lib

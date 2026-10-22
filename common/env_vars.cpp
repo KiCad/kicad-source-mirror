@@ -43,6 +43,7 @@ static const std::vector<wxString> predefinedEnvVars = {
     ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ),
     wxS( "KICAD_USER_TEMPLATE_DIR" ),
     wxS( "KICAD_PTEMPLATES" ),
+    wxS( "KICAD_LTSPICE_LIB" ),
     ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ),
 };
 
@@ -136,6 +137,10 @@ static void initialiseEnvVarHelp( std::map<wxString, wxString>& aMap )
 
     aMap[wxS( "KICAD_USER_TEMPLATE_DIR" )] =
         _( "Optional. Can be defined if you want to create your own project templates folder." );
+
+    aMap[wxS( "KICAD_LTSPICE_LIB" )] =
+        _( "Optional. The LTspice library folder, which holds the sub and sym folders, used when importing "
+           "LTspice schematics." );
 
     aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) )] =
         _( "A directory containing 3rd party plugins, libraries and other downloadable content." );
