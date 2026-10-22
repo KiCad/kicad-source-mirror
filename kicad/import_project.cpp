@@ -166,6 +166,7 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     else
         importProj.ImportFiles( aSchFileType, aPcbFileType );
 
+    importProj.SaveImportedFiles();
     ReCreateTreePrj();
     m_active_project = true;
 }

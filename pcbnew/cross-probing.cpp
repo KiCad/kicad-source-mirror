@@ -877,8 +877,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         } while( true );
 
-        if( importFormat >= 0 )
-            importFile( fnameStr, importFormat, props.empty() ? nullptr : &props );
+        payload.clear();
+
+        if( importFormat >= 0 && importFile( fnameStr, importFormat, props.empty() ? nullptr : &props ) )
+            payload = "success";
 
         break;
     }

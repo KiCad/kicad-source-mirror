@@ -612,8 +612,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         payload.clear();
 
-        if( importFormat >= 0 && importFile( fnameStr, importFormat, props.empty() ? nullptr : &props )
-            && importFormat == SCH_IO_MGR::SCH_ORCAD )
+        if( importFormat < 0 || !importFile( fnameStr, importFormat, props.empty() ? nullptr : &props ) )
+            break;
+
+        if( importFormat == SCH_IO_MGR::SCH_ORCAD )
         {
             const IMPORT_NET_MAP*        map = Schematic().GetImportNetMap();
             std::map<wxString, wxString> names;
@@ -622,6 +624,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 names = GetBoardNetNameMap( *map, LOAD_INFO_REPORTER::GetInstance() );
 
             payload = TO_UTF8( IMPORT_PROJ_PROPS::JoinNetNameMap( names ) );
+        }
+        else
+        {
+            payload = "success";
         }
 
         break;

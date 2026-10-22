@@ -187,6 +187,10 @@ void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, in
         std::string packet = ss.str();
         frame->Kiway().ExpressMail( aFrameType, MAIL_IMPORT_FILE, packet, m_frame );
 
+        // Editors reply with an empty packet when the import fails
+        if( !packet.empty() )
+            m_importedFrames.insert( aFrameType );
+
         if( aFrameType == FRAME_SCH && aImportedFileType == SCH_IO_MGR::SCH_ORCAD
             && IMPORT_PROJ_PROPS::SplitNetNameMap( From_UTF8( packet ) ) )
             m_properties[IMPORT_PROJ_PROPS::NET_NAME_MAP] = packet;
@@ -199,6 +203,18 @@ void IMPORT_PROJ_HELPER::doImport( const wxString& aFile, FRAME_T aFrameType, in
             frame->Iconize( false );
 
         frame->Raise();
+    }
+}
+
+
+void IMPORT_PROJ_HELPER::SaveImportedFiles()
+{
+    for( FRAME_T frameType : m_importedFrames )
+    {
+        std::string payload;
+        MAIL_T      mail = frameType == FRAME_SCH ? MAIL_SCH_SAVE : MAIL_PCB_SAVE;
+
+        m_frame->Kiway().ExpressMail( frameType, mail, payload, m_frame );
     }
 }
 
