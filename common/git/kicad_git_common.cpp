@@ -1771,6 +1771,59 @@ wxString KIGIT_COMMON::GetRemoteNameOrDefault() const
 }
 
 
+wxString KIGIT_COMMON::remoteNameWithoutUpstream() const
+{
+    wxString     retval;
+    git_strarray remotes = { nullptr, 0 };
+
+    if( git_remote_list( &remotes, m_repo ) == GIT_OK )
+    {
+        // No upstream tracking branch.  Prefer "origin" when present, otherwise pick the
+        // single configured remote.  Returning empty for ambiguous (multiple) remotes
+        // tells callers to fall back to whatever default they want.
+        if( remotes.count == 1 )
+        {
+            retval = remotes.strings[0];
+        }
+        else
+        {
+            for( size_t ii = 0; ii < remotes.count; ++ii )
+            {
+                if( strcmp( remotes.strings[ii], "origin" ) == 0 )
+                {
+                    retval = remotes.strings[ii];
+                    break;
+                }
+            }
+        }
+
+        git_strarray_dispose( &remotes );
+    }
+    else
+    {
+        wxLogTrace( traceGit, "Failed to list remotes: %s", KIGIT_COMMON::GetLastGitError() );
+
+        // If we can't get the remote name from the upstream branch or the list of remotes,
+        // just return the default remote name
+
+        git_remote* remote = nullptr;
+
+        if( git_remote_lookup( &remote, m_repo, "origin" ) == GIT_OK )
+        {
+            retval = git_remote_name( remote );
+            git_remote_free( remote );
+        }
+        else
+        {
+            wxLogTrace( traceGit, "Failed to get remote name from default remote: %s",
+                        KIGIT_COMMON::GetLastGitError() );
+        }
+    }
+
+    return retval;
+}
+
+
 wxString KIGIT_COMMON::GetRemotename() const
 {
     if( !m_repo )
@@ -1781,10 +1834,11 @@ wxString KIGIT_COMMON::GetRemotename() const
     git_reference* head = nullptr;
     git_reference* upstream = nullptr;
 
+    // An unborn HEAD has no branch to track, but the remote still exists
     if( git_repository_head( &head, m_repo ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to get remote name: %s", KIGIT_COMMON::GetLastGitError() );
-        return retval;
+        return remoteNameWithoutUpstream();
     }
 
     KIGIT::GitReferencePtr headPtr( head );
@@ -1792,53 +1846,7 @@ wxString KIGIT_COMMON::GetRemotename() const
     if( git_branch_upstream( &upstream, head ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to get upstream branch: %s", KIGIT_COMMON::GetLastGitError() );
-        git_strarray remotes = { nullptr, 0 };
-
-        if( git_remote_list( &remotes, m_repo ) == GIT_OK )
-        {
-            // No upstream tracking branch.  Prefer "origin" when present, otherwise pick the
-            // single configured remote.  Returning empty for ambiguous (multiple) remotes
-            // tells callers to fall back to whatever default they want.
-            if( remotes.count == 1 )
-            {
-                retval = remotes.strings[0];
-            }
-            else
-            {
-                for( size_t ii = 0; ii < remotes.count; ++ii )
-                {
-                    if( strcmp( remotes.strings[ii], "origin" ) == 0 )
-                    {
-                        retval = remotes.strings[ii];
-                        break;
-                    }
-                }
-            }
-
-            git_strarray_dispose( &remotes );
-        }
-        else
-        {
-            wxLogTrace( traceGit, "Failed to list remotes: %s", KIGIT_COMMON::GetLastGitError() );
-
-            // If we can't get the remote name from the upstream branch or the list of remotes,
-            // just return the default remote name
-
-            git_remote* remote = nullptr;
-
-            if( git_remote_lookup( &remote, m_repo, "origin" ) == GIT_OK )
-            {
-                retval = git_remote_name( remote );
-                git_remote_free( remote );
-            }
-            else
-            {
-                wxLogTrace( traceGit, "Failed to get remote name from default remote: %s",
-                            KIGIT_COMMON::GetLastGitError() );
-            }
-        }
-
-        return retval;
+        return remoteNameWithoutUpstream();
     }
 
     KIGIT::GitReferencePtr upstreamPtr( upstream );

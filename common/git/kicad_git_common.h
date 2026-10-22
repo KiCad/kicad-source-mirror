@@ -659,6 +659,9 @@ private:
         return m_activeCancel;
     }
 
+    /// Remote to use when HEAD names no upstream, empty when several remotes leave it ambiguous.
+    wxString remoteNameWithoutUpstream() const;
+
     void updatePublicKeys();
 
     /// Body of SetSSHKey, for callers that already hold m_credentialsMutex.
