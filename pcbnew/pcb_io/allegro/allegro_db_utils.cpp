@@ -19,6 +19,8 @@
 
 #include "allegro_db_utils.h"
 
+#include <wx/arrstr.h>
+
 
 using namespace ALLEGRO;
 
@@ -83,4 +85,21 @@ std::optional<int> ALLEGRO::GetFirstFieldOfTypeInt( const BRD_DB& aDb, uint32_t 
         return static_cast<int>( *val );
 
     return std::nullopt;
+}
+
+
+wxString ALLEGRO::DecodeEscapedIdentifiers( const wxString& aName )
+{
+    wxArrayString components = wxSplit( aName, ':', '\0' );
+
+    for( wxString& component : components )
+    {
+        if( component.length() > 2 && component.StartsWith( wxS( "\\" ) ) && component.EndsWith( wxS( "\\" ) )
+                && component.find( '\\', 1 ) == component.length() - 1 )
+        {
+            component = component.Mid( 1, component.length() - 2 );
+        }
+    }
+
+    return wxJoin( components, ':', '\0' );
 }

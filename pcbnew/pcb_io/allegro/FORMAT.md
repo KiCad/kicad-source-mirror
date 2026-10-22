@@ -33,6 +33,7 @@ to determine the format version:
 | Magic         | Version | Allegro Release |
 |---------------|---------|-----------------|
 | `0x0013_0000` | V_160   | 16.0            |
+| `0x0013_0200` | V_161   | between 16.0 and 16.2 |
 | `0x0013_0400` | V_162   | 16.2            |
 | `0x0013_0500` | V_162   | 16.2            |
 | `0x0013_0C00` | V_164   | 16.4            |
@@ -130,6 +131,7 @@ earlier versions.
 | 0x15 | BLK_0x15_16_17_SEGMENT  | Line segment (tracks, outlines)      |
 | 0x16 | (same as 0x15)          | Line segment variant                 |
 | 0x17 | (same as 0x15)          | Line segment variant                 |
+| 0x1A | BLK_0x1A_UNKNOWN        | Unknown                              |
 | 0x1B | BLK_0x1B_NET            | Net definition                       |
 | 0x1C | BLK_0x1C_PADSTACK       | Padstack definition                  |
 | 0x1D | BLK_0x1D                | Physical constraint set (see below)  |

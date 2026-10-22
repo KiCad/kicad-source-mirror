@@ -133,6 +133,7 @@ enum class FMT_VER
     V_UNKNOWN,
     V_PRE_V16, // Allegro versions before 16.0 (unsupported binary format)
     V_160, // Allegro 16.0, 0x00130000
+    V_161, // Between 16.0 and 16.2, 0x00130200
     V_162, // Allegro 16.2  0x00130400, 0x00130500
     V_164, // Allegro 16.4, 0x00130C00
     V_165, // Allegro 16.5, 0x00131000
@@ -1123,6 +1124,21 @@ struct BLK_0x15_16_17_SEGMENT
 };
 
 /**
+ * Purpose not determined. A fixed block of 22 words in every version seen, with pointers
+ * into the net data, so it only needs to be stepped over.
+ */
+struct BLK_0x1A_UNKNOWN
+{
+    static constexpr uint8_t BLOCK_TYPE_CODE = 0x1A;
+
+    uint8_t  m_Type;
+    uint16_t m_T2;
+    uint32_t m_Key;
+
+    std::array<uint32_t, 20> m_UnknownArray;
+};
+
+/**
  * 0x1B objects are nets.
  *
  * They have names and pointers to various other objects.
@@ -1546,9 +1562,9 @@ struct BLK_0x1E_SI_MODEL
     uint32_t m_Key;
     uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
 
-    // Present in 16.2 (TWR-MCF51JG LAY-26493) and Kinoma (V_164); no 16.0 sample yet
-    COND_GE<FMT_VER::V_162, uint16_t> m_Unknown2;
-    COND_GE<FMT_VER::V_162, uint16_t> m_Unknown3;
+    // Present in V_161, 16.2 (TWR-MCF51JG LAY-26493) and Kinoma (V_164); no 16.0 sample yet
+    COND_GE<FMT_VER::V_161, uint16_t> m_Unknown2;
+    COND_GE<FMT_VER::V_161, uint16_t> m_Unknown3;
 
     uint32_t m_StrPtr;
     uint32_t m_Size;
@@ -1832,6 +1848,7 @@ struct BLK_0x2A_LAYER_LIST
     struct NONREF_ENTRY
     {
         std::string m_Name;
+        uint32_t    m_Properties; ///< Same layer flags as REF_ENTRY, stored after the 32 byte name
     };
 
     struct REF_ENTRY

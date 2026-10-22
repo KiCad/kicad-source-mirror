@@ -70,7 +70,30 @@ static bool checkFileHeader( const wxString& aFileName )
     if( IO_UTILS::fileHasBinaryHeader( aFileName, v18Magic, magicMajorOffset ) )
         return true;
 
-    return IO_UTILS::fileHasBinaryHeader( aFileName, v19Magic, magicMajorOffset );
+    if( IO_UTILS::fileHasBinaryHeader( aFileName, v19Magic, magicMajorOffset ) )
+        return true;
+
+    // Allegro 14 and 15 keep the family in the top byte of the magic, recognized so the refusal can say why
+    for( uint8_t family = 0x0F; family <= 0x12; ++family )
+    {
+        if( IO_UTILS::fileHasBinaryHeader( aFileName, { 0x00, family }, magicMajorOffset ) )
+            return true;
+    }
+
+    // dbdoctor also rewrites the version string of pre-16 files, so match their family together with the fixed
+    // words after the magic, which tell them from other .brd binaries
+    static const std::vector<uint8_t> headerWords = { 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0, 9, 0, 0, 0 };
+
+    if( !IO_UTILS::fileHasBinaryHeader( aFileName, headerWords, 4 ) )
+        return false;
+
+    for( uint8_t family = 0x0F; family <= 0x12; ++family )
+    {
+        if( IO_UTILS::fileHasBinaryHeader( aFileName, { family, 0x00 }, magicMajorOffset ) )
+            return true;
+    }
+
+    return false;
 }
 
 

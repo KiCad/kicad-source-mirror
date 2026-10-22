@@ -1567,7 +1567,8 @@ wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
     wxLogTrace( traceAllegroBuilder, "Resolving match group name for NET '%s': found table at key %#010x, subtype %#x, name '%s'",
                 m_brdDb.GetString( aNet.m_NetName ), tableKey, tbl->m_SubType, name );
 
-    return name;
+    // A group made from a schematic path keeps Cadence's \name\ wrapper, which is not part of the name
+    return DecodeEscapedIdentifiers( name );
 }
 
 
