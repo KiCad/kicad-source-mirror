@@ -145,9 +145,10 @@ int SCH_IO_EASYEDA::GetModifyHash() const
 
 
 LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
-                        const wxString& aAliasName, const std::map<std::string, UTF8>* aProperties )
+                        const wxString& aAliasName, const std::map<std::string, UTF8>* aProperties,
+                        REPORTER* aReporter )
 {
-    SCH_EASYEDA_PARSER      parser( nullptr, nullptr );
+    SCH_EASYEDA_PARSER      parser( nullptr, nullptr, aReporter );
     std::map<wxString, int> namesCounter;
 
     try
@@ -456,7 +457,7 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
         for( const wxString& symbolName : symbolNameList )
         {
-            LIB_SYMBOL* sym = loadSymbol( aLibraryPath, js, symbolName, aProperties );
+            LIB_SYMBOL* sym = loadSymbol( aLibraryPath, js, symbolName, aProperties, m_reporter );
 
             if( sym )
                 aSymbolList.push_back( sym );
@@ -487,7 +488,7 @@ LIB_SYMBOL* SCH_IO_EASYEDA::LoadSymbol( const wxString&        aLibraryPath,
         if( !FindSchFileInStream( aLibraryPath, in, js, topDoc, topDocType ) )
             THROW_IO_ERRORF( _( "Unable to find a valid schematic file in '%s'" ), aLibraryPath );
 
-        return loadSymbol( aLibraryPath, js, aAliasName, aProperties );
+        return loadSymbol( aLibraryPath, js, aAliasName, aProperties, m_reporter );
     }
     catch( nlohmann::json::exception& e )
     {
@@ -500,9 +501,10 @@ LIB_SYMBOL* SCH_IO_EASYEDA::LoadSymbol( const wxString&        aLibraryPath,
 }
 
 
-static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxString& aFileName )
+static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxString& aFileName,
+                           REPORTER* aReporter )
 {
-    SCH_EASYEDA_PARSER parser( nullptr, nullptr );
+    SCH_EASYEDA_PARSER parser( nullptr, nullptr, aReporter );
 
     try
     {
@@ -636,7 +638,7 @@ SCH_SHEET* SCH_IO_EASYEDA::LoadSchematicFile( const wxString& aFileName, SCHEMAT
         rootSheet->SyncUuidToScreen();
     }
 
-    LoadSchematic( aSchematic, rootSheet, aFileName );
+    LoadSchematic( aSchematic, rootSheet, aFileName, m_reporter );
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
 
     return rootSheet;

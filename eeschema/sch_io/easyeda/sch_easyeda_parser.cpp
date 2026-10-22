@@ -31,6 +31,7 @@
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
 #include <sch_bitmap.h>
+#include <reporter.h>
 #include <string_utils.h>
 #include <bezier_curves.h>
 #include <wx/base64.h>
@@ -56,10 +57,37 @@ static const std::vector<wxString> c_attributesWhitelist = { "Datasheet",
 // clang-format on
 
 
-SCH_EASYEDA_PARSER::SCH_EASYEDA_PARSER( SCHEMATIC*         aSchematic,
-                                        PROGRESS_REPORTER* aProgressReporter )
+SCH_EASYEDA_PARSER::SCH_EASYEDA_PARSER( SCHEMATIC* aSchematic, PROGRESS_REPORTER* aProgressReporter,
+                                        REPORTER* aReporter )
 {
     m_schematic = aSchematic;
+    m_reporter = aReporter;
+}
+
+
+// Fields past the text are optional and some exports omit them
+static constexpr size_t TEXT_MIN_FIELDS = 13;
+
+
+static wxString optionalField( const wxArrayString& aArr, size_t aIndex )
+{
+    return aIndex < aArr.size() ? aArr[aIndex] : wxString();
+}
+
+
+bool SCH_EASYEDA_PARSER::checkTextFields( const wxArrayString& aArr )
+{
+    if( aArr.size() >= TEXT_MIN_FIELDS )
+        return true;
+
+    if( m_reporter )
+    {
+        m_reporter->Report( wxString::Format( _( "Skipped a text with %d of %d fields." ), (int) aArr.size(),
+                                              (int) TEXT_MIN_FIELDS ),
+                            RPT_SEVERITY_WARNING );
+    }
+
+    return false;
 }
 
 
@@ -840,6 +868,9 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
         }
         else if( elType == wxS( "T" ) )
         {
+            if( !checkTextFields( arr ) )
+                continue;
+
             wxString textType = arr[1];
             VECTOR2D pos( Convert( arr[2] ), Convert( arr[3] ) );
             int      angle = Convert( arr[4] );
@@ -848,12 +879,12 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString fontSize = arr[7];
             wxString baselineAlign = arr[10];
             wxString textStr = arr[12];
-            bool     visible = arr[13] != wxS( "0" );
+            bool     visible = optionalField( arr, 13 ) != wxS( "0" );
 
             textStr.Replace( wxS( "\\n" ), wxS( "\n" ) );
             textStr = UnescapeHTML( textStr );
 
-            wxString halignStr = arr[14]; // Empty, start, middle, end, inherit
+            wxString halignStr = optionalField( arr, 14 ); // Empty, start, middle, end, inherit
 
             bool      added = false;
             EDA_TEXT* textItem = nullptr;
@@ -1371,6 +1402,9 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
         }
         else if( rootType == wxS( "T" ) )
         {
+            if( !checkTextFields( arr ) )
+                continue;
+
             VECTOR2D pos( Convert( arr[2] ), Convert( arr[3] ) );
             int      angle = Convert( arr[4] );
             // wxString color = arr[5];
@@ -1382,7 +1416,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             textStr.Replace( wxS( "\\n" ), wxS( "\n" ) );
             textStr = UnescapeHTML( textStr );
 
-            wxString halignStr = arr[14]; // Empty, start, middle, end, inherit
+            wxString halignStr = optionalField( arr, 14 ); // Empty, start, middle, end, inherit
 
             std::unique_ptr<SCH_TEXT> textItem =
                     std::make_unique<SCH_TEXT>( RelPos( pos ), textStr );

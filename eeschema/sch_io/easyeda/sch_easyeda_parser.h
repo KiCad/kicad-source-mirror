@@ -28,11 +28,12 @@
 
 
 class EDA_TEXT;
+class REPORTER;
 
 class SCH_EASYEDA_PARSER: public EASYEDA_PARSER_BASE
 {
 public:
-    explicit SCH_EASYEDA_PARSER( SCHEMATIC* aSchematic, PROGRESS_REPORTER* aProgressReporter );
+    SCH_EASYEDA_PARSER( SCHEMATIC* aSchematic, PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter );
     ~SCH_EASYEDA_PARSER();
 
     double ScaleSize( double aValue ) override
@@ -59,7 +60,10 @@ public:
                          wxArrayString aShapes );
 
 private:
+    bool checkTextFields( const wxArrayString& aArr );
+
     SCHEMATIC* m_schematic;
+    REPORTER*  m_reporter;
 };
 
 
