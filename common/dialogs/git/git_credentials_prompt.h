@@ -43,9 +43,11 @@ namespace KIGIT
  * @param aCommon Session to update with the entered credentials.
  * @param aProject When given, the corrected username and key are also written to the project's
  *                 stored settings, so a later repository attach does not revert them.
+ * @param aExplanation Why the last attempt failed, shown above the fields. Nothing is shown when empty.
  * @return True when the user confirmed and credentials were applied.
  */
-bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr );
+bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr,
+                           const wxString& aExplanation = wxEmptyString );
 
 /// Repository values and whether Git can use them to record a commit.
 struct GIT_IDENTITY

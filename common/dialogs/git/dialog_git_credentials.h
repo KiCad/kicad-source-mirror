@@ -26,8 +26,14 @@
 class DIALOG_GIT_CREDENTIALS : public DIALOG_GIT_CREDENTIALS_BASE
 {
 public:
-    DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxString& aUrl, KIGIT_COMMON::GIT_CONN_TYPE aConnType,
-                            const wxString& aDefaultUsername, const wxString& aDefaultSSHKey );
+    /**
+     * @param aUrl Address being authenticated to, without a password.
+     * @param aExplanation Why the last attempt failed. Hidden when empty.
+     * @param aConnType Transport of aUrl. GIT_CONN_LOCAL lets the user choose one.
+     */
+    DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxString& aUrl, const wxString& aExplanation,
+                            KIGIT_COMMON::GIT_CONN_TYPE aConnType, const wxString& aDefaultUsername,
+                            const wxString& aDefaultSSHKey );
 
     wxString                    GetUsername() const;
     wxString                    GetPassword() const;
@@ -43,6 +49,9 @@ private:
 
     /// On macOS a disabled wxRadioBox reports its first entry, so the type is kept here.
     KIGIT_COMMON::GIT_CONN_TYPE m_connType;
+
+    /// The user an SSH address names, which the server requires.
+    wxString m_urlUsername;
 };
 
 #endif // DIALOG_GIT_CREDENTIALS_H

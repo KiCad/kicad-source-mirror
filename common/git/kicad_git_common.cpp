@@ -36,11 +36,13 @@
 #include <wx/textfile.h>
 #include <wx/utils.h>
 #include <cerrno>
+#include <chrono>
 #include <cstdlib>
 #include <cstring>
 #include <map>
 #include <set>
 #include <string>
+#include <thread>
 #include <vector>
 
 #ifndef _WIN32
@@ -1897,6 +1899,52 @@ wxString KIGIT_COMMON::GetSSHKey() const
 }
 
 
+KIGIT_COMMON::CREDENTIAL_IDENTITY KIGIT_COMMON::GetCredentialIdentity() const
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    return { m_remote, m_connType, m_username };
+}
+
+
+bool KIGIT_COMMON::ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, const PROMPTED_CREDENTIALS& aEntered )
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
+    if( m_remote != aFor.remote || m_connType != aFor.connType || m_username != aFor.username )
+        return false;
+
+    m_connType = aEntered.connType;
+
+    if( aEntered.username )
+        m_username = *aEntered.username;
+
+    m_password = aEntered.password;
+    m_secretFetched = true;
+
+    // As SetSSHKey, which also refuses an empty key
+    if( !aEntered.sshKey.IsEmpty() )
+        setSSHKeyUnlocked( aEntered.sshKey );
+
+    m_nextPublicKey = 0;
+    m_testedTypes = 0;
+    m_authFailed = false;
+    return true;
+}
+
+
+std::unique_lock<std::mutex> KIGIT_COMMON::TryLockActionFor( std::chrono::milliseconds aWait )
+{
+    const auto                   deadline = std::chrono::steady_clock::now() + aWait;
+    std::unique_lock<std::mutex> lock( m_gitActionMutex, std::defer_lock );
+
+    // Not a timed mutex, so poll. A status read lets go within a few of these
+    while( !lock.try_lock() && std::chrono::steady_clock::now() < deadline )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 20 ) );
+
+    return lock;
+}
+
+
 void KIGIT_COMMON::setSSHKeyUnlocked( const wxString& aKey )
 {
     auto it = std::find( m_publicKeys.begin(), m_publicKeys.end(), aKey );
@@ -2119,6 +2167,13 @@ KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 {
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
     return m_connType;
+}
+
+
+void KIGIT_COMMON::SetConnType( GIT_CONN_TYPE aConnType )
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    m_connType = aConnType;
 }
 
 

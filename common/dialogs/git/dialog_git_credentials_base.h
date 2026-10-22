@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,31 +32,32 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_GIT_CREDENTIALS_BASE : public DIALOG_SHIM
 {
-private:
-protected:
-    wxStaticText*           m_promptLabel;
-    wxStaticText*           m_urlLabel;
-    wxRadioBox*             m_authChoice;
-    wxStaticText*           m_userLabel;
-    wxTextCtrl*             m_userCtrl;
-    wxStaticText*           m_passLabel;
-    wxTextCtrl*             m_passCtrl;
-    wxStaticText*           m_keyLabel;
-    wxFilePickerCtrl*       m_keyPicker;
-    wxCheckBox*             m_saveCheck;
-    wxStdDialogButtonSizer* m_sdbSizer1;
-    wxButton*               m_sdbSizer1OK;
-    wxButton*               m_sdbSizer1Cancel;
+	private:
 
-    // Virtual event handlers, override them in your derived class
-    virtual void OnConnTypeChanged( wxCommandEvent& event ) { event.Skip(); }
+	protected:
+		wxStaticText* m_promptLabel;
+		wxStaticText* m_explanationLabel;
+		wxRadioBox* m_authChoice;
+		wxStaticText* m_userLabel;
+		wxTextCtrl* m_userCtrl;
+		wxStaticText* m_passLabel;
+		wxTextCtrl* m_passCtrl;
+		wxStaticText* m_keyLabel;
+		wxFilePickerCtrl* m_keyPicker;
+		wxCheckBox* m_saveCheck;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnConnTypeChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
-public:
-    DIALOG_GIT_CREDENTIALS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY,
-                                 const wxString& title = _( "Git Authentication Required" ),
-                                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                                 long style = wxDEFAULT_DIALOG_STYLE );
+	public:
 
-    ~DIALOG_GIT_CREDENTIALS_BASE();
+		DIALOG_GIT_CREDENTIALS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Git Authentication Required"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+
+		~DIALOG_GIT_CREDENTIALS_BASE();
+
 };
+

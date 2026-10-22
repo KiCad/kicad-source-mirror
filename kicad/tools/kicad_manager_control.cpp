@@ -487,7 +487,9 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
                 KIGIT::EnsureGitIdentity( m_frame, m_frame, common, identity->identity );
             } );
 
-    KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
+    // Keyed like the attach-time lookup, which never sees credentials embedded in the address
+    KIPLATFORM::SECRETS::StoreSecret( KIGIT_COMMON::ParseRemoteURL( dlg.GetRepoURL() ).url, dlg.GetUsername(),
+                                      dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
     Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
 

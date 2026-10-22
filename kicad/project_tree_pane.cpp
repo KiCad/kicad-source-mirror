@@ -1815,7 +1815,9 @@ static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon )
 // local settings. Runs only after the remote itself was set up successfully.
 static void saveAcceptedRemoteSettings( PROJECT& aProject, const RemoteConfig& aConfig )
 {
-    KIPLATFORM::SECRETS::StoreSecret( aConfig.url, aConfig.username, aConfig.password );
+    // Keyed like the attach-time lookup, which never sees credentials embedded in the address
+    KIPLATFORM::SECRETS::StoreSecret( KIGIT_COMMON::ParseRemoteURL( aConfig.url ).url, aConfig.username,
+                                      aConfig.password );
     aProject.GetLocalSettings().m_GitRepoUsername = aConfig.username;
     aProject.GetLocalSettings().m_GitSSHKey = aConfig.sshKey;
 
@@ -1895,6 +1897,9 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     m_gitLastError = GIT_ERROR_NONE;
 
+    // Before the fetch, so a corrected login from the prompt below is the one that stays saved
+    saveAcceptedRemoteSettings( Prj(), remoteConfig );
+
     KIGIT_COMMON* common = gitCommon().get();
 
     while( true )
@@ -1913,8 +1918,6 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
         break;
     }
-
-    saveAcceptedRemoteSettings( Prj(), remoteConfig );
 }
 
 

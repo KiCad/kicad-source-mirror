@@ -27,6 +27,7 @@
 
 #include <git2.h>
 #include <atomic>
+#include <chrono>
 #include <functional>
 #include <mutex>
 #include <optional>
@@ -303,6 +304,9 @@ public:
     wxString GetPassword();
     GIT_CONN_TYPE GetConnType() const;
 
+    /// For a remote whose address names no transport, the user picks one in the prompt.
+    void SetConnType( GIT_CONN_TYPE aConnType );
+
     void SetUsername( const wxString& aUsername )
     {
         std::lock_guard<std::mutex> lock( m_credentialsMutex );
@@ -321,6 +325,35 @@ public:
     /// The key this session prefers, which is the one the project was set up with. Empty
     /// when none is known.
     wxString GetSSHKey() const;
+
+    /// The remote the credential prompt was opened for. Read as one, so a transfer syncing the
+    /// URL on another thread cannot leave the fields describing two remotes.
+    struct CREDENTIAL_IDENTITY
+    {
+        wxString      remote;
+        GIT_CONN_TYPE connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
+        wxString      username;
+    };
+
+    /// What the credential prompt collected. No username leaves the session's alone, for an SSH
+    /// address that names it. An empty key keeps the current one.
+    struct PROMPTED_CREDENTIALS
+    {
+        GIT_CONN_TYPE           connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
+        std::optional<wxString> username;
+        wxString                password;
+        wxString                sshKey;
+    };
+
+    CREDENTIAL_IDENTITY GetCredentialIdentity() const;
+
+    /**
+     * Apply what the prompt collected, unless the session has moved to another remote since
+     * aFor was taken. The check and the apply share one critical section, so a background fetch
+     * cannot slip between them. The per-attempt state is reset with it, so the next transfer
+     * starts over with these. Returns false, leaving everything alone, when the identity moved.
+     */
+    bool ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, const PROMPTED_CREDENTIALS& aEntered );
 
     // Holds a temporary variable that can be used by the authentication callback
     // to remember which types of authentication have been tested so that we
@@ -626,6 +659,13 @@ public:
     {
         return std::unique_lock<std::mutex>( m_gitActionMutex, std::try_to_lock );
     }
+
+    /// Long enough for a status read to finish, short enough that a window does not look hung.
+    static constexpr std::chrono::milliseconds ACTION_LOCK_WAIT{ 2000 };
+
+    /// TryLockAction that keeps trying for aWait before giving up. For the UI thread, where a
+    /// blocking LockAction could wait out a whole network timeout.
+    std::unique_lock<std::mutex> TryLockActionFor( std::chrono::milliseconds aWait );
 
     std::unique_lock<std::mutex> LockAction() { return std::unique_lock<std::mutex>( m_gitActionMutex ); }
 

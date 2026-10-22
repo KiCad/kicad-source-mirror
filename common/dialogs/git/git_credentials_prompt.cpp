@@ -33,29 +33,92 @@
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <kiplatform/secrets.h>
+#include <trace_helpers.h>
 
 
-bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject )
+// A session that never read its remote would show no address and offer no transport
+static void resolveMissingRemote( KIGIT_COMMON* aCommon )
 {
-    // The dialog seeds its picker from this, so a project that already knows its key does
-    // not make the user find it again.
-    DIALOG_GIT_CREDENTIALS dlg( aParent, aCommon->GetRemote(), aCommon->GetConnType(), aCommon->GetUsername(),
-                                aCommon->GetSSHKey() );
+    if( !aCommon->GetRemote().IsEmpty() || !aCommon->GetRepo() )
+        return;
+
+    // A status read holds the lock for moments at a time, so a short wait usually gets it
+    wxBusyCursor                 busy;
+    std::unique_lock<std::mutex> lock = aCommon->TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
+
+    if( !lock.owns_lock() )
+    {
+        wxLogTrace( traceGit, "Credential prompt opens without an address, the repository is busy" );
+        return;
+    }
+
+    wxString    remoteName = aCommon->GetRemoteNameOrDefault();
+    git_remote* remote = nullptr;
+
+    if( git_remote_lookup( &remote, aCommon->GetRepo(), remoteName.utf8_string().c_str() ) != GIT_OK )
+        return;
+
+    KIGIT::GitRemotePtr remotePtr( remote );
+
+    // The retry's credential callback compares against this, so both see one identity
+    if( const char* url = git_remote_url( remote ) )
+        aCommon->SyncRemoteUrl( wxString::FromUTF8( url ) );
+}
+
+
+// A key the project was set up with outlives the session's list, which a host change regathers
+static wxString initialSSHKey( KIGIT_COMMON* aCommon, PROJECT* aProject )
+{
+    if( aProject && !aProject->GetLocalSettings().m_GitSSHKey.IsEmpty() )
+        return aProject->GetLocalSettings().m_GitSSHKey;
+
+    return aCommon->GetSSHKey();
+}
+
+
+bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject,
+                                  const wxString& aExplanation )
+{
+    resolveMissingRemote( aCommon );
+
+    KIGIT_COMMON::CREDENTIAL_IDENTITY identity = aCommon->GetCredentialIdentity();
+    wxString                          shownUsername = identity.username;
+
+    if( shownUsername.IsEmpty() && aProject )
+        shownUsername = aProject->GetLocalSettings().m_GitRepoUsername;
+
+    DIALOG_GIT_CREDENTIALS dlg( aParent, identity.remote, aExplanation, identity.connType, shownUsername,
+                                initialSSHKey( aCommon, aProject ) );
 
     if( dlg.ShowModal() != wxID_OK )
         return false;
 
+    bool ssh = dlg.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH;
+
     // An ssh remote's user comes from its address, and the server refuses a different one.
-    if( dlg.GetConnType() != KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
-        aCommon->SetUsername( dlg.GetUsername() );
+    bool urlNamesUser = ssh && !KIGIT_COMMON::ParseRemoteURL( identity.remote ).username.IsEmpty();
 
-    aCommon->SetPassword( dlg.GetPassword() );
+    KIGIT_COMMON::PROMPTED_CREDENTIALS entered;
+    entered.connType = dlg.GetConnType();
+    entered.password = dlg.GetPassword();
 
-    if( dlg.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH && !dlg.GetSSHKey().IsEmpty() )
-        aCommon->SetSSHKey( dlg.GetSSHKey() );
+    if( !urlNamesUser )
+        entered.username = dlg.GetUsername();
 
-    if( dlg.SaveCredentials()
-        && !KIPLATFORM::SECRETS::StoreSecret( aCommon->GetRemote(), aCommon->GetUsername(), dlg.GetPassword() ) )
+    if( ssh )
+        entered.sshKey = dlg.GetSSHKey();
+
+    // A background fetch can move the session to another remote while the dialog is open
+    if( !aCommon->ApplyPromptedCredentials( identity, entered ) )
+    {
+        wxLogTrace( traceGit, "Credential prompt discarded, the remote changed while it was open" );
+        DisplayInfoMessage( aParent, _( "The remote changed while this window was open. Try the operation again." ) );
+        return false;
+    }
+
+    wxString username = entered.username ? *entered.username : identity.username;
+
+    if( dlg.SaveCredentials() && !KIPLATFORM::SECRETS::StoreSecret( identity.remote, username, entered.password ) )
     {
         DisplayInfoMessage( aParent, _( "The credentials could not be saved to the system keychain, so they "
                                         "are kept for this session only." ) );
@@ -64,16 +127,16 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
     // A correction only in the session would be reverted by the next attach.
     if( aProject )
     {
-        if( dlg.GetConnType() != KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
+        if( !urlNamesUser )
             aProject->GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
 
-        if( dlg.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH && !dlg.GetSSHKey().IsEmpty() )
+        if( ssh && !dlg.GetSSHKey().IsEmpty() )
             aProject->GetLocalSettings().m_GitSSHKey = dlg.GetSSHKey();
+
+        if( KIGIT_COMMON::ParseRemoteURL( identity.remote ).connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
+            aProject->GetLocalSettings().m_GitRepoType = ssh ? wxS( "ssh" ) : wxS( "https" );
     }
 
-    aCommon->ClearAuthFailure();
-    aCommon->TestedTypes() = 0;
-    aCommon->ResetNextKey();
     return true;
 }
 

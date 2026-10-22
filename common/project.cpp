@@ -140,6 +140,18 @@ bool PROJECT::AttachGitRepository()
 
     common->UpdateCurrentBranchInfo();
 
+    wxString remote = common->GetRemote();
+
+    // The address names no transport, so the one picked in the credential prompt stands in
+    if( m_localSettings && !remote.IsEmpty()
+        && KIGIT_COMMON::ParseRemoteURL( remote ).connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
+    {
+        if( m_localSettings->m_GitRepoType == wxS( "ssh" ) )
+            common->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
+        else if( m_localSettings->m_GitRepoType == wxS( "https" ) )
+            common->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS );
+    }
+
     // Reading the URL clears a username it does not name, and one it does name wins
     if( m_localSettings && common->GetUsername().IsEmpty() )
         common->SetUsername( m_localSettings->m_GitRepoUsername );
