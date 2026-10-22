@@ -453,7 +453,14 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         adapter->LoadOne( getLibName() );
     }
 
-    m_eagleDoc = std::make_unique<EAGLE_DOC>( currentNode, this );
+    try
+    {
+        m_eagleDoc = std::make_unique<EAGLE_DOC>( currentNode, this );
+    }
+    catch( const XML_PARSER_ERROR& exc )
+    {
+        THROW_IO_ERROR( exc.what() );
+    }
 
     // If the attribute is found, store the Eagle version;
     // otherwise, store the dummy "0.0" version.

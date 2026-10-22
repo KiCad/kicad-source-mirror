@@ -41,6 +41,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
+#include <wx/utils.h>
 #include <libraries/library_manager.h>
 
 /**
@@ -567,4 +568,129 @@ BOOST_AUTO_TEST_CASE( LibrarySymbolFieldsKeepTheirText )
 
     // Keep the prefix check from becoming vacuous if the fields come back empty
     BOOST_CHECK_GT( prefixCount, 30 );
+}
+
+
+// A binary schematic's free-text blob can pass 32 KiB, and losing it drops every package name
+BOOST_AUTO_TEST_CASE( BinaryLargeFreeTextKeepsPackages )
+{
+    wxString corpus;
+
+    if( !wxGetEnv( wxS( "KICAD_IMPORT_CORPUS" ), &corpus ) )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_IMPORT_CORPUS is not set" );
+        return;
+    }
+
+    const wxFileName eagleFn( corpus + wxS( "/Other/OLINUXINO/HARDWARE/A20-OLinuXino-MICRO/2. Older hardware "
+                                            "revisions/Hardware revision L1/T2-OLINUXINO-MICRO_Rev_L1.sch" ) );
+
+    if( !eagleFn.FileExists() )
+    {
+        BOOST_TEST_MESSAGE( "T2-OLINUXINO-MICRO_Rev_L1.sch is not in KICAD_IMPORT_CORPUS" );
+        return;
+    }
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_large_free_text" ), schematic );
+
+    SCH_SYMBOL* c1 = nullptr;
+
+    for( const SCH_SHEET_PATH& sheetPath : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+            if( sym->GetField( FIELD_T::REFERENCE )->GetText() == wxS( "C1" ) )
+                c1 = sym;
+        }
+    }
+
+    BOOST_REQUIRE( c1 );
+    BOOST_CHECK( !c1->GetField( FIELD_T::FOOTPRINT )->GetText().IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryBusNamesKeepLongStringsAligned )
+{
+    wxString corpus;
+
+    if( !wxGetEnv( wxS( "KICAD_IMPORT_CORPUS" ), &corpus ) )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_IMPORT_CORPUS is not set" );
+        return;
+    }
+
+    const wxFileName eagleFn( corpus + wxS( "/Other/OLINUXINO/HARDWARE/A20-OLinuXino-LIME2/2. Older hardware "
+                                            "revisions/A20-OLinuXino-LIME2 hardware revision G2/"
+                                            "A20-OLinuXino-Lime2_Rev_G2.sch" ) );
+
+    if( !eagleFn.FileExists() )
+    {
+        BOOST_TEST_MESSAGE( "A20-OLinuXino-Lime2_Rev_G2.sch is not in KICAD_IMPORT_CORPUS" );
+        return;
+    }
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_bus_names" ), schematic );
+
+    int symbols = 0;
+
+    for( const SCH_SHEET_PATH& sheetPath : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+            // Missing bus names shift the strings so GND supplies take a capacitor value
+            BOOST_CHECK_MESSAGE( !sym->GetField( FIELD_T::REFERENCE )->GetText().Contains( wxS( "22uF" ) ),
+                                 sym->GetField( FIELD_T::REFERENCE )->GetText() );
+            symbols++;
+        }
+    }
+
+    BOOST_CHECK_GT( symbols, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryLongStringsFollowRecordOrder )
+{
+    wxString corpus;
+
+    if( !wxGetEnv( wxS( "KICAD_IMPORT_CORPUS" ), &corpus ) )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_IMPORT_CORPUS is not set" );
+        return;
+    }
+
+    const wxFileName eagleFn( corpus + wxS( "/Other/OLINUXINO/HARDWARE/A20-OLinuXino-LIME2/2. Older hardware "
+                                            "revisions/A20-OLinuXino-LIME2 hardware revision K2/"
+                                            "A20-OLinuXino-Lime2_Rev_K2.sch" ) );
+
+    if( !eagleFn.FileExists() )
+    {
+        BOOST_TEST_MESSAGE( "A20-OLinuXino-Lime2_Rev_K2.sch is not in KICAD_IMPORT_CORPUS" );
+        return;
+    }
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_long_string_order" ), schematic );
+
+    SCH_SYMBOL* led = nullptr;
+
+    for( const SCH_SHEET_PATH& sheetPath : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+            if( sym->GetField( FIELD_T::VALUE )->GetText() == wxS( "LED/RED/0603" ) )
+                led = sym;
+        }
+    }
+
+    // The blob holds a part's long value before its long name
+    BOOST_REQUIRE( led );
+    BOOST_CHECK( led->GetField( FIELD_T::REFERENCE )->GetText().StartsWith( wxS( "PWR_LED" ) ) );
 }

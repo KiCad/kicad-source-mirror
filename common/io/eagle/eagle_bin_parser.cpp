@@ -33,6 +33,7 @@
 #include <cstring>
 #include <algorithm>
 #include <functional>
+#include <map>
 
 #include <wx/intl.h>
 #include <wx/stream.h>
@@ -111,7 +112,8 @@ enum ATTR_TYPE
     T_INT, // signed little-endian integer
     T_UINT, // unsigned little-endian integer
     T_DBL, // 8-byte IEEE double
-    T_STR  // fixed-length NUL-padded string
+    T_STR, // fixed-length NUL-padded string
+    T_RAW  // len bytes kept as a hex string
 };
 
 enum SS_TYPE
@@ -292,7 +294,8 @@ const SCRIPT_ROW g_script[] = {
       0xFFB3,
       "signal",
       { TERM_F },
-      { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
+      // The count includes polygon vertices, so a direct count overruns into the next signal
+      { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "minx", T_INT, 4, 2 },
         { "miny", T_INT, 6, 2 },
         { "maxx", T_INT, 8, 2 },
@@ -305,7 +308,8 @@ const SCRIPT_ROW g_script[] = {
       0xFF7F,
       "symbol",
       { TERM_F },
-      { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
+      // The count includes polygon vertices, so a direct count overruns into the next symbol
+      { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "minx", T_INT, 4, 2 },
         { "miny", T_INT, 6, 2 },
         { "maxx", T_INT, 8, 2 },
@@ -355,9 +359,9 @@ const SCRIPT_ROW g_script[] = {
         { "miny", T_INT, 6, 2 },
         { "maxx", T_INT, 8, 2 },
         { "maxy", T_INT, 10, 2 },
-        { "width", T_INT, 12, 2 },
-        { "spacing", T_INT, 14, 2 },
-        { "isolate", T_INT, 16, 2 },
+        { "half_width", T_UINT, 12, 2 },
+        { "half_spacing", T_UINT, 14, 2 },
+        { "half_isolate", T_UINT, 16, 2 },
         { "layer", T_UBF, 18, BITFIELD( 1, 0, 7 ) },
         { "pour", T_BMB, 19, 0x01 },
         { "rank", T_BMB, 19, BITFIELD( 1, 1, 3 ) },
@@ -607,7 +611,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "half_size", T_INT, 12, 2 },
+        { "half_size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -625,7 +629,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -640,7 +644,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -655,7 +659,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -680,6 +684,8 @@ const SCRIPT_ROW g_script[] = {
         { "prefix", T_STR, 8, 5 },
         { "desc", T_STR, 13, 5 },
         { "name", T_STR, 18, 5 },
+        { "pin_bits", T_UBF, 7, BITFIELD( 1, 0, 3 ) },
+        { "con_byte", T_UBF, 7, BITFIELD( 1, 7, 7 ) },
         TERM_A } },
     { EGKW_SECT_PART,
       0xFF00,
@@ -694,8 +700,14 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 11, 5 },
         { "value", T_STR, 16, 8 },
         TERM_A } },
-    { EGKW_SECT_SCHEMABUS, 0xFF00, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
-    { EGKW_SECT_VARIANTCONNECTIONS, 0xFF7F, "variantconnections", { TERM_F }, { TERM_S }, { TERM_A } },
+    // Buses are not imported, but a long bus name still holds its place in the free-text blob
+    { EGKW_SECT_SCHEMABUS, 0xFF00, nullptr, { TERM_F }, { TERM_S }, { { "name", T_STR, 4, 20 }, TERM_A } },
+    { EGKW_SECT_VARIANTCONNECTIONS,
+      0xFF7F,
+      "variantconnections",
+      { TERM_F },
+      { TERM_S },
+      { { "pads", T_RAW, 2, 22 }, TERM_A } },
     { EGKW_SECT_SCHEMACONNECTION, 0xFF00, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
     { EGKW_SECT_CONTACTREF,
       0xFF57,
@@ -711,7 +723,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -726,7 +738,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -743,7 +755,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -778,7 +790,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "x", T_INT, 4, 4 },
         { "y", T_INT, 8, 4 },
-        { "size", T_INT, 12, 2 },
+        { "size", T_UINT, 12, 2 },
         { "ratio", T_UBF, 14, BITFIELD( 2, 2, 6 ) },
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
@@ -1100,16 +1112,23 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
         case T_INT: val = wxString::Format( wxS( "%d" ), loadS32( blockStart + at->offs, at->len ) ); break;
         case T_UINT: val = wxString::Format( wxS( "%u" ), loadU32( blockStart + at->offs, at->len ) ); break;
         case T_DBL: val = wxString::FromCDouble( loadDouble( blockStart + at->offs ) ); break;
+
+        case T_RAW:
+            requireBytes( blockStart + at->offs, at->len );
+
+            for( unsigned n = 0; n < at->len; n++ )
+                val += wxString::Format( wxS( "%02x" ), (unsigned) ( *m_buf )[blockStart + at->offs + n] );
+
+            break;
+
         case T_STR:
         {
             size_t foff = blockStart + at->offs;
             val = loadStr( foff, at->len );
 
-            // A 0x7F-marked field defers to a 32-bit little-endian pointer into the
-            // free-text blob. Record the raw pointer (loadStr would NUL-truncate one
-            // whose high byte is zero) while keeping the inline value for fallback.
+            // A 0x7F-marked field defers to the free-text blob, keeping the inline value for fallback
             if( foff + 5 <= m_buf->size() && ( *m_buf )[foff] == 0x7F )
-                m_longRefs.push_back( { node, wxString::FromUTF8( at->name ), loadU32( foff + 1, 4 ) } );
+                m_longRefs.push_back( { node, wxString::FromUTF8( at->name ) } );
 
             break;
         }
@@ -1176,11 +1195,9 @@ bool EAGLE_BIN_PARSER::readNotes()
     if( ( *m_buf )[m_pos] != 0x13 || ( *m_buf )[m_pos + 1] != 0x12 )
         return false;
 
-    int textLen = loadS32( m_pos + 4, 2 );
+    // The length is 32 bits wide, a large schematic's blob passes 32 KiB
+    uint32_t textLen = loadU32( m_pos + 4, 4 );
     m_pos += 8;
-
-    if( textLen < 0 )
-        return false;
 
     // A trailing 4-byte checksum follows the text payload.
     size_t total = static_cast<size_t>( textLen ) + 4;
@@ -1189,13 +1206,8 @@ bool EAGLE_BIN_PARSER::readNotes()
         return false;
 
     // Split the blob into NUL-delimited strings; an empty string terminates.
-    // Each string is also keyed by its byte offset in the blob so deferred 0x7F
-    // pointer references can be resolved directly.
-    size_t blobStart = m_pos;
     size_t end = m_pos + total;
     size_t cur = m_pos;
-
-    m_freeTextByOffset.clear();
 
     while( cur < end && ( *m_buf )[cur] != '\0' )
     {
@@ -1207,7 +1219,6 @@ bool EAGLE_BIN_PARSER::readNotes()
         wxString str = wxString::FromUTF8( reinterpret_cast<const char*>( m_buf->data() + s ),
                                            cur - s );
         m_freeText.push_back( str );
-        m_freeTextByOffset[s - blobStart] = str;
         cur++; // skip the NUL
     }
 
@@ -1229,83 +1240,46 @@ const wxString& EAGLE_BIN_PARSER::nextLongText()
 }
 
 
+std::vector<wxString> EAGLE_BIN_PARSER::matchLongRefsInRecordOrder() const
+{
+    const size_t refCount = m_longRefs.size();
+
+    wxLogTrace( traceEagleIo, wxS( "Eagle bin: %zu long strings for %zu references" ), m_freeText.size(), refCount );
+
+    if( refCount == 0 || m_freeText.size() != refCount )
+        return {};
+
+    std::vector<wxString> placed( refCount );
+    auto                  str = m_freeText.begin();
+
+    // The blob holds the strings in record order, but a record writes its own fields last first
+    for( size_t first = 0; first < refCount; )
+    {
+        size_t end = first + 1;
+
+        while( end < refCount && m_longRefs[end].node == m_longRefs[first].node )
+            end++;
+
+        for( size_t i = end; i-- > first; )
+            placed[i] = *str++;
+
+        first = end;
+    }
+
+    return placed;
+}
+
+
 void EAGLE_BIN_PARSER::resolveLongPointers()
 {
-    if( m_freeTextByOffset.empty() || m_longRefs.empty() )
+    std::vector<wxString> placed = matchLongRefsInRecordOrder();
+
+    // Without a match the inline 0x7F markers are left for postprocFreeText() to resolve in order
+    if( placed.empty() )
         return;
 
-    // The pointers are absolute addresses with an unstored base, so recover it by
-    // consensus: the most common (pointer - boundary) difference is the base. A file
-    // can reference several blob regions with different bases, so iterate, resolving
-    // the dominant base's references each round until no more can be placed.
-    std::vector<bool>     done( m_longRefs.size(), false );
-    std::vector<wxString> value( m_longRefs.size() );
-
-    while( true )
-    {
-        std::map<long long, int> votes;
-
-        for( size_t i = 0; i < m_longRefs.size(); i++ )
-        {
-            if( done[i] )
-                continue;
-
-            for( const auto& [offset, str] : m_freeTextByOffset )
-            {
-                if( offset > m_longRefs[i].ptr )
-                    break;
-
-                votes[static_cast<long long>( m_longRefs[i].ptr ) - static_cast<long long>( offset )]++;
-            }
-        }
-
-        long long base = -1;
-        int       best = 0;
-
-        for( const auto& [cand, count] : votes )
-        {
-            if( count > best )
-            {
-                best = count;
-                base = cand;
-            }
-        }
-
-        if( base < 0 )
-            break;
-
-        int progress = 0;
-
-        for( size_t i = 0; i < m_longRefs.size(); i++ )
-        {
-            if( done[i] )
-                continue;
-
-            auto it = m_freeTextByOffset.find(
-                    static_cast<size_t>( static_cast<long long>( m_longRefs[i].ptr ) - base ) );
-
-            if( it != m_freeTextByOffset.end() )
-            {
-                value[i] = it->second;
-                done[i] = true;
-                progress++;
-            }
-        }
-
-        if( progress == 0 )
-            break;
-    }
-
-    // Commit only if every reference resolved: a partial mix would desync the
-    // sequential fallback for the misses, so in that case leave all the inline 0x7F
-    // markers for postprocFreeText() to resolve in order instead.
-    bool allResolved = std::all_of( done.begin(), done.end(), []( bool d ) { return d; } );
-
-    if( allResolved )
-    {
-        for( size_t i = 0; i < m_longRefs.size(); i++ )
-            m_longRefs[i].node->props[m_longRefs[i].field] = value[i];
-    }
+    for( size_t i = 0; i < m_longRefs.size(); i++ )
+        m_longRefs[i].node->props[m_longRefs[i].field] = placed[i];
 }
 
 
@@ -1685,6 +1659,10 @@ void EAGLE_BIN_PARSER::postprocPolygons( EGB_NODE* aRoot )
     // the endpoints and curve, and before postprocUnits scales the coordinates.
     if( aRoot->id == EGKW_SECT_POLYGON )
     {
+        aRoot->props[wxS( "width" )] = aRoot->PropDoubled( wxS( "half_width" ) );
+        aRoot->props[wxS( "spacing" )] = aRoot->PropDoubled( wxS( "half_spacing" ) );
+        aRoot->props[wxS( "isolate" )] = aRoot->PropDoubled( wxS( "half_isolate" ) );
+
         std::vector<std::unique_ptr<EGB_NODE>> rebuilt;
 
         for( auto& child : aRoot->children )
@@ -1973,6 +1951,7 @@ void EAGLE_BIN_PARSER::postprocFreeText( EGB_NODE* aRoot )
     case EGKW_SECT_LIBRARY:
     case EGKW_SECT_SIGNAL:
     case EGKW_SECT_SYMBOL:
+    case EGKW_SECT_SCHEMABUS:
     case EGKW_SECT_SCHEMANET:
     case EGKW_SECT_PAD:
     case EGKW_SECT_SMD:
@@ -1993,6 +1972,11 @@ void EAGLE_BIN_PARSER::postprocFreeText( EGB_NODE* aRoot )
     case EGKW_SECT_PACKAGEVARIANT:
         fixLongText( aRoot, wxS( "name" ) );
         fixLongText( aRoot, wxS( "table" ) );
+
+        // An unnamed variant is stored as a literal pair of apostrophes, but XML spells it empty
+        if( aRoot->Prop( wxS( "name" ) ) == wxS( "''" ) )
+            aRoot->props[wxS( "name" )] = wxEmptyString;
+
         break;
 
     case EGKW_SECT_PACKAGE:
@@ -2299,49 +2283,6 @@ void EAGLE_BIN_PARSER::postprocNames( EGB_NODE* aLibraries, EGB_NODE* aElements 
 }
 
 
-void EAGLE_BIN_PARSER::postprocSignals( EGB_NODE* aSignals )
-{
-    if( aSignals == nullptr )
-        return;
-
-    // Flatten any nested signal so every signal sits directly under signals.
-    // Connectivity of nested nets is not preserved, matching Eagle's own
-    // binary-to-XML conversion. Iterate by index because nested signals are
-    // appended to the same vector and must themselves be flattened, which
-    // handles three or more levels of nesting.
-    for( size_t i = 0; i < aSignals->children.size(); i++ )
-    {
-        EGB_NODE* sig = aSignals->children[i].get();
-
-        if( sig->id != EGKW_SECT_SIGNAL )
-            continue;
-
-        std::vector<std::unique_ptr<EGB_NODE>> kept;
-        std::vector<std::unique_ptr<EGB_NODE>> promoted;
-
-        for( auto& inner : sig->children )
-        {
-            if( inner->id == EGKW_SECT_SIGNAL )
-            {
-                inner->parent = aSignals;
-                promoted.push_back( std::move( inner ) );
-            }
-            else
-            {
-                kept.push_back( std::move( inner ) );
-            }
-        }
-
-        sig->children = std::move( kept );
-
-        // Append after rebuilding sig->children; this may reallocate, but sig
-        // is only dereferenced above and i indexes the (stable) container.
-        for( auto& p : promoted )
-            aSignals->children.push_back( std::move( p ) );
-    }
-}
-
-
 void EAGLE_BIN_PARSER::postprocContactRefs( EGB_NODE* aSignals, EGB_NODE* aElements, EGB_NODE* aLibraries )
 {
     if( aSignals == nullptr || aElements == nullptr || aLibraries == nullptr )
@@ -2471,7 +2412,6 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
 
     postprocLibs( libraries );
     postprocElements( elements );
-    postprocSignals( signals );
 
     postprocWires( aRoot );
     postprocArcs( aRoot );
@@ -2592,8 +2532,7 @@ std::unique_ptr<wxXmlDocument> EAGLE_BIN_PARSER::Parse( const std::vector<uint8_
     if( isSchematic )
     {
         // Long names/values are stored as 0x7F references into the trailing
-        // free-text section, present in schematics as well as boards. Read it and
-        // resolve every reference by its embedded pointer (order-independent).
+        // free-text section, present in schematics as well as boards.
         readNotes();
         resolveLongPointers();
 
@@ -2842,15 +2781,8 @@ EAGLE_BIN_PARSER::resolveSchLibraries( EGB_NODE* aSchematic )
 
         lib->props[wxS( "name" )] = libName;
 
-        // Footprint packages are irrelevant to schematic import and only drag in
-        // board-only required attributes (dx/dy on smd/pad). Drop them.
-        lib->children.erase(
-                std::remove_if( lib->children.begin(), lib->children.end(),
-                                []( const std::unique_ptr<EGB_NODE>& n )
-                                { return n->id == EGKW_SECT_PACKAGES; } ),
-                lib->children.end() );
-
         std::vector<EGB_NODE*> symbols = childrenById( symbolsNode, EGKW_SECT_SYMBOL );
+        std::vector<EGB_NODE*> packages = childrenById( lib->FindChildById( EGKW_SECT_PACKAGES ), EGKW_SECT_PACKAGE );
         std::vector<EGB_NODE*> devicesetList = childrenById( devicesets, EGKW_SECT_DEVICE );
 
         // Devicesets are keyed by name in the reader, so every name must be
@@ -2874,10 +2806,142 @@ EAGLE_BIN_PARSER::resolveSchLibraries( EGB_NODE* aSchematic )
 
             for( EGB_NODE* gate : childrenById( gatesNode, EGKW_SECT_GATE ) )
                 gate->props[wxS( "symbol" )] = nameByOrdinal( symbols, gate->PropLong( wxS( "symno" ) ) );
+
+            resolveSchConnects( ds, symbols, packages );
         }
+
+        // Footprint packages are irrelevant to schematic import and only drag in
+        // board-only required attributes (dx/dy on smd/pad). Drop them.
+        lib->children.erase(
+                std::remove_if( lib->children.begin(), lib->children.end(),
+                                []( const std::unique_ptr<EGB_NODE>& n )
+                                { return n->id == EGKW_SECT_PACKAGES; } ),
+                lib->children.end() );
     }
 
     return libList;
+}
+
+
+void EAGLE_BIN_PARSER::resolveSchConnects( EGB_NODE* aDeviceSet, const std::vector<EGB_NODE*>& aSymbols,
+                                           const std::vector<EGB_NODE*>& aPackages )
+{
+    std::vector<std::vector<wxString>> gatePins;
+    std::vector<wxString>              gateNames;
+    size_t                             maxPins = 0;
+
+    for( EGB_NODE* gate : childrenById( aDeviceSet->FindChildByName( wxS( "gates" ) ), EGKW_SECT_GATE ) )
+    {
+        EGB_NODE*             symbol = nullptr;
+        long                  symno = gate->PropLong( wxS( "symno" ) );
+        std::vector<wxString> pins;
+
+        if( symno >= 1 && symno <= (long) aSymbols.size() )
+            symbol = aSymbols[symno - 1];
+
+        for( EGB_NODE* pin : childrenById( symbol, EGKW_SECT_PIN ) )
+            pins.push_back( pin->Prop( wxS( "name" ) ) );
+
+        maxPins = std::max( maxPins, pins.size() );
+        gateNames.push_back( gate->Prop( wxS( "name" ) ) );
+        gatePins.push_back( std::move( pins ) );
+    }
+
+    for( EGB_NODE* variant : childrenById( aDeviceSet->FindChildByName( wxS( "devices" ) ), EGKW_SECT_PACKAGEVARIANT ) )
+    {
+        long      pkgno = variant->PropLong( wxS( "package" ) );
+        EGB_NODE* package = ( pkgno >= 1 && pkgno <= (long) aPackages.size() ) ? aPackages[pkgno - 1] : nullptr;
+
+        // The binary refers to the package by ordinal but the reader looks it up by name
+        if( package != nullptr )
+            variant->props[wxS( "package" )] = package->Prop( wxS( "name" ) );
+        else
+            variant->props.erase( wxS( "package" ) );
+
+        std::vector<uint8_t> bytes;
+
+        for( EGB_NODE* conn : childrenById( variant, EGKW_SECT_VARIANTCONNECTIONS ) )
+        {
+            const wxString hex = conn->Prop( wxS( "pads" ) );
+
+            for( size_t n = 0; n + 1 < hex.length(); n += 2 )
+            {
+                unsigned long value = 0;
+                hex.Mid( n, 2 ).ToULong( &value, 16 );
+                bytes.push_back( static_cast<uint8_t>( value ) );
+            }
+        }
+
+        variant->children.erase( std::remove_if( variant->children.begin(), variant->children.end(),
+                                                 []( const std::unique_ptr<EGB_NODE>& n )
+                                                 { return n->id == EGKW_SECT_VARIANTCONNECTIONS; } ),
+                                 variant->children.end() );
+
+        if( package == nullptr || bytes.empty() || maxPins == 0 )
+            continue;
+
+        std::vector<wxString> pads;
+
+        for( const auto& child : package->children )
+        {
+            if( child->id == EGKW_SECT_PAD || child->id == EGKW_SECT_SMD )
+                pads.push_back( child->Prop( wxS( "name" ) ) );
+        }
+
+        // Each pad owns one entry holding its gate and pin, packed as gate << width | pin. The device
+        // record states the pin width and whether an entry takes one byte or two
+        const unsigned width = static_cast<unsigned>( aDeviceSet->PropLong( wxS( "pin_bits" ) ) );
+        const size_t   entrySize = aDeviceSet->PropLong( wxS( "con_byte" ) ) != 0 ? 1 : 2;
+
+        if( width == 0 )
+            continue;
+
+        if( bytes.size() < pads.size() * entrySize )
+            continue;
+
+        std::map<std::pair<size_t, size_t>, wxString> padList;
+        bool                                          valid = true;
+
+        for( size_t pad = 0; pad < pads.size() && valid; pad++ )
+        {
+            unsigned entry = bytes[pad * entrySize];
+
+            if( entrySize == 2 )
+                entry |= static_cast<unsigned>( bytes[pad * 2 + 1] ) << 8;
+
+            if( entry == 0 )
+                continue;
+
+            size_t gate = entry >> width;
+            size_t pin = entry & ( ( 1u << width ) - 1 );
+
+            if( gate < 1 || gate > gatePins.size() || pin < 1 || pin > gatePins[gate - 1].size() )
+            {
+                valid = false;
+                break;
+            }
+
+            wxString& list = padList[{ gate - 1, pin - 1 }];
+            list += list.IsEmpty() ? pads[pad] : wxS( " " ) + pads[pad];
+        }
+
+        if( !valid )
+        {
+            wxLogTrace( traceEagleIo, wxS( "Eagle bin: connects of device '%s' do not match its symbols" ),
+                        variant->Prop( wxS( "name" ) ) );
+            continue;
+        }
+
+        EGB_NODE* connects = variant->AddChild( 0, wxS( "connects" ) );
+
+        for( const auto& [key, padNames] : padList )
+        {
+            EGB_NODE* connect = connects->AddChild( 0, wxS( "connect" ) );
+            connect->props[wxS( "gate" )] = gateNames[key.first];
+            connect->props[wxS( "pin" )] = gatePins[key.first][key.second];
+            connect->props[wxS( "pad" )] = padNames;
+        }
+    }
 }
 
 

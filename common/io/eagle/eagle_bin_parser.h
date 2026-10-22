@@ -132,9 +132,10 @@ private:
 
     const wxString& nextLongText();
 
-    // Each 0x7F-marked string field holds a little-endian pointer into the free-text
-    // blob; resolve them by offset so the result is independent of traversal order.
+    // Each 0x7F-marked string field holds a heap pointer with no stored base, so it cannot
+    // locate its text. The free-text blob is written in record order instead.
     void resolveLongPointers();
+    std::vector<wxString> matchLongRefsInRecordOrder() const;
 
     void postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc );
 
@@ -145,6 +146,8 @@ private:
     void postprocSchAttrs( EGB_NODE* aRoot );
     void renameSchSections( EGB_NODE* aSchematic );
     std::vector<EGB_NODE*> resolveSchLibraries( EGB_NODE* aSchematic );
+    void resolveSchConnects( EGB_NODE* aDeviceSet, const std::vector<EGB_NODE*>& aSymbols,
+                             const std::vector<EGB_NODE*>& aPackages );
     void resegmentSchSheets( EGB_NODE* aSchematic, const std::vector<EGB_NODE*>& aLibList );
 
     static std::vector<EGB_NODE*> childrenById( EGB_NODE* aParent, int aChildId );
@@ -155,7 +158,6 @@ private:
     void postprocElements( EGB_NODE* aElements );
     void postprocAttributes( EGB_NODE* aRoot );
     void postprocNames( EGB_NODE* aLibraries, EGB_NODE* aElements );
-    void postprocSignals( EGB_NODE* aSignals );
     void postprocContactRefs( EGB_NODE* aSignals, EGB_NODE* aElements, EGB_NODE* aLibraries );
     void postprocWires( EGB_NODE* aRoot );
     void postprocArcs( EGB_NODE* aRoot );
@@ -201,17 +203,11 @@ private:
     size_t                m_freeTextCursor = 0;
     wxString              m_invalidText; ///< returned when out of strings
 
-    /// Free-text strings keyed by their byte offset within the blob, for pointer
-    /// (0x7F-reference) resolution.
-    std::map<size_t, wxString> m_freeTextByOffset;
-
-    /// A deferred string field and the absolute blob pointer it resolves to,
-    /// recorded by readBlock() for resolveLongPointers().
+    /// A deferred string field, recorded by readBlock() for resolveLongPointers().
     struct LONG_REF
     {
         EGB_NODE* node;
         wxString  field;
-        uint32_t  ptr;
     };
 
     std::vector<LONG_REF> m_longRefs;
