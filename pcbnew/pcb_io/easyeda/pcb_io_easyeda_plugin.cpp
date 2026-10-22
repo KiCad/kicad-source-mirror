@@ -63,6 +63,8 @@ static bool FindBoardInStream( const wxString& aName, wxInputStream& aStream, nl
         if( js.is_discarded() )
             return false;
 
+        EASYEDA::UnwrapDataStr( js );
+
         EASYEDA::DOCUMENT doc = js.get<EASYEDA::DOCUMENT>();
 
         if( doc.head.docType == EASYEDA::DOC_TYPE::PCB

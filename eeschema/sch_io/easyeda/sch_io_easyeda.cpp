@@ -51,6 +51,8 @@ static bool FindSchFileInStream( const wxString& aName, wxInputStream& aStream,
         if( js.is_discarded() )
             return false;
 
+        EASYEDA::UnwrapDataStr( js );
+
         EASYEDA::DOCUMENT doc = js.get<EASYEDA::DOCUMENT>();
         EASYEDA::DOC_TYPE type;
 
@@ -86,6 +88,22 @@ static bool FindSchFileInStream( const wxString& aName, wxInputStream& aStream,
     }
 
     return false;
+}
+
+
+// A document that is a lone sheet carries its shapes itself, so present it as a one sheet list
+static std::vector<EASYEDA::DOCUMENT> SheetsOf( const nlohmann::json& aJson )
+{
+    EASYEDA::DOCUMENT_SCHEMATICS schDoc = aJson.get<EASYEDA::DOCUMENT_SCHEMATICS>();
+
+    if( schDoc.schematics )
+        return *schDoc.schematics;
+
+    EASYEDA::DOCUMENT sheet;
+    sheet.docType = EASYEDA::DOC_TYPE::SCHEMATIC_SHEET;
+    sheet.dataStr = aJson;
+
+    return { sheet };
 }
 
 
@@ -145,9 +163,7 @@ LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
         if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET
             || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
         {
-            EASYEDA::DOCUMENT_SCHEMATICS schDoc = js.get<EASYEDA::DOCUMENT_SCHEMATICS>();
-
-            for( const EASYEDA::DOCUMENT& subDoc : *schDoc.schematics )
+            for( const EASYEDA::DOCUMENT& subDoc : SheetsOf( js ) )
             {
                 if( subDoc.docType )
                 {
@@ -323,9 +339,7 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
         if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET
             || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
         {
-            EASYEDA::DOCUMENT_SCHEMATICS schDoc = js.get<EASYEDA::DOCUMENT_SCHEMATICS>();
-
-            for( const EASYEDA::DOCUMENT& subDoc : *schDoc.schematics )
+            for( const EASYEDA::DOCUMENT& subDoc : SheetsOf( js ) )
             {
                 if( subDoc.docType )
                 {
@@ -504,6 +518,13 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
         {
             int                          pageNum = 1;
             EASYEDA::DOCUMENT_SCHEMATICS schDoc = js.get<EASYEDA::DOCUMENT_SCHEMATICS>();
+
+            // a single sheet document carries its shapes itself rather than in a sheet list
+            if( !schDoc.schematics )
+            {
+                parser.ParseSchematic( aSchematic, aRootSheet, aFileName, topDoc.shape );
+                return;
+            }
 
             for( const EASYEDA::DOCUMENT& subDoc : *schDoc.schematics )
             {

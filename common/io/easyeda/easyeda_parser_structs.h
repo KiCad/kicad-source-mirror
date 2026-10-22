@@ -110,6 +110,15 @@ void from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_PCB& d );
 void from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_SYM& d );
 void from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_SCHEMATICS& d );
 
+/**
+ * Replace a document the EasyEDA server wraps in a metadata envelope with the document it carries.
+ *
+ * The envelope holds the editor document under "dataStr"; a document that is not wrapped is left as is.
+ *
+ * @return true if @a aJson was unwrapped.
+ */
+bool UnwrapDataStr( nlohmann::json& aJson );
+
 enum class POWER_FLAG_STYLE
 {
     UNKNOWN = -1,

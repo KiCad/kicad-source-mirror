@@ -89,6 +89,15 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT& d )
     PARSE_VALUE( title );
     PARSE_VALUE( shape );
     PARSE_VALUE( dataStr );
+
+    // Some exports store the sheet document as JSON text instead of as an object
+    if( d.dataStr && d.dataStr->is_string() )
+    {
+        nlohmann::json inner = nlohmann::json::parse( d.dataStr->get<std::string>(), nullptr, false );
+
+        if( inner.is_object() )
+            d.dataStr = std::move( inner );
+    }
 }
 
 
@@ -111,6 +120,22 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_SYM& d )
 void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT_SCHEMATICS& d )
 {
     PARSE_VALUE( schematics );
+}
+
+
+bool EASYEDA::UnwrapDataStr( nlohmann::json& aJson )
+{
+    if( !aJson.is_object() || aJson.contains( "head" ) )
+        return false;
+
+    auto it = aJson.find( "dataStr" );
+
+    if( it == aJson.end() || !it->is_object() || !it->contains( "head" ) )
+        return false;
+
+    nlohmann::json inner = std::move( *it );
+    aJson = std::move( inner );
+    return true;
 }
 
 

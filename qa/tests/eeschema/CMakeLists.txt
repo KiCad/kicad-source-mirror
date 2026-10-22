@@ -70,6 +70,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/geda/test_geda_sch_import.cpp
     sch_io/diptrace/test_diptrace_sch_import.cpp
     sch_io/pcad/test_pcad_sch_import.cpp
+    sch_io/easyeda/test_easyeda_sch_import.cpp
     sch_io/orcad/test_orcad_sch_import.cpp
     sch_io/cadstar/test_issue14447_arc_connection.cpp
 
