@@ -68,6 +68,7 @@ Load() TODO's
 #include <board_design_settings.h>
 #include <project/net_settings.h>
 #include <footprint.h>
+#include <pcb_field.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
@@ -341,6 +342,7 @@ void PCB_IO_EAGLE::loadBoard( const wxString& aFileName, BOARD& aBoard, bool aIs
 
     init( aProperties );
 
+    m_importedDesignRules.clear();
     m_board = &aBoard;
 
     try
@@ -446,19 +448,10 @@ void PCB_IO_EAGLE::loadBoard( const wxString& aFileName, BOARD& aBoard, bool aIs
         m_board->m_LegacyNetclassesLoaded = true;
         m_board->m_LegacyDesignSettingsLoaded = true;
 
-        fn.SetExt( wxT( "kicad_dru" ) );
-
         // Only emit a design rules sidecar when the Eagle board carried an actual
         // clearance matrix. A version-only file has no rules and is just clutter.
         if( m_customRules.Contains( wxT( "(rule " ) ) )
-        {
-            wxFile rulesFile( fn.GetFullPath(), wxFile::write );
-            rulesFile.Write( m_customRules );
-        }
-        else if( fn.FileExists() )
-        {
-            wxRemoveFile( fn.GetFullPath() );
-        }
+            m_importedDesignRules = m_customRules;
 
         // should be empty, else missing m_xpath->pop()
         wxASSERT( m_xpath->Contents().size() == 0 );
@@ -555,6 +548,18 @@ void PCB_IO_EAGLE::loadAllSections( wxXmlNode* aDoc )
     wxXmlNode* signals = boardChildren["signals"];
     wxXmlNode* libs = boardChildren["libraries"];
     wxXmlNode* elems = boardChildren["elements"];
+
+    // Board attributes give the value of a package text such as >REV
+    m_boardAttributes.clear();
+
+    if( wxXmlNode* attributes = boardChildren["attributes"] )
+    {
+        for( wxXmlNode* attribute = attributes->GetChildren(); attribute; attribute = attribute->GetNext() )
+        {
+            if( attribute->GetName() == wxT( "attribute" ) )
+                m_boardAttributes[attribute->GetAttribute( wxT( "name" ) )] = attribute->GetAttribute( wxT( "value" ) );
+        }
+    }
 
     if( m_progressReporter )
     {
@@ -1313,6 +1318,43 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                 const ENET* enet = &ni->second;
                 pad->SetNetCode( enet->netcode );
             }
+        }
+
+        // A placeholder such as >PROJECT became ${PROJECT}, which needs a field of that name to resolve
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        {
+            PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( item );
+
+            if( !text || !text->GetText().StartsWith( wxS( "${" ) ) || !text->GetText().EndsWith( wxS( "}" ) ) )
+                continue;
+
+            wxString varName = text->GetText().Mid( 2, text->GetText().length() - 3 );
+            wxString token = varName;
+
+            if( varName.IsEmpty() || footprint->HasField( varName ) || footprint->ResolveTextVar( &token ) )
+                continue;
+
+            // An attribute of the element with a value overrides the one of the board
+            wxString value;
+
+            if( auto boardValue = m_boardAttributes.find( varName ); boardValue != m_boardAttributes.end() )
+                value = boardValue->second;
+
+            for( wxXmlNode* attribute = element->GetChildren(); attribute; attribute = attribute->GetNext() )
+            {
+                if( attribute->GetName() == wxT( "attribute" ) && attribute->GetAttribute( wxT( "name" ) ) == varName
+                    && attribute->HasAttribute( wxT( "value" ) ) )
+                {
+                    value = attribute->GetAttribute( wxT( "value" ) );
+                }
+            }
+
+            PCB_FIELD* field = new PCB_FIELD( footprint, FIELD_T::USER, varName );
+
+            field->SetText( value );
+            field->SetVisible( false );
+            field->SetLayer( text->GetLayer() );
+            footprint->Add( field );
         }
 
         refanceNamePresetInPackageLayout = true;

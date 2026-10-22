@@ -152,6 +152,7 @@ public:
     bool CanReadFootprint( const wxString& aFileName ) const override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+    wxString GetImportedDesignRules() const override { return m_importedDesignRules; }
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const std::map<std::string, UTF8>* aProperties = nullptr) override;
@@ -354,8 +355,10 @@ private:
 
     /// Eagle class number to KiCad netclass
     std::map<wxString, std::shared_ptr<NETCLASS>>  m_classMap;
+    std::map<wxString, wxString>     m_boardAttributes;   ///< Board attribute values by name
 
     wxString                         m_customRules;
+    wxString                         m_importedDesignRules;
 
     ERULES*       m_rules;          ///< Eagle design rules.
     XPATH*        m_xpath;          ///< keeps track of what we are working on within
