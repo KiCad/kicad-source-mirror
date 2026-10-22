@@ -30,7 +30,7 @@ public:
     /// With aName set the remote exists already, so only its URL can be changed.
     DIALOG_GIT_REMOTE( wxWindow* aParent, const wxString& aName = wxEmptyString, const wxString& aUrl = wxEmptyString );
 
-    wxString GetName() const { return m_name; }
+    wxString GetRemoteName() const { return m_name; }
     wxString GetUrl() const { return m_url; }
 
 private:

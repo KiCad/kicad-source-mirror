@@ -29,7 +29,7 @@ class DIALOG_GIT_NEW_TAG : public DIALOG_GIT_NEW_TAG_BASE
 public:
     DIALOG_GIT_NEW_TAG( wxWindow* aParent );
 
-    wxString GetName() const { return m_name; }
+    wxString GetTagName() const { return m_name; }
     wxString GetMessage() const { return m_message; }
 
 private:

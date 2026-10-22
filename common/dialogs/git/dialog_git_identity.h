@@ -29,7 +29,7 @@ class DIALOG_GIT_IDENTITY : public DIALOG_GIT_IDENTITY_BASE
 public:
     DIALOG_GIT_IDENTITY( wxWindow* aParent, const wxString& aTitle, const wxString& aName, const wxString& aEmail );
 
-    wxString GetName() const { return m_name; }
+    wxString GetAuthorName() const { return m_name; }
     wxString GetEmail() const { return m_email; }
 
 private:

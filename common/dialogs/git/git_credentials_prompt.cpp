@@ -146,7 +146,7 @@ bool KIGIT::EditGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const st
         if( dlg.ShowModal() != wxID_OK )
             return false;
 
-        config.authorName = dlg.GetName();
+        config.authorName = dlg.GetAuthorName();
         config.authorEmail = dlg.GetEmail();
     }
 

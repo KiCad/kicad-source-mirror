@@ -1701,9 +1701,9 @@ void KIGIT_COMMON::NotifyRefreshListeners()
     {
         // An earlier listener in this round can have removed this one.
         bool registered = std::any_of( m_refreshListeners.begin(), m_refreshListeners.end(),
-                                       [owner = owner]( const auto& aEntry )
+                                       [target = owner]( const auto& aEntry )
                                        {
-                                           return aEntry.first == owner;
+                                           return aEntry.first == target;
                                        } );
 
         if( registered )

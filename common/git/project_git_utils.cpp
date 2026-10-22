@@ -295,7 +295,8 @@ bool PROJECT_GIT_UTILS::PathUsesGitLfs( git_repository* aRepo, const wxString& a
         return false;
 
     const char*      value = nullptr;
-    git_attr_options opts = GIT_ATTR_OPTIONS_INIT;
+    git_attr_options opts = {};
+    opts.version = GIT_ATTR_OPTIONS_VERSION;
     opts.flags = GIT_ATTR_CHECK_INDEX_THEN_FILE;
 
     if( aCommit )
@@ -617,7 +618,8 @@ bool PROJECT_GIT_UTILS::WriteTreeToDir( git_repository* aRepo, const wxString& a
         return false;
 
     std::string          destUtf8 = aDestDir.utf8_string();
-    git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_checkout_options opts;
+    git_checkout_options_init( &opts, GIT_CHECKOUT_OPTIONS_VERSION );
 
     // Without DONT_UPDATE_INDEX, git_checkout_tree rewrites .git/index to the checked-out
     // tree, replacing whatever the user has staged.

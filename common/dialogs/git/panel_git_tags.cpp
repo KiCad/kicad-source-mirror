@@ -198,7 +198,7 @@ void PANEL_GIT_TAGS::onNewTag()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    wxString name = dlg.GetName();
+    wxString name = dlg.GetTagName();
     wxString message = dlg.GetMessage();
 
     m_dialog->RunGitAction(

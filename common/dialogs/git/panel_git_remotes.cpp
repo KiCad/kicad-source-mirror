@@ -214,7 +214,7 @@ void PANEL_GIT_REMOTES::onAddRemote()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    wxString name = dlg.GetName();
+    wxString name = dlg.GetRemoteName();
     wxString url = dlg.GetUrl();
 
     runRemoteAction(
