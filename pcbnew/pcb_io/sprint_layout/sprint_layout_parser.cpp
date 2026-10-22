@@ -38,6 +38,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>
 #include <math/box2.h>
+#include <geometry/seg.h>
 #include <font/fontconfig.h>
 
 #include <wx/filename.h>
@@ -47,6 +48,7 @@
 #include <wx/fontenc.h>
 
 #include <algorithm>
+#include <set>
 #include <cmath>
 #include <cstring>
 #include <limits>
@@ -1978,6 +1980,9 @@ void SPRINT_LAYOUT_PARSER::buildOutline( BOARD* aBoard, std::vector<std::vector<
 
     bool hasOutline = false;
 
+    // an edge drawn twice would read as a self-intersecting outline
+    std::set<SEG> edges;
+
     for( const std::vector<VECTOR2I>& seg : aOutlineSegments )
     {
         if( seg.size() < 2 )
@@ -1987,6 +1992,11 @@ void SPRINT_LAYOUT_PARSER::buildOutline( BOARD* aBoard, std::vector<std::vector<
 
         for( size_t i = 0; i + 1 < seg.size(); i++ )
         {
+            SEG edge( seg[i], seg[i + 1] );
+
+            if( !edges.insert( std::min( edge, edge.Reversed() ) ).second )
+                continue;
+
             PCB_SHAPE* shape = new PCB_SHAPE( aBoard );
             shape->SetShape( SHAPE_T::SEGMENT );
             shape->SetLayer( Edge_Cuts );
