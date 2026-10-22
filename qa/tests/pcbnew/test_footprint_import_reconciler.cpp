@@ -332,7 +332,8 @@ BOOST_AUTO_TEST_CASE( AltiumBoardResolvesToGeneratedCache )
 // fails on revert, since distinct placed versions then share one cache item
 BOOST_AUTO_TEST_CASE( CachedFootprintsMatchPlacedFootprints )
 {
-    stageProject( wxS( "altium_fpparity" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "altium_fpparity" ) );
+    stageProject( projectDir.Path(), wxS( "altium_fpparity" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     PCB_IO_ALTIUM_DESIGNER plugin;
@@ -381,7 +382,8 @@ BOOST_AUTO_TEST_CASE( CachedFootprintsMatchPlacedFootprints )
 // fails on revert, since the first placement is then cached for every same-named one
 BOOST_AUTO_TEST_CASE( CachedFootprintsMatchPlacedFootprintsWithoutDefinitions )
 {
-    stageProject( wxS( "allegro_fpparity" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "allegro_fpparity" ) );
+    stageProject( projectDir.Path(), wxS( "allegro_fpparity" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     PCB_IO_ALLEGRO         plugin;
@@ -420,7 +422,8 @@ BOOST_AUTO_TEST_CASE( CachedFootprintsMatchPlacedFootprintsWithoutDefinitions )
 // reconciliation; fails on revert, since the missing footprint is then an error that aborts it
 BOOST_AUTO_TEST_CASE( SourceLibraryMissingAFootprintStillReconciles )
 {
-    stageProject( wxS( "altium_fpreconcile_missing" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "altium_fpreconcile_missing" ) );
+    stageProject( projectDir.Path(), wxS( "altium_fpreconcile_missing" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     std::string dataPath =
@@ -470,7 +473,8 @@ BOOST_AUTO_TEST_CASE( SourceLibraryMissingAFootprintStillReconciles )
 // fails on revert, since a half turned rectangular pad then reads as a changed pad
 BOOST_AUTO_TEST_CASE( BackSideFootprintsMatchTheirCachedCopy )
 {
-    stageProject( wxS( "backside_fpparity" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "backside_fpparity" ) );
+    stageProject( projectDir.Path(), wxS( "backside_fpparity" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     PCBNEW_SETTINGS settings;
@@ -548,7 +552,8 @@ BOOST_AUTO_TEST_CASE( BackSideFootprintsMatchTheirCachedCopy )
 // fails on revert, since a left-right flip leaves the cached copy half turned and its pad angle off by 180
 BOOST_AUTO_TEST_CASE( BackSideCustomPadMatchesCachedCopy )
 {
-    stageProject( wxS( "backside_custompad" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "backside_custompad" ) );
+    stageProject( projectDir.Path(), wxS( "backside_custompad" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     PCBNEW_SETTINGS settings;
@@ -598,7 +603,8 @@ BOOST_AUTO_TEST_CASE( BackSideCustomPadMatchesCachedCopy )
 // fails on revert, since the cached pad then carries an entry for every possible copper layer
 BOOST_AUTO_TEST_CASE( CachedCustomPadstackKeepsDefinedLayers )
 {
-    stageProject( wxS( "cached_custompadstack" ) );
+    KI_TEST::SCOPED_TEMP_DIR projectDir( wxS( "cached_custompadstack" ) );
+    stageProject( projectDir.Path(), wxS( "cached_custompadstack" ) );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     BOARD board;
