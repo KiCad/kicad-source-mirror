@@ -400,6 +400,20 @@ BOOST_AUTO_TEST_CASE( OutlineEdgesAreNotRepeated )
 }
 
 
+// A board without ground planes must not gain a zone that has no layer
+BOOST_AUTO_TEST_CASE( ZonesHaveLayers )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "/plugins/sprint_layout/tfcc.lay6";
+
+    std::unique_ptr<BOARD> board = m_plugin.LoadBoard( dataPath );
+
+    BOOST_REQUIRE( board );
+
+    for( ZONE* zone : board->Zones() )
+        BOOST_CHECK( zone->GetFirstLayer() != UNDEFINED_LAYER );
+}
+
+
 // ============================================================================
 // Complex board tests
 // ============================================================================

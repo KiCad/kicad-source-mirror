@@ -887,7 +887,7 @@ bool SPRINT_LAYOUT_PARSER::CreateBoard( BOARD& aBoard, std::map<wxString, std::u
             groundPlaneLayerSet.set( layer );
     }
 
-    if( !groundPlaneLayerSet.empty() )
+    if( groundPlaneLayerSet.any() )
     {
         int w = sprintToKicadCoord( static_cast<float>( boardData.size_x ) );
         int h = sprintToKicadCoord( static_cast<float>( boardData.size_y ) );
