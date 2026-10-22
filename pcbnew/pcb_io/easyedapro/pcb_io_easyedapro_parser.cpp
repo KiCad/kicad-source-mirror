@@ -717,6 +717,27 @@ NETINFO_ITEM* PCB_IO_EASYEDAPRO_PARSER::getNet( BOARD* aBoard, const wxString& a
 }
 
 
+void PCB_IO_EASYEDAPRO_PARSER::SizeHoleOnlyPad( PAD& aPad, bool aPlated )
+{
+    VECTOR2I size = aPad.GetSize( PADSTACK::ALL_LAYERS );
+
+    if( size.x > 0 && size.y > 0 )
+        return;
+
+    VECTOR2I drill = aPad.GetDrillSize();
+
+    aPad.SetSize( PADSTACK::ALL_LAYERS, drill );
+    aPad.SetShape( PADSTACK::ALL_LAYERS,
+                   aPad.GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ? PAD_SHAPE::OVAL : PAD_SHAPE::CIRCLE );
+
+    if( !aPlated )
+    {
+        aPad.SetAttribute( PAD_ATTRIB::NPTH );
+        aPad.SetLayerSet( PAD::UnplatedHoleMask() );
+    }
+}
+
+
 std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT* aFootprint, const nlohmann::json& line )
 {
     wxString uuid = line.at( 1 );
@@ -868,6 +889,9 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT* aFootprint,
             pad->AddPrimitive( PADSTACK::ALL_LAYERS, shape.release() );
         }
     }
+
+    if( hasHole )
+        SizeHoleOnlyPad( *pad, !( line.size() > 15 && line.at( 15 ).is_number() && line.at( 15 ).get<int>() == 0 ) );
 
     pad->SetThermalSpokeAngle( ANGLE_90 );
 

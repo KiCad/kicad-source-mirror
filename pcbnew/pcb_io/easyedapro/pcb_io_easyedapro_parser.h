@@ -41,6 +41,8 @@ class NETINFO_ITEM;
 class BOARD;
 class PROGRESS_REPORTER;
 
+class PAD;
+
 class PCB_IO_EASYEDAPRO_PARSER
 {
 public:
@@ -68,6 +70,9 @@ public:
     }
 
     static double Convert( wxString aValue );
+
+    /// A hole with no copper around it takes the drill size, and stays unplated if the source says it is
+    static void SizeHoleOnlyPad( PAD& aPad, bool aPlated );
 
     /// Map legacy eight- and ten-row safe-spacing matrices to the v3 category layout.
     static nlohmann::json NormalizeSafeSpacing( const nlohmann::json& aTable );
