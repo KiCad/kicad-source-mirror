@@ -43,6 +43,7 @@
 #include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_utils.h>
+#include <trigo.h>
 #include <hash.h>
 #include <project/net_settings.h>
 #include <footprint.h>
@@ -467,6 +468,9 @@ static PCB_LAYER_ID nthCopperLayerId( int aIndex, int aTotal )
 }
 
 
+/// Layer list property bit of a negative plane layer
+static constexpr uint32_t LAYER_PROP_PLANE = 0x100;
+
 /**
  * Class to handle the mapping for Allegro CLASS/SUBCLASS idiom to KiCad layers.
  */
@@ -480,6 +484,7 @@ class ALLEGRO::LAYER_MAPPER
     struct CUSTOM_LAYER
     {
         wxString m_Name;
+        uint32_t m_Properties = 0;
         // LAYER_ARTWORK: POSITIVE/NEGATIVE
         // LAYER_USE: empty, EMBEDDED_PLANE, ...?
         // bool m_IsConductor;
@@ -505,14 +510,20 @@ public:
                 {
                     const wxString& layerName = m_brdDb.GetString( entry.mLayerNameId );
 
-                    classLayers.emplace_back( CUSTOM_LAYER( layerName ) );
+                    CUSTOM_LAYER layer( layerName );
+                    layer.m_Properties = entry.m_Properties;
+
+                    classLayers.emplace_back( std::move( layer ) );
                 }
             }
             else if( aList.m_NonRefEntries.has_value() )
             {
                 for( const BLK_0x2A_LAYER_LIST::NONREF_ENTRY& entry : aList.m_NonRefEntries.value() )
                 {
-                    classLayers.emplace_back( CUSTOM_LAYER( entry.m_Name ) );
+                    CUSTOM_LAYER layer( entry.m_Name );
+                    layer.m_Properties = entry.m_Properties;
+
+                    classLayers.emplace_back( std::move( layer ) );
                 }
             }
             else
@@ -746,6 +757,26 @@ public:
 
         // Dump everything else here
         return m_unmappedLayer;
+    }
+
+    /**
+     * Plane layers are drawn as negatives, so a line on one is a void and not copper. This is a property of the
+     * source layer, as several source layers can share one KiCad layer.
+     */
+    bool IsPlaneLayer( const LAYER_INFO& aLayerInfo ) const
+    {
+        const auto etchIt = m_ClassCustomLayerLists.find( LAYER_INFO::CLASS::ETCH );
+        const auto classIt = m_ClassCustomLayerLists.find( aLayerInfo.m_Class );
+
+        // Other classes can draw on the copper layers through the same list
+        if( etchIt == m_ClassCustomLayerLists.end() || classIt == m_ClassCustomLayerLists.end()
+            || classIt->second != etchIt->second || !etchIt->second
+            || aLayerInfo.m_Subclass >= etchIt->second->size() )
+        {
+            return false;
+        }
+
+        return ( etchIt->second->at( aLayerInfo.m_Subclass ).m_Properties & LAYER_PROP_PLANE ) != 0;
     }
 
     /**
@@ -1892,7 +1923,22 @@ std::unique_ptr<PCB_SHAPE> BOARD_BUILDER::buildArc( const BLK_0x01_ARC& aArc, co
         VECTOR2I mid = start;
         RotatePoint( mid, c, -angle / 2.0 );
 
-        shape->SetArcGeometry( start, mid, end );
+        // A near-straight arc has a centre outside the coordinate range, so it cannot be transformed.
+        // The centre is measured before the arc is built since building it already rotates by it.
+        const double centreDistance =
+                ( CalcArcCenter( VECTOR2D( start ), VECTOR2D( mid ), VECTOR2D( end ) ) - VECTOR2D( start ) )
+                        .EuclideanNorm();
+
+        if( !std::isfinite( centreDistance ) || centreDistance > std::numeric_limits<int>::max() / 4 )
+        {
+            shape->SetShape( SHAPE_T::SEGMENT );
+            shape->SetStart( start );
+            shape->SetEnd( end );
+        }
+        else
+        {
+            shape->SetArcGeometry( start, mid, end );
+        }
     }
 
     return shape;
@@ -2292,6 +2338,11 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
     else if( layer == B_CrtYd )
         layer = m_layerMapper->GetPlaceBounds( false );
 
+    // Lines of the anti-etch class remove copper on any layer, as lines on a plane layer do. The lines of a
+    // footprint are in board coordinates too, so they join the same voids
+    const bool isVoidLine = m_layerMapper->IsPlaneLayer( aGraphic.m_Layer )
+                            || ( aGraphic.m_Layer.m_Class == LAYER_INFO::CLASS::ANTI_ETCH && IsCopperLayer( layer ) );
+
     const LL_WALKER segWalker{ aGraphic.m_SegmentPtr, aGraphic.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* segBlock : segWalker )
@@ -2320,8 +2371,17 @@ std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x
             break;
         }
 
-        if( shape )
-            shapes.push_back( std::move( shape ) );
+        if( !shape )
+            continue;
+
+        // Void lines on a copper layer are kept as clearance and not as copper
+        if( isVoidLine )
+        {
+            shape->TransformShapeToPolygon( m_planeVoids[layer], layer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
+            continue;
+        }
+
+        shapes.push_back( std::move( shape ) );
     }
 
     return shapes;
@@ -3703,7 +3763,11 @@ void BOARD_BUILDER::createTracks()
                 case 0x33:
                 {
                     const BLK_0x33_VIA& viaData = BlockDataAs<BLK_0x33_VIA>( *connItemBlock );
-                    newItemList.push_back( buildVia( viaData, netCode ) );
+
+                    // A via whose padstack is missing has nothing to place
+                    if( std::unique_ptr<BOARD_ITEM> via = buildVia( viaData, netCode ) )
+                        newItemList.push_back( std::move( via ) );
+
                     break;
                 }
                 case 0x32:
@@ -4551,6 +4615,39 @@ void BOARD_BUILDER::createZones()
 }
 
 
+void BOARD_BUILDER::createPlaneVoidAreas()
+{
+    for( auto& [layer, voids] : m_planeVoids )
+    {
+        voids.Simplify();
+
+        if( voids.IsEmpty() )
+            continue;
+
+        // A zone saves only its first polygon, so every separate void gets an area of its own
+        for( const SHAPE_POLY_SET::POLYGON& polygon : voids.CPolygons() )
+        {
+            std::unique_ptr<ZONE> area = std::make_unique<ZONE>( &m_board );
+
+            area->SetIsRuleArea( true );
+            area->SetLayerSet( LSET( { layer } ) );
+            area->SetDoNotAllowZoneFills( true );
+            area->SetDoNotAllowTracks( false );
+            area->SetDoNotAllowVias( false );
+            area->SetDoNotAllowPads( false );
+            area->SetDoNotAllowFootprints( false );
+            area->SetZoneName( wxS( "Plane void" ) );
+            area->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+            *area->Outline() = SHAPE_POLY_SET( polygon );
+
+            m_board.Add( area.release() );
+        }
+    }
+
+    m_planeVoids.clear();
+}
+
+
 void BOARD_BUILDER::createTables()
 {
     wxLogTrace( traceAllegroBuilder, "Creating tables from m_LL_0x2C" );
@@ -4687,6 +4784,7 @@ void BOARD_BUILDER::applyZoneFills()
         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
         {
             SHAPE_POLY_SET fractured( poly );
+            fractured.ClearArcs();
             fractured.Fracture( /* aSimplify */ false );
 
             const bool isDynCopperShape = ( fill.shape->m_Unknown2.value_or( 0 ) & 0x1000 ) != 0;
@@ -4714,6 +4812,25 @@ void BOARD_BUILDER::applyZoneFills()
                 stampIds( *zone, fillKey, idSeq );
                 m_board.Add( zone.release(), ADD_MODE::APPEND );
                 teardropCount++;
+            }
+            else if( m_layerMapper->IsPlaneLayer( fill.shape->m_Layer ) )
+            {
+                // A negative plane has no clearance around other nets in its shape, so the copper has
+                // to be a zone that KiCad fills
+                std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( &m_board );
+
+                zone->SetLayer( fill.layer );
+                zone->SetNetCode( fill.netCode );
+                zone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
+                zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+                zone->SetLocalClearance( 0 );
+                zone->SetMinThickness( 0 );
+                zone->Outline()->AddPolygon( poly );
+                zone->SetNeedRefill( true );
+
+                stampIds( *zone, fillKey, idSeq );
+                m_board.Add( zone.release(), ADD_MODE::APPEND );
+                copperShapeCount++;
             }
             else
             {
@@ -4942,6 +5059,9 @@ bool BOARD_BUILDER::BuildBoard()
 
     wxLogTrace( traceAllegroPerf, wxT( "  FinalizeBulkAdd: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow
     wxLogTrace( traceAllegroBuilder, "Converted %zu footprints", bulkAddedItems.size() );
+
+    // the footprints have added their voids by now
+    createPlaneVoidAreas();
 
     enablePadTeardrops();
     wxLogTrace( traceAllegroPerf, wxT( "  enablePadTeardrops: %.3f ms" ), buildTimer.msecs( true ) ); //format:allow

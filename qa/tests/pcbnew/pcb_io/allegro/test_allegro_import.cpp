@@ -45,6 +45,7 @@
 #include <reporter.h>
 
 #include <algorithm>
+#include <cstdlib>
 #include <filesystem>
 #include <functional>
 #include <fstream>
@@ -98,6 +99,548 @@ BOOST_AUTO_TEST_CASE( FootprintRefDes )
 
     // Most footprints should have valid reference designators
     BOOST_CHECK_GT( validRefDesCount, emptyRefDesCount );
+}
+
+
+/**
+ * Test that footprints without a reference designator are board only, so they do not need a schematic symbol.
+ */
+BOOST_AUTO_TEST_CASE( UnreferencedFootprintsAreBoardOnly )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int unreferenced = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( !fp->GetReference().IsEmpty() )
+            continue;
+
+        unreferenced++;
+        BOOST_CHECK( fp->GetAttributes() & FP_BOARD_ONLY );
+    }
+
+    BOOST_CHECK_GT( unreferenced, 0 );
+}
+
+
+/**
+ * Test that placed footprints carry their package name as a library-less FPID.
+ */
+BOOST_AUTO_TEST_CASE( FootprintLibItemNames )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int unnamed = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        BOOST_TEST_MESSAGE( fp->GetReference() << " -> " << fp->GetFPID().GetLibItemName().wx_str() );
+
+        if( !fp->GetReference().IsEmpty() && fp->GetFPID().GetLibItemName().empty() )
+            unnamed++;
+
+        BOOST_CHECK( fp->GetFPID().GetLibNickname().empty() );
+    }
+
+    BOOST_CHECK_EQUAL( unnamed, 0 );
+}
+
+
+/**
+ * Test that unplated holes keep a non-zero pad size, which KiCad rejects when it reads them back.
+ */
+BOOST_AUTO_TEST_CASE( UnplatedHolesHaveSize )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "EVK_BaseBoard/EVK_BaseBoard.brd" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int zeroSized = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
+                zeroSized++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( zeroSized, 0 );
+}
+
+
+/**
+ * Test that every imported footprint can be reoriented, as saving it to a library does.
+ */
+BOOST_AUTO_TEST_CASE( NearStraightArcsSurviveReorientation )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "EDA-02862-V1-0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        std::unique_ptr<FOOTPRINT> copy( static_cast<FOOTPRINT*>( fp->Clone() ) );
+        copy->SetOrientation( ANGLE_0 );
+    }
+}
+
+
+/**
+ * Test that a 16.1 file, whose constraint sets carry 12 values per layer, loads.
+ */
+BOOST_AUTO_TEST_CASE( Release161Loads )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "EDA-02152-V1-0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+    BOOST_CHECK_EQUAL( board->Footprints().size(), 61u );
+}
+
+
+/**
+ * Test that lines drawn on a negative plane layer are not left as unnetted copper, which shorts the vias.
+ */
+BOOST_AUTO_TEST_CASE( PlaneLayerLinesAreNotCopper )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "EVK_BaseBoard/EVK_BaseBoard.brd" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int copperLines = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && IsInnerCopperLayer( item->GetLayer() ) )
+            copperLines++;
+    }
+
+    BOOST_CHECK_EQUAL( copperLines, 0 );
+}
+
+
+/**
+ * Test that lines drawn on a negative plane layer are not copper in a file that keeps the layer
+ * flags after the layer name.
+ */
+BOOST_AUTO_TEST_CASE( PlaneLayerLinesAreNotCopperBefore165 )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "EDA-02152-V1-0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int copperLines = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && IsInnerCopperLayer( item->GetLayer() )
+            && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::SEGMENT )
+        {
+            copperLines++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( copperLines, 0 );
+}
+
+
+/**
+ * Test that overlapping pads of different nets in one footprint are declared as a net tie.
+ */
+BOOST_AUTO_TEST_CASE( OverlappingPadsAreNetTie )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "USB-PD w QC3_0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    FOOTPRINT* tie = board->FindFootprintByReference( wxS( "NT1" ) );
+
+    BOOST_REQUIRE( tie != nullptr );
+    BOOST_REQUIRE_EQUAL( tie->GetNetTiePadGroups().size(), 1 );
+    BOOST_CHECK_EQUAL( tie->GetNetTiePadGroups()[0], wxS( "1,2" ) );
+}
+
+
+/**
+ * Test that 16.4 padstacks take their solder mask and paste from the 16.x fixed slots.
+ */
+BOOST_AUTO_TEST_CASE( V164PadstackMaskAndPaste )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    // EDA-02016 has 8 NOPM_* SMD padstacks, 4 of them also NOSM_*. EDA-03470 has 4 NOPM_* and 6 fiducials
+    // without paste, and its 7 bottom-start pads keep their opening in the bottom mask slot.
+    const std::map<std::string, std::pair<int, int>> expected = { { "EDA-02016-V8-0.brd", { 43, 4 } },
+                                                                  { "EDA-03470-V1-0.brd", { 138, 0 } } };
+
+    std::map<std::string, std::filesystem::path> boards;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && expected.count( entry.path().filename().string() ) )
+            boards[entry.path().filename().string()] = entry.path();
+    }
+
+    for( const auto& [name, brd] : boards )
+    {
+        BOOST_TEST_CONTEXT( name )
+        {
+            std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+            BOOST_REQUIRE( board != nullptr );
+
+            int pasted = 0;
+            int unmasked = 0;
+
+            for( FOOTPRINT* fp : board->Footprints() )
+            {
+                for( PAD* pad : fp->Pads() )
+                {
+                    if( pad->GetAttribute() != PAD_ATTRIB::SMD )
+                        continue;
+
+                    const LSET layers = pad->GetLayerSet();
+
+                    if( layers.Contains( F_Paste ) || layers.Contains( B_Paste ) )
+                        pasted++;
+
+                    if( !layers.Contains( F_Mask ) && !layers.Contains( B_Mask ) )
+                        unmasked++;
+                }
+            }
+
+            BOOST_CHECK_EQUAL( pasted, expected.at( name ).first );
+            BOOST_CHECK_EQUAL( unmasked, expected.at( name ).second );
+        }
+    }
+}
+
+
+/**
+ * Test that the far fingers of an edge connector land on the bottom copper layer.
+ */
+BOOST_AUTO_TEST_CASE( EdgeConnectorBottomFingers )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "600-20192-01_CYW920822M2P4XXI040_REV1.0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    FOOTPRINT* edge = board->FindFootprintByReference( wxS( "J1" ) );
+
+    BOOST_REQUIRE( edge != nullptr );
+
+    const PAD* top = edge->FindPadByNumber( wxS( "39" ) );
+    const PAD* bottom = edge->FindPadByNumber( wxS( "40" ) );
+
+    BOOST_REQUIRE( top && bottom );
+    BOOST_CHECK( top->IsOnLayer( F_Cu ) && !top->IsOnLayer( B_Cu ) );
+    BOOST_CHECK( bottom->IsOnLayer( B_Cu ) && !bottom->IsOnLayer( F_Cu ) );
+    BOOST_CHECK( bottom->IsOnLayer( B_Mask ) && !bottom->IsOnLayer( F_Mask ) );
+}
+
+
+/**
+ * Test that anti-etch lines on a routing layer remove copper and are not imported as unnetted copper.
+ */
+BOOST_AUTO_TEST_CASE( AntiEtchLinesAreNotCopper )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "EDA-02067-V1-0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int copperLines = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && IsInnerCopperLayer( item->GetLayer() )
+            && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::SEGMENT )
+        {
+            copperLines++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( copperLines, 0 );
+}
+
+
+/**
+ * Test that a negative plane's copper is a zone for KiCad to fill, not a fixed polygon over the vias.
+ */
+BOOST_AUTO_TEST_CASE( PlaneCopperIsAZone )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path brd;
+
+    for( const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator( corpusEnv ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == "EDA-02153-V1-0.brd" )
+            brd = entry.path();
+    }
+
+    if( brd.empty() )
+        return;
+
+    std::unique_ptr<BOARD> board = m_allegroPlugin.LoadBoard( brd.string() );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int planePolygons = 0;
+    int planeZones = 0;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && IsInnerCopperLayer( item->GetLayer() )
+            && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY )
+        {
+            planePolygons++;
+        }
+    }
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() && IsInnerCopperLayer( zone->GetFirstLayer() ) && zone->GetNetCode() > 0 )
+        {
+            planeZones++;
+
+            // The board's rules set the clearance, and thin fill is not dropped
+            BOOST_CHECK( zone->GetLocalClearance().has_value() );
+            BOOST_CHECK_EQUAL( zone->GetLocalClearance().value_or( -1 ), 0 );
+            BOOST_CHECK_EQUAL( zone->GetMinThickness(), 0 );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( planePolygons, 0 );
+    BOOST_CHECK_GT( planeZones, 0 );
+
+    KI_TEST::FillZones( board.get() );
+
+    int filledPlanes = 0;
+    int coveredVias = 0;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        PCB_LAYER_ID layer = zone->GetFirstLayer();
+
+        if( !zone->GetIsRuleArea() && IsInnerCopperLayer( layer ) && zone->HasFilledPolysForLayer( layer )
+            && !zone->GetFilledPolysList( layer )->IsEmpty() )
+        {
+            filledPlanes++;
+        }
+    }
+
+    for( PCB_TRACK* track : board->Tracks() )
+    {
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        for( ZONE* zone : board->Zones() )
+        {
+            PCB_LAYER_ID layer = zone->GetFirstLayer();
+
+            if( zone->GetIsRuleArea() || zone->GetNetCode() == track->GetNetCode() || !IsInnerCopperLayer( layer )
+                || !track->IsOnLayer( layer ) || !zone->HasFilledPolysForLayer( layer ) )
+            {
+                continue;
+            }
+
+            if( zone->GetFilledPolysList( layer )->Collide( track->GetEffectiveShape( layer ).get() ) )
+                coveredVias++;
+        }
+    }
+
+    BOOST_CHECK_GT( filledPlanes, 0 );
+    BOOST_CHECK_EQUAL( coveredVias, 0 );
+}
+
+
+/**
+ * Test that a refilled plane stays clear of the voids drawn on it, so the pour does not close them.
+ */
+BOOST_AUTO_TEST_CASE( PlaneFillRespectsVoids )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "EVK_BaseBoard/EVK_BaseBoard.brd" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    std::vector<ZONE*> voids;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( zone->GetIsRuleArea() && zone->GetZoneName() == wxS( "Plane void" ) )
+            voids.push_back( zone );
+    }
+
+    BOOST_REQUIRE( !voids.empty() );
+
+    // A zone is saved with only its first polygon, so each void area holds exactly one
+    for( ZONE* area : voids )
+        BOOST_CHECK_EQUAL( area->Outline()->OutlineCount(), 1 );
+
+    KI_TEST::FillZones( board.get() );
+
+    double overlap = 0;
+
+    for( ZONE* area : voids )
+    {
+        PCB_LAYER_ID layer = area->GetFirstLayer();
+
+        for( ZONE* zone : board->Zones() )
+        {
+            if( zone->GetIsRuleArea() || !zone->IsOnLayer( layer ) || !zone->HasFilledPolysForLayer( layer ) )
+                continue;
+
+            SHAPE_POLY_SET common( *zone->GetFilledPolysList( layer ) );
+            common.BooleanIntersection( *area->Outline() );
+            overlap += common.Area();
+        }
+    }
+
+    // slivers from rounding are fine, a closed void is not
+    BOOST_CHECK_LT( overlap, 1e10 );
+}
+
+
+/**
+ * Test that a custom pad's anchor and outline join into one polygon, which KiCad requires.
+ */
+BOOST_AUTO_TEST_CASE( CustomPadsAreOnePolygon )
+{
+    for( const char* name : { "EVK_BaseBoard/EVK_BaseBoard.brd", "EVK_SOM/EVK_SOM.brd",
+                              "BeagleBone-AI/BeagleBone-AI.brd", "CutiePi_V2_3_v166/CutiePi_V2_3.brd",
+                              "mainBoard/mainBoard.brd", "ABX00162_UNOQ/20250806_UNOQ.brd" } )
+    {
+        std::unique_ptr<BOARD> board = LoadAllegroBoard( name );
+
+        BOOST_REQUIRE( board );
+
+        int multi = 0;
+
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                for( PCB_LAYER_ID layer : pad->Padstack().UniqueLayers() )
+                {
+                    if( pad->GetShape( layer ) != PAD_SHAPE::CUSTOM )
+                        continue;
+
+                    if( pad->GetEffectivePolygon( layer )->OutlineCount() != 1 )
+                        multi++;
+                }
+            }
+        }
+
+        BOOST_TEST_CONTEXT( name ) { BOOST_CHECK_EQUAL( multi, 0 ); }
+    }
 }
 
 
@@ -2934,6 +3477,39 @@ BOOST_AUTO_TEST_CASE( BeagleBone_Teardrops )
 
     BOOST_CHECK_GT( viasWithTeardrops, 0 );
     BOOST_TEST_MESSAGE( "Vias with teardrops enabled: " << viasWithTeardrops << " / " << totalVias );
+}
+
+
+BOOST_AUTO_TEST_CASE( BeagleBone_TeardropFillsHaveNoArcs )
+{
+    std::string dataPath = KI_TEST::AllegroBoardFile( "BeagleBone_Black_RevC/BeagleBone_Black_RevC.brd" );
+
+    BOARD* board = GetCachedBoard( dataPath );
+    BOOST_REQUIRE( board );
+
+    int arcFills = 0;
+
+    for( const ZONE* zone : board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+        {
+            if( !zone->HasFilledPolysForLayer( layer ) )
+                continue;
+
+            const std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+            for( int i = 0; i < fill->OutlineCount(); ++i )
+            {
+                if( fill->COutline( i ).ArcCount() > 0 )
+                    ++arcFills;
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( arcFills, 0 );
 }
 
 

@@ -288,6 +288,7 @@ private:
     void createBoardText();
     void createZones();
     void createTables();
+    void createPlaneVoidAreas();
     void applyZoneFills();
     void enablePadTeardrops();
     void applyConstraintSets();
@@ -330,6 +331,9 @@ private:
 
     // Keys that have been used as zone fills already
     std::unordered_set<uint32_t> m_usedZoneFillShapes;
+
+    // Void geometry drawn on negative plane layers, which the plane fill must keep clear
+    std::map<PCB_LAYER_ID, SHAPE_POLY_SET> m_planeVoids;
 
     std::unique_ptr<LAYER_MAPPER> m_layerMapper;
 
