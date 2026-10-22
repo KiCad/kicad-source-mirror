@@ -104,6 +104,10 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
     if( !outputArg.IsEmpty() )
     {
         projectFn.Assign( outputArg );
+
+        // The argument is a stem, so a dot in it is part of the name unless it names a project file
+        if( projectFn.HasExt() && projectFn.GetExt() != FILEEXT::ProjectFileExtension )
+            projectFn.SetName( projectFn.GetFullName() );
     }
     else
     {
@@ -154,6 +158,8 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
     // Preserve board-first format detection, but defer loading until the schematic supplies its names.
     for( const wxString& input : inputFiles )
     {
+        bool accepted = false;
+
         if( !haveBoard )
         {
             JOB_PCB_IMPORT probe;
@@ -214,14 +220,15 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
 
                     if( retCode != EXIT_CODES::SUCCESS )
                         break;
-
-                    continue;
+                }
+                else
+                {
+                    boards.emplace_back( KIID(), boardFn.GetFullName() );
+                    haveBoard = true;
+                    boardInput = input;
                 }
 
-                boards.emplace_back( KIID(), boardFn.GetFullName() );
-                haveBoard = true;
-                boardInput = input;
-                continue;
+                accepted = true;
             }
             else if( pcbResult != EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT )
             {
@@ -230,6 +237,8 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
             }
         }
 
+        // Some formats keep the board and the schematic in one file, so a board input is offered to both faces;
+        // a board file without a schematic is still a good board
         if( !haveSch )
         {
             JOB_SCH_IMPORT schJob;
@@ -243,14 +252,17 @@ int CLI::IMPORT_COMMAND::doPerform( KIWAY& aKiway )
             {
                 haveSch = true;
                 netNameMap = std::move( schJob.m_netNameMap );
-                continue;
+                accepted = true;
             }
-            else if( schResult != EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT )
+            else if( schResult != EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT && !accepted )
             {
                 retCode = schResult;
                 break;
             }
         }
+
+        if( accepted )
+            continue;
 
         if( haveBoard && haveSch )
         {

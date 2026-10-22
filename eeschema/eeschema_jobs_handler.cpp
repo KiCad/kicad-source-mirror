@@ -2381,6 +2381,7 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
     case JOB_SCH_IMPORT::FORMAT::PCAD:       fileType = SCH_IO_MGR::SCH_PCAD;            break;
     case JOB_SCH_IMPORT::FORMAT::ORCAD:      fileType = SCH_IO_MGR::SCH_ORCAD;           break;
     case JOB_SCH_IMPORT::FORMAT::EASYPC:     fileType = SCH_IO_MGR::SCH_EASYPC;          break;
+    case JOB_SCH_IMPORT::FORMAT::TARGET3001: fileType = SCH_IO_MGR::SCH_TARGET3001;      break;
     }
 
     if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )

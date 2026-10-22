@@ -56,7 +56,8 @@ public:
         FABMASTER,
         PCAD,
         SOLIDWORKS,
-        EASYPC
+        EASYPC,
+        TARGET3001
     };
 
     wxString             m_inputFile;

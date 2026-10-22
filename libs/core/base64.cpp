@@ -110,17 +110,23 @@ namespace base64
     }
 
 
-    void decode(const std::vector<uint8_t>& aInput, std::vector<uint8_t>& aOutput )
+    void decode( const std::vector<uint8_t>& aInput, std::vector<uint8_t>& aOutput )
     {
-        size_t end = ( aInput.size() / 4 ) * 4;
-        size_t decode_size = decode_length( aInput.size() );
+        size_t len = aInput.size();
+
+        // Padding is optional; encode() never writes it
+        while( len > 0 && aInput[len - 1] == '=' )
+            len--;
+
+        size_t end = ( len / 4 ) * 4;
+        size_t decode_size = decode_length( len );
 
         if( !decode_size )
             return;
 
-        aOutput.reserve( decode_size );
+        aOutput.reserve( aOutput.size() + decode_size );
 
-        for( size_t i = 0; i < end; i++ )
+        for( size_t i = 0; i < end; i += 4 )
         {
             unsigned value = ( DECODE_BASE64[aInput[i] & 0x7F] << 18 ) |
                              ( DECODE_BASE64[aInput[i + 1] & 0x7F] << 12 ) |
@@ -132,7 +138,7 @@ namespace base64
             aOutput.emplace_back( value & 0xff );
         }
 
-        size_t remainder = aInput.size() - end;
+        size_t remainder = len - end;
 
         if( remainder )
         {
@@ -150,7 +156,8 @@ namespace base64
             {
                 value >>= 4;
             }
-            aOutput[0] = value & 0xff ;
+
+            aOutput.emplace_back( value & 0xff );
         }
     }
 

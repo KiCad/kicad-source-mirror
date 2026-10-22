@@ -3634,7 +3634,24 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, bool aInferOutli
     }
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
-    aOutlines.Simplify();
+    if( aOutlines.ArcCount() > 0 && aOutlines.OutlineCount() > 1 )
+    {
+        // Boolean ops keep arcs only within a single outline, so simplify each island alone
+        SHAPE_POLY_SET simplified;
+
+        for( int ii = 0; ii < aOutlines.OutlineCount(); ++ii )
+        {
+            SHAPE_POLY_SET island( aOutlines.Polygon( ii ) );
+            island.Simplify();
+            simplified.Append( island );
+        }
+
+        aOutlines = std::move( simplified );
+    }
+    else
+    {
+        aOutlines.Simplify();
+    }
 
     return success;
 }

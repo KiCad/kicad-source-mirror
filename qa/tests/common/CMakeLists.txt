@@ -111,6 +111,9 @@ set( QA_COMMON_SRCS
     test_snapping_options.cpp
     test_string_any_map.cpp
     test_string_utils.cpp
+    test_base64.cpp
+    test_target3001_arc.cpp
+    test_target3001_fonts.cpp
     test_richio.cpp
     test_template_fieldnames.cpp
     test_text_attributes.cpp

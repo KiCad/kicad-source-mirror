@@ -3819,6 +3819,8 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     case JOB_PCB_IMPORT::FORMAT::SOLIDWORKS: fileType = PCB_IO_MGR::SOLIDWORKS_PCB; break;
 
     case JOB_PCB_IMPORT::FORMAT::EASYPC: fileType = PCB_IO_MGR::EASYPC; break;
+
+    case JOB_PCB_IMPORT::FORMAT::TARGET3001: fileType = PCB_IO_MGR::TARGET3001; break;
     }
 
     // FindPluginTypeFromBoardPath returns FILE_TYPE_NONE (not PCB_FILE_UNKNOWN) when no plugin

@@ -250,6 +250,14 @@ void KICAD_MANAGER_FRAME::OnImportEasyPcFiles( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::OnImportTarget3001Files( wxCommandEvent& event )
+{
+    // One project file carries both the schematic and the board
+    ImportNonKiCadProject( _( "Import TARGET 3001! Project" ), FILEEXT::Target3001FilesWildcard(), { "INPUT" },
+                           { "INPUT" }, SCH_IO_MGR::SCH_TARGET3001, PCB_IO_MGR::TARGET3001 );
+}
+
+
 void KICAD_MANAGER_FRAME::OnImportOrcadFiles( wxCommandEvent& event )
 {
     // OrCAD handler imports .dsn schematic then offers associated Allegro board, so no

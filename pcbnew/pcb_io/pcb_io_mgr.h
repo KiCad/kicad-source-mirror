@@ -74,6 +74,7 @@ public:
         AUTOTRAX,
         PADS_BINARY,
         EASYPC,       ///< Easy-PC / DesignSpark PCB
+        TARGET3001,   ///< TARGET 3001! project
         // add your type here.
 
         // etc.

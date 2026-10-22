@@ -112,6 +112,9 @@ public:
 
     double GetSuperSubSizeMultiplier() const override { return m_subscriptSuperscriptSize; }
 
+    /// Edge of the em square for glyphs drawn at text size @a aSize
+    double GetEmSize( double aSize ) const { return aSize * m_outlineFontSizeCompensation; }
+
     double GetSuperSubBaselineOffset( TEXT_STYLE_FLAGS aTextStyle ) const override
     {
         double offset = 0.0;

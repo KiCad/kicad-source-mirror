@@ -44,7 +44,7 @@ CLI::PCB_IMPORT_COMMAND::PCB_IMPORT_COMMAND() : COMMAND( "import" )
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "auto" ) )
             .help( UTF8STDSTR( _( "Input format hint: auto, pads, altium, eagle, cadstar, "
-                                  "fabmaster, pcad, solidworks, easypc (default: auto)" ) ) )
+                                  "fabmaster, pcad, solidworks, easypc, target3001 (default: auto)" ) ) )
             .metavar( "FORMAT" );
 
     m_argParser.add_argument( ARG_REPORT_FORMAT )
@@ -109,6 +109,10 @@ int CLI::PCB_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
     else if( format == wxS( "easypc" ) )
     {
         importJob->m_format = JOB_PCB_IMPORT::FORMAT::EASYPC;
+    }
+    else if( format == wxS( "target3001" ) )
+    {
+        importJob->m_format = JOB_PCB_IMPORT::FORMAT::TARGET3001;
     }
     else
     {

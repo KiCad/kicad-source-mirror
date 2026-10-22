@@ -1248,6 +1248,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case PCB_IO_MGR::ALLEGRO:
     case PCB_IO_MGR::SOLIDWORKS_PCB:
     case PCB_IO_MGR::PADS:
+    case PCB_IO_MGR::TARGET3001:
     {
         int ctl = KICTL_NONKICAD_ONLY;
 

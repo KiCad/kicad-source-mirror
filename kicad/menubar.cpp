@@ -166,6 +166,11 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                      ID_IMPORT_EASYPC_PROJECT,
                      BITMAPS::import_project );
 
+    importMenu->Add( _( "TARGET 3001! Project..." ),
+                     _( "Import TARGET 3001! project schematic and PCB (*.T3001)" ),
+                     ID_IMPORT_TARGET3001_PROJECT,
+                     BITMAPS::import_project );
+
     importMenu->Add( _( "OrCAD Project..." ),
                      _( "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)" ),
                      ID_IMPORT_ORCAD_PROJECT,

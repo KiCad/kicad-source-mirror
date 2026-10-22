@@ -719,8 +719,9 @@ add_subdirectory( pcb_io/sprint_layout )
 add_subdirectory( pcb_io/diptrace )
 add_subdirectory( pcb_io/easypc )
 add_subdirectory( pcb_io/autotrax )
+add_subdirectory( pcb_io/target3001 )
 
-set( PCBNEW_IO_LIBRARIES pcad2kicadpcb allegro2pcbnew altium2pcbnew cadstar2pcbnew easyeda easyedapro fabmaster ipc2581 odbpp pads2pcbnew sprint_layout2pcbnew diptrace2pcbnew easypc2pcbnew autotrax2pcbnew CACHE INTERNAL "")
+set( PCBNEW_IO_LIBRARIES pcad2kicadpcb allegro2pcbnew altium2pcbnew cadstar2pcbnew easyeda easyedapro fabmaster ipc2581 odbpp pads2pcbnew sprint_layout2pcbnew diptrace2pcbnew easypc2pcbnew autotrax2pcbnew target30012pcbnew CACHE INTERNAL "")
 
 #a very small program launcher for pcbnew_kiface
 add_executable( pcbnew WIN32 MACOSX_BUNDLE

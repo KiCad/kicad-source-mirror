@@ -369,6 +369,12 @@ wxString FILEEXT::EasyPcFilesWildcard()
 }
 
 
+wxString FILEEXT::Target3001FilesWildcard()
+{
+    return _( "TARGET 3001! project files" ) + AddFileExtListToFilter( { "T3001" } );
+}
+
+
 wxString FILEEXT::OrCadSchematicFilesWildcard()
 {
     return _( "OrCAD Capture schematic files" ) + AddFileExtListToFilter( { "dsn" } );

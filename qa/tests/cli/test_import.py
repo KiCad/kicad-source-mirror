@@ -159,6 +159,20 @@ class TestImportBoardOnly:
         with open( stem.with_suffix( ".kicad_pro" ), "r" ) as f:
             json.load( f )
 
+    def test_import_keeps_dots_in_stem( self, kitest: KiTestFixture ):
+        """A dot in the output stem is part of the project name"""
+        pads_file = get_pads_test_file()
+        stem = get_project_stem( kitest, "dotted_stem", "widget.v2" )
+
+        command = [ utils.kicad_cli(), "import", pads_file, "-o", str( stem ) ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert Path( f"{stem}.kicad_pro" ).exists()
+        assert Path( f"{stem}.kicad_pcb" ).exists()
+        assert not stem.with_suffix( ".kicad_pro" ).exists()
+
     def test_import_board_with_layer_map( self, kitest: KiTestFixture ):
         """The top-level import accepts --layer-map and wires it through to the board job"""
         pads_file = get_pads_test_file()

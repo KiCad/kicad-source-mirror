@@ -146,6 +146,7 @@ public:
      *  Open dialog to import an Easy-PC / DesignSpark PCB project, schematic or board.
      */
     void OnImportEasyPcFiles( wxCommandEvent& event );
+    void OnImportTarget3001Files( wxCommandEvent& event );
 
     /**
      *  Open dialog to import an OrCAD schematic file.

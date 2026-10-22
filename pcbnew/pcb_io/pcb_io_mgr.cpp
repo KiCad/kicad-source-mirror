@@ -51,6 +51,7 @@
 #include <pcb_io/diptrace/pcb_io_diptrace.h>
 #include <pcb_io/easypc/pcb_io_easypc.h>
 #include <pcb_io/autotrax/pcb_io_autotrax.h>
+#include <pcb_io/target3001/pcb_io_target3001.h>
 #include <pcb_io/pads/pcb_io_pads_binary.h>
 #include <reporter.h>
 #include <libraries/library_table_parser.h>
@@ -142,6 +143,7 @@ bool PCB_IO_MGR::ImportGeneratesProjectLibrary( PCB_FILE_T aFileType )
     case ALTIUM_CIRCUIT_MAKER:
     case ALTIUM_CIRCUIT_STUDIO:
     case ALLEGRO:
+    case TARGET3001:
         return true;
 
     default:
@@ -429,6 +431,11 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerEasyPcPlugin(
         PCB_IO_MGR::EASYPC,
         wxT( "Easy-PC" ),
         []() -> PCB_IO* { return new PCB_IO_EASYPC; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerTarget3001Plugin(
+        PCB_IO_MGR::TARGET3001,
+        wxT( "TARGET 3001!" ),
+        []() -> PCB_IO* { return new PCB_IO_TARGET3001; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerAutotraxPlugin(
         PCB_IO_MGR::AUTOTRAX,

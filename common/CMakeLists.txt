@@ -851,6 +851,10 @@ set( COMMON_IO_SRCS
     io/easypc/easypc_file.cpp
     io/easypc/easypc_text_metrics.cpp
 
+    # TARGET 3001!
+    io/target3001/target3001_fonts.cpp
+    io/target3001/target3001_parser.cpp
+
     # P-CAD
     io/pcad/s_expr_loader.cpp
 
