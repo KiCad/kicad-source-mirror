@@ -30,34 +30,88 @@
 
 #include <filesystem>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace KI_TEST
 {
 
+/// Point every config level above the repository at one directory, restoring the previous paths afterwards.
+class SCOPED_GIT_CONFIG_SEARCH_PATH
+{
+public:
+    explicit SCOPED_GIT_CONFIG_SEARCH_PATH( const std::string& aPath )
+    {
+        for( git_config_level_t level :
+             { GIT_CONFIG_LEVEL_PROGRAMDATA, GIT_CONFIG_LEVEL_SYSTEM, GIT_CONFIG_LEVEL_XDG, GIT_CONFIG_LEVEL_GLOBAL } )
+        {
+            git_buf previous = GIT_BUF_INIT;
+            BOOST_REQUIRE_EQUAL( git_libgit2_opts( GIT_OPT_GET_SEARCH_PATH, level, &previous ), GIT_OK );
+            m_saved.emplace_back( level, previous.ptr ? previous.ptr : "" );
+            git_buf_dispose( &previous );
+        }
+
+        bool overridden = true;
+
+        for( const auto& [level, searchPath] : m_saved )
+            overridden &= git_libgit2_opts( GIT_OPT_SET_SEARCH_PATH, level, aPath.c_str() ) == GIT_OK;
+
+        // A throwing constructor skips the destructor, so undo a partial override here
+        if( !overridden )
+            restore();
+
+        BOOST_REQUIRE( overridden );
+    }
+
+    ~SCOPED_GIT_CONFIG_SEARCH_PATH() { restore(); }
+
+    SCOPED_GIT_CONFIG_SEARCH_PATH( const SCOPED_GIT_CONFIG_SEARCH_PATH& ) = delete;
+    SCOPED_GIT_CONFIG_SEARCH_PATH& operator=( const SCOPED_GIT_CONFIG_SEARCH_PATH& ) = delete;
+
+private:
+    void restore()
+    {
+        for( const auto& [level, searchPath] : m_saved )
+            git_libgit2_opts( GIT_OPT_SET_SEARCH_PATH, level, searchPath.c_str() );
+    }
+
+    std::vector<std::pair<git_config_level_t, std::string>> m_saved;
+};
+
+
 /// Give each test a backend and a temporary directory. Tests own their repository handles.
+/// Only repository config is read, so results do not depend on the user's global or system Git config.
 class GIT_TEST_FIXTURE
 {
 public:
     GIT_TEST_FIXTURE() :
-            m_tempDir( "kicad-qa-git" )
+            m_tempDir( "kicad-qa-git" ),
+            m_configDir( "kicad-qa-gitconfig" ),
+            m_configSearchPath( toWxString( m_configDir.Path() ).utf8_string() )
     {
         // Resolve temporary-directory symlinks to match libgit2's workdir path.
-        std::filesystem::path path = std::filesystem::canonical( m_tempDir.Path() );
-
-#ifdef __WINDOWS__
-        m_tempPath = path.wstring();
-#else
-        m_tempPath = wxString::FromUTF8( path.native() );
-#endif
+        m_tempPath = toWxString( std::filesystem::canonical( m_tempDir.Path() ) );
     }
 
     const wxString& TempPath() const { return m_tempPath; }
     LIBGIT_BACKEND* Backend() const { return m_backend.Backend(); }
 
 private:
-    SCOPED_GIT_BACKEND m_backend;
-    SCOPED_TEMP_DIR    m_tempDir;
-    wxString           m_tempPath;
+    static wxString toWxString( const std::filesystem::path& aPath )
+    {
+#ifdef __WINDOWS__
+        return aPath.wstring();
+#else
+        return wxString::FromUTF8( aPath.native() );
+#endif
+    }
+
+    // Declared after the backend so the search paths are set after libgit2 starts and restored before it stops
+    SCOPED_GIT_BACKEND            m_backend;
+    SCOPED_TEMP_DIR               m_tempDir;
+    SCOPED_TEMP_DIR               m_configDir;
+    SCOPED_GIT_CONFIG_SEARCH_PATH m_configSearchPath;
+    wxString                      m_tempPath;
 };
 
 
