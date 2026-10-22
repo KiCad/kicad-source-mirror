@@ -807,6 +807,15 @@ private:
      */
     bool earcutList( VERTEX* aPoint, int pass = 0 )
     {
+        bool retval = earcutRing( aPoint, pass );
+
+        // Other isEar() callers must not scan an index built for a ring they do not walk
+        m_reflexIndexValid = false;
+        return retval;
+    }
+
+    bool earcutRing( VERTEX* aPoint, int pass )
+    {
         constexpr int kMaxRecursion = 64;
 
         if( pass >= kMaxRecursion )
@@ -826,8 +835,24 @@ private:
         int internal_pass = 1;
         constexpr int kEarLookahead = 2;
 
+        // Below this size, building the index costs more than the ear tests it saves
+        constexpr size_t kReflexIndexMinVertices = 8192;
+        size_t           ringSize = 0;
+        const VERTEX*    walk = aPoint;
+
+        do
+        {
+            ringSize++;
+            walk = walk->next;
+        } while( walk != aPoint && ringSize < kReflexIndexMinVertices );
+
+        const bool useReflexIndex = ringSize >= kReflexIndexMinVertices;
+
         while( aPoint->prev != aPoint->next )
         {
+            if( useReflexIndex && !m_reflexIndexValid )
+                buildReflexIndex( aPoint );
+
             prev = aPoint->prev;
             next = aPoint->next;
 
@@ -857,6 +882,10 @@ private:
                 m_result.AddTriangle( prev->i, bestEar->i, next->i );
                 bestEar->remove();
 
+                // A degenerate ear can leave a neighbor reflex that the index never recorded
+                if( isUnindexedReflex( prev ) || isUnindexedReflex( next ) )
+                    m_reflexIndexValid = false;
+
                 // Skip one vertex as the triangle will account for the prev node
                 aPoint = next->next;
                 stop = next->next;
@@ -877,6 +906,7 @@ private:
                 // remove two nodes involved
                 next->remove();
                 aPoint->remove();
+                m_reflexIndexValid = false;
 
                 aPoint = nextNext;
                 stop = nextNext;
@@ -893,6 +923,9 @@ private:
             if( aPoint == stop && aPoint->prev != aPoint->next )
             {
                 VERTEX* newPoint;
+
+                // Every recovery step below edits the ring
+                m_reflexIndexValid = false;
 
                 // Removing null triangles will remove steiner points as well as colinear points
                 // that are three in a row.  Because our next step is to subdivide the polygon,
@@ -950,6 +983,11 @@ private:
         return true;
     }
 
+
+    bool isUnindexedReflex( const VERTEX* aPoint ) const
+    {
+        return !aPoint->m_inReflexIndex && area( aPoint->prev, aPoint, aPoint->next ) >= 0;
+    }
 
     /**
      * Check whether a given vertex is too small to matter.
