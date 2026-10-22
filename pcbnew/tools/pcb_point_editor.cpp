@@ -2130,6 +2130,8 @@ public:
 
     BOARD_ITEM* GetParent() const { return m_parent; }
 
+    const std::vector<PCB_SHAPE*>& GetShapes() const { return m_shapes; }
+
 private:
     BOX2I getBoundingBox() const
     {
@@ -3430,7 +3432,22 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
                 return false;
             };
 
-    if( item->Type() == PCB_SHAPE_T && m_editedPoint && anyConstraints() )
+    if( auto* groupBehavior = dynamic_cast<SHAPE_GROUP_POINT_EDIT_BEHAVIOR*>( m_editorBehavior.get() );
+        groupBehavior && anyConstraints() )
+    {
+        // A group edit writes its own shapes, so the neighbours still need re-solving
+        std::vector<PCB_SHAPE*> modified;
+
+        ReSolveShapeClustersHoldingEdited( board(), groupBehavior->GetShapes(), &modified,
+                                           [&]( BOARD_ITEM* aNeighbor )
+                                           {
+                                               aCommit.Modify( aNeighbor );
+                                           } );
+
+        for( PCB_SHAPE* neighbor : modified )
+            updatedItems.push_back( neighbor );
+    }
+    else if( item->Type() == PCB_SHAPE_T && m_editedPoint && anyConstraints() )
     {
         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
         SHAPE_T    type = shape->GetShape();
