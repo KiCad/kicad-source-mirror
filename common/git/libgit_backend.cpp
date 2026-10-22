@@ -1691,7 +1691,8 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 
     KIGIT::GitReferencePtr branchRefPtr( branchRef );
 
-    git_checkout_options checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_checkout_options checkoutOpts;
+    git_checkout_options_init( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
     checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_RECREATE_MISSING;
 
     if( git_checkout_tree( repo, reinterpret_cast<git_object*>( tree ), &checkoutOpts ) != GIT_OK )
@@ -2629,7 +2630,8 @@ bool LIBGIT_BACKEND::CheckoutTag( git_repository* aRepo, const wxString& aName )
 
     KIGIT::GitObjectPtr targetPtr( target );
 
-    git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_checkout_options opts;
+    git_checkout_options_init( &opts, GIT_CHECKOUT_OPTIONS_VERSION );
     opts.checkout_strategy = GIT_CHECKOUT_SAFE;
 
     if( git_checkout_tree( aRepo, target, &opts ) != GIT_OK )
@@ -2812,8 +2814,10 @@ bool remergeInMemory( git_repository* aRepo, const wxString& aPinnedTheirsOid, K
         }
     }
 
-    git_merge_options mergeOpts = GIT_MERGE_OPTIONS_INIT;
+    git_merge_options mergeOpts;
     git_index*        mergedIndex = nullptr;
+
+    git_merge_options_init( &mergeOpts, GIT_MERGE_OPTIONS_VERSION );
 
     if( git_merge_trees( &mergedIndex, aRepo, baseTreePtr.get(), oursTree, theirsTree, &mergeOpts ) != GIT_OK )
     {
@@ -2958,7 +2962,8 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
                                              git_reference* aHeadRef, git_commit* aRollbackCommit,
                                              const char* aReflogLabel, wxString& aGitError )
 {
-    git_checkout_options checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+    git_checkout_options checkoutOpts;
+    git_checkout_options_init( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
     checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE;
 
     if( git_checkout_tree( aRepo, reinterpret_cast<git_object*>( aTree ), &checkoutOpts ) != GIT_OK )
@@ -3471,7 +3476,8 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
         for( const std::string& path : touched )
             paths.push_back( const_cast<char*>( path.c_str() ) );
 
-        git_checkout_options checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+        git_checkout_options checkoutOpts;
+        git_checkout_options_init( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
         checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE;
         checkoutOpts.paths.strings = paths.data();
         checkoutOpts.paths.count = paths.size();
