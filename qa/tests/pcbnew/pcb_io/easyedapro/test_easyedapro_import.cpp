@@ -28,9 +28,14 @@
 
 #include <pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h>
 
+#include <board.h>
 #include <footprint.h>
 #include <pad.h>
+#include <zone.h>
 
+#include <cstdlib>
+#include <filesystem>
+#include <map>
 #include <memory>
 
 
