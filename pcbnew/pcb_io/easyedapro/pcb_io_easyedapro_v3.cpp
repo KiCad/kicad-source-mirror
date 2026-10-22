@@ -94,6 +94,15 @@ PCB_IO_EASYEDAPRO_V3::EnumerateProjectBoards( const wxString& aFileName ) const
 }
 
 
+std::vector<IMPORT_PROJECT_DESC> PCB_IO_EASYEDAPRO_V3::EnumerateProjectEntries( const wxString& aFileName ) const
+{
+    EASYEDAPRO::V3_DOC_PARSER parser( aFileName );
+    parser.Load();
+
+    return EASYEDAPRO::ProjectToSelectorDialog( EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( parser, false ) );
+}
+
+
 bool PCB_IO_EASYEDAPRO_V3::CanReadBoard( const wxString& aFileName ) const
 {
     return EASYEDAPRO::V3_DOC_PARSER::IsV3Archive( aFileName );

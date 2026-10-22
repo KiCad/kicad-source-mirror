@@ -56,6 +56,8 @@ public:
 
     std::vector<std::pair<wxString, wxString>> EnumerateProjectBoards( const wxString& aFileName ) const override;
 
+    std::vector<IMPORT_PROJECT_DESC> EnumerateProjectEntries( const wxString& aFileName ) const override;
+
     bool CanReadLibrary( const wxString& aFileName ) const override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;

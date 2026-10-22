@@ -163,11 +163,15 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
 {
     std::vector<IMPORT_PROJECT_DESC> result;
 
-    std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = aProject.at( "schematics" );
-    std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = aProject.at( "boards" );
+    const nlohmann::json empty = nlohmann::json::object();
+
+    std::map<wxString, EASYEDAPRO::PRJ_SCHEMATIC> prjSchematics = aProject.value( "schematics", empty );
+    std::map<wxString, EASYEDAPRO::PRJ_BOARD>     prjBoards = aProject.value( "boards", empty );
 
     std::map<wxString, wxString>       prjPcbNames;
-    std::map<wxString, nlohmann::json> prjPcbs = aProject.at( "pcbs" );
+    std::map<wxString, nlohmann::json> prjPcbs = aProject.value( "pcbs", empty );
+    std::set<wxString>                 boardPcbs;
+    std::set<wxString>                 boardSchematics;
 
     for( const auto& [pcbUuid, pcbJsonEntry] : prjPcbs )
     {
@@ -192,7 +196,7 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
             if( desc.PCBName.empty() )
                 desc.PCBName = pcbNameIt->first;
 
-            prjPcbNames.erase( pcbNameIt );
+            boardPcbs.insert( desc.PCBId );
         }
 
         auto schIt = prjSchematics.find( desc.SchematicId );
@@ -203,7 +207,7 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
             if( desc.SchematicName.empty() )
                 desc.SchematicName = schIt->first;
 
-            prjSchematics.erase( schIt );
+            boardSchematics.insert( desc.SchematicId );
         }
 
         result.emplace_back( desc );
@@ -213,6 +217,9 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
     {
         for( const auto& [pcbId, pcbName] : prjPcbNames )
         {
+            if( boardPcbs.contains( pcbId ) )
+                continue;
+
             IMPORT_PROJECT_DESC desc;
             desc.PCBId = pcbId;
             desc.PCBName = pcbName;
@@ -228,6 +235,9 @@ EASYEDAPRO::ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOn
     {
         for( const auto& [schId, schData] : prjSchematics )
         {
+            if( boardSchematics.contains( schId ) )
+                continue;
+
             IMPORT_PROJECT_DESC desc;
             desc.SchematicId = schId;
             desc.SchematicName = schData.name;

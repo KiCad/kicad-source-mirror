@@ -45,6 +45,10 @@ wxString ShortenLibName( wxString aProjectName );
 
 LIB_ID ToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
 
+/**
+ * List the project's board entries, then the PCBs and schematics no entry names.  A document an entry names but the
+ * project does not hold keeps its identifier and has no name.
+ */
 std::vector<IMPORT_PROJECT_DESC> ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOnly = false,
                                                           bool                  aSchOnly = false );
 
