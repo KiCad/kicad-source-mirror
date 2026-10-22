@@ -236,7 +236,10 @@ public:
             pad->SetLayerSet( PAD::ConnSMDMask() );
 
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ DEFAULT_PAD_THT_WIDTH_MM, DEFAULT_PAD_THT_HEIGHT_MM } );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_THT_WIDTH_MM ),
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_THT_HEIGHT_MM ),
+                                                } );
             break;
         }
         // No Default: handle every case explicitly
