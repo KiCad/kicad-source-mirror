@@ -155,8 +155,7 @@ std::size_t TEXT_VAR_REF_KEY_HASH::operator()( const TEXT_VAR_REF_KEY& aKey ) co
 }
 
 
-void TEXT_VAR_DEPENDENCY_INDEX::Register( EDA_ITEM*                            aItem,
-                                          const std::vector<TEXT_VAR_REF_KEY>& aKeys )
+void TEXT_VAR_DEPENDENCY_INDEX::Register( EDA_ITEM* aItem, const std::vector<TEXT_VAR_REF_KEY>& aKeys )
 {
     if( !aItem )
         return;
@@ -295,8 +294,7 @@ void TEXT_VAR_TRACKER::SetSourceKeyExtractor( SourceKeyExtractor aExtractor )
 }
 
 
-TEXT_VAR_TRACKER::ListenerHandle TEXT_VAR_TRACKER::AddInvalidateListener(
-        InvalidateCallback aCallback )
+TEXT_VAR_TRACKER::ListenerHandle TEXT_VAR_TRACKER::AddInvalidateListener( InvalidateCallback aCallback )
 {
     std::unique_lock lock( m_listenersMutex );
     const ListenerHandle handle = m_nextListenerHandle++;
@@ -312,8 +310,7 @@ void TEXT_VAR_TRACKER::RemoveInvalidateListener( ListenerHandle aHandle )
 }
 
 
-void TEXT_VAR_TRACKER::RegisterItem( EDA_ITEM*                            aItem,
-                                     const std::vector<TEXT_VAR_REF_KEY>& aKeys )
+void TEXT_VAR_TRACKER::RegisterItem( EDA_ITEM* aItem, const std::vector<TEXT_VAR_REF_KEY>& aKeys )
 {
     if( aKeys.empty() )
         m_index.Unregister( aItem );
@@ -340,20 +337,24 @@ void TEXT_VAR_TRACKER::fanOutSourceKeys( EDA_ITEM* aItem )
 }
 
 
-void TEXT_VAR_TRACKER::HandleItemChanged( EDA_ITEM*                            aItem,
-                                          const std::vector<TEXT_VAR_REF_KEY>& aUpdatedKeys )
+void TEXT_VAR_TRACKER::HandleItemChanged( EDA_ITEM* aItem, const std::vector<TEXT_VAR_REF_KEY>& aUpdatedKeys )
 {
     // Two responsibilities per changed item:
     //   1. Keep its own dependency registration current — text may have been edited.
     //   2. Fan out invalidation to items that depend on it as a cross-ref source.
     // We do (1) before (2) so a self-referencing item sees its own refresh.
+    //
+    // AI review seems to think this needs the old value of the reference too in order
+    // to catch things linked to the old value.  But the linking under the hood is via
+    // KIID paths (we only show them as references to the user), and KIID paths are
+    // functionally invariant.
+
     RegisterItem( aItem, aUpdatedKeys );
     fanOutSourceKeys( aItem );
 }
 
 
-void TEXT_VAR_TRACKER::InvalidateByKind(
-        std::initializer_list<TEXT_VAR_REF_KEY::KIND> aKinds )
+void TEXT_VAR_TRACKER::InvalidateByKind( std::initializer_list<TEXT_VAR_REF_KEY::KIND> aKinds )
 {
     // Snapshot the key set once (copy is unavoidable — InvalidateKey can
     // mutate the index through its listener callbacks, so iterating the
@@ -408,14 +409,14 @@ void TEXT_VAR_TRACKER::InvalidateKey( const TEXT_VAR_REF_KEY& aKey )
 
         snapshot.reserve( m_invalidateListeners.size() );
 
-        for( const auto& [handle, cb] : m_invalidateListeners )
-            snapshot.push_back( cb );
+        for( const auto& [handle, callback] : m_invalidateListeners )
+            snapshot.push_back( callback );
     }
 
     m_index.ForEachDependent( aKey,
                               [&]( EDA_ITEM* dependent )
                               {
-                                  for( const InvalidateCallback& cb : snapshot )
-                                      cb( dependent, aKey );
+                                  for( const InvalidateCallback& callback : snapshot )
+                                      callback( dependent, aKey );
                               } );
 }

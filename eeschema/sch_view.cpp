@@ -199,7 +199,15 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
                             }
 
                             if( aDep->IsSCH_ITEM() )
-                                Update( aDep, KIGFX::REPAINT );
+                            {
+                                if( SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( aDep ) )
+                                {
+                                    text->ClearRenderCache();
+                                    text->ClearBoundingBoxCache();
+                                }
+
+                                Update( aDep, KIGFX::GEOMETRY | KIGFX::REPAINT );
+                            }
                         } );
             }
         }

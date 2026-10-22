@@ -32,7 +32,9 @@ BOARD_TEXT_VAR_ADAPTER::BOARD_TEXT_VAR_ADAPTER( BOARD& aBoard ) :
 {
     m_tracker.SetSourceKeyExtractor(
             [this]( EDA_ITEM* aItem ) -> std::vector<TEXT_VAR_REF_KEY>
-            { return ExtractSourceKeys( aItem ); } );
+            {
+                return ExtractSourceKeys( aItem );
+            } );
 }
 
 
@@ -96,26 +98,58 @@ void BOARD_TEXT_VAR_ADAPTER::unregisterItem( BOARD_ITEM* aItem )
 void BOARD_TEXT_VAR_ADAPTER::OnBoardItemAdded( BOARD&, BOARD_ITEM* aItem )
 {
     registerItem( aItem );
+
+    // Handle any fan-out from other items using this item as a source.  You might think no-one could
+    // yet be referencing something that was just added, but the add may be the result of an undo of
+    // a delete, and dangling cross-reference should get a chance to re-link to the item.
+    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
+    {
+        std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
+        m_tracker.HandleItemChanged( field, fieldRefs );
+    }
+    else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
+    {
+        for( PCB_FIELD* childField : fp->GetFields() )
+        {
+            std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( childField->GetTextVarReferences() );
+            m_tracker.HandleItemChanged( childField, fieldRefs );
+        }
+    }
 }
 
 
-void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsAdded( BOARD&, std::vector<BOARD_ITEM*>& aItems )
+void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems )
 {
     for( BOARD_ITEM* item : aItems )
-        registerItem( item );
+        OnBoardItemAdded( aBoard, item );
 }
 
 
 void BOARD_TEXT_VAR_ADAPTER::OnBoardItemRemoved( BOARD&, BOARD_ITEM* aItem )
 {
     unregisterItem( aItem );
+
+    // Handle any fan-out from other items using this item as a source
+    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
+    {
+        std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
+        m_tracker.HandleItemChanged( field, fieldRefs );
+    }
+    else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
+    {
+        for( PCB_FIELD* childField : fp->GetFields() )
+        {
+            std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( childField->GetTextVarReferences() );
+            m_tracker.HandleItemChanged( childField, fieldRefs );
+        }
+    }
 }
 
 
-void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsRemoved( BOARD&, std::vector<BOARD_ITEM*>& aItems )
+void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems )
 {
     for( BOARD_ITEM* item : aItems )
-        unregisterItem( item );
+        OnBoardItemRemoved( aBoard, item );
 }
 
 
@@ -124,46 +158,48 @@ void BOARD_TEXT_VAR_ADAPTER::OnBoardItemChanged( BOARD&, BOARD_ITEM* aItem )
     if( !aItem )
         return;
 
-    // Re-register the item's own refs (its text may have changed), then fan
-    // out any cross-ref keys this item could source so dependents refresh.
-    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+    // Re-register the item's own refs (its text may have changed), then fan out any cross-ref keys
+    // this item could source so dependents refresh.
 
-    if( text )
+    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
     {
-        std::vector<TEXT_VAR_REF_KEY> updated = FilterTrackable( text->GetTextVarReferences() );
-        m_tracker.HandleItemChanged( aItem, updated );
+        // A PCB_FIELD can be both a consumer and a source.  We must use HandleItemChanged() for
+        // it so that the fan-out is done.
+        std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
+        m_tracker.HandleItemChanged( field, fieldRefs );
     }
-    else if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+    else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
     {
-        m_tracker.HandleItemChanged( aItem, FilterTrackable( bc->GetTextVarReferences() ) );
+        // Footprint fields may themselves have been edited (value/ref change).  Again, these can
+        // be both consumer and/or source, so HandleItemChanged() is required.
+        for( PCB_FIELD* childField : fp->GetFields() )
+        {
+            std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( childField->GetTextVarReferences() );
+            m_tracker.HandleItemChanged( childField, fieldRefs );
+        }
+
+        // Graphical items (silkscreen text etc.) may also reference text vars and may have
+        // been edited out-of-band.  They can only be consumers so RegisterItem() is sufficient.
+        for( BOARD_ITEM* child : fp->GraphicalItems() )
+        {
+            if( EDA_TEXT* childText = dynamic_cast<EDA_TEXT*>( child ) )
+                m_tracker.RegisterItem( child, FilterTrackable( childText->GetTextVarReferences() ) );
+        }
+    }
+    else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
+    {
+        // An EDA_TEXT which is not a PCB_FIELD can only be a consumer, not a source.  RegisterItem()
+        // is sufficient.
+        std::vector<TEXT_VAR_REF_KEY> updated = FilterTrackable( text->GetTextVarReferences() );
+        m_tracker.RegisterItem( aItem, updated );
+    }
+    else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( aItem ) )
+    {
+        m_tracker.RegisterItem( aItem, FilterTrackable( barcode->GetTextVarReferences() ) );
     }
     else
     {
-        // Non-text item (e.g., FOOTPRINT) — its own children were registered
-        // separately on add, so we only need the fan-out for source keys.
-        m_tracker.HandleItemChanged( aItem, {} );
-
-        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
-        {
-            // Footprint fields may themselves have been edited (value/ref
-            // change). Re-register each so the dependency graph stays current.
-            for( PCB_FIELD* field : fp->GetFields() )
-            {
-                std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
-                m_tracker.RegisterItem( field, fieldRefs );
-            }
-
-            // Graphical items (silkscreen text etc.) may also reference
-            // text vars and may have been edited out-of-band.
-            for( BOARD_ITEM* child : fp->GraphicalItems() )
-            {
-                if( EDA_TEXT* childText = dynamic_cast<EDA_TEXT*>( child ) )
-                {
-                    m_tracker.RegisterItem( child,
-                            FilterTrackable( childText->GetTextVarReferences() ) );
-                }
-            }
-        }
+        m_tracker.RegisterItem( aItem, {} );
     }
 }
 
@@ -176,18 +212,18 @@ void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOA
 
 
 void BOARD_TEXT_VAR_ADAPTER::OnBoardCompositeUpdate( BOARD&                    aBoard,
-                                                    std::vector<BOARD_ITEM*>& aAdded,
-                                                    std::vector<BOARD_ITEM*>& aRemoved,
-                                                    std::vector<BOARD_ITEM*>& aChanged )
+                                                     std::vector<BOARD_ITEM*>& aAdded,
+                                                     std::vector<BOARD_ITEM*>& aRemoved,
+                                                     std::vector<BOARD_ITEM*>& aChanged )
 {
     // Apply in order: remove, add, change. Removals first so re-added items
     // with recycled pointers don't collide in the index. Changes last so
     // fan-outs see the updated board state.
     for( BOARD_ITEM* item : aRemoved )
-        unregisterItem( item );
+        OnBoardItemRemoved( aBoard, item );
 
     for( BOARD_ITEM* item : aAdded )
-        registerItem( item );
+        OnBoardItemAdded( aBoard, item );
 
     for( BOARD_ITEM* item : aChanged )
         OnBoardItemChanged( aBoard, item );
@@ -210,7 +246,24 @@ std::vector<TEXT_VAR_REF_KEY> BOARD_TEXT_VAR_ADAPTER::ExtractSourceKeys( EDA_ITE
 {
     std::vector<TEXT_VAR_REF_KEY> out;
 
+    auto addKey =
+            [&]( const wxString& aPrimary )
+            {
+                if( aPrimary.IsEmpty() )
+                    return;
+
+                TEXT_VAR_REF_KEY key;
+                key.kind    = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
+                key.primary = aPrimary;
+
+                if( std::find( out.begin(), out.end(), key ) == out.end() )
+                    out.push_back( key );
+            };
+
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem );
+
+    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
+        fp = field->GetParentFootprint();
 
     if( !fp )
         return out;
@@ -219,13 +272,10 @@ std::vector<TEXT_VAR_REF_KEY> BOARD_TEXT_VAR_ADAPTER::ExtractSourceKeys( EDA_ITE
     // commit system for a per-field diff against a pre-image
     const wxString refdes = fp->GetReference();
 
-    if( refdes.IsEmpty() )
-        return out;
+    if( !refdes.IsEmpty() )
+        addKey( refdes );
 
-    TEXT_VAR_REF_KEY key;
-    key.kind    = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
-    key.primary = refdes;
-    out.push_back( key );
+    addKey( fp->m_Uuid.AsString() );
 
     return out;
 }

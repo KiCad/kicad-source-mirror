@@ -107,8 +107,7 @@ struct KICOMMON_API TEXT_VAR_REF_KEY
  * (drops OP and any future non-trackable kinds). Shared helper so per-module
  * adapters don't each re-implement the filter.
  */
-KICOMMON_API std::vector<TEXT_VAR_REF_KEY> FilterTrackable(
-        const std::vector<TEXT_VAR_REF_KEY>& aRefs );
+KICOMMON_API std::vector<TEXT_VAR_REF_KEY> FilterTrackable( const std::vector<TEXT_VAR_REF_KEY>& aRefs );
 
 
 struct KICOMMON_API TEXT_VAR_REF_KEY_HASH
@@ -297,6 +296,7 @@ public:
 private:
     void fanOutSourceKeys( EDA_ITEM* aItem );
 
+private:
     TEXT_VAR_DEPENDENCY_INDEX                              m_index;
     SourceKeyExtractor                                     m_extractSourceKeys;
 

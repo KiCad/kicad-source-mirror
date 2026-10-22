@@ -1077,7 +1077,15 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
                             }
 
                             if( aDep->IsBOARD_ITEM() )
-                                view->Update( aDep, KIGFX::REPAINT );
+                            {
+                                if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( aDep ) )
+                                {
+                                    text->ClearRenderCache();
+                                    text->ClearBoundingBoxCache();
+                                }
+
+                                view->Update( aDep, KIGFX::GEOMETRY | KIGFX::REPAINT );
+                            }
                         } );
             }
         }
