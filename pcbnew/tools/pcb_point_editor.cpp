@@ -1953,7 +1953,8 @@ class SHAPE_GROUP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     SHAPE_GROUP_POINT_EDIT_BEHAVIOR( PCB_GROUP& aGroup ) :
             m_group( &aGroup ),
-            m_parent( &aGroup )
+            m_parent( &aGroup ),
+            m_pinned( std::nullopt )
     {
         for( BOARD_ITEM* item : aGroup.GetBoardItems() )
         {
@@ -1966,10 +1967,12 @@ public:
         }
     }
 
-    SHAPE_GROUP_POINT_EDIT_BEHAVIOR( std::vector<PCB_SHAPE*> aShapes, BOARD_ITEM* aParent ) :
+    SHAPE_GROUP_POINT_EDIT_BEHAVIOR( std::vector<PCB_SHAPE*> aShapes, BOARD_ITEM* aParent,
+                                     const std::optional<VECTOR2I>& aPinned ) :
             m_group( nullptr ),
             m_shapes( std::move( aShapes ) ),
-            m_parent( aParent )
+            m_parent( aParent ),
+            m_pinned( aPinned )
     {
         for( PCB_SHAPE* shape : m_shapes )
             m_originalWidths[shape] = static_cast<double>( shape->GetWidth() );
@@ -2015,6 +2018,12 @@ public:
 
         if( isModified( aEditedPoint, aPoints.Point( RECT_CENTER ) ) )
         {
+            if( m_pinned )
+            {
+                UpdatePoints( aPoints );
+                return;
+            }
+
             VECTOR2I delta = aPoints.Point( RECT_CENTER ).GetPosition() - oldCenter;
 
             if( m_group )
@@ -2045,9 +2054,48 @@ public:
 
         RECTANGLE_POINT_EDIT_BEHAVIOR::PinEditedCorner( aEditedPoint, aPoints, tl, tr, bl, br );
 
-        double sx = static_cast<double>( br.x - tl.x ) / static_cast<double>( oldBox.GetWidth() );
-        double sy = static_cast<double>( br.y - tl.y ) / static_cast<double>( oldBox.GetHeight() );
-        double scale = ( sx + sy ) / 2.0;
+        VECTOR2I origin = oldCenter;
+        double   scale;
+
+        // A scale holds exactly one point still, so a pinned selection has to scale about the pin
+        if( m_pinned )
+        {
+            VECTOR2I oldCorner( oldBox.GetLeft(), oldBox.GetTop() );
+
+            if( isModified( aEditedPoint, aPoints.Point( RECT_TOP_RIGHT ) ) )
+                oldCorner = VECTOR2I( oldBox.GetRight(), oldBox.GetTop() );
+            else if( isModified( aEditedPoint, aPoints.Point( RECT_BOT_RIGHT ) ) )
+                oldCorner = VECTOR2I( oldBox.GetRight(), oldBox.GetBottom() );
+            else if( isModified( aEditedPoint, aPoints.Point( RECT_BOT_LEFT ) ) )
+                oldCorner = VECTOR2I( oldBox.GetLeft(), oldBox.GetBottom() );
+
+            // Below this share of the selection diagonal a corner is too near the pin to scale by
+            const double MIN_ARM_RATIO = 0.1;
+
+            VECTOR2I oldArm = oldCorner - *m_pinned;
+            VECTOR2I newArm = aEditedPoint.GetPosition() - *m_pinned;
+            VECTOR2I diagonal( oldBox.GetWidth(), oldBox.GetHeight() );
+            double   span = static_cast<double>( oldArm.SquaredEuclideanNorm() );
+            double   floor = static_cast<double>( diagonal.SquaredEuclideanNorm() ) * MIN_ARM_RATIO * MIN_ARM_RATIO;
+
+            // A corner on the pin has no leverage, so any drag of it would scale wildly
+            if( span < floor )
+            {
+                UpdatePoints( aPoints );
+                return;
+            }
+
+            // Measured along the arm, so a corner level with the pin stays controllable
+            origin = *m_pinned;
+            scale = static_cast<double>( oldArm.Dot( newArm ) ) / span;
+        }
+        else
+        {
+            double sx = static_cast<double>( br.x - tl.x ) / static_cast<double>( oldBox.GetWidth() );
+            double sy = static_cast<double>( br.y - tl.y ) / static_cast<double>( oldBox.GetHeight() );
+
+            scale = ( sx + sy ) / 2.0;
+        }
 
         // Prevent scaling below a minimum threshold to avoid precision loss when shapes
         // are scaled to near-zero size. Also prevent negative scaling which would flip
@@ -2060,9 +2108,9 @@ public:
         for( PCB_SHAPE* shape : m_shapes )
         {
             aCommit.Modify( shape );
-            shape->Move( -oldCenter );
+            shape->Move( -origin );
             shape->Scale( scale );
-            shape->Move( oldCenter );
+            shape->Move( origin );
 
             if( auto shapeIt = m_originalWidths.find( shape ); shapeIt != m_originalWidths.end() )
             {
@@ -2097,6 +2145,7 @@ private:
     PCB_GROUP*                             m_group;
     std::vector<PCB_SHAPE*>                m_shapes;
     BOARD_ITEM*                            m_parent;
+    std::optional<VECTOR2I>                m_pinned;
     std::unordered_map<PCB_SHAPE*, double> m_originalWidths;
 };
 
@@ -2531,6 +2580,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     {
         // Multi-selection: check if all items are shapes
         std::vector<PCB_SHAPE*> shapes;
+        std::set<KIID>          shapeIds;
         bool allShapes = true;
         bool anyLocked = false;
 
@@ -2540,6 +2590,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( selItem );
                 shapes.push_back( shape );
+                shapeIds.insert( shape->m_Uuid );
 
                 if( shape->IsLocked() )
                     anyLocked = true;
@@ -2550,10 +2601,20 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( allShapes && shapes.size() > 1 && ( !anyLocked || overrideLocks ) )
+        std::vector<VECTOR2I> pinned;
+
+        if( allShapes && shapes.size() > 1 )
+            pinned = ConstraintPinnedPositions( board(), shapeIds );
+
+        // Two pins in different places leave a scale no fixed point to work from
+        if( allShapes && shapes.size() > 1 && ( !anyLocked || overrideLocks ) && pinned.size() < 2 )
         {
-            m_editorBehavior = std::make_unique<SHAPE_GROUP_POINT_EDIT_BEHAVIOR>(
-                    std::move( shapes ), item );
+            std::optional<VECTOR2I> pin;
+
+            if( !pinned.empty() )
+                pin = pinned.front();
+
+            m_editorBehavior = std::make_unique<SHAPE_GROUP_POINT_EDIT_BEHAVIOR>( std::move( shapes ), item, pin );
             m_editPoints = std::make_shared<EDIT_POINTS>( item );
             m_editorBehavior->MakePoints( *m_editPoints );
         }

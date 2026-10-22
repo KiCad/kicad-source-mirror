@@ -85,6 +85,34 @@ bool BoardHasConstraints( BOARD* aBoard )
 }
 
 
+std::vector<VECTOR2I> ConstraintPinnedPositions( BOARD* aBoard, const std::set<KIID>& aItems )
+{
+    std::vector<VECTOR2I> positions;
+
+    if( !aBoard )
+        return positions;
+
+    for( const PCB_CONSTRAINT* constraint : collectAllConstraints( aBoard ) )
+    {
+        if( constraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::FIXED_POSITION )
+            continue;
+
+        for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
+        {
+            if( !aItems.contains( member.m_item ) )
+                continue;
+
+            std::optional<VECTOR2I> pos = ConstraintAnchorPosition( aBoard, member );
+
+            if( pos && std::ranges::find( positions, *pos ) == positions.end() )
+                positions.push_back( *pos );
+        }
+    }
+
+    return positions;
+}
+
+
 bool ConstraintItemIsLocked( const BOARD_ITEM* aItem )
 {
     if( !aItem )

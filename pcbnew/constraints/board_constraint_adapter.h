@@ -546,6 +546,11 @@ CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTR
 bool BoardHasConstraints( BOARD* aBoard );
 
 
+/// The distinct board positions that fixed positions pin on @p aItems. A transform of those items
+/// has to leave every one of them where it is.
+std::vector<VECTOR2I> ConstraintPinnedPositions( BOARD* aBoard, const std::set<KIID>& aItems );
+
+
 /// True when the solver must treat @p aItem as immovable, either locked itself or living inside a
 /// locked footprint.  BOARD_ITEM::IsLocked() alone misses the parent-footprint case because most
 /// edit tools filter footprint children out before their lock checks run, while the solver
