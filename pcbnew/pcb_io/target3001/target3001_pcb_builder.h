@@ -37,6 +37,7 @@
 #include <io/target3001/target3001_parser.h>
 
 class BOARD;
+class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
 class FOOTPRINT;
@@ -106,8 +107,11 @@ private:
     /// Clearance rules between copper areas and each signal's tracks and vias
     void buildAreaClearanceRules();
 
-    /// Connect pads to areas of their own signal the way their aura and NO_AURA layers do
-    void connectAuraPads();
+    /// Rules that keep areas the aura distance from pads and vias, except on their NO_AURA layers
+    void buildAuraRules();
+
+    /// Tag a pad or via with its aura so the aura rules can match it
+    void tagAura( BOARD_CONNECTED_ITEM& aItem, const TARGET3001::ELEMENT_BASE& aBase, int aAura );
 
     NETINFO_ITEM* net( uint16_t aSignal ) const;
 
@@ -124,13 +128,6 @@ private:
 
     /// Cut @a aItem, grown per layer, from the pours of the deletion layers padstack @a aPadstack lists
     void addPadstackCuts( const BOARD_ITEM& aItem, int aPadstack );
-
-    struct AURA_PAD
-    {
-        PAD*                   pad;
-        uint16_t               signal;
-        std::set<PCB_LAYER_ID> noAura;   ///< layers where the area joins the pad solidly
-    };
 
     struct POUR_AREA
     {
@@ -157,7 +154,8 @@ private:
 
     /// Track and via clearances counted per signal, then per clearance value
     std::map<uint16_t, std::map<int, int>>   m_signalClearances;
-    std::vector<AURA_PAD>                    m_auraPads;
+    std::set<int>                            m_auraValues;      ///< distinct aura distances above zero
+    std::set<PCB_LAYER_ID>                   m_noAuraLayers;    ///< copper layers some NO_AURA list names
     std::set<std::pair<uint16_t, PCB_LAYER_ID>> m_pourLayers; ///< (signal, KiCad layer) holding an area
     wxString                                 m_designRules;
     TARGET3001::FONTS                        m_fonts;

@@ -1160,7 +1160,7 @@ types:
           Copper clearance. A copper area keeps this distance from the element even when both belong to
           the same signal, so a via or pad in its own area stands isolated unless signal lines drawn to it
           bridge the gap. Base property NO_AURA, a comma-separated list of board layer numbers (e.g. "2,16"),
-          drops the aura on those layers and the area then joins the element solidly. On two-layer boards
+          drops the aura on those layers and the area then joins the element solidly.
           An aura of 0 leaves no gap on any layer.
           On two-layer boards this predicts the vendor fill around 1846 of 1929 signal vias inside areas of
           their own signal;

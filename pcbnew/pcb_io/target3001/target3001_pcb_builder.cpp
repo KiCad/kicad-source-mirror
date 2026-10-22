@@ -125,8 +125,8 @@ void TARGET3001_PCB_BUILDER::Build()
     buildSignalCopper();
     buildFreeItems();
     buildPourAreas();
-    connectAuraPads();
     buildAreaClearanceRules();
+    buildAuraRules();
 
     // A pour runs up to a contour stroke without clearance; KiCad has one edge clearance per board
     if( m_contourCarvesNothing )
@@ -161,6 +161,12 @@ bool TARGET3001_PCB_BUILDER::isCopper( int aLayer ) const
 
     return f == LAYER_FUNCTION::COPPER_BOTTOM || f == LAYER_FUNCTION::COPPER_INSIDE
            || f == LAYER_FUNCTION::COPPER_TOP;
+}
+
+
+static wxString ruleMm( int aValue )
+{
+    return wxString::FromUTF8( EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aValue ) ) + wxS( "mm" );
 }
 
 
@@ -208,16 +214,11 @@ void TARGET3001_PCB_BUILDER::buildAreaClearanceRules()
     if( boardCounts.empty() )
         return;
 
-    auto mm = []( int aValue )
-    {
-        return wxString::FromUTF8( EDA_UNIT_UTILS::FormatInternalUnits( pcbIUScale, aValue ) ) + wxS( "mm" );
-    };
-
     auto addRule = [&]( const wxString& aName, int aClearance, const wxString& aCondition )
     {
         m_designRules += wxString::Format( wxS( "\n(rule \"%s\"\n    (constraint clearance (min %s))\n"
                                                 "    (condition \"%s\"))\n" ),
-                                           aName, mm( aClearance ), aCondition );
+                                           aName, ruleMm( aClearance ), aCondition );
     };
 
     // An area keeps each element's own clearance, which KiCad tracks and vias cannot hold
@@ -240,33 +241,83 @@ void TARGET3001_PCB_BUILDER::buildAreaClearanceRules()
             condition += wxS( "B.NetName == " ) + ruleNetLiteral( name );
         }
 
-        addRule( wxS( "TARGET 3001! copper areas to " ) + mm( clearance ) + wxS( " signals" ), clearance,
+        addRule( wxS( "TARGET 3001! copper areas to " ) + ruleMm( clearance ) + wxS( " signals" ), clearance,
                  wxS( "A.Type == 'Zone' && (" ) + condition + wxS( ")" ) );
     }
 }
 
 
-void TARGET3001_PCB_BUILDER::connectAuraPads()
+void TARGET3001_PCB_BUILDER::buildAuraRules()
 {
-    for( const AURA_PAD& entry : m_auraPads )
-    {
-        bool hasArea = false;
-        bool joined = false;
+    if( m_pourLayers.empty() )
+        return;
 
-        for( PCB_LAYER_ID layer : entry.pad->GetLayerSet().CuStack() )
+    if( m_designRules.IsEmpty() )
+        m_designRules = wxS( "(version 1)\n" );
+
+    // Later rules win, so the NO_AURA layers come last
+    m_designRules += wxS( "\n(rule \"TARGET 3001! areas join own pads and vias\"\n"
+                          "    (condition \"A.hasCustomProperty('TARGET3001_AURA') && B.Type == 'Zone'\")\n"
+                          "    (constraint zone_connection solid))\n" );
+
+    for( int aura : m_auraValues )
+    {
+        m_designRules += wxString::Format( wxS( "\n(rule \"TARGET 3001! aura %s\"\n"
+                                                "    (condition \"A.customProperty('TARGET3001_AURA') == '%d' "
+                                                "&& B.Type == 'Zone'\")\n"
+                                                "    (constraint zone_connection none)\n"
+                                                "    (constraint physical_clearance (min %s)))\n" ),
+                                           ruleMm( aura ), aura, ruleMm( aura ) );
+    }
+
+    for( PCB_LAYER_ID layer : m_noAuraLayers )
+    {
+        wxString name = LSET::Name( layer );
+
+        m_designRules += wxString::Format( wxS( "\n(rule \"TARGET 3001! no aura on %s\"\n"
+                                                "    (layer \"%s\")\n"
+                                                "    (condition \"A.customProperty('TARGET3001_NO_AURA') == '*,%s,*' "
+                                                "&& B.Type == 'Zone'\")\n"
+                                                "    (constraint zone_connection solid)\n"
+                                                "    (constraint physical_clearance (min 0mm)))\n" ),
+                                           name, name, name );
+    }
+}
+
+
+void TARGET3001_PCB_BUILDER::tagAura( BOARD_CONNECTED_ITEM& aItem, const TARGET3001::ELEMENT_BASE& aBase, int aAura )
+{
+    aItem.SetCustomProperty( wxS( "TARGET3001_AURA" ), wxString::Format( wxS( "%d" ), aAura ) );
+
+    if( aAura <= 0 )
+        return;
+
+    m_auraValues.insert( aAura );
+
+    // Names are comma delimited both sides so a rule can match one layer with a wildcard
+    wxString layers;
+
+    if( const std::string* list = aBase.FindProp( "NO_AURA" ) )
+    {
+        wxStringTokenizer tokens( wxString::FromUTF8( *list ), wxS( "," ) );
+
+        while( tokens.HasMoreTokens() )
         {
-            if( !m_pourLayers.count( { entry.signal, layer } ) )
+            long layer = 0;
+
+            if( !tokens.GetNextToken().Trim().Trim( false ).ToLong( &layer ) || !isCopper( int( layer ) ) )
                 continue;
 
-            hasArea = true;
-            joined |= entry.noAura.count( layer ) > 0;
+            if( std::optional<PCB_LAYER_ID> cu = mapLayer( int( layer ) ) )
+            {
+                layers += ( layers.IsEmpty() ? wxS( "," ) : wxS( "" ) ) + LSET::Name( *cu ) + wxS( "," );
+                m_noAuraLayers.insert( *cu );
+            }
         }
-
-        // An isolated pad reaches its area only through the signal's own tracks; a pad joined on
-        // some layers stays joined on all so no connection is lost
-        if( hasArea )
-            entry.pad->SetLocalZoneConnection( joined ? ZONE_CONNECTION::FULL : ZONE_CONNECTION::NONE );
     }
+
+    if( !layers.IsEmpty() )
+        aItem.SetCustomProperty( wxS( "TARGET3001_NO_AURA" ), layers );
 }
 
 
@@ -1269,34 +1320,8 @@ void TARGET3001_PCB_BUILDER::addPad( const ELEMENT& aElem, FOOTPRINT* aFootprint
 
     pad->SetNet( net( b.signal ) );
 
-    // The aura isolates a pad from areas of its own signal too, except on the layers NO_AURA lists
     if( b.signal )
-    {
-        AURA_PAD entry{ pad, b.signal, {} };
-
-        if( src.clearance == 0 )
-        {
-            for( PCB_LAYER_ID cu : pad->GetLayerSet().CuStack() )
-                entry.noAura.insert( cu );
-        }
-        else if( const std::string* layers = b.FindProp( "NO_AURA" ) )
-        {
-            wxStringTokenizer tokens( wxString::FromUTF8( *layers ), wxS( "," ) );
-
-            while( tokens.HasMoreTokens() )
-            {
-                long layer = 0;
-
-                if( tokens.GetNextToken().Trim().Trim( false ).ToLong( &layer ) && isCopper( int( layer ) ) )
-                {
-                    if( std::optional<PCB_LAYER_ID> cu = mapLayer( int( layer ) ) )
-                        entry.noAura.insert( *cu );
-                }
-            }
-        }
-
-        m_auraPads.push_back( std::move( entry ) );
-    }
+        tagAura( *pad, b, src.clearance );
 
     fp->Add( pad, ADD_MODE::APPEND );
 
@@ -1385,6 +1410,10 @@ void TARGET3001_PCB_BUILDER::addVia( const ELEMENT& aElem )
     via->SetViaType( VIATYPE::THROUGH );
     via->SetLayerPair( F_Cu, B_Cu );
     via->SetNet( net( b.signal ) );
+
+    if( b.signal )
+        tagAura( *via, b, src.clearance );
+
     m_board->Add( via, ADD_MODE::APPEND );
 
     if( b.signal && src.clearance > 0 )
