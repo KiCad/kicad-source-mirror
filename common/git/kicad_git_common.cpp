@@ -2086,6 +2086,35 @@ void KIGIT_COMMON::SyncRemoteUrl( const wxString& aRawUrl )
 }
 
 
+void KIGIT_COMMON::FollowRewrittenUrl( const wxString& aRawUrl )
+{
+    wxString username;
+    wxString password;
+    wxString sshKey;
+    bool     secretFetched;
+
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        username = m_username;
+        password = m_password;
+        secretFetched = m_secretFetched;
+
+        if( !m_publicKeys.empty() )
+            sshKey = m_publicKeys.front();
+    }
+
+    SyncRemoteUrl( aRawUrl );
+
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    m_username = username;
+    m_password = password;
+    m_secretFetched = secretFetched;
+
+    if( !sshKey.IsEmpty() )
+        setSSHKeyUnlocked( sshKey );
+}
+
+
 KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 {
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
@@ -2445,6 +2474,9 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
     KIGIT_COMMON* common = parent->GetCommon();
 
+    // The transport's URL outranks a cached remote that may be empty or stale
+    common->SyncRemoteUrl( wxString::FromUTF8( aUrl ) );
+
     // The configured remote URL may embed a password. Keep it out of the trace log.
     wxString safeUrl = stripUrlUserinfo( wxString::FromUTF8( aUrl ) );
 
@@ -2500,8 +2532,11 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_SSH_KEY ) )
     {
+        // libgit2 fails a credential whose user differs from the one the SSH session already uses
+        wxString sshUser = ( aUsername && *aUsername ) ? wxString::FromUTF8( aUsername ) : parent->GetUsername();
+
         // SSH key authentication
-        int result = common->HandleSSHKeyAuthentication( aOut, parent->GetUsername() );
+        int result = common->HandleSSHKeyAuthentication( aOut, sshUser );
 
         // Translate exhausted-keys PASSTHROUGH into a proper auth error so the
         // retry loop runs and libgit2 doesn't emit "no callback set".

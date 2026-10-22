@@ -279,6 +279,10 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
     if( result == GIT_OK )
     {
+        // url.insteadOf may have rewritten the URL, which would otherwise drop the credentials typed here
+        if( const char* remoteUrl = git_remote_url( remote ) )
+            common.FollowRewrittenUrl( wxString::FromUTF8( remoteUrl ) );
+
         result = git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, &proxyOpts, nullptr );
 
         if( result == GIT_OK )

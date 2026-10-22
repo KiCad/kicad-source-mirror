@@ -465,6 +465,12 @@ public:
      */
     void SyncRemoteUrl( const wxString& aRawUrl );
 
+    /**
+     * Bind the session to a URL that url.insteadOf rewrote, keeping the username, password and
+     * key entered for the original.
+     */
+    void FollowRewrittenUrl( const wxString& aRawUrl );
+
     wxString GetGitRootDirectory() const;
 
     wxString GetRemotename() const;
@@ -520,11 +526,16 @@ public:
 
     void SetRemote( const wxString& aRemote )
     {
-        std::lock_guard<std::mutex> lock( m_credentialsMutex );
-        m_remote = aRemote;
-        m_password.clear();
-        m_secretFetched = false;
-        updateConnectionTypeUnlocked();
+        {
+            std::lock_guard<std::mutex> lock( m_credentialsMutex );
+            m_remote = aRemote;
+            m_password.clear();
+            m_secretFetched = false;
+            updateConnectionTypeUnlocked();
+        }
+
+        // Gathers the keys now, or the first transfer's sync would drop a key chosen after this
+        SyncRemoteUrl( aRemote );
     }
 
     wxString GetRemote() const

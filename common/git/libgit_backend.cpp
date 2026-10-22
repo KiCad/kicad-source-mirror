@@ -122,6 +122,21 @@ bool LIBGIT_BACKEND::IsLibraryAvailable()
 }
 
 
+// url.insteadOf can rewrite the clone URL, which would otherwise read as a new identity and drop the
+// credentials entered for the original
+static int clone_remote_cb( git_remote** aOut, git_repository* aRepo, const char* aName, const char* aUrl,
+                            void* aPayload )
+{
+    if( int rc = git_remote_create( aOut, aRepo, aName, aUrl ); rc != GIT_OK )
+        return rc;
+
+    if( const char* url = git_remote_url( *aOut ) )
+        static_cast<KIGIT_COMMON*>( aPayload )->FollowRewrittenUrl( wxString::FromUTF8( url ) );
+
+    return GIT_OK;
+}
+
+
 bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
 {
     KIGIT_COMMON* common = aHandler->GetCommon();
@@ -160,6 +175,8 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
     cloneOptions.fetch_opts.callbacks.credentials = credentials_cb;
     cloneOptions.fetch_opts.callbacks.payload = aHandler;
     cloneOptions.fetch_opts.proxy_opts.type = GIT_PROXY_AUTO;
+    cloneOptions.remote_cb = clone_remote_cb;
+    cloneOptions.remote_cb_payload = common;
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
