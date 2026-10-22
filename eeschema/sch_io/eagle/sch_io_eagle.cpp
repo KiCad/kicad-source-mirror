@@ -1557,12 +1557,14 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
             // signals, so a global bus label would join same-named buses project-wide where
             // Eagle only had visual grouping; (2) nets inside module instances are scoped
             // by the module's ports, so a global label would punch through the hierarchy.
-            if( segmentCount > 1 || m_netCounts[netName] > 1 )
+            if( aIsBus || !m_modules.empty() )
             {
-                if( aIsBus || !m_modules.empty() )
+                if( segmentCount > 1 || m_netCounts[netName] > 1 )
                     label.reset( new SCH_LABEL );
-                else
-                    label.reset( new SCH_GLOBALLABEL );
+            }
+            else
+            {
+                label.reset( new SCH_GLOBALLABEL );
             }
 
             if( label )
@@ -1586,6 +1588,8 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
                         label->SetSpinStyle( SPIN_STYLE::UP );
                 }
 
+                // adjustNetLabels() moves the label off a crossing wire so it does not join another net
+                segDesc.labels.push_back( label.get() );
                 screen->Append( label.release() );
             }
         }
