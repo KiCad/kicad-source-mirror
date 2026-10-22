@@ -733,16 +733,20 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             //bool               show = mainParts[1].Lower() != wxS( "none" );
             ELECTRICAL_PINTYPE elecType = ConvertElecType( mainParts[2] );
             wxString           pinNumber = mainParts[3];
-            VECTOR2D           pinPos( Convert( mainParts[4] ), Convert( mainParts[5] ) );
             //int                pinRot = Convert( mainParts[6] );
 
-            VECTOR2D pinDotPos( Convert( pinDotParts[0] ), Convert( pinDotParts[1] ) );
+            // The dot is where wires attach. The record's own position drifts from it in some exports
+            VECTOR2D pinPos( Convert( pinDotParts[0] ), Convert( pinDotParts[1] ) );
 
             bool     nameVisible = pinNameParts[0] != wxS( "0" );
             wxString pinName = pinNameParts[4];
 
             bool     numVisible = pinNumParts[0] != wxS( "0" );
             // wxString ptSize = pinNumParts[4];
+
+            // The shown number is the one the board's pads carry, and it can differ from the record's id
+            if( pinNumParts.size() > 4 && !pinNumParts[4].Trim().IsEmpty() )
+                pinNumber = pinNumParts[4].Trim();
 
             VECTOR2D startPoint;
             bool     vertical = false;
@@ -979,6 +983,13 @@ LIB_SYMBOL* SCH_EASYEDA_PARSER::ParseSymbol( const VECTOR2D&              aOrigi
     ksymbol->GetReferenceField().SetText( symbolPrefix );
     ksymbol->GetValueField().SetText( symbolName );
 
+    // Frames and other parts with no package never reach the board
+    if( ( valOpt = get_opt( aParams, wxS( "package" ) ) ) && *valOpt == wxS( "NONE" ) )
+    {
+        ksymbol->SetExcludedFromBoard( true );
+        ksymbol->SetExcludedFromBOM( true );
+    }
+
     for( wxString attrName : c_attributesWhitelist )
     {
         wxString srcName = attrName;
@@ -1155,6 +1166,10 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             loadedSymbols.emplace( symbolName, sym );
 
             wxString referenceStr = sym->GetReferenceField().GetText();
+
+            // A frame can share its designator with a real part, which hides that part from the netlist
+            if( sym->GetExcludedFromBoard() )
+                referenceStr = wxS( "#" ) + referenceStr;
 
             m_relOrigin = pcbOrigin;
             LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, symbolName );
