@@ -590,10 +590,10 @@ static void MoveOpenCourtyardItems( BOARD& aBoard )
                     degree[ends[i].first]--;
                     degree[ends[i].second]--;
 
-                    const int far = ends[i].first == node ? ends[i].second : ends[i].first;
+                    const int far_idx = ends[i].first == node ? ends[i].second : ends[i].first;
 
-                    if( degree[far] == 1 )
-                        open.push_back( far );
+                    if( degree[far_idx] == 1 )
+                        open.push_back( far_idx );
                 }
             }
 
