@@ -1921,17 +1921,48 @@ void PAD::SwapShapePositions( PAD* aLhs, PAD* aRhs )
 {
     wxCHECK( aLhs && aRhs, /* void */ );
 
-    VECTOR2I lhsShapePos = aLhs->ShapePos( PADSTACK::ALL_LAYERS );
-    VECTOR2I rhsShapePos = aRhs->ShapePos( PADSTACK::ALL_LAYERS );
+    LSET uniqueLayerUnion;
 
-    VECTOR2I lhsOffset = aLhs->GetOffset( PADSTACK::ALL_LAYERS );
-    VECTOR2I rhsOffset = aRhs->GetOffset( PADSTACK::ALL_LAYERS );
+    aLhs->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                uniqueLayerUnion.set( layer );
+            } );
 
-    RotatePoint( lhsOffset, aLhs->GetOrientation() );
-    RotatePoint( rhsOffset, aRhs->GetOrientation() );
+    aRhs->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                uniqueLayerUnion.set( layer );
+            } );
 
-    aLhs->SetPosition( rhsShapePos - lhsOffset );
-    aRhs->SetPosition( lhsShapePos - rhsOffset );
+    std::map<PCB_LAYER_ID, std::pair<VECTOR2I, VECTOR2I>> positions;
+
+    for( PCB_LAYER_ID layer : uniqueLayerUnion.Seq() )
+    {
+        VECTOR2I lhsShapePos = aLhs->ShapePos( layer );
+        VECTOR2I rhsShapePos = aRhs->ShapePos( layer );
+
+        VECTOR2I lhsOffset = aLhs->GetOffset( layer );
+        VECTOR2I rhsOffset = aRhs->GetOffset( layer );
+
+        RotatePoint( lhsOffset, aLhs->GetOrientation() );
+        RotatePoint( rhsOffset, aRhs->GetOrientation() );
+
+        positions[layer].first = rhsShapePos - lhsOffset;
+        positions[layer].second = lhsShapePos - rhsOffset;
+    }
+
+    aLhs->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                aLhs->SetPosition( positions[layer].first );
+            } );
+
+    aRhs->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                aRhs->SetPosition( positions[layer].second );
+            } );
 }
 
 
