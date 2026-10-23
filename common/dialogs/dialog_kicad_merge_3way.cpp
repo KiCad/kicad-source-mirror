@@ -408,6 +408,7 @@ void DIALOG_KICAD_MERGE_3WAY::showConflict( int aIndex )
     // not a side.
     m_radioUnresolved->SetLabel( offersMerge ? _( "Merge both changes" ) : _( "Not decided yet" ) );
     m_radioUnresolved->Enable( offersMerge );
+    m_panelResolution->Layout();
 
     switch( action.kind )
     {

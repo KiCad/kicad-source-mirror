@@ -4316,6 +4316,7 @@ int PCBNEW_JOBS_HANDLER::JobDiff( JOB* aJob )
 // ============================================================================
 #include <diff_merge/pcb_geometry_extractor.h>
 #include <diff_merge/pcb_merge_applier.h>
+#include <diff_merge/auto_resolution.h>
 #include <diff_merge/kicad_merge_engine.h>
 #include <diff_merge/pcb_diff_canvas_context.h>
 #include <dialogs/dialog_kicad_merge_3way.h>
@@ -4383,7 +4384,7 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
 
-    if( aInteractive && !plan.Resolved() )
+    if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
         if( !Pgm().IsGUI() )
         {

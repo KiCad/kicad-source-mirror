@@ -137,6 +137,9 @@ ApplyAutoResolutions( MERGE_PLAN&                          aPlan,
 
         if( it == aResolutions.end() )
         {
+            if( action.kind == ITEM_RES::MERGE_PROPS )
+                continue;
+
             out.status         = APPLY_AUTO_RESOLUTIONS_STATUS::PARTIAL;
             out.firstMissingId = action.id;
             return out;
@@ -165,7 +168,7 @@ std::vector<CONFLICT_LIST_ENTRY> BuildConflictList( const MERGE_PLAN& aPlan )
     {
         const ITEM_RESOLUTION& action = aPlan.actions[i];
 
-        if( !unresolvedSet.count( action.id ) )
+        if( !unresolvedSet.count( action.id ) && action.kind != ITEM_RES::MERGE_PROPS )
             continue;
 
         wxString label = action.id.AsString();

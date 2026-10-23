@@ -140,8 +140,9 @@ ApplyAutoResolutions( MERGE_PLAN&                          aPlan,
 
 
 /**
- * Build the list of conflict-action indices the dialog walks (i.e. the
- * positions in `plan.actions` whose ids appear in `plan.unresolved`).
+ * Build the list of conflict-action indices the dialog walks: the positions
+ * in `plan.actions` whose ids appear in `plan.unresolved`, plus the items the
+ * engine merged property by property, so the user can review that answer.
  *
  * Each entry carries the action index plus a human-readable label
  * truncated to 40 chars (an ellipsis + the right-most 39 chars if the

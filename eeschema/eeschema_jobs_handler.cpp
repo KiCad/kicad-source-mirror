@@ -3180,6 +3180,7 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
 // ============================================================================
 // JobSchMerge: sch_merge implementation
 // ============================================================================
+#include <diff_merge/auto_resolution.h>
 #include <diff_merge/sch_merge_applier.h>
 #include <dialogs/dialog_kicad_merge_3way.h>
 #include <jobs/scratch_doc.h>
@@ -3255,7 +3256,7 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
 
-    if( aInteractive && !plan.Resolved() )
+    if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
         if( !Pgm().IsGUI() )
         {

@@ -251,6 +251,35 @@ BOOST_AUTO_TEST_CASE( Apply_NoConflicts )
 }
 
 
+BOOST_AUTO_TEST_CASE( Apply_UncoveredMergedEditKeepsEngineAnswer )
+{
+    const KIID_PATH idA = MakePath( 2200 );
+    const KIID_PATH idB = MakePath( 2201 );
+
+    MERGE_PLAN plan;
+
+    ITEM_RESOLUTION a;
+    a.id = idA;
+    a.kind = ITEM_RES::MERGE_PROPS;
+    ITEM_RESOLUTION b;
+    b.id = idB;
+    b.kind = ITEM_RES::KEEP;
+    plan.actions.push_back( a );
+    plan.actions.push_back( b );
+    plan.unresolved.push_back( idB );
+
+    std::vector<std::size_t>     conflictIdx = { 0, 1 };
+    std::map<wxString, ITEM_RES> autoMap = { { idB.AsString(), ITEM_RES::TAKE_OURS } };
+
+    auto result = ApplyAutoResolutions( plan, conflictIdx, autoMap );
+
+    BOOST_CHECK( result.status == APPLY_AUTO_RESOLUTIONS_STATUS::COMPLETE );
+    BOOST_CHECK( plan.actions[0].kind == ITEM_RES::MERGE_PROPS );
+    BOOST_CHECK( plan.actions[1].kind == ITEM_RES::TAKE_OURS );
+    BOOST_CHECK( plan.unresolved.empty() );
+}
+
+
 // BuildConflictList ---------------------------------------------------------
 
 BOOST_AUTO_TEST_CASE( BuildConflictList_OnlyUnresolvedActions )
@@ -329,6 +358,29 @@ BOOST_AUTO_TEST_CASE( BuildConflictList_EmptyPlan )
 {
     MERGE_PLAN plan;
     BOOST_CHECK( BuildConflictList( plan ).empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BuildConflictList_MergedEditsAreListed )
+{
+    const KIID_PATH idA = MakePath( 2100 );
+    const KIID_PATH idB = MakePath( 2101 );
+
+    MERGE_PLAN plan;
+
+    ITEM_RESOLUTION a;
+    a.id = idA;
+    a.kind = ITEM_RES::MERGE_PROPS;
+    ITEM_RESOLUTION b;
+    b.id = idB;
+    b.kind = ITEM_RES::TAKE_THEIRS;
+    plan.actions.push_back( a );
+    plan.actions.push_back( b );
+
+    auto entries = BuildConflictList( plan );
+    BOOST_REQUIRE_EQUAL( entries.size(), 1u );
+    BOOST_CHECK_EQUAL( entries[0].actionIndex, 0u );
+    BOOST_CHECK( entries[0].id == idA );
 }
 
 
