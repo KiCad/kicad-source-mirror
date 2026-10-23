@@ -38,83 +38,65 @@ BOARD_TEXT_VAR_ADAPTER::BOARD_TEXT_VAR_ADAPTER( BOARD& aBoard ) :
 }
 
 
+std::vector<TEXT_VAR_REF_KEY> BOARD_TEXT_VAR_ADAPTER::collectKeys( BOARD_ITEM* aItem )
+{
+    std::vector<TEXT_VAR_REF_KEY> keys;
+
+    auto collect =
+            [&]( BOARD_ITEM* item )
+            {
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
+                {
+                    for( const TEXT_VAR_REF_KEY& key : FilterTrackable( text->GetTextVarReferences() ) )
+                    {
+                        if( std::find( keys.begin(), keys.end(), key ) == keys.end() )
+                            keys.push_back( key );
+                    }
+                }
+                // PCB_BARCODE wraps an EDA_TEXT internally
+                else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                {
+                    for( const TEXT_VAR_REF_KEY& key : FilterTrackable( barcode->GetTextVarReferences() ) )
+                    {
+                        if( std::find( keys.begin(), keys.end(), key ) == keys.end() )
+                            keys.push_back( key );
+                    }
+                }
+            };
+
+    collect( aItem );
+
+    // Group members participate in the COMMIT architecture as first-class items.  FOOTPRINT and
+    // PCB_TABLE children do not, and must therefore be collected into their parent's registration
+    // list
+    if ( aItem->Type() != PCB_GROUP_T )
+        aItem->RunOnChildren( collect, RECURSE_MODE::RECURSE );
+
+    return keys;
+}
+
+
 void BOARD_TEXT_VAR_ADAPTER::registerItem( BOARD_ITEM* aItem )
 {
-    if( !aItem )
-        return;
-
-    // Route the dynamic_cast through the pcbnew DSO where RTTI for EDA_TEXT is
-    // visible. The kicommon-side tracker stays RTTI-free.
-    EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
-
-    if( !text )
-    {
-        // PCB_BARCODE wraps an EDA_TEXT internally; register the barcode itself
-        // (not its inner PCB_TEXT) so invalidation callbacks receive the barcode
-        // as the dependent and the view can repaint it.
-        if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
-        {
-            m_tracker.RegisterItem( aItem, FilterTrackable( bc->GetTextVarReferences() ) );
-            return;
-        }
-
-        // FOOTPRINTs aren't themselves EDA_TEXT. Walk both their fields AND
-        // their graphical items — silkscreen/copper/courtyard layers can
-        // carry PCB_TEXT/PCB_TEXTBOX that reference `${...}`.
-        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
-        {
-            for( PCB_FIELD* field : fp->GetFields() )
-                registerItem( field );
-
-            for( BOARD_ITEM* child : fp->GraphicalItems() )
-                registerItem( child );
-        }
-
-        return;
-    }
-
-    m_tracker.RegisterItem( aItem, FilterTrackable( text->GetTextVarReferences() ) );
+    if( aItem )
+        m_tracker.RegisterItem( aItem, collectKeys( aItem ) );
 }
 
 
 void BOARD_TEXT_VAR_ADAPTER::unregisterItem( BOARD_ITEM* aItem )
 {
-    if( !aItem )
-        return;
-
-    m_tracker.UnregisterItem( aItem );
-
-    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
-    {
-        for( PCB_FIELD* field : fp->GetFields() )
-            m_tracker.UnregisterItem( field );
-
-        for( BOARD_ITEM* child : fp->GraphicalItems() )
-            unregisterItem( child );
-    }
+    if( aItem )
+        m_tracker.UnregisterItem( aItem );
 }
 
 
 void BOARD_TEXT_VAR_ADAPTER::OnBoardItemAdded( BOARD&, BOARD_ITEM* aItem )
 {
-    registerItem( aItem );
-
-    // Handle any fan-out from other items using this item as a source.  You might think no-one could
-    // yet be referencing something that was just added, but the add may be the result of an undo of
-    // a delete, and dangling cross-reference should get a chance to re-link to the item.
-    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
-    {
-        std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
-        m_tracker.HandleItemChanged( field, fieldRefs );
-    }
-    else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
-    {
-        for( PCB_FIELD* childField : fp->GetFields() )
-        {
-            std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( childField->GetTextVarReferences() );
-            m_tracker.HandleItemChanged( childField, fieldRefs );
-        }
-    }
+    // Register the item, AND handle any fan-out from other items using this item as a source.
+    // You might think no one could yet be referencing something that was just added, but if the
+    // add is the result of an undo of a delete, then any dangling cross-reference should get a
+    // chance to re-link to the item.
+    m_tracker.HandleItemChanged( aItem, collectKeys( aItem ) );
 }
 
 
@@ -127,22 +109,9 @@ void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD
 
 void BOARD_TEXT_VAR_ADAPTER::OnBoardItemRemoved( BOARD&, BOARD_ITEM* aItem )
 {
+    // Handle any fan-out from other items using this item as a source, and then unregister it.
+    m_tracker.HandleItemChanged( aItem, collectKeys( aItem ) );
     unregisterItem( aItem );
-
-    // Handle any fan-out from other items using this item as a source
-    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
-    {
-        std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
-        m_tracker.HandleItemChanged( field, fieldRefs );
-    }
-    else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
-    {
-        for( PCB_FIELD* childField : fp->GetFields() )
-        {
-            std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( childField->GetTextVarReferences() );
-            m_tracker.HandleItemChanged( childField, fieldRefs );
-        }
-    }
 }
 
 
@@ -155,52 +124,9 @@ void BOARD_TEXT_VAR_ADAPTER::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOA
 
 void BOARD_TEXT_VAR_ADAPTER::OnBoardItemChanged( BOARD&, BOARD_ITEM* aItem )
 {
-    if( !aItem )
-        return;
-
     // Re-register the item's own refs (its text may have changed), then fan out any cross-ref keys
     // this item could source so dependents refresh.
-
-    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
-    {
-        // A PCB_FIELD can be both a consumer and a source.  We must use HandleItemChanged() for
-        // it so that the fan-out is done.
-        std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( field->GetTextVarReferences() );
-        m_tracker.HandleItemChanged( field, fieldRefs );
-    }
-    else if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem ) )
-    {
-        // Footprint fields may themselves have been edited (value/ref change).  Again, these can
-        // be both consumer and/or source, so HandleItemChanged() is required.
-        for( PCB_FIELD* childField : fp->GetFields() )
-        {
-            std::vector<TEXT_VAR_REF_KEY> fieldRefs = FilterTrackable( childField->GetTextVarReferences() );
-            m_tracker.HandleItemChanged( childField, fieldRefs );
-        }
-
-        // Graphical items (silkscreen text etc.) may also reference text vars and may have
-        // been edited out-of-band.  They can only be consumers so RegisterItem() is sufficient.
-        for( BOARD_ITEM* child : fp->GraphicalItems() )
-        {
-            if( EDA_TEXT* childText = dynamic_cast<EDA_TEXT*>( child ) )
-                m_tracker.RegisterItem( child, FilterTrackable( childText->GetTextVarReferences() ) );
-        }
-    }
-    else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
-    {
-        // An EDA_TEXT which is not a PCB_FIELD can only be a consumer, not a source.  RegisterItem()
-        // is sufficient.
-        std::vector<TEXT_VAR_REF_KEY> updated = FilterTrackable( text->GetTextVarReferences() );
-        m_tracker.RegisterItem( aItem, updated );
-    }
-    else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( aItem ) )
-    {
-        m_tracker.RegisterItem( aItem, FilterTrackable( barcode->GetTextVarReferences() ) );
-    }
-    else
-    {
-        m_tracker.RegisterItem( aItem, {} );
-    }
+    m_tracker.HandleItemChanged( aItem, collectKeys( aItem ) );
 }
 
 

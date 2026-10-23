@@ -57,25 +57,25 @@ std::vector<TEXT_VAR_REF_KEY> SCHEMATIC_TEXT_VAR_ADAPTER::collectKeys( SCH_ITEM*
     std::vector<TEXT_VAR_REF_KEY> keys;
 
     auto collect =
-            [&]( SCH_ITEM* aTextItem )
+            [&]( SCH_ITEM* item )
             {
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aTextItem );
-
-                if( !text )
-                    return;
-
-                for( const TEXT_VAR_REF_KEY& key : FilterTrackable( text->GetTextVarReferences() ) )
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
                 {
-                    if( std::find( keys.begin(), keys.end(), key ) == keys.end() )
-                        keys.push_back( key );
+                    for( const TEXT_VAR_REF_KEY& key : FilterTrackable( text->GetTextVarReferences() ) )
+                    {
+                        if( std::find( keys.begin(), keys.end(), key ) == keys.end() )
+                            keys.push_back( key );
+                    }
                 }
             };
 
     collect( aItem );
 
-    // Group members are screen items in their own right
+    // Group members participate in the COMMIT architecture as first-class items.  FOOTPRINT and
+    // PCB_TABLE children do not, and must therefore be collected into their parent's registration
+    // list
     if( aItem->Type() != SCH_GROUP_T )
-        aItem->RunOnChildren( collect, RECURSE_MODE::NO_RECURSE );
+        aItem->RunOnChildren( collect, RECURSE_MODE::RECURSE );
 
     return keys;
 }
