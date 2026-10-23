@@ -39,7 +39,7 @@
 
 void PCB_EDIT_FRAME::LoadDrawingSheet()
 {
-    PROJECT_FILE&           project       = Prj().GetProjectFile();
+    PROJECT_FILE& project = Prj().GetProjectFile();
 
     // Load the drawing sheet from the filename stored in the project
     // If empty, or not existing, the default drawing sheet is loaded.
@@ -47,16 +47,15 @@ void PCB_EDIT_FRAME::LoadDrawingSheet()
     resolver.SetProject( &Prj() );
     resolver.SetProgramBase( &Pgm() );
 
-    wxString filename = resolver.ResolvePath( project.m_BoardDrawingSheetFile,
-                                              Prj().GetProjectPath(),
+    wxString filename = resolver.ResolvePath( project.m_BoardDrawingSheetFile, Prj().GetProjectPath(),
                                               { GetBoard()->GetEmbeddedFiles() } );
 
     wxString msg;
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
         ShowInfoBarError( msg, true );
-
 }
+
 
 bool PCB_EDIT_FRAME::LoadProjectSettings()
 {
