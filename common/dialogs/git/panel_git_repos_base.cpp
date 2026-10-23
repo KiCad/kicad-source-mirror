@@ -109,7 +109,7 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 
 	bSizerCommitData->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
 
-	m_authorDefaultNote = new wxStaticText( this, wxID_ANY, _("Used when a project's repository has no name and email of its own."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_authorDefaultNote = new wxStaticText( this, wxID_ANY, _("Fills in the Set Author dialog when Git has no name and email for a repository."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_authorDefaultNote->Wrap( -1 );
 	bSizerCommitData->Add( m_authorDefaultNote, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
