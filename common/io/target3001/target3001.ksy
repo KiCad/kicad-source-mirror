@@ -1451,7 +1451,9 @@ types:
         type: elem
         doc: |
           Board copper of the signal. Triangles on copper layers are stored copper surfaces, distinct from the
-          computed fill of area layers.
+          computed fill of area layers. Lines with a true THERMAL_SNIPPET property are thermal spokes the area
+          fill generated; the vendor ODB++ export omits them (4 of 3288 in the corpus, each coinciding with a
+          routed line), whatever their unknown_byte.
       - id: min_width
         type: s4
       - id: min_spacing
