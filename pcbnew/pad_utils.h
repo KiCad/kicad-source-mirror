@@ -26,6 +26,7 @@
 #include <layer_ids.h>
 
 class PAD;
+class PADSTACK;
 class UNITS_PROVIDER;
 
 namespace PAD_UTILS
@@ -44,6 +45,13 @@ bool PadHasMeaningfulRoundingRadius( const PAD& aPad, PCB_LAYER_ID aLayer );
  * According to IPC-7351C, this is 25%, or 0.25mm, whichever is smaller
  */
 double GetDefaultIpcRoundingRatio( const PAD& aPad, PCB_LAYER_ID aLayer );
+
+
+/**
+ * Remove the primary drill, the secondary and tertiary drills, and any post-machining
+ * operations from a padstack.
+ */
+void RemoveAllDrillsFromPadstack( PADSTACK& aPadstack );
 
 
 /**

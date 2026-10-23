@@ -27,6 +27,7 @@
 #include <geometry/shape_segment.h>
 #include <math/util.h>
 #include <pad.h>
+#include <padstack.h>
 #include <pcb_shape.h>
 #include <units_provider.h>
 
@@ -49,6 +50,16 @@ bool PAD_UTILS::PadHasMeaningfulRoundingRadius( const PAD& aPad, PCB_LAYER_ID aL
 {
     const PAD_SHAPE shape = aPad.GetShape( aLayer );
     return shape == PAD_SHAPE::ROUNDRECT || shape == PAD_SHAPE::CHAMFERED_RECT;
+}
+
+
+void PAD_UTILS::RemoveAllDrillsFromPadstack( PADSTACK& aPadstack )
+{
+    aPadstack.Drill() = {};
+    aPadstack.SecondaryDrill() = {};
+    aPadstack.TertiaryDrill() = {};
+    aPadstack.FrontPostMachining() = {};
+    aPadstack.BackPostMachining() = {};
 }
 
 

@@ -2184,17 +2184,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     switch( aPad->GetAttribute() )
     {
     case PAD_ATTRIB::PTH:
-        break;
-
     case PAD_ATTRIB::CONN:
     case PAD_ATTRIB::SMD:
-        // SMD and PAD_ATTRIB::CONN has no hole.
-        // basically, SMD and PAD_ATTRIB::CONN are same type of pads
-        // PAD_ATTRIB::CONN has just a default non technical layers that differs from SMD
-        // and are intended to be used in virtual edge board connectors
-        // However we can accept a non null offset,
-        // mainly to allow complex pads build from a set of basic pad shapes
-        aPad->SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     case PAD_ATTRIB::NPTH:
@@ -2324,77 +2315,88 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     aPad->SetLayerSet( padLayerMask );
 
-    // Backdrills are written through the PADSTACK accessors, which stamp each side's start layer
-    // (top = F_Cu, bottom = B_Cu) so the result is read back correctly by older KiCad.
-    int  backDrillSel = m_backDrillChoice->GetSelection();
-    bool wantTop = ( backDrillSel == 1 || backDrillSel == 3 );    // 1: Top, 3: Top & bottom
-    bool wantBottom = ( backDrillSel == 2 || backDrillSel == 3 ); // 2: Bottom
+    PADSTACK&  padstack = aPad->Padstack();
+    const bool canHaveDrills = aPad->GetAttribute() == PAD_ATTRIB::PTH || aPad->GetAttribute() == PAD_ATTRIB::NPTH;
 
-    PADSTACK& padstack = aPad->Padstack();
-
-    if( wantTop )
+    if( !canHaveDrills )
     {
-        padstack.SetBackdrillSize( true, m_backDrillTopSizeBinder.GetIntValue() );
-
-        if( m_backDrillTopLayer->GetSelection() != wxNOT_FOUND )
-            padstack.SetBackdrillEndLayer( true, ToLAYER_ID( (intptr_t) m_backDrillTopLayer->GetClientData(
-                                                         m_backDrillTopLayer->GetSelection() ) ) );
+        // The drill, backdrill and post-machining controls are disabled for this pad type, but
+        // may still hold content from an earlier type.  Clear the whole padstack drilling
+        // rather than trusting them.
+        PAD_UTILS::RemoveAllDrillsFromPadstack( padstack );
     }
     else
     {
-        padstack.SetBackdrillSize( true, std::nullopt );
+        // Backdrills are written through the PADSTACK accessors, which stamp each side's start
+        // layer (top = F_Cu, bottom = B_Cu) so the result is read back correctly by older KiCad.
+        int  backDrillSel = m_backDrillChoice->GetSelection();
+        bool wantTop = ( backDrillSel == 1 || backDrillSel == 3 );    // 1: Top, 3: Top & bottom
+        bool wantBottom = ( backDrillSel == 2 || backDrillSel == 3 ); // 2: Bottom
+
+        if( wantTop )
+        {
+            padstack.SetBackdrillSize( true, m_backDrillTopSizeBinder.GetIntValue() );
+
+            if( m_backDrillTopLayer->GetSelection() != wxNOT_FOUND )
+                padstack.SetBackdrillEndLayer( true, ToLAYER_ID( (intptr_t) m_backDrillTopLayer->GetClientData(
+                                                             m_backDrillTopLayer->GetSelection() ) ) );
+        }
+        else
+        {
+            padstack.SetBackdrillSize( true, std::nullopt );
+        }
+
+        if( wantBottom )
+        {
+            padstack.SetBackdrillSize( false, m_backDrillBottomSizeBinder.GetIntValue() );
+
+            if( m_backDrillBottomLayer->GetSelection() != wxNOT_FOUND )
+                padstack.SetBackdrillEndLayer( false, ToLAYER_ID( (intptr_t) m_backDrillBottomLayer->GetClientData(
+                                                              m_backDrillBottomLayer->GetSelection() ) ) );
+        }
+        else
+        {
+            padstack.SetBackdrillSize( false, std::nullopt );
+        }
+
+        // Front Post Machining
+        PADSTACK::POST_MACHINING_PROPS frontPostMachining;
+
+        switch( m_topPostMachining->GetSelection() )
+        {
+        case 1: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;           break;
+        case 2: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;           break;
+        default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;    break;
+        }
+
+        frontPostMachining.size = m_topPostMachineSize1Binder.GetIntValue();
+
+        if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            frontPostMachining.angle = KiROUND( m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
+        else
+            frontPostMachining.depth = m_topPostMachineSize2Binder.GetIntValue();
+
+        aPad->Padstack().FrontPostMachining() = frontPostMachining;
+
+        // Back Post Machining
+        PADSTACK::POST_MACHINING_PROPS backPostMachining;
+
+        switch( m_bottomPostMachining->GetSelection() )
+        {
+        case 1: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;            break;
+        case 2: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;            break;
+        default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;     break;
+        }
+
+        backPostMachining.size = m_bottomPostMachineSize1Binder.GetIntValue();
+
+        if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            backPostMachining.angle = KiROUND( m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
+        else
+            backPostMachining.depth = m_bottomPostMachineSize2Binder.GetIntValue();
+
+        aPad->Padstack().BackPostMachining() = backPostMachining;
     }
-
-    if( wantBottom )
-    {
-        padstack.SetBackdrillSize( false, m_backDrillBottomSizeBinder.GetIntValue() );
-
-        if( m_backDrillBottomLayer->GetSelection() != wxNOT_FOUND )
-            padstack.SetBackdrillEndLayer( false, ToLAYER_ID( (intptr_t) m_backDrillBottomLayer->GetClientData(
-                                                          m_backDrillBottomLayer->GetSelection() ) ) );
-    }
-    else
-    {
-        padstack.SetBackdrillSize( false, std::nullopt );
-    }
-
-    // Front Post Machining
-    PADSTACK::POST_MACHINING_PROPS frontPostMachining;
-
-    switch( m_topPostMachining->GetSelection() )
-    {
-    case 1:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
-    case 2:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
-    default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
-    }
-
-    frontPostMachining.size = m_topPostMachineSize1Binder.GetIntValue();
-
-    if( frontPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-        frontPostMachining.angle = KiROUND( m_topPostMachineSize2Binder.GetDoubleValue() * 10.0 );
-    else
-        frontPostMachining.depth = m_topPostMachineSize2Binder.GetIntValue();
-
-    aPad->Padstack().FrontPostMachining() = frontPostMachining;
-
-    // Back Post Machining
-    PADSTACK::POST_MACHINING_PROPS backPostMachining;
-
-    switch( m_bottomPostMachining->GetSelection() )
-    {
-    case 1:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
-    case 2:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
-    default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
-    }
-
-    backPostMachining.size = m_bottomPostMachineSize1Binder.GetIntValue();
-
-    if( backPostMachining.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-        backPostMachining.angle = KiROUND( m_bottomPostMachineSize2Binder.GetDoubleValue() * 10.0 );
-    else
-        backPostMachining.depth = m_bottomPostMachineSize2Binder.GetIntValue();
-
-    aPad->Padstack().BackPostMachining() = backPostMachining;
 
     // If we created new layers, initialize them
     for( const auto& [newLayer, initFromLayer] : newLayerMap )

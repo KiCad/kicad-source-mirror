@@ -25,7 +25,7 @@
 
 #include <memory>
 
-BOOST_AUTO_TEST_SUITE( PadSizeSetters )
+BOOST_AUTO_TEST_SUITE( PadSetters )
 
 // Regression test for GitLab #24333: editing a circular pad's diameter via the
 // Properties panel calls PAD::SetSizeX with a single dimension. SetSizeX must
@@ -93,6 +93,40 @@ BOOST_AUTO_TEST_CASE( SetSizeXOnRectPadLeavesYAlone )
 
     BOOST_CHECK_EQUAL( pad->GetSizeX(), pcbIUScale.mmToIU( 1.5 ) );
     BOOST_CHECK_EQUAL( pad->GetSizeY(), pcbIUScale.mmToIU( 0.5 ) );
+}
+
+
+// PAD::SetAttribute() must drop all drilling when the new type has no hole.
+// This is used (for example) when parsing an SMD pad as the pad starts as PTH
+// and then changes to SMD, which has no hole.
+BOOST_AUTO_TEST_CASE( SetAttributeClearsAllDrilling )
+{
+    BOARD board;
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
+
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( &board );
+    std::unique_ptr<PAD>       pad = std::make_unique<PAD>( fp.get() );
+
+    // Start with a plated through-hole pad with a drill and post-machining
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetLayerSet( PAD::PTHMask() );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+
+    // Set up "some" drilling and post-machining features
+    pad->Padstack().SetBackdrillSize( true, pcbIUScale.mmToIU( 1.2 ) );
+    pad->Padstack().SetBackdrillEndLayer( true, In1_Cu );
+    pad->Padstack().FrontPostMachining().mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
+    pad->Padstack().FrontPostMachining().size = pcbIUScale.mmToIU( 1.5 );
+
+    // Switch to SMD, which has no hole
+    pad->SetAttribute( PAD_ATTRIB::SMD );
+
+    // All drilling and post-machining features should be cleared
+    BOOST_CHECK_EQUAL( pad->GetDrillSize().x, 0 );
+    BOOST_CHECK_EQUAL( pad->GetDrillSize().y, 0 );
+    BOOST_CHECK_EQUAL( pad->Padstack().SecondaryDrill().size.x, 0 );
+    BOOST_CHECK( !pad->Padstack().FrontPostMachining().mode.has_value() );
+    BOOST_CHECK_EQUAL( pad->Padstack().FrontPostMachining().size, 0 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

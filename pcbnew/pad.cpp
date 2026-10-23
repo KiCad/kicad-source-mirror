@@ -1717,8 +1717,8 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
                     layerMask.set( copperLayers.Seq().front() );
             }
 
-            // No hole
-            m_padStack.Drill().size = VECTOR2I( 0, 0 );
+            // No hole, so no drilling of any kind
+            PAD_UTILS::RemoveAllDrillsFromPadstack( m_padStack );
             break;
         }
 
@@ -3034,8 +3034,8 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     {
     case PAD_ATTRIB::SMD:
     case PAD_ATTRIB::CONN:
-        // These pads do not have a hole (they are expected to be on one external copper layer)
-        SetDrillSize( VECTOR2I( 0, 0 ) );
+        // These pads have no hole, or any kind of drilling.
+        PAD_UTILS::RemoveAllDrillsFromPadstack( m_padStack );
         break;
 
     default:

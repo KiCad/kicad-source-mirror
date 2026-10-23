@@ -7172,18 +7172,10 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
     case T_smd:
         pad->SetAttribute( PAD_ATTRIB::SMD );
-
-        // Default PAD object is thru hole with drill.
-        // SMD pads have no hole
-        pad->SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     case T_connect:
         pad->SetAttribute( PAD_ATTRIB::CONN );
-
-        // Default PAD object is thru hole with drill.
-        // CONN pads have no hole
-        pad->SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     case T_np_thru_hole:
