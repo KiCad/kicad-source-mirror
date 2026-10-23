@@ -134,7 +134,7 @@ private:
     void onSettings( wxCommandEvent& aEvent );
     void setAuthor();
 
-    /// Set the status line text and wrap it to the current panel width.
+    /// Set the status line text and wrap it to the width of the label's column.
     void setStatusText( const wxString& aText );
 
     /// Show a command to copy under the status line, or hide the row when aCommand is empty.

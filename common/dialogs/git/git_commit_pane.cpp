@@ -684,7 +684,7 @@ void GIT_COMMIT_PANE::setStatusText( const wxString& aText )
 
 bool GIT_COMMIT_PANE::Layout()
 {
-    bool     done = wxPanel::Layout();
+    bool     done = GIT_COMMIT_PANE_BASE::Layout();
     wxSizer* column = m_emptyLabel ? m_emptyLabel->GetContainingSizer() : nullptr;
 
     if( !column || m_statusText.IsEmpty() )
@@ -706,7 +706,7 @@ bool GIT_COMMIT_PANE::Layout()
     m_emptyLabel->SetLabelText( KIUI::WrapText( m_emptyLabel, m_statusText, width - 1 ) );
 
     // The label's height follows its line count only once the sizer runs again
-    return wxPanel::Layout();
+    return GIT_COMMIT_PANE_BASE::Layout();
 }
 
 

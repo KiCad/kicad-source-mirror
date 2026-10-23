@@ -102,7 +102,8 @@ struct KIGIT_OWNERSHIP_REFUSAL
 {
     wxString summary;
     wxString trustCommand; ///< Kept apart from the summary so it can be shown in full and copied. Empty when
-                           ///< the folder name cannot be quoted safely for the user's shell.
+                           ///< no safe command exists for the folder, such as a name the shell could act on or
+                           ///< one git reads as a wildcard.
 };
 
 
