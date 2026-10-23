@@ -1978,7 +1978,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
     {
         // Update the remote config and cached branch info under the same lock.
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *common, this );
 
         if( !lock.owns_lock() )
             return;
@@ -2097,7 +2097,7 @@ void PROJECT_TREE_PANE::switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, 
         wxString error;
 
         {
-            std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, this );
+            std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *aCommon, this );
 
             if( !lock.owns_lock() )
                 return;

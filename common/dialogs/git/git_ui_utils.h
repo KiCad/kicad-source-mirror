@@ -42,6 +42,10 @@ void ShowBusyMessage( wxWindow* aParent );
 /// UI thread only. Check owns_lock() before using the repository.
 [[nodiscard]] std::unique_lock<std::mutex> TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent );
 
+/// TryLockAction that first waits a moment for a status read or fetch to let go. For applying
+/// what the user has already typed, which the busy message would throw away.
+[[nodiscard]] std::unique_lock<std::mutex> WaitForActionLock( KIGIT_COMMON& aCommon, wxWindow* aParent );
+
 /// Put the current branch first, then local and remote branches with the newest tips first.
 /// Use the name to break ties. Callers can choose a different order.
 void SortBranchesForDisplay( std::vector<KIGIT_BRANCH_INFO>& aBranches );

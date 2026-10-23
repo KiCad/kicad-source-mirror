@@ -742,7 +742,7 @@ void GIT_ADVANCED_DIALOG::RunGitAction( const std::function<bool( KIGIT_COMMON&,
 
     {
         // Release the lock before reloading editors and refreshing other Git views.
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *common, this );
 
         if( !lock.owns_lock() )
             return;

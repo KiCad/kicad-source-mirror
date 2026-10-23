@@ -27,6 +27,7 @@
 #include <wx/listctrl.h>
 #include <wx/string.h>
 #include <wx/splitter.h>
+#include <wx/utils.h>
 
 #include <confirm.h>
 #include <diff_merge/diff_scene.h>
@@ -43,6 +44,22 @@ void KIGIT::ShowBusyMessage( wxWindow* aParent )
 std::unique_lock<std::mutex> KIGIT::TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent )
 {
     std::unique_lock<std::mutex> lock = aCommon.TryLockAction();
+
+    if( !lock.owns_lock() )
+        ShowBusyMessage( aParent );
+
+    return lock;
+}
+
+
+std::unique_lock<std::mutex> KIGIT::WaitForActionLock( KIGIT_COMMON& aCommon, wxWindow* aParent )
+{
+    std::unique_lock<std::mutex> lock;
+
+    {
+        wxBusyCursor busy;
+        lock = aCommon.TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
+    }
 
     if( !lock.owns_lock() )
         ShowBusyMessage( aParent );

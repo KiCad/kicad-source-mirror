@@ -220,7 +220,7 @@ bool KIGIT::EditGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const st
     bool saved = false;
 
     {
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, aParent );
+        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *aCommon, aParent );
 
         if( !lock.owns_lock() )
             return false;
