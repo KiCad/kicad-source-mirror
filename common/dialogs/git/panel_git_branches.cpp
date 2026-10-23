@@ -181,7 +181,7 @@ void PANEL_GIT_BRANCHES::Populate()
                 }
 
                 int shown = m_branchesList->GetItemCount();
-                m_branchCount->SetLabel( shown == 1 ? _( "1 branch" ) : wxString::Format( _( "%d branches" ), shown ) );
+                m_branchCount->SetLabel( wxString::Format( wxPLURAL( "%d branch", "%d branches", shown ), shown ) );
 
                 if( selectRow != wxNOT_FOUND )
                 {
@@ -256,12 +256,15 @@ void PANEL_GIT_BRANCHES::fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail )
         if( counts.ahead == 0 && counts.behind == 0 )
             sync = wxString::Format( _( "Up to date with %s." ), aDetail.upstream );
         else if( counts.behind == 0 )
-            sync = wxString::Format( _( "%zu commits ahead of %s." ), counts.ahead, aDetail.upstream );
+            sync = wxString::Format( wxPLURAL( "%zu commit ahead of %s.", "%zu commits ahead of %s.", counts.ahead ),
+                                     counts.ahead, aDetail.upstream );
         else if( counts.ahead == 0 )
-            sync = wxString::Format( _( "%zu commits behind %s." ), counts.behind, aDetail.upstream );
+            sync = wxString::Format( wxPLURAL( "%zu commit behind %s.", "%zu commits behind %s.", counts.behind ),
+                                     counts.behind, aDetail.upstream );
         else
-            sync = wxString::Format( _( "%zu commits ahead and %zu behind %s." ), counts.ahead, counts.behind,
-                                     aDetail.upstream );
+            sync = wxString::Format( wxPLURAL( "%zu commit ahead and %zu behind %s.",
+                                               "%zu commits ahead and %zu behind %s.", counts.ahead ),
+                                     counts.ahead, counts.behind, aDetail.upstream );
     }
 
     m_branchSync->SetLabel( sync );

@@ -92,22 +92,28 @@ void KIGIT::SortBranchesForDisplay( std::vector<KIGIT_BRANCH_INFO>& aBranches )
 
 wxString KIGIT::RelativeDate( const wxDateTime& aWhen )
 {
+    return RelativeDate( aWhen, wxDateTime::Now() );
+}
+
+
+wxString KIGIT::RelativeDate( const wxDateTime& aWhen, const wxDateTime& aNow )
+{
     if( !aWhen.IsValid() )
         return wxEmptyString;
 
-    wxTimeSpan diff = wxDateTime::Now() - aWhen;
+    wxTimeSpan diff = aNow - aWhen;
 
     if( diff.GetSeconds() < 60 )
         return _( "just now" );
 
-    if( diff.GetMinutes() < 60 )
-        return wxString::Format( _( "%d minutes ago" ), static_cast<int>( diff.GetMinutes() ) );
+    if( int minutes = diff.GetMinutes(); minutes < 60 )
+        return wxString::Format( wxPLURAL( "%d minute ago", "%d minutes ago", minutes ), minutes );
 
-    if( diff.GetHours() < 24 )
-        return wxString::Format( _( "%d hours ago" ), static_cast<int>( diff.GetHours() ) );
+    if( int hours = diff.GetHours(); hours < 24 )
+        return wxString::Format( wxPLURAL( "%d hour ago", "%d hours ago", hours ), hours );
 
-    if( diff.GetDays() < 30 )
-        return wxString::Format( _( "%d days ago" ), static_cast<int>( diff.GetDays() ) );
+    if( int days = diff.GetDays(); days < 30 )
+        return wxString::Format( wxPLURAL( "%d day ago", "%d days ago", days ), days );
 
     return aWhen.FormatISODate();
 }

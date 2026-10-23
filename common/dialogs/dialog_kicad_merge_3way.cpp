@@ -219,8 +219,11 @@ void DIALOG_KICAD_MERGE_3WAY::OnApply( wxCommandEvent& aEvent )
 
     if( !stillUnresolved.empty() )
     {
-        wxMessageBox( wxString::Format( _( "%zu conflict(s) still need a resolution. "
-                                           "Pick Ours, Theirs, or Ancestor for each one." ),
+        wxMessageBox( wxString::Format( wxPLURAL( "%zu conflict still needs a resolution. "
+                                                  "Pick Ours, Theirs, or Ancestor for each one.",
+                                                  "%zu conflicts still need a resolution. "
+                                                  "Pick Ours, Theirs, or Ancestor for each one.",
+                                                  stillUnresolved.size() ),
                                         stillUnresolved.size() ),
                       _( "Resolve Merge Conflicts" ),
                       wxOK | wxICON_INFORMATION, this );

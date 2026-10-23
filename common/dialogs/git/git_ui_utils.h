@@ -52,6 +52,7 @@ void SortBranchesForDisplay( std::vector<KIGIT_BRANCH_INFO>& aBranches );
 
 /// "just now", "3 hours ago", or the ISO date once it is more than a month old.
 wxString RelativeDate( const wxDateTime& aWhen );
+wxString RelativeDate( const wxDateTime& aWhen, const wxDateTime& aNow );
 
 /// Close a splitter's second pane, keeping the sash where the user left it for next time.
 void UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, int& aSashPos );

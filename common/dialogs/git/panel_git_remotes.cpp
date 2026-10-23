@@ -124,7 +124,7 @@ void PANEL_GIT_REMOTES::Populate()
                 }
 
                 int shown = m_remotesList->GetItemCount();
-                m_remoteCount->SetLabel( shown == 1 ? _( "1 remote" ) : wxString::Format( _( "%d remotes" ), shown ) );
+                m_remoteCount->SetLabel( wxString::Format( wxPLURAL( "%d remote", "%d remotes", shown ), shown ) );
 
                 if( selectRow != wxNOT_FOUND )
                 {

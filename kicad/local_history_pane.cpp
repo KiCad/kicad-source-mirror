@@ -112,12 +112,12 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
         else if( elapsed.GetMinutes() < 91 )
         {
             int minutes = elapsed.GetMinutes();
-            timeStr = wxString::Format( _( "%d minutes ago" ), minutes );
+            timeStr = wxString::Format( wxPLURAL( "%d minute ago", "%d minutes ago", minutes ), minutes );
         }
         else if( elapsed.GetHours() < 24 )
         {
             int hours = elapsed.GetHours();
-            timeStr = wxString::Format( _( "%d hours ago" ), hours );
+            timeStr = wxString::Format( wxPLURAL( "%d hour ago", "%d hours ago", hours ), hours );
         }
         else
         {

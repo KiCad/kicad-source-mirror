@@ -221,7 +221,8 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
     if( m_diff.Empty() )
         m_labelSummary->SetLabel( _( "No differences detected." ) );
     else
-        m_labelSummary->SetLabel( wxString::Format( _( "%zu change(s) detected." ), m_diff.Size() ) );
+        m_labelSummary->SetLabel( wxString::Format(
+                wxPLURAL( "%zu change detected.", "%zu changes detected.", m_diff.Size() ), m_diff.Size() ) );
 
     Layout();
 }
@@ -555,7 +556,8 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
     if( m_diff.Empty() )
         m_labelSummary->SetLabel( _( "No differences detected." ) );
     else
-        m_labelSummary->SetLabel( wxString::Format( _( "%zu change(s) detected." ), m_diff.Size() ) );
+        m_labelSummary->SetLabel( wxString::Format(
+                wxPLURAL( "%zu change detected.", "%zu changes detected.", m_diff.Size() ), m_diff.Size() ) );
 
     showChange( nullptr );
     Layout();

@@ -118,7 +118,7 @@ void PANEL_GIT_TAGS::Populate()
                 }
 
                 int shown = m_tagsList->GetItemCount();
-                m_tagCount->SetLabel( shown == 1 ? _( "1 tag" ) : wxString::Format( _( "%d tags" ), shown ) );
+                m_tagCount->SetLabel( wxString::Format( wxPLURAL( "%d tag", "%d tags", shown ), shown ) );
 
                 if( selectRow != wxNOT_FOUND )
                 {

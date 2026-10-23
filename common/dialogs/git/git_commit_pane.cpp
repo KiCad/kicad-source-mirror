@@ -1122,10 +1122,9 @@ void GIT_COMMIT_PANE::updateSummary()
 
     if( m_summaryFiles )
     {
-        wxString stagedText = staged == 1 ? _( "1 file will be committed" )
-                                          : wxString::Format( _( "%d files will be committed" ), staged );
-        wxString unstagedText = unstaged == 1 ? _( "1 left out" )
-                                              : wxString::Format( _( "%d left out" ), unstaged );
+        wxString stagedText = wxString::Format(
+                wxPLURAL( "%d file will be committed", "%d files will be committed", staged ), staged );
+        wxString unstagedText = wxString::Format( wxPLURAL( "%d left out", "%d left out", unstaged ), unstaged );
 
         m_summaryFiles->SetLabel( wxString::Format( wxS( "%s, %s" ), stagedText, unstagedText ) );
         m_summaryAdded->SetLabel( wxString::Format( wxS( "+%d" ), m_lineStats.first ) );

@@ -173,7 +173,7 @@ void PANEL_GIT_STASHES::Populate()
                 }
 
                 int shown = m_stashesList->GetItemCount();
-                m_stashCount->SetLabel( shown == 1 ? _( "1 stash" ) : wxString::Format( _( "%d stashes" ), shown ) );
+                m_stashCount->SetLabel( wxString::Format( wxPLURAL( "%d stash", "%d stashes", shown ), shown ) );
 
                 if( selectRow != wxNOT_FOUND )
                 {

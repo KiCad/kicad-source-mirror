@@ -265,7 +265,8 @@ wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution )
     }
 
     text << wxS( "\n\n" );
-    text << wxString::Format( _( "%zu property edit(s) in this resolution.\n" ),
+    text << wxString::Format( wxPLURAL( "%zu property edit in this resolution.\n",
+                                        "%zu property edits in this resolution.\n", aResolution.props.size() ),
                               aResolution.props.size() );
 
     return text;
