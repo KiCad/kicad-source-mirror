@@ -30,6 +30,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <netclass.h>
+#include <richio.h>
 #include <wildcards_and_files_ext.h>
 
 #include <wx/file.h>
@@ -47,6 +48,7 @@
 #include <properties/property_mgr.h>
 
 #include <algorithm>
+#include <set>
 
 
 namespace KICAD_DIFF
@@ -694,6 +696,87 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         docDeltas.push_back( std::move( d ) );
     }
 
+    auto summarizePlotOptions = []( const PCB_PLOT_PARAMS& aParams ) -> std::string
+    {
+        STRING_FORMATTER formatter;
+        aParams.Format( &formatter );
+        return wxString::Format( wxS( "hash %zx" ), std::hash<std::string>{}( formatter.GetString() ) )
+                .ToStdString();
+    };
+
+    const std::string beforePlot = summarizePlotOptions( m_before->GetPlotOptions() );
+    const std::string afterPlot = summarizePlotOptions( m_after->GetPlotOptions() );
+
+    if( beforePlot != afterPlot )
+    {
+        PROPERTY_DELTA d;
+        d.name = DOC_PROP_PLOT_OPTIONS;
+        d.before = DIFF_VALUE::FromString( beforePlot );
+        d.after = DIFF_VALUE::FromString( afterPlot );
+        docDeltas.push_back( std::move( d ) );
+    }
+
+    if( m_before->LegacyTeardrops() != m_after->LegacyTeardrops() )
+    {
+        PROPERTY_DELTA d;
+        d.name = DOC_PROP_LEGACY_TEARDROPS;
+        d.before = DIFF_VALUE::FromBool( m_before->LegacyTeardrops() );
+        d.after = DIFF_VALUE::FromBool( m_after->LegacyTeardrops() );
+        docDeltas.push_back( std::move( d ) );
+    }
+
+    // Board properties and variants get one property each, so edits to different entries merge cleanly
+    auto appendKeyedDeltas =
+            [&]( const wxString& aPrefix, const std::map<wxString, wxString>& aBefore,
+                 const std::map<wxString, wxString>& aAfter )
+            {
+                std::set<wxString> names;
+
+                for( const auto& [name, value] : aBefore )
+                    names.insert( name );
+
+                for( const auto& [name, value] : aAfter )
+                    names.insert( name );
+
+                auto render = []( const std::map<wxString, wxString>& aMap, const wxString& aName )
+                {
+                    auto it = aMap.find( aName );
+
+                    if( it == aMap.end() )
+                        return wxString( wxS( "(none)" ) );
+
+                    return wxS( "\"" ) + it->second + wxS( "\"" );
+                };
+
+                for( const wxString& name : names )
+                {
+                    const wxString before = render( aBefore, name );
+                    const wxString after = render( aAfter, name );
+
+                    if( before != after )
+                    {
+                        PROPERTY_DELTA d;
+                        d.name = aPrefix + name;
+                        d.before = DIFF_VALUE::FromString( before );
+                        d.after = DIFF_VALUE::FromString( after );
+                        docDeltas.push_back( std::move( d ) );
+                    }
+                }
+            };
+
+    auto boardVariants = []( const BOARD* aBoard )
+    {
+        std::map<wxString, wxString> result;
+
+        for( const wxString& name : aBoard->GetVariantNames() )
+            result[name] = aBoard->GetVariantDescription( name );
+
+        return result;
+    };
+
+    appendKeyedDeltas( DOC_PROP_BOARD_PROPERTY, m_before->GetProperties(), m_after->GetProperties() );
+    appendKeyedDeltas( DOC_PROP_VARIANT, boardVariants( m_before ), boardVariants( m_after ) );
+
     // Stackup is structural (layer count, dielectric materials, copper
     // weights) so a per-field walk would explode the change list. Detect
     // any change with BOARD_STACKUP::operator== and emit a single delta
@@ -1008,6 +1091,46 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         d.name = DOC_PROP_DRAWING_SHEET;
         d.before = DIFF_VALUE::FromString( beforeSheet );
         d.after = DIFF_VALUE::FromString( afterSheet );
+        docDeltas.push_back( std::move( d ) );
+    }
+
+    // One property per embedded file, so files added on different sides merge cleanly
+    const EMBEDDED_FILES* beforeFiles = m_before->GetEmbeddedFiles();
+    const EMBEDDED_FILES* afterFiles = m_after->GetEmbeddedFiles();
+    std::set<wxString>    fileNames;
+
+    for( const auto& [name, file] : beforeFiles->EmbeddedFileMap() )
+        fileNames.insert( name );
+
+    for( const auto& [name, file] : afterFiles->EmbeddedFileMap() )
+        fileNames.insert( name );
+
+    auto fileHash = []( const EMBEDDED_FILES::EMBEDDED_FILE* aFile ) -> wxString
+    {
+        return aFile ? wxString::FromUTF8( aFile->data_hash ) : wxString( wxS( "(none)" ) );
+    };
+
+    for( const wxString& name : fileNames )
+    {
+        const wxString beforeHash = fileHash( beforeFiles->GetEmbeddedFile( name ) );
+        const wxString afterHash = fileHash( afterFiles->GetEmbeddedFile( name ) );
+
+        if( beforeHash != afterHash )
+        {
+            PROPERTY_DELTA d;
+            d.name = DOC_PROP_EMBEDDED_FILE + name;
+            d.before = DIFF_VALUE::FromString( beforeHash );
+            d.after = DIFF_VALUE::FromString( afterHash );
+            docDeltas.push_back( std::move( d ) );
+        }
+    }
+
+    if( beforeFiles->GetAreFontsEmbedded() != afterFiles->GetAreFontsEmbedded() )
+    {
+        PROPERTY_DELTA d;
+        d.name = DOC_PROP_EMBED_FONTS;
+        d.before = DIFF_VALUE::FromBool( beforeFiles->GetAreFontsEmbedded() );
+        d.after = DIFF_VALUE::FromBool( afterFiles->GetAreFontsEmbedded() );
         docDeltas.push_back( std::move( d ) );
     }
 

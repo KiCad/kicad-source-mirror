@@ -235,13 +235,40 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
                     result->GetDesignSettings().m_NetSettings->CopyFrom( *aSource->GetDesignSettings().m_NetSettings );
                 };
 
+        // Layer names and types live on BOARD, not in the design settings
+        auto adoptLayers =
+                [&]( const BOARD* aSource )
+                {
+                    result->SetEnabledLayers( aSource->GetEnabledLayers() );
+
+                    for( PCB_LAYER_ID layer : aSource->GetEnabledLayers().Seq() )
+                    {
+                        const wxString name = aSource->GetLayerName( layer );
+
+                        result->SetLayerType( layer, aSource->GetLayerType( layer ) );
+                        result->SetLayerName( layer, name == BOARD::GetStandardLayerName( layer ) ? wxString()
+                                                                                               : name );
+                    }
+                };
+
         if( settingsSrc )
         {
             result->SetPageSettings( settingsSrc->GetPageSettings() );
             result->SetTitleBlock( settingsSrc->GetTitleBlock() );
             result->SetDesignSettings( settingsSrc->GetDesignSettings() );
+            result->SetPlotOptions( settingsSrc->GetPlotOptions() );
+            result->SetLegacyTeardrops( settingsSrc->LegacyTeardrops() );
+            result->SetProperties( settingsSrc->GetProperties() );
+            result->SetVariantNames( settingsSrc->GetVariantNames() );
+
+            for( const wxString& variant : settingsSrc->GetVariantNames() )
+                result->SetVariantDescription( variant, settingsSrc->GetVariantDescription( variant ) );
+
+            adoptLayers( settingsSrc );
             detachNetSettingsFor( result.get() );
             adoptNetSettings( settingsSrc );
+
+            *result->GetEmbeddedFiles() = *settingsSrc->GetEmbeddedFiles();
 
             // Flag the project-file-scoped fields (DRC severities) the
             // handler needs to mirror onto ancestor + persist via Save
@@ -436,6 +463,41 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
                     merged.SetPortrait( src->GetPageSettings().IsPortrait() );
                     pageTouched = true;
                 }
+                else if( prop.name == DOC_PROP_PLOT_OPTIONS )
+                {
+                    result->SetPlotOptions( src->GetPlotOptions() );
+                }
+                else if( prop.name == DOC_PROP_LEGACY_TEARDROPS )
+                {
+                    result->SetLegacyTeardrops( src->LegacyTeardrops() );
+                }
+                else if( prop.name.StartsWith( DOC_PROP_BOARD_PROPERTY ) )
+                {
+                    const wxString               key = prop.name.Mid( DOC_PROP_BOARD_PROPERTY.length() );
+                    std::map<wxString, wxString> props = result->GetProperties();
+                    auto                         it = src->GetProperties().find( key );
+
+                    if( it != src->GetProperties().end() )
+                        props[key] = it->second;
+                    else
+                        props.erase( key );
+
+                    result->SetProperties( props );
+                }
+                else if( prop.name.StartsWith( DOC_PROP_VARIANT ) )
+                {
+                    const wxString variant = prop.name.Mid( DOC_PROP_VARIANT.length() );
+
+                    if( src->HasVariant( variant ) )
+                    {
+                        result->AddVariant( variant );
+                        result->SetVariantDescription( variant, src->GetVariantDescription( variant ) );
+                    }
+                    else
+                    {
+                        result->DeleteVariant( variant );
+                    }
+                }
                 else if( prop.name == DOC_PROP_BOARD_THICKNESS )
                 {
                     result->GetDesignSettings().SetBoardThickness( src->GetDesignSettings().GetBoardThickness() );
@@ -446,6 +508,7 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
                     // copy the whole stackup descriptor.
                     result->GetDesignSettings().GetStackupDescriptor() =
                             src->GetDesignSettings().GetStackupDescriptor();
+                    adoptLayers( src );
                 }
                 else if( prop.name == DOC_PROP_DRC_SEVERITIES )
                 {
@@ -518,6 +581,20 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
                         m_report.drawingSheetFileSet = true;
                         m_report.projectFileTouched = true;
                     }
+                }
+                else if( prop.name.StartsWith( DOC_PROP_EMBEDDED_FILE ) )
+                {
+                    const wxString  fileName = prop.name.Mid( DOC_PROP_EMBEDDED_FILE.length() );
+                    EMBEDDED_FILES* files = result->GetEmbeddedFiles();
+
+                    files->RemoveFile( fileName );
+
+                    if( auto* file = src->GetEmbeddedFiles()->GetEmbeddedFile( fileName ) )
+                        files->AddFile( std::make_shared<EMBEDDED_FILES::EMBEDDED_FILE>( *file ) );
+                }
+                else if( prop.name == DOC_PROP_EMBED_FONTS )
+                {
+                    result->GetEmbeddedFiles()->SetAreFontsEmbedded( src->GetEmbeddedFiles()->GetAreFontsEmbedded() );
                 }
                 else
                 {

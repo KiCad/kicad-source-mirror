@@ -24,7 +24,9 @@
 #include <diff_merge/pcb_differ.h>
 #include <diff_merge/pcb_merge_applier.h>
 
+#include <advanced_config.h>
 #include <board.h>
+#include <io/kicad/kicad_io_utils.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <richio.h>
@@ -76,6 +78,22 @@ KIGIT_PCB_MERGE_DIFFERENCES KIGIT_PCB_MERGE::compareBoards( BOARD* aAncestor, BO
     findSetDifferences( ancestor_set, other_set, differences.m_added, differences.m_removed, differences.m_changed );
 
     return differences;
+}
+
+
+std::string KIGIT_PCB_MERGE::FormatBoard( BOARD* aBoard )
+{
+    STRING_FORMATTER   formatter;
+    PCB_IO_KICAD_SEXPR pcbIO;
+
+    pcbIO.FormatBoardToFormatter( &formatter, aBoard );
+
+    std::string text = std::move( formatter.MutableString() );
+
+    KICAD_FORMAT::Prettify( text, ADVANCED_CFG::GetCfg().m_CompactSave
+                                          ? KICAD_FORMAT::FORMAT_MODE::COMPACT_TEXT_PROPERTIES
+                                          : KICAD_FORMAT::FORMAT_MODE::NORMAL );
+    return text;
 }
 
 
@@ -183,11 +201,7 @@ int KIGIT_PCB_MERGE::Merge()
 
     try
     {
-        STRING_FORMATTER formatter;
-        PCB_IO_KICAD_SEXPR pcbIO;
-        pcbIO.SetOutputFormatter( &formatter );
-        pcbIO.Format( merged.get() );
-        serialized = formatter.GetString();
+        serialized = FormatBoard( merged.get() );
     }
     catch( const IO_ERROR& ioe )
     {

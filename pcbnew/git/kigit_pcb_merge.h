@@ -44,6 +44,13 @@ class KIGIT_PCB_MERGE
         int Merge();
 
         /**
+         * Serialize a board to a complete, prettified .kicad_pcb file image.
+         *
+         * @throw IO_ERROR if the board cannot be formatted.
+         */
+        static std::string FormatBoard( BOARD* aBoard );
+
+        /**
          * libgit2 merge-driver apply callback shim. Registered with the
          * driver registry under the name "kicad-pcb" so `.gitattributes`
          * entries `merge=kicad-pcb` route here.
