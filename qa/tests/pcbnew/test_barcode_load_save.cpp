@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
     const std::filesystem::path savePath = libPath / "barcode_roundtrip.kicad_mod";
 
     KI_TEST::DumpFootprintToFile( footprint, savePath );
-    std::unique_ptr<FOOTPRINT> footprint2 = KI_TEST::ReadFootprintFromFileOrStream( savePath );
+    std::unique_ptr<FOOTPRINT> footprint2 = KI_TEST::ReadFootprintFromFile( savePath );
 
     PCB_BARCODE* loaded = nullptr;
 

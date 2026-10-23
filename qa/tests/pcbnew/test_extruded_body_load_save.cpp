@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE( FullRoundTrip )
     const auto savePath = libPath / "extruded_body_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath );
 
-    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath );
+    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFile( savePath );
     BOOST_REQUIRE( loaded != nullptr );
 
     BOOST_REQUIRE( loaded->HasBody() );
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE( DefaultsRoundTrip )
     const auto savePath = libPath / "extruded_body_defaults_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath );
 
-    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath );
+    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFile( savePath );
     BOOST_REQUIRE( loaded != nullptr );
     BOOST_REQUIRE( loaded->HasBody() );
 
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE( NoExtrudedBodyRoundTrip )
     const auto savePath = libPath / "extruded_body_none_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath );
 
-    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath );
+    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFile( savePath );
     BOOST_REQUIRE( loaded != nullptr );
     BOOST_CHECK( !loaded->HasBody() );
 }
