@@ -109,6 +109,15 @@ KICOMMON_API wxString EllipsizeStatusText( wxWindow* aWindow, const wxString& aS
 KICOMMON_API wxString EllipsizeMenuText( const wxString& aString );
 
 /**
+ * Break text into lines no wider than aWidth pixels in aWindow's font.
+ *
+ * Lines break at spaces, and between characters in a word too wide to fit, so text written without spaces
+ * keeps every character.  wxStaticText::Wrap() leaves such a word whole.  A path or URL too wide to fit is
+ * ellipsized in the middle instead, since breaking it would hide where it ends.
+ */
+KICOMMON_API wxString WrapText( wxWindow* aWindow, const wxString& aText, int aWidth );
+
+/**
  * Check if a input control has focus.
  *
  * @param aFocus Control that has focus, if null, wxWidgets will be queried

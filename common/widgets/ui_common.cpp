@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <wx/arrstr.h>
 #include <wx/dcclient.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
@@ -231,6 +232,64 @@ wxString KIUI::EllipsizeMenuText( const wxString& aString )
         msg = msg.Left( 34 ) + wxT( "..." );
 
     return msg;
+}
+
+
+wxString KIUI::WrapText( wxWindow* aWindow, const wxString& aText, int aWidth )
+{
+    wxClientDC dc( aWindow );
+    dc.SetFont( aWindow->GetFont() );
+
+    auto measure =
+            [&]( const wxString& aLine )
+            {
+                return dc.GetTextExtent( aLine ).x;
+            };
+
+    wxString wrapped;
+
+    for( const wxString& line : wxSplit( aText, '\n', '\0' ) )
+    {
+        wxString current;
+
+        for( wxString word : wxSplit( line, ' ', '\0' ) )
+        {
+            const bool isPath = word.Contains( wxS( "/" ) ) || word.Contains( wxS( "\\" ) );
+
+            if( isPath && measure( word ) > aWidth )
+                word = wxControl::Ellipsize( word, dc, wxELLIPSIZE_MIDDLE, aWidth, wxELLIPSIZE_FLAGS_NONE );
+
+            const wxString joined = current.IsEmpty() ? word : current + wxS( " " ) + word;
+
+            if( measure( joined ) <= aWidth )
+            {
+                current = joined;
+                continue;
+            }
+
+            if( !current.IsEmpty() )
+            {
+                wrapped += current + wxS( "\n" );
+                current.clear();
+            }
+
+            for( const wxString& cluster : SplitGraphemeClusters( word ) )
+            {
+                if( !current.IsEmpty() && measure( current + cluster ) > aWidth )
+                {
+                    wrapped += current + wxS( "\n" );
+                    current.clear();
+                }
+
+                current += cluster;
+            }
+        }
+
+        wrapped += current + wxS( "\n" );
+    }
+
+    wrapped.RemoveLast();
+    return wrapped;
 }
 
 

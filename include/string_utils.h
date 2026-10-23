@@ -46,6 +46,14 @@ KICOMMON_API wxString ConvertToNewOverbarNotation( const wxString& aOldStr );
 KICOMMON_API bool ConvertSmartQuotesAndDashes( wxString* aString );
 
 /**
+ * Split text into the units a reader sees as one character.
+ *
+ * A unit is a base with its combining marks and variation selectors, or a conjunct joined by a virama.  Breaking
+ * text only between units keeps every character of our translations intact.  Emoji sequences are not kept whole.
+ */
+KICOMMON_API std::vector<wxString> SplitGraphemeClusters( const wxString& aText );
+
+/**
  * Escape/Unescape routines to safely encode reserved-characters in various contexts.
  */
 enum ESCAPE_CONTEXT
