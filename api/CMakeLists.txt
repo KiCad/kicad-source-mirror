@@ -20,6 +20,7 @@ set( Protobuf_IMPORT_DIRS ${Protobuf_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/pr
 
 set( KIAPI_PROTO_SRCS
     common/envelope.proto
+    common/tasks.proto
 
     common/types/base_types.proto
     common/types/embedded_files.proto

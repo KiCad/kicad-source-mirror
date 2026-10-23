@@ -388,6 +388,7 @@ set( KICOMMON_SRCS
     api/api_plugin.cpp
     api/api_plugin_manager.cpp
     api/api_server.cpp
+    api/api_task_scheduler.cpp
     api/api_utils.cpp
     api/cross_probe_client.cpp
     api/python_manager.cpp

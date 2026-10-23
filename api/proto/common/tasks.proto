@@ -1,0 +1,71 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Common types and commands for long-running asynchronous tasks.
+ *
+ * Only one task runs at a time: a start request is rejected with AS_BUSY while another
+ * task is active.  While a task is running, other commands are also rejected with AS_BUSY;
+ * only task status/result queries are answered.  In other words, these tasks are asynchronous
+ * from the point of view of the API client, but not from KiCad's point of view.  It is still
+ * not possible to carry out other editing operations while one of these tasks is running.
+ */
+
+syntax = "proto3";
+
+package kiapi.common.tasks;
+
+// Opaque identifier for a task started via the API.
+// Since: 11.0
+message TaskToken
+{
+  string value = 1;
+}
+
+// Since: 11.0
+enum TaskState
+{
+  TS_UNKNOWN = 0;
+  TS_RUNNING = 1;
+  TS_COMPLETED = 2;
+  TS_FAILED = 3;
+  TS_CANCELLED = 4;
+}
+
+// Query the status of a previously started task.  Returns TaskStatusResponse.
+// Since: 11.0
+message GetTaskStatus
+{
+  TaskToken token = 1;
+}
+
+// Since: 11.0
+message TaskStatusResponse
+{
+  TaskState state = 1;
+
+  // Populated when state is TS_FAILED or TS_CANCELLED; empty otherwise
+  string error_message = 2;
+}
+
+// Since: 11.0
+message StartTaskResponse
+{
+  TaskToken token = 1;
+}

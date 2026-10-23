@@ -24,6 +24,7 @@
 #include <tuple>
 
 #include <api/api_handler_common.h>
+#include <api/api_task_scheduler.h>
 #include <build_version.h>
 #include <eda_shape.h>
 #include <eda_text.h>
@@ -76,6 +77,8 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
             &API_HANDLER_COMMON::handleCloseAllDocuments );
     registerHandler<CreateDocument, OpenDocumentResponse>(
             &API_HANDLER_COMMON::handleCreateDocument );
+    registerHandler<tasks::GetTaskStatus, tasks::TaskStatusResponse>(
+            &API_HANDLER_COMMON::handleGetTaskStatus );
 }
 
 
@@ -692,4 +695,30 @@ HANDLER_RESULT<GetPathsResponse> API_HANDLER_COMMON::handleGetPaths( const HANDL
     addPath( types::PATH_STOCK_TEMPLATES, PATHS::GetStockTemplatesPath() );
 
     return reply;
+}
+
+
+HANDLER_RESULT<tasks::TaskStatusResponse> API_HANDLER_COMMON::handleGetTaskStatus(
+        const HANDLER_CONTEXT<tasks::GetTaskStatus>& aCtx )
+{
+    if( !aCtx.Request.has_token() || aCtx.Request.token().value().empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "no task token provided" );
+        return tl::unexpected( e );
+    }
+
+    std::optional<tasks::TaskStatusResponse> status =
+            API_TASK_SCHEDULER::Instance().GetStatus( aCtx.Request.token().value() );
+
+    if( !status )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "unknown task token {}", aCtx.Request.token().value() ) );
+        return tl::unexpected( e );
+    }
+
+    return *status;
 }
