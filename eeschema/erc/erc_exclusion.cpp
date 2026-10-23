@@ -44,6 +44,11 @@ static void canonicalizeExclusion( kiapi::schematic::ErcExclusion& aMessage )
     // Display names can change without changing an exclusion's sheet identity.
     auto& marker = *aMessage.mutable_marker();
 
+    // Clear additional fields not part of the exclusion
+    marker.clear_description();
+    marker.clear_severity();
+    marker.clear_excluded();
+
     if( marker.has_sheet_specific_path() )
         marker.mutable_sheet_specific_path()->clear_path_human_readable();
 

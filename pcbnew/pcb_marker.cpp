@@ -100,7 +100,7 @@ PCB_MARKER::~PCB_MARKER()
 }
 
 
-static void ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMarker )
+void PCB_MARKER::ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMarker )
 {
     std::shared_ptr<DRC_ITEM> drc = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
 
@@ -146,6 +146,22 @@ static void ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMarker )
             layer = F_Cu;
 
         aMsg.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( layer ) );
+    }
+
+    if( const DRC_RULE* rule = drc->GetViolatingRule() )
+        aMsg.set_violating_rule( rule->m_Name.ToUTF8() );
+
+    aMsg.set_description( HYPERLINK_DV_RENDERER::StripMarkup( drc->GetErrorMessage( false ) ).ToUTF8() );
+
+    if( aMarker.GetBoard() )
+    {
+        aMsg.set_severity( ToProtoEnum<SEVERITY, kiapi::common::types::RuleSeverity>( aMarker.GetSeverity() ) );
+        aMsg.set_excluded( aMarker.IsTreatedAsExcluded() );
+    }
+    else if( aMarker.IsExcluded() )
+    {
+        aMsg.set_severity( ToProtoEnum<SEVERITY, kiapi::common::types::RuleSeverity>( RPT_SEVERITY_EXCLUSION ) );
+        aMsg.set_excluded( true );
     }
 }
 

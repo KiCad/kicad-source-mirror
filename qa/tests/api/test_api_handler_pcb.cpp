@@ -27,18 +27,23 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
+#include <board.h>
+#include <connectivity/connectivity_data.h>
+#include <drc/drc_exclusion.h>
+#include <drc/drc_item.h>
+#include <drc/drc_rule.h>
+#include <pcb_marker.h>
+#include <settings/settings_manager.h>
+#include <zone.h>
+
 #include <api/api_handler_pcb.h>
 #include <api/headless_pcb_context.h>
 #include <api/board/board_commands.pb.h>
+#include <api/board/board_rules.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/envelope.pb.h>
 #include <api/common/types/base_types.pb.h>
 #include <jobs/job_export_pcb_odb.h>
-
-#include <board.h>
-#include <connectivity/connectivity_data.h>
-#include <settings/settings_manager.h>
-#include <zone.h>
 
 
 namespace
@@ -334,6 +339,46 @@ BOOST_AUTO_TEST_CASE( RevertDocumentWithoutCommitPassesGuard )
 
     BOOST_REQUIRE( !result.has_value() );
     BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BAD_REQUEST );
+}
+
+
+BOOST_AUTO_TEST_CASE( DrcExclusionDropsMarkerReportFields )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+    drcItem->SetItems( KIID( "12345678-1234-1234-1234-123456789abc" ),
+                       KIID( "87654321-4321-4321-4321-cba987654321" ) );
+
+    DRC_RULE rule( wxS( "custom clearance" ) );
+    drcItem->SetViolatingRule( &rule );
+
+    PCB_MARKER* marker = new PCB_MARKER( drcItem, VECTOR2I( 1000, 1000 ) );
+    board->Add( marker );
+    marker->SetExcluded( true, "Test exclusion comment" );
+
+    kiapi::board::DrcMarker msg;
+    PCB_MARKER::ToProto( msg, *marker );
+    BOOST_CHECK_EQUAL( msg.violating_rule(), "custom clearance" );
+    BOOST_CHECK( !msg.description().empty() );
+    BOOST_CHECK( msg.excluded() );
+
+    DRC_EXCLUSION exclusion = DRC_EXCLUSION::FromMarker( *marker );
+    const kiapi::board::DrcMarker& canonical = exclusion.ToProto().marker();
+
+    BOOST_CHECK( canonical.violating_rule().empty() );
+    BOOST_CHECK( canonical.description().empty() );
+    BOOST_CHECK_EQUAL( canonical.severity(), kiapi::common::types::RuleSeverity::RS_UNKNOWN );
+    BOOST_CHECK( !canonical.excluded() );
+
+    // Canonicalization is stable across a proto round trip
+    DRC_EXCLUSION roundTripped = DRC_EXCLUSION::FromProto( exclusion.ToProto() );
+    BOOST_CHECK( roundTripped == exclusion );
+
+    const kiapi::board::DrcMarker& roundTrippedMsg = roundTripped.ToProto().marker();
+    BOOST_CHECK( roundTrippedMsg.violating_rule().empty() );
+    BOOST_CHECK( roundTrippedMsg.description().empty() );
+    BOOST_CHECK( !roundTrippedMsg.excluded() );
 }
 
 

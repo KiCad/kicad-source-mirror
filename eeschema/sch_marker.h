@@ -57,6 +57,8 @@ public:
     static SCH_MARKER* FromProto( const kiapi::schematic::ErcMarker& aMsg,
                                   const SCH_SHEET_LIST& aSheetList );
 
+    static void ToProto( kiapi::schematic::ErcMarker& aMsg, const SCH_MARKER& aMarker );
+
     std::vector<int> ViewGetLayers() const override;
 
     SCH_LAYER_ID GetColorLayer() const;

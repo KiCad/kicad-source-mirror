@@ -102,7 +102,7 @@ void SCH_MARKER::swapData( SCH_ITEM* aItem )
 }
 
 
-static void ToProto( kiapi::schematic::ErcMarker& aMsg, const SCH_MARKER& aMarker )
+void SCH_MARKER::ToProto( kiapi::schematic::ErcMarker& aMsg, const SCH_MARKER& aMarker )
 {
     std::shared_ptr<ERC_ITEM> erc = std::static_pointer_cast<ERC_ITEM>( aMarker.GetRCItem() );
 
@@ -120,11 +120,14 @@ static void ToProto( kiapi::schematic::ErcMarker& aMsg, const SCH_MARKER& aMarke
     if( erc->AuxItemHasSheetPath() )
         PackSheetPath( *aMsg.mutable_aux_item_sheet_path(), erc->GetAuxItemSheetPath() );
 
-    if( erc->GetErrorCode() == ERCE_GENERIC_WARNING
-            || erc->GetErrorCode() == ERCE_GENERIC_ERROR
-            || erc->GetErrorCode() == ERCE_UNRESOLVED_VARIABLE )
+    SCHEMATIC* schematic = aMarker.Schematic();
+
+    if( schematic
+        && ( erc->GetErrorCode() == ERCE_GENERIC_WARNING
+             || erc->GetErrorCode() == ERCE_GENERIC_ERROR
+             || erc->GetErrorCode() == ERCE_UNRESOLVED_VARIABLE ) )
     {
-        SCH_ITEM* sch_item = aMarker.Schematic()->ResolveItem( erc->GetMainItemID() );
+        SCH_ITEM* sch_item = schematic->ResolveItem( erc->GetMainItemID() );
         SCH_ITEM* parent = sch_item ? static_cast<SCH_ITEM*>( sch_item->GetParent() ) : nullptr;
         EDA_TEXT* text_item = dynamic_cast<EDA_TEXT*>( sch_item );
 
@@ -142,6 +145,19 @@ static void ToProto( kiapi::schematic::ErcMarker& aMsg, const SCH_MARKER& aMarke
     {
         if( id != niluuid )
             aMsg.add_items()->set_value( id.AsStdString() );
+    }
+
+    aMsg.set_description( HYPERLINK_DV_RENDERER::StripMarkup( erc->GetErrorMessage( false ) ).ToUTF8() );
+
+    if( schematic )
+    {
+        aMsg.set_severity( ToProtoEnum<SEVERITY, kiapi::common::types::RuleSeverity>( aMarker.GetSeverity() ) );
+        aMsg.set_excluded( aMarker.IsTreatedAsExcluded() );
+    }
+    else if( aMarker.IsExcluded() )
+    {
+        aMsg.set_severity( ToProtoEnum<SEVERITY, kiapi::common::types::RuleSeverity>( RPT_SEVERITY_EXCLUSION ) );
+        aMsg.set_excluded( true );
     }
 }
 

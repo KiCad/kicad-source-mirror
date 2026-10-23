@@ -53,6 +53,9 @@ public:
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
 
     static PCB_MARKER* FromProto( const kiapi::board::DrcMarker& aMsg );
+
+    static void ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMarker );
+
     static PCB_MARKER* FromLegacyString( const wxString& aData );
 
     void Move( const VECTOR2I& aMoveVector ) override

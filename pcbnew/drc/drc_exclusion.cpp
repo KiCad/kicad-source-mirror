@@ -34,6 +34,20 @@ struct DRC_EXCLUSION::IMPL
 };
 
 
+static void canonicalizeExclusion( kiapi::board::DrcExclusion& aMessage )
+{
+    if( !aMessage.has_marker() )
+        return;
+
+    auto& marker = *aMessage.mutable_marker();
+
+    marker.clear_violating_rule();
+    marker.clear_description();
+    marker.clear_severity();
+    marker.clear_excluded();
+}
+
+
 DRC_EXCLUSION::DRC_EXCLUSION() :
         m_impl( std::make_unique<IMPL>() )
 {
@@ -63,6 +77,7 @@ DRC_EXCLUSION DRC_EXCLUSION::FromMarker( const PCB_MARKER& aMarker )
 
     aMarker.Serialize( container );
     container.UnpackTo( ex.m_impl->message.mutable_marker() );
+    canonicalizeExclusion( ex.m_impl->message );
     ex.SetComment( aMarker.GetComment() );
 
     return ex;
@@ -73,6 +88,7 @@ DRC_EXCLUSION DRC_EXCLUSION::FromProto( const kiapi::board::DrcExclusion& aMessa
 {
     DRC_EXCLUSION ex;
     ex.m_impl->message.CopyFrom( aMessage );
+    canonicalizeExclusion( ex.m_impl->message );
     return ex;
 }
 
@@ -89,6 +105,7 @@ DRC_EXCLUSION DRC_EXCLUSION::FromLegacyStrings( const wxString& aMarkerData, con
         delete marker;
     }
 
+    canonicalizeExclusion( ex.m_impl->message );
     ex.SetComment( aComment );
     return ex;
 }
@@ -122,6 +139,7 @@ void to_json( nlohmann::json& aJson, const DRC_EXCLUSION& aEx )
 void from_json( const nlohmann::json& aJson, DRC_EXCLUSION& aEx )
 {
     std::ignore = google::protobuf::util::JsonStringToMessage( aJson.dump(), &aEx.m_impl->message ).ok();
+    canonicalizeExclusion( aEx.m_impl->message );
 }
 
 

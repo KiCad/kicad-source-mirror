@@ -119,6 +119,21 @@ message ErcMarker
   // When the ERC marker refers to an item that has no KIID itself (e.g a symbol field)
   // the parent item will be in items and this will be used to look up the child
   optional ErcSymbolChildReference child = 7;
+
+  // The descriptive message for the violation
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  string description = 8;
+
+  // Severity of the violation
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  kiapi.common.types.RuleSeverity severity = 9;
+
+  // True if the violation is suppressed by an exclusion
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  bool excluded = 10;
 }
 
 message ErcSeveritySetting

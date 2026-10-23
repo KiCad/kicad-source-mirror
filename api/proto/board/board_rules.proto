@@ -218,6 +218,26 @@ message DrcMarker
   // May be up to 4 items involved
   repeated kiapi.common.types.KIID items = 3;
   kiapi.board.types.BoardLayer layer = 4;
+
+  // The rule that was violated (e.g. "clearance")
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  string violating_rule = 5;
+
+  // The descriptive message for the violation
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  string description = 6;
+
+  // Severity of the violation
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  kiapi.common.types.RuleSeverity severity = 7;
+
+  // True if the violation is suppressed by an exclusion
+  // This field is report-only: it is filled in when available and is read-only to API clients.
+  // Since: 11.0
+  bool excluded = 8;
 }
 
 message DrcSeveritySetting
