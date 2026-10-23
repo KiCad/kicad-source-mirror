@@ -84,6 +84,7 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <project.h>
+#include <project/project_file.h>
 #include <tool/actions.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -1449,7 +1450,10 @@ void API_HANDLER_PCB::setDrawingSheetFileName( const wxString& aFileName )
     BASE_SCREEN::m_DrawingSheetFileName = aFileName;
 
     if( frame() )
+    {
+        frame()->Prj().GetProjectFile().m_BoardDrawingSheetFile = aFileName;
         frame()->LoadDrawingSheet();
+    }
 }
 
 
