@@ -28,9 +28,9 @@ BOOST_AUTO_TEST_CASE( FullRoundTrip )
     KI_TEST::SCOPED_TEMP_DIR tempLib( "kicad_qa_extruded_body_roundtrip" );
     const auto libPath = tempLib.CreateChildDir( "extruded_body_roundtrip.pretty" );
     const auto savePath = libPath / "extruded_body_roundtrip.kicad_mod";
-    KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
+    KI_TEST::DumpFootprintToFile( footprint, savePath );
 
-    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
+    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath );
     BOOST_REQUIRE( loaded != nullptr );
 
     BOOST_REQUIRE( loaded->HasBody() );
@@ -70,9 +70,9 @@ BOOST_AUTO_TEST_CASE( DefaultsRoundTrip )
     KI_TEST::SCOPED_TEMP_DIR tempLib( "kicad_qa_extruded_body_defaults_roundtrip" );
     const auto libPath = tempLib.CreateChildDir( "extruded_body_defaults_roundtrip.pretty" );
     const auto savePath = libPath / "extruded_body_defaults_roundtrip.kicad_mod";
-    KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
+    KI_TEST::DumpFootprintToFile( footprint, savePath );
 
-    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
+    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath );
     BOOST_REQUIRE( loaded != nullptr );
     BOOST_REQUIRE( loaded->HasBody() );
 
@@ -105,9 +105,9 @@ BOOST_AUTO_TEST_CASE( NoExtrudedBodyRoundTrip )
     KI_TEST::SCOPED_TEMP_DIR tempLib( "kicad_qa_extruded_body_none_roundtrip" );
     const auto libPath = tempLib.CreateChildDir( "extruded_body_none_roundtrip.pretty" );
     const auto savePath = libPath / "extruded_body_none_roundtrip.kicad_mod";
-    KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
+    KI_TEST::DumpFootprintToFile( footprint, savePath );
 
-    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
+    std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath );
     BOOST_REQUIRE( loaded != nullptr );
     BOOST_CHECK( !loaded->HasBody() );
 }
