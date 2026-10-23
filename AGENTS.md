@@ -6,8 +6,8 @@
 
 ## Code Style
 - The Code Style policy is located here: https://dev-docs.kicad.org/en/rules-guidelines/code-style/index.html
-- The repo contains a clang format configuration file, it does not match the code style policy exactly but it is close. The policy takes precedence.
-- The Code Style Policy is actively enforced for conributions, it is not a suggestion.
+- The repo contains a clang format configuration file. It does not match the code style policy exactly but it is close. The policy takes precedence.
+- The Code Style Policy is actively enforced for contributions; it is not a suggestion.
 - No emojis.
 
 ## Code
@@ -20,7 +20,7 @@
 - The Tool Generated Content policy is a requirement not a suggestion, there is zero tolerance for violations.
 - All commits MUST be marked with "Assisted-by:" trailer and your (agent tool name)
 - Commit messages must be human generated with the exception that you may translate non-English to English.
-- Merge requests must reference a open issue that was assigned to the merge request author. The Merge request will be closed automatically by a script if a open issue is not referenced and/or the issue is not assigned.
+- Merge requests must reference a open issue that was assigned to the merge request author. The Merge request will be closed automatically by a script if an open issue is not referenced and/or the issue is not assigned.
 - Merge request descriptions must be human generated, you may only translate the author's own words. There is zero tolerance for violating this policy and the merge request will be closed by bot or human.
 - The Merge Request form has a template that must be filled out, failure to fill out the template will result in immediate Merge Request closure.
 - Merge requests must be **ONE PER ISSUE**, we do not accept bulk unrelated fixes in one MR.
@@ -31,9 +31,9 @@
 - We do not accept agent generated Issue report(s) / Work Item(s). You may only translate the author's own words to English if there is a language gap.
     - The same applies to any comment replies.
     - Issues not adhering to this policy will be closed by bot or human.
-- The Gitlab Issue Template **MUST** be filled out, the issue will be closed automatically by a bot if you fail to fill out the issue.
+- The GitLab Issue Template **MUST** be filled out, the issue will be closed automatically by a bot if you fail to fill out the issue.
 - Issue reports must focus on what an issue is and how to reproduce it (if possible). We do not accept write-ups on how to fix the issue. Do not mention code, or the issue will be closed.
-- File a separate work item/issue per actual issue, do not *BULK UP* a single issue with multiple actual bugs
+- File a separate work item/issue per actual issue. Do not *BULK UP* a single issue with multiple actual bugs
 
 In summary, you may help the user create issue submissions but the user must create the content of the issue themselves.
 
