@@ -1027,6 +1027,7 @@ set( COMMON_SRCS
     properties/std_optional_variants.cpp
 
     database/database_connection.cpp
+    database/database_value.cpp
 
     http_lib/http_lib_connection.cpp
     http_lib/http_lib_settings.cpp

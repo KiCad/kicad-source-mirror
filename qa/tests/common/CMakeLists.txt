@@ -45,6 +45,7 @@ set( QA_COMMON_SRCS
     test_coroutine.cpp
     test_filter_kruskal.cpp
     test_database_lib_settings.cpp
+    test_database_value.cpp
     test_design_block_io.cpp
     test_design_block_library_adapter.cpp
     test_desktop_app_id.cpp

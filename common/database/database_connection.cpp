@@ -46,6 +46,7 @@
 #include <wx/log.h>
 
 #include <database/database_connection.h>
+#include <database/database_value.h>
 #include <database/database_cache.h>
 #include <core/profile.h>
 
@@ -103,7 +104,8 @@ static std::vector<RESULT_COLUMN> resultColumns( nanodbc::result& aResults )
 
 /**
  * Decodes the current row of a result set into strings keyed by column name.
- * Floating-point columns are formatted with {:G} and nulls become empty strings.
+ * Floating-point columns keep their full precision, exact numerics are trimmed decimal text and nulls become
+ * empty strings.
  */
 static void decodeRow( nanodbc::result& aResults, const std::vector<RESULT_COLUMN>& aColumns,
                        DATABASE_CONNECTION::ROW& aRow )
@@ -117,17 +119,22 @@ static void decodeRow( nanodbc::result& aResults, const std::vector<RESULT_COLUM
         case SQL_DOUBLE:
         case SQL_FLOAT:
         case SQL_REAL:
-        case SQL_DECIMAL:
-        case SQL_NUMERIC:
             try
             {
-                aRow[column.name] = fmt::format( "{:G}", aResults.get<double>( i ) );
+                aRow[column.name] = DatabaseValueToString( aResults.get<double>( i ) );
             }
             catch( nanodbc::null_access_error& )
             {
                 aRow[column.name] = std::string();
             }
 
+            break;
+
+        case SQL_DECIMAL:
+        case SQL_NUMERIC:
+            // Text avoids the double conversion that would round past 15 digits
+            aRow[column.name] =
+                    NormalizeDecimalText( toUTF8( aResults.get<nanodbc::string>( i, NANODBC_TEXT( "" ) ) ) );
             break;
 
         default:

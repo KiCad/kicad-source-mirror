@@ -18,12 +18,19 @@
 * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <cstdlib>
 #include <filesystem>
 #include <random>
 
 #include <fmt/format.h>
 #include <boost/test/unit_test.hpp>
 #include <nanodbc/nanodbc.h>
+
+#ifdef _WIN32
+#include <windows.h> // for sql.h
+#endif
+
+#include <sql.h>
 
 #include <database/database_connection.h>
 
@@ -177,6 +184,92 @@ BOOST_AUTO_TEST_CASE( QuoteCharactersInIdentifiers )
         BOOST_REQUIRE_MESSAGE( dc.SelectOne( table, std::make_pair( "Part ID", "P2" ), result ), dc.GetLastError() );
         BOOST_CHECK_EQUAL( std::any_cast<std::string>( result.at( column ) ), "22K" );
     }
+}
+
+
+// REAL columns must keep every significant digit rather than the six that {:G} gives
+BOOST_AUTO_TEST_CASE( NumericPrecision )
+{
+    SCRATCH_DATABASE db;
+    db.Execute( "CREATE TABLE Nums (\"Part ID\" TEXT, Val REAL)" );
+    db.Execute( "INSERT INTO Nums VALUES ('P1', 10012345), ('P2', 1234.5678)" );
+
+    DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+    BOOST_REQUIRE( dc.IsConnected() );
+    BOOST_REQUIRE( dc.CacheTableInfo( "Nums", { "Part ID", "Val" } ) );
+
+    std::vector<DATABASE_CONNECTION::ROW> rows;
+    BOOST_REQUIRE_MESSAGE( dc.SelectAll( "Nums", "Part ID", rows ), dc.GetLastError() );
+    BOOST_REQUIRE_EQUAL( rows.size(), 2 );
+
+    BOOST_CHECK_EQUAL( std::any_cast<std::string>( rows[0].at( "Val" ) ), "10012345" );
+    BOOST_CHECK_EQUAL( std::any_cast<std::string>( rows[1].at( "Val" ) ), "1234.5678" );
+}
+
+
+static boost::test_tools::assertion_result hasPostgresConnection( boost::unit_test::test_unit_id )
+{
+    const char*                         connection = std::getenv( "QA_DBLIB_PG_CONNECTION" );
+    boost::test_tools::assertion_result result( connection && *connection );
+    result.message() << "QA_DBLIB_PG_CONNECTION is not set";
+    return result;
+}
+
+
+// NUMERIC values must arrive as exact text, which SQLite cannot prove, so this runs against PostgreSQL
+BOOST_AUTO_TEST_CASE( DecimalPrecision, *boost::unit_test::precondition( hasPostgresConnection ) )
+{
+    const std::string cs = std::getenv( "QA_DBLIB_PG_CONNECTION" );
+    const std::string table = fmt::format( "kicad_qa_decimal_{}", std::random_device()() );
+
+    {
+        nanodbc::connection conn( nanodbc::string( cs.begin(), cs.end() ) );
+        nanodbc::just_execute( conn, NANODBC_TEXT( "CREATE TABLE " ) + nanodbc::string( table.begin(), table.end() )
+                                             + NANODBC_TEXT( " (part_id TEXT, val NUMERIC(30,10))" ) );
+    }
+
+    struct DROP_TABLE
+    {
+        ~DROP_TABLE()
+        {
+            try
+            {
+                nanodbc::connection conn( nanodbc::string( m_cs.begin(), m_cs.end() ) );
+                nanodbc::just_execute( conn, NANODBC_TEXT( "DROP TABLE IF EXISTS " )
+                                                     + nanodbc::string( m_table.begin(), m_table.end() ) );
+            }
+            catch( const std::exception& e )
+            {
+                BOOST_TEST_MESSAGE( "Leaked table " << m_table << ": " << e.what() );
+            }
+        }
+
+        std::string m_cs;
+        std::string m_table;
+    } dropTable{ cs, table };
+
+    {
+        nanodbc::connection conn( nanodbc::string( cs.begin(), cs.end() ) );
+        nanodbc::just_execute( conn, nanodbc::string( NANODBC_TEXT( "INSERT INTO " ) )
+                                             + nanodbc::string( table.begin(), table.end() )
+                                             + NANODBC_TEXT( " VALUES ('P1', 12345678901234567.89)" ) );
+
+        nanodbc::result res = nanodbc::execute( conn, NANODBC_TEXT( "SELECT val FROM " )
+                                                              + nanodbc::string( table.begin(), table.end() ) );
+
+        BOOST_REQUIRE( res.columns() == 1 );
+        BOOST_CHECK( res.column_datatype( 0 ) == SQL_NUMERIC || res.column_datatype( 0 ) == SQL_DECIMAL );
+    }
+
+    DATABASE_CONNECTION dc( cs, 2 );
+    BOOST_REQUIRE( dc.IsConnected() );
+    BOOST_REQUIRE_MESSAGE( dc.CacheTableInfo( table, { "part_id", "val" } ), dc.GetLastError() );
+
+    std::vector<DATABASE_CONNECTION::ROW> rows;
+    BOOST_REQUIRE_MESSAGE( dc.SelectAll( table, "part_id", rows ), dc.GetLastError() );
+    BOOST_REQUIRE_EQUAL( rows.size(), 1 );
+
+    BOOST_CHECK_EQUAL( std::any_cast<std::string>( rows[0].at( "val" ) ), "12345678901234567.89" );
 }
 
 
