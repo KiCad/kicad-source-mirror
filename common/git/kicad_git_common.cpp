@@ -35,6 +35,7 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/utils.h>
+#include <algorithm>
 #include <cctype>
 #include <cerrno>
 #include <chrono>
@@ -2994,6 +2995,68 @@ git_tree* ResolveRefToTree( git_repository* aRepo, const wxString& aRef )
     }
 
     return tree;
+}
+
+
+std::vector<wxString> CompareBranchRefs( git_repository* aRepo )
+{
+    std::vector<wxString> refs;
+
+    if( !aRepo )
+        return refs;
+
+    auto resolves = [&]( const wxString& aRef )
+    {
+        return !aRef.IsEmpty() && KIGIT::GitTreePtr( ResolveRefToTree( aRepo, aRef ) ) != nullptr;
+    };
+
+    auto add = [&]( const wxString& aRef )
+    {
+        if( resolves( aRef ) && std::find( refs.begin(), refs.end(), aRef ) == refs.end() )
+            refs.push_back( aRef );
+    };
+
+    wxString       current;
+    wxString       upstream;
+    git_reference* head = nullptr;
+
+    if( git_repository_head( &head, aRepo ) == 0 )
+    {
+        KIGIT::GitReferencePtr headPtr( head );
+
+        if( git_reference_is_branch( head ) )
+        {
+            current = wxString::FromUTF8( git_reference_shorthand( head ) );
+
+            git_reference* tracking = nullptr;
+
+            if( git_branch_upstream( &tracking, head ) == 0 )
+            {
+                KIGIT::GitReferencePtr trackingPtr( tracking );
+                upstream = wxString::FromUTF8( git_reference_shorthand( tracking ) );
+            }
+        }
+    }
+
+    const wxString main = wxS( "main" );
+    const wxString master = wxS( "master" );
+
+    for( const wxString& base : { main, master, upstream } )
+    {
+        if( base != current && resolves( base ) )
+        {
+            refs.push_back( base );
+            break;
+        }
+    }
+
+    add( current.IsEmpty() ? wxString( wxS( "HEAD" ) ) : current );
+    add( main );
+    add( master );
+    add( upstream );
+    add( wxS( "HEAD" ) );
+
+    return refs;
 }
 
 

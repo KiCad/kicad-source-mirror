@@ -1212,50 +1212,15 @@ void KICAD_MANAGER_FRAME::OnCompareProjectBranches( wxCommandEvent& event )
         return;
     }
 
-    // Seed the picker with the conventional "MR" pair: an integration branch
-    // (main/master) as the base, the current branch as the head. Resolve the
-    // current branch from HEAD so a checked-out feature branch lands at
-    // index 1 (where DIALOG_GIT_MR_REVIEW selects its head ref) instead of
-    // the literal "HEAD" string.
-    wxString currentBranch;
-
-    // libgit2 is not safe for concurrent use of one repository, so read HEAD under the git
-    // action lock. If a background operation holds it, skip the seed and fall back to HEAD.
-    if( std::unique_lock<std::mutex> lock = gitCommon->TryLockAction(); lock.owns_lock() )
-    {
-        git_reference* head = nullptr;
-
-        if( git_repository_head( &head, repo ) == 0 )
-        {
-            const char* shorthand = git_reference_shorthand( head );
-
-            if( shorthand && *shorthand )
-                currentBranch = wxString::FromUTF8( shorthand );
-
-            git_reference_free( head );
-        }
-    }
-
     std::vector<wxString> refs;
 
-    auto pushUnique = [&]( const wxString& aRef )
-    {
-        if( aRef.IsEmpty() )
-            return;
+    // libgit2 is not safe for concurrent use of one repository, so read the refs under the git
+    // action lock. If a background operation holds it, fall back to HEAD.
+    if( std::unique_lock<std::mutex> lock = gitCommon->TryLockAction(); lock.owns_lock() )
+        refs = KIGIT::CompareBranchRefs( repo );
 
-        for( const wxString& existing : refs )
-        {
-            if( existing == aRef )
-                return;
-        }
-
-        refs.push_back( aRef );
-    };
-
-    pushUnique( wxS( "main" ) );
-    pushUnique( wxS( "master" ) );
-    pushUnique( currentBranch );
-    pushUnique( wxS( "HEAD" ) );
+    if( refs.empty() )
+        refs.push_back( wxS( "HEAD" ) );
 
     DIALOG_GIT_MR_REVIEW dlg( this, gitCommon.get(), refs );
     dlg.ShowModal();

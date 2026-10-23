@@ -65,7 +65,8 @@ DIALOG_GIT_MR_REVIEW::DIALOG_GIT_MR_REVIEW( wxWindow* aParent, KIGIT_COMMON* aCo
         m_comboHead->SetSelection( aRefList.size() > 1 ? 1 : 0 );
     }
 
-    Layout();
+    SetupStandardButtons( { { wxID_CANCEL, _( "Close" ) } } );
+    finishDialogSettings();
 }
 
 

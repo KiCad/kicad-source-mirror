@@ -55,6 +55,8 @@ DIALOG_GIT_MR_REVIEW_BASE::DIALOG_GIT_MR_REVIEW_BASE( wxWindow* parent, wxWindow
 	bMainSizer->Add( m_listFiles, 1, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
 	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );

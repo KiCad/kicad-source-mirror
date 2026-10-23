@@ -54,6 +54,7 @@ class DIALOG_GIT_MR_REVIEW_BASE : public DIALOG_SHIM
 
 	public:
 		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerCancel;
 
 		DIALOG_GIT_MR_REVIEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Compare Branches"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,550 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 

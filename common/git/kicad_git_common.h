@@ -831,6 +831,16 @@ APIEXPORT git_tree* ResolveRefToTree( git_repository* aRepo, const wxString& aRe
 
 
 /**
+ * Refs to offer when comparing branches, base first and head second. Only refs that resolve are
+ * listed. The base is main or master when it is not the current branch, else the current
+ * branch's upstream. The head is the current branch, or HEAD when detached.
+ *
+ * The caller must hold the git action lock.
+ */
+APIEXPORT std::vector<wxString> CompareBranchRefs( git_repository* aRepo );
+
+
+/**
  * Walk every delta in a computed diff, invoking @p aCallback once per delta.
  *
  * Centralizes the git_diff_num_deltas / git_diff_get_delta loop.  Null deltas
