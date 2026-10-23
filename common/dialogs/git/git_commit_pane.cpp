@@ -68,6 +68,7 @@
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <thread>
 #include <wildcards_and_files_ext.h>
 #include <widgets/file_checklist_ctrl.h>
@@ -177,47 +178,6 @@ static void dropNewBranch( KIGIT_COMMON& aCommon, const wxString& aName, const w
     GIT_BRANCH_HANDLER branchHandler( &aCommon );
     branchHandler.SwitchToBranch( aPrevious );
     aCommon.DeleteBranch( aName );
-}
-
-
-// Claim a name for the version a conflict is about to replace. An earlier copy beside the same
-// file may be the only remaining source of its work, so it is never overwritten.
-static bool reserveRecoveryFile( const wxString& aPreferredPath, wxString& aPathOut, wxString& aCreatedDir )
-{
-    aPathOut.Clear();
-    aCreatedDir.Clear();
-
-    wxFileName parent( aPreferredPath );
-
-    if( !parent.DirExists() )
-    {
-        if( !parent.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-            return false;
-
-        aCreatedDir = parent.GetPath();
-    }
-
-    for( int attempt = 0; attempt < 100; attempt++ )
-    {
-        wxString candidate =
-                attempt == 0 ? aPreferredPath : wxString::Format( wxS( "%s.%d" ), aPreferredPath, attempt );
-
-        // Exclusive create, so two names are never handed out for one file.
-        wxFile out;
-
-        if( out.Create( candidate, false ) )
-        {
-            aPathOut = candidate;
-            return true;
-        }
-
-        // Free and still not creatable means the filesystem is refusing, and counting up
-        // will not change that.
-        if( !wxFileName::FileExists( candidate ) )
-            return false;
-    }
-
-    return false;
 }
 
 
@@ -2170,7 +2130,6 @@ struct GIT_COMMIT_PANE::MERGE_PREPARATION
     std::unique_ptr<GIT_DIFF_WORKSPACE> workspace;
     wxString                            headOid;
     wxString                            theirsOid;
-    wxString                            rootDir;
     wxString                            error;
     std::vector<KIGIT_CONFLICT_SIDES>   conflicts;
     KIGIT::GIT_IDENTITY                 identity;
@@ -2194,7 +2153,6 @@ void GIT_COMMIT_PANE::resolvePullConflicts( std::shared_ptr<KIGIT_COMMON> aCommo
 
                 preparation->rebaseConfigured = aSession.IsPullRebaseConfigured();
                 preparation->identity = KIGIT::ReadGitIdentity( aSession );
-                preparation->rootDir = aSession.GetGitRootDirectory();
                 preparation->prepared = aSession.GetMergeConflicts(
                         preparation->workspace->Root() + wxFileName::GetPathSeparator() + wxS( "stages" ),
                         preparation->headOid, preparation->theirsOid, preparation->conflicts, preparation->error );
@@ -2280,8 +2238,8 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
 
     std::vector<std::pair<wxString, wxString>> resolved;
 
-    // The version the user does not keep is still somebody's work, so it is saved beside the
-    // project file. Written only once every conflict is answered, so cancelling changes nothing.
+    // The version the user does not keep is still somebody's work, so it is saved under the
+    // project's backups. Written only once every conflict is answered, so cancelling changes nothing.
     struct LOSING_COPY
     {
         wxString source;
@@ -2422,54 +2380,36 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
         return;
 
     // Written before the merge is published, so a copy that cannot be made stops the merge
-    // rather than losing the version it was meant to protect.
-    wxString rootDir = aPreparation->rootDir;
+    // rather than losing the version it was meant to protect. Each merge gets its own folder,
+    // so copies from different conflicts never meet.
+    wxString backupDir;
 
-    if( !rootDir.EndsWith( wxS( "/" ) ) )
-        rootDir += wxS( "/" );
-
-    std::vector<wxString> savedCopies;
-    std::vector<wxString> createdDirs;
+    if( !losingCopies.empty() )
+    {
+        backupDir = Pgm().GetSettingsManager().GetBackupRootForProject( &m_frame->Prj() ) + sep + wxS( "merge-" )
+                    + wxDateTime::UNow().Format( wxS( "%Y-%m-%dT%H-%M-%S-%l" ) );
+    }
 
     // Undoing the copies keeps every later abort honest when it says the files are unchanged.
-    // Only what this attempt made is removed, so an older recovery file survives.
-    auto discardSavedCopies = [&savedCopies, &createdDirs]()
+    auto discardSavedCopies = [&backupDir]()
     {
-        for( const wxString& path : savedCopies )
-            wxRemoveFile( path );
-
-        // Deepest first, and only while empty, so a directory holding anything else stays.
-        for( auto dir = createdDirs.rbegin(); dir != createdDirs.rend(); ++dir )
-            wxFileName::Rmdir( *dir );
-
-        savedCopies.clear();
-        createdDirs.clear();
+        if( !backupDir.IsEmpty() )
+            wxFileName::Rmdir( backupDir, wxPATH_RMDIR_RECURSIVE );
     };
 
     for( const LOSING_COPY& copy : losingCopies )
     {
-        wxString saved;
-        wxString createdDir;
+        wxFileName dest( backupDir + sep + copy.relativeDest );
 
-        bool reserved = reserveRecoveryFile( rootDir + copy.relativeDest, saved, createdDir );
-
-        if( !createdDir.IsEmpty() )
-            createdDirs.push_back( createdDir );
-
-        if( !reserved || !wxCopyFile( copy.source, saved, true ) )
+        if( !dest.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) || !wxCopyFile( copy.source, dest.GetFullPath(), false ) )
         {
-            if( !saved.IsEmpty() )
-                wxRemoveFile( saved );
-
             discardSavedCopies();
             setBusy( false, _( "Getting changes was cancelled. Your files are unchanged." ) );
             DisplayErrorMessage( this, wxString::Format( _( "Could not save the version you are replacing "
                                                             "as '%s', so the merge was stopped." ),
-                                                         copy.relativeDest ) );
+                                                         dest.GetFullPath() ) );
             return;
         }
-
-        savedCopies.push_back( saved );
     }
 
     MergeCommitResult result = MergeCommitResult::FailedCleanly;
@@ -2521,8 +2461,10 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
 
     if( aThenPush )
         submitPush( aCommon );
-    else
+    else if( backupDir.IsEmpty() )
         setBusy( false, _( "Changes merged." ) );
+    else
+        setBusy( false, wxString::Format( _( "Changes merged. The versions you replaced are in '%s'." ), backupDir ) );
 }
 
 

@@ -436,7 +436,7 @@ const std::vector<wxString>& PROJECT_GIT_UTILS::TransientGitIgnorePatterns()
         wxS( "*-bak" ),
         wxS( "*.[kK][iI][cC][aA][dD]_[pP][rR][lL]" ),
 
-        // The conflict resolver keeps the original suffix or adds a number from 1 to 99.
+        // Recovery copies that earlier builds left beside the design files.
         wxS( "*.mine" ),
         wxS( "*.mine.[0-9]" ),
         wxS( "*.mine.[0-9][0-9]" ),
