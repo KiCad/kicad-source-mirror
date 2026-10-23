@@ -30,6 +30,8 @@
 
 #include <vector>
 
+#include "dsnlexer.h"
+
 
 class DRC_RE_BASE_CONSTRAINT_DATA : public RULE_EDITOR_DATA_BASE
 {
@@ -137,11 +139,11 @@ public:
     }
 
     /**
-     * Format a rule name for use in S-expression output while preserving the exact
-     * name the user chose.  If the name is a bare symbol (non-empty, alphanumeric
-     * plus `_`, `-` or `.`, and not starting with a digit) it is emitted unquoted;
-     * otherwise it is emitted as a double-quoted string with embedded quotes
-     * escaped via the standard CTX_QUOTED_STR encoding.
+     * Format a rule name for use in S-expression output while preserving the exact name
+     * the user chose.  If the name is a bare symbol (non-empty, alphanumeric plus `_`,
+     * `-` or `.`, and failing the DSNLEXER::isNumber() test) it is emitted  unquoted;
+     * otherwise it is emitted as a double-quoted string with embedded quotes escaped via
+     * the standard CTX_QUOTED_STR encoding.
      */
     static wxString formatRuleName( const wxString& aRuleName )
     {
@@ -150,7 +152,12 @@ public:
 
         bool needsQuoting = false;
 
-        if( wxIsdigit( *aRuleName.begin() ) )
+        char ruleName[1024];
+
+        for( size_t ii = 0; ii < sizeof( ruleName ) && ii < aRuleName.size(); ++ii )
+            ruleName[ii] = aRuleName[ii];
+
+        if( DSNLEXER::isNumber( ruleName, ruleName + std::min( aRuleName.size(), sizeof( ruleName ) ) ) )
         {
             needsQuoting = true;
         }

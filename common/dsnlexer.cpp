@@ -491,16 +491,7 @@ inline bool DSNLEXER::isSep( char cc )
 }
 
 
-/**
- * Return true if the next sequence of text is a number:
- * either an integer, fixed point, or float with exponent.  Stops scanning
- * at the first non-number character, even if it is not whitespace.
- *
- * @param cp is the start of the current token.
- * @param limit is the end of the current token.
- * @return true if input token is a number, else false.
- */
-static bool isNumber( const char* cp, const char* limit )
+bool DSNLEXER::isNumber( const char* cp, const char* limit )
 {
     // regex for a float: "^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?" i.e. any number,
     // code traversal manually here:
