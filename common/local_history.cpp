@@ -47,6 +47,8 @@
 #include <wx/msgdlg.h>
 #include <wx/utils.h>
 
+#include <fstream>
+#include <iterator>
 #include <vector>
 #include <string>
 #include <memory>
@@ -99,20 +101,15 @@ static const size_t UNLIMITED_HISTORY_LOOSE_BYTES = 25 * 1024 * 1024;
 
 static bool readFileContent( const wxString& aPath, std::string& aContent )
 {
-    wxFFile file( aPath, wxS( "rb" ) );
+    // Not wxFFile, which shows an error dialog for a file that was never saved
+    std::ifstream file( aPath.fn_str(), std::ios::binary );
 
-    if( !file.IsOpened() )
+    if( !file )
         return false;
 
-    wxFileOffset length = file.Length();
+    aContent.assign( std::istreambuf_iterator<char>( file ), std::istreambuf_iterator<char>() );
 
-    if( length < 0 )
-        return false;
-
-    size_t len = static_cast<size_t>( length );
-    aContent.assign( len, '\0' );
-
-    return file.Read( aContent.data(), len ) == len;
+    return !file.bad();
 }
 
 
@@ -924,10 +921,12 @@ SNAPSHOT_COMMIT_RESULT LOCAL_HISTORY::commitInBackground( const wxString& aProje
 
         for( const STAGED_FILE& file : staged )
         {
-            wxString    diskPath = aProjectPath + wxFileName::GetPathSeparator() + file.relativePath;
+            wxFileName  diskPath( file.relativePath );
             std::string diskContent;
 
-            if( !readFileContent( diskPath, diskContent ) || diskContent != file.content )
+            diskPath.MakeAbsolute( aProjectPath );
+
+            if( !readFileContent( diskPath.GetFullPath(), diskContent ) || diskContent != file.content )
             {
                 stagedMatchesDisk = false;
                 break;
