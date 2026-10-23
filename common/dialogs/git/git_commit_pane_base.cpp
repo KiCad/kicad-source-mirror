@@ -25,15 +25,12 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_branchName = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_branchName->Wrap( -1 );
-	m_branchRow->Add( m_branchName, 0, wxALIGN_CENTER_VERTICAL, 0 );
-
-
-	m_branchRow->Add( 0, 0, 1, wxEXPAND, 0 );
+	m_branchRow->Add( m_branchName, 1, wxALIGN_CENTER_VERTICAL, 0 );
 
 	wxArrayString m_recentMessagesChoices;
 	m_recentMessages = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_recentMessagesChoices, 0 );
 	m_recentMessages->SetSelection( 0 );
-	m_branchRow->Add( m_recentMessages, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
+	m_branchRow->Add( m_recentMessages, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
 
 	m_settingsButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_settingsButton->SetToolTip( _("Commit settings and the advanced window") );

@@ -207,8 +207,10 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_summary->SetHint( _( "Summarize your changes..." ) );
     m_newBranchName->SetHint( _( "Branch name" ) );
 
-    // Sized by hand, or the longest message would set the width of the whole row.
-    m_recentMessages->SetMinSize( FromDIP( wxSize( 170, -1 ) ) );
+    // Sized by hand, or the longest message would set the width of the whole row. It shrinks in a
+    // narrow dock so the settings button stays reachable.
+    m_recentMessages->SetMinSize( FromDIP( wxSize( 60, -1 ) ) );
+    m_recentMessages->SetMaxSize( FromDIP( wxSize( 170, -1 ) ) );
     KIPLATFORM::UI::EllipsizeChoiceBox( m_recentMessages );
 
     updateSummaryCount();
