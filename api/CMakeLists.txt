@@ -43,6 +43,7 @@ set( KIAPI_PROTO_SRCS
     board/board_jobs.proto
     board/board_types.proto
     board/board_rules.proto
+    board/board_tasks.proto
 
     schematic/schematic_types.proto
     schematic/schematic_commands.proto

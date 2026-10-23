@@ -177,10 +177,10 @@ void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
 }
 
 
-void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter, bool aHeadless )
+bool ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter, bool aHeadless )
 {
     if( m_fillInProgress )
-        return;
+        return false;
 
     m_fillInProgress = true;
 
@@ -227,6 +227,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         m_filler->SetProgressReporter( reporter.get() );
     }
 
+    bool filled = false;
+
     if( m_filler->Fill( toFill ) )
     {
         if( m_filler->GetProgressReporter() )
@@ -243,6 +245,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
         // Refill again as generators like via stitches can cause punch outs
         refillAroundGenerators( regenerated );
+
+        filled = true;
     }
     else
     {
@@ -261,6 +265,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
         // here doesn't work, so we delay it to an idle event.
         canvas()->Bind( wxEVT_IDLE, &ZONE_FILLER_TOOL::singleShotRefocus, this );
+
+    return filled;
 }
 
 

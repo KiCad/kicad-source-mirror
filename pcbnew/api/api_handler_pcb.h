@@ -24,6 +24,8 @@
 #include <api/api_handler_board.h>
 #include <api/pcb_context.h>
 #include <api/board/board_jobs.pb.h>
+#include <api/board/board_tasks.pb.h>
+#include <api/common/tasks.pb.h>
 #include <api/common/commands/cross_probe_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
 #include <api/common/commands/variant_commands.pb.h>
@@ -36,6 +38,7 @@ using namespace kiapi::board::jobs;
 class PCB_EDIT_FRAME;
 class PCB_TRACK;
 class PROPERTY_BASE;
+class ZONE;
 class JOB_EXPORT_PCB_FAB;
 class JOB_EXPORT_PCB_ODB;
 
@@ -126,6 +129,10 @@ private:
 
     HANDLER_RESULT<ImportSpecctraSessionResponse> handleImportSpecctraSession(
             const HANDLER_CONTEXT<ImportSpecctraSession>& aCtx );
+    HANDLER_RESULT<kiapi::common::tasks::StartTaskResponse> handleStartRefillZonesTask(
+            const HANDLER_CONTEXT<kiapi::board::tasks::StartRefillZonesTask>& aCtx );
+
+    class REFILL_ZONES_TASK;
 
     HANDLER_RESULT<BoardEditorAppearanceSettings> handleGetBoardEditorAppearanceSettings(
             const HANDLER_CONTEXT<GetBoardEditorAppearanceSettings>& aCtx );
@@ -243,6 +250,9 @@ private:
     PCB_CONTEXT* pcbContext() const { return static_cast<PCB_CONTEXT*>( context() ); }
 
     PCB_EDIT_FRAME* frame() const;
+
+    HANDLER_RESULT<std::vector<ZONE*>>
+    resolveZonesToFill( const google::protobuf::RepeatedPtrField<kiapi::common::types::KIID>& aZoneIds ) const;
 };
 
 #endif //KICAD_API_HANDLER_PCB_H

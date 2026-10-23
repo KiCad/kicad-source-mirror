@@ -35,13 +35,17 @@
 #include <pcb_marker.h>
 #include <settings/settings_manager.h>
 #include <zone.h>
+#include <zone_filler.h>
 
 #include <api/api_handler_pcb.h>
+#include <api/api_task_scheduler.h>
 #include <api/headless_pcb_context.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board_rules.pb.h>
+#include <api/board/board_tasks.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/envelope.pb.h>
+#include <api/common/tasks.pb.h>
 #include <api/common/types/base_types.pb.h>
 #include <jobs/job_export_pcb_odb.h>
 
@@ -139,6 +143,35 @@ kiapi::common::ApiRequest makeRevertRequest( BOARD* aBoard )
 
     return request;
 }
+
+
+kiapi::common::types::DocumentSpecifier makeBoardDocument( const BOARD& aBoard )
+{
+    kiapi::common::types::DocumentSpecifier document;
+    document.set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
+    document.set_board_filename(
+            wxFileName( aBoard.GetFileName() ).GetFullName().ToStdString() );
+
+    return document;
+}
+
+
+kiapi::common::ApiRequest makeStartRefillZonesTaskRequest(
+        const BOARD& aBoard, const std::vector<wxString>& aZoneIds = {} )
+{
+    kiapi::board::tasks::StartRefillZonesTask command;
+    *command.mutable_board() = makeBoardDocument( aBoard );
+
+    for( const wxString& id : aZoneIds )
+        command.add_zones()->set_value( id.ToStdString() );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    return request;
+}
+
 
 } // namespace
 
@@ -339,6 +372,127 @@ BOOST_AUTO_TEST_CASE( RevertDocumentWithoutCommitPassesGuard )
 
     BOOST_REQUIRE( !result.has_value() );
     BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BAD_REQUEST );
+}
+
+
+/*
+ * Long-running API task: StartRefillZonesTask must fill the requested zones via the task
+ * scheduler and report COMPLETED.
+ */
+
+BOOST_AUTO_TEST_CASE( StartRefillZonesTaskCompletes )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    unfillAll( board );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::board::tasks::StartRefillZonesTask command;
+    command.mutable_board()->set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
+    command.mutable_board()->set_board_filename(
+            wxFileName( board->GetFileName() ).GetFullName().ToStdString() );
+    command.add_zones()->set_value( F_CU_ZONE.ToStdString() );
+    command.add_zones()->set_value( IN1_CU_ZONE.ToStdString() );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( result.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE( !response.token().value().empty() );
+
+    // No event loop here: drain the scheduler synchronously until the task finishes
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( response.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_COMPLETED );
+
+    ZONE* fCu   = zoneByUuid( board, F_CU_ZONE );
+    ZONE* in1Cu = zoneByUuid( board, IN1_CU_ZONE );
+    ZONE* bCu   = zoneByUuid( board, B_CU_ZONE );
+
+    BOOST_REQUIRE( fCu && in1Cu && bCu );
+    BOOST_CHECK( fCu->IsFilled() );
+    BOOST_CHECK( in1Cu->IsFilled() );
+    BOOST_CHECK( !bCu->IsFilled() );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartRefillZonesTaskUnknownIdRejected )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::board::tasks::StartRefillZonesTask command;
+    command.mutable_board()->set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
+    command.mutable_board()->set_board_filename(
+            wxFileName( board->GetFileName() ).GetFullName().ToStdString() );
+    command.add_zones()->set_value( "deadbeef-0000-0000-0000-000000000000" );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    API_RESULT result = handler.Handle( request );
+
+    // Validation happens at request time, before any task starts
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BAD_REQUEST );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartRefillZonesTaskEmptyListFillsAllZones )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    unfillAll( board );
+
+    API_HANDLER_PCB handler( m_context );
+
+    // An empty zone list means "all zones", matching the synchronous RefillZones command
+    kiapi::common::ApiRequest request = makeStartRefillZonesTaskRequest( *board );
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE( !response.token().value().empty() );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( response.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_COMPLETED );
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+            BOOST_CHECK_MESSAGE( zone->IsFilled(), "zone " << zone->GetZoneName() << " was not filled" );
+    }
+
+    // Headless contexts track modification themselves; the task must report it like the
+    // synchronous command so clients know the board needs saving.
+    kiapi::common::commands::GetDocumentModifiedState stateCommand;
+    *stateCommand.mutable_document() = makeBoardDocument( *board );
+
+    kiapi::common::ApiRequest stateRequest;
+    stateRequest.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( stateRequest.mutable_message()->PackFrom( stateCommand ) );
+
+    API_RESULT stateResult = handler.Handle( stateRequest );
+    BOOST_REQUIRE( stateResult.has_value() );
+
+    kiapi::common::commands::GetDocumentModifiedStateResponse state;
+    BOOST_REQUIRE( stateResult->message().UnpackTo( &state ) );
+    BOOST_CHECK_EQUAL( state.state(), kiapi::common::commands::DMS_MODIFIED );
 }
 
 

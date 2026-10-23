@@ -49,7 +49,9 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     void CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr );
-    void FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr, bool aHeadless = false );
+
+    /// @return true if the fill completed, false if it was cancelled or failed
+    bool FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr, bool aHeadless = false );
 
     /**
      * Run the shared post-fill refresh once a fill commit has been pushed with connectivity
