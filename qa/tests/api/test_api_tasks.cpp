@@ -267,6 +267,7 @@ BOOST_AUTO_TEST_CASE( GetTaskStatusHandlerReportsLifecycle )
     scheduler.Pump();
 
     API_HANDLER_COMMON handler;
+    BOOST_REQUIRE( handler.CanHandle( kiapi::common::tasks::GetTaskStatus().GetTypeName() ) );
 
     auto task = std::make_shared<TEST_TASK>( TEST_TASK::BEHAVIOR::COMPLETE );
     std::optional<std::string> token = scheduler.StartTask( task, "status" );

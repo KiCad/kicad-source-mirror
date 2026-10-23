@@ -78,7 +78,7 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
     registerHandler<CreateDocument, OpenDocumentResponse>(
             &API_HANDLER_COMMON::handleCreateDocument );
     registerHandler<tasks::GetTaskStatus, tasks::TaskStatusResponse>(
-            &API_HANDLER_COMMON::handleGetTaskStatus );
+            &API_HANDLER_COMMON::handleGetTaskStatus, true );
 }
 
 

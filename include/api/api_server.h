@@ -37,9 +37,20 @@ class API_HANDLER;
 class KINNG_REQUEST_SERVER;
 class wxEvtHandler;
 
+/// Event carrying an incoming API request from the listener thread to the main thread.
+class KICOMMON_API KICAD_API_REQUEST_EVENT : public wxCommandEvent
+{
+public:
+    KICAD_API_REQUEST_EVENT( wxEventType aEventType = wxEVT_NULL ) :
+            wxCommandEvent( aEventType )
+    {}
 
-wxDECLARE_EVENT( API_REQUEST_EVENT, wxCommandEvent );
+    wxEvent* Clone() const override { return new KICAD_API_REQUEST_EVENT( *this ); }
 
+    wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_THREAD; }
+};
+
+wxDECLARE_EVENT( API_REQUEST_EVENT, KICAD_API_REQUEST_EVENT );
 
 class KICOMMON_API KICAD_API_SERVER : public wxEvtHandler
 {

@@ -51,7 +51,7 @@ API_RESULT API_HANDLER::Handle( ApiRequest& aMsg )
 
     if( it != m_handlers.end() )
     {
-        REQUEST_HANDLER& handler = it->second;
+        REQUEST_HANDLER& handler = it->second.Handler;
         return handler( aMsg );
     }
 
