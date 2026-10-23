@@ -548,6 +548,7 @@ set( EESCHEMA_SRCS
     api/api_sch_utils.cpp
     api/api_handler_sch_libraries.cpp
     api/api_handler_sch.cpp
+    api/api_handler_sch_tasks.cpp
     api/api_handler_symbol.cpp
     api/headless_sch_context.cpp
     api/headless_symbol_editor_context.cpp

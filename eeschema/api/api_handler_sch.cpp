@@ -182,6 +182,10 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleSetPageSettings );
     registerHandler<GetSchematicNetlist, SchematicNetlistResponse>( &API_HANDLER_SCH::handleGetSchematicNetlist );
     registerHandler<CrossProbeAnnounce, CrossProbeAnnounceResponse>( &API_HANDLER_SCH::handleCrossProbeAnnounce );
+    registerHandler<kiapi::schematic::tasks::StartErcTask, kiapi::common::tasks::StartTaskResponse>(
+            &API_HANDLER_SCH::handleStartErcTask );
+    registerHandler<kiapi::schematic::tasks::GetErcTaskResult, kiapi::schematic::tasks::ErcTaskResult>(
+            &API_HANDLER_SCH::handleGetErcTaskResult, true );
     registerHandler<SyncSelection, SyncSelectionResponse>( &API_HANDLER_SCH::handleSyncSelection );
     registerHandler<HighlightNets, HighlightNetsResponse>( &API_HANDLER_SCH::handleHighlightNets );
     registerHandler<GetVariants, VariantsResponse>( &API_HANDLER_SCH::handleGetVariants );

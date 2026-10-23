@@ -23,10 +23,13 @@
 
 #include <api/api_handler_sch.h>
 #include <api/api_sch_utils.h>
+#include <api/api_task_scheduler.h>
 #include <api/api_utils.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/envelope.pb.h>
+#include <api/common/tasks.pb.h>
 #include <api/headless_sch_context.h>
+#include <api/schematic/schematic_tasks.pb.h>
 #include <api/schematic/schematic_types.pb.h>
 #include <schematic_utils/schematic_file_util.h>
 #include <settings/settings_manager.h>
@@ -90,6 +93,32 @@ kiapi::common::ApiRequest makeRevertRequest( const SCHEMATIC& aSchematic )
 {
     kiapi::common::commands::RevertDocument command;
     *command.mutable_document() = makeDocument( aSchematic );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    request.mutable_message()->PackFrom( command );
+
+    return request;
+}
+
+
+kiapi::common::ApiRequest makeStartErcTaskRequest( const SCHEMATIC& aSchematic )
+{
+    kiapi::schematic::tasks::StartErcTask command;
+    *command.mutable_document() = makeDocument( aSchematic );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    return request;
+}
+
+
+kiapi::common::ApiRequest makeGetErcTaskResultRequest( const std::string& aToken )
+{
+    kiapi::schematic::tasks::GetErcTaskResult command;
+    command.mutable_token()->set_value( aToken );
 
     kiapi::common::ApiRequest request;
     request.mutable_header()->set_client_name( "kicad.qa" );
@@ -579,6 +608,108 @@ BOOST_AUTO_TEST_CASE( NetlistReportsRebuildFailureAndAllowsRetry )
     kiapi::schematic::commands::SchematicNetlistResponse response;
     BOOST_REQUIRE( result->message().UnpackTo( &response ) );
     BOOST_CHECK_GT( response.nets_size(), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartErcTaskCompletesWithResults )
+{
+    SCHEMATIC* schematic = loadSchematic( wxS( "NoConnectOnPin" ) );
+
+    API_HANDLER_SCH handler( m_context );
+
+    kiapi::common::ApiRequest startRequest = makeStartErcTaskRequest( *schematic );
+    API_RESULT start = handler.Handle( startRequest );
+    BOOST_REQUIRE( start.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse startResponse;
+    BOOST_REQUIRE( start->message().UnpackTo( &startResponse ) );
+    BOOST_REQUIRE( !startResponse.token().value().empty() );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( startResponse.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_COMPLETED );
+
+    kiapi::common::ApiRequest resultRequest = makeGetErcTaskResultRequest( startResponse.token().value() );
+    API_RESULT result = handler.Handle( resultRequest );
+    BOOST_REQUIRE( result.has_value() );
+
+    kiapi::schematic::tasks::ErcTaskResult ercResult;
+    BOOST_REQUIRE( result->message().UnpackTo( &ercResult ) );
+
+    BOOST_CHECK_GT( ercResult.violations_size(), 0 );
+    BOOST_CHECK_EQUAL( ercResult.excluded_count(), 0 );
+
+    BOOST_CHECK_GT( ercResult.ignored_count(), 0 );
+
+    int markerCount = 0;
+    SCH_SCREENS screens( schematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            if( item->Type() == SCH_MARKER_T )
+                ++markerCount;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( markerCount, ercResult.violations_size() );
+
+    for( const kiapi::schematic::ErcMarker& violation : ercResult.violations() )
+    {
+        BOOST_CHECK( !violation.description().empty() );
+        BOOST_CHECK( violation.error_type() != kiapi::schematic::ErcErrorType::ERCET_UNKNOWN );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( StartErcTaskWhileRunningIsRejected )
+{
+    SCHEMATIC* schematic = loadSchematic( wxS( "NoConnectOnPin" ) );
+
+    API_HANDLER_SCH handler( m_context );
+
+    kiapi::common::ApiRequest startRequest = makeStartErcTaskRequest( *schematic );
+    API_RESULT start = handler.Handle( startRequest );
+    BOOST_REQUIRE( start.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse startResponse;
+    BOOST_REQUIRE( start->message().UnpackTo( &startResponse ) );
+    BOOST_REQUIRE( !startResponse.token().value().empty() );
+
+    // The ERC run event has not been pumped, so the task is still running
+    kiapi::common::ApiRequest secondRequest = makeStartErcTaskRequest( *schematic );
+    API_RESULT second = handler.Handle( secondRequest );
+    BOOST_REQUIRE( !second.has_value() );
+    BOOST_CHECK_EQUAL( second.error().status(), kiapi::common::ApiStatusCode::AS_BUSY );
+
+    kiapi::common::ApiRequest runningRequest = makeGetErcTaskResultRequest( startResponse.token().value() );
+    API_RESULT runningResult = handler.Handle( runningRequest );
+    BOOST_REQUIRE( !runningResult.has_value() );
+    BOOST_CHECK_EQUAL( runningResult.error().status(), kiapi::common::ApiStatusCode::AS_BUSY );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    kiapi::common::ApiRequest finishedRequest =
+            makeGetErcTaskResultRequest( startResponse.token().value() );
+    API_RESULT finishedResult = handler.Handle( finishedRequest );
+    BOOST_REQUIRE( finishedResult.has_value() );
+}
+
+
+BOOST_AUTO_TEST_CASE( GetErcTaskResultRejectsUnknownToken )
+{
+    loadSchematic( wxS( "NoConnectOnPin" ) );
+
+    API_HANDLER_SCH handler( m_context );
+
+    kiapi::common::ApiRequest request = makeGetErcTaskResultRequest( "deadbeef-0000-0000-0000-000000000000" );
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BAD_REQUEST );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

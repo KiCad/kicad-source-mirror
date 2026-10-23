@@ -1,0 +1,61 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Long-running asynchronous tasks on a schematic (ERC).
+ */
+
+syntax = "proto3";
+
+package kiapi.schematic.tasks;
+
+import "common/types/base_types.proto";
+import "schematic/schematic_rules.proto";
+import "common/tasks.proto";
+
+
+// Runs ERC as a background task.  Returns a StartTaskResponse immediately;
+// poll GetTaskStatus with the returned token to determine when it has completed.
+// completion.
+// Since: 11.0
+message StartErcTask
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+// Retrieves the results of a completed ERC task.  Fails with AS_INTERNAL_ERROR if the task
+// did not complete successfully; use GetTaskStatus for the failure details.
+// Since: 11.0
+message GetErcTaskResult
+{
+  kiapi.common.tasks.TaskToken token = 1;
+}
+
+// Since: 11.0
+message ErcTaskResult
+{
+  // The violations found by the check
+  repeated kiapi.schematic.ErcMarker violations = 1;
+
+  // Number of check types whose severity is set to Ignore.
+  int32 ignored_count = 2;
+
+  // Number of violations suppressed by exclusions
+  int32 excluded_count = 3;
+}
