@@ -2745,13 +2745,18 @@ BOOST_AUTO_TEST_CASE( UpdateCurrentBranchInfoRefreshesChangedRemoteUrl )
 // An empty result means the end of the list, so an empty entry would hide every key behind it.
 BOOST_AUTO_TEST_CASE( SetSSHKeyIgnoresEmptyKey )
 {
-    KIGIT_COMMON common( nullptr );
+    // Only keys with both files on disk are offered
+    KI_TEST::WriteGitFile( TempPath(), wxS( "keys/kicad" ), c_opensshPlain );
+    KI_TEST::WriteGitFile( TempPath(), wxS( "keys/kicad.pub" ), "ssh-ed25519 AAAA qa\n" );
 
-    common.SetSSHKey( wxS( "/home/qa/.ssh/id_ed25519" ) );
+    const wxString key = wxFileName( TempPath() + wxS( "/keys/kicad" ) ).GetFullPath();
+    KIGIT_COMMON   common( nullptr );
+
+    common.SetSSHKey( key );
     common.SetSSHKey( wxEmptyString );
     common.ResetNextKey();
 
-    BOOST_CHECK_EQUAL( common.GetNextPublicKey().ToStdString(), "/home/qa/.ssh/id_ed25519" );
+    BOOST_CHECK_EQUAL( common.GetNextPublicKey(), key );
 }
 
 

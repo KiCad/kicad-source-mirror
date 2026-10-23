@@ -29,6 +29,7 @@
 #include <git/git_backend.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/kigit_ssh_keys.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_local_settings.h>
@@ -66,13 +67,13 @@ static void resolveMissingRemote( KIGIT_COMMON* aCommon )
 }
 
 
-// A key the project was set up with outlives the session's list, which a host change regathers
+// The project's key outlives the session's list, which a host change regathers, but a deleted one is never offered
 static wxString initialSSHKey( KIGIT_COMMON* aCommon, PROJECT* aProject )
 {
-    if( aProject && !aProject->GetLocalSettings().m_GitSSHKey.IsEmpty() )
+    if( aProject && KIGIT::IsOfferableSSHKey( aProject->GetLocalSettings().m_GitSSHKey ) )
         return aProject->GetLocalSettings().m_GitSSHKey;
 
-    return aCommon->GetSSHKey();
+    return aCommon->GetFirstOfferedSSHKey();
 }
 
 

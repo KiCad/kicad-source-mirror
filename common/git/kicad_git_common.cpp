@@ -21,6 +21,7 @@
 #include "kicad_git_memory.h"
 #include "git_repo_mixin.h"
 #include "git_backend.h"
+#include "kigit_ssh_keys.h"
 #include "project_git_utils.h"
 
 #include <git/git_progress.h>
@@ -33,7 +34,6 @@
 #include <wx/base64.h>
 #include <wx/filename.h>
 #include <wx/log.h>
-#include <wx/textfile.h>
 #include <wx/utils.h>
 #include <cerrno>
 #include <chrono>
@@ -44,11 +44,6 @@
 #include <string>
 #include <thread>
 #include <vector>
-
-#ifndef _WIN32
-#include <pwd.h>
-#include <unistd.h>
-#endif
 
 static wxString stripUrlUserinfo( const wxString& aUrl );
 
@@ -86,8 +81,10 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
 
         // The mutex is default-initialized, not copied
         m_gitActionMutex(),
+        m_discoveredKeys( aOther.m_discoveredKeys ),
         m_publicKeys( aOther.m_publicKeys ),
         m_publicKeysHost( aOther.m_publicKeysHost ),
+        m_projectSSHKey( aOther.m_projectSSHKey ),
         m_nextPublicKey( aOther.m_nextPublicKey ),
         m_secretFetched( aOther.m_secretFetched )
 {
@@ -1887,7 +1884,8 @@ void KIGIT_COMMON::SetSSHKey( const wxString& aKey )
         return;
 
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
-    setSSHKeyUnlocked( aKey );
+    m_projectSSHKey = aKey;
+    rebuildPublicKeysUnlocked();
 }
 
 
@@ -1895,7 +1893,27 @@ wxString KIGIT_COMMON::GetSSHKey() const
 {
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
 
+    if( !m_projectSSHKey.IsEmpty() )
+        return m_projectSSHKey;
+
     return m_publicKeys.empty() ? wxString() : m_publicKeys.front();
+}
+
+
+wxString KIGIT_COMMON::GetFirstOfferedSSHKey() const
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
+    if( KIGIT::IsOfferableSSHKey( m_projectSSHKey ) )
+        return m_projectSSHKey;
+
+    for( const wxString& key : m_publicKeys )
+    {
+        if( KIGIT::IsOfferableSSHKey( key ) )
+            return key;
+    }
+
+    return wxEmptyString;
 }
 
 
@@ -1923,7 +1941,10 @@ bool KIGIT_COMMON::ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, co
 
     // As SetSSHKey, which also refuses an empty key
     if( !aEntered.sshKey.IsEmpty() )
-        setSSHKeyUnlocked( aEntered.sshKey );
+    {
+        m_projectSSHKey = aEntered.sshKey;
+        rebuildPublicKeysUnlocked();
+    }
 
     m_nextPublicKey = 0;
     m_testedTypes = 0;
@@ -1945,14 +1966,38 @@ std::unique_lock<std::mutex> KIGIT_COMMON::TryLockActionFor( std::chrono::millis
 }
 
 
-void KIGIT_COMMON::setSSHKeyUnlocked( const wxString& aKey )
+void KIGIT_COMMON::rebuildPublicKeysUnlocked()
 {
-    auto it = std::find( m_publicKeys.begin(), m_publicKeys.end(), aKey );
+    m_publicKeys.clear();
+    m_nextPublicKey = 0;
 
-    if( it != m_publicKeys.end() )
-        m_publicKeys.erase( it );
+    if( KIGIT::IsOfferableSSHKey( m_projectSSHKey ) )
+        m_publicKeys.push_back( m_projectSSHKey );
+    else if( !m_projectSSHKey.IsEmpty() )
+        wxLogTrace( traceGit, "Not offering project SSH key %s, it or its .pub is missing", m_projectSSHKey );
 
-    m_publicKeys.insert( m_publicKeys.begin(), aKey );
+    for( const wxString& key : m_discoveredKeys )
+    {
+        if( !KIGIT::IsSameSSHKey( key, m_projectSSHKey ) )
+            m_publicKeys.push_back( key );
+    }
+}
+
+
+wxString KIGIT_COMMON::GetNextPublicKey()
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
+    // A key deleted since discovery would end the whole attempt instead of failing over to the next one
+    while( m_nextPublicKey < static_cast<int>( m_publicKeys.size() ) )
+    {
+        wxString key = m_publicKeys[m_nextPublicKey++];
+
+        if( KIGIT::IsOfferableSSHKey( key ) )
+            return key;
+    }
+
+    return wxEmptyString;
 }
 
 
@@ -1973,108 +2018,15 @@ wxString KIGIT_COMMON::GetGitRootDirectory() const
 }
 
 
-// wxGetenv converts through an unlocked static buffer except on MSVC, and key discovery runs on any thread
-static wxString homeDir()
-{
-#ifdef _WIN32
-    return wxGetHomeDir();
-#else
-    if( const char* home = std::getenv( "HOME" ); home && *home )
-        return wxString( home, wxConvLibc );
-
-    passwd            entry;
-    passwd*           found = nullptr;
-    std::vector<char> buffer( 1024 );
-    int               rc;
-
-    while( ( rc = getpwuid_r( getuid(), &entry, buffer.data(), buffer.size(), &found ) ) == ERANGE )
-        buffer.resize( buffer.size() * 2 );
-
-    if( rc == 0 && found && found->pw_dir )
-        return wxString( found->pw_dir, wxConvLibc );
-
-    return wxEmptyString;
-#endif
-}
-
-
 void KIGIT_COMMON::updatePublicKeys()
 {
     // Deadlocks if the credentials lock is already held. SyncRemoteUrl releases it
     // first for that reason.
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
 
-    m_publicKeys.clear();
+    m_discoveredKeys = KIGIT::DefaultSSHKeyCandidates( KIGIT::HomeDir(), m_hostname );
     m_publicKeysHost = m_hostname;
-
-    const wxString home = homeDir();
-
-    // An empty home would make every key path relative to the working directory
-    if( home.IsEmpty() )
-        return;
-
-    wxFileName keyFile( home, wxEmptyString );
-    keyFile.AppendDir( ".ssh" );
-    keyFile.SetFullName( "id_rsa" );
-
-    if( keyFile.FileExists() )
-        m_publicKeys.push_back( keyFile.GetFullPath() );
-
-    keyFile.SetFullName( "id_dsa" );
-
-    if( keyFile.FileExists() )
-        m_publicKeys.push_back( keyFile.GetFullPath() );
-
-    keyFile.SetFullName( "id_ecdsa" );
-
-    if( keyFile.FileExists() )
-        m_publicKeys.push_back( keyFile.GetFullPath() );
-
-    keyFile.SetFullName( "id_ed25519" );
-
-    if( keyFile.FileExists() )
-        m_publicKeys.push_back( keyFile.GetFullPath() );
-
-    // Parse SSH config file for hostname information
-    wxFileName sshConfig( home, wxEmptyString );
-    sshConfig.AppendDir( ".ssh" );
-    sshConfig.SetFullName( "config" );
-
-    if( sshConfig.FileExists() )
-    {
-        wxTextFile configFile( sshConfig.GetFullPath() );
-        configFile.Open();
-
-        bool match = false;
-
-        for( wxString line = configFile.GetFirstLine(); !configFile.Eof(); line = configFile.GetNextLine() )
-        {
-            line.Trim( false ).Trim( true );
-
-            if( line.StartsWith( "Host " ) )
-                match = false;
-
-            // The difference here is that we are matching either "Hostname" or "Host" to get the
-            // match.  This is because in the absence of a "Hostname" line, the "Host" line is used
-            if( line.StartsWith( "Host" ) && line.Contains( m_hostname ) )
-                match = true;
-
-            if( match && line.StartsWith( "IdentityFile" ) )
-            {
-                wxString keyPath = line.AfterFirst( ' ' ).Trim( false ).Trim( true );
-
-                // Expand ~ to home directory if present
-                if( keyPath.StartsWith( "~" ) )
-                    keyPath.Replace( "~", home, false );
-
-                // The lock is already held, so not through the locking entry point.
-                if( wxFileName::FileExists( keyPath ) )
-                    setSSHKeyUnlocked( keyPath );
-            }
-        }
-
-        configFile.Close();
-    }
+    rebuildPublicKeysUnlocked();
 }
 
 
@@ -2138,7 +2090,6 @@ void KIGIT_COMMON::FollowRewrittenUrl( const wxString& aRawUrl )
 {
     wxString username;
     wxString password;
-    wxString sshKey;
     bool     secretFetched;
 
     {
@@ -2146,9 +2097,6 @@ void KIGIT_COMMON::FollowRewrittenUrl( const wxString& aRawUrl )
         username = m_username;
         password = m_password;
         secretFetched = m_secretFetched;
-
-        if( !m_publicKeys.empty() )
-            sshKey = m_publicKeys.front();
     }
 
     SyncRemoteUrl( aRawUrl );
@@ -2157,9 +2105,6 @@ void KIGIT_COMMON::FollowRewrittenUrl( const wxString& aRawUrl )
     m_username = username;
     m_password = password;
     m_secretFetched = secretFetched;
-
-    if( !sshKey.IsEmpty() )
-        setSSHKeyUnlocked( sshKey );
 }
 
 

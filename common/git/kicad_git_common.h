@@ -322,9 +322,13 @@ public:
     }
     void SetSSHKey( const wxString& aSSHKey );
 
-    /// The key this session prefers, which is the one the project was set up with. Empty
-    /// when none is known.
+    /// The key the project was set up with, even when its file is gone, otherwise the first key
+    /// offered. Empty when none is known.
     wxString GetSSHKey() const;
+
+    /// The key the next attempt will try first, for the credential prompt to show. Empty when no
+    /// key file can be offered.
+    wxString GetFirstOfferedSSHKey() const;
 
     /// The remote the credential prompt was opened for. Read as one, so a transfer syncing the
     /// URL on another thread cannot leave the fields describing two remotes.
@@ -547,15 +551,7 @@ public:
     }
 
     /// By value, so the caller never holds a pointer into the vector.
-    wxString GetNextPublicKey()
-    {
-        std::lock_guard<std::mutex> lock( m_credentialsMutex );
-
-        if( m_nextPublicKey >= static_cast<int>( m_publicKeys.size() ) )
-            return wxEmptyString;
-
-        return m_publicKeys[m_nextPublicKey++];
-    }
+    wxString GetNextPublicKey();
 
     void SetRemote( const wxString& aRemote )
     {
@@ -723,15 +719,18 @@ private:
 
     void updatePublicKeys();
 
-    /// Body of SetSSHKey, for callers that already hold m_credentialsMutex.
-    void setSSHKeyUnlocked( const wxString& aKey );
+    /// Rebuild m_publicKeys as the project key, when offerable, then the discovered keys, and restart
+    /// from the first. The caller holds m_credentialsMutex.
+    void rebuildPublicKeysUnlocked();
     void updateConnectionType();
 
     /// Body of updateConnectionType, for callers that already hold m_credentialsMutex.
     void updateConnectionTypeUnlocked();
 
+    std::vector<wxString> m_discoveredKeys; // Gathered for m_publicKeysHost, without the project key
     std::vector<wxString> m_publicKeys;
     wxString m_publicKeysHost; // The host m_publicKeys was gathered for
+    wxString m_projectSSHKey;  // Kept when its file is missing, so the setting is not lost
     int m_nextPublicKey;
     bool m_secretFetched;
 

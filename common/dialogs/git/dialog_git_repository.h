@@ -87,7 +87,7 @@ private:
     void OnFileUpdated( wxFileDirPickerEvent& event ) override;
     void onCbCustom( wxCommandEvent& event ) override;
 
-    void setDefaultSSHKey();
+    void setDefaultSSHKey( const wxString& aHost );
 
     void updateAuthControls();
     void updateURLData();

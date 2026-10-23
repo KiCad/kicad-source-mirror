@@ -23,6 +23,7 @@
 #include <git2.h>
 #include <git/kicad_git_memory.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_ssh_keys.h>
 #include <git/git_repo_mixin.h>
 #include <gestfich.h>
 
@@ -114,35 +115,20 @@ bool DIALOG_GIT_REPOSITORY::extractClipboardData()
 }
 
 
-void DIALOG_GIT_REPOSITORY::setDefaultSSHKey()
+void DIALOG_GIT_REPOSITORY::setDefaultSSHKey( const wxString& aHost )
 {
-    wxFileName sshKey;
-    sshKey.SetPath( wxGetUserHome() );
-    wxString retval;
+    std::vector<wxString> keys = KIGIT::DefaultSSHKeyCandidates( KIGIT::HomeDir(), aHost );
 
-    sshKey.AppendDir( ".ssh" );
-    sshKey.SetFullName( "id_rsa" );
+    if( keys.empty() )
+        return;
 
-    if( sshKey.FileExists() )
-    {
-        retval = sshKey.GetFullPath();
-    }
-    else if( sshKey.SetFullName( "id_dsa" ); sshKey.FileExists() )
-    {
-        retval = sshKey.GetFullPath();
-    }
-    else if( sshKey.SetFullName( "id_ecdsa" ); sshKey.FileExists() )
-    {
-        retval = sshKey.GetFullPath();
-    }
+    // Unticked greys out the picker and passphrase, hiding the key the connection will use
+    m_cbCustom->SetValue( true );
+    m_fpSSHKey->SetFileName( keys.front() );
 
-    if( !retval.empty() )
-    {
-        m_fpSSHKey->SetFileName( retval );
-        wxFileDirPickerEvent evt;
-        evt.SetPath( retval );
-        OnFileUpdated( evt );
-    }
+    wxFileDirPickerEvent evt;
+    evt.SetPath( keys.front() );
+    OnFileUpdated( evt );
 }
 
 
@@ -223,7 +209,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
     m_ConnType->SetSelection( static_cast<int>( parsed.connType ) );
 
     if( parsed.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH && !wasSSH && m_fpSSHKey->GetPath().IsEmpty() )
-        setDefaultSSHKey();
+        setDefaultSSHKey( parsed.hostname );
 
     if( !parsed.username.IsEmpty() )
         SetUsername( parsed.username );
