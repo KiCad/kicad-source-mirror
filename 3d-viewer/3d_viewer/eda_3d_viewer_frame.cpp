@@ -263,7 +263,7 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     auto showMissingModels =
             [this]( const SELECTION& aSel )
             {
-                return m_boardAdapter.m_Cfg->m_Render.show_missing_models;
+                return m_boardAdapter.ShowMissingModels();
             };
     auto showTH =
             [this]( const SELECTION& aSel )

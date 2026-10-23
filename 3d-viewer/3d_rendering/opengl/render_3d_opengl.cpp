@@ -1181,18 +1181,14 @@ void RENDER_3D_OPENGL::get3dModelsSelected( std::list<MODELTORENDER> &aDstRender
                 continue;
         }
 
-        bool hasModels = !fp->Models().empty();
-        bool showMissing = m_boardAdapter.m_Cfg->m_Render.show_missing_models;
-
-        if( hasModels || showMissing )
+        if( !fp->Models().empty() || m_boardAdapter.ShowMissingModels() )
         {
             if( m_boardAdapter.IsFootprintShown( fp ) )
             {
                 const bool isFlipped = fp->IsFlipped();
 
                 if( aGetTop == !isFlipped || aGetBot == isFlipped )
-                    get3dModelsFromFootprint( aDstRenderList, fp, aRenderTransparentOnly,
-                                              highlight );
+                    get3dModelsFromFootprint( aDstRenderList, fp, aRenderTransparentOnly, highlight );
             }
         }
     }
@@ -1290,7 +1286,7 @@ void RENDER_3D_OPENGL::renderPlaceholderForFootprint( std::list<MODELTORENDER>& 
                                                       const glm::mat4& aFpMatrix, const FOOTPRINT* aFootprint,
                                                       bool aRenderTransparentOnly, bool aIsSelected, float aOpacity )
 {
-    if( !m_boardAdapter.m_Cfg->m_Render.show_missing_models || !m_placeholderModel )
+    if( !m_boardAdapter.ShowMissingModels() || !m_placeholderModel )
         return;
 
     // Suppress placeholder if a valid extruded body was built

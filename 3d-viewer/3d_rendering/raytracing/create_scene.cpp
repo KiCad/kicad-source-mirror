@@ -2265,7 +2265,6 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
             return;
 
         bool hasModels = !fp->Models().empty();
-        bool showMissing = m_boardAdapter.m_Cfg->m_Render.show_missing_models;
 
         // Placeholder is suppressed when an extrusion was built.
         bool hasExtrudedBody = false;
@@ -2273,7 +2272,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
         if( fp->HasBody() && fp->GetBody()->GetExtruded()->m_show && m_boardAdapter.IsFootprintShown( fp ) )
             hasExtrudedBody = addExtrudedBodyToRaytracer( aDstContainer, fp );
 
-        if( ( hasModels || showMissing ) && m_boardAdapter.IsFootprintShown( fp ) )
+        if( ( hasModels || m_boardAdapter.ShowMissingModels() ) && m_boardAdapter.IsFootprintShown( fp ) )
         {
             const glm::mat4 fpMatrix = m_boardAdapter.GetFootprintMatrix( *fp );
 
@@ -2308,7 +2307,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
                     addModels( aDstContainer, modelPtr, modelMatrix, (float) model.m_Opacity,
                                aSkipMaterialInformation, fp );
                 }
-                else if( showMissing && !placeholderAdded )
+                else if( m_boardAdapter.ShowMissingModels() && !placeholderAdded )
                 {
                     addPlaceholderToRaytracer( aDstContainer, fp, fpMatrix, hasExtrudedBody, (float) model.m_Opacity );
                     placeholderAdded = true;
@@ -2316,7 +2315,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
             }
 
             // Footprint with no models assigned at all
-            if( !hasModels && showMissing )
+            if( !hasModels && m_boardAdapter.ShowMissingModels() )
             {
                 addPlaceholderToRaytracer( aDstContainer, fp, fpMatrix, hasExtrudedBody, 1.0f );
             }

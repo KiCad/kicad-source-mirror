@@ -472,6 +472,11 @@ public:
     const MAP_POLY& GetHoleIdPolysMap() const noexcept { return m_layerHoleIdPolys; }
     const MAP_POLY& GetHoleOdPolysMap() const noexcept { return m_layerHoleOdPolys; }
 
+    bool ShowMissingModels()
+    {
+        return m_IsPreviewer || m_Cfg->m_Render.show_missing_models;
+    }
+
 private:
     /**
      * Create the board outline polygon.

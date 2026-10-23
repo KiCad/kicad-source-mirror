@@ -247,10 +247,6 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     loadSettings();
 
-    // Don't show placeholder models in the footprint properties 3D preview
-    if( m_boardAdapter.m_Cfg )
-        m_boardAdapter.m_Cfg->m_Render.show_missing_models = false;
-
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( m_dummyBoard, nullptr, nullptr, nullptr, this );
