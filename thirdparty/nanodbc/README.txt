@@ -13,3 +13,6 @@ this is needed when building with the GCC standard library and clang.
 
 Note: recent_error() has been modified to copy the whole SQLSTATE.  size() already excludes
 the terminator, so subtracting one more dropped the last character ("08001" became "0800").
+
+Note: The SQL_LOGIN_TIMEOUT calls in connect() ignore failures whose first diagnostic record
+is HYC00 or HY092, allowing connection attempts when login timeout support is unavailable.
