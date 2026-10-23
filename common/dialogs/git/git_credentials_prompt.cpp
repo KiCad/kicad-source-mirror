@@ -142,6 +142,72 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
 }
 
 
+bool KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust )
+{
+    wxString host = aFailure.host;
+
+    if( aFailure.port != 22 )
+        host << wxS( ":" ) << aFailure.port;
+
+    if( !MayOfferTrust( aFailure, aRetriedAfterTrust ) )
+    {
+        wxString message;
+
+        if( aFailure.state == KNOWN_HOST_STATE::REVOKED )
+        {
+            message = _( "The key for %s has been revoked. Ask your administrator before connecting again." );
+        }
+        else if( aFailure.state == KNOWN_HOST_STATE::MISMATCH )
+        {
+            message = _( "The key for %s has changed since the last connection. This can mean the server was "
+                         "replaced or that someone is intercepting the connection. Ask your administrator "
+                         "before connecting again." );
+        }
+        else
+        {
+            message = _( "%s still could not be verified after its key was saved. Ask your administrator before "
+                         "connecting again." );
+        }
+
+        DisplayErrorMessage( aParent, wxString::Format( message, host ) );
+        return false;
+    }
+
+    wxString question;
+
+    if( aFailure.state == KNOWN_HOST_STATE::OTHER_KEY_TYPE )
+    {
+        question = _( "%s is already known by a different key type. The key it presented has fingerprint "
+                      "SHA256:%s. Connect and remember this key too?" );
+    }
+    else
+    {
+        question = _( "This is the first time connecting to %s. Its key fingerprint is SHA256:%s. Connect and "
+                      "remember this server?" );
+    }
+
+    // Enter must never trust a server
+    auto dlg = KICAD_MESSAGE_DIALOG( aParent, wxString::Format( question, host, aFailure.fingerprint ),
+                                     _( "Verify Server" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+    dlg.SetYesNoLabels( _( "&Connect" ), _( "Cancel" ) );
+
+    if( dlg.ShowModal() != wxID_YES )
+        return false;
+
+    if( !AddKnownHost( aFailure ) )
+    {
+        DisplayErrorMessage( aParent,
+                             wxString::Format( _( "The key for %s could not be saved, so the connection was not "
+                                                  "made. Check that your .ssh folder can be written to." ),
+                                               host ),
+                             KnownHostsPath() );
+        return false;
+    }
+
+    return true;
+}
+
+
 KIGIT::GIT_IDENTITY KIGIT::ReadGitIdentity( KIGIT_COMMON& aCommon )
 {
     GIT_IDENTITY identity;

@@ -21,6 +21,7 @@
 #define GIT_CREDENTIALS_PROMPT_H
 
 #include <git/git_config_handler.h>
+#include <git/kigit_known_hosts.h>
 #include <settings/common_settings.h>
 
 #include <memory>
@@ -48,6 +49,15 @@ namespace KIGIT
  */
 bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr,
                            const wxString& aExplanation = wxEmptyString );
+
+/**
+ * Ask whether to trust a server seen for the first time, and remember its key when the user agrees.
+ * A changed or revoked key is refused with an explanation and no way to accept it.
+ *
+ * @param aRetriedAfterTrust The operation already ran again after a trust, so it is refused instead.
+ * @return True when the key was saved and the operation should be tried again.
+ */
+bool PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
 
 /// Repository values and whether Git can use them to record a commit.
 struct GIT_IDENTITY

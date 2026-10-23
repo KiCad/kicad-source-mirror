@@ -58,10 +58,11 @@ private:
     void onNewBranch();
     void onDeleteBranch();
 
-    /// Force push the current branch, after an explicit confirmation.
-    void onForcePush();
+    /// Force push the current branch, after an explicit confirmation. aRetriedAfterTrust marks a push
+    /// already rerun after a trusted host key.
+    void onForcePush( bool aRetriedAfterTrust = false );
     void startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aExpectedBranch,
-                         const wxString& aExpectedHeadOid );
+                         const wxString& aExpectedHeadOid, bool aRetriedAfterTrust );
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;

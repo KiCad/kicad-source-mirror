@@ -1980,7 +1980,7 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 }
 
 
-void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
+void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust )
 {
     struct TARGET
     {
@@ -1999,7 +1999,7 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
                 target->branch = aSession.GetCurrentBranchName();
                 target->head = aSession.GetHeadCommitId();
             },
-            [this, aCommon, target]()
+            [this, aCommon, target, aRetriedAfterTrust]()
             {
                 if( !target->hasRemote )
                 {
@@ -2008,13 +2008,14 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon )
                     return;
                 }
 
-                startPush( aCommon, target->branch, target->head );
+                startPush( aCommon, target->branch, target->head, aRetriedAfterTrust );
             },
             _( "Checking remote..." ) );
 }
 
 
-void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead )
+void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead,
+                                 bool aRetriedAfterTrust )
 {
     setBusy( true, _( "Pushing..." ) );
 
@@ -2025,6 +2026,8 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
         wxString   error;
         bool       authFailure = false;
         bool       cancelled = false;
+
+        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
     };
 
     auto outcome = std::make_shared<OUTCOME>();
@@ -2049,6 +2052,7 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
                 outcome->result = handler.PerformPush();
                 outcome->error = handler.GetErrorString();
                 outcome->authFailure = aCommon->WasAuthFailure();
+                outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a cancel aimed at something else is not
                 // reported here and this one's is not left behind for the next operation.
@@ -2064,10 +2068,10 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
                             } );
                 }
             },
-            [this, aCommon, outcome]()
+            [this, aCommon, outcome, aRetriedAfterTrust]()
             {
                 onPushDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->authFailure,
-                            outcome->cancelled );
+                            outcome->hostKey, aRetriedAfterTrust, outcome->cancelled );
             } );
 
     if( !started )
@@ -2076,7 +2080,8 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
 
 
 void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError,
-                                  bool aAuthFailure, bool aCancelled )
+                                  bool aAuthFailure, const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey,
+                                  bool aRetriedAfterTrust, bool aCancelled )
 {
     PushResult result = static_cast<PushResult>( aResult );
 
@@ -2100,10 +2105,20 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
+    if( aHostKey )
+    {
+        if( KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust ) )
+            submitPush( aCommon, true );
+        else
+            setBusy( false, wxEmptyString );
+
+        return;
+    }
+
     if( aAuthFailure )
     {
         if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
-            submitPush( aCommon );
+            submitPush( aCommon, aRetriedAfterTrust );
         else
             setBusy( false, _( "Cancelled." ) );
 
@@ -2511,7 +2526,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
 }
 
 
-void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush )
+void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush, bool aRetriedAfterTrust )
 {
     // Version control can be removed while a transfer runs, and leaving the busy state behind
     // would disable the panel for good.
@@ -2537,7 +2552,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
                 result->identity = KIGIT::ReadGitIdentity( aSession );
                 result->worktree = ReadGitWorktreeStatus( aSession, projectPath );
             },
-            [this, aCommon, aThenPush, result]()
+            [this, aCommon, aThenPush, aRetriedAfterTrust, result]()
             {
                 if( !ProjectSafeToRewrite( m_frame, this, result->worktree ) )
                     return;
@@ -2554,13 +2569,13 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
                 if( !ProjectSafeToRewrite( m_frame, this, result->worktree ) )
                     return;
 
-                startPull( aCommon, aThenPush );
+                startPull( aCommon, aThenPush, aRetriedAfterTrust );
             },
             _( "Checking changes..." ) );
 }
 
 
-void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush )
+void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush, bool aRetriedAfterTrust )
 {
     setBusy( true, _( "Getting changes..." ) );
 
@@ -2580,6 +2595,8 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
         wxString   error;
         bool       authFailure = false;
         bool       cancelled = false;
+
+        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
     };
 
     auto outcome = std::make_shared<OUTCOME>();
@@ -2603,6 +2620,7 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
                 outcome->result = handler.PerformPull();
                 outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
                 outcome->authFailure = aCommon->WasAuthFailure();
+                outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a cancel aimed at something else is not
                 // reported here and this one's is not left behind for the next operation.
@@ -2622,10 +2640,10 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
                                 aCommon->NotifyRefreshListeners();
                         } );
             },
-            [this, aCommon, aThenPush, outcome]()
+            [this, aCommon, aThenPush, aRetriedAfterTrust, outcome]()
             {
                 onPullDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->authFailure,
-                            aThenPush, outcome->cancelled );
+                            outcome->hostKey, aRetriedAfterTrust, aThenPush, outcome->cancelled );
             } );
 
     if( !started )
@@ -2634,7 +2652,8 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
 
 
 void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError,
-                                  bool aAuthFailure, bool aThenPush, bool aCancelled )
+                                  bool aAuthFailure, const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey,
+                                  bool aRetriedAfterTrust, bool aThenPush, bool aCancelled )
 {
     PullResult result = static_cast<PullResult>( aResult );
 
@@ -2663,10 +2682,20 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
+    if( aHostKey )
+    {
+        if( KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust ) )
+            submitPull( aCommon, aThenPush, true );
+        else
+            setBusy( false, wxEmptyString );
+
+        return;
+    }
+
     if( aAuthFailure )
     {
         if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
-            submitPull( aCommon, aThenPush );
+            submitPull( aCommon, aThenPush, aRetriedAfterTrust );
         else
             setBusy( false, _( "Cancelled." ) );
 

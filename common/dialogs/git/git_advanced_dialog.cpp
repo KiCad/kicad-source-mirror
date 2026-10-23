@@ -526,7 +526,7 @@ void GIT_ADVANCED_DIALOG::populateTopBar()
 }
 
 
-void GIT_ADVANCED_DIALOG::onFetch()
+void GIT_ADVANCED_DIALOG::onFetch( bool aRetriedAfterTrust )
 {
     if( !SessionStillCurrent() )
         return;
@@ -551,7 +551,7 @@ void GIT_ADVANCED_DIALOG::onFetch()
             {
                 *hasRemote = aCommon.HasPushAndPullRemote();
             },
-            [this, common, hasRemote]()
+            [this, common, hasRemote, aRetriedAfterTrust]()
             {
                 if( !SessionStillCurrent() )
                     return;
@@ -565,12 +565,12 @@ void GIT_ADVANCED_DIALOG::onFetch()
                     return;
                 }
 
-                startFetch( common );
+                startFetch( common, aRetriedAfterTrust );
             } );
 }
 
 
-void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
+void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust )
 {
     m_fetchButton->SetLabel( _( "Fetching..." ) );
     m_fetchButton->Disable();
@@ -583,6 +583,8 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
         wxString error;
         bool     authFailure = false;
         bool     cancelled = false;
+
+        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
     };
 
     auto outcome = std::make_shared<OUTCOME>();
@@ -605,6 +607,7 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
                 outcome->fetched = handler.PerformFetch();
                 outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
                 outcome->authFailure = aCommon->WasAuthFailure();
+                outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a fetch that never became active cannot
                 // consume a cancel belonging to the transfer that is running.
@@ -620,7 +623,7 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
                             } );
                 }
             },
-            [this, aCommon, outcome]()
+            [this, aCommon, outcome, aRetriedAfterTrust]()
             {
                 if( !SessionStillCurrent() )
                     return;
@@ -633,9 +636,17 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon )
                 if( outcome->cancelled || outcome->fetched )
                     return;
 
+                if( outcome->hostKey )
+                {
+                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust ) )
+                        onFetch( true );
+
+                    return;
+                }
+
                 if( outcome->authFailure && KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj() ) )
                 {
-                    onFetch();
+                    onFetch( aRetriedAfterTrust );
                     return;
                 }
 

@@ -1901,6 +1901,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     saveAcceptedRemoteSettings( Prj(), remoteConfig );
 
     KIGIT_COMMON* common = gitCommon().get();
+    bool          retriedAfterTrust = false;
 
     while( true )
     {
@@ -1910,8 +1911,20 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         handler.SetProgressReporter(
                 std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
 
+        // A status read can hold the lock briefly, and the login or key just confirmed must not be dropped
+        handler.SetActionLockWait( KIGIT_COMMON::ACTION_LOCK_WAIT );
+
         if( handler.PerformFetch() )
             break;
+
+        if( std::optional<KIGIT::HOST_KEY_FAILURE> hostKey = handler.GetHostKeyFailure() )
+        {
+            if( !KIGIT::PromptToTrustHost( m_parent, *hostKey, retriedAfterTrust ) )
+                break;
+
+            retriedAfterTrust = true;
+            continue;
+        }
 
         if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
             continue;

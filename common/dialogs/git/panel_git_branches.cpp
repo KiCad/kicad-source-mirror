@@ -402,7 +402,7 @@ void PANEL_GIT_BRANCHES::onDeleteBranch()
 }
 
 
-void PANEL_GIT_BRANCHES::onForcePush()
+void PANEL_GIT_BRANCHES::onForcePush( bool aRetriedAfterTrust )
 {
     if( m_push.IsBusy() )
     {
@@ -439,7 +439,7 @@ void PANEL_GIT_BRANCHES::onForcePush()
                 outcome->upstream = aCommon.GetRemoteNameOrDefault() + wxS( "/" ) + outcome->branch;
                 outcome->checked = true;
             },
-            [this, common, outcome]()
+            [this, common, outcome, aRetriedAfterTrust]()
             {
                 if( !m_dialog->SessionStillCurrent() || !outcome->checked || m_push.IsBusy() )
                     return;
@@ -467,13 +467,13 @@ void PANEL_GIT_BRANCHES::onForcePush()
                 confirm.SetYesNoLabels( _( "Force &Push" ), _( "Cancel" ) );
 
                 if( confirm.ShowModal() == wxID_YES && m_dialog->SessionStillCurrent() )
-                    startForcePush( common, outcome->branch, outcome->headOid );
+                    startForcePush( common, outcome->branch, outcome->headOid, aRetriedAfterTrust );
             } );
 }
 
 
 void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aExpectedBranch,
-                                         const wxString& aExpectedHeadOid )
+                                         const wxString& aExpectedHeadOid, bool aRetriedAfterTrust )
 {
     // Carried rather than captured by reference, because Start returns before the work runs.
     struct OUTCOME
@@ -482,6 +482,8 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
         wxString   error;
         bool       authFailure = false;
         bool       cancelled = false;
+
+        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
     };
 
     auto outcome = std::make_shared<OUTCOME>();
@@ -508,6 +510,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                 outcome->result = handler.PerformPush( true );
                 outcome->error = handler.GetErrorString();
                 outcome->authFailure = aCommon->WasAuthFailure();
+                outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a force push that never became active cannot
                 // consume a cancel belonging to the transfer that is running.
@@ -523,7 +526,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                             } );
                 }
             },
-            [this, aCommon, outcome]()
+            [this, aCommon, outcome, aRetriedAfterTrust]()
             {
                 if( !m_dialog->SessionStillCurrent() )
                     return;
@@ -539,9 +542,17 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                     return;
                 }
 
+                if( outcome->hostKey )
+                {
+                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust ) )
+                        onForcePush( true );
+
+                    return;
+                }
+
                 if( outcome->authFailure && KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
                 {
-                    onForcePush();
+                    onForcePush( aRetriedAfterTrust );
                     return;
                 }
 

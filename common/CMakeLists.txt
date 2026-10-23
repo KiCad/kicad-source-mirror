@@ -123,6 +123,7 @@ set( KICOMMON_SRCS
     git/text_diff.cpp
     git/git_backend.cpp
     git/kigit_orphan_registry.cpp
+    git/kigit_known_hosts.cpp
     git/kigit_ssh_keys.cpp
     git/libgit_backend.cpp
 

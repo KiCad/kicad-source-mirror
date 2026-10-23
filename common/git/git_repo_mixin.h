@@ -167,10 +167,26 @@ public:
     /// nonblocking behavior and report a busy repository instead.
     void SetWaitForActionLock( bool aWait ) { m_waitForActionLock = aWait; }
 
+    /// A UI caller retrying confirmed input waits this long for a background read instead of failing at once.
+    void SetActionLockWait( std::chrono::milliseconds aWait ) { m_actionLockWait = aWait; }
+
     std::unique_lock<std::mutex> GetActionLock() const
     {
-        return m_waitForActionLock ? m_common->LockAction() : m_common->TryLockAction();
+        if( m_waitForActionLock )
+            return m_common->LockAction();
+
+        if( m_actionLockWait.count() > 0 )
+            return m_common->TryLockActionFor( m_actionLockWait );
+
+        return m_common->TryLockAction();
     }
+
+    /// The host key this operation's transfer refused, for the UI to offer to trust or to report. Kept per
+    /// operation so an overlapping transfer on the same session cannot clear or replace it. Only the
+    /// operation's own thread writes it, and readers wait for the transfer to return.
+    std::optional<KIGIT::HOST_KEY_FAILURE> GetHostKeyFailure() const { return m_hostKeyFailure; }
+    void SetHostKeyFailure( const KIGIT::HOST_KEY_FAILURE& aFailure ) { m_hostKeyFailure = aFailure; }
+    void ClearHostKeyFailure() { m_hostKeyFailure.reset(); }
 
     bool IsThisOperationCancelled() const { return m_cancelToken->load(); }
 
@@ -181,6 +197,9 @@ private:
     KIGIT_COMMON*              m_common;
     KIGIT_COMMON::CANCEL_TOKEN m_cancelToken;
     bool                       m_waitForActionLock = false;
+    std::chrono::milliseconds  m_actionLockWait{ 0 };
+
+    std::optional<KIGIT::HOST_KEY_FAILURE> m_hostKeyFailure;
 };
 
 

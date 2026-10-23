@@ -419,28 +419,60 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
     // No open project owns the repository being cloned, so use a scratch session.
     KIGIT_COMMON cloneCommon( nullptr );
+    bool         retriedAfterTrust = false;
 
-    GIT_CLONE_HANDLER cloneHandler( &cloneCommon );
-
-    cloneHandler.SetRemote( dlg.GetRepoURL() );
-    cloneHandler.SetClonePath( pro.GetPath() );
-    cloneHandler.SetUsername( dlg.GetUsername() );
-    cloneHandler.SetPassword( dlg.GetPassword() );
-    cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );
-
-    cloneHandler.SetProgressReporter(
-            std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Clone Repository" ), 1, PR_CAN_ABORT ) );
-
-    if( !cloneHandler.PerformClone() )
+    while( true )
     {
-        // Cancelling from the progress dialog is not an error.
-        if( !cloneHandler.IsThisOperationCancelled() )
-            DisplayErrorMessage( m_frame, cloneHandler.GetErrorString() );
+        bool     cloned = false;
+        bool     cancelled = false;
+        wxString error;
 
+        std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
+
+        // Scoped, so the progress window is gone before a prompt below
+        {
+            GIT_CLONE_HANDLER cloneHandler( &cloneCommon );
+
+            cloneHandler.SetRemote( dlg.GetRepoURL() );
+            cloneHandler.SetClonePath( pro.GetPath() );
+            cloneHandler.SetUsername( dlg.GetUsername() );
+            cloneHandler.SetPassword( dlg.GetPassword() );
+            cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );
+
+            cloneHandler.SetProgressReporter(
+                    std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Clone Repository" ), 1, PR_CAN_ABORT ) );
+
+            cloned = cloneHandler.PerformClone();
+            cancelled = !cloned && cloneHandler.IsThisOperationCancelled();
+
+            if( !cloned )
+            {
+                error = cloneHandler.GetErrorString();
+                hostKey = cloneHandler.GetHostKeyFailure();
+            }
+        }
+
+        if( cloned )
+            break;
+
+        // Cancelling from the progress dialog is not an error.
+        if( cancelled )
+            return -1;
+
+        if( hostKey )
+        {
+            if( !KIGIT::PromptToTrustHost( m_frame, *hostKey, retriedAfterTrust ) )
+                return -1;
+
+            retriedAfterTrust = true;
+            continue;
+        }
+
+        DisplayErrorMessage( m_frame, error );
         return -1;
     }
 
-    std::vector<wxString> projects = cloneHandler.GetProjectDirs();
+    std::vector<wxString> projects = cloneCommon.GetProjectDirs();
 
     // The project opens its own handle when it loads below, this one is done.
     git_repository_free( cloneCommon.GetRepo() );

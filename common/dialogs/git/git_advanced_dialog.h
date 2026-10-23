@@ -133,9 +133,10 @@ private:
     /// Keep every text box in aWindow out of the dialog's saved control state.
     void optOutOfTextPersistence( wxWindow* aWindow );
 
-    /// Fetch from the remote on a worker, then refresh every surface.
-    void onFetch();
-    void startFetch( std::shared_ptr<KIGIT_COMMON> aCommon );
+    /// Fetch from the remote on a worker, then refresh every surface. aRetriedAfterTrust marks a fetch
+    /// already rerun after a trusted host key.
+    void onFetch( bool aRetriedAfterTrust = false );
+    void startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust );
 
     /// On-disk identity of the open documents, taken by ConfirmWorkingTreeChange() so only the
     /// documents an operation actually rewrote are reloaded.

@@ -19,6 +19,7 @@
 
 #include "dialog_git_repository.h"
 #include <confirm.h>
+#include <dialogs/git/git_credentials_prompt.h>
 
 #include <git2.h>
 #include <git/kicad_git_memory.h>
@@ -254,6 +255,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     KIGIT_REPO_MIXIN repoMixin( &common );
     callbacks.payload = &repoMixin;
     callbacks.credentials = credentials_cb;
+    callbacks.certificate_check = certificate_check_cb;
 
     git_proxy_options proxyOpts;
     git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
@@ -269,14 +271,33 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
         if( const char* remoteUrl = git_remote_url( remote ) )
             common.FollowRewrittenUrl( wxString::FromUTF8( remoteUrl ) );
 
-        result = git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, &proxyOpts, nullptr );
+        bool retriedAfterTrust = false;
 
-        if( result == GIT_OK )
-            success = true;
-        else
+        while( true )
+        {
+            repoMixin.ClearHostKeyFailure();
+            result = git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, &proxyOpts, nullptr );
+            git_remote_disconnect( remote );
+
+            if( result == GIT_OK )
+            {
+                success = true;
+                break;
+            }
+
             error = KIGIT_COMMON::GetLastGitError();
 
-        git_remote_disconnect( remote );
+            std::optional<KIGIT::HOST_KEY_FAILURE> hostKey = repoMixin.GetHostKeyFailure();
+
+            if( !hostKey )
+                break;
+
+            // The prompt has told the user why, so a declined key ends the test here
+            if( !KIGIT::PromptToTrustHost( this, *hostKey, retriedAfterTrust ) )
+                return;
+
+            retriedAfterTrust = true;
+        }
     }
     else
     {

@@ -35,6 +35,7 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/utils.h>
+#include <cctype>
 #include <cerrno>
 #include <chrono>
 #include <cstdlib>
@@ -75,6 +76,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         m_remote( aOther.m_remote ),
         m_urlUsername( aOther.m_urlUsername ),
         m_hostname( aOther.m_hostname ),
+        m_port( aOther.m_port ),
         m_username( aOther.m_username ),
         m_password( aOther.m_password ),
         m_testedTypes( aOther.m_testedTypes.load() ),
@@ -1953,6 +1955,17 @@ bool KIGIT_COMMON::ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, co
 }
 
 
+int KIGIT_COMMON::SSHPortFor( const wxString& aHost ) const
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
+    if( m_port < 0 || !m_hostname.IsSameAs( aHost, false ) )
+        return -1;
+
+    return m_port == 0 ? 22 : m_port;
+}
+
+
 std::unique_lock<std::mutex> KIGIT_COMMON::TryLockActionFor( std::chrono::milliseconds aWait )
 {
     const auto                   deadline = std::chrono::steady_clock::now() + aWait;
@@ -2072,6 +2085,7 @@ void KIGIT_COMMON::SyncRemoteUrl( const wxString& aRawUrl )
             m_urlUsername = parsed.username;
             m_connType = parsed.connType;
             m_hostname = parsed.hostname;
+            m_port = parsed.port;
             m_username = parsed.username;
             m_password = parsed.password;
             m_secretFetched = !m_password.IsEmpty();
@@ -2156,6 +2170,237 @@ static wxString stripUrlUserinfo( const wxString& aUrl )
 }
 
 
+// libgit2's git_str_decode_percent when the whole result is UTF-8; otherwise the component stays as written
+static wxString decodePercent( const wxString& aText )
+{
+    const std::string text = aText.utf8_string();
+    std::string       decoded;
+
+    for( size_t ii = 0; ii < text.size(); ++ii )
+    {
+        if( text[ii] == '%' && ii + 2 < text.size() && isxdigit( (unsigned char) text[ii + 1] )
+            && isxdigit( (unsigned char) text[ii + 2] ) )
+        {
+            decoded += static_cast<char>( std::stoi( text.substr( ii + 1, 2 ), nullptr, 16 ) );
+            ii += 2;
+        }
+        else
+        {
+            decoded += text[ii];
+        }
+    }
+
+    wxString result = wxString::FromUTF8( decoded );
+
+    // wxString cannot hold bytes that are not UTF-8, so such text stays as written
+    return result.IsEmpty() && !decoded.empty() ? aText : result;
+}
+
+
+// 0 when the address names no port, -1 when it names one that cannot be used
+static int parsePort( const wxString& aPort )
+{
+    long port = 0;
+
+    if( aPort.IsEmpty() )
+        return 0;
+
+    if( !aPort.ToLong( &port ) || port <= 0 || port > 65535 )
+        return -1;
+
+    return static_cast<int>( port );
+}
+
+
+static bool isScpIpv6( const wxString& aText, size_t aBracket )
+{
+    size_t colons = 0;
+
+    for( size_t ii = aBracket + 1; ii < aText.length(); ++ii )
+    {
+        wxUniChar c = aText[ii];
+
+        if( c == ':' )
+            colons++;
+
+        if( c == ']' )
+            return colons > 1;
+
+        if( c != ':' && !wxIsxdigit( c ) )
+            return false;
+    }
+
+    return false;
+}
+
+
+static bool scpHasUser( const wxString& aText, size_t aStart )
+{
+    for( size_t ii = aStart; ii < aText.length(); ++ii )
+    {
+        if( aText[ii] == '@' )
+            return true;
+
+        if( aText[ii] == ':' )
+            return false;
+    }
+
+    return false;
+}
+
+
+// libgit2's git_net_url_parse_scp, state for state, so the host key check binds the host and port it dials
+static bool parseScpAddress( const wxString& aURL, wxString& aUser, wxString& aHost, wxString& aPort )
+{
+    enum
+    {
+        NONE,
+        USER,
+        HOST_START,
+        HOST,
+        HOST_END,
+        IPV6,
+        IPV6_END,
+        PORT_START,
+        PORT,
+        PORT_END,
+        PATH_START
+    } state = NONE;
+
+    size_t user = 0, userLen = 0, host = 0, hostLen = 0, port = 0, portLen = 0;
+    int    bracket = 0;
+    bool   havePath = false;
+
+    for( size_t ii = 0; ii < aURL.length() && !havePath; ++ii )
+    {
+        wxUniChar c = aURL[ii];
+
+        switch( state )
+        {
+        case NONE:
+            if( c == '@' || c == ':' )
+                return false;
+
+            if( c == '[' )
+            {
+                if( isScpIpv6( aURL, ii ) )
+                {
+                    state = IPV6;
+                    host = ii;
+                }
+                else if( bracket++ > 1 )
+                {
+                    return false;
+                }
+            }
+            else if( scpHasUser( aURL, ii ) )
+            {
+                state = USER;
+                user = ii;
+            }
+            else
+            {
+                state = HOST;
+                host = ii;
+            }
+
+            break;
+
+        case USER:
+            if( c == '@' )
+            {
+                userLen = ii - user;
+                state = HOST_START;
+            }
+
+            break;
+
+        case HOST_START:
+            state = c == '[' ? IPV6 : HOST;
+            host = ii;
+            break;
+
+        case HOST:
+            if( c == ':' )
+            {
+                hostLen = ii - host;
+                state = bracket ? PORT_START : PATH_START;
+            }
+            else if( c == ']' )
+            {
+                if( bracket-- == 0 )
+                    return false;
+
+                hostLen = ii - host;
+                state = HOST_END;
+            }
+
+            break;
+
+        case HOST_END:
+            if( c != ':' )
+                return false;
+
+            state = PATH_START;
+            break;
+
+        case IPV6:
+            if( c == ']' )
+                state = IPV6_END;
+
+            break;
+
+        case IPV6_END:
+            if( c != ':' )
+                return false;
+
+            hostLen = ii - host;
+            state = bracket ? PORT_START : PATH_START;
+            break;
+
+        case PORT_START:
+            port = ii;
+            state = PORT;
+            break;
+
+        case PORT:
+            if( c == ']' )
+            {
+                if( bracket-- == 0 )
+                    return false;
+
+                portLen = ii - port;
+                state = PORT_END;
+            }
+
+            break;
+
+        case PORT_END:
+            if( c != ':' )
+                return false;
+
+            state = PATH_START;
+            break;
+
+        case PATH_START: havePath = true; break;
+        }
+    }
+
+    if( !havePath || hostLen == 0 )
+        return false;
+
+    aUser = aURL.Mid( user, userLen );
+    aHost = aURL.Mid( host, hostLen );
+    aPort = aURL.Mid( port, portLen );
+
+    // libgit2 keeps an IPv6 host in its brackets here, but hands it out without them for URLs
+    if( aHost.StartsWith( "[" ) && aHost.EndsWith( "]" ) )
+        aHost = aHost.Mid( 1, aHost.length() - 2 );
+
+    return true;
+}
+
+
 KIGIT_COMMON::REMOTE_URL KIGIT_COMMON::ParseRemoteURL( const wxString& aURL )
 {
     REMOTE_URL result;
@@ -2171,7 +2416,7 @@ KIGIT_COMMON::REMOTE_URL KIGIT_COMMON::ParseRemoteURL( const wxString& aURL )
 
         if( scheme == "https" || scheme == "http" )
             result.connType = GIT_CONN_TYPE::GIT_CONN_HTTPS;
-        else if( scheme == "ssh" || scheme == "git+ssh" )
+        else if( scheme == "ssh" || scheme == "ssh+git" || scheme == "git+ssh" )
             result.connType = GIT_CONN_TYPE::GIT_CONN_SSH;
         else
             return result;
@@ -2184,15 +2429,16 @@ KIGIT_COMMON::REMOTE_URL KIGIT_COMMON::ParseRemoteURL( const wxString& aURL )
         {
             wxString credentials = aURL.Mid( hostStart, at - hostStart );
             size_t   colon = credentials.find( ':' );
-            result.username = credentials.Left( colon );
+            wxString user = credentials.Left( colon );
+            result.username = decodePercent( user );
 
             if( colon != wxString::npos )
-                result.password = credentials.Mid( colon + 1 );
+                result.password = decodePercent( credentials.Mid( colon + 1 ) );
 
             wxString userPrefix;
 
-            if( result.connType == GIT_CONN_TYPE::GIT_CONN_SSH && !result.username.IsEmpty() )
-                userPrefix = result.username + "@";
+            if( result.connType == GIT_CONN_TYPE::GIT_CONN_SSH && !user.IsEmpty() )
+                userPrefix = user + "@";
 
             result.url = aURL.Left( hostStart ) + userPrefix + aURL.Mid( at + 1 );
             hostStart = at + 1;
@@ -2223,21 +2469,32 @@ KIGIT_COMMON::REMOTE_URL KIGIT_COMMON::ParseRemoteURL( const wxString& aURL )
         }
 
         result.connType = GIT_CONN_TYPE::GIT_CONN_SSH;
-        size_t at = aURL.Left( hostEnd ).find( '@' );
+        wxString port;
 
-        if( at != wxString::npos )
-        {
-            result.username = aURL.Left( at );
-            hostStart = at + 1;
-        }
+        // An address libgit2 cannot read leaves no host, which the host key check refuses
+        if( parseScpAddress( aURL, result.username, result.hostname, port ) )
+            result.port = parsePort( port );
+
+        return result;
     }
 
     wxString host = aURL.Mid( hostStart, hostEnd == wxString::npos ? wxString::npos : hostEnd - hostStart );
+    wxString port;
 
     if( host.StartsWith( "[" ) )
+    {
         result.hostname = host.AfterFirst( '[' ).BeforeFirst( ']' );
+        port = host.AfterFirst( ']' ).AfterFirst( ':' );
+    }
     else
+    {
         result.hostname = host.BeforeFirst( ':' );
+        port = host.AfterFirst( ':' );
+    }
+
+    // libgit2 connects to the decoded name, so %67he.example is ghe.example
+    result.hostname = decodePercent( result.hostname );
+    result.port = parsePort( port );
 
     return result;
 }
@@ -2257,6 +2514,7 @@ void KIGIT_COMMON::updateConnectionTypeUnlocked()
     m_remote = parsed.url;
     m_urlUsername = parsed.username;
     m_hostname = parsed.hostname;
+    m_port = parsed.port;
 
     if( !parsed.username.IsEmpty() )
         m_username = parsed.username;
@@ -2562,6 +2820,72 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
 
     return GIT_OK;
 };
+
+
+extern "C" int certificate_check_cb( git_cert* aCert, int aValid, const char* aHost, void* aPayload )
+{
+    if( !aCert || !aHost || !aPayload || aCert->cert_type != GIT_CERT_HOSTKEY_LIBSSH2 )
+        return GIT_PASSTHROUGH;
+
+    const git_cert_hostkey* cert = reinterpret_cast<const git_cert_hostkey*>( aCert );
+
+    // libgit2 1.9 connects on a passthrough even when nothing was verified
+    auto refuseUnreadable = [&]()
+    {
+        wxLogTrace( traceGit, "Host key from %s cannot be read, refusing it", aHost );
+        git_error_set_str( GIT_ERROR_NET, wxString::Format( _( "KiCad could not read the key %s presented, so the "
+                                                               "connection was not made. Ask your administrator "
+                                                               "which host key the server uses." ),
+                                                            wxString::FromUTF8( aHost ) )
+                                                  .utf8_str() );
+        return GIT_ECERTIFICATE;
+    };
+
+    if( !( cert->type & GIT_CERT_SSH_RAW ) || !cert->hostkey || cert->hostkey_len == 0 )
+        return refuseUnreadable();
+
+    KIGIT_REPO_MIXIN* handler = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
+
+    KIGIT::HOST_KEY_FAILURE key;
+    key.rawKey.assign( cert->hostkey, cert->hostkey_len );
+    key.host = wxString::FromUTF8( aHost );
+
+    // An SCP address hands over an IPv6 host still in its brackets
+    if( key.host.StartsWith( wxS( "[" ) ) && key.host.EndsWith( wxS( "]" ) ) )
+        key.host = key.host.Mid( 1, key.host.length() - 2 );
+
+    key.port = handler->GetCommon()->SSHPortFor( key.host );
+
+    // Checking another port's entries would let a wildcard or plain-host line vouch for this server
+    if( key.port < 0 )
+    {
+        wxLogTrace( traceGit, "Host %s does not match the synced remote, refusing its key", key.host );
+        git_error_set_str( GIT_ERROR_NET, wxString::Format( _( "The address of %s could not be matched to the "
+                                                               "remote, so its key was not checked. Check the "
+                                                               "remote URL." ),
+                                                            key.host )
+                                                  .utf8_str() );
+        return GIT_ECERTIFICATE;
+    }
+
+    key.keyType = KIGIT::HostKeyType( key.rawKey );
+    key.fingerprint = KIGIT::HostKeyFingerprint( key.rawKey );
+
+    if( key.keyType.IsEmpty() )
+        return refuseUnreadable();
+
+    key.state = KIGIT::LookupKnownHost( KIGIT::ReadKnownHosts(), key.host, key.port, key.keyType, key.rawKey );
+
+    wxLogTrace( traceGit, "Host key %s SHA256:%s for %s port %d, known_hosts state %d, libgit2 valid %d", key.keyType,
+                key.fingerprint, key.host, key.port, static_cast<int>( key.state ), aValid );
+
+    // libssh2 accepts revoked keys and port-22 lines for other ports, and 1.5.0 reads no known_hosts at all
+    if( key.state == KIGIT::KNOWN_HOST_STATE::MATCH )
+        return 0;
+
+    handler->SetHostKeyFailure( key );
+    return GIT_ECERTIFICATE;
+}
 
 
 namespace KIGIT

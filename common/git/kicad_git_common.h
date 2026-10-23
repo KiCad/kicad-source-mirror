@@ -23,6 +23,7 @@
 #include <git/git_backend.h>
 #include <git/git_compare_handler.h>
 #include <git/kicad_git_errors.h>
+#include <git/kigit_known_hosts.h>
 #include <import_export.h>
 
 #include <git2.h>
@@ -290,6 +291,7 @@ public:
         wxString      username;
         wxString      password;
         wxString      hostname;
+        int           port = 0; ///< 0 when the address names none.
         GIT_CONN_TYPE connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
     };
 
@@ -647,6 +649,10 @@ public:
             m_activeCancel->store( true );
     }
 
+    /// The SSH port the session's remote names for aHost, 22 when it names none, or -1 when the remote is on
+    /// another host or its port is not valid.
+    int SSHPortFor( const wxString& aHost ) const;
+
     bool WasAuthFailure() const { return m_authFailed; }
     void ClearAuthFailure() { m_authFailed = false; }
     void SetAuthFailure() { m_authFailed = true; }
@@ -682,6 +688,7 @@ protected:
     wxString m_remote;      // This is the full connection string
     wxString m_urlUsername; // The username m_remote was parsed with, which HTTPS strips from it
     wxString m_hostname;    // This is just the hostname without the protocol, username, or password
+    int      m_port = 0;    // The port m_remote names, 0 when it names none and -1 when it is not valid
     wxString m_username;
     wxString m_password;
 
@@ -760,6 +767,15 @@ extern "C" APIEXPORT int fetchhead_foreach_cb( const char*, const char*,
                                                const git_oid* aOID, unsigned int aIsMerge, void* aPayload );
 extern "C" APIEXPORT int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
                                          unsigned int aAllowedTypes, void* aPayload );
+
+/**
+ * Check an SSH host key against known_hosts, which decides alone. A listed key returns 0, and any other
+ * state fails with GIT_ECERTIFICATE and is recorded with KIGIT_REPO_MIXIN::SetHostKeyFailure. A key KiCad
+ * cannot read, or a host or port that does not match the synced remote, fails without a record. Other
+ * certificates, such as HTTPS ones, are left to libgit2. Never returns a positive value, which libgit2 1.9
+ * takes as accepting an unverified SSH host.
+ */
+extern "C" APIEXPORT int certificate_check_cb( git_cert* aCert, int aValid, const char* aHost, void* aPayload );
 
 
 class wxWindow;

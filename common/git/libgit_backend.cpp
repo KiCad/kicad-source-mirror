@@ -173,6 +173,7 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
     cloneOptions.checkout_opts.progress_payload = aHandler;
     cloneOptions.fetch_opts.callbacks.transfer_progress = transfer_progress_cb;
     cloneOptions.fetch_opts.callbacks.credentials = credentials_cb;
+    cloneOptions.fetch_opts.callbacks.certificate_check = certificate_check_cb;
     cloneOptions.fetch_opts.callbacks.payload = aHandler;
     cloneOptions.fetch_opts.proxy_opts.type = GIT_PROXY_AUTO;
     cloneOptions.remote_cb = clone_remote_cb;
@@ -180,6 +181,7 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
+    aHandler->ClearHostKeyFailure();
     git_repository* newRepo = nullptr;
     wxString        remote = common->GetRemote();
     std::string     remoteUtf8 = remote.utf8_string();
@@ -943,6 +945,7 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     remoteCallbacks.push_transfer_progress = push_transfer_progress_cb;
     remoteCallbacks.push_update_reference = push_update_reference_cb;
     remoteCallbacks.credentials = credentials_cb;
+    remoteCallbacks.certificate_check = certificate_check_cb;
     remoteCallbacks.payload = aHandler;
 
     git_proxy_options proxyOpts;
@@ -954,6 +957,7 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
+    aHandler->ClearHostKeyFailure();
 
     if( int connectResult = git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {
@@ -1480,6 +1484,7 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     remoteCallbacks.sideband_progress = progress_cb;
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.credentials = credentials_cb;
+    remoteCallbacks.certificate_check = certificate_check_cb;
     remoteCallbacks.payload = aHandler;
 
     git_proxy_options proxyOpts;
@@ -1495,6 +1500,7 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
+    aHandler->ClearHostKeyFailure();
 
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {

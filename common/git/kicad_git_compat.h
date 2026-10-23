@@ -31,4 +31,7 @@
 #include <git2/sys/errors.h>
 #endif
 
+// GIT_OPT_GET_HOMEDIR and GIT_OPT_SET_HOMEDIR were added in libgit2 1.6
+#define KIGIT_HAS_HOMEDIR_OPT ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 6 ) )
+
 #endif // KICAD_GIT_COMPAT_H_
