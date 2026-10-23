@@ -149,8 +149,7 @@ kiapi::common::types::DocumentSpecifier makeBoardDocument( const BOARD& aBoard )
 {
     kiapi::common::types::DocumentSpecifier document;
     document.set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
-    document.set_board_filename(
-            wxFileName( aBoard.GetFileName() ).GetFullName().ToStdString() );
+    document.set_board_filename( wxFileName( aBoard.GetFileName() ).GetFullName().ToStdString() );
 
     return document;
 }
@@ -172,6 +171,34 @@ kiapi::common::ApiRequest makeStartRefillZonesTaskRequest(
     return request;
 }
 
+
+kiapi::common::ApiRequest makeStartDrcTaskRequest( const BOARD& aBoard, bool aTestSchematicParity = false,
+                                                   bool aRequireZonesFilled = false )
+{
+    kiapi::board::tasks::StartDrcTask command;
+    *command.mutable_board() = makeBoardDocument( aBoard );
+    command.set_test_schematic_parity( aTestSchematicParity );
+    command.set_require_zones_filled( aRequireZonesFilled );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    return request;
+}
+
+
+kiapi::common::ApiRequest makeGetDrcTaskResultRequest( const std::string& aToken )
+{
+    kiapi::board::tasks::GetDrcTaskResult command;
+    command.mutable_token()->set_value( aToken );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    return request;
+}
 
 } // namespace
 
@@ -376,8 +403,9 @@ BOOST_AUTO_TEST_CASE( RevertDocumentWithoutCommitPassesGuard )
 
 
 /*
- * Long-running API task: StartRefillZonesTask must fill the requested zones via the task
- * scheduler and report COMPLETED.
+ * Long-running API tasks: StartRefillZonesTask must fill the requested zones via the task
+ * scheduler and report COMPLETED; StartDrcTask must run DRC headlessly and produce a result
+ * retrievable through GetDrcTaskResult.
  */
 
 BOOST_AUTO_TEST_CASE( StartRefillZonesTaskCompletes )
@@ -493,6 +521,263 @@ BOOST_AUTO_TEST_CASE( StartRefillZonesTaskEmptyListFillsAllZones )
     kiapi::common::commands::GetDocumentModifiedStateResponse state;
     BOOST_REQUIRE( stateResult->message().UnpackTo( &state ) );
     BOOST_CHECK_EQUAL( state.state(), kiapi::common::commands::DMS_MODIFIED );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartDrcTaskCompletesWithResults )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::board::tasks::StartDrcTask command;
+    command.mutable_board()->set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
+    command.mutable_board()->set_board_filename(
+            wxFileName( board->GetFileName() ).GetFullName().ToStdString() );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE( !response.token().value().empty() );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( response.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_COMPLETED );
+
+    // Fetch the result via a GetDrcTaskResult request, like a real client
+    kiapi::board::tasks::GetDrcTaskResult resultRequest;
+    resultRequest.mutable_token()->set_value( response.token().value() );
+
+    kiapi::common::ApiRequest resultApiRequest;
+    resultApiRequest.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( resultApiRequest.mutable_message()->PackFrom( resultRequest ) );
+
+    API_RESULT resultResponse = handler.Handle( resultApiRequest );
+    BOOST_REQUIRE( resultResponse.has_value() );
+
+    kiapi::board::tasks::DrcTaskResult drcResult;
+    BOOST_REQUIRE( resultResponse->message().UnpackTo( &drcResult ) );
+
+    // issue5830 has unfilled zones and minimal clearances: DRC must find violations, and
+    // the run must have produced board markers retrievable via the standard item API
+    BOOST_CHECK_GT( drcResult.violations_size(), 0 );
+    BOOST_CHECK_EQUAL( board->Markers().size(), drcResult.violations_size() );
+
+    // Each violation entry must carry a description and a valid error type
+    for( const kiapi::board::DrcMarker& violation : drcResult.violations() )
+    {
+        BOOST_CHECK( !violation.description().empty() );
+        BOOST_CHECK( violation.error_type() != kiapi::board::DrcErrorType::DRCET_UNKNOWN );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( GetDrcTaskResultRejectsUnknownToken )
+{
+    loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::board::tasks::GetDrcTaskResult resultRequest;
+    resultRequest.mutable_token()->set_value( "deadbeef-0000-0000-0000-000000000000" );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( resultRequest ) );
+
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BAD_REQUEST );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartDrcTaskRequiresFilledZones )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    auto makeStartRequest = [&]() -> kiapi::common::ApiRequest
+    {
+        kiapi::board::tasks::StartDrcTask command;
+        command.mutable_board()->set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
+        command.mutable_board()->set_board_filename(
+                wxFileName( board->GetFileName() ).GetFullName().ToStdString() );
+        command.set_require_zones_filled( true );
+
+        kiapi::common::ApiRequest request;
+        request.mutable_header()->set_client_name( "kicad.qa" );
+        BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+        return request;
+    };
+
+    // Stale zones: unfill everything; the task must refuse to run DRC
+    unfillAll( board );
+
+    kiapi::common::ApiRequest request = makeStartRequest();
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( response.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_FAILED );
+    BOOST_CHECK( status->error_message().find( "zone" ) != std::string::npos );
+
+    // Filled zones: the task must now run
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+        {
+            ZONE_FILLER filler( board, nullptr );
+            std::vector<ZONE*> toFill = { zone };
+            BOOST_REQUIRE( filler.Fill( toFill ) );
+        }
+    }
+
+    kiapi::common::ApiRequest request2 = makeStartRequest();
+    API_RESULT result2 = handler.Handle( request2 );
+    BOOST_REQUIRE( result2.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response2;
+    BOOST_REQUIRE( result2->message().UnpackTo( &response2 ) );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status2 = API_TASK_SCHEDULER::Instance().GetStatus( response2.token().value() );
+    BOOST_REQUIRE( status2.has_value() );
+    BOOST_CHECK_EQUAL( status2->state(), kiapi::common::tasks::TS_COMPLETED );
+}
+
+
+BOOST_AUTO_TEST_CASE( GetDrcTaskResultOnFailedTaskReturnsInternalError )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    unfillAll( board );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::common::ApiRequest startRequest =
+            makeStartDrcTaskRequest( *board, false, true /* requireFilledZones */ );
+    API_RESULT start = handler.Handle( startRequest );
+    BOOST_REQUIRE( start.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( start->message().UnpackTo( &response ) );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( response.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_FAILED );
+
+    kiapi::common::ApiRequest resultRequest =
+            makeGetDrcTaskResultRequest( response.token().value() );
+    API_RESULT result = handler.Handle( resultRequest );
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_INTERNAL_ERROR );
+    BOOST_CHECK( result.error().error_message().find( "zone" ) != std::string::npos );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartDrcTaskWithParityWithoutKiwayFails )
+{
+    BOARD* board = loadBoard( wxS( "via_off_center" ) );
+
+    // The QA loader reads boards from a stream, which leaves the board without a file name.
+    // Set it so the parity lookup finds the schematic next to this board and reaches the
+    // kiface step; the headless test context has no KIWAY.
+    board->SetFileName( wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() )
+                        + wxS( "via_off_center.kicad_pcb" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::common::ApiRequest startRequest =
+            makeStartDrcTaskRequest( *board, true /* testFootprints */, false );
+    API_RESULT start = handler.Handle( startRequest );
+    BOOST_REQUIRE( start.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( start->message().UnpackTo( &response ) );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    auto status = API_TASK_SCHEDULER::Instance().GetStatus( response.token().value() );
+    BOOST_REQUIRE( status.has_value() );
+    BOOST_CHECK_EQUAL( status->state(), kiapi::common::tasks::TS_FAILED );
+    BOOST_CHECK_MESSAGE( status->error_message().find( "parity tests" ) != std::string::npos,
+                         "unexpected error: " << status->error_message() );
+}
+
+
+BOOST_AUTO_TEST_CASE( StartTaskWhileAnotherIsRunningIsRejected )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    kiapi::common::ApiRequest startRequest = makeStartDrcTaskRequest( *board );
+    API_RESULT first = handler.Handle( startRequest );
+    BOOST_REQUIRE( first.has_value() );
+
+    kiapi::common::tasks::StartTaskResponse response;
+    BOOST_REQUIRE( first->message().UnpackTo( &response ) );
+    BOOST_REQUIRE( !response.token().value().empty() );
+
+    // The DRC run event has not been pumped, so the task is still running
+    kiapi::common::ApiRequest secondRequest =
+            makeStartRefillZonesTaskRequest( *board, { F_CU_ZONE } );
+    API_RESULT second = handler.Handle( secondRequest );
+    BOOST_REQUIRE( !second.has_value() );
+    BOOST_CHECK_EQUAL( second.error().status(), kiapi::common::ApiStatusCode::AS_BUSY );
+
+    // Result queries are served during a task, but report that it is not finished yet
+    kiapi::common::ApiRequest runningRequest =
+            makeGetDrcTaskResultRequest( response.token().value() );
+    API_RESULT runningResult = handler.Handle( runningRequest );
+    BOOST_REQUIRE( !runningResult.has_value() );
+    BOOST_CHECK_EQUAL( runningResult.error().status(), kiapi::common::ApiStatusCode::AS_BUSY );
+
+    API_TASK_SCHEDULER::Instance().Pump();
+
+    kiapi::common::ApiRequest finishedRequest =
+            makeGetDrcTaskResultRequest( response.token().value() );
+    API_RESULT finishedResult = handler.Handle( finishedRequest );
+    BOOST_REQUIRE( finishedResult.has_value() );
+}
+
+
+BOOST_AUTO_TEST_CASE( TaskQueriesAllowedDuringTask )
+{
+    loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    // Status/result retrieval is safe while a task runs
+    BOOST_CHECK( handler.AllowsDuringTask(
+            kiapi::board::tasks::GetDrcTaskResult().GetTypeName() ) );
+
+    // Starting or mutating commands is not
+    BOOST_CHECK( !handler.AllowsDuringTask(
+            kiapi::board::tasks::StartDrcTask().GetTypeName() ) );
+    BOOST_CHECK( !handler.AllowsDuringTask(
+            kiapi::board::tasks::StartRefillZonesTask().GetTypeName() ) );
+    BOOST_CHECK( !handler.AllowsDuringTask(
+            kiapi::common::commands::GetItems().GetTypeName() ) );
 }
 
 

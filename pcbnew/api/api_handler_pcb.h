@@ -132,7 +132,14 @@ private:
     HANDLER_RESULT<kiapi::common::tasks::StartTaskResponse> handleStartRefillZonesTask(
             const HANDLER_CONTEXT<kiapi::board::tasks::StartRefillZonesTask>& aCtx );
 
+    HANDLER_RESULT<kiapi::common::tasks::StartTaskResponse> handleStartDrcTask(
+            const HANDLER_CONTEXT<kiapi::board::tasks::StartDrcTask>& aCtx );
+
+    HANDLER_RESULT<kiapi::board::tasks::DrcTaskResult> handleGetDrcTaskResult(
+            const HANDLER_CONTEXT<kiapi::board::tasks::GetDrcTaskResult>& aCtx );
+
     class REFILL_ZONES_TASK;
+    class DRC_TASK;
 
     HANDLER_RESULT<BoardEditorAppearanceSettings> handleGetBoardEditorAppearanceSettings(
             const HANDLER_CONTEXT<GetBoardEditorAppearanceSettings>& aCtx );

@@ -41,7 +41,7 @@
 
 
 DRC_TOOL::DRC_TOOL() :
-        PCB_TOOL_BASE( "pcbnew.DRCTool" ),
+        PCB_TOOL_BASE( DRC_TOOL_NAME ),
         m_editFrame( nullptr ),
         m_pcb( nullptr ),
         m_drcDialog( nullptr ),

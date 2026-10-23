@@ -160,6 +160,11 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
             &API_HANDLER_PCB::handleImportSpecctraSession );
     registerHandler<kiapi::board::tasks::StartRefillZonesTask, kiapi::common::tasks::StartTaskResponse>(
             &API_HANDLER_PCB::handleStartRefillZonesTask );
+    registerHandler<kiapi::board::tasks::StartDrcTask,
+                    kiapi::common::tasks::StartTaskResponse>(
+            &API_HANDLER_PCB::handleStartDrcTask );
+    registerHandler<kiapi::board::tasks::GetDrcTaskResult, kiapi::board::tasks::DrcTaskResult>(
+            &API_HANDLER_PCB::handleGetDrcTaskResult, true );
 
     registerHandler<GetBoardEditorAppearanceSettings, BoardEditorAppearanceSettings>(
             &API_HANDLER_PCB::handleGetBoardEditorAppearanceSettings );

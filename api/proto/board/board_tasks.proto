@@ -26,6 +26,7 @@ syntax = "proto3";
 package kiapi.board.tasks;
 
 import "common/types/base_types.proto";
+import "board/board_rules.proto";
 import "common/tasks.proto";
 
 // Refills some or all zones on the board as a background task.  Returns a StartTaskResponse immediately;
@@ -38,4 +39,42 @@ message StartRefillZonesTask
 
   // A list of zones to refill.  If empty, all zones are refilled.
   repeated kiapi.common.types.KIID zones = 2;
+}
+
+// Runs the board design rules check as a background task.  Returns a StartTaskResponse immediately;
+// poll GetTaskStatus with the returned token to determine when it has completed.
+// Since: 11.0
+message StartDrcTask
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  // Report all track/via clearance violations instead of one per net
+  bool report_all_track_errors = 2;
+
+  // Test for parity between the PCB and the schematic
+  bool test_schematic_parity = 3;
+
+  // When true, the task fails with an error if any zone on the board needs to be refilled
+  bool require_zones_filled = 4;
+}
+
+// Retrieves the results of a completed DRC task.  Fails with AS_INTERNAL_ERROR if the task
+// did not complete successfully; use GetTaskStatus for the failure details
+// Since: 11.0
+message GetDrcTaskResult
+{
+  kiapi.common.tasks.TaskToken token = 1;
+}
+
+// Since: 11.0
+message DrcTaskResult
+{
+  // The violations found by the check
+  repeated kiapi.board.DrcMarker violations = 1;
+
+  // Number of check types whose severity is set to Ignore
+  int32 ignored_count = 2;
+
+  // Number of violations suppressed by exclusions
+  int32 excluded_count = 3;
 }

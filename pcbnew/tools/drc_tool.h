@@ -30,6 +30,9 @@
 #include <tools/pcb_tool_base.h>
 
 
+#define DRC_TOOL_NAME "pcbnew.DRCTool"
+
+
 class PCB_EDIT_FRAME;
 class DIALOG_DRC;
 class DIALOG_DRC_RULE_EDITOR;
