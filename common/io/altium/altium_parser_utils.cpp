@@ -307,7 +307,7 @@ wxString AltiumPinDesignatorToKiCad( const wxString& aDesignator )
         token.Trim( true ).Trim( false );
 
         if( !token.IsEmpty() )
-            cleaned.Add( token );
+            cleaned.Add( EscapeStackedPinItem( token ) );
     }
 
     if( cleaned.IsEmpty() )
