@@ -1051,8 +1051,8 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const KIGIT
     // The restore rewrites files the editors have open, so snapshot them for a scoped reload.
     EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( m_frame->Kiway() );
 
-    RestoreResult result = RestoreResult::Error;
-    wxString      error;
+    RestoreResult       result = RestoreResult::Error;
+    KIGIT_ERROR_MESSAGE error;
 
     {
         std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
@@ -1115,6 +1115,9 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const KIGIT
         break;
     }
 
-    case RestoreResult::Error: DisplayErrorMessage( this, _( "Could not restore that version." ), error ); break;
+    case RestoreResult::Error:
+        DisplayErrorMessage( this, error.summary.IsEmpty() ? _( "Could not restore that version." ) : error.summary,
+                             error.details );
+        break;
     }
 }

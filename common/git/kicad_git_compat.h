@@ -34,4 +34,7 @@
 // GIT_OPT_GET_HOMEDIR and GIT_OPT_SET_HOMEDIR were added in libgit2 1.6
 #define KIGIT_HAS_HOMEDIR_OPT ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 6 ) )
 
+// libgit2 1.8 added GIT_CONFIG_LEVEL_WORKTREE and started reading config.worktree
+#define KIGIT_HAS_WORKTREE_CONFIG ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 8 ) )
+
 #endif // KICAD_GIT_COMPAT_H_

@@ -56,6 +56,9 @@ public:
     GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame );
     ~GIT_COMMIT_PANE() override;
 
+    /// Lay out the pane, then re-wrap the status line when the width its column got has changed.
+    bool Layout() override;
+
     /// Called with the path of the file the user selects in the list, or empty when none is.
     void SetFileSelectedHandler( std::function<void( const wxString& )> aHandler );
 
@@ -126,7 +129,6 @@ private:
     void onChecklistChanged( wxDataViewEvent& aEvent );
     void onMessageChanged( wxCommandEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
-    void onSize( wxSizeEvent& aEvent );
 
     /// The gear's menu: the advanced window and the author.
     void onSettings( wxCommandEvent& aEvent );
@@ -134,6 +136,9 @@ private:
 
     /// Set the status line text and wrap it to the current panel width.
     void setStatusText( const wxString& aText );
+
+    /// Show a command to copy under the status line, or hide the row when aCommand is empty.
+    void showTrustCommand( const wxString& aCommand );
 
     /// False, with a message, while a transfer is running or a merge waits to be finished.
     bool transferCanStart();
@@ -274,6 +279,9 @@ private:
 
     /// Unwrapped status text, kept so it can be re-wrapped on resize.
     wxString m_statusText;
+
+    /// The width the status text was last wrapped to, so a layout re-wraps it only when that changes.
+    int m_statusWrapWidth = -1;
 
     /// True once this panel has attached its refresh listener to a session at least once. A
     /// first attachment is not a project change, so it must not close the Advanced window.

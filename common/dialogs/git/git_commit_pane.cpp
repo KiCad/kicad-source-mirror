@@ -47,6 +47,7 @@
 #include <wx/choicdlg.h>
 
 #include <bitmaps.h>
+#include <clipboard.h>
 #include <confirm.h>
 #include <dialogs/git/git_credentials_prompt.h>
 #include <dialogs/git/git_transfer.h>
@@ -73,6 +74,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/file_checklist_ctrl.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/ui_common.h>
 
 
 namespace
@@ -156,8 +158,12 @@ static bool moveToNewBranch( KIGIT_COMMON& aCommon, const wxString& aName, wxStr
 
     if( branchHandler.SwitchToBranch( aName ) != BranchResult::Success )
     {
-        aError = wxString::Format( _( "Could not switch to the new branch '%s'." ), aName );
-        aDetail = branchHandler.GetErrorString();
+        KIGIT_ERROR_MESSAGE switchError = branchHandler.PopError();
+
+        aError = switchError.summary.IsEmpty()
+                         ? wxString::Format( _( "Could not switch to the new branch '%s'." ), aName )
+                         : switchError.summary;
+        aDetail = switchError.details;
         aCommon.DeleteBranch( aName );
         return false;
     }
@@ -265,6 +271,11 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_newBranchCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onNewBranchToggled, this );
     m_recentMessages->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onRecentMessage, this );
     m_showDiffButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onShowDiff, this );
+    m_copyTrustCommand->Bind( wxEVT_BUTTON,
+                              [this]( wxCommandEvent& )
+                              {
+                                  SaveClipboard( m_trustCommand->GetValue().utf8_string() );
+                              } );
     m_showDiffButton->SetToolTip( _( "Show what changed in the selected file. Pick a file in the list first." ) );
     m_description->Bind( wxEVT_TEXT,
                          [this]( wxCommandEvent& )
@@ -286,7 +297,6 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
                            if( m_fileSelectedHandler )
                                m_fileSelectedHandler( m_checklist->GetItemPath( m_checklist->GetSelection() ) );
                        } );
-    Bind( wxEVT_SIZE, &GIT_COMMIT_PANE::onSize, this );
     Bind( wxEVT_IDLE, &GIT_COMMIT_PANE::onIdle, this );
 
     // Inside the advanced window the page is wide enough for the list and the message side
@@ -311,6 +321,7 @@ void GIT_COMMIT_PANE::layoutWide()
     wxSizer* column = GetSizer();
     column->Detach( m_changesRow );
     column->Detach( m_emptyLabel );
+    column->Detach( m_trustRow );
     column->Detach( m_checklist );
     column->GetItem( m_description )->SetProportion( 1 );
     column->SetMinSize( FromDIP( wxSize( 280, -1 ) ) );
@@ -351,6 +362,7 @@ void GIT_COMMIT_PANE::layoutWide()
     wxBoxSizer* files = new wxBoxSizer( wxVERTICAL );
     files->Add( m_changesRow, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
     files->Add( m_emptyLabel, 0, wxALL, 8 );
+    files->Add( m_trustRow, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, 8 );
     files->Add( m_checklist, 1, wxALL | wxEXPAND, 4 );
 
     wxBoxSizer* row = new wxBoxSizer( wxHORIZONTAL );
@@ -437,6 +449,7 @@ struct GIT_COMMIT_PANE::STATUS
     bool                              upstreamAhead = false;
     GitOperation                      operation = GitOperation::None;
     wxString                          attachError;
+    wxString                          attachTrustCommand;
     wxString                          currentBranch;
     std::vector<FILE_CHECKLIST_ENTRY> entries;
     std::vector<KIGIT_BRANCH_INFO>    branches;
@@ -463,6 +476,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
     bool                          countLines = m_summaryFiles != nullptr;
     auto                          status = std::make_shared<STATUS>();
     status->attachError = common->GetAttachError();
+    status->attachTrustCommand = common->GetAttachTrustCommand();
 
     m_refresh.Run(
             common,
@@ -546,7 +560,8 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
     m_checklist->SetEntries( entries );
     updateSummary();
 
-    bool hasChanges = !entries.empty();
+    bool     hasChanges = !entries.empty();
+    wxString trustCommand;
 
     m_checklist->Show( hasChanges );
     m_changesRow->ShowItems( hasChanges );
@@ -579,7 +594,10 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
         if( !Pgm().GetCommonSettings()->m_Git.enableGit )
             setStatusText( _( "Version control is turned off in Preferences." ) );
         else if( !aStatus.hasRepo && !aStatus.attachError.IsEmpty() )
+        {
             setStatusText( aStatus.attachError );
+            trustCommand = aStatus.attachTrustCommand;
+        }
         else if( !aStatus.hasRepo )
             setStatusText( _( "This project is not under version control. To set it up, right click "
                               "the project in the project manager and choose Version Control." ) );
@@ -593,6 +611,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
         m_emptyLabel->Show( true );
     }
 
+    showTrustCommand( trustCommand );
     updateCommitButton();
     Layout();
     updateDescriptionHint();
@@ -639,19 +658,53 @@ void GIT_COMMIT_PANE::showDisabledState()
 
     setStatusText( _( "Version control is turned off in Preferences." ) );
     m_emptyLabel->Show( true );
+    showTrustCommand( wxEmptyString );
 
     updateCommitButton();
     Layout();
 }
 
 
+void GIT_COMMIT_PANE::showTrustCommand( const wxString& aCommand )
+{
+    m_trustCommand->ChangeValue( aCommand );
+    m_trustRow->ShowItems( !aCommand.IsEmpty() );
+}
+
+
 void GIT_COMMIT_PANE::setStatusText( const wxString& aText )
 {
     m_statusText = aText;
+    m_statusWrapWidth = -1;
+    Layout();
+}
 
-    // Wrap to the panel width so a long line is not clipped when the pane is narrow.
-    m_emptyLabel->SetLabel( m_statusText );
-    m_emptyLabel->Wrap( std::max( 40, GetClientSize().GetWidth() - 16 ) );
+
+bool GIT_COMMIT_PANE::Layout()
+{
+    bool     done = wxPanel::Layout();
+    wxSizer* column = m_emptyLabel ? m_emptyLabel->GetContainingSizer() : nullptr;
+
+    if( !column || m_statusText.IsEmpty() )
+        return done;
+
+    // Every resize ends here, and so does a change in the wide layout's other column, which moves the
+    // label's column without resizing the pane
+    const int available = column == GetSizer() ? GetClientSize().GetWidth() : column->GetSize().GetWidth();
+
+    // The floor keeps a collapsed column from breaking at every character
+    const int width = std::max( 40, available - 2 * column->GetItem( m_emptyLabel )->GetBorder() );
+
+    if( width == m_statusWrapWidth )
+        return done;
+
+    m_statusWrapWidth = width;
+
+    // A line that fills the label exactly can be broken again by the native Windows control
+    m_emptyLabel->SetLabelText( KIUI::WrapText( m_emptyLabel, m_statusText, width - 1 ) );
+
+    // The label's height follows its line count only once the sizer runs again
+    return wxPanel::Layout();
 }
 
 
@@ -672,15 +725,6 @@ void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 
     if( dirty != m_editorsDirty )
         RefreshFileList();
-}
-
-
-void GIT_COMMIT_PANE::onSize( wxSizeEvent& aEvent )
-{
-    aEvent.Skip();
-
-    if( m_emptyLabel && m_emptyLabel->IsShown() && !m_statusText.IsEmpty() )
-        setStatusText( m_statusText );
 }
 
 
@@ -1753,11 +1797,11 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     if( common != m_frame->Prj().GetGitCommon() || common->IsShuttingDown() )
         return;
 
-    CommitResult result = CommitResult::Error;
-    wxString     error;
-    wxString     branchError;
-    wxString     branchDetail;
-    wxString     previousBranch;
+    CommitResult        result = CommitResult::Error;
+    KIGIT_ERROR_MESSAGE error;
+    wxString            branchError;
+    wxString            branchDetail;
+    wxString            previousBranch;
 
     {
         // Keep the lock through branch creation and the commit.
@@ -1810,7 +1854,7 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
             else
                 result = commitHandler.PerformCommit( files, message, userConfig.authorName, userConfig.authorEmail );
 
-            error = commitHandler.GetErrorString();
+            error = commitHandler.PopError();
 
             bool committed = result == CommitResult::Success || result == CommitResult::SuccessIndexStale;
 
@@ -1829,11 +1873,12 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     // The commit exists on this path, so saying it failed would invite a second one.
     if( result == CommitResult::SuccessIndexStale )
     {
-        DisplayInfoMessage( this, error );
+        DisplayInfoMessage( this, error.summary, error.details );
     }
     else if( result != CommitResult::Success )
     {
-        DisplayErrorMessage( this, wxString::Format( _( "Could not create the commit: %s" ), error ) );
+        DisplayErrorMessage( this, error.summary.IsEmpty() ? _( "Could not create the commit." ) : error.summary,
+                             error.details );
         return;
     }
 
@@ -2240,7 +2285,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
     const wxString&                          headOid = aPreparation->headOid;
     const wxString&                          theirsOid = aPreparation->theirsOid;
     const std::vector<KIGIT_CONFLICT_SIDES>& conflicts = aPreparation->conflicts;
-    wxString                                 error;
+    KIGIT_ERROR_MESSAGE                      error;
 
     std::vector<std::pair<wxString, wxString>> resolved;
 
@@ -2461,7 +2506,8 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
 
     if( result != MergeCommitResult::Success )
     {
-        DisplayErrorMessage( this, _( "Could not finish the merge." ), error );
+        DisplayErrorMessage( this, error.summary.IsEmpty() ? _( "Could not finish the merge." ) : error.summary,
+                             error.details );
         return;
     }
 

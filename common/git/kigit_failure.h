@@ -97,6 +97,15 @@ struct KIGIT_FAILURE_REPORT
 };
 
 
+/// Why git will not open a repository another user owns, and the command that trusts it.
+struct KIGIT_OWNERSHIP_REFUSAL
+{
+    wxString summary;
+    wxString trustCommand; ///< Kept apart from the summary so it can be shown in full and copied. Empty when
+                           ///< the folder name cannot be quoted safely for the user's shell.
+};
+
+
 namespace KIGIT
 {
 
@@ -130,6 +139,15 @@ APIEXPORT wxString StripEmbeddedUserinfo( const wxString& aText );
  * Line breaks are kept.
  */
 APIEXPORT wxString PrintableServerText( const wxString& aText );
+
+/**
+ * The message for a repository git refuses to open because another user owns it.
+ *
+ * git checks the working folder, so that is the one named: the nearest folder at or above aStartDir that holds
+ * a .git file or folder, spelled as libgit2 resolves it. A bare repository has none and keeps aGitDir, the git
+ * directory discovery found.
+ */
+APIEXPORT KIGIT_OWNERSHIP_REFUSAL DescribeOwnershipRefusal( const wxString& aStartDir, const wxString& aGitDir );
 
 } // namespace KIGIT
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,6 +58,9 @@ class GIT_COMMIT_PANE_BASE : public wxPanel
 		wxStaticText* m_changesLabel;
 		wxButton* m_showDiffButton;
 		wxStaticText* m_emptyLabel;
+		wxBoxSizer* m_trustRow;
+		wxTextCtrl* m_trustCommand;
+		wxButton* m_copyTrustCommand;
 		FILE_CHECKLIST_CTRL* m_checklist;
 		SPLIT_BUTTON* m_commitButton;
 		wxButton* m_pullButton;

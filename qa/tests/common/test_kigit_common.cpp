@@ -3017,7 +3017,8 @@ BOOST_AUTO_TEST_CASE( ForcePushRejectsAChangedConfirmedTarget )
 
     // A matching target gets past confirmation validation. With no remote configured it
     // stops at lookup, so none of these checks can start a network connection.
-    BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).Contains( "Could not lookup remote" ) );
+    const wxString noRemote = wxS( "There is no remote named 'origin'." );
+    BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).StartsWith( noRemote ) );
 
     const wxString targetChanged = wxS( "The branch or its last commit changed while the push was waiting." );
 
@@ -3033,8 +3034,8 @@ BOOST_AUTO_TEST_CASE( ForcePushRejectsAChangedConfirmedTarget )
     BOOST_CHECK( forcePushError( confirmedBranch, confirmedHead ).Contains( targetChanged ) );
 
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head, repo.get(), "HEAD" ), GIT_OK );
-    BOOST_CHECK( forcePushError( confirmedBranch, wxString::FromUTF8( git_oid_tostr_s( &head ) ) )
-                         .Contains( "Could not lookup remote" ) );
+    BOOST_CHECK(
+            forcePushError( confirmedBranch, wxString::FromUTF8( git_oid_tostr_s( &head ) ) ).StartsWith( noRemote ) );
 }
 
 

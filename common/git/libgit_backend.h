@@ -70,7 +70,7 @@ public:
     bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) override;
     PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) override;
 
-    git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) override;
+    git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError, wxString* aTrustCommand ) override;
     int             CreateBranch( git_repository* aRepo, const wxString& aBranchName, const wxString& aFrom ) override;
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;
@@ -92,7 +92,8 @@ public:
 
     bool SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail ) override;
 
-    RestoreResult RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash, wxString& aError ) override;
+    RestoreResult RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash,
+                                  KIGIT_ERROR_MESSAGE& aError ) override;
 
     bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) override;
 
@@ -106,7 +107,7 @@ public:
     MergeCommitResult CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
                                           const wxString&                                   aTheirsOid,
                                           const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                          wxString&                                         aError ) override;
+                                          KIGIT_ERROR_MESSAGE&                              aError ) override;
 
 private:
     PullResult handleFastForward( GIT_PULL_HANDLER* aHandler );

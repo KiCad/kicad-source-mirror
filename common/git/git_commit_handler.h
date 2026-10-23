@@ -31,9 +31,7 @@
 #include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
 #include <wx/string.h>
 
-class LIBGIT_BACKEND;
-
-class APIEXPORT GIT_COMMIT_HANDLER : public KIGIT_COMMON
+class APIEXPORT GIT_COMMIT_HANDLER : public KIGIT_COMMON, public KIGIT_ERRORS
 {
 public:
     GIT_COMMIT_HANDLER( git_repository* aRepo );
@@ -46,14 +44,6 @@ public:
 
     CommitResult PerformAmend( const std::vector<wxString>& aFiles, const wxString& aMessage,
                                const wxString& aAuthorName, const wxString& aAuthorEmail );
-
-    wxString GetErrorString() const;
-
-private:
-    friend class LIBGIT_BACKEND;
-    void AddErrorString( const wxString& aErrorString );
-
-    wxString m_errorString;
 };
 
 #endif // GIT_COMMIT_HANDLER_H

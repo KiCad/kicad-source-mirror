@@ -108,9 +108,11 @@ bool PROJECT::AttachGitRepository()
     wxFileName      fn( GetProjectFullName() );
     wxString        projectDir = fn.GetPath();
     wxString        attachError;
-    git_repository* repo = KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( projectDir.mb_str(), &attachError );
+    wxString        trustCommand;
+    git_repository* repo =
+            KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( projectDir ), &attachError, &trustCommand );
 
-    common->SetAttachError( attachError );
+    common->SetAttachError( attachError, trustCommand );
 
     if( !repo )
         return false;

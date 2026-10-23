@@ -37,14 +37,15 @@
 namespace KIGIT
 {
 
-git_repository* PROJECT_GIT_UTILS::GetRepositoryForFile( const char* aFilename, wxString* aError )
+git_repository* PROJECT_GIT_UTILS::GetRepositoryForFile( const char* aFilename, wxString* aError,
+                                                         wxString* aTrustCommand )
 {
     GIT_BACKEND* backend = GetGitBackend();
 
     if( !backend )
         return nullptr;
 
-    return backend->GetRepositoryForFile( aFilename, aError );
+    return backend->GetRepositoryForFile( aFilename, aError, aTrustCommand );
 }
 
 

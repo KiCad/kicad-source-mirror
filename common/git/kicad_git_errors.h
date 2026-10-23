@@ -70,11 +70,13 @@ public:
     }
 
     /// A summary the user can act on, with the raw text that explains it kept apart for the details.
-    void AddError( const wxString& aSummary, const wxString& aDetails )
-    {
-        m_errorStrings.emplace_back( aSummary );
-        m_errorDetails.emplace_back( aDetails );
-    }
+    /// Both are shown, so any credentials in a URL inside either one are removed here.
+    void AddError( const wxString& aSummary, const wxString& aDetails );
+
+    void AddError( const KIGIT_ERROR_MESSAGE& aMessage ) { AddError( aMessage.summary, aMessage.details ); }
+
+    /// Queue the summary with libgit2's last error as its details.
+    void AddGitError( const wxString& aSummary );
 
     void AddErrorString( const wxString aErrorString )
     {

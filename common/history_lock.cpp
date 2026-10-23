@@ -18,6 +18,7 @@
  */
 
 #include <history_lock.h>
+#include <git/kicad_git_common.h>
 #include <lockfile.h>
 #include <advanced_config.h>
 #include <pgm_base.h>
@@ -187,10 +188,7 @@ bool HISTORY_LOCK_MANAGER::openRepository()
 
     if( rc != 0 )
     {
-        const git_error* err = git_error_last();
-        m_lockError = wxString::Format(
-            _( "Failed to open git repository: %s" ),
-            err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
+        m_lockError = wxString::Format( _( "Failed to open git repository: %s" ), KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
@@ -199,9 +197,8 @@ bool HISTORY_LOCK_MANAGER::openRepository()
 
     if( rc != 0 )
     {
-        const git_error* err = git_error_last();
         m_lockError = wxString::Format( _( "Failed to set git repository workdir to %s: %s" ), m_projectPath,
-                                        err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
+                                        KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
@@ -236,10 +233,8 @@ bool HISTORY_LOCK_MANAGER::acquireIndexLock()
 
     if( rc != 0 )
     {
-        const git_error* err = git_error_last();
-        m_lockError = wxString::Format(
-            _( "Failed to acquire git index lock (another operation in progress?): %s" ),
-            err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
+        m_lockError = wxString::Format( _( "Failed to acquire git index lock (another operation in progress?): %s" ),
+                                        KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 

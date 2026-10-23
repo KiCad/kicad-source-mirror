@@ -43,9 +43,11 @@ public:
      *
      * @param aFilename Absolute path to a file inside the repository.
      * @param aError Receives a reason worth showing when the repository cannot be opened.
+     * @param aTrustCommand Receives the git command that trusts a repository another user owns.
      * @return Newly opened git_repository or nullptr on failure.
      */
-    static git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError = nullptr );
+    static git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError = nullptr,
+                                                 wxString* aTrustCommand = nullptr );
 
     /**
      * Create a new branch based on HEAD.

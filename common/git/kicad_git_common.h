@@ -465,9 +465,10 @@ public:
 
     /**
      * Restore the project as it was at aCommitHash, recorded as a new commit on top of the
-     * current head. Only the session's project folder is restored.
+     * current head. Only the session's project folder is restored. A failure leaves its reason
+     * in aError's details, and a summary only when the next step is known.
      */
-    RestoreResult RestoreVersion( const wxString& aCommitHash, wxString& aError );
+    RestoreResult RestoreVersion( const wxString& aCommitHash, KIGIT_ERROR_MESSAGE& aError );
 
     /**
      * Put the given working directory relative paths back to their committed state. A path
@@ -495,11 +496,12 @@ public:
      * check out. All or nothing.
      *
      * aTheirsOid pins the remote commit, so a background fetch cannot change what gets merged.
-     * An empty resolved-file path records "the file is deleted".
+     * An empty resolved-file path records "the file is deleted". A failure leaves its reason in
+     * aError's details, and a summary only when the next step is known.
      */
     MergeCommitResult CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
                                           const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                          wxString&                                         aError );
+                                          KIGIT_ERROR_MESSAGE&                              aError );
 
     // Returns true if the repository has a remote that can be pushed to pulled from
     bool HasPushAndPullRemote() const;
@@ -553,8 +555,16 @@ public:
     std::optional<wxString> GetProjectPrefix() const;
 
     /// Why binding a repository last failed, for the panels to show. Empty on success.
-    void            SetAttachError( const wxString& aError ) { m_attachError = aError; }
+    void SetAttachError( const wxString& aError, const wxString& aTrustCommand = wxEmptyString )
+    {
+        m_attachError = aError;
+        m_attachTrustCommand = aTrustCommand;
+    }
+
     const wxString& GetAttachError() const { return m_attachError; }
+
+    /// The command that trusts a repository another user owns, when that is why attaching failed.
+    const wxString& GetAttachTrustCommand() const { return m_attachTrustCommand; }
 
     void ResetNextKey()
     {
@@ -592,15 +602,8 @@ public:
 
     int HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername );
 
-    static wxString GetLastGitError()
-    {
-        const git_error* error = git_error_last();
-
-        if( error == nullptr )
-            return wxString( "No error" );
-
-        return wxString( error->message );
-    }
+    /// libgit2's last message, without credentials from any URL it quotes, so it is safe to show or trace.
+    static wxString GetLastGitError();
 
     /// The error libgit2 holds for a call that returned aCode. Read it straight after the call, because the
     /// callbacks and cleanup that follow can replace it.
@@ -694,6 +697,7 @@ protected:
     wxString m_projectDir;  // Repository working directory preserving symlinks
     wxString m_projectPath; // Project directory captured when the session was created
     wxString m_attachError;
+    wxString m_attachTrustCommand;
 
     GIT_CONN_TYPE m_connType;
     wxString m_remote;      // This is the full connection string

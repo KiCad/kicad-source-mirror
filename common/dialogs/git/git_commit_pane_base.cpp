@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,6 +96,21 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 	m_emptyLabel = new wxStaticText( this, wxID_ANY, _("No changes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_emptyLabel->Wrap( -1 );
 	bMainSizer->Add( m_emptyLabel, 0, wxALL, 8 );
+
+	m_trustRow = new wxBoxSizer( wxHORIZONTAL );
+
+	m_trustCommand = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_trustCommand->Hide();
+
+	m_trustRow->Add( m_trustCommand, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
+
+	m_copyTrustCommand = new wxButton( this, wxID_ANY, _("Copy"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_copyTrustCommand->Hide();
+
+	m_trustRow->Add( m_copyTrustCommand, 0, wxALIGN_CENTER_VERTICAL, 0 );
+
+
+	bMainSizer->Add( m_trustRow, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxRIGHT, 8 );
 
 	m_checklist = new FILE_CHECKLIST_CTRL( this, wxID_ANY );
 	bMainSizer->Add( m_checklist, 1, wxALL|wxEXPAND, 4 );

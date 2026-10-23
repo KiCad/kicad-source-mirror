@@ -1588,7 +1588,7 @@ bool KIGIT_COMMON::SetUserConfig( const wxString& aName, const wxString& aEmail 
 }
 
 
-RestoreResult KIGIT_COMMON::RestoreVersion( const wxString& aCommitHash, wxString& aError )
+RestoreResult KIGIT_COMMON::RestoreVersion( const wxString& aCommitHash, KIGIT_ERROR_MESSAGE& aError )
 {
     return GetGitBackend()->RestoreVersion( *this, aCommitHash, aError );
 }
@@ -1669,7 +1669,7 @@ bool KIGIT_COMMON::GetMergeConflicts( const wxString& aStageDir, wxString& aHead
 
 MergeCommitResult KIGIT_COMMON::CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
                                                     const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                                    wxString&                                         aError )
+                                                    KIGIT_ERROR_MESSAGE&                              aError )
 {
     return GetGitBackend()->CreateMergedCommit( m_repo, aExpectedHeadOid, aTheirsOid, aResolvedFiles, aError );
 }
@@ -2152,6 +2152,18 @@ static size_t findUserinfoAt( const wxString& aUrl )
     size_t at = aUrl.rfind( '@', searchEnd - 1 );
 
     return ( at != wxString::npos && at >= hostStart ) ? at : wxString::npos;
+}
+
+
+wxString KIGIT_COMMON::GetLastGitError()
+{
+    const git_error* error = git_error_last();
+
+    if( error == nullptr )
+        return wxString( "No error" );
+
+    // libgit2 quotes config lines and URLs verbatim, passwords included
+    return KIGIT::StripEmbeddedUserinfo( wxString::FromUTF8( error->message ? error->message : "" ) );
 }
 
 

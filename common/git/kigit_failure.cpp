@@ -19,6 +19,8 @@
 
 #include "kigit_failure.h"
 #include "git_repo_mixin.h"
+#include "kicad_git_compat.h"
+#include "kicad_git_memory.h"
 
 #include <trace_helpers.h>
 
@@ -29,6 +31,9 @@
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 #include <wx/translation.h>
+
+#include <cstdlib>
+#include <memory>
 
 
 namespace
@@ -518,4 +523,154 @@ wxString KIGIT::PrintableServerText( const wxString& aText )
 
     // Removing escapes and controls can join a "://" the raw text split
     return StripEmbeddedUserinfo( printable );
+}
+
+
+/// aDir spelled as libgit2 1.9's p_realpath spells the working folder it checks safe.directory against
+static wxFileName resolveLikeLibgit2( const wxString& aDir )
+{
+#ifdef __WINDOWS__
+    // win32 p_realpath is GetFullPathNameW then GetLongPathNameW, so links and junctions stay as written
+    wxFileName dir = wxFileName::DirName( aDir );
+    dir.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_LONG );
+    return dir;
+#else
+    std::unique_ptr<char, decltype( &std::free )> resolved( realpath( aDir.utf8_str(), nullptr ), &std::free );
+    return wxFileName::DirName( resolved ? wxString::FromUTF8( resolved.get() ) : aDir );
+#endif
+}
+
+
+/// aPath quoted for the shell the trust command is pasted into, or empty when it cannot be done safely
+static wxString quoteForShell( const wxString& aPath )
+{
+#ifdef __WINDOWS__
+    // cmd and PowerShell each expand or end a quote on different characters, so only known-inert ones pass
+    static const wxString inert = wxS( " -_.,:/\\'()[]{}+=#@~" );
+
+    for( wxUniChar c : aPath )
+    {
+        if( !wxIsalnum( c ) && inert.Find( c ) == wxNOT_FOUND )
+            return wxEmptyString;
+    }
+
+    return wxS( "\"" ) + aPath + wxS( "\"" );
+#else
+    // Single quotes stop sh expanding $, `, " and \ in a folder name
+    wxString quoted = aPath;
+    quoted.Replace( wxS( "'" ), wxS( "'\\''" ) );
+    return wxS( "'" ) + quoted + wxS( "'" );
+#endif
+}
+
+
+/// True when libgit2's git_fs_path_root takes aPath as rooted rather than joining it onto a base folder
+static bool isRootedLikeLibgit2( const wxString& aPath )
+{
+    // libgit2 skips a drive prefix on every platform, not only Windows
+    const size_t offset = aPath.length() > 1 && aPath[1] == ':' ? 2 : 0;
+
+    if( offset >= aPath.length() )
+        return false;
+
+#ifdef __WINDOWS__
+    return aPath[offset] == '/' || aPath[offset] == '\\';
+#else
+    return aPath[offset] == '/';
+#endif
+}
+
+
+KIGIT_OWNERSHIP_REFUSAL KIGIT::DescribeOwnershipRefusal( const wxString& aStartDir, const wxString& aGitDir )
+{
+    const wxFileName gitDir = wxFileName::DirName( aGitDir );
+    wxFileName       trusted = gitDir;
+    wxFileName       dir = resolveLikeLibgit2( aStartDir );
+
+    // Reaching the git directory first means a bare repository, which is trusted by its own path
+    while( !dir.SameAs( gitDir ) )
+    {
+        if( wxFileName::Exists( dir.GetPathWithSep() + wxS( ".git" ) ) )
+        {
+            trusted = dir;
+            break;
+        }
+
+        if( dir.GetDirCount() == 0 )
+            break;
+
+        dir.RemoveLastDir();
+    }
+
+    // core.worktree moves the working folder git checks, except in a bare repository or linked worktree
+    git_config* rawConfig = nullptr;
+
+    if( !wxFileName::FileExists( gitDir.GetPathWithSep() + wxS( "commondir" ) )
+        && git_config_open_ondisk( &rawConfig, ( gitDir.GetPathWithSep() + wxS( "config" ) ).utf8_str() ) == GIT_OK )
+    {
+        KIGIT::GitConfigPtr config( rawConfig );
+        int                 error = GIT_OK;
+        int                 bare = 0;
+        git_buf             worktree = GIT_BUF_INIT;
+
+#if KIGIT_HAS_WORKTREE_CONFIG
+        int worktreeConfig = 0;
+
+        // With the extension on, libgit2 lets config.worktree override config
+        if( git_config_get_bool( &worktreeConfig, config.get(), "extensions.worktreeConfig" ) == GIT_OK
+            && worktreeConfig )
+        {
+            error = git_config_add_file_ondisk( config.get(),
+                                                ( gitDir.GetPathWithSep() + wxS( "config.worktree" ) ).utf8_str(),
+                                                GIT_CONFIG_LEVEL_WORKTREE, nullptr, 0 );
+        }
+#endif
+
+        if( ( error == GIT_OK || error == GIT_ENOTFOUND )
+            && ( git_config_get_bool( &bare, config.get(), "core.bare" ) != GIT_OK || !bare )
+            && git_config_get_string_buf( &worktree, config.get(), "core.worktree" ) == GIT_OK )
+        {
+            KIGIT::GitBufPtr worktreePtr( &worktree );
+            wxString         configured = wxString::FromUTF8( worktree.ptr );
+
+            // libgit2 joins a relative value onto the git directory and leaves .. and ~ to realpath
+            if( !isRootedLikeLibgit2( configured ) )
+                configured = gitDir.GetPathWithSep() + configured;
+
+            trusted = resolveLikeLibgit2( configured );
+        }
+    }
+
+    wxString path = trusted.GetPath();
+
+#ifdef __WINDOWS__
+    // git compares safe.directory against a forward-slash path, on Windows too
+    path.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+
+    // git reads a trailing /* as every repository below the folder, so trusting this one would trust them all
+    if( path.EndsWith( wxS( "/*" ) ) )
+    {
+        return { wxString::Format( _( "The repository at '%s' belongs to another user, so git will not open it. "
+                                      "git reads a folder named '*' as a wildcard, so rename the folder before "
+                                      "trusting it." ),
+                                   trusted.GetPath() ),
+                 wxEmptyString };
+    }
+
+    const wxString quoted = quoteForShell( path );
+
+    if( quoted.IsEmpty() )
+    {
+        return { wxString::Format( _( "The repository at '%s' belongs to another user, so git will not open it. To "
+                                      "trust it, add its folder to git's safe.directory setting and reopen the "
+                                      "project." ),
+                                   trusted.GetPath() ),
+                 wxEmptyString };
+    }
+
+    return { wxString::Format( _( "The repository at '%s' belongs to another user, so git will not open it. To "
+                                  "trust it, run the command below and reopen the project." ),
+                               trusted.GetPath() ),
+             wxS( "git config --global --add safe.directory " ) + quoted };
 }

@@ -30,6 +30,7 @@
 #include "project_git_utils.h"
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
+#include "kigit_failure.h"
 #include "trace_helpers.h"
 
 #include "kicad_git_compat.h"
@@ -108,6 +109,32 @@ bool LIBGIT_BACKEND::IsLibraryAvailable()
     // On older platforms, assume available when building with libgit2
     return true;
 #endif
+}
+
+
+// git_signature_default answers GIT_ENOTFOUND only when user.name or user.email is not set
+static KIGIT_ERROR_MESSAGE describeSignatureFailure( int aRc )
+{
+    if( aRc == GIT_ENOTFOUND )
+        return { _( "Set your name and email before committing (gear menu > Set Author...)." ), wxEmptyString };
+
+    return { _( "Could not record the commit author." ), KIGIT_COMMON::GetLastGitError() };
+}
+
+
+static void reportRemoteLookupFailure( KIGIT_ERRORS* aHandler, int aRc, const wxString& aRemoteName )
+{
+    if( aRc == GIT_ENOTFOUND )
+    {
+        aHandler->AddError( wxString::Format( _( "There is no remote named '%s'. Add it on the Remotes page of the "
+                                                 "Advanced Git window." ),
+                                              aRemoteName ),
+                            wxEmptyString );
+        return;
+    }
+
+    aHandler->AddError( wxString::Format( _( "Could not read the remote '%s'." ), aRemoteName ),
+                        KIGIT_COMMON::GetLastGitError() );
 }
 
 
@@ -475,11 +502,11 @@ struct COMMIT_STAGING
     std::vector<STAGED_ENTRY>             committedEntries;
 
     /// Read the index, record what it holds and take it over. False leaves the reason in aError.
-    bool Begin( git_repository* aRepo, const std::vector<wxString>& aFiles, wxString& aError )
+    bool Begin( git_repository* aRepo, const std::vector<wxString>& aFiles, KIGIT_ERROR_MESSAGE& aError )
     {
         if( git_repository_index( &index, aRepo ) != 0 )
         {
-            aError = wxString::Format( _( "Failed to get repository index: %s" ), KIGIT_COMMON::GetLastGitError() );
+            aError = { _( "Could not read the list of staged files." ), KIGIT_COMMON::GetLastGitError() };
             return false;
         }
 
@@ -492,7 +519,7 @@ struct COMMIT_STAGING
 
         if( refuseWhileOperationInProgress( aRepo, index, blockedError ) )
         {
-            aError = blockedError;
+            aError = { blockedError, wxEmptyString };
             return false;
         }
 
@@ -511,11 +538,11 @@ struct COMMIT_STAGING
     /// Stage the chosen files over whatever the index already holds and write the tree they
     /// make. False leaves the reason in aError.
     bool BuildTree( git_repository* aRepo, const std::vector<wxString>& aFiles, KIGIT::GitTreePtr& aTreeOut,
-                    wxString& aError )
+                    KIGIT_ERROR_MESSAGE& aError )
     {
         if( !applySelectedPaths( aRepo, index, aFiles ) )
         {
-            aError = wxString::Format( _( "Failed to add file to index: %s" ), KIGIT_COMMON::GetLastGitError() );
+            aError = { _( "Could not stage the selected files." ), KIGIT_COMMON::GetLastGitError() };
             return false;
         }
 
@@ -531,7 +558,7 @@ struct COMMIT_STAGING
 
         if( git_index_write_tree( &treeId, index ) != 0 )
         {
-            aError = wxString::Format( _( "Failed to write tree: %s" ), KIGIT_COMMON::GetLastGitError() );
+            aError = { _( "Could not prepare the commit." ), KIGIT_COMMON::GetLastGitError() };
             return false;
         }
 
@@ -539,7 +566,7 @@ struct COMMIT_STAGING
 
         if( git_tree_lookup( &tree, aRepo, &treeId ) != 0 )
         {
-            aError = wxString::Format( _( "Failed to lookup tree: %s" ), KIGIT_COMMON::GetLastGitError() );
+            aError = { _( "Could not prepare the commit." ), KIGIT_COMMON::GetLastGitError() };
             return false;
         }
 
@@ -548,16 +575,18 @@ struct COMMIT_STAGING
         // Nothing is written yet, so the scratch guard puts the real index back on the way out.
         if( branchMovedSince( aRepo, headAtStart, hadHeadAtStart ) )
         {
-            aError = _( "The branch moved while this was running, so nothing was "
-                        "committed. Review the changes and try again." );
+            aError = { _( "The branch moved while this was running, so nothing was "
+                          "committed. Review the changes and try again." ),
+                       wxEmptyString };
             return false;
         }
 
         if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
             || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
         {
-            aError = _( "The staged files changed outside KiCad while this ran. Nothing "
-                        "was committed. Review the changes and try again." );
+            aError = { _( "The staged files changed outside KiCad while this ran. Nothing "
+                          "was committed. Review the changes and try again." ),
+                       wxEmptyString };
             return false;
         }
 
@@ -575,12 +604,12 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
     if( !repo )
         return CommitResult::Error;
 
-    COMMIT_STAGING staging;
-    wxString       stagingError;
+    COMMIT_STAGING      staging;
+    KIGIT_ERROR_MESSAGE stagingError;
 
     if( !staging.Begin( repo, aFiles, stagingError ) )
     {
-        aHandler->AddErrorString( stagingError );
+        aHandler->AddError( stagingError );
         return CommitResult::Error;
     }
 
@@ -593,8 +622,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
         if( git_repository_head( &headRef, repo ) != 0 )
         {
-            aHandler->AddErrorString(
-                    wxString::Format( _( "Failed to get HEAD reference: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+            aHandler->AddGitError( _( "Could not read the current commit." ) );
             return CommitResult::Error;
         }
 
@@ -603,8 +631,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
         if( git_reference_peel( (git_object**) &headTree, headRef, GIT_OBJECT_TREE ) != 0 )
         {
-            aHandler->AddErrorString(
-                    wxString::Format( _( "Failed to get HEAD tree: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+            aHandler->AddGitError( _( "Could not read the current commit." ) );
             return CommitResult::Error;
         }
 
@@ -612,15 +639,13 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
         if( git_index_read_tree( index, headTree ) != 0 )
         {
-            aHandler->AddErrorString(
-                    wxString::Format( _( "Failed to reset index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+            aHandler->AddGitError( _( "Could not prepare the commit." ) );
             return CommitResult::Error;
         }
     }
     else if( git_index_clear( index ) != 0 )
     {
-        aHandler->AddErrorString(
-                wxString::Format( _( "Failed to reset index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not prepare the commit." ) );
         return CommitResult::Error;
     }
 
@@ -628,7 +653,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
     if( !staging.BuildTree( repo, aFiles, treePtr, stagingError ) )
     {
-        aHandler->AddErrorString( stagingError );
+        aHandler->AddError( stagingError );
         return CommitResult::Error;
     }
 
@@ -642,8 +667,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
         if( git_repository_head( &headRef, repo ) != 0 )
         {
-            aHandler->AddErrorString( wxString::Format( _( "Failed to get HEAD reference: %s" ),
-                                                        KIGIT_COMMON::GetLastGitError() ) );
+            aHandler->AddGitError( _( "Could not read the current commit." ) );
             return CommitResult::Error;
         }
 
@@ -651,8 +675,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
         if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
         {
-            aHandler->AddErrorString( wxString::Format( _( "Failed to get commit: %s" ),
-                                                        KIGIT_COMMON::GetLastGitError() ) );
+            aHandler->AddGitError( _( "Could not read the current commit." ) );
             return CommitResult::Error;
         }
     }
@@ -663,8 +686,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
     if( git_signature_now( &author, aAuthorName.utf8_string().c_str(), aAuthorEmail.utf8_string().c_str() ) != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to create author signature: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not record the commit author." ) );
         return CommitResult::Error;
     }
 
@@ -685,8 +707,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
                            parentsCount, parentsPtr )
         != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to create commit: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not create the commit." ) );
         return CommitResult::Error;
     }
 
@@ -712,9 +733,7 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
     if( republished == REPUBLISH_RESULT::WRITE_FAILED )
     {
-        aHandler->AddErrorString( wxString::Format( _( "The commit was created, but the list of staged "
-                                                       "files could not be updated: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "The commit was created, but the list of staged files could not be updated." ) );
         return CommitResult::SuccessIndexStale;
     }
 
@@ -743,8 +762,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( git_repository_head( &headRef, repo ) != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to get HEAD reference: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
         return CommitResult::Error;
     }
 
@@ -753,18 +771,17 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( git_reference_peel( (git_object**) &headCommit, headRef, GIT_OBJECT_COMMIT ) != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to get HEAD commit: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
         return CommitResult::Error;
     }
 
     KIGIT::GitCommitPtr headCommitPtr( headCommit );
     COMMIT_STAGING      staging;
-    wxString            stagingError;
+    KIGIT_ERROR_MESSAGE stagingError;
 
     if( !staging.Begin( repo, aFiles, stagingError ) )
     {
-        aHandler->AddErrorString( stagingError );
+        aHandler->AddError( stagingError );
         return CommitResult::Error;
     }
 
@@ -775,8 +792,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( git_commit_tree( &headTree, headCommit ) != 0 )
     {
-        aHandler->AddErrorString(
-                wxString::Format( _( "Failed to get HEAD tree: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
         return CommitResult::Error;
     }
 
@@ -784,8 +800,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( git_index_read_tree( index, headTree ) != 0 )
     {
-        aHandler->AddErrorString(
-                wxString::Format( _( "Failed to reset index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not prepare the commit." ) );
         return CommitResult::Error;
     }
 
@@ -793,7 +808,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( !staging.BuildTree( repo, aFiles, treePtr, stagingError ) )
     {
-        aHandler->AddErrorString( stagingError );
+        aHandler->AddError( stagingError );
         return CommitResult::Error;
     }
 
@@ -803,8 +818,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( git_signature_now( &author, aAuthorName.utf8_string().c_str(), aAuthorEmail.utf8_string().c_str() ) != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to create author signature: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not record the commit author." ) );
         return CommitResult::Error;
     }
 
@@ -814,8 +828,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     if( git_commit_amend( &oid, headCommit, "HEAD", author, author, nullptr, aMessage.utf8_string().c_str(), tree )
         != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to amend commit: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not amend the commit." ) );
         return CommitResult::Error;
     }
 
@@ -824,7 +837,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
         || ( staging.haveIndexAtStart && indexChangedSince( index, staging.indexAtStart ) ) )
     {
         git_index_read( index, 1 );
-        aHandler->AddErrorString( _( "The commit was created, but the list of staged files was left "
+        aHandler->AddErrorString( _( "The commit was amended, but the list of staged files was left "
                                      "alone, because the staged files changed outside KiCad while "
                                      "this ran." ) );
         return CommitResult::SuccessIndexStale;
@@ -841,9 +854,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( republished == REPUBLISH_RESULT::WRITE_FAILED )
     {
-        aHandler->AddErrorString( wxString::Format( _( "The commit was amended, but the list of staged "
-                                                       "files could not be updated: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "The commit was amended, but the list of staged files could not be updated." ) );
         return CommitResult::SuccessIndexStale;
     }
 
@@ -909,9 +920,9 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     std::string remoteNameUtf8 = remoteName.utf8_string();
     git_remote* remote = nullptr;
 
-    if( git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ) != 0 )
+    if( int rc = git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ); rc != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ), remoteName ) );
+        reportRemoteLookupFailure( aHandler, rc, remoteName );
         return PushResult::Error;
     }
 
@@ -1286,15 +1297,13 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
 }
 
 
-static bool lookup_branch_reference( git_repository* repo, const wxString& aBranchName, git_reference** aReference )
+// The short-name lookup's code, since it is the one that tells a missing branch from a bad name
+static int lookup_branch_reference( git_repository* repo, const wxString& aBranchName, git_reference** aReference )
 {
     if( git_reference_lookup( aReference, repo, aBranchName.utf8_string().c_str() ) == GIT_OK )
-        return true;
+        return GIT_OK;
 
-    if( git_reference_dwim( aReference, repo, aBranchName.utf8_string().c_str() ) == GIT_OK )
-        return true;
-
-    return false;
+    return git_reference_dwim( aReference, repo, aBranchName.utf8_string().c_str() );
 }
 
 
@@ -1310,11 +1319,18 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
 
     git_reference* branchRef = nullptr;
 
-    if( !lookup_branch_reference( repo, aBranchName, &branchRef ) )
+    if( int rc = lookup_branch_reference( repo, aBranchName, &branchRef ); rc != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to lookup branch '%s': %s" ),
-                                                    aBranchName, KIGIT_COMMON::GetLastGitError() ) );
-        return BranchResult::BranchNotFound;
+        if( rc == GIT_ENOTFOUND )
+        {
+            aHandler->AddError( wxString::Format( _( "The branch '%s' no longer exists." ), aBranchName ),
+                                wxEmptyString );
+            return BranchResult::BranchNotFound;
+        }
+
+        aHandler->AddError( wxString::Format( _( "Could not open the branch '%s'." ), aBranchName ),
+                            KIGIT_COMMON::GetLastGitError() );
+        return BranchResult::Error;
     }
 
     KIGIT::GitReferencePtr branchRefPtr( branchRef );
@@ -1336,8 +1352,8 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
 
     if( git_revparse_single( &branchObj, repo, aBranchName.utf8_string().c_str() ) != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to find branch head for '%s': %s" ),
-                                                    aBranchName, KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddError( wxString::Format( _( "Could not open the branch '%s'." ), aBranchName ),
+                            KIGIT_COMMON::GetLastGitError() );
         return BranchResult::Error;
     }
 
@@ -1394,16 +1410,15 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
             return BranchResult::Conflict;
         }
 
-        aHandler->AddErrorString( wxString::Format( _( "Failed to switch to branch '%s': %s" ),
-                                                    aBranchName, KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddError( wxString::Format( _( "Could not switch to the branch '%s'." ), aBranchName ),
+                            KIGIT_COMMON::GetLastGitError() );
         return BranchResult::CheckoutFailed;
     }
 
     if( git_repository_set_head( repo, branchRefName ) != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to update HEAD reference for branch '%s': %s" ),
-                                                    aBranchName,
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddError( wxString::Format( _( "Could not switch to the branch '%s'." ), aBranchName ),
+                            KIGIT_COMMON::GetLastGitError() );
         return BranchResult::Error;
     }
 
@@ -1445,10 +1460,10 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     std::string remoteNameUtf8 = remoteName.utf8_string();
     git_remote* remote = nullptr;
 
-    if( git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ) != 0 )
+    if( int rc = git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ); rc != GIT_OK )
     {
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to lookup remote '%s'", remoteName );
-        aHandler->AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ), remoteName ) );
+        reportRemoteLookupFailure( aHandler, rc, remoteName );
         return false;
     }
 
@@ -1652,7 +1667,7 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 
     if( git_commit_lookup( &commit, repo, &aRemoteOid ) != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Could not look up target commit" ) );
+        aHandler->AddGitError( _( "Could not read the fetched commit." ) );
         return PullResult::Error;
     }
 
@@ -1661,7 +1676,7 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 
     if( git_commit_tree( &tree, commit ) != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Could not get tree from target commit" ) );
+        aHandler->AddGitError( _( "Could not read the fetched commit." ) );
         return PullResult::Error;
     }
 
@@ -1685,12 +1700,14 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
     // while a checkout against no previous commit has nothing to undo from.
     git_reference* branchRef = nullptr;
 
+    wxString shorthand = wxString::FromUTF8( branchRefName );
+    shorthand.StartsWith( wxS( "refs/heads/" ), &shorthand );
+
     if( git_reference_create( &branchRef, repo, branchRefName.c_str(), &aRemoteOid, 0, "pull: adopt remote history" )
         != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to update reference '%s' to point to '%s'" ),
-                                                    wxString::FromUTF8( branchRefName ),
-                                                    git_oid_tostr_s( &aRemoteOid ) ) );
+        aHandler->AddError( wxString::Format( _( "Could not create the branch '%s'." ), shorthand ),
+                            KIGIT_COMMON::GetLastGitError() );
         return PullResult::Error;
     }
 
@@ -1707,18 +1724,12 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 
         refreshCachedIndex( repo );
 
-        aHandler->AddErrorString(
-                restored ? wxString::Format( _( "Could not check out the remote branch, so nothing was "
-                                                "changed: %s" ),
-                                             gitError )
-                         : wxString::Format( _( "Could not check out the remote branch, and the project may "
-                                                "be partly changed: %s" ),
-                                             gitError ) );
+        aHandler->AddError( restored ? _( "Could not check out the remote branch, so nothing was changed." )
+                                     : _( "Could not check out the remote branch, and the project may be partly "
+                                          "changed." ),
+                            gitError );
         return PullResult::Error;
     }
-
-    wxString shorthand = wxString::FromUTF8( branchRefName );
-    shorthand.StartsWith( wxS( "refs/heads/" ), &shorthand );
 
     wxString upstream = wxString::Format( "%s/%s", aHandler->GetCommon()->GetRemoteNameOrDefault(), shorthand );
     git_branch_set_upstream( branchRef, upstream.utf8_string().c_str() );
@@ -1752,7 +1763,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 
     if( git_repository_fetchhead_foreach( aHandler->GetRepo(), fetchhead_foreach_cb, &pull_merge_oid ) )
     {
-        aHandler->AddErrorString( _( "Could not read 'FETCH_HEAD'" ) );
+        aHandler->AddGitError( _( "Could not read the fetched changes." ) );
         return PullResult::Error;
     }
 
@@ -1835,7 +1846,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 
     if( git_annotated_commit_lookup( &fetchhead_commit, aHandler->GetRepo(), &pull_merge_oid ) )
     {
-        aHandler->AddErrorString( _( "Could not lookup commit" ) );
+        aHandler->AddGitError( _( "Could not read the fetched commit." ) );
         return PullResult::Error;
     }
 
@@ -1846,7 +1857,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 
     if( git_merge_analysis( &merge_analysis, &merge_preference, aHandler->GetRepo(), merge_commits, 1 ) )
     {
-        aHandler->AddErrorString( _( "Could not analyze merge" ) );
+        aHandler->AddGitError( _( "Could not compare the fetched changes with this branch." ) );
         return PullResult::Error;
     }
 
@@ -1875,7 +1886,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
         if( git_repository_config( &config, aHandler->GetRepo() ) != GIT_OK )
         {
             wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Failed to get repository config" );
-            aHandler->AddErrorString( _( "Could not access repository configuration" ) );
+            aHandler->AddGitError( _( "Could not read the repository settings." ) );
             return PullResult::Error;
         }
 
@@ -1930,10 +1941,16 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
         remoteBranchName = wxString::Format( "refs/remotes/%s/%s", remote_name, branch_shorthand );
     }
 
-    if( git_reference_name_to_id( &updatedRefOid, aHandler->GetRepo(), remoteBranchName.c_str() ) != GIT_OK )
+    if( int rc = git_reference_name_to_id( &updatedRefOid, aHandler->GetRepo(), remoteBranchName.c_str() );
+        rc != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not get reference OID for reference '%s'" ),
-                                                    remoteBranchName ) );
+        wxString shownName = remoteBranchName;
+        shownName.StartsWith( wxS( "refs/remotes/" ), &shownName );
+
+        aHandler->AddError( wxString::Format( rc == GIT_ENOTFOUND ? _( "Could not find the remote branch '%s'." )
+                                                                  : _( "Could not read the remote branch '%s'." ),
+                                              shownName ),
+                            KIGIT_COMMON::GetLastGitError() );
         return PullResult::Error;
     }
 
@@ -1941,7 +1958,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( git_commit_lookup( &targetCommit, aHandler->GetRepo(), &updatedRefOid ) != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Could not look up target commit" ) );
+        aHandler->AddGitError( _( "Could not read the fetched commit." ) );
         return PullResult::Error;
     }
 
@@ -1951,7 +1968,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( git_commit_tree( &targetTree, targetCommit ) != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Could not get tree from target commit" ) );
+        aHandler->AddGitError( _( "Could not read the fetched commit." ) );
         return PullResult::Error;
     }
 
@@ -1962,9 +1979,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( treeState == TREE_STATE::UNKNOWN )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not read the status of the project files, so "
-                                                       "getting changes was stopped: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not read the status of the project files, so getting changes was stopped." ) );
         return PullResult::Error;
     }
 
@@ -2043,12 +2058,9 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
         refreshCachedIndex( aHandler->GetRepo() );
 
-        aHandler->AddErrorString( restored ? wxString::Format( _( "Could not update the project files, so "
-                                                                  "nothing was changed: %s" ),
-                                                               gitError )
-                                           : wxString::Format( _( "Could not update the project files, and "
-                                                                  "they may be partly changed: %s" ),
-                                                               gitError ) );
+        aHandler->AddError( restored ? _( "Could not update the project files, so nothing was changed." )
+                                     : _( "Could not update the project files, and they may be partly changed." ),
+                            gitError );
         return PullResult::Error;
     }
 
@@ -2062,13 +2074,10 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
         refreshCachedIndex( aHandler->GetRepo() );
 
-        aHandler->AddErrorString( restored ? wxString::Format( _( "Could not move the branch, so nothing was "
-                                                                  "changed: %s" ),
-                                                               gitError )
-                                           : wxString::Format( _( "Could not move the branch, and the project "
-                                                                  "files may be left at the incoming version "
-                                                                  "while the branch is not: %s" ),
-                                                               gitError ) );
+        aHandler->AddError( restored ? _( "Could not move the branch, so nothing was changed." )
+                                     : _( "Could not move the branch, and the project files may be left at the "
+                                          "incoming version while the branch is not." ),
+                            gitError );
         return PullResult::Error;
     }
 
@@ -2139,10 +2148,10 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     {
         git_signature* probe = nullptr;
 
-        if( git_signature_default( &probe, repo ) != GIT_OK )
+        if( int rc = git_signature_default( &probe, repo ); rc != GIT_OK )
         {
-            aHandler->AddErrorString( _( "Could not create a commit signature. Set user.name and user.email "
-                                         "in your git configuration." ) );
+            KIGIT_ERROR_MESSAGE failure = describeSignatureFailure( rc );
+            aHandler->AddError( failure );
             return PullResult::MergeFailed;
         }
 
@@ -2181,8 +2190,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
 
     if( git_merge( repo, aMergeHeads, aMergeHeadsCount, nullptr, nullptr ) )
     {
-        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-        aHandler->AddErrorString( wxString::Format( _( "Merge failed: %s" ), errorMsg ) );
+        aHandler->AddGitError( _( "Could not merge the fetched changes." ) );
         return PullResult::MergeFailed;
     }
 
@@ -2264,10 +2272,10 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     KIGIT::GitCommitPtr headCommitPtr( head_commit );
     KIGIT::GitCommitPtr mergeCommitPtr( merge_commit );
 
-    if( git_signature_default( &signature, repo ) != GIT_OK )
+    if( int rc = git_signature_default( &signature, repo ); rc != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name and user.email in your "
-                                     "git configuration." ) );
+        KIGIT_ERROR_MESSAGE failure = describeSignatureFailure( rc );
+        aHandler->AddError( failure );
         undoMerge();
         return PullResult::MergeFailed;
     }
@@ -2282,8 +2290,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     if( git_commit_create( &merge_commit_oid, repo, "HEAD", signature, signature, nullptr,
                            message.utf8_string().c_str(), tree, 2, parents ) != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not create merge commit: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not create the merge commit." ) );
         undoMerge();
         return PullResult::MergeFailed;
     }
@@ -2297,10 +2304,10 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
 {
     git_signature* signature = nullptr;
 
-    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    if( int rc = git_signature_default( &signature, aRepo ); rc != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name and user.email in your "
-                                     "git configuration." ) );
+        KIGIT_ERROR_MESSAGE failure = describeSignatureFailure( rc );
+        aHandler->AddError( failure );
         return PullResult::Error;
     }
 
@@ -2311,8 +2318,7 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
 
     if( git_rebase_init( &rebase, aRepo, nullptr, aOnto, nullptr, &rebase_opts ) != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Rebase failed to start: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddGitError( _( "Could not start the rebase." ) );
         return PullResult::Error;
     }
 
@@ -2341,7 +2347,7 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
                 return PullResult::Conflict;
             }
 
-            aHandler->AddErrorString( wxString::Format( _( "Rebase commit failed: %s" ), gitError ) );
+            aHandler->AddError( _( "Could not rebase your commits onto the fetched changes." ), gitError );
             return PullResult::Error;
         }
     }
@@ -2350,7 +2356,7 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
     {
         wxString gitError = KIGIT_COMMON::GetLastGitError();
         git_rebase_abort( rebase );
-        aHandler->AddErrorString( wxString::Format( _( "Rebase failed: %s" ), gitError ) );
+        aHandler->AddError( _( "Could not rebase your commits onto the fetched changes." ), gitError );
         return PullResult::Error;
     }
 
@@ -2358,7 +2364,7 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
     {
         wxString gitError = KIGIT_COMMON::GetLastGitError();
         git_rebase_abort( rebase );
-        aHandler->AddErrorString( wxString::Format( _( "Rebase finish failed: %s" ), gitError ) );
+        aHandler->AddError( _( "Could not finish the rebase." ), gitError );
         return PullResult::Error;
     }
 
@@ -2381,38 +2387,31 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler, const git_a
 }
 
 
-git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxString* aError )
+git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxString* aError, wxString* aTrustCommand )
 {
     git_repository* repo = nullptr;
-    git_buf         repo_path = GIT_BUF_INIT;
 
-    if( git_repository_discover( &repo_path, aFilename, 0, nullptr ) != GIT_OK )
+    // Searching from the project, as git_repository_discover does, rather than opening the git directory it
+    // finds keeps a linked .git from moving the working folder to the link's target
+    if( int rc = git_repository_open_ext( &repo, aFilename, 0, nullptr ); rc != GIT_OK )
     {
-        wxLogTrace( traceGit, "Can't repo discover %s: %s", aFilename, KIGIT_COMMON::GetLastGitError() );
-        return nullptr;
-    }
-
-    KIGIT::GitBufPtr repo_path_ptr( &repo_path );
-
-    if( int rc = git_repository_open( &repo, repo_path.ptr ); rc != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Can't open repo for %s: %s", repo_path.ptr, KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( traceGit, "Can't open repo for %s: %s", aFilename, KIGIT_COMMON::GetLastGitError() );
 
         // Left unexplained, a repository git refuses to open looks like no repository at all.
         if( rc == GIT_EOWNER && aError )
         {
-            // Discovery gives the git directory. An ordinary repository keeps it as .git inside
-            // the project, so the directory to trust is its parent. A worktree or a submodule
-            // keeps it elsewhere, and there the git directory is the one to name.
-            wxFileName gitDir( wxString::FromUTF8( repo_path.ptr ), wxEmptyString );
+            git_buf gitDir = GIT_BUF_INIT;
 
-            if( gitDir.GetDirCount() > 0 && gitDir.GetDirs().Last() == wxS( ".git" ) )
-                gitDir.RemoveLastDir();
+            if( git_repository_discover( &gitDir, aFilename, 0, nullptr ) == GIT_OK )
+            {
+                KIGIT::GitBufPtr        gitDirPtr( &gitDir );
+                KIGIT_OWNERSHIP_REFUSAL refusal = KIGIT::DescribeOwnershipRefusal( wxString::FromUTF8( aFilename ),
+                                                                                   wxString::FromUTF8( gitDir.ptr ) );
+                *aError = refusal.summary;
 
-            *aError = wxString::Format( _( "The repository at '%s' belongs to another user, so git will not "
-                                           "open it. To trust it, run:\n\n"
-                                           "git config --global --add safe.directory \"%s\"" ),
-                                        gitDir.GetPath(), gitDir.GetPath() );
+                if( aTrustCommand )
+                    *aTrustCommand = refusal.trustCommand;
+            }
         }
 
         return nullptr;
@@ -3001,13 +3000,14 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
 }
 
 
-RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash, wxString& aError )
+RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash,
+                                              KIGIT_ERROR_MESSAGE& aError )
 {
     git_repository* repo = aCommon.GetRepo();
 
     if( !repo )
     {
-        aError = _( "The project has no git repository." );
+        aError.details = _( "The project has no git repository." );
         return RestoreResult::Error;
     }
 
@@ -3015,8 +3015,8 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     if( !projectPrefix )
     {
-        aError = _( "Could not work out which folder this project occupies in the repository, "
-                    "so nothing was restored." );
+        aError.details = _( "Could not work out which folder this project occupies in the repository, "
+                            "so nothing was restored." );
         return RestoreResult::Error;
     }
 
@@ -3024,7 +3024,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     if( git_revparse_single( &targetObj, repo, aCommitHash.utf8_string().c_str() ) != GIT_OK )
     {
-        aError = _( "Could not find that version." );
+        aError.details = _( "Could not find that version." );
         return RestoreResult::Error;
     }
 
@@ -3034,7 +3034,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
     if( git_object_type( targetObj ) != GIT_OBJECT_COMMIT
         || git_commit_lookup( &targetCommit, repo, git_object_id( targetObj ) ) != GIT_OK )
     {
-        aError = _( "Could not find that version." );
+        aError.details = _( "Could not find that version." );
         return RestoreResult::Error;
     }
 
@@ -3043,7 +3043,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     if( git_commit_tree( &targetTree, targetCommit ) != GIT_OK )
     {
-        aError = _( "Could not read that version's contents." );
+        aError.details = _( "Could not read that version's contents." );
         return RestoreResult::Error;
     }
 
@@ -3053,7 +3053,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     if( git_repository_head( &headRef, repo ) != GIT_OK )
     {
-        aError = _( "Could not get the repository head." );
+        aError.details = _( "Could not get the repository head." );
         return RestoreResult::Error;
     }
 
@@ -3062,7 +3062,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     if( git_reference_peel( (git_object**) &headCommit, headRef, GIT_OBJECT_COMMIT ) != GIT_OK )
     {
-        aError = _( "Could not get the repository head." );
+        aError.details = _( "Could not get the repository head." );
         return RestoreResult::Error;
     }
 
@@ -3071,7 +3071,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     if( git_commit_tree( &headTree, headCommit ) != GIT_OK )
     {
-        aError = _( "Could not get the repository head." );
+        aError.details = _( "Could not get the repository head." );
         return RestoreResult::Error;
     }
 
@@ -3089,7 +3089,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
         if( git_tree_entry_bypath( &subtreeEntry, targetTree, prefixUtf8.c_str() ) != GIT_OK )
         {
-            aError = _( "That version does not contain this project's folder." );
+            aError.details = _( "That version does not contain this project's folder." );
             return RestoreResult::Error;
         }
 
@@ -3097,7 +3097,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
         if( git_tree_entry_type( subtreeEntry ) != GIT_OBJECT_TREE )
         {
-            aError = _( "That version does not contain this project's folder." );
+            aError.details = _( "That version does not contain this project's folder." );
             return RestoreResult::Error;
         }
 
@@ -3111,8 +3111,8 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
         if( git_tree_create_updated( &combinedOid, repo, headTree, 1, &update ) != GIT_OK )
         {
-            aError = wxString::Format( _( "Could not build the restored content: %s" ),
-                                       KIGIT_COMMON::GetLastGitError() );
+            aError.details = wxString::Format( _( "Could not build the restored content: %s" ),
+                                               KIGIT_COMMON::GetLastGitError() );
             return RestoreResult::Error;
         }
 
@@ -3120,7 +3120,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
         if( git_tree_lookup( &combined, repo, &combinedOid ) != GIT_OK )
         {
-            aError = _( "Could not build the restored content." );
+            aError.details = _( "Could not build the restored content." );
             return RestoreResult::Error;
         }
 
@@ -3140,7 +3140,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
         if( git_status_list_new( &statusList, repo, &statusOpts ) != GIT_OK )
         {
-            aError = _( "Could not read the repository status." );
+            aError.details = _( "Could not read the repository status." );
             return RestoreResult::Error;
         }
 
@@ -3182,10 +3182,9 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     git_signature* signature = nullptr;
 
-    if( git_signature_default( &signature, repo ) != GIT_OK )
+    if( int rc = git_signature_default( &signature, repo ); rc != GIT_OK )
     {
-        aError = _( "Could not create a commit signature. Set user.name and user.email in your "
-                    "git configuration." );
+        aError = describeSignatureFailure( rc );
         return RestoreResult::Error;
     }
 
@@ -3204,7 +3203,8 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
                            message.utf8_string().c_str(), effectiveTree, 1, parents )
         != GIT_OK )
     {
-        aError = wxString::Format( _( "Could not create the restore commit: %s" ), KIGIT_COMMON::GetLastGitError() );
+        aError.details =
+                wxString::Format( _( "Could not create the restore commit: %s" ), KIGIT_COMMON::GetLastGitError() );
         return RestoreResult::Error;
     }
 
@@ -3215,23 +3215,25 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
     case PUBLISH_RESULT::PUBLISHED: return RestoreResult::Restored;
 
     case PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK:
-        aError = wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
+        aError.details =
+                wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
         return RestoreResult::Error;
 
     case PUBLISH_RESULT::CHECKOUT_FAILED_PARTIAL:
-        aError = wxString::Format( _( "Could not update the working files, and they may be partially "
-                                      "changed: %s" ),
-                                   gitError );
+        aError.details = wxString::Format( _( "Could not update the working files, and they may be partially "
+                                              "changed: %s" ),
+                                           gitError );
         return RestoreResult::Error;
 
     case PUBLISH_RESULT::RECORD_FAILED_ROLLED_BACK:
-        aError = wxString::Format( _( "Could not record the restore commit, so nothing was changed: %s" ), gitError );
+        aError.details =
+                wxString::Format( _( "Could not record the restore commit, so nothing was changed: %s" ), gitError );
         return RestoreResult::Error;
 
     case PUBLISH_RESULT::RECORD_FAILED_PARTIAL:
-        aError = wxString::Format( _( "Could not record the restore commit, and the working files may "
-                                      "have been changed: %s" ),
-                                   gitError );
+        aError.details = wxString::Format( _( "Could not record the restore commit, and the working files may "
+                                              "have been changed: %s" ),
+                                           gitError );
         return RestoreResult::Error;
     }
 
@@ -3598,11 +3600,11 @@ bool LIBGIT_BACKEND::GetMergeConflicts( git_repository* aRepo, const wxString& a
 MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
                                                       const wxString&                                   aTheirsOid,
                                                       const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                                      wxString&                                         aError )
+                                                      KIGIT_ERROR_MESSAGE&                              aError )
 {
     if( !aRepo )
     {
-        aError = _( "The project has no git repository." );
+        aError.details = _( "The project has no git repository." );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3618,7 +3620,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
         if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
         {
-            aError = _( "Could not read the repository status." );
+            aError.details = _( "Could not read the repository status." );
             return MergeCommitResult::FailedCleanly;
         }
 
@@ -3626,9 +3628,9 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
         if( git_status_list_entrycount( statusList ) > 0 )
         {
-            aError = _( "Files changed while the conflicts were being resolved, and finishing the "
-                        "merge would overwrite those changes. Get changes again to redo the merge "
-                        "with the current files." );
+            aError.details = _( "Files changed while the conflicts were being resolved, and finishing the "
+                                "merge would overwrite those changes. Get changes again to redo the merge "
+                                "with the current files." );
             return MergeCommitResult::FailedCleanly;
         }
     }
@@ -3637,7 +3639,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
     KIGIT::GitCommitPtr ours;
     KIGIT::GitCommitPtr theirs;
 
-    if( !remergeInMemory( aRepo, aTheirsOid, mergedIndex, ours, theirs, aError ) )
+    if( !remergeInMemory( aRepo, aTheirsOid, mergedIndex, ours, theirs, aError.details ) )
         return MergeCommitResult::FailedCleanly;
 
     char oidStr[GIT_OID_HEXSZ + 1] = { 0 };
@@ -3646,7 +3648,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
     // The resolutions were made against this head. If the branch moved, they no longer apply.
     if( aExpectedHeadOid != wxString::FromUTF8( oidStr ) )
     {
-        aError = _( "The repository changed while resolving. Get changes again." );
+        aError.details = _( "The repository changed while resolving. Get changes again." );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3664,7 +3666,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
         {
             if( git_index_conflict_remove( mergedIndex.get(), pathUtf8.c_str() ) != GIT_OK )
             {
-                aError = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
+                aError.details = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
                 return MergeCommitResult::FailedCleanly;
             }
 
@@ -3675,7 +3677,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
         if( !in )
         {
-            aError = wxString::Format( _( "Could not read the resolved file for '%s'." ), path );
+            aError.details = wxString::Format( _( "Could not read the resolved file for '%s'." ), path );
             return MergeCommitResult::FailedCleanly;
         }
 
@@ -3685,7 +3687,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
         if( git_blob_create_from_buffer( &blobOid, aRepo, bytes.data(), bytes.size() ) != GIT_OK )
         {
-            aError = wxString::Format( _( "Could not store the resolved file for '%s'." ), path );
+            aError.details = wxString::Format( _( "Could not store the resolved file for '%s'." ), path );
             return MergeCommitResult::FailedCleanly;
         }
 
@@ -3698,14 +3700,14 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
         if( git_index_conflict_remove( mergedIndex.get(), pathUtf8.c_str() ) != GIT_OK
             || git_index_add( mergedIndex.get(), &entry ) != GIT_OK )
         {
-            aError = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
+            aError.details = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
             return MergeCommitResult::FailedCleanly;
         }
     }
 
     if( git_index_has_conflicts( mergedIndex.get() ) )
     {
-        aError = _( "Not every conflict was resolved." );
+        aError.details = _( "Not every conflict was resolved." );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3713,7 +3715,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
     if( git_index_write_tree_to( &treeOid, mergedIndex.get(), aRepo ) != GIT_OK )
     {
-        aError = _( "Could not write the merge result." );
+        aError.details = _( "Could not write the merge result." );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3721,7 +3723,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
     if( git_tree_lookup( &tree, aRepo, &treeOid ) != GIT_OK )
     {
-        aError = _( "Could not write the merge result." );
+        aError.details = _( "Could not write the merge result." );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3729,10 +3731,9 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
     git_signature* signature = nullptr;
 
-    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    if( int rc = git_signature_default( &signature, aRepo ); rc != GIT_OK )
     {
-        aError = _( "Could not create a commit signature. Set user.name and user.email in your "
-                    "git configuration." );
+        aError = describeSignatureFailure( rc );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3742,7 +3743,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
     if( git_repository_head( &headRef, aRepo ) != GIT_OK )
     {
-        aError = _( "Could not get the repository head." );
+        aError.details = _( "Could not get the repository head." );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3758,7 +3759,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
                            message.utf8_string().c_str(), tree, 2, parents )
         != GIT_OK )
     {
-        aError = wxString::Format( _( "Could not create merge commit: %s" ), KIGIT_COMMON::GetLastGitError() );
+        aError.details = wxString::Format( _( "Could not create merge commit: %s" ), KIGIT_COMMON::GetLastGitError() );
         return MergeCommitResult::FailedCleanly;
     }
 
@@ -3770,23 +3771,25 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
     case PUBLISH_RESULT::PUBLISHED: return MergeCommitResult::Success;
 
     case PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK:
-        aError = wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
+        aError.details =
+                wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
         return MergeCommitResult::FailedCleanly;
 
     case PUBLISH_RESULT::CHECKOUT_FAILED_PARTIAL:
-        aError = wxString::Format( _( "Could not update the working files, and they may be partially "
-                                      "changed: %s" ),
-                                   gitError );
+        aError.details = wxString::Format( _( "Could not update the working files, and they may be partially "
+                                              "changed: %s" ),
+                                           gitError );
         return MergeCommitResult::FailedPartially;
 
     case PUBLISH_RESULT::RECORD_FAILED_ROLLED_BACK:
-        aError = wxString::Format( _( "Could not record the merge commit, so nothing was changed: %s" ), gitError );
+        aError.details =
+                wxString::Format( _( "Could not record the merge commit, so nothing was changed: %s" ), gitError );
         return MergeCommitResult::FailedCleanly;
 
     case PUBLISH_RESULT::RECORD_FAILED_PARTIAL:
-        aError = wxString::Format( _( "Could not record the merge commit, and the working files may "
-                                      "have been changed: %s" ),
-                                   gitError );
+        aError.details = wxString::Format( _( "Could not record the merge commit, and the working files may "
+                                              "have been changed: %s" ),
+                                           gitError );
         return MergeCommitResult::FailedPartially;
     }
 

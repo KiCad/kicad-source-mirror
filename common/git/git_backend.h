@@ -45,6 +45,7 @@ enum class BranchResult;
 enum class PullResult;
 struct FileStatus;
 struct KIGIT_CONFLICT_SIDES;
+struct KIGIT_ERROR_MESSAGE;
 enum class RestoreResult;
 enum class PushResult;
 
@@ -131,8 +132,10 @@ public:
     virtual bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) = 0;
     virtual PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) = 0;
 
-    /// aError receives why git refused to open the repository. Untouched otherwise.
-    virtual git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) = 0;
+    /// aError receives why git refused to open the repository, and aTrustCommand the command that trusts it when
+    /// another user owns it. Both are untouched otherwise.
+    virtual git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError,
+                                                  wxString* aTrustCommand ) = 0;
     virtual int  CreateBranch( git_repository* aRepo, const wxString& aBranchName, const wxString& aFrom ) = 0;
     virtual bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                             bool aRemoveGitDir, wxString* aErrors ) = 0;
@@ -154,7 +157,8 @@ public:
 
     virtual bool SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail ) = 0;
 
-    virtual RestoreResult RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash, wxString& aError ) = 0;
+    virtual RestoreResult RestoreVersion( KIGIT_COMMON& aCommon, const wxString& aCommitHash,
+                                          KIGIT_ERROR_MESSAGE& aError ) = 0;
 
     virtual bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) = 0;
 
@@ -170,7 +174,7 @@ public:
     virtual MergeCommitResult CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
                                                   const wxString&                                   aTheirsOid,
                                                   const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
-                                                  wxString&                                         aError ) = 0;
+                                                  KIGIT_ERROR_MESSAGE&                              aError ) = 0;
 
 protected:
     KIGIT_ORPHAN_REGISTRY m_orphanRegistry;

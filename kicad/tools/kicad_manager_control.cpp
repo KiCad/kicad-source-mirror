@@ -483,7 +483,10 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
     if( projects.empty() )
     {
-        DisplayErrorMessage( m_frame, _( "No project files were found in the repository." ) );
+        DisplayErrorMessage( m_frame, wxString::Format( _( "The repository has no KiCad project to open. Its files "
+                                                           "were cloned to '%s', which can be deleted if they are "
+                                                           "not needed." ),
+                                                        pro.GetPath() ) );
         return -1;
     }
 

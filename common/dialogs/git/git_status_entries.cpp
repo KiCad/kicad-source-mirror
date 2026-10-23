@@ -514,8 +514,8 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
                 }
 
                 EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( frame->Kiway() );
-                BranchResult    result = BranchResult::Error;
-                wxString        resultError;
+                BranchResult        result = BranchResult::Error;
+                KIGIT_ERROR_MESSAGE resultError;
 
                 {
                     std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, parent );
@@ -525,7 +525,7 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
 
                     GIT_BRANCH_HANDLER handler( common.get() );
                     result = handler.SwitchToBranch( aBranch );
-                    resultError = handler.GetErrorString();
+                    resultError = handler.PopError();
 
                     // The next transfer must use the new branch's upstream and credentials.
                     // Update them before releasing the same lock that protects the checkout.
@@ -535,14 +535,23 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
 
                 if( result == BranchResult::Conflict )
                 {
-                    DisplayInfoMessage( parent, resultError );
+                    DisplayInfoMessage( parent, resultError.summary );
                     return;
                 }
 
                 if( result != BranchResult::Success )
                 {
-                    DisplayErrorMessage( parent, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
-                                         resultError.IsEmpty() ? KIGIT_COMMON::GetLastGitError() : resultError );
+                    if( resultError.summary.IsEmpty() )
+                    {
+                        DisplayErrorMessage( parent,
+                                             wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
+                                             KIGIT_COMMON::GetLastGitError() );
+                    }
+                    else
+                    {
+                        DisplayErrorMessage( parent, resultError.summary, resultError.details );
+                    }
+
                     return;
                 }
 

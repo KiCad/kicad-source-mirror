@@ -43,15 +43,3 @@ CommitResult GIT_COMMIT_HANDLER::PerformAmend( const std::vector<wxString>& aFil
 {
     return GetGitBackend()->Amend( this, aFiles, aMessage, aAuthorName, aAuthorEmail );
 }
-
-
-wxString GIT_COMMIT_HANDLER::GetErrorString() const
-{
-    return m_errorString;
-}
-
-
-void GIT_COMMIT_HANDLER::AddErrorString( const wxString& aErrorString )
-{
-    m_errorString += aErrorString;
-}
