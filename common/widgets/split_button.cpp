@@ -276,8 +276,8 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     wxRendererNative::Get().DrawPushButton( this, dc, r1, m_stateButton );
 #endif
 
-    SetForegroundColour( m_bIsEnable ? wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT )
-                                     : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+    dc.SetTextForeground( m_bIsEnable ? wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT )
+                                      : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
     if( m_bitmap.IsOk() )
     {
