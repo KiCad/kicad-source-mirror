@@ -381,29 +381,25 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_TOP ),
-                              renderJob->m_lightTopIntensity ) )
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_TOP ), renderJob->m_lightTopIntensity ) )
     {
         wxFprintf( stderr, _( "Invalid light top intensity format\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
 
-    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_BOTTOM ),
-                              renderJob->m_lightBottomIntensity ) )
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_BOTTOM ), renderJob->m_lightBottomIntensity ) )
     {
         wxFprintf( stderr, _( "Invalid light bottom intensity format\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
 
-    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_SIDE ),
-                              renderJob->m_lightSideIntensity ) )
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_SIDE ), renderJob->m_lightSideIntensity ) )
     {
         wxFprintf( stderr, _( "Invalid light side intensity format\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
 
-    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_CAMERA ),
-                              renderJob->m_lightCameraIntensity ) )
+    if( !getColorOrIntensity( m_argParser.get<std::string>( ARG_LIGHT_CAMERA ), renderJob->m_lightCameraIntensity ) )
     {
         wxFprintf( stderr, _( "Invalid light camera intensity format\n" ) );
         return EXIT_CODES::ERR_ARGS;
@@ -425,6 +421,15 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, renderJob.get() );
+
+    for( size_t ii = 1; ii < m_argVariantNames.size(); ++ii )
+    {
+        if( exitCode != EXIT_CODES::OK )
+            return exitCode;
+
+        renderJob->m_variant = m_argVariantNames[ii];
+        exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, renderJob.get() );
+    }
 
     return exitCode;
 }
