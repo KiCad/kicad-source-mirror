@@ -89,6 +89,9 @@ APIEXPORT wxString KnownHostsPath();
  */
 APIEXPORT bool MayOfferTrust( const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
 
+/// Why a key the user may not trust was refused, and what to do next.
+APIEXPORT wxString HostKeyRefusalMessage( const HOST_KEY_FAILURE& aFailure );
+
 /**
  * The home folder libgit2 1.5 reads `.ssh/known_hosts` under, which it has no option to report.
  * 1.5.1 reads HOME at each connection and 1.5.2 takes the folder 1.6 would. 1.5.0 reads no trust store,

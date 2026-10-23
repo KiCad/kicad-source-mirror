@@ -35,6 +35,7 @@
 #include <project/project_local_settings.h>
 #include <kiplatform/secrets.h>
 #include <trace_helpers.h>
+#include <widgets/kistatusbar.h>
 
 
 // A session that never read its remote would show no address and offer no transport
@@ -151,25 +152,7 @@ bool KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailu
 
     if( !MayOfferTrust( aFailure, aRetriedAfterTrust ) )
     {
-        wxString message;
-
-        if( aFailure.state == KNOWN_HOST_STATE::REVOKED )
-        {
-            message = _( "The key for %s has been revoked. Ask your administrator before connecting again." );
-        }
-        else if( aFailure.state == KNOWN_HOST_STATE::MISMATCH )
-        {
-            message = _( "The key for %s has changed since the last connection. This can mean the server was "
-                         "replaced or that someone is intercepting the connection. Ask your administrator "
-                         "before connecting again." );
-        }
-        else
-        {
-            message = _( "%s still could not be verified after its key was saved. Ask your administrator before "
-                         "connecting again." );
-        }
-
-        DisplayErrorMessage( aParent, wxString::Format( message, host ) );
+        DisplayErrorMessage( aParent, HostKeyRefusalMessage( aFailure ) );
         return false;
     }
 
@@ -205,6 +188,34 @@ bool KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailu
     }
 
     return true;
+}
+
+
+void KIGIT::ClearSyncWarnings( wxWindow* aWindow )
+{
+    for( wxWindow* window = aWindow; window; window = window->GetParent() )
+    {
+        if( wxFrame* frame = dynamic_cast<wxFrame*>( window ) )
+        {
+            if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( frame->GetStatusBar() ) )
+                statusBar->ClearWarningMessages( SYNC_WARNING_SOURCE );
+
+            return;
+        }
+    }
+}
+
+
+void KIGIT::ClearSyncWarnings( const KIGIT_COMMON* aCommon )
+{
+    // The manager lists the warnings, and an editor's pull or push answers them as well
+    for( wxWindow* window : wxTopLevelWindows )
+    {
+        EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( window );
+
+        if( frame && frame->HasKiway() && frame->Prj().GetGitCommon().get() == aCommon )
+            ClearSyncWarnings( frame );
+    }
 }
 
 

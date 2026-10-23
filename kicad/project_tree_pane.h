@@ -39,6 +39,7 @@
 #include <wx/treebase.h>
 
 #include <git/kicad_git_common.h>
+#include <git/kigit_failure.h>
 #include "tree_file_type.h"
 
 
@@ -267,6 +268,10 @@ private:
 
     void gitStatusTimerHandler();
 
+    /// Background fetches have no window to answer, so each failure goes to the status bar's warnings once,
+    /// and a transfer that succeeds clears them.
+    void reportGitSyncResult( bool aFetched, std::optional<KIGIT_FAILURE> aKind, const wxString& aSummary );
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     PROJECT_TREE*           m_TreeProject;
@@ -280,7 +285,6 @@ private:
     bool                    m_watcherNeedReset; // true if FileWatcherReset() must be called
                                                 // (during an idle time for instance) after
                                                 // the main loop event handler is started
-    int                     m_gitLastError;
     wxString                m_gitCurrentBranchName;
     wxTimer                 m_gitSyncTimer;
     wxTimer                 m_gitStatusTimer;

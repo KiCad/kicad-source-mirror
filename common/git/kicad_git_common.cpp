@@ -46,8 +46,6 @@
 #include <thread>
 #include <vector>
 
-static wxString stripUrlUserinfo( const wxString& aUrl );
-
 
 wxWindow*& KIGIT::ActiveAdvancedGitWindow()
 {
@@ -1421,7 +1419,7 @@ std::vector<std::pair<wxString, wxString>> KIGIT_COMMON::GetRemotes() const
         KIGIT::GitRemotePtr remotePtr( remote );
 
         const char* url = git_remote_url( remote );
-        remotes.emplace_back( name, url ? stripUrlUserinfo( wxString::FromUTF8( url ) ) : wxString() );
+        remotes.emplace_back( name, url ? KIGIT::StripEmbeddedUserinfo( wxString::FromUTF8( url ) ) : wxString() );
     }
 
     return remotes;
@@ -1950,7 +1948,6 @@ bool KIGIT_COMMON::ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, co
 
     m_nextPublicKey = 0;
     m_testedTypes = 0;
-    m_authFailed = false;
     return true;
 }
 
@@ -2158,15 +2155,19 @@ static size_t findUserinfoAt( const wxString& aUrl )
 }
 
 
-// Display and trace output must not carry the secret.
-static wxString stripUrlUserinfo( const wxString& aUrl )
+KIGIT_ERROR_INFO KIGIT_COMMON::GetLastGitErrorInfo( int aCode )
 {
-    size_t at = findUserinfoAt( aUrl );
+    KIGIT_ERROR_INFO info;
+    info.code = aCode;
 
-    if( at == wxString::npos )
-        return aUrl;
+    // libgit2 before 1.8 answers null rather than "no error"
+    if( const git_error* error = git_error_last() )
+    {
+        info.klass = error->klass;
+        info.message = wxString::FromUTF8( error->message ? error->message : "" );
+    }
 
-    return aUrl.Left( aUrl.find( "://" ) + 3 ) + aUrl.Mid( at + 1 );
+    return info;
 }
 
 
@@ -2526,12 +2527,16 @@ void KIGIT_COMMON::updateConnectionTypeUnlocked()
 }
 
 
-int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername )
+int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername, KIGIT_AUTH_ATTEMPT& aAttempt )
 {
     if( !( m_testedTypes & KIGIT_CREDENTIAL_SSH_AGENT ) )
     {
         if( HandleSSHAgentAuthentication( aOut, aUsername ) == GIT_OK )
+        {
+            aAttempt.agentTried = true;
             return GIT_OK;
+        }
+
         // Agent unavailable or has no matching key; fall through to configured key.
     }
 
@@ -2553,11 +2558,13 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
     if( git_credential_ssh_key_new( aOut, aUsername.mbc_str(), sshPubKey.mbc_str(), sshKey.mbc_str(),
                                     password.mbc_str() ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s",
-                    aUsername, KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s", sshKey,
+                    KIGIT_COMMON::GetLastGitError() );
         return GIT_PASSTHROUGH;
     }
 
+    // libssh2 reads the file only once authentication starts, so a load failure names this key
+    aAttempt.keysTried.push_back( sshKey );
     return GIT_OK;
 }
 
@@ -2579,8 +2586,7 @@ int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString&
 
     if( git_credential_ssh_key_from_agent( aOut, aUsername.mbc_str() ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to create SSH agent credential for %s: %s",
-                    aUsername, KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( traceGit, "Failed to create SSH agent credential: %s", KIGIT_COMMON::GetLastGitError() );
         return GIT_PASSTHROUGH;
     }
 
@@ -2619,9 +2625,7 @@ extern "C" int progress_cb( const char* str, int len, void* aPayload )
         return GIT_EUSER;
     }
 
-    wxString progressMessage( str, len );
-    parent->UpdateProgress( 0, 0, progressMessage );
-
+    parent->ReceiveSideband( str, len );
     return 0;
 }
 
@@ -2705,11 +2709,15 @@ extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aT
 extern "C" int push_update_reference_cb( const char* aRefname, const char* aStatus, void* aPayload )
 {
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-    wxString          status( aStatus );
 
-    if( !status.IsEmpty() )
+    if( aStatus && *aStatus )
     {
-        wxString statusMessage = wxString::Format( _( "* [rejected] %s (%s)" ), aRefname, aStatus );
+        const wxString status = KIGIT::DecodeServerText( aStatus, strlen( aStatus ) );
+
+        parent->SetPushRefusal( wxString::Format( wxS( "%s: %s" ), aRefname, status ) );
+
+        wxString statusMessage = wxString::Format( _( "* [rejected] %s (%s)" ), aRefname,
+                                                   KIGIT::PrintableServerText( status ) );
         parent->UpdateProgress( 0, 0, statusMessage );
 
         // Without this the push reports success even though the remote refused it.
@@ -2736,9 +2744,11 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     common->SyncRemoteUrl( wxString::FromUTF8( aUrl ) );
 
     // The configured remote URL may embed a password. Keep it out of the trace log.
-    wxString safeUrl = stripUrlUserinfo( wxString::FromUTF8( aUrl ) );
+    wxString safeUrl = KIGIT::StripEmbeddedUserinfo( wxString::FromUTF8( aUrl ) );
 
     wxLogTrace( traceGit, "Credentials callback for %s, testing %d", safeUrl, aAllowedTypes );
+
+    parent->AuthAttempt().connType = parent->GetConnType();
 
     if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
     {
@@ -2750,8 +2760,8 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         && !( parent->TestedTypes() & GIT_CREDENTIAL_USERNAME ) )
     {
         wxString username = parent->GetUsername().Trim().Trim( false );
-        wxLogTrace( traceGit, "Username credential for %s at %s with allowed type %d", username, safeUrl,
-                    aAllowedTypes );
+        // A token in the URL parses as the username, so no trace names it
+        wxLogTrace( traceGit, "Username credential at %s with allowed type %d", safeUrl, aAllowedTypes );
 
         // An empty username makes the server answer "unsupported authentication", which tells
         // the user nothing. Fail authentication instead, so the caller prompts and retries.
@@ -2759,19 +2769,18 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         {
             git_error_clear();
             git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-            common->SetAuthFailure();
+            parent->SetAuthFailure();
             return GIT_EAUTH;
         }
 
         if( int rc = git_credential_username_new( aOut, username.ToStdString().c_str() ); rc != GIT_OK )
         {
-            wxLogTrace( traceGit, "Failed to create username credential for %s: %s",
-                        username, KIGIT_COMMON::GetLastGitError() );
+            wxLogTrace( traceGit, "Failed to create username credential: %s", KIGIT_COMMON::GetLastGitError() );
             return rc;
         }
         else
         {
-            wxLogTrace( traceGit, "Created username credential for %s", username );
+            wxLogTrace( traceGit, "Created username credential" );
         }
 
         parent->TestedTypes() |= GIT_CREDENTIAL_USERNAME;
@@ -2782,8 +2791,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && !parent->GetUsername().IsEmpty() )
     {
         // Plaintext authentication
-        wxLogTrace( traceGit, "Plaintext authentication for %s at %s with allowed type %d", parent->GetUsername(),
-                    safeUrl, aAllowedTypes );
+        wxLogTrace( traceGit, "Plaintext authentication at %s with allowed type %d", safeUrl, aAllowedTypes );
         return common->HandlePlaintextAuthentication( aOut, parent->GetUsername() );
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
@@ -2794,7 +2802,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         wxString sshUser = ( aUsername && *aUsername ) ? wxString::FromUTF8( aUsername ) : parent->GetUsername();
 
         // SSH key authentication
-        int result = common->HandleSSHKeyAuthentication( aOut, sshUser );
+        int result = common->HandleSSHKeyAuthentication( aOut, sshUser, parent->AuthAttempt() );
 
         // Translate exhausted-keys PASSTHROUGH into a proper auth error so the
         // retry loop runs and libgit2 doesn't emit "no callback set".
@@ -2802,7 +2810,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         {
             git_error_clear();
             git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-            common->SetAuthFailure();
+            parent->SetAuthFailure();
             return GIT_EAUTH;
         }
 
@@ -2814,7 +2822,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         // "no callback set" as a dead end.
         git_error_clear();
         git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-        common->SetAuthFailure();
+        parent->SetAuthFailure();
         return GIT_EAUTH;
     }
 
@@ -2829,22 +2837,26 @@ extern "C" int certificate_check_cb( git_cert* aCert, int aValid, const char* aH
 
     const git_cert_hostkey* cert = reinterpret_cast<const git_cert_hostkey*>( aCert );
 
+    KIGIT_REPO_MIXIN* handler = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
+
+    auto refuse = [&]( const wxString& aReason )
+    {
+        // libgit2 v1.9.0 ssh_libssh2.c:758-760 replaces any error the callback sets
+        handler->SetHostKeyRefusal( aReason );
+        return GIT_ECERTIFICATE;
+    };
+
     // libgit2 1.9 connects on a passthrough even when nothing was verified
     auto refuseUnreadable = [&]()
     {
         wxLogTrace( traceGit, "Host key from %s cannot be read, refusing it", aHost );
-        git_error_set_str( GIT_ERROR_NET, wxString::Format( _( "KiCad could not read the key %s presented, so the "
-                                                               "connection was not made. Ask your administrator "
-                                                               "which host key the server uses." ),
-                                                            wxString::FromUTF8( aHost ) )
-                                                  .utf8_str() );
-        return GIT_ECERTIFICATE;
+        return refuse( wxString::Format( _( "KiCad could not read the key %s presented, so the connection was not "
+                                            "made. Ask your administrator which host key the server uses." ),
+                                         wxString::FromUTF8( aHost ) ) );
     };
 
     if( !( cert->type & GIT_CERT_SSH_RAW ) || !cert->hostkey || cert->hostkey_len == 0 )
         return refuseUnreadable();
-
-    KIGIT_REPO_MIXIN* handler = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
     KIGIT::HOST_KEY_FAILURE key;
     key.rawKey.assign( cert->hostkey, cert->hostkey_len );
@@ -2860,12 +2872,9 @@ extern "C" int certificate_check_cb( git_cert* aCert, int aValid, const char* aH
     if( key.port < 0 )
     {
         wxLogTrace( traceGit, "Host %s does not match the synced remote, refusing its key", key.host );
-        git_error_set_str( GIT_ERROR_NET, wxString::Format( _( "The address of %s could not be matched to the "
-                                                               "remote, so its key was not checked. Check the "
-                                                               "remote URL." ),
-                                                            key.host )
-                                                  .utf8_str() );
-        return GIT_ECERTIFICATE;
+        return refuse( wxString::Format( _( "The address of %s could not be matched to the remote, so its key was "
+                                            "not checked. Check the remote URL." ),
+                                         key.host ) );
     }
 
     key.keyType = KIGIT::HostKeyType( key.rawKey );

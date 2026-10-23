@@ -48,17 +48,6 @@
 #include <vector>
 
 
-// libgit2 phrases a rejected login several ways, so match the class and prompt for credentials.
-static bool isAuthenticationError( const wxString& aGitError )
-{
-    wxString lower = aGitError.Lower();
-
-    return lower.Contains( wxS( "authenticat" ) ) // authenticate, authentication
-           || lower.Contains( wxS( "credential" ) ) || lower.Contains( wxS( "unauthorized" ) )
-           || lower.Contains( wxS( "401" ) );
-}
-
-
 void LIBGIT_BACKEND::Init()
 {
     git_libgit2_init();
@@ -179,18 +168,15 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
     cloneOptions.remote_cb = clone_remote_cb;
     cloneOptions.remote_cb_payload = common;
 
-    aHandler->TestedTypes() = 0;
-    aHandler->ResetNextKey();
-    aHandler->ClearHostKeyFailure();
+    aHandler->ResetTransferState();
     git_repository* newRepo = nullptr;
     wxString        remote = common->GetRemote();
     std::string     remoteUtf8 = remote.utf8_string();
 
-    if( git_clone( &newRepo, remoteUtf8.c_str(), aHandler->GetClonePath().mbc_str(), &cloneOptions ) != 0 )
+    if( int rc = git_clone( &newRepo, remoteUtf8.c_str(), aHandler->GetClonePath().mbc_str(), &cloneOptions ) )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not clone repository '%s' : %s" ),
-                                                    remote,
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( rc ), KIGIT_OPERATION::CLONE,
+                                         wxEmptyString );
         return false;
     }
 
@@ -955,25 +941,12 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     if( aHandler->IsThisOperationCancelled() )
         return PushResult::Error;
 
-    aHandler->TestedTypes() = 0;
-    aHandler->ResetNextKey();
-    aHandler->ClearHostKeyFailure();
+    aHandler->ResetTransferState();
 
     if( int connectResult = git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {
-        wxString gitError = KIGIT_COMMON::GetLastGitError();
-
-        if( connectResult == GIT_EAUTH || isAuthenticationError( gitError ) )
-        {
-            common->SetAuthFailure();
-            aHandler->AddErrorString( _( "Authentication failed. Check the username and access "
-                                         "token for the remote." ) );
-        }
-        else
-        {
-            aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ), gitError ) );
-        }
-
+        aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( connectResult ), KIGIT_OPERATION::PUSH,
+                                         remoteName );
         return PushResult::Error;
     }
 
@@ -1018,8 +991,8 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 
     if( int pushResult = git_remote_push( remote, &refspecs, &pushOptions ) )
     {
-        aHandler->AddErrorString(
-                wxString::Format( _( "Could not push to remote: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( pushResult ), KIGIT_OPERATION::PUSH,
+                                         remoteName );
         git_remote_disconnect( remote );
 
         // The return code, not the message, which varies between libgit2 versions.
@@ -1246,8 +1219,8 @@ InitResult LIBGIT_BACKEND::InitializeRepository( GIT_INIT_HANDLER* aHandler, con
         if( repo )
             git_repository_free( repo );
 
-        aHandler->AddErrorString( wxString::Format( _( "Failed to initialize Git repository: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddError( wxString::Format( _( "Could not set up version control in %s." ), aPath ),
+                            KIGIT_COMMON::GetLastGitError() );
         return InitResult::Error;
     }
 
@@ -1289,8 +1262,14 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
 
     if( error != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to set up remote: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        KIGIT_FAILURE_CONTEXT context;
+        context.operation = KIGIT_OPERATION::SET_UP_REMOTE;
+        context.remoteName = wxS( "origin" );
+        context.url = parsed.url;
+
+        KIGIT_FAILURE_REPORT report =
+                KIGIT::DescribeGitFailure( KIGIT_COMMON::GetLastGitErrorInfo( error ), {}, context );
+        aHandler->AddError( report.summary, report.details );
         return false;
     }
 
@@ -1498,16 +1477,11 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     if( aHandler->IsThisOperationCancelled() )
         return false;
 
-    aHandler->TestedTypes() = 0;
-    aHandler->ResetNextKey();
-    aHandler->ClearHostKeyFailure();
+    aHandler->ResetTransferState();
 
-    if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, &proxyOpts, nullptr ) )
+    if( int rc = git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {
-        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to connect to remote: %s", errorMsg );
-        aHandler->AddErrorString(
-                wxString::Format( _( "Could not connect to remote '%s': %s" ), remoteName, errorMsg ) );
+        aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( rc ), KIGIT_OPERATION::FETCH, remoteName );
         return false;
     }
 
@@ -1515,12 +1489,9 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     git_fetch_init_options( &fetchOptions, GIT_FETCH_OPTIONS_VERSION );
     fetchOptions.callbacks = remoteCallbacks;
 
-    if( git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
+    if( int rc = git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
     {
-        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to fetch from remote: %s", errorMsg );
-        aHandler->AddErrorString(
-                wxString::Format( _( "Could not fetch data from remote '%s': %s" ), remoteName, errorMsg ) );
+        aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( rc ), KIGIT_OPERATION::FETCH, remoteName );
         return false;
     }
 

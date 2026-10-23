@@ -1984,6 +1984,7 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
     {
         PushResult result = PushResult::Error;
         wxString   error;
+        wxString   details;
         bool       authFailure = false;
         bool       cancelled = false;
 
@@ -1997,8 +1998,6 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
             [aCommon, outcome, aBranch, aHead, alive = m_transfer.Alive(),
              pane = this]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
-                aCommon->ClearAuthFailure();
-
                 GIT_PUSH_HANDLER handler( aCommon.get() );
                 handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
                         alive,
@@ -2010,8 +2009,10 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
                 handler.SetExpectedTarget( aBranch, aHead );
                 handler.SetCancelToken( aToken );
                 outcome->result = handler.PerformPush();
-                outcome->error = handler.GetErrorString();
-                outcome->authFailure = aCommon->WasAuthFailure();
+                KIGIT_ERROR_MESSAGE error = handler.PopError();
+                outcome->error = error.summary;
+                outcome->details = error.details;
+                outcome->authFailure = handler.WasAuthFailure();
                 outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a cancel aimed at something else is not
@@ -2030,8 +2031,8 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
             },
             [this, aCommon, outcome, aRetriedAfterTrust]()
             {
-                onPushDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->authFailure,
-                            outcome->hostKey, aRetriedAfterTrust, outcome->cancelled );
+                onPushDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->details,
+                            outcome->authFailure, outcome->hostKey, aRetriedAfterTrust, outcome->cancelled );
             } );
 
     if( !started )
@@ -2040,8 +2041,9 @@ void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wx
 
 
 void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError,
-                                  bool aAuthFailure, const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey,
-                                  bool aRetriedAfterTrust, bool aCancelled )
+                                  const wxString& aDetails, bool aAuthFailure,
+                                  const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey, bool aRetriedAfterTrust,
+                                  bool aCancelled )
 {
     PushResult result = static_cast<PushResult>( aResult );
 
@@ -2049,6 +2051,7 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     {
         // The shared refresh already ran in the completion.
         setBusy( false, _( "Pushed to remote." ) );
+        KIGIT::ClearSyncWarnings( aCommon.get() );
         return;
     }
 
@@ -2077,7 +2080,7 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( aAuthFailure )
     {
-        if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
+        if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError ) )
             submitPush( aCommon, aRetriedAfterTrust );
         else
             setBusy( false, _( "Cancelled." ) );
@@ -2119,7 +2122,10 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     }
 
     setBusy( false, _( "Push failed." ) );
-    DisplayErrorMessage( this, wxString::Format( _( "Could not push: %s" ), aError ) );
+    DisplayErrorMessage( this,
+                         aError.IsEmpty() ? KIGIT::UnexplainedFailure( KIGIT_OPERATION::PUSH, aCommon->GetRemote() )
+                                          : aError,
+                         aDetails );
 }
 
 
@@ -2535,6 +2541,7 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
     {
         PullResult result = PullResult::Error;
         wxString   error;
+        wxString   details;
         bool       authFailure = false;
         bool       cancelled = false;
 
@@ -2548,8 +2555,6 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
             [aCommon, docsBefore, kiway, outcome, alive = m_transfer.Alive(),
              pane = this]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
-                aCommon->ClearAuthFailure();
-
                 GIT_PULL_HANDLER handler( aCommon.get() );
                 handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
                         alive,
@@ -2560,8 +2565,10 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
                 handler.SetWaitForActionLock( true );
                 handler.SetCancelToken( aToken );
                 outcome->result = handler.PerformPull();
-                outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
-                outcome->authFailure = aCommon->WasAuthFailure();
+                KIGIT_ERROR_MESSAGE error = handler.PopError();
+                outcome->error = error.summary;
+                outcome->details = error.details;
+                outcome->authFailure = handler.WasAuthFailure();
                 outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a cancel aimed at something else is not
@@ -2584,8 +2591,8 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
             },
             [this, aCommon, aThenPush, aRetriedAfterTrust, outcome]()
             {
-                onPullDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->authFailure,
-                            outcome->hostKey, aRetriedAfterTrust, aThenPush, outcome->cancelled );
+                onPullDone( aCommon, static_cast<int>( outcome->result ), outcome->error, outcome->details,
+                            outcome->authFailure, outcome->hostKey, aRetriedAfterTrust, aThenPush, outcome->cancelled );
             } );
 
     if( !started )
@@ -2594,13 +2601,16 @@ void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aTh
 
 
 void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError,
-                                  bool aAuthFailure, const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey,
-                                  bool aRetriedAfterTrust, bool aThenPush, bool aCancelled )
+                                  const wxString& aDetails, bool aAuthFailure,
+                                  const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey, bool aRetriedAfterTrust,
+                                  bool aThenPush, bool aCancelled )
 {
     PullResult result = static_cast<PullResult>( aResult );
 
     if( result == PullResult::Success || result == PullResult::FastForward || result == PullResult::UpToDate )
     {
+        KIGIT::ClearSyncWarnings( aCommon.get() );
+
         // The editor reloads and the panel refresh already ran in the completion, before the
         // window check, so they happen even when the initiating window is gone.
         if( result == PullResult::UpToDate )
@@ -2636,7 +2646,7 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( aAuthFailure )
     {
-        if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
+        if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError ) )
             submitPull( aCommon, aThenPush, aRetriedAfterTrust );
         else
             setBusy( false, _( "Cancelled." ) );
@@ -2679,5 +2689,8 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     // report the backend's actual error rather than guessing at a cause.
     setBusy( false, _( "Could not get changes." ) );
     aCommon->NotifyRefreshListeners();
-    DisplayErrorMessage( this, _( "Could not get changes." ), aError );
+    DisplayErrorMessage( this,
+                         aError.IsEmpty() ? KIGIT::UnexplainedFailure( KIGIT_OPERATION::FETCH, aCommon->GetRemote() )
+                                          : aError,
+                         aDetails );
 }

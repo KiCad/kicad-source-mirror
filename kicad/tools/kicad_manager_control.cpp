@@ -426,6 +426,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
         bool     cloned = false;
         bool     cancelled = false;
         wxString error;
+        wxString details;
 
         std::optional<KIGIT::HOST_KEY_FAILURE> hostKey;
 
@@ -447,7 +448,9 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
             if( !cloned )
             {
-                error = cloneHandler.GetErrorString();
+                KIGIT_ERROR_MESSAGE message = cloneHandler.PopError();
+                error = message.summary;
+                details = message.details;
                 hostKey = cloneHandler.GetHostKeyFailure();
             }
         }
@@ -468,7 +471,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        DisplayErrorMessage( m_frame, error );
+        DisplayErrorMessage( m_frame, error, details );
         return -1;
     }
 

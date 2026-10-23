@@ -177,7 +177,8 @@ private:
     void submitPush( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust = false );
     void startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead,
                     bool aRetriedAfterTrust );
-    void onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError, bool aAuthFailure,
+    void onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError,
+                     const wxString& aDetails, bool aAuthFailure,
                      const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey, bool aRetriedAfterTrust, bool aCancelled );
     /// aThenPush pushes after a successful pull, which belongs only to the rejected-push
     /// recovery flow. A plain Get Changes leaves local commits unpublished.
@@ -190,7 +191,8 @@ private:
     struct MERGE_PREPARATION;
     void finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush,
                                         std::shared_ptr<MERGE_PREPARATION> aPreparation );
-    void onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError, bool aAuthFailure,
+    void onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aResult, const wxString& aError,
+                     const wxString& aDetails, bool aAuthFailure,
                      const std::optional<KIGIT::HOST_KEY_FAILURE>& aHostKey, bool aRetriedAfterTrust, bool aThenPush,
                      bool aCancelled );
 

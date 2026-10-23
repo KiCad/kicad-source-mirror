@@ -16,6 +16,7 @@
 
 #include "kicad_git_common.h"
 #include "kicad_git_errors.h"
+#include "kigit_failure.h"
 #include "git_progress.h"
 #include <import_export.h>
 
@@ -188,18 +189,67 @@ public:
     void SetHostKeyFailure( const KIGIT::HOST_KEY_FAILURE& aFailure ) { m_hostKeyFailure = aFailure; }
     void ClearHostKeyFailure() { m_hostKeyFailure.reset(); }
 
+    void            SetHostKeyRefusal( const wxString& aReason ) { m_hostKeyRefusal = aReason; }
+
+    /// Start a transfer with nothing left from an earlier one on this handler or session: no keys or
+    /// methods marked tried, and no refused host key, offered key, server text or failure on record.
+    void ResetTransferState()
+    {
+        TestedTypes() = 0;
+        ResetNextKey();
+        ClearHostKeyFailure();
+        m_hostKeyRefusal.clear();
+        m_authAttempt = KIGIT_AUTH_ATTEMPT();
+        m_serverMessage.clear();
+        m_pendingSideband.clear();
+        m_skippingServerLine = false;
+        m_pushRefusal.clear();
+        m_authFailed = false;
+        m_failureKind.reset();
+    }
+
+    KIGIT_AUTH_ATTEMPT&       AuthAttempt() { return m_authAttempt; }
+
+    /// Set when the server refused every credential offered, so the caller can prompt and retry.
+    bool WasAuthFailure() const { return m_authFailed; }
+    void SetAuthFailure() { m_authFailed = true; }
+
+    /// Keep sideband text the server sent for the user, such as why it refused a pushed branch, and show
+    /// each complete line as progress.
+    void ReceiveSideband( const char* aData, size_t aLength );
+
+    void            SetPushRefusal( const wxString& aStatus );
+
+    /// Classify a failed libgit2 transfer call and queue its summary and details. Call it straight after
+    /// the failing call, before anything else can replace libgit2's error.
+    KIGIT_FAILURE_REPORT ReportTransferFailure( const KIGIT_ERROR_INFO& aError, KIGIT_OPERATION aOperation,
+                                                const wxString& aRemoteName );
+
+    /// The kind of the last failure ReportTransferFailure classified, or none.
+    std::optional<KIGIT_FAILURE> GetFailureKind() const { return m_failureKind; }
+
     bool IsThisOperationCancelled() const { return m_cancelToken->load(); }
 
     void CancelThisOperation() { m_cancelToken->store( true ); }
 
 
 private:
+    void addServerLine( const wxString& aLine );
+
     KIGIT_COMMON*              m_common;
     KIGIT_COMMON::CANCEL_TOKEN m_cancelToken;
     bool                       m_waitForActionLock = false;
     std::chrono::milliseconds  m_actionLockWait{ 0 };
 
     std::optional<KIGIT::HOST_KEY_FAILURE> m_hostKeyFailure;
+    wxString                               m_hostKeyRefusal;
+    KIGIT_AUTH_ATTEMPT                     m_authAttempt;
+    bool                                   m_authFailed = false;
+    wxString                               m_serverMessage;
+    std::string                            m_pendingSideband;
+    bool                                   m_skippingServerLine = false;
+    wxString                               m_pushRefusal;
+    std::optional<KIGIT_FAILURE>           m_failureKind;
 };
 
 

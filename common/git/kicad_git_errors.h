@@ -25,6 +25,15 @@
 
 #include <wx/translation.h>
 
+
+/// A summary the user can act on, with the raw text that explains it kept apart for the details.
+struct KIGIT_ERROR_MESSAGE
+{
+    wxString summary;
+    wxString details;
+};
+
+
 class APIEXPORT KIGIT_ERRORS
 {
 public:
@@ -44,22 +53,43 @@ public:
 
         const wxString errorString( m_errorStrings.back() );
         m_errorStrings.pop_back();
+        m_errorDetails.pop_back();
         return errorString;
+    }
+
+    /// Take the newest error with its details. Both are empty when none is queued.
+    KIGIT_ERROR_MESSAGE PopError()
+    {
+        if( m_errorStrings.empty() )
+            return {};
+
+        KIGIT_ERROR_MESSAGE message{ m_errorStrings.back(), m_errorDetails.back() };
+        m_errorStrings.pop_back();
+        m_errorDetails.pop_back();
+        return message;
+    }
+
+    /// A summary the user can act on, with the raw text that explains it kept apart for the details.
+    void AddError( const wxString& aSummary, const wxString& aDetails )
+    {
+        m_errorStrings.emplace_back( aSummary );
+        m_errorDetails.emplace_back( aDetails );
     }
 
     void AddErrorString( const wxString aErrorString )
     {
-        m_errorStrings.emplace_back( aErrorString );
+        AddError( aErrorString, wxEmptyString );
     }
 
     void AddErrorString( const std::string aErrorString )
     {
-        m_errorStrings.emplace_back( aErrorString );
+        AddError( wxString( aErrorString ), wxEmptyString );
     }
 
 private:
 
     std::vector<wxString> m_errorStrings;
+    std::vector<wxString> m_errorDetails; ///< One per entry in m_errorStrings
 
 };
 

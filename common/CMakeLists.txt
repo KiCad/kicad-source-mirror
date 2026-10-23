@@ -116,6 +116,7 @@ set( KICOMMON_SRCS
     git/git_pull_handler.cpp
     git/git_push_handler.cpp
     git/git_remove_vcs_handler.cpp
+    git/git_repo_mixin.cpp
     git/git_status_handler.cpp
     git/git_switch_branch_handler.cpp
     git/kicad_git_common.cpp
@@ -123,6 +124,7 @@ set( KICOMMON_SRCS
     git/text_diff.cpp
     git/git_backend.cpp
     git/kigit_orphan_registry.cpp
+    git/kigit_failure.cpp
     git/kigit_known_hosts.cpp
     git/kigit_ssh_keys.cpp
     git/libgit_backend.cpp

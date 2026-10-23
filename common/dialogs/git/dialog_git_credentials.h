@@ -27,7 +27,7 @@ class DIALOG_GIT_CREDENTIALS : public DIALOG_GIT_CREDENTIALS_BASE
 {
 public:
     /**
-     * @param aUrl Address being authenticated to, without a password.
+     * @param aUrl Address being authenticated to. Any password it holds is not shown.
      * @param aExplanation Why the last attempt failed. Hidden when empty.
      * @param aConnType Transport of aUrl. GIT_CONN_LOCAL lets the user choose one.
      */

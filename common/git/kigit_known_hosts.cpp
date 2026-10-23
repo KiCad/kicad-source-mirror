@@ -44,6 +44,7 @@
 #include <wx/arrstr.h>
 #include <wx/base64.h>
 #include <wx/filename.h>
+#include <wx/intl.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
@@ -448,6 +449,34 @@ bool KIGIT::MayOfferTrust( const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterT
         return false;
 
     return aFailure.state == KNOWN_HOST_STATE::UNKNOWN || aFailure.state == KNOWN_HOST_STATE::OTHER_KEY_TYPE;
+}
+
+
+wxString KIGIT::HostKeyRefusalMessage( const HOST_KEY_FAILURE& aFailure )
+{
+    wxString host = aFailure.host;
+
+    if( aFailure.port != 22 )
+        host << wxS( ":" ) << aFailure.port;
+
+    if( aFailure.state == KNOWN_HOST_STATE::REVOKED )
+    {
+        return wxString::Format( _( "The key for %s has been revoked. Ask your administrator before connecting "
+                                    "again." ),
+                                 host );
+    }
+
+    if( aFailure.state == KNOWN_HOST_STATE::MISMATCH )
+    {
+        return wxString::Format( _( "The key for %s has changed since the last connection. This can mean the server "
+                                    "was replaced or that someone is intercepting the connection. Ask your "
+                                    "administrator before connecting again." ),
+                                 host );
+    }
+
+    return wxString::Format( _( "%s still could not be verified after its key was saved. Ask your administrator "
+                                "before connecting again." ),
+                             host );
 }
 
 

@@ -2821,11 +2821,12 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
     KIGIT_COMMON common( repo );
 
     wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
-    wxString                          headOid, theirsOid, error;
+    wxString                          headOid, theirsOid, conflictsError;
+    KIGIT_ERROR_MESSAGE               error;
     std::vector<KIGIT_CONFLICT_SIDES> conflicts;
 
-    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ),
-                           "GetMergeConflicts failed: " + error.ToStdString() );
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, conflictsError ),
+                           "GetMergeConflicts failed: " + conflictsError.ToStdString() );
     BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
     BOOST_CHECK_EQUAL( conflicts[0].path.ToStdString(), "file.txt" );
     BOOST_CHECK( conflicts[0].hasAncestor && conflicts[0].hasOurs && conflicts[0].hasTheirs );
@@ -2970,7 +2971,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
 
     BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, mergedFile } }, error )
                                    == MergeCommitResult::Success,
-                           "CreateMergedCommit failed: " + error.ToStdString() );
+                           "CreateMergedCommit failed: " + error.summary.ToStdString() );
 
     // HEAD is now a merge commit of both sides, the working file carries the resolution, and no
     // merge state is left behind.
@@ -3015,11 +3016,12 @@ BOOST_AUTO_TEST_CASE( MergeConflictFinishesWithAnUntrackedFilePresent )
     KIGIT_COMMON common( repo );
 
     wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
-    wxString                          headOid, theirsOid, error;
+    wxString                          headOid, theirsOid, conflictsError;
+    KIGIT_ERROR_MESSAGE               error;
     std::vector<KIGIT_CONFLICT_SIDES> conflicts;
 
-    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ),
-                           "GetMergeConflicts failed: " + error.ToStdString() );
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, conflictsError ),
+                           "GetMergeConflicts failed: " + conflictsError.ToStdString() );
     BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
 
     // The recovery copy the panel leaves beside the file.
@@ -3032,7 +3034,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictFinishesWithAnUntrackedFilePresent )
     BOOST_CHECK_MESSAGE(
             common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].theirsFile } }, error )
                     == MergeCommitResult::Success,
-            "refused with an untracked file present: " + error.ToStdString() );
+            "refused with an untracked file present: " + error.summary.ToStdString() );
 
     git_repository_free( repo );
 }
@@ -3100,10 +3102,12 @@ BOOST_AUTO_TEST_CASE( MergeConflictRenameTakeTheirsLandsOnNewPath )
 
     KIGIT_COMMON                      common( repo );
     wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
-    wxString                          headOid, theirsOid, error;
+    wxString                          headOid, theirsOid, conflictsError;
+    KIGIT_ERROR_MESSAGE               error;
     std::vector<KIGIT_CONFLICT_SIDES> conflicts;
 
-    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ), error );
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, conflictsError ),
+                           conflictsError );
 
 
     BOOST_REQUIRE_EQUAL( conflicts.size(), 2u );
@@ -3113,8 +3117,9 @@ BOOST_AUTO_TEST_CASE( MergeConflictRenameTakeTheirsLandsOnNewPath )
     for( const KIGIT_CONFLICT_SIDES& c : conflicts )
         resolved.emplace_back( c.path, c.hasTheirs ? c.theirsFile : wxString() );
 
-    BOOST_REQUIRE_MESSAGE(
-            common.CreateMergedCommit( headOid, theirsOid, resolved, error ) == MergeCommitResult::Success, error );
+    BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, resolved, error )
+                                   == MergeCommitResult::Success,
+                           error.summary );
 
     wxString workdir = wxString::FromUTF8( git_repository_workdir( repo ) );
     bool     renamedExists = wxFileExists( workdir + wxT( "renamed.txt" ) );
@@ -3865,7 +3870,7 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
     git_oid_tostr( firstHash, sizeof( firstHash ), &firstOid );
 
     KIGIT_COMMON common( repo, repoPath() );
-    wxString     error;
+    KIGIT_ERROR_MESSAGE error;
 
     // Refuses over uncommitted changes.
     wxString trackedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
@@ -3883,7 +3888,7 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
 
     // Restores as a new commit whose parent is the current head.
     BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::Restored,
-                           "RestoreVersion failed: " + error.ToStdString() );
+                           "RestoreVersion failed: " + error.summary.ToStdString() );
 
     git_oid newHead;
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &newHead, repo, "HEAD" ), GIT_OK );
@@ -3926,10 +3931,10 @@ BOOST_AUTO_TEST_CASE( RestoreScopesToProjectDirectory )
 
     const wxString projectPath = repoPath() + wxS( "/projects/board" );
     KIGIT_COMMON   common( repo.get(), projectPath );
-    wxString       error;
+    KIGIT_ERROR_MESSAGE error;
 
     BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( v1Hash ), error ) == RestoreResult::Restored,
-                           "RestoreVersion failed: " + error.ToStdString() );
+                           "RestoreVersion failed: " + error.summary.ToStdString() );
 
     auto readAll = []( const wxString& aPath )
     {
@@ -3958,7 +3963,7 @@ BOOST_AUTO_TEST_CASE( RestoreScopesToProjectDirectory )
     KIGIT_COMMON linkedProject( repo.get(), projectLink );
     BOOST_REQUIRE_MESSAGE( linkedProject.RestoreVersion( wxString::FromUTF8( v1Hash ), error )
                                    == RestoreResult::Restored,
-                           "RestoreVersion failed: " + error.ToStdString() );
+                           "RestoreVersion failed: " + error.summary.ToStdString() );
     BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board/f.txt" ) ), "a1\n" );
     BOOST_CHECK_EQUAL( readAll( repoPath() + wxS( "/projects/board2/g.txt" ) ), "b2\n" );
 #endif
@@ -3986,10 +3991,10 @@ BOOST_AUTO_TEST_CASE( RestoreRefusesUnknownOrOutsideProject )
     for( const wxString& projectPath : projectPaths )
     {
         KIGIT_COMMON common( repo.get(), projectPath );
-        wxString     error;
+        KIGIT_ERROR_MESSAGE error;
 
         BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::Error );
-        BOOST_CHECK( !error.IsEmpty() );
+        BOOST_CHECK( !error.details.IsEmpty() );
 
         git_oid afterOid;
         BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &afterOid, repo.get(), "HEAD" ), GIT_OK );
@@ -4054,7 +4059,7 @@ BOOST_AUTO_TEST_CASE( RestoreRefusesUntrackedCollision )
     git_oid_tostr( withNotesHash, sizeof( withNotesHash ), &withNotesOid );
 
     KIGIT_COMMON common( repo, repoPath() );
-    wxString     error;
+    KIGIT_ERROR_MESSAGE error;
 
     // A new, never committed notes.txt collides with the version being restored.
     wxString notesFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "notes.txt" );
@@ -4084,7 +4089,7 @@ BOOST_AUTO_TEST_CASE( RestoreRefusesUntrackedCollision )
 
     BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), error )
                                    == RestoreResult::Restored,
-                           "RestoreVersion failed: " + error.ToStdString() );
+                           "RestoreVersion failed: " + error.summary.ToStdString() );
     BOOST_CHECK_EQUAL( readAll( notesFile ), "keep\n" );
     BOOST_CHECK_EQUAL( readAll( unrelatedFile ), "scratch\n" );
 
@@ -4146,11 +4151,12 @@ BOOST_AUTO_TEST_CASE( MergeConflictKeepsDeletion )
     KIGIT_COMMON common( repo );
 
     wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "del_stages" );
-    wxString                          headOid, theirsOid, error;
+    wxString                          headOid, theirsOid, conflictsError;
+    KIGIT_ERROR_MESSAGE               error;
     std::vector<KIGIT_CONFLICT_SIDES> conflicts;
 
-    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ),
-                           "GetMergeConflicts failed: " + error.ToStdString() );
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, conflictsError ),
+                           "GetMergeConflicts failed: " + conflictsError.ToStdString() );
     BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
     BOOST_CHECK( !conflicts[0].hasOurs );
     BOOST_CHECK( conflicts[0].hasTheirs );
@@ -4158,7 +4164,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictKeepsDeletion )
     // Keep the deletion: an empty resolved path, not the extracted empty placeholder file.
     BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, wxString() } }, error )
                                    == MergeCommitResult::Success,
-                           "CreateMergedCommit failed: " + error.ToStdString() );
+                           "CreateMergedCommit failed: " + error.summary.ToStdString() );
 
     git_oid newHead;
     BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &newHead, repo, "HEAD" ), GIT_OK );

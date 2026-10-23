@@ -581,6 +581,7 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
     {
         bool     fetched = false;
         wxString error;
+        wxString details;
         bool     authFailure = false;
         bool     cancelled = false;
 
@@ -593,8 +594,6 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
             "git fetch",
             [aCommon, outcome, alive = m_fetch.Alive(), dialog = this]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
-                aCommon->ClearAuthFailure();
-
                 GIT_PULL_HANDLER handler( aCommon.get() );
                 handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
                         alive,
@@ -605,8 +604,10 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
                 handler.SetCancelToken( aToken );
                 handler.SetWaitForActionLock( true );
                 outcome->fetched = handler.PerformFetch();
-                outcome->error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
-                outcome->authFailure = aCommon->WasAuthFailure();
+                KIGIT_ERROR_MESSAGE error = handler.PopError();
+                outcome->error = error.summary;
+                outcome->details = error.details;
+                outcome->authFailure = handler.WasAuthFailure();
                 outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a fetch that never became active cannot
@@ -633,6 +634,9 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
                 SetPaneTransferBusy( false );
                 Layout();
 
+                if( outcome->fetched && !outcome->cancelled )
+                    KIGIT::ClearSyncWarnings( aCommon.get() );
+
                 if( outcome->cancelled || outcome->fetched )
                     return;
 
@@ -644,13 +648,19 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
                     return;
                 }
 
-                if( outcome->authFailure && KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj() ) )
+                if( outcome->authFailure
+                    && KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj(), outcome->error ) )
                 {
                     onFetch( aRetriedAfterTrust );
                     return;
                 }
 
-                DisplayErrorMessage( this, _( "Fetch failed." ), outcome->error );
+                wxString error = outcome->error;
+
+                if( error.IsEmpty() )
+                    error = KIGIT::UnexplainedFailure( KIGIT_OPERATION::FETCH, aCommon->GetRemote() );
+
+                DisplayErrorMessage( this, error, outcome->details );
             } );
 
     if( !started )

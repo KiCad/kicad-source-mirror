@@ -234,6 +234,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
         return;
 
     wxString error;
+    wxString details;
     bool success = false;
     git_remote* remote = nullptr;
     git_remote_callbacks callbacks;
@@ -275,17 +276,21 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
         while( true )
         {
-            repoMixin.ClearHostKeyFailure();
+            repoMixin.ResetTransferState();
             result = git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, &proxyOpts, nullptr );
-            git_remote_disconnect( remote );
 
             if( result == GIT_OK )
             {
+                git_remote_disconnect( remote );
                 success = true;
                 break;
             }
 
-            error = KIGIT_COMMON::GetLastGitError();
+            KIGIT_FAILURE_REPORT report = repoMixin.ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( result ),
+                                                                           KIGIT_OPERATION::CONNECT, wxEmptyString );
+            git_remote_disconnect( remote );
+            error = report.summary;
+            details = report.details;
 
             std::optional<KIGIT::HOST_KEY_FAILURE> hostKey = repoMixin.GetHostKeyFailure();
 
@@ -301,23 +306,24 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     }
     else
     {
-        error = KIGIT_COMMON::GetLastGitError();
+        KIGIT_FAILURE_CONTEXT context;
+        context.operation = KIGIT_OPERATION::CONNECT;
+        context.url = url;
+
+        KIGIT_FAILURE_REPORT report =
+                KIGIT::DescribeGitFailure( KIGIT_COMMON::GetLastGitErrorInfo( result ), {}, context );
+        error = report.summary;
+        details = report.details;
     }
 
-    auto dlg = KICAD_MESSAGE_DIALOG( this, wxEmptyString, _( "Test Connection" ),
+    if( !success )
+    {
+        DisplayErrorMessage( this, error, details );
+        return;
+    }
+
+    auto dlg = KICAD_MESSAGE_DIALOG( this, _( "Connection successful" ), _( "Test Connection" ),
                                      wxOK | wxICON_INFORMATION );
-
-    if( success )
-    {
-        dlg.SetMessage( _( "Connection successful" ) );
-    }
-    else
-    {
-        dlg.SetMessage( wxString::Format( _( "Could not connect to '%s' " ),
-                                          m_txtURL->GetValue() ) );
-        dlg.SetExtendedMessage( error );
-    }
-
     dlg.ShowModal();
 }
 

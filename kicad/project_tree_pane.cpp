@@ -220,7 +220,6 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
     m_isRenaming = false;
     m_selectedItem = nullptr;
     m_watcherNeedReset = false;
-    m_gitLastError = GIT_ERROR_NONE;
     m_watcher = nullptr;
     m_gitIconsInitialized = false;
 
@@ -1645,6 +1644,7 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
     m_branchQuery->Cancel();
     m_gitMenuBranches.clear();
     m_gitMenuSession.reset();
+    KIGIT::ClearSyncWarnings( m_Parent );
 
     // Make sure we don't try to inspect the tree after we've deleted its items.
     shutdownFileWatcher();
@@ -1752,6 +1752,7 @@ void PROJECT_TREE_PANE::syncGitListener()
     m_branchQuery->Cancel();
     m_gitMenuBranches.clear();
     m_gitMenuSession.reset();
+    KIGIT::ClearSyncWarnings( m_Parent );
 
     if( std::shared_ptr<KIGIT_COMMON> previous = m_gitListenerSession.lock() )
         previous->RemoveRefreshListener( this );
@@ -1805,9 +1806,9 @@ void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 
 
 // Prompts for git credentials after an auth failure. Returns false if cancelled.
-static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon )
+static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, const wxString& aExplanation )
 {
-    return KIGIT::PromptForCredentials( aParent, aCommon, &Prj() );
+    return KIGIT::PromptForCredentials( aParent, aCommon, &Prj(), aExplanation );
 }
 
 
@@ -1855,12 +1856,12 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     InitResult result = initHandler.InitializeRepository( dir );
     if( result != InitResult::Success )
     {
-        DisplayErrorMessage( m_parent, _( "Failed to initialize Git project." ),
-                             initHandler.GetErrorString() );
+        KIGIT_ERROR_MESSAGE error = initHandler.PopError();
+        DisplayErrorMessage( m_parent, error.summary, error.details );
         return;
     }
 
-    m_gitLastError = GIT_ERROR_NONE;
+    KIGIT::ClearSyncWarnings( m_Parent );
 
     gitCommon()->SetShuttingDown( false );
 
@@ -1890,12 +1891,12 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     if( !initHandler.SetupRemote( remoteConfig ) )
     {
-        DisplayErrorMessage( m_parent, _( "Failed to set default remote." ),
-                             initHandler.GetErrorString() );
+        KIGIT_ERROR_MESSAGE error = initHandler.PopError();
+        DisplayErrorMessage( m_parent, error.summary, error.details );
         return;
     }
 
-    m_gitLastError = GIT_ERROR_NONE;
+    KIGIT::ClearSyncWarnings( m_Parent );
 
     // Before the fetch, so a corrected login from the prompt below is the one that stays saved
     saveAcceptedRemoteSettings( Prj(), remoteConfig );
@@ -1905,8 +1906,6 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     while( true )
     {
-        common->ClearAuthFailure();
-
         GIT_PULL_HANDLER handler( common );
         handler.SetProgressReporter(
                 std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
@@ -1926,8 +1925,20 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
             continue;
         }
 
-        if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
-            continue;
+        KIGIT_ERROR_MESSAGE error = handler.PopError();
+
+        if( handler.WasAuthFailure() )
+        {
+            if( promptForGitCredentials( m_parent, common, error.summary ) )
+                continue;
+
+            break;
+        }
+
+        // The remote is saved either way, so this only says why its first fetch did not happen. A cancelled
+        // fetch needs no dialog
+        if( !error.summary.IsEmpty() && handler.GetFailureKind() != KIGIT_FAILURE::CANCELLED )
+            DisplayErrorMessage( m_parent, error.summary, error.details );
 
         break;
     }
@@ -1988,6 +1999,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
     bool     setupOk = false;
     wxString setupError;
+    wxString setupDetails;
 
     {
         // Update the remote config and cached branch info under the same lock.
@@ -1997,7 +2009,9 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
             return;
 
         setupOk = initHandler.SetupRemote( remoteConfig );
-        setupError = initHandler.GetErrorString();
+        KIGIT_ERROR_MESSAGE error = initHandler.PopError();
+        setupError = error.summary;
+        setupDetails = error.details;
 
         if( setupOk )
             common->UpdateCurrentBranchInfo();
@@ -2005,7 +2019,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
     if( !setupOk )
     {
-        DisplayErrorMessage( topLevelParent, _( "Failed to configure remote." ), setupError );
+        DisplayErrorMessage( topLevelParent, setupError, setupDetails );
         return;
     }
 
@@ -2464,13 +2478,20 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
                                     }
 
                                     GIT_PULL_HANDLER handler( common.get() );
-                                    handler.PerformFetch();
+                                    bool                         fetched = handler.PerformFetch();
+                                    std::optional<KIGIT_FAILURE> kind = handler.GetFailureKind();
+                                    wxString                     summary = handler.PopError().summary;
 
                                     // Only schedule the follow-up work if not cancelled
                                     if( !common->IsShuttingDown() )
                                         CallAfter(
-                                                [this, common]()
+                                                [this, common, fetched, kind, summary]()
                                                 {
+                                                    // The project may have closed or changed while queued
+                                                    if( common->IsShuttingDown() || common != gitCommon() )
+                                                        return;
+
+                                                    reportGitSyncResult( fetched, kind, summary );
                                                     gitStatusTimerHandler();
 
                                                     // The panels show whether the remote is ahead, and the fetch
@@ -2482,6 +2503,38 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
     wxLogTrace( traceGit, "onGitSyncTimer: Restarting git sync timer" );
     // We store the timer interval in minutes but wxTimer uses milliseconds
     m_gitSyncTimer.Start( gitSettings.updatInterval * 60 * 1000, wxTIMER_ONE_SHOT );
+}
+
+
+void PROJECT_TREE_PANE::reportGitSyncResult( bool aFetched, std::optional<KIGIT_FAILURE> aKind,
+                                             const wxString& aSummary )
+{
+    KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( m_Parent->GetStatusBar() );
+
+    if( aFetched )
+    {
+        KIGIT::ClearSyncWarnings( m_Parent );
+        return;
+    }
+
+    // A busy repository or a closing project is not something to warn about
+    if( !statusBar || !aKind || *aKind == KIGIT_FAILURE::CANCELLED )
+        return;
+
+    // The timer fires every few minutes, and the same failure each time would bury every other warning. The list
+    // itself is the record, so anything that clears it lets the next failure show again
+    std::map<wxString, std::vector<KI_ERROR>> shown = statusBar->GetWarningMessages();
+
+    for( const KI_ERROR& existing : shown[KIGIT::SYNC_WARNING_SOURCE] )
+    {
+        if( existing.GetTitle() == aSummary )
+            return;
+    }
+
+    KI_ERROR warning;
+    warning.SetTitle( aSummary );
+    warning.SetSeverity( RPT_SEVERITY_WARNING );
+    statusBar->AddWarningMessages( KIGIT::SYNC_WARNING_SOURCE, { warning } );
 }
 
 

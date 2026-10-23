@@ -59,6 +59,16 @@ bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aP
  */
 bool PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
 
+/// The status bar source under which background fetch failures are listed.
+inline constexpr const wxChar* SYNC_WARNING_SOURCE = wxS( "git" );
+
+/// Clear the background fetch's warnings from the frame holding \a aWindow.
+void ClearSyncWarnings( wxWindow* aWindow );
+
+/// A transfer that reached the remote answers the background fetch's warnings, so they go from every frame
+/// open on the project whose session \a aCommon is.
+void ClearSyncWarnings( const KIGIT_COMMON* aCommon );
+
 /// Repository values and whether Git can use them to record a commit.
 struct GIT_IDENTITY
 {

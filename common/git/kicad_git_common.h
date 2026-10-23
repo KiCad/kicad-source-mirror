@@ -40,6 +40,16 @@
 #include <wx/string.h>
 
 class LIBGIT_BACKEND;
+struct KIGIT_AUTH_ATTEMPT;
+
+
+/// What libgit2 reported for a failed call, read before anything else can replace it.
+struct KIGIT_ERROR_INFO
+{
+    int      klass = 0; ///< git_error_t
+    int      code = 0;  ///< The failed call's return value
+    wxString message;
+};
 
 
 // One entry in the commit history, as shown by the advanced git window's History page.
@@ -575,7 +585,8 @@ public:
         return m_remote;
     }
 
-    int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername );
+    /// Offer the agent's keys once, then the next key file, recording in aAttempt which file was offered.
+    int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername, KIGIT_AUTH_ATTEMPT& aAttempt );
 
     int HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername );
 
@@ -590,6 +601,10 @@ public:
 
         return wxString( error->message );
     }
+
+    /// The error libgit2 holds for a call that returned aCode. Read it straight after the call, because the
+    /// callbacks and cleanup that follow can replace it.
+    static KIGIT_ERROR_INFO GetLastGitErrorInfo( int aCode );
 
     /// One token per operation. Born uncancelled, so nothing has to be reset before an
     /// operation starts and one operation's cancel cannot reach another.
@@ -653,10 +668,6 @@ public:
     /// another host or its port is not valid.
     int SSHPortFor( const wxString& aHost ) const;
 
-    bool WasAuthFailure() const { return m_authFailed; }
-    void ClearAuthFailure() { m_authFailed = false; }
-    void SetAuthFailure() { m_authFailed = true; }
-
     std::unique_lock<std::mutex> TryLockAction()
     {
         return std::unique_lock<std::mutex>( m_gitActionMutex, std::try_to_lock );
@@ -693,8 +704,6 @@ protected:
     wxString m_password;
 
     std::atomic<unsigned> m_testedTypes;
-
-    std::atomic<bool> m_authFailed{ false };
 
     std::mutex m_gitActionMutex;
 

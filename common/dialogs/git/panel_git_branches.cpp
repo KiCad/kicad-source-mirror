@@ -480,6 +480,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
     {
         PushResult result = PushResult::Error;
         wxString   error;
+        wxString   details;
         bool       authFailure = false;
         bool       cancelled = false;
 
@@ -495,8 +496,6 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
             [aCommon, outcome, aExpectedBranch, aExpectedHeadOid, alive = m_push.Alive(),
              dialog = m_dialog]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
-                aCommon->ClearAuthFailure();
-
                 GIT_PUSH_HANDLER handler( aCommon.get() );
                 handler.SetProgressReporter( std::make_unique<KIGIT_STATUS_REPORTER>(
                         alive,
@@ -508,8 +507,10 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                 handler.SetWaitForActionLock( true );
                 handler.SetExpectedTarget( aExpectedBranch, aExpectedHeadOid );
                 outcome->result = handler.PerformPush( true );
-                outcome->error = handler.GetErrorString();
-                outcome->authFailure = aCommon->WasAuthFailure();
+                KIGIT_ERROR_MESSAGE error = handler.PopError();
+                outcome->error = error.summary;
+                outcome->details = error.details;
+                outcome->authFailure = handler.WasAuthFailure();
                 outcome->hostKey = handler.GetHostKeyFailure();
 
                 // This operation's own token, so a force push that never became active cannot
@@ -533,6 +534,9 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
                 m_dialog->SetPaneTransferBusy( false );
 
+                if( !outcome->cancelled && outcome->result == PushResult::Success )
+                    KIGIT::ClearSyncWarnings( aCommon.get() );
+
                 if( outcome->cancelled || outcome->result == PushResult::Success )
                     return;
 
@@ -550,13 +554,19 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                     return;
                 }
 
-                if( outcome->authFailure && KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj() ) )
+                if( outcome->authFailure
+                    && KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), outcome->error ) )
                 {
                     onForcePush( aRetriedAfterTrust );
                     return;
                 }
 
-                DisplayErrorMessage( this, _( "Force push failed." ), outcome->error );
+                wxString error = outcome->error;
+
+                if( error.IsEmpty() )
+                    error = KIGIT::UnexplainedFailure( KIGIT_OPERATION::PUSH, aCommon->GetRemote() );
+
+                DisplayErrorMessage( this, error, outcome->details );
             } );
 
     if( !started )

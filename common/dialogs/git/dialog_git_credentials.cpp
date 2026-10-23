@@ -20,6 +20,7 @@
 #include "dialog_git_credentials.h"
 
 #include <diff_merge/diff_scene.h>
+#include <git/kigit_failure.h>
 #include <kiplatform/ui.h>
 
 #include <wx/dcclient.h>
@@ -41,11 +42,12 @@ DIALOG_GIT_CREDENTIALS::DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxStrin
         // Long remote paths would otherwise widen the dialog past the screen
         wxClientDC dc( m_promptLabel );
         dc.SetFont( m_promptLabel->GetFont() );
-        wxString url = wxControl::Ellipsize( aUrl, dc, wxELLIPSIZE_MIDDLE, FromDIP( 400 ), wxELLIPSIZE_FLAGS_NONE );
+        const wxString safeUrl = KIGIT::StripEmbeddedUserinfo( aUrl );
+        wxString url = wxControl::Ellipsize( safeUrl, dc, wxELLIPSIZE_MIDDLE, FromDIP( 400 ), wxELLIPSIZE_FLAGS_NONE );
 
         m_promptLabel->SetLabelText( wxString::Format( _( "Authentication is required to access %s." ), url ) );
         m_promptLabel->Wrap( FromDIP( 500 ) );
-        m_promptLabel->SetToolTip( aUrl );
+        m_promptLabel->SetToolTip( safeUrl );
     }
 
     if( !aExplanation.IsEmpty() )
