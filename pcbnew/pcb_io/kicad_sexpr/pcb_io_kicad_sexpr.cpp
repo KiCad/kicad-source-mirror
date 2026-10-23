@@ -757,9 +757,9 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard ) const
                       layer,
                       m_out->Quotew( LSET::Name( layer ) ).c_str(),
                       LAYER::ShowType( aBoard->GetLayerType( layer ) ),
-                      LSET::Name( layer ) == m_board->GetLayerName( layer )
+                      LSET::Name( layer ) == aBoard->GetLayerName( layer )
                             ? ""
-                            : m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );
+                            : m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
 
     }
 
@@ -788,9 +788,9 @@ void PCB_IO_KICAD_SEXPR::formatBoardLayers( const BOARD* aBoard ) const
                       print_type
                             ? LAYER::ShowType( aBoard->GetLayerType( layer ) )
                             : "user",
-                      m_board->GetLayerName( layer ) == LSET::Name( layer )
+                      aBoard->GetLayerName( layer ) == LSET::Name( layer )
                             ? ""
-                            : m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );
+                            : m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
     }
 
     m_out->Print( ")" );
