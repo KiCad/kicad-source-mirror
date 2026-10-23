@@ -251,6 +251,36 @@ MDW_PREVIEW_BEFORE MdwPreviewBefore( long aRow, long aRows, bool aHasWorkingRow,
 }
 
 
+MDW_COMPARE_PATHS MdwComparePaths( const wxString& aRoot, const wxString& aFileName, bool aHasOlder )
+{
+    MDW_COMPARE_PATHS paths;
+
+    if( aHasOlder )
+        paths.older = wxFileName( aRoot + wxS( "/older/" ) + aFileName ).GetFullPath();
+
+    paths.newer = wxFileName( aRoot + wxS( "/newer/" ) + aFileName ).GetFullPath();
+    return paths;
+}
+
+
+std::optional<MDW_COMPARE_ROWS> MdwCompareRows( long aRows, const std::vector<long>& aSelected, bool aHasWorkingRow,
+                                                bool aOlderUnread )
+{
+    if( std::optional<std::pair<long, long>> pair = MdwComparePair( aRows, aSelected, aHasWorkingRow ) )
+        return MDW_COMPARE_ROWS{ pair->first, pair->second };
+
+    if( aSelected.size() != 1 )
+        return std::nullopt;
+
+    const MDW_PREVIEW_BEFORE before = MdwPreviewBefore( aSelected[0], aRows, aHasWorkingRow, aOlderUnread );
+
+    if( before.what == MDW_PREVIEW_BEFORE::WHAT::ADDED )
+        return MDW_COMPARE_ROWS{ std::nullopt, aSelected[0] };
+
+    return std::nullopt;
+}
+
+
 bool MdwFilesDiffer( const wxString& aPath, const wxString& aOther )
 {
     auto read = []( const wxString& aFile, std::string& aBytes )

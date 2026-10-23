@@ -30,6 +30,7 @@
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
 #include <git/git_push_handler.h>
+#include <git/text_diff.h>
 #include <qa_utils/file_utils.h>
 #include <qa_utils/git_test_fixture.h>
 #include <pgm_base.h>
@@ -1303,6 +1304,23 @@ BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
     // A path that is not in the tree returns false and leaves the destination alone.
     BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( repo, wxS( "HEAD" ), wxS( "missing.txt" ), dest ) );
     BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( dest ) ), "hello world\n" );
+}
+
+
+// A board is written alone into the workspace, so its side is the workspace and a small one is previewed
+BOOST_AUTO_TEST_CASE( MaterializedBoardIsPreviewedWithinTheWorkspace )
+{
+    git_repository*         repo = makeRepoWithCommit( TempPath(), "board.kicad_pcb", "(kicad_pcb)\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+    KIGIT_COMMON            common( repo );
+    GIT_DIFF_WORKSPACE      workspace;
+    GIT_FILE_SIDES          sides;
+
+    writeFile( TempPath(), "board.kicad_pcb", "(kicad_pcb (version 1))\n" );
+
+    BOOST_REQUIRE( MaterializeWorkingFile( common, workspace, wxS( "board.kicad_pcb" ), sides ) );
+    BOOST_CHECK( !KIGIT::DrawingTooLargeToPreview( sides.before, sides.after, false, sides.beforeRoot,
+                                                   sides.afterRoot ) );
 }
 
 

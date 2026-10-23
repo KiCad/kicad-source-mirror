@@ -240,8 +240,11 @@ struct GIT_FILE_SIDES
 {
     wxString             before; ///< Empty when the file did not exist on that side.
     wxString             after;
+    wxString             beforeRoot; ///< The tree each side's sheet references resolve within, when known.
+    wxString             afterRoot;
     KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DOC_KIND::UNKNOWN;
     wxString             error;  ///< Why the sides could not be written, when they could not.
+    bool                 tooLargeToPreview = false; ///< A drawing over the preview cap, decided on a worker.
 };
 
 /**

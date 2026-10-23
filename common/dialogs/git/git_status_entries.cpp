@@ -1203,6 +1203,24 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
 }
 
 
+// A materialized schematic sits at its repository path under the tree it was written into. A board is written
+// alone into the workspace, its slot prefixed to its name
+static wxString treeRootOf( const GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aPath, const wxString& aRelativePath,
+                            KICAD_DIFF::DOC_KIND aKind )
+{
+    if( aPath.IsEmpty() )
+        return wxEmptyString;
+
+    if( aKind != KICAD_DIFF::DOC_KIND::SCH )
+        return aWorkspace.Root();
+
+    if( !aPath.EndsWith( aRelativePath ) )
+        return wxEmptyString;
+
+    return aPath.Left( aPath.length() - aRelativePath.length() );
+}
+
+
 bool MaterializeWorkingFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
                              GIT_FILE_SIDES& aSides )
 {
@@ -1215,12 +1233,16 @@ bool MaterializeWorkingFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspa
 
     GIT_STATUS_HANDLER handler( &aCommon );
     aSides.after = handler.GetWorkingDirectory() + aRelativePath;
+    aSides.afterRoot = handler.GetWorkingDirectory();
 
     // A new file has no committed version, so that side stays empty and shows as added.
     bool inHead = aCommon.IsPathInHead( aRelativePath );
 
     if( inHead )
+    {
         aSides.before = aWorkspace.Materialize( repo, wxT( "HEAD" ), aRelativePath, aSides.kind );
+        aSides.beforeRoot = treeRootOf( aWorkspace, aSides.before, aRelativePath, aSides.kind );
+    }
 
     if( inHead && aSides.before.IsEmpty() )
     {
@@ -1355,10 +1377,14 @@ bool MaterializeCommitFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspac
         {
             wxString parentPath = file.oldPath.IsEmpty() ? file.path : file.oldPath;
             aSides.before = aWorkspace.Materialize( repo, parentRef, parentPath, aSides.kind );
+            aSides.beforeRoot = treeRootOf( aWorkspace, aSides.before, parentPath, aSides.kind );
         }
 
         if( hasCommit )
+        {
             aSides.after = aWorkspace.Materialize( repo, aCommitHash, file.path, aSides.kind );
+            aSides.afterRoot = treeRootOf( aWorkspace, aSides.after, file.path, aSides.kind );
+        }
 
         if( ( hasParent && aSides.before.IsEmpty() ) || ( hasCommit && aSides.after.IsEmpty() ) )
         {
@@ -1375,6 +1401,7 @@ bool MaterializeCommitFile( KIGIT_COMMON& aCommon, GIT_DIFF_WORKSPACE& aWorkspac
     {
         aSides.kind = KICAD_DIFF::DocKindFromExtension( aRelativePath );
         aSides.after = aWorkspace.Materialize( repo, aCommitHash + wxT( "^3" ), aRelativePath, aSides.kind );
+        aSides.afterRoot = treeRootOf( aWorkspace, aSides.after, aRelativePath, aSides.kind );
 
         if( !aSides.after.IsEmpty() )
             return true;

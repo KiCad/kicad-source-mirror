@@ -121,6 +121,35 @@ struct MDW_PREVIEW_BEFORE
  */
 KICOMMON_API MDW_PREVIEW_BEFORE MdwPreviewBefore( long aRow, long aRows, bool aHasWorkingRow, bool aOlderUnread );
 
+/// Where a comparison's sides are downloaded under a scratch folder
+struct MDW_COMPARE_PATHS
+{
+    wxString older;
+    wxString newer;
+};
+
+/**
+ * The paths a comparison of aFileName downloads to and opens under aRoot. Without an older version its path is
+ * empty, which every viewer takes as an added document rather than a file that failed to load.
+ */
+KICOMMON_API MDW_COMPARE_PATHS MdwComparePaths( const wxString& aRoot, const wxString& aFileName, bool aHasOlder );
+
+/// The rows Compare opens. Without an older row the newer is the oldest version, compared against nothing
+struct MDW_COMPARE_ROWS
+{
+    std::optional<long> older;
+    long                newer = -1;
+
+    bool operator==( const MDW_COMPARE_ROWS& ) const = default;
+};
+
+/**
+ * MdwComparePair's rows, or for one selected row it pairs with nothing, that row against nothing when
+ * MdwPreviewBefore previews it so. The preview's note to double click then always has a comparison to open.
+ */
+KICOMMON_API std::optional<MDW_COMPARE_ROWS> MdwCompareRows( long aRows, const std::vector<long>& aSelected,
+                                                             bool aHasWorkingRow, bool aOlderUnread );
+
 /// True when both files exist and their bytes differ. A file that cannot be read says nothing, so it never differs.
 KICOMMON_API bool MdwFilesDiffer( const wxString& aPath, const wxString& aOther );
 

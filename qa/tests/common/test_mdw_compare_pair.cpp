@@ -79,6 +79,37 @@ BOOST_AUTO_TEST_CASE( OneSelectedVersionComparesWithItsPredecessorOrWorkingCopy 
 }
 
 
+// The oldest version previews against nothing, so the double click its note asks for must open that comparison
+BOOST_AUTO_TEST_CASE( OldestVersionComparesAgainstNothingWhereItPreviewsSo )
+{
+    using ROWS = MDW_COMPARE_ROWS;
+
+    BOOST_CHECK( ( MdwCompareRows( 1, { 0 }, false, false ) == ROWS{ std::nullopt, 0 } ) );
+    BOOST_CHECK( ( MdwCompareRows( 0, { 0 }, true, false ) == ROWS{ std::nullopt, 0 } ) );
+
+    // A pair wins, and a history left partly unread has no known version before its last row
+    BOOST_CHECK( ( MdwCompareRows( 3, { 1 }, false, false ) == ROWS{ 2, 1 } ) );
+    BOOST_CHECK( !MdwCompareRows( 3, { 2 }, false, true ) );
+    BOOST_CHECK( !MdwCompareRows( 3, { 0, 1, 2 }, false, false ) );
+}
+
+
+// Viewers take an empty older path as an added document, and fail on a path to a file never downloaded
+BOOST_AUTO_TEST_CASE( AddedVersionOpensWithNoOlderPath )
+{
+    const std::optional<MDW_COMPARE_ROWS> rows = MdwCompareRows( 1, { 0 }, false, false );
+
+    BOOST_REQUIRE( rows );
+
+    const MDW_COMPARE_PATHS added = MdwComparePaths( wxS( "/s" ), wxS( "a.kicad_pcb" ), rows->older.has_value() );
+    const MDW_COMPARE_PATHS both = MdwComparePaths( wxS( "/s" ), wxS( "a.kicad_pcb" ), true );
+
+    BOOST_CHECK( added.older.IsEmpty() );
+    BOOST_CHECK( !added.newer.IsEmpty() );
+    BOOST_CHECK( !both.older.IsEmpty() && both.older != both.newer );
+}
+
+
 // A source that cannot list local changes compares the checkout with the newest release's file
 BOOST_AUTO_TEST_CASE( FilesDifferOnlyWhenBothExistWithOtherBytes )
 {

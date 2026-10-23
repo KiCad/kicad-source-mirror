@@ -543,9 +543,10 @@ void PANEL_MDW_VERSIONS::fillList()
 }
 
 
-std::optional<std::pair<long, long>> PANEL_MDW_VERSIONS::comparePair() const
+std::optional<MDW_COMPARE_ROWS> PANEL_MDW_VERSIONS::compareRows() const
 {
-    return MdwComparePair( static_cast<long>( m_revisions.size() ), selectedRows( *m_list ), hasWorkingCopy() );
+    return MdwCompareRows( static_cast<long>( m_revisions.size() ), selectedRows( *m_list ), hasWorkingCopy(),
+                           m_olderUnread );
 }
 
 
@@ -590,7 +591,7 @@ void PANEL_MDW_VERSIONS::setCopyStatus( const wxString& aText, const wxString& a
 
 void PANEL_MDW_VERSIONS::updateCompare()
 {
-    m_compareButton->Enable( !m_comparing && comparePair().has_value()
+    m_compareButton->Enable( !m_comparing && compareRows().has_value()
                              && compareDocument().kind != KICAD_DIFF::DOC_KIND::UNKNOWN );
     m_saveCopyButton->Enable( !m_copying && singleRevisionRow().has_value() );
 }
@@ -649,17 +650,18 @@ bool PANEL_MDW_VERSIONS::saveWorkingCopy( const wxString& aPath ) const
 }
 
 
-void PANEL_MDW_VERSIONS::placeSides( const wxString& aRoot, SIDE& aOlder, SIDE& aNewer ) const
+void PANEL_MDW_VERSIONS::placeSides( const wxString& aRoot, bool aHasOlder, SIDE& aOlder, SIDE& aNewer ) const
 {
-    const wxString fileName = compareDocument().fileName;
-    wxFileName     older( aRoot + wxS( "/older/" ) + fileName );
-    wxFileName     newer( aRoot + wxS( "/newer/" ) + fileName );
+    const MDW_COMPARE_PATHS paths = MdwComparePaths( aRoot, compareDocument().fileName, aHasOlder );
 
-    older.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    newer.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    for( const wxString& path : { paths.older, paths.newer } )
+    {
+        if( !path.IsEmpty() )
+            wxFileName( path ).Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    }
 
-    aOlder.path = older.GetFullPath();
-    aNewer.path = newer.GetFullPath();
+    aOlder.path = paths.older;
+    aNewer.path = paths.newer;
 }
 
 
@@ -681,9 +683,9 @@ MDW_OP PANEL_MDW_VERSIONS::fetch( const SIDE& aSide, std::function<void( const M
 
 void PANEL_MDW_VERSIONS::onCompare()
 {
-    std::optional<std::pair<long, long>> pair = comparePair();
+    std::optional<MDW_COMPARE_ROWS> rows = compareRows();
 
-    if( !m_source || !pair )
+    if( !m_source || !rows )
         return;
 
     auto comparison = std::make_shared<COMPARISON>();
@@ -700,10 +702,15 @@ void PANEL_MDW_VERSIONS::onCompare()
         return;
     }
 
-    SIDE olderSide = sideAt( pair->first );
-    SIDE newerSide = sideAt( pair->second );
+    SIDE olderSide;
+    SIDE newerSide = sideAt( rows->newer );
 
-    placeSides( comparison->scratch->Root(), olderSide, newerSide );
+    if( rows->older )
+        olderSide = sideAt( *rows->older );
+    else
+        olderSide.label = _( "Added" );
+
+    placeSides( comparison->scratch->Root(), rows->older.has_value(), olderSide, newerSide );
     comparison->older = olderSide.path;
     comparison->newer = newerSide.path;
     comparison->olderLabel = olderSide.label;
@@ -739,15 +746,25 @@ void PANEL_MDW_VERSIONS::onCompare()
         if( !current() )
             return;
 
-        if( reporter.HasMessage() )
-            DisplayErrorMessage( this, _( "Could not open the comparison." ), reporter.GetMessages() );
-
-        // Compare stays off while the modal viewer is up
+        // Compare stays off while the modal viewer is up, and the panel may be gone after the report's modal
         m_comparing = false;
         updateCompare();
+
+        if( reporter.HasMessage() )
+            DisplayErrorMessage( this, _( "Could not open the comparison." ), reporter.GetMessages() );
     };
 
     // The working copy's side answers inside fetch, whose modal viewer can close the panel before it returns
+    if( !rows->older )
+    {
+        MDW_OP newer = fetch( newerSide, finish );
+
+        if( current() )
+            m_newerOp = std::move( newer );
+
+        return;
+    }
+
     MDW_OP older = fetch( olderSide,
                           [this, current, newerSide, finish]( const MDW_RESULT& aStatus )
                           {
@@ -825,15 +842,6 @@ void PANEL_MDW_VERSIONS::updatePreview()
         return;
     }
 
-    const KICAD_DIFF::DOC_KIND kind = compareDocument().kind;
-
-    if( kind != KICAD_DIFF::DOC_KIND::UNKNOWN && kind != KICAD_DIFF::DOC_KIND::SCH
-        && kind != KICAD_DIFF::DOC_KIND::PCB )
-    {
-        stopPreview( _( "Double-click the version to open its comparison." ) );
-        return;
-    }
-
     const long               row = rows[0];
     const MDW_PREVIEW_BEFORE before =
             MdwPreviewBefore( row, static_cast<long>( m_revisions.size() ), hasWorkingCopy(), m_olderUnread );
@@ -841,6 +849,16 @@ void PANEL_MDW_VERSIONS::updatePreview()
     if( before.what == MDW_PREVIEW_BEFORE::WHAT::UNREAD )
     {
         stopPreview( _( "The version before this one has not been read." ) );
+        return;
+    }
+
+    // Follows the unread stop, which leaves nothing for a double click to open
+    const KICAD_DIFF::DOC_KIND kind = compareDocument().kind;
+
+    if( kind != KICAD_DIFF::DOC_KIND::UNKNOWN && kind != KICAD_DIFF::DOC_KIND::SCH
+        && kind != KICAD_DIFF::DOC_KIND::PCB )
+    {
+        stopPreview( _( "Double click the file to open its comparison." ) );
         return;
     }
 
@@ -885,11 +903,11 @@ void PANEL_MDW_VERSIONS::updatePreview()
     else
         olderSide.label = _( "Added" );
 
-    placeSides( folder, olderSide, newerSide );
+    placeSides( folder, hasBefore, olderSide, newerSide );
 
     GIT_FILE_SIDES sides;
 
-    sides.before = hasBefore ? olderSide.path : wxString();
+    sides.before = olderSide.path;
     sides.after = newerSide.path;
     sides.kind = kind;
 
@@ -914,11 +932,13 @@ void PANEL_MDW_VERSIONS::updatePreview()
                                             MdwErrorText( aStatus ) );
         }
 
-        m_preview->ShowSides( shown, olderSide.label, newerSide.label );
-
-        // The download has answered and the drawings are loaded, so nothing holds the folder now
-        wxLogNull quiet;
-        wxFileName::Rmdir( folder, wxPATH_RMDIR_RECURSIVE );
+        m_preview->ShowSides( shown, olderSide.label, newerSide.label, scratch,
+                              [folder]()
+                              {
+                                  // The drawings are loaded, so nothing holds the folder now
+                                  wxLogNull quiet;
+                                  wxFileName::Rmdir( folder, wxPATH_RMDIR_RECURSIVE );
+                              } );
     };
 
     if( !hasBefore )

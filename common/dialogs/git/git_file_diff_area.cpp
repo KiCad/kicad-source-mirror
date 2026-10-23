@@ -87,6 +87,18 @@ bool diffTextSides( GIT_FILE_SIDES& aSides, std::vector<KIGIT::TEXT_DIFF_LINE>& 
 }
 
 
+// Reads every sheet a hierarchy reaches, so it runs on a worker where a slow share cannot stall the UI
+void checkDrawingSize( GIT_FILE_SIDES& aSides )
+{
+    if( aSides.kind == KICAD_DIFF::DOC_KIND::SCH || aSides.kind == KICAD_DIFF::DOC_KIND::PCB )
+    {
+        aSides.tooLargeToPreview =
+                KIGIT::DrawingTooLargeToPreview( aSides.before, aSides.after, aSides.kind == KICAD_DIFF::DOC_KIND::SCH,
+                                                 aSides.beforeRoot, aSides.afterRoot );
+    }
+}
+
+
 struct FILE_DIFF_RESULT
 {
     // Keep the extracted files until the UI has loaded the drawing documents.
@@ -161,6 +173,7 @@ GIT_FILE_DIFF_AREA::~GIT_FILE_DIFF_AREA()
 
 void GIT_FILE_DIFF_AREA::Clear()
 {
+    ++m_shown;
     m_query.Cancel();
     destroyCanvases();
 }
@@ -195,6 +208,7 @@ void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession
                     return;
                 }
 
+                checkDrawingSize( result->sides );
                 result->ready = true;
             },
             [this, result, aSession, aBeforeLabel, aAfterLabel]()
@@ -215,10 +229,13 @@ void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession
 
 
 void GIT_FILE_DIFF_AREA::ShowSides( const GIT_FILE_SIDES& aSides, const wxString& aBeforeLabel,
-                                    const wxString& aAfterLabel )
+                                    const wxString& aAfterLabel, std::shared_ptr<void> aFiles,
+                                    std::function<void()> aShown )
 {
     // A git comparison still loading must not replace these sides when it lands
     m_query.Cancel();
+
+    const unsigned shown = ++m_shown;
 
     GIT_FILE_SIDES                     sides = aSides;
     std::vector<KIGIT::TEXT_DIFF_LINE> textLines;
@@ -231,18 +248,52 @@ void GIT_FILE_DIFF_AREA::ShowSides( const GIT_FILE_SIDES& aSides, const wxString
             diffTextSides( sides, textLines );
     }
 
-    if( !sides.error.IsEmpty() )
+    const bool drawing = sides.kind == KICAD_DIFF::DOC_KIND::SCH || sides.kind == KICAD_DIFF::DOC_KIND::PCB;
+
+    if( !sides.error.IsEmpty() || !drawing )
     {
-        ShowNote( sides.error );
+        if( sides.error.IsEmpty() )
+            showDiff( sides, textLines, aBeforeLabel, aAfterLabel );
+        else
+            ShowNote( sides.error );
+
+        if( aShown )
+            aShown();
+
         return;
     }
 
-    showDiff( sides, textLines, aBeforeLabel, aAfterLabel );
+    auto checked = std::make_shared<GIT_FILE_SIDES>( sides );
+
+    m_sizeCheck.Start(
+            "Preview size check",
+            [checked, aFiles]( const KIGIT_COMMON::CANCEL_TOKEN& )
+            {
+                // A failed check is doubt, and the completion must still run to show it
+                try
+                {
+                    checkDrawingSize( *checked );
+                }
+                catch( const std::exception& )
+                {
+                    checked->tooLargeToPreview = true;
+                }
+            },
+            // Holds the files until they are drawn, as the worker may drop its copy first
+            [this, checked, shown, aBeforeLabel, aAfterLabel, aShown, aFiles]()
+            {
+                if( shown == m_shown )
+                    showDiff( *checked, {}, aBeforeLabel, aAfterLabel );
+
+                if( aShown )
+                    aShown();
+            } );
 }
 
 
 void GIT_FILE_DIFF_AREA::ShowNote( const wxString& aNote )
 {
+    ++m_shown;
     destroyCanvases();
     m_note->SetLabelText( aNote );
     m_note->Show();
@@ -258,12 +309,25 @@ void GIT_FILE_DIFF_AREA::showDiff( const GIT_FILE_SIDES& aSides, const std::vect
 {
     bool shown = true;
 
+    const bool drawing = aSides.kind == KICAD_DIFF::DOC_KIND::SCH || aSides.kind == KICAD_DIFF::DOC_KIND::PCB;
+
     if( aSides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+    {
         showTextDiff( aTextLines );
-    else if( aSides.kind == KICAD_DIFF::DOC_KIND::SCH || aSides.kind == KICAD_DIFF::DOC_KIND::PCB )
+    }
+    else if( drawing && aSides.tooLargeToPreview )
+    {
+        ShowNote( _( "This drawing is too large to preview. Double click the file to open its comparison." ) );
+        shown = false;
+    }
+    else if( drawing )
+    {
         shown = showDrawingDiff( aSides.kind, aSides.before, aSides.after, aBeforeLabel, aAfterLabel );
+    }
     else
+    {
         ShowNote( _( "Double click the file to open its comparison." ) );
+    }
 
     if( shown )
         Layout();

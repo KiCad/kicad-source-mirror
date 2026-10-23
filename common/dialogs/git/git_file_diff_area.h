@@ -60,9 +60,14 @@ public:
     void ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession, const MATERIALIZE& aMaterialize,
                    const wxString& aBeforeLabel, const wxString& aAfterLabel );
 
-    /// Compare two sides already written out, or show their error instead. Needs no git session, and diffs a text
-    /// file on the calling thread, so a side over 1 MiB shows a note instead.
-    void ShowSides( const GIT_FILE_SIDES& aSides, const wxString& aBeforeLabel, const wxString& aAfterLabel );
+    /**
+     * Compare two sides already written out, or show their error instead. Needs no git session, and diffs a text
+     * file on the calling thread, so a side over 1 MiB shows a note instead. A drawing's size is checked on a
+     * worker, which holds aFiles until it is done. aShown runs on the UI thread once the sides are shown or
+     * replaced by a newer comparison or note.
+     */
+    void ShowSides( const GIT_FILE_SIDES& aSides, const wxString& aBeforeLabel, const wxString& aAfterLabel,
+                    std::shared_ptr<void> aFiles = nullptr, std::function<void()> aShown = {} );
 
     /// Show aNote in place of a comparison.
     void ShowNote( const wxString& aNote );
@@ -101,6 +106,11 @@ private:
 
     /// A newer file selection discards any materialization still running for the previous one.
     KIGIT_QUERY m_query;
+
+    /// The drawing size check for ShowSides, and a count of what was shown, so a check that lands after a newer
+    /// comparison or note draws nothing.
+    KIGIT_TRANSFER m_sizeCheck;
+    unsigned       m_shown = 0;
 
     /// The documents the two canvases draw, held by the kiface that loaded them. Reset before
     /// the canvases go.

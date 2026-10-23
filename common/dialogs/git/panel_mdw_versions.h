@@ -164,10 +164,10 @@ private:
     MDW_COMPARE_DOC compareDocument() const;
 
     /// Give aOlder and aNewer their paths under aRoot, one file name in two folders as the diff viewer routes on it
-    void placeSides( const wxString& aRoot, SIDE& aOlder, SIDE& aNewer ) const;
+    void placeSides( const wxString& aRoot, bool aHasOlder, SIDE& aOlder, SIDE& aNewer ) const;
 
     /// The rows Compare opens for the selected ones, older first
-    std::optional<std::pair<long, long>> comparePair() const;
+    std::optional<MDW_COMPARE_ROWS> compareRows() const;
 
     /// The selected row when it is one version, not the working copy and not several rows
     std::optional<long> singleRevisionRow() const;
