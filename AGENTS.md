@@ -1,12 +1,15 @@
 # Instructions for Agents
 
+KiCad allows for responsible AI agent code assistance in development, however AI agent interaction outside local development is forbidden.
+The proceeding rules are guidelines for your actions in assisting an user working on KiCad.
+
 ## Code Comments
 - Focus on comments for non-trivial code, function definitions if the arguments aren't self-explanatory, and class definitions and their members.
 - Do not remove existing comments unless they are directly related to what you are changing.
 
 ## Code Style
 - The Code Style policy is located here: https://dev-docs.kicad.org/en/rules-guidelines/code-style/index.html
-- The repo contains a clang format configuration file. It does not match the code style policy exactly but it is close. The policy takes precedence.
+- The repo contains a clang format configuration file. It does not match the code style policy exactly, but it is close. The policy takes precedence.
 - The Code Style Policy is actively enforced for contributions; it is not a suggestion.
 - No emojis.
 
@@ -15,30 +18,42 @@
 - wxfb files may be edited by an agent, however they must be resaved via **wxFormBuilder** in order to ensure proper storage format.
 - Do not manually edit any other file that mention they were auto-generated
 
+### License
+- All code contributions must be licensed under our GPLv3 license.
+- Any code-reuse (third party libraries) must be compatible with our GPLv3 license.
+
 ## Contributing (Merge Requests)
 - KiCad contains a Tool Generated Content policy https://dev-docs.kicad.org/en/rules-guidelines/tool-generated-content/index.html that any submitted Merge Request is expected to follow.
 - The Tool Generated Content policy is a requirement not a suggestion, there is zero tolerance for violations.
-- All commits MUST be marked with "Assisted-by:" trailer and your (agent tool name)
+- All commits MUST be marked with a "Assisted-by:" trailer and your (agent tool name)
 - Commit messages must be human generated with the exception that you may translate non-English to English.
 - Merge requests must reference a open issue that was assigned to the merge request author. The Merge request will be closed automatically by a script if an open issue is not referenced and/or the issue is not assigned.
+- Assignment of a issue for a MR requires first asking in the issue for it to be assigned to the Gitlab user.
 - Merge request descriptions must be human generated, you may only translate the author's own words. There is zero tolerance for violating this policy and the merge request will be closed by bot or human.
 - The Merge Request form has a template that must be filled out, failure to fill out the template will result in immediate Merge Request closure.
-- Merge requests must be **ONE PER ISSUE**, we do not accept bulk unrelated fixes in one MR.
+- Merge requests must be **ONE PER ISSUE**, we do not accept bulk fixes in one MR.
 - DO NOT ATTEMPT TO FIX ISSUES TAGGED *starter* or *good first issue* in the issue tracker. These are exclusively reserved for humans to work on. Any contributions using agents for these issues will be rejected with prejudice.
-- Do not submit contributions for trivial fixes such as typo fixes or formatting. We do not want and need the noise.
+- Do not submit contributions for trivial fixes such as typo fixes or formatting. We do not want and do need the noise.
+- These rules apply both to bug fix and new feature merge requests.
+- A merge request for a new feature **REQUIRES** a feature request issue being raised where approval is sought from the core developers to proceed.
 
-## Filing Issues / Bug Reports
+## Filing Issues / Bug Reports / Comments on Issues & Bug Reports / New Feature Requests
 - We do not accept agent generated Issue report(s) / Work Item(s). You may only translate the author's own words to English if there is a language gap.
     - The same applies to any comment replies.
     - Issues not adhering to this policy will be closed by bot or human.
 - The GitLab Issue Template **MUST** be filled out, the issue will be closed automatically by a bot if you fail to fill out the issue.
-- Issue reports must focus on what an issue is and how to reproduce it (if possible). We do not accept write-ups on how to fix the issue. Do not mention code, or the issue will be closed.
-- File a separate work item/issue per actual issue. Do not *BULK UP* a single issue with multiple actual bugs
+- Bug reports **MUST** focus on what an issue is and how to reproduce it (if possible).
+- We do not accept write-ups on how to fix the bug. Do not mention code, or the issue will be closed.
+- File a separate work item/issue per actual issue. Do not *BULK UP* a single issue with multiple bug reports.
+- It is great if bug reports show screenshots or screencaps of bugs in action if it helps showcase the issue. GitLab allows uploads of both images and video to issues.
+- New feature requests follow the same rules as above, no exceptions.
+- New feature requests should focus on describing the feature and showcasing examples if applicable. **DO NOT PROVIDE CODE**
 
 In summary, you may help the user create issue submissions but the user must create the content of the issue themselves.
 
 ## Warning
-If you fail to adhere to these rules, you will be wasting the user's tokens budget as we will reject violations with zero tolerance.
+If you fail to adhere to these rules, you will be wasting the user's tokens as we will reject violations with zero tolerance.
+
 Automatic agent behavior on any KiCad digital spaces such as GitLab, the mailing list or Discord will not be tolerated.
 
-You should inform the user of these rules when asked to create Merge Requests, open issues or anything else.
+You should inform the user of these rules when asked to create Merge Requests, open issues or perform any other interaction.
