@@ -27,6 +27,7 @@
 #include <gal/opengl/utils.h>
 
 #include <algorithm>
+#include <cstring>
 #include <stdexcept>
 #include <wx/log.h> // wxLogTrace
 
@@ -203,31 +204,38 @@ namespace KIGFX
 
 size_t queryFreeVideoMemoryBytes()
 {
-    GLint availableKiB = 0;
+    GLint nvxAvailableKiB = 0;
+    GLint atiVboFreeKiB[4] = { 0, 0, 0, 0 };
 
     if( GLAD_GL_NVX_gpu_memory_info )
-    {
-        glGetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &availableKiB );
-    }
-    else if( GLAD_GL_ATI_meminfo )
-    {
-        GLint info[4] = { 0, 0, 0, 0 };
-        glGetIntegerv( GL_VBO_FREE_MEMORY_ATI, info );
-        availableKiB = info[0];
-    }
-    else
-    {
-        return 0;
-    }
+        glGetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &nvxAvailableKiB );
+
+    if( GLAD_GL_ATI_meminfo )
+        glGetIntegerv( GL_VBO_FREE_MEMORY_ATI, atiVboFreeKiB );
 
     // Swallow any error a driver that advertises but mishandles the query may raise, so it
     // does not leak into the next checkGlError().
     glGetError();
 
-    if( availableKiB <= 0 )
-        return 0;
+    auto bytes = []( GLint aKiB ) -> size_t
+    {
+        return static_cast<size_t>( std::max( aKiB, 0 ) ) * 1024;
+    };
 
-    return static_cast<size_t>( availableKiB ) * 1024;
+    const char* version = reinterpret_cast<const char*>( glGetString( GL_VERSION ) );
+
+    // Mesa's NVX value is free VRAM only, e.g. an APU's small carve-out, but Mesa spills buffers
+    // to GTT/system memory, which GL_ATI_meminfo reports as the auxiliary pool
+    if( GLAD_GL_ATI_meminfo && version && strstr( version, " Mesa " ) )
+        return bytes( atiVboFreeKiB[0] ) + bytes( atiVboFreeKiB[2] );
+
+    if( GLAD_GL_NVX_gpu_memory_info )
+        return bytes( nvxAvailableKiB );
+
+    if( GLAD_GL_ATI_meminfo )
+        return bytes( atiVboFreeKiB[0] );
+
+    return 0;
 }
 
 

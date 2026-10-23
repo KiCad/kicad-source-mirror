@@ -64,8 +64,9 @@ enum class VRAM_RESIZE_STRATEGY
 /**
  * Query the amount of free video memory the driver reports.
  *
- * Uses GL_NVX_gpu_memory_info (NVIDIA) or GL_ATI_meminfo (AMD) when present. Requires a
- * current OpenGL context.
+ * Uses GL_NVX_gpu_memory_info or GL_ATI_meminfo when present. On Mesa, which places buffers
+ * that do not fit in VRAM in system memory, the GL_ATI_meminfo auxiliary pool counts too.
+ * Requires a current OpenGL context.
  *
  * @return the free video memory in bytes, or 0 when no driver query is available.
  */
