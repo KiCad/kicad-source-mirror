@@ -253,11 +253,11 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     CONNECTION_TYPE origType = m_type;
     m_type   = aOther.m_type;
 
-    // Note: m_local_name is not cloned if not set yet
+    // Note: m_local_name is not cloned if already set in the target
     if( m_local_name.IsEmpty() )
     {
-        m_local_name   = aOther.LocalName();
-        m_local_prefix = aOther.Prefix();
+        m_local_name   = aOther.m_local_name;
+        m_local_prefix = aOther.m_local_prefix;
     }
 
     m_prefix       = aOther.Prefix();
