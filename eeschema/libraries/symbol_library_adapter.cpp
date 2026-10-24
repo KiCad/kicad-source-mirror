@@ -54,6 +54,13 @@ SYMBOL_LIBRARY_ADAPTER::SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
 }
 
 
+SYMBOL_LIBRARY_ADAPTER::~SYMBOL_LIBRARY_ADAPTER()
+{
+    resetProjectCache();
+    evictOwnedGlobalEntries();
+}
+
+
 wxString SYMBOL_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 {
     return ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) );

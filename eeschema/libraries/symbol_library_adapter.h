@@ -57,6 +57,8 @@ public:
 public:
     SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager );
 
+    ~SYMBOL_LIBRARY_ADAPTER() override;
+
     LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::SYMBOL; }
 
     static wxString GlobalPathEnvVariableName();

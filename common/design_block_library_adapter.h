@@ -37,6 +37,8 @@ class KICOMMON_API DESIGN_BLOCK_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER
 public:
     DESIGN_BLOCK_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager );
 
+    ~DESIGN_BLOCK_LIBRARY_ADAPTER() override;
+
     LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::DESIGN_BLOCK; }
 
     static wxString GlobalPathEnvVariableName();

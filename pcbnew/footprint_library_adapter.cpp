@@ -51,6 +51,13 @@ FOOTPRINT_LIBRARY_ADAPTER::FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager 
 }
 
 
+FOOTPRINT_LIBRARY_ADAPTER::~FOOTPRINT_LIBRARY_ADAPTER()
+{
+    resetProjectCache();
+    evictOwnedGlobalEntries();
+}
+
+
 wxString FOOTPRINT_LIBRARY_ADAPTER::GlobalPathEnvVariableName()
 {
     return ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) );

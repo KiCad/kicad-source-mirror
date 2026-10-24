@@ -44,6 +44,8 @@ class FOOTPRINT_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER
 public:
     FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager );
 
+    ~FOOTPRINT_LIBRARY_ADAPTER() override;
+
     LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::FOOTPRINT; }
 
     static wxString GlobalPathEnvVariableName();

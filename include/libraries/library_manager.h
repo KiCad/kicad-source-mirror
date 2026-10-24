@@ -32,6 +32,7 @@
 
 
 class LIBRARY_MANAGER;
+class LIBRARY_MANAGER_ADAPTER;
 class PROJECT;
 
 
@@ -55,9 +56,15 @@ struct KICOMMON_API LIB_STATUS
 /// Storage for an actual loaded library (including library content owned by the plugin)
 struct KICOMMON_API LIB_DATA
 {
+    /// Never destroyed while holding the map's mutex; a plugin's worker thread may be blocked on it
     std::unique_ptr<IO_BASE> plugin;
     const LIBRARY_TABLE_ROW* row = nullptr;
     LIB_STATUS               status;
+
+    // For an entry in the process-wide globalLibs() cache, the adapter that loaded it and so owns
+    // the lifetime of row. Its destructor evicts the entry; identity is by adapter, not by the
+    // reusable row pointer.
+    const LIBRARY_MANAGER_ADAPTER* global_owner = nullptr;
 
     int                   modify_hash = -1;
     std::vector<wxString> available_fields_cache;
@@ -220,6 +227,14 @@ protected:
     /// Aborts any async load in progress; blocks until fully done aborting
     void abortLoad();
 
+    /// Erases this adapter's own entries (LIB_DATA::global_owner == this) from the process-wide
+    /// globalLibs() cache. The cached LIB_DATA::row pointers reference this manager's tables, so
+    /// they must be dropped before the manager is destroyed or a later manager's fetchIfLoaded()
+    /// would dereference freed rows. Derived destructors must call this while globalLibs() is
+    /// still resolvable. Derived destructors must also call resetProjectCache() so plugin worker
+    /// threads are joined while the derived adapter is still alive.
+    void evictOwnedGlobalEntries();
+
     /// Aborts pending loads and resets every project-scope cache entry in place
     /// (plugin and row cleared, status returned to INVALID) while preserving the
     /// nickname keys. Keeping the keys acts as a sentinel: fetchIfLoaded() finds
@@ -227,6 +242,8 @@ protected:
     /// falling through to globalLibs(), which is what preserves project-over-
     /// global shadowing across a project table reload. Shared between
     /// ProjectChanged() and ProjectTablesChanged() so both hooks stay in sync.
+    /// Derived destructors must also call this so plugin worker threads are joined while the
+    /// derived adapter is still alive.
     void resetProjectCache();
 
     /// Creates a concrete plugin for the given row
