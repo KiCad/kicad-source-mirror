@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-20 07:51+0000\n"
+"PO-Revision-Date: 2026-10-24 19:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -1056,14 +1056,12 @@ msgid "Hide All Copper Layers"
 msgstr "すべての導体レイヤーを非表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:281
-#, fuzzy
 msgid "Show All Inner Layers"
-msgstr "内層レイヤーのみ表示"
+msgstr "すべての内層レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:282
-#, fuzzy
 msgid "Hide All Inner Layers"
-msgstr "すべての導体レイヤーを非表示"
+msgstr "すべての内層レイヤーを非表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:668
 msgid "Left double click or middle click to change color"
@@ -1080,9 +1078,9 @@ msgid "Show or hide %s"
 msgstr "%s の表示/非表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:760
-#, fuzzy, c-format
+#, c-format
 msgid "Show %s"
-msgstr "%s ページを表示"
+msgstr "%s を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:837
 #: pcbnew/widgets/appearance_controls.cpp:2758
@@ -1233,9 +1231,8 @@ msgid "Width:"
 msgstr "幅:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:91
-#, fuzzy
 msgid "Lock/unlock aspect ratio"
-msgstr "選択したアイテムをロック/ロック解除する"
+msgstr "アスペクト比をロック/ロック解除"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:97
 #: common/dialogs/panel_gal_options_base.cpp:57
@@ -1992,20 +1989,20 @@ msgid "Error allocating memory for potrace bitmap"
 msgstr "Potrace ビットマップ用のメモリー 割り当てエラー"
 
 #: common/bitmap_tracing.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Error allocating parameters: %s"
-msgstr "フットプリントの読み込み中にエラー: %s"
+msgstr "パラメータの割り当てエラー: %s"
 
 #: common/bitmap_tracing.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Error tracing bitmap: %s"
-msgstr "画像 '%s' の読み込み中にエラーしました。"
+msgstr "ビットマップのトレース中にエラー: %s"
 
 #: common/bitmap_tracing.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "%d region of the image could not be traced."
 msgid_plural "%d regions of the image could not be traced."
-msgstr[0] "いくつかのポリゴンは分割できません。"
+msgstr[0] "イメージの %d 領域をトレースできませんでした。"
 
 #: common/column_formatter.cpp:27
 msgid "True"
@@ -2901,9 +2898,8 @@ msgid "Configure Paths"
 msgstr "パスを設定"
 
 #: common/dialogs/dialog_convert_image_to_outlines.cpp:33
-#, fuzzy
 msgid "Convert to Outlines"
-msgstr "ゾーンに変換"
+msgstr "アウトラインに変換"
 
 #: common/dialogs/dialog_convert_image_to_outlines.cpp:41
 #: common/dialogs/dialog_import_gfx_base.cpp:232
@@ -3893,15 +3889,13 @@ msgstr "1.0"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:134
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:56
-#, fuzzy
 msgid "Imported width:"
-msgstr "スポーク幅:"
+msgstr "インポートされた幅:"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:145
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:69
-#, fuzzy
 msgid "Imported height:"
-msgstr "インポートされた図形"
+msgstr "インポートされた高さ:"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:159
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:85
@@ -3932,15 +3926,13 @@ msgid "Default units:"
 msgstr "デフォルトの単位:"
 
 #: common/dialogs/dialog_import_gfx_base.cpp:227
-#, fuzzy
 msgid "Image Parameters"
-msgstr "パラメーター"
+msgstr "イメージ パラメーター"
 
 #: common/dialogs/dialog_import_gfx_base.h:100
 #: pcbnew/import_gfx/dialog_import_graphics_base.h:110
-#, fuzzy
 msgid "Import Graphics File"
-msgstr "グラフィックをインポート"
+msgstr "図形ファイルをインポート"
 
 #: common/dialogs/dialog_kicad_diff.cpp:65
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:57
@@ -5099,18 +5091,16 @@ msgid "Accelerated Graphics"
 msgstr "グラフィックス描画の高速化"
 
 #: common/dialogs/panel_common_settings.cpp:58
-#, fuzzy
 msgid "RHI Metal (Experimental)"
-msgstr "Gerber (実験的)"
+msgstr "RHI Metal (実験的)"
 
 #: common/dialogs/panel_common_settings.cpp:60
 msgid "Fallback Graphics"
 msgstr "代替グラフィックス"
 
 #: common/dialogs/panel_common_settings.cpp:61
-#, fuzzy
 msgid "RHI Vulkan (Experimental)"
-msgstr "Gerber (実験的)"
+msgstr "RHI Vulkan(実験的)"
 
 #: common/dialogs/panel_common_settings.cpp:114
 msgid ""
@@ -5183,6 +5173,10 @@ msgid ""
 "for computers that do not support hardware acceleration. RHI is a new "
 "experimental GPU rendering engine (Vulkan, or Metal on macOS)."
 msgstr ""
+"GPUを使ってアクセラレーションします(推奨)。 ハードウェアアクセラレーションを"
+"サポートしていないコンピューター向けにはソフトウェアレンダリングを使用します"
+"。RHIは新しい実験的なGPUレンダリングエンジンです（VulkanまたはmacOSではMetal"
+"）。"
 
 #: common/dialogs/panel_common_settings_base.cpp:56
 msgid "Antialiasing:"
@@ -5948,9 +5942,8 @@ msgid "Minimum grid spacing:"
 msgstr "最小グリッド間隔:"
 
 #: common/dialogs/panel_gal_options_base.cpp:72
-#, fuzzy
 msgid "Show major grid"
-msgstr "グリッドの表示"
+msgstr "主グリッドを表示"
 
 #: common/dialogs/panel_gal_options_base.cpp:84 common/layer_id.cpp:111
 #: common/layer_id.cpp:152 eeschema/sim/simulator_frame_ui.cpp:776
@@ -7366,14 +7359,12 @@ msgid "Duplicate ID"
 msgstr "重複 ID"
 
 #: common/draw_panel_gal.cpp:378
-#, fuzzy
 msgid "Could not use Metal, switching to OpenGL"
-msgstr "OpenGL を使用できません"
+msgstr "Metalを使用できませんでしたので、OpenGLに切り替えます"
 
 #: common/draw_panel_gal.cpp:380
-#, fuzzy
 msgid "Could not use Vulkan, falling back to software rendering"
-msgstr "OpenGL を使用できないため、ソフトウェア レンダリングに切り替えます"
+msgstr "Vulkan を使用できないため、ソフトウェア レンダリングに切り替えます"
 
 #: common/draw_panel_gal.cpp:474
 msgid "The graphics driver was reset and OpenGL could not be restored"
@@ -7409,9 +7400,8 @@ msgstr ""
 "に切り替えます"
 
 #: common/draw_panel_gal.cpp:643
-#, fuzzy
 msgid "The graphics device was lost and could not be restored."
-msgstr "グラフィックドライバーがリセットされOpenGLが復元できませんでした"
+msgstr "グラフィックドライバーが失われそして復元できませんでした。"
 
 #: common/draw_panel_gal.cpp:1001
 msgid "Unknown exception"
@@ -8097,9 +8087,8 @@ msgid "Grid"
 msgstr "グリッド"
 
 #: common/eda_item.cpp:610 pcbnew/pcb_3d_body.h:110 pcbnew/pcb_3d_body.h:146
-#, fuzzy
 msgid "3D Body"
-msgstr "ボディ形状"
+msgstr "3Dボディ"
 
 #: common/eda_item.cpp:613 eeschema/sch_junction.cpp:348
 #: eeschema/sch_junction.h:101
@@ -9997,37 +9986,39 @@ msgstr ""
 #, c-format
 msgid "Easy-PC archive ends at offset %zu, %zu bytes short of a %zu byte read."
 msgstr ""
+"Easy-PC アーカイブはオフセット %zu で終了、%zu バイトが %zu バイトの読み取り"
+"に不足。"
 
 #: common/io/easypc/easypc_archive.cpp:249
 #, c-format
 msgid "Easy-PC class name of %u bytes at offset %zu."
-msgstr ""
+msgstr "Easy-PC クラス名 %u バイト、オフセット%zu。"
 
 #: common/io/easypc/easypc_archive.cpp:259
 #, c-format
 msgid "Unsupported Easy-PC object '%s' at offset %zu."
-msgstr ""
+msgstr "サポートされていないEasy-PCオブジェクト '%s' 、オフセット%zu。"
 
 #: common/io/easypc/easypc_archive.cpp:272
 #, c-format
 msgid "Easy-PC class reference to slot %u at offset %zu is not a class."
-msgstr ""
+msgstr "長穴 %u 、オフセット %zu のEasy-PCクラス参照はクラスではない。"
 
 #: common/io/easypc/easypc_archive.cpp:287
 #, c-format
 msgid "Easy-PC object reference to slot %u at offset %zu is not an object."
-msgstr ""
+msgstr "長穴 %u 、オフセット %zu のEasy-PCオブジェクト参照はオブジェクトではない。"
 
 #: common/io/easypc/easypc_archive.cpp:298
 #: common/io/easypc/easypc_archive.cpp:350
 #, c-format
 msgid "Easy-PC archive nests deeper than %d objects at offset %zu."
-msgstr ""
+msgstr "%d個よりも深く 、オフセット %zu でEasy-PCアーカイブがネストされています。"
 
 #: common/io/easypc/easypc_archive.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Easy-PC class '%s' is not registered."
-msgstr "アクションが登録されていない"
+msgstr "Easy-PCクラス '%s' は登録されていない。"
 
 #: common/io/easypc/easypc_archive.cpp:511
 #, c-format
@@ -10050,9 +10041,9 @@ msgid "Easy-PC %s at offset %zu has a cyclic parent chain."
 msgstr ""
 
 #: common/io/easypc/easypc_classes_styles.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported Easy-PC turned slot in pad style '%s'."
-msgstr "サポートされていないモード '%s'."
+msgstr "サポートされていないEasy-PCのパッドスタイル '%s' で曲がった長穴。"
 
 #: common/io/easypc/easypc_design_settings.cpp:67
 #, c-format
@@ -10074,34 +10065,33 @@ msgid "Easy-PC project holds %u OLE items."
 msgstr ""
 
 #: common/io/easypc/easypc_document.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Easy-PC project format %d is not supported."
-msgstr "ファイルフォーマットはサポートされていません"
+msgstr "Easy-PCプロジェクトフォーマット %d はサポートされていません。"
 
 #: common/io/easypc/easypc_document.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a %s, not a design."
-msgstr "'%s' はディレクトリーではありません"
+msgstr "'%s' は %s 、デザインではありません。"
 
 #: common/io/easypc/easypc_document.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' has no Contents stream."
-msgstr "ライブラリ '%s' にはフットプリント '%s' がありません。"
+msgstr "'%s' にはコンテンツ ストリームがありません。"
 
 #: common/io/easypc/easypc_document.cpp:161
-#, fuzzy
 msgid "design"
 msgstr "デザイン"
 
 #: common/io/easypc/easypc_document.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a %s, not a library."
-msgstr "ファイル '%s' は旧形式のライブラリではありません。"
+msgstr "'%s' は %s 、ライブラリではありません。"
 
 #: common/io/easypc/easypc_document.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' holds '%s', which is not an item."
-msgstr "ライブラリ '%s' を読み込めませんでした。"
+msgstr "ライブラリ '%s' は '%s' をもっていますが、それはアイテムではありません。"
 
 #: common/io/easypc/easypc_document.cpp:220
 #, c-format
@@ -10109,14 +10099,14 @@ msgid "Library '%s' lists duplicate item '%s' as '%s'."
 msgstr ""
 
 #: common/io/easypc/easypc_document.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no item '%s'."
-msgstr "ライブラリ '%s' にはフットプリント '%s' がありません。"
+msgstr "ライブラリ '%s' はアイテム '%s' がありません。"
 
 #: common/io/easypc/easypc_document.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' has no [ScmComponent] stream."
-msgstr "導体ゾーン '%s' はパッドへの接続がありません。"
+msgstr "コンポーネント '%s' は [ScmComponent] ストリームがありません。"
 
 #: common/io/easypc/easypc_file.cpp:50
 #, c-format
@@ -10202,7 +10192,7 @@ msgstr "3Dモデルとしてエクスポート"
 
 #: common/jobs/job_export_pcb_3d.cpp:191
 msgid "Export 3D Model Job Settings"
-msgstr "3Dモデルのエクスポートジョブ設定"
+msgstr "3Dモデル エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_3d.cpp:213
 msgid "PCB: Export 3D Model"
@@ -10214,7 +10204,7 @@ msgstr "ドリルデータのエクスポート"
 
 #: common/jobs/job_export_pcb_drill.cpp:143
 msgid "Export Drill Data Job Settings"
-msgstr "ドリルデータのエクスポートジョブ設定"
+msgstr "ドリルデータ エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_drill.cpp:146
 msgid "PCB: Export Drill Data"
@@ -10228,7 +10218,7 @@ msgstr "DXFとしてエクスポート"
 #: common/jobs/job_export_pcb_dxf.cpp:66
 #: common/jobs/job_export_sch_plot.cpp:144
 msgid "Export DXF Job Settings"
-msgstr "DXFのエクスポートジョブ設定"
+msgstr "DXF エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_dxf.cpp:70
 msgid "PCB: Export DXF"
@@ -10241,7 +10231,7 @@ msgstr "GenCADファイルをエクスポート"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
-msgstr "GenCADのエクスポートジョブ設定"
+msgstr "GenCAD エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
 msgid "PCB: Export GenCAD"
@@ -10253,19 +10243,19 @@ msgstr "単一ガーバーとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export Single Gerber Job Settings"
-msgstr "単一ガーバーのエクスポートジョブ設定"
+msgstr "単一ガーバー エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
 msgid "Export Gerbers"
-msgstr "ガーバー としてエクスポート"
+msgstr "ガーバー のエクスポート"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
 msgid "Export Gerbers Job Settings"
-msgstr "ガーバー としてエクスポートジョブ設定"
+msgstr "ガーバー エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr "PCB: ガーバー としてエクスポート"
+msgstr "PCB: ガーバー のエクスポート"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:195 kicad/kicad_cli.cpp:214
@@ -10283,7 +10273,7 @@ msgstr "IDFv3のエクスポート"
 
 #: common/jobs/job_export_pcb_idf.cpp:69
 msgid "Export IDFv3 Job Settings"
-msgstr "IDFv3のエクスポートジョブ設定"
+msgstr "IDFv3 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_idf.cpp:83
 msgid "PCB: Export IDFv3"
@@ -10296,7 +10286,7 @@ msgstr "IPC-2581 としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:88
 msgid "Export IPC-2581 Job Settings"
-msgstr "IPC-2581のエクスポートジョブ設定"
+msgstr "IPC-2581 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:101
 msgid "PCB: Export IPC-2581"
@@ -10308,7 +10298,7 @@ msgstr "IPC-D-356としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:41
 msgid "Export IPC-D-356 Job Settings"
-msgstr "IPC-D-356 のエクスポートジョブ設定"
+msgstr "IPC-D-356 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:55
 msgid "PCB: Export IPC-D-356"
@@ -10317,11 +10307,11 @@ msgstr "PCB: IPC-D-356 としてエクスポート"
 #: common/jobs/job_export_pcb_odb.cpp:123
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:87
 msgid "Export ODB++"
-msgstr "ODB++をエクスポート"
+msgstr "ODB++としてエクスポート"
 
 #: common/jobs/job_export_pcb_odb.cpp:129
 msgid "Export ODB++ Job Settings"
-msgstr "ODB++のエクスポートジョブ設定"
+msgstr "ODB++ エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_odb.cpp:142
 msgid "PCB: Export ODB++"
@@ -10336,7 +10326,7 @@ msgstr "PDFとしてエクスポート"
 #: common/jobs/job_export_pcb_pdf.cpp:69
 #: common/jobs/job_export_sch_plot.cpp:125
 msgid "Export PDF Job Settings"
-msgstr "PDFのエクスポートジョブ設定"
+msgstr "PDF エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_pdf.cpp:73
 msgid "PCB: Export PDF"
@@ -10350,7 +10340,7 @@ msgstr "PNGとしてエクスポート"
 #: common/jobs/job_export_pcb_png.cpp:53
 #: common/jobs/job_export_sch_plot.cpp:218
 msgid "Export PNG Job Settings"
-msgstr "PNGのエクスポートジョブ設定"
+msgstr "PNG エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_png.cpp:57
 msgid "PCB: Export PNG"
@@ -10362,7 +10352,7 @@ msgstr "位置データとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:129
 msgid "Export Position Data Job Settings"
-msgstr "位置データのエクスポートジョブ設定"
+msgstr "位置データ エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_pos.cpp:147
 msgid "PCB: Export Position Data"
@@ -10374,26 +10364,23 @@ msgstr "PostScriptとしてエクスポート"
 
 #: common/jobs/job_export_pcb_ps.cpp:64 common/jobs/job_export_sch_plot.cpp:182
 msgid "Export Postscript Job Settings"
-msgstr "Postscriptのエクスポートジョブ設定"
+msgstr "Postscript エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_ps.cpp:68
 msgid "PCB: Export Postscript"
 msgstr "PCB: PostScript としてエクスポート"
 
 #: common/jobs/job_export_pcb_specctra_dsn.cpp:32
-#, fuzzy
 msgid "Export Specctra DSN File"
-msgstr "Specctra DSN ファイル"
+msgstr "Specctra DSN ファイルとしてエクスポート"
 
 #: common/jobs/job_export_pcb_specctra_dsn.cpp:38
-#, fuzzy
 msgid "Export Specctra DSN Job Settings"
-msgstr "Specctra DSN 配線情報ファイル (*.dsn) へエクスポート"
+msgstr "Specctra DSN エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_specctra_dsn.cpp:42
-#, fuzzy
 msgid "PCB: Export Specctra DSN"
-msgstr "Specctra DSN をエクスポート..."
+msgstr "PCB:Specctra DSN としてエクスポート"
 
 #: common/jobs/job_export_pcb_stackup.cpp:66
 msgid "Export board stackup table"
@@ -10401,11 +10388,11 @@ msgstr "基板積層構造テーブルをエクスポート"
 
 #: common/jobs/job_export_pcb_stackup.cpp:72
 msgid "Export Board Stackup Job Settings"
-msgstr "基板積層構造のエクスポートジョブ設定"
+msgstr "基板積層構造 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_stackup.cpp:91
 msgid "PCB: Export Stackup Table"
-msgstr "PCB:積層構造テーブルをエクスポート"
+msgstr "PCB:積層構造テーブル としてエクスポート"
 
 #: common/jobs/job_export_pcb_stats.cpp:62
 msgid "Export board statistics"
@@ -10413,7 +10400,7 @@ msgstr "基板統計をエクスポート"
 
 #: common/jobs/job_export_pcb_stats.cpp:68
 msgid "Export Board Statistics Job Settings"
-msgstr "基板統計のエクスポートジョブ設定"
+msgstr "基板統計 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_stats.cpp:89
 msgid "PCB: Export Board Statistics"
@@ -10427,7 +10414,7 @@ msgstr "SVGとしてエクスポート"
 #: common/jobs/job_export_pcb_svg.cpp:55
 #: common/jobs/job_export_sch_plot.cpp:163
 msgid "Export SVG Job Settings"
-msgstr "SVGのエクスポートジョブ設定"
+msgstr "SVG エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_svg.cpp:59
 msgid "PCB: Export SVG"
@@ -10440,7 +10427,7 @@ msgstr "ネットリスト%sをエクスポート"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Export Netlist Job Settings"
-msgstr "ネットリストのエクスポートジョブ設定"
+msgstr "ネットリスト エクスポートのジョブ設定"
 
 #: common/jobs/job_export_sch_netlist.cpp:94
 msgid "Schematic: Export Netlist"
@@ -11049,14 +11036,12 @@ msgid "Over-constrained tint"
 msgstr "過剰拘束の色"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "Router clearance shadow"
-msgstr "ゾーン クリアランス: %s."
+msgstr "ルータークリアランスの影"
 
 #: common/layer_id.cpp:165
-#, fuzzy
 msgid "Router collision marker"
-msgstr "ネット衝突マーカー幅:"
+msgstr "ルーター衝突マーカー"
 
 #: common/layer_id.cpp:166
 msgid "Board outline area"
@@ -11232,9 +11217,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf と '%s' との間で型が不整合です"
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Edit library settings"
-msgstr "設定の編集"
+msgstr "ライブラリ設定の編集"
 
 #: common/libraries/lib_table_grid_data_model.cpp:126
 msgid "Open library table"
@@ -11762,21 +11746,18 @@ msgstr "Zip アーカイブ '%s' を作成しました (%s 未圧縮, %s 圧縮�
 #: common/project/project_file_downgrade.cpp:713
 #: common/project/project_file_downgrade.cpp:916
 #: common/project/project_file_downgrade.cpp:930
-#, fuzzy
 msgid "The target cannot represent this exclusion. It is removed."
-msgstr "このシートには削除するための参照されていないピンはありません。"
+msgstr "対象はこの除外を表現できませんので、削除しました。"
 
 #: common/project/project_file_downgrade.cpp:782
-#, fuzzy
 msgid "BOM field filters"
-msgstr "部品表(BOM)フィールド"
+msgstr "部品表(BOM)フィールド フィルター"
 
 #: common/project/project_file_downgrade.cpp:783
 msgid "The target can only filter references. The field filter is removed."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:796
-#, fuzzy
 msgid "BOM byte order marks"
 msgstr "UTF-8のBOMを含める"
 
@@ -11793,9 +11774,8 @@ msgid "The target cannot retain the selected output sections or naming rules."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:866
-#, fuzzy
 msgid "IDF output customization"
-msgstr "フットプリントの関連付け"
+msgstr "IDF出力のカスタマイズ"
 
 #: common/project/project_file_downgrade.cpp:867
 msgid "The target cannot retain the selected IDF export settings."
@@ -11810,31 +11790,27 @@ msgid "The target cannot retain the PCB BOM export settings."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:940
-#, fuzzy
 msgid "Microvia stack presets"
-msgstr "新しいスタック型マイクロビア プリセット"
+msgstr "スタック型マイクロビア プリセット"
 
 #: common/project/project_file_downgrade.cpp:940
 #: common/project/project_file_downgrade.cpp:1019
 #: common/project/project_file_downgrade.cpp:1032
 #: common/project/project_file_downgrade.cpp:1138
-#, fuzzy
 msgid "Removed from the project file."
-msgstr "表面のリファレンス接頭辞を削除"
+msgstr "プロジェクト ファイルから削除しました。"
 
 #: common/project/project_file_downgrade.cpp:954
-#, fuzzy
 msgid "Teardrop enable defaults"
-msgstr "ティアドロップのデフォルト"
+msgstr "ティアドロップをデフォルトで有効化"
 
 #: common/project/project_file_downgrade.cpp:955
 msgid "The target cannot retain enabled teardrop defaults."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:975
-#, fuzzy
 msgid "Newer project settings schema"
-msgstr "この回路図向けに新規プロジェクトを作成"
+msgstr "新規プロジェクトの設定スキーマ"
 
 #: common/project/project_file_downgrade.cpp:976
 #, c-format
@@ -11842,83 +11818,71 @@ msgid "The %s schema is newer than the exporter has reviewed."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:986
-#, fuzzy
 msgid "net settings"
-msgstr "設定の編集"
+msgstr "ネット設定"
 
 #: common/project/project_file_downgrade.cpp:989
-#, fuzzy
 msgid "tuning profiles"
-msgstr "等長配線の調整プロファイル '%s'"
+msgstr "等長配線の調整プロファイル"
 
 #: common/project/project_file_downgrade.cpp:992
-#, fuzzy
 msgid "component class settings"
-msgstr "コンポーネントクラス"
+msgstr "コンポーネントクラス設定"
 
 #: common/project/project_file_downgrade.cpp:995
-#, fuzzy
 msgid "ERC settings"
-msgstr "設定の編集"
+msgstr "ERC設定"
 
 #: common/project/project_file_downgrade.cpp:998
-#, fuzzy
 msgid "board design settings"
-msgstr "変換の設定:"
+msgstr "基板デザイン設定"
 
 #: common/project/project_file_downgrade.cpp:1018
-#, fuzzy
 msgid "Net chain netclass assignments"
-msgstr "ネットクラスの割り当て"
+msgstr "ネット チェーンのネットクラス割り当て"
 
 #: common/project/project_file_downgrade.cpp:1032
-#, fuzzy
 msgid "Net chain classes"
 msgstr "ネット チェーン クラス"
 
 #: common/project/project_file_downgrade.cpp:1086
-#, fuzzy
 msgid "Tuning profile frequencies"
-msgstr "等長配線の調整プロファイル配線形状"
+msgstr "等長配線の調整プロファイル 周波数"
 
 #: common/project/project_file_downgrade.cpp:1087
 msgid "The target uses its default calculation frequency."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:1093
-#, fuzzy
 msgid "Tuning profile solder mask modelling"
-msgstr "等長配線の調整プロファイルには名前を付ける必要があります"
+msgstr "等長配線の調整プロファイルのハンダマスク モデリング"
 
 #: common/project/project_file_downgrade.cpp:1094
-#, fuzzy
 msgid "The target cannot include solder mask in the calculation."
-msgstr "ライブラリは現在の設定に含まれていません。"
+msgstr "計算対象にハンダマスクを含めることはできません。"
 
 #: common/project/project_file_downgrade.cpp:1104
-#, fuzzy
 msgid "Net chain bridge propagation delay"
-msgstr "ネット チェーンブリッジ伝播"
+msgstr "ネット チェーンブリッジ伝播遅延"
 
 #: common/project/project_file_downgrade.cpp:1105
 msgid "The target cannot model delay across net chain bridges."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:1119
-#, fuzzy
 msgid "Time-domain tuning profiles"
-msgstr "等長配線の調整プロファイル がありません"
+msgstr "時間領域の等長配線の調整プロファイル"
 
 #: common/project/project_file_downgrade.cpp:1120
-#, fuzzy
 msgid ""
 "Removed saved profiles or netclass profile selections from the project file."
-msgstr "このトップ レベル シートをプロジェクトから削除"
+msgstr ""
+"プロジェクト ファイルから保存されたプロファイルまたはネットクラス "
+"プロファイル選択を削除しました。"
 
 #: common/project/project_file_downgrade.cpp:1137
-#, fuzzy
 msgid "Component class assignment rules"
-msgstr "コンポーネントクラスの割り当てルールを読み込めませんでした"
+msgstr "コンポーネントクラスの割り当てルール"
 
 #: common/properties/pg_editors.cpp:642
 #: common/widgets/grid_text_button_helpers.cpp:301
@@ -13719,18 +13683,18 @@ msgid "Close All Tabs"
 msgstr "すべてのタブを閉じる"
 
 #: common/widgets/field_warning_icon.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid " (%zu times)"
-msgstr " (%zu 個変換)"
+msgstr " (%zu 秒)"
 
 #: common/widgets/field_warning_icon.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "... and %zu more"
 msgstr ""
 "\n"
-"... 並びに %zu 個のファイルたち\n"
+"...そして %zu 個以上"
 
 #: common/widgets/filter_combobox.cpp:156
 #: eeschema/dialogs/panel_footprint_filters.cpp:554
@@ -13981,14 +13945,14 @@ msgid "Restore Defaults"
 msgstr "デフォルト値を復元"
 
 #: common/widgets/widget_hotkey_list.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'.  Both bindings will be "
 "kept, but only one will run per key press.  Continue?"
 msgstr ""
-"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。 両方のキーバイ"
-"ンドは保持されますが、 キーを押すたびに実行されるのは片方のみです。 続行しま"
-"すか?"
+"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。 両方の"
+"キーバインドは保持されますが、 キーを押すたびに実行されるのは片方のみです。 "
+"続行しますか?"
 
 #: common/widgets/widget_hotkey_list.cpp:526
 msgid "Hotkey conflict"
@@ -14167,9 +14131,8 @@ msgid "DipTrace files"
 msgstr "DipTrace ファイル"
 
 #: common/wildcards_and_files_ext.cpp:368
-#, fuzzy
 msgid "Easy-PC / DesignSpark PCB files"
-msgstr "Altium Designer 基板ファイル"
+msgstr "Easy-PC / DesignSpark 基板ファイル"
 
 #: common/wildcards_and_files_ext.cpp:374
 #: eeschema/sch_io/orcad/sch_io_orcad.h:73
@@ -14280,9 +14243,8 @@ msgid "SPICE netlist file"
 msgstr "SPICE ネットリスト ファイル"
 
 #: common/wildcards_and_files_ext.cpp:539
-#, fuzzy
 msgid "SPICE subcircuit model file"
-msgstr "SPICE モデルの問題"
+msgstr "SPICE subcircuit モデル ファイル"
 
 #: common/wildcards_and_files_ext.cpp:545
 msgid "CadStar netlist file"
@@ -15730,19 +15692,16 @@ msgid "Re-detect potential net chains from the schematic"
 msgstr "回路図から可能性のあるネット チェーンを再検出する"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:103
-#, fuzzy
 msgid "(no nickname)"
-msgstr "プラグイン ニックネーム:"
+msgstr "(ニックネーム無し)"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:114
 msgid "The server rejected the user name or password."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "Could not reach the database server; check that it is running."
-msgstr ""
-"ライブラリー ファイルを作成できません。書き込み権限を確認してください。"
+msgstr "データベース サーバーに到達できませんでした。動作しているか確認してください。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:120
 #, c-format
@@ -15760,14 +15719,12 @@ msgid "There is no ODBC data source named '%s'."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:129
-#, fuzzy
 msgid "The ODBC driver for this data source is not installed."
-msgstr "この言語向けのKiCadの言語ファイルがインストールされていません。"
+msgstr "このデータ ソースのODBCドライバーがインストールされていません。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:135
-#, fuzzy
 msgid "Could not connect to the database."
-msgstr "リモート '%s' に接続できません"
+msgstr "データベースに接続できません。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:152
 #: eeschema/lib_symbol.cpp:3291 eeschema/symbol_editor/symbol_editor.cpp:1859
@@ -15781,17 +15738,14 @@ msgstr "データ シート"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:219
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:220
-#, fuzzy
 msgid "key"
-msgstr "キー"
+msgstr "key"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:220
-#, fuzzy
 msgid "id"
-msgstr "中点"
+msgstr "id"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:222
-#, fuzzy
 msgid "symbols"
 msgstr "シンボル"
 
@@ -15800,9 +15754,8 @@ msgid "symbol"
 msgstr "シンボル"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:222
-#, fuzzy
 msgid "sym"
-msgstr "シンボル"
+msgstr "SYM"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:224
 #, fuzzy
@@ -15826,9 +15779,8 @@ msgid "pin map"
 msgstr "ピン マップを追加"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:226
-#, fuzzy
 msgid "pins"
-msgstr "ピンがありません！"
+msgstr "ピン"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:228
 #, fuzzy
@@ -15894,9 +15846,8 @@ msgid "${CWD} is replaced by %s"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:330
-#, fuzzy
 msgid "This file could not be read and is shown read-only."
-msgstr "OrCADファイルを読み取ることができませんでした。"
+msgstr "このファイルは読み取ることができず、 そして読み取り専用と表示されています。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:334
 #, fuzzy
@@ -15946,9 +15897,9 @@ msgid "New Database Library"
 msgstr "データベースライブラリの設定"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Database Library Settings (%s)"
-msgstr "データベースライブラリの設定"
+msgstr "データベースライブラリの設定 (%s)"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:516
 msgid ""
@@ -15979,9 +15930,9 @@ msgid "Library '%s' needs a key column."
 msgstr "ライブラリ '%s' が見つかりません。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "More than one library is named '%s'."
-msgstr "フットプリント ライブラリ '%s' を '%s' へ保存しました。"
+msgstr "'%s' という名前のライブラリが複数あります。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:636
 #: eeschema/sch_io/database/sch_io_database.h:61
@@ -15994,9 +15945,9 @@ msgid "Save Database Library"
 msgstr "ライブラリーに保存"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "Overwrite '%s'?"
-msgstr "上書き"
+msgstr "'%s' を上書きします?"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:671
 msgid ""
@@ -16037,9 +15988,8 @@ msgid "Data source changed; click Test Connection to apply it."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:889
-#, fuzzy
 msgid "Connection attempt stopped."
-msgstr "接続名"
+msgstr "接続の試みが止められた。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:941
 #, fuzzy
@@ -16048,23 +15998,22 @@ msgstr "アップストリーム ブランチが設定されていません。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:951
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2087
-#, fuzzy
 msgid "Connecting..."
-msgstr "接続"
+msgstr "接続中..."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Connecting to %s..."
-msgstr "%s ピン %s を %s に接続します。"
+msgstr "%s に接続中..."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:954
 msgid "Stop"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Connected; %zu tables and views found."
-msgstr "入れ子になったテーブル '%s' が見つかりません。"
+msgstr "接続しました; %zu のテーブルとビューが見つかりました。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1724
 msgid "<key>"
@@ -40373,11 +40322,8 @@ msgstr ""
 "コミットする前に保存しますか？"
 
 #: kicad/tools/kicad_manager_control.cpp:648
-#, fuzzy
 msgid "The schematic was not saved. Nothing was exported."
-msgstr ""
-"\n"
-"回路図は更新されません。"
+msgstr "回路図は保存されませんでした。 何もエクスポートされませんでした。"
 
 #: kicad/tools/kicad_manager_control.cpp:661
 msgid "The board was not saved. Nothing was exported."
