@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+
 #include "drc_re_bitmap_overlay_panel.h"
 #include "drc_re_overlay_field.h"
 
@@ -34,9 +36,14 @@ DRC_RE_BITMAP_OVERLAY_PANEL::DRC_RE_BITMAP_OVERLAY_PANEL( wxWindow* aParent, wxW
         m_bitmapId( BITMAPS::INVALID_BITMAP ),
         m_logicalBitmapSize( 0, 0 )
 {
-    // Must set background style BEFORE creating the window
-    SetBackgroundStyle( wxBG_STYLE_PAINT );
+    // The illustration has no background of its own. Letting whatever holds it draw through
+    // keeps it the same shade as the rest of the page, which matters where the platform
+    // composites the window background rather than filling it with a flat colour.
+    SetBackgroundStyle( wxBG_STYLE_TRANSPARENT );
     Create( aParent, aId );
+
+    if( !IsTransparentBackgroundSupported() )
+        SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     Bind( wxEVT_PAINT, &DRC_RE_BITMAP_OVERLAY_PANEL::OnPaint, this );
     Bind( wxEVT_DPI_CHANGED, &DRC_RE_BITMAP_OVERLAY_PANEL::OnDPIChanged, this );
@@ -51,10 +58,13 @@ DRC_RE_BITMAP_OVERLAY_PANEL::~DRC_RE_BITMAP_OVERLAY_PANEL()
 
 void DRC_RE_BITMAP_OVERLAY_PANEL::OnPaint( wxPaintEvent& aEvent )
 {
-    wxAutoBufferedPaintDC dc( this );
+    wxPaintDC dc( this );
 
-    dc.SetBackground( wxBrush( GetBackgroundColour() ) );
-    dc.Clear();
+    if( GetBackgroundStyle() == wxBG_STYLE_PAINT )
+    {
+        dc.SetBackground( wxBrush( pageBackground() ) );
+        dc.Clear();
+    }
 
     if( !m_bitmap.IsOk() )
         return;
@@ -69,6 +79,18 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::OnDPIChanged( wxDPIChangedEvent& aEvent )
     PositionFields();
     Refresh();
     aEvent.Skip();
+}
+
+
+wxColour DRC_RE_BITMAP_OVERLAY_PANEL::pageBackground() const
+{
+    // The illustration sits on the page, so it takes the colour of whatever holds it rather
+    // than the default panel one, which is a shade darker on some themes. The colour is read
+    // when painting because a parent inherits its own only once the hierarchy is built.
+    if( GetParent() )
+        return GetParent()->GetBackgroundColour();
+
+    return GetBackgroundColour();
 }
 
 
@@ -141,7 +163,17 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
             continue;
 
         int heightLogical = ctrl->GetBestSize().GetHeight();
-        int widthLogical = FromDIP( pos.xEnd - pos.xStart );
+
+        // The slots were drawn for millimetre values. Inch values need more room, so a field
+        // grows up to where its neighbour on the same line begins.
+        int widthLogical = std::max( FromDIP( pos.xEnd - pos.xStart ), FromDIP( 96 ) );
+        int roomLogical = roomBeforeNextField( field.get() );
+
+        if( roomLogical > 0 )
+            widthLogical = std::min( widthLogical, roomLogical );
+
+        widthLogical = std::max( widthLogical, FromDIP( pos.xEnd - pos.xStart ) );
+
         int xLogical = FromDIP( pos.xStart );
         int yLogical = FromDIP( pos.yCenter ) - heightLogical / 2;
 
@@ -155,6 +187,38 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
         if( field->HasPrefixLabel() )
             PositionPrefixLabel( field.get() );
     }
+}
+
+
+int DRC_RE_BITMAP_OVERLAY_PANEL::roomBeforeNextField( const DRC_RE_OVERLAY_FIELD* aField ) const
+{
+    const DRC_RE_FIELD_POSITION& pos = aField->GetPosition();
+    int                          room = 0;
+
+    // Anything drawn between this field and the next one has to keep its place: this field's
+    // own unit label on the right, and the next field's prefix.
+    int reserved = FromDIP( 4 );
+
+    if( aField->HasLabel() && pos.labelPosition == LABEL_POSITION::RIGHT )
+        reserved += aField->GetLabel()->GetBestSize().GetWidth() + FromDIP( 4 );
+
+    for( const auto& other : m_fields )
+    {
+        const DRC_RE_FIELD_POSITION& otherPos = other->GetPosition();
+
+        if( other.get() == aField || otherPos.yCenter != pos.yCenter || otherPos.xStart <= pos.xStart )
+            continue;
+
+        int limit = FromDIP( otherPos.xStart - pos.xStart ) - reserved;
+
+        if( other->HasPrefixLabel() )
+            limit -= other->GetPrefixLabel()->GetBestSize().GetWidth() + FromDIP( 4 );
+
+        if( room == 0 || limit < room )
+            room = limit;
+    }
+
+    return room;
 }
 
 

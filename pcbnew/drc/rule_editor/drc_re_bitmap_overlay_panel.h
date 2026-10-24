@@ -156,6 +156,10 @@ private:
     void OnPaint( wxPaintEvent& aEvent );
     void OnDPIChanged( wxDPIChangedEvent& aEvent );
     void OnThemeChange( wxSysColourChangedEvent& aEvent );
+
+    wxColour pageBackground() const;
+
+    int  roomBeforeNextField( const DRC_RE_OVERLAY_FIELD* aField ) const;
     void OnFieldFocus( wxFocusEvent& aEvent );
     void OnFieldBlur( wxFocusEvent& aEvent );
 
