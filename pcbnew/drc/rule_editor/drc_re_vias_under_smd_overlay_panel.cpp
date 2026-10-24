@@ -21,7 +21,6 @@
 #include "drc_re_vias_under_smd_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
-#include <dialogs/rule_editor_dialog_base.h>
 #include <wx/checkbox.h>
 
 
@@ -51,18 +50,6 @@ DRC_RE_VIAS_UNDER_SMD_OVERLAY_PANEL::DRC_RE_VIAS_UNDER_SMD_OVERLAY_PANEL(
 
     field = AddCheckbox( wxS( "buried_vias" ), positions[3] );
     m_buriedViasCheckbox = static_cast<wxCheckBox*>( field->GetControl() );
-
-    auto notifyModified = [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    };
-
-    m_throughViasCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_microViasCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_blindViasCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-    m_buriedViasCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
 
     PositionFields();
     TransferDataToWindow();

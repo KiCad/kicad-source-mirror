@@ -369,7 +369,6 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_panel_matcher.cpp
     drc/rule_editor/drc_re_rule_loader.cpp
     drc/rule_editor/drc_re_rule_saver.cpp
-    drc/rule_editor/dialog_drc_rule_editor.cpp
     drc/rule_editor/drc_rule_document.cpp
     drc/rule_editor/panel_drc_rule_editor_base.cpp
     drc/rule_editor/panel_drc_rule_editor.cpp
@@ -390,8 +389,6 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_condition_row_panel.cpp
     drc/rule_editor/drc_re_condition_group_panel.cpp
     drc/rule_editor/drc_re_custom_rule_panel.cpp
-    drc/rule_editor/panel_drc_group_header_base.cpp
-    drc/rule_editor/panel_drc_group_header.cpp
     drc/rule_editor/drc_re_validator_checkbox_list.cpp
     drc/rule_editor/drc_re_validator_combo_ctrl.cpp
     drc/rule_editor/drc_re_validator_min_max_ctrl.cpp

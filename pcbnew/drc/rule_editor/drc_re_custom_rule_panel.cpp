@@ -26,7 +26,6 @@
 #include <ki_exception.h>
 #include <reporter.h>
 #include <scintilla_tricks.h>
-#include <dialogs/rule_editor_dialog_base.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/stc/stc.h>
@@ -49,15 +48,6 @@ DRC_RE_CUSTOM_RULE_PANEL::DRC_RE_CUSTOM_RULE_PANEL(
     sizer->Add( m_checkSyntaxBtn, 0, wxALIGN_RIGHT | wxRIGHT | wxBOTTOM, 5 );
 
     SetSizer( sizer );
-
-    m_textCtrl->Bind( wxEVT_STC_CHANGE,
-                      [this]( wxStyledTextEvent& )
-                      {
-                          RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-
-                          if( dlg )
-                              dlg->SetModified();
-                      } );
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>(
             m_textCtrl, wxT( "()" ), false,

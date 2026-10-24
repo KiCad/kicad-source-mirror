@@ -21,7 +21,6 @@
 #include "drc_re_bool_input_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
-#include <dialogs/rule_editor_dialog_base.h>
 #include <wx/checkbox.h>
 
 
@@ -37,13 +36,6 @@ DRC_RE_BOOL_INPUT_OVERLAY_PANEL::DRC_RE_BOOL_INPUT_OVERLAY_PANEL(
 
     DRC_RE_OVERLAY_FIELD* field = AddCheckbox( wxS( "bool_input" ), positions[0] );
     m_boolInputCheckbox = static_cast<wxCheckBox*>( field->GetControl() );
-
-    m_boolInputCheckbox->Bind( wxEVT_CHECKBOX, [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    } );
 
     PositionFields();
     TransferDataToWindow();

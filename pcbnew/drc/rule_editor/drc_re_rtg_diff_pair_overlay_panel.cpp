@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/rule_editor_dialog_base.h>   
+#include "panel_drc_rule_editor.h"
 #include "drc_re_rtg_diff_pair_overlay_panel.h"
 #include "drc_re_rtg_diff_pair_constraint_data.h"
 #include "drc_rule_editor_utils.h"
@@ -83,24 +83,10 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
                                            maxUncoupledField->GetLabel(), false, false );
     maxUncoupledField->SetUnitBinder( m_maxUncoupledLengthBinder.get() );
 
-    auto notifyModified = [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    };
-
-    optWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    widthTolField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    optGapField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    gapTolField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxUncoupledField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->OnSave( aEvent );
+        if( PANEL_DRC_RULE_EDITOR* editor = PANEL_DRC_RULE_EDITOR::FindEditor( this ) )
+            editor->Save( aEvent );
     };
 
     optWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );

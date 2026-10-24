@@ -42,9 +42,7 @@ class PANEL_DRC_RULE_EDITOR : public PANEL_DRC_RULE_EDITOR_BASE,
                               public DRC_RULE_EDITOR_CONTENT_PANEL_BASE
 {
 public:
-    PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
-                           DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType,
-                           wxString* aConstraintTitle,
+    PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard, DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType,
                            std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> aConstraintData );
 
     ~PANEL_DRC_RULE_EDITOR() override;
@@ -62,16 +60,6 @@ public:
         m_callBackSave = aCallBackSave;
     }
 
-    void SetRemoveCallback( std::function<void( int aNodeId )> aCallBackRemove )
-    {
-        m_callBackRemove = aCallBackRemove;
-    }
-
-    void SetCloseCallback( std::function<void( int aNodeId )> aCallBackClose )
-    {
-        m_callBackClose = aCallBackClose;
-    }
-
     void SetRuleNameValidationCallback(
             std::function<bool( int aNodeId, const wxString& aRuleName )> aCallbackRuleNameValidation )
     {
@@ -83,7 +71,10 @@ public:
         m_callBackShowMatches = aCallBackShowMatches;
     }
 
-    void ResetShowMatchesButton();
+    /**
+     * The rule editor that hosts aChild, or nullptr when it is not inside one.
+     */
+    static PANEL_DRC_RULE_EDITOR* FindEditor( wxWindow* aChild );
 
     bool GetIsValidationSucceeded() { return m_validationSucceeded; }
 
@@ -97,8 +88,6 @@ public:
 
     void Save( wxCommandEvent& aEvent );
 
-    void Cancel( wxCommandEvent& aEvent );
-
 private:
     DRC_RULE_EDITOR_CONTENT_PANEL_BASE* getConstraintPanel( wxWindow* aParent,
         const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType );
@@ -107,26 +96,16 @@ private:
 
     void onFieldChanged( wxEvent& aEvent );
 
+    void clearMatchReport();
+
+    void relayoutHost();
+
     /**
      * Handles the save button click event, validating inputs and invoking the save callback if valid.
      *
      * @param aEvent The event triggered by the save button click.
      */
     void onSaveButtonClicked( wxCommandEvent& aEvent );
-
-    /**
-     * Handles the remove button click event, invoking the remove callback.
-     *
-     * @param aEvent The event triggered by the remove button click.
-     */
-    void onRemoveButtonClicked( wxCommandEvent& aEvent );
-
-    /**
-     * Handles the close button click event, invoking the close callback.
-     *
-     * @param aEvent The event triggered by the close button click.
-     */
-    void onCloseButtonClicked( wxCommandEvent& aEvent );
 
     /**
      * Handles character addition in the Scintilla text control, performing auto-complete and context-sensitive
@@ -175,10 +154,10 @@ private:
                             const wxString& aLayerSource = wxEmptyString );
 
     wxButton*         m_btnShowMatches;
+    wxStaticText*     m_matchReport;
     std::vector<int>  m_validLayers;
     LSEQ              m_layerList;
     BOARD*            m_board;
-    wxString*         m_constraintTitle;
     bool              m_validationSucceeded;
     bool              m_modified;
     wxString          m_validationMessage;
@@ -192,9 +171,7 @@ private:
     std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> m_constraintData;
     DRC_RE_CONDITION_GROUP_PANEL*                m_conditionGroupPanel;
 
-    std::function<void( int aNodeId )>                     m_callBackSave;
-    std::function<void( int aNodeId )>                     m_callBackRemove;
-    std::function<void( int aNodeId )>                     m_callBackClose;
+    std::function<void( int aNodeId )>                            m_callBackSave;
     std::function<bool( int aNodeId, const wxString& aRuleName )> m_callBackRuleNameValidation;
     std::function<int( int aNodeId )> m_callBackShowMatches;
 

@@ -29,7 +29,7 @@
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
-#include <dialogs/rule_editor_dialog_base.h>
+#include "panel_drc_rule_editor.h"
 
 DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL(
         wxWindow* aParent, DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA* aData, EDA_UNITS aUnits ) :
@@ -78,23 +78,10 @@ DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_MATCHED_LENGTH_DIFF_PAIR_O
     auto* withinDiffPairs = AddCheckbox( wxS( "within_diff_pairs" ), positions[3] );
     m_withinDiffPairsCheckbox = static_cast<wxCheckBox*>( withinDiffPairs->GetControl() );
 
-    auto notifyModified = [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    };
-
-    optLengthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    toleranceField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxSkewField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    m_withinDiffPairsCheckbox->Bind( wxEVT_CHECKBOX, notifyModified );
-
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->OnSave( aEvent );
+        if( PANEL_DRC_RULE_EDITOR* editor = PANEL_DRC_RULE_EDITOR::FindEditor( this ) )
+            editor->Save( aEvent );
     };
 
     optLengthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );

@@ -32,7 +32,6 @@
 
 class PCB_EDIT_FRAME;
 class DIALOG_DRC;
-class DIALOG_DRC_RULE_EDITOR;
 class DRC_ITEM;
 class WX_PROGRESS_REPORTER;
 class DRC_ENGINE;
@@ -74,12 +73,6 @@ public:
      */
     void DestroyDRCDialog();
 
-    void ShowDesignRuleEditorDialog( wxWindow* aParent );
-
-    int ShowDesignRuleEditorDialog( const TOOL_EVENT& aEvent );
-
-    void DestroyDesignRuleEditorDialog();
-
     std::shared_ptr<DRC_ENGINE> GetDRCEngine() { return m_drcEngine; }
 
     /**
@@ -118,7 +111,6 @@ private:
     PCB_EDIT_FRAME*             m_editFrame;
     BOARD*                      m_pcb;
     DIALOG_DRC*                 m_drcDialog;
-    DIALOG_DRC_RULE_EDITOR*     m_designRuleEditorDlg;
     bool                        m_drcRunning;
     std::shared_ptr<DRC_ENGINE> m_drcEngine;
 };

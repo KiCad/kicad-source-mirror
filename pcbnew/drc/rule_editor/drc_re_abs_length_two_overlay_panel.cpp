@@ -29,7 +29,7 @@
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
-#include <dialogs/rule_editor_dialog_base.h>
+#include "panel_drc_rule_editor.h"
 
 DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
         wxWindow* aParent, DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA* aData, EDA_UNITS aUnits ) :
@@ -68,21 +68,10 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
     toleranceField->SetUnitBinder( m_toleranceBinder.get() );
     toleranceField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    auto notifyModified = [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    };
-
-    optLengthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    toleranceField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->OnSave( aEvent );
+        if( PANEL_DRC_RULE_EDITOR* editor = PANEL_DRC_RULE_EDITOR::FindEditor( this ) )
+            editor->Save( aEvent );
     };
 
     optLengthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
@@ -95,13 +84,12 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
     m_timeDomainCheckbox->SetValue( m_data->IsTimeDomain() );
 
     m_timeDomainCheckbox->Bind( wxEVT_CHECKBOX,
-                                [this, notifyModified]( wxCommandEvent& aEvent )
+                                [this]( wxCommandEvent& aEvent )
                                 {
                                     TransferDataFromWindow();
                                     m_data->SetTimeDomain( m_timeDomainCheckbox->GetValue() );
                                     updateDomainUnits();
                                     TransferDataToWindow();
-                                    notifyModified( aEvent );
                                 } );
 
     SetMinSize( wxSize( GetMinSize().x, FromDIP( 190 ) ) );

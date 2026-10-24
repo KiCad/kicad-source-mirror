@@ -17,31 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "drc_rule_editor_tool.h"
+
 #include <pcb_edit_frame.h>
-#include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcb_tool_base.h>
-#include <tools/zone_filler_tool.h>
-#include <tools/pcb_selection_tool.h>
-#include <tools/drc_rule_editor_tool.h>
-#include <kiface_base.h>
-#include <board_commit.h>
-#include <board_design_settings.h>
-#include <progress_reporter.h>
-#include <drc/drc_engine.h>
-#include <drc/drc_item.h>
-#include <macros.h>
-#include <drc/rule_editor/dialog_drc_rule_editor.h>
 
 
 DRC_RULE_EDITOR_TOOL::DRC_RULE_EDITOR_TOOL() :
-        PCB_TOOL_BASE( "pcbnew.DRETool" ), m_editFrame( nullptr ), m_pcb( nullptr ),
-        m_drcRuleEditorDlg( nullptr )
-{
-}
-
-
-DRC_RULE_EDITOR_TOOL::~DRC_RULE_EDITOR_TOOL()
+        PCB_TOOL_BASE( "pcbnew.DRETool" ),
+        m_editFrame( nullptr )
 {
 }
 
@@ -49,108 +33,13 @@ DRC_RULE_EDITOR_TOOL::~DRC_RULE_EDITOR_TOOL()
 void DRC_RULE_EDITOR_TOOL::Reset( RESET_REASON aReason )
 {
     m_editFrame = getEditFrame<PCB_EDIT_FRAME>();
-
-    if( m_pcb != m_editFrame->GetBoard() )
-    {
-        if( m_drcRuleEditorDlg )
-            DestroyDRCRuleEditorDialog();
-
-        m_pcb = m_editFrame->GetBoard();
-        m_drcEngine = m_pcb->GetDesignSettings().m_DRCEngine;
-    }
-}
-
-
-bool DRC_RULE_EDITOR_TOOL::IsDRCRuleEditorDialogShown()
-{
-    if( m_drcRuleEditorDlg )
-        return m_drcRuleEditorDlg->IsShownOnScreen();
-
-    return false;
-}
-
-
-void DRC_RULE_EDITOR_TOOL::updatePointers()
-{
-    // update my pointers, m_editFrame is the only unchangeable one
-    m_pcb = m_editFrame->GetBoard();
-
-    if( m_drcRuleEditorDlg )
-        m_drcRuleEditorDlg->UpdateData();
-}
-
-
-void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
-{
-    if( !m_editFrame->GetBoard() )
-        return;
-
-    bool show_dlg_modal = true;
-
-    // the dialog needs a parent frame. if it is not specified, this is the PCB editor frame
-    // specified in DRC_RULE_EDITOR_TOOL class.
-    if( !aParent )
-    {
-        // if any parent is specified, the dialog is modal.
-        // if this is the default PCB editor frame, it is not modal
-        show_dlg_modal = false;
-        aParent = m_editFrame;
-    }
-
-    Activate();
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-
-    // Check if the rules file changed on disk since the dialog was last loaded
-    if( m_drcRuleEditorDlg )
-    {
-        wxFileName rulesFile( m_editFrame->GetBoard()->GetDesignRulesPath() );
-        wxDateTime currentModTime;
-
-        if( rulesFile.FileExists() )
-            currentModTime = rulesFile.GetModificationTime();
-
-        if( !currentModTime.IsValid() || currentModTime != m_lastRulesFileModTime )
-            DestroyDRCRuleEditorDialog();
-    }
-
-    if( !m_drcRuleEditorDlg )
-    {
-        m_drcRuleEditorDlg = new DIALOG_DRC_RULE_EDITOR( m_editFrame, aParent );
-        updatePointers();
-
-        wxFileName rulesFile( m_editFrame->GetBoard()->GetDesignRulesPath() );
-
-        if( rulesFile.FileExists() )
-            m_lastRulesFileModTime = rulesFile.GetModificationTime();
-
-        if( show_dlg_modal )
-            m_drcRuleEditorDlg->ShowModal();
-        else
-            m_drcRuleEditorDlg->Show( true );
-    }
-    else
-    {
-        // File unchanged, bring existing dialog to front
-        m_drcRuleEditorDlg->Show( true );
-        m_drcRuleEditorDlg->Raise();
-    }
 }
 
 
 int DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( const TOOL_EVENT& aEvent )
 {
-    ShowDRCRuleEditorDialog( nullptr );
+    m_editFrame->ShowBoardSetupDialog( _( "Clearance" ) );
     return 0;
-}
-
-
-void DRC_RULE_EDITOR_TOOL::DestroyDRCRuleEditorDialog()
-{
-    if( m_drcRuleEditorDlg )
-    {
-        m_drcRuleEditorDlg->Destroy();
-        m_drcRuleEditorDlg = nullptr;
-    }
 }
 
 

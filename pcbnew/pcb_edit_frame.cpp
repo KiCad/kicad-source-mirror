@@ -161,7 +161,6 @@
 #include <footprint_viewer_frame.h>
 #include <footprint_chooser_frame.h>
 #include <toolbars_pcb_editor.h>
-#include <drc/rule_editor/dialog_drc_rule_editor.h>
 
 #include <richio.h>
 
@@ -826,11 +825,6 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
     if( drcDlg )
         drcDlg->Close( true );
-
-    wxWindow* ruleEditorDlg = wxWindow::FindWindowByName( DIALOG_DRC_RULE_EDITOR_WINDOW_NAME );
-
-    if( ruleEditorDlg )
-        ruleEditorDlg->Close( true );
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -1780,11 +1774,6 @@ void PCB_EDIT_FRAME::doCloseWindow()
 
     if( drcDlg )
         drcDlg->Close( true );
-
-    wxWindow* ruleEditorDlg = wxWindow::FindWindowByName( DIALOG_DRC_RULE_EDITOR_WINDOW_NAME );
-
-    if( ruleEditorDlg )
-        ruleEditorDlg->Close( true );
 
     if( m_findDialog )
     {

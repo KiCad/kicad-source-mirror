@@ -37,7 +37,6 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <macros.h>
 #include <dialog_exchange_footprints.h>
-#include <drc/rule_editor/dialog_drc_rule_editor.h>
 
 
 DRC_TOOL::DRC_TOOL() :
@@ -45,7 +44,6 @@ DRC_TOOL::DRC_TOOL() :
         m_editFrame( nullptr ),
         m_pcb( nullptr ),
         m_drcDialog( nullptr ),
-        m_designRuleEditorDlg( nullptr ),
         m_drcRunning( false )
 {
 }
@@ -398,58 +396,6 @@ void DRC_TOOL::FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
                 || aDRCItem->GetErrorCode() == DRCE_DANGLING_VIA )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::cleanupTracksAndVias );
-    }
-}
-
-
-void DRC_TOOL::ShowDesignRuleEditorDialog( wxWindow* aParent )
-{
-    bool show_dlg_modal = true;
-
-    // the dialog needs a parent frame. if it is not specified, this is the PCB editor frame
-    // specified in DRC_TOOL class.
-    if( !aParent )
-    {
-        // if any parent is specified, the dialog is modal.
-        // if this is the default PCB editor frame, it is not modal
-        show_dlg_modal = false;
-        aParent = m_editFrame;
-    }
-
-    Activate();
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-
-    if( !m_designRuleEditorDlg )
-    {
-        m_designRuleEditorDlg = new DIALOG_DRC_RULE_EDITOR( m_editFrame, aParent );
-        updatePointers( false );
-
-        if( show_dlg_modal )
-            m_designRuleEditorDlg->ShowModal();
-        else
-            m_designRuleEditorDlg->Show( true );
-    }
-    else // The dialog is just not visible (because the user has double clicked on an error item)
-    {
-        updatePointers( false );
-        m_designRuleEditorDlg->Show( true );
-    }
-}
-
-
-int DRC_TOOL::ShowDesignRuleEditorDialog( const TOOL_EVENT& aEvent )
-{
-    ShowDesignRuleEditorDialog( nullptr );
-    return 0;
-}
-
-
-void DRC_TOOL::DestroyDesignRuleEditorDialog()
-{
-    if( m_designRuleEditorDlg )
-    {
-        m_designRuleEditorDlg->Destroy();
-        m_designRuleEditorDlg = nullptr;
     }
 }
 

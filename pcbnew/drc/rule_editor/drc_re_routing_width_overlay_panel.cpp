@@ -28,7 +28,7 @@
 
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
-#include <dialogs/rule_editor_dialog_base.h>
+#include "panel_drc_rule_editor.h"
 
 
 DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
@@ -54,7 +54,6 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
         }
     }
 
-
     // Create opt width field
     auto* optWidthField = AddField<wxTextCtrl>( wxS( "opt_width" ), positions[0], wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_optWidthBinder =
@@ -72,21 +71,10 @@ DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL::DRC_RE_ROUTING_WIDTH_OVERLAY_PANEL(
     widthTolField->SetUnitBinder( m_widthToleranceBinder.get() );
     widthTolField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    auto notifyModified = [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    };
-
-    optWidthField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    widthTolField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-
     auto notifySave = [this]( wxCommandEvent& aEvent )
     {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->OnSave( aEvent );
+        if( PANEL_DRC_RULE_EDITOR* editor = PANEL_DRC_RULE_EDITOR::FindEditor( this ) )
+            editor->Save( aEvent );
     };
 
     optWidthField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );

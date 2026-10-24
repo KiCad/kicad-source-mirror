@@ -543,9 +543,7 @@ void CONSTRAINT_RULES_LIST::buildEditor( const std::shared_ptr<DRC_RE_BASE_CONST
     m_editingData = aData;
     m_editingType = aPanelType;
 
-    wxString title = aPanelType == CUSTOM_RULE ? _( "Custom rule" ) : m_title;
-
-    m_editor = new PANEL_DRC_RULE_EDITOR( m_editorHost, m_frame->GetBoard(), aPanelType, &title, aData );
+    m_editor = new PANEL_DRC_RULE_EDITOR( m_editorHost, m_frame->GetBoard(), aPanelType, aData );
     m_editorSizer->Insert( 0, m_editor, 0, wxEXPAND | wxRIGHT, 8 );
     m_editor->TransferDataToWindow();
 
