@@ -22,6 +22,7 @@
 #include <board.h>
 #include <kiplatform/io.h>
 #include <lset.h>
+#include <tuple>
 #include <string_utils.h>
 
 #include <drc_rules_lexer.h>
@@ -45,6 +46,16 @@ wxString formatLayerClause( const wxString& aLayerSource )
     return wxString::Format( wxS( "(layer \"%s\")" ), EscapeString( aLayerSource, CTX_QUOTED_STR ) );
 }
 
+
+std::pair<wxString, wxString> splitLeadingTrivia( const wxString& aTrivia )
+{
+    size_t blank = aTrivia.rfind( wxS( "\n\n" ) );
+
+    if( blank == wxString::npos )
+        return { wxEmptyString, aTrivia };
+
+    return { aTrivia.Left( blank + 2 ), aTrivia.Mid( blank + 2 ) };
+}
 }
 
 
@@ -74,9 +85,8 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
     if( result.IsEmpty() )
         result = wxS( "(version 2)" );
 
-    // Group entries by (sourceRule, ruleName, condition, layerSource) for merging same-rule constraints.
-    // Including the layer source prevents rules with different layer scopes from being
-    // incorrectly merged (e.g. separate "outer" and "inner" rules must remain distinct).
+    // Constraints the loader split out of one rule share its group and go back into one rule. The
+    // layer source keeps "outer" and "inner" scopes of one name apart.
     using GroupKey = std::tuple<int, wxString, wxString, wxString>;
 
     std::vector<std::pair<GroupKey, std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>>>
@@ -85,7 +95,7 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 
     for( const DRC_RE_LOADED_PANEL_ENTRY& entry : aEntries )
     {
-        auto key = std::make_tuple( entry.sourceRule, entry.ruleName, entry.condition, entry.layerSource );
+        auto key = std::make_tuple( entry.ruleGroupId, entry.ruleName, entry.condition, entry.layerSource );
         auto it = groupIndex.find( key );
 
         if( it == groupIndex.end() )
@@ -99,14 +109,61 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
         }
     }
 
+    size_t                triviaCount = aTrivia.leadingTrivia.size();
+    std::vector<wxString> floating( triviaCount );
+    std::vector<wxString> attached( triviaCount );
+    std::vector<bool>     present( triviaCount, false );
+
+    for( size_t i = 0; i < triviaCount; ++i )
+        std::tie( floating[i], attached[i] ) = splitLeadingTrivia( aTrivia.leadingTrivia[i] );
+
+    for( const auto& [key, entries] : groupedEntries )
+    {
+        int source = entries[0]->sourceRule;
+
+        if( source >= 0 && static_cast<size_t>( source ) < triviaCount )
+            present[source] = true;
+    }
+
     size_t nextTrivia = 0;
+
+    auto emitUpTo = [&]( size_t aLast )
+    {
+        while( nextTrivia <= aLast )
+        {
+            result += floating[nextTrivia];
+
+            if( !present[nextTrivia] )
+                result += attached[nextTrivia];
+
+            nextTrivia++;
+        }
+    };
 
     // Generate rule text for each group
     for( const auto& [key, entries] : groupedEntries )
     {
         wxString ruleText;
 
-        if( entries.size() == 1 )
+        // An untouched rule goes back exactly as it was read.
+        bool     anyEdited = false;
+        wxString originalText;
+
+        for( const DRC_RE_LOADED_PANEL_ENTRY* entry : entries )
+        {
+            if( entry->wasEdited )
+                anyEdited = true;
+
+            if( originalText.IsEmpty() )
+                originalText = entry->originalRuleText;
+        }
+
+        if( !anyEdited && !originalText.IsEmpty()
+            && static_cast<int>( entries.size() ) == entries[0]->originalEntryCount )
+        {
+            ruleText = originalText;
+        }
+        else if( entries.size() == 1 )
         {
             // Single entry, no merge needed
             ruleText = generateRuleText( *entries[0], aBoard );
@@ -123,11 +180,15 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
         // Comments of deleted rules are kept, and a file rule split by an edit emits its own only once
         int source = entries[0]->sourceRule;
 
-        if( source >= 0 && static_cast<size_t>( source ) >= nextTrivia
-            && static_cast<size_t>( source ) < aTrivia.leadingTrivia.size() )
+        if( source >= 0 && static_cast<size_t>( source ) < triviaCount )
         {
-            while( nextTrivia <= static_cast<size_t>( source ) )
-                result += aTrivia.leadingTrivia[nextTrivia++];
+            if( static_cast<size_t>( source ) >= nextTrivia )
+                emitUpTo( source );
+
+            if( !attached[source].StartsWith( wxS( "\n" ) ) && !result.EndsWith( wxS( "\n" ) ) )
+                result += wxS( "\n" );
+
+            result += attached[source];
         }
         else
         {
@@ -137,8 +198,8 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
         result += ruleText;
     }
 
-    while( nextTrivia < aTrivia.leadingTrivia.size() )
-        result += aTrivia.leadingTrivia[nextTrivia++];
+    if( triviaCount > 0 )
+        emitUpTo( triviaCount - 1 );
 
     if( aTrivia.header.IsEmpty() )
         result += wxS( "\n" );

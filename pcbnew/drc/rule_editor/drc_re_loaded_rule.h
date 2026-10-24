@@ -54,6 +54,9 @@ struct DRC_RE_LOADED_PANEL_ENTRY
     int      originalEntryCount = 1;
     int      sourceRule = -1;  ///< Index of the rule in the loaded file, or -1 for a new rule
 
+    /// Entries the loader split out of one rule share this. Zero means the entry stands alone.
+    int ruleGroupId = 0;
+
     DRC_RE_LOADED_PANEL_ENTRY() = default;
 
     DRC_RE_LOADED_PANEL_ENTRY( DRC_RULE_EDITOR_CONSTRAINT_NAME              aPanel,

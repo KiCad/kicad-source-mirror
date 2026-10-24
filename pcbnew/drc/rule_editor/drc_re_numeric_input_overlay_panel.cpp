@@ -57,7 +57,7 @@ DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL(
                                                    valueField->GetLabel(), false, false );
     valueField->SetUnitBinder( m_valueBinder.get() );
 
-    valueField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, m_data->IsIntegerOnly() ) );
+    valueField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( true, m_data->IsIntegerOnly() ) );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

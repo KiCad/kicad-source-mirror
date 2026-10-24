@@ -46,7 +46,6 @@
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <reporter.h>
-#include <dialogs/rule_editor_dialog_base.h>
 #include <footprint.h>
 #include <pcbnew_utils/board_file_utils.h>
 
@@ -165,38 +164,34 @@ BOOST_AUTO_TEST_CASE( SaveRules )
     wxRemoveFile( filename );
 }
 
-BOOST_AUTO_TEST_CASE( SaveRulesToFileLogic )
+BOOST_AUTO_TEST_CASE( RoundTripPreservesUneditedRuleWithCommentParens )
 {
-    // Mimic m_ruleTreeNodeDatas
-    std::vector<RULE_TREE_NODE> ruleTreeNodeDatas;
+    // The parens inside the comment must not move the rule boundary.
+    wxString input = "(version 2)\n"
+                     "(rule MyRule\n"
+                     "\t(constraint clearance (min 0.2mm))\n"
+                     "\t# old: (condition \"A.x\"))\n"
+                     "\t(severity error))\n";
 
-    // Add a rule node
-    RULE_TREE_NODE node;
-    node.m_nodeId = 1;
-    node.m_nodeName = "TestRule";
-    node.m_nodeType = RULE; // 4
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( input );
 
-    auto data = std::make_shared<DRC_RE_BASE_CONSTRAINT_DATA>( 1, 0, "TestRule" );
-    data->SetConstraintCode( "clearance" );
-    node.m_nodeData = data;
+    BOOST_REQUIRE( !entries.empty() );
 
-    ruleTreeNodeDatas.push_back( node );
+    BOOST_CHECK( entries[0].originalRuleText.Contains( "(severity error)" ) );
+    BOOST_CHECK( entries[0].originalRuleText.Contains( "# old:" ) );
+    BOOST_CHECK( !entries[0].wasEdited );
 
-    // Mimic SaveRulesToFile logic
-    std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>> rules;
+    DRC_RULE_SAVER saver;
+    wxString       output = saver.GenerateRulesText( entries, nullptr );
 
-    for( const RULE_TREE_NODE& n : ruleTreeNodeDatas )
-    {
-        if( n.m_nodeType != RULE )
-            continue;
+    BOOST_CHECK( output.Contains( "(rule MyRule" ) );
+    BOOST_CHECK( output.Contains( "# old: (condition \"A.x\"))" ) );
+    BOOST_CHECK( output.Contains( "(severity error))" ) );
 
-        auto d = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( n.m_nodeData );
-
-        if( d )
-            rules.push_back( d );
-    }
-
-    BOOST_CHECK_EQUAL( rules.size(), 1 );
+    DRC_RULE_LOADER                        loader2;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> reparsed = loader2.LoadFromString( output );
+    BOOST_CHECK( !reparsed.empty() );
 }
 
 BOOST_AUTO_TEST_CASE( SaveNumericRules )
@@ -543,6 +538,98 @@ BOOST_AUTO_TEST_CASE( EditedViaStyleRuleKeepsOptimums )
                          "the voided optimum was not dropped from the clause: " << saved.ToStdString() );
     BOOST_CHECK_MESSAGE( saved.find( wxS( "(opt 0.4mm)" ) ) != wxString::npos,
                          "the untouched hole size optimum must survive: " << saved.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( RegeneratedRuleWithoutLayerClauseStaysOnAllLayers )
+{
+    wxString rules = wxS( "(version 2)\n"
+                          "(rule \"under_fpga\"\n"
+                          "\t(constraint clearance (min 0.1mm))\n"
+                          "\t(constraint hole_size (min 0.2mm) (max 0.5mm))\n"
+                          "\t(constraint via_diameter (min 0.4mm) (max 0.9mm))\n"
+                          "\t(condition \"A.intersectsArea('underFPGA')\"))\n" );
+
+    BOARD           board;
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 2 );
+
+    for( DRC_RE_LOADED_PANEL_ENTRY& entry : entries )
+    {
+        if( entry.panelType == MINIMUM_CLEARANCE )
+            entry.wasEdited = true;
+    }
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, &board );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(layer" ) ) == wxString::npos,
+                         "a rule without a layer clause gained one: " << saved.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( MovedRuleKeepsItsOwnComment )
+{
+    wxString rules = wxS( "(version 2)\n"
+                          "# file header\n"
+                          "\n"
+                          "(rule \"a\"\n"
+                          "\t(constraint clearance (min 0.1mm)))\n"
+                          "\n"
+                          "# b is special\n"
+                          "(rule \"b\"\n"
+                          "\t(constraint clearance (min 0.2mm)))\n" );
+
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 2 );
+
+    std::swap( entries[0], entries[1] );
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, nullptr, loader.GetFileTrivia() );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "# b is special\n(rule \"b\"" ) ) != wxString::npos,
+                         "the comment did not move with its rule: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "# file header" ) ) < saved.find( wxS( "(rule" ) ),
+                         "the file header did not stay first: " << saved.ToStdString() );
+    BOOST_CHECK_EQUAL( saved.Freq( '#' ), 2 );
+    BOOST_CHECK( saved.find( wxS( "(rule \"b\"" ) ) < saved.find( wxS( "(rule \"a\"" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ViaStyleWithoutMaximumRoundTrips )
+{
+    wxString rules = wxS( "(version 2)\n"
+                          "(rule \"small_vias\"\n"
+                          "\t(constraint hole_size (min 0.2mm))\n"
+                          "\t(constraint via_diameter (min 0.4mm)))\n" );
+
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_REQUIRE_EQUAL( entries[0].panelType, VIA_STYLE );
+
+    entries[0].wasEdited = true;
+
+    BOOST_CHECK( entries[0].constraintData->Validate().isValid );
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(max" ) ) == wxString::npos,
+                         "an open upper limit was written as a number: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(constraint via_diameter (min 0.4mm))" ) ) != wxString::npos,
+                         "the via diameter minimum was lost: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(constraint hole_size (min 0.2mm))" ) ) != wxString::npos,
+                         "the hole size minimum was lost: " << saved.ToStdString() );
 }
 
 
