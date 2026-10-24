@@ -24,11 +24,13 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
+#include <diff_merge/diff_scene.h>
 #include <diff_merge/pcb_differ.h>
 #include <diff_merge/pcb_geometry_extractor.h>
 
 #include <board.h>
 #include <board_item.h>
+#include <eda_units.h>
 #include <pad.h>
 #include <pcb_field.h>
 #include <pcb_track.h>
@@ -278,6 +280,50 @@ BOOST_AUTO_TEST_CASE( ChildEditOnFootprintNestsUnderFootprintRecord )
     BOOST_CHECK( result.changes[0].children[0].kind == CHANGE_KIND::MODIFIED );
     BOOST_CHECK_EQUAL( result.changes[0].children[0].id.back().AsString().ToStdString(),
                        pad->m_Uuid.AsString().ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintMoveDisplaysInUserUnits )
+{
+    FOOTPRINT* fp = nullptr;
+
+    for( BOARD_ITEM* item : m_after->GetItemSet() )
+    {
+        if( item && item->Type() == PCB_FOOTPRINT_T )
+        {
+            fp = static_cast<FOOTPRINT*>( item );
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( fp );
+
+    const int before = fp->GetX();
+    const int after = before + pcbIUScale.mmToIU( 0.5 );
+    fp->SetX( after );
+
+    PCB_DIFFER    differ( m_before.get(), m_after.get() );
+    DOCUMENT_DIFF result = differ.Diff();
+
+    BOOST_REQUIRE_EQUAL( result.changes.size(), 1u );
+
+    const EDA_IU_SCALE& scale = IuScaleForDocKind( DocKindFromDocType( result.docType ) );
+    bool                found = false;
+
+    for( const PROPERTY_DELTA& d : result.changes[0].properties )
+    {
+        if( d.name != wxS( "Position X" ) )
+            continue;
+
+        const wxString expectedBefore = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MM, before, true );
+        const wxString expectedAfter = EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, EDA_UNITS::MM, after, true );
+
+        found = true;
+        BOOST_CHECK_EQUAL( d.before.ToDisplayString( EDA_UNITS::MM, scale ), expectedBefore );
+        BOOST_CHECK_EQUAL( d.after.ToDisplayString( EDA_UNITS::MM, scale ), expectedAfter );
+    }
+
+    BOOST_CHECK( found );
 }
 
 

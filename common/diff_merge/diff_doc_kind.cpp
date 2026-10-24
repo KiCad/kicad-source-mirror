@@ -50,4 +50,22 @@ DOC_KIND DocKindFromExtension( const wxString& aPath )
     return DOC_KIND::UNKNOWN;
 }
 
+
+DOC_KIND DocKindFromDocType( const wxString& aDocType )
+{
+    if( aDocType == wxS( "kicad_pcb" ) )
+        return DOC_KIND::PCB;
+
+    if( aDocType == wxS( "kicad_sch" ) )
+        return DOC_KIND::SCH;
+
+    if( aDocType == wxS( "kicad_sym" ) )
+        return DOC_KIND::SYM_LIB;
+
+    if( aDocType == wxS( "pretty" ) )
+        return DOC_KIND::FP_LIB;
+
+    return DOC_KIND::UNKNOWN;
+}
+
 } // namespace KICAD_DIFF

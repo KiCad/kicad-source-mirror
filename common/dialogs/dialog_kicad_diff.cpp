@@ -624,14 +624,16 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
             m_canvas->CenterOnHighlight();
     }
 
-    long               row = 0;
-    std::set<wxString> seen;
+    long                row = 0;
+    std::set<wxString>  seen;
+    const EDA_UNITS     units = GetUserUnits();
+    const EDA_IU_SCALE& iuScale = KICAD_DIFF::IuScaleForDocKind( KICAD_DIFF::DocKindFromDocType( m_diff.docType ) );
 
     auto emitDelta = [&]( const wxString& aPrefix, const KICAD_DIFF::PROPERTY_DELTA& d )
     {
         const wxString label = aPrefix.IsEmpty() ? d.name : aPrefix + wxS( " / " ) + d.name;
-        const wxString beforeStr = d.before.ToDisplayString();
-        const wxString afterStr = d.after.ToDisplayString();
+        const wxString beforeStr = d.before.ToDisplayString( units, iuScale );
+        const wxString afterStr = d.after.ToDisplayString( units, iuScale );
         const wxString key = label + wxS( "|" ) + beforeStr + wxS( "|" ) + afterStr;
 
         if( !seen.insert( key ).second )

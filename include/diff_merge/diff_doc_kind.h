@@ -50,6 +50,10 @@ enum class DOC_KIND
 /// .kicad_sym -> SYM_LIB, .kicad_mod -> FOOTPRINT; anything else -> UNKNOWN).
 KICOMMON_API DOC_KIND DocKindFromExtension( const wxString& aPath );
 
+/// Map a DOCUMENT_DIFF::docType tag written by the differs ("kicad_pcb", "kicad_sch",
+/// "kicad_sym", "pretty") to a DOC_KIND; anything else -> UNKNOWN.
+KICOMMON_API DOC_KIND DocKindFromDocType( const wxString& aDocType );
+
 } // namespace KICAD_DIFF
 
 #endif // KICAD_DIFF_DOC_KIND_H
