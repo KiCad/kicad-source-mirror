@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:38+0300\n"
-"PO-Revision-Date: 2026-10-20 10:51+0000\n"
+"PO-Revision-Date: 2026-10-24 09:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -8669,7 +8669,7 @@ msgstr "3Dモデルとしてエクスポート"
 
 #: common/jobs/job_export_pcb_3d.cpp:191
 msgid "Export 3D Model Job Settings"
-msgstr "3Dモデルのエクスポートジョブ設定"
+msgstr "3Dモデル エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_3d.cpp:213
 msgid "PCB: Export 3D Model"
@@ -8681,7 +8681,7 @@ msgstr "ドリルデータのエクスポート"
 
 #: common/jobs/job_export_pcb_drill.cpp:143
 msgid "Export Drill Data Job Settings"
-msgstr "ドリルデータのエクスポートジョブ設定"
+msgstr "ドリルデータ エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_drill.cpp:146
 msgid "PCB: Export Drill Data"
@@ -8695,7 +8695,7 @@ msgstr "DXFとしてエクスポート"
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:139
 msgid "Export DXF Job Settings"
-msgstr "DXFのエクスポートジョブ設定"
+msgstr "DXF エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
 msgid "PCB: Export DXF"
@@ -8708,7 +8708,7 @@ msgstr "GenCADファイルをエクスポート"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
 msgid "Export GenCAD Job Settings"
-msgstr "GenCADのエクスポートジョブ設定"
+msgstr "GenCAD エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
 msgid "PCB: Export GenCAD"
@@ -8720,19 +8720,19 @@ msgstr "単一ガーバーとしてエクスポート"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
 msgid "Export Single Gerber Job Settings"
-msgstr "単一ガーバーのエクスポートジョブ設定"
+msgstr "単一ガーバー エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
 msgid "Export Gerbers"
-msgstr "ガーバー としてエクスポート"
+msgstr "ガーバー のエクスポート"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
 msgid "Export Gerbers Job Settings"
-msgstr "ガーバー としてエクスポートジョブ設定"
+msgstr "ガーバー エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
-msgstr "PCB: ガーバー としてエクスポート"
+msgstr "PCB: ガーバー のエクスポート"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:190 kicad/kicad_cli.cpp:167
@@ -8750,7 +8750,7 @@ msgstr "IPC-2581 としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:81
 msgid "Export IPC-2581 Job Settings"
-msgstr "IPC-2581のエクスポートジョブ設定"
+msgstr "IPC-2581 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:94
 msgid "PCB: Export IPC-2581"
@@ -8762,7 +8762,7 @@ msgstr "IPC-D-356としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:41
 msgid "Export IPC-D-356 Job Settings"
-msgstr "IPC-D-356 のエクスポートジョブ設定"
+msgstr "IPC-D-356 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:55
 msgid "PCB: Export IPC-D-356"
@@ -8771,11 +8771,11 @@ msgstr "PCB: IPC-D-356 としてエクスポート"
 #: common/jobs/job_export_pcb_odb.cpp:60
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
 msgid "Export ODB++"
-msgstr "ODB++をエクスポート"
+msgstr "ODB++としてエクスポート"
 
 #: common/jobs/job_export_pcb_odb.cpp:66
 msgid "Export ODB++ Job Settings"
-msgstr "ODB++のエクスポートジョブ設定"
+msgstr "ODB++ エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_odb.cpp:79
 msgid "PCB: Export ODB++"
@@ -8790,7 +8790,7 @@ msgstr "PDFとしてエクスポート"
 #: common/jobs/job_export_pcb_pdf.cpp:69
 #: common/jobs/job_export_sch_plot.cpp:120
 msgid "Export PDF Job Settings"
-msgstr "PDFのエクスポートジョブ設定"
+msgstr "PDF エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_pdf.cpp:73
 msgid "PCB: Export PDF"
@@ -8802,7 +8802,7 @@ msgstr "位置データとしてエクスポート"
 
 #: common/jobs/job_export_pcb_pos.cpp:129
 msgid "Export Position Data Job Settings"
-msgstr "位置データのエクスポートジョブ設定"
+msgstr "位置データ エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_pos.cpp:147
 msgid "PCB: Export Position Data"
@@ -8814,7 +8814,7 @@ msgstr "PostScriptとしてエクスポート"
 
 #: common/jobs/job_export_pcb_ps.cpp:63 common/jobs/job_export_sch_plot.cpp:177
 msgid "Export Postscript Job Settings"
-msgstr "Postscriptのエクスポートジョブ設定"
+msgstr "Postscript エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_ps.cpp:67
 msgid "PCB: Export Postscript"
@@ -8826,7 +8826,7 @@ msgstr "基板統計をエクスポート"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
 msgid "Export Board Statistics Job Settings"
-msgstr "基板統計のエクスポートジョブ設定"
+msgstr "基板統計 エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
 msgid "PCB: Export Board Statistics"
@@ -8840,7 +8840,7 @@ msgstr "SVGとしてエクスポート"
 #: common/jobs/job_export_pcb_svg.cpp:56
 #: common/jobs/job_export_sch_plot.cpp:158
 msgid "Export SVG Job Settings"
-msgstr "SVGのエクスポートジョブ設定"
+msgstr "SVG エクスポートのジョブ設定"
 
 #: common/jobs/job_export_pcb_svg.cpp:60
 msgid "PCB: Export SVG"
@@ -8865,7 +8865,7 @@ msgstr "ネットリスト%sをエクスポート"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
 msgid "Export Netlist Job Settings"
-msgstr "ネットリストのエクスポートジョブ設定"
+msgstr "ネットリスト エクスポートのジョブ設定"
 
 #: common/jobs/job_export_sch_netlist.cpp:94
 msgid "Schematic: Export Netlist"
