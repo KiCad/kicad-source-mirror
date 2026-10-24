@@ -182,6 +182,9 @@ PGM_BASE::~PGM_BASE()
 
 void PGM_BASE::Destroy()
 {
+    // Clean up library IO plugins before static destruction
+    m_library_manager.reset();
+
     KICAD_CURL::Cleanup();
 
     APP_MONITOR::SENTRY::Instance()->Cleanup();
