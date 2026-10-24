@@ -368,6 +368,7 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_rule_loader.cpp
     drc/rule_editor/drc_re_rule_saver.cpp
     drc/rule_editor/dialog_drc_rule_editor.cpp
+    drc/rule_editor/drc_rule_document.cpp
     drc/rule_editor/panel_drc_rule_editor_base.cpp
     drc/rule_editor/panel_drc_rule_editor.cpp
     drc/rule_editor/drc_re_bitmap_overlay_panel.cpp

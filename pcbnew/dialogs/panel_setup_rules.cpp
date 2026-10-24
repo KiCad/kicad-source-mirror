@@ -17,9 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <drc/rule_editor/drc_rule_document.h>
 #include <bitmaps.h>
 #include <common.h>
-#include <kiplatform/io.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
@@ -41,15 +41,15 @@
 #include <drc/drc_rule_parser.h>
 #include <tools/drc_tool.h>
 #include <pgm_base.h>
-#include <wildcards_and_files_ext.h>
 #include <regex>
 #include <unordered_map>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
-PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, DRC_RULE_DOCUMENT* aDocument ) :
         PANEL_SETUP_RULES_BASE( aParentWindow ),
         m_frame( aFrame ),
+        m_document( aDocument ),
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
 {
@@ -1079,32 +1079,7 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
     if( !m_frame->GetBoard() )
         return true;
 
-    wxFileName rulesFile( m_frame->GetBoard()->GetDesignRulesPath() );
-
-    if( rulesFile.FileExists() )
-    {
-        wxTextFile file( rulesFile.GetFullPath() );
-
-        if( file.Open() )
-        {
-            for ( wxString str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
-            {
-                ConvertSmartQuotesAndDashes( &str );
-                m_textEditor->AddText( str << '\n' );
-            }
-
-            m_textEditor->EmptyUndoBuffer();
-
-            wxCommandEvent dummy;
-            OnCompile( dummy );
-        }
-    }
-    else
-    {
-        m_textEditor->AddText( wxT( "(version 2)\n" ) );
-    }
-
-    m_originalText = m_textEditor->GetText();
+    RefreshFromDocument();
 
     if( m_frame->Prj().IsNullProject() )
     {
@@ -1119,32 +1094,13 @@ bool PANEL_SETUP_RULES::TransferDataToWindow()
 
 bool PANEL_SETUP_RULES::TransferDataFromWindow()
 {
-    if( !IsModified() )
-        return true;
-
-    wxString rulesFilepath = m_frame->GetBoard()->GetDesignRulesPath();
-
-    wxString    content = m_textEditor->GetText();
-    std::string utf8 = std::string( content.mb_str( wxConvUTF8 ) );
-    wxString    writeError;
-
-    if( !KIPLATFORM::IO::AtomicWriteFile( rulesFilepath, utf8.data(), utf8.size(), &writeError ) )
+    if( IsModified() )
     {
-        wxLogError( _( "Cannot save design rules to '%s': %s" ), rulesFilepath, writeError );
-        return false;
+        m_document->SetText( m_textEditor->GetText() );
+        m_originalText = m_textEditor->GetText();
     }
 
-    try
-    {
-        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine( rulesFilepath );
-        return true;
-    }
-    catch( PARSE_ERROR& )
-    {
-        // Don't lock them in to the Setup dialog if they have bad rules.  They've already
-        // saved them so we can allow an exit.
-        return true;
-    }
+    return true;
 }
 
 
@@ -1222,34 +1178,18 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 }
 
 
-void PANEL_SETUP_RULES::ImportSettingsFrom( BOARD* aBoard )
+void PANEL_SETUP_RULES::RefreshFromDocument()
 {
-    if( !m_frame->Prj().IsNullProject() )
+    wxString text = m_document->GetText();
+
+    if( text != m_textEditor->GetText() )
     {
-        wxFileName relFile = aBoard->GetFileName();
-        relFile.SetExt( FILEEXT::DesignRulesFileExtension );
+        m_textEditor->SetText( text );
+        m_textEditor->EmptyUndoBuffer();
 
-        wxFileName absFile( aBoard->GetProject()->AbsolutePath( relFile.GetFullName() ) );
-
-        if( absFile.FileExists() )
-        {
-            wxTextFile file( absFile.GetFullPath() );
-
-            if( file.Open() )
-            {
-                m_textEditor->ClearAll();
-
-                for ( wxString str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
-                {
-                    ConvertSmartQuotesAndDashes( &str );
-                    m_textEditor->AddText( str << '\n' );
-                }
-
-                m_textEditor->EmptyUndoBuffer();
-
-                wxCommandEvent dummy;
-                OnCompile( dummy );
-            }
-        }
+        wxCommandEvent dummy;
+        OnCompile( dummy );
     }
+
+    m_originalText = m_textEditor->GetText();
 }

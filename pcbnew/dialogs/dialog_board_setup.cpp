@@ -38,6 +38,9 @@
 #include <panel_embedded_files.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_rules.h>
+#include <drc/drc_engine.h>
+#include <drc/rule_editor/drc_rule_document.h>
+#include <ki_exception.h>
 #include <dialogs/panel_setup_teardrops.h>
 #include <dialogs/panel_setup_zones.h>
 #include <dialogs/panel_setup_tuning_patterns.h>
@@ -90,6 +93,9 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_tuningProfilesPage( 0 ),
         m_initComplete( false )
 {
+    m_ruleDocument = std::make_unique<DRC_RULE_DOCUMENT>( m_frame->GetBoard() );
+    m_ruleDocument->Load();
+
     SetEvtHandlerEnabled( false );
 
     /*
@@ -250,7 +256,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_SETUP_RULES( aParent, m_frame );
+                return new PANEL_SETUP_RULES( aParent, m_frame, m_ruleDocument.get() );
             },
             _( "Custom Rules" ) );
 
@@ -316,7 +322,7 @@ bool DIALOG_BOARD_SETUP::canDiscardChanges()
 {
     auto* rules = static_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( m_customRulesPage ) );
 
-    if( !rules || !rules->IsModified() )
+    if( !m_ruleDocument->IsModified() && ( !rules || !rules->IsModified() ) )
         return true;
 
     return OKOrCancelDialog( this, _( "Confirmation" ), _( "Discard changes to custom rules?" ), wxEmptyString,
@@ -343,20 +349,31 @@ void DIALOG_BOARD_SETUP::onCloseWindow( wxCloseEvent& aEvent )
 }
 
 
-void DIALOG_BOARD_SETUP::onPageChanging( wxBookCtrlEvent& aEvent )
-{
-    // Rules are written to disk only on OK so Cancel can still discard them
-    if( aEvent.GetOldSelection() == (int) m_customRulesPage )
-        return;
-
-    PAGED_DIALOG::onPageChanging( aEvent );
-}
-
-
 bool DIALOG_BOARD_SETUP::TransferDataFromWindow()
 {
     if( !PAGED_DIALOG::TransferDataFromWindow() )
         return false;
+
+    if( m_ruleDocument->IsModified() && !m_frame->GetBoard()->GetDesignRulesPath().IsEmpty() )
+    {
+        wxString error;
+
+        if( !m_ruleDocument->Save( &error ) )
+        {
+            SetError( wxString::Format( _( "Cannot save design rules: %s" ), error ), nullptr, nullptr );
+            return false;
+        }
+
+        try
+        {
+            m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine(
+                    m_frame->GetBoard()->GetDesignRulesPath() );
+        }
+        catch( PARSE_ERROR& )
+        {
+            // The rules are saved. Compile problems are reported when DRC runs.
+        }
+    }
 
     // References to renamed profiles can only be fixed up after all pages have saved
     auto* tuningProfiles =
@@ -396,6 +413,9 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
     PAGED_DIALOG::onPageChanged( aEvent );
 
     size_t page = aEvent.GetSelection();
+
+    if( int selected = m_treebook->GetSelection(); selected != wxNOT_FOUND )
+        refreshRulePage( selected );
 
     if( m_initComplete )
     {
@@ -443,6 +463,13 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
     }
 
     m_currentPage = page;
+}
+
+
+void DIALOG_BOARD_SETUP::refreshRulePage( size_t aPage )
+{
+    if( auto* textPage = dynamic_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( aPage ) ) )
+        textPage->RefreshFromDocument();
 }
 
 
@@ -598,7 +625,11 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             RESOLVE_PAGE( PANEL_SETUP_ZONES, m_zonesPage )->ImportHatchOffsetsFrom( other );
 
         if( importDlg.m_CustomRulesOpt->GetValue() )
-            RESOLVE_PAGE( PANEL_SETUP_RULES, m_customRulesPage )->ImportSettingsFrom( other );
+        {
+            m_ruleDocument->LoadFrom( other->GetDesignRulesPath() );
+
+            refreshRulePage( m_customRulesPage );
+        }
 
         if( importDlg.m_SeveritiesOpt->GetValue() )
         {

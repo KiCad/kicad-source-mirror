@@ -20,10 +20,12 @@
 
 #pragma once
 
+#include <memory>
 #include <widgets/paged_dialog.h>
 #include "panel_setup_formatting.h"
 
 class PCB_EDIT_FRAME;
+class DRC_RULE_DOCUMENT;
 class PANEL_SETUP_CONSTRAINTS;
 class PANEL_SETUP_LAYERS;
 class PANEL_SETUP_DEFAULTS;
@@ -48,10 +50,11 @@ public:
 protected:
     // event handlers
     void onPageChanged( wxBookCtrlEvent& aEvent ) override;
-    void onPageChanging( wxBookCtrlEvent& aEvent ) override;
     void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
     void onCancelButton( wxCommandEvent& aEvent );
     void onCloseWindow( wxCloseEvent& aEvent );
+
+    void refreshRulePage( size_t aPage );
 
     bool TransferDataFromWindow() override;
 
@@ -87,4 +90,6 @@ private:
     size_t m_embeddedFilesPage;
     size_t m_tuningProfilesPage;
     bool   m_initComplete;
+
+    std::unique_ptr<DRC_RULE_DOCUMENT> m_ruleDocument;
 };

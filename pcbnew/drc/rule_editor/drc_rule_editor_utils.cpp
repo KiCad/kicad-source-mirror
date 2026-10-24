@@ -36,6 +36,12 @@
 #include "drc_re_routing_width_constraint_data.h"
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_re_bool_input_constraint_data.h"
+#include "drc_re_abs_length_two_constraint_data.h"
+#include "drc_re_min_txt_ht_th_constraint_data.h"
+#include "drc_re_rtg_diff_pair_constraint_data.h"
+#include "drc_re_permitted_layers_constraint_data.h"
+#include "drc_re_allowed_orientation_constraint_data.h"
+#include "drc_re_vias_under_smd_constraint_data.h"
 #include <board.h>
 #include <wx/ffile.h>
 #include <wx/regex.h>
@@ -254,6 +260,23 @@ std::optional<DRC_RULE_EDITOR_CONSTRAINT_NAME> DRC_RULE_EDITOR_UTILS::GetConstra
         return it->second;
 
     return std::nullopt;
+}
+
+
+std::optional<DRC_RULE_EDITOR_CONSTRAINT_NAME> DRC_RULE_EDITOR_UTILS::SectionForConstraintCode( const wxString& aCode )
+{
+    static const std::map<wxString, DRC_RULE_EDITOR_CONSTRAINT_NAME> sharedCodes = {
+        { wxString::FromUTF8( DRC_RULES_LEXER::TokenName( DRCRULE_T::T_hole_size ) ), HOLE_SIZE },
+        { wxString::FromUTF8( DRC_RULES_LEXER::TokenName( DRCRULE_T::T_silk_clearance ) ), SILK_TO_SILK_CLEARANCE },
+        { wxString::FromUTF8( DRC_RULES_LEXER::TokenName( DRCRULE_T::T_length ) ), ABSOLUTE_LENGTH }
+    };
+
+    auto it = sharedCodes.find( aCode );
+
+    if( it != sharedCodes.end() )
+        return it->second;
+
+    return GetConstraintTypeFromCode( aCode );
 }
 
 
@@ -968,4 +991,35 @@ DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( const wxString& aExpr )
         return SELECTOR_CONDITION{ SELECTOR_KIND::ENCLOSED_BY_AREA, enclosedRe.GetMatch( aExpr, 1 ) };
 
     return std::nullopt;
+}
+
+
+std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>
+DRC_RULE_EDITOR_UTILS::CreateConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME    aType,
+                                             const DRC_RE_BASE_CONSTRAINT_DATA& aBase )
+{
+    switch( aType )
+    {
+    case VIA_STYLE: return std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
+        return std::make_shared<DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA>( aBase );
+    case ROUTING_DIFF_PAIR: return std::make_shared<DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA>( aBase );
+    case ROUTING_WIDTH: return std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( aBase );
+    case PERMITTED_LAYERS: return std::make_shared<DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA>( aBase );
+    case ALLOWED_ORIENTATION: return std::make_shared<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( aBase );
+    case CUSTOM_RULE: return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( aBase );
+    case ABSOLUTE_LENGTH: return std::make_shared<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( aBase );
+    case MATCHED_LENGTH_DIFF_PAIR: return std::make_shared<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>( aBase );
+    case VIAS_UNDER_SMD: return std::make_shared<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( aBase );
+    default: break;
+    }
+
+    if( IsNumericInputType( aType ) )
+        return CreateNumericConstraintData( aType, aBase );
+
+    if( IsBoolInputType( aType ) )
+        return std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( aBase );
+
+    wxLogWarning( "No factory found for constraint type: %d", aType );
+    return std::make_shared<DRC_RE_BASE_CONSTRAINT_DATA>( aBase );
 }

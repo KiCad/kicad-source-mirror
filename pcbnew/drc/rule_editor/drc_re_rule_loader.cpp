@@ -874,7 +874,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
 }
 
 
-std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wxString& aRulesText )
+std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wxString& aRulesText, bool* aParsed )
 {
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> allEntries;
     std::vector<std::shared_ptr<DRC_RULE>> parsedRules;
@@ -897,8 +897,14 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wx
     }
     catch( const IO_ERROR& )
     {
+        if( aParsed )
+            *aParsed = false;
+
         return allEntries;
     }
+
+    if( aParsed )
+        *aParsed = true;
 
     // The parser accepted the text, so its non-version expressions are the rules in parse order
     // and everything between them is kept verbatim for the saver
