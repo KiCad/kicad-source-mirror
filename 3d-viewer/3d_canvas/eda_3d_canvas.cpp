@@ -449,8 +449,8 @@ void EDA_3D_CANVAS::DoRePaint()
 
     if( !m_activityReporterSync || !m_warningReporterSync )
     {
-        m_statusBarReporter =
-                std::make_unique<STATUSBAR_REPORTER>( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
+        m_statusBarReporter = std::make_unique<STATUSBAR_REPORTER>( m_parentStatusBar,
+                                                                    EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
         m_infoBarReporter = std::make_unique<INFOBAR_REPORTER>( m_parentInfoBar );
 
         m_activityReporterSync = std::make_shared<SYNC_REPORTER>( *m_statusBarReporter );
@@ -515,8 +515,8 @@ void EDA_3D_CANVAS::DoRePaint()
 
         if( !m_is_opengl_version_supported )
         {
-            m_warningReporterSync->Report( _( "Your OpenGL version is not supported. Minimum required "
-                                       "is 1.5." ), RPT_SEVERITY_ERROR );
+            m_warningReporterSync->Report( _( "Your OpenGL version is not supported. Minimum required is 1.5." ),
+                                           RPT_SEVERITY_ERROR );
 
             m_warningReporterSync->Finalize();
         }
@@ -540,18 +540,19 @@ void EDA_3D_CANVAS::DoRePaint()
     {
         m_3d_render = m_3d_render_opengl.get();
         m_render_raytracing_was_requested = false;
-        m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
+
+        if( m_boardAdapter.m_Cfg )
+            m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
     }
 
     // Check if a raytracing was requested and need to switch to raytracing mode
-    if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
+    if( !m_boardAdapter.m_Cfg || m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
         const bool was_camera_changed = m_camera.ParametersChanged();
 
         // It reverts back to OpenGL mode if it was requested a raytracing
         // render of the current scene. AND the mouse / camera is moving
-        if( ( m_mouse_is_moving || m_camera_is_moving || was_camera_changed
-            || windows_size_changed )
+        if( ( m_mouse_is_moving || m_camera_is_moving || was_camera_changed || windows_size_changed )
           && m_render_raytracing_was_requested )
         {
             m_render_raytracing_was_requested = false;
@@ -563,10 +564,9 @@ void EDA_3D_CANVAS::DoRePaint()
 
     if( m_camera_is_moving )
     {
-    const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
-    // Convert microseconds to seconds as float and apply speed multiplier
-    curtime_delta_s = static_cast<float>( static_cast<double>( curtime_delta ) / 1e6 )
-              * m_camera_moving_speed;
+        const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
+        // Convert microseconds to seconds as float and apply speed multiplier
+        curtime_delta_s = static_cast<float>( static_cast<double>( curtime_delta ) / 1e6 ) * m_camera_moving_speed;
         m_camera.Interpolate( curtime_delta_s );
 
         if( curtime_delta_s > 1.0f )
@@ -748,18 +748,18 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
     glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
                                depthStencilBuffer );
 
-    auto resetState = std::unique_ptr<void, std::function<void(void*)>>(
-        reinterpret_cast<void*>(1),
-        [&](void*) {
-            glBindFramebuffer( GL_FRAMEBUFFER, oldFramebuffer );
-            glViewport( oldViewport[0], oldViewport[1], oldViewport[2], oldViewport[3] );
-            glDeleteFramebuffers( 1, &framebuffer );
-            glDeleteTextures( 1, &colorTexture );
-            glDeleteRenderbuffers( 1, &depthStencilBuffer );
-            gl_mgr->UnlockCtx( m_glRC );
-            m_is_currently_painting.clear();
-        }
-    );
+    auto resetState =
+            std::unique_ptr<void, std::function<void(void*)>>( reinterpret_cast<void*>(1),
+            [&](void*)
+            {
+                glBindFramebuffer( GL_FRAMEBUFFER, oldFramebuffer );
+                glViewport( oldViewport[0], oldViewport[1], oldViewport[2], oldViewport[3] );
+                glDeleteFramebuffers( 1, &framebuffer );
+                glDeleteTextures( 1, &colorTexture );
+                glDeleteRenderbuffers( 1, &depthStencilBuffer );
+                gl_mgr->UnlockCtx( m_glRC );
+                m_is_currently_painting.clear();
+            } );
 
     // Check framebuffer completeness
     GLenum framebufferStatus = glCheckFramebufferStatus( GL_FRAMEBUFFER );
@@ -1049,7 +1049,8 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         auto printNetInfo =
                 []( BOARD_CONNECTED_ITEM* aItem )
                 {
-                    return wxString::Format( _( "Net %s\tNet class %s" ), aItem->GetNet()->GetNetname(),
+                    return wxString::Format( _( "Net %s\tNet class %s" ),
+                                             aItem->GetNet()->GetNetname(),
                                              aItem->GetNet()->GetNetClass()->GetHumanReadableName() );
                 };
 
