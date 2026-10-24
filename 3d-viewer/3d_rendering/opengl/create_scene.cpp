@@ -818,7 +818,9 @@ void RENDER_3D_OPENGL::reload()
         m_canvas->InvalidateRaytracingHitTesting();
 
     freeAllLists();
-    createPlaceholderModel();
+
+    if( !m_boardAdapter.m_IsPreviewer )
+        createPlaceholderModel();
 
     OBJECT_2D_STATS::Instance().ResetStats();
 

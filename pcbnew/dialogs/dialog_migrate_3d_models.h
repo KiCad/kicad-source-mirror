@@ -77,6 +77,7 @@ protected:
     void OnMissingSelected( wxListEvent& event ) override;
     void OnCandidateSelected( wxListEvent& event ) override;
     void OnAddSearchDirectoryClick( wxCommandEvent& event ) override;
+    void OnRemoveSearchDirectoryClick( wxCommandEvent& event ) override;
     void OnOpenExternalFileClick( wxCommandEvent& event ) override;
     void OnReplaceClick( wxCommandEvent& event ) override;
     void OnKeepClick( wxCommandEvent& event ) override;
@@ -98,6 +99,7 @@ private:
         int      m_score;    ///< Higher = better match
     };
 
+    void updateAfterCatalogChange();
     void collectMissingModels();
     void buildCatalog();
     void scanDirectory( const wxString& aDir );
@@ -119,10 +121,6 @@ private:
     /// currently selected (m_selectedPerMissing[idx] == -1), so rows still
     /// needing user attention stand out visually.
     void updateMissingItemStyle( int aMissingIndex );
-
-    /// Size the dialog on first construction: cap at 0.9 * parent width when
-    /// opening for the first time, always cap at 0.9 * screen width.
-    void applyInitialSizeCaps();
 
     PCB_EDIT_FRAME*              m_frame;
 

@@ -28,6 +28,10 @@
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 
+#include <widgets/std_bitmap_button.h>
+#include <widgets/wx_grid.h>
+#include <bitmaps/bitmaps_list.h>
+#include <bitmaps/bitmap_types.h>
 #include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
@@ -181,6 +185,24 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
         m_trackBallCamera( 2 * RANGE_SCALE_3D ),
         m_previewPane( nullptr )
 {
+    m_searchDirsGrid->ClearRows();
+    m_searchDirsGrid->EnableEditing( false );
+    m_searchDirsGrid->AutoSizeColumn( 0 );
+    m_searchDirsGrid->SetupColumnAutosizer( 0 );
+
+    if( COMMON_SETTINGS* common = Pgm().GetCommonSettings() )
+    {
+        for( const wxString& dir : common->m_Extra3DSearchDirs )
+        {
+            m_searchDirsGrid->AppendRows( 1 );
+            m_searchDirsGrid->SetCellValue( m_searchDirsGrid->GetNumberRows() - 1, 0, dir );
+        }
+    }
+
+    m_addReplacement->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_addSearchDir->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteSearchDir->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
     // Single column spanning the full list-control width; wxLC_REPORT needs
     // at least one column to show anything, wxLC_NO_HEADER hides the header.
     m_missingList->AppendColumn( wxEmptyString, wxLIST_FORMAT_LEFT, 800 );
@@ -240,50 +262,6 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
     }
 
     finishDialogSettings();
-    applyInitialSizeCaps();
-
-    // Position the splitter sashes so the three columns start out at roughly
-    // one third of the dialog width each.  Must happen after the dialog has
-    // been laid out at its final initial size.
-    const int clientWidth = m_mainSplitter->GetClientSize().GetWidth();
-
-    if( clientWidth > 360 )
-    {
-        const int outerSash = clientWidth / 3;
-        m_mainSplitter->SetSashPosition( outerSash );
-
-        const int innerWidth = std::max( clientWidth - outerSash, 240 );
-        m_innerSplitter->SetSashPosition( innerWidth / 2 );
-    }
-}
-
-
-void DIALOG_MIGRATE_3D_MODELS::applyInitialSizeCaps()
-{
-    const wxSize screenSize = wxGetDisplaySize();
-    const int hardCap = ( screenSize.GetWidth() * 9 ) / 10;
-
-    // Soft cap (0.9 * parent width) only applies on the first time the
-    // dialog is opened against a given user settings file.  We detect that
-    // by comparing the current width to the hardcoded base-class default:
-    // if finishDialogSettings() restored a saved value the width won't
-    // match the default.
-    constexpr int kBaseDefaultWidth = 900;
-    int cap = hardCap;
-
-    if( m_frame && GetSize().GetWidth() == kBaseDefaultWidth )
-    {
-        const int parentCap = ( m_frame->GetSize().GetWidth() * 9 ) / 10;
-        cap = std::min( cap, parentCap );
-    }
-
-    if( GetSize().GetWidth() > cap )
-    {
-        wxSize sized = GetSize();
-        sized.SetWidth( std::max( cap, GetMinSize().GetWidth() ) );
-        SetSize( sized );
-        Centre( wxBOTH );
-    }
 }
 
 
@@ -515,6 +493,9 @@ void DIALOG_MIGRATE_3D_MODELS::buildCatalog()
     if( m_missing.empty() )
         return;
 
+    m_catalog.clear();
+    m_scannedDirs.clear();
+
     wxBusyCursor busy;
 
     FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &m_frame->Prj() );
@@ -713,20 +694,20 @@ void DIALOG_MIGRATE_3D_MODELS::populateCandidatesList( int aMissingIndex )
     if( aMissingIndex < 0 || aMissingIndex >= static_cast<int>( m_missing.size() ) )
         return;
 
-    const std::vector<MATCH_CANDIDATE>& cands = m_candidatesPerMissing[aMissingIndex];
+    const std::vector<MATCH_CANDIDATE>& candidates = m_candidatesPerMissing[aMissingIndex];
 
-    for( size_t i = 0; i < cands.size(); ++i )
-        m_candidatesList->InsertItem( static_cast<long>( i ), cands[i].m_display );
+    for( size_t i = 0; i < candidates.size(); ++i )
+        m_candidatesList->InsertItem( static_cast<long>( i ), candidates[i].m_display );
 
     const int sel = m_selectedPerMissing[aMissingIndex];
 
-    if( sel >= 0 && sel < static_cast<int>( cands.size() ) )
+    if( sel >= 0 && sel < static_cast<int>( candidates.size() ) )
     {
         m_candidatesList->SetItemState( sel, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
                                         wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
-        showPreview( aMissingIndex, cands[sel].m_absPath );
+        showPreview( aMissingIndex, candidates[sel].m_absPath );
     }
-    else if( !cands.empty() )
+    else if( !candidates.empty() )
     {
         // No committed choice yet (only the "keep existing" row is available).
         // Highlight the top row for visual continuity; the preview still shows
@@ -734,7 +715,7 @@ void DIALOG_MIGRATE_3D_MODELS::populateCandidatesList( int aMissingIndex )
         // even when no replacement has been chosen.
         m_candidatesList->SetItemState( 0, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
                                         wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
-        showPreview( aMissingIndex, cands.front().m_absPath );
+        showPreview( aMissingIndex, candidates.front().m_absPath );
     }
 }
 
@@ -879,10 +860,11 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
     if( chosen.IsEmpty() )
         return;
 
-    // Persist the directory so future sessions include it automatically.
-    COMMON_SETTINGS* common = Pgm().GetCommonSettings();
+    m_searchDirsGrid->AppendRows( 1 );
+    m_searchDirsGrid->SetCellValue( m_searchDirsGrid->GetNumberRows() - 1, 0, chosen );
 
-    if( common )
+    // Persist the directory so future sessions include it automatically.
+    if( COMMON_SETTINGS* common = Pgm().GetCommonSettings() )
     {
         std::vector<wxString>& dirs = common->m_Extra3DSearchDirs;
 
@@ -896,6 +878,12 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
         scanDirectory( chosen );
     }
 
+    updateAfterCatalogChange();
+}
+
+
+void DIALOG_MIGRATE_3D_MODELS::updateAfterCatalogChange()
+{
     // Re-rank every row against the expanded catalog and refresh the view,
     // preserving the user's existing per-row selections by filename.
     std::vector<wxString> priorSelectionPaths( m_missing.size() );
@@ -937,7 +925,6 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
                 && !candidates.front().m_absPath.IsEmpty() )
         {
             m_selectedPerMissing[i] = 0;
-            showPreview( (int) i, candidates.front().m_absPath );
         }
 
         updateMissingItemStyle( static_cast<int>( i ) );
@@ -945,6 +932,34 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
 
     const int activeRow = getSelectedRow( m_missingList );
     populateCandidatesList( activeRow );
+}
+
+
+void DIALOG_MIGRATE_3D_MODELS::OnRemoveSearchDirectoryClick(wxCommandEvent& event)
+{
+    wxString deleted;
+
+    m_searchDirsGrid->OnDeleteRows(
+            [&]( int row )
+            {
+                deleted = m_searchDirsGrid->GetCellValue( row, 0 );
+                m_searchDirsGrid->DeleteRows( row );
+            } );
+
+    // Persist the directory so future sessions include it automatically.
+    if( COMMON_SETTINGS* common = Pgm().GetCommonSettings() )
+    {
+        std::vector<wxString>& dirs = common->m_Extra3DSearchDirs;
+
+        std::erase_if( dirs,
+                       [&]( const wxString& dir )
+                       {
+                           return dir == deleted;
+                       } );
+    }
+
+    buildCatalog();
+    updateAfterCatalogChange();
 }
 
 
