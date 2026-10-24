@@ -59,9 +59,13 @@ namespace
 const std::vector<wxString>& stepExtensions()
 {
     static const std::vector<wxString> exts = {
-        wxS( "step" ), wxS( "stp" ), wxS( "stpz" ),
-        wxS( "step.gz" ), wxS( "stp.gz" ),
-        wxS( "iges" ), wxS( "igs" )
+        wxS( "step" ),
+        wxS( "stp" ),
+        wxS( "stpz" ),
+        wxS( "step.gz" ),
+        wxS( "stp.gz" ),
+        wxS( "iges" ),
+        wxS( "igs" )
     };
     return exts;
 }
@@ -79,16 +83,20 @@ wxString normalizeStem( const wxString& aName )
     // Strip known extensions (case-insensitive), including doubled-up .gz
     // forms that don't round-trip through wxFileName::GetName.
     static const wxString stripList[] = {
-        wxS( ".step.gz" ), wxS( ".stp.gz" ),
-        wxS( ".wrl" ),  wxS( ".wrz" ),
-        wxS( ".step" ), wxS( ".stp" ), wxS( ".stpz" ),
-        wxS( ".iges" ), wxS( ".igs" )
+        wxS( ".step.gz" ),
+        wxS( ".stp.gz" ),
+        wxS( ".wrl" ),
+        wxS( ".wrz" ),
+        wxS( ".step" ),
+        wxS( ".stp" ),
+        wxS( ".stpz" ),
+        wxS( ".iges" ),
+        wxS( ".igs" )
     };
 
     for( const wxString& ext : stripList )
     {
-        if( stem.length() > ext.length()
-                && stem.Right( ext.length() ).Lower() == ext )
+        if( stem.length() > ext.length() && stem.Right( ext.length() ).Lower() == ext )
         {
             stem = stem.Left( stem.length() - ext.length() );
             break;
@@ -178,11 +186,12 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
 
     // Keep the single column filling the visible width as the splitter sash
     // moves.  Bare wxListCtrl in report mode clips overflowing text cleanly.
-    auto fitColumn = []( wxListCtrl* aList )
-    {
-        const int width = std::max( aList->GetClientSize().GetWidth() - 2, 20 );
-        aList->SetColumnWidth( 0, width );
-    };
+    auto fitColumn =
+            []( wxListCtrl* aList )
+            {
+                const int width = std::max( aList->GetClientSize().GetWidth() - 2, 20 );
+                aList->SetColumnWidth( 0, width );
+            };
 
     m_missingList->Bind( wxEVT_SIZE,
             [this, fitColumn]( wxSizeEvent& aEvt )
@@ -637,9 +646,7 @@ DIALOG_MIGRATE_3D_MODELS::rankCandidatesFor( const wxString& aWrlFilename ) cons
         {
             MATCH_CANDIDATE cand;
             cand.m_absPath = entry.m_absPath;
-            cand.m_display = wxFileName( entry.m_absPath ).GetFullName()
-                             + wxS( "   \u2014   " )
-                             + entry.m_parent;
+            cand.m_display = wxFileName( entry.m_absPath ).GetFullName() + wxS( "   \u2014   " ) + entry.m_parent;
             cand.m_score   = score;
             ranked.push_back( cand );
         }
@@ -836,22 +843,22 @@ void DIALOG_MIGRATE_3D_MODELS::OnMissingSelected( wxListEvent& aEvent )
 
 void DIALOG_MIGRATE_3D_MODELS::OnCandidateSelected( wxListEvent& aEvent )
 {
-    const int missingIdx = static_cast<int>( getSelectedRow( m_missingList ) );
-    const int candIdx    = static_cast<int>( aEvent.GetIndex() );
+    const int missingIdx   = getSelectedRow( m_missingList );
+    const int candidateIdx = static_cast<int>( aEvent.GetIndex() );
 
     if( missingIdx < 0 || missingIdx >= static_cast<int>( m_missing.size() ) )
         return;
 
-    const std::vector<MATCH_CANDIDATE>& cands = m_candidatesPerMissing[missingIdx];
+    const std::vector<MATCH_CANDIDATE>& candidates = m_candidatesPerMissing[missingIdx];
 
-    if( candIdx < 0 || candIdx >= static_cast<int>( cands.size() ) )
+    if( candidateIdx < 0 || candidateIdx >= static_cast<int>( candidates.size() ) )
         return;
 
-    const MATCH_CANDIDATE& c = cands[candIdx];
+    const MATCH_CANDIDATE& c = candidates[candidateIdx];
 
     // Record this row's choice.  The "keep existing" row has an empty path
     // and we store -1 to mean "no replacement".
-    m_selectedPerMissing[missingIdx] = c.m_absPath.IsEmpty() ? -1 : candIdx;
+    m_selectedPerMissing[missingIdx] = c.m_absPath.IsEmpty() ? -1 : candidateIdx;
 
     // Bold the missing row again when the user explicitly chose "keep
     // existing", so the visual cue tracks the actual selection state.
@@ -878,7 +885,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
 
     if( common )
     {
-        auto& dirs = common->m_Extra3DSearchDirs;
+        std::vector<wxString>& dirs = common->m_Extra3DSearchDirs;
 
         if( std::find( dirs.begin(), dirs.end(), chosen ) == dirs.end() )
             dirs.push_back( chosen );
@@ -926,7 +933,8 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
         // For rows with no prior pick (or whose pick disappeared), auto-select
         // the newly-best candidate so adding a directory immediately un-bolds
         // rows that just acquired a plausible match.
-        if( m_selectedPerMissing[i] < 0 && !cands.empty()
+        if( m_selectedPerMissing[i] < 0
+                && !cands.empty()
                 && !cands.front().m_absPath.IsEmpty() )
         {
             m_selectedPerMissing[i] = 0;
@@ -973,25 +981,26 @@ void DIALOG_MIGRATE_3D_MODELS::OnOpenExternalFileClick( wxCommandEvent& )
     // user can see it previewed and it will be applied when they hit Replace.
     MATCH_CANDIDATE injected;
     injected.m_absPath = chosenPath;
-    injected.m_display = wxFileName( chosenPath ).GetFullName() + wxS( "   \u2014   " )
-                         + _( "user-selected" );
+    injected.m_display = wxFileName( chosenPath ).GetFullName() + wxS( "   \u2014   " ) + _( "user-selected" );
     injected.m_score   = 2000;
 
-    std::vector<MATCH_CANDIDATE>& cands = m_candidatesPerMissing[missingIdx];
+    std::vector<MATCH_CANDIDATE>& candidates = m_candidatesPerMissing[missingIdx];
 
     // Avoid duplicating an already-present entry.
-    auto existing = std::find_if( cands.begin(), cands.end(),
-                                   [&]( const MATCH_CANDIDATE& c )
-                                   { return c.m_absPath == chosenPath; } );
+    auto existing = std::find_if( candidates.begin(), candidates.end(),
+                                  [&]( const MATCH_CANDIDATE& c )
+                                  {
+                                      return c.m_absPath == chosenPath;
+                                  } );
 
-    if( existing == cands.end() )
+    if( existing == candidates.end() )
     {
-        cands.insert( cands.begin(), injected );
+        candidates.insert( candidates.begin(), injected );
         m_selectedPerMissing[missingIdx] = 0;
     }
     else
     {
-        m_selectedPerMissing[missingIdx] = static_cast<int>( existing - cands.begin() );
+        m_selectedPerMissing[missingIdx] = static_cast<int>( existing - candidates.begin() );
     }
 
     updateMissingItemStyle( missingIdx );
@@ -1058,7 +1067,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnReplaceClick( wxCommandEvent& )
         }
     }
 
-    commit.Push( _( "Migrate 3D model references" ) );
+    commit.Push( _( "Migrate 3D Model References" ) );
 
     EndModal( wxID_OK );
 }
