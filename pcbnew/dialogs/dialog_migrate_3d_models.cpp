@@ -50,6 +50,8 @@
 #include <gestfich.h>
 
 
+#define KEEP_EXISTING -1
+
 namespace
 {
 /**
@@ -503,7 +505,7 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
         m_missingXform.push_back( entry.m_xform );
     }
 
-    m_selectedPerMissing.assign( m_missing.size(), -1 );
+    m_selectedPerMissing.assign( m_missing.size(), KEEP_EXISTING );
     m_candidatesPerMissing.resize( m_missing.size() );
 }
 
@@ -854,8 +856,8 @@ void DIALOG_MIGRATE_3D_MODELS::OnCandidateSelected( wxListEvent& aEvent )
     const MATCH_CANDIDATE& c = candidates[candidateIdx];
 
     // Record this row's choice.  The "keep existing" row has an empty path
-    // and we store -1 to mean "no replacement".
-    m_selectedPerMissing[missingIdx] = c.m_absPath.IsEmpty() ? -1 : candidateIdx;
+    // and we store KEEP_EXISTING to mean "no replacement".
+    m_selectedPerMissing[missingIdx] = c.m_absPath.IsEmpty() ? KEEP_EXISTING : candidateIdx;
 
     // Bold the missing row again when the user explicitly chose "keep
     // existing", so the visual cue tracks the actual selection state.
@@ -910,16 +912,16 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
 
     for( size_t i = 0; i < m_missing.size(); ++i )
     {
-        m_selectedPerMissing[i] = -1;
-        const std::vector<MATCH_CANDIDATE>& cands = m_candidatesPerMissing[i];
+        m_selectedPerMissing[i] = KEEP_EXISTING;
+        const std::vector<MATCH_CANDIDATE>& candidates = m_candidatesPerMissing[i];
 
         // Preserve the user's prior explicit pick when the same file still
         // appears in the catalog.
         if( !priorSelectionPaths[i].IsEmpty() )
         {
-            for( size_t j = 0; j < cands.size(); ++j )
+            for( size_t j = 0; j < candidates.size(); ++j )
             {
-                if( cands[j].m_absPath == priorSelectionPaths[i] )
+                if( candidates[j].m_absPath == priorSelectionPaths[i] )
                 {
                     m_selectedPerMissing[i] = static_cast<int>( j );
                     break;
@@ -931,10 +933,11 @@ void DIALOG_MIGRATE_3D_MODELS::OnAddSearchDirectoryClick( wxCommandEvent& )
         // the newly-best candidate so adding a directory immediately un-bolds
         // rows that just acquired a plausible match.
         if( m_selectedPerMissing[i] < 0
-                && !cands.empty()
-                && !cands.front().m_absPath.IsEmpty() )
+                && !candidates.empty()
+                && !candidates.front().m_absPath.IsEmpty() )
         {
             m_selectedPerMissing[i] = 0;
+            showPreview( (int) i, candidates.front().m_absPath );
         }
 
         updateMissingItemStyle( static_cast<int>( i ) );
@@ -1000,6 +1003,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnOpenExternalFileClick( wxCommandEvent& )
         m_selectedPerMissing[missingIdx] = static_cast<int>( existing - candidates.begin() );
     }
 
+    showPreview( missingIdx, chosenPath );
     updateMissingItemStyle( missingIdx );
     populateCandidatesList( missingIdx );
 }
