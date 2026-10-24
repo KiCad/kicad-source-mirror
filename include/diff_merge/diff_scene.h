@@ -165,6 +165,9 @@ struct KICOMMON_API DOCUMENT_GEOMETRY
     std::vector<DOCUMENT_POLYGON> polygons;
     std::vector<DOCUMENT_CIRCLE>  circles;
 
+    /// Board layer names, including user-assigned ones. Empty for documents without a board.
+    std::map<PCB_LAYER_ID, wxString> layerNames;
+
     bool Empty() const { return segments.empty() && polygons.empty() && circles.empty(); }
 };
 

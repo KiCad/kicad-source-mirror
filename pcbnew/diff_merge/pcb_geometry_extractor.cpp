@@ -299,6 +299,21 @@ DOCUMENT_GEOMETRY ExtractBoardGeometry( const BOARD& aBoard, const KIGFX::COLOR4
         out.polygons.push_back( std::move( poly ) );
     }
 
+    // Through-hole pads report every copper layer, so clamp to the layers this board has
+    const LSET enabled = aBoard.GetEnabledLayers();
+
+    for( DOCUMENT_SEGMENT& seg : out.segments )
+        seg.layers &= enabled;
+
+    for( DOCUMENT_POLYGON& poly : out.polygons )
+        poly.layers &= enabled;
+
+    for( DOCUMENT_CIRCLE& circle : out.circles )
+        circle.layers &= enabled;
+
+    for( PCB_LAYER_ID layer : enabled.Seq() )
+        out.layerNames[layer] = aBoard.GetLayerName( layer );
+
     return out;
 }
 

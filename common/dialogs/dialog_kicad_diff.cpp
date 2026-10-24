@@ -41,6 +41,7 @@
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/stattext.h>
+#include <wx/wrapsizer.h>
 #include <wx/wupdlock.h>
 
 
@@ -128,7 +129,15 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         const LSET geometryLayers = KICAD_DIFF::GeometryLayerSet( scene.referenceGeometry )
                                     | KICAD_DIFF::GeometryLayerSet( scene.comparisonGeometry );
 
+        std::map<PCB_LAYER_ID, wxString> layerNames = scene.referenceGeometry.layerNames;
+
+        for( const auto& [layer, name] : scene.comparisonGeometry.layerNames )
+            layerNames[layer] = name;
+
         m_filterSizer = new wxBoxSizer( wxHORIZONTAL );
+
+        // A board can have dozens of layers, so the checkboxes wrap rather than widen the dialog
+        wxWrapSizer* checkboxSizer = new wxWrapSizer( wxHORIZONTAL );
 
         const std::array<std::pair<KICAD_DIFF::CATEGORY, wxString>, 4> categories{ {
                 { KICAD_DIFF::CATEGORY::ADDED, _( "Added" ) },
@@ -147,29 +156,32 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
                           m_canvas->SetCategoryVisible( cat, aEvent.IsChecked() );
                           buildTree();
                       } );
-            m_filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+            checkboxSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
         }
 
         if( geometryLayers.any() )
         {
-            m_filterSizer->Add( new wxStaticText( m_panelDetail, wxID_ANY, _( "Layers:" ) ),
+            checkboxSizer->Add( new wxStaticText( m_panelDetail, wxID_ANY, _( "Layers:" ) ),
                                 wxSizerFlags().Border( wxLEFT | wxRIGHT, 4 ).Centre() );
 
             for( PCB_LAYER_ID layer : geometryLayers.UIOrder() )
             {
-                wxCheckBox* cb = new wxCheckBox( m_panelDetail, wxID_ANY, LayerName( layer ) );
+                auto           nameIt = layerNames.find( layer );
+                const wxString label = nameIt != layerNames.end() ? nameIt->second : LayerName( layer );
+                wxCheckBox*    cb = new wxCheckBox( m_panelDetail, wxID_ANY, label );
                 cb->SetValue( true );
                 cb->Bind( wxEVT_CHECKBOX,
                           [this, layer]( wxCommandEvent& aEvent )
                           {
                               m_canvas->SetLayerVisible( layer, aEvent.IsChecked() );
                           } );
-                m_filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+                checkboxSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
             }
         }
 
+        m_filterSizer->Add( checkboxSizer, wxSizerFlags( 1 ).Centre() );
+
         // Toggle the property list so the board can use the full detail panel.
-        m_filterSizer->AddStretchSpacer();
 
         wxCheckBox* propsToggle = new wxCheckBox( m_panelDetail, wxID_ANY, _( "Properties" ) );
         propsToggle->SetValue( true );
