@@ -38,6 +38,7 @@ class LIB_ID;
 class LIBRARY_MANAGER_ADAPTER;
 class DATABASE_LIB_SETTINGS;
 struct DATABASE_LIB_TABLE;
+struct DATABASE_SOURCE;
 
 
 /**
@@ -114,6 +115,10 @@ public:
     static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
                                                                   bool aConnectNow = true,
                                                                   const wxString& aBaseDir = wxEmptyString );
+
+    /// Opens a connection to an already expanded source, see DATABASE_LIB_SETTINGS::ExpandedSource()
+    static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_SOURCE& aSource,
+                                                                  bool                   aConnectNow = true );
 
     /// A problem found while previewing, tagged with the setting that caused it
     struct PREVIEW_ISSUE

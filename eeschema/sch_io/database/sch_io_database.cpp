@@ -319,23 +319,20 @@ LIB_SYMBOL* SCH_IO_DATABASE::resolveSourceSymbol( const LIB_ID& aId )
 std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
                                                                         bool aConnectNow, const wxString& aBaseDir )
 {
-    const DATABASE_SOURCE& source = aSettings.m_Source;
+    return CreateConnection( aSettings.ExpandedSource( aBaseDir ), aConnectNow );
+}
 
-    if( source.connection_string.empty() )
+
+std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_SOURCE& aSource,
+                                                                        bool                   aConnectNow )
+{
+    if( aSource.connection_string.empty() )
     {
-        return std::make_unique<DATABASE_CONNECTION>( source.dsn, source.username, source.password,
-                                                      source.timeout, aConnectNow );
+        return std::make_unique<DATABASE_CONNECTION>( aSource.dsn, aSource.username, aSource.password, aSource.timeout,
+                                                      aConnectNow );
     }
 
-    std::string cs = source.connection_string;
-    wxString    baseDir = aBaseDir.IsEmpty() ? wxFileName( aSettings.GetFilename() ).GetPath() : aBaseDir;
-    std::string basePath( baseDir.ToUTF8() );
-
-    // Database drivers that use files operate on absolute paths, so provide a mechanism
-    // for specifying on-disk databases that live next to the kicad_dbl file
-    boost::replace_all( cs, "${CWD}", basePath );
-
-    return std::make_unique<DATABASE_CONNECTION>( cs, source.timeout, aConnectNow );
+    return std::make_unique<DATABASE_CONNECTION>( aSource.connection_string, aSource.timeout, aConnectNow );
 }
 
 
@@ -720,8 +717,17 @@ void SCH_IO_DATABASE::ensureConnection()
 
     if( !m_conn || !m_conn->IsConnected() )
     {
-        THROW_IO_ERRORF( _( "Could not load database library: could not connect to database %s (%s)" ),
-                         m_settings->m_Source.dsn, m_lastError );
+        const DATABASE_SOURCE source = m_settings->ExpandedSource();
+        const std::string     name = source.Describe();
+        const bool            configured = !source.dsn.empty() || !source.connection_string.empty();
+
+        // Nothing safe to name means the source was withheld, unless none is configured at all
+        const wxString shown = !name.empty() ? wxString::FromUTF8( name )
+                               : configured  ? _( "connection string" )
+                                             : _( "(not configured)" );
+
+        THROW_IO_ERRORF( _( "Could not load database library: could not connect to database %s (%s)" ), shown,
+                         m_lastError );
     }
 }
 

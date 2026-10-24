@@ -21,7 +21,11 @@
 #include <core/kicad_algo.h>
 #include <json_common.h>
 #include <algorithm>
+#include <cctype>
+#include <map>
 #include <set>
+
+#include <boost/algorithm/string.hpp>
 
 #include <database/database_lib_settings.h>
 #include <kiplatform/secrets.h>
@@ -65,6 +69,143 @@ void DATABASE_FIELD_MAPPING::SetName( const std::string& aName )
 {
     name = aName;
     name_wx = wxString( aName.c_str(), wxConvUTF8 );
+}
+
+
+/**
+ * Splits a connection string into lower-case keys and values for display.  We skip anything else that
+ * doesn't match the grammar
+ *
+ *   string  := { segment ';' } segment
+ *   segment := blank | key '=' value
+ *   value   := '{' text '}' blank | plain       a doubled '}' inside braces is a literal brace
+ *   plain   := text with none of = { } " '
+ */
+static std::map<std::string, std::string> parseConnectionString( const std::string& aConnectionString )
+{
+    std::map<std::string, std::string> pairs;
+    const size_t                       len = aConnectionString.size();
+    size_t                             pos = 0;
+
+    auto skipSpaces = [&]()
+    {
+        while( pos < len && std::isspace( static_cast<unsigned char>( aConnectionString[pos] ) ) )
+            ++pos;
+    };
+
+    while( true )
+    {
+        skipSpaces();
+
+        if( pos >= len )
+            break;
+
+        if( aConnectionString[pos] == ';' )
+        {
+            ++pos;
+            continue;
+        }
+
+        size_t eq = aConnectionString.find_first_of( "=;", pos );
+
+        if( eq == std::string::npos || aConnectionString[eq] == ';' )
+            return {};
+
+        std::string key = boost::algorithm::trim_right_copy( aConnectionString.substr( pos, eq - pos ) );
+        boost::algorithm::to_lower( key );
+
+        if( key.empty() )
+            return {};
+
+        pos = eq + 1;
+        skipSpaces();
+
+        std::string value;
+
+        if( pos < len && aConnectionString[pos] == '{' )
+        {
+            ++pos;
+
+            bool closed = false;
+
+            while( pos < len && !closed )
+            {
+                const char c = aConnectionString[pos++];
+
+                if( c != '}' )
+                    value += c;
+                else if( pos < len && aConnectionString[pos] == '}' )
+                    value += aConnectionString[pos++];
+                else
+                    closed = true;
+            }
+
+            if( !closed )
+                return {};
+
+            skipSpaces();
+
+            if( pos < len && aConnectionString[pos] != ';' )
+                return {};
+        }
+        else
+        {
+            size_t end = std::min( aConnectionString.find( ';', pos ), len );
+
+            value = boost::algorithm::trim_right_copy( aConnectionString.substr( pos, end - pos ) );
+
+            if( value.find_first_of( "={}\"'" ) != std::string::npos )
+                return {};
+
+            pos = end;
+        }
+
+        pairs.emplace( key, value );
+    }
+
+    return pairs;
+}
+
+
+/// A shown value holding '=' has swallowed another key's assignment, possibly a credential
+static bool holdsAssignment( const std::string& aText )
+{
+    return aText.find( '=' ) != std::string::npos;
+}
+
+
+std::string DATABASE_SOURCE::Describe() const
+{
+    if( connection_string.empty() )
+        return holdsAssignment( dsn ) ? std::string{} : dsn;
+
+    // A malformed string parses to no pairs, so nothing is shown
+    const std::map<std::string, std::string> pairs = parseConnectionString( connection_string );
+
+    auto find = [&]( std::initializer_list<const char*> aKeys ) -> std::string
+    {
+        for( const char* key : aKeys )
+        {
+            auto it = pairs.find( key );
+
+            if( it != pairs.end() && !it->second.empty() )
+                return holdsAssignment( it->second ) ? std::string{} : it->second;
+        }
+
+        return {};
+    };
+
+    // Each field is shown only if clean, so one contaminated value does not hide the other
+    const std::string driver = find( { "driver" } );
+    const std::string target = find( { "dbq", "database", "data source", "dsn", "server" } );
+
+    if( driver.empty() )
+        return target;
+
+    if( target.empty() )
+        return driver;
+
+    return target + " (" + driver + ")";
 }
 
 
@@ -399,6 +540,19 @@ void DATABASE_LIB_SETTINGS::ResolvePassword( const DATABASE_SECRET_LOOKUP& aLook
 {
     ResolveDatabasePassword( m_Source, aLookup );
     m_loaded.source.password = m_Source.password;
+}
+
+
+DATABASE_SOURCE DATABASE_LIB_SETTINGS::ExpandedSource( const wxString& aBaseDir ) const
+{
+    DATABASE_SOURCE source = m_Source;
+    wxString        baseDir = aBaseDir.IsEmpty() ? wxFileName( GetFilename() ).GetPath() : aBaseDir;
+
+    // Database drivers that use files operate on absolute paths, so provide a mechanism
+    // for specifying on-disk databases that live next to the kicad_dbl file
+    boost::replace_all( source.connection_string, "${CWD}", std::string( baseDir.ToUTF8() ) );
+
+    return source;
 }
 
 

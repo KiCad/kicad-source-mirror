@@ -945,11 +945,15 @@ void DIALOG_DATABASE_LIB_SETTINGS::connect()
 
     auto job = std::make_shared<CONNECT_JOB>();
     job->owner = this;
-    job->conn = SCH_IO_DATABASE::CreateConnection( *m_settings, false, cwdDir() );
+    const DATABASE_SOURCE expanded = m_settings->ExpandedSource( cwdDir() );
+
+    job->conn = SCH_IO_DATABASE::CreateConnection( expanded, false );
     m_connectJob = job;
 
-    setConnectionStatus( source.dsn.empty() ? _( "Connecting..." )
-                                            : wxString::Format( _( "Connecting to %s..." ), From_UTF8( source.dsn ) ),
+    const std::string sourceName = expanded.Describe();
+
+    setConnectionStatus( sourceName.empty() ? _( "Connecting..." )
+                                            : wxString::Format( _( "Connecting to %s..." ), From_UTF8( sourceName ) ),
                          false );
     m_btnTest->SetLabel( _( "Stop" ) );
     refreshTables();

@@ -45,6 +45,13 @@ struct KICOMMON_API DATABASE_SOURCE
     std::string          password;
     int                  timeout;
     std::string          connection_string;
+
+    /**
+     * @return the DSN, or for a connection string its driver and database file or name. Never the
+     *         password, so it is safe for error messages and traces. Empty when there is nothing safe
+     *         to show, in which case callers supply their own wording.
+     */
+    std::string Describe() const;
 };
 
 
@@ -155,6 +162,12 @@ public:
      * treated as loaded, so Store() never writes it back to the file.
      */
     void ResolvePassword( const DATABASE_SECRET_LOOKUP& aLookup = nullptr );
+
+    /**
+     * @param aBaseDir replaces the settings file's directory for ${CWD}; used while the file has no path yet
+     * @return a copy of the source with ${CWD} expanded, exactly as the driver receives it
+     */
+    DATABASE_SOURCE ExpandedSource( const wxString& aBaseDir = wxEmptyString ) const;
 
 protected:
     wxString getFileExt() const override;
