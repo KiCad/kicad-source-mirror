@@ -434,6 +434,10 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     if( KIPLATFORM::IO::IsFileHidden( aName ) )
         return wxTreeItemId();
 
+    // Windows only hides .git when it carries the hidden attribute
+    if( fn.GetFullName().IsSameAs( wxS( ".git" ), false ) )
+        return wxTreeItemId();
+
     if( wxDirExists( aName ) )
     {
         type = TREE_FILE_TYPE::DIRECTORY;
