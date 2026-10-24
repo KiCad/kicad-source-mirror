@@ -101,6 +101,7 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
         m_board( aBoard ),
         m_constraintTitle( aConstraintTitle ),
         m_validationSucceeded( false ),
+        m_modified( false ),
         m_constraintData( aConstraintData ),
         m_helpWindow( nullptr )
 {
@@ -147,6 +148,14 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     bContentSizer->Add( buttonSizer, 0, wxALIGN_RIGHT | wxALL, 2 );
 
     m_btnShowMatches->Bind( wxEVT_BUTTON, &PANEL_DRC_RULE_EDITOR::onShowMatchesButtonClicked, this );
+
+    Bind( wxEVT_TEXT, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
+    Bind( wxEVT_CHOICE, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
+    Bind( wxEVT_COMBOBOX, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
+    Bind( wxEVT_CHECKBOX, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
+    Bind( wxEVT_CHECKLISTBOX, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
+    Bind( wxEVT_RADIOBUTTON, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
+    Bind( wxEVT_STC_CHANGE, &PANEL_DRC_RULE_EDITOR::onFieldChanged, this );
 
     m_btnShowMatches->Enable( true );
 
@@ -261,10 +270,21 @@ bool PANEL_DRC_RULE_EDITOR::TransferDataToWindow()
         m_conditionGroupPanel->ParseCondition( cond );
     }
 
-    if( m_constraintPanel )
-        return m_constraintPanel->TransferDataToWindow();
+    bool transferred = true;
 
-    return true;
+    if( m_constraintPanel )
+        transferred = m_constraintPanel->TransferDataToWindow();
+
+    m_modified = false;
+
+    return transferred;
+}
+
+
+void PANEL_DRC_RULE_EDITOR::onFieldChanged( wxEvent& aEvent )
+{
+    m_modified = true;
+    aEvent.Skip();
 }
 
 

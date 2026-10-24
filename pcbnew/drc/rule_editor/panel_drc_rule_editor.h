@@ -55,6 +55,8 @@ public:
 
     auto GetConstraintData() { return m_constraintData; }
 
+    bool IsModified() const { return m_modified; }
+
     void SetSaveCallback( std::function<void( int aNodeId )> aCallBackSave )
     {
         m_callBackSave = aCallBackSave;
@@ -102,6 +104,8 @@ private:
         const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType );
 
     wxString buildLayerClause() const;
+
+    void onFieldChanged( wxEvent& aEvent );
 
     /**
      * Handles the save button click event, validating inputs and invoking the save callback if valid.
@@ -176,6 +180,7 @@ private:
     BOARD*            m_board;
     wxString*         m_constraintTitle;
     bool              m_validationSucceeded;
+    bool              m_modified;
     wxString          m_validationMessage;
 
     std::unique_ptr<SCINTILLA_TRICKS>            m_scintillaTricks;

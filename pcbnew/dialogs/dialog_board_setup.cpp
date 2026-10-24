@@ -38,6 +38,7 @@
 #include <panel_embedded_files.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_rules.h>
+#include <dialogs/panel_setup_constraint_rules.h>
 #include <drc/drc_engine.h>
 #include <drc/rule_editor/drc_rule_document.h>
 #include <ki_exception.h>
@@ -83,12 +84,12 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_formattingPage( 0 ),
         m_maskAndPastePage( 0 ),
         m_constraintsPage( 0 ),
+        m_customRulesPage( 0 ),
         m_tracksAndViasPage( 0 ),
         m_viaStacksPage( 0 ),
         m_teardropsPage( 0 ),
         m_tuningPatternsPage( 0 ),
         m_netclassesPage( 0 ),
-        m_customRulesPage( 0 ),
         m_severitiesPage( 0 ),
         m_tuningProfilesPage( 0 ),
         m_initComplete( false )
@@ -133,13 +134,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_BOARD_FINISH( aParent, m_frame );
             }, _( "Board Finish" ) );
 
-    m_maskAndPastePage = m_treebook->GetPageCount();
-    m_treebook->AddLazySubPage(
-            [this]( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
-            }, _( "Solder Mask/Paste" ) );
-
     m_drillChartPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
@@ -178,6 +172,38 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_CONSTRAINTS( aParent, m_frame );
             }, _( "Constraints" ) );
 
+    const std::vector<std::pair<PANEL_SETUP_CONSTRAINT_RULES::FAMILY, wxString>> ruleFamilies = {
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::CLEARANCE, _( "Clearance" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::TRACKS_AND_VIAS, _( "Tracks and Vias" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::HOLES, _( "Holes" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::SILKSCREEN, _( "Silkscreen" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::SOLDER_MASK, _( "Solder Mask/Paste Rules" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::HIGH_SPEED, _( "High Speed" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::FOOTPRINTS, _( "Footprints" ) }
+    };
+
+    for( const auto& [family, familyTitle] : ruleFamilies )
+    {
+        size_t familyPage = m_treebook->GetPageCount();
+
+        // A plain empty page, so selecting the family drops through to its first constraint the
+        // way the other tree level nodes do.
+        m_treebook->AddSubPage( new wxPanel( GetTreebook() ), familyTitle );
+
+        std::vector<CONSTRAINT_SECTION> sections = PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( family );
+
+        for( size_t i = 0; i < sections.size(); ++i )
+        {
+            m_treebook->InsertLazySubPage(
+                    familyPage,
+                    [this, family, i]( wxWindow* aParent ) -> wxWindow*
+                    {
+                        return new PANEL_SETUP_CONSTRAINT_RULES( aParent, m_frame, m_ruleDocument.get(), family, i );
+                    },
+                    sections[i].title );
+        }
+    }
+
     m_tracksAndViasPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
@@ -192,6 +218,14 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_VIA_STACKS( aParent, m_frame );
             },
             _( "Microvia Stacks" ) );
+
+    m_maskAndPastePage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
+            },
+            _( "Solder Mask/Paste" ) );
 
     m_zonesPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -466,9 +500,23 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 }
 
 
+void DIALOG_BOARD_SETUP::forEachOpenRulePage( const std::function<void( PANEL_SETUP_CONSTRAINT_RULES* )>& aAction )
+{
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        if( auto* page = dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( m_treebook->GetResolvedPage( i ) ) )
+            aAction( page );
+    }
+}
+
+
 void DIALOG_BOARD_SETUP::refreshRulePage( size_t aPage )
 {
-    if( auto* textPage = dynamic_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( aPage ) ) )
+    wxWindow* resolved = m_treebook->GetResolvedPage( aPage );
+
+    if( auto* rulesPage = dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( resolved ) )
+        rulesPage->RefreshFromDocument();
+    else if( auto* textPage = dynamic_cast<PANEL_SETUP_RULES*>( resolved ) )
         textPage->RefreshFromDocument();
 }
 
@@ -585,7 +633,15 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             RESOLVE_PAGE( PANEL_SETUP_FORMATTING, m_formattingPage )->ImportSettingsFrom( other );
 
         if( importDlg.m_ConstraintsOpt->GetValue() )
+        {
             RESOLVE_PAGE( PANEL_SETUP_CONSTRAINTS, m_constraintsPage )->ImportSettingsFrom( other );
+
+            forEachOpenRulePage(
+                    [other]( PANEL_SETUP_CONSTRAINT_RULES* aPage )
+                    {
+                        aPage->ImportSettingsFrom( other );
+                    } );
+        }
 
         if( importDlg.m_NetclassesOpt->GetValue() )
         {
@@ -629,6 +685,12 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             m_ruleDocument->LoadFrom( other->GetDesignRulesPath() );
 
             refreshRulePage( m_customRulesPage );
+
+            forEachOpenRulePage(
+                    []( PANEL_SETUP_CONSTRAINT_RULES* aPage )
+                    {
+                        aPage->RefreshFromDocument();
+                    } );
         }
 
         if( importDlg.m_SeveritiesOpt->GetValue() )

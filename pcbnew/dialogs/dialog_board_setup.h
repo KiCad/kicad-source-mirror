@@ -27,6 +27,7 @@
 class PCB_EDIT_FRAME;
 class DRC_RULE_DOCUMENT;
 class PANEL_SETUP_CONSTRAINTS;
+class PANEL_SETUP_CONSTRAINT_RULES;
 class PANEL_SETUP_LAYERS;
 class PANEL_SETUP_DEFAULTS;
 class PANEL_SETUP_NETCLASSES;
@@ -55,6 +56,7 @@ protected:
     void onCloseWindow( wxCloseEvent& aEvent );
 
     void refreshRulePage( size_t aPage );
+    void forEachOpenRulePage( const std::function<void( PANEL_SETUP_CONSTRAINT_RULES* )>& aAction );
 
     bool TransferDataFromWindow() override;
 
@@ -78,6 +80,7 @@ private:
     size_t m_maskAndPastePage;
     size_t m_drillChartPage;
     size_t m_constraintsPage;
+    size_t m_customRulesPage;
     size_t m_tracksAndViasPage;
     size_t m_viaStacksPage;
     size_t m_zonesPage;
@@ -85,7 +88,6 @@ private:
     size_t m_tuningPatternsPage;
     size_t m_netclassesPage;
     size_t m_componentClassesPage;
-    size_t m_customRulesPage;
     size_t m_severitiesPage;
     size_t m_embeddedFilesPage;
     size_t m_tuningProfilesPage;
