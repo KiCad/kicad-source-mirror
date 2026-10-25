@@ -63,8 +63,18 @@ PANEL_SETUP_CONSTRAINT_RULES::PANEL_SETUP_CONSTRAINT_RULES( wxWindow* aParent, P
 
     if( !m_sections.empty() && !m_sections[0].defaults.empty() )
     {
-        m_noteText = _( "The value is resolved in this order: the board default, then the matching net class, "
-                        "then the rules from top to bottom. The last match wins." );
+        m_noteText = _( "The value is resolved in this order, the last match winning: the board defaults, "
+                        "then the matching net class, then any tuning profile, then any keepout area, then "
+                        "the rules below from top to bottom." );
+
+        // The engine raises a resolved clearance to the board minimum afterwards, so for these
+        // two a rule cannot win by asking for less.
+        if( m_sections[0].ruleType == MINIMUM_CLEARANCE || m_sections[0].ruleType == COPPER_TO_HOLE_CLEARANCE )
+        {
+            m_noteText += wxS( " " );
+            m_noteText += _( "A rule cannot take the clearance below the board minimum." );
+        }
+
         m_note = new wxStaticText( m_scrolled, wxID_ANY, m_noteText );
         m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
         m_scrolled->GetSizer()->Add( m_note, 0, wxALL, 8 );
