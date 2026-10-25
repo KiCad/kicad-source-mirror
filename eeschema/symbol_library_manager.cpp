@@ -33,6 +33,7 @@
 #include <wx_filename.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <progress_reporter.h>
+#include <algorithm>
 #include <list>
 #include <locale_io.h>
 #include <confirm.h>
@@ -1025,8 +1026,7 @@ bool LIB_BUFFER::DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf )
                 return aBuf.get() == &aSymbolBuf;
             };
 
-    auto symbolBufIt = std::find_if( m_symbols.begin(), m_symbols.end(), sameBufferPredicate );
-    wxCHECK( symbolBufIt != m_symbols.end(), false );
+    wxCHECK( std::any_of( m_symbols.begin(), m_symbols.end(), sameBufferPredicate ), false );
 
     bool retv = true;
 
@@ -1036,6 +1036,10 @@ bool LIB_BUFFER::DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf )
     {
         retv = false;
     }
+
+    // Erasing the children invalidated any earlier iterator into the deque
+    auto symbolBufIt = std::find_if( m_symbols.begin(), m_symbols.end(), sameBufferPredicate );
+    wxCHECK( symbolBufIt != m_symbols.end(), false );
 
     m_deleted.emplace_back( *symbolBufIt );
     m_symbols.erase( symbolBufIt );
