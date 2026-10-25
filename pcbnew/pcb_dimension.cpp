@@ -530,10 +530,7 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
 
 DIM_VALUE_MODE PCB_DIMENSION_BASE::GetValueMode() const
 {
-    // Read only here but shared lookup helpers require a mutable board pointer
-    BOARD* board = const_cast<BOARD*>( GetBoard() );
-
-    return DimensionValueMode( board, this );
+    return DimensionValueMode( GetBoard(), this );
 }
 
 
@@ -550,8 +547,7 @@ wxString PCB_DIMENSION_BASE::GetValueFieldText() const
     {
     case DIM_VALUE_MODE::DRIVING:
     {
-        PCB_CONSTRAINT* lengthConstraint =
-                FindDimensionLengthConstraint( const_cast<BOARD*>( GetBoard() ), this );
+        PCB_CONSTRAINT* lengthConstraint = FindDimensionLengthConstraint( GetBoard(), this );
 
         if( lengthConstraint && lengthConstraint->GetValue() )
         {
