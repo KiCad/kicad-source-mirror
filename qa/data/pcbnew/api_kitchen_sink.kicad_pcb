@@ -2466,6 +2466,16 @@
 		)
 		(attr smd)
 		(duplicate_pad_numbers_are_jumpers no)
+		(units
+			(unit
+				(name "A")
+				(pins "1" "2" "3" "4" "5" "6")
+			)
+			(unit
+				(name "B")
+				(pins "7" "8" "9" "10" "11" "12")
+			)
+		)
 		(fp_line
 			(start -1.61 -1.61)
 			(end -0.885 -1.61)

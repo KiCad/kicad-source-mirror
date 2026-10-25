@@ -1426,6 +1426,18 @@ message FootprintVariant
   map<string, string> fields = 6;
 }
 
+// Unit information copied from the symbol associated with a footprint.  This information is
+// refreshed when the board is updated from the schematic.
+// Since: 10.0.8
+message FootprintUnitInfo
+{
+  // The unit name, e.g. "A"
+  string name = 1;
+
+  // The symbol pin numbers belonging to this unit
+  repeated string pin_numbers = 2;
+}
+
 message NetTieDefinition
 {
   repeated string pad_number = 1;
@@ -1606,6 +1618,10 @@ message FootprintInstance
   // Per-variant data for this footprint instance
   // Since: 10.0.7
   repeated FootprintVariant variants = 20;
+
+  // Unit metadata copied from the associated symbol
+  // Since: 10.0.8
+  repeated FootprintUnitInfo symbol_units = 21;
 }
 
 // Since: 10.0.7

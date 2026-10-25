@@ -543,6 +543,15 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
         }
     }
 
+    for( const FP_UNIT_INFO& unit : m_unitInfo )
+    {
+        types::FootprintUnitInfo* unitMsg = footprint.add_symbol_units();
+        unitMsg->set_name( unit.m_unitName.ToUTF8() );
+
+        for( const wxString& pinNumber : unit.m_pins )
+            unitMsg->add_pin_numbers( pinNumber.ToUTF8() );
+    }
+
     aContainer.PackFrom( footprint );
 }
 
@@ -896,6 +905,19 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
         for( const auto& [fieldName, fieldValue] : variantMsg.fields() )
             variant.SetFieldValue( wxString::FromUTF8( fieldName ), wxString::FromUTF8( fieldValue ) );
+    }
+
+    m_unitInfo.clear();
+
+    for( const types::FootprintUnitInfo& unitMsg : footprint.symbol_units() )
+    {
+        FP_UNIT_INFO unit;
+        unit.m_unitName = wxString::FromUTF8( unitMsg.name() );
+
+        for( const std::string& pinNumber : unitMsg.pin_numbers() )
+            unit.m_pins.emplace_back( wxString::FromUTF8( pinNumber ) );
+
+        m_unitInfo.push_back( std::move( unit ) );
     }
 
     return true;
