@@ -2864,6 +2864,11 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                             return;
                         }
 
+                        // An image has no physical area to contribute and no polygon
+                        // representation, so leave it out without invalidating the total.
+                        if( aItem->Type() == PCB_REFERENCE_IMAGE_T )
+                            return;
+
                         if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
                         {
                             group->RunOnChildren( accumulateArea, RECURSE_MODE::RECURSE );

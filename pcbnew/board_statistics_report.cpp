@@ -383,7 +383,8 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
             {
                 if( child->Type() == PCB_FOOTPRINT_T
                     || child->Type() == PCB_GROUP_T
-                    || child->Type() == PCB_GENERATOR_T )
+                    || child->Type() == PCB_GENERATOR_T
+                    || child->Type() == PCB_REFERENCE_IMAGE_T )
                 {
                     return;
                 }
