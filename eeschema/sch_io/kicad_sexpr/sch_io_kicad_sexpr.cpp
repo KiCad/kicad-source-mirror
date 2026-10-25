@@ -468,6 +468,10 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
     screen->GetPageSettings().Format( m_out );
     screen->GetTitleBlock().Format( m_out );
 
+    // Variant alternates are not placed on the sheet, so include them here to keep the file self-contained
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        screen->IncludeVariantSymbols( *static_cast<SCH_SYMBOL*>( item ) );
+
     // Save cache library.
     m_out->Print( "(lib_symbols" );
 
@@ -677,6 +681,16 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
 
         if( it != screen->GetLibSymbols().end() )
             libSymbols[ libSymbolLookup ] = it->second;
+
+        screen->IncludeVariantSymbols( *symbol );
+
+        for( const LIB_ID& alternate : symbol->GetVariantSymbolOverrides() )
+        {
+            wxString key = alternate.Format().wx_str();
+
+            if( auto altIt = screen->GetLibSymbols().find( key ); altIt != screen->GetLibSymbols().end() )
+                libSymbols[key] = altIt->second;
+        }
     }
 
     if( !libSymbols.empty() )

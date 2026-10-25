@@ -1033,11 +1033,23 @@ public:
     bool ClearVariantSymbolOverride( const SCH_SHEET_PATH& aPath, const wxString& aVariantName );
 
     /**
+     * @return the distinct alternate-symbol LIB_IDs referenced by any variant of any instance.
+     */
+    std::vector<LIB_ID> GetVariantSymbolOverrides() const;
+
+    /**
+     * Load a flattened copy of an alternate symbol from the project's symbol libraries.
+     *
+     * @return the symbol, or nullptr if the library or symbol cannot be found.
+     */
+    std::unique_ptr<LIB_SYMBOL> LoadAlternateFromLibrary( const LIB_ID& aLibId ) const;
+
+    /**
      * Resolve the alternate library symbol for a given variant.
      *
-     * Looks up the variant's symbol override and resolves the LIB_ID through
-     * the project's symbol library adapter. Returns nullptr if the variant has no
-     * override or if the LIB_ID cannot be resolved.
+     * Looks up the variant's symbol override and resolves the LIB_ID through the schematic's
+     * library symbols first, then the project's symbol library adapter. Returns nullptr if the
+     * variant has no override or if the LIB_ID cannot be resolved.
      *
      * @param aVariantName the variant to resolve.
      * @param aPath the sheet path for this instance.

@@ -390,6 +390,12 @@ bool SCH_SCREEN::PruneUnusedLibSymbol( const wxString& aName )
 
         if( symbol->GetSchSymbolLibraryName() == aName )
             return false;
+
+        for( const LIB_ID& alternate : symbol->GetVariantSymbolOverrides() )
+        {
+            if( alternate.Format().wx_str() == aName )
+                return false;
+        }
     }
 
     if( auto it = m_libSymbols.find( aName ); it != m_libSymbols.end() )
@@ -1573,6 +1579,44 @@ void SCH_SCREEN::AddLibSymbol( const wxString& aKey, std::unique_ptr<LIB_SYMBOL>
     LIB_SYMBOL* previous = std::exchange( it->second, aLibSymbol.release() );
 
     delete previous;
+}
+
+
+void SCH_SCREEN::IncludeVariantSymbols( const SCH_SYMBOL& aSymbol, bool aRefresh )
+{
+    for( const LIB_ID& alternate : aSymbol.GetVariantSymbolOverrides() )
+    {
+        // Overriding to the symbol's own link changes nothing
+        if( alternate == aSymbol.GetLibId() )
+            continue;
+
+        wxString key = alternate.Format().wx_str();
+
+        if( m_libSymbols.contains( key ) )
+        {
+            if( !aRefresh )
+                continue;
+
+            // A base symbol sharing the key keeps its own copy
+            bool usedAsBase = false;
+
+            for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+                usedAsBase |= static_cast<SCH_SYMBOL*>( item )->GetSchSymbolLibraryName() == key;
+
+            if( usedAsBase )
+                continue;
+        }
+
+        if( std::unique_ptr<LIB_SYMBOL> libSymbol = aSymbol.LoadAlternateFromLibrary( alternate ) )
+        {
+            libSymbol->SetParent();
+            AddLibSymbol( key, std::move( libSymbol ) );
+
+            // Other instances may hold the replaced definition in their resolved cache
+            for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+                item->ClearCaches();
+        }
+    }
 }
 
 

@@ -348,6 +348,14 @@ public:
     bool PruneUnusedLibSymbol( const wxString& aName );
 
     /**
+     * Include the alternate symbols that \a aSymbol's variants select in the library symbols.
+     *
+     * Alternates already present are kept unless \a aRefresh is set, in which case they are
+     * reloaded from the symbol libraries.  Alternates that no library can supply are left alone.
+     */
+    void IncludeVariantSymbols( const SCH_SYMBOL& aSymbol, bool aRefresh = false );
+
+    /**
      * Remove \a aItem from the linked list and deletes the object.
      *
      * If \a aItem is a schematic sheet label, it is removed from the screen associated with

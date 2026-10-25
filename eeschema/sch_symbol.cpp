@@ -4975,6 +4975,67 @@ LIB_SYMBOL* SCH_SYMBOL::GetVariantLibSymbol( const wxString&      aVariantName,
         return nullptr;
     }
 
+    std::unique_ptr<LIB_SYMBOL> resolved;
+
+    // The schematic's copy wins so library edits only apply through an explicit update
+    if( GetParent() && GetParent()->Type() == SCH_SCREEN_T )
+    {
+        const auto& libSymbols = static_cast<const SCH_SCREEN*>( GetParent() )->GetLibSymbols();
+
+        if( auto it = libSymbols.find( libIdStr ); it != libSymbols.end() && it->second )
+            resolved = it->second->Flatten();
+    }
+
+    if( !resolved )
+    {
+        if( !Schematic() )
+            return nullptr;
+
+        resolved = LoadAlternateFromLibrary( libId );
+    }
+
+    if( !resolved )
+    {
+        m_variantSymbolCache[libIdStr] = nullptr;
+        return nullptr;
+    }
+
+    std::unique_ptr<LIB_SYMBOL>& cached = m_variantSymbolCache[libIdStr];
+
+    cached = std::move( resolved );
+
+    if( m_part && !ValidateVariantSymbolCompatibility( *m_part, *cached ).empty() )
+    {
+        cached.reset();
+        return nullptr;
+    }
+
+    return cached.get();
+}
+
+
+std::vector<LIB_ID> SCH_SYMBOL::GetVariantSymbolOverrides() const
+{
+    std::vector<LIB_ID> overrides;
+
+    for( const SCH_SYMBOL_INSTANCE& instance : GetInstances() )
+    {
+        for( const auto& [name, variant] : instance.m_Variants )
+        {
+            if( variant.m_SymbolOverride
+                && std::find( overrides.begin(), overrides.end(), *variant.m_SymbolOverride ) == overrides.end() )
+            {
+                overrides.push_back( *variant.m_SymbolOverride );
+            }
+        }
+    }
+
+    return overrides;
+}
+
+
+std::unique_ptr<LIB_SYMBOL> SCH_SYMBOL::LoadAlternateFromLibrary( const LIB_ID& aLibId ) const
+{
     SCHEMATIC* schematic = Schematic();
 
     if( !schematic )
@@ -4987,26 +5048,18 @@ LIB_SYMBOL* SCH_SYMBOL::GetVariantLibSymbol( const wxString&      aVariantName,
 
     try
     {
-        if( LIB_SYMBOL* libSymbol = adapter->LoadSymbol( libId ) )
-        {
-            std::unique_ptr<LIB_SYMBOL>& cached = m_variantSymbolCache[libIdStr];
+        const wxString nickname = aLibId.GetLibNickname().wx_str();
 
-            cached = libSymbol->Flatten();
+        if( adapter->GetRow( nickname ) && !adapter->HasLibrary( nickname ) )
+            adapter->LoadOne( nickname );
 
-            if( m_part && cached && !ValidateVariantSymbolCompatibility( *m_part, *cached ).empty() )
-            {
-                cached.reset();
-                return nullptr;
-            }
-
-            return cached.get();
-        }
+        if( LIB_SYMBOL* libSymbol = adapter->LoadSymbol( aLibId ) )
+            return libSymbol->Flatten();
     }
     catch( const IO_ERROR& )
     {
     }
 
-    m_variantSymbolCache[libIdStr] = nullptr;
     return nullptr;
 }
 

@@ -2501,6 +2501,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( source )
                 symbol->SetLibSymbol( new LIB_SYMBOL( *source ) );
 
+            for( const LIB_ID& alternate : symbol->GetVariantSymbolOverrides() )
+            {
+                wxString key = alternate.Format().wx_str();
+                auto     it = tempScreen->GetLibSymbols().find( key );
+
+                if( it != tempScreen->GetLibSymbols().end() && it->second
+                    && !currentScreen->GetLibSymbols().contains( key ) )
+                    currentScreen->AddLibSymbol( key, it->second->Flatten() );
+            }
+
             // If the symbol is already in the schematic we have to always keep the annotations. The exception
             // is if the user has chosen to remove them.
             for( const SCH_SYMBOL_INSTANCE& instance : symbol->GetInstances() )

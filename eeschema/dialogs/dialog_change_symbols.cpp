@@ -685,6 +685,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
 
         symbol->SetLibSymbol( flattenedSymbol.release() );
 
+        if( screen )
+            screen->IncludeVariantSymbols( *symbol, true );
+
         if( keepPinMaps && symbol->GetLibSymbolRef() )
         {
             symbol->GetLibSymbolRef()->SetPinMaps( savedPinMaps );
