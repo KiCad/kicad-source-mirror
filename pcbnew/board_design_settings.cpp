@@ -18,6 +18,7 @@
  */
 
 #include "board_design_settings.h"
+#include "widgets/report_severity.h"
 
 #include <algorithm>
 #include <cmath>
@@ -38,6 +39,7 @@
 #include <settings/parameters.h>
 #include <project/project_file.h>
 #include <advanced_config.h>
+#include <wx/debug.h>
 
 const int bdsSchemaVersion = 3;
 
@@ -1592,15 +1594,22 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
 }
 
 
-SEVERITY BOARD_DESIGN_SETTINGS::GetSeverity( int aDRCErrorCode )
+SEVERITY BOARD_DESIGN_SETTINGS::GetSeverity( int aDRCErrorCode ) const
 {
-    return m_DRCSeverities[ aDRCErrorCode ];
+    auto it = m_DRCSeverities.find( aDRCErrorCode );
+
+    // If not found, return the default severity for unrecognized error codes.
+    // As constructed, the default severity for unrecognized error codes is RPT_SEVERITY_ERROR.
+    wxCHECK_MSG( it != m_DRCSeverities.end(), RPT_SEVERITY_ERROR,
+                 wxString::Format( wxT( "DRC error code %d not found" ), aDRCErrorCode ) );
+
+    return it->second;
 }
 
 
-bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode )
+bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode ) const
 {
-    return m_DRCSeverities[ aDRCErrorCode ] == RPT_SEVERITY_IGNORE;
+    return GetSeverity( aDRCErrorCode ) == RPT_SEVERITY_IGNORE;
 }
 
 

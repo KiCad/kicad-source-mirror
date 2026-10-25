@@ -233,12 +233,17 @@ public:
         return &m_TeardropParamsList;
     }
 
-    SEVERITY GetSeverity( int aDRCErrorCode );
+    /**
+     * Return the severity of a given DRC error code.
+     *
+     * If the error code is not recognized, RPT_SEVERITY_ERROR is returned.
+     */
+    SEVERITY GetSeverity( int aDRCErrorCode ) const;
 
     /**
-     * Return true if the DRC error code's severity is SEVERITY_IGNORE.
+     * Return true if the DRC error code's severity is RPT_SEVERITY_ERROR.
      */
-    bool Ignore( int aDRCErrorCode );
+    bool Ignore( int aDRCErrorCode ) const;
 
     /**
      * Validate design settings values and return per-field errors.
