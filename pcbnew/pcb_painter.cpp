@@ -2303,7 +2303,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 }
 
                 for( PCB_LAYER_ID layer : visibleLayers )
-                    margin = std::max( margin, getExpansion( layer ) );
+                {
+                    VECTOR2I expansion = getExpansion( layer );
+
+                    if( expansion.SquaredEuclideanNorm() > margin.SquaredEuclideanNorm() )
+                        margin = expansion;
+                }
 
                 margin.x += m_lockedShadowMargin / 2;
                 margin.y += m_lockedShadowMargin / 2;

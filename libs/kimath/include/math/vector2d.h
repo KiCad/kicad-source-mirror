@@ -590,28 +590,28 @@ VECTOR2<T>::SquaredDistance( const VECTOR2<T>& aVector ) const
 template <class T>
 constexpr bool VECTOR2<T>::operator<( const VECTOR2<T>& aVector ) const
 {
-    return ( *this * *this ) < ( aVector * aVector );
+    return x < aVector.x || ( x == aVector.x && y < aVector.y );
 }
 
 
 template <class T>
 constexpr bool VECTOR2<T>::operator<=( const VECTOR2<T>& aVector ) const
 {
-    return ( *this * *this ) <= ( aVector * aVector );
+    return x < aVector.x || ( x == aVector.x && y <= aVector.y );
 }
 
 
 template <class T>
 constexpr bool VECTOR2<T>::operator>( const VECTOR2<T>& aVector ) const
 {
-    return ( *this * *this ) > ( aVector * aVector );
+    return x > aVector.x || ( x == aVector.x && y > aVector.y );
 }
 
 
 template <class T>
 constexpr bool VECTOR2<T>::operator>=( const VECTOR2<T>& aVector ) const
 {
-    return ( *this * *this ) >= ( aVector * aVector );
+    return x > aVector.x || ( x == aVector.x && y >= aVector.y );
 }
 
 
@@ -731,13 +731,6 @@ namespace std
     struct hash<VECTOR2I>
     {
         size_t operator()( const VECTOR2I& k ) const = delete;
-    };
-
-    // Required to enable use of std::hash with maps.
-    template <>
-    struct less<VECTOR2I>
-    {
-        bool operator()( const VECTOR2I& aA, const VECTOR2I& aB ) const;
     };
 }
 

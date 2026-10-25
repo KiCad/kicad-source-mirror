@@ -875,7 +875,7 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
         {
             GRID_HELPER_GRIDS itemGrid = GetItemGrid( item );
 
-            if( GetGridSize( itemGrid ) > GetGridSize( grid ) )
+            if( GetGridSize( itemGrid ).SquaredEuclideanNorm() > GetGridSize( grid ).SquaredEuclideanNorm() )
                 grid = itemGrid;
         }
 

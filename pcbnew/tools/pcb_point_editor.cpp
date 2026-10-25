@@ -1636,7 +1636,8 @@ private:
             // Find vector from nearest dimension point to edit position
             VECTOR2I directionA( cursorPos - m_dimension.GetStart() );
             VECTOR2I directionB( cursorPos - m_dimension.GetEnd() );
-            VECTOR2I direction = ( directionA < directionB ) ? directionA : directionB;
+            VECTOR2I direction = directionA.SquaredEuclideanNorm() < directionB.SquaredEuclideanNorm() ? directionA
+                                                                                                      : directionB;
 
             bool     vert;
             VECTOR2D featureLine( cursorPos - m_dimension.GetStart() );

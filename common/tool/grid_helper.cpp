@@ -477,7 +477,7 @@ GRID_HELPER_GRIDS GRID_HELPER::GetSelectionGrid( const SELECTION& aSelection ) c
     {
         GRID_HELPER_GRIDS itemGrid = GetItemGrid( item );
 
-        if( GetGridSize( itemGrid ) > GetGridSize( grid ) )
+        if( GetGridSize( itemGrid ).SquaredEuclideanNorm() > GetGridSize( grid ).SquaredEuclideanNorm() )
             grid = itemGrid;
     }
 

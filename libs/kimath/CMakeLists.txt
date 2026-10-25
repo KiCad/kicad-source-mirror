@@ -47,7 +47,6 @@ set( KIMATH_SRCS
     src/geometry/vertex_set.cpp
 
 
-    src/math/vector2.cpp
     src/math/util.cpp
 )
 
