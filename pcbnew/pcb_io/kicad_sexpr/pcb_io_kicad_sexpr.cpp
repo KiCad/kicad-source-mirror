@@ -2643,22 +2643,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
 
     if( parentFP )
     {
-        EDA_TEXT*      mut = const_cast<EDA_TEXT*>( static_cast<const EDA_TEXT*>( aText ) );
-        const VECTOR2I savedSize = mut->GetTextSize();
-        const int      savedThickness = mut->GetTextThickness();
-        const bool     mutateThickness = !mut->GetAutoThickness();
-
-        mut->SetTextSize( unbakeSize( savedSize, parentFP ) );
-
-        if( mutateThickness )
-            mut->SetTextThickness( unbakeLinear( savedThickness, parentFP ) );
-
-        aText->EDA_TEXT::Format( m_out, ctl_flags );
-
-        mut->SetTextSize( savedSize );
-
-        if( mutateThickness )
-            mut->SetTextThickness( savedThickness );
+        // Footprint text accessors return board-frame sizes, so format the stored library-frame attributes
+        EDA_TEXT libText( pcbIUScale );
+        libText.SetAttributes( aText->GetAttributes() );
+        libText.Format( m_out, ctl_flags );
     }
     else
     {

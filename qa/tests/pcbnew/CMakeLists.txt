@@ -83,6 +83,7 @@ set( QA_PCBNEW_SRCS
     test_issue24901.cpp
     test_issue24967.cpp
     test_issue25010.cpp
+    test_issue25880.cpp
     test_issue25110_bezier_line_style.cpp
     test_issue25521.cpp
     test_issue25621_via_flashing_contact_layer.cpp
