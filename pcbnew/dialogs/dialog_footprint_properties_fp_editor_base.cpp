@@ -146,7 +146,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_heightCtrl = new wxTextCtrl( sbMetadataSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_heightCtrl->SetToolTip( _("Optional overall height specification for the footprint, independent from any 3D models.") );
 
-	bHeightSizer->Add( m_heightCtrl, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bHeightSizer->Add( m_heightCtrl, 1, wxEXPAND, 5 );
 
 	m_heightUnits = new wxStaticText( sbMetadataSizer->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_heightUnits->Wrap( -1 );

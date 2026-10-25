@@ -956,7 +956,7 @@
                               </object>
                               <object class="sizeritem" expanded="false">
                                 <property name="border">5</property>
-                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
+                                <property name="flag">wxEXPAND</property>
                                 <property name="proportion">1</property>
                                 <object class="wxTextCtrl" expanded="false">
                                   <property name="BottomDockable">1</property>
