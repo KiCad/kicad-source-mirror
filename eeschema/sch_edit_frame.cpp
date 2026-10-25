@@ -1695,6 +1695,23 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 }
 
 
+void SCH_EDIT_FRAME::RefreshComposedReferences()
+{
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [this]( KIGFX::VIEW_ITEM* aItem ) -> int
+            {
+                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem );
+
+                if( !symbol )
+                    return 0;
+
+                symbol->ClearCaches();
+                GetScreen()->UpdateDisplayBounds( symbol );
+                return KIGFX::GEOMETRY | KIGFX::REPAINT;
+            } );
+}
+
+
 void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 {
     SCHEMATIC_SETTINGS& settings = m_schematic->Settings();

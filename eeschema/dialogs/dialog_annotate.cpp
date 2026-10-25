@@ -85,6 +85,19 @@ private:
         return (int) EDA_UNIT_UTILS::UI::ValueFromString( m_textNumberAfter->GetValue() );
     }
 
+    /// Write the reused sheet mode to the project, returning true when it changed
+    bool storeReusedSheetMode()
+    {
+        SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+        bool                suffixMode = m_rbSuffixInstances->GetValue();
+
+        if( settings.m_AnnotateReusedSheetSuffixes == suffixMode )
+            return false;
+
+        settings.m_AnnotateReusedSheetSuffixes = suffixMode;
+        return true;
+    }
+
 private:
     SCH_EDIT_FRAME* m_Parent;
 };
@@ -167,6 +180,9 @@ DIALOG_ANNOTATE::~DIALOG_ANNOTATE()
             modified = true;
         }
 
+        if( storeReusedSheetMode() )
+            modified = true;
+
         if( modified )
             schFrame->OnModify();
     }
@@ -219,6 +235,8 @@ bool DIALOG_ANNOTATE::TransferDataToWindow()
         }
 
         m_textNumberAfter->SetValue( wxString::Format( wxT( "%d" ), projSettings.m_AnnotateStartNum ) );
+        m_rbSuffixInstances->SetValue( projSettings.m_AnnotateReusedSheetSuffixes );
+        m_rbSeparateInstances->SetValue( !projSettings.m_AnnotateReusedSheetSuffixes );
     }
 
     return true;
@@ -248,6 +266,10 @@ void DIALOG_ANNOTATE::OnAnnotateClick( wxCommandEvent& event )
 
     bool resetAnnotation = m_rbReset_Annotations->GetValue();
     bool regroupUnits = resetAnnotation && m_checkRegroupUnits->GetValue();
+
+    // Annotation reads the mode from the project, not from its arguments
+    if( storeReusedSheetMode() )
+        m_Parent->OnModify();
 
     m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(), m_checkRecursive->GetValue(),
                                GetStartNumber(), resetAnnotation, regroupUnits, true, reporter );

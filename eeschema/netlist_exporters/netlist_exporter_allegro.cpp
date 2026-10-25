@@ -70,6 +70,7 @@ bool NETLIST_EXPORTER_ALLEGRO::writeNetlist( const wxString& aOutFileName, unsig
         m_netNameNodes.clear();
 
         extractComponentsInfo();
+        reportUnsafeRefs( aReporter );
 
         // Start with package definitions, which we create from component groups.
         success &= toAllegroPackages();
@@ -116,12 +117,8 @@ bool NETLIST_EXPORTER_ALLEGRO::CompareSymbolSheetpath( const std::pair<SCH_SYMBO
 bool NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef( const wxString& aRefText1,
                                                  const wxString& aRefText2 )
 {
-    if( removeTailDigits( aRefText1 ) == removeTailDigits( aRefText2 ) )
-    {
-        return extractTailNumber( aRefText1 ) < extractTailNumber( aRefText2 );
-    }
-
-    return aRefText1 < aRefText2;
+    // A sheet suffix follows the number, so R2_M1 still sorts before R10_M1
+    return StrNumCmp( aRefText1, aRefText2 ) < 0;
 }
 
 
@@ -135,6 +132,9 @@ bool NETLIST_EXPORTER_ALLEGRO::CompareLibPin( const SCH_PIN* aPin1, const SCH_PI
 void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 {
     m_referencesAlreadyFound.Clear();
+
+    const EXPORT_EXCLUSION excluded = boardExclusion();
+
     m_libParts.clear();
 
     for( const SCH_SHEET_PATH& sheet : m_exportSheets )
@@ -154,7 +154,12 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            auto        test = ordered_symbols.insert( symbol );
+
+            // An excluded unit must not stand for its package, or the included units go with it
+            if( excluded( symbol, sheet ) )
+                continue;
+
+            auto test = ordered_symbols.insert( symbol );
 
             if( !test.second )
             {
@@ -173,9 +178,9 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
         for( EDA_ITEM* item : ordered_symbols )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, sheet, excluded );
 
-            if( !symbol || symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
+            if( !symbol )
                 continue;
 
             if( symbol->GetLibPins().empty() )
@@ -295,7 +300,7 @@ bool NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
             wxString ref1 = it->first->GetRef( &it->second );
             wxString ref2 = first_ele.first->GetRef( &first_ele.second );
 
-            if( removeTailDigits( ref1 ) == removeTailDigits( ref2 ) )
+            if( refPrefix( ref1 ) == refPrefix( ref2 ) )
             {
                 m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount, *it ) );
                 it = m_orderedSymbolsSheetpath.erase( it );
@@ -774,34 +779,35 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 }
 
 
-wxString NETLIST_EXPORTER_ALLEGRO::removeTailDigits( wxString aString )
+wxString NETLIST_EXPORTER_ALLEGRO::refPrefix( const wxString& aRef )
 {
-    while( aString.Length() > 0
-            && aString.GetChar( aString.Length() - 1 ) >= '0'
-            && aString.GetChar( aString.Length() - 1 ) <= '9' )
-    {
-        aString.RemoveLast();
-    }
-
-    return aString;
+    return aRef.Left( aRef.find_first_of( wxS( "0123456789" ) ) );
 }
 
 
-unsigned int NETLIST_EXPORTER_ALLEGRO::extractTailNumber( wxString aString )
+void NETLIST_EXPORTER_ALLEGRO::reportUnsafeRefs( REPORTER& aReporter ) const
 {
-    wxString numString;
+    // Allegro's default name length, and characters its netlist reader refuses
+    const size_t   maxLength = 31;
+    const wxString unsafe = wxS( "()'!@" );
 
-    while( aString.Length() > 0
-            && aString.GetChar( aString.Length() - 1 ) >= '0'
-            && aString.GetChar( aString.Length() - 1 ) <= '9' )
+    for( const auto& [symbol, sheet] : m_orderedSymbolsSheetpath )
     {
-        numString.insert( 0, aString.GetChar( aString.Length() - 1 ) );
-        aString.RemoveLast();
+        const wxString ref = symbol->GetRef( &sheet );
+
+        if( ref.length() > maxLength )
+        {
+            aReporter.Report( wxString::Format( _( "Reference %s is longer than the %zu characters Allegro accepts "
+                                                   "by default." ),
+                                                ref, maxLength ),
+                              RPT_SEVERITY_WARNING );
+        }
+
+        if( ref.find_first_of( unsafe ) != wxString::npos )
+        {
+            aReporter.Report( wxString::Format( _( "Reference %s contains a character Allegro rejects (%s)." ), ref,
+                                                unsafe ),
+                              RPT_SEVERITY_WARNING );
+        }
     }
-
-    unsigned long val;
-
-    //From wxWidgets 3.1.6, here we can use ToUInt instead of ToULong function.
-    numString.ToULong( &val );
-    return (unsigned int) val;
 }

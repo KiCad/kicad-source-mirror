@@ -62,6 +62,8 @@ bool NETLIST_EXPORTER_ORCADPCB2::writeNetlist( const wxString& aOutFileName, uns
         // Create netlist footprints section
         m_referencesAlreadyFound.Clear();
 
+        const EXPORT_EXCLUSION excluded = boardExclusion();
+
         for( const SCH_SHEET_PATH& sheet : m_exportSheets )
         {
             // The rtree returns items in a non-deterministic order (platform-dependent)
@@ -83,12 +85,9 @@ bool NETLIST_EXPORTER_ORCADPCB2::writeNetlist( const wxString& aOutFileName, uns
             // Process symbol attributes
             for( EDA_ITEM* item : sheetItems )
             {
-                SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
+                SCH_SYMBOL* symbol = findNextSymbol( item, sheet, excluded );
 
                 if( !symbol )
-                    continue;
-
-                if( symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
                     continue;
 
                 std::vector<PIN_INFO> pins = CreatePinList( symbol, sheet );

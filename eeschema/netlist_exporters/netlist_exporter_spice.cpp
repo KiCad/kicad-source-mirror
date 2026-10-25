@@ -34,6 +34,7 @@
 #include <sch_textbox.h>
 #include <string_utils.h>
 #include <algorithm>
+#include <set>
 #include <ki_exception.h>
 
 #include <dialogs/html_message_box.h>
@@ -185,7 +186,20 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
         wxRemoveFile( thisFile.GetFullPath() );
     }
 
-    for( SCH_SHEET_PATH& sheet : BuildSheetList( aNetlistOptions ) )
+    SCH_SHEET_LIST      exportSheets = BuildSheetList( aNetlistOptions );
+    std::set<KIID_PATH> exportPaths;
+
+    for( const SCH_SHEET_PATH& sheet : exportSheets )
+        exportPaths.insert( sheet.Path() );
+
+    // A unit outside the simulation must not claim its package, or the simulated units are dropped with it
+    const EXPORT_EXCLUSION excluded =
+            [&]( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheet )
+            {
+                return !exportPaths.contains( aSheet.Path() ) || aSymbol->ResolveExcludedFromSim( &aSheet, variant );
+            };
+
+    for( SCH_SHEET_PATH& sheet : exportSheets )
     {
         std::vector<SCH_ITEM*> sheetItems;
 
@@ -200,9 +214,9 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
         for( SCH_ITEM* item : sheetItems )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
+            SCH_SYMBOL* symbol = findNextSymbol( item, sheet, excluded );
 
-            if( !symbol || symbol->ResolveExcludedFromSim( &sheet, variant ) )
+            if( !symbol )
                 continue;
 
             try

@@ -332,7 +332,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, cons
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            wxString    ref = symbol->GetRef( &path );
+            wxString    ref = symbol->GetBaseRef( &path );
 
             symbol->SetRef( &path, ref + suffix );
         }

@@ -20,6 +20,7 @@
  */
 
 #include <cstdlib>
+#include <optional>
 
 #include <bitmaps.h>
 #include <core/mirror.h>
@@ -30,9 +31,12 @@
 #include <plotters/plotter.h>
 #include <sch_plotter.h>
 #include <string_utils.h>
+#include <common.h>
+#include <advanced_config.h>
 #include <widgets/msgpanel.h>
 #include <math/util.h>      // for KiROUND
 #include <geometry/geometry_utils.h>
+#include <increment.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
@@ -61,6 +65,24 @@ public:
             m_name( aName )
     {
         SetGroup( _HKI( "Fields" ) );
+
+        if( aName == GetDefaultFieldName( FIELD_T::SHEET_REF_SUFFIX, UNTRANSLATED ) )
+        {
+            SetValidator( []( const wxAny&& aValue, EDA_ITEM* ) -> VALIDATOR_RESULT
+                          {
+                              wxString value;
+
+                              if( !aValue.GetAs( &value ) )
+                                  return {};
+
+                              wxString msg = GetFieldValidationErrorMessage( FIELD_T::SHEET_REF_SUFFIX, value );
+
+                              if( msg.empty() )
+                                  return {};
+
+                              return std::make_unique<VALIDATION_ERROR_MSG>( msg );
+                          } );
+        }
     }
 
     size_t OwnerHash() const override { return TYPE_HASH( SCH_SHEET ); }
@@ -513,7 +535,13 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
         if( token->IsSameAs( fieldName ) )
         {
-            *token = field.GetShownText( aPath, INTERNAL, wxEmptyString, aDepth + 1 );
+            // Sheet instances (and their variant fields) are keyed by the parent path
+            SCH_SHEET_PATH parentPath = *aPath;
+
+            if( !parentPath.empty() && parentPath.Last() == this )
+                parentPath.pop_back();
+
+            *token = field.GetShownText( &parentPath, INTERNAL, schematic->GetCurrentVariant(), aDepth + 1 );
             return true;
         }
     }
@@ -652,6 +680,175 @@ const SCH_FIELD* SCH_SHEET::GetField( FIELD_T aFieldType ) const
 }
 
 
+wxString SCH_SHEET::GetRefSuffix( const SCH_SHEET_PATH& aParentPath ) const
+{
+    const SCH_FIELD* suffixField = GetField( FIELD_T::SHEET_REF_SUFFIX );
+
+    if( !suffixField )
+        return wxEmptyString;
+
+    return ResolveRefSuffix( suffixField->GetText(), aParentPath );
+}
+
+
+wxString SCH_SHEET::ResolveRefSuffix( const wxString& aText, const SCH_SHEET_PATH& aParentPath ) const
+{
+    if( aText.IsEmpty() )
+        return wxEmptyString;
+
+    const SCH_FIELD* suffixField = GetField( FIELD_T::SHEET_REF_SUFFIX );
+    const int maxDepth = ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth;
+    int       depth = 0;
+
+    // Only base user fields on this path resolve, so every input reaches the cache through a commit
+    std::function<bool( wxString* )> resolver =
+            [&]( wxString* aToken ) -> bool
+            {
+                const SCH_FIELD* field = GetField( *aToken );
+
+                for( size_t ii = aParentPath.size(); !field && ii > 0; --ii )
+                    field = std::as_const( *aParentPath.at( ii - 1 ) ).GetField( *aToken );
+
+                // Saves rewrite the mandatory file name field without a commit
+                if( !field || field == suffixField || field->IsMandatory() )
+                    return false;
+
+                wxString value = UnescapeString( field->GetText() );
+
+                if( value.Contains( wxS( "${" ) ) && depth < maxDepth )
+                {
+                    ++depth;
+                    value = ExpandTextVars( value, &resolver, FOR_ERC_DRC, depth );
+                    --depth;
+                }
+
+                *aToken = value;
+                return true;
+            };
+
+    // INTERNAL would drop fields named like ERC_WARNING*, which are ordinary fields here
+    wxString suffix = ExpandTextVars( UnescapeString( aText ), &resolver, FOR_ERC_DRC );
+    FinalizeTextVarExpansion( suffix, INTERNAL );
+    return suffix;
+}
+
+
+wxString SCH_SHEET::NextRefSuffix( const wxString& aSuffix, const std::set<wxString>& aInUse,
+                                   const std::function<bool( const wxString& )>& aIsTaken )
+{
+    auto taken =
+            [&]( const wxString& aCandidate )
+            {
+                return aInUse.contains( aCandidate ) || ( aIsTaken && aIsTaken( aCandidate ) );
+            };
+
+    if( aSuffix.IsEmpty() || !taken( aSuffix ) )
+        return aSuffix;
+
+    auto splitTail =
+            []( const wxString& aText, auto aIsTailChar ) -> size_t
+            {
+                size_t stem = aText.length();
+
+                while( stem > 0 && aIsTailChar( aText[stem - 1] ) )
+                    --stem;
+
+                return stem;
+            };
+
+    auto isDigit = []( wxUniChar c ) { return c >= '0' && c <= '9'; };
+    auto isUpper = []( wxUniChar c ) { return c >= 'A' && c <= 'Z'; };
+    auto isLower = []( wxUniChar c ) { return c >= 'a' && c <= 'z'; };
+
+    size_t digitStem = splitTail( aSuffix, isDigit );
+
+    if( digitStem < aSuffix.length() )
+    {
+        wxString stem = aSuffix.Left( digitStem );
+        size_t   width = aSuffix.length() - digitStem;
+        wxULongLong_t highest = 0;
+
+        for( const wxString& used : aInUse )
+        {
+            wxULongLong_t value = 0;
+
+            if( used.StartsWith( stem ) && used.length() > stem.length()
+                    && splitTail( used, isDigit ) == stem.length()
+                    && used.Mid( stem.length() ).ToULongLong( &value ) )
+            {
+                highest = std::max( highest, value );
+            }
+        }
+
+        // A wrapped counter restarts at zero, so it still needs the in-use check
+        for( wxULongLong_t next = highest + 1; ; ++next )
+        {
+            wxString candidate = stem + wxString::Format( wxS( "%0*" wxLongLongFmtSpec "u" ), (int) width, next );
+
+            if( !taken( candidate ) )
+                return candidate;
+        }
+    }
+
+    // Longer letter runs are words such as _LEFT, not a series
+    auto letterSeries =
+            [&]( auto aIsLetter, bool aLower ) -> std::optional<wxString>
+            {
+                static const wxString alphabet = wxS( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+
+                size_t stem = splitTail( aSuffix, aIsLetter );
+                size_t run = aSuffix.length() - stem;
+
+                if( run == 0 || run > 2 )
+                    return std::nullopt;
+
+                wxString prefix = aSuffix.Left( stem );
+                int      highest = -1;
+
+                for( const wxString& used : aInUse )
+                {
+                    size_t usedStem = splitTail( used, aIsLetter );
+
+                    if( usedStem == stem && used.length() - usedStem <= 2 && used.StartsWith( prefix ) )
+                        highest = std::max( highest, IndexFromAlphabetic( used.Mid( stem ).Upper(), alphabet ) );
+                }
+
+                // Overflow such as _ZZ to _AAA leaves the series, so skip what it already holds
+                for( int next = highest + 1; ; ++next )
+                {
+                    wxString letters = AlphabeticFromIndex( next, alphabet, true );
+
+                    if( aLower )
+                        letters.MakeLower();
+
+                    if( !taken( prefix + letters ) )
+                        return prefix + letters;
+                }
+            };
+
+    if( std::optional<wxString> next = letterSeries( isUpper, false ) )
+        return *next;
+
+    if( std::optional<wxString> next = letterSeries( isLower, true ) )
+        return *next;
+
+    return aSuffix;
+}
+
+
+wxString SCH_SHEET::GetFullRefSuffixProp() const
+{
+    const SCHEMATIC* schematic = Schematic();
+
+    if( !schematic )
+        return wxEmptyString;
+
+    SCH_SHEET_PATH path = schematic->CurrentSheet();
+    path.push_back( const_cast<SCH_SHEET*>( this ) );
+    return schematic->GetRefSuffix( path );
+}
+
+
 SCH_FIELD* SCH_SHEET::GetField( const wxString& aFieldName )
 {
     return FindField( m_fields, aFieldName );
@@ -704,6 +901,7 @@ void SCH_SHEET::SetFieldText( SCH_FIELD* aField, const wxString& aFieldName, con
     }
 
     case FIELD_T::SHEET_NAME:
+    case FIELD_T::SHEET_REF_SUFFIX:
         aField->SetText( aFieldText );
         break;
 
@@ -778,6 +976,7 @@ wxString SCH_SHEET::GetFieldText( const SCH_FIELD* aField, const wxString& aFiel
     {
     case FIELD_T::REFERENCE:
     case FIELD_T::FOOTPRINT:
+    case FIELD_T::SHEET_REF_SUFFIX:
         return aField->GetText();
         break;
 
@@ -2019,7 +2218,36 @@ bool SCH_SHEET::HasHierarchyChanges( const SCH_SHEET& aOther ) const
     return GetName() != aOther.GetName()
             || GetFileName() != aOther.GetFileName()
             || GetScreen() != aOther.GetScreen()
-            || HasPageNumberChanges( aOther );
+            || HasPageNumberChanges( aOther )
+            || HasRefSuffixChanges( aOther );
+}
+
+
+bool SCH_SHEET::HasRefSuffixChanges( const SCH_SHEET& aOther ) const
+{
+    const SCHEMATIC* schematic = Schematic() ? Schematic() : aOther.Schematic();
+
+    if( !GetField( FIELD_T::SHEET_REF_SUFFIX ) && !aOther.GetField( FIELD_T::SHEET_REF_SUFFIX )
+        && !( schematic && schematic->HasRefSuffixFields() ) )
+    {
+        return false;
+    }
+
+    // A suffix can resolve any sheet field on its path, so every field edit may move one
+    return !std::ranges::equal( m_fields, aOther.m_fields,
+                                []( const SCH_FIELD& a, const SCH_FIELD& b )
+                                {
+                                    return a.GetName() == b.GetName() && a.GetText() == b.GetText();
+                                } );
+}
+
+
+void SCH_SHEET::SetDescendantsModified()
+{
+    SCH_SCREENS screens( this );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        screen->SetContentModified();
 }
 
 
@@ -2454,6 +2682,14 @@ static struct SCH_SHEET_DESC
 
                                     return std::make_unique<VALIDATION_ERROR_MSG>( msg );
                                 } );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, wxString>( _HKI( "Full Suffix" ),
+                    NO_SETTER( SCH_SHEET, wxString ), &SCH_SHEET::GetFullRefSuffixProp ) )
+                .SetAvailableFunc( []( INSPECTABLE* aObject )
+                                   {
+                                       SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( aObject );
+                                       return sheet && !sheet->GetFullRefSuffixProp().IsEmpty();
+                                   } );
 
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, int>( _HKI( "Border Width" ),
                     &SCH_SHEET::SetBorderWidth, &SCH_SHEET::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ) );

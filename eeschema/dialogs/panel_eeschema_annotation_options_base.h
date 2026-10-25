@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -63,6 +63,11 @@ class PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_rbSheetX100;
 		wxRadioButton* m_rbSheetX1000;
 		wxCheckBox* m_checkReuseRefdes;
+		wxStaticText* m_reusedSheetsLabel;
+		wxStaticLine* m_staticline4;
+		wxRadioButton* m_rbSeparateInstances;
+		wxRadioButton* m_rbSuffixInstances;
+		wxCheckBox* m_checkIncrementPastedSuffix;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnOptionChanged( wxCommandEvent& event ) { event.Skip(); }

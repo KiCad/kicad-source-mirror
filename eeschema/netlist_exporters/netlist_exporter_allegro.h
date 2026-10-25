@@ -169,20 +169,14 @@ private:
     wxString getGroupField( int aGroupIndex, const wxArrayString& aFieldArray, bool aSanitize = true );
 
     /**
-     * Remove the str's tailing digits.
-     *
-     * @param aString
-     * @return wxString
+     * @return the text of a reference before its number, as R for R12 and R12_M1.
      */
-    static wxString removeTailDigits( wxString aString );
+    static wxString refPrefix( const wxString& aRef );
 
     /**
-     * Extract the str's tailing number.
-     *
-     * @param aString
-     * @return unsigned int
+     * Warn about references Allegro may reject, which are too long or hold characters it refuses.
      */
-    static unsigned int extractTailNumber( wxString aString );
+    void reportUnsafeRefs( REPORTER& aReporter ) const;
 
     struct NET_NODE
     {

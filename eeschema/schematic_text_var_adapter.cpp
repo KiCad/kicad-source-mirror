@@ -236,6 +236,7 @@ std::vector<TEXT_VAR_REF_KEY> SCHEMATIC_TEXT_VAR_ADAPTER::ExtractSourceKeys( EDA
                 path.push_back( sym->m_Uuid );
 
                 addKey( sym->GetRef( &aPath, false ) );
+                addKey( sym->GetRef( &aPath, true ) );
                 addKey( path.AsString() );
             };
 

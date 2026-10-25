@@ -55,6 +55,12 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getItemIdentifier( const SCH_REFE
 }
 
 
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getItemRefSuffix( const SCH_REFERENCE& aItem ) const
+{
+    return aItem.GetRefSuffix();
+}
+
+
 wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = nullptr;
@@ -313,7 +319,8 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhIte
     if( lhItem.GetRefNumber() == wxT( "?" ) )
         return false;
 
-    return ( lhItem.GetRef() == rhItem.GetRef() && lhItem.GetRefNumber() == rhItem.GetRefNumber() );
+    return lhItem.GetRef() == rhItem.GetRef() && lhItem.GetRefNumber() == rhItem.GetRefNumber()
+           && lhItem.GetRefSuffix() == rhItem.GetRefSuffix();
 }
 
 

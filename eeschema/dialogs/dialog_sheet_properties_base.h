@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,6 +54,8 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_bpDelete;
 		wxStaticText* m_pageNumberStaticText;
 		wxTextCtrl* m_pageNumberTextCtrl;
+		wxStaticText* m_fullSuffixLabel;
+		wxTextCtrl* m_fullSuffixCtrl;
 		wxCheckBox* m_cbExcludeFromSim;
 		wxCheckBox* m_cbExcludeFromBoard;
 		wxCheckBox* m_cbDNP;

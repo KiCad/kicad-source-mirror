@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -56,6 +56,8 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_unitLabel;
 		wxChoice* m_unitChoice;
 		wxStaticText* m_bodyStyle;
+		wxStaticText* m_composedRefLabel;
+		wxStaticText* m_composedRef;
 		wxChoice* m_bodyStyleChoice;
 		wxStaticText* m_orientationLabel;
 		wxChoice* m_orientationCtrl;

@@ -38,6 +38,7 @@
 
 class SCH_SYMBOL;
 class SCH_SHEET;
+class SCH_SHEET_LIST;
 
 enum SYMBOL_FILTER
 {
@@ -130,6 +131,9 @@ struct SCH_SYMBOL_INSTANCE
     bool      m_ExcludedFromSim = false;
     bool      m_ExcludedFromBoard = false;
     bool      m_ExcludedFromPosFiles = false;
+
+    /// Set at load when the saved reference lacked its sheet suffix, cleared when the reference changes.
+    bool      m_RefLacksSuffix = false;
 
     /// A list of symbol variants.
     std::map<wxString, SCH_SYMBOL_VARIANT> m_Variants;
@@ -440,6 +444,14 @@ public:
                                 bool aEscapeSheetNames = false ) const;
 
     /**
+     * Compose the reference suffixes of every sheet in this path, from the root down.
+     *
+     * Resolves text variables, so call it on the main thread.  Readers on other threads use
+     * SCHEMATIC::GetRefSuffix(), which returns the value cached by SCHEMATIC::RefreshHierarchy().
+     */
+    wxString ComposeRefSuffix() const;
+
+    /**
      * Update all the symbol references for this sheet path.
      *
      * Mandatory in complex hierarchies because sheets may use the same screen (basic schematic)
@@ -542,9 +554,11 @@ public:
      * @param aPrefixSheetPath is the sheet path to prefix to this sheet path for the new symbol
      *        instance.
      * @param aProjectName is the name of the project for the new symbol instance data.
+     * @param aSourceSheets are the loaded sheets whose suffixes the copied references carry, or
+     *        nullptr when the copies are bases already.
      */
-    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
-                                const wxString& aProjectName );
+    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath, const wxString& aProjectName,
+                                const SCH_SHEET_LIST* aSourceSheets = nullptr );
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
@@ -856,9 +870,18 @@ public:
      *
      * @param aPrefixSheetPath is the sheet path to append the new symbol instances to.
      * @param aProjectName is the name of the project for the new symbol instance data.
+     * @param aStripRefSuffixes strips the suffix another project composed into a copied reference.
      */
-    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
-                                const wxString& aProjectName );
+    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath, const wxString& aProjectName,
+                                bool aStripRefSuffixes = false );
+
+    /**
+     * Return the suffix the source project composed into the instance of \a aSymbol at
+     * \a aInstancePath, which this list holds as loaded from that project's file.
+     *
+     * Ancestors above the loaded root are not in the file, so their part of the suffix is unknown.
+     */
+    wxString SourceRefSuffix( const SCH_SYMBOL& aSymbol, const KIID_PATH& aInstancePath ) const;
 
     void AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
                                int aLastVirtualPageNumber );
@@ -868,6 +891,30 @@ public:
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
     void CheckForMissingSymbolInstances( const wxString& aProjectName );
+
+    /**
+     * Recover the base references from the composed references a file stores.
+     *
+     * Run once after loading a project, before CheckForMissingSymbolInstances() copies references
+     * to new paths. A unit whose package an older version stored with another sheet's suffix loses
+     * that suffix; any other reference that lacks its path's suffix is kept whole.
+     */
+    void StripRefSuffixes();
+
+    /**
+     * Give a unit loaded by StripRefSuffixes() the base of a package in another top level sheet.
+     *
+     * Each top level sheet strips its references as it loads, before the others exist, so a unit
+     * of a package owned elsewhere keeps its whole reference or loses only its own suffix.
+     */
+    void RecoverPackageRefs();
+
+    /**
+     * Give every other instance of \a aSymbol's sheet the base reference and unit it has on \a aSource.
+     *
+     * @return the number of instances updated.
+     */
+    int ShareReusedSheetRef( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSource ) const;
 
     bool HasPath( const KIID_PATH& aPath ) const;
 

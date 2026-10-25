@@ -80,6 +80,26 @@ BACKANNOTATE_UNIT_SWAP_PLAN PlanBackannotateUnitSwaps(
         const std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE>& aCandidates,
         const std::map<wxString, wxString>& aPcbPinMap );
 
+struct BACKANNOTATE_REF
+{
+    wxString m_base;      ///< Base reference the instance takes, when m_error is empty
+    wxString m_error;
+};
+
+/**
+ * Turn the references footprints carry into the base references of their schematic instances.
+ *
+ * A board reference must end with its instance's sheet suffix, which is dropped.  When
+ * \a aShareBases is set, as in suffix annotation mode, all instances of a symbol share one base,
+ * so a symbol whose instances ask for different bases is refused as a whole.
+ *
+ * @param aRequests pairs each instance with the reference of its footprint.
+ * @return one result per request, in order.
+ */
+std::vector<BACKANNOTATE_REF>
+ResolveBackannotatedRefs( const std::vector<std::pair<const SCH_REFERENCE*, wxString>>& aRequests,
+                          bool aShareBases );
+
 /**
  * Back annotation algorithm class used to receive, check, and apply a \ref NETLIST from
  * Pcbnew.

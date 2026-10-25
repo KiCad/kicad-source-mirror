@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -114,7 +114,38 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	gbSizerNumbering->Add( m_checkReuseRefdes, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL, 2 );
 
 
-	bLeftColumn->Add( gbSizerNumbering, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bLeftColumn->Add( gbSizerNumbering, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+
+	bLeftColumn->Add( 0, 15, 0, wxEXPAND, 5 );
+
+	m_reusedSheetsLabel = new wxStaticText( this, wxID_ANY, _("Reused Sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_reusedSheetsLabel->Wrap( -1 );
+	bLeftColumn->Add( m_reusedSheetsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bLeftColumn->Add( m_staticline4, 0, wxEXPAND|wxTOP, 2 );
+
+
+	bLeftColumn->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerReusedSheets;
+	bSizerReusedSheets = new wxBoxSizer( wxVERTICAL );
+
+	m_rbSeparateInstances = new wxRadioButton( this, wxID_ANY, _("Number each sheet instance separately (R1, R2 ...)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizerReusedSheets->Add( m_rbSeparateInstances, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
+
+	m_rbSuffixInstances = new wxRadioButton( this, wxID_ANY, _("Number each file once and add the sheet's reference suffix (R1_M1, R1_M2 ...)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerReusedSheets->Add( m_rbSuffixInstances, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
+
+	m_checkIncrementPastedSuffix = new wxCheckBox( this, wxID_ANY, _("Give pasted sheets the next free reference suffix"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkIncrementPastedSuffix->SetValue(true);
+	m_checkIncrementPastedSuffix->SetToolTip( _("A pasted sheet whose suffix is already in use continues its series, so _M1 becomes _M4 when _M3 is in use") );
+
+	bSizerReusedSheets->Add( m_checkIncrementPastedSuffix, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
+
+
+	bLeftColumn->Add( bSizerReusedSheets, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND, 5 );
@@ -131,6 +162,8 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	m_textNumberAfter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
 	m_rbSheetX100->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
 	m_rbSheetX1000->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
+	m_rbSeparateInstances->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
+	m_rbSuffixInstances->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
 }
 
 PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::~PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE()
@@ -142,5 +175,7 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::~PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE(
 	m_textNumberAfter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
 	m_rbSheetX100->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
 	m_rbSheetX1000->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
+	m_rbSeparateInstances->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
+	m_rbSuffixInstances->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::OnOptionChanged ), NULL, this );
 
 }

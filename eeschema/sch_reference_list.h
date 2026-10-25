@@ -21,7 +21,11 @@
 
 #pragma once
 
+#include <functional>
 #include <map>
+#include <optional>
+#include <set>
+#include <utility>
 
 #include <lib_symbol.h>
 #include <macros.h>
@@ -31,6 +35,8 @@
 #include <erc/erc_settings.h>
 
 class REFDES_TRACKER;
+class SCHEMATIC;
+class SCHEMATIC_SETTINGS;
 
 /** Schematic annotation scope options. */
 enum ANNOTATE_SCOPE_T
@@ -158,27 +164,26 @@ public:
     void SetRef( const wxString& aReference ) { m_ref = aReference; }
     wxString GetRef() const { return m_ref; }
 
+    /// Return the reference as shown on this sheet path, with its sheet suffix.
+    wxString GetComposedRef() const { return m_rootSymbol->GetRef( &m_sheetPath ); }
+
+    /**
+     * Return the sheet suffix this reference composes with, or empty while it is unannotated.
+     *
+     * Channels of a reused sheet share a base, so the suffix tells their packages apart.
+     */
+    const wxString& GetRefSuffix() const
+    {
+        static const wxString empty;
+
+        return hasRef() ? m_refSuffix : empty;
+    }
+
     void SetRefStr( const std::string& aReference ) { m_ref = aReference; }
     const char* GetRefStr() const { return m_ref.c_str(); }
 
-    /// Return reference name with unit altogether.
-    wxString GetFullRef() const
-    {
-        wxString ref = GetRef();
-
-        if( IsSplit() )
-        {
-            if( !m_numRefStr.IsEmpty() )
-                ref += m_numRefStr;
-            else
-                ref << m_numRef;
-        }
-
-        if( GetSymbol()->GetUnitCount() > 1 )
-            ref += GetSymbol()->SubReference( GetUnit() );
-
-        return ref;
-    }
+    /// Return reference name with unit and sheet suffix altogether, as in U12A_M4.
+    wxString GetFullRef() const;
 
     /// Return reference name in canonical format, optionally with unit.
     /// (Canonical form will return "R1" even when the user entered "R001".)
@@ -281,11 +286,18 @@ public:
 private:
     wxString formatRefStr( int aNumber ) const;
 
+    bool hasRef() const
+    {
+        // Split() drops the '?' of R1? and keeps R1, so the new flag is the only trace of it
+        return !m_isNew && ( IsSplit() ? m_numRef >= 0 : m_ref.IsEmpty() || m_ref.Last() != '?' );
+    }
+
 private:
     friend class SCH_REFERENCE_LIST;
 
     /// Symbol reference prefix, without number (for IC1, this is IC) )
     wxString        m_ref;               // it's private, use the accessors please
+    wxString        m_refSuffix;         ///< The suffix the board reference composes with.
     SCH_SYMBOL*     m_rootSymbol;        ///< The symbol associated the reference object.
     VECTOR2I        m_symbolPos;         ///< The physical position of the symbol in schematic
                                          ///< used to annotate by X or Y position
@@ -384,6 +396,33 @@ public:
         for( unsigned ii = 0; ii < GetCount(); ii++ )
             m_flatList[ii].Split();
     }
+
+    /**
+     * Replace the references of each reused sheet symbol with one reference on the first instance
+     * of its sheet in \a aSheets, which carries the base every instance shares in suffix mode.
+     */
+    void UseReusedSheetRepresentatives( const SCH_SHEET_LIST& aSheets );
+
+    /**
+     * Move locked multi-unit groups onto the representatives in this list.
+     *
+     * Groups that share a symbol merge, because a representative's base reaches every instance and
+     * so every package its units belong to.
+     */
+    SCH_MULTI_UNIT_REFERENCE_MAP LockedForRepresentatives( const SCH_MULTI_UNIT_REFERENCE_MAP& aLocked ) const;
+
+    /**
+     * Mark unsplit references for renumbering where their kept base would collide once suffix
+     * mode copies it to every instance of its sheet in \a aSheets.
+     *
+     * A base collides when \a aOthers, the references this annotation does not touch, use it or
+     * one of its composed references for anything but a free unit of the same part, or when an
+     * earlier package in this list holds it. A colliding package renumbers whole.
+     *
+     * @param aLocked the groups from LockedForRepresentatives(), which define the packages.
+     */
+    void RenumberBasesUsedBy( const SCH_REFERENCE_LIST& aOthers, const SCH_MULTI_UNIT_REFERENCE_MAP& aLocked,
+                              const SCH_SHEET_LIST& aSheets );
 
     /**
      * Treat all symbols in this list as non-annotated. Does not update annotation state of the
@@ -583,9 +622,9 @@ public:
     }
 
     /**
-     * Search the list for a symbol with a given reference.
+     * Search the list for a symbol with a given reference, as shown with its sheet suffix.
      */
-    int FindRef( const wxString& aPath ) const;
+    int FindRef( const wxString& aRef ) const;
 
     /**
      * Search the list for a symbol with the given KIID path (as string).
@@ -606,12 +645,12 @@ public:
     void GetRefsInUse( int aIndex, std::vector<int>& aIdList, int aMinRefId ) const;
 
     /**
-     * Return all the unit numbers for a given reference, comparing library reference, value,
-     * reference number and reference prefix.
+     * Return the units a locked package needs free when \a aRef is numbered, which are the units of
+     * every member with the same library symbol and value.
      *
-     * @param aRef is the index of a symbol to use for reference prefix and number filtering.
+     * Members may still carry different references when suffix mode merged packages of reused sheets.
      */
-    std::vector<int> GetUnitsMatchingRef( const SCH_REFERENCE& aRef ) const;
+    std::vector<int> GetPackageUnits( const SCH_REFERENCE& aRef ) const;
 
     /**
      * Return the first unused reference number from the properties given in aRef, ensuring
@@ -670,3 +709,41 @@ private:
     std::vector<SCH_REFERENCE>      m_flatList;
     std::shared_ptr<REFDES_TRACKER> m_refDesTracker;   ///< A list of previously used reference designators.
 };
+
+
+/**
+ * Annotate a newly placed symbol on each of \a aPaths in turn, avoiding \a aExistingRefs and adding the
+ * results to it.  In suffix annotation mode the first path picks the base and the others share it.
+ */
+void AnnotateNewSymbol( SCH_SYMBOL* aSymbol, const std::vector<SCH_SHEET_PATH>& aPaths,
+                        SCH_REFERENCE_LIST& aExistingRefs, const SCHEMATIC_SETTINGS& aSettings,
+                        SCH_SHEET_LIST* aHierarchy );
+
+
+/**
+ * Find two instances of a reused sheet that \a aRefs reaches and that compose the same reference suffix.
+ *
+ * Suffix annotation mode gives every instance one base, so only their suffixes keep their references apart.
+ *
+ * @return the colliding instance and the first instance with its suffix, or nothing outside suffix mode.
+ */
+std::optional<std::pair<SCH_SHEET_PATH, SCH_SHEET_PATH>> FindRefSuffixCollision( const SCH_REFERENCE_LIST& aRefs,
+                                                                                 const SCHEMATIC&          aSchematic );
+
+/**
+ * Annotate \a aRefs, the references in \a aScope, around every other symbol of \a aSchematic.
+ *
+ * In suffix annotation mode each symbol of a reused sheet annotates on its first instance and every other
+ * instance takes that base.  Check FindRefSuffixCollision() first, since instances that compose alike cannot
+ * share a base.
+ *
+ * @param aLocked the multi-unit groups in scope that stay together, or none to regroup units.
+ * @param aResetAnnotation renumber every reference instead of only the unannotated ones.
+ * @param aBeforeAnnotate called with each reference before its symbol changes.
+ * @return the screens whose references now apply to every sheet that uses them.
+ */
+std::set<const SCH_SCREEN*> AnnotateReferences( SCH_REFERENCE_LIST& aRefs, SCH_MULTI_UNIT_REFERENCE_MAP aLocked,
+                                                const SCHEMATIC& aSchematic, ANNOTATE_SCOPE_T aScope,
+                                                ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption,
+                                                int aStartNumber, bool aResetAnnotation,
+                                                const std::function<void( SCH_REFERENCE& )>& aBeforeAnnotate = {} );

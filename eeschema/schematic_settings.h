@@ -103,6 +103,8 @@ public:
     int       m_AnnotateStartNum;       // Starting value for annotation
     int       m_AnnotateSortOrder;      // Annotation sort order
     int       m_AnnotateMethod;         // Annotation numbering method (linear, sheet * 100, etc)
+    bool      m_AnnotateReusedSheetSuffixes; // Instances of a reused sheet share base references
+    bool      m_IncrementPastedSuffix;  // Pasted sheets take the next free reference suffix
 
     int       m_SubpartIdSeparator;     // the separator char between the subpart id and the
                                         //   reference like U1A, U1.A or U1-A

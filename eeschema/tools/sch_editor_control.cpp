@@ -2408,6 +2408,24 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // Get set of sheet names in the current schematic to prevent duplicate sheet names on paste.
     std::set<wxString> existingSheetNames = pasteRoot.LastScreen()->GetSheetNames();
+    std::set<wxString> existingSuffixes;
+    std::set<wxString> composedSuffixes;
+
+    for( const SCH_SHEET_PATH& path : hierarchy )
+    {
+        const SCH_SHEET* sheet = path.Last();
+
+        composedSuffixes.insert( m_frame->Schematic().GetRefSuffix( path ) );
+
+        if( const SCH_FIELD* suffixField = sheet->GetField( FIELD_T::SHEET_REF_SUFFIX ) )
+        {
+            SCH_SHEET_PATH parentPath = path;
+            parentPath.pop_back();
+
+            existingSuffixes.insert( suffixField->GetText() );
+            existingSuffixes.insert( sheet->GetRefSuffix( parentPath ) );
+        }
+    }
 
     // Build symbol list for reannotation of duplicates
     SCH_REFERENCE_LIST existingRefs;
@@ -2622,6 +2640,68 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             sheetsPasted = true;
+
+            // The non-const GetField would add a suffix field to every pasted sheet
+            if( std::as_const( *sheet ).GetField( FIELD_T::SHEET_REF_SUFFIX ) )
+            {
+                SCH_FIELD*     suffixField = sheet->GetField( FIELD_T::SHEET_REF_SUFFIX );
+                wxString       pastedSuffix = suffixField->GetText();
+                SCH_SHEET_LIST subtree( sheet );
+
+                // Suffixes concatenate, so the sheet or any child below it can compose to one in use
+                auto composedBelowPaste =
+                        [&]()
+                        {
+                            std::vector<wxString> composed;
+
+                            for( const SCH_SHEET_PATH& parentPath : sheetPathsForScreen )
+                            {
+                                for( const SCH_SHEET_PATH& subPath : subtree )
+                                {
+                                    SCH_SHEET_PATH fullPath = parentPath;
+
+                                    for( size_t ii = 0; ii < subPath.size(); ++ii )
+                                        fullPath.push_back( subPath.at( ii ) );
+
+                                    composed.push_back( fullPath.ComposeRefSuffix() );
+                                }
+                            }
+
+                            return composed;
+                        };
+
+                auto resolvesTaken =
+                        [&]( const wxString& aCandidate )
+                        {
+                            suffixField->SetText( aCandidate );
+
+                            for( const SCH_SHEET_PATH& parentPath : sheetPathsForScreen )
+                            {
+                                if( existingSuffixes.contains( sheet->GetRefSuffix( parentPath ) ) )
+                                    return true;
+                            }
+
+                            for( const wxString& composed : composedBelowPaste() )
+                            {
+                                if( composedSuffixes.contains( composed ) )
+                                    return true;
+                            }
+
+                            return false;
+                        };
+
+                if( m_frame->Schematic().Settings().m_IncrementPastedSuffix )
+                    pastedSuffix = SCH_SHEET::NextRefSuffix( pastedSuffix, existingSuffixes, resolvesTaken );
+
+                suffixField->SetText( pastedSuffix );
+                existingSuffixes.insert( pastedSuffix );
+
+                for( const SCH_SHEET_PATH& parentPath : sheetPathsForScreen )
+                    existingSuffixes.insert( sheet->GetRefSuffix( parentPath ) );
+
+                for( const wxString& composed : composedBelowPaste() )
+                    composedSuffixes.insert( composed );
+            }
 
             // Push it to the clipboard path while it still has its old KIID
             clipPath.push_back( sheet->m_Uuid );
@@ -2846,6 +2926,30 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(), sheets );
     allScreens.PruneOrphanedSheetInstances( m_frame->Prj().GetProjectName(), sheets );
+
+    // Only the full annotator shares a reused sheet's base while keeping packages and composed refs whole
+    // It resets the tools, so it runs before the move setup
+    if( schematicSettings.m_AnnotateReusedSheetSuffixes && pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS
+            && !loadedItems.empty() )
+    {
+        SCH_GROUP* enteredGroup = selTool->GetEnteredGroup();
+
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+        m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &loadedItems );
+        m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION,
+                                  static_cast<ANNOTATE_ORDER_T>( schematicSettings.m_AnnotateSortOrder ),
+                                  static_cast<ANNOTATE_ALGO_T>( schematicSettings.m_AnnotateMethod ), true,
+                                  schematicSettings.m_AnnotateStartNum, false, false, false,
+                                  NULL_REPORTER::GetInstance() );
+
+        // The reset also leaves the entered group, which the pasted items must join
+        if( enteredGroup && !selTool->GetEnteredGroup() )
+        {
+            selTool->ClearSelection();
+            selTool->AddItemToSel( enteredGroup );
+            selTool->EnterGroup();
+        }
+    }
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
     m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -3128,7 +3232,7 @@ int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
                     fullRef << num;
 
                     commit.Modify( ref.GetSymbol(), sheet.LastScreen(), RECURSE_MODE::NO_RECURSE );
-                    ref.GetSymbol()->SetRef( &sheet, From_UTF8( fullRef.c_str() ) );
+                    ref.GetSymbol()->SetUserRef( sheet, From_UTF8( fullRef.c_str() ) );
                 }
             }
         }

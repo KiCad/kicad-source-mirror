@@ -1358,6 +1358,10 @@ void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
                 .push_back( sheetPath );
     }
 
+    // Channels of one file share a screen, where each suffix must be unique
+    std::map<wxString, std::set<wxString>> suffixesByFile;
+    bool                                   suffixed = false;
+
     for( auto& [groupKey, sheetPaths] : pathsByFile )
     {
         if( sheetPaths.size() < 2 )
@@ -1397,8 +1401,30 @@ void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
         for( size_t ii = 0; ii < sheetPaths.size(); ++ii )
         {
             SCH_SHEET_PATH& sheetPath = sheetPaths[ii];
+            SCH_SHEET*      sheet = sheetPath.Last();
 
             sheetPath.SetPageNumber( wxString::Format( wxT( "%ld" ), basePage + (long) ii ) );
+
+            // Altium names a channel's parts after its sheet, as R1_CH2, so the channels share one base
+            wxString channel = wxT( "_" ) + sheet->GetName();
+
+            for( const wxString& reserved : { wxT( " " ), wxT( "?" ), wxT( "," ) } )
+                channel.Replace( reserved, wxT( "_" ) );
+
+            std::set<wxString>& used = suffixesByFile[sheet->GetFileName().Lower()];
+            wxString            suffix = channel;
+
+            for( int n = 2; !used.insert( suffix ).second; ++n )
+                suffix = wxString::Format( wxT( "%s_%d" ), channel, n );
+
+            SCH_FIELD* suffixField = sheet->GetField( FIELD_T::SHEET_REF_SUFFIX );
+
+            if( !suffixField )
+                suffixField = sheet->AddField( SCH_FIELD( sheet, FIELD_T::SHEET_REF_SUFFIX ) );
+
+            suffixField->SetText( suffix );
+            suffixField->SetVisible( false );
+            suffixed = true;
 
             for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
@@ -1412,12 +1438,16 @@ void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
                 }
 
                 if( !baseRef.IsEmpty() )
-                    symbol->SetRef( &sheetPath, baseRef + wxT( "_" ) + sheetPath.Last()->GetName() );
+                    symbol->SetRef( &sheetPath, baseRef );
             }
         }
     }
 
     m_schematic->RefreshHierarchy();
+
+    // Suffix annotation stops at any other reused sheet whose instances share a suffix
+    if( suffixed && m_schematic->RefSuffixCollisions( true ).empty() )
+        m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
 }
 
 

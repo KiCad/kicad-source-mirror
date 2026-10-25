@@ -30,6 +30,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -499,10 +500,38 @@ public:
     const SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName ) const;
 
     /**
-     * @return the reference for the instance on the given sheet.
+     * @return the reference for the instance on the given sheet, with the unit after the base and
+     *         the sheet path's reference suffix last, as in U12A_M4.
      */
     const wxString GetRef( const SCH_SHEET_PATH* aSheet,
                            bool aIncludeUnit = false ) const override;
+
+    /**
+     * @return the reference of \a aUnit of this symbol's package, with that unit's sheet suffix
+     *         when the package spans sheets.
+     */
+    wxString GetUnitRef( const SCH_SHEET_PATH* aSheet, int aUnit ) const;
+
+    /**
+     * Count of changes to any symbol's references, units, library links or placement.
+     *
+     * Caches built from references across the schematic rebuild when it moves.
+     */
+    static uint64_t RefGeneration();
+
+    /// Mark every cache built from references as stale.
+    static void BumpRefGeneration();
+
+    /**
+     * @return the stored reference for the instance on the given sheet, without the sheet path's
+     *         reference suffix.  This is what SetRef() takes and what annotation numbers.
+     */
+    wxString GetBaseRef( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit = false ) const;
+
+    /**
+     * @return the reference shown on the current sheet, for descriptions that have no sheet path.
+     */
+    wxString GetCurrentSheetRef() const;
 
     /**
      * @return the value for the instance on the given sheet.
@@ -687,12 +716,33 @@ public:
     const std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() const { return m_pins; }
 
     /**
-     * Set the reference for the given sheet path for this symbol.
+     * Set the base reference for the given sheet path for this symbol.
      *
      * @param aSheet is the hierarchical path of the reference.
-     * @param aReference is the new reference for the symbol.
+     * @param aReference is the new base reference, without the sheet path's reference suffix.
      */
     void SetRef( const SCH_SHEET_PATH* aSheet, const wxString& aReference );
+
+    /**
+     * Convert a reference typed on \a aSheet to the base reference.  Text that ends in the path's own
+     * reference suffix loses it.  Text that ends in the suffix of another instance of this symbol's
+     * file is refused, since it names another channel.
+     *
+     * @param aBase receives the base reference.
+     * @param aSchematic stands in for Schematic() on a symbol that is not on a screen yet.
+     * @return an error message, or an empty string when \a aBase is valid.
+     */
+    wxString BaseRefFromUser( const SCH_SHEET_PATH& aSheet, const wxString& aText, wxString& aBase,
+                              const SCHEMATIC* aSchematic = nullptr ) const;
+
+    /**
+     * Set a base reference chosen by the user on \a aSheet.  In suffix annotation mode every
+     * instance of the symbol's file takes it, so the channels keep one base.
+     */
+    void SetUserRef( const SCH_SHEET_PATH& aSheet, const wxString& aBase );
+
+    /// Flag the reference loaded for @a aPath as saved without its sheet suffix.
+    void SetRefLacksSuffix( const KIID_PATH& aPath, bool aLacksSuffix = true );
 
     /**
      * Check if the symbol has a valid annotation (reference) for the given sheet path.
@@ -1135,6 +1185,12 @@ private:
                                                               const wxString&       aVariantName ) const;
 
     void rebuildInstancePathIndex();
+
+    /**
+     * @param aUnit replaces the instance's own unit when given.
+     */
+    wxString refFor( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit, bool aCompose,
+                     std::optional<int> aUnit = std::nullopt ) const;
 
 private:
     VECTOR2I              m_pos;

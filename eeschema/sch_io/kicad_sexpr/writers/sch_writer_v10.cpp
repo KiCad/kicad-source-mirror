@@ -1151,8 +1151,14 @@ void SCH_WRITER_V10::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchemati
 
                 path = tmp.AsString();
 
+                wxString reference = instance.m_Reference;
+
+                // This version cannot compose references, so it reads them with the package's suffix baked in
+                if( m_schematic && !aForClipboard && !reference.EndsWith( wxS( "?" ) ) )
+                    reference += m_schematic->GetPackageRefSuffix( aSymbol, instance.m_Path );
+
                 m_out->Print( "(path %s (reference %s) (unit %d)", m_out->Quotew( path ).c_str(),
-                              m_out->Quotew( instance.m_Reference ).c_str(), instance.m_Unit );
+                              m_out->Quotew( reference ).c_str(), instance.m_Unit );
 
                 if( !instance.m_Variants.empty() )
                 {

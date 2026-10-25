@@ -485,6 +485,7 @@ set( PCBNEW_CLASS_SRCS
     pcbplot.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
+    ref_suffix_split.cpp
     specctra_import_export/specctra.cpp
     specctra_import_export/specctra_export.cpp
     specctra_import_export/specctra_import.cpp

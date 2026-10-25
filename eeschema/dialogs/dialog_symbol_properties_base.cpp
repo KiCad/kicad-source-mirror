@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -140,6 +140,14 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_bodyStyle = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Body style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bodyStyle->Wrap( -1 );
 	gbSizer1->Add( m_bodyStyle, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_composedRefLabel = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, _("Composed reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_composedRefLabel->Wrap( -1 );
+	gbSizer1->Add( m_composedRefLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_composedRef = new wxStaticText( sbGeneralProps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_composedRef->Wrap( -1 );
+	gbSizer1->Add( m_composedRef, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	wxArrayString m_bodyStyleChoiceChoices;
 	m_bodyStyleChoice = new wxChoice( sbGeneralProps->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_bodyStyleChoiceChoices, 0 );

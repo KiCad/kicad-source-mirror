@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,6 +67,8 @@ class DIALOG_ANNOTATE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textNumberAfter;
 		wxRadioButton* m_rbSheetX100;
 		wxRadioButton* m_rbSheetX1000;
+		wxRadioButton* m_rbSeparateInstances;
+		wxRadioButton* m_rbSuffixInstances;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxButton* m_btnClear;
 		wxStdDialogButtonSizer* m_sdbSizer1;

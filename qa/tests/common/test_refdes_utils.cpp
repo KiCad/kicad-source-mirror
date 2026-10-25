@@ -62,4 +62,15 @@ BOOST_AUTO_TEST_CASE( GetPrefix )
 }
 
 
+BOOST_AUTO_TEST_CASE( RangesStayWithinOneSuffix )
+{
+    // R1_M1 and R1_M2 are different channels, never a range
+    std::vector<std::pair<wxString, wxString>> refs = { { wxS( "R1" ), wxS( "_M1" ) }, { wxS( "R1" ), wxS( "_M2" ) },
+                                                        { wxS( "R2" ), wxS( "_M1" ) }, { wxS( "R2" ), wxS( "_M2" ) },
+                                                        { wxS( "R3" ), wxS( "_M1" ) }, { wxS( "R3" ), wxS( "_M2" ) } };
+
+    BOOST_CHECK_EQUAL( UTIL::FormatRefDesRanges( refs, wxS( ", " ), wxS( "-" ) ), wxS( "R1_M1-R3_M1, R1_M2-R3_M2" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

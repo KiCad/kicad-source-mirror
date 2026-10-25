@@ -341,7 +341,7 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
             kiapi::common::commands::SelectionSpec* spec = sync.add_items();
-            spec->mutable_footprint()->set_reference( symbol->GetField( FIELD_T::REFERENCE )->GetText().ToUTF8() );
+            spec->mutable_footprint()->set_reference( symbol->GetCurrentSheetRef().ToUTF8() );
             break;
         }
 
@@ -517,6 +517,12 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         RefreshConnectivity( true );
         payload = formatter.GetString();
+        break;
+    }
+
+    case MAIL_SCH_GET_REF_SUFFIXES:
+    {
+        payload = Schematic().FormatRefSuffixes();
         break;
     }
 

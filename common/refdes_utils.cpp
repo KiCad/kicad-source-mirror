@@ -70,27 +70,64 @@ int GetRefDesNumber( const wxString& aRefDes )
 wxString FormatRefDesRanges( const std::vector<wxString>& aReferences, const wxString& aRefDelimiter,
                              const wxString& aRefRangeDelimiter )
 {
+    std::vector<std::pair<wxString, wxString>> bases;
+
+    for( const wxString& reference : aReferences )
+        bases.emplace_back( reference, wxEmptyString );
+
+    return FormatRefDesRanges( bases, aRefDelimiter, aRefRangeDelimiter );
+}
+
+
+wxString FormatRefDesRanges( const std::vector<std::pair<wxString, wxString>>& aBasesAndSuffixes,
+                             const wxString& aRefDelimiter, const wxString& aRefRangeDelimiter )
+{
+    std::vector<std::pair<wxString, wxString>> sorted( aBasesAndSuffixes );
+
+    // A range must not span channels, so each suffix's references are made adjacent
+    std::vector<wxString> suffixOrder;
+
+    for( const auto& [base, suffix] : sorted )
+    {
+        if( std::find( suffixOrder.begin(), suffixOrder.end(), suffix ) == suffixOrder.end() )
+            suffixOrder.push_back( suffix );
+    }
+
+    std::stable_sort( sorted.begin(), sorted.end(),
+                      [&]( const auto& a, const auto& b )
+                      {
+                          return std::find( suffixOrder.begin(), suffixOrder.end(), a.second )
+                                 < std::find( suffixOrder.begin(), suffixOrder.end(), b.second );
+                      } );
+
+    auto composed =
+            [&]( size_t aIndex )
+            {
+                return sorted[aIndex].first + sorted[aIndex].second;
+            };
+
     wxString retVal;
     size_t   i = 0;
 
-    while( i < aReferences.size() )
+    while( i < sorted.size() )
     {
-        const wxString& reference = aReferences[i];
+        const wxString& reference = sorted[i].first;
+        const wxString& suffix = sorted[i].second;
         wxString        prefix = GetRefDesPrefix( reference );
         wxString        numberText = reference.Mid( prefix.length() );
         long            number;
         bool            hasNumber = numberText.ToLong( &number );
         size_t          range = 1;
 
-        while( hasNumber && i + range < aReferences.size() )
+        while( hasNumber && i + range < sorted.size() )
         {
-            const wxString& nextReference = aReferences[i + range];
+            const wxString& nextReference = sorted[i + range].first;
             wxString        nextPrefix = GetRefDesPrefix( nextReference );
             wxString        nextNumberText = nextReference.Mid( nextPrefix.length() );
             long            nextNumber;
 
-            if( nextPrefix != prefix || !nextNumberText.ToLong( &nextNumber )
-                || nextNumber != number + static_cast<long>( range ) )
+            if( nextPrefix != prefix || sorted[i + range].second != suffix
+                || !nextNumberText.ToLong( &nextNumber ) || nextNumber != number + static_cast<long>( range ) )
             {
                 break;
             }
@@ -106,19 +143,19 @@ wxString FormatRefDesRanges( const std::vector<wxString>& aReferences, const wxS
 
         if( range == 1 )
         {
-            retVal << reference;
+            retVal << composed( i );
         }
         else if( range == 2 || aRefRangeDelimiter.IsEmpty() )
         {
-            retVal << reference;
+            retVal << composed( i );
             retVal << aRefDelimiter;
-            retVal << aReferences[i + 1];
+            retVal << composed( i + 1 );
         }
         else
         {
-            retVal << reference;
+            retVal << composed( i );
             retVal << aRefRangeDelimiter;
-            retVal << aReferences[i + range - 1];
+            retVal << composed( i + range - 1 );
         }
 
         i += range;

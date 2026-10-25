@@ -1022,6 +1022,110 @@ int ERC_TESTER::TestMultiunitFootprints()
 }
 
 
+int ERC_TESTER::TestAnnotation()
+{
+    SCH_REFERENCE_LIST references;
+    m_schematic->Hierarchy().GetSymbols( references, SYMBOL_FILTER_NON_POWER, true );
+
+    ERC_MARKER_PLACER markers( *m_schematic );
+
+    references.CheckAnnotation(
+            [&]( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA, SCH_REFERENCE* aItemB )
+            {
+                if( !m_settings.IsTestEnabled( aType ) )
+                    return;
+
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aType );
+                ercItem->SetErrorMessage( aMsg );
+
+                if( aItemB )
+                    ercItem->SetItems( aItemA->GetSymbol(), aItemB->GetSymbol() );
+                else
+                    ercItem->SetItems( aItemA->GetSymbol() );
+
+                // Saved exclusions name these markers without a sheet path, as the dialog placed them
+                markers.Place( std::move( ercItem ), aItemA->GetSheetPath().Path(),
+                               aItemA->GetSymbol()->GetPosition(), ITEM_PATHS::NONE, false );
+            } );
+
+    return markers.Count();
+}
+
+
+int ERC_TESTER::TestDuplicateSheetSuffixes()
+{
+    ERC_MARKER_PLACER markers( *m_schematic );
+    const bool        suffixMode = m_schematic->Settings().m_AnnotateReusedSheetSuffixes;
+
+    // Suffix mode shares one base across instances, so two bare instances also collide
+    for( const auto& [path, first] : m_schematic->RefSuffixCollisions( suffixMode ) )
+    {
+        KIID_PATH parent = path.Path();
+        KIID_PATH otherParent = first.Path();
+        parent.pop_back();
+        otherParent.pop_back();
+
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DUPLICATE_SHEET_SUFFIX );
+        ercItem->SetItems( path.Last(), first.Last() );
+        markers.Place( std::move( ercItem ), parent, path.Last()->GetPosition(), parent, otherParent );
+    }
+
+    return markers.Count();
+}
+
+
+int ERC_TESTER::TestRefSuffixMismatch()
+{
+    ERC_MARKER_PLACER markers( *m_schematic );
+    const bool        suffixMode = m_schematic->Settings().m_AnnotateReusedSheetSuffixes;
+
+    std::map<const SCH_SCREEN*, const SCH_SHEET_PATH*> firstPath;
+
+    for( const SCH_SHEET_PATH& path : m_sheetList )
+    {
+        auto [first, isFirst] = firstPath.emplace( path.LastScreen(), &path );
+
+        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*         symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL_INSTANCE instance;
+            wxString            msg;
+
+            if( !symbol->GetInstance( instance, path.PathRef() ) )
+                continue;
+
+            const SCH_SHEET_PATH& firstUse = *first->second;
+
+            if( instance.m_RefLacksSuffix )
+            {
+                msg = wxString::Format( _( "Reference %s was saved without the suffix %s" ), instance.m_Reference,
+                                        m_schematic->GetRefSuffix( path ) );
+            }
+            else if( suffixMode && !isFirst && !m_schematic->CopiesSelectDifferentUnits( symbol )
+                     && !instance.m_Reference.StartsWith( wxS( "#" ) )
+                     && symbol->IsAnnotated( &path ) && symbol->IsAnnotated( &firstUse )
+                     && symbol->GetBaseRef( &path ) != symbol->GetBaseRef( &firstUse ) )
+            {
+                // Suffix mode numbers the first instance and every other instance shares its base
+                msg = wxString::Format( _( "Reference %s does not share the base of %s" ), symbol->GetRef( &path ),
+                                        symbol->GetRef( &firstUse ) );
+            }
+            else
+            {
+                continue;
+            }
+
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_REF_SUFFIX_MISMATCH );
+            ercItem->SetErrorMessage( msg );
+            ercItem->SetItems( symbol );
+            markers.Place( std::move( ercItem ), path.Path(), symbol->GetPosition(), ITEM_PATHS::MAIN );
+        }
+    }
+
+    return markers.Count();
+}
+
+
 int ERC_TESTER::TestMissingUnits()
 {
     ERC_MARKER_PLACER markers( *m_schematic );
@@ -3439,6 +3543,15 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
 
         TestDuplicateSheetNames( true );
     }
+
+    // The schematic editor's dialog used to own this, so headless runs never checked annotation
+    TestAnnotation();
+
+    if( m_settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_SUFFIX ) )
+        TestDuplicateSheetSuffixes();
+
+    if( m_settings.IsTestEnabled( ERCE_REF_SUFFIX_MISMATCH ) )
+        TestRefSuffixMismatch();
 
     // Test pin-to-pad maps for stale pins, duplicate pad targets and bad pad references (issue #2282).
     if( m_settings.IsTestEnabled( ERCE_PIN_MAP_STALE_PIN ) || m_settings.IsTestEnabled( ERCE_PIN_MAP_DUPLICATE_PAD )

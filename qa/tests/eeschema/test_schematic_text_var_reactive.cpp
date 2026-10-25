@@ -262,4 +262,48 @@ BOOST_AUTO_TEST_CASE( KiidCrossRefInvalidatedBySymbolChange )
 }
 
 
+// Text that names a unit by its reference follows that unit's changes
+BOOST_AUTO_TEST_CASE( UnitRefCrossRefInvalidatedBySymbolChange )
+{
+    LOCALE_IO dummy;
+
+    wxString path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                    + wxS( "netlist_exporter_unit_metadata_per_unit.kicad_sch" );
+    std::unique_ptr<SCHEMATIC> sch( EESCHEMA_HELPERS::LoadSchematic( path, true, true ) );
+    BOOST_REQUIRE( sch );
+
+    SCH_SHEET_PATH root = sch->Hierarchy()[0];
+    SCH_ITEM*      unitB = nullptr;
+
+    for( SCH_ITEM* item : root.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        if( static_cast<SCH_SYMBOL*>( item )->GetRef( &root, true ) == wxS( "U1B" ) )
+            unitB = item;
+    }
+
+    BOOST_REQUIRE( unitB );
+
+    SCH_TEXT text;
+    text.SetText( wxS( "${U1B:UNIT}" ) );
+
+    SCHEMATIC_TEXT_VAR_ADAPTER* adapter = sch->GetTextVarAdapter();
+    std::vector<SCH_ITEM*>      added{ &text };
+    std::vector<SCH_ITEM*>      changed{ unitB };
+    bool                        invalidated = false;
+
+    adapter->OnSchItemsAdded( *sch, added );
+
+    TEXT_VAR_TRACKER::ListenerHandle handle = adapter->Tracker().AddInvalidateListener(
+            [&]( EDA_ITEM* aDep, const TEXT_VAR_REF_KEY& )
+            {
+                invalidated |= aDep == &text;
+            } );
+
+    adapter->OnSchItemsChanged( *sch, changed );
+    adapter->Tracker().RemoveInvalidateListener( handle );
+
+    BOOST_CHECK( invalidated );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

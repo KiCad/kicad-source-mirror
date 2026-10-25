@@ -35,6 +35,7 @@ using namespace TFIELD_T;
 #define DESCRIPTION_UNTRANSLATED "Description"
 #define SHEET_NAME_UNTRANSLATED "Sheetname"
 #define SHEET_FILE_UNTRANSLATED "Sheetfile"
+#define SHEET_REF_SUFFIX_UNTRANSLATED "Reference Suffix"
 #define INTERSHEET_REFS_UNTRANSLATED "Intersheetrefs"
 #define USER_FIELD_UNTRANSLATED_FORMAT "Field%d"
 
@@ -45,6 +46,7 @@ static wxString s_UntranslatedDatasheet( DATASHEET_UNTRANSLATED );
 static wxString s_UntranslatedDescription( DESCRIPTION_UNTRANSLATED );
 static wxString s_UntranslatedSheetName( SHEET_NAME_UNTRANSLATED );
 static wxString s_UntranslatedSheetFile( SHEET_FILE_UNTRANSLATED );
+static wxString s_UntranslatedSheetRefSuffix( SHEET_REF_SUFFIX_UNTRANSLATED );
 static wxString s_UntranslatedIntersheetRefs( INTERSHEET_REFS_UNTRANSLATED );
 
 
@@ -61,6 +63,7 @@ wxString GetDefaultFieldName( FIELD_T aFieldId, TRANSLATION aTranslation )
         case FIELD_T::DESCRIPTION:     return s_UntranslatedDescription; // The symbol description
         case FIELD_T::SHEET_NAME:      return s_UntranslatedSheetName;
         case FIELD_T::SHEET_FILENAME:  return s_UntranslatedSheetFile;
+        case FIELD_T::SHEET_REF_SUFFIX: return s_UntranslatedSheetRefSuffix;
         case FIELD_T::INTERSHEET_REFS: return s_UntranslatedIntersheetRefs;
         default:                       return GetUserFieldName( 42, aTranslation );
         }
@@ -76,6 +79,7 @@ wxString GetDefaultFieldName( FIELD_T aFieldId, TRANSLATION aTranslation )
         case FIELD_T::DESCRIPTION:     return _( DESCRIPTION_UNTRANSLATED ); // The symbol description
         case FIELD_T::SHEET_NAME:      return _( SHEET_NAME_UNTRANSLATED );
         case FIELD_T::SHEET_FILENAME:  return _( SHEET_FILE_UNTRANSLATED );
+        case FIELD_T::SHEET_REF_SUFFIX: return _( SHEET_REF_SUFFIX_UNTRANSLATED );
         case FIELD_T::INTERSHEET_REFS: return _( INTERSHEET_REFS_UNTRANSLATED );
         default:                       return GetUserFieldName( 42, aTranslation );
         }

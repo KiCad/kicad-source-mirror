@@ -651,6 +651,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_pinMapPanel->SetSymbol( libSymbol );
     m_pinMapPanel->TransferDataToWindow();
 
+    const bool hasSuffix = !schematic.GetRefSuffix( sheetPath ).IsEmpty();
+    m_composedRefLabel->Show( hasSuffix );
+    m_composedRef->Show( hasSuffix );
+
     m_fieldsGrid->Layout();
     Layout();
     m_fieldsGrid->SetMinVisibleRows( this, 4 );
@@ -784,6 +788,16 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
         }
     }
 
+    wxString base;
+    wxString msg = m_symbol->BaseRefFromUser( GetParent()->GetCurrentSheet(),
+                                              m_fields->GetField( FIELD_T::REFERENCE )->GetText(), base );
+
+    if( !msg.IsEmpty() )
+    {
+        DisplayErrorMessage( this, msg );
+        return false;
+    }
+
     return true;
 }
 
@@ -895,7 +909,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
             *tmp = field;
 
-            if( !currentVariant.IsEmpty() )
+            // References are not variant data and are set for the sheet below
+            if( !currentVariant.IsEmpty() && field.GetId() != FIELD_T::REFERENCE )
             {
                 // Restore the default field text for existing fields.
                 tmp->SetText( defaultText, &currentSheet );
@@ -934,13 +949,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                           return lhs.GetOrdinal() < rhs.GetOrdinal();
                       } );
 
-    if( currentVariant.IsEmpty() )
-    {
-        // Reference has a specific initialization, depending on the current active sheet
-        // because for a given symbol, in a complex hierarchy, there are more than one
-        // reference.
-        m_symbol->SetRef( &GetParent()->GetCurrentSheet(), m_fields->GetField( FIELD_T::REFERENCE )->GetText() );
-    }
+    // Reference has a specific initialization, depending on the current active sheet
+    // because for a given symbol, in a complex hierarchy, there are more than one
+    // reference.
+    wxString base;
+    m_symbol->BaseRefFromUser( currentSheet, m_fields->GetField( FIELD_T::REFERENCE )->GetText(), base );
+    m_symbol->SetUserRef( currentSheet, base );
 
     m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked(), &currentSheet, currentVariant );
     m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked(), &currentSheet, currentVariant );
@@ -1222,6 +1236,26 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustPinsGridColumns()
 
 void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
+    if( m_composedRef->IsShown() )
+    {
+        const SCH_SHEET_PATH& sheet = GetParent()->GetCurrentSheet();
+        wxString              composed;
+
+        m_symbol->BaseRefFromUser( sheet, m_fields->GetField( FIELD_T::REFERENCE )->GetText(), composed );
+
+        const SCHEMATIC& schematic = GetParent()->Schematic();
+
+        // Unannotated references are never suffixed, and a package takes the suffix it shares across sheets
+        if( !composed.EndsWith( wxS( "?" ) ) )
+            composed += schematic.GetPackageRefSuffix( m_symbol, sheet );
+
+        if( m_composedRef->GetLabelText() != composed )
+        {
+            m_composedRef->SetLabelText( composed );
+            Layout();
+        }
+    }
+
     std::bitset<64> shownColumns = m_fieldsGrid->GetShownColumns();
 
     if( shownColumns != m_shownColumns )

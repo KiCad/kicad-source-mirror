@@ -78,6 +78,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_realignment.cpp
     test_cross_probe_selection.cpp
     test_footprint_transform_sync.cpp
+    test_ref_suffix_split.cpp
     test_footprint_rescue_layer.cpp
     test_issue24735.cpp
     test_issue24901.cpp

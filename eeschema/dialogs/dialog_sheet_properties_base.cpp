@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -142,6 +142,22 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 
 
 	sbAttributes->Add( bSizer6, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 10 );
+
+	wxBoxSizer* bSizerFullSuffix;
+	bSizerFullSuffix = new wxBoxSizer( wxHORIZONTAL );
+
+	m_fullSuffixLabel = new wxStaticText( sbAttributes->GetStaticBox(), wxID_ANY, _("Full reference suffix:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fullSuffixLabel->Wrap( -1 );
+	bSizerFullSuffix->Add( m_fullSuffixLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_fullSuffixCtrl = new wxTextCtrl( sbAttributes->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	bSizerFullSuffix->Add( m_fullSuffixCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	bSizerFullSuffix->Add( 0, 0, 3, wxEXPAND, 5 );
+
+
+	sbAttributes->Add( bSizerFullSuffix, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 10 );
 
 	m_cbExcludeFromSim = new wxCheckBox( sbAttributes->GetStaticBox(), wxID_ANY, _("Exclude from simulation"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAttributes->Add( m_cbExcludeFromSim, 0, wxTOP|wxRIGHT|wxLEFT, 5 );

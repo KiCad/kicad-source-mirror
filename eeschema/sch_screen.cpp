@@ -947,6 +947,10 @@ void SCH_SCREEN::BumpConnectivityRevision( KICAD_T aChangedType )
     if( aChangedType != SCH_LINE_T )
         ++m_connectivitySymbolRevision;
 
+    // Packages spanning sheets are found from the symbols on every screen
+    if( aChangedType == SCH_SYMBOL_T || aChangedType == TYPE_NOT_INIT )
+        SCH_SYMBOL::BumpRefGeneration();
+
     m_connectivityItems.reset();
 }
 

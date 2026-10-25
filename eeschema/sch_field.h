@@ -146,11 +146,7 @@ public:
     {
         return IsMandatory() ? (int) m_id : m_ordinal;
     }
-    void SetOrdinal( int aOrdinal, FIELD_T aType )
-    {
-        m_id = aType;
-        m_ordinal = aOrdinal;
-    }
+    void SetOrdinal( int aOrdinal, FIELD_T aType );
 
     /**
      * Get the field's name as displayed on the schematic or in the symbol fields table. This is

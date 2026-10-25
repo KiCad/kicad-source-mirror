@@ -233,6 +233,11 @@ public:
     void RefreshOperatingPointDisplay();
 
     /**
+     * Redraw the displayed symbols after a sheet suffix change made on another screen.
+     */
+    void RefreshComposedReferences();
+
+    /**
      * Automatically set the rotation of an item (if the item supports it).
      */
     void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );

@@ -50,7 +50,8 @@ enum class FIELD_T : int
     INTERSHEET_REFS,        ///< Global label cross-reference page numbers
     SHEET_NAME,
     SHEET_FILENAME,
-    SHEET_USER
+    SHEET_USER,
+    SHEET_REF_SUFFIX        ///< Optional sheet field appended to the references of the sheet's symbols
 };
 
 #define MANDATORY_FIELDS { FIELD_T::REFERENCE,        \

@@ -24,6 +24,7 @@
 
 #include <schematic.h>
 
+#include <functional>
 #include <map>
 #include <set>
 #include <optional>
@@ -92,6 +93,9 @@ struct PIN_INFO
 /**
  * An abstract class used for the netlist exporters that Eeschema supports.
  */
+using EXPORT_EXCLUSION = std::function<bool( const SCH_SYMBOL*, const SCH_SHEET_PATH& )>;
+
+
 class NETLIST_EXPORTER_BASE
 {
 public:
@@ -192,9 +196,22 @@ protected:
      *
      * @param aItem is a symbol to check
      * @param aSheetPath is the sheet to check the symbol for
+     * @param aExcluded tells which symbol instances the export leaves out, so they never claim a package
      * @return the symbol if it should be processed, or nullptr
      */
-    SCH_SYMBOL* findNextSymbol( EDA_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath );
+    SCH_SYMBOL* findNextSymbol( EDA_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath,
+                                const EXPORT_EXCLUSION& aExcluded = nullptr );
+
+    /**
+     * @return true if an exported unit on the sheet whose suffix names this package owns its footprint.
+     */
+    bool packageOwnedElsewhere( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath,
+                                const EXPORT_EXCLUSION& aExcluded ) const;
+
+    /**
+     * @return the exclusion of footprint exporters, which leave out symbols excluded from the board.
+     */
+    EXPORT_EXCLUSION boardExclusion() const;
 
     /**
      * Erase duplicate pins.

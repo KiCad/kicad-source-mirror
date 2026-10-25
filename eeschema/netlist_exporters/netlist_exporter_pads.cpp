@@ -54,6 +54,8 @@ bool NETLIST_EXPORTER_PADS::writeNetlist( const wxString& aOutFileName, unsigned
         // Create netlist footprints section
         m_referencesAlreadyFound.Clear();
 
+        const EXPORT_EXCLUSION excluded = boardExclusion();
+
         for( const SCH_SHEET_PATH& sheet : m_exportSheets )
         {
             // The rtree returns items in a non-deterministic order (platform-dependent)
@@ -74,12 +76,9 @@ bool NETLIST_EXPORTER_PADS::writeNetlist( const wxString& aOutFileName, unsigned
 
             for( EDA_ITEM* item : sheetItems )
             {
-                symbol = findNextSymbol( item, sheet );
+                symbol = findNextSymbol( item, sheet, excluded );
 
                 if( !symbol )
-                    continue;
-
-                if( symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
                     continue;
 
                 footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED, m_exportVariant );

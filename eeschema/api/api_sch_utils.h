@@ -40,14 +40,26 @@ class SCHEMATIC;
 
 std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer );
 
+/**
+ * @param aSchematic stands in for the symbol's own schematic while a created symbol is only staged.
+ */
 bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, const SCH_SYMBOL* aInput,
-                 const SCH_SHEET_PATH& aPath );
+                 const SCH_SHEET_PATH& aPath, const SCHEMATIC* aSchematic = nullptr );
 
 /**
  * Unpack the geometry, the library definition, fields, and the default-variant attributes that
  * are shared between every placement. Single-placement data is handled by #ApplySymbolInstance.
  */
 bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::SchematicSymbolInstance& aInput );
+
+/**
+ * Check what #ApplySymbolInstance would refuse, so a caller can reject a request before it
+ * changes anything.  The reference must not carry another instance's sheet suffix, and no
+ * variant may override the reference.
+ */
+bool ValidateSymbolInstance( kiapi::common::commands::ItemStatus* aStatus, const SCH_SYMBOL* aSymbol,
+                             const kiapi::schematic::types::SchematicSymbolInstance& aInput,
+                             const SCH_SHEET_PATH& aPath, const SCHEMATIC* aSchematic );
 
 /**
  * Apply placement-specific data to an @a aSymbol at @a aPath: reference, unit, and

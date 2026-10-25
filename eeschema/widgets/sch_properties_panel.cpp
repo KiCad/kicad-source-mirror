@@ -42,6 +42,7 @@
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_field.h>
+#include <validators.h>
 #include <pin_map.h>
 #include <template_fieldnames.h>
 #include <settings/color_settings.h>
@@ -402,27 +403,52 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
     if( m_SuppressGridChangeEvents )
         return;
 
-    EDA_ITEM* frontItem = getFrontItem();
-
-    if( !frontItem )
+    if( !getFrontItem() || !getPropertyFromEvent( aEvent ) )
         return;
 
-    if( PROPERTY_BASE* property = getPropertyFromEvent( aEvent ) )
-    {
-        wxVariant newValue = aEvent.GetPropertyValue();
+    SELECTION        fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+    wxVariant        newValue = aEvent.GetPropertyValue();
 
-        if( VALIDATOR_RESULT validationFailure = property->Validate( newValue.GetAny(), frontItem ) )
+    // valueChanged() writes every selected item, so a mixed selection must be valid for each of them
+    for( EDA_ITEM* item : selection )
+    {
+        PROPERTY_BASE* property = m_propMgr.GetProperty( item, aEvent.GetPropertyName() );
+
+        if( !property )
+            continue;
+
+        wxString errorMsg;
+
+        if( VALIDATOR_RESULT validationFailure = property->Validate( newValue.GetAny(), item ) )
         {
-            wxString errorMsg = wxString::Format( wxS( "%s: %s" ), wxGetTranslation( property->Name() ),
-                                                  validationFailure->get()->Format( m_frame ) );
+            errorMsg = wxString::Format( wxS( "%s: %s" ), wxGetTranslation( property->Name() ),
+                                         validationFailure->get()->Format( m_frame ) );
+        }
+        else if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( item );
+                 field && field->GetId() == FIELD_T::SHEET_REF_SUFFIX && property->Name() == wxS( "Text" ) )
+        {
+            // The suffix field's own Text property is generic and carries no field rules
+            errorMsg = GetFieldValidationErrorMessage( FIELD_T::SHEET_REF_SUFFIX, newValue.GetString() );
+        }
+        else if( SCH_SYMBOL* symbol = field ? dynamic_cast<SCH_SYMBOL*>( field->GetParentSymbol() ) : nullptr;
+                 symbol && symbol->Schematic() && field->GetId() == FIELD_T::REFERENCE
+                 && property->Name() == wxS( "Text" ) )
+        {
+            wxString base;
+            errorMsg = symbol->BaseRefFromUser( symbol->Schematic()->CurrentSheet(), newValue.GetString(), base );
+        }
+
+        if( !errorMsg.IsEmpty() )
+        {
             m_frame->ShowInfoBarError( errorMsg );
             aEvent.Veto();
             m_ValueChangeVetoed = true;
             return;
         }
-
-        aEvent.Skip();
     }
+
+    aEvent.Skip();
 }
 
 
@@ -616,6 +642,30 @@ void SCH_PROPERTIES_PANEL::onKeyRenamed( const wxString& aOldName, const wxStrin
 {
     SELECTION fallbackSelection;
     const SELECTION& selection = getSelection( fallbackSelection );
+
+    // Renaming to the suffix name retypes the field, so its existing text must already be a valid suffix
+    if( aNewName == GetDefaultFieldName( FIELD_T::SHEET_REF_SUFFIX, UNTRANSLATED ) )
+    {
+        for( EDA_ITEM* edaItem : selection )
+        {
+            if( edaItem->Type() != SCH_SHEET_T )
+                continue;
+
+            const SCH_FIELD* field = std::as_const( *static_cast<SCH_SHEET*>( edaItem ) ).GetField( aOldName );
+
+            if( !field )
+                continue;
+
+            wxString msg = GetFieldValidationErrorMessage( FIELD_T::SHEET_REF_SUFFIX, field->GetText() );
+
+            if( !msg.IsEmpty() )
+            {
+                m_frame->ShowInfoBarError( msg );
+                UpdateData();
+                return;
+            }
+        }
+    }
 
     SCH_COMMIT  changes( m_frame );
     SCH_SCREEN* screen = m_frame->GetScreen();

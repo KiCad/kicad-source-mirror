@@ -534,19 +534,10 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     m_deleteAllMarkers->Enable( false );
     m_saveReport->Enable( false );
 
+    // ERC_TESTER places the annotation markers, this only counts them for the summary
     int itemsNotAnnotated = m_parent->CheckAnnotate(
-            []( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA, SCH_REFERENCE* aItemB )
+            []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aType );
-                ercItem->SetErrorMessage( aMsg );
-
-                if( aItemB )
-                    ercItem->SetItems( aItemA->GetSymbol(), aItemB->GetSymbol() );
-                else
-                    ercItem->SetItems( aItemA->GetSymbol() );
-
-                SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aItemA->GetSymbol()->GetPosition() );
-                aItemA->GetSheetPath().LastScreen()->Append( marker );
             },
             ANNOTATE_ALL, true );
 

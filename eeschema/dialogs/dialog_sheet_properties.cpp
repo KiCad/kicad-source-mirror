@@ -298,6 +298,17 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
+    if( const SCH_FIELD* suffix = FindField( *m_fields, FIELD_T::SHEET_REF_SUFFIX ) )
+    {
+        wxString msg = GetFieldValidationErrorMessage( FIELD_T::SHEET_REF_SUFFIX, suffix->GetText() );
+
+        if( !msg.IsEmpty() )
+        {
+            DisplayError( this, msg );
+            return false;
+        }
+    }
+
     // Ensure the filename extension is OK.  (In normal use will be caught by grid validators,
     // but unedited data from existing files can be bad.)
     sheetFileName = EnsureFileExtension( sheetFileName, FILEEXT::KiCadSchematicFileExtension );
@@ -695,6 +706,33 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     if( m_hierarchicalPath->GetLabel() != path )
         m_hierarchicalPath->SetLabel( path );
+
+    // The staged fields resolve like the saved sheet, so the shown suffix is the one references get
+    const SCH_SHEET_PATH& parentPath = m_frame->GetCurrentSheet();
+
+    // Edits under a variant become overrides, and suffixes only read base text
+    if( !m_frame->Schematic().GetCurrentVariant().IsEmpty() )
+    {
+        for( SCH_FIELD& field : m_dummySheet.GetFields() )
+        {
+            const SCH_FIELD* baseField = std::as_const( *m_sheet ).GetField( field.GetName() );
+
+            if( baseField && field.GetId() != FIELD_T::SHEET_REF_SUFFIX )
+                field.SetText( baseField->GetText() );
+        }
+    }
+
+    wxString fullSuffix = m_frame->Schematic().GetRefSuffix( parentPath ) + m_dummySheet.GetRefSuffix( parentPath );
+
+    if( m_fullSuffixCtrl->GetValue() != fullSuffix )
+        m_fullSuffixCtrl->ChangeValue( fullSuffix );
+
+    if( m_fullSuffixCtrl->IsShown() == fullSuffix.IsEmpty() )
+    {
+        m_fullSuffixLabel->Show( !fullSuffix.IsEmpty() );
+        m_fullSuffixCtrl->Show( !fullSuffix.IsEmpty() );
+        Layout();
+    }
 
     // Handle a delayed focus
     if( m_delayedFocusRow >= 0 )

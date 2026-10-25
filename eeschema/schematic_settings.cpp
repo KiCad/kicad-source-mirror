@@ -72,6 +72,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_AnnotateStartNum( 0 ),
         m_AnnotateSortOrder( 0 ),
         m_AnnotateMethod( 0 ),
+        m_AnnotateReusedSheetSuffixes( false ),
+        m_IncrementPastedSuffix( true ),
         m_IntersheetRefsShow( false ),
         m_IntersheetRefsListOwnPage( true ),
         m_IntersheetRefsFormatShort( false ),
@@ -239,6 +241,12 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     m_params.emplace_back( new PARAM<int>( "annotation.method",
             &m_AnnotateMethod, 0, 0, 2 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "annotation.reused_sheet_suffixes",
+            &m_AnnotateReusedSheetSuffixes, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "annotation.increment_pasted_suffix",
+            &m_IncrementPastedSuffix, true ) );
 
     m_NgspiceSettings = std::make_shared<NGSPICE_SETTINGS>( this, "ngspice" );
 

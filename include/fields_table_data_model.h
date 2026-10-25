@@ -773,7 +773,12 @@ public:
             // C1-15, C17 kind of formatting
             if( ColIsReference( aCol ) )
             {
-                fieldValue = UTIL::FormatRefDesRanges( itemIdentifiers, refDelimiter, refRangeDelimiter );
+                std::vector<std::pair<wxString, wxString>> bases;
+
+                for( const ITEM_TYPE& item : items )
+                    bases.emplace_back( getItemIdentifier( item ), getItemRefSuffix( item ) );
+
+                fieldValue = UTIL::FormatRefDesRanges( bases, refDelimiter, refRangeDelimiter );
             }
             else
             {
@@ -963,7 +968,10 @@ protected:
     // Used for sorting items that are grouped within a single row by their item identifiers.
     virtual bool cmpRowItems( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem )
     {
-        return StrNumCmp( getItemIdentifier( lhItem ), getItemIdentifier( rhItem ), true ) < 0;
+        int cmp = StrNumCmp( getItemIdentifier( lhItem ), getItemIdentifier( rhItem ), true );
+
+        // Duplicate removal only merges neighbours, so each channel's units must sort together
+        return cmp != 0 ? cmp < 0 : getItemRefSuffix( lhItem ) < getItemRefSuffix( rhItem );
     }
 
     virtual bool unitMatch( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem ) = 0;
@@ -1417,6 +1425,9 @@ protected:
 public:
     virtual KIID_PATH getDataStoreKey( const ITEM_TYPE& aItem ) const = 0;
     virtual wxString  getItemIdentifier( const ITEM_TYPE& aItem ) const = 0;
+
+    /// Return the sheet suffix shown after the item's identifier, which is a base reference.
+    virtual wxString getItemRefSuffix( const ITEM_TYPE& aItem ) const { return wxEmptyString; }
 
     /**
      * Explicitly bypasses the data store's field values and retries them from

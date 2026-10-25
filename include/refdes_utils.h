@@ -25,6 +25,7 @@
 #ifndef REFDES_UTILS__H
 #define REFDES_UTILS__H
 
+#include <utility>
 #include <vector>
 
 #include <wx/string.h>
@@ -68,6 +69,15 @@ int GetRefDesNumber( const wxString& aRefDes );
  */
 wxString FormatRefDesRanges( const std::vector<wxString>& aReferences, const wxString& aRefDelimiter,
                              const wxString& aRefRangeDelimiter );
+
+/**
+ * Format references given as base and sheet suffix pairs, ranging bases within one suffix only.
+ *
+ * R1_M1 and R1_M2 are different channels, so they never form a range. Each suffix's references
+ * stay together, in the order their suffix first appears.
+ */
+wxString FormatRefDesRanges( const std::vector<std::pair<wxString, wxString>>& aBasesAndSuffixes,
+                             const wxString& aRefDelimiter, const wxString& aRefRangeDelimiter );
 
 } // namespace UTIL
 

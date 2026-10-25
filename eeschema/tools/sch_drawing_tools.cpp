@@ -232,26 +232,11 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
 
                 // Then we need to annotate all instances by sheet
-                for( SCH_SHEET_PATH& instance : newInstances )
+                if( !newInstances.empty()
+                        && ( cfg->m_AnnotatePanel.automatic
+                             || SCH_REFERENCE( symbol, newInstances[0] ).AlwaysAnnotate() ) )
                 {
-                    SCH_REFERENCE newReference( symbol, instance );
-                    SCH_REFERENCE_LIST refs;
-                    refs.AddItem( newReference );
-                    refs.SetRefDesTracker( schSettings.m_refDesTracker );
-
-                    if( cfg->m_AnnotatePanel.automatic || newReference.AlwaysAnnotate() )
-                    {
-                        refs.ReannotateByOptions( (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
-                                                  (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod,
-                                                  schSettings.m_AnnotateStartNum, existingRefs, false,
-                                                  &hierarchy );
-
-                        refs.UpdateAnnotation();
-
-                        // Update existing refs for next iteration
-                        for( size_t i = 0; i < refs.GetCount(); i++ )
-                            existingRefs.AddItem( refs[i] );
-                    }
+                    AnnotateNewSymbol( symbol, newInstances, existingRefs, schSettings, &hierarchy );
                 }
 
                 m_frame->GetCurrentSheet().UpdateAllScreenReferences();
@@ -516,11 +501,19 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         auto unitOccupied =
                                 [&]( int aUnit ) -> bool
                                 {
+                                    // The next unit copies every instance, so each must be free once composed
                                     if( !isUnannotated )
                                     {
-                                        SCH_REFERENCE candidate = currentReference;
-                                        candidate.SetUnit( aUnit );
-                                        return schematic.Contains( candidate );
+                                        for( const SCH_SHEET_PATH& instance : newInstances )
+                                        {
+                                            SCH_REFERENCE candidate( symbol, instance );
+                                            candidate.SetUnit( aUnit );
+
+                                            if( schematic.Contains( candidate ) )
+                                                return true;
+                                        }
+
+                                        return false;
                                     }
 
                                     return IsUnannotatedUnitOccupied( existingRefs, currentRefStr, symLibId, aUnit );
@@ -726,7 +719,7 @@ int SCH_DRAWING_TOOLS::PlaceNextSymbolUnit( const TOOL_EVENT& aEvent )
     // sheet instances - we want the new symbol unit to appear correctly on all instances.
     newSymbol->SetUnitSelection( nextMissing );
     newSymbol->SetUnit( nextMissing );
-    newSymbol->SetRefProp( symbol->GetRef( &sheetPath, false ) );
+    newSymbol->SetRefProp( symbol->GetBaseRef( &sheetPath ) );
 
     // Post the new symbol - don't reannotate it - we set the reference ourselves
     m_toolMgr->PostAction( SCH_ACTIONS::placeSymbol, SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ newSymbol.release(), false } );

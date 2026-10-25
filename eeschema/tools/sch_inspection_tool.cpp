@@ -353,7 +353,7 @@ void SCH_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
     dialog->DeleteAllPages();
     dialog->SetUserItemID( symbol->m_Uuid );
 
-    wxString symbolDesc = wxString::Format( _( "Symbol %s" ), symbol->GetField( FIELD_T::REFERENCE )->GetText() );
+    wxString symbolDesc = wxString::Format( _( "Symbol %s" ), symbol->GetCurrentSheetRef() );
     LIB_ID   libId = symbol->GetLibId();
     wxString libName = libId.GetLibNickname();
     wxString symbolName = libId.GetLibItemName();

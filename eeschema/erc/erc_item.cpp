@@ -181,6 +181,14 @@ ERC_ITEM ERC_ITEM::emptyLabelName( ERCE_EMPTY_LABEL_NAME, _HKI( "Label has an em
 ERC_ITEM ERC_ITEM::emptyPowerValue( ERCE_EMPTY_POWER_VALUE, _HKI( "Power symbol has an empty value" ),
                                     wxT( "empty_power_value" ) );
 
+ERC_ITEM ERC_ITEM::duplicateSheetSuffix( ERCE_DUPLICATE_SHEET_SUFFIX,
+                                         _HKI( "Reused sheets have the same reference suffix" ),
+                                         wxT( "duplicate_sheet_suffix" ) );
+
+ERC_ITEM ERC_ITEM::refSuffixMismatch( ERCE_REF_SUFFIX_MISMATCH,
+                                      _HKI( "Reference does not match its reused sheet" ),
+                                      wxT( "ref_suffix_mismatch" ) );
+
 ERC_ITEM ERC_ITEM::pinMapBadPad( ERCE_PIN_MAP_BAD_PAD,
                                  _HKI( "Pin map references a pad that does not exist on the footprint" ),
                                  wxT( "pin_map_bad_pad" ) );
@@ -287,14 +295,15 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
 
           ERC_ITEM::heading_conflicts, ERC_ITEM::duplicateReference, ERC_ITEM::pinTableWarning,
           ERC_ITEM::differentUnitValue, ERC_ITEM::differentUnitFootprint, ERC_ITEM::differentUnitNet,
-          ERC_ITEM::duplicateSheetName, ERC_ITEM::hierLabelMismatch, ERC_ITEM::multipleNetNames,
-          ERC_ITEM::busDefinitionConflict, ERC_ITEM::busToBusConflict, ERC_ITEM::busToNetConflict,
-          ERC_ITEM::netNotBusMember, ERC_ITEM::groundPinNotGround,
+          ERC_ITEM::duplicateSheetName, ERC_ITEM::duplicateSheetSuffix, ERC_ITEM::hierLabelMismatch,
+          ERC_ITEM::multipleNetNames, ERC_ITEM::busDefinitionConflict, ERC_ITEM::busToBusConflict,
+          ERC_ITEM::busToNetConflict, ERC_ITEM::netNotBusMember, ERC_ITEM::groundPinNotGround,
 
           ERC_ITEM::heading_misc, ERC_ITEM::stackedPinName, ERC_ITEM::fieldNameWhitespace, ERC_ITEM::pinMapBadPad,
           ERC_ITEM::pinMapUnmappedPin, ERC_ITEM::pinMapDuplicatePad, ERC_ITEM::pinMapStalePin, ERC_ITEM::unannotated,
-          ERC_ITEM::unresolvedVariable, ERC_ITEM::undefinedNetclass, ERC_ITEM::simulationModelIssues,
-          ERC_ITEM::similarLabels, ERC_ITEM::similarPower, ERC_ITEM::similarLabelAndPower,
+          ERC_ITEM::refSuffixMismatch, ERC_ITEM::unresolvedVariable, ERC_ITEM::undefinedNetclass,
+          ERC_ITEM::simulationModelIssues, ERC_ITEM::similarLabels, ERC_ITEM::similarPower,
+          ERC_ITEM::similarLabelAndPower,
           // Commented out until the logic for this element is coded
           // TODO: Add bus label syntax checking
           //                 ERC_ITEM::busLabelSyntax,
@@ -367,6 +376,8 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_FIELD_NAME_WHITESPACE:   return std::make_shared<ERC_ITEM>( fieldNameWhitespace );
     case ERCE_EMPTY_LABEL_NAME: return std::make_shared<ERC_ITEM>( emptyLabelName );
     case ERCE_EMPTY_POWER_VALUE: return std::make_shared<ERC_ITEM>( emptyPowerValue );
+    case ERCE_DUPLICATE_SHEET_SUFFIX: return std::make_shared<ERC_ITEM>( duplicateSheetSuffix );
+    case ERCE_REF_SUFFIX_MISMATCH: return std::make_shared<ERC_ITEM>( refSuffixMismatch );
     case ERCE_PIN_MAP_BAD_PAD: return std::make_shared<ERC_ITEM>( pinMapBadPad );
     case ERCE_PIN_MAP_UNMAPPED_PIN: return std::make_shared<ERC_ITEM>( pinMapUnmappedPin );
     case ERCE_PIN_MAP_DUPLICATE_PAD: return std::make_shared<ERC_ITEM>( pinMapDuplicatePad );

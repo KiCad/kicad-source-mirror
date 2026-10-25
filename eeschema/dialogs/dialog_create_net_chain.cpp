@@ -319,13 +319,13 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
 
     for( const SCH_REFERENCE& ref : refs )
     {
-        if( ref.GetRef() == fromRef && ref.GetSymbol() )
+        if( ref.GetSymbol() && ref.GetComposedRef() == fromRef )
         {
             fromSym = ref.GetSymbol();
             fromSheet = ref.GetSheetPath();
         }
 
-        if( ref.GetRef() == toRef && ref.GetSymbol() )
+        if( ref.GetSymbol() && ref.GetComposedRef() == toRef )
         {
             toSym = ref.GetSymbol();
             toSheet = ref.GetSheetPath();
@@ -548,7 +548,7 @@ void DIALOG_CREATE_NET_CHAIN::populateComponentCombos()
     for( const SCH_REFERENCE& ref : refs )
     {
         if( ref.GetSymbol() )
-            refNames.insert( ref.GetRef() );
+            refNames.insert( ref.GetComposedRef() );
     }
 
     for( const wxString& name : refNames )
@@ -962,7 +962,7 @@ const SCH_SHEET_PATH& DIALOG_CREATE_NET_CHAIN::findSheetForRow( POTENTIAL_ROW& a
 
         for( const SCH_REFERENCE& ref : refs )
         {
-            if( ref.GetRef() == targetRef && ref.GetSymbol() )
+            if( ref.GetSymbol() && ref.GetComposedRef() == targetRef )
             {
                 aRow.cachedSheet = ref.GetSheetPath();
                 return aRow.cachedSheet;

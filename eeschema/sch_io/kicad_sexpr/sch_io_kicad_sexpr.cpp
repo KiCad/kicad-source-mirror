@@ -165,6 +165,10 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
         m_rootSheet = newSheet.get();
         loadHierarchy( SCH_SHEET_PATH(), newSheet.get() );
 
+        // A sheet load must keep another project's instances intact, so only its copies are stripped
+        if( !m_sheetLoad )
+            SCH_SHEET_LIST( newSheet.get() ).StripRefSuffixes();
+
         // If we got here, the schematic loaded successfully.
         sheet = newSheet.release();
         m_rootSheet = nullptr;         // Quiet Coverity warning.
@@ -1075,9 +1079,15 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
                 path = tmp.AsString();
 
+                wxString reference = instance.m_Reference;
+
+                // Older readers show the file's reference as is, so it carries the suffix
+                if( m_schematic && !aForClipboard && !reference.EndsWith( wxS( "?" ) ) )
+                    reference += m_schematic->GetRefSuffix( instance.m_Path );
+
                 m_out->Print( "(path %s (reference %s) (unit %d)",
                               m_out->Quotew( path ).c_str(),
-                              m_out->Quotew( instance.m_Reference ).c_str(),
+                              m_out->Quotew( reference ).c_str(),
                               instance.m_Unit );
 
                 if( !instance.m_Variants.empty() )
@@ -1265,7 +1275,13 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
     KICAD_FORMAT::FormatUuid( m_out, aSheet->m_Uuid );
 
     for( SCH_FIELD& field : aSheet->GetFields() )
+    {
+        // An empty suffix is the same as none, so designs without suffixes do not churn
+        if( field.GetId() == FIELD_T::SHEET_REF_SUFFIX && field.GetText().IsEmpty() )
+            continue;
+
         saveField( &field );
+    }
 
     for( const SCH_SHEET_PIN* pin : aSheet->GetPins() )
     {

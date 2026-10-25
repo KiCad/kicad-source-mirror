@@ -542,6 +542,87 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 }
 
 
+std::vector<BACKANNOTATE_REF>
+ResolveBackannotatedRefs( const std::vector<std::pair<const SCH_REFERENCE*, wxString>>& aRequests,
+                          bool aShareBases )
+{
+    std::vector<BACKANNOTATE_REF>         result( aRequests.size() );
+    std::map<const SCH_SYMBOL*, wxString> firstBase;
+    std::set<const SCH_SYMBOL*>           refusedSymbols;
+    std::set<wxString>                    refusedBoardRefs;
+
+    auto shares =
+            [&]( const SCH_SYMBOL* aSymbol )
+            {
+                return aShareBases
+                       && !( aSymbol->Schematic() && aSymbol->Schematic()->CopiesSelectDifferentUnits( aSymbol ) );
+            };
+
+    for( size_t ii = 0; ii < aRequests.size(); ++ii )
+    {
+        const SCH_REFERENCE& ref = *aRequests[ii].first;
+        const wxString&      boardRef = aRequests[ii].second;
+        const SCH_SYMBOL*    symbol = ref.GetSymbol();
+        const SCHEMATIC*     schematic = symbol->Schematic();
+
+        // A footprint whose units span sheets carries the package's suffix, not each unit's own
+        const wxString suffix = schematic ? schematic->GetPackageRefSuffix( symbol, ref.GetSheetPath() ) : wxString();
+
+        if( !boardRef.EndsWith( suffix ) || boardRef.length() <= suffix.length() )
+        {
+            result[ii].m_error = wxString::Format( _( "Cannot change %s to '%s', which lacks the sheet "
+                                                      "suffix '%s'." ),
+                                                   DescribeRef( ref.GetComposedRef() ), boardRef, suffix );
+            continue;
+        }
+
+        result[ii].m_base = boardRef.Left( boardRef.length() - suffix.length() );
+
+        if( shares( symbol ) )
+        {
+            auto [it, inserted] = firstBase.emplace( ref.GetSymbol(), result[ii].m_base );
+
+            if( !inserted && it->second != result[ii].m_base )
+                refusedSymbols.insert( ref.GetSymbol() );
+        }
+    }
+
+    // A rename is all or nothing for a footprint's units and, with shared bases, for a symbol's sheets
+    for( bool changed = true; changed; )
+    {
+        changed = false;
+
+        for( size_t ii = 0; ii < aRequests.size(); ++ii )
+        {
+            const SCH_SYMBOL* symbol = aRequests[ii].first->GetSymbol();
+            const wxString&   boardRef = aRequests[ii].second;
+
+            if( result[ii].m_error.IsEmpty() && !refusedSymbols.contains( symbol )
+                    && !refusedBoardRefs.contains( boardRef ) )
+            {
+                continue;
+            }
+
+            changed |= refusedBoardRefs.insert( boardRef ).second;
+
+            if( shares( symbol ) )
+                changed |= refusedSymbols.insert( symbol ).second;
+
+            if( result[ii].m_error.IsEmpty() )
+            {
+                result[ii].m_error = wxString::Format( _( "Cannot change %s to '%s', because the change "
+                                                          "cannot reach all of its units and sheets." ),
+                                                       DescribeRef( aRequests[ii].first->GetComposedRef() ),
+                                                       boardRef );
+                result[ii].m_base.clear();
+            }
+        }
+    }
+
+    return result;
+}
+
+
 void BACK_ANNOTATE::applyChangelist()
 {
     SCH_COMMIT commit( m_frame );
@@ -849,9 +930,18 @@ void BACK_ANNOTATE::applyChangelist()
         }
     }
 
+    std::vector<std::pair<const SCH_REFERENCE*, wxString>> refRequests;
+    const bool shareBases = m_frame->Schematic().Settings().m_AnnotateReusedSheetSuffixes;
+
+    for( const CHANGELIST_ITEM& item : m_changelist )
+        refRequests.emplace_back( &item.first, item.second->m_ref );
+
+    std::vector<BACKANNOTATE_REF> newRefs = ResolveBackannotatedRefs( refRequests, shareBases );
+
     // Apply changes from change list
-    for( CHANGELIST_ITEM& item : m_changelist )
+    for( size_t itemIdx = 0; itemIdx < m_changelist.size(); ++itemIdx )
     {
+        CHANGELIST_ITEM& item = m_changelist[itemIdx];
         SCH_REFERENCE& ref = item.first;
         PCB_FP_DATA&   fpData = *item.second;
         SCH_SYMBOL*    symbol = ref.GetSymbol();
@@ -874,18 +964,29 @@ void BACK_ANNOTATE::applyChangelist()
         if( !m_dryRun )
             commit.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
 
-        if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip
+        if( m_processReferences && ref.GetComposedRef() != fpData.m_ref && !skip
                 && !symbol->GetField( FIELD_T::REFERENCE )->HasTextVars() )
         {
-            ++m_changesCount;
-            msg.Printf( _( "Change %s reference designator to '%s'." ),
-                        DescribeRef( ref.GetRef() ),
-                        fpData.m_ref );
+            const BACKANNOTATE_REF& newRef = newRefs[itemIdx];
 
-            if( !m_dryRun )
-                symbol->SetRef( &ref.GetSheetPath(), fpData.m_ref );
+            if( !newRef.m_error.IsEmpty() )
+            {
+                m_reporter.ReportHead( newRef.m_error, RPT_SEVERITY_ERROR );
+            }
+            else
+            {
+                ++m_changesCount;
+                msg.Printf( _( "Change %s reference designator to '%s'." ),
+                            DescribeRef( ref.GetComposedRef() ),
+                            fpData.m_ref );
 
-            m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+                if( !m_dryRun && shareBases )
+                    symbol->SetUserRef( ref.GetSheetPath(), newRef.m_base );
+                else if( !m_dryRun )
+                    symbol->SetRef( &ref.GetSheetPath(), newRef.m_base );
+
+                m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+            }
         }
 
         if( m_processFootprints && oldFootprint != fpData.m_footprint && !skip

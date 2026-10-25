@@ -485,7 +485,13 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     {
     }
 
-    SCH_COMMIT commit( m_frame );
+    SCH_COMMIT          commit( m_frame );
+    SCH_EDIT_FRAME*     editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+    const bool          sharedRefs = editFrame && editFrame->Schematic().Settings().m_AnnotateReusedSheetSuffixes;
+    std::set<EDA_ITEM*> replacedRefs;
+
+    // Replacing changes references, so decide which copies share before any of them do
+    const std::set<KIID> splitCopies = sharedRefs ? editFrame->Schematic().SplitUnitSymbols() : std::set<KIID>();
 
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
@@ -495,10 +501,28 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
             {
                 wxCHECK_RET( aSheet, wxT( "must have a sheetpath for undo" ) );
 
+                SCH_FIELD*  field = dynamic_cast<SCH_FIELD*>( aItem );
+                SCH_SYMBOL* parent = field && field->GetId() == FIELD_T::REFERENCE
+                                             ? dynamic_cast<SCH_SYMBOL*>( field->GetParent() )
+                                             : nullptr;
+                EDA_ITEM*   sharedRef = nullptr;
+
+                if( sharedRefs && parent && !splitCopies.contains( parent->m_Uuid ) )
+                    sharedRef = parent;
+
+                // One replacement already reached every instance, and repeating it would compound R1 to R100
+                if( sharedRef && replacedRefs.contains( sharedRef ) )
+                    return;
+
                 commit.Modify( aItem, aSheet->LastScreen(), RECURSE_MODE::NO_RECURSE );
 
                 if( aItem->Replace( aData, aSheet ) )
+                {
                     m_frame->UpdateItem( aItem, false, true );
+
+                    if( sharedRef )
+                        replacedRefs.insert( sharedRef );
+                }
             };
 
     if( currentSheetOnly || selectedOnly )

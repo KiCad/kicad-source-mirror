@@ -145,6 +145,7 @@ private:
 
     KIID_PATH getDataStoreKey( const SCH_REFERENCE& aItem ) const override;
     wxString  getItemIdentifier( const SCH_REFERENCE& aItem ) const override;
+    wxString  getItemRefSuffix( const SCH_REFERENCE& aItem ) const override;
 
 protected:
     /**

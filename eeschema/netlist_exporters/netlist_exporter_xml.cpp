@@ -292,6 +292,25 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     m_libParts.clear();
     getSheetComponentClasses();
 
+    const bool     forBOM = aCtl & GNL_OPT_BOM;
+    const bool     forBoard = aCtl & GNL_OPT_KICAD;
+    const wxString currentVariant = m_schematic->GetCurrentVariant();
+
+    // Do not use exportVariant for determininig whether or not to output a symbol.  It
+    // will be blank when exporting to PCBNew.
+    const EXPORT_EXCLUSION excluded =
+            [&]( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheet )
+            {
+                if( forBOM && ( aSheet.GetExcludedFromBOM( currentVariant )
+                                || aSymbol->ResolveExcludedFromBOM( &aSheet, currentVariant ) ) )
+                {
+                    return true;
+                }
+
+                return forBoard && ( aSheet.GetExcludedFromBoard( currentVariant )
+                                     || aSymbol->ResolveExcludedFromBoard( &aSheet, currentVariant ) );
+            };
+
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
     SCH_SHEET_LIST sheetList = m_exportSheets;
 
@@ -317,7 +336,12 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            auto        test = ordered_symbols.insert( symbol );
+
+            // An excluded unit must not stand for its package, or the included units go with it
+            if( excluded( symbol, sheet ) )
+                continue;
+
+            auto test = ordered_symbols.insert( symbol );
 
             if( !test.second )
             {
@@ -336,27 +360,10 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
         for( EDA_ITEM* item : ordered_symbols )
         {
-            SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
-            bool        forBOM = aCtl & GNL_OPT_BOM;
-            bool        forBoard = aCtl & GNL_OPT_KICAD;
+            SCH_SYMBOL* symbol = findNextSymbol( item, sheet, excluded );
 
             if( !symbol )
                 continue;
-
-            // Do not use exportVariant for determininig whether or not to output a symbol.  It
-            // will be blank when exporting to PCBNew.
-
-            if( forBOM && ( sheet.GetExcludedFromBOM( m_schematic->GetCurrentVariant() )
-                           || symbol->ResolveExcludedFromBOM( &sheet, m_schematic->GetCurrentVariant() ) ) )
-            {
-                continue;
-            }
-
-            if( forBoard && ( sheet.GetExcludedFromBoard( m_schematic->GetCurrentVariant() )
-                             || symbol->ResolveExcludedFromBoard( &sheet, m_schematic->GetCurrentVariant() ) ) )
-            {
-                continue;
-            }
 
             // Output the symbol's elements in order of expected access frequency. This may
             // not always look best, but it will allow faster execution under XSL processing

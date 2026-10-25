@@ -986,7 +986,7 @@ int PADS_SCH_SYMBOL_BUILDER::NextFreePowerOrdinal( SCH_SHEET* aSheet )
             wxString digits;
             long     ordinal = 0;
 
-            if( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ).StartsWith( wxS( "#PWR" ), &digits )
+            if( static_cast<SCH_SYMBOL*>( item )->GetBaseRef( &path ).StartsWith( wxS( "#PWR" ), &digits )
                 && digits.ToLong( &ordinal ) )
             {
                 next = std::max( next, static_cast<int>( ordinal ) + 1 );

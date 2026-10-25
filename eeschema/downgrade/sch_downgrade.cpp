@@ -2680,9 +2680,10 @@ bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantNam
         {
             for( SCH_FIELD& field : sheet->GetFields() )
             {
-                bool mandatory = field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME;
+                bool invariant = field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME
+                                 || field.GetId() == FIELD_T::SHEET_REF_SUFFIX;
 
-                if( !mandatory && field.GetName() == name )
+                if( !invariant && field.GetName() == name )
                     field.SetText( value );
             }
         }

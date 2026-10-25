@@ -74,6 +74,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/orcad/test_orcad_sch_import.cpp
     sch_io/cadstar/test_issue14447_arc_connection.cpp
 
+    erc/test_erc_annotation.cpp
     erc/test_erc_empty_label.cpp
     erc/test_erc_empty_power_value.cpp
     erc/test_erc_four_way.cpp
@@ -297,6 +298,7 @@ set( QA_EESCHEMA_SRCS
     test_autoplace_fields.cpp
     test_field_case_conflicts.cpp
     test_variant_symbol_compatibility.cpp
+    test_ref_suffix.cpp
     test_variant_field_resolution.cpp
     test_sch_dynamic_properties.cpp
 

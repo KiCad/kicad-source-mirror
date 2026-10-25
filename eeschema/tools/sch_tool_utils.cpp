@@ -186,7 +186,7 @@ bool IsUnannotatedUnitOccupied( const SCH_REFERENCE_LIST& aRefs, const wxString&
         if( ref.GetUnit() != aUnit )
             continue;
 
-        if( ref.GetRef() != aRef )
+        if( ref.GetComposedRef() != aRef )
             continue;
 
         SCH_SYMBOL* refSym = ref.GetSymbol();
@@ -227,7 +227,7 @@ std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
 
     for( const SCH_REFERENCE& ref : existingRefs )
     {
-        if( symRefDes != ref.GetRef() )
+        if( symRefDes != ref.GetComposedRef() )
             continue;
 
         if( refIsUnannotated && ref.GetSymbol() && ref.GetSymbol()->GetLibId() != symLibId )
@@ -248,7 +248,7 @@ std::optional<SCH_REFERENCE> FindSymbolByRefAndUnit( const SCHEMATIC& aSchematic
 
     for( const SCH_REFERENCE& ref : refs )
     {
-        if( ref.GetRef() == aRef && ref.GetUnit() == aUnit )
+        if( ref.GetComposedRef() == aRef && ref.GetUnit() == aUnit )
         {
             return ref;
         }

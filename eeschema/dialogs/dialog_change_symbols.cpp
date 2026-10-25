@@ -639,7 +639,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
         wxCHECK2( screen, continue );
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
-            usedRefs.insert( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ) );
+            usedRefs.insert( static_cast<SCH_SYMBOL*>( item )->GetBaseRef( &path ) );
     }
 
     // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
@@ -748,7 +748,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
 
                         for( const SCH_SHEET_PATH& instance : symbol_change_info.m_Instances )
                         {
-                            wxString oldRef = symbol->GetRef( &instance );
+                            wxString oldRef = symbol->GetBaseRef( &instance );
                             int      number = UTIL::GetRefDesNumber( oldRef );
                             wxString ref;
                             auto     renamed = renamedRefs.find( oldRef );

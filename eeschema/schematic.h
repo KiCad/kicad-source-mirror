@@ -32,7 +32,11 @@
 #include <import_net_map.h>
 
 #include <memory>
+#include <map>
+#include <set>
+#include <mutex>
 #include <optional>
+#include <unordered_map>
 #include <vector>
 
 
@@ -198,6 +202,74 @@ public:
     bool HasHierarchy() const { return !m_hierarchy.empty(); }
 
     void RefreshHierarchy();
+
+    /**
+     * Return the composed reference suffix of \a aPath as of the last RefreshHierarchy().
+     *
+     * Safe to call from the connectivity workers.
+     */
+    wxString GetRefSuffix( const SCH_SHEET_PATH& aPath ) const;
+
+    wxString GetRefSuffix( const KIID_PATH& aPath ) const;
+
+    /// Append the composed reference suffix of \a aPath to \a aRef without copying it.
+    void AppendRefSuffix( wxString& aRef, const SCH_SHEET_PATH& aPath ) const;
+
+    /**
+     * Return the suffix the package of a multi-unit symbol's instance composes with.
+     *
+     * Units sharing a base and library symbol form one package when no unit repeats among them.  Such
+     * a package takes the alphabetically lowest suffix of its units, so U20A on _M4 and U20B on _M5
+     * are both footprint U20_M4.  Otherwise this is the suffix of \a aPath.
+     */
+    wxString GetPackageRefSuffix( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath ) const;
+
+    wxString GetPackageRefSuffix( const SCH_SYMBOL* aSymbol, const KIID_PATH& aPath ) const;
+
+    /**
+     * @return the suffix for \a aUnit of the package that \a aSymbol on \a aPath belongs to, which is the
+     *         suffix of the sheet holding that unit when the package spans sheets.
+     */
+    wxString GetUnitRefSuffix( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath, int aUnit ) const;
+
+    /**
+     * @return true if the copies of \a aSymbol on a reused sheet select different units.  Suffix
+     *         mode does not share one base across such copies; the annotator pairs them into packages.
+     */
+    bool CopiesSelectDifferentUnits( const SCH_SYMBOL* aSymbol ) const;
+
+    /// Symbols whose copies select different units, for loops that change references as they go.
+    std::set<KIID> SplitUnitSymbols() const;
+
+    /**
+     * @return the reply to MAIL_SCH_GET_REF_SUFFIXES, each sheet path's suffix in page order, each
+     *         followed by the instances on it whose package takes another sheet's suffix.
+     */
+    std::string FormatRefSuffixes() const;
+
+    /// Symbol and sheet path of each instance whose package suffix is another sheet's, with that suffix.
+    std::map<std::pair<KIID, KIID_PATH>, wxString> PackageRefSuffixes() const;
+
+    /**
+     * Find instances of one sheet file whose composed reference suffixes collide.
+     *
+     * @param aIncludeEmpty also treats two instances without a suffix as a collision.
+     * @return each later colliding path paired with the first path that composed the same suffix.
+     */
+    std::vector<std::pair<SCH_SHEET_PATH, SCH_SHEET_PATH>> RefSuffixCollisions( bool aIncludeEmpty ) const;
+
+    /// True when a sheet in the hierarchy has suffix text, even text that resolves to nothing.
+    bool HasRefSuffixFields() const { return m_hasRefSuffixFields; }
+
+    /// True when some hierarchy path composes a reference suffix.
+    bool HasRefSuffixes() const { return !m_refSuffixes.empty(); }
+
+    /**
+     * Recompose the reference suffix of every sheet path in the hierarchy.
+     *
+     * RefreshHierarchy() calls this.
+     */
+    void RefreshRefSuffixes();
 
     SCH_ITEM* ResolveItem( const KIID& aID, SCH_SHEET_PATH* aPathOut = nullptr,
                            bool aAllowNullptrReturn = false ) const
@@ -781,6 +853,33 @@ private:
      * Cache of the entire schematic hierarchy sorted by sheet page number.
      */
     SCH_SHEET_LIST m_hierarchy;
+
+    /// Composed reference suffix of each hierarchy path that has one.
+    std::unordered_map<KIID_PATH, wxString> m_refSuffixes;
+
+    /// Every hierarchy path's suffix by its cached sheet path hash, which SCH_SHEET_PATH equality also relies on.
+    std::unordered_map<size_t, wxString>    m_refSuffixesBySheetHash;
+    bool                                    m_hasRefSuffixFields = false;
+
+    /// Rebuild m_packageSuffixes when a reference changed; the caller holds m_packageSuffixesMutex.
+    void updatePackageSuffixes() const;
+
+    /// The cached suffix of @a aPath, or nullptr when it has none.
+    const wxString* findRefSuffix( const SCH_SHEET_PATH& aPath ) const;
+
+    /// The suffix of a package spanning sheets that @a aSymbol on @a aPath belongs to, if any.
+    std::optional<wxString> spanningPackageSuffix( const SCH_SYMBOL* aSymbol, const KIID_PATH& aPath ) const;
+
+    /// Package suffix of each instance whose package spans suffixes and is not its own sheet's.
+    mutable std::map<std::pair<KIID, KIID_PATH>, wxString> m_packageSuffixes;
+
+    /// Sheet suffix of each placed unit of a package spanning suffixes, keyed by base and LIB_ID.
+    mutable std::map<std::pair<wxString, wxString>, std::map<int, wxString>> m_packageUnitSuffixes;
+
+    /// Symbols whose copies select different units.
+    mutable std::set<KIID> m_unitSplitSymbols;
+    mutable std::optional<uint64_t>                       m_packageSuffixesGeneration;
+    mutable std::mutex                                    m_packageSuffixesMutex;
 
     /// Exclusions whose saved identity cannot currently be reconstructed as a marker.
     std::vector<ERC_EXCLUSION> m_unresolvedErcExclusions;

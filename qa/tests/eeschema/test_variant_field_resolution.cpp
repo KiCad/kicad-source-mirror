@@ -25,6 +25,7 @@
 #include "eeschema_test_utils.h"
 
 #include <sch_symbol.h>
+#include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <lib_id.h>
 #include <wildcards_and_files_ext.h>
@@ -323,4 +324,26 @@ BOOST_FIXTURE_TEST_CASE( VariantOverrideResolvesTextVars, TEST_VARIANT_FIELD_RES
             }
         }
     }
+}
+
+
+BOOST_FIXTURE_TEST_CASE( SheetFieldVariantResolvesInsideSubsheet, KI_TEST::SCHEMATIC_TEST_FIXTURE )
+{
+    LoadSchematic( wxFileName( KI_TEST::GetEeschemaTestDataDir(), wxS( "issue13212" ),
+                               FILEEXT::KiCadSchematicFileExtension ) );
+
+    SCH_SHEET_PATH childPath = m_schematic->Hierarchy()[1];
+    SCH_SHEET_PATH parentPath = childPath;
+    SCH_SHEET*     sheet = childPath.Last();
+
+    parentPath.pop_back();
+    sheet->AddField( SCH_FIELD( sheet, FIELD_T::SHEET_USER, wxS( "Owner" ) ) )->SetText( wxS( "BASE" ) );
+
+    m_schematic->AddVariant( wxS( "Alt" ) );
+    sheet->SetFieldText( wxS( "Owner" ), wxS( "ALT" ), &parentPath, wxS( "Alt" ) );
+    m_schematic->SetCurrentVariant( wxS( "Alt" ) );
+
+    wxString token = wxS( "Owner" );
+    BOOST_REQUIRE( sheet->ResolveTextVar( &childPath, &token, 0 ) );
+    BOOST_CHECK_EQUAL( token, wxS( "ALT" ) );
 }

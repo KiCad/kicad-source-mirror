@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -131,6 +131,18 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 
 
 	bupperSizer->Add( fgSizer1, 0, wxBOTTOM|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizerReusedSheets;
+	sbSizerReusedSheets = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Reused Sheets") ), wxVERTICAL );
+
+	m_rbSeparateInstances = new wxRadioButton( sbSizerReusedSheets->GetStaticBox(), wxID_ANY, _("Number each sheet instance separately (R1, R2 ...)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	sbSizerReusedSheets->Add( m_rbSeparateInstances, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_rbSuffixInstances = new wxRadioButton( sbSizerReusedSheets->GetStaticBox(), wxID_ANY, _("Number each file once and add the sheet's reference suffix (R1_M1, R1_M2 ...)"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerReusedSheets->Add( m_rbSuffixInstances, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bupperSizer->Add( sbSizerReusedSheets, 0, wxALL|wxEXPAND, 5 );
 
 	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_MessageWindow->SetMinSize( wxSize( -1,120 ) );

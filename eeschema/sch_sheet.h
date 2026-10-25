@@ -23,6 +23,8 @@
 
 #include <map>
 #include <memory>
+#include <functional>
+#include <set>
 
 #include <sch_field.h>
 
@@ -146,6 +148,40 @@ public:
         return GetField( FIELD_T::SHEET_NAME )->GetShownText( aContext );
     }
     wxString GetName() const { return GetField( FIELD_T::SHEET_NAME )->GetText(); }
+
+    /**
+     * Return this sheet's own reference suffix with text variables resolved.
+     *
+     * Only base user field values of this sheet and the sheets on its path resolve, so the result
+     * never depends on the variant, project, title block, file name or attributes.
+     *
+     * @param aParentPath is the path of the sheet that holds this sheet symbol.
+     */
+    wxString GetRefSuffix( const SCH_SHEET_PATH& aParentPath ) const;
+
+    /**
+     * Resolve \a aText as if it were this sheet's reference suffix, with the same rules as GetRefSuffix.
+     */
+    wxString ResolveRefSuffix( const wxString& aText, const SCH_SHEET_PATH& aParentPath ) const;
+
+    /**
+     * @return the composed reference suffix of this sheet below the current sheet.
+     */
+    wxString GetFullRefSuffixProp() const;
+
+    /**
+     * Return the suffix a pasted copy of a sheet should take.
+     *
+     * A suffix that is not in use is kept. Otherwise a trailing number or a trailing run of up to two
+     * letters continues past the highest suffix of the same series, so _M1 becomes _M4 when _M3 is in
+     * use, _M09 becomes _M10 and _Z becomes _AA. Any other suffix is kept verbatim.
+     *
+     * @param aSuffix is the raw suffix field text of the pasted sheet.
+     * @param aInUse is the suffix of every sheet in the schematic, both raw and resolved.
+     * @param aIsTaken also refuses a candidate, for one that only collides once resolved.
+     */
+    static wxString NextRefSuffix( const wxString& aSuffix, const std::set<wxString>& aInUse,
+                                   const std::function<bool( const wxString& )>& aIsTaken = nullptr );
     void SetName( const wxString& aName ) { GetField( FIELD_T::SHEET_NAME )->SetText( aName ); }
 
     SCH_SCREEN* GetScreen() const { return m_screen; }
@@ -595,6 +631,16 @@ public:
     bool HasPageNumberChanges( const SCH_SHEET& aOther ) const;
 
     bool HasHierarchyChanges( const SCH_SHEET& aOther ) const;
+
+    /// True when an edit may change the reference suffix this sheet adds to the paths below it.
+    bool HasRefSuffixChanges( const SCH_SHEET& aOther ) const;
+
+    /**
+     * Flag every screen at or below this sheet as modified.
+     *
+     * Files store composed references, so a suffix change rewrites the files below the sheet.
+     */
+    void SetDescendantsModified();
 
     bool HasPinIdentityChanges( const SCH_SHEET& aOther ) const;
 

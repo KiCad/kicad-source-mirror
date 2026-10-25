@@ -108,7 +108,10 @@ struct MODEL_TEXT_CONTEXT
     std::vector<wxString>                   templateFields;
     std::vector<INSTANCE_TEXT_CONTEXT>      instances;
     std::map<KIID_PATH, SHEET_TEXT_CONTEXT> sheets;
-    bool                                    operator==( const MODEL_TEXT_CONTEXT& ) const = default;
+
+    // A package's suffix comes from units on other screens, so a rename there must bump the epoch
+    std::map<std::pair<KIID, KIID_PATH>, wxString> packageSuffixes;
+    bool                                           operator==( const MODEL_TEXT_CONTEXT& ) const = default;
 };
 
 std::optional<MODEL_TEXT_CONTEXT> CaptureTextContext( SCHEMATIC& aSchematic, const SCH_SHEET_LIST& aPaths )
@@ -137,6 +140,7 @@ std::optional<MODEL_TEXT_CONTEXT> CaptureTextContext( SCHEMATIC& aSchematic, con
     result.variantDescription = aSchematic.GetVariantDescription( result.variant );
     result.sheetCount = aSchematic.Root().CountSheets();
     result.variables = project.GetTextVars();
+    result.packageSuffixes = aSchematic.PackageRefSuffixes();
 
     for( const auto& field : project.GetProjectFile().m_TemplateFieldNames.GetResolvedTemplateFieldNames() )
         result.templateFields.push_back( field.m_Name );

@@ -225,6 +225,21 @@ public:
      */
     int TestVariantSymbols();
 
+    /**
+     * Test the annotation of every symbol: unannotated, duplicate and mismatched units.
+     */
+    int TestAnnotation();
+
+    /**
+     * Test that the instances of each reused sheet compose distinct reference suffixes.
+     */
+    int TestDuplicateSheetSuffixes();
+
+    /**
+     * Report symbols whose saved reference lacked the reference suffix of their sheet instance.
+     */
+    int TestRefSuffixMismatch();
+
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 

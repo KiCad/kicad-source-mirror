@@ -260,6 +260,22 @@ BOOST_AUTO_TEST_CASE( Issue24861_RepeatedSchematicChannels )
                                                         wxT( "LED1_CH3" ) } ) );
     BOOST_CHECK( resistorReferences == std::set<wxString>( { wxT( "R1_CH1" ), wxT( "R1_CH2" ),
                                                              wxT( "R1_CH3" ) } ) );
+
+    // The channel names are suffixes, so every channel keeps the base the annotator shares
+    BOOST_CHECK( m_schematic.Settings().m_AnnotateReusedSheetSuffixes );
+
+    for( const auto& [channelName, sheetPath] : channelPaths )
+    {
+        BOOST_CHECK_EQUAL( m_schematic.GetRefSuffix( sheetPath ), wxT( "_" ) + channelName );
+
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( !symbol->GetRef( &sheetPath ).StartsWith( wxT( "#" ) ) )
+                BOOST_CHECK( !symbol->GetBaseRef( &sheetPath ).Contains( wxT( "_CH" ) ) );
+        }
+    }
 }
 
 

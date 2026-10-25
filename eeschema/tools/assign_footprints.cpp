@@ -76,7 +76,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
             // Search the symbol in the flat list
             for( unsigned ii = 0;  ii < refs.GetCount();  ++ii )
             {
-                if( reference == refs[ii].GetRef() )
+                if( reference == refs[ii].GetComposedRef() )
                 {
                     // We have found a candidate.
                     // Note: it can be not unique (multiple parts per package)
@@ -178,7 +178,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
         // Search the symbol in the flat list
         for( unsigned ii = 0;  ii < referencesList.GetCount();  ii++ )
         {
-            if( reference == referencesList[ii].GetRef() )
+            if( reference == referencesList[ii].GetComposedRef() )
             {
                 // We have found a candidate.
                 // Note: it can be not unique (multiple units per part)

@@ -206,6 +206,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     bool                dirtyConnectivity = false;
     bool                refreshConnectivity = false;
     bool                refreshHierarchy = false;
+    bool                refSuffixChanged = false;
     SCH_CLEANUP_FLAGS   connectivityCleanUp = NO_CLEANUP;
 
     if( Empty() )
@@ -471,6 +472,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
                 refreshHierarchy |= hierarchyChanged;
 
+                if( hierarchyChanged && originalSheet->HasRefSuffixChanges( *modifiedSheet ) )
+                {
+                    static_cast<SCH_SHEET*>( schItem )->SetDescendantsModified();
+                    refSuffixChanged = true;
+                }
+
                 // Stable ports are invalidated through their containing screen, including shared instances
                 fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine
                                       || hierarchyChanged
@@ -587,6 +594,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( refreshHierarchy && frame )
         frame->UpdateHierarchyNavigator();
+
+    // An API edit can change a suffix while one of its child sheets is on screen
+    if( refSuffixChanged && frame )
+        frame->RefreshComposedReferences();
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 

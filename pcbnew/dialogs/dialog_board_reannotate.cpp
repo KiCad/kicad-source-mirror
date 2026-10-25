@@ -36,6 +36,8 @@
 #include <string_utils.h>  // StrNumCmp
 #include <kiface_base.h>
 #include <pcbnew_settings.h>
+#include <mail_type.h>
+#include <ref_suffix_split.h>
 #include <refdes_utils.h>
 #include <richio.h>
 #include <tool/grid_menu.h>
@@ -88,8 +90,24 @@ wxString ActionMessage[] = {
     "",                                 // UPDATE_REFDES
     _( "(not updated)" ),               // EMPTY_REFDES
     _( "(unannotated; not updated)" ),  // INVALID_REFDES
-    _( "(excluded)" )                   // EXCLUDE_REFDES
+    _( "(excluded)" ),                  // EXCLUDE_REFDES
+    _( "(unknown suffix; not updated)" ) // UNKNOWN_SUFFIX_REFDES
 };
+
+
+/// The number of a reference, which a sheet suffix may follow
+static int refDesNumber( const wxString& aRefDes )
+{
+    size_t firstnum = aRefDes.find_first_of( wxS( "0123456789" ) );
+
+    if( firstnum == wxString::npos )
+        return -1;
+
+    long number = 0;
+    aRefDes.Mid( firstnum, aRefDes.find_first_not_of( wxS( "0123456789" ), firstnum ) - firstnum )
+            .ToLong( &number );
+    return static_cast<int>( number );
+}
 
 
 DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame ) :
@@ -419,6 +437,21 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
             return false;
     }
 
+    int unknownSuffixes = (int) std::count_if( m_changeArray.begin(), m_changeArray.end(),
+                                            []( const REFDES_CHANGE& aChange )
+                                            {
+                                                return aChange.Action == UNKNOWN_SUFFIX_REFDES;
+                                            } );
+
+    if( unknownSuffixes > 0 )
+    {
+        ShowReport( wxString::Format( _( "%d footprints keep their references because the text after the number "
+                                         "is not a known sheet suffix. Open the schematic and update the PCB from "
+                                         "it to renumber them." ),
+                                      unknownSuffixes ),
+                    RPT_SEVERITY_WARNING );
+    }
+
     BOARD_COMMIT commit( m_frame );
 
     for( FOOTPRINT* footprint : m_footprints )
@@ -462,6 +495,18 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     while( tokenizer.HasMoreTokens() )
         m_excludeArray.push_back( tokenizer.GetNextToken() );
 
+    std::optional<SHEET_REF_SUFFIXES> suffixes;
+
+    // A standalone board has no schematic to name the suffixes, so suffixed references stay as they are
+    if( m_frame->Kiway().Player( FRAME_SCH, false ) )
+    {
+        std::string payload;
+        m_frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_REF_SUFFIXES, payload, this );
+        suffixes = ParseRefSuffixes( payload );
+    }
+
+    std::map<KIID, FOOTPRINT_REF_SPLIT> splits = SplitRefSuffixes( m_footprints, suffixes ? &*suffixes : nullptr );
+
     REFDES_INFO fpData;
     bool        useFPLocation = m_locationChoice->GetSelection() == 0;
 
@@ -478,6 +523,10 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
         fpData.roundedy     = RoundToGrid( fpData.y, sortGridy );
         fpData.Front        = footprint->GetLayer() == F_Cu;
         fpData.Action       = UPDATE_REFDES; // Usually good
+        fpData.Suffix       = splits.at( footprint->m_Uuid ).Suffix;
+        fpData.Representative = splits.at( footprint->m_Uuid ).Representative;
+        fpData.Shared       = splits.at( footprint->m_Uuid ).Shared;
+        fpData.Held         = footprint->IsLocked() && skipLocked;
 
         if( fpData.RefDesString.IsEmpty() )
         {
@@ -512,19 +561,64 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
             }
         }
 
-        if( footprint->IsLocked() && skipLocked )
+        // The scope only narrows what the exclude list and the refdes checks leave to update
+        const bool outOfScope = ( footprint->IsLocked() && skipLocked )
+                                || ( annotateSelected && !footprint->IsSelected() )
+                                || ( annotateFront && !fpData.Front ) || ( annotateBack && fpData.Front );
+
+        if( fpData.Action == UPDATE_REFDES && outOfScope )
             fpData.Action = EXCLUDE_REFDES;
-        else if( annotateSelected )
-            fpData.Action = footprint->IsSelected() ? UPDATE_REFDES : EXCLUDE_REFDES;
-        else if( annotateFront )
-            fpData.Action = fpData.Front ? UPDATE_REFDES : EXCLUDE_REFDES;
-        else if( annotateBack )
-            fpData.Action = fpData.Front ? EXCLUDE_REFDES : UPDATE_REFDES;
+
+        if( fpData.Action == UPDATE_REFDES && splits.at( footprint->m_Uuid ).Unknown )
+            fpData.Action = UNKNOWN_SUFFIX_REFDES;
 
         if( fpData.Front )
             m_frontFootprints.push_back( fpData );
         else
             m_backFootprints.push_back( fpData );
+    }
+
+    // Copies on reused sheets share one base, so any copy in scope renumbers all of them and a locked
+    // copy holds the whole group
+    std::map<KIID, ACTION_CODE> groupActions;
+    std::set<KIID>              scopedGroups;
+    std::set<KIID>              heldGroups;
+    m_groupSuffixes.clear();
+
+    for( std::vector<REFDES_INFO>* side : { &m_frontFootprints, &m_backFootprints } )
+    {
+        for( const REFDES_INFO& info : *side )
+        {
+            if( !info.Shared )
+                continue;
+
+            if( info.Representative == info.Uuid )
+                groupActions[info.Uuid] = info.Action;
+
+            if( info.Action == UPDATE_REFDES )
+                scopedGroups.insert( info.Representative );
+
+            if( info.Held )
+                heldGroups.insert( info.Representative );
+        }
+    }
+
+    for( std::vector<REFDES_INFO>* side : { &m_frontFootprints, &m_backFootprints } )
+    {
+        for( REFDES_INFO& info : *side )
+        {
+            if( !info.Shared )
+                continue;
+
+            if( heldGroups.count( info.Representative ) )
+                info.Action = EXCLUDE_REFDES;
+            else if( scopedGroups.count( info.Representative ) )
+                info.Action = UPDATE_REFDES;
+            else
+                info.Action = groupActions.at( info.Representative );
+
+            m_groupSuffixes[info.Representative].push_back( info.Suffix );
+        }
     }
 
     int sortCode = 0; // Convert radio button to sort direction code
@@ -554,6 +648,9 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
 
     m_refDesPrefixInfos.clear();
     m_changeArray.clear();
+    m_newBases.clear();
+    m_takenRefs.clear();
+    m_suffixedRefs.clear();
 
     BuildUnavailableRefsList();
 
@@ -567,6 +664,12 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     {
         BuildChangeArray( m_backFootprints, wxAtoi( m_BackRefDesStart->GetValue() ),
                           m_BackPrefix->GetValue(), m_RemoveBackPrefix->GetValue(), aBadRefDes );
+    }
+
+    for( REFDES_CHANGE& change : m_changeArray )
+    {
+        if( change.Action == UPDATE_REFDES && change.Representative != change.Uuid )
+            change.NewRefDes = m_newBases.at( change.Representative ) + change.Suffix;
     }
 
     if( !m_changeArray.empty() )
@@ -605,26 +708,23 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
 
 void DIALOG_BOARD_REANNOTATE::BuildUnavailableRefsList()
 {
-    std::vector<REFDES_INFO> excludedFootprints;
-
-    for( const REFDES_INFO& fpData : m_frontFootprints )
+    for( std::vector<REFDES_INFO>* side : { &m_frontFootprints, &m_backFootprints } )
     {
-        if( fpData.Action == EXCLUDE_REFDES )
-            excludedFootprints.push_back( fpData );
-    }
-
-    for( const REFDES_INFO& fpData : m_backFootprints )
-    {
-        if( fpData.Action == EXCLUDE_REFDES )
-            excludedFootprints.push_back( fpData );
-    }
-
-    for( const REFDES_INFO& fpData : excludedFootprints )
-    {
-        if( fpData.Action == EXCLUDE_REFDES )
+        for( const REFDES_INFO& fpData : *side )
         {
-            REFDES_PREFIX_INFO* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesPrefix );
-            refDesInfo->UnavailableRefs.insert( UTIL::GetRefDesNumber( fpData.RefDesString ) );
+            if( fpData.Action == UPDATE_REFDES )
+                continue;
+
+            m_takenRefs.insert( fpData.RefDesString );
+
+            if( !fpData.Suffix.IsEmpty() || fpData.Action == UNKNOWN_SUFFIX_REFDES )
+                m_suffixedRefs.insert( fpData.RefDesString );
+
+            if( fpData.Action == EXCLUDE_REFDES || fpData.Action == UNKNOWN_SUFFIX_REFDES )
+            {
+                REFDES_PREFIX_INFO* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesPrefix );
+                refDesInfo->UnavailableRefs.insert( refDesNumber( fpData.RefDesString ) );
+            }
         }
     }
 }
@@ -659,6 +759,8 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootp
         change.OldRefDesString = fpData.RefDesString;
         change.NewRefDes       = fpData.RefDesString;
         change.Front           = fpData.Front;
+        change.Suffix          = fpData.Suffix;
+        change.Representative  = fpData.Representative;
 
         if( fpData.RefDesString.IsEmpty() )
             fpData.Action = EMPTY_REFDES;
@@ -667,6 +769,13 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootp
         {
             m_changeArray.push_back( change );
             aBadRefDes.push_back( fpData );
+            continue;
+        }
+
+        // A copy on a reused sheet takes the base its representative is given
+        if( change.Action == UPDATE_REFDES && fpData.Representative != fpData.Uuid )
+        {
+            m_changeArray.push_back( change );
             continue;
         }
 
@@ -683,10 +792,42 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<REFDES_INFO>& aFootp
             REFDES_PREFIX_INFO* refDesInfo = GetOrBuildRefDesInfo( fpData.RefDesPrefix, aStartRefDes );
             unsigned int  newRefDesNumber = refDesInfo->LastUsedRefDes + 1;
 
-            while( refDesInfo->UnavailableRefs.count( newRefDesNumber ) )
-                newRefDesNumber++;
+            std::vector<wxString> suffixes = { fpData.Suffix };
 
-            change.NewRefDes = refDesInfo->RefDesPrefix + std::to_string( newRefDesNumber );
+            if( auto it = m_groupSuffixes.find( fpData.Uuid ); it != m_groupSuffixes.end() )
+                suffixes = it->second;
+
+            // A digit suffix makes R1 with suffix 2 read as R12, so suffixed and bare references are compared whole
+            auto clashes =
+                    [&]( const wxString& aBase )
+                    {
+                        for( const wxString& suffix : suffixes )
+                        {
+                            if( ( suffix.IsEmpty() ? m_suffixedRefs : m_takenRefs ).count( aBase + suffix ) )
+                                return true;
+                        }
+
+                        return false;
+                    };
+
+            while( refDesInfo->UnavailableRefs.count( newRefDesNumber )
+                   || clashes( refDesInfo->RefDesPrefix + std::to_string( newRefDesNumber ) ) )
+            {
+                newRefDesNumber++;
+            }
+
+            wxString base = refDesInfo->RefDesPrefix + std::to_string( newRefDesNumber );
+
+            for( const wxString& suffix : suffixes )
+            {
+                m_takenRefs.insert( base + suffix );
+
+                if( !suffix.IsEmpty() )
+                    m_suffixedRefs.insert( base + suffix );
+            }
+
+            m_newBases[fpData.Uuid] = base;
+            change.NewRefDes = base + fpData.Suffix;
             refDesInfo->LastUsedRefDes = newRefDesNumber;
         }
 

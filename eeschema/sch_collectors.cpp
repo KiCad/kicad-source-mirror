@@ -226,7 +226,7 @@ void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId, S
     {
         const SCH_REFERENCE& symbol = symbols[i];
 
-        if( symbol.GetRef() == aRef
+        if( symbol.GetComposedRef() == aRef
                 && symbol.GetSymbol()->GetLibId() == aLibId
                 && symbol.GetUnit() != aUnit )
         {

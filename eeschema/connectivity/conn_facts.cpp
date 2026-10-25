@@ -1203,7 +1203,8 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
 
                 if( hasInstance )
                 {
-                    cached.reference.reference = instance.m_Reference;
+                    // Channels of a reused sheet share a base, so only the composed reference keeps their nets apart
+                    cached.reference.reference = cached.symbol->GetRef( &aPath );
                     cached.reference.referenceWithUnit = cached.symbol->GetRef( &aPath, true );
                 }
 

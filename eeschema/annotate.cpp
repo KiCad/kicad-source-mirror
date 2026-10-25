@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <set>
+#include <unordered_set>
 
 #include <confirm.h>
 #include <project/project_file.h>
@@ -239,15 +240,25 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
     // Store the selected sheets relative to the full hierarchy so we get the correct sheet numbers
     SCH_SHEET_LIST selectedSheets;
 
+    auto addSelectedSheet =
+            [&]( EDA_ITEM* aItem )
+            {
+                if( aItem->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET_PATH subSheetPath = currentSheet;
+                    subSheetPath.push_back( static_cast<SCH_SHEET*>( aItem ) );
+
+                    sheets.GetSheetsWithinPath( selectedSheets, subSheetPath );
+                }
+            };
+
     for( EDA_ITEM* item : selection )
     {
-        if( item->Type() == SCH_SHEET_T )
-        {
-            SCH_SHEET_PATH subSheetPath = currentSheet;
-            subSheetPath.push_back( static_cast<SCH_SHEET*>( item ) );
+        addSelectedSheet( item );
 
-            sheets.GetSheetsWithinPath( selectedSheets, subSheetPath );
-        }
+        // A selected group selects its sheets, as getInferredSymbols does its symbols
+        if( item->Type() == SCH_GROUP_T )
+            static_cast<SCH_GROUP*>( item )->RunOnChildren( addSelectedSheet, RECURSE_MODE::RECURSE );
     }
 
 
@@ -321,36 +332,6 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
 
             break;
         }
-
-        // When resetting annotations, check for and remove groups with unit conflicts (duplicate
-        // units within the same reference designator). These will get fresh assignments.
-        if( aResetAnnotation )
-        {
-            std::vector<wxString> conflictingRefs;
-
-            for( auto& [refBase, refList] : lockedSymbols )
-            {
-                std::set<int> seenUnits;
-                bool hasConflict = false;
-
-                for( const SCH_REFERENCE& ref : refList )
-                {
-                    if( seenUnits.count( ref.GetUnit() ) )
-                    {
-                        hasConflict = true;
-                        break;
-                    }
-
-                    seenUnits.insert( ref.GetUnit() );
-                }
-
-                if( hasConflict )
-                    conflictingRefs.push_back( refBase );
-            }
-
-            for( const wxString& ref : conflictingRefs )
-                lockedSymbols.erase( ref );
-        }
     }
 
     // Store previous annotations for building info messages
@@ -384,37 +365,27 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
         break;
     }
 
-    // Remove annotation only updates the "new" flag to indicate to the algorithm
-    // that these references must be reannotated, but keeps the original reference
-    // so that we can reannotate multi-unit symbols together.
-    if( aResetAnnotation )
-        references.RemoveAnnotation();
-
-    // Build additional list of references to be used during reannotation
-    // to avoid duplicate designators (no additional references when annotating
-    // the full schematic)
-    SCH_REFERENCE_LIST additionalRefs;
-
-    if( aAnnotateScope != ANNOTATE_ALL )
+    if( std::optional<std::pair<SCH_SHEET_PATH, SCH_SHEET_PATH>> collision =
+                FindRefSuffixCollision( references, Schematic() ) )
     {
-        SCH_REFERENCE_LIST allRefs;
-        sheets.GetSymbols( allRefs, SYMBOL_FILTER_NON_POWER );
+        const auto& [path, first] = *collision;
 
-        for( size_t i = 0; i < allRefs.GetCount(); i++ )
-        {
-            if( !references.Contains( allRefs[i] ) )
-                additionalRefs.AddItem( allRefs[i] );
-        }
+        aReporter.ReportTail( wxString::Format( _( "Sheets %s and %s use %s with the same reference suffix. "
+                                                   "Give each sheet a distinct suffix before annotating." ),
+                                                first.PathHumanReadable( false, true ),
+                                                path.PathHumanReadable( false, true ),
+                                                path.LastScreen()->GetFileName() ),
+                              RPT_SEVERITY_ERROR );
+        return;
     }
 
-    references.SetRefDesTracker( Schematic().Settings().m_refDesTracker );
-
-    // Break full symbol reference into name (prefix) and number:
-    // example: IC1 become IC, and 1
-    references.SplitReferences();
-
-    // Annotate all of the references we've collected by our options
-    references.AnnotateByOptions( aSortOption, aAlgoOption, aStartNumber, lockedSymbols, additionalRefs, false );
+    const std::set<const SCH_SCREEN*> sharedScreens =
+            AnnotateReferences( references, std::move( lockedSymbols ), Schematic(), aAnnotateScope, aSortOption,
+                                aAlgoOption, aStartNumber, aResetAnnotation,
+                                [&]( SCH_REFERENCE& aRef )
+                                {
+                                    aCommit->Modify( aRef.GetSymbol(), aRef.GetSheetPath().LastScreen() );
+                                } );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
@@ -422,17 +393,11 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
         SCH_SYMBOL*     symbol = ref.GetSymbol();
         SCH_SHEET_PATH* sheet = &ref.GetSheetPath();
 
-        aCommit->Modify( symbol, sheet->LastScreen() );
-        ref.Annotate();
-
         KIID_PATH full_uuid = sheet->Path();
         full_uuid.push_back( symbol->m_Uuid );
 
         wxString  prevRef = previousAnnotation[ full_uuid.AsString() ];
-        wxString  newRef  = symbol->GetRef( sheet );
-
-        if( symbol->GetUnitCount() > 1 )
-            newRef << symbol->SubReference( symbol->GetUnitSelection( sheet ) );
+        wxString  newRef  = symbol->GetRef( sheet, true );
 
         wxString msg;
 
@@ -475,6 +440,13 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
         }
 
         aReporter.Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    for( const SCH_SCREEN* screen : sharedScreens )
+    {
+        aReporter.Report( wxString::Format( _( "References in %s apply to every sheet that uses it." ),
+                                            screen->GetFileName() ),
+                          RPT_SEVERITY_ACTION );
     }
 
     // Final control (just in case ... ).

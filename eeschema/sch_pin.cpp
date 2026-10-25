@@ -1899,7 +1899,7 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull
         const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( GetParentSymbol() );
 
         return wxString::Format( "Symbol %s %s",
-                                 UnescapeString( symbol->GetField( FIELD_T::REFERENCE )->GetText() ),
+                                 UnescapeString( symbol->GetCurrentSheetRef() ),
                                  itemDesc );
     }
 

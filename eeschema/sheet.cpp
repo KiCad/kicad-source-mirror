@@ -827,7 +827,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     newScreen->MigrateSimModels();
 
     // Attempt to create new symbol instances using the instance data loaded above.
-    loadedSheets.AddNewSymbolInstances( *aCurrentSheet, Prj().GetProjectName() );
+    loadedSheets.AddNewSymbolInstances( *aCurrentSheet, Prj().GetProjectName(), true );
 
     // Add new sheet instance data.
     loadedSheets.AddNewSheetInstances( *aCurrentSheet, schematicSheets.GetLastVirtualPageNumber() );
