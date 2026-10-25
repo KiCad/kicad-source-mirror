@@ -586,12 +586,11 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
     m_out->Print( "(setup" );
 
     // Save the board physical stackup structure
-    const BOARD_STACKUP& stackup = aBoard->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    const BOARD_STACKUP&         stackup = bds.GetStackupDescriptor();
 
-    if( aBoard->GetDesignSettings().m_HasStackup )
+    if( bds.m_HasStackup )
         stackup.FormatBoardStackup( m_out, aBoard );
-
-    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     m_out->Print( "(pad_to_mask_clearance %s)", formatInternalUnits( bds.m_SolderMaskExpansion ).c_str() );
 

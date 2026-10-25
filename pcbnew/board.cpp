@@ -1287,7 +1287,13 @@ bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const
 }
 
 
-BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
+BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings()
+{
+    return *m_designSettings;
+}
+
+
+const BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 {
     return *m_designSettings;
 }

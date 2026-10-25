@@ -111,7 +111,7 @@ int BOARD_CONNECTED_ITEM::GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSourc
 {
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
+        const BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
         return bds.m_DRCEngine->GetCachedOwnClearance( this, aLayer, aSource );
     }
 

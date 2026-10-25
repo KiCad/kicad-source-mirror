@@ -745,7 +745,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
     if( const BOARD* board = item->GetBoard() )
     {
-        BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        const BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
         m_maxError = bds.m_MaxError;
         m_holePlatingThickness = bds.GetHolePlatingThickness();
         m_lockedShadowMargin = bds.GetLineThickness( F_SilkS ) * 4;

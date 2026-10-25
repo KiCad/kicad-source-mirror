@@ -322,11 +322,11 @@ void PCB_WRITER_V10::formatSetup( const BOARD* aBoard ) const
     // Setup
     m_out->Print( "(setup" );
 
-    // Save the board physical stackup structure
-    if( aBoard->GetDesignSettings().m_HasStackup )
-        formatBoardStackupV10( m_out, aBoard );
+    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
-    BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
+    // Save the board physical stackup structure
+    if( dsnSettings.m_HasStackup )
+        formatBoardStackupV10( m_out, aBoard );
 
     m_out->Print( "(pad_to_mask_clearance %s)", formatInternalUnits( dsnSettings.m_SolderMaskExpansion ).c_str() );
 
