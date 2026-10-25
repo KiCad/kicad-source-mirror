@@ -666,6 +666,21 @@ std::vector<int> SCH_SHAPE::ViewGetLayers() const
 }
 
 
+void SCH_SHAPE::SetArcOrLine( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    if( IsStraightArc( aStart, aMid, aEnd ) )
+    {
+        SetShape( SHAPE_T::POLY );
+        AddPoint( aStart );
+        AddPoint( aEnd );
+    }
+    else
+    {
+        SetArcGeometry( aStart, aMid, aEnd );
+    }
+}
+
+
 void SCH_SHAPE::AddPoint( const VECTOR2I& aPosition )
 {
     if( GetShape() == SHAPE_T::POLY )

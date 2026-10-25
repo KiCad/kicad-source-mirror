@@ -1413,6 +1413,21 @@ void EDA_SHAPE::SetCachedArcData( const VECTOR2I& aStart, const VECTOR2I& aMid,
 }
 
 
+void EDA_SHAPE::SetArcOrSegment( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    if( IsStraightArc( aStart, aMid, aEnd ) )
+    {
+        SetShape( SHAPE_T::SEGMENT );
+        SetStart( aStart );
+        SetEnd( aEnd );
+    }
+    else
+    {
+        SetArcGeometry( aStart, aMid, aEnd );
+    }
+}
+
+
 void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
 {
     m_arcMidData = {};
@@ -3283,7 +3298,10 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         }
 
         case 5:
-            SetArcGeometry( GetStart(), aPosition, GetEnd() );
+            // A straight arc has no center, so hold the last valid geometry
+            if( !IsStraightArc( GetStart(), aPosition, GetEnd() ) )
+                SetArcGeometry( GetStart(), aPosition, GetEnd() );
+
             return;
         }
 

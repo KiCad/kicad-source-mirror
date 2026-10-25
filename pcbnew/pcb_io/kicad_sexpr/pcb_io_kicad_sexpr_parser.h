@@ -334,7 +334,7 @@ private:
     void        parsePostMachining( PADSTACK::POST_MACHINING_PROPS& aProps );
     void        parsePadstack( PAD* aPad );
 
-    PCB_ARC*       parseARC();
+    PCB_TRACK*     parseARC();
     PCB_TRACK*     parsePCB_TRACK();
     PCB_VIA*       parsePCB_VIA();
     void           parseViastack( PCB_VIA* aVia );

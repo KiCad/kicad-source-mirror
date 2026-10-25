@@ -269,6 +269,13 @@ public:
 
     PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc );
 
+    /**
+     * Create a PCB_ARC through the three points, or a PCB_TRACK segment when they are straight.
+     * Layer, width and net are left for the caller.
+     */
+    static std::unique_ptr<PCB_TRACK> CreateFromThreePoints( BOARD_ITEM* aParent, const VECTOR2I& aStart,
+                                                             const VECTOR2I& aMid, const VECTOR2I& aEnd );
+
     void CopyFrom( const BOARD_ITEM* aOther ) override;
 
     static inline bool ClassOf( const EDA_ITEM *aItem )

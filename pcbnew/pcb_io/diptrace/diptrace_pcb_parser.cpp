@@ -4929,7 +4929,7 @@ void PCB_PARSER::CreateBoardOutline()
                 PCB_SHAPE* arc = new PCB_SHAPE( m_board, SHAPE_T::ARC );
                 arc->SetLayer( Edge_Cuts );
                 arc->SetStroke( stroke );
-                arc->SetArcGeometry( prim.start, prim.mid, prim.end );
+                arc->SetArcOrSegment( prim.start, prim.mid, prim.end );
                 m_board->Add( arc, ADD_MODE::APPEND );
             }
             else

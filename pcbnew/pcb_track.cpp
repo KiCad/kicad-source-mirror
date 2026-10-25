@@ -92,6 +92,27 @@ PCB_ARC::PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) :
 }
 
 
+std::unique_ptr<PCB_TRACK> PCB_ARC::CreateFromThreePoints( BOARD_ITEM* aParent, const VECTOR2I& aStart,
+                                                           const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    if( IsStraightArc( aStart, aMid, aEnd ) )
+    {
+        std::unique_ptr<PCB_TRACK> track = std::make_unique<PCB_TRACK>( aParent );
+
+        track->SetStart( aStart );
+        track->SetEnd( aEnd );
+        return track;
+    }
+
+    std::unique_ptr<PCB_ARC> arc = std::make_unique<PCB_ARC>( aParent );
+
+    arc->SetStart( aStart );
+    arc->SetMid( aMid );
+    arc->SetEnd( aEnd );
+    return arc;
+}
+
+
 EDA_ITEM* PCB_ARC::Clone() const
 {
     return new PCB_ARC( *this );
@@ -530,9 +551,17 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
         return false;
 
     SetUuidDirect( KIID( arc.id().value() ) );
-    SetStart( VECTOR2I( arc.start().x_nm(), arc.start().y_nm() ) );
-    SetMid( VECTOR2I( arc.mid().x_nm(), arc.mid().y_nm() ) );
-    SetEnd( VECTOR2I( arc.end().x_nm(), arc.end().y_nm() ) );
+    const VECTOR2I start( arc.start().x_nm(), arc.start().y_nm() );
+    const VECTOR2I mid( arc.mid().x_nm(), arc.mid().y_nm() );
+    const VECTOR2I end( arc.end().x_nm(), arc.end().y_nm() );
+
+    // The item type is fixed here, so reject points that have no arc center
+    if( IsStraightArc( start, mid, end ) )
+        return false;
+
+    SetStart( start );
+    SetMid( mid );
+    SetEnd( end );
     SetWidth( arc.width().value_nm() );
     SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( arc.layer() ) );
     UnpackNet( arc.net() );

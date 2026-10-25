@@ -390,6 +390,10 @@ constexpr double kCollinearRadius = 1e17;
 // Largest magnitude at which every integer is still a double
 constexpr double kMaxExactInteger = 9007199254740992.0;
 
+// Integer arc centers are clamped to this range
+constexpr double kMinArcCenter = std::numeric_limits<int>::min() + 100.0;
+constexpr double kMaxArcCenter = std::numeric_limits<int>::max() - 100.0;
+
 
 bool degenerateArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd,
                           VECTOR2D& aCenter )
@@ -473,6 +477,36 @@ VECTOR2D snapArcCenter( const VECTOR2D& aCenter, const VECTOR2D& aStart, const V
 
     return aCenter;
 }
+
+
+VECTOR2D unclampedArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
+    VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
+    VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
+    VECTOR2D dCenter;
+
+    if( degenerateArcCenter( dStart, dMid, dEnd, dCenter ) )
+        return dCenter;
+
+    // Deltas are exact in 64 bits and the numerators in 128, so only the final divisions round
+    VECTOR2L b( int64_t( aMid.x ) - aStart.x, int64_t( aMid.y ) - aStart.y );
+    VECTOR2L c( int64_t( aEnd.x ) - aStart.x, int64_t( aEnd.y ) - aStart.y );
+
+    KI_INT128 b2 = KI_INT128( b.x ) * KI_INT128( b.x ) + KI_INT128( b.y ) * KI_INT128( b.y );
+    KI_INT128 c2 = KI_INT128( c.x ) * KI_INT128( c.x ) + KI_INT128( c.y ) * KI_INT128( c.y );
+    KI_INT128 d = CrossWide( b, c ) * KI_INT128( 2 );
+
+    if( d == KI_INT128( 0 ) )
+        return collinearArcCenter( dStart, dEnd );
+
+    // Fold start into the numerator so the sum is rounded once
+    double dd = ToDouble( d );
+    double cx = ToDouble( KI_INT128( aStart.x ) * d + b2 * KI_INT128( c.y ) - c2 * KI_INT128( b.y ) ) / dd;
+    double cy = ToDouble( KI_INT128( aStart.y ) * d + c2 * KI_INT128( b.x ) - b2 * KI_INT128( c.x ) ) / dd;
+
+    return snapArcCenter( VECTOR2D( cx, cy ), dStart, dMid, dEnd );
+}
 } // namespace
 
 
@@ -505,45 +539,24 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
 
 const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
 {
-    VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
-    VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
-    VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
-    VECTOR2D dCenter;
+    VECTOR2D dCenter = unclampedArcCenter( aStart, aMid, aEnd );
 
-    if( !degenerateArcCenter( dStart, dMid, dEnd, dCenter ) )
-    {
-        // Deltas are exact in 64 bits and the numerators in 128, so only the final divisions round
-        VECTOR2L b( int64_t( aMid.x ) - aStart.x, int64_t( aMid.y ) - aStart.y );
-        VECTOR2L c( int64_t( aEnd.x ) - aStart.x, int64_t( aEnd.y ) - aStart.y );
+    return VECTOR2I( KiROUND( std::clamp( dCenter.x, kMinArcCenter, kMaxArcCenter ) ),
+                     KiROUND( std::clamp( dCenter.y, kMinArcCenter, kMaxArcCenter ) ) );
+}
 
-        KI_INT128 b2 = KI_INT128( b.x ) * KI_INT128( b.x ) + KI_INT128( b.y ) * KI_INT128( b.y );
-        KI_INT128 c2 = KI_INT128( c.x ) * KI_INT128( c.x ) + KI_INT128( c.y ) * KI_INT128( c.y );
-        KI_INT128 d = CrossWide( b, c ) * KI_INT128( 2 );
 
-        if( d == KI_INT128( 0 ) )
-        {
-            dCenter = collinearArcCenter( dStart, dEnd );
-        }
-        else
-        {
-            // Fold start into the numerator so the sum is rounded once
-            double dd = ToDouble( d );
-            double cx = ToDouble( KI_INT128( aStart.x ) * d + b2 * KI_INT128( c.y ) - c2 * KI_INT128( b.y ) ) / dd;
-            double cy = ToDouble( KI_INT128( aStart.y ) * d + c2 * KI_INT128( b.x ) - b2 * KI_INT128( c.x ) ) / dd;
+bool IsStraightArc( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    if( aStart == aEnd )
+        return false;
 
-            dCenter = snapArcCenter( VECTOR2D( cx, cy ), dStart, dMid, dEnd );
-        }
-    }
+    if( CrossWide( VECTOR2L( aMid ) - VECTOR2L( aStart ), VECTOR2L( aEnd ) - VECTOR2L( aStart ) ) == KI_INT128( 0 ) )
+        return true;
 
-    VECTOR2I iCenter;
+    VECTOR2D center = unclampedArcCenter( aStart, aMid, aEnd );
 
-    iCenter.x = KiROUND( std::clamp( dCenter.x,
-                                    double( std::numeric_limits<int>::min() + 100 ),
-                                    double( std::numeric_limits<int>::max() - 100 ) ) );
-
-    iCenter.y = KiROUND( std::clamp( dCenter.y,
-                                    double( std::numeric_limits<int>::min() + 100 ),
-                                    double( std::numeric_limits<int>::max() - 100 ) ) );
-
-    return iCenter;
+    // Near-collinear points put the center outside the clamp
+    return !( center.x >= kMinArcCenter && center.x <= kMaxArcCenter && center.y >= kMinArcCenter
+              && center.y <= kMaxArcCenter );
 }

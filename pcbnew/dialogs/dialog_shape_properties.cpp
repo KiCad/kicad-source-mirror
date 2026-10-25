@@ -543,7 +543,9 @@ public:
         const VECTOR2I p1{ GetIntValue( SME_MID_X ), GetIntValue( SME_MID_Y ) };
         const VECTOR2I p2{ GetIntValue( SME_END_X ), GetIntValue( SME_END_Y ) };
 
-        GetShape().SetArcGeometry( p0, p1, p2 );
+        // Collinear typed points have no arc, keep the previous geometry
+        if( !IsStraightArc( p0, p1, p2 ) )
+            GetShape().SetArcGeometry( p0, p1, p2 );
 
         updateCSA();
         updateCRAA();

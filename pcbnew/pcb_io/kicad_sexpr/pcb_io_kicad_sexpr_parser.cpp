@@ -1346,7 +1346,7 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             break;
 
         case T_arc:
-            if( PCB_ARC* arc = parseARC() )
+            if( PCB_TRACK* arc = parseARC() )
             {
                 m_board->Add( arc, ADD_MODE::BULK_APPEND, true );
                 bulkAddedItems.push_back( arc );
@@ -3899,7 +3899,7 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             arc_end.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
 
-            shape->SetArcGeometry( arc_start, arc_mid, arc_end );
+            shape->SetArcOrSegment( arc_start, arc_mid, arc_end );
         }
 
         break;
@@ -8747,7 +8747,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGENERATOR( BOARD_ITEM* aParent )
 }
 
 
-PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
+PCB_TRACK* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
 {
     wxCHECK_MSG( CurTok() == T_arc, nullptr, wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as ARC." ) );
 
@@ -8844,6 +8844,17 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
     {
         // No point in asserting; these usually come from hand-edited boards
         return nullptr;
+    }
+
+    // Collinear points have no arc center, so load them as the straight track they describe
+    if( IsStraightArc( arc->GetStart(), arc->GetMid(), arc->GetEnd() ) )
+    {
+        std::unique_ptr<PCB_TRACK> track = std::make_unique<PCB_TRACK>( m_board );
+
+        // Base assignment copies every track property except the item type and UUID
+        static_cast<PCB_TRACK&>( *track ) = *arc;
+        track->SetUuidDirect( arc->m_Uuid );
+        return track.release();
     }
 
     return arc.release();

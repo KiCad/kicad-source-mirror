@@ -698,7 +698,8 @@ static void editArcMidKeepEndpoints( EDA_SHAPE& aArc, const VECTOR2I& aStart, co
     SEG       legal( m + v.Resize( JUST_OFF ), m + v.Resize( INT_MAX / 2 ) );
     VECTOR2I  mid = legal.NearestPoint( aCursor );
 
-    aArc.SetArcGeometry( aStart, mid, aEnd );
+    if( !IsStraightArc( aStart, mid, aEnd ) )
+        aArc.SetArcGeometry( aStart, mid, aEnd );
 }
 
 

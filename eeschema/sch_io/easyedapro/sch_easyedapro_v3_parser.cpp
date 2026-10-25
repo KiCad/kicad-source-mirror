@@ -394,9 +394,7 @@ SCH_EASYEDAPRO_V3_PARSER::ParseSymbol( const EASYEDAPRO::V3_DOC_RAW&       aDoc,
 
             auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
 
-            shape->SetArcGeometry( V3ScalePosSym( start ),
-                                   V3ScalePosSym( mid ),
-                                   V3ScalePosSym( end ) );
+            shape->SetArcOrLine( V3ScalePosSym( start ), V3ScalePosSym( mid ), V3ScalePosSym( end ) );
             shape->SetUnit( rowUnit );
             ApplyV3LineStyle( shape, row.inner );
 
@@ -1069,9 +1067,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
                           EASYEDAPRO::V3GetDouble( row.inner, "endY" ) );
 
             std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC );
-            arc->SetArcGeometry( V3ScalePos( start ),
-                                 V3ScalePos( mid ),
-                                 V3ScalePos( end ) );
+            arc->SetArcOrLine( V3ScalePos( start ), V3ScalePos( mid ), V3ScalePos( end ) );
 
             SCH_SHAPE* arcPtr = arc.get();
             ApplyV3LineStyle( arcPtr, row.inner );

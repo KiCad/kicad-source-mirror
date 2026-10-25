@@ -1028,18 +1028,16 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         }
         else if( graphic->GetShape() == SHAPE_T::ARC )
         {
-            PCB_ARC* arc = new PCB_ARC( parent );
+            std::unique_ptr<PCB_TRACK> arc = PCB_ARC::CreateFromThreePoints( parent, graphic->GetStart(),
+                                                                             graphic->GetArcMid(), graphic->GetEnd() );
 
             arc->SetLayer( targetLayer );
-            arc->SetStart( graphic->GetStart() );
-            arc->SetEnd( graphic->GetEnd() );
-            arc->SetMid( graphic->GetArcMid() );
             arc->SetWidth( graphic->GetWidth() );
 
             if( aNet )
                 arc->SetNet( aNet );
 
-            commit.Add( arc );
+            commit.Add( arc.release() );
 
             return true;
         }
@@ -1126,12 +1124,10 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
             if( arc.GetP0() == arc.GetP1() )
                 continue;
 
-            PCB_ARC* trackArc = new PCB_ARC( parent );
+            std::unique_ptr<PCB_TRACK> trackArc =
+                    PCB_ARC::CreateFromThreePoints( parent, arc.GetP0(), arc.GetArcMid(), arc.GetP1() );
 
             trackArc->SetLayer( targetLayer );
-            trackArc->SetStart( arc.GetP0() );
-            trackArc->SetEnd( arc.GetP1() );
-            trackArc->SetMid( arc.GetArcMid() );
 
             if( aWidth && *aWidth > 0 )
                 trackArc->SetWidth( *aWidth );
@@ -1139,7 +1135,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
             if( aNet )
                 trackArc->SetNet( aNet );
 
-            commit.Add( trackArc );
+            commit.Add( trackArc.release() );
         }
     };
 
@@ -1334,29 +1330,23 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
     else if( source->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( source )->GetShape() == SHAPE_T::ARC )
     {
         PCB_SHAPE* source_arc = static_cast<PCB_SHAPE*>( source );
-        PCB_ARC*   arc  = new PCB_ARC( parent );
+        std::unique_ptr<PCB_TRACK> arc = PCB_ARC::CreateFromThreePoints( parent, start, source_arc->GetArcMid(), end );
 
         arc->SetLayer( layer );
         arc->SetWidth( source_arc->GetWidth() );
-        arc->SetStart( start );
-        arc->SetMid( source_arc->GetArcMid() );
-        arc->SetEnd( end );
 
-        commit.Add( arc );
+        commit.Add( arc.release() );
     }
     else if( source->Type() == PCB_TRACE_T )
     {
         PCB_TRACK* line = static_cast<PCB_TRACK*>( source );
-        PCB_ARC*   arc  = new PCB_ARC( parent );
+        std::unique_ptr<PCB_TRACK> arc = PCB_ARC::CreateFromThreePoints( parent, start, mid, end );
 
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
         arc->SetNet( line->GetNet() );
-        arc->SetStart( start );
-        arc->SetMid( mid );
-        arc->SetEnd( end );
 
-        commit.Add( arc );
+        commit.Add( arc.release() );
     }
     else if( source->Type() == PCB_ARC_T )
     {

@@ -408,7 +408,7 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
 
             auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
 
-            shape->SetArcGeometry( kstart, kmid, kend );
+            shape->SetArcOrLine( kstart, kmid, kend );
 
             shape->SetUnit( currentUnit );
             ApplyLineStyle( lineStyles, shape, styleStr );

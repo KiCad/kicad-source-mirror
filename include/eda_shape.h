@@ -483,6 +483,12 @@ public:
     virtual void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
     /**
+     * Set the shape from three points, falling back to a SEGMENT from \a aStart to \a aEnd when the points
+     * are collinear and so have no finite arc center.
+     */
+    void SetArcOrSegment( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+
+    /**
      * Set the data used for mid point caching.
      *
      * If the controlling points remain constant, then we keep the midpoint the same as it was

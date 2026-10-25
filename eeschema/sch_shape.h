@@ -112,6 +112,12 @@ public:
     void AddPoint( const VECTOR2I& aPosition );
 
     /**
+     * Set the arc from three points, or a two-point polyline when they are collinear.  The schematic
+     * painter and writer handle polylines but not SEGMENT shapes.
+     */
+    void SetArcOrLine( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+
+    /**
     * Make a set of SHAPE objects representing the SCH_SHAPE.  Caller owns the objects.
     *
     * @param aEdgeOnly indicates only edges should be generated (even if 0 width), and no fill

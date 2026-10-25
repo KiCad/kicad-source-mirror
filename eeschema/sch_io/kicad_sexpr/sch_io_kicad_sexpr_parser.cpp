@@ -1725,9 +1725,9 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
 
     if( hasMidPoint )
     {
-        arc->SetArcGeometry( startPoint, midPoint, endPoint );
+        arc->SetArcOrLine( startPoint, midPoint, endPoint );
 
-        if( m_requiredVersion <= 20230121 ) // Versions before 7.0
+        if( arc->GetShape() == SHAPE_T::ARC && m_requiredVersion <= 20230121 ) // Versions before 7.0
         {
             // Should be not required. Unfortunately it is needed because some bugs created
             // incorrect data after conversion of old libraries to the new arc format using
@@ -5019,7 +5019,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchArc()
         }
     }
 
-    arc->SetArcGeometry( startPoint, midPoint, endPoint );
+    arc->SetArcOrLine( startPoint, midPoint, endPoint );
 
     return arc.release();
 }

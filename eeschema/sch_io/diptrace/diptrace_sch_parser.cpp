@@ -2689,7 +2689,7 @@ void SCH_PARSER::populateLibSymbolUnit( LIB_SYMBOL* aLibSymbol, const DCH_COMPON
 
             auto arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE, 0, FILL_T::NO_FILL );
             arc->SetParent( aLibSymbol );
-            arc->SetArcGeometry( start, mid, end );
+            arc->SetArcOrLine( start, mid, end );
             arc->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             arc->SetUnit( aUnit );
             aLibSymbol->AddDrawItem( arc.release() );

@@ -143,6 +143,12 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                               const EDA_ANGLE& aAngle );
 
 /**
+ * @return true if the three points describe no arc whose center fits in VECTOR2I, which is the case
+ *         for collinear points.  Coincident start and end make a full circle, not a line.
+ */
+bool IsStraightArc( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+
+/**
  * Return the middle point of an arc, half-way between aStart and aEnd.
  *
  * There are two possible solutions which can be found by toggling aMinArcAngle. The behavior
