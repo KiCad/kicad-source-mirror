@@ -137,6 +137,8 @@ private:
     void onTreeRightClick( wxTreeEvent& event );
     void onTreeEditFinished( wxTreeEvent& event );
 
+    void renameSheet( const SCH_SHEET_PATH& aPath, const wxString& aNewName );
+
     /**
      * @return String with page number in parenthesis
      */
