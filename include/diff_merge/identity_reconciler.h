@@ -28,6 +28,7 @@
 
 #include <wx/string.h>
 
+#include <functional>
 #include <map>
 #include <set>
 #include <string>
@@ -110,8 +111,12 @@ public:
     const CONFIG& GetConfig() const { return m_config; }
     void          SetConfig( const CONFIG& aConfig ) { m_config = aConfig; }
 
-    RECONCILIATION Reconcile( const std::vector<ITEM_DESCRIPTOR>& aA,
-                              const std::vector<ITEM_DESCRIPTOR>& aB ) const;
+    /**
+     * @param aTick is called for each pair the similarity pass scores, which can be millions when many items were
+     *        replaced, so a caller can poll for a cancel.
+     */
+    RECONCILIATION Reconcile( const std::vector<ITEM_DESCRIPTOR>& aA, const std::vector<ITEM_DESCRIPTOR>& aB,
+                              const std::function<void()>& aTick = nullptr ) const;
 
     /**
      * Compute the similarity score between two items of the same type.

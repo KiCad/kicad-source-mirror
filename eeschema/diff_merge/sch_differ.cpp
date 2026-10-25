@@ -232,23 +232,33 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
         return d;
     };
 
+    PROGRESS_SPAN describing( m_options, 0.2, 0.45, beforeWalk.size() + afterWalk.size() );
+
     for( const WalkedItem& w : beforeWalk )
     {
+        describing.Step();
         beforeDesc.push_back( makeDescriptor( w, m_before ) );
         beforeMap[w.id] = &w;
     }
 
     for( const WalkedItem& w : afterWalk )
     {
+        describing.Step();
         afterDesc.push_back( makeDescriptor( w, m_after ) );
         afterMap[w.id] = &w;
     }
 
     IDENTITY_RECONCILER reconciler( m_options.identity );
-    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc );
+    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc,
+                                                  [&describing]()
+                                                  {
+                                                      describing.Tick();
+                                                  } );
 
     if( m_options.progress )
         m_options.progress( 0.5 );
+
+    PROGRESS_SPAN comparing( m_options, 0.5, 1.0, recon.aToB.size() + recon.aOnly.size() + recon.bOnly.size() );
 
     // Duplicate KIID_PATH entries inside either schematic.
     for( const KIID_PATH& dup : recon.duplicatesA )
@@ -282,6 +292,8 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
     // Matched pairs: emit MODIFIED records when any delta surfaces.
     for( const auto& [idA, idB] : recon.aToB )
     {
+        comparing.Step();
+
         auto itA = beforeMap.find( idA );
         auto itB = afterMap.find( idB );
         const WalkedItem* a = itA == beforeMap.end() ? nullptr : itA->second;
@@ -314,6 +326,8 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
 
     for( const KIID_PATH& idA : recon.aOnly )
     {
+        comparing.Step();
+
         auto it = beforeMap.find( idA );
 
         if( it == beforeMap.end() || !it->second )
@@ -338,6 +352,8 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
 
     for( const KIID_PATH& idB : recon.bOnly )
     {
+        comparing.Step();
+
         auto it = afterMap.find( idB );
 
         if( it == afterMap.end() || !it->second )

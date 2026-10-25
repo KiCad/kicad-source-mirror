@@ -527,7 +527,7 @@ namespace
 DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
 {
     DOCUMENT_DIFF result = DiffLibraryByName(
-            m_before, m_after, m_path, wxS( "kicad_sym" ), wxS( "LIB_SYMBOL" ), m_options,
+            m_before, m_after, m_path, wxS( "kicad_sym" ), wxS( "LIB_SYMBOL" ), scaledOptions( 0.0, 0.5 ),
             []( const LIB_SYMBOL* aSym )
             {
                 return aSym->GetUnitBoundingBox( 0, 0 );
@@ -537,8 +537,13 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
                 return hasSymbolDifferences( aA, aB );
             } );
 
+    // Comparing each modified item's elements can take longer than finding them
+    PROGRESS_SPAN comparing( m_options, 0.5, 1.0, result.changes.size() );
+
     for( ITEM_CHANGE& change : result.changes )
     {
+        comparing.Step();
+
         if( change.kind != CHANGE_KIND::MODIFIED || !change.refdes )
             continue;
 

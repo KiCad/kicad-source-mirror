@@ -312,7 +312,8 @@ std::vector<PROPERTY_DELTA> PCB_DIFFER::diffProperties( const BOARD_ITEM* aBefor
 }
 
 
-std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter ) const
+std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter,
+                                                        PROGRESS_SPAN& aSpan ) const
 {
     std::vector<ITEM_CHANGE> children;
 
@@ -328,6 +329,8 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
 
     auto childDescriptor = [&]( const FOOTPRINT* aFp, const BOARD_ITEM* aChild ) -> ITEM_DESCRIPTOR
     {
+        aSpan.Tick();
+
         ITEM_DESCRIPTOR d = makeDescriptor( aChild );
         d.id = KIID_PATH();
         d.id.push_back( aFp->m_Uuid );
@@ -372,13 +375,19 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
     collect( aAfter, afterDesc, afterMap );
 
     IDENTITY_RECONCILER reconciler( m_options.identity );
-    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc );
+    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc,
+                                                  [&aSpan]()
+                                                  {
+                                                      aSpan.Tick();
+                                                  } );
 
     // Matched pairs: compute property deltas. Items count as "changed" if any
     // property surfaced a delta OR if their semantic operator== rejects equality
     // (which covers fields that aren't exposed through PROPERTY_MANAGER).
     for( const auto& [idA, idB] : recon.aToB )
     {
+        aSpan.Tick();
+
         auto              itA = beforeMap.find( idA );
         auto              itB = afterMap.find( idB );
         const BOARD_ITEM* a = itA == beforeMap.end() ? nullptr : itA->second;
@@ -413,6 +422,8 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
 
     for( const KIID_PATH& idA : recon.aOnly )
     {
+        aSpan.Tick();
+
         auto it = beforeMap.find( idA );
 
         if( it == beforeMap.end() || !it->second )
@@ -436,6 +447,8 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
 
     for( const KIID_PATH& idB : recon.bOnly )
     {
+        aSpan.Tick();
+
         auto it = afterMap.find( idB );
 
         if( it == afterMap.end() || !it->second )
@@ -501,8 +514,12 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
     beforeDesc.reserve( beforeSet.size() );
     afterDesc.reserve( afterSet.size() );
 
+    PROGRESS_SPAN describing( m_options, 0.0, 0.1, beforeSet.size() + afterSet.size() );
+
     for( const BOARD_ITEM* item : beforeSet )
     {
+        describing.Step();
+
         if( !item )
             continue;
 
@@ -512,6 +529,8 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
 
     for( const BOARD_ITEM* item : afterSet )
     {
+        describing.Step();
+
         if( !item )
             continue;
 
@@ -520,13 +539,20 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
     }
 
     if( m_options.progress )
-        m_options.progress( 0.2 );
+        m_options.progress( 0.1 );
 
     IDENTITY_RECONCILER reconciler( m_options.identity );
-    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc );
+    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc,
+                                                  [&describing]()
+                                                  {
+                                                      describing.Tick();
+                                                  } );
 
     if( m_options.progress )
-        m_options.progress( 0.5 );
+        m_options.progress( 0.15 );
+
+    // Nearly all of a large board's diff time is spent in the three item loops below
+    PROGRESS_SPAN comparing( m_options, 0.15, 1.0, recon.aToB.size() + recon.aOnly.size() + recon.bOnly.size() );
 
     // Duplicate-UUID records (within either side).
     for( const KIID_PATH& dup : recon.duplicatesA )
@@ -562,6 +588,8 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
     // Matched pairs.
     for( const auto& [idA, idB] : recon.aToB )
     {
+        comparing.Step();
+
         const KIID&       uuidA = idA.back();
         const KIID&       uuidB = idB.back();
         auto              itA = beforeMap.find( uuidA );
@@ -585,7 +613,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         if( auto fpA = dynamic_cast<const FOOTPRINT*>( a ) )
         {
             if( auto fpB = dynamic_cast<const FOOTPRINT*>( b ) )
-                childChanges = diffFootprintChildren( fpA, fpB );
+                childChanges = diffFootprintChildren( fpA, fpB, comparing );
         }
 
         if( propDeltas.empty() && childChanges.empty() )
@@ -625,6 +653,8 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
     // Items present only in ancestor: REMOVED.
     for( const KIID_PATH& idA : recon.aOnly )
     {
+        comparing.Step();
+
         auto it = beforeMap.find( idA.back() );
 
         if( it == beforeMap.end() || !it->second )
@@ -652,7 +682,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
             FOOTPRINT                empty( nullptr );
             // diffFootprintChildren needs two footprints; producing an empty
             // "after" gives us a REMOVED record per child.
-            c.children = diffFootprintChildren( fp, &empty );
+            c.children = diffFootprintChildren( fp, &empty, comparing );
         }
 
         result.changes.push_back( std::move( c ) );
@@ -661,6 +691,8 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
     // Items present only in after: ADDED.
     for( const KIID_PATH& idB : recon.bOnly )
     {
+        comparing.Step();
+
         auto it = afterMap.find( idB.back() );
 
         if( it == afterMap.end() || !it->second )
@@ -683,7 +715,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         if( auto fp = dynamic_cast<const FOOTPRINT*>( b ) )
         {
             FOOTPRINT empty( nullptr );
-            c.children = diffFootprintChildren( &empty, fp );
+            c.children = diffFootprintChildren( &empty, fp, comparing );
         }
 
         result.changes.push_back( std::move( c ) );

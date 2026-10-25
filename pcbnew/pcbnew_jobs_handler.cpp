@@ -5022,8 +5022,13 @@ struct PCB_DIFF_SIDES
 
 // A progress reporter gets one phase per side and one for the diff, and a cancel returns ERR_CANCELLED
 static int loadPcbDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const wxString& aFileA,
-                             const wxString& aFileB, PCB_DIFF_SIDES& aSides, PROGRESS_REPORTER* aProgress = nullptr )
+                             const wxString& aFileB, PCB_DIFF_SIDES& aSides, WX_PROGRESS_REPORTER* aProgress = nullptr,
+                             const wxString& aLabelA = wxEmptyString, const wxString& aLabelB = wxEmptyString )
 {
+    // The loader reports the path it opens, which for a downloaded version is a temporary folder
+    if( aProgress && !aFileA.IsEmpty() )
+        aProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileA, aLabelA ) );
+
     aSides.a = loadScratchBoard( aMgr, aFileA, /* aInitializeAfterLoad */ false, aProgress );
 
     if( aProgress )
@@ -5034,7 +5039,13 @@ static int loadPcbDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const 
         aProgress->AdvancePhase();
     }
 
+    if( aProgress && !aFileB.IsEmpty() )
+        aProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileB, aLabelB ) );
+
     aSides.b = loadScratchBoard( aMgr, aFileB, /* aInitializeAfterLoad */ false, aProgress );
+
+    if( aProgress )
+        aProgress->UnpinMessage();
 
     if( aProgress && aProgress->IsCancelled() )
         return CLI::EXIT_CODES::ERR_CANCELLED;
@@ -5135,7 +5146,8 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
                                                aReporter ? aReporter : m_reporter );
 
-    wxWindow* parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
+    // The progress dialog disables only its parent, and the caller may be a panel inside a larger window
+    wxWindow* parent = aParent ? wxGetTopLevelParent( aParent ) : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
@@ -5146,6 +5158,7 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     std::vector<std::unique_ptr<FOOTPRINT>>  ownersB;
     KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
     KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
+    std::unique_ptr<WX_PROGRESS_REPORTER>    libProgress;
 
     switch( aKind )
     {
@@ -5157,7 +5170,8 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
         auto progress = std::make_unique<WX_PROGRESS_REPORTER>( parent, _( "Compare Files" ), 4, PR_CAN_ABORT );
         progress->SetRefreshOnPhaseChange( true );
 
-        if( int rc = loadPcbDiffSides( mgr, *m_reporter, aFileA, aFileB, sides, progress.get() );
+        if( int rc = loadPcbDiffSides( mgr, *m_reporter, aFileA, aFileB, sides, progress.get(), aLabelA,
+                                      aLabelB );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
@@ -5190,11 +5204,26 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     }
     case KICAD_DIFF::DOC_KIND::FP_LIB:
     {
+        // A large library loads and compares on the UI thread before the window opens
+        libProgress = std::make_unique<WX_PROGRESS_REPORTER>( parent, _( "Compare Files" ), 4, PR_CAN_ABORT );
+        libProgress->SetRefreshOnPhaseChange( true );
+
+        if( !aFileA.IsEmpty() )
+            libProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileA, aLabelA ) );
+
         if( int rc = loadFootprintLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
         }
+
+        if( !libProgress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        libProgress->AdvancePhase();
+
+        if( !aFileB.IsEmpty() )
+            libProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileB, aLabelB ) );
 
         if( int rc = loadFootprintLibrarySide( aFileB, ownersB, mapB, true, *m_reporter );
             rc != CLI::EXIT_CODES::SUCCESS )
@@ -5202,6 +5231,7 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
             return rc;
         }
 
+        libProgress->UnpinMessage();
         break;
     }
     case KICAD_DIFF::DOC_KIND::FOOTPRINT:
@@ -5252,7 +5282,26 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     }
 
     KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, aFileB );
-    KICAD_DIFF::DOCUMENT_DIFF result = differ.Diff();
+    KICAD_DIFF::DOCUMENT_DIFF result;
+
+    KICAD_DIFF::ReportDiffProgress( differ, libProgress.get() );
+
+    try
+    {
+        result = differ.Diff();
+    }
+    catch( const IO_CANCELLED& )
+    {
+        return CLI::EXIT_CODES::ERR_CANCELLED;
+    }
+
+    if( libProgress )
+    {
+        libProgress->AdvancePhase( _( "Drawing..." ) );
+
+        if( !libProgress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+    }
 
     const KICAD_DIFF::DIFF_COLOR_THEME theme;
 
@@ -5266,6 +5315,7 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
                 KICAD_DIFF::ShowFootprintPair( aCanvas, mapA, mapB, aName );
             } );
 
+    libProgress.reset();
     dlg.ShowModal();
 
     return CLI::EXIT_CODES::SUCCESS;

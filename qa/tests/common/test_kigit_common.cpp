@@ -1343,6 +1343,7 @@ BOOST_AUTO_TEST_CASE( DiffWorkspaceKeepsExtractionsSeparateAndRemovesThem )
         root = workspace.Root();
         boardFile = workspace.Materialize( repo.get(), "HEAD", "board.kicad_pcb", KICAD_DIFF::DOC_KIND::PCB );
         BOOST_REQUIRE( !boardFile.IsEmpty() );
+        BOOST_CHECK_EQUAL( wxFileName( boardFile ).GetFullName(), wxS( "board.kicad_pcb" ) );
         BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( boardFile ) ), "board version\n" );
 
         {

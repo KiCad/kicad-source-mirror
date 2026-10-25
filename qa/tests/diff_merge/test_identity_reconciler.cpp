@@ -377,6 +377,32 @@ BOOST_AUTO_TEST_CASE( EmptyInputsProduceEmptyReconciliation )
 }
 
 
+// Replacing many items scores every same-type pair, so a cancel must be polled per pair
+BOOST_AUTO_TEST_CASE( SimilarityPassTicksForEveryScoredPair )
+{
+    std::vector<ITEM_DESCRIPTOR> a;
+    std::vector<ITEM_DESCRIPTOR> b;
+
+    for( int i = 0; i < 10; ++i )
+    {
+        a.push_back( make( wxS( "PCB_TRACK" ), KIID() ) );
+        b.push_back( make( wxS( "PCB_TRACK" ), KIID() ) );
+    }
+
+    b.push_back( make( wxS( "PCB_VIA" ), KIID() ) );
+
+    size_t ticks = 0;
+
+    IDENTITY_RECONCILER().Reconcile( a, b,
+                                     [&ticks]()
+                                     {
+                                         ticks++;
+                                     } );
+
+    BOOST_CHECK_EQUAL( ticks, 100u );
+}
+
+
 BOOST_AUTO_TEST_CASE( OneSideEmptyOtherFullyUnmatched )
 {
     KIID::SeedGenerator( 106 );

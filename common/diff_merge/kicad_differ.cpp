@@ -25,6 +25,7 @@
 #include <ki_exception.h>
 #include <progress_reporter.h>
 
+#include <wx/filename.h>
 #include <wx/intl.h>
 
 
@@ -53,6 +54,21 @@ void ReportDiffProgress( KICAD_DIFFER& aDiffer, PROGRESS_REPORTER* aProgress )
     };
 
     aDiffer.SetOptions( options );
+}
+
+
+wxString LoadingMessage( const wxString& aFile, const wxString& aLabel )
+{
+    const wxString name = wxFileName( aFile ).GetFullName();
+
+    if( aLabel.IsEmpty() )
+        return wxString::Format( _( "Loading %s..." ), name );
+
+    // Versions labels already start with the file name
+    if( aLabel.StartsWith( name + wxS( " " ) ) )
+        return wxString::Format( _( "Loading %s..." ), aLabel );
+
+    return wxString::Format( _( "Loading %s (%s)..." ), name, aLabel );
 }
 
 } // namespace KICAD_DIFF

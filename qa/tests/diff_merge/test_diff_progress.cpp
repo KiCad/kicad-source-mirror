@@ -27,6 +27,8 @@
 #include <ki_exception.h>
 #include <widgets/progress_reporter_base.h>
 
+#include <wx/filename.h>
+
 
 namespace
 {
@@ -74,5 +76,20 @@ BOOST_AUTO_TEST_CASE( CancelStopsTheDiffAtItsNextProgress )
     BOOST_CHECK( !differ.m_pairedAfterCancel );
 }
 
+
+// A downloaded version sits in a temporary folder that names the user
+BOOST_AUTO_TEST_CASE( LoadingMessageNamesTheFileAndVersionButNotTheFolder )
+{
+    wxFileName file( wxFileName::GetTempDir(), wxS( "vme-wren.kicad_pcb" ) );
+
+    file.AppendDir( wxS( "older" ) );
+
+    BOOST_CHECK_EQUAL( KICAD_DIFF::LoadingMessage( file.GetFullPath(), wxS( "v213d641c" ) ).ToStdString(),
+                       "Loading vme-wren.kicad_pcb (v213d641c)..." );
+
+    // Versions labels already name the file
+    BOOST_CHECK_EQUAL( KICAD_DIFF::LoadingMessage( file.GetFullPath(), wxS( "vme-wren.kicad_pcb v1" ) ).ToStdString(),
+                       "Loading vme-wren.kicad_pcb v1..." );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

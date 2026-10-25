@@ -403,6 +403,42 @@ BOOST_AUTO_TEST_CASE( ExtractSchematicGeometryProducesDrawableContext )
 }
 
 
+// A cancel is noticed between callbacks, so a long comparison must report as it goes
+BOOST_AUTO_TEST_CASE( DiffReportsEvery64ComparedItems )
+{
+    SETTINGS_MANAGER           settings;
+    std::unique_ptr<SCHEMATIC> other;
+
+    KI_TEST::LoadSchematic( settings, "netlists/complex_hierarchy/complex_hierarchy", other );
+    BOOST_REQUIRE( other );
+
+    SCH_DIFFER            differ( m_before.get(), other.get(), wxS( "complex_hierarchy.kicad_sch" ) );
+    KICAD_DIFFER::OPTIONS options = differ.GetOptions();
+    size_t                reports = 0;
+
+    options.progress = [&reports]( double aFraction )
+    {
+        if( aFraction > 0.5 )
+            reports++;
+    };
+
+    differ.SetOptions( options );
+
+    size_t unmatched = 0;
+
+    for( const ITEM_CHANGE& c : differ.Diff().changes )
+    {
+        if( c.kind == CHANGE_KIND::ADDED || c.kind == CHANGE_KIND::REMOVED )
+            unmatched++;
+    }
+
+    BOOST_REQUIRE_GE( unmatched, 64u );
+
+    // One more for the diff's final report
+    BOOST_CHECK_GE( reports, unmatched / 64 + 1 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

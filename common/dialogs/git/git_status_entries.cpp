@@ -958,13 +958,12 @@ wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString&
         return wxEmptyString;
 
     const wxString sep = wxFileName::GetPathSeparator();
+    const wxString dir = Root() + sep + wxString::Format( wxS( "s%d" ), m_slot++ );
 
     // A schematic root sheet references its sub-sheet files by relative path, so check out the
     // whole tree and the sub-sheets come along. A board is self-contained, so write just the blob.
     if( aKind == KICAD_DIFF::DOC_KIND::SCH )
     {
-        wxString dir = Root() + sep + wxString::Format( wxS( "s%d" ), m_slot++ );
-
         if( !KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( aRepo, aRef, dir ) )
             return wxEmptyString;
 
@@ -973,7 +972,11 @@ wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString&
         return wxFileName::FileExists( path ) ? path : wxString( wxEmptyString );
     }
 
-    wxString path = Root() + sep + wxString::Format( wxS( "s%d_" ), m_slot++ ) + wxFileName( aRelPath ).GetFullName();
+    // A folder per slot keeps the repository name, which the comparison shows while it loads
+    if( !wxFileName::Mkdir( dir, 0700 ) )
+        return wxEmptyString;
+
+    wxString path = dir + sep + wxFileName( aRelPath ).GetFullName();
 
     if( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( aRepo, aRef, aRelPath, path ) )
         return wxEmptyString;
@@ -1204,7 +1207,7 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
 
 
 // A materialized schematic sits at its repository path under the tree it was written into. A board is written
-// alone into the workspace, its slot prefixed to its name
+// alone into a slot folder of the workspace
 static wxString treeRootOf( const GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aPath, const wxString& aRelativePath,
                             KICAD_DIFF::DOC_KIND aKind )
 {

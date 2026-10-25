@@ -490,4 +490,40 @@ BOOST_AUTO_TEST_CASE( ExtractedGeometryCarriesBoardLayers )
 }
 
 
+// A large board spends its diff in the item loops, so a cancel acts only if they report, even within a footprint
+BOOST_AUTO_TEST_CASE( DiffReportsEvery64ItemsAndFootprintParts )
+{
+    BOARD  empty;
+    size_t items = m_after->GetItemSet().size();
+    size_t parts = 0;
+
+    for( const FOOTPRINT* fp : m_after->Footprints() )
+        parts += fp->Pads().size() + fp->GraphicalItems().size() + fp->Zones().size() + fp->GetFields().size();
+
+    auto loopReports = []( const BOARD* aBefore, const BOARD* aAfter )
+    {
+        PCB_DIFFER            differ( aBefore, aAfter );
+        KICAD_DIFFER::OPTIONS options = differ.GetOptions();
+        size_t                reports = 0;
+
+        options.progress = [&reports]( double aFraction )
+        {
+            if( aFraction > 0.15 )
+                reports++;
+        };
+
+        differ.SetOptions( options );
+        differ.Diff();
+
+        return reports;
+    };
+
+    // Each part ticks once as it is described and again as it is compared, plus the diff's final report
+    const size_t expected = items / 64 + 2 * parts / 64 + 1;
+
+    BOOST_CHECK_GE( loopReports( m_before.get(), m_after.get() ), expected );
+    BOOST_CHECK_GE( loopReports( &empty, m_after.get() ), expected );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

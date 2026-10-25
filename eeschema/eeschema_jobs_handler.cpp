@@ -3041,8 +3041,13 @@ struct SCH_DIFF_SIDES
 
 // A progress reporter gets one phase per side and one for the diff, and a cancel returns ERR_CANCELLED
 static int loadSchDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const wxString& aFileA,
-                             const wxString& aFileB, SCH_DIFF_SIDES& aSides, PROGRESS_REPORTER* aProgress = nullptr )
+                             const wxString& aFileB, SCH_DIFF_SIDES& aSides, WX_PROGRESS_REPORTER* aProgress = nullptr,
+                             const wxString& aLabelA = wxEmptyString, const wxString& aLabelB = wxEmptyString )
 {
+    // The loader reports the path it opens, which for a downloaded version is a temporary folder
+    if( aProgress && !aFileA.IsEmpty() )
+        aProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileA, aLabelA ) );
+
     aSides.a = loadScratchSchematic( aMgr, aFileA, aProgress );
 
     if( aProgress )
@@ -3053,7 +3058,13 @@ static int loadSchDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const 
         aProgress->AdvancePhase();
     }
 
+    if( aProgress && !aFileB.IsEmpty() )
+        aProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileB, aLabelB ) );
+
     aSides.b = loadScratchSchematic( aMgr, aFileB, aProgress );
+
+    if( aProgress )
+        aProgress->UnpinMessage();
 
     if( aProgress && aProgress->IsCancelled() )
         return CLI::EXIT_CODES::ERR_CANCELLED;
@@ -3171,7 +3182,9 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
     SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
                                                aReporter ? aReporter : m_reporter );
 
-    wxWindow*      parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
+    // The progress dialog disables only its parent, and the caller may be a panel inside a larger window
+    wxWindow*      parent = aParent ? wxGetTopLevelParent( aParent )
+                                    : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
     const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
     const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
 
@@ -3186,7 +3199,7 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
         progress->SetRefreshOnPhaseChange( true );
 
         if( int rc = loadSchDiffSides( Pgm().GetSettingsManager(), *m_reporter, aFileA, aFileB, sides,
-                                       progress.get() );
+                                       progress.get(), aLabelA, aLabelB );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
@@ -3277,11 +3290,26 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
         KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   mapA;
         KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   mapB;
 
+        // A large library loads and compares on the UI thread before the window opens
+        auto progress = std::make_unique<WX_PROGRESS_REPORTER>( parent, _( "Compare Files" ), 4, PR_CAN_ABORT );
+        progress->SetRefreshOnPhaseChange( true );
+
+        if( !aFileA.IsEmpty() )
+            progress->PinMessage( KICAD_DIFF::LoadingMessage( aFileA, aLabelA ) );
+
         if( int rc = loadSymbolLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
         }
+
+        if( !progress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        progress->AdvancePhase();
+
+        if( !aFileB.IsEmpty() )
+            progress->PinMessage( KICAD_DIFF::LoadingMessage( aFileB, aLabelB ) );
 
         if( int rc = loadSymbolLibrarySide( aFileB, ownersB, mapB, true, *m_reporter );
             rc != CLI::EXIT_CODES::SUCCESS )
@@ -3289,8 +3317,26 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
             return rc;
         }
 
+        progress->UnpinMessage();
+
         KICAD_DIFF::SYM_LIB_DIFFER differ( mapA, mapB, aFileB );
-        KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
+        KICAD_DIFF::DOCUMENT_DIFF  result;
+
+        KICAD_DIFF::ReportDiffProgress( differ, progress.get() );
+
+        try
+        {
+            result = differ.Diff();
+        }
+        catch( const IO_CANCELLED& )
+        {
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+        }
+
+        progress->AdvancePhase( _( "Drawing..." ) );
+
+        if( !progress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
 
         // The selected symbol is drawn whole, since outlines of every symbol pile up in one place
         DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result );
@@ -3299,6 +3345,8 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
                 {
                     KICAD_DIFF::ShowSymbolPair( aCanvas, mapA, mapB, aName );
                 } );
+
+        progress.reset();
         dlg.ShowModal();
 
         return CLI::EXIT_CODES::SUCCESS;

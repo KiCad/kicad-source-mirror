@@ -26,6 +26,7 @@
 #include <diff_merge/kicad_diff_types.h>
 #include <diff_merge/identity_reconciler.h>
 
+#include <algorithm>
 #include <functional>
 #include <set>
 
@@ -79,6 +80,63 @@ public:
 protected:
     KICAD_DIFFER() = default;
 
+    /**
+     * One loop's share of the diff's progress, from @p aFrom to @p aTo over @p aSteps steps. Reports every few steps,
+     * so a cancel acts within a moment even when each step is slow, as in a debug build.
+     */
+    class PROGRESS_SPAN
+    {
+    public:
+        PROGRESS_SPAN( const OPTIONS& aOptions, double aFrom, double aTo, size_t aSteps ) :
+                m_progress( aOptions.progress ),
+                m_from( aFrom ),
+                m_to( aTo ),
+                m_steps( std::max<size_t>( aSteps, 1 ) )
+        {
+        }
+
+        void Step()
+        {
+            if( m_progress && ++m_done % STRIDE == 0 )
+                report();
+        }
+
+        /// Reports from within a step with many parts, such as a footprint's pads, without moving the bar on
+        void Tick()
+        {
+            if( m_progress && ++m_ticks % STRIDE == 0 )
+                report();
+        }
+
+    private:
+        void report() { m_progress( m_from + ( m_to - m_from ) * double( m_done ) / double( m_steps ) ); }
+
+        static constexpr size_t STRIDE = 64;
+
+        const std::function<void( double )>& m_progress;
+        double                               m_from;
+        double                               m_to;
+        size_t                               m_steps;
+        size_t                               m_done = 0;
+        size_t                               m_ticks = 0;
+    };
+
+    /// These options with progress mapped onto @p aFrom to @p aTo, for a pass that reports through a shared routine.
+    OPTIONS scaledOptions( double aFrom, double aTo ) const
+    {
+        OPTIONS options = m_options;
+
+        if( m_options.progress )
+        {
+            options.progress = [progress = m_options.progress, aFrom, aTo]( double aFraction )
+            {
+                progress( aFrom + ( aTo - aFrom ) * aFraction );
+            };
+        }
+
+        return options;
+    }
+
     OPTIONS m_options;
 };
 
@@ -89,6 +147,13 @@ protected:
  * Does nothing without a reporter.
  */
 KICOMMON_API void ReportDiffProgress( KICAD_DIFFER& aDiffer, PROGRESS_REPORTER* aProgress );
+
+
+/**
+ * The progress message while one side of a comparison loads. Names the file and @p aLabel, the side's version,
+ * but not the folder, which for a downloaded version is a temporary one that names the user.
+ */
+KICOMMON_API wxString LoadingMessage( const wxString& aFile, const wxString& aLabel );
 
 
 /**

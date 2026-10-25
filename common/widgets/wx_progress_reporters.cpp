@@ -64,6 +64,37 @@ WX_PROGRESS_REPORTER::~WX_PROGRESS_REPORTER()
 }
 
 
+void WX_PROGRESS_REPORTER::PinMessage( const wxString& aMessage )
+{
+    std::lock_guard<std::mutex> guard( m_mutex );
+
+    m_messageChanged = m_rptMessage != aMessage;
+    m_rptMessage = aMessage;
+    m_messagePinned = true;
+}
+
+
+void WX_PROGRESS_REPORTER::UnpinMessage()
+{
+    std::lock_guard<std::mutex> guard( m_mutex );
+
+    m_messagePinned = false;
+}
+
+
+void WX_PROGRESS_REPORTER::Report( const wxString& aMessage )
+{
+    // Checked and written under one lock, so a worker's report cannot land after a pin
+    std::lock_guard<std::mutex> guard( m_mutex );
+
+    if( m_messagePinned )
+        return;
+
+    m_messageChanged = m_rptMessage != aMessage;
+    m_rptMessage = aMessage;
+}
+
+
 bool WX_PROGRESS_REPORTER::updateUI()
 {
     const int phase = m_phase.load();

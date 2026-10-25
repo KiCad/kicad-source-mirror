@@ -81,7 +81,8 @@ private:
     ITEM_DESCRIPTOR makeDescriptor( const BOARD_ITEM* aItem ) const;
 
     /// Construct a child-level diff for nested items inside a footprint pair.
-    std::vector<ITEM_CHANGE> diffFootprintChildren( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter ) const;
+    std::vector<ITEM_CHANGE> diffFootprintChildren( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter,
+                                                    PROGRESS_SPAN& aSpan ) const;
 
     /// Stable, deterministic sort of ITEM_CHANGEs (by id, then typeName, then kind).
     static void sortChanges( std::vector<ITEM_CHANGE>& aChanges );

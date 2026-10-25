@@ -86,6 +86,15 @@ public:
      */
     void SetRefreshOnPhaseChange( bool aRefresh ) { m_refreshOnPhaseChange = aRefresh; }
 
+    /**
+     * Show @p aMessage and ignore the text of Report() until UnpinMessage(), so a caller can name a step better than
+     * the code it calls. Progress values still flow.
+     */
+    void PinMessage( const wxString& aMessage );
+    void UnpinMessage();
+
+    void Report( const wxString& aMessage ) override;
+
     ///< Gate expensive dialog work while always allowing the final tick.
     static bool shouldRefresh( int aProgress, int aMaxProgress, int aPhase, int aNumPhases, int aShownPhase,
                                bool aRefreshOnPhaseChange, THROTTLE& aThrottle )
@@ -111,6 +120,7 @@ private:
     std::atomic_bool       m_indeterminate;
     std::atomic_int        m_shownPhase;
     bool                   m_refreshOnPhaseChange = false;
+    bool                   m_messagePinned = false; ///< Guarded by m_mutex
 };
 
 

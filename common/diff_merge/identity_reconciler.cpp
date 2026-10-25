@@ -118,7 +118,8 @@ double IDENTITY_RECONCILER::ScoreSimilarity( const ITEM_DESCRIPTOR& aA,
 
 
 RECONCILIATION IDENTITY_RECONCILER::Reconcile( const std::vector<ITEM_DESCRIPTOR>& aA,
-                                               const std::vector<ITEM_DESCRIPTOR>& aB ) const
+                                               const std::vector<ITEM_DESCRIPTOR>& aB,
+                                               const std::function<void()>&        aTick ) const
 {
     RECONCILIATION result;
 
@@ -246,6 +247,9 @@ RECONCILIATION IDENTITY_RECONCILER::Reconcile( const std::vector<ITEM_DESCRIPTOR
 
             for( std::size_t bIdx : it->second )
             {
+                if( aTick )
+                    aTick();
+
                 double s = ScoreSimilarity( aA[aIdx], aB[bIdx] );
 
                 if( s >= m_config.similarityThreshold )
