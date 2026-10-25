@@ -18,8 +18,7 @@
  */
 
 #include <algorithm>                          // for min
-#include <bitset>                             // for bitset, operator&, __bi...
-#include <math.h>                             // for abs
+#include <cmath>                              // for abs
 
 #include <geometry/seg.h>                     // for SEG
 #include <geometry/shape_circle.h>
@@ -82,7 +81,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( int aLayer ) const
 }
 
 
-void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
+void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor ) const
 {
     wxString padNumber = UnescapeString( aPad->GetNumber() );
 
@@ -105,8 +104,8 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
                 RotatePoint( position, aPad->GetOrientation() );
                 position += aPad->ShapePos( PADSTACK::TEMP_ALL_LAYERS );
 
-                padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
-                padsize.y = abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
+                padsize.x = std::abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
+                padsize.y = std::abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
 
                 break;
             }
@@ -153,8 +152,7 @@ void BRDITEMS_PLOTTER::PlotPadNumber( const PAD* aPad, const COLOR4D& aColor )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLOR4D& aColor,
-                                bool aSketchMode )
+void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLOR4D& aColor, bool aSketchMode ) const
 {
     VECTOR2I     shape_pos = aPad->ShapePos( aLayer );
     GBR_METADATA metadata;
@@ -394,7 +392,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
 }
 
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
+void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint ) const
 {
     if( !GetPlotFPText() )
         return;
@@ -482,7 +480,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 }
 
 
-void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
+void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item ) const
 {
     switch( item->Type() )
     {
@@ -561,7 +559,7 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
 }
 
 
-void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
+void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim ) const
 {
     if( !m_layerMask[aDim->GetLayer()] )
         return;
@@ -616,7 +614,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
+void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire ) const
 {
     int dx1, dx2, dy1, dy2, radius;
 
@@ -670,7 +668,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
 }
 
 
-void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint ) const
 {
     const wxString variantName = m_board ? m_board->GetCurrentVariant() : wxString();
     const bool     dnp = aFootprint->GetDNPForVariant( variantName );
@@ -760,13 +758,25 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 }
 
 
-#define getMetadata() ( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER ? (void*) &gbr_metadata   \
-                         : m_plotter->GetPlotterType() == PLOT_FORMAT::DXF ? (void*) this            \
-                                                                           : (void*) nullptr )
+static void* plotMetadata( PLOTTER* aPlotter, GBR_METADATA& aMetadata, const PLOT_PARAMS* aPlotOptions )
+{
+    // Gerber writes its metadata through the plotters' opaque data parameter, so that parameter
+    // stays void*.  DXF instead reads the sketch/filled mode back out of the plot options and
+    // never writes to them, which is what lets a const plot hand them over at all.
+    switch( aPlotter->GetPlotterType() )
+    {
+    case PLOT_FORMAT::GERBER:   return &aMetadata;
+    case PLOT_FORMAT::DXF:      return const_cast<PLOT_PARAMS*>( aPlotOptions );
+    default:                    return nullptr;
+    }
+}
+
+
+#define getMetadata() plotMetadata( m_plotter, gbr_metadata, this )
 
 
 void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
-                                 const KIFONT::METRICS& aFontMetrics, bool aStrikeout )
+                                 const KIFONT::METRICS& aFontMetrics, bool aStrikeout ) const
 {
     int           maxError = m_board->GetDesignSettings().m_MaxError;
     KIFONT::FONT* font = aText->GetDrawFont( m_plotter->RenderSettings() );
@@ -798,7 +808,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 
     m_plotter->SetCurrentLineWidth( attrs.m_StrokeWidth );
 
-    auto strikeoutText =
+    const auto strikeoutText =
             [&]( const PCB_TEXT* text )
             {
                 SHAPE_POLY_SET  textPoly;
@@ -881,7 +891,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 }
 
 
-void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList )
+void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList ) const
 {
     if( aPolysList.IsEmpty() )
         return;
@@ -939,7 +949,7 @@ void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer, const S
 }
 
 
-void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
+void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape ) const
 {
     if( !( m_layerMask & aShape->GetLayerSet() ).any() )
         return;
@@ -1327,7 +1337,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 }
 
 
-void BRDITEMS_PLOTTER::PlotBarCode( const PCB_BARCODE* aBarCode )
+void BRDITEMS_PLOTTER::PlotBarCode( const PCB_BARCODE* aBarCode ) const
 {
     if( !m_layerMask[aBarCode->GetLayer()] )
         return;
@@ -1346,7 +1356,7 @@ void BRDITEMS_PLOTTER::PlotBarCode( const PCB_BARCODE* aBarCode )
 }
 
 
-void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
+void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable ) const
 {
     if( !m_layerMask[aTable->GetLayer()] )
         return;
@@ -1385,7 +1395,7 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
 
 void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECTOR2I& aDrillPos,
                                          const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
-                                         const EDA_ANGLE& aOrientation, int aSmallDrill )
+                                         const EDA_ANGLE& aOrientation, int aSmallDrill ) const
 {
     VECTOR2I drillSize = aDrillSize;
 
@@ -1411,7 +1421,7 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECT
 }
 
 
-void BRDITEMS_PLOTTER::PlotDrillMarks()
+void BRDITEMS_PLOTTER::PlotDrillMarks() const
 {
     int smallDrill = 0;
 
@@ -1489,7 +1499,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 }
 
 
-void BRDITEMS_PLOTTER::PlotDrillSymbols( PCB_LAYER_ID aLayer )
+void BRDITEMS_PLOTTER::PlotDrillSymbols( PCB_LAYER_ID aLayer ) const
 {
     const std::vector<const PCB_DRILL_MAP*> maps = m_board->DrillMapsOnLayer( aLayer );
 
@@ -1601,7 +1611,7 @@ void BRDITEMS_PLOTTER::PlotDrillSymbols( PCB_LAYER_ID aLayer )
 }
 
 
-void BRDITEMS_PLOTTER::PlotChartSymbols( const PCB_DRILL_CHART* aChart )
+void BRDITEMS_PLOTTER::PlotChartSymbols( const PCB_DRILL_CHART* aChart ) const
 {
 
     if( aChart->GetSymbolColumn() < 0 || aChart->RowShapes().empty() )
