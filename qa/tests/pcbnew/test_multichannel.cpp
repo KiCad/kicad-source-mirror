@@ -1587,124 +1587,148 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutMatchesBySymbolPathWhenTopologyDi
 {
     using TMATCH::CONNECTION_GRAPH;
 
-    m_board = std::make_unique<BOARD>();
-    m_board->SetEnabledLayers( LSET::AllCuMask() );
-
-    NETINFO_ITEM* shared = new NETINFO_ITEM( m_board.get(), wxT( "Net-(J1-Pin_1)" ) );
-    m_board->Add( shared );
-
-    auto makeFootprint =
-            [&]( const wxString& aRef, const VECTOR2I& aPos, const KIID& aSymbolUuid,
-                 NETINFO_ITEM* aNet ) -> FOOTPRINT*
-            {
-                FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
-                fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "Receptacle" ) ) );
-                fp->SetReference( aRef );
-                fp->SetPosition( aPos );
-
-                // Symbol instance UUID, the link between a block footprint and its placed instance
-                KIID_PATH path;
-                path.push_back( aSymbolUuid );
-                fp->SetPath( path );
-
-                PAD* pad = new PAD( fp );
-                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
-                pad->SetNumber( wxT( "1" ) );
-                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-                pad->SetPosition( aPos );
-                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-                pad->SetLayerSet( LSET( { F_Cu } ) );
-
-                if( aNet )
-                    pad->SetNet( aNet );
-
-                fp->Add( pad );
-                m_board->Add( fp );
-                return fp;
-            };
-
-    KIID symA, symB;
-
-    // Block source: both receptacles unconnected, so each pad has zero connections
-    FOOTPRINT* refFpA = makeFootprint( wxT( "J5" ), VECTOR2I( 0, 0 ), symA, nullptr );
-    FOOTPRINT* refFpB = makeFootprint( wxT( "J6" ), VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), symB, nullptr );
-
-    // Board instance: same symbol instances, but a board wire ties both pads onto one net
-    FOOTPRINT* destFpA = makeFootprint( wxT( "J1" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
-                                        symA, shared );
-    FOOTPRINT* destFpB = makeFootprint( wxT( "J2" ), VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 80 ) ),
-                                        symB, shared );
-
-    // Precondition: topology matching fails, so the symbol path fallback is what rescues the apply
+    // Nested is a sheet reused twice inside a repeated sheet, where both instances share the symbol UUID
+    for( bool nested : { false, true } )
     {
-        std::set<FOOTPRINT*>      refSet{ refFpA, refFpB };
-        std::set<FOOTPRINT*>      destSet{ destFpA, destFpB };
-        auto                      cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refSet, destSet );
-        auto                      cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( destSet, refSet );
-        TMATCH::COMPONENT_MATCHES topoOnly;
-        std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
-        BOOST_REQUIRE_MESSAGE( !cgRef->FindIsomorphism( cgTarget.get(), topoOnly, details ),
-                               "Test precondition broken: areas are net isomorphic" );
+        BOOST_TEST_CONTEXT( ( nested ? "nested sheet paths" : "flat symbol paths" ) )
+        {
+            m_board = std::make_unique<BOARD>();
+            m_board->SetEnabledLayers( LSET::AllCuMask() );
+
+            NETINFO_ITEM* shared = new NETINFO_ITEM( m_board.get(), wxT( "Net-(J1-Pin_1)" ) );
+            m_board->Add( shared );
+
+            auto makeFootprint =
+                    [&]( const wxString& aRef, const VECTOR2I& aPos, const KIID_PATH& aPath,
+                         NETINFO_ITEM* aNet ) -> FOOTPRINT*
+                    {
+                        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+                        fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "Receptacle" ) ) );
+                        fp->SetReference( aRef );
+                        fp->SetPosition( aPos );
+
+                        // Symbol instance path, the link between a block footprint and its placed instance
+                        fp->SetPath( aPath );
+
+                        PAD* pad = new PAD( fp );
+                        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                        pad->SetNumber( wxT( "1" ) );
+                        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                        pad->SetPosition( aPos );
+                        pad->SetSize( PADSTACK::ALL_LAYERS,
+                                      VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                        pad->SetLayerSet( LSET( { F_Cu } ) );
+
+                        if( aNet )
+                            pad->SetNet( aNet );
+
+                        fp->Add( pad );
+                        m_board->Add( fp );
+                        return fp;
+                    };
+
+            const KIID refSheet, destSheet, innerA, innerB, symA;
+            const KIID symB = nested ? symA : KIID();
+
+            auto pathOf =
+                    [&]( const KIID& aSheet, const KIID& aInner, const KIID& aSymbol )
+                    {
+                        if( nested )
+                        {
+                            return KIID_PATH( wxString::Format( "/%s/%s/%s", aSheet.AsString(),
+                                                                aInner.AsString(), aSymbol.AsString() ) );
+                        }
+
+                        return KIID_PATH( wxT( "/" ) + aSymbol.AsString() );
+                    };
+
+            // Block source: both receptacles unconnected, so each pad has zero connections
+            FOOTPRINT* refFpA =
+                    makeFootprint( wxT( "J5" ), VECTOR2I( 0, 0 ), pathOf( refSheet, innerA, symA ), nullptr );
+            FOOTPRINT* refFpB = makeFootprint( wxT( "J6" ), VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ),
+                                               pathOf( refSheet, innerB, symB ), nullptr );
+
+            // Board instance: same symbol instances, but a board wire ties both pads onto one net
+            FOOTPRINT* destFpA =
+                    makeFootprint( wxT( "J1" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
+                                   pathOf( destSheet, innerA, symA ), shared );
+            FOOTPRINT* destFpB =
+                    makeFootprint( wxT( "J2" ), VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 80 ) ),
+                                   pathOf( destSheet, innerB, symB ), shared );
+
+            // Precondition: topology matching fails, so the symbol path fallback is what rescues the apply
+            {
+                std::set<FOOTPRINT*>      refSet{ refFpA, refFpB };
+                std::set<FOOTPRINT*>      destSet{ destFpA, destFpB };
+                auto                      cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refSet, destSet );
+                auto                      cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( destSet, refSet );
+                TMATCH::COMPONENT_MATCHES topoOnly;
+                std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+                BOOST_REQUIRE_MESSAGE( !cgRef->FindIsomorphism( cgTarget.get(), topoOnly, details ),
+                                       "Test precondition broken: areas are net isomorphic" );
+            }
+
+            PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+            destGroup->SetName( wxT( "design-block-dest" ) );
+            destGroup->AddItem( destFpA );
+            destGroup->AddItem( destFpB );
+            m_board->Add( destGroup );
+
+            RULE_AREA dbRA;
+            dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+            dbRA.m_components.insert( refFpA );
+            dbRA.m_components.insert( refFpB );
+            dbRA.m_designBlockItems.insert( refFpA );
+            dbRA.m_designBlockItems.insert( refFpB );
+            dbRA.m_zone = new ZONE( m_board.get() );
+            dbRA.m_zone->SetIsRuleArea( true );
+            dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+            dbRA.m_zone->AddPolygon(
+                    KIGEOM::BoxToLineChain( BOX2I::ByCorners(
+                            VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                            VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+
+            RULE_AREA destRA;
+            destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+            destRA.m_components.insert( destFpA );
+            destRA.m_components.insert( destFpB );
+            destRA.m_group = destGroup;
+            destRA.m_zone = new ZONE( m_board.get() );
+            destRA.m_zone->SetIsRuleArea( true );
+            destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+            destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+                    BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ),
+                                      VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 90 ) ) ) ) );
+
+            TOOL_MANAGER       toolMgr;
+            MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+            toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+            MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+            toolMgr.RegisterTool( mtTool );
+
+            REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                           .m_connectedRoutingOnly = false,
+                                           .m_copyPlacement = true,
+                                           .m_copyOtherItems = true,
+                                           .m_groupItems = false,
+                                           .m_includeLockedItems = true };
+
+            int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
+
+            delete dbRA.m_zone;
+            delete destRA.m_zone;
+
+            BOOST_CHECK_MESSAGE( result >= 0, "Apply Design Block Layout aborted even though the symbol instance paths "
+                                              "give an unambiguous mapping (No compatible component regression)" );
+
+            // Correct pairing (J5->J1, J6->J2) reproduces the source 10mm spacing, a swap would give -10mm
+            VECTOR2I delta = destFpB->GetPosition() - destFpA->GetPosition();
+            BOOST_CHECK_MESSAGE( delta == VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ),
+                                 wxString::Format( "Destination relative placement wrong, expected "
+                                                   "(10mm,0) got (%d,%d) IU",
+                                                   delta.x, delta.y ) );
+        }
     }
-
-    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
-    destGroup->SetName( wxT( "design-block-dest" ) );
-    destGroup->AddItem( destFpA );
-    destGroup->AddItem( destFpB );
-    m_board->Add( destGroup );
-
-    RULE_AREA dbRA;
-    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
-    dbRA.m_components.insert( refFpA );
-    dbRA.m_components.insert( refFpB );
-    dbRA.m_designBlockItems.insert( refFpA );
-    dbRA.m_designBlockItems.insert( refFpB );
-    dbRA.m_zone = new ZONE( m_board.get() );
-    dbRA.m_zone->SetIsRuleArea( true );
-    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
-    dbRA.m_zone->AddPolygon(
-            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
-                                                      VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
-
-    RULE_AREA destRA;
-    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
-    destRA.m_components.insert( destFpA );
-    destRA.m_components.insert( destFpB );
-    destRA.m_group = destGroup;
-    destRA.m_zone = new ZONE( m_board.get() );
-    destRA.m_zone->SetIsRuleArea( true );
-    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
-    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
-            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ),
-                              VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 90 ) ) ) ) );
-
-    TOOL_MANAGER       toolMgr;
-    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
-    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
-    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
-    toolMgr.RegisterTool( mtTool );
-
-    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
-                                   .m_connectedRoutingOnly = false,
-                                   .m_copyPlacement = true,
-                                   .m_copyOtherItems = true,
-                                   .m_groupItems = false,
-                                   .m_includeLockedItems = true };
-
-    int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
-
-    delete dbRA.m_zone;
-    delete destRA.m_zone;
-
-    BOOST_CHECK_MESSAGE( result >= 0, "Apply Design Block Layout aborted even though the symbol instance paths "
-                                      "give an unambiguous mapping (No compatible component regression)" );
-
-    // Correct pairing (J5->J1, J6->J2) reproduces the source 10mm spacing, a swap would give -10mm
-    VECTOR2I delta = destFpB->GetPosition() - destFpA->GetPosition();
-    BOOST_CHECK_MESSAGE( delta == VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ),
-                         wxString::Format( "Destination relative placement wrong, expected "
-                                           "(10mm,0) got (%d,%d) IU",
-                                           delta.x, delta.y ) );
 }
 
 
@@ -2884,6 +2908,69 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchTieBreaksIdenticalPartsByValue, MULTICHANNEL_T
 
         BOOST_CHECK_EQUAL( refFp->GetValue(), targetFp->GetValue() );
     }
+}
+
+
+// A sheet reused inside a repeated sheet repeats its symbol UUID, so only the inner sheet UUID
+// tells instances apart (Zoho 2659)
+BOOST_FIXTURE_TEST_CASE( TopoMatchTieBreaksNestedSheetInstancesByPath, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    const KIID outerRef, outerTarget, inner1, inner2, symbol;
+
+    // Unique net per footprint and one shared value, so topology and value are both a tie
+    auto makePart =
+            [&]( const wxString& aRef, const KIID& aOuter, const KIID& aInner ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( board.get() );
+                fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "R_0402" ) ) );
+                fp->SetReference( aRef );
+                fp->SetValue( wxT( "10k" ) );
+                fp->SetPath( KIID_PATH( wxString::Format( "/%s/%s/%s", aOuter.AsString(), aInner.AsString(),
+                                                          symbol.AsString() ) ) );
+
+                NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), wxString::Format( "net_%s", aRef ) );
+                board->Add( net );
+
+                PAD* pad = new PAD( fp );
+                pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                pad->SetNumber( wxT( "1" ) );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                pad->SetNet( net );
+                fp->Add( pad );
+
+                board->Add( fp );
+                return fp;
+            };
+
+    FOOTPRINT* ref1 = makePart( wxT( "R101" ), outerRef, inner1 );
+    FOOTPRINT* ref2 = makePart( wxT( "R201" ), outerRef, inner2 );
+
+    // Target refdes order is the reverse of instance order, so a refdes fallback pairs them crosswise
+    FOOTPRINT* target2 = makePart( wxT( "R301" ), outerTarget, inner2 );
+    FOOTPRINT* target1 = makePart( wxT( "R401" ), outerTarget, inner1 );
+
+    auto cgRef = std::make_unique<CONNECTION_GRAPH>();
+    cgRef->AddFootprint( ref1, VECTOR2I( 0, 0 ) );
+    cgRef->AddFootprint( ref2, VECTOR2I( 0, 0 ) );
+    cgRef->BuildConnectivity();
+
+    auto cgTarget = std::make_unique<CONNECTION_GRAPH>();
+    cgTarget->AddFootprint( target2, VECTOR2I( 0, 0 ) );
+    cgTarget->AddFootprint( target1, VECTOR2I( 0, 0 ) );
+    cgTarget->BuildConnectivity();
+
+    TMATCH::COMPONENT_MATCHES                     result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+
+    BOOST_REQUIRE( cgRef->FindIsomorphism( cgTarget.get(), result, details ) );
+    BOOST_CHECK( result[ref1] == target1 );
+    BOOST_CHECK( result[ref2] == target2 );
 }
 
 

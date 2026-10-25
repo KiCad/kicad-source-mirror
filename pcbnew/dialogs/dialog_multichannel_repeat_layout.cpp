@@ -28,6 +28,7 @@
 #include <zone.h>
 #include <board.h>
 #include <footprint.h>
+#include <utility>
 #include <algorithm>
 
 
@@ -121,11 +122,17 @@ void DIALOG_MULTICHANNEL_REPEAT_LAYOUT::onOptionChanged()
 {
     readWindow();
 
+    // The refresh pumps events while it shows progress, so a second one queued behind it would run inside it
+    if( std::exchange( m_refreshPending, true ) )
+        return;
+
     // Rebuilding the grid from inside one of its own events is not safe
     CallAfter( [this]()
                {
+                   readWindow();
                    m_parentTool->RefreshRepeat();
                    TransferDataToWindow();
+                   m_refreshPending = false;
                } );
 }
 
@@ -203,8 +210,6 @@ bool DIALOG_MULTICHANNEL_REPEAT_LAYOUT::TransferDataToWindow()
 
         i++;
     }
-
-    m_raGrid->Fit();
 
     m_refRAName->SetLabelText( data->FromSelection()
                                        ? wxString::Format( _( "%d selected footprints" ),

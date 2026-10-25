@@ -62,8 +62,9 @@
 #include <scoped_set_reset.h>
 #include <trigo.h>
 #include <chrono>
+#include <future>
 #include <core/profile.h>
-#include <thread_pool.h>
+#include <core/raii.h>
 #include <widgets/wx_progress_reporters.h>
 #include <string_utils.h>
 #include <wx/log.h>
@@ -1564,7 +1565,7 @@ void MULTICHANNEL_TOOL::DiscoverRepeatCandidates( bool aLoose )
         m_areas.m_compatMap[&m_areas.m_areas[i + 1]] = std::move( found[i] );
 
     // A candidate that fails on its own starts unticked, so its missing parts do not shrink the others
-    updateSelectionCore();
+    bool resolved = updateSelectionCore();
     bool unticked = false;
 
     for( auto& [area, compat] : m_areas.m_compatMap )
@@ -1573,7 +1574,8 @@ void MULTICHANNEL_TOOL::DiscoverRepeatCandidates( bool aLoose )
         compat.m_doCopy &= compat.m_isOk;
     }
 
-    if( unticked )
+    // Cancelled candidates are unticked too, and resolving the rest again would restart the search
+    if( unticked && resolved )
         updateSelectionCore();
 
     wxLogTrace( traceMultichannelTool, wxT( "Discovery: %s, %d candidates" ), timer.to_string(),
@@ -1733,13 +1735,13 @@ int MULTICHANNEL_TOOL::expandSelection( bool aLargest )
 }
 
 
-void MULTICHANNEL_TOOL::updateSelectionCore()
+bool MULTICHANNEL_TOOL::updateSelectionCore()
 {
     RULE_AREA*           ref = m_areas.m_refRA;
     std::set<FOOTPRINT*> pruned;
 
     if( !ref )
-        return;
+        return true;
 
     // Every channel keeps only the parts all ticked channels share
     for( const auto& [area, compat] : m_areas.m_compatMap )
@@ -1770,7 +1772,7 @@ void MULTICHANNEL_TOOL::updateSelectionCore()
             compat.m_errorMsg = _( "The ticked channels share no selected part" );
         }
 
-        return;
+        return true;
     }
 
     // The anchor must be shared by all channels; the biggest part is the one placed first
@@ -1790,6 +1792,8 @@ void MULTICHANNEL_TOOL::updateSelectionCore()
         }
     }
 
+    std::vector<TOPOLOGY_JOB> jobs;
+
     for( auto& [area, compat] : m_areas.m_compatMap )
     {
         area->m_components.clear();
@@ -1807,7 +1811,17 @@ void MULTICHANNEL_TOOL::updateSelectionCore()
             continue;
         }
 
-        if( !resolveConnectionTopology( ref, area, compat ) )
+        jobs.push_back( { ref, area, &compat } );
+    }
+
+    bool resolved = resolveTopologies( _( "Matching channels..." ), jobs );
+
+    for( const TOPOLOGY_JOB& job : jobs )
+    {
+        RULE_AREA*             area = job.m_target;
+        RULE_AREA_COMPAT_DATA& compat = *job.m_compat;
+
+        if( !compat.m_isOk )
             continue;
 
         if( !compat.m_unmatched.empty() )
@@ -1821,6 +1835,8 @@ void MULTICHANNEL_TOOL::updateSelectionCore()
         area->m_zone->AddPolygon( repeatedOutline( ref, area, m_areas.m_options.m_anchor, compat.m_matchingComponents,
                                                    disp, rot ) );
     }
+
+    return resolved;
 }
 
 
@@ -2004,23 +2020,40 @@ void MULTICHANNEL_TOOL::UpdateRepeatPreview()
     m_areas.m_options.m_groupItems = false;
     applyRepeat( commit );
 
+    auto previewClone =
+            [&]( BOARD_ITEM* aItem ) -> BOARD_ITEM*
+            {
+                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( aItem->Clone() );
+
+                // The revert below deletes groups the copy staged, and drawing asks the parent group for its lock
+                clone->SetParentGroup( nullptr );
+                view->AddToPreview( clone, true );
+                return clone;
+            };
+
+    auto isContainer =
+            []( const BOARD_ITEM* aItem )
+            {
+                return aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T;
+            };
+
     auto show =
             [&]( BOARD_ITEM* aItem )
             {
                 // Group and generator clones share members, so those are shown one member at a time
-                if( aItem->Type() == PCB_GROUP_T || aItem->Type() == PCB_GENERATOR_T )
+                if( isContainer( aItem ) )
                 {
                     aItem->RunOnChildren( [&]( BOARD_ITEM* aChild )
                                           {
-                                              view->AddToPreview( aChild->Clone(), true );
+                                              if( !isContainer( aChild ) )
+                                                  previewClone( aChild );
                                           },
                                           RECURSE_MODE::RECURSE );
                     return;
                 }
 
-                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( aItem->Clone() );
+                BOARD_ITEM* clone = previewClone( aItem );
                 clone->SetBrightened();
-                view->AddToPreview( clone, true );
                 clone->RunOnChildren( [&]( BOARD_ITEM* aChild ) { view->AddToPreview( aChild, false ); },
                                       RECURSE_MODE::RECURSE );
             };
@@ -2295,26 +2328,36 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
     m_areas.m_compatMap.clear();
 
-    std::vector<RULE_AREA*> targets;
+    std::vector<TOPOLOGY_JOB> jobs;
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
         if( ra.m_zone == m_areas.m_refRA->m_zone )
             continue;
 
-        targets.push_back( &ra );
-        m_areas.m_compatMap[&ra] = RULE_AREA_COMPAT_DATA();
+        jobs.push_back( { m_areas.m_refRA, &ra, &m_areas.m_compatMap[&ra] } );
     }
 
-    if( targets.empty() )
-        return 0;
+    if( !resolveTopologies( _( "Checking Rule Area compatibility..." ), jobs ) )
+    {
+        m_areas.m_compatMap.clear();
+        return -1;
+    }
 
-    int              total = static_cast<int>( targets.size() );
-    std::atomic<int> completed( 0 );
+    return 0;
+}
+
+
+bool MULTICHANNEL_TOOL::resolveTopologies( const wxString& aTitle, const std::vector<TOPOLOGY_JOB>& aJobs )
+{
+    if( aJobs.empty() )
+        return true;
+
+    int               total = static_cast<int>( aJobs.size() );
+    std::atomic<int>  completed( 0 );
     std::atomic<bool> cancelled( false );
     std::atomic<int>  matchedComponents( 0 );
     std::atomic<int>  totalComponents( 0 );
-    RULE_AREA*        refRA = m_areas.m_refRA;
 
     TMATCH::ISOMORPHISM_PARAMS isoParams;
     isoParams.m_cancelled = &cancelled;
@@ -2326,26 +2369,32 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
     // across the thread pool, creating many short-lived tasks that fully utilize
     // all available cores.  Running the outer loop sequentially avoids thread
     // pool starvation from nested parallelism.
-    thread_pool& tp = GetKiCadThreadPool();
-
-    auto future = tp.submit_task(
-            [this, refRA, &targets, &completed, &cancelled, &matchedComponents, &isoParams]()
+    // The loop waits on those tasks, so it runs outside the pool lest a one-thread pool deadlock
+    auto future = std::async(
+            std::launch::async,
+            [this, &aJobs, &completed, &cancelled, &matchedComponents, &isoParams]()
             {
-                for( RULE_AREA* target : targets )
+                for( const TOPOLOGY_JOB& job : aJobs )
                 {
                     if( cancelled.load( std::memory_order_relaxed ) )
                         break;
 
                     matchedComponents.store( 0, std::memory_order_relaxed );
+                    resolveConnectionTopology( job.m_ref, job.m_target, *job.m_compat, isoParams );
 
-                    RULE_AREA_COMPAT_DATA& compatData = m_areas.m_compatMap[target];
-                    resolveConnectionTopology( refRA, target, compatData, isoParams );
+                    if( cancelled.load( std::memory_order_relaxed ) )
+                        break;
+
                     completed.fetch_add( 1, std::memory_order_relaxed );
                 }
             } );
 
     if( Pgm().IsGUI() )
     {
+        // Declared first so the windows are enabled again only after the progress dialog is gone, the
+        // Repeat dialog last so it is raised over the board
+        std::unique_ptr<WINDOW_DISABLER>      dialogDisabler;
+        std::unique_ptr<WINDOW_DISABLER>      frameDisabler;
         std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
         auto startTime = std::chrono::steady_clock::now();
         double highWaterMark = 0.0;
@@ -2354,12 +2403,14 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
         {
             if( !reporter )
             {
-                auto elapsed = std::chrono::steady_clock::now() - startTime;
-
-                if( elapsed > std::chrono::seconds( 1 ) )
+                // Short enough to feel immediate, long enough not to flash for a small board
+                if( std::chrono::steady_clock::now() - startTime > std::chrono::milliseconds( 250 ) )
                 {
-                    reporter = std::make_unique<WX_PROGRESS_REPORTER>(
-                            frame(), _( "Checking Rule Area compatibility..." ), 1, PR_CAN_ABORT );
+                    // The progress dialog pumps events from its first Show, and the board and a non-modal
+                    // Repeat dialog must not change while the worker reads them
+                    dialogDisabler = std::make_unique<WINDOW_DISABLER>( m_dialog );
+                    frameDisabler = std::make_unique<WINDOW_DISABLER>( frame() );
+                    reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), aTitle, 1, PR_CAN_ABORT );
                 }
                 else
                 {
@@ -2385,7 +2436,7 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
                 reporter->SetCurrentProgress( highWaterMark );
                 reporter->Report( wxString::Format(
                         _( "Resolving topology %d of %d (%d/%d components)" ),
-                        done + 1, total, matched, compTotal ) );
+                        std::min( done + 1, total ), total, matched, compTotal ) );
 
                 if( !reporter->KeepRefreshing() )
                     cancelled.store( true, std::memory_order_relaxed );
@@ -2397,13 +2448,18 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
         future.wait();
     }
 
-    if( cancelled.load( std::memory_order_relaxed ) )
+    if( !cancelled.load( std::memory_order_relaxed ) )
+        return true;
+
+    // A job stopped part way says no more about its topology than one never started
+    for( size_t i = static_cast<size_t>( completed.load() ); i < aJobs.size(); ++i )
     {
-        m_areas.m_compatMap.clear();
-        return -1;
+        aJobs[i].m_compat->m_isOk = false;
+        aJobs[i].m_compat->m_errorMsg = _( "Cancelled" );
+        aJobs[i].m_compat->m_mismatchReasons.clear();
     }
 
-    return 0;
+    return false;
 }
 
 
@@ -2782,14 +2838,29 @@ bool MULTICHANNEL_TOOL::UpdateLinkedLayouts( ZONE* aSource )
     m_areas.m_options = aSource->GetRepeatOptions();
     m_areas.m_compatMap.clear();
 
+    std::vector<RULE_AREA*>   targets;
+    std::vector<TOPOLOGY_JOB> jobs;
+
     for( RULE_AREA* target : linked )
     {
         if( target == ref || target->m_zone->GetLinkSet() != aSource->GetLinkSet() )
             continue;
 
+        targets.push_back( target );
+        jobs.push_back( { ref, target, &m_areas.m_compatMap[target] } );
+    }
+
+    if( !resolveTopologies( _( "Updating linked layouts..." ), jobs ) )
+    {
+        m_areas.m_compatMap.clear();
+        return false;
+    }
+
+    for( RULE_AREA* target : targets )
+    {
         RULE_AREA_COMPAT_DATA& compat = m_areas.m_compatMap[target];
 
-        if( !resolveConnectionTopology( ref, target, compat ) )
+        if( !compat.m_isOk )
         {
             problems.push_back( wxString::Format( wxT( "'%s': %s" ), target->m_ruleName, compat.m_errorMsg ) );
             continue;
@@ -3819,49 +3890,42 @@ std::vector<NETINFO_ITEM*> MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( BOARD*
 }
 
 
-// A placed design block or repeated sheet stamps the originating symbol instance UUID into each
-// footprint's path. When that linkage is complete and unique it is an authoritative one to one
-// mapping, independent of net topology. Returns false (and leaves aResult untouched) unless it
-// yields a full pad compatible bijection, so callers can fall back to topology matching.
+// Pairs footprints by their unique closest symbol instance path, independent of net topology
+// Leaves aResult untouched unless that gives a full pad compatible bijection
 static bool matchBySymbolInstancePath( const std::set<FOOTPRINT*>& aRef, const std::set<FOOTPRINT*>& aTarget,
                                        TMATCH::COMPONENT_MATCHES& aResult )
 {
     if( aRef.empty() || aRef.size() != aTarget.size() )
         return false;
 
-    auto symbolUuid = []( const FOOTPRINT* aFp ) -> KIID
-    {
-        const KIID_PATH& path = aFp->GetPath();
-        return path.empty() ? niluuid : path.back();
-    };
-
-    std::map<KIID, FOOTPRINT*> targetByUuid;
-
-    for( FOOTPRINT* fp : aTarget )
-    {
-        KIID uuid = symbolUuid( fp );
-
-        // A missing or duplicated UUID (copy paste, hand built group) is not a clean instance link
-        if( uuid == niluuid || !targetByUuid.emplace( uuid, fp ).second )
-            return false;
-    }
-
     TMATCH::COMPONENT_MATCHES result;
     std::set<FOOTPRINT*>      used;
 
     for( FOOTPRINT* refFp : aRef )
     {
-        KIID uuid = symbolUuid( refFp );
+        FOOTPRINT* targetFp = nullptr;
+        size_t     bestLength = 0;
+        bool       tied = false;
 
-        if( uuid == niluuid )
+        for( FOOTPRINT* candidate : aTarget )
+        {
+            size_t length = TMATCH::CommonPathTailLength( refFp->GetPath(), candidate->GetPath() );
+
+            if( length > bestLength )
+            {
+                targetFp = candidate;
+                bestLength = length;
+                tied = false;
+            }
+            else if( length == bestLength && length > 0 )
+            {
+                tied = true;
+            }
+        }
+
+        // A missing or ambiguous path (copy paste, hand built group) is not a clean instance link
+        if( !targetFp || tied )
             return false;
-
-        auto it = targetByUuid.find( uuid );
-
-        if( it == targetByUuid.end() )
-            return false;
-
-        FOOTPRINT* targetFp = it->second;
 
         // Routing and placement copy only makes sense between pad compatible footprints
         if( refFp->GetFPID() != targetFp->GetFPID() || refFp->Pads().size() != targetFp->Pads().size() )

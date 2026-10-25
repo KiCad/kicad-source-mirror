@@ -182,6 +182,15 @@ PGM_BASE::~PGM_BASE()
 
 void PGM_BASE::Destroy()
 {
+    // The preload reads the design block libraries, so it has to stop before they go
+    if( m_libraryPreloadReturn.valid() )
+    {
+        if( m_libraryPreloadInProgress.load() )
+            m_libraryPreloadAbort.store( true );
+
+        m_libraryPreloadReturn.wait();
+    }
+
     // Clean up library IO plugins before static destruction
     m_library_manager.reset();
 
@@ -971,9 +980,9 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
             aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
         };
 
-    thread_pool& tp = GetKiCadThreadPool();
+    // The preload waits on loads it queues on the pool, so it must not hold a pool thread itself
     m_libraryPreloadInProgress.store( true );
-    m_libraryPreloadReturn = tp.submit_task( preload );
+    m_libraryPreloadReturn = std::async( std::launch::async, preload );
 }
 
 

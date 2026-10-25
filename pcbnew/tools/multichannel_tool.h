@@ -197,7 +197,8 @@ private:
     /// The channels elsewhere on the board that repeat the topology of aSelected
     std::vector<RULE_AREA_COMPAT_DATA> findMatches( const std::set<FOOTPRINT*>& aSelected, bool aLoose );
 
-    void updateSelectionCore();
+    /// @return false if the user cancelled the topology check.
+    bool updateSelectionCore();
     int  applySelectionRepeat();
     void clearRepeatPreview();
 
@@ -234,6 +235,24 @@ private:
                                           RULE_AREA_COMPAT_DATA& aMatches,
                                           const TMATCH::ISOMORPHISM_PARAMS& aParams = {},
                                           const std::unordered_set<int>& aExtraGlobalNets = {} );
+
+    struct TOPOLOGY_JOB
+    {
+        RULE_AREA*             m_ref;
+        RULE_AREA*             m_target;
+        RULE_AREA_COMPAT_DATA* m_compat;
+    };
+
+    /**
+     * Resolve the topology of each job in turn on a worker thread.
+     *
+     * In the GUI a progress dialog titled @p aTitle shows how far the matching got, and the board
+     * and the Repeat dialog are disabled until it closes.  Jobs not finished when the user cancels
+     * are marked as not OK.
+     *
+     * @return false if the user cancelled.
+     */
+    bool       resolveTopologies( const wxString& aTitle, const std::vector<TOPOLOGY_JOB>& aJobs );
     void       fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
                          bool aHasMatches,
                          const std::map<int, int>& aNetMap );

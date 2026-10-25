@@ -60,6 +60,7 @@ private:
     std::vector<TABLE_ENTRY> m_targetRAs;
     MULTICHANNEL_TOOL*       m_parentTool;
     wxBitmapBundle           m_detailsIcon;
+    bool                     m_refreshPending = false;
 };
 
 #endif

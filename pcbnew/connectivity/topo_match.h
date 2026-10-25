@@ -27,6 +27,7 @@
 #include <unordered_set>
 #include <optional>
 
+#include <kiid.h>
 #include <wx/string.h>
 
 class FOOTPRINT;
@@ -186,6 +187,17 @@ private:
 
 typedef std::map<FOOTPRINT*, FOOTPRINT*> COMPONENT_MATCHES;
 
+/**
+ * Count the trailing elements two symbol instance paths share.
+ *
+ * Instances of a sheet differ only in their leading sheet UUIDs, so a footprint's counterpart in
+ * another channel shares the longest tail.  The symbol UUID alone repeats once a sheet is reused
+ * inside a repeated sheet.
+ *
+ * @return 0 when either path is empty or ends in a nil UUID.
+ */
+size_t CommonPathTailLength( const KIID_PATH& aA, const KIID_PATH& aB );
+
 class CONNECTION_GRAPH
 {
 public:
@@ -222,7 +234,7 @@ private:
      * The most useful tie breaker is based on symbol/sheet instances, since multiple channels in a design
      * are very often multiple instances of the same sheet.
      */
-    bool breakTieBySymbolUuid( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const;
+    bool breakTieBySymbolPath( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const;
 
     /**
      * Break a tie by footprint value when the symbol UUID can't, e.g. identical parts that
