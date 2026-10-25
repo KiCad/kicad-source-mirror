@@ -367,9 +367,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
                     continue;
             }
 
-            int netcode = b_net[ii] ? b_net[ii]->GetNetCode() : 0;
+            const int netcode = b_net[ii] ? b_net[ii]->GetNetCode() : 0;
 
-            if( netcode && m_drcEngine->IsNetTieExclusion( netcode, layer, holeShape->Centre(), a[ii] ) )
+            // Footprint-internal net-tie pads can be left unassigned, so net code 0 must be
+            // tested too. For example, a net tie that connects across two layers by a PTH
+            // pad that isn't connected to the external nets directly.
+            if( m_drcEngine->IsNetTieExclusion( netcode, layer, holeShape->Centre(), a[ii] ) )
                 continue;
 
             constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, b[ii], a[ii], layer );
