@@ -214,9 +214,9 @@ protected:
     }
 
 private:
-    int defaultPitch( BOARD* aBoard ) const;      // grid pitch
-    int defaultViaSize( BOARD* aBoard ) const;    // via diameter
-    int defaultViaDrill( BOARD* aBoard ) const;   // drill diameter
+    int defaultPitch( const BOARD* aBoard ) const;    // grid pitch
+    int defaultViaSize( const BOARD* aBoard ) const;  // via diameter
+    int defaultViaDrill( const BOARD* aBoard ) const; // drill diameter
 
     /**
      * @return true when the current layout/mode places vias on a regular grid, and so keys

@@ -316,7 +316,7 @@ void PCB_VIA_STITCH::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMM
 }
 
 
-int PCB_VIA_STITCH::defaultPitch( BOARD* aBoard ) const
+int PCB_VIA_STITCH::defaultPitch( const BOARD* aBoard ) const
 {
     int mm2 = pcbIUScale.mmToIU( 2.0 );
     int viaSize = m_viaTemplate->GetWidth( PADSTACK::TEMP_ALL_LAYERS ) > 0 ? m_viaTemplate->GetWidth( PADSTACK::TEMP_ALL_LAYERS )
@@ -326,7 +326,7 @@ int PCB_VIA_STITCH::defaultPitch( BOARD* aBoard ) const
 }
 
 
-int PCB_VIA_STITCH::defaultViaSize( BOARD* aBoard ) const
+int PCB_VIA_STITCH::defaultViaSize( const BOARD* aBoard ) const
 {
     if( !aBoard )
         return pcbIUScale.mmToIU( 0.6 );
@@ -339,7 +339,7 @@ int PCB_VIA_STITCH::defaultViaSize( BOARD* aBoard ) const
     return val;
 }
 
-int PCB_VIA_STITCH::defaultViaDrill( BOARD* aBoard ) const
+int PCB_VIA_STITCH::defaultViaDrill( const BOARD* aBoard ) const
 {
     if( !aBoard )
         return pcbIUScale.mmToIU( 0.3 );
@@ -1081,7 +1081,7 @@ std::set<VECTOR2I> PCB_VIA_STITCH::buildPlacementCells( BOARD* aBoard ) const
     // Probe used for clearance evaluation; it must carry the stitch net because clearance
     // rules can key off the net class.
     std::unique_ptr<PCB_VIA> probe( static_cast<PCB_VIA*>( m_viaTemplate->Clone() ) );
-    probe->SetParent( const_cast<BOARD*>( aBoard ) );
+    probe->SetParent( aBoard );
 
     if( m_netCode )
         probe->SetNetCode( m_netCode );
