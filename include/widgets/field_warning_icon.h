@@ -20,6 +20,7 @@
 #pragma once
 
 #include <kicommon.h>
+#include <bitmaps/bitmaps_list.h>
 #include <wx/arrstr.h>
 #include <wx/generic/statbmpg.h>
 
@@ -43,7 +44,9 @@ public:
     static constexpr size_t MAX_LINES = 10;
 
     /// @param aField the field to mark, which needs a parent window
-    explicit FIELD_WARNING_ICON( wxWindow* aField );
+    /// @param aIcon the glyph to draw
+    /// @param aSlot which place to take at the right edge, counting inwards from zero
+    explicit FIELD_WARNING_ICON( wxWindow* aField, BITMAPS aIcon = BITMAPS::small_warning, int aSlot = 0 );
     ~FIELD_WARNING_ICON() override;
 
     /// Lists aMessages in the tooltip, once each with a count when repeated, and shows the icon, or hides it when
@@ -61,4 +64,5 @@ private:
     void onFieldDestroyed( wxWindowDestroyEvent& aEvent );
 
     wxWindow* m_field; ///< Null once the field has been destroyed
+    int       m_slot;
 };

@@ -341,6 +341,37 @@ void PANEL_SETUP_CONSTRAINT_RULES::ImportSettingsFrom( BOARD* aBoard )
 }
 
 
+bool PANEL_SETUP_CONSTRAINT_RULES::RulesCanOverride( const wxString& aSetting, DRC_RULE_EDITOR_CONSTRAINT_NAME* aType,
+                                                     wxString* aPage )
+{
+    for( FAMILY family : { FAMILY::CLEARANCE, FAMILY::TRACKS_AND_VIAS, FAMILY::HOLES, FAMILY::SILKSCREEN,
+                           FAMILY::SOLDER_MASK, FAMILY::HIGH_SPEED, FAMILY::FOOTPRINTS } )
+    {
+        for( const CONSTRAINT_SECTION& section : SectionsFor( family ) )
+        {
+            if( !section.ruleType )
+                continue;
+
+            for( const CONSTRAINT_DEFAULT_FIELD& field : section.defaults )
+            {
+                if( field.settingName != aSetting )
+                    continue;
+
+                if( aType )
+                    *aType = *section.ruleType;
+
+                if( aPage )
+                    *aPage = section.title;
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMILY aFamily )
 {
     using BDS = BOARD_DESIGN_SETTINGS;
@@ -370,39 +401,39 @@ std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMIL
     {
     case FAMILY::CLEARANCE:
         return { { _( "Minimum clearance" ),
-                   { { _( "Board default:" ), &BDS::m_MinClearance } },
+                   { { _( "Board default:" ), &BDS::m_MinClearance, wxS( "min_clearance" ) } },
                    MINIMUM_CLEARANCE,
                    clearance },
                  { _( "Copper to hole clearance" ),
-                   { { _( "Board default:" ), &BDS::m_HoleClearance } },
+                   { { _( "Board default:" ), &BDS::m_HoleClearance, wxS( "min_hole_clearance" ) } },
                    COPPER_TO_HOLE_CLEARANCE,
                    {} },
                  { _( "Copper to edge clearance" ),
-                   { { _( "Board default:" ), &BDS::m_CopperEdgeClearance } },
+                   { { _( "Board default:" ), &BDS::m_CopperEdgeClearance, wxS( "min_copper_edge_clearance" ) } },
                    COPPER_TO_EDGE_CLEARANCE,
                    {} },
                  { _( "Physical clearance" ), {}, PHYSICAL_CLEARANCE, {} },
                  { _( "Creepage distance" ),
-                   { { _( "Minimum groove for creepage:" ), &BDS::m_MinGrooveWidth } },
+                   { { _( "Minimum groove for creepage:" ), &BDS::m_MinGrooveWidth, wxS( "min_groove_width" ) } },
                    CREEPAGE_DISTANCE,
                    {} },
                  { _( "Minimum thermal relief spoke count" ), {}, MINIMUM_THERMAL_RELIEF_SPOKE_COUNT, {} } };
 
     case FAMILY::TRACKS_AND_VIAS:
         return { { _( "Minimum track width" ),
-                   { { _( "Board default:" ), &BDS::m_TrackMinWidth } },
+                   { { _( "Board default:" ), &BDS::m_TrackMinWidth, wxS( "min_track_width" ) } },
                    ROUTING_WIDTH,
                    trackWidth },
                  { _( "Minimum connection width" ),
-                   { { _( "Board default:" ), &BDS::m_MinConn } },
+                   { { _( "Board default:" ), &BDS::m_MinConn, wxS( "min_connection" ) } },
                    MINIMUM_CONNECTION_WIDTH,
                    {} },
                  { _( "Minimum annular width" ),
-                   { { _( "Board default:" ), &BDS::m_ViasMinAnnularWidth } },
+                   { { _( "Board default:" ), &BDS::m_ViasMinAnnularWidth, wxS( "min_via_annular_width" ) } },
                    MINIMUM_ANNULAR_WIDTH,
                    {} },
                  { _( "Minimum via diameter" ),
-                   { { _( "Board default:" ), &BDS::m_ViasMinSize } },
+                   { { _( "Board default:" ), &BDS::m_ViasMinSize, wxS( "min_via_diameter" ) } },
                    MINIMUM_VIA_DIAMETER,
                    viaDiameter },
                  { _( "Via style" ), {}, VIA_STYLE, {} },
@@ -410,17 +441,17 @@ std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMIL
 
     case FAMILY::HOLES:
         return { { _( "Minimum drill size" ),
-                   { { _( "Board default:" ), &BDS::m_MinThroughDrill } },
+                   { { _( "Board default:" ), &BDS::m_MinThroughDrill, wxS( "min_through_hole_diameter" ) } },
                    MINIMUM_DRILL_SIZE,
                    viaDrill },
                  { _( "Hole size" ), {}, HOLE_SIZE, {} },
                  { _( "Hole to hole clearance" ),
-                   { { _( "Board default:" ), &BDS::m_HoleToHoleMin } },
+                   { { _( "Board default:" ), &BDS::m_HoleToHoleMin, wxS( "min_hole_to_hole" ) } },
                    HOLE_TO_HOLE_DISTANCE,
                    {} },
                  { _( "Microvias" ),
-                   { { _( "Minimum uVia diameter:" ), &BDS::m_MicroViasMinSize },
-                     { _( "Minimum uVia hole:" ), &BDS::m_MicroViasMinDrill } },
+                   { { _( "Minimum uVia diameter:" ), &BDS::m_MicroViasMinSize, wxS( "min_microvia_diameter" ) },
+                     { _( "Minimum uVia hole:" ), &BDS::m_MicroViasMinDrill, wxS( "min_microvia_drill" ) } },
                    std::nullopt,
                    uViaDiameter },
                  { _( "Microvia stack depth" ), {}, MICROVIA_STACK_DEPTH, {} },
@@ -428,12 +459,12 @@ std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMIL
 
     case FAMILY::SILKSCREEN:
         return { { _( "Silk to silk clearance" ),
-                   { { _( "Board default:" ), &BDS::m_SilkClearance } },
+                   { { _( "Board default:" ), &BDS::m_SilkClearance, wxS( "min_silk_clearance" ) } },
                    SILK_TO_SILK_CLEARANCE,
                    {} },
                  { _( "Minimum text height and thickness" ),
-                   { { _( "Minimum text height:" ), &BDS::m_MinSilkTextHeight },
-                     { _( "Minimum text thickness:" ), &BDS::m_MinSilkTextThickness } },
+                   { { _( "Minimum text height:" ), &BDS::m_MinSilkTextHeight, wxS( "min_text_height" ) },
+                     { _( "Minimum text thickness:" ), &BDS::m_MinSilkTextThickness, wxS( "min_text_thickness" ) } },
                    MINIMUM_TEXT_HEIGHT_AND_THICKNESS,
                    {} },
                  { _( "Silk to solder mask clearance" ), {}, SILK_TO_SOLDERMASK_CLEARANCE, {} } };
@@ -445,17 +476,17 @@ std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMIL
 
     case FAMILY::SOLDER_MASK:
         return { { _( "Solder mask expansion" ),
-                   { { _( "Board default:" ), &BDS::m_SolderMaskExpansion } },
+                   { { _( "Board default:" ), &BDS::m_SolderMaskExpansion, wxS( "solder_mask_expansion" ) } },
                    SOLDERMASK_EXPANSION,
                    {},
                    _( "Solder Mask/Paste" ) },
                  { _( "Minimum solder mask sliver" ),
-                   { { _( "Board default:" ), &BDS::m_SolderMaskMinWidth } },
+                   { { _( "Board default:" ), &BDS::m_SolderMaskMinWidth, wxS( "solder_mask_min_width" ) } },
                    MINIMUM_SOLDERMASK_SLIVER,
                    {},
                    _( "Solder Mask/Paste" ) },
                  { _( "Solder paste expansion" ),
-                   { { _( "Board default:" ), &BDS::m_SolderPasteMargin } },
+                   { { _( "Board default:" ), &BDS::m_SolderPasteMargin, wxS( "solder_paste_margin" ) } },
                    SOLDERPASTE_EXPANSION,
                    {},
                    _( "Solder Mask/Paste" ) } };

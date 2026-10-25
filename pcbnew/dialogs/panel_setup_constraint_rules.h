@@ -42,6 +42,7 @@ struct CONSTRAINT_DEFAULT_FIELD
 {
     wxString label;
     int BOARD_DESIGN_SETTINGS::* member;
+    wxString                     settingName;
 };
 
 
@@ -82,6 +83,8 @@ public:
      * The sections of one family, in the order they are shown in the tree.
      */
     static std::vector<CONSTRAINT_SECTION> SectionsFor( FAMILY aFamily );
+
+    static bool RulesCanOverride( const wxString& aSetting, DRC_RULE_EDITOR_CONSTRAINT_NAME* aType, wxString* aPage );
 
     void ImportSettingsFrom( BOARD* aBoard );
 

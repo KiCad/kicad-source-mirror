@@ -26,6 +26,7 @@
 #include <drc/rule_editor/drc_rule_document.h>
 #include <drc/rule_editor/drc_rule_editor_enums.h>
 #include <drc/rule_editor/drc_rule_editor_utils.h>
+#include <dialogs/panel_setup_constraint_rules.h>
 
 #include <wx/ffile.h>
 #include <wx/filename.h>
@@ -452,6 +453,38 @@ BOOST_AUTO_TEST_CASE( RuleNamesAreUniqueWithinAConstraint )
 
     BOOST_CHECK_EQUAL( document.UniqueRuleName( wxS( "Minimum clearance" ) ), wxS( "Minimum clearance 1" ) );
     BOOST_CHECK_EQUAL( document.UniqueRuleName( wxS( "first" ) ), wxS( "first 1" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( EveryBoardConstraintWithRulesResolvesToAPage )
+{
+    // The names are the ones PANEL_SETUP_CONSTRAINTS keys its fields by.
+    const std::vector<wxString> governed = { wxS( "min_clearance" ),
+                                             wxS( "min_connection" ),
+                                             wxS( "min_track_width" ),
+                                             wxS( "min_via_annular_width" ),
+                                             wxS( "min_via_diameter" ),
+                                             wxS( "min_through_hole_diameter" ),
+                                             wxS( "min_hole_to_hole" ),
+                                             wxS( "min_hole_clearance" ),
+                                             wxS( "min_silk_clearance" ),
+                                             wxS( "min_groove_width" ),
+                                             wxS( "min_text_height" ),
+                                             wxS( "min_text_thickness" ),
+                                             wxS( "min_copper_edge_clearance" ) };
+
+    for( const wxString& setting : governed )
+    {
+        DRC_RULE_EDITOR_CONSTRAINT_NAME type = CUSTOM_RULE;
+        wxString                        page;
+
+        BOOST_CHECK_MESSAGE( PANEL_SETUP_CONSTRAINT_RULES::RulesCanOverride( setting, &type, &page ),
+                             "no rule page governs " << setting.ToStdString() );
+        BOOST_CHECK_MESSAGE( !page.IsEmpty(), "no page title for " << setting.ToStdString() );
+    }
+
+    // Max error is a geometry tolerance, not something a rule can override.
+    BOOST_CHECK( !PANEL_SETUP_CONSTRAINT_RULES::RulesCanOverride( wxS( "max_error" ), nullptr, nullptr ) );
 }
 
 

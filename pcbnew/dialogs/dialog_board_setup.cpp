@@ -169,8 +169,9 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_SETUP_CONSTRAINTS( aParent, m_frame );
-            }, _( "Constraints" ) );
+                return new PANEL_SETUP_CONSTRAINTS( aParent, m_frame, m_ruleDocument.get() );
+            },
+            _( "Constraints" ) );
 
     const std::vector<std::pair<PANEL_SETUP_CONSTRAINT_RULES::FAMILY, wxString>> ruleFamilies = {
         { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::CLEARANCE, _( "Clearance" ) },
@@ -518,6 +519,8 @@ void DIALOG_BOARD_SETUP::refreshRulePage( size_t aPage )
         rulesPage->RefreshFromDocument();
     else if( auto* textPage = dynamic_cast<PANEL_SETUP_RULES*>( resolved ) )
         textPage->RefreshFromDocument();
+    else if( auto* constraintsPage = dynamic_cast<PANEL_SETUP_CONSTRAINTS*>( resolved ) )
+        constraintsPage->RefreshOverrides();
 }
 
 

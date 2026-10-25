@@ -27,14 +27,19 @@
 #include <panel_setup_constraints_base.h>
 #include <pcb_edit_frame.h>
 #include <widgets/field_warning_icon.h>
+#include <widgets/wx_treebook.h>
+#include <dialogs/panel_setup_constraint_rules.h>
+#include <drc/rule_editor/drc_rule_document.h>
 #include <widgets/paged_dialog.h>
 #include <wx/treebook.h>
 #include <bitmaps.h>
 #include <advanced_config.h>
 
 
-PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
+                                                  DRC_RULE_DOCUMENT* aDocument ) :
         PANEL_SETUP_CONSTRAINTS_BASE( aParentWindow ),
+        m_document( aDocument ),
         m_minClearance( aFrame, m_clearanceTitle, m_clearanceCtrl, m_clearanceUnits ),
         m_minConn( aFrame, m_MinConnTitle, m_MinConnCtrl, m_MinConnUnits ),
         m_trackMinWidth( aFrame, m_TrackMinWidthTitle, m_TrackMinWidthCtrl, m_TrackMinWidthUnits ),
@@ -84,28 +89,40 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         m_minGrooveWidthUnits->Show( false );
     }
 
-    m_fields = {
-        { wxS( "min_clearance" ),             m_clearanceCtrl,              nullptr },
-        { wxS( "min_connection" ),            m_MinConnCtrl,                nullptr },
-        { wxS( "min_track_width" ),           m_TrackMinWidthCtrl,          nullptr },
-        { wxS( "min_via_annular_width" ),     m_ViaMinAnnulusCtrl,          nullptr },
-        { wxS( "min_via_diameter" ),          m_SetViasMinSizeCtrl,         nullptr },
-        { wxS( "min_through_hole_diameter" ), m_MinDrillCtrl,               nullptr },
-        { wxS( "min_microvia_diameter" ),     m_uviaMinSizeCtrl,            nullptr },
-        { wxS( "min_microvia_drill" ),        m_uviaMinDrillCtrl,           nullptr },
-        { wxS( "min_hole_to_hole" ),          m_SetHoleToHoleCtrl,          nullptr },
-        { wxS( "min_hole_clearance" ),        m_HoleClearanceCtrl,          nullptr },
-        { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl,          nullptr },
-        { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl,         nullptr },
-        { wxS( "min_text_height" ),           m_textHeightCtrl,             nullptr },
-        { wxS( "min_text_thickness" ),        m_textThicknessCtrl,          nullptr },
-        { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl,          nullptr },
-        { wxS( "max_error" ),                 m_maxErrorCtrl,               nullptr }
-    };
+    m_fields = { { wxS( "min_clearance" ), m_clearanceCtrl, nullptr, nullptr },
+                 { wxS( "min_connection" ), m_MinConnCtrl, nullptr },
+                 { wxS( "min_track_width" ), m_TrackMinWidthCtrl, nullptr, nullptr },
+                 { wxS( "min_via_annular_width" ), m_ViaMinAnnulusCtrl, nullptr, nullptr },
+                 { wxS( "min_via_diameter" ), m_SetViasMinSizeCtrl, nullptr, nullptr },
+                 { wxS( "min_through_hole_diameter" ), m_MinDrillCtrl, nullptr, nullptr },
+                 { wxS( "min_microvia_diameter" ), m_uviaMinSizeCtrl, nullptr },
+                 { wxS( "min_microvia_drill" ), m_uviaMinDrillCtrl, nullptr },
+                 { wxS( "min_hole_to_hole" ), m_SetHoleToHoleCtrl, nullptr, nullptr },
+                 { wxS( "min_hole_clearance" ), m_HoleClearanceCtrl, nullptr, nullptr },
+                 { wxS( "min_silk_clearance" ), m_silkClearanceCtrl, nullptr, nullptr },
+                 { wxS( "min_groove_width" ), m_minGrooveWidthCtrl, nullptr, nullptr },
+                 { wxS( "min_text_height" ), m_textHeightCtrl, nullptr },
+                 { wxS( "min_text_thickness" ), m_textThicknessCtrl, nullptr, nullptr },
+                 { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl, nullptr, nullptr },
+                 { wxS( "max_error" ), m_maxErrorCtrl, nullptr, nullptr } };
 
     for( CONSTRAINT_FIELD& field : m_fields )
     {
         field.m_Warning = new FIELD_WARNING_ICON( field.m_Ctrl );
+
+        if( m_document && PANEL_SETUP_CONSTRAINT_RULES::RulesCanOverride( field.m_Setting, nullptr, nullptr ) )
+        {
+            field.m_Override = new FIELD_WARNING_ICON( field.m_Ctrl, BITMAPS::small_new_window, 1 );
+            field.m_Override->SetCursor( wxCURSOR_HAND );
+            field.m_Override->Bind( wxEVT_LEFT_DOWN,
+                                    [this, setting = field.m_Setting]( wxMouseEvent& )
+                                    {
+                                        wxString page;
+
+                                        if( PANEL_SETUP_CONSTRAINT_RULES::RulesCanOverride( setting, nullptr, &page ) )
+                                            showRulePage( page );
+                                    } );
+        }
 
         // Debounced so a half-typed value does not flash a warning
         field.m_Ctrl->Bind( wxEVT_TEXT,
@@ -158,6 +175,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
     m_minTextThickness.SetValue( m_BrdSettings->m_MinSilkTextThickness );
 
     updateWarnings();
+    RefreshOverrides();
 
     return true;
 }
@@ -236,6 +254,60 @@ void PANEL_SETUP_CONSTRAINTS::applyValues( BOARD_DESIGN_SETTINGS& aSettings ) co
     aSettings.m_SilkClearance = m_silkClearance.GetValue();
     aSettings.m_MinSilkTextHeight = m_minTextHeight.GetValue();
     aSettings.m_MinSilkTextThickness = m_minTextThickness.GetValue();
+}
+
+
+void PANEL_SETUP_CONSTRAINTS::RefreshOverrides()
+{
+    if( !m_document )
+        return;
+
+    for( CONSTRAINT_FIELD& field : m_fields )
+    {
+        if( !field.m_Override )
+            continue;
+
+        DRC_RULE_EDITOR_CONSTRAINT_NAME type;
+        wxString                        page;
+
+        if( !PANEL_SETUP_CONSTRAINT_RULES::RulesCanOverride( field.m_Setting, &type, &page ) )
+            continue;
+
+        size_t count = m_document->IndicesFor( type ).size();
+
+        if( count == 0 )
+        {
+            field.m_Override->SetWarning( wxEmptyString );
+            continue;
+        }
+
+        field.m_Override->SetWarning( wxString::Format( wxPLURAL( "%zu rule on the %s page overrides this. "
+                                                                  "Click to open it.",
+                                                                  "%zu rules on the %s page override this. "
+                                                                  "Click to open it.",
+                                                                  count ),
+                                                        count, page ) );
+    }
+}
+
+
+void PANEL_SETUP_CONSTRAINTS::showRulePage( const wxString& aTitle )
+{
+    PAGED_DIALOG* dialog = PAGED_DIALOG::GetDialog( this );
+
+    if( !dialog )
+        return;
+
+    WX_TREEBOOK* book = dialog->GetTreebook();
+
+    for( size_t i = 0; i < book->GetPageCount(); ++i )
+    {
+        if( book->GetPageText( i ) == aTitle )
+        {
+            book->SetSelection( i );
+            return;
+        }
+    }
 }
 
 

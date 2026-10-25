@@ -32,9 +32,10 @@
 #include <wx/settings.h>
 
 
-FIELD_WARNING_ICON::FIELD_WARNING_ICON( wxWindow* aField ) :
-        wxGenericStaticBitmap( aField->GetParent(), wxID_ANY, KiBitmapBundle( BITMAPS::small_warning ) ),
-        m_field( aField )
+FIELD_WARNING_ICON::FIELD_WARNING_ICON( wxWindow* aField, BITMAPS aIcon, int aSlot ) :
+        wxGenericStaticBitmap( aField->GetParent(), wxID_ANY, KiBitmapBundle( aIcon ) ),
+        m_field( aField ),
+        m_slot( aSlot )
 {
     Hide();
 
@@ -135,8 +136,11 @@ void FIELD_WARNING_ICON::Reposition()
     const wxSize iconSize = GetSize();
     const int    gap = m_field->FromDIP( 3 );
 
-    SetPosition( m_field->GetPosition()
-                 + wxPoint( fieldSize.x - buttonWidth - iconSize.x - gap, ( fieldSize.y - iconSize.y ) / 2 ) );
+    const int slotOffset = m_slot * ( iconSize.x + gap );
+
+    SetPosition(
+            m_field->GetPosition()
+            + wxPoint( fieldSize.x - buttonWidth - iconSize.x - gap - slotOffset, ( fieldSize.y - iconSize.y ) / 2 ) );
     Raise();
 }
 

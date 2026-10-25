@@ -31,6 +31,7 @@
 
 class BOARD;
 class FIELD_WARNING_ICON;
+class DRC_RULE_DOCUMENT;
 class PAGED_DIALOG;
 class PCB_EDIT_FRAME;
 class wxCommandEvent;
@@ -39,10 +40,12 @@ class wxCommandEvent;
 class PANEL_SETUP_CONSTRAINTS : public PANEL_SETUP_CONSTRAINTS_BASE
 {
 public:
-    PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, DRC_RULE_DOCUMENT* aDocument = nullptr );
     ~PANEL_SETUP_CONSTRAINTS( ) override { };
 
     void ImportSettingsFrom( BOARD* aBoard );
+
+    void RefreshOverrides();
 
 private:
     bool TransferDataToWindow() override;
@@ -53,11 +56,14 @@ private:
     /// Show a warning icon, with the reason as its tooltip, over each field whose value has an issue.
     void updateWarnings();
 
+    void showRulePage( const wxString& aTitle );
+
     struct CONSTRAINT_FIELD
     {
         wxString            m_Setting;
         wxWindow*           m_Ctrl;
         FIELD_WARNING_ICON* m_Warning;
+        FIELD_WARNING_ICON* m_Override;
     };
 
 public:
@@ -80,6 +86,7 @@ public:
 
 private:
     PCB_EDIT_FRAME*               m_Frame;
+    DRC_RULE_DOCUMENT*            m_document;
     BOARD_DESIGN_SETTINGS*        m_BrdSettings;
     std::vector<CONSTRAINT_FIELD> m_fields;
     wxTimer                       m_validationTimer;
