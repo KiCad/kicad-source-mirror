@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-23 15:51+0000\n"
+"PO-Revision-Date: 2026-10-27 06:51+0000\n"
 "Last-Translator: Frank Sonnenberg "
 "<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
@@ -2968,9 +2968,8 @@ msgid "Configure Paths"
 msgstr "Pfade konfigurieren"
 
 #: common/dialogs/dialog_convert_image_to_outlines.cpp:33
-#, fuzzy
 msgid "Convert to Outlines"
-msgstr "In Zone umwandeln"
+msgstr "In Umrisse umwandeln"
 
 #: common/dialogs/dialog_convert_image_to_outlines.cpp:41
 #: common/dialogs/dialog_import_gfx_base.cpp:232
@@ -3007,7 +3006,7 @@ msgstr "Lage:"
 #: common/dialogs/dialog_design_block_properties.cpp:98
 #, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Unzulässiges Zeichen ‚%c‘ im Namen ‚%s‘."
+msgstr "Unzulässiges Zeichen \"%c\" im Namen \"%s\"."
 
 #: common/dialogs/dialog_design_block_properties.cpp:123
 #: eeschema/dialogs/panel_template_fieldnames.cpp:92
@@ -3122,9 +3121,8 @@ msgid "Clear the cell value"
 msgstr "Zellenwert löschen"
 
 #: common/dialogs/dialog_fields_table.cpp:196
-#, fuzzy
 msgid "Copy from Variant"
-msgstr "Variante kopieren"
+msgstr "Von Variante kopieren"
 
 #: common/dialogs/dialog_fields_table.cpp:328
 #: common/dialogs/eda_list_dialog.cpp:45 common/dialogs/eda_list_dialog.cpp:71
@@ -16182,14 +16180,13 @@ msgid "KiCad database library files"
 msgstr "KiCad-Datenbank-Bibliotheksdateien"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:642
-#, fuzzy
 msgid "Save Database Library"
-msgstr "Speichern in Bibliothek"
+msgstr "Datenbank-Bibliothek speichern"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "Overwrite '%s'?"
-msgstr "Überschreiben"
+msgstr "\"%s\" überschreiben?"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:671
 msgid ""
@@ -16235,9 +16232,8 @@ msgid "Connection attempt stopped."
 msgstr "Verbindungsname"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:941
-#, fuzzy
 msgid "No data source configured."
-msgstr "Kein Upstream-Zweig eingestellt."
+msgstr "Keine Datenquelle eingestellt."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:951
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2087
@@ -16252,7 +16248,7 @@ msgstr "%s Pin %s nach %s verbinden."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:954
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1002
 #, fuzzy, c-format
@@ -16261,7 +16257,7 @@ msgstr "Verschachtelte Tabelle \"%s\" nicht gefunden."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1724
 msgid "<key>"
-msgstr ""
+msgstr "<Schlüssel>"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1732
 #, fuzzy, c-format
@@ -16283,9 +16279,9 @@ msgid "Not connected."
 msgstr "Nicht verbunden"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1779
-#, fuzzy, c-format
+#, c-format
 msgid "field '%s'"
-msgstr "Feld %s"
+msgstr "Feld \"%s\""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1785
 #, fuzzy, c-format
