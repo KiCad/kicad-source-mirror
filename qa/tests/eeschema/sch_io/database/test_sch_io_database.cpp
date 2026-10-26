@@ -167,13 +167,13 @@ BOOST_AUTO_TEST_CASE( CreateConnectionExpandsCwdAndPrefersConnectionString )
     // The database file is only found if ${CWD} became the settings folder
     settings.m_Source.dsn = "qa_nonexistent_dsn";
 
-    std::unique_ptr<DATABASE_CONNECTION> conn = SCH_IO_DATABASE::CreateConnection( settings );
+    std::unique_ptr<DATABASE_CONNECTION> conn = SCH_IO_DATABASE::CreateConnection( settings ).connection;
 
     BOOST_REQUIRE( conn );
     BOOST_CHECK_MESSAGE( conn->IsConnected(), conn->GetLastError() );
 
     settings.m_Source.connection_string.clear();
-    conn = SCH_IO_DATABASE::CreateConnection( settings );
+    conn = SCH_IO_DATABASE::CreateConnection( settings ).connection;
 
     BOOST_REQUIRE( conn );
     BOOST_CHECK( !conn->IsConnected() );
@@ -215,7 +215,7 @@ BOOST_AUTO_TEST_CASE( PreviewSymbolsMatchCachedNames )
                                } );
     BOOST_REQUIRE( table != settings.m_Tables.end() );
 
-    std::unique_ptr<DATABASE_CONNECTION>  conn = SCH_IO_DATABASE::CreateConnection( settings );
+    std::unique_ptr<DATABASE_CONNECTION>  conn = SCH_IO_DATABASE::CreateConnection( settings ).connection;
     std::vector<std::string>              columns;
     std::vector<DATABASE_CONNECTION::ROW> rows;
     BOOST_REQUIRE( conn->SelectSample( table->table, 100000, columns, rows ) );

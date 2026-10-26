@@ -695,12 +695,21 @@ void LIBRARY_MANAGER::ProjectChanged()
 }
 
 
-void LIBRARY_MANAGER::AbortAsyncLoads()
+void LIBRARY_MANAGER::AbortAsyncLoads( bool aCancelPlugins )
 {
     std::scoped_lock lock( m_adaptersMutex );
 
     for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
-        adapter->AbortAsyncLoad();
+        adapter->AbortAsyncLoad( aCancelPlugins );
+}
+
+
+void LIBRARY_MANAGER::RestartAsyncLoads()
+{
+    std::scoped_lock lock( m_adaptersMutex );
+
+    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+        adapter->RestartAsyncLoad();
 }
 
 
@@ -1145,9 +1154,9 @@ void LIBRARY_MANAGER_ADAPTER::ProjectChanged()
 }
 
 
-void LIBRARY_MANAGER_ADAPTER::resetProjectCache()
+void LIBRARY_MANAGER_ADAPTER::resetProjectCache( bool aCancelPlugins )
 {
-    abortLoad();
+    abortLoad( aCancelPlugins );
 
     // Declared before the lock so plugins die after it is released; their worker threads may need it
     std::vector<std::unique_ptr<IO_BASE>> retired;
@@ -1167,9 +1176,19 @@ void LIBRARY_MANAGER_ADAPTER::resetProjectCache()
 }
 
 
-void LIBRARY_MANAGER_ADAPTER::AbortAsyncLoad()
+void LIBRARY_MANAGER_ADAPTER::AbortAsyncLoad( bool aCancelPlugins )
 {
-    abortLoad();
+    abortLoad( aCancelPlugins );
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::RestartAsyncLoad()
+{
+    // Blocking, since a lost try-lock would leave the cancelled libraries with nothing to restart them
+    std::lock_guard lock( m_loadMutex );
+
+    if( m_rearmPending )
+        asyncLoadLocked();
 }
 
 
@@ -1203,7 +1222,7 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
 
 void LIBRARY_MANAGER_ADAPTER::evictOwnedGlobalEntries()
 {
-    abortLoad();
+    abortLoad( true );
 
     // Declared before the lock so plugins die after it is released
     std::vector<std::map<wxString, LIB_DATA>::node_type> retired;
@@ -1451,28 +1470,107 @@ std::optional<LIBRARY_TABLE_ROW*> LIBRARY_MANAGER_ADAPTER::FindRowByURI(
 }
 
 
-void LIBRARY_MANAGER_ADAPTER::abortLoad()
+void LIBRARY_MANAGER_ADAPTER::withPlugin( const LOADING_KEY& aKey, const std::function<void( IO_BASE& )>& aAction )
+{
+    const bool global = aKey.second == LIBRARY_TABLE_SCOPE::GLOBAL;
+
+    std::map<wxString, LIB_DATA>& libs = global ? globalLibs() : m_libraries;
+
+    // A plugin leaves the map only under the exclusive lock, so it stays alive for the call
+    std::shared_lock lock( global ? globalLibsMutex() : m_librariesMutex );
+
+    if( auto it = libs.find( aKey.first ); it != libs.end() && it->second.plugin )
+        aAction( *it->second.plugin );
+}
+
+
+std::vector<LIBRARY_MANAGER_ADAPTER::LOADING_KEY> LIBRARY_MANAGER_ADAPTER::loadingSnapshot()
+{
+    std::lock_guard lock( m_loadingMutex );
+    return std::vector<LOADING_KEY>( m_loading.begin(), m_loading.end() );
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::cancelLoadingPlugins( const std::vector<LOADING_KEY>& aSnapshot )
+{
+    for( const LOADING_KEY& key : aSnapshot )
+    {
+        withPlugin( key,
+                    []( IO_BASE& aPlugin )
+                    {
+                        aPlugin.CancelLoad();
+                    } );
+    }
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::resumeLoadingPlugins( const std::vector<LOADING_KEY>& aCancelled )
+{
+    for( const LOADING_KEY& key : aCancelled )
+    {
+        withPlugin( key,
+                    []( IO_BASE& aPlugin )
+                    {
+                        aPlugin.ResumeLoad();
+                    } );
+    }
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::abortLoad( bool aCancelPlugins )
 {
     {
         std::lock_guard lock( m_loadMutex );
+
+        // Only abortLoad sets m_abort, so a ready future has worked through its whole queue
+        std::erase_if( m_futures,
+                       []( std::future<void>& aFuture )
+                       {
+                           return aFuture.valid() && aFuture.wait_for( 0s ) == std::future_status::ready;
+                       } );
 
         if( m_futures.empty() )
             return;
 
         wxLogTrace( traceLibraries, "Aborting library load..." );
         m_abort.store( true );
+
+        if( aCancelPlugins )
+        {
+            m_cancelling.store( true );
+            m_rearmPending = true;
+
+            // Bumped after the flags, so a load that reads the new generation also reads the cancel
+            m_abortGeneration.fetch_add( 1 );
+        }
     }
 
-    BlockUntilLoaded();
-    wxLogTrace( traceLibraries, "Aborted" );
-
+    // The snapshot follows m_cancelling, so a worker that lists itself later sees the flag instead
+    struct ABORT_SCOPE
     {
-        std::lock_guard lock( m_loadMutex );
-        m_abort.store( false );
-        m_futures.clear();
-        m_loadTotal.store( 0 );
-        m_loadCount.store( 0 );
-    }
+        LIBRARY_MANAGER_ADAPTER& adapter;
+        std::vector<LOADING_KEY> cancelled;
+
+        // Joins and resets on every exit, so a throwing cancel cannot leave m_abort set or a plugin cancelled
+        ~ABORT_SCOPE()
+        {
+            adapter.BlockUntilLoaded();
+            adapter.resumeLoadingPlugins( cancelled );
+            wxLogTrace( traceLibraries, "Aborted" );
+
+            std::lock_guard lock( adapter.m_loadMutex );
+            adapter.m_abort.store( false );
+            adapter.m_cancelling.store( false );
+            adapter.m_futures.clear();
+            adapter.m_loadTotal.store( 0 );
+            adapter.m_loadCount.store( 0 );
+        }
+    } scope{ *this, {} };
+
+    if( aCancelPlugins )
+        scope.cancelled = loadingSnapshot();
+
+    cancelLoadingPlugins( scope.cancelled );
 }
 
 
@@ -1612,7 +1710,7 @@ void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIB
 {
     // Drain the async load before erasing, else a worker mid-enumerate writes status through the
     // freed LIB_DATA (every other invalidator already does this).
-    abortLoad();
+    abortLoad( true );
 
     auto reloadScope =
             [&]( LIBRARY_TABLE_SCOPE aScopeToReload, std::map<wxString, LIB_DATA>& aTarget,
@@ -1668,6 +1766,9 @@ void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIB
         reloadScope( LIBRARY_TABLE_SCOPE::GLOBAL, globalLibs(), globalLibsMutex() );
         break;
     }
+
+    // Both scopes are swapped by now, so the cancelled libraries can be queued again
+    RestartAsyncLoad();
 }
 
 
@@ -1893,6 +1994,12 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
     if( !asyncLock )
         return;
 
+    asyncLoadLocked();
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::asyncLoadLocked()
+{
     std::erase_if( m_futures,
                    []( std::future<void>& aFuture )
                    {
@@ -1914,6 +2021,7 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
     if( rows.empty() )
     {
         wxLogTrace( traceLibraries, "AsyncLoad: no libraries left to load; exiting" );
+        m_rearmPending = false;
         return;
     }
 
@@ -1937,13 +2045,6 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
 
     // Collect work items with pre-resolved URIs. URI expansion accesses PROJECT data
     // (text variables, env vars) that is not thread-safe, so resolve on the calling thread.
-    struct LOAD_WORK
-    {
-        wxString              nickname;
-        LIBRARY_TABLE_SCOPE   scope;
-        wxString              uri;
-    };
-
     auto workQueue = std::make_shared<std::vector<LOAD_WORK>>();
     workQueue->reserve( rows.size() );
 
@@ -1978,6 +2079,7 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
     if( workQueue->empty() )
     {
         wxLogTrace( traceLibraries, "AsyncLoad: all libraries already loaded; exiting" );
+        m_rearmPending = false;
         return;
     }
 
@@ -2009,59 +2111,31 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                             return;
 
                         const LOAD_WORK& work = ( *workQueue )[idx];
-                        LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( work.nickname );
 
-                        if( result.has_value() )
+                        // Any other exception, from the factory or the enumerate, is still counted, else the progress
+                        // never reaches 1
+                        try
                         {
-                            LIB_DATA* lib = *result;
-
-                            try
-                            {
-                                {
-                                    std::unique_lock lock(
-                                            work.scope == LIBRARY_TABLE_SCOPE::GLOBAL
-                                                    ? globalLibsMutex()
-                                                    : m_librariesMutex );
-                                    lib->status.load_status = LOAD_STATUS::LOADING;
-                                }
-
-                                enumerateLibrary( lib, work.uri );
-
-                                {
-                                    std::unique_lock lock(
-                                            work.scope == LIBRARY_TABLE_SCOPE::GLOBAL
-                                                    ? globalLibsMutex()
-                                                    : m_librariesMutex );
-                                    lib->status.load_status = LOAD_STATUS::LOADED;
-                                }
-                            }
-                            catch( IO_ERROR& e )
-                            {
-                                std::unique_lock lock(
-                                        work.scope == LIBRARY_TABLE_SCOPE::GLOBAL
-                                                ? globalLibsMutex()
-                                                : m_librariesMutex );
-                                lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
-                                lib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
-                                wxLogTrace( traceLibraries, "%s: plugin threw exception: %s",
-                                            work.nickname, e.What() );
-                            }
+                            if( !loadQueuedRow( work ) )
+                                continue;
                         }
-                        else
+                        catch( std::exception& e )
                         {
-                            std::unique_lock lock(
-                                    work.scope == LIBRARY_TABLE_SCOPE::GLOBAL
-                                            ? globalLibsMutex()
-                                            : m_librariesMutex );
+                            std::unique_lock lock( scopeMutex( work.scope ) );
 
-                            std::map<wxString, LIB_DATA>& target =
-                                    ( work.scope == LIBRARY_TABLE_SCOPE::GLOBAL ) ? globalLibs()
-                                                                                  : m_libraries;
+                            LIB_STATUS& status = queuedRowEntry( work ).status;
 
-                            target[work.nickname].status = LIB_STATUS( {
-                                    .load_status = LOAD_STATUS::LOAD_ERROR,
-                                    .error = result.error()
-                            } );
+                            // Counted even when cancelled, since the abort resets the count anyway
+                            if( m_cancelling.load() )
+                            {
+                                status.load_status = LOAD_STATUS::INVALID;
+                                status.error.reset();
+                            }
+                            else
+                            {
+                                status.load_status = LOAD_STATUS::LOAD_ERROR;
+                                status.error = LIBRARY_ERROR( wxString::FromUTF8( e.what() ) );
+                            }
                         }
 
                         ++m_loadCount;
@@ -2070,5 +2144,105 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
                 BS::pr::lowest ) );
     }
 
+    m_rearmPending = false;
     wxLogTrace( traceLibraries, "Started async load of %zu libraries", workQueue->size() );
+}
+
+
+bool LIBRARY_MANAGER_ADAPTER::loadQueuedRow( const LOAD_WORK& aWork )
+{
+    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aWork.nickname );
+
+    if( result.has_value() )
+    {
+        LIB_DATA* lib = *result;
+
+        // Listed while enumerating so a cancel can reach the plugin; the cancel flag is read
+        // after listing, so either the abort sees the entry or the worker sees the flag
+        struct LOADING_ENTRY
+        {
+            LIBRARY_MANAGER_ADAPTER& adapter;
+            LOADING_KEY              key;
+
+            ~LOADING_ENTRY()
+            {
+                std::lock_guard lock( adapter.m_loadingMutex );
+                adapter.m_loading.erase( key );
+            }
+        } loadingEntry{ *this, { aWork.nickname, aWork.scope } };
+
+        {
+            std::lock_guard lock( m_loadingMutex );
+            m_loading.insert( loadingEntry.key );
+        }
+
+        try
+        {
+            {
+                std::unique_lock lock( scopeMutex( aWork.scope ) );
+
+                // A cancelled load is picked up again by the next AsyncLoad
+                if( m_cancelling.load() )
+                {
+                    lib->status.load_status = LOAD_STATUS::INVALID;
+                    return false;
+                }
+
+                lib->status.load_status = LOAD_STATUS::LOADING;
+            }
+
+            enumerateLibrary( lib, aWork.uri );
+
+            {
+                std::unique_lock lock( scopeMutex( aWork.scope ) );
+                lib->status.load_status = LOAD_STATUS::LOADED;
+            }
+        }
+        catch( IO_ERROR& e )
+        {
+            std::unique_lock lock( scopeMutex( aWork.scope ) );
+
+            // A load the abort cut short is not a failure of the library
+            if( m_cancelling.load() )
+            {
+                lib->status.load_status = LOAD_STATUS::INVALID;
+                lib->status.error.reset();
+                return false;
+            }
+
+            lib->status.load_status = LOAD_STATUS::LOAD_ERROR;
+            lib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
+            wxLogTrace( traceLibraries, "%s: plugin threw exception: %s", aWork.nickname, e.What() );
+        }
+    }
+    else
+    {
+        std::unique_lock lock( scopeMutex( aWork.scope ) );
+
+        queuedRowEntry( aWork ).status =
+                LIB_STATUS( { .load_status = LOAD_STATUS::LOAD_ERROR, .error = result.error() } );
+    }
+
+    return true;
+}
+
+
+std::shared_mutex& LIBRARY_MANAGER_ADAPTER::scopeMutex( LIBRARY_TABLE_SCOPE aScope )
+{
+    return aScope == LIBRARY_TABLE_SCOPE::GLOBAL ? globalLibsMutex() : m_librariesMutex;
+}
+
+
+LIB_DATA& LIBRARY_MANAGER_ADAPTER::queuedRowEntry( const LOAD_WORK& aWork )
+{
+    if( aWork.scope != LIBRARY_TABLE_SCOPE::GLOBAL )
+        return m_libraries[aWork.nickname];
+
+    LIB_DATA& entry = globalLibs()[aWork.nickname];
+
+    // An entry nobody owns would outlive the rows it names, since only its owner evicts it
+    if( !entry.global_owner )
+        entry.global_owner = this;
+
+    return entry;
 }

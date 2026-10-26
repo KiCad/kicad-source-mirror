@@ -18,13 +18,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <chrono>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <map>
+#include <random>
 #include <string_view>
 #include <set>
 #include <utility>
+#include <vector>
 #include <bs_thread_pool.hpp>
 #include <wx/datetime.h>
+#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
@@ -35,7 +42,9 @@
 #include <libraries/symbol_library_adapter.h>
 #include <database/database_connection.h>
 #include <database/database_lib_settings.h>
+#include <database/file_in_use_backoff.h>
 #include <fmt.h>
+#include <gestfich.h>
 #include <hash.h>
 #include <ki_exception.h>
 #include <lib_symbol.h>
@@ -77,6 +86,25 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
         aSymbolNameList.Add( symbol->GetName() );
         delete symbol;
     }
+}
+
+
+void SCH_IO_DATABASE::CancelLoad()
+{
+    // Set under the wait mutex so a waiter between its check and its sleep cannot miss the wakeup
+    {
+        std::lock_guard lock( m_refreshMutex );
+        m_loadCancelled = true;
+    }
+
+    m_refreshCV.notify_all();
+}
+
+
+void SCH_IO_DATABASE::ResumeLoad() noexcept
+{
+    std::lock_guard lock( m_refreshMutex );
+    m_loadCancelled = false;
 }
 
 
@@ -309,23 +337,28 @@ LIB_SYMBOL* SCH_IO_DATABASE::resolveSourceSymbol( const LIB_ID& aId )
 }
 
 
-std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
-                                                                        bool aConnectNow, const wxString& aBaseDir )
+/// The directory ${CWD} stands for, which is the settings file's unless the caller supplies one
+static wxString cwdDirFor( const DATABASE_LIB_SETTINGS& aSettings, const wxString& aBaseDir )
 {
-    return CreateConnection( aSettings.ExpandedSource( aBaseDir ), aConnectNow );
+    return aBaseDir.IsEmpty() ? wxFileName( aSettings.GetFilename() ).GetPath() : aBaseDir;
 }
 
 
-std::unique_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::CreateConnection( const DATABASE_SOURCE& aSource,
-                                                                        bool                   aConnectNow )
+SCH_IO_DATABASE::CONNECTION_RESULT SCH_IO_DATABASE::CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
+                                                                      bool aConnectNow, const wxString& aBaseDir )
 {
-    if( aSource.connection_string.empty() )
-    {
-        return std::make_unique<DATABASE_CONNECTION>( aSource.dsn, aSource.username, aSource.password, aSource.timeout,
-                                                      aConnectNow );
-    }
+    return connectionFor( DATABASE_BACKEND::Create( aSettings.m_Source, cwdDirFor( aSettings, aBaseDir ) ),
+                          aConnectNow );
+}
 
-    return std::make_unique<DATABASE_CONNECTION>( aSource.connection_string, aSource.timeout, aConnectNow );
+
+SCH_IO_DATABASE::CONNECTION_RESULT SCH_IO_DATABASE::connectionFor( DB_BACKEND_RESULT&& aBackend, bool aConnectNow )
+{
+    if( !aBackend.backend )
+        return { nullptr, aBackend.failure, std::move( aBackend.error ) };
+
+    return { std::make_unique<DATABASE_CONNECTION>( std::move( aBackend.backend ), aConnectNow ), DB_FAILURE::UNKNOWN,
+             std::string() };
 }
 
 
@@ -482,20 +515,41 @@ void SCH_IO_DATABASE::cacheLib( const std::shared_ptr<DATABASE_CONNECTION>& aCon
     // when nothing relevant has changed.
     TABLE_RESULT_LIST tableResults;
 
-    for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
+    // A backend may open sessions for the load, so they are closed before the slow materialization
     {
-        std::vector<DATABASE_CONNECTION::ROW> results;
+        DATABASE_CONNECTION::LOAD_CYCLE cycle( *aConn,
+                                               [this]()
+                                               {
+                                                   return m_loadCancelled.load();
+                                               } );
 
-        if( !aConn->SelectAll( table.table, table.key_col, results ) )
+        for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
         {
-            if( !aConn->GetLastError().empty() )
-                THROW_IO_ERRORF( _( "Error reading database table %s: %s" ), table.table, aConn->GetLastError() );
+            // Nothing is published from a load that was cancelled
+            if( m_loadCancelled.load() )
+                THROW_IO_ERROR( _( "Database library load cancelled" ) );
 
-            continue;
+            std::vector<DATABASE_CONNECTION::ROW> results;
+            DATABASE_CONNECTION::QUERY_STATUS     status;
+
+            if( !aConn->SelectAll( table.table, table.key_col, results, &status ) )
+            {
+                // A read the cancel stopped says nothing about the table
+                if( m_loadCancelled.load() )
+                    THROW_IO_ERROR( _( "Database library load cancelled" ) );
+
+                if( !status.error.empty() )
+                    THROW_IO_ERRORF( _( "Error reading database table %s: %s" ), table.table, status.error );
+
+                continue;
+            }
+
+            tableResults.emplace_back( &table, std::move( results ) );
         }
-
-        tableResults.emplace_back( &table, std::move( results ) );
     }
+
+    if( m_loadCancelled.load() )
+        THROW_IO_ERROR( _( "Database library load cancelled" ) );
 
     size_t signature = computeSignature( tableResults );
 
@@ -566,13 +620,39 @@ void SCH_IO_DATABASE::stopBackgroundRefresh()
 }
 
 
+std::chrono::milliseconds SCH_IO_DATABASE::busyRetryWait( long long aMaxAgeSeconds, int aAttempt,
+                                                          std::minstd_rand& aRng )
+{
+    // A writer holds its lock for seconds, so waiting a whole max_age after one leaves the cache stale for longer
+    static constexpr long long FIRST_RETRY_MS = 3000;
+
+    const long long ceiling =
+            std::min( aMaxAgeSeconds * 1000, FIRST_RETRY_MS << std::clamp( aAttempt, 0, MAX_BUSY_ATTEMPT ) );
+
+    // Readers that failed on one lock must not all come back together and keep the writer out
+    std::uniform_int_distribution<long long> spread( ceiling / 2, ceiling );
+
+    return std::chrono::milliseconds( spread( aRng ) );
+}
+
+
+bool SCH_IO_DATABASE::connectionStopped() const
+{
+    return m_stopping.load() || m_loadCancelled.load();
+}
+
+
 void SCH_IO_DATABASE::backgroundRefreshWorker()
 {
     BS::this_thread::set_os_thread_name( "dblib bg" );
 
+    std::minstd_rand jitter( std::random_device{}() );
+    int              busyRetries = 0;
+
     while( m_refreshRunning.load() )
     {
         long long maxAge = 0;
+        bool      busy = false;
 
         {
             std::unique_lock lock( m_cacheMutex );
@@ -585,26 +665,13 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
             maxAge = 1;
 
         std::shared_ptr<DATABASE_CONNECTION> conn = currentConnection();
+        bool                                 dropped = m_cachePopulated.load() && ( !conn || !conn->IsConnected() );
 
-        // A failed read leaves the connection closed, and only a new connection can end that
-        if( m_refreshRunning.load() && m_cachePopulated.load() && ( !conn || !conn->IsConnected() ) )
+        // A failed read leaves the backend disconnected, and only a new connection can end that
+        if( dropped && m_refreshRunning.load() )
         {
-            try
-            {
-                const wxString error = connect();
-
-                if( !error.IsEmpty() )
-                    wxLogTrace( traceDatabase, wxT( "Background refresh: reconnect failed: %s" ), error );
-            }
-            catch( const IO_ERROR& e )
-            {
-                wxLogTrace( traceDatabase, wxT( "Background refresh: reconnect failed: %s" ), e.What() );
-            }
-            catch( const std::exception& e )
-            {
-                wxLogTrace( traceDatabase, wxT( "Background refresh: reconnect failed: %s" ), e.what() );
-            }
-
+            // A catalog a writer holds is retried on the busy backoff, like a locked read
+            busy = connect().failure == DB_FAILURE::FILE_IN_USE;
             conn = currentConnection();
         }
 
@@ -615,31 +682,43 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
 
             try
             {
-                std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> tableResults;
-                bool querySuccess = true;
+                TABLE_RESULT_LIST tableResults;
+                bool              querySuccess = true;
 
-                for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
                 {
-                    // A close must not wait for the tables left in the pass
-                    if( !m_refreshRunning.load() )
+                    DATABASE_CONNECTION::LOAD_CYCLE cycle( *conn,
+                                                           [this]()
+                                                           {
+                                                               return !m_refreshRunning.load() || m_stopping.load();
+                                                           } );
+
+                    for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
                     {
-                        querySuccess = false;
-                        break;
+                        // A close must not wait for the tables left in the pass
+                        if( !m_refreshRunning.load() )
+                        {
+                            querySuccess = false;
+                            break;
+                        }
+
+                        conn->ClearCache( table.table );
+
+                        std::vector<DATABASE_CONNECTION::ROW> results;
+                        DATABASE_CONNECTION::QUERY_STATUS     status;
+
+                        if( !conn->SelectAll( table.table, table.key_col, results, &status ) )
+                        {
+                            wxLogTrace( traceDatabase, wxT( "Background refresh: SelectAll failed for table %s" ),
+                                        table.table );
+                            querySuccess = false;
+
+                            // A lost connection goes to the reconnect at the top of the next pass instead
+                            busy = status.connected && status.failure == DB_FAILURE::FILE_IN_USE;
+                            break;
+                        }
+
+                        tableResults.emplace_back( &table, std::move( results ) );
                     }
-
-                    conn->ClearCache( table.table );
-
-                    std::vector<DATABASE_CONNECTION::ROW> results;
-
-                    if( !conn->SelectAll( table.table, table.key_col, results ) )
-                    {
-                        wxLogTrace( traceDatabase, wxT( "Background refresh: SelectAll failed for table %s" ),
-                                    table.table );
-                        querySuccess = false;
-                        break;
-                    }
-
-                    tableResults.emplace_back( &table, std::move( results ) );
                 }
 
                 // A stop during the last table must not wait for a publish
@@ -663,7 +742,7 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
 
                     if( dataChanged )
                     {
-                        std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
+                        std::map<wxString, std::unique_ptr<LIB_SYMBOL>>         newSymbolCache;
                         std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
 
                         materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
@@ -701,9 +780,21 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
         // A connection the foreground replaced must not stay open through the wait
         conn.reset();
 
+        std::chrono::milliseconds wait = std::chrono::seconds( maxAge );
+
+        if( busy )
+        {
+            wait = busyRetryWait( maxAge, busyRetries, jitter );
+            busyRetries = std::min( busyRetries + 1, MAX_BUSY_ATTEMPT );
+        }
+        else
+        {
+            busyRetries = 0;
+        }
+
         {
             std::unique_lock lock( m_refreshMutex );
-            m_refreshCV.wait_for( lock, std::chrono::seconds( maxAge ),
+            m_refreshCV.wait_for( lock, wait,
                                   [this]()
                                   {
                                       return !m_refreshRunning.load();
@@ -715,30 +806,21 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
 
 void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
 {
-    auto tryLoad =
-            [&]()
-            {
-                if( !m_settings->LoadFromFile() )
-                {
-                    THROW_IO_ERRORF( _( "Could not load database library: settings file %s missing or invalid" ),
-                                     aSettingsPath );
-                }
-
-                m_settings->ResolvePassword();
-            };
-
     if( !m_settings && !aSettingsPath.IsEmpty() )
     {
         std::string path( aSettingsPath.ToUTF8() );
         m_settings = std::make_unique<DATABASE_LIB_SETTINGS>( path );
         m_settings->SetReadOnly( true );
 
-        tryLoad();
+        // A read that fails leaves these defaults to size the next attempt's wait
+        m_settings->Load();
+
+        loadSettingsBounded( m_settings->m_Source.timeout );
     }
-    else if( !currentConnection() && m_settings )
+    else if( !currentConnection() && m_settings && !m_cachePopulated )
     {
-        // If we have valid settings but no connection yet; reload settings in case user is editing
-        tryLoad();
+        // Reload in case the user is editing; the read is bounded because the share may be down
+        loadSettingsBounded( m_settings->m_Source.timeout );
     }
     else if( currentConnection() && m_settings && !aSettingsPath.IsEmpty() )
     {
@@ -749,6 +831,147 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
     {
         wxLogTrace( traceDatabase, wxT( "ensureSettings: no settings but no valid path!" ) );
     }
+}
+
+
+namespace
+{
+// Owned jointly by the callers and the reader thread, which is all the thread touches
+struct SETTINGS_READ
+{
+    std::mutex              m;
+    std::condition_variable cv;
+    bool                    done = false;
+    bool                    ok = false;
+    std::string             bytes;
+};
+
+
+// Reached only from callers, so its static lifetime cannot race a detached reader
+struct SETTINGS_READ_REGISTRY
+{
+    std::mutex                                          m;
+    std::map<std::string, std::weak_ptr<SETTINGS_READ>> reads;
+};
+
+
+SETTINGS_READ_REGISTRY& settingsReadRegistry()
+{
+    static SETTINGS_READ_REGISTRY* instance = new SETTINGS_READ_REGISTRY;
+
+    return *instance;
+}
+
+
+// Runs detached, so it uses no wx state and never throws
+void readSettingsFile( const std::shared_ptr<SETTINGS_READ>& aRead, const std::filesystem::path& aPath )
+{
+    std::string bytes;
+    bool        ok = false;
+
+    try
+    {
+        std::ifstream     in( aPath, std::ios::binary );
+        std::vector<char> chunk( 1 << 16 );
+
+        while( in )
+        {
+            in.read( chunk.data(), chunk.size() );
+            bytes.append( chunk.data(), static_cast<size_t>( in.gcount() ) );
+        }
+
+        ok = in.eof() && !in.bad();
+    }
+    catch( ... )
+    {
+        bytes.clear();
+        ok = false;
+    }
+
+    std::lock_guard lock( aRead->m );
+    aRead->bytes = std::move( bytes );
+    aRead->ok = ok;
+    aRead->done = true;
+    aRead->cv.notify_all();
+}
+} // namespace
+
+
+void SCH_IO_DATABASE::loadSettingsBounded( int aTimeoutSeconds )
+{
+    const wxString path = m_settings->GetLoadPath();
+
+    if( m_loadCancelled.load() )
+        THROW_IO_ERRORF( _( "Database library settings file %s could not be reached" ), path );
+
+    std::shared_ptr<SETTINGS_READ> read;
+
+    {
+        SETTINGS_READ_REGISTRY& registry = settingsReadRegistry();
+        std::lock_guard         registryLock( registry.m );
+
+        for( auto it = registry.reads.begin(); it != registry.reads.end(); )
+        {
+            it = it->second.expired() ? registry.reads.erase( it ) : std::next( it );
+        }
+
+        // Normalised without touching the file system, since the share may be down
+        wxFileName file( path );
+        file.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
+
+        const std::filesystem::path nativePath = ToFsPath( file.GetFullPath() );
+
+        file.Normalize( wxPATH_NORM_CASE );
+
+        const std::string key( file.GetFullPath().ToUTF8() );
+
+        if( std::shared_ptr<SETTINGS_READ> pending = registry.reads[key].lock() )
+        {
+            std::lock_guard readLock( pending->m );
+
+            if( !pending->done )
+                read = pending;
+        }
+
+        if( !read )
+        {
+            read = std::make_shared<SETTINGS_READ>();
+            registry.reads[key] = read;
+
+            try
+            {
+                std::thread( readSettingsFile, read, nativePath ).detach();
+            }
+            catch( ... )
+            {
+                registry.reads.erase( key );
+                THROW_IO_ERRORF( _( "Database library settings file %s could not be reached" ), path );
+            }
+        }
+    }
+
+    const auto deadline =
+            std::chrono::steady_clock::now() + std::chrono::seconds( DatabaseFileWaitSeconds( aTimeoutSeconds ) );
+
+    std::unique_lock lock( read->m );
+
+    while( !read->done )
+    {
+        if( m_loadCancelled.load() || std::chrono::steady_clock::now() >= deadline )
+            THROW_IO_ERRORF( _( "Database library settings file %s could not be reached" ), path );
+
+        read->cv.wait_for( lock, std::chrono::milliseconds( 50 ) );
+    }
+
+    const bool        ok = read->ok;
+    const std::string bytes = read->bytes;
+
+    lock.unlock();
+
+    if( !ok || !m_settings->LoadFromBuffer( bytes ) )
+        THROW_IO_ERRORF( _( "Could not load database library: settings file %s missing or invalid" ), path );
+
+    m_settings->ResolvePassword();
 }
 
 
@@ -763,12 +986,16 @@ std::shared_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::ensureConnection()
 {
     wxCHECK_MSG( m_settings, nullptr, "Call ensureSettings before ensureConnection!" );
 
-    const wxString error = connect();
+    CONNECT_STATUS status = connect();
 
     std::shared_ptr<DATABASE_CONNECTION> conn = currentConnection();
 
     if( !conn || !conn->IsConnected() )
     {
+        // No backend exists for the source, so there is no database to name
+        if( status.failure == DB_FAILURE::INVALID_TYPE || status.failure == DB_FAILURE::NOT_SUPPORTED_ON_PLATFORM )
+            THROW_IO_ERRORF( _( "Could not load database library: %s" ), status.error );
+
         const DATABASE_SOURCE source = m_settings->ExpandedSource();
         const std::string     name = source.Describe();
         const bool            configured = !source.dsn.empty() || !source.connection_string.empty();
@@ -779,37 +1006,100 @@ std::shared_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::ensureConnection()
                                              : _( "(not configured)" );
 
         THROW_IO_ERRORF( _( "Could not load database library: could not connect to database %s (%s)" ), shown,
-                         error );
+                         status.error );
     }
 
     return conn;
 }
 
 
-wxString SCH_IO_DATABASE::connect()
+SCH_IO_DATABASE::CONNECT_STATUS SCH_IO_DATABASE::connect()
 {
-    wxCHECK_MSG( m_settings, wxEmptyString, "Call ensureSettings before connect()!" );
+    wxCHECK_MSG( m_settings, CONNECT_STATUS(), "Call ensureSettings before connect()!" );
 
-    // The refresh thread reconnects too, and two connections must not be built at once
-    std::lock_guard connectGuard( m_connectMutex );
+    // Every load and symbol lookup comes through here, so a live connection returns before any other work
+    if( std::shared_ptr<DATABASE_CONNECTION> live = currentConnection(); live && live->IsConnected() )
+        return CONNECT_STATUS();
 
-    std::shared_ptr<DATABASE_CONNECTION> existing = currentConnection();
+    auto now = std::chrono::steady_clock::now;
 
-    if( existing && existing->IsConnected() )
-        return wxEmptyString;
+    const auto                start = now();
+    const auto                deadline = start + FIRST_CONNECT_BUDGET;
+    std::minstd_rand          jitter( std::random_device{}() );
+    bool                      firstOpen = false;
+    std::chrono::milliseconds lastAttempt( 0 );
+    CONNECT_STATUS            status;
 
+    for( int attempt = 0;; ++attempt )
+    {
+        {
+            // The refresh thread reconnects too, and two connections must not be built at once
+            std::lock_guard connectGuard( m_connectMutex );
+
+            std::shared_ptr<DATABASE_CONNECTION> existing = currentConnection();
+
+            if( existing && existing->IsConnected() )
+                return CONNECT_STATUS();
+
+            if( attempt == 0 )
+                firstOpen = !existing;
+
+            // The wait or the mutex may have run past the budget the last check allowed for
+            if( attempt > 0 && ( connectionStopped() || now() + lastAttempt > deadline ) )
+                return status;
+
+            const auto attemptStart = now();
+
+            status = connectOnce();
+            lastAttempt = std::chrono::duration_cast<std::chrono::milliseconds>( now() - attemptStart );
+        }
+
+        // A reconnect has the refresh backoff, so only a library that never opened waits here
+        if( !firstOpen || status.failure != DB_FAILURE::FILE_IN_USE || connectionStopped() )
+            return status;
+
+        // Another attempt must also end inside the budget, as the file was in use for as long as the last one took
+        const auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>( deadline - now() ) - lastAttempt;
+
+        if( remaining <= std::chrono::milliseconds( 0 ) )
+            return status;
+
+        const std::chrono::milliseconds wait = std::min( FileInUseBackoff( attempt, jitter ), remaining );
+
+        {
+            std::unique_lock lock( m_refreshMutex );
+
+            m_refreshCV.wait_for( lock, wait,
+                                  [this]()
+                                  {
+                                      return connectionStopped();
+                                  } );
+        }
+
+        if( connectionStopped() )
+            return status;
+    }
+}
+
+
+SCH_IO_DATABASE::CONNECT_STATUS SCH_IO_DATABASE::connectOnce()
+{
     // The old connection stays in place until the new one is ready, as other threads may still be reading from it
-    std::shared_ptr<DATABASE_CONNECTION> newConn = CreateConnection( *m_settings );
+    CONNECTION_RESULT created = connectionFor(
+            DATABASE_BACKEND::Create( m_settings->m_Source, cwdDirFor( *m_settings, wxEmptyString ) ), true );
+
+    std::shared_ptr<DATABASE_CONNECTION> newConn = std::move( created.connection );
+
+    if( !newConn )
+        return { created.failure, wxString::FromUTF8( created.error ) };
 
     if( !newConn->IsConnected() )
-        return wxString::FromUTF8( newConn->GetLastError() );
+        return { newConn->GetLastFailure(), newConn->GetLastError() };
 
     for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
     {
         // Trusted even if unreported by the driver, to support generated columns (#16952)
-        std::set<std::string> requiredColumns{ tableIter.key_col,
-                                               tableIter.footprints_col,
-                                               tableIter.symbols_col };
+        std::set<std::string> requiredColumns{ tableIter.key_col, tableIter.footprints_col, tableIter.symbols_col };
 
         for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
             requiredColumns.insert( field.column );
@@ -818,14 +1108,24 @@ wxString SCH_IO_DATABASE::connect()
             requiredColumns.insert( tableIter.pins_col );
 
         // Only used if confirmed present, so a misconfigured mapping can't break the table (#23532)
-        std::set<std::string> optionalColumns{ tableIter.properties.description,
-                                               tableIter.properties.footprint_filters,
-                                               tableIter.properties.keywords,
-                                               tableIter.properties.exclude_from_sim,
-                                               tableIter.properties.exclude_from_bom,
-                                               tableIter.properties.exclude_from_board };
+        std::set<std::string> optionalColumns{
+            tableIter.properties.description,      tableIter.properties.footprint_filters,
+            tableIter.properties.keywords,         tableIter.properties.exclude_from_sim,
+            tableIter.properties.exclude_from_bom, tableIter.properties.exclude_from_board
+        };
 
-        newConn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns );
+        if( newConn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns ) )
+            continue;
+
+        std::optional<DATABASE_CONNECTION::TABLE_FAILURE> failed = newConn->GetTableFailure( tableIter.table );
+
+        // A connection without a table that was only locked or out of reach would keep it missing until a reload
+        if( failed && ( failed->failure == DB_FAILURE::FILE_IN_USE || failed->failure == DB_FAILURE::UNREACHABLE ) )
+        {
+            return { failed->failure,
+                     wxString::Format( _( "Error reading database table %s: %s" ),
+                                       wxString::FromUTF8( tableIter.table ), wxString::FromUTF8( failed->error ) ) };
+        }
     }
 
     newConn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
@@ -833,7 +1133,7 @@ wxString SCH_IO_DATABASE::connect()
     std::unique_lock connLock( m_cacheMutex );
     m_conn = std::move( newConn );
 
-    return wxEmptyString;
+    return CONNECT_STATUS();
 }
 
 

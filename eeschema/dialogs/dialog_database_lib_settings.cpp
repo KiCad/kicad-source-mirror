@@ -104,11 +104,11 @@ static wxString displayName( const DATABASE_LIB_TABLE& aTable )
 }
 
 
-static wxString describeFailure( const DATABASE_CONNECTION& aConn, const DATABASE_SOURCE& aSource )
+static wxString describeFailure( DB_FAILURE aFailure, const DATABASE_SOURCE& aSource )
 {
-    using FAILURE = DATABASE_CONNECTION::FAILURE;
+    using FAILURE = DB_FAILURE;
 
-    switch( DATABASE_CONNECTION::ClassifyFailure( aConn.GetLastState(), aConn.GetLastError() ) )
+    switch( aFailure )
     {
     case FAILURE::LOGIN:
         return _( "The server rejected the user name or password." );
@@ -129,6 +129,12 @@ static wxString describeFailure( const DATABASE_CONNECTION& aConn, const DATABAS
         return _( "The ODBC driver for this data source is not installed." );
 
     case FAILURE::UNKNOWN:
+    case FAILURE::FILE_NOT_FOUND:
+    case FAILURE::FILE_IN_USE:
+    case FAILURE::PROVIDER_MISSING:
+    case FAILURE::NOT_SUPPORTED_ON_PLATFORM:
+    case FAILURE::INVALID_TYPE:
+    case FAILURE::NETWORK_WAL:
         break;
     }
 
@@ -263,10 +269,6 @@ DIALOG_DATABASE_LIB_SETTINGS::DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, c
         m_settings = LoadDatabaseLibSettingsReadOnly( m_path, &loaded );
         m_canSave = loaded && !m_settings->IsFutureFormat();
     }
-
-    // Matches the documented template so hand editors recognise the source block
-    if( isNew )
-        m_settings->Set( "source.type", std::string( "odbc" ) );
 
     EDA_BASE_FRAME* frame = nullptr;
 
@@ -452,7 +454,7 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataToWindow()
     m_rbDSN->SetValue( !useConnectionString );
     m_rbConnectionString->SetValue( useConnectionString );
 
-    for( const std::string& driver : DATABASE_CONNECTION::ListDrivers() )
+    for( const std::string& driver : ODBC_BACKEND::ListDrivers() )
         m_choiceDriver->Append( From_UTF8( driver ) );
 
     m_cbDSN->ChangeValue( From_UTF8( source.dsn ) );
@@ -773,10 +775,10 @@ void DIALOG_DATABASE_LIB_SETTINGS::loadDataSources()
 
     wxString current = m_cbDSN->GetValue();
 
-    m_dataSources = DATABASE_CONNECTION::ListDataSourceDetails();
+    m_dataSources = ODBC_BACKEND::ListDataSourceDetails();
     m_cbDSN->Clear();
 
-    for( const DATABASE_CONNECTION::DATA_SOURCE& source : m_dataSources )
+    for( const ODBC_BACKEND::DATA_SOURCE& source : m_dataSources )
         m_cbDSN->Append( From_UTF8( source.name ) );
 
     m_cbDSN->ChangeValue( current );
@@ -793,7 +795,7 @@ void DIALOG_DATABASE_LIB_SETTINGS::updateDsnDriver()
     {
         text = _( "Not configured on this computer" );
 
-        for( const DATABASE_CONNECTION::DATA_SOURCE& source : m_dataSources )
+        for( const ODBC_BACKEND::DATA_SOURCE& source : m_dataSources )
         {
             if( source.name == name )
                 text = wxString::Format( _( "Driver: %s" ), From_UTF8( source.driver ) );
@@ -945,12 +947,19 @@ void DIALOG_DATABASE_LIB_SETTINGS::connect()
 
     auto job = std::make_shared<CONNECT_JOB>();
     job->owner = this;
-    const DATABASE_SOURCE expanded = m_settings->ExpandedSource( cwdDir() );
+    SCH_IO_DATABASE::CONNECTION_RESULT created = SCH_IO_DATABASE::CreateConnection( *m_settings, false, cwdDir() );
+    job->conn = std::move( created.connection );
 
-    job->conn = SCH_IO_DATABASE::CreateConnection( expanded, false );
+    if( !job->conn )
+    {
+        setConnectionStatus( describeFailure( created.failure, source ), true, From_UTF8( created.error ) );
+        refreshTables();
+        return;
+    }
+
     m_connectJob = job;
 
-    const std::string sourceName = expanded.Describe();
+    const std::string sourceName = m_settings->ExpandedSource( cwdDir() ).Describe();
 
     setConnectionStatus( sourceName.empty() ? _( "Connecting..." )
                                             : wxString::Format( _( "Connecting to %s..." ), From_UTF8( sourceName ) ),
@@ -1008,7 +1017,7 @@ void DIALOG_DATABASE_LIB_SETTINGS::onConnectFinished( const std::shared_ptr<CONN
     }
     else
     {
-        setConnectionStatus( describeFailure( *aJob->conn, m_settings->m_Source ), true,
+        setConnectionStatus( describeFailure( aJob->conn->GetLastFailure(), m_settings->m_Source ), true,
                              From_UTF8( aJob->conn->GetLastError() ) );
     }
 

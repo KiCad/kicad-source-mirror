@@ -559,6 +559,9 @@ private:
      */
     bool unloadProjectFile( PROJECT* aProject, bool aSave );
 
+    /// Cancels and joins every library preload and async load, so none can touch Prj() during a project change
+    void stopLibraryLoads();
+
     /// Helper to create built-in colors and register them.
     void registerBuiltinColorSettings();
 

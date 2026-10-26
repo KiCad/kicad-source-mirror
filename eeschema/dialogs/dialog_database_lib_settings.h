@@ -29,6 +29,7 @@
 
 #include <database/database_connection.h>
 #include <database/database_lib_settings.h>
+#include <database/odbc_backend.h>
 #include <sch_io/database/sch_io_database.h>
 #include <widgets/field_warning_icon.h>
 #include <widgets/wx_debounced_action.h>
@@ -274,7 +275,7 @@ private:
     /// Columns the user chose this session, keyed like EESCHEMA_SETTINGS::m_DatabaseColumnChoices
     std::map<std::string, std::string> m_newChoices;
 
-    std::vector<DATABASE_CONNECTION::DATA_SOURCE>   m_dataSources;
+    std::vector<ODBC_BACKEND::DATA_SOURCE>          m_dataSources;
     std::vector<std::string>                        m_tables;
     std::map<std::string, std::vector<std::string>> m_columns;
 

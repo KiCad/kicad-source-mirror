@@ -975,7 +975,10 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
                 {
                     float progress = *loadStatus;
-                    reporter->SetCurrentProgress( progress );
+
+                    // Past the limit only the progress stops, so a cancel can still cut a stalled load short
+                    if( elapsed <= timeLimit )
+                        reporter->SetCurrentProgress( progress );
 
                     if( progress >= 1 )
                         break;
@@ -986,10 +989,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                     break;
                 }
 
-                elapsed += interval;
-
-                if( elapsed > timeLimit )
-                    break;
+                if( elapsed <= timeLimit )
+                    elapsed += interval;
             }
 
             // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
@@ -997,7 +998,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             // waits for each future to complete naturally, which can hang indefinitely
             // if a worker is stuck on a stalled network or filesystem operation.
             if( aborted )
-                adapter->AbortAsyncLoad();
+                adapter->AbortAsyncLoad( true );
             else
                 adapter->BlockUntilLoaded();
 
@@ -1026,6 +1027,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
             }
 
+            // A cancel that came after the loop left the flag set, and it would end the next preload at once
+            m_libraryPreloadAbort.store( false );
             m_libraryPreloadInProgress.store( false );
         };
 
@@ -1041,7 +1044,12 @@ void IFACE::CancelPreload( bool aBlock )
         m_libraryPreloadAbort.store( true );
 
         if( aBlock )
+        {
             m_libraryPreloadReturn.wait();
+
+            // The preload has ended, so a flag it never read can only stop the next one
+            m_libraryPreloadAbort.store( false );
+        }
     }
 }
 

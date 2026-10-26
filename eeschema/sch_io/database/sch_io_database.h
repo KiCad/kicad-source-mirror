@@ -26,9 +26,12 @@
 #include <sch_io/sch_io_mgr.h>
 #include <wildcards_and_files_ext.h>
 #include <atomic>
+#include <chrono>
 #include <condition_variable>
+#include <functional>
 #include <mutex>
 #include <optional>
+#include <random>
 #include <shared_mutex>
 #include <thread>
 #include <unordered_set>
@@ -99,26 +102,40 @@ public:
 
     DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent, const wxString& aLibraryPath ) override;
 
+    /// Ends the waits of a load in progress and of any that starts before ResumeLoad(), so closing a project does not
+    /// wait out a locked database
+    void CancelLoad() override;
+
+    void ResumeLoad() noexcept override;
+
     DATABASE_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
     /// @return the symbol name a row is listed under, or empty if the row has no key
     static wxString SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bool aGloballyUniqueKeys,
                                       const DATABASE_CONNECTION::ROW& aRow, std::string* aRawKey = nullptr );
 
+    /// A connection built from settings, or the reason none could be built
+    struct CONNECTION_RESULT
+    {
+        /// Null when no backend exists for the source type
+        std::unique_ptr<DATABASE_CONNECTION> connection;
+
+        /// Why connection is null
+        DB_FAILURE failure = DB_FAILURE::UNKNOWN;
+
+        /// The message naming the problem when connection is null
+        std::string error;
+    };
+
     /**
      * Opens a connection described by aSettings, expanding ${CWD} in a connection string to the
-     * directory holding the settings file.  The result may be disconnected; check IsConnected().
+     * directory holding the settings file.  The connection may be disconnected; check IsConnected().
      *
      * @param aConnectNow false defers connecting to the caller's Connect(), e.g. on a worker thread
      * @param aBaseDir replaces the settings file's directory for ${CWD}; used while the file has no path yet
      */
-    static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_LIB_SETTINGS& aSettings,
-                                                                  bool aConnectNow = true,
-                                                                  const wxString& aBaseDir = wxEmptyString );
-
-    /// Opens a connection to an already expanded source, see DATABASE_LIB_SETTINGS::ExpandedSource()
-    static std::unique_ptr<DATABASE_CONNECTION> CreateConnection( const DATABASE_SOURCE& aSource,
-                                                                  bool                   aConnectNow = true );
+    static CONNECTION_RESULT CreateConnection( const DATABASE_LIB_SETTINGS& aSettings, bool aConnectNow = true,
+                                               const wxString& aBaseDir = wxEmptyString );
 
     /// A problem found while previewing, tagged with the setting that caused it
     struct PREVIEW_ISSUE
@@ -162,15 +179,34 @@ private:
 
     void ensureSettings( const wxString& aSettingsPath );
 
-    /// @return the connection, which stays valid while held even if another thread replaces it
+    /// Loads the settings file on a thread that can be abandoned, so a share that went away cannot hold the caller
+    /// past the wait or past a cancel; throws when the file could not be reached
+    void loadSettingsBounded( int aTimeoutSeconds );
+
+    /// Why the last connect() attempt failed, for the caller to report from its own copy
+    struct CONNECT_STATUS
+    {
+        DB_FAILURE failure = DB_FAILURE::UNKNOWN;
+        wxString   error;
+    };
+
+    /// Copies the connection under the cache lock so the caller keeps it alive across a reconnect
     std::shared_ptr<DATABASE_CONNECTION> currentConnection();
 
-    /// @return a live connection; throws IO_ERROR naming the source when there is none
+    /// Returns a live connection or throws
     std::shared_ptr<DATABASE_CONNECTION> ensureConnection();
 
-    /// Replaces a missing or closed connection, keeping the old one until the new one is ready
-    /// @return the error from a failed connect, or empty
-    wxString connect();
+    /// Connects, and waits out a file another instance is opening at the same moment when the library never opened
+    CONNECT_STATUS connect();
+
+    /// One attempt at connect(), with m_connectMutex held
+    CONNECT_STATUS connectOnce();
+
+    /// @return true once the plugin is closing, so no wait should outlast the call that notices
+    bool connectionStopped() const;
+
+    /// Wraps a backend in a connection, or reports why there is none
+    static CONNECTION_RESULT connectionFor( DB_BACKEND_RESULT&& aBackend, bool aConnectNow );
 
     std::unique_ptr<LIB_SYMBOL> loadSymbolFromRow( const wxString& aSymbolName,
                                                    const DATABASE_LIB_TABLE& aTable,
@@ -229,15 +265,28 @@ private:
     void stopBackgroundRefresh();
     void backgroundRefreshWorker();
 
-    std::thread             m_refreshThread;
-    std::atomic<bool>       m_refreshRunning{ false };
-    std::atomic<bool>       m_stopping{ false };
+    /// Busy retries past this attempt stop doubling the window
+    static constexpr int MAX_BUSY_ATTEMPT = 5;
+
+    /**
+     * @return the wait before retrying a refresh that found the database locked, drawn from the upper half of a
+     *         window that starts at 3 s and doubles with each attempt up to max_age
+     */
+    static std::chrono::milliseconds busyRetryWait( long long aMaxAgeSeconds, int aAttempt, std::minstd_rand& aRng );
+
+    /// The race this covers lasts milliseconds, so a file in use for longer has a real holder and is reported
+    static constexpr std::chrono::seconds FIRST_CONNECT_BUDGET{ 3 };
+
+    std::thread       m_refreshThread;
+    std::atomic<bool> m_refreshRunning{ false };
+    std::atomic<bool> m_stopping{ false };
+    std::atomic<bool> m_loadCancelled{ false }; ///< Set by CancelLoad(), cleared by ResumeLoad()
+
     std::condition_variable m_refreshCV;
     std::mutex              m_refreshMutex;
-    std::mutex              m_connectMutex;
     std::shared_mutex       m_cacheMutex;
+    std::mutex              m_connectMutex;
     std::mutex              m_symbolLoadMutex;
-
 };
 
 #endif //SCH_IO_DATABASE_H_

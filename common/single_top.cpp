@@ -236,6 +236,8 @@ struct APP_SINGLE_TOP : public wxApp
         // pointer out from under them. See https://gitlab.com/kicad/code/kicad/-/issues/23373
         int ret = wxApp::OnExit();
         program.OnPgmExit();
+        program.ExitIfTeardownUnsafe();
+
         return ret;
     }
 
@@ -251,6 +253,8 @@ struct APP_SINGLE_TOP : public wxApp
         {
             Pgm().HandleException( std::current_exception() );
         }
+
+        program.SetRunResult( ret );
 
         return ret;
     }

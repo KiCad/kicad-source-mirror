@@ -162,6 +162,15 @@ public:
                                 const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
+     * Ask a library load running on this plugin to end early.  Called from another thread while an asynchronous load
+     * is in flight, so it must return at once.  Plugins with no wait worth cutting short ignore it.
+     */
+    virtual void CancelLoad() {}
+
+    /// Called after the loads that were cancelled have ended, to clear what CancelLoad() left behind
+    virtual void ResumeLoad() noexcept {}
+
+    /**
      * Return true if the library at @a aLibraryPath is writable.
      *
      * The system libraries are typically read only because of where they are installed..

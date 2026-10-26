@@ -274,63 +274,30 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
         if( !path.IsFileWritable() )
             m_writeFile = false;
 
-        try
-        {
-            wxFFileInputStream fp( path.GetFullPath(), wxT( "rt" ) );
-            wxStdInputStream fstream( fp );
-
-            if( fp.IsOk() )
-            {
-                *static_cast<nlohmann::json*>( m_internals.get() ) = nlohmann::json::parse( fstream, nullptr,
-                                                                                            ALLOW_EXCEPTIONS,
-                                                                                            IGNORE_COMMENTS );
-
-                // Save whatever we loaded, before doing any migration etc
-                m_internals->m_original = *static_cast<nlohmann::json*>( m_internals.get() );
-
-                // If parse succeeds, check if schema migration is required
-                int filever = -1;
-
-                try
+        bool parseError = false;
+        bool parsed = parseAndMigrate(
+                [&]( nlohmann::json& aDoc )
                 {
-                    filever = m_internals->Get<int>( "meta.version" );
-                }
-                catch( ... )
-                {
-                    wxLogTrace( traceSettings, wxT( "%s: file version could not be read!" ), GetFullFilename() );
-                    success = false;
-                }
+                    wxFFileInputStream fp( path.GetFullPath(), wxT( "rt" ) );
+                    wxStdInputStream   fstream( fp );
 
-                if( filever >= 0 && filever < m_schemaVersion )
-                {
-                    wxLogTrace( traceSettings, wxT( "%s: attempting migration from version %d to %d" ),
-                                GetFullFilename(), filever, m_schemaVersion );
-
-                    if( Migrate() )
+                    if( !fp.IsOk() )
                     {
-                        migrated = true;
+                        wxLogTrace( traceSettings, wxT( "%s exists but can't be opened for read" ),
+                                    GetFullFilename() );
+                        return false;
                     }
-                    else
-                    {
-                        wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
-                    }
-                }
-                else if( filever > m_schemaVersion )
-                {
-                    wxLogTrace( traceSettings, wxT( "%s: warning: file version %d is newer than latest (%d)" ),
-                                GetFullFilename(), filever, m_schemaVersion );
-                    m_isFutureFormat = true;
-                }
-            }
-            else
-            {
-                wxLogTrace( traceSettings, wxT( "%s exists but can't be opened for read" ), GetFullFilename() );
-            }
-        }
-        catch( nlohmann::json::parse_error& error )
-        {
+
+                    aDoc = nlohmann::json::parse( fstream, nullptr, ALLOW_EXCEPTIONS, IGNORE_COMMENTS );
+                    return true;
+                },
+                migrated, parseError );
+
+        if( !parsed )
             success = false;
-            wxLogTrace( traceSettings, wxT( "Json parse error reading %s: %s" ), path.GetFullPath(), error.what() );
+
+        if( parseError )
+        {
             wxLogTrace( traceSettings, wxT( "Attempting migration in case file is in legacy format" ) );
             migrateFromLegacy( path );
         }
@@ -373,6 +340,91 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
             }
         }
     }
+
+    return success;
+}
+
+
+bool JSON_SETTINGS::parseAndMigrate( const std::function<bool( nlohmann::json& )>& aParse, bool& aMigrated,
+                                     bool& aParseError )
+{
+    bool success = true;
+
+    try
+    {
+        nlohmann::json& doc = *static_cast<nlohmann::json*>( m_internals.get() );
+
+        if( !aParse( doc ) )
+            return true;
+
+        // Save whatever we loaded, before doing any migration etc
+        m_internals->m_original = doc;
+
+        // If parse succeeds, check if schema migration is required
+        int filever = -1;
+
+        try
+        {
+            filever = m_internals->Get<int>( "meta.version" );
+        }
+        catch( ... )
+        {
+            wxLogTrace( traceSettings, wxT( "%s: file version could not be read!" ), GetFullFilename() );
+            success = false;
+        }
+
+        if( filever >= 0 && filever < m_schemaVersion )
+        {
+            wxLogTrace( traceSettings, wxT( "%s: attempting migration from version %d to %d" ), GetFullFilename(),
+                        filever, m_schemaVersion );
+
+            if( Migrate() )
+                aMigrated = true;
+            else
+                wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
+        }
+        else if( filever > m_schemaVersion )
+        {
+            wxLogTrace( traceSettings, wxT( "%s: warning: file version %d is newer than latest (%d)" ),
+                        GetFullFilename(), filever, m_schemaVersion );
+            m_isFutureFormat = true;
+        }
+    }
+    catch( nlohmann::json::parse_error& error )
+    {
+        success = false;
+        aParseError = true;
+
+        // The message text can carry a token of the document, which may be a password
+        wxLogTrace( traceSettings, wxT( "Json parse error reading %s (id %d, byte %d)" ), GetFullFilename(),
+                    error.id, static_cast<int>( error.byte ) );
+    }
+
+    return success;
+}
+
+
+bool JSON_SETTINGS::LoadFromBuffer( const std::string& aContents )
+{
+    m_internals->clear();
+    Load();
+
+    // No LOCALE_IO here, this runs on library load threads and a wxLocale would race the GUI thread
+    bool migrated = false;
+    bool parseError = false;
+
+    bool success = parseAndMigrate(
+            [&]( nlohmann::json& aDoc )
+            {
+                aDoc = nlohmann::json::parse( aContents, nullptr, ALLOW_EXCEPTIONS, IGNORE_COMMENTS );
+                return true;
+            },
+            migrated, parseError );
+
+    Load();
+
+    m_modified = false;
+    m_fileSynced = success;
 
     return success;
 }
@@ -623,7 +675,8 @@ bool JSON_SETTINGS::LoadFromRawFile( const wxString& aPath )
     }
     catch( nlohmann::json::parse_error& error )
     {
-        wxLogTrace( traceSettings, wxT( "Json parse error reading %s: %s" ), aPath, error.what() );
+        wxLogTrace( traceSettings, wxT( "Json parse error reading %s (id %d, byte %d)" ), aPath, error.id,
+                    static_cast<int>( error.byte ) );
 
         return false;
     }

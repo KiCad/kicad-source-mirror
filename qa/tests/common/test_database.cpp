@@ -33,8 +33,15 @@
 #include <sql.h>
 
 #include <database/database_connection.h>
+#include <database/odbc_backend.h>
 
 BOOST_AUTO_TEST_SUITE( Database )
+
+
+static std::unique_ptr<DATABASE_BACKEND> odbcBackend( const std::string& aConnectionString )
+{
+    return std::make_unique<ODBC_BACKEND>( "", "", "", aConnectionString, 2 );
+}
 
 
 BOOST_AUTO_TEST_CASE( Connect )
@@ -43,7 +50,7 @@ BOOST_AUTO_TEST_CASE( Connect )
                                   QA_DATABASE_FILE_LOCATION );
 
     // Construct and connect
-    DATABASE_CONNECTION dc( cs, 2, false );
+    DATABASE_CONNECTION dc( odbcBackend( cs ), false );
     BOOST_CHECK_NO_THROW( dc.Connect() );
     BOOST_CHECK( dc.IsConnected() );
 
@@ -57,7 +64,7 @@ BOOST_AUTO_TEST_CASE( Connect )
 
     // Scoped connection should self-disconnect
     {
-        DATABASE_CONNECTION dc2( cs, 2 );
+        DATABASE_CONNECTION dc2( odbcBackend( cs ) );
     }
 
     dc.Connect();
@@ -97,7 +104,7 @@ BOOST_AUTO_TEST_CASE( GeneratedColumns )
     std::string cs = fmt::format( "Driver={{SQLite3}};Database={}/database.sqlite",
                                   QA_DATABASE_FILE_LOCATION );
 
-    DATABASE_CONNECTION dc( cs, 2 );
+    DATABASE_CONNECTION dc( odbcBackend( cs ) );
     BOOST_CHECK( dc.IsConnected() );
 
     // Cache table info including the generated column "FullDesc"
@@ -163,7 +170,7 @@ BOOST_AUTO_TEST_CASE( QuoteCharactersInIdentifiers )
     const std::string column = "Va\"lue";
 
     {
-        DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+        DATABASE_CONNECTION dc( odbcBackend( db.ConnectionString() ) );
         BOOST_REQUIRE( dc.IsConnected() );
         BOOST_REQUIRE( dc.CacheTableInfo( table, { "Part ID", column } ) );
 
@@ -173,7 +180,7 @@ BOOST_AUTO_TEST_CASE( QuoteCharactersInIdentifiers )
     }
 
     {
-        DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+        DATABASE_CONNECTION dc( odbcBackend( db.ConnectionString() ) );
         BOOST_REQUIRE( dc.IsConnected() );
         BOOST_REQUIRE( dc.CacheTableInfo( table, { "Part ID", column } ) );
 
@@ -194,7 +201,7 @@ BOOST_AUTO_TEST_CASE( NumericPrecision )
     db.Execute( "CREATE TABLE Nums (\"Part ID\" TEXT, Val REAL)" );
     db.Execute( "INSERT INTO Nums VALUES ('P1', 10012345), ('P2', 1234.5678)" );
 
-    DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+    DATABASE_CONNECTION dc( odbcBackend( db.ConnectionString() ) );
     BOOST_REQUIRE( dc.IsConnected() );
     BOOST_REQUIRE( dc.CacheTableInfo( "Nums", { "Part ID", "Val" } ) );
 
@@ -261,7 +268,7 @@ BOOST_AUTO_TEST_CASE( DecimalPrecision, *boost::unit_test::precondition( hasPost
         BOOST_CHECK( res.column_datatype( 0 ) == SQL_NUMERIC || res.column_datatype( 0 ) == SQL_DECIMAL );
     }
 
-    DATABASE_CONNECTION dc( cs, 2 );
+    DATABASE_CONNECTION dc( odbcBackend( cs ) );
     BOOST_REQUIRE( dc.IsConnected() );
     BOOST_REQUIRE_MESSAGE( dc.CacheTableInfo( table, { "part_id", "val" } ), dc.GetLastError() );
 
@@ -286,7 +293,7 @@ BOOST_AUTO_TEST_CASE( PatternCharactersInTableNames )
     db.Execute( "INSERT INTO PartABCData VALUES ('P1', 'wrong ABC')" );
     db.Execute( "INSERT INTO \"Part_%Data\" VALUES ('P1', 'right')" );
 
-    DATABASE_CONNECTION dc( db.ConnectionString(), 2 );
+    DATABASE_CONNECTION dc( odbcBackend( db.ConnectionString() ) );
     BOOST_REQUIRE( dc.IsConnected() );
     BOOST_REQUIRE( dc.CacheTableInfo( "Part_%Data", { "Part ID", "Value" } ) );
 

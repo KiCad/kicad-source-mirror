@@ -120,6 +120,14 @@ namespace KIPLATFORM
          * @return true if the priority was changed.
          */
         bool SetCurrentThreadPriority( bool aRaise );
+
+        /**
+         * End the process at once with the given exit code, skipping static destruction, atexit handlers and
+         * library unload.  For use after the application has flushed what it needs to keep.
+         *
+         * @param aExitCode is the process exit code
+         */
+        [[noreturn]] void TerminateWithCode( int aExitCode );
     }
 }
 

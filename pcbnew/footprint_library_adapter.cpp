@@ -53,7 +53,7 @@ FOOTPRINT_LIBRARY_ADAPTER::FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager 
 
 FOOTPRINT_LIBRARY_ADAPTER::~FOOTPRINT_LIBRARY_ADAPTER()
 {
-    resetProjectCache();
+    resetProjectCache( true );
     evictOwnedGlobalEntries();
 }
 

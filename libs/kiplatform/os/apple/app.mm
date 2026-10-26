@@ -21,6 +21,7 @@
 #include <kiplatform/app.h>
 
 #include <pthread.h>
+#include <unistd.h>
 
 #include <wx/string.h>
 #include <wx/sysopt.h>
@@ -104,4 +105,10 @@ bool KIPLATFORM::APP::SetCurrentThreadPriority( bool aRaise )
     param.sched_priority = aRaise ? sched_get_priority_max( policy ) : sched_get_priority_min( policy );
 
     return pthread_setschedparam( pthread_self(), policy, &param ) == 0;
+}
+
+
+void KIPLATFORM::APP::TerminateWithCode( int aExitCode )
+{
+    _exit( aExitCode );
 }

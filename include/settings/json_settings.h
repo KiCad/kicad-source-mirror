@@ -143,6 +143,15 @@ public:
     virtual bool LoadFromFile( const wxString& aDirectory = "" );
 
     /**
+     * Loads the document from file contents already in memory, so the caller can bound the read of the file.
+     * Migrates the schema as LoadFromFile() does, but never writes the migrated result back and does not load
+     * nested settings.
+     * @param aContents is the raw text of the backing file
+     * @return true if the contents parsed
+     */
+    bool LoadFromBuffer( const std::string& aContents );
+
+    /**
      * Calls Store() and then writes the contents of the JSON document to a file.
      * @param aDirectory is the directory to save to, including trailing separator.
      * @param aForce is a flag to force a save to file.
@@ -413,6 +422,17 @@ protected:
     std::map<int, std::pair<int, std::function<bool()>>> m_migrators;
 
     std::unique_ptr<JSON_SETTINGS_INTERNALS> m_internals;
+
+private:
+    /**
+     * Parses a document into the store through \a aParse, then checks the schema version and migrates.
+     * @param aParse fills the store, and returns false if there was nothing to parse
+     * @param aMigrated is set when a migration ran and succeeded
+     * @param aParseError is set when the document is not valid JSON
+     * @return false if the document did not parse or its version could not be read
+     */
+    bool parseAndMigrate( const std::function<bool( nlohmann::json& )>& aParse, bool& aMigrated,
+                          bool& aParseError );
 };
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API

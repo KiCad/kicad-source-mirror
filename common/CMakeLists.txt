@@ -293,6 +293,7 @@ set( KICOMMON_SRCS
     widgets/wx_html_report_panel_base.cpp
     widgets/wx_html_report_box.cpp
 
+    database/access_fast_exit.cpp
     database/database_autofill.cpp
     database/database_lib_settings.cpp
 
@@ -477,6 +478,11 @@ if( APPLE )
         "-framework QuartzCore"
         "-framework AppKit"
     )
+endif()
+
+if( WIN32 )
+    # access_fast_exit.cpp flushes the OLE clipboard
+    target_link_libraries( kicommon ole32 )
 endif()
 
 
@@ -1026,7 +1032,12 @@ set( COMMON_SRCS
     properties/property_mgr.cpp
     properties/std_optional_variants.cpp
 
+    database/access_engine_mutex.cpp
+    database/database_backend.cpp
     database/database_connection.cpp
+    database/db_backend_support.cpp
+    database/db_worker_thread.cpp
+    database/odbc_backend.cpp
     database/database_value.cpp
 
     http_lib/http_lib_connection.cpp

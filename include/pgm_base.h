@@ -311,6 +311,15 @@ public:
     // too late for the objects they contain.
     void Destroy();
 
+    /// Records the code the application's run loop returned, which a fast exit still reports
+    void SetRunResult( int aResult ) { m_runResult = aResult; }
+
+    /**
+     * Ends the process at once when a worker abandoned inside a native driver makes the rest of the teardown
+     * unsafe, and returns otherwise.  The application calls it last in OnExit(), after OnPgmExit().
+     */
+    void ExitIfTeardownUnsafe();
+
     /**
      * Save the program (process) settings subset which are stored .kicad_common.
      */
@@ -357,6 +366,19 @@ public:
      * handled here unlike symbol/footprint loading which are taken care of by the KIFACEs.
      */
     void PreloadDesignBlockLibraries( KIWAY* aKiway );
+
+    /**
+     * Asks the design block preload to stop, without waiting for it. A transition calls this before it aborts the
+     * library loads, so a preload still queued behind those loads is not waited on while they run.
+     * WaitForDesignBlockPreload() must follow before the project goes away.
+     */
+    void CancelDesignBlockPreload();
+
+    /**
+     * Waits for the design block preload to end, so it no longer reaches the project, and clears the cancel.
+     * Called on the main thread after the library loads were aborted and before the active project changes.
+     */
+    void WaitForDesignBlockPreload();
 
     /**
      * Register a status bar to receive library load warning messages.
@@ -442,6 +464,8 @@ protected:
     int m_argcUtf8;
 
     wxSplashScreen* m_splash;
+
+    int m_runResult = 0;
 
     std::shared_ptr<BACKGROUND_JOB> m_libraryPreloadBackgroundJob;
     std::future<void>               m_libraryPreloadReturn;

@@ -47,6 +47,7 @@
 #include <bitmaps.h>
 #include <build_version.h>
 #include <common.h>
+#include <database/access_fast_exit.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <id.h>
@@ -213,6 +214,12 @@ void PGM_BASE::Destroy()
     // causing a crash. By destroying the thread pool here, we ensure it's cleaned up
     // while the C++ runtime is still in a valid state.
     m_singleton.Shutdown();
+}
+
+
+void PGM_BASE::ExitIfTeardownUnsafe()
+{
+    ExitFastIfAccessWorkerAbandoned( m_runResult );
 }
 
 
@@ -920,6 +927,16 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
     auto preload =
         [this, aKiway]() -> void
         {
+            // A task that starts after its cancel must not reach the project that is going away
+            if( m_libraryPreloadAbort.load() )
+            {
+                m_libraryPreloadAbort.store( false );
+                Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+                m_libraryPreloadBackgroundJob.reset();
+                m_libraryPreloadInProgress.store( false );
+                return;
+            }
+
             std::shared_ptr<BACKGROUND_JOB_REPORTER> reporter =
                     m_libraryPreloadBackgroundJob->m_reporter;
 
@@ -945,7 +962,10 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
                 if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
                 {
                     float progress = *loadStatus;
-                    reporter->SetCurrentProgress( progress );
+
+                    // Past the limit only the progress stops, so a cancel can still cut a stalled load short
+                    if( elapsed <= timeLimit )
+                        reporter->SetCurrentProgress( progress );
 
                     if( progress >= 1 )
                         break;
@@ -956,10 +976,8 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
                     break;
                 }
 
-                elapsed += interval;
-
-                if( elapsed > timeLimit )
-                    break;
+                if( elapsed <= timeLimit )
+                    elapsed += interval;
             }
 
             // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
@@ -967,7 +985,7 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
             // waits for each future to complete naturally, which can hang indefinitely
             // if a worker is stuck on a stalled network or filesystem operation.
             if( aborted )
-                adapter->AbortAsyncLoad();
+                adapter->AbortAsyncLoad( true );
             else
                 adapter->BlockUntilLoaded();
 
@@ -983,6 +1001,23 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
     // The preload waits on loads it queues on the pool, so it must not hold a pool thread itself
     m_libraryPreloadInProgress.store( true );
     m_libraryPreloadReturn = std::async( std::launch::async, preload );
+}
+
+
+void PGM_BASE::CancelDesignBlockPreload()
+{
+    if( m_libraryPreloadReturn.valid() )
+        m_libraryPreloadAbort.store( true );
+}
+
+
+void PGM_BASE::WaitForDesignBlockPreload()
+{
+    if( m_libraryPreloadReturn.valid() )
+        m_libraryPreloadReturn.wait();
+
+    // The preload has ended, so a flag it never read can only stop the next one
+    m_libraryPreloadAbort.store( false );
 }
 
 

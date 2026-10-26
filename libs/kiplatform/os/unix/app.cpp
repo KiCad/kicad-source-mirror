@@ -131,3 +131,9 @@ bool KIPLATFORM::APP::SetCurrentThreadPriority( bool aRaise )
     return false;
 #endif
 }
+
+
+void KIPLATFORM::APP::TerminateWithCode( int aExitCode )
+{
+    _exit( aExitCode );
+}

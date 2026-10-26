@@ -23,52 +23,47 @@
 
 #include <any>
 #include <cstdint>
-#include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
-#include <optional>
 #include <set>
+#include <string>
 #include <vector>
 
+#include <database/database_backend.h>
 #include <database/database_cache.h>
 
-extern const char* const traceDatabase;
 
-
-namespace nanodbc
-{
-    class connection;
-}
-
-
+/**
+ * A read-only view of a database library source.  Owns the backend that talks to the database and adds
+ * what every backend shares: serialised access, the row cache, column-name matching and the conversion of
+ * values to the text KiCad stores.
+ */
 class DATABASE_CONNECTION
 {
 public:
-    static const long DEFAULT_TIMEOUT = 10;
-
     typedef std::map<std::string, std::any> ROW;
 
-    /// Why a connection attempt failed, as far as the driver's report tells
-    enum class FAILURE
+    /**
+     * @param aBackend the backend to read through; must not be null
+     * @param aConnectNow false defers connecting to the caller's Connect(), e.g. on a worker thread
+     */
+    DATABASE_CONNECTION( std::unique_ptr<DATABASE_BACKEND> aBackend, bool aConnectNow = true );
+
+    /// Brackets the reads of one library load or refresh, so the backend can keep what it opens for them
+    class LOAD_CYCLE
     {
-        UNKNOWN,
-        LOGIN,       ///< The server rejected the user name or password
-        UNREACHABLE, ///< Nothing answered at the server address, or it refused the connection
-        TIMEOUT,     ///< The server did not answer within the timeout
-        NO_DSN,      ///< The data source name is not configured
-        NO_DRIVER    ///< The driver named by the data source could not be loaded
+    public:
+        LOAD_CYCLE( DATABASE_CONNECTION& aConnection, DB_STOP_CHECK aStopped );
+
+        ~LOAD_CYCLE();
+
+        LOAD_CYCLE( const LOAD_CYCLE& ) = delete;
+        LOAD_CYCLE& operator=( const LOAD_CYCLE& ) = delete;
+
+    private:
+        DATABASE_CONNECTION& m_connection;
     };
-
-    DATABASE_CONNECTION( const std::string& aDataSourceName, const std::string& aUsername,
-                         const std::string& aPassword, int aTimeoutSeconds = DEFAULT_TIMEOUT,
-                         bool aConnectNow = true );
-
-    DATABASE_CONNECTION( const std::string& aConnectionString,
-                         int aTimeoutSeconds = DEFAULT_TIMEOUT,
-                         bool aConnectNow = true );
-
-    ~DATABASE_CONNECTION();
 
     void SetCacheParams( int aMaxSize, int aMaxAge );
 
@@ -81,14 +76,15 @@ public:
     /**
      * Caches schema information for a table so that subsequent queries know which columns exist.
      *
-     * Required columns are trusted even if the driver doesn't report them (e.g. SQLite generated
+     * Required columns are trusted even if the backend doesn't report them (e.g. SQLite generated
      * columns).  Optional columns are added only if confirmed present; otherwise they are dropped
      * with a warning rather than breaking every query against the table.  Matching is case-insensitive.
+     * Columns the backend reports as unreadable are dropped even when required.
      *
      * @param aTable the name of a table in the database
-     * @param aRequiredColumns columns that must be present in queries even if the driver does not
+     * @param aRequiredColumns columns that must be present in queries even if the backend does not
      *                         report them
-     * @param aOptionalColumns columns that are added only when the driver confirms they exist
+     * @param aOptionalColumns columns that are added only when the backend confirms they exist
      * @return true on success
      */
     bool CacheTableInfo( const std::string& aTable, const std::set<std::string>& aRequiredColumns,
@@ -106,18 +102,42 @@ public:
     bool SelectOne( const std::string& aTable, const std::pair<std::string, std::string>& aWhere,
                     ROW& aResult );
 
+    /// What a failed query left behind, copied before another thread's query can replace it
+    struct QUERY_STATUS
+    {
+        bool        connected = false;
+        DB_FAILURE  failure = DB_FAILURE::UNKNOWN;
+        std::string error;
+    };
+
+    /// Why CacheTableInfo could not describe a table
+    struct TABLE_FAILURE
+    {
+        DB_FAILURE  failure = DB_FAILURE::UNKNOWN;
+        std::string error;
+
+        /// Lowercase columns the failed lookups asked for; only a lookup asking for all of them clears the failure
+        std::set<std::string> columns;
+    };
+
+    /**
+     * @return why CacheTableInfo could not describe aTable, or nothing if it was described
+     */
+    std::optional<TABLE_FAILURE> GetTableFailure( const std::string& aTable ) const;
+
     /**
      * Retrieves all rows from a database table.
      * @param aTable the name of a table in the database
      * @param aKey holds the column name of the primary key used for caching results
      * @param aResults will be filled with all rows in the table
+     * @param aStatus if not null, receives the state of the failure when the query fails
      * @return true if the query succeeded and at least one ROW was found, false otherwise
      */
-    bool SelectAll( const std::string& aTable, const std::string& aKey,
-                    std::vector<ROW>& aResults );
+    bool SelectAll( const std::string& aTable, const std::string& aKey, std::vector<ROW>& aResults,
+                    QUERY_STATUS* aStatus = nullptr );
 
     /**
-     * Reads the first rows of a table with a forward-only cursor, bypassing the row cache.
+     * Reads the first rows of a table, bypassing the row cache.
      * @param aTable the name of a table in the database
      * @param aMaxRows stop fetching after this many rows; zero fetches only the column names
      * @param aColumns will be filled with the column names in result order
@@ -137,145 +157,52 @@ public:
      */
     bool GetColumns( const std::string& aTable, std::vector<std::string>& aColumns );
 
-    /// A data source configured in the ODBC driver manager
-    struct DATA_SOURCE
-    {
-        std::string name;
-        std::string driver;
-    };
-
-    /// @return the data sources configured in the ODBC driver manager, with the driver each one uses
-    static std::vector<DATA_SOURCE> ListDataSourceDetails();
-
-    /// @return the driver names installed in the ODBC driver manager
-    static std::vector<std::string> ListDrivers();
-
-    /// The keyword ODBC uses to choose where a connection string connects
-    struct SELECTOR
-    {
-        enum class KIND
-        {
-            NONE,
-            DSN,
-            FILE_DSN,
-            DRIVER
-        };
-
-        KIND        kind = KIND::NONE;
-        std::string value; ///< The keyword's value without braces
-    };
-
-    /// @return the first DSN, FILEDSN or DRIVER keyword of a connection string, which ODBC honours over later ones
-    static SELECTOR FirstSelector( const std::string& aConnectionString );
-
-    /// Resolves a data source name to its driver, or nullopt if it is unknown
-    using DSN_LOOKUP = std::function<std::optional<std::string>( const std::string& )>;
-
-    /**
-     * Decides whether connecting must be serialized because the effective driver is, or may be, the Microsoft Access
-     * driver.  Anything that cannot be resolved without loading a driver is serialized.
-     *
-     * @param aDsn is the data source name, used when the connection string is empty
-     * @param aLookup resolves a data source name to its driver
-     */
-    static bool NeedsDriverLock( const std::string& aDsn, const std::string& aConnectionString,
-                                 const DSN_LOOKUP& aLookup );
-
-    /// @return true for the Microsoft Access ODBC drivers, which must not initialize on two threads at once
-    static bool IsAccessDriver( const std::string& aDriverName );
-
     void ClearCache( const std::string& aTable )
     {
         if( m_cache )
             m_cache->Clear( aTable );
     }
 
-    std::string GetLastError() const { return m_lastError; }
+    std::string GetLastError() const { return m_backend->GetLastError(); }
 
-    /// @return the SQLSTATE of the last driver error, or an empty string
-    std::string GetLastState() const { return m_lastState; }
-
-    /// Classifies a driver error from its SQLSTATE, falling back to its text since drivers disagree on states
-    static FAILURE ClassifyFailure( const std::string& aState, const std::string& aMessage );
-
-    /// How SelectOne describes its key parameter to the driver
-    struct KEY_PARAMETER
-    {
-        short         type = 0;          ///< ODBC SQL data type
-        unsigned long size = 0;          ///< Column size or precision
-        short         scale = 0;         ///< Digits right of the decimal point
-        bool          asInteger = false; ///< Bind integerValue as a 64-bit integer instead of the key text
-        int64_t       integerValue = 0;  ///< The key as a number, set when asInteger is true
-    };
-
-    /**
-     * Chooses the parameter description for a lookup key from its column's cached ODBC description.
-     * Strict drivers (Microsoft Access) reject a key whose type does not match the column.
-     *
-     * @param aColumnType is the ODBC SQL data type of the key column
-     * @param aColumnSize is its character length or numeric precision, zero or negative when unknown
-     * @param aColumnScale is its number of digits right of the decimal point
-     * @param aKey is the key text
-     */
-    static KEY_PARAMETER DescribeKeyParameter( int aColumnType, long aColumnSize, short aColumnScale,
-                                               const std::string& aKey );
+    /// @return why the last connection attempt failed
+    DB_FAILURE GetLastFailure() const { return m_backend->GetLastFailure(); }
 
 private:
-    void init();
+    typedef DATABASE_CACHE<std::map<std::string, ROW>> DB_CACHE_TYPE;
 
-    bool getQuoteChar();
-
-    /**
-     * Takes the lock that keeps the Access driver from initializing or unloading on two threads at once.
-     * The lock is not taken for any other driver, and never off Windows.
-     */
-    std::unique_lock<std::mutex> accessDriverLock() const;
-
-    /// Wraps an identifier in the driver's quote character, doubling any it contains
-    std::string quoted( const std::string& aIdentifier ) const;
-
-    /// Escapes catalog search pattern characters so a name matches only itself
-    std::string escapePattern( const std::string& aName ) const;
-
-    std::string columnsFor( const std::string& aTable );
-
-    /// The caller must already hold m_queryMutex.
-    bool selectAllAndCache( const std::string& aTable, const std::string& aKey );
-
-    std::unique_ptr<nanodbc::connection> m_conn;
-
-    std::string m_dsn;
-    std::string m_user;
-    std::string m_pass;
-    std::string m_connectionString;
-
-    bool m_accessDriver = false;
-
-    std::string m_lastError;
-    std::string m_lastState;
-
-    std::map<std::string, std::string> m_tables;
-
-    /// ODBC description of a column, so a lookup key can be bound with the type the driver expects
-    struct COLUMN_INFO
+    /// A table the backend described, with the columns queries against it read
+    struct TABLE_STATE
     {
-        int           type = 0;  ///< SQL data type
-        long          size = 0;  ///< Character length or numeric precision, zero or negative when unknown
-        short         scale = 0; ///< Digits right of the decimal point
+        DB_TABLE_INFO info;
+
+        /// The column spellings queries read.  Spellings differing only in case are distinct columns.
+        std::set<std::string> columns;
     };
 
-    /// Map of table -> map of column name -> column description
-    std::map<std::string, std::map<std::string, COLUMN_INFO>> m_columnCache;
+    /// @return the names of the columns to read from a table
+    static std::vector<std::string> columnNames( const TABLE_STATE& aTable );
 
-    long m_timeout;
+    /// @return the position in aLabels of the key column, matched exactly first and then ignoring case
+    static std::optional<size_t> findLabel( const std::vector<std::string>& aLabels, const std::string& aKey );
 
-    char m_quoteChar;
+    /// Converts one row delivered by the backend to text keyed by result-column label
+    static ROW makeRow( const std::vector<std::string>& aLabels, std::vector<DB_VALUE>&& aValues );
 
-    std::string m_patternEscape;
+    /**
+     * Reads a whole table into aEntry and offers it to the row cache.  The caller must already hold
+     * m_queryMutex.  aEntry is untouched and the cache unchanged unless the read succeeded.
+     */
+    bool readAndCache( const std::string& aTable, const std::string& aKey, DB_CACHE_TYPE::CACHE_VALUE& aEntry );
+
+    std::unique_ptr<DATABASE_BACKEND> m_backend;
+
+    std::map<std::string, TABLE_STATE> m_tables;
+
+    /// Why CacheTableInfo could not describe each table, so a later query on it reports that table's own failure
+    std::map<std::string, TABLE_FAILURE> m_tableFailures;
 
     mutable std::mutex m_queryMutex;
-
-    typedef DATABASE_CACHE<std::map<std::string, ROW>> DB_CACHE_TYPE;
 
     std::unique_ptr<DB_CACHE_TYPE> m_cache;
 };

@@ -174,8 +174,26 @@ static bool holdsAssignment( const std::string& aText )
 }
 
 
+DATABASE_SOURCE DATABASE_SOURCE::Expanded( const wxString& aBaseDir ) const
+{
+    DATABASE_SOURCE expanded = *this;
+    const std::string basePath( aBaseDir.ToUTF8() );
+
+    // Database drivers that use files operate on absolute paths, so provide a mechanism
+    // for specifying on-disk databases that live next to the kicad_dbl file
+    boost::replace_all( expanded.connection_string, "${CWD}", basePath );
+    boost::replace_all( expanded.path, "${CWD}", basePath );
+
+    return expanded;
+}
+
+
 std::string DATABASE_SOURCE::Describe() const
 {
+    // A file path carries no credentials, so it is shown as is
+    if( type == DATABASE_SOURCE_TYPE::SQLITE || type == DATABASE_SOURCE_TYPE::ACCESS )
+        return path;
+
     if( connection_string.empty() )
         return holdsAssignment( dsn ) ? std::string{} : dsn;
 
@@ -368,6 +386,46 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
 
     m_params.emplace_back( new PARAM<std::string>( "description", &m_Description, "" ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "source.type",
+            [&]() -> nlohmann::json
+            {
+                switch( m_Source.type )
+                {
+                case DATABASE_SOURCE_TYPE::ODBC: return "odbc";
+                case DATABASE_SOURCE_TYPE::SQLITE: return "sqlite";
+                case DATABASE_SOURCE_TYPE::ACCESS: return "access";
+                case DATABASE_SOURCE_TYPE::INVALID: return m_Source.type_name;
+                }
+
+                return "odbc";
+            },
+            [&]( const nlohmann::json& aType )
+            {
+                m_Source.type_name.clear();
+
+                if( aType == "odbc" )
+                {
+                    m_Source.type = DATABASE_SOURCE_TYPE::ODBC;
+                }
+                else if( aType == "sqlite" )
+                {
+                    m_Source.type = DATABASE_SOURCE_TYPE::SQLITE;
+                }
+                else if( aType == "access" )
+                {
+                    m_Source.type = DATABASE_SOURCE_TYPE::ACCESS;
+                }
+                else
+                {
+                    m_Source.type = DATABASE_SOURCE_TYPE::INVALID;
+                    m_Source.type_name = aType.is_string() ? aType.get<std::string>() : aType.dump();
+                }
+            },
+            "odbc" ) );
+
+    m_params.emplace_back( new PARAM<std::string>( "source.path", &m_Source.path, "" ) );
+
     m_params.emplace_back( new PARAM<std::string>( "source.dsn", &m_Source.dsn, "" ) );
 
     m_params.emplace_back( new PARAM<std::string>( "source.username", &m_Source.username, "" ) );
@@ -377,7 +435,8 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
     m_params.emplace_back( new PARAM<std::string>( "source.connection_string",
                                                    &m_Source.connection_string, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( "source.timeout_seconds", &m_Source.timeout, 2 ) );
+    m_params.emplace_back(
+            new PARAM<int>( "source.timeout_seconds", &m_Source.timeout, DEFAULT_DATABASE_TIMEOUT_SECONDS ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "libraries",
@@ -490,6 +549,8 @@ bool DATABASE_LIB_SETTINGS::Store()
     const std::vector<std::pair<std::string, bool>> unchanged = {
         { "name", m_Name == m_loaded.name },
         { "description", m_Description == m_loaded.description },
+        { "source.type", m_Source.type == m_loaded.source.type && m_Source.type_name == m_loaded.source.type_name },
+        { "source.path", m_Source.path == m_loaded.source.path },
         { "source.dsn", m_Source.dsn == m_loaded.source.dsn },
         { "source.username", m_Source.username == m_loaded.source.username },
         { "source.password", m_Source.password == m_loaded.source.password },
@@ -545,14 +606,16 @@ void DATABASE_LIB_SETTINGS::ResolvePassword( const DATABASE_SECRET_LOOKUP& aLook
 
 DATABASE_SOURCE DATABASE_LIB_SETTINGS::ExpandedSource( const wxString& aBaseDir ) const
 {
-    DATABASE_SOURCE source = m_Source;
-    wxString        baseDir = aBaseDir.IsEmpty() ? wxFileName( GetFilename() ).GetPath() : aBaseDir;
+    return m_Source.Expanded( aBaseDir.IsEmpty() ? wxFileName( GetFilename() ).GetPath() : aBaseDir );
+}
 
-    // Database drivers that use files operate on absolute paths, so provide a mechanism
-    // for specifying on-disk databases that live next to the kicad_dbl file
-    boost::replace_all( source.connection_string, "${CWD}", std::string( baseDir.ToUTF8() ) );
 
-    return source;
+wxString DATABASE_LIB_SETTINGS::GetLoadPath() const
+{
+    wxFileName path( m_filename );
+    path.SetExt( getFileExt() );
+
+    return path.GetFullPath();
 }
 
 
@@ -570,10 +633,9 @@ std::unique_ptr<DATABASE_LIB_SETTINGS> LoadDatabaseLibSettingsReadOnly( const wx
     settings->SetReadOnly( true );
     bool loaded = settings->LoadFromFile();
 
-    // Mirror the path LoadFromFile() reads, which forces the extension; an unreadable file loads as
+    // The path LoadFromFile() reads has the extension forced; an unreadable file loads as
     // defaults with success reported
-    wxFileName path( aPath );
-    path.SetExt( FILEEXT::DatabaseLibraryFileExtension );
+    wxFileName path( settings->GetLoadPath() );
 
     if( aLoaded )
         *aLoaded = !path.FileExists() || ( loaded && path.IsFileReadable() );
@@ -593,6 +655,73 @@ wxString DefaultDatabaseLibFileName( const wxString& aLibName )
         return wxS( "database_library" );
 
     return name;
+}
+
+
+std::string DatabasePathForStorage( const wxString& aPath, const wxString& aBaseDir )
+{
+    const std::string unchanged( aPath.ToUTF8() );
+
+    wxFileName file( aPath );
+    wxFileName base;
+    base.AssignDir( aBaseDir );
+
+    if( aPath.IsEmpty() || aBaseDir.IsEmpty() || !file.IsAbsolute() || !base.IsAbsolute() )
+        return unchanged;
+
+    file.Normalize( wxPATH_NORM_DOTS );
+    base.Normalize( wxPATH_NORM_DOTS );
+
+    if( !file.GetVolume().IsSameAs( base.GetVolume(), wxFileName::IsCaseSensitive() ) )
+        return unchanged;
+
+    // MakeRelativeTo resolves long names and shortcuts, which stalls on an unreachable share
+    const wxArrayString& baseDirs = base.GetDirs();
+    const wxArrayString& fileDirs = file.GetDirs();
+
+    if( file.GetFullName().IsEmpty() || fileDirs.GetCount() < baseDirs.GetCount() )
+        return unchanged;
+
+    for( size_t i = 0; i < baseDirs.GetCount(); ++i )
+    {
+        if( !fileDirs[i].IsSameAs( baseDirs[i], wxFileName::IsCaseSensitive() ) )
+            return unchanged;
+    }
+
+    wxString relative;
+
+    for( size_t i = baseDirs.GetCount(); i < fileDirs.GetCount(); ++i )
+        relative << fileDirs[i] << wxS( "/" );
+
+    relative << file.GetFullName();
+
+    return "${CWD}/" + std::string( relative.ToUTF8() );
+}
+
+
+wxString DatabasePathFromInput( const wxString& aInput, const wxString& aBaseDir )
+{
+    if( aInput.IsEmpty() )
+        return aInput;
+
+    DATABASE_SOURCE source;
+    source.path = aInput.ToUTF8();
+
+    const wxString expanded = wxString::FromUTF8( source.Expanded( aBaseDir ).path );
+    wxFileName     file( expanded );
+
+    if( file.IsAbsolute() )
+        return file.GetFullPath();
+
+    // GetFullPath and Normalize switch to the working directory of a foreign volume, which touches that drive
+    const bool rooted = !expanded.IsEmpty() && wxFileName::GetPathSeparators().Find( expanded[0] ) != wxNOT_FOUND;
+
+    if( file.HasVolume() || rooted || aBaseDir.IsEmpty() )
+        return expanded;
+
+    file.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE, aBaseDir );
+
+    return file.GetFullPath();
 }
 
 
@@ -620,8 +749,9 @@ bool IsNoPromptSecretLookup( const DATABASE_SECRET_LOOKUP& aLookup )
 
 static bool hasKeyringLogin( const DATABASE_SOURCE& aSource )
 {
-    // Without a user name the DSN supplies its own credentials, so the keyring is not consulted
-    return aSource.connection_string.empty() && !aSource.dsn.empty() && !aSource.username.empty();
+    // File sources have no login, and without a user name the DSN supplies its own credentials
+    return aSource.type == DATABASE_SOURCE_TYPE::ODBC && aSource.connection_string.empty() && !aSource.dsn.empty()
+           && !aSource.username.empty();
 }
 
 

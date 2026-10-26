@@ -1034,22 +1034,12 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( !lockFile.Valid() )
         wxLogTrace( traceSettings, wxT( "Project %s is locked; opening read-only" ), fullPath );
 
-    // No MDI yet
-    if( aSetActive && !m_projects_list.empty() )
-    {
-        // Cancel any in-progress library preloads and wait for them to finish before
-        // modifying m_projects_list. Background preload threads access Prj() which becomes
-        // invalid when the project list is modified.
-        if( m_kiway )
-        {
-            if( KIFACE* pcbFace = m_kiway->KiFACE( KIWAY::FACE_PCB, false ) )
-                pcbFace->CancelPreload( true );
-        }
+    const bool switching = aSetActive && !m_projects_list.empty();
 
-        // Abort any async library loads before modifying m_projects_list to prevent race
-        // conditions where background threads try to access Prj() while the list is empty.
-        if( PgmOrNull() )
-            Pgm().GetLibraryManager().AbortAsyncLoads();
+    // No MDI yet
+    if( switching )
+    {
+        stopLibraryLoads();
 
         // The map is ordered by path, so its first entry may be a passive project
         PROJECT* oldProject = m_projects_list.front().get();
@@ -1133,6 +1123,10 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( aSetActive && m_kiway )
         m_kiway->ProjectChanged();
 
+    // The global libraries survive the switch, and a new project open does not always preload them
+    if( switching && PgmOrNull() )
+        Pgm().GetLibraryManager().RestartAsyncLoads();
+
     return success;
 }
 
@@ -1150,6 +1144,34 @@ bool SETTINGS_MANAGER::IsProjectLoaded( PROJECT* aProject ) const
 }
 
 
+void SETTINGS_MANAGER::stopLibraryLoads()
+{
+    // Cancel any in-progress library preloads and wait for them to finish before
+    // modifying m_projects_list. Background preload threads access Prj() which becomes
+    // invalid when the project list is modified.
+    if( m_kiway )
+    {
+        // Joined too, so a stale symbol preload cannot cancel the restart that follows
+        if( KIFACE* schFace = m_kiway->KiFACE( KIWAY::FACE_SCH, false ) )
+            schFace->CancelPreload( true );
+
+        if( KIFACE* pcbFace = m_kiway->KiFACE( KIWAY::FACE_PCB, false ) )
+            pcbFace->CancelPreload( true );
+    }
+
+    if( !PgmOrNull() )
+        return;
+
+    // Wait after the abort frees the pool threads needed by a queued design block preload
+    Pgm().CancelDesignBlockPreload();
+
+    // Abort any async library loads before modifying m_projects_list to prevent race
+    // conditions where background threads try to access Prj() while the list is empty.
+    Pgm().GetLibraryManager().AbortAsyncLoads( true );
+    Pgm().WaitForDesignBlockPreload();
+}
+
+
 bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 {
     if( !aProject || !m_projects.count( aProject->GetProjectFullName() ) )
@@ -1159,24 +1181,19 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
     wxLogTrace( traceSettings, wxT( "Unload project %s" ), projectPath );
 
     PROJECT* toRemove = m_projects.at( projectPath );
-    bool wasActiveProject = m_projects_list.begin()->get() == toRemove;
+    bool     wasActiveProject = m_projects_list.begin()->get() == toRemove;
 
-    // Cancel any in-progress library preloads and wait for them to finish before
-    // modifying m_projects_list. Background preload threads access Prj() which becomes
-    // invalid when the project list is modified.
-    if( wasActiveProject && m_kiway )
-    {
-        if( KIFACE* pcbFace = m_kiway->KiFACE( KIWAY::FACE_PCB, false ) )
-            pcbFace->CancelPreload( true );
-    }
+    if( wasActiveProject )
+        stopLibraryLoads();
 
-    // Abort any async library loads before modifying m_projects_list to prevent race
-    // conditions where background threads try to access Prj() while the list is empty.
-    if( wasActiveProject && PgmOrNull() )
-        Pgm().GetLibraryManager().AbortAsyncLoads();
-
+    // The project stays loaded, so the loads this abort or the preloads cancelled are queued again
     if( !unloadProjectFile( aProject, aSave ) )
+    {
+        if( wasActiveProject && PgmOrNull() )
+            Pgm().GetLibraryManager().RestartAsyncLoads();
+
         return false;
+    }
 
     auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
                             [&]( const std::unique_ptr<PROJECT>& ptr )

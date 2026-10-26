@@ -804,21 +804,27 @@ struct APP_KICAD_CLI : public wxAppConsole
 #endif
 
         program.OnPgmExit();
+        program.ExitIfTeardownUnsafe();
+
         return ret;
     }
 
     int OnRun() override
     {
+        int ret = -1;
+
         try
         {
-            return program.OnPgmRun();
+            ret = program.OnPgmRun();
         }
         catch( ... )
         {
             Pgm().HandleException( std::current_exception() );
         }
 
-        return -1;
+        program.SetRunResult( ret );
+
+        return ret;
     }
 
     int FilterEvent( wxEvent& aEvent ) override { return Event_Skip; }

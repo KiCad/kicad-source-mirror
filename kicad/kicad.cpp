@@ -619,22 +619,28 @@ struct APP_KICAD : public wxApp
         wxLog::EnableLogging( false );
 
         program.OnPgmExit();
+        program.ExitIfTeardownUnsafe();
+
         return ret;
     }
 
 
     int OnRun() override
     {
+        int ret = -1;
+
         try
         {
-            return wxApp::OnRun();
+            ret = wxApp::OnRun();
         }
         catch(...)
         {
             Pgm().HandleException( std::current_exception() );
         }
 
-        return -1;
+        program.SetRunResult( ret );
+
+        return ret;
     }
 
 

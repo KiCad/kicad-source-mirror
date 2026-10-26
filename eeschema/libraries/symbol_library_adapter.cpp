@@ -57,7 +57,7 @@ SYMBOL_LIBRARY_ADAPTER::SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
 
 SYMBOL_LIBRARY_ADAPTER::~SYMBOL_LIBRARY_ADAPTER()
 {
-    resetProjectCache();
+    resetProjectCache( true );
     evictOwnedGlobalEntries();
 }
 
@@ -95,6 +95,10 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
 
+    // Generation before flag, so both a cancel already running and one that starts later are seen
+    const unsigned abortGeneration = m_abortGeneration.load();
+    const bool     cancelling = m_cancelling.load();
+
     try
     {
         wxArrayString dummyList;
@@ -105,6 +109,14 @@ std::optional<LIB_STATUS> SYMBOL_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
     }
     catch( IO_ERROR& e )
     {
+        // A load the abort cut short is not a failure of the library
+        if( cancelling || m_cancelling.load() || m_abortGeneration.load() != abortGeneration )
+        {
+            aLib->status.load_status = LOAD_STATUS::INVALID;
+            aLib->status.error.reset();
+            return aLib->status;
+        }
+
         aLib->status.load_status = LOAD_STATUS::LOAD_ERROR;
         aLib->status.error = LIBRARY_ERROR( e.Problem(), e.Where() );
         wxLogTrace( traceLibraries, "Sym: %s: plugin threw exception: %s", aLib->row->Nickname(), e.What() );

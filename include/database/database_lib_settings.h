@@ -33,23 +33,31 @@
 enum class DATABASE_SOURCE_TYPE
 {
     ODBC,
+    SQLITE,
+    ACCESS,
     INVALID
 };
 
 
 struct KICOMMON_API DATABASE_SOURCE
 {
-    DATABASE_SOURCE_TYPE type;
+    DATABASE_SOURCE_TYPE type = DATABASE_SOURCE_TYPE::ODBC;
     std::string          dsn;
     std::string          username;
     std::string          password;
-    int                  timeout;
+    int                  timeout = 0;
     std::string          connection_string;
+    std::string          path;      ///< Database file of a SQLITE or ACCESS source
+    std::string          type_name; ///< Raw source.type as written, kept for the error when the type is INVALID
+
+    /// @return a copy with ${CWD} replaced by aBaseDir in the connection string and the path
+    DATABASE_SOURCE Expanded( const wxString& aBaseDir ) const;
 
     /**
-     * @return the DSN, or for a connection string its driver and database file or name. Never the
-     *         password, so it is safe for error messages and traces. Empty when there is nothing safe
-     *         to show, in which case callers supply their own wording.
+     * @return the database file of a SQLITE or ACCESS source, the DSN of an ODBC one, or for a
+     *         connection string its driver and database file or name. Never the password, so it is
+     *         safe for error messages and traces. Empty when there is nothing safe to show, in which
+     *         case callers supply their own wording.
      */
     std::string Describe() const;
 };
@@ -169,6 +177,9 @@ public:
      */
     DATABASE_SOURCE ExpandedSource( const wxString& aBaseDir = wxEmptyString ) const;
 
+    /// @return the file LoadFromFile() reads, which is the settings name with the library extension forced
+    wxString GetLoadPath() const;
+
 protected:
     wxString getFileExt() const override;
 
@@ -206,6 +217,30 @@ KICOMMON_API std::unique_ptr<DATABASE_LIB_SETTINGS> LoadDatabaseLibSettingsReadO
  *         user typed, or a generic name when that leaves nothing usable
  */
 KICOMMON_API wxString DefaultDatabaseLibFileName( const wxString& aLibName );
+
+/**
+ * @return aPath as ${CWD}/<relative> when it lies in aBaseDir or below it, so a library moves with its
+ *         database file; any other path is returned unchanged
+ */
+KICOMMON_API std::string DatabasePathForStorage( const wxString& aPath, const wxString& aBaseDir );
+
+/**
+ * @return the path a user typed or pasted as an absolute path, with ${CWD} expanded and a relative path
+ *         taken from aBaseDir; never touches the file system, so a path on an unreachable share costs nothing
+ */
+KICOMMON_API wxString DatabasePathFromInput( const wxString& aInput, const wxString& aBaseDir );
+
+/// The source timeout a library file gets when it sets none
+inline constexpr int DEFAULT_DATABASE_TIMEOUT_SECONDS = 2;
+
+/**
+ * @return the seconds a caller waits on a database source with the given timeout before giving up, which is
+ *         the timeout plus 10 s for the worker, or 30 s when the timeout is 0
+ */
+inline int DatabaseFileWaitSeconds( int aTimeoutSeconds )
+{
+    return aTimeoutSeconds > 0 ? aTimeoutSeconds + 10 : 30;
+}
 
 /**
  * The lookup used when none is injected, which must never prompt to unlock the keyring.
