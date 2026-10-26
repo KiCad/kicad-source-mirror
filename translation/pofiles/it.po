@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-23 15:51+0000\n"
+"PO-Revision-Date: 2026-10-27 06:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -7524,14 +7524,12 @@ msgid "Duplicate ID"
 msgstr "Duplica ID"
 
 #: common/draw_panel_gal.cpp:378
-#, fuzzy
 msgid "Could not use Metal, switching to OpenGL"
-msgstr "Impossibile usare OpenGL"
+msgstr "Impossibile utilizzare Metal, passaggio a OpenGL"
 
 #: common/draw_panel_gal.cpp:380
-#, fuzzy
 msgid "Could not use Vulkan, falling back to software rendering"
-msgstr "Impossibile usare OpenGL, ripiego sul rendering software"
+msgstr "Impossibile usare Vulkan, ripiego sul rendering software"
 
 #: common/draw_panel_gal.cpp:474
 msgid "The graphics driver was reset and OpenGL could not be restored"
@@ -7567,11 +7565,8 @@ msgstr ""
 "software."
 
 #: common/draw_panel_gal.cpp:643
-#, fuzzy
 msgid "The graphics device was lost and could not be restored."
-msgstr ""
-"Il driver grafico è stato reimpostato e non è stato possibile ripristinare "
-"OpenGL"
+msgstr "Il driver grafico è perso e non è stato possibile ripristinarlo."
 
 #: common/draw_panel_gal.cpp:1001
 msgid "Unknown exception"
@@ -8257,9 +8252,8 @@ msgid "Grid"
 msgstr "Griglia"
 
 #: common/eda_item.cpp:610 pcbnew/pcb_3d_body.h:110 pcbnew/pcb_3d_body.h:146
-#, fuzzy
 msgid "3D Body"
-msgstr "Corpo"
+msgstr "Corpo 3D"
 
 #: common/eda_item.cpp:613 eeschema/sch_junction.cpp:348
 #: eeschema/sch_junction.h:101
@@ -10189,9 +10183,9 @@ msgid "Easy-PC archive nests deeper than %d objects at offset %zu."
 msgstr ""
 
 #: common/io/easypc/easypc_archive.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Easy-PC class '%s' is not registered."
-msgstr "azione non registrata"
+msgstr "La classe Easy-PC '%s' non è registrata."
 
 #: common/io/easypc/easypc_archive.cpp:511
 #, c-format
@@ -10214,9 +10208,10 @@ msgid "Easy-PC %s at offset %zu has a cyclic parent chain."
 msgstr ""
 
 #: common/io/easypc/easypc_classes_styles.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported Easy-PC turned slot in pad style '%s'."
-msgstr "Modalità di trasferimento non supportata '%s'."
+msgstr ""
+"Stile di piazzola con asola (slot-in-pad) '%s' di Easy-PC non supportato."
 
 #: common/io/easypc/easypc_design_settings.cpp:67
 #, c-format
@@ -10238,34 +10233,33 @@ msgid "Easy-PC project holds %u OLE items."
 msgstr ""
 
 #: common/io/easypc/easypc_document.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Easy-PC project format %d is not supported."
-msgstr "Formato file non supportato"
+msgstr "Il formato di progetto Easy-PC %d non è supportato."
 
 #: common/io/easypc/easypc_document.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a %s, not a design."
-msgstr "'%s' non è una cartella"
+msgstr "'%s' è un %s, non un progetto."
 
 #: common/io/easypc/easypc_document.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' has no Contents stream."
-msgstr "La libreria '%s' non ha impronta '%s'."
+msgstr "'%s' non possiede uno stream Contents."
 
 #: common/io/easypc/easypc_document.cpp:161
-#, fuzzy
 msgid "design"
-msgstr "blocco progetto"
+msgstr "progetto"
 
 #: common/io/easypc/easypc_document.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a %s, not a library."
-msgstr "Il file \"%s\" non è una libreria obsoleta."
+msgstr "'%s' è un %s, non una libreria."
 
 #: common/io/easypc/easypc_document.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' holds '%s', which is not an item."
-msgstr "La libreria '%s' non può essere caricata."
+msgstr "La libreria '%s' contiene '%s', che non è un elemento."
 
 #: common/io/easypc/easypc_document.cpp:220
 #, c-format
@@ -10273,14 +10267,14 @@ msgid "Library '%s' lists duplicate item '%s' as '%s'."
 msgstr ""
 
 #: common/io/easypc/easypc_document.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no item '%s'."
-msgstr "La libreria '%s' non ha impronta '%s'."
+msgstr "La libreria '%s' non ha elemento '%s'."
 
 #: common/io/easypc/easypc_document.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' has no [ScmComponent] stream."
-msgstr "La zona rame \"%s\" non ha piazzole connesse."
+msgstr "Il componente '%s' non dispone di uno stream [ScmComponent]."
 
 #: common/io/easypc/easypc_file.cpp:50
 #, c-format
@@ -10545,19 +10539,16 @@ msgid "PCB: Export Postscript"
 msgstr "C.S.: esporta Postscript"
 
 #: common/jobs/job_export_pcb_specctra_dsn.cpp:32
-#, fuzzy
 msgid "Export Specctra DSN File"
-msgstr "File Specctra DSN"
+msgstr "Esporta file DSN Specctra"
 
 #: common/jobs/job_export_pcb_specctra_dsn.cpp:38
-#, fuzzy
 msgid "Export Specctra DSN Job Settings"
-msgstr "Esporta informazioni di sbroglio DSN Specctra"
+msgstr "Esporta impostazioni del lavoro Specctra DSN"
 
 #: common/jobs/job_export_pcb_specctra_dsn.cpp:42
-#, fuzzy
 msgid "PCB: Export Specctra DSN"
-msgstr "Esporta DSN Specctra..."
+msgstr "CS: Esporta DSN Specctra"
 
 #: common/jobs/job_export_pcb_stackup.cpp:66
 msgid "Export board stackup table"
@@ -11212,14 +11203,12 @@ msgid "Over-constrained tint"
 msgstr "Tinta supervincolato"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "Router clearance shadow"
-msgstr "Clearance zone: %s."
+msgstr "Ombra clearance sbrogliatore"
 
 #: common/layer_id.cpp:165
-#, fuzzy
 msgid "Router collision marker"
-msgstr "Larghezza marcatore collisione collegamento:"
+msgstr "Marcatore collisione sbrogliatore"
 
 #: common/layer_id.cpp:166
 msgid "Board outline area"
@@ -11394,9 +11383,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Mancata corrispondenza di tipo tra %lf e \"%s\""
 
 #: common/libraries/lib_table_grid_data_model.cpp:124
-#, fuzzy
 msgid "Edit library settings"
-msgstr "Modifica impostazioni"
+msgstr "Modifica impostazioni libreria"
 
 #: common/libraries/lib_table_grid_data_model.cpp:126
 msgid "Open library table"
@@ -11939,18 +11927,16 @@ msgid "The target cannot represent this exclusion. It is removed."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:782
-#, fuzzy
 msgid "BOM field filters"
-msgstr "Campi"
+msgstr "Filtri campo DIBA"
 
 #: common/project/project_file_downgrade.cpp:783
 msgid "The target can only filter references. The field filter is removed."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:796
-#, fuzzy
 msgid "BOM byte order marks"
-msgstr "Includi marcatore ordine byte"
+msgstr "Marcatori ordine byte DIBA"
 
 #: common/project/project_file_downgrade.cpp:797
 msgid "The target cannot retain the BOM byte order mark option."
@@ -11965,9 +11951,8 @@ msgid "The target cannot retain the selected output sections or naming rules."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:866
-#, fuzzy
 msgid "IDF output customization"
-msgstr "Associazione impronte"
+msgstr "Personalizzazione uscita IDF"
 
 #: common/project/project_file_downgrade.cpp:867
 msgid "The target cannot retain the selected IDF export settings."
@@ -11982,31 +11967,27 @@ msgid "The target cannot retain the PCB BOM export settings."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:940
-#, fuzzy
 msgid "Microvia stack presets"
-msgstr "Diametro piazzola microvia"
+msgstr "Preimpostazioni stack microvia"
 
 #: common/project/project_file_downgrade.cpp:940
 #: common/project/project_file_downgrade.cpp:1019
 #: common/project/project_file_downgrade.cpp:1032
 #: common/project/project_file_downgrade.cpp:1138
-#, fuzzy
 msgid "Removed from the project file."
-msgstr "Rimuovi prefisso fronte"
+msgstr "Rimosso dal file progetto."
 
 #: common/project/project_file_downgrade.cpp:954
-#, fuzzy
 msgid "Teardrop enable defaults"
-msgstr "Predefiniti lacrime"
+msgstr "Abilita predefiniti lacrime"
 
 #: common/project/project_file_downgrade.cpp:955
 msgid "The target cannot retain enabled teardrop defaults."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:975
-#, fuzzy
 msgid "Newer project settings schema"
-msgstr "Crea nuovo progetto per questo schema"
+msgstr "Schema impostazioni progetto più recente"
 
 #: common/project/project_file_downgrade.cpp:976
 #, c-format
@@ -12014,44 +11995,36 @@ msgid "The %s schema is newer than the exporter has reviewed."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:986
-#, fuzzy
 msgid "net settings"
-msgstr "Modifica impostazioni"
+msgstr "impostazioni net"
 
 #: common/project/project_file_downgrade.cpp:989
-#, fuzzy
 msgid "tuning profiles"
-msgstr "profilo regolazione '%s'"
+msgstr "profili di regolazione"
 
 #: common/project/project_file_downgrade.cpp:992
-#, fuzzy
 msgid "component class settings"
-msgstr "Classi di componenti"
+msgstr "impostazioni classi di componenti"
 
 #: common/project/project_file_downgrade.cpp:995
-#, fuzzy
 msgid "ERC settings"
-msgstr "Modifica impostazioni"
+msgstr "Impostazioni ERC"
 
 #: common/project/project_file_downgrade.cpp:998
-#, fuzzy
 msgid "board design settings"
-msgstr "Impostazioni di conversione"
+msgstr "impostazioni progettazione scheda"
 
 #: common/project/project_file_downgrade.cpp:1018
-#, fuzzy
 msgid "Net chain netclass assignments"
-msgstr "Assegnamento netclass"
+msgstr "Assegnamento netclass catena di net"
 
 #: common/project/project_file_downgrade.cpp:1032
-#, fuzzy
 msgid "Net chain classes"
 msgstr "Classi catene di net"
 
 #: common/project/project_file_downgrade.cpp:1086
-#, fuzzy
 msgid "Tuning profile frequencies"
-msgstr "Geometrie piste del profilo di regolazione"
+msgstr "Frequenze del profilo di regolazione"
 
 #: common/project/project_file_downgrade.cpp:1087
 msgid "The target uses its default calculation frequency."
