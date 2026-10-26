@@ -2827,6 +2827,10 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
             field.SetParent( this );
     }
 
+    std::swap( m_pinNameOffset, symbol->m_pinNameOffset );
+    std::swap( m_showPinNames, symbol->m_showPinNames );
+    std::swap( m_showPinNumbers, symbol->m_showPinNumbers );
+
     TRANSFORM tmp = m_transform;
     m_transform = symbol->m_transform;
     symbol->m_transform = tmp;
