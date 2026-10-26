@@ -309,16 +309,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
         }
 
         // Sort each file's symbols by inheritance depth
-        auto sortByInheritance = []( LIB_SYMBOL* aLhs, LIB_SYMBOL* aRhs )
-        {
-            unsigned int lhDepth = aLhs->GetInheritanceDepth();
-            unsigned int rhDepth = aRhs->GetInheritanceDepth();
+        auto sortByInheritance =
+                []( LIB_SYMBOL* aLhs, LIB_SYMBOL* aRhs )
+                {
+                    unsigned int lhDepth = aLhs->GetInheritanceDepth();
+                    unsigned int rhDepth = aRhs->GetInheritanceDepth();
 
-            if( lhDepth == rhDepth )
-                return aLhs->GetName() < aRhs->GetName();
+                    if( lhDepth == rhDepth )
+                        return aLhs->GetName() < aRhs->GetName();
 
-            return lhDepth < rhDepth;
-        };
+                    return lhDepth < rhDepth;
+                };
 
         // Write each file
         for( auto& [ filePath, symbols ] : symbolsByFile )
