@@ -402,10 +402,6 @@ std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMIL
     {
         return aNetclass.GetViaDrillOpt();
     };
-    auto uViaDiameter = []( const NETCLASS& aNetclass )
-    {
-        return aNetclass.GetuViaDiameterOpt();
-    };
 
     switch( aFamily )
     {
@@ -459,11 +455,6 @@ std::vector<CONSTRAINT_SECTION> PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( FAMIL
                    { { _( "Board default:" ), &BDS::m_HoleToHoleMin, wxS( "min_hole_to_hole" ) } },
                    HOLE_TO_HOLE_DISTANCE,
                    {} },
-                 { _( "Microvias" ),
-                   { { _( "Minimum uVia diameter:" ), &BDS::m_MicroViasMinSize, wxS( "min_microvia_diameter" ) },
-                     { _( "Minimum uVia hole:" ), &BDS::m_MicroViasMinDrill, wxS( "min_microvia_drill" ) } },
-                   std::nullopt,
-                   uViaDiameter },
                  { _( "Microvia stack depth" ), {}, MICROVIA_STACK_DEPTH, {} },
                  { _( "Hole aspect ratio" ), {}, HOLE_ASPECT_RATIO, {} } };
 
