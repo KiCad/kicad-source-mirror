@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:38+0300\n"
-"PO-Revision-Date: 2026-10-24 09:51+0000\n"
+"PO-Revision-Date: 2026-10-27 13:51+0000\n"
 "Last-Translator: Frank Sonnenberg "
 "<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
@@ -3006,7 +3006,7 @@ msgstr "Pfad"
 #: common/dialogs/dialog_design_block_properties.cpp:102
 #, c-format
 msgid "Illegal character '%c' in name '%s'."
-msgstr "Unzulässiges Zeichen ‚%c‘ im Namen ‚%s‘."
+msgstr "Unzulässiges Zeichen \"%c\" im Namen \"%s\"."
 
 #: common/dialogs/dialog_design_block_properties.cpp:127
 #: eeschema/dialogs/panel_template_fieldnames.cpp:102
