@@ -49,6 +49,7 @@ set( QA_COMMON_SRCS
     test_dialog_shim.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
+    test_edit_constraints.cpp
     test_wx_dataviewctrl.cpp
     test_embedded_file_compress.cpp
     test_env_paths.cpp

@@ -145,12 +145,10 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle, const GRID_HELPER& aGrid )
 }
 
 
-EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints,
-                              POLYGON_LINE_MODE aMode ) :
+EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints, POLYGON_LINE_MODE aMode ) :
         EDIT_CONSTRAINT<EDIT_LINE>( aLine ),
         m_mode( aMode ),
         m_colinearConstraint( nullptr ),
-        m_editPoints( aPoints ),
         m_prevOrigin( aPoints.Previous( aLine.GetOrigin(), false ) ),
         m_nextEnd( aPoints.Next( aLine.GetEnd(), false ) )
 {
@@ -170,6 +168,8 @@ EC_CONVERGING::EC_CONVERGING( EDIT_LINE& aLine, EDIT_POINTS& aPoints,
 
     // Half-length for fixed-length mode
     m_halfLength = m_draggedVector.EuclideanNorm() / 2.0;
+
+    m_contourIsTriangle = m_prevOrigin == m_nextEnd;
 
     // Check for colinearity
     SEG originSide( origin.GetPosition(), m_prevOrigin->GetPosition() );
@@ -216,8 +216,9 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid )
     else
         newCenter = handlePos;
 
-    // In converging mode, don't allow movement past the convergence point
-    if( m_mode == POLYGON_LINE_MODE::CONVERGING )
+    // In converging mode, don't allow movement past the convergence point, unless the contour
+    // is a triangle and has no corner to fold away there
+    if( m_mode == POLYGON_LINE_MODE::CONVERGING && !m_contourIsTriangle )
     {
         VECTOR2I centerToConv = m_convergencePoint - m_originalCenter;
         VECTOR2I centerToNew = newCenter - m_originalCenter;
@@ -285,17 +286,17 @@ void EC_CONVERGING::applyConverging( EDIT_LINE& aHandle )
     if( OPT_VECTOR2I endIntersect = dragged.IntersectLines( endSide ) )
         end.SetPosition( *endIntersect );
 
+    if( m_contourIsTriangle )
+        return;
+
     // Check if adjacent segments would intersect (self-intersecting polygon)
     originSide = SEG( origin.GetPosition(), m_prevOrigin->GetPosition() );
     endSide = SEG( end.GetPosition(), m_nextEnd->GetPosition() );
 
     if( OPT_VECTOR2I originEndIntersect = endSide.Intersect( originSide ) )
     {
-        if( m_editPoints.LinesSize() > 3 )
-        {
-            origin.SetPosition( *originEndIntersect );
-            end.SetPosition( *originEndIntersect );
-        }
+        origin.SetPosition( *originEndIntersect );
+        end.SetPosition( *originEndIntersect );
     }
 }
 

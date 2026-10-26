@@ -293,9 +293,6 @@ private:
     /// m_[origin/end]SideConstraint, so it should not be freed.
     EDIT_CONSTRAINT<EDIT_POINT>* m_colinearConstraint;
 
-    /// EDIT_POINTS instance that stores currently modified lines.
-    EDIT_POINTS& m_editPoints;
-
     /// Vector that represents the initial direction of the dragged segment.
     VECTOR2I m_draggedVector;
 
@@ -311,6 +308,9 @@ private:
     /// Flags to indicate when dragged and neighbouring lines are (almost) collinear.
     bool m_originCollinear;
     bool m_endCollinear;
+
+    /// True when the edges either side of the dragged one end at the same corner.
+    bool m_contourIsTriangle;
 
     /// Previous and next points to keep drag endpoints fixed.
     EDIT_POINT* m_prevOrigin;
