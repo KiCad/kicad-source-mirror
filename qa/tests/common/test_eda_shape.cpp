@@ -24,6 +24,7 @@
 #include <eda_shape.h>
 #include <math/util.h>
 #include <tool/point_editor_behavior.h>
+#include <commit.h>
 #include <qa_utils/geometry/geometry.h> // For KI_TEST::IsVecWithinTol
 #include <geometry/shape_arc.h> // For SHAPE_ARC::DefaultAccuracyForPCB()
 
@@ -34,6 +35,18 @@ class EDA_SHAPE_MOCK : public EDA_SHAPE
 {
 public:
     EDA_SHAPE_MOCK( SHAPE_T aShapeType ) : EDA_SHAPE( aShapeType, 0, FILL_T::NO_FILL ){};
+};
+
+
+class POLY_EDIT_COMMIT : public COMMIT
+{
+public:
+    void Push( const wxString&, int ) override {}
+    void Revert() override {}
+
+private:
+    EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override { return aItem; }
+    EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override { return aItem->Clone(); }
 };
 
 
@@ -247,6 +260,31 @@ BOOST_AUTO_TEST_CASE( PolygonBehaviorSurvivesAssignment )
     BOOST_CHECK_EQUAL( points2.PointsSize(), 3u );
 
     BOOST_CHECK( behavior.UpdatePoints( points ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CollapsedPolygonKeepsItsCorners )
+{
+    EDA_SHAPE_MOCK shape( SHAPE_T::POLY );
+
+    SHAPE_POLY_SET& poly = shape.GetPolyShape();
+    poly.NewOutline();
+    poly.Append( { 20, 30 } );
+    poly.Append( { 50, 30 } );
+    poly.Append( { 35, 55 } );
+
+    for( int ii = 0; ii < poly.TotalVertices(); ++ii )
+        poly.SetVertex( ii, VECTOR2I( 35, 55 ) );
+
+    EDA_POLYGON_POINT_EDIT_BEHAVIOR behavior( shape );
+
+    EDIT_POINTS      points( nullptr );
+    POLY_EDIT_COMMIT commit;
+
+    behavior.FinalizeItem( points, commit );
+
+    BOOST_CHECK_MESSAGE( shape.GetPolyShape().TotalVertices() == 3,
+                         "finalizing a collapsed polygon stripped every corner" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

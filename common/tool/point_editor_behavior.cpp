@@ -99,9 +99,20 @@ void POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints( SHAPE_POLY_SET&   aOu
 }
 
 
+void POLYGON_POINT_EDIT_BEHAVIOR::RemoveNullSegmentsIfPolygonSurvives( SHAPE_POLY_SET& aOutline )
+{
+    SHAPE_POLY_SET cleaned = aOutline;
+
+    cleaned.RemoveNullSegments();
+
+    if( cleaned.TotalVertices() >= 3 )
+        aOutline = cleaned;
+}
+
+
 void POLYGON_POINT_EDIT_BEHAVIOR::FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit )
 {
-    m_polygon.RemoveNullSegments();
+    RemoveNullSegmentsIfPolygonSurvives( m_polygon );
 }
 
 

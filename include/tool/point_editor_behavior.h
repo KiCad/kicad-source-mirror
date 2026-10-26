@@ -164,6 +164,12 @@ public:
     static void UpdateOutlineFromPoints( SHAPE_POLY_SET& aOutline, const EDIT_POINT& aEditedPoint,
                                          EDIT_POINTS& aPoints );
 
+    /**
+     * Remove the zero length segments left by an edit, unless that would strip the outline
+     * down to something that is no longer a polygon.
+     */
+    static void RemoveNullSegmentsIfPolygonSurvives( SHAPE_POLY_SET& aOutline );
+
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
         BuildForPolyOutline( aPoints, m_polygon );
@@ -224,7 +230,7 @@ public:
 
     void FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit ) override
     {
-        m_shape.GetPolyShape().RemoveNullSegments();
+        POLYGON_POINT_EDIT_BEHAVIOR::RemoveNullSegmentsIfPolygonSurvives( m_shape.GetPolyShape() );
     }
 
 private:
