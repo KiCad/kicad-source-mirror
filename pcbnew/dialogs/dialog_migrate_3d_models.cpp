@@ -54,6 +54,7 @@
 #include <gestfich.h>
 
 
+#define UNSPECIFIED -2
 #define KEEP_EXISTING -1
 
 namespace
@@ -187,7 +188,6 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
 {
     m_searchDirsGrid->ClearRows();
     m_searchDirsGrid->EnableEditing( false );
-    m_searchDirsGrid->AutoSizeColumn( 0 );
     m_searchDirsGrid->SetupColumnAutosizer( 0 );
 
     if( COMMON_SETTINGS* common = Pgm().GetCommonSettings() )
@@ -199,17 +199,19 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
         }
     }
 
-    m_addReplacement->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+    m_addReplacement->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_addSearchDir->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_deleteSearchDir->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
-    // Single column spanning the full list-control width; wxLC_REPORT needs
-    // at least one column to show anything, wxLC_NO_HEADER hides the header.
-    m_missingList->AppendColumn( wxEmptyString, wxLIST_FORMAT_LEFT, 800 );
-    m_candidatesList->AppendColumn( wxEmptyString, wxLIST_FORMAT_LEFT, 800 );
+    m_headerLabel->SetFont( KIUI::GetControlFont( this ).Bold() );
+    m_subHeader->SetFont( KIUI::GetControlFont( this ).Italic() );
+    m_subHeader2->SetFont( KIUI::GetControlFont( this ).Italic() );
+    m_helpText->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
-    // Keep the single column filling the visible width as the splitter sash
-    // moves.  Bare wxListCtrl in report mode clips overflowing text cleanly.
+    m_missingList->AppendColumn( wxEmptyString );
+    m_candidatesList->AppendColumn( wxEmptyString );
+
+    // Keep the single column filling the visible width as the splitter sash moves.
     auto fitColumn =
             []( wxListCtrl* aList )
             {
@@ -231,24 +233,38 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
                 aEvt.Skip();
             } );
 
+    // Build the throwaway board + footprint and the 3D canvas.
+    initPreviewBoard();
+
+    SetupStandardButtons( { { wxID_OK,     _( "Replace Models" ) },
+                            { wxID_CANCEL, _( "Cancel" )         } } );
+
+    finishDialogSettings();
+}
+
+
+DIALOG_MIGRATE_3D_MODELS::~DIALOG_MIGRATE_3D_MODELS()
+{
+    delete m_previewPane;
+    delete m_dummyBoard;   // owns m_dummyFootprint
+}
+
+
+bool DIALOG_MIGRATE_3D_MODELS::TransferDataToWindow()
+{
+    // Perform these actions *after* we have loaded saved state into the dialog
     collectMissingModels();
     buildCatalog();
     rankAllCandidates();
 
-    // Build the throwaway board + footprint and the 3D canvas.  Must happen
-    // after collectMissingModels() so we can size the preview using whichever
-    // representative footprint is first shown.
-    initPreviewBoard();
-
-    // Auto-select the top real (non-"keep existing") candidate for every
-    // missing row so the user sees a sensible default without having to
-    // click through each one.  Rows for which no real candidate exists get
-    // bolded by populateMissingList() as a visual attention marker.
+    // Auto-select the top real (non-"keep existing") candidate for every missing row so the user gets
+    // a sensible default without having to click through each one.  Rows for which no real candidate
+    // exists get bolded by populateMissingList() as a visual attention marker.
     for( size_t i = 0; i < m_missing.size(); ++i )
     {
-        const std::vector<MATCH_CANDIDATE>& cands = m_candidatesPerMissing[i];
+        const std::vector<MATCH_CANDIDATE>& candidates = m_candidatesPerMissing[i];
 
-        if( !cands.empty() && !cands.front().m_absPath.IsEmpty() )
+        if( !candidates.empty() && !candidates.front().m_absPath.IsEmpty() )
             m_selectedPerMissing[i] = 0;
     }
 
@@ -261,14 +277,7 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
         populateCandidatesList( 0 );
     }
 
-    finishDialogSettings();
-}
-
-
-DIALOG_MIGRATE_3D_MODELS::~DIALOG_MIGRATE_3D_MODELS()
-{
-    delete m_previewPane;
-    delete m_dummyBoard;   // owns m_dummyFootprint
+    return true;
 }
 
 
@@ -483,7 +492,7 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
         m_missingXform.push_back( entry.m_xform );
     }
 
-    m_selectedPerMissing.assign( m_missing.size(), KEEP_EXISTING );
+    m_selectedPerMissing.assign( m_missing.size(), UNSPECIFIED );
     m_candidatesPerMissing.resize( m_missing.size() );
 }
 
@@ -836,8 +845,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnCandidateSelected( wxListEvent& aEvent )
 
     const MATCH_CANDIDATE& c = candidates[candidateIdx];
 
-    // Record this row's choice.  The "keep existing" row has an empty path
-    // and we store KEEP_EXISTING to mean "no replacement".
+    // Record this row's choice.  The "keep existing" row has an empty path.
     m_selectedPerMissing[missingIdx] = c.m_absPath.IsEmpty() ? KEEP_EXISTING : candidateIdx;
 
     // Bold the missing row again when the user explicitly chose "keep
@@ -900,7 +908,10 @@ void DIALOG_MIGRATE_3D_MODELS::updateAfterCatalogChange()
 
     for( size_t i = 0; i < m_missing.size(); ++i )
     {
-        m_selectedPerMissing[i] = KEEP_EXISTING;
+        if( m_selectedPerMissing[i] == KEEP_EXISTING )
+            continue;
+
+        m_selectedPerMissing[i] = UNSPECIFIED;
         const std::vector<MATCH_CANDIDATE>& candidates = m_candidatesPerMissing[i];
 
         // Preserve the user's prior explicit pick when the same file still
@@ -920,9 +931,8 @@ void DIALOG_MIGRATE_3D_MODELS::updateAfterCatalogChange()
         // For rows with no prior pick (or whose pick disappeared), auto-select
         // the newly-best candidate so adding a directory immediately un-bolds
         // rows that just acquired a plausible match.
-        if( m_selectedPerMissing[i] < 0
-                && !candidates.empty()
-                && !candidates.front().m_absPath.IsEmpty() )
+        if( m_selectedPerMissing[i] == UNSPECIFIED && !candidates.empty()
+                                                   && !candidates.front().m_absPath.IsEmpty() )
         {
             m_selectedPerMissing[i] = 0;
         }
@@ -1010,6 +1020,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnOpenExternalFileClick( wxCommandEvent& )
 
     if( existing == candidates.end() )
     {
+        // Put new candidate at the top and select it
         candidates.insert( candidates.begin(), injected );
         m_selectedPerMissing[missingIdx] = 0;
     }

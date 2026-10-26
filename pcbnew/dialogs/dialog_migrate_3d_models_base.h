@@ -20,8 +20,8 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listctrl.h>
 #include <wx/sizer.h>
+#include <wx/listctrl.h>
 #include <wx/panel.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
@@ -43,12 +43,15 @@ class DIALOG_MIGRATE_3D_MODELS_BASE : public DIALOG_SHIM
 
 	protected:
 		wxStaticText* m_headerLabel;
+		wxStaticText* m_subHeader;
+		wxStaticText* m_subHeader2;
 		wxSplitterWindow* m_mainSplitter;
 		wxPanel* m_leftPanel;
 		wxSplitterWindow* m_splitter3;
 		wxPanel* m_paneMissingModels;
 		wxStaticText* m_missingLabel;
 		wxListCtrl* m_missingList;
+		wxStaticText* m_helpText;
 		wxPanel* m_paneReplacements;
 		wxStaticText* m_candidatesLabel;
 		wxListCtrl* m_candidatesList;
@@ -59,8 +62,9 @@ class DIALOG_MIGRATE_3D_MODELS_BASE : public DIALOG_SHIM
 		wxStaticText* m_previewLabel;
 		STD_BITMAP_BUTTON* m_addSearchDir;
 		STD_BITMAP_BUTTON* m_deleteSearchDir;
-		wxButton* m_replaceButton;
-		wxButton* m_keepButton;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnMissingSelected( wxListEvent& event ) { event.Skip(); }
@@ -68,8 +72,8 @@ class DIALOG_MIGRATE_3D_MODELS_BASE : public DIALOG_SHIM
 		virtual void OnOpenExternalFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddSearchDirectoryClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveSearchDirectoryClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnReplaceClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKeepClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnReplaceClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

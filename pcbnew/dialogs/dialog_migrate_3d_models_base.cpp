@@ -19,9 +19,23 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_headerLabel = new wxStaticText( this, wxID_ANY, _("This board references 3D models that are no longer present on your system.\nKiCad can auto-select suitable matches from the configured 3D directories, plus any additional directories specified below.  \nIndividual matches can be overridden in the Replacement list, either with another candidate from the search directories, or with a specific model file."), wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bHeader;
+	bHeader = new wxBoxSizer( wxVERTICAL );
+
+	m_headerLabel = new wxStaticText( this, wxID_ANY, _("This board references 3D models that are no longer present on your system."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_headerLabel->Wrap( -1 );
-	bSizerMain->Add( m_headerLabel, 0, wxALL, 8 );
+	bHeader->Add( m_headerLabel, 0, wxBOTTOM, 10 );
+
+	m_subHeader = new wxStaticText( this, wxID_ANY, _("KiCad will auto-select suitable matches from the configured 3D directories, plus any additional directories specified below.  "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_subHeader->Wrap( -1 );
+	bHeader->Add( m_subHeader, 0, wxBOTTOM, 4 );
+
+	m_subHeader2 = new wxStaticText( this, wxID_ANY, _("Individual matches can be overridden in the Replacement list, either with another candidate from the search directories, or with a specific model file."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_subHeader2->Wrap( -1 );
+	bHeader->Add( m_subHeader2, 0, wxBOTTOM, 10 );
+
+
+	bSizerMain->Add( bHeader, 0, wxEXPAND|wxALL, 10 );
 
 	m_mainSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NOBORDER );
 	m_mainSplitter->SetSashGravity( 0.66 );
@@ -34,7 +48,7 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerUpper;
 	bSizerUpper = new wxBoxSizer( wxVERTICAL );
 
-	m_splitter3 = new wxSplitterWindow( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_NOBORDER );
+	m_splitter3 = new wxSplitterWindow( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NOBORDER );
 	m_splitter3->SetSashGravity( 0.5 );
 	m_splitter3->SetMinimumPaneSize( 120 );
 
@@ -48,6 +62,13 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 
 	m_missingList = new wxListCtrl( m_paneMissingModels, wxID_ANY, wxDefaultPosition, wxSize( 330,-1 ), wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxBORDER_THEME );
 	bSizer8->Add( m_missingList, 1, wxEXPAND, 5 );
+
+	m_helpText = new wxStaticText( m_paneMissingModels, wxID_ANY, _("References with no match (auto or override) are shown in bold."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpText->Wrap( -1 );
+	bSizer8->Add( m_helpText, 0, wxTOP|wxLEFT, 3 );
+
+
+	bSizer8->Add( 0, 12, 0, 0, 5 );
 
 
 	m_paneMissingModels->SetSizer( bSizer8 );
@@ -68,7 +89,9 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	bButtonBar = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addReplacement = new STD_BITMAP_BUTTON( m_paneReplacements, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonBar->Add( m_addReplacement, 0, wxTOP|wxRIGHT, 5 );
+	m_addReplacement->SetToolTip( _("Select a model file from disk as a replacement") );
+
+	bButtonBar->Add( m_addReplacement, 0, wxALL, 3 );
 
 
 	bSizer9->Add( bButtonBar, 0, wxEXPAND, 5 );
@@ -81,7 +104,7 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	bSizerUpper->Add( m_splitter3, 1, wxEXPAND, 5 );
 
 
-	bSizerMissing->Add( bSizerUpper, 3, wxEXPAND, 5 );
+	bSizerMissing->Add( bSizerUpper, 8, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerLower;
 	bSizerLower = new wxBoxSizer( wxVERTICAL );
@@ -116,14 +139,8 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	m_searchDirsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	bSizerLower->Add( m_searchDirsGrid, 1, wxEXPAND, 5 );
 
-	wxBoxSizer* bButtonsSizer;
-	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-
-	bSizerLower->Add( bButtonsSizer, 0, wxEXPAND, 5 );
-
-
-	bSizerMissing->Add( bSizerLower, 1, wxEXPAND|wxTOP, 10 );
+	bSizerMissing->Add( bSizerLower, 3, wxEXPAND|wxTOP, 15 );
 
 
 	m_leftPanel->SetSizer( bSizerMissing );
@@ -142,28 +159,35 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	m_previewPanel->Layout();
 	bSizerPreview->Fit( m_previewPanel );
 	m_mainSplitter->SplitVertically( m_leftPanel, m_previewPanel, -1 );
-	bSizerMain->Add( m_mainSplitter, 1, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( m_mainSplitter, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addSearchDir = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addSearchDir->SetToolTip( _("Add a directory to be included in the search for suitable 3D model replacement files") );
+
 	bSizerBottom->Add( m_addSearchDir, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_deleteSearchDir = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_deleteSearchDir->SetToolTip( _("Remove the selected directory from the list.  Its contents will no longer be considered in the search for suitable replacements.") );
+
 	bSizerBottom->Add( m_deleteSearchDir, 0, wxLEFT, 20 );
 
 
 	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 0 );
 
-	m_replaceButton = new wxButton( this, wxID_ANY, _("Replace Models"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_replaceButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 15 );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
 
-	m_keepButton = new wxButton( this, wxID_CANCEL, _("Keep Existing"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_keepButton, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 15 );
+	bSizerBottom->Add( m_sdbSizer1, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizerMain->Add( bSizerBottom, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxTOP, 3 );
 
 
 	this->SetSizer( bSizerMain );
@@ -178,8 +202,8 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	m_addReplacement->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnOpenExternalFileClick ), NULL, this );
 	m_addSearchDir->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnAddSearchDirectoryClick ), NULL, this );
 	m_deleteSearchDir->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnRemoveSearchDirectoryClick ), NULL, this );
-	m_replaceButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnReplaceClick ), NULL, this );
-	m_keepButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnKeepClick ), NULL, this );
+	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnKeepClick ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnReplaceClick ), NULL, this );
 }
 
 DIALOG_MIGRATE_3D_MODELS_BASE::~DIALOG_MIGRATE_3D_MODELS_BASE()
@@ -190,7 +214,7 @@ DIALOG_MIGRATE_3D_MODELS_BASE::~DIALOG_MIGRATE_3D_MODELS_BASE()
 	m_addReplacement->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnOpenExternalFileClick ), NULL, this );
 	m_addSearchDir->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnAddSearchDirectoryClick ), NULL, this );
 	m_deleteSearchDir->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnRemoveSearchDirectoryClick ), NULL, this );
-	m_replaceButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnReplaceClick ), NULL, this );
-	m_keepButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnKeepClick ), NULL, this );
+	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnKeepClick ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MIGRATE_3D_MODELS_BASE::OnReplaceClick ), NULL, this );
 
 }

@@ -561,11 +561,14 @@ bool DIALOG_SHIM::Show( bool show )
             }
 #endif
 
+            ReloadSashPositions();
         }
         else if( m_initialSize != wxDefaultSize )
         {
             SetSize( m_initialSize );
             Centre();
+
+            ReloadSashPositions();
         }
 
         // Re-center if the title bar would land on no display. Testing a point inside the title
@@ -1021,6 +1024,63 @@ void DIALOG_SHIM::LoadControlState()
                         {
                             if( j.is_string() )
                                 grid->ShowHideColumns( wxString::FromUTF8( j.get<std::string>().c_str() ) );
+                        }
+                    }
+                }
+
+                for( wxWindow* child : win->GetChildren() )
+                    loadFn( child );
+            };
+
+    if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( GetClientData() ) )
+    {
+        if( !props->GetPropertyOr( "persist", false ) )
+            return;
+    }
+
+    for( wxWindow* child : GetChildren() )
+        loadFn( child );
+}
+
+
+void DIALOG_SHIM::ReloadSashPositions()
+{
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( !settings )
+        return;
+
+    std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
+    auto        dlgIt = settings->CsInternals().m_dialogControlValues.find( dialogKey );
+
+    if( dlgIt == settings->CsInternals().m_dialogControlValues.end() )
+        return;
+
+    const std::map<std::string, nlohmann::json>& dlgMap = dlgIt->second;
+
+    std::function<void( wxWindow* )> loadFn =
+            [&]( wxWindow* win )
+            {
+                if( PROPERTY_HOLDER* props = PROPERTY_HOLDER::SafeCast( win->GetClientData() ) )
+                {
+                    if( !props->GetPropertyOr( "persist", false ) )
+                        return;
+                }
+
+                std::string key = generateKey( win );
+
+                if( !key.empty() )
+                {
+                    auto it = dlgMap.find( key );
+
+                    if( it != dlgMap.end() )
+                    {
+                        const nlohmann::json& j = it->second;
+
+                        if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                splitter->SetSashPosition( j.get<int>() );
                         }
                     }
                 }

@@ -156,6 +156,12 @@ public:
     void LoadControlState();
 
     /**
+     * While we did this in LoadControlState(), we need to re-apply if after setting
+     * the dialog size.  Well, sometimes we need to re-apply it.
+     */
+    void ReloadSashPositions();
+
+    /**
      * Save control values and geometry to the current project's local settings.
      */
     void SaveControlState();

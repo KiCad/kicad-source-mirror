@@ -73,6 +73,8 @@ public:
     /// Returns the number of FP_3DMODEL entries rewritten.
     static int AutoMigrateByFilename( PCB_EDIT_FRAME* aFrame );
 
+    bool TransferDataToWindow() override;
+
 protected:
     void OnMissingSelected( wxListEvent& event ) override;
     void OnCandidateSelected( wxListEvent& event ) override;
