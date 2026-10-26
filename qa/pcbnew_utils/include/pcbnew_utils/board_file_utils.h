@@ -24,6 +24,8 @@
 #include <memory>
 #include <string>
 
+#include <wx/string.h>
+
 class BOARD;
 class BOARD_ITEM;
 class FOOTPRINT;
@@ -113,7 +115,19 @@ std::unique_ptr<BOARD> RequireBoardFromPcbnewQAData( const std::filesystem::path
 
 std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
                                                           std::istream& aFallback = std::cin );
-
-std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename );
+/**
+ * Read a footprint object  \a aFootprintName from \a aFileName.
+ *
+ * @note This no longer directly parses a FOOTPRINT object from a file.  This was always conceptually a
+ *       bad idea because it assumed a footprint library file would only ever be a FOOTPRINT object which
+ *       was wrong.  This now calls #PCB_IO_KICAD_SEXPR::LoadFootprint which loads a footprint library.
+ *       This means that the footprint name must be the file name of the originally saved file.
+ *
+ * @param aFilename is the full path and file name with extension of the file to load.
+ * @param aFootprintName is the name of the footprint to load.
+ * @return a pointer to the loaded #FOOTPRINT object or a nullptr if the footprint was not loaded.
+ */
+std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename,
+                                                  const wxString& aFootprintName );
 
 } // namespace KI_TEST

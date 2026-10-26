@@ -97,7 +97,8 @@ BOOST_AUTO_TEST_CASE( FootprintLineEndingsRoundTrip )
     const std::filesystem::path savePath = libPath / "line_ending_roundtrip.kicad_mod";
 
     KI_TEST::DumpFootprintToFile( footprint, savePath );
-    std::unique_ptr<FOOTPRINT> loadedFootprint = KI_TEST::ReadFootprintFromFile( savePath );
+    std::unique_ptr<FOOTPRINT> loadedFootprint = KI_TEST::ReadFootprintFromFile( savePath,
+                                                                                 wxT( "line_ending_roundtrip" ) );
 
     BOOST_REQUIRE( loadedFootprint );
 
@@ -133,7 +134,8 @@ BOOST_AUTO_TEST_CASE( FootprintLineEndingEqualLengthWidthRoundTrip )
     const std::filesystem::path savePath = libPath / "line_ending_equal_size.kicad_mod";
 
     KI_TEST::DumpFootprintToFile( footprint, savePath );
-    std::unique_ptr<FOOTPRINT> loadedFootprint = KI_TEST::ReadFootprintFromFile( savePath );
+    std::unique_ptr<FOOTPRINT> loadedFootprint = KI_TEST::ReadFootprintFromFile( savePath,
+                                                                                 wxT( "line_ending_equal_size" ) );
 
     BOOST_REQUIRE( loadedFootprint );
 

@@ -168,9 +168,19 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFi
 }
 
 
-std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename )
+std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename,
+                                                  const wxString& aFootprintName )
 {
-    return ReadFootprintFromFileOrStream( aFilename.string() );
+    PCB_IO_KICAD_SEXPR io;
+    wxString           libPath;
+    wxFileName         fn( aFilename.string() );
+
+    if( fn.GetExt().Lower() == FILEEXT::KiCadFootprintFileExtension )
+        libPath = fn.GetPath();
+    else
+        libPath = aFilename.string();
+
+    return io.FootprintLoad( libPath, aFootprintName, true );
 }
 
 
