@@ -1481,7 +1481,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks() const
 
                     VECTOR2I padSize = pad->GetSize( layer );
 
-                    if( padSize.x > pad->GetDrillSizeX() || padSize.y > pad->GetDrillSizeY() )
+                    if( padSize.x > pad->GetDrillSize().x || padSize.y > pad->GetDrillSize().y )
                     {
                         m_plotter->SetColor( WHITE );
                         break;

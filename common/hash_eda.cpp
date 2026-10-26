@@ -151,7 +151,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            hash_combine( ret, pad->GetDrillSizeX(), pad->GetDrillSizeY() );
+            hash_combine( ret, pad->GetDrillSize().x, pad->GetDrillSize().y );
             hash_combine( ret, pad->GetDrillShape() );
 
             pad->GetLayerSet().RunOnLayers(

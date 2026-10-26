@@ -538,7 +538,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNonPlatedSlot( const PNS::ITEM* aItem )
             PAD* pad = static_cast<PAD*>( parent );
 
             return pad->GetAttribute() == PAD_ATTRIB::NPTH
-                        && pad->GetDrillSizeX() != pad->GetDrillSizeY();
+                        && pad->GetDrillSize().x != pad->GetDrillSize().y;
         }
 
         // Via holes are (currently) always round, and always plated

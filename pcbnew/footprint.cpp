@@ -4831,11 +4831,11 @@ bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond 
     if( aFirst->GetLayerSet() != aSecond->GetLayerSet() )
         return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
 
-    if( aFirst->GetDrillSizeX() != aSecond->GetDrillSizeX() )
-        return aFirst->GetDrillSizeX() < aSecond->GetDrillSizeX();
+    if( aFirst->GetDrillSize().x != aSecond->GetDrillSize().x )
+        return aFirst->GetDrillSize().x < aSecond->GetDrillSize().x;
 
-    if( aFirst->GetDrillSizeY() != aSecond->GetDrillSizeY() )
-        return aFirst->GetDrillSizeY() < aSecond->GetDrillSizeY();
+    if( aFirst->GetDrillSize().y != aSecond->GetDrillSize().y )
+        return aFirst->GetDrillSize().y < aSecond->GetDrillSize().y;
 
     if( aFirst->GetDrillShape() != aSecond->GetDrillShape() )
         return aFirst->GetDrillShape() < aSecond->GetDrillShape();

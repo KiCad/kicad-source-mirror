@@ -976,9 +976,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 {
                     if( pad->HasHole() )
                     {
-                        if( pad->GetDrillSizeX() == pad->GetDrillSizeY() )
+                        if( pad->GetDrillSize().x == pad->GetDrillSize().y )
                         {
-                            int drill = pad->GetDrillSizeX();
+                            int drill = pad->GetDrillSize().x;
 
                             if( aPlotOpt.GetDrillMarksType() == DRILL_MARKS::SMALL_DRILL_SHAPE )
                                 drill = std::min( smallDrill, drill );

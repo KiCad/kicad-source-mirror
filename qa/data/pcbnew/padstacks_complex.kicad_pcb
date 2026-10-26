@@ -158,7 +158,7 @@
 				)
 				(layer "In2.Cu"
 					(shape rect)
-					(size 1.27 -1.27)
+					(size 1.27 1.27)
 				)
 				(layer "B.Cu"
 					(shape rect)

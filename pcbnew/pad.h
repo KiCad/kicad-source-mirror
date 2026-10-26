@@ -112,12 +112,12 @@ public:
 
     bool HasHole() const override
     {
-        return GetDrillSizeX() > 0 && GetDrillSizeY() > 0;
+        return GetDrillSize().x > 0 && GetDrillSize().y > 0;
     }
 
     bool HasDrilledHole() const override
     {
-        return HasHole() && GetDrillSizeX() == GetDrillSizeY();
+        return HasHole() && GetDrillSize().x == GetDrillSize().y;
     }
 
     bool IsLocked() const override;
@@ -292,11 +292,11 @@ public:
     // in the GUI when the padstack mode is set to anything other than NORMAL, but so that the code
     // compiles, these are set up to work with the front layer (in other words, assume the mode is
     // NORMAL, where F_Cu stores the whole padstack data)
-    void SetSizeX( int aX );
-    int  GetSizeX() const;
+    void SetSizeXProp( int aX );
+    int  GetSizeXProp() const;
 
-    void SetSizeY( int aY );
-    int  GetSizeY() const;
+    void SetSizeYProp( int aY );
+    int  GetSizeYProp() const;
 
     void SetDelta( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
     {
@@ -318,10 +318,10 @@ public:
 
     void     SetDrillSize( const VECTOR2I& aSize ) { SetPrimaryDrillSize( aSize ); }
     VECTOR2I GetDrillSize() const { return GetPrimaryDrillSize(); }
-    void     SetDrillSizeX( int aX );
-    int      GetDrillSizeX() const { return GetPrimaryDrillSizeX(); }
-    void     SetDrillSizeY( int aY );
-    int      GetDrillSizeY() const { return GetPrimaryDrillSizeY(); }
+    void     SetDrillSizeXProp( int aX );
+    int      GetDrillSizeXProp() const { return GetPrimaryDrillSizeX(); }
+    void     SetDrillSizeYProp( int aY );
+    int      GetDrillSizeYProp() const { return GetPrimaryDrillSizeY(); }
 
     void     SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset );
     VECTOR2I GetOffset( PCB_LAYER_ID aLayer ) const;

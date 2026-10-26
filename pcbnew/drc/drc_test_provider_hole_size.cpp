@@ -128,12 +128,12 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 
         ptA = aPad->GetPosition();
 
-        if( aPad->GetDrillSizeX() == aPad->GetDrillSizeY() )
-            ptB = ptA - VECTOR2I( aPad->GetDrillSize() ).Resize( aPad->GetDrillSizeX() / 2 );
-        else if( aPad->GetDrillSizeX() > aPad->GetDrillSizeY() )
-            ptB = ptA - VECTOR2I( aPad->GetDrillSizeX() / 2, 0 );
+        if( aPad->GetDrillSize().x == aPad->GetDrillSize().y )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSize() ).Resize( aPad->GetDrillSize().x / 2 );
+        else if( aPad->GetDrillSize().x > aPad->GetDrillSize().y )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSize().x / 2, 0 );
         else
-            ptB = ptA - VECTOR2I( 0, aPad->GetDrillSizeY() / 2 );
+            ptB = ptA - VECTOR2I( 0, aPad->GetDrillSize().y / 2 );
     }
 
     if( constraint.Value().HasMin() && holeMinor < constraint.Value().Min() )
@@ -143,12 +143,12 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPadHole( PAD* aPad )
 
         ptA = aPad->GetPosition();
 
-        if( aPad->GetDrillSizeX() == aPad->GetDrillSizeY() )
-            ptB = ptA - VECTOR2I( aPad->GetDrillSize() ).Resize( aPad->GetDrillSizeX() / 2 );
-        else if( aPad->GetDrillSizeX() < aPad->GetDrillSizeY() )
-            ptB = ptA - VECTOR2I( aPad->GetDrillSizeX() / 2, 0 );
+        if( aPad->GetDrillSize().x == aPad->GetDrillSize().y )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSize() ).Resize( aPad->GetDrillSize().x / 2 );
+        else if( aPad->GetDrillSize().x < aPad->GetDrillSize().y )
+            ptB = ptA - VECTOR2I( aPad->GetDrillSize().x / 2, 0 );
         else
-            ptB = ptA - VECTOR2I( 0, aPad->GetDrillSizeY() / 2 );
+            ptB = ptA - VECTOR2I( 0, aPad->GetDrillSize().y / 2 );
     }
 
     if( fail_min || fail_max )

@@ -45,10 +45,10 @@ BOOST_AUTO_TEST_CASE( SetSizeXOnCirclePadUpdatesY )
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
 
-    pad->SetSizeX( pcbIUScale.mmToIU( 1.5 ) );
+    pad->SetSizeXProp( pcbIUScale.mmToIU( 1.5 ) );
 
-    BOOST_CHECK_EQUAL( pad->GetSizeX(), pcbIUScale.mmToIU( 1.5 ) );
-    BOOST_CHECK_EQUAL( pad->GetSizeY(), pcbIUScale.mmToIU( 1.5 ) );
+    BOOST_CHECK_EQUAL( pad->GetSizeXProp(), pcbIUScale.mmToIU( 1.5 ) );
+    BOOST_CHECK_EQUAL( pad->GetSizeYProp(), pcbIUScale.mmToIU( 1.5 ) );
 }
 
 
@@ -67,10 +67,10 @@ BOOST_AUTO_TEST_CASE( SetSizeYOnCirclePadUpdatesX )
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
 
-    pad->SetSizeY( pcbIUScale.mmToIU( 1.5 ) );
+    pad->SetSizeYProp( pcbIUScale.mmToIU( 1.5 ) );
 
-    BOOST_CHECK_EQUAL( pad->GetSizeX(), pcbIUScale.mmToIU( 1.5 ) );
-    BOOST_CHECK_EQUAL( pad->GetSizeY(), pcbIUScale.mmToIU( 1.5 ) );
+    BOOST_CHECK_EQUAL( pad->GetSizeXProp(), pcbIUScale.mmToIU( 1.5 ) );
+    BOOST_CHECK_EQUAL( pad->GetSizeYProp(), pcbIUScale.mmToIU( 1.5 ) );
 }
 
 
@@ -89,10 +89,10 @@ BOOST_AUTO_TEST_CASE( SetSizeXOnRectPadLeavesYAlone )
     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
     pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 0.5 ) ) );
 
-    pad->SetSizeX( pcbIUScale.mmToIU( 1.5 ) );
+    pad->SetSizeXProp( pcbIUScale.mmToIU( 1.5 ) );
 
-    BOOST_CHECK_EQUAL( pad->GetSizeX(), pcbIUScale.mmToIU( 1.5 ) );
-    BOOST_CHECK_EQUAL( pad->GetSizeY(), pcbIUScale.mmToIU( 0.5 ) );
+    BOOST_CHECK_EQUAL( pad->GetSizeXProp(), pcbIUScale.mmToIU( 1.5 ) );
+    BOOST_CHECK_EQUAL( pad->GetSizeYProp(), pcbIUScale.mmToIU( 0.5 ) );
 }
 
 

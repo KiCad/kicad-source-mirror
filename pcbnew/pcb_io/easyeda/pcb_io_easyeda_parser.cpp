@@ -151,25 +151,26 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
     BOARD*     board = aParent ? aParent : dynamic_cast<BOARD*>( aContainer );
     FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aContainer );
 
-    auto getOrAddNetItem = [&]( const wxString& aNetName ) -> NETINFO_ITEM*
-    {
-        if( !board )
-            return nullptr;
+    auto getOrAddNetItem =
+            [&]( const wxString& aNetName ) -> NETINFO_ITEM*
+            {
+                if( !board )
+                    return nullptr;
 
-        if( aNetName.empty() )
-            return nullptr;
+                if( aNetName.empty() )
+                    return nullptr;
 
-        if( NETINFO_ITEM* item = board->FindNet( aNetName ) )
-        {
-            return item;
-        }
-        else
-        {
-            item = new NETINFO_ITEM( board, aNetName, board->GetNetCount() + 1 );
-            board->Add( item, ADD_MODE::APPEND );
-            return item;
-        }
-    };
+                if( NETINFO_ITEM* item = board->FindNet( aNetName ) )
+                {
+                    return item;
+                }
+                else
+                {
+                    item = new NETINFO_ITEM( board, aNetName, board->GetNetCount() + 1 );
+                    board->Add( item, ADD_MODE::APPEND );
+                    return item;
+                }
+            };
 
     if( footprint )
     {
@@ -1016,7 +1017,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             }
             else if( padType == wxS( "OVAL" ) )
             {
-                if( pad->GetSizeX() == pad->GetSizeY() )
+                if( pad->GetSize( PADSTACK::ALL_LAYERS ).x == pad->GetSize( PADSTACK::ALL_LAYERS ).y )
                     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
                 else
                     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
@@ -1045,6 +1046,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             }
 
             wxString holeDia = arr[9];
+
             if( !holeDia.IsEmpty() )
             {
                 double holeD = ConvertSize( holeDia ) * 2;
@@ -1071,6 +1073,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             }
 
             wxString pasteExp = arr[17];
+
             if( !pasteExp.IsEmpty() )
             {
                 double pasteExpansion = ConvertSize( pasteExp );
@@ -1078,13 +1081,37 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             }
 
             wxString maskExp = arr[18];
+
             if( !maskExp.IsEmpty() )
             {
                 double maskExpansion = ConvertSize( maskExp );
                 pad->SetLocalSolderMaskMargin( maskExpansion );
             }
 
-            padContainer->Add( pad.release(), ADD_MODE::APPEND );
+            bool badPad = false;
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        VECTOR2I padSize = pad->GetSize( layer );
+
+                        if( padSize.x <= 0 || padSize.y <= 0 )
+                            badPad = true;
+                    } );
+
+            if( badPad )
+            {
+                // Not worth throwing, and we don't (at present) have a reporter....
+                /*
+                Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                                          aParent->GetFileName() ),
+                        RPT_SEVERITY_ERROR );
+                 */
+            }
+            else
+            {
+                padContainer->Add( pad.release(), ADD_MODE::APPEND );
+            }
         }
     }
 }
@@ -1180,8 +1207,8 @@ PCB_IO_EASYEDA_PARSER::ParseFootprint( const VECTOR2D& aOrigin, const EDA_ANGLE&
 
 
 void PCB_IO_EASYEDA_PARSER::ParseBoard( BOARD* aBoard, const VECTOR2D& aOrigin,
-                                     std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap,
-                                     wxArrayString                                   aShapes )
+                                        std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap,
+                                        wxArrayString                                   aShapes )
 {
     m_relOrigin = aOrigin;
 

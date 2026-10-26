@@ -1295,7 +1295,7 @@ bool PCB_PAINTER::HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const
         if( aLayer != LAYER_PAD_HOLEWALLS )
             return true;
 
-        return pad->GetDrillSizeX() <= 0 || ( pad->GetSecondaryDrillSizeX() <= 0 && pad->GetTertiaryDrillSizeX() <= 0 );
+        return pad->GetDrillSize().x <= 0 || ( pad->GetSecondaryDrillSizeX() <= 0 && pad->GetTertiaryDrillSizeX() <= 0 );
     }
 
     case PCB_VIA_T:
@@ -2121,8 +2121,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         m_gal->SetIsStroke( false );
         double widthFactor = ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
         double lineWidth = widthFactor * m_holePlatingThickness;
-        lineWidth = std::min( lineWidth, aPad->GetSizeX() / 2.0 );
-        lineWidth = std::min( lineWidth, aPad->GetSizeY() / 2.0 );
+        lineWidth = std::min( lineWidth, aPad->GetSize( PADSTACK::ALL_LAYERS ).x / 2.0 );
+        lineWidth = std::min( lineWidth, aPad->GetSize( PADSTACK::ALL_LAYERS ).y / 2.0 );
 
         m_gal->SetFillColor( color );
         m_gal->SetMinLineWidth( lineWidth );
@@ -2144,7 +2144,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         // Draw backdrill indicators on top of the hole wall so they remain visible
         // regardless of layer rendering order
-        if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSizeX() > 0 )
+        if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSize().x > 0 )
         {
             const VECTOR2I& holePos = slot->GetSeg().A;
             const VECTOR2I& secDrill = aPad->GetSecondaryDrillSize();
@@ -2522,7 +2522,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         }
     }
 
-    if( !m_pcbSettings.IsPrinting() && IsCopperLayer( pcbLayer ) && aPad->GetDrillSizeX() > 0 )
+    if( !m_pcbSettings.IsPrinting() && IsCopperLayer( pcbLayer ) && aPad->GetDrillSize().x > 0 )
     {
         VECTOR2D holePos = aPad->GetPosition() + aPad->GetOffset( pcbLayer );
         drawPostMachiningIndicator( aPad, holePos, pcbLayer );

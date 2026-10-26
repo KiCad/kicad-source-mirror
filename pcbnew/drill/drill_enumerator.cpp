@@ -287,8 +287,9 @@ void enumeratePad( PAD* aPad, const DRILL_QUERY& aQuery, std::vector<DRILL_OPERA
 
 bool IsDrillSlot( const PAD& aPad )
 {
-    return aPad.HasHole() && aPad.GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE
-           && aPad.GetDrillSizeX() != aPad.GetDrillSizeY();
+    return aPad.HasHole()
+            && aPad.GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE
+            && aPad.GetDrillSize().x != aPad.GetDrillSize().y;
 }
 
 

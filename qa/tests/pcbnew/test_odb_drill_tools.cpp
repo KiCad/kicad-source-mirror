@@ -106,7 +106,7 @@ static void checkNonPlatedDrillTools( const char* aUnits, double aOutputScale )
         if( pad->GetAttribute() != PAD_ATTRIB::NPTH || !pad->HasHole() )
             continue;
 
-        expectedSizes.insert( pcbIUScale.IUTomm( std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) )
+        expectedSizes.insert( pcbIUScale.IUTomm( std::min( pad->GetDrillSize().x, pad->GetDrillSize().y ) )
                               * aOutputScale );
         npthHoleCount++;
     }

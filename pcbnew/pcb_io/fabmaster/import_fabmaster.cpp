@@ -2953,14 +2953,25 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     else
                         newpad->SetOrientation( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
 
-                    if( newpad->GetSizeX() > 0 || newpad->GetSizeY() > 0 )
-                    {
-                        fp->Add( newpad.release(), ADD_MODE::APPEND );
-                    }
-                    else
+                    bool badPad = false;
+
+                    newpad->Padstack().ForEachUniqueLayer(
+                            [&]( PCB_LAYER_ID layer )
+                            {
+                                VECTOR2I padSize = newpad->GetSize( layer );
+
+                                if( padSize.x <= 0 && padSize.y <= 0 )
+                                    badPad = true;
+                            } );
+
+                    if( badPad )
                     {
                         reportError( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
                                      aBoard->GetFileName().wc_str() );
+                    }
+                    else
+                    {
+                        fp->Add( newpad.release(), ADD_MODE::APPEND );
                     }
                 }
             }

@@ -2185,7 +2185,7 @@ BOOST_AUTO_TEST_CASE( RoundUnequalDrillHasPadstackHole )
             board->ResolveItem( KIID( wxS( "bd1ca0c2-74bb-4a01-94e6-11796af0cb7e" ) ), true ) );
     BOOST_REQUIRE( pad );
     BOOST_REQUIRE( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE );
-    BOOST_REQUIRE_NE( pad->GetDrillSizeX(), pad->GetDrillSizeY() );
+    BOOST_REQUIRE_NE( pad->GetDrillSize().x, pad->GetDrillSize().y );
 
     wxString                    tempPath = CreateTempFile();
     std::map<std::string, UTF8> props = { { "units", "mm" }, { "version", "C" }, { "sigfig", "6" } };
@@ -2244,7 +2244,7 @@ BOOST_AUTO_TEST_CASE( RoundUnequalDrillHasPadstackHole )
     BOOST_REQUIRE_MESSAGE( padstackHole, "Round unequal drill padstack must define its hole" );
     BOOST_CHECK_EQUAL( padstackHole->GetAttribute( wxS( "platingStatus" ) ), wxS( "PLATED" ) );
     BOOST_CHECK_SMALL( wxAtof( padstackHole->GetAttribute( wxS( "diameter" ) ) ) - layerHole, 0.001 );
-    BOOST_CHECK_SMALL( layerHole - pcbIUScale.IUTomm( std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) ),
+    BOOST_CHECK_SMALL( layerHole - pcbIUScale.IUTomm( std::min( pad->GetDrillSize().x, pad->GetDrillSize().y ) ),
                        0.001 );
 }
 
@@ -2325,7 +2325,7 @@ BOOST_AUTO_TEST_CASE( NpthMaskOnlyOpeningUsesAuthoredSize )
         for( PAD* pad : footprint->Pads() )
         {
             if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->IsOnLayer( F_Mask ) && !pad->IsOnLayer( F_Cu )
-                && pad->GetDrillSizeX() == pcbIUScale.mmToIU( 2.7 )
+                && pad->GetDrillSize().x == pcbIUScale.mmToIU( 2.7 )
                 && pad->GetSize( F_Mask ).x == pcbIUScale.mmToIU( 5.0 ) )
             {
                 if( !source )

@@ -83,7 +83,7 @@ BOOST_FIXTURE_TEST_CASE( NpthSlotClearanceIssue24799, NPTH_SLOT_CLEARANCE_FIXTUR
             if( pad->GetAttribute() != PAD_ATTRIB::NPTH || !pad->HasHole() )
                 continue;
 
-            if( pad->GetDrillSizeX() != pad->GetDrillSizeY() )
+            if( pad->GetDrillSize().x != pad->GetDrillSize().y )
                 slotPad = pad;
             else
                 roundPad = pad;
@@ -113,8 +113,8 @@ BOOST_FIXTURE_TEST_CASE( NpthSlotClearanceIssue24799, NPTH_SLOT_CLEARANCE_FIXTUR
                                "No fill within 2 mm of the hole, standoff is far too large" );
 
         BOOST_TEST_MESSAGE( wxString::Format( "Fill standoff from %s hole: %.3f mm",
-                                              pad->GetDrillSizeX() == pad->GetDrillSizeY() ? wxString( "round" )
-                                                                                           : wxString( "oblong" ),
+                                              pad->GetDrillSize().x == pad->GetDrillSize().y ? wxString( "round" )
+                                                                                             : wxString( "oblong" ),
                                               pcbIUScale.IUTomm( actual ) ) );
 
         // both holes should get the 0.25 mm hole clearance, not the 1 mm edge clearance

@@ -442,7 +442,7 @@ BOOST_AUTO_TEST_CASE( OdbNpthPressFitNeverUsesPressFitTool )
                 if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->GetProperty() == PAD_PROP::PRESSFIT )
                 {
                     ++invalidPads;
-                    BOOST_CHECK_EQUAL( pad->GetDrillSizeX() != pad->GetDrillSizeY(), isSlot );
+                    BOOST_CHECK_EQUAL( pad->GetDrillSize().x != pad->GetDrillSize().y, isSlot );
                 }
             }
         }

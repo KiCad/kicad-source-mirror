@@ -2714,10 +2714,10 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         padStackHoleNode->AddAttribute( "name",
                                         wxString::Format( "%s%d_%d",
                                                           aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PTH" : "NPTH",
-                                                          aPad->GetDrillSizeX(), aPad->GetDrillSizeY() ) );
+                                                          aPad->GetDrillSize().x, aPad->GetDrillSize().y ) );
 
         // A round drill with unequal axes is drilled at its smaller axis, like its layer hole
-        int diameter = std::min( aPad->GetDrillSizeX(), aPad->GetDrillSizeY() );
+        int diameter = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
         addAttribute( padStackHoleNode,  "diameter", floatVal( m_scale * diameter ) );
         addAttribute( padStackHoleNode,  "platingStatus",
                       aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
@@ -2745,7 +2745,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         {
             PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
             shape.SetStart( offset );
-            shape.SetEnd( offset + VECTOR2I( std::min( aPad->GetDrillSizeX(), aPad->GetDrillSizeY() ) / 2, 0 ) );
+            shape.SetEnd( offset + VECTOR2I( std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y ) / 2, 0 ) );
             addShape( padStackPadDefNode, shape );
         }
         else

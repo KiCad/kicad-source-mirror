@@ -304,7 +304,7 @@ VECTOR2I PAD::GetSize( PCB_LAYER_ID aLayer ) const
 }
 
 
-void PAD::SetSizeX( int aX )
+void PAD::SetSizeXProp( int aX )
 {
     if( aX <= 0 )
         return;
@@ -318,13 +318,13 @@ void PAD::SetSizeX( int aX )
 }
 
 
-int PAD::GetSizeX() const
+int PAD::GetSizeXProp() const
 {
     return GetSize( PADSTACK::ALL_LAYERS ).x;
 }
 
 
-void PAD::SetSizeY( int aY )
+void PAD::SetSizeYProp( int aY )
 {
     if( aY <= 0 )
         return;
@@ -338,7 +338,7 @@ void PAD::SetSizeY( int aY )
 }
 
 
-int PAD::GetSizeY() const
+int PAD::GetSizeYProp() const
 {
     return GetSize( PADSTACK::ALL_LAYERS ).y;
 }
@@ -803,7 +803,7 @@ void PAD::SetPrimaryDrillSizeX( const int aX )
 }
 
 
-void PAD::SetDrillSizeX( const int aX )
+void PAD::SetDrillSizeXProp( const int aX )
 {
     SetPrimaryDrillSizeX( aX );
 }
@@ -817,7 +817,7 @@ void PAD::SetPrimaryDrillSizeY( const int aY )
 }
 
 
-void PAD::SetDrillSizeY( const int aY )
+void PAD::SetDrillSizeYProp( const int aY )
 {
     SetPrimaryDrillSizeY( aY );
 }
@@ -1661,8 +1661,8 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
                     }
                 } );
 
-        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeX() / 2.0 ) );
-        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSizeY() / 2.0 ) );
+        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSize().x / 2.0 ) );
+        m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, KiROUND( GetDrillSize().y / 2.0 ) );
     }
 
     // All done
@@ -3784,11 +3784,11 @@ static struct PAD_DESC
                     groupPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
-                    &PAD::SetSizeX, &PAD::GetSizeX, PROPERTY_DISPLAY::PT_SIZE ),
+                    &PAD::SetSizeXProp, &PAD::GetSizeXProp, PROPERTY_DISPLAY::PT_SIZE ),
                     groupPad )
                 .SetAvailableFunc( hasNormalPadstack );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size Y" ),
-                    &PAD::SetSizeY, &PAD::GetSizeY, PROPERTY_DISPLAY::PT_SIZE ),
+                    &PAD::SetSizeYProp, &PAD::GetSizeYProp, PROPERTY_DISPLAY::PT_SIZE ),
                     groupPad )
                 .SetAvailableFunc( []( INSPECTABLE* aItem ) -> bool
                                    {
@@ -3835,13 +3835,13 @@ static struct PAD_DESC
                 .SetWriteableFunc( padCanHaveHole );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size X" ),
-                    &PAD::SetDrillSizeX, &PAD::GetDrillSizeX, PROPERTY_DISPLAY::PT_SIZE ),
+                    &PAD::SetDrillSizeXProp, &PAD::GetDrillSizeXProp, PROPERTY_DISPLAY::PT_SIZE ),
                     groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Hole Size Y" ),
-                    &PAD::SetDrillSizeY, &PAD::GetDrillSizeY, PROPERTY_DISPLAY::PT_SIZE ),
+                    &PAD::SetDrillSizeYProp, &PAD::GetDrillSizeYProp, PROPERTY_DISPLAY::PT_SIZE ),
                     groupPad )
                 .SetWriteableFunc( padCanHaveHole )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )

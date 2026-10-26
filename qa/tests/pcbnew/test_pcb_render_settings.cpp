@@ -302,12 +302,9 @@ BOOST_AUTO_TEST_CASE( BackdrilledPadKeepsIndicatorColours )
     PAD* pad = new PAD( footprint );
     pad->SetAttribute( PAD_ATTRIB::PTH );
     pad->SetPosition( { 0, 0 } );
-    pad->SetSizeX( pcbIUScale.mmToIU( 1.6 ) );
-    pad->SetSizeY( pcbIUScale.mmToIU( 1.6 ) );
-    pad->SetDrillSizeX( pcbIUScale.mmToIU( 0.8 ) );
-    pad->SetDrillSizeY( pcbIUScale.mmToIU( 0.8 ) );
-    pad->SetSecondaryDrillSizeX( pcbIUScale.mmToIU( 1.2 ) );
-    pad->SetSecondaryDrillSizeY( pcbIUScale.mmToIU( 1.2 ) );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.6 ), pcbIUScale.mmToIU( 1.6 ) ) );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.8 ), pcbIUScale.mmToIU( 0.8 ) ) );
+    pad->SetSecondaryDrillSize( VECTOR2I( pcbIUScale.mmToIU( 1.2 ), pcbIUScale.mmToIU( 1.2 ) ) );
     pad->SetSecondaryDrillStartLayer( F_Cu );
     pad->SetSecondaryDrillEndLayer( In1_Cu );
     footprint->Add( pad );

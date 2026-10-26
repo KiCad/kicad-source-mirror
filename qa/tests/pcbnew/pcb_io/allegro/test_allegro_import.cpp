@@ -166,8 +166,12 @@ BOOST_AUTO_TEST_CASE( UnplatedHolesHaveSize )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
-                zeroSized++;
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        if( pad->GetSize( layer ).x <= 0 || pad->GetSize( layer ).y <= 0 )
+                            zeroSized++;
+                    } );
         }
     }
 
@@ -1474,7 +1478,7 @@ BOOST_AUTO_TEST_CASE( SmdPadDetection )
             {
                 for( PAD* pad : fp->Pads() )
                 {
-                    bool hasDrill = pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0;
+                    bool hasDrill = pad->GetDrillSize().x > 0 && pad->GetDrillSize().y > 0;
                     PAD_ATTRIB attr = pad->GetAttribute();
 
                     if( !hasDrill && attr == PAD_ATTRIB::PTH )
@@ -2679,7 +2683,7 @@ BOOST_AUTO_TEST_CASE( PadDrillConsistency )
                 for( PAD* pad : fp->Pads() )
                 {
                     PAD_ATTRIB attr = pad->GetAttribute();
-                    bool hasDrill = pad->GetDrillSizeX() > 0;
+                    bool hasDrill = pad->GetDrillSize().x > 0;
 
                     if( attr == PAD_ATTRIB::PTH && !hasDrill )
                     {

@@ -210,7 +210,7 @@ SPAN_DRILL_TABLE collectBoardDrillTable( const BOARD& aBoard )
             if( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
                 continue;
 
-            int drill = toMicrons( pad->GetDrillSizeX() );
+            int drill = toMicrons( pad->GetDrillSize().x );
 
             if( drill <= 0 )
                 continue;

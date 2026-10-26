@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE( PadStackDifferentLayers )
     // Verify drill is present
     BOOST_CHECK_EQUAL( static_cast<int>( pad1->GetAttribute() ),
                        static_cast<int>( PAD_ATTRIB::PTH ) );
-    BOOST_CHECK_GT( pad1->GetDrillSizeX(), 0 );
+    BOOST_CHECK_GT( pad1->GetDrillSize().x, 0 );
 }
 
 

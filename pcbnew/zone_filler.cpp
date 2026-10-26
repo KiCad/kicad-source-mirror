@@ -1894,7 +1894,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             int holeRadius = 0;
 
             if( pad->HasHole() )
-                holeRadius = std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) / 2;
+                holeRadius = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y ) / 2;
 
             for( PCB_LAYER_ID layer : layers )
             {

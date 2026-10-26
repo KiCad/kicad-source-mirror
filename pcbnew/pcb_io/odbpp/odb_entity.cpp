@@ -1535,10 +1535,10 @@ void ODB_LAYER_ENTITY::InitDrillData()
                     continue;
 
                 m_tools.value().AddDrillTool( m_plugin->GetFormat(),
-                                               padIsNPTH ? wxT( "NON_PLATED" ) : wxT( "PLATED" ),
-                                               std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ),
-                                               !padIsNPTH && GetFabPadRole( *pad ) == FAB_PAD_ROLE::PRESSFIT
-                                                       ? wxT( "PRESS_FIT" ) : wxT( "STANDARD" ) );
+                                              padIsNPTH ? wxT( "NON_PLATED" ) : wxT( "PLATED" ),
+                                              std::min( pad->GetDrillSize().x, pad->GetDrillSize().y ),
+                                              !padIsNPTH && GetFabPadRole( *pad ) == FAB_PAD_ROLE::PRESSFIT
+                                                      ? wxT( "PRESS_FIT" ) : wxT( "STANDARD" ) );
 
                 m_layerItems[pad->GetNetCode()].push_back( item );
             }

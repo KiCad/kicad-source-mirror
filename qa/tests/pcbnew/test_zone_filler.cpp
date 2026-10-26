@@ -1055,14 +1055,13 @@ BOOST_FIXTURE_TEST_CASE( RegressionThermalReliefAnnularRing45, ZONE_FILL_TEST_FI
 
                 if( !pad->FlashLayer( layer ) )
                 {
-                    BOOST_TEST_MESSAGE(
-                            wxString::Format( "Pad %s (drill %.2f mm, spoke angle %.0f deg) on net %s is inside the "
-                                              "zone but not flashing on %s",
-                                              pad->GetNumber(),
-                                              pcbIUScale.IUTomm( pad->GetDrillSizeX() ),
-                                              pad->GetThermalSpokeAngle().AsDegrees(),
-                                              pad->GetNetname(),
-                                              m_board->GetLayerName( layer ) ) );
+                    BOOST_TEST_MESSAGE( wxString::Format( "Pad %s (drill %.2f mm, spoke angle %.0f deg) on net %s "
+                                                          "is inside the zone but not flashing on %s",
+                                                          pad->GetNumber(),
+                                                          pcbIUScale.IUTomm( pad->GetDrillSize().x ),
+                                                          pad->GetThermalSpokeAngle().AsDegrees(),
+                                                          pad->GetNetname(),
+                                                          m_board->GetLayerName( layer ) ) );
                     padsWithMissingFlashing++;
                 }
             }

@@ -133,18 +133,18 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                 if( pad->GetOffset( aLayer ) == VECTOR2I( 0, 0 ) )
                 {
-                    int xDist = KiROUND( ( pad->GetSizeX() - pad->GetDrillSizeX() ) / 2.0 );
-                    int yDist = KiROUND( ( pad->GetSizeY() - pad->GetDrillSizeY() ) / 2.0 );
+                    int xDist = KiROUND( ( pad->GetSize( aLayer ).x - pad->GetDrillSize().x ) / 2.0 );
+                    int yDist = KiROUND( ( pad->GetSize( aLayer ).y - pad->GetDrillSize().y ) / 2.0 );
 
                     if( yDist < xDist )
                     {
-                        *ptA = pad->GetPosition() - VECTOR2I( 0, pad->GetDrillSizeY() / 2 );
-                        *ptB = pad->GetPosition() - VECTOR2I( 0, pad->GetSizeY() / 2 );
+                        *ptA = pad->GetPosition() - VECTOR2I( 0, pad->GetDrillSize().y / 2 );
+                        *ptB = pad->GetPosition() - VECTOR2I( 0, pad->GetSize( aLayer ).y / 2 );
                     }
                     else
                     {
-                        *ptA = pad->GetPosition() - VECTOR2I( pad->GetDrillSizeX() / 2, 0 );
-                        *ptB = pad->GetPosition() - VECTOR2I( pad->GetSizeX() / 2, 0 );
+                        *ptA = pad->GetPosition() - VECTOR2I( pad->GetDrillSize().x / 2, 0 );
+                        *ptB = pad->GetPosition() - VECTOR2I( pad->GetSize( aLayer ).x / 2, 0 );
                     }
 
                     RotatePoint( *ptA, pad->GetPosition(), pad->GetOrientation() );

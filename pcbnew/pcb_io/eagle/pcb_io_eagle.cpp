@@ -1335,23 +1335,23 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                 continue;
 
             // An attribute of the element with a value overrides the one of the board
-            wxString value;
+            wxString fieldValue;
 
             if( auto boardValue = m_boardAttributes.find( varName ); boardValue != m_boardAttributes.end() )
-                value = boardValue->second;
+                fieldValue = boardValue->second;
 
             for( wxXmlNode* attribute = element->GetChildren(); attribute; attribute = attribute->GetNext() )
             {
                 if( attribute->GetName() == wxT( "attribute" ) && attribute->GetAttribute( wxT( "name" ) ) == varName
                     && attribute->HasAttribute( wxT( "value" ) ) )
                 {
-                    value = attribute->GetAttribute( wxT( "value" ) );
+                    fieldValue = attribute->GetAttribute( wxT( "value" ) );
                 }
             }
 
             PCB_FIELD* field = new PCB_FIELD( footprint, FIELD_T::USER, varName );
 
-            field->SetText( value );
+            field->SetText( fieldValue );
             field->SetVisible( false );
             field->SetLayer( text->GetLayer() );
             footprint->Add( field );
@@ -2110,20 +2110,37 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     // Eagle spokes are always '+'
     pad->SetThermalSpokeAngle( ANGLE_0 );
 
-    if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 && pad->HasHole() )
-    {
-        aFootprint->Add( pad.release() );
-    }
-    else
+    bool badPad = false;
+
+    pad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                VECTOR2I padSize = pad->GetSize( layer );
+
+                if( padSize.x <= 0 || padSize.y <= 0 )
+                    badPad = true;
+            } );
+
+    if( badPad )
     {
         wxFileName fileName( m_lib_path );
 
         if( m_board)
+        {
             Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
-                                      m_board->GetFileName() ), RPT_SEVERITY_ERROR );
+                                      m_board->GetFileName() ),
+                    RPT_SEVERITY_ERROR );
+        }
         else
+        {
             Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
-                                      fileName.GetFullName() ), RPT_SEVERITY_ERROR );
+                                      fileName.GetFullName() ),
+                    RPT_SEVERITY_ERROR );
+        }
+    }
+    else
+    {
+        aFootprint->Add( pad.release() );
     }
 }
 

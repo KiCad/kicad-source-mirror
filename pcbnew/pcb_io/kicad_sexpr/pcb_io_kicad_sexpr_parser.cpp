@@ -7808,16 +7808,23 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
     }
 
     // Zero-sized pads are likely algorithmically unsafe.
-    if( pad->GetSizeX() <= 0 || pad->GetSizeY() <= 0 )
-    {
-        pad->SetSize( F_Cu, VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
+    pad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                VECTOR2I padSize = pad->GetSize( aLayer );
 
-        m_parseWarnings.push_back( wxString::Format( _( "Invalid zero-sized pad pinned to %s in\n"
-                                                        "file: %s\n"
-                                                        "line: %d\n"
-                                                        "offset: %d" ),
-                                                     wxT( "1µm" ), CurSource(), CurLineNumber(), CurOffset() ) );
-    }
+                if( padSize.x <= 0 || padSize.y <= 0 )
+                {
+                    pad->SetSize( aLayer, VECTOR2I( pcbIUScale.mmToIU( 0.001 ), pcbIUScale.mmToIU( 0.001 ) ) );
+
+                    m_parseWarnings.push_back( wxString::Format( _( "Invalid zero-sized pad pinned to %s in\n"
+                                                                    "file: %s\n"
+                                                                    "line: %d\n"
+                                                                    "offset: %d" ),
+                                                                 wxT( "1µm" ),
+                                                                 CurSource(), CurLineNumber(), CurOffset() ) );
+                }
+            } );
 
     return pad.release();
 }

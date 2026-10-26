@@ -572,16 +572,26 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             }
 
-            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+            bool badPad = false;
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        VECTOR2I padSize = pad->GetSize( layer );
+
+                        if( padSize.x <= 0 || padSize.y <= 0 )
+                            badPad = true;
+                    } );
+
+            if( badPad )
             {
-                footprint->Add( pad.release() );
+                m_owner->Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                                                   aLineReader->GetSource() ),
+                                 RPT_SEVERITY_ERROR );
             }
             else
             {
-                m_owner->Report( wxString::Format( _( "Invalid zero-sized pad ignored in\n"
-                                                      "file: %s" ),
-                                                   aLineReader->GetSource() ),
-                                 RPT_SEVERITY_ERROR );
+                footprint->Add( pad.release() );
             }
 
             continue;
@@ -1489,8 +1499,27 @@ FOOTPRINT* PCB_IO_GEDA::parseElement( wxArrayString& aParameters, LINE_READER* a
                     pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             }
 
-            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+            bool badPad = false;
+
+            pad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        VECTOR2I padSize = pad->GetSize( layer );
+
+                        if( padSize.x <= 0 || padSize.y <= 0 )
+                            badPad = true;
+                    } );
+
+            if( badPad )
+            {
+                Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                                          m_board->GetFileName() ),
+                        RPT_SEVERITY_ERROR );
+            }
+            else
+            {
                 footprint->Add( pad.release() );
+            }
 
             continue;
         }

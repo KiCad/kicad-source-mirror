@@ -1557,7 +1557,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
         }
         else if( TESTLINE( "$EndPAD" ) )
         {
-            if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
+            if( pad->GetSize( PADSTACK::ALL_LAYERS ).x > 0 && pad->GetSize( PADSTACK::ALL_LAYERS ).y > 0 )
             {
                 aFootprint->Add( pad.release() );
             }

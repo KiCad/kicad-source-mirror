@@ -2314,7 +2314,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
                 }
 
                 // padsize is used for calculating route offset (as done in CADSTAR post processor)
-                int padsize = std::min( pad->GetSizeX(), pad->GetSizeY() );
+                int padsize = std::min( pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).x,
+                                        pad->GetSize( PADSTACK::TEMP_ALL_LAYERS ).y );
                 netelementSizes.insert( { pinPair.first, padsize } );
             }
         }
