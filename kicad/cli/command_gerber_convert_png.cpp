@@ -70,6 +70,7 @@ CLI::GERBER_CONVERT_PNG_COMMAND::GERBER_CONVERT_PNG_COMMAND() :
     m_argParser.add_argument( ARG_NO_ANTIALIAS ).help( UTF8STDSTR( _( "Disable anti-aliasing" ) ) ).flag();
 
     m_argParser.add_argument( ARG_TRANSPARENT )
+            .default_value( true )
             .help( UTF8STDSTR( _( "Use transparent background (default)" ) ) )
             .flag();
 

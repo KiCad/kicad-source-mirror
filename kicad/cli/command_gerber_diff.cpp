@@ -70,7 +70,8 @@ CLI::GERBER_DIFF_COMMAND::GERBER_DIFF_COMMAND() :
             .flag();
 
     m_argParser.add_argument( ARG_TRANSPARENT )
-            .help( UTF8STDSTR( _( "Use transparent background for PNG output" ) ) )
+            .default_value( true )
+            .help( UTF8STDSTR( _( "Use transparent background for PNG output (default)" ) ) )
             .flag();
 
     m_argParser.add_argument( ARG_EXIT_CODE_ONLY )
