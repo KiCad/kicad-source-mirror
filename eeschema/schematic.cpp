@@ -3256,6 +3256,9 @@ void SCHEMATIC::SetVariantDescription( const wxString& aVariantName, const wxStr
         descriptions.erase( aVariantName );
     else
         descriptions[aVariantName] = aDescription;
+
+    if( m_textVarAdapter )
+        m_textVarAdapter->Tracker().InvalidateVariantScoped();
 }
 
 

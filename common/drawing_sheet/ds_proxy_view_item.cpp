@@ -33,6 +33,7 @@
 #include <project.h>
 #include <text_var_dependency.h>
 #include <view/view.h>
+#include <title_block.h>
 
 using namespace KIGFX;
 
@@ -189,6 +190,22 @@ std::vector<TEXT_VAR_REF_KEY> DS_PROXY_VIEW_ITEM::CollectTextVarKeys() const
         {
             if( ref.IsTrackable() )
                 keys.push_back( ref );
+        }
+    }
+
+    // Also scan the title block fields, as they can contain nested references
+    // to other text variables.
+    if( m_titleBlock )
+    {
+        const wxArrayString& titleBlockStrings = m_titleBlock->GetStrings();
+
+        for( int ii = 0; ii < (int) titleBlockStrings.GetCount(); ++ii )
+        {
+            for( const TEXT_VAR_REF_KEY& ref : ExtractTextVarReferences( titleBlockStrings[ii] ) )
+            {
+                if( ref.IsTrackable() )
+                    keys.push_back( ref );
+            }
         }
     }
 

@@ -127,6 +127,8 @@ public:
     static wxString GetCurrentTimeHHMMSS();
     static wxString GetCurrentTimeLocale();
 
+    wxArrayString GetStrings() const { return m_tbTexts; }
+
 private:
     wxArrayString m_tbTexts;
 

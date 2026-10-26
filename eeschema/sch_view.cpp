@@ -131,16 +131,8 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
                                                   &aScreen->Schematic()->Project(),
                                                   &aScreen->GetTitleBlock(),
                                                   aScreen->Schematic()->GetProperties() ) );
-    m_drawingSheet->SetPageNumber( TO_UTF8( aScreen->GetPageNumber() ) );
-    m_drawingSheet->SetSheetCount( aScreen->GetPageCount() );
-    m_drawingSheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
     m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
-
-    wxString currentVariant = aScreen->Schematic()->GetCurrentVariant();
-    wxString variantDesc = aScreen->Schematic()->GetVariantDescription( currentVariant );
-    m_drawingSheet->SetVariantName( TO_UTF8( currentVariant ) );
-    m_drawingSheet->SetVariantDesc( TO_UTF8( variantDesc ) );
 
     if( m_frame && m_frame->IsType( FRAME_SCH ) )
     {
@@ -156,9 +148,14 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     }
     else
     {
+        m_drawingSheet->SetPageNumber( TO_UTF8( aScreen->GetPageNumber() ) );
+        m_drawingSheet->SetSheetCount( aScreen->GetPageCount() );
+        m_drawingSheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
         m_drawingSheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
         m_drawingSheet->SetSheetName( "" );
         m_drawingSheet->SetSheetPath( "" );
+        m_drawingSheet->SetVariantName( "" );
+        m_drawingSheet->SetVariantDesc( "" );
     }
 
     Add( m_drawingSheet.get() );
@@ -194,7 +191,7 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
 
                             if( m_drawingSheet && aDep == m_drawingSheet.get() )
                             {
-                                Update( m_drawingSheet.get(), KIGFX::REPAINT );
+                                RefreshDrawingSheetPageInfo();
                                 return;
                             }
 
@@ -237,6 +234,12 @@ void SCH_VIEW::syncDrawingSheetToCurrentSheet( SCH_EDIT_FRAME* aFrame )
     m_drawingSheet->SetIsFirstPage( aFrame->GetCurrentSheet().GetVirtualPageNumber() == 1 );
     m_drawingSheet->SetSheetName( TO_UTF8( aFrame->GetScreenDesc() ) );
     m_drawingSheet->SetSheetPath( TO_UTF8( aFrame->GetFullScreenDesc() ) );
+
+    wxString currentVariant = aFrame->Schematic().GetCurrentVariant();
+    wxString variantDesc = aFrame->Schematic().GetVariantDescription( currentVariant );
+
+    m_drawingSheet->SetVariantName( TO_UTF8( currentVariant ) );
+    m_drawingSheet->SetVariantDesc( TO_UTF8( variantDesc ) );
 }
 
 
