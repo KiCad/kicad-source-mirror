@@ -115,6 +115,60 @@ BOOST_AUTO_TEST_CASE( PolygonConvergenceClampsAtAdjacentIntersection )
 }
 
 
+BOOST_AUTO_TEST_CASE( TriangleEdgeDragPassesThroughTheCollapsePoint )
+{
+    EDIT_POINTS points( nullptr );
+    points.AddPoint( VECTOR2I( 0, 0 ) );
+    points.AddPoint( VECTOR2I( 40, 0 ) );
+    points.AddPoint( VECTOR2I( 20, 30 ) );
+    points.AddLine( points.Point( 0 ), points.Point( 1 ) );
+    points.AddLine( points.Point( 1 ), points.Point( 2 ) );
+    points.AddLine( points.Point( 2 ), points.Point( 0 ) );
+
+    EDIT_LINE& line = points.Line( 0 );
+    line.SetDragPolicy( std::make_unique<POLYGON_EDGE_DRAG_POLICY>( line, points ) );
+    line.SetPosition( VECTOR2I( 20, 60 ) );
+
+    GRID_HELPER grid;
+    line.ApplyRelation( grid );
+
+    BOOST_CHECK_EQUAL( line.GetOrigin().GetPosition(), VECTOR2I( 40, 60 ) );
+    BOOST_CHECK_EQUAL( line.GetEnd().GetPosition(), VECTOR2I( 0, 60 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( TriangularHoleEdgeDragKeepsItsCorners )
+{
+    SHAPE_POLY_SET poly;
+
+    poly.NewOutline();
+    poly.Append( VECTOR2I( 0, 0 ) );
+    poly.Append( VECTOR2I( 60, 0 ) );
+    poly.Append( VECTOR2I( 60, 60 ) );
+    poly.Append( VECTOR2I( 0, 60 ) );
+    poly.NewHole();
+    poly.Append( VECTOR2I( 20, 20 ), 0, 0 );
+    poly.Append( VECTOR2I( 40, 20 ), 0, 0 );
+    poly.Append( VECTOR2I( 30, 40 ), 0, 0 );
+
+    EDIT_POINTS points( nullptr );
+    POLYGON_POINT_EDIT_BEHAVIOR::BuildForPolyOutline( points, poly );
+
+    EDIT_LINE& line = points.Line( 4 );
+    BOOST_REQUIRE_EQUAL( line.GetOrigin().GetPosition(), VECTOR2I( 20, 20 ) );
+    BOOST_REQUIRE_EQUAL( line.GetEnd().GetPosition(), VECTOR2I( 40, 20 ) );
+
+    line.SetDragPolicy( std::make_unique<POLYGON_EDGE_DRAG_POLICY>( line, points ) );
+    line.SetPosition( VECTOR2I( 30, 30 ) );
+
+    GRID_HELPER grid;
+    line.ApplyRelation( grid );
+
+    BOOST_CHECK_EQUAL( line.GetOrigin().GetPosition(), VECTOR2I( 25, 30 ) );
+    BOOST_CHECK_EQUAL( line.GetEnd().GetPosition(), VECTOR2I( 35, 30 ) );
+}
+
+
 class POLY_SHAPE_MOCK : public EDA_SHAPE
 {
 public:

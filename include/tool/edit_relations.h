@@ -120,7 +120,6 @@ private:
     void applyFixedLength( EDIT_LINE& aHandle );
 
     POLYGON_LINE_MODE m_mode;
-    EDIT_POINTS&      m_editPoints;
     VECTOR2I          m_originSideDirection;
     VECTOR2I          m_endSideDirection;
     VECTOR2I          m_draggedVector;
@@ -129,6 +128,7 @@ private:
     double            m_halfLength;
     bool              m_originCollinear;
     bool              m_endCollinear;
+    bool              m_contourIsTriangle;
     EDIT_POINT*       m_prevOrigin;
     EDIT_POINT*       m_nextEnd;
     VECTOR2I          m_convergencePoint;

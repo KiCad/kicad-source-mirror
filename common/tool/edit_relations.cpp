@@ -175,7 +175,6 @@ void EDIT_RELATION::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGrid ) const
 
 POLYGON_EDGE_DRAG_POLICY::POLYGON_EDGE_DRAG_POLICY( EDIT_LINE& aLine, EDIT_POINTS& aPoints, POLYGON_LINE_MODE aMode ) :
         m_mode( aMode ),
-        m_editPoints( aPoints ),
         m_prevOrigin( aPoints.Previous( aLine.GetOrigin(), false ) ),
         m_nextEnd( aPoints.Next( aLine.GetEnd(), false ) )
 {
@@ -188,6 +187,7 @@ POLYGON_EDGE_DRAG_POLICY::POLYGON_EDGE_DRAG_POLICY( EDIT_LINE& aLine, EDIT_POINT
     m_originalCenter = aLine.GetPosition();
     m_perpVector = m_draggedVector.Perpendicular();
     m_halfLength = m_draggedVector.EuclideanNorm() / 2.0;
+    m_contourIsTriangle = m_prevOrigin == m_nextEnd;
 
     SEG originSide( origin.GetPosition(), m_prevOrigin->GetPosition() );
     SEG endSide( end.GetPosition(), m_nextEnd->GetPosition() );
@@ -213,7 +213,7 @@ void POLYGON_EDGE_DRAG_POLICY::Apply( EDIT_LINE& aHandle, const GRID_HELPER& aGr
     if( OPT_VECTOR2I intersection = perpendicular.IntersectLines( throughHandle ) )
         newCenter = *intersection;
 
-    if( m_mode == POLYGON_LINE_MODE::CONVERGING )
+    if( m_mode == POLYGON_LINE_MODE::CONVERGING && !m_contourIsTriangle )
     {
         VECTOR2I centerToConvergence = m_convergencePoint - m_originalCenter;
         VECTOR2I centerToNew = newCenter - m_originalCenter;
@@ -261,16 +261,16 @@ void POLYGON_EDGE_DRAG_POLICY::applyConverging( EDIT_LINE& aHandle )
     if( OPT_VECTOR2I intersection = dragged.IntersectLines( endSide ) )
         end.SetPosition( *intersection );
 
+    if( m_contourIsTriangle )
+        return;
+
     originSide = SEG( origin.GetPosition(), m_prevOrigin->GetPosition() );
     endSide = SEG( end.GetPosition(), m_nextEnd->GetPosition() );
 
     if( OPT_VECTOR2I intersection = endSide.Intersect( originSide ) )
     {
-        if( m_editPoints.LinesSize() > 3 )
-        {
-            origin.SetPosition( *intersection );
-            end.SetPosition( *intersection );
-        }
+        origin.SetPosition( *intersection );
+        end.SetPosition( *intersection );
     }
 }
 
