@@ -351,7 +351,7 @@ wxString SCH_IO_DATABASE::SymbolNameForRow( const DATABASE_LIB_TABLE& aTable, bo
     if( aRawKey )
         *aRawKey = rawName;
 
-    return wxString( fmt::format( "{}{}", prefix, sanitizedName.c_str() ) );
+    return wxString::FromUTF8( fmt::format( "{}{}", prefix, sanitizedName.c_str() ) );
 }
 
 
