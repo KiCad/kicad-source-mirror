@@ -187,6 +187,25 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
         if( field->HasPrefixLabel() )
             PositionPrefixLabel( field.get() );
     }
+
+    // A field can be widened past the right edge of the drawing, and its unit label sits beyond
+    // that again, so the panel has to ask for the room it actually uses rather than the room the
+    // bitmap takes.  Where the page is wide enough the difference never shows.
+    int used = m_logicalBitmapSize.x;
+
+    for( const auto& field : m_fields )
+    {
+        if( wxControl* ctrl = field->GetControl() )
+            used = std::max( used, ctrl->GetPosition().x + ctrl->GetSize().x );
+
+        if( field->HasLabel() )
+            used = std::max( used, field->GetLabel()->GetPosition().x + field->GetLabel()->GetSize().x );
+
+        if( field->HasPrefixLabel() )
+            used = std::max( used, field->GetPrefixLabel()->GetPosition().x + field->GetPrefixLabel()->GetSize().x );
+    }
+
+    SetMinSize( wxSize( used, GetMinSize().y ) );
 }
 
 
