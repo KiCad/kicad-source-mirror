@@ -199,6 +199,8 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
         m_LayersComboBoxSizer->Show( false );
         m_staticText711->Hide();
         m_staticline111->Hide();
+
+        giveConstraintColumnTheWidth();
     }
 
     // Hide the base class syntax check controls since we use inline validation
@@ -1283,6 +1285,27 @@ PANEL_DRC_RULE_EDITOR* PANEL_DRC_RULE_EDITOR::FindEditor( wxWindow* aChild )
     }
 
     return nullptr;
+}
+
+
+void PANEL_DRC_RULE_EDITOR::giveConstraintColumnTheWidth()
+{
+    // A custom rule is written in the constraint column and everything in the column beside it is
+    // hidden.  That column keeps the stretch regardless, because a spacer in its header row still
+    // counts as shown, so the width has to be handed over here or the rule text stays at its
+    // smallest.
+    for( const wxSizerItem* item : bContentSizer->GetChildren() )
+    {
+        wxSizer* columns = item->GetSizer();
+
+        if( !columns || !columns->GetItem( m_constraintSizer ) )
+            continue;
+
+        for( wxSizerItem* column : columns->GetChildren() )
+            column->SetProportion( column->GetSizer() == m_constraintSizer ? 1 : 0 );
+
+        return;
+    }
 }
 
 

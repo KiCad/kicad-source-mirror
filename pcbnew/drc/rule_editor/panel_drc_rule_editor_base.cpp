@@ -50,6 +50,9 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 
 	bContentSizer->Add( bBasicDetailSizer, 0, wxEXPAND, 20 );
 
+	wxBoxSizer* bColumnsSizer;
+	bColumnsSizer = new wxBoxSizer( wxHORIZONTAL );
+
 	m_constraintSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_constraintHeaderTitle = new wxStaticText( this, wxID_ANY, _("Constraint"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -65,7 +68,10 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	m_constraintSizer->Add( m_constraintContentSizer, 0, wxEXPAND, 5 );
 
 
-	bContentSizer->Add( m_constraintSizer, 0, wxEXPAND|wxTOP, 15 );
+	bColumnsSizer->Add( m_constraintSizer, 0, wxEXPAND|wxRIGHT, 16 );
+
+	wxBoxSizer* bScopeSizer;
+	bScopeSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bConditionSizer;
 	bConditionSizer = new wxBoxSizer( wxVERTICAL );
@@ -146,7 +152,7 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	bConditionSizer->Add( m_conditionControlsSizer, 1, wxEXPAND|wxTOP, 5 );
 
 
-	bContentSizer->Add( bConditionSizer, 0, wxEXPAND, 15 );
+	bScopeSizer->Add( bConditionSizer, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bLayerSizer;
 	bLayerSizer = new wxBoxSizer( wxVERTICAL );
@@ -164,7 +170,13 @@ PANEL_DRC_RULE_EDITOR_BASE::PANEL_DRC_RULE_EDITOR_BASE( wxWindow* parent, wxWind
 	bLayerSizer->Add( m_LayersComboBoxSizer, 1, wxALL|wxEXPAND, 5 );
 
 
-	bContentSizer->Add( bLayerSizer, 0, wxEXPAND|wxTOP, 15 );
+	bScopeSizer->Add( bLayerSizer, 0, wxEXPAND|wxTOP, 15 );
+
+
+	bColumnsSizer->Add( bScopeSizer, 1, wxEXPAND, 5 );
+
+
+	bContentSizer->Add( bColumnsSizer, 1, wxEXPAND|wxTOP, 15 );
 
 
 	mainSizer->Add( bContentSizer, 1, wxEXPAND, 5 );
