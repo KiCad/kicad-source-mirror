@@ -22,15 +22,15 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	wxBoxSizer* bHeader;
 	bHeader = new wxBoxSizer( wxVERTICAL );
 
-	m_headerLabel = new wxStaticText( this, wxID_ANY, _("This board references 3D models that are no longer present on your system."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_headerLabel = new wxStaticText( this, wxID_ANY, _("The board references VRML 3D models (*.wrl files) that are no longer present on your system."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_headerLabel->Wrap( -1 );
 	bHeader->Add( m_headerLabel, 0, wxBOTTOM, 10 );
 
-	m_subHeader = new wxStaticText( this, wxID_ANY, _("KiCad will auto-select suitable matches from the configured 3D directories, plus any additional directories specified below.  "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_subHeader = new wxStaticText( this, wxID_ANY, _("KiCad will auto-select suitable STEP file matches from the configured 3D directories, plus any additional directories specified below.  "), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subHeader->Wrap( -1 );
 	bHeader->Add( m_subHeader, 0, wxBOTTOM, 4 );
 
-	m_subHeader2 = new wxStaticText( this, wxID_ANY, _("Individual matches can be overridden in the Replacement list, either with another candidate from the search directories, or with a specific model file."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_subHeader2 = new wxStaticText( this, wxID_ANY, _("Individual matches can be overridden in the Replacement list, either with another candidate from the search directories, or with a specific STEP model file."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subHeader2->Wrap( -1 );
 	bHeader->Add( m_subHeader2, 0, wxBOTTOM, 10 );
 
@@ -89,7 +89,7 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	bButtonBar = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addReplacement = new STD_BITMAP_BUTTON( m_paneReplacements, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_addReplacement->SetToolTip( _("Select a model file from disk as a replacement") );
+	m_addReplacement->SetToolTip( _("Select a STEP model file from disk as a replacement") );
 
 	bButtonBar->Add( m_addReplacement, 0, wxALL, 3 );
 

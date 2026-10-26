@@ -252,10 +252,26 @@ DIALOG_MIGRATE_3D_MODELS::~DIALOG_MIGRATE_3D_MODELS()
 
 bool DIALOG_MIGRATE_3D_MODELS::TransferDataToWindow()
 {
-    // Perform these actions *after* we have loaded saved state into the dialog
-    collectMissingModels();
+    std::map<wxString, ENTRY> byName = collectMissingWrlModels( m_frame );
+
+    m_missing.reserve( byName.size() );
+    m_missingRepFp.reserve( byName.size() );
+    m_missingXform.reserve( byName.size() );
+
+    for( const auto& [fn, entry] : byName )
+    {
+        m_missing.push_back( fn );
+        m_missingRepFp.push_back( entry.m_fp );
+        m_missingXform.push_back( entry.m_xform );
+    }
+
     buildCatalog();
+
+    m_selectedPerMissing.assign( m_missing.size(), UNSPECIFIED );
+    m_candidatesPerMissing.resize( m_missing.size() );
     rankAllCandidates();
+
+    // Perform these actions *after* we have loaded saved state into the dialog
 
     // Auto-select the top real (non-"keep existing") candidate for every missing row so the user gets
     // a sensible default without having to click through each one.  Rows for which no real candidate
@@ -283,121 +299,44 @@ bool DIALOG_MIGRATE_3D_MODELS::TransferDataToWindow()
 
 bool DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame )
 {
-    if( !aFrame )
-        return false;
-
-    BOARD*             board    = aFrame->GetBoard();
-    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
-
-    if( !board || !resolver )
-        return false;
-
-    const wxString projectPath = aFrame->Prj().GetProjectPath();
-
-    for( FOOTPRINT* fp : board->Footprints() )
-    {
-        for( const FP_3DMODEL& model : fp->Models() )
-        {
-            const wxString& fn = model.m_Filename;
-
-            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
-                continue;
-
-            if( resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
-                return true;
-        }
-    }
-
-    return false;
+    return collectMissingWrlModels( aFrame ).size() > 0;
 }
 
 
 int DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame )
 {
-    if( !aFrame )
-        return 0;
-
-    BOARD*             board    = aFrame->GetBoard();
-    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
-
-    if( !board || !resolver )
-        return 0;
-
-    const wxString               projectPath = aFrame->Prj().GetProjectPath();
-    std::unordered_set<wxString> unique;
-
-    for( FOOTPRINT* fp : board->Footprints() )
-    {
-        for( const FP_3DMODEL& model : fp->Models() )
-        {
-            const wxString& fn = model.m_Filename;
-
-            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
-                continue;
-
-            if( unique.count( fn ) )
-                continue;
-
-            if( resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
-                unique.insert( fn );
-        }
-    }
-
-    return static_cast<int>( unique.size() );
+    return (int) collectMissingWrlModels( aFrame ).size();
 }
 
 
 int DIALOG_MIGRATE_3D_MODELS::AutoMigrateByFilename( PCB_EDIT_FRAME* aFrame )
 {
-    if( !aFrame )
+    std::map<wxString, ENTRY> missingModels = collectMissingWrlModels( aFrame );
+
+    if( missingModels.size() == 0 )
         return 0;
 
-    BOARD*             board    = aFrame->GetBoard();
-    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
-
-    if( !board || !resolver )
-        return 0;
-
-    const wxString projectPath = aFrame->Prj().GetProjectPath();
-
+    BOARD*                           board    = aFrame->GetBoard();
+    FILENAME_RESOLVER*               resolver = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
+    const wxString                   projectPath = aFrame->Prj().GetProjectPath();
     MODEL_SUBSTITUTION::STEP_CATALOG catalog;
-    bool                             catalogBuilt = false;
+
+    catalog.Build( projectPath, resolver );
 
     std::map<wxString, wxString> replacements;
-    std::unordered_set<wxString> seen;
 
-    for( FOOTPRINT* fp : board->Footprints() )
+    for( const auto& [filename, _] : missingModels )
     {
-        for( const FP_3DMODEL& model : fp->Models() )
-        {
-            const wxString& fn = model.m_Filename;
+        const wxString match = catalog.FindMatchFor( filename );
 
-            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
-                continue;
+        if( match.IsEmpty() )
+            continue;
 
-            if( !seen.insert( fn ).second )
-                continue;
+        const wxString shortened = resolver->ShortenPath( match );
 
-            if( !resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
-                continue;
-
-            if( !catalogBuilt )
-            {
-                catalog.Build( projectPath, resolver );
-                catalogBuilt = true;
-            }
-
-            const wxString match = catalog.FindMatchFor( fn );
-
-            if( match.IsEmpty() )
-                continue;
-
-            const wxString shortened = resolver->ShortenPath( match );
-
-            // ShortenPath returning empty would blank the footprint reference;
-            // fall back to the absolute path in that edge case.
-            replacements[fn] = shortened.IsEmpty() ? match : shortened;
-        }
+        // ShortenPath returning empty would blank the footprint reference;
+        // fall back to the absolute path in that edge case.
+        replacements[filename] = shortened.IsEmpty() ? match : shortened;
     }
 
     if( replacements.empty() )
@@ -428,32 +367,27 @@ int DIALOG_MIGRATE_3D_MODELS::AutoMigrateByFilename( PCB_EDIT_FRAME* aFrame )
         }
     }
 
-    if( rewritten > 0 )
-        commit.Push( _( "Auto-migrate 3D model references" ) );
+    if( !commit.Empty() )
+        commit.Push( _( "Auto-migrate 3D Model References" ) );
 
     return rewritten;
 }
 
 
-void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
+std::map<wxString, DIALOG_MIGRATE_3D_MODELS::ENTRY>
+DIALOG_MIGRATE_3D_MODELS::collectMissingWrlModels( PCB_EDIT_FRAME* aFrame )
 {
-    BOARD*             board    = m_frame->GetBoard();
-    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &m_frame->Prj() );
+    std::map<wxString, ENTRY> byName;
+
+    if( !aFrame )
+        return byName;
+
+    BOARD*             board       = aFrame->GetBoard();
+    FILENAME_RESOLVER* resolver    = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
+    const wxString     projectPath = aFrame->Prj().GetProjectPath();
 
     if( !board || !resolver )
-        return;
-
-    const wxString projectPath = m_frame->Prj().GetProjectPath();
-
-    // Accumulate into a map keyed by WRL filename so we can sort afterwards
-    // while still tracking the representative footprint and transform captured
-    // from the first FP_3DMODEL that referenced it.
-    struct ENTRY
-    {
-        const FOOTPRINT* m_fp = nullptr;
-        MISSING_XFORM    m_xform;
-    };
-    std::map<wxString, ENTRY> byName;
+        return byName;
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
@@ -467,9 +401,11 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
             if( byName.count( fn ) )
                 continue;
 
-            // Mirror the resolver invocation used by the 3D viewer: empty
-            // return means "not found on disk via any search path".
-            if( !resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
+            std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+            embeddedFilesStack.push_back( fp->GetEmbeddedFiles() );
+            embeddedFilesStack.push_back( board->GetEmbeddedFiles() );
+
+            if( !resolver->ResolvePath( fn, projectPath, embeddedFilesStack ).IsEmpty() )
                 continue;
 
             ENTRY& e = byName[fn];
@@ -481,19 +417,7 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
         }
     }
 
-    m_missing.reserve( byName.size() );
-    m_missingRepFp.reserve( byName.size() );
-    m_missingXform.reserve( byName.size() );
-
-    for( const auto& [fn, entry] : byName )
-    {
-        m_missing.push_back( fn );
-        m_missingRepFp.push_back( entry.m_fp );
-        m_missingXform.push_back( entry.m_xform );
-    }
-
-    m_selectedPerMissing.assign( m_missing.size(), UNSPECIFIED );
-    m_candidatesPerMissing.resize( m_missing.size() );
+    return byName;
 }
 
 

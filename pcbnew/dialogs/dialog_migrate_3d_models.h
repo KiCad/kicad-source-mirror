@@ -102,7 +102,6 @@ private:
     };
 
     void updateAfterCatalogChange();
-    void collectMissingModels();
     void buildCatalog();
     void scanDirectory( const wxString& aDir );
     void populateMissingList();
@@ -124,17 +123,6 @@ private:
     /// needing user attention stand out visually.
     void updateMissingItemStyle( int aMissingIndex );
 
-    PCB_EDIT_FRAME*              m_frame;
-
-    /// Preview pipeline.  We host the footprint on a throwaway board so the
-    /// canvas renders it on FR4 with pads/silk in place, the same way the
-    /// footprint properties 3D preview panel does.
-    BOARD*                       m_dummyBoard;
-    FOOTPRINT*                   m_dummyFootprint;   ///< Owned by m_dummyBoard
-    BOARD_ADAPTER                m_boardAdapter;
-    TRACK_BALL                   m_trackBallCamera;
-    EDA_3D_CANVAS*               m_previewPane;
-
     /// Transform data captured from the first FP_3DMODEL entry that referenced
     /// each missing WRL filename, so candidate replacements sit at the same
     /// position the original WRL would have occupied.
@@ -145,6 +133,29 @@ private:
         VECTOR3D m_offset   { 0, 0, 0 };
         double   m_opacity  = 1.0;
     };
+
+    struct ENTRY
+    {
+        const FOOTPRINT* m_fp = nullptr;
+        MISSING_XFORM    m_xform;
+    };
+
+    // Accumulate into a map keyed by WRL filename so we can sort afterwards
+    // while still tracking the representative footprint and transform captured
+    // from the first FP_3DMODEL that referenced it.
+    static std::map<wxString, ENTRY> collectMissingWrlModels( PCB_EDIT_FRAME* aFrame );
+
+private:
+    PCB_EDIT_FRAME*              m_frame;
+
+    /// Preview pipeline.  We host the footprint on a throwaway board so the
+    /// canvas renders it on FR4 with pads/silk in place, the same way the
+    /// footprint properties 3D preview panel does.
+    BOARD*                       m_dummyBoard;
+    FOOTPRINT*                   m_dummyFootprint;   ///< Owned by m_dummyBoard
+    BOARD_ADAPTER                m_boardAdapter;
+    TRACK_BALL                   m_trackBallCamera;
+    EDA_3D_CANVAS*               m_previewPane;
 
     /// Unique WRL filenames (as stored in FP_3DMODEL::m_Filename, i.e. with
     /// `${VAR}` still present) that the resolver could not locate.
