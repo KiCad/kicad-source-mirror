@@ -36,6 +36,8 @@ SHAPE_POLY_SET ConvertGerberToPolySet( GERBER_FILE_IMAGE* aImage, int aTolerance
     SHAPE_POLY_SET positivePolygons;
     SHAPE_POLY_SET negativePolygons;
 
+    int maxError = static_cast<int>( gerbIUScale.IU_PER_MM * ARC_LOW_DEF_MM );
+
     for( GERBER_DRAW_ITEM* item : aImage->GetItems() )
     {
         SHAPE_POLY_SET itemPoly;
@@ -50,19 +52,32 @@ SHAPE_POLY_SET ConvertGerberToPolySet( GERBER_FILE_IMAGE* aImage, int aTolerance
             D_CODE* dcode = item->GetDcodeDescr();
 
             if( dcode && dcode->m_ApertType != APT_RECT )
-            {
-                int arcError = static_cast<int>( gerbIUScale.IU_PER_MM * ARC_LOW_DEF_MM );
-                TransformOvalToPolygon( itemPoly, item->m_Start, item->m_End,
-                                        item->m_Size.x, arcError, ERROR_INSIDE );
-            }
+                TransformOvalToPolygon( itemPoly, item->m_Start, item->m_End, item->m_Size.x, maxError, ERROR_INSIDE );
             else
-            {
                 item->ConvertSegmentToPolygon( &itemPoly );
-            }
         }
         else if( item->m_ShapeType == GBR_ARC )
         {
-            item->ConvertSegmentToPolygon( &itemPoly );
+            VECTOR2I centre = item->m_ArcCentre;
+
+            if( item->m_Start == item->m_End )
+            {
+                TransformRingToPolygon( itemPoly, centre, KiROUND( item->m_Start.Distance( centre ) ), item->m_Size.x,
+                                        maxError, ERROR_INSIDE );
+            }
+            else
+            {
+                double a = atan2( (double) ( item->m_Start - centre ).y, (double) ( item->m_Start - centre ).x );
+                double b = atan2( (double) ( item->m_End - centre ).y, (double) ( item->m_End - centre ).x );
+
+                if( a > b )
+                    b += 2 * M_PI;
+
+                VECTOR2I mid = GetRotated( item->m_Start, centre, -EDA_ANGLE( ( b - a ) / 2, RADIANS_T ) );
+
+                TransformArcToPolygon( itemPoly, item->m_Start, mid, item->m_End, item->m_Size.x, maxError,
+                                       ERROR_INSIDE );
+            }
         }
         else if( item->m_Flashed )
         {
