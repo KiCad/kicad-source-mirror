@@ -273,8 +273,8 @@ int GERBVIEW_JOBS_HANDLER::JobGerberDiff( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
     // Convert to poly sets
-    SHAPE_POLY_SET polyA = ConvertGerberToPolySet( imageA.get(), diffJob->m_tolerance );
-    SHAPE_POLY_SET polyB = ConvertGerberToPolySet( imageB.get(), diffJob->m_tolerance );
+    SHAPE_POLY_SET polyA = ConvertGerberToPolySet( imageA.get(), gerbIUScale.NmToIU( diffJob->m_tolerance ) );
+    SHAPE_POLY_SET polyB = ConvertGerberToPolySet( imageB.get(), gerbIUScale.NmToIU( diffJob->m_tolerance ) );
 
     // Align bounding-box origins unless the caller explicitly opts out.
     // Skip alignment when testing for absolute-placement correctness (wrong origin,
