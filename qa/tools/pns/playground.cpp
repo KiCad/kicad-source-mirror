@@ -274,19 +274,15 @@ int playground_main_func( int argc, char* argv[] )
     PAD pad1( nullptr );
     pad1.SetX( pcbIUScale.mmToIU( 84.0 ) );
     pad1.SetY( pcbIUScale.mmToIU( 66.0 ) );
-    pad1.SetSizeX( pcbIUScale.mmToIU( 7.0 ) );
-    pad1.SetSizeY( pcbIUScale.mmToIU( 7.0 ) );
-    pad1.SetDrillSizeX( pcbIUScale.mmToIU( 3.5 ) );
-    pad1.SetDrillSizeY( pcbIUScale.mmToIU( 3.5 ) );
+    pad1.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 7.0 ), pcbIUScale.mmToIU( 7.0 ) ) );
+    pad1.SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 3.5 ), pcbIUScale.mmToIU( 3.5 ) ) );
     vp.Merge( pad1.GetBoundingBox() );
 
     PAD pad2( nullptr );
     pad2.SetX( pcbIUScale.mmToIU( 87.125 ) );
     pad2.SetY( pcbIUScale.mmToIU( 66.0 ) );
-    pad2.SetSizeX( pcbIUScale.mmToIU( 0.8 ) );
-    pad2.SetSizeY( pcbIUScale.mmToIU( 0.8 ) );
-    pad2.SetDrillSizeX( pcbIUScale.mmToIU( 0.5 ) );
-    pad2.SetDrillSizeY( pcbIUScale.mmToIU( 0.5 ) );
+    pad2.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 0.8 ), pcbIUScale.mmToIU( 0.8 ) ) );
+    pad2.SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.5 ), pcbIUScale.mmToIU( 0.5 ) ) );
     vp.Merge( pad2.GetBoundingBox() );
 
     SHAPE_POLY_SET pad1Outline;
