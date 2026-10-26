@@ -247,12 +247,23 @@ private:
     void HelperSetFootprintStackups();
 
     /**
-     * Hold netted copper a component draws until its pads exist.
+     * Hold copper a footprint draws until its pads exist.
      *
-     * @param aFallback places the copper on the board when no pad of its net touches it.
+     * @param aFallback places the copper where it would otherwise go when no pad of its net touches it.
      */
     void HelperDeferComponentCopper( FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer, uint16_t aNet,
                                      std::unique_ptr<PCB_SHAPE> aShape, std::function<void()> aFallback );
+
+    /**
+     * Join each deferred copper shape on \a aCopper to the same-net numbered pad it touches.
+     *
+     * @param aExtensionPads copper-only pads made by earlier passes, which grow in place.
+     * @return true when any shape was joined.
+     */
+    bool HelperFoldPendingCopper( const LSET& aCopper, int aMaxError, std::set<PAD*>& aExtensionPads );
+
+    /// Run the fallback of every deferred copper shape no pad took.
+    void HelperPlaceUnfoldedCopper();
 
     /// Join deferred component copper and vias to the same-net pads they touch.
     void HelperFoldComponentCopperIntoPads();
@@ -290,6 +301,10 @@ private:
     void ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem, const int aPrimitiveIndex );
     void ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT* aFootprint, const AREGION6& aElem,
                                                    const int aPrimitiveIndex );
+
+    /// Plain copper region of a footprint; inner layers wait to join the pad they touch.
+    void ConvertShapeBasedRegions6ToFootprintCopper( FOOTPRINT* aFootprint, const AREGION6& aElem,
+                                                     const int aPrimitiveIndex, uint16_t aNet );
     void ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem, PCB_LAYER_ID aLayer,
                                                       const int aPrimitiveIndex );
     void ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*      aFootprint,

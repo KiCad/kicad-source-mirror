@@ -1031,6 +1031,69 @@ static void altiumMakePadLayerCustom( PAD* aPad, PCB_LAYER_ID aLayer, int aMaxEr
 }
 
 
+// Give every copper layer its own padstack entry, deep copying shared primitives, so one layer
+// can change shape without the others; ALL_LAYERS aliases F_Cu so a NORMAL pad cannot be edited in place
+static void altiumSplitPadstackPerLayer( PAD* aPad, const LSET& aBoardCopper )
+{
+    PADSTACK& padstack = aPad->Padstack();
+
+    if( padstack.Mode() == PADSTACK::MODE::CUSTOM )
+        return;
+
+    // Entries for layers the board lacks would only collide with real ones when flipped
+    const LSET copper = aPad->GetLayerSet() & aBoardCopper;
+
+    std::map<PCB_LAYER_ID, PADSTACK::COPPER_LAYER_PROPS> props;
+
+    for( PCB_LAYER_ID layer : copper )
+    {
+        PADSTACK::COPPER_LAYER_PROPS layerProps = padstack.CopperLayer( layer );
+
+        for( std::shared_ptr<PCB_SHAPE>& prim : layerProps.custom_shapes )
+            prim = std::shared_ptr<PCB_SHAPE>( static_cast<PCB_SHAPE*>( prim->Clone() ) );
+
+        props[layer] = std::move( layerProps );
+    }
+
+    padstack.SetMode( PADSTACK::MODE::CUSTOM );
+
+    for( auto& [layer, layerProps] : props )
+        padstack.CopperLayer( layer ) = std::move( layerProps );
+
+    aPad->SetDirty();
+}
+
+
+// Lets aLayer change shape alone with the fewest padstack entries; outer layers only need front/inner/back
+static void altiumIsolatePadLayer( PAD* aPad, PCB_LAYER_ID aLayer, const LSET& aBoardCopper )
+{
+    if( ( aPad->GetLayerSet() & LSET::AllCuMask() ).count() < 2 )
+        return;
+
+    PADSTACK& padstack = aPad->Padstack();
+
+    if( IsInnerCopperLayer( aLayer ) )
+    {
+        altiumSplitPadstackPerLayer( aPad, aBoardCopper );
+    }
+    else if( padstack.Mode() == PADSTACK::MODE::NORMAL )
+    {
+        padstack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
+
+        // Materialized from the shared F_Cu entry before aLayer changes
+        padstack.CopperLayer( PADSTACK::INNER_LAYERS );
+        padstack.CopperLayer( B_Cu );
+        aPad->SetDirty();
+    }
+}
+
+
+static LSET altiumStackupCopper( const LSET& aDrawnCopper, int aMinCopperLayers )
+{
+    return LSET::AllCuMask( std::max( aMinCopperLayers, LAYER_UTILS::MinimalCopperLayerCount( aDrawnCopper ) ) );
+}
+
+
 // Altium addresses each mid layer directly, while the default footprint stackup has one inner
 // layer that hides deeper items and spreads an In1 keepout to every inner layer
 static void altiumSetFootprintStackup( FOOTPRINT* aFootprint, const LSET& aDrawnCopper, int aMinCopperLayers )
@@ -1038,8 +1101,7 @@ static void altiumSetFootprintStackup( FOOTPRINT* aFootprint, const LSET& aDrawn
     if( ( aDrawnCopper & LSET::InternalCuMask() ).none() )
         return;
 
-    int copperCount = std::max( aMinCopperLayers, LAYER_UTILS::MinimalCopperLayerCount( aDrawnCopper ) );
-    const LSET stackupCopper = LSET::AllCuMask( copperCount );
+    const LSET stackupCopper = altiumStackupCopper( aDrawnCopper, aMinCopperLayers );
 
     for( ZONE* zone : aFootprint->Zones() )
     {
@@ -1231,7 +1293,18 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
         {
             AREGION6 region( parser, false );
             noteLayer( region.layer );
-            ConvertShapeBasedRegions6ToFootprintItem( footprint.get(), region, primitiveIndex );
+
+            if( region.kind == ALTIUM_REGION_KIND::COPPER && region.polygon == ALTIUM_POLYGON_NONE
+                && !region.is_keepout )
+            {
+                ConvertShapeBasedRegions6ToFootprintCopper( footprint.get(), region, primitiveIndex,
+                                                            ALTIUM_NET_UNCONNECTED );
+            }
+            else
+            {
+                ConvertShapeBasedRegions6ToFootprintItem( footprint.get(), region, primitiveIndex );
+            }
+
             break;
         }
         case ALTIUM_RECORD::MODEL:
@@ -1278,13 +1351,17 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
                 return PADSTACK::ALL_LAYERS;
             };
 
+    const int  maxError = m_board ? m_board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
+    const LSET stackupCopper = altiumStackupCopper( drawnCopper, 2 );
+
     auto mergeRegionPadInto =
             [&]( PAD* aNamedPad, PAD* aRegionPad )
             {
                 PCB_LAYER_ID layer = commonCopperLayer( aRegionPad, aNamedPad );
 
-                altiumMakePadLayerCustom( aNamedPad, layer,
-                                          m_board ? m_board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF );
+                // A NORMAL padstack shares one shape, so a through pad would grow on every layer
+                altiumIsolatePadLayer( aNamedPad, layer, stackupCopper );
+                altiumMakePadLayerCustom( aNamedPad, layer, maxError );
 
                 // Region primitives are in the region pad's local frame; re-express in the named
                 // pad's frame, undoing the orientation GetEffectivePolygon will later re-apply
@@ -1292,21 +1369,15 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
                 VECTOR2I  anchorShift = aRegionPad->ShapePos( PADSTACK::ALL_LAYERS )
                                         - aNamedPad->ShapePos( layer );
 
-                for( PCB_LAYER_ID primLayer : { PADSTACK::ALL_LAYERS, F_Cu, B_Cu } )
+                for( const std::shared_ptr<PCB_SHAPE>& src : aRegionPad->GetPrimitives( layer ) )
                 {
-                    const std::vector<std::shared_ptr<PCB_SHAPE>>& prims =
-                            aRegionPad->GetPrimitives( primLayer );
+                    PCB_SHAPE* copy = static_cast<PCB_SHAPE*>( src->Clone() );
 
-                    for( const std::shared_ptr<PCB_SHAPE>& src : prims )
-                    {
-                        PCB_SHAPE* copy = static_cast<PCB_SHAPE*>( src->Clone() );
+                    copy->Rotate( VECTOR2I( 0, 0 ), aRegionPad->GetOrientation() );
+                    copy->Move( anchorShift );
+                    copy->Rotate( VECTOR2I( 0, 0 ), -namedAngle );
 
-                        copy->Rotate( VECTOR2I( 0, 0 ), aRegionPad->GetOrientation() );
-                        copy->Move( anchorShift );
-                        copy->Rotate( VECTOR2I( 0, 0 ), -namedAngle );
-
-                        aNamedPad->AddPrimitive( layer, copy );
-                    }
+                    aNamedPad->AddPrimitive( layer, copy );
                 }
 
                 if( aRegionPad->GetLocalSolderMaskMargin().has_value()
@@ -1391,10 +1462,12 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
         }
     }
 
+    std::set<PAD*> extensionPads;
+
     // Loop over this multiple times to catch pads that are jumpered to each other by multiple shapes
     for( bool changes = true; changes; )
     {
-        changes = false;
+        changes = HelperFoldPendingCopper( stackupCopper, maxError, extensionPads );
 
         alg::for_all_pairs( footprint->Pads().begin(), footprint->Pads().end(),
                 [&changes]( PAD* aPad1, PAD* aPad2 )
@@ -1402,7 +1475,10 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
                     if( !( aPad1->GetNumber().IsEmpty() ^ aPad2->GetNumber().IsEmpty() ) )
                         return;
 
-                    for( PCB_LAYER_ID layer : aPad1->GetLayerSet() )
+                    // A pad answers for layers it lacks with its own shape, and masks carry no current
+                    const LSET sharedCopper = aPad1->GetLayerSet() & aPad2->GetLayerSet() & LSET::AllCuMask();
+
+                    for( PCB_LAYER_ID layer : sharedCopper )
                     {
                         std::shared_ptr<SHAPE> shape1 = aPad1->GetEffectiveShape( layer );
                         std::shared_ptr<SHAPE> shape2 = aPad2->GetEffectiveShape( layer );
@@ -1419,6 +1495,8 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
                     }
                 } );
     }
+
+    HelperPlaceUnfoldedCopper();
 
     // Auto-position reference and value
     footprint->AutoPositionFields();
@@ -3785,47 +3863,8 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&   
         else if( elem.kind == ALTIUM_REGION_KIND::COPPER && elem.polygon == ALTIUM_POLYGON_NONE
                  && !elem.is_keepout && elem.net != ALTIUM_NET_UNCONNECTED )
         {
-            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
-
-            for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( elem.layer ) )
-            {
-                // Outer copper already becomes a netted region pad; inner copper would lose its net
-                if( !IsInnerCopperLayer( klayer ) )
-                {
-                    ConvertShapeBasedRegions6ToFootprintItemOnLayer( footprint, elem, klayer, primitiveIndex );
-                    continue;
-                }
-
-                SHAPE_LINE_CHAIN outline;
-                HelperShapeLineChainFromAltiumVertices( outline, elem.outline );
-
-                if( outline.PointCount() < 3 )
-                    continue;
-
-                SHAPE_POLY_SET polySet( outline );
-
-                for( const std::vector<ALTIUM_VERTICE>& hole : elem.holes )
-                {
-                    SHAPE_LINE_CHAIN holeChain;
-                    HelperShapeLineChainFromAltiumVertices( holeChain, hole );
-
-                    if( holeChain.PointCount() >= 3 )
-                        polySet.AddHole( holeChain );
-                }
-
-                std::unique_ptr<PCB_SHAPE> region = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::POLY );
-
-                region->SetPolyShape( polySet );
-                region->SetFilled( true );
-                region->SetStroke( STROKE_PARAMS( 0 ) );
-
-                HelperDeferComponentCopper( footprint, klayer, elem.net, std::move( region ),
-                                            [this, footprint, elem, klayer, primitiveIndex]()
-                                            {
-                                                ConvertShapeBasedRegions6ToFootprintItemOnLayer(
-                                                        footprint, elem, klayer, primitiveIndex );
-                                            } );
-            }
+            ConvertShapeBasedRegions6ToFootprintCopper( HelperGetFootprint( elem.component ), elem, primitiveIndex,
+                                                        elem.net );
         }
         else
         {
@@ -3836,6 +3875,51 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&   
 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "ShapeBasedRegions6 stream is not fully parsed" ) );
+}
+
+
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintCopper( FOOTPRINT* aFootprint, const AREGION6& aElem,
+                                                             const int aPrimitiveIndex, uint16_t aNet )
+{
+    for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+    {
+        // Outer copper already becomes a region pad; inner copper would be left unconnected
+        if( !IsInnerCopperLayer( klayer ) )
+        {
+            ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer, aPrimitiveIndex );
+            continue;
+        }
+
+        SHAPE_LINE_CHAIN outline;
+        HelperShapeLineChainFromAltiumVertices( outline, aElem.outline );
+
+        if( outline.PointCount() < 3 )
+            continue;
+
+        SHAPE_POLY_SET polySet( outline );
+
+        for( const std::vector<ALTIUM_VERTICE>& hole : aElem.holes )
+        {
+            SHAPE_LINE_CHAIN holeChain;
+            HelperShapeLineChainFromAltiumVertices( holeChain, hole );
+
+            if( holeChain.PointCount() >= 3 )
+                polySet.AddHole( holeChain );
+        }
+
+        std::unique_ptr<PCB_SHAPE> region = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::POLY );
+
+        region->SetPolyShape( polySet );
+        region->SetFilled( true );
+        region->SetStroke( STROKE_PARAMS( 0 ) );
+
+        HelperDeferComponentCopper( aFootprint, klayer, aNet, std::move( region ),
+                                    [this, aFootprint, aElem, klayer, aPrimitiveIndex]()
+                                    {
+                                        ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer,
+                                                                                         aPrimitiveIndex );
+                                    } );
+    }
 }
 
 
@@ -4529,18 +4613,22 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
     {
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
         {
-            if( aIsBoardImport && IsCopperLayer( klayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+            if( IsCopperLayer( klayer ) && ( !aIsBoardImport || aElem.net != ALTIUM_NET_UNCONNECTED ) )
             {
-                // Footprint graphics carry no net, so netted copper waits to join a pad
+                // Footprint graphics are not connected, so copper waits to join a pad it touches
                 std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( nullptr );
 
                 ConvertArcs6ToPcbShape( aElem, arc.get() );
                 arc->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
 
-                HelperDeferComponentCopper( aFootprint, klayer, aElem.net, std::move( arc ),
-                                            [this, aElem, klayer]()
+                HelperDeferComponentCopper( aFootprint, klayer, aIsBoardImport ? aElem.net : ALTIUM_NET_UNCONNECTED,
+                                            std::move( arc ),
+                                            [this, aFootprint, aElem, klayer, aIsBoardImport]()
                                             {
-                                                ConvertArcs6ToBoardItemOnLayer( aElem, klayer );
+                                                if( aIsBoardImport )
+                                                    ConvertArcs6ToBoardItemOnLayer( aElem, klayer );
+                                                else
+                                                    ConvertArcs6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
                                             } );
             }
             else
@@ -5695,19 +5783,23 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
     {
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
         {
-            if( aIsBoardImport && IsCopperLayer( klayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+            if( IsCopperLayer( klayer ) && ( !aIsBoardImport || aElem.net != ALTIUM_NET_UNCONNECTED ) )
             {
-                // Footprint graphics carry no net, so netted copper waits to join a pad
+                // Footprint graphics are not connected, so copper waits to join a pad it touches
                 std::unique_ptr<PCB_SHAPE> seg = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::SEGMENT );
 
                 seg->SetStart( aElem.start );
                 seg->SetEnd( aElem.end );
                 seg->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
 
-                HelperDeferComponentCopper( aFootprint, klayer, aElem.net, std::move( seg ),
-                                            [this, aElem, klayer]()
+                HelperDeferComponentCopper( aFootprint, klayer, aIsBoardImport ? aElem.net : ALTIUM_NET_UNCONNECTED,
+                                            std::move( seg ),
+                                            [this, aFootprint, aElem, klayer, aIsBoardImport]()
                                             {
-                                                ConvertTracks6ToBoardItemOnLayer( aElem, klayer );
+                                                if( aIsBoardImport )
+                                                    ConvertTracks6ToBoardItemOnLayer( aElem, klayer );
+                                                else
+                                                    ConvertTracks6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
                                             } );
             }
             else
@@ -6024,6 +6116,8 @@ void ALTIUM_PCB::HelperDeferComponentCopper( FOOTPRINT* aFootprint, PCB_LAYER_ID
 static PAD* altiumFindTouchingPad( FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer, int aNetCode, const SHAPE& aShape,
                                    const PAD* aExclude = nullptr )
 {
+    PAD* found = nullptr;
+
     for( PAD* pad : aFootprint->Pads() )
     {
         if( pad == aExclude || pad->GetNumber().IsEmpty() || pad->GetNetCode() != aNetCode
@@ -6035,56 +6129,23 @@ static PAD* altiumFindTouchingPad( FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer, i
         if( aShape.BBox().Intersects( pad->GetBoundingBox() )
             && aShape.Collide( pad->GetEffectiveShape( aLayer ).get() ) )
         {
-            return pad;
+            if( aNetCode > 0 )
+                return pad;
+
+            // Without a net, copper bridging two pad numbers has no single owner
+            if( found && found->GetNumber() != pad->GetNumber() )
+                return nullptr;
+
+            found = pad;
         }
     }
 
-    return nullptr;
+    return found;
 }
 
 
-// Give every copper layer its own padstack entry, deep copying shared primitives, so one layer
-// can change shape without the others; ALL_LAYERS aliases F_Cu so a NORMAL pad cannot be edited in place
-static void altiumSplitPadstackPerLayer( PAD* aPad, const LSET& aBoardCopper )
+bool ALTIUM_PCB::HelperFoldPendingCopper( const LSET& aCopper, int aMaxError, std::set<PAD*>& aExtensionPads )
 {
-    PADSTACK& padstack = aPad->Padstack();
-
-    if( padstack.Mode() == PADSTACK::MODE::CUSTOM )
-        return;
-
-    // Entries for layers the board lacks would only collide with real ones when flipped
-    const LSET copper = aPad->GetLayerSet() & aBoardCopper;
-
-    std::map<PCB_LAYER_ID, PADSTACK::COPPER_LAYER_PROPS> props;
-
-    for( PCB_LAYER_ID layer : copper )
-    {
-        PADSTACK::COPPER_LAYER_PROPS layerProps = padstack.CopperLayer( layer );
-
-        for( std::shared_ptr<PCB_SHAPE>& prim : layerProps.custom_shapes )
-            prim = std::shared_ptr<PCB_SHAPE>( static_cast<PCB_SHAPE*>( prim->Clone() ) );
-
-        props[layer] = std::move( layerProps );
-    }
-
-    padstack.SetMode( PADSTACK::MODE::CUSTOM );
-
-    for( auto& [layer, layerProps] : props )
-        padstack.CopperLayer( layer ) = std::move( layerProps );
-
-    aPad->SetDirty();
-}
-
-
-void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
-{
-    const int  maxError = m_board->GetDesignSettings().m_MaxError;
-    const LSET boardCopper = m_board->GetEnabledLayers() & LSET::AllCuMask();
-
-    // Copper-only pads made here to carry a pad's number on an outer layer; they own no mask or
-    // paste, so further copper can join them without widening an aperture
-    std::set<PAD*> extensionPads;
-
     // A custom outline is placed at ShapePos, so a pad offset must come out with the position
     auto toPadFrame =
             []( PCB_SHAPE* aShape, const PAD* aPad, PCB_LAYER_ID aLayer )
@@ -6096,19 +6157,32 @@ void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
     auto fold =
             [&]( PENDING_COMPONENT_COPPER& aPending, PAD* aPad )
             {
-                PCB_LAYER_ID layer = aPending.layer;
+                PCB_LAYER_ID   layer = aPending.layer;
+                SHAPE_POLY_SET uncovered;
+                SHAPE_POLY_SET padCopper;
+
+                aPending.shape->TransformShapeToPolygon( uncovered, layer, 0, aMaxError, ERROR_OUTSIDE );
+                aPad->TransformShapeToPolygon( padCopper, layer, 0, aMaxError, ERROR_INSIDE );
+                uncovered.BooleanSubtract( padCopper );
+
+                // Copper already inside the pad would only add a redundant primitive or pad
+                if( uncovered.IsEmpty() )
+                {
+                    aPending.shape.reset();
+                    return;
+                }
 
                 if( IsInnerCopperLayer( layer ) )
                 {
                     // Inner layers carry no mask or paste, so the pad itself can grow there
-                    altiumSplitPadstackPerLayer( aPad, boardCopper );
-                    altiumMakePadLayerCustom( aPad, layer, maxError );
+                    altiumIsolatePadLayer( aPad, layer, aCopper );
+                    altiumMakePadLayerCustom( aPad, layer, aMaxError );
                     toPadFrame( aPending.shape.get(), aPad, layer );
                     aPad->AddPrimitive( layer, aPending.shape.release() );
                     return;
                 }
 
-                if( extensionPads.count( aPad ) )
+                if( aExtensionPads.count( aPad ) )
                 {
                     toPadFrame( aPending.shape.get(), aPad, layer );
                     aPad->AddPrimitive( PADSTACK::ALL_LAYERS, aPending.shape.release() );
@@ -6119,7 +6193,7 @@ void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
                 // Growing the touched pad would open its mask over the copper, so a same-numbered
                 // copper-only pad joins it instead
                 SHAPE_POLY_SET outline;
-                aPending.shape->TransformShapeToPolygon( outline, layer, 0, maxError, ERROR_INSIDE );
+                aPending.shape->TransformShapeToPolygon( outline, layer, 0, aMaxError, ERROR_INSIDE );
 
                 std::unique_ptr<PAD> extension = std::make_unique<PAD>( aPending.footprint );
 
@@ -6143,9 +6217,51 @@ void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
                 toPadFrame( aPending.shape.get(), extension.get(), layer );
                 extension->AddPrimitive( PADSTACK::ALL_LAYERS, aPending.shape.release() );
 
-                extensionPads.insert( extension.get() );
+                aExtensionPads.insert( extension.get() );
                 aPending.footprint->Add( extension.release(), ADD_MODE::APPEND );
             };
+
+    bool changed = false;
+
+    for( PENDING_COMPONENT_COPPER& pending : m_pendingComponentCopper )
+    {
+        // Copper outside the stackup is a multi-layer copy that the stackup step discards
+        if( !pending.shape || !aCopper.test( pending.layer ) )
+            continue;
+
+        std::shared_ptr<SHAPE> shape = pending.shape->GetEffectiveShape( pending.layer );
+
+        if( PAD* pad = altiumFindTouchingPad( pending.footprint, pending.layer, pending.netcode, *shape ) )
+        {
+            fold( pending, pad );
+            changed = true;
+        }
+    }
+
+    return changed;
+}
+
+
+void ALTIUM_PCB::HelperPlaceUnfoldedCopper()
+{
+    for( PENDING_COMPONENT_COPPER& pending : m_pendingComponentCopper )
+    {
+        if( pending.shape )
+            pending.fallback();
+    }
+
+    m_pendingComponentCopper.clear();
+}
+
+
+void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
+{
+    const int  maxError = m_board->GetDesignSettings().m_MaxError;
+    const LSET boardCopper = m_board->GetEnabledLayers() & LSET::AllCuMask();
+
+    // Copper-only pads made here to carry a pad's number on an outer layer; they own no mask or
+    // paste, so further copper can join them without widening an aperture
+    std::set<PAD*> extensionPads;
 
     // Mirrors the land ConvertVias6ToBoardItem would give the via on each layer
     auto viaDiameterOn =
@@ -6176,21 +6292,7 @@ void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
     // Repeat so copper reaching a pad only through other folded copper still joins it
     for( bool changed = true; changed; )
     {
-        changed = false;
-
-        for( PENDING_COMPONENT_COPPER& pending : m_pendingComponentCopper )
-        {
-            if( !pending.shape )
-                continue;
-
-            std::shared_ptr<SHAPE> shape = pending.shape->GetEffectiveShape( pending.layer );
-
-            if( PAD* pad = altiumFindTouchingPad( pending.footprint, pending.layer, pending.netcode, *shape ) )
-            {
-                fold( pending, pad );
-                changed = true;
-            }
-        }
+        changed = HelperFoldPendingCopper( boardCopper, maxError, extensionPads );
 
         for( auto it = m_pendingComponentVias.begin(); it != m_pendingComponentVias.end(); )
         {
@@ -6252,16 +6354,11 @@ void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
         }
     }
 
-    for( PENDING_COMPONENT_COPPER& pending : m_pendingComponentCopper )
-    {
-        if( pending.shape )
-            pending.fallback();
-    }
+    HelperPlaceUnfoldedCopper();
 
     for( const auto& [footprint, via] : m_pendingComponentVias )
         ConvertVias6ToBoardItem( via );
 
-    m_pendingComponentCopper.clear();
     m_pendingComponentVias.clear();
 }
 
@@ -6849,20 +6946,30 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
         HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer,
                                                 aElem.keepoutrestrictions );
     }
-    else if( aIsBoardImport && IsAltiumLayerCopper( aElem.layer )
-             && aElem.net != ALTIUM_NET_UNCONNECTED )
+    else if( IsAltiumLayerCopper( aElem.layer ) && ( !aIsBoardImport || aElem.net != ALTIUM_NET_UNCONNECTED ) )
     {
-        // Footprint graphics carry no net, so netted copper waits to join a pad
+        // Footprint graphics are not connected, so copper waits to join a pad it touches
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
         {
+            // An outer library fill already becomes a pad
+            if( !aIsBoardImport && !IsInnerCopperLayer( klayer ) )
+            {
+                ConvertFills6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
+                continue;
+            }
+
             std::unique_ptr<PCB_SHAPE> fill = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::RECTANGLE );
 
             ConvertFills6ToPcbShape( aElem, fill.get() );
 
-            HelperDeferComponentCopper( aFootprint, klayer, aElem.net, std::move( fill ),
-                                        [this, aElem, klayer]()
+            HelperDeferComponentCopper( aFootprint, klayer, aIsBoardImport ? aElem.net : ALTIUM_NET_UNCONNECTED,
+                                        std::move( fill ),
+                                        [this, aFootprint, aElem, klayer, aIsBoardImport]()
                                         {
-                                            ConvertFills6ToBoardItemOnLayer( aElem, klayer );
+                                            if( aIsBoardImport )
+                                                ConvertFills6ToBoardItemOnLayer( aElem, klayer );
+                                            else
+                                                ConvertFills6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
                                         } );
         }
     }
