@@ -302,40 +302,50 @@ int GERBVIEW_JOBS_HANDLER::JobGerberDiff( JOB* aJob )
     wxFileName fnA( diffJob->m_inputFileA );
     wxFileName fnB( diffJob->m_inputFileB );
 
-    auto writeTextToOutput = [&]( const wxString& aText ) -> bool
-    {
-        wxString outputPath = diffJob->GetConfiguredOutputPath();
-
-        if( !outputPath.IsEmpty() )
-        {
-            wxFile file( outputPath, wxFile::write );
-
-            if( !file.IsOpened() )
+    auto writeTextToOutput =
+            [&]( const wxString& aText ) -> bool
             {
-                if( m_reporter )
+                wxString outputPath = diffJob->GetConfiguredOutputPath();
+
+                if( !outputPath.IsEmpty() )
                 {
-                    m_reporter->Report( wxString::Format( wxS( "Failed to open output file: %s" ), outputPath ),
-                                        RPT_SEVERITY_ERROR );
+                    wxFile file( outputPath, wxFile::write );
+
+                    if( !file.IsOpened() )
+                    {
+                        if( m_reporter )
+                        {
+                            m_reporter->Report( wxString::Format( _( "Failed to open output file: %s" ), outputPath ),
+                                                RPT_SEVERITY_ERROR );
+                        }
+
+                        return false;
+                    }
+
+                    if( !file.Write( aText ) )
+                    {
+                        if( m_reporter )
+                        {
+                            m_reporter->Report( wxString::Format( _( "Error writing output file: %s" ), outputPath ),
+                                                RPT_SEVERITY_ERROR );
+                        }
+
+                        return false;
+                    }
+
+                    if( m_reporter )
+                    {
+                        m_reporter->Report( wxString::Format( _( "Output written to: %s" ), outputPath ),
+                                            RPT_SEVERITY_INFO );
+                    }
+                }
+                else if( m_reporter )
+                {
+                    m_reporter->Report( aText, RPT_SEVERITY_INFO );
                 }
 
-                return false;
-            }
-
-            file.Write( aText );
-
-            if( m_reporter )
-            {
-                m_reporter->Report( wxString::Format( wxS( "Output written to: %s" ), outputPath ),
-                                    RPT_SEVERITY_INFO );
-            }
-        }
-        else if( m_reporter )
-        {
-            m_reporter->Report( aText, RPT_SEVERITY_INFO );
-        }
-
-        return true;
-    };
+                return true;
+            };
 
     switch( diffJob->m_outputFormat )
     {
