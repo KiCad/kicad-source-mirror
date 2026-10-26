@@ -4576,7 +4576,22 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
     if( !std::ranges::equal( m_zones, aOther.m_zones, equalItems ) )
         return false;
 
+    if( !std::ranges::equal( m_groups, aOther.m_groups, equalItems ) )
+        return false;
+
+    if( m_netTiePadGroups != aOther.m_netTiePadGroups )
+        return false;
+
+    if( m_jumperPadGroups != aOther.m_jumperPadGroups )
+        return false;
+
     if( m_points.size() != aOther.m_points.size() )
+        return false;
+
+    if( !std::ranges::equal( m_bodies, aOther.m_bodies, equalItems ) )
+        return false;
+
+    if( m_height != aOther.m_height )
         return false;
 
     // Compare fields in ordinally-sorted order

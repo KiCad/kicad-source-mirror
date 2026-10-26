@@ -1215,8 +1215,7 @@ public:
     /**
      * Return true if a board footprint differs from the library version.
      */
-    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags = 0,
-                               REPORTER* aReporter = nullptr );
+    bool FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags = 0, REPORTER* aReporter = nullptr );
 
     /**
      * Take ownership of caller's heap allocated aInitialComments block.
@@ -1376,20 +1375,20 @@ protected:
     void addMandatoryFields();
 
 private:
-    std::deque<PCB_FIELD*>  m_fields;    // Fields, mapped by name, owned by pointer
-    std::deque<BOARD_ITEM*> m_drawings;  // Drawings in the footprint, owned by pointer
-    std::deque<PAD*>        m_pads;      // Pads, owned by pointer
-    std::vector<ZONE*>      m_zones;     // Rule area zones, owned by pointer
-    std::deque<PCB_GROUP*>  m_groups;    // Groups, owned by pointer
-    std::deque<PCB_CONSTRAINT*> m_constraints;  // Geometric constraints, owned by pointer
-    std::deque<PCB_POINT*>  m_points;    // Points, owned by pointer
+    std::deque<PCB_FIELD*>      m_fields;            // Fields, mapped by name, owned by pointer
+    std::deque<BOARD_ITEM*>     m_drawings;          // Drawings in the footprint, owned by pointer
+    std::deque<PAD*>            m_pads;              // Pads, owned by pointer
+    std::vector<ZONE*>          m_zones;             // Rule area zones, owned by pointer
+    std::deque<PCB_GROUP*>      m_groups;            // Groups, owned by pointer
+    std::deque<PCB_CONSTRAINT*> m_constraints;       // Geometric constraints, owned by pointer
+    std::deque<PCB_POINT*>      m_points;            // Points, owned by pointer
 
-    TRANSFORM_TRS   m_transform;
-    bool            m_flipped = false;
-    LIB_ID          m_fpid;
-    int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
-    int             m_fpStatus = 0;      // For autoplace: flags (PLACED, TO_PLACE)
-    int             m_fileFormatVersionAtLoad;
+    TRANSFORM_TRS               m_transform;
+    bool                        m_flipped = false;
+    LIB_ID                      m_fpid;
+    int                         m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
+    int                         m_fpStatus = 0;      // For autoplace: flags (PLACED, TO_PLACE)
+    int                         m_fileFormatVersionAtLoad;
 
     /// Variant data for this footprint, keyed by variant name
     CASE_INSENSITIVE_MAP<FOOTPRINT_VARIANT> m_variants;
@@ -1413,60 +1412,60 @@ private:
 
     // A list of pad groups, each of which is allowed to short nets within their group.
     // A pad group is a comma-separated list of pad numbers.
-    std::vector<wxString>  m_netTiePadGroups;
+    std::vector<wxString>    m_netTiePadGroups;
 
     // A list of 1:N footprint item to allowed net numbers
     std::map<const BOARD_ITEM*, std::set<int>> m_netTieCache;
 
     /// A list of jumper pad groups, each of which is a set of pad numbers that should be jumpered
     /// together (treated as internally connected for the purposes of connectivity)
-    JUMPER_GROUP_SET m_jumperPadGroups;
+    JUMPER_GROUP_SET         m_jumperPadGroups;
 
     /// Flag that this footprint should automatically treat sets of two or more pads with the same
     /// number as jumpered pin groups
-    bool                  m_duplicatePadNumbersAreJumpers;
+    bool                     m_duplicatePadNumbersAreJumpers;
 
-    bool                  m_allowMissingCourtyard;
-    bool                  m_allowSolderMaskBridges;
+    bool                     m_allowMissingCourtyard;
+    bool                     m_allowSolderMaskBridges;
 
     // Optional overrides
-    ZONE_CONNECTION       m_zoneConnection;
-    std::optional<int>    m_clearance;
-    std::optional<int>    m_solderMaskMargin;       // Solder mask margin
-    std::optional<int>    m_solderPasteMargin;      // Solder paste margin absolute value
-    std::optional<double> m_solderPasteMarginRatio; // Solder mask margin ratio of pad size
-                                                    // The final margin is the sum of these 2 values
+    ZONE_CONNECTION          m_zoneConnection;
+    std::optional<int>       m_clearance;
+    std::optional<int>       m_solderMaskMargin;       // Solder mask margin
+    std::optional<int>       m_solderPasteMargin;      // Solder paste margin absolute value
+    std::optional<double>    m_solderPasteMarginRatio; // Solder mask margin ratio of pad size
+                                                       // The final margin is the sum of these 2 values
 
-    LSET              m_stackupLayers; // Layers in the stackup
-    FOOTPRINT_STACKUP m_stackupMode;   // Stackup mode for this footprint
-    LSET              m_privateLayers; // Layers visible only in the footprint editor
+    LSET                     m_stackupLayers;          // Layers in the stackup
+    FOOTPRINT_STACKUP        m_stackupMode;            // Stackup mode for this footprint
+    LSET                     m_privateLayers;          // Layers visible only in the footprint editor
 
-    wxString        m_libDescription;    // File name and path for documentation file.
-    wxString        m_keywords;          // Search keywords to find footprint in library.
-    KIID_PATH       m_path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
-    wxString        m_sheetname;         // Name of the sheet containing the symbol for this footprint
-    wxString        m_sheetfile;         // File of the sheet containing the symbol for this footprint
-    wxString        m_filters;           // Footprint filters from symbol
-    timestamp_t     m_lastEditTime;
-    int             m_arflag;            // Use to trace ratsnest and auto routing.
-    KIID            m_link;              // Temporary logical link used during editing
-    std::deque<PCB_3D_BODY*> m_bodies; // 3D bodies (extruded or model), owned by pointer
-    std::vector<FP_3DMODEL> m_3D_Drawings;       // 3D models.
-    int             m_height = 0;
+    wxString                 m_libDescription;         // File name and path for documentation file.
+    wxString                 m_keywords;               // Search keywords to find footprint in library.
+    KIID_PATH                m_path;                   // Path to associated symbol ([sheetUUID, .., symbolUUID]).
+    wxString                 m_sheetname;              // Name of the sheet containing the symbol for this footprint
+    wxString                 m_sheetfile;              // File of the sheet containing the symbol for this footprint
+    wxString                 m_filters;                // Footprint filters from symbol
+    timestamp_t              m_lastEditTime;
+    int                      m_arflag;                 // Use to trace ratsnest and auto routing.
+    KIID                     m_link;                   // Temporary logical link used during editing
+    std::deque<PCB_3D_BODY*> m_bodies;                 // 3D bodies (extruded or model), owned by pointer
+    std::vector<FP_3DMODEL>  m_3D_Drawings;            // 3D models.
+    int                      m_height = 0;
 
-    wxArrayString*          m_initial_comments;  // s-expression comments in the footprint,
-                                                 //   lazily allocated only if needed for speed
+    wxArrayString*           m_initial_comments;       // s-expression comments in the footprint,
+                                                       //   lazily allocated only if needed for speed
 
     mutable std::unique_ptr<FOOTPRINT_COURTYARD_CACHE_DATA> m_courtyard_cache;
     mutable std::mutex                                      m_courtyard_cache_mutex;
 
-    std::unordered_set<wxString> m_transientComponentClassNames;
+    std::unordered_set<wxString>                 m_transientComponentClassNames;
     std::unique_ptr<COMPONENT_CLASS_CACHE_PROXY> m_componentClassCacheProxy;
 
     // Optional unit mapping information for multi-unit symbols
-    std::vector<FP_UNIT_INFO> m_unitInfo;
+    std::vector<FP_UNIT_INFO>                    m_unitInfo;
 
-    std::vector<SEARCH_TERM> m_searchTerms;
+    std::vector<SEARCH_TERM>                     m_searchTerms;
 };
 
 #endif     // FOOTPRINT_H
