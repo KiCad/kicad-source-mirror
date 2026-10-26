@@ -62,23 +62,6 @@ CONSTRAINT_RULES_LIST::CONSTRAINT_RULES_LIST( wxWindow* aParent, PCB_EDIT_FRAME*
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_editorHost = new wxPanel( this, wxID_ANY );
-    m_editorSizer = new wxBoxSizer( wxVERTICAL );
-    m_editorHost->SetSizer( m_editorSizer );
-    mainSizer->Add( m_editorHost, 0, wxEXPAND );
-
-    wxBoxSizer* formButtons = new wxBoxSizer( wxHORIZONTAL );
-    m_primaryBtn = new wxButton( this, wxID_ANY, _( "Add Rule" ) );
-    m_newBtn = new wxButton( this, wxID_ANY, _( "New Rule" ) );
-
-    m_primaryBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_primaryBtn->SetMinSize( wxSize( m_primaryBtn->GetBestSize().x + FromDIP( 16 ), -1 ) );
-    m_newBtn->SetToolTip( _( "Empty the form so another rule can be written. Anything typed and not "
-                             "added is discarded." ) );
-    formButtons->Add( m_primaryBtn, 0, wxRIGHT, 4 );
-    formButtons->Add( m_newBtn, 0, wxRIGHT, 4 );
-    mainSizer->Add( formButtons, 0, wxTOP | wxBOTTOM, 6 );
-
     m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1, 140 ), wxLC_REPORT | wxLC_SINGLE_SEL );
     m_list->AppendColumn( wxS( "#" ), wxLIST_FORMAT_RIGHT, 36 );
     m_list->AppendColumn( _( "Name" ), wxLIST_FORMAT_LEFT, 160 );
@@ -109,12 +92,29 @@ CONSTRAINT_RULES_LIST::CONSTRAINT_RULES_LIST( wxWindow* aParent, PCB_EDIT_FRAME*
     m_duplicateBtn->SetToolTip( _( "Copy the selected rule and place the copy after it." ) );
     m_removeBtn->SetToolTip( _( "Delete the selected rule." ) );
     m_list->SetToolTip( _( "The rules for this constraint, in the order they are read. Select one to load "
-                           "it into the form above." ) );
+                           "it into the form below." ) );
     tableButtons->Add( m_upBtn, 0, wxRIGHT, 4 );
     tableButtons->Add( m_downBtn, 0, wxRIGHT, 4 );
     tableButtons->Add( m_duplicateBtn, 0, wxRIGHT, 4 );
     tableButtons->Add( m_removeBtn, 0, wxRIGHT, 4 );
     mainSizer->Add( tableButtons, 0, wxBOTTOM, 4 );
+
+    m_editorHost = new wxPanel( this, wxID_ANY );
+    m_editorSizer = new wxBoxSizer( wxVERTICAL );
+    m_editorHost->SetSizer( m_editorSizer );
+    mainSizer->Add( m_editorHost, 0, wxEXPAND | wxTOP, 8 );
+
+    wxBoxSizer* formButtons = new wxBoxSizer( wxHORIZONTAL );
+    m_primaryBtn = new wxButton( this, wxID_ANY, _( "Add Rule" ) );
+    m_newBtn = new wxButton( this, wxID_ANY, _( "New Rule" ) );
+
+    m_primaryBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_primaryBtn->SetMinSize( wxSize( m_primaryBtn->GetBestSize().x + FromDIP( 16 ), -1 ) );
+    m_newBtn->SetToolTip( _( "Empty the form so another rule can be written. Anything typed and not "
+                             "added is discarded." ) );
+    formButtons->Add( m_primaryBtn, 0, wxRIGHT, 4 );
+    formButtons->Add( m_newBtn, 0, wxRIGHT, 4 );
+    mainSizer->Add( formButtons, 0, wxTOP | wxBOTTOM, 6 );
 
     SetSizer( mainSizer );
 
@@ -407,7 +407,7 @@ void CONSTRAINT_RULES_LIST::updateButtons()
     wxString label = editingExisting ? _( "Apply" ) : _( "Add Rule" );
 
     m_primaryBtn->SetToolTip( editingExisting ? _( "Save the form back to the selected rule." )
-                                              : _( "Check the form and add it to the list of rules below." ) );
+                                              : _( "Check the form and add it to the list of rules above." ) );
 
     if( m_primaryBtn->GetLabel() != label )
     {
