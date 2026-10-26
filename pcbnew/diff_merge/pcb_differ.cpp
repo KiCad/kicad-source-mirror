@@ -375,11 +375,7 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
     collect( aAfter, afterDesc, afterMap );
 
     IDENTITY_RECONCILER reconciler( m_options.identity );
-    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc,
-                                                  [&aSpan]()
-                                                  {
-                                                      aSpan.Tick();
-                                                  } );
+    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc, aSpan.Ticker() );
 
     // Matched pairs: compute property deltas. Items count as "changed" if any
     // property surfaced a delta OR if their semantic operator== rejects equality
@@ -542,11 +538,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         m_options.progress( 0.1 );
 
     IDENTITY_RECONCILER reconciler( m_options.identity );
-    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc,
-                                                  [&describing]()
-                                                  {
-                                                      describing.Tick();
-                                                  } );
+    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc, describing.Ticker() );
 
     if( m_options.progress )
         m_options.progress( 0.15 );

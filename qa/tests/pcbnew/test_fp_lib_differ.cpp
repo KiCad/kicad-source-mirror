@@ -30,9 +30,11 @@
 #include <diff_merge/pcb_geometry_extractor.h>
 
 #include <footprint.h>
+#include <ki_exception.h>
 #include <pad.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_shape.h>
+#include <widgets/progress_reporter_base.h>
 
 #include <json_common.h>
 
@@ -40,6 +42,28 @@
 
 
 using namespace KICAD_DIFF;
+
+
+namespace
+{
+
+// Cancels on the second poll, once the cache holds a parsed entry
+class SECOND_POLL_CANCELS : public PROGRESS_REPORTER_BASE
+{
+public:
+    SECOND_POLL_CANCELS() :
+            PROGRESS_REPORTER_BASE( 1 )
+    {
+    }
+
+protected:
+    bool updateUI() override { return ++m_polls < 2; }
+
+private:
+    int m_polls = 0;
+};
+
+} // namespace
 
 
 BOOST_AUTO_TEST_SUITE( FpLibDiffer )
@@ -277,6 +301,65 @@ BOOST_AUTO_TEST_CASE( FootprintElementsFindAMovedPolygonCorner )
     BOOST_REQUIRE_EQUAL( elements.size(), 1u );
     BOOST_CHECK( elements[0].kind == CHANGE_KIND::MODIFIED );
     BOOST_CHECK( elements[0].item == polygon );
+}
+
+
+// A large library parses for a while, so a cancel must end the parse, and the next load must read it all again
+BOOST_AUTO_TEST_CASE( EnumerationStopsOnceCancelled )
+{
+    SECOND_POLL_CANCELS reporter;
+    PCB_IO_KICAD_SEXPR  io;
+    PCB_IO_KICAD_SEXPR  fresh;
+    wxArrayString       retried;
+    wxArrayString       expected;
+
+    io.SetProgressReporter( &reporter );
+    BOOST_CHECK_THROW( io.FootprintEnumerate( retried, getFixturePath(), false, nullptr ), IO_CANCELLED );
+
+    io.SetProgressReporter( nullptr );
+    retried.Clear();
+    io.FootprintEnumerate( retried, getFixturePath(), false, nullptr );
+    fresh.FootprintEnumerate( expected, getFixturePath(), false, nullptr );
+
+    BOOST_REQUIRE_GE( expected.size(), 2u );
+    BOOST_CHECK( retried == expected );
+}
+
+
+// Moved pads are compared pair by pair within one footprint, which is one step of the diff
+BOOST_AUTO_TEST_CASE( DiffReportsWhilePairingOneFootprintsPads )
+{
+    const wxString path = KI_TEST::GetPcbnewTestDataDir() + "issue24045/QFN-24_L4.0-W4.0-P0.50-BL-EP2.6.kicad_mod";
+
+    PCB_IO_KICAD_SEXPR         io;
+    wxString                   name;
+    std::unique_ptr<FOOTPRINT> before = io.ImportFootprint( path, name );
+    std::unique_ptr<FOOTPRINT> after = io.ImportFootprint( path, name );
+
+    BOOST_REQUIRE( before && after );
+
+    for( PAD* pad : after->Pads() )
+        pad->SetPosition( pad->GetPosition() + VECTOR2I( 100000, 0 ) );
+
+    FP_LIB_DIFFER::FOOTPRINT_MAP mapA{ { name, before.get() } };
+    FP_LIB_DIFFER::FOOTPRINT_MAP mapB{ { name, after.get() } };
+    FP_LIB_DIFFER                differ( mapA, mapB );
+    KICAD_DIFFER::OPTIONS        options = differ.GetOptions();
+    size_t                       reports = 0;
+
+    options.progress = [&reports]( double aFraction )
+    {
+        if( aFraction > 0.5 )
+            reports++;
+    };
+
+    differ.SetOptions( options );
+    differ.Diff();
+
+    const size_t pads = after->Pads().size();
+
+    // One more for the diff's final report
+    BOOST_CHECK_GE( reports, pads * pads / 64 + 1 );
 }
 
 

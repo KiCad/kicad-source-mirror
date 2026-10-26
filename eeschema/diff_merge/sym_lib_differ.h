@@ -68,9 +68,10 @@ public:
 
     /// Convenience: load a .kicad_sym path into a SYMBOL_MAP using
     /// SCH_IO_KICAD_SEXPR::EnumerateSymbolLib. Symbol ownership is held by
-    /// the returned vector; the caller must not delete entries individually.
+    /// the returned vector; the caller must not delete entries individually. Throws IO_CANCELLED once
+    /// @p aProgress is cancelled.
     static std::pair<std::vector<std::unique_ptr<LIB_SYMBOL>>, SYMBOL_MAP>
-    LoadLibrary( const wxString& aPath );
+    LoadLibrary( const wxString& aPath, PROGRESS_REPORTER* aProgress = nullptr );
 
     /// LoadLibrary for the text of a .kicad_sym file. Throws IO_ERROR when any symbol fails to parse,
     /// since a skipped symbol would read as removed

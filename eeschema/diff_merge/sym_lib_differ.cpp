@@ -61,7 +61,7 @@ SYM_LIB_DIFFER::~SYM_LIB_DIFFER() = default;
 
 
 std::pair<std::vector<std::unique_ptr<LIB_SYMBOL>>, SYM_LIB_DIFFER::SYMBOL_MAP>
-SYM_LIB_DIFFER::LoadLibrary( const wxString& aPath )
+SYM_LIB_DIFFER::LoadLibrary( const wxString& aPath, PROGRESS_REPORTER* aProgress )
 {
     std::vector<std::unique_ptr<LIB_SYMBOL>> owners;
     SYMBOL_MAP                               map;
@@ -79,6 +79,7 @@ SYM_LIB_DIFFER::LoadLibrary( const wxString& aPath )
     // unreadable file. Let the exception escape so callers can distinguish a
     // load failure from a deliberately-empty library; swallowing here was
     // misreported as a valid empty diff downstream.
+    io.SetProgressReporter( aProgress );
     io.EnumerateSymbolLib( rawList, absStr, nullptr );
 
     // EnumerateSymbolLib returns pointers owned by the IO plugin's cache,
@@ -86,6 +87,8 @@ SYM_LIB_DIFFER::LoadLibrary( const wxString& aPath )
     // each symbol so we own a stable copy.
     for( LIB_SYMBOL* sym : rawList )
     {
+        KeepLoading( aProgress );
+
         if( !sym )
             continue;
 
@@ -331,7 +334,7 @@ bool SYM_LIB_DIFFER::DiffLibraryTexts( const std::vector<std::string>& aBefore, 
                 {
                     return BOX2I();
                 },
-                []( const LIB_SYMBOL* aA, const LIB_SYMBOL* aB )
+                []( const LIB_SYMBOL* aA, const LIB_SYMBOL* aB, const std::function<void()>& )
                 {
                     // The saved text misses a parent's edits, and flattening drops the parent and own state
                     return SavedSymbolText( *aA ) != SavedSymbolText( *aB ) || flatText( aA ) != flatText( aB );
@@ -511,14 +514,14 @@ namespace
     }
 
 
-    bool hasSymbolDifferences( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
+    bool hasSymbolDifferences( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter, const std::function<void()>& aTick )
     {
         std::unique_ptr<LIB_SYMBOL> before = aBefore->Flatten();
         std::unique_ptr<LIB_SYMBOL> after = aAfter->Flatten();
 
         return before->Compare( *after, SYMBOL_COMPARE_FLAGS ) != 0
                || !symbolDeltas( before.get(), after.get() ).empty()
-               || !DiffSymbolElements( before.get(), after.get() ).empty()
+               || !DiffSymbolElements( before.get(), after.get(), aTick ).empty()
                || !ownStateDeltas( aBefore, aAfter ).empty();
     }
 } // namespace
@@ -532,13 +535,14 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
             {
                 return aSym->GetUnitBoundingBox( 0, 0 );
             },
-            []( const LIB_SYMBOL* aA, const LIB_SYMBOL* aB )
+            []( const LIB_SYMBOL* aA, const LIB_SYMBOL* aB, const std::function<void()>& aTick )
             {
-                return hasSymbolDifferences( aA, aB );
+                return hasSymbolDifferences( aA, aB, aTick );
             } );
 
     // Comparing each modified item's elements can take longer than finding them
-    PROGRESS_SPAN comparing( m_options, 0.5, 1.0, result.changes.size() );
+    PROGRESS_SPAN               comparing( m_options, 0.5, 1.0, result.changes.size() );
+    const std::function<void()> tick = comparing.Ticker();
 
     for( ITEM_CHANGE& change : result.changes )
     {
@@ -561,8 +565,11 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
         for( PROPERTY_DELTA& delta : ownStateDeltas( beforeIt->second, afterIt->second ) )
             change.properties.push_back( std::move( delta ) );
 
-        AppendElementChanges( change, DiffSymbolElements( before.get(), after.get() ) );
+        AppendElementChanges( change, DiffSymbolElements( before.get(), after.get(), tick ) );
     }
+
+    if( m_options.progress )
+        m_options.progress( 1.0 );
 
     return result;
 }

@@ -77,9 +77,6 @@ public:
      */
     virtual DOCUMENT_DIFF Diff() = 0;
 
-protected:
-    KICAD_DIFFER() = default;
-
     /**
      * One loop's share of the diff's progress, from @p aFrom to @p aTo over @p aSteps steps. Reports every few steps,
      * so a cancel acts within a moment even when each step is slow, as in a debug build.
@@ -108,6 +105,18 @@ protected:
                 report();
         }
 
+        /// Tick() as a callback, or none without a progress reporter so a loop of millions skips the call
+        std::function<void()> Ticker()
+        {
+            if( !m_progress )
+                return {};
+
+            return [this]()
+            {
+                Tick();
+            };
+        }
+
     private:
         void report() { m_progress( m_from + ( m_to - m_from ) * double( m_done ) / double( m_steps ) ); }
 
@@ -120,6 +129,9 @@ protected:
         size_t                               m_done = 0;
         size_t                               m_ticks = 0;
     };
+
+protected:
+    KICAD_DIFFER() = default;
 
     /// These options with progress mapped onto @p aFrom to @p aTo, for a pass that reports through a shared routine.
     OPTIONS scaledOptions( double aFrom, double aTo ) const
@@ -150,6 +162,13 @@ KICOMMON_API void ReportDiffProgress( KICAD_DIFFER& aDiffer, PROGRESS_REPORTER* 
 
 
 /**
+ * Refresh @p aProgress while one side of a comparison loads, and throw IO_CANCELLED once the user cancels.
+ * Does nothing without a reporter.
+ */
+KICOMMON_API void KeepLoading( PROGRESS_REPORTER* aProgress );
+
+
+/**
  * The progress message while one side of a comparison loads. Names the file and @p aLabel, the side's version,
  * but not the folder, which for a downloaded version is a temporary one that names the user.
  */
@@ -161,7 +180,8 @@ KICOMMON_API wxString LoadingMessage( const wxString& aFile, const wxString& aLa
  *
  * Walks the union of names in @p aBefore and @p aAfter, classifying each entry
  * as ADDED, REMOVED, or MODIFIED. @p aBBox yields the bounding box stored on
- * each change; @p aChanged decides whether two present items differ. Library
+ * each change; @p aChanged decides whether two present items differ, calling the tick
+ * it is given through long work so a cancel is noticed. Library
  * files aren't UUID-keyed, so each change's id is the deterministic synthetic
  * LibraryItemKiidPath( name ) the appliers look up by.
  */
@@ -186,14 +206,12 @@ DOCUMENT_DIFF DiffLibraryByName( const MAP& aBefore, const MAP& aAfter, const wx
     if( aOptions.progress )
         aOptions.progress( 0.1 );
 
-    std::size_t processed = 0;
+    KICAD_DIFFER::PROGRESS_SPAN naming( aOptions, 0.1, 1.0, allNames.size() );
+    const std::function<void()> tick = naming.Ticker();
 
     for( const wxString& name : allNames )
     {
-        ++processed;
-
-        if( aOptions.progress )
-            aOptions.progress( 0.1 + 0.9 * processed / allNames.size() );
+        naming.Step();
 
         auto        beforeIt = aBefore.find( name );
         auto        afterIt  = aAfter.find( name );
@@ -218,7 +236,7 @@ DOCUMENT_DIFF DiffLibraryByName( const MAP& aBefore, const MAP& aAfter, const wx
             c.bbox = aBBox( after );
             result.changes.push_back( std::move( c ) );
         }
-        else if( before && after && aChanged( before, after ) )
+        else if( before && after && aChanged( before, after, tick ) )
         {
             c.kind = CHANGE_KIND::MODIFIED;
             c.bbox = aBBox( after );

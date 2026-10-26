@@ -4919,17 +4919,21 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
 static int loadFootprintLibrarySide( const wxString& aPath,
                                      std::vector<std::unique_ptr<FOOTPRINT>>& aOwners,
                                      KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP& aMap, bool aAllowEmpty,
-                                     REPORTER& aReporter )
+                                     REPORTER& aReporter, PROGRESS_REPORTER* aProgress = nullptr )
 {
     if( aAllowEmpty && aPath.IsEmpty() )
         return CLI::EXIT_CODES::SUCCESS;
 
     try
     {
-        auto loaded = KICAD_DIFF::FP_LIB_DIFFER::LoadLibrary( aPath );
+        auto loaded = KICAD_DIFF::FP_LIB_DIFFER::LoadLibrary( aPath, aProgress );
         aOwners = std::move( loaded.first );
         aMap = std::move( loaded.second );
         return CLI::EXIT_CODES::SUCCESS;
+    }
+    catch( const IO_CANCELLED& )
+    {
+        return CLI::EXIT_CODES::ERR_CANCELLED;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -5211,21 +5215,25 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
         if( !aFileA.IsEmpty() )
             libProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileA, aLabelA ) );
 
-        if( int rc = loadFootprintLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
+        // Refreshed at once, or the next phase replaces the pinned name before it is ever shown
+        if( !libProgress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        if( int rc = loadFootprintLibrarySide( aFileA, ownersA, mapA, true, *m_reporter, libProgress.get() );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
         }
-
-        if( !libProgress->KeepRefreshing() )
-            return CLI::EXIT_CODES::ERR_CANCELLED;
 
         libProgress->AdvancePhase();
 
         if( !aFileB.IsEmpty() )
             libProgress->PinMessage( KICAD_DIFF::LoadingMessage( aFileB, aLabelB ) );
 
-        if( int rc = loadFootprintLibrarySide( aFileB, ownersB, mapB, true, *m_reporter );
+        if( !libProgress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        if( int rc = loadFootprintLibrarySide( aFileB, ownersB, mapB, true, *m_reporter, libProgress.get() );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;

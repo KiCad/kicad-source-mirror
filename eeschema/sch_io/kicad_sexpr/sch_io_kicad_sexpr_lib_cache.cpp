@@ -105,7 +105,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 
         FILE_LINE_READER reader( m_libFileName.GetFullPath() );
 
-        SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
+        SCH_IO_KICAD_SEXPR_PARSER parser( &reader, m_progressReporter );
 
         parser.ParseLib( m_symbols );
 
@@ -170,7 +170,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
                 try
                 {
                     FILE_LINE_READER reader( sourceFilePath );
-                    SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
+                    SCH_IO_KICAD_SEXPR_PARSER parser( &reader, m_progressReporter );
 
                     parser.ParseLib( m_symbols );
                     SetFileFormatVersionAtLoad( parser.GetParsedRequiredVersion() );
@@ -206,6 +206,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
 
                         errorCache += warning;
                     }
+                }
+                catch( const IO_CANCELLED& )
+                {
+                    throw;
                 }
                 catch( const IO_ERROR& ioe )
                 {

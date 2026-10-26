@@ -2006,9 +2006,18 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
 
         if( !isBuffering( aProperties ) || ( isNewCache && m_cache->isLibraryPathValid() ) )
         {
+            // Only for this load, since the reporter may not live as long as the cache
+            m_cache->m_progressReporter = m_progressReporter;
+
             try
             {
                 m_cache->Load();
+            }
+            catch( const IO_CANCELLED& )
+            {
+                delete m_cache;
+                m_cache = nullptr;
+                throw;
             }
             catch( const IO_ERROR& )
             {
@@ -2018,10 +2027,15 @@ void SCH_IO_KICAD_SEXPR::cacheLib( const wxString& aLibraryFileName,
                     delete m_cache;
                     m_cache = nullptr;
                 }
+                else
+                {
+                    m_cache->m_progressReporter = nullptr;
+                }
 
                 throw;
             }
 
+            m_cache->m_progressReporter = nullptr;
             m_cache->m_modHash = oldModifyHash + 1;
         }
     }

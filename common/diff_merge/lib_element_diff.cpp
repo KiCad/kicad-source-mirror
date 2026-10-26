@@ -31,7 +31,7 @@ namespace KICAD_DIFF
 
 void DiffKeyedElements( std::vector<LIB_ELEMENT>& aOut, const wxString& aTypeName,
                         const std::map<wxString, const EDA_ITEM*>& aBefore,
-                        const std::map<wxString, const EDA_ITEM*>& aAfter )
+                        const std::map<wxString, const EDA_ITEM*>& aAfter, const std::function<void()>& aTick )
 {
     std::set<wxString> keys;
 
@@ -43,6 +43,9 @@ void DiffKeyedElements( std::vector<LIB_ELEMENT>& aOut, const wxString& aTypeNam
 
     for( const wxString& key : keys )
     {
+        if( aTick )
+            aTick();
+
         auto            beforeIt = aBefore.find( key );
         auto            afterIt = aAfter.find( key );
         const EDA_ITEM* before = beforeIt != aBefore.end() ? beforeIt->second : nullptr;
@@ -70,7 +73,8 @@ void DiffKeyedElements( std::vector<LIB_ELEMENT>& aOut, const wxString& aTypeNam
 void DiffUnkeyedElements( std::vector<LIB_ELEMENT>& aOut, const std::vector<const EDA_ITEM*>& aBefore,
                           const std::vector<const EDA_ITEM*>&                            aAfter,
                           const std::function<wxString( const EDA_ITEM* )>&              aTypeName,
-                          const std::function<bool( const EDA_ITEM*, const EDA_ITEM* )>& aSameGeometry )
+                          const std::function<bool( const EDA_ITEM*, const EDA_ITEM* )>& aSameGeometry,
+                          const std::function<void()>&                                   aTick )
 {
     auto sameGeometry = [&]( const EDA_ITEM* aBeforeItem, const EDA_ITEM* aAfterItem )
     {
@@ -85,6 +89,9 @@ void DiffUnkeyedElements( std::vector<LIB_ELEMENT>& aOut, const std::vector<cons
     {
         for( const EDA_ITEM* before : aBefore )
         {
+            if( aTick )
+                aTick();
+
             if( matchedBefore.count( before ) || before->Type() != after->Type() )
                 continue;
 
@@ -108,6 +115,9 @@ void DiffUnkeyedElements( std::vector<LIB_ELEMENT>& aOut, const std::vector<cons
 
         for( const EDA_ITEM* before : aBefore )
         {
+            if( aTick )
+                aTick();
+
             if( matchedBefore.count( before ) || before->Type() != after->Type() )
                 continue;
 

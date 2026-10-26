@@ -108,13 +108,14 @@ namespace
 } // namespace
 
 
-std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
+std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter,
+                                             const std::function<void()>& aTick )
 {
     std::vector<LIB_ELEMENT> out;
 
-    DiffKeyedElements( out, _( "Pin" ), pinsByNumber( aBefore ), pinsByNumber( aAfter ) );
-    DiffKeyedElements( out, _( "Field" ), fieldsByName( aBefore ), fieldsByName( aAfter ) );
-    DiffUnkeyedElements( out, graphics( aBefore ), graphics( aAfter ), graphicTypeName );
+    DiffKeyedElements( out, _( "Pin" ), pinsByNumber( aBefore ), pinsByNumber( aAfter ), aTick );
+    DiffKeyedElements( out, _( "Field" ), fieldsByName( aBefore ), fieldsByName( aAfter ), aTick );
+    DiffUnkeyedElements( out, graphics( aBefore ), graphics( aAfter ), graphicTypeName, {}, aTick );
 
     return out;
 }

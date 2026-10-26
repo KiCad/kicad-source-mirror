@@ -42,9 +42,10 @@ namespace KICAD_DIFF
  * Compares the elements of two library symbols. Pins match by number and
  * fields by name. Graphics and text first match identical shapes, then pair up
  * the leftovers so an edited shape reads as modified. Only changed elements are
- * returned. Either symbol may be null for a whole symbol add or remove.
+ * returned. Either symbol may be null for a whole symbol add or remove. @p aTick is called per compared pair.
  */
-std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter );
+std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter,
+                                             const std::function<void()>& aTick = {} );
 
 /**
  * The symbol as a library file saves it, which holds everything it carries, including state no diff

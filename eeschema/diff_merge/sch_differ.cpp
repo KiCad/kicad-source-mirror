@@ -249,11 +249,7 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
     }
 
     IDENTITY_RECONCILER reconciler( m_options.identity );
-    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc,
-                                                  [&describing]()
-                                                  {
-                                                      describing.Tick();
-                                                  } );
+    RECONCILIATION      recon = reconciler.Reconcile( beforeDesc, afterDesc, describing.Ticker() );
 
     if( m_options.progress )
         m_options.progress( 0.5 );

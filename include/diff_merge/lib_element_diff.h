@@ -45,20 +45,22 @@ struct LIB_ELEMENT
     std::vector<PROPERTY_DELTA> deltas;
 };
 
-/// Elements that are matched by a key, such as pins by number or fields by name.
+/// Elements that are matched by a key, such as pins by number or fields by name. Calls @p aTick per key.
 void DiffKeyedElements( std::vector<LIB_ELEMENT>& aOut, const wxString& aTypeName,
                         const std::map<wxString, const EDA_ITEM*>& aBefore,
-                        const std::map<wxString, const EDA_ITEM*>& aAfter );
+                        const std::map<wxString, const EDA_ITEM*>& aAfter, const std::function<void()>& aTick = {} );
 
 /**
  * Elements with no key. Identical elements are matched first, then each leftover is paired with
  * the nearest leftover of its type so an edited element reads as modified. Elements are identical
- * when no property differs and, if given, aSameGeometry holds for geometry that is no property.
+ * when no property differs and, if given, aSameGeometry holds for geometry that is no property. The matching
+ * compares every pair of one type, so @p aTick is called per pair.
  */
 void DiffUnkeyedElements( std::vector<LIB_ELEMENT>& aOut, const std::vector<const EDA_ITEM*>& aBefore,
                           const std::vector<const EDA_ITEM*>&                            aAfter,
                           const std::function<wxString( const EDA_ITEM* )>&              aTypeName,
-                          const std::function<bool( const EDA_ITEM*, const EDA_ITEM* )>& aSameGeometry = {} );
+                          const std::function<bool( const EDA_ITEM*, const EDA_ITEM* )>& aSameGeometry = {},
+                          const std::function<void()>&                                   aTick = {} );
 
 /// Add each element to aChange as a child change, which is how a library item reports its elements.
 void AppendElementChanges( ITEM_CHANGE& aChange, const std::vector<LIB_ELEMENT>& aElements );

@@ -172,6 +172,13 @@ void FP_CACHE::Load()
                 THROW_IO_ERRORF( _( "Loading footprint library '%s' was cancelled." ), m_lib_raw_path );
             }
 
+            if( m_owner->m_progressReporter && !m_owner->m_progressReporter->KeepRefreshing() )
+            {
+                m_footprints.clear();
+                m_cache_dirty = true;
+                THROW_IO_CANCELLED();
+            }
+
             fn.SetFullName( fullName );
 
             // Queue I/O errors so only files that fail to parse don't get loaded.
@@ -3994,6 +4001,10 @@ void PCB_IO_KICAD_SEXPR::FootprintEnumerate( wxArrayString& aFootprintNames,
         if( !dir.IsOpened() )
             THROW_IO_ERRORF( _( "Footprint library '%s' not found." ), aLibPath );
     }
+    catch( const IO_CANCELLED& )
+    {
+        throw;
+    }
     catch( const IO_ERROR& ioe )
     {
         errorMsg = ioe.What();
@@ -4020,6 +4031,10 @@ const FOOTPRINT* PCB_IO_KICAD_SEXPR::getFootprint( const wxString& aLibraryPath,
     try
     {
         validateCache( aLibraryPath, checkModified );
+    }
+    catch( const IO_CANCELLED& )
+    {
+        throw;
     }
     catch( const IO_ERROR& )
     {

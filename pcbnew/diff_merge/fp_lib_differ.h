@@ -60,9 +60,10 @@ public:
     DOCUMENT_DIFF Diff() override;
 
     /// Load a .pretty directory into a FOOTPRINT_MAP. The vector owns the
-    /// FOOTPRINT instances; the map borrows raw pointers into it.
+    /// FOOTPRINT instances; the map borrows raw pointers into it. Throws IO_CANCELLED once
+    /// @p aProgress is cancelled.
     static std::pair<std::vector<std::unique_ptr<FOOTPRINT>>, FOOTPRINT_MAP>
-    LoadLibrary( const wxString& aPrettyPath );
+    LoadLibrary( const wxString& aPrettyPath, PROGRESS_REPORTER* aProgress = nullptr );
 
 private:
     const FOOTPRINT_MAP& m_before;
@@ -73,9 +74,11 @@ private:
 /**
  * Compare the elements of two library footprints. Fields match by name, and pads, graphics and
  * zones match as they would in DiffUnkeyedElements, since pad numbers repeat. Only changed
- * elements are returned. Either footprint may be null for a whole footprint add or remove.
+ * elements are returned. Either footprint may be null for a whole footprint add or remove. @p aTick is called per
+ * compared pair.
  */
-std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter );
+std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter,
+                                                const std::function<void()>& aTick = {} );
 
 } // namespace KICAD_DIFF
 

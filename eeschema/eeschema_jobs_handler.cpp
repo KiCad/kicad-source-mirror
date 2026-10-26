@@ -2925,17 +2925,21 @@ int EESCHEMA_JOBS_HANDLER::JobSchDiff( JOB* aJob )
 static int loadSymbolLibrarySide( const wxString& aPath,
                                   std::vector<std::unique_ptr<LIB_SYMBOL>>& aOwners,
                                   KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP& aMap, bool aAllowEmpty,
-                                  REPORTER& aReporter )
+                                  REPORTER& aReporter, PROGRESS_REPORTER* aProgress = nullptr )
 {
     if( aAllowEmpty && aPath.IsEmpty() )
         return CLI::EXIT_CODES::SUCCESS;
 
     try
     {
-        auto loaded = KICAD_DIFF::SYM_LIB_DIFFER::LoadLibrary( aPath );
+        auto loaded = KICAD_DIFF::SYM_LIB_DIFFER::LoadLibrary( aPath, aProgress );
         aOwners = std::move( loaded.first );
         aMap = std::move( loaded.second );
         return CLI::EXIT_CODES::SUCCESS;
+    }
+    catch( const IO_CANCELLED& )
+    {
+        return CLI::EXIT_CODES::ERR_CANCELLED;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -3297,21 +3301,25 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
         if( !aFileA.IsEmpty() )
             progress->PinMessage( KICAD_DIFF::LoadingMessage( aFileA, aLabelA ) );
 
-        if( int rc = loadSymbolLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
+        // Refreshed at once, or the next phase replaces the pinned name before it is ever shown
+        if( !progress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        if( int rc = loadSymbolLibrarySide( aFileA, ownersA, mapA, true, *m_reporter, progress.get() );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
         }
-
-        if( !progress->KeepRefreshing() )
-            return CLI::EXIT_CODES::ERR_CANCELLED;
 
         progress->AdvancePhase();
 
         if( !aFileB.IsEmpty() )
             progress->PinMessage( KICAD_DIFF::LoadingMessage( aFileB, aLabelB ) );
 
-        if( int rc = loadSymbolLibrarySide( aFileB, ownersB, mapB, true, *m_reporter );
+        if( !progress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        if( int rc = loadSymbolLibrarySide( aFileB, ownersB, mapB, true, *m_reporter, progress.get() );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;

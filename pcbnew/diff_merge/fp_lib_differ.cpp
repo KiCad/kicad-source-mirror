@@ -51,7 +51,7 @@ FP_LIB_DIFFER::~FP_LIB_DIFFER() = default;
 
 
 std::pair<std::vector<std::unique_ptr<FOOTPRINT>>, FP_LIB_DIFFER::FOOTPRINT_MAP>
-FP_LIB_DIFFER::LoadLibrary( const wxString& aPrettyPath )
+FP_LIB_DIFFER::LoadLibrary( const wxString& aPrettyPath, PROGRESS_REPORTER* aProgress )
 {
     std::vector<std::unique_ptr<FOOTPRINT>> owners;
     FOOTPRINT_MAP                           map;
@@ -61,12 +61,15 @@ FP_LIB_DIFFER::LoadLibrary( const wxString& aPrettyPath )
 
     // Throws on corrupt/unreadable libraries; callers distinguish failures
     // from a deliberately-empty .pretty directory.
+    io.SetProgressReporter( aProgress );
     io.FootprintEnumerate( names, aPrettyPath, false, nullptr );
 
     // Per-footprint loads propagate too; previously swallowing them let a
     // bilaterally-corrupt footprint vanish from the diff entirely.
     for( const wxString& name : names )
     {
+        KeepLoading( aProgress );
+
         std::unique_ptr<FOOTPRINT> owner = io.FootprintLoad( aPrettyPath, name, false, nullptr );
 
         if( !owner )
@@ -91,13 +94,14 @@ DOCUMENT_DIFF FP_LIB_DIFFER::Diff()
             {
                 return aFp->GetBoundingBox( false );
             },
-            []( const FOOTPRINT* aA, const FOOTPRINT* aB )
+            []( const FOOTPRINT* aA, const FOOTPRINT* aB, const std::function<void()>& )
             {
                 return !( *aA == *aB );
             } );
 
     // Comparing each modified item's elements can take longer than finding them
-    PROGRESS_SPAN comparing( m_options, 0.5, 1.0, result.changes.size() );
+    PROGRESS_SPAN               comparing( m_options, 0.5, 1.0, result.changes.size() );
+    const std::function<void()> tick = comparing.Ticker();
 
     for( ITEM_CHANGE& change : result.changes )
     {
@@ -110,14 +114,18 @@ DOCUMENT_DIFF FP_LIB_DIFFER::Diff()
         auto afterIt = m_after.find( *change.refdes );
 
         if( beforeIt != m_before.end() && afterIt != m_after.end() )
-            AppendElementChanges( change, DiffFootprintElements( beforeIt->second, afterIt->second ) );
+            AppendElementChanges( change, DiffFootprintElements( beforeIt->second, afterIt->second, tick ) );
     }
+
+    if( m_options.progress )
+        m_options.progress( 1.0 );
 
     return result;
 }
 
 
-std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter )
+std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter,
+                                                const std::function<void()>& aTick )
 {
     auto fields = []( const FOOTPRINT* aFootprint )
     {
@@ -148,7 +156,7 @@ std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const 
 
     std::vector<LIB_ELEMENT> out;
 
-    DiffKeyedElements( out, _( "Field" ), fields( aBefore ), fields( aAfter ) );
+    DiffKeyedElements( out, _( "Field" ), fields( aBefore ), fields( aAfter ), aTick );
     DiffUnkeyedElements(
             out, others( aBefore ), others( aAfter ),
             []( const EDA_ITEM* aItem )
@@ -163,7 +171,8 @@ std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const 
                     return static_cast<const PAD&>( *aA ) == static_cast<const PAD&>( *aB );
 
                 return static_cast<const BOARD_ITEM&>( *aA ) == static_cast<const BOARD_ITEM&>( *aB );
-            } );
+            },
+            aTick );
 
     return out;
 }

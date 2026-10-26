@@ -57,6 +57,13 @@ void ReportDiffProgress( KICAD_DIFFER& aDiffer, PROGRESS_REPORTER* aProgress )
 }
 
 
+void KeepLoading( PROGRESS_REPORTER* aProgress )
+{
+    if( aProgress && !aProgress->KeepRefreshing() )
+        THROW_IO_CANCELLED();
+}
+
+
 wxString LoadingMessage( const wxString& aFile, const wxString& aLabel )
 {
     const wxString name = wxFileName( aFile ).GetFullName();

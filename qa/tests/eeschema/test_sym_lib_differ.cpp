@@ -34,6 +34,7 @@
 #include <sch_item.h>
 #include <sch_pin.h>
 #include <sch_shape.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
@@ -41,6 +42,8 @@
 #include <eeschema_jobs_handler.h>
 #include <mdw/client/mdw_library_sources.h>
 #include <reporter.h>
+#include <ki_exception.h>
+#include <widgets/progress_reporter_base.h>
 
 #include <json_common.h>
 
@@ -58,6 +61,28 @@
 using namespace KICAD_DIFF;
 
 
+namespace
+{
+
+// Cancels on the second poll, once the cache holds a parsed entry
+class SECOND_POLL_CANCELS : public PROGRESS_REPORTER_BASE
+{
+public:
+    SECOND_POLL_CANCELS() :
+            PROGRESS_REPORTER_BASE( 1 )
+    {
+    }
+
+protected:
+    bool updateUI() override { return ++m_polls < 2; }
+
+private:
+    int m_polls = 0;
+};
+
+} // namespace
+
+
 BOOST_AUTO_TEST_SUITE( SymLibDiffer )
 
 
@@ -69,6 +94,28 @@ static wxString getFixturePath()
     fn.AppendDir( wxS( "libraries" ) );
     fn.SetFullName( wxS( "Device.kicad_sym" ) );
     return fn.GetFullPath();
+}
+
+
+// A large library parses for a while, so a cancel must end the parse, and the next load must read it all again
+BOOST_AUTO_TEST_CASE( EnumerationStopsOnceCancelled )
+{
+    SECOND_POLL_CANCELS reporter;
+    SCH_IO_KICAD_SEXPR  io;
+    SCH_IO_KICAD_SEXPR  fresh;
+    wxArrayString       retried;
+    wxArrayString       expected;
+
+    io.SetProgressReporter( &reporter );
+    BOOST_CHECK_THROW( io.EnumerateSymbolLib( retried, getFixturePath(), nullptr ), IO_CANCELLED );
+
+    io.SetProgressReporter( nullptr );
+    retried.Clear();
+    io.EnumerateSymbolLib( retried, getFixturePath(), nullptr );
+    fresh.EnumerateSymbolLib( expected, getFixturePath(), nullptr );
+
+    BOOST_REQUIRE_GE( expected.size(), 2u );
+    BOOST_CHECK( retried == expected );
 }
 
 

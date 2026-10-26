@@ -31,6 +31,7 @@ class SCH_PIN;
 class SCH_TEXT;
 class SCH_TEXTBOX;
 class LINE_READER;
+class PROGRESS_REPORTER;
 class SCH_IO_KICAD_SEXPR;
 
 /**
@@ -83,6 +84,9 @@ private:
 
     /// The owning plugin's cancel flag, read between the files of a symbol folder
     const std::atomic<bool>* m_loadCancelled = nullptr;
+
+    /// The owning plugin's progress reporter, polled per symbol during Load(), or null
+    PROGRESS_REPORTER* m_progressReporter = nullptr;
 
     static void saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter );
     static void saveField( SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter );

@@ -269,6 +269,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
             // By the time we get to the first symbol, we can check the version
             checkVersion();
 
+            // Not checkpoint(), which needs the line count a library load never counts
+            if( m_progressReporter && !m_progressReporter->KeepRefreshing() )
+                THROW_IO_CANCELLED();
+
             m_unit = 1;
             m_bodyStyle = 1;
 
@@ -276,6 +280,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
             {
                 LIB_SYMBOL* symbol = parseLibSymbol( aSymbolLibMap );
                 aSymbolLibMap[symbol->GetName()] = symbol;
+            }
+            catch( const IO_CANCELLED& )
+            {
+                throw;
             }
             catch( const IO_ERROR& e )
             {
