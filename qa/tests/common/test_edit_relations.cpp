@@ -22,6 +22,10 @@
 #include <tool/edit_points.h>
 #include <tool/edit_relations.h>
 #include <tool/grid_helper.h>
+#include <tool/point_editor_behavior.h>
+#include <commit.h>
+#include <eda_shape.h>
+#include <geometry/shape_poly_set.h>
 
 
 BOOST_AUTO_TEST_SUITE( EditRelations )
@@ -108,6 +112,54 @@ BOOST_AUTO_TEST_CASE( PolygonConvergenceClampsAtAdjacentIntersection )
 
     BOOST_CHECK_EQUAL( line.GetOrigin().GetPosition(), VECTOR2I( 10, 10 ) );
     BOOST_CHECK_EQUAL( line.GetEnd().GetPosition(), VECTOR2I( 10, 10 ) );
+}
+
+
+class POLY_SHAPE_MOCK : public EDA_SHAPE
+{
+public:
+    POLY_SHAPE_MOCK() :
+            EDA_SHAPE( SHAPE_T::POLY, 0, FILL_T::NO_FILL ) {};
+};
+
+
+class POLY_EDIT_COMMIT : public COMMIT
+{
+public:
+    void      Push( const wxString&, int ) override {}
+    void      Revert() override {}
+    void      RevertToCheckpoint( int aCheckpoint ) override {}
+    EDA_ITEM* ResolveItem( KIID& aID ) override { return nullptr; }
+
+protected:
+    EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override { return aItem; }
+    EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override { return aItem->Clone(); }
+};
+
+
+BOOST_AUTO_TEST_CASE( CollapsedPolygonKeepsItsCorners )
+{
+    SHAPE_POLY_SET poly;
+
+    poly.NewOutline();
+    poly.Append( VECTOR2I( 20, 30 ) );
+    poly.Append( VECTOR2I( 50, 30 ) );
+    poly.Append( VECTOR2I( 35, 55 ) );
+
+    for( int ii = 0; ii < poly.TotalVertices(); ++ii )
+        poly.SetVertex( ii, VECTOR2I( 35, 55 ) );
+
+    POLY_SHAPE_MOCK shape;
+    shape.SetPolyShape( poly );
+
+    EDIT_POINTS                     points( nullptr );
+    EDA_POLYGON_POINT_EDIT_BEHAVIOR behavior( shape );
+    POLY_EDIT_COMMIT                commit;
+
+    behavior.FinalizeItem( points, commit );
+
+    BOOST_CHECK_MESSAGE( shape.GetPolyShape().TotalVertices() == 3,
+                         "finalizing a collapsed polygon stripped every corner" );
 }
 
 
