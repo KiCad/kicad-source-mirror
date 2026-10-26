@@ -132,6 +132,18 @@ void HTML_WINDOW::onCharHook( wxKeyEvent& aEvent )
             break;
         }
     }
+#ifdef __WXMAC__
+    else if( aEvent.GetKeyCode() == WXK_CONTROL_A )
+    {
+        SelectAll();
+        return;
+    }
+    else if( aEvent.GetKeyCode() == WXK_CONTROL_C )
+    {
+        doCopySelection();
+        return;
+    }
+#endif
 
     aEvent.Skip();
 }
