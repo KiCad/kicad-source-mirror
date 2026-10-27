@@ -1010,6 +1010,12 @@ wxString DIALOG_FIND_BY_PROPERTIES::propNameToExprField( const wxString& aPropNa
 {
     wxString result = aPropName;
     result.Replace( wxT( " " ), wxT( "_" ) );
+
+    // We store netcodes internally for performance, but compares need to be done against the string
+    // (which is represented by the property "NetName").
+    if( result.CmpNoCase( wxS( "Net" ) ) == 0 )
+        result = wxS( "NetName" );
+
     return result;
 }
 
