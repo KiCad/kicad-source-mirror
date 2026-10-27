@@ -86,11 +86,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 {
     wxCHECK_RET( m_adapter, "Database plugin missing library manager adapter handle!" );
     ensureSettings( aLibraryPath );
-    ensureConnection();
-    cacheLib();
-
-    if( !m_conn )
-        THROW_IO_ERROR( m_lastError );
+    cacheLib( ensureConnection() );
 
     bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly ) );
 
@@ -120,12 +116,9 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
 {
     wxCHECK_MSG( m_adapter, nullptr, "Database plugin missing library manager adapter handle!" );
     ensureSettings( aLibraryPath );
-    ensureConnection();
+    std::shared_ptr<DATABASE_CONNECTION> conn = ensureConnection();
 
-    if( !m_conn )
-        THROW_IO_ERROR( m_lastError );
-
-    cacheLib();
+    cacheLib( conn );
 
     std::string tableName;
     std::string symbolName( aAliasName.ToUTF8() );
@@ -183,7 +176,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
 
     for( const DATABASE_LIB_TABLE* table : tablesToTry )
     {
-        if( m_conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ), result ) )
+        if( conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ), result ) )
         {
             foundTable = table;
             wxLogTrace( traceDatabase, wxT( "LoadSymbol: SelectOne (%s, %s) found in %s" ),
@@ -458,7 +451,7 @@ bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
 }
 
 
-void SCH_IO_DATABASE::cacheLib()
+void SCH_IO_DATABASE::cacheLib( const std::shared_ptr<DATABASE_CONNECTION>& aConn )
 {
     // Guard against re-entrant cacheLib() calls. A self-referential symbol row (issue #24249)
     // causes m_adapter->LoadSymbol to route back into SCH_IO_DATABASE::LoadSymbol, which would
@@ -493,10 +486,10 @@ void SCH_IO_DATABASE::cacheLib()
     {
         std::vector<DATABASE_CONNECTION::ROW> results;
 
-        if( !m_conn->SelectAll( table.table, table.key_col, results ) )
+        if( !aConn->SelectAll( table.table, table.key_col, results ) )
         {
-            if( !m_conn->GetLastError().empty() )
-                THROW_IO_ERRORF( _( "Error reading database table %s: %s" ), table.table, m_conn->GetLastError() );
+            if( !aConn->GetLastError().empty() )
+                THROW_IO_ERRORF( _( "Error reading database table %s: %s" ), table.table, aConn->GetLastError() );
 
             continue;
         }
@@ -591,100 +584,122 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
         if( maxAge <= 0 )
             maxAge = 1;
 
+        std::shared_ptr<DATABASE_CONNECTION> conn = currentConnection();
+
+        // A failed read leaves the connection closed, and only a new connection can end that
+        if( m_refreshRunning.load() && m_cachePopulated.load() && ( !conn || !conn->IsConnected() ) )
         {
-            std::shared_lock connGuard( m_cacheMutex );
-
-            if( m_conn && m_cachePopulated.load() )
+            try
             {
-                wxLogTrace( traceDatabase, wxT( "Initiating background refresh" ) );
+                const wxString error = connect();
 
-                try
+                if( !error.IsEmpty() )
+                    wxLogTrace( traceDatabase, wxT( "Background refresh: reconnect failed: %s" ), error );
+            }
+            catch( const IO_ERROR& e )
+            {
+                wxLogTrace( traceDatabase, wxT( "Background refresh: reconnect failed: %s" ), e.What() );
+            }
+            catch( const std::exception& e )
+            {
+                wxLogTrace( traceDatabase, wxT( "Background refresh: reconnect failed: %s" ), e.what() );
+            }
+
+            conn = currentConnection();
+        }
+
+        // The pass owns its connection, so a reconnect cannot free it and no lock is held across the reads
+        if( conn && conn->IsConnected() && m_cachePopulated.load() )
+        {
+            wxLogTrace( traceDatabase, wxT( "Initiating background refresh" ) );
+
+            try
+            {
+                std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> tableResults;
+                bool querySuccess = true;
+
+                for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
                 {
-                    std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> tableResults;
-                    bool querySuccess = true;
-
-                    for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
+                    // A close must not wait for the tables left in the pass
+                    if( !m_refreshRunning.load() )
                     {
-                        // A close must not wait for the tables left in the pass
-                        if( !m_refreshRunning.load() )
-                        {
-                            querySuccess = false;
-                            break;
-                        }
-
-                        m_conn->ClearCache( table.table );
-
-                        std::vector<DATABASE_CONNECTION::ROW> results;
-
-                        if( !m_conn->SelectAll( table.table, table.key_col, results ) )
-                        {
-                            wxLogTrace( traceDatabase, wxT( "Background refresh: SelectAll failed for table %s" ),
-                                        table.table );
-                            querySuccess = false;
-                            break;
-                        }
-
-                        tableResults.emplace_back( &table, std::move( results ) );
+                        querySuccess = false;
+                        break;
                     }
 
-                    // A stop during the last table must not wait for a publish
-                    if( !m_refreshRunning.load() )
-                        querySuccess = false;
+                    conn->ClearCache( table.table );
 
-                    if( querySuccess )
+                    std::vector<DATABASE_CONNECTION::ROW> results;
+
+                    if( !conn->SelectAll( table.table, table.key_col, results ) )
                     {
-                        size_t signature = computeSignature( tableResults );
+                        wxLogTrace( traceDatabase, wxT( "Background refresh: SelectAll failed for table %s" ),
+                                    table.table );
+                        querySuccess = false;
+                        break;
+                    }
 
-                        bool dataChanged = false;
+                    tableResults.emplace_back( &table, std::move( results ) );
+                }
+
+                // A stop during the last table must not wait for a publish
+                if( !m_refreshRunning.load() )
+                    querySuccess = false;
+
+                if( querySuccess )
+                {
+                    size_t signature = computeSignature( tableResults );
+
+                    bool dataChanged = false;
+
+                    {
+                        std::unique_lock lock( m_cacheMutex );
+
+                        if( signature == m_cacheSignature )
+                            m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
+                        else
+                            dataChanged = true;
+                    }
+
+                    if( dataChanged )
+                    {
+                        std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
+                        std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
+
+                        materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
+
+                        wxLogTrace( traceDatabase, wxT( "Background refresh: new data" ) );
 
                         {
-                            // Upgrade to unique lock for cache mutation
-                            connGuard.unlock();
                             std::unique_lock lock( m_cacheMutex );
 
-                            if( signature == m_cacheSignature )
-                                m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
-                            else
-                                dataChanged = true;
-                        }
+                            m_nameToSymbolcache = std::move( newSymbolCache );
+                            m_sanitizedNameMap = std::move( newSanitizedNameMap );
 
-                        if( dataChanged )
-                        {
-                            std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
-                            std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
-
-                            materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
-
-                            wxLogTrace( traceDatabase, wxT( "Background refresh: new data" ) );
-
-                            {
-                                std::unique_lock lock( m_cacheMutex );
-
-                                m_nameToSymbolcache = std::move( newSymbolCache );
-                                m_sanitizedNameMap = std::move( newSanitizedNameMap );
-
-                                m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
-                                m_cacheSignature = signature;
-                                m_cachePopulated = true;
-                                m_modifyHash++;
-                            }
-                        }
-                        else
-                        {
-                            wxLogTrace( traceDatabase, wxT( "Background refresh: no new data" ) );
+                            m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
+                            m_cacheSignature = signature;
+                            m_cachePopulated = true;
+                            m_modifyHash++;
                         }
                     }
-                }
-                catch( const IO_ERROR& e )
-                {
-                    wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.What() );
-                }
-                catch( const std::exception& e )
-                {
-                    wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.what() );
+                    else
+                    {
+                        wxLogTrace( traceDatabase, wxT( "Background refresh: no new data" ) );
+                    }
                 }
             }
+            catch( const IO_ERROR& e )
+            {
+                wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.What() );
+            }
+            catch( const std::exception& e )
+            {
+                wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.what() );
+            }
         }
+
+        // A connection the foreground replaced must not stay open through the wait
+        conn.reset();
 
         {
             std::unique_lock lock( m_refreshMutex );
@@ -720,12 +735,12 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
 
         tryLoad();
     }
-    else if( !m_conn && m_settings )
+    else if( !currentConnection() && m_settings )
     {
         // If we have valid settings but no connection yet; reload settings in case user is editing
         tryLoad();
     }
-    else if( m_conn && m_settings && !aSettingsPath.IsEmpty() )
+    else if( currentConnection() && m_settings && !aSettingsPath.IsEmpty() )
     {
         wxASSERT_MSG( aSettingsPath == m_settings->GetFilename(),
                       "Path changed for database library without re-initializing plugin!" );
@@ -737,13 +752,22 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
 }
 
 
-void SCH_IO_DATABASE::ensureConnection()
+std::shared_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::currentConnection()
 {
-    wxCHECK_RET( m_settings, "Call ensureSettings before ensureConnection!" );
+    std::shared_lock lock( m_cacheMutex );
+    return m_conn;
+}
 
-    connect();
 
-    if( !m_conn || !m_conn->IsConnected() )
+std::shared_ptr<DATABASE_CONNECTION> SCH_IO_DATABASE::ensureConnection()
+{
+    wxCHECK_MSG( m_settings, nullptr, "Call ensureSettings before ensureConnection!" );
+
+    const wxString error = connect();
+
+    std::shared_ptr<DATABASE_CONNECTION> conn = currentConnection();
+
+    if( !conn || !conn->IsConnected() )
     {
         const DATABASE_SOURCE source = m_settings->ExpandedSource();
         const std::string     name = source.Describe();
@@ -755,69 +779,61 @@ void SCH_IO_DATABASE::ensureConnection()
                                              : _( "(not configured)" );
 
         THROW_IO_ERRORF( _( "Could not load database library: could not connect to database %s (%s)" ), shown,
-                         m_lastError );
+                         error );
     }
+
+    return conn;
 }
 
 
-void SCH_IO_DATABASE::connect()
+wxString SCH_IO_DATABASE::connect()
 {
-    wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
+    wxCHECK_MSG( m_settings, wxEmptyString, "Call ensureSettings before connect()!" );
 
+    // The refresh thread reconnects too, and two connections must not be built at once
+    std::lock_guard connectGuard( m_connectMutex );
+
+    std::shared_ptr<DATABASE_CONNECTION> existing = currentConnection();
+
+    if( existing && existing->IsConnected() )
+        return wxEmptyString;
+
+    // The old connection stays in place until the new one is ready, as other threads may still be reading from it
+    std::shared_ptr<DATABASE_CONNECTION> newConn = CreateConnection( *m_settings );
+
+    if( !newConn->IsConnected() )
+        return wxString::FromUTF8( newConn->GetLastError() );
+
+    for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
     {
-        // A refresh pass keeps the lock shared while it reads, so a live connection must not ask for it exclusively
-        std::shared_lock connLock( m_cacheMutex );
+        // Trusted even if unreported by the driver, to support generated columns (#16952)
+        std::set<std::string> requiredColumns{ tableIter.key_col,
+                                               tableIter.footprints_col,
+                                               tableIter.symbols_col };
 
-        if( m_conn && m_conn->IsConnected() )
-            return;
+        for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
+            requiredColumns.insert( field.column );
+
+        if( !tableIter.pins_col.empty() )
+            requiredColumns.insert( tableIter.pins_col );
+
+        // Only used if confirmed present, so a misconfigured mapping can't break the table (#23532)
+        std::set<std::string> optionalColumns{ tableIter.properties.description,
+                                               tableIter.properties.footprint_filters,
+                                               tableIter.properties.keywords,
+                                               tableIter.properties.exclude_from_sim,
+                                               tableIter.properties.exclude_from_bom,
+                                               tableIter.properties.exclude_from_board };
+
+        newConn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns );
     }
 
-    {
-        std::unique_lock connLock( m_cacheMutex );
+    newConn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
 
-        if( m_conn && !m_conn->IsConnected() )
-            m_conn.reset();
-    }
+    std::unique_lock connLock( m_cacheMutex );
+    m_conn = std::move( newConn );
 
-    if( !m_conn )
-    {
-        std::unique_ptr<DATABASE_CONNECTION> newConn = CreateConnection( *m_settings );
-
-        if( !newConn->IsConnected() )
-        {
-            m_lastError = newConn->GetLastError();
-            return;
-        }
-
-        for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
-        {
-            // Trusted even if unreported by the driver, to support generated columns (#16952)
-            std::set<std::string> requiredColumns{ tableIter.key_col,
-                                                   tableIter.footprints_col,
-                                                   tableIter.symbols_col };
-
-            for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
-                requiredColumns.insert( field.column );
-
-            if( !tableIter.pins_col.empty() )
-                requiredColumns.insert( tableIter.pins_col );
-
-            // Only used if confirmed present, so a misconfigured mapping can't break the table (#23532)
-            std::set<std::string> optionalColumns{ tableIter.properties.description,
-                                                   tableIter.properties.footprint_filters,
-                                                   tableIter.properties.keywords,
-                                                   tableIter.properties.exclude_from_sim,
-                                                   tableIter.properties.exclude_from_bom,
-                                                   tableIter.properties.exclude_from_board };
-
-            newConn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns );
-        }
-
-        newConn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
-
-        std::unique_lock connLock( m_cacheMutex );
-        m_conn = std::move( newConn );
-    }
+    return wxEmptyString;
 }
 
 

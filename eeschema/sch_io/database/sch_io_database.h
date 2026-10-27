@@ -152,7 +152,7 @@ public:
 private:
     typedef std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> TABLE_RESULT_LIST;
 
-    void cacheLib();
+    void cacheLib( const std::shared_ptr<DATABASE_CONNECTION>& aConn );
 
     size_t computeSignature( const TABLE_RESULT_LIST& aTableResults ) const;
 
@@ -162,9 +162,15 @@ private:
 
     void ensureSettings( const wxString& aSettingsPath );
 
-    void ensureConnection();
+    /// @return the connection, which stays valid while held even if another thread replaces it
+    std::shared_ptr<DATABASE_CONNECTION> currentConnection();
 
-    void connect();
+    /// @return a live connection; throws IO_ERROR naming the source when there is none
+    std::shared_ptr<DATABASE_CONNECTION> ensureConnection();
+
+    /// Replaces a missing or closed connection, keeping the old one until the new one is ready
+    /// @return the error from a failed connect, or empty
+    wxString connect();
 
     std::unique_ptr<LIB_SYMBOL> loadSymbolFromRow( const wxString& aSymbolName,
                                                    const DATABASE_LIB_TABLE& aTable,
@@ -189,7 +195,7 @@ private:
     std::unique_ptr<DATABASE_LIB_SETTINGS> m_settings;
 
     /// Generally will be null if no valid connection is established
-    std::unique_ptr<DATABASE_CONNECTION> m_conn;
+    std::shared_ptr<DATABASE_CONNECTION> m_conn;
 
     std::set<wxString> m_customFields;
 
@@ -228,10 +234,10 @@ private:
     std::atomic<bool>       m_stopping{ false };
     std::condition_variable m_refreshCV;
     std::mutex              m_refreshMutex;
+    std::mutex              m_connectMutex;
     std::shared_mutex       m_cacheMutex;
     std::mutex              m_symbolLoadMutex;
 
-    wxString m_lastError;
 };
 
 #endif //SCH_IO_DATABASE_H_
