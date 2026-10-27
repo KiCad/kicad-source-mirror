@@ -26,10 +26,12 @@
 #include <thread_pool.h>
 #include <ranges>
 #include <set>
+#include <thread>
 #include <unordered_set>
 
 #include <paths.h>
 #include <pgm_base.h>
+#include <progress_reporter.h>
 #include <richio.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
@@ -1583,6 +1585,35 @@ std::optional<float> LIBRARY_MANAGER_ADAPTER::AsyncLoadProgress() const
 
     size_t loaded = m_loadCount.load();
     return loaded / static_cast<float>( total );
+}
+
+
+bool LIBRARY_MANAGER_ADAPTER::RunPreload( PROGRESS_REPORTER& aReporter, std::atomic_bool& aAbort )
+{
+    constexpr std::chrono::milliseconds interval( 150 );
+
+    AsyncLoad();
+
+    while( !aAbort.load() )
+    {
+        std::this_thread::sleep_for( interval );
+
+        std::optional<float> progress = AsyncLoadProgress();
+        aReporter.SetCurrentProgress( progress.value_or( 1 ) );
+
+        if( progress.value_or( 1 ) >= 1 )
+        {
+            // Workers can still be retiring once the count reaches the total
+            BlockUntilLoaded();
+            return true;
+        }
+    }
+
+    aAbort.store( false );
+
+    // Plugins that can end a load early do so instead of being waited out
+    AbortAsyncLoad( true );
+    return false;
 }
 
 

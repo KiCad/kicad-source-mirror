@@ -929,9 +929,6 @@ void IFACE::Reset()
 
 void IFACE::PreloadLibraries( KIWAY* aKiway )
 {
-    constexpr static int interval = 150;
-    constexpr static int timeLimit = 120000;
-
     wxCHECK( aKiway, /* void */ );
 
     // Use compare_exchange to atomically check and set the flag to prevent race conditions
@@ -955,52 +952,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aKiway->Prj() );
 
-            int  elapsed = 0;
-            bool aborted = false;
-
             reporter->Report( _( "Loading Symbol Libraries" ) );
-            adapter->AsyncLoad();
-
-            while( true )
-            {
-                if( m_libraryPreloadAbort.load() )
-                {
-                    m_libraryPreloadAbort.store( false );
-                    aborted = true;
-                    break;
-                }
-
-                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
-
-                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
-                {
-                    float progress = *loadStatus;
-
-                    // Past the limit only the progress stops, so a cancel can still cut a stalled load short
-                    if( elapsed <= timeLimit )
-                        reporter->SetCurrentProgress( progress );
-
-                    if( progress >= 1 )
-                        break;
-                }
-                else
-                {
-                    reporter->SetCurrentProgress( 1 );
-                    break;
-                }
-
-                if( elapsed <= timeLimit )
-                    elapsed += interval;
-            }
-
-            // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
-            // so workers exit at their next checkpoint. BlockUntilLoaded() alone just
-            // waits for each future to complete naturally, which can hang indefinitely
-            // if a worker is stuck on a stalled network or filesystem operation.
-            if( aborted )
-                adapter->AbortAsyncLoad( true );
-            else
-                adapter->BlockUntilLoaded();
+            bool aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
 
             // If aborted, skip operations that use the adapter since the project may have changed
             // and the adapter's project reference could be stale. This prevents use-after-free

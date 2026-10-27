@@ -35,6 +35,7 @@
 
 class LIBRARY_MANAGER;
 class LIBRARY_MANAGER_ADAPTER;
+class PROGRESS_REPORTER;
 class PROJECT;
 
 
@@ -174,6 +175,15 @@ public:
     std::optional<float> AsyncLoadProgress() const;
 
     void BlockUntilLoaded();
+
+    /**
+     * Starts AsyncLoad() and waits for it on the calling thread, reporting progress to @a aReporter.
+     * Setting @a aAbort asks the plugins to cancel, but the call still waits for the workers, so one blocked in
+     * I/O that cannot be cancelled delays the return.
+     *
+     * @return false when @a aAbort cut the load short, in which case the flag has been cleared
+     */
+    bool RunPreload( PROGRESS_REPORTER& aReporter, std::atomic_bool& aAbort );
 
     /// Aborts any async load in progress; blocks until fully done aborting.
     /// This is the public interface to allow LIBRARY_MANAGER to abort loads before project changes.

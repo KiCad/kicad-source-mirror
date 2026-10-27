@@ -1347,9 +1347,6 @@ bool IFACE::HandleApiCloseDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER
 
 void IFACE::PreloadLibraries( KIWAY* aKiway )
 {
-    constexpr static int interval = 150;
-    constexpr static int timeLimit = 120000;
-
     wxCHECK( aKiway, /* void */ );
 
     // Use compare_exchange to atomically check and set the flag to prevent race conditions
@@ -1373,52 +1370,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &aKiway->Prj() );
 
-            int elapsed = 0;
-            bool aborted = false;
-
             reporter->Report( _( "Loading Footprint Libraries" ) );
-            adapter->AsyncLoad();
-
-            while( true )
-            {
-                if( m_libraryPreloadAbort.load() )
-                {
-                    m_libraryPreloadAbort.store( false );
-                    aborted = true;
-                    break;
-                }
-
-                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
-
-                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
-                {
-                    float progress = *loadStatus;
-
-                    // Past the limit only the progress stops, so a cancel can still cut a stalled load short
-                    if( elapsed <= timeLimit )
-                        reporter->SetCurrentProgress( progress );
-
-                    if( progress >= 1 )
-                        break;
-                }
-                else
-                {
-                    reporter->SetCurrentProgress( 1 );
-                    break;
-                }
-
-                if( elapsed <= timeLimit )
-                    elapsed += interval;
-            }
-
-            // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
-            // so workers exit at their next checkpoint. BlockUntilLoaded() alone just
-            // waits for each future to complete naturally, which can hang indefinitely
-            // if a worker is stuck on a stalled network or filesystem operation.
-            if( aborted )
-                adapter->AbortAsyncLoad( true );
-            else
-                adapter->BlockUntilLoaded();
+            bool aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
 
             // If aborted, skip operations that use the adapter since the project may have changed
             // and the adapter's project reference could be stale. This prevents use-after-free
@@ -1433,7 +1386,6 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 wxLogTrace( traceLibraries, "pcbnew PreloadLibraries: aborted, skipping footprint processing" );
             }
 
-            m_libraryPreloadAbort.store( false );
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
 
@@ -1446,6 +1398,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
             }
 
+            // A cancel that came after the loop left the flag set, and it would end the next preload at once
+            m_libraryPreloadAbort.store( false );
             m_libraryPreloadInProgress.store( false );
         };
 

@@ -914,10 +914,6 @@ void PGM_BASE::WritePdfBrowserInfos()
 
 void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
 {
-    // TODO(JE) much of this code can be shared across the 3 preloads
-    constexpr static int interval = 150;
-    constexpr static int timeLimit = 120000;
-
     if( m_libraryPreloadInProgress.load() )
         return;
 
@@ -942,52 +938,8 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
 
             DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = aKiway->Prj().DesignBlockLibs();
 
-            int elapsed = 0;
-            bool aborted = false;
-
             reporter->Report( _( "Loading Design Block Libraries" ) );
-            adapter->AsyncLoad();
-
-            while( true )
-            {
-                if( m_libraryPreloadAbort.load() )
-                {
-                    m_libraryPreloadAbort.store( false );
-                    aborted = true;
-                    break;
-                }
-
-                std::this_thread::sleep_for( std::chrono::milliseconds( interval ) );
-
-                if( std::optional<float> loadStatus = adapter->AsyncLoadProgress() )
-                {
-                    float progress = *loadStatus;
-
-                    // Past the limit only the progress stops, so a cancel can still cut a stalled load short
-                    if( elapsed <= timeLimit )
-                        reporter->SetCurrentProgress( progress );
-
-                    if( progress >= 1 )
-                        break;
-                }
-                else
-                {
-                    reporter->SetCurrentProgress( 1 );
-                    break;
-                }
-
-                if( elapsed <= timeLimit )
-                    elapsed += interval;
-            }
-
-            // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
-            // so workers exit at their next checkpoint. BlockUntilLoaded() alone just
-            // waits for each future to complete naturally, which can hang indefinitely
-            // if a worker is stuck on a stalled network or filesystem operation.
-            if( aborted )
-                adapter->AbortAsyncLoad( true );
-            else
-                adapter->BlockUntilLoaded();
+            adapter->RunPreload( *reporter, m_libraryPreloadAbort );
 
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
