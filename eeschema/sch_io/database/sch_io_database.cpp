@@ -540,8 +540,13 @@ void SCH_IO_DATABASE::cacheLib()
 
 void SCH_IO_DATABASE::startBackgroundRefresh()
 {
-    if( m_refreshRunning.exchange( true ) )
+    // The flag check and the thread install stay together so a stop cannot slip between them
+    std::lock_guard lock( m_refreshMutex );
+
+    if( m_stopping.load() || m_refreshRunning.load() )
         return;
+
+    m_refreshRunning = true;
 
     wxLogTrace( traceDatabase, wxT( "Starting background refresh thread" ) );
     m_refreshThread = std::thread( &SCH_IO_DATABASE::backgroundRefreshWorker, this );
@@ -550,11 +555,21 @@ void SCH_IO_DATABASE::startBackgroundRefresh()
 
 void SCH_IO_DATABASE::stopBackgroundRefresh()
 {
-    m_refreshRunning = false;
+    std::thread worker;
+
+    // Set under the wait mutex so a waiter between its check and its sleep cannot miss the wakeup
+    {
+        std::lock_guard lock( m_refreshMutex );
+
+        m_stopping = true;
+        m_refreshRunning = false;
+        worker = std::move( m_refreshThread );
+    }
+
     m_refreshCV.notify_all();
 
-    if( m_refreshThread.joinable() )
-        m_refreshThread.join();
+    if( worker.joinable() )
+        worker.join();
 }
 
 
@@ -590,6 +605,13 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
 
                     for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
                     {
+                        // A close must not wait for the tables left in the pass
+                        if( !m_refreshRunning.load() )
+                        {
+                            querySuccess = false;
+                            break;
+                        }
+
                         m_conn->ClearCache( table.table );
 
                         std::vector<DATABASE_CONNECTION::ROW> results;
@@ -604,6 +626,10 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
 
                         tableResults.emplace_back( &table, std::move( results ) );
                     }
+
+                    // A stop during the last table must not wait for a publish
+                    if( !m_refreshRunning.load() )
+                        querySuccess = false;
 
                     if( querySuccess )
                     {

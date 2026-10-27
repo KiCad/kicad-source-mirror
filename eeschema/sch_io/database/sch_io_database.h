@@ -225,6 +225,7 @@ private:
 
     std::thread             m_refreshThread;
     std::atomic<bool>       m_refreshRunning{ false };
+    std::atomic<bool>       m_stopping{ false };
     std::condition_variable m_refreshCV;
     std::mutex              m_refreshMutex;
     std::shared_mutex       m_cacheMutex;
