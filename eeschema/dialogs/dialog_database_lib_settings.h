@@ -36,6 +36,7 @@
 #include <widgets/wx_debounced_action.h>
 #include "dialog_database_lib_settings_base.h"
 
+#include <wx/timer.h>
 
 class DB_LIB_PREVIEW_PANEL;
 class SYMBOL_LIBRARY_ADAPTER;
@@ -128,6 +129,9 @@ private:
 
     /// Follows an edit of the data source by dropping the connection that no longer matches it
     void sourceEdited();
+
+    /// Offers Access once the provider check, which does not block, has found the engine
+    void onProviderTimer( wxTimerEvent& aEvent );
 
     /// Fills the data source list from the ODBC driver manager, keeping what is typed
     void loadDataSources();
@@ -302,6 +306,9 @@ private:
     DATABASE_SOURCE m_loadedSource;
 
     bool m_pathEdited = false;
+
+    wxTimer m_providerTimer;
+    int     m_providerPolls = 0;
 
     /// Autofilled values for the current library, which a later autofill may replace
     std::string                        m_autoTable;

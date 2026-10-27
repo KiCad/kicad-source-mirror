@@ -120,6 +120,15 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::DIALOG_DATABASE_LIB_SETTINGS_BASE( wxWindow* 
 
 	fgBackend->Add( bFile, 1, wxEXPAND, 5 );
 
+	m_filePasswordLabel = new wxStaticText( sbSource->GetStaticBox(), wxID_ANY, _("Password:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_filePasswordLabel->Wrap( -1 );
+	fgBackend->Add( m_filePasswordLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_txtFilePassword = new wxTextCtrl( sbSource->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD );
+	m_txtFilePassword->SetToolTip( _("The database password. It is saved in plain text in the library file.") );
+
+	fgBackend->Add( m_txtFilePassword, 1, wxEXPAND, 5 );
+
 
 	sbSource->Add( fgBackend, 0, wxEXPAND|wxALL, 5 );
 
@@ -671,6 +680,7 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::DIALOG_DATABASE_LIB_SETTINGS_BASE( wxWindow* 
 	m_choiceBackend->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBackendChanged ), NULL, this );
 	m_txtDbFile->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnFileTextChanged ), NULL, this );
 	m_btnBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBrowseFile ), NULL, this );
+	m_txtFilePassword->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
 	m_rbDSN->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceTypeChanged ), NULL, this );
 	m_cbDSN->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
 	m_cbDSN->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
@@ -733,6 +743,7 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::~DIALOG_DATABASE_LIB_SETTINGS_BASE()
 	m_choiceBackend->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBackendChanged ), NULL, this );
 	m_txtDbFile->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnFileTextChanged ), NULL, this );
 	m_btnBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBrowseFile ), NULL, this );
+	m_txtFilePassword->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
 	m_rbDSN->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceTypeChanged ), NULL, this );
 	m_cbDSN->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
 	m_cbDSN->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );

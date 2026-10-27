@@ -64,6 +64,8 @@ class DIALOG_DATABASE_LIB_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_fileLabel;
 		wxTextCtrl* m_txtDbFile;
 		STD_BITMAP_BUTTON* m_btnBrowse;
+		wxStaticText* m_filePasswordLabel;
+		wxTextCtrl* m_txtFilePassword;
 		wxRadioButton* m_rbDSN;
 		wxComboBox* m_cbDSN;
 		wxStaticText* m_stDsnDriver;

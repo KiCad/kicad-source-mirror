@@ -26,6 +26,10 @@
 #include "db_backend_support.h"
 #include "sqlite_backend.h"
 
+#ifdef _WIN32
+#include "ace_backend.h"
+#endif
+
 
 DB_BACKEND_RESULT DATABASE_BACKEND::Create( const DATABASE_SOURCE& aSource, const wxString& aBasePath )
 {
@@ -43,8 +47,17 @@ DB_BACKEND_RESULT DATABASE_BACKEND::Create( const DATABASE_SOURCE& aSource, cons
                  std::string() };
 
     case DATABASE_SOURCE_TYPE::ACCESS:
+#ifdef _WIN32
+        // A probe still running is waited on once, by Connect
+        if( ACE_BACKEND::ProviderState() == ACE_BACKEND::PROVIDER_STATE::MISSING )
+            return { nullptr, DB_FAILURE::PROVIDER_MISSING, ACE_BACKEND::ProviderMissingMessage() };
+
+        return { std::make_unique<ACE_BACKEND>( source.path, source.password, source.timeout ), DB_FAILURE::UNKNOWN,
+                 std::string() };
+#else
         return { nullptr, DB_FAILURE::NOT_SUPPORTED_ON_PLATFORM,
-                 utf8( wxString::Format( _( "source type '%s' is not yet supported" ), wxS( "access" ) ) ) };
+                 utf8( wxString::Format( _( "source type '%s' is only available on Windows" ), wxS( "access" ) ) ) };
+#endif
 
     case DATABASE_SOURCE_TYPE::INVALID:
         break;

@@ -61,6 +61,10 @@
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 
+#ifdef _WIN32
+#include <database/ace_backend.h>
+#endif
+
 
 /// Rows read for the Data page and preview; enough to judge a mapping without loading a whole table
 static constexpr size_t PREVIEW_ROW_LIMIT = 200;
@@ -71,8 +75,37 @@ static constexpr int PREVIEW_MIN_WIDTH_DIP = 450;
 /// Delay after the last edit before the preview is rebuilt
 static constexpr int PREVIEW_DEBOUNCE_MS = 750;
 
+/// How often the Access provider check is asked whether it has finished, and for how long
+static constexpr int PROVIDER_POLL_MS = 250;
+static constexpr int PROVIDER_POLL_LIMIT = 80;
+
 /// Pause in typing a database file path before the connection is tried
 static constexpr int CONNECT_DEBOUNCE_MS = 500;
+
+
+enum class ACCESS_PROVIDER
+{
+    MISSING,
+    PENDING,
+    AVAILABLE
+};
+
+
+/// Whether this computer can read Access files, which never blocks
+static ACCESS_PROVIDER accessProvider()
+{
+#ifdef _WIN32
+    switch( ACE_BACKEND::ProviderState() )
+    {
+    case ACE_BACKEND::PROVIDER_STATE::AVAILABLE: return ACCESS_PROVIDER::AVAILABLE;
+    case ACE_BACKEND::PROVIDER_STATE::PENDING:
+    case ACE_BACKEND::PROVIDER_STATE::BUSY: return ACCESS_PROVIDER::PENDING;
+    case ACE_BACKEND::PROVIDER_STATE::MISSING: break;
+    }
+#endif
+
+    return ACCESS_PROVIDER::MISSING;
+}
 
 
 /// Re-lays out a scrolled page and refits its scroll area after its contents change size
@@ -117,6 +150,9 @@ static wxString describeFailure( DB_FAILURE aFailure, const DATABASE_SOURCE& aSo
     switch( aFailure )
     {
     case FAILURE::LOGIN:
+        if( aSource.type == DATABASE_SOURCE_TYPE::ACCESS )
+            return _( "The database password is missing or wrong." );
+
         return _( "The server rejected the user name or password." );
 
     case FAILURE::UNREACHABLE:
@@ -259,6 +295,9 @@ DIALOG_DATABASE_LIB_SETTINGS::DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, c
                            },
                            CONNECT_DEBOUNCE_MS )
 {
+    m_providerTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, &DIALOG_DATABASE_LIB_SETTINGS::onProviderTimer, this, m_providerTimer.GetId() );
+
     // Search terms are English; autofill also tries their translations
     m_roles = {
         { m_cbKeyCol, []( DATABASE_LIB_TABLE& t ) -> std::string& { return t.key_col; }, false, _( "key" ),
@@ -501,6 +540,8 @@ DIALOG_DATABASE_LIB_SETTINGS::CONNECT_JOB::~CONNECT_JOB()
 
 DIALOG_DATABASE_LIB_SETTINGS::~DIALOG_DATABASE_LIB_SETTINGS()
 {
+    m_providerTimer.Stop();
+
     cancelConnect();
     m_previewDebounce.Cancel();
     m_connectDebounce.Cancel();
@@ -538,6 +579,8 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataToWindow()
     m_dbFile = From_UTF8( source.Expanded( cwdDir() ).path );
     m_pathEdited = false;
     m_txtDbFile->ChangeValue( m_dbFile );
+    m_txtFilePassword->ChangeValue( source.type == DATABASE_SOURCE_TYPE::ACCESS ? From_UTF8( source.password )
+                                                                                : wxString() );
 
     for( const std::string& driver : ODBC_BACKEND::ListDrivers() )
         m_choiceDriver->Append( From_UTF8( driver ) );
@@ -919,6 +962,12 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnManageDataSources( wxCommandEvent& aEvent )
 }
 
 
+static wxString accessLabel( ACCESS_PROVIDER aProvider )
+{
+    return aProvider == ACCESS_PROVIDER::MISSING ? _( "Access (unavailable)" ) : _( "Access" );
+}
+
+
 void DIALOG_DATABASE_LIB_SETTINGS::loadBackends()
 {
     const DATABASE_SOURCE& source = m_settings->m_Source;
@@ -927,6 +976,18 @@ void DIALOG_DATABASE_LIB_SETTINGS::loadBackends()
     m_choiceBackend->Clear();
     m_choiceBackend->Append( _( "ODBC" ) );
     m_choiceBackend->Append( _( "SQLite" ) );
+
+    const ACCESS_PROVIDER provider = accessProvider();
+
+    if( provider == ACCESS_PROVIDER::PENDING )
+        m_providerTimer.Start( PROVIDER_POLL_MS );
+
+    // A file naming Access keeps its entry, marked when this computer cannot read it, so opening it never changes it
+    if( provider == ACCESS_PROVIDER::AVAILABLE || source.type == DATABASE_SOURCE_TYPE::ACCESS )
+    {
+        m_backendTypes.push_back( DATABASE_SOURCE_TYPE::ACCESS );
+        m_choiceBackend->Append( accessLabel( provider ) );
+    }
 
     if( source.type == DATABASE_SOURCE_TYPE::INVALID )
     {
@@ -957,6 +1018,36 @@ void DIALOG_DATABASE_LIB_SETTINGS::selectBackend( DATABASE_SOURCE_TYPE aType )
 }
 
 
+void DIALOG_DATABASE_LIB_SETTINGS::onProviderTimer( wxTimerEvent& aEvent )
+{
+    const ACCESS_PROVIDER provider = accessProvider();
+
+    if( provider == ACCESS_PROVIDER::PENDING && ++m_providerPolls < PROVIDER_POLL_LIMIT )
+        return;
+
+    m_providerTimer.Stop();
+
+    // A check that never finished counts as unavailable
+    const ACCESS_PROVIDER shown =
+            provider == ACCESS_PROVIDER::AVAILABLE ? ACCESS_PROVIDER::AVAILABLE : ACCESS_PROVIDER::MISSING;
+    const DATABASE_SOURCE_TYPE current = selectedBackend();
+    auto access = std::find( m_backendTypes.begin(), m_backendTypes.end(), DATABASE_SOURCE_TYPE::ACCESS );
+
+    if( access != m_backendTypes.end() )
+    {
+        m_choiceBackend->SetString( access - m_backendTypes.begin(), accessLabel( shown ) );
+    }
+    else if( shown == ACCESS_PROVIDER::AVAILABLE )
+    {
+        // An unknown type always comes last
+        m_backendTypes.insert( m_backendTypes.begin() + 2, DATABASE_SOURCE_TYPE::ACCESS );
+        m_choiceBackend->Insert( accessLabel( shown ), 2 );
+    }
+
+    selectBackend( current );
+}
+
+
 bool DIALOG_DATABASE_LIB_SETTINGS::sourceConfigured() const
 {
     const DATABASE_SOURCE& source = m_settings->m_Source;
@@ -977,7 +1068,8 @@ void DIALOG_DATABASE_LIB_SETTINGS::updateSourceControls()
 {
     const DATABASE_SOURCE_TYPE type = selectedBackend();
     const bool                 odbc = type == DATABASE_SOURCE_TYPE::ODBC;
-    const bool                 file = type == DATABASE_SOURCE_TYPE::SQLITE;
+    const bool                 access = type == DATABASE_SOURCE_TYPE::ACCESS;
+    const bool                 file = access || type == DATABASE_SOURCE_TYPE::SQLITE;
     const bool                 useDSN = m_rbDSN->GetValue();
     wxSizer*                   sbSource = m_rbDSN->GetContainingSizer();
     wxSizer*                   fgBackend = m_choiceBackend->GetContainingSizer();
@@ -992,6 +1084,8 @@ void DIALOG_DATABASE_LIB_SETTINGS::updateSourceControls()
 
     fgBackend->Show( m_fileLabel, file );
     fgBackend->Show( m_txtDbFile->GetContainingSizer(), file );
+    fgBackend->Show( m_filePasswordLabel, access );
+    fgBackend->Show( m_txtFilePassword, access );
 
     // Showing the data source rows shows every control in them
 #ifdef __WXMSW__
@@ -1034,7 +1128,8 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnBrowseFile( wxCommandEvent& aEvent )
         dir = cwdDir();
 
     wxFileDialog dlg( this, _( "Select the database file" ), dir, wxEmptyString,
-                      _( "SQLite databases (*.sqlite;*.sqlite3;*.db)|*.sqlite;*.sqlite3;*.db|All files|*" ),
+                      _( "SQLite databases (*.sqlite;*.sqlite3;*.db)|*.sqlite;*.sqlite3;*.db|"
+                         "Access databases (*.accdb;*.mdb)|*.accdb;*.mdb|All files|*" ),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
@@ -1163,7 +1258,9 @@ void DIALOG_DATABASE_LIB_SETTINGS::storeSource()
     source.dsn.clear();
     source.username.clear();
     source.path = m_pathEdited ? DatabasePathForStorage( m_dbFile, cwdDir() ) : m_loadedSource.path;
-    source.password.clear();
+
+    // The keyring is keyed by DSN login, so Access keeps its password in the file
+    source.password = type == DATABASE_SOURCE_TYPE::ACCESS ? TO_UTF8( m_txtFilePassword->GetValue() ) : std::string();
 }
 
 

@@ -86,8 +86,8 @@ private:
  * of that allowance from the moment it is accepted until its thread returns, so concurrent callers cannot
  * overshoot the cap.
  *
- * This class depends on the standard library and the database settings, with the message dispatch on Windows.
- * A worker serves one calling thread at a time.
+ * This class depends on the standard library and the database settings, with the message
+ * dispatch on Windows.  A worker serves one calling thread at a time.
  */
 class DB_WORKER_THREAD
 {
@@ -101,9 +101,11 @@ public:
      * @param aPumpMessages on Windows, the worker dispatches its thread's window messages while it waits for a job
      *                      and while it waits for the caller to take rows, as a COM apartment needs; ignored
      *                      elsewhere
+     * @param aOnAbandon runs on the owner's thread each time a worker blocked in a job is detached
      */
     DB_WORKER_THREAD( std::string aSourceKey, std::function<bool()> aThreadInit = nullptr,
-                      std::function<void()> aThreadExit = nullptr, bool aPumpMessages = false );
+                      std::function<void()> aThreadExit = nullptr, bool aPumpMessages = false,
+                      std::function<void()> aOnAbandon = nullptr );
 
     /// Waits up to the shutdown bound for a running job, then abandons it
     ~DB_WORKER_THREAD();
@@ -161,6 +163,9 @@ public:
 
     /// @return false if the last Run was abandoned or the worker thread could not start
     bool IsHealthy() const;
+
+    /// @return true only while a worker thread exists that has neither been abandoned nor failed to start
+    bool HasLiveThread() const;
 
     OUTCOME LastOutcome() const { return *m_outcome; }
 

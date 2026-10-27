@@ -1054,6 +1054,12 @@ if( UNIX AND NOT APPLE )
     )
 endif()
 
+if( WIN32 )
+    list( APPEND COMMON_SRCS
+        database/ace_backend.cpp
+    )
+endif()
+
 list( APPEND COMMON_SRCS
     api/api_handler_common.cpp
     api/api_handler_editor.cpp
@@ -1123,6 +1129,11 @@ target_link_libraries( common
 if( KICAD_USE_SENTRY )
     target_link_libraries( common
         sentry )
+endif()
+
+if( WIN32 )
+    # The Access backend talks ADO through COM and maps drive letters to UNC names
+    target_link_libraries( common ole32 oleaut32 mpr )
 endif()
 
 target_include_directories( common

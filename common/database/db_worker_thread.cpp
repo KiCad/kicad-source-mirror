@@ -246,6 +246,7 @@ struct DB_WORKER_STATE
     std::atomic<bool>     stopping{ false };
     std::function<bool()> init;
     std::function<void()> exit;
+    std::function<void()> onAbandon;
 
     std::shared_ptr<DB_WORKER_CORE> core;
     std::thread                     thread;
@@ -423,11 +424,13 @@ void DB_WORKER_CORE::Main( std::shared_ptr<DB_WORKER_CORE> aCore, std::function<
 
 
 DB_WORKER_THREAD::DB_WORKER_THREAD( std::string aSourceKey, std::function<bool()> aThreadInit,
-                                    std::function<void()> aThreadExit, bool aPumpMessages ) :
+                                    std::function<void()> aThreadExit, bool aPumpMessages,
+                                    std::function<void()> aOnAbandon ) :
         m_key( std::move( aSourceKey ) ),
         m_pumpMessages( aPumpMessages ),
         m_state( std::make_shared<DB_WORKER_STATE>() )
 {
+    m_state->onAbandon = std::move( aOnAbandon );
     m_state->init = std::move( aThreadInit );
     m_state->exit = std::move( aThreadExit );
 }
@@ -496,9 +499,16 @@ DB_WORKER_THREAD::~DB_WORKER_THREAD()
         return;
 
     if( abandoned )
+    {
+        if( m_state->onAbandon )
+            m_state->onAbandon();
+
         thread.detach();
+    }
     else
+    {
         thread.join();
+    }
 }
 
 
@@ -507,6 +517,14 @@ bool DB_WORKER_THREAD::IsHealthy() const
     std::lock_guard lock( m_state->m );
 
     return !m_state->core || ( !m_state->core->abandoned && !m_state->core->initFailed );
+}
+
+
+bool DB_WORKER_THREAD::HasLiveThread() const
+{
+    std::lock_guard lock( m_state->m );
+
+    return m_state->core && !m_state->core->abandoned && !m_state->core->initFailed;
 }
 
 
@@ -700,7 +718,12 @@ bool DB_WORKER_THREAD::runJob( std::function<void( DB_JOB_CONTEXT& )> aJob, std:
         if( !state->core || state->core->abandoned || state->core->initFailed )
         {
             if( state->thread.joinable() )
+            {
+                if( state->onAbandon && state->core && state->core->abandoned )
+                    state->onAbandon();
+
                 state->thread.detach();
+            }
 
             state->core = std::make_shared<DB_WORKER_CORE>();
             state->core->key = key;
