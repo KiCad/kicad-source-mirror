@@ -35,14 +35,14 @@
 # genericprinter0815 <genericprinter0815@users.noreply.hosted.weblate.org>, 2026.
 # Frank Sonnenberg <audiofrank@users.noreply.hosted.weblate.org>, 2026.
 # Karl SCHUH <karls0@users.noreply.hosted.weblate.org>, 2026.
+# "Pferd O." <pferdob@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
 "PO-Revision-Date: 2026-10-28 07:51+0000\n"
-"Last-Translator: Frank Sonnenberg "
-"<audiofrank@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: \"Pferd O.\" <pferdob@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -2060,11 +2060,11 @@ msgid "Error tracing bitmap: %s"
 msgstr "Fehler beim Lesen des Bildes %s."
 
 #: common/bitmap_tracing.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "%d region of the image could not be traced."
 msgid_plural "%d regions of the image could not be traced."
-msgstr[0] "Manche Polygone konnten nicht subtrahiert werden."
-msgstr[1] "Manche Polygone konnten nicht subtrahiert werden."
+msgstr[0] "%d Bereich des Bildes konnte nicht erfasst werden."
+msgstr[1] "%d Bereiche des Bildes konnten nicht erfasst werden."
 
 #: common/column_formatter.cpp:27
 msgid "True"
@@ -7480,10 +7480,9 @@ msgid "Could not use Metal, switching to OpenGL"
 msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/draw_panel_gal.cpp:380
-#, fuzzy
 msgid "Could not use Vulkan, falling back to software rendering"
 msgstr ""
-"OpenGL Modus kann nicht verwendet werden; Software-Rendering wird verwendet"
+"Vulkan konnte nicht verwendet werden; falle auf Software-Rendering zurück"
 
 #: common/draw_panel_gal.cpp:474
 msgid "The graphics driver was reset and OpenGL could not be restored"
@@ -7521,11 +7520,9 @@ msgstr ""
 "verwendet"
 
 #: common/draw_panel_gal.cpp:643
-#, fuzzy
 msgid "The graphics device was lost and could not be restored."
 msgstr ""
-"Der Grafiktreiber wurde zurückgesetzt und OpenGL konnte nicht "
-"wiederhergestellt werden"
+"Das Grafikgerät ging verloren und konnte nicht wiederhergestellt werden."
 
 #: common/draw_panel_gal.cpp:1001
 msgid "Unknown exception"
@@ -16016,9 +16013,8 @@ msgid "pin map"
 msgstr "Pin hinzufügen"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:226
-#, fuzzy
 msgid "pins"
-msgstr "Keine Pins vorhanden!"
+msgstr "Pins"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:228
 #, fuzzy
@@ -16085,9 +16081,9 @@ msgid "${CWD} is replaced by %s"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:330
-#, fuzzy
 msgid "This file could not be read and is shown read-only."
-msgstr "Die OrCAD-Datei konnte nicht gelesen werden."
+msgstr ""
+"Die Datei konnte nicht gelesen werden und wird schreibgeschützt angezeigt."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:334
 #, fuzzy
@@ -16424,9 +16420,8 @@ msgid "Manage Data Sources..."
 msgstr "Datenquellen verwalten ..."
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:137
-#, fuzzy
 msgid "Save password in the library file"
-msgstr "Änderungen in verschachtelter Bibliothekstabelle speichern?"
+msgstr "Passwort in Bibliotheksdatei speichern"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
 msgid ""
@@ -23284,18 +23279,16 @@ msgid "Could not read the schematic project settings."
 msgstr "Konnte die Schaltplan-Projekteinstellungen nicht lesen."
 
 #: eeschema/eeschema_jobs_handler.cpp:2249
-#, fuzzy
 msgid "The schematic project settings are invalid."
-msgstr "Der Schaltplan für diese Platine kann nicht gefunden werden."
+msgstr "Die Projekteinstellungen des Schaltplans sind ungültig."
 
 #: eeschema/eeschema_jobs_handler.cpp:2302
 msgid "Could not stage the schematic project settings."
 msgstr "Konnte die Schaltplan-Projekteinstellungen nicht bereitstellen."
 
 #: eeschema/eeschema_jobs_handler.cpp:2310
-#, fuzzy
 msgid "Could not save the schematic project settings."
-msgstr "Konnte Projekt nicht erstellen: %s\n"
+msgstr "Konnte Projekteinstellungen des Schaltplans nicht speichern."
 
 #: eeschema/eeschema_jobs_handler.cpp:2332 pcbnew/pcbnew_jobs_handler.cpp:3605
 #, fuzzy, c-format
@@ -25470,9 +25463,8 @@ msgid "No variants to rename."
 msgstr "Keine Designvarianten zum Bearbeiten vorhanden."
 
 #: eeschema/sch_edit_frame.cpp:3460
-#, fuzzy
 msgid "Select variant to rename:"
-msgstr "Zu löschenden Variantennamen wählen:"
+msgstr "Um zu benennende Variante wählen:"
 
 #: eeschema/sch_edit_frame.cpp:3529
 #, fuzzy
@@ -25480,9 +25472,8 @@ msgid "No variants to copy."
 msgstr "Keine Designvarianten zum Bearbeiten vorhanden."
 
 #: eeschema/sch_edit_frame.cpp:3533
-#, fuzzy
 msgid "Select variant to copy:"
-msgstr "Zu löschenden Variantennamen wählen:"
+msgstr "Zu kopierende Variante wählen:"
 
 #: eeschema/sch_field.cpp:1034
 #, c-format
@@ -32497,9 +32488,8 @@ msgid "Place Images"
 msgstr "Bilder einfügen"
 
 #: eeschema/tools/sch_actions.cpp:874 pcbnew/tools/pcb_actions.cpp:552
-#, fuzzy
 msgid "Convert to Outlines..."
-msgstr "In Zone umwandeln"
+msgstr "In Umrisse umwandeln..."
 
 #: eeschema/tools/sch_actions.cpp:875
 #, fuzzy
@@ -34031,11 +34021,11 @@ msgid "Convert Image to Outlines"
 msgstr "Polygone in Linien umwandeln"
 
 #: eeschema/tools/sch_edit_tool.cpp:4008 pcbnew/tools/drawing_tool.cpp:2399
-#, fuzzy, c-format
+#, c-format
 msgid "Added %d shape."
 msgid_plural "Added %d shapes."
-msgstr[0] "Benutze Padform"
-msgstr[1] "Benutze Padform"
+msgstr[0] "%d Form hinzugefügt."
+msgstr[1] "%d Formen hinzugefügt."
 
 #: eeschema/tools/sch_edit_tool.cpp:4124 pcbnew/tools/edit_tool.cpp:1278
 msgid "Toggle Attribute"
@@ -36500,9 +36490,8 @@ msgid ""
 msgstr ""
 
 #: include/downgrade_copy.h:79
-#, fuzzy
 msgid "The library folder is not accessible."
-msgstr "Symbolbibliothek existiert nicht oder ist nicht zugänglich\n"
+msgstr "Das Bibliotheksverzeichnis ist nicht verfügbar."
 
 #: include/downgrade_copy.h:97
 msgid "Library folders containing directory links cannot be copied safely."
@@ -36621,9 +36610,8 @@ msgid "Add new library to project library table"
 msgstr "Neue Bibliothek zur Projektbibliothekstabelle hinzufügen"
 
 #: include/widgets/filedlg_hook_relative_path.h:66
-#, fuzzy
 msgid "Use relative path"
-msgstr "Einen relativen Pfad verwenden?"
+msgstr "Relativen Pfad verwenden"
 
 #: include/widgets/filedlg_import_non_kicad.h:38
 msgid "Show import issues"
@@ -39730,7 +39718,7 @@ msgstr "Änderungen anwenden"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:171
 msgid "Discard Pending Changes"
-msgstr "Änderungen verwerfen"
+msgstr "Ausstehende Änderungen verwerfen"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:234
 msgid ""
@@ -40240,9 +40228,9 @@ msgid ""
 msgstr ""
 
 #: kicad/project_downgrade.cpp:435
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown target version '%s'. Valid targets: %s"
-msgstr "Unbekannter Parameter \"%s\" in \"%s\""
+msgstr "Unbekannte Zielversion \"%s\". Gültige Ziele: %s"
 
 #: kicad/project_downgrade.cpp:458
 #, fuzzy
@@ -40250,9 +40238,9 @@ msgid "Choose a destination outside the current project."
 msgstr "Im aktuellen Projekt wurde kein Teilschaltplan gefunden"
 
 #: kicad/project_downgrade.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create the folder '%s'."
-msgstr "Kann Ordner \"%s\" nicht erstellen."
+msgstr "Kaonte Verzeichnis \"%s\" nicht erstellen."
 
 #: kicad/project_downgrade.cpp:473
 #, c-format
@@ -40265,9 +40253,8 @@ msgid "Some files could not be removed from '%s'."
 msgstr "Manche Linien können nicht bis zum Treffpunkt verlängert werden."
 
 #: kicad/project_downgrade.cpp:526 kicad/project_downgrade.cpp:529
-#, fuzzy
 msgid "Could not copy the project."
-msgstr "Konnte Projekt nicht erstellen: %s\n"
+msgstr "Konnte Projekt nicht kopieren."
 
 #: kicad/project_downgrade.cpp:553
 msgid "Export failed: the board could not be converted. Nothing was written."
@@ -40279,9 +40266,8 @@ msgid ""
 msgstr ""
 
 #: kicad/project_downgrade.cpp:585
-#, fuzzy
 msgid "Export failed: could not migrate the project file."
-msgstr "VRML Export fehlgeschlagen: Konnte Konturen keine Löcher hinzufügen."
+msgstr "Export fehlgeschlagen: Konnte Projektdatei nicht übernehmen."
 
 #: kicad/project_downgrade.cpp:599
 #, fuzzy
@@ -46412,9 +46398,8 @@ msgstr ""
 "Projekt fehlt oder ist schreibgeschützt. Änderungen werden nicht gespeichert."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:322
-#, fuzzy
 msgid "Discard changes to custom rules?"
-msgstr "Änderungen verwerfen"
+msgstr "Änderungen an benutzerdefinierten Regeln verwerfen?"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:466
 #, c-format
@@ -68061,9 +68046,9 @@ msgid "Successfully created genCAD file\n"
 msgstr "genCAD-Datei erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2006
-#, fuzzy, c-format
+#, c-format
 msgid "Export failed: %s\n"
-msgstr "Der IDF-Export ist fehlgeschlagen:\n"
+msgstr "Export ist fehlgeschlagen: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2012
 #, fuzzy
@@ -71812,45 +71797,39 @@ msgstr "Pad hinzufügen"
 msgid ""
 "Add a pad of the most recently-placed type, or a copy of the selected pad"
 msgstr ""
+"Pad mit zuletzt platziertem Typ oder Kopie des ausgewählten Pads hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1600
-#, fuzzy
 msgid "Add a THT Pad"
-msgstr "Fügt ein Pad hinzu"
+msgstr "THT-Pad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1601
-#, fuzzy
 msgid "Add a through-hole pad"
-msgstr "Durchlochpads"
+msgstr "Durchsteckpad pinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1609
-#, fuzzy
 msgid "Add an SMD Pad"
-msgstr "Fügt ein Pad hinzu"
+msgstr "SMD-Pad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1610
-#, fuzzy
 msgid "Add a surface-mount pad"
-msgstr "Blinde Vias unter SMD-Pads verbieten"
+msgstr "Pad zur Oberflächenbefestigung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1618
-#, fuzzy
 msgid "Add an NPTH Pad"
-msgstr "Fügt ein Pad hinzu"
+msgstr "NPTH-Pad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1619
-#, fuzzy
 msgid "Add a non-plated through-hole pad"
-msgstr "Metallisierte Bohrungen von Durchkontaktierungen und Vias anzeigen"
+msgstr "Nicht-metallisiertes Durchsteckpad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1627
 msgid "Add a Paste Aperture Pad"
-msgstr ""
+msgstr "Pastenöffnungspad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1628
-#, fuzzy
 msgid "Add a paste aperture pad"
-msgstr "Eine Spannungsquelle hinzufügen"
+msgstr "Pastenöffnungspad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:1637
 msgid "Edit Pad as Graphic Shapes"
