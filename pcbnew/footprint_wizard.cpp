@@ -138,7 +138,7 @@ tl::expected<FOOTPRINT*, wxString> FOOTPRINT_WIZARD_MANAGER::Generate( FOOTPRINT
     std::vector<wxString> args = {
         wxS( "--generate" ),
         wxS( "--lang" ),
-        lang->CanonicalName,
+        lang ? lang->CanonicalName : wxString( wxS( "en" ) ),
         wxS( "--params" )
     };
 
