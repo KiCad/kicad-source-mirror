@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-24 19:51+0000\n"
+"PO-Revision-Date: 2026-10-28 07:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -10024,21 +10024,23 @@ msgstr "Easy-PCクラス '%s' は登録されていない。"
 #, c-format
 msgid "Easy-PC object '%s' at offset %zu is not of the class required there."
 msgstr ""
+"Easy-PC オブジェクト '%s' (オフセット %zu)は、そこに必要なクラスではありませ"
+"ん。"
 
 #: common/io/easypc/easypc_classes_root.cpp:357
 #, c-format
 msgid "Easy-PC design format %d at offset %zu is too new."
-msgstr ""
+msgstr "Easy-PC デザインフォーマット %d (オフセット %zu)は新しすぎます。"
 
 #: common/io/easypc/easypc_classes_styles.cpp:64
 #, c-format
 msgid "Easy-PC item format %d at offset %zu is too new."
-msgstr ""
+msgstr "Easy-PC アイテムフォーマット %d (オフセット %zu)は新しすぎます。"
 
 #: common/io/easypc/easypc_classes_styles.cpp:142
 #, c-format
 msgid "Easy-PC %s at offset %zu has a cyclic parent chain."
-msgstr ""
+msgstr "Easy-PC %s (オフセット %zu)に循環親チェーンがあります。"
 
 #: common/io/easypc/easypc_classes_styles.cpp:289
 #, c-format
@@ -10048,21 +10050,21 @@ msgstr "サポートされていないEasy-PCのパッドスタイル '%s' で�
 #: common/io/easypc/easypc_design_settings.cpp:67
 #, c-format
 msgid "Easy-PC SummaryInformation is cut short at %zu."
-msgstr ""
+msgstr "Easy-PCのサマリーインフォメーションは%zuで切り詰められています。"
 
 #: common/io/easypc/easypc_design_settings.cpp:78
 msgid "Easy-PC SummaryInformation has no byte order mark."
-msgstr ""
+msgstr "Easy-PCのサマリーインフォメーションはUTF-8のBOMではありません。"
 
 #: common/io/easypc/easypc_document.cpp:52
 #, c-format
 msgid "Easy-PC %s ends at offset %zu of %zu."
-msgstr ""
+msgstr "Easy-PC %s は %zu のオフセット(%zu)で終わります。"
 
 #: common/io/easypc/easypc_document.cpp:98
 #, c-format
 msgid "Easy-PC project holds %u OLE items."
-msgstr ""
+msgstr "Easy-PCプロジェクトには %u 個のOLEアイテムが含まれています。"
 
 #: common/io/easypc/easypc_document.cpp:103
 #, c-format
@@ -10096,7 +10098,7 @@ msgstr "ライブラリ '%s' は '%s' をもっていますが、それはアイ
 #: common/io/easypc/easypc_document.cpp:220
 #, c-format
 msgid "Library '%s' lists duplicate item '%s' as '%s'."
-msgstr ""
+msgstr "ライブラリ '%s' は重複するアイテム '%s' を '%s' としてリストしています。"
 
 #: common/io/easypc/easypc_document.cpp:235
 #, c-format
@@ -10111,7 +10113,7 @@ msgstr "コンポーネント '%s' は [ScmComponent] ストリームがあり�
 #: common/io/easypc/easypc_file.cpp:50
 #, c-format
 msgid "Easy-PC compound file is malformed: %s."
-msgstr ""
+msgstr "Easy-PCの複合ファイルが壊れています: %s。"
 
 #: common/io/easypc/easypc_file.cpp:98 common/io/easypc/easypc_file.cpp:103
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
@@ -10123,23 +10125,25 @@ msgstr "ファイル '%s' を読み取れません。"
 #: common/io/easypc/easypc_file.cpp:115
 msgid "Not an Easy-PC / DesignSpark file: no compound file signature."
 msgstr ""
+"Easy-PC / DesignSpark のファイルではありません：複合ファイルの署名がありませ"
+"ん。"
 
 #: common/io/easypc/easypc_file.cpp:242
 msgid "Easy-PC / DesignSpark file has no FileType stream."
-msgstr ""
+msgstr "Easy-PC / DesignSparkのファイルにFileTypeストリームがありません。"
 
 #: common/io/easypc/easypc_file.cpp:254
 #, c-format
 msgid "Easy-PC / DesignSpark file type '%s' is not supported."
-msgstr ""
+msgstr "Easy-PC / DesignSpark のファイルタイプ '%s' はサポートされていません。"
 
 #: common/io/easypc/easypc_text_metrics.cpp:70
 msgid "Easy-PC text metrics are outside the supported range."
-msgstr ""
+msgstr "Easy-PCのテキストメトリクスはサポートされている範囲外です。"
 
 #: common/io/easypc/easypc_text_metrics.cpp:131
 msgid "Easy-PC TrueType text cannot be measured."
-msgstr ""
+msgstr "Easy-PCのTrueTypeテキストは計測できません。"
 
 #: common/io/idf/idf_parser.cpp:3259
 #, c-format
@@ -11747,15 +11751,17 @@ msgstr "Zip アーカイブ '%s' を作成しました (%s 未圧縮, %s 圧縮�
 #: common/project/project_file_downgrade.cpp:916
 #: common/project/project_file_downgrade.cpp:930
 msgid "The target cannot represent this exclusion. It is removed."
-msgstr "対象はこの除外を表現できませんので、削除しました。"
+msgstr "ターゲットはこの除外を表現できませんので、削除しました。"
 
 #: common/project/project_file_downgrade.cpp:782
 msgid "BOM field filters"
-msgstr "部品表(BOM)フィールド フィルター"
+msgstr "UTF-8のBOMフィールド フィルター"
 
 #: common/project/project_file_downgrade.cpp:783
 msgid "The target can only filter references. The field filter is removed."
 msgstr ""
+"ターゲットはリファレンスだけをフィルタできます。フィールドフィルタは削除され"
+"ました。"
 
 #: common/project/project_file_downgrade.cpp:796
 msgid "BOM byte order marks"
@@ -11763,15 +11769,15 @@ msgstr "UTF-8のBOMを含める"
 
 #: common/project/project_file_downgrade.cpp:797
 msgid "The target cannot retain the BOM byte order mark option."
-msgstr ""
+msgstr "ターゲットはUTF-8のBOMオプションを保持できません。"
 
 #: common/project/project_file_downgrade.cpp:850
 msgid "IPC-2581 output customization"
-msgstr ""
+msgstr "IPC-2581出力カスタマイズ"
 
 #: common/project/project_file_downgrade.cpp:851
 msgid "The target cannot retain the selected output sections or naming rules."
-msgstr ""
+msgstr "ターゲットは選択した出力セクションや命名規則を保持できません。"
 
 #: common/project/project_file_downgrade.cpp:866
 msgid "IDF output customization"
@@ -11779,15 +11785,15 @@ msgstr "IDF出力のカスタマイズ"
 
 #: common/project/project_file_downgrade.cpp:867
 msgid "The target cannot retain the selected IDF export settings."
-msgstr ""
+msgstr "ターゲットは選択したIDFエクスポート設定を保持できません。"
 
 #: common/project/project_file_downgrade.cpp:892
 msgid "PCB BOM output customization"
-msgstr ""
+msgstr "プリント基板部品表(BOM)カスタマイズ"
 
 #: common/project/project_file_downgrade.cpp:893
 msgid "The target cannot retain the PCB BOM export settings."
-msgstr ""
+msgstr "ターゲットはプリント基板の部品表(BOM)エクスポート設定を保持できません。"
 
 #: common/project/project_file_downgrade.cpp:940
 msgid "Microvia stack presets"
@@ -13783,7 +13789,7 @@ msgstr "列を選択"
 #: common/widgets/margin_offset_binder.cpp:231
 #, c-format
 msgid "%s could not be parsed as a distance and/or percentage offset."
-msgstr ""
+msgstr "%s は距離や割合のオフセットとして解釈できませんでした。"
 
 #: common/widgets/mathplot.cpp:1486
 msgid "Zoom in plot view."
@@ -15697,7 +15703,7 @@ msgstr "(ニックネーム無し)"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:114
 msgid "The server rejected the user name or password."
-msgstr ""
+msgstr "サーバーはユーザー名かパスワードで拒絶しました。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
 msgid "Could not reach the database server; check that it is running."
@@ -15706,17 +15712,17 @@ msgstr "データベース サーバーに到達できませんでした。動�
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:120
 #, c-format
 msgid "The server did not answer within %d seconds."
-msgstr ""
+msgstr "サーバーは%d秒以内に応答しませんでした。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 msgid ""
 "The connection string names a data source or driver that is not configured."
-msgstr ""
+msgstr "接続文字列は、設定されていないデータソースやドライバーを指定しています。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:126
 #, c-format
 msgid "There is no ODBC data source named '%s'."
-msgstr ""
+msgstr "'%s'という名前のODBCデータ ソースはありません。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:129
 msgid "The ODBC driver for this data source is not installed."
@@ -15789,7 +15795,7 @@ msgstr "説明"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:228
 msgid "desc"
-msgstr ""
+msgstr "desc"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:230
 #, fuzzy
@@ -15798,7 +15804,7 @@ msgstr "キーワード"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:230
 msgid "tags"
-msgstr ""
+msgstr "tags"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:232
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:233
@@ -15837,13 +15843,13 @@ msgstr "基板から除外"
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:320
 #, c-format
 msgid "${CWD} is replaced by %s (the folder the file will be saved in)"
-msgstr ""
+msgstr "${CWD} は %s（ファイルが保存されるフォルダ）に置換されました"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:323
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:665
 #, c-format
 msgid "${CWD} is replaced by %s"
-msgstr ""
+msgstr "${CWD} は %s に置換されました"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:330
 msgid "This file could not be read and is shown read-only."
@@ -15862,10 +15868,12 @@ msgid ""
 "Choose a data source and click Test Connection, then add a library on the "
 "Libraries page."
 msgstr ""
+"データソースを選択し接続テストをクリックしてから、ライブラリページで"
+"ライブラリを追加してください。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:371
 msgid "Database column the field reads its value from"
-msgstr ""
+msgstr "フィールドがその値を読み取るデータベースの列"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:372
 #, fuzzy
@@ -15889,7 +15897,7 @@ msgstr "フィールド名とその値を表示する"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:376
 msgid "Take position and style from the symbol's own field of the same name"
-msgstr ""
+msgstr "同名のシンボルのフィールドから位置とスタイルを取得する"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:392
 #, fuzzy
@@ -15908,6 +15916,11 @@ msgid ""
 "\n"
 "Check 'Save password in the library file' to keep it there instead."
 msgstr ""
+"パスワードはシステムのキーリングに保存できませんでした。ユーザー名と動作中の"
+"キーリングサービスが必要です。\n"
+"\n"
+"代わりに 'ライブラリファイルにパスワードを保存' を選択して、そこに保持するこ"
+"とを確認してください。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:543
 #, fuzzy, c-format
@@ -15954,6 +15967,8 @@ msgid ""
 "The data source uses ${CWD} and was tested again in the folder you chose. "
 "Check the result, then click OK to save."
 msgstr ""
+"データソースは ${CWD} を使用しており、選択したフォルダーで再度テストされまし"
+"た。結果を確認した後、[OK] をクリックして保存してください。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:700
 #, fuzzy
@@ -15986,6 +16001,8 @@ msgstr "エラー: %s"
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:861
 msgid "Data source changed; click Test Connection to apply it."
 msgstr ""
+"データソースが変更されました;適用するには「接続テスト」をクリックしてください"
+"。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:889
 msgid "Connection attempt stopped."
