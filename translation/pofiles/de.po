@@ -36,8 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:38+0300\n"
 "PO-Revision-Date: 2026-10-27 13:51+0000\n"
-"Last-Translator: Frank Sonnenberg "
-"<audiofrank@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: \"Pferd O.\" <pferdob@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -30495,9 +30494,8 @@ msgid "Add new library to project library table"
 msgstr "Neue Bibliothek zur Projektbibliothekstabelle hinzufügen"
 
 #: include/widgets/filedlg_hook_relative_path.h:65
-#, fuzzy
 msgid "Use relative path"
-msgstr "Einen relativen Pfad verwenden?"
+msgstr "Relativen Pfad verwenden"
 
 #: include/widgets/filedlg_import_non_kicad.h:38
 msgid "Show import issues"
@@ -38381,9 +38379,8 @@ msgstr ""
 "Projekt fehlt oder ist schreibgeschützt. Änderungen werden nicht gespeichert."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:302
-#, fuzzy
 msgid "Discard changes to custom rules?"
-msgstr "Änderungen verwerfen"
+msgstr "Änderungen an benutzerdefinierten Regeln verwerfen?"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:303
 #, fuzzy
