@@ -23,9 +23,11 @@
 
 #include <any>
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <set>
 #include <vector>
 
@@ -148,6 +150,40 @@ public:
     /// @return the driver names installed in the ODBC driver manager
     static std::vector<std::string> ListDrivers();
 
+    /// The keyword ODBC uses to choose where a connection string connects
+    struct SELECTOR
+    {
+        enum class KIND
+        {
+            NONE,
+            DSN,
+            FILE_DSN,
+            DRIVER
+        };
+
+        KIND        kind = KIND::NONE;
+        std::string value; ///< The keyword's value without braces
+    };
+
+    /// @return the first DSN, FILEDSN or DRIVER keyword of a connection string, which ODBC honours over later ones
+    static SELECTOR FirstSelector( const std::string& aConnectionString );
+
+    /// Resolves a data source name to its driver, or nullopt if it is unknown
+    using DSN_LOOKUP = std::function<std::optional<std::string>( const std::string& )>;
+
+    /**
+     * Decides whether connecting must be serialized because the effective driver is, or may be, the Microsoft Access
+     * driver.  Anything that cannot be resolved without loading a driver is serialized.
+     *
+     * @param aDsn is the data source name, used when the connection string is empty
+     * @param aLookup resolves a data source name to its driver
+     */
+    static bool NeedsDriverLock( const std::string& aDsn, const std::string& aConnectionString,
+                                 const DSN_LOOKUP& aLookup );
+
+    /// @return true for the Microsoft Access ODBC drivers, which must not initialize on two threads at once
+    static bool IsAccessDriver( const std::string& aDriverName );
+
     void ClearCache( const std::string& aTable )
     {
         if( m_cache )
@@ -189,6 +225,12 @@ private:
 
     bool getQuoteChar();
 
+    /**
+     * Takes the lock that keeps the Access driver from initializing or unloading on two threads at once.
+     * The lock is not taken for any other driver, and never off Windows.
+     */
+    std::unique_lock<std::mutex> accessDriverLock() const;
+
     /// Wraps an identifier in the driver's quote character, doubling any it contains
     std::string quoted( const std::string& aIdentifier ) const;
 
@@ -206,6 +248,8 @@ private:
     std::string m_user;
     std::string m_pass;
     std::string m_connectionString;
+
+    bool m_accessDriver = false;
 
     std::string m_lastError;
     std::string m_lastState;

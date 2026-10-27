@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <charconv>
+#include <mutex>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>
@@ -180,7 +181,13 @@ DATABASE_CONNECTION::DATABASE_CONNECTION( const std::string& aConnectionString,
 
 DATABASE_CONNECTION::~DATABASE_CONNECTION()
 {
+    // An unopened connection frees nothing, so it never waits on another library's driver
+    if( !m_conn )
+        return;
+
     Disconnect();
+
+    std::unique_lock<std::mutex> driverLock = accessDriverLock();
     m_conn.reset();
 }
 
@@ -188,6 +195,151 @@ DATABASE_CONNECTION::~DATABASE_CONNECTION()
 void DATABASE_CONNECTION::init()
 {
     m_cache = std::make_unique<DB_CACHE_TYPE>( 10, 1 );
+
+#ifdef _WIN32
+    m_accessDriver = NeedsDriverLock( m_dsn, m_connectionString,
+                                      []( const std::string& aName ) -> std::optional<std::string>
+                                      {
+                                          for( const DATA_SOURCE& source : ListDataSourceDetails() )
+                                          {
+                                              if( boost::iequals( source.name, aName ) )
+                                                  return source.driver;
+                                          }
+
+                                          return std::nullopt;
+                                      } );
+#endif
+}
+
+
+// The Access driver loads Office libraries when it initializes and again when it unloads, and both race when
+// two libraries do it at once.  Other drivers connect and disconnect in parallel as always.
+std::unique_lock<std::mutex> DATABASE_CONNECTION::accessDriverLock() const
+{
+    // Never destroyed, so a thread still closing a library at exit finds it alive
+    static auto* s_mutex = new std::mutex;
+
+    std::unique_lock<std::mutex> lock( *s_mutex, std::defer_lock );
+
+    if( m_accessDriver )
+    {
+        wxLogTrace( traceDatabase, wxT( "Taking the Access driver lock" ) );
+        lock.lock();
+    }
+
+    return lock;
+}
+
+
+DATABASE_CONNECTION::SELECTOR DATABASE_CONNECTION::FirstSelector( const std::string& aConnectionString )
+{
+    size_t pos = 0;
+    const size_t size = aConnectionString.size();
+
+    while( pos < size )
+    {
+        size_t end = aConnectionString.find_first_of( "=;", pos );
+
+        if( end == std::string::npos )
+            break;
+
+        std::string key = boost::trim_copy( aConnectionString.substr( pos, end - pos ) );
+
+        if( aConnectionString[end] == ';' )
+        {
+            pos = end + 1;
+            continue;
+        }
+
+        pos = aConnectionString.find_first_not_of( " \t", end + 1 );
+
+        if( pos == std::string::npos )
+            break;
+
+        std::string value;
+
+        if( aConnectionString[pos] == '{' )
+        {
+            // A doubled closing brace is a literal brace inside the value
+            for( ++pos; pos < size; ++pos )
+            {
+                if( aConnectionString[pos] == '}' )
+                {
+                    if( pos + 1 < size && aConnectionString[pos + 1] == '}' )
+                    {
+                        value += '}';
+                        ++pos;
+                        continue;
+                    }
+
+                    ++pos;
+                    break;
+                }
+
+                value += aConnectionString[pos];
+            }
+
+            pos = aConnectionString.find( ';', pos );
+        }
+        else
+        {
+            size_t stop = aConnectionString.find( ';', pos );
+            value = boost::trim_copy( aConnectionString.substr( pos, stop - pos ) );
+            pos = stop;
+        }
+
+        if( boost::iequals( key, "DSN" ) )
+            return { SELECTOR::KIND::DSN, value };
+
+        if( boost::iequals( key, "FILEDSN" ) )
+            return { SELECTOR::KIND::FILE_DSN, value };
+
+        if( boost::iequals( key, "DRIVER" ) )
+            return { SELECTOR::KIND::DRIVER, value };
+
+        if( pos == std::string::npos )
+            break;
+
+        ++pos;
+    }
+
+    return {};
+}
+
+
+bool DATABASE_CONNECTION::NeedsDriverLock( const std::string& aDsn, const std::string& aConnectionString,
+                                           const DSN_LOOKUP& aLookup )
+{
+    // A driver that cannot be named is locked too, since it may be the Access driver
+    auto lockForDsn =
+            [&]( const std::string& aName )
+            {
+                std::optional<std::string> driver = aLookup( aName );
+
+                return !driver || driver->empty() || IsAccessDriver( *driver );
+            };
+
+    if( aConnectionString.empty() )
+        return lockForDsn( aDsn );
+
+    // ODBC honours the first DSN, FILEDSN or DRIVER keyword in the string
+    SELECTOR selector = FirstSelector( aConnectionString );
+
+    switch( selector.kind )
+    {
+    case SELECTOR::KIND::DRIVER: return selector.value.empty() || IsAccessDriver( selector.value );
+    case SELECTOR::KIND::DSN: return lockForDsn( selector.value );
+    case SELECTOR::KIND::FILE_DSN:
+    case SELECTOR::KIND::NONE: break;
+    }
+
+    return true;
+}
+
+
+bool DATABASE_CONNECTION::IsAccessDriver( const std::string& aDriverName )
+{
+    return aDriverName.starts_with( "Microsoft Access Driver" );
 }
 
 
@@ -213,6 +365,8 @@ bool DATABASE_CONNECTION::Connect()
     nanodbc::string user = fromUTF8( m_user );
     nanodbc::string pass = fromUTF8( m_pass );
     nanodbc::string cs   = fromUTF8( m_connectionString );
+
+    std::unique_lock<std::mutex> driverLock = accessDriverLock();
 
     try
     {
@@ -268,6 +422,8 @@ bool DATABASE_CONNECTION::Disconnect()
         wxLogTrace( traceDatabase, wxT( "Note: Disconnect() called without valid connection" ) );
         return false;
     }
+
+    std::unique_lock<std::mutex> driverLock = accessDriverLock();
 
     try
     {
