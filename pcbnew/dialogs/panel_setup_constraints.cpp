@@ -167,33 +167,31 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
 
-    applyValues( *m_BrdSettings );
-
-    std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR> errors =
-            m_BrdSettings->ValidateDesignRules( m_Frame->GetUserUnits() );
+    BOARD_DESIGN_SETTINGS                                temp( *m_BrdSettings );
+    std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR> errors = temp.ValidateDesignRules( m_Frame->GetUserUnits() );
 
     if( !errors.empty() )
     {
         const BOARD_DESIGN_SETTINGS::VALIDATION_ERROR& error = errors.front();
 
         const std::map<wxString, wxWindow*> fieldToControl = {
-            { wxS( "min_clearance" ), m_clearanceCtrl },
-            { wxS( "min_connection" ), m_MinConnCtrl },
-            { wxS( "min_track_width" ), m_TrackMinWidthCtrl },
-            { wxS( "min_via_annular_width" ), m_ViaMinAnnulusCtrl },
-            { wxS( "min_via_diameter" ), m_SetViasMinSizeCtrl },
+            { wxS( "min_clearance" ),             m_clearanceCtrl },
+            { wxS( "min_connection" ),            m_MinConnCtrl },
+            { wxS( "min_track_width" ),           m_TrackMinWidthCtrl },
+            { wxS( "min_via_annular_width" ),     m_ViaMinAnnulusCtrl },
+            { wxS( "min_via_diameter" ),          m_SetViasMinSizeCtrl },
             { wxS( "min_through_hole_diameter" ), m_MinDrillCtrl },
-            { wxS( "min_microvia_diameter" ), m_uviaMinSizeCtrl },
-            { wxS( "min_microvia_drill" ), m_uviaMinDrillCtrl },
-            { wxS( "min_hole_to_hole" ), m_SetHoleToHoleCtrl },
-            { wxS( "min_hole_clearance" ), m_HoleClearanceCtrl },
-            { wxS( "min_silk_clearance" ), m_silkClearanceCtrl },
-            { wxS( "min_groove_width" ), m_minGrooveWidthCtrl },
-            { wxS( "min_text_height" ), m_textHeightCtrl },
-            { wxS( "min_text_thickness" ), m_textThicknessCtrl },
+            { wxS( "min_microvia_diameter" ),     m_uviaMinSizeCtrl },
+            { wxS( "min_microvia_drill" ),        m_uviaMinDrillCtrl },
+            { wxS( "min_hole_to_hole" ),          m_SetHoleToHoleCtrl },
+            { wxS( "min_hole_clearance" ),        m_HoleClearanceCtrl },
+            { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl },
+            { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl },
+            { wxS( "min_text_height" ),           m_textHeightCtrl },
+            { wxS( "min_text_thickness" ),        m_textThicknessCtrl },
             { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl },
-            { wxS( "max_error" ), m_maxErrorCtrl },
-            { wxS( "min_resolved_spokes" ), m_minResolvedSpokeCountCtrl }
+            { wxS( "max_error" ),                 m_maxErrorCtrl },
+            { wxS( "min_resolved_spokes" ),       m_minResolvedSpokeCountCtrl }
         };
 
         wxWindow* control = nullptr;
@@ -205,6 +203,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
         return false;
     }
 
+    applyValues( *m_BrdSettings );
     return true;
 }
 
