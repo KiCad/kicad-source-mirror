@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-27 06:51+0000\n"
+"PO-Revision-Date: 2026-10-28 07:51+0000\n"
 "Last-Translator: Frank Sonnenberg "
 "<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
@@ -13892,7 +13892,7 @@ msgid ""
 "... and %zu more"
 msgstr ""
 "\n"
-"... und %zu weitere Dateien\n"
+"... und weitere %zu"
 
 #: common/widgets/filter_combobox.cpp:156
 #: eeschema/dialogs/panel_footprint_filters.cpp:554
@@ -23116,47 +23116,50 @@ msgstr "Schaltplandatei erfolgreich im neuesten Format gespeichert\n"
 #: eeschema/eeschema_jobs_handler.cpp:1602
 #: kicad/cli/command_project_downgrade.cpp:115
 #: pcbnew/pcbnew_jobs_handler.cpp:3419
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown target version '%s'. Valid targets: %s\n"
-msgstr "Unbekannter Parameter \"%s\" in \"%s\""
+msgstr "Unbekannte Zielversion \"%s\". Gültige Ziele: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1610 pcbnew/pcbnew_jobs_handler.cpp:3427
-#, fuzzy, c-format
+#, c-format
 msgid "The library folder '%s' does not exist.\n"
-msgstr "Der Bibliothekstabellenpfad \"%s\" existiert nicht"
+msgstr "Der Bibliotheksordner \"%s\" existiert nicht.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1628
 msgid "An output folder is required. Use --output."
-msgstr ""
+msgstr "Ein Ausgabeordner ist erforderlich. Verwenden Sie --output."
 
 #: eeschema/eeschema_jobs_handler.cpp:1664
-#, fuzzy
 msgid "Could not create the schematic output folder.\n"
-msgstr "Kann das Schaltplanbild nicht erzeugen"
+msgstr "Konnte den Schaltplanausgabeordner nicht erstellen.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1695
 #, c-format
 msgid "Cannot export: symbol library '%s' uses a feature %s cannot open.\n"
 msgstr ""
+"Export gescheitert: Symbolbibliothek \"%s\" verwendet ein Feature, das %s "
+"nicht öffnen kann.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1709
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error downgrading symbol libraries.\n"
 "%s"
 msgstr ""
-"Fehler beim Laden der Symbolbibliothek %s.\n"
-"\n"
-"%s\n"
+"Fehler beim Herabstufen der Symbolbibliotheken.\n"
+"%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1722 pcbnew/pcbnew_jobs_handler.cpp:3629
 msgid "Variants do not apply to a library downgrade.\n"
 msgstr ""
+"Varianten können nicht auf eine Bibliotheksherabstufung angewendet werden.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1735 pcbnew/pcbnew_jobs_handler.cpp:3643
 msgid ""
 "Cannot export: the libraries use features the target cannot represent.\n"
 msgstr ""
+"Export gescheitert: die Bibliotheken verwenden Features, die das Ziel nicht "
+"darstellen kann.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1742
 #: eeschema/eeschema_jobs_handler.cpp:2032
@@ -23164,100 +23167,104 @@ msgstr ""
 #: pcbnew/pcbnew_jobs_handler.cpp:3532 pcbnew/pcbnew_jobs_handler.cpp:3650
 msgid "Export would lose data. Re-run with --force to export anyway.\n"
 msgstr ""
+"Der Export würde Daten verlieren. Nochmals mit --force laufen lassen, um es "
+"trotzdem zu exportieren.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1786
-#, fuzzy
 msgid "Could not establish a project for the schematic\n"
-msgstr "Konnte kein Projekt für den Import anlegen\n"
+msgstr "Konnte keinen Schaltplan für das Projekt anlegen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1815
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot export: top-level schematic '%s' is missing.\n"
-msgstr "Kann das Schaltplanbild nicht erzeugen"
+msgstr "Export gescheitert: Top-Level Schaltplan \"%s\" fehlt.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1871
 #: eeschema/eeschema_jobs_handler.cpp:1907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot export: the schematic did not load completely.\n"
 "%s"
-msgstr "Kann das Schaltplanbild nicht erzeugen"
+msgstr ""
+"Export gescheitert: der Schaltplan wurde nicht vollständig geladen.\n"
+"%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1930
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic: %s\n"
-msgstr "Fehler beim Laden des Schaltplanes: %s"
+msgstr "Fehler beim Laden des Schaltplanes: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1961 pcbnew/pcbnew_jobs_handler.cpp:3434
 msgid "The target supports variants, so there is nothing to flatten.\n"
 msgstr ""
+"Das Ziel unterstützt Varianten, daher ist ein Verflachen nicht notwendig.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1968
-#, fuzzy, c-format
+#, c-format
 msgid "The schematic has no variant named '%s'.\n"
-msgstr "Der Schaltplan für diese Platine kann nicht gefunden werden."
+msgstr "Der Schaltplan hat keine \"%s\" genannte Variante.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1978
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot export selected variant '%s': %s"
-msgstr "Kann JSON-Zeile %d in \"%s\" nicht lesen: %s"
+msgstr "Kann ausgewählte Variante \"%s\" nicht exportieren: %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1992
-#, fuzzy
 msgid "Schematic variants"
-msgstr "Schaltplanvarianten:"
+msgstr "Schaltplanvarianten"
 
 #: eeschema/eeschema_jobs_handler.cpp:1992
-#, fuzzy
 msgid "The variant registry is removed."
-msgstr "Zu löschenden Variantennamen wählen:"
+msgstr "Die Varianten-Registry wird entfernt."
 
 #: eeschema/eeschema_jobs_handler.cpp:2007
 #: pcbnew/downgrade/board_downgrade.cpp:2572
-#, fuzzy
 msgid "Net chains"
 msgstr "Netzketten"
 
 #: eeschema/eeschema_jobs_handler.cpp:2008
 msgid "No equivalent in the target. Net chain grouping is removed."
-msgstr ""
+msgstr "Kein Äquivalent im Ziel. Netzkettengruppierung wird entfernt."
 
 #: eeschema/eeschema_jobs_handler.cpp:2025
 msgid ""
 "Cannot export: the schematic uses features the target cannot represent.\n"
 msgstr ""
+"Export gescheitert: der Schaltplan verwendet Features, die das Ziel nicht "
+"darstellen kann.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2059
 #: eeschema/eeschema_jobs_handler.cpp:2159
 #, c-format
 msgid "Cannot export: sheet '%s' lies outside the project folder.\n"
 msgstr ""
+"Export gescheitert: Schaltplanblatt \"%s\" liegt nicht im Projektordner.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2078
-#, fuzzy
 msgid "The library output path is not accessible.\n"
-msgstr "Symbolbibliothek existiert nicht oder ist nicht zugänglich\n"
+msgstr "Auf den Bibliotheksausgabepfad kann nicht zugegriffen werden.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2089
-#, fuzzy
 msgid "The schematic output path is not accessible.\n"
-msgstr "Schaltplandatei existiert nicht oder ist nicht zugänglich\n"
+msgstr "Auf den Schaltplanausgabepfad kann nicht zugegriffen werden.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2106
+#, fuzzy
 msgid ""
 "The copied library folder overlaps a schematic or project output path. "
 "Choose a different library folder.\n"
 msgstr ""
+"Der kopierte Bibliotheksordner überschneidet sich mit einem Schaltplan oder "
+"Projektausgabepfad. Wählen Sie einen anderen Bibliotheksordner.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2179
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create the output folder '%s'.\n"
-msgstr "Konnte Stückliste-Ausgabe \"%s\" nicht erstellen."
+msgstr "Konnte den Ausgabeordner \"%s\" nicht erstellen.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2193
-#, fuzzy
 msgid "Could not stage the schematic export."
-msgstr "Kann das Schaltplanbild nicht erzeugen"
+msgstr "Konnte den Schaltplanexport nicht bereitstellen."
 
 #: eeschema/eeschema_jobs_handler.cpp:2210 pcbnew/pcbnew_jobs_handler.cpp:3579
 #, c-format
@@ -23267,15 +23274,14 @@ msgid ""
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2217
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot export: could not verify '%s'.\n"
-msgstr "Kann Ordner \"%s\" nicht erstellen."
+msgstr "Export gescheitert: \"%s\" konnte nicht verifiziert werden.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2236
 #: eeschema/eeschema_jobs_handler.cpp:2244
-#, fuzzy
 msgid "Could not read the schematic project settings."
-msgstr "Konnte Projekt nicht erstellen: %s\n"
+msgstr "Konnte die Schaltplan-Projekteinstellungen nicht lesen."
 
 #: eeschema/eeschema_jobs_handler.cpp:2249
 #, fuzzy
@@ -23283,9 +23289,8 @@ msgid "The schematic project settings are invalid."
 msgstr "Der Schaltplan für diese Platine kann nicht gefunden werden."
 
 #: eeschema/eeschema_jobs_handler.cpp:2302
-#, fuzzy
 msgid "Could not stage the schematic project settings."
-msgstr "Konnte Projekt nicht erstellen: %s\n"
+msgstr "Konnte die Schaltplan-Projekteinstellungen nicht bereitstellen."
 
 #: eeschema/eeschema_jobs_handler.cpp:2310
 #, fuzzy
@@ -41027,23 +41032,18 @@ msgid "Archive Project Files"
 msgstr "Projektdateien archivieren"
 
 #: kicad/tools/kicad_manager_control.cpp:631
-#, fuzzy
 msgid "You have unsaved changes. Save them before exporting?"
 msgstr ""
-"Folgende Editoren enthalten ungespeicherte Änderungen: %s\n"
-"\n"
-"Sollen diese vor dem Commit gespeichert werden?"
+"Sie haben ungespeicherte Änderungen. Sollen diese vor dem Export gespeichert "
+"werden?"
 
 #: kicad/tools/kicad_manager_control.cpp:648
-#, fuzzy
 msgid "The schematic was not saved. Nothing was exported."
-msgstr ""
-"\n"
-"Der Schaltplan wird nicht aktualisiert."
+msgstr "Der Schaltplan wurde nicht gespeichert. Es wurde nichts exportiert."
 
 #: kicad/tools/kicad_manager_control.cpp:661
 msgid "The board was not saved. Nothing was exported."
-msgstr ""
+msgstr "Die Platine wurde nicht gespeichert. Es wurde nichts exportiert."
 
 #: kicad/tools/kicad_manager_control.cpp:676
 msgid ""
@@ -41058,9 +41058,9 @@ msgid ""
 msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:766
-#, fuzzy, c-format
+#, c-format
 msgid "Exported to '%s'."
-msgstr "\"%s\" exportiert."
+msgstr "Nach \"%s\" exportiert."
 
 #: kicad/tools/kicad_manager_control.cpp:825
 msgid "Save Project To"
