@@ -576,85 +576,87 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
         if( maxAge <= 0 )
             maxAge = 1;
 
-        std::shared_lock connGuard( m_cacheMutex );
-
-        if( m_conn && m_cachePopulated.load() )
         {
-            wxLogTrace( traceDatabase, wxT( "Initiating background refresh" ) );
+            std::shared_lock connGuard( m_cacheMutex );
 
-            try
+            if( m_conn && m_cachePopulated.load() )
             {
-                std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> tableResults;
-                bool querySuccess = true;
+                wxLogTrace( traceDatabase, wxT( "Initiating background refresh" ) );
 
-                for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
+                try
                 {
-                    m_conn->ClearCache( table.table );
+                    std::vector<std::pair<const DATABASE_LIB_TABLE*, std::vector<DATABASE_CONNECTION::ROW>>> tableResults;
+                    bool querySuccess = true;
 
-                    std::vector<DATABASE_CONNECTION::ROW> results;
-
-                    if( !m_conn->SelectAll( table.table, table.key_col, results ) )
+                    for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
                     {
-                        wxLogTrace( traceDatabase, wxT( "Background refresh: SelectAll failed for table %s" ),
-                                    table.table );
-                        querySuccess = false;
-                        break;
+                        m_conn->ClearCache( table.table );
+
+                        std::vector<DATABASE_CONNECTION::ROW> results;
+
+                        if( !m_conn->SelectAll( table.table, table.key_col, results ) )
+                        {
+                            wxLogTrace( traceDatabase, wxT( "Background refresh: SelectAll failed for table %s" ),
+                                        table.table );
+                            querySuccess = false;
+                            break;
+                        }
+
+                        tableResults.emplace_back( &table, std::move( results ) );
                     }
 
-                    tableResults.emplace_back( &table, std::move( results ) );
-                }
-
-                if( querySuccess )
-                {
-                    size_t signature = computeSignature( tableResults );
-
-                    bool dataChanged = false;
-
+                    if( querySuccess )
                     {
-                        // Upgrade to unique lock for cache mutation
-                        connGuard.unlock();
-                        std::unique_lock lock( m_cacheMutex );
+                        size_t signature = computeSignature( tableResults );
 
-                        if( signature == m_cacheSignature )
-                            m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
-                        else
-                            dataChanged = true;
-                    }
-
-                    if( dataChanged )
-                    {
-                        std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
-                        std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
-
-                        materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
-
-                        wxLogTrace( traceDatabase, wxT( "Background refresh: new data" ) );
+                        bool dataChanged = false;
 
                         {
+                            // Upgrade to unique lock for cache mutation
+                            connGuard.unlock();
                             std::unique_lock lock( m_cacheMutex );
 
-                            m_nameToSymbolcache = std::move( newSymbolCache );
-                            m_sanitizedNameMap = std::move( newSanitizedNameMap );
+                            if( signature == m_cacheSignature )
+                                m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
+                            else
+                                dataChanged = true;
+                        }
 
-                            m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
-                            m_cacheSignature = signature;
-                            m_cachePopulated = true;
-                            m_modifyHash++;
+                        if( dataChanged )
+                        {
+                            std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
+                            std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
+
+                            materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
+
+                            wxLogTrace( traceDatabase, wxT( "Background refresh: new data" ) );
+
+                            {
+                                std::unique_lock lock( m_cacheMutex );
+
+                                m_nameToSymbolcache = std::move( newSymbolCache );
+                                m_sanitizedNameMap = std::move( newSanitizedNameMap );
+
+                                m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
+                                m_cacheSignature = signature;
+                                m_cachePopulated = true;
+                                m_modifyHash++;
+                            }
+                        }
+                        else
+                        {
+                            wxLogTrace( traceDatabase, wxT( "Background refresh: no new data" ) );
                         }
                     }
-                    else
-                    {
-                        wxLogTrace( traceDatabase, wxT( "Background refresh: no new data" ) );
-                    }
                 }
-            }
-            catch( const IO_ERROR& e )
-            {
-                wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.What() );
-            }
-            catch( const std::exception& e )
-            {
-                wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.what() );
+                catch( const IO_ERROR& e )
+                {
+                    wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.What() );
+                }
+                catch( const std::exception& e )
+                {
+                    wxLogTrace( traceDatabase, wxT( "Background refresh failed: %s; cache preserved" ), e.what() );
+                }
             }
         }
 
@@ -735,6 +737,14 @@ void SCH_IO_DATABASE::ensureConnection()
 void SCH_IO_DATABASE::connect()
 {
     wxCHECK_RET( m_settings, "Call ensureSettings before connect()!" );
+
+    {
+        // A refresh pass keeps the lock shared while it reads, so a live connection must not ask for it exclusively
+        std::shared_lock connLock( m_cacheMutex );
+
+        if( m_conn && m_conn->IsConnected() )
+            return;
+    }
 
     {
         std::unique_lock connLock( m_cacheMutex );
