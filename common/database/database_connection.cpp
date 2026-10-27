@@ -19,6 +19,7 @@
  */
 
 #include <algorithm>
+#include <charconv>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>
@@ -42,6 +43,7 @@
 #endif
 
 #include <sql.h> // SQL_IDENTIFIER_QUOTE_CHAR
+#include <sqlext.h> // SQL_LONGVARCHAR
 
 #include <wx/log.h>
 
@@ -339,7 +341,8 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
                 if( requiredLower.count( columnKeyLower )
                     || optionalLower.count( columnKeyLower ) )
                 {
-                    m_columnCache[key][columnKey] = columns.data_type();
+                    m_columnCache[key][columnKey] = { columns.data_type(), columns.column_size(),
+                                                      columns.decimal_digits() };
                     columnsInCatalog.insert( columnKeyLower );
                 }
             }
@@ -357,7 +360,7 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
                                      "'%s', adding anyway" ),
                                 requestedCol, key );
 
-                    m_columnCache[key][requestedCol] = SQL_VARCHAR;
+                    m_columnCache[key][requestedCol] = { SQL_VARCHAR, 0, 0 };
                 }
             }
 
@@ -470,7 +473,7 @@ std::string DATABASE_CONNECTION::columnsFor( const std::string& aTable )
 
     std::string ret;
 
-    for( const auto& [ columnName, columnType ] : m_columnCache[aTable] )
+    for( const auto& [columnName, columnInfo] : m_columnCache[aTable] )
         ret += quoted( columnName ) + ", ";
 
     // strip tailing ', '
@@ -478,6 +481,64 @@ std::string DATABASE_CONNECTION::columnsFor( const std::string& aTable )
 
     return ret;
 }
+
+// Fallback sizes for when the catalog reports none, and the longest character size worth declaring
+static constexpr unsigned long DEFAULT_KEY_CHAR_SIZE = 255;
+static constexpr unsigned long MAX_KEY_CHAR_SIZE = 8000;
+static constexpr unsigned long DEFAULT_KEY_INTEGER_SIZE = 19; // nanodbc asserts on a zero size when binding numbers
+static constexpr unsigned long DEFAULT_KEY_DECIMAL_SIZE = 38; // widest precision ODBC drivers commonly allow
+
+
+DATABASE_CONNECTION::KEY_PARAMETER DATABASE_CONNECTION::DescribeKeyParameter( int aColumnType, long aColumnSize,
+                                                                              short              aColumnScale,
+                                                                              const std::string& aKey )
+{
+    const short type = static_cast<short>( aColumnType );
+
+    // Catalogs report a negative or NULL size for types where it does not apply
+    const unsigned long columnSize = aColumnSize > 0 ? static_cast<unsigned long>( aColumnSize ) : 0;
+
+    switch( type )
+    {
+    case SQL_TINYINT:
+    case SQL_SMALLINT:
+    case SQL_INTEGER:
+    case SQL_BIGINT:
+    {
+        int64_t     value = 0;
+        const char* end = aKey.data() + aKey.size();
+        auto        parsed = std::from_chars( aKey.data(), end, value );
+
+        // A key that is not a whole number cannot match an integer column, so the driver is left to reject it
+        if( parsed.ec == std::errc() && parsed.ptr == end )
+            return { type, columnSize ? columnSize : DEFAULT_KEY_INTEGER_SIZE, 0, true, value };
+
+        break;
+    }
+
+    case SQL_DECIMAL:
+    case SQL_NUMERIC: return { type, columnSize ? columnSize : DEFAULT_KEY_DECIMAL_SIZE, aColumnScale, false, 0 };
+
+    case SQL_CHAR:
+    case SQL_VARCHAR:
+    case SQL_LONGVARCHAR:
+    case SQL_WCHAR:
+    case SQL_WVARCHAR:
+    case SQL_WLONGVARCHAR:
+    {
+        const bool          wide = type == SQL_WCHAR || type == SQL_WVARCHAR || type == SQL_WLONGVARCHAR;
+        const unsigned long size = columnSize ? std::min( columnSize, MAX_KEY_CHAR_SIZE ) : DEFAULT_KEY_CHAR_SIZE;
+
+        return { static_cast<short>( wide ? SQL_WVARCHAR : SQL_VARCHAR ),
+                 std::max( size, static_cast<unsigned long>( aKey.size() ) ), 0, false, 0 };
+    }
+
+    default: break;
+    }
+
+    return { SQL_VARCHAR, DEFAULT_KEY_CHAR_SIZE, 0, false, 0 };
+}
+
 
 //next step, make SelectOne take from the SelectAll cache if the SelectOne cache is missing.
 //To do this, need to build a map of PK->ROW for the cache result.
@@ -551,6 +612,7 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
     }
 
     const std::string& columnName = columnCacheIter->first;
+    const COLUMN_INFO& columnInfo = columnCacheIter->second;
 
     std::string cacheKey = fmt::format( "{}{}{}", tableName, columnName, aWhere.second );
 
@@ -577,12 +639,18 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         return false;
     }
 
-    // Pre-describe parameter as VARCHAR to avoid SQLDescribeParam call. Some ODBC drivers
-    // (Microsoft Access, Excel, CSV) don't implement SQLDescribeParam.
+    // Pre-describe the parameter to avoid SQLDescribeParam, which some ODBC drivers (Microsoft Access,
+    // Excel, CSV) don't implement
+    const KEY_PARAMETER key = DescribeKeyParameter( columnInfo.type, columnInfo.size, columnInfo.scale, aWhere.second );
+
     try
     {
-        statement.describe_parameters( { 0 }, { SQL_VARCHAR }, { 255 }, { 0 } );
-        statement.bind( 0, aWhere.second.c_str() );
+        statement.describe_parameters( { 0 }, { key.type }, { key.size }, { key.scale } );
+
+        if( key.asInteger )
+            statement.bind( 0, &key.integerValue );
+        else
+            statement.bind( 0, aWhere.second.c_str() );
     }
     catch( std::exception& e )
     {

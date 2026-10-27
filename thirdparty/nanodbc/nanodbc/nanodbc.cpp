@@ -4895,8 +4895,8 @@ string catalog::columns::type_name() const
 
 long catalog::columns::column_size() const
 {
-    // COLUMN_SIZE
-    return result_.get<long>(6);
+    // COLUMN_SIZE might be NULL
+    return result_.get<long>( 6, 0 );
 }
 
 long catalog::columns::buffer_length() const

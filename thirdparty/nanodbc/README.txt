@@ -16,3 +16,6 @@ the terminator, so subtracting one more dropped the last character ("08001" beca
 
 Note: The SQL_LOGIN_TIMEOUT calls in connect() ignore failures whose first diagnostic record
 is HYC00 or HY092, allowing connection attempts when login timeout support is unavailable.
+
+Note: catalog::columns::column_size() returns 0 when COLUMN_SIZE is NULL, as decimal_digits() already
+does, instead of throwing null_access_error.

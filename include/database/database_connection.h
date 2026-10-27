@@ -22,6 +22,7 @@
 #define KICAD_DATABASE_CONNECTION_H
 
 #include <any>
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -161,6 +162,28 @@ public:
     /// Classifies a driver error from its SQLSTATE, falling back to its text since drivers disagree on states
     static FAILURE ClassifyFailure( const std::string& aState, const std::string& aMessage );
 
+    /// How SelectOne describes its key parameter to the driver
+    struct KEY_PARAMETER
+    {
+        short         type = 0;          ///< ODBC SQL data type
+        unsigned long size = 0;          ///< Column size or precision
+        short         scale = 0;         ///< Digits right of the decimal point
+        bool          asInteger = false; ///< Bind integerValue as a 64-bit integer instead of the key text
+        int64_t       integerValue = 0;  ///< The key as a number, set when asInteger is true
+    };
+
+    /**
+     * Chooses the parameter description for a lookup key from its column's cached ODBC description.
+     * Strict drivers (Microsoft Access) reject a key whose type does not match the column.
+     *
+     * @param aColumnType is the ODBC SQL data type of the key column
+     * @param aColumnSize is its character length or numeric precision, zero or negative when unknown
+     * @param aColumnScale is its number of digits right of the decimal point
+     * @param aKey is the key text
+     */
+    static KEY_PARAMETER DescribeKeyParameter( int aColumnType, long aColumnSize, short aColumnScale,
+                                               const std::string& aKey );
+
 private:
     void init();
 
@@ -189,8 +212,16 @@ private:
 
     std::map<std::string, std::string> m_tables;
 
-    /// Map of table -> map of column name -> data type
-    std::map<std::string, std::map<std::string, int>> m_columnCache;
+    /// ODBC description of a column, so a lookup key can be bound with the type the driver expects
+    struct COLUMN_INFO
+    {
+        int           type = 0;  ///< SQL data type
+        long          size = 0;  ///< Character length or numeric precision, zero or negative when unknown
+        short         scale = 0; ///< Digits right of the decimal point
+    };
+
+    /// Map of table -> map of column name -> column description
+    std::map<std::string, std::map<std::string, COLUMN_INFO>> m_columnCache;
 
     long m_timeout;
 
