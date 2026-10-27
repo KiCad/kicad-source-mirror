@@ -395,6 +395,7 @@ UNIT_BINDER::RANGE_BOUND UNIT_BINDER::ConvertRangeBound( const EDA_IU_SCALE& aIu
     case EDA_DATA_TYPE::AREA:     conversions = 2; break;
     case EDA_DATA_TYPE::VOLUME:   conversions = 3; break;
     case EDA_DATA_TYPE::UNITLESS: conversions = 0; break;
+    case EDA_DATA_TYPE::ANGLE:    conversions = 0; break;
     default:                      conversions = 1; break;
     }
 

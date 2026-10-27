@@ -118,6 +118,7 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
     else if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) != nullptr )
     {
         m_unitBinder->SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
+        m_unitBinder->SetDataType( EDA_DATA_TYPE::ANGLE );
         m_unitBinder->SetUnits( EDA_UNITS::DEGREES );
     }
     else if( dynamic_cast<PGPROPERTY_TIME*>( aProperty ) != nullptr )

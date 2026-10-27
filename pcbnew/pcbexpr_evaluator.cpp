@@ -866,6 +866,9 @@ const std::vector<wxString>& PCBEXPR_UNIT_RESOLVER::GetSupportedUnits() const
 
 wxString PCBEXPR_UNIT_RESOLVER::GetSupportedUnitsMessage() const
 {
+    if( m_impliedDegrees )
+        return wxEmptyString;
+
     return _( "must be mm, in, mil, deg, fs, or ps" );
 }
 

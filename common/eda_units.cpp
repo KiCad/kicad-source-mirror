@@ -164,6 +164,7 @@ wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
     case EDA_DATA_TYPE::VOLUME:      label += wxT( "³" );       break;
     case EDA_DATA_TYPE::AREA:        label += wxT( "²" );       break;
     case EDA_DATA_TYPE::DISTANCE:                               break;
+    case EDA_DATA_TYPE::ANGLE:                                  break;
     case EDA_DATA_TYPE::TIME:                                   break;
     case EDA_DATA_TYPE::LENGTH_DELAY:                           break;
     default: UNIMPLEMENTED_FOR( wxS( "Unknown measurement" ) ); break;
@@ -236,6 +237,7 @@ double EDA_UNIT_UTILS::GetScaleForInternalUnitType( const EDA_IU_SCALE& aIuScale
     case EDA_DATA_TYPE::TIME:         return aIuScale.IU_PER_PS;
     case EDA_DATA_TYPE::LENGTH_DELAY: return aIuScale.IU_PER_PS_PER_MM;
     case EDA_DATA_TYPE::UNITLESS:     return 1.0;
+    case EDA_DATA_TYPE::ANGLE:        return 1.0;
     default:                          return aIuScale.IU_PER_MM;
     }
 }
@@ -334,6 +336,7 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
         break;
 
     case EDA_DATA_TYPE::UNITLESS:
+    case EDA_DATA_TYPE::ANGLE:
         break;
 
     case EDA_DATA_TYPE::TIME:
@@ -428,6 +431,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
         break;
 
     case EDA_DATA_TYPE::UNITLESS:
+    case EDA_DATA_TYPE::ANGLE:
         break;
 
     case EDA_DATA_TYPE::TIME:
@@ -691,6 +695,7 @@ double EDA_UNIT_UTILS::UI::DoubleValueFromString( const EDA_IU_SCALE& aIuScale, 
         break;
 
     case EDA_DATA_TYPE::UNITLESS:
+    case EDA_DATA_TYPE::ANGLE:
         break;
 
     case EDA_DATA_TYPE::TIME:

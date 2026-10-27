@@ -86,23 +86,24 @@ void PL_ITEM_PROPERTIES::SetItalic( bool aValue )
 // wxPropertyGrid supplies integer values as longs; accept conversion before checking the range.
 static PROPERTY_VALIDATOR_FN rangeValidator( int aMin, int aMax, bool aDistance = true )
 {
-    return [=]( const wxAny&& aValue, EDA_ITEM* ) -> VALIDATOR_RESULT
-    {
-        int value;
+    return
+            [=]( const wxAny&& aValue, EDA_ITEM* ) -> VALIDATOR_RESULT
+            {
+                int value;
 
-        if( !aValue.GetAs( &value ) )
-            return std::make_unique<VALIDATION_ERROR_MSG>( _( "Enter an integer value." ) );
+                if( !aValue.GetAs( &value ) )
+                    return std::make_unique<VALIDATION_ERROR_MSG>( _( "Enter an integer value." ) );
 
-        EDA_DATA_TYPE type = aDistance ? EDA_DATA_TYPE::DISTANCE : EDA_DATA_TYPE::UNITLESS;
+                EDA_DATA_TYPE type = aDistance ? EDA_DATA_TYPE::DISTANCE : EDA_DATA_TYPE::UNITLESS;
 
-        if( value < aMin )
-            return std::make_unique<VALIDATION_ERROR_TOO_SMALL<int>>( value, aMin, type );
+                if( value < aMin )
+                    return std::make_unique<VALIDATION_ERROR_TOO_SMALL<int>>( value, aMin, type );
 
-        if( value > aMax )
-            return std::make_unique<VALIDATION_ERROR_TOO_LARGE<int>>( value, aMax, type );
+                if( value > aMax )
+                    return std::make_unique<VALIDATION_ERROR_TOO_LARGE<int>>( value, aMax, type );
 
-        return std::nullopt;
-    };
+                return std::nullopt;
+            };
 }
 
 
@@ -144,27 +145,31 @@ static struct PL_PROPERTIES_DESC
                     .Map( GR_TEXT_V_ALIGN_BOTTOM, _HKI( "Bottom" ) );
         }
 
-        auto isText = []( INSPECTABLE* aItem )
-        {
-            return static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType() == DS_DATA_ITEM::DS_TEXT;
-        };
+        auto isText =
+                []( INSPECTABLE* aItem )
+                {
+                    return static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType() == DS_DATA_ITEM::DS_TEXT;
+                };
 
-        auto hasEnd = []( INSPECTABLE* aItem )
-        {
-            auto type = static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType();
-            return type == DS_DATA_ITEM::DS_SEGMENT || type == DS_DATA_ITEM::DS_RECT;
-        };
+        auto hasEnd =
+                []( INSPECTABLE* aItem )
+                {
+                    auto type = static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType();
+                    return type == DS_DATA_ITEM::DS_SEGMENT || type == DS_DATA_ITEM::DS_RECT;
+                };
 
-        auto hasRotation = []( INSPECTABLE* aItem )
-        {
-            auto type = static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType();
-            return type == DS_DATA_ITEM::DS_TEXT || type == DS_DATA_ITEM::DS_POLYPOLYGON;
-        };
+        auto hasRotation =
+                []( INSPECTABLE* aItem )
+                {
+                    auto type = static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType();
+                    return type == DS_DATA_ITEM::DS_TEXT || type == DS_DATA_ITEM::DS_POLYPOLYGON;
+                };
 
-        auto isBitmap = []( INSPECTABLE* aItem )
-        {
-            return static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType() == DS_DATA_ITEM::DS_BITMAP;
-        };
+        auto isBitmap =
+                []( INSPECTABLE* aItem )
+                {
+                    return static_cast<PL_ITEM_PROPERTIES*>( aItem )->GetItem()->GetType() == DS_DATA_ITEM::DS_BITMAP;
+                };
 
         mgr.AddProperty( new PROPERTY<PL_ITEM_PROPERTIES, wxString>( _HKI( "Comment" ), &PL_ITEM_PROPERTIES::SetComment,
                                                                      &PL_ITEM_PROPERTIES::GetComment ) );

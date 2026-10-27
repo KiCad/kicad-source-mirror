@@ -611,11 +611,19 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
     bool ratio = c.m_Type == HOLE_ASPECT_RATIO_CONSTRAINT;
 
-    bool unitless = ratio || c.m_Type == VIA_COUNT_CONSTRAINT || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
-                    || c.m_Type == MICROVIA_STACK_DEPTH_CONSTRAINT || c.m_Type == TRACK_ANGLE_CONSTRAINT
-                    || c.m_Type == VIA_DANGLING_CONSTRAINT || c.m_Type == BRIDGED_MASK_CONSTRAINT;
+    bool unitless = ratio
+                    || c.m_Type == VIA_COUNT_CONSTRAINT
+                    || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
+                    || c.m_Type == MICROVIA_STACK_DEPTH_CONSTRAINT
+                    || c.m_Type == VIA_DANGLING_CONSTRAINT
+                    || c.m_Type == BRIDGED_MASK_CONSTRAINT;
 
-    allowsTimeDomain = c.m_Type == LENGTH_CONSTRAINT || c.m_Type == NET_CHAIN_LENGTH_CONSTRAINT
+    // Because previous versions allowed non-united values (in fact, required them), we have to interpret
+    // a track angle constraint value with no units as degrees.
+    bool impliedDegrees = c.m_Type == TRACK_ANGLE_CONSTRAINT;
+
+    allowsTimeDomain = c.m_Type == LENGTH_CONSTRAINT
+                       || c.m_Type == NET_CHAIN_LENGTH_CONSTRAINT
                        || c.m_Type == NET_CHAIN_STUB_LENGTH_CONSTRAINT
                        || c.m_Type == SKEW_CONSTRAINT;
 
@@ -809,7 +817,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( (int) offset, expr, value, units, unitless, ratio );
+            parseValueWithUnits( (int) offset, expr, value, units, unitless, ratio, impliedDegrees );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -875,7 +883,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
 
 void DRC_RULES_PARSER::parseValueWithUnits( int aOffset, const wxString& aExpr, int& aResult, EDA_UNITS& aUnits,
-                                            bool aUnitless, bool aRatio )
+                                            bool aUnitless, bool aRatio, bool aImpliedDegrees )
 {
     aResult = 0.0;
     aUnits = EDA_UNITS::UNSCALED;
@@ -906,7 +914,7 @@ void DRC_RULES_PARSER::parseValueWithUnits( int aOffset, const wxString& aExpr, 
             };
 
     PCBEXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNITLESS_RESOLVER()
-                                           : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER() );
+                                           : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER( aImpliedDegrees ) );
     evaluator.SetErrorCallback( errorHandler );
 
     if( evaluator.Evaluate( aExpr ) )

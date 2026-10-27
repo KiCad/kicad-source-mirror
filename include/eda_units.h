@@ -37,7 +37,8 @@ enum class EDA_DATA_TYPE
     VOLUME       = 2,
     UNITLESS     = 3,
     TIME         = 4,
-    LENGTH_DELAY = 5
+    LENGTH_DELAY = 5,
+    ANGLE        = 6        // Angles are unscalled, but not unitless
 };
 
 enum class EDA_UNITS
@@ -89,8 +90,7 @@ namespace EDA_UNIT_UTILS
      * @param aType DISTANCE, AREA, or VOLUME.
      * @return The human readable units string with appropriate separators.
      */
-    KICOMMON_API wxString GetText( EDA_UNITS aUnits,
-                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+    KICOMMON_API wxString GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
      * Get the units string for a given units type.
@@ -101,8 +101,7 @@ namespace EDA_UNIT_UTILS
      * @param aType DISTANCE, AREA, or VOLUME
      * @return The human readable units string.
      */
-    KICOMMON_API wxString GetLabel( EDA_UNITS     aUnits,
-                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+    KICOMMON_API wxString GetLabel( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
      * Convert \a aAngle from board units to a string appropriate for writing to file.
@@ -131,8 +130,7 @@ namespace EDA_UNIT_UTILS
      */
     KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue,
                                                   EDA_DATA_TYPE aDataType = EDA_DATA_TYPE::DISTANCE );
-    KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
-                                                  const VECTOR2I&     aPoint );
+    KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const VECTOR2I& aPoint );
 
     /**
      * Returns the scaling parameter for the given units data type
@@ -152,8 +150,7 @@ namespace EDA_UNIT_UTILS
      * @param aOut is the output reference.
      * @return true if the parsing was successful.
      */
-    KICOMMON_API bool ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
-                                          int& aOut );
+    KICOMMON_API bool ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale, int& aOut );
 
     /**
      * Converts \a aInput string to internal units vector when reading from a file.
@@ -185,8 +182,7 @@ namespace EDA_UNIT_UTILS
          * @param aValue The value in internal units to convert.
          * @return The converted value, in double.
          */
-        KICOMMON_API double ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
-                                        double aValue );
+        KICOMMON_API double ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
 
         /**
          * Return the string from \a aValue according to \a aUnits (inch, mm ...) for display.
@@ -203,8 +199,7 @@ namespace EDA_UNIT_UTILS
          * @return A wxString object containing value and optionally the symbol unit
          *         (like 2.000 mm).
          */
-        KICOMMON_API wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                               double aValue,
+        KICOMMON_API wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue,
                                                bool aAddUnitsText = false,
                                                EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
@@ -238,15 +233,13 @@ namespace EDA_UNIT_UTILS
         KICOMMON_API wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel = true );
 
 
-        KICOMMON_API wxString MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale,
-                                                        EDA_UNITS aUnits,
+        KICOMMON_API wxString MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                         const MINOPTMAX<int>& aValue );
         /**
          * Return in internal units the value \a aValue given in a real unit such as "in", "mm",
          * or "deg".
          */
-        KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
-                                          double aValue );
+        KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
 
 
         /**
