@@ -1682,6 +1682,8 @@ const BOX2I PAD::GetBoundingBox() const
 // Thermal spokes are built on the bounding box, so we must have a layer-specific version
 const BOX2I PAD::GetBoundingBox( PCB_LAYER_ID aLayer ) const
 {
+    std::lock_guard<std::mutex> RAII_lock( m_dataMutex );
+
     return buildEffectiveShape( aLayer ).BBox();
 }
 
