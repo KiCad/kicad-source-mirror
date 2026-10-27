@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:38+0300\n"
-"PO-Revision-Date: 2026-10-20 22:34+0000\n"
+"PO-Revision-Date: 2026-10-27 13:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -15988,12 +15988,11 @@ msgid "Plot Current Page"
 msgstr "Traccia pagina corrente"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:90
-#, fuzzy
 msgid ""
 "Target file for the plot. Can be absolute or relative to the schematic main "
 "file location."
 msgstr ""
-"Percorso di destinazione per i file di tracciatura. Può essere assuluto o "
+"File di destinazione per il grafico. Può essere un percorso assoluto oppure "
 "relativo alla posizione del file principale dello schema."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:211
