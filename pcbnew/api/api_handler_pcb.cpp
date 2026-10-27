@@ -1027,37 +1027,31 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleSetBoardDesignRu
         newSettings.m_FillVias = viaProtection.fill();
     }
 
-    if( rules.severities_size() > 0 )
-    {
-        newSettings.m_DRCSeverities.clear();
+    newSettings.m_DRCSeverities.clear();
 
-        for( const kiapi::board::DrcSeveritySetting& severitySetting : rules.severities() )
+    for( const kiapi::board::DrcSeveritySetting& severitySetting : rules.severities() )
+    {
+        PCB_DRC_CODE ruleType =
+                FromProtoEnum<PCB_DRC_CODE, kiapi::board::DrcErrorType>( severitySetting.rule_type() );
+
+        const std::unordered_set<SEVERITY> permitted( { RPT_SEVERITY_ERROR, RPT_SEVERITY_WARNING, RPT_SEVERITY_IGNORE } );
+        SEVERITY setting = FromProtoEnum<SEVERITY, kiapi::common::types::RuleSeverity>( severitySetting.severity() );
+
+        if( !permitted.contains( setting ) )
         {
-            PCB_DRC_CODE ruleType =
-                    FromProtoEnum<PCB_DRC_CODE, kiapi::board::DrcErrorType>( severitySetting.rule_type() );
-
-            const std::unordered_set<SEVERITY> permitted( { RPT_SEVERITY_ERROR, RPT_SEVERITY_WARNING, RPT_SEVERITY_IGNORE } );
-            SEVERITY setting = FromProtoEnum<SEVERITY, kiapi::common::types::RuleSeverity>( severitySetting.severity() );
-
-            if( !permitted.contains( setting ) )
-            {
-                ApiResponseStatus e;
-                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                e.set_error_message( fmt::format( "DRC severity must be error, warning, or ignore" ) );
-                return tl::unexpected( e );
-            }
-
-            newSettings.m_DRCSeverities[ruleType] = setting;
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "DRC severity must be error, warning, or ignore" ) );
+            return tl::unexpected( e );
         }
+
+        newSettings.m_DRCSeverities[ruleType] = setting;
     }
 
-    if( rules.exclusions_size() > 0 )
-    {
-        newSettings.m_DrcExclusions.clear();
+    newSettings.m_DrcExclusions.clear();
 
-        for( const kiapi::board::DrcExclusion& exclusion : rules.exclusions() )
-            newSettings.m_DrcExclusions.insert( DRC_EXCLUSION::FromProto( exclusion ) );
-    }
+    for( const kiapi::board::DrcExclusion& exclusion : rules.exclusions() )
+        newSettings.m_DrcExclusions.insert( DRC_EXCLUSION::FromProto( exclusion ) );
 
     std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR> errors = newSettings.ValidateDesignRules();
 
