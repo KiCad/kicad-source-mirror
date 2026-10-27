@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-27 06:51+0000\n"
+"PO-Revision-Date: 2026-10-28 07:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -12031,40 +12031,35 @@ msgid "The target uses its default calculation frequency."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:1093
-#, fuzzy
 msgid "Tuning profile solder mask modelling"
-msgstr "Il profilo di regolazione deve avere un nome"
+msgstr "Ottimizzazione del profilo di modellazione della maschera di saldatura"
 
 #: common/project/project_file_downgrade.cpp:1094
-#, fuzzy
 msgid "The target cannot include solder mask in the calculation."
-msgstr "La libreria non è inclusa nella configurazione corrente."
+msgstr "L'obiettivo non può includere la maschera di saldatura nel calcolo."
 
 #: common/project/project_file_downgrade.cpp:1104
-#, fuzzy
 msgid "Net chain bridge propagation delay"
-msgstr "Propagazione via"
+msgstr "Ritardo di propagazione della catena di net"
 
 #: common/project/project_file_downgrade.cpp:1105
 msgid "The target cannot model delay across net chain bridges."
 msgstr ""
 
 #: common/project/project_file_downgrade.cpp:1119
-#, fuzzy
 msgid "Time-domain tuning profiles"
-msgstr "Profilo regolazione mancante"
+msgstr "Profili di regolazione nel dominio del tempo"
 
 #: common/project/project_file_downgrade.cpp:1120
-#, fuzzy
 msgid ""
 "Removed saved profiles or netclass profile selections from the project file."
-msgstr "Rimuovi questo foglio di livello superiore dal progetto"
+msgstr ""
+"Rimossi dal file di progetto i profili salvati o le selezioni di profili di "
+"netclass."
 
 #: common/project/project_file_downgrade.cpp:1137
-#, fuzzy
 msgid "Component class assignment rules"
-msgstr ""
-"Impossibile caricare le regole di assegnazione della classe del componente"
+msgstr "Regole di assegnazione delle classi di componenti"
 
 #: common/properties/pg_editors.cpp:642
 #: common/widgets/grid_text_button_helpers.cpp:301
@@ -13872,18 +13867,18 @@ msgid "Close All Tabs"
 msgstr "Chiudi tutte le schede"
 
 #: common/widgets/field_warning_icon.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid " (%zu times)"
-msgstr " (%zu occorrenze)"
+msgstr " (%zu volte)"
 
 #: common/widgets/field_warning_icon.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "... and %zu more"
 msgstr ""
 "\n"
-"... e %zu altri file\n"
+"... e %zu ulteriori"
 
 #: common/widgets/filter_combobox.cpp:156
 #: eeschema/dialogs/panel_footprint_filters.cpp:554
@@ -14134,14 +14129,14 @@ msgid "Restore Defaults"
 msgstr "Ripristina predefiniti"
 
 #: common/widgets/widget_hotkey_list.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'.  Both bindings will be "
 "kept, but only one will run per key press.  Continue?"
 msgstr ""
-"'%s' è già assegnato a '%s' nella sezione '%s'. Entrambe le associazioni "
-"vengono mantenute, ma ne viene eseguita solo una per ogni pressione del "
-"tasto. Continuare?"
+"'%s' già assegnato a '%s' nella sezione '%s'.  Entrambe le associazioni "
+"vengono mantenute, ma ne viene eseguita solo una per ogni pressione di "
+"tasto.  Continuare?"
 
 #: common/widgets/widget_hotkey_list.cpp:526
 msgid "Hotkey conflict"
@@ -14320,9 +14315,8 @@ msgid "DipTrace files"
 msgstr "File DipTrace"
 
 #: common/wildcards_and_files_ext.cpp:368
-#, fuzzy
 msgid "Easy-PC / DesignSpark PCB files"
-msgstr "File C.S. Altium Designer"
+msgstr "File Easy-PC / DesignSpark PCB"
 
 #: common/wildcards_and_files_ext.cpp:374
 #: eeschema/sch_io/orcad/sch_io_orcad.h:73
@@ -14433,9 +14427,8 @@ msgid "SPICE netlist file"
 msgstr "File netlist SPICE"
 
 #: common/wildcards_and_files_ext.cpp:539
-#, fuzzy
 msgid "SPICE subcircuit model file"
-msgstr "Problema modello SPICE"
+msgstr "File di modello di sottocircuito SPICE"
 
 #: common/wildcards_and_files_ext.cpp:545
 msgid "CadStar netlist file"
@@ -15890,9 +15883,8 @@ msgid "Re-detect potential net chains from the schematic"
 msgstr "Rileva nuovamente le potenziali catene di net dallo schema"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:103
-#, fuzzy
 msgid "(no nickname)"
-msgstr "Denominatore generatore:"
+msgstr "(no denom.re)"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:114
 msgid "The server rejected the user name or password."
@@ -15918,14 +15910,12 @@ msgid "There is no ODBC data source named '%s'."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:129
-#, fuzzy
 msgid "The ODBC driver for this data source is not installed."
-msgstr "Il file KiCad di supporto per questa lingua non è installato."
+msgstr "Il driver ODBC per questa origine dati non è installato."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:135
-#, fuzzy
 msgid "Could not connect to the database."
-msgstr "Impossibile connettersi con il remote: %s"
+msgstr "Impossibile connettersi al database."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:152
 #: eeschema/lib_symbol.cpp:3291 eeschema/symbol_editor/symbol_editor.cpp:1859
@@ -15934,39 +15924,33 @@ msgid "Datasheet"
 msgstr "Specifiche"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:152
-#, fuzzy
 msgid "data sheet"
-msgstr "Specifiche"
+msgstr "foglio specifiche"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:219
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:220
-#, fuzzy
 msgid "key"
-msgstr "Chiave"
+msgstr "chiave"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:220
-#, fuzzy
 msgid "id"
-msgstr "Misto"
+msgstr "id"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:222
-#, fuzzy
 msgid "symbols"
-msgstr "simbolo"
+msgstr "simboli"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:222
 msgid "symbol"
 msgstr "simbolo"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:222
-#, fuzzy
 msgid "sym"
-msgstr "simbolo"
+msgstr "sim"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:224
-#, fuzzy
 msgid "footprints"
-msgstr "impronta"
+msgstr "impronte"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:224
 #: pcbnew/drc/drc_engine.cpp:2166
@@ -15974,33 +15958,29 @@ msgid "footprint"
 msgstr "impronta"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:224
-#, fuzzy
 msgid "fp"
-msgstr "f"
+msgstr "im"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:225
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:226
-#, fuzzy
 msgid "pin map"
-msgstr "Aggiungi mappa pin"
+msgstr "mappa pin"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:226
 msgid "pins"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:228
-#, fuzzy
 msgid "description"
-msgstr "Descrizione"
+msgstr "descrizione"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:228
 msgid "desc"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:230
-#, fuzzy
 msgid "keywords"
-msgstr "Parole chiave"
+msgstr "parole chiave"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:230
 msgid "tags"
@@ -16008,27 +15988,23 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:232
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:233
-#, fuzzy
 msgid "footprint filters"
-msgstr "Filtri impronte"
+msgstr "filtri impronte"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:233
-#, fuzzy
 msgid "fp filters"
-msgstr "File zip"
+msgstr "filtri im"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:235
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:236
 #: pcbnew/footprint.cpp:2694
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1636
-#, fuzzy
 msgid "exclude from simulation"
-msgstr "Escludi dalla simulazione"
+msgstr "escludi dalla simulazione"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:236
-#, fuzzy
 msgid "exclude from sim"
-msgstr "Escludi dalla simulazione"
+msgstr "escludi dalla sim"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:238
 #: pcbnew/footprint.cpp:2691
@@ -16037,9 +16013,8 @@ msgid "exclude from BOM"
 msgstr "escludi dalla DIBA"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:240
-#, fuzzy
 msgid "exclude from board"
-msgstr "Escludi dalla scheda"
+msgstr "escludi dalla scheda"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:320
 #, c-format
@@ -16053,17 +16028,15 @@ msgid "${CWD} is replaced by %s"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:330
-#, fuzzy
 msgid "This file could not be read and is shown read-only."
-msgstr "Non è stato possibile leggere il file OrCAD."
+msgstr "Impossibile leggere il file, quindi mostrato in sola lettura."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:334
-#, fuzzy
 msgid ""
 "This file was written by a newer version of KiCad and is shown read-only."
 msgstr ""
-"Questo file è stato creato con una precedente versione di KiCad. Verrà "
-"convertito al nuovo formato al salvataggio."
+"Questo file è stato creato con una versione più recente di KiCad e viene "
+"visualizzato in modalità sola lettura."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:339
 msgid ""
@@ -16076,38 +16049,33 @@ msgid "Database column the field reads its value from"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:372
-#, fuzzy
 msgid "Name of the symbol field"
-msgstr "Altri campi simboli"
+msgstr "Nome del campo simbolo"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:373
-#, fuzzy
 msgid "Show the field on the schematic when the symbol is placed"
-msgstr "Mostra il nome campo oltre al suo valore"
+msgstr "Mostra il campo sullo schema quando il simbolo viene posizionato"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:374
-#, fuzzy
 msgid "Show the field as a column in the symbol chooser"
-msgstr "Apri il simbolo selezionato nell'editor dei simboli"
+msgstr "Mostra il campo come colonna nel selettore di simboli"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:375
-#, fuzzy
 msgid "Show the field name before its value"
-msgstr "Mostra il nome campo oltre al suo valore"
+msgstr "Mostra nome campo prima del suo valore"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:376
 msgid "Take position and style from the symbol's own field of the same name"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:392
-#, fuzzy
 msgid "New Database Library"
-msgstr "Impostazioni librerie database"
+msgstr "Nuova libreria database"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Database Library Settings (%s)"
-msgstr "Impostazioni librerie database"
+msgstr "Impostazioni libreria database (%s)"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:516
 msgid ""
@@ -16118,29 +16086,29 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:543
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save '%s'."
-msgstr "Impossibile leggere il file: %s"
+msgstr "Impossibile salvare '%s'."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:580
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' needs a table and a key column."
-msgstr "La libreria \"%s\" è in sola lettura."
+msgstr "La libreria '%s' richiede una tabella e una colonna chiave."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:585
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' needs a table."
-msgstr "La libreria \"%s\" è in sola lettura."
+msgstr "La libreria '%s' richiede una tabella."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:590
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' needs a key column."
-msgstr "Libreria \"%s\" non trovata."
+msgstr "Libreria '%s' richiede una colonna chiave."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "More than one library is named '%s'."
-msgstr "Libreria impronte '%s' salvata come '%s'."
+msgstr "Più di una libreria è denominata '%s'."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:636
 #: eeschema/sch_io/database/sch_io_database.h:61
@@ -16148,14 +16116,13 @@ msgid "KiCad database library files"
 msgstr "File librerie di db di KiCad"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:642
-#, fuzzy
 msgid "Save Database Library"
-msgstr "Impostazioni librerie database"
+msgstr "Salva libreria database"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "Overwrite '%s'?"
-msgstr "Sovrascrivere"
+msgstr "Sovrascrivere '%s'?"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:671
 msgid ""
@@ -16164,9 +16131,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:700
-#, fuzzy
 msgid "Save the new database library before closing?"
-msgstr "Salvare le modifiche a \"%s\" prima di chiudere?"
+msgstr "Salvare la nuova libreria database prima di chiudere?"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:701
 #: eeschema/sch_edit_frame.cpp:1234
@@ -16182,81 +16148,75 @@ msgid "Save changes to '%s' before closing?"
 msgstr "Salvare le modifiche a \"%s\" prima di chiudere?"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:794
-#, fuzzy
 msgid "Not configured on this computer"
-msgstr "Non configurato"
+msgstr "Non configurato su questo computer"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:799
-#, fuzzy, c-format
+#, c-format
 msgid "Driver: %s"
-msgstr "Errore: %s"
+msgstr "Driver: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:861
 msgid "Data source changed; click Test Connection to apply it."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:889
-#, fuzzy
 msgid "Connection attempt stopped."
-msgstr "Nome connessione"
+msgstr "Tentativo di connessione interrotto."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:941
-#, fuzzy
 msgid "No data source configured."
-msgstr "Nessun branch upstream configurato."
+msgstr "Nessuna fonte dati configurata."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:951
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2087
-#, fuzzy
 msgid "Connecting..."
-msgstr "Connessione"
+msgstr "Connessione..."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Connecting to %s..."
-msgstr "Connetti %s pin %s a %s."
+msgstr "Connessione a %s..."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:954
 msgid "Stop"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Connected; %zu tables and views found."
-msgstr "Tabella nidificata '%s' non trovata."
+msgstr "Connesso; trovate %zu tabelle e viste."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1724
 msgid "<key>"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1732
-#, fuzzy, c-format
+#, c-format
 msgid "Symbols appear as %s"
-msgstr "Simbolo %s [%s]"
+msgstr "I simboli appaiono come %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1751
 msgid "Choose a library on the Libraries page to see its table."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1757
-#, fuzzy
 msgid "No rows loaded."
-msgstr "Nessuna impronta caricata."
+msgstr "Nessuna riga caricata."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1757
-#, fuzzy
 msgid "Not connected."
-msgstr "Non connesso"
+msgstr "Non connesso."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1779
-#, fuzzy, c-format
+#, c-format
 msgid "field '%s'"
-msgstr "Campo %s '%s'"
+msgstr "campo '%s'"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1785
-#, fuzzy, c-format
+#, c-format
 msgid "%zu rows"
-msgstr "%zu net"
+msgstr "%zu righe"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1786
 #, c-format
@@ -16269,14 +16229,12 @@ msgid "Library '%s', table '%s', %s. Click a column header to map it."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1810
-#, fuzzy
 msgid "Remove Field Mapping"
-msgstr "Rimuovi campo"
+msgstr "Rimuovi mappatura campo"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1810
-#, fuzzy
 msgid "Map as Field"
-msgstr "Modifica campo %s"
+msgstr "Mappa come campo"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1819
 #, c-format
@@ -16285,20 +16243,18 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:1969
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2093
-#, fuzzy
 msgid "Choose a table."
-msgstr "Scegli immagine"
+msgstr "Scegli una tabella."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2009
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2112
-#, fuzzy
 msgid "Choose a key column."
-msgstr "Scegli simbolo"
+msgstr "Scegli una colonna chiave."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2013
-#, fuzzy, c-format
+#, c-format
 msgid "Column '%s' is not in table '%s'."
-msgstr "Cartella '%s' non scrivibile."
+msgstr "La colonna '%s' non è presente nella tabella '%s'."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2019
 #, c-format
@@ -16312,24 +16268,23 @@ msgid "Add a library on the Libraries page to preview it."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2090
-#, fuzzy
 msgid "Not connected to a database."
-msgstr "Nessuna connessione al database"
+msgstr "Non connesso a un database."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2097
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read table '%s'."
-msgstr "Impossibile leggere il file: %s"
+msgstr "Impossibile leggere la tabella '%s'."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2114
-#, fuzzy, c-format
+#, c-format
 msgid "Key column '%s' is not in table '%s'."
-msgstr "Cartella '%s' non scrivibile."
+msgstr "La colonna chiave '%s' non è presente nella tabella '%s'."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2117
-#, fuzzy, c-format
+#, c-format
 msgid "%zu symbols."
-msgstr "Simboli di gruppo"
+msgstr "%zu simboli."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:2119
 #, c-format
@@ -16351,19 +16306,16 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:83
-#, fuzzy
 msgid "Data Source"
-msgstr "Sorgenti dati"
+msgstr "Sorgente dati"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
-#, fuzzy
 msgid "ODBC data source name (DSN)"
-msgstr "Nome sorgente dati"
+msgstr "Nome Sorgente Dati (DSN) ODBC"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:95
-#, fuzzy
 msgid "Data source:"
-msgstr "Sorgenti dati"
+msgstr "Sorgente dati:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:356
@@ -16394,9 +16346,8 @@ msgid "Manage Data Sources..."
 msgstr "Gestione sorgenti dati..."
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:137
-#, fuzzy
 msgid "Save password in the library file"
-msgstr "Salvare le modifiche alla tabella della libreria nidificata?"
+msgstr "Salva password nel file della libreria"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
 msgid ""
@@ -16405,23 +16356,20 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:142
-#, fuzzy
 msgid "Connection string"
 msgstr "Stringa di connessione"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:154
-#, fuzzy
 msgid "Insert driver:"
-msgstr "Inserisci spaziatore"
+msgstr "Inserisci driver:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:166
 msgid "${CWD}"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:174
-#, fuzzy
 msgid "Connection timeout:"
-msgstr "Tipo connessione:"
+msgstr "Timeout connessione:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:176
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:181
@@ -16453,14 +16401,12 @@ msgid "Number of tables kept in memory; each holds the rows read from it."
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:230
-#, fuzzy
 msgid "tables"
-msgstr "Tabelle"
+msgstr "tabelle"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:235
-#, fuzzy
 msgid "Cache lifetime:"
-msgstr "Timeout cache:"
+msgstr "Tempo di vita cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:237
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:242
@@ -16487,48 +16433,40 @@ msgid "Add Library"
 msgstr "Aggiungi libreria"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:294
-#, fuzzy
 msgid "Add library"
 msgstr "Aggiungi libreria"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:299
-#, fuzzy
 msgid "Duplicate library"
-msgstr "Duplica"
+msgstr "Duplica libreria"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:317
-#, fuzzy
 msgid "Remove library"
-msgstr "Rimuovi libreria dalla tabella"
+msgstr "Rimuovi libreria"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:337
-#, fuzzy
 msgid "Nickname:"
-msgstr "Denominazione"
+msgstr "Denominazione:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:352
-#, fuzzy
 msgid "Table: *"
-msgstr "Tabella"
+msgstr "Tabella: *"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:360
 msgid "Key column: *"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:368
-#, fuzzy
 msgid "Symbols column:"
-msgstr "Simboli da aggiornare:"
+msgstr "Colonna simboli:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:376
-#, fuzzy
 msgid "Footprints column:"
-msgstr "Impronte fronte"
+msgstr "Colonna impronte:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:384
-#, fuzzy
 msgid "Pin map column:"
-msgstr "Numero pin:"
+msgstr "Colonna mappa pin:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:386
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:391
@@ -16542,9 +16480,8 @@ msgid "* required"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:403
-#, fuzzy
 msgid "Symbol Properties (optional)"
-msgstr "Proprietà simbolo"
+msgstr "Proprietà simbolo (opzionale)"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:428
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:637
@@ -16552,19 +16489,16 @@ msgid "Footprint filters:"
 msgstr "Filtri impronte:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:436
-#, fuzzy
 msgid "Exclude from simulation:"
-msgstr "Escludi dalla simulazione"
+msgstr "Escludi dalla simulazione:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:444
-#, fuzzy
 msgid "Exclude from BOM:"
-msgstr "Escluso dalla DIBA"
+msgstr "Escludi dalla DIBA:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:452
-#, fuzzy
 msgid "Exclude from board:"
-msgstr "Escludi dalla scheda"
+msgstr "Escludi dalla scheda:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:472
 #: eeschema/dialogs/dialog_label_properties_base.cpp:81
@@ -16588,9 +16522,8 @@ msgstr "Campi"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:489
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:95
-#, fuzzy
 msgid "Column"
-msgstr "Colonne"
+msgstr "Colonna"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:491
 msgid "On add"
@@ -16601,14 +16534,12 @@ msgid "In chooser"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:493
-#, fuzzy
 msgid "Show name"
 msgstr "Mostra nome"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:494
-#, fuzzy
 msgid "Inherit"
-msgstr "Ereditato"
+msgstr "Eredita"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:515
 #: eeschema/dialogs/dialog_label_properties_base.cpp:143
@@ -16621,19 +16552,16 @@ msgid "Add field"
 msgstr "Aggiungi campo"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:530
-#, fuzzy
 msgid "Remove field"
 msgstr "Rimuovi campo"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:537
-#, fuzzy
 msgid "Add Unmapped Columns"
-msgstr "%d Colonne"
+msgstr "Aggiungi colonne non mappate"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:594
-#, fuzzy
 msgid "Data"
-msgstr "Specifiche"
+msgstr "Dati"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:147
 msgid "Database Library Settings"
@@ -18928,12 +18856,11 @@ msgid "Plot Current Page"
 msgstr "Traccia pagina corrente"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:86
-#, fuzzy
 msgid ""
 "Target file for the plot. Can be absolute or relative to the schematic main "
 "file location."
 msgstr ""
-"Percorso di destinazione per i file di tracciatura. Può essere assuluto o "
+"File di destinazione per il grafico. Può essere un percorso assoluto oppure "
 "relativo alla posizione del file principale dello schema."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:214
@@ -20735,9 +20662,8 @@ msgid "Show pin names"
 msgstr "Mostra nomi pin"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:198
-#, fuzzy
 msgid "Local power"
-msgstr "Superamento locale"
+msgstr "Alimentazione locale"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
 msgid ""
@@ -22349,9 +22275,8 @@ msgid "folder with .kicad_sym files"
 msgstr "cartella con file .kicad_sym"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:444
-#, fuzzy
 msgid "New Database Library..."
-msgstr "Nuova libreria..."
+msgstr "Nuova libreria database..."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:495
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:466
