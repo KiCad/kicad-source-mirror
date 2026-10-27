@@ -836,6 +836,27 @@ find_package( libgit2 1.5 REQUIRED )
 # Set include directories for libgit
 include_directories(${LIBGIT2_INCLUDE_DIRS})
 
+# Find SQLite3, required by the database library backend
+find_package( SQLite3 REQUIRED )
+
+# The SDK library of macOS fails to read a write-ahead log database that no program has open, and the only
+# workaround writes to the user's database, so a build must link Homebrew or vcpkg SQLite instead
+if( APPLE )
+    if( SQLite3_LIBRARY MATCHES "^/usr/lib/" OR SQLite3_LIBRARY MATCHES "\\.sdk/" OR SQLite3_LIBRARY MATCHES "/SDKs/" )
+        message( FATAL_ERROR "SQLite3 was found in the macOS SDK (${SQLite3_LIBRARY}), which cannot read WAL "
+                             "databases KiCad promises to read.  Set SQLite3_ROOT to a Homebrew or vcpkg SQLite, for "
+                             "example -DSQLite3_ROOT=/opt/homebrew/opt/sqlite, and remove SQLite3_LIBRARY and "
+                             "SQLite3_INCLUDE_DIR from the CMake cache if it already found the SDK copy." )
+    endif()
+endif()
+
+# Newer CMake renames the imported target and deprecates the old name
+if( TARGET SQLite3::SQLite3 )
+    set( KICAD_SQLITE3_TARGET SQLite3::SQLite3 )
+else()
+    set( KICAD_SQLITE3_TARGET SQLite::SQLite3 )
+endif()
+
 #
 # Find Boost headers and libraries, required.
 set( BOOST_REQUESTED_COMPONENTS locale )    # locale is required by nanoodbc/database libraries

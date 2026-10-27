@@ -21,6 +21,7 @@
 #ifndef KICAD_DIALOG_DATABASE_LIB_SETTINGS_H
 #define KICAD_DIALOG_DATABASE_LIB_SETTINGS_H
 
+#include <atomic>
 #include <map>
 #include <memory>
 #include <set>
@@ -34,6 +35,7 @@
 #include <widgets/field_warning_icon.h>
 #include <widgets/wx_debounced_action.h>
 #include "dialog_database_lib_settings_base.h"
+
 
 class DB_LIB_PREVIEW_PANEL;
 class SYMBOL_LIBRARY_ADAPTER;
@@ -68,6 +70,9 @@ public:
 protected:
     void OnSettingChanged( wxCommandEvent& aEvent ) override;
     void OnSettingSpinChanged( wxSpinEvent& aEvent ) override;
+    void OnBackendChanged( wxCommandEvent& aEvent ) override;
+    void OnFileTextChanged( wxCommandEvent& aEvent ) override;
+    void OnBrowseFile( wxCommandEvent& aEvent ) override;
     void OnSourceTypeChanged( wxCommandEvent& aEvent ) override;
     void OnSourceChanged( wxCommandEvent& aEvent ) override;
     void OnSourceSpinChanged( wxSpinEvent& aEvent ) override;
@@ -110,6 +115,20 @@ private:
 
     void storeSource();
 
+    /// Fills the backend choice with what this computer offers, plus the one the file already names
+    void loadBackends();
+
+    /// @return the backend chosen in the choice
+    DATABASE_SOURCE_TYPE selectedBackend() const;
+
+    void selectBackend( DATABASE_SOURCE_TYPE aType );
+
+    /// @return true when the chosen backend has what it needs to try a connection
+    bool sourceConfigured() const;
+
+    /// Follows an edit of the data source by dropping the connection that no longer matches it
+    void sourceEdited();
+
     /// Fills the data source list from the ODBC driver manager, keeping what is typed
     void loadDataSources();
 
@@ -126,6 +145,12 @@ private:
         std::unique_ptr<DATABASE_CONNECTION> conn;
         std::vector<std::string>             tables;
         bool                                 connected = false;
+
+        /// Set by the worker before it opens anything, so a job that never ran can be destroyed anywhere
+        std::atomic<bool>                    started = false;
+
+        /// Lets the connection go on a pool thread, so a stalled close never blocks the UI thread while the app runs
+        ~CONNECT_JOB();
     };
 
     /// Starts connecting with the current settings; the table list refreshes when it finishes
@@ -252,6 +277,9 @@ private:
     /// Coalesces edits into one preview refresh
     WX_DEBOUNCED_ACTION m_previewDebounce;
 
+    /// Connects once typing in the file field pauses
+    WX_DEBOUNCED_ACTION m_connectDebounce;
+
     /// Why the table could not be read, shown on the table warning icon
     wxString m_tableError;
 
@@ -263,6 +291,17 @@ private:
 
     /// DSN login and keyring password at load, so an untouched login never rewrites the keyring
     DATABASE_SOURCE m_keyringLogin;
+
+    /// The type each entry of the backend choice stands for
+    std::vector<DATABASE_SOURCE_TYPE> m_backendTypes;
+
+    /// The database file as picked, which stays absolute so the stored path can follow the save location
+    wxString m_dbFile;
+
+    /// The source as loaded, which an unknown type is restored from and source.path is kept from until a file is picked
+    DATABASE_SOURCE m_loadedSource;
+
+    bool m_pathEdited = false;
 
     /// Autofilled values for the current library, which a later autofill may replace
     std::string                        m_autoTable;

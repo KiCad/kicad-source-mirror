@@ -18,6 +18,7 @@ RUN dnf install -y --setopt=install_weak_deps=False \
     protobuf-compiler \
     protobuf-devel \
     unixODBC-devel \
+    sqlite-devel \
     wxGTK-devel \
     zlib-devel \
     python3-devel \

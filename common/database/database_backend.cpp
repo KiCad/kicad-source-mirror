@@ -24,6 +24,7 @@
 
 #include "odbc_backend.h"
 #include "db_backend_support.h"
+#include "sqlite_backend.h"
 
 
 DB_BACKEND_RESULT DATABASE_BACKEND::Create( const DATABASE_SOURCE& aSource, const wxString& aBasePath )
@@ -37,10 +38,9 @@ DB_BACKEND_RESULT DATABASE_BACKEND::Create( const DATABASE_SOURCE& aSource, cons
                                                  source.connection_string, source.timeout ),
                  DB_FAILURE::UNKNOWN, std::string() };
 
-    // Replaced by the file backends as they land
     case DATABASE_SOURCE_TYPE::SQLITE:
-        return { nullptr, DB_FAILURE::NOT_SUPPORTED_ON_PLATFORM,
-                 utf8( wxString::Format( _( "source type '%s' is not yet supported" ), wxS( "sqlite" ) ) ) };
+        return { std::make_unique<SQLITE_BACKEND>( source.path, source.timeout ), DB_FAILURE::UNKNOWN,
+                 std::string() };
 
     case DATABASE_SOURCE_TYPE::ACCESS:
         return { nullptr, DB_FAILURE::NOT_SUPPORTED_ON_PLATFORM,

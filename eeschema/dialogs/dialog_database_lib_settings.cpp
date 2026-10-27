@@ -24,11 +24,13 @@
 #include <wx/app.h>
 #include <wx/display.h>
 #include <wx/filedlg.h>
+#include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/menu.h>
 #include <wx/regex.h>
 #include <wx/settings.h>
 #include <wx/stdpaths.h>
+#include <wx/thread.h>
 #include <wx/utils.h>
 
 #include <bitmaps.h>
@@ -68,6 +70,10 @@ static constexpr int PREVIEW_MIN_WIDTH_DIP = 450;
 
 /// Delay after the last edit before the preview is rebuilt
 static constexpr int PREVIEW_DEBOUNCE_MS = 750;
+
+/// Pause in typing a database file path before the connection is tried
+static constexpr int CONNECT_DEBOUNCE_MS = 500;
+
 
 /// Re-lays out a scrolled page and refits its scroll area after its contents change size
 static void relayoutPage( wxScrolledWindow* aPage )
@@ -114,10 +120,29 @@ static wxString describeFailure( DB_FAILURE aFailure, const DATABASE_SOURCE& aSo
         return _( "The server rejected the user name or password." );
 
     case FAILURE::UNREACHABLE:
+        if( aSource.type != DATABASE_SOURCE_TYPE::ODBC )
+            return _( "Could not reach the database file; check that its drive or share is available." );
+
         return _( "Could not reach the database server; check that it is running." );
 
     case FAILURE::TIMEOUT:
-        return wxString::Format( _( "The server did not answer within %d seconds." ), aSource.timeout );
+        if( aSource.type != DATABASE_SOURCE_TYPE::ODBC )
+        {
+            const int seconds = DatabaseFileWaitSeconds( aSource.timeout );
+
+            return wxString::Format( wxPLURAL( "The database file '%s' did not respond within %d second.",
+                                               "The database file '%s' did not respond within %d seconds.",
+                                               static_cast<unsigned>( seconds ) ),
+                                     wxFileName( From_UTF8( aSource.path ) ).GetFullName(), seconds );
+        }
+
+        if( aSource.timeout <= 0 )
+            return _( "The server did not answer in time." );
+
+        return wxString::Format( wxPLURAL( "The server did not answer within %d second.",
+                                           "The server did not answer within %d seconds.",
+                                           static_cast<unsigned>( aSource.timeout ) ),
+                                 aSource.timeout );
 
     case FAILURE::NO_DSN:
         if( !aSource.connection_string.empty() )
@@ -128,14 +153,22 @@ static wxString describeFailure( DB_FAILURE aFailure, const DATABASE_SOURCE& aSo
     case FAILURE::NO_DRIVER:
         return _( "The ODBC driver for this data source is not installed." );
 
-    case FAILURE::UNKNOWN:
-    case FAILURE::FILE_NOT_FOUND:
-    case FAILURE::FILE_IN_USE:
-    case FAILURE::PROVIDER_MISSING:
-    case FAILURE::NOT_SUPPORTED_ON_PLATFORM:
+    case FAILURE::FILE_NOT_FOUND: return _( "The database file was not found." );
+
+    case FAILURE::FILE_IN_USE: return _( "The database file is locked by another program." );
+
+    case FAILURE::PROVIDER_MISSING: return _( "The Microsoft Access Database Engine is not installed." );
+
+    case FAILURE::NOT_SUPPORTED_ON_PLATFORM: return _( "Microsoft Access databases can only be read on Windows." );
+
     case FAILURE::INVALID_TYPE:
+        return wxString::Format( _( "This KiCad does not know the database type '%s'." ),
+                                 From_UTF8( aSource.type_name ) );
+
     case FAILURE::NETWORK_WAL:
-        break;
+        return _( "A database in write-ahead log mode cannot be read safely from a network drive." );
+
+    case FAILURE::UNKNOWN: break;
     }
 
     return _( "Could not connect to the database." );
@@ -218,7 +251,13 @@ DIALOG_DATABASE_LIB_SETTINGS::DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, c
                            {
                                updatePreview();
                            },
-                           PREVIEW_DEBOUNCE_MS )
+                           PREVIEW_DEBOUNCE_MS ),
+        m_connectDebounce( [this]()
+                           {
+                               storeSource();
+                               connect();
+                           },
+                           CONNECT_DEBOUNCE_MS )
 {
     // Search terms are English; autofill also tries their translations
     m_roles = {
@@ -286,6 +325,7 @@ DIALOG_DATABASE_LIB_SETTINGS::DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, c
     m_preview = new DB_LIB_PREVIEW_PANEL( m_previewPanel, frame, HasKiway() ? &Kiway() : nullptr, canvasType );
     m_previewSizer->Add( m_preview, 1, wxEXPAND | wxALL, 5 );
 
+    m_btnBrowse->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_btnAddLibrary->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_btnDuplicateLibrary->SetBitmap( KiBitmapBundle( BITMAPS::copy ) );
     m_btnMoveLibraryUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
@@ -424,10 +464,47 @@ DIALOG_DATABASE_LIB_SETTINGS::DIALOG_DATABASE_LIB_SETTINGS( wxWindow* aParent, c
 }
 
 
+/// A connection closes with a bounded wait that a dead share can use up, so the UI thread hands it to the pool
+/// while a pool thread closes it inline, as detaching from inside purge() would lock the queue twice
+static void releaseConnection( std::unique_ptr<DATABASE_CONNECTION> aConn )
+{
+    if( !aConn )
+        return;
+
+    // Once the app is gone the pool may be deleted too
+    if( !wxTheApp || !wxIsMainThread() )
+    {
+        aConn.reset();
+        return;
+    }
+
+    GetKiCadThreadPool().detach_task(
+            [holder = std::shared_ptr<DATABASE_CONNECTION>( std::move( aConn ) )]() mutable
+            {
+                holder.reset();
+            } );
+}
+
+
+DIALOG_DATABASE_LIB_SETTINGS::CONNECT_JOB::~CONNECT_JOB()
+{
+    // A job purged from the pool's queue is destroyed under its lock and never opened anything
+    if( !started )
+    {
+        conn.reset();
+        return;
+    }
+
+    releaseConnection( std::move( conn ) );
+}
+
+
 DIALOG_DATABASE_LIB_SETTINGS::~DIALOG_DATABASE_LIB_SETTINGS()
 {
     cancelConnect();
     m_previewDebounce.Cancel();
+    m_connectDebounce.Cancel();
+    releaseConnection( std::move( m_conn ) );
 
     m_fieldsGrid->PopEventHandler( true );
     m_dataGrid->PopEventHandler( true );
@@ -442,6 +519,8 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataToWindow()
     bool             useConnectionString = !source.connection_string.empty();
     bool             passwordInFile = !source.password.empty();
 
+    m_loadedSource = source;
+
     m_keyringLogin = source;
     m_keyringLogin.password.clear();
 
@@ -454,13 +533,19 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataToWindow()
     m_rbDSN->SetValue( !useConnectionString );
     m_rbConnectionString->SetValue( useConnectionString );
 
+    loadBackends();
+
+    m_dbFile = From_UTF8( source.Expanded( cwdDir() ).path );
+    m_pathEdited = false;
+    m_txtDbFile->ChangeValue( m_dbFile );
+
     for( const std::string& driver : ODBC_BACKEND::ListDrivers() )
         m_choiceDriver->Append( From_UTF8( driver ) );
 
     m_cbDSN->ChangeValue( From_UTF8( source.dsn ) );
     loadDataSources();
     m_txtUser->ChangeValue( From_UTF8( source.username ) );
-    m_txtPassword->ChangeValue( From_UTF8( source.password ) );
+    m_txtPassword->ChangeValue( source.type == DATABASE_SOURCE_TYPE::ODBC ? From_UTF8( source.password ) : wxString() );
     m_cbPasswordInFile->SetValue( passwordInFile );
     m_txtConnectionString->ChangeValue( From_UTF8( source.connection_string ) );
     m_spinTimeout->SetValue( source.timeout );
@@ -489,6 +574,8 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataToWindow()
 
 bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataFromWindow()
 {
+    m_connectDebounce.Cancel();
+
     // Ctrl+Enter reaches here even with OK disabled
     if( !m_canSave || !m_fieldsGrid->CommitPendingChanges() )
         return false;
@@ -505,7 +592,8 @@ bool DIALOG_DATABASE_LIB_SETTINGS::TransferDataFromWindow()
 
     DATABASE_SOURCE& source = m_settings->m_Source;
     std::string      password = source.password;
-    bool             useKeyring = source.connection_string.empty() && !m_cbPasswordInFile->GetValue();
+    bool             useKeyring = source.type == DATABASE_SOURCE_TYPE::ODBC && source.connection_string.empty()
+                      && !m_cbPasswordInFile->GetValue();
 
     if( useKeyring )
     {
@@ -666,8 +754,15 @@ bool DIALOG_DATABASE_LIB_SETTINGS::chooseSavePath()
     m_settings->Internals()->SetFromString( "meta.filename", std::string( m_settings->GetFullFilename().ToUTF8() ) );
     m_stCwdHelp->SetLabel( wxString::Format( _( "${CWD} is replaced by %s" ), cwdDir() ) );
 
+    // The picked file stays absolute so its stored form follows the save folder
+    storeSource();
+
     // The connection was tested against another folder than the one it will resolve in once saved
-    if( oldBase != cwdDir() && m_settings->m_Source.connection_string.find( "${CWD}" ) != std::string::npos )
+    const DATABASE_SOURCE& stored = m_settings->m_Source;
+
+    if( oldBase != cwdDir()
+        && ( stored.connection_string.find( "${CWD}" ) != std::string::npos
+             || stored.path.find( "${CWD}" ) != std::string::npos ) )
     {
         connect();
         showInfo( _( "The data source uses ${CWD} and was tested again in the folder you chose. "
@@ -725,6 +820,8 @@ DIALOG_DATABASE_LIB_SETTINGS::CLOSE_ACTION DIALOG_DATABASE_LIB_SETTINGS::confirm
 
 void DIALOG_DATABASE_LIB_SETTINGS::onCancel( wxCommandEvent& aEvent )
 {
+    m_connectDebounce.Cancel();
+
     if( confirmClose() == CLOSE_ACTION::DISCARD )
         aEvent.Skip();
 }
@@ -732,6 +829,8 @@ void DIALOG_DATABASE_LIB_SETTINGS::onCancel( wxCommandEvent& aEvent )
 
 void DIALOG_DATABASE_LIB_SETTINGS::onCloseWindow( wxCloseEvent& aEvent )
 {
+    m_connectDebounce.Cancel();
+
     if( !aEvent.CanVeto() )
     {
         aEvent.Skip();
@@ -820,25 +919,136 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnManageDataSources( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_DATABASE_LIB_SETTINGS::loadBackends()
+{
+    const DATABASE_SOURCE& source = m_settings->m_Source;
+
+    m_backendTypes = { DATABASE_SOURCE_TYPE::ODBC, DATABASE_SOURCE_TYPE::SQLITE };
+    m_choiceBackend->Clear();
+    m_choiceBackend->Append( _( "ODBC" ) );
+    m_choiceBackend->Append( _( "SQLite" ) );
+
+    if( source.type == DATABASE_SOURCE_TYPE::INVALID )
+    {
+        m_backendTypes.push_back( DATABASE_SOURCE_TYPE::INVALID );
+        m_choiceBackend->Append( wxString::Format( _( "Unknown (%s)" ), From_UTF8( source.type_name ) ) );
+    }
+
+    selectBackend( source.type );
+}
+
+
+DATABASE_SOURCE_TYPE DIALOG_DATABASE_LIB_SETTINGS::selectedBackend() const
+{
+    const int selection = m_choiceBackend->GetSelection();
+
+    if( selection < 0 || selection >= static_cast<int>( m_backendTypes.size() ) )
+        return DATABASE_SOURCE_TYPE::ODBC;
+
+    return m_backendTypes[selection];
+}
+
+
+void DIALOG_DATABASE_LIB_SETTINGS::selectBackend( DATABASE_SOURCE_TYPE aType )
+{
+    auto it = std::find( m_backendTypes.begin(), m_backendTypes.end(), aType );
+
+    m_choiceBackend->SetSelection( it == m_backendTypes.end() ? 0 : static_cast<int>( it - m_backendTypes.begin() ) );
+}
+
+
+bool DIALOG_DATABASE_LIB_SETTINGS::sourceConfigured() const
+{
+    const DATABASE_SOURCE& source = m_settings->m_Source;
+
+    switch( source.type )
+    {
+    case DATABASE_SOURCE_TYPE::ODBC: return !source.dsn.empty() || !source.connection_string.empty();
+    case DATABASE_SOURCE_TYPE::SQLITE:
+    case DATABASE_SOURCE_TYPE::ACCESS: return !source.path.empty();
+    case DATABASE_SOURCE_TYPE::INVALID: return true;
+    }
+
+    return false;
+}
+
+
 void DIALOG_DATABASE_LIB_SETTINGS::updateSourceControls()
 {
-    bool     useDSN = m_rbDSN->GetValue();
-    wxSizer* sbSource = m_rbDSN->GetContainingSizer();
+    const DATABASE_SOURCE_TYPE type = selectedBackend();
+    const bool                 odbc = type == DATABASE_SOURCE_TYPE::ODBC;
+    const bool                 file = type == DATABASE_SOURCE_TYPE::SQLITE;
+    const bool                 useDSN = m_rbDSN->GetValue();
+    wxSizer*                   sbSource = m_rbDSN->GetContainingSizer();
+    wxSizer*                   fgBackend = m_choiceBackend->GetContainingSizer();
 
-    sbSource->Show( m_cbDSN->GetContainingSizer(), useDSN );
-    sbSource->Show( m_cbPasswordInFile, useDSN );
-    sbSource->Show( m_txtConnectionString, !useDSN );
-    sbSource->Show( m_choiceDriver->GetContainingSizer(), !useDSN );
-    sbSource->Show( m_stCwdHelp, !useDSN );
+    sbSource->Show( m_rbDSN, odbc );
+    sbSource->Show( m_rbConnectionString, odbc );
+    sbSource->Show( m_cbDSN->GetContainingSizer(), odbc && useDSN );
+    sbSource->Show( m_cbPasswordInFile, odbc && useDSN );
+    sbSource->Show( m_txtConnectionString, odbc && !useDSN );
+    sbSource->Show( m_choiceDriver->GetContainingSizer(), odbc && !useDSN );
+    sbSource->Show( m_stCwdHelp, odbc && !useDSN );
+
+    fgBackend->Show( m_fileLabel, file );
+    fgBackend->Show( m_txtDbFile->GetContainingSizer(), file );
 
     // Showing the data source rows shows every control in them
 #ifdef __WXMSW__
-    m_btnManageDsn->Show( useDSN );
+    m_btnManageDsn->Show( odbc && useDSN );
 #else
     m_btnManageDsn->Hide();
 #endif
 
     relayoutPage( m_connectionPage );
+}
+
+
+void DIALOG_DATABASE_LIB_SETTINGS::OnBackendChanged( wxCommandEvent& aEvent )
+{
+    updateSourceControls();
+    sourceEdited();
+}
+
+
+void DIALOG_DATABASE_LIB_SETTINGS::OnFileTextChanged( wxCommandEvent& aEvent )
+{
+    if( m_loading )
+        return;
+
+    m_dbFile = DatabasePathFromInput( m_txtDbFile->GetValue(), cwdDir() );
+    m_pathEdited = true;
+    sourceEdited();
+
+    // Typing reports every keystroke, and a file on an unreachable share must not stall this thread
+    m_connectDebounce.Restart();
+    setConnectionStatus( _( "The file is tried when typing pauses." ), false );
+}
+
+
+void DIALOG_DATABASE_LIB_SETTINGS::OnBrowseFile( wxCommandEvent& aEvent )
+{
+    wxString dir = wxPathOnly( m_dbFile );
+
+    if( dir.IsEmpty() )
+        dir = cwdDir();
+
+    wxFileDialog dlg( this, _( "Select the database file" ), dir, wxEmptyString,
+                      _( "SQLite databases (*.sqlite;*.sqlite3;*.db)|*.sqlite;*.sqlite3;*.db|All files|*" ),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    m_txtDbFile->ChangeValue( dlg.GetPath() );
+    m_dbFile = DatabasePathFromInput( dlg.GetPath(), cwdDir() );
+    m_pathEdited = true;
+    sourceEdited();
+    m_connectDebounce.Cancel();
+    storeSource();
+    connect();
 }
 
 
@@ -851,9 +1061,16 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnSourceTypeChanged( wxCommandEvent& aEvent )
 
 void DIALOG_DATABASE_LIB_SETTINGS::OnSourceChanged( wxCommandEvent& aEvent )
 {
+    sourceEdited();
+}
+
+
+void DIALOG_DATABASE_LIB_SETTINGS::sourceEdited()
+{
     if( m_loading )
         return;
 
+    m_connectDebounce.Cancel();
     updateDsnDriver();
     storeSource();
     cancelConnect();
@@ -894,6 +1111,7 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnTestConnection( wxCommandEvent& aEvent )
         return;
     }
 
+    m_connectDebounce.Cancel();
     storeSource();
     connect();
 }
@@ -901,24 +1119,51 @@ void DIALOG_DATABASE_LIB_SETTINGS::OnTestConnection( wxCommandEvent& aEvent )
 
 void DIALOG_DATABASE_LIB_SETTINGS::storeSource()
 {
-    DATABASE_SOURCE& source = m_settings->m_Source;
-
-    if( m_rbConnectionString->GetValue() )
-    {
-        source.connection_string = TO_UTF8( m_txtConnectionString->GetValue() );
-        source.dsn.clear();
-        source.username.clear();
-        source.password.clear();
-    }
-    else
-    {
-        source.connection_string.clear();
-        source.dsn = TO_UTF8( m_cbDSN->GetValue() );
-        source.username = TO_UTF8( m_txtUser->GetValue() );
-        source.password = TO_UTF8( m_txtPassword->GetValue() );
-    }
+    DATABASE_SOURCE&           source = m_settings->m_Source;
+    const DATABASE_SOURCE_TYPE type = selectedBackend();
 
     source.timeout = m_spinTimeout->GetValue();
+
+    // An unknown type is restored as the file has it, whatever was chosen in between
+    if( type == DATABASE_SOURCE_TYPE::INVALID )
+    {
+        source = m_loadedSource;
+        source.timeout = m_spinTimeout->GetValue();
+        return;
+    }
+
+    if( source.type != type )
+    {
+        source.type = type;
+        source.type_name.clear();
+        source.path.clear();
+    }
+
+    if( type == DATABASE_SOURCE_TYPE::ODBC )
+    {
+        if( m_rbConnectionString->GetValue() )
+        {
+            source.connection_string = TO_UTF8( m_txtConnectionString->GetValue() );
+            source.dsn.clear();
+            source.username.clear();
+            source.password.clear();
+        }
+        else
+        {
+            source.connection_string.clear();
+            source.dsn = TO_UTF8( m_cbDSN->GetValue() );
+            source.username = TO_UTF8( m_txtUser->GetValue() );
+            source.password = TO_UTF8( m_txtPassword->GetValue() );
+        }
+
+        return;
+    }
+
+    source.connection_string.clear();
+    source.dsn.clear();
+    source.username.clear();
+    source.path = m_pathEdited ? DatabasePathForStorage( m_dbFile, cwdDir() ) : m_loadedSource.path;
+    source.password.clear();
 }
 
 
@@ -926,7 +1171,7 @@ void DIALOG_DATABASE_LIB_SETTINGS::connect()
 {
     cancelConnect();
 
-    m_conn.reset();
+    releaseConnection( std::move( m_conn ) );
     m_tables.clear();
     m_columns.clear();
     m_sampleTable.clear();
@@ -938,9 +1183,11 @@ void DIALOG_DATABASE_LIB_SETTINGS::connect()
 
     const DATABASE_SOURCE& source = m_settings->m_Source;
 
-    if( source.dsn.empty() && source.connection_string.empty() )
+    if( !sourceConfigured() )
     {
-        setConnectionStatus( _( "No data source configured." ), false );
+        setConnectionStatus( source.type == DATABASE_SOURCE_TYPE::ODBC ? _( "No data source configured." )
+                                                                       : _( "No database file chosen." ),
+                             false );
         refreshTables();
         return;
     }
@@ -971,18 +1218,22 @@ void DIALOG_DATABASE_LIB_SETTINGS::connect()
     GetKiCadThreadPool().detach_task(
             [job]()
             {
+                job->started = true;
                 job->connected = job->conn->Connect();
 
                 if( job->connected )
                     job->conn->GetTables( job->tables );
 
+                // A callback still pending at exit is destroyed after the pool, so it must not own the job
                 if( wxTheApp )
                 {
                     wxTheApp->CallAfter(
-                            [job]()
+                            [weak = std::weak_ptr<CONNECT_JOB>( job )]()
                             {
-                                if( job->owner )
-                                    job->owner->onConnectFinished( job );
+                                std::shared_ptr<CONNECT_JOB> finished = weak.lock();
+
+                                if( finished && finished->owner )
+                                    finished->owner->onConnectFinished( finished );
                             } );
                 }
             } );
@@ -1012,7 +1263,10 @@ void DIALOG_DATABASE_LIB_SETTINGS::onConnectFinished( const std::shared_ptr<CONN
     {
         m_conn = std::move( aJob->conn );
         m_tables = std::move( aJob->tables );
-        setConnectionStatus( wxString::Format( _( "Connected; %zu tables and views found." ), m_tables.size() ),
+        setConnectionStatus( wxString::Format( wxPLURAL( "Connected; %zu table or view found.",
+                                                         "Connected; %zu tables and views found.",
+                                                         static_cast<unsigned>( m_tables.size() ) ),
+                                               m_tables.size() ),
                              false );
     }
     else
@@ -1794,9 +2048,13 @@ void DIALOG_DATABASE_LIB_SETTINGS::updateDataLabels()
         m_dataGrid->SetColLabelValue( col, label );
     }
 
-    wxString rows = m_sampleRows.size() < PREVIEW_ROW_LIMIT
-                            ? wxString::Format( _( "%zu rows" ), m_sampleRows.size() )
-                            : wxString::Format( _( "first %zu rows" ), m_sampleRows.size() );
+    const unsigned sampled = static_cast<unsigned>( m_sampleRows.size() );
+    wxString       rows;
+
+    if( m_sampleRows.size() < PREVIEW_ROW_LIMIT )
+        rows = wxString::Format( wxPLURAL( "%zu row", "%zu rows", sampled ), m_sampleRows.size() );
+    else
+        rows = wxString::Format( wxPLURAL( "first %zu row", "first %zu rows", sampled ), m_sampleRows.size() );
 
     m_stDataStatus->SetLabel( wxString::Format( _( "Library '%s', table '%s', %s. Click a column header to map it." ),
                                                 displayName( *lib ), From_UTF8( lib->table ), rows ) );
@@ -2029,10 +2287,13 @@ void DIALOG_DATABASE_LIB_SETTINGS::updateColumnWarnings()
 
             if( isKey && repeats > 0 )
             {
-                warnings.Add( wxString::Format( _( "'%s' repeats in %zu of the first %zu rows, and parts that share "
-                                                   "a key hide each other. Choose a column with a unique value per "
-                                                   "part." ),
-                                                From_UTF8( lib->key_col ), repeats, m_sampleRows.size() ) );
+                warnings.Add( wxString::Format(
+                        wxPLURAL( "'%s' repeats in %zu of the first %zu row, and parts that share a key hide each "
+                                  "other. Choose a column with a unique value per part.",
+                                  "'%s' repeats in %zu of the first %zu rows, and parts that share a key hide each "
+                                  "other. Choose a column with a unique value per part.",
+                                  static_cast<unsigned>( m_sampleRows.size() ) ),
+                        From_UTF8( lib->key_col ), repeats, m_sampleRows.size() ) );
             }
         }
 
@@ -2127,9 +2388,11 @@ void DIALOG_DATABASE_LIB_SETTINGS::updatePreview()
         status = wxString::Format( _( "Key column '%s' is not in table '%s'." ), From_UTF8( lib->key_col ),
                                    From_UTF8( lib->table ) );
     else if( m_sampleRows.size() < PREVIEW_ROW_LIMIT )
-        status = wxString::Format( _( "%zu symbols." ), count );
+        status = wxString::Format( wxPLURAL( "%zu symbol.", "%zu symbols.", static_cast<unsigned>( count ) ), count );
     else
-        status = wxString::Format( _( "%zu symbols from the first %zu rows." ), count, m_sampleRows.size() );
+        status = wxString::Format( wxPLURAL( "%zu symbol from the first %zu rows.",
+                                             "%zu symbols from the first %zu rows.", static_cast<unsigned>( count ) ),
+                                   count, m_sampleRows.size() );
 
     updateColumnWarnings();
 

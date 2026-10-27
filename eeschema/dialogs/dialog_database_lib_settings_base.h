@@ -25,18 +25,18 @@ class WX_INFOBAR;
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/radiobut.h>
-#include <wx/combobox.h>
-#include <wx/button.h>
+#include <wx/choice.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/radiobut.h>
+#include <wx/combobox.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/listbox.h>
-#include <wx/bmpbuttn.h>
 #include <wx/grid.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
@@ -60,6 +60,10 @@ class DIALOG_DATABASE_LIB_SETTINGS_BASE : public DIALOG_SHIM
 		wxScrolledWindow* m_connectionPage;
 		wxTextCtrl* m_txtName;
 		wxTextCtrl* m_txtDescription;
+		wxChoice* m_choiceBackend;
+		wxStaticText* m_fileLabel;
+		wxTextCtrl* m_txtDbFile;
+		STD_BITMAP_BUTTON* m_btnBrowse;
 		wxRadioButton* m_rbDSN;
 		wxComboBox* m_cbDSN;
 		wxStaticText* m_stDsnDriver;
@@ -117,8 +121,11 @@ class DIALOG_DATABASE_LIB_SETTINGS_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnSettingChanged( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSourceTypeChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBackendChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFileTextChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnBrowseFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSourceChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSourceTypeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnManageDataSources( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInsertDriver( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSourceSpinChanged( wxSpinEvent& event ) { event.Skip(); }

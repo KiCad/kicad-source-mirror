@@ -82,6 +82,47 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::DIALOG_DATABASE_LIB_SETTINGS_BASE( wxWindow* 
 	wxStaticBoxSizer* sbSource;
 	sbSource = new wxStaticBoxSizer( new wxStaticBox( m_connectionPage, wxID_ANY, _("Data Source") ), wxVERTICAL );
 
+	wxFlexGridSizer* fgBackend;
+	fgBackend = new wxFlexGridSizer( 0, 2, 5, 5 );
+	fgBackend->AddGrowableCol( 1 );
+	fgBackend->SetFlexibleDirection( wxBOTH );
+	fgBackend->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_backendLabel;
+	m_backendLabel = new wxStaticText( sbSource->GetStaticBox(), wxID_ANY, _("Database type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_backendLabel->Wrap( -1 );
+	fgBackend->Add( m_backendLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxArrayString m_choiceBackendChoices;
+	m_choiceBackend = new wxChoice( sbSource->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceBackendChoices, 0 );
+	m_choiceBackend->SetSelection( 0 );
+	m_choiceBackend->SetToolTip( _("The kind of database this library reads. Every kind is read only.") );
+
+	fgBackend->Add( m_choiceBackend, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_fileLabel = new wxStaticText( sbSource->GetStaticBox(), wxID_ANY, _("Database file:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fileLabel->Wrap( -1 );
+	fgBackend->Add( m_fileLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* bFile;
+	bFile = new wxBoxSizer( wxHORIZONTAL );
+
+	m_txtDbFile = new wxTextCtrl( sbSource->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtDbFile->SetToolTip( _("A file in the same folder as the library file, or below it, is stored relative to it.") );
+
+	bFile->Add( m_txtDbFile, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_btnBrowse = new STD_BITMAP_BUTTON( sbSource->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_btnBrowse->SetToolTip( _("Browse") );
+
+	bFile->Add( m_btnBrowse, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+
+	fgBackend->Add( bFile, 1, wxEXPAND, 5 );
+
+
+	sbSource->Add( fgBackend, 0, wxEXPAND|wxALL, 5 );
+
 	m_rbDSN = new wxRadioButton( sbSource->GetStaticBox(), wxID_ANY, _("ODBC data source name (DSN)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	sbSource->Add( m_rbDSN, 0, wxALL, 5 );
 
@@ -627,6 +668,9 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::DIALOG_DATABASE_LIB_SETTINGS_BASE( wxWindow* 
 	// Connect Events
 	m_txtName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSettingChanged ), NULL, this );
 	m_txtDescription->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSettingChanged ), NULL, this );
+	m_choiceBackend->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBackendChanged ), NULL, this );
+	m_txtDbFile->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnFileTextChanged ), NULL, this );
+	m_btnBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBrowseFile ), NULL, this );
 	m_rbDSN->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceTypeChanged ), NULL, this );
 	m_cbDSN->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
 	m_cbDSN->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
@@ -686,6 +730,9 @@ DIALOG_DATABASE_LIB_SETTINGS_BASE::~DIALOG_DATABASE_LIB_SETTINGS_BASE()
 	// Disconnect Events
 	m_txtName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSettingChanged ), NULL, this );
 	m_txtDescription->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSettingChanged ), NULL, this );
+	m_choiceBackend->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBackendChanged ), NULL, this );
+	m_txtDbFile->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnFileTextChanged ), NULL, this );
+	m_btnBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnBrowseFile ), NULL, this );
 	m_rbDSN->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceTypeChanged ), NULL, this );
 	m_cbDSN->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );
 	m_cbDSN->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_DATABASE_LIB_SETTINGS_BASE::OnSourceChanged ), NULL, this );

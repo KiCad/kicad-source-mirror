@@ -1038,6 +1038,7 @@ set( COMMON_SRCS
     database/db_backend_support.cpp
     database/db_worker_thread.cpp
     database/odbc_backend.cpp
+    database/sqlite_backend.cpp
     database/database_value.cpp
 
     http_lib/http_lib_connection.cpp
@@ -1109,6 +1110,7 @@ target_link_libraries( common
     Boost::headers
     # Database support needs these two
     nanodbc # for now; maybe hoist out of common
+    ${KICAD_SQLITE3_TARGET}
     Boost::locale
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}
