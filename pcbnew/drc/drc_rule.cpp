@@ -331,7 +331,13 @@ wxString DRC_RULE::FormatRuleFromProto( const kiapi::board::CustomRule& aRule, w
                     + wxS( "\")" );
         }
 
-        if( constraint.value_case() == kiapi::board::CustomRuleConstraint::ValueCase::kDisallow )
+        // Special case for CRCT_MIN_RESOLVED_SPOKES, which is a kNumeric value, but doesn't use
+        // min/opt/max for serialization in order to avoid the implication that we support opt.
+        if( constraint.type() == kiapi::board::CRCT_MIN_RESOLVED_SPOKES )
+        {
+            text += wxString::Format( "%d", constraint.numeric().min() );
+        }
+        else if( constraint.value_case() == kiapi::board::CustomRuleConstraint::ValueCase::kDisallow )
         {
             for( int disallowTypeValue : constraint.disallow().types() )
             {
