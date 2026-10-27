@@ -233,18 +233,17 @@ double EDA_UNIT_UTILS::GetScaleForInternalUnitType( const EDA_IU_SCALE& aIuScale
 {
     switch( aDataType )
     {
-    case EDA_DATA_TYPE::TIME: return aIuScale.IU_PER_PS;
+    case EDA_DATA_TYPE::TIME:         return aIuScale.IU_PER_PS;
     case EDA_DATA_TYPE::LENGTH_DELAY: return aIuScale.IU_PER_PS_PER_MM;
-    case EDA_DATA_TYPE::UNITLESS: return 1.0;
-    default: return aIuScale.IU_PER_MM;
+    case EDA_DATA_TYPE::UNITLESS:     return 1.0;
+    default:                          return aIuScale.IU_PER_MM;
     }
 }
 
 
 #if 0   // No support for std::from_chars on MacOS yet
 
-bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
-                                         int& aOut )
+bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale, int& aOut )
 {
     double value;
 
@@ -256,8 +255,7 @@ bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU
 }
 
 
-bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale,
-                                         VECTOR2I& aOut )
+bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU_SCALE& aIuScale, VECTOR2I& aOut )
 {
     size_t pos = aInput.find( ' ' );
 
@@ -295,8 +293,7 @@ bool EDA_UNIT_UTILS::ParseInternalUnits( const std::string& aInput, const EDA_IU
 #define PS_PER_MM_TO_IU( x, scale ) ( x * scale.IU_PER_PS_PER_MM )
 
 
-double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
-                                       double aValue )
+double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue )
 {
     switch( aUnit )
     {
@@ -316,9 +313,8 @@ double EDA_UNIT_UTILS::UI::ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS a
 }
 
 
-wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                              double aValue, bool aAddUnitsText,
-                                              EDA_DATA_TYPE aType )
+wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue,
+                                              bool aAddUnitsText, EDA_DATA_TYPE aType )
 {
     double value_to_print = aValue;
     bool   is_eeschema = ( aIuScale.IU_PER_MM == SCH_IU_PER_MM );
@@ -381,10 +377,8 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                                   int aValue,
-                                                   bool aAddUnitLabel,
-                                                   EDA_DATA_TYPE aType )
+wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, int aValue,
+                                                   bool aAddUnitLabel, EDA_DATA_TYPE aType )
 {
     return MessageTextFromValue( aIuScale, aUnits, double( aValue ), aAddUnitLabel, aType );
 }
@@ -392,9 +386,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 
 // A lower-precision (for readability) version of StringFromValue()
 wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                                   long long int aValue,
-                                                   bool aAddUnitLabel,
-                                                   EDA_DATA_TYPE aType )
+                                                   long long int aValue, bool aAddUnitLabel, EDA_DATA_TYPE aType )
 {
     return MessageTextFromValue( aIuScale, aUnits, double( aValue ), aAddUnitLabel, aType );
 }
@@ -410,9 +402,8 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( EDA_ANGLE aValue, bool aAddUn
 
 
 // A lower-precision (for readability) version of StringFromValue()
-wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                                   double aValue, bool aAddUnitsText,
-                                                   EDA_DATA_TYPE aType )
+wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue,
+                                                   bool aAddUnitsText, EDA_DATA_TYPE aType )
 {
     wxString      text;
     const wxChar* format;
@@ -506,8 +497,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
 }
 
 
-wxString EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale,
-                                                       EDA_UNITS aUnits,
+wxString EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                        const MINOPTMAX<int>& aValue )
 {
     wxString msg;
@@ -537,8 +527,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuSc
 };
 
 
-double EDA_UNIT_UTILS::UI::FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                         double aValue )
+double EDA_UNIT_UTILS::UI::FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue )
 {
     switch( aUnits )
     {

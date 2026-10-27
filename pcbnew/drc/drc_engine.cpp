@@ -933,8 +933,7 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
 }
 
 
-void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints,
-                           BOARD_COMMIT* aCommit )
+void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints, BOARD_COMMIT* aCommit )
 {
     PROF_TIMER timer;
 
@@ -993,8 +992,8 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 
-DRC_CONSTRAINT DRC_ENGINE::EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b,
-                                               PCB_LAYER_ID aLayer, REPORTER* aReporter )
+DRC_CONSTRAINT DRC_ENGINE::EvalZoneConnection( const BOARD_ITEM* a, const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
+                                               REPORTER* aReporter )
 {
     DRC_CONSTRAINT constraint = EvalRules( ZONE_CONNECTION_CONSTRAINT, a, b, aLayer, aReporter );
 
@@ -2237,8 +2236,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 }
 
 
-DRC_CLEARANCE_BATCH DRC_ENGINE::EvalClearanceBatch( const BOARD_ITEM* a, const BOARD_ITEM* b,
-                                                     PCB_LAYER_ID aLayer )
+DRC_CLEARANCE_BATCH DRC_ENGINE::EvalClearanceBatch( const BOARD_ITEM* a, const BOARD_ITEM* b, PCB_LAYER_ID aLayer )
 {
     DRC_CLEARANCE_BATCH result;
     DRC_CONSTRAINT c;
@@ -2272,8 +2270,7 @@ DRC_CLEARANCE_BATCH DRC_ENGINE::EvalClearanceBatch( const BOARD_ITEM* a, const B
 }
 
 
-void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
-                                    std::function<void( const DRC_CONSTRAINT* )> aFailureHandler,
+void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a, std::function<void( const DRC_CONSTRAINT* )> aFailureHandler,
                                     REPORTER* aReporter )
 {
     /*
@@ -2287,8 +2284,7 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
                 REPORT( wxString::Format( _( "Checking rule assertion '%s'." ),
                                           EscapeHTML( c->constraint.m_Test->GetExpression() ) ) )
 
-                if( c->constraint.m_Test->EvaluateFor( a, nullptr, c->constraint.m_Type,
-                                                       a->GetLayer(), aReporter ) )
+                if( c->constraint.m_Test->EvaluateFor( a, nullptr, c->constraint.m_Type, a->GetLayer(), aReporter ) )
                 {
                     REPORT( _( "Assertion passed." ) )
                 }
@@ -2321,8 +2317,7 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a,
                     REPORT( wxString::Format( _( "Checking rule condition '%s'." ),
                                               EscapeHTML( c->condition->GetExpression() ) ) )
 
-                    if( c->condition->EvaluateFor( a, nullptr, c->constraint.m_Type,
-                                                   a->GetLayer(), aReporter ) )
+                    if( c->condition->EvaluateFor( a, nullptr, c->constraint.m_Type, a->GetLayer(), aReporter ) )
                     {
                         REPORT( _( "Rule applied." ) )
                         testAssertion( c );
@@ -2693,9 +2688,11 @@ bool isShowMatchSkippable( const BOARD_ITEM* aItem )
     {
     case PCB_NETINFO_T:
     case PCB_GENERATOR_T:
-    case PCB_GROUP_T: return true;
+    case PCB_GROUP_T:
+        return true;
 
-    default: return false;
+    default:
+        return false;
     }
 }
 
@@ -2707,9 +2704,11 @@ bool matchesShowMatchDomain( const BOARD_ITEM* aItem, SHOWMATCH_DOMAIN aDomain )
 
     switch( aDomain )
     {
-    case SHOWMATCH_DOMAIN::ALL_ITEMS: return true;
+    case SHOWMATCH_DOMAIN::ALL_ITEMS:
+        return true;
 
-    case SHOWMATCH_DOMAIN::COPPER_ITEMS: return aItem->IsOnCopperLayer();
+    case SHOWMATCH_DOMAIN::COPPER_ITEMS:
+        return aItem->IsOnCopperLayer();
 
     case SHOWMATCH_DOMAIN::EDGE_ITEMS:
         if( aItem->IsOnLayer( Edge_Cuts ) || aItem->IsOnLayer( Margin ) )
@@ -2723,9 +2722,11 @@ bool matchesShowMatchDomain( const BOARD_ITEM* aItem, SHOWMATCH_DOMAIN aDomain )
 
         return false;
 
-    case SHOWMATCH_DOMAIN::FOOTPRINTS: return aItem->Type() == PCB_FOOTPRINT_T;
+    case SHOWMATCH_DOMAIN::FOOTPRINTS:
+        return aItem->Type() == PCB_FOOTPRINT_T;
 
-    case SHOWMATCH_DOMAIN::HOLE_ITEMS: return aItem->HasHole();
+    case SHOWMATCH_DOMAIN::HOLE_ITEMS:
+        return aItem->HasHole();
 
     case SHOWMATCH_DOMAIN::MASK_EXPANSION_ITEMS:
         switch( aItem->Type() )
@@ -2735,18 +2736,24 @@ bool matchesShowMatchDomain( const BOARD_ITEM* aItem, SHOWMATCH_DOMAIN aDomain )
         case PCB_ARC_T:
         case PCB_VIA_T:
         case PCB_SHAPE_T:
-        case PCB_ZONE_T: return true;
+        case PCB_ZONE_T:
+            return true;
 
-        default: return false;
+        default:
+            return false;
         }
 
-    case SHOWMATCH_DOMAIN::MASK_ITEMS: return aItem->IsOnLayer( F_Mask ) || aItem->IsOnLayer( B_Mask );
+    case SHOWMATCH_DOMAIN::MASK_ITEMS:
+        return aItem->IsOnLayer( F_Mask ) || aItem->IsOnLayer( B_Mask );
 
-    case SHOWMATCH_DOMAIN::PADS: return aItem->Type() == PCB_PAD_T;
+    case SHOWMATCH_DOMAIN::PADS:
+        return aItem->Type() == PCB_PAD_T;
 
-    case SHOWMATCH_DOMAIN::PADS_AND_VIAS: return aItem->Type() == PCB_PAD_T || aItem->Type() == PCB_VIA_T;
+    case SHOWMATCH_DOMAIN::PADS_AND_VIAS:
+        return aItem->Type() == PCB_PAD_T || aItem->Type() == PCB_VIA_T;
 
-    case SHOWMATCH_DOMAIN::PASTE_ITEMS: return aItem->IsOnLayer( F_Paste ) || aItem->IsOnLayer( B_Paste );
+    case SHOWMATCH_DOMAIN::PASTE_ITEMS:
+        return aItem->IsOnLayer( F_Paste ) || aItem->IsOnLayer( B_Paste );
 
     case SHOWMATCH_DOMAIN::ROUTING_ITEMS:
         switch( aItem->Type() )
@@ -2754,12 +2761,15 @@ bool matchesShowMatchDomain( const BOARD_ITEM* aItem, SHOWMATCH_DOMAIN aDomain )
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-        case PCB_PAD_T: return true;
+        case PCB_PAD_T:
+            return true;
 
-        default: return false;
+        default:
+            return false;
         }
 
-    case SHOWMATCH_DOMAIN::SILK_ITEMS: return aItem->IsOnLayer( F_SilkS ) || aItem->IsOnLayer( B_SilkS );
+    case SHOWMATCH_DOMAIN::SILK_ITEMS:
+        return aItem->IsOnLayer( F_SilkS ) || aItem->IsOnLayer( B_SilkS );
 
     case SHOWMATCH_DOMAIN::SILK_TARGET_ITEMS:
         return aItem->IsOnLayer( F_SilkS ) || aItem->IsOnLayer( B_SilkS ) || aItem->IsOnLayer( F_Mask )
@@ -2772,7 +2782,8 @@ bool matchesShowMatchDomain( const BOARD_ITEM* aItem, SHOWMATCH_DOMAIN aDomain )
         return aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T || aItem->Type() == PCB_TEXTBOX_T
                || aItem->Type() == PCB_TABLECELL_T || BaseType( aItem->Type() ) == PCB_DIMENSION_T;
 
-    case SHOWMATCH_DOMAIN::VIAS: return aItem->Type() == PCB_VIA_T;
+    case SHOWMATCH_DOMAIN::VIAS:
+        return aItem->Type() == PCB_VIA_T;
     }
 
     return false;
@@ -2783,24 +2794,31 @@ SHOWMATCH_DOMAIN_SPEC getShowMatchDomainSpec( DRC_CONSTRAINT_T aConstraint )
 {
     switch( aConstraint )
     {
-    case CLEARANCE_CONSTRAINT: return { SHOWMATCH_DOMAIN::COPPER_ITEMS };
+    case CLEARANCE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::COPPER_ITEMS };
 
-    case EDGE_CLEARANCE_CONSTRAINT: return { SHOWMATCH_DOMAIN::COPPER_ITEMS, SHOWMATCH_DOMAIN::EDGE_ITEMS, true, true };
+    case EDGE_CLEARANCE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::COPPER_ITEMS, SHOWMATCH_DOMAIN::EDGE_ITEMS, true, true };
 
-    case HOLE_CLEARANCE_CONSTRAINT: return { SHOWMATCH_DOMAIN::HOLE_ITEMS, SHOWMATCH_DOMAIN::ALL_ITEMS, true, false };
+    case HOLE_CLEARANCE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::HOLE_ITEMS, SHOWMATCH_DOMAIN::ALL_ITEMS, true, false };
 
-    case HOLE_TO_HOLE_CONSTRAINT: return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
+    case HOLE_TO_HOLE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
 
-    case COURTYARD_CLEARANCE_CONSTRAINT: return { SHOWMATCH_DOMAIN::FOOTPRINTS };
+    case COURTYARD_CLEARANCE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::FOOTPRINTS };
 
     case PHYSICAL_CLEARANCE_CONSTRAINT:
     case PHYSICAL_HOLE_CLEARANCE_CONSTRAINT:
-    case CREEPAGE_CONSTRAINT: return { SHOWMATCH_DOMAIN::ALL_ITEMS };
+    case CREEPAGE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::ALL_ITEMS };
 
     case SILK_CLEARANCE_CONSTRAINT:
         return { SHOWMATCH_DOMAIN::SILK_ITEMS, SHOWMATCH_DOMAIN::SILK_TARGET_ITEMS, true, false };
 
-    case SOLDER_MASK_SLIVER_CONSTRAINT: return { SHOWMATCH_DOMAIN::MASK_ITEMS };
+    case SOLDER_MASK_SLIVER_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::MASK_ITEMS };
 
     case TRACK_WIDTH_CONSTRAINT:
     case TRACK_ANGLE_CONSTRAINT:
@@ -2809,30 +2827,39 @@ SHOWMATCH_DOMAIN_SPEC getShowMatchDomainSpec( DRC_CONSTRAINT_T aConstraint )
     case DIFF_PAIR_GAP_CONSTRAINT:
     case MAX_UNCOUPLED_CONSTRAINT:
     case LENGTH_CONSTRAINT:
-    case SKEW_CONSTRAINT: return { SHOWMATCH_DOMAIN::ROUTING_ITEMS };
+    case SKEW_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::ROUTING_ITEMS };
 
     case VIA_DIAMETER_CONSTRAINT:
     case VIA_COUNT_CONSTRAINT:
     case MICROVIA_STACK_DEPTH_CONSTRAINT:
-    case HOLE_ASPECT_RATIO_CONSTRAINT: return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
+    case HOLE_ASPECT_RATIO_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
 
-    case HOLE_SIZE_CONSTRAINT: return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
+    case HOLE_SIZE_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::HOLE_ITEMS };
 
-    case ANNULAR_WIDTH_CONSTRAINT: return { SHOWMATCH_DOMAIN::PADS_AND_VIAS };
+    case ANNULAR_WIDTH_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::PADS_AND_VIAS };
 
-    case MIN_RESOLVED_SPOKES_CONSTRAINT: return { SHOWMATCH_DOMAIN::PADS };
+    case MIN_RESOLVED_SPOKES_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::PADS };
 
     case TEXT_HEIGHT_CONSTRAINT:
-    case TEXT_THICKNESS_CONSTRAINT: return { SHOWMATCH_DOMAIN::TEXT_ITEMS };
+    case TEXT_THICKNESS_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::TEXT_ITEMS };
 
-    case SOLDER_MASK_EXPANSION_CONSTRAINT: return { SHOWMATCH_DOMAIN::MASK_EXPANSION_ITEMS };
+    case SOLDER_MASK_EXPANSION_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::MASK_EXPANSION_ITEMS };
 
     case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT:
-    case SOLDER_PASTE_REL_MARGIN_CONSTRAINT: return { SHOWMATCH_DOMAIN::PASTE_ITEMS };
+    case SOLDER_PASTE_REL_MARGIN_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::PASTE_ITEMS };
 
     case ASSERTION_CONSTRAINT:
     case DISALLOW_CONSTRAINT:
-    default: return { SHOWMATCH_DOMAIN::ALL_ITEMS };
+    default:
+        return { SHOWMATCH_DOMAIN::ALL_ITEMS };
     }
 }
 
@@ -2862,9 +2889,11 @@ std::vector<PCB_LAYER_ID> getShowMatchLayers( const BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
-    case PCB_PAD_T: layers = static_cast<const PAD*>( aItem )->Padstack().UniqueLayers(); break;
+    case PCB_PAD_T:
+        layers = static_cast<const PAD*>( aItem )->Padstack().UniqueLayers(); break;
 
-    case PCB_VIA_T: layers = static_cast<const PCB_VIA*>( aItem )->Padstack().UniqueLayers(); break;
+    case PCB_VIA_T:
+        layers = static_cast<const PCB_VIA*>( aItem )->Padstack().UniqueLayers(); break;
 
     default:
         for( PCB_LAYER_ID layer : aItem->GetLayerSet() )
@@ -2934,7 +2963,9 @@ std::vector<PCB_LAYER_ID> getShowMatchPairLayers( const DRC_RULE& aRule, const B
 
         break;
 
-    case COURTYARD_CLEARANCE_CONSTRAINT: addLayer( UNDEFINED_LAYER ); break;
+    case COURTYARD_CLEARANCE_CONSTRAINT:
+        addLayer( UNDEFINED_LAYER );
+        break;
 
     default:
         for( PCB_LAYER_ID layer : getShowMatchLayers( aItemA ) )
@@ -3153,9 +3184,7 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingRule( const std::shared_ptr
             for( BOARD_ITEM* item : primaryItems )
             {
                 if( ruleMatchesUnary( *aRule, item, constraint.m_Type, aReporter ? aReporter : m_logReporter ) )
-                {
                     matchedItems.insert( item );
-                }
             }
 
             if( domainSpec.hasSecondary && domainSpec.secondaryUnary )
@@ -3163,9 +3192,7 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingRule( const std::shared_ptr
                 for( BOARD_ITEM* item : secondaryItems )
                 {
                     if( ruleMatchesUnary( *aRule, item, constraint.m_Type, aReporter ? aReporter : m_logReporter ) )
-                    {
                         matchedItems.insert( item );
-                    }
                 }
             }
         }
@@ -3177,8 +3204,7 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingRule( const std::shared_ptr
 }
 
 
-int DRC_ENGINE::GetCachedOwnClearance( const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer,
-                                       wxString* aSource )
+int DRC_ENGINE::GetCachedOwnClearance( const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, wxString* aSource )
 {
     DRC_OWN_CLEARANCE_CACHE_KEY key{ aItem->m_Uuid, aLayer };
 
@@ -3246,7 +3272,11 @@ void DRC_ENGINE::InvalidateClearanceCache( const KIID& aUuid )
     }
     else
     {
-        std::erase_if( m_ownClearanceCache, [&aUuid]( const auto& entry ) { return entry.first.m_uuid == aUuid; } );
+        std::erase_if( m_ownClearanceCache,
+                       [&aUuid]( const auto& entry )
+                       {
+                           return entry.first.m_uuid == aUuid;
+                       } );
     }
 }
 

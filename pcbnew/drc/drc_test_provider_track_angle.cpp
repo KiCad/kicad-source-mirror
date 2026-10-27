@@ -42,9 +42,9 @@ public:
 
     virtual ~DRC_TEST_PROVIDER_TRACK_ANGLE() = default;
 
-    virtual bool Run() override;
+    bool Run() override;
 
-    virtual const wxString GetName() const override { return wxT( "angle" ); };
+    const wxString GetName() const override { return wxT( "track angle" ); };
 };
 
 
@@ -69,16 +69,12 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
             [&]( const int ind ) -> bool
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_ANGLE ) )
-                {
                     return false;
-                }
 
                 PCB_TRACK* item = m_drcEngine->GetBoard()->Tracks()[ind];
 
                 if( item->Type() != PCB_TRACE_T )
-                {
                     return true;
-                }
 
                 SEG      segment   = SEG( item->GetStart(), item->GetEnd() );
 
@@ -87,28 +83,21 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
                 for( PCB_TRACK* other : connectivity->GetConnectedTracks( item ) )
                 {
                     if( other->Type() != PCB_TRACE_T )
-                    {
                         continue;
-                    }
 
                     SEG other_segment = SEG( other->GetStart(), other->GetEnd() );
 
                     OPT_VECTOR2I intersection_opt = segment.Intersect( other_segment );
 
                     if( !intersection_opt.has_value() )
-                    {
                         continue;
-                    }
 
                     VECTOR2I p0 = intersection_opt.value();
 
                     if( m_drcEngine->GetBoard()->GetPad( p0, { item->GetLayer() } ) )
-                    {
                         continue;
-                    }
 
-                    auto constraint = m_drcEngine->EvalRules( TRACK_ANGLE_CONSTRAINT, item, other,
-                                                              item->GetLayer() );
+                    auto constraint = m_drcEngine->EvalRules( TRACK_ANGLE_CONSTRAINT, item, other, item->GetLayer() );
 
                     VECTOR2D  direction       = VECTOR2D( item->GetEnd() - item->GetStart() ).Resize( 1 );
                     VECTOR2D  other_direction = VECTOR2D( other->GetEnd() - other->GetStart() ).Resize( 1 );
@@ -116,28 +105,19 @@ bool DRC_TEST_PROVIDER_TRACK_ANGLE::Run()
                     bool angle_below_90 = false;
 
                     if( segment.B == p0 )
-                    {
                         direction *= -1;
-                    }
                     else if( segment.A != p0 )
-                    {
                         angle_below_90 = true;
-                    }
 
                     if( other_segment.B == p0 )
-                    {
                         other_direction *= -1;
-                    }
                     else if( other_segment.A != p0 )
-                    {
                         angle_below_90 = true;
-                    }
 
                     actual = EDA_ANGLE::Arccos( direction.Dot( other_direction ) );
+
                     if( angle_below_90 && actual > ANGLE_90 )
-                    {
                         actual -= ANGLE_90;
-                    }
 
                     bool fail_min = false;
                     bool fail_max = false;

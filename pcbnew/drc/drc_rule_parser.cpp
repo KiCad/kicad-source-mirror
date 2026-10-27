@@ -75,8 +75,7 @@ void DRC_RULES_PARSER::reportDeprecation( const wxString& oldToken, const wxStri
 {
     if( m_reporter )
     {
-        wxString msg = wxString::Format( _( "The '%s' keyword has been deprecated.  "
-                                            "Please use '%s' instead." ),
+        wxString msg = wxString::Format( _( "The '%s' keyword has been deprecated.  Please use '%s' instead." ),
                                          oldToken,
                                          newToken);
 
@@ -304,11 +303,11 @@ void DRC_RULES_PARSER::ParseComponentClassAssignmentRules(
 std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
 {
     std::shared_ptr<DRC_RULE> rule = std::make_shared<DRC_RULE>();
-    int                     conditionLine = 0;
-    int                     conditionOffset = 0;
-    std::string             conditionSource;
+    int                       conditionLine = 0;
+    int                       conditionOffset = 0;
+    std::string               conditionSource;
 
-    T        token = NextTok();
+    T token = NextTok();
 
     if( !IsSymbol( token ) )
         reportError( _( "Missing rule name." ) );
@@ -414,7 +413,7 @@ std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> DRC_RULES_PARSER::parseComponen
 {
     std::shared_ptr<DRC_RULE_CONDITION> condition;
 
-    T        token = NextTok();
+    T token = NextTok();
 
     if( !IsSymbol( token ) )
         reportError( _( "Missing component class name." ) );
@@ -573,7 +572,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
     case T_microvia_stack_depth:      c.m_Type = MICROVIA_STACK_DEPTH_CONSTRAINT;      break;
-    case T_hole_aspect_ratio: c.m_Type = HOLE_ASPECT_RATIO_CONSTRAINT; break;
+    case T_hole_aspect_ratio:         c.m_Type = HOLE_ASPECT_RATIO_CONSTRAINT;         break;
     case T_min_resolved_spokes:       c.m_Type = MIN_RESOLVED_SPOKES_CONSTRAINT;       break;
     case T_solder_mask_expansion:     c.m_Type = SOLDER_MASK_EXPANSION_CONSTRAINT;     break;
     case T_solder_mask_sliver:        c.m_Type = SOLDER_MASK_SLIVER_CONSTRAINT;        break;
@@ -629,21 +628,21 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
 
             switch( token )
             {
-            case T_track:       c.m_DisallowFlags |= DRC_DISALLOW_TRACKS;        break;
+            case T_track:       c.m_DisallowFlags |= DRC_DISALLOW_TRACKS;       break;
             case T_via:         c.m_DisallowFlags |= DRC_DISALLOW_THROUGH_VIAS
-                                              | DRC_DISALLOW_BLIND_VIAS
-                                              | DRC_DISALLOW_BURIED_VIAS
-                                              | DRC_DISALLOW_MICRO_VIAS;       break;
+                                                   | DRC_DISALLOW_BLIND_VIAS
+                                                   | DRC_DISALLOW_BURIED_VIAS
+                                                   | DRC_DISALLOW_MICRO_VIAS;   break;
             case T_through_via: c.m_DisallowFlags |= DRC_DISALLOW_THROUGH_VIAS; break;
             case T_blind_via:   c.m_DisallowFlags |= DRC_DISALLOW_BLIND_VIAS;   break;
             case T_buried_via:  c.m_DisallowFlags |= DRC_DISALLOW_BURIED_VIAS;  break;
-            case T_micro_via:   c.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS;  break;
-            case T_pad:        c.m_DisallowFlags |= DRC_DISALLOW_PADS;       break;
-            case T_zone:       c.m_DisallowFlags |= DRC_DISALLOW_ZONES;      break;
-            case T_text:       c.m_DisallowFlags |= DRC_DISALLOW_TEXTS;      break;
-            case T_graphic:    c.m_DisallowFlags |= DRC_DISALLOW_GRAPHICS;   break;
-            case T_hole:       c.m_DisallowFlags |= DRC_DISALLOW_HOLES;      break;
-            case T_footprint:  c.m_DisallowFlags |= DRC_DISALLOW_FOOTPRINTS; break;
+            case T_micro_via:   c.m_DisallowFlags |= DRC_DISALLOW_MICRO_VIAS;   break;
+            case T_pad:         c.m_DisallowFlags |= DRC_DISALLOW_PADS;         break;
+            case T_zone:        c.m_DisallowFlags |= DRC_DISALLOW_ZONES;        break;
+            case T_text:        c.m_DisallowFlags |= DRC_DISALLOW_TEXTS;        break;
+            case T_graphic:     c.m_DisallowFlags |= DRC_DISALLOW_GRAPHICS;     break;
+            case T_hole:        c.m_DisallowFlags |= DRC_DISALLOW_HOLES;        break;
+            case T_footprint:   c.m_DisallowFlags |= DRC_DISALLOW_FOOTPRINTS;   break;
 
             case T_EOF:
                 reportError( _( "Missing ')'." ) );
