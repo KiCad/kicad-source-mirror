@@ -99,7 +99,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
 void DIALOG_GRID_SETTINGS::OnLinkedChecked( wxCommandEvent& event )
 {
-    if( !m_checkLinked->IsChecked() && m_textY->GetValue().IsEmpty() )
+    if( !m_checkLinked->IsChecked() )
         m_gridSizeY.SetDoubleValue( m_gridSizeX.GetDoubleValue() );
 
     m_textY->Enable( !m_checkLinked->IsChecked() );
