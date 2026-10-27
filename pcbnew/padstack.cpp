@@ -138,8 +138,15 @@ bool PADSTACK::operator==( const PADSTACK& aOther ) const
     if( m_layerSet != aOther.m_layerSet )
         return false;
 
-    if(  CustomName() != aOther.CustomName() )
+    if( m_customName && aOther.m_customName )
+    {
+        if( *m_customName != *aOther.m_customName )
+            return false;
+    }
+    else if( (bool) m_customName != (bool) m_customName )
+    {
         return false;
+    }
 
     if(  m_orientation != aOther.m_orientation )
         return false;
