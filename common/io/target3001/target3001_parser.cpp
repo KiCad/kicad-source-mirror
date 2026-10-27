@@ -20,6 +20,7 @@
 #include "target3001_parser.h"
 
 #include <algorithm>
+#include <charconv>
 #include <cstring>
 #include <map>
 #include <set>
@@ -99,6 +100,107 @@ void resolveLinkedSignals( COMPONENT& aComponent, uint16_t aOwner )
         }
     }
 }
+
+
+std::vector<std::string> splitFields( const std::string& aText, char aSeparator )
+{
+    std::vector<std::string> fields;
+    size_t                   start = 0;
+
+    while( true )
+    {
+        size_t end = aText.find( aSeparator, start );
+        fields.push_back( aText.substr( start, end - start ) );
+
+        if( end == std::string::npos )
+            return fields;
+
+        start = end + 1;
+    }
+}
+
+
+template <typename T>
+bool toInt( const std::string& aText, T& aOut )
+{
+    const char* end = aText.data() + aText.size();
+    auto [ptr, ec] = std::from_chars( aText.data(), end, aOut );
+    return ec == std::errc() && ptr == end;
+}
+
+
+/// Polygon from a "$%&POLY" value: "layer,id,width,hatch,rank,thermals,islands,x,y;...;x,y*contour,rgb,bits,props"
+std::optional<POLYGON_POUR> parsePolygonPour( const std::string& aValue )
+{
+    size_t star = aValue.find( '*' );
+
+    if( star == std::string::npos )
+        return std::nullopt;
+
+    std::vector<std::string> head = splitFields( aValue.substr( 0, star ), ',' );
+    std::vector<std::string> tail = splitFields( aValue.substr( star + 1 ), ',' );
+    POLYGON_POUR             poly;
+    int                      hatch = 0;
+    int                      thermals = 0;
+    int                      islands = 0;
+
+    if( head.size() < 9 || !toInt( head[0], poly.layer ) || !toInt( head[1], poly.id ) || !toInt( head[2], poly.width )
+        || !toInt( head[3], hatch ) || !toInt( head[4], poly.rank ) || !toInt( head[5], thermals )
+        || !toInt( head[6], islands ) )
+    {
+        return std::nullopt;
+    }
+
+    poly.thermals = thermals != 0;
+    poly.removeIslands = islands != 0;
+
+    // Vertices are "x,y" pairs joined by ';', so they span the remaining comma fields
+    std::string vertices = head[7];
+
+    for( size_t i = 8; i < head.size(); i++ )
+        vertices += ',' + head[i];
+
+    for( const std::string& pair : splitFields( vertices, ';' ) )
+    {
+        size_t  comma = pair.find( ',' );
+        int32_t x = 0;
+        int32_t y = 0;
+
+        if( comma == std::string::npos || !toInt( pair.substr( 0, comma ), x )
+            || !toInt( pair.substr( comma + 1 ), y ) )
+        {
+            return std::nullopt;
+        }
+
+        poly.outline.emplace_back( x, y );
+    }
+
+    if( !tail.empty() && !tail[0].empty() && !toInt( tail[0], poly.edgeClearance ) )
+        return std::nullopt;
+
+    // The polygon's own property list escapes commas as 0x1c and splits names from values with 0x1d;
+    // older records drop the fields before it, so it is found by its separator
+    for( size_t i = 1; i < tail.size(); i++ )
+    {
+        for( const std::string& entry : splitFields( tail[i], '\n' ) )
+        {
+            size_t split = entry.find( '\x1d' );
+
+            if( split != std::string::npos && entry.substr( 0, split ) == "AURA" )
+            {
+                std::string value = entry.substr( split + 1 );
+
+                if( !value.empty() && value.back() == '\r' )
+                    value.pop_back();
+
+                toInt( value, poly.aura );
+            }
+        }
+    }
+
+    return poly;
+}
+
 
 const std::string PASSWORD_MARKER_A = "$%&\xa7";
 const std::string PASSWORD_MARKER_B = "$%&\xa7!";
@@ -588,6 +690,16 @@ private:
             s->string4 = m_r.LStr();
             s->record = m_r.Bytes( 48 );
             s->string5 = m_r.LStr();
+
+            for( const auto& [key, value] : aElem.base.props )
+            {
+                if( key != "$%&POLY" )
+                    continue;
+
+                if( std::optional<POLYGON_POUR> poly = parsePolygonPour( value ) )
+                    s->polygons.push_back( std::move( *poly ) );
+            }
+
             aElem.signal = std::move( s );
             break;
         }
@@ -832,6 +944,18 @@ std::vector<uint8_t> ELEMENT_BASE::Picture() const
     std::replace( text.begin(), text.end(), uint8_t( '_' ), uint8_t( '+' ) );
     base64::decode( text, data );
     return data;
+}
+
+
+std::optional<int64_t> ELEMENT_BASE::PolygonId() const
+{
+    const std::string* value = FindProp( "POLYGONID" );
+    int64_t            id = 0;
+
+    if( !value || !toInt( *value, id ) )
+        return std::nullopt;
+
+    return id;
 }
 
 

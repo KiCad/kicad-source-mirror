@@ -692,7 +692,8 @@ types:
       - id: variants_high
         size: 28
         if: present != 0
-        doc: Bytes 4..31 of the variant set, ORed in after bits 33..255 are cleared. Some writers leave stale bytes here.
+        doc: |
+          Bytes 4..31 of the variant set, ORed in after bits 33..255 are cleared. Some writers leave stale bytes here.
   embedded_file:
     doc: File stored inside the project, e.g. a component's 3D model as "<library>-<model>.step" and ".stl".
     seq:
@@ -1136,7 +1137,8 @@ types:
       v / 200 * min(width, height); other shapes ignore it (corpus pads matched to vendor exports: 4633
       rounded rectangles for values 1..50, 3660 non-rectangles unaffected). Drill zero means no hole; SLOT_HOLE > drill
       supplies elongated-hole length (decimal nanometres) along the pad's local X, with drill as its width,
-      rotated by direction (verified against vendor drill exports). DRILLPICT selects the drill drawing glyph (0..21, default 21),
+      rotated by direction (verified against vendor drill exports). DRILLPICT selects the drill drawing glyph (0..21,
+      default 21),
       independently of padstack selection.
     seq:
       - id: base
@@ -1454,13 +1456,25 @@ types:
           computed fill of area layers. Lines with a true THERMAL_SNIPPET property are thermal spokes the area
           fill generated; the vendor ODB++ export omits them (4 of 3288 in the corpus, each coinciding with a
           routed line), whatever their unknown_byte.
+          Signal polygons are base properties "$%&POLY" (one per polygon, the key repeats) holding
+          "layer,id,width,hatch,rank,thermals,islands,x,y;...;x,y*contour,rgb,bits,props": copper layer,
+          random 64-bit POLYGONID, fill stroke width (0 = board default), hatch pitch (0 = solid), rank
+          (higher ranks are cut out of lower ones), own pads by spokes, remove islands, a closed outline in
+          nanometres, then the board contour distance, a colour (-1 = layer colour), thermal bits and the
+          polygon's own properties (commas escaped as 0x1c, name and value split by 0x1d; AURA is the
+          distance to other signals' polygons). Older records drop trailing tail fields. The polygon's
+          computed fill is stored here as elements carrying its POLYGONID and an ELEMENT_FLAG bit mask
+          (1 member, 2 interior triangle, 4 THERMAL_LIGAMENT spoke); flag-1 boundary strokes have the
+          polygon's width.
       - id: min_width
         type: s4
       - id: min_spacing
         type: s4
       - id: type_coarse
         type: lstr
-        doc: Signal type as chosen in the signal dialog, e.g. CMOS, "Versorgungsspannung DC"; "undefiniert"/"undefined" by default.
+        doc: |
+          Signal type as chosen in the signal dialog, e.g. CMOS, "Versorgungsspannung DC"; "undefiniert"/"undefined" by
+          default.
       - id: type_fine
         type: lstr
         doc: Signal subtype, e.g. "4000 B", ">10V", "bis 1 MHz".
@@ -1680,12 +1694,14 @@ enums:
         end point, points at the start and end angles, and the axis extremes the sweep passes
         (equal angles mean a full circle); polygon corners; the anchor of anything else. Islands
         of a fill are kept even when unconnected. Area elements of one signal on one copper layer unite into
-        one fill. Without any contour element no anchor test applies (no corpus case). The fill is not clipped to the board contour, so an
+        one fill. Without any contour element no anchor test applies (no corpus case). The fill is not clipped to the
+        board contour, so an
         area larger than the board fills past it. A contour stroke with clearance 0 carves nothing and
         the fill runs to the board edge. How a contour stroke with a nonzero clearance carves is not
         resolved: in the corpus, strokes 0.3 wide with clearance 0.15 or 0.3 left 0.49 to 0.51 between
         the fill and the stroke centre, and a stroke with clearance 0.5 left the area's own 0.38 inset
-        intact, so neither the stroke clearance nor clearance plus half width accounts for it. Copper of another signal is carved out by its own clearance alone
+        intact, so neither the stroke clearance nor clearance plus half width accounts for it. Copper of another signal
+        is carved out by its own clearance alone
         (line, arc and spline clearance, pad aura); a clearance of 0 carves nothing and the fill
         covers the element. Signal min_spacing plays no part.
     9:

@@ -105,6 +105,9 @@ struct ELEMENT_BASE
     /// True when property @a aKey holds one of the format's boolean true words
     bool FlagProp( const std::string& aKey ) const;
 
+    /// ID of the signal polygon whose stored fill this element is part of, if any
+    std::optional<int64_t> PolygonId() const;
+
     /// Right end of right-aligned text from its ARXY property, in file coordinates
     std::optional<std::pair<int32_t, int32_t>> TextRightEnd() const;
 
@@ -335,11 +338,31 @@ struct COMPONENT
 };
 
 
+/**
+ * Copper polygon of a signal, stored in a "$%&POLY" signal property.  The fill computed from it is
+ * stored among the signal's tracks, each element tagged with the polygon's POLYGONID property.
+ */
+struct POLYGON_POUR
+{
+    int     layer = 0;
+    int64_t id = 0;
+    int32_t width = 0;       ///< fill stroke width, 0 for the board default
+    int32_t rank = 0;        ///< a polygon is cut out of every one of lower rank on its layer
+    bool    thermals = true; ///< own pads join by spokes rather than solidly
+    bool    removeIslands = false;
+    int32_t edgeClearance = 0; ///< distance kept from the board contour, 0 for none
+    int32_t aura = 0;          ///< distance kept from other signals' polygons, 0 for the default
+
+    std::vector<std::pair<int32_t, int32_t>> outline; ///< closed, first vertex repeated last
+};
+
+
 struct SIGNAL
 {
     std::string          name;
     std::vector<ELEMENT> connections;    ///< schematic wires, junctions and labels
     std::vector<ELEMENT> tracks;         ///< board copper
+    std::vector<POLYGON_POUR> polygons;
     int32_t              minWidth = 0;
     int32_t              minSpacing = 0;
     std::string          string3;
