@@ -81,7 +81,7 @@ public:
             m_Pos.x = m_Pos.y = coord_limits::lowest() / 2.0;
             m_Size.x = m_Size.y = coord_limits::max();
         }
-        else if( size_type( coord_limits::max() ) == std::numeric_limits<size_type>::max() )
+        else if( std::is_same_v<size_type, coord_type> )
         {
             // BOX2L uses 64-bit ints for both coords and sizes
             m_Pos.x = m_Pos.y = -( ( coord_limits::max() / 2 ) - coord_limits::epsilon() );
@@ -170,8 +170,8 @@ public:
      */
     constexpr bool Contains( const Vec& aPoint ) const
     {
-        Vec rel_pos = aPoint - m_Pos;
-        Vec size    = m_Size;
+        SizeVec rel_pos = SizeVec( aPoint ) - m_Pos;
+        SizeVec size    = m_Size;
 
         if( size.x < 0 )
         {
@@ -418,18 +418,15 @@ public:
         // Prevent floating point comparison errors
         static const EDA_ANGLE ROT_EPSILON( 0.000000001, DEGREES_T );
 
-        static const EDA_ANGLE ROT_PARALLEL[]      = { ANGLE_0, ANGLE_180, ANGLE_360 };
-        static const EDA_ANGLE ROT_PERPENDICULAR[] = { ANGLE_0, ANGLE_90,  ANGLE_270 };
-
         // Test for non-rotated rectangle
-        for( EDA_ANGLE ii : ROT_PARALLEL )
+        for( EDA_ANGLE ii : { ANGLE_0, ANGLE_180, ANGLE_360 } )
         {
             if( std::abs( rotation - ii ) < ROT_EPSILON )
                 return Intersects( aRect );
         }
 
         // Test for rectangle rotated by multiple of 90 degrees
-        for( EDA_ANGLE jj : ROT_PERPENDICULAR )
+        for( EDA_ANGLE jj : { ANGLE_90,  ANGLE_270 } )
         {
             if( std::abs( rotation - jj ) < ROT_EPSILON )
             {
@@ -437,7 +434,7 @@ public:
 
                 // Rotate the supplied rect by 90 degrees
                 rotRect.SetOrigin( aRect.Centre() );
-                rotRect.Inflate( aRect.GetHeight(), aRect.GetWidth() );
+                rotRect.Inflate( ( aRect.GetHeight() / 2 ) + 1, ( aRect.GetWidth() / 2 ) + 1 );
                 return Intersects( rotRect );
             }
         }
@@ -530,7 +527,7 @@ public:
         me.Normalize(); // ensure size is >= 0
 
         // Test if the circle intersects at all
-        if( !IntersectsCircle( aCenter, aRadius + aWidth / 2 ) )
+        if( !IntersectsCircle( aCenter, aRadius + ( aWidth / 2 ) + 1 ) )
             return false;
 
         Vec farpt = FarthestPointTo( aCenter );
