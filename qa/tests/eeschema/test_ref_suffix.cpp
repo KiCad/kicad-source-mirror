@@ -629,6 +629,29 @@ BOOST_AUTO_TEST_CASE( SuffixModeSharesOneBase )
 }
 
 
+BOOST_AUTO_TEST_CASE( SuffixModeNewReferenceAvoidsComposedCollision )
+{
+    Load( wxS( "issue13212" ) );
+
+    std::vector<SCH_SHEET_PATH> channels = SuffixChannels();
+    SCH_SHEET_PATH              root = m_schematic->Hierarchy()[0];
+    SCH_SYMBOL*                 channel = FirstSymbol( channels[0] );
+    SCH_SYMBOL*                 other = FindSymbol( root, wxS( "R1" ) );
+    BOOST_REQUIRE( channel && other );
+
+    other->SetRef( &root, wxS( "R1_M2" ) );
+
+    for( const SCH_SHEET_PATH& path : channels )
+        channel->SetRef( &path, wxS( "R?" ) );
+
+    AnnotateSelection( { channel }, channels[0] );
+
+    BOOST_CHECK_EQUAL( other->GetRef( &root ), wxS( "R1_M2" ) );
+    BOOST_CHECK_EQUAL( channel->GetRef( &channels[0] ), wxS( "R7_M1" ) );
+    BOOST_CHECK_EQUAL( channel->GetRef( &channels[1] ), wxS( "R7_M2" ) );
+}
+
+
 // A variable can give a suffix that runs into the base number, so R91 with suffix 2 reads R912
 BOOST_AUTO_TEST_CASE( SuffixModeRenumbersComposedCollision )
 {

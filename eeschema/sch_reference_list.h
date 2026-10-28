@@ -494,13 +494,12 @@ public:
      * @param aAdditionalRefs Additional references to check for duplicates
      * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
      *        aStartNumber)
+     * @param aSharedSheets Hierarchy to check when one base is shared by reused sheet instances
      */
-    void AnnotateByOptions( enum ANNOTATE_ORDER_T                   aSortOption,
-                            enum ANNOTATE_ALGO_T                    aAlgoOption,
-                            int                                     aStartNumber,
-                            const SCH_MULTI_UNIT_REFERENCE_MAP&     aLockedUnitMap,
-                            const SCH_REFERENCE_LIST&               aAdditionalRefs,
-                            bool                                    aStartAtCurrent );
+    void AnnotateByOptions( enum ANNOTATE_ORDER_T aSortOption, enum ANNOTATE_ALGO_T aAlgoOption, int aStartNumber,
+                            const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
+                            const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent,
+                            const SCH_SHEET_LIST* aSharedSheets = nullptr );
 
     /**
      * Set the reference designators in the list that have not been annotated.
@@ -522,11 +521,11 @@ public:
      *      in aAdditionalRefs exist in this list.
      * @param aStartAtCurrent Use m_numRef for each reference as the start number (overrides
             aStartNumber)
+     * @param aSharedSheets Hierarchy to check when one base is shared by reused sheet instances
      */
     void Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
-                   const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
-                   const SCH_REFERENCE_LIST& aAdditionalRefs,
-                   bool aStartAtCurrent = false );
+                   const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap, const SCH_REFERENCE_LIST& aAdditionalRefs,
+                   bool aStartAtCurrent = false, const SCH_SHEET_LIST* aSharedSheets = nullptr );
 
     /**
      * Check for annotations errors.
@@ -659,9 +658,12 @@ public:
      * @param aRef is the reference item used for the search pattern.
      * @param aMinValue The minimum value for the current search.
      * @param aRequiredUnits List of units to ensure are free
+     * @param aDestinations Instances affected by each reference in this list
+     * @param aLocked Package whose members will receive the same number
      */
-    int FindFirstUnusedReference( const SCH_REFERENCE& aRef, int aMinValue,
-                                  const std::vector<int>& aRequiredUnits ) const;
+    int FindFirstUnusedReference( const SCH_REFERENCE& aRef, int aMinValue, const std::vector<int>& aRequiredUnits,
+                                  const std::map<const SCH_REFERENCE*, std::vector<SCH_REFERENCE>>& aDestinations = {},
+                                  const SCH_REFERENCE_LIST* aLocked = nullptr ) const;
 
     std::vector<SCH_SYMBOL_INSTANCE> GetSymbolInstances() const;
 

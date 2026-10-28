@@ -87,12 +87,13 @@ public:
      * @param aRefNumberMap map from reference numbers to vectors of SCH_REFERENCE for currently used references
      * @param aRequiredUnits vector of unit numbers needed (negative values are ignored)
      * @param aMinValue the minimum value to start searching from
+     * @param aAcceptNumber Optional additional check before a number is accepted or reserved
      * @return the next available reference number
      */
-    int GetNextRefDesForUnits( const SCH_REFERENCE& aRef,
+    int GetNextRefDesForUnits( const SCH_REFERENCE&                             aRef,
                                const std::map<int, std::vector<SCH_REFERENCE>>& aRefNumberMap,
-                               const std::vector<int>& aRequiredUnits,
-                               int aMinValue );
+                               const std::vector<int>& aRequiredUnits, int aMinValue,
+                               const std::function<bool( int )>& aAcceptNumber = {} );
 
     /**
      * Serialize the tracker data to a compact string representation.

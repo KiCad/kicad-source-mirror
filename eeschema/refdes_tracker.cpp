@@ -87,10 +87,10 @@ bool REFDES_TRACKER::Contains( const std::string& aRefDes ) const
 }
 
 
-int REFDES_TRACKER::GetNextRefDesForUnits( const SCH_REFERENCE& aRef,
+int REFDES_TRACKER::GetNextRefDesForUnits( const SCH_REFERENCE&                             aRef,
                                            const std::map<int, std::vector<SCH_REFERENCE>>& aRefNumberMap,
-                                           const std::vector<int>& aRequiredUnits,
-                                           int aMinValue )
+                                           const std::vector<int>& aRequiredUnits, int aMinValue,
+                                           const std::function<bool( int )>& aAcceptNumber )
 {
     std::unique_lock<std::mutex> lock;
 
@@ -107,6 +107,12 @@ int REFDES_TRACKER::GetNextRefDesForUnits( const SCH_REFERENCE& aRef,
 
     while( true )
     {
+        if( aAcceptNumber && !aAcceptNumber( candidate ) )
+        {
+            candidate++;
+            continue;
+        }
+
         // Check if this candidate number is currently in use
         auto mapIt = aRefNumberMap.find( candidate );
 

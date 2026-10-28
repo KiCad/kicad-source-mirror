@@ -527,8 +527,10 @@ void SCH_REFERENCE_LIST::RenumberBasesUsedBy( const SCH_REFERENCE_LIST&         
 }
 
 
-int SCH_REFERENCE_LIST::FindFirstUnusedReference( const SCH_REFERENCE& aRef, int aMinValue,
-                                                  const std::vector<int>& aRequiredUnits ) const
+int SCH_REFERENCE_LIST::FindFirstUnusedReference(
+        const SCH_REFERENCE& aRef, int aMinValue, const std::vector<int>& aRequiredUnits,
+        const std::map<const SCH_REFERENCE*, std::vector<SCH_REFERENCE>>& aDestinations,
+        const SCH_REFERENCE_LIST*                                         aLocked ) const
 {
     // Create a map of references indexed by reference number, only including those with the same
     // reference prefix as aRef
@@ -552,7 +554,60 @@ int SCH_REFERENCE_LIST::FindFirstUnusedReference( const SCH_REFERENCE& aRef, int
             numbered.push_back( ref );
     }
 
-    return m_refDesTracker->GetNextRefDesForUnits( aRef, refNumberMap, aRequiredUnits, aMinValue );
+    std::function<bool( int )> acceptNumber;
+
+    if( !aDestinations.empty() )
+    {
+        std::multimap<wxString, SCH_REFERENCE> occupied;
+        std::vector<SCH_REFERENCE>             candidates;
+
+        for( const auto& [ref, destinations] : aDestinations )
+        {
+            if( ref == &aRef
+                || ( aLocked && ref->CompareRef( aRef ) == 0 && ref->CompareLibId( aRef ) == 0
+                     && ref->CompareValue( aRef ) == 0 && aLocked->Contains( *ref ) ) )
+            {
+                candidates.insert( candidates.end(), destinations.begin(), destinations.end() );
+            }
+
+            if( ref->m_isNew || ref->m_numRef < 0 )
+                continue;
+
+            for( SCH_REFERENCE destination : destinations )
+            {
+                destination.SetUnit( ref->GetUnit() );
+
+                // Symbols still hold the old references until allocation finishes
+                wxString composed = ref->GetRef() + ref->GetRefNumber() + destination.m_refSuffix;
+                occupied.emplace( composed, std::move( destination ) );
+            }
+        }
+
+        acceptNumber = [&aRef, occupied = std::move( occupied ), candidates = std::move( candidates )]( int aNumber )
+        {
+            wxString base = aRef.GetRef() + aRef.formatRefStr( aNumber );
+
+            for( const SCH_REFERENCE& candidate : candidates )
+            {
+                auto [begin, end] = occupied.equal_range( base + candidate.m_refSuffix );
+
+                for( auto it = begin; it != end; ++it )
+                {
+                    const SCH_REFERENCE& other = it->second;
+
+                    if( other.GetUnit() == candidate.GetUnit() || other.CompareLibId( candidate ) != 0
+                        || other.CompareValue( candidate ) != 0 )
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        };
+    }
+
+    return m_refDesTracker->GetNextRefDesForUnits( aRef, refNumberMap, aRequiredUnits, aMinValue, acceptNumber );
 }
 
 
@@ -639,12 +694,10 @@ void SCH_REFERENCE_LIST::ReannotateDuplicates( const SCH_REFERENCE_LIST& aAdditi
 }
 
 
-void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T                    aSortOption,
-                                            ANNOTATE_ALGO_T                     aAlgoOption,
-                                            int                                 aStartNumber,
+void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption, int aStartNumber,
                                             const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
-                                            const SCH_REFERENCE_LIST&           aAdditionalRefs,
-                                            bool                                aStartAtCurrent )
+                                            const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent,
+                                            const SCH_SHEET_LIST* aSharedSheets )
 {
     switch( aSortOption )
     {
@@ -677,14 +730,14 @@ void SCH_REFERENCE_LIST::AnnotateByOptions( ANNOTATE_ORDER_T                    
         break;
     }
 
-    Annotate( useSheetNum, idStep, aStartNumber, aLockedUnitMap, aAdditionalRefs, aStartAtCurrent );
+    Annotate( useSheetNum, idStep, aStartNumber, aLockedUnitMap, aAdditionalRefs, aStartAtCurrent, aSharedSheets );
 }
 
 
 void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int aStartNumber,
                                    const SCH_MULTI_UNIT_REFERENCE_MAP& aLockedUnitMap,
-                                   const SCH_REFERENCE_LIST& aAdditionalRefs,
-                                   bool aStartAtCurrent )
+                                   const SCH_REFERENCE_LIST& aAdditionalRefs, bool aStartAtCurrent,
+                                   const SCH_SHEET_LIST* aSharedSheets )
 {
     if( !m_refDesTracker )
     {
@@ -721,6 +774,30 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         // so we change the m_isNew flag to be false after splitting
         additionalRef.m_isNew = false;
         AddItem( additionalRef ); //add to this container
+    }
+
+    std::map<const SCH_REFERENCE*, std::vector<SCH_REFERENCE>> destinations;
+
+    if( aSharedSheets )
+    {
+        for( size_t i = 0; i < m_flatList.size(); ++i )
+        {
+            const SCH_REFERENCE&        ref = m_flatList[i];
+            std::vector<SCH_REFERENCE>& instances = destinations[&ref];
+
+            if( i < originalSize && sharesReusedBase( ref ) )
+            {
+                for( const SCH_SHEET_PATH& path : *aSharedSheets )
+                {
+                    if( path.LastScreen() == ref.GetSheetPath().LastScreen() )
+                        instances.emplace_back( ref.GetSymbol(), path );
+                }
+            }
+            else
+            {
+                instances.push_back( ref );
+            }
+        }
     }
 
     int LastReferenceNumber = 0;
@@ -795,7 +872,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         {
             if( ref_unit.m_isNew )
             {
-                LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, {} );
+                LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, {}, destinations );
                 ref_unit.m_numRef = LastReferenceNumber;
                 ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
             }
@@ -814,7 +891,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
             if( ref_unit.m_isNew )
             {
-                LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
+                LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units, destinations, lockedList );
                 ref_unit.m_numRef = LastReferenceNumber;
                 ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
                 ref_unit.m_isNew = false;
@@ -875,7 +952,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             // know what group this might belong to, so just find the first unused reference for
             // this specific unit. The other units will be annotated in the following passes.
             std::vector<int> units = { ref_unit.GetUnit() };
-            LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units );
+            LastReferenceNumber = FindFirstUnusedReference( ref_unit, minRefId, units, destinations );
             ref_unit.m_numRef = LastReferenceNumber;
             ref_unit.m_numRefStr = ref_unit.formatRefStr( LastReferenceNumber );
             ref_unit.m_isNew = false;
@@ -1552,7 +1629,8 @@ std::set<const SCH_SCREEN*> AnnotateReferences( SCH_REFERENCE_LIST& aRefs, SCH_M
     // Break full symbol reference into name (prefix) and number:
     // example: IC1 become IC, and 1
     aRefs.SplitReferences();
-    aRefs.AnnotateByOptions( aSortOption, aAlgoOption, aStartNumber, aLocked, additionalRefs, false );
+    aRefs.AnnotateByOptions( aSortOption, aAlgoOption, aStartNumber, aLocked, additionalRefs, false,
+                             suffixMode ? &sheets : nullptr );
 
     std::set<const SCH_SCREEN*> sharedScreens;
 
