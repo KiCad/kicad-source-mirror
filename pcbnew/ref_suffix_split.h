@@ -62,8 +62,10 @@ struct FOOTPRINT_REF_SPLIT
  * copy on the first page so every copy keeps the same base.
  *
  * @param aSuffixes are the schematic's sheet suffixes, or null when there is no schematic to ask.
+ * @param aSuffixMode is true when the project numbers reused sheets by suffix, which leaves a
+ *                    reference ambiguous whenever there is no schematic to name the suffix.
  */
-std::map<KIID, FOOTPRINT_REF_SPLIT> SplitRefSuffixes( const FOOTPRINTS& aFootprints,
-                                                     const SHEET_REF_SUFFIXES* aSuffixes );
+std::map<KIID, FOOTPRINT_REF_SPLIT> SplitRefSuffixes( const FOOTPRINTS&         aFootprints,
+                                                      const SHEET_REF_SUFFIXES* aSuffixes, bool aSuffixMode );
 
 #endif // REF_SUFFIX_SPLIT_H

@@ -36,6 +36,7 @@
 #include <string_utils.h>  // StrNumCmp
 #include <kiface_base.h>
 #include <pcbnew_settings.h>
+#include <project/project_file.h>
 #include <mail_type.h>
 #include <ref_suffix_split.h>
 #include <refdes_utils.h>
@@ -445,9 +446,9 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
     if( unknownSuffixes > 0 )
     {
-        ShowReport( wxString::Format( _( "%d footprints keep their references because the text after the number "
-                                         "is not a known sheet suffix. Open the schematic and update the PCB from "
-                                         "it to renumber them." ),
+        ShowReport( wxString::Format( _( "%d footprints keep their references because their sheet suffixes "
+                                         "could not be determined. Open the schematic editor and update the PCB "
+                                         "from it if needed before renumbering them." ),
                                       unknownSuffixes ),
                     RPT_SEVERITY_WARNING );
     }
@@ -505,7 +506,11 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
         suffixes = ParseRefSuffixes( payload );
     }
 
-    std::map<KIID, FOOTPRINT_REF_SPLIT> splits = SplitRefSuffixes( m_footprints, suffixes ? &*suffixes : nullptr );
+    // Mirrors SCHEMATIC_SETTINGS::m_AnnotateReusedSheetSuffixes, which pcbnew cannot reach
+    const bool suffixMode =
+            m_frame->Prj().GetProjectFile().Get<bool>( "schematic.annotation.reused_sheet_suffixes" ).value_or( false );
+    std::map<KIID, FOOTPRINT_REF_SPLIT> splits =
+            SplitRefSuffixes( m_footprints, suffixes ? &*suffixes : nullptr, suffixMode );
 
     REFDES_INFO fpData;
     bool        useFPLocation = m_locationChoice->GetSelection() == 0;

@@ -53,8 +53,8 @@ std::optional<SHEET_REF_SUFFIXES> ParseRefSuffixes( const std::string& aPayload 
 }
 
 
-std::map<KIID, FOOTPRINT_REF_SPLIT> SplitRefSuffixes( const FOOTPRINTS& aFootprints,
-                                                     const SHEET_REF_SUFFIXES* aSuffixes )
+std::map<KIID, FOOTPRINT_REF_SPLIT> SplitRefSuffixes( const FOOTPRINTS&         aFootprints,
+                                                      const SHEET_REF_SUFFIXES* aSuffixes, bool aSuffixMode )
 {
     struct GROUP
     {
@@ -97,6 +97,13 @@ std::map<KIID, FOOTPRINT_REF_SPLIT> SplitRefSuffixes( const FOOTPRINTS& aFootpri
                 if( it = aSuffixes->find( sheet.AsString() + wxS( "/" ) ); it != aSuffixes->end() )
                     entry = &it->second;
             }
+        }
+
+        if( !aSuffixes && aSuffixMode && footprint->GetPath().size() > 1 )
+        {
+            // With no schematic to ask, a numeric suffix cannot be told from part of the number
+            split.Unknown = true;
+            continue;
         }
 
         const wxString suffix = entry ? entry->Suffix : wxString();

@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE( CopiesShareTheFirstPagesBase )
     add( c, "a4", wxS( "R8" ) );
     KIID package = add( b, "a5", wxS( "U9_M1" ) );
 
-    std::map<KIID, FOOTPRINT_REF_SPLIT> splits = SplitRefSuffixes( board.Footprints(), &*suffixes );
+    std::map<KIID, FOOTPRINT_REF_SPLIT> splits = SplitRefSuffixes( board.Footprints(), &*suffixes, true );
 
     BOOST_CHECK( splits[first].Representative == bare && splits[second].Representative == bare );
     BOOST_CHECK( splits[stale].Unknown );
@@ -71,7 +71,31 @@ BOOST_AUTO_TEST_CASE( CopiesShareTheFirstPagesBase )
     BOOST_CHECK_EQUAL( splits[package].Base, wxS( "U9" ) );
 
     // Without a schematic, a suffix cannot be told from part of the reference
-    BOOST_CHECK( SplitRefSuffixes( board.Footprints(), nullptr )[first].Unknown );
+    BOOST_CHECK( SplitRefSuffixes( board.Footprints(), nullptr, true )[first].Unknown );
+}
+
+
+BOOST_AUTO_TEST_CASE( NumericSuffixNeedsTheSchematic )
+{
+    BOARD      board;
+    FOOTPRINT* child = new FOOTPRINT( &board );
+    child->SetPath( KIID_PATH( wxS( "/11111111-1111-1111-1111-111111111111/"
+                                    "22222222-2222-2222-2222-222222222222" ) ) );
+    child->SetReference( wxS( "R72" ) );
+    board.Add( child, ADD_MODE::APPEND );
+
+    BOOST_CHECK( SplitRefSuffixes( board.Footprints(), nullptr, true )[child->m_Uuid].Unknown );
+    BOOST_CHECK( !SplitRefSuffixes( board.Footprints(), nullptr, false )[child->m_Uuid].Unknown );
+
+    KIID_PATH sheet = child->GetPath();
+    sheet.pop_back();
+    SHEET_REF_SUFFIXES suffixes;
+    suffixes[sheet.AsString() + wxS( "/" )].Suffix = wxS( "2" );
+
+    FOOTPRINT_REF_SPLIT split = SplitRefSuffixes( board.Footprints(), &suffixes, true )[child->m_Uuid];
+    BOOST_CHECK( !split.Unknown );
+    BOOST_CHECK_EQUAL( split.Base, wxS( "R7" ) );
+    BOOST_CHECK_EQUAL( split.Suffix, wxS( "2" ) );
 }
 
 
