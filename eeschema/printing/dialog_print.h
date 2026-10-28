@@ -45,6 +45,8 @@ private:
 
     void SavePrintOptions();
 
+    bool printViaPdf();
+
 private:
     SCH_EDIT_FRAME* m_parent;
 };

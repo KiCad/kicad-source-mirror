@@ -55,6 +55,12 @@ namespace PRINTING
         }
     }
 
+    /**
+     * Show the platform print dialog for the PDF @a aFile and print it.
+     *
+     * The job, and any print-to-file output, is named after the file's base name. The call
+     * returns only once the platform has finished reading the file, so the caller may delete it.
+     */
     PRINT_RESULT PrintPDF( const std::string& aFile );
 
     /**

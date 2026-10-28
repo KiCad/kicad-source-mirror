@@ -29,6 +29,8 @@
 #include <wx/print.h>
 #include <wx/cmndata.h>
 #include <wx/regex.h>
+#include <wx/toplevel.h>
+#include <wx/log.h>
 
 #if wxUSE_GTKPRINT
 #include <wx/gtk/print.h>
@@ -145,6 +147,69 @@ void request_page_setup_callback( GtkPrintOperation* operation, GtkPrintContext*
 
     g_object_unref( page );
 }
+
+
+// GTK's scratch files use the g_mkstemp() templates "gtkprintXXXXXX" and "gtkprint_XXXXXX", so match
+// the whole template to keep a destination the user named gtkprint-something
+bool isSpoolName( const wxString& aFileName )
+{
+    static wxRegEx spoolTemplate( wxS( "^gtkprint_?[A-Z0-9]{6}$" ) );
+
+    return spoolTemplate.Matches( aFileName );
+}
+
+
+// Settings from the last accepted dialog, so the next print reopens on the same printer and paper
+GtkPrintSettings* s_lastSettings = nullptr;
+
+
+// Keep the print-to-file folder but not the file, so the next document is offered under its own name
+void rememberSettings( GtkPrintSettings* aSettings )
+{
+    GtkPrintSettings* settings = gtk_print_settings_copy( aSettings );
+    const gchar*      uri = gtk_print_settings_get( settings, GTK_PRINT_SETTINGS_OUTPUT_URI );
+
+    if( uri )
+    {
+        GFile* file = g_file_new_for_uri( uri );
+        GFile* dir = g_file_get_parent( file );
+        gchar* name = g_file_get_basename( file );
+
+        // The file backend joins output-dir to the basename as a local path, so a URI there breaks it
+        gchar* dirPath = dir ? g_file_get_path( dir ) : nullptr;
+
+        if( dirPath && name && !isSpoolName( wxFileName( wxString::FromUTF8( name ) ).GetName() ) )
+            gtk_print_settings_set( settings, GTK_PRINT_SETTINGS_OUTPUT_DIR, dirPath );
+
+        g_free( dirPath );
+
+        g_free( name );
+
+        if( dir )
+            g_object_unref( dir );
+
+        g_object_unref( file );
+        gtk_print_settings_unset( settings, GTK_PRINT_SETTINGS_OUTPUT_URI );
+    }
+
+    if( s_lastSettings )
+        g_object_unref( s_lastSettings );
+
+    s_lastSettings = settings;
+}
+
+
+GtkWindow* activeToplevel()
+{
+    wxWindow* active = wxGetTopLevelParent( wxGetActiveWindow() );
+
+    if( !active || !active->GetHandle() )
+        return nullptr;
+
+    GtkWidget* toplevel = gtk_widget_get_toplevel( active->GetHandle() );
+
+    return gtk_widget_is_toplevel( toplevel ) ? GTK_WINDOW( toplevel ) : nullptr;
+}
 } // namespace
 
 namespace KIPLATFORM
@@ -169,6 +234,7 @@ namespace PRINTING
 
         if( error )
         {
+            wxLogTrace( PRINTING_TRACE, "Poppler could not load %s: %s", aFile, error->message );
             g_error_free( error );
             return PRINT_RESULT::FAILED_TO_LOAD;
         }
@@ -200,6 +266,16 @@ namespace PRINTING
         gtk_print_operation_set_use_full_page( op, FALSE );
         gtk_print_operation_set_unit( op, GTK_UNIT_POINTS );
 
+        // GTK names both the spooled job and the print-to-file output after these
+        std::string       jobName = wxFileName( wxString::FromUTF8( aFile ) ).GetName().ToStdString( wxConvUTF8 );
+        GtkPrintSettings* settings =
+                s_lastSettings ? gtk_print_settings_copy( s_lastSettings ) : gtk_print_settings_new();
+
+        gtk_print_settings_set( settings, GTK_PRINT_SETTINGS_OUTPUT_BASENAME, jobName.c_str() );
+        gtk_print_operation_set_print_settings( op, settings );
+        g_object_unref( settings );
+        gtk_print_operation_set_job_name( op, jobName.c_str() );
+
         // Connect callbacks
         g_signal_connect( op, "begin-print", G_CALLBACK( begin_print_callback ), &print_data );
         g_signal_connect( op, "draw-page", G_CALLBACK( draw_page ), &print_data );
@@ -208,13 +284,14 @@ namespace PRINTING
         // Run the print operation
         error = NULL;
         GtkPrintOperationResult result =
-                gtk_print_operation_run( op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, NULL, &error );
+                gtk_print_operation_run( op, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, activeToplevel(), &error );
 
         // Handle errors and determine result
         PRINT_RESULT return_result;
 
         if( error )
         {
+            wxLogTrace( PRINTING_TRACE, "GTK print failed: %s", error->message );
             g_error_free( error );
             return_result = PRINT_RESULT::FAILED_TO_PRINT;
         }
@@ -222,7 +299,10 @@ namespace PRINTING
         {
             switch( result )
             {
-            case GTK_PRINT_OPERATION_RESULT_APPLY: return_result = PRINT_RESULT::OK; break;
+            case GTK_PRINT_OPERATION_RESULT_APPLY:
+                rememberSettings( gtk_print_operation_get_print_settings( op ) );
+                return_result = PRINT_RESULT::OK;
+                break;
             case GTK_PRINT_OPERATION_RESULT_CANCEL: return_result = PRINT_RESULT::CANCELLED; break;
             case GTK_PRINT_OPERATION_RESULT_ERROR:
             default: return_result = PRINT_RESULT::FAILED_TO_PRINT; break;
@@ -236,18 +316,6 @@ namespace PRINTING
     {
         return PrintPDF( aFile, true );
     }
-
-    // GTK opens its scratch file with the g_mkstemp() templates "gtkprintXXXXXX" and
-    // "gtkprint_XXXXXX", so the name is the only thing separating it from a destination the user
-    // picked. Matching the whole template rather than the prefix keeps a file the user named
-    // gtkprint-something safe
-    static bool isSpoolName( const wxString& aFileName )
-    {
-        static wxRegEx spoolTemplate( wxS( "^gtkprint_?[A-Z0-9]{6}$" ) );
-
-        return spoolTemplate.Matches( aFileName );
-    }
-
 
     void ResetPrintToFilePath( wxPrintData& aData )
     {

@@ -46,6 +46,8 @@
       <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}" />
       <!-- Windows 10 and 11 -->
       <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}" />
+      <!-- XAML Islands, used by the PDF print dialog, refuse to start without a tested 1903 or later -->
+      <maxversiontested Id="10.0.18362.0" />
     </application>
   </compatibility>
 </assembly>

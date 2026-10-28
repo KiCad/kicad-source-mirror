@@ -34,6 +34,8 @@
 #include <dialogs/panel_printer_list.h>
 
 #include <advanced_config.h>
+#include <reporter.h>
+#include <gestfich.h>
 #include <printing.h>
 #include <sch_plotter.h>
 
@@ -110,10 +112,12 @@ DIALOG_PRINT::DIALOG_PRINT( SCH_EDIT_FRAME* aParent ) :
     m_sdbSizerApply->Hide();
 #endif
 
-    // New printing subsystem has print preview on all platforms
-#if defined( _MSC_VER )
+#ifndef __MINGW32__
     if( ADVANCED_CFG::GetCfg().m_UsePdfPrint )
     {
+        // The native print dialog owns the printer, paper and preview
+        m_panelPrinters->Hide();
+        m_buttonPageSetup->Hide();
         m_sdbSizerApply->Hide();
     }
 #endif
@@ -304,46 +308,7 @@ bool DIALOG_PRINT::TransferDataFromWindow()
 
 #ifndef __MINGW32__
     if( ADVANCED_CFG::GetCfg().m_UsePdfPrint )
-    {
-        EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-
-        SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
-        renderSettings.m_ShowHiddenPins = false;
-        renderSettings.m_ShowHiddenFields = false;
-
-        COLOR_SETTINGS* cs = ::GetColorSettings( cfg->m_Printing.use_theme ? cfg->m_Printing.color_theme
-                                                                           : cfg->m_ColorTheme );
-        renderSettings.LoadColors( cs );
-
-        SCH_PLOT_OPTS plotOpts;
-        plotOpts.m_plotDrawingSheet = cfg->m_Printing.title_block;
-        plotOpts.m_blackAndWhite = cfg->m_Printing.monochrome;
-        plotOpts.m_useBackgroundColor = cfg->m_Printing.background;
-        plotOpts.m_theme = cfg->m_Printing.use_theme ? cfg->m_Printing.color_theme
-                                                     : cfg->m_ColorTheme;
-
-        wxFileName tmp = wxFileName::CreateTempFileName( wxS( "eeschema_print" ) );
-        wxRemoveFile( tmp.GetFullPath() );
-        tmp.SetExt( wxS( "pdf" ) );
-        plotOpts.m_outputFile = tmp.GetFullPath();
-
-        SCH_PLOTTER plotter( m_parent );
-
-        Pgm().m_Printing = true;
-        plotter.Plot( PLOT_FORMAT::PDF, plotOpts, &renderSettings, nullptr );
-        Pgm().m_Printing = false;
-
-        KIPLATFORM::PRINTING::PRINT_RESULT result =
-                KIPLATFORM::PRINTING::PrintPDF( TO_UTF8( plotter.GetLastOutputFilePath() ) );
-
-        if( result != KIPLATFORM::PRINTING::PRINT_RESULT::OK
-                && result != KIPLATFORM::PRINTING::PRINT_RESULT::CANCELLED )
-        {
-            DisplayError( this, KIPLATFORM::PRINTING::PrintResultToString( result ) );
-        }
-
-        return true;
-    }
+        return printViaPdf();
 #endif
 
     int sheet_count = m_parent->Schematic().Root().CountSheets();
@@ -460,4 +425,63 @@ bool DIALOG_PRINT::TransferDataFromWindow()
     Pgm().m_Printing = false;
 
     return true;
+}
+
+
+bool DIALOG_PRINT::printViaPdf()
+{
+#ifdef __MINGW32__
+    return false;
+#else
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
+    SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
+    renderSettings.m_ShowHiddenPins = false;
+    renderSettings.m_ShowHiddenFields = false;
+
+    wxString themeName = cfg->m_Printing.use_theme ? cfg->m_Printing.color_theme : cfg->m_ColorTheme;
+    renderSettings.LoadColors( ::GetColorSettings( themeName ) );
+
+    SCH_PLOT_OPTS plotOpts;
+    plotOpts.m_plotDrawingSheet = cfg->m_Printing.title_block;
+    plotOpts.m_blackAndWhite = cfg->m_Printing.monochrome;
+    plotOpts.m_useBackgroundColor = cfg->m_Printing.background;
+    plotOpts.m_theme = themeName;
+
+    // The platform names the print job and any print-to-file output after the PDF
+    SCOPED_TEMP_PATH tmpDir;
+    wxString         jobName = wxFileName( m_parent->Schematic().GetFileName() ).GetName();
+
+    if( !tmpDir.MakeDirectory( wxS( "eeschema_print" ), wxS_IRUSR | wxS_IWUSR | wxS_IXUSR ) )
+    {
+        DisplayError( this, _( "Failed to create a temporary folder for printing." ) );
+        return false;
+    }
+
+    wxFileName tmp( tmpDir.Path(), jobName.IsEmpty() ? wxString( wxS( "schematic" ) ) : jobName, wxS( "pdf" ) );
+    plotOpts.m_outputFile = tmp.GetFullPath();
+
+    SCH_PLOTTER        plotter( m_parent );
+    WX_STRING_REPORTER reporter;
+
+    Pgm().m_Printing = true;
+    plotter.Plot( PLOT_FORMAT::PDF, plotOpts, &renderSettings, &reporter );
+    Pgm().m_Printing = false;
+
+    if( reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+    {
+        DisplayErrorMessage( this, _( "Failed to prepare the schematic for printing." ), reporter.GetMessages() );
+        return false;
+    }
+
+    KIPLATFORM::PRINTING::PRINT_RESULT result = KIPLATFORM::PRINTING::PrintPDF( TO_UTF8( tmp.GetFullPath() ) );
+
+    if( result != KIPLATFORM::PRINTING::PRINT_RESULT::OK && result != KIPLATFORM::PRINTING::PRINT_RESULT::CANCELLED )
+    {
+        DisplayError( this, KIPLATFORM::PRINTING::PrintResultToString( result ) );
+        return false;
+    }
+
+    return true;
+#endif
 }

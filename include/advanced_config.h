@@ -377,11 +377,12 @@ public:
     double m_PDFStrokeFontKerningFactor;
 
     /**
-     * Use legacy wxWidgets-based printing.
+     * Print by plotting to PDF and handing the PDF to the platform print system.
+     * Set to 0 to use the legacy wxWidgets printing.
      *
      * Setting name: "UsePdfPrint"
      * Valid values: 0 or 1
-     * Default value: 0
+     * Default value: 1
      */
     bool m_UsePdfPrint;
 

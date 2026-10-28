@@ -273,7 +273,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_PDFStrokeFontYOffset = 0.35;
     m_PDFStrokeFontBoldMultiplier = 1.8;
     m_PDFStrokeFontKerningFactor = 1.0;
-    m_UsePdfPrint = false;
+    m_UsePdfPrint = true;
     m_SmallDrillMarkSize = 0.35;
     m_HotkeysDumper = false;
     m_DrawBoundingBoxes = false;
