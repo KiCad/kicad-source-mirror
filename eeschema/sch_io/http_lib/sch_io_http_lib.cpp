@@ -30,6 +30,7 @@
 #include <fmt.h>
 #include <hash.h>
 #include <lib_symbol.h>
+#include <scoped_set_reset.h>
 
 #include <libraries/symbol_library_adapter.h>
 #include <http_lib/http_lib_connection.h>
@@ -159,12 +160,7 @@ void SCH_IO_HTTP_LIB::backgroundRefreshWorker()
                     {
                         wxLogTrace( traceHTTPLib, wxT( "Background refresh: new data" ) );
 
-                        materializeCache( m_libraryPath, categoryData );
-
-                        {
-                            std::unique_lock lock( m_cacheMutex );
-                            m_cacheSignature = signature;
-                        }
+                        materializeCache( m_libraryPath, std::move( categoryData ), signature );
                     }
                     else
                     {
@@ -246,12 +242,14 @@ size_t SCH_IO_HTTP_LIB::computeSignature( const std::map<std::string, HTTP_LIB_C
 }
 
 
-void SCH_IO_HTTP_LIB::materializeCache( const wxString& aLibraryPath,
-                                        const std::map<std::string, HTTP_LIB_CATEGORY>& aCategoryData )
+bool SCH_IO_HTTP_LIB::materializeCache( const wxString& aLibraryPath,
+                                        std::map<std::string, HTTP_LIB_CATEGORY> aCategoryData, size_t aSignature,
+                                        std::optional<int> aExpectedModifyHash )
 {
     std::map<wxString, std::unique_ptr<LIB_SYMBOL>>         newSymbolCache;
     std::map<wxString, std::pair<std::string, std::string>> newPartIdMap;
     std::set<wxString>                                      newCustomFields;
+    std::set<wxString>                                      newPendingSourceLibs;
 
     for( const HTTP_LIB_CATEGORY& category : aCategoryData | std::views::values )
     {
@@ -260,23 +258,83 @@ void SCH_IO_HTTP_LIB::materializeCache( const wxString& aLibraryPath,
             wxString symbolName( part.name );
             newPartIdMap[symbolName] = { part.id, category.id };
 
-            LIB_SYMBOL* symbol = loadSymbolFromPart( aLibraryPath, symbolName, category, part, newCustomFields );
+            LIB_SYMBOL* symbol = loadSymbolFromPart( aLibraryPath, symbolName, category, part, newCustomFields,
+                                                     newPendingSourceLibs );
 
             if( symbol )
                 newSymbolCache[symbolName] = std::unique_ptr<LIB_SYMBOL>( symbol );
         }
     }
 
+    std::unique_lock lock( m_cacheMutex );
+
+    if( aExpectedModifyHash && *aExpectedModifyHash != m_modifyHash )
+        return false;
+
+    m_symbolCache = std::move( newSymbolCache );
+    m_partIdMap = std::move( newPartIdMap );
+    m_customFields = std::move( newCustomFields );
+
+    if( newPendingSourceLibs.empty() )
+        m_pendingCategoryData.clear();
+    else
+        m_pendingCategoryData = std::move( aCategoryData );
+
+    m_pendingSourceLibs = std::move( newPendingSourceLibs );
+
+    m_cacheSignature = aSignature;
+    m_cachePopulated = true;
+    m_modifyHash++;
+    return true;
+}
+
+
+void SCH_IO_HTTP_LIB::resolvePendingSources()
+{
+    if( m_inCacheLib )
+        return;
+
+    std::set<wxString> pending;
+    int                modifyHash = 0;
+
     {
-        std::unique_lock lock( m_cacheMutex );
+        std::shared_lock lock( m_cacheMutex );
 
-        m_symbolCache = std::move( newSymbolCache );
-        m_partIdMap = std::move( newPartIdMap );
-        m_customFields = std::move( newCustomFields );
+        if( m_pendingSourceLibs.empty() )
+            return;
 
-        m_cachePopulated = true;
-        m_modifyHash++;
+        pending = m_pendingSourceLibs;
+        modifyHash = m_modifyHash;
     }
+
+    if( std::ranges::all_of( pending,
+                             [this]( const wxString& aLib )
+                             {
+                                 return m_adapter->IsLibraryLoadPending( aLib );
+                             } ) )
+    {
+        return;
+    }
+
+    std::map<std::string, HTTP_LIB_CATEGORY> categoryData;
+    size_t                                   signature = 0;
+
+    // The parts must come from the same published cache as the pending set
+    {
+        std::shared_lock lock( m_cacheMutex );
+
+        if( m_modifyHash != modifyHash )
+            return;
+
+        categoryData = m_pendingCategoryData;
+        signature = m_cacheSignature;
+    }
+
+    wxLogTrace( traceHTTPLib, wxT( "Rebuilding cache now that a source library has loaded" ) );
+
+    SCOPED_SET_RESET<bool> inCacheLib( m_inCacheLib, true );
+
+    materializeCache( m_libraryPath, std::move( categoryData ), signature, modifyHash );
 }
 
 
@@ -293,13 +351,7 @@ void SCH_IO_HTTP_LIB::cacheLib( const wxString& aLibraryPath )
             return;
     }
 
-    m_inCacheLib = true;
-
-    struct CACHE_LIB_GUARD
-    {
-        bool* flag;
-        ~CACHE_LIB_GUARD() { *flag = false; }
-    } cacheLibGuard{ &m_inCacheLib };
+    SCOPED_SET_RESET<bool> inCacheLib( m_inCacheLib, true );
 
     m_libraryPath = aLibraryPath;
 
@@ -334,12 +386,7 @@ void SCH_IO_HTTP_LIB::cacheLib( const wxString& aLibraryPath )
             return;
     }
 
-    materializeCache( aLibraryPath, categoryData );
-
-    {
-        std::unique_lock lock( m_cacheMutex );
-        m_cacheSignature = signature;
-    }
+    materializeCache( aLibraryPath, std::move( categoryData ), signature );
 
     if( !m_refreshRunning.load() )
         startBackgroundRefresh();
@@ -357,6 +404,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( wxArrayString& aSymbolNameList, const 
         THROW_IO_ERROR( m_lastError );
 
     cacheLib( aLibraryPath );
+    resolvePendingSources();
 
     bool powerSymbolsOnly = aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
 
@@ -381,6 +429,7 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
         THROW_IO_ERROR( m_lastError );
 
     cacheLib( aLibraryPath );
+    resolvePendingSources();
 
     bool powerSymbolsOnly = aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
 
@@ -413,6 +462,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
         THROW_IO_ERROR( m_lastError );
 
     cacheLib( aLibraryPath );
+    resolvePendingSources();
 
     {
         std::shared_lock lock( m_cacheMutex );
@@ -475,8 +525,10 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
     // This transient symbol is not placed in the shared cache; collect its custom fields into a
     // local set so the background materializer's m_customFields is never mutated off-thread.
     std::set<wxString> transientFields;
+    std::set<wxString> transientPendingLibs;
 
-    return loadSymbolFromPart( aLibraryPath, aAliasName, *foundCategory, result, transientFields );
+    return loadSymbolFromPart( aLibraryPath, aAliasName, *foundCategory, result, transientFields,
+                               transientPendingLibs );
 }
 
 
@@ -649,7 +701,8 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
                                                  const wxString& aSymbolName,
                                                  const HTTP_LIB_CATEGORY& aCategory,
                                                  const HTTP_LIB_PART& aPart,
-                                                 std::set<wxString>& aCustomFields )
+                                                 std::set<wxString>& aCustomFields,
+                                                 std::set<wxString>& aPendingSourceLibs )
 {
     LIB_SYMBOL* symbol = nullptr;
     LIB_SYMBOL* originalSymbol = nullptr;
@@ -684,6 +737,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
         } guard{ &m_inProgressLoads, {}, false };
 
         bool cycle = false;
+        bool sourcePending = false;
 
         if( symbolId.IsValid() )
         {
@@ -700,6 +754,8 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
             }
             else
             {
+                // Sampled before the lookup so a load that finishes in between is still recorded
+                sourcePending = m_adapter->IsLibraryLoadPending( symbolId.GetLibNickname().wx_str() );
                 originalSymbol = m_adapter->LoadSymbol( symbolId );
             }
         }
@@ -731,6 +787,9 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
         }
         else
         {
+            if( sourcePending )
+                aPendingSourceLibs.insert( symbolId.GetLibNickname().wx_str() );
+
             wxLogTrace( traceHTTPLib, wxT( "loadSymbolFromPart: source symbol '%s' not found, "
                                            "will create empty symbol" ), symbolIdStr );
         }

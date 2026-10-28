@@ -171,6 +171,14 @@ public:
 
     bool IsLibraryLoaded( const wxString& aNickname );
 
+    /**
+     * Return true if the library has an enabled row in the table but has not finished loading.
+     *
+     * A lookup into such a library that misses now may succeed later, unlike one into a library
+     * that is loaded, failed to load, or does not exist.
+     */
+    bool IsLibraryLoadPending( const wxString& aNickname ) const;
+
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
     std::optional<LIB_STATUS> GetLibraryStatus( const wxString& aNickname ) const;
 

@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <string_view>
@@ -37,6 +38,7 @@
 #include <hash.h>
 #include <ki_exception.h>
 #include <lib_symbol.h>
+#include <scoped_set_reset.h>
 
 #include "sch_io_database.h"
 
@@ -87,6 +89,8 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
 
+    resolvePendingSources();
+
     bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly ) );
 
     std::shared_lock lock( m_cacheMutex );
@@ -121,6 +125,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
         THROW_IO_ERROR( m_lastError );
 
     cacheLib();
+    resolvePendingSources();
 
     std::string tableName;
     std::string symbolName( aAliasName.ToUTF8() );
@@ -195,7 +200,9 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
     if( !foundTable )
         return nullptr;
 
-    return loadSymbolFromRow( aAliasName, *foundTable, result ).release();
+    std::set<wxString> transientPendingLibs;
+
+    return loadSymbolFromRow( aAliasName, *foundTable, result, transientPendingLibs ).release();
 }
 
 
@@ -294,7 +301,8 @@ size_t SCH_IO_DATABASE::computeSignature( const TABLE_RESULT_LIST& aTableResults
 
 bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
         std::map<wxString, std::unique_ptr<LIB_SYMBOL>>& aSymbolCache,
-        std::map<wxString, std::pair<std::string, std::string>>& aSanitizedNameMap )
+        std::map<wxString, std::pair<std::string, std::string>>& aSanitizedNameMap,
+        std::set<wxString>& aPendingSourceLibs )
 {
     for( const auto& [table, results] : aTableResults )
     {
@@ -314,7 +322,7 @@ bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
 
             aSanitizedNameMap[name] = std::make_pair( table->name, rawName );
 
-            std::unique_ptr<LIB_SYMBOL> symbol = loadSymbolFromRow( name, *table, result );
+            std::unique_ptr<LIB_SYMBOL> symbol = loadSymbolFromRow( name, *table, result, aPendingSourceLibs );
 
             if( symbol )
                 aSymbolCache[symbol->GetName()] = std::move( symbol );
@@ -325,7 +333,7 @@ bool SCH_IO_DATABASE::materializeCache( const TABLE_RESULT_LIST& aTableResults,
 }
 
 
-void SCH_IO_DATABASE::cacheLib()
+void SCH_IO_DATABASE::cacheLib( bool aForce )
 {
     // Guard against re-entrant cacheLib() calls. A self-referential symbol row (issue #24249)
     // causes m_adapter->LoadSymbol to route back into SCH_IO_DATABASE::LoadSymbol, which would
@@ -335,21 +343,19 @@ void SCH_IO_DATABASE::cacheLib()
 
     long long currentTimestampSeconds = wxDateTime::Now().GetValue().GetValue() / 1000;
 
+    int expectedModifyHash = 0;
+
     // After the initial load, the background refresh thread handles all cache updates.
     {
         std::shared_lock lock( m_cacheMutex );
 
-        if( m_cachePopulated )
+        if( m_cachePopulated && !aForce )
             return;
+
+        expectedModifyHash = m_modifyHash;
     }
 
-    m_inCacheLib = true;
-
-    struct CACHE_LIB_GUARD
-    {
-        bool* flag;
-        ~CACHE_LIB_GUARD() { *flag = false; }
-    } cacheLibGuard{ &m_inCacheLib };
+    SCOPED_SET_RESET<bool> inCacheLib( m_inCacheLib, true );
 
     // Re-query the database (the connection layer caches results subject to its own max_age) and
     // compute a lightweight signature of the raw rows so we can skip the costly materialization
@@ -376,7 +382,8 @@ void SCH_IO_DATABASE::cacheLib()
     {
         std::unique_lock lock( m_cacheMutex );
 
-        if( m_cachePopulated && signature == m_cacheSignature )
+        // A forced rebuild must re-resolve source symbols even when the rows are unchanged
+        if( m_cachePopulated && signature == m_cacheSignature && !aForce )
         {
             m_cacheTimestamp = currentTimestampSeconds;
             return;
@@ -385,14 +392,20 @@ void SCH_IO_DATABASE::cacheLib()
 
     std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
     std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
+    std::set<wxString> newPendingSourceLibs;
 
-    materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
+    materializeCache( tableResults, newSymbolCache, newSanitizedNameMap, newPendingSourceLibs );
 
     {
         std::unique_lock lock( m_cacheMutex );
 
+        // A background refresh published newer rows while this build ran
+        if( m_modifyHash != expectedModifyHash )
+            return;
+
         m_nameToSymbolcache = std::move( newSymbolCache );
         m_sanitizedNameMap = std::move( newSanitizedNameMap );
+        m_pendingSourceLibs = std::move( newPendingSourceLibs );
 
         m_cacheTimestamp = currentTimestampSeconds;
         m_cacheSignature = signature;
@@ -402,6 +415,45 @@ void SCH_IO_DATABASE::cacheLib()
 
     if( !m_refreshRunning.load() )
         startBackgroundRefresh();
+}
+
+
+void SCH_IO_DATABASE::resolvePendingSources()
+{
+    if( m_inCacheLib )
+        return;
+
+    std::set<wxString> pending;
+
+    {
+        std::shared_lock lock( m_cacheMutex );
+
+        if( m_pendingSourceLibs.empty() )
+            return;
+
+        pending = m_pendingSourceLibs;
+    }
+
+    if( std::ranges::all_of( pending,
+                             [this]( const wxString& aLib )
+                             {
+                                 return m_adapter->IsLibraryLoadPending( aLib );
+                             } ) )
+    {
+        return;
+    }
+
+    wxLogTrace( traceDatabase, wxT( "Rebuilding cache now that a source library has loaded" ) );
+
+    // A failed rebuild leaves the previous cache in place for the background refresh to retry
+    try
+    {
+        cacheLib( true );
+    }
+    catch( const IO_ERROR& e )
+    {
+        wxLogTrace( traceDatabase, wxT( "Rebuilding cache failed: %s" ), e.What() );
+    }
 }
 
 
@@ -488,8 +540,9 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
                     {
                         std::map<wxString, std::unique_ptr<LIB_SYMBOL>> newSymbolCache;
                         std::map<wxString, std::pair<std::string, std::string>> newSanitizedNameMap;
+                        std::set<wxString> newPendingSourceLibs;
 
-                        materializeCache( tableResults, newSymbolCache, newSanitizedNameMap );
+                        materializeCache( tableResults, newSymbolCache, newSanitizedNameMap, newPendingSourceLibs );
 
                         wxLogTrace( traceDatabase, wxT( "Background refresh: new data" ) );
 
@@ -498,6 +551,7 @@ void SCH_IO_DATABASE::backgroundRefreshWorker()
 
                             m_nameToSymbolcache = std::move( newSymbolCache );
                             m_sanitizedNameMap = std::move( newSanitizedNameMap );
+                            m_pendingSourceLibs = std::move( newPendingSourceLibs );
 
                             m_cacheTimestamp = wxDateTime::Now().GetValue().GetValue() / 1000;
                             m_cacheSignature = signature;
@@ -702,7 +756,8 @@ std::optional<bool> SCH_IO_DATABASE::boolFromAny( const std::any& aVal )
 
 std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
                                                 const DATABASE_LIB_TABLE& aTable,
-                                                const DATABASE_CONNECTION::ROW& aRow )
+                                                const DATABASE_CONNECTION::ROW& aRow,
+                                                std::set<wxString>& aPendingSourceLibs )
 {
     std::lock_guard lock( m_symbolLoadMutex );
     std::unique_ptr<LIB_SYMBOL> symbol = nullptr;
@@ -734,6 +789,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         } guard{ &s_inProgressLoads, {}, false };
 
         bool cycle = false;
+        bool sourcePending = false;
 
         if( symbolId.IsValid() )
         {
@@ -750,6 +806,8 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
             }
             else
             {
+                // Sampled before the lookup so a load that finishes in between is still recorded
+                sourcePending = m_adapter->IsLibraryLoadPending( symbolId.GetLibNickname().wx_str() );
                 originalSymbol = m_adapter->LoadSymbol( symbolId );
             }
         }
@@ -772,6 +830,9 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         }
         else if( !symbolIdStr.empty() )
         {
+            if( sourcePending )
+                aPendingSourceLibs.insert( symbolId.GetLibNickname().wx_str() );
+
             wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' not found, "
                                             "will create empty symbol" ), symbolIdStr );
         }

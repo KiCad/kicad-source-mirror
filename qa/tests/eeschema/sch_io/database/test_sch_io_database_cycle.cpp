@@ -62,7 +62,9 @@ public:
                                                  const wxString& aInProgressKey )
     {
         aPlugin.s_inProgressLoads.insert( aInProgressKey );
-        return aPlugin.loadSymbolFromRow( aSymbolName, aTable, aRow );
+        std::set<wxString> pendingSourceLibs;
+
+        return aPlugin.loadSymbolFromRow( aSymbolName, aTable, aRow, pendingSourceLibs );
     }
 
     /// Drive loadSymbolFromRow without pre-seeding the in-progress set; the plugin inserts and
@@ -72,7 +74,9 @@ public:
                                         const DATABASE_LIB_TABLE& aTable,
                                         const DATABASE_CONNECTION::ROW& aRow )
     {
-        return aPlugin.loadSymbolFromRow( aSymbolName, aTable, aRow );
+        std::set<wxString> pendingSourceLibs;
+
+        return aPlugin.loadSymbolFromRow( aSymbolName, aTable, aRow, pendingSourceLibs );
     }
 
     bool IsInProgressEmpty( const SCH_IO_DATABASE& aPlugin ) const

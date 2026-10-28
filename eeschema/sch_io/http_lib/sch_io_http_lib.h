@@ -37,6 +37,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
+#include <optional>
 #include <set>
 #include <shared_mutex>
 #include <thread>
@@ -122,16 +123,34 @@ private:
 
     void connect();
 
+    /**
+     * Build the symbol for one part from its source symbol.
+     *
+     * @param aPendingSourceLibs receives the nickname of a source library that has not finished
+     *                           loading, when that is why the source symbol was not found.
+     */
     LIB_SYMBOL* loadSymbolFromPart( const wxString& aLibraryPath, const wxString& aSymbolName,
                                     const HTTP_LIB_CATEGORY& aCategory, const HTTP_LIB_PART& aPart,
-                                    std::set<wxString>& aCustomFields );
+                                    std::set<wxString>& aCustomFields, std::set<wxString>& aPendingSourceLibs );
 
     void cacheLib( const wxString& aLibraryPath );
 
+    /**
+     * Rebuild the cache from the last fetched parts once a source library that was still loading
+     * when the cache was built has finished, so its parts stop being empty symbols.
+     */
+    void resolvePendingSources();
+
     size_t computeSignature( const std::map<std::string, HTTP_LIB_CATEGORY>& aCategoryData ) const;
 
-    void materializeCache( const wxString& aLibraryPath,
-                           const std::map<std::string, HTTP_LIB_CATEGORY>& aCategoryData );
+    /**
+     * @param aSignature is the signature of \a aCategoryData, recorded with the published cache.
+     * @param aExpectedModifyHash when set, the result is only published if no other build has
+     *                            published since the caller read this modify hash.
+     * @return true if the new cache was published.
+     */
+    bool materializeCache( const wxString& aLibraryPath, std::map<std::string, HTTP_LIB_CATEGORY> aCategoryData,
+                           size_t aSignature, std::optional<int> aExpectedModifyHash = std::nullopt );
 
     void startBackgroundRefresh();
     void stopBackgroundRefresh();
@@ -170,7 +189,13 @@ private:
     size_t m_cacheSignature = 0;
     int m_modifyHash = 0;
 
-    /// Protects m_symbolCache, m_partIdMap, and m_customFields.
+    /// Source libraries that were still loading when the cache was built
+    std::set<wxString> m_pendingSourceLibs;
+
+    /// The parts the cache was built from, kept only while m_pendingSourceLibs is not empty
+    std::map<std::string, HTTP_LIB_CATEGORY> m_pendingCategoryData;
+
+    /// Protects m_symbolCache, m_partIdMap, m_customFields, and the pending source state.
     std::shared_mutex m_cacheMutex;
 
     /// Serializes loadSymbolFromPart calls

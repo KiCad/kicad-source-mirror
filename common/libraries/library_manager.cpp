@@ -1503,6 +1503,18 @@ bool LIBRARY_MANAGER_ADAPTER::IsLibraryLoaded( const wxString& aNickname )
 }
 
 
+bool LIBRARY_MANAGER_ADAPTER::IsLibraryLoadPending( const wxString& aNickname ) const
+{
+    if( std::optional<LIB_STATUS> status = GetLibraryStatus( aNickname ) )
+        return status->load_status == LOAD_STATUS::LOADING;
+
+    // No entry yet means no load worker has reached this row
+    std::optional<LIBRARY_TABLE_ROW*> row = GetRow( aNickname );
+
+    return row && !( *row )->Disabled();
+}
+
+
 std::optional<LIBRARY_ERROR> LIBRARY_MANAGER_ADAPTER::LibraryError( const wxString& aNickname ) const
 {
     {
