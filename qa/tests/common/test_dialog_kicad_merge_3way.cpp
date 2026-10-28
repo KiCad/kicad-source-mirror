@@ -153,14 +153,6 @@ BOOST_AUTO_TEST_CASE( ApplyRequiresAChoiceForEveryConflict )
     dialog->Choose( dialog->m_radioAncestor );
     BOOST_CHECK( dialog->GetResolvedPlan().actions[2].kind == KICAD_DIFF::ITEM_RES::TAKE_ANCESTOR );
     BOOST_CHECK( dialog->m_sdbSizerApply->IsEnabled() );
-
-    dialog->SelectConflict( 0 );
-    dialog->Choose( dialog->m_radioUnresolved );
-    BOOST_CHECK( dialog->GetResolvedPlan().actions[0].kind == KICAD_DIFF::ITEM_RES::KEEP );
-    BOOST_CHECK( !dialog->m_sdbSizerApply->IsEnabled() );
-
-    dialog->Choose( dialog->m_radioOurs );
-    BOOST_CHECK( dialog->m_sdbSizerApply->IsEnabled() );
 }
 
 

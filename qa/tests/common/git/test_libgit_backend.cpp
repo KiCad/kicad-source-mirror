@@ -61,6 +61,7 @@
 #include <wx/ffile.h>
 #include <wx/file.h>
 #include <wx/filename.h>
+#include <wx/filesys.h>
 #include <wx/textfile.h>
 
 
@@ -2015,7 +2016,7 @@ BOOST_AUTO_TEST_CASE( Clone_CancelFromProgressReporterStopsTheClone )
     KIGIT_COMMON      common( nullptr );
     GIT_CLONE_HANDLER handler( &common );
 
-    handler.SetRemote( wxS( "file://" ) + remotePath() );
+    handler.SetRemote( wxFileSystem::FileNameToURL( wxFileName( remotePath() ) ) );
     handler.SetClonePath( dest );
 
     auto                   reporter = std::make_unique<CLONE_CANCEL_REPORTER>();
@@ -3879,14 +3880,14 @@ BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
     // Refuses over uncommitted changes.
     wxString trackedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
     {
-        std::ofstream f( trackedFile.ToStdString() );
+        std::ofstream f( trackedFile.ToStdString(), std::ios::binary );
         f << "uncommitted\n";
     }
 
     BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), error ) == RestoreResult::Dirty );
 
     {
-        std::ofstream f( trackedFile.ToStdString() );
+        std::ofstream f( trackedFile.ToStdString(), std::ios::binary );
         f << "second\n";
     }
 
