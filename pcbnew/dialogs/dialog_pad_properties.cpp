@@ -362,8 +362,6 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     static GAL_DISPLAY_OPTIONS_IMPL opts = m_parent->GetGalDisplayOptions();
     opts.m_forceDisplayCursor = false;
 
-    opts.m_forceDisplayCursor = false;
-
     // Initialize the canvas to display the pad
     m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition, wxDefaultSize, opts,
                                               m_parent->GetCanvas()->GetBackend() );

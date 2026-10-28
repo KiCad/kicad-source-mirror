@@ -111,7 +111,7 @@ struct ADO_ERROR
 {
     HRESULT     hr = E_FAIL;
     std::string text;
-    std::string sqlState; ///< The engine's own error number as ADO reports it, such as 3031
+    std::string sqlState = ""; ///< The engine's own error number as ADO reports it, such as 3031
 };
 
 
@@ -227,8 +227,11 @@ public:
     bool AsBool() const
     {
         VAR copy;
-
+    #if defined (__MINGW32__)
+        if( FAILED( VariantChangeTypeEx( &copy.m_v, const_cast<VARIANT*>(&m_v), LOCALE_INVARIANT, 0, VT_BOOL ) ) )
+    #else
         if( FAILED( VariantChangeTypeEx( &copy.m_v, &m_v, LOCALE_INVARIANT, 0, VT_BOOL ) ) )
+    #endif
             return false;
 
         return V_BOOL( &copy.m_v ) != VARIANT_FALSE;
@@ -238,8 +241,12 @@ public:
     {
         VAR copy;
 
+    #if defined (__MINGW32__)
+        if( FAILED( VariantChangeTypeEx( &copy.m_v, const_cast<VARIANT*>(&m_v), LOCALE_INVARIANT, 0, VT_I4 ) ) )
+    #else
         if( FAILED( VariantChangeTypeEx( &copy.m_v, &m_v, LOCALE_INVARIANT, 0, VT_I4 ) ) )
-            return 0;
+    #endif
+        return 0;
 
         return V_I4( &copy.m_v );
     }
@@ -248,7 +255,11 @@ public:
     {
         VAR copy;
 
+    #if defined (__MINGW32__)
+        if( FAILED( VariantChangeTypeEx( &copy.m_v, const_cast<VARIANT*>(&m_v), LOCALE_INVARIANT, 0, VT_BSTR ) ) )
+    #else
         if( FAILED( VariantChangeTypeEx( &copy.m_v, &m_v, LOCALE_INVARIANT, 0, VT_BSTR ) ) )
+    #endif
             return std::string();
 
         const BSTR text = V_BSTR( &copy.m_v );
