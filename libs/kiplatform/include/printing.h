@@ -60,8 +60,12 @@ namespace PRINTING
      *
      * The job, and any print-to-file output, is named after the file's base name. The call
      * returns only once the platform has finished reading the file, so the caller may delete it.
+     *
+     * @param aCurrentPage is the 1-based page the dialog offers as the current page, or 0 for none.
+     *                     Windows can only offer the page showing in its preview, and macOS has no
+     *                     current page choice, so both use this only to decide whether to offer it.
      */
-    PRINT_RESULT PrintPDF( const std::string& aFile );
+    PRINT_RESULT PrintPDF( const std::string& aFile, int aCurrentPage = 0 );
 
     /**
      * Discard a "print to file" destination in @a aData that the platform print backend

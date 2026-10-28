@@ -76,7 +76,7 @@ PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page)
     }
 }
 
-PRINT_RESULT PrintPDF(const std::string& aFile)
+PRINT_RESULT PrintPDF( const std::string& aFile, int )
 {
     return PrintPDF(aFile, true);
 }

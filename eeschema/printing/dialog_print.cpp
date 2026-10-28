@@ -461,6 +461,14 @@ bool DIALOG_PRINT::printViaPdf()
     wxFileName tmp( tmpDir.Path(), jobName.IsEmpty() ? wxString( wxS( "schematic" ) ) : jobName, wxS( "pdf" ) );
     plotOpts.m_outputFile = tmp.GetFullPath();
 
+    // Locate the edited sheet in the plotter's page order so the system dialog can offer it as the current page
+    SCH_SHEET_LIST sheets;
+    sheets.BuildSheetList( &m_parent->Schematic().Root(), true );
+    sheets.SortByHierarchicalPageNumbers( false );
+
+    auto sheetIt = std::find( sheets.begin(), sheets.end(), m_parent->GetCurrentSheet() );
+    int  currentPage = sheetIt == sheets.end() ? 0 : static_cast<int>( sheetIt - sheets.begin() ) + 1;
+
     SCH_PLOTTER        plotter( m_parent );
     WX_STRING_REPORTER reporter;
 
@@ -474,7 +482,8 @@ bool DIALOG_PRINT::printViaPdf()
         return false;
     }
 
-    KIPLATFORM::PRINTING::PRINT_RESULT result = KIPLATFORM::PRINTING::PrintPDF( TO_UTF8( tmp.GetFullPath() ) );
+    KIPLATFORM::PRINTING::PRINT_RESULT result =
+            KIPLATFORM::PRINTING::PrintPDF( TO_UTF8( tmp.GetFullPath() ), currentPage );
 
     if( result != KIPLATFORM::PRINTING::PRINT_RESULT::OK && result != KIPLATFORM::PRINTING::PRINT_RESULT::CANCELLED )
     {

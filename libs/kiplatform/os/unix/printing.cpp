@@ -192,6 +192,10 @@ void rememberSettings( GtkPrintSettings* aSettings )
         gtk_print_settings_unset( settings, GTK_PRINT_SETTINGS_OUTPUT_URI );
     }
 
+    // A page selection only fits the document it was made for, so the next print starts from all pages
+    gtk_print_settings_set_print_pages( settings, GTK_PRINT_PAGES_ALL );
+    gtk_print_settings_unset( settings, GTK_PRINT_SETTINGS_PAGE_RANGES );
+
     if( s_lastSettings )
         g_object_unref( s_lastSettings );
 
@@ -216,7 +220,7 @@ namespace KIPLATFORM
 {
 namespace PRINTING
 {
-    PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page )
+    PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page, int aCurrentPage )
     {
         // Check file accessibility
         if( access( aFile.c_str(), R_OK ) != 0 )
@@ -276,6 +280,9 @@ namespace PRINTING
         g_object_unref( settings );
         gtk_print_operation_set_job_name( op, jobName.c_str() );
 
+        if( aCurrentPage > 0 && aCurrentPage <= num_pages )
+            gtk_print_operation_set_current_page( op, aCurrentPage - 1 );
+
         // Connect callbacks
         g_signal_connect( op, "begin-print", G_CALLBACK( begin_print_callback ), &print_data );
         g_signal_connect( op, "draw-page", G_CALLBACK( draw_page ), &print_data );
@@ -312,9 +319,9 @@ namespace PRINTING
         return return_result;
     }
 
-    PRINT_RESULT PrintPDF( const std::string& aFile )
+    PRINT_RESULT PrintPDF( const std::string& aFile, int aCurrentPage )
     {
-        return PrintPDF( aFile, true );
+        return PrintPDF( aFile, true, aCurrentPage );
     }
 
     void ResetPrintToFilePath( wxPrintData& aData )

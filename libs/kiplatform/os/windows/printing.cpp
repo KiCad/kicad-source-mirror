@@ -205,11 +205,12 @@ struct JOB_STATE
 class WIN_PDF_PRINTER
 {
 public:
-    WIN_PDF_PRINTER( HWND aOwner, const wdp::PdfDocument& aPdf, const winrt::hstring& aJobName ) :
+    WIN_PDF_PRINTER( HWND aOwner, const wdp::PdfDocument& aPdf, const winrt::hstring& aJobName, int aCurrentPage ) :
             m_owner( aOwner ),
             m_pdf( aPdf ),
             m_jobName( aJobName ),
             m_pageCount( aPdf.PageCount() ),
+            m_currentPage( aCurrentPage ),
             m_job( std::make_shared<JOB_STATE>() )
     {
     }
@@ -271,9 +272,11 @@ public:
         std::shared_ptr<JOB_STATE> job = m_job;
         wgp::IPrintDocumentSource  source = m_docSource;
         winrt::hstring             jobName = m_jobName;
+        bool                       offerCurrent = m_currentPage > 0;
 
         m_taskRequestedToken = m_printManager.PrintTaskRequested(
-                [job, source, jobName]( const wgp::PrintManager&, const wgp::PrintTaskRequestedEventArgs& aArgs )
+                [job, source, jobName, offerCurrent]( const wgp::PrintManager&,
+                                                      const wgp::PrintTaskRequestedEventArgs& aArgs )
                 {
                     wgp::PrintTask task = aArgs.Request().CreatePrintTask(
                             jobName,
@@ -281,6 +284,12 @@ public:
                             {
                                 aSourceArgs.SetSource( source );
                             } );
+
+                    wgp::PrintPageRangeOptions ranges = task.Options().PageRangeOptions();
+                    ranges.AllowAllPages( true );
+                    ranges.AllowCurrentPage( offerCurrent );
+                    ranges.AllowCustomSetOfPages( true );
+                    task.Options().DisplayedOptions().Append( wgp::StandardPrintTaskOptions::CustomPageRanges() );
 
                     task.Completed(
                             [job]( const wgp::PrintTask&, const wgp::PrintTaskCompletedEventArgs& aDone )
@@ -361,9 +370,10 @@ private:
     {
         try
         {
+            std::vector<uint32_t>                  pages = selectedPages( aOptions );
             std::vector<wgp::PrintPageDescription> papers;
 
-            for( uint32_t i = 0; i < m_pageCount; ++i )
+            for( uint32_t i = 0; i < pages.size(); ++i )
                 papers.push_back( aOptions.GetPageDescription( i + 1 ) );
 
             std::vector<wss::InMemoryRandomAccessStream> streams = runInMta(
@@ -371,13 +381,13 @@ private:
                     {
                         std::vector<wss::InMemoryRandomAccessStream> rendered;
 
-                        for( uint32_t i = 0; i < m_pageCount; ++i )
-                            rendered.push_back( renderPage( m_pdf, i, papers[i], PRINT_MAX_DPI ) );
+                        for( uint32_t i = 0; i < pages.size(); ++i )
+                            rendered.push_back( renderPage( m_pdf, pages[i], papers[i], PRINT_MAX_DPI ) );
 
                         return rendered;
                     } );
 
-            for( uint32_t i = 0; i < m_pageCount; ++i )
+            for( uint32_t i = 0; i < pages.size(); ++i )
             {
                 m_printPages.push_back( makePageElement( streams[i], papers[i] ) );
                 m_printDoc.AddPage( m_printPages.back() );
@@ -389,6 +399,31 @@ private:
         }
 
         m_printDoc.AddPagesComplete();
+    }
+
+    // Zero-based PDF pages to spool, from the page selection made in the print UI
+    std::vector<uint32_t> selectedPages( const wgp::PrintTaskOptions& aOptions ) const
+    {
+        std::vector<uint32_t> pages;
+
+        for( const wgp::PrintPageRange& range : aOptions.CustomPageRanges() )
+        {
+            wxLogTrace( PRINTING_TRACE, "Selected page range %d-%d", range.FirstPageNumber(), range.LastPageNumber() );
+
+            for( int32_t page = range.FirstPageNumber(); page <= range.LastPageNumber(); ++page )
+            {
+                if( page >= 1 && static_cast<uint32_t>( page ) <= m_pageCount )
+                    pages.push_back( static_cast<uint32_t>( page - 1 ) );
+            }
+        }
+
+        if( pages.empty() )
+        {
+            for( uint32_t i = 0; i < m_pageCount; ++i )
+                pages.push_back( i );
+        }
+
+        return pages;
     }
 
     void cleanup()
@@ -432,6 +467,7 @@ private:
     wdp::PdfDocument           m_pdf;
     winrt::hstring             m_jobName;
     uint32_t                   m_pageCount;
+    int                        m_currentPage;
     std::shared_ptr<JOB_STATE> m_job;
 
     HWND                                  m_host = nullptr;
@@ -456,7 +492,7 @@ namespace KIPLATFORM
 {
 namespace PRINTING
 {
-    PRINT_RESULT PrintPDF( const std::string& aFile )
+    PRINT_RESULT PrintPDF( const std::string& aFile, int aCurrentPage )
     {
         wxFileName     fn( wxString::FromUTF8( aFile ) );
         winrt::hstring path( fn.GetFullPath().ToStdWstring() );
@@ -496,7 +532,7 @@ namespace PRINTING
 
         try
         {
-            WIN_PDF_PRINTER printer( owner, pdf, winrt::hstring( fn.GetName().ToStdWstring() ) );
+            WIN_PDF_PRINTER printer( owner, pdf, winrt::hstring( fn.GetName().ToStdWstring() ), aCurrentPage );
             result = printer.Run();
         }
         catch( const winrt::hresult_error& e )
@@ -519,7 +555,7 @@ namespace KIPLATFORM
 {
 namespace PRINTING
 {
-    PRINT_RESULT PrintPDF( std::string const& )
+    PRINT_RESULT PrintPDF( std::string const&, int )
     {
         return PRINT_RESULT::UNSUPPORTED;
     }
