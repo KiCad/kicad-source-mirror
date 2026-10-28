@@ -89,6 +89,11 @@ protected:
     WX_INFOBAR*  m_infoBar;
 
 private:
+    /**
+     * Append current project values for a page so searches reflect unsaved edits.
+     */
+    virtual void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const {}
+
     void buildSearchIndex();
 
     /**

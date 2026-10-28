@@ -21,6 +21,7 @@
 #ifndef PANEL_SETUP_RULES_H
 #define PANEL_SETUP_RULES_H
 
+#include <memory>
 #include <wx/regex.h>
 #include <panel_setup_rules_base.h>
 
@@ -46,6 +47,8 @@ public:
 
     void RefreshFromDocument();
 
+    const DRC_RULE_DOCUMENT& GetSearchDocument() const;
+
 private:
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
@@ -65,6 +68,8 @@ private:
     DRC_RULE_DOCUMENT* m_document;
     SCINTILLA_TRICKS* m_scintillaTricks;
     wxString          m_originalText;
+
+    mutable std::unique_ptr<DRC_RULE_DOCUMENT> m_searchSnapshot;
 
     wxRegEx           m_netClassRegex;
     wxRegEx           m_netNameRegex;

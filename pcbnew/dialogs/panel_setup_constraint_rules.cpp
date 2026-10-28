@@ -22,6 +22,7 @@
 #include <map>
 
 #include <drc/drc_constraint_types.h>
+#include <drc/rule_editor/drc_rule_document.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -416,6 +417,26 @@ void PANEL_SETUP_CONSTRAINT_RULES::RefreshFromDocument()
 {
     if( m_list )
         m_list->RefreshRules();
+}
+
+
+void PANEL_SETUP_CONSTRAINT_RULES::AppendSearchTerms( const DRC_RULE_DOCUMENT& aDocument,
+                                                      std::vector<wxString>&   aTerms ) const
+{
+    if( !m_section.ruleType || aDocument.HasUnparsedText() )
+        return;
+
+    for( int index : aDocument.IndicesFor( *m_section.ruleType ) )
+    {
+        const DRC_RE_LOADED_PANEL_ENTRY& entry = aDocument.Entries()[index];
+        const wxString comment = entry.constraintData ? entry.constraintData->GetComment() : wxString();
+
+        for( const wxString& term : { entry.ruleName, entry.condition, entry.layerSource, comment } )
+        {
+            if( !term.IsEmpty() )
+                aTerms.push_back( term );
+        }
+    }
 }
 
 

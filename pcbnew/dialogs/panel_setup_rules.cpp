@@ -131,6 +131,20 @@ bool PANEL_SETUP_RULES::IsModified() const
 }
 
 
+const DRC_RULE_DOCUMENT& PANEL_SETUP_RULES::GetSearchDocument() const
+{
+    if( !IsModified() )
+        return *m_document;
+
+    // Parse a separate snapshot so search does not apply the raw editor's draft.
+    if( !m_searchSnapshot )
+        m_searchSnapshot = std::make_unique<DRC_RULE_DOCUMENT>( m_frame->GetBoard() );
+
+    m_searchSnapshot->SetText( m_textEditor->GetText() );
+    return *m_searchSnapshot;
+}
+
+
 void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
 {
     wxMenu   menu;

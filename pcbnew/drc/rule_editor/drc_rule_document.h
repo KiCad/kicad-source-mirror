@@ -72,6 +72,7 @@ public:
     void SetText( const wxString& aText );
 
     std::vector<DRC_RE_LOADED_PANEL_ENTRY>& Entries() { return m_entries; }
+    const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& Entries() const { return m_entries; }
 
     std::vector<int> IndicesFor( DRC_RULE_EDITOR_CONSTRAINT_NAME aType ) const;
 

@@ -57,6 +57,8 @@ protected:
     void onCancelButton( wxCommandEvent& aEvent );
     void onCloseWindow( wxCloseEvent& aEvent );
 
+    void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const override;
+
     void refreshRulePage( size_t aPage );
 
     /// Reads the staged settings back into the open pages of one Import Settings group

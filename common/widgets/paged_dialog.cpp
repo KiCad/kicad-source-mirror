@@ -611,21 +611,45 @@ int PAGED_DIALOG::applySearch()
     if( m_searchIndex.size() != count )
         buildSearchIndex();
 
-    auto containsAllTerms = [&]( const wxString& aText )
-    {
-        for( const wxString& term : terms )
-        {
-            if( !aText.Contains( term ) )
-                return false;
-        }
+    std::vector<bool> matches( count, false );
+    std::vector<bool> found( terms.size(), false );
 
-        return true;
+    auto takeTerms = [&]( const wxString& aText )
+    {
+        for( size_t jj = 0; jj < terms.size(); ++jj )
+        {
+            if( !found[jj] && aText.Contains( terms[jj] ) )
+                found[jj] = true;
+        }
     };
 
-    std::vector<bool> matches( count, false );
+    auto foundEveryTerm = [&]()
+    {
+        return std::ranges::find( found, false ) == found.end();
+    };
 
     for( size_t ii = 0; ii < count; ++ii )
-        matches[ii] = std::ranges::any_of( m_searchIndex[ii], containsAllTerms );
+    {
+        // A page matches when every word is found somewhere on it. Testing each label for the
+        // whole query would miss words that are both on the page but in different labels.
+        std::fill( found.begin(), found.end(), false );
+
+        for( const wxString& text : m_searchIndex[ii] )
+            takeTerms( text );
+
+        if( !foundEveryTerm() )
+        {
+            // Project values can change after the label index is built.
+            std::vector<wxString> live;
+
+            AppendSearchTerms( ii, live );
+
+            for( const wxString& term : live )
+                takeTerms( term.Lower() );
+        }
+
+        matches[ii] = foundEveryTerm();
+    }
 
     for( size_t ii = 0; ii < count; ++ii )
     {
