@@ -479,3 +479,20 @@ BOOST_FIXTURE_TEST_CASE( ERCGroundPinComprehensive, ERC_GROUND_PIN_TEST_FIXTURE 
                              << "\n" << reportWriter.GetTextReport() );
     }
 }
+
+
+/**
+ * GND2 of an isolator in a subsheet is tied to a local VSS power symbol, whose net name carries
+ * the sheet path.  Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25943
+ */
+BOOST_FIXTURE_TEST_CASE( ERCGroundPinLocalPowerNet, ERC_GROUND_PIN_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    KI_TEST::LoadSchematic( m_settingsManager, "issue25943/issue25943", m_schematic );
+    m_schematic->ErcSettings().m_ERCSeverities[ERCE_GROUND_PIN_NOT_GROUND] = RPT_SEVERITY_ERROR;
+    m_schematic->ConnectionGraph()->RunERC();
+
+    ERC_TESTER tester( m_schematic.get() );
+    BOOST_CHECK_EQUAL( tester.TestGroundPins(), 0 );
+}

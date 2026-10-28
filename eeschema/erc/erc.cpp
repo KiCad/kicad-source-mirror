@@ -1445,7 +1445,7 @@ int ERC_TESTER::TestGroundPins()
             for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
                 SCH_CONNECTION* conn = pin->Connection( &sheet );
-                wxString        net = conn ? conn->GetNetName() : wxString();
+                wxString        net = conn ? conn->Name( true ) : wxString();
                 bool            netIsGround = isGround( net );
 
                 // We are only interested in power pins
