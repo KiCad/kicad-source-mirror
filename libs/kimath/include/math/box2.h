@@ -81,6 +81,12 @@ public:
             m_Pos.x = m_Pos.y = coord_limits::lowest() / 2.0;
             m_Size.x = m_Size.y = coord_limits::max();
         }
+        else if( size_type( coord_limits::max() ) == std::numeric_limits<size_type>::max() )
+        {
+            // BOX2L uses 64-bit ints for both coords and sizes
+            m_Pos.x = m_Pos.y = -( ( coord_limits::max() / 2 ) - coord_limits::epsilon() );
+            m_Size.x = m_Size.y = coord_limits::max() - coord_limits::epsilon();
+        }
         else
         {
             // We want to be able to invert the box, so don't use lowest()
