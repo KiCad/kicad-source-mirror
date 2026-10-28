@@ -428,6 +428,19 @@ void PANEL_SETUP_NETCLASSES::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
+void PANEL_SETUP_NETCLASSES::AppendSearchTerms( std::vector<wxString>& aTerms ) const
+{
+    for( int row = 0; row < m_netclassGrid->GetNumberRows(); ++row )
+        aTerms.push_back( m_netclassGrid->GetCellValue( row, GRID_NAME ) );
+
+    for( int row = 0; row < m_assignmentGrid->GetNumberRows(); ++row )
+    {
+        aTerms.push_back( m_assignmentGrid->GetCellValue( row, 0 ) );
+        aTerms.push_back( m_assignmentGrid->GetCellValue( row, 1 ) );
+    }
+}
+
+
 bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
 {
     m_lastLoaded = m_netSettings->GetNetclasses();

@@ -23,6 +23,7 @@
 
 #include <bitset>
 #include <memory>
+#include <vector>
 
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
@@ -46,6 +47,8 @@ public:
     bool Validate() override;
 
     void ImportSettingsFrom( const std::shared_ptr<NET_SETTINGS>& aNetSettings );
+
+    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
 
     void UpdateDelayProfileNames( const std::vector<wxString>& aNames ) const;
 

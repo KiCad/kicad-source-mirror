@@ -298,6 +298,26 @@ bool PANEL_SETUP_NET_CHAINS::TransferDataToWindow()
 }
 
 
+void PANEL_SETUP_NET_CHAINS::AppendSearchTerms( std::vector<wxString>& aTerms ) const
+{
+    for( int row = 0; row < m_chainsGrid->GetNumberRows(); ++row )
+    {
+        aTerms.push_back( m_chainsGrid->GetCellValue( row, COL_NAME ) );
+        aTerms.push_back( m_chainsGrid->GetCellValue( row, COL_CHAIN_CLASS ) );
+        aTerms.push_back( m_chainsGrid->GetCellValue( row, COL_NET_CLASS ) );
+
+        const CHAIN_ROW& chain = m_chainRows[m_gridToChainIdx[row]];
+        aTerms.insert( aTerms.end(), chain.memberNets.begin(), chain.memberNets.end() );
+    }
+
+    for( int row = 0; row < m_classesGrid->GetNumberRows(); ++row )
+    {
+        if( !m_classRows[row].deletePending )
+            aTerms.push_back( m_classesGrid->GetCellValue( row, CLASS_COL_NAME ) );
+    }
+}
+
+
 bool PANEL_SETUP_NET_CHAINS::Validate()
 {
     if( !m_chainsGrid->CommitPendingChanges() )

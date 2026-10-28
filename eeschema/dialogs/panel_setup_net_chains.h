@@ -58,6 +58,8 @@ public:
 
     bool ApplyEdits();
 
+    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
+
 protected:
     void OnDeleteChainClicked( wxCommandEvent& aEvent ) override;
     void OnChainGridSelectionChanged( wxGridEvent& aEvent ) override;

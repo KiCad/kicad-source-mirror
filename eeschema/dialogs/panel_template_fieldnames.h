@@ -20,6 +20,8 @@
 #ifndef PANEL_EESCHEMA_DEFUALT_FIELDS_H
 #define PANEL_EESCHEMA_DEFUALT_FIELDS_H
 
+#include <vector>
+
 #include <template_fieldnames.h>
 #include "panel_template_fieldnames_base.h"
 
@@ -33,6 +35,8 @@ public:
     ~PANEL_TEMPLATE_FIELDNAMES() override;
 
     void ImportSettingsFrom( TEMPLATES* templateMgr );
+
+    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
 
 protected:
     /**

@@ -180,6 +180,26 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 }
 
 
+void DIALOG_SCHEMATIC_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const
+{
+    // Keep unopened pages out of validation and writeback.
+    wxWindow* page = m_treebook->ResolvePageForSearch( aPage );
+
+    if( aPage == m_netclassesPage )
+        static_cast<PANEL_SETUP_NETCLASSES*>( page )->AppendSearchTerms( aTerms );
+    else if( aPage == m_netChainsPage )
+        static_cast<PANEL_SETUP_NET_CHAINS*>( page )->AppendSearchTerms( aTerms );
+    else if( aPage == m_textVarsPage )
+        static_cast<PANEL_TEXT_VARIABLES*>( page )->AppendSearchTerms( aTerms );
+    else if( aPage == m_busesPage )
+        static_cast<PANEL_SETUP_BUSES*>( page )->AppendSearchTerms( aTerms );
+    else if( aPage == m_fieldNameTemplatesPage )
+        static_cast<PANEL_TEMPLATE_FIELDNAMES*>( page )->AppendSearchTerms( aTerms );
+    else if( aPage == m_bomPresetsPage )
+        static_cast<PANEL_BOM_PRESETS*>( page )->AppendSearchTerms( aTerms );
+}
+
+
 void DIALOG_SCHEMATIC_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 {
     PAGED_DIALOG::onPageChanged( aEvent );

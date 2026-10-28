@@ -148,6 +148,19 @@ bool PANEL_SETUP_BUSES::TransferDataToWindow()
 }
 
 
+void PANEL_SETUP_BUSES::AppendSearchTerms( std::vector<wxString>& aTerms ) const
+{
+    for( int row = 0; row < m_aliasesGrid->GetNumberRows(); ++row )
+    {
+        aTerms.push_back( m_aliasesGrid->GetCellValue( row, 0 ) );
+
+        // Include members of unselected aliases.
+        const std::vector<wxString>& members = m_aliases[row]->Members();
+        aTerms.insert( aTerms.end(), members.begin(), members.end() );
+    }
+}
+
+
 bool PANEL_SETUP_BUSES::TransferDataFromWindow()
 {
     if( !m_aliasesGrid->CommitPendingChanges() || !m_membersGrid->CommitPendingChanges() )

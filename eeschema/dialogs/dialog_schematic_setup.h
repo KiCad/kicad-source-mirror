@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <widgets/paged_dialog.h>
 
 class SCH_EDIT_FRAME;
@@ -43,6 +44,8 @@ protected:
     // event handlers
     void onPageChanged( wxBookCtrlEvent& aEvent ) override;
     void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
+
+    void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const override;
 
 protected:
     SCH_EDIT_FRAME*           m_frame;

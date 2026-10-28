@@ -23,6 +23,8 @@
 #define PANEL_SETUP_BUSES_H
 
 #include <map>
+#include <vector>
+
 #include <dialogs/panel_setup_buses_base.h>
 #include <bus_alias.h>
 
@@ -40,6 +42,8 @@ public:
     bool TransferDataToWindow() override;
 
     void ImportSettingsFrom( const std::map<wxString, std::vector<wxString>>& aAliases );
+
+    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
 
 protected:
     void OnAddAlias( wxCommandEvent& aEvent ) override;
