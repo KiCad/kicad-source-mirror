@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <geometry/eda_angle.h>
+
+
 enum class FLIP_DIRECTION
 {
     LEFT_RIGHT, ///< Flip left to right (around the Y axis)
@@ -55,4 +58,13 @@ constexpr void MIRROR( VT& aPoint, const VT& aMirrorRef, FLIP_DIRECTION aFlipDir
         MIRROR( aPoint.x, aMirrorRef.x );
     else
         MIRROR( aPoint.y, aMirrorRef.y );
+}
+
+
+/**
+ * Returns the angle of the axis of reflection for the given flip direction.
+ */
+constexpr EDA_ANGLE MIRROR_AXIS( FLIP_DIRECTION aFlipDirection )
+{
+    return aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT ? ANGLE_90 : ANGLE_0;
 }

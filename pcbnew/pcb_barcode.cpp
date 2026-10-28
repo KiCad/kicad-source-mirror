@@ -336,34 +336,15 @@ void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( const FOOTPRINT* fp = GetParentFootprint() )
-    {
-        const VECTOR2I libAxis = fp->GetTransform().InverseApply( aCentre );
+    // The position mirrors in the library or board frame depending on if this in a FP.
+    const FOOTPRINT* fp = GetParentFootprint();
+    const VECTOR2I   libCentre = fp ? fp->GetTransform().InverseApply( aCentre ) : aCentre;
+    const EDA_ANGLE  axis = MIRROR_AXIS( aFlipDirection );
 
-        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-            m_libPos.x = 2 * libAxis.x - m_libPos.x;
-        else
-            m_libPos.y = 2 * libAxis.y - m_libPos.y;
+    MIRROR( m_libPos, libCentre, aFlipDirection );
 
-        // Reflect the library-frame angle (rotation-independent).
-        if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
-            m_libAngle = ANGLE_180 - m_libAngle;
-        else
-            m_libAngle = -m_libAngle;
-
-        SetLayer( GetFlippedLayer( GetLayer() ) );
-        AssembleBarcode();
-        return;
-    }
-
-    VECTOR2I boardPos = GetPosition();
-    MIRROR( boardPos, aCentre, aFlipDirection );
-    m_libPos = boardPos;
-
-    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
-        m_libAngle = ANGLE_180 - m_libAngle;
-    else
-        m_libAngle = -m_libAngle;
+    // A flip changes the side, so that's a half turn on top of the reflection.
+    m_libAngle = m_libAngle.Reflect( axis ) + ANGLE_180;
 
     SetLayer( GetFlippedLayer( GetLayer() ) );
     AssembleBarcode();

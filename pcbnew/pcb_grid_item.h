@@ -231,7 +231,7 @@ private:
     EDA_ANGLE        m_phiExtent;  // polar only
     EDA_ANGLE        m_phiSpacing; // polar only
 
-    COLOR4D          m_color;
+    KIGFX::COLOR4D   m_color;
     unsigned         m_priority = 1;     ///< Higher wins in overlap resolution; 0 reserved for global grid.
     unsigned         m_tickInterval = 0; ///< 0 = no major ticks; N = every Nth line is major.
     PCB_GRID_AFFECTS m_affects;

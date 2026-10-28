@@ -309,6 +309,30 @@ public:
 
     EDA_ANGLE KeepUpright() const;
 
+    /**
+     * Reflection, over a line with direction @a aAxisAngle, of the turn this angle stores.
+     *
+     * Assuming a y-down coordinate system, the turn is measured anti-clockwise from the
+     * positive x-axis (i.e. the same turn convention as RotatePoint()).
+     *
+     *       /45   |     \ 135
+     *      /___   |      \____
+     *        a    |        a'
+     *             |
+     *             |<- reflection axis, 90 or 270 degrees
+     *
+     * In this case, an angle a = 45 degrees is reflected over the y-axis to become
+     * a' = 135 degrees.
+     *
+     * Reflecting over aAxisAngle gives the same result as reflecting over
+     * aAxisAngle + 180 (or any value modulo 180), so the direction of the axis
+     * does not matter.
+     */
+    [[nodiscard]] EDA_ANGLE Reflect( const EDA_ANGLE& aAxisAngle ) const
+    {
+        return EDA_ANGLE( 2.0 * aAxisAngle.AsDegrees() - AsDegrees(), DEGREES_T );
+    }
+
     [[nodiscard]] EDA_ANGLE Round( int digits ) const
     {
         EDA_ANGLE angle( *this );
@@ -540,6 +564,17 @@ public:
         // Normalize -0 to 0 to avoid -0 in display and serialization.
         if( m_angle == ANGLE_0 )
             m_angle = ANGLE_0;
+    }
+
+    /**
+     * This orientation reflected over a line with direction @a aAxisAngle.
+     *
+     * The orientation counterpart of EDA_ANGLE::Reflect() with the normalized
+     * result.
+     */
+    [[nodiscard]] EDA_ORIENTATION Reflect( const EDA_ANGLE& aAxisAngle ) const
+    {
+        return EDA_ORIENTATION( m_angle.Reflect( aAxisAngle ) );
     }
 
 private:

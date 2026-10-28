@@ -630,32 +630,17 @@ void PCB_TEXT::OnFootprintTransformed()
 
 void PCB_TEXT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( const FOOTPRINT* fp = GetParentFootprint() )
-    {
-        // Mirror the library-frame position (rotation-independent).
-        const VECTOR2I libAxis = fp->GetTransform().InverseApply( aCentre );
-        VECTOR2I       libPos = EDA_TEXT::GetTextPos();
+    // The position mirrors in the library or board frame depending on if this is in a FP.
+    const FOOTPRINT* fp = GetParentFootprint();
+    const VECTOR2I   libCentre = fp ? fp->GetTransform().InverseApply( aCentre ) : aCentre;
+    const EDA_ANGLE  axis = MIRROR_AXIS( aFlipDirection );
 
-        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-            libPos.x = 2 * libAxis.x - libPos.x;
-        else
-            libPos.y = 2 * libAxis.y - libPos.y;
+    VECTOR2I libPos = EDA_TEXT::GetTextPos();
+    MIRROR( libPos, libCentre, aFlipDirection );
+    SetLibTextPos( libPos );
 
-        SetLibTextPos( libPos );
-    }
-    else if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-    {
-        SetTextX( MIRRORVAL( GetTextPos().x, aCentre.x ) );
-    }
-    else
-    {
-        SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
-    }
-
-    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-        m_libTextAngle = -m_libTextAngle;
-    else
-        m_libTextAngle = ANGLE_180 - m_libTextAngle;
+    // A flip changes the side it is read from, so add a half turn on top of the reflection.
+    m_libTextAngle = m_libTextAngle.Reflect( axis ) + ANGLE_180;
 
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 

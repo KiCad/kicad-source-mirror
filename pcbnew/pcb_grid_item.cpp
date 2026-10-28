@@ -21,13 +21,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_grid_item.h"
+
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/board/board_types.pb.h>
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
-#include <pcb_grid_item.h>
+#include <core/mirror.h>
 #include <base_units.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -211,16 +213,11 @@ void PCB_GRID_ITEM::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle 
 
 void PCB_GRID_ITEM::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-    {
-        m_pos.x = aCentre.x - ( m_pos.x - aCentre.x );
-        m_orientation = ANGLE_180 - m_orientation;
-    }
-    else
-    {
-        m_pos.y = aCentre.y - ( m_pos.y - aCentre.y );
-        m_orientation = -m_orientation;
-    }
+    const EDA_ANGLE axis = MIRROR_AXIS( aFlipDirection );
+
+    // Move the location and adjust rotation for the flip.
+    MIRROR( m_pos, aCentre, aFlipDirection );
+    m_orientation = m_orientation.Reflect( axis );
 }
 
 

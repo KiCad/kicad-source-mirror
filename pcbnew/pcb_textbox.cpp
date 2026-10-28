@@ -24,6 +24,7 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <core/mirror.h>
 #include <footprint.h>
 #include <pcb_textbox.h>
 #include <pcb_painter.h>
@@ -664,10 +665,8 @@ void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
     // the position and angle are mirrored, but not the text (or its justification)
     PCB_SHAPE::Mirror( aCentre, aFlipDirection );
 
-    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-        m_libTextAngle = ANGLE_180 - m_libTextAngle;
-    else
-        m_libTextAngle = -m_libTextAngle;
+    const EDA_ANGLE axis = MIRROR_AXIS( aFlipDirection );
+    m_libTextAngle = m_libTextAngle.Reflect( axis );
 
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 }
@@ -677,10 +676,9 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     PCB_SHAPE::Flip( aCentre, aFlipDirection );
 
-    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-        m_libTextAngle = -m_libTextAngle;
-    else
-        m_libTextAngle = ANGLE_180 - m_libTextAngle;
+    // A flip changes the side it is read from, so add a half turn on top of the reflection.
+    const EDA_ANGLE axis = MIRROR_AXIS( aFlipDirection );
+    m_libTextAngle = m_libTextAngle.Reflect( axis ) + ANGLE_180;
 
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 

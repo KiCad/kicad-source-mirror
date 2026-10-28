@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <boost/test/tools/context.hpp>
+
 #include <cmath>
 #include <iomanip>
 
@@ -172,6 +174,18 @@ static bool refIsCardinal90( double aValue )
 }
 
 
+static EDA_ANGLE deg( double d )
+{
+    return EDA_ANGLE( d, DEGREES_T );
+};
+
+
+static EDA_ORIENTATION orientation( double d )
+{
+    return EDA_ORIENTATION{ deg( d ) };
+};
+
+
 BOOST_AUTO_TEST_CASE( NormalizeMatchesSteppingLoops )
 {
     std::vector<double> inputs;
@@ -231,8 +245,6 @@ BOOST_AUTO_TEST_CASE( ConstantAngles )
 
 BOOST_AUTO_TEST_CASE( Snapped )
 {
-    auto deg = []( double d ) { return EDA_ANGLE( d, DEGREES_T ); };
-
     BOOST_CHECK_EQUAL( deg( 80 ).Snapped( ANGLE_90 ).AsDegrees(), 90.0 );
     BOOST_CHECK_EQUAL( deg( 30 ).Snapped( ANGLE_90 ).AsDegrees(), 0.0 );
     BOOST_CHECK_EQUAL( deg( 135 ).Snapped( ANGLE_90 ).AsDegrees(), 180.0 );
@@ -255,11 +267,61 @@ BOOST_AUTO_TEST_CASE( Snapped )
 }
 
 
+BOOST_AUTO_TEST_CASE( AngleReflect )
+{
+    const auto checkReflect = []( double aAngle, double aAxis, double aExpected )
+    {
+        BOOST_TEST_CONTEXT( "Testing reflect( " << aAngle << " about " << aAxis << " ) -> " << aExpected )
+        {
+            const EDA_ANGLE angle = deg( aAngle );
+            const EDA_ANGLE axis = deg( aAxis );
+
+            const EDA_ANGLE reflected = angle.Reflect( axis );
+            BOOST_CHECK_EQUAL( reflected.Normalized().AsDegrees(), aExpected );
+
+            // And check the reverse returns
+            const EDA_ANGLE reversed = reflected.Reflect( axis );
+
+            BOOST_CHECK_EQUAL( reversed.Normalized().AsDegrees(), angle.Normalized().AsDegrees() );
+
+            // And check that and axis reversal has no effect on the reflection result.
+            const EDA_ANGLE reversedAxis = axis + deg( 180 );
+            const EDA_ANGLE reflectedWithReversedAxis = angle.Reflect( reversedAxis );
+            BOOST_CHECK_EQUAL( reflectedWithReversedAxis.Normalized().AsDegrees(), aExpected );
+        }
+    };
+
+
+    //   ^
+    //   | A = 90
+    // ------
+    //   | A' = -90
+    //   v
+    checkReflect( 90, 0, 270.0 );
+
+    //      |
+    //   /  |  \
+    //   A  |  A'
+    checkReflect( 45, 90, 135.0 );
+
+    //  | A  /
+    //  v   /
+    //     /
+    //    /   <---- A'
+    //
+    // Note: reflecting in a non-cardinal axis is the only time a sign error manifests, so this
+    // one is probably the most critical test.
+    checkReflect( -90, 45, 180.0 );
+
+    //   /    /
+    //  v    /    /
+    //      /    v
+    checkReflect( 45, 45, 45 );
+}
+
+
 BOOST_AUTO_TEST_CASE( Orientation )
 {
-    auto deg = []( double d ) { return EDA_ANGLE( d, DEGREES_T ); };
-    auto orientation = [&]( double d ) { return EDA_ORIENTATION( deg( d ) ); };
-
     // Construction normalizes into [0, 360), and equality compares canonical values.
     BOOST_CHECK_EQUAL( orientation( 370 ).GetAngle().AsDegrees(), 10.0 );
     BOOST_CHECK_EQUAL( orientation( -90 ).GetAngle().AsDegrees(), 270.0 );
@@ -287,5 +349,12 @@ BOOST_AUTO_TEST_CASE( Orientation )
     BOOST_CHECK( !std::signbit( ( -orientation( 0 ) ).GetAngle().AsDegrees() ) );
 }
 
+
+BOOST_AUTO_TEST_CASE( OrientationReflect )
+{
+    // Reflecting an orientation is just reflecting its angle over the given axis.
+    BOOST_CHECK_EQUAL( orientation( 30 ).Reflect( deg( 90 ) ).GetAngle().AsDegrees(), 150.0 );
+    BOOST_CHECK_EQUAL( orientation( 0 ).Reflect( deg( 45 ) ).GetAngle().AsDegrees(), 90.0 );
+}
 
 BOOST_AUTO_TEST_SUITE_END()
