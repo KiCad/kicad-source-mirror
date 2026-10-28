@@ -96,6 +96,15 @@ protected:
     void onSearchEnter( wxCommandEvent& aEvent );
     void onSearchCharHook( wxKeyEvent& aEvent );
 
+    virtual void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const;
+
+    /**
+     * Read current control values and choices without committing edits.
+     * Set aIncludeValues to false when a page supplies its values from a separate edit buffer.
+     */
+    static void AppendControlSearchTerms( wxWindow* aWindow, std::vector<wxString>& aTerms,
+                                          bool aIncludeValues = true );
+
     WX_TREEBOOK* m_treebook;
     wxButton*    m_auxiliaryButton;
     wxButton*    m_resetButton;
@@ -103,11 +112,6 @@ protected:
     WX_INFOBAR*  m_infoBar;
 
 private:
-    /**
-     * Append current project values for a page so searches reflect unsaved edits.
-     */
-    virtual void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const {}
-
     void excludeFromSearchIndex( wxWindow* aWindow );
     void excludeBookTitlesFromSearchIndex( wxBookCtrlBase* aBook );
     void invalidateSearchIndex( wxWindow* aWindow );

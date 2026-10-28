@@ -48,8 +48,6 @@ public:
 
     void ImportSettingsFrom( const std::shared_ptr<NET_SETTINGS>& aNetSettings );
 
-    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
-
     void UpdateDelayProfileNames( const std::vector<wxString>& aNames ) const;
 
     void RemapDelayProfileNames( const std::map<wxString, wxString>& aRenames ) const;

@@ -24,7 +24,6 @@
 
 #include <map>
 #include <memory>
-#include <vector>
 
 class PROJECT;
 
@@ -39,8 +38,6 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( const PROJECT* aOtherProject );
-
-    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
 
 protected:
     // Various button callbacks

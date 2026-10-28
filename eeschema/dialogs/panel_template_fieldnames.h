@@ -36,8 +36,6 @@ public:
 
     void ImportSettingsFrom( TEMPLATES* templateMgr );
 
-    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
-
 protected:
     /**
      * Adds a new template fieldname (with default values) to the template fieldnames data.

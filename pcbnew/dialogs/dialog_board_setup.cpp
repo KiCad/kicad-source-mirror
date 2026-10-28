@@ -593,11 +593,17 @@ void DIALOG_BOARD_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxString>&
         const DRC_RULE_DOCUMENT& document = textPage ? textPage->GetSearchDocument() : *m_ruleDocument;
 
         rulesPage->AppendSearchTerms( document, aTerms );
+
+        // Inactive rule forms may still show values from before the raw text was edited.
+        AppendControlSearchTerms( page, aTerms, static_cast<int>( aPage ) == m_treebook->GetSelection() );
     }
-    else if( PANEL_SETUP_TUNING_PROFILES* profiles = dynamic_cast<PANEL_SETUP_TUNING_PROFILES*>( page ) )
+    else if( PANEL_SETUP_RULES* textPage = dynamic_cast<PANEL_SETUP_RULES*>( page ) )
     {
-        const std::vector<wxString> names = profiles->GetDelayProfileNames();
-        aTerms.insert( aTerms.end(), names.begin(), names.end() );
+        aTerms.push_back( textPage->GetSearchDocument().GetText() );
+    }
+    else
+    {
+        PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
     }
 }
 

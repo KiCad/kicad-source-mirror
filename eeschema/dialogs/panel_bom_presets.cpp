@@ -48,16 +48,6 @@ bool PANEL_BOM_PRESETS::TransferDataToWindow()
 }
 
 
-void PANEL_BOM_PRESETS::AppendSearchTerms( std::vector<wxString>& aTerms ) const
-{
-    for( const BOM_PRESET& preset : m_bomPresets )
-        aTerms.push_back( preset.name );
-
-    for( const BOM_FMT_PRESET& preset : m_bomFmtPresets )
-        aTerms.push_back( preset.name );
-}
-
-
 bool PANEL_BOM_PRESETS::TransferDataFromWindow()
 {
     m_settings.m_BomPresets = m_bomPresets;

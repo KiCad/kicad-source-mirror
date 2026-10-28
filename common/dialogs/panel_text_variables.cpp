@@ -143,16 +143,6 @@ void PANEL_TEXT_VARIABLES::AppendTextVar( const wxString& aName, const wxString&
 }
 
 
-void PANEL_TEXT_VARIABLES::AppendSearchTerms( std::vector<wxString>& aTerms ) const
-{
-    for( int row = 0; row < m_TextVars->GetNumberRows(); ++row )
-    {
-        aTerms.push_back( m_TextVars->GetCellValue( row, TV_NAME_COL ) );
-        aTerms.push_back( m_TextVars->GetCellValue( row, TV_VALUE_COL ) );
-    }
-}
-
-
 bool PANEL_TEXT_VARIABLES::TransferDataFromWindow()
 {
     if( !m_TextVars->CommitPendingChanges() )

@@ -37,8 +37,6 @@ public:
     void ImportBomPresetsFrom( SCHEMATIC_SETTINGS& aSettings );
     void ImportBomFmtPresetsFrom( SCHEMATIC_SETTINGS& aSettings );
 
-    void AppendSearchTerms( std::vector<wxString>& aTerms ) const;
-
 protected:
     void OnDeleteBomPreset( wxCommandEvent& event ) override;
     void OnDeleteBomFmtPreset( wxCommandEvent& event ) override;

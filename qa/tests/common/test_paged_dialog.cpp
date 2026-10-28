@@ -24,10 +24,14 @@
 #include <optional>
 #include <widgets/paged_dialog.h>
 #include <wx/app.h>
+#include <wx/choice.h>
+#include <wx/combobox.h>
+#include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/treectrl.h>
 
 
@@ -108,6 +112,8 @@ private:
 
     void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const override
     {
+        PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
+
         if( aPage != 1 )
             return;
 
@@ -292,6 +298,90 @@ BOOST_AUTO_TEST_CASE( AddedAndRemovedNotebookPagesRefreshSearchLabels )
     wxTheApp->ProcessPendingEvents();
     BOOST_CHECK( !dialog->PageMatches() );
     profile->Destroy();
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( TextValuesReflectUnsavedEditsAndNewControls )
+{
+    TEST_SEARCH_DIALOG* dialog = new TEST_SEARCH_DIALOG( true );
+    wxWindow*           page = dialog->GetTreebook()->ResolvePageForSearch( 1 );
+    wxTextCtrl*         name = new wxTextCtrl( page, wxID_ANY, wxS( "Isola370HR" ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "Isola370HR" ) ) );
+
+    name->ChangeValue( wxS( "Rogers4350B" ) );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "Isola370HR" ) ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "Rogers4350B" ) ) );
+    name->Clear();
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "Rogers4350B" ) ) );
+
+    wxTextCtrl* added = new wxTextCtrl( page, wxID_ANY, wxS( "NewComponentClass" ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "NewComponentClass" ) ) );
+    added->Hide();
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "NewComponentClass" ) ) );
+
+    new wxTextCtrl( page, wxID_ANY, wxS( "HiddenPassword" ), wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "HiddenPassword" ) ) );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( ChoiceEntriesAndEditableCombosStayCurrent )
+{
+    TEST_SEARCH_DIALOG* dialog = new TEST_SEARCH_DIALOG( true );
+    wxWindow*           page = dialog->GetTreebook()->ResolvePageForSearch( 1 );
+    wxChoice*           choice = new wxChoice( page, wxID_ANY );
+    choice->Append( wxS( "SelectedFinish" ) );
+    choice->Append( wxS( "UnselectedFinish" ) );
+    choice->SetSelection( 0 );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "UnselectedFinish" ) ) );
+
+    choice->SetString( 1, wxS( "ReplacementFinish" ) );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "UnselectedFinish" ) ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "ReplacementFinish" ) ) );
+    choice->Delete( 1 );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "ReplacementFinish" ) ) );
+
+    wxComboBox* combo = new wxComboBox( page, wxID_ANY, wxS( "TypedExpression" ) );
+    combo->Append( wxS( "SuggestedExpression" ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "TypedExpression" ) ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "SuggestedExpression" ) ) );
+    combo->ChangeValue( wxS( "UpdatedExpression" ) );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "TypedExpression" ) ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "UpdatedExpression" ) ) );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( GridSearchReadsTheEditorWithoutCommittingIt )
+{
+    TEST_SEARCH_DIALOG* dialog = new TEST_SEARCH_DIALOG( true );
+    wxGrid*             grid = new wxGrid( dialog->GetTreebook()->ResolvePageForSearch( 1 ), wxID_ANY );
+    grid->CreateGrid( 1, 2 );
+    grid->SetCellValue( 0, 0, wxS( "OldVariableName" ) );
+    grid->SetCellValue( 0, 1, wxS( "VariableContent" ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "OldVariableName" ) ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "VariableContent" ) ) );
+
+    dialog->Show( true );
+    grid->SetGridCursor( 0, 0 );
+    grid->EnableCellEditControl();
+    BOOST_REQUIRE( grid->IsCellEditControlEnabled() );
+    wxGridCellEditor* editor = grid->GetCellEditor( 0, 0 );
+    wxTextEntryBase*  text = dynamic_cast<wxTextEntryBase*>( editor->GetControl() );
+    BOOST_REQUIRE( text );
+    text->ChangeValue( wxS( "DraftVariableName" ) );
+    editor->DecRef();
+
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "OldVariableName" ) ) );
+    BOOST_CHECK( dialog->SearchMatches( wxS( "DraftVariableName" ) ) );
+    BOOST_CHECK_EQUAL( grid->GetCellValue( 0, 0 ), wxS( "OldVariableName" ) );
+    BOOST_CHECK( grid->IsCellEditControlEnabled() );
+
+    grid->DisableCellEditControl();
+    grid->DeleteRows( 0 );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "DraftVariableName" ) ) );
+    BOOST_CHECK( !dialog->SearchMatches( wxS( "VariableContent" ) ) );
     dialog->Destroy();
 }
 

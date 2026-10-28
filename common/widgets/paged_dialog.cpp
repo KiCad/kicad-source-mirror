@@ -33,6 +33,7 @@
 
 #include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/ctrlsub.h>
 #include <wx/display.h>
 #include <wx/grid.h>
 #include <wx/hyperlink.h>
@@ -44,6 +45,7 @@
 #include <wx/srchctrl.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
+#include <wx/textentry.h>
 #include <wx/tokenzr.h>
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
@@ -727,6 +729,75 @@ void PAGED_DIALOG::collectSearchText( wxWindow* aWindow, std::vector<wxString>& 
 
         collectSearchText( child, aTexts );
     }
+}
+
+
+void PAGED_DIALOG::AppendControlSearchTerms( wxWindow* aWindow, std::vector<wxString>& aTerms, bool aIncludeValues )
+{
+    if( wxBookCtrlBase* book = dynamic_cast<wxBookCtrlBase*>( aWindow ) )
+    {
+        for( size_t ii = 0; ii < book->GetPageCount(); ++ii )
+            AppendControlSearchTerms( book->GetPage( ii ), aTerms, aIncludeValues );
+
+        return;
+    }
+
+    if( wxGrid* grid = dynamic_cast<wxGrid*>( aWindow ) )
+    {
+        if( !aIncludeValues )
+            return;
+
+        const int editRow = grid->GetGridCursorRow();
+        const int editCol = grid->GetGridCursorCol();
+
+        for( int row = 0; row < grid->GetNumberRows(); ++row )
+        {
+            for( int col = 0; col < grid->GetNumberCols(); ++col )
+            {
+                if( grid->IsCellEditControlEnabled() && row == editRow && col == editCol )
+                {
+                    wxGridCellEditor* editor = grid->GetCellEditor( row, col );
+                    aTerms.push_back( editor->GetValue() );
+                    editor->DecRef();
+                }
+                else
+                {
+                    aTerms.push_back( grid->GetCellValue( row, col ) );
+                }
+            }
+        }
+
+        return;
+    }
+
+    if( wxItemContainerImmutable* choices = dynamic_cast<wxItemContainerImmutable*>( aWindow ) )
+    {
+        for( unsigned int ii = 0; ii < choices->GetCount(); ++ii )
+            aTerms.push_back( choices->GetString( ii ) );
+    }
+
+    if( aIncludeValues )
+    {
+        if( wxTextEntryBase* entry = dynamic_cast<wxTextEntryBase*>( aWindow ) )
+        {
+            if( !aWindow->HasFlag( wxTE_PASSWORD ) )
+                aTerms.push_back( entry->GetValue() );
+
+            return;
+        }
+    }
+
+    for( wxWindow* child : aWindow->GetChildren() )
+    {
+        if( child->IsShown() )
+            AppendControlSearchTerms( child, aTerms, aIncludeValues );
+    }
+}
+
+
+void PAGED_DIALOG::AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const
+{
+    AppendControlSearchTerms( m_treebook->ResolvePageForSearch( aPage ), aTerms );
 }
 
 

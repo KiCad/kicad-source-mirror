@@ -81,13 +81,6 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataToWindow()
 }
 
 
-void PANEL_TEMPLATE_FIELDNAMES::AppendSearchTerms( std::vector<wxString>& aTerms ) const
-{
-    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
-        aTerms.push_back( m_grid->GetCellValue( row, 0 ) );
-}
-
-
 void PANEL_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
 {
     m_grid->OnAddRow(
