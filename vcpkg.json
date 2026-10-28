@@ -83,6 +83,11 @@
     {
       "name": "ngspice",
       "version": "46#0"
+    },
+    {
+      "name": "protobuf",
+      "version": "6.33.4#2",
+      "$comment": "Pinned due to the MSVC C++20 linker mismatch with protobuf 7.36.2"
     }
   ]
 }
