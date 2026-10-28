@@ -94,6 +94,12 @@ private:
      */
     virtual void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const {}
 
+    /// Tree path used to identify collapsed sections.
+    wxString pagePath( size_t aPage ) const;
+
+    void saveTreeExpansion() const;
+    void loadTreeExpansion();
+
     void buildSearchIndex();
 
     /**

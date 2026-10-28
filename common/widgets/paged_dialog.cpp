@@ -25,6 +25,10 @@
 #include <widgets/wx_panel.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_treebook.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
+#include <settings/common_settings_internals.h>
+#include <set>
 #include <widgets/ui_common.h>
 
 #include <wx/button.h>
@@ -174,6 +178,94 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 }
 
 
+static const wxString TREE_PATH_SEPARATOR = wxS( "  >  " );
+
+static const char* COLLAPSED_NODES_KEY = "__collapsedNodes";
+
+
+/// Return the pages that have children.
+static std::set<size_t> treeNodes( const WX_TREEBOOK* aTreebook )
+{
+    std::set<size_t> nodes;
+
+    for( size_t page = 0; page < aTreebook->GetPageCount(); ++page )
+    {
+        int parent = aTreebook->GetPageParent( page );
+
+        if( parent != wxNOT_FOUND )
+            nodes.insert( static_cast<size_t>( parent ) );
+    }
+
+    return nodes;
+}
+
+
+wxString PAGED_DIALOG::pagePath( size_t aPage ) const
+{
+    wxString path = m_treebook->GetPageText( aPage );
+
+    for( int parent = m_treebook->GetPageParent( aPage ); parent != wxNOT_FOUND;
+         parent = m_treebook->GetPageParent( static_cast<size_t>( parent ) ) )
+    {
+        path = m_treebook->GetPageText( static_cast<size_t>( parent ) ) + TREE_PATH_SEPARATOR + path;
+    }
+
+    return path;
+}
+
+
+void PAGED_DIALOG::saveTreeExpansion() const
+{
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( !settings )
+        return;
+
+    nlohmann::json collapsed = nlohmann::json::array();
+
+    for( size_t node : treeNodes( m_treebook ) )
+    {
+        if( !m_treebook->IsNodeExpanded( node ) )
+            collapsed.push_back( std::string( pagePath( node ).ToUTF8() ) );
+    }
+
+    settings->CsInternals().m_dialogControlValues[GetPersistenceKey()][COLLAPSED_NODES_KEY] = collapsed;
+}
+
+
+void PAGED_DIALOG::loadTreeExpansion()
+{
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( !settings )
+        return;
+
+    auto dialogIt = settings->CsInternals().m_dialogControlValues.find( GetPersistenceKey() );
+
+    if( dialogIt == settings->CsInternals().m_dialogControlValues.end() )
+        return;
+
+    auto nodesIt = dialogIt->second.find( COLLAPSED_NODES_KEY );
+
+    if( nodesIt == dialogIt->second.end() || !nodesIt->second.is_array() )
+        return;
+
+    std::set<wxString> collapsed;
+
+    for( const nlohmann::json& entry : nodesIt->second )
+    {
+        if( entry.is_string() )
+            collapsed.insert( wxString::FromUTF8( entry.get<std::string>() ) );
+    }
+
+    for( size_t node : treeNodes( m_treebook ) )
+    {
+        if( collapsed.contains( pagePath( node ) ) )
+            m_treebook->CollapseNode( node );
+    }
+}
+
+
 void PAGED_DIALOG::finishInitialization()
 {
     for( size_t i = 1; i < m_treebook->GetPageCount(); ++i )
@@ -223,6 +315,8 @@ void PAGED_DIALOG::SetInitialPage( const wxString& aPage, const wxString& aParen
 
 PAGED_DIALOG::~PAGED_DIALOG()
 {
+    saveTreeExpansion();
+
     // Store the current parentPageTitle/pageTitle hierarchy so we can re-select it
     // next time.
     wxString lastPage = wxEmptyString;
@@ -273,6 +367,8 @@ bool PAGED_DIALOG::TransferDataToWindow()
     // this is enough on wxWidgets 3.1
     if( !DIALOG_SHIM::TransferDataToWindow() )
         return false;
+
+    loadTreeExpansion();
 
     // Search for a page matching the lastParentPageTitle/lastPageTitle hierarchy
     wxString lastPage = g_lastPage[ m_title ];
