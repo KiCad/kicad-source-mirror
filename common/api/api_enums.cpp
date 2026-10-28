@@ -479,13 +479,14 @@ LINE_STYLE FromProtoEnum( types::StrokeLineStyle aValue )
 {
     switch( aValue )
     {
+    // Clients that leave the style unset send SLS_UNKNOWN, which means the default style
+    case types::StrokeLineStyle::SLS_UNKNOWN:
     case types::StrokeLineStyle::SLS_DEFAULT:    return LINE_STYLE::DEFAULT;
     case types::StrokeLineStyle::SLS_SOLID:      return LINE_STYLE::SOLID;
     case types::StrokeLineStyle::SLS_DASH:       return LINE_STYLE::DASH;
     case types::StrokeLineStyle::SLS_DOT:        return LINE_STYLE::DOT;
     case types::StrokeLineStyle::SLS_DASHDOT:    return LINE_STYLE::DASHDOT;
     case types::StrokeLineStyle::SLS_DASHDOTDOT: return LINE_STYLE::DASHDOTDOT;
-    case types::StrokeLineStyle::SLS_UNKNOWN:
     default:
         wxCHECK_MSG( false, LINE_STYLE::DEFAULT,
                      "Unhandled case in FromProtoEnum<types::StrokeLineStyle>" );

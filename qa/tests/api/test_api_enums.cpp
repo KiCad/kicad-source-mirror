@@ -66,6 +66,16 @@ BOOST_AUTO_TEST_CASE( StrokeLineStyle )
     testEnums<LINE_STYLE, types::StrokeLineStyle>();
 }
 
+/// Clients that never set a stroke style send SLS_UNKNOWN, which must read as the default style
+/// rather than trip an assert (Sentry KICAD-1BSY).
+BOOST_AUTO_TEST_CASE( UnsetStrokeLineStyleIsDefault )
+{
+    LINE_STYLE style = LINE_STYLE::SOLID;
+
+    BOOST_REQUIRE_NO_THROW( ( style = FromProtoEnum<LINE_STYLE, types::StrokeLineStyle>( types::SLS_UNKNOWN ) ) );
+    BOOST_CHECK( style == LINE_STYLE::DEFAULT );
+}
+
 BOOST_AUTO_TEST_CASE( KiCadObjectType )
 {
     testEnums<KICAD_T, types::KiCadObjectType>( true );
