@@ -92,7 +92,7 @@ std::optional<CONSTRAINT_ANCHOR_POINT> ConstraintShapeVertex( const PCB_SHAPE* a
 std::vector<PCB_SHAPE*> CollectConstraintShapes( const BOARD* aBoard, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
 
-/// Every constrainable item on a visible layer -- shapes plus dimensions -- for board-wide anchor picking.
+/// Every constrainable item on a visible layer -- shapes, dimensions and pads -- for board-wide anchor picking.
 /// @p aLayer narrows the walk to one layer; UNDEFINED_LAYER keeps every visible layer.
 std::vector<BOARD_ITEM*> CollectConstrainableItems( const BOARD* aBoard, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
@@ -151,13 +151,14 @@ std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( const BOARD* aBoard, c
 
 
 /**
- * The board item a constraint may reference: a PCB_SHAPE or a dimension, or nullptr for anything
- * else (or a deleted item).  Constraints bind these two families; everything else is unconstrainable.
+ * The board item a constraint may reference: a PCB_SHAPE, a dimension or a pad, or nullptr for
+ * anything else (or a deleted item).  A pad exposes only its centre and never moves on its own; it
+ * travels with its footprint.
  */
 BOARD_ITEM* ResolveConstrainableItem( const BOARD* aBoard, const KIID& aId );
 
 
-/// True when @p aItem is one ResolveConstrainableItem() accepts: a PCB_SHAPE or a dimension.
+/// True when @p aItem is one ResolveConstrainableItem() accepts: a PCB_SHAPE, a dimension or a pad.
 bool IsConstrainableItem( const BOARD_ITEM* aItem );
 
 
@@ -229,7 +230,8 @@ bool ConstraintIsDuplicateOnBoard( const BOARD* aBoard, const PCB_CONSTRAINT* aC
 /**
  * The constraint anchors an item exposes.  Delegates to ConstraintShapeAnchors for a shape; for a
  * dimension it returns the measured feature points (START/END for aligned/orthogonal/radial, START
- * only for leader/center -- their other point is a control point, not a feature).
+ * only for leader/center -- their other point is a control point, not a feature).  A pad exposes
+ * only its CENTER.
  */
 std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintItemAnchors( const BOARD_ITEM* aItem );
 
@@ -263,8 +265,8 @@ std::optional<KIID> NearestConstrainedShape( const BOARD* aBoard, const std::vec
 
 
 /**
- * The ids of every item on @p aBoard a constraint member can resolve to (shapes, dimensions and
- * table cells), gathered in one board walk.  Check members against it before BOARD::ResolveItem(),
+ * The ids of every item on @p aBoard a constraint member can resolve to (shapes, dimensions, pads
+ * and table cells), gathered in one board walk.  Check members against it before BOARD::ResolveItem(),
  * which scans the whole board for an id that is not on it.
  */
 std::unordered_set<KIID> CollectMemberCandidateIds( const BOARD* aBoard );

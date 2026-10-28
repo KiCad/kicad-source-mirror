@@ -33,6 +33,7 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
+#include <pad.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_table.h>
@@ -505,7 +506,22 @@ std::vector<BOARD_ITEM*> CollectConstrainableItems( const BOARD* aBoard, PCB_LAY
     collect( aBoard->Drawings() );
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
         collect( footprint->GraphicalItems() );
+
+        // A pad spans several layers so its principal layer alone would hide an NPTH mounting hole
+        for( PAD* pad : footprint->Pads() )
+        {
+            bool visible = std::ranges::any_of( pad->GetLayerSet().Seq(),
+                                                [&]( PCB_LAYER_ID aPadLayer )
+                                                {
+                                                    return aBoard->IsLayerVisible( aPadLayer );
+                                                } );
+
+            if( visible && layerMatches( pad, aLayer ) )
+                items.push_back( pad );
+        }
+    }
 
     return items;
 }
@@ -680,7 +696,9 @@ BOARD_ITEM* ResolveConstrainableItem( const BOARD* aBoard, const KIID& aId )
 
 bool IsConstrainableItem( const BOARD_ITEM* aItem )
 {
-    return aItem && ( aItem->Type() == PCB_SHAPE_T || dynamic_cast<const PCB_DIMENSION_BASE*>( aItem ) );
+    return aItem
+           && ( aItem->Type() == PCB_SHAPE_T || aItem->Type() == PCB_PAD_T
+                || dynamic_cast<const PCB_DIMENSION_BASE*>( aItem ) );
 }
 
 
@@ -769,6 +787,9 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintItemAnchors( const BOARD_ITEM* aI
         return anchors;
     }
 
+    if( aItem->Type() == PCB_PAD_T )
+        return { { CONSTRAINT_ANCHOR::CENTER, static_cast<const PAD*>( aItem )->GetPosition() } };
+
     return {};
 }
 
@@ -842,7 +863,12 @@ std::unordered_set<KIID> CollectMemberCandidateIds( const BOARD* aBoard )
     collect( aBoard->Drawings() );
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
         collect( footprint->GraphicalItems() );
+
+        for( PAD* pad : footprint->Pads() )
+            ids.insert( pad->m_Uuid );
+    }
 
     return ids;
 }

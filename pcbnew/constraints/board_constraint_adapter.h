@@ -38,6 +38,8 @@
 
 class BOARD;
 class BOARD_ITEM;
+class FOOTPRINT;
+class PAD;
 class PCB_DIMENSION_BASE;
 class PCB_DIM_ORTHOGONAL;
 class PCB_SHAPE;
@@ -120,12 +122,19 @@ public:
      * @param aFixedShapes shapes to treat as immovable references (their whole span is frozen).
      * @param aDimensions dimensions referenced by the constraints; each contributes its two feature
      *                  points, so a coincident constraint can drag a dimension along with a shape.
+     * @param aPads pads referenced by the constraints; each contributes its centre point.
      * @return true if the system was built; unmappable constraints are skipped rather than fatal,
      *         and are listed by UnmappedConstraints() so the caller can flag them.
+     *
+     * In the board editor a footprint that a board-owned constraint reaches into is a rigid body.
+     * Its children in the cluster share one free translation, write-back moves the footprint
+     * itself, and the footprint's own internal constraints are left out since rigidity already
+     * satisfies them.  A pad never moves on its own, so outside a rigid footprint it is grounded.
      */
     bool Build( const std::vector<PCB_SHAPE*>& aShapes, const std::vector<PCB_CONSTRAINT*>& aConstraints,
                 const std::set<KIID>* aFixedShapes = nullptr,
-                const std::vector<PCB_DIMENSION_BASE*>& aDimensions = {} );
+                const std::vector<PCB_DIMENSION_BASE*>& aDimensions = {},
+                const std::vector<PAD*>& aPads = {} );
 
     /// Constraints from the last Build() that could not be mapped onto a solver primitive (wrong
     /// member count/kind for their type, e.g. a parallel whose shape was changed to a circle), so
@@ -177,7 +186,8 @@ public:
      *
      * Only shapes whose geometry actually changed are written.  @p aBeforeWrite, if set, is
      * invoked with each such shape immediately before it is mutated, so a caller can stage it in
-     * an undo commit (BOARD_COMMIT::Modify) before the change.
+     * an undo commit (BOARD_COMMIT::Modify) before the change.  A rigid footprint is moved whole
+     * and passed to @p aBeforeWrite, but its children are not reported as changed shapes.
      *
      * @return the shapes that were changed.
      */
@@ -218,8 +228,9 @@ private:
         POINT_PAIR, ///< A dimension's two feature points (start + end); no line/curve geometry.
         RECTANGLE,  ///< An axis-aligned rectangle whose four corners alias the two stored corners
                     ///< params so rectness holds by construction with no extra DOF
-        POLYGON     ///< A single hole-free outline with one free param pair per vertex since
+        POLYGON,    ///< A single hole-free outline with one free param pair per vertex since
                     ///< write-back rebuilds one outline only
+        PAD_CENTER  ///< A pad's centre point, which only ever moves with its footprint
     };
 
     /// Per-shape indices into m_params.  A segment stores start/end; a circle stores center
@@ -231,6 +242,7 @@ private:
     {
         PCB_SHAPE*          shape = nullptr;
         PCB_DIMENSION_BASE* dimension = nullptr;   ///< set instead of shape for a POINT_PAIR
+        PAD*                pad = nullptr;         ///< set instead of shape for a PAD_CENTER
         SHAPE_KIND kind = SHAPE_KIND::SEGMENT;
         int        startX = -1;        ///< start.x (segment) / center.x (circle, arc, ellipse).
         int        endX = -1;          ///< end.x (segment only).
@@ -272,6 +284,22 @@ private:
         std::set<int>                  points;
         std::vector<RIGID_RADIUS_HOLD> radii;
     };
+
+    /// A footprint moving as one body with its translation from buildPosition held in the params
+    /// at translationX
+    struct RIGID_FOOTPRINT
+    {
+        FOOTPRINT* footprint = nullptr;
+        VECTOR2I   buildPosition;
+        int        translationX = -1;
+    };
+
+    static BOARD_ITEM* itemOf( const SHAPE_VARS& aVars );
+
+    /// Tie every mapped child of each footprint in @p aFootprints to one shared translation, or
+    /// freeze them all when any is locked or in @p aFixedShapes, adding frozen params to @p aFixed
+    void coupleRigidFootprints( const std::set<FOOTPRINT*>& aFootprints, const std::set<KIID>* aFixedShapes,
+                                std::set<int>& aFixed );
 
     /// Append a normalized coordinate to the backing store, returning its stable index.
     int pushParam( double aValue );
@@ -356,6 +384,8 @@ private:
     std::map<int, std::vector<KIID>> m_tagMembers;           ///< Member items per tag, for collapse attribution.
     std::vector<PCB_CONSTRAINT*>     m_referenceConstraints; ///< Non-driving valued, read back after a solve.
     std::vector<KIID>                m_unmapped;             ///< Constraints Build() could not map (not enforced).
+    std::vector<RIGID_FOOTPRINT>     m_rigidFootprints;
+    std::set<KIID>                   m_rigidMembers;         ///< Mapped items that move only with their footprint
 
     /// Shapes a direction or angle constraint could collapse to a point only these get a
     /// stabilize length or radius hold
@@ -594,6 +624,7 @@ struct CLUSTER_DIAGNOSIS
     CONSTRAINT_STATE  state = CONSTRAINT_STATE::WELL_CONSTRAINED;
     std::vector<KIID> shapeIds;          ///< Cluster shapes in the order the state is written
     std::vector<KIID> dimensionIds;      ///< Cluster dimensions
+    std::vector<KIID> padIds;            ///< Cluster pads
     int               freeDof = 0;       ///< Remaining free DOF folded into the board total
     std::vector<KIID> conflicting;
     std::vector<KIID> redundant;
