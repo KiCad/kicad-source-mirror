@@ -2927,10 +2927,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     allScreens.PruneOrphanedSymbolInstances( m_frame->Prj().GetProjectName(), sheets );
     allScreens.PruneOrphanedSheetInstances( m_frame->Prj().GetProjectName(), sheets );
 
-    // Only the full annotator shares a reused sheet's base while keeping packages and composed refs whole
-    // It resets the tools, so it runs before the move setup
-    if( schematicSettings.m_AnnotateReusedSheetSuffixes && pasteMode != PASTE_MODE::REMOVE_ANNOTATIONS
-            && !loadedItems.empty() )
+    // Unique paste needs the full annotator to share reused-sheet bases while keeping composed refs whole.
+    // Keep-existing paste must retain its references even when they duplicate existing symbols.
+    // Annotation resets the tools, so run it before the move setup.
+    if( schematicSettings.m_AnnotateReusedSheetSuffixes && pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS
+        && !loadedItems.empty() )
     {
         SCH_GROUP* enteredGroup = selTool->GetEnteredGroup();
 
