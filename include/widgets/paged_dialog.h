@@ -77,6 +77,14 @@ public:
     /// control is added, removed or first shown. Without it the page matches its old wording.
     static void InvalidateSearchIndex( wxWindow* aWindow );
 
+    /**
+     * Keep the labels of aPages for the next dialog of the same aScope, so reopening does not
+     * read them again. A different aIdentity, which names the project they were read from,
+     * replaces what was kept. Call it once the tree is complete, as the pages are resolved to
+     * tree paths here.
+     */
+    void ReuseSearchLabels( const wxString& aScope, const wxString& aIdentity, const std::set<size_t>& aPages );
+
 protected:
     void finishInitialization();
 
@@ -105,6 +113,9 @@ protected:
     static void AppendControlSearchTerms( wxWindow* aWindow, std::vector<wxString>& aTerms,
                                           bool aIncludeValues = true );
 
+    /// Terms for a page listing the project's text variables, which it reads rather than owns.
+    void AppendTextVarSearchTerms( std::vector<wxString>& aTerms ) const;
+
     WX_TREEBOOK* m_treebook;
     wxButton*    m_auxiliaryButton;
     wxButton*    m_resetButton;
@@ -116,16 +127,26 @@ private:
     void excludeBookTitlesFromSearchIndex( wxBookCtrlBase* aBook );
     void invalidateSearchIndex( wxWindow* aWindow );
 
+    enum class SEARCH_ACTION
+    {
+        REFRESH,
+        SELECT_PAGE,
+        FOCUS_TREE
+    };
+
     /// Tree path used to identify collapsed sections.
     wxString pagePath( size_t aPage ) const;
 
     void saveTreeExpansion() const;
     void loadTreeExpansion();
 
-    void buildSearchIndex();
-    void collectSearchText( wxWindow* aWindow, std::vector<wxString>& aTexts ) const;
+    /// Tree path of a page, lowercased, prefixed by its parent so "schematic colors" finds Colors
+    wxString              pageSearchTitle( size_t aPage ) const;
+    void                  onSearchIdle( wxIdleEvent& aEvent );
+    void                  collectSearchText( wxWindow* aWindow, std::vector<wxString>& aTexts ) const;
     std::vector<wxString> buildPageSearchIndex( size_t aPage );
     void                  refreshSearch();
+    void                  updateSearch( SEARCH_ACTION aAction );
 
     /**
      * Bold the pages matching the search box and grey out the rest.
@@ -140,6 +161,11 @@ private:
     std::vector<std::vector<wxString>> m_searchIndex; ///< Lowercased page title and labels, per page
     std::set<wxWindow*>                m_searchExcludedControls;
     std::set<wxBookCtrlBase*>          m_searchExcludedBookTitles;
+    wxString                           m_searchReuseScope;
+    std::set<wxString>                 m_reusableSearchPaths;
+    std::vector<bool>                  m_searchLabelsPending; ///< Pages still waiting for their labels
+    bool                               m_indexingSearch = false;
+    SEARCH_ACTION                      m_pendingSearchAction = SEARCH_ACTION::REFRESH;
 
     wxBoxSizer* m_buttonsSizer;
 

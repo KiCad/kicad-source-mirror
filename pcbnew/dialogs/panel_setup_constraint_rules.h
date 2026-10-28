@@ -171,6 +171,9 @@ public:
 
     void AppendSearchTerms( const DRC_RULE_DOCUMENT& aDocument, std::vector<wxString>& aTerms ) const;
 
+    static void AppendSearchTerms( const CONSTRAINT_SECTION& aSection, PCB_EDIT_FRAME* aFrame,
+                                   const DRC_RULE_DOCUMENT& aDocument, std::vector<wxString>& aTerms );
+
     bool TransferDataToWindow() override;
 
     /**

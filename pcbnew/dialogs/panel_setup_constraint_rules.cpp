@@ -200,6 +200,8 @@ void PANEL_SETUP_CONSTRAINT_RULES::buildSection()
                 new CONSTRAINT_RULES_LIST( parent, m_frame, m_document, *m_section.ruleType, m_section.title );
         list->SetTitleWindow( heading );
 
+        PAGED_DIALOG::ExcludeFromSearchIndex( heading );
+
         if( !m_section.defaults.empty() )
         {
             std::vector<std::pair<wxString, std::function<wxString()>>> defaults;
@@ -423,20 +425,10 @@ void PANEL_SETUP_CONSTRAINT_RULES::RefreshFromDocument()
 void PANEL_SETUP_CONSTRAINT_RULES::AppendSearchTerms( const DRC_RULE_DOCUMENT& aDocument,
                                                       std::vector<wxString>&   aTerms ) const
 {
-    if( !m_section.ruleType || aDocument.HasUnparsedText() )
-        return;
+    AppendSearchTerms( m_section, m_frame, aDocument, aTerms );
 
-    for( int index : aDocument.IndicesFor( *m_section.ruleType ) )
-    {
-        const DRC_RE_LOADED_PANEL_ENTRY& entry = aDocument.Entries()[index];
-        const wxString comment = entry.constraintData ? entry.constraintData->GetComment() : wxString();
-
-        for( const wxString& term : { entry.ruleName, entry.condition, entry.layerSource, comment } )
-        {
-            if( !term.IsEmpty() )
-                aTerms.push_back( term );
-        }
-    }
+    if( m_list )
+        aTerms.push_back( m_list->GetSearchActionLabel() );
 }
 
 
@@ -562,6 +554,41 @@ std::map<int, std::vector<wxString>> groupByValue( const std::function<std::opti
 }
 
 } // namespace
+
+
+void PANEL_SETUP_CONSTRAINT_RULES::AppendSearchTerms( const CONSTRAINT_SECTION& aSection, PCB_EDIT_FRAME* aFrame,
+                                                      const DRC_RULE_DOCUMENT& aDocument,
+                                                      std::vector<wxString>&   aTerms )
+{
+    if( aSection.netclassValue )
+    {
+        const NET_SETTINGS& netSettings = *aFrame->Prj().GetProjectFile().NetSettings();
+
+        // The same wording the list shows for a net class row
+        for( const auto& [value, names] : groupByValue( aSection.netclassValue, netSettings ) )
+        {
+            for( const wxString& name : names )
+                aTerms.push_back( wxString::Format( _( "Net class '%s'" ), name ) );
+
+            aTerms.push_back( aFrame->StringFromValue( value, true ) );
+        }
+    }
+
+    if( !aSection.ruleType || aDocument.HasUnparsedText() )
+        return;
+
+    for( int index : aDocument.IndicesFor( *aSection.ruleType ) )
+    {
+        const DRC_RE_LOADED_PANEL_ENTRY& entry = aDocument.Entries()[index];
+        const wxString comment = entry.constraintData ? entry.constraintData->GetComment() : wxString();
+
+        for( const wxString& term : { entry.ruleName, entry.condition, entry.layerSource, comment } )
+        {
+            if( !term.IsEmpty() )
+                aTerms.push_back( term );
+        }
+    }
+}
 
 
 std::map<int, std::vector<wxString>> PANEL_SETUP_CONSTRAINT_RULES::NetclassValuesFor( const wxString&     aSetting,

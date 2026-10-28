@@ -81,6 +81,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_boardFinishPage( 0 ),
         m_defaultsPage( 0 ),
         m_formattingPage( 0 ),
+        m_textVarsPage( 0 ),
         m_customRulesPage( 0 ),
         m_tracksAndViasPage( 0 ),
         m_viaStacksPage( 0 ),
@@ -156,6 +157,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_FORMATTING( aParent, m_frame );
             }, _( "Formatting" ) );
 
+    m_textVarsPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
@@ -203,6 +205,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
 
         for( const CONSTRAINT_SECTION& section : PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( family ) )
         {
+            m_ruleSearchSections.emplace( m_treebook->GetPageCount(), section );
             m_treebook->InsertLazySubPage(
                     familyPage,
                     [this, section]( wxWindow* aParent ) -> wxWindow*
@@ -323,6 +326,21 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
             _( "Embedded Files" ) );
 
     m_initComplete = true;
+
+    std::set<size_t> reusablePages;
+
+    for( const auto& [page, section] : m_ruleSearchSections )
+        reusablePages.insert( page );
+
+    reusablePages.insert( m_textVarsPage );
+    reusablePages.insert( m_severitiesPage );
+
+    // The rule pages hide their editor while the custom rules do not parse, so the wording a
+    // page offers depends on that as well as on which project it was read from.
+    ReuseSearchLabels(
+            wxS( "Board Setup" ),
+            wxString::Format( wxS( "%s:%d" ), Prj().GetProjectFullName(), m_ruleDocument->HasUnparsedText() ),
+            reusablePages );
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
@@ -583,16 +601,52 @@ void DIALOG_BOARD_SETUP::refreshStagedPages( const wxString& aGroup )
 }
 
 
+const DRC_RULE_DOCUMENT& DIALOG_BOARD_SETUP::searchDocument() const
+{
+    auto* textPage = static_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( m_customRulesPage ) );
+
+    return textPage ? textPage->GetSearchDocument() : *m_ruleDocument;
+}
+
+
 void DIALOG_BOARD_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const
 {
+    // A page that has not been built yet is answered from the board instead
+    if( !m_treebook->GetBuiltPageForSearch( aPage ) )
+    {
+        if( aPage == m_severitiesPage )
+            return;
+
+        if( aPage == m_textVarsPage )
+        {
+            AppendTextVarSearchTerms( aTerms );
+            return;
+        }
+
+        auto ruleSection = m_ruleSearchSections.find( aPage );
+
+        if( ruleSection != m_ruleSearchSections.end() )
+        {
+            const DRC_RULE_DOCUMENT& document = searchDocument();
+            PANEL_SETUP_CONSTRAINT_RULES::AppendSearchTerms( ruleSection->second, m_frame, document, aTerms );
+
+            const BOARD_DESIGN_SETTINGS& settings = m_frame->GetBoard()->GetDesignSettings();
+
+            for( const CONSTRAINT_DEFAULT_FIELD& field : ruleSection->second.defaults )
+                aTerms.push_back( m_frame->StringFromValue( settings.*( field.member ), true ) );
+
+            if( !m_frame->GetBoard()->GetDesignRulesPath().IsEmpty() && !document.HasUnparsedText() )
+                aTerms.push_back( _( "Add Rule" ) );
+
+            return;
+        }
+    }
+
     wxWindow* page = m_treebook->ResolvePageForSearch( aPage );
 
     if( PANEL_SETUP_CONSTRAINT_RULES* rulesPage = dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( page ) )
     {
-        auto* textPage = static_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( m_customRulesPage ) );
-        const DRC_RULE_DOCUMENT& document = textPage ? textPage->GetSearchDocument() : *m_ruleDocument;
-
-        rulesPage->AppendSearchTerms( document, aTerms );
+        rulesPage->AppendSearchTerms( searchDocument(), aTerms );
 
         // Inactive rule forms may still show values from before the raw text was edited.
         AppendControlSearchTerms( page, aTerms, static_cast<int>( aPage ) == m_treebook->GetSelection() );

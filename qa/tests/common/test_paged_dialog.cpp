@@ -46,7 +46,8 @@ bool canRunDisplayTests( boost::unit_test::test_unit_id )
 class TEST_SEARCH_DIALOG : public PAGED_DIALOG
 {
 public:
-    explicit TEST_SEARCH_DIALOG( bool aExcludeHeading ) :
+    explicit TEST_SEARCH_DIALOG( bool aExcludeHeading, const wxString& aReuseKey = wxEmptyString,
+                                 const wxString& aIdentity = wxS( "project" ) ) :
             PAGED_DIALOG( nullptr, wxS( "Search regression test" ), false, false )
     {
         SetEvtHandlerEnabled( false );
@@ -65,6 +66,9 @@ public:
                 },
                 wxS( "Chains" ) );
         SetEvtHandlerEnabled( true );
+
+        if( !aReuseKey.IsEmpty() )
+            ReuseSearchLabels( aReuseKey, aIdentity, { 1 } );
     }
 
     void SetLiveTerm( const wxString& aTerm ) { m_liveTerm = aTerm; }
@@ -72,6 +76,12 @@ public:
     void SetTermOnPageChange( const wxString& aTerm ) { m_termOnPageChange = aTerm; }
 
     void ExcludeHeading() { ExcludeFromSearchIndex( m_heading ); }
+
+    void RenameHeading( const wxString& aText )
+    {
+        m_heading->SetLabel( aText );
+        InvalidateSearchIndex( m_heading );
+    }
 
     wxNotebook* AddNotebook()
     {
@@ -88,11 +98,35 @@ public:
         return m_notebook;
     }
 
-    bool SearchMatches( const wxString& aQuery )
+    void SetQuery( const wxString& aQuery )
     {
         wxSearchCtrl* search = dynamic_cast<wxSearchCtrl*>( FindWindowByName( wxSearchCtrlNameStr, this ) );
         BOOST_REQUIRE( search );
         search->SetValue( aQuery );
+    }
+
+    bool IndexNextPage()
+    {
+        wxIdleEvent event;
+        ProcessWindowEvent( event );
+        return event.MoreRequested();
+    }
+
+    void FinishSearch()
+    {
+        for( size_t page = 0; page <= m_treebook->GetPageCount(); ++page )
+        {
+            if( !IndexNextPage() )
+                return;
+        }
+
+        BOOST_FAIL( "Search indexing did not finish" );
+    }
+
+    bool SearchMatches( const wxString& aQuery )
+    {
+        SetQuery( aQuery );
+        FinishSearch();
         return PageMatches();
     }
 
@@ -112,10 +146,14 @@ private:
 
     void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const override
     {
-        PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
-
         if( aPage != 1 )
+        {
+            PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
             return;
+        }
+
+        if( m_treebook->GetBuiltPageForSearch( aPage ) )
+            PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
 
         aTerms.push_back( m_liveTerm );
 
@@ -136,6 +174,133 @@ private:
 
 
 BOOST_AUTO_TEST_SUITE( PagedDialogSearch, *boost::unit_test::precondition( canRunDisplayTests ) )
+
+
+BOOST_AUTO_TEST_CASE( ReopeningReusesLabelsWithoutBuildingTheLazyPage )
+{
+    TEST_SEARCH_DIALOG* first = new TEST_SEARCH_DIALOG( true, wxS( "reuse regression" ) );
+    BOOST_CHECK( first->SearchMatches( wxS( "Static setting" ) ) );
+    first->Destroy();
+
+    TEST_SEARCH_DIALOG* second = new TEST_SEARCH_DIALOG( true, wxS( "reuse regression" ) );
+    wxWindow*           lazyPage = second->GetTreebook()->GetPage( 1 );
+
+    second->SetQuery( wxS( "General" ) );
+    second->FinishSearch();
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+
+    BOOST_CHECK( second->SearchMatches( wxS( "Static setting" ) ) );
+    second->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( AnotherProjectDoesNotReuseTheLabelsOfTheLastOne )
+{
+    TEST_SEARCH_DIALOG* first = new TEST_SEARCH_DIALOG( true, wxS( "identity regression" ), wxS( "project one" ) );
+    BOOST_CHECK( first->SearchMatches( wxS( "Static setting" ) ) );
+    first->Destroy();
+
+    // Same dialog, another project. What was kept for the first one must not answer for this
+    // one, so the page is read again instead of reused.
+    TEST_SEARCH_DIALOG* second = new TEST_SEARCH_DIALOG( true, wxS( "identity regression" ), wxS( "project two" ) );
+    wxWindow*           lazyPage = second->GetTreebook()->GetPage( 1 );
+
+    second->SetQuery( wxS( "General" ) );
+    second->FinishSearch();
+    BOOST_CHECK( !lazyPage->GetChildren().IsEmpty() );
+    second->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( ReopeningUsesCurrentProjectTermsWithCachedLabels )
+{
+    TEST_SEARCH_DIALOG* first = new TEST_SEARCH_DIALOG( true, wxS( "current terms regression" ) );
+    first->SetLiveTerm( wxS( "OldProjectName" ) );
+    BOOST_CHECK( first->SearchMatches( wxS( "OldProjectName" ) ) );
+    first->Destroy();
+
+    TEST_SEARCH_DIALOG* second = new TEST_SEARCH_DIALOG( true, wxS( "current terms regression" ) );
+    second->SetLiveTerm( wxS( "NewProjectName" ) );
+    wxWindow* lazyPage = second->GetTreebook()->GetPage( 1 );
+
+    BOOST_CHECK( !second->SearchMatches( wxS( "OldProjectName" ) ) );
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+    BOOST_CHECK( second->SearchMatches( wxS( "NewProjectName" ) ) );
+    BOOST_CHECK( !lazyPage->GetChildren().IsEmpty() );
+    second->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( InvalidationBeforeFirstSearchDropsReusedLabels )
+{
+    TEST_SEARCH_DIALOG* first = new TEST_SEARCH_DIALOG( false, wxS( "early invalidation regression" ) );
+    BOOST_CHECK( first->SearchMatches( wxS( "DDR4_DQ0" ) ) );
+    first->Destroy();
+
+    TEST_SEARCH_DIALOG* second = new TEST_SEARCH_DIALOG( false, wxS( "early invalidation regression" ) );
+    second->GetTreebook()->ResolvePageForSearch( 1 );
+    second->RenameHeading( wxS( "Member Nets: PCIE_TX0" ) );
+
+    BOOST_CHECK( !second->SearchMatches( wxS( "DDR4_DQ0" ) ) );
+    BOOST_CHECK( second->SearchMatches( wxS( "PCIE_TX0" ) ) );
+    second->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( TitlesMatchBeforeTheLabelsHaveBeenRead )
+{
+    TEST_SEARCH_DIALOG* dialog = new TEST_SEARCH_DIALOG( false );
+
+    // A page title is known without reading the page, so the first search answers straight
+    // away instead of waiting for every page to be built.
+    dialog->SetQuery( wxS( "Chains" ) );
+    BOOST_CHECK( dialog->PageMatches() );
+
+    // A label on that page is only found once the idle pass has read it.
+    dialog->SetQuery( wxS( "Static setting" ) );
+    BOOST_CHECK( !dialog->PageMatches() );
+
+    dialog->FinishSearch();
+    BOOST_CHECK( dialog->PageMatches() );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( InitialSearchYieldsBetweenPagesAndUsesTheLatestQuery )
+{
+    TEST_SEARCH_DIALOG* dialog = new TEST_SEARCH_DIALOG( true );
+    wxWindow*           lazyPage = dialog->GetTreebook()->GetPage( 1 );
+
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+    dialog->SetQuery( wxS( "No matching setting" ) );
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+
+    BOOST_CHECK( dialog->IndexNextPage() );
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+
+    dialog->SetQuery( wxS( "Static setting" ) );
+    dialog->FinishSearch();
+    BOOST_CHECK( !lazyPage->GetChildren().IsEmpty() );
+    BOOST_CHECK( dialog->PageMatches() );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( ClearingSearchStopsPendingPageConstruction )
+{
+    TEST_SEARCH_DIALOG* dialog = new TEST_SEARCH_DIALOG( true );
+    wxWindow*           lazyPage = dialog->GetTreebook()->GetPage( 1 );
+
+    dialog->SetQuery( wxS( "Static setting" ) );
+    BOOST_CHECK( dialog->IndexNextPage() );
+    dialog->SetQuery( wxEmptyString );
+    BOOST_CHECK( !dialog->IndexNextPage() );
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+    BOOST_CHECK( !dialog->PageMatches() );
+
+    BOOST_CHECK( dialog->SearchMatches( wxS( "Static setting" ) ) );
+    dialog->Destroy();
+}
 
 
 BOOST_AUTO_TEST_CASE( RenamedAndRemovedTermsDoNotMatchCachedHeading )
@@ -229,6 +394,7 @@ BOOST_AUTO_TEST_CASE( PageChangesRefreshMatchesWithoutNavigatingAgain )
 
     BOOST_CHECK( dialog->SearchMatches( wxS( "DDR4_DQ0" ) ) );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( !dialog->PageMatches() );
     BOOST_CHECK_EQUAL( dialog->GetTreebook()->GetSelection(), 1 );
     BOOST_CHECK( dialog->SearchMatches( wxS( "PCIE_TX0" ) ) );
@@ -236,6 +402,7 @@ BOOST_AUTO_TEST_CASE( PageChangesRefreshMatchesWithoutNavigatingAgain )
     dialog->SetTermOnPageChange( wxEmptyString );
     dialog->GetTreebook()->SetSelection( 0 );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( !dialog->PageMatches() );
     BOOST_CHECK_EQUAL( dialog->GetTreebook()->GetSelection(), 0 );
     dialog->Destroy();
@@ -254,6 +421,7 @@ BOOST_AUTO_TEST_CASE( RevealedControlsRefreshMatchesWithoutChangingPages )
     details->Show();
     dialog->InvalidateSearchIndex( details );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( dialog->PageMatches() );
     BOOST_CHECK_EQUAL( dialog->GetTreebook()->GetSelection(), 0 );
     BOOST_CHECK( !dialog->GetTreebook()->GetResolvedPage( 1 ) );
@@ -262,11 +430,13 @@ BOOST_AUTO_TEST_CASE( RevealedControlsRefreshMatchesWithoutChangingPages )
     background->Hide();
     dialog->InvalidateSearchIndex( background );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( !dialog->PageMatches() );
 
     background->Show();
     dialog->InvalidateSearchIndex( background );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( dialog->PageMatches() );
     BOOST_CHECK( dialog->SearchMatches( wxS( "Static setting" ) ) );
     BOOST_CHECK( !dialog->SearchMatches( wxS( "DDR4_DQ0" ) ) );
@@ -285,6 +455,7 @@ BOOST_AUTO_TEST_CASE( AddedAndRemovedNotebookPagesRefreshSearchLabels )
     book->AddPage( profile, wxS( "USB3Profile" ) );
     dialog->InvalidateSearchIndex( book );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( dialog->PageMatches() );
     BOOST_CHECK_EQUAL( dialog->GetTreebook()->GetSelection(), 0 );
 
@@ -296,6 +467,7 @@ BOOST_AUTO_TEST_CASE( AddedAndRemovedNotebookPagesRefreshSearchLabels )
     book->RemovePage( 0 );
     dialog->InvalidateSearchIndex( book );
     wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
     BOOST_CHECK( !dialog->PageMatches() );
     profile->Destroy();
     dialog->Destroy();

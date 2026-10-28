@@ -26,11 +26,13 @@
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_treebook.h>
 #include <pgm_base.h>
+#include <project.h>
 #include <settings/common_settings.h>
 #include <settings/common_settings_internals.h>
 #include <set>
 #include <widgets/ui_common.h>
 
+#include <wx/app.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/ctrlsub.h>
@@ -53,6 +55,7 @@
 #include <wx/stc/stc.h>
 #include <wx/utils.h>
 #include <wx/wupdlock.h>
+#include <wx/weakref.h>
 
 #include <utility>
 
@@ -66,6 +69,17 @@
 // This is not a simple page index because some dialogs have dynamic page sets.
 std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
+
+// Only pages explicitly opted in by their dialog may reuse labels from another instance.
+// One entry per dialog, holding the identity its labels were read from so that opening a
+// different project replaces them instead of adding to the map for the rest of the session.
+struct SEARCH_LABEL_CACHE
+{
+    wxString                                  identity;
+    std::map<wxString, std::vector<wxString>> labels;
+};
+
+static std::map<wxString, SEARCH_LABEL_CACHE> s_searchLabels;
 
 
 PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset, bool aShowOpenFolder,
@@ -179,6 +193,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     m_searchCtrl->Bind( wxEVT_SEARCH_CANCEL, &PAGED_DIALOG::onSearchText, this );
     m_searchCtrl->Bind( wxEVT_SEARCH, &PAGED_DIALOG::onSearchEnter, this );
     m_searchCtrl->Bind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onSearchCharHook, this );
+    Bind( wxEVT_IDLE, &PAGED_DIALOG::onSearchIdle, this );
 }
 
 
@@ -360,6 +375,7 @@ PAGED_DIALOG::~PAGED_DIALOG()
     m_searchCtrl->Unbind( wxEVT_SEARCH_CANCEL, &PAGED_DIALOG::onSearchText, this );
     m_searchCtrl->Unbind( wxEVT_SEARCH, &PAGED_DIALOG::onSearchEnter, this );
     m_searchCtrl->Unbind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onSearchCharHook, this );
+    Unbind( wxEVT_IDLE, &PAGED_DIALOG::onSearchIdle, this );
 }
 
 
@@ -632,7 +648,35 @@ void PAGED_DIALOG::ExcludeFromSearchIndex( wxWindow* aWindow )
 void PAGED_DIALOG::excludeFromSearchIndex( wxWindow* aWindow )
 {
     m_searchExcludedControls.insert( aWindow );
-    m_searchIndex.clear();
+    InvalidateSearchIndex( aWindow );
+}
+
+
+void PAGED_DIALOG::ReuseSearchLabels( const wxString& aScope, const wxString& aIdentity,
+                                      const std::set<size_t>& aPages )
+{
+    m_searchReuseScope = aScope;
+    m_reusableSearchPaths.clear();
+
+    SEARCH_LABEL_CACHE& cache = s_searchLabels[aScope];
+
+    // Labels describe the project they were read from, so another one starts over rather than
+    // reading the last one's wording.
+    if( cache.identity != aIdentity )
+    {
+        cache.identity = aIdentity;
+        cache.labels.clear();
+    }
+
+    // Kept as tree paths, not indices: a page added or moved later would leave an index
+    // pointing at whatever took its place.
+    for( size_t page : aPages )
+    {
+        wxCHECK2_MSG( page < m_treebook->GetPageCount(), continue,
+                      wxS( "ReuseSearchLabels() takes pages of a tree that is already built" ) );
+
+        m_reusableSearchPaths.insert( pagePath( page ) );
+    }
 }
 
 
@@ -646,7 +690,7 @@ void PAGED_DIALOG::ExcludeBookTitlesFromSearchIndex( wxBookCtrlBase* aBook )
 void PAGED_DIALOG::excludeBookTitlesFromSearchIndex( wxBookCtrlBase* aBook )
 {
     m_searchExcludedBookTitles.insert( aBook );
-    m_searchIndex.clear();
+    InvalidateSearchIndex( aBook );
 }
 
 
@@ -659,19 +703,22 @@ void PAGED_DIALOG::InvalidateSearchIndex( wxWindow* aWindow )
 
 void PAGED_DIALOG::invalidateSearchIndex( wxWindow* aWindow )
 {
-    if( m_searchIndex.size() != m_treebook->GetPageCount() )
-        return;
-
-    for( size_t ii = 0; ii < m_searchIndex.size(); ++ii )
+    for( size_t ii = 0; ii < m_treebook->GetPageCount(); ++ii )
     {
         wxWindow* page = m_treebook->GetPage( ii );
 
         if( page != aWindow && !page->IsDescendant( aWindow ) )
             continue;
 
-        if( !m_searchIndex[ii].empty() )
+        if( const wxString path = pagePath( ii ); m_reusableSearchPaths.contains( path ) )
+            s_searchLabels[m_searchReuseScope].labels.erase( path );
+
+        bool indexed = ii < m_searchLabelsPending.size() && !m_searchLabelsPending[ii];
+
+        if( indexed )
         {
-            m_searchIndex[ii].clear();
+            m_searchIndex[ii] = { pageSearchTitle( ii ) };
+            m_searchLabelsPending[ii] = true;
             CallAfter( &PAGED_DIALOG::refreshSearch );
         }
 
@@ -801,38 +848,87 @@ void PAGED_DIALOG::AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerm
 }
 
 
-std::vector<wxString> PAGED_DIALOG::buildPageSearchIndex( size_t aPage )
+void PAGED_DIALOG::AppendTextVarSearchTerms( std::vector<wxString>& aTerms ) const
 {
-    std::vector<wxString> texts;
-    wxString              title = m_treebook->GetPageText( aPage );
-    int                   parent = m_treebook->GetPageParent( aPage );
+    for( const auto& [name, value] : Prj().GetTextVars() )
+    {
+        aTerms.push_back( name );
+        aTerms.push_back( value );
+    }
+}
+
+
+wxString PAGED_DIALOG::pageSearchTitle( size_t aPage ) const
+{
+    wxString title = m_treebook->GetPageText( aPage );
+    int      parent = m_treebook->GetPageParent( aPage );
 
     // Lets "schematic colors" find the Colors page under Schematic Editor
     if( parent != wxNOT_FOUND )
         title = m_treebook->GetPageText( parent ) + wxS( " " ) + title;
 
-    texts.push_back( title.Lower() );
+    return title.Lower();
+}
+
+
+std::vector<wxString> PAGED_DIALOG::buildPageSearchIndex( size_t aPage )
+{
+    std::vector<wxString> texts;
+
+    texts.push_back( pageSearchTitle( aPage ) );
     collectSearchText( m_treebook->ResolvePageForSearch( aPage ), texts );
     return texts;
 }
 
 
-void PAGED_DIALOG::buildSearchIndex()
+void PAGED_DIALOG::onSearchIdle( wxIdleEvent& aEvent )
 {
-    PROF_TIMER           timer;
-    wxBusyCursor         busy;
-    wxWindowUpdateLocker updateLock( m_treebook );
+    aEvent.Skip();
 
-    std::vector<std::vector<wxString>> index( m_treebook->GetPageCount() );
+    if( !m_indexingSearch )
+        return;
 
-    for( size_t ii = 0; ii < index.size(); ++ii )
-        index[ii] = buildPageSearchIndex( ii );
+    auto missing = std::ranges::find( m_searchLabelsPending, true );
 
-    m_searchIndex = std::move( index );
+    if( missing != m_searchLabelsPending.end() )
+    {
+        size_t               page = std::distance( m_searchLabelsPending.begin(), missing );
+        wxWeakRef<wxWindow>  focus = wxWindow::FindFocus();
+        long                 selFrom = 0;
+        long                 selTo = 0;
+        PROF_TIMER           timer;
+        wxWindowUpdateLocker updateLock( m_treebook );
 
-    timer.Stop();
-    wxLogTrace( traceUiProfile, wxS( "Indexing %zu pages of '%s' for search took %s." ), m_searchIndex.size(), m_title,
-                timer.to_string() );
+        m_searchCtrl->GetSelection( &selFrom, &selTo );
+
+        // Build one page per idle event so input can be handled between page constructors.
+        m_searchIndex[page] = buildPageSearchIndex( page );
+        m_searchLabelsPending[page] = false;
+
+        if( const wxString path = pagePath( page ); m_reusableSearchPaths.contains( path ) )
+            s_searchLabels[m_searchReuseScope].labels[path] = m_searchIndex[page];
+
+        if( focus && wxWindow::FindFocus() != focus )
+        {
+            focus->SetFocus();
+
+            if( m_searchCtrl->IsDescendant( focus ) )
+                m_searchCtrl->SetSelection( selFrom, selTo );
+        }
+
+        timer.Stop();
+        wxLogTrace( traceUiProfile, wxS( "Indexing page '%s' of '%s' for search took %s." ),
+                    m_treebook->GetPageText( page ), m_title, timer.to_string() );
+    }
+
+    if( std::ranges::find( m_searchLabelsPending, true ) != m_searchLabelsPending.end() )
+    {
+        aEvent.RequestMore();
+        return;
+    }
+
+    m_indexingSearch = false;
+    updateSearch( m_pendingSearchAction );
 }
 
 
@@ -848,6 +944,8 @@ int PAGED_DIALOG::applySearch()
 
     if( terms.empty() )
     {
+        m_indexingSearch = false;
+
         for( size_t ii = 0; ii < count; ++ii )
         {
             tree->SetItemTextColour( m_treebook->GetPageTreeItem( ii ), wxNullColour );
@@ -858,7 +956,42 @@ int PAGED_DIALOG::applySearch()
     }
 
     if( m_searchIndex.size() != count )
-        buildSearchIndex();
+    {
+        m_searchIndex.clear();
+        m_searchIndex.resize( count );
+
+        m_searchLabelsPending.assign( count, true );
+
+        for( size_t page = 0; page < count; ++page )
+        {
+            const wxString path = pagePath( page );
+
+            if( !m_reusableSearchPaths.contains( path ) )
+                continue;
+
+            auto cached = s_searchLabels[m_searchReuseScope].labels.find( path );
+
+            if( cached != s_searchLabels[m_searchReuseScope].labels.end() )
+            {
+                m_searchIndex[page] = cached->second;
+                m_searchLabelsPending[page] = false;
+            }
+        }
+
+        // Seeding each page with its own title answers the first keystroke immediately, and
+        // the results sharpen as the labels arrive.
+        for( size_t page = 0; page < count; ++page )
+        {
+            if( m_searchLabelsPending[page] )
+                m_searchIndex[page].push_back( pageSearchTitle( page ) );
+        }
+    }
+
+    if( std::ranges::find( m_searchLabelsPending, true ) != m_searchLabelsPending.end() )
+    {
+        m_indexingSearch = true;
+        wxWakeUpIdle();
+    }
 
     std::vector<bool> matches( count, false );
     std::vector<bool> found( terms.size(), false );
@@ -879,9 +1012,6 @@ int PAGED_DIALOG::applySearch()
 
     for( size_t ii = 0; ii < count; ++ii )
     {
-        if( m_searchIndex[ii].empty() )
-            m_searchIndex[ii] = buildPageSearchIndex( ii );
-
         // A page matches when every word is found somewhere on it. Testing each label for the
         // whole query would miss words that are both on the page but in different labels.
         std::fill( found.begin(), found.end(), false );
@@ -889,7 +1019,9 @@ int PAGED_DIALOG::applySearch()
         for( const wxString& text : m_searchIndex[ii] )
             takeTerms( text );
 
-        if( !foundEveryTerm() )
+        // A page still waiting for its labels is matched on its title alone. Reading its
+        // values here would build it, which is what the idle pass exists to spread out.
+        if( !foundEveryTerm() && !m_searchLabelsPending[ii] )
         {
             // Project values can change after the label index is built.
             std::vector<wxString> live;
@@ -926,7 +1058,7 @@ int PAGED_DIALOG::applySearch()
         tree->SetItemTextColour( m_treebook->GetPageTreeItem( ii ), matches[ii] ? wxNullColour : greyed );
 
         // Keep the current match selected and skip empty category pages.
-        if( matches[ii] && !m_treebook->GetPage( ii )->GetChildren().IsEmpty()
+        if( matches[ii] && ( m_treebook->IsLazyPage( ii ) || !m_treebook->GetPage( ii )->GetChildren().IsEmpty() )
             && ( target == wxNOT_FOUND || static_cast<int>( ii ) == current ) )
         {
             target = static_cast<int>( ii );
@@ -940,7 +1072,7 @@ int PAGED_DIALOG::applySearch()
 void PAGED_DIALOG::refreshSearch()
 {
     if( !m_searchCtrl->IsEmpty() )
-        applySearch();
+        updateSearch( m_indexingSearch ? m_pendingSearchAction : SEARCH_ACTION::REFRESH );
 }
 
 
@@ -956,6 +1088,14 @@ void PAGED_DIALOG::onSearchText( wxCommandEvent& aEvent )
     // Required to avoid interaction with SetHint()
     aEvent.Skip();
 
+    updateSearch( SEARCH_ACTION::SELECT_PAGE );
+}
+
+
+void PAGED_DIALOG::updateSearch( SEARCH_ACTION aAction )
+{
+    m_pendingSearchAction = aAction;
+
     wxWindow* focus = wxWindow::FindFocus();
     bool      hadFocus = focus && m_searchCtrl->IsDescendant( focus );
     long      selFrom = 0;
@@ -965,8 +1105,14 @@ void PAGED_DIALOG::onSearchText( wxCommandEvent& aEvent )
 
     int target = applySearch();
 
-    if( target != wxNOT_FOUND && target != m_treebook->GetSelection() )
+    if( aAction != SEARCH_ACTION::REFRESH && target != wxNOT_FOUND && target != m_treebook->GetSelection() )
         m_treebook->SetSelection( target );
+
+    if( aAction == SEARCH_ACTION::FOCUS_TREE && target != wxNOT_FOUND && target == m_treebook->GetSelection() )
+    {
+        m_treebook->GetTreeCtrl()->SetFocus();
+        return;
+    }
 
     // Page construction can move focus. Keep focus on any error that prevents a page change.
     bool vetoed = target != wxNOT_FOUND && target != m_treebook->GetSelection();
@@ -982,16 +1128,7 @@ void PAGED_DIALOG::onSearchText( wxCommandEvent& aEvent )
 
 void PAGED_DIALOG::onSearchEnter( wxCommandEvent& aEvent )
 {
-    int target = applySearch();
-
-    if( target == wxNOT_FOUND )
-        return;
-
-    if( target != m_treebook->GetSelection() )
-        m_treebook->SetSelection( target );
-
-    if( m_treebook->GetSelection() == target )
-        m_treebook->GetTreeCtrl()->SetFocus();
+    updateSearch( SEARCH_ACTION::FOCUS_TREE );
 }
 
 

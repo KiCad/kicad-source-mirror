@@ -22,6 +22,8 @@
 #include <jobs/scratch_doc.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <sch_netchain.h>
+#include <connectivity/conn_netchain_manager.h>
 #include <schematic_settings.h>
 #include <kiface_base.h>
 #include <dialog_sch_import_settings.h>
@@ -164,6 +166,9 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
 
+    ReuseSearchLabels( wxS( "Schematic Setup" ), Prj().GetProjectFullName(),
+                       { m_busesPage, m_netChainsPage, m_textVarsPage, m_severitiesPage } );
+
     SetEvtHandlerEnabled( true );
 
     finishDialogSettings();
@@ -182,6 +187,56 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
 void DIALOG_SCHEMATIC_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const
 {
+    // A page that has not been built yet is answered from the project instead
+    if( !m_treebook->GetBuiltPageForSearch( aPage ) )
+    {
+        if( aPage == m_severitiesPage )
+            return;
+
+        if( aPage == m_textVarsPage )
+        {
+            AppendTextVarSearchTerms( aTerms );
+            return;
+        }
+
+        if( aPage == m_busesPage )
+        {
+            const wxString heading = _( "Members of '%s'" );
+            aTerms.push_back( wxString::Format( heading, wxEmptyString ) );
+
+            for( const auto& [name, members] : m_frame->Prj().GetProjectFile().m_BusAliases )
+            {
+                aTerms.push_back( wxString::Format( heading, name ) );
+                aTerms.insert( aTerms.end(), members.begin(), members.end() );
+            }
+
+            return;
+        }
+
+        if( aPage == m_netChainsPage )
+        {
+            aTerms.push_back( _( "Member Nets" ) );
+
+            for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_frame->Schematic().NetChains().GetCommittedNetChains() )
+            {
+                if( !chain )
+                    continue;
+
+                aTerms.push_back( chain->GetName() );
+                aTerms.push_back( chain->GetNetClass() );
+                aTerms.insert( aTerms.end(), chain->GetNets().begin(), chain->GetNets().end() );
+            }
+
+            for( const auto& [chain, className] : m_frame->Prj().GetProjectFile().NetSettings()->GetNetChainClasses() )
+            {
+                aTerms.push_back( chain );
+                aTerms.push_back( className );
+            }
+
+            return;
+        }
+    }
+
     wxWindow* page = m_treebook->ResolvePageForSearch( aPage );
 
     if( aPage == m_netChainsPage )

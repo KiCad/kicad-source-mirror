@@ -75,6 +75,9 @@ CONSTRAINT_RULES_LIST::CONSTRAINT_RULES_LIST( wxWindow* aParent, PCB_EDIT_FRAME*
 
     m_emptyLabel->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
+    PAGED_DIALOG::ExcludeFromSearchIndex( m_emptyLabel );
+    PAGED_DIALOG::ExcludeFromSearchIndex( m_primaryBtn );
+
     m_upBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_downBtn->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_duplicateBtn->SetBitmap( KiBitmapBundle( BITMAPS::duplicate ) );

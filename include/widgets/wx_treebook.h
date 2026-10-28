@@ -55,6 +55,10 @@ public:
      */
     wxWindow* GetResolvedPage( size_t aPage );
 
+    wxWindow* GetBuiltPageForSearch( size_t aPage ) const;
+
+    bool IsLazyPage( size_t aPage ) const;
+
     wxTreeItemId GetPageTreeItem( size_t aPage ) const { return m_treeIds[aPage]; }
 
 private:

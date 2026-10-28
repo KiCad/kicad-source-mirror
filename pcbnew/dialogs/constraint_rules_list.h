@@ -54,6 +54,11 @@ public:
 
     void RefreshRules();
 
+    wxString GetSearchActionLabel() const
+    {
+        return m_primaryBtn->IsShown() ? m_primaryBtn->GetLabelText() : wxString();
+    }
+
     /**
      * Lists the net class values for this constraint above the rules, where a class can set one.
      *

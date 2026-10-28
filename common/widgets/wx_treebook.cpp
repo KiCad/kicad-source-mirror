@@ -62,6 +62,8 @@ public:
 
     wxWindow* Contents() const { return m_active ? m_contents : nullptr; }
 
+    wxWindow* BuiltContents() const { return m_contents; }
+
     bool Validate() override { return !m_active || wxPanel::Validate(); }
 
     bool TransferDataFromWindow() override { return !m_active || wxPanel::TransferDataFromWindow(); }
@@ -161,4 +163,19 @@ wxWindow* WX_TREEBOOK::GetResolvedPage( size_t aPage )
         return lazyPage->Contents();
 
     return page;
+}
+
+
+bool WX_TREEBOOK::IsLazyPage( size_t aPage ) const
+{
+    return dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) != nullptr;
+}
+
+
+wxWindow* WX_TREEBOOK::GetBuiltPageForSearch( size_t aPage ) const
+{
+    if( LAZY_PAGE* page = dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) )
+        return page->BuiltContents();
+
+    return GetPage( aPage );
 }

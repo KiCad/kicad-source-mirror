@@ -136,6 +136,9 @@ PANEL_DRC_RULE_EDITOR::PANEL_DRC_RULE_EDITOR( wxWindow* aParent, BOARD* aBoard,
     wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
     m_matchReport =
             new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
+
+    PAGED_DIALOG::ExcludeFromSearchIndex( m_matchReport );
+
     m_btnShowMatches = new wxButton( this, wxID_ANY, _( "Show Matches" ) );
     buttonSizer->Add( m_matchReport, 1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
     buttonSizer->Add( m_btnShowMatches, 0, wxALL, 5 );
@@ -1317,6 +1320,9 @@ void PANEL_DRC_RULE_EDITOR::SetOverrideNote( const wxString& aText )
     {
         m_overrideNote =
                 new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
+
+        PAGED_DIALOG::ExcludeFromSearchIndex( m_overrideNote );
+
         m_overrideNote->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
         // A long condition would otherwise widen this column at the expense of the one beside it,
