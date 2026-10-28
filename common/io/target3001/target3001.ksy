@@ -60,9 +60,10 @@ seq:
     type: rest
   - id: trailing
     size-eos: true
-    valid:
-      expr: _.length == 0
-    doc: The settings end the file; trailing bytes make it invalid.
+    doc: |
+      Unread. The reader stops after the settings its version knows and, when more than one byte remains,
+      warns that the project came from a newer version, then loads it anyway. TARGET 14.2.0.35 leaves 44
+      zero bytes here at version 0x271f; every other corpus file ends at the settings.
 types:
   rest:
     doc: Project settings that follow the element trees. Gates compare the header version.

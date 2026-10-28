@@ -336,10 +336,8 @@ public:
         appendFlattened( p.schematicItems, 0 );
         appendFlattened( p.boardItems, 0 );
 
+        // Bytes after the settings are left unread, as the source program only warns about them
         parseSettings( p.settings );
-
-        if( !m_r.AtEnd() )
-            m_r.Fail( "trailing data" );
 
         p.ApplyTextLanguage();
 

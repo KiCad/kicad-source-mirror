@@ -520,7 +520,7 @@ struct PROJECT
 
 
 /**
- * Parse a complete .T3001 file.  The whole stream must be consumed exactly.
+ * Parse a complete .T3001 file.  Bytes after the project settings are ignored.
  *
  * @throw IO_ERROR when the file cannot be read, is password protected, or does not match the layout.
  */
