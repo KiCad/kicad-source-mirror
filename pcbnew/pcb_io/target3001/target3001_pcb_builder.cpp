@@ -29,6 +29,7 @@
 #include <eda_units.h>
 #include <footprint.h>
 #include <geometry/shape_ellipse.h>
+#include <geometry/shape_rect.h>
 #include <ki_exception.h>
 #include <macros.h>
 #include <netinfo.h>
@@ -105,6 +106,50 @@ std::vector<VECTOR2I> parsePolyPad( const std::string& aValue )
     return pts;
 }
 
+
+/// The value counted most often, the smallest one on a tie
+int mostCommon( const std::map<int, int>& aCounts )
+{
+    auto it = std::max_element( aCounts.begin(), aCounts.end(),
+                                []( const auto& a, const auto& b )
+                                {
+                                    return a.second < b.second;
+                                } );
+
+    return it->first;
+}
+
+
+/// Distance from a pad to the fill around it, 0 when the pad touches it or nothing lies within reach
+int padFillGap( const PAD& aPad, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aFill, int aReach )
+{
+    int         gap = 0;
+    ::PAD_SHAPE shape = aPad.GetShape( aLayer );
+
+    // The vendor may knock out an octagon around a rectangular pad, so only side midpoints agree; round
+    // knockouts are polygons around the pad that touch it only at their tangent points
+    if( shape != ::PAD_SHAPE::RECTANGLE && shape != ::PAD_SHAPE::ROUNDRECT && shape != ::PAD_SHAPE::CHAMFERED_RECT )
+        return aFill.Collide( aPad.GetEffectiveShape( aLayer ).get(), aReach, &gap ) ? gap : 0;
+
+    VECTOR2I half = aPad.GetSize( aLayer ) / 2;
+    int      best = 0;
+
+    for( VECTOR2I side :
+         { VECTOR2I( half.x, 0 ), VECTOR2I( -half.x, 0 ), VECTOR2I( 0, half.y ), VECTOR2I( 0, -half.y ) } )
+    {
+        RotatePoint( side, aPad.GetOrientation() );
+
+        SHAPE_RECT probe( aPad.ShapePos( aLayer ) + side, 1, 1 );
+
+        if( !aFill.Collide( &probe, aReach, &gap ) || gap <= 0 )
+            continue;
+
+        best = best ? std::min( best, gap ) : gap;
+    }
+
+    return best;
+}
+
 } // namespace
 
 
@@ -129,6 +174,7 @@ void TARGET3001_PCB_BUILDER::Build()
     buildAreaClearanceRules();
     buildAuraRules();
     buildPolygonRules();
+    buildThermalGaps();
 
     // A pour runs up to a contour stroke without clearance; KiCad has one edge clearance per board
     if( m_contourCarvesNothing )
@@ -173,9 +219,9 @@ static wxString ruleMm( int aValue )
 
 
 /// An expression string literal, whose only escape is \', inside a quoted rules file string
-static wxString ruleNetLiteral( const wxString& aNetName )
+static wxString ruleLiteral( const wxString& aValue )
 {
-    wxString text = aNetName;
+    wxString text = aValue;
     text.Replace( wxS( "\\" ), wxS( "\\\\" ) );
     text.Replace( wxS( "'" ), wxS( "\\\\'" ) );
     text.Replace( wxS( "\"" ), wxS( "\\\"" ) );
@@ -187,15 +233,6 @@ void TARGET3001_PCB_BUILDER::buildAreaClearanceRules()
 {
     if( m_pourLayers.empty() && !m_hasPolygonPours )
         return;
-
-    auto mostCommon = []( const std::map<int, int>& aCounts )
-    {
-        return std::max_element( aCounts.begin(), aCounts.end(),
-                                 []( const auto& a, const auto& b )
-                                 {
-                                     return a.second < b.second;
-                                 } )->first;
-    };
 
     std::map<int, int>                   boardCounts;
     std::map<int, std::vector<wxString>> netsByClearance;
@@ -240,7 +277,7 @@ void TARGET3001_PCB_BUILDER::buildAreaClearanceRules()
             if( !condition.IsEmpty() )
                 condition += wxS( " || " );
 
-            condition += wxS( "B.NetName == " ) + ruleNetLiteral( name );
+            condition += wxS( "B.NetName == " ) + ruleLiteral( name );
         }
 
         addRule( wxS( "TARGET 3001! copper areas to " ) + ruleMm( clearance ) + wxS( " signals" ), clearance,
@@ -622,8 +659,10 @@ void TARGET3001_PCB_BUILDER::buildSignalCopper()
             // A polygon's stored fill becomes the fill of its zone
             if( std::optional<int64_t> id = t.base.PolygonId(); id && polygons.count( *id ) )
             {
+                bool spoke = t.base.FlagProp( "THERMAL_LIGAMENT" );
+
                 if( !( t.base.flags & 1 ) )
-                    elementOutline( t, m_polygonFills[*id] );
+                    elementOutline( t, spoke ? m_polygonSpokes[*id] : m_polygonFills[*id] );
 
                 continue;
             }
@@ -768,20 +807,156 @@ void TARGET3001_PCB_BUILDER::buildPolygonPours()
             }
 
             // The stored fill shows the board as the vendor left it until the zones are refilled
-            auto fill = m_polygonFills.find( poly.id );
+            SHAPE_POLY_SET& body = m_polygonFills[poly.id];
+            SHAPE_POLY_SET& spokes = m_polygonSpokes[poly.id];
 
-            if( fill != m_polygonFills.end() && !fill->second.IsEmpty() )
+            if( !body.IsEmpty() )
             {
-                fill->second.Simplify();
-                fill->second.Fracture();
-                zone->SetFilledPolysList( *layer, fill->second );
+                body.Simplify();
+                spokes.Simplify();
+
+                SHAPE_POLY_SET fill = body;
+                fill.BooleanAdd( spokes );
+                fill.Fracture();
+                zone->SetFilledPolysList( *layer, fill );
                 zone->SetIsFilled( true );
                 zone->SetNeedRefill( false );
             }
 
+            if( poly.thermals )
+                m_polygonZones.emplace_back( zone, poly.id );
+
             m_hasPolygonPours = true;
             m_board->Add( zone, ADD_MODE::APPEND );
         }
+    }
+}
+
+
+void TARGET3001_PCB_BUILDER::buildThermalGaps()
+{
+    // Vendor knockouts stand off a pad by a few um more than its gap, well below any gap a designer enters
+    const int step = pcbIUScale.mmToIU( 0.01 );
+    const int reach = pcbIUScale.mmToIU( 5 );
+
+    std::map<PAD*, std::map<ZONE*, int>> padGaps;
+    std::map<ZONE*, std::map<int, int>>  zoneCounts;
+    std::map<int, int>                   boardCounts;
+
+    for( const auto& [zone, id] : m_polygonZones )
+    {
+        const SHAPE_POLY_SET& body = m_polygonFills[id];
+        const SHAPE_POLY_SET& spokes = m_polygonSpokes[id];
+        PCB_LAYER_ID          layer = zone->GetLayer();
+
+        for( FOOTPRINT* fp : m_board->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( pad->GetNetCode() != zone->GetNetCode() || !pad->FlashLayer( layer )
+                    || !zone->Outline()->Contains( pad->GetPosition() ) )
+                {
+                    continue;
+                }
+
+                // Only a pad the fill reaches through spokes shows its thermal gap
+                if( !spokes.Collide( pad->GetEffectiveShape( layer ).get() ) )
+                    continue;
+
+                int gap = KiROUND( double( padFillGap( *pad, layer, body, reach ) ) / step ) * step;
+
+                if( gap <= 0 )
+                    continue;
+
+                padGaps[pad][zone] = gap;
+                zoneCounts[zone][gap]++;
+                boardCounts[gap]++;
+            }
+        }
+    }
+
+    if( boardCounts.empty() )
+        return;
+
+    // A zone without spoked pads takes the board's gap, so a refill treats its pads alike
+    for( const auto& [zone, id] : m_polygonZones )
+    {
+        auto it = zoneCounts.find( zone );
+        zone->SetThermalReliefGap( mostCommon( it != zoneCounts.end() ? it->second : boardCounts ) );
+    }
+
+    std::map<wxString, int> references;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+        references[fp->GetReference()]++;
+
+    std::map<int, std::vector<wxString>> footprintsByGap;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        std::map<PAD*, int> overrides;
+        std::set<int>       gaps;
+
+        for( PAD* pad : fp->Pads() )
+        {
+            auto it = padGaps.find( pad );
+
+            if( it == padGaps.end() )
+                continue;
+
+            std::map<int, int> counts;
+            bool               differs = false;
+
+            for( const auto& [zone, gap] : it->second )
+            {
+                counts[gap]++;
+                gaps.insert( gap );
+                differs |= gap != zone->GetThermalReliefGap();
+            }
+
+            if( differs )
+                overrides[pad] = mostCommon( counts );
+        }
+
+        if( overrides.empty() )
+            continue;
+
+        // A footprint rule needs one gap for all its measured pads and a reference no other footprint shares
+        const wxString& ref = fp->GetReference();
+
+        if( gaps.size() == 1 && !ref.IsEmpty() && references[ref] == 1 )
+        {
+            footprintsByGap[*gaps.begin()].push_back( ref );
+            continue;
+        }
+
+        for( const auto& [pad, gap] : overrides )
+            pad->SetLocalThermalGapOverride( gap );
+    }
+
+    if( footprintsByGap.empty() )
+        return;
+
+    if( m_designRules.IsEmpty() )
+        m_designRules = wxS( "(version 1)\n" );
+
+    // Pads inherit a thermal gap rule that matches their footprint
+    for( const auto& [gap, refs] : footprintsByGap )
+    {
+        wxString condition;
+
+        for( const wxString& ref : refs )
+        {
+            if( !condition.IsEmpty() )
+                condition += wxS( " || " );
+
+            condition += wxS( "A.Reference == " ) + ruleLiteral( ref );
+        }
+
+        m_designRules += wxString::Format( wxS( "\n(rule \"TARGET 3001! thermal gap %s\"\n"
+                                                "    (condition \"A.Type == 'Footprint' && (%s)\")\n"
+                                                "    (constraint thermal_relief_gap (min %s)))\n" ),
+                                           ruleMm( gap ), condition, ruleMm( gap ) );
     }
 }
 

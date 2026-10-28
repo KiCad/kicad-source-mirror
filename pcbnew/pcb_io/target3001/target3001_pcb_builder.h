@@ -46,6 +46,7 @@ class PAD;
 class PCB_SHAPE;
 class PCB_TEXT;
 class REPORTER;
+class ZONE;
 
 
 /**
@@ -76,6 +77,9 @@ private:
     void buildFreeItems();
     void buildPourAreas();
     void buildPolygonPours();
+
+    /// Thermal gaps the stored fill leaves around spoked pads, as zone defaults and pad or footprint overrides
+    void buildThermalGaps();
 
     void addFootprint( const TARGET3001::ELEMENT& aComponent );
 
@@ -158,7 +162,9 @@ private:
     BOX2I                                    m_contourBox;
     bool                                     m_contourCarvesNothing = false; ///< a contour stroke has no clearance
     std::map<int, SHAPE_POLY_SET>            m_pourKeepouts;    ///< KiCad layer -> pour keepout
-    std::map<int64_t, SHAPE_POLY_SET>        m_polygonFills;    ///< POLYGONID -> stored fill
+    std::map<int64_t, SHAPE_POLY_SET>        m_polygonFills;    ///< POLYGONID -> stored fill without spokes
+    std::map<int64_t, SHAPE_POLY_SET>        m_polygonSpokes;   ///< POLYGONID -> stored thermal spokes
+    std::vector<std::pair<ZONE*, int64_t>>   m_polygonZones;    ///< thermal polygon zones and their POLYGONID
     std::set<int>                            m_polygonEdgeClearances;
     std::set<int>                            m_polygonAuras;
     bool                                     m_hasPolygonPours = false;

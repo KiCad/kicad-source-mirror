@@ -1465,7 +1465,8 @@ types:
           distance to other signals' polygons). Older records drop trailing tail fields. The polygon's
           computed fill is stored here as elements carrying its POLYGONID and an ELEMENT_FLAG bit mask
           (1 member, 2 interior triangle, 4 THERMAL_LIGAMENT spoke); flag-1 boundary strokes have the
-          polygon's width.
+          polygon's width, and spokes also carry THERMAL_LIGAMENT=TRUE. Spoked pads sit in knockouts
+          their thermal gap wide, octagonal around rectangular pads.
       - id: min_width
         type: s4
       - id: min_spacing
