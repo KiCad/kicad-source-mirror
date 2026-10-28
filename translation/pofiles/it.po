@@ -119,7 +119,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-28 07:51+0000\n"
+"PO-Revision-Date: 2026-10-28 18:58+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -22284,11 +22284,13 @@ msgid "Table (nested library table)"
 msgstr "Tabella (tabella librerie nidificata)"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An item nicknamed '%s' already exists; the new library was added with a "
 "blank nickname."
-msgstr "Un elemento con denominazione '%s' esiste già."
+msgstr ""
+"Un elemento denominato '%s' esiste già; nuova libreria aggiunta con "
+"denominatore vuoto."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:753
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:804
@@ -22453,9 +22455,8 @@ msgstr "URL"
 
 #: eeschema/downgrade/sch_downgrade.cpp:1371
 #: pcbnew/downgrade/board_downgrade.cpp:2755
-#, fuzzy
 msgid "Post-target text variables"
-msgstr "Variabili testo disponibili:"
+msgstr "Variabili testo post-target"
 
 #: eeschema/downgrade/sch_downgrade.cpp:1372
 msgid ""
@@ -22464,9 +22465,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:1379
-#, fuzzy
 msgid "Unresolved post-target text variables"
-msgstr "Variabile testo non risolta"
+msgstr "Variabili testo post-target non risolte"
 
 #: eeschema/downgrade/sch_downgrade.cpp:1380
 msgid ""
@@ -22495,19 +22495,16 @@ msgid ""
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2004
-#, fuzzy
 msgid "Custom user properties"
-msgstr "Proprietà personalizzabili"
+msgstr "Proprietà utente personalizzate"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2005
-#, fuzzy
 msgid "Custom user-property metadata is removed."
-msgstr "Metadati del fornitore remoto non caricati."
+msgstr "Metadati proprietà utente personalizzate rimossi."
 
 #: eeschema/downgrade/sch_downgrade.cpp:2007
-#, fuzzy
 msgid "Alternate variant symbols"
-msgstr "Cancella simbolo variante"
+msgstr "Simboli varianti alternative"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2008
 msgid ""
@@ -22516,9 +22513,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2013
-#, fuzzy
 msgid "Selected custom body styles"
-msgstr "Stili corpo personalizzati:"
+msgstr "Stili corpo personalizzati selezionati"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2014
 msgid ""
@@ -22532,9 +22528,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2022
-#, fuzzy
 msgid "Unresolved custom body styles"
-msgstr "Stili corpo personalizzati:"
+msgstr "Stili corpo personalizzati non risolti"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2023
 msgid "The selected drawing cannot be preserved without its library symbol."
@@ -22549,18 +22544,16 @@ msgid "Locked items"
 msgstr "Elementi bloccati"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2026
-#, fuzzy
 msgid "The lock is not kept."
-msgstr "Il file netlist non esiste."
+msgstr "Blocco non mantenuto."
 
 #: eeschema/downgrade/sch_downgrade.cpp:2033
 msgid "Lock metadata is removed; the supported items are kept."
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2034
-#, fuzzy
 msgid "Line endings"
-msgstr "Lunghezza linea"
+msgstr "Terminazioni di riga"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2035
 msgid "Solid line bodies and endings are approximated by filled polygons."
@@ -22573,17 +22566,15 @@ msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2039
 #: pcbnew/downgrade/board_downgrade.cpp:2575
-#, fuzzy
 msgid "Ellipse graphics"
-msgstr "Grafiche sbloccate"
+msgstr "Grafiche a ellissi"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2040
 #: eeschema/downgrade/sch_downgrade.cpp:2070
 #: pcbnew/downgrade/board_downgrade.cpp:2576
 #: pcbnew/downgrade/board_downgrade.cpp:2695
-#, fuzzy
 msgid "Approximated by a polygon."
-msgstr "Approssimazione:"
+msgstr "Approssimazione a poligoni."
 
 #: eeschema/downgrade/sch_downgrade.cpp:2042
 #: pcbnew/downgrade/board_downgrade.cpp:2578
@@ -22592,9 +22583,8 @@ msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2043
 #: pcbnew/downgrade/board_downgrade.cpp:2636
-#, fuzzy
 msgid "Hatched shape fills"
-msgstr "Riempimento tratteggiato"
+msgstr "Riempimenti a tratteggio"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2044
 #: pcbnew/downgrade/board_downgrade.cpp:2637
@@ -22629,19 +22619,16 @@ msgid "Group metadata is removed; the supported items are kept."
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2060
-#, fuzzy
 msgid "Jumper pin groups"
-msgstr "Gruppi di pin ponticelli"
+msgstr "Gruppi pin ponticelli"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2061
-#, fuzzy
 msgid "Jumper pin groupings are removed."
-msgstr "Gruppi di pin ponticelli"
+msgstr "Raggruppamenti pin ponticelli rimossi."
 
 #: eeschema/downgrade/sch_downgrade.cpp:2063
-#, fuzzy
 msgid "Named body styles"
-msgstr "Tutti gli stili corpo"
+msgstr "Stili corpo con nome"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2064
 msgid ""
@@ -22650,9 +22637,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/downgrade/sch_downgrade.cpp:2066
-#, fuzzy
 msgid "Position file exclusions"
-msgstr "Mostra esclusioni ERC"
+msgstr "Esclusioni file posizioni"
 
 #: eeschema/downgrade/sch_downgrade.cpp:2067
 #, fuzzy
