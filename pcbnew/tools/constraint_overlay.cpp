@@ -491,7 +491,7 @@ void CONSTRAINT_OVERLAY::render()
     // Selected badge draws enlarged and ringed
     // Badge colour reflects constraint solve state no on top tint
     auto walkConstraints =
-            [&]( const CONSTRAINTS& aConstraints )
+            [&]( const std::vector<PCB_CONSTRAINT*>& aConstraints )
             {
                 for( PCB_CONSTRAINT* constraint : aConstraints )
                 {
@@ -543,10 +543,7 @@ void CONSTRAINT_OVERLAY::render()
                 }
             };
 
-    walkConstraints( m_board->Constraints() );
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-        walkConstraints( footprint->Constraints() );
+    walkConstraints( CollectResolvedConstraints( m_board ) );
 
     // Pick preview outline draws last on top of diagnostics tint in a hue distinct from state colours
     // Anchor point drawn by badge item at constant screen size like an edit handle not scaled with zoom

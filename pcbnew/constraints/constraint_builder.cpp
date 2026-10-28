@@ -884,25 +884,35 @@ std::vector<KIID> ConstrainedShapeIds( const BOARD* aBoard )
     std::unordered_set<KIID> onBoard = CollectMemberCandidateIds( aBoard );
     std::unordered_set<KIID> seen;
 
-    auto collect =
-            [&]( const CONSTRAINTS& aConstraints )
-            {
-                for( PCB_CONSTRAINT* constraint : aConstraints )
-                {
-                    for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
-                    {
-                        if( onBoard.contains( member.m_item ) && seen.insert( member.m_item ).second )
-                            ids.push_back( member.m_item );
-                    }
-                }
-            };
-
-    collect( aBoard->Constraints() );
-
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-        collect( footprint->Constraints() );
+    for( PCB_CONSTRAINT* constraint : CollectResolvedConstraints( aBoard ) )
+    {
+        for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
+        {
+            if( onBoard.contains( member.m_item ) && seen.insert( member.m_item ).second )
+                ids.push_back( member.m_item );
+        }
+    }
 
     return ids;
+}
+
+
+std::vector<PCB_CONSTRAINT*> CollectResolvedConstraints( const BOARD* aBoard )
+{
+    std::vector<PCB_CONSTRAINT*> constraints;
+
+    if( !aBoard )
+        return constraints;
+
+    constraints.assign( aBoard->Constraints().begin(), aBoard->Constraints().end() );
+
+    if( !aBoard->IsFootprintHolder() )
+        return constraints;
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+        constraints.insert( constraints.end(), footprint->Constraints().begin(), footprint->Constraints().end() );
+
+    return constraints;
 }
 
 
@@ -969,16 +979,11 @@ bool DimensionEndpointsBound( const BOARD* aBoard, const PCB_DIMENSION_BASE* aDi
     const CONSTRAINT_MEMBER startMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::START );
     const CONSTRAINT_MEMBER endMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::END );
 
+    const std::vector<PCB_CONSTRAINT*> resolved = CollectResolvedConstraints( aBoard );
+
     auto anyConstraint = [&]( const auto& aMatch )
     {
-        if( std::ranges::any_of( aBoard->Constraints(), aMatch ) )
-            return true;
-
-        // Bindings are parented to the owning dimension footprint not necessarily the first so
-        // every footprint must be scanned to match the write path
-        return std::ranges::any_of( aBoard->Footprints(),
-                                    [&]( const FOOTPRINT* aFootprint )
-                                    { return std::ranges::any_of( aFootprint->Constraints(), aMatch ); } );
+        return std::ranges::any_of( resolved, aMatch );
     };
 
     // Radial dimension binds centre coincident plus rim on outline of one circle or arc
@@ -1096,24 +1101,10 @@ PCB_CONSTRAINT* FindDimensionLengthConstraint( const BOARD* aBoard, const PCB_DI
                     || ( members[0] == endMember && members[1] == startMember ) );
     };
 
-    auto scan = [&]( const CONSTRAINTS& aList ) -> PCB_CONSTRAINT*
-    {
-        auto it = std::ranges::find_if( aList, matches );
-        return it != aList.end() ? *it : nullptr;
-    };
+    const std::vector<PCB_CONSTRAINT*> resolved = CollectResolvedConstraints( aBoard );
+    auto                               it = std::ranges::find_if( resolved, matches );
 
-    if( PCB_CONSTRAINT* c = scan( aBoard->Constraints() ) )
-        return c;
-
-    // Driving length is parented to the owning dimension footprint not necessarily the first so
-    // scan every footprint to match the write
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-    {
-        if( PCB_CONSTRAINT* c = scan( footprint->Constraints() ) )
-            return c;
-    }
-
-    return nullptr;
+    return it != resolved.end() ? *it : nullptr;
 }
 
 
@@ -1176,7 +1167,9 @@ PCB_CONSTRAINT* SetDimensionValueMode( BOARD* aBoard, PCB_DIMENSION_BASE* aDimen
             return existing;
         }
 
-        BOARD_ITEM* parent = aDimension->GetParentFootprint()
+        // A footprint owns its constraints only in the footprint editor since the board never
+        // resolves them
+        BOARD_ITEM* parent = aBoard->IsFootprintHolder() && aDimension->GetParentFootprint()
                                      ? static_cast<BOARD_ITEM*>( aDimension->GetParentFootprint() )
                                      : static_cast<BOARD_ITEM*>( aBoard );
 
@@ -1266,22 +1259,10 @@ void RemapPolygonVertexMembers( BOARD* aBoard, const KIID& aPoly, int aChangedIn
 
 bool ConstraintIsDuplicateOnBoard( const BOARD* aBoard, const PCB_CONSTRAINT* aConstraint )
 {
-    auto scan = [&]( const CONSTRAINTS& aList )
-    {
-        return std::ranges::any_of( aList,
-                                    [&]( const PCB_CONSTRAINT* aExisting )
-                                    {
-                                        return ConstraintsAreDuplicate( *aExisting, *aConstraint );
-                                    } );
-    };
-
-    if( scan( aBoard->Constraints() ) )
-        return true;
-
-    return std::ranges::any_of( aBoard->Footprints(),
-                                [&]( FOOTPRINT* aFootprint )
+    return std::ranges::any_of( CollectResolvedConstraints( aBoard ),
+                                [&]( const PCB_CONSTRAINT* aExisting )
                                 {
-                                    return scan( aFootprint->Constraints() );
+                                    return ConstraintsAreDuplicate( *aExisting, *aConstraint );
                                 } );
 }
 

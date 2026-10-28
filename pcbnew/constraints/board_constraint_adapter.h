@@ -126,10 +126,9 @@ public:
      * @return true if the system was built; unmappable constraints are skipped rather than fatal,
      *         and are listed by UnmappedConstraints() so the caller can flag them.
      *
-     * In the board editor a footprint that a board-owned constraint reaches into is a rigid body.
-     * Its children in the cluster share one free translation, write-back moves the footprint
-     * itself, and the footprint's own internal constraints are left out since rigidity already
-     * satisfies them.  A pad never moves on its own, so outside a rigid footprint it is grounded.
+     * Outside the footprint editor a footprint is a rigid body.  Its children in the cluster share
+     * one free translation and write-back moves the footprint itself.  A pad never moves on its
+     * own, so in the footprint editor it is grounded.
      */
     bool Build( const std::vector<PCB_SHAPE*>& aShapes, const std::vector<PCB_CONSTRAINT*>& aConstraints,
                 const std::set<KIID>* aFixedShapes = nullptr,
@@ -571,8 +570,8 @@ CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTR
                                                  const std::set<KIID>&                     aFixedShapes = {} );
 
 
-/// True if the board or any of its footprints carries at least one geometric constraint. Cheap,
-/// short-circuiting guard so an unconstrained board pays nothing on every edit.
+/// True if @p aBoard resolves at least one geometric constraint (see CollectResolvedConstraints()).
+/// Cheap, short-circuiting guard so an unconstrained board pays nothing on every edit.
 bool BoardHasConstraints( BOARD* aBoard );
 
 

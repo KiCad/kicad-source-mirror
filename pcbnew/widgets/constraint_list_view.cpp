@@ -67,7 +67,7 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
             };
 
     auto addRows =
-            [&]( const CONSTRAINTS& aConstraints )
+            [&]( const std::vector<PCB_CONSTRAINT*>& aConstraints )
             {
                 for( PCB_CONSTRAINT* constraint : aConstraints )
                 {
@@ -102,8 +102,5 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
                 }
             };
 
-    addRows( aBoard->Constraints() );
-
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-        addRows( footprint->Constraints() );
+    addRows( CollectResolvedConstraints( aBoard ) );
 }

@@ -1189,7 +1189,9 @@ BOOST_AUTO_TEST_CASE( RoundedRectNonCardinalRotationDegradesToUnmapped )
 // Driving gate scans footprint-parented constraints too stale footprint binding revokes it
 BOOST_AUTO_TEST_CASE( FootprintParentedBindingGatesDriving )
 {
-    BOARD      board;
+    BOARD board;
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
+
     FOOTPRINT* fp = new FOOTPRINT( &board );
     board.Add( fp );
 

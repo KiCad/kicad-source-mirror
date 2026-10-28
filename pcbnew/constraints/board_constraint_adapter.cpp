@@ -59,19 +59,6 @@ static constexpr double STAY_PUT_WEIGHT = 1e-4;
 static constexpr double CURSOR_WEIGHT = 1e-2;
 
 
-// Every constraint owned by the board or by any of its footprints.  In the footprint editor the
-// "board" is a footprint holder, so footprint-scoped constraints must be gathered too.
-static std::vector<PCB_CONSTRAINT*> collectAllConstraints( BOARD* aBoard )
-{
-    std::vector<PCB_CONSTRAINT*> all( aBoard->Constraints().begin(), aBoard->Constraints().end() );
-
-    for( FOOTPRINT* footprint : aBoard->Footprints() )
-        all.insert( all.end(), footprint->Constraints().begin(), footprint->Constraints().end() );
-
-    return all;
-}
-
-
 bool BoardHasConstraints( BOARD* aBoard )
 {
     if( !aBoard )
@@ -80,9 +67,10 @@ bool BoardHasConstraints( BOARD* aBoard )
     if( !aBoard->Constraints().empty() )
         return true;
 
-    return std::ranges::any_of( aBoard->Footprints(),
-                                []( const FOOTPRINT* aFootprint )
-                                { return !aFootprint->Constraints().empty(); } );
+    return aBoard->IsFootprintHolder()
+           && std::ranges::any_of( aBoard->Footprints(),
+                                   []( const FOOTPRINT* aFootprint )
+                                   { return !aFootprint->Constraints().empty(); } );
 }
 
 
@@ -93,7 +81,7 @@ std::vector<VECTOR2I> ConstraintPinnedPositions( BOARD* aBoard, const std::set<K
     if( !aBoard )
         return positions;
 
-    for( const PCB_CONSTRAINT* constraint : collectAllConstraints( aBoard ) )
+    for( const PCB_CONSTRAINT* constraint : CollectResolvedConstraints( aBoard ) )
     {
         if( constraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::FIXED_POSITION )
             continue;
@@ -128,8 +116,8 @@ bool ConstraintItemIsLocked( const BOARD_ITEM* aItem )
 }
 
 
-// The footprint @p aItem moves with when a board-owned constraint reaches it, or nullptr inside the
-// footprint editor where a footprint's children are the geometry being edited
+// The footprint @p aItem moves with as one body, or nullptr inside the footprint editor where a
+// footprint's children are the geometry being edited
 static FOOTPRINT* boardFootprintOf( const BOARD_ITEM* aItem )
 {
     FOOTPRINT* footprint = aItem ? aItem->GetParentFootprint() : nullptr;
@@ -154,8 +142,8 @@ static BOARD_ITEM* resolveMember( BOARD* aBoard, const std::unordered_set<KIID>*
 }
 
 
-// Constraint adjacency by member KIID plus, for each footprint a board-owned constraint reaches
-// into, links between its constrained children so the whole footprint lands in one cluster
+// Constraint adjacency by member KIID plus, for each footprint on a board, links between its
+// constrained children so the whole footprint lands in one cluster
 struct CONSTRAINT_GRAPH
 {
     std::unordered_map<KIID, std::vector<PCB_CONSTRAINT*>> byMember;
@@ -202,19 +190,11 @@ buildShapeConstraintMap( BOARD* aBoard, const std::vector<PCB_CONSTRAINT*>& aCon
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         std::vector<KIID> constrained;
-        bool              reachedFromBoard = false;
 
         auto visit = [&]( const BOARD_ITEM* aChild )
         {
-            auto it = map.find( aChild->m_Uuid );
-
-            if( it == map.end() )
-                return;
-
-            constrained.push_back( aChild->m_Uuid );
-
-            for( const PCB_CONSTRAINT* constraint : it->second )
-                reachedFromBoard |= constraint->GetParentFootprint() == nullptr;
+            if( map.contains( aChild->m_Uuid ) )
+                constrained.push_back( aChild->m_Uuid );
         };
 
         for( const BOARD_ITEM* child : footprint->GraphicalItems() )
@@ -223,7 +203,7 @@ buildShapeConstraintMap( BOARD* aBoard, const std::vector<PCB_CONSTRAINT*>& aCon
         for( const PAD* pad : footprint->Pads() )
             visit( pad );
 
-        if( !reachedFromBoard || constrained.size() < 2 )
+        if( constrained.size() < 2 )
             continue;
 
         // A star keeps the children connected without a quadratic all-pairs link set
@@ -916,19 +896,10 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
 
     std::set<FOOTPRINT*> rigidFootprints;
 
-    for( const PCB_CONSTRAINT* constraint : aConstraints )
+    for( const auto& [kiid, vars] : m_shapeVars )
     {
-        if( constraint->GetParentFootprint() )
-            continue;
-
-        for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
-        {
-            if( auto it = m_shapeVars.find( member.m_item ); it != m_shapeVars.end() )
-            {
-                if( FOOTPRINT* footprint = boardFootprintOf( itemOf( it->second ) ) )
-                    rigidFootprints.insert( footprint );
-            }
-        }
+        if( FOOTPRINT* footprint = boardFootprintOf( itemOf( vars ) ) )
+            rigidFootprints.insert( footprint );
     }
 
     coupleRigidFootprints( rigidFootprints, aFixedShapes, fixedParams );
@@ -1007,11 +978,6 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
 
     for( PCB_CONSTRAINT* constraint : aConstraints )
     {
-        // Rigidity already holds a moving footprint's own relations so mapping them would only
-        // report them redundant
-        if( rigidFootprints.contains( constraint->GetParentFootprint() ) )
-            continue;
-
         const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
         bool                                  mapped = false;
 
@@ -3120,7 +3086,7 @@ bool BOARD_CONSTRAINT_MOVE_SESSION::Build( BOARD* aBoard,
     if( !aBoard || aEditedShapes.empty() )
         return false;
 
-    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, CollectResolvedConstraints( aBoard ) );
     std::set<KIID>               visited;
     std::unordered_set<KIID>     sessionShapes;
     std::vector<PCB_CONSTRAINT*> sessionConstraints;
@@ -3267,7 +3233,7 @@ bool BOARD_CONSTRAINT_DRAG_SESSION::Build( BOARD* aBoard, const CONSTRAINT_MEMBE
     if( !m_board )
         return false;
 
-    auto shapeToConstraints = buildShapeConstraintMap( m_board, collectAllConstraints( m_board ) );
+    auto shapeToConstraints = buildShapeConstraintMap( m_board, CollectResolvedConstraints( m_board ) );
     std::unordered_set<KIID>     clusterShapes;
     std::vector<PCB_CONSTRAINT*> clusterConstraints;
     collectConstraintCluster( shapeToConstraints, m_dragged.m_item, clusterShapes, clusterConstraints );
@@ -3512,7 +3478,7 @@ CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDrag
 
     // The cluster is the connected component of the shape<->constraint graph containing the
     // dragged shape, since a constraint links the shapes of all its members.
-    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, CollectResolvedConstraints( aBoard ) );
 
     std::unordered_set<KIID>     clusterShapes;
     std::vector<PCB_CONSTRAINT*> clusterConstraints;
@@ -3594,7 +3560,7 @@ std::set<KIID> ConstraintReferenceShapes( BOARD* aBoard, const PCB_CONSTRAINT* a
                && aOther->GetMembers().front() == members.front();
     };
 
-    if( std::ranges::any_of( collectAllConstraints( aBoard ), pinsThePoint ) )
+    if( std::ranges::any_of( CollectResolvedConstraints( aBoard ), pinsThePoint ) )
         return {};
 
     return { members.back().m_item };
@@ -3649,7 +3615,7 @@ void ReSolveShapeClusters( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aShapes
     if( !aBoard )
         return;
 
-    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, CollectResolvedConstraints( aBoard ) );
 
     // Solve each affected cluster once, no matter how many of its shapes were edited.
     std::set<KIID> visited;
@@ -3692,7 +3658,7 @@ bool ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHA
     if( !aBoard )
         return false;
 
-    auto           shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+    auto           shapeToConstraints = buildShapeConstraintMap( aBoard, CollectResolvedConstraints( aBoard ) );
     std::set<KIID> visited;
     std::vector<std::unique_ptr<BOARD_CONSTRAINT_ADAPTER>> solvedClusters;
 
@@ -3755,7 +3721,7 @@ void ReSolveAfterShapeResize( BOARD* aBoard, PCB_SHAPE* aShape, std::vector<PCB_
     if( !aBoard || !aShape )
         return;
 
-    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, CollectResolvedConstraints( aBoard ) );
 
     if( !shapeToConstraints.contains( aShape->m_Uuid ) )
         return;
@@ -3893,7 +3859,7 @@ BOARD_CONSTRAINT_DIAGNOSTICS DiagnoseBoardConstraints( BOARD* aBoard )
     if( !aBoard )
         return result;
 
-    std::vector<PCB_CONSTRAINT*> boardConstraints = collectAllConstraints( aBoard );
+    std::vector<PCB_CONSTRAINT*> boardConstraints = CollectResolvedConstraints( aBoard );
 
     if( boardConstraints.empty() )
         return result;
@@ -4138,7 +4104,7 @@ BOARD_CONSTRAINT_DIAGNOSTICS BOARD_CONSTRAINT_DIAGNOSER::Diagnose( BOARD* aBoard
         return result;
     }
 
-    std::vector<PCB_CONSTRAINT*> boardConstraints = collectAllConstraints( aBoard );
+    std::vector<PCB_CONSTRAINT*> boardConstraints = CollectResolvedConstraints( aBoard );
 
     if( boardConstraints.empty() )
     {

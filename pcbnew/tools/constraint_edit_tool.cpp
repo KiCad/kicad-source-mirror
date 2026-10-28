@@ -612,19 +612,12 @@ bool CONSTRAINT_EDIT_TOOL::isDuplicateConstraint( const PCB_CONSTRAINT* aConstra
     if( !aConstraint || !board() )
         return false;
 
-    auto scan = [&]( const CONSTRAINTS& aList )
-    {
-        return std::ranges::any_of( aList,
-                            [&]( const PCB_CONSTRAINT* aExisting )
-                            {
-                                return aExisting != aConstraint && ConstraintsAreDuplicate( *aExisting, *aConstraint );
-                            } );
-    };
-
-    if( scan( board()->Constraints() ) )
-        return true;
-
-    return board()->GetFirstFootprint() && scan( board()->GetFirstFootprint()->Constraints() );
+    return std::ranges::any_of( CollectResolvedConstraints( board() ),
+                                [&]( const PCB_CONSTRAINT* aExisting )
+                                {
+                                    return aExisting != aConstraint
+                                           && ConstraintsAreDuplicate( *aExisting, *aConstraint );
+                                } );
 }
 
 

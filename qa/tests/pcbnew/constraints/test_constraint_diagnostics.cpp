@@ -160,9 +160,9 @@ BOOST_AUTO_TEST_CASE( CircleEndpointAnchorIsErrored )
 }
 
 
-// Constraints owned by a footprint (footprint-editor scope) are diagnosed too, not only
-// board-level ones.
-BOOST_AUTO_TEST_CASE( FootprintScopedConstraintsAreDiagnosed )
+// A footprint's own constraints are saved with it but resolved only in the footprint editor, so a
+// board places the footprint as authored and never diagnoses them.
+BOOST_AUTO_TEST_CASE( FootprintConstraintsResolveOnlyInFootprintEditor )
 {
     BOARD board;
 
@@ -177,6 +177,11 @@ BOOST_AUTO_TEST_CASE( FootprintScopedConstraintsAreDiagnosed )
     PCB_CONSTRAINT* c = new PCB_CONSTRAINT( fp, PCB_CONSTRAINT_TYPE::HORIZONTAL );
     c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
     fp->Add( c );
+
+    BOOST_CHECK( !BoardHasConstraints( &board ) );
+    BOOST_CHECK( DiagnoseBoardConstraints( &board ).shapeStates.empty() );
+
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
 
     BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( &board );
 

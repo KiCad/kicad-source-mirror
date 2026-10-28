@@ -268,10 +268,15 @@ BOOST_AUTO_TEST_CASE( ConstrainedShapeIdsDropsMissingMembers )
                                          []( BOARD_ITEM* aItem ) { return aItem->Type() == PCB_SHAPE_T; } );
     BOOST_REQUIRE( shapeIt != footprint->GraphicalItems().end() );
 
+    // A board resolves only its own constraints so stage both at board scope
+    PCB_CONSTRAINT* boardDangling = static_cast<PCB_CONSTRAINT*>( dangling->Clone() );
+    boardDangling->ResetUuid();
+    board->Add( boardDangling );
+
     PCB_CONSTRAINT* live = static_cast<PCB_CONSTRAINT*>( dangling->Clone() );
     live->ResetUuid();
     live->RemapKIIDs( { { dangling->GetMembers().front().m_item, ( *shapeIt )->m_Uuid } } );
-    footprint->Add( live );
+    board->Add( live );
 
     std::vector<KIID> ids = ConstrainedShapeIds( board.get() );
     BOOST_REQUIRE_EQUAL( ids.size(), 1 );
