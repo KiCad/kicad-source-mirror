@@ -1359,7 +1359,7 @@ void TARGET3001_SCH_BUILDER::separateSignals( int aSheet )
 
             for( const auto& [from, to] : { std::pair( start, start + side ), std::pair( end + side, end ) } )
             {
-                SCH_LINE* stub = new SCH_LINE( *wire );
+                SCH_LINE* stub = static_cast<SCH_LINE*>( wire->Duplicate( false ) );
                 stub->SetStartPoint( from );
                 stub->SetEndPoint( to );
                 addNetItem( aSheet, stub, pick.second );
@@ -1620,7 +1620,7 @@ std::optional<VECTOR2I> TARGET3001_SCH_BUILDER::bendAround( int aSheet, int aSig
         for( const auto& [from, to] : { std::pair( before, before + side ), std::pair( before + side, after + side ),
                                         std::pair( after + side, after ), std::pair( after, end ) } )
         {
-            SCH_LINE* piece = new SCH_LINE( *line );
+            SCH_LINE* piece = static_cast<SCH_LINE*>( line->Duplicate( false ) );
             piece->SetStartPoint( from );
             piece->SetEndPoint( to );
             addNetItem( aSheet, piece, aSignal );
