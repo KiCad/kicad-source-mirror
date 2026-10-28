@@ -40,6 +40,8 @@ PANEL_SETUP_TUNING_PROFILES::PANEL_SETUP_TUNING_PROFILES( wxWindow* aParentWindo
 {
     Freeze();
 
+    PAGED_DIALOG::ExcludeBookTitlesFromSearchIndex( m_tuningProfiles );
+
     m_addTuningProfileButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_removeTuningProfileButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
@@ -65,6 +67,8 @@ bool PANEL_SETUP_TUNING_PROFILES::TransferDataToWindow()
         m_tuningProfiles->AddPage( panel, profile.m_ProfileName, true );
         panel->LoadProfile( profile );
     }
+
+    PAGED_DIALOG::InvalidateSearchIndex( this );
 
     return true;
 }
@@ -123,6 +127,8 @@ void PANEL_SETUP_TUNING_PROFILES::OnAddTuningProfileClick( wxCommandEvent& event
 {
     PANEL_SETUP_TUNING_PROFILE_INFO* panel = new PANEL_SETUP_TUNING_PROFILE_INFO( m_tuningProfiles, this );
     m_tuningProfiles->AddPage( panel, "Profile ", true );
+
+    PAGED_DIALOG::InvalidateSearchIndex( this );
 }
 
 
@@ -132,6 +138,8 @@ void PANEL_SETUP_TUNING_PROFILES::OnRemoveTuningProfileClick( wxCommandEvent& ev
     {
         const size_t pageIdx = m_tuningProfiles->FindPage( page );
         m_tuningProfiles->RemovePage( pageIdx );
+
+        PAGED_DIALOG::InvalidateSearchIndex( this );
     }
 }
 

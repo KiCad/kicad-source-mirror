@@ -24,6 +24,8 @@
 #include <dialog_shim.h>
 #include <widgets/wx_treebook.h>
 
+#include <set>
+
 
 class WX_INFOBAR;
 class WX_TREEBOOK;
@@ -63,6 +65,18 @@ public:
 
     static PAGED_DIALOG* GetDialog( wxWindow* aWindow );
 
+    /// Keep aWindow and its children out of the search index, for text the tree already shows
+    /// or that names something the page does not own. Does nothing outside a PAGED_DIALOG.
+    static void ExcludeFromSearchIndex( wxWindow* aWindow );
+
+    /// Keep the tab titles of aBook out of the index, where the user named them. The controls
+    /// on each tab are still indexed.
+    static void ExcludeBookTitlesFromSearchIndex( wxBookCtrlBase* aBook );
+
+    /// Refresh the cached labels of the page holding aWindow, after a label is renamed or a
+    /// control is added, removed or first shown. Without it the page matches its old wording.
+    static void InvalidateSearchIndex( wxWindow* aWindow );
+
 protected:
     void finishInitialization();
 
@@ -94,6 +108,10 @@ private:
      */
     virtual void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const {}
 
+    void excludeFromSearchIndex( wxWindow* aWindow );
+    void excludeBookTitlesFromSearchIndex( wxBookCtrlBase* aBook );
+    void invalidateSearchIndex( wxWindow* aWindow );
+
     /// Tree path used to identify collapsed sections.
     wxString pagePath( size_t aPage ) const;
 
@@ -101,6 +119,9 @@ private:
     void loadTreeExpansion();
 
     void buildSearchIndex();
+    void collectSearchText( wxWindow* aWindow, std::vector<wxString>& aTexts ) const;
+    std::vector<wxString> buildPageSearchIndex( size_t aPage );
+    void                  refreshSearch();
 
     /**
      * Bold the pages matching the search box and grey out the rest.
@@ -113,6 +134,8 @@ private:
 
     wxSearchCtrl*                      m_searchCtrl;
     std::vector<std::vector<wxString>> m_searchIndex; ///< Lowercased page title and labels, per page
+    std::set<wxWindow*>                m_searchExcludedControls;
+    std::set<wxBookCtrlBase*>          m_searchExcludedBookTitles;
 
     wxBoxSizer* m_buttonsSizer;
 

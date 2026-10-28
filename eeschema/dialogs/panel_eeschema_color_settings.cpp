@@ -46,6 +46,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <sch_base_frame.h>
 #include <widgets/color_swatch.h>
+#include <widgets/paged_dialog.h>
 #include <widgets/wx_panel.h>
 #include <wx/msgdlg.h>
 
@@ -553,6 +554,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::updateAllowedSwatches()
 
     m_colorsGridSizer->Layout();
     m_colorsListWindow->Layout();
+
+    PAGED_DIALOG::InvalidateSearchIndex( this );
 }
 
 

@@ -25,6 +25,7 @@
 #include <wx/tokenzr.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/paged_dialog.h>
 #include <confirm.h>
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
@@ -42,6 +43,8 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
         m_errorRow( -1 )
 {
     m_membersLabelTemplate = m_membersLabel->GetLabel();
+
+    PAGED_DIALOG::ExcludeFromSearchIndex( m_membersLabel );
 
     m_addAlias->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_deleteAlias->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -150,9 +153,11 @@ bool PANEL_SETUP_BUSES::TransferDataToWindow()
 
 void PANEL_SETUP_BUSES::AppendSearchTerms( std::vector<wxString>& aTerms ) const
 {
+    aTerms.push_back( wxString::Format( m_membersLabelTemplate, wxEmptyString ) );
+
     for( int row = 0; row < m_aliasesGrid->GetNumberRows(); ++row )
     {
-        aTerms.push_back( m_aliasesGrid->GetCellValue( row, 0 ) );
+        aTerms.push_back( wxString::Format( m_membersLabelTemplate, m_aliasesGrid->GetCellValue( row, 0 ) ) );
 
         // Include members of unselected aliases.
         const std::vector<wxString>& members = m_aliases[row]->Members();

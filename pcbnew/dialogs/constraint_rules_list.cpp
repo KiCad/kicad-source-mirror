@@ -241,6 +241,8 @@ void CONSTRAINT_RULES_LIST::RefreshRules()
     fitColumns();
     updateButtons();
     relayout();
+
+    PAGED_DIALOG::InvalidateSearchIndex( this );
 }
 
 
@@ -799,6 +801,8 @@ void CONSTRAINT_RULES_LIST::buildEditor( const std::shared_ptr<DRC_RE_BASE_CONST
             } );
 
     relayout();
+
+    PAGED_DIALOG::InvalidateSearchIndex( this );
 }
 
 

@@ -594,6 +594,11 @@ void DIALOG_BOARD_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxString>&
 
         rulesPage->AppendSearchTerms( document, aTerms );
     }
+    else if( PANEL_SETUP_TUNING_PROFILES* profiles = dynamic_cast<PANEL_SETUP_TUNING_PROFILES*>( page ) )
+    {
+        const std::vector<wxString> names = profiles->GetDelayProfileNames();
+        aTerms.insert( aTerms.end(), names.begin(), names.end() );
+    }
 }
 
 
