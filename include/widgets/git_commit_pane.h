@@ -110,6 +110,10 @@ private:
     void abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon );
     void finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon, const std::vector<wxString>& aOutside );
     void onAmendToggled( wxCommandEvent& aEvent );
+
+    /// Take back the last commit while no remote has it, keeping its changes staged and its message.
+    void onUndoCommit( wxCommandEvent& aEvent );
+
     void onNewBranchToggled( wxCommandEvent& aEvent );
     void onRecentMessage( wxCommandEvent& aEvent );
     void onShowDiff( wxCommandEvent& aEvent );
@@ -255,6 +259,9 @@ private:
 
     /// The branch and commit chosen when amend started. Keep them fixed while editing.
     std::pair<wxString, wxString> m_amendHead;
+
+    /// The branch and commit the last refresh showed, so Undo takes back only the commit the user saw.
+    std::pair<wxString, wxString> m_undoHead;
 
     /// The description box's hint, a label laid over it while it is empty. Null where the box
     /// shows its own.

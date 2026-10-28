@@ -43,3 +43,10 @@ CommitResult GIT_COMMIT_HANDLER::PerformAmend( const std::vector<wxString>& aFil
 {
     return GetGitBackend()->Amend( this, aFiles, aMessage, aAuthorName, aAuthorEmail );
 }
+
+
+UndoCommitResult GIT_COMMIT_HANDLER::PerformUndoLastCommit( const wxString& aExpectedBranch,
+                                                            const git_oid& aExpectedHead, wxString& aMessage )
+{
+    return GetGitBackend()->UndoLastCommit( this, aExpectedBranch, aExpectedHead, aMessage );
+}

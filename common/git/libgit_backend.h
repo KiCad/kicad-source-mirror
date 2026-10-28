@@ -44,6 +44,9 @@ public:
     CommitResult Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles, const wxString& aMessage,
                         const wxString& aAuthorName, const wxString& aAuthorEmail ) override;
 
+    UndoCommitResult UndoLastCommit( GIT_COMMIT_HANDLER* aHandler, const wxString& aExpectedBranch,
+                                     const git_oid& aExpectedHead, wxString& aMessage ) override;
+
     PushResult Push( GIT_PUSH_HANDLER* aHandler, bool aForce = false ) override;
 
     std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,

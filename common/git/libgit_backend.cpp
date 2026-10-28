@@ -864,6 +864,184 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 }
 
 
+// 1 when a remote-tracking branch already holds aCommit, naming one in aRemoteRef, 0 when none does, negative on a
+// libgit2 error
+static int reachableFromRemote( git_repository* aRepo, const git_oid& aCommit, wxString& aRemoteRef )
+{
+    git_reference_iterator* rawIter = nullptr;
+
+    if( int rc = git_reference_iterator_glob_new( &rawIter, aRepo, "refs/remotes/*" ); rc != GIT_OK )
+        return rc;
+
+    KIGIT::GitReferenceIteratorPtr iter( rawIter );
+    std::vector<git_oid>           tips;
+    std::vector<wxString>          names;
+    git_reference*                 rawRef = nullptr;
+    int                            rc = GIT_OK;
+
+    while( ( rc = git_reference_next( &rawRef, iter.get() ) ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr ref( rawRef );
+
+        // origin/HEAD names a branch this loop visits anyway, and may dangle
+        if( git_reference_type( ref.get() ) == GIT_REFERENCE_SYMBOLIC )
+            continue;
+
+        git_object* rawTip = nullptr;
+
+        if( int peel = git_reference_peel( &rawTip, ref.get(), GIT_OBJECT_COMMIT ); peel != GIT_OK )
+            return peel;
+
+        KIGIT::GitObjectPtr tip( rawTip );
+        tips.push_back( *git_object_id( tip.get() ) );
+        names.push_back( wxString::FromUTF8( git_reference_shorthand( ref.get() ) ) );
+    }
+
+    if( rc != GIT_ITEROVER )
+        return rc;
+
+    if( tips.empty() )
+        return 0;
+
+    if( int reachable = git_graph_reachable_from_any( aRepo, &aCommit, tips.data(), tips.size() ); reachable <= 0 )
+        return reachable;
+
+    // One walk answers the common unpublished case, so only a published commit pays to find which branch holds it
+    for( size_t ii = 0; ii < tips.size(); ++ii )
+    {
+        int reachable = git_graph_reachable_from_any( aRepo, &aCommit, &tips[ii], 1 );
+
+        if( reachable < 0 )
+            return reachable;
+
+        if( reachable > 0 )
+        {
+            aRemoteRef = names[ii];
+            return 1;
+        }
+    }
+
+    return 1;
+}
+
+
+UndoCommitResult LIBGIT_BACKEND::UndoLastCommit( GIT_COMMIT_HANDLER* aHandler, const wxString& aExpectedBranch,
+                                                 const git_oid& aExpectedHead, wxString& aMessage )
+{
+    git_repository* repo = aHandler->GetRepo();
+
+    if( !repo )
+        return UndoCommitResult::Error;
+
+    git_reference* rawHead = nullptr;
+
+    if( git_reference_lookup( &rawHead, repo, "HEAD" ) != GIT_OK )
+    {
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
+        return UndoCommitResult::Error;
+    }
+
+    KIGIT::GitReferencePtr head( rawHead );
+    const char*            branchName = git_reference_symbolic_target( head.get() );
+
+    // A detached HEAD has no branch to move back
+    if( !branchName || aExpectedBranch.IsEmpty() || wxString::FromUTF8( branchName ) != aExpectedBranch )
+        return UndoCommitResult::TargetChanged;
+
+    git_reference* rawBranch = nullptr;
+    int            lookup = git_reference_lookup( &rawBranch, repo, branchName );
+
+    if( lookup == GIT_ENOTFOUND )
+        return UndoCommitResult::NoCommit;
+
+    if( lookup != GIT_OK )
+    {
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
+        return UndoCommitResult::Error;
+    }
+
+    KIGIT::GitReferencePtr branch( rawBranch );
+    const git_oid*         tip = git_reference_target( branch.get() );
+
+    if( !tip || !git_oid_equal( tip, &aExpectedHead ) )
+        return UndoCommitResult::TargetChanged;
+
+    if( aHandler->IsOperationInProgress() )
+    {
+        aHandler->AddErrorString( _( "Finish or abandon the current Git operation before undoing a commit." ) );
+        return UndoCommitResult::Error;
+    }
+
+    git_commit* rawCommit = nullptr;
+
+    if( git_commit_lookup( &rawCommit, repo, &aExpectedHead ) != GIT_OK )
+    {
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
+        return UndoCommitResult::Error;
+    }
+
+    KIGIT::GitCommitPtr commit( rawCommit );
+    int                 published = reachableFromRemote( repo, aExpectedHead, aMessage );
+
+    if( published < 0 )
+    {
+        aHandler->AddGitError( _( "Could not check whether the commit was already sent to a remote." ) );
+        return UndoCommitResult::Error;
+    }
+
+    if( published > 0 )
+        return UndoCommitResult::Published;
+
+    int moved = GIT_OK;
+
+    // Both writes fail if the branch moved since it was read, so a commit made meanwhile is never dropped
+    if( git_commit_parentcount( commit.get() ) == 0 )
+    {
+        // git_reference_delete drops the reflog before comparing, so compare under the ref lock instead
+        git_transaction* rawTransaction = nullptr;
+        moved = git_transaction_new( &rawTransaction, repo );
+
+        std::unique_ptr<git_transaction, decltype( &git_transaction_free )> transaction( rawTransaction,
+                                                                                       git_transaction_free );
+        git_oid current;
+
+        if( moved == GIT_OK )
+            moved = git_transaction_lock_ref( transaction.get(), branchName );
+
+        if( moved == GIT_OK )
+            moved = git_reference_name_to_id( &current, repo, branchName );
+
+        if( moved == GIT_OK && !git_oid_equal( &current, &aExpectedHead ) )
+            moved = GIT_EMODIFIED;
+
+        if( moved == GIT_OK )
+            moved = git_transaction_remove( transaction.get(), branchName );
+
+        if( moved == GIT_OK )
+            moved = git_transaction_commit( transaction.get() );
+    }
+    else
+    {
+        git_reference* rawMoved = nullptr;
+        moved = git_reference_create_matching( &rawMoved, repo, branchName, git_commit_parent_id( commit.get(), 0 ), 1,
+                                               &aExpectedHead, "undo: moving to parent" );
+        git_reference_free( rawMoved );
+    }
+
+    if( moved == GIT_EMODIFIED )
+        return UndoCommitResult::TargetChanged;
+
+    if( moved != GIT_OK )
+    {
+        aHandler->AddGitError( _( "Could not undo the commit." ) );
+        return UndoCommitResult::Error;
+    }
+
+    aMessage = wxString::FromUTF8( git_commit_message( commit.get() ) );
+    return UndoCommitResult::Success;
+}
+
+
 PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 {
     KIGIT_COMMON*                common = aHandler->GetCommon();

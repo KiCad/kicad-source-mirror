@@ -61,6 +61,7 @@ class GIT_COMMIT_PANE_BASE : public wxPanel
 		wxBoxSizer* m_trustRow;
 		wxTextCtrl* m_trustCommand;
 		wxButton* m_copyTrustCommand;
+		wxButton* m_undoCommitButton;
 		FILE_CHECKLIST_CTRL* m_checklist;
 		SPLIT_BUTTON* m_commitButton;
 		wxButton* m_pullButton;

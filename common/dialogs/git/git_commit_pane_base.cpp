@@ -109,6 +109,12 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 
 	bMainSizer->Add( m_trustRow, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxRIGHT, 8 );
 
+	m_undoCommitButton = new wxButton( this, wxID_ANY, _("Undo Last Commit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_undoCommitButton->Hide();
+	m_undoCommitButton->SetToolTip( _("Undo the last commit. Only possible while it has not been sent to any remote this project knows about.") );
+
+	bMainSizer->Add( m_undoCommitButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 8 );
+
 	m_checklist = new FILE_CHECKLIST_CTRL( this, wxID_ANY );
 	bMainSizer->Add( m_checklist, 1, wxALL|wxEXPAND, 4 );
 

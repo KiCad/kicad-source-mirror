@@ -40,6 +40,7 @@ class GIT_PULL_HANDLER;
 class KIGIT_COMMON;
 struct RemoteConfig;
 struct git_repository;
+struct git_oid;
 enum class InitResult;
 enum class BranchResult;
 enum class PullResult;
@@ -59,6 +60,21 @@ enum class CommitResult
 
     Error,
     Cancelled
+};
+
+// Why undoing the last commit did or did not move the branch
+enum class UndoCommitResult
+{
+    Success,
+
+    /// A remote-tracking branch already holds the commit, so taking it back would rewrite shared history.
+    Published,
+
+    /// The branch or its last commit is no longer the one the caller saw.
+    TargetChanged,
+
+    NoCommit,
+    Error
 };
 
 // What finishing a merge did to the working files. A partial write leaves the recovery copies
@@ -105,6 +121,12 @@ public:
     virtual CommitResult Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
                                 const wxString& aMessage, const wxString& aAuthorName,
                                 const wxString& aAuthorEmail ) = 0;
+
+    /// Move aExpectedBranch back to the parent of aExpectedHead, leaving the index and working files as they
+    /// are. aMessage receives the undone commit's full message, or on Published the remote-tracking branch
+    /// holding it.
+    virtual UndoCommitResult UndoLastCommit( GIT_COMMIT_HANDLER* aHandler, const wxString& aExpectedBranch,
+                                             const git_oid& aExpectedHead, wxString& aMessage ) = 0;
 
     virtual PushResult Push( GIT_PUSH_HANDLER* aHandler, bool aForce = false ) = 0;
 

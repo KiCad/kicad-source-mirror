@@ -44,6 +44,9 @@ public:
 
     CommitResult PerformAmend( const std::vector<wxString>& aFiles, const wxString& aMessage,
                                const wxString& aAuthorName, const wxString& aAuthorEmail );
+
+    UndoCommitResult PerformUndoLastCommit( const wxString& aExpectedBranch, const git_oid& aExpectedHead,
+                                            wxString& aMessage );
 };
 
 #endif // GIT_COMMIT_HANDLER_H
