@@ -551,12 +551,14 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
                 if( fpData.RefDesString.Matches( excluded ) )
                 {
                     fpData.Action = EXCLUDE_REFDES;
+                    fpData.Held = true;
                     break;
                 }
             }
             else if( excluded == fpData.RefDesPrefix )
             {
                 fpData.Action = EXCLUDE_REFDES;
+                fpData.Held = true;
                 break;
             }
         }
@@ -579,7 +581,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<REFDES_INFO>& aBad
     }
 
     // Copies on reused sheets share one base, so any copy in scope renumbers all of them and a locked
-    // copy holds the whole group
+    // or explicitly excluded copy holds the whole group
     std::map<KIID, ACTION_CODE> groupActions;
     std::set<KIID>              scopedGroups;
     std::set<KIID>              heldGroups;

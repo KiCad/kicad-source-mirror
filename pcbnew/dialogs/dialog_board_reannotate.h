@@ -79,7 +79,7 @@ struct REFDES_INFO
     wxString    Suffix;             // Sheet suffix of a copy on a reused sheet
     KIID        Representative;     // Copy whose placement numbers the base this one shares
     bool        Shared;             // One of the copies on reused sheets that share a base
-    bool        Held;               // Locked, so the copies sharing its base keep theirs too
+    bool        Held;               // Locked or explicitly excluded, so copies sharing its base keep theirs too
 };
 
 struct REFDES_PREFIX_INFO
