@@ -52,6 +52,7 @@ private:
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
+    void OnGridMotion( wxMouseEvent& aEvent );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
 private:

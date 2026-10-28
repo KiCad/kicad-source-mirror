@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -136,6 +136,8 @@ PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE::PANEL_EESCHEMA_ANNOTATION_OPTIONS_BASE( 
 	bSizerReusedSheets->Add( m_rbSeparateInstances, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
 
 	m_rbSuffixInstances = new wxRadioButton( this, wxID_ANY, _("Number each file once and add the sheet's reference suffix (R1_M1, R1_M2 ...)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbSuffixInstances->SetToolTip( _("Repeated instances of one sheet file need distinct full reference suffixes. Set Reference Suffix in Sheet Properties.") );
+
 	bSizerReusedSheets->Add( m_rbSuffixInstances, 0, wxTOP|wxBOTTOM|wxLEFT, 2 );
 
 	m_checkIncrementPastedSuffix = new wxCheckBox( this, wxID_ANY, _("Give pasted sheets the next free reference suffix"), wxDefaultPosition, wxDefaultSize, 0 );

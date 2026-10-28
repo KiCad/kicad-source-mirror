@@ -127,6 +127,43 @@ wxString BuildFootprintChooserSymbolNetlist( const std::vector<LIB_SYMBOL*>& aSy
 }
 
 
+std::vector<SCH_FIELD> GetSheetFieldsForEditing( const SCH_SHEET& aSheet )
+{
+    std::vector<SCH_FIELD> fields = aSheet.GetFields();
+
+    if( !FindField( fields, FIELD_T::SHEET_REF_SUFFIX ) )
+    {
+        SCH_FIELD suffix( nullptr, FIELD_T::SHEET_REF_SUFFIX,
+                          GetDefaultFieldName( FIELD_T::SHEET_REF_SUFFIX, UNTRANSLATED ) );
+        suffix.SetVisible( false );
+        suffix.SetPosition( aSheet.GetPosition() );
+        suffix.SetTextSize( aSheet.GetField( FIELD_T::SHEET_NAME )->GetTextSize() );
+        suffix.SetTextAngle( aSheet.GetField( FIELD_T::SHEET_NAME )->GetTextAngle() );
+        fields.push_back( suffix );
+    }
+
+    std::stable_sort( fields.begin(), fields.end(),
+                      []( const SCH_FIELD& a, const SCH_FIELD& b )
+                      {
+                          if( a.IsMandatory() != b.IsMandatory() )
+                              return a.IsMandatory();
+
+                          if( !a.IsMandatory() )
+                          {
+                              bool aSuffix = a.GetId() == FIELD_T::SHEET_REF_SUFFIX;
+                              bool bSuffix = b.GetId() == FIELD_T::SHEET_REF_SUFFIX;
+
+                              if( aSuffix != bSuffix )
+                                  return aSuffix;
+                          }
+
+                          return a.GetOrdinal() < b.GetOrdinal();
+                      } );
+
+    return fields;
+}
+
+
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
                                       LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*>& aFilesStack ) :
         m_frame( aFrame ),
@@ -563,7 +600,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::
     switch( aCol )
     {
     case FDC_NAME:
-        if( field.IsMandatory() )
+        if( field.IsMandatory() || field.GetId() == FIELD_T::SHEET_REF_SUFFIX )
         {
             attr = m_fieldNameAttr->Clone();
             attr->SetReadOnly( true );
@@ -746,7 +783,7 @@ wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
         }
         else
         {
-            if( field.IsMandatory() )
+            if( field.IsMandatory() || field.GetId() == FIELD_T::SHEET_REF_SUFFIX )
                 return GetDefaultFieldName( field.GetId(), TRANSLATED );
             else
                 return field.GetName( false );
@@ -873,6 +910,16 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
     switch( aCol )
     {
     case FDC_NAME:
+        if( field.GetId() == FIELD_T::SHEET_REF_SUFFIX )
+            break;
+
+        if( m_parentType == SCH_SHEET_T
+            && ( value == GetDefaultFieldName( FIELD_T::SHEET_REF_SUFFIX, UNTRANSLATED )
+                 || value == GetDefaultFieldName( FIELD_T::SHEET_REF_SUFFIX, TRANSLATED ) ) )
+        {
+            break;
+        }
+
         field.SetName( value );
         break;
 
@@ -1169,7 +1216,7 @@ bool FIELDS_GRID_TABLE::EraseRow( size_t aRow )
 {
     int fieldIndex = getFieldIndex( static_cast<int>( aRow ) );
 
-    if( fieldIndex < 0 )
+    if( fieldIndex < 0 || at( fieldIndex ).GetId() == FIELD_T::SHEET_REF_SUFFIX )
         return false;
 
     if( m_inheritance.size() > static_cast<size_t>( fieldIndex ) )

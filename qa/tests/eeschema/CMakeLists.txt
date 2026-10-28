@@ -299,6 +299,7 @@ set( QA_EESCHEMA_SRCS
     test_field_case_conflicts.cpp
     test_variant_symbol_compatibility.cpp
     test_ref_suffix.cpp
+    test_sheet_suffix_properties.cpp
     test_variant_field_resolution.cpp
     test_sch_dynamic_properties.cpp
 

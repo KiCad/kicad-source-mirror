@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,12 +36,12 @@ class WX_INFOBAR;
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ID_SORT_BY_X_POSITION 1000
-#define ID_SORT_BY_Y_POSITION 1001
-#define wxID_FIRST_FREE 1002
-#define wxID_SHEET_X_100 1003
-#define wxID_SHEET_X_1000 1004
-#define ID_CLEAR_ANNOTATION_CMP 1005
+#define ID_SORT_BY_X_POSITION 6000
+#define ID_SORT_BY_Y_POSITION 6001
+#define wxID_FIRST_FREE 6002
+#define wxID_SHEET_X_100 6003
+#define wxID_SHEET_X_1000 6004
+#define ID_CLEAR_ANNOTATION_CMP 6005
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ANNOTATE_BASE

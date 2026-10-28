@@ -14,7 +14,7 @@
     <property name="embedded_files_path">res</property>
     <property name="encoding">UTF-8</property>
     <property name="file">dialog_annotate_base</property>
-    <property name="first_id">1000</property>
+    <property name="first_id">6000</property>
     <property name="internationalize">1</property>
     <property name="lua_skip_events">1</property>
     <property name="lua_ui_table">UI</property>
@@ -1342,7 +1342,7 @@
                     <property name="gripper">0</property>
                     <property name="hidden">0</property>
                     <property name="id">wxID_ANY</property>
-                    <property name="label">Number each file once and add the sheet's reference suffix (R1_M1, R1_M2 ...)</property>
+                    <property name="label">Number each file once and add the sheet&apos;s reference suffix (R1_M1, R1_M2 ...)</property>
                     <property name="max_size"></property>
                     <property name="maximize_button">0</property>
                     <property name="maximum_size"></property>
@@ -1363,7 +1363,7 @@
                     <property name="style"></property>
                     <property name="subclass">; ; forward_declare</property>
                     <property name="toolbar_pane">0</property>
-                    <property name="tooltip"></property>
+                    <property name="tooltip">Repeated instances of one sheet file need distinct full reference suffixes. Set Reference Suffix in Sheet Properties.</property>
                     <property name="validator_data_type"></property>
                     <property name="validator_style">wxFILTER_NONE</property>
                     <property name="validator_type">wxDefaultValidator</property>

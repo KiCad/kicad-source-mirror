@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -139,6 +139,8 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	sbSizerReusedSheets->Add( m_rbSeparateInstances, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_rbSuffixInstances = new wxRadioButton( sbSizerReusedSheets->GetStaticBox(), wxID_ANY, _("Number each file once and add the sheet's reference suffix (R1_M1, R1_M2 ...)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbSuffixInstances->SetToolTip( _("Repeated instances of one sheet file need distinct full reference suffixes. Set Reference Suffix in Sheet Properties.") );
+
 	sbSizerReusedSheets->Add( m_rbSuffixInstances, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
