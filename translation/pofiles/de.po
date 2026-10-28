@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:37+0300\n"
-"PO-Revision-Date: 2026-10-28 07:51+0000\n"
+"PO-Revision-Date: 2026-10-28 18:58+0000\n"
 "Last-Translator: \"Pferd O.\" <pferdob@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -22920,9 +22920,9 @@ msgstr ""
 "überschrieben wird."
 
 #: eeschema/eeschema_config.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Fehler beim Speichern der Seite \"%s\": %s"
+msgstr "Fehler beim Speichern des Zeichnungsblattes \"%s\": %s"
 
 #: eeschema/eeschema_helpers.cpp:163
 #, fuzzy, c-format
@@ -38811,7 +38811,6 @@ msgid "Other Templates"
 msgstr "Andere Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
 msgstr "Ein anderes Verzeichnis nach Vorlagen durchsuchen"
 
@@ -38946,7 +38945,7 @@ msgid "Select all jobs"
 msgstr "Alle Aufträge auswählen"
 
 #: kicad/dialogs/panel_jobset.cpp:704
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
 msgstr "Diese KiCad-Version unterstützt den \"%s\"-Auftragstyp nicht."
 
@@ -55413,7 +55412,7 @@ msgid "Design rules cannot be added without a project"
 msgstr "Designregeln können ohne Projekt nicht hinzugefügt werden"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:1133
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design rules to '%s': %s"
 msgstr "Kann Designregeln nicht nach \"%s\" speichern: %s"
 
@@ -59062,7 +59061,7 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
 msgstr "(%s min Restring-Breite %s; tatsächlich %s auf %s)"
 
@@ -59942,7 +59941,7 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s min Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
 msgstr "(%s min Durchmesser %s; tatsächlich %s auf %s)"
 
@@ -59952,7 +59951,7 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
 msgstr "(%s max Durchmesser %s; tatsächlich %s auf %s)"
 
@@ -61896,7 +61895,7 @@ msgstr ""
 "verweisen"
 
 #: pcbnew/footprint_libraries_utils.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
 msgstr "Footprint \"%s\" konnte nicht in Bibliothek \"%s\" gespeichert werden."
 
@@ -64328,7 +64327,7 @@ msgid "Loading board data..."
 msgstr "Lade Platinendaten ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1567
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
@@ -69084,7 +69083,7 @@ msgid "KiCad board netlist files"
 msgstr "KiCad Platinen-Netzlistendateien"
 
 #: pcbnew/tools/board_editor_control.cpp:774
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export netlist to '%s': %s"
 msgstr "Fehler beim Exportieren der Netzliste nach \"%s\": %s"
 
