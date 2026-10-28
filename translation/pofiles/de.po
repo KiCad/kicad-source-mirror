@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-21 01:38+0300\n"
-"PO-Revision-Date: 2026-10-27 13:51+0000\n"
+"PO-Revision-Date: 2026-10-28 16:51+0000\n"
 "Last-Translator: \"Pferd O.\" <pferdob@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -19255,9 +19255,9 @@ msgstr ""
 "überschrieben wird."
 
 #: eeschema/eeschema_config.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Fehler beim Speichern der Seite \"%s\": %s"
+msgstr "Fehler beim Speichern des Zeichnungsblattes \"%s\": %s"
 
 #: eeschema/eeschema_helpers.cpp:194 eeschema/files-io.cpp:361
 #: eeschema/picksymbol.cpp:127
@@ -31883,7 +31883,6 @@ msgid "Other Templates"
 msgstr "Andere Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
 msgstr "Ein anderes Verzeichnis nach Vorlagen durchsuchen"
 
@@ -32017,7 +32016,7 @@ msgid "Select all jobs"
 msgstr "Alle Aufträge auswählen"
 
 #: kicad/dialogs/panel_jobset.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
 msgstr "Diese KiCad-Version unterstützt den \"%s\"-Auftragstyp nicht."
 
@@ -32685,7 +32684,7 @@ msgstr "Änderungen anwenden"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:170
 msgid "Discard Pending Changes"
-msgstr "Änderungen verwerfen"
+msgstr "Ausstehende Änderungen verwerfen"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:233
 msgid ""
@@ -38383,9 +38382,8 @@ msgid "Discard changes to custom rules?"
 msgstr "Änderungen an benutzerdefinierten Regeln verwerfen?"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:303
-#, fuzzy
 msgid "Discard Changes"
-msgstr "Än&derungen verwerfen"
+msgstr "Änderungen verwerfen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:443
 #, c-format
@@ -46049,7 +46047,7 @@ msgid "Design rules cannot be added without a project"
 msgstr "Designregeln können ohne Projekt nicht hinzugefügt werden"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:1136
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design rules to '%s': %s"
 msgstr "Kann Designregeln nicht nach \"%s\" speichern: %s"
 
@@ -48765,7 +48763,7 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
 msgstr "(%s min Restring-Breite %s; tatsächlich %s auf %s)"
 
@@ -49618,7 +49616,7 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s min Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
 msgstr "(%s min Durchmesser %s; tatsächlich %s auf %s)"
 
@@ -49628,7 +49626,7 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
 msgstr "(%s max Durchmesser %s; tatsächlich %s auf %s)"
 
@@ -51050,7 +51048,7 @@ msgstr ""
 "verweisen"
 
 #: pcbnew/footprint_libraries_utils.cpp:842
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
 msgstr "Footprint \"%s\" konnte nicht in Bibliothek \"%s\" gespeichert werden."
 
@@ -53097,7 +53095,7 @@ msgid "Loading board data..."
 msgstr "Lade Platinendaten ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1611
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
@@ -56831,7 +56829,7 @@ msgid "KiCad board netlist files"
 msgstr "KiCad Platinen-Netzlistendateien"
 
 #: pcbnew/tools/board_editor_control.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export netlist to '%s': %s"
 msgstr "Fehler beim Exportieren der Netzliste nach \"%s\": %s"
 
