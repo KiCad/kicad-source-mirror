@@ -416,8 +416,10 @@ BOOST_AUTO_TEST_CASE( PerformPull_RefusesACommitThatBringsGitLfs )
 
     BOOST_CHECK_MESSAGE( result != PullResult::Success && result != PullResult::FastForward,
                          "the pull should refuse a commit that brings Git LFS in" );
-    BOOST_CHECK_MESSAGE( handler.GetErrorString().Upper().Contains( wxS( "LFS" ) ),
-                         "the refusal should name Git LFS, got: " + handler.GetErrorString().ToStdString() );
+    const wxString error = handler.GetErrorString();
+
+    BOOST_CHECK_MESSAGE( error.Upper().Contains( wxS( "LFS" ) ),
+                         "the refusal should name Git LFS, got: " + error.ToStdString() );
 
     // Above all, the pointer text must not have been written where the board belongs.
     BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "board.kicad_pcb" ) ) );
@@ -703,9 +705,10 @@ BOOST_AUTO_TEST_CASE( Push_RefusesOnADetachedHead )
     GIT_PUSH_HANDLER handler( &common );
 
     BOOST_CHECK_EQUAL( static_cast<int>( handler.PerformPush() ), static_cast<int>( PushResult::Error ) );
-    BOOST_CHECK_MESSAGE( handler.GetErrorString().Contains( wxS( "branch" ) ),
-                         "the refusal should say the project is not on a branch, got: "
-                                 + handler.GetErrorString().ToStdString() );
+    const wxString error = handler.GetErrorString();
+
+    BOOST_CHECK_MESSAGE( error.Contains( wxS( "branch" ) ),
+                         "the refusal should say the project is not on a branch, got: " + error.ToStdString() );
 
     git_repository_free( repo );
 }
@@ -3204,9 +3207,10 @@ BOOST_AUTO_TEST_CASE( SwitchToBranch_RefusesARemoteBranch )
     GIT_BRANCH_HANDLER handler( &common );
 
     BOOST_CHECK( handler.SwitchToBranch( wxT( "origin/feature" ) ) == BranchResult::Error );
-    BOOST_CHECK_MESSAGE( handler.GetErrorString().Contains( wxS( "remote" ) ),
-                         "the refusal should say the branch is on the remote, got: "
-                                 + handler.GetErrorString().ToStdString() );
+    const wxString error = handler.GetErrorString();
+
+    BOOST_CHECK_MESSAGE( error.Contains( wxS( "remote" ) ),
+                         "the refusal should say the branch is on the remote, got: " + error.ToStdString() );
 
     // Nothing moved and nothing was written.
     git_oid headNow;
