@@ -460,9 +460,28 @@ BOOST_AUTO_TEST_CASE( SheetVariantManagement )
     BOOST_CHECK_EQUAL( sheet->GetDNP( &parentPath ), baseDNP );
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
 
-    ( *variant->mutable_fields() )["Sheetfile"] = "should_not_be_allowed";
-    BOOST_CHECK( ApplySheetInstance( &status, sheet, proto, parentPath, m_schematic.get() ) == false );
-    BOOST_CHECK( status.code() == kiapi::common::commands::ItemStatusCode::ISC_INVALID_DATA );
+    sheet->AddField( SCH_FIELD( sheet, FIELD_T::SHEET_USER, wxS( "Reference Suffix" ) ) );
+    kiapi::schematic::types::SheetSymbol before;
+    BOOST_REQUIRE( PackSheet( &before, sheet, parentPath ) );
+    const wxString originalDescription = m_schematic->GetVariantDescription( variantName );
+    proto.set_page_number( "999" );
+    variant->set_dnp( baseDNP );
+    variant->set_description( "Rejected description" );
+
+    for( const std::string& field : { "Sheetname", "Sheetfile", "Reference Suffix" } )
+    {
+        BOOST_TEST_CONTEXT( field )
+        {
+            variant->clear_fields();
+            ( *variant->mutable_fields() )[field] = "should_not_be_allowed";
+            BOOST_CHECK( !ApplySheetInstance( &status, sheet, proto, parentPath, m_schematic.get() ) );
+            BOOST_CHECK_EQUAL( status.code(), kiapi::common::commands::ISC_INVALID_DATA );
+            kiapi::schematic::types::SheetSymbol after;
+            BOOST_REQUIRE( PackSheet( &after, sheet, parentPath ) );
+            BOOST_CHECK( google::protobuf::util::MessageDifferencer::Equals( before, after ) );
+            BOOST_CHECK_EQUAL( m_schematic->GetVariantDescription( variantName ), originalDescription );
+        }
+    }
 
     kiapi::schematic::types::SheetSymbol untouched;
     BOOST_REQUIRE( PackSheet( &untouched, sheet, parentPath ) );

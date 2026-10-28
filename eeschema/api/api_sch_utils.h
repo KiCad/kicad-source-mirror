@@ -87,6 +87,10 @@ bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* 
 tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput,
                                                                   const kiapi::schematic::types::SheetSymbol& aInput );
 
+/// Validate sheet variant overrides before adding or modifying a live sheet.
+bool ValidateSheetInstance( kiapi::common::commands::ItemStatus* aStatus, const SCH_SHEET* aSheet,
+                            const kiapi::schematic::types::SheetSymbol& aInput );
+
 /**
  * Apply the placement data in a sheet message to @a aSheet: page number and the variants the
  * message carries.

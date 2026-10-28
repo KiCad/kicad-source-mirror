@@ -22,6 +22,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <api/api_handler_sch.h>
+#include <api/api_sch_utils.h>
 #include <api/api_utils.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/envelope.pb.h>
@@ -121,6 +122,152 @@ BOOST_AUTO_TEST_CASE( RevertDocumentRejectedWithOpenCommit )
     BOOST_CHECK( result.error().error_message().find( "commit" ) != std::string::npos );
 }
 
+
+BOOST_AUTO_TEST_CASE( RejectedSheetCreateLeavesNoChanges )
+{
+    SCHEMATIC*      model = loadSchematic( wxS( "api_kitchen_sink" ) );
+    API_HANDLER_SCH handler( m_context );
+
+    schematic::types::SheetSymbol sheet;
+    const KIID                    id;
+    sheet.mutable_id()->set_value( id.AsStdString() );
+    sheet.mutable_name_field()->mutable_text()->set_text( "RejectedSheet" );
+    sheet.mutable_filename_field()->mutable_text()->set_text( "rejected.kicad_sch" );
+    sheet.set_page_number( "999" );
+    auto* field = sheet.add_user_fields();
+    field->set_name( "Reference Suffix" );
+    field->mutable_text()->set_text( "_M1" );
+    auto* variant = sheet.mutable_variants()->add_variants();
+    variant->set_name( "rejected-variant" );
+    ( *variant->mutable_fields() )["Reference Suffix"] = "_M2";
+    variant->set_dnp( true );
+
+    commands::CreateItems command;
+    *command.mutable_header()->mutable_document() = makeDocument( *model );
+    BOOST_REQUIRE( command.add_items()->PackFrom( sheet ) );
+    ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+
+    commands::CreateItemsResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE_EQUAL( response.created_items_size(), 1 );
+    BOOST_CHECK_EQUAL( response.created_items( 0 ).status().code(), commands::ISC_INVALID_DATA );
+    BOOST_CHECK( !model->Hierarchy().ResolveItem( id, nullptr, true ) );
+    BOOST_CHECK( !model->HasVariant( wxS( "rejected-variant" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectedSheetUpdateLeavesNoChanges )
+{
+    SCHEMATIC*      model = loadSchematic( wxS( "issue13212" ) );
+    API_HANDLER_SCH handler( m_context );
+    BOOST_REQUIRE_GE( model->Hierarchy().size(), 2 );
+    SCH_SHEET_PATH child = model->Hierarchy()[1];
+    SCH_SHEET*     original = child.Last();
+    SCH_SHEET_PATH parent = child;
+    parent.pop_back();
+    const wxString originalName = original->GetName();
+    const wxString originalPage = child.GetPageNumber();
+
+    schematic::types::SheetSymbol sheet;
+    BOOST_REQUIRE( PackSheet( &sheet, original, parent ) );
+    sheet.mutable_name_field()->mutable_text()->set_text( "RejectedName" );
+    sheet.set_page_number( "999" );
+    auto* field = sheet.add_user_fields();
+    field->set_name( "Reference Suffix" );
+    field->mutable_text()->set_text( "_M1" );
+    auto* variant = sheet.mutable_variants()->add_variants();
+    variant->set_name( "rejected-variant" );
+    ( *variant->mutable_fields() )["Reference Suffix"] = "_M2";
+
+    commands::UpdateItems command;
+    *command.mutable_header()->mutable_document() = makeDocument( *model );
+    BOOST_REQUIRE( command.add_items()->PackFrom( sheet ) );
+    ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+
+    commands::UpdateItemsResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE_EQUAL( response.updated_items_size(), 1 );
+    BOOST_CHECK_EQUAL( response.updated_items( 0 ).status().code(), commands::ISC_INVALID_DATA );
+    BOOST_CHECK_EQUAL( original->GetName(), originalName );
+    BOOST_CHECK_EQUAL( child.GetPageNumber(), originalPage );
+    BOOST_CHECK( !model->HasVariant( wxS( "rejected-variant" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SheetBatchKeepsValidItems )
+{
+    SCHEMATIC*            model = loadSchematic( wxS( "api_kitchen_sink" ) );
+    API_HANDLER_SCH       handler( m_context );
+    commands::CreateItems command;
+    *command.mutable_header()->mutable_document() = makeDocument( *model );
+    std::vector<KIID> ids( 3 );
+
+    for( int i = 0; i < 3; ++i )
+    {
+        schematic::types::SheetSymbol sheet;
+        sheet.mutable_id()->set_value( ids[i].AsStdString() );
+        sheet.mutable_name_field()->mutable_text()->set_text( "Sheet" + std::to_string( i ) );
+        sheet.mutable_filename_field()->mutable_text()->set_text( "batch" + std::to_string( i ) + ".kicad_sch" );
+        sheet.set_page_number( std::to_string( 20 + i ) );
+        auto* suffix = sheet.add_user_fields();
+        suffix->set_name( "Reference Suffix" );
+        suffix->mutable_text()->set_text( "_M1" );
+        auto* field = sheet.add_user_fields();
+        field->set_name( "Channel" );
+        field->mutable_text()->set_text( "base" );
+        auto* variant = sheet.mutable_variants()->add_variants();
+        variant->set_name( "batch-variant-" + std::to_string( i ) );
+        variant->set_dnp( true );
+        ( *variant->mutable_fields() )["Channel"] = "override";
+
+        if( i == 1 )
+            ( *variant->mutable_fields() )["Reference Suffix"] = "_M2";
+
+        BOOST_REQUIRE( command.add_items()->PackFrom( sheet ) );
+    }
+
+    ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+    commands::CreateItemsResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE_EQUAL( response.created_items_size(), 3 );
+    BOOST_CHECK_EQUAL( response.status(), types::IRS_OK );
+
+    SCH_SHEET_PATH parent = model->Hierarchy()[0];
+
+    for( int i = 0; i < 3; ++i )
+    {
+        const wxString variantName = wxString::Format( wxS( "batch-variant-%d" ), i );
+        auto*          sheet = dynamic_cast<SCH_SHEET*>( model->Hierarchy().ResolveItem( ids[i], nullptr, true ) );
+        BOOST_CHECK_EQUAL( response.created_items( i ).status().code(),
+                           i == 1 ? commands::ISC_INVALID_DATA : commands::ISC_OK );
+        BOOST_CHECK_EQUAL( model->HasVariant( variantName ), i != 1 );
+
+        if( i == 1 )
+        {
+            BOOST_CHECK( !sheet );
+            continue;
+        }
+
+        BOOST_REQUIRE( sheet );
+        BOOST_CHECK( sheet->GetDNP( &parent, variantName ) );
+        BOOST_CHECK( sheet->GetFieldText( wxS( "Channel" ), &parent, variantName ) == wxS( "override" ) );
+        schematic::types::SheetSymbol stored;
+        BOOST_REQUIRE( PackSheet( &stored, sheet, parent ) );
+        BOOST_CHECK_EQUAL( stored.page_number(), std::to_string( 20 + i ) );
+    }
+}
 
 
 BOOST_AUTO_TEST_CASE( CustomPropertyCannotDuplicateSystemProperty )

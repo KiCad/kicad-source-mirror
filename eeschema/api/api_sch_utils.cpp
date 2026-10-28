@@ -532,11 +532,48 @@ bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* 
 }
 
 
+bool ValidateSheetInstance( commands::ItemStatus* aStatus, const SCH_SHEET* aSheet,
+                            const kiapi::schematic::types::SheetSymbol& aInput )
+{
+    for( const kiapi::schematic::types::SheetVariant& variant : aInput.variants().variants() )
+    {
+        if( variant.name().empty() )
+            continue;
+
+        for( const auto& [key, unused] : variant.fields() )
+        {
+            if( const SCH_FIELD* field = aSheet->GetField( wxString::FromUTF8( key ) ) )
+            {
+                if( field->GetId() == FIELD_T::SHEET_NAME )
+                {
+                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
+                    aStatus->set_error_message( "sheet name can not be changed in a variant" );
+                    return false;
+                }
+                else if( field->GetId() == FIELD_T::SHEET_FILENAME )
+                {
+                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
+                    aStatus->set_error_message( "sheet filename can not be changed in a variant" );
+                    return false;
+                }
+                else if( field->GetId() == FIELD_T::SHEET_REF_SUFFIX )
+                {
+                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
+                    aStatus->set_error_message( "reference suffix can not be changed in a variant" );
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+
 /// Make the set of variant records on one placement of a sheet match @a aInput, by name.
 ///
 /// Each surviving record keeps the attributes the message leaves unset.
-static bool applySheetVariants( commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
-                                const kiapi::schematic::types::SheetVariants& aInput,
+static void applySheetVariants( SCH_SHEET* aSheet, const kiapi::schematic::types::SheetVariants& aInput,
                                 const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic )
 {
     using namespace kiapi::schematic::types;
@@ -583,28 +620,7 @@ static bool applySheetVariants( commands::ItemStatus* aStatus, SCH_SHEET* aSheet
             wxString fieldValue = wxString::FromUTF8( value );
 
             if( SCH_FIELD* field = aSheet->GetField( fieldName ) )
-            {
-                if( field->GetId() == FIELD_T::SHEET_NAME )
-                {
-                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
-                    aStatus->set_error_message( "sheet name can not be changed in a variant" );
-                    return false;
-                }
-                else if( field->GetId() == FIELD_T::SHEET_FILENAME )
-                {
-                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
-                    aStatus->set_error_message( "sheet filename can not be changed in a variant" );
-                    return false;
-                }
-                else if( field->GetId() == FIELD_T::SHEET_REF_SUFFIX )
-                {
-                    aStatus->set_code( commands::ItemStatusCode::ISC_INVALID_DATA );
-                    aStatus->set_error_message( "reference suffix can not be changed in a variant" );
-                    return false;
-                }
-
                 aSheet->SetFieldText( field, fieldName, fieldValue, &aParentPath, name );
-            }
         }
     }
 
@@ -622,8 +638,6 @@ static bool applySheetVariants( commands::ItemStatus* aStatus, SCH_SHEET* aSheet
         for( const wxString& name : obsolete )
             aSheet->DeleteVariant( aParentPath.Path(), name );
     }
-
-    return true;
 }
 
 
@@ -631,6 +645,9 @@ bool ApplySheetInstance( commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
                          const kiapi::schematic::types::SheetSymbol& aInput,
                          const SCH_SHEET_PATH& aParentPath, SCHEMATIC* aSchematic )
 {
+    if( !ValidateSheetInstance( aStatus, aSheet, aInput ) )
+        return false;
+
     wxString       pageNumber = wxString::FromUTF8( aInput.page_number() );
     SCH_SHEET_PATH path( aParentPath );
 
@@ -641,8 +658,8 @@ bool ApplySheetInstance( commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
     path.SetPageNumber( pageNumber.IsEmpty() ? path.GetPageNumber() : pageNumber );
 
     // A request that carries no variant set leaves the placement's variants as they are.
-    if( aInput.has_variants() && !applySheetVariants( aStatus, aSheet, aInput.variants(), aParentPath, aSchematic ) )
-        return false;
+    if( aInput.has_variants() )
+        applySheetVariants( aSheet, aInput.variants(), aParentPath, aSchematic );
 
     return true;
 }

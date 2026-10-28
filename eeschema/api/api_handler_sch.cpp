@@ -1345,6 +1345,12 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item.get() );
 
+            if( !ValidateSheetInstance( &status, sheet, sheetProto ) )
+            {
+                aItemHandler( status, anyItem );
+                continue;
+            }
+
             if( aCreate && !sheet->GetScreen() )
             {
                 sheet->SetScreen( new SCH_SCREEN( schematic() ) );
