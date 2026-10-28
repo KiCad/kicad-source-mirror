@@ -594,6 +594,35 @@ BOOST_AUTO_TEST_CASE( ErcChecks )
 }
 
 
+BOOST_AUTO_TEST_CASE( ErcChecksComposedPackageValues )
+{
+    std::vector<SCH_SHEET_PATH> channels = LoadAmpliChannels();
+    SCH_SHEET_PATH              root = m_schematic->Hierarchy()[0];
+    SCH_SYMBOL*                 source = FindSymbol( channels[0], wxS( "U201_V" ), 1 );
+    BOOST_REQUIRE( source );
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = false;
+
+    SCH_SYMBOL* unitA = new SCH_SYMBOL( *source->GetLibSymbolRef(), source->GetLibId(), &channels[0], 1 );
+    SCH_SYMBOL* unitB = new SCH_SYMBOL( *source->GetLibSymbolRef(), source->GetLibId(), &root, 2 );
+    channels[0].LastScreen()->Append( unitA );
+    root.LastScreen()->Append( unitB );
+    unitA->SetRef( &channels[0], wxS( "U777" ) );
+    unitA->SetRef( &channels[1], wxS( "U778" ) );
+    unitB->SetRef( &root, wxS( "U777_V2" ) );
+    unitA->GetField( FIELD_T::VALUE )->SetText( wxS( "first-value" ) );
+    unitB->GetField( FIELD_T::VALUE )->SetText( wxS( "second-value" ) );
+
+    channels[0].Last()->GetField( FIELD_T::SHEET_REF_SUFFIX )->SetText( wxS( "_V2" ) );
+    m_schematic->RefreshHierarchy();
+
+    BOOST_REQUIRE_EQUAL( unitA->GetRef( &channels[0] ), unitB->GetRef( &root ) );
+    BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_DIFFERENT_UNIT_VALUE ), 1 );
+
+    unitB->GetField( FIELD_T::VALUE )->SetText( wxS( "first-value" ) );
+    BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_DIFFERENT_UNIT_VALUE ), 0 );
+}
+
+
 // The channel file starts with R7 and R8, which suffix mode must unify into one base
 BOOST_AUTO_TEST_CASE( SuffixModeSharesOneBase )
 {

@@ -1035,24 +1035,17 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         }
     }
 
-    // count the duplicated elements (if all are annotated)
-    int imax = m_flatList.size() - 1;
+    auto sameBaseAndSuffix = []( const SCH_REFERENCE& aFirst, const SCH_REFERENCE& aSecond )
+    {
+        return aFirst.CompareRef( aSecond ) == 0 && aFirst.m_numRef == aSecond.m_numRef
+               && aFirst.GetRefSuffix() == aSecond.GetRefSuffix();
+    };
 
-    for( int ii = 0; ii < imax; ii++ )
+    auto checkPackage = [&]( SCH_REFERENCE& first, SCH_REFERENCE& second )
     {
         msg.Empty();
         tmp.Empty();
         tmp2.Empty();
-
-        SCH_REFERENCE& first = m_flatList[ii];
-        SCH_REFERENCE& second = m_flatList[ii + 1];
-
-        if(  ( first.CompareRef( second ) != 0 )
-          || ( first.m_numRef != second.m_numRef )
-          || ( first.GetRefSuffix() != second.GetRefSuffix() ) )
-        {
-            continue;
-        }
 
         // Same reference found. If same unit, error!
         if( first.m_unit == second.m_unit )
@@ -1070,9 +1063,9 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                                 : wxString( wxT( "" ) ),
                         first.GetRefSuffix() );
 
-            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &m_flatList[ii+1] );
+            aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &second );
             error++;
-            continue;
+            return;
         }
 
         /* Test error if units are different but number of parts per package
@@ -1102,7 +1095,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &second );
             error++;
-            continue;
+            return;
         }
 
         // Error if values are different between units, for the same reference
@@ -1121,34 +1114,34 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             aHandler( ERCE_DIFFERENT_UNIT_VALUE, msg, &first, &second );
             error++;
         }
+    };
+
+    // count the duplicated elements (if all are annotated)
+    for( size_t ii = 1; ii < m_flatList.size(); ++ii )
+    {
+        if( sameBaseAndSuffix( m_flatList[ii - 1], m_flatList[ii] ) )
+            checkPackage( m_flatList[ii - 1], m_flatList[ii] );
     }
 
-    // Prefix groups miss what composing joins, as R1 with suffix A1 against a bare R1A1
-    std::map<std::pair<wxString, int>, SCH_REFERENCE*> composed;
+    // Different base and suffix splits can identify the same complete package reference
+    std::map<wxString, std::map<int, SCH_REFERENCE*>> composed;
 
     for( SCH_REFERENCE& ref : m_flatList )
     {
         if( ref.m_isNew )
             continue;
 
-        auto [it, inserted] = composed.emplace(
-                std::make_pair( ref.GetRef() + ref.m_numRefStr + ref.GetRefSuffix(), ref.m_unit ), &ref );
+        auto& units = composed[ref.GetRef() + ref.m_numRefStr + ref.GetRefSuffix()];
+        auto  first = units.find( ref.m_unit );
 
-        if( inserted )
-            continue;
+        if( first == units.end() )
+            first = units.begin();
 
-        SCH_REFERENCE& first = *it->second;
+        // The loop above already checked units with the same base and suffix
+        if( first != units.end() && !sameBaseAndSuffix( *first->second, ref ) )
+            checkPackage( *first->second, ref );
 
-        // The loop above already reported a pair that splits alike
-        if( first.CompareRef( ref ) == 0 && first.m_numRef == ref.m_numRef
-            && first.GetRefSuffix() == ref.GetRefSuffix() )
-        {
-            continue;
-        }
-
-        msg.Printf( _( "Duplicate items %s\n" ), ref.GetFullRef() );
-        aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &ref );
-        error++;
+        units.emplace( ref.m_unit, &ref );
     }
 
     return error;
