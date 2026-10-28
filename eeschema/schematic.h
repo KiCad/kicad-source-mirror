@@ -261,8 +261,8 @@ public:
     /// True when a sheet in the hierarchy has suffix text, even text that resolves to nothing.
     bool HasRefSuffixFields() const { return m_hasRefSuffixFields; }
 
-    /// True when some hierarchy path composes a reference suffix.
-    bool HasRefSuffixes() const { return !m_refSuffixes.empty(); }
+    /// True when suffix numbering is enabled and a hierarchy path has a composed suffix.
+    bool HasRefSuffixes() const { return Settings().m_AnnotateReusedSheetSuffixes && !m_refSuffixes.empty(); }
 
     /**
      * Recompose the reference suffix of every sheet path in the hierarchy.

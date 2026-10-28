@@ -1096,7 +1096,7 @@ int ERC_TESTER::TestRefSuffixMismatch()
 
             const SCH_SHEET_PATH& firstUse = *first->second;
 
-            if( instance.m_RefLacksSuffix )
+            if( suffixMode && instance.m_RefLacksSuffix )
             {
                 msg = wxString::Format( _( "Reference %s was saved without the suffix %s" ), instance.m_Reference,
                                         m_schematic->GetRefSuffix( path ) );

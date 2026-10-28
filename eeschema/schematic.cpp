@@ -654,7 +654,7 @@ void SCHEMATIC::RefreshRefSuffixes()
 
 const wxString* SCHEMATIC::findRefSuffix( const SCH_SHEET_PATH& aPath ) const
 {
-    if( m_refSuffixes.empty() )
+    if( !HasRefSuffixes() )
         return nullptr;
 
     if( auto it = m_refSuffixesBySheetHash.find( aPath.GetCurrentHash() ); it != m_refSuffixesBySheetHash.end() )
@@ -685,7 +685,7 @@ void SCHEMATIC::AppendRefSuffix( wxString& aRef, const SCH_SHEET_PATH& aPath ) c
 wxString SCHEMATIC::GetRefSuffix( const KIID_PATH& aPath ) const
 {
     // Designs without suffixes skip the path hash
-    if( m_refSuffixes.empty() )
+    if( !HasRefSuffixes() )
         return wxEmptyString;
 
     auto it = m_refSuffixes.find( aPath );
@@ -714,7 +714,7 @@ std::optional<wxString> SCHEMATIC::spanningPackageSuffix( const SCH_SYMBOL* aSym
 
 wxString SCHEMATIC::GetPackageRefSuffix( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath ) const
 {
-    if( m_refSuffixes.empty() )
+    if( !HasRefSuffixes() )
         return wxEmptyString;
 
     if( std::optional<wxString> suffix = spanningPackageSuffix( aSymbol, aPath.PathRef() ) )
@@ -726,7 +726,7 @@ wxString SCHEMATIC::GetPackageRefSuffix( const SCH_SYMBOL* aSymbol, const SCH_SH
 
 wxString SCHEMATIC::GetPackageRefSuffix( const SCH_SYMBOL* aSymbol, const KIID_PATH& aPath ) const
 {
-    if( m_refSuffixes.empty() )
+    if( !HasRefSuffixes() )
         return wxEmptyString;
 
     if( std::optional<wxString> suffix = spanningPackageSuffix( aSymbol, aPath ) )
@@ -738,7 +738,7 @@ wxString SCHEMATIC::GetPackageRefSuffix( const SCH_SYMBOL* aSymbol, const KIID_P
 
 wxString SCHEMATIC::GetUnitRefSuffix( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath, int aUnit ) const
 {
-    if( m_refSuffixes.empty() )
+    if( !HasRefSuffixes() )
         return wxEmptyString;
 
     {
@@ -803,7 +803,7 @@ std::set<KIID> SCHEMATIC::SplitUnitSymbols() const
 
 std::map<std::pair<KIID, KIID_PATH>, wxString> SCHEMATIC::PackageRefSuffixes() const
 {
-    if( m_refSuffixes.empty() )
+    if( !HasRefSuffixes() )
         return {};
 
     std::lock_guard<std::mutex> lock( m_packageSuffixesMutex );

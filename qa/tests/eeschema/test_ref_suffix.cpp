@@ -128,6 +128,7 @@ public:
 
         AddSuffixField( channels[0].Last(), aFirst );
         AddSuffixField( channels[1].Last(), aSecond );
+        m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
         m_schematic->RefreshHierarchy();
         return channels;
     }
@@ -336,7 +337,20 @@ BOOST_AUTO_TEST_CASE( SaveAndLoad )
     BOOST_REQUIRE( first && second && loaded );
 
     BOOST_CHECK( first->Last()->GetField( FIELD_T::SHEET_REF_SUFFIX ) );
-    BOOST_CHECK_EQUAL( m_schematic->GetRefSuffix( *first ), wxS( "_M1" ) );
+    BOOST_CHECK_EQUAL( first->Last()->GetRefSuffix( m_schematic->Hierarchy()[0] ), wxS( "_M1" ) );
+    BOOST_CHECK( m_schematic->GetRefSuffix( *first ).IsEmpty() );
+    BOOST_CHECK_EQUAL( loaded->GetRef( &*first ), wxS( "R91" ) );
+
+    io.SaveSchematicFile( first->LastScreen()->GetFileName(), first->Last(), m_schematic.get() );
+    wxString plainFile;
+    BOOST_REQUIRE( wxFFile( first->LastScreen()->GetFileName(), wxS( "rb" ) ).ReadAll( &plainFile ) );
+    BOOST_CHECK( plainFile.Contains( wxS( "(reference \"R91\")" ) ) );
+    BOOST_CHECK( plainFile.Contains( wxS( "(reference \"R92\")" ) ) );
+    BOOST_CHECK( !plainFile.Contains( wxS( "(reference \"R91_M1\")" ) ) );
+
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
+    m_schematic->RefreshRefSuffixes();
+    BOOST_CHECK_EQUAL( loaded->GetRef( &*first ), wxS( "R91_M1" ) );
     BOOST_CHECK_EQUAL( loaded->GetBaseRef( &*first ), wxS( "R91" ) );
     BOOST_CHECK_EQUAL( loaded->GetBaseRef( &*second ), wxS( "R92" ) );
 
@@ -393,6 +407,7 @@ BOOST_AUTO_TEST_CASE( ComposesPerPath )
     outer[0]->AddField( SCH_FIELD( outer[0], FIELD_T::SHEET_USER, wxS( "CH" ) ) )->SetText( wxS( "a" ) );
     outer[1]->AddField( SCH_FIELD( outer[1], FIELD_T::SHEET_USER, wxS( "CH" ) ) )->SetText( wxS( "b" ) );
     AddSuffixField( inner[0], wxS( "_${CH}" ) );
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
     m_schematic->RefreshHierarchy();
 
     std::set<wxString> composed;
@@ -543,6 +558,7 @@ BOOST_AUTO_TEST_CASE( UserTextMapsToBase )
     // A sibling suffix that ends in this channel's suffix still names the sibling
     channels[0].Last()->GetField( FIELD_T::SHEET_REF_SUFFIX )->SetText( wxS( "_A" ) );
     channels[1].Last()->GetField( FIELD_T::SHEET_REF_SUFFIX )->SetText( wxS( "_B_A" ) );
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
     m_schematic->RefreshHierarchy();
 
     wxString base;
@@ -570,11 +586,11 @@ BOOST_AUTO_TEST_CASE( ErcChecks )
     const KIID_PATH             firstPath = channels[0].Path();
     BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_REF_SUFFIX_MISMATCH ), 1 );
 
-    // Typed suffixes must differ in either mode
+    // Configured suffix collisions do not matter when separate numbering ignores them
     m_schematic->Settings().m_AnnotateReusedSheetSuffixes = false;
     channels[1].Last()->GetField( FIELD_T::SHEET_REF_SUFFIX )->SetText( wxS( "_M1" ) );
     m_schematic->RefreshHierarchy();
-    BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_DUPLICATE_SHEET_SUFFIX ), 1 );
+    BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_DUPLICATE_SHEET_SUFFIX ), 0 );
 
     channels[1].Last()->GetField( FIELD_T::SHEET_REF_SUFFIX )->SetText( wxS( "_M2" ) );
     m_schematic->RefreshHierarchy();
@@ -584,6 +600,10 @@ BOOST_AUTO_TEST_CASE( ErcChecks )
                                             m_schematic.get() );
     LoadSchematic( RootFile() );
     m_schematic->Settings().m_AnnotateReusedSheetSuffixes = false;
+    m_schematic->RefreshRefSuffixes();
+    BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_REF_SUFFIX_MISMATCH ), 0 );
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
+    m_schematic->RefreshRefSuffixes();
     BOOST_CHECK_EQUAL( CountErcMarkers( ERCE_REF_SUFFIX_MISMATCH ), 2 );
 
     std::optional<SCH_SHEET_PATH> path = m_schematic->Hierarchy().GetSheetPathByKIIDPath( firstPath );
@@ -613,6 +633,7 @@ BOOST_AUTO_TEST_CASE( ErcChecksComposedPackageValues )
     unitB->GetField( FIELD_T::VALUE )->SetText( wxS( "second-value" ) );
 
     channels[0].Last()->GetField( FIELD_T::SHEET_REF_SUFFIX )->SetText( wxS( "_V2" ) );
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
     m_schematic->RefreshHierarchy();
 
     BOOST_REQUIRE_EQUAL( unitA->GetRef( &channels[0] ), unitB->GetRef( &root ) );
@@ -655,6 +676,67 @@ BOOST_AUTO_TEST_CASE( SuffixModeSharesOneBase )
 
     BOOST_CHECK( !symbol->GetBaseRef( &channels[0] ).EndsWith( wxS( "?" ) ) );
     BOOST_CHECK_EQUAL( symbol->GetBaseRef( &channels[1] ), symbol->GetBaseRef( &channels[0] ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SeparateNumberingIgnoresConfiguredSuffixes )
+{
+    Load( wxS( "issue13212" ) );
+    std::vector<SCH_SHEET_PATH> channels = SuffixChannels();
+    SCH_SYMBOL*                 symbol = FirstSymbol( channels[0] );
+    BOOST_REQUIRE( symbol );
+
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = false;
+    m_schematic->RefreshRefSuffixes();
+
+    BOOST_CHECK_EQUAL( channels[0].Last()->GetRefSuffix( m_schematic->Hierarchy()[0] ), wxS( "_M1" ) );
+    BOOST_CHECK( !m_schematic->HasRefSuffixes() );
+    BOOST_CHECK( m_schematic->GetRefSuffix( channels[0] ).IsEmpty() );
+    BOOST_CHECK_EQUAL( symbol->GetRef( &channels[0] ), symbol->GetBaseRef( &channels[0] ) );
+
+    symbol->SetRef( &channels[0], wxS( "R?" ) );
+    SCH_REFERENCE_LIST           refs;
+    SCH_MULTI_UNIT_REFERENCE_MAP locked;
+    channels[0].AppendSymbol( refs, symbol, SYMBOL_FILTER_NON_POWER );
+    channels[0].AppendMultiUnitSymbol( locked, symbol, SYMBOL_FILTER_NON_POWER );
+    AnnotateReferences( refs, locked, *m_schematic, ANNOTATE_SELECTION, SORT_BY_X_POSITION, INCREMENTAL_BY_REF, 0,
+                        true );
+
+    BOOST_CHECK_EQUAL( symbol->GetRef( &channels[0] ), symbol->GetBaseRef( &channels[0] ) );
+    BOOST_CHECK( !symbol->GetRef( &channels[0] ).EndsWith( wxS( "_M1" ) ) );
+
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
+    m_schematic->RefreshRefSuffixes();
+    BOOST_CHECK_EQUAL( symbol->GetRef( &channels[0] ), symbol->GetBaseRef( &channels[0] ) + wxS( "_M1" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SeparateNumberingResetUsesDistinctPlainReferences )
+{
+    Load( wxS( "issue13212" ) );
+    std::vector<SCH_SHEET_PATH> channels = SuffixChannels();
+    SCH_SHEET_PATH              root = m_schematic->Hierarchy()[0];
+    SCH_SYMBOL*                 channel = FirstSymbol( channels[0] );
+    SCH_SYMBOL*                 other = FindSymbol( root, wxS( "R1" ) );
+    BOOST_REQUIRE( channel && other );
+
+    other->SetRef( &root, wxS( "R1_M2" ) );
+    m_schematic->Settings().m_AnnotateReusedSheetSuffixes = false;
+    m_schematic->RefreshRefSuffixes();
+
+    SCH_SHEET_LIST               sheets = m_schematic->Hierarchy();
+    SCH_REFERENCE_LIST           refs;
+    SCH_MULTI_UNIT_REFERENCE_MAP locked;
+    sheets.GetSymbols( refs, SYMBOL_FILTER_NON_POWER );
+    sheets.GetMultiUnitSymbols( locked, SYMBOL_FILTER_NON_POWER );
+    AnnotateReferences( refs, locked, *m_schematic, ANNOTATE_ALL, SORT_BY_X_POSITION, INCREMENTAL_BY_REF, 0, true );
+
+    BOOST_CHECK_EQUAL( CountDuplicates(), 0 );
+    BOOST_CHECK_NE( channel->GetRef( &channels[0] ), channel->GetRef( &channels[1] ) );
+    BOOST_CHECK_EQUAL( channel->GetRef( &channels[0] ), channel->GetBaseRef( &channels[0] ) );
+    BOOST_CHECK_EQUAL( channel->GetRef( &channels[1] ), channel->GetBaseRef( &channels[1] ) );
+    BOOST_CHECK( !channel->GetRef( &channels[0] ).EndsWith( wxS( "_M1" ) ) );
+    BOOST_CHECK( !channel->GetRef( &channels[1] ).EndsWith( wxS( "_M2" ) ) );
 }
 
 

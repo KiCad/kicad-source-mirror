@@ -729,7 +729,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     if( m_hierarchicalPath->GetLabel() != path )
         m_hierarchicalPath->SetLabel( path );
 
-    // The staged fields resolve like the saved sheet, so the shown suffix is the one references get
+    // Preview the configured suffix even when separate numbering leaves it inactive
     const SCH_SHEET_PATH& parentPath = m_frame->GetCurrentSheet();
 
     // Edits under a variant become overrides, and suffixes only read base text
@@ -744,7 +744,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         }
     }
 
-    wxString fullSuffix = m_frame->Schematic().GetRefSuffix( parentPath ) + m_dummySheet.GetRefSuffix( parentPath );
+    wxString fullSuffix = parentPath.ComposeRefSuffix() + m_dummySheet.GetRefSuffix( parentPath );
 
     wxString preview = fullSuffix.IsEmpty() ? _( "None" ) : fullSuffix;
 

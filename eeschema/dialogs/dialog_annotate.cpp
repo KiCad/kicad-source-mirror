@@ -95,6 +95,7 @@ private:
             return false;
 
         settings.m_AnnotateReusedSheetSuffixes = suffixMode;
+        m_Parent->Schematic().RefreshRefSuffixes();
         return true;
     }
 
@@ -117,6 +118,9 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
         m_rbScope_Schematic->SetValue( true );
         m_rbScope_Schematic->Enable( false );
     }
+
+    m_rbSeparateInstances->SetToolTip( _( "Use separate numbers for each sheet instance and ignore "
+                                          "Reference Suffix fields." ) );
 
     m_MessageWindow->SetLabel( _( "Annotation Messages:" ) );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );

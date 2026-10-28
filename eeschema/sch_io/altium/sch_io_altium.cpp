@@ -1446,8 +1446,14 @@ void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
     m_schematic->RefreshHierarchy();
 
     // Suffix annotation stops at any other reused sheet whose instances share a suffix
-    if( suffixed && m_schematic->RefSuffixCollisions( true ).empty() )
+    if( suffixed )
+    {
+        // The collision scan reads suffixes through the suffix numbering gate, so turn it on first
         m_schematic->Settings().m_AnnotateReusedSheetSuffixes = true;
+
+        if( !m_schematic->RefSuffixCollisions( true ).empty() )
+            m_schematic->Settings().m_AnnotateReusedSheetSuffixes = false;
+    }
 }
 
 
