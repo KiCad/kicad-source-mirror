@@ -172,6 +172,8 @@ public:
     bool IsGroupEditModeActive() const { return m_groupEditModeActive; }
     void SetGroupEditModeActive( bool aActive ) { m_groupEditModeActive = aActive; }
 
+    double GetOutsideGroupOpacity() const { return m_outsideGroupOpacity; }
+
     std::map<int, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
 
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }

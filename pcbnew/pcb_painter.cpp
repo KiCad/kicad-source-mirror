@@ -695,8 +695,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     }
 
     // Dim items outside the currently-entered group
-    if( m_groupEditModeActive && m_outsideGroupOpacity < 1.0 && !highlighted && !selected
-            && aItem->Type() != PCB_MARKER_T )
+    if( m_groupEditModeActive && m_outsideGroupOpacity < 1.0 && !selected && aItem->Type() != PCB_MARKER_T )
     {
         if( !isInEnteredGroup( aItem ) )
             color.a *= m_outsideGroupOpacity;

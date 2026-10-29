@@ -874,14 +874,19 @@ void PCB_SELECTION_TOOL::EnterGroup()
 
 void PCB_SELECTION_TOOL::SetGroupEditModeActive( bool aActive )
 {
-    auto* settings = static_cast<KIGFX::PCB_PAINTER*>( view()->GetPainter() )->GetSettings();
+    auto* painter = dynamic_cast<KIGFX::PCB_PAINTER*>( view()->GetPainter() );
+
+    if( !painter )
+        return;
+
+    auto* settings = painter->GetSettings();
 
     if( settings->IsGroupEditModeActive() == aActive )
         return;
 
     settings->SetGroupEditModeActive( aActive );
 
-    if( m_frame->GetDisplayOptions().m_OutsideGroupOpacity < 1.0 )
+    if( settings->GetOutsideGroupOpacity() < 1.0 )
         view()->UpdateAllItems( KIGFX::COLOR );
 }
 
