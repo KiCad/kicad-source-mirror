@@ -61,6 +61,9 @@ public:
     void ToggleGitCommitPane();
     bool GitCommitPaneShown();
 
+    /// Open the advanced Git window on its History page, run through the docked panel.
+    void ShowGitHistory();
+
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnEditAdvancedCfg( wxCommandEvent& event );
 

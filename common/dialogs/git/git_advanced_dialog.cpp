@@ -226,7 +226,8 @@ GIT_ADVANCED_DIALOG* GIT_ADVANCED_DIALOG::Active()
 }
 
 
-void GIT_ADVANCED_DIALOG::ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane )
+void GIT_ADVANCED_DIALOG::ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane,
+                                        std::optional<GIT_ADVANCED_PAGE> aPage )
 {
     if( !activeDialog() )
     {
@@ -247,6 +248,9 @@ void GIT_ADVANCED_DIALOG::ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE
 
         setActiveDialog( dialog );
     }
+
+    if( aPage )
+        activeDialog()->selectPage( *aPage );
 
     activeDialog()->Show( true );
     activeDialog()->Raise();
@@ -285,7 +289,10 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
 
     // The panel usually outlives this window, so it must not be left calling into it. When the
     // panel went first it cleared this and dropped the pointer.
-    if( m_pane )
+    GIT_ADVANCED_DIALOG* current = activeDialog();
+
+    // A replacement opened before this deferred delete already owns the panel's handlers
+    if( m_pane && ( !current || current == this || current->m_pane.get() != m_pane.get() ) )
     {
         m_pane->SetBusyChangedHandler( nullptr );
         m_pane->SetMessageChangedHandler( nullptr );
@@ -366,14 +373,14 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
 
 void GIT_ADVANCED_DIALOG::ShowHistoryForFile( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane, const wxString& aPath )
 {
-    ShowForFrame( aParent, aPane );
+    ShowForFrame( aParent, aPane, GIT_ADVANCED_PAGE::HISTORY );
     activeDialog()->ShowHistoryForFile( aPath );
 }
 
 
 void GIT_ADVANCED_DIALOG::ShowHistoryForFile( const wxString& aPath )
 {
-    m_book->SetSelection( 1 );
+    selectPage( GIT_ADVANCED_PAGE::HISTORY );
     m_historyPage->ShowHistoryForFile( aPath );
 }
 
@@ -383,8 +390,14 @@ void GIT_ADVANCED_DIALOG::ShowAmend( const wxString& aCommitHash )
     if( !SessionStillCurrent() )
         return;
 
-    m_book->SetSelection( 0 );
+    selectPage( GIT_ADVANCED_PAGE::CHANGES );
     m_changesPane->BeginAmend( aCommitHash );
+}
+
+
+void GIT_ADVANCED_DIALOG::selectPage( GIT_ADVANCED_PAGE aPage )
+{
+    m_book->SetSelection( static_cast<size_t>( aPage ) );
 }
 
 

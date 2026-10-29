@@ -173,6 +173,11 @@ private:
     void onGitRemoteSettings( wxCommandEvent& event );
 
     /**
+     * Open the advanced Git window on its History page
+     */
+    void onGitHistory( wxCommandEvent& event );
+
+    /**
      * Switch to a different branch in the git repository
      */
     void onGitSwitchBranch( wxCommandEvent& event );

@@ -35,6 +35,7 @@
 #include <wx/file.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
+#include <wx/hyperlink.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
 #include <wx/settings.h>
@@ -213,6 +214,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_recentMessages->SetMaxSize( FromDIP( wxSize( 170, -1 ) ) );
     KIPLATFORM::UI::EllipsizeChoiceBox( m_recentMessages );
 
+    m_summaryCount->SetToolTip( _( "Git tools show up to 72 characters of the summary on one line." ) );
     updateSummaryCount();
 
     // Only a platform without a native hint for a multi line box gets the label laid over it.
@@ -305,6 +307,18 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     // Inside the advanced window the page is wide enough for the list and the message side
     // by side.
     m_inAdvancedWindow = aParent != aFrame;
+
+    // Otherwise the history is only reachable through the gear menu, where users did not find it
+    m_historyLink = new wxHyperlinkCtrl( this, wxID_ANY, _( "History..." ), wxEmptyString, wxDefaultPosition,
+                                         wxDefaultSize, wxHL_ALIGN_RIGHT | wxNO_BORDER );
+    m_historyLink->SetToolTip( _( "Show the commits made to this project" ) );
+    m_historyLink->Hide();
+    m_historyLink->Bind( wxEVT_HYPERLINK,
+                         [this]( wxHyperlinkEvent& )
+                         {
+                             ShowHistory();
+                         } );
+    GetSizer()->Add( m_historyLink, 0, wxALIGN_RIGHT | wxLEFT | wxRIGHT | wxBOTTOM, 4 );
 
     if( m_inAdvancedWindow )
         layoutWide();
@@ -621,6 +635,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
     }
 
     showTrustCommand( trustCommand );
+    m_historyLink->Show( m_hasRepo && !m_inAdvancedWindow );
     m_undoCommitButton->Show( m_canAmend );
     m_undoCommitButton->Enable( m_canAmend && !m_actionPending && !m_transfer.IsBusy() );
     updateCommitButton();
@@ -633,6 +648,12 @@ void GIT_COMMIT_PANE::ReloadAdvancedWindow()
 {
     if( GIT_ADVANCED_DIALOG* dialog = GIT_ADVANCED_DIALOG::Active() )
         dialog->ReloadPages();
+}
+
+
+void GIT_COMMIT_PANE::ShowHistory()
+{
+    GIT_ADVANCED_DIALOG::ShowForFrame( m_frame, this, GIT_ADVANCED_PAGE::HISTORY );
 }
 
 
@@ -667,6 +688,7 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_amendHead = {};
     m_undoHead = {};
     m_undoCommitButton->Hide();
+    m_historyLink->Hide();
     updateMessageVisibility( false );
 
     setStatusText( _( "Version control is turned off in Preferences." ) );
@@ -796,7 +818,7 @@ void GIT_COMMIT_PANE::updateMessageVisibility( bool aHasChanges )
     bool show = aHasChanges || m_editorsDirty || m_amendCheckbox->IsChecked();
 
     m_summary->Show( show );
-    m_summaryCount->Show( show );
+    updateSummaryCount();
     m_description->Show( show );
 
     // The options box stays for a message only amend, with just the amend tick in it.
@@ -973,6 +995,15 @@ void GIT_COMMIT_PANE::updateSummaryCount()
     // Git tools show the first line whole up to 72 columns.
     int left = 72 - static_cast<int>( m_summary->GetValue().length() );
     m_summaryCount->SetLabel( wxString::Format( wxS( "%d" ), left ) );
+
+    // A count shown from the first character reads as a limit the user must work to
+    bool show = m_summary->IsShown() && left <= 10;
+
+    if( m_summaryCount->IsShown() != show )
+    {
+        m_summaryCount->Show( show );
+        Layout();
+    }
 }
 
 

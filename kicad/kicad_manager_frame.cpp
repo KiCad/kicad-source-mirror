@@ -1610,3 +1610,14 @@ bool KICAD_MANAGER_FRAME::GitCommitPaneShown()
 {
     return m_gitCommitPane && m_auimgr.GetPane( m_gitCommitPane ).IsShown();
 }
+
+
+void KICAD_MANAGER_FRAME::ShowGitHistory()
+{
+    if( m_gitCommitPane )
+    {
+        // A hidden pane is not refreshed on project load, so it may still hold the previous session
+        m_gitCommitPane->RefreshFileList();
+        m_gitCommitPane->ShowHistory();
+    }
+}

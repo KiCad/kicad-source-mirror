@@ -173,6 +173,7 @@ enum project_tree_ids
 
     ID_GIT_INITIALIZE_PROJECT, // Initialize a new git repository in an existing project
     ID_GIT_REMOTE_SETTINGS,    // Configure (or set) the default remote on an existing repo
+    ID_GIT_HISTORY,            // Show the commit history in the advanced Git window
     ID_GIT_REMOVE_VCS,         // Toggle Git integration for this project (preference in kicad_prl)
     ID_GIT_SWITCH_BRANCH,      // Switch the local repository to a different branch
     ID_GIT_SWITCH_QUICK1,      // Switch the local repository to the first quick branch
@@ -198,6 +199,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
 
     EVT_MENU( ID_GIT_INITIALIZE_PROJECT, PROJECT_TREE_PANE::onGitInitializeProject )
     EVT_MENU( ID_GIT_REMOTE_SETTINGS, PROJECT_TREE_PANE::onGitRemoteSettings )
+    EVT_MENU( ID_GIT_HISTORY, PROJECT_TREE_PANE::onGitHistory )
     EVT_MENU( ID_GIT_SWITCH_BRANCH, PROJECT_TREE_PANE::onGitSwitchBranch )
     EVT_MENU_RANGE( ID_GIT_SWITCH_QUICK1, ID_GIT_SWITCH_QUICK5, PROJECT_TREE_PANE::onGitSwitchBranch )
     EVT_MENU( ID_GIT_REMOVE_VCS, PROJECT_TREE_PANE::onGitRemoveVCS )
@@ -800,6 +802,7 @@ void PROJECT_TREE_PANE::showContextMenu()
     // detected a repository for this project or integration is currently disabled.
     bool vcs_can_remove = vcs_has_repo || gitIntegrationDisabled;
     bool vcs_can_switch = vcs_enabled && vcs_has_repo;
+    bool vcs_can_show_history = vcs_enabled && vcs_has_repo;
     bool vcs_menu        = Pgm().GetCommonSettings()->m_Git.enableGit;
 
     // Check if the libgit2 library is available via backend
@@ -1000,8 +1003,12 @@ void PROJECT_TREE_PANE::showContextMenu()
         vcs_menuitem->Enable( vcs_can_set_remote );
 
         // Committing, pushing and pulling are done from the docked Version Control panel, so
-        // the version-control submenu keeps only repository setup and branch operations.
+        // the version-control submenu keeps only repository setup, history and branch operations.
         vcs_submenu->AppendSeparator();
+
+        vcs_menuitem = vcs_submenu->Append( ID_GIT_HISTORY, _( "Version History..." ),
+                                            _( "Show the commits made to this project" ) );
+        vcs_menuitem->Enable( vcs_can_show_history );
 
         // Reading the branch list walks the repository. On contention the submenu is built
         // without the shortcuts rather than reading it concurrently.
@@ -1946,6 +1953,12 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
         break;
     }
+}
+
+
+void PROJECT_TREE_PANE::onGitHistory( wxCommandEvent& aEvent )
+{
+    m_Parent->ShowGitHistory();
 }
 
 

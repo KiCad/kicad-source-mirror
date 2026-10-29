@@ -23,6 +23,9 @@
 #include <atomic>
 #include <functional>
 #include <memory>
+#include <optional>
+
+#include <wx/weakref.h>
 
 #include <dialogs/git/dialog_git_advanced_base.h>
 #include <dialogs/git/git_transfer.h>
@@ -43,6 +46,19 @@ class wxSplitterWindow;
 struct GIT_WORKTREE_STATUS;
 
 
+/// The advanced window's pages, in the order its sidebar lists them.
+enum class GIT_ADVANCED_PAGE
+{
+    CHANGES = 0,
+    HISTORY,
+    BRANCHES,
+    REMOTES,
+    STASHES,
+    TAGS,
+    REPOSITORY
+};
+
+
 /**
  * The advanced Git window: a non-modal dialog with a top bar naming the repository and branch
  * and a sidebar of pages (History, Branches, Remotes, Stashes, Tags, Repository) over the live
@@ -57,8 +73,10 @@ public:
 
     /// Raise the one window for this session, creating it on first use. The manager and both
     /// editors share it, so a working area never has two windows disagreeing about the repository.
-    /// The pane that opens it runs the window's Pull and Push.
-    static void ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane );
+    /// The pane that opens it runs the window's Pull and Push. aPage is turned to whether the
+    /// window is new or already open; without one an open window keeps its page.
+    static void ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane,
+                              std::optional<GIT_ADVANCED_PAGE> aPage = std::nullopt );
 
     /// The live window, or null when none is open.
     static GIT_ADVANCED_DIALOG* Active();
@@ -120,6 +138,8 @@ public:
     void SwitchToBranch( const wxString& aBranch );
 
 private:
+    void selectPage( GIT_ADVANCED_PAGE aPage );
+
     /// The Changes page: the docked panel's commit controls with the selected file's diff below.
     wxWindow* buildChangesPage( wxWindow* aBook );
 
@@ -146,8 +166,10 @@ private:
     /// The fetch the top bar started.
     KIGIT_TRANSFER m_fetch;
 
-    EDA_BASE_FRAME*  m_parent;
-    GIT_COMMIT_PANE* m_pane;
+    EDA_BASE_FRAME* m_parent;
+
+    /// Weak because the pane can be destroyed before this dialog's deferred delete runs.
+    wxWeakRef<GIT_COMMIT_PANE> m_pane;
 
     PANEL_GIT_HISTORY*    m_historyPage;
     PANEL_GIT_BRANCHES*   m_branchesPage;
