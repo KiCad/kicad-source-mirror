@@ -1395,6 +1395,47 @@ bool LIBGIT_BACKEND::IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& a
 }
 
 
+// Names the unborn branch Add to Version Control created, so a fetch can tell it from a later orphan
+static const char ADOPT_REMOTE_BRANCH_KEY[] = "kicad.adoptRemoteBranch";
+
+
+static wxString unbornBranchName( git_repository* aRepo )
+{
+    git_reference* head = nullptr;
+    wxString       name;
+
+    if( git_repository_head_unborn( aRepo ) != 1 || git_reference_lookup( &head, aRepo, "HEAD" ) != GIT_OK )
+        return name;
+
+    KIGIT::GitReferencePtr headPtr( head );
+
+    if( const char* target = git_reference_symbolic_target( head ) )
+        wxString::FromUTF8( target ).StartsWith( wxS( "refs/heads/" ), &name );
+
+    return name;
+}
+
+
+static bool markForRemoteBranchAdoption( git_repository* aRepo )
+{
+    const wxString branch = unbornBranchName( aRepo );
+    git_config*    config = nullptr;
+    git_config*    local = nullptr;
+
+    if( branch.IsEmpty() || git_repository_config( &config, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr configPtr( config );
+
+    if( git_config_open_level( &local, config, GIT_CONFIG_LEVEL_LOCAL ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr localPtr( local );
+
+    return git_config_set_string( local, ADOPT_REMOTE_BRANCH_KEY, branch.utf8_str() ) == GIT_OK;
+}
+
+
 InitResult LIBGIT_BACKEND::InitializeRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath )
 {
     if( IsRepository( aHandler, aPath ) )
@@ -1415,6 +1456,12 @@ InitResult LIBGIT_BACKEND::InitializeRepository( GIT_INIT_HANDLER* aHandler, con
     }
 
     aHandler->GetCommon()->SetRepo( repo );
+
+    if( !markForRemoteBranchAdoption( repo ) )
+    {
+        aHandler->AddGitError( wxString::Format( _( "Could not set up version control in %s." ), aPath ) );
+        return InitResult::Error;
+    }
 
     wxLogTrace( traceGit, "Successfully initialized Git repository at %s", aPath );
     return InitResult::Success;
@@ -1608,6 +1655,101 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
 
 // Use callbacks declared/implemented in kicad_git_common.h/.cpp
 
+// A local default of master would otherwise push beside a server created with main. False means
+// the move was due and failed
+static bool adoptRemoteBranch( git_repository* aRepo, const wxString& aRemoteName,
+                               const std::vector<wxString>& aRemoteBranches )
+{
+    git_config* config = nullptr;
+    git_config* local = nullptr;
+
+    if( git_repository_config( &config, aRepo ) != GIT_OK )
+        return true;
+
+    KIGIT::GitConfigPtr configPtr( config );
+
+    if( git_config_open_level( &local, config, GIT_CONFIG_LEVEL_LOCAL ) != GIT_OK )
+        return true;
+
+    KIGIT::GitConfigPtr localPtr( local );
+
+    git_buf marked = GIT_BUF_INIT;
+
+    if( git_config_get_string_buf( &marked, local, ADOPT_REMOTE_BRANCH_KEY ) != GIT_OK )
+        return true;
+
+    KIGIT::GitBufPtr markedPtr( &marked );
+    const wxString   localName = unbornBranchName( aRepo );
+
+    git_branch_iterator* iterator = nullptr;
+    git_reference*       ref = nullptr;
+    git_branch_t         type;
+
+    if( git_branch_iterator_new( &iterator, aRepo, GIT_BRANCH_LOCAL ) != GIT_OK )
+        return false;
+
+    KIGIT::GitBranchIteratorPtr iteratorPtr( iterator );
+    const int                   rc = git_branch_next( &ref, &type, iterator );
+    KIGIT::GitReferencePtr      refPtr( rc == GIT_OK ? ref : nullptr );
+
+    if( rc != GIT_OK && rc != GIT_ITEROVER )
+        return false;
+
+    git_reflog* reflog = nullptr;
+
+    if( git_reflog_read( &reflog, aRepo, "HEAD" ) != GIT_OK )
+        return false;
+
+    std::unique_ptr<git_reflog, decltype( &git_reflog_free )> reflogPtr( reflog, git_reflog_free );
+
+    // A commit, any branch, or HEAD history means the repository has moved on since it was made
+    if( rc == GIT_OK || git_reflog_entrycount( reflog ) != 0 || localName.IsEmpty()
+        || localName != wxString::FromUTF8( marked.ptr ) )
+    {
+        git_config_delete_entry( local, ADOPT_REMOTE_BRANCH_KEY );
+        return true;
+    }
+
+    // An empty remote keeps the question open until the first push gives it a branch
+    if( aRemoteBranches.empty() )
+        return true;
+
+    // Only a single remote branch says unambiguously where the first commit belongs
+    if( aRemoteBranches.size() != 1 || aRemoteBranches.front() == localName )
+    {
+        git_config_delete_entry( local, ADOPT_REMOTE_BRANCH_KEY );
+        return true;
+    }
+
+    const wxString   branch = aRemoteBranches.front();
+    const wxString   section = wxS( "branch." ) + branch;
+    git_transaction* transaction = nullptr;
+
+    if( git_config_lock( &transaction, local ) != GIT_OK )
+        return false;
+
+    std::unique_ptr<git_transaction, decltype( &git_transaction_free )> transactionPtr( transaction,
+                                                                                        git_transaction_free );
+
+    // Upstream first, so a failure leaves HEAD where it was rather than on a branch with half its tracking
+    if( git_config_set_string( local, ( section + wxS( ".remote" ) ).utf8_str(), aRemoteName.utf8_str() ) != GIT_OK
+        || git_config_set_string( local, ( section + wxS( ".merge" ) ).utf8_str(),
+                                  ( wxS( "refs/heads/" ) + branch ).utf8_str() )
+                   != GIT_OK
+        || git_transaction_commit( transaction ) != GIT_OK
+        || git_repository_set_head( aRepo, ( wxS( "refs/heads/" ) + branch ).utf8_str() ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "adoptRemoteBranch: could not move %s to %s: %s", localName, branch,
+                    KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    git_config_delete_entry( local, ADOPT_REMOTE_BRANCH_KEY );
+    wxLogTrace( traceGit, "adoptRemoteBranch: first commit goes to %s instead of %s", branch, localName );
+    return true;
+}
+
+
 // aRemoteHasBranches, when given, is false only when the server advertised no branch at all
 static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemoteHasBranches )
 {
@@ -1682,16 +1824,20 @@ static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemo
 
     const git_remote_head** heads = nullptr;
     size_t                  headCount = 0;
+    std::vector<wxString>   remoteBranches;
 
     // The advertisement, not local tracking refs, because a custom refspec or stale refs mislead those
-    if( aRemoteHasBranches && git_remote_ls( &heads, &headCount, remote ) == GIT_OK )
+    if( git_remote_ls( &heads, &headCount, remote ) == GIT_OK )
     {
-        *aRemoteHasBranches = std::any_of( heads, heads + headCount,
-                                           []( const git_remote_head* aHead )
-                                           {
-                                               return std::strncmp( aHead->name, "refs/heads/", 11 ) == 0;
-                                           } );
+        for( size_t ii = 0; ii < headCount; ++ii )
+        {
+            if( std::strncmp( heads[ii]->name, "refs/heads/", 11 ) == 0 )
+                remoteBranches.push_back( wxString::FromUTF8( heads[ii]->name + 11 ) );
+        }
     }
+
+    if( aRemoteHasBranches )
+        *aRemoteHasBranches = !remoteBranches.empty();
 
     git_fetch_options fetchOptions;
     git_fetch_init_options( &fetchOptions, GIT_FETCH_OPTIONS_VERSION );
@@ -1700,6 +1846,14 @@ static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemo
     if( int rc = git_remote_fetch( remote, nullptr, &fetchOptions, nullptr ) )
     {
         aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( rc ), KIGIT_OPERATION::FETCH, remoteName );
+        return false;
+    }
+
+    if( !adoptRemoteBranch( aHandler->GetRepo(), remoteName, remoteBranches ) )
+    {
+        aHandler->AddGitError( wxString::Format( _( "Fetched from '%s', but could not switch the new repository "
+                                                    "to the remote's branch." ),
+                                                 remoteName ) );
         return false;
     }
 
