@@ -64,10 +64,19 @@ APIEXPORT std::vector<wxString> DefaultSSHKeyCandidates( const wxString& aHomeDi
 APIEXPORT bool IsSameSSHKey( const wxString& aKey, const wxString& aOther );
 
 /**
- * The user's home folder, where ssh looks for its config and default keys. Empty when unknown.
- * Safe to call from any thread.
+ * The folders that may be the user's home, most likely first. On Windows wxGetHomeDir, HOMEDRIVE with
+ * HOMEPATH, and USERPROFILE can each name a different folder. Safe to call from any thread.
+ */
+APIEXPORT std::vector<wxString> HomeDirCandidates();
+
+/**
+ * The user's home folder, where ssh looks for its config and default keys: the first candidate with a
+ * .ssh folder, else the first candidate. Empty when unknown. Safe to call from any thread.
  */
 APIEXPORT wxString HomeDir();
+
+/// The folder ssh keeps keys in, for a file picker to open at. Empty when the home folder is unknown.
+APIEXPORT wxString SSHKeyFolder();
 
 /**
  * Whether @p aKey can be offered to a server. libgit2 opens both files only once the

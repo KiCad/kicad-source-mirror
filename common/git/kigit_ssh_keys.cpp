@@ -593,13 +593,29 @@ bool KIGIT::IsSameSSHKey( const wxString& aKey, const wxString& aOther )
 
 
 // wxGetenv converts through an unlocked static buffer except on MSVC, and key discovery runs on any thread
-wxString KIGIT::HomeDir()
+std::vector<wxString> KIGIT::HomeDirCandidates()
 {
+    std::vector<wxString> homes;
+
 #ifdef _WIN32
-    return wxGetHomeDir();
+    wxString drive;
+    wxString path;
+    wxString profile;
+
+    homes.push_back( wxGetHomeDir() );
+
+    // wxGetHomeDir drops HOMEPATH "", which is also how a mapped network home drive such as H: looks
+    if( wxGetEnv( wxS( "HOMEDRIVE" ), &drive ) && wxGetEnv( wxS( "HOMEPATH" ), &path ) && !drive.IsEmpty() )
+        homes.push_back( drive + path );
+
+    if( wxGetEnv( wxS( "USERPROFILE" ), &profile ) && !profile.IsEmpty() )
+        homes.push_back( profile );
 #else
     if( const char* home = std::getenv( "HOME" ); home && *home )
-        return wxString( home, wxConvLibc );
+    {
+        homes.emplace_back( home, wxConvLibc );
+        return homes;
+    }
 
     passwd            entry;
     passwd*           found = nullptr;
@@ -610,10 +626,41 @@ wxString KIGIT::HomeDir()
         buffer.resize( buffer.size() * 2 );
 
     if( rc == 0 && found && found->pw_dir )
-        return wxString( found->pw_dir, wxConvLibc );
-
-    return wxEmptyString;
+        homes.emplace_back( found->pw_dir, wxConvLibc );
 #endif
+
+    return homes;
+}
+
+
+wxString KIGIT::HomeDir()
+{
+    const std::vector<wxString> homes = HomeDirCandidates();
+
+    // Git for Windows keeps keys under HOME and Windows OpenSSH under USERPROFILE
+    for( const wxString& home : homes )
+    {
+        wxFileName sshDir( home, wxEmptyString );
+        sshDir.AppendDir( wxS( ".ssh" ) );
+
+        if( sshDir.DirExists() )
+            return home;
+    }
+
+    return homes.empty() ? wxString() : homes.front();
+}
+
+
+wxString KIGIT::SSHKeyFolder()
+{
+    const wxString home = HomeDir();
+
+    if( home.IsEmpty() )
+        return wxEmptyString;
+
+    wxFileName sshDir( home, wxEmptyString );
+    sshDir.AppendDir( wxS( ".ssh" ) );
+    return sshDir.GetPath();
 }
 
 

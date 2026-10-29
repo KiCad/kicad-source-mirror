@@ -66,6 +66,9 @@ DIALOG_GIT_CREDENTIALS::DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxStrin
 
     m_userCtrl->SetValue( m_urlUsername.IsEmpty() ? aDefaultUsername : m_urlUsername );
 
+    // Otherwise the picker opens wherever the last file dialog was, far from any key
+    m_keyPicker->SetInitialDirectory( KIGIT::SSHKeyFolder() );
+
     if( !aDefaultSSHKey.IsEmpty() )
         m_keyPicker->SetFileName( wxFileName( aDefaultSSHKey ) );
 

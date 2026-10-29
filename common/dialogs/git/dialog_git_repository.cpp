@@ -63,6 +63,9 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         git_repository_init_ext( &m_repository, m_tempPath.ToStdString().c_str(), &options );
     }
 
+    // Otherwise the picker opens wherever the last file dialog was, far from any key
+    m_fpSSHKey->SetInitialDirectory( KIGIT::SSHKeyFolder() );
+
     SetupStandardButtons( { { wxID_HELP, _( "Test Connection" ) } } );
     Layout();
     finishDialogSettings();
