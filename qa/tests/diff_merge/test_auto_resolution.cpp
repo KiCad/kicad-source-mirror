@@ -699,12 +699,13 @@ BOOST_AUTO_TEST_CASE( DetailText_KnownResolutionKindsProduceText )
         ITEM_RES::MERGE_PROPS, ITEM_RES::DELETE_ITEM, ITEM_RES::KEEP,
     };
 
-    // Format the expected count line through the same `_()` machinery the
+    // Format the expected count line through the same `wxPLURAL` machinery the
     // production code uses so the assertion stays locale-stable. A
     // translated harness ends up comparing translated against translated.
-    const wxString expectedCountLine = wxString::Format(
-            _( "%zu property edit(s) in this resolution.\n" ),
-            static_cast<std::size_t>( 0 ) );
+    const wxString expectedCountLine =
+            wxString::Format( wxPLURAL( "%zu property edit in this resolution.\n",
+                                        "%zu property edits in this resolution.\n", 0 ),
+                              static_cast<std::size_t>( 0 ) );
 
     for( ITEM_RES kind : kinds )
     {
