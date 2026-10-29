@@ -213,8 +213,15 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
     }
     else
     {
-        clearance = aNode->GetClearance( this, aHead, aCtx ? aCtx->options.m_useClearanceEpsilon
-                                                           : false, aCtx->options );
+        const COLLISION_SEARCH_OPTIONS defaultOptions;
+        if ( aCtx )
+        {
+            clearance = aNode->GetClearance( this, aHead, aCtx->options.m_useClearanceEpsilon, aCtx->options );
+        }
+        else
+        {
+            clearance = aNode->GetClearance( this, aHead, false, defaultOptions );
+        }
     }
 
     if( clearance >= 0 )
