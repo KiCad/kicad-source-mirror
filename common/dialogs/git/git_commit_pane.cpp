@@ -43,6 +43,7 @@
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/utils.h>
 #include <wx/weakref.h>
 
 #include <wx/choicdlg.h>
@@ -2616,7 +2617,13 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
             return;
         }
 
-        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+        std::unique_lock<std::mutex> lock;
+
+        // Saving the copies into the project wakes a status read, so give it time to let go
+        {
+            wxBusyCursor busy;
+            lock = aCommon->TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
+        }
 
         if( lock.owns_lock() )
         {
