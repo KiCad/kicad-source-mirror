@@ -449,11 +449,10 @@ void REFERENCE_IMAGE::PlotImage( PLOTTER* aPlotter, const VECTOR2I& aPos, const 
 
     const double    scaleFactor = m_bitmapBase->GetScalingFactor();
     const EDA_ANGLE angle = m_orientation.GetAngle();
-    const bool      faded = m_opacity < 1.0;
 
-    if( angle.IsZero() && !faded )
+    if( angle.IsZero() )
     {
-        aPlotter->PlotImage( *image, aPos, scaleFactor );
+        aPlotter->PlotImage( *image, aPos, scaleFactor, m_opacity );
         return;
     }
 
@@ -484,21 +483,7 @@ void REFERENCE_IMAGE::PlotImage( PLOTTER* aPlotter, const VECTOR2I& aPos, const 
 
     wxCHECK_MSG( turned.IsOk(), /* void */, wxT( "Failed to rotate image" ) );
 
-    // Apply fading if the image opacity is less than 1.0
-    if( faded )
-    {
-        if( !turned.HasAlpha() )
-            turned.InitAlpha();
-
-        unsigned char* alpha = turned.GetAlpha();
-        const int      pixels = turned.GetWidth() * turned.GetHeight();
-
-        // Post-multiply the alpha channel by the image overall opacity
-        for( int ii = 0; ii < pixels; ++ii )
-            alpha[ii] = static_cast<unsigned char>( KiROUND( alpha[ii] * m_opacity ) );
-    }
-
-    aPlotter->PlotImage( turned, aPos, scaleFactor );
+    aPlotter->PlotImage( turned, aPos, scaleFactor, m_opacity );
 }
 
 

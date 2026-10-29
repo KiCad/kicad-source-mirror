@@ -157,7 +157,8 @@ public:
     /**
      * Plot the image on a plotter, turned to its stored orientation.
      *
-     * This may resample the image depending on the orientation.
+     * This may resample the image depending on the orientation and alpha channel
+     * capabilities of the plotter backend.
      *
      * @param aPlotter the plotter to use.
      * @param aPos the position of the center of the image.

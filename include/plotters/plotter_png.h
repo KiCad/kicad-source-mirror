@@ -128,7 +128,7 @@ public:
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                            void* aData = nullptr ) override;
 
-    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor ) override;
+    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha ) override;
 
     // Flash pad operations
     virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, void* aData ) override;

@@ -367,16 +367,18 @@ public:
     virtual void PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData );
 
     /**
-     * Only PostScript plotters can plot bitmaps.
+     * Plot a bitmap.
      *
-     * A rectangle is plotted for plotters that cannot plot a bitmap.
+     * Plotters that cannot embed a bitmap plot a placeholder rectangle instead.
      *
      * @param aImage is the bitmap.
      * @param aPos is position of the center of the bitmap.
      * @param aScaleFactor is the scale factor to apply to the bitmap size
      *                      (this is not the plot scale factor).
+     * @param aAlpha is the opacity to apply to the whole bitmap, on top of the image's own
+     *               alpha (1.0 is fully opaque).
      */
-    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor );
+    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha );
 
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width, void* aData );

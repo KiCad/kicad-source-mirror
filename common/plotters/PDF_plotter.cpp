@@ -644,7 +644,7 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 }
 
 
-void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
+void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha )
 {
     wxASSERT( m_workFile );
     VECTOR2I pix_size( aImage.GetWidth(), aImage.GetHeight() );
@@ -722,6 +722,10 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
                   encodeDoubleForPlotter( userToDeviceSize( drawsize.y ) ),
                   encodeDoubleForPlotter( dev_start.x ),
                   encodeDoubleForPlotter( dev_start.y ) );
+
+    // Apply any global alpha setting for this image (on top of the image's own alpha)
+    if( m_currentAlpha != aAlpha )
+        fmt::println( m_workFile, "/GS{} gs", getExtGStateHandleForAlpha( aAlpha ) );
 
     fmt::println( m_workFile, "/Im{} Do", imgHandle );
     fmt::println( m_workFile, "Q" );

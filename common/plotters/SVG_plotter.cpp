@@ -679,7 +679,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
-void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
+void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha )
 {
     VECTOR2I pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
@@ -693,7 +693,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     // so use a line when happens.
     if( drawsize.x == 0.0 || drawsize.y == 0.0 )    // Draw a line
     {
-        PLOTTER::PlotImage( aImage, aPos, aScaleFactor );
+        PLOTTER::PlotImage( aImage, aPos, aScaleFactor, aAlpha );
     }
     else
     {
@@ -729,9 +729,14 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
         }
 
         fmt::print( m_outputFile,
-                    "\"\npreserveAspectRatio=\"none\" width=\"{:.{}f}\" height=\"{:.{}f}\" />",
+                    "\"\npreserveAspectRatio=\"none\" width=\"{:.{}f}\" height=\"{:.{}f}\"",
                     userToDeviceSize( drawsize.x ), m_precision,
                     userToDeviceSize( drawsize.y ), m_precision );
+
+        if( aAlpha < 1.0 )
+            fmt::print( m_outputFile, " opacity=\"{:.{}f}\"", aAlpha, m_precision );
+
+        fmt::print( m_outputFile, " />" );
     }
 }
 

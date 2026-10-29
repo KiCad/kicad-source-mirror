@@ -581,7 +581,7 @@ void PS_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, in
 }
 
 
-void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
+void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha )
 {
     VECTOR2I pix_size; // size of the bitmap in pixels
     pix_size.x = aImage.GetWidth();
@@ -646,17 +646,16 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
             blue = aImage.GetBlue( xx, yy) & 0xFF;
 
             // PS doesn't support alpha, so premultiply against white background
-            if( aImage.HasAlpha() )
-            {
-                unsigned char alpha = aImage.GetAlpha( xx, yy ) & 0xFF;
+            double alpha = aAlpha;
 
-                if( alpha < 0xFF )
-                {
-                    float a = 1.0 - ( (float) alpha / 255.0 );
-                    red =   ( int )( red   + ( a * 0xFF ) ) & 0xFF;
-                    green = ( int )( green + ( a * 0xFF ) ) & 0xFF;
-                    blue =  ( int )( blue  + ( a * 0xFF ) ) & 0xFF;
-                }
+            if( aImage.HasAlpha() )
+                alpha *= aImage.GetAlpha( xx, yy ) / 255.0;
+
+            if( alpha < 1.0 )
+            {
+                red   = KiROUND( red   * alpha + 255.0 * ( 1.0 - alpha ) );
+                green = KiROUND( green * alpha + 255.0 * ( 1.0 - alpha ) );
+                blue  = KiROUND( blue  * alpha + 255.0 * ( 1.0 - alpha ) );
             }
 
             if( aImage.HasMask() )

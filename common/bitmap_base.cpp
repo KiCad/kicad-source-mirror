@@ -676,7 +676,7 @@ void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter, const VECTOR2I& aPos,
     // and plot a rectangle instead of.
     aPlotter->SetColor( aDefaultColor );
     aPlotter->SetCurrentLineWidth( aDefaultPensize );
-    aPlotter->PlotImage( *m_image, aPos, GetScalingFactor() );
+    aPlotter->PlotImage( *m_image, aPos, GetScalingFactor(), 1.0 );
 }
 
 

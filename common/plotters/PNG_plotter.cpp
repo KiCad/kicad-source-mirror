@@ -441,7 +441,7 @@ void PNG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
-void PNG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
+void PNG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha )
 {
     if( !m_context || !aImage.IsOk() )
         return;
@@ -517,7 +517,12 @@ void PNG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     cairo_translate( m_context, pos.x, pos.y );
     cairo_scale( m_context, drawW / imgW, drawH / imgH );
     cairo_set_source_surface( m_context, imgSurface, 0, 0 );
-    cairo_paint( m_context );
+
+    if( aAlpha < 1.0 )
+        cairo_paint_with_alpha( m_context, aAlpha );
+    else
+        cairo_paint( m_context );
+
     cairo_restore( m_context );
 
     cairo_surface_destroy( imgSurface );
