@@ -317,6 +317,27 @@ public:
         return false;
     }
 
+    bool ApproxOverlaps( const SEG& aSeg, int aThreshold = 3 ) const
+    {
+        if( this->A == this->B ) // single point corner case
+        {
+            if( aSeg.A == this->A || aSeg.B == this->A )
+                return false;
+
+            return aSeg.Contains( this->A, aThreshold );
+        }
+
+        if( !aSeg.ApproxCollinear( *this, aThreshold ) )
+            return false;
+
+        if( aSeg.Contains( this->A, aThreshold ) || aSeg.Contains( this->B, aThreshold ) )
+            return true;
+
+        if( this->Contains( aSeg.A, aThreshold ) || this->Contains( aSeg.B, aThreshold ) )
+            return true;
+
+        return false;
+    }
 
     bool Contains( const SEG& aSeg ) const
     {
