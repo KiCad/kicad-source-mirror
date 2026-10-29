@@ -2777,6 +2777,11 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxS
                 KIGIT::GitBufPtr        gitDirPtr( &gitDir );
                 KIGIT_OWNERSHIP_REFUSAL refusal = KIGIT::DescribeOwnershipRefusal( wxString::FromUTF8( aFilename ),
                                                                                    wxString::FromUTF8( gitDir.ptr ) );
+
+                // Left as no repository, so Add to Version Control gives the project its own
+                if( refusal.coversHome )
+                    return nullptr;
+
                 *aError = refusal.summary;
 
                 if( aTrustCommand )

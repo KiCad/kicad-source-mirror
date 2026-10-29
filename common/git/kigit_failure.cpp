@@ -21,6 +21,7 @@
 #include "git_repo_mixin.h"
 #include "kicad_git_compat.h"
 #include "kicad_git_memory.h"
+#include "kigit_ssh_keys.h"
 
 #include <trace_helpers.h>
 
@@ -32,7 +33,9 @@
 #include <wx/tokenzr.h>
 #include <wx/translation.h>
 
+#include <algorithm>
 #include <cstdlib>
+#include <filesystem>
 #include <memory>
 
 
@@ -551,6 +554,21 @@ static wxFileName resolveLikeLibgit2( const wxString& aDir )
 }
 
 
+/// aDir with links and junctions resolved, which libgit2 leaves as written on Windows, or empty on failure
+static std::filesystem::path canonicalDir( const wxString& aDir )
+{
+    std::error_code ec;
+
+#ifdef __WINDOWS__
+    std::filesystem::path path = std::filesystem::canonical( aDir.ToStdWstring(), ec );
+#else
+    std::filesystem::path path = std::filesystem::canonical( aDir.utf8_string(), ec );
+#endif
+
+    return ec ? std::filesystem::path() : path;
+}
+
+
 /// aPath quoted for the shell the trust command is pasted into, or empty when it cannot be done safely
 static wxString quoteForShell( const wxString& aPath )
 {
@@ -648,6 +666,23 @@ KIGIT_OWNERSHIP_REFUSAL KIGIT::DescribeOwnershipRefusal( const wxString& aStartD
                 configured = gitDir.GetPathWithSep() + configured;
 
             trusted = resolveLikeLibgit2( configured );
+        }
+    }
+
+    const std::filesystem::path repoPath = canonicalDir( trusted.GetPath() );
+
+    // A repository holding the home folder is someone else's, such as one an administrator made there
+    for( const wxString& home : KIGIT::HomeDirCandidates() )
+    {
+        const std::filesystem::path homePath = canonicalDir( home );
+
+        if( !homePath.empty() && !repoPath.empty()
+            && std::mismatch( repoPath.begin(), repoPath.end(), homePath.begin(), homePath.end() ).first
+                       == repoPath.end() )
+        {
+            KIGIT_OWNERSHIP_REFUSAL refusal;
+            refusal.coversHome = true;
+            return refusal;
         }
     }
 

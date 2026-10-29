@@ -108,6 +108,8 @@ struct KIGIT_OWNERSHIP_REFUSAL
     wxString trustCommand; ///< Kept apart from the summary so it can be shown in full and copied. Empty when
                            ///< no safe command exists for the folder, such as a name the shell could act on or
                            ///< one git reads as a wildcard.
+    bool     coversHome = false; ///< The repository's folder is the home folder or above it. It is not the
+                                 ///< project's own, and trusting it would take in every project below it.
 };
 
 
