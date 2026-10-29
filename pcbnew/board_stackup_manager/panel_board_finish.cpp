@@ -186,7 +186,10 @@ bool PANEL_SETUP_BOARD_FINISH::TransferDataFromWindow()
     }
 
     if( modified )
+    {
+        m_board->BumpDrillModelGeneration();
         m_frame->OnModify();
+    }
 
     return true;
 }
