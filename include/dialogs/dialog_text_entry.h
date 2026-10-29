@@ -27,7 +27,7 @@
 
 #include <vector>
 
-#include <dialog_text_entry_base.h>
+#include <dialogs/dialog_text_entry_base.h>
 #include <wx/valtext.h>
 
 
@@ -37,7 +37,7 @@ public:
     WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,
                           const wxString& aDefaultValue = wxEmptyString, bool aExtraWidth = false );
 
-    void SetTextValidator( const wxTextValidator& validator );
+    void SetTextValidator( const wxValidator& validator );
 
     wxString GetValue() const;
 };

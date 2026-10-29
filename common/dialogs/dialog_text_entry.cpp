@@ -52,7 +52,7 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& a
 }
 
 
-void WX_TEXT_ENTRY_DIALOG::SetTextValidator( const wxTextValidator& validator )
+void WX_TEXT_ENTRY_DIALOG::SetTextValidator( const wxValidator& validator )
 {
     m_textCtrl->SetValidator( validator );
 }
