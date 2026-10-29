@@ -21,6 +21,7 @@
 
 #include <diff_merge/diff_scene.h>
 #include <git/kigit_failure.h>
+#include <git/kigit_ssh_keys.h>
 #include <kiplatform/ui.h>
 
 #include <wx/dcclient.h>
@@ -136,7 +137,7 @@ wxString DIALOG_GIT_CREDENTIALS::GetPassword() const
 
 wxString DIALOG_GIT_CREDENTIALS::GetSSHKey() const
 {
-    return m_keyPicker->GetFileName().GetFullPath();
+    return KIGIT::PrivateKeyPath( m_keyPicker->GetFileName().GetFullPath() );
 }
 
 

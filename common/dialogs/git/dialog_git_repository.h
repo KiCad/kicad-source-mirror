@@ -23,6 +23,7 @@
 #include "dialog_git_repository_base.h"
 
 #include <git/kicad_git_common.h>
+#include <git/kigit_ssh_keys.h>
 #include <git2.h>
 
 class DIALOG_GIT_REPOSITORY : public DIALOG_GIT_REPOSITORY_BASE
@@ -61,11 +62,7 @@ public:
 
     void SetRepoSSHPath( const wxString& aPath ) { m_fpSSHKey->SetFileName( aPath ); }
     /// The private key, also when its .pub was picked.
-    wxString GetRepoSSHPath() const
-    {
-        wxString path = m_fpSSHKey->GetFileName().GetFullPath();
-        return path.ends_with( wxS( ".pub" ) ) ? path.Left( path.size() - 4 ) : path;
-    }
+    wxString GetRepoSSHPath() const { return KIGIT::PrivateKeyPath( m_fpSSHKey->GetFileName().GetFullPath() ); }
 
     void     SetEncrypted( bool aEncrypted = true );
 

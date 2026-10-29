@@ -66,6 +66,11 @@ APIEXPORT wxString HomeDir();
  */
 APIEXPORT bool IsOfferableSSHKey( const wxString& aKey );
 
+/**
+ * The private key for a path picked in a file dialog, which may be the key's .pub file.
+ */
+APIEXPORT wxString PrivateKeyPath( const wxString& aPicked );
+
 } // namespace KIGIT
 
 #endif // KIGIT_SSH_KEYS_H_

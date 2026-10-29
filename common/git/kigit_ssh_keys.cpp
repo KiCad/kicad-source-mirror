@@ -289,6 +289,12 @@ wxString KIGIT::HomeDir()
 }
 
 
+wxString KIGIT::PrivateKeyPath( const wxString& aPicked )
+{
+    return aPicked.ends_with( wxS( ".pub" ) ) ? aPicked.Left( aPicked.size() - 4 ) : aPicked;
+}
+
+
 bool KIGIT::IsOfferableSSHKey( const wxString& aKey )
 {
     return !aKey.IsEmpty() && wxFileName::FileExists( aKey ) && wxFileName::FileExists( aKey + wxS( ".pub" ) );

@@ -34,6 +34,7 @@
 #include <lockfile.h>
 #include <macros.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_ssh_keys.h>
 #include <git/project_git_utils.h>
 #include <git2.h>
 #include <project.h>
@@ -103,7 +104,7 @@ bool PROJECT::AttachGitRepository()
     // First attach only, or every panel refresh would undo what the credentials prompt
     // corrected on the live session.
     if( m_localSettings )
-        common->SetSSHKey( m_localSettings->m_GitSSHKey );
+        common->SetSSHKey( KIGIT::PrivateKeyPath( m_localSettings->m_GitSSHKey ) );
 
     wxFileName      fn( GetProjectFullName() );
     wxString        projectDir = fn.GetPath();
