@@ -39,6 +39,7 @@
 #include <wx/log.h>
 #include <gestfich.h>
 #include <algorithm>
+#include <cstring>
 #include <fstream>
 #include <iterator>
 #include <map>
@@ -1607,7 +1608,8 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
 
 // Use callbacks declared/implemented in kicad_git_common.h/.cpp
 
-bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
+// aRemoteHasBranches, when given, is false only when the server advertised no branch at all
+static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemoteHasBranches )
 {
     // A pull already holds the lock when it fetches, and relocking from the owner is undefined.
     std::unique_lock<std::mutex> lock;
@@ -1678,6 +1680,19 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
         return false;
     }
 
+    const git_remote_head** heads = nullptr;
+    size_t                  headCount = 0;
+
+    // The advertisement, not local tracking refs, because a custom refspec or stale refs mislead those
+    if( aRemoteHasBranches && git_remote_ls( &heads, &headCount, remote ) == GIT_OK )
+    {
+        *aRemoteHasBranches = std::any_of( heads, heads + headCount,
+                                           []( const git_remote_head* aHead )
+                                           {
+                                               return std::strncmp( aHead->name, "refs/heads/", 11 ) == 0;
+                                           } );
+    }
+
     git_fetch_options fetchOptions;
     git_fetch_init_options( &fetchOptions, GIT_FETCH_OPTIONS_VERSION );
     fetchOptions.callbacks = remoteCallbacks;
@@ -1690,6 +1705,12 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
 
     wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Fetch completed successfully" );
     return true;
+}
+
+
+bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
+{
+    return fetchRemote( aHandler, aSkipLock, nullptr );
 }
 
 
@@ -1934,7 +1955,9 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
     if( aHandler->IsThisOperationCancelled() || !aHandler->GetRepo() )
         return PullResult::Error;
 
-    if( !PerformFetch( aHandler, true ) )
+    bool remoteHasBranches = true;
+
+    if( !fetchRemote( aHandler, true, &remoteHasBranches ) )
         return PullResult::Error;
 
     git_oid pull_merge_oid = {};
@@ -1999,6 +2022,10 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
     if( git_oid_iszero( &pull_merge_oid ) )
 #endif
     {
+        // An empty remote, as right after Add to Version Control, has nothing to pull yet
+        if( !remoteHasBranches )
+            return PullResult::UpToDate;
+
         aHandler->AddErrorString( _( "Nothing to pull: the remote has no branch matching the current local "
                                      "branch." ) );
         return PullResult::Error;
