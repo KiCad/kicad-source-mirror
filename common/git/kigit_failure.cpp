@@ -255,6 +255,11 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
     {
     case KIGIT_FAILURE::AUTH_SSH_KEY_REJECTED:
         // An encrypted key with a wrong passphrase fails exactly as an unregistered one does
+        if( lastKeyEncrypted( aAuth ) && !aAuth.passphraseGiven )
+        {
+            return wxString::Format( _( "The SSH key %s requires a passphrase to connect to %s." ), key, host );
+        }
+
         if( lastKeyEncrypted( aAuth ) )
         {
             return wxString::Format( _( "%s did not accept the SSH key %s. Check the key's passphrase, and that "

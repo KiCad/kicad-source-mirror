@@ -36,6 +36,7 @@ struct KIGIT_AUTH_ATTEMPT
     KIGIT_COMMON::GIT_CONN_TYPE connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL;
     std::vector<wxString>       keysTried;          ///< Key files offered, in order.
     bool                        agentTried = false; ///< The SSH agent was offered before any key file.
+    bool                        passphraseGiven = false; ///< A passphrase went with the last key file offered.
 };
 
 

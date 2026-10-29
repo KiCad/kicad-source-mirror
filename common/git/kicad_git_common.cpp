@@ -2578,6 +2578,7 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
 
     // libssh2 reads the file only once authentication starts, so a load failure names this key
     aAttempt.keysTried.push_back( sshKey );
+    aAttempt.passphraseGiven = !password.IsEmpty();
     return GIT_OK;
 }
 
