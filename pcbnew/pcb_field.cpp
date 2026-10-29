@@ -61,6 +61,9 @@ PCB_FIELD::PCB_FIELD( const PCB_FIELD& aField ):
         PCB_TEXT( aField.GetParent(), PCB_FIELD_T )
 {
     *this = aField;
+
+    // Assignment keeps the new KIID, and a copy must not churn the uuid written to the file
+    SetUuidDirect( aField.m_Uuid );
 }
 
 

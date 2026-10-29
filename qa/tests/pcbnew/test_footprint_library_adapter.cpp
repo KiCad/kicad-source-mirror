@@ -42,6 +42,7 @@
 #include <libraries/library_table.h>
 #include <netinfo.h>
 #include <pad.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 
@@ -571,5 +572,39 @@ BOOST_AUTO_TEST_CASE( RemovedLibraryStopsServingPreloadedFootprints )
     BOOST_CHECK_MESSAGE( !fp, "a library removed from the table must not keep serving preloaded "
                               "footprints" );
 }
+
+/*
+ * Copying a footprint renewed the uuid of every user field, so each save of a footprint with a field
+ * such as Lifecycle rewrote that line and two edits of it always collided in git.
+ */
+BOOST_AUTO_TEST_CASE( SaveKeepsUserFieldUuids )
+{
+    KI_TEST::SCOPED_TEMP_DIR tmpLib( "kicad_qa_user_field_uuid" );
+
+    wxFileName source( getResistorLibPath(), wxS( "R_0402_1005Metric.kicad_mod" ) );
+    source.RemoveLastDir();
+    source.AppendDir( wxS( "Lifecycle_SMD.pretty" ) );
+
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "Lifecycle_SMD.pretty" );
+    std::filesystem::copy_file( source.GetFullPath().ToStdString(), libPath / "R_0402_1005Metric.kicad_mod" );
+
+    IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
+    const wxString      lib = wxString::FromUTF8( libPath.string() );
+
+    std::unique_ptr<FOOTPRINT> footprint( plugin->FootprintLoad( lib, wxS( "R_0402_1005Metric" ), true ) );
+    BOOST_REQUIRE( footprint );
+
+    const PCB_FIELD* lifecycle = footprint->GetField( wxS( "Lifecycle" ) );
+    BOOST_REQUIRE( lifecycle );
+
+    const KIID uuid = lifecycle->m_Uuid;
+    plugin->FootprintSave( lib, footprint.get() );
+
+    IO_RELEASER<PCB_IO>        reader( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
+    std::unique_ptr<FOOTPRINT> saved( reader->FootprintLoad( lib, wxS( "R_0402_1005Metric" ), true ) );
+    BOOST_REQUIRE( saved && saved->GetField( wxS( "Lifecycle" ) ) );
+    BOOST_CHECK_EQUAL( saved->GetField( wxS( "Lifecycle" ) )->m_Uuid.AsString(), uuid.AsString() );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

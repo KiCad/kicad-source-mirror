@@ -583,7 +583,9 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         }
         else
         {
+            // The old footprint is still on the board, so its field's uuid is not reused
             newField = new PCB_FIELD( *oldField );
+            newField->ResetUuidDirect();
             handledFields.insert( newField );
             aNew->Add( newField );
         }
