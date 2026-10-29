@@ -36,34 +36,55 @@ namespace TEXT_EVAL_VCS
 // loaded project directory). When empty, repo discovery falls back to the process cwd.
 namespace
 {
-    thread_local wxString tl_contextPath;
-    thread_local bool tl_contextIsFile = false;
+    // Static destructors such as ~SETTINGS_MANAGER run after the main thread's thread_local objects are
+    // destroyed. A bool has no destructor, so it stays readable and tells them the context is gone.
+    thread_local bool tl_contextGone = false;
+
+    struct CONTEXT
+    {
+        ~CONTEXT() { tl_contextGone = true; }
+
+        wxString path;
+        bool     isFile = false;
+    };
+
+    thread_local CONTEXT tl_context;
+
+    void setContext( const wxString& aPath, bool aIsFile )
+    {
+        if( tl_contextGone )
+            return;
+
+        tl_context.path = aPath;
+        tl_context.isFile = aIsFile;
+    }
 }
 
 
 void SetContextPath( const wxString& aPath )
 {
-    const bool isFile = !aPath.IsEmpty() && wxFileName( aPath ).FileExists();
-    tl_contextPath = aPath;
-    tl_contextIsFile = isFile;
+    setContext( aPath, !aPath.IsEmpty() && wxFileName( aPath ).FileExists() );
 }
 
 
 wxString GetContextPath()
 {
-    return tl_contextPath.IsEmpty() ? wxString( wxT( "." ) ) : tl_contextPath;
+    if( tl_contextGone || tl_context.path.IsEmpty() )
+        return wxString( wxT( "." ) );
+
+    return tl_context.path;
 }
 
 
 bool GetContextIsFile()
 {
-    return tl_contextIsFile;
+    return !tl_contextGone && tl_context.isFile;
 }
 
 
 CONTEXT_PATH_SCOPE::CONTEXT_PATH_SCOPE( const wxString& aPath ) :
-        m_previous( tl_contextPath ),
-        m_previousIsFile( tl_contextIsFile )
+        m_previous( tl_contextGone ? wxString() : tl_context.path ),
+        m_previousIsFile( GetContextIsFile() )
 {
     SetContextPath( aPath );
 }
@@ -71,8 +92,7 @@ CONTEXT_PATH_SCOPE::CONTEXT_PATH_SCOPE( const wxString& aPath ) :
 
 CONTEXT_PATH_SCOPE::~CONTEXT_PATH_SCOPE()
 {
-    tl_contextPath = m_previous;
-    tl_contextIsFile = m_previousIsFile;
+    setContext( m_previous, m_previousIsFile );
 }
 
 
@@ -90,7 +110,7 @@ namespace
         {
             wxFileName context( GetContextPath() );
             context.MakeAbsolute();
-            path.MakeAbsolute( tl_contextIsFile ? context.GetPath() : context.GetFullPath() );
+            path.MakeAbsolute( GetContextIsFile() ? context.GetPath() : context.GetFullPath() );
         }
 
         return path.GetFullPath();
@@ -107,7 +127,7 @@ namespace
         {
             wxFileName path = wxFileName::DirName( ResolveEffectivePath( aPath ) );
             path.MakeAbsolute();
-            const bool contextFile = tl_contextIsFile && ( aPath.empty() || aPath == "." );
+            const bool contextFile = GetContextIsFile() && ( aPath.empty() || aPath == "." );
             return environment->VcsValue( { aQuery,
                                             path.GetPath( (int) wxPATH_GET_VOLUME ),
                                             aArgument,
@@ -127,7 +147,7 @@ namespace
 
         wxFileName effective( ResolveEffectivePath( aPath ) );
 
-        if( ( !aPath.empty() && aPath != "." ) || tl_contextIsFile )
+        if( ( !aPath.empty() && aPath != "." ) || GetContextIsFile() )
         {
             effective.MakeAbsolute();
             return KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( effective.GetPath() ) );
