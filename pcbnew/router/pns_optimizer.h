@@ -107,7 +107,9 @@ public:
         RESTRICT_AREA         = 0x100,
         LIMIT_CORNER_COUNT    = 0x200,  ///< Do not attempt to optimize if the resulting line's
                                         ///< corner count is outside the predefined range
-        REQUIRE_OBTUSE_ANGLES = 0x400   ///< Try to prevent 90-degree or acute corners in a drag
+        REQUIRE_OBTUSE_ANGLES = 0x400,  ///< Try to prevent 90-degree or acute corners in a drag
+        DP_PAD_EXITS          = 0x800,  ///< fit coupled gateways for pad/via diff pair connections
+        PRESERVE_SEGMENTS     = 0x1000, ///< do not remove segments from a restricted set
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -133,6 +135,12 @@ public:
     void SetEffortLevel( int aEffort )
     {
         m_effortLevel = aEffort;
+    }
+
+    void SetPreserveSegments( const std::vector<SEG>& aSegs )
+    {
+        m_preservedSegments = aSegs;
+        m_effortLevel |= OPTIMIZER::PRESERVE_SEGMENTS;
     }
 
     void SetPreserveVertex( const VECTOR2I& aV )
@@ -210,6 +218,7 @@ private:
     int                 m_effortLevel;
 
     VECTOR2I            m_preservedVertex;
+    std::vector<SEG>    m_preservedSegments;
     std::pair<int, int> m_restrictedVertexRange;
     BOX2I               m_restrictArea;
     bool                m_restrictAreaIsStrict;
@@ -309,6 +318,23 @@ public:
                 const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
     VECTOR2I m_v;
+};
+
+
+class PRESERVE_SEGMENTS_CONSTRAINT: public OPT_CONSTRAINT
+{
+public:
+    PRESERVE_SEGMENTS_CONSTRAINT( NODE* aWorld, const std::vector<SEG>& aSegs ) :
+        OPT_CONSTRAINT( aWorld ),
+        m_segs( aSegs )
+    {
+    };
+
+    bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                const SHAPE_LINE_CHAIN& aCurrentPath,
+                const SHAPE_LINE_CHAIN& aReplacement ) override;
+private:
+    std::vector<SEG> m_segs;
 };
 
 

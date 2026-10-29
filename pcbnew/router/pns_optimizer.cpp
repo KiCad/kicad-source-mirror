@@ -279,6 +279,37 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* 
 }
 
 
+bool PRESERVE_SEGMENTS_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
+                                        const SHAPE_LINE_CHAIN& aCurrentPath,
+                                        const SHAPE_LINE_CHAIN& aReplacement )
+{
+    
+    /*
+    auto             dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    PNS_DBG( dbg, Message, wxString::Format("pre chk %d %d", aVertex1, aVertex2 ));
+    */
+    for( const SEG& rSeg : m_segs )
+    {
+        for (int i = aVertex1; i < aVertex2; i++ )
+        {
+            const SEG& cSeg = aCurrentPath.CSegment( i );
+
+            /*
+            PNS_DBG( dbg, AddShape, rSeg, YELLOW, 100000, wxT("rseg"));
+            PNS_DBG( dbg, AddShape, cSeg, YELLOW, 100000, wxT("cseg"));
+            */
+
+            if( rSeg.ApproxOverlaps( cSeg ) )
+                return false;
+        }
+    }
+
+
+    return true;
+}
+
+
+
 bool RESTRICT_VERTEX_RANGE_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine,
                                               const SHAPE_LINE_CHAIN& aCurrentPath,
                                               const SHAPE_LINE_CHAIN& aReplacement )
@@ -680,6 +711,12 @@ bool OPTIMIZER::Optimize( const LINE* aLine, LINE* aResult, LINE* aRoot )
         addConstraint( c );
     }
 
+    if( m_effortLevel & PRESERVE_SEGMENTS )
+    {
+        auto c = new PRESERVE_SEGMENTS_CONSTRAINT( m_world, m_preservedSegments );
+        addConstraint( c );
+    }
+
     if( m_effortLevel & RESTRICT_VERTEX_RANGE )
     {
         auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first,
@@ -805,6 +842,10 @@ bool OPTIMIZER::dragFixCorners( LINE* aLine )
         return false;
 
     SHAPE_LINE_CHAIN& path = aLine->Line();
+
+    if( path.SegmentCount() == 0 )
+        return false;
+
     VECTOR2I          anchor = ( m_effortLevel & PRESERVE_VERTEX ) ? m_preservedVertex : path.CLastPoint();
 
     int anchorIdx = path.Find( anchor );
