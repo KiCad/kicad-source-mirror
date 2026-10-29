@@ -204,6 +204,7 @@ bool WALKAROUND::singleStep()
                 hull.Append( bbox.GetRight(), bbox.GetTop()    );
                 hull.Append( bbox.GetRight(), bbox.GetBottom() );
                 hull.Append( bbox.GetLeft(),  bbox.GetBottom() );
+                hull.SetClosed( true );
             }
             else
             {
