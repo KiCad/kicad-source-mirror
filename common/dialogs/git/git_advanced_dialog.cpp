@@ -188,8 +188,12 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     m_book->GetTreeCtrl()->SetMinSize( treeSize );
 
     // A page is a bare list whose natural size is a few rows, so without a floor the first
-    // open is a stamp. A saved size still wins once there is one.
-    m_book->SetMinSize( FromDIP( wxSize( 800, 600 ) ) );
+    // open is a stamp. A saved size still wins once there is one. The fitted size keeps the
+    // widest page's right-hand controls inside the window.
+    wxSize bookMin = FromDIP( wxSize( 800, 600 ) );
+    m_book->InvalidateBestSize();
+    bookMin.IncTo( m_book->GetBestSize() );
+    m_book->SetMinSize( bookMin );
     m_book->Layout();
 
     Bind(

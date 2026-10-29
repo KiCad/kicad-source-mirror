@@ -32,6 +32,7 @@
 #include <wx/font.h>
 
 class wxBitmapBundle;
+class wxHyperlinkCtrl;
 class wxSize;
 class wxTextCtrl;
 class wxTextEntry;
@@ -140,6 +141,14 @@ KICOMMON_API bool IsModalDialogFocused();
  * can still scroll around in sub-windows.
  */
 KICOMMON_API void Disable( wxWindow* aWindow );
+
+/**
+ * Keep a hyperlink in the system link colour across a light or dark switch.
+ *
+ * The generic control used on macOS fixes its colours when created.  Native controls elsewhere
+ * follow the theme already, so there this does nothing.
+ */
+KICOMMON_API void FollowSystemLinkColour( wxHyperlinkCtrl* aLink );
 
 KICOMMON_API extern const wxString s_FocusStealableInputName;
 

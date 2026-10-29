@@ -50,6 +50,7 @@
 
 #include <wx/choicdlg.h>
 
+#include <bitmap_store.h>
 #include <bitmaps.h>
 #include <clipboard.h>
 #include <confirm.h>
@@ -280,6 +281,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_newBranchCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onNewBranchToggled, this );
     m_recentMessages->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onRecentMessage, this );
     m_showDiffButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onShowDiff, this );
+    Bind( wxEVT_SYS_COLOUR_CHANGED, &GIT_COMMIT_PANE::onThemeChanged, this );
     m_copyTrustCommand->Bind( wxEVT_BUTTON,
                               [this]( wxCommandEvent& )
                               {
@@ -317,6 +319,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
                                          wxDefaultSize, wxHL_ALIGN_RIGHT | wxNO_BORDER );
     m_historyLink->SetToolTip( _( "Show the commits made to this project" ) );
     m_historyLink->Hide();
+    KIUI::FollowSystemLinkColour( m_historyLink );
     m_historyLink->Bind( wxEVT_HYPERLINK,
                          [this]( wxHyperlinkEvent& )
                          {
@@ -354,6 +357,10 @@ void GIT_COMMIT_PANE::layoutWide()
     column->Detach( m_checklist );
     column->GetItem( m_description )->SetProportion( 1 );
     column->SetMinSize( FromDIP( wxSize( 280, -1 ) ) );
+
+    // The docked pane's cap is for a narrow dock; here the caption and most of a message fit
+    m_recentMessages->SetMaxSize( wxDefaultSize );
+    m_recentMessages->SetMinSize( FromDIP( wxSize( 170, -1 ) ) );
 
     wxStaticText* heading = new wxStaticText( this, wxID_ANY, _( "Commit Message" ) );
     heading->SetFont( heading->GetFont().Bold() );
@@ -740,6 +747,10 @@ void GIT_COMMIT_PANE::setStatusText( const wxString& aText )
 
 bool GIT_COMMIT_PANE::Layout()
 {
+    // Rows shown or hidden change the content height without the size event wx refits the scroll area on
+    if( GetBestVirtualSize() != GetVirtualSize() )
+        FitInside();
+
     bool done = layoutAndWrapStatus();
 
     // AUI sizes a pane from its pane info alone and squeezes the controls past their minimum
@@ -827,6 +838,31 @@ void GIT_COMMIT_PANE::updateDockMinHeight()
     {
         manager->Update();
     }
+}
+
+
+void GIT_COMMIT_PANE::onThemeChanged( wxSysColourChangedEvent& aEvent )
+{
+    // Icons and colours picked at construction belong to the theme that was active then
+    GetBitmapStore()->ThemeChanged();
+    m_settingsButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
+
+    if( m_descriptionHint )
+        m_descriptionHint->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+
+    if( m_summaryAdded )
+    {
+        const KICAD_DIFF::DIFF_COLOR_THEME theme =
+                KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
+
+        m_summaryAdded->SetForegroundColour( theme.added.ToColour() );
+        m_summaryRemoved->SetForegroundColour( theme.removed.ToColour() );
+    }
+
+    // The list's row colours are chosen when its status is read
+    RefreshFileList();
+
+    aEvent.Skip();
 }
 
 

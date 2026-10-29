@@ -136,6 +136,7 @@ private:
     void onChecklistChanged( wxDataViewEvent& aEvent );
     void onMessageChanged( wxCommandEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
+    void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
     /// The gear's menu: the advanced window and the author.
     void onSettings( wxCommandEvent& aEvent );

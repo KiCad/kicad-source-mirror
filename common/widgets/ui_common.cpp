@@ -202,6 +202,32 @@ bool KIUI::EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 }
 
 
+void KIUI::FollowSystemLinkColour( wxHyperlinkCtrl* aLink )
+{
+#ifdef __WXMAC__
+    // The visited purple is fixed for both themes, so a clicked link takes the link colour too
+    auto apply = [aLink]()
+    {
+        wxColour colour = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT );
+
+        aLink->SetNormalColour( colour );
+        aLink->SetVisitedColour( colour );
+    };
+
+    apply();
+
+    aLink->Bind( wxEVT_SYS_COLOUR_CHANGED,
+                 [apply]( wxSysColourChangedEvent& aEvent )
+                 {
+                     apply();
+                     aEvent.Skip();
+                 } );
+#else
+    wxUnusedVar( aLink );
+#endif
+}
+
+
 wxString KIUI::EllipsizeStatusText( wxWindow* aWindow, const wxString& aString )
 {
     wxString msg = UnescapeString( aString );
