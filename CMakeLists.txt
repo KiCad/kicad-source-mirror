@@ -610,6 +610,9 @@ if( MSVC )
     foreach( type EXE SHARED MODULE)
         # /DEBUG: create PDB
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
+        # /PDBPAGESIZE: the default 4 KiB pages cap a PDB at 4 GiB, which an incrementally linked
+        # debug eeschema reaches
+        string( APPEND CMAKE_${type}_LINKER_FLAGS_DEBUG " /PDBPAGESIZE:8192" )
         # /OPT:REF: omit unreferenced code
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:REF" )
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:REF" )
