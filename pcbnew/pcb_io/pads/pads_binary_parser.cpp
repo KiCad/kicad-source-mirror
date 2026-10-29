@@ -389,6 +389,10 @@ void BINARY_PARSER::parsePartPlacements()
         {
             m_partTypeIndex[m_parts.size()] = nextRecord.U32( 4 );
             m_partDecalAlternate[m_parts.size()] = nextRecord.U8( 17 );
+
+            // Flag 0x10 marks a NAME@DECAL placement outside the parttype alternates
+            if( nextRecord.U8( 16 ) & 0x10 )
+                m_partDecalIndex[m_parts.size()] = nextRecord.U32( 8 );
         }
 
         if( section->stride == 112 )
@@ -3938,6 +3942,15 @@ void BINARY_PARSER::linkPartsToDecals()
 
         if( alternate < decalIndices.size() )
             decalIndex = decalIndices[alternate];
+
+        // An explicit placement overrides the parttype alternates
+        auto placedIt = m_partDecalIndex.find( partIdx );
+
+        if( placedIt != m_partDecalIndex.end() && placedIt->second < m_decalNameTable.size()
+            && m_decals.count( m_decalNameTable[placedIt->second] ) )
+        {
+            decalIndex = static_cast<int32_t>( placedIt->second );
+        }
 
         if( decalIndex < 0 || static_cast<size_t>( decalIndex ) >= m_decalNameTable.size() )
             continue;

@@ -437,8 +437,9 @@ private:
     // Part index -> zero-based alternate decal selector from the NEXT placement record @+17.
     std::map<size_t, uint8_t> m_partDecalAlternate;
 
-    // Part index -> direct decal index for v0x2021, which carries no parttype layer; the decal
-    // is selected from the NEXT 96 B placement record's @+56 field. Indexes m_decalNameTable.
+    // Part index -> direct decal index into m_decalNameTable. v0x2021 carries no parttype layer and
+    // selects its decal from the NEXT 96 B placement record's @+56 field. Newer dialects store the
+    // placed decal at @+8 of the NEXT record, which can lie outside the parttype's alternates.
     std::map<size_t, uint32_t> m_partDecalIndex;
 
     // All decal indices for each parttype, primary first, then alternates. The parttype table is
