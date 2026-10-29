@@ -157,6 +157,18 @@ bool isHiddenText( const ELEMENT& aElem )
 }
 
 
+const ELEMENT* pinNameText( const ELEMENT& aPin )
+{
+    for( const ELEMENT& child : aPin.children )
+    {
+        if( child.type == ELEMENT_TYPE::TEXT && child.text.function == uint8_t( TEXT_FUNCTION::PIN_NAME ) )
+            return &child;
+    }
+
+    return nullptr;
+}
+
+
 /// An unplaced gate stays in the library symbol but is drawn on no sheet
 bool isUnplacedGate( const ELEMENT& aGate )
 {
@@ -655,25 +667,40 @@ void TARGET3001_SCH_BUILDER::addComponent( const ELEMENT& aComponent )
         bool refShown = false;
         bool valueShown = false;
 
+        auto placeField = [&]( FIELD_T aId, const ELEMENT& aText )
+        {
+            SCH_FIELD* field = symbol->GetField( aId );
+            std::pair<int32_t, int32_t> pos = configureText( field, aText, m_fonts );
+            field->SetPosition( toSch( pos.first, pos.second ) + TARGET3001::FONTS::BaselineShift( *field ) );
+            field->SetVisible( !isHiddenText( aText ) );
+            ( aId == FIELD_T::REFERENCE ? refShown : valueShown ) = !isHiddenText( aText );
+        };
+
         for( const ELEMENT& child : gate.symbol->children )
         {
             if( child.type != ELEMENT_TYPE::TEXT )
                 continue;
 
-            FIELD_T id;
-
             if( child.text.function == uint8_t( TEXT_FUNCTION::REFERENCE ) )
-                id = FIELD_T::REFERENCE;
+                placeField( FIELD_T::REFERENCE, child );
             else if( child.text.function == uint8_t( TEXT_FUNCTION::VALUE ) )
-                id = FIELD_T::VALUE;
-            else
-                continue;
+                placeField( FIELD_T::VALUE, child );
+        }
 
-            SCH_FIELD* field = symbol->GetField( id );
-            std::pair<int32_t, int32_t> pos = configureText( field, child, m_fonts );
-            field->SetPosition( toSch( pos.first, pos.second ) + TARGET3001::FONTS::BaselineShift( *field ) );
-            field->SetVisible( !isHiddenText( child ) );
-            ( id == FIELD_T::REFERENCE ? refShown : valueShown ) = !isHiddenText( child );
+        // KiCad names a power net with the value, so the pin name TARGET draws becomes the value
+        if( isPower && !valueShown )
+        {
+            for( const ELEMENT& child : gate.symbol->children )
+            {
+                if( child.type != ELEMENT_TYPE::PIN )
+                    continue;
+
+                if( const ELEMENT* name = pinNameText( child ); name && !isHiddenText( *name ) )
+                {
+                    placeField( FIELD_T::VALUE, *name );
+                    break;
+                }
+            }
         }
 
         if( !refShown )
@@ -716,6 +743,8 @@ void TARGET3001_SCH_BUILDER::addGateBodies( LIB_SYMBOL* aLib, const std::vector<
 {
     bool                  showNumbers = false;
     bool                  showNames = false;
+    int                   alongVotes = 0;
+    int                   acrossVotes = 0;
     std::vector<SCH_PIN*> hiddenNames;
 
     for( size_t g = 0; g < aGates.size(); g++ )
@@ -730,28 +759,33 @@ void TARGET3001_SCH_BUILDER::addGateBodies( LIB_SYMBOL* aLib, const std::vector<
             {
                 const TARGET3001::PIN& src = child.pin;
                 SCH_PIN*               pin = new SCH_PIN( aLib );
-                wxString               name;
-                bool                   nameShown = false;
+                const ELEMENT*         nameText = pinNameText( child );
+                wxString               name = nameText ? ToWx( nameText->text.text ) : wxString();
 
-                for( const ELEMENT& pc : child.children )
-                {
-                    if( pc.type == ELEMENT_TYPE::TEXT && pc.text.function == uint8_t( TEXT_FUNCTION::PIN_NAME ) )
-                    {
-                        name = ToWx( pc.text.text );
-                        nameShown = !isHiddenText( pc ) && !name.IsEmpty();
-
-                        if( nameShown )
-                        {
-                            SCH_TEXT probe( VECTOR2I( 0, 0 ), name );
-                            m_fonts.Apply( &probe, pc, 100 );
-                            pin->SetNameTextSize( probe.GetTextHeight() );
-                        }
-                    }
-                }
+                // A power symbol shows its name through the value field
+                bool nameShown = nameText && !isHiddenText( *nameText ) && !name.IsEmpty() && !aLib->IsPower();
 
                 pin->SetPosition( toSch( child.base.x, child.base.y ) - origin );
                 pin->SetOrientation( pinOrientation( src.direction ) );
                 pin->SetLength( toSch( src.length ) );
+
+                if( nameShown )
+                {
+                    SCH_TEXT probe( VECTOR2I( 0, 0 ), name );
+                    std::pair<int32_t, int32_t> pos = configureText( &probe, *nameText, m_fonts );
+                    probe.SetPosition( toSch( pos.first, pos.second ) - origin );
+                    pin->SetNameTextSize( probe.GetTextHeight() );
+
+                    // A name centred short of the pin root sits beside the pin, outside the body
+                    VECTOR2I    pinVec = pin->GetPinRoot() - pin->GetPosition();
+                    SEG::ecoord along = pinVec.Dot( probe.GetBoundingBox().Centre() - pin->GetPosition() );
+                    bool        parallel =
+                            textQuadrant( nameText->text.direction ) % 2 == textQuadrant( src.direction ) % 2;
+
+                    // KiCad turns a name written across its pin, so those vote only when no name runs along one
+                    ( parallel ? alongVotes : acrossVotes ) += along < pinVec.SquaredEuclideanNorm() ? 1 : -1;
+                }
+
                 pin->SetType( pinType( child ) );
                 pin->SetShape( pinShape( src ) );
                 pin->SetName( name.IsEmpty() ? wxString( wxS( "~" ) ) : name );
@@ -801,12 +835,16 @@ void TARGET3001_SCH_BUILDER::addGateBodies( LIB_SYMBOL* aLib, const std::vector<
     if( showNames )
     {
         for( SCH_PIN* pin : hiddenNames )
-            pin->SetName( wxS( "~" ) );
+            pin->SetNameTextSize( 0 );
     }
 
     aLib->GetDrawItems().sort();
     aLib->SetShowPinNumbers( showNumbers );
     aLib->SetShowPinNames( showNames );
+
+    // Only a zero offset puts KiCad's names beside the pin instead of inside the body
+    if( ( alongVotes ? alongVotes : acrossVotes ) > 0 )
+        aLib->SetPinNameOffset( 0 );
 }
 
 
