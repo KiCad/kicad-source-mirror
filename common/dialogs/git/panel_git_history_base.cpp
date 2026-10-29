@@ -98,15 +98,12 @@ PANEL_GIT_HISTORY_BASE::PANEL_GIT_HISTORY_BASE( wxWindow* parent, wxWindowID id,
 
 	bcommitDetailSizer->Add( m_commitMessage, 0, wxEXPAND|wxALL, 8 );
 
-	wxBoxSizer* bStatsRow;
-	bStatsRow = new wxBoxSizer( wxHORIZONTAL );
-
 	m_commitStats = new wxStaticText( m_commitDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_commitStats->Wrap( -1 );
-	bStatsRow->Add( m_commitStats, 0, wxALIGN_CENTER_VERTICAL, 0 );
+	bcommitDetailSizer->Add( m_commitStats, 0, wxLEFT|wxRIGHT, 8 );
 
-
-	bStatsRow->Add( 0, 0, 1, wxEXPAND, 0 );
+	wxBoxSizer* bStatsRow;
+	bStatsRow = new wxBoxSizer( wxHORIZONTAL );
 
 	m_commitFileCount = new wxStaticText( m_commitDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_commitFileCount->Wrap( -1 );
