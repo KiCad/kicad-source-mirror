@@ -76,6 +76,9 @@ public:
     /// The schematic or the Edit page's grouping changed; recompare without a round trip
     void DesignChanged();
 
+    /// The table is closing, so stop every request and stop reading or probing the design
+    void Detach();
+
 private:
     enum class STATE
     {

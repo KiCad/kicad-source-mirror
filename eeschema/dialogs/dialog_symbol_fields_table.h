@@ -57,7 +57,7 @@ public:
     /// Show the schematic's current variant, which the toolbar or an undo may have just changed.
     void FollowCurrentVariant();
 
-    /// The schematic is about to be freed, so stop listening to it before the deferred destruction.
+    /// The schematic is about to be freed or the table closed, so stop listening to it and stop every request.
     void DetachFromSchematic();
 
 private:

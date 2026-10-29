@@ -226,6 +226,16 @@ PANEL_SYMBOL_FIELDS_WORKSPACE::~PANEL_SYMBOL_FIELDS_WORKSPACE()
 }
 
 
+void PANEL_SYMBOL_FIELDS_WORKSPACE::Detach()
+{
+    m_op.Cancel();
+    m_ecoOp.Cancel();
+    m_reviewOp.Cancel();
+    m_design = {};
+    m_crossProbe = {};
+}
+
+
 void PANEL_SYMBOL_FIELDS_WORKSPACE::Activate()
 {
     if( m_activated )

@@ -898,8 +898,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
     if( savePresets( true ) )
         m_parent->OnModify();
 
-    // Stop listening to schematic events
-    m_parent->Schematic().RemoveListener( this );
+    DetachFromSchematic();
     m_parent->ClearFocus();
 
     wxCommandEvent* event = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
@@ -914,6 +913,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::DetachFromSchematic()
     // A discarded table's open edit must not land in a model that is going away
     m_grid->CancelPendingChanges();
     m_parent->Schematic().RemoveListener( this );
+
+    // Destruction is deferred, so no Workspace answer may read the schematic once it is replaced
+    m_projectStateOp.Cancel();
+    m_projectRefOp.Cancel();
+
+    if( m_workspacePage )
+        m_workspacePage->Detach();
 }
 
 
