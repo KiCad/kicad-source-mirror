@@ -880,7 +880,9 @@ void PCB_SELECTION_TOOL::SetGroupEditModeActive( bool aActive )
         return;
 
     settings->SetGroupEditModeActive( aActive );
-    view()->UpdateAllItems( KIGFX::COLOR );
+
+    if( m_frame->GetDisplayOptions().m_OutsideGroupOpacity < 1.0 )
+        view()->UpdateAllItems( KIGFX::COLOR );
 }
 
 
