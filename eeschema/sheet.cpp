@@ -73,10 +73,8 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
         return false;
     }
 
-    // SCH_SCREEN object file paths are expected to be absolute.  If this assert fires,
-    // something is seriously broken.
-    wxASSERT_MSG( wxFileName( destFilePath ).IsAbsolute(), destFilePath + wxS( " is not absolute" ) );
-
+    // A new root's default name is relative, which TestForRecursion resolves, and asserting here would open a
+    // debug message box inside the paste tool's coroutine
     if( schematicSheets.TestForRecursion( loadedSheets, destFilePath ) )
     {
         msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
