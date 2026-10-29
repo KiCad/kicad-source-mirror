@@ -141,6 +141,7 @@ public:
     double m_ZoneOpacity;      ///< Opacity override for filled zones
     double m_ShapeOpacity;     ///< Opacity override for graphic shapes
     double m_ImageOpacity;     ///< Opacity override for user images
+    double m_OutsideGroupOpacity; ///< Opacity override for items outside the entered group
 
     /**
      * A list of netnames that have been manually hidden in the board editor.

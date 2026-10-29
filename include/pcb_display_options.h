@@ -38,6 +38,7 @@ public:
         m_ZoneOpacity         = 1.0;
         m_ImageOpacity        = 1.0;
         m_FilledShapeOpacity        = 1.0;
+        m_OutsideGroupOpacity = 1.0;
     }
 
     /// @see ZONE_DISPLAY_MODE - stored in the project
@@ -57,6 +58,7 @@ public:
     double             m_ZoneOpacity;      ///< Opacity override for filled zone areas
     double             m_ImageOpacity;     ///< Opacity override for user images
     double             m_FilledShapeOpacity;     ///< Opacity override for graphic shapes
+    double             m_OutsideGroupOpacity;    ///< Opacity override for items outside the entered group
     bool               m_FlipBoardView = false;  ///< true if the board is flipped to show the mirrored view
 };
 

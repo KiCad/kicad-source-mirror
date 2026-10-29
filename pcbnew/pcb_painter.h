@@ -169,6 +169,9 @@ public:
     NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
     void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
 
+    bool IsGroupEditModeActive() const { return m_groupEditModeActive; }
+    void SetGroupEditModeActive( bool aActive ) { m_groupEditModeActive = aActive; }
+
     std::map<int, KIGFX::COLOR4D>& GetNetColorMap() { return m_netColors; }
 
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }
@@ -226,6 +229,11 @@ protected:
     double m_zoneOpacity;            ///< Opacity override for filled zones
     double m_imageOpacity;           ///< Opacity override for user images
     double m_filledShapeOpacity;     ///< Opacity override for graphic shapes
+
+    bool   m_groupEditModeActive; ///< True when inside an entered group
+    double m_outsideGroupOpacity; ///< Opacity override for items outside the entered group
+
+    bool isInEnteredGroup( const BOARD_ITEM* aItem ) const;
 
     wxString m_highlightedNetChain;  ///< Active highlighted chain name (if any)
 

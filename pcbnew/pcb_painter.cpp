@@ -129,6 +129,9 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_imageOpacity    = 1.0;
     m_filledShapeOpacity    = 1.0;
 
+    m_groupEditModeActive = false;
+    m_outsideGroupOpacity = 1.0;
+
     m_ForcePadSketchModeOn = false;
 
     m_PadEditModePad = nullptr;
@@ -203,6 +206,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     m_zoneOpacity     = aOptions.m_ZoneOpacity;
     m_imageOpacity    = aOptions.m_ImageOpacity;
     m_filledShapeOpacity = aOptions.m_FilledShapeOpacity;
+    m_outsideGroupOpacity = aOptions.m_OutsideGroupOpacity;
 }
 
 
@@ -286,6 +290,28 @@ bool PCB_RENDER_SETTINGS::IsDimExempt( const VIEW_ITEM* aItem ) const
 }
 
 
+bool PCB_RENDER_SETTINGS::isInEnteredGroup( const BOARD_ITEM* aItem ) const
+{
+    if( aItem->IsEntered() )
+        return true;
+
+    EDA_GROUP* pg = aItem->GetParentGroup();
+
+    if( !pg && aItem->GetParent() )
+        pg = aItem->GetParent()->GetParentGroup();
+
+    while( pg )
+    {
+        if( pg->AsEdaItem()->IsEntered() )
+            return true;
+
+        pg = pg->AsEdaItem()->GetParentGroup();
+    }
+
+    return false;
+}
+
+
 COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) const
 {
     int netCode = -1;
@@ -294,11 +320,16 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     if( aLayer == LAYER_MARKER_SHADOWS )
         return m_backgroundColor.WithAlpha( 0.5 );
 
-    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
-        return m_layerColors.at( aLayer );
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW || aLayer == LAYER_CONSTRAINT_SHADOW )
+    {
+        COLOR4D color = m_layerColors.at( aLayer );
 
-    if( aLayer == LAYER_CONSTRAINT_SHADOW )
-        return m_layerColors.at( aLayer );
+        // Dim shadows of items outside the currently-entered group
+        if( m_groupEditModeActive && m_outsideGroupOpacity < 1.0 && aItem && !isInEnteredGroup( aItem ) )
+            color.a *= m_outsideGroupOpacity;
+
+        return color;
+    }
 
     // SMD pads use the copper netname layer
     if( aLayer == LAYER_PAD_FR_NETNAMES )
@@ -661,6 +692,13 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         // Target graphic is visible if the via crosses a visible layer
         if( ( via->GetLayerSet() & visibleLayers ).none() )
             color = COLOR4D::CLEAR;
+    }
+
+    // Dim items outside the currently-entered group
+    if( m_groupEditModeActive && m_outsideGroupOpacity < 1.0 && !highlighted && !selected )
+    {
+        if( !isInEnteredGroup( aItem ) )
+            color.a *= m_outsideGroupOpacity;
     }
 
     // Apply per-type opacity overrides
@@ -3753,7 +3791,12 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 
         if( allowDrawOutline && !m_pcbSettings.m_isPrinting && zoneOutline && zoneOutline->OutlineCount() > 0 )
         {
-            m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
+            COLOR4D outlineColor = color.a > 0.0 ? color.WithAlpha( 1.0 ) : color;
+
+            if( m_pcbSettings.m_groupEditModeActive && !aZone->IsSelected() && !m_pcbSettings.isInEnteredGroup( aZone ) )
+                outlineColor.a *= m_pcbSettings.m_outsideGroupOpacity;
+
+            m_gal->SetStrokeColor( outlineColor );
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );

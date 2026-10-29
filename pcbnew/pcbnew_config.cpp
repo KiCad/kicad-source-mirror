@@ -118,6 +118,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_ZoneDisplayMode     = localSettings.m_ZoneDisplayMode;
     opts.m_ImageOpacity        = localSettings.m_ImageOpacity;
     opts.m_FilledShapeOpacity        = localSettings.m_ShapeOpacity;
+    opts.m_OutsideGroupOpacity = localSettings.m_OutsideGroupOpacity;
 
     // No refresh here: callers of LoadProjectSettings refresh later
     SetDisplayOptions( opts, false );
@@ -217,6 +218,7 @@ void PCB_EDIT_FRAME::saveProjectSettings()
     localSettings.m_ZoneDisplayMode     = displayOpts.m_ZoneDisplayMode;
     localSettings.m_ImageOpacity        = displayOpts.m_ImageOpacity;
     localSettings.m_ShapeOpacity        = displayOpts.m_FilledShapeOpacity;
+    localSettings.m_OutsideGroupOpacity = displayOpts.m_OutsideGroupOpacity;
 
     // Save Design settings
     localSettings.m_AutoTrackWidth = GetDesignSettings().m_UseConnectedTrackWidth;

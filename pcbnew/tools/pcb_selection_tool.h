@@ -270,6 +270,12 @@ public:
      */
     PCB_GROUP* GetEnteredGroup() { return m_enteredGroup; }
 
+    /**
+     * Tell the painter whether items outside the entered group should be dimmed, and recolour
+     * the board if that changed.
+     */
+    void SetGroupEditModeActive( bool aActive );
+
     PCB_LAYER_ID GetActiveLayer() { return m_frame->GetActiveLayer(); }
 
     enum STOP_CONDITION
