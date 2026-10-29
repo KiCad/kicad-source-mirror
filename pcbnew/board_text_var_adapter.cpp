@@ -43,7 +43,7 @@ std::vector<TEXT_VAR_REF_KEY> BOARD_TEXT_VAR_ADAPTER::collectKeys( BOARD_ITEM* a
     std::vector<TEXT_VAR_REF_KEY> keys;
 
     auto collect =
-            [&]( BOARD_ITEM* item )
+            [&keys]( BOARD_ITEM* item )
             {
                 if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
                 {
@@ -54,7 +54,7 @@ std::vector<TEXT_VAR_REF_KEY> BOARD_TEXT_VAR_ADAPTER::collectKeys( BOARD_ITEM* a
                     }
                 }
                 // PCB_BARCODE wraps an EDA_TEXT internally
-                else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( aItem ) )
+                else if( PCB_BARCODE* barcode = dynamic_cast<PCB_BARCODE*>( item ) )
                 {
                     for( const TEXT_VAR_REF_KEY& key : FilterTrackable( barcode->GetTextVarReferences() ) )
                     {
