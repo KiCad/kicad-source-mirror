@@ -35,6 +35,8 @@
 #include <kiplatform/environment.h>
 #include <kiplatform/io.h>
 #include <kiway.h>
+#include <project.h>
+#include <project/project_file.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <wx/msgdlg.h>
@@ -272,6 +274,16 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 
             if( !rootSchematic.IsEmpty() && wxFileExists( rootSchematic ) )
                 ScanSchematicHierarchy( rootSchematic, hierarchyFiles );
+
+            // Flat designs keep every page in its own top-level sheet file
+            for( const TOP_LEVEL_SHEET_INFO& info : Prj().GetProjectFile().GetTopLevelSheets() )
+            {
+                wxFileName topSheet( info.filename );
+                topSheet.MakeAbsolute( Prj().GetProjectPath() );
+
+                if( topSheet.FileExists() )
+                    ScanSchematicHierarchy( topSheet.GetFullPath(), hierarchyFiles );
+            }
 
             bool isInHierarchy = hierarchyFiles.count( fullFileName ) > 0;
 
