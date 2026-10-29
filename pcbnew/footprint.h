@@ -1011,6 +1011,12 @@ public:
     const CASE_INSENSITIVE_MAP<FOOTPRINT_VARIANT>& GetVariants() const { return m_variants; }
 
     /**
+     * Replace all variants with the given set.
+     * @param aVariants Map of variant name to variant data.
+     */
+    void SetVariants( const CASE_INSENSITIVE_MAP<FOOTPRINT_VARIANT>& aVariants ) { m_variants = aVariants; }
+
+    /**
      * Get the DNP status for a specific variant.
      *
      * If the variant doesn't exist, returns the default DNP status.

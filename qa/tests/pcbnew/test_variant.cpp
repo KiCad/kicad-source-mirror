@@ -27,6 +27,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <board.h>
+#include <board_commit.h>
+#include <core/mirror.h>
 #include <footprint.h>
 #include <lib_id.h>
 #include <exporters/place_file_exporter.h>
@@ -1423,6 +1425,61 @@ BOOST_AUTO_TEST_CASE( Issue23298_BaseFootprintHiddenInNonDefaultVariant )
                          "Variant A FP must be visible when Variant A is active" );
     BOOST_CHECK_MESSAGE( baseFp->GetDNPForVariant( wxT( "Variant A" ) ),
                          "Base FP must be hidden when Variant A is active (issue #23298)" );
+}
+
+
+/**
+ * A library footprint carries no variants and no unit assignments, so updating a footprint
+ * from the library must not take the board's away.  Helpdesk ticket #2606.
+ */
+BOOST_AUTO_TEST_CASE( ExchangeFootprintPreservesVariantsAndUnits )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    board.AddVariant( "Prototype" );
+
+    FOOTPRINT* existing = new FOOTPRINT( &board );
+    existing->SetFPID( LIB_ID( "Resistor_SMD", "R_0805_2012Metric" ) );
+    existing->SetReference( "R1" );
+    existing->SetValue( "10k" );
+
+    FOOTPRINT_VARIANT variant( "Prototype" );
+    variant.SetDNP( true );
+    variant.SetFieldValue( "MPN", "RC0805FR-071KL" );
+    existing->SetVariant( variant );
+
+    FOOTPRINT::FP_UNIT_INFO unit;
+    unit.m_unitName = "A";
+    unit.m_pins = { "1", "2" };
+    existing->SetUnitInfo( { unit } );
+
+    board.Add( existing );
+    board.BuildConnectivity();
+
+    // The library copy, as a fresh load gives it: the same footprint with no board data.
+    FOOTPRINT* updated = new FOOTPRINT( &board );
+    updated->SetFPID( existing->GetFPID() );
+
+    BOARD_COMMIT commit( dummyTool );
+
+    // The defaults are every reset option enabled, the most aggressive update on offer.
+    board.ExchangeFootprint( existing, updated, commit, FLIP_DIRECTION::TOP_BOTTOM, true );
+    commit.Push( wxT( "Update Footprint" ) );
+
+    const FOOTPRINT_VARIANT* kept = updated->GetVariant( "Prototype" );
+
+    BOOST_REQUIRE_MESSAGE( kept, "The Prototype variant must survive a footprint update" );
+    BOOST_CHECK( kept->GetDNP() );
+    BOOST_CHECK_EQUAL( kept->GetFieldValue( "MPN" ), "RC0805FR-071KL" );
+    BOOST_CHECK( updated->GetDNPForVariant( "Prototype" ) );
+
+    BOOST_REQUIRE_EQUAL( updated->GetUnitInfo().size(), 1u );
+    BOOST_CHECK_EQUAL( updated->GetUnitInfo()[0].m_unitName, "A" );
+    BOOST_CHECK_EQUAL( updated->GetUnitInfo()[0].m_pins.size(), 2u );
 }
 
 
