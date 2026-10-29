@@ -86,5 +86,6 @@ const wxString Format( const MINOPTMAX<int> x );
 
 const SEG LongestCoveringSegment( const SEG& a, const SEG& b );
 
+bool commonParallelProjection( SEG p, SEG n, SEG &pClip, SEG& nClip );
 
 }
