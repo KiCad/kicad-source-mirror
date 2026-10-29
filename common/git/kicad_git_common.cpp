@@ -1020,6 +1020,10 @@ std::vector<wxString> KIGIT_COMMON::GetRecentCommitMessages( size_t aMax ) const
         KIGIT::GitCommitPtr commitPtr( commit );
         wxString            message;
 
+        // git writes a merge's message, so it is no message the user would start from
+        if( git_commit_parentcount( commit ) > 1 )
+            continue;
+
         if( const char* text = git_commit_message( commit ) )
             message = KIGIT::DecodeRepoText( text );
 
