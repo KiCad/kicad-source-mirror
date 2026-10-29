@@ -150,14 +150,13 @@ public:
         if( aRuleName.IsEmpty() )
             return wxString( wxS( "\"\"" ) );
 
-        bool needsQuoting = false;
+        bool              needsQuoting = false;
+        std::vector<char> buffer( aRuleName.size() );
 
-        char ruleName[1024];
+        for( size_t ii = 0; ii < aRuleName.size(); ++ii )
+            buffer[ii] = aRuleName[ii];
 
-        for( size_t ii = 0; ii < sizeof( ruleName ) && ii < aRuleName.size(); ++ii )
-            ruleName[ii] = aRuleName[ii];
-
-        if( DSNLEXER::isNumber( ruleName, ruleName + std::min( aRuleName.size(), sizeof( ruleName ) ) ) )
+        if( DSNLEXER::isNumber( buffer.data(), buffer.data() + aRuleName.size() ) )
         {
             needsQuoting = true;
         }
