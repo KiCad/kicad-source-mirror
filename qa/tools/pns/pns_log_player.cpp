@@ -143,6 +143,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         case LOGGER::EVT_START_ROUTE:
         {
             wxString msg;
+            PNS::ITEM_SET auxItems;
             PNS::SIZES_SETTINGS sizes( evt.sizes );
             m_board->GetDesignSettings().m_UseConnectedTrackWidth = evt.useConnectedTrackWidth;
             m_iface->SetStartLayerFromPNS( routingLayer );
@@ -152,8 +153,11 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
             m_debugDecorator->NewStage( "route-start", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
 
-            PROF_TIMER tmr("route-start");
-            bool status = m_router->StartRouting( evt.p, ritem, routingLayer );
+            for( int i = 1; i < ritems.Size(); i++ )
+                auxItems.Add( ritems[i] );
+
+            PROF_TIMER tmr("route-start");            
+            bool status = m_router->StartRouting( evt.p, ritem, routingLayer, auxItems );
             tmr.Stop();
             double msecs = tmr.msecs();
 
