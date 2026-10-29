@@ -375,7 +375,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
     {
         const OBSTACLE& obstacle = obstacles[i];
 
-        int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon )
+        int clearance = GetClearance( obstacle.m_item, aLine, aOpts.m_useClearanceEpsilon, aOpts )
                             + aLine->Width() / 2;
 
         hullData[i].lineHull = makeHull( ruleResolver->HullCache( obstacle.m_item, clearance,
@@ -384,7 +384,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
         if( hasVia )
         {
             const VIA& via = aLine->Via();
-            int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon )
+            int viaClearance = GetClearance( obstacle.m_item, &via, aOpts.m_useClearanceEpsilon, aOpts )
                                + via.Diameter( aLine->Layer() ) / 2;
 
             hullData[i].viaHull = makeHull( ruleResolver->HullCache( obstacle.m_item,
