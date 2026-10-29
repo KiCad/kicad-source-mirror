@@ -137,14 +137,18 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
 
     std::vector<LIB_ID> footprintLinks;
 
-    auto downloadAsset = [&]( size_t i, REMOTE_SYMBOL_FETCHED_ASSET& fetched ) -> bool
-    {
-        if( !downloader().DownloadAndVerify( aProvider, aManifest.assets[i], remainingBudget, fetched, aError ) )
-            return false;
+    auto downloadAsset =
+            [&]( size_t i, REMOTE_SYMBOL_FETCHED_ASSET& fetched ) -> bool
+            {
+                if( !downloader().DownloadAndVerify( aProvider, aManifest.assets[i], remainingBudget, fetched,
+                                                     aError ) )
+                {
+                    return false;
+                }
 
-        remainingBudget -= aManifest.assets[i].size_bytes;
-        return true;
-    };
+                remainingBudget -= aManifest.assets[i].size_bytes;
+                return true;
+            };
 
     // --- Footprints ---
     for( size_t i : footprintIdx )
@@ -280,7 +284,11 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
             ApplyFootprintLinks( *loaded, footprintLinks );
         }
 
-        symbolDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+        if( !symbolDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            aError = wxString::Format( _( "Unable to create directory '%s'." ), symbolDir.GetPath() );
+            return false;
+        }
 
         if( strictLibraryTables )
         {
@@ -300,33 +308,30 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
         }
         else
         {
-            // Headless: write the raw payload to disk so the SCH plugin's library cache
-            // has an existing file to load, then re-save through the plugin to replace
-            // the symbol entry with the mutated (link-applied) copy. When there are no
-            // links to apply, the raw payload on disk is already correct and we skip
-            // the second save.
+            // Headless: write the raw payload to disk so the SCH plugin's library cache has an existing
+            // file to load, then re-save through the plugin to replace the symbol entry with the mutated
+            // (link-applied) copy.
+            // While this step isn't strictly necessary when there are no links to apply, it's the only
+            // thing that validates the data, so we perform it regardless.
             if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
                 return false;
 
-            if( !footprintLinks.empty() )
+            try
             {
-                try
-                {
-                    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+                IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
-                    if( !plugin )
-                    {
-                        aError = _( "Unable to access the KiCad symbol plugin." );
-                        return false;
-                    }
-
-                    plugin->SaveSymbol( outFile.GetFullPath(), std::move( loaded ) );
-                }
-                catch( const IO_ERROR& e )
+                if( !plugin )
                 {
-                    aError = wxString::Format( _( "Unable to save the downloaded symbol: %s" ), e.What() );
+                    aError = _( "Unable to access the KiCad symbol plugin." );
                     return false;
                 }
+
+                plugin->SaveSymbol( outFile.GetFullPath(), std::move( loaded ) );
+            }
+            catch( const IO_ERROR& e )
+            {
+                aError = wxString::Format( _( "Unable to save the downloaded symbol: %s" ), e.What() );
+                return false;
             }
         }
 
