@@ -23,13 +23,18 @@
 #include <utility>
 
 #include <board.h>
+#include <board_commit.h>
 #include <core/kicad_algo.h>
+#include <core/mirror.h>
 #include <embedded_files.h>
 #include <geometry/shape_utils.h>
 #include <footprint.h>
 #include <mmh3_hash.h>
+#include <pad.h>
 #include <pcb_field.h>
 #include <pcb_shape.h>
+#include <pcbnew_utils/board_test_utils.h>
+#include <tool/tool_manager.h>
 
 
 static bool CourtyardEqualPredicate( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b )
@@ -409,6 +414,70 @@ BOOST_AUTO_TEST_CASE( FootprintRotationKeepsPolygonArcs )
     footprint.Flip( footprint.GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
 
     BOOST_CHECK_EQUAL( poly->GetLibraryPolyShape().Outline( 0 ).ArcCount(), 1 );
+}
+
+
+/**
+ * "Update/reset clearance overrides" covers a footprint's pads, not just the footprint.
+ */
+BOOST_AUTO_TEST_CASE( ExchangeFootprintPadOverridesFollowResetOption )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    auto addPad = []( FOOTPRINT* aFootprint )
+    {
+        PAD* pad = new PAD( aFootprint );
+        pad->SetNumber( "1" );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        aFootprint->Add( pad );
+        return pad;
+    };
+
+    // Update a board footprint whose pad has overrides with a library one that has none.
+    auto update = [&]( bool aResetClearanceOverrides )
+    {
+        FOOTPRINT* existing = new FOOTPRINT( &board );
+        existing->SetFPID( LIB_ID( "Lib", "Part" ) );
+
+        PAD* pad = addPad( existing );
+        pad->SetLocalClearance( pcbIUScale.mmToIU( 0.4 ) );
+        pad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
+
+        board.Add( existing );
+        board.BuildConnectivity();
+
+        FOOTPRINT* fromLibrary = new FOOTPRINT( &board );
+        fromLibrary->SetFPID( existing->GetFPID() );
+        addPad( fromLibrary );
+
+        BOARD_COMMIT commit( dummyTool );
+
+        board.ExchangeFootprint( existing, fromLibrary, commit, FLIP_DIRECTION::TOP_BOTTOM, true, true, true, true,
+                                 true, true, true, aResetClearanceOverrides, true, false );
+        commit.Push( wxT( "Update Footprint" ) );
+
+        // An unmatched pad would carry nothing over and pass the kept case by accident.
+        BOOST_REQUIRE_EQUAL( fromLibrary->Pads().size(), 1u );
+        BOOST_REQUIRE( fromLibrary->Pads()[0]->m_Uuid == pad->m_Uuid );
+
+        return fromLibrary->Pads()[0];
+    };
+
+    const PAD* kept = update( false );
+
+    BOOST_REQUIRE( kept->GetLocalClearance().has_value() );
+    BOOST_CHECK_EQUAL( kept->GetLocalClearance().value(), pcbIUScale.mmToIU( 0.4 ) );
+    BOOST_CHECK( kept->GetLocalZoneConnection() == ZONE_CONNECTION::FULL );
+
+    const PAD* reset = update( true );
+
+    BOOST_CHECK( !reset->GetLocalClearance().has_value() );
+    BOOST_CHECK( reset->GetLocalZoneConnection() == ZONE_CONNECTION::INHERITED );
 }
 
 

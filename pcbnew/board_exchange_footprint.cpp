@@ -279,6 +279,17 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
         newPad->SetPinFunction( oldPad->GetPinFunction() );
         newPad->SetPinType( oldPad->GetPinType() );
 
+        if( !aResetClearanceOverrides )
+        {
+            newPad->SetLocalClearance( oldPad->GetLocalClearance() );
+            newPad->SetLocalSolderMaskMargin( oldPad->GetLocalSolderMaskMargin() );
+            newPad->SetLocalSolderPasteMargin( oldPad->GetLocalSolderPasteMargin() );
+            newPad->SetLocalSolderPasteMarginRatio( oldPad->GetLocalSolderPasteMarginRatio() );
+            newPad->SetLocalZoneConnection( oldPad->GetLocalZoneConnection() );
+            newPad->SetLocalThermalSpokeWidthOverride( oldPad->GetLocalThermalSpokeWidthOverride() );
+            newPad->SetLocalThermalGapOverride( oldPad->GetLocalThermalGapOverride() );
+        }
+
         if( newPad->IsOnCopperLayer() )
             newPad->SetNetCode( oldPad->GetNetCode() );
         else
