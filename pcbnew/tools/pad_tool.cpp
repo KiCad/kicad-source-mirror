@@ -525,6 +525,24 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 }
 
 
+/**
+ * Check if the sizes of two pads match on all relevant layers.
+ * Returns true if all sizes match, false otherwise.
+ */
+static bool padSizesMatch( const PAD& aPad1, const PAD& aPad2 )
+{
+    LSET relevantLayers = aPad1.Padstack().RelevantShapeLayers( aPad2.Padstack() );
+
+    for( PCB_LAYER_ID aLayer : relevantLayers )
+    {
+        if( aPad1.GetSize( aLayer ) != aPad2.GetSize( aLayer ) )
+            return false;
+    }
+
+    return true;
+}
+
+
 static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT& commit, bool aSameFootprints,
                                  bool aPadShapeFilter, bool aPadSizeFilter, bool aPadOrientFilter, bool aPadLayerFilter,
                                  bool aPadTypeFilter )
@@ -568,7 +586,7 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
 
             EDA_ANGLE padAngle = pad->GetOrientation() - footprint->GetOrientation();
 
-            if( aPadSizeFilter && ( pad->GetSize( PADSTACK::ALL_LAYERS ) != aSrcPad.GetSize( PADSTACK::ALL_LAYERS ) ) )
+            if( aPadSizeFilter && ( !padSizesMatch( *pad, aSrcPad ) ) )
                 continue;
 
             if( aPadOrientFilter && ( padAngle != srcPadAngle ) )
