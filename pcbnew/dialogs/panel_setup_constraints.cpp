@@ -167,7 +167,9 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
 
-    BOARD_DESIGN_SETTINGS                                temp( *m_BrdSettings );
+    BOARD_DESIGN_SETTINGS temp( *m_BrdSettings );
+    applyValues( temp );
+
     std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR> errors = temp.ValidateDesignRules( m_Frame->GetUserUnits() );
 
     if( !errors.empty() )
