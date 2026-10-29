@@ -2018,8 +2018,9 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     wxString            previousBranch;
 
     {
-        // Keep the lock through branch creation and the commit.
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+        // Keep the lock through branch creation and the commit. Closing the identity prompt wakes a
+        // status read, so a bare try loses to it
+        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *common, this );
 
         if( !lock.owns_lock() )
             return;
