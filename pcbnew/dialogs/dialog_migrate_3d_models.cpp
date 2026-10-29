@@ -871,12 +871,12 @@ void DIALOG_MIGRATE_3D_MODELS::updateAfterCatalogChange()
 
 void DIALOG_MIGRATE_3D_MODELS::OnRemoveSearchDirectoryClick(wxCommandEvent& event)
 {
-    wxString deleted;
+    std::vector<wxString> deleted;
 
     m_searchDirsGrid->OnDeleteRows(
             [&]( int row )
             {
-                deleted = m_searchDirsGrid->GetCellValue( row, 0 );
+                deleted.push_back( m_searchDirsGrid->GetCellValue( row, 0 ) );
                 m_searchDirsGrid->DeleteRows( row );
             } );
 
@@ -888,7 +888,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnRemoveSearchDirectoryClick(wxCommandEvent& even
         std::erase_if( dirs,
                        [&]( const wxString& dir )
                        {
-                           return dir == deleted;
+                           return alg::contains( deleted, dir );
                        } );
     }
 
