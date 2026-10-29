@@ -97,6 +97,9 @@ private:
     /// Type name for an SCH_ITEM (used in diff records).
     static wxString itemTypeName( const SCH_ITEM* aItem );
 
+    /// Translated type name shown to the user.
+    static wxString itemTypeLabel( const SCH_ITEM* aItem );
+
     /// Refdes if the item is a symbol; nullopt otherwise.
     static std::optional<wxString> itemRefdes( const SCH_ITEM* aItem,
                                                const SCH_SHEET_PATH* aPath );

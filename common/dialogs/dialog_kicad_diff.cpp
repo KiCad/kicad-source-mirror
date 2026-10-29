@@ -611,8 +611,8 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
         return;
     }
 
-    m_labelSummary->SetLabel(
-            wxString::Format( wxS( "%s — %s" ), KICAD_DIFF::ChangeKindLabel( aChange->kind ), aChange->typeName ) );
+    m_labelSummary->SetLabel( wxString::Format( wxS( "%s — %s" ), KICAD_DIFF::ChangeKindLabel( aChange->kind ),
+                                                aChange->DisplayType() ) );
 
     if( m_canvas )
     {
@@ -667,7 +667,7 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
             {
                 for( const KICAD_DIFF::ITEM_CHANGE& child : aC.children )
                 {
-                    wxString prefix = child.typeName;
+                    wxString prefix = child.DisplayType();
 
                     if( child.refdes && !child.refdes->IsEmpty() )
                         prefix += wxS( " " ) + *child.refdes;

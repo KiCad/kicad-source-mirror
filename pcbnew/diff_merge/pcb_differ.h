@@ -89,6 +89,9 @@ private:
     /// Convert the dynamic class string for an item into the type name used in diffs.
     static wxString itemTypeName( const BOARD_ITEM* aItem );
 
+    /// Translated type name shown to the user.
+    static wxString itemTypeLabel( const BOARD_ITEM* aItem );
+
     /// Extract a presentation label: footprint refdes, or routing net name for tracks/vias.
     static std::optional<wxString> itemRefdes( const BOARD_ITEM* aItem );
 

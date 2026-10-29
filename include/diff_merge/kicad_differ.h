@@ -126,9 +126,10 @@ DOCUMENT_DIFF DiffLibraryByName( const MAP& aBefore, const MAP& aAfter, const wx
         const auto* after    = afterIt == aAfter.end() ? nullptr : afterIt->second;
 
         ITEM_CHANGE c;
-        c.id       = LibraryItemKiidPath( name );
-        c.typeName = aTypeName;
-        c.refdes   = name;
+        c.id        = LibraryItemKiidPath( name );
+        c.typeName  = aTypeName;
+        c.typeLabel = ( after ? after : before )->GetFriendlyName();
+        c.refdes    = name;
 
         if( before && !after )
         {

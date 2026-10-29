@@ -68,6 +68,15 @@ wxString SCH_DIFFER::itemTypeName( const SCH_ITEM* aItem )
 }
 
 
+wxString SCH_DIFFER::itemTypeLabel( const SCH_ITEM* aItem )
+{
+    if( !aItem )
+        return wxEmptyString;
+
+    return aItem->GetFriendlyName();
+}
+
+
 std::optional<wxString> SCH_DIFFER::itemRefdes( const SCH_ITEM*       aItem,
                                                 const SCH_SHEET_PATH* aPath )
 {
@@ -245,9 +254,10 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
     for( const KIID_PATH& dup : recon.duplicatesA )
     {
         ITEM_CHANGE c;
-        c.id       = dup;
-        c.typeName = wxS( "SCH_ITEM" );
-        c.kind     = CHANGE_KIND::DUPLICATE_UUID;
+        c.id        = dup;
+        c.typeName  = wxS( "SCH_ITEM" );
+        c.typeLabel = _( "Item" );
+        c.kind      = CHANGE_KIND::DUPLICATE_UUID;
         result.changes.push_back( std::move( c ) );
     }
 
@@ -262,9 +272,10 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
         }
 
         ITEM_CHANGE c;
-        c.id       = dup;
-        c.typeName = wxS( "SCH_ITEM" );
-        c.kind     = CHANGE_KIND::DUPLICATE_UUID;
+        c.id        = dup;
+        c.typeName  = wxS( "SCH_ITEM" );
+        c.typeLabel = _( "Item" );
+        c.kind      = CHANGE_KIND::DUPLICATE_UUID;
         result.changes.push_back( std::move( c ) );
     }
 
@@ -293,6 +304,7 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id         = idA;
         c.typeName   = itemTypeName( a->item );
+        c.typeLabel  = itemTypeLabel( a->item );
         c.kind       = CHANGE_KIND::MODIFIED;
         c.bbox       = bboxOnSheet( m_after, b->item, b->sheetPath );
         c.refdes     = itemRefdes( b->item, b->sheetPath );
@@ -309,11 +321,12 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
 
         const WalkedItem* a = it->second;
         ITEM_CHANGE c;
-        c.id       = idA;
-        c.typeName = itemTypeName( a->item );
-        c.kind     = CHANGE_KIND::REMOVED;
-        c.bbox     = bboxOnSheet( m_before, a->item, a->sheetPath );
-        c.refdes   = itemRefdes( a->item, a->sheetPath );
+        c.id        = idA;
+        c.typeName  = itemTypeName( a->item );
+        c.typeLabel = itemTypeLabel( a->item );
+        c.kind      = CHANGE_KIND::REMOVED;
+        c.bbox      = bboxOnSheet( m_before, a->item, a->sheetPath );
+        c.refdes    = itemRefdes( a->item, a->sheetPath );
 
         {
             SHEET_SCOPE scope( m_before, a->sheetPath );
@@ -333,11 +346,12 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
         const WalkedItem* b = it->second;
 
         ITEM_CHANGE c;
-        c.id       = idB;
-        c.typeName = itemTypeName( b->item );
-        c.kind     = CHANGE_KIND::ADDED;
-        c.bbox     = bboxOnSheet( m_after, b->item, b->sheetPath );
-        c.refdes   = itemRefdes( b->item, b->sheetPath );
+        c.id        = idB;
+        c.typeName  = itemTypeName( b->item );
+        c.typeLabel = itemTypeLabel( b->item );
+        c.kind      = CHANGE_KIND::ADDED;
+        c.bbox      = bboxOnSheet( m_after, b->item, b->sheetPath );
+        c.refdes    = itemRefdes( b->item, b->sheetPath );
 
         {
             SHEET_SCOPE scope( m_after, b->sheetPath );
@@ -417,6 +431,7 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id         = KIID_PATH();
         c.typeName   = wxS( "SCHEMATIC" );
+        c.typeLabel  = _( "Schematic" );
         c.kind       = CHANGE_KIND::MODIFIED;
         c.bbox       = BOX2I();
         c.properties = std::move( docDeltas );
@@ -497,6 +512,7 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
             // applier checks the last KIID to route to the screen branch.
             c.id.push_back( SchScreenSentinelKiid() );
             c.typeName   = wxS( "SCH_SCREEN" );
+            c.typeLabel  = _( "Page Settings" );
             c.kind       = CHANGE_KIND::MODIFIED;
             c.bbox       = BOX2I();
             c.properties = std::move( sheetDeltas );

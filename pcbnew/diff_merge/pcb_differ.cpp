@@ -113,6 +113,18 @@ wxString PCB_DIFFER::itemTypeName( const BOARD_ITEM* aItem )
 }
 
 
+wxString PCB_DIFFER::itemTypeLabel( const BOARD_ITEM* aItem )
+{
+    if( !aItem )
+        return wxEmptyString;
+
+    if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aItem ) )
+        return field->GetName();
+
+    return aItem->GetFriendlyName();
+}
+
+
 std::optional<wxString> PCB_DIFFER::itemRefdes( const BOARD_ITEM* aItem )
 {
     if( auto fp = dynamic_cast<const FOOTPRINT*>( aItem ) )
@@ -386,6 +398,7 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         ITEM_CHANGE c;
         c.id = idA;
         c.typeName = itemTypeName( a );
+        c.typeLabel = itemTypeLabel( a );
         c.kind = CHANGE_KIND::MODIFIED;
         c.bbox = b->GetBoundingBox();
         c.refdes = itemRefdes( b );
@@ -413,6 +426,7 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         ITEM_CHANGE       c;
         c.id = idA;
         c.typeName = itemTypeName( a );
+        c.typeLabel = itemTypeLabel( a );
         c.kind = CHANGE_KIND::REMOVED;
         c.bbox = a->GetBoundingBox();
         c.refdes = itemRefdes( a );
@@ -435,6 +449,7 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         ITEM_CHANGE       c;
         c.id = idB;
         c.typeName = itemTypeName( b );
+        c.typeLabel = itemTypeLabel( b );
         c.kind = CHANGE_KIND::ADDED;
         c.bbox = b->GetBoundingBox();
         c.refdes = itemRefdes( b );
@@ -519,6 +534,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id = dup;
         c.typeName = wxS( "BOARD_ITEM" );
+        c.typeLabel = _( "Item" );
         c.kind = CHANGE_KIND::DUPLICATE_UUID;
         result.changes.push_back( std::move( c ) );
     }
@@ -538,6 +554,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id = dup;
         c.typeName = wxS( "BOARD_ITEM" );
+        c.typeLabel = _( "Item" );
         c.kind = CHANGE_KIND::DUPLICATE_UUID;
         result.changes.push_back( std::move( c ) );
     }
@@ -577,6 +594,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id = idA;
         c.typeName = itemTypeName( a );
+        c.typeLabel = itemTypeLabel( a );
         c.kind = CHANGE_KIND::MODIFIED;
         c.bbox = b->GetBoundingBox();
         c.refdes = itemRefdes( b );
@@ -620,6 +638,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id = idA;
         c.typeName = itemTypeName( a );
+        c.typeLabel = itemTypeLabel( a );
         c.kind = CHANGE_KIND::REMOVED;
         c.bbox = a->GetBoundingBox();
         c.refdes = itemRefdes( a );
@@ -655,6 +674,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id = idB;
         c.typeName = itemTypeName( b );
+        c.typeLabel = itemTypeLabel( b );
         c.kind = CHANGE_KIND::ADDED;
         c.bbox = b->GetBoundingBox();
         c.refdes = itemRefdes( b );
@@ -1139,6 +1159,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
         ITEM_CHANGE c;
         c.id = KIID_PATH(); // empty path = document-scope sentinel
         c.typeName = wxS( "BOARD" );
+        c.typeLabel = _( "Board" );
         c.kind = CHANGE_KIND::MODIFIED;
         c.bbox = BOX2I(); // document-scoped, no spatial location
         c.properties = std::move( docDeltas );

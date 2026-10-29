@@ -308,16 +308,22 @@ struct KICOMMON_API PROPERTY_DELTA
  *
  * kind defaults to MODIFIED because that is the only kind an applier can act on without
  * materializing or deleting an item, so a record whose kind was never set stays inert.
+ *
+ * typeLabel is the translated name shown to the user. It is presentation only, so it is
+ * neither serialized nor compared; typeName stays the identity.
  */
 struct KICOMMON_API ITEM_CHANGE
 {
     KIID_PATH                   id;
     wxString                    typeName;
+    wxString                    typeLabel;
     CHANGE_KIND                 kind = CHANGE_KIND::MODIFIED;
     std::vector<PROPERTY_DELTA> properties;
     BOX2I                       bbox;
     std::optional<wxString>     refdes;
     std::vector<ITEM_CHANGE>    children;
+
+    const wxString& DisplayType() const { return typeLabel.IsEmpty() ? typeName : typeLabel; }
 
     bool operator==( const ITEM_CHANGE& aOther ) const;
     nlohmann::json     ToJson() const;

@@ -424,7 +424,7 @@ bool IsRoutingNetChange( const ITEM_CHANGE& aChange )
 
 wxString ChangeDisplayLabel( const ITEM_CHANGE& aChange )
 {
-    wxString label = aChange.typeName;
+    wxString label = aChange.DisplayType();
 
     if( aChange.refdes.has_value() )
         label += wxS( " [" ) + *aChange.refdes + wxS( "]" );

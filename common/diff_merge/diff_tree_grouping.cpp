@@ -50,8 +50,11 @@ bool ChangeMatchesSearchFilter( const ITEM_CHANGE& aChange, const wxString& aLow
     if( aLowercaseFilter.IsEmpty() )
         return true;
 
-    if( aChange.typeName.Lower().Contains( aLowercaseFilter ) )
+    if( aChange.typeName.Lower().Contains( aLowercaseFilter )
+        || aChange.typeLabel.Lower().Contains( aLowercaseFilter ) )
+    {
         return true;
+    }
 
     if( aChange.refdes.has_value() && aChange.refdes->Lower().Contains( aLowercaseFilter ) )
     {
