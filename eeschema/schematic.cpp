@@ -1518,37 +1518,48 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
     // This handles both exact matches (J601A) and parent references for multi-unit symbols (J601)
     if( !refItem )
     {
-        SCH_REFERENCE_LIST refs;
-        Hierarchy().GetSymbols( refs, SYMBOL_FILTER_NON_POWER );
-
         SCH_SYMBOL*    foundSymbol = nullptr;
         SCH_SHEET_PATH foundPath;
 
-        for( int ii = 0; ii < (int) refs.GetCount(); ii++ )
-        {
-            SCH_REFERENCE& reference = refs[ii];
-            wxString       symbolRef = reference.GetSymbol()->GetRef( &reference.GetSheetPath(), false );
-
-            // Try exact match first
-            if( symbolRef == ref )
-            {
-                foundSymbol = reference.GetSymbol();
-                foundPath = reference.GetSheetPath();
-                break;
-            }
-
-            // For multi-unit symbols, try matching parent reference (e.g., J601 matches J601A)
-            if( symbolRef.StartsWith( ref ) && symbolRef.Length() == ref.Length() + 1 )
-            {
-                wxChar lastChar = symbolRef.Last();
-                if( lastChar >= 'A' && lastChar <= 'Z' )
+        // Walk symbols directly since an SCH_REFERENCE_LIST resolves fields that may refer back here
+        auto findSymbol =
+                [&]()
                 {
-                    foundSymbol = reference.GetSymbol();
-                    foundPath = reference.GetSheetPath();
-                    // Don't break - continue looking for exact match
-                }
-            }
-        }
+                    for( const SCH_SHEET_PATH& sheet : Hierarchy() )
+                    {
+                        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                        {
+                            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                            wxString    symbolRef = symbol->GetRef( &sheet, false );
+
+                            if( !symbol->GetLibSymbolRef() || symbolRef.StartsWith( wxT( "#" ) ) )
+                                continue;
+
+                            // Try exact match first
+                            if( symbolRef == ref )
+                            {
+                                foundSymbol = symbol;
+                                foundPath = sheet;
+                                return;
+                            }
+
+                            // For multi-unit symbols, try matching parent reference (e.g., J601 matches J601A)
+                            if( symbolRef.StartsWith( ref ) && symbolRef.Length() == ref.Length() + 1 )
+                            {
+                                wxChar lastChar = symbolRef.Last();
+
+                                if( lastChar >= 'A' && lastChar <= 'Z' )
+                                {
+                                    foundSymbol = symbol;
+                                    foundPath = sheet;
+                                    // Don't break - continue looking for exact match
+                                }
+                            }
+                        }
+                    }
+                };
+
+        findSymbol();
 
         if( foundSymbol )
         {

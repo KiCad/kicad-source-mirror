@@ -801,7 +801,8 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetP
 
     m_numRef = -1;
 
-    wxString value = aSymbol->GetValue( &aSheetPath, RESOLVED );
+    // Unresolved so building a reference list never re-enters text resolution
+    wxString value = aSymbol->GetValue( &aSheetPath, RAW_VALUE );
 
     if( value.IsEmpty() )
         value = wxT( "~" );
