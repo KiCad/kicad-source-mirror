@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="spread_tracks.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="939"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="18.637346"
+     inkscape:cx="7.5922829"
+     inkscape:cy="15.452844"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:pagecheckerboard="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_tracks</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs400">
+    <style
+       id="style398">.cls-1{fill:none;stroke:#DED3DD;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title402">add_tracks</title>
+  <path
+     id="path1214"
+     style="fill:none;stroke:#1a80c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="m 22,8 h -2.5 l -3,-3 H 9 L 6,8 H 2"
+     class="cls-1"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     id="path2193"
+     style="fill:none;stroke:#1a80c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="m 2,16 h 3.5 l 3,3 H 16 l 3,-3 h 3"
+     class="cls-1"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="fill:#008000;stroke:#008000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 12.5,16 V 8"
+     id="path2521" />
+  <path
+     style="fill:none;stroke:#008000;stroke-width:1.11803px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 10,8 h 5"
+     id="path2690" />
+  <path
+     style="fill:none;stroke:#008000;stroke-width:1.11803px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 10,16 h 5"
+     id="path2805" />
+</svg>

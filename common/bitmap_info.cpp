@@ -803,6 +803,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::show_back_assembly_layers].emplace_back( BITMAPS::show_back_assembly_layers, wxT( "show_back_assembly_layers_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::special_tools].emplace_back( BITMAPS::special_tools, wxT( "special_tools_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::spreadsheet].emplace_back( BITMAPS::spreadsheet, wxT( "spreadsheet_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::spread_tracks].emplace_back( BITMAPS::spread_tracks, wxT( "spread_tracks_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::subtract_polygons].emplace_back( BITMAPS::subtract_polygons, wxT( "subtract_polygons_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::swap].emplace_back( BITMAPS::swap, wxT( "swap_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::swap_layer].emplace_back( BITMAPS::swap_layer, wxT( "swap_layer_24.png" ), 24, wxT( "light" ) );
@@ -1261,6 +1262,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::show_back_assembly_layers].emplace_back( BITMAPS::show_back_assembly_layers, wxT( "show_back_assembly_layers_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::special_tools].emplace_back( BITMAPS::special_tools, wxT( "special_tools_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::spreadsheet].emplace_back( BITMAPS::spreadsheet, wxT( "spreadsheet_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::spread_tracks].emplace_back( BITMAPS::spread_tracks, wxT( "spread_tracks_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::subtract_polygons].emplace_back( BITMAPS::subtract_polygons, wxT( "subtract_polygons_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::swap].emplace_back( BITMAPS::swap, wxT( "swap_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::swap_layer].emplace_back( BITMAPS::swap_layer, wxT( "swap_layer_dark_24.png" ), 24, wxT( "dark" ) );

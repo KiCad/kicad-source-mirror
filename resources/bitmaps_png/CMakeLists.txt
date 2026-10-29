@@ -137,6 +137,7 @@ set( BMAPS_SMALL
     small_trash
     small_up
     small_warning
+    spread_tracks
     text_horizontal
     text_vertical
     text_align_left

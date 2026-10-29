@@ -767,7 +767,9 @@ enum class BITMAPS : unsigned int
     constraint_angular_dimension,
     constraint_tangent,
     constraint_arc_angle,
-    constraint_auto
+    constraint_auto,
+
+    spread_tracks
 };
 
 
