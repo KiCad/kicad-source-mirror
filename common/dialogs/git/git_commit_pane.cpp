@@ -821,6 +821,9 @@ void GIT_COMMIT_PANE::updateMessageVisibility( bool aHasChanges )
     updateSummaryCount();
     m_description->Show( show );
 
+    // A pick only fills the message fields, so the list goes with them
+    m_recentMessages->Show( show && !m_recentMessageTexts.empty() );
+
     // The options box stays for a message only amend, with just the amend tick in it.
     m_optionsSizer->ShowItems( show || m_canAmend );
     m_amendCheckbox->Show( m_canAmend || m_amendCheckbox->IsChecked() );
@@ -1102,7 +1105,6 @@ void GIT_COMMIT_PANE::populateRecentMessages( const std::vector<wxString>& aMess
     }
 
     m_recentMessages->SetSelection( 0 );
-    m_recentMessages->Show( !m_recentMessageTexts.empty() );
 }
 
 
