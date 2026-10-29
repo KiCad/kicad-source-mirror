@@ -2620,13 +2620,13 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
     if( !field )
     {
         m_out->Print( "(%s_text %s %s",
-                      prefix.c_str(),
-                      type.c_str(),
-                      m_out->Quotew( aText->GetText() ).c_str() );
-
-        if( aText->IsLocked() )
-            KICAD_FORMAT::FormatBool( m_out, "locked", true );
+                        prefix.c_str(),
+                        type.c_str(),
+                        m_out->Quotew( aText->GetText() ).c_str() );
     }
+
+    if( aText->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
     m_out->Print( "(at %s %s)",
                   formatInternalUnits( pos ).c_str(),

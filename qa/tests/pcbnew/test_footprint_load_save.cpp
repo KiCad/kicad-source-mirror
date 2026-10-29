@@ -20,12 +20,18 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/data/test_case.hpp>
 
+#include <qa_utils/file_utils.h>
+
 #include <board.h>
 #include <kiid.h>
 #include <footprint.h>
+#include <pcb_field.h>
+#include <pcb_text.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <settings/settings_manager.h>
+
+#include <filesystem>
 
 
 namespace
@@ -95,4 +101,54 @@ BOOST_DATA_TEST_CASE( FootprintLoadSave,
 
     KI_TEST::LoadAndTestBoardFile( testCase.m_BoardFileRelativePath, true, doBoardTest,
                                    testCase.m_ExpectedBoardVersion );
+}
+
+
+/**
+ * Fields are written without a header of their own, inside the footprint's (property ...), so
+ * their lock takes a different path through the writer than a plain footprint text's does.
+ */
+BOOST_AUTO_TEST_CASE( FootprintFieldLockRoundTrip )
+{
+    BOARD board;
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ) );
+    fp->SetReference( wxS( "U1" ) );
+    fp->GetField( FIELD_T::REFERENCE )->SetLocked( true );
+
+    PCB_FIELD* userField = new PCB_FIELD( fp, FIELD_T::USER, wxS( "Label" ) );
+    userField->SetText( wxS( "BezelSW0" ) );
+    userField->SetLayer( F_SilkS );
+    userField->SetLocked( true );
+    fp->Add( userField );
+
+    // A plain footprint text is the control: it has always round-tripped its lock
+    PCB_TEXT* fpText = new PCB_TEXT( fp );
+    fpText->SetText( wxS( "fp text" ) );
+    fpText->SetLayer( F_SilkS );
+    fpText->SetLocked( true );
+    fp->Add( fpText );
+
+    board.Add( fp );
+
+    KI_TEST::SCOPED_TEMP_DIR    tempDir( "kicad_qa_field_lock" );
+    const std::filesystem::path path = tempDir.Path() / "field_lock.kicad_pcb";
+
+    KI_TEST::DumpBoardToFile( board, path );
+    std::unique_ptr<BOARD> restored = KI_TEST::ReadBoardFromFileOrStream( path.string() );
+    BOOST_REQUIRE( restored );
+    BOOST_REQUIRE_EQUAL( restored->Footprints().size(), 1 );
+
+    FOOTPRINT* loaded = restored->Footprints().front();
+
+    BOOST_CHECK( loaded->GetField( FIELD_T::REFERENCE )->IsLocked() );
+    BOOST_REQUIRE( loaded->GetField( wxS( "Label" ) ) );
+    BOOST_CHECK( loaded->GetField( wxS( "Label" ) )->IsLocked() );
+
+    for( BOARD_ITEM* item : loaded->GraphicalItems() )
+    {
+        if( item->Type() == PCB_TEXT_T )
+            BOOST_CHECK( item->IsLocked() );
+    }
 }
