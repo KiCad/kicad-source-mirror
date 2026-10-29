@@ -299,6 +299,20 @@ public:
         update();       // recompute other shades of the color
     }
 
+    /**
+     * Change the color used to draw every layer.
+     *
+     * @param aColor is the new color.
+     */
+    void SetAllLayerColors( const COLOR4D& aColor )
+    {
+        // update() walks every layer, so calling SetLayerColor() per layer is quadratic
+        for( int layer = 0; layer < LAYER_ID_COUNT; ++layer )
+            m_layerColors[layer] = aColor;
+
+        update();
+    }
+
     virtual bool IsBackgroundDark() const
     {
         return false;

@@ -91,9 +91,7 @@ void ConfigureSchDiffContextRenderSettings( SCH_RENDER_SETTINGS& aSettings,
 {
     const KIGFX::COLOR4D gray( 0.5, 0.5, 0.5, 1.0 );
 
-    for( int layer = 0; layer < LAYER_ID_COUNT; ++layer )
-        aSettings.SetLayerColor( layer, gray );
-
+    aSettings.SetAllLayerColors( gray );
     aSettings.SetLayerColor( LAYER_BRIGHTENED, aColor );
 
     aSettings.SetBackgroundColor( KIGFX::COLOR4D( 0.97, 0.97, 0.97, 1.0 ) );

@@ -147,9 +147,7 @@ void ConfigurePcbDiffContextRenderSettings( KIGFX::PCB_RENDER_SETTINGS& aSetting
     const KIGFX::COLOR4D gray( 0.45, 0.45, 0.45, 1.0 );
     const KIGFX::COLOR4D background( 0.97, 0.97, 0.97, 1.0 );
 
-    for( int layer = 0; layer < LAYER_ID_COUNT; ++layer )
-        aSettings.SetLayerColor( layer, gray );
-
+    aSettings.SetAllLayerColors( gray );
     aSettings.SetLayerColor( LAYER_BRIGHTENED, aColor );
     aSettings.SetLayerColor( LAYER_PCB_BACKGROUND, background );
     aSettings.SetBackgroundColor( background );

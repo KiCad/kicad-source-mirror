@@ -217,8 +217,7 @@ bool SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen, wxDC* aDC, bool aForPrinting 
 
     if( cfg && cfg->m_Printing.monochrome )
     {
-        for( int i = 0; i < LAYER_ID_COUNT; ++i )
-            dstSettings->SetLayerColor( i, COLOR4D::BLACK );
+        dstSettings->SetAllLayerColors( COLOR4D::BLACK );
 
         // In B&W mode, draw the background only in white, because any other color
         // will be replaced by a black background
