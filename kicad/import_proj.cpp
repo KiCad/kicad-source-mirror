@@ -291,6 +291,7 @@ void IMPORT_PROJ_HELPER::setImportCacheNickname()
         stem = m_InputFile.GetName();
 
     m_properties[IMPORT_PROJ_PROPS::FP_CACHE_NICKNAME] = IMPORT_PROJ_PROPS::MakeCacheNickname( stem );
+    m_properties[IMPORT_PROJ_PROPS::SYM_CACHE_NICKNAME] = IMPORT_PROJ_PROPS::MakeSymbolCacheNickname( stem );
 }
 
 
