@@ -127,6 +127,13 @@ public:
         m_deleted.clear();
     }
 
+    /**
+     * Save the modified symbols back to the library's own file aFileName. The others are left as the
+     * file has them, which may be newer than the buffer when something else, such as a git pull,
+     * changed the file.
+     */
+    bool SaveModifiedBuffers( const wxString& aFileName, SCH_IO* aPlugin );
+
     /// Save stored modifications using a plugin. aBuffer decides whether the changes
     /// should be cached or stored directly to the disk (for #SCH_IO_KICAD_LEGACY).
     bool SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileName, SCH_IO* aPlugin,
@@ -256,6 +263,10 @@ public:
      * Update the library buffer with a new version of the library.
      */
     bool UpdateLibraryBuffer( const wxString& aLibrary );
+
+    /// Forget the buffers of libraries with no unsaved changes, so they are read again from their
+    /// files, and return those libraries' names
+    std::vector<wxString> DropUnmodifiedBuffers();
 
     /**
      * Remove the symbol from the symbol buffer.
