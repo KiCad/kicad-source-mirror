@@ -1646,8 +1646,8 @@ int wmf_canvas_bitmap (wmfAPI * API, wmfCanvas * canvas,
 		       unsigned short width, unsigned short height,
 		       const unsigned char * buffer, unsigned long length)
 {
-  unsigned short bmp_width;
-  unsigned short bmp_height;
+  unsigned short bmp_width = 0;
+  unsigned short bmp_height = 0;
 
   unsigned long bmp_size;
   unsigned long Size = 3 + 10;
