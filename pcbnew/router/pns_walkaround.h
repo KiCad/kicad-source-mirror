@@ -56,6 +56,7 @@ public:
         m_iterationLimit = Settings().WalkaroundIterationLimit();
         m_overrideClearance = nullptr;
         m_useClustering = true;
+        m_anyCompletePolicyIsSuccess = false;
     }
 
     ~WALKAROUND() {};
@@ -140,8 +141,7 @@ public:
         m_lengthExpansionFactor = aLengthExpansionFactor;
     }
 
-    void SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies);
-
+    void SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies, bool aAnyCompletePolicyIsSuccess = false );
     void SetCollisionFilter( COLLISION_FILTER_FUNC aFilter );
     void SetClearanceOverride( CLEARANCE_OVERRIDE_FUNC aFunc );
 
@@ -172,8 +172,9 @@ private:
     COLLISION_FILTER_FUNC m_collisionFilter;
     CLEARANCE_OVERRIDE_FUNC m_overrideClearance;
     RESULT m_currentResult;
-    bool m_useClustering;
     double m_initialLength;
+    bool m_useClustering;
+    bool m_anyCompletePolicyIsSuccess;
 };
 
 }

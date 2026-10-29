@@ -371,6 +371,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
     while( m_iteration < m_iterationLimit )
     {
+        bool finished = false;
         singleStep();
 
         bool stillInProgress = false;
@@ -382,6 +383,13 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
             auto& st = m_currentResult.status[pol];
             auto& ln = m_currentResult.lines[pol];
+
+            if ( st == ST_DONE && m_anyCompletePolicyIsSuccess )
+            {
+                finished = true;
+                break;
+            }
+
             double lengthFactor = (double) ln.CLine().Length() / (double) aInitialPath.CLine().Length();
             // In some situations, there isn't a trivial path (or even a path at all).  Hitting the
             // iteration limit causes lag, so we can exit out early if the walkaround path gets very long
@@ -399,8 +407,7 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
                 stillInProgress = true;
         }
 
-
-        if( !stillInProgress )
+        if( !stillInProgress || finished )
             break;
 
         m_iteration++;
@@ -434,13 +441,15 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
     return m_currentResult;
 }
 
-void WALKAROUND::SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies)
+void WALKAROUND::SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies, bool aAnyCompletePolicyIsSuccess )
 {
     for( int i = 0; i < MaxWalkPolicies; i++ )
         m_enabledPolicies[i] =  false;
 
     for ( auto p : aPolicies )
         m_enabledPolicies[p] = true;
+    
+    m_anyCompletePolicyIsSuccess = aAnyCompletePolicyIsSuccess;
 }
 
 void WALKAROUND::SetClearanceOverride( CLEARANCE_OVERRIDE_FUNC aFunc )
