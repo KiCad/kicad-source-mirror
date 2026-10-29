@@ -817,6 +817,9 @@ APIEXPORT bool IsPrivateKeyEncrypted( const wxString& aKeyText );
 /// IsPrivateKeyEncrypted for the key file @p aKey. A file that cannot be read is reported as unencrypted.
 APIEXPORT bool IsPrivateKeyFileEncrypted( const wxString& aKey );
 
+/// git's core.sshCommand for @p aRepo, or from the user's git config when @p aRepo is null. Empty when unset.
+APIEXPORT wxString ConfiguredSSHCommand( git_repository* aRepo );
+
 
 /**
  * The advanced git window, or null when none is open.

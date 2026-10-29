@@ -41,13 +41,21 @@ APIEXPORT std::vector<wxString> ParseSSHConfigIdentityFiles( const wxString& aCo
                                                              const wxString& aHomeDir );
 
 /**
+ * The `-i` key files in an ssh command line such as git's core.sshCommand, in order. Words split
+ * and unquote as sh does it, and a leading `~` expands to @p aHomeDir.
+ */
+APIEXPORT std::vector<wxString> ParseSSHCommandIdentityFiles( const wxString& aCommand, const wxString& aHomeDir );
+
+/**
  * Private keys to offer @p aHost, best first.
  *
- * The ssh config's IdentityFile entries for the host come first, then id_ed25519, id_ecdsa,
- * id_rsa and id_dsa from @p aHomeDir/.ssh. Only keys whose private and public files both
- * exist are listed. An empty @p aHomeDir gives no keys.
+ * The `-i` keys of @p aSSHCommand come first, then the ssh config's IdentityFile entries for the
+ * host, then id_ed25519, id_ecdsa, id_rsa and id_dsa from @p aHomeDir/.ssh, then a few other keys
+ * found in that folder with a .pub beside them. Only keys that can be offered are listed. An empty
+ * @p aHomeDir gives no keys.
  */
-APIEXPORT std::vector<wxString> DefaultSSHKeyCandidates( const wxString& aHomeDir, const wxString& aHost );
+APIEXPORT std::vector<wxString> DefaultSSHKeyCandidates( const wxString& aHomeDir, const wxString& aHost,
+                                                         const wxString& aSSHCommand = wxEmptyString );
 
 /**
  * Whether two key paths name the same file. Separators are normalised, and case is ignored where
@@ -64,15 +72,34 @@ APIEXPORT wxString HomeDir();
 /**
  * Whether @p aKey can be offered to a server. libgit2 opens both files only once the
  * connection is under way, and a missing one ends the attempt instead of trying the next key.
+ * Writes the public key file EnsurePublicKeyFile would.
  */
 APIEXPORT bool IsOfferableSSHKey( const wxString& aKey );
+
+/**
+ * The public key file to offer with @p aKey. That is the .pub beside it, else one written by
+ * EnsurePublicKeyFile, else empty.
+ */
+APIEXPORT wxString PublicKeyPath( const wxString& aKey );
+
+/**
+ * PublicKeyPath for @p aKey, first writing a public key file to KiCad's cache when the key has no
+ * .pub beside it. An OpenSSH key keeps its public half unencrypted, so this needs no passphrase.
+ */
+APIEXPORT wxString EnsurePublicKeyFile( const wxString& aKey );
+
+/**
+ * Keep public key files written by EnsurePublicKeyFile in @p aDir. Until this is called none are
+ * written. Finding the user's cache folder is not safe off the main thread, so the caller resolves it.
+ */
+APIEXPORT void SetDerivedPublicKeyFolder( const wxString& aDir );
 
 /**
  * The private key for a path picked in a file dialog, which may be the key's .pub file.
  */
 APIEXPORT wxString PrivateKeyPath( const wxString& aPicked );
 
-/// The public key blob from @p aKey's .pub file, as the server sees it, or empty when it cannot be read.
+/// The public key blob from @p aKey's public key file, as the server sees it, or empty when it cannot be read.
 APIEXPORT std::string PublicKeyBlob( const wxString& aKey );
 
 /**

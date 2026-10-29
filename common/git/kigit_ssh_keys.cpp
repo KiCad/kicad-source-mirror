@@ -22,6 +22,8 @@
 #include <trace_helpers.h>
 
 #include <algorithm>
+#include <cstdint>
+#include <cstring>
 #include <fstream>
 #include <iterator>
 #include <map>
@@ -32,6 +34,7 @@
 
 #include <wx/arrstr.h>
 #include <wx/base64.h>
+#include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/file.h>
 #include <wx/filename.h>
@@ -69,6 +72,78 @@ std::vector<wxString> splitArgs( const wxString& aText )
             inArg = true;
         }
         else if( !quoted && ( c == ' ' || c == '\t' ) )
+        {
+            if( inArg )
+                args.push_back( current );
+
+            current.clear();
+            inArg = false;
+        }
+        else
+        {
+            current += c;
+            inArg = true;
+        }
+    }
+
+    if( inArg )
+        args.push_back( current );
+
+    return args;
+}
+
+
+// git runs core.sshCommand through sh, Git for Windows included, so its words split as sh splits them
+std::vector<wxString> splitShellArgs( const wxString& aText )
+{
+    std::vector<wxString> args;
+    wxString              current;
+    bool                  inArg = false;
+
+    for( auto it = aText.begin(); it != aText.end(); ++it )
+    {
+        const wxUniChar c = *it;
+
+        if( c == '\'' )
+        {
+            inArg = true;
+
+            while( ++it != aText.end() && *it != '\'' )
+                current += *it;
+
+            if( it == aText.end() )
+                break;
+        }
+        else if( c == '"' )
+        {
+            inArg = true;
+
+            while( ++it != aText.end() && *it != '"' )
+            {
+                auto next = std::next( it );
+
+                if( *it == '\\' && next != aText.end()
+                    && ( *next == '"' || *next == '\\' || *next == '$' || *next == '`' ) )
+                {
+                    it = next;
+                }
+
+                current += *it;
+            }
+
+            if( it == aText.end() )
+                break;
+        }
+        else if( c == '\\' )
+        {
+            inArg = true;
+
+            if( ++it == aText.end() )
+                break;
+
+            current += *it;
+        }
+        else if( c == ' ' || c == '\t' || c == '\n' )
         {
             if( inArg )
                 args.push_back( current );
@@ -158,6 +233,143 @@ wxString expandPath( const wxString& aValue, const wxString& aHomeDir )
 
     tail.Replace( wxS( "%d" ), aHomeDir );
     return head + tail;
+}
+
+
+// sshd allows 6 attempts by default. The agent and each key refused before this one use some, so a long tail
+// of keys found by name alone would never be reached
+constexpr size_t MAX_DISCOVERED_KEYS = 4;
+
+
+struct DERIVED_PUBLIC_KEYS
+{
+    std::mutex mutex;
+    wxString   folder;
+};
+
+
+DERIVED_PUBLIC_KEYS& derivedPublicKeys()
+{
+    static DERIVED_PUBLIC_KEYS store;
+    return store;
+}
+
+
+// FNV-1a, so a key finds the same file in every session and build
+wxString derivedPublicKeyPath( const wxString& aKey )
+{
+    wxString folder;
+
+    {
+        DERIVED_PUBLIC_KEYS&        store = derivedPublicKeys();
+        std::lock_guard<std::mutex> lock( store.mutex );
+        folder = store.folder;
+    }
+
+    if( folder.IsEmpty() || aKey.IsEmpty() )
+        return wxEmptyString;
+
+    uint64_t hash = 14695981039346656037ULL;
+
+    for( unsigned char c : wxFileName( aKey ).GetFullPath().utf8_string() )
+    {
+        hash ^= c;
+        hash *= 1099511628211ULL;
+    }
+
+    return wxFileName( folder, wxString::Format( wxS( "%016llx.pub" ), static_cast<unsigned long long>( hash ) ) )
+            .GetFullPath();
+}
+
+
+uint32_t readUint32( const unsigned char* aData )
+{
+    return ( static_cast<uint32_t>( aData[0] ) << 24 ) | ( static_cast<uint32_t>( aData[1] ) << 16 )
+           | ( static_cast<uint32_t>( aData[2] ) << 8 ) | static_cast<uint32_t>( aData[3] );
+}
+
+
+// The "<type> <base64 blob>" line for an OpenSSH private key, read from its unencrypted header. Empty for any
+// other format, whose public half is only reachable with the passphrase
+std::string openSSHPublicKeyLine( const std::string& aKeyText )
+{
+    const std::string begin = "-----BEGIN OPENSSH PRIVATE KEY-----";
+    size_t            start = aKeyText.find( begin );
+
+    if( start == std::string::npos )
+        return {};
+
+    start += begin.size();
+    size_t end = aKeyText.find( "-----END", start );
+
+    if( end == std::string::npos )
+        return {};
+
+    wxMemoryBuffer raw = wxBase64Decode( aKeyText.data() + start, end - start, wxBase64DecodeMode_SkipWS );
+
+    const unsigned char* data = static_cast<const unsigned char*>( raw.GetData() );
+    const size_t         size = raw.GetDataLen();
+    const char           magic[] = "openssh-key-v1";
+    size_t               pos = sizeof( magic );
+
+    if( size < pos || std::memcmp( data, magic, pos ) != 0 )
+        return {};
+
+    // Cipher name, KDF name and KDF options come before the key count and the first public key
+    for( int field = 0; field < 3; ++field )
+    {
+        if( size < pos + 4 || size - pos - 4 < readUint32( data + pos ) )
+            return {};
+
+        pos += 4 + readUint32( data + pos );
+    }
+
+    if( size < pos + 8 || readUint32( data + pos ) == 0 )
+        return {};
+
+    const uint32_t blobLen = readUint32( data + pos + 4 );
+    pos += 8;
+
+    if( size - pos < blobLen || blobLen < 4 || blobLen - 4 < readUint32( data + pos ) )
+        return {};
+
+    const std::string type( reinterpret_cast<const char*>( data + pos + 4 ), readUint32( data + pos ) );
+
+    if( type.empty() )
+        return {};
+
+    return type + " " + wxBase64Encode( data + pos, blobLen ).utf8_string() + "\n";
+}
+
+
+// A private key named only by being in ~/.ssh with a .pub beside it, sorted so the order is stable
+std::vector<wxString> scanSSHFolder( const wxString& aSSHDir )
+{
+    std::vector<wxString> keys;
+    wxDir                 dir;
+
+    if( !wxDir::Exists( aSSHDir ) || !dir.Open( aSSHDir ) )
+        return keys;
+
+    wxString name;
+
+    for( bool more = dir.GetFirst( &name, wxEmptyString, wxDIR_FILES ); more; more = dir.GetNext( &name ) )
+    {
+        const wxString path = wxFileName( aSSHDir, name ).GetFullPath();
+
+        if( name.EndsWith( wxS( ".pub" ) ) || !wxFileName::FileExists( path + wxS( ".pub" ) ) )
+            continue;
+
+        wxFFile file( path, wxS( "rb" ) );
+        char    head[64] = {};
+        size_t  read = file.IsOpened() ? file.Read( head, sizeof( head ) - 1 ) : 0;
+
+        if( std::string( head, read ).find( "PRIVATE KEY" ) != std::string::npos )
+            keys.push_back( path );
+    }
+
+    std::sort( keys.begin(), keys.end() );
+    return keys;
 }
 
 
@@ -280,7 +492,25 @@ std::vector<wxString> KIGIT::ParseSSHConfigIdentityFiles( const wxString& aConfi
 }
 
 
-std::vector<wxString> KIGIT::DefaultSSHKeyCandidates( const wxString& aHomeDir, const wxString& aHost )
+std::vector<wxString> KIGIT::ParseSSHCommandIdentityFiles( const wxString& aCommand, const wxString& aHomeDir )
+{
+    std::vector<wxString> files;
+    std::vector<wxString> args = splitShellArgs( aCommand );
+
+    for( size_t ii = 0; ii < args.size(); ++ii )
+    {
+        if( args[ii] == wxS( "-i" ) && ii + 1 < args.size() )
+            files.push_back( expandPath( args[++ii], aHomeDir ) );
+        else if( args[ii].StartsWith( wxS( "-i" ) ) && args[ii].size() > 2 )
+            files.push_back( expandPath( args[ii].Mid( 2 ), aHomeDir ) );
+    }
+
+    return files;
+}
+
+
+std::vector<wxString> KIGIT::DefaultSSHKeyCandidates( const wxString& aHomeDir, const wxString& aHost,
+                                                      const wxString& aSSHCommand )
 {
     std::vector<wxString> keys;
 
@@ -292,7 +522,7 @@ std::vector<wxString> KIGIT::DefaultSSHKeyCandidates( const wxString& aHomeDir, 
     sshDir.AppendDir( wxS( ".ssh" ) );
 
     const wxString        configPath = wxFileName( sshDir.GetPath(), wxS( "config" ) ).GetFullPath();
-    std::vector<wxString> candidates;
+    std::vector<wxString> candidates = ParseSSHCommandIdentityFiles( aSSHCommand, aHomeDir );
     std::ifstream         config( configPath.fn_str(), std::ios::binary );
 
     if( config )
@@ -309,29 +539,42 @@ std::vector<wxString> KIGIT::DefaultSSHKeyCandidates( const wxString& aHomeDir, 
         if( decoded.IsEmpty() && !text.empty() )
             decoded = wxString( text.data(), wxConvISO8859_1, text.size() );
 
-        candidates = ParseSSHConfigIdentityFiles( decoded, aHost, aHomeDir );
+        std::vector<wxString> configured = ParseSSHConfigIdentityFiles( decoded, aHost, aHomeDir );
+        candidates.insert( candidates.end(), configured.begin(), configured.end() );
     }
 
     for( const wxString& name : { wxS( "id_ed25519" ), wxS( "id_ecdsa" ), wxS( "id_rsa" ), wxS( "id_dsa" ) } )
         candidates.push_back( wxFileName( sshDir.GetPath(), name ).GetFullPath() );
+
+    auto isKnown = [&]( const wxString& aPath )
+    {
+        return std::any_of( keys.begin(), keys.end(),
+                            [&]( const wxString& aKey )
+                            {
+                                return IsSameSSHKey( aKey, aPath );
+                            } );
+    };
 
     for( const wxString& candidate : candidates )
     {
         wxFileName fn( candidate );
 
         // ssh would resolve a relative path against its working directory, which ours is not
-        if( !fn.IsAbsolute() || !IsOfferableSSHKey( fn.GetFullPath() ) )
+        if( !fn.IsAbsolute() || !wxFileName::FileExists( fn.GetFullPath() ) )
             continue;
 
         const wxString path = fn.GetFullPath();
 
-        bool seen = std::any_of( keys.begin(), keys.end(),
-                                 [&]( const wxString& aKey )
-                                 {
-                                     return IsSameSSHKey( aKey, path );
-                                 } );
+        if( !isKnown( path ) && !EnsurePublicKeyFile( path ).IsEmpty() )
+            keys.push_back( path );
+    }
 
-        if( !seen )
+    for( const wxString& path : scanSSHFolder( sshDir.GetPath() ) )
+    {
+        if( keys.size() >= MAX_DISCOVERED_KEYS )
+            break;
+
+        if( !isKnown( path ) )
             keys.push_back( path );
     }
 
@@ -382,7 +625,7 @@ wxString KIGIT::PrivateKeyPath( const wxString& aPicked )
 
 std::string KIGIT::PublicKeyBlob( const wxString& aKey )
 {
-    wxFFile  file( aKey + wxS( ".pub" ), wxS( "rb" ) );
+    wxFFile  file( PublicKeyPath( aKey ), wxS( "rb" ) );
     wxString text;
 
     if( !file.IsOpened() || !file.ReadAll( &text ) )
@@ -402,7 +645,68 @@ std::string KIGIT::PublicKeyBlob( const wxString& aKey )
 
 bool KIGIT::IsOfferableSSHKey( const wxString& aKey )
 {
-    return !aKey.IsEmpty() && wxFileName::FileExists( aKey ) && wxFileName::FileExists( aKey + wxS( ".pub" ) );
+    return !aKey.IsEmpty() && wxFileName::FileExists( aKey ) && !EnsurePublicKeyFile( aKey ).IsEmpty();
+}
+
+
+wxString KIGIT::PublicKeyPath( const wxString& aKey )
+{
+    if( aKey.IsEmpty() )
+        return wxEmptyString;
+
+    if( wxFileName::FileExists( aKey + wxS( ".pub" ) ) )
+        return aKey + wxS( ".pub" );
+
+    const wxString derived = derivedPublicKeyPath( aKey );
+
+    return !derived.IsEmpty() && wxFileName::FileExists( derived ) ? derived : wxString();
+}
+
+
+wxString KIGIT::EnsurePublicKeyFile( const wxString& aKey )
+{
+    if( aKey.IsEmpty() || wxFileName::FileExists( aKey + wxS( ".pub" ) ) )
+        return PublicKeyPath( aKey );
+
+    const wxString derived = derivedPublicKeyPath( aKey );
+    std::ifstream  file( aKey.fn_str(), std::ios::binary );
+
+    if( derived.IsEmpty() || !file )
+        return wxEmptyString;
+
+    const std::string line = openSSHPublicKeyLine(
+            std::string( ( std::istreambuf_iterator<char>( file ) ), std::istreambuf_iterator<char>() ) );
+
+    if( line.empty() )
+        return wxEmptyString;
+
+    // Rewritten when it differs, so a key regenerated at the same path does not keep the old public half
+    std::ifstream     old( derived.fn_str(), std::ios::binary );
+    const std::string current( ( std::istreambuf_iterator<char>( old ) ), std::istreambuf_iterator<char>() );
+
+    if( current == line )
+        return derived;
+
+    wxFileName fn( derived );
+
+    if( !fn.DirExists() && !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        return wxEmptyString;
+
+    wxTempFile out( derived );
+
+    if( out.IsOpened() && out.Write( wxString::FromUTF8( line ), wxConvUTF8 ) && out.Commit() )
+        return derived;
+
+    wxLogTrace( traceGit, "Could not write the public key for %s to %s", aKey, derived );
+    return wxEmptyString;
+}
+
+
+void KIGIT::SetDerivedPublicKeyFolder( const wxString& aDir )
+{
+    DERIVED_PUBLIC_KEYS&        store = derivedPublicKeys();
+    std::lock_guard<std::mutex> lock( store.mutex );
+    store.folder = aDir;
 }
 
 

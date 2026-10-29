@@ -119,7 +119,8 @@ bool DIALOG_GIT_REPOSITORY::extractClipboardData()
 
 void DIALOG_GIT_REPOSITORY::setDefaultSSHKey( const wxString& aHost )
 {
-    std::vector<wxString> keys = KIGIT::DefaultSSHKeyCandidates( KIGIT::HomeDir(), aHost );
+    std::vector<wxString> keys =
+            KIGIT::DefaultSSHKeyCandidates( KIGIT::HomeDir(), aHost, KIGIT::ConfiguredSSHCommand( m_repository ) );
 
     if( keys.empty() )
         return;
@@ -355,12 +356,10 @@ static bool checkSSHKey( wxString aPath, wxString& aError, wxString& aDetails, b
         return false;
     }
 
-    std::ifstream pubIfs( ( aPath + wxS( ".pub" ) ).fn_str() );
-
-    if( !pubIfs.good() || !pubIfs.is_open() )
+    if( KIGIT::EnsurePublicKeyFile( aPath ).IsEmpty() )
     {
         aError = wxString::Format( _( "Could not open public key '%s'" ), aPath + wxS( ".pub" ) );
-        aDetails = wxString::Format( "%s: %d", std::strerror( errno ), errno );
+        aDetails = _( "Put the key's .pub file beside it, or pick a key in OpenSSH format" );
         return false;
     }
 

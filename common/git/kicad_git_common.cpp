@@ -2083,7 +2083,8 @@ void KIGIT_COMMON::updatePublicKeys()
     // first for that reason.
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
 
-    m_discoveredKeys = KIGIT::DefaultSSHKeyCandidates( KIGIT::HomeDir(), m_hostname );
+    m_discoveredKeys =
+            KIGIT::DefaultSSHKeyCandidates( KIGIT::HomeDir(), m_hostname, KIGIT::ConfiguredSSHCommand( m_repo ) );
     m_publicKeysHost = m_hostname;
     rebuildPublicKeysUnlocked();
 }
@@ -2661,7 +2662,7 @@ int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& a
         }
     }
 
-    wxString sshPubKey = sshKey + ".pub";
+    wxString sshPubKey = KIGIT::PublicKeyPath( sshKey );
 
     wxLogTrace( traceGit, "Testing %s\n", sshKey );
 
@@ -3078,6 +3079,24 @@ bool IsPrivateKeyFileEncrypted( const wxString& aKey )
     wxString text;
 
     return file.IsOpened() && file.ReadAll( &text ) && IsPrivateKeyEncrypted( text );
+}
+
+
+wxString ConfiguredSSHCommand( git_repository* aRepo )
+{
+    git_config* config = nullptr;
+
+    if( ( aRepo ? git_repository_config( &config, aRepo ) : git_config_open_default( &config ) ) != 0 )
+        return wxEmptyString;
+
+    GitConfigPtr      configPtr( config );
+    git_config_entry* entry = nullptr;
+
+    if( git_config_get_entry( &entry, config, "core.sshCommand" ) != 0 )
+        return wxEmptyString;
+
+    GitConfigEntryPtr entryPtr( entry );
+    return wxString::FromUTF8( entry->value );
 }
 
 

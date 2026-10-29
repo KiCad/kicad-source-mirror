@@ -58,6 +58,7 @@ void LIBGIT_BACKEND::Init()
 
     KIGIT::SetRememberedSSHKeyStore(
             wxFileName( PATHS::GetUserCachePath(), wxS( "git_ssh_keys.json" ) ).GetFullPath() );
+    KIGIT::SetDerivedPublicKeyFolder( wxFileName( PATHS::GetUserCachePath(), wxS( "ssh_public_keys" ) ).GetFullPath() );
 
     // libgit2 sets no timeout of its own, so an unreachable remote parks a fetch in connect()
     // or recv() for as long as the OS allows.  SSH remotes stay bounded only by libssh2.
