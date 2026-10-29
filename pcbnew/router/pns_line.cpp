@@ -1497,17 +1497,14 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
 
     if( IsLinked() )
     {
+        auto oldLinks( m_links );
         wxASSERT( m_links.size() < INT_MAX );
         wxASSERT( static_cast<int>( m_links.size() ) >= ( lastLink - firstLink ) );
 
-        // Note: The range includes aEnd, but we have n-1 segments.
-        std::rotate(
-            m_links.begin(),
-            m_links.begin() + firstLink,
-            m_links.begin() + lastLink
-        );
 
-        m_links.resize( lastLink - firstLink + 1 );
+        m_links.clear();
+        for( int i = firstLink; i <= lastLink; i++ )
+            m_links.push_back( oldLinks[i] );
     }
 }
 
