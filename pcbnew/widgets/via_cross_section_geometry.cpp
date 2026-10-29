@@ -262,8 +262,8 @@ void VIA_CROSS_SECTION_GEOMETRY::build( const STATE& aState )
     };
 
     const bool throughVia = reachesFront && reachesBack;
-    const int frontRemoved = throughVia ? std::clamp( aState.m_BackdrillFrontLayers.value_or( 0 ), 0, innerLayers ) : 0;
-    const int backRemoved = throughVia ? std::clamp( aState.m_BackdrillBackLayers.value_or( 0 ), 0, innerLayers ) : 0;
+    const int frontRemoved = throughVia ? std::clamp( aState.m_BackdrillFrontLayers.value_or( 0 ), 0, lastOrdinal ) : 0;
+    const int backRemoved = throughVia ? std::clamp( aState.m_BackdrillBackLayers.value_or( 0 ), 0, lastOrdinal ) : 0;
 
     const bool   frontBored = frontRemoved > 0;
     const bool   backBored = backRemoved > 0;
