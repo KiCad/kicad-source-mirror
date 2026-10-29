@@ -234,6 +234,13 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
                                                 ///<   in library frame. Earlier files stored them
                                                 ///<   in board frame, so zone outlines need to be
                                                 ///<   un-baked on load.
+
+// The footprint library now has a header and is a separate format from the board file FOOTPRINT
+// object parser and formatter.  If you make any footprint library file format changes that do not
+// affect the board file format, please do not bump the board file format.
+#define SEXPR_FOOTPRINT_LIB_FILE_VERSION  20261028
+
+
 // clang-format on
 
 // common combinations of the above:

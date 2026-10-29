@@ -50,6 +50,8 @@
 #include <utility>
 #include <vector>
 
+#include <boost/ptr_container/clone_allocator.hpp>
+
 
 class PCB_ARC;
 class BOARD;
@@ -84,7 +86,11 @@ class SHAPE_LINE_CHAIN;
 struct LAYER;
 class PROGRESS_REPORTER;
 class TEARDROP_PARAMETERS;
+class FP_CACHE_ENTRY;
 
+
+namespace boost { template<class Key, class T, class Compare, class CloneAllocator, class Allocator>
+                  class ptr_map; }
 
 /**
  * Read a Pcbnew s-expression formatted #LINE_READER object and returns the appropriate
@@ -125,6 +131,21 @@ public:
      *                         delete it even on exception.
      */
     FOOTPRINT* parseFOOTPRINT( wxArrayString* aInitialComments = nullptr );
+
+    /**
+     * Parse a footprint library file.
+     *
+     * This parses a .kicad_mod file containing one or more footprints and populates \a aFootprints.
+     *
+     * @note This parses both packed and unpacked file formats.  Starting with file version 20261028, all
+     *       *.kicad_mod files contain a header like all other KiCad s-expression file formats.
+     *
+     * @param[out] aFootprints Map to store parsed footprints (footprint name -> cache entry).
+     */
+    void ParseFootprintLib( boost::ptr_map<wxString, FP_CACHE_ENTRY,
+                            std::less<wxString>,
+                            boost::heap_clone_allocator,
+                            std::allocator<std::pair<const wxString,void*>>>& aFootprints );
 
     /**
      * Return whether a version number, if any was parsed, was too recent

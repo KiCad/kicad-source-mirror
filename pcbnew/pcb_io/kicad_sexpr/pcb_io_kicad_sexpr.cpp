@@ -124,13 +124,18 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-            wxLogTrace( traceKicadPcbPlugin, wxT( "Writing library file '%s'." ),
-                        fileName );
+            wxLogTrace( traceKicadPcbPlugin, wxT( "Writing library file '%s'." ), fileName );
 
             PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fileName );
 
             m_owner->SetOutputFormatter( &formatter );
+
+            formatter.Print( "(kicad_footprint_lib (version %d) (generator \"kicad_footprint_editor\")"
+                             " (generator_version \"%s\")\n",
+                             SEXPR_FOOTPRINT_LIB_FILE_VERSION,
+                             GetMajorMinorVersion().c_str().AsChar() );
             m_owner->Format( footprint.get() );
+            formatter.Print( ")\n" );
             formatter.Finish();
         }
 
@@ -174,17 +179,20 @@ void FP_CACHE::Load()
             // Queue I/O errors so only files that fail to parse don't get loaded.
             try
             {
+                boost::ptr_map<wxString, FP_CACHE_ENTRY> tmp;
                 FILE_LINE_READER reader( fn.GetFullPath() );
-                PCB_IO_KICAD_SEXPR_PARSER       parser( &reader, nullptr, nullptr );
+                PCB_IO_KICAD_SEXPR_PARSER parser( &reader, nullptr, nullptr );
 
-                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( parser.Parse() );
+                parser.ParseFootprintLib( tmp );
                 wxString fpName = fn.GetName();
 
-                if( !footprint )
+                if( tmp.empty() )
                     THROW_IO_ERROR( wxEmptyString );   // caught locally, just below...
 
-                footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
-                m_footprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
+                auto entry = tmp.release( tmp.begin() );
+
+                entry->GetFootprint()->SetFPID( LIB_ID( wxEmptyString, fpName ) );
+                m_footprints.insert( fpName, entry.release() );
 
                 // A warning leaves the footprint usable, and libraries load on worker threads that have no one to
                 // show a message to, so it is only traced
@@ -1453,12 +1461,6 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     {
         m_out->Print( "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
-    }
-
-    if( !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
-    {
-        m_out->Print( "(version %d) (generator \"pcbnew\") (generator_version %s)", SEXPR_BOARD_FILE_VERSION,
-                      m_out->Quotew( GetMajorMinorVersion() ).c_str() );
     }
 
     if( aFootprint->IsLocked() )
@@ -4015,20 +4017,26 @@ std::unique_ptr<FOOTPRINT> PCB_IO_KICAD_SEXPR::ImportFootprint( const wxString& 
                                                                 wxString&                          aFootprintNameOut,
                                                                 const std::map<std::string, UTF8>* aProperties )
 {
-    wxString fcontents;
-    wxFFile  f( aFootprintPath );
+    boost::ptr_map<wxString, FP_CACHE_ENTRY> footprints;
 
     // Suppress font substitution warnings (RAII - automatically restored on scope exit)
     FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
+    FILE_LINE_READER          reader( aFootprintPath );
+    PCB_IO_KICAD_SEXPR_PARSER parser( &reader, nullptr, nullptr );
 
-    if( !f.IsOpened() )
+    parser.ParseFootprintLib( footprints );
+
+    if( footprints.empty() )
         return nullptr;
 
-    f.ReadAll( &fcontents );
+    auto it = footprints.begin();
 
     aFootprintNameOut = wxFileName( aFootprintPath ).GetName();
+    FOOTPRINT* fp = it->second->GetFootprint().release();
+    std::unique_ptr<FOOTPRINT> retv;
+    retv.reset( fp );
 
-    return std::unique_ptr<FOOTPRINT>( dynamic_cast<FOOTPRINT*>( Parse( fcontents ) ) );
+    return retv;
 }
 
 
