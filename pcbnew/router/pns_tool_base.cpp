@@ -60,6 +60,7 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     m_gridHelper = nullptr;
 
     m_cancelled = false;
+    m_selectableItemMask = ITEM::ANY_T;
 }
 
 
@@ -108,8 +109,14 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 }
 
 
+void TOOL_BASE::setSelectableItemMask( int aMask )
+{
+    m_selectableItemMask = aMask;
+}
+
+
 ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aLayer,
-                                 bool aIgnorePads, const std::vector<ITEM*> aAvoidItems )
+                                 bool aIgnorePads, const std::vector<ITEM*> aAvoidItems, int aPermittedItemMask )
 {
     int tl = aLayer > 0 ? aLayer
                         : m_router->GetInterface()->GetPNSLayerFromBoardLayer(
@@ -144,6 +151,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aL
 
         for( ITEM* item : candidates.Items() )
         {
+            if( (item->Kind() & aPermittedItemMask ) == 0 )
+                continue;
+
             if( !item->IsRoutable() )
                 continue;
 
@@ -351,7 +361,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
-    m_startItem = pickSingleItem( pos, nullptr, -1, aIgnorePads );
+    m_startItem = pickSingleItem( pos, nullptr, -1, aIgnorePads, {}, m_selectableItemMask );
 
     if( !m_gridHelper->GetUseGrid() && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;
@@ -406,7 +416,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     for( NET_HANDLE net : nets )
     {
         
-        endItem = pickSingleItem( mousePos, net, layer, false, {} ); //{ m_startItem } );
+        endItem = pickSingleItem( mousePos, net, layer, false, {}, m_selectableItemMask ); //{ m_startItem } );
 
         if( endItem )
             break;
