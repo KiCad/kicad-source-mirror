@@ -44,6 +44,7 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
       m_gridSnapping( GRID_SNAPPING::ALWAYS ),
       m_gridLineWidth( 1.0 ),
       m_gridMinSpacing( 10.0 ),
+      m_gridShowMajor( true ),
       m_axesEnabled( false ),
       m_crossHairMode( CROSS_HAIR_MODE::SMALL_CROSS ),
       m_forceDisplayCursor( false ),
