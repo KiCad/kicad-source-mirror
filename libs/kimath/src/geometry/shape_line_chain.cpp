@@ -1970,7 +1970,12 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP, int aIndex ) const
             else
                 indexMatch = ( i == aIndex );
         }
-
+        else
+        {
+            if( seg.Contains( aP ) )
+                indexMatch = true;
+        }
+        
         if( indexMatch )
         {
             sum += ( aP - seg.A ).EuclideanNorm();
