@@ -136,6 +136,8 @@ private:
     void onChecklistChanged( wxDataViewEvent& aEvent );
     void onMessageChanged( wxCommandEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
+    /// Set the icons and colours that follow the light or dark theme.
+    void applyTheme();
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
     /// The gear's menu: the advanced window and the author.
@@ -290,8 +292,7 @@ private:
     /// The branch and commit the last refresh showed, so Undo takes back only the commit the user saw.
     std::pair<wxString, wxString> m_undoHead;
 
-    /// The description box's hint, a label laid over it while it is empty. Null where the box
-    /// shows its own.
+    /// The description box's hint, a label laid over it while it is empty.
     wxStaticText* m_descriptionHint = nullptr;
 
     /// Opens the History page from the docked panel. Never shown inside the advanced window.

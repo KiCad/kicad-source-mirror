@@ -222,19 +222,14 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_summaryCount->SetToolTip( _( "Git tools show up to 72 characters of the summary on one line." ) );
     updateSummaryCount();
 
-    // Only a platform without a native hint for a multi line box gets the label laid over it.
-    if( !m_description->SetHint( _( "Extended Description (optional)" ) ) )
-    {
-        m_descriptionHint = new wxStaticText( this, wxID_ANY, _( "Extended Description (optional)" ) );
-        m_descriptionHint->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-        m_descriptionHint->Bind( wxEVT_LEFT_DOWN,
-                                 [this]( wxMouseEvent& )
-                                 {
-                                     m_description->SetFocus();
-                                 } );
-    }
+    // No platform hints a multi line box natively, and wx's stand-in text is wiped by ChangeValue
+    m_descriptionHint = new wxStaticText( this, wxID_ANY, _( "Extended Description (optional)" ) );
+    m_descriptionHint->Bind( wxEVT_LEFT_DOWN,
+                             [this]( wxMouseEvent& )
+                             {
+                                 m_description->SetFocus();
+                             } );
 
-    m_settingsButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
     m_settingsButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onSettings, this );
     m_commitButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommit, this );
 
@@ -333,6 +328,8 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     if( m_inAdvancedWindow )
         layoutWide();
 
+    applyTheme();
+
     // Sized by hand, or a long branch name would set the width of the whole row. Wide enough
     // for an ordinary name, with the tooltip carrying the rest when one is longer.
 
@@ -366,17 +363,12 @@ void GIT_COMMIT_PANE::layoutWide()
     heading->SetFont( heading->GetFont().Bold() );
     column->Insert( 0, heading, 0, wxLEFT | wxRIGHT | wxTOP, 8 );
 
-    // Use the diff colors for the summary's line counts.
     wxStaticBoxSizer* summary = new wxStaticBoxSizer( wxVERTICAL, this, _( "Summary" ) );
     wxWindow*         box = summary->GetStaticBox();
 
     m_summaryFiles = new wxStaticText( box, wxID_ANY, wxEmptyString );
     m_summaryAdded = new wxStaticText( box, wxID_ANY, wxEmptyString );
     m_summaryRemoved = new wxStaticText( box, wxID_ANY, wxEmptyString );
-
-    const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
-    m_summaryAdded->SetForegroundColour( theme.added.ToColour() );
-    m_summaryRemoved->SetForegroundColour( theme.removed.ToColour() );
 
     wxBoxSizer* lines = new wxBoxSizer( wxHORIZONTAL );
     lines->Add( m_summaryAdded, 0, wxRIGHT, 8 );
@@ -841,15 +833,12 @@ void GIT_COMMIT_PANE::updateDockMinHeight()
 }
 
 
-void GIT_COMMIT_PANE::onThemeChanged( wxSysColourChangedEvent& aEvent )
+void GIT_COMMIT_PANE::applyTheme()
 {
-    // Icons and colours picked at construction belong to the theme that was active then
-    GetBitmapStore()->ThemeChanged();
     m_settingsButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
+    m_descriptionHint->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 
-    if( m_descriptionHint )
-        m_descriptionHint->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
-
+    // The summary's line counts use the diff colours
     if( m_summaryAdded )
     {
         const KICAD_DIFF::DIFF_COLOR_THEME theme =
@@ -858,6 +847,14 @@ void GIT_COMMIT_PANE::onThemeChanged( wxSysColourChangedEvent& aEvent )
         m_summaryAdded->SetForegroundColour( theme.added.ToColour() );
         m_summaryRemoved->SetForegroundColour( theme.removed.ToColour() );
     }
+}
+
+
+void GIT_COMMIT_PANE::onThemeChanged( wxSysColourChangedEvent& aEvent )
+{
+    // Icons and colours picked at construction belong to the theme that was active then
+    GetBitmapStore()->ThemeChanged();
+    applyTheme();
 
     // The list's row colours are chosen when its status is read
     RefreshFileList();
@@ -1266,9 +1263,6 @@ void GIT_COMMIT_PANE::onRecentMessage( wxCommandEvent& aEvent )
 
 void GIT_COMMIT_PANE::updateDescriptionHint()
 {
-    if( !m_descriptionHint )
-        return;
-
     // Over the box's top left corner, where typed text would start.
     bool    show = m_description->IsShown() && m_description->IsEmpty();
     wxPoint at = m_description->GetPosition() + wxPoint( FromDIP( 6 ), FromDIP( 4 ) );
