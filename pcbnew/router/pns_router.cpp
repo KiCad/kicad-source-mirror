@@ -50,6 +50,7 @@
 #include "pns_meander_placer.h"
 #include "pns_meander_skew_placer.h"
 #include "pns_dp_meander_placer.h"
+#include "pns_tracks_spreader.h"
 #include "pns_utils.h"
 #include "pns_diff_pair.h"
 
@@ -472,12 +473,15 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 }
 
 
-bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
+bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer, const ITEM_SET& aAuxItems )
 {
     GetRuleResolver()->ClearCaches();
 
-    if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
-        return false;
+    if( m_mode != PNS_MODE_SPREAD_TRACKS )
+    {
+        if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
+            return false;
+    }
 
     switch( m_mode )
     {
@@ -501,6 +505,12 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
         m_placer = std::make_unique<MEANDER_SKEW_PLACER>( this );
         break;
 
+    case PNS_MODE_SPREAD_TRACKS:
+        m_placer = std::make_unique<TRACKS_SPREADER>( this );
+	// fixme: ugly cast
+        static_cast<TRACKS_SPREADER*>( m_placer.get() )->SetSpreadableItems( aAuxItems );
+        break;
+
     default:
         return false;
     }
@@ -517,7 +527,17 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
         if( m_logger )
         {
             m_logger->Clear();
-            m_logger->Log( LOGGER::EVT_START_ROUTE, aP, aStartItem, &m_sizes, m_placer->CurrentLayer() );
+            std::vector<ITEM*> logItems;
+            logItems.push_back( aStartItem );
+
+            if( m_mode == PNS_MODE_SPREAD_TRACKS )
+            {
+                auto spreadable = static_cast<TRACKS_SPREADER*>( m_placer.get() )->GetSpreadableItems();
+                for( auto item : spreadable.Items() )
+                    logItems.push_back( item );
+            }
+
+            m_logger->LogM( LOGGER::EVT_START_ROUTE, aP, logItems, &m_sizes, m_placer->CurrentLayer() );
         }
 
         return true;

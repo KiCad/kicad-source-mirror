@@ -70,7 +70,8 @@ enum ROUTER_MODE {
     PNS_MODE_ROUTE_DIFF_PAIR,
     PNS_MODE_TUNE_SINGLE,
     PNS_MODE_TUNE_DIFF_PAIR,
-    PNS_MODE_TUNE_DIFF_PAIR_SKEW
+    PNS_MODE_TUNE_DIFF_PAIR_SKEW,
+    PNS_MODE_SPREAD_TRACKS
 };
 
 enum DRAG_MODE
@@ -191,7 +192,7 @@ public:
     void SyncWorld();
 
     bool RoutingInProgress() const;
-    bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer );
+    bool StartRouting( const VECTOR2I& aP, ITEM* aItem, int aLayer, const ITEM_SET& aAuxItems = ITEM_SET() );
     bool Move( const VECTOR2I& aP, ITEM* aItem );
     bool Finish();
     bool ContinueFromEnd( ITEM** aNewStartItem );
