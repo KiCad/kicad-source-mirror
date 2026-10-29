@@ -798,8 +798,12 @@ public:
      * Using SetPosition() directly would swap anchor (hole) positions, which leaves each pad's
      * copper shape displaced by its own offset after the swap.  This helper computes the new
      * anchor for each pad so the visible shape centers (ShapePos) are exchanged.
+     *
+     * The downside is that swapping copper shape positions is ill-defined when there is more
+     * than one (ie: for complex padstackes).  In that case we swap based on the active layer's
+     * copper shape, following the principle of least surprise.
      */
-    static void SwapShapePositions( PAD* aLhs, PAD* aRhs );
+    static void SwapShapePositions( PAD* aLhs, PAD* aRhs, PCB_LAYER_ID aActiveLayer );
 
     /**
      * Has meaning only for rounded rectangle pads.

@@ -61,13 +61,13 @@ BOOST_AUTO_TEST_CASE( SwapPadsWithoutOffset )
     std::unique_ptr<PAD> padA = makeRoundPad( footprint.get(), posA, { 0, 0 } );
     std::unique_ptr<PAD> padB = makeRoundPad( footprint.get(), posB, { 0, 0 } );
 
-    VECTOR2I originalShapeA = padA->ShapePos( PADSTACK::ALL_LAYERS );
-    VECTOR2I originalShapeB = padB->ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I originalShapeA = padA->ShapePos( F_Cu );
+    VECTOR2I originalShapeB = padB->ShapePos( F_Cu );
 
-    PAD::SwapShapePositions( padA.get(), padB.get() );
+    PAD::SwapShapePositions( padA.get(), padB.get(), F_Cu );
 
-    BOOST_CHECK_EQUAL( padA->ShapePos( PADSTACK::ALL_LAYERS ), originalShapeB );
-    BOOST_CHECK_EQUAL( padB->ShapePos( PADSTACK::ALL_LAYERS ), originalShapeA );
+    BOOST_CHECK_EQUAL( padA->ShapePos( F_Cu ), originalShapeB );
+    BOOST_CHECK_EQUAL( padB->ShapePos( F_Cu ), originalShapeA );
 }
 
 
@@ -85,16 +85,16 @@ BOOST_AUTO_TEST_CASE( SwapPadsWhenOneHasShapeOffset )
     std::unique_ptr<PAD> padA = makeRoundPad( footprint.get(), posA, offsetA, EDA_ANGLE( 90, DEGREES_T ) );
     std::unique_ptr<PAD> padB = makeRoundPad( footprint.get(), posB, { 0, 0 } );
 
-    VECTOR2I originalShapeA = padA->ShapePos( PADSTACK::ALL_LAYERS );
-    VECTOR2I originalShapeB = padB->ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I originalShapeA = padA->ShapePos( F_Cu );
+    VECTOR2I originalShapeB = padB->ShapePos( F_Cu );
 
-    PAD::SwapShapePositions( padA.get(), padB.get() );
+    PAD::SwapShapePositions( padA.get(), padB.get(), F_Cu );
 
     // Visible shape centers must be exchanged; each pad keeps its own offset/orientation.
-    BOOST_CHECK_EQUAL( padA->ShapePos( PADSTACK::ALL_LAYERS ), originalShapeB );
-    BOOST_CHECK_EQUAL( padB->ShapePos( PADSTACK::ALL_LAYERS ), originalShapeA );
-    BOOST_CHECK_EQUAL( padA->GetOffset( PADSTACK::ALL_LAYERS ), offsetA );
-    BOOST_CHECK_EQUAL( padB->GetOffset( PADSTACK::ALL_LAYERS ), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( padA->ShapePos( F_Cu ), originalShapeB );
+    BOOST_CHECK_EQUAL( padB->ShapePos( F_Cu ), originalShapeA );
+    BOOST_CHECK_EQUAL( padA->GetOffset( F_Cu ), offsetA );
+    BOOST_CHECK_EQUAL( padB->GetOffset( F_Cu ), VECTOR2I( 0, 0 ) );
 }
 
 
@@ -112,16 +112,16 @@ BOOST_AUTO_TEST_CASE( SwapPadsWithDifferentOffsets )
     std::unique_ptr<PAD> padA = makeRoundPad( footprint.get(), posA, offsetA, EDA_ANGLE( 45, DEGREES_T ) );
     std::unique_ptr<PAD> padB = makeRoundPad( footprint.get(), posB, offsetB, EDA_ANGLE( -30, DEGREES_T ) );
 
-    VECTOR2I originalShapeA = padA->ShapePos( PADSTACK::ALL_LAYERS );
-    VECTOR2I originalShapeB = padB->ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I originalShapeA = padA->ShapePos( F_Cu );
+    VECTOR2I originalShapeB = padB->ShapePos( F_Cu );
 
-    PAD::SwapShapePositions( padA.get(), padB.get() );
+    PAD::SwapShapePositions( padA.get(), padB.get(), F_Cu );
 
-    BOOST_CHECK_EQUAL( padA->ShapePos( PADSTACK::ALL_LAYERS ), originalShapeB );
-    BOOST_CHECK_EQUAL( padB->ShapePos( PADSTACK::ALL_LAYERS ), originalShapeA );
+    BOOST_CHECK_EQUAL( padA->ShapePos( F_Cu ), originalShapeB );
+    BOOST_CHECK_EQUAL( padB->ShapePos( F_Cu ), originalShapeA );
     // Offsets and orientations must remain with each pad.
-    BOOST_CHECK_EQUAL( padA->GetOffset( PADSTACK::ALL_LAYERS ), offsetA );
-    BOOST_CHECK_EQUAL( padB->GetOffset( PADSTACK::ALL_LAYERS ), offsetB );
+    BOOST_CHECK_EQUAL( padA->GetOffset( F_Cu ), offsetA );
+    BOOST_CHECK_EQUAL( padB->GetOffset( F_Cu ), offsetB );
 }
 
 
@@ -141,8 +141,33 @@ BOOST_AUTO_TEST_CASE( SwapIsInvolutiveForTwoPads )
     VECTOR2I originalPosA = padA->GetPosition();
     VECTOR2I originalPosB = padB->GetPosition();
 
-    PAD::SwapShapePositions( padA.get(), padB.get() );
-    PAD::SwapShapePositions( padA.get(), padB.get() );
+    PAD::SwapShapePositions( padA.get(), padB.get(), F_Cu );
+    PAD::SwapShapePositions( padA.get(), padB.get(), F_Cu );
+
+    BOOST_CHECK_EQUAL( padA->GetPosition(), originalPosA );
+    BOOST_CHECK_EQUAL( padB->GetPosition(), originalPosB );
+}
+
+BOOST_AUTO_TEST_CASE( SwapIsInvolutiveForTwoPadsSwappedOnBackLayer )
+{
+    BOARD board;
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( &board );
+
+    const VECTOR2I posA{ pcbIUScale.mmToIU( -1.5 ), pcbIUScale.mmToIU( 0.6 ) };
+    const VECTOR2I offsetA{ pcbIUScale.mmToIU( 0.6 ), 0 };
+    const VECTOR2I posB{ pcbIUScale.mmToIU( 0.0 ), 0 };
+
+    std::unique_ptr<PAD> padA = makeRoundPad( footprint.get(), posA, offsetA, EDA_ANGLE( 90, DEGREES_T ) );
+    std::unique_ptr<PAD> padB = makeRoundPad( footprint.get(), posB, { 0, 0 } );
+    padA->Flip( padA->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
+    padB->Flip( padB->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
+
+    VECTOR2I originalPosA = padA->GetPosition();
+    VECTOR2I originalPosB = padB->GetPosition();
+
+    PAD::SwapShapePositions( padA.get(), padB.get(), B_Cu );
+    PAD::SwapShapePositions( padA.get(), padB.get(), B_Cu );
 
     BOOST_CHECK_EQUAL( padA->GetPosition(), originalPosA );
     BOOST_CHECK_EQUAL( padB->GetPosition(), originalPosB );

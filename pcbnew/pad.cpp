@@ -1919,52 +1919,26 @@ VECTOR2I PAD::ShapePos( PCB_LAYER_ID aLayer ) const
 }
 
 
-void PAD::SwapShapePositions( PAD* aLhs, PAD* aRhs )
+void PAD::SwapShapePositions( PAD* aLhs, PAD* aRhs, PCB_LAYER_ID aActiveLayer )
 {
     wxCHECK( aLhs && aRhs, /* void */ );
 
-    LSET uniqueLayerUnion;
+    // This routine favours the center of the visual copper over the center of the hole.
+    // The downside is that said center is ill-defined when there is more than one shape
+    // (ie: for complex padstackes).  In that case we swap based on the active layer's
+    // copper shape, following the principle of least surprise.
 
-    aLhs->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID layer )
-            {
-                uniqueLayerUnion.set( layer );
-            } );
+    VECTOR2I lhsShapePos = aLhs->ShapePos( aActiveLayer );
+    VECTOR2I rhsShapePos = aRhs->ShapePos( aActiveLayer );
 
-    aRhs->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID layer )
-            {
-                uniqueLayerUnion.set( layer );
-            } );
+    VECTOR2I lhsOffset = aLhs->GetOffset( aActiveLayer );
+    VECTOR2I rhsOffset = aRhs->GetOffset( aActiveLayer );
 
-    std::map<PCB_LAYER_ID, std::pair<VECTOR2I, VECTOR2I>> positions;
+    RotatePoint( lhsOffset, aLhs->GetOrientation() );
+    RotatePoint( rhsOffset, aRhs->GetOrientation() );
 
-    for( PCB_LAYER_ID layer : uniqueLayerUnion.Seq() )
-    {
-        VECTOR2I lhsShapePos = aLhs->ShapePos( layer );
-        VECTOR2I rhsShapePos = aRhs->ShapePos( layer );
-
-        VECTOR2I lhsOffset = aLhs->GetOffset( layer );
-        VECTOR2I rhsOffset = aRhs->GetOffset( layer );
-
-        RotatePoint( lhsOffset, aLhs->GetOrientation() );
-        RotatePoint( rhsOffset, aRhs->GetOrientation() );
-
-        positions[layer].first = rhsShapePos - lhsOffset;
-        positions[layer].second = lhsShapePos - rhsOffset;
-    }
-
-    aLhs->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID layer )
-            {
-                aLhs->SetPosition( positions[layer].first );
-            } );
-
-    aRhs->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID layer )
-            {
-                aRhs->SetPosition( positions[layer].second );
-            } );
+    aLhs->SetPosition( rhsShapePos - lhsOffset );
+    aRhs->SetPosition( lhsShapePos - rhsOffset );
 }
 
 

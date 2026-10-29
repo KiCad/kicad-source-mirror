@@ -183,8 +183,9 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     if( selection.Size() < 2 )
         return 0;
 
-    BOARD_COMMIT  localCommit( this );
-    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD_COMMIT         localCommit( this );
+    BOARD_COMMIT*        commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
 
     if( !commit )
         commit = &localCommit;
@@ -210,7 +211,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         // centers rather than anchor positions.  See PAD::SwapShapePositions.
         if( a->Type() == PCB_PAD_T && b->Type() == PCB_PAD_T )
         {
-            PAD::SwapShapePositions( static_cast<PAD*>( a ), static_cast<PAD*>( b ) );
+            PAD::SwapShapePositions( static_cast<PAD*>( a ), static_cast<PAD*>( b ), editFrame->GetActiveLayer() );
 
             PCB_LAYER_ID aLayer = a->GetLayer(), bLayer = b->GetLayer();
             std::swap( aLayer, bLayer );
