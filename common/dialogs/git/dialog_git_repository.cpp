@@ -56,6 +56,9 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         m_tempRepo = true;
         m_tempPath = wxFileName::CreateTempFileName( "kicadtestrepo" );
 
+        // CreateTempFileName leaves a file at the path, where git cannot make a repository
+        wxRemoveFile( m_tempPath );
+
         git_repository_init_options options;
         git_repository_init_init_options( &options, GIT_REPOSITORY_INIT_OPTIONS_VERSION );
         options.flags = GIT_REPOSITORY_INIT_MKPATH | GIT_REPOSITORY_INIT_NO_REINIT;
@@ -378,6 +381,54 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
 }
 
 
+// Empty when the address is one git can try; otherwise says what is wrong with it
+static wxString describeUnusableURL( git_repository* aRepo, const wxString& aURL )
+{
+    git_remote* rawRemote = nullptr;
+
+    if( git_remote_create_anonymous( &rawRemote, aRepo, aURL.utf8_str() ) != GIT_OK )
+        return wxString::Format( _( "'%s' is not a repository address." ), aURL );
+
+    KIGIT::GitRemotePtr remote( rawRemote );
+
+    // A url.insteadOf alias is judged by the address it expands to
+    wxString effective = wxString::FromUTF8( git_remote_url( remote.get() ) );
+    wxString checked = effective;
+
+    // The parser has no git:// case, so its server part is checked the way an HTTPS one is
+    if( checked.Lower().StartsWith( wxS( "git://" ) ) )
+        checked = wxS( "https://" ) + checked.Mid( 6 );
+
+    KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( checked );
+
+    if( parsed.connType != KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
+    {
+        const wxString& host = parsed.hostname;
+        wxString        authority = checked.AfterFirst( ':' ).Mid( 2 ).BeforeFirst( '/' );
+
+        // The parser drops an unclosed IPv6 bracket, so look for it in the address itself
+        if( host.IsEmpty() || host.find_first_of( wxS( " \t" ) ) != wxString::npos
+            || ( checked.Contains( wxS( "://" ) ) && authority.Contains( wxS( "[" ) )
+                 && !authority.Contains( wxS( "]" ) ) ) )
+        {
+            return wxString::Format( _( "'%s' does not name a server." ), aURL );
+        }
+
+        if( parsed.port < 0 )
+            return wxString::Format( _( "The port in '%s' is not a number." ), aURL );
+
+        return wxEmptyString;
+    }
+
+    wxString lower = effective.Lower();
+
+    if( lower.Contains( wxS( "://" ) ) && !lower.StartsWith( wxS( "file://" ) ) )
+        return wxString::Format( _( "'%s' is not an HTTPS, SSH or folder address." ), aURL );
+
+    return wxEmptyString;
+}
+
+
 void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
 {
     // Save the repository details
@@ -386,6 +437,16 @@ void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
     {
         DisplayErrorMessage( this, _( "Missing information" ),
                             _( "Please enter a URL for the repository" ) );
+        return;
+    }
+
+    wxString problem = describeUnusableURL( m_repository, GetRepoURL() );
+
+    if( !problem.IsEmpty() )
+    {
+        DisplayErrorMessage( this, problem,
+                             _( "Use an address such as https://server/owner/project.git or "
+                                "git@server:owner/project.git, or the path of a repository folder." ) );
         return;
     }
 
