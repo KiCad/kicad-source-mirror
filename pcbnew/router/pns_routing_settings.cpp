@@ -60,6 +60,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_restrictAngles = false;
     m_viaForcePropIterationLimit = 40;
     m_keepDPCouplingWhenDragging = true;
+    m_spreadTracksDistance = 0;
 
     m_params.emplace_back( new PARAM<int>( "mode", reinterpret_cast<int*>( &m_routingMode ),
             static_cast<int>( RM_Walkaround ) ) );
@@ -75,7 +76,8 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<bool>( "start_diagonal",   &m_startDiagonal,   false ) );
     m_params.emplace_back( new PARAM<int>( "shove_iteration_limit", &m_shoveIterationLimit, 250 ) );
     m_params.emplace_back( new PARAM<int>( "via_force_prop_iteration_limit", &m_viaForcePropIterationLimit, 40 ) );
-
+    m_params.emplace_back( new PARAM<int>( "spread_tracks_distance", &m_spreadTracksDistance, 0 ) );
+    
     m_params.emplace_back( new PARAM_LAMBDA<int>( "shove_time_limit",
             [this] () -> int
             {

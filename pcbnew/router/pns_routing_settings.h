@@ -167,6 +167,9 @@ public:
     void SetKeepDPCouplingWhenDragging( bool aSet ) { m_keepDPCouplingWhenDragging = aSet; }
     bool GetKeepDPCouplingWhenDragging() const { return m_keepDPCouplingWhenDragging; }
 
+    int GetSpreadTracksDistance() const { return m_spreadTracksDistance; }
+    void SetSpreadTracksDistance( int aDistance ) { m_spreadTracksDistance = aDistance; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -194,6 +197,7 @@ private:
     int m_walkaroundIterationLimit;
     int m_shoveIterationLimit;
     int m_viaForcePropIterationLimit;
+    int m_spreadTracksDistance;
     double m_diffPairGapPickupRatioThreshold;
     double m_diffPairGapCouplingRecognitionThreshold;
     double m_walkaroundHugLengthThreshold;
