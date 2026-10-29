@@ -163,7 +163,11 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
     // Ensure image handlers are loaded, because a board can include bitmap images
     // using various formats.
     // By default only the BMP handler is available.
-    wxInitAllImageHandlers();
+    // wxPython or an earlier call may have registered some and wx logs each duplicate
+    {
+        wxLogNull noLog;
+        wxInitAllImageHandlers();
+    }
 
     SETTINGS_MANAGER& settingsManager = PgmOrNull() ? Pgm().GetSettingsManager() : *GetSettingsManager();
 

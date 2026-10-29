@@ -358,7 +358,11 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 
     APP_MONITOR::SENTRY::Instance()->AddTag( "kicad.app", pgm_name );
 
-    wxInitAllImageHandlers();
+    // A host process may have registered some already, and wx logs every duplicate
+    {
+        wxLogNull noImageLog;
+        wxInitAllImageHandlers();
+    }
 
     // libpng warnings such as "iCCP: known incorrect sRGB profile" otherwise pop up for
     // benign plugin and user images; load failures are still reported by the callers
