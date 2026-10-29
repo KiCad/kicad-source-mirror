@@ -78,4 +78,18 @@ BOOST_AUTO_TEST_CASE( TabCheck )
 }
 
 
+BOOST_AUTO_TEST_CASE( ZeroSizeTab )
+{
+    std::unique_ptr<KIFONT::STROKE_FONT> font( KIFONT::STROKE_FONT::LoadFont( wxEmptyString ) );
+    std::vector<std::unique_ptr<KIFONT::GLYPH>> glyphs;
+    BOX2I bbox;
+
+    // Zero-size pin names are how a symbol hides one name, and they can hold tabs
+    VECTOR2I end = font->GetTextAsGlyphs( &bbox, &glyphs, wxS( "A\tB" ), VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ),
+                                          ANGLE_0, false, VECTOR2I( 0, 0 ), 0 );
+
+    BOOST_CHECK_EQUAL( end.x, 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

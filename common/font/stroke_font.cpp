@@ -226,7 +226,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
             int new_cursor = aPosition.x + aSize.x * char_count
                     + aSize.x * space_width;
 
-            while( new_cursor <= cursor.x )
+            // A zero-width tab never advances, so it cannot pass the cursor
+            while( aSize.x > 0 && new_cursor <= cursor.x )
             {
                 char_count += TAB_WIDTH;
                 new_cursor += aSize.x * TAB_WIDTH;
