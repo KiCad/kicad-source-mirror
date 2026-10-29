@@ -82,6 +82,8 @@ public:
     /**
      * Create and return the path to a direct child directory.
      *
+     * @param aName Name of the child directory, must be a single path component
+     * @throws std::invalid_argument if aName is not a single path component
      * @throws std::runtime_error if the directory cannot be created
      */
     std::filesystem::path CreateChildDir( const wxString& aName ) const;
@@ -89,6 +91,8 @@ public:
     /**
      * Create and return the path to a direct child directory as a wxString.
      *
+     * @param aName Name of the child directory, must be a single path component
+     * @throws std::invalid_argument if aName is not a single path component
      * @throws std::runtime_error if the directory cannot be created
      */
     wxString CreateChildDirStr( const wxString& aName ) const;
@@ -96,6 +100,8 @@ public:
     /**
      * Create and return the path to a direct child file.
      *
+     * @param aName Name of the child file, must be a single path component
+     * @throws std::invalid_argument if aName is not a single path component
      * @throws std::runtime_error if the file cannot be created
      */
     std::filesystem::path CreateChildFile( const wxString& aName ) const;
@@ -103,6 +109,8 @@ public:
     /**
      * Create and return the path to a direct child file as a wxString.
      *
+     * @param aName Name of the child file, must be a single path component
+     * @throws std::invalid_argument if aName is not a single path component
      * @throws std::runtime_error if the file cannot be created
      */
     wxString CreateChildFileStr( const wxString& aName ) const;

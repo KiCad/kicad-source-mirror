@@ -218,7 +218,7 @@ void SCOPED_TEMP_DIR::Retain()
 void expectSafeChildPath( const wxString& aChild )
 {
     if( !WX_FILENAME::IsSafeChildPath( aChild ) )
-        throw std::runtime_error( "Unsafe child path '" + std::string( aChild.utf8_str() ) + "'" );
+        throw std::invalid_argument( "Unsafe child path '" + std::string( aChild.utf8_str() ) + "'" );
 }
 
 
