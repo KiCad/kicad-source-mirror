@@ -510,12 +510,18 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
 
     for( std::reference_wrapper<RC_ITEM>& item : violations )
     {
-        if( bds().GetSeverity( item.get().GetErrorCode() ) == RPT_SEVERITY_IGNORE )
+        const int code = item.get().GetErrorCode();
+
+        // Group headings carry code 0 and have no severity of their own.
+        if( code <= 0 )
+            continue;
+
+        if( bds().GetSeverity( code ) == RPT_SEVERITY_IGNORE )
         {
             wxListItem listItem;
             listItem.SetId( m_ignoredList->GetItemCount() );
             listItem.SetText( wxT( " • " ) + item.get().GetErrorText( true ) );
-            listItem.SetData( item.get().GetErrorCode() );
+            listItem.SetData( code );
 
             m_ignoredList->InsertItem( listItem );
         }
