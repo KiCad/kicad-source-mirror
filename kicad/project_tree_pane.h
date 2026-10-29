@@ -311,6 +311,9 @@ private:
     std::map<wxTreeItemId, KIGIT_COMMON::GIT_STATUS> m_gitStatusIcons;
     bool                                             m_gitIconsInitialized;
 
+    /// Raw status of every file in the last pass, so a change with no tree item still reaches the panels
+    std::map<wxString, unsigned int> m_gitLastStatus;
+
     DECLARE_EVENT_TABLE()
 };
 

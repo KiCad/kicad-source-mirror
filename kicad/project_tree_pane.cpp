@@ -654,6 +654,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
     m_gitTreeCache.clear();
     m_gitStatusIcons.clear();
+    m_gitLastStatus.clear();
 
     wxString pro_dir = m_Parent->GetProjectFileName();
 
@@ -2264,9 +2265,12 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         {
             wxString filename = wxFileNameFromPath( rootItem->GetFileName() );
             m_TreeProject->SetItemText( kid, filename + " [" + m_gitCurrentBranchName + "]" );
-            m_gitIconsInitialized = true;
         }
     }
+
+    // Set even without a branch name, or each pass on an unborn HEAD notifies the panels and their
+    // refresh restarts the status timer
+    m_gitIconsInitialized = true;
 
     wxLogTrace( traceGit, wxS( "updateGitStatusIcons: Git status icons updated" ) );
 }
@@ -2405,7 +2409,14 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
     auto [localChanges, remoteChanges] = aGitCommon->GetDifferentFiles();
     statusHandler.UpdateRemoteStatus( localChanges, remoteChanges, fileStatusMap );
 
-    bool updated = false;
+    std::map<wxString, unsigned int> currentStatus;
+
+    for( const auto& [absPath, fileStatus] : fileStatusMap )
+        currentStatus.emplace( absPath, fileStatus.gitStatus );
+
+    // A file deleted outside KiCad loses its tree item, so no icon changes to say so
+    bool updated = currentStatus != m_gitLastStatus;
+    m_gitLastStatus = std::move( currentStatus );
 
     // Update status icons based on file status
     for( const auto& [absPath, fileStatus] : fileStatusMap )
