@@ -31,6 +31,7 @@
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
 #include "kigit_failure.h"
+#include "kigit_ssh_keys.h"
 #include "trace_helpers.h"
 
 #include "kicad_git_compat.h"
@@ -38,6 +39,7 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <gestfich.h>
+#include <paths.h>
 #include <algorithm>
 #include <cstring>
 #include <fstream>
@@ -53,6 +55,9 @@
 void LIBGIT_BACKEND::Init()
 {
     git_libgit2_init();
+
+    KIGIT::SetRememberedSSHKeyStore(
+            wxFileName( PATHS::GetUserCachePath(), wxS( "git_ssh_keys.json" ) ).GetFullPath() );
 
     // libgit2 sets no timeout of its own, so an unreachable remote parks a fetch in connect()
     // or recv() for as long as the OS allows.  SSH remotes stay bounded only by libssh2.
@@ -208,6 +213,7 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
         return false;
     }
 
+    aHandler->RememberWorkingSSHKey();
     common->SetRepo( newRepo );
 
     return true;
@@ -1140,6 +1146,8 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
         return PushResult::Error;
     }
 
+    aHandler->RememberWorkingSSHKey();
+
     git_push_options pushOptions;
     git_push_init_options( &pushOptions, GIT_PUSH_OPTIONS_VERSION );
     pushOptions.callbacks = remoteCallbacks;
@@ -1821,6 +1829,8 @@ static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemo
         aHandler->ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( rc ), KIGIT_OPERATION::FETCH, remoteName );
         return false;
     }
+
+    aHandler->RememberWorkingSSHKey();
 
     const git_remote_head** heads = nullptr;
     size_t                  headCount = 0;

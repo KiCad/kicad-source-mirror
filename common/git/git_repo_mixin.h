@@ -210,6 +210,9 @@ public:
 
     KIGIT_AUTH_ATTEMPT&       AuthAttempt() { return m_authAttempt; }
 
+    /// Call once the transfer has connected, so the key that worked is offered first next time.
+    void RememberWorkingSSHKey() { m_common->RememberWorkingSSHKey( m_authAttempt ); }
+
     /// Set when the server refused every credential offered, so the caller can prompt and retry.
     bool WasAuthFailure() const { return m_authFailed; }
     void SetAuthFailure() { m_authFailed = true; }

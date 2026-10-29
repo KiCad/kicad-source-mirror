@@ -1987,11 +1987,43 @@ void KIGIT_COMMON::rebuildPublicKeysUnlocked()
     else if( !m_projectSSHKey.IsEmpty() )
         wxLogTrace( traceGit, "Not offering project SSH key %s, it or its .pub is missing", m_projectSSHKey );
 
+    // A refused key still counts toward the server's limit on attempts, and the right one can come too late.
+    // Only a key still found for the host moves up, so one dropped from the ssh config stays dropped
+    wxString remembered = KIGIT::RememberedSSHKey( m_remote );
+
+    bool current = std::any_of( m_discoveredKeys.begin(), m_discoveredKeys.end(),
+                                [&]( const wxString& aKey )
+                                {
+                                    return KIGIT::IsSameSSHKey( aKey, remembered );
+                                } );
+
+    if( !current || KIGIT::IsSameSSHKey( remembered, m_projectSSHKey ) )
+        remembered.clear();
+    else
+        m_publicKeys.push_back( remembered );
+
     for( const wxString& key : m_discoveredKeys )
     {
-        if( !KIGIT::IsSameSSHKey( key, m_projectSSHKey ) )
+        if( !KIGIT::IsSameSSHKey( key, m_projectSSHKey ) && !KIGIT::IsSameSSHKey( key, remembered ) )
             m_publicKeys.push_back( key );
     }
+}
+
+
+void KIGIT_COMMON::ResetNextKey()
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    rebuildPublicKeysUnlocked();
+}
+
+
+void KIGIT_COMMON::RememberWorkingSSHKey( const KIGIT_AUTH_ATTEMPT& aAttempt )
+{
+    // libgit2 asks for nothing more once a credential works, so the last key offered is the one that did
+    if( aAttempt.connType != GIT_CONN_TYPE::GIT_CONN_SSH || aAttempt.keysTried.empty() )
+        return;
+
+    KIGIT::RememberSSHKey( GetRemote(), aAttempt.keysTried.back() );
 }
 
 
@@ -2087,6 +2119,9 @@ void KIGIT_COMMON::SyncRemoteUrl( const wxString& aRawUrl )
             m_username = parsed.username;
             m_password = parsed.password;
             m_secretFetched = !m_password.IsEmpty();
+
+            // Another address on the same host can have a different key remembered for it
+            rebuildPublicKeysUnlocked();
         }
 
         // SetRemote can move the host without gathering keys, so compare against the gathered list

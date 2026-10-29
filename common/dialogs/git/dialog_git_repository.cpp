@@ -282,6 +282,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
             if( result == GIT_OK )
             {
+                repoMixin.RememberWorkingSSHKey();
                 git_remote_disconnect( remote );
                 success = true;
                 break;

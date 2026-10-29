@@ -19,13 +19,21 @@
 
 #include "kigit_ssh_keys.h"
 
+#include <trace_helpers.h>
+
 #include <algorithm>
 #include <fstream>
 #include <iterator>
+#include <map>
+#include <mutex>
 #include <string>
 
+#include <nlohmann/json.hpp>
+
 #include <wx/arrstr.h>
+#include <wx/file.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/utils.h>
 
 #ifndef _WIN32
@@ -148,6 +156,81 @@ wxString expandPath( const wxString& aValue, const wxString& aHomeDir )
 
     tail.Replace( wxS( "%d" ), aHomeDir );
     return head + tail;
+}
+
+
+struct REMEMBERED_KEYS
+{
+    std::mutex                   mutex;
+    wxString                     path;
+    bool                         loaded = false;
+    std::map<wxString, wxString> keys;    ///< Remote address to key file
+    std::map<wxString, wxString> pending; ///< Remembered but not yet saved
+};
+
+
+REMEMBERED_KEYS& rememberedKeys()
+{
+    static REMEMBERED_KEYS store;
+    return store;
+}
+
+
+std::map<wxString, wxString> readRememberedKeys( const wxString& aPath )
+{
+    std::map<wxString, wxString> keys;
+
+    if( aPath.IsEmpty() )
+        return keys;
+
+    std::ifstream file( aPath.fn_str(), std::ios::binary );
+
+    if( !file )
+        return keys;
+
+    // A damaged file only costs the order keys are offered in, so it is dropped rather than reported
+    nlohmann::json json = nlohmann::json::parse( file, nullptr, false );
+
+    if( !json.is_object() )
+        return keys;
+
+    for( const auto& [remote, key] : json.items() )
+    {
+        if( key.is_string() )
+            keys[wxString::FromUTF8( remote )] = wxString::FromUTF8( key.get<std::string>() );
+    }
+
+    return keys;
+}
+
+
+bool writeRememberedKeys( const wxString& aPath, const std::map<wxString, wxString>& aKeys )
+{
+    nlohmann::json json = nlohmann::json::object();
+
+    for( const auto& [remote, key] : aKeys )
+        json[remote.utf8_string()] = key.utf8_string();
+
+    wxFileName fn( aPath );
+
+    if( !fn.DirExists() && !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        return false;
+
+    // Commit renames a uniquely named file over the old one, so a reader never sees half a file
+    wxTempFile out( aPath );
+
+    return out.IsOpened() && out.Write( wxString::FromUTF8( json.dump( 2 ) ), wxConvUTF8 ) && out.Commit();
+}
+
+
+// The caller holds the store's mutex
+void loadRememberedKeys( REMEMBERED_KEYS& aStore )
+{
+    if( aStore.loaded )
+        return;
+
+    aStore.loaded = true;
+    aStore.keys = readRememberedKeys( aStore.path );
 }
 
 } // namespace
@@ -298,4 +381,64 @@ wxString KIGIT::PrivateKeyPath( const wxString& aPicked )
 bool KIGIT::IsOfferableSSHKey( const wxString& aKey )
 {
     return !aKey.IsEmpty() && wxFileName::FileExists( aKey ) && wxFileName::FileExists( aKey + wxS( ".pub" ) );
+}
+
+
+wxString KIGIT::RememberedSSHKey( const wxString& aRemote )
+{
+    REMEMBERED_KEYS&            store = rememberedKeys();
+    std::lock_guard<std::mutex> lock( store.mutex );
+    loadRememberedKeys( store );
+
+    auto it = store.keys.find( aRemote );
+    return it == store.keys.end() ? wxString() : it->second;
+}
+
+
+void KIGIT::RememberSSHKey( const wxString& aRemote, const wxString& aKey )
+{
+    if( aRemote.IsEmpty() || aKey.IsEmpty() )
+        return;
+
+    REMEMBERED_KEYS&            store = rememberedKeys();
+    std::lock_guard<std::mutex> lock( store.mutex );
+    loadRememberedKeys( store );
+
+    auto it = store.keys.find( aRemote );
+
+    if( it != store.keys.end() && IsSameSSHKey( it->second, aKey ) && store.pending.empty() )
+        return;
+
+    store.keys[aRemote] = aKey;
+    store.pending[aRemote] = aKey;
+
+    if( store.path.IsEmpty() )
+        return;
+
+    // Another KiCad may have saved since this one loaded, so merge into what is on disk now
+    std::map<wxString, wxString> merged = readRememberedKeys( store.path );
+
+    for( const auto& [remote, key] : store.pending )
+        merged[remote] = key;
+
+    if( writeRememberedKeys( store.path, merged ) )
+    {
+        store.keys = std::move( merged );
+        store.pending.clear();
+    }
+    else
+    {
+        wxLogTrace( traceGit, "Could not save remembered SSH keys to %s", store.path );
+    }
+}
+
+
+void KIGIT::SetRememberedSSHKeyStore( const wxString& aPath )
+{
+    REMEMBERED_KEYS&            store = rememberedKeys();
+    std::lock_guard<std::mutex> lock( store.mutex );
+    store.path = aPath;
+    store.loaded = false;
+    store.keys.clear();
+    store.pending.clear();
 }

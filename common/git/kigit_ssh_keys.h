@@ -71,6 +71,21 @@ APIEXPORT bool IsOfferableSSHKey( const wxString& aKey );
  */
 APIEXPORT wxString PrivateKeyPath( const wxString& aPicked );
 
+/**
+ * The key that last connected to @p aRemote, or empty. Kept across sessions, so the next
+ * connection offers it before keys the server refuses. Safe to call from any thread.
+ */
+APIEXPORT wxString RememberedSSHKey( const wxString& aRemote );
+
+/// Remember @p aKey as the key that connected to @p aRemote. Safe to call from any thread.
+APIEXPORT void RememberSSHKey( const wxString& aRemote, const wxString& aKey );
+
+/**
+ * Keep remembered keys in @p aPath. Until this is called they last for the session only. Finding the
+ * user's cache folder is not safe off the main thread, so the caller resolves it.
+ */
+APIEXPORT void SetRememberedSSHKeyStore( const wxString& aPath );
+
 } // namespace KIGIT
 
 #endif // KIGIT_SSH_KEYS_H_

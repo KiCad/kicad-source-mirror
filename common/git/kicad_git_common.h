@@ -566,11 +566,12 @@ public:
     /// The command that trusts a repository another user owns, when that is why attaching failed.
     const wxString& GetAttachTrustCommand() const { return m_attachTrustCommand; }
 
-    void ResetNextKey()
-    {
-        std::lock_guard<std::mutex> lock( m_credentialsMutex );
-        m_nextPublicKey = 0;
-    }
+    /// Start the next attempt from the first key, with the key that last connected to the current
+    /// remote moved up.
+    void ResetNextKey();
+
+    /// Remember the key that connected for @p aAttempt, so the next connection offers it first.
+    void RememberWorkingSSHKey( const KIGIT_AUTH_ATTEMPT& aAttempt );
 
     /// By value, so the caller never holds a pointer into the vector.
     wxString GetNextPublicKey();
@@ -739,8 +740,9 @@ private:
 
     void updatePublicKeys();
 
-    /// Rebuild m_publicKeys as the project key, when offerable, then the discovered keys, and restart
-    /// from the first. The caller holds m_credentialsMutex.
+    /// Rebuild m_publicKeys as the project key, when offerable, then the key that last connected to
+    /// m_remote, then the discovered keys, and restart from the first. The caller holds
+    /// m_credentialsMutex.
     void rebuildPublicKeysUnlocked();
     void updateConnectionType();
 
