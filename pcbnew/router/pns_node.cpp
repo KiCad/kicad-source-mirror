@@ -145,8 +145,7 @@ NODE::~NODE()
     delete m_index;
 }
 
-
-int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon ) const
+int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon, const COLLISION_SEARCH_OPTIONS& aOpts ) const
 {
     if( !m_ruleResolver )
         return 100000;
@@ -154,9 +153,21 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilo
     if( aA->IsVirtual() || aB->IsVirtual() )
         return 0;
 
-    int cl = m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
+    int rrClearance = m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
 
-    return cl;
+    if( rrClearance > 0 && aOpts.m_overrideClearance )
+    {
+        int overriddenClearance = aOpts.m_overrideClearance( aA, aB, CLEARANCE_ASPECT::ASP_DEFAULT );
+        
+        // fixme: negative return value from clearance override lambda indicates return to default. Perhaps an enum or a constant
+        // for this case would be better here
+        if( overriddenClearance < 0 ) 
+            return rrClearance;
+        else
+            return overriddenClearance;
+    }
+
+    return rrClearance;
 }
 
 

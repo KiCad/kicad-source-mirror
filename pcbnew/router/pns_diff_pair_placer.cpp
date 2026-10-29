@@ -294,7 +294,7 @@ bool DIFF_PAIR_PLACER::attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR&
 
         LINE postShove( preShove );
 
-        shove.ForceClearance( true, cur.Dimensions().Gap() - 2 * PNS_HULL_MARGIN );
+        shove.SetClearanceOverride( FixedClearanceOverrideLambda( cur.Dimensions().Gap() - 2 * PNS_HULL_MARGIN ) );
 
         bool sh1;
 

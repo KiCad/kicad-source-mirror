@@ -65,6 +65,15 @@ enum class CONSTRAINT_TYPE
     CT_PHYSICAL_HOLE_CLEARANCE = 13
 };
 
+enum class CLEARANCE_ASPECT
+{
+    ASP_DEFAULT = 0,
+    ASP_SHOVE_FORWARD = 1,
+    ASP_SHOVE_REVERSE = 2,
+    ASP_DIFF_PAIR_GAP = 3
+};
+
+
 /**
  * An abstract function object, returning a design rule (clearance, diff pair gap, etc) required
  * between two items.
@@ -110,17 +119,34 @@ struct OBSTACLE
     }
 };
 
-typedef std::function<bool(const ITEM* aTestItem, const ITEM* aRefItem)> COLLISION_FILTER_FUNC;
+typedef std::function<bool(const ITEM*, const ITEM*)> COLLISION_FILTER_FUNC;
+typedef std::function<int(const ITEM*, const ITEM*, CLEARANCE_ASPECT)> CLEARANCE_OVERRIDE_FUNC;
+
+static CLEARANCE_OVERRIDE_FUNC FixedClearanceOverrideLambda( int aFixedValue )
+{
+    return [ aFixedValue ] ( const ITEM*, const ITEM*, CLEARANCE_ASPECT ) -> int
+    {
+        return aFixedValue;
+    };
+}
 
 struct COLLISION_SEARCH_OPTIONS
 {
     bool m_differentNetsOnly = true;
-    int m_overrideClearance = -1;
     int m_limitCount = -1;
     int m_kindMask = -1;
     bool m_useClearanceEpsilon = true;
     COLLISION_FILTER_FUNC m_filter = nullptr;
+    CLEARANCE_OVERRIDE_FUNC m_overrideClearance = nullptr;
     int m_layer = -1;
+    
+    void SetFixedClearanceOverride( int aClearance )
+    {
+        m_overrideClearance = FixedClearanceOverrideLambda( aClearance );
+    }
+
+private:
+    
 };
 
 
@@ -259,7 +285,7 @@ public:
     ~NODE();
 
     /// Return the expected clearance between items a and b.
-    int GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) const;
+    int GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true, const COLLISION_SEARCH_OPTIONS& aOpts = COLLISION_SEARCH_OPTIONS() ) const;
 
     /// Return the pre-set worst case clearance between any pair of items.
     int GetMaxClearance() const

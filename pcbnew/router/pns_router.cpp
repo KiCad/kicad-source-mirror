@@ -208,8 +208,8 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
         test.SetLayers( PNS_LAYER_RANGE::All() );
 
         opts.m_differentNetsOnly = false;
-        opts.m_overrideClearance = aSlopRadius;
-
+        opts.SetFixedClearanceOverride( aSlopRadius );
+        
         node->QueryColliding( &test, obs, opts );
 
         for( const OBSTACLE& obstacle : obs )

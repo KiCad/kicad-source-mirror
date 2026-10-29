@@ -547,7 +547,7 @@ std::vector<LINE> TOPOLOGY::findLinesFromVia( ROUTER_IFACE* aRouterIface, VIA* a
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_differentNetsOnly = false;
-    opts.m_overrideClearance = 0;
+    opts.SetFixedClearanceOverride( 0 );
     opts.m_kindMask = ITEM::SEGMENT_T | ITEM::ARC_T;
 
     m_world->QueryColliding( aVia, obstacles, opts );
@@ -1197,7 +1197,7 @@ const TOPOLOGY::CLUSTER TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer, dou
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_differentNetsOnly = false;
-    opts.m_overrideClearance = aOverrideClearance;
+    opts.SetFixedClearanceOverride( aOverrideClearance );
 
     pending.push_back( aStart );
 

@@ -54,6 +54,7 @@ public:
         m_useShortestPath = false;
         m_lengthExpansionFactor = 10.0;
         m_iterationLimit = Settings().WalkaroundIterationLimit();
+        m_overrideClearance = nullptr;
     }
 
     ~WALKAROUND() {};
@@ -136,6 +137,7 @@ public:
     void SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies);
 
     void SetCollisionFilter( COLLISION_FILTER_FUNC aFilter );
+    void SetClearanceOverride( CLEARANCE_OVERRIDE_FUNC aFunc );
 
 private:
     void start( const LINE& aInitialPath );
@@ -162,6 +164,7 @@ private:
     TOPOLOGY::CLUSTER m_currentCluster[ MaxWalkPolicies ];
     std::set<ITEM*> m_processedItems;
     COLLISION_FILTER_FUNC m_collisionFilter;
+    CLEARANCE_OVERRIDE_FUNC m_overrideClearance;
     RESULT m_currentResult;
     double m_initialLength;
 };

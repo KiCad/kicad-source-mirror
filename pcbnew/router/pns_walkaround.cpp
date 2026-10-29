@@ -70,6 +70,7 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
     else 
     {
         opts.m_filter = m_collisionFilter;
+        opts.m_overrideClearance = m_overrideClearance;
     }
 
     opts.m_useClearanceEpsilon = false;
@@ -118,6 +119,9 @@ bool WALKAROUND::singleStep()
 {
     TOPOLOGY topo( m_world );
     TOPOLOGY::CLUSTER pendingClusters[MaxWalkPolicies];
+    COLLISION_SEARCH_OPTIONS opts;
+
+    opts.m_overrideClearance = m_overrideClearance;
 
     for( int i = 0; i < MaxWalkPolicies; i++ )
     {
@@ -178,7 +182,7 @@ bool WALKAROUND::singleStep()
                 return false;
             }
 
-            int clearance = m_world->GetClearance( clItem, &aLine, false );
+            int clearance = m_world->GetClearance( clItem, &aLine, false, opts );
             const SHAPE_LINE_CHAIN& cachedHull = m_world->GetRuleResolver()->HullCache(
                     clItem, clearance, aLine.Width(), aLine.Layer() );
 
@@ -237,7 +241,6 @@ bool WALKAROUND::singleStep()
 
     if( m_enabledPolicies[WP_SHORTEST] )
     {
-        COLLISION_SEARCH_OPTIONS opts;
         LINE& line = m_currentResult.lines[WP_SHORTEST];
         LINE  path_cw( line ), path_ccw( line );
 
@@ -295,7 +298,7 @@ bool WALKAROUND::singleStep()
             for( auto& item : m_processedItems )
             {
                 std::set<PNS::OBSTACLE> obstacles;
-                PNS::COLLISION_SEARCH_CONTEXT ctx( obstacles );
+                PNS::COLLISION_SEARCH_CONTEXT ctx( obstacles, opts );
                 if( shortest->Collide( item, m_world, shortest->Layer(), &ctx ) )
                 {
                     anyColliding = true;
@@ -429,6 +432,12 @@ void WALKAROUND::SetAllowedPolicies( std::vector<WALK_POLICY> aPolicies)
     for ( auto p : aPolicies )
         m_enabledPolicies[p] = true;
 }
+
+void WALKAROUND::SetClearanceOverride( CLEARANCE_OVERRIDE_FUNC aFunc )
+{
+    m_overrideClearance = aFunc;
+}
+
 
 }
 

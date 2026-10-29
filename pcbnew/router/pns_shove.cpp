@@ -166,11 +166,15 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aInclud
 }
 
 
-int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
+int SHOVE::getClearance( const ITEM* aA, const ITEM* aB, CLEARANCE_ASPECT aAspect ) const
 {
-    if( m_forceClearance >= 0 )
-        return m_forceClearance;
-
+    if( m_overrideClearance )
+    {
+        int overriddenClearance = m_overrideClearance( aA, aB, aAspect );
+        if( overriddenClearance >= 0 )
+            return overriddenClearance;
+    }
+    
     int clearance = m_currentNode->GetClearance( aA, aB, false );
 
     if( aA->HasHole() )
@@ -194,7 +198,7 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
     ALGO_BASE( aRouter )
 {
     m_optFlagDisableMask = 0;
-    m_forceClearance = -1;
+    m_overrideClearance = nullptr;
     m_root = aWorld;
     m_currentNode = aWorld;
     SetDebugDecorator( aRouter->GetInterface()->GetDebugDecorator() );
@@ -1651,6 +1655,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     {
         COLLISION_SEARCH_OPTIONS opts;
         opts.m_kindMask = search_order;
+        opts.m_overrideClearance = m_overrideClearance;
         opts.m_filter = [ this ] ( const ITEM* item, const ITEM* aRefItem ) -> bool
         {
             bool rv = true;
@@ -2664,6 +2669,12 @@ void SHOVE::SetCollisionFilter( COLLISION_FILTER_FUNC aFunc )
 {
     m_collisionFilter = aFunc;
 }
+
+void SHOVE::SetClearanceOverride( CLEARANCE_OVERRIDE_FUNC aFunc )
+{
+    m_overrideClearance = aFunc;
+}
+
 
 
 }
