@@ -70,9 +70,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
         // Vertical pins: text is rotated vertical so that it reads bottom->top.
 
         // Check if both name and number are displayed
-        bool showBothNameAndNumber = !m_pin.GetShownName().IsEmpty()
-                                     && parentSym
-                                     && parentSym->GetShowPinNames()
+        bool showBothNameAndNumber = isNameShown()
                                      && parentSym->GetPinNameOffset() == 0; // name is outside
 
         int centerX;
@@ -102,9 +100,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
         // Horizontal pins: "above" means negative Y direction.
 
         // Check if both name and number are displayed
-        bool showBothNameAndNumber = !m_pin.GetShownName().IsEmpty()
-                                     && parentSym
-                                     && parentSym->GetShowPinNames()
+        bool showBothNameAndNumber = isNameShown()
                                      && parentSym->GetPinNameOffset() == 0; // name is outside
 
         int centerY;
@@ -520,6 +516,15 @@ int PIN_LAYOUT_CACHE::getNumberBlockOffset() const
 }
 
 
+bool PIN_LAYOUT_CACHE::isNameShown() const
+{
+    const SYMBOL* parentSym = m_pin.GetParentSymbol();
+
+    return parentSym && parentSym->GetShowPinNames() && m_pin.GetNameTextSize() > 0
+           && !m_pin.GetShownName().IsEmpty();
+}
+
+
 int PIN_LAYOUT_CACHE::getPinTextOffset() const
 {
     const float offsetRatio =
@@ -584,9 +589,7 @@ OPT_BOX2I PIN_LAYOUT_CACHE::getUntransformedPinNumberBox() const
     OPT_BOX2I box = BOX2I::ByCenter( { pinLength / 2, 0 }, m_numExtentsCache.m_Extents );
 
     // Check if both name and number are displayed (name outside the pin)
-    bool showBothNameAndNumber = ( pinNameOffset == 0
-                                   && !m_pin.GetShownName().empty()
-                                   && m_pin.GetParentSymbol()->GetShowPinNames() );
+    bool showBothNameAndNumber = pinNameOffset == 0 && isNameShown();
 
     // Same side decision as GetPinNumberInfo(), so the box follows a mirrored block (issue 24894)
     const bool flipStacked = m_numExtentsCache.m_Text.Contains( '\n' )
@@ -776,7 +779,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
     // Because pins are very likely to share a lot of characteristics, a global
     // cache might make more sense than a per-pin cache.
 
-    if( name.IsEmpty() || !m_pin.GetParentSymbol()->GetShowPinNames() )
+    if( !isNameShown() )
         return std::nullopt;
 
     std::optional<TEXT_INFO> info = TEXT_INFO();

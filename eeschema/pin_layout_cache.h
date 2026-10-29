@@ -164,6 +164,11 @@ private:
     int getPinTextOffset() const;
 
     /**
+     * Whether the pin's name is drawn.  A zero name size hides one name while the symbol shows the rest.
+     */
+    bool isNameShown() const;
+
+    /**
      * Get the distance from the pin to the centre of the drawn number, measured perpendicular to
      * the pin.  A stacked number is a column of lines, so this grows with the line count.
      */
