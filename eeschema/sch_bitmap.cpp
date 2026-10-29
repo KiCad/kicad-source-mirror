@@ -132,6 +132,10 @@ void SCH_BITMAP::Serialize( google::protobuf::Any& aContainer ) const
     m_referenceImage.PackToBytes( *image.mutable_image_data() );
 
     kiapi::common::PackCustomProperties( image.mutable_custom_properties(), *this );
+
+    image.mutable_orientation()->set_value_degrees( m_referenceImage.GetOrientation().AsDegrees() );
+    image.set_opacity( m_referenceImage.GetOpacity() );
+
     aContainer.PackFrom( image );
 }
 
@@ -161,6 +165,10 @@ bool SCH_BITMAP::Deserialize( const google::protobuf::Any& aContainer )
 
     SetLocked( image.locked() == types::LockedState::LS_LOCKED );
     kiapi::common::UnpackCustomProperties( image.custom_properties(), *this );
+
+    m_referenceImage.SetOrientation( EDA_ANGLE( image.orientation().value_degrees(), DEGREES_T ) );
+    m_referenceImage.SetOpacity( image.opacity() );
+
     return true;
 }
 

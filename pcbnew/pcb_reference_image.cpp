@@ -195,6 +195,10 @@ void PCB_REFERENCE_IMAGE::Serialize( google::protobuf::Any& aContainer ) const
     m_referenceImage.PackToBytes( *refImage.mutable_image_data() );
 
     kiapi::common::PackCustomProperties( refImage.mutable_custom_properties(), *this );
+
+    refImage.mutable_orientation()->set_value_degrees( m_referenceImage.GetOrientation().AsDegrees() );
+    refImage.set_opacity( m_referenceImage.GetOpacity() );
+
     aContainer.PackFrom( refImage );
 }
 
@@ -224,6 +228,10 @@ bool PCB_REFERENCE_IMAGE::Deserialize( const google::protobuf::Any& aContainer )
 
     SetLocked( refImage.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     kiapi::common::UnpackCustomProperties( refImage.custom_properties(), *this );
+
+    m_referenceImage.SetOrientation( EDA_ANGLE( refImage.orientation().value_degrees(), DEGREES_T ) );
+    m_referenceImage.SetOpacity( refImage.opacity() );
+
     return true;
 }
 

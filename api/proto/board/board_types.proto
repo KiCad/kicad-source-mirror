@@ -1225,6 +1225,10 @@ message ReferenceImage
 
   // Since: 11.0
   repeated kiapi.common.types.CustomProperty custom_properties = 9;
+
+  // Since: 11.0
+  kiapi.common.types.Angle orientation = 10;
+  double opacity = 11;
 }
 
 message GridItemAffects

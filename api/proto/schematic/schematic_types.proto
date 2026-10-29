@@ -146,6 +146,9 @@ message SchematicImage
   kiapi.common.types.LockedState locked = 6;
 
   repeated kiapi.common.types.CustomProperty custom_properties = 7;
+
+  kiapi.common.types.Angle orientation = 8;
+  double opacity = 9;
 }
 
 enum SchematicLabelShape
