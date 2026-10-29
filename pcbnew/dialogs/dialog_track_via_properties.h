@@ -153,4 +153,8 @@ private:
     PCB_LAYER_ID m_editLayer;
     std::map<int, PCB_LAYER_ID> m_editLayerCtrlMap;
     bool                        m_padstackDirty;
+
+    /// A layer selector cannot hold a mixed state in its value, so the dialog remembers it
+    bool m_backdrillFrontLayerMixed = false;
+    bool m_backdrillBackLayerMixed = false;
 };

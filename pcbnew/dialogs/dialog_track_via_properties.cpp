@@ -695,6 +695,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         }
 
         // Top backdrill control
+        m_backdrillFrontLayerMixed = secondary_drill_end_layer_mixed;
+
         if( secondary_drill_end_layer_mixed )
         {
             m_backdrillFrontLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
@@ -709,6 +711,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         }
 
         // Bottom backdrill control
+        m_backdrillBackLayerMixed = tertiary_drill_end_layer_mixed;
+
         if( tertiary_drill_end_layer_mixed )
         {
             m_backdrillBackLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
@@ -1384,6 +1388,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                         if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
                             tertiaryDrill.end = ToLAYER_ID( m_backdrillBackLayer->GetLayerSelection() );
+                        else if( m_backdrillBackLayerMixed )
+                            tertiaryDrill.end = viaStack.TertiaryDrill().end;
 
                         break;
 
@@ -1400,6 +1406,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                         if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
                             secondaryDrill.end = ToLAYER_ID( m_backdrillFrontLayer->GetLayerSelection() );
+                        else if( m_backdrillFrontLayerMixed )
+                            secondaryDrill.end = viaStack.SecondaryDrill().end;
 
                         break;
 
@@ -1417,6 +1425,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                         if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
                             secondaryDrill.end = ToLAYER_ID( m_backdrillFrontLayer->GetLayerSelection() );
+                        else if( m_backdrillFrontLayerMixed )
+                            secondaryDrill.end = viaStack.SecondaryDrill().end;
 
                         if( !m_backdrillBackSize.IsIndeterminate() && !m_backdrillBackSize.IsNull() )
                         {
@@ -1426,6 +1436,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                         if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
                             tertiaryDrill.end = ToLAYER_ID( m_backdrillBackLayer->GetLayerSelection() );
+                        else if( m_backdrillBackLayerMixed )
+                            tertiaryDrill.end = viaStack.TertiaryDrill().end;
 
                         break;
                     }
