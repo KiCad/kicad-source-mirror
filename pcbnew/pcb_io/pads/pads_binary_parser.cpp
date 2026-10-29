@@ -2062,6 +2062,7 @@ void BINARY_PARSER::parseFreeText( const SDB_SECTION& aText, size_t aRecordBase,
         text.width = static_cast<double>( linewidth );
         text.layer = static_cast<int>( layerWord & 0xFF );
         text.rotation = toBasicAngle( angleRaw );
+        text.mirrored = geom.I32( aRingRotation + 20 ) != 0;
 
         m_texts.push_back( text );
     }
