@@ -145,6 +145,12 @@ private:
     /// Set the status line text and wrap it to the width of the label's column.
     void setStatusText( const wxString& aText );
 
+    /// Lay out the controls, then rewrap the status line to its column's new width.
+    bool layoutAndWrapStatus();
+
+    /// Give the AUI pane the controls' minimum height, so a dock never squeezes them.
+    void updateDockMinHeight();
+
     /// Show a command to copy under the status line, or hide the row when aCommand is empty.
     void showTrustCommand( const wxString& aCommand );
 
@@ -296,6 +302,11 @@ private:
 
     /// The width the status text was last wrapped to, so a layout re-wraps it only when that changes.
     int m_statusWrapWidth = -1;
+
+    /// The controls' minimum height from the last layout, applied to the AUI pane at idle time.
+    int       m_dockMinHeight = -1;
+    wxWindow* m_dockParent = nullptr;
+    bool      m_dockUpdatePending = false;
 
     /// True once this panel has attached its refresh listener to a session at least once. A
     /// first attachment is not a project change, so it must not close the Advanced window.

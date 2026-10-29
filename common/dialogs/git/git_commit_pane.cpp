@@ -30,6 +30,8 @@
 #include <memory>
 
 #include <wx/app.h>
+#include <wx/aui/floatpane.h>
+#include <wx/aui/framemanager.h>
 #include <wx/button.h>
 #include <wx/dataview.h>
 #include <wx/file.h>
@@ -718,6 +720,25 @@ void GIT_COMMIT_PANE::setStatusText( const wxString& aText )
 
 bool GIT_COMMIT_PANE::Layout()
 {
+    bool done = layoutAndWrapStatus();
+
+    // AUI sizes a pane from its pane info alone and squeezes the controls past their minimum
+    const int height = GetSizer()->CalcMin().y;
+
+    // Floating or docking the pane reparents it into a frame laid out from a copy of the pane info
+    if( height != m_dockMinHeight || GetParent() != m_dockParent )
+    {
+        m_dockMinHeight = height;
+        m_dockParent = GetParent();
+        m_dockUpdatePending = true;
+    }
+
+    return done;
+}
+
+
+bool GIT_COMMIT_PANE::layoutAndWrapStatus()
+{
     bool     done = GIT_COMMIT_PANE_BASE::Layout();
     wxSizer* column = m_emptyLabel ? m_emptyLabel->GetContainingSizer() : nullptr;
 
@@ -744,9 +765,61 @@ bool GIT_COMMIT_PANE::Layout()
 }
 
 
+void GIT_COMMIT_PANE::updateDockMinHeight()
+{
+    wxAuiManager* manager = wxAuiManager::GetManager( this );
+
+    if( !manager )
+        return;
+
+    wxAuiPaneInfo& pane = manager->GetPane( this );
+
+    if( !pane.IsOk() )
+        return;
+
+    // A refresh passes through shorter states, so compare with what the manager already has
+    const bool changed = pane.min_size.y != m_dockMinHeight;
+
+    pane.MinSize( pane.min_size.x, m_dockMinHeight );
+
+    // A floating pane is laid out by a copy of its info in the floating frame's own manager
+    if( wxAuiFloatingFrame* floating = wxDynamicCast( pane.frame, wxAuiFloatingFrame ) )
+    {
+        wxAuiManager&  inner = floating->GetAuiManager();
+        wxAuiPaneInfo& innerPane = inner.GetPane( this );
+
+        if( innerPane.min_size != pane.min_size )
+        {
+            innerPane.MinSize( pane.min_size );
+            inner.Update();
+        }
+
+        // wx opens a floating pane at its FloatingSize even when that is below the pane's minimum
+        const wxSize minimum = floating->GetSizer()->GetMinSize();
+        const wxSize size = floating->GetClientSize();
+
+        floating->SetMinClientSize( minimum );
+
+        if( size.x < minimum.x || size.y < minimum.y )
+            floating->SetClientSize( wxSize( std::max( size.x, minimum.x ), std::max( size.y, minimum.y ) ) );
+    }
+    else if( changed && pane.IsShown() )
+    {
+        manager->Update();
+    }
+}
+
+
 void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 {
     aEvent.Skip();
+
+    // Update() from inside Layout() would recurse, and during a sash drag it would drop the drag
+    if( m_dockUpdatePending && !wxWindow::GetCapture() )
+    {
+        m_dockUpdatePending = false;
+        updateDockMinHeight();
+    }
 
     // Every layout path moves the box, so the hint follows it from here.
     updateDescriptionHint();
