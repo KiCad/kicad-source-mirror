@@ -342,6 +342,11 @@ public:
     /// key file can be offered.
     wxString GetFirstOfferedSSHKey() const;
 
+    /// The encrypted key the server last accepted for this remote, so the credential prompt asks for the
+    /// right passphrase. Empty when no server has accepted one.
+    wxString GetAcceptedSSHKey() const;
+    void     SetAcceptedSSHKey( const wxString& aKey );
+
     /// The remote the credential prompt was opened for. Read as one, so a transfer syncing the
     /// URL on another thread cannot leave the fields describing two remotes.
     struct CREDENTIAL_IDENTITY
@@ -583,6 +588,7 @@ public:
             m_remote = aRemote;
             m_password.clear();
             m_secretFetched = false;
+            m_acceptedSSHKey.clear();
             updateConnectionTypeUnlocked();
         }
 
@@ -753,6 +759,7 @@ private:
     std::vector<wxString> m_publicKeys;
     wxString m_publicKeysHost; // The host m_publicKeys was gathered for
     wxString m_projectSSHKey;  // Kept when its file is missing, so the setting is not lost
+    wxString              m_acceptedSSHKey; // An encrypted key the server took for m_remote, still to be unlocked
     int m_nextPublicKey;
     bool m_secretFetched;
 
@@ -806,6 +813,9 @@ namespace KIGIT
  * recognised as a private key is reported as unencrypted.
  */
 APIEXPORT bool IsPrivateKeyEncrypted( const wxString& aKeyText );
+
+/// IsPrivateKeyEncrypted for the key file @p aKey. A file that cannot be read is reported as unencrypted.
+APIEXPORT bool IsPrivateKeyFileEncrypted( const wxString& aKey );
 
 
 /**

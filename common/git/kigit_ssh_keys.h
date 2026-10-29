@@ -22,6 +22,7 @@
 
 #include <import_export.h>
 
+#include <string>
 #include <vector>
 
 #include <wx/string.h>
@@ -70,6 +71,9 @@ APIEXPORT bool IsOfferableSSHKey( const wxString& aKey );
  * The private key for a path picked in a file dialog, which may be the key's .pub file.
  */
 APIEXPORT wxString PrivateKeyPath( const wxString& aPicked );
+
+/// The public key blob from @p aKey's .pub file, as the server sees it, or empty when it cannot be read.
+APIEXPORT std::string PublicKeyBlob( const wxString& aKey );
 
 /**
  * The key that last connected to @p aRemote, or empty. Kept across sessions, so the next

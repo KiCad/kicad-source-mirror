@@ -71,6 +71,10 @@ static void resolveMissingRemote( KIGIT_COMMON* aCommon )
 // The project's key outlives the session's list, which a host change regathers, but a deleted one is never offered
 static wxString initialSSHKey( KIGIT_COMMON* aCommon, PROJECT* aProject )
 {
+    // The server named this key as the one it takes, so its passphrase is the one to ask for
+    if( wxString accepted = aCommon->GetAcceptedSSHKey(); KIGIT::IsOfferableSSHKey( accepted ) )
+        return accepted;
+
     if( aProject && KIGIT::IsOfferableSSHKey( aProject->GetLocalSettings().m_GitSSHKey ) )
         return aProject->GetLocalSettings().m_GitSSHKey;
 

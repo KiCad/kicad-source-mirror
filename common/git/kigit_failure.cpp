@@ -100,16 +100,13 @@ KIGIT_COMMON::GIT_CONN_TYPE connTypeOf( const KIGIT_AUTH_ATTEMPT& aAuth, const K
 }
 
 
-bool lastKeyEncrypted( const KIGIT_AUTH_ATTEMPT& aAuth )
+// The key to name in a rejection. The server accepted the public half of acceptedKey, so it is the one to fix
+wxString namedKey( const KIGIT_AUTH_ATTEMPT& aAuth )
 {
-    // wxFFile reports an unopenable file to the user, and a key that is gone is simply not encrypted
-    if( aAuth.keysTried.empty() || !wxFileName::IsFileReadable( aAuth.keysTried.back() ) )
-        return false;
+    if( !aAuth.acceptedKey.IsEmpty() )
+        return aAuth.acceptedKey;
 
-    wxFFile  file( aAuth.keysTried.back(), wxS( "rb" ) );
-    wxString text;
-
-    return file.IsOpened() && file.ReadAll( &text ) && KIGIT::IsPrivateKeyEncrypted( text );
+    return aAuth.keysTried.empty() ? wxString() : aAuth.keysTried.back();
 }
 
 
@@ -237,7 +234,9 @@ namespace
 wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const KIGIT_FAILURE_CONTEXT& aContext )
 {
     const KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( aContext.url );
-    const wxString                 key = aAuth.keysTried.empty() ? wxString() : aAuth.keysTried.back();
+    const wxString                 key = aKind == KIGIT_FAILURE::AUTH_SSH_KEY_REJECTED
+                                                 ? namedKey( aAuth )
+                                                 : ( aAuth.keysTried.empty() ? wxString() : aAuth.keysTried.back() );
     wxString                       host = parsed.hostname;
 
     // A lab or company server often listens on another port, and the bare host would name the wrong service
@@ -254,13 +253,18 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
     switch( aKind )
     {
     case KIGIT_FAILURE::AUTH_SSH_KEY_REJECTED:
-        // An encrypted key with a wrong passphrase fails exactly as an unregistered one does
-        if( lastKeyEncrypted( aAuth ) && !aAuth.passphraseGiven )
+    {
+        // An encrypted key with a wrong passphrase fails exactly as an unregistered one does, unless the
+        // server already refused its public half
+        const bool encrypted =
+                ( !aAuth.acceptedKey.IsEmpty() || !aAuth.lastKeyRefused ) && KIGIT::IsPrivateKeyFileEncrypted( key );
+
+        if( encrypted && !aAuth.passphraseGiven )
         {
             return wxString::Format( _( "The SSH key %s requires a passphrase to connect to %s." ), key, host );
         }
 
-        if( lastKeyEncrypted( aAuth ) )
+        if( encrypted )
         {
             return wxString::Format( _( "%s did not accept the SSH key %s. Check the key's passphrase, and that "
                                         "%s.pub is added to your account on %s." ),
@@ -270,6 +274,7 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
         return wxString::Format( _( "%s did not accept the SSH key %s. Check that %s.pub is added to your account "
                                     "on %s, or choose another key." ),
                                  host, key, key, host );
+    }
 
     case KIGIT_FAILURE::AUTH_NO_SSH_KEY:
         return wxString::Format( _( "%s did not accept any SSH key. KiCad found no key files, and your SSH agent "

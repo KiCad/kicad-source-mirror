@@ -31,6 +31,8 @@
 #include <nlohmann/json.hpp>
 
 #include <wx/arrstr.h>
+#include <wx/base64.h>
+#include <wx/ffile.h>
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -375,6 +377,26 @@ wxString KIGIT::HomeDir()
 wxString KIGIT::PrivateKeyPath( const wxString& aPicked )
 {
     return aPicked.ends_with( wxS( ".pub" ) ) ? aPicked.Left( aPicked.size() - 4 ) : aPicked;
+}
+
+
+std::string KIGIT::PublicKeyBlob( const wxString& aKey )
+{
+    wxFFile  file( aKey + wxS( ".pub" ), wxS( "rb" ) );
+    wxString text;
+
+    if( !file.IsOpened() || !file.ReadAll( &text ) )
+        return {};
+
+    // "<type> <base64 blob> [comment]" on the first line
+    wxArrayString fields = wxSplit( text.BeforeFirst( '\n' ).Trim().Trim( false ), ' ', '\0' );
+
+    if( fields.size() < 2 )
+        return {};
+
+    wxMemoryBuffer blob = wxBase64Decode( fields[1] );
+
+    return std::string( static_cast<const char*>( blob.GetData() ), blob.GetDataLen() );
 }
 
 

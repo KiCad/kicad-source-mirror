@@ -37,6 +37,9 @@ struct KIGIT_AUTH_ATTEMPT
     std::vector<wxString>       keysTried;          ///< Key files offered, in order.
     bool                        agentTried = false; ///< The SSH agent was offered before any key file.
     bool                        passphraseGiven = false; ///< A passphrase went with the last key file offered.
+    wxString                    acceptedKey;             ///< An encrypted key whose public half the server accepted.
+    bool                        lastKeyRefused = false;  ///< The server refused the last key's public half.
+    wxString                    probing; ///< The encrypted key whose public half is out to the server now.
 };
 
 
