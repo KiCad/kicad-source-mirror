@@ -324,14 +324,20 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
                          } );
     GetSizer()->Add( m_historyLink, 0, wxALIGN_RIGHT | wxLEFT | wxRIGHT | wxBOTTOM, 4 );
 
+    // A short dock scrolls, and the list must still show a few files when it does
+    m_checklist->SetMinSize( FromDIP( wxSize( -1, 100 ) ) );
+
     if( m_inAdvancedWindow )
         layoutWide();
 
     // Sized by hand, or a long branch name would set the width of the whole row. Wide enough
     // for an ordinary name, with the tooltip carrying the rest when one is longer.
 
-    // Measured while every control is still shown.
-    m_minDockWidth = GetSizer()->CalcMin().x;
+    // Measured while every control is still shown, leaving room for the scrollbar a short dock adds
+    m_minDockWidth = GetSizer()->CalcMin().x + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X, this );
+
+    // A dock shorter than the controls scrolls them rather than drawing them over each other
+    SetScrollRate( 0, FromDIP( 10 ) );
 
     OnGitTransfersChanged();
     RefreshFileList();

@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
 
+#include "wx/scrolwin.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -37,7 +38,7 @@ class STD_BITMAP_BUTTON;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GIT_COMMIT_PANE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class GIT_COMMIT_PANE_BASE : public wxPanel
+class GIT_COMMIT_PANE_BASE : public wxScrolledWindow
 {
 	private:
 
