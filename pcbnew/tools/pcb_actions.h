@@ -294,6 +294,8 @@ public:
     static TOOL_ACTION routerRouteSelectedFromEnd;
     static TOOL_ACTION routerAutorouteSelected;
     static TOOL_ACTION routerOptimizeSelected;
+    static TOOL_ACTION routerSpreadTracks;
+
     static TOOL_ACTION cancelCurrentItem;
 
     /// Activation of the Push and Shove settings dialogs

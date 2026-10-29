@@ -3189,6 +3189,17 @@ TOOL_ACTION PCB_ACTIONS::tuneSkew( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW ) );
 
+
+TOOL_ACTION PCB_ACTIONS::routerSpreadTracks( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveRouter.SpreadTracks" )
+        .Scope( AS_GLOBAL )
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        .FriendlyName( _( "Spread Tracks" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Flags( AF_ACTIVATE )
+        .Icon( BITMAPS::spread_tracks )
+        .Parameter( PNS::PNS_MODE_SPREAD_TRACKS ) );
+
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.InlineDrag" )
         .Scope( AS_CONTEXT )
