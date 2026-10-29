@@ -55,6 +55,7 @@ public:
         m_lengthExpansionFactor = 10.0;
         m_iterationLimit = Settings().WalkaroundIterationLimit();
         m_overrideClearance = nullptr;
+        m_useClustering = true;
     }
 
     ~WALKAROUND() {};
@@ -121,6 +122,11 @@ public:
         m_useShortestPath = aEnabled;
     }
 
+    void SetUseClustering( bool aEnabled )
+    {
+        m_useClustering = aEnabled;
+    }
+
     void RestrictToCluster( bool aEnabled, const TOPOLOGY::CLUSTER& aCluster );
 
     STATUS Route( const LINE& aInitialPath, LINE& aWalkPath,
@@ -166,6 +172,7 @@ private:
     COLLISION_FILTER_FUNC m_collisionFilter;
     CLEARANCE_OVERRIDE_FUNC m_overrideClearance;
     RESULT m_currentResult;
+    bool m_useClustering;
     double m_initialLength;
 };
 

@@ -150,7 +150,16 @@ bool WALKAROUND::singleStep()
 
         int clusterMargin = 2 * obstacle->m_clearance + line.Width() ;
 
-        pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer(), 0.0, line.Net(), clusterMargin );
+        if( m_useClustering )
+        {
+            pendingClusters[ i ] = topo.AssembleCluster( obstacle->m_item, line.Layer(), 0.0, line.Net(), clusterMargin );
+        }
+        else
+        {
+            pendingClusters[ i ].m_key = nullptr;
+            pendingClusters[ i ].m_items = { obstacle->m_item };
+        }
+
         PNS_DBG( Dbg(), AddItem, obstacle->m_item, BLUE, 10000, wxString::Format( "col-item owner-depth %d cl-items=%d cl-margin=%d", static_cast<const NODE*>( obstacle->m_item->Owner() )->Depth(), (int) pendingClusters[i].m_items.size(), clusterMargin ) );
 
     }
