@@ -4523,9 +4523,10 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEX
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT* aBaseText )
+bool PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT* aBaseText )
 {
     FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aText->GetParent() );
+    bool       sawEffects = false;
     bool hasAngle       = false;    // Old files do not have a angle specified.
                                     // in this case it is 0 expected to be 0
     bool hasPos         = false;
@@ -4629,6 +4630,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
             break;
 
         case T_effects:
+            sawEffects = true;
             parseEDA_TEXT( static_cast<EDA_TEXT*>( aText ) );
             break;
 
@@ -4674,6 +4676,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
         if( !aText->GetAutoThickness() )
             aText->SetLibTextThickness( aText->GetTextThickness() );
     }
+
+    return sawEffects;
 }
 
 
@@ -6335,6 +6339,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
             PCB_FIELD* field = nullptr;
             std::unique_ptr<PCB_FIELD> unusedField;
+            bool                       newField = false;
 
             // 8.0.0rc3 had a bug where these properties were mistakenly added to the footprint as
             // fields, this will remove them as fields but still correctly set the footprint filters
@@ -6369,8 +6374,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 field->SetText( pValue );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
 
-                if( m_board )   // can be null when reading a lib
-                    field->StyleFromSettings( m_board->GetDesignSettings(), true );
+                newField = true;
             }
 
             // Hide the field by default if it is a legacy field that did not have
@@ -6380,7 +6384,12 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             else
                 field->SetVisible( true );
 
-            parsePCB_TEXT_effects( field );
+            bool sawEffects = parsePCB_TEXT_effects( field );
+
+            // Fields too old to carry effects have no style of their own, so give them the
+            // board's. A file that did carry effects has said all it means to say.
+            if( newField && !sawEffects && m_board ) // m_board is null when reading a lib
+                field->StyleFromSettings( m_board->GetDesignSettings(), true );
         }
             break;
 

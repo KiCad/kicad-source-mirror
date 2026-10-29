@@ -25,6 +25,7 @@
 #include <board.h>
 #include <kiid.h>
 #include <footprint.h>
+#include <board_design_settings.h>
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcbnew_utils/board_file_utils.h>
@@ -151,4 +152,66 @@ BOOST_AUTO_TEST_CASE( FootprintFieldLockRoundTrip )
         if( item->Type() == PCB_TEXT_T )
             BOOST_CHECK( item->IsLocked() );
     }
+}
+
+
+/**
+ * A field with no thickness token is using auto thickness. Loading one builds the field before
+ * its effects are parsed, so nothing stamped on it then may survive the parse.
+ */
+BOOST_AUTO_TEST_CASE( FootprintUserFieldKeepsAutoThickness )
+{
+    BOARD board;
+
+    // Auto thickness only differs from the board default when that default is not zero
+    board.GetDesignSettings().m_TextThickness[LAYER_CLASS_SILK] = pcbIUScale.mmToIU( 0.15 );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ) );
+    fp->SetReference( wxS( "U1" ) );
+
+    PCB_FIELD* userField = new PCB_FIELD( fp, FIELD_T::USER, wxS( "Label" ) );
+    userField->SetText( wxS( "BezelSW0" ) );
+    userField->SetLayer( F_SilkS );
+    userField->SetAutoThickness( true );
+    fp->Add( userField );
+
+    board.Add( fp );
+
+    BOOST_REQUIRE( userField->GetAutoThickness() );
+
+    KI_TEST::SCOPED_TEMP_DIR    tempDir( "kicad_qa_auto_thickness" );
+    const std::filesystem::path path = tempDir.Path() / "auto_thickness.kicad_pcb";
+
+    KI_TEST::DumpBoardToFile( board, path );
+    std::unique_ptr<BOARD> restored = KI_TEST::ReadBoardFromFileOrStream( path.string() );
+    BOOST_REQUIRE( restored );
+    BOOST_REQUIRE_EQUAL( restored->Footprints().size(), 1 );
+
+    PCB_FIELD* loaded = restored->Footprints().front()->GetField( wxS( "Label" ) );
+    BOOST_REQUIRE( loaded );
+    BOOST_CHECK( loaded->GetAutoThickness() );
+}
+
+
+/**
+ * The other side of the same call: a legacy property carries no effects at all, so the board
+ * defaults are the only style it can get.
+ */
+BOOST_AUTO_TEST_CASE( LegacyFootprintPropertyTakesBoardDefaults )
+{
+    const auto doBoardTest = [&]( const BOARD& aBoard )
+    {
+        BOOST_REQUIRE( !aBoard.Footprints().empty() );
+
+        PCB_FIELD* field = aBoard.Footprints().front()->GetField( wxS( "myfield" ) );
+
+        BOOST_REQUIRE( field );
+        BOOST_CHECK( !field->GetAutoThickness() );
+        BOOST_CHECK_EQUAL( field->GetTextThickness(),
+                           aBoard.GetDesignSettings().GetTextThickness( field->GetLayer() ) );
+    };
+
+    // Saving upgrades the file, so the roundtrip also covers the field once it has its own effects
+    KI_TEST::LoadAndTestBoardFile( "custom_fields", true, doBoardTest );
 }
