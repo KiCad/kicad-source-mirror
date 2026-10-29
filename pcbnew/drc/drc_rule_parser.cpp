@@ -838,7 +838,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( (int) offset, expr, value, units, unitless, ratio );
+            parseValueWithUnits( (int) offset, expr, value, units, unitless, ratio, impliedDegrees );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
@@ -859,7 +859,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                 break;
             }
 
-            parseValueWithUnits( (int) offset, expr, value, units, unitless, ratio );
+            parseValueWithUnits( (int) offset, expr, value, units, unitless, ratio, impliedDegrees );
             validateAndSetValueWithUnits( value, units,
                                           [&c]( const int aValue )
                                           {
