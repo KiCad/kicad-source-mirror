@@ -854,6 +854,11 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // GAL_DRAWING_CONTEXT can throw in the dtor, so we need to scope
         // the full lifetime inside the try block
         {
+            // Cairo clears the screen as drawing begins, so a canvas's first frame needs its colours first
+            m_gal->SetClearColor( settings->GetBackgroundColor() );
+            m_gal->SetGridColor( settings->GetGridColor() );
+            m_gal->SetCursorColor( settings->GetCursorColor() );
+
             cntCtx.Start();
             KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
             cntCtx.Stop();
@@ -875,10 +880,6 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
             {
                 m_view->MarkDirty();
             }
-
-            m_gal->SetClearColor( settings->GetBackgroundColor() );
-            m_gal->SetGridColor( settings->GetGridColor() );
-            m_gal->SetCursorColor( settings->GetCursorColor() );
 
             // The OpenGL back buffer is undefined after SwapBuffers, even on a cursor-only repaint
             if( m_backend == GAL_TYPE_OPENGL )
