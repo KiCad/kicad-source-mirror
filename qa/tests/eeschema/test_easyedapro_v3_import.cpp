@@ -105,6 +105,46 @@ static void writeV3LibraryArchive( const wxString& aPath, const std::string& aSy
     writeZipEntry( zip, wxS( "library.elibu" ), aElibu );
 }
 
+/// The LS2K0300 archive loaded once, since every load parses all of it. Cases must not modify it.
+struct LOADED_SAMPLE
+{
+    LOADED_SAMPLE() :
+            m_project( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ), wxS( "easyedapro_v3_test" ) ),
+            m_schematic( nullptr ),
+            m_docs( getEasyEdaProV3ArchivePath() )
+    {
+        wxFileName archiveFile( m_project.DirStr(), "sample", "epro2" );
+        BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
+
+        m_schematic.SetProject( &m_project.Project() );
+
+        m_plugin.reset( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
+        BOOST_REQUIRE( m_plugin );
+
+        BOOST_REQUIRE_NO_THROW( m_rootSheet = m_plugin->LoadSchematicFile( archiveFile.GetFullPath(), &m_schematic,
+                                                                           nullptr, nullptr ) );
+        BOOST_REQUIRE( m_rootSheet );
+
+        m_schematic.RefreshHierarchy();
+
+        BOOST_REQUIRE_NO_THROW( m_docs.Load() );
+
+        s_instance = this;
+    }
+
+    ~LOADED_SAMPLE() { s_instance = nullptr; }
+
+    static LOADED_SAMPLE& Get() { return *s_instance; }
+
+    KI_TEST::SCOPED_TEMP_PROJECT m_project;
+    SCHEMATIC                    m_schematic;
+    IO_RELEASER<SCH_IO>          m_plugin;
+    EASYEDAPRO::V3_DOC_PARSER    m_docs;
+    SCH_SHEET*                   m_rootSheet = nullptr;
+
+    static inline LOADED_SAMPLE* s_instance = nullptr;
+};
+
 } // namespace
 
 
@@ -240,10 +280,11 @@ BOOST_AUTO_TEST_CASE( RawDocNullTombstonesRemovedAfterDeduplication )
 }
 
 
+BOOST_AUTO_TEST_SUITE( LS2K0300Sample, *boost::unit_test::fixture<LOADED_SAMPLE>() )
+
 BOOST_AUTO_TEST_CASE( BuildProjectIndexHasSchematicSheets )
 {
-    EASYEDAPRO::V3_DOC_PARSER v3( getEasyEdaProV3ArchivePath() );
-    BOOST_REQUIRE_NO_THROW( v3.Load() );
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = LOADED_SAMPLE::Get().m_docs;
 
     nlohmann::json project = EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( v3 );
 
@@ -269,8 +310,7 @@ BOOST_AUTO_TEST_CASE( BuildProjectIndexHasSchematicSheets )
 
 BOOST_AUTO_TEST_CASE( RawSchematicPageContainsTextWireAndNetAttr )
 {
-    EASYEDAPRO::V3_DOC_PARSER v3( getEasyEdaProV3ArchivePath() );
-    BOOST_REQUIRE_NO_THROW( v3.Load() );
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = LOADED_SAMPLE::Get().m_docs;
 
     const auto& pages = v3.GetRawDocs( wxS( "SCH_PAGE" ) );
     BOOST_REQUIRE( !pages.empty() );
@@ -309,8 +349,7 @@ BOOST_AUTO_TEST_CASE( RawSchematicPageContainsTextWireAndNetAttr )
 
 BOOST_AUTO_TEST_CASE( RawSymbolContainsBlobObjectReference )
 {
-    EASYEDAPRO::V3_DOC_PARSER v3( getEasyEdaProV3ArchivePath() );
-    BOOST_REQUIRE_NO_THROW( v3.Load() );
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = LOADED_SAMPLE::Get().m_docs;
 
     const auto& symbols = v3.GetRawDocs( wxS( "SYMBOL" ) );
     BOOST_REQUIRE( !symbols.empty() );
@@ -343,8 +382,7 @@ BOOST_AUTO_TEST_CASE( RawSymbolContainsBlobObjectReference )
 
 BOOST_AUTO_TEST_CASE( RawSymbolPartUnitsAndPinOrientationAreStable )
 {
-    EASYEDAPRO::V3_DOC_PARSER v3( getEasyEdaProV3ArchivePath() );
-    BOOST_REQUIRE_NO_THROW( v3.Load() );
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = LOADED_SAMPLE::Get().m_docs;
 
     nlohmann::json project = EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( v3 );
     std::map<wxString, EASYEDAPRO::PRJ_DEVICE> devices = project.at( "devices" );
@@ -422,25 +460,7 @@ BOOST_AUTO_TEST_CASE( RawSymbolPartUnitsAndPinOrientationAreStable )
 
 BOOST_AUTO_TEST_CASE( PluginLoadProducesWireTextAndLabel )
 {
-    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
-                                              wxS( "easyedapro_v3_test" ) );
-
-    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
-
-    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
-
-    SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &tempProject.Project() );
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
-    BOOST_REQUIRE( plugin );
-
-    SCH_SHEET* rootSheet = nullptr;
-    BOOST_REQUIRE_NO_THROW( rootSheet = plugin->LoadSchematicFile( archiveFile.GetFullPath(),
-                                                                   &schematic, nullptr, nullptr ) );
-    BOOST_REQUIRE( rootSheet );
-
-    schematic.RefreshHierarchy();
+    SCHEMATIC& schematic = LOADED_SAMPLE::Get().m_schematic;
 
     int wireCount = 0;
     int textCount = 0;
@@ -486,17 +506,9 @@ BOOST_AUTO_TEST_CASE( PluginLoadProducesWireTextAndLabel )
 
 BOOST_AUTO_TEST_CASE( PluginLoadPreservesWireNetLabelAlignment )
 {
-    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
-                                              wxS( "easyedapro_v3_test" ) );
-
-    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
-
-    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
-
     // Pick a stable, unique NET label from raw docs where align indicates the text is anchored
     // on the right side of the connection point.
-    EASYEDAPRO::V3_DOC_PARSER v3( archiveFile.GetFullPath() );
-    BOOST_REQUIRE_NO_THROW( v3.Load() );
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = LOADED_SAMPLE::Get().m_docs;
 
     struct NET_ATTR
     {
@@ -569,19 +581,7 @@ BOOST_AUTO_TEST_CASE( PluginLoadPreservesWireNetLabelAlignment )
     }
 
     // Load via the plugin and validate the resulting schematic keeps label spin style.
-    SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &tempProject.Project() );
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
-    BOOST_REQUIRE( plugin );
-
-    SCH_SHEET* rootSheet = nullptr;
-    BOOST_REQUIRE_NO_THROW( rootSheet =
-                                    plugin->LoadSchematicFile( archiveFile.GetFullPath(),
-                                                               &schematic, nullptr, nullptr ) );
-    BOOST_REQUIRE( rootSheet );
-
-    schematic.RefreshHierarchy();
+    SCHEMATIC& schematic = LOADED_SAMPLE::Get().m_schematic;
 
     int  foundCount = 0;
     bool hasExpectedSpinStyle = false;
@@ -615,16 +615,8 @@ BOOST_AUTO_TEST_CASE( PluginLoadPreservesWireNetLabelAlignment )
 
 BOOST_AUTO_TEST_CASE( PluginLoadConvertsNetportsToGlobalLabels )
 {
-    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
-                                              wxS( "easyedapro_v3_test" ) );
-
-    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
-
-    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
-
     // Extract expected netport instance names from the raw v3 docs.
-    EASYEDAPRO::V3_DOC_PARSER v3( archiveFile.GetFullPath() );
-    BOOST_REQUIRE_NO_THROW( v3.Load() );
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = LOADED_SAMPLE::Get().m_docs;
 
     std::set<wxString> netportSymbolUuids;
 
@@ -692,19 +684,7 @@ BOOST_AUTO_TEST_CASE( PluginLoadConvertsNetportsToGlobalLabels )
     BOOST_REQUIRE( !expectedNetportNames.empty() );
 
     // Load via the plugin and validate the resulting schematic contains global labels (not symbols).
-    SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &tempProject.Project() );
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
-    BOOST_REQUIRE( plugin );
-
-    SCH_SHEET* rootSheet = nullptr;
-    BOOST_REQUIRE_NO_THROW( rootSheet =
-                                    plugin->LoadSchematicFile( archiveFile.GetFullPath(),
-                                                               &schematic, nullptr, nullptr ) );
-    BOOST_REQUIRE( rootSheet );
-
-    schematic.RefreshHierarchy();
+    SCHEMATIC& schematic = LOADED_SAMPLE::Get().m_schematic;
 
     int  netportSymbolCount = 0;
     int  globalLabelCount = 0;
@@ -769,26 +749,7 @@ BOOST_AUTO_TEST_CASE( PluginLoadConvertsNetportsToGlobalLabels )
 
 BOOST_AUTO_TEST_CASE( PluginLoadKeepsSchematicVerticalOrderAndFootprints )
 {
-    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
-                                              wxS( "easyedapro_v3_test" ) );
-
-    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
-
-    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
-
-    SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &tempProject.Project() );
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
-    BOOST_REQUIRE( plugin );
-
-    SCH_SHEET* rootSheet = nullptr;
-    BOOST_REQUIRE_NO_THROW( rootSheet =
-                                    plugin->LoadSchematicFile( archiveFile.GetFullPath(),
-                                                               &schematic, nullptr, nullptr ) );
-    BOOST_REQUIRE( rootSheet );
-
-    schematic.RefreshHierarchy();
+    SCHEMATIC& schematic = LOADED_SAMPLE::Get().m_schematic;
 
     SCH_SYMBOL* u6 = nullptr;
     SCH_SYMBOL* u7 = nullptr;
@@ -835,26 +796,7 @@ BOOST_AUTO_TEST_CASE( PluginLoadKeepsSchematicVerticalOrderAndFootprints )
 
 BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
 {
-    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
-                                              wxS( "easyedapro_v3_test" ) );
-
-    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
-
-    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
-
-    SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &tempProject.Project() );
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
-    BOOST_REQUIRE( plugin );
-
-    SCH_SHEET* rootSheet = nullptr;
-    BOOST_REQUIRE_NO_THROW( rootSheet =
-                                    plugin->LoadSchematicFile( archiveFile.GetFullPath(),
-                                                               &schematic, nullptr, nullptr ) );
-    BOOST_REQUIRE( rootSheet );
-
-    schematic.RefreshHierarchy();
+    SCHEMATIC& schematic = LOADED_SAMPLE::Get().m_schematic;
 
     int plus5vCount = 0;
     int plus5vShownCount = 0;
@@ -973,21 +915,11 @@ BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
  */
 BOOST_AUTO_TEST_CASE( PluginLoadFillsRootSheetWithFirstPage )
 {
-    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
-                                              wxS( "easyedapro_v3_test" ) );
-
-    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
-    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
-
-    SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &tempProject.Project() );
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
-    SCH_SHEET* rootSheet = plugin->LoadSchematicFile( archiveFile.GetFullPath(), &schematic );
-    BOOST_REQUIRE( rootSheet );
-    schematic.RefreshHierarchy();
+    SCHEMATIC& schematic = LOADED_SAMPLE::Get().m_schematic;
 
     int rootSymbols = 0;
+
+    SCH_SHEET* rootSheet = LOADED_SAMPLE::Get().m_rootSheet;
 
     for( SCH_ITEM* item : rootSheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
         (void) item, rootSymbols++;
@@ -996,6 +928,9 @@ BOOST_AUTO_TEST_CASE( PluginLoadFillsRootSheetWithFirstPage )
     BOOST_CHECK( rootSymbols > 0 );
     BOOST_CHECK( !rootSheet->GetScreen()->GetPageNumber().IsEmpty() );
 }
+
+
+BOOST_AUTO_TEST_SUITE_END()
 
 
 /**
