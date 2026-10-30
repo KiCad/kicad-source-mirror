@@ -17,9 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <jobs/job_registry.h>
 #include <jobs/job_gerber_export_png.h>
-#include <i18n_utility.h>
 
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_GERBER_EXPORT_PNG::UNITS,
@@ -45,18 +43,3 @@ JOB_GERBER_EXPORT_PNG::JOB_GERBER_EXPORT_PNG() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "foreground_color", &m_foregroundColor, m_foregroundColor ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "background_color", &m_backgroundColor, m_backgroundColor ) );
 }
-
-
-wxString JOB_GERBER_EXPORT_PNG::GetDefaultDescription() const
-{
-    return _( "Gerber Export PNG" );
-}
-
-
-wxString JOB_GERBER_EXPORT_PNG::GetSettingsDialogTitle() const
-{
-    return _( "Gerber Export PNG Job Settings" );
-}
-
-
-REGISTER_JOB( gerber_export_png, _HKI( "Gerber: Export PNG" ), KIWAY::FACE_GERBVIEW, JOB_GERBER_EXPORT_PNG );

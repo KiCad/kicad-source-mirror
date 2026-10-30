@@ -33,9 +33,6 @@ class KICOMMON_API JOB_GERBER_EXPORT_PNG : public JOB
 public:
     JOB_GERBER_EXPORT_PNG();
 
-    wxString GetDefaultDescription() const override;
-    wxString GetSettingsDialogTitle() const override;
-
     enum class UNITS
     {
         MM,

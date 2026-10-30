@@ -22,20 +22,9 @@
  */
 
 #include <jobs/job_sym_diff.h>
-#include <jobs/job_registry.h>
-#include <i18n_utility.h>
 
 
 JOB_SYM_DIFF::JOB_SYM_DIFF() :
         JOB_DIFF_BASE( "sym_diff" )
 {
 }
-
-
-wxString JOB_SYM_DIFF::GetDefaultDescription() const
-{
-    return _( "Diff two .kicad_sym libraries" );
-}
-
-
-REGISTER_JOB( sym_diff, _HKI( "Symbol Library: Diff" ), KIWAY::FACE_SCH, JOB_SYM_DIFF );

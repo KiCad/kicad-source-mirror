@@ -42,5 +42,4 @@ class KICOMMON_API JOB_PCB_DIFF : public JOB_DIFF_BASE
 public:
     JOB_PCB_DIFF();
 
-    wxString GetDefaultDescription() const override;
 };

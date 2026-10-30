@@ -47,8 +47,6 @@ public:
         SVG
     };
 
-    wxString GetSettingsDialogTitle() const override { return GetDefaultDescription(); }
-
     wxString      m_inputA;         ///< Reference document (file or directory)
     wxString      m_inputB;         ///< Comparison document (file or directory)
     OUTPUT_FORMAT m_format = OUTPUT_FORMAT::JSON;

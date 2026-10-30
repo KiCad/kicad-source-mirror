@@ -33,5 +33,4 @@ class KICOMMON_API JOB_SCH_DIFF : public JOB_DIFF_BASE
 public:
     JOB_SCH_DIFF();
 
-    wxString GetDefaultDescription() const override;
 };

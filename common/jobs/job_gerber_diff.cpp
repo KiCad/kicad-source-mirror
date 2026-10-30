@@ -17,9 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <jobs/job_registry.h>
 #include <jobs/job_gerber_diff.h>
-#include <i18n_utility.h>
 
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_GERBER_DIFF::OUTPUT_FORMAT, { { JOB_GERBER_DIFF::OUTPUT_FORMAT::PNG, "png" },
@@ -39,18 +37,3 @@ JOB_GERBER_DIFF::JOB_GERBER_DIFF() :
     m_params.emplace_back( new JOB_PARAM<int>( "tolerance", &m_tolerance, m_tolerance ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "no_align", &m_noAlign, m_noAlign ) );
 }
-
-
-wxString JOB_GERBER_DIFF::GetDefaultDescription() const
-{
-    return _( "Gerber Diff" );
-}
-
-
-wxString JOB_GERBER_DIFF::GetSettingsDialogTitle() const
-{
-    return _( "Gerber Diff Job Settings" );
-}
-
-
-REGISTER_JOB( gerber_diff, _HKI( "Gerber: Diff" ), KIWAY::FACE_GERBVIEW, JOB_GERBER_DIFF );

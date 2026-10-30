@@ -22,20 +22,9 @@
  */
 
 #include <jobs/job_fp_diff.h>
-#include <jobs/job_registry.h>
-#include <i18n_utility.h>
 
 
 JOB_FP_DIFF::JOB_FP_DIFF() :
         JOB_DIFF_BASE( "fp_diff" )
 {
 }
-
-
-wxString JOB_FP_DIFF::GetDefaultDescription() const
-{
-    return _( "Diff two .pretty footprint libraries" );
-}
-
-
-REGISTER_JOB( fp_diff, _HKI( "Footprint Library: Diff" ), KIWAY::FACE_PCB, JOB_FP_DIFF );

@@ -22,20 +22,9 @@
  */
 
 #include <jobs/job_sch_diff.h>
-#include <jobs/job_registry.h>
-#include <i18n_utility.h>
 
 
 JOB_SCH_DIFF::JOB_SCH_DIFF() :
         JOB_DIFF_BASE( "sch_diff" )
 {
 }
-
-
-wxString JOB_SCH_DIFF::GetDefaultDescription() const
-{
-    return _( "Diff two schematic files" );
-}
-
-
-REGISTER_JOB( sch_diff, _HKI( "Schematic: Diff" ), KIWAY::FACE_SCH, JOB_SCH_DIFF );

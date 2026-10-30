@@ -34,9 +34,6 @@ class KICOMMON_API JOB_GERBER_DIFF : public JOB
 public:
     JOB_GERBER_DIFF();
 
-    wxString GetDefaultDescription() const override;
-    wxString GetSettingsDialogTitle() const override;
-
     enum class OUTPUT_FORMAT
     {
         PNG,

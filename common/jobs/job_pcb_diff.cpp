@@ -22,20 +22,9 @@
  */
 
 #include <jobs/job_pcb_diff.h>
-#include <jobs/job_registry.h>
-#include <i18n_utility.h>
 
 
 JOB_PCB_DIFF::JOB_PCB_DIFF() :
         JOB_DIFF_BASE( "pcb_diff" )
 {
 }
-
-
-wxString JOB_PCB_DIFF::GetDefaultDescription() const
-{
-    return _( "Diff two PCB files" );
-}
-
-
-REGISTER_JOB( pcb_diff, _HKI( "PCB: Diff" ), KIWAY::FACE_PCB, JOB_PCB_DIFF );

@@ -17,9 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <jobs/job_registry.h>
 #include <jobs/job_gerber_info.h>
-#include <i18n_utility.h>
 
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_GERBER_INFO::OUTPUT_FORMAT, { { JOB_GERBER_INFO::OUTPUT_FORMAT::TEXT, "text" },
@@ -32,18 +30,3 @@ JOB_GERBER_INFO::JOB_GERBER_INFO() :
     m_params.emplace_back( new JOB_PARAM<OUTPUT_FORMAT>( "output_format", &m_outputFormat, m_outputFormat ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "calculate_area", &m_calculateArea, m_calculateArea ) );
 }
-
-
-wxString JOB_GERBER_INFO::GetDefaultDescription() const
-{
-    return _( "Gerber Info" );
-}
-
-
-wxString JOB_GERBER_INFO::GetSettingsDialogTitle() const
-{
-    return _( "Gerber Info Job Settings" );
-}
-
-
-REGISTER_JOB( gerber_info, _HKI( "Gerber: Info" ), KIWAY::FACE_GERBVIEW, JOB_GERBER_INFO );

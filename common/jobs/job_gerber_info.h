@@ -34,9 +34,6 @@ class KICOMMON_API JOB_GERBER_INFO : public JOB
 public:
     JOB_GERBER_INFO();
 
-    wxString GetDefaultDescription() const override;
-    wxString GetSettingsDialogTitle() const override;
-
     enum class OUTPUT_FORMAT
     {
         TEXT,
