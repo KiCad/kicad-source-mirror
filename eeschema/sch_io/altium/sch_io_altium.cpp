@@ -3079,24 +3079,26 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
 {
     ASCH_LABEL elem( aProperties );
 
+    // TODO: fill in replacements from variant, sheet and project
+    static const std::map<wxString, wxString> variableMap = {
+        { "SHEETNUMBER",             "#"                   },
+        { "SHEETTOTAL",              "##"                  },
+        { "TITLE",                   "TITLE"               },  // including 1:1 maps makes it easier
+        { "REVISION",                "REVISION"            },  //   to see that the list is complete
+        { "DATE",                    "ISSUE_DATE"          },
+        { "CURRENTDATE",             "CURRENT_DATE"        },
+        { "CURRENTTIME",             "CURRENT_TIME_LOCALE" },
+        { "COMPANYNAME",             "COMPANY"             },
+        { "DOCUMENTNAME",            "FILENAME"            },
+        { "DOCUMENTFULLPATHANDNAME", "FILEPATH"            },
+        { "PROJECTNAME",             "PROJECTNAME"         },
+    };
+
+    std::set<wxString> unmapped;
+    wxString           kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap, &unmapped );
+
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
-        static const std::map<wxString, wxString> variableMap = {
-            { "SHEETNUMBER",             "#"             },
-            { "SHEETTOTAL",              "##"            },
-            { "TITLE",                   "TITLE"         },  // including 1:1 maps makes it easier
-            { "REVISION",                "REVISION"      },  //   to see that the list is complete
-            { "DATE",                    "ISSUE_DATE"    },
-            { "CURRENTDATE",             "CURRENT_DATE"  },
-            { "CURRENTTIME",             "CURRENT_TIME_LOCALE" },
-            { "COMPANYNAME",             "COMPANY"       },
-            { "DOCUMENTNAME",            "FILENAME"      },
-            { "DOCUMENTFULLPATHANDNAME", "FILEPATH"      },
-            { "PROJECTNAME",             "PROJECTNAME"   },
-        };
-
-        std::set<wxString> unmapped;
-        wxString           kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap, &unmapped );
         SCH_TEXT*          textItem = new SCH_TEXT( elem.location + m_sheetOffset, kicadText );
 
         // a name outside the map is Altium's own, KiCad cannot resolve it
@@ -3154,7 +3156,7 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
         }
 
         VECTOR2I  pos = elem.location;
-        SCH_TEXT* textItem = new SCH_TEXT( { 0, 0 }, elem.text, LAYER_DEVICE );
+        SCH_TEXT* textItem = new SCH_TEXT( { 0, 0 }, kicadText, LAYER_DEVICE );
         symbol->AddDrawItem( textItem, false );
 
         if( symbol->GetBodyStyleCount() > 1 )
@@ -3209,8 +3211,7 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
 
 
 void SCH_IO_ALTIUM::ParseTextFrame( const std::map<wxString, wxString>& aProperties,
-                                    std::vector<LIB_SYMBOL*>& aSymbol,
-                                    std::vector<int>& aFontSizes )
+                                    std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
     ASCH_TEXT_FRAME elem( aProperties );
 
@@ -4650,8 +4651,14 @@ void SCH_IO_ALTIUM::ParseHarnessType( const std::map<wxString, wxString>& aPrope
         return;
     }
 
+    // TODO: fill in replacements from variant, sheet and project
+    static const std::map<wxString, wxString> variableMap = {
+    };
+
+    wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.Text, variableMap );
+
     HARNESS& harness = harnessIt->second;
-    harness.m_name = elem.Text;
+    harness.m_name = kicadText;
 }
 
 
@@ -5062,7 +5069,13 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
 {
     ASCH_POWER_PORT elem( aProperties );
 
-    wxString    symName( elem.text );
+    // TODO: fill in replacements from variant, sheet and project
+    static const std::map<wxString, wxString> variableMap = {
+    };
+
+    wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
+
+    wxString    symName( kicadText );
     std::string styleName( magic_enum::enum_name<ASCH_POWER_PORT_STYLE>( elem.style ) );
 
     if( !styleName.empty() )
@@ -5084,7 +5097,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         libSymbol->SetName( symName );
         libSymbol->GetReferenceField().SetText( "#PWR" );
         libSymbol->GetReferenceField().SetVisible( false );
-        libSymbol->GetValueField().SetText( elem.text );
+        libSymbol->GetValueField().SetText( kicadText );
         libSymbol->GetValueField().SetVisible( true );
         libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global label with name '%s'" ),
                                                      elem.text ) );
@@ -5095,7 +5108,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         SCH_PIN* pin = new SCH_PIN( libSymbol );
         libSymbol->AddDrawItem( pin, false );
 
-        pin->SetName( elem.text );
+        pin->SetName( kicadText );
         pin->SetPosition( { 0, 0 } );
         pin->SetLength( 0 );
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
@@ -5115,7 +5128,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
     symbol->SetRef( &m_sheetPath, "#PWR?" );
     symbol->GetField( FIELD_T::REFERENCE )->SetVisible( false );
-    symbol->SetValueFieldText( elem.text );
+    symbol->SetValueFieldText( kicadText );
     symbol->SetLibId( libId );
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
 
@@ -5354,7 +5367,13 @@ void SCH_IO_ALTIUM::ParseNetLabel( const std::map<wxString, wxString>& aProperti
 {
     ASCH_NET_LABEL elem( aProperties );
 
-    SCH_LABEL* label = new SCH_LABEL( elem.location + m_sheetOffset, elem.text );
+    // TODO: fill in replacements from variant, sheet and project
+    static const std::map<wxString, wxString> variableMap = {
+    };
+
+    wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
+
+    SCH_LABEL* label = new SCH_LABEL( elem.location + m_sheetOffset, kicadText );
 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
@@ -5442,8 +5461,7 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( !storageFile )
         {
-            m_errorMessages.emplace( wxString::Format( _( "Embedded file '%s' not found in "
-                                                          "storage." ),
+            m_errorMessages.emplace( wxString::Format( _( "Embedded file '%s' not found in storage." ),
                                                        elem.filename ),
                                      RPT_SEVERITY_ERROR );
             return;
@@ -5464,11 +5482,10 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( storagePath.IsEmpty() || !writeOk || !closeOk )
         {
-            m_errorMessages.emplace(
-                    wxString::Format( _( "Could not write a temporary file while extracting the "
-                                         "embedded image '%s'." ),
-                                     elem.filename ),
-                    RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( wxString::Format( _( "Could not write a temporary file while extracting the "
+                                                          "embedded image '%s'." ),
+                                                       elem.filename ),
+                                     RPT_SEVERITY_ERROR );
 
             if( !storagePath.IsEmpty() )
                 wxRemoveFile( storagePath );
@@ -5486,12 +5503,10 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( !readOk )
         {
-            m_errorMessages.emplace(
-                    wxString::Format( _( "Failed to read embedded image '%s'. "
-                                         "The image data may be corrupt or in an "
-                                         "unsupported format." ),
-                                     elem.filename ),
-                    RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( wxString::Format( _( "Failed to read embedded image '%s'. The image data may "
+                                                          "be corrupt or in an unsupported format." ),
+                                                       elem.filename ),
+                                     RPT_SEVERITY_ERROR );
             wxRemoveFile( storagePath );
             return;
         }
@@ -5503,12 +5518,10 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
     {
         if( !wxFileExists( elem.filename ) )
         {
-            m_errorMessages.emplace(
-                    wxString::Format( _( "Could not find image file '%s'. The file "
-                                         "path may be specific to a different operating "
-                                         "system." ),
-                                     elem.filename ),
-                    RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( wxString::Format( _( "Could not find image file '%s'. The file path may be "
+                                                          "specific to a different operating system." ),
+                                                       elem.filename ),
+                                     RPT_SEVERITY_ERROR );
             return;
         }
 
@@ -5521,12 +5534,10 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( !readOk )
         {
-            m_errorMessages.emplace(
-                    wxString::Format( _( "Failed to read image file '%s'. The image "
-                                         "may be corrupt or in an unsupported "
-                                         "format." ),
-                                     elem.filename ),
-                    RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace( wxString::Format( _( "Failed to read image file '%s'. The image may be "
+                                                          "corrupt or in an unsupported format." ),
+                                                       elem.filename ),
+                                     RPT_SEVERITY_ERROR );
             return;
         }
     }
@@ -5602,19 +5613,24 @@ void SCH_IO_ALTIUM::ParseSheetName( const std::map<wxString, wxString>& aPropert
     ASCH_SHEET_NAME elem( aProperties );
     SCH_SCREEN*     currentScreen = getCurrentScreen();
 
+    // TODO: fill in replacements from variant, sheet and project
+    static const std::map<wxString, wxString> variableMap = {
+    };
+
+    wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
+
     wxCHECK( currentScreen, /* void */ );
 
     const auto& sheetIt = m_sheets.find( elem.ownerindex );
 
     if( sheetIt == m_sheets.end() )
     {
-        m_errorMessages.emplace( wxString::Format( wxT( "Sheetname's owner (%d) not found." ),
-                                                   elem.ownerindex ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Sheetname's owner (%d) not found." ), elem.ownerindex ),
                                  RPT_SEVERITY_DEBUG );
         return;
     }
 
-    wxString baseName = elem.text;
+    wxString baseName = kicadText;
     baseName.Replace( wxT( "/" ), wxT( "_" ) );
 
     wxString           sheetName = baseName;
@@ -5651,8 +5667,7 @@ void SCH_IO_ALTIUM::ParseFileName( const std::map<wxString, wxString>& aProperti
 
     if( sheetIt == m_sheets.end() )
     {
-        m_errorMessages.emplace( wxString::Format( wxT( "Filename's owner (%d) not found." ),
-                                                   elem.ownerindex ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Filename's owner (%d) not found." ), elem.ownerindex ),
                                  RPT_SEVERITY_DEBUG );
         return;
     }
@@ -5671,14 +5686,15 @@ void SCH_IO_ALTIUM::ParseFileName( const std::map<wxString, wxString>& aProperti
 void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_DESIGNATOR elem( aProperties );
+    wxString        escapedRef = AltiumEscapeTextVars( elem.text );
+    bool            emptyRef = escapedRef.IsEmpty();
 
     const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
     if( libSymbolIt == m_libSymbols.end() )
     {
         // TODO: e.g. can depend on Template (RECORD=39
-        m_errorMessages.emplace( wxString::Format( wxT( "Designator's owner (%d) not found." ),
-                                                   elem.ownerindex ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Designator's owner (%d) not found." ), elem.ownerindex ),
                                  RPT_SEVERITY_DEBUG );
         return;
     }
@@ -5691,8 +5707,7 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
 
     // Graphics symbols have no reference. '#GRAPHIC' allows them to not have footprint associated.
     // Note: not all unnamed imported symbols are necessarily graphics.
-    bool emptyRef = elem.text.IsEmpty();
-    symbol->SetRef( &m_sheetPath, emptyRef ? wxString( wxS( "#GRAPHIC" ) ) : elem.text );
+    symbol->SetRef( &m_sheetPath, emptyRef ? wxString( wxS( "#GRAPHIC" ) ) : escapedRef );
 
     // I am not sure value and ref should be invisible just because emptyRef is true
     // I have examples with this criteria fully incorrect.
@@ -5713,23 +5728,23 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
 
 
 void SCH_IO_ALTIUM::ParseLibDesignator( const std::map<wxString, wxString>& aProperties,
-                                        std::vector<LIB_SYMBOL*>&           aSymbol,
-                                        std::vector<int>&                   aFontSizes )
+                                        std::vector<LIB_SYMBOL*>& aSymbols, std::vector<int>& aFontSizes )
 {
     ASCH_DESIGNATOR elem( aProperties );
+    wxString        escapedRef = AltiumEscapeTextVars( elem.text );
+    bool            emptyRef = escapedRef.IsEmpty();
 
     if( elem.ownerpartdisplaymode != 0 )
         return;
 
-    for( LIB_SYMBOL* symbol : aSymbol )
+    for( LIB_SYMBOL* symbol : aSymbols )
     {
-        bool emptyRef = elem.text.IsEmpty();
         SCH_FIELD& refField = symbol->GetReferenceField();
 
         if( emptyRef )
             refField.SetText( wxT( "X" ) );
         else
-            refField.SetText( elem.text.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
+            refField.SetText( escapedRef.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
 
         refField.SetPosition( elem.location );
         SetTextPositioning( &refField, elem.justification, elem.orientation );
@@ -5770,15 +5785,20 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         { "VALUE",   "ALTIUM_VALUE" },
     };
 
+    wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
+
     if( elem.ownerindex <= 0 )
     {
         // This is some sheet parameter
         wxString paramName = elem.name.Upper();
 
         // an unset parameter still names a variable, which resolves to nothing
-        if( elem.text == "*" )
+        if( kicadText == "*" )
         {
-            if( paramName != "SHEETNUMBER" && paramName != "TITLE" && paramName != "REVISION" && paramName != "DATE"
+            if( paramName != "SHEETNUMBER"
+                && paramName != "TITLE"
+                && paramName != "REVISION"
+                && paramName != "DATE"
                 && paramName != "COMPANYNAME" )
             {
                 m_unsetSheetParams.insert( paramName );
@@ -5789,27 +5809,27 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
 
         if( paramName == "SHEETNUMBER" )
         {
-            m_sheetPath.SetPageNumber( elem.text );
+            m_sheetPath.SetPageNumber( kicadText );
         }
         else if( paramName == "TITLE" )
         {
-            m_currentTitleBlock->SetTitle( elem.text );
+            m_currentTitleBlock->SetTitle( kicadText );
         }
         else if( paramName == "REVISION" )
         {
-            m_currentTitleBlock->SetRevision( elem.text );
+            m_currentTitleBlock->SetRevision( kicadText );
         }
         else if( paramName == "DATE" )
         {
-            m_currentTitleBlock->SetDate( elem.text );
+            m_currentTitleBlock->SetDate( kicadText );
         }
         else if( paramName == "COMPANYNAME" )
         {
-            m_currentTitleBlock->SetCompany( elem.text );
+            m_currentTitleBlock->SetCompany( kicadText );
         }
         else
         {
-            m_schematic->Project().GetTextVars()[ paramName ] = elem.text;
+            m_schematic->Project().GetTextVars()[ paramName ] = kicadText;
         }
     }
     else
@@ -5854,7 +5874,6 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
             field = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, fieldName ) );
         }
 
-        wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
         field->SetPosition( elem.location + m_sheetOffset );
         field->SetVisible( !elem.isHidden );
@@ -5870,8 +5889,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
 
 
 void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProperties,
-                                       std::vector<LIB_SYMBOL*>& aSymbol,
-                                       std::vector<int>& aFontSizes )
+                                       std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
     ASCH_PARAMETER elem( aProperties );
 
@@ -5880,8 +5898,7 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
 
     // Part ID 1 is the current library part.
     // Part ID ALTIUM_COMPONENT_NONE(-1) means all parts
-    // If a parameter is assigned to a specific element such as a pin,
-    // we will need to handle it here.
+    // If a parameter is assigned to a specific element such as a pin, we will need to handle it here.
     // TODO: Handle HIDDENNETNAME property (others?)
     if( elem.ownerpartid != 1 && elem.ownerpartid != ALTIUM_COMPONENT_NONE )
         return;
@@ -5892,9 +5909,8 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
     if( elem.ownerindex != ALTIUM_COMPONENT_NONE )
         return;
 
-    // TODO: fill in replacements from variant, sheet and project
-    // N.B. We do not keep the Altium "VALUE" variable here because
-    // we don't have a way to assign variables to specific symbols
+    // N.B. We do not keep the Altium "VALUE" variable here because we don't have a way to assign variables
+    // to specific symbols
     std::map<wxString, wxString> variableMap = {
         { "COMMENT", "VALUE" },
     };
@@ -5957,8 +5973,7 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
 }
 
 
-void SCH_IO_ALTIUM::ParseImplementationList( int aIndex,
-                                             const std::map<wxString, wxString>& aProperties )
+void SCH_IO_ALTIUM::ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties )
 {
     ASCH_IMPLEMENTATION_LIST elem( aProperties );
 
@@ -6004,8 +6019,7 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
 
     if( implementationOwnerIt == m_altiumImplementationList.end() )
     {
-        m_errorMessages.emplace( wxString::Format( wxT( "Implementation's owner (%d) not found." ),
-                                                   elem.ownerindex ),
+        m_errorMessages.emplace( wxString::Format( wxT( "Implementation's owner (%d) not found." ), elem.ownerindex ),
                                  RPT_SEVERITY_DEBUG );
         return;
     }
@@ -6031,8 +6045,7 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
 
 
 
-std::vector<LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibComponent( const std::map<wxString,
-                                                           wxString>& aProperties )
+std::vector<LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibComponent( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SYMBOL elem( aProperties );
 

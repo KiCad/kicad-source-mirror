@@ -160,8 +160,7 @@ wxString AltiumSchSpecialStringsToKiCadVariables( const wxString&               
         }
         else
         {
-            wxString specialString =
-                    aString.substr( start, delimiter - start ).Trim().Trim( false );
+            wxString specialString = aString.substr( start, delimiter - start ).Trim().Trim( false );
 
             if( specialString.StartsWith( "\"" ) && specialString.EndsWith( "\"" ) )
                 specialString = specialString.Mid( 1, specialString.Length() - 2 );
