@@ -42,7 +42,7 @@ struct RECORD_OUTPUT_FIXTURE
 {
     RECORD_OUTPUT_FIXTURE() :
             m_destDir( wxS( "kicad_jobs_runner_record" ) ),
-            m_jobset( KI_TEST::ToWxPath( m_destDir.Path() / "record.kicad_jobset" ) )
+            m_jobset( FromFsPath( m_destDir.Path() / "record.kicad_jobset" ) )
     {
         m_execute = new JOB_SPECIAL_EXECUTE();
         m_execute->m_command = wxS( "echo recorded" );
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE( ExecuteCommandRecordOutputFailureNamesLog )
     fs::path blocker = m_destDir.Path() / "blocker";
     std::ofstream( blocker ).put( 'x' );
 
-    wxString logPath = KI_TEST::ToWxPath( blocker / "run.log" );
+    wxString logPath = FromFsPath( blocker / "run.log" );
     m_execute->SetConfiguredOutputPath( logPath );
 
     WX_STRING_REPORTER reporter;

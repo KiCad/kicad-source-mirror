@@ -75,7 +75,7 @@ struct ScratchRoot
 
 bool contains( const wxArrayString& aFiles, const std::filesystem::path& aPath )
 {
-    const wxString want = KI_TEST::ToWxPath( aPath );
+    const wxString want = FromFsPath( aPath );
 
     for( const wxString& f : aFiles )
     {
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE( RecursiveSymlinkTerminates )
         return;
 
     wxArrayString files;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( scratch.path ), files );
+    CollectFilesLoopSafe( FromFsPath( scratch.path ), files );
 
     BOOST_CHECK( contains( files, stepFile ) );
 }
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE( SingleSymlinkResolves )
         return;
 
     wxArrayString files;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( linkedDir ), files );
+    CollectFilesLoopSafe( FromFsPath( linkedDir ), files );
 
     BOOST_CHECK_EQUAL( files.GetCount(), 1u );
     BOOST_CHECK( contains( files, linkedDir / "R_0603.step" ) );
@@ -181,7 +181,7 @@ BOOST_AUTO_TEST_CASE( AncestorSymlinkDoesNotEscape )
         return;
 
     wxArrayString files;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( root ), files );
+    CollectFilesLoopSafe( FromFsPath( root ), files );
 
     BOOST_CHECK( !contains( files, root / "up" / "outside" / "Outside.step" ) );
     BOOST_CHECK( !contains( files, outsideFile ) );
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE( FileSpecFiltersResults )
     std::ofstream( scratch.path / "R_0603.wrl" ) << "#VRML\n";
 
     wxArrayString files;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( scratch.path ), files, wxS( "*.step" ) );
+    CollectFilesLoopSafe( FromFsPath( scratch.path ), files, wxS( "*.step" ) );
 
     BOOST_CHECK_EQUAL( files.GetCount(), 1u );
     BOOST_CHECK( contains( files, scratch.path / "R_0603.step" ) );
@@ -224,7 +224,7 @@ BOOST_AUTO_TEST_CASE( SubdirCollectionTerminates )
         return;
 
     wxArrayString dirs;
-    CollectSubdirsLoopSafe( KI_TEST::ToWxPath( scratch.path ), dirs );
+    CollectSubdirsLoopSafe( FromFsPath( scratch.path ), dirs );
 
     BOOST_CHECK( contains( dirs, subDir ) );
 }
@@ -250,13 +250,13 @@ BOOST_AUTO_TEST_CASE( HiddenFlagControlsDotfiles )
 #endif
 
     wxArrayString withHidden;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( scratch.path ), withHidden );
+    CollectFilesLoopSafe( FromFsPath( scratch.path ), withHidden );
 
     BOOST_CHECK( contains( withHidden, normalFile ) );
     BOOST_CHECK( contains( withHidden, hiddenFile ) );
 
     wxArrayString noHidden;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( scratch.path ), noHidden, wxEmptyString,
+    CollectFilesLoopSafe( FromFsPath( scratch.path ), noHidden, wxEmptyString,
                           wxDIR_FILES | wxDIR_DIRS );
 
     BOOST_CHECK( contains( noHidden, normalFile ) );
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_CASE( ChildSymlinkToExternalDirIsFollowed )
         return;
 
     wxArrayString files;
-    CollectFilesLoopSafe( KI_TEST::ToWxPath( root ), files );
+    CollectFilesLoopSafe( FromFsPath( root ), files );
 
     BOOST_CHECK( contains( files, root / "alias" / "C_0402.step" ) );
 }

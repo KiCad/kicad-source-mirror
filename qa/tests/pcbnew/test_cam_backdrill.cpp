@@ -633,7 +633,7 @@ BOOST_AUTO_TEST_CASE( OdbPpDegenerateTrackArc )
 // dimensions come out in micrometres because the file units are millimetres.
 static wxFileName ExportOdbTree( BOARD* aBoard, const std::filesystem::path& aParentDir )
 {
-    wxFileName odbRoot( KI_TEST::ToWxPath( aParentDir ), wxEmptyString );
+    wxFileName odbRoot( FromFsPath( aParentDir ), wxEmptyString );
     odbRoot.AppendDir( wxT( "odb_out" ) );
     BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 

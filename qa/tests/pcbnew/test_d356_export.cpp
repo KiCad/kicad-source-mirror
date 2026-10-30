@@ -57,7 +57,7 @@ std::vector<std::string> exportD356( const std::string& aBoardFile )
     const std::filesystem::path outputPath = std::filesystem::temp_directory_path() / ( aBoardFile + ".d356" );
 
     IPC356D_WRITER writer( board.get() );
-    BOOST_REQUIRE( writer.Write( KI_TEST::ToWxPath( outputPath ) ) );
+    BOOST_REQUIRE( writer.Write( FromFsPath( outputPath ) ) );
 
     std::ifstream            in( outputPath );
     std::vector<std::string> lines;
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE( ExportD356MidpointFlag )
             std::filesystem::temp_directory_path() / "kicad_d356_midpoint_test.d356";
 
     IPC356D_WRITER writer( board.get() );
-    BOOST_REQUIRE( writer.Write( KI_TEST::ToWxPath( outputPath ) ) );
+    BOOST_REQUIRE( writer.Write( FromFsPath( outputPath ) ) );
 
     std::ifstream in( outputPath );
     BOOST_REQUIRE( in.is_open() );

@@ -61,7 +61,7 @@ struct BDS_TEST_FIXTURE
         aEdit( doc );
         std::ofstream( proPath ) << doc.dump( 2 );
 
-        BOOST_REQUIRE( m_settingsManager.LoadProject( wxString::FromUTF8( proPath.string() ) ) );
+        BOOST_REQUIRE( m_settingsManager.LoadProject( FromFsPath( proPath ) ) );
         return proPath;
     }
 
@@ -511,7 +511,7 @@ BOOST_AUTO_TEST_CASE( LegacyProjectImportKeepsCourtyardRulesAndFillets )
 
     fs::path proPath = dir.Path() / "issue4257.kicad_pro";
 
-    BOOST_REQUIRE( m_settingsManager.LoadProject( wxString::FromUTF8( proPath.string() ) ) );
+    BOOST_REQUIRE( m_settingsManager.LoadProject( FromFsPath( proPath ) ) );
 
     auto board = std::make_unique<BOARD>();
 

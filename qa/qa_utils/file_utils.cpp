@@ -83,7 +83,7 @@ void safeRemoveTempDir( const std::filesystem::path& aPath ) noexcept
     try
     {
         reportTempDir( wxString::Format( wxT( "Cannot remove temporary directory '%s': %s" ),
-                                         KI_TEST::ToWxPath( aPath ), errorText( ec ) ) );
+                                         FromFsPath( aPath ), errorText( ec ) ) );
     }
     catch( ... )
     {
@@ -149,7 +149,7 @@ bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& aKeepEn
             // Probably do want to see this, because if you are keeping the temp dirs, you may
             // want to know which ones they are.
             reportTempDir( wxString::Format( wxT( "Keeping temporary directory '%s' because %s is set to '%s'" ),
-                                             KI_TEST::ToWxPath( aPath ), envVar, keepEnv ) );
+                                             FromFsPath( aPath ), envVar, keepEnv ) );
             return true;
         }
     }
@@ -172,7 +172,7 @@ std::filesystem::path createTempDir( const wxString& aPrefix, const wxString& aS
     for( size_t i = 0; i < k_maxAttempts; ++i )
     {
         const std::filesystem::path candidate =
-                tempRoot / KI_TEST::ToFsPath( aPrefix + wxS( "_" ) + wxString::Format( wxS( "%zu" ), i ) + aSuffix );
+                tempRoot / ToFsPath( aPrefix + wxS( "_" ) + wxString::Format( wxS( "%zu" ), i ) + aSuffix );
 
         if( std::filesystem::create_directory( candidate, ec ) )
             return candidate;
@@ -181,7 +181,7 @@ std::filesystem::path createTempDir( const wxString& aPrefix, const wxString& aS
         // means we should try the next candidate name.
         if( ec && ec != std::errc::file_exists )
             throw std::runtime_error( "Cannot create temporary directory '"
-                                      + KI_TEST::ToWxPath( candidate ).utf8_string()
+                                      + FromFsPath( candidate ).utf8_string()
                                       + "': " + errorText( ec ).utf8_string() );
     }
 
@@ -191,26 +191,6 @@ std::filesystem::path createTempDir( const wxString& aPrefix, const wxString& aS
 }
 
 } // namespace
-
-
-std::filesystem::path KI_TEST::ToFsPath( const wxString& aPath )
-{
-#ifdef _WIN32
-    return std::filesystem::path( aPath.ToStdWstring() );
-#else
-    return std::filesystem::path( aPath.utf8_string() );
-#endif
-}
-
-
-wxString KI_TEST::ToWxPath( const std::filesystem::path& aPath )
-{
-#ifdef _WIN32
-    return wxString( aPath.wstring() );
-#else
-    return wxString::FromUTF8( aPath.string() );
-#endif
-}
 
 
 bool SCOPED_TEMP_DIR::s_anyTempDirRetained = false;
@@ -249,7 +229,7 @@ void SCOPED_TEMP_DIR::Retain()
     s_anyTempDirRetained = true;
 
     reportTempDir(
-            wxString::Format( wxT( "Keeping temporary directory '%s'" ), ToWxPath( m_path ) ) );
+            wxString::Format( wxT( "Keeping temporary directory '%s'" ), FromFsPath( m_path ) ) );
 }
 
 
@@ -264,7 +244,7 @@ wxString SCOPED_TEMP_DIR::ChildPathStr( const wxString& aName ) const
 {
     expectSafeChildPath( aName );
 
-    return ToWxPath( m_path / ToFsPath( aName ) );
+    return FromFsPath( m_path / ToFsPath( aName ) );
 }
 
 
@@ -275,7 +255,7 @@ std::filesystem::path SCOPED_TEMP_DIR::CreateChildDir( const wxString& aName ) c
     std::filesystem::path childPath = m_path / ToFsPath( aName );
 
     if( !std::filesystem::create_directory( childPath ) )
-        throw std::runtime_error( "Cannot create temporary child directory '" + ToWxPath( childPath ).utf8_string()
+        throw std::runtime_error( "Cannot create temporary child directory '" + FromFsPath( childPath ).utf8_string()
                                   + "'" );
 
     return childPath;
@@ -284,7 +264,7 @@ std::filesystem::path SCOPED_TEMP_DIR::CreateChildDir( const wxString& aName ) c
 
 wxString SCOPED_TEMP_DIR::CreateChildDirStr( const wxString& aName ) const
 {
-    return ToWxPath( CreateChildDir( aName ) );
+    return FromFsPath( CreateChildDir( aName ) );
 }
 
 
@@ -293,10 +273,10 @@ std::filesystem::path SCOPED_TEMP_DIR::CreateChildFile( const wxString& aName ) 
     expectSafeChildPath( aName );
 
     std::filesystem::path childPath = m_path / ToFsPath( aName );
-    wxFFile               file( ToWxPath( childPath ), wxT( "w" ) );
+    wxFFile               file( FromFsPath( childPath ), wxT( "w" ) );
 
     if( !file.IsOpened() )
-        throw std::runtime_error( "Cannot create temporary child file '" + ToWxPath( childPath ).utf8_string() + "'" );
+        throw std::runtime_error( "Cannot create temporary child file '" + FromFsPath( childPath ).utf8_string() + "'" );
 
     return childPath;
 }
@@ -304,7 +284,7 @@ std::filesystem::path SCOPED_TEMP_DIR::CreateChildFile( const wxString& aName ) 
 
 wxString SCOPED_TEMP_DIR::CreateChildFileStr( const wxString& aName ) const
 {
-    return ToWxPath( CreateChildFile( aName ) );
+    return FromFsPath( CreateChildFile( aName ) );
 }
 
 

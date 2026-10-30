@@ -26,6 +26,7 @@
 
 #include <wx/string.h>
 
+#include <gestfich.h>
 #include <wx_filename.h>
 
 
@@ -34,14 +35,6 @@ class SETTINGS_MANAGER;
 
 namespace KI_TEST
 {
-/**
- * Convert between wx and std::filesystem paths.  On Windows a narrow std::filesystem path uses the ANSI
- * codepage, not UTF-8, so both directions go through wide strings there.
- */
-std::filesystem::path ToFsPath( const wxString& aPath );
-wxString              ToWxPath( const std::filesystem::path& aPath );
-
-
 /*
  * A uniquely-named temporary directory removed on destruction.
  */
@@ -72,7 +65,7 @@ public:
     const std::filesystem::path& Path() const { return m_path; }
 
     /// Get the path to the temporary directory as a wxString.
-    wxString PathStr() const { return ToWxPath( m_path ); }
+    wxString PathStr() const { return FromFsPath( m_path ); }
 
     /**
      * Get the path to a direct child of the temporary directory as a wxString,

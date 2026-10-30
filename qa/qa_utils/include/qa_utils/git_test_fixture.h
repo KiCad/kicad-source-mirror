@@ -88,11 +88,11 @@ public:
     GIT_TEST_FIXTURE() :
             m_tempDir( "kicad-qa-git" ),
             m_configDir( "kicad-qa-gitconfig" ),
-            m_configSearchPath( ToWxPath( m_configDir.Path() ).utf8_string() ),
+            m_configSearchPath( FromFsPath( m_configDir.Path() ).utf8_string() ),
             m_originalCwd( wxGetCwd() )
     {
         // Resolve temporary-directory symlinks to match libgit2's workdir path.
-        m_tempPath = ToWxPath( std::filesystem::canonical( m_tempDir.Path() ) );
+        m_tempPath = FromFsPath( std::filesystem::canonical( m_tempDir.Path() ) );
     }
 
     /// Loading a project in a GUI app moves the working directory into it, so leave before the temp dir goes.

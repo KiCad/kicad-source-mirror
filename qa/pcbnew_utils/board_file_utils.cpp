@@ -68,7 +68,7 @@ std::string GetPcbnewTestDataDir()
 void DumpBoardToFile( BOARD& board, const std::filesystem::path& aFilename )
 {
     PCB_IO_KICAD_SEXPR io;
-    io.SaveBoard( ToWxPath( aFilename ), board );
+    io.SaveBoard( FromFsPath( aFilename ), board );
 }
 
 
@@ -153,12 +153,12 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& a
 {
     PCB_IO_KICAD_SEXPR io;
     wxString           libPath;
-    wxFileName         fn( ToWxPath( aFilename ) );
+    wxFileName         fn( FromFsPath( aFilename ) );
 
     if( fn.GetExt().Lower() == FILEEXT::KiCadFootprintFileExtension )
         libPath = fn.GetPath();
     else
-        libPath = ToWxPath( aFilename );
+        libPath = FromFsPath( aFilename );
 
     try
     {
@@ -179,7 +179,7 @@ void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::filesystem::pa
 
     try
     {
-        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( ToWxPath( aLibraryPath ) );
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( FromFsPath( aLibraryPath ) );
 
         io.SetOutputFormatter( &formatter );
         io.FormatFootprintLibFile( const_cast<FOOTPRINT*>( &aFootprint ) );

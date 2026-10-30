@@ -44,8 +44,8 @@ BOOST_AUTO_TEST_CASE( ExportGencadWithFilename )
     const std::filesystem::path outputPath = outputRoot.Path() / "test_output.cad";
 
     auto gencadJob = std::make_unique<JOB_EXPORT_PCB_GENCAD>();
-    gencadJob->m_filename = KI_TEST::ToWxPath( boardPath );
-    gencadJob->SetConfiguredOutputPath( KI_TEST::ToWxPath( outputPath ) );
+    gencadJob->m_filename = FromFsPath( boardPath );
+    gencadJob->SetConfiguredOutputPath( FromFsPath( outputPath ) );
 
     int result = handler.JobExportGencad( gencadJob.get() );
     BOOST_CHECK_EQUAL( result, CLI::EXIT_CODES::OK );

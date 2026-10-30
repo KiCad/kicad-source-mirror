@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE( TextReportRetainsUntranslatedFeatureText )
 BOOST_AUTO_TEST_CASE( TextReportCanBeSavedAndReplacedAsUtf8 )
 {
     KI_TEST::SCOPED_TEMP_DIR dir( "kicad-compatibility-report-" );
-    wxString                 path = KI_TEST::ToWxPath( dir.Path() / "report.txt" );
+    wxString                 path = FromFsPath( dir.Path() / "report.txt" );
     COMPATIBILITY_REPORT     report;
     report.Add( DOWNGRADE_BUCKET::DROP, wxString::FromUTF8( "Réglages Ω" ), wxString::FromUTF8( "日本語" ) );
 

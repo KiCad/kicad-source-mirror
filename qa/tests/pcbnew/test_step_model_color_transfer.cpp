@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE( TO252_2_ColorsPreserved )
 
     BOOST_REQUIRE( model.CreatePCB( outline, VECTOR2D( 0, 0 ), true ) );
 
-    const wxString modelPath = KI_TEST::ToWxPath( sourceModel );
+    const wxString modelPath = FromFsPath( sourceModel );
 
     const bool added = model.AddComponent( wxT( "TO-252-2" ), modelPath, {}, wxT( "U1" ), false,
                                            VECTOR2D( 5.0, 5.0 ), 0.0, VECTOR3D( 0.0, 0.0, 0.0 ),
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE( TO252_2_ColorsPreserved )
 
     BOOST_REQUIRE_MESSAGE( added, "AddComponent failed for TO-252-2.step" );
 
-    const wxString outputPath = KI_TEST::ToWxPath( outputFile );
+    const wxString outputPath = FromFsPath( outputFile );
 
     BOOST_REQUIRE_MESSAGE( model.WriteSTEP( outputPath, false, false ),
                            "WriteSTEP returned failure" );

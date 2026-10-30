@@ -50,8 +50,8 @@ BOOST_AUTO_TEST_CASE( ExportPdfSingleDocumentOutputPath )
     const std::filesystem::path outputPath = outputRoot.Path() / "Assembly" / "Assembly_output.pdf";
 
     auto pdfJob = std::make_unique<JOB_EXPORT_PCB_PDF>();
-    pdfJob->m_filename = KI_TEST::ToWxPath( boardPath );
-    pdfJob->SetConfiguredOutputPath( KI_TEST::ToWxPath( outputPath ) );
+    pdfJob->m_filename = FromFsPath( boardPath );
+    pdfJob->SetConfiguredOutputPath( FromFsPath( outputPath ) );
     pdfJob->m_plotDrawingSheet = false;
     pdfJob->m_pdfSingle = true;
     pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE;
@@ -82,8 +82,8 @@ BOOST_AUTO_TEST_CASE( ExportPdfSingleDocumentTrailingDisabledLayers )
     const std::filesystem::path outputPath = outputRoot.Path() / "out.pdf";
 
     auto pdfJob = std::make_unique<JOB_EXPORT_PCB_PDF>();
-    pdfJob->m_filename = KI_TEST::ToWxPath( boardPath );
-    pdfJob->SetConfiguredOutputPath( KI_TEST::ToWxPath( outputPath ) );
+    pdfJob->m_filename = FromFsPath( boardPath );
+    pdfJob->SetConfiguredOutputPath( FromFsPath( outputPath ) );
     pdfJob->m_plotDrawingSheet = false;
     pdfJob->m_pdfSingle = true;
     pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE;
@@ -124,8 +124,8 @@ static std::string plotOneLayerToPdf( const std::string& aBoardFile, PCB_LAYER_I
     const std::filesystem::path outputPath = outputRoot.Path() / "out.pdf";
 
     auto pdfJob = std::make_unique<JOB_EXPORT_PCB_PDF>();
-    pdfJob->m_filename = KI_TEST::ToWxPath( boardPath );
-    pdfJob->SetConfiguredOutputPath( KI_TEST::ToWxPath( outputPath ) );
+    pdfJob->m_filename = FromFsPath( boardPath );
+    pdfJob->SetConfiguredOutputPath( FromFsPath( outputPath ) );
     pdfJob->m_plotDrawingSheet = false;
     pdfJob->m_pdfSingle = true;
     pdfJob->m_pdfGenMode = JOB_EXPORT_PCB_PDF::GEN_MODE::ONE_PAGE_PER_LAYER_ONE_FILE;

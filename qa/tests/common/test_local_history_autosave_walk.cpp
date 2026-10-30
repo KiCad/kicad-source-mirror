@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE( SelfReferencingSymlinkTerminates )
     namespace fs = std::filesystem;
 
     const ScratchRoot scratch( "cycle" );
-    const wxString    root = KI_TEST::ToWxPath( scratch.path );
+    const wxString    root = FromFsPath( scratch.path );
 
     std::ofstream( scratch.path / "_autosave-board.kicad_pcb" ) << "x";
 
@@ -146,7 +146,7 @@ BOOST_AUTO_TEST_CASE( RootEscapeSymlinkIgnored )
     if( !createSymlinkOrSkip( outside.path, dosdevices / "z:" ) )
         return;
 
-    const wxString root = KI_TEST::ToWxPath( scratch.path );
+    const wxString root = FromFsPath( scratch.path );
 
     std::vector<std::pair<wxString, wxString>> pairs =
             LOCAL_HISTORY::CollectAutosaveFilePairs( root, root, BACKUP_LOCATION::PROJECT_DIR );

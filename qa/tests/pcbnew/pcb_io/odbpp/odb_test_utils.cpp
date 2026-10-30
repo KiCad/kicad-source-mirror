@@ -52,7 +52,7 @@ fs::path ExportOdb( const BOARD& aBoard, const fs::path& aDir, const std::string
     props["units"] = aUnits;
     props["sigfig"] = aSigfig;
 
-    odbExporter.SaveBoard( KI_TEST::ToWxPath( aDir ), const_cast<BOARD&>( aBoard ), &props );
+    odbExporter.SaveBoard( FromFsPath( aDir ), const_cast<BOARD&>( aBoard ), &props );
 
     return aDir;
 }
@@ -207,7 +207,7 @@ ODB_PRODUCT::ODB_PRODUCT( const fs::path& aRoot )
     wxString block;
     ODB_MATRIX_ROW row;
 
-    FILE_LINE_READER reader( KI_TEST::ToWxPath( aRoot / "matrix" / "matrix" ) );
+    FILE_LINE_READER reader( FromFsPath( aRoot / "matrix" / "matrix" ) );
 
     while( const char* line = reader.ReadLine() )
     {
@@ -271,7 +271,7 @@ ODB_PRODUCT::ODB_PRODUCT( const fs::path& aRoot )
 
     for( const fs::directory_entry& entry : fs::directory_iterator( aRoot / "steps", ec ) )
     {
-        if( entry.is_directory() && KI_TEST::ToWxPath( entry.path().filename() ).IsSameAs( stepName, false ) )
+        if( entry.is_directory() && FromFsPath( entry.path().filename() ).IsSameAs( stepName, false ) )
             m_stepDir = entry.path();
     }
 }
@@ -285,9 +285,9 @@ wxString ODB_PRODUCT::LayerFile( const wxString& aLayer, const wxString& aFile )
 
     for( const fs::directory_entry& entry : fs::directory_iterator( layersRoot, ec ) )
     {
-        if( entry.is_directory() && KI_TEST::ToWxPath( entry.path().filename() ).IsSameAs( aLayer, false ) )
+        if( entry.is_directory() && FromFsPath( entry.path().filename() ).IsSameAs( aLayer, false ) )
             layerDir = entry.path();
     }
 
-    return KI_TEST::ToWxPath( layerDir / KI_TEST::ToFsPath( aFile ) );
+    return FromFsPath( layerDir / ToFsPath( aFile ) );
 }

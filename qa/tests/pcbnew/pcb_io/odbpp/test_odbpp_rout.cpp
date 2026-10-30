@@ -449,7 +449,7 @@ BOOST_AUTO_TEST_CASE( OdbCollidingLayerNamesKeepMatrixReferences )
             PCB_IO_ODBPP plugin;
             ODB_EXPORT_OPTIONS options;
             options.m_sections = FAB::LegacySections();
-            BOOST_REQUIRE_NO_THROW( plugin.Export( KI_TEST::ToWxPath( root ), *board, options ) );
+            BOOST_REQUIRE_NO_THROW( plugin.Export( FromFsPath( root ), *board, options ) );
         }
         else
         {

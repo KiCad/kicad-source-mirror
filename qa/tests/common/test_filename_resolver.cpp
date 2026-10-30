@@ -48,13 +48,13 @@ BOOST_AUTO_TEST_CASE( ResolveAbsoluteAndWorkingPath )
 
     FILENAME_RESOLVER resolver;
 
-    wxString   absFile = KI_TEST::ToWxPath( file );
+    wxString   absFile = FromFsPath( file );
     wxString   resolved = resolver.ResolvePath( absFile, wxEmptyString, {} );
     wxFileName fn( absFile );
     fn.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_DOTS );
     BOOST_CHECK_EQUAL( resolved, fn.GetFullPath() );
 
-    wxString working = KI_TEST::ToWxPath( work );
+    wxString working = FromFsPath( work );
     wxString relResolved = resolver.ResolvePath( wxS( "model.txt" ), working, {} );
     BOOST_CHECK_EQUAL( relResolved, fn.GetFullPath() );
 }
@@ -76,11 +76,11 @@ BOOST_AUTO_TEST_CASE( ResolveAliasAndErrors )
 
     // canonical ALIAS:path format (no leading colon)
     wxString resolved = resolver.ResolvePath( wxS( "ALIAS:a.txt" ), wxEmptyString, {} );
-    BOOST_CHECK_EQUAL( resolved, KI_TEST::ToWxPath( file ) );
+    BOOST_CHECK_EQUAL( resolved, FromFsPath( file ) );
 
     // legacy :ALIAS:path format (leading colon)
     wxString resolvedLeadingColon = resolver.ResolvePath( wxS( ":ALIAS:a.txt" ), wxEmptyString, {} );
-    BOOST_CHECK_EQUAL( resolvedLeadingColon, KI_TEST::ToWxPath( file ) );
+    BOOST_CHECK_EQUAL( resolvedLeadingColon, FromFsPath( file ) );
 
     // unknown alias returns empty
     wxString missing = resolver.ResolvePath( wxS( "MISSING:a.txt" ), wxEmptyString, {} );
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE( ShortenPathRoundTrip )
     sp.m_Pathvar = tempDir.PathStr();
     resolver.UpdatePathList( { sp } );
 
-    wxString full = KI_TEST::ToWxPath( file );
+    wxString full = FromFsPath( file );
     wxString shortened = resolver.ShortenPath( full );
 
     // ShortenPath produces ${ALIAS}/path for user-defined aliases
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE( ResolveBackCompatColonAlias )
 
     // :MYLIB:model.wrl is the legacy format produced by KiCad before e7d6c84aef
     wxString resolved = resolver.ResolvePath( wxS( ":MYLIB:model.wrl" ), wxEmptyString, {} );
-    wxFileName fn( KI_TEST::ToWxPath( file ) );
+    wxFileName fn( FromFsPath( file ) );
     fn.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_DOTS );
     BOOST_CHECK_EQUAL( resolved, fn.GetFullPath() );
 }
@@ -154,17 +154,17 @@ BOOST_AUTO_TEST_CASE( RelativePathResolution )
     SEARCH_STACK stack;
     stack.AddPaths( tempDir.PathStr() );
 
-    wxString rel = stack.FilenameWithRelativePathInSearchList( KI_TEST::ToWxPath( file ),
+    wxString rel = stack.FilenameWithRelativePathInSearchList( FromFsPath( file ),
                                                                tempDir.PathStr() );
-    BOOST_CHECK_EQUAL( rel, KI_TEST::ToWxPath( fs::path( "sub" ) / "f.txt" ) );
+    BOOST_CHECK_EQUAL( rel, FromFsPath( fs::path( "sub" ) / "f.txt" ) );
 
     KI_TEST::SCOPED_TEMP_DIR outsideDir( "ss_outside" );
     fs::path                 outside = outsideDir.Path() / "outside.txt";
     std::ofstream( outside.string() ) << "dummy";
 
-    wxString full = stack.FilenameWithRelativePathInSearchList( KI_TEST::ToWxPath( outside ),
+    wxString full = stack.FilenameWithRelativePathInSearchList( FromFsPath( outside ),
                                                                 tempDir.PathStr() );
-    BOOST_CHECK_EQUAL( full, KI_TEST::ToWxPath( outside ) );
+    BOOST_CHECK_EQUAL( full, FromFsPath( outside ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

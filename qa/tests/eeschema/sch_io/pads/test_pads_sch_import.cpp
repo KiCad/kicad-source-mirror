@@ -1518,7 +1518,7 @@ BOOST_AUTO_TEST_CASE( CanReadLibraryRefusesBinaryContainer )
     }
 
     SCH_IO_PADS plugin;
-    wxString    path = KI_TEST::ToWxPath( binaryAsTxt );
+    wxString    path = FromFsPath( binaryAsTxt );
 
     BOOST_CHECK( plugin.CanReadSchematicFile( path ) );
     BOOST_CHECK( !plugin.CanReadLibrary( path ) );

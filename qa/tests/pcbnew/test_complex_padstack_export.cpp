@@ -64,7 +64,7 @@ public:
     }
 
     const std::filesystem::path& Path() const { return m_path; }
-    wxString                     WxStr() const { return KI_TEST::ToWxPath( m_path ); }
+    wxString                     WxStr() const { return FromFsPath( m_path ); }
 
 private:
     std::filesystem::path m_path;

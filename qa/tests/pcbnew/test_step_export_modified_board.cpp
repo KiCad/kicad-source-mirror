@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( ModifiedBoardStagesCurrentState )
     const KI_TEST::SCOPED_TEMP_DIR workDir( wxS( "kicad_step_export_23704_" ) );
     const std::filesystem::path& onDisk = workDir.Path() / "panel.kicad_pcb";
     KI_TEST::DumpBoardToFile( *board, onDisk );
-    const wxString onDiskPath = KI_TEST::ToWxPath( onDisk );
+    const wxString onDiskPath = FromFsPath( onDisk );
 
     // A sibling project file must be staged too, so project-relative model and library paths
     // resolve identically during export.

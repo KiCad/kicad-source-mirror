@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( UnknownKeysSurviveAnEdit )
 
     {
         std::unique_ptr<DATABASE_LIB_SETTINGS> settings =
-                LoadDatabaseLibSettingsReadOnly( KI_TEST::ToWxPath( path ) );
+                LoadDatabaseLibSettingsReadOnly( FromFsPath( path ) );
 
         settings->m_Tables[0].key_col = "MPN";
         settings->SetReadOnly( false );
