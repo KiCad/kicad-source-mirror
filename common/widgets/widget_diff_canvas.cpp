@@ -145,6 +145,9 @@ void WIDGET_DIFF_CANVAS::SetScene( KICAD_DIFF::DIFF_SCENE aScene )
 
 void WIDGET_DIFF_CANVAS::SetWorldUnitLength( double aWorldUnitLength )
 {
+    if( m_gal->GetWorldUnitLength() == aWorldUnitLength )
+        return;
+
     m_gal->SetWorldUnitLength( aWorldUnitLength );
     m_gal->ComputeWorldScreenMatrix();
     ZoomToFit();
