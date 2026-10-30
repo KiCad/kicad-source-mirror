@@ -1153,34 +1153,15 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
 
     auto parseFp = [&]()
     {
-        try
+        FOOTPRINT* footprint = parseFOOTPRINT( nullptr );
+
+        if( footprint )
         {
-            FOOTPRINT* footprint = parseFOOTPRINT( nullptr );
+            wxString fpName = footprint->GetFPID().GetLibItemName();
+            footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
 
-            if( footprint )
-            {
-                wxString fpName = footprint->GetFPID().GetLibItemName();
-                footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
-
-                WX_FILENAME fn( wxEmptyString, fpName );
-                aFootprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
-            }
-        }
-        catch( const IO_ERROR& e )
-        {
-            // Log warning and continue parsing remaining footprints
-            this->m_parseWarnings.push_back( e.What() );
-
-            // Skip to end of this footprint block
-            int depth = 1;
-
-            while( depth > 0 && ( token = NextTok() ) != T_EOF )
-            {
-                if( token == T_LEFT )
-                    depth++;
-                else if( token == T_RIGHT )
-                    depth--;
-            }
+            WX_FILENAME fn( wxEmptyString, fpName );
+            aFootprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
         }
     };
 
@@ -1193,6 +1174,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
 
         switch( token )
         {
+        case T_module:              // legacy token
         case T_footprint:           // This is a footprint file prior to the header addition.
             parseFp();              // There is only a single footprint so the closing ')' has already been parsed.
             return;

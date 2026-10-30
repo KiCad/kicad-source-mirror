@@ -189,10 +189,11 @@ void FP_CACHE::Load()
                 if( tmp.empty() )
                     THROW_IO_ERROR( wxEmptyString );   // caught locally, just below...
 
-                auto entry = tmp.release( tmp.begin() );
+                // The parser's entry has no file name, and saving uses the one cached here
+                FOOTPRINT* footprint = tmp.release( tmp.begin() )->GetFootprint().release();
 
-                entry->GetFootprint()->SetFPID( LIB_ID( wxEmptyString, fpName ) );
-                m_footprints.insert( fpName, entry.release() );
+                footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
+                m_footprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
 
                 // A warning leaves the footprint usable, and libraries load on worker threads that have no one to
                 // show a message to, so it is only traced
