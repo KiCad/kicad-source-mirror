@@ -149,6 +149,10 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXP
         m_plotOpts = m_editFrame->GetPlotSettings();
         m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
         m_allCopperLayers->Hide();
+
+        // Only plot jobs carry these, the board plot settings do not store them
+        m_plotFootprintValues->Hide();
+        m_plotRefDes->Hide();
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
@@ -293,6 +297,9 @@ bool DIALOG_PLOT::TransferDataToWindow()
     // Select the current board variant in the variant choice
     if( m_job )
     {
+        m_plotFootprintValues->SetValue( m_plotOpts.GetPlotValue() );
+        m_plotRefDes->SetValue( m_plotOpts.GetPlotReference() );
+
         if( !m_job->m_variant.IsEmpty() )
         {
             int idx = m_variantChoiceCtrl->FindString( m_job->m_variant );
@@ -590,6 +597,8 @@ void DIALOG_PLOT::transferPlotParamsToJob()
 
     m_job->m_plotDrawingSheet = m_plotOpts.GetPlotFrameRef();
     m_job->m_plotPadNumbers = m_plotOpts.GetPlotPadNumbers();
+    m_job->m_plotFootprintValues = m_plotOpts.GetPlotValue();
+    m_job->m_plotRefDes = m_plotOpts.GetPlotReference();
 
     m_job->m_blackAndWhite = m_plotOpts.GetBlackAndWhite();
     m_job->m_mirror = m_plotOpts.GetMirror();
@@ -1142,6 +1151,8 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
     tempOptions.SetPlotPadNumbers( m_plotPadNumbers->GetValue() );
+    tempOptions.SetPlotValue( !m_job || m_plotFootprintValues->GetValue() );
+    tempOptions.SetPlotReference( !m_job || m_plotRefDes->GetValue() );
     tempOptions.SetHideDNPFPsOnFabLayers( m_plotDNP->GetValue()
                                             && m_hideDNP->GetValue() );
     tempOptions.SetSketchDNPFPsOnFabLayers( m_plotDNP->GetValue()

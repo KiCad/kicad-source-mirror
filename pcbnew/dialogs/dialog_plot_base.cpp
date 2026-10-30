@@ -151,6 +151,18 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_zoneFillCheck->SetValue(true);
 	gbSizer1->Add( m_zoneFillCheck, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
+	m_plotFootprintValues = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot footprint values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotFootprintValues->SetValue(true);
+	m_plotFootprintValues->SetToolTip( _("Plot footprint values on silkscreen and fabrication layers") );
+
+	gbSizer1->Add( m_plotFootprintValues, wxGBPosition( 7, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_plotRefDes = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotRefDes->SetValue(true);
+	m_plotRefDes->SetToolTip( _("Plot reference designators on silkscreen and fabrication layers") );
+
+	gbSizer1->Add( m_plotRefDes, wxGBPosition( 8, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
 	drillMarksLabel = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
 	drillMarksLabel->Wrap( -1 );
 	gbSizer1->Add( drillMarksLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );

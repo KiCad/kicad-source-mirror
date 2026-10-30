@@ -75,6 +75,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_sketchPadsOnFabLayers;
 		wxCheckBox* m_plotPadNumbers;
 		wxCheckBox* m_zoneFillCheck;
+		wxCheckBox* m_plotFootprintValues;
+		wxCheckBox* m_plotRefDes;
 		wxStaticText* drillMarksLabel;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* scalingLabel;
