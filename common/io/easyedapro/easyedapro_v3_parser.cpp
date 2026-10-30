@@ -27,6 +27,7 @@
 #include <cmath>
 #include <optional>
 #include <set>
+#include <string_view>
 
 #include <io/easyedapro/easyedapro_parser.h>
 
@@ -37,7 +38,6 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/mstream.h>
-#include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 
@@ -245,14 +245,57 @@ static wxString ParseDocUuid( const nlohmann::json& aHead )
 }
 
 
+static std::string ReadEntryText( wxInputStream& aInput )
+{
+    wxMemoryOutputStream mem;
+    mem << aInput;
+
+    wxStreamBuffer* buf = mem.GetOutputStreamBuffer();
+    return std::string( static_cast<const char*>( buf->GetBufferStart() ), buf->GetBufferSize() );
+}
+
+
+static std::string_view NextEpruLine( std::string_view& aText )
+{
+    size_t           eol = aText.find_first_of( "\r\n" );
+    std::string_view line = aText.substr( 0, eol );
+
+    if( eol == std::string_view::npos )
+    {
+        aText = {};
+        return line;
+    }
+
+    bool crlf = aText[eol] == '\r' && eol + 1 < aText.size() && aText[eol + 1] == '\n';
+    aText.remove_prefix( eol + ( crlf ? 2 : 1 ) );
+
+    return line;
+}
+
+
+static bool SplitEpruLine( std::string_view aLine, std::string_view& aOuter, std::string_view& aInner )
+{
+    if( !aLine.empty() && aLine.back() == '|' )
+        aLine.remove_suffix( 1 );
+
+    size_t sepPos = aLine.find( "||" );
+
+    if( sepPos == std::string_view::npos )
+        return false;
+
+    aOuter = aLine.substr( 0, sepPos );
+    aInner = aLine.substr( sepPos + 2 );
+
+    return true;
+}
+
+
 static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
                              std::vector<V3_DOC_RAW>& aDocs )
 {
-    // wxTextInputStream reads a byte at a time, so an unbuffered zip stream inflates per character
-    wxBufferedInputStream buffered( aInput, 64 * 1024 );
-    wxTextInputStream     txt( buffered, wxS( " " ), wxConvUTF8 );
-
-    int                      currentLine = 1;
+    std::string               text = ReadEntryText( aInput );
+    std::string_view          remaining = text;
+    int                       currentLine = 1;
     std::optional<V3_DOC_RAW> currentDoc;
 
     auto flushDoc = [&]()
@@ -286,37 +329,24 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
         }
     };
 
-    while( buffered.CanRead() )
+    while( !remaining.empty() )
     {
-        wxString rawLine = txt.ReadLine();
+        std::string_view outerStr;
+        std::string_view innerStr;
 
-        if( rawLine.empty() )
+        if( !SplitEpruLine( NextEpruLine( remaining ), outerStr, innerStr ) )
         {
             currentLine++;
             continue;
         }
-
-        if( rawLine.Last() == '|' )
-            rawLine.RemoveLast();
-
-        int sepPos = rawLine.Find( wxS( "||" ) );
-
-        if( sepPos < 0 )
-        {
-            currentLine++;
-            continue;
-        }
-
-        wxString outerStr = rawLine.Left( sepPos );
-        wxString innerStr = rawLine.Mid( sepPos + 2 );
 
         try
         {
-            nlohmann::json outer = nlohmann::json::parse( ToStdString( outerStr ) );
+            nlohmann::json outer = nlohmann::json::parse( outerStr );
             nlohmann::json inner;
 
             if( !innerStr.empty() )
-                inner = nlohmann::json::parse( ToStdString( innerStr ) );
+                inner = nlohmann::json::parse( innerStr );
 
             wxString type = GetString( outer, "type" );
 
@@ -398,41 +428,28 @@ static bool HasValidV3LibraryContents( const V3_LIBRARY_CONTENTS& aContents, con
 
 static void ScanEpruDocTypes( wxInputStream& aInput, const wxString& aSource, std::set<wxString>& aDocTypes )
 {
-    wxBufferedInputStream buffered( aInput, 64 * 1024 );
-    wxTextInputStream     txt( buffered, wxS( " " ), wxConvUTF8 );
-    int                   currentLine = 1;
+    std::string      text = ReadEntryText( aInput );
+    std::string_view remaining = text;
+    int              currentLine = 1;
 
-    while( buffered.CanRead() )
+    while( !remaining.empty() )
     {
-        wxString rawLine = txt.ReadLine();
+        std::string_view outerStr;
+        std::string_view innerStr;
 
-        if( rawLine.empty() )
+        if( !SplitEpruLine( NextEpruLine( remaining ), outerStr, innerStr ) )
         {
             currentLine++;
             continue;
         }
-
-        if( rawLine.Last() == '|' )
-            rawLine.RemoveLast();
-
-        int sepPos = rawLine.Find( wxS( "||" ) );
-
-        if( sepPos < 0 )
-        {
-            currentLine++;
-            continue;
-        }
-
-        wxString outerStr = rawLine.Left( sepPos );
-        wxString innerStr = rawLine.Mid( sepPos + 2 );
 
         try
         {
-            nlohmann::json outer = nlohmann::json::parse( ToStdString( outerStr ) );
+            nlohmann::json outer = nlohmann::json::parse( outerStr );
 
             if( GetString( outer, "type" ) == wxS( "DOCHEAD" ) && !innerStr.empty() )
             {
-                nlohmann::json inner = nlohmann::json::parse( ToStdString( innerStr ) );
+                nlohmann::json inner = nlohmann::json::parse( innerStr );
                 wxString       docType = ParseDocType( inner );
 
                 if( !docType.empty() )
@@ -451,15 +468,9 @@ static void ScanEpruDocTypes( wxInputStream& aInput, const wxString& aSource, st
 
 static nlohmann::json ReadJsonEntry( wxInputStream& aInput, const wxString& aEntryName )
 {
-    wxMemoryOutputStream mem;
-    mem << aInput;
-
-    wxStreamBuffer* buf = mem.GetOutputStreamBuffer();
-    std::string     jsonStr( static_cast<const char*>( buf->GetBufferStart() ), buf->GetBufferSize() );
-
     try
     {
-        return nlohmann::json::parse( jsonStr );
+        return nlohmann::json::parse( ReadEntryText( aInput ) );
     }
     catch( nlohmann::json::exception& e )
     {
