@@ -465,6 +465,18 @@ void WIDGET_DIFF_CANVAS::CenterOnHighlight()
     if( !bb || bb->GetWidth() <= 0 || bb->GetHeight() <= 0 )
         return;
 
+    BOX2I focus = *bb;
+    focus.Inflate( std::max( bb->GetWidth(), bb->GetHeight() ) );
+
+    // A part in a sheet-wide fit is too small to read, but a closer zoom the user chose is kept
+    const BOX2D viewport = m_view->GetViewport();
+
+    if( focus.GetWidth() < viewport.GetWidth() && focus.GetHeight() < viewport.GetHeight() )
+    {
+        ZoomToBBox( focus );
+        return;
+    }
+
     const VECTOR2I center = bb->GetCenter();
     m_view->SetCenter( VECTOR2D( center.x, center.y ) );
     m_view->MarkDirty();

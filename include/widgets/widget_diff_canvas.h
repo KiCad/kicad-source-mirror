@@ -146,8 +146,8 @@ public:
     /// Zoom and center on a specific document-space bbox with a small margin.
     void ZoomToBBox( const BOX2I& aBBox );
 
-    /// Pan so the currently highlighted change is at
-    /// the center of the canvas. No-op when nothing is highlighted.
+    /// Pan so the currently highlighted change is at the center of the canvas, zooming in first
+    /// when it would be too small to read. No-op when nothing is highlighted.
     void CenterOnHighlight();
 
     /// Register a callback to fire when the user left-clicks the canvas.
