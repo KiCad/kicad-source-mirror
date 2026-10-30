@@ -325,3 +325,21 @@ def test_pcb_export_pos_exclude_bom(kitest: KiTestFixture, tmp_path: Path):
 
     excluded = export("--exclude-bom")
     assert re.search(r"^D1 ", excluded, re.M) and not re.search(r"^D2 ", excluded, re.M)
+
+
+def test_pcb_export_dxf_exclude_value(kitest: KiTestFixture, tmp_path: Path):
+    board = kitest.get_data_file_path("pcbnew/issue5830.kicad_pcb")
+
+    def export(name: str, *options: str) -> int:
+        out = tmp_path / name
+        stdout, stderr, exitcode = utils.run_and_capture(
+            [utils.kicad_cli(), "pcb", "export", "dxf", "--layers", "F.Fab", *options, "-o", str(out), str(board)])
+        assert exitcode == 0, stdout + stderr
+        return (out / "issue5830-F_Fab.dxf").stat().st_size
+
+    # Value and reference text are plotted on F.Fab, so each exclusion shrinks the file
+    both = export("both")
+    no_value = export("no_value", "--exclude-value")
+    neither = export("neither", "--exclude-value", "--exclude-refdes")
+
+    assert both > no_value > neither
