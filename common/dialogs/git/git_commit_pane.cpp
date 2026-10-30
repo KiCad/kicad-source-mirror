@@ -394,6 +394,9 @@ void GIT_COMMIT_PANE::layoutWide()
     files->Add( m_undoCommitButton, 0, wxBOTTOM | wxLEFT | wxRIGHT, 8 );
     files->Add( m_checklist, 1, wxALL | wxEXPAND, 4 );
 
+    // The list is the only part that stretches, so without a floor the docked split leaves it one row tall
+    m_checklist->SetMinSize( FromDIP( wxSize( -1, 120 ) ) );
+
     wxBoxSizer* row = new wxBoxSizer( wxHORIZONTAL );
     row->Add( files, 1, wxEXPAND );
     row->Add( column, 0, wxEXPAND );
