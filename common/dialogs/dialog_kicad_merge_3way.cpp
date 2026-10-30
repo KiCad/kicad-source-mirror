@@ -145,6 +145,14 @@ DIALOG_KICAD_MERGE_3WAY::DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent,
 
     Layout();
 
+    // The first conflict is drawn before the canvas has a surface, so draw it again once shown
+    CallAfter(
+            [this]()
+            {
+                if( m_canvas )
+                    m_canvas->ForceRefresh();
+            } );
+
     // Headless / scripted mode: if KICAD_MERGETOOL_AUTO is set, apply the
     // pre-recorded resolutions and close the dialog immediately. The
     // EndModal is deferred via CallAfter so it runs after ShowModal has
