@@ -169,6 +169,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24943_variant_unit_sync.cpp
     test_issue25119_bom_netlist_variant.cpp
     test_issue25198_multi_top_level_plot.cpp
+    test_job_export_sch_plot_path.cpp
     test_issue25869_variant_lib_symbols.cpp
     test_issue24961_group_promotion.cpp
     test_issue24663_sheet_dnp_fields.cpp

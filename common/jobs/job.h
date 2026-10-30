@@ -255,6 +255,14 @@ public:
 
     wxString ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, PROJECT* aProject ) const;
 
+    /**
+     * Complete a resolved file output path that names a folder, either by a trailing separator or by
+     * being an existing directory, with a default file name.
+     *
+     * @return aPath unchanged when it already names a file.
+     */
+    static wxString AppendDefaultFileName( const wxString& aPath, const wxString& aDefaultName );
+
     bool GetOutputPathIsDirectory() const { return m_outputPathIsDirectory; }
 
 protected:

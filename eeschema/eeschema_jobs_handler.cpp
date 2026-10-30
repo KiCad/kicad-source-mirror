@@ -410,16 +410,17 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
-    if( !aPlotJob->GetOutputPathIsDirectory() && aPlotJob->GetConfiguredOutputPath().IsEmpty() )
-    {
-        wxFileName fn = sch->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( GetDefaultPlotExtension( format ) );
+    wxFileName defaultFn = sch->GetFileName();
+    defaultFn.SetExt( GetDefaultPlotExtension( format ) );
 
-        aPlotJob->SetConfiguredOutputPath( fn.GetFullName() );
-    }
+    if( !aPlotJob->GetOutputPathIsDirectory() && aPlotJob->GetConfiguredOutputPath().IsEmpty() )
+        aPlotJob->SetConfiguredOutputPath( defaultFn.GetFullName() );
 
     wxString outPath = aPlotJob->GetFullOutputPath( &sch->Project() );
+
+    // A folder in file mode gets the default name inside it
+    if( !aPlotJob->GetOutputPathIsDirectory() )
+        outPath = JOB::AppendDefaultFileName( outPath, defaultFn.GetFullName() );
 
     if( !PATHS::EnsurePathExists( outPath, !aPlotJob->GetOutputPathIsDirectory() ) )
     {

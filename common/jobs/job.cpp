@@ -149,6 +149,28 @@ wxString JOB::ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, P
 }
 
 
+wxString JOB::AppendDefaultFileName( const wxString& aPath, const wxString& aDefaultName )
+{
+    if( aPath.IsEmpty() )
+        return aPath;
+
+    wxFileName fn( aPath );
+
+    if( !fn.GetFullName().IsEmpty() )
+    {
+        if( !wxFileName::DirExists( aPath ) )
+            return aPath;
+
+        // An existing folder without a trailing separator parses as a file name
+        fn.AssignDir( aPath );
+    }
+
+    fn.SetFullName( aDefaultName );
+
+    return fn.GetFullPath();
+}
+
+
 wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
 {
     return ResolveOutputPath( m_workingOutputPath.IsEmpty() ? m_outputPath : m_workingOutputPath,
