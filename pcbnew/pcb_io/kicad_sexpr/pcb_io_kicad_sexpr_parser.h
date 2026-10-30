@@ -533,6 +533,9 @@ private:
     void resolveGroups( BOARD_ITEM* aParent );
     void resolveConstraints( BOARD_ITEM* aParent );
 
+    /// Resolve the fonts, groups and constraints of a fully parsed board or footprint
+    void finishItem( BOARD_ITEM* aItem );
+
     /// The type of progress bar timeout
     using TIMEOUT = std::chrono::milliseconds;
 

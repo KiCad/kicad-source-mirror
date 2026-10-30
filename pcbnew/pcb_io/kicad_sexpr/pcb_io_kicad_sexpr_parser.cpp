@@ -1127,9 +1127,17 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
-    const std::vector<wxString>* embeddedFonts = item->GetEmbeddedFiles()->UpdateFontFiles();
+    finishItem( item );
 
-    item->RunOnChildren(
+    return item;
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::finishItem( BOARD_ITEM* aItem )
+{
+    const std::vector<wxString>* embeddedFonts = aItem->GetEmbeddedFiles()->UpdateFontFiles();
+
+    aItem->RunOnChildren(
             [&]( BOARD_ITEM* aChild )
             {
                 if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( aChild ) )
@@ -1137,10 +1145,13 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
             },
             RECURSE_MODE::RECURSE );
 
-    resolveGroups( item );
-    resolveConstraints( item );
+    resolveGroups( aItem );
+    resolveConstraints( aItem );
 
-    return item;
+    // The next footprint in a file must not resolve against these
+    m_groupInfos.clear();
+    m_generatorInfos.clear();
+    m_constraintInfos.clear();
 }
 
 
@@ -1153,15 +1164,20 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
 
     auto parseFp = [&]()
     {
-        FOOTPRINT* footprint = parseFOOTPRINT( nullptr );
+        std::unique_ptr<FOOTPRINT> footprint( parseFOOTPRINT( nullptr ) );
 
         if( footprint )
         {
             wxString fpName = footprint->GetFPID().GetLibItemName();
             footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
 
+            // Locking a footprint has no meaning outside of a board
+            footprint->SetLocked( false );
+
+            finishItem( footprint.get() );
+
             WX_FILENAME fn( wxEmptyString, fpName );
-            aFootprints.insert( fpName, new FP_CACHE_ENTRY( footprint, fn ) );
+            aFootprints.insert( fpName, new FP_CACHE_ENTRY( footprint.release(), fn ) );
         }
     };
 
