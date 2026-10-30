@@ -69,15 +69,9 @@ BOOST_FIXTURE_TEST_SUITE( ConnectivityClusters, CONNECTIVITY_CLUSTER_FIXTURE )
  * the adjacency, and no adjacency may cross between two clusters.  That is the definition of a
  * connected component, so a union-find that links too much or too little cannot satisfy it.
  */
-BOOST_DATA_TEST_CASE( ClustersAreTheConnectedComponents, boost::unit_test::data::make( c_boards ),
-                      boardName )
+static void checkClustersAreConnectedComponents( BOARD* aBoard )
 {
-    KI_TEST::LoadBoard( m_settingsManager, boardName, m_board );
-    KI_TEST::FillZones( m_board.get() );
-    m_board->BuildConnectivity();
-
-    std::shared_ptr<CN_CONNECTIVITY_ALGO> algo =
-            m_board->GetConnectivity()->GetConnectivityAlgo();
+    std::shared_ptr<CN_CONNECTIVITY_ALGO> algo = aBoard->GetConnectivity()->GetConnectivityAlgo();
 
     CN_CONNECTIVITY_ALGO::CLUSTERS clusters =
             algo->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_RATSNEST );
@@ -155,14 +149,9 @@ BOOST_DATA_TEST_CASE( ClustersAreTheConnectedComponents, boost::unit_test::data:
  * left split.  That the forest is also of minimum weight is covered by the FilterKruskal suite,
  * which checks the selection against plain sort-then-scan Kruskal.
  */
-BOOST_DATA_TEST_CASE( RatsnestSpansTheClustersOfEachNet,
-                      boost::unit_test::data::make( c_boards ), boardName )
+static void checkRatsnestSpansClusters( BOARD* aBoard )
 {
-    KI_TEST::LoadBoard( m_settingsManager, boardName, m_board );
-    KI_TEST::FillZones( m_board.get() );
-    m_board->BuildConnectivity();
-
-    std::shared_ptr<CONNECTIVITY_DATA> conn = m_board->GetConnectivity();
+    std::shared_ptr<CONNECTIVITY_DATA> conn = aBoard->GetConnectivity();
     std::shared_ptr<CN_CONNECTIVITY_ALGO> algo = conn->GetConnectivityAlgo();
 
     std::map<int, std::set<const CN_CLUSTER*>> clustersPerNet;
@@ -206,6 +195,18 @@ BOOST_DATA_TEST_CASE( RatsnestSpansTheClustersOfEachNet,
 
     BOOST_REQUIRE_MESSAGE( netsChecked > 0, "no net on this board exercised the ratsnest" );
     BOOST_TEST_MESSAGE( "net count " << netsChecked << ", ratsnest edges " << edgesSeen );
+}
+
+
+// Filling these boards dominates, so both checks share one load
+BOOST_DATA_TEST_CASE( ClustersAndRatsnestMatchTheBoard, boost::unit_test::data::make( c_boards ), boardName )
+{
+    KI_TEST::LoadBoard( m_settingsManager, boardName, m_board );
+    KI_TEST::FillZones( m_board.get() );
+    m_board->BuildConnectivity();
+
+    checkClustersAreConnectedComponents( m_board.get() );
+    checkRatsnestSpansClusters( m_board.get() );
 }
 
 

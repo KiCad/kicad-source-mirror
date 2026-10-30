@@ -28,13 +28,15 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <gestfich.h>
+
 #include <wx/dir.h>
 #include <wx/filename.h>
-#include <wx/textfile.h>
 
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>
+#include <fstream>
 #include <map>
 #include <set>
 #include <string>
@@ -90,9 +92,9 @@ std::string unquote( const std::string& aLine )
 std::vector<PO_ENTRY> parsePo( const wxString& aPath )
 {
     std::vector<PO_ENTRY> entries;
-    wxTextFile            file;
+    std::ifstream         file( ToFsPath( aPath ), std::ios::binary );
 
-    if( !file.Open( aPath ) )
+    if( !file.is_open() )
         return entries;
 
     PO_ENTRY    cur;
@@ -106,12 +108,16 @@ std::vector<PO_ENTRY> parsePo( const wxString& aPath )
         return aStr.rfind( aPrefix, 0 ) == 0;
     };
 
-    int lineNo = 0;
+    int         lineNo = 0;
+    std::string rawLine;
 
-    for( wxString wxLine = file.GetFirstLine(); !file.Eof(); wxLine = file.GetNextLine() )
+    while( std::getline( file, rawLine ) )
     {
         ++lineNo;
-        std::string line = wxLine.Trim( false ).Trim( true ).utf8_string();
+        const size_t first = rawLine.find_first_not_of( " \t\r" );
+        std::string  line = first == std::string::npos
+                                    ? std::string()
+                                    : rawLine.substr( first, rawLine.find_last_not_of( " \t\r" ) - first + 1 );
 
         if( starts( line, "#," ) )
         {

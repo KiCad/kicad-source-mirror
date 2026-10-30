@@ -4033,7 +4033,14 @@ BOOST_FIXTURE_TEST_CASE( RegressionSameNetZoneFillScheduler, ZONE_FILL_TEST_FIXT
 
     const PCB_LAYER_ID layer = F_Cu;
 
-    for( int pass = 0; pass < 64; ++pass )
+    // The race is only reported reliably under a sanitizer, so other builds just smoke test the fill
+#if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
+    const int passes = 64;
+#else
+    const int passes = 8;
+#endif
+
+    for( int pass = 0; pass < passes; ++pass )
     {
         BOOST_REQUIRE_NO_THROW( KI_TEST::FillZones( m_board.get() ) );
 

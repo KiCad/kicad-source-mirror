@@ -1867,6 +1867,18 @@ struct ALG_REFERENCE_DATA
         return static_cast<int>( val );
     }
 
+    static const ALG_REFERENCE_DATA& GetCached( const std::string& aPath )
+    {
+        static std::map<std::string, ALG_REFERENCE_DATA> cache;
+
+        auto it = cache.find( aPath );
+
+        if( it == cache.end() )
+            it = cache.emplace( aPath, ParseAlgFile( aPath ) ).first;
+
+        return it->second;
+    }
+
     static ALG_REFERENCE_DATA ParseAlgFile( const std::string& aPath )
     {
         ALG_REFERENCE_DATA data;
@@ -2071,7 +2083,7 @@ BOOST_AUTO_TEST_CASE( AlgReferenceNetNames )
     {
         BOOST_TEST_MESSAGE( "Validating net names: " << brdFile );
 
-        ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
+        const ALG_REFERENCE_DATA& algData = ALG_REFERENCE_DATA::GetCached( algFile );
         BOOST_REQUIRE_GT( algData.netNames.size(), 0u );
 
         BOARD* board = GetCachedBoard( brdFile );
@@ -2119,7 +2131,7 @@ BOOST_AUTO_TEST_CASE( AlgReferenceComponentPlacement )
     {
         BOOST_TEST_MESSAGE( "Validating components: " << brdFile );
 
-        ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
+        const ALG_REFERENCE_DATA& algData = ALG_REFERENCE_DATA::GetCached( algFile );
         BOOST_REQUIRE_GT( algData.refDes.size(), 0u );
 
         BOARD* board = GetCachedBoard( brdFile );
@@ -2252,6 +2264,18 @@ struct ALG_OUTLINE_DATA
         maxY = std::max( maxY, aY );
     }
 
+    static const ALG_OUTLINE_DATA& GetCached( const std::string& aPath )
+    {
+        static std::map<std::string, ALG_OUTLINE_DATA> cache;
+
+        auto it = cache.find( aPath );
+
+        if( it == cache.end() )
+            it = cache.emplace( aPath, ParseAlgOutlines( aPath ) ).first;
+
+        return it->second;
+    }
+
     static ALG_OUTLINE_DATA ParseAlgOutlines( const std::string& aPath )
     {
         ALG_OUTLINE_DATA data;
@@ -2376,7 +2400,7 @@ BOOST_AUTO_TEST_CASE( OutlineSegmentCount )
     {
         BOOST_TEST_CONTEXT( "Board: " << brdFile )
         {
-            ALG_OUTLINE_DATA algOutlines = ALG_OUTLINE_DATA::ParseAlgOutlines( algFile );
+            const ALG_OUTLINE_DATA& algOutlines = ALG_OUTLINE_DATA::GetCached( algFile );
 
             if( algOutlines.designOutlineCount == 0 && algOutlines.outlineCount == 0 )
             {
@@ -2428,7 +2452,7 @@ BOOST_AUTO_TEST_CASE( OutlineBoundingBox )
     {
         BOOST_TEST_CONTEXT( "Board: " << brdFile )
         {
-            ALG_OUTLINE_DATA algOutlines = ALG_OUTLINE_DATA::ParseAlgOutlines( algFile );
+            const ALG_OUTLINE_DATA& algOutlines = ALG_OUTLINE_DATA::GetCached( algFile );
 
             if( algOutlines.designOutlineCount == 0 )
             {
@@ -2512,7 +2536,7 @@ BOOST_AUTO_TEST_CASE( OutlineEndpoints )
     {
         BOOST_TEST_CONTEXT( "Board: " << brdFile )
         {
-            ALG_OUTLINE_DATA algOutlines = ALG_OUTLINE_DATA::ParseAlgOutlines( algFile );
+            const ALG_OUTLINE_DATA& algOutlines = ALG_OUTLINE_DATA::GetCached( algFile );
 
             if( algOutlines.designOutlineCount == 0 )
                 continue;
@@ -2731,7 +2755,7 @@ BOOST_AUTO_TEST_CASE( ZoneCountMatchesAlg )
     {
         BOOST_TEST_CONTEXT( "Zone count: " << brdFile )
         {
-            ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
+            const ALG_REFERENCE_DATA& algData = ALG_REFERENCE_DATA::GetCached( algFile );
 
             BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
@@ -2769,7 +2793,7 @@ BOOST_AUTO_TEST_CASE( ZoneLayerDistribution )
     {
         BOOST_TEST_CONTEXT( "Zone layers: " << brdFile )
         {
-            ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
+            const ALG_REFERENCE_DATA& algData = ALG_REFERENCE_DATA::GetCached( algFile );
 
             BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );
@@ -2822,7 +2846,7 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxes )
     {
         BOOST_TEST_CONTEXT( "Zone bboxes: " << brdFile )
         {
-            ALG_REFERENCE_DATA algData = ALG_REFERENCE_DATA::ParseAlgFile( algFile );
+            const ALG_REFERENCE_DATA& algData = ALG_REFERENCE_DATA::GetCached( algFile );
 
             BOARD* board = GetCachedBoard( brdFile );
             BOOST_REQUIRE( board );

@@ -834,8 +834,8 @@ BOOST_AUTO_TEST_CASE( SurfaceFinishExport )
  */
 BOOST_AUTO_TEST_CASE( NoSurfaceFinishExport )
 {
-    // Load a board without surface finish (vme-wren.kicad_pcb has "None")
-    std::unique_ptr<BOARD> board = LoadBoard( "vme-wren.kicad_pcb" );
+    // Load a board without surface finish (via_stacks.kicad_pcb has "None")
+    std::unique_ptr<BOARD> board = LoadBoard( "via_stacks.kicad_pcb" );
 
     BOOST_REQUIRE( board );
 

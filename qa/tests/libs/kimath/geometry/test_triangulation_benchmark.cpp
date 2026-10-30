@@ -808,8 +808,16 @@ BOOST_AUTO_TEST_CASE( BenchmarkAllExtractedPolygons )
 
     std::vector<ZONE_COMPARISON> comparisons;
 
-    for( const auto& polyFile : polyFiles )
+    // Unoptimized builds spend minutes here without learning more than a sample shows
+#ifdef DEBUG
+    const size_t fileStride = 8;
+#else
+    const size_t fileStride = 1;
+#endif
+
+    for( size_t fileIdx = 0; fileIdx < polyFiles.size(); fileIdx += fileStride )
     {
+        const auto& polyFile = polyFiles[fileIdx];
         BOARD_ENTRY board;
 
         if( !ParsePolyFile( polyFile, board ) )

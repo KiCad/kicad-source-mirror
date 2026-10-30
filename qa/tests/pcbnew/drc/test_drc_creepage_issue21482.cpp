@@ -82,6 +82,12 @@ struct DRC_CREEPAGE_PERF_TEST_FIXTURE
  */
 BOOST_FIXTURE_TEST_CASE( CreepagePerformanceIssue21482, DRC_CREEPAGE_PERF_TEST_FIXTURE )
 {
+    // This only measures, and unoptimized MSVC needs 20 minutes to do so
+#ifdef DEBUG
+    BOOST_TEST_MESSAGE( "Skipping creepage performance measurement in a debug build" );
+    return;
+#endif
+
     // Load the test board with custom creepage rules
     KI_TEST::LoadBoard( m_settingsManager, "issue21482/issue21482", m_board );
 

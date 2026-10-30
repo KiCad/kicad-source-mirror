@@ -575,6 +575,7 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!RegressionShallowArcZoneFill\
 :!RegressionIterativeRefillRespectsKeepouts\
 :!RegressionTHPadInnerLayerFlashing\
+:!RegressionThermalReliefAnnularRing45\
 :!RegressionRoundRectTeardropGeometry\
 :!OvalPadTeardropGeometry\
 :!LargeCircleTeardropGeometry\
