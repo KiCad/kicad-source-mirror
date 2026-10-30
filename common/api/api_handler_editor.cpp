@@ -565,6 +565,14 @@ HANDLER_RESULT<types::PageSettings> API_HANDLER_EDITOR::handleSetPageSettings(
 
     const types::PageSettings& request = aCtx.Request.page_settings();
 
+    if( request.page_size() == types::PageSize::PS_UNKNOWN )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "SetPageSettings requires page_size" );
+        return tl::unexpected( e );
+    }
+
     PAGE_INFO pageInfo = *optPageInfo;
     PAGE_SIZE_TYPE pageSizeType = FromProtoEnum<PAGE_SIZE_TYPE>( request.page_size() );
 

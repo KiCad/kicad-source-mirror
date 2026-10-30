@@ -182,6 +182,29 @@ BOOST_FIXTURE_TEST_CASE( OpenSingleBoard, API_SERVER_E2E_FIXTURE )
 }
 
 
+// An unset page_size must be refused because mapping it asserts, and a debug server blocks on the assert
+BOOST_FIXTURE_TEST_CASE( SetPageSettingsRequiresPageSize, API_SERVER_E2E_FIXTURE )
+{
+    BOOST_REQUIRE_MESSAGE( Start(), LastError() );
+
+    kiapi::common::types::DocumentSpecifier document;
+    wxFileName boardPath( wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() ), wxS( "api_kitchen_sink.kicad_pcb" ) );
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPath.GetFullPath(), &document ),
+                           "OpenDocument failed: " + Client().LastError() );
+
+    kiapi::common::commands::SetPageSettings request;
+    request.mutable_document()->CopyFrom( document );
+    request.mutable_page_settings()->set_orientation( kiapi::common::types::PO_PORTRAIT );
+
+    kiapi::common::ApiResponse response;
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( request, &response ),
+                           "SetPageSettings failed to send: " + Client().LastError() );
+    BOOST_CHECK( response.status().status() == kiapi::common::AS_BAD_REQUEST );
+    BOOST_CHECK_EQUAL( response.status().error_message(), "SetPageSettings requires page_size" );
+}
+
+
 // A footprint stripped of its reference or value is a state neither the editor nor the const
 // field accessors can cope with, so the deletion has to be refused outright
 BOOST_FIXTURE_TEST_CASE( DeleteMandatoryFieldIsRefused, API_SERVER_E2E_FIXTURE )
@@ -728,6 +751,7 @@ BOOST_FIXTURE_TEST_CASE( CreateDocumentRejectsUnsavedModifications, API_SERVER_E
 
             SetPageSettings modify;
             modify.mutable_document()->CopyFrom( existingDoc );
+            modify.mutable_page_settings()->set_page_size( kiapi::common::types::PS_A4 );
             modify.mutable_page_settings()->set_orientation( kiapi::common::types::PO_PORTRAIT );
             kiapi::common::ApiResponse response;
             BOOST_CHECK( Client().SendCommand( modify, &response ) );
