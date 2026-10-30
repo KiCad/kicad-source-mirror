@@ -20,12 +20,14 @@
 #include <boost/test/unit_test.hpp>
 
 #include <gestfich.h>
+#include <paths.h>
 
 #include <wx/process.h>
 #include <wx/txtstrm.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
 #include <wx/file.h>
+#include <wx/stdpaths.h>
 
 #ifdef _WIN32
 #include <process.h>
@@ -253,6 +255,58 @@ BOOST_AUTO_TEST_CASE( AbsolutePathWithSpaces )
     wxRemoveFile( argPath );
     wxRemoveFile( scriptPath );
     wxRmdir( baseDir );
+}
+
+
+// Only the Windows branch put the executable directory on the child PATH (#21603)
+BOOST_AUTO_TEST_CASE( ExecutableDirectoryOnPath )
+{
+    wxFileName exe( wxStandardPaths::Get().GetExecutablePath() );
+
+    BOOST_REQUIRE( exe.IsFileExecutable() );
+
+#ifdef __WXMSW__
+    wxString cmd = wxS( "where " ) + exe.GetName();
+#else
+    wxString cmd = wxS( "command -v " ) + exe.GetFullName();
+#endif
+
+    wxString output;
+    int      result = executeViaShell( cmd, output );
+
+    BOOST_CHECK_EQUAL( result, 0 );
+    BOOST_CHECK_MESSAGE( output.Contains( exe.GetFullPath() ),
+                         "A bare name should resolve beside the KiCad executable, got: " + output );
+}
+
+
+// A macOS bundle keeps Python under Contents/Frameworks, not in Contents/MacOS
+BOOST_AUTO_TEST_CASE( BundledPythonDirectory )
+{
+    wxString sep = wxFileName::GetPathSeparator();
+    wxString base = wxFileName::GetTempDir() + sep + wxS( "kicad_test_bundle_" )
+                    + wxString::Format( wxS( "%d" ), (int) getpid() );
+    wxString contents = base + sep + wxS( "KiCad.app" ) + sep + wxS( "Contents" );
+    wxString macOsDir = contents + sep + wxS( "MacOS" );
+    wxString pythonDir = contents + sep + wxS( "Frameworks" ) + sep + wxS( "Python.framework" )
+                         + sep + wxS( "Versions" ) + sep + wxS( "Current" ) + sep + wxS( "bin" );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( macOsDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    // An install shipping no framework must not gain a phantom entry
+    BOOST_CHECK_EQUAL( PATHS::GetToolDirectories( macOsDir ).size(), 1 );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( pythonDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    std::vector<wxString> dirs = PATHS::GetToolDirectories( macOsDir );
+
+    BOOST_REQUIRE_EQUAL( dirs.size(), 2 );
+    BOOST_CHECK( wxFileName( dirs[0], wxEmptyString ).SameAs( wxFileName( macOsDir, wxEmptyString ) ) );
+    BOOST_CHECK_MESSAGE(
+            wxFileName( dirs[1], wxEmptyString ).SameAs( wxFileName( pythonDir, wxEmptyString ) ),
+            "The bundled Python directory should be found, got: " + dirs[1] );
+
+    RmDirRecursive( base );
 }
 
 

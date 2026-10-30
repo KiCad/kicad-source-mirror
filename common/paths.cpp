@@ -666,6 +666,51 @@ const wxString& PATHS::GetExecutablePath()
 }
 
 
+wxString PATHS::GetExecutableDir()
+{
+#ifdef __WXMAC__
+    // The bundle root resolves symlinks and auxiliary bundles, unlike the raw executable path
+    wxFileName root = wxFileName::DirName( getOSXBundleRoot() );
+
+    if( !root.GetDirs().IsEmpty() && root.GetDirs().Last().Lower().EndsWith( wxS( ".app" ) ) )
+    {
+        root.AppendDir( wxS( "Contents" ) );
+        root.AppendDir( wxS( "MacOS" ) );
+    }
+
+    return root.GetPath();
+#else
+    // Unlike wxStandardPaths this knows the AppImage layout
+    return wxFileName::DirName( GetExecutablePath() ).GetPath();
+#endif
+}
+
+
+std::vector<wxString> PATHS::GetToolDirectories( const wxString& aExecutableDir )
+{
+    std::vector<wxString> dirs;
+
+    if( aExecutableDir.IsEmpty() )
+        return dirs;
+
+    dirs.emplace_back( wxFileName::DirName( aExecutableDir ).GetPath() );
+
+    // A macOS bundle keeps Python under Contents/Frameworks, probed on all platforms for testability
+    wxFileName python = wxFileName::DirName( aExecutableDir );
+    python.RemoveLastDir();
+    python.AppendDir( wxS( "Frameworks" ) );
+    python.AppendDir( wxS( "Python.framework" ) );
+    python.AppendDir( wxS( "Versions" ) );
+    python.AppendDir( wxS( "Current" ) );
+    python.AppendDir( wxS( "bin" ) );
+
+    if( python.DirExists() )
+        dirs.emplace_back( python.GetPath() );
+
+    return dirs;
+}
+
+
 wxString PATHS::ResolveSiblingExecutable( const wxString& aBaseName )
 {
 #ifdef __WXMAC__

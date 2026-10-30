@@ -132,8 +132,9 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
             {
                 wxFileOutputStream procOutput( logPath );
 
+                // A command that fails to launch reports on stderr only, leaving an empty log
                 logWritten = procOutput.IsOk() && procOutput.WriteAll( memInBuf, memInBuf.GetDataLen() )
-                             && procOutput.Close();
+                             && procOutput.WriteAll( memErrBuf, memErrBuf.GetDataLen() ) && procOutput.Close();
             }
 
             if( !logWritten )
@@ -148,6 +149,12 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
 
     if( specialJob->m_ignoreExitcode )
         return CLI::EXIT_CODES::OK;
+
+    if( result != CLI::EXIT_CODES::OK )
+    {
+        aReporter->Report( wxString::Format( _( "Command exited with code %d" ), result ),
+                           RPT_SEVERITY_ERROR );
+    }
 
     return result;
 }

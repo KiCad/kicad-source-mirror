@@ -26,6 +26,7 @@
 #include <memory>
 #include <string>
 #include <unordered_set>
+#include <vector>
 #include <kicommon.h>
 #include <wx/arrstr.h>
 #include <wx/dir.h>
