@@ -60,6 +60,8 @@ private:
     void onPlotAllListMoveUp( wxCommandEvent& aEvent );
     void onPlotAllListMoveDown( wxCommandEvent& aEvent );
 
+    void onLayerToggled( wxCommandEvent& event ) override;
+    void onAllCopperLayers( wxCommandEvent& event ) override;
     void onDNPCheckbox( wxCommandEvent& event ) override;
     void onSketchPads( wxCommandEvent& event ) override;
     void onPDFColorChoice( wxCommandEvent& event ) override;
@@ -74,6 +76,9 @@ private:
     void transferPlotParamsToJob();
     void updatePdfColorOptions();
     void updateJobOutputLabel();
+    void checkAllCopperLayers();
+    bool allCopperLayersChecked() const;
+    void syncAllCopperLayers();
 
 private:
     PCB_EDIT_FRAME*     m_editFrame;

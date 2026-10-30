@@ -116,7 +116,8 @@ private:
     void refillFabZones( const JOB_EXPORT_PCB_FAB& aJob, BOARD* aBoard );
     LSEQ convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const;
 
-    bool preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard, TOOL_MANAGER* aToolManager );
+    bool preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard, TOOL_MANAGER* aToolManager,
+                            LSEQ& aLayersToPlot );
     wxString resolvePlotOutputPath( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard,
                                    PLOT_FORMAT aFormat, bool aSingleOutput );
 

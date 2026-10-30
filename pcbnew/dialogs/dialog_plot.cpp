@@ -148,6 +148,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXP
     {
         m_plotOpts = m_editFrame->GetPlotSettings();
         m_messagesPanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
+        m_allCopperLayers->Hide();
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
@@ -358,6 +359,18 @@ bool DIALOG_PLOT::TransferDataToWindow()
 
         if( m_plotOpts.GetLayerSelection()[layer] )
             m_layerCheckListBox->Check( checkIndex );
+    }
+
+    if( m_job )
+    {
+        // A new Gerber job starts with every copper layer, as a fabrication set needs them all
+        bool newGerberJob = m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::GERBER
+                            && m_job->m_plotLayerSequence.empty();
+
+        m_allCopperLayers->SetValue( m_job->m_plotAllCopperLayers || newGerberJob );
+
+        if( m_allCopperLayers->GetValue() )
+            checkAllCopperLayers();
     }
 
     arrangeAllLayersList( s_lastAllLayersOrder );
@@ -582,6 +595,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
     m_job->m_mirror = m_plotOpts.GetMirror();
     m_job->m_negative = m_plotOpts.GetNegative();
     m_job->m_plotLayerSequence = m_plotOpts.GetLayerSelection().SeqStackupForPlotting();
+    m_job->m_plotAllCopperLayers = m_allCopperLayers->GetValue() && allCopperLayersChecked();
     m_job->m_plotOnAllLayersSequence = m_plotOpts.GetPlotOnAllLayersSequence();
 
     if( m_job->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::SVG ||
@@ -777,6 +791,60 @@ void DIALOG_PLOT::OnRightClickLayers( wxMouseEvent& event )
             } );
 
     PopupMenu( &menu );
+
+    recordControlChange( m_layerCheckListBox );
+    syncAllCopperLayers();
+}
+
+
+void DIALOG_PLOT::checkAllCopperLayers()
+{
+    for( unsigned i = 0; i < m_layerList.size(); i++ )
+    {
+        if( IsCopperLayer( m_layerList[i] ) )
+            m_layerCheckListBox->Check( i, true );
+    }
+}
+
+
+bool DIALOG_PLOT::allCopperLayersChecked() const
+{
+    for( unsigned i = 0; i < m_layerList.size(); i++ )
+    {
+        if( IsCopperLayer( m_layerList[i] ) && !m_layerCheckListBox->IsChecked( i ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+void DIALOG_PLOT::syncAllCopperLayers()
+{
+    if( m_allCopperLayers->GetValue() && !allCopperLayersChecked() )
+    {
+        m_allCopperLayers->SetValue( false );
+        recordControlChange( m_allCopperLayers );
+    }
+}
+
+
+void DIALOG_PLOT::onLayerToggled( wxCommandEvent& event )
+{
+    syncAllCopperLayers();
+    event.Skip();
+}
+
+
+void DIALOG_PLOT::onAllCopperLayers( wxCommandEvent& event )
+{
+    if( m_allCopperLayers->GetValue() )
+    {
+        checkAllCopperLayers();
+        recordControlChange( m_layerCheckListBox );
+    }
+
+    event.Skip();
 }
 
 

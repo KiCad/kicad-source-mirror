@@ -42,6 +42,16 @@ public:
 
     JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string& aType, bool aOutputIsDirectory );
 
+    void FromJson( const nlohmann::json& aJson ) override;
+
+    /**
+     * Return the layers to plot on a board with \a aEnabledLayers.
+     *
+     * With #m_plotAllCopperLayers set this adds every copper layer the board enables, so one job
+     * serves any layer count.
+     */
+    LSEQ ResolvePlotLayers( const LSET& aEnabledLayers ) const;
+
 public:
     std::optional<wxString> m_argLayers;
     std::optional<wxString> m_argCommonLayers;
@@ -73,6 +83,10 @@ public:
     bool m_plotPadNumbers;
 
     LSEQ m_plotLayerSequence;
+
+    /// Plot every copper layer of the board in addition to #m_plotLayerSequence
+    bool m_plotAllCopperLayers;
+
     /// Layers to include on all individual layer prints
     LSEQ m_plotOnAllLayersSequence;
 

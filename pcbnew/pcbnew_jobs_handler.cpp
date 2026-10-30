@@ -1462,7 +1462,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
 
 
 bool PCBNEW_JOBS_HANDLER::preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard,
-                                            TOOL_MANAGER* aToolManager )
+                                            TOOL_MANAGER* aToolManager, LSEQ& aLayersToPlot )
 {
     if( aJob->m_checkZonesBeforePlot )
     {
@@ -1478,7 +1478,9 @@ bool PCBNEW_JOBS_HANDLER::preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* a
     if( aJob->m_argCommonLayers )
         aJob->m_plotOnAllLayersSequence = convertLayerArg( aJob->m_argCommonLayers.value(), aBoard );
 
-    if( aJob->m_plotLayerSequence.empty() )
+    aLayersToPlot = aJob->ResolvePlotLayers( aBoard->GetEnabledLayers() );
+
+    if( aLayersToPlot.empty() )
     {
         m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
         return false;
@@ -1503,8 +1505,8 @@ wxString PCBNEW_JOBS_HANDLER::resolvePlotOutputPath( JOB_EXPORT_PCB_PLOT* aJob, 
 
 
 // PDF single-document output need not use overrides; PNG never uses them.
-static int plotJob( JOB_EXPORT_PCB_PLOT* aJob, PCB_PLOTTER& aPlotter, const wxString& aOutPath,
-                    bool aSingleOutput, bool aUseOverrides )
+static int plotJob( JOB_EXPORT_PCB_PLOT* aJob, PCB_PLOTTER& aPlotter, const LSEQ& aLayersToPlot,
+                    const wxString& aOutPath, bool aSingleOutput, bool aUseOverrides )
 {
     std::optional<wxString> layerName;
     std::optional<wxString> sheetName;
@@ -1524,7 +1526,7 @@ static int plotJob( JOB_EXPORT_PCB_PLOT* aJob, PCB_PLOTTER& aPlotter, const wxSt
 
     std::vector<wxString> outputPaths;
 
-    if( !aPlotter.Plot( aOutPath, aJob->m_plotLayerSequence, aJob->m_plotOnAllLayersSequence, false,
+    if( !aPlotter.Plot( aOutPath, aLayersToPlot, aJob->m_plotOnAllLayersSequence, false,
                         aSingleOutput, layerName, sheetName, sheetPath, &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -1563,7 +1565,9 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    if( !preparePlotLayers( aSvgJob, brd, toolManager ) )
+    LSEQ layersToPlot;
+
+    if( !preparePlotLayers( aSvgJob, brd, toolManager, layersToPlot ) )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     PCB_PLOT_PARAMS plotOpts;
@@ -1571,7 +1575,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-    return plotJob( aSvgJob, plotter, outPath, isSingle, isSingle );
+    return plotJob( aSvgJob, plotter, layersToPlot, outPath, isSingle, isSingle );
 }
 
 
@@ -1592,7 +1596,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( !preparePlotLayers( aDxfJob, brd, toolManager ) )
+    LSEQ layersToPlot;
+
+    if( !preparePlotLayers( aDxfJob, brd, toolManager, layersToPlot ) )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     const bool isSingle = aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE;
@@ -1610,7 +1616,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-    return plotJob( aDxfJob, plotter, outPath, isSingle, isSingle );
+    return plotJob( aDxfJob, plotter, layersToPlot, outPath, isSingle, isSingle );
 }
 
 
@@ -1632,7 +1638,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( !preparePlotLayers( pdfJob, brd, toolManager ) )
+    LSEQ layersToPlot;
+
+    if( !preparePlotLayers( pdfJob, brd, toolManager, layersToPlot ) )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
@@ -1653,7 +1661,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    return plotJob( pdfJob, pcbPlotter, outPath, outputIsSingle, plotAllLayersOneFile );
+    return plotJob( pdfJob, pcbPlotter, layersToPlot, outPath, outputIsSingle, plotAllLayersOneFile );
 }
 
 
@@ -1674,7 +1682,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( !preparePlotLayers( pngJob, brd, toolManager ) )
+    LSEQ layersToPlot;
+
+    if( !preparePlotLayers( pngJob, brd, toolManager, layersToPlot ) )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     bool isSingle = pngJob->m_genMode == JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE;
@@ -1692,7 +1702,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    return plotJob( pngJob, pcbPlotter, outPath, isSingle, false );
+    return plotJob( pngJob, pcbPlotter, layersToPlot, outPath, isSingle, false );
 }
 
 
@@ -1713,7 +1723,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( !preparePlotLayers( psJob, brd, toolManager ) )
+    LSEQ layersToPlot;
+
+    if( !preparePlotLayers( psJob, brd, toolManager, layersToPlot ) )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     bool isSingle = psJob->m_genMode == JOB_EXPORT_PCB_PS::GEN_MODE::SINGLE;
@@ -1731,7 +1743,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    return plotJob( psJob, pcbPlotter, outPath, isSingle, isSingle );
+    return plotJob( psJob, pcbPlotter, layersToPlot, outPath, isSingle, isSingle );
 }
 
 
@@ -1807,12 +1819,15 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     {
         // default to the board enabled layers, but only if the user has not specifed a layer list
         // ( m_plotLayerSequence can be empty with a broken user layer list)
-        if( aGerberJob->m_plotLayerSequence.empty() && !hasLayerListSpecified )
+        if( aGerberJob->m_plotLayerSequence.empty() && !hasLayerListSpecified
+            && !aGerberJob->m_plotAllCopperLayers )
+        {
             aGerberJob->m_plotLayerSequence = brd->GetEnabledLayers().SeqStackupForPlotting();
+        }
     }
 
     // Ensure layers to plot are restricted to enabled layers of the board to plot
-    LSET layersToPlot = LSET( { aGerberJob->m_plotLayerSequence } ) & brd->GetEnabledLayers();
+    LSET layersToPlot = LSET( aGerberJob->ResolvePlotLayers( brd->GetEnabledLayers() ) ) & brd->GetEnabledLayers();
 
     // Once for the run, not per file, so an update rebuilds each chart once. Common layers
     // included or a chart plotted as one is never looked at

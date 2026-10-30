@@ -21,6 +21,8 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 #include <board.h>
+#include <jobs/job_export_pcb_gerbers.h>
+#include <json_common.h>
 #include <pcb_plotter.h>
 
 
@@ -50,6 +52,42 @@ BOOST_AUTO_TEST_CASE( JobDialogKeepsOnlyShownLayers )
     LSET stored = PCB_PLOTTER::DialogLayerSelection( LSET( { F_Fab } ), twoLayer->GetEnabledLayers(), true );
 
     BOOST_CHECK_EQUAL( ( stored & fourLayer->GetEnabledLayers() ).FmtHex(), LSET( { F_Fab } ).FmtHex() );
+}
+
+
+// A job listing every copper layer, re-saved on a 2-layer board, must still plot all copper of a 4-layer board
+BOOST_AUTO_TEST_CASE( AllCopperLayersSurviveSmallerBoard )
+{
+    std::unique_ptr<BOARD> twoLayer = loadBoard( "issue17559.kicad_pcb" );
+    std::unique_ptr<BOARD> fourLayer = loadBoard( "issue22536.kicad_pcb" );
+    BOOST_REQUIRE( twoLayer && fourLayer );
+
+    // Older plot job dialogs wrote every copper layer and no all_copper_layers key
+    nlohmann::json legacy;
+    {
+        JOB_EXPORT_PCB_GERBERS job;
+        LSET layers = LSET::AllCuMask() | LSET( { F_Mask, B_Mask, Edge_Cuts } );
+        job.m_plotLayerSequence = layers.SeqStackupForPlotting();
+        job.ToJson( legacy );
+        legacy.erase( "all_copper_layers" );
+    }
+
+    JOB_EXPORT_PCB_GERBERS gerberJob;
+    gerberJob.FromJson( legacy );
+    gerberJob.m_plotLayerSequence = PCB_PLOTTER::DialogLayerSelection( LSET( gerberJob.m_plotLayerSequence ),
+                                                                       twoLayer->GetEnabledLayers(), true )
+                                            .SeqStackupForPlotting();
+
+    nlohmann::json saved;
+    gerberJob.ToJson( saved );
+
+    JOB_EXPORT_PCB_GERBERS reloaded;
+    reloaded.FromJson( saved );
+
+    LSET plotted = LSET( reloaded.ResolvePlotLayers( fourLayer->GetEnabledLayers() ) );
+    LSET fourLayerCopper = fourLayer->GetEnabledLayers() & LSET::AllCuMask();
+
+    BOOST_CHECK_EQUAL( ( plotted & LSET::AllCuMask() ).FmtHex(), fourLayerCopper.FmtHex() );
 }
 
 

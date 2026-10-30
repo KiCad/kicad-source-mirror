@@ -47,6 +47,7 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
         m_subtractSolderMaskFromSilk( false ),
         m_plotPadNumbers( false ),
         m_plotLayerSequence(),
+        m_plotAllCopperLayers( false ),
         m_plotOnAllLayersSequence(),
         m_drillShapeOption( DRILL_MARKS::FULL_DRILL_SHAPE ),
         m_useDrillOrigin( false ),
@@ -54,6 +55,9 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
 {
     m_params.emplace_back( new JOB_PARAM_LSEQ( "layers",
                                                &m_plotLayerSequence, m_plotLayerSequence ) );
+
+    m_params.emplace_back( new JOB_PARAM<bool>( "all_copper_layers", &m_plotAllCopperLayers,
+                                                m_plotAllCopperLayers ) );
 
     m_params.emplace_back( new JOB_PARAM_LSEQ( "layers_to_include_on_all_layers",
                                                 &m_plotOnAllLayersSequence,
@@ -106,4 +110,27 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
     m_params.emplace_back( new JOB_PARAM<bool>( "check_zones", &m_checkZonesBeforePlot, m_checkZonesBeforePlot ) );
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
+}
+
+
+void JOB_EXPORT_PCB_PLOT::FromJson( const nlohmann::json& aJson )
+{
+    JOB::FromJson( aJson );
+
+    // Older plot job dialogs stored every copper layer the board lacked, so a list holding all of
+    // them meant every copper layer
+    if( !aJson.contains( "all_copper_layers" ) )
+        m_plotAllCopperLayers = LSET( m_plotLayerSequence ).ContainsAll( LSET::AllCuMask() );
+}
+
+
+LSEQ JOB_EXPORT_PCB_PLOT::ResolvePlotLayers( const LSET& aEnabledLayers ) const
+{
+    if( !m_plotAllCopperLayers )
+        return m_plotLayerSequence;
+
+    LSET layers( m_plotLayerSequence );
+    layers |= aEnabledLayers & LSET::AllCuMask();
+
+    return layers.SeqStackupForPlotting();
 }
