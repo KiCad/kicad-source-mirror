@@ -688,20 +688,26 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 
 void DIALOG_KICAD_DIFF::SelectFirstChange()
 {
-    wxTreeItemIdValue groupCookie;
+    // A canvas configured before it is shown keeps a black background, so select once it is
+    CallAfter(
+            [this]()
+            {
+                wxTreeItemIdValue groupCookie;
+                wxTreeItemId      root = m_treeChanges->GetRootItem();
 
-    for( wxTreeItemId group = m_treeChanges->GetFirstChild( m_treeChanges->GetRootItem(), groupCookie );
-         group.IsOk(); group = m_treeChanges->GetNextChild( m_treeChanges->GetRootItem(), groupCookie ) )
-    {
-        wxTreeItemIdValue itemCookie;
-        wxTreeItemId      item = m_treeChanges->GetFirstChild( group, itemCookie );
+                for( wxTreeItemId group = m_treeChanges->GetFirstChild( root, groupCookie ); group.IsOk();
+                     group = m_treeChanges->GetNextChild( root, groupCookie ) )
+                {
+                    wxTreeItemIdValue itemCookie;
+                    wxTreeItemId      item = m_treeChanges->GetFirstChild( group, itemCookie );
 
-        if( item.IsOk() )
-        {
-            m_treeChanges->SelectItem( item );
-            return;
-        }
-    }
+                    if( item.IsOk() )
+                    {
+                        m_treeChanges->SelectItem( item );
+                        return;
+                    }
+                }
+            } );
 }
 
 
