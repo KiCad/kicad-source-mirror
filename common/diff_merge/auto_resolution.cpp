@@ -121,6 +121,8 @@ ApplyAutoResolutions( MERGE_PLAN&                          aPlan,
     std::vector<std::pair<std::size_t, ITEM_RES>> staged;
     staged.reserve( aConflictActionIndices.size() );
 
+    const std::set<KIID_PATH> unresolved( aPlan.unresolved.begin(), aPlan.unresolved.end() );
+
     for( std::size_t actionIdx : aConflictActionIndices )
     {
         if( actionIdx >= aPlan.actions.size() )
@@ -137,7 +139,8 @@ ApplyAutoResolutions( MERGE_PLAN&                          aPlan,
 
         if( it == aResolutions.end() )
         {
-            if( action.kind == ITEM_RES::MERGE_PROPS )
+            // The engine's own property merge stands unless it left a property conflict
+            if( action.kind == ITEM_RES::MERGE_PROPS && !unresolved.contains( action.id ) )
                 continue;
 
             out.status         = APPLY_AUTO_RESOLUTIONS_STATUS::PARTIAL;
