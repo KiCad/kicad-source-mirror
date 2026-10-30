@@ -19,8 +19,14 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
+#include <common.h>
 #include <gestfich.h>
+#include <jobs/job_special_execute.h>
 #include <paths.h>
+#include <project.h>
+#include <settings/settings_manager.h>
 
 #include <wx/process.h>
 #include <wx/txtstrm.h>
@@ -305,6 +311,87 @@ BOOST_AUTO_TEST_CASE( BundledPythonDirectory )
     BOOST_CHECK_MESSAGE(
             wxFileName( dirs[1], wxEmptyString ).SameAs( wxFileName( pythonDir, wxEmptyString ) ),
             "The bundled Python directory should be found, got: " + dirs[1] );
+
+    RmDirRecursive( base );
+}
+
+
+BOOST_AUTO_TEST_CASE( ExecuteBuiltinVariables )
+{
+    wxString sep = wxFileName::GetPathSeparator();
+    wxString base = wxFileName::GetTempDir() + sep + wxS( "kicad_test_exec_vars_" )
+                    + wxString::Format( wxS( "%d" ), (int) getpid() );
+    wxString src = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + sep + wxS( "pcbnew" ) + sep;
+
+    BOOST_REQUIRE( wxFileName::Mkdir( base, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    for( const wxString& ext : { wxS( "kicad_pro" ), wxS( "kicad_sch" ), wxS( "kicad_pcb" ) } )
+    {
+        wxString name = wxS( "custom_fields." ) + ext;
+        BOOST_REQUIRE( wxCopyFile( src + name, base + sep + name ) );
+    }
+
+    {
+        SETTINGS_MANAGER mgr;
+        BOOST_REQUIRE( mgr.LoadProject( base + sep + wxS( "custom_fields.kicad_pro" ), false ) );
+
+        PROJECT& prj = mgr.Prj();
+        wxString cmd = wxS( "${KICAD_PROJECT_PCB}|${KICAD_PROJECT_SCH}" );
+
+        wxString expanded = ExpandExecuteCommand( cmd, &prj );
+        wxString pcb = expanded.BeforeFirst( '|' );
+        wxString sch = expanded.AfterFirst( '|' );
+
+        BOOST_CHECK( wxFileName( pcb ).SameAs( wxFileName( base + sep + wxS( "custom_fields.kicad_pcb" ) ) ) );
+        BOOST_CHECK( wxFileName( sch ).SameAs( wxFileName( base + sep + wxS( "custom_fields.kicad_sch" ) ) ) );
+        BOOST_CHECK( !ExpandExecuteCommand( wxS( "${KICAD_PYTHON}" ), &prj ).StartsWith( wxS( "${" ) ) );
+
+        // A user variable can refer to a built-in
+        wxSetEnv( wxS( "KICAD_TEST_PY" ), wxS( "${KICAD_PYTHON}" ) );
+        BOOST_CHECK_EQUAL( ExpandExecuteCommand( wxS( "${KICAD_TEST_PY}" ), &prj ),
+                           ExpandExecuteCommand( wxS( "${KICAD_PYTHON}" ), &prj ) );
+        wxUnsetEnv( wxS( "KICAD_TEST_PY" ) );
+
+        // A user definition wins so a portable jobset can still be overridden
+        wxSetEnv( wxS( "KICAD_PYTHON" ), wxS( "user_python" ) );
+        BOOST_CHECK_EQUAL( ExpandExecuteCommand( wxS( "${KICAD_PYTHON}" ), &prj ), wxS( "user_python" ) );
+        wxUnsetEnv( wxS( "KICAD_PYTHON" ) );
+
+        // A renamed board is still found when it is the only one
+        BOOST_REQUIRE( wxRenameFile( base + sep + wxS( "custom_fields.kicad_pcb" ),
+                                     base + sep + wxS( "renamed.kicad_pcb" ) ) );
+        pcb = ExpandExecuteCommand( wxS( "${KICAD_PROJECT_PCB}" ), &prj );
+        BOOST_CHECK( wxFileName( pcb ).SameAs( wxFileName( base + sep + wxS( "renamed.kicad_pcb" ) ) ) );
+
+        mgr.UnloadProject( &prj, false );
+    }
+
+    RmDirRecursive( base );
+}
+
+
+// The bundled interpreter is found in a later tool directory, not only beside the executable
+BOOST_AUTO_TEST_CASE( BundledPythonLookup )
+{
+    wxString sep = wxFileName::GetPathSeparator();
+    wxString base = wxFileName::GetTempDir() + sep + wxS( "kicad_test_py_" )
+                    + wxString::Format( wxS( "%d" ), (int) getpid() );
+    wxString exeDir = base + sep + wxS( "exe" );
+    wxString pyDir = base + sep + wxS( "py" );
+
+#ifdef __WXMSW__
+    wxString name = wxS( "python.exe" );
+#else
+    wxString name = wxS( "python3" );
+#endif
+
+    BOOST_REQUIRE( wxFileName::Mkdir( exeDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( pyDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    BOOST_CHECK( FindBundledPython( { exeDir, pyDir } ).IsEmpty() );
+
+    BOOST_REQUIRE( wxFile( pyDir + sep + name, wxFile::write ).IsOpened() );
+    BOOST_CHECK_EQUAL( FindBundledPython( { exeDir, pyDir } ), pyDir + sep + name );
 
     RmDirRecursive( base );
 }

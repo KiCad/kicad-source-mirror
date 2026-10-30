@@ -38,6 +38,13 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
         m_lastFocusedInput( nullptr ),
         m_scintillaTricks( nullptr )
 {
+    wxString builtinHelp = _( "Built-in variables:" );
+
+    for( const auto& [name, text] : GetExecuteBuiltinVariableHelp() )
+        builtinHelp += wxS( "\n  ${" ) + name + wxS( "}  " ) + text;
+
+    m_stBuiltinHelp->SetLabel( builtinHelp );
+
     m_textCtrlCommand->SetWrapMode( wxSTC_WRAP_CHAR );
 
     m_textCtrlExpanded->SetFont( KIUI::GetMonospacedUIFont() );
@@ -58,6 +65,9 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS::DIALOG_EXECUTECOMMAND_JOB_SETTINGS( wxWindow
                         {
                             ENV_VAR::GetEnvVarAutocompleteTokens( tokens );
                             tokens->Add( OUTPUT_TMP_PATH_VAR_NAME );
+
+                            for( const auto& [name, text] : GetExecuteBuiltinVariableHelp() )
+                                tokens->Add( name );
 
                             if( m_project )
                             {
@@ -160,7 +170,7 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::onCommandChanged( wxStyledTextEvent& aE
 
 void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::updateExpandedPreview()
 {
-    m_textCtrlExpanded->ChangeValue( ExpandEnvVarSubstitutions( m_textCtrlCommand->GetValue(), m_project ) );
+    m_textCtrlExpanded->ChangeValue( ExpandExecuteCommand( m_textCtrlCommand->GetValue(), m_project ) );
 }
 
 
@@ -225,6 +235,9 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
     unique.insert( OUTPUT_TMP_PATH_VAR_NAME );
     unique.insert( PROJECT_VAR_NAME );
 
+    for( const auto& [name, text] : GetExecuteBuiltinVariableHelp() )
+        unique.insert( name );
+
     for( const wxString& evName : unique )
     {
         int row = m_path_subs_grid->GetNumberRows();
@@ -244,7 +257,7 @@ void DIALOG_EXECUTECOMMAND_JOB_SETTINGS::populateEnvironReadOnlyTable()
         {
             // resolve the same way the job runner will
             wxString token = wxT( "${" ) + evName + wxT( "}" );
-            evValue = ExpandEnvVarSubstitutions( token, m_project );
+            evValue = ExpandExecuteCommand( token, m_project );
 
             if( evValue == token )
                 evValue = wxEmptyString;

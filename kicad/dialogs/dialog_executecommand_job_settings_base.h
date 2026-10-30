@@ -46,6 +46,7 @@ class DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRecordOutput;
 		wxCheckBox* m_cbIgnoreExitCode;
 		WX_GRID* m_path_subs_grid;
+		wxStaticText* m_stBuiltinHelp;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

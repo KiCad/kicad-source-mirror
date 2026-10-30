@@ -65,7 +65,7 @@ bool JOBS_RUNNER::RunJobsAllDestinations( bool aBail )
 int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter, PROJECT* aProject )
 {
     JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( aJob->m_job.get() );
-    wxString             cmd = ExpandEnvVarSubstitutions( specialJob->m_command, m_project );
+    wxString             cmd = ExpandExecuteCommand( specialJob->m_command, m_project );
 
     aReporter->Report( cmd, RPT_SEVERITY_INFO );
     aReporter->Report( wxEmptyString, RPT_SEVERITY_INFO );

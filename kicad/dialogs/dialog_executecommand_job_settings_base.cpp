@@ -136,6 +136,10 @@ DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE::DIALOG_EXECUTECOMMAND_JOB_SETTINGS_BASE
 
 	bSizerMain->Add( m_path_subs_grid, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
+	m_stBuiltinHelp = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_stBuiltinHelp->Wrap( -1 );
+	bSizerMain->Add( m_stBuiltinHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
