@@ -82,7 +82,7 @@ private:
     int runSchMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,
                      const wxString& aOutput, bool aInteractive );
     int runSymLibMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,
-                        const wxString& aOutput );
+                        const wxString& aOutput, bool aInteractive );
 
 public:
 

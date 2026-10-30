@@ -3182,6 +3182,18 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
 #include <jobs/scratch_doc.h>
 
 
+static bool canShowMergeDialog( REPORTER& aReporter )
+{
+    if( Pgm().IsGUI() )
+        return true;
+
+    aReporter.Report( _( "--interactive requires a GUI KiCad process; the console "
+                         "kicad-cli cannot open dialogs.\n" ),
+                      RPT_SEVERITY_ERROR );
+    return false;
+}
+
+
 int EESCHEMA_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& aAncestor,
                                      const wxString& aOurs, const wxString& aTheirs,
                                      const wxString& aOutput, bool aInteractive, bool aSingleFile,
@@ -3193,7 +3205,7 @@ int EESCHEMA_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString&
                                                aReporter ? aReporter : m_reporter );
 
     if( aKind == KICAD_DIFF::DOC_KIND::SYM_LIB )
-        return runSymLibMerge( aAncestor, aOurs, aTheirs, aOutput );
+        return runSymLibMerge( aAncestor, aOurs, aTheirs, aOutput, aInteractive );
 
     return runSchMerge( aAncestor, aOurs, aTheirs, aOutput, aInteractive );
 }
@@ -3254,13 +3266,8 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
-        if( !Pgm().IsGUI() )
-        {
-            m_reporter->Report( _( "--interactive requires a GUI KiCad process; the console "
-                                   "kicad-cli cannot open dialogs.\n" ),
-                                RPT_SEVERITY_ERROR );
+        if( !canShowMergeDialog( *m_reporter ) )
             return CLI::EXIT_CODES::ERR_ARGS;
-        }
 
         const KICAD_DIFF::DIFF_COLOR_THEME        theme;
         DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
@@ -3547,13 +3554,14 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 // ============================================================================
 // JobSymLibMerge: 3-way merge of .kicad_sym libraries.
 // ============================================================================
+#include <diff_merge/sym_diff_canvas_context.h>
 #include <diff_merge/sym_lib_merge_applier.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 #include <wx/ffile.h>
 
 
 int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxString& aOurs,
-                                           const wxString& aTheirs, const wxString& aOutput )
+                                           const wxString& aTheirs, const wxString& aOutput, bool aInteractive )
 {
     if( aOutput.IsEmpty() )
     {
@@ -3611,6 +3619,94 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
 
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
+
+    // The applier cannot combine two edits of one symbol, so the user picks a side for each
+    if( aInteractive )
+    {
+        std::set<KIID_PATH> unresolved( plan.unresolved.begin(), plan.unresolved.end() );
+
+        for( KICAD_DIFF::ITEM_RESOLUTION& action : plan.actions )
+        {
+            if( action.kind != KICAD_DIFF::ITEM_RES::MERGE_PROPS )
+                continue;
+
+            action.kind = KICAD_DIFF::ITEM_RES::KEEP;
+
+            if( unresolved.insert( action.id ).second )
+                plan.unresolved.push_back( action.id );
+        }
+    }
+
+    if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
+    {
+        if( !canShowMergeDialog( *m_reporter ) )
+            return CLI::EXIT_CODES::ERR_ARGS;
+
+        std::map<KIID_PATH, wxString> names;
+
+        for( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side : { &ancestor.map, &ours.map, &theirs.map } )
+        {
+            for( const auto& [name, symbol] : *side )
+                names.emplace( KICAD_DIFF::LibraryItemKiidPath( name ), name );
+        }
+
+        auto flatten = []( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP& aSide,
+                           const wxString&                               aName ) -> std::unique_ptr<LIB_SYMBOL>
+        {
+            auto it = aSide.find( aName );
+            return it != aSide.end() ? it->second->Flatten() : nullptr;
+        };
+
+        // The canvas draws items it does not own, so they live until the next symbol replaces them
+        auto shown = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
+
+        DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
+
+        ctx.describeItem = [names]( const KIID_PATH& aId ) -> wxString
+        {
+            auto it = names.find( aId );
+            return it != names.end() ? it->second : wxString();
+        };
+
+        // Each side is drawn over the common version so its own edits stand out
+        ctx.drawSide = [&ancestor, &ours, &theirs, names, flatten, shown](
+                               WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide,
+                               const std::optional<KIID_PATH>& aId )
+        {
+            auto it = aId ? names.find( *aId ) : names.end();
+
+            if( it == names.end() )
+            {
+                KICAD_DIFF::ConfigureSymDiffCanvasContext( aCanvas, nullptr, nullptr );
+                shown->clear();
+                return;
+            }
+
+            const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side = &ours.map;
+
+            if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS )
+                side = &theirs.map;
+            else if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR )
+                side = &ancestor.map;
+
+            std::unique_ptr<LIB_SYMBOL> before = flatten( ancestor.map, it->second );
+            std::unique_ptr<LIB_SYMBOL> after = flatten( *side, it->second );
+
+            KICAD_DIFF::ConfigureSymDiffCanvasContext( aCanvas, before.get(), after.get() );
+
+            shown->clear();
+            shown->push_back( std::move( before ) );
+            shown->push_back( std::move( after ) );
+        };
+
+        DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
+
+        // Cancelling leaves the conflicts unresolved and the files untouched
+        if( dlg.ShowModal() != wxID_APPLY )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        plan = dlg.GetResolvedPlan();
+    }
 
     const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
 
