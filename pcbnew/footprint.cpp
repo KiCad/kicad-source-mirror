@@ -4567,6 +4567,22 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
                 return *aLeft == *aRight;
             };
 
+    // Delimiters are not significant, "1,2" and "1, 2" tie the same pads
+    auto equalPadGroups =
+            []( const wxString& aLeft, const wxString& aRight )
+            {
+                wxStringTokenizer left( aLeft, ", \t\r\n", wxTOKEN_STRTOK );
+                wxStringTokenizer right( aRight, ", \t\r\n", wxTOKEN_STRTOK );
+
+                while( left.HasMoreTokens() && right.HasMoreTokens() )
+                {
+                    if( left.GetNextToken() != right.GetNextToken() )
+                        return false;
+                }
+
+                return !left.HasMoreTokens() && !right.HasMoreTokens();
+            };
+
     if( !std::ranges::equal( m_pads, aOther.m_pads, equalItems ) )
         return false;
 
@@ -4579,7 +4595,7 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
     if( !std::ranges::equal( m_groups, aOther.m_groups, equalItems ) )
         return false;
 
-    if( m_netTiePadGroups != aOther.m_netTiePadGroups )
+    if( !std::ranges::equal( m_netTiePadGroups, aOther.m_netTiePadGroups, equalPadGroups ) )
         return false;
 
     if( m_jumperPadGroups != aOther.m_jumperPadGroups )
