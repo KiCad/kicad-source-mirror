@@ -211,6 +211,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     m_netTiePadGroups                = aFootprint.m_netTiePadGroups;
     m_jumperPadGroups                = aFootprint.m_jumperPadGroups;
+    m_unitInfo                       = aFootprint.m_unitInfo;
     m_duplicatePadNumbersAreJumpers  = aFootprint.m_duplicatePadNumbersAreJumpers;
     m_allowMissingCourtyard          = aFootprint.m_allowMissingCourtyard;
     m_allowSolderMaskBridges         = aFootprint.m_allowSolderMaskBridges;
@@ -1173,6 +1174,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
     m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
     m_jumperPadGroups                = aOther.m_jumperPadGroups;
+    m_unitInfo                       = aOther.m_unitInfo;
 
     // If this footprint is on a board, uncache all items before deleting them
     if( BOARD* board = GetBoard() )
@@ -1322,6 +1324,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_netTiePadGroups                = aOther.m_netTiePadGroups;
     m_duplicatePadNumbersAreJumpers  = aOther.m_duplicatePadNumbersAreJumpers;
     m_jumperPadGroups                = aOther.m_jumperPadGroups;
+    m_unitInfo                       = aOther.m_unitInfo;
     m_variants                       = aOther.m_variants;
 
     // If this footprint is on a board, uncache all items before deleting them
