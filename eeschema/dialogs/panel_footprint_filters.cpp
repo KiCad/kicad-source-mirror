@@ -252,9 +252,15 @@ PANEL_FOOTPRINT_FILTERS::~PANEL_FOOTPRINT_FILTERS()
 }
 
 
-void PANEL_FOOTPRINT_FILTERS::SetFilters( const wxArrayString& aFilters )
+void PANEL_FOOTPRINT_FILTERS::SetFilters( const wxArrayString& aFilters, const wxString& aInheritedFrom )
 {
     m_FootprintFilterListBox->Set( aFilters );
+
+    if( aInheritedFrom.IsEmpty() )
+        m_FootprintFilterListBox->UnsetToolTip();
+    else
+        m_FootprintFilterListBox->SetToolTip(
+                wxString::Format( _( "These filters are inherited from '%s'." ), aInheritedFrom ) );
 }
 
 
@@ -274,6 +280,8 @@ void PANEL_FOOTPRINT_FILTERS::SetFootprintFieldAccessors( FOOTPRINT_ASSIGN_QUERY
 
 void PANEL_FOOTPRINT_FILTERS::onModify()
 {
+    m_FootprintFilterListBox->UnsetToolTip();
+
     if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
         dlg->OnModify();
 }

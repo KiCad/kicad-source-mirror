@@ -1557,7 +1557,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
         aFormatter.Print( 0, "\n" );
     }
 
-    wxArrayString footprints = aSymbol->GetFPFilters();
+    const wxArrayString& footprints = aSymbol->GetRawFPFilters();
 
     // Write the footprint filter list
     if( footprints.GetCount() != 0 )

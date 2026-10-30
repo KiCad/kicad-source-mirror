@@ -249,6 +249,8 @@ public:
 
     void SetFPFilters( const wxArrayString& aFilters ) { m_fpFilters = aFilters; }
 
+    const wxArrayString& GetRawFPFilters() const { return m_fpFilters; }
+
     wxArrayString GetFPFilters() const
     {
         if( m_fpFilters.IsEmpty() && IsDerived() )

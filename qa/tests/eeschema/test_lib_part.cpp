@@ -35,6 +35,8 @@
 #include <sch_file_versions.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <richio.h>
 #include <locale_io.h>
 #include <units_provider.h>
 
@@ -133,6 +135,31 @@ static void saveToLib( const wxString& aLibPath, const LIB_SYMBOL& aSymbol )
     pi->CreateLibrary( aLibPath );
     pi->SaveSymbol( aLibPath, std::make_unique<LIB_SYMBOL>( aSymbol ) );
     pi->SaveLibrary( aLibPath );
+}
+
+
+/**
+ * Build a footprint filter list.
+ */
+static wxArrayString filterList( const std::vector<wxString>& aFilters )
+{
+    wxArrayString filters;
+
+    for( const wxString& filter : aFilters )
+        filters.Add( filter );
+
+    return filters;
+}
+
+
+/**
+ * Serialize one symbol the way the library writer would.
+ */
+static wxString formatted( LIB_SYMBOL& aSymbol )
+{
+    STRING_FORMATTER out;
+    SCH_IO_KICAD_SEXPR::FormatLibSymbol( &aSymbol, out );
+    return wxString( out.GetString() );
 }
 
 
@@ -1341,6 +1368,131 @@ BOOST_AUTO_TEST_CASE( NativeComparisonHonorsAlternateDefinitionFlag )
     BOOST_CHECK_EQUAL( changed.Compare( *original, flags & ~SCH_ITEM::COMPARE_FLAGS::PIN_ALT_DEFS ), 0 );
     BOOST_CHECK_NE( original->Compare( changed, flags ), 0 );
     BOOST_CHECK_NE( changed.Compare( *original, flags ), 0 );
+}
+
+
+/**
+ * A derived symbol that defines no filters of its own must not be written carrying its
+ * parent's, because the parser assigns whatever it reads straight onto the symbol, so a
+ * written inherited value comes back as an override and the symbol stops following its parent.
+ */
+BOOST_AUTO_TEST_CASE( InheritedFootprintFiltersAreNotWritten )
+{
+    LIB_SYMBOL parent( wxS( "MAX291" ) );
+    LIB_SYMBOL derived( wxS( "MAX293" ) );
+
+    parent.SetFPFilters( filterList( { wxS( "DIP*" ), wxS( "SOIC*" ) } ) );
+    derived.SetParent( &parent );
+
+    BOOST_REQUIRE( derived.IsDerived() );
+    BOOST_CHECK( derived.GetRawFPFilters().IsEmpty() );
+
+    // The resolving accessor must keep reporting what the symbol uses
+    BOOST_CHECK( derived.GetFPFilters() == parent.GetFPFilters() );
+
+    BOOST_CHECK( formatted( parent ).Contains( wxS( "ki_fp_filters" ) ) );
+    BOOST_CHECK( !formatted( derived ).Contains( wxS( "ki_fp_filters" ) ) );
+
+    // A schematic caches a flattened copy, which is a root and so must carry the filters
+    std::unique_ptr<LIB_SYMBOL> flattened = derived.Flatten();
+    BOOST_REQUIRE( flattened );
+    BOOST_CHECK( flattened->IsRoot() );
+    BOOST_CHECK( flattened->GetRawFPFilters() == parent.GetFPFilters() );
+    BOOST_CHECK( formatted( *flattened ).Contains( wxS( "ki_fp_filters" ) ) );
+}
+
+
+/**
+ * Filters the derived symbol does own are a deliberate override and must still be written.
+ */
+BOOST_AUTO_TEST_CASE( OwnFootprintFiltersAreWritten )
+{
+    LIB_SYMBOL parent( wxS( "MAX291" ) );
+    LIB_SYMBOL derived( wxS( "MAX293" ) );
+
+    parent.SetFPFilters( filterList( { wxS( "DIP*" ) } ) );
+    derived.SetParent( &parent );
+    derived.SetFPFilters( filterList( { wxS( "QFN*" ) } ) );
+
+    BOOST_CHECK( derived.GetFPFilters() == filterList( { wxS( "QFN*" ) } ) );
+
+    wxString text = formatted( derived );
+    BOOST_CHECK( text.Contains( wxS( "ki_fp_filters" ) ) );
+    BOOST_CHECK( text.Contains( wxS( "QFN*" ) ) );
+    BOOST_CHECK( !text.Contains( wxS( "DIP*" ) ) );
+}
+
+
+/**
+ * Clearing a derived symbol's filters returns it to inheriting rather than writing a copy of
+ * the parent's list onto it.  An empty own-list is how a symbol says "inherit", so a derived
+ * symbol cannot express "deliberately no filters" at all, the same as for its keywords and its
+ * empty mandatory fields.
+ */
+BOOST_AUTO_TEST_CASE( ClearingOwnFootprintFiltersReturnsToInheriting )
+{
+    LIB_SYMBOL parent( wxS( "MAX291" ) );
+    LIB_SYMBOL derived( wxS( "MAX293" ) );
+
+    parent.SetFPFilters( filterList( { wxS( "DIP*" ), wxS( "SOIC*" ) } ) );
+    derived.SetParent( &parent );
+
+    // Dropping one of two inherited filters is a real override and must be kept
+    derived.SetFPFilters( filterList( { wxS( "SOIC*" ) } ) );
+    BOOST_CHECK( derived.GetFPFilters() == filterList( { wxS( "SOIC*" ) } ) );
+
+    wxString kept = formatted( derived );
+    BOOST_CHECK( kept.Contains( wxS( "SOIC*" ) ) );
+    BOOST_CHECK( !kept.Contains( wxS( "DIP*" ) ) );
+
+    // Dropping the last one leaves nothing of its own, so the parent's list applies again
+    derived.SetFPFilters( wxArrayString() );
+    BOOST_CHECK( derived.GetRawFPFilters().IsEmpty() );
+    BOOST_CHECK( derived.GetFPFilters() == parent.GetFPFilters() );
+
+    // What must not happen is the parent's list being stamped onto the child as an override
+    BOOST_CHECK( !formatted( derived ).Contains( wxS( "ki_fp_filters" ) ) );
+}
+
+
+/**
+ * The round trip through a real library file is what makes the leak permanent: write, read
+ * back, and the child owns filters nobody set on it.
+ */
+BOOST_AUTO_TEST_CASE( FootprintFiltersSurviveSaveAndReload )
+{
+    SCOPED_TEMP_LIB tempLib;
+
+    {
+        LIB_SYMBOL parent( wxS( "MAX291" ) );
+        parent.GetValueField().SetText( wxS( "MAX291" ) );
+        parent.SetFPFilters( filterList( { wxS( "DIP*" ), wxS( "SOIC*" ) } ) );
+
+        LIB_SYMBOL derived( wxS( "MAX293" ) );
+        derived.GetValueField().SetText( wxS( "MAX293" ) );
+        derived.SetParent( &parent );
+
+        // saveToLib() writes a single symbol, and the parent has to land first
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        pi->CreateLibrary( tempLib.GetPath() );
+        pi->SaveSymbol( tempLib.GetPath(), std::make_unique<LIB_SYMBOL>( parent ) );
+        pi->SaveSymbol( tempLib.GetPath(), std::make_unique<LIB_SYMBOL>( derived ) );
+        pi->SaveLibrary( tempLib.GetPath() );
+    }
+
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    LIB_SYMBOL*         parent = pi->LoadSymbol( tempLib.GetPath(), wxS( "MAX291" ) );
+    LIB_SYMBOL*         derived = pi->LoadSymbol( tempLib.GetPath(), wxS( "MAX293" ) );
+
+    BOOST_REQUIRE( parent && derived );
+    BOOST_REQUIRE( derived->IsDerived() );
+
+    BOOST_CHECK( derived->GetRawFPFilters().IsEmpty() );
+    BOOST_CHECK( derived->GetFPFilters() == filterList( { wxS( "DIP*" ), wxS( "SOIC*" ) } ) );
+
+    // Retracking the parent is the point: a new parent filter reaches the child
+    parent->SetFPFilters( filterList( { wxS( "QFN*" ) } ) );
+    BOOST_CHECK( derived->GetFPFilters() == filterList( { wxS( "QFN*" ) } ) );
 }
 
 

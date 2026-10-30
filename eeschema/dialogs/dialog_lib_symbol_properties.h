@@ -124,6 +124,8 @@ private:
     /// Ancestor supplying the keywords while the symbol leaves them empty.
     wxString m_keywordsSource;
 
+    wxArrayString m_inheritedFpFilters;
+
     enum class LAST_LAYOUT {
         NONE,
         ALIAS,

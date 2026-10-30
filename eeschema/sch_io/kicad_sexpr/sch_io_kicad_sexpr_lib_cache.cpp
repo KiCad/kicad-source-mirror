@@ -587,7 +587,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
         saveField( &keywords, aFormatter );
     }
 
-    wxArrayString fpFilters = aSymbol->GetFPFilters();
+    const wxArrayString& fpFilters = aSymbol->GetRawFPFilters();
 
     if( !fpFilters.IsEmpty() )
     {

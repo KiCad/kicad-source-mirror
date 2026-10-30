@@ -44,8 +44,8 @@ public:
 
     ~PANEL_FOOTPRINT_FILTERS() override;
 
-    /// Replace the filters in the list with \a aFilters.
-    void SetFilters( const wxArrayString& aFilters );
+    /// Replace the filters in the list, naming the ancestor they are inherited from, if any.
+    void SetFilters( const wxArrayString& aFilters, const wxString& aInheritedFrom = wxEmptyString );
 
     /// @return the filters in the list.
     wxArrayString GetFilters() const;

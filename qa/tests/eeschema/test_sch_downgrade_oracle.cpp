@@ -1291,6 +1291,48 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolKeywordsPreserveRawOverridesInsteadOfInherite
 }
 
 
+BOOST_AUTO_TEST_CASE( DerivedSymbolFootprintFiltersPreserveRawOverridesInsteadOfInheritedValues )
+{
+    // Looping the targets rather than naming them keeps a new downgrade target covered
+    for( const DOWNGRADE_TARGET& target : GetDowngradeTargets() )
+    {
+        BOOST_TEST_CONTEXT( target.m_name )
+        {
+            KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_derived_fp_filters" );
+            LIB_SYMBOL               parent( wxT( "parent" ) );
+            wxArrayString            parentFilters;
+            parentFilters.Add( wxT( "DIP*" ) );
+            parentFilters.Add( wxT( "SOIC*" ) );
+            parent.SetFPFilters( parentFilters );
+
+            LIB_SYMBOL empty( wxT( "empty_derived" ) );
+            empty.SetParent( &parent );
+
+            LIB_SYMBOL explicitFilters( wxT( "explicit_derived" ) );
+            explicitFilters.SetParent( &parent );
+            wxArrayString ownFilters;
+            ownFilters.Add( wxT( "QFN*" ) );
+            explicitFilters.SetFPFilters( ownFilters );
+
+            BOOST_REQUIRE( empty.GetRawFPFilters().IsEmpty() );
+            BOOST_REQUIRE( empty.GetFPFilters() == parent.GetFPFilters() );
+
+            const std::string path = ( tmp.Path() / "derived.kicad_sym" ).string();
+            SaveSymbolLibraryForTarget( { &parent, &empty, &explicitFilters }, path, target );
+
+            SCH_IO_KICAD_SEXPR io;
+            LIB_SYMBOL*        reloadedEmpty = io.LoadSymbol( path, empty.GetName() );
+            LIB_SYMBOL*        reloadedExplicit = io.LoadSymbol( path, explicitFilters.GetName() );
+
+            BOOST_REQUIRE( reloadedEmpty );
+            BOOST_REQUIRE( reloadedExplicit );
+            BOOST_CHECK( reloadedEmpty->GetRawFPFilters().IsEmpty() );
+            BOOST_CHECK( reloadedExplicit->GetRawFPFilters() == ownFilters );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( EmbeddedAttachmentsUseLegacyChecksumsInSchematicCacheAndLibraryFiles )
 {
     for( const auto& target : { kicad9, kicad10 } )

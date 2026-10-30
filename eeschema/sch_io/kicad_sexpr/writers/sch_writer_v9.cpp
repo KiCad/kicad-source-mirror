@@ -534,7 +534,7 @@ static void libSaveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aForma
         libSaveField( &keywords, aFormatter );
     }
 
-    wxArrayString fpFilters = aSymbol->GetFPFilters();
+    const wxArrayString& fpFilters = aSymbol->GetRawFPFilters();
 
     if( !fpFilters.IsEmpty() )
     {
