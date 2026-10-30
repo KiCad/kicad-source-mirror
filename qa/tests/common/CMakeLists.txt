@@ -220,6 +220,8 @@ set( QA_COMMON_SRCS
     test_jobs_runner.cpp
     test_jobs_output_archive.cpp
     test_job_output_path.cpp
+    test_jobs_runner_record_output.cpp
+    ${CMAKE_SOURCE_DIR}/kicad/jobs_runner.cpp
 
     # Translation integrity tests
     test_translation_format_strings.cpp

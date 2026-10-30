@@ -116,19 +116,33 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
 
         if( specialJob->m_recordOutput )
         {
+            wxFileName defaultLog( aJob->m_id );
+            defaultLog.SetExt( wxT( "log" ) );
+
             if( specialJob->GetConfiguredOutputPath().IsEmpty() )
+                specialJob->SetConfiguredOutputPath( defaultLog.GetFullPath() );
+
+            // A folder gets the default log name inside it
+            wxString logPath =
+                    JOB::AppendDefaultFileName( specialJob->GetFullOutputPath( aProject ), defaultLog.GetFullName() );
+
+            bool logWritten = false;
+
+            if( PATHS::EnsurePathExists( logPath, true ) )
             {
-                wxFileName fn( aJob->m_id );
-                fn.SetExt( wxT( "log" ) );
-                specialJob->SetConfiguredOutputPath( fn.GetFullPath() );
+                wxFileOutputStream procOutput( logPath );
+
+                logWritten = procOutput.IsOk() && procOutput.WriteAll( memInBuf, memInBuf.GetDataLen() )
+                             && procOutput.Close();
             }
 
-            wxFFileOutputStream procOutput( specialJob->GetFullOutputPath( aProject ) );
-
-            if( !procOutput.IsOk() )
+            if( !logWritten )
+            {
+                wxString msg = wxString::Format( _( "Command finished but its output could not be written to '%s'" ),
+                                                 logPath );
+                aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
-
-            procOutput.WriteAll( memInBuf, memInBuf.GetDataLen() );
+            }
         }
     }
 
