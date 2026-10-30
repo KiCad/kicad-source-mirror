@@ -1274,8 +1274,12 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint( bool aSkipConfirmation )
 {
     if( GetScreen()->IsContentModified() && m_originalFootprintCopy )
     {
-        wxString msg = wxString::Format( _( "Revert '%s' to last version saved?" ),
-                                         GetLoadedFPID().GetLibItemName().wx_str() );
+        wxString msg;
+
+        if( IsCurrentFPFromBoard() )
+            msg.Printf( _( "Revert '%s' to version from board?" ), m_originalFootprintCopy->GetReference() );
+        else
+            msg.Printf( _( "Revert '%s' to last version saved?" ), GetLoadedFPID().GetLibItemName().wx_str() );
 
         if( aSkipConfirmation || ConfirmRevertDialog( this, msg ) )
         {
@@ -1287,7 +1291,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint( bool aSkipConfirmation )
             const wxString oldKey = m_activeTab ? m_activeTab->GetTabKey() : wxString();
 
             freeUndoRedoCommandsWithItems( m_undoList, m_redoList );
-            ReloadFootprint( restored.release() );
+            installFootprintOnActiveBoard( restored.release() );
 
             // The tab is keyed on the footprint name, which the revert may have rolled back
             if( m_activeTab && m_activeTab->GetTabKey() != oldKey )
