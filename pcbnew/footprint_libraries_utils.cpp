@@ -293,7 +293,9 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
             aFootprint->SetOrientation( 0 );
         */
 
-        pcb_io.Format( aFootprint );
+        std::unique_ptr<FOOTPRINT> copy( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
+
+        pcb_io.FormatFootprintLibFile( copy.get() );
 
         FILE* fp = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 

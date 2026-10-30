@@ -111,13 +111,6 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
         if( aFootprintFilter && footprint.get() != aFootprintFilter )
             continue;
 
-        // If we've requested to embed the fonts in the footprint, do so.  Otherwise, clear the
-        // embedded fonts from the footprint.  Embedded fonts will be used if available.
-        if( footprint->GetAreFontsEmbedded() )
-            footprint->EmbedFonts();
-        else
-            footprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
-
         WX_FILENAME fn = fpCacheEntry->GetFileName();
         wxString    fileName = fn.GetFullPath();
 
@@ -130,12 +123,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
 
             m_owner->SetOutputFormatter( &formatter );
 
-            formatter.Print( "(kicad_footprint_lib (version %d) (generator \"kicad_footprint_editor\")"
-                             " (generator_version \"%s\")\n",
-                             SEXPR_FOOTPRINT_LIB_FILE_VERSION,
-                             GetMajorMinorVersion().c_str().AsChar() );
-            m_owner->Format( footprint.get() );
-            formatter.Print( ")\n" );
+            m_owner->FormatFootprintLibFile( footprint.get() );
             formatter.Finish();
         }
 
@@ -360,6 +348,24 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR::Parse( const wxString& aClipboardSourceInput )
         else
             throw;
     }
+}
+
+
+void PCB_IO_KICAD_SEXPR::FormatFootprintLibFile( FOOTPRINT* aFootprint ) const
+{
+    // If we've requested to embed the fonts in the footprint, do so.  Otherwise, clear the
+    // embedded fonts from the footprint.  Embedded fonts will be used if available.
+    if( aFootprint->GetAreFontsEmbedded() )
+        aFootprint->EmbedFonts();
+    else
+        aFootprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
+
+    m_out->Print( "(kicad_footprint_lib (version %d) (generator \"kicad_footprint_editor\")"
+                  " (generator_version \"%s\")\n",
+                  SEXPR_FOOTPRINT_LIB_FILE_VERSION,
+                  GetMajorMinorVersion().c_str().AsChar() );
+    format( aFootprint, false );
+    m_out->Print( ")\n" );
 }
 
 
@@ -1440,7 +1446,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GRID_ITEM* aGridItem ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
+void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, bool aWriteVersion ) const
 {
     if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
     {
@@ -1462,6 +1468,12 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     {
         m_out->Print( "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
+    }
+
+    if( aWriteVersion && !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
+    {
+        m_out->Print( "(version %d) (generator \"pcbnew\") (generator_version %s)", SEXPR_BOARD_FILE_VERSION,
+                      m_out->Quotew( GetMajorMinorVersion() ).c_str() );
     }
 
     if( aFootprint->IsLocked() )

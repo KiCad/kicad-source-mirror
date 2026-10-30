@@ -451,6 +451,13 @@ public:
      */
     void Format( const BOARD_ITEM* aItem ) const;
 
+    /**
+     * Output \a aFootprint as a complete footprint library file.
+     *
+     * @param aFootprint has its embedded fonts updated to match its settings, so pass a copy of a live footprint.
+     */
+    void FormatFootprintLibFile( FOOTPRINT* aFootprint ) const;
+
     std::string GetStringOutput( bool doClear )
     {
         std::string ret = m_sf.GetString();
@@ -516,7 +523,7 @@ private:
 
     void format( const PCB_GRID_ITEM* aGridItem ) const;
 
-    void format( const FOOTPRINT* aFootprint ) const;
+    void format( const FOOTPRINT* aFootprint, bool aWriteVersion = true ) const;
 
     void format( const PAD* aPad ) const;
 
