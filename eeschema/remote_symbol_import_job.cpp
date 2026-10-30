@@ -91,7 +91,7 @@ REMOTE_SYMBOL_IMPORT_JOB::REMOTE_SYMBOL_IMPORT_JOB( SCH_EDIT_FRAME* aFrame,
 bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider,
                                        const REMOTE_SYMBOL_IMPORT_CONTEXT& aContext,
                                        const REMOTE_PROVIDER_PART_MANIFEST& aManifest,
-                                       bool aPlaceSymbol, wxString& aError )
+                                       bool doPlaceSymbol, wxString& aError )
 {
     aError.clear();
 
@@ -113,26 +113,28 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
     const bool                strictLibraryTables = m_frame != nullptr;
     const wxString            prefix = RemoteLibraryPrefix();
     const LIBRARY_TABLE_SCOPE scope = addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
-    bool                      importedSymbol = false;
-    wxString                  placedNickname;
-    wxString                  placedSymbolName;
+    bool                      didImportSymbol = false;
+    wxString                  toPlaceNickname;
+    wxString                  toPlaceSymbolName;
 
-    // Sort asset indices: footprints first, then 3D/SPICE, then symbols. The symbol's
+    // Sort asset indexes: footprints first, then 3D/SPICE, then symbols. The symbol's
     // Footprint field references a LIB_ID that must already exist on disk and (when
     // running interactive) be registered in the footprint library table by the time the
     // symbol file is written, otherwise CvPcb / placement-time resolution misses it.
-    std::vector<size_t> footprintIdx, otherIdx, symbolIdx;
+    std::vector<size_t> footprintIndexes;
+    std::vector<size_t> otherIndexes;
+    std::vector<size_t> symbolIndexes;
 
     for( size_t i = 0; i < aManifest.assets.size(); ++i )
     {
         const wxString& type = aManifest.assets[i].asset_type;
 
         if( type == wxS( "footprint" ) )
-            footprintIdx.push_back( i );
+            footprintIndexes.push_back( i );
         else if( type == wxS( "symbol" ) )
-            symbolIdx.push_back( i );
+            symbolIndexes.push_back( i );
         else
-            otherIdx.push_back( i );
+            otherIndexes.push_back( i );
     }
 
     std::vector<LIB_ID> footprintLinks;
@@ -151,12 +153,12 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
             };
 
     // --- Footprints ---
-    for( size_t i : footprintIdx )
+    for( size_t footprintIdx : footprintIndexes )
     {
-        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[i];
+        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[footprintIdx];
         REMOTE_SYMBOL_FETCHED_ASSET       fetched;
 
-        if( !downloadAsset( i, fetched ) )
+        if( !downloadAsset( footprintIdx, fetched ) )
             return false;
 
         wxFileName fpRoot = baseDir;
@@ -195,12 +197,12 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
     }
 
     // --- 3D models, SPICE ---
-    for( size_t i : otherIdx )
+    for( size_t otherIdx : otherIndexes )
     {
-        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[i];
+        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[otherIdx];
         REMOTE_SYMBOL_FETCHED_ASSET       fetched;
 
-        if( !downloadAsset( i, fetched ) )
+        if( !downloadAsset( otherIdx, fetched ) )
             return false;
 
         if( asset.asset_type == wxS( "3dmodel" ) )
@@ -239,12 +241,12 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
     }
 
     // --- Symbols ---
-    for( size_t i : symbolIdx )
+    for( size_t symbolIdx : symbolIndexes )
     {
-        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[i];
+        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[symbolIdx];
         REMOTE_SYMBOL_FETCHED_ASSET       fetched;
 
-        if( !downloadAsset( i, fetched ) )
+        if( !downloadAsset( symbolIdx, fetched ) )
             return false;
 
         wxFileName symbolDir = baseDir;
@@ -271,17 +273,19 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
 
         // Deserialize → mutate → save so the persisted symbol's Footprint field is
         // already pointing at the local LIB_IDs of the bundle's footprints.
-        std::unique_ptr<LIB_SYMBOL> loaded = LoadRemoteSymbolFromPayload( fetched.payload, symbolName, aError );
+        std::unique_ptr<LIB_SYMBOL> loadedSymbol = LoadRemoteSymbolFromPayload( fetched.payload, symbolName, aError );
 
-        if( loaded )
+        if( loadedSymbol )
         {
-            loaded->SetName( symbolName );
+            didImportSymbol = true;
+
+            loadedSymbol->SetName( symbolName );
             LIB_ID savedId;
             savedId.SetLibNickname( nickname );
             savedId.SetLibItemName( symbolName );
-            loaded->SetLibId( savedId );
+            loadedSymbol->SetLibId( savedId );
 
-            ApplyFootprintLinks( *loaded, footprintLinks );
+            ApplyFootprintLinks( *loadedSymbol, footprintLinks );
         }
 
         if( !symbolDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
@@ -292,7 +296,7 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
 
         if( strictLibraryTables )
         {
-            if( !loaded )
+            if( !loadedSymbol )
                 return false;
 
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
@@ -303,8 +307,11 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
                 return false;
             }
 
-            if( !SaveRemoteSymbolToLibrary( *adapter, outFile, nickname, addToGlobal, std::move( loaded ), aError ) )
+            if( !SaveRemoteSymbolToLibrary( *adapter, outFile, nickname, addToGlobal, std::move( loadedSymbol ),
+                                            aError ) )
+            {
                 return false;
+            }
         }
         else
         {
@@ -316,39 +323,43 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
             if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
                 return false;
 
-            try
+            if( loadedSymbol )
             {
-                IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-                if( !plugin )
+                try
                 {
-                    aError = _( "Unable to access the KiCad symbol plugin." );
+                    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+                    if( !plugin )
+                    {
+                        aError = _( "Unable to access the KiCad symbol plugin." );
+                        return false;
+                    }
+
+                    plugin->SaveSymbol( outFile.GetFullPath(), std::move( loadedSymbol ) );
+                }
+                catch( const IO_ERROR& e )
+                {
+                    aError = wxString::Format( _( "Unable to save the downloaded symbol: %s" ), e.What() );
                     return false;
                 }
-
-                plugin->SaveSymbol( outFile.GetFullPath(), std::move( loaded ) );
-            }
-            catch( const IO_ERROR& e )
-            {
-                aError = wxString::Format( _( "Unable to save the downloaded symbol: %s" ), e.What() );
-                return false;
             }
         }
 
-        importedSymbol = loaded != nullptr;
-        placedNickname = nickname;
-        placedSymbolName = symbolName;
+        // TODO: the payload is expected to contain a single symbol.  But if it contains more, should we
+        // be placing all of them?  (And if so, as a block or singly?)
+        toPlaceNickname = nickname;
+        toPlaceSymbolName = symbolName;
     }
 
-    if( aPlaceSymbol )
+    if( doPlaceSymbol )
     {
-        if( !importedSymbol )
+        if( !didImportSymbol )
         {
             aError = _( "No symbol asset was available to place." );
             return false;
         }
 
-        if( !PlaceRemoteDownloadedSymbol( m_frame, placedNickname, placedSymbolName, aError ) )
+        if( !PlaceRemoteDownloadedSymbol( m_frame, toPlaceNickname, toPlaceSymbolName, aError ) )
             return false;
     }
 

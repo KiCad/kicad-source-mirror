@@ -43,7 +43,7 @@ public:
                                        REMOTE_SYMBOL_DOWNLOAD_MANAGER* aDownloader = nullptr );
 
     bool Import( const REMOTE_PROVIDER_METADATA& aProvider, const REMOTE_SYMBOL_IMPORT_CONTEXT& aContext,
-                 const REMOTE_PROVIDER_PART_MANIFEST& aManifest, bool aPlaceSymbol, wxString& aError );
+                 const REMOTE_PROVIDER_PART_MANIFEST& aManifest, bool doPlaceSymbol, wxString& aError );
 
 private:
     const REMOTE_SYMBOL_DOWNLOAD_MANAGER& downloader() const;
