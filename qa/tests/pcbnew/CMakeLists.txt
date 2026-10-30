@@ -127,6 +127,7 @@ set( QA_PCBNEW_SRCS
     test_pad_swap_positions.cpp
     test_pad_tenting.cpp
     test_plot_edge_cuts_drill_marks.cpp
+    test_plot_job_layers.cpp
     test_plot_pad_mask.cpp
     test_plot_footprint_scaled_text.cpp
     test_pcb_textbox.cpp

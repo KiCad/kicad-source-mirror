@@ -1193,9 +1193,6 @@ void DIALOG_PLOT::applyPlotSettings()
             selectedLayers.set( m_layerList[i] );
     }
 
-    // Get a list of copper layers that aren't being used by inverting enabled layers.
-    LSET disabledCopperLayers = LSET::AllCuMask() & ~m_editFrame->GetBoard()->GetEnabledLayers();
-
     // Add selected layers from plot on all layers list in order set by user.
     wxArrayInt plotOnAllLayers;
     LSEQ commonLayers;
@@ -1215,10 +1212,9 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetPlotOnAllLayersSequence( commonLayers );
 
-    // Enable all of the disabled copper layers.
-    // If someone enables more copper layers they will be selected by default.
-    selectedLayers = selectedLayers | disabledCopperLayers;
-    tempOptions.SetLayerSelection( selectedLayers );
+    tempOptions.SetLayerSelection( PCB_PLOTTER::DialogLayerSelection( selectedLayers,
+                                                                      m_editFrame->GetBoard()->GetEnabledLayers(),
+                                                                      m_job != nullptr ) );
 
     tempOptions.SetNegative( m_plotPSNegativeOpt->GetValue() );
     tempOptions.SetA4Output( m_forcePSA4OutputOpt->GetValue() );

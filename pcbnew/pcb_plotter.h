@@ -54,6 +54,16 @@ public:
     bool copperLayerShouldBeSkipped( PCB_LAYER_ID aLayerToPlot );
 
     /**
+     * Return the layers a plot dialog stores when \a aChecked are ticked.
+     *
+     * The dialog shows only the board's \a aEnabledLayers.  Board plot settings also keep every
+     * unused copper layer so it starts ticked once the board enables it.  A job keeps only what
+     * the dialog showed, since it plots on other boards and a layer nobody can see cannot be
+     * removed.
+     */
+    static LSET DialogLayerSelection( const LSET& aChecked, const LSET& aEnabledLayers, bool aForJob );
+
+    /**
      * Complete a plot filename.
      *
      * It forces the output directory, adds a suffix to the name, and sets the specified extension.
@@ -67,14 +77,6 @@ public:
      */
     static void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir, const wxString& aSuffix,
                                    const wxString& aExtension );
-
-    /**
-     * True when the board's out-of-date-chart policy regenerated charts during the last
-     * Plot().
-     *
-     * The board changed in memory and no plot writes the board file, so an interactive
-     * caller has to mark the document modified or the regenerated charts are lost on close.
-     */
 
     /**
      * Translate a JOB to PCB_PLOT_PARAMS

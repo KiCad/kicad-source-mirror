@@ -366,6 +366,17 @@ bool PCB_PLOTTER::copperLayerShouldBeSkipped( PCB_LAYER_ID aLayerToPlot )
 }
 
 
+LSET PCB_PLOTTER::DialogLayerSelection( const LSET& aChecked, const LSET& aEnabledLayers, bool aForJob )
+{
+    LSET shown = aChecked & aEnabledLayers;
+
+    if( aForJob )
+        return shown;
+
+    return shown | ( LSET::AllCuMask() & ~aEnabledLayers );
+}
+
+
 void PCB_PLOTTER::BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir,
                                      const wxString& aSuffix, const wxString& aExtension )
 {
