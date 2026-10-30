@@ -498,3 +498,22 @@ wxFileName EnsureDefaultProjectTemplate( const wxString& aBaseDir )
 
     return wxFileName();
 }
+
+
+bool TemplateListLess( const wxString& aTitleA, bool aPinnedA, const wxString& aTitleB, bool aPinnedB )
+{
+    if( aPinnedA != aPinnedB )
+        return aPinnedA;
+
+    int cmp = aTitleA.CmpNoCase( aTitleB );
+
+    if( cmp == 0 )
+        return false;
+
+    if( aTitleA.CmpNoCase( wxS( "default" ) ) == 0 )
+        return true;
+    else if( aTitleB.CmpNoCase( wxS( "default" ) ) == 0 )
+        return false;
+
+    return cmp < 0;
+}

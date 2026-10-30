@@ -234,4 +234,11 @@ public:
  */
 wxFileName EnsureDefaultProjectTemplate( const wxString& aBaseDir );
 
+
+/**
+ * Order of the template selector list.  Pinned templates come first, then the "Default"
+ * template, then the rest alphabetically ignoring case.
+ */
+bool TemplateListLess( const wxString& aTitleA, bool aPinnedA, const wxString& aTitleB, bool aPinnedB );
+
 #endif

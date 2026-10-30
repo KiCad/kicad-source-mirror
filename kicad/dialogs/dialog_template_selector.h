@@ -81,6 +81,12 @@ public:
 
     PROJECT_TEMPLATE* GetTemplate() { return m_currTemplate; }
 
+    /// The template directory, the identity used for recent and pinned templates.
+    wxString GetTemplatePath() const;
+
+    void SetPinned( bool aPinned );
+    bool IsPinned() const { return m_pinned; }
+
     void Select();
     void SelectWithoutStateChange();
     void Unselect();
@@ -103,6 +109,7 @@ protected:
     void onEditTemplate( wxCommandEvent& event );
     void onOpenFolder( wxCommandEvent& event );
     void onDuplicateTemplate( wxCommandEvent& event );
+    void onTogglePinned( wxCommandEvent& event );
 
 public:
     bool IsSelected() const { return m_selected; }
@@ -112,6 +119,7 @@ protected:
     wxWindow*                 m_parent;
     wxPanel*                  m_panel;
     bool                      m_selected;
+    bool                      m_pinned;
     CATEGORY                  m_category;
     wxString                  m_description;
 
@@ -145,6 +153,10 @@ public:
     wxString GetBrowsedTemplatesPath() const { return m_browsedTemplatesPath; }
 
     void SetProjectToEdit( const wxString& aPath ) { m_projectToEdit = aPath; }
+
+    bool IsTemplatePinned( const wxString& aPath ) const;
+    void SetTemplatePinned( const wxString& aPath, bool aPinned );
+
     void RefreshTemplateList();
 
 protected:
@@ -178,6 +190,7 @@ private:
     void EnsurePreviewSplit();
     void BuildMRUList();
     void BuildTemplateList();
+    void SortTemplateWidgets();
     void ApplyFilter();
     void LoadTemplatePreview( PROJECT_TEMPLATE* aTemplate );
     void SetupFileWatcher();
@@ -201,6 +214,7 @@ private:
     wxString                                     m_defaultTemplatesPath;
     wxString                                     m_browsedTemplatesPath;
     std::vector<wxString>                        m_recentTemplates;
+    std::vector<wxString>                        m_pinnedTemplates;
 
     std::vector<std::unique_ptr<PROJECT_TEMPLATE>> m_templates;
     std::vector<TEMPLATE_WIDGET*>                m_templateWidgets;

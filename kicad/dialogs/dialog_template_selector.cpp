@@ -20,8 +20,10 @@
 
 #include "dialog_template_selector.h"
 #include <bitmaps.h>
+#include <core/kicad_algo.h>
 #include <kiplatform/environment.h>
 #include <kiplatform/ui.h>
+#include <lib_tree_model_adapter.h>
 #include <pgm_base.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
@@ -45,6 +47,8 @@
 
 
 static const wxChar* traceTemplateSelector = wxT( "KICAD_TEMPLATE_SELECTOR" );
+
+static constexpr int ID_TOGGLE_PINNED = wxID_HIGHEST + 1;
 
 
 DIALOG_TEMPLATE_SELECTOR::REFRESH_GUARD::REFRESH_GUARD( DIALOG_TEMPLATE_SELECTOR* aDialog ) :
@@ -141,6 +145,7 @@ TEMPLATE_WIDGET::TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* a
 {
     m_parent = aParent;
     m_dialog = aDialog;
+    m_pinned = false;
     m_category = CATEGORY::SYSTEM;
 
     // Set a small minimum size to allow the dialog to shrink
@@ -249,6 +254,29 @@ void TEMPLATE_WIDGET::SetTemplate( PROJECT_TEMPLATE* aTemplate )
 }
 
 
+wxString TEMPLATE_WIDGET::GetTemplatePath() const
+{
+    if( !m_currTemplate )
+        return wxEmptyString;
+
+    wxFileName htmlFile = m_currTemplate->GetHtmlFile();
+    htmlFile.RemoveLastDir();
+    return htmlFile.GetPath();
+}
+
+
+void TEMPLATE_WIDGET::SetPinned( bool aPinned )
+{
+    m_pinned = aPinned;
+
+    if( !m_currTemplate )
+        return;
+
+    const wxString& title = *m_currTemplate->GetTitle();
+    m_titleLabel->SetLabel( aPinned ? LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + title : title );
+}
+
+
 void TEMPLATE_WIDGET::SetDescription( const wxString& aDescription )
 {
     m_description = aDescription;
@@ -312,11 +340,16 @@ void TEMPLATE_WIDGET::onRightClick( wxMouseEvent& event )
         return;
     }
 
+    // A refresh fired from the popup's nested event loop would destroy this widget under the menu
+    DIALOG_TEMPLATE_SELECTOR::REFRESH_GUARD refreshGuard( m_dialog );
+
     wxMenu menu;
     menu.Append( wxID_EDIT,
                  m_category == CATEGORY::USER ? _( "Edit Template" ) : _( "Open Template (Read-Only)" ) );
     menu.Append( wxID_OPEN, _( "Open Template Folder" ) );
     menu.Append( wxID_COPY, _( "Duplicate Template" ) );
+    menu.AppendSeparator();
+    menu.Append( ID_TOGGLE_PINNED, m_pinned ? _( "Unpin Template" ) : _( "Pin Template" ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
                [this]( wxCommandEvent& evt )
@@ -327,9 +360,18 @@ void TEMPLATE_WIDGET::onRightClick( wxMouseEvent& event )
                        onOpenFolder( evt );
                    else if( evt.GetId() == wxID_COPY )
                        onDuplicateTemplate( evt );
+                   else if( evt.GetId() == ID_TOGGLE_PINNED )
+                       onTogglePinned( evt );
                } );
 
     PopupMenu( &menu );
+}
+
+
+void TEMPLATE_WIDGET::onTogglePinned( wxCommandEvent& event )
+{
+    if( m_currTemplate )
+        m_dialog->SetTemplatePinned( GetTemplatePath(), !m_pinned );
 }
 
 
@@ -556,6 +598,15 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
 
     if( settings )
     {
+        // Pins of deleted or moved templates would otherwise linger in the settings forever
+        for( const wxString& path : settings->m_PinnedTemplates )
+        {
+            if( wxDirExists( path ) && !alg::contains( m_pinnedTemplates, path ) )
+                m_pinnedTemplates.push_back( path );
+        }
+
+        settings->m_PinnedTemplates = m_pinnedTemplates;
+
         int filterChoice = settings->m_TemplateFilterChoice;
 
         if( filterChoice >= 0 && filterChoice < static_cast<int>( m_filterChoice->GetCount() ) )
@@ -803,31 +854,10 @@ void DIALOG_TEMPLATE_SELECTOR::BuildTemplateList()
     // points at a custom location.  Treated as a built-in, not a user template.
     scanDirectory( m_defaultTemplatesPath, TEMPLATE_WIDGET::CATEGORY::SYSTEM );
 
-    // Sort alphabetically with "Default" first
-    std::sort( m_templateWidgets.begin(), m_templateWidgets.end(),
-               []( TEMPLATE_WIDGET* a, TEMPLATE_WIDGET* b )
-               {
-                   wxString titleA = *a->GetTemplate()->GetTitle();
-                   wxString titleB = *b->GetTemplate()->GetTitle();
-                   int      cmp = titleA.CmpNoCase( titleB );
-
-                   if( cmp == 0 )
-                       return false;
-
-                   if( titleA.CmpNoCase( "default" ) == 0 )
-                       return true;
-                   else if( titleB.CmpNoCase( "default" ) == 0 )
-                       return false;
-
-                   return cmp < 0;
-               } );
-
     for( TEMPLATE_WIDGET* widget : m_templateWidgets )
-    {
-        m_sizerTemplateList->Add( widget, 0, wxEXPAND | wxBOTTOM, 8 );
-    }
+        widget->SetPinned( IsTemplatePinned( widget->GetTemplatePath() ) );
 
-    ApplyFilter();
+    SortTemplateWidgets();
 
     // Force initial sizing of widgets after layout
     CallAfter(
@@ -838,6 +868,55 @@ void DIALOG_TEMPLATE_SELECTOR::BuildTemplateList()
             } );
 
     wxLogTrace( traceTemplateSelector, "BuildTemplateList() found %zu templates", m_templateWidgets.size() );
+}
+
+
+void DIALOG_TEMPLATE_SELECTOR::SortTemplateWidgets()
+{
+    std::sort( m_templateWidgets.begin(), m_templateWidgets.end(),
+               []( TEMPLATE_WIDGET* a, TEMPLATE_WIDGET* b )
+               {
+                   return TemplateListLess( *a->GetTemplate()->GetTitle(), a->IsPinned(),
+                                            *b->GetTemplate()->GetTitle(), b->IsPinned() );
+               } );
+
+    m_sizerTemplateList->Clear( false );
+
+    for( TEMPLATE_WIDGET* widget : m_templateWidgets )
+        m_sizerTemplateList->Add( widget, 0, wxEXPAND | wxBOTTOM, 8 );
+
+    ApplyFilter();
+}
+
+
+bool DIALOG_TEMPLATE_SELECTOR::IsTemplatePinned( const wxString& aPath ) const
+{
+    return alg::contains( m_pinnedTemplates, aPath );
+}
+
+
+void DIALOG_TEMPLATE_SELECTOR::SetTemplatePinned( const wxString& aPath, bool aPinned )
+{
+    if( aPath.IsEmpty() || aPinned == IsTemplatePinned( aPath ) )
+        return;
+
+    if( aPinned )
+        m_pinnedTemplates.push_back( aPath );
+    else
+        m_pinnedTemplates.erase( std::remove( m_pinnedTemplates.begin(), m_pinnedTemplates.end(), aPath ),
+                                 m_pinnedTemplates.end() );
+
+    if( KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
+        settings->m_PinnedTemplates = m_pinnedTemplates;
+
+    // A browsed directory can list the same template a second time
+    for( TEMPLATE_WIDGET* widget : m_templateWidgets )
+    {
+        if( widget->GetTemplatePath() == aPath )
+            widget->SetPinned( aPinned );
+    }
+
+    SortTemplateWidgets();
 }
 
 

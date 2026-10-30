@@ -59,6 +59,7 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
     m_params.emplace_back( new PARAM<wxSize>( "template.window.size", &m_TemplateWindowSize, wxDefaultSize ) );
     m_params.emplace_back( new PARAM<wxString>( "template.last_used", &m_LastUsedTemplate, "" ) );
     m_params.emplace_back( new PARAM_LIST<wxString>( "template.recent_templates", &m_RecentTemplates, {} ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( "template.pinned_templates", &m_PinnedTemplates, {} ) );
 
     m_params.emplace_back( new PARAM<int>( "template.filter", &m_TemplateFilterChoice, 0 ) );
 

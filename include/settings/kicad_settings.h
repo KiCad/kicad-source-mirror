@@ -84,6 +84,8 @@ public:
     wxString m_LastUsedTemplate;
 
     std::vector<wxString> m_RecentTemplates;
+    // Template directories the user keeps at the top of the template selector list
+    std::vector<wxString> m_PinnedTemplates;
     int                   m_TemplateFilterChoice = 0;
     // Most recently browsed external template directory (restored in the template selector
     // so users can keep using templates from arbitrary locations across sessions).
