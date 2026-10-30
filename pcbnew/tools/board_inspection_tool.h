@@ -17,8 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BOARD_INSPECTION_TOOL_H
-#define BOARD_INSPECTION_TOOL_H
+#pragma once
 
 #include <dialogs/dialog_book_reporter.h>
 #include <pcb_edit_frame.h>
@@ -103,6 +102,10 @@ public:
         return !m_currentlyHighlighted.empty();
     }
 
+protected:
+    /// Bind handlers to corresponding TOOL_ACTIONs.
+    void setTransitions() override;
+
 private:
     /// Diff the board at aOtherPath against the live one and show the dialog.
     int showBoardComparison( const wxString& aOtherPath, const wxString& aProjectPath,
@@ -121,9 +124,6 @@ private:
     bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
 
     void doHideRatsnestNet( int aNetCode, bool aHide );
-
-    /// Bind handlers to corresponding TOOL_ACTIONs.
-    void setTransitions() override;
 
     std::unique_ptr<DRC_ENGINE> makeDRCEngine( bool* aCompileError, bool* aCourtyardError );
 
@@ -144,16 +144,12 @@ private:
     BOARD_ITEM* pickItemForInspection( const TOOL_EVENT& aEvent, const wxString& aPrompt,
                                        const std::vector<KICAD_T>& aTypes, BOARD_ITEM* aLockedHighlight );
 
-public:
-    wxString            m_HighlightedNetChain;
-
 private:
-    PCB_EDIT_FRAME*     m_frame;    // Pointer to the currently used edit frame.
+    PCB_EDIT_FRAME*     m_frame;                // Pointer to the currently used edit frame.
 
     std::set<int>       m_currentlyHighlighted; // Active net being highlighted, or -1 when off
     std::set<int>       m_lastHighlighted;      // For toggling between last two highlighted nets
+    wxString            m_highlightedNetChain;
 
-    CONNECTIVITY_DATA*  m_dynamicData;      // Cached connectivity data from the selection
+    CONNECTIVITY_DATA*  m_dynamicData;          // Cached connectivity data from the selection
 };
-
-#endif //BOARD_INSPECTION_TOOL_H

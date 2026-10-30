@@ -2719,7 +2719,10 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
                         settings->SetHighlight( sigCodes, true );
                         m_toolMgr->GetView()->UpdateAllLayersColor();
                         m_currentlyHighlighted = sigCodes;
-                        m_HighlightedNetChain  = sig;
+                        m_highlightedNetChain  = sig;
+
+                        if( auto pcbSettings = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings ) )
+                            pcbSettings->SetHighlightedNetChain( sig );
 
                         board2->ResetNetHighLight();
 
@@ -2727,9 +2730,6 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
                             board2->SetHighLightNet( c, true );
 
                         board2->HighLightON();
-
-                        if( auto pcbSettings = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings ) )
-                            pcbSettings->SetHighlightedNetChain( sig );
 
                         return true;
                     }
@@ -2790,10 +2790,14 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         }
     }
 
+    m_highlightedNetChain.clear();
+
+    if( auto pcbSettings = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings ) )
+        pcbSettings->SetHighlightedNetChain( wxEmptyString );
+
     // Store the highlighted netcode in the current board (for dialogs for instance)
     if( enableHighlight && net >= 0 )
     {
-        m_HighlightedNetChain.clear();
         m_currentlyHighlighted = netcodes;
         board->SetHighLightNet( net );
         board->HighLightON();
@@ -2810,7 +2814,6 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_HighlightedNetChain.clear();
         m_currentlyHighlighted.clear();
         board->ResetNetHighLight();
         m_frame->SetMsgPanel( board );
@@ -2850,7 +2853,7 @@ int BOARD_INSPECTION_TOOL::HighlightNet( const TOOL_EVENT& aEvent )
                     bool alreadyHighlighted = highlighted.count( netcode );
                     if( count > 1 && alreadyHighlighted )
                     {
-                        if( m_HighlightedNetChain != sig )
+                        if( m_highlightedNetChain != sig )
                         {
                             TOOL_EVENT sigEvt = PCB_ACTIONS::highlightNetChain.MakeEvent();
                             HighlightNetChain( sigEvt );
@@ -2923,9 +2926,13 @@ int BOARD_INSPECTION_TOOL::HighlightNetChain( const TOOL_EVENT& aEvent )
     KIGFX::RENDER_SETTINGS* settings = m_toolMgr->GetView()->GetPainter()->GetSettings();
 
     // If no chain under cursor and a chain is currently highlighted, toggle off
-    if( sig.IsEmpty() && !m_HighlightedNetChain.IsEmpty() )
+    if( sig.IsEmpty() && !m_highlightedNetChain.IsEmpty() )
     {
-        m_HighlightedNetChain.clear();
+        m_highlightedNetChain.clear();
+
+        if( auto pcbSettings = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings ) )
+            pcbSettings->SetHighlightedNetChain( wxEmptyString );
+
         settings->SetHighlight( false );
         m_currentlyHighlighted.clear();
         m_toolMgr->GetView()->UpdateAllLayersColor();
@@ -2938,9 +2945,13 @@ int BOARD_INSPECTION_TOOL::HighlightNetChain( const TOOL_EVENT& aEvent )
 
 
     // If same chain already highlighted, clear highlight
-    if( !sig.IsEmpty() && sig == m_HighlightedNetChain )
+    if( !sig.IsEmpty() && sig == m_highlightedNetChain )
     {
-        m_HighlightedNetChain.clear();
+        m_highlightedNetChain.clear();
+
+        if( auto pcbSettings = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings ) )
+            pcbSettings->SetHighlightedNetChain( wxEmptyString );
+
         settings->SetHighlight( false );
         m_currentlyHighlighted.clear();
         m_toolMgr->GetView()->UpdateAllLayersColor();
@@ -2952,7 +2963,7 @@ int BOARD_INSPECTION_TOOL::HighlightNetChain( const TOOL_EVENT& aEvent )
     }
 
     // If we have a net highlight active but no chain highlight, convert to chain highlight
-    if( !sig.IsEmpty() && m_HighlightedNetChain.IsEmpty() && !m_currentlyHighlighted.empty() )
+    if( !sig.IsEmpty() && m_highlightedNetChain.IsEmpty() && !m_currentlyHighlighted.empty() )
     {
         // Determine chain from first highlighted net if cursor item had no chain
         if( sig.IsEmpty() )
@@ -2964,7 +2975,7 @@ int BOARD_INSPECTION_TOOL::HighlightNetChain( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_HighlightedNetChain = sig;
+    m_highlightedNetChain = sig;
 
     if( KIGFX::PCB_RENDER_SETTINGS* pcbSettings = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings ) )
         pcbSettings->SetHighlightedNetChain( sig );
@@ -2990,14 +3001,14 @@ int BOARD_INSPECTION_TOOL::HighlightNetChain( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::ReplaceTerminalPad( const TOOL_EVENT& aEvent )
 {
-    if( m_HighlightedNetChain.IsEmpty() )
+    if( m_highlightedNetChain.IsEmpty() )
         return 0;
 
     // Parameters are passed as a single pair<old,new>
     std::pair<wxString, wxString> ids = aEvent.Parameter<std::pair<wxString, wxString>>();
     KIID oldId( ids.first );
     KIID newId( ids.second );
-    m_frame->GetBoard()->ReplaceNetChainTerminalPad( m_HighlightedNetChain, oldId, newId );
+    m_frame->GetBoard()->ReplaceNetChainTerminalPad( m_highlightedNetChain, oldId, newId );
     return 0;
 }
 
