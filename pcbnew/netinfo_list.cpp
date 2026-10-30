@@ -159,7 +159,7 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
     if( sameName != nullptr )
     {
         aNewElement->m_netCode = sameName->GetNetCode();
-
+        delete aNewElement;
         return;
     }
     else if( aNewElement->m_netCode != (int) m_netCodes.size() || aNewElement->m_netCode < 0 )
