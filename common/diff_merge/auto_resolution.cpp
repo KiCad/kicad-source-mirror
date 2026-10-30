@@ -272,6 +272,20 @@ wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution )
                                         "%zu property edits in this resolution.\n", aResolution.props.size() ),
                               aResolution.props.size() );
 
+    // A count alone does not say which edit a side would lose
+    wxString names;
+
+    for( const PROPERTY_RESOLUTION& prop : aResolution.props )
+    {
+        if( !names.IsEmpty() )
+            names << wxS( ", " );
+
+        names << prop.name;
+    }
+
+    if( !names.IsEmpty() )
+        text << wxString::Format( _( "Properties: %s\n" ), names );
+
     return text;
 }
 
