@@ -1208,17 +1208,20 @@ void WX_GRID::RecomputeGridWidths()
                 AutoSizeColumn( colIndex );
                 int colSize = GetColSize( colIndex );
 
+                // Give a bit more width to columns that have editors with graphic widgets
+                if( GetNumberRows() > 0 )
                 {
-                    wxGridCellEditor* editor = GetCellEditor( 0, colIndex );
-
-                    if( dynamic_cast<wxGridCellChoiceEditor*>( editor )
-                        || dynamic_cast<GRID_CELL_TEXT_BUTTON*>( editor )
-                        || dynamic_cast<GRID_CELL_COMBOBOX*>( editor ) )
+                    if( wxGridCellEditor* editor = GetCellEditor( 0, colIndex ) )
                     {
-                        colSize += 40;
-                    }
+                        if( dynamic_cast<wxGridCellChoiceEditor*>( editor )
+                            || dynamic_cast<GRID_CELL_TEXT_BUTTON*>( editor )
+                            || dynamic_cast<GRID_CELL_COMBOBOX*>( editor ) )
+                        {
+                            colSize += 40;
+                        }
 
-                    editor->DecRef();
+                        editor->DecRef();
+                    }
                 }
 
                 int minWidthScaled = FromDIP( minWidth );
