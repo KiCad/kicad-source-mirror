@@ -104,6 +104,15 @@ static inline wxString extractNetName( const wxString& aPinName )
 }
 
 
+/// True for the "N$<n>" names Eagle assigns to nets the user never named
+static bool isEagleAutoNetName( const wxString& aNetName )
+{
+    wxString number;
+
+    return aNetName.StartsWith( wxS( "N$" ), &number ) && !number.empty() && number.IsNumber();
+}
+
+
 SCH_SHEET* SCH_IO_EAGLE::getCurrentSheet()
 {
     return m_sheetPath.Last();
@@ -1557,13 +1566,16 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
             // signals, so a global bus label would join same-named buses project-wide where
             // Eagle only had visual grouping; (2) nets inside module instances are scoped
             // by the module's ports, so a global label would punch through the hierarchy.
+            bool joinedByName = segmentCount > 1 || m_netCounts[netName] > 1;
+
             if( aIsBus || !m_modules.empty() )
             {
-                if( segmentCount > 1 || m_netCounts[netName] > 1 )
+                if( joinedByName )
                     label.reset( new SCH_LABEL );
             }
-            else
+            else if( joinedByName || !isEagleAutoNetName( netName ) )
             {
+                // A lone segment is already wired, so only a user-chosen name is worth a label
                 label.reset( new SCH_GLOBALLABEL );
             }
 

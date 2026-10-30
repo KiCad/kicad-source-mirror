@@ -505,6 +505,38 @@ BOOST_AUTO_TEST_CASE( BinaryNetLabelAndHighVariantImported )
 }
 
 
+// a lone wired segment of an Eagle-generated N$ net needs no label, so every N$ label joins at least two places
+BOOST_AUTO_TEST_CASE( AutoNamedNetsLabelledOnlyWhenJoinedByName )
+{
+    const wxFileName eagleFn = getEagleTestSchematic( "issue24829_brenner.sch" );
+    BOOST_REQUIRE( wxFileExists( eagleFn.GetFullPath() ) );
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_auto_net_labels" ), schematic );
+
+    std::map<wxString, int> autoLabelCounts;
+
+    for( const SCH_SHEET_PATH& sheetPath : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        {
+            const wxString& text = static_cast<SCH_LABEL_BASE*>( item )->GetText();
+
+            if( text.StartsWith( wxS( "N$" ) ) )
+                autoLabelCounts[text]++;
+        }
+    }
+
+    for( const auto& [text, count] : autoLabelCounts )
+        BOOST_CHECK_MESSAGE( count > 1, text << " labels a lone wired segment" );
+}
+
+
 /**
  * An Eagle ">NAME"/">VALUE" text only says where and how a field is drawn, so it must not
  * replace the reference prefix that the deviceset declares
