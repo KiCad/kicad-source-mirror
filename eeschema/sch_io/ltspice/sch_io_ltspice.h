@@ -49,6 +49,8 @@ public:
         return IO_BASE::IO_FILE_DESC( _HKI( "LTspice schematic files" ), { "asc" } );
     }
 
+    bool CanReadSchematicFile( const wxString& aFileName ) const override;
+
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
         // This was originally commented out, so keep it commented and just return an empty library description
