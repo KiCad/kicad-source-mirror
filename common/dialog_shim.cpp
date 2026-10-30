@@ -524,13 +524,12 @@ bool DIALOG_SHIM::Show( bool show )
             }
         }
 
-        if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0
-            && ( GetWindowStyleFlag() & wxRESIZE_BORDER ) != 0 )
+        if( savedDialogRect.GetSize().x != 0 && savedDialogRect.GetSize().y != 0 )
         {
             // Convert saved DIP size to logical pixels for the current monitor
             wxSize restoredSize = FromDIP( savedDialogRect.GetSize() );
 
-            if( m_useCalculatedSize )
+            if( m_useCalculatedSize || ( GetWindowStyleFlag() & wxRESIZE_BORDER ) == 0 )
             {
                 SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
                          wxDialog::GetSize().x, wxDialog::GetSize().y, 0 );
