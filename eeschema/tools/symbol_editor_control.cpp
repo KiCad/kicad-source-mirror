@@ -54,11 +54,7 @@
 #include <dialogs/dialog_kicad_diff.h>
 #include <diff_merge/sym_lib_differ.h>
 #include <diff_merge/sym_diff_canvas_context.h>
-#include <widgets/widget_diff_canvas.h>
 #include <lib_symbol.h>
-#include <symbol_edit_frame.h>
-
-#include <map>
 
 
 bool SYMBOL_EDITOR_CONTROL::Init()
@@ -1205,51 +1201,8 @@ int SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
     KICAD_DIFF::SYM_LIB_DIFFER differ( beforeMap, afterMap, otherPath );
     KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
 
-    auto cloneHolder = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
-
     DIALOG_KICAD_DIFF dlgDiff( editFrame, currentLib, otherPath, result );
-
-    std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> changesById;
-
-    for( const KICAD_DIFF::ITEM_CHANGE& c : result.changes )
-        changesById[c.id] = &c;
-
-    dlgDiff.SetChangeSelectedHandler(
-            [&, cloneHolder]( const KIID_PATH& aId )
-            {
-                WIDGET_DIFF_CANVAS* canvas = dlgDiff.DiffCanvas();
-
-                if( !canvas )
-                    return;
-
-                auto it = changesById.find( aId );
-
-                if( it == changesById.end() || !it->second->refdes )
-                {
-                    KICAD_DIFF::ConfigureSymDiffCanvasContext( *canvas, nullptr, nullptr );
-                    cloneHolder->clear();
-                    return;
-                }
-
-                const wxString& name = *it->second->refdes;
-                auto            beforeIt = beforeMap.find( name );
-                auto            afterIt = afterMap.find( name );
-
-                std::unique_ptr<LIB_SYMBOL> beforeClone =
-                        beforeIt != beforeMap.end() ? beforeIt->second->Flatten() : nullptr;
-                std::unique_ptr<LIB_SYMBOL> afterClone =
-                        afterIt != afterMap.end() ? afterIt->second->Flatten() : nullptr;
-
-                KICAD_DIFF::ConfigureSymDiffCanvasContext( *canvas, beforeClone.get(), afterClone.get() );
-
-                cloneHolder->clear();
-
-                if( beforeClone )
-                    cloneHolder->push_back( std::move( beforeClone ) );
-
-                if( afterClone )
-                    cloneHolder->push_back( std::move( afterClone ) );
-            } );
+    KICAD_DIFF::ShowSymbolChanges( dlgDiff, result, beforeMap, afterMap );
 
     dlgDiff.ShowModal();
 

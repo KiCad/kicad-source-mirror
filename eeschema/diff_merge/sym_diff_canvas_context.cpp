@@ -22,6 +22,7 @@
 #include <diff_merge/sch_diff_canvas_context.h>
 #include <diff_merge/sym_item_diff.h>
 #include <diff_merge/diff_scene.h>
+#include <dialogs/dialog_kicad_diff.h>
 
 #include <gal/painter.h>
 #include <kiid.h>
@@ -83,6 +84,57 @@ void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBe
     aCanvas.SetContextPainter( MakeSchDiffContextPainter( aCanvas.GetGAL(), nullptr, theme.reference, overrides ) );
     aCanvas.SetContextItems( items );
     aCanvas.ZoomToFit();
+}
+
+
+void ShowSymbolPair( WIDGET_DIFF_CANVAS& aCanvas, const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore,
+                     const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter, const wxString& aName,
+                     std::vector<std::unique_ptr<LIB_SYMBOL>>& aShown )
+{
+    auto flatten = [&]( const SYM_LIB_DIFFER::SYMBOL_MAP& aSide ) -> std::unique_ptr<LIB_SYMBOL>
+    {
+        auto symbol = aSide.find( aName );
+        return symbol != aSide.end() ? symbol->second->Flatten() : nullptr;
+    };
+
+    std::unique_ptr<LIB_SYMBOL> before = flatten( aBefore );
+    std::unique_ptr<LIB_SYMBOL> after = flatten( aAfter );
+
+    ConfigureSymDiffCanvasContext( aCanvas, before.get(), after.get() );
+
+    // Released only after the canvas has let go of the previous pair
+    aShown.clear();
+    aShown.push_back( std::move( before ) );
+    aShown.push_back( std::move( after ) );
+}
+
+
+void ShowSymbolChanges( DIALOG_KICAD_DIFF& aDialog, const DOCUMENT_DIFF& aDiff,
+                        const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore, const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter )
+{
+    std::map<KIID_PATH, wxString> names;
+
+    for( const ITEM_CHANGE& change : aDiff.changes )
+    {
+        if( change.refdes )
+            names[change.id] = *change.refdes;
+    }
+
+    auto shown = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
+
+    aDialog.SetChangeSelectedHandler(
+            [&aDialog, &aBefore, &aAfter, names, shown]( const KIID_PATH& aId )
+            {
+                WIDGET_DIFF_CANVAS* canvas = aDialog.DiffCanvas();
+
+                if( !canvas )
+                    return;
+
+                auto name = names.find( aId );
+
+                ShowSymbolPair( *canvas, aBefore, aAfter, name != names.end() ? name->second : wxString(),
+                                *shown );
+            } );
 }
 
 } // namespace KICAD_DIFF

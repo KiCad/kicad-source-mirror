@@ -2910,6 +2910,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymDiff( JOB* aJob )
 // ============================================================================
 #include <dialogs/dialog_kicad_diff.h>
 #include <diff_merge/sch_diff_canvas_context.h>
+#include <diff_merge/sym_diff_canvas_context.h>
 #include <widgets/widget_diff_canvas.h>
 #include <diff_merge/sch_geometry_extractor.h>
 #include <jobs/scratch_doc.h>
@@ -3038,11 +3039,9 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
     SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
                                                aReporter ? aReporter : m_reporter );
 
-    wxWindow* parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
-
-    KICAD_DIFF::DOCUMENT_DIFF     result;
-    KICAD_DIFF::DOCUMENT_GEOMETRY refGeometry;
-    KICAD_DIFF::DOCUMENT_GEOMETRY compGeometry;
+    wxWindow*      parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
+    const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
+    const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
 
     switch( aKind )
     {
@@ -3056,16 +3055,10 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
             return rc;
         }
 
-        SCHEMATIC* schA = sides.schA;
-        SCHEMATIC* schB = sides.schB;
-        result = std::move( sides.diff );
-
+        SCHEMATIC*                         schA = sides.schA;
+        SCHEMATIC*                         schB = sides.schB;
+        const KICAD_DIFF::DOCUMENT_DIFF&   result = sides.diff;
         const KICAD_DIFF::DIFF_COLOR_THEME theme;
-        refGeometry = KICAD_DIFF::ExtractSchematicGeometry( *schA, theme.reference );
-        compGeometry = KICAD_DIFF::ExtractSchematicGeometry( *schB, theme.comparison );
-
-        const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
-        const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
 
         // A deleted item exists only in the reference schematic, so the comparison-side context cannot
         // draw it. Keyed by sheet path, or removing one instance of a shared sheet ghosts the others.
@@ -3081,7 +3074,9 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
             }
         }
 
-        DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ),
+        DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result,
+                               KICAD_DIFF::ExtractSchematicGeometry( *schA, theme.reference ),
+                               KICAD_DIFF::ExtractSchematicGeometry( *schB, theme.comparison ),
                                [schA, schB, removedBySheet, color = theme.reference]( WIDGET_DIFF_CANVAS& aCanvas,
                                                                                       const KIID_PATH&    aSheetPath )
                                {
@@ -3151,25 +3146,19 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
         }
 
         KICAD_DIFF::SYM_LIB_DIFFER differ( mapA, mapB, aFileB );
-        result = differ.Diff();
+        KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
 
-        const KICAD_DIFF::DIFF_COLOR_THEME theme;
-        refGeometry = symbolLibraryGeometry( mapA, theme.reference );
-        compGeometry = symbolLibraryGeometry( mapB, theme.comparison );
-        break;
+        // The selected symbol is drawn whole, since outlines of every symbol pile up in one place
+        DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result );
+        KICAD_DIFF::ShowSymbolChanges( dlg, result, mapA, mapB );
+        dlg.ShowModal();
+
+        return CLI::EXIT_CODES::SUCCESS;
     }
     default:
         m_reporter->Report( _( "Unsupported document kind for this dispatcher.\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_ARGS;
     }
-
-    const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
-    const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
-
-    DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ) );
-    dlg.ShowModal();
-
-    return CLI::EXIT_CODES::SUCCESS;
 }
 
 
@@ -3554,7 +3543,6 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 // ============================================================================
 // JobSymLibMerge: 3-way merge of .kicad_sym libraries.
 // ============================================================================
-#include <diff_merge/sym_diff_canvas_context.h>
 #include <diff_merge/sym_lib_merge_applier.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 #include <wx/ffile.h>
@@ -3650,38 +3638,24 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
                 names.emplace( KICAD_DIFF::LibraryItemKiidPath( name ), name );
         }
 
-        auto flatten = []( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP& aSide,
-                           const wxString&                               aName ) -> std::unique_ptr<LIB_SYMBOL>
-        {
-            auto it = aSide.find( aName );
-            return it != aSide.end() ? it->second->Flatten() : nullptr;
-        };
-
-        // The canvas draws items it does not own, so they live until the next symbol replaces them
-        auto shown = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
-
-        DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
-
-        ctx.describeItem = [names]( const KIID_PATH& aId ) -> wxString
+        auto nameOf = [&names]( const KIID_PATH& aId ) -> wxString
         {
             auto it = names.find( aId );
             return it != names.end() ? it->second : wxString();
         };
 
+        // Outlives the dialog, which detaches the canvas items when it closes
+        std::vector<std::unique_ptr<LIB_SYMBOL>> shown;
+
+        DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
+
+        ctx.describeItem = nameOf;
+
         // Each side is drawn over the common version so its own edits stand out
-        ctx.drawSide = [&ancestor, &ours, &theirs, names, flatten, shown](
-                               WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide,
-                               const std::optional<KIID_PATH>& aId )
+        ctx.drawSide = [&ancestor, &ours, &theirs, &shown, nameOf]( WIDGET_DIFF_CANVAS&             aCanvas,
+                                                                     DIALOG_KICAD_MERGE_3WAY::SIDE   aSide,
+                                                                     const std::optional<KIID_PATH>& aId )
         {
-            auto it = aId ? names.find( *aId ) : names.end();
-
-            if( it == names.end() )
-            {
-                KICAD_DIFF::ConfigureSymDiffCanvasContext( aCanvas, nullptr, nullptr );
-                shown->clear();
-                return;
-            }
-
             const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side = &ours.map;
 
             if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS )
@@ -3689,14 +3663,7 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
             else if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR )
                 side = &ancestor.map;
 
-            std::unique_ptr<LIB_SYMBOL> before = flatten( ancestor.map, it->second );
-            std::unique_ptr<LIB_SYMBOL> after = flatten( *side, it->second );
-
-            KICAD_DIFF::ConfigureSymDiffCanvasContext( aCanvas, before.get(), after.get() );
-
-            shown->clear();
-            shown->push_back( std::move( before ) );
-            shown->push_back( std::move( after ) );
+            KICAD_DIFF::ShowSymbolPair( aCanvas, ancestor.map, *side, aId ? nameOf( *aId ) : wxString(), shown );
         };
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
