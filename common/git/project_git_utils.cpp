@@ -435,6 +435,9 @@ const std::vector<wxString>& PROJECT_GIT_UTILS::TransientGitIgnorePatterns()
         wxS( "~*" ),
         wxS( "*.[lL][cC][kK]" ),
         wxS( "*-bak" ),
+
+        // The symbol editor's copy of a library from before its last save
+        wxS( "*.bak" ),
         wxS( "*.[kK][iI][cC][aA][dD]_[pP][rR][lL]" ),
 
         // Recovery copies that earlier builds left beside the design files.
