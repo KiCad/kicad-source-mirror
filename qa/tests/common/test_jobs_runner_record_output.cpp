@@ -89,6 +89,19 @@ BOOST_AUTO_TEST_CASE( ExecuteCommandRecordOutputIntoFolder )
 }
 
 
+// The default log name is not written back into the job a user saves
+BOOST_AUTO_TEST_CASE( ExecuteCommandDefaultLogNotStored )
+{
+    m_execute->SetConfiguredOutputPath( wxEmptyString );
+
+    WX_STRING_REPORTER reporter;
+
+    BOOST_CHECK( Run( reporter ) );
+    BOOST_CHECK( fs::is_regular_file( m_destDir.Path() / "out" / ( m_job->m_id.ToStdString() + ".log" ) ) );
+    BOOST_CHECK_MESSAGE( m_execute->GetConfiguredOutputPath().IsEmpty(), m_execute->GetConfiguredOutputPath() );
+}
+
+
 // A log that cannot be created is named in the error
 BOOST_AUTO_TEST_CASE( ExecuteCommandRecordOutputFailureNamesLog )
 {

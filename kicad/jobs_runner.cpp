@@ -119,12 +119,13 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
             wxFileName defaultLog( aJob->m_id );
             defaultLog.SetExt( wxT( "log" ) );
 
-            if( specialJob->GetConfiguredOutputPath().IsEmpty() )
-                specialJob->SetConfiguredOutputPath( defaultLog.GetFullPath() );
-
+            // The default name is not stored, a saved jobset must not carry it
             // A folder gets the default log name inside it
             wxString logPath =
-                    JOB::AppendDefaultFileName( specialJob->GetFullOutputPath( aProject ), defaultLog.GetFullName() );
+                    specialJob->GetConfiguredOutputPath().IsEmpty()
+                            ? specialJob->ResolveOutputPath( defaultLog.GetFullPath(), false, aProject )
+                            : JOB::AppendDefaultFileName( specialJob->GetFullOutputPath( aProject ),
+                                                          defaultLog.GetFullName() );
 
             bool logWritten = false;
 
