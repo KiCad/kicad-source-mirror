@@ -57,6 +57,10 @@ wxString RelativeDate( const wxDateTime& aWhen, const wxDateTime& aNow );
 /// Close a splitter's second pane, keeping the sash where the user left it for next time.
 void UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, int& aSashPos );
 
+/// Keep a split detail pane at the width its controls need, against both a narrow window and a
+/// dragged sash. Call while the pane is split and every control in it is shown.
+void KeepDetailWidth( wxSplitterWindow* aSplitter );
+
 /// Paint a button's text the diff's red, for one that throws something away.
 void MarkDestructive( wxButton* aButton );
 

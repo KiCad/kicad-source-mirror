@@ -336,6 +336,10 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     // Measured while every control is still shown, leaving room for the scrollbar a short dock adds
     m_minDockWidth = GetSizer()->CalcMin().x + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X, this );
 
+    // The advanced window takes its minimum from this, and the branch row stays hidden until the status arrives
+    if( m_inAdvancedWindow )
+        SetMinSize( wxSize( m_minDockWidth, -1 ) );
+
     // A dock shorter than the controls scrolls them rather than drawing them over each other
     SetScrollRate( 0, FromDIP( 10 ) );
 

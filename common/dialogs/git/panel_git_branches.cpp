@@ -19,6 +19,7 @@
 
 #include <dialogs/git/panel_git_branches.h>
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -51,6 +52,8 @@ PANEL_GIT_BRANCHES::PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* 
 
     KIGIT::MarkDestructive( m_deleteBranchButton );
     KIGIT::MarkDestructive( m_forcePushButton );
+
+    KIGIT::KeepDetailWidth( m_branchesSplitter );
 
     // The detail pane appears once a branch is selected.
     m_branchSashPos = FromDIP( 460 );
@@ -183,6 +186,13 @@ void PANEL_GIT_BRANCHES::Populate()
                     // Keep the selection where it was, or start on the current branch.
                     if( branch.name == selected || ( selected.IsEmpty() && branch.isCurrent ) )
                         selectRow = idx;
+                }
+
+                // Relative dates vary in length with the language and font, so the column follows its text
+                if( m_branchesList->GetItemCount() > 0 )
+                {
+                    m_branchesList->SetColumnWidth( 3, wxLIST_AUTOSIZE );
+                    m_branchesList->SetColumnWidth( 3, std::max( m_branchesList->GetColumnWidth( 3 ), FromDIP( 90 ) ) );
                 }
 
                 int shown = m_branchesList->GetItemCount();

@@ -25,6 +25,7 @@
 #include <wx/datetime.h>
 #include <wx/intl.h>
 #include <wx/listctrl.h>
+#include <wx/sizer.h>
 #include <wx/string.h>
 #include <wx/splitter.h>
 #include <wx/utils.h>
@@ -126,6 +127,28 @@ void KIGIT::UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, in
 
     aSashPos = aSplitter->GetSashPosition();
     aSplitter->Unsplit( aPane );
+}
+
+
+void KIGIT::KeepDetailWidth( wxSplitterWindow* aSplitter )
+{
+    wxWindow* detail = aSplitter->GetWindow2();
+    int       detailMin = detail->GetSizer()->CalcMin().x;
+    int       frame = aSplitter->GetSashSize() + 2 * aSplitter->GetBorderSize();
+
+    detail->SetMinSize( wxSize( detailMin, -1 ) );
+    aSplitter->SetMinSize( wxSize( aSplitter->GetMinimumPaneSize() + frame + detailMin, -1 ) );
+
+    // The splitter stops honouring pane minimums once they no longer both fit, so a drag at the
+    // window's minimum width could otherwise push the detail off the edge
+    aSplitter->Bind( wxEVT_SPLITTER_SASH_POS_CHANGING,
+                     [aSplitter, detailMin, frame]( wxSplitterEvent& aEvent )
+                     {
+                         int widest = aSplitter->GetClientSize().x - frame - detailMin;
+
+                         aEvent.SetSashPosition( std::max( aSplitter->GetMinimumPaneSize(),
+                                                           std::min( aEvent.GetSashPosition(), widest ) ) );
+                     } );
 }
 
 

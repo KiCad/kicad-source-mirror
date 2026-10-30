@@ -90,7 +90,9 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     m_book->SetFont( KIUI::GetControlFont( this ) );
 
     m_repoName->SetFont( KIUI::GetControlFont( this ).Bold() );
-    m_book->SetFitToCurrentPage( true );
+
+    // The window's minimum must fit every page, not only the one open when it is built
+    m_book->SetFitToCurrentPage( false );
 
     // One icon per page, in page order, as the About dialog does for its tabs.
     wxVector<wxBitmapBundle> pageIcons;
