@@ -21,6 +21,7 @@
 #include "job_export_pcb_stackup.h"
 
 #include <jobs/job_registry.h>
+#include <i18n_utility.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
@@ -88,4 +89,4 @@ void JOB_EXPORT_PCB_STACKUP::SetDefaultOutputPath( const wxString& aReferenceNam
 }
 
 
-REGISTER_JOB( pcb_export_stackup, _( "PCB: Export Stackup Table" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_STACKUP );
+REGISTER_JOB( pcb_export_stackup, _HKI( "PCB: Export Stackup Table" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_STACKUP );

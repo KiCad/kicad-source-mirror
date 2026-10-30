@@ -20,6 +20,7 @@
 #include "job_export_pcb_stats.h"
 
 #include <jobs/job_registry.h>
+#include <i18n_utility.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
@@ -86,4 +87,4 @@ void JOB_EXPORT_PCB_STATS::SetDefaultOutputPath( const wxString& aReferenceName 
 }
 
 
-REGISTER_JOB( pcb_export_stats, _( "PCB: Export Board Statistics" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_STATS );
+REGISTER_JOB( pcb_export_stats, _HKI( "PCB: Export Board Statistics" ), KIWAY::FACE_PCB, JOB_EXPORT_PCB_STATS );
