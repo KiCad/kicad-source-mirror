@@ -12,7 +12,7 @@
         "diffPairGap": 200000,
         "diffPairViaGap": 200000,
         "diffPairWidth": 185700,
-        "layerBottom": 3,
+        "layerBottom": 2,
         "layerTop": 0,
         "trackWidth": 185700,
         "trackWidthIsExplicit": false,
@@ -381,4 +381,3 @@
   "removedItems": [],
   "test_case_type": 0
 }
-

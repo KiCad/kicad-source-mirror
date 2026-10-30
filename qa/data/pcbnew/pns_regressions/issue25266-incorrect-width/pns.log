@@ -12,7 +12,7 @@
         "diffPairGap": 400000,
         "diffPairViaGap": 400000,
         "diffPairWidth": 400000,
-        "layerBottom": 5,
+        "layerBottom": 2,
         "layerTop": 0,
         "trackWidth": 200000,
         "trackWidthIsExplicit": false,
@@ -264,6 +264,10 @@
             "y": 88009000
           },
           {
+            "x": 102508000,
+            "y": 88009000
+          },
+          {
             "x": 107170000,
             "y": 88009000
           }
@@ -286,6 +290,10 @@
             "y": 88809000
           },
           {
+            "x": 102508000,
+            "y": 88809000
+          },
+          {
             "x": 107170000,
             "y": 88809000
           }
@@ -299,4 +307,3 @@
   "removedItems": [],
   "test_case_type": 0
 }
-
