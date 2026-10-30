@@ -221,7 +221,7 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
                     {
                         const SEG& s = entry.spreadableLine.CSegment( i );
 
-                        SEGMENT* ps = dyn_cast<SEGMENT*>( lnk );
+                        SEGMENT* ps = dynamic_cast<SEGMENT*>( lnk );
                         if( ps )
                         {
                             int overlapDist = 0;
