@@ -135,6 +135,9 @@ public:
     void SwitchToBranch( const wxString& aBranch );
 
 private:
+    /// The page and toolbar icons, again after a light or dark switch.
+    void setIcons();
+
     void selectPage( GIT_ADVANCED_PAGE aPage );
 
     /// The Changes page: the docked panel's commit controls with the selected file's diff below.

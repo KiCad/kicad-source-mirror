@@ -19,6 +19,7 @@
 
 #include <dialogs/git/git_advanced_dialog.h>
 
+#include <bitmap_store.h>
 #include <bitmaps.h>
 #include <dialogs/git/git_file_diff_area.h>
 #include <dialogs/git/git_status_entries.h>
@@ -94,16 +95,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     // The window's minimum must fit every page, not only the one open when it is built
     m_book->SetFitToCurrentPage( false );
 
-    // One icon per page, in page order, as the About dialog does for its tabs.
-    wxVector<wxBitmapBundle> pageIcons;
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_changes, 16 ) );
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_history, 16 ) );
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_branches, 16 ) );
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_remotes, 16 ) );
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_stashes, 16 ) );
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_tags, 16 ) );
-    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_repository, 16 ) );
-    m_book->SetImages( pageIcons );
+    setIcons();
 
     m_book->AddPage( buildChangesPage( m_book ), _( "Changes" ), true, 0 );
     m_historyPage = new PANEL_GIT_HISTORY( m_book, this, m_parent );
@@ -125,10 +117,6 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     m_book->AddPage( m_repositoryPage, _( "Repository" ), false, 6 );
 
     // Pull and Push run through the docked panel, which owns the merge and its conflict handling.
-    m_fetchButton->SetBitmap( KiBitmapBundle( BITMAPS::git_fetch ) );
-    m_pullButton->SetBitmap( KiBitmapBundle( BITMAPS::git_pull ) );
-    m_pushButton->SetBitmap( KiBitmapBundle( BITMAPS::git_push ) );
-
     m_fetchButton->Bind( wxEVT_BUTTON,
                          [this]( wxCommandEvent& )
                          {
@@ -210,6 +198,15 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
 
     // A commit, push or pull from any surface broadcasts a change, so the window never goes stale.
     syncListener();
+
+    // Top-level windows hear a theme switch in no set order, so this one cannot wait on the frame's store reset
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          [this]( wxSysColourChangedEvent& aEvent )
+          {
+              GetBitmapStore()->ThemeChanged();
+              setIcons();
+              aEvent.Skip();
+          } );
 
     finishDialogSettings();
 }
@@ -393,6 +390,25 @@ void GIT_ADVANCED_DIALOG::ShowAmend( const wxString& aCommitHash )
 
     selectPage( GIT_ADVANCED_PAGE::CHANGES );
     m_changesPane->BeginAmend( aCommitHash );
+}
+
+
+void GIT_ADVANCED_DIALOG::setIcons()
+{
+    // One icon per page, in page order, as the About dialog does for its tabs.
+    wxVector<wxBitmapBundle> pageIcons;
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_changes, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_history, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_branches, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_remotes, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_stashes, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_tags, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_repository, 16 ) );
+    m_book->SetImages( pageIcons );
+
+    m_fetchButton->SetBitmap( KiBitmapBundle( BITMAPS::git_fetch ) );
+    m_pullButton->SetBitmap( KiBitmapBundle( BITMAPS::git_pull ) );
+    m_pushButton->SetBitmap( KiBitmapBundle( BITMAPS::git_push ) );
 }
 
 
