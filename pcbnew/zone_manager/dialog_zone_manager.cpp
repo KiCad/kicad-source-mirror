@@ -507,7 +507,7 @@ void DIALOG_ZONE_MANAGER::OnDeleteClick( wxCommandEvent& aEvent )
     bool         nameFilter = m_checkName->IsChecked();
     bool         netFilter = m_checkNet->IsChecked();
 
-    if( m_layerFilter->GetSelection() >= 0 )
+    if( m_layerFilter->GetSelection() > 0 )   // 0 is "All Layers" (ie: no filter)
     {
         void* data = m_layerFilter->GetClientData( m_layerFilter->GetSelection() );
         layerFilter = static_cast<PCB_LAYER_ID>( reinterpret_cast<intptr_t>( data ) );
