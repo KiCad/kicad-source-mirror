@@ -1008,7 +1008,7 @@ int BOARD_STACKUP::GetDrillDepth( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSecond
                     half = true;
             };
 
-    if( aSecondLayer > aFirstLayer )
+    if( IsCopperLayerLowerThan( aSecondLayer, aFirstLayer ) )
     {
         for( const BOARD_STACKUP_ITEM* item : m_list )
         {
