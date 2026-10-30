@@ -219,6 +219,7 @@ set( QA_COMMON_SRCS
     test_job_sch_erc.cpp
     test_jobs_runner.cpp
     test_jobs_output_archive.cpp
+    test_job_output_path.cpp
 
     # Translation integrity tests
     test_translation_format_strings.cpp

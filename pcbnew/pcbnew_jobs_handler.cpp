@@ -2375,14 +2375,17 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     }
 
 
-    if( aDrillJob->m_generateReport && aDrillJob->m_reportPath.IsEmpty() )
+    wxString reportPathSetting = aDrillJob->m_reportPath;
+
+    // Keep the generated default out of the job so it is not saved into the jobset
+    if( aDrillJob->m_generateReport && reportPathSetting.IsEmpty() )
     {
-        wxFileName fn = outPath;
+        wxFileName fn = wxFileName::DirName( outPath );
         fn.SetFullName( brd->GetFileName() );
         fn.SetName( fn.GetName() + "-drill" );
         fn.SetExt( FILEEXT::ReportFileExtension );
 
-        aDrillJob->m_reportPath = fn.GetFullPath();
+        reportPathSetting = fn.GetFullPath();
     }
 
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
@@ -2430,7 +2433,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
         if( aDrillJob->m_generateReport )
         {
-            wxString reportPath = aDrillJob->ResolveOutputPath( aDrillJob->m_reportPath, true, brd->GetProject() );
+            wxString reportPath = aDrillJob->ResolveOutputPath( reportPathSetting, false, brd->GetProject() );
 
             if( !excellonWriter->GenDrillReportFile( reportPath ) )
             {
@@ -2465,7 +2468,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
         if( aDrillJob->m_generateReport )
         {
-            wxString reportPath = aDrillJob->ResolveOutputPath( aDrillJob->m_reportPath, true, brd->GetProject() );
+            wxString reportPath = aDrillJob->ResolveOutputPath( reportPathSetting, false, brd->GetProject() );
 
             if( !gerberWriter->GenDrillReportFile( reportPath ) )
             {

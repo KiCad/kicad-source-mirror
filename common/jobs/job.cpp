@@ -117,8 +117,11 @@ wxString JOB::ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, P
         {
             wxFileName fn( outPath );
 
-            if( fn.IsAbsolute() || outPath.IsEmpty() )
+            // Absolute directories are used as given, like absolute file paths
+            if( outPath.IsEmpty() )
                 fn.AssignDir( m_tempOutputDirectory );
+            else if( fn.IsAbsolute() )
+                fn.AssignDir( outPath );
             else
                 PrependDirectoryToPath( fn, m_tempOutputDirectory );
 
