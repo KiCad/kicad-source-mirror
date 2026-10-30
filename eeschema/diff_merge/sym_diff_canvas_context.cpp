@@ -135,6 +135,8 @@ void ShowSymbolChanges( DIALOG_KICAD_DIFF& aDialog, const DOCUMENT_DIFF& aDiff,
                 ShowSymbolPair( *canvas, aBefore, aAfter, name != names.end() ? name->second : wxString(),
                                 *shown );
             } );
+
+    aDialog.SelectFirstChange();
 }
 
 } // namespace KICAD_DIFF

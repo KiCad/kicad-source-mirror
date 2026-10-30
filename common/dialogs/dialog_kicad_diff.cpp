@@ -686,6 +686,25 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 }
 
 
+void DIALOG_KICAD_DIFF::SelectFirstChange()
+{
+    wxTreeItemIdValue groupCookie;
+
+    for( wxTreeItemId group = m_treeChanges->GetFirstChild( m_treeChanges->GetRootItem(), groupCookie );
+         group.IsOk(); group = m_treeChanges->GetNextChild( m_treeChanges->GetRootItem(), groupCookie ) )
+    {
+        wxTreeItemIdValue itemCookie;
+        wxTreeItemId      item = m_treeChanges->GetFirstChild( group, itemCookie );
+
+        if( item.IsOk() )
+        {
+            m_treeChanges->SelectItem( item );
+            return;
+        }
+    }
+}
+
+
 bool DIALOG_KICAD_DIFF::selectChangeById( const KIID_PATH& aChangeId )
 {
     for( const auto& [treeIdNum, change] : m_changeByTreeId )

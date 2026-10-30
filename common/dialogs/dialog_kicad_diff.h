@@ -81,6 +81,9 @@ public:
 
     void SetChangeSelectedHandler( CHANGE_SELECTED_FN aFn ) { m_changeSelectedFn = std::move( aFn ); }
 
+    /// Select the first change in the tree, for documents whose canvas shows nothing until one is chosen.
+    void SelectFirstChange();
+
     using UP_HANDLER = std::function<void()>;
 
     void SetUpHandler( UP_HANDLER aHandler );
