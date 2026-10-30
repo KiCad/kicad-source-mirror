@@ -989,24 +989,31 @@ bool KIGIT_COMMON::IsPullRebaseConfigured() const
 
 bool KIGIT_COMMON::HasUpstreamCommits() const
 {
+    std::optional<KIGIT_AHEAD_BEHIND> counts = UpstreamDivergence();
+
+    return counts && counts->behind > 0;
+}
+
+
+std::optional<KIGIT_AHEAD_BEHIND> KIGIT_COMMON::UpstreamDivergence() const
+{
     if( !m_repo )
-        return false;
+        return std::nullopt;
 
     git_reference* head = nullptr;
 
     if( git_repository_head( &head, m_repo ) != GIT_OK )
-        return false;
+        return std::nullopt;
 
     KIGIT::GitReferencePtr headPtr( head );
     git_reference*         upstream = nullptr;
 
     if( git_branch_upstream( &upstream, head ) != GIT_OK )
-        return false;
+        return std::nullopt;
 
-    KIGIT::GitReferencePtr            upstreamPtr( upstream );
-    std::optional<KIGIT_AHEAD_BEHIND> counts = compareRefs( head, upstream );
+    KIGIT::GitReferencePtr upstreamPtr( upstream );
 
-    return counts && counts->behind > 0;
+    return compareRefs( head, upstream );
 }
 
 

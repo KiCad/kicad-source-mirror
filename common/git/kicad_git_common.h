@@ -403,6 +403,9 @@ public:
     /// True when the upstream branch has commits the current branch does not.
     bool HasUpstreamCommits() const;
 
+    /// Commits HEAD and its upstream each have that the other lacks. No value without an upstream.
+    std::optional<KIGIT_AHEAD_BEHIND> UpstreamDivergence() const;
+
     /// True when the repository is set to rebase rather than merge when getting changes.
     bool IsPullRebaseConfigured() const;
 

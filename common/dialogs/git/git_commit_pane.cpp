@@ -205,7 +205,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         m_hasUnpushedCommits( false ),
         m_hasRemote( false ),
         m_headDetached( false ),
-        m_upstreamAhead( false ),
+        m_upstreamAhead( 0 ),
         m_operationInProgress( false ),
         m_operation( GitOperation::None ),
         m_editorsDirty( false )
@@ -494,7 +494,8 @@ struct GIT_COMMIT_PANE::STATUS
     bool                              hasRemote = false;
     bool                              headDetached = false;
     bool                              operationInProgress = false;
-    bool                              upstreamAhead = false;
+    size_t                            upstreamAhead = 0;
+    size_t                            unpushed = 0;
     GitOperation                      operation = GitOperation::None;
     std::pair<wxString, wxString>     head;
     wxString                          attachError;
@@ -538,7 +539,13 @@ void GIT_COMMIT_PANE::RefreshFileList()
                 status->headDetached = aCommon.IsHeadDetached();
                 status->operationInProgress = aCommon.IsOperationInProgress();
                 status->operation = aCommon.OperationInProgress();
-                status->upstreamAhead = aCommon.HasUpstreamCommits();
+
+                if( std::optional<KIGIT_AHEAD_BEHIND> counts = aCommon.UpstreamDivergence() )
+                {
+                    status->upstreamAhead = counts->behind;
+                    status->unpushed = counts->ahead;
+                }
+
                 status->branches = aCommon.GetBranches();
                 KIGIT::SortBranchesForDisplay( status->branches );
                 status->currentBranch = aCommon.GetCurrentBranchName();
@@ -578,6 +585,7 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
 
     // Without a remote there is nowhere to push to, so local commits are not waiting for it.
     m_hasUnpushedCommits = aStatus.hasLocalCommits && m_hasRemote;
+    m_unpushedCount = m_hasUnpushedCommits ? aStatus.unpushed : 0;
     m_lineStats = aStatus.lineStats;
     populateBranches( aStatus );
     populateRecentMessages( aStatus.recentMessages );
@@ -653,7 +661,16 @@ void GIT_COMMIT_PANE::applyStatus( const STATUS& aStatus )
             setStatusText( _( "This project is not under version control. To set it up, right click "
                               "the project in the project manager and choose Version Control." ) );
         else if( m_upstreamAhead )
-            setStatusText( _( "The tracked branch has changes this project does not. Get Changes brings them in." ) );
+            setStatusText( wxString::Format( wxPLURAL( "The tracked branch has %zu commit this project does not. "
+                                                       "Get Changes brings it in.",
+                                                       "The tracked branch has %zu commits this project does not. "
+                                                       "Get Changes brings them in.",
+                                                       m_upstreamAhead ),
+                                             m_upstreamAhead ) );
+        else if( m_unpushedCount )
+            setStatusText( wxString::Format( wxPLURAL( "%zu commit is waiting to be pushed.",
+                                                       "%zu commits are waiting to be pushed.", m_unpushedCount ),
+                                             m_unpushedCount ) );
         else if( m_hasUnpushedCommits )
             setStatusText( _( "Committed changes are waiting to be pushed." ) );
         else
@@ -697,11 +714,12 @@ void GIT_COMMIT_PANE::showDisabledState()
     }
     m_hasRepo = false;
     m_hasUnpushedCommits = false;
+    m_unpushedCount = 0;
     m_hasRemote = false;
     m_headDetached = false;
     m_operationInProgress = false;
     m_operation = GitOperation::None;
-    m_upstreamAhead = false;
+    m_upstreamAhead = 0;
     m_editorsDirty = false;
 
     m_shownPaths.clear();
@@ -1026,14 +1044,18 @@ void GIT_COMMIT_PANE::updateCommitButton()
         return;
     }
 
-    m_pullButton->SetLabel( _( "Get Changes" ) );
-
     // The empty state label only shows when there is nothing to commit, so the button carries
     // the notice the rest of the time.
     if( m_upstreamAhead )
+    {
+        m_pullButton->SetLabel( wxString::Format( _( "Get Changes (%zu)" ), m_upstreamAhead ) );
         m_pullButton->SetToolTip( _( "The tracked branch has commits this project does not have." ) );
+    }
     else
+    {
+        m_pullButton->SetLabel( _( "Get Changes" ) );
         m_pullButton->UnsetToolTip();
+    }
 
     bool hasCheckedChanges = !m_checklist->GetCheckedPaths().empty();
     bool amend = m_amendCheckbox->IsChecked();
@@ -1081,7 +1103,11 @@ void GIT_COMMIT_PANE::updateCommitButton()
     }
     else if( m_hasUnpushedCommits )
     {
-        mainLabel = _( "Push" );
+        if( m_unpushedCount )
+            mainLabel = wxString::Format( _( "Push (%zu)" ), m_unpushedCount );
+        else
+            mainLabel = _( "Push" );
+
         mainEnabled = true;
         m_commitButtonPushes = true;
     }
