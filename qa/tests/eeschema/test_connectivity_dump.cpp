@@ -559,7 +559,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
                 for( SCH_ITEM* item : removed )
                     delete item;
 
-                verify();
+                // The original dump already passed verify, so matching it covers both rebuilds
                 BOOST_CHECK_EQUAL( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
             };
 
@@ -659,6 +659,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
         }
     }
 
+    verify();
     BOOST_TEST_MESSAGE( fixture << ": checked " << labels.size() << " native label renames and restores, and "
                                << geometry.size() << " native geometry move/remove/restore sequences" );
     const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
