@@ -2713,13 +2713,18 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
     // A conflicted rebase was already abandoned by the time it got here, and settling it from
     // this window can only produce a merge commit. Someone who asked for rebases is told that
     // before one is made.
-    if( aPreparation->rebaseConfigured
-        && !IsOK( this, _( "This project is set to rebase when getting changes, but a conflict can only be "
-                           "settled here by merging. Carry on and make a merge commit, or cancel and rebase "
-                           "from a git command line?" ) ) )
+    if( aPreparation->rebaseConfigured )
     {
-        setBusy( false, _( "Getting changes was cancelled. Your files are unchanged." ) );
-        return;
+        if( OKOrCancelDialog( this, _( "Get Changes" ),
+                              _( "This project is set to rebase when getting changes, but a conflict can only be "
+                                 "settled here by merging. Make a merge commit, or cancel and rebase from a git "
+                                 "command line." ),
+                              wxEmptyString, _( "Make Merge Commit" ) )
+            != wxID_OK )
+        {
+            setBusy( false, _( "Getting changes was cancelled. Your files are unchanged." ) );
+            return;
+        }
     }
 
     if( !canResolve() )
