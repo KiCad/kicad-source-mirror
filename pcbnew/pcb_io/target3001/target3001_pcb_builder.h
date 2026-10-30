@@ -74,6 +74,10 @@ private:
     void buildNets();
     void buildComponents();
     void buildSignalCopper();
+
+    /// Turn the spokes an old style area stores into thermal reliefs on the pads they start in
+    void buildAreaSpokes( const std::vector<const TARGET3001::ELEMENT*>& aSpokes );
+
     void buildFreeItems();
     void buildPourAreas();
     void buildPolygonPours();

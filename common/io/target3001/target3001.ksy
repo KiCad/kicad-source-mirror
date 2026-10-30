@@ -1457,6 +1457,9 @@ types:
           computed fill of area layers. Lines with a true THERMAL_SNIPPET property are thermal spokes the area
           fill generated; the vendor ODB++ export omits them (4 of 3288 in the corpus, each coinciding with a
           routed line), whatever their unknown_byte.
+          Old style areas store their spokes as flat-ended lines with unknown_byte 0 and no properties, starting
+          in a pad or via of the signal on the area's copper layer (20892 of 21449 such corpus lines start at a
+          pad centre, 0.5 to 2.4 mm long); the importer makes them thermal reliefs of that pad.
           Signal polygons are base properties "$%&POLY" (one per polygon, the key repeats) holding
           "layer,id,width,hatch,rank,thermals,islands,x,y;...;x,y*contour,rgb,bits,props": copper layer,
           random 64-bit POLYGONID, fill stroke width (0 = board default), hatch pitch (0 = solid), rank

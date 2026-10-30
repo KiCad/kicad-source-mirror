@@ -300,6 +300,11 @@ void TARGET3001_PCB_BUILDER::buildAuraRules()
                           "&& B.hasCustomProperty('TARGET3001_AREA')\")\n"
                           "    (constraint zone_connection solid))\n" );
 
+    // Require at least one spoke to match the import
+    m_designRules += wxS( "\n(rule \"TARGET 3001! area spokes\"\n"
+                          "    (condition \"B.hasCustomProperty('TARGET3001_AREA')\")\n"
+                          "    (constraint min_resolved_spokes 1))\n" );
+
     for( int aura : m_auraValues )
     {
         m_designRules += wxString::Format( wxS( "\n(rule \"TARGET 3001! aura %s\"\n"
@@ -637,6 +642,8 @@ void TARGET3001_PCB_BUILDER::addFootprint( const ELEMENT& aComponent )
 
 void TARGET3001_PCB_BUILDER::buildSignalCopper()
 {
+    std::vector<const ELEMENT*> spokes;
+
     for( const ELEMENT& e : m_project.signals )
     {
         if( e.type != ELEMENT_TYPE::SIGNAL || !e.signal )
@@ -667,9 +674,18 @@ void TARGET3001_PCB_BUILDER::buildSignalCopper()
                 continue;
             }
 
+            // Old style areas store their thermal spokes as flat status 0 strokes
+            if( t.type == ELEMENT_TYPE::LINE && t.base.status == 0 && !t.line.roundEnds )
+            {
+                spokes.push_back( &t );
+                continue;
+            }
+
             addItem( t, m_board, nullptr, true );
         }
     }
+
+    buildAreaSpokes( spokes );
 
     for( auto& [key, polys] : m_copperFills )
     {
@@ -686,6 +702,92 @@ void TARGET3001_PCB_BUILDER::buildSignalCopper()
             m_board->Add( shape, ADD_MODE::APPEND );
         }
     }
+}
+
+
+void TARGET3001_PCB_BUILDER::buildAreaSpokes( const std::vector<const ELEMENT*>& aSpokes )
+{
+    std::set<std::pair<uint16_t, PCB_LAYER_ID>> areas;
+    std::map<int, std::vector<PAD*>>            padsByNet;
+    std::map<int, std::vector<PCB_VIA*>>        viasByNet;
+
+    for( const POUR_AREA& area : m_pourAreas )
+        areas.emplace( area.signal, area.layer );
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+            padsByNet[pad->GetNetCode()].push_back( pad );
+    }
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            viasByNet[track->GetNetCode()].push_back( static_cast<PCB_VIA*>( track ) );
+    }
+
+    std::map<PAD*, const ELEMENT*> padSpokes;
+    std::set<PCB_VIA*>             spokedVias;
+
+    for( const ELEMENT* spoke : aSpokes )
+    {
+        const ELEMENT_BASE&         b = spoke->base;
+        std::optional<PCB_LAYER_ID> layer = mapLayer( b.layer );
+        NETINFO_ITEM*               item = net( b.signal );
+        VECTOR2I                    start = toKi( b.x, b.y );
+        bool                        relief = false;
+
+        if( layer && IsCopperLayer( *layer ) && item && areas.count( { b.signal, *layer } ) )
+        {
+            for( PAD* pad : padsByNet[item->GetNetCode()] )
+            {
+                if( pad->IsOnLayer( *layer ) && pad->GetEffectiveShape( *layer )->Collide( start ) )
+                {
+                    const ELEMENT*& widest = padSpokes[pad];
+
+                    if( !widest || spoke->line.width > widest->line.width )
+                        widest = spoke;
+
+                    relief = true;
+                    break;
+                }
+            }
+
+            for( PCB_VIA* via : viasByNet[item->GetNetCode()] )
+            {
+                if( !relief && via->IsOnLayer( *layer ) && via->GetEffectiveShape( *layer )->Collide( start ) )
+                {
+                    spokedVias.insert( via );
+                    relief = true;
+                }
+            }
+        }
+
+        if( !relief )
+            addItem( *spoke, m_board, nullptr, true );
+    }
+
+    for( const auto& [pad, spoke] : padSpokes )
+    {
+        VECTOR2I dir = toKi( spoke->line.x2, spoke->line.y2 ) - toKi( spoke->base.x, spoke->base.y );
+        RotatePoint( dir, -pad->GetOrientation() );
+
+        // Pad spokes repeat every 90 degrees starting at the spoke angle
+        double degrees = std::fmod( EDA_ANGLE( VECTOR2D( dir ) ).AsDegrees() + 360.0, 90.0 );
+
+        // Untagged, the pad joins its area and the local connection picks spokes over solid
+        pad->SetCustomProperty( wxS( "TARGET3001_AURA" ), wxS( "0" ) );
+        pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+        pad->SetLocalThermalSpokeWidthOverride( spoke->line.width );
+        pad->SetThermalSpokeAngle( EDA_ANGLE( degrees, DEGREES_T ) );
+
+        if( std::optional<int> aura = pad->GetLocalClearance(); aura && *aura > 0 )
+            pad->SetLocalThermalGapOverride( aura );
+    }
+
+    // Vias get no spokes in a solid fill, so a spoked via joins its area solidly
+    for( PCB_VIA* via : spokedVias )
+        via->SetCustomProperty( wxS( "TARGET3001_AURA" ), wxS( "0" ) );
 }
 
 
