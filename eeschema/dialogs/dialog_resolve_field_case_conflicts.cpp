@@ -186,8 +186,6 @@ void DIALOG_RESOLVE_FIELD_CASE_CONFLICTS::applyResolutions()
 
         if( action < 0 )    // join
         {
-            value = c.variants[0].second;
-
             for( const auto& [fieldName, fieldValue] : c.variants )
             {
                 if( !value.IsEmpty() && !fieldValue.IsEmpty() )
