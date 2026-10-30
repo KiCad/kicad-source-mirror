@@ -58,7 +58,7 @@ public:
                        KICAD_DIFF::DOCUMENT_GEOMETRY aComparisonGeometry = {}, SHEET_SWITCHER aSheetSwitcher = {},
                        KIID_PATH aInitialSheet = {} );
 
-    ~DIALOG_KICAD_DIFF() override = default;
+    ~DIALOG_KICAD_DIFF() override;
 
     void                SwitchCanvasToSheet( const KIID_PATH& aSheetPath );
     const KIID_PATH&    CurrentCanvasSheet() const { return m_currentCanvasSheet; }
