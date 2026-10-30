@@ -502,6 +502,16 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
             break;
 
         case wxID_NO:
+            // Edits reach the library buffer as they are made, so discarding them must restore it too
+            if( !ctx->IsTransient() && m_libMgr->IsSymbolModified( ctx->GetName(), ctx->GetLibrary() ) )
+            {
+                m_libMgr->RevertSymbol( LIB_ID( ctx->GetLibrary(), ctx->GetName() ) );
+                m_libMgr->ClearSymbolModified( ctx->GetName(), ctx->GetLibrary() );
+
+                if( IsLibraryTreeShown() )
+                    m_treePane->GetLibTree()->RefreshLibTree();
+            }
+
             break;
 
         default:
