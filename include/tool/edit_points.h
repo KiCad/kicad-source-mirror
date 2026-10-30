@@ -51,7 +51,10 @@ public:
             m_position( aPoint ),
             m_isActive( false ),
             m_isHover( false ),
+            m_isSelected( false ),
+            m_isDependent( false ),
             m_drawCircle( false ),
+            m_drivesWholeShape( false ),
             m_gridConstraint( SNAP_TO_GRID ),
             m_snapConstraint( OBJECT_LAYERS ),
             m_connected( aConnected )
@@ -165,8 +168,19 @@ public:
     bool IsHover() const { return m_isHover; }
     void SetHover( bool aHover = true ) { m_isHover = aHover; }
 
+    bool IsSelected() const { return m_isSelected; }
+    void SetSelected( bool aSelected = true ) { m_isSelected = aSelected; }
+
+    bool IsDependent() const { return m_isDependent; }
+    void SetDependent( bool aDependent = true ) { m_isDependent = aDependent; }
+
     bool DrawCircle() const { return m_drawCircle; }
     void SetDrawCircle( bool aDrawCircle = true ) { m_drawCircle = aDrawCircle; }
+
+    /// Whether dragging this handle rebuilds the whole shape instead of placing one of its
+    /// points, the way a rectangle's centre moves it and its radius handle rounds it.
+    bool DrivesWholeShape() const { return m_drivesWholeShape; }
+    void SetDrivesWholeShape( bool aDrives = true ) { m_drivesWholeShape = aDrives; }
 
     GRID_CONSTRAINT_TYPE GetGridConstraint() const { return m_gridConstraint; }
     void SetGridConstraint( GRID_CONSTRAINT_TYPE aConstraint ) { m_gridConstraint = aConstraint; }
@@ -194,7 +208,10 @@ private:
     VECTOR2I             m_position;        ///< Position of EDIT_POINT.
     bool                 m_isActive;        ///< True if this point is being manipulated.
     bool                 m_isHover;         ///< True if this point is being hovered over.
+    bool                 m_isSelected;      ///< True if the user has picked this point.
+    bool                 m_isDependent;     ///< True if this point follows a point the user picked.
     bool                 m_drawCircle;      ///< True if the point is drawn circular.
+    bool                 m_drivesWholeShape; ///< True if dragging it rebuilds the whole shape.
     GRID_CONSTRAINT_TYPE m_gridConstraint;  ///< Describe the grid snapping behavior.
     SNAP_CONSTRAINT_TYPE m_snapConstraint;  ///< Describe the object snapping behavior.
 
@@ -590,6 +607,16 @@ public:
     bool SwapY() const             { return m_swapY; }
     void SetSwapY( bool aSwap )    { m_swapY = aSwap; }
 
+    /**
+     * Whether an edge handle draws its own hover, picked and active state.
+     *
+     * Off by default, which draws an edge midpoint plain whatever state it carries. An editor
+     * that lets the user pick an edge in its own right turns it on, so the handle can show that
+     * it is under the cursor or picked.
+     */
+    bool LineStateVisible() const { return m_lineStateVisible; }
+    void SetLineStateVisible( bool aShow ) { m_lineStateVisible = aShow; }
+
 private:
     EDA_ITEM*              m_parent;       ///< Parent of the EDIT_POINTs.
     bool                   m_swapX;        ///< Parent's X coords are inverted.
@@ -598,6 +625,9 @@ private:
     std::deque<EDIT_LINE>  m_lines;        ///< EDIT_LINEs for modifying m_parent.
     std::list<int>         m_contours;     ///< Indices of end contour points.
     bool                   m_allowPoints;  ///< If false, only allow editing of EDIT_LINES.
+
+    /// If false, an edge handle draws plain whatever state it carries.
+    bool m_lineStateVisible;
 };
 
 #endif /* EDIT_POINTS_H_ */

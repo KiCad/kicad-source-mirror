@@ -496,23 +496,34 @@ bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int*
 
 bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
 {
-    std::vector<SEG> segments;
+    // SEG::Index() counts within one contour, so adjacency needs the contour too
+    struct CONTOUR_SEG
+    {
+        SEG seg;
+        int contour;
+    };
+
+    std::vector<CONTOUR_SEG> segments;
     segments.reserve( FullPointCount() );
 
     for( CONST_SEGMENT_ITERATOR it = CIterateSegmentsWithHoles( aPolygonIndex ); it; it++ )
-        segments.emplace_back( *it );
+        segments.push_back( { *it, it.GetIndex().m_contour } );
 
-    std::sort( segments.begin(), segments.end(), []( const SEG& a, const SEG& b )
+    std::sort( segments.begin(), segments.end(), []( const CONTOUR_SEG& aA, const CONTOUR_SEG& aB )
             {
+                const SEG& a = aA.seg;
+                const SEG& b = aB.seg;
                 int min_a_x = std::min( a.A.x, a.B.x );
                 int min_b_x = std::min( b.A.x, b.B.x );
 
                 return min_a_x < min_b_x || ( min_a_x == min_b_x && std::min( a.A.y, a.B.y ) < std::min( b.A.y, b.B.y ) );
             } );
 
+    const POLYGON& polygon = m_polys[aPolygonIndex];
+
     for( auto it = segments.begin(); it != segments.end(); ++it )
     {
-        SEG& firstSegment = *it;
+        SEG& firstSegment = it->seg;
 
         // Iterate through all remaining segments.
         auto innerIterator = it;
@@ -522,7 +533,7 @@ bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
         // Start in the next segment, we don't want to check collision between a segment and itself
         for( innerIterator++; innerIterator != segments.end(); innerIterator++ )
         {
-            SEG& secondSegment = *innerIterator;
+            SEG& secondSegment = innerIterator->seg;
             int min_x = std::min( secondSegment.A.x, secondSegment.B.x );
             int min_y = std::min( secondSegment.A.y, secondSegment.B.y );
 
@@ -531,8 +542,13 @@ bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
             if( max_x < min_x || ( max_x == min_x && max_y < min_y ) )
                 break;
 
-            int index_diff = std::abs( firstSegment.Index() - secondSegment.Index() );
-            bool adjacent = ( index_diff == 1) || (index_diff == ((int)segments.size() - 1) );
+            bool adjacent = false;
+
+            if( it->contour == innerIterator->contour )
+            {
+                int index_diff = std::abs( firstSegment.Index() - secondSegment.Index() );
+                adjacent = ( index_diff == 1 ) || ( index_diff == polygon[it->contour].SegmentCount() - 1 );
+            }
 
             // Check whether the two segments built collide, only when they are not adjacent.
             if( !adjacent && firstSegment.Collide( secondSegment, 0 ) )

@@ -47,6 +47,7 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_rotationAngleUnits;
 		wxStaticText* m_arcEditModeLabel;
 		wxChoice* m_arcEditMode;
+		wxCheckBox* m_cbAreaAnchorPick;
 		wxBoxSizer* m_sizerBoardEdit;
 		wxStaticText* m_trackMouseDragLabel;
 		wxChoice* m_trackMouseDragCtrl;

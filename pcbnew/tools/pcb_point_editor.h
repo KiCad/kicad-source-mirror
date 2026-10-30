@@ -25,11 +25,15 @@
 
 #include <tool/tool_interactive.h>
 #include <tools/pcb_selection.h>
+#include <tools/pcb_handle_key.h>
 #include "tool/edit_points.h"
 #include <pcbnew_settings.h>
 #include <status_popup.h>
 
+#include <functional>
 #include <memory>
+#include <set>
+#include <unordered_set>
 
 namespace KIGFX { namespace PREVIEW { class ANGLE_ITEM; } }
 
@@ -39,6 +43,7 @@ class POINT_EDIT_BEHAVIOR;
 class RECT_RADIUS_TEXT_ITEM;
 class SHAPE_POLY_SET;
 class BOARD_CONSTRAINT_DRAG_SESSION;
+class BLOCK_DRAG_SESSION;
 
 /**
  * Tool that displays edit points allowing to modify items by dragging the points.
@@ -69,6 +74,17 @@ public:
     bool HasCorner()   { return HasPoint() && !HasMidpoint() && ( !m_editPoints || m_editPoints->GetParent()->Type() != PCB_GROUP_T ); }
 
     /**
+     * True when the cursor sits on a handle the user can pick.
+     *
+     * The selection tool asks this so its long press menu does not open on a click
+     * the point editor is about to use.
+     */
+    bool HasBlockHandle() const;
+
+    /// True while handles are shown for the members of a multi-selection or group.
+    bool HasBlockHandles() const { return !m_blockHandles.empty(); }
+
+    /**
      * Check if a corner can be added to the given item (zones, polys, segments, arcs).
      */
     static bool CanAddCorner( const EDA_ITEM& aItem );
@@ -88,6 +104,44 @@ private:
     void setTransitions() override;
 
     std::shared_ptr<EDIT_POINTS> makePoints( EDA_ITEM* aItem );
+
+    /// Create the point edit behavior for an item. Sets aRejected for item types that
+    /// should show no handles at all.
+    std::unique_ptr<POINT_EDIT_BEHAVIOR> makeBehavior( EDA_ITEM* aItem, bool& aRejected );
+
+    /// Whether the user has turned on anchor point handles for multi-selections.
+    bool blockAnchorEditingEnabled() const;
+
+    /// Build the handles shown for every reshapeable item in a multi-selection or group.
+    void buildBlockHandles( const PCB_SELECTION& aSelection );
+
+    /// Take those handles off the view and throw them away.
+    void clearBlockHandles();
+
+    /// Move those handles back onto their items after the geometry changed.
+    void updateBlockHandlePoints();
+
+    /// Highlight the handle under the cursor, if there is one.
+    void updateBlockHandleHover( const VECTOR2I& aPosition );
+
+    /// Gap to leave between the scaling box handles and the shapes' own handles, in
+    /// board units for the current zoom.
+    int bboxHandleInflation() const;
+
+    /// The handle collections the user can pick from.
+    std::vector<EDIT_POINTS*> pickableCollections();
+
+    /// Pick the handle under aPosition. Returns false when there is no handle to pick.
+    bool pickHandleAt( const VECTOR2I& aPosition, bool aAccumulate );
+
+    /// Unpick everything and redraw.
+    void clearPickedHandles();
+
+    /// Replace the picked set and repaint the handles to match it.
+    void setPickedHandles( std::set<PCB_HANDLE_KEY> aPicked );
+
+    /// Paint the picked handles, dropping keys whose handle has gone.
+    void applyPickedFlags();
 
     /// Update item's points with edit points.
     void updateItem( BOARD_COMMIT& aCommit );
@@ -165,7 +219,33 @@ private:
     std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editorBehavior;
     std::shared_ptr<BOARD_CONSTRAINT_DRAG_SESSION> m_constraintDragSession;
 
+    // Handles shown for the reshapeable members of a multi-selection or group, one
+    // collection per item
+    struct BLOCK_HANDLE_ENTRY
+    {
+        std::unique_ptr<POINT_EDIT_BEHAVIOR> behavior;
+        std::shared_ptr<EDIT_POINTS>         points;
+    };
+
+    std::vector<BLOCK_HANDLE_ENTRY> m_blockHandles;
+    EDIT_POINT*                     m_blockHoveredPoint;
+    EDIT_POINTS*                    m_blockHoveredOwner;
+    std::set<PCB_HANDLE_KEY>        m_pickedHandles;
+
+    // The selection with each group replaced by its members, kept in selection order
+    // so a refusal message always names the same item
+    std::vector<BOARD_ITEM*> m_expandedSelection;
+
+    // Undoes a block drag that is still running. Set only while OnSelectionChange is
+    // parked in its loop, because it reads that call's locals. Reset() calls it before
+    // it clears any collection, so the drag is undone while the items still exist
+    std::function<void()> m_blockDragAbort;
+
     static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
+
+    // Runs the block drag gesture. It works on the handle collections, the picked set and
+    // the expanded selection this tool builds, and runs its area picks through its Wait()
+    friend class BLOCK_DRAG_SESSION;
 };
 
 #endif

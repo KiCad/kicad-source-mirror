@@ -109,6 +109,7 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
+    m_cbAreaAnchorPick->SetValue( aCfg->m_AreaAnchorPointSelection );
 
 
     /* Set display options */
@@ -139,6 +140,10 @@ void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_cbConstrainHV45Mode->SetValue( aCfg->m_AngleSnapMode != LEADER_MODE::DIRECT );
     m_arcEditMode->SetSelection( arcEditModeToComboIndex( aCfg->m_ArcEditMode ) );
+
+    // Read from the board editor's settings, which both editors share
+    if( PCBNEW_SETTINGS* pcbCfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+        m_cbAreaAnchorPick->SetValue( pcbCfg->m_AreaAnchorPointSelection );
 }
 
 
@@ -165,6 +170,10 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
                                                                     : LEADER_MODE::DIRECT;
             cfg->m_ArcEditMode = arcEditModeToEnum( m_arcEditMode->GetSelection() );
         }
+
+        // One setting for both editors, the way the flip direction works
+        if( PCBNEW_SETTINGS* pcbCfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+            pcbCfg->m_AreaAnchorPointSelection = m_cbAreaAnchorPick->GetValue();
     }
     else
     {
@@ -185,6 +194,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
             cfg->m_AllowFreePads = m_allowFreePads->GetValue();
             cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
+            cfg->m_AreaAnchorPointSelection = m_cbAreaAnchorPick->GetValue();
 
             cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
             cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
@@ -210,6 +220,12 @@ void PANEL_EDIT_OPTIONS::ResetPanel()
         cfg.Load();                     // Loading without a file will init to defaults
 
         loadFPSettings( &cfg );
+
+        // loadFPSettings() reads the shared option from the live board editor settings
+        PCBNEW_SETTINGS pcbCfg;
+        pcbCfg.Load();
+
+        m_cbAreaAnchorPick->SetValue( pcbCfg.m_AreaAnchorPointSelection );
     }
     else
     {

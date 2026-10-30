@@ -649,6 +649,7 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
     m_rigidFootprints.clear();
     m_rigidMembers.clear();
     m_tagToConstraint.clear();
+    m_droppedTags.clear();
     m_nonDrivingTags.clear();
     m_tagMembers.clear();
     m_referenceConstraints.clear();
@@ -885,6 +886,10 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
     // locked-shape params go here; everything else stays an unknown.
     std::set<int> fixedParams;
 
+    // Of those, the ones a FIXED_POSITION constraint nails down, kept apart because a block
+    // edit is allowed to place a locked shape but never a point the user pinned
+    std::set<int> groundedPositions;
+
     for( const auto& [first, last] : lockedRanges )
     {
         for( int i = first; i < last; ++i )
@@ -1080,6 +1085,8 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
             {
                 fixedParams.insert( a.x );
                 fixedParams.insert( a.y );
+                groundedPositions.insert( a.x );
+                groundedPositions.insert( a.y );
                 mapped = true;   // enforced by omission from the unknowns, not a solver constraint
             }
 
@@ -1512,6 +1519,7 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
     }
 
     m_fixedParams = fixedParams;
+    m_groundedPositionParams = groundedPositions;
     m_gcs->declareUnknowns( unknowns );
     m_gcs->initSolution();
     m_gcs->maxIter = MAX_SOLVE_ITERATIONS;
@@ -2137,6 +2145,112 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveRigidTranslation( const std::set<KIID>& aEdi
 }
 
 
+CONSTRAINT_BLOCK_RESULT
+BOARD_CONSTRAINT_ADAPTER::SolveBlockEdit( const std::vector<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aPinnedAnchors,
+                                          const std::set<KIID>& aTranslatedShapes, const VECTOR2I& aTranslation )
+{
+    if( !m_built )
+        return CONSTRAINT_BLOCK_RESULT::NOT_MODELED;
+
+    // The held coordinates and their IU targets, keyed by parameter index so a coordinate
+    // two anchors name is held once. The axes are kept apart because a rectangle corner
+    // shares one stored corner's x with the other's y.
+    std::map<int, int> targetsX;
+    std::map<int, int> targetsY;
+
+    const RIGID_STATE carried = collectRigidState( aTranslatedShapes );
+
+    // A shape travelling whole cannot carry a point the user pinned, the same refusal
+    // SolveRigidTranslation makes. A locked shape is different and stays placeable, since
+    // the caller has already put it where the user asked
+    const bool carriesGroundedPoint = std::ranges::any_of(
+            carried.points,
+            [&]( int aPointX )
+            {
+                return m_groundedPositionParams.contains( aPointX ) || m_groundedPositionParams.contains( aPointX + 1 );
+            } );
+
+    if( carriesGroundedPoint && aTranslation != VECTOR2I() )
+        return CONSTRAINT_BLOCK_RESULT::REFUSED;
+
+    for( int pointX : carried.points )
+    {
+        targetsX[pointX] = KiROUND( denormalizeX( m_params[pointX] ) ) + aTranslation.x;
+        targetsY[pointX + 1] = KiROUND( denormalizeY( m_params[pointX + 1] ) ) + aTranslation.y;
+    }
+
+    // Whether the user picked a point this cluster nails down. The solve still has to run in
+    // that case, with nothing commanded, so the point is put back where the constraint says
+    bool groundedAnchorPicked = false;
+
+    for( const auto& [member, target] : aPinnedAnchors )
+    {
+        // An anchor this cluster does not cover, say a corner of a polygon the solver cannot
+        // model, is skipped so the rest of the block still solves
+        if( ANCHOR_PARAMS anchor = anchorParams( member ); anchor.IsValid() )
+        {
+            // A FIXED_POSITION constraint grounds this point. The caller has already written
+            // the cursor into the item, so commanding it here would hold the violation and
+            // then report it solved, because the check below reads back what was just written
+            // A rectangle corner shares each axis with a different neighbour, so check them apart
+            if( m_groundedPositionParams.contains( anchor.x ) )
+                groundedAnchorPicked = true;
+            else
+                targetsX[anchor.x] = target.x;
+
+            if( m_groundedPositionParams.contains( anchor.y ) )
+                groundedAnchorPicked = true;
+            else
+                targetsY[anchor.y] = target.y;
+        }
+    }
+
+    if( targetsX.empty() && targetsY.empty() && !groundedAnchorPicked )
+        return CONSTRAINT_BLOCK_RESULT::NOT_MODELED;
+
+    beginTemporaryParameters();
+
+    std::set<int> commanded;
+
+    for( const auto& [param, target] : targetsX )
+    {
+        m_params[param] = normalizeX( target );
+        commanded.insert( param );
+    }
+
+    for( const auto& [param, target] : targetsY )
+    {
+        m_params[param] = normalizeY( target );
+        commanded.insert( param );
+    }
+
+    // The anchors keep the default weight, far above the stay-put tier, and the whole
+    // temporary subsystem is minimized inside the null space of the real constraints. A
+    // constraint therefore always wins, and a contradiction turns up as an unreachable
+    // target in the check below
+    for( int param : commanded )
+        softPinCoordinate( param, GCS::DefaultTemporaryConstraint );
+
+    pinUncommandedCoordinates( commanded, GCS::DefaultTemporaryConstraint );
+
+    m_gcs->initSolution();
+    int ret = m_gcs->solve();
+    m_gcs->applySolution();
+
+    bool solved = solveSucceeded( ret );
+
+    for( const auto& [param, target] : targetsX )
+        solved = solved && KiROUND( denormalizeX( m_params[param] ) ) == target;
+
+    for( const auto& [param, target] : targetsY )
+        solved = solved && KiROUND( denormalizeY( m_params[param] ) ) == target;
+
+    m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+
+    return solved ? CONSTRAINT_BLOCK_RESULT::SOLVED : CONSTRAINT_BLOCK_RESULT::REFUSED;
+}
+
+
 bool BOARD_CONSTRAINT_ADAPTER::SolveRigidSnapRelations( const std::set<KIID>& aEditedShapes, const VECTOR2I& aReference,
                                                         const std::vector<SNAP_CANDIDATE>& aCandidates,
                                                         const VECTOR2I& aCursor, VECTOR2I& aResolvedCursor )
@@ -2259,19 +2373,47 @@ bool BOARD_CONSTRAINT_ADAPTER::hardRelationsSatisfied() const
     if( std::isfinite( structuralErr ) && std::abs( structuralErr ) > residualTol )
         return false;
 
+    return staleRelationTags().empty();
+}
+
+
+std::vector<int> BOARD_CONSTRAINT_ADAPTER::staleRelationTags() const
+{
+    const double     residualTol = 1e-3;
+    std::vector<int> stale;
+
     for( const auto& [tag, kiid] : m_tagToConstraint )
     {
         // A reference non-driving constraint only measures so its residual is never a failure
-        if( m_nonDrivingTags.contains( tag ) )
+        if( m_nonDrivingTags.contains( tag ) || m_droppedTags.contains( tag ) )
             continue;
 
         double err = m_gcs->calculateConstraintErrorByTag( tag );
 
         if( !std::isfinite( err ) || std::abs( err ) > residualTol )
-            return false;
+            stale.push_back( tag );
     }
 
-    return true;
+    return stale;
+}
+
+
+int BOARD_CONSTRAINT_ADAPTER::DropStaleRelations()
+{
+    const std::vector<int> stale = staleRelationTags();
+
+    for( int tag : stale )
+    {
+        m_gcs->clearByTag( tag );
+
+        // The mapping stays so Diagnose() can still attribute the relation to its constraint
+        m_droppedTags.insert( tag );
+    }
+
+    if( !stale.empty() )
+        m_gcs->initSolution();
+
+    return (int) stale.size();
 }
 
 
@@ -2352,6 +2494,64 @@ void BOARD_CONSTRAINT_ADAPTER::softPinPoint( int aPointX, int aTag, std::optiona
 {
     if( aPointX >= 0 )
         softPinPoint( ANCHOR_PARAMS{ aPointX, aPointX + 1 }, aTag, aWeight );
+}
+
+
+void BOARD_CONSTRAINT_ADAPTER::softPinCoordinate( int aParam, int aTag, std::optional<double> aWeight )
+{
+    // A zero weight would neutralize the pin instead of tiering it
+    wxASSERT( !aWeight || *aWeight > 0 );
+
+    if( aParam < 0 )
+        return;
+
+    int pin = temporaryParam( m_params[aParam] );
+    int id = m_gcs->addConstraintEqual( &m_params[aParam], &m_params[pin], aTag );
+
+    if( aWeight )
+        m_gcs->rescaleConstraint( id, *aWeight );
+}
+
+
+void BOARD_CONSTRAINT_ADAPTER::pinUncommandedCoordinates( const std::set<int>& aCommanded, int aTag )
+{
+    for( const auto& [kiid, vars] : m_shapeVars )
+    {
+        // Build already froze a locked shape or dimension, so a pin here adds nothing
+        if( ConstraintItemIsLocked( vars.shape ) || ConstraintItemIsLocked( vars.dimension ) )
+            continue;
+
+        const RIGID_STATE state = collectRigidState( { kiid } );
+        bool              commandedShape = false;
+
+        for( int pointX : state.points )
+            commandedShape = commandedShape || aCommanded.contains( pointX ) || aCommanded.contains( pointX + 1 );
+
+        // Holding one coordinate at a time keeps a rectangle corner the user placed apart
+        // from the free corner it shares stored parameters with
+        for( int pointX : state.points )
+        {
+            if( !aCommanded.contains( pointX ) )
+                softPinCoordinate( pointX, aTag, STAY_PUT_WEIGHT );
+
+            if( !aCommanded.contains( pointX + 1 ) )
+                softPinCoordinate( pointX + 1, aTag, STAY_PUT_WEIGHT );
+        }
+
+        // A shape the user placed keeps its size exactly, while an untouched one only prefers to
+        for( const RIGID_RADIUS_HOLD& hold : state.radii )
+        {
+            int         target = temporaryParam( m_params[hold.radius] );
+            GCS::Circle circle;
+            circle.center = GCS::Point{ &m_params[hold.centerX], &m_params[hold.centerX + 1] };
+            circle.rad = &m_params[hold.radius];
+
+            int id = m_gcs->addConstraintCircleRadius( circle, &m_params[target], aTag );
+
+            if( !commandedShape )
+                m_gcs->rescaleConstraint( id, STAY_PUT_WEIGHT );
+        }
+    }
 }
 
 
@@ -3220,6 +3420,80 @@ bool BOARD_CONSTRAINT_MOVE_SESSION::Solve(
         aModified->insert( aModified->end(), changed.begin(), changed.end() );
 
     return true;
+}
+
+
+bool BOARD_CONSTRAINT_BLOCK_SESSION::Build( BOARD* aBoard, const std::vector<BOARD_ITEM*>& aBlockItems )
+{
+    reset();
+
+    if( !aBoard || aBlockItems.empty() )
+        return false;
+
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, CollectResolvedConstraints( aBoard ) );
+    std::set<KIID>           visited;
+    std::unordered_set<KIID> sessionShapes;
+    std::vector<PCB_CONSTRAINT*> sessionConstraints;
+
+    // Every cluster the block touches goes into one adapter. Two block shapes can constrain
+    // each other, and a cluster solved on its own would pull the other's anchors back
+    for( BOARD_ITEM* seed : aBlockItems )
+    {
+        if( !seed || visited.contains( seed->m_Uuid ) || !shapeToConstraints.contains( seed->m_Uuid ) )
+            continue;
+
+        std::unordered_set<KIID>     clusterShapes;
+        std::vector<PCB_CONSTRAINT*> clusterConstraints;
+        collectConstraintCluster( shapeToConstraints, seed->m_Uuid, clusterShapes, clusterConstraints, &visited );
+
+        sessionShapes.insert( clusterShapes.begin(), clusterShapes.end() );
+        sessionConstraints.insert( sessionConstraints.end(), clusterConstraints.begin(), clusterConstraints.end() );
+    }
+
+    if( sessionShapes.empty() )
+        return false;
+
+    if( !buildCluster( aBoard, sessionShapes, sessionConstraints ) )
+        return false;
+
+    // One constraint that the geometry already fails marks the whole cluster conflicted, and a
+    // conflicted cluster is solved not at all, so the constraints that do hold are dropped with
+    // it. Take the stale ones out instead and keep enforcing the rest
+    if( m_baseConflict && m_adapter->DropStaleRelations() > 0 )
+        m_baseConflict = !m_adapter->CurrentRelationsSatisfied();
+
+    return true;
+}
+
+
+CONSTRAINT_BLOCK_RESULT
+BOARD_CONSTRAINT_BLOCK_SESSION::Solve( const std::vector<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aPinnedAnchors,
+                                       const std::set<KIID>& aTranslatedShapes, const VECTOR2I& aTranslation,
+                                       std::vector<PCB_SHAPE*>*                  aModified,
+                                       const std::function<void( BOARD_ITEM* )>& aBeforeModify )
+{
+    // Leave a cluster that was already broken before the drag alone, so the drag does not
+    // quietly repair geometry the user did not touch
+    if( !usable() || !rewind() )
+        return CONSTRAINT_BLOCK_RESULT::NOT_MODELED;
+
+    CONSTRAINT_BLOCK_RESULT result = m_adapter->SolveBlockEdit( aPinnedAnchors, aTranslatedShapes, aTranslation );
+
+    if( result != CONSTRAINT_BLOCK_RESULT::SOLVED )
+    {
+        rewind();
+        return result;
+    }
+
+    // The starting geometry stays as it was when the session was built, so every frame
+    // solves the same system and only the final offset decides the result
+    std::vector<PCB_SHAPE*> changed = m_adapter->Apply( aBeforeModify );
+    m_adapter->ApplyReferenceValues( aBeforeModify );
+
+    if( aModified )
+        aModified->insert( aModified->end(), changed.begin(), changed.end() );
+
+    return result;
 }
 
 

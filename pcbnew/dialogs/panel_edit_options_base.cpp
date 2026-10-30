@@ -69,6 +69,11 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_arcEditMode->SetSelection( 0 );
 	bSizerUniversal->Add( m_arcEditMode, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_cbAreaAnchorPick = new wxCheckBox( this, wxID_ANY, _("Show and edit anchor points on multi-selections"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbAreaAnchorPick->SetToolTip( _("If checked, selecting multiple items shows their anchor points. Anchor points can be picked by click, box, or lasso, and dragging a picked point moves all picked points as one block.") );
+
+	bSizerUniversal->Add( m_cbAreaAnchorPick, 0, wxBOTTOM|wxLEFT, 5 );
+
 
 	bMiddleLeftSizer->Add( bSizerUniversal, 0, wxEXPAND|wxALL, 5 );
 

@@ -98,6 +98,14 @@ public:
                              std::vector<EDA_ITEM*>& aUpdatedItems ) = 0;
 
     /**
+     * Whether UpdateItem() writes every point back, so one call applies all of them.
+     *
+     * A caller holding several moved points can then call it once instead of once per point.
+     * A behavior whose branches each handle one point must leave this false.
+     */
+    virtual bool UpdateItemAppliesAllPoints() const { return false; }
+
+    /**
      * Get the 45-degree constrainer for the item, when the given point is moved.
      * Return std::nullopt if not, and the caller can decide.
      *
@@ -184,6 +192,8 @@ public:
         UpdateOutlineFromPoints( m_polygon, aEditedPoint, aPoints );
     }
 
+    bool UpdateItemAppliesAllPoints() const override { return true; }
+
     void FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit ) override;
 
 private:
@@ -228,6 +238,8 @@ public:
         POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints(
                 m_shape.GetPolyShape(), aEditedPoint, aPoints );
     }
+
+    bool UpdateItemAppliesAllPoints() const override { return true; }
 
     void FinalizeItem( EDIT_POINTS& aPoints, COMMIT& aCommit ) override
     {

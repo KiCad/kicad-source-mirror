@@ -66,7 +66,7 @@ public:
     PCB_VIA_STITCH& operator=( PCB_VIA_STITCH&& aOther ) noexcept;
     ~PCB_VIA_STITCH() override;
 
-    wxString GetGeneratorType() const override { return wxS( "via_stitch" ); }
+    wxString GetGeneratorType() const override { return GENERATOR_TYPE; }
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override
     {

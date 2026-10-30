@@ -62,7 +62,7 @@ void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-std::vector<PCB_GENERATOR*> ZONE_FILLER_TOOL::regenerateDirtyGenerators( BOARD_COMMIT& aCommit )
+std::vector<PCB_GENERATOR*> ZONE_FILLER_TOOL::RegenerateDirtyGenerators( BOARD_COMMIT& aCommit )
 {
     std::vector<PCB_GENERATOR*> regenerated;
 
@@ -234,7 +234,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
 
         // First pass on allowing generators like via-stitch to update
         board()->OnZonesFilled( toFill );
-        std::vector<PCB_GENERATOR*> regenerated = regenerateDirtyGenerators( commit );
+        std::vector<PCB_GENERATOR*> regenerated = RegenerateDirtyGenerators( commit );
 
         commit.Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
 
@@ -334,7 +334,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     if( filled )
     {
         board()->OnZonesFilled( toFill );
-        regenerated = regenerateDirtyGenerators( commit );
+        regenerated = RegenerateDirtyGenerators( commit );
 
         commit.Push( _( "Auto-fill Zone(s)" ), APPEND_UNDO | SKIP_CONNECTIVITY | ZONE_FILL_OP );
     }

@@ -81,6 +81,14 @@ public:
 
     SELECTION& GetSelection() { return selection(); }
 
+    /**
+     * Stop a long press menu that has been armed but not yet opened.
+     *
+     * For clicks another tool takes before the selection tool sees them, where its
+     * own click handling never gets to stop the timer.
+     */
+    void StopDisambiguation() { m_disambiguateTimer.Stop(); }
+
     virtual void EnterGroup() {}
     virtual void ExitGroup( bool aSelectGroup = false ) {}
 

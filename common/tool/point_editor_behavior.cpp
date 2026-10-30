@@ -172,6 +172,10 @@ void EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
     aPoints.AddPoint( ellipse.GetPointAtAngle( ANGLE_0 ) );
     aPoints.AddPoint( ellipse.GetPointAtAngle( ANGLE_90 ) );
 
+    // The centre is not a point on the ellipse. Dragging it moves the whole shape, and the
+    // radius handles read the centre back, so the two compound if both are placed at once
+    aPoints.Point( ELLIPSE_CENTER ).SetDrivesWholeShape();
+
     if( m_ellipse.GetShape() == SHAPE_T::ELLIPSE_ARC )
     {
         aPoints.AddPoint( evaluateAt( m_ellipse.GetEllipseStartAngle() ) );

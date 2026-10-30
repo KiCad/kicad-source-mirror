@@ -443,10 +443,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMouseDown( BUT_LEFT ) )
         {
-            // Avoid triggering when running under other tools
+            // Avoid triggering when running under other tools. A click on a block handle
+            // belongs to the point editor, which stops this timer for every click it takes
             PCB_POINT_EDITOR *pt_tool = m_toolMgr->GetTool<PCB_POINT_EDITOR>();
 
-            if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() )
+            if( m_frame->ToolStackIsEmpty() && pt_tool && !pt_tool->HasPoint() && !pt_tool->HasBlockHandle() )
             {
                 m_originalCursor = m_toolMgr->GetMousePosition();
                 m_disambiguateTimer.StartOnce( ADVANCED_CFG::GetCfg().m_DisambiguationMenuDelay );
@@ -710,7 +711,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         doDrag = true;
                     }
                     // Check if dragging has started within any of selected items bounding box.
-                    else if( evt->HasPosition() && selectionContains( evt->DragOrigin() ) )
+                    else if( evt->HasPosition() && SelectionContains( evt->DragOrigin() ) )
                     {
                         doDrag = true;
                     }
@@ -819,11 +820,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
         {
             // move cursor prediction
-            if( !hasModifier()
-                    && dragAction == MOUSE_DRAG_ACTION::DRAG_SELECTED
-                    && !m_selection.Empty()
-                    && evt->HasPosition()
-                    && selectionContains( evt->Position() ) )
+            if( !hasModifier() && dragAction == MOUSE_DRAG_ACTION::DRAG_SELECTED && !m_selection.Empty()
+                && evt->HasPosition() && SelectionContains( evt->Position() ) )
             {
                 m_nonModifiedCursor = KICURSOR::MOVING;
             }
@@ -1567,7 +1565,13 @@ int PCB_SELECTION_TOOL::SetSelectPoly( const TOOL_EVENT& aEvent )
 {
     m_selectionMode = SELECTION_MODE::INSIDE_LASSO;
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SELECT_LASSO );
-    m_toolMgr->PostAction( ACTIONS::selectionTool );
+
+    // This activation just cancels the tool on the stack. With an empty stack it would
+    // cancel the point editor and clear the selection instead, and the anchor point
+    // gesture needs both kept
+    if( !keepsBlockHandles() )
+        m_toolMgr->PostAction( ACTIONS::selectionTool );
+
     return 0; // No need to wait for an event, just set the mode
 }
 
@@ -1576,7 +1580,10 @@ int PCB_SELECTION_TOOL::SetSelectRect( const TOOL_EVENT& aEvent )
 {
     m_selectionMode = SELECTION_MODE::INSIDE_RECTANGLE;
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    m_toolMgr->PostAction( ACTIONS::selectionTool );
+
+    if( !keepsBlockHandles() )
+        m_toolMgr->PostAction( ACTIONS::selectionTool );
+
     return 0; // No need to wait for an event, just set the mode
 }
 
@@ -4587,7 +4594,15 @@ void PCB_SELECTION_TOOL::unhighlightInternal( EDA_ITEM* aItem, int aMode, bool a
 }
 
 
-bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
+bool PCB_SELECTION_TOOL::keepsBlockHandles() const
+{
+    PCB_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<PCB_POINT_EDITOR>();
+
+    return m_frame->ToolStackIsEmpty() && pointEditor && pointEditor->HasBlockHandles();
+}
+
+
+bool PCB_SELECTION_TOOL::SelectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
     int            margin = KiROUND( getView()->ToWorld( GRIP_MARGIN ) );

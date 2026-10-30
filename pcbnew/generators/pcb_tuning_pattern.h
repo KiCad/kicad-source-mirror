@@ -115,7 +115,7 @@ public:
     PCB_TUNING_PATTERN( BOARD_ITEM* aParent = nullptr, PCB_LAYER_ID aLayer = F_Cu,
                         LENGTH_TUNING_MODE aMode = LENGTH_TUNING_MODE::SINGLE );
 
-    wxString GetGeneratorType() const override { return wxS( "tuning_pattern" ); }
+    wxString GetGeneratorType() const override { return GENERATOR_TYPE; }
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override
     {

@@ -78,17 +78,17 @@ public:
 
     static bool IsZoneFillAction( const TOOL_EVENT* aEvent );
 
+    /**
+     * Kicks all the generators as they may need to update after a zone fill update
+     */
+    std::vector<PCB_GENERATOR*> RegenerateDirtyGenerators( BOARD_COMMIT& aCommit );
+
 private:
     /// Refocus on an idle event (used after the Progress Reporter messes up the focus).
     void singleShotRefocus( wxIdleEvent& );
 
     void rebuildConnectivity( bool aHeadless = false );
     void refresh();
-
-    /**
-     * Kicks all the generators as they may need to update after a zone fill update
-     */
-    std::vector<PCB_GENERATOR*> regenerateDirtyGenerators( BOARD_COMMIT& aCommit );
 
     /**
      * Triggers refill of zones near the given generators
