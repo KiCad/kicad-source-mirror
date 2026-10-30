@@ -3612,6 +3612,9 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     if( aInteractive )
     {
         std::set<KIID_PATH> unresolved( plan.unresolved.begin(), plan.unresolved.end() );
+        std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> ourChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
+        std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> theirChanges =
+                KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
 
         for( KICAD_DIFF::ITEM_RESOLUTION& action : plan.actions )
         {
@@ -3619,6 +3622,39 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
                 continue;
 
             action.kind = KICAD_DIFF::ITEM_RES::KEEP;
+
+            // Named for the details, which would otherwise omit field and pin edits
+            std::set<wxString> edited;
+
+            for( const auto* changes : { &ourChanges, &theirChanges } )
+            {
+                auto it = changes->find( action.id );
+
+                if( it == changes->end() )
+                    continue;
+
+                for( const KICAD_DIFF::PROPERTY_DELTA& delta : it->second->properties )
+                    edited.insert( delta.name );
+
+                for( const KICAD_DIFF::ITEM_CHANGE& child : it->second->children )
+                {
+                    if( !child.refdes )
+                        edited.insert( child.typeName );
+                    else if( child.typeName == wxS( "Pin" ) )
+                        edited.insert( wxString::Format( _( "Pin %s" ), *child.refdes ) );
+                    else
+                        edited.insert( *child.refdes );
+                }
+            }
+
+            action.props.clear();
+
+            for( const wxString& name : edited )
+            {
+                KICAD_DIFF::PROPERTY_RESOLUTION prop;
+                prop.name = name;
+                action.props.push_back( std::move( prop ) );
+            }
 
             if( unresolved.insert( action.id ).second )
                 plan.unresolved.push_back( action.id );

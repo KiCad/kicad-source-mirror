@@ -284,7 +284,7 @@ wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution )
     }
 
     if( !names.IsEmpty() )
-        text << wxString::Format( _( "Properties: %s\n" ), names );
+        text << wxString::Format( _( "Changed on either side: %s\n" ), names );
 
     return text;
 }

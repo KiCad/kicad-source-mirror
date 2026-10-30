@@ -96,7 +96,12 @@ void indexChangeTree( const ITEM_CHANGE&                       aChange,
     aIndex[aChange.id] = &aChange;
 
     for( const ITEM_CHANGE& child : aChange.children )
-        indexChangeTree( child, aIndex );
+    {
+        // A child without an id, such as a library symbol's field, belongs to its parent's resolution
+        // Indexed, every such child on both sides would collide into one conflict on the document
+        if( !child.id.empty() )
+            indexChangeTree( child, aIndex );
+    }
 }
 
 } // namespace
