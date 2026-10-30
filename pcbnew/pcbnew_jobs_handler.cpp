@@ -2722,7 +2722,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
 
         for( const auto& footprint : fpLib.GetFootprints() )
         {
-            if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
+            if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad() < SEXPR_FOOTPRINT_LIB_FILE_VERSION )
                 shouldSave = true;
         }
 

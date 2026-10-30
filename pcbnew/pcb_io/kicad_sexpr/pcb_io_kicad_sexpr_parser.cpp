@@ -1173,6 +1173,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
 
             // Locking a footprint has no meaning outside of a board
             footprint->SetLocked( false );
+            footprint->SetFileFormatVersionAtLoad( m_requiredVersion );
 
             finishItem( footprint.get() );
 
@@ -1197,6 +1198,19 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
 
         case T_kicad_footprint_lib:
         {
+            bool hasVersion = false;
+
+            // Version gates in the footprint parser need this before they run
+            auto checkVersion =
+                    [&]()
+                    {
+                        if( !hasVersion )
+                            Expecting( "version" );
+
+                        if( m_tooRecent )
+                            throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ), m_generatorVersion );
+                    };
+
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
@@ -1208,6 +1222,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
                 {
                 case T_version:
                 {
+                    if( hasVersion )
+                        Unexpected( token );
+
+                    hasVersion = true;
+
                     int versionNumber = parseInt( "version" );
 
                     m_requiredVersion = versionNumber;
@@ -1226,24 +1245,20 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
                     NeedSYMBOL();
                     m_generatorVersion = FromUTF8();
                     NeedRIGHT();
-
-                    // If the generator version is newer than the current, treat the file as too recent
-                    if( m_requiredVersion > SEXPR_FOOTPRINT_LIB_FILE_VERSION )
-                    {
-                        throw FUTURE_FORMAT_ERROR( fmt::format( "{}", m_requiredVersion ),
-                                                   m_generatorVersion );
-                    }
-
                     break;
 
                 case T_footprint:
+                    checkVersion();
                     parseFp();
                     break;
 
                 default:
+                    checkVersion();
                     Expecting( "footprint, generator, generator_version, or version" );
                 }
             }
+
+            checkVersion();
 
             return;
         }
@@ -6258,7 +6273,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             int this_version = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
             NeedRIGHT();
             m_requiredVersion = std::max( m_requiredVersion, this_version );
-            m_tooRecent       = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
+            m_tooRecent       = ( m_requiredVersion > SEXPR_FOOTPRINT_LIB_FILE_VERSION );
             SetKnowsBar( m_requiredVersion >= 20240706 ); // Bar token is known from this version
             footprint->SetFileFormatVersionAtLoad( this_version );
             break;

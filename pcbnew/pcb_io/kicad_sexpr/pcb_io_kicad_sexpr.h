@@ -240,6 +240,11 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 // affect the board file format, please do not bump the board file format.
 #define SEXPR_FOOTPRINT_LIB_FILE_VERSION  20261028
 
+// A footprint body uses the board format, so a library file stamped older than the board format would
+// run migrations on current data
+static_assert( SEXPR_FOOTPRINT_LIB_FILE_VERSION >= SEXPR_BOARD_FILE_VERSION,
+               "Bump SEXPR_FOOTPRINT_LIB_FILE_VERSION with SEXPR_BOARD_FILE_VERSION" );
+
 
 // clang-format on
 
