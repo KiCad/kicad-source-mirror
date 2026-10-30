@@ -1126,7 +1126,7 @@ void PCAD_PCB::AddToBoard( FOOTPRINT* )
     {
         net = m_PcbNetlist[i];
 
-        m_board->Add( new NETINFO_ITEM( m_board, net->m_Name, net->m_NetCode ) );
+        m_board->FindOrAddNet( net->m_Name, net->m_NetCode );
     }
 
     for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )

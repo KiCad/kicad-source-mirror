@@ -1249,12 +1249,14 @@ void BOARD_BUILDER::createNets()
         if( netName.IsEmpty() )
             netName = wxString::Format( wxS( "Net_%d" ), netCode );
 
-        std::unique_ptr<NETINFO_ITEM> kiNetInfo = std::make_unique<NETINFO_ITEM>( &m_board, netName, netCode );
+        const bool    isNew = m_board.FindNet( netName ) == nullptr;
+        NETINFO_ITEM* kiNetInfo = m_board.FindOrAddNet( netName, netCode, ADD_MODE::BULK_APPEND );
         netCode++;
 
-        m_netCache[netBlk.m_Key] = kiNetInfo.get();
-        bulkAdded.push_back( kiNetInfo.get() );
-        m_board.Add( kiNetInfo.release(), ADD_MODE::BULK_APPEND );
+        m_netCache[netBlk.m_Key] = kiNetInfo;
+
+        if( isNew )
+            bulkAdded.push_back( kiNetInfo );
     }
 
     m_board.FinalizeBulkAdd( bulkAdded );

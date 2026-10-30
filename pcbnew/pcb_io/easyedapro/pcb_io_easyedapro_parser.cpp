@@ -1248,7 +1248,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard( BOARD* aBoard, const nlohmann::json& 
         {
             wxString netname = line.at( 1 );
 
-            aBoard->Add( new NETINFO_ITEM( aBoard, netname, aBoard->GetNetCount() + 1 ), ADD_MODE::APPEND );
+            aBoard->FindOrAddNet( netname, aBoard->GetNetCount() + 1, ADD_MODE::APPEND );
         }
         else if( type == wxS( "RULE" ) )
         {

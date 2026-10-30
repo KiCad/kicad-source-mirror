@@ -718,10 +718,7 @@ void FOOTPRINT_VIEWER_FRAME::displayFootprint( FOOTPRINT* aFootprint )
 
         if( !net.GetPinFunction().IsEmpty() )
         {
-            NETINFO_ITEM* netinfo = new NETINFO_ITEM( GetBoard() );
-            netinfo->SetNetname( net.GetPinFunction() );
-            GetBoard()->Add( netinfo );
-            pad->SetNet( netinfo );
+            pad->SetNet( GetBoard()->FindOrAddNet( net.GetPinFunction() ) );
         }
     }
 

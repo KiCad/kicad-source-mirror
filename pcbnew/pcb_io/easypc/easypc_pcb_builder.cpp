@@ -227,9 +227,7 @@ void PCB_BUILDER::Build()
     for( const SOURCE_NET* net : TypedItems<const SOURCE_NET>( m_design->Nets ) )
     {
         // The schematic import names the net the same way, so an update from the schematic keeps it
-        NETINFO_ITEM* info = new NETINFO_ITEM( &m_board, ToKiCadMarkup( net->Name ) );
-        m_board.Add( info );
-        m_nets[net] = info;
+        m_nets[net] = m_board.FindOrAddNet( ToKiCadMarkup( net->Name ) );
     }
 
     buildRules();

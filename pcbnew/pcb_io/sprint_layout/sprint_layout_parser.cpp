@@ -890,8 +890,7 @@ bool SPRINT_LAYOUT_PARSER::CreateBoard( BOARD& aBoard, std::map<wxString, std::u
         int w = sprintToKicadCoord( static_cast<float>( boardData.size_x ) );
         int h = sprintToKicadCoord( static_cast<float>( boardData.size_y ) );
 
-        gndPlaneNet = new NETINFO_ITEM( board, gndPlaneNetName );
-        board->Add( gndPlaneNet );
+        gndPlaneNet = board->FindOrAddNet( gndPlaneNetName );
 
         ZONE* zone = new ZONE( board );
         zone->SetLayerSet( groundPlaneLayerSet );

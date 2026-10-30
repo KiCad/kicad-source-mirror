@@ -110,9 +110,8 @@ public:
 
             if( BOARD* board = m_netinfoList->GetParent() )
             {
-                NETINFO_ITEM *newnet = new NETINFO_ITEM( board, remainingName, 0 );
+                NETINFO_ITEM* newnet = board->FindOrAddNet( remainingName, 0 );
 
-                board->Add( newnet );
                 rebuildList();
 
                 if( newnet->GetNetCode() > 0 )

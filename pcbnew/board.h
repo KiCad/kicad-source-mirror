@@ -1199,6 +1199,21 @@ public:
     NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
 
     /**
+     * Return the net with the given name, adding it to the board if there is none.
+     *
+     * Use this rather than Add() when the name may already exist, because Add() deletes a
+     * duplicate net.
+     *
+     * @param aNetName The net name.
+     * @param aNetCode The code for a new net, or -1 to assign one.
+     * @param aMode How to add a new net.
+     * @param aSkipConnectivity True to leave a new net out of the connectivity data.
+     * @return the net on this board with that name.
+     */
+    NETINFO_ITEM* FindOrAddNet( const wxString& aNetName, int aNetCode = -1, ADD_MODE aMode = ADD_MODE::INSERT,
+                                bool aSkipConnectivity = false );
+
+    /**
      * Fetch the coupled netname for a given net.
      *
      * This accepts netnames suffixed by 'P', 'N', '+', '-', as well as additional numbers and

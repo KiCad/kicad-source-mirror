@@ -1528,7 +1528,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T:
-        m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
+        // A duplicate net is deleted here, so nothing below may touch it
+        if( !m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem ) )
+            return;
+
         break;
 
     // this one uses a vector
@@ -2810,6 +2813,17 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 {
     return m_NetInfo.GetNetItem( aNetname );
+}
+
+
+NETINFO_ITEM* BOARD::FindOrAddNet( const wxString& aNetName, int aNetCode, ADD_MODE aMode, bool aSkipConnectivity )
+{
+    if( NETINFO_ITEM* existing = FindNet( aNetName ) )
+        return existing;
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( this, aNetName, aNetCode );
+    Add( net, aMode, aSkipConnectivity );
+    return net;
 }
 
 

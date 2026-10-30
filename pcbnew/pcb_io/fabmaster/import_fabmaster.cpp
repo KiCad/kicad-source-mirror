@@ -3123,8 +3123,7 @@ bool FABMASTER::loadNets( BOARD* aBoard )
     {
         checkpoint();
 
-        NETINFO_ITEM *newnet = new NETINFO_ITEM( aBoard, net );
-        aBoard->Add( newnet, ADD_MODE::APPEND );
+        aBoard->FindOrAddNet( net, -1, ADD_MODE::APPEND );
     }
 
     return true;

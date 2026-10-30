@@ -2773,7 +2773,7 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
             usedNetNames.insert( netName );
         }
 
-        NETINFO_ITEM*             netInfo = new NETINFO_ITEM( m_board, netName, netCode );
+        NETINFO_ITEM*             netInfo = m_board->FindOrAddNet( netName, netCode );
         std::shared_ptr<NETCLASS> netclass;
 
         if( net->HasAttribute( "class" ) )
@@ -2788,9 +2788,7 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
             }
         }
 
-        m_board->Add( netInfo );
-
-        // AppendNet deduplicates by name and renumbers to keep net codes
+        // FindOrAddNet deduplicates by name and renumbers to keep net codes
         // consecutive, so the authoritative code for this signal's items is
         // whatever the board accepted, not the local request counter.
         netCode = netInfo->GetNetCode();

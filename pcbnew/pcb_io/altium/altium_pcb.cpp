@@ -3523,10 +3523,9 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
             }
         }
 
-        NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, netName, -1 );
-        m_board->Add( netInfo, ADD_MODE::APPEND );
+        NETINFO_ITEM* netInfo = m_board->FindOrAddNet( netName, -1, ADD_MODE::APPEND );
 
-        // needs to be called after m_board->Add() as assign us the NetCode
+        // the board assigns the NetCode, and a repeated name shares the existing one
         m_altiumToKicadNetcodes.push_back( netInfo->GetNetCode() );
     }
 

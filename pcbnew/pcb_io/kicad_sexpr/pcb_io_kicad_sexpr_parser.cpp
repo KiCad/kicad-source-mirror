@@ -3612,8 +3612,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETINFO_ITEM()
     // (TODO: a better test.)
     if( netCode > NETINFO_LIST::UNCONNECTED || !m_board->FindNet( NETINFO_LIST::UNCONNECTED ) )
     {
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, netCode );
-        m_board->Add( net, ADD_MODE::INSERT, true );
+        NETINFO_ITEM* net = m_board->FindOrAddNet( name, netCode, ADD_MODE::INSERT, true );
 
         // Store the new code mapping
         pushValueIntoMap( netCode, net->GetNetCode() );

@@ -367,8 +367,13 @@ protected:  // Access is through the BOARD, which is a friend class
     /**
      * Add \a aNewElement to the end of the net list. Negative net code means it is going to be
      * auto-assigned.
+     *
+     * The list takes ownership of \a aNewElement.  If another net already has its name it is
+     * deleted and must not be used again.
+     *
+     * @return true if \a aNewElement is in the list, false if it was deleted.
      */
-    void AppendNet( NETINFO_ITEM* aNewElement );
+    bool AppendNet( NETINFO_ITEM* aNewElement );
 
     /**
      * Remove a net from the net list.

@@ -565,9 +565,7 @@ void TARGET3001_PCB_BUILDER::buildNets()
         if( m_board->FindNet( name ) )
             name = wxString::Format( wxS( "%s_%zu" ), name, i + 1 );
 
-        NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, -1 );
-        m_board->Add( net, ADD_MODE::APPEND );
-        m_nets[e.base.signal] = net;
+        m_nets[e.base.signal] = m_board->FindOrAddNet( name, -1, ADD_MODE::APPEND );
     }
 }
 

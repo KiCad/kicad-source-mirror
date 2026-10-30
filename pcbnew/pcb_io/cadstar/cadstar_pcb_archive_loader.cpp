@@ -4012,7 +4012,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         }
 
         std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
-        NETINFO_ITEM*                  netInfo = new NETINFO_ITEM( m_board, newName, ++m_numNets );
+        NETINFO_ITEM*                  netInfo = m_board->FindOrAddNet( newName, ++m_numNets, ADD_MODE::APPEND );
         std::shared_ptr<NETCLASS>      netclass;
 
         std::tuple<ROUTECODE_ID, NETCLASS_ID, SPACING_CLASS_ID> key = { csNet.RouteCodeID,
@@ -4059,7 +4059,6 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment( newName, netclass->GetName() );
 
         netInfo->SetNetClass( netclass );
-        m_board->Add( netInfo, ADD_MODE::APPEND );
         m_netMap.insert( { aCadstarNetID, netInfo } );
         return netInfo;
     }

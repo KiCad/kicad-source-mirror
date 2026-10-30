@@ -151,16 +151,18 @@ void NETINFO_LIST::RemoveUnusedNets( BOARD_COMMIT* aCommit )
 }
 
 
-void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
+bool NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
-    // if there is a net with such name then just assign the correct number
     NETINFO_ITEM* sameName = GetNetItem( aNewElement->GetNetname() );
 
-    if( sameName != nullptr )
+    if( sameName == aNewElement )
     {
-        aNewElement->m_netCode = sameName->GetNetCode();
+        return true;
+    }
+    else if( sameName != nullptr )
+    {
         delete aNewElement;
-        return;
+        return false;
     }
     else if( aNewElement->m_netCode != (int) m_netCodes.size() || aNewElement->m_netCode < 0 )
     {
@@ -178,6 +180,7 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
     m_netCodes.insert( std::make_pair( aNewElement->GetNetCode(), aNewElement ) );
 
     m_DisplayNetnamesDirty = true;
+    return true;
 }
 
 

@@ -2026,20 +2026,17 @@ void PCB_IO_KICAD_LEGACY::loadNETINFO_ITEM()
             // if it is not the net 0, or if the net 0 does not exists.
             if( net && ( net->GetNetCode() > 0 || m_board->FindNet( 0 ) == nullptr ) )
             {
-                m_board->Add( net );
+                NETINFO_ITEM* boardNet = m_board->FindOrAddNet( net->GetNetname(), net->GetNetCode() );
 
                 // Be sure we have room to store the net in m_netCodes
                 if( (int)m_netCodes.size() <= netCode )
                     m_netCodes.resize( netCode+1 );
 
-                m_netCodes[netCode] = net->GetNetCode();
-                net = nullptr;
+                m_netCodes[netCode] = boardNet->GetNetCode();
             }
-            else
-            {
-                delete net;
-                net = nullptr;     // Avoid double deletion.
-            }
+
+            delete net;
+            net = nullptr;     // Avoid double deletion.
 
             return;     // preferred exit
         }
