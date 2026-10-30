@@ -20,6 +20,7 @@
 
 #include <fast_float/fast_float.h>
 #include <cstdarg>
+#include <memory>
 #include <cstdio>
 #include <cstdlib>         // bsearch()
 #include <cctype>
@@ -841,13 +842,13 @@ exit:   // single point of exit, no returns elsewhere please.
 
 wxArrayString* DSNLEXER::ReadCommentLines()
 {
-    wxArrayString*  ret = nullptr;
-    bool            cmt_setting = SetCommentsAreTokens( true );
-    int             tok = NextTok();
+    std::unique_ptr<wxArrayString> ret;
+    bool                           cmt_setting = SetCommentsAreTokens( true );
+    int                            tok = NextTok();
 
     if( tok == DSN_COMMENT )
     {
-        ret = new wxArrayString();
+        ret = std::make_unique<wxArrayString>();
 
         do
         {
@@ -858,7 +859,7 @@ wxArrayString* DSNLEXER::ReadCommentLines()
 
     SetCommentsAreTokens( cmt_setting );
 
-    return ret;
+    return ret.release();
 }
 
 // Skip the white space and also accept both normal numbers and scientfic notation

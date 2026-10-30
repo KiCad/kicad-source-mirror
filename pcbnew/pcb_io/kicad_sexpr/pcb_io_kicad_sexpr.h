@@ -523,7 +523,12 @@ private:
 
     void format( const PCB_GRID_ITEM* aGridItem ) const;
 
-    void format( const FOOTPRINT* aFootprint, bool aWriteVersion = true ) const;
+    /**
+     * @param aInLibFile leaves the initial comments and version to the enclosing library file.
+     */
+    void format( const FOOTPRINT* aFootprint, bool aInLibFile = false ) const;
+
+    void formatInitialComments( const FOOTPRINT* aFootprint ) const;
 
     void format( const PAD* aPad ) const;
 

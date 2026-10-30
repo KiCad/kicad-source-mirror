@@ -19,6 +19,8 @@
 
 #include "io/kicad/kicad_io_utils.h"
 
+#include <algorithm>
+
 #include <wx/buffer.h>
 #include <wx/ffile.h>
 
@@ -209,6 +211,21 @@ void Prettify( std::string& aSource, FORMAT_MODE aMode )
 
     while( cursor != aSource.end() )
     {
+        // A comment line is not s-expression syntax and must keep its spacing, quotes and parens
+        if( listDepth == 0 && *cursor == '#' && ( formatted.empty() || formatted.back() == '\n' ) )
+        {
+            auto lineEnd = std::find( cursor, aSource.end(), '\n' );
+
+            formatted.append( cursor, lineEnd );
+            formatted.push_back( '\n' );
+
+            if( lineEnd == aSource.end() )
+                break;
+
+            cursor = std::next( lineEnd );
+            continue;
+        }
+
         char next = nextNonWhitespace( cursor );
 
         if( isWhitespace( *cursor ) && !inQuote )
@@ -251,7 +268,7 @@ void Prettify( std::string& aSource, FORMAT_MODE aMode )
                 bool currentIsShortForm = textSpecialCase && isShortForm( cursor );
                 bool currentIsLib = libSpecialCase && isLib( cursor );
 
-                if( formatted.empty() )
+                if( formatted.empty() || formatted.back() == '\n' )
                 {
                     formatted.push_back( '(' );
                     column++;

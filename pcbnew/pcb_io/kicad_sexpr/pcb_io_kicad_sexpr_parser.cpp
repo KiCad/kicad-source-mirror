@@ -1162,9 +1162,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
 {
     T token;
 
+    std::unique_ptr<wxArrayString> initial_comments( ReadCommentLines() );
+
     auto parseFp = [&]()
     {
-        std::unique_ptr<FOOTPRINT> footprint( parseFOOTPRINT( nullptr ) );
+        std::unique_ptr<FOOTPRINT> footprint( parseFOOTPRINT( initial_comments.release() ) );
 
         if( footprint )
         {
@@ -1182,7 +1184,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::ParseFootprintLib(
         }
     };
 
-    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    for( token = CurTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );

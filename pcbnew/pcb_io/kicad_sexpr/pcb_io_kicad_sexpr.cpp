@@ -360,11 +360,13 @@ void PCB_IO_KICAD_SEXPR::FormatFootprintLibFile( FOOTPRINT* aFootprint ) const
     else
         aFootprint->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
+    formatInitialComments( aFootprint );
+
     m_out->Print( "(kicad_footprint_lib (version %d) (generator \"kicad_footprint_editor\")"
                   " (generator_version \"%s\")\n",
                   SEXPR_FOOTPRINT_LIB_FILE_VERSION,
                   GetMajorMinorVersion().c_str().AsChar() );
-    format( aFootprint, false );
+    format( aFootprint, true );
     m_out->Print( ")\n" );
 }
 
@@ -1446,7 +1448,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GRID_ITEM* aGridItem ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, bool aWriteVersion ) const
+void PCB_IO_KICAD_SEXPR::formatInitialComments( const FOOTPRINT* aFootprint ) const
 {
     if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
     {
@@ -1458,6 +1460,13 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, bool aWriteVersion
                 m_out->Print( "%s\n", TO_UTF8( (*initial_comments)[i] ) );
         }
     }
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, bool aInLibFile ) const
+{
+    if( !aInLibFile )
+        formatInitialComments( aFootprint );
 
     if( m_ctl & CTL_OMIT_LIBNAME )
     {
@@ -1470,7 +1479,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, bool aWriteVersion
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
     }
 
-    if( aWriteVersion && !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
+    if( !aInLibFile && !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
     {
         m_out->Print( "(version %d) (generator \"pcbnew\") (generator_version %s)", SEXPR_BOARD_FILE_VERSION,
                       m_out->Quotew( GetMajorMinorVersion() ).c_str() );
