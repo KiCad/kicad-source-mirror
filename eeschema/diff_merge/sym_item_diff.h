@@ -23,6 +23,8 @@
 
 #include <diff_merge/kicad_diff_types.h>
 
+#include <memory>
+#include <set>
 #include <vector>
 #include <wx/string.h>
 
@@ -51,6 +53,18 @@ struct SYM_ELEMENT
  * returned. Either symbol may be null for a whole symbol add or remove.
  */
 std::vector<SYM_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter );
+
+/// The properties, fields and pins aChange edits, by the names a user would know them by.
+std::set<wxString> EditedNames( const ITEM_CHANGE& aChange );
+
+/**
+ * Combine two edits of one library symbol when neither can lose anything. One side may have
+ * changed anything, the other only fields and symbol properties, and no name may be touched by
+ * both. Returns the first side with the other side's edits applied, or null when the edits must
+ * be resolved by hand.
+ */
+std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aOurs, const LIB_SYMBOL& aTheirs,
+                                                const ITEM_CHANGE& aOurChange, const ITEM_CHANGE& aTheirChange );
 
 } // namespace KICAD_DIFF
 

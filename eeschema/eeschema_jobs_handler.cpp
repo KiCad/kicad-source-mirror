@@ -2805,6 +2805,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchDiff( JOB* aJob )
 // ============================================================================
 // JobSymDiff: sym_diff implementation
 // ============================================================================
+#include <diff_merge/sym_item_diff.h>
 #include <diff_merge/sym_lib_differ.h>
 #include <jobs/job_sym_diff.h>
 
@@ -3608,58 +3609,91 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
 
-    // The applier cannot combine two edits of one symbol, so the user picks a side for each
-    if( aInteractive )
+    std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> ourChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
+    std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> theirChanges = KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
+
+    // Combined symbols stand in for our side, so the applier takes them like any other edit of ours
+    std::vector<std::unique_ptr<LIB_SYMBOL>> combined;
+
+    auto combine = [&]( const KICAD_DIFF::ITEM_CHANGE* aOurs, const KICAD_DIFF::ITEM_CHANGE* aTheirs ) -> bool
     {
-        std::set<KIID_PATH> unresolved( plan.unresolved.begin(), plan.unresolved.end() );
-        std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> ourChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
-        std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> theirChanges =
-                KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
+        if( !aOurs || !aTheirs || !aOurs->refdes )
+            return false;
 
-        for( KICAD_DIFF::ITEM_RESOLUTION& action : plan.actions )
+        auto ourSymbol = ours.map.find( *aOurs->refdes );
+        auto theirSymbol = theirs.map.find( *aOurs->refdes );
+
+        if( ourSymbol == ours.map.end() || theirSymbol == theirs.map.end() )
+            return false;
+
+        std::unique_ptr<LIB_SYMBOL> symbol =
+                KICAD_DIFF::CombineSymbolEdits( *ourSymbol->second, *theirSymbol->second, *aOurs, *aTheirs );
+
+        if( !symbol )
+            return false;
+
+        ourSymbol->second = symbol.get();
+        combined.push_back( std::move( symbol ) );
+        return true;
+    };
+
+    auto changeFor = []( const std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*>& aChanges,
+                         const KIID_PATH& aId ) -> const KICAD_DIFF::ITEM_CHANGE*
+    {
+        auto it = aChanges.find( aId );
+        return it != aChanges.end() ? it->second : nullptr;
+    };
+
+    std::set<KIID_PATH> unresolved( plan.unresolved.begin(), plan.unresolved.end() );
+
+    for( KICAD_DIFF::ITEM_RESOLUTION& action : plan.actions )
+    {
+        if( action.kind != KICAD_DIFF::ITEM_RES::MERGE_PROPS )
+            continue;
+
+        const KICAD_DIFF::ITEM_CHANGE* ourChange = changeFor( ourChanges, action.id );
+        const KICAD_DIFF::ITEM_CHANGE* theirChange = changeFor( theirChanges, action.id );
+
+        if( combine( ourChange, theirChange ) )
         {
-            if( action.kind != KICAD_DIFF::ITEM_RES::MERGE_PROPS )
-                continue;
-
-            action.kind = KICAD_DIFF::ITEM_RES::KEEP;
-
-            // Named for the details, which would otherwise omit field and pin edits
-            std::set<wxString> edited;
-
-            for( const auto* changes : { &ourChanges, &theirChanges } )
-            {
-                auto it = changes->find( action.id );
-
-                if( it == changes->end() )
-                    continue;
-
-                for( const KICAD_DIFF::PROPERTY_DELTA& delta : it->second->properties )
-                    edited.insert( delta.name );
-
-                for( const KICAD_DIFF::ITEM_CHANGE& child : it->second->children )
-                {
-                    if( !child.refdes )
-                        edited.insert( child.typeName );
-                    else if( child.typeName == wxS( "Pin" ) )
-                        edited.insert( wxString::Format( _( "Pin %s" ), *child.refdes ) );
-                    else
-                        edited.insert( *child.refdes );
-                }
-            }
-
+            action.kind = KICAD_DIFF::ITEM_RES::TAKE_OURS;
             action.props.clear();
-
-            for( const wxString& name : edited )
-            {
-                KICAD_DIFF::PROPERTY_RESOLUTION prop;
-                prop.name = name;
-                action.props.push_back( std::move( prop ) );
-            }
-
-            if( unresolved.insert( action.id ).second )
-                plan.unresolved.push_back( action.id );
+            unresolved.erase( action.id );
+            continue;
         }
+
+        // The applier cannot combine two edits of one symbol, so the user picks a side for each
+        if( !aInteractive )
+            continue;
+
+        action.kind = KICAD_DIFF::ITEM_RES::KEEP;
+        action.props.clear();
+
+        // Named for the details, which would otherwise omit field and pin edits
+        std::set<wxString> edited;
+
+        for( const KICAD_DIFF::ITEM_CHANGE* change : { ourChange, theirChange } )
+        {
+            if( change )
+                edited.merge( KICAD_DIFF::EditedNames( *change ) );
+        }
+
+        for( const wxString& name : edited )
+        {
+            KICAD_DIFF::PROPERTY_RESOLUTION prop;
+            prop.name = name;
+            action.props.push_back( std::move( prop ) );
+        }
+
+        if( unresolved.insert( action.id ).second )
+            plan.unresolved.push_back( action.id );
     }
+
+    std::erase_if( plan.unresolved,
+                   [&]( const KIID_PATH& aId )
+                   {
+                       return !unresolved.contains( aId );
+                   } );
 
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {

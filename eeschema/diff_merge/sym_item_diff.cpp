@@ -20,12 +20,14 @@
 
 #include <diff_merge/sym_item_diff.h>
 #include <diff_merge/property_diff.h>
+#include <diff_merge/kicad_merge_engine.h>
 
 #include <lib_symbol.h>
 #include <sch_field.h>
 #include <sch_item.h>
 #include <sch_pin.h>
 
+#include <algorithm>
 #include <map>
 #include <set>
 
@@ -224,6 +226,92 @@ std::vector<SYM_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LI
     }
 
     return out;
+}
+
+
+std::set<wxString> EditedNames( const ITEM_CHANGE& aChange )
+{
+    std::set<wxString> names;
+
+    for( const PROPERTY_DELTA& delta : aChange.properties )
+        names.insert( delta.name );
+
+    for( const ITEM_CHANGE& child : aChange.children )
+    {
+        // A bare pin number could collide with a field of that name
+        if( child.refdes && child.typeName == _( "Pin" ) )
+            names.insert( wxString::Format( _( "Pin %s" ), *child.refdes ) );
+        else
+            names.insert( child.refdes.value_or( child.typeName ) );
+    }
+
+    return names;
+}
+
+
+std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aOurs, const LIB_SYMBOL& aTheirs,
+                                                const ITEM_CHANGE& aOurChange, const ITEM_CHANGE& aTheirChange )
+{
+    // Edits are compared on flattened symbols, so an inherited field cannot be copied back safely
+    if( aOurs.IsDerived() || aTheirs.IsDerived() )
+        return nullptr;
+
+    auto onlyFields = []( const ITEM_CHANGE& aChange )
+    {
+        return std::ranges::all_of( aChange.children,
+                                    []( const ITEM_CHANGE& aChild )
+                                    {
+                                        return aChild.typeName == _( "Field" ) && aChild.refdes
+                                               && aChild.kind != CHANGE_KIND::REMOVED;
+                                    } );
+    };
+
+    const bool theirsDonates = onlyFields( aTheirChange );
+
+    if( !theirsDonates && !onlyFields( aOurChange ) )
+        return nullptr;
+
+    const std::set<wxString> ourNames = EditedNames( aOurChange );
+    const std::set<wxString> theirNames = EditedNames( aTheirChange );
+
+    // A rename moves the symbol to another key, which a field copy cannot follow
+    if( ourNames.contains( wxS( "Name" ) ) || theirNames.contains( wxS( "Name" ) ) )
+        return nullptr;
+
+    if( std::ranges::any_of( ourNames, [&]( const wxString& aName ) { return theirNames.contains( aName ); } ) )
+        return nullptr;
+
+    const LIB_SYMBOL&  donor = theirsDonates ? aTheirs : aOurs;
+    const ITEM_CHANGE& donation = theirsDonates ? aTheirChange : aOurChange;
+    auto               merged = std::make_unique<LIB_SYMBOL>( theirsDonates ? aOurs : aTheirs );
+
+    for( const ITEM_CHANGE& child : donation.children )
+    {
+        const SCH_FIELD* from = donor.GetField( *child.refdes );
+
+        if( !from )
+            return nullptr;
+
+        if( SCH_FIELD* to = merged->GetField( *child.refdes ) )
+            *to = *from;
+        else
+            merged->AddField( new SCH_FIELD( *from ) );
+    }
+
+    std::vector<PROPERTY_RESOLUTION> props;
+
+    for( const PROPERTY_DELTA& delta : donation.properties )
+    {
+        PROPERTY_RESOLUTION prop;
+        prop.name = delta.name;
+        prop.kind = PROP_RES::THEIRS;
+        props.push_back( std::move( prop ) );
+    }
+
+    if( ApplyPropertyResolutions( merged.get(), props, nullptr, &donor, nullptr ).failed > 0 )
+        return nullptr;
+
+    return merged;
 }
 
 } // namespace KICAD_DIFF
