@@ -19,21 +19,65 @@
 
 #pragma once
 
+#include <kiid.h>
+#include <wx/string.h>
+
+#include <map>
+#include <optional>
+#include <set>
 #include <string>
+#include <utility>
+#include <vector>
 
 class SCHEMATIC;
+enum class CONNECTION_TYPE;
 
 namespace SCH_CONNECTIVITY
 {
 class FACADE;
+
+/** One connection or bus member. The driver path is empty without a driver. */
+struct DUMP_VALUE
+{
+    wxString                name;
+    wxString                localName;
+    CONNECTION_TYPE         type{};
+    std::optional<KIID>     driver;
+    KIID_PATH               driverPath;
+    std::vector<DUMP_VALUE> members;
+    std::set<wxString>      netclasses;
+
+    bool operator==( const DUMP_VALUE& ) const = default;
+};
+
+struct DUMP_ROW
+{
+    DUMP_VALUE        value;
+    bool              dangling = false;
+    std::vector<bool> danglingEnds;
+    std::set<KIID>    connected;
+
+    bool operator==( const DUMP_ROW& ) const = default;
+};
+
+/** Rows by sheet path and item. Equal rows serialize to equal dumps and the reverse. */
+using DUMP_ROWS = std::map<std::pair<KIID_PATH, KIID>, DUMP_ROW>;
 
 /**
  * Canonical, pointer-free connectivity rows for migration and rebuild comparisons.
  * Session-local net and subgraph codes are deliberately omitted. The legacy `<NO NET>`
  * placeholder, including its sheet prefix, is normalized only for driverless connections.
  */
+DUMP_ROWS CaptureRows( SCHEMATIC& aSchematic );
+
+/** Same rows from a current facade publication, with isolated netclass resolution. */
+DUMP_ROWS CaptureRows( SCHEMATIC& aSchematic, const FACADE& aFacade );
+
+std::string Dump( const DUMP_ROWS& aRows );
+
+/** @return the rows of CaptureRows() as canonical JSON. */
 std::string Dump( SCHEMATIC& aSchematic );
 
-/** Same row format from a current facade publication, with isolated netclass resolution. */
+/** @return the rows of CaptureRows() for a facade as canonical JSON. */
 std::string Dump( SCHEMATIC& aSchematic, const FACADE& aFacade );
 }

@@ -48,8 +48,6 @@
 namespace
 {
 // Keep this exhaustive corpus small because every item edit compares two full rebuilds
-const size_t MAX_ORACLE_GEOMETRY_EDITS = 32;
-
 // Native fixtures from the disabled entries in test_incremental_netlister.cpp's RemoveAddItems
 const char* const ORACLE_FIXTURES[] = {
     "incremental_test", "issue10430", "issue10926_1", "issue11926", "issue12505", "issue12814",
@@ -67,6 +65,17 @@ const char* const PARITY_FIXTURES[] = {
     "same_local_global_power", "issue1768/issue1768", "issue18092/issue18092", "issue22864/Test_Move_Grid",
     "issue23840/BusAndVectors"
 };
+
+void CheckRows( const SCH_CONNECTIVITY::DUMP_ROWS& aExpected, const SCH_CONNECTIVITY::DUMP_ROWS& aActual )
+{
+    if( aExpected == aActual )
+        return;
+
+    BOOST_ERROR( nlohmann::json::diff( nlohmann::json::parse( SCH_CONNECTIVITY::Dump( aExpected ) ),
+                                       nlohmann::json::parse( SCH_CONNECTIVITY::Dump( aActual ) ) )
+                         .dump( 2 ) );
+}
+
 
 // Legacy records each island's own driver while the engine records the whole net's winner
 void EraseDrivers( nlohmann::json& aValue )
@@ -492,13 +501,13 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
                     }
                 }
 
-                const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
+                const auto incremental = SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() );
                 rebuilt.Update( *schematic, true );
-                BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, rebuilt ) );
+                CheckRows( incremental, SCH_CONNECTIVITY::CaptureRows( *schematic, rebuilt ) );
                 // A separate fresh engine also detects stale content-keyed caches retained by a full rebuild
                 SCH_CONNECTIVITY::FACADE fresh;
                 fresh.Update( *schematic, true );
-                BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, fresh ) );
+                CheckRows( incremental, SCH_CONNECTIVITY::CaptureRows( *schematic, fresh ) );
                 std::map<int, int> toFresh;
                 std::map<int, int> fromFresh;
                 const auto& current = schematic->Connectivity();
@@ -519,7 +528,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
                 }
             };
 
-    const std::string original = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
+    const auto original = SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() );
 
     const auto restoreGeometry =
             [&]()
@@ -562,7 +571,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
                     delete item;
 
                 // The original dump already passed verify, so matching it covers both rebuilds
-                BOOST_CHECK_EQUAL( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
+                CheckRows( original, SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() ) );
 
                 // Net codes follow update history, so the rebuild must see every state the commit did
                 rebuilt.Update( *schematic, true );
@@ -589,7 +598,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
     BOOST_REQUIRE( !symbolScreen->CheckIfOnDrawList( symbol ) );
     delete symbol;
     verify();
-    BOOST_CHECK_NE( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
+    BOOST_CHECK( original != SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() ) );
 
     SCH_COMMIT addition( &manager );
     addition.Add( symbolReplacement.get(), symbolScreen );
@@ -630,17 +639,8 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
         }
     }
 
-    const size_t             stride = 1 + geometry.size() / MAX_ORACLE_GEOMETRY_EDITS;
-    std::map<KICAD_T, size_t> typeCounts;
-    size_t                   editedGeometry = 0;
-
     for( const auto& [screen, source] : geometry )
     {
-        // Each type's first item is always edited, so sampling cannot drop a rare type
-        if( typeCounts[source->Type()]++ % stride != 0 )
-            continue;
-
-        editedGeometry++;
         const KIID& id = source->m_Uuid;
 
         BOOST_TEST_CONTEXT( "geometry item " << id.AsString().ToStdString() )
@@ -667,7 +667,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
             delete item;
 
             verify();
-            BOOST_CHECK_NE( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
+            BOOST_CHECK( original != SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() ) );
 
             restoreGeometry();
         }
@@ -675,11 +675,11 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
 
     verify();
     BOOST_TEST_MESSAGE( fixture << ": checked " << labels.size() << " native label renames and restores, and "
-                               << editedGeometry << " native geometry move/remove/restore sequences" );
-    const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
-    BOOST_CHECK_EQUAL( original, incremental );
+                               << geometry.size() << " native geometry move/remove/restore sequences" );
+    const auto incremental = SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() );
+    CheckRows( original, incremental );
     schematic->RebuildConnectivity();
-    BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
+    CheckRows( incremental, SCH_CONNECTIVITY::CaptureRows( *schematic, schematic->Connectivity() ) );
 }
 
 
