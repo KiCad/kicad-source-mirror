@@ -21,7 +21,7 @@ class VIA_CROSS_SECTION_PREVIEW;
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/statline.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,6 +40,7 @@ class PANEL_SETUP_BOARD_FINISH_BASE : public wxPanel
 		wxStaticText* m_staticTextEdgeConn;
 		wxChoice* m_choiceEdgeConn;
 		wxStaticText* m_viaProtectionHint;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_fillViasLabel;
 		wxCheckBox* m_fillVias;
 		wxStaticText* m_capViasLabel;
