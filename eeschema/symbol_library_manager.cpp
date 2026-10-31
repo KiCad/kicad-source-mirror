@@ -1116,9 +1116,15 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
         // Delete the original symbol if the symbol name has been changed.
         if( libSymbol.GetName() != originalSymbol.GetName() )
         {
+            const bool nameTaken = std::any_of( m_symbols.begin(), m_symbols.end(),
+                                                [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+                                                {
+                                                    return aBuf->GetSymbol().GetName() == originalName;
+                                                } );
+
             try
             {
-                if( aPlugin->LoadSymbol( aFileName, originalName ) )
+                if( !nameTaken && aPlugin->LoadSymbol( aFileName, originalName ) )
                     aPlugin->DeleteSymbol( aFileName, originalName, &properties );
             }
             catch( const IO_ERROR& ioe )
