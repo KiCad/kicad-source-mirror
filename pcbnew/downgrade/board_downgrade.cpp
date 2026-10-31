@@ -42,6 +42,7 @@
 #include <pad.h>
 #include <pcb_barcode.h>
 #include <pcb_shape.h>
+#include <pcb_stackup_table.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_textbox.h>
@@ -66,6 +67,7 @@
 #include <io/kicad/legacy_tuning_pattern.h>
 #include <geometry/shape_ellipse.h>
 #include <geometry/shape_poly_set.h>
+#include <board_tables/generated_table_refresh.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/writers/pcb_writer_v9.h>
 #include <pcb_io/kicad_sexpr/writers/pcb_writer_v10.h>
@@ -113,6 +115,7 @@ static constexpr int VER_FOOTPRINT_HEIGHT = 20261017;
 static constexpr int VER_LINKED_PLACEMENT = 20261018;
 static constexpr int VER_IMAGE_ROTATION = 20261025;
 static constexpr int VER_IMAGE_OPACITY = 20261025;
+static constexpr int VER_STACKUP_TABLE = 20261030;
 static constexpr int VER_NON_COMPONENT_PAD = 20261031;
 
 // The board format these rules were written against. When SEXPR_BOARD_FILE_VERSION moves past
@@ -1679,6 +1682,89 @@ static void dropGrids( BOARD* aBoard )
 }
 
 
+static bool isStackupTable( const BOARD_ITEM* aItem )
+{
+    return aItem->Type() == PCB_STACKUP_TABLE_T;
+}
+
+
+static int countStackupTables( const BOARD* aBoard )
+{
+    return countDrawings( aBoard, isStackupTable );
+}
+
+
+static void omitStackupTables( BOARD* aBoard )
+{
+    omitGraphics( aBoard, isStackupTable );
+}
+
+
+/**
+ * Cells are cloned, not moved, because a table deletes its own cells. The copy keeps the UUID,
+ * so repeated exports of one board stay identical.
+ */
+static PCB_TABLE* stackupTableToTable( const PCB_STACKUP_TABLE* aTable, BOARD_ITEM* aParent )
+{
+    PCB_TABLE* table = new PCB_TABLE( aParent, aTable->GetBorderWidth() );
+
+    table->SetLayer( aTable->GetLayer() );
+    table->SetLocked( aTable->IsLocked() );
+    table->SetBorderStroke( aTable->GetBorderStroke() );
+    table->SetSeparatorsStroke( aTable->GetSeparatorsStroke() );
+    table->SetStrokeExternal( aTable->StrokeExternal() );
+    table->SetStrokeHeaderSeparator( aTable->StrokeHeaderSeparator() );
+    table->SetStrokeColumns( aTable->StrokeColumns() );
+    table->SetStrokeRows( aTable->StrokeRows() );
+
+    const int cols = aTable->GetColCount();
+    const int rows = aTable->GetRowCount();
+
+    table->SetColCount( cols );
+
+    for( int col = 0; col < cols; ++col )
+        table->SetColWidth( col, aTable->GetColWidth( col ) );
+
+    for( int row = 0; row < rows; ++row )
+        table->SetRowHeight( row, aTable->GetRowHeight( row ) );
+
+    for( PCB_TABLECELL* cell : aTable->GetCells() )
+        table->AddCell( static_cast<PCB_TABLECELL*>( cell->Clone() ) );
+
+    return table;
+}
+
+
+static void lowerStackupTables( BOARD* aBoard )
+{
+    // Nothing on the downgrade path refreshes generated tables, and a saved table can be stale.
+    RefreshGeneratedTables( *aBoard );
+
+    std::vector<PCB_STACKUP_TABLE*> tables;
+
+    for( BOARD_ITEM* item : aBoard->Drawings() )
+    {
+        if( isStackupTable( item ) )
+            tables.push_back( static_cast<PCB_STACKUP_TABLE*>( item ) );
+    }
+
+    for( PCB_STACKUP_TABLE* live : tables )
+    {
+        EDA_GROUP* group = live->GetParentGroup();
+        PCB_TABLE* flat = stackupTableToTable( live, aBoard );
+
+        aBoard->Add( flat );
+
+        if( group )
+            group->AddItem( flat );
+
+        detachFromGroup( live );
+        aBoard->Remove( live );
+        delete live;
+    }
+}
+
+
 static int countReferenceImageRotations( const BOARD* aBoard )
 {
     const auto isRotatedReferenceImage = []( const BOARD_ITEM* aItem )
@@ -1891,7 +1977,8 @@ static bool isUnreviewedDrawing( const BOARD_ITEM* aItem )
     case PCB_BARCODE_T:
     case PCB_GRID_ITEM_T:
     case PCB_DRILL_CHART_T:
-    case PCB_DRILL_MAP_T: return false;
+    case PCB_DRILL_MAP_T:
+    case PCB_STACKUP_TABLE_T: return false;
 
     default: return true;
     }
@@ -2805,6 +2892,11 @@ static std::vector<BOARD_RULE> boardRules()
         { VER_GROUP_LIB_ID, DOWNGRADE_BUCKET::DROP, _( "Group design block links" ),
           _( "The link from a group to its design block is removed." ),
           countGroupDesignBlocks, dropGroupDesignBlocks, dropGroupDesignBlocksFp },
+        { VER_STACKUP_TABLE, DOWNGRADE_BUCKET::LOWER, _( "Live stackup tables" ),
+          _( "Converted to a static table with the same contents. Column configuration and the "
+             "link to the board stackup are lost." ),
+          countStackupTables, lowerStackupTables, nullptr, omitStackupTables, nullptr,
+          _( "Stackup tables are omitted instead of converted to static tables." ) },
         { VER_TEXTBOX_KNOCKOUT, DOWNGRADE_BUCKET::LOWER, _( "Knockout text boxes" ),
           _( "Drawn as plain text boxes." ),
           countKnockoutTextBoxes, dropKnockoutTextBoxes, dropKnockoutTextBoxesFp, omitKnockoutTextBoxes,
@@ -3045,6 +3137,7 @@ static constexpr DATED_TOKEN BOARD_TOKENS[] = {
     { "drill_chart", VER_DRILL_DRAWINGS },
     { "drill_map", VER_DRILL_DRAWINGS },
     { "drill_symbol_profile", VER_DRILL_DRAWINGS },
+    { "stackup_table", VER_STACKUP_TABLE },
     { "link", VER_LINKED_PLACEMENT },
     { "connected_routing", VER_LINKED_PLACEMENT },
     { "other_items", VER_LINKED_PLACEMENT },

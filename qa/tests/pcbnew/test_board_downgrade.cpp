@@ -52,6 +52,7 @@
 #include <pcb_grid_item.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
+#include <pcb_stackup_table.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_textbox.h>
@@ -75,6 +76,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <qa_utils/downgrade_oracle_utils.h>
 #include <qa_utils/downgrade_golden_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/file_utils.h>
 
 
@@ -2675,6 +2677,114 @@ BOOST_AUTO_TEST_CASE( GridAndDrillDrawingLossesAreReportedBeforeRemoval )
         BOOST_REQUIRE_EQUAL( board.Tracks().size(), 1 );
         BOOST_CHECK( via->GetPosition() == VECTOR2I( 1000000, 2000000 ) );
         BOOST_CHECK( board.GetDesignSettings().GetDrillSymbolProfile() == DRILL_SYMBOL_PROFILE() );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( StackupTableLowersToAStaticTable )
+{
+    for( bool drop : { false, true } )
+    {
+        BOARD board;
+        board.SetCopperLayerCount( 4 );
+
+        PCB_STACKUP_TABLE* live = new PCB_STACKUP_TABLE( &board );
+
+        // The loader rejects a stackup table anywhere else
+        live->SetLayer( Dwgs_User );
+        live->RebuildCells( board );
+        board.Add( live );
+
+        PCB_GROUP* group = new PCB_GROUP( &board );
+        board.Add( group );
+        group->AddItem( live );
+
+        const auto report = ClassifyBoardForDowngrade( &board, kicad10, drop );
+        BOOST_CHECK( !report.IsBlocked() );
+        checkFeature( report, wxT( "Live stackup tables" ), drop ? DOWNGRADE_BUCKET::DROP : DOWNGRADE_BUCKET::LOWER,
+                      1 );
+
+        DowngradeBoardInPlace( &board, kicad10, drop );
+
+        if( drop )
+        {
+            BOOST_CHECK( board.Drawings().empty() );
+            continue;
+        }
+
+        BOOST_REQUIRE_EQUAL( board.Drawings().size(), 1 );
+
+        BOARD_ITEM* item = *board.Drawings().begin();
+        BOOST_REQUIRE( item->Type() == PCB_TABLE_T );
+
+        BOOST_CHECK( item->GetParentGroup() == group );
+    }
+}
+
+
+// The frozen writers have no case for a generated table, so the file itself has to carry a plain one.
+BOOST_AUTO_TEST_CASE( ExportedStackupTableIsAPlainTable )
+{
+    SETTINGS_MANAGER settingsManager;
+
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_downgrade_stackup", "" );
+    const std::string        src = ( tmp.Path() / "stackup.kicad_pcb" ).string();
+
+    wxString heading;
+
+    {
+        BOARD board;
+        board.SetCopperLayerCount( 4 );
+
+        PCB_STACKUP_TABLE* live = new PCB_STACKUP_TABLE( &board );
+
+        // The loader rejects a stackup table anywhere else
+        live->SetLayer( Dwgs_User );
+        live->RebuildCells( board );
+        board.Add( live );
+
+        BOOST_REQUIRE( live->GetRowCount() > 1 );
+        BOOST_REQUIRE( live->GetCell( 0, 0 ) );
+        heading = live->GetCell( 0, 0 )->GetText();
+        BOOST_REQUIRE( !heading.IsEmpty() );
+
+        KI_TEST::DumpBoardToFile( board, src );
+    }
+
+    // The source really is a live table, or the export below proves nothing
+    {
+        std::ifstream file( src );
+        std::string   content( ( std::istreambuf_iterator<char>( file ) ), std::istreambuf_iterator<char>() );
+        BOOST_REQUIRE( content.find( "(stackup_table" ) != std::string::npos );
+    }
+
+    for( const DOWNGRADE_TARGET& target : { kicad10, kicad9 } )
+    {
+        BOOST_TEST_CONTEXT( "Target " << target.m_id )
+        {
+            const std::string dest = ( tmp.Path() / ( "out-" + target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
+
+            COMPATIBILITY_REPORT report;
+            BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, target, report ) );
+
+            std::ifstream file( dest );
+            std::string   content( ( std::istreambuf_iterator<char>( file ) ), std::istreambuf_iterator<char>() );
+
+            BOOST_CHECK( content.find( "(stackup_table" ) == std::string::npos );
+            BOOST_CHECK( content.find( "(table" ) != std::string::npos );
+
+            PCB_IO_KICAD_SEXPR     io;
+            std::unique_ptr<BOARD> exported( io.LoadBoard( dest, nullptr ) );
+            BOOST_REQUIRE( exported );
+            BOOST_REQUIRE_EQUAL( exported->Drawings().size(), 1 );
+
+            BOARD_ITEM* item = *exported->Drawings().begin();
+            BOOST_REQUIRE( item->Type() == PCB_TABLE_T );
+
+            PCB_TABLE* flat = static_cast<PCB_TABLE*>( item );
+            BOOST_REQUIRE( flat->GetCell( 0, 0 ) );
+            BOOST_CHECK( flat->GetCell( 0, 0 )->GetText() == heading );
+        }
     }
 }
 
