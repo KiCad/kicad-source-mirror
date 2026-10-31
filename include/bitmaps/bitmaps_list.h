@@ -21,6 +21,12 @@
 #ifndef BITMAPS_PNG_BITMAPS_LIST__H
 #define BITMAPS_PNG_BITMAPS_LIST__H
 
+// GCC reports scoped enumerators such as git_push as shadowing libgit2's typedefs of the same name
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+
 /**
  * A list of all bitmap identifiers.  These map to multiple actual images, i.e. light and dark icon
  * themes, and eventually multi-resolution icons.
@@ -771,6 +777,10 @@ enum class BITMAPS : unsigned int
 
     spread_tracks
 };
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 
 inline bool operator!( const BITMAPS& aBitmap ) { return aBitmap == BITMAPS::INVALID_BITMAP; }
