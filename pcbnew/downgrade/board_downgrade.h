@@ -68,6 +68,9 @@ wxString FindUnsupportedBoardToken( const wxString& aSerialized, const DOWNGRADE
 /// The format the denylist was generated against. A format bump forces a review.
 int BoardDowngradeCoveredVersion();
 
+/// The footprint library format the rules were reviewed against. Moves independently of the board.
+int FootprintLibDowngradeCoveredVersion();
+
 /// First board format that stores custom footprint stackups.
 constexpr int FIRST_FP_CUSTOM_STACKUP = 20250818;
 

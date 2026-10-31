@@ -2128,6 +2128,14 @@ BOOST_AUTO_TEST_CASE( DenylistCoversCurrentFormat )
 }
 
 
+// When this fails the footprint library format moved. Review what it added inside (footprint ...),
+// then bump FootprintLibDowngradeCoveredVersion.
+BOOST_AUTO_TEST_CASE( DenylistCoversCurrentFootprintLibFormat )
+{
+    BOOST_CHECK_EQUAL( SEXPR_FOOTPRINT_LIB_FILE_VERSION, FootprintLibDowngradeCoveredVersion() );
+}
+
+
 // Every graphical LOWER rule has an omission path, both on boards and in footprints.
 BOOST_AUTO_TEST_CASE( DropApproximationsOmitsGraphicsWithoutReplacements )
 {

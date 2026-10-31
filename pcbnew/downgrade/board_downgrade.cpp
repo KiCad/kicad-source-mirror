@@ -130,6 +130,10 @@ static constexpr int VER_NON_COMPONENT_PAD = 20261031;
 // 4. Set this constant to the new version.
 static constexpr int BOARD_DOWNGRADE_COVERED = 20261031;
 
+// The footprint library format these rules were reviewed against. It moves independently of the
+// board format, so it needs its own gate.
+static constexpr int FOOTPRINT_LIB_DOWNGRADE_COVERED = 20261031;
+
 
 static bool isEllipse( const BOARD_ITEM* aItem )
 {
@@ -3205,6 +3209,12 @@ static constexpr DATED_TOKEN BOARD_VALUES[] = {
 int BoardDowngradeCoveredVersion()
 {
     return BOARD_DOWNGRADE_COVERED;
+}
+
+
+int FootprintLibDowngradeCoveredVersion()
+{
+    return FOOTPRINT_LIB_DOWNGRADE_COVERED;
 }
 
 
