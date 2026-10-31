@@ -31,7 +31,7 @@ class LAYER_RANGE
 private:
     PCB_LAYER_ID m_start;
     PCB_LAYER_ID m_stop;
-    int  m_layer_count;
+    int          m_layer_count;
 
     class LAYER_RANGE_ITERATOR
     {
@@ -45,15 +45,16 @@ private:
         {
             if( m_reverse )
             {
-                if( aLayer == B_Cu )
-                    aLayer = m_layer_count == 2 ? F_Cu :
-                             static_cast<int>( F_Cu ) + 2 * ( m_layer_count - 2 ) + 2;
+                if( aLayer == B_Cu && m_layer_count == 2 )
+                    aLayer = F_Cu;
+                else if( aLayer == B_Cu )
+                    aLayer = static_cast<int>( F_Cu ) + 2 * ( m_layer_count - 2 ) + 2;
                 else if( aLayer == m_stop || aLayer == UNDEFINED_LAYER )
                     aLayer = UNDEFINED_LAYER;
                 else if( aLayer == In1_Cu )
                     aLayer = F_Cu;
                 else
-                    aLayer = static_cast<int>( aLayer ) - 2;
+                    aLayer = aLayer - 2;
             }
             else
             {
@@ -66,7 +67,7 @@ private:
                 else if( aLayer == F_Cu )
                     aLayer = In1_Cu;
                 else
-                    aLayer = static_cast<int>( aLayer ) + 2;
+                    aLayer = aLayer + 2;
             }
 
             return aLayer;
@@ -80,7 +81,9 @@ private:
         using reference = PCB_LAYER_ID&;
 
         LAYER_RANGE_ITERATOR( PCB_LAYER_ID start, PCB_LAYER_ID stop, int layer_count ) :
-                m_current( start ), m_stop( stop ), m_layer_count( layer_count )
+                m_current( start ),
+                m_stop( stop ),
+                m_layer_count( layer_count )
         {
             if( start & 1 || stop & 1 )
                 throw std::invalid_argument( "Only works for copper layers" );
@@ -116,19 +119,26 @@ private:
             return m_current == other.m_current;
         }
 
-        bool operator!=( const LAYER_RANGE_ITERATOR& other ) const { return !( *this == other ); }
+        bool operator!=( const LAYER_RANGE_ITERATOR& other ) const
+        {
+            return !( *this == other );
+        }
     };
 
 public:
     LAYER_RANGE( PCB_LAYER_ID start, PCB_LAYER_ID stop, int layer_count ) :
-            m_start( start ), m_stop( stop ), m_layer_count( std::max( layer_count, 2 ) )
+            m_start( start ),
+            m_stop( stop ),
+            m_layer_count( std::max( layer_count, 2 ) )
     {
-            if( start & 1 || stop & 1 )
-                throw std::invalid_argument( "Only works for copper layers" );
+        if( start & 1 || stop & 1 )
+            throw std::invalid_argument( "Only works for copper layers" );
     }
 
-    LAYER_RANGE_ITERATOR begin() const { return LAYER_RANGE_ITERATOR( m_start, m_stop,
-                                                                      m_layer_count ); }
+    LAYER_RANGE_ITERATOR begin() const
+    {
+        return LAYER_RANGE_ITERATOR( m_start, m_stop, m_layer_count );
+    }
 
     LAYER_RANGE_ITERATOR end() const
     {
@@ -167,16 +177,17 @@ public:
         // iterator's traversal instead of the enum's numeric ordering (F_Cu=0, B_Cu=2, In1_Cu=4,
         // In2_Cu=6, ...).  F_Cu sits at position 0, each In<N>_Cu at position N, and B_Cu at the
         // bottom of whatever stackup the caller specified.
-        auto ordinal = [this]( PCB_LAYER_ID aLayer ) -> int
-        {
-            if( aLayer == F_Cu )
-                return 0;
+        auto ordinal =
+                [this]( PCB_LAYER_ID aLayer ) -> int
+                {
+                    if( aLayer == F_Cu )
+                        return 0;
 
-            if( aLayer == B_Cu )
-                return m_layer_count - 1;
+                    if( aLayer == B_Cu )
+                        return m_layer_count - 1;
 
-            return static_cast<int>( aLayer ) / 2 - 1;
-        };
+                    return static_cast<int>( aLayer ) / 2 - 1;
+                };
 
         int start = ordinal( m_start );
         int stop  = ordinal( m_stop );
