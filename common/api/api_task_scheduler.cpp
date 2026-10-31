@@ -19,6 +19,8 @@
 
 #include <api/api_task_scheduler.h>
 
+#include <wx/log.h>
+
 #include <api/api_utils.h>
 #include <api/common/tasks.pb.h>
 #include <kiid.h>
