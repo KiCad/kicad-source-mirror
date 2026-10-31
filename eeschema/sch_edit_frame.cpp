@@ -2380,6 +2380,10 @@ void SCH_EDIT_FRAME::FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll )
 
         UpdateItem( lastItem );
         lastBrightenedItemID = niluuid;
+
+        // Focusing a new item repaints as it moves the view, but clearing alone has to ask
+        if( !aItem )
+            GetCanvas()->Refresh();
     }
 
     if( aItem )
