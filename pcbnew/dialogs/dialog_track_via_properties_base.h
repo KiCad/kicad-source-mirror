@@ -114,7 +114,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_annularRingsCtrl;
 		wxStaticText* m_protectionPresetsLabel;
 		wxChoice* m_protectionFeatures;
-		VIA_CROSS_SECTION_PREVIEW* m_viaPreview;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_backdrillLabel;
 		wxChoice* m_backdrillChoice;
@@ -146,6 +145,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_bottomPostMachineSize2Label;
 		wxTextCtrl* m_bottomPostMachineSize2Ctrl;
 		wxStaticText* m_bottomPostMachineSize2Units;
+		VIA_CROSS_SECTION_PREVIEW* m_viaPreview;
 		wxStaticLine* m_staticline4;
 		wxBoxSizer* m_legacyTeardropsWarning;
 		wxStaticBitmap* m_legacyTeardropsIcon;

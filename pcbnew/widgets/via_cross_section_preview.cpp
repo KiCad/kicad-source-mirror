@@ -37,9 +37,10 @@ using GEOMETRY = VIA_CROSS_SECTION_GEOMETRY;
 class BODY_PAINTER
 {
 public:
-    BODY_PAINTER( wxDC& aDC, double aScale, double aOriginX, double aOriginY ) :
+    BODY_PAINTER( wxDC& aDC, double aScaleX, double aScaleY, double aOriginX, double aOriginY ) :
             m_dc( aDC ),
-            m_scale( aScale ),
+            m_scaleX( aScaleX ),
+            m_scaleY( aScaleY ),
             m_originX( aOriginX ),
             m_originY( aOriginY )
     {
@@ -47,7 +48,7 @@ public:
 
     wxPoint ToDevice( const GEOMETRY::POINT& aPoint ) const
     {
-        return wxPoint( KiROUND( m_originX + aPoint.x * m_scale ), KiROUND( m_originY + aPoint.y * m_scale ) );
+        return wxPoint( KiROUND( m_originX + aPoint.x * m_scaleX ), KiROUND( m_originY + aPoint.y * m_scaleY ) );
     }
 
     wxRect DeviceRect( const GEOMETRY::PIECE& aShape ) const
@@ -119,7 +120,8 @@ public:
 
 private:
     wxDC&  m_dc;
-    double m_scale;
+    double m_scaleX;
+    double m_scaleY;
     double m_originX;
     double m_originY;
 };
@@ -134,7 +136,7 @@ VIA_CROSS_SECTION_PREVIEW::VIA_CROSS_SECTION_PREVIEW( wxWindow* aParent, wxWindo
         SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     Create( aParent, aId, aPos, aSize, aStyle );
-    SetMinSize( FromDIP( wxSize( 160, 70 ) ) );
+    SetMinSize( FromDIP( wxSize( 150, 300 ) ) );
     SetToolTip( _( "Schematic cross section. Layer positions and cut depths are to scale with the "
                    "board thickness, widths are relative to the hole. Copper and mask thickness "
                    "are exaggerated." ) );
@@ -145,9 +147,6 @@ VIA_CROSS_SECTION_PREVIEW::VIA_CROSS_SECTION_PREVIEW( wxWindow* aParent, wxWindo
 void VIA_CROSS_SECTION_PREVIEW::SetState( const STATE& aState )
 {
     m_state = aState;
-
-    const double gridHeight = GEOMETRY( m_state ).GridHeight();
-    SetMinSize( FromDIP( wxSize( 160, KiROUND( 160 * gridHeight / GEOMETRY::GRID_W ) ) ) );
     Refresh();
 }
 
@@ -178,11 +177,16 @@ void VIA_CROSS_SECTION_PREVIEW::onPaint( wxPaintEvent& aEvent )
     const GEOMETRY geometry( m_state );
 
     const wxSize size = GetClientSize();
-    const double scale = std::min( size.x / GEOMETRY::GRID_W, size.y / geometry.GridHeight() );
-    const double originX = ( size.x - GEOMETRY::GRID_W * scale ) / 2;
-    const double originY = ( size.y - geometry.GridHeight() * scale ) / 2;
+    double       scaleX = size.x / GEOMETRY::GRID_W;
+    double       scaleY = size.y / geometry.GridHeight();
 
-    BODY_PAINTER painter( dc, scale, originX, originY );
+    // Pin the aspect ratio at no more than the golden mean
+    scaleY = std::min( scaleY, 1.618 * scaleX );
+
+    const double originX = ( size.x - GEOMETRY::GRID_W * scaleX ) / 2;
+    const double originY = ( size.y - geometry.GridHeight() * scaleY ) / 2;
+
+    BODY_PAINTER painter( dc, scaleX, scaleY, originX, originY );
 
     // Air is never painted. Backdrills are clipped out of everything under the mask, and the
     // cuts out of the mask and cover as well, so the dialog shows through them.

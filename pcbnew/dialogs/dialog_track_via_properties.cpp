@@ -2163,16 +2163,17 @@ void DIALOG_TRACK_VIA_PROPERTIES::updateViaPreview()
     state.m_TopLayer = span.m_Top;
     state.m_BottomLayer = span.m_Bottom;
 
-    const int boardThickness =
-            VIA_CROSS_SECTION_GEOMETRY::SetLayersFromStackup( state, board->GetStackupOrDefault(), copperLayers );
+    const int boardThickness = VIA_CROSS_SECTION_GEOMETRY::SetLayersFromStackup( state, board->GetStackupOrDefault(),
+                                                                                 copperLayers );
 
     const int drillSize = m_viaDrill.IsIndeterminate() ? 0 : m_viaDrill.GetIntValue();
 
-    auto ratioToDrill = [&]( UNIT_BINDER& aSize, double& aRatio )
-    {
-        if( drillSize > 0 && !aSize.IsIndeterminate() && !aSize.IsNull() )
-            aRatio = (double) aSize.GetIntValue() / drillSize;
-    };
+    auto ratioToDrill =
+            [&]( UNIT_BINDER& aSize, double& aRatio )
+            {
+                if( drillSize > 0 && !aSize.IsIndeterminate() && !aSize.IsNull() )
+                    aRatio = (double) aSize.GetIntValue() / drillSize;
+            };
 
     ratioToDrill( m_viaDiameter, state.m_PadRatio );
 
@@ -2204,8 +2205,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::updateViaPreview()
             switch( ringMode )
             {
             case ANNULAR_RINGS_START_END_CONNECTED: state.m_RingLayers.push_back( startEnd || connected ); break;
-            case ANNULAR_RINGS_CONNECTED: state.m_RingLayers.push_back( connected ); break;
-            default: state.m_RingLayers.push_back( startEnd ); break;
+            case ANNULAR_RINGS_CONNECTED:           state.m_RingLayers.push_back( connected );             break;
+            default:                                state.m_RingLayers.push_back( startEnd );              break;
             }
         }
     }
@@ -2285,10 +2286,10 @@ void DIALOG_TRACK_VIA_PROPERTIES::updateViaPreview()
 
         switch( ctrls.m_Mode->GetSelection() )
         {
-        case POST_MACHINE_NONE: cut.m_Mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
-        case POST_MACHINE_COUNTERSINK: cut.m_Mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK; break;
-        case POST_MACHINE_COUNTERBORE: cut.m_Mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE; break;
-        default: cut.m_Mode.reset(); break;
+        case POST_MACHINE_NONE:        cut.m_Mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
+        case POST_MACHINE_COUNTERSINK: cut.m_Mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+        case POST_MACHINE_COUNTERBORE: cut.m_Mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
+        default:                       cut.m_Mode.reset();                                            break;
         }
 
         ratioToDrill( ctrls.m_Size, cut.m_WidthRatio );

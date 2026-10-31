@@ -34,8 +34,10 @@ static constexpr double COVER_THICKNESS = 6.0;
 static constexpr double INNER_THICKNESS = 4.0;
 
 static constexpr double GRID_W = VIA_CROSS_SECTION_GEOMETRY::GRID_W;
-static constexpr double BOARD_LEFT = 10.0;
-static constexpr double BOARD_RIGHT = GRID_W - 10.0;
+// BOARD_LEFT and BOARD_RIGHT are placed slightly off view so that the left and right
+// extremes are clipped, giving the graphic more of a sectional-drawing look.
+static constexpr double BOARD_LEFT = -2.0;
+static constexpr double BOARD_RIGHT = GRID_W + 4.0;
 static constexpr double HOLE_LEFT = GRID_W / 2 - 17.0;
 static constexpr double HOLE_RIGHT = GRID_W / 2 + 17.0;
 static constexpr double BARREL_LEFT = HOLE_LEFT - 5.0;
