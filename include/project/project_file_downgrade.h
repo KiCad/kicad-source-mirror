@@ -25,6 +25,18 @@
 #include <downgrade_target.h>
 #include <kicommon.h>
 
+/// The settings schemas the project downgrade rules were written against. A bump can change the
+/// shape those rules edit, so bump one here only after checking the rules still hold.
+struct PROJECT_SCHEMAS_REVIEWED
+{
+    int m_Project = 4;
+    int m_NetSettings = 5;
+    int m_TuningProfiles = 2;
+    int m_ComponentClasses = 0;
+    int m_Erc = 1;
+    int m_BoardDesignSettings = 3;
+};
+
 /// Migrate a .kicad_pro document down to what the target release expects. The downgrade twin
 /// of the settings upgrade migrations: newer keys are removed, nested schema versions are
 /// rewound, and behavior-changing losses are added to the report. Keys the target simply

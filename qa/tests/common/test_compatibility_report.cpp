@@ -8,6 +8,11 @@
 #include <boost/test/unit_test.hpp>
 
 #include <compatibility_report.h>
+#include <project/component_class_settings.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
+#include <project/project_file_downgrade.h>
+#include <project/tuning_profiles.h>
 #include <kiplatform/io.h>
 #include <qa_utils/file_utils.h>
 
@@ -150,6 +155,38 @@ BOOST_AUTO_TEST_CASE( TextReportCanBeSavedAndReplacedAsUtf8 )
     BOOST_CHECK_EQUAL(
             std::distance( std::filesystem::directory_iterator( dir.Path() ), std::filesystem::directory_iterator() ),
             1 );
+}
+
+
+// A schema bump stops project export working until the downgrade has been checked against it.
+// If this fails, see what the bump changed, fix the downgrade if it needs it, then update
+// PROJECT_SCHEMAS_REVIEWED.
+//
+// ERC and board design settings are not checked. They live in eeschema and pcbnew, which this
+// binary does not link.
+BOOST_AUTO_TEST_CASE( ReviewedSchemasMatchTheLiveOnes )
+{
+    // Params only reach the json through a store, and meta.version is one of them
+    auto live = []( JSON_SETTINGS& aSettings ) -> int
+    {
+        aSettings.Store();
+
+        std::optional<int> value = aSettings.Get<int>( "meta.version" );
+        BOOST_REQUIRE( value.has_value() );
+        return *value;
+    };
+
+    const PROJECT_SCHEMAS_REVIEWED reviewed;
+
+    PROJECT_FILE             project( wxT( "schema_probe.kicad_pro" ) );
+    NET_SETTINGS             nets( nullptr, "net_settings" );
+    TUNING_PROFILES          tuning( nullptr, "tuning_profiles" );
+    COMPONENT_CLASS_SETTINGS classes( nullptr, "component_class_settings" );
+
+    BOOST_CHECK_EQUAL( live( project ), reviewed.m_Project );
+    BOOST_CHECK_EQUAL( live( nets ), reviewed.m_NetSettings );
+    BOOST_CHECK_EQUAL( live( tuning ), reviewed.m_TuningProfiles );
+    BOOST_CHECK_EQUAL( live( classes ), reviewed.m_ComponentClasses );
 }
 
 

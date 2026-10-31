@@ -966,6 +966,8 @@ void downgradeBoardSettings( nlohmann::json& aDoc, bool aPreTen, COMPATIBILITY_R
 
 void DowngradeProjectFileJson( nlohmann::json& aDoc, const DOWNGRADE_TARGET& aTarget, COMPATIBILITY_REPORT& aReport )
 {
+    const PROJECT_SCHEMAS_REVIEWED reviewed;
+
     auto knownSchema = [&]( const nlohmann::json& aSettings, int aMaximum, const wxString& aName )
     {
         if( aSettings.is_object() && aSettings.contains( "meta" ) && aSettings["meta"].is_object()
@@ -980,22 +982,24 @@ void DowngradeProjectFileJson( nlohmann::json& aDoc, const DOWNGRADE_TARGET& aTa
         return true;
     };
 
-    bool known = knownSchema( aDoc, 4, _( "project" ) );
+    bool known = knownSchema( aDoc, reviewed.m_Project, _( "project" ) );
 
     if( aDoc.contains( "net_settings" ) )
-        known &= knownSchema( aDoc["net_settings"], 5, _( "net settings" ) );
+        known &= knownSchema( aDoc["net_settings"], reviewed.m_NetSettings, _( "net settings" ) );
 
     if( aDoc.contains( "tuning_profiles" ) )
-        known &= knownSchema( aDoc["tuning_profiles"], 2, _( "tuning profiles" ) );
+        known &= knownSchema( aDoc["tuning_profiles"], reviewed.m_TuningProfiles, _( "tuning profiles" ) );
 
     if( aDoc.contains( "component_class_settings" ) )
-        known &= knownSchema( aDoc["component_class_settings"], 0, _( "component class settings" ) );
+        known &= knownSchema( aDoc["component_class_settings"], reviewed.m_ComponentClasses,
+                              _( "component class settings" ) );
 
     if( aDoc.contains( "erc" ) )
-        known &= knownSchema( aDoc["erc"], 1, _( "ERC settings" ) );
+        known &= knownSchema( aDoc["erc"], reviewed.m_Erc, _( "ERC settings" ) );
 
     if( aDoc.contains( "board" ) && aDoc["board"].is_object() && aDoc["board"].contains( "design_settings" ) )
-        known &= knownSchema( aDoc["board"]["design_settings"], 3, _( "board design settings" ) );
+        known &= knownSchema( aDoc["board"]["design_settings"], reviewed.m_BoardDesignSettings,
+                              _( "board design settings" ) );
 
     if( !known )
         return;
