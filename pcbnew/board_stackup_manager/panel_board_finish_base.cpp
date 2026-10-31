@@ -59,7 +59,7 @@ PANEL_SETUP_BOARD_FINISH_BASE::PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, 
 	bMargins->Add( m_viaProtectionHint, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMargins->Add( m_staticline1, 0, wxEXPAND | wxALL, 3 );
+	bMargins->Add( m_staticline1, 0, wxEXPAND|wxALL, 3 );
 
 	wxBoxSizer* bViaProtectionCtrls;
 	bViaProtectionCtrls = new wxBoxSizer( wxHORIZONTAL );
@@ -142,16 +142,16 @@ PANEL_SETUP_BOARD_FINISH_BASE::PANEL_SETUP_BOARD_FINISH_BASE( wxWindow* parent, 
 	bSizerPreview = new wxBoxSizer( wxVERTICAL );
 
 	m_viaPreview = new VIA_CROSS_SECTION_PREVIEW( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_viaPreview->SetMinSize( wxSize( 300,120 ) );
-	m_viaPreview->SetMaxSize( wxSize( 300,120 ) );
+	m_viaPreview->SetMinSize( wxSize( 240,120 ) );
+	m_viaPreview->SetMaxSize( wxSize( 240,120 ) );
 
 	bSizerPreview->Add( m_viaPreview, 0, wxRIGHT|wxLEFT, 20 );
 
 
-	bViaProtectionCtrls->Add( bSizerPreview, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bViaProtectionCtrls->Add( bSizerPreview, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 20 );
 
 
-	bMargins->Add( bViaProtectionCtrls, 0, wxALL|wxEXPAND, 5 );
+	bMargins->Add( bViaProtectionCtrls, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

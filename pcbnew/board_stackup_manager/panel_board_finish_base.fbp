@@ -480,7 +480,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">3</property>
-              <property name="flag">wxEXPAND | wxALL</property>
+              <property name="flag">wxEXPAND|wxALL</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -539,7 +539,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL|wxEXPAND</property>
+              <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
               <property name="proportion">0</property>
               <object class="wxBoxSizer" expanded="true">
                 <property name="minimum_size"></property>
@@ -1415,8 +1415,8 @@
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
-                  <property name="border">5</property>
-                  <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                  <property name="border">20</property>
+                  <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                   <property name="proportion">0</property>
                   <object class="wxBoxSizer" expanded="true">
                     <property name="minimum_size"></property>
@@ -1462,10 +1462,10 @@
                         <property name="include"></property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
-                        <property name="maximum_size">300,120</property>
+                        <property name="maximum_size">240,120</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
-                        <property name="minimum_size">300,120</property>
+                        <property name="minimum_size">240,120</property>
                         <property name="moveable">1</property>
                         <property name="name">m_viaPreview</property>
                         <property name="pane_border">1</property>
