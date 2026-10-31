@@ -888,6 +888,7 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
             }
 
             // Add backdrill cutouts for pads - affects specific layers only
+            LSET            copper = LSET::AllCuMask( m_copperLayersCount );
             const VECTOR2I& secDrillSize = pad->GetSecondaryDrillSize();
 
             if( secDrillSize.x > 0 || secDrillSize.y > 0 )
@@ -904,10 +905,10 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                 {
                     PCB_LAYER_ID secStart = pad->GetSecondaryDrillStartLayer();
                     PCB_LAYER_ID secEnd = pad->GetSecondaryDrillEndLayer();
-                    bool validLyPair = secStart >= 0 && secEnd >= 0;
+                    bool         validLayerPair = copper.Contains( secStart ) && copper.Contains( secEnd );;
 
                     // Iterate through layers affected by backdrill
-                    if( validLyPair )
+                    if( validLayerPair )
                     {
                         for( PCB_LAYER_ID backdrillLayer : LAYER_RANGE( secStart, secEnd, m_copperLayersCount ) )
                         {
