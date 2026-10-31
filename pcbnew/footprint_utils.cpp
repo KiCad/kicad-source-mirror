@@ -289,7 +289,18 @@ void FOOTPRINT_UTILS::CheckNetTies(
             copperItems.push_back( field );
     }
 
-    for( PCB_LAYER_ID layer : { F_Cu, In1_Cu, B_Cu } )
+    // Any copper layer which carries footprint copper can form a shorting group, including the
+    // inner layers used by buried graphics and non-component pads.
+
+    LSET copperLayers;
+
+    for( BOARD_ITEM* item : copperItems )
+        copperLayers |= item->GetLayerSet();
+
+    for( const PAD* pad : aFootprint.Pads() )
+        copperLayers |= pad->GetLayerSet();
+
+    for( PCB_LAYER_ID layer : copperLayers.CuStack() )
     {
         // Next, build a polygon-set for the copper on this layer.  We don't really care about
         // nets here, we just want to end up with a set of outlines describing the distinct
@@ -313,6 +324,13 @@ void FOOTPRINT_UTILS::CheckNetTies(
 
         for( const PAD* pad : aFootprint.Pads() )
         {
+            // PAD::GetEffectiveShape() will report the shape of the pad inferred for the given layer,
+            // but for single-layer pads like SMD/Non-component, this does not mean that the pad actually
+            // exists as copper on this layer.
+            // So check that there is actually copper here before assuming it can collide with the outline.
+            if( !pad->IsOnLayer( layer ) )
+                continue;
+
             for( int ii = 0; ii < copperOutlines.OutlineCount(); ++ii )
             {
                 if( pad->GetEffectiveShape( layer )->Collide( &copperOutlines.Outline( ii ), 0 ) )
