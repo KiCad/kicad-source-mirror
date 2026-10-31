@@ -563,6 +563,9 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
 
                 // The original dump already passed verify, so matching it covers both rebuilds
                 BOOST_CHECK_EQUAL( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
+
+                // Net codes follow update history, so the rebuild must see every state the commit did
+                rebuilt.Update( *schematic, true );
             };
 
     for( const VECTOR2I& movement : { offset, VECTOR2I( -offset.x, -offset.y ) } )
