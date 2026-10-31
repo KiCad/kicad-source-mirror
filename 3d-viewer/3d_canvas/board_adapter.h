@@ -632,7 +632,7 @@ private:
     BVH_CONTAINER_2D        m_frontCountersinkCutouts;   ///< Countersink cutouts on front (top)
     BVH_CONTAINER_2D        m_backCountersinkCutouts;    ///< Countersink cutouts on back (bottom)
 
-    unsigned int            m_copperLayersCount;
+    int                     m_copperLayersCount;
 
     double                  m_biuTo3Dunits;         ///< Scale factor to convert board internal units
                                               ///<  to 3D units normalized between -1.0 and 1.0.
