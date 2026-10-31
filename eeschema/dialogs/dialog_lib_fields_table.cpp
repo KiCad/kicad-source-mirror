@@ -537,6 +537,8 @@ bool DIALOG_LIB_FIELDS_TABLE::TransferDataToWindow()
 
     setScope( static_cast<SCOPE>( m_scope->GetSelection() ) );
 
+    rememberLoadedPresets();
+
     return true;
 }
 

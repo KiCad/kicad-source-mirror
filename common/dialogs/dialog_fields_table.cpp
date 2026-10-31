@@ -506,13 +506,23 @@ void DIALOG_FIELDS_TABLE::saveJobSettings( JOB_EXPORT_BOM& aJob )
 }
 
 
+void DIALOG_FIELDS_TABLE::rememberLoadedPresets()
+{
+    m_loadedSettings.m_BomPresets = GetUserBomPresets();
+    m_loadedSettings.m_BomSettings = getDataModel()->GetBomSettings();
+    m_loadedSettings.m_BomFmtPresets = GetUserBomFmtPresets();
+    m_loadedSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();
+}
+
+
 bool DIALOG_FIELDS_TABLE::savePresets( bool aSaveCurrentSettings )
 {
     bool modified = false;
 
+    // Compare with the presets as loaded, so a stored preset the load merely normalized stays untouched
     std::vector<BOM_PRESET> presets = GetUserBomPresets();
 
-    if( m_cfgBomSettings.m_BomPresets != presets )
+    if( m_loadedSettings.m_BomPresets != presets )
     {
         modified = true;
         m_cfgBomSettings.m_BomPresets = presets;
@@ -520,7 +530,7 @@ bool DIALOG_FIELDS_TABLE::savePresets( bool aSaveCurrentSettings )
 
     BOM_PRESET bomSettings = getDataModel()->GetBomSettings();
 
-    if( aSaveCurrentSettings && m_cfgBomSettings.m_BomSettings != bomSettings )
+    if( aSaveCurrentSettings && m_loadedSettings.m_BomSettings != bomSettings )
     {
         modified = true;
         m_cfgBomSettings.m_BomSettings = bomSettings;
@@ -528,7 +538,7 @@ bool DIALOG_FIELDS_TABLE::savePresets( bool aSaveCurrentSettings )
 
     std::vector<BOM_FMT_PRESET> fmts = GetUserBomFmtPresets();
 
-    if( m_cfgBomSettings.m_BomFmtPresets != fmts )
+    if( m_loadedSettings.m_BomFmtPresets != fmts )
     {
         modified = true;
         m_cfgBomSettings.m_BomFmtPresets = fmts;
@@ -536,7 +546,7 @@ bool DIALOG_FIELDS_TABLE::savePresets( bool aSaveCurrentSettings )
 
     BOM_FMT_PRESET fmtSettings = GetCurrentBomFmtSettings();
 
-    if( aSaveCurrentSettings && m_cfgBomSettings.m_BomFmtSettings != fmtSettings )
+    if( aSaveCurrentSettings && m_loadedSettings.m_BomFmtSettings != fmtSettings )
     {
         modified = true;
         m_cfgBomSettings.m_BomFmtSettings = fmtSettings;

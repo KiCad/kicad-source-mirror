@@ -507,6 +507,8 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     // user's current selection.
     EnableSelectionEvents();
 
+    rememberLoadedPresets();
+
     return true;
 }
 
