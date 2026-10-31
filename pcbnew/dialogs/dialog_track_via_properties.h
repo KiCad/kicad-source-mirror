@@ -45,8 +45,7 @@ public:
 
     bool TransferDataFromWindow() override;
 
-private:
-    void onNetSelector( wxCommandEvent& aEvent );
+protected:
     void onViaNotFreeClicked( wxCommandEvent& aEvent ) override;
     void onWidthSelect( wxCommandEvent& aEvent ) override;
     void onWidthEdit( wxCommandEvent& aEvent ) override;
@@ -60,6 +59,9 @@ private:
     void onBottomPostMachineChange( wxCommandEvent& aEvent ) override;
     void onProtectionFeaturesChange( wxCommandEvent& aEvent ) override;
     void onMachiningEdit( wxCommandEvent& aEvent ) override;
+
+private:
+    void onNetSelector( wxCommandEvent& aEvent );
 
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;

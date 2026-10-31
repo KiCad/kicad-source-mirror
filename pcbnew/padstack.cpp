@@ -562,8 +562,10 @@ void PADSTACK::SetBackdrillMode( BACKDRILL_MODE aMode )
                 {
                     DRILL_PROPS& drill = backdrillWriteSlot( aTop );
                     drill.start = aTop ? F_Cu : B_Cu;
-                    drill.end = drill.start;                 // Must-cut a single copper layer
                     drill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+                    if( drill.end == UNDEFINED_LAYER )
+                        drill.end = drill.start;             // Must-cut a single copper layer
 
                     if( drill.size.x <= 0 )
                         drill.size = m_drill.size * 1.1;     // Backdrill slightly larger than main drill

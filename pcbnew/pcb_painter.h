@@ -343,13 +343,12 @@ protected:
      *
      * @param aItem the board item (for color lookup)
      * @param aCenter center point of the indicator
-     * @param aDrillSize diameter of the backdrill
-     * @param aStartLayer layer where backdrill starts
-     * @param aEndLayer layer where backdrill ends
+     * @param aBackdrillSize diameter of the backdrill
+     * @param aMustCutLayer layer the backdrill must cut
+     * @param aOffset dash offset (so that top and bottom backdrills at the same radius will alternate colors)
      */
-    void drawBackdrillIndicator( const BOARD_ITEM* aItem, const VECTOR2D& aCenter,
-                                 int aDrillSize, PCB_LAYER_ID aStartLayer,
-                                 PCB_LAYER_ID aEndLayer );
+    void drawBackdrillIndicator( const BOARD_ITEM* aItem, const VECTOR2D& aCenter, int aBackdrillSize,
+                                 PCB_LAYER_ID aMustCutLayer, int aOffset );
 
     /**
      * Draw post-machining indicator (dashed circle) at the given center point.

@@ -1522,8 +1522,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
     if( aLayer == LAYER_VIA_HOLEWALLS )
     {
-        double thickness =
-            m_holePlatingThickness * ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
+        double thickness =  m_holePlatingThickness * ADVANCED_CFG::GetCfg().m_HoleWallPaintingMultiplier;
         double drillRadius = getViaDrillSize( aVia ) / 2.0;
         double maxRadius = aVia->GetWidth( layerTop ) / 2.0;
         double radius = drillRadius + thickness;
@@ -1557,16 +1556,10 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
             std::optional<int> terDrill = aVia->GetTertiaryDrillSize();
 
             if( secDrill.value_or( 0 ) > 0 )
-            {
-                drawBackdrillIndicator( aVia, center, *secDrill, aVia->GetSecondaryDrillStartLayer(),
-                                        aVia->GetSecondaryDrillEndLayer() );
-            }
+                drawBackdrillIndicator( aVia, center, *secDrill, aVia->GetSecondaryDrillEndLayer(), 0 );
 
             if( terDrill.value_or( 0 ) > 0 )
-            {
-                drawBackdrillIndicator( aVia, center, *terDrill, aVia->GetTertiaryDrillStartLayer(),
-                                        aVia->GetTertiaryDrillEndLayer() );
-            }
+                drawBackdrillIndicator( aVia, center, *terDrill, aVia->GetTertiaryDrillEndLayer(), 1 );
         }
     }
     else if( aLayer == LAYER_VIA_HOLES )
@@ -2190,16 +2183,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             const VECTOR2I& terDrill = aPad->GetTertiaryDrillSize();
 
             if( secDrill.x > 0 )
-            {
-                drawBackdrillIndicator( aPad, holePos, secDrill.x, aPad->GetSecondaryDrillStartLayer(),
-                                        aPad->GetSecondaryDrillEndLayer() );
-            }
+                drawBackdrillIndicator( aPad, holePos, secDrill.x, aPad->GetSecondaryDrillEndLayer(), 0 );
 
             if( terDrill.x > 0 )
-            {
-                drawBackdrillIndicator( aPad, holePos, terDrill.x, aPad->GetTertiaryDrillStartLayer(),
-                                        aPad->GetTertiaryDrillEndLayer() );
-            }
+                drawBackdrillIndicator( aPad, holePos, terDrill.x, aPad->GetTertiaryDrillEndLayer(), 1 );
         }
 
         return;
@@ -4005,11 +3992,10 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_GRID_ITEM* aGridItem, int aLayer )
 {
-    // Grid content (lines/dots/crosses) is rendered by the GAL backend through
-    // GRID_SOURCE (see PCB_DRAW_PANEL_GAL::prepareGridSources).  Only selection
-    // decorations - outline and centre marker - live here, on LAYER_GRID_ITEMS.
-    // The item is also registered on m_layer for VIEW::Query (selection); skip
-    // those passes.
+    // Grid content (lines/dots/crosses) is rendered by the GAL backend through GRID_SOURCE (see
+    // PCB_DRAW_PANEL_GAL::prepareGridSources).  Only selection decorations - outline and centre
+    // marker - live here, on LAYER_GRID_ITEMS.  The item is also registered on m_layer for VIEW::Query
+    // (selection); skip those passes.
     const bool shadow = aLayer == LAYER_LOCKED_ITEM_SHADOW; // happens only if locked
 
     if( aLayer != LAYER_SUBGRIDS && !shadow )
@@ -4291,9 +4277,9 @@ void PCB_PAINTER::draw( const PCB_BOARD_OUTLINE* aBoardOutline, int aLayer )
 
 
 void PCB_PAINTER::drawBackdrillIndicator( const BOARD_ITEM* aItem, const VECTOR2D& aCenter,
-                                          int aDrillSize, PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer )
+                                          int aBackdrillSize, PCB_LAYER_ID aMustCutLayer, int aOffset )
 {
-    double backdrillRadius = aDrillSize / 2.0;
+    double backdrillRadius = aBackdrillSize / 2.0;
     double lineWidth = std::max( backdrillRadius / 16.0, m_pcbSettings.m_outlineWidth * 2.0 );
 
     // Inset so entire graphic is within backdrill extent
@@ -4309,10 +4295,10 @@ void PCB_PAINTER::drawBackdrillIndicator( const BOARD_ITEM* aItem, const VECTOR2
     constexpr int NUM_DASHES = 12;                             // Number of dashes around the circle
     EDA_ANGLE     dashAngle = ANGLE_360 / ( NUM_DASHES * 2 );  // Dash and gap are equal size
 
-    for( int i = 0; i < NUM_DASHES; ++i )
+    for( int i = aOffset; i < NUM_DASHES; i += 2 )
     {
         EDA_ANGLE startAngle = dashAngle * ( i * 2 );
-        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aItem, i % 2 ? aStartLayer : aEndLayer ) );
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( aItem, aMustCutLayer ) );
         m_gal->DrawArc( aCenter, backdrillRadius, startAngle, dashAngle );
     }
 }

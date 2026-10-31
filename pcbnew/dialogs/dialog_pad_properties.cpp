@@ -233,6 +233,18 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD& aPad
     m_padToDieDelay.SetUnits( EDA_UNITS::PS );
     m_padToDieDelay.SetDataType( EDA_DATA_TYPE::TIME );
 
+    m_backDrillTopLayer->SetLayersHotkeys( false );
+    m_backDrillTopLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_backDrillTopLayer->SetBoardFrame( m_parent );
+    m_backDrillTopLayer->SetUndefinedLayerName( _( "None" ) );
+    m_backDrillTopLayer->Resync();
+
+    m_backDrillBottomLayer->SetLayersHotkeys( false );
+    m_backDrillBottomLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_backDrillBottomLayer->SetBoardFrame( m_parent );
+    m_backDrillBottomLayer->SetUndefinedLayerName( _( "None" ) );
+    m_backDrillBottomLayer->Resync();
+
     initValues();
 
     m_techLayersLabel->SetFont( KIUI::GetStatusFont( this ) );
@@ -374,9 +386,8 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 
     // Show the X and Y axis. It is useful because pad shape can have an offset
     // or be a complex shape.
-    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( colorSettings->GetColor( LAYER_GRID ),
-                                               KIGFX::ORIGIN_VIEWITEM::CROSS, 100000,
-                                               VECTOR2D( m_previewPad->GetPosition() ) );
+    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( colorSettings->GetColor( LAYER_GRID ), KIGFX::ORIGIN_VIEWITEM::CROSS,
+                                               100000, VECTOR2D( m_previewPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
     m_padPreviewGAL->UpdateColors();
@@ -570,14 +581,10 @@ void DIALOG_PAD_PROPERTIES::updateAllowedPadChamferCorners()
     };
 
     if( m_mixedChamferRatio.GetDoubleValue() > 50.0 )
-    {
         updateCheckBoxes( { m_cbTopLeft1, m_cbTopRight1, m_cbBottomRight1, m_cbBottomLeft1 } );
-    }
 
     if( m_chamferRatio.GetDoubleValue() > 50.0 )
-    {
         updateCheckBoxes( { m_cbTopLeft, m_cbTopRight, m_cbBottomRight, m_cbBottomLeft } );
-    }
 }
 
 
@@ -790,8 +797,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_ZoneCustomPadShape->SetSelection( 0 );
 
     // Type of pad selection
-    bool aperture =
-            m_previewPad->GetAttribute() == PAD_ATTRIB::SMD && m_previewPad->IsAperturePad();
+    bool aperture = m_previewPad->GetAttribute() == PAD_ATTRIB::SMD && m_previewPad->IsAperturePad();
 
     if( aperture )
     {
@@ -801,10 +807,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
     {
         switch( m_previewPad->GetAttribute() )
         {
-        case PAD_ATTRIB::PTH:             m_padType->SetSelection( PTH_DLG_TYPE ); break;
-        case PAD_ATTRIB::SMD:             m_padType->SetSelection( SMD_DLG_TYPE ); break;
-        case PAD_ATTRIB::CONN:            m_padType->SetSelection( CONN_DLG_TYPE ); break;
-        case PAD_ATTRIB::NPTH:            m_padType->SetSelection( NPTH_DLG_TYPE ); break;
+        case PAD_ATTRIB::PTH:             m_padType->SetSelection( PTH_DLG_TYPE );           break;
+        case PAD_ATTRIB::SMD:             m_padType->SetSelection( SMD_DLG_TYPE );           break;
+        case PAD_ATTRIB::CONN:            m_padType->SetSelection( CONN_DLG_TYPE );          break;
+        case PAD_ATTRIB::NPTH:            m_padType->SetSelection( NPTH_DLG_TYPE );          break;
         case PAD_ATTRIB::NON_COMPONENT:   m_padType->SetSelection( NON_COMPONENT_DLG_TYPE ); break;
         }
     }
@@ -837,26 +843,19 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_backDrillChoice->SetSelection( topBackdrillSize ? ( bottomBackdrillSize ? 3 : 1 )
                                                       : ( bottomBackdrillSize ? 2 : 0 ) );
 
-    auto loadBackdrill = [&]( const std::optional<int>& aSize, PCB_LAYER_ID aEndLayer, UNIT_BINDER& aSizeBinder,
-                              wxBitmapComboBox* aLayerCtrl )
-    {
-        if( !aSize )
-        {
-            aSizeBinder.SetValue( 0 );
-            return;
-        }
-
-        aSizeBinder.SetValue( *aSize );
-
-        for( unsigned int i = 0; i < aLayerCtrl->GetCount(); ++i )
-        {
-            if( ToLAYER_ID( (intptr_t) aLayerCtrl->GetClientData( i ) ) == aEndLayer )
+    auto loadBackdrill =
+            [&]( const std::optional<int>& aSize, PCB_LAYER_ID aEndLayer, UNIT_BINDER& aSizeBinder,
+                 PCB_LAYER_BOX_SELECTOR* aLayerCtrl )
             {
-                aLayerCtrl->SetSelection( i );
-                break;
-            }
-        }
-    };
+                if( !aSize )
+                {
+                    aSizeBinder.SetValue( 0 );
+                    return;
+                }
+
+                aSizeBinder.SetValue( *aSize );
+                aLayerCtrl->SetLayerSelection( aEndLayer );
+            };
 
     loadBackdrill( topBackdrillSize, padstack.GetBackdrillEndLayer( true ), m_backDrillTopSizeBinder,
                    m_backDrillTopLayer );
@@ -1292,19 +1291,6 @@ void DIALOG_PAD_PROPERTIES::UpdateLayersDropdown()
 
         break;
     }
-
-    m_backDrillTopLayer->Clear();
-    m_backDrillBottomLayer->Clear();
-
-    for( PCB_LAYER_ID layerId : m_board->GetEnabledLayers().UIOrder() )
-    {
-        if( IsCopperLayer( layerId ) )
-        {
-            wxString layerName = m_board->GetLayerName( layerId );
-            m_backDrillTopLayer->Append( layerName, wxBitmapBundle(), (void*)(intptr_t)layerId );
-            m_backDrillBottomLayer->Append( layerName, wxBitmapBundle(), (void*)(intptr_t)layerId );
-        }
-    }
 }
 
 
@@ -1325,8 +1311,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
     // Pad type just changed, so the old pad's layer set is no longer meaningful.  Pass nullopt
     // to populate the defaults for the new type.
-    updatePadLayersList( std::nullopt, m_previewPad->GetRemoveUnconnected(),
-                         m_previewPad->GetKeepTopBottom() );
+    updatePadLayersList( std::nullopt, m_previewPad->GetRemoveUnconnected(), m_previewPad->GetKeepTopBottom() );
 
     m_gbSizerHole->Show( hasHole );
     m_staticline71->Show( hasHole );
@@ -1939,8 +1924,9 @@ void DIALOG_PAD_PROPERTIES::updateHoleControls()
         m_bottomPostMachining->Enable( true );
 
         // Update sub-controls based on selection
+        syncBackdrillControls( false );
+
         wxCommandEvent dummy;
-        onBackDrillChoice( dummy );
         onTopPostMachining( dummy );
         onBottomPostMachining( dummy );
     }
@@ -2390,9 +2376,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         {
             padstack.SetBackdrillSize( true, m_backDrillTopSizeBinder.GetIntValue() );
 
-            if( m_backDrillTopLayer->GetSelection() != wxNOT_FOUND )
-                padstack.SetBackdrillEndLayer( true, ToLAYER_ID( (intptr_t) m_backDrillTopLayer->GetClientData(
-                                                             m_backDrillTopLayer->GetSelection() ) ) );
+            if( m_backDrillTopLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                padstack.SetBackdrillEndLayer( true, ToLAYER_ID( m_backDrillTopLayer->GetLayerSelection() ) );
         }
         else
         {
@@ -2403,9 +2388,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         {
             padstack.SetBackdrillSize( false, m_backDrillBottomSizeBinder.GetIntValue() );
 
-            if( m_backDrillBottomLayer->GetSelection() != wxNOT_FOUND )
-                padstack.SetBackdrillEndLayer( false, ToLAYER_ID( (intptr_t) m_backDrillBottomLayer->GetClientData(
-                                                              m_backDrillBottomLayer->GetSelection() ) ) );
+            if( m_backDrillBottomLayer->GetLayerSelection() != UNDEFINED_LAYER )
+                padstack.SetBackdrillEndLayer( false, ToLAYER_ID( m_backDrillBottomLayer->GetLayerSelection() ) );
         }
         else
         {
@@ -2417,9 +2401,9 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
         switch( m_topPostMachining->GetSelection() )
         {
-        case 1: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;           break;
-        case 2: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;           break;
-        default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;    break;
+        case 1:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+        case 2:  frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
+        default: frontPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
         }
 
         frontPostMachining.size = m_topPostMachineSize1Binder.GetIntValue();
@@ -2436,9 +2420,9 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
         switch( m_bottomPostMachining->GetSelection() )
         {
-        case 1: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;            break;
-        case 2: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;            break;
-        default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;     break;
+        case 1:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;       break;
+        case 2:  backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;       break;
+        default: backPostMachining.mode = PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED; break;
         }
 
         backPostMachining.size = m_bottomPostMachineSize1Binder.GetIntValue();
@@ -2462,9 +2446,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 }
 
 
+void DIALOG_PAD_PROPERTIES::onBackDrillChoice( wxCommandEvent& aEvent )
+{
+    syncBackdrillControls( true );
+    OnValuesChanged( aEvent );
+}
 
 
-void DIALOG_PAD_PROPERTIES::onBackDrillChoice( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::syncBackdrillControls( bool aFromUserEvent )
 {
     int selection = m_backDrillChoice->GetSelection();
     // 0: None, 1: Top, 2: Bottom, 3: Both
@@ -2480,6 +2469,35 @@ void DIALOG_PAD_PROPERTIES::onBackDrillChoice( wxCommandEvent& event )
     m_backDrillBottomLayer->Enable( enableBottom );
     m_backDrillBottomLayerLabel->Enable( enableBottom );
 
+    // Initialize values if this was a user event that turned on backdrills
+    if( aFromUserEvent )
+    {
+        if( enableTop )
+        {
+            if( m_backDrillTopLayer->GetLayerSelection() == UNDEFINED_LAYER )
+                m_backDrillTopLayer->SetLayerSelection( F_Cu );
+
+            if( m_backDrillTopSizeBinder.GetIntValue() == 0 )
+            {
+                // Initialize backdrill slightly larger than main drill (see PADSTACK::SetBackdrillMode())
+                int drill = std::max( m_holeX.GetIntValue(), m_holeY.GetIntValue() );
+                m_backDrillTopSizeBinder.SetValue( KiROUND( drill * 1.1 ) );
+            }
+        }
+
+        if( enableBottom )
+        {
+            if( m_backDrillBottomLayer->GetLayerSelection() == UNDEFINED_LAYER )
+                m_backDrillBottomLayer->SetLayerSelection( B_Cu );
+
+            if( m_backDrillBottomSizeBinder.GetIntValue() == 0 )
+            {
+                // Initialize backdrill slightly larger than main drill (see PADSTACK::SetBackdrillMode())
+                int drill = std::max( m_holeX.GetIntValue(), m_holeY.GetIntValue() );
+                m_backDrillBottomSizeBinder.SetValue( KiROUND( drill * 1.1 ) );
+            }
+        }
+    }
 }
 
 

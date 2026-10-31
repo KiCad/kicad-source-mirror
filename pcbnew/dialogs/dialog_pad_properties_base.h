@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class PCB_LAYER_BOX_SELECTOR;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -260,12 +261,12 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_bottomPostMachineSize2Units;
 		wxChoice* m_backDrillChoice;
 		wxStaticText* m_backDrillTopLayerLabel;
-		wxBitmapComboBox* m_backDrillTopLayer;
+		PCB_LAYER_BOX_SELECTOR* m_backDrillTopLayer;
 		wxStaticText* m_backDrillTopSizeLabel;
 		wxTextCtrl* m_backDrillTopSize;
 		wxStaticText* m_backDrillTopSizeUnits;
 		wxStaticText* m_backDrillBottomLayerLabel;
-		wxBitmapComboBox* m_backDrillBottomLayer;
+		PCB_LAYER_BOX_SELECTOR* m_backDrillBottomLayer;
 		wxStaticText* m_backDrillBottomSizeLabel;
 		wxTextCtrl* m_backDrillBottomSize;
 		wxStaticText* m_backDrillBottomSizeUnits;
