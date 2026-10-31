@@ -204,28 +204,10 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     // Keyed by the source table, since the board branch deletes each copy once it is formatted
     std::set<const EDA_ITEM*> promotedSources;
 
-    if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_FOOTPRINT_T )
-    {
-        // make the footprint safe to transfer to other pcbs
-        const FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aSelected.Front() );
-        // Do not modify existing board
-        FOOTPRINT newFootprint( *footprint );
+    // Copy without nets
+    const bool loneFootprint = aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_FOOTPRINT_T;
 
-        for( PAD* pad : newFootprint.Pads() )
-            pad->SetNetCode( 0 );
-
-        // locked means "locked in place"; copied items therefore can't be locked
-        newFootprint.SetLocked( false );
-
-        // locate the reference point at (0, 0) in the copied items
-        newFootprint.Move( VECTOR2I( -refPoint.x, -refPoint.y ) );
-
-        Format( static_cast<BOARD_ITEM*>( &newFootprint ) );
-
-        newFootprint.SetParent( nullptr );
-        newFootprint.SetParentGroup( nullptr );
-    }
-    else if( isFootprintEditor )
+    if( isFootprintEditor )
     {
         FOOTPRINT partialFootprint( m_board );
 
@@ -442,6 +424,12 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 copy->SetLocked( false );
                 copy->SetParent( m_board );
                 copy->SetParentGroup( nullptr );
+
+                if( loneFootprint && copy->Type() == PCB_FOOTPRINT_T )
+                {
+                    for( PAD* pad : static_cast<FOOTPRINT*>( copy )->Pads() )
+                        pad->SetNetCode( 0 );
+                }
 
                 // locate the reference point at (0, 0) in the copied items
                 copy->Move( -refPoint );

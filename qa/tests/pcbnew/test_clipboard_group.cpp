@@ -20,9 +20,9 @@
 /**
  * @file test_clipboard_group.cpp
  *
- * Regression tests for clipboard copy/paste of PCB_GROUPs.
+ * Regression tests for clipboard copy/paste round trips.
  *
- * Specifically guards against https://gitlab.com/kicad/code/kicad/-/issues/24000 where
+ * The group cases guard against https://gitlab.com/kicad/code/kicad/-/issues/24000 where
  * groups appeared ungrouped after paste because PCB_IO_KICAD_SEXPR::format(PCB_GROUP*)
  * validated cloned member pointers against the source board's pointer cache and dropped
  * every member as "invalid", causing the (group ...) sexpr to be omitted entirely.
@@ -31,8 +31,10 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
+#include <footprint.h>
 #include <kicad_clipboard.h>
 #include <lset.h>
+#include <pad.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <tools/pcb_selection.h>
@@ -187,6 +189,57 @@ BOOST_AUTO_TEST_CASE( CopyPasteNestedGroupPreservesMembership )
     BOOST_CHECK_EQUAL( pastedOuter->GetItems().size(), 2u );
     BOOST_CHECK_EQUAL( pastedInner->GetItems().size(), 2u );
     BOOST_CHECK_EQUAL( pastedInner->GetParentGroup(), pastedOuter );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE( ClipboardFootprint )
+
+
+/**
+ * A lone footprint used to go to the clipboard as a bare (footprint ...), which is an object and
+ * not a document, so the payload carried no header for the parser to read it against.
+ */
+BOOST_AUTO_TEST_CASE( CopyPasteLoneFootprintKeepsBody )
+{
+    auto board = std::make_unique<BOARD>();
+    board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    FOOTPRINT* source = new FOOTPRINT( board.get() );
+    source->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "TestFootprint" ) ) );
+    source->SetLayer( F_Cu );
+    source->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+
+    PCB_SHAPE* silk = new PCB_SHAPE( source, SHAPE_T::SEGMENT );
+    silk->SetStart( source->GetPosition() );
+    silk->SetEnd( source->GetPosition() + VECTOR2I( pcbIUScale.mmToIU( 2 ), 0 ) );
+    silk->SetLayer( F_SilkS );
+    silk->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.12 ), LINE_STYLE::SOLID ) );
+    source->Add( silk );
+
+    PAD* pad = new PAD( source );
+    pad->SetNumber( wxT( "1" ) );
+    pad->SetPosition( source->GetPosition() );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+    pad->SetAttribute( PAD_ATTRIB::SMD );
+    pad->SetLayerSet( LSET( { F_Cu, F_Mask, F_Paste } ) );
+    source->Add( pad );
+
+    board->Add( source );
+
+    PCB_SELECTION selection;
+    selection.Add( source );
+
+    std::unique_ptr<BOARD> clipBoard = roundTripSelection( board.get(), selection );
+
+    BOOST_REQUIRE_EQUAL( clipBoard->Footprints().size(), 1u );
+
+    const FOOTPRINT* pasted = clipBoard->Footprints().front();
+
+    BOOST_CHECK_EQUAL( pasted->Pads().size(), 1u );
+    BOOST_CHECK_EQUAL( pasted->GraphicalItems().size(), 1u );
 }
 
 
