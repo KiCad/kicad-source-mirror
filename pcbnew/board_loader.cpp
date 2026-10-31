@@ -175,6 +175,10 @@ std::unique_ptr<BOARD> BOARD_LOADER::CreateEmptyBoard( PROJECT* aProject )
 {
     std::unique_ptr<BOARD> brd = std::make_unique<BOARD>();
     brd->SetProject( aProject );
+
+    BOARD_DESIGN_SETTINGS& bds = brd->GetDesignSettings();
+    bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( brd.get(), &bds );
+
     return brd;
 }
 
