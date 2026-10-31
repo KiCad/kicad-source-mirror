@@ -115,6 +115,7 @@ static constexpr int VER_FOOTPRINT_HEIGHT = 20261017;
 static constexpr int VER_LINKED_PLACEMENT = 20261018;
 static constexpr int VER_IMAGE_ROTATION = 20261025;
 static constexpr int VER_IMAGE_OPACITY = 20261025;
+static constexpr int VER_FP_LIB_HEADER = 20261028;
 static constexpr int VER_STACKUP_TABLE = 20261030;
 static constexpr int VER_NON_COMPONENT_PAD = 20261031;
 
@@ -3142,6 +3143,7 @@ static constexpr DATED_TOKEN BOARD_TOKENS[] = {
     { "drill_map", VER_DRILL_DRAWINGS },
     { "drill_symbol_profile", VER_DRILL_DRAWINGS },
     { "stackup_table", VER_STACKUP_TABLE },
+    { "kicad_footprint_lib", VER_FP_LIB_HEADER },
     { "link", VER_LINKED_PLACEMENT },
     { "connected_routing", VER_LINKED_PLACEMENT },
     { "other_items", VER_LINKED_PLACEMENT },
