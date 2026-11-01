@@ -592,6 +592,8 @@ BOOST_AUTO_TEST_CASE( ActualUnitParsing )
 /**
  * Test unit parsing edge cases and error handling
  */
+#if !defined( __MINGW32__ ) // on mingw use of boost::unit_test::disabled() or enabled()
+                            // creates serious link issues
 BOOST_AUTO_TEST_CASE( UnitParsingEdgeCases, * boost::unit_test::enabled() )
 {
     EXPRESSION_EVALUATOR evaluator_mm( EDA_UNITS::MM );
@@ -623,6 +625,7 @@ BOOST_AUTO_TEST_CASE( UnitParsingEdgeCases, * boost::unit_test::enabled() )
     result = evaluator_mm.Evaluate( "@{1um}" );
     BOOST_CHECK_EQUAL( result, "0.001" );  // 1 um = 0.001 mm
 }
+#endif
 
 BOOST_AUTO_TEST_CASE( NumericEvaluatorCompatibility )
 {

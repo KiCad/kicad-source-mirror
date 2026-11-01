@@ -899,7 +899,7 @@ BOOST_AUTO_TEST_CASE( BenchmarkAllExtractedPolygons )
         OutputComparisonReport( baseline, comparisons, totalTriangles, totalSpikeyTri, totalZones );
 }
 
-
+#if !defined( __MINGW32__ )   // on mingw use of * boost::unit_test::disabled() creates serious link issues
 BOOST_AUTO_TEST_CASE( UpdateTriangulationStatus, * boost::unit_test::disabled() )
 {
     // Naming the enclosing suite with --run_test overrides disabled(), which would otherwise
@@ -1008,6 +1008,6 @@ BOOST_AUTO_TEST_CASE( UpdateTriangulationStatus, * boost::unit_test::disabled() 
     BOOST_TEST_MESSAGE( "Boards: " << polyFiles.size() << "  Zones: " << totalZones
                         << "  Triangles: " << totalTriangles );
 }
-
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()

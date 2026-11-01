@@ -807,6 +807,7 @@ double RunSeriesOP( const std::string& aSubckt, const std::string& aSubcktName,
 
 // End-to-end ngspice .op against the emitted SUBCKT.  Disabled by default;
 // ngspice singleton state from prior suites can segfault subsequent runs.
+#if !defined( __MINGW32__ )   // on mingw use of * boost::unit_test::disabled() creates serious link issues
 BOOST_AUTO_TEST_CASE( Run_v4_1_RSeries_Ngspice, * boost::unit_test::disabled() )
 {
     WX_STRING_REPORTER reporter;
@@ -881,7 +882,7 @@ BOOST_AUTO_TEST_CASE( Run_v4_1_RSeries_Ngspice, * boost::unit_test::disabled() )
         }
     }
 }
-
+#endif
 
 namespace
 {
@@ -993,6 +994,7 @@ BOOST_AUTO_TEST_CASE( Dialog_Series_Switch_Params_v4_1 )
 
 // Two-port SUBCKT round-trip through ngspice.  Disabled by default — see
 // Run_v4_1_RSeries_Ngspice.
+#if !defined( __MINGW32__ )   // on mingw use of * boost::unit_test::disabled() creates serious link issues
 BOOST_AUTO_TEST_CASE( Run_Series_Schematic_Ngspice, * boost::unit_test::disabled() )
 {
     WX_STRING_REPORTER reporter;
@@ -1050,7 +1052,7 @@ BOOST_AUTO_TEST_CASE( Run_Series_Schematic_Ngspice, * boost::unit_test::disabled
     BOOST_TEST( iDevice > 0.0 );
     BOOST_TEST( iDevice < 2.0 );
 }
-
+#endif
 
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23583
 // A rectangular-wave driver on a model with exactly two waveform pairs (the
