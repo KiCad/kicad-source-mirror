@@ -397,6 +397,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             *item = std::move( alt_item );
 
             UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+            SetCurrentVariant( Schematic().GetCurrentVariant() );
         }
         else if( schItem )
         {
