@@ -444,6 +444,9 @@ protected:
     void recreateColumns();
     void createMissingColumns();
 
+    /// What RefreshTree last added to aColumn's shown width to force a redraw
+    int redrawNudge( const wxString& aColumn ) const;
+
 protected:
     EDA_BASE_FRAME*              m_parent;
     APP_SETTINGS_BASE::LIB_TREE& m_cfg;
@@ -455,6 +458,7 @@ protected:
     std::vector<wxString>        m_shownColumns;   // Stored in display order
     wxDataViewCtrl*              m_widget;
     std::function<void()>        m_lazyLoadHandler;
+    std::map<wxString, int>      m_redrawNudge;
 
 private:
     SORT_MODE                    m_sort_mode;

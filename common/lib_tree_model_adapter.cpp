@@ -260,8 +260,13 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
 
         for( const std::pair<const wxString, wxDataViewColumn*>& pair : m_colNameMap )
         {
-            if( pair.second && IsValidColumnWidth( pair.second->GetWidth() ) )
-                m_cfg.column_widths[pair.first] = pair.second->GetWidth();
+            if( !pair.second )
+                continue;
+
+            int width = pair.second->GetWidth() - redrawNudge( pair.first );
+
+            if( IsValidColumnWidth( width ) )
+                m_cfg.column_widths[pair.first] = width;
         }
 
         m_cfg.open_libs = GetOpenLibs();
@@ -434,6 +439,7 @@ void LIB_TREE_MODEL_ADAPTER::recreateColumns()
     m_columns.clear();
     m_colIdxMap.clear();
     m_colNameMap.clear();
+    m_redrawNudge.clear();
 
     // The Item column is always shown
     doAddColumn( wxT( "Item" ) );
@@ -704,7 +710,7 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
             if( !colPtr )
                 continue;
 
-            int width = colPtr->GetWidth();
+            int width = colPtr->GetWidth() - redrawNudge( colName );
 
             // Keep the prior sane width if a DPI change handed back a corrupt one.
             if( IsValidColumnWidth( width ) )
@@ -712,13 +718,11 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
         }
     }
 
-    auto colIt = m_colWidths.begin();
+    // The nudge only forces the redraw; the widths read back and saved leave it out
+    auto first = m_colWidths.begin();
+    auto second = std::next( first );
 
-    colIt->second += walk;
-    colIt++;
-
-    if( colIt != m_colWidths.end() )
-        colIt->second -= walk;
+    m_redrawNudge.clear();
 
     for( const auto& [ colName, colPtr ] : m_colNameMap )
     {
@@ -726,10 +730,23 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
             continue;
 
         wxASSERT( m_colWidths.count( colName ) );
-        colPtr->SetWidth( m_colWidths[ colName ] );
+
+        if( colName == first->first )
+            m_redrawNudge[colName] = walk;
+        else if( second != m_colWidths.end() && colName == second->first )
+            m_redrawNudge[colName] = -walk;
+
+        colPtr->SetWidth( m_colWidths[ colName ] + redrawNudge( colName ) );
     }
 
     walk = -walk;
+}
+
+
+int LIB_TREE_MODEL_ADAPTER::redrawNudge( const wxString& aColumn ) const
+{
+    auto it = m_redrawNudge.find( aColumn );
+    return it == m_redrawNudge.end() ? 0 : it->second;
 }
 
 
