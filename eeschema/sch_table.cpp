@@ -365,24 +365,22 @@ bool SCH_TABLE::operator<( const SCH_ITEM& aItem ) const
     if( m_separatorsStroke != other.m_separatorsStroke )
         return m_separatorsStroke < other.m_separatorsStroke;
 
-    int diff;
-
-    if( ( diff = GetColCount() - other.GetColCount() ) != 0 )
-        return diff;
+    if( GetColCount() != other.GetColCount() )
+        return GetColCount() < other.GetColCount();
 
     for( int col = 0; col < GetColCount(); ++col )
     {
-        if( ( diff = GetColWidth( col ) - other.GetColWidth( col ) ) != 0 )
-            return diff;
+        if( GetColWidth( col ) != other.GetColWidth( col ) )
+            return GetColWidth( col ) < other.GetColWidth( col );
     }
 
-    if( ( diff = GetRowCount() - other.GetRowCount() ) != 0 )
-        return diff;
+    if( GetRowCount() != other.GetRowCount() )
+        return GetRowCount() < other.GetRowCount();
 
     for( int row = 0; row < GetRowCount(); ++row )
     {
-        if( ( diff = GetRowHeight( row ) - other.GetRowHeight( row ) ) != 0 )
-            return diff;
+        if( GetRowHeight( row ) != other.GetRowHeight( row ) )
+            return GetRowHeight( row ) < other.GetRowHeight( row );
     }
 
     for( int ii = 0; ii < (int) m_cells.size(); ++ii )
