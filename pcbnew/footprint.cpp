@@ -724,8 +724,8 @@ bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aIn
     Models().clear();
     Points().clear();
 
-    for( PCB_3D_BODY* body : m_bodies )
-        Remove( body );
+    while( !m_bodies.empty() )
+        Remove( m_bodies.back() );
 
     for( const google::protobuf::Any& itemMsg : aInput.items() )
     {
@@ -3166,8 +3166,8 @@ PCB_3D_BODY& FOOTPRINT::EnsureBody()
 
 void FOOTPRINT::ClearBody()
 {
-    for( PCB_3D_BODY* body : m_bodies )
-        Remove( body );
+    while( !m_bodies.empty() )
+        Remove( m_bodies.back() );
 }
 
 bool FOOTPRINT::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const

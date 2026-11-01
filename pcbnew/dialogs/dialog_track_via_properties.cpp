@@ -614,7 +614,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         {
             m_TrackLayerCtrl->SetUndefinedLayerName( INDETERMINATE_STATE );
             m_TrackLayerCtrl->Resync();
-            m_TrackLayerCtrl->SetSelection( UNDEFINED_LAYER );
+            m_TrackLayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
         }
         else
         {
@@ -629,7 +629,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         {
             m_ViaStartLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
             m_ViaStartLayer->Resync();
-            m_ViaStartLayer->SetSelection( UNDEFINED_LAYER );
+            m_ViaStartLayer->SetLayerSelection( UNDEFINED_LAYER );
         }
         else
         {
@@ -640,7 +640,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         {
             m_ViaEndLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
             m_ViaEndLayer->Resync();
-            m_ViaEndLayer->SetSelection( UNDEFINED_LAYER );
+            m_ViaEndLayer->SetLayerSelection( UNDEFINED_LAYER );
         }
         else
         {
