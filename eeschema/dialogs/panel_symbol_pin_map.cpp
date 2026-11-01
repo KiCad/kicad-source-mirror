@@ -554,7 +554,8 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
     m_associations.erase( std::remove_if( m_associations.begin(), m_associations.end(),
                                           [&]( const ASSOCIATED_FOOTPRINT& assoc )
                                           {
-                                              return assoc.m_FootprintLibId == fpId && assoc.m_MapName == mapName;
+                                              return assoc.m_MapName == mapName
+                                                    && ( !fpid.IsEmpty() || assoc.m_FootprintLibId == fpId );
                                           } ),
                           m_associations.end() );
 
