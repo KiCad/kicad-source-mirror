@@ -2105,7 +2105,8 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         if( retv != 0 )
             return retv;
 
-        return m_number.Cmp( tmp->m_name );
+        // If StrNumCmp() thinks they're equivalent, disambiguate with a straigh-up Cmp()
+        return m_name.Cmp( tmp->m_name );
     }
 
     if( m_position.x != tmp->m_position.x )
