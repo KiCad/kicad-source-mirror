@@ -3,13 +3,13 @@
   "default-registry": {
     "kind": "git",
     "repository": "https://github.com/microsoft/vcpkg",
-    "baseline": "01e159b519b7e791cc5bb3548663a26d9c0922a3"
+    "baseline": "15b12b99a227d51e21c86dffd40385439eac87a0"
   },
   "registries": [
     {
       "kind": "git",
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
-      "baseline": "1c729aa1d25750bd43f392a6ae618ea96d6ee76c",
+      "baseline": "46089698db0a4f1016dd4b4f77f9291e720616ba",
       "packages": [
         "python3",
         "opencascade",

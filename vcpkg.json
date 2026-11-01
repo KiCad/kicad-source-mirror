@@ -61,15 +61,15 @@
     },
     {
       "name": "python3",
-      "version": "3.11.5#0"
+      "version": "3.11.18#0"
     },
     {
       "name": "wxwidgets-33",
-      "version": "3.3.3#2"
+      "version": "3.3.4#0"
     },
     {
       "name": "wxpython-33",
-      "version": "4.3.1#0"
+      "version": "4.3.2#0"
     },
     {
       "name": "ngspice",
