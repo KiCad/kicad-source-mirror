@@ -263,7 +263,7 @@ void LIB_TREE_MODEL_ADAPTER::SaveSettings()
             if( !pair.second )
                 continue;
 
-            int width = pair.second->GetWidth() - redrawNudge( pair.first );
+            int width = KIPLATFORM::UI::GetColumnWidth( pair.second ) - redrawNudge( pair.first );
 
             if( IsValidColumnWidth( width ) )
                 m_cfg.column_widths[pair.first] = width;
@@ -710,7 +710,7 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
             if( !colPtr )
                 continue;
 
-            int width = colPtr->GetWidth() - redrawNudge( colName );
+            int width = KIPLATFORM::UI::GetColumnWidth( colPtr ) - redrawNudge( colName );
 
             // Keep the prior sane width if a DPI change handed back a corrupt one.
             if( IsValidColumnWidth( width ) )

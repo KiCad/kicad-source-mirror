@@ -24,6 +24,7 @@
 #include <wx/cursor.h>
 
 class wxChoice;
+class wxDataViewColumn;
 class wxDataViewCtrl;
 class wxDialog;
 class wxNonOwnedWindow;
@@ -290,6 +291,14 @@ namespace KIPLATFORM
          * controls do not exhibit this race.
          */
         void CancelPendingScroll( wxDataViewCtrl* aCtrl );
+
+        /**
+         * The width last asked of aColumn, by SetWidth or by the user dragging its border.
+         *
+         * wxGTK reports the width GTK last laid out, which lags a SetWidth until the next
+         * layout, so reading it back right after setting it returns the old width.
+         */
+        int GetColumnWidth( const wxDataViewColumn* aColumn );
 
         /**
          * Tag a top-level window with the freedesktop application id of its installed
