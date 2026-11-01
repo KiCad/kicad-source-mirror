@@ -6930,7 +6930,7 @@ void ORCAD_CONVERTER::placeHierarchicalBlockFields( SCH_SHEET* aSheet, const ORC
 
         if( !valueText.empty() )
         {
-            SCH_FIELD implementation( aSheet, FIELD_T::USER, wxS( "Implementation" ) );
+            SCH_FIELD implementation( aSheet, FIELD_T::SHEET_USER, wxS( "Implementation" ) );
             implementation.SetText( FromOrcadString( valueText ) );
             applyDisplay( implementation, *valueDisplay );
             aSheet->AddField( implementation );
