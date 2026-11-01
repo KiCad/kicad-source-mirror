@@ -248,7 +248,7 @@ void KIPLATFORM::UI::AllowNetworkFileSystems( wxDialog* aDialog )
 
 int KIPLATFORM::UI::GetColumnWidth( const wxDataViewColumn* aColumn )
 {
-    return aColumn->GetWidth();
+    return aColumn->WXGetSpecifiedWidth();
 }
 
 
