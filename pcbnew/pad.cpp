@@ -3188,8 +3188,9 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 
                     if( Padstack().Mode() == PADSTACK::MODE::NORMAL )
                     {
-                        // A signle layer (F_Cu) in NORMAL mode represents _all_ layers,
-                        // so disable the layer test entirely
+                        // A single layer (F_Cu) in NORMAL mode represents _all_ copper layers
+                        if( !IsCopperLayer( other->GetLayer() ) )
+                            continue;
                     }
                     else
                     {
