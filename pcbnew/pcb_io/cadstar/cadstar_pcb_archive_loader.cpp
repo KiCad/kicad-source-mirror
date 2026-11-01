@@ -3054,7 +3054,10 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
     polySet.ClearArcs();
 
     if( aLineThickness > 0 )
-        polySet.Inflate( aLineThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aContainer->GetMaxError() );
+    {
+        polySet.Inflate( aLineThickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                         m_board->GetDesignSettings().m_MaxError );
+    }
 
 #ifdef DEBUG
     for( int i = 0; i < polySet.OutlineCount(); ++i )
