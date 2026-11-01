@@ -3593,7 +3593,7 @@ int CADSTAR_PCB_ARCHIVE_LOADER::getKiCadHatchCodeGap( const HATCHCODE_ID& aCadst
     checkAndLogHatchCode( aCadstarHatchcodeID );
     HATCHCODE hcode = getHatchCode( aCadstarHatchcodeID );
 
-    if( hcode.Hatches.size() < 1 || hcode.Hatches.at( 0 ).LineWidth == UNDEFINED_VALUE )
+    if( hcode.Hatches.size() < 1 || hcode.Hatches.at( 0 ).Step == UNDEFINED_VALUE )
         return m_board->GetDesignSettings().GetDefaultZoneSettings().m_HatchGap;
     else
         return getKiCadLength( hcode.Hatches.at( 0 ).Step, 1.5 );
