@@ -339,7 +339,8 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
 
 DIALOG_EXPORT_NETLIST::~DIALOG_EXPORT_NETLIST()
 {
-    WriteCurrentNetlistSetup();
+    if( !m_job )
+        WriteCurrentNetlistSetup();
 }
 
 
