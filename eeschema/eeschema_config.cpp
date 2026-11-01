@@ -182,8 +182,8 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         RefreshOperatingPointDisplay();
         GetCanvas()->Refresh();
 
-        if( DIALOG_ERC* ercDialog = GetErcDialog() )
-            ercDialog->UpdateData();
+        if( m_ercDialog )
+            m_ercDialog->UpdateData();
     }
 }
 
