@@ -319,11 +319,7 @@ void EDA_DRAW_FRAME::ToggleUserUnits()
     }
     else
     {
-        SetUserUnits( GetUserUnits() == EDA_UNITS::INCH ? EDA_UNITS::MM : EDA_UNITS::INCH );
-        unitsChangeRefresh();
-
-        wxCommandEvent e( EDA_EVT_UNITS_CHANGED );
-        ProcessEventLocally( e );
+        ChangeUserUnits( GetUserUnits() == EDA_UNITS::INCH ? EDA_UNITS::MM : EDA_UNITS::INCH );
     }
 }
 
