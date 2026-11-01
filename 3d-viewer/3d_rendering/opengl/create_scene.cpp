@@ -32,6 +32,7 @@
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <geometry/shape_poly_set.h>
 #include <thread_pool.h>
+#include <exporters/fab_model/fab_drill.h>
 
 
 void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D*                aCircle,
@@ -420,28 +421,30 @@ void RENDER_3D_OPENGL::backfillPostMachine()
     if( !m_boardAdapter.GetBoard() )
         return;
 
-    const int copperLayerCount = m_boardAdapter.GetBoard()->GetCopperLayerCount();
-    const float unitScale = m_boardAdapter.BiuTo3dUnits();
-    const int platingThickness = m_boardAdapter.GetHolePlatingThickness();
-    const float boardBodyThickness = m_boardAdapter.GetBoardBodyThickness();
+    const BOARD_STACKUP& stackup = m_boardAdapter.GetBoard()->GetStackupOrDefault();
+    LSEQ                 cuStack = m_boardAdapter.GetBoard()->GetEnabledLayers().CuStack();
+
+    const float          unitScale = m_boardAdapter.BiuTo3dUnits();
+    const int            platingThickness = m_boardAdapter.GetHolePlatingThickness();
 
     // We use the same unit z range as the board (0 to 1) and apply scaling when rendering
     const float boardZTop = 1.0f;  // Top of board body
     const float boardZBot = 0.0f;  // Bottom of board body
 
     // Helper to convert layer Z position to normalized 0-1 range
-    auto normalizeZ = [&]( float absZ ) -> float
-    {
-        float boardTop = m_boardAdapter.GetLayerBottomZPos( F_Cu );
-        float boardBot = m_boardAdapter.GetLayerBottomZPos( B_Cu );
-        float boardThick = boardTop - boardBot;
+    auto normalizeZ =
+            [&]( float absZ ) -> float
+            {
+                float boardTop = m_boardAdapter.GetLayerTopZPos( F_Cu );
+                float boardBot = m_boardAdapter.GetLayerBottomZPos( B_Cu );
+                float boardThick = boardTop - boardBot;
 
-        if( boardThick <= 0 )
-            return 0.5f;
+                if( boardThick <= 0 )
+                    return 0.5f;
 
-        // Map absolute Z to 0-1 range where 0 = B_Cu and 1 = F_Cu
-        return ( absZ - boardBot ) / boardThick;
-    };
+                // Map absolute Z to 0-1 range where 0 = B_Cu and 1 = F_Cu
+                return ( absZ - boardBot ) / boardThick;
+            };
 
     // We'll accumulate all plug geometry into a single triangle list
     std::shared_ptr<TRIANGLE_DISPLAY_LIST> plugTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( 1024 );
@@ -468,33 +471,37 @@ void RENDER_3D_OPENGL::backfillPostMachine()
         getLayerZPos( bottomLayer, dummy, viaZBot );
 
         // Handle backdrill plugs
-        const float secondaryDrillRadius = via->GetSecondaryDrillSize().value_or( 0 ) * 0.5f * unitScale;
-        const float tertiaryDrillRadius = via->GetTertiaryDrillSize().value_or( 0 ) * 0.5f * unitScale;
-
-        if( secondaryDrillRadius > holeOuterRadius || tertiaryDrillRadius > holeOuterRadius )
+        for( const PADSTACK::DRILL_PROPS& backdrill : { via->Padstack().SecondaryDrill(),
+                                                        via->Padstack().TertiaryDrill() } )
         {
-            PCB_LAYER_ID plug_start_layer = F_Cu;
-            PCB_LAYER_ID plug_end_layer = B_Cu;
-
-            // Case 1: secondary drill exists, so we need to adjust the plug_end_layer
-            if( secondaryDrillRadius > holeOuterRadius )
+            if( backdrill.start == F_Cu && backdrill.size.x > 0 )
             {
-                plug_end_layer = via->GetSecondaryDrillEndLayer();
+                int          depthIU = stackup.GetLayerDistance( backdrill.start, backdrill.end );
+                PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
+
+                if( mustNotCut != UNDEFINED_LAYER )
+                    depthIU += stackup.GetLayerDistance( backdrill.end, mustNotCut ) / 2;
+
+                float depth = (float) depthIU * unitScale;
+                float drillRadius = (float) backdrill.size.x * 0.5f * unitScale;
+
+                generateCylinder( center, holeOuterRadius, drillRadius, normalizeZ( viaZTop ),
+                                  normalizeZ( viaZTop - depth ), nrSegments, plugTriangles );
             }
-            // Case 2: tertiary drill exists, so we need to adjust the plug_start_layer
-            if( tertiaryDrillRadius > holeOuterRadius )
+            else if( backdrill.end == B_Cu && backdrill.size.x > 0 )
             {
-                plug_start_layer = via->GetTertiaryDrillStartLayer();
+                int          depthIU = stackup.GetLayerDistance( backdrill.end, backdrill.start );
+                PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
+
+                if( mustNotCut != UNDEFINED_LAYER )
+                    depthIU += stackup.GetLayerDistance( mustNotCut, backdrill.end ) / 2;
+
+                float depth = (float) depthIU * unitScale;
+                float drillRadius = (float) backdrill.size.x * 0.5f * unitScale;
+
+                generateCylinder( center, holeOuterRadius, drillRadius, normalizeZ( viaZBot + depth ),
+                                  normalizeZ( viaZBot ), nrSegments, plugTriangles );
             }
-
-            // Calculate where the backdrill ends and plug should start
-            float plugZTop, plugZBot, temp;
-            getLayerZPos( plug_end_layer, temp, plugZBot );
-            getLayerZPos( plug_start_layer, plugZTop, temp );
-
-            // Create a ring from holeOuterRadius to backdrillRadius
-            generateCylinder( center, holeOuterRadius, std::max( secondaryDrillRadius, tertiaryDrillRadius ),
-                                plugZTop, plugZBot, nrSegments, plugTriangles );
         }
 
         // Handle front post-machining plugs
@@ -904,11 +911,11 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
     if( m_boardAdapter.GetBackCountersinkPolys().OutlineCount() > 0 )
         board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
 
-    if( m_boardAdapter.GetSecondarydrillPolys().OutlineCount() > 0 )
-        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetSecondarydrillPolys() );
+    if( m_boardAdapter.GetFrontBackdrillPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetFrontBackdrillPolys() );
 
-    if( m_boardAdapter.GetTertiarydrillPolys().OutlineCount() > 0 )
-        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
+    if( m_boardAdapter.GetBackBackdrillPolys().OutlineCount() > 0 )
+        board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetBackBackdrillPolys() );
 
     if( aStop.stop_requested() )
         return;
@@ -1081,7 +1088,7 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetFrontCounterborePolys() );
             poly.BooleanSubtract( m_boardAdapter.GetFrontCountersinkPolys() );
-            poly.BooleanSubtract( m_boardAdapter.GetSecondarydrillPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetFrontBackdrillPolys() );
 
             assignRenderPtr( m_platedPadsFront, generateLayerList( m_boardAdapter.GetPlatedPadsFront(), &poly, F_Cu ) );
 
@@ -1098,7 +1105,7 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
             poly.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
             poly.BooleanSubtract( m_boardAdapter.GetBackCounterborePolys() );
             poly.BooleanSubtract( m_boardAdapter.GetBackCountersinkPolys() );
-            poly.BooleanSubtract( m_boardAdapter.GetTertiarydrillPolys() );
+            poly.BooleanSubtract( m_boardAdapter.GetBackBackdrillPolys() );
 
             assignRenderPtr( m_platedPadsBack, generateLayerList( m_boardAdapter.GetPlatedPadsBack(), &poly, B_Cu ) );
 
@@ -1264,11 +1271,7 @@ void RENDER_3D_OPENGL::getLayerZPos( PCB_LAYER_ID aLayer, float& aOutZtop, float
     aOutZtop = m_boardAdapter.GetLayerTopZPos( aLayer );
 
     if( aOutZtop < aOutZbot )
-    {
-        float tmpFloat = aOutZbot;
-        aOutZbot = aOutZtop;
-        aOutZtop = tmpFloat;
-    }
+        std::swap( aOutZtop, aOutZbot );
 }
 
 
@@ -1419,6 +1422,7 @@ bool RENDER_3D_OPENGL::appendPostMachiningGeometry( std::shared_ptr<TRIANGLE_DIS
                                                     PAD_DRILL_POST_MACHINING_MODE aMode,
                                                     int aSizeIU,
                                                     int aDepthIU,
+                                                    const EDA_ANGLE& aAngle,
                                                     float aHoleInnerRadius,
                                                     float aZSurface,
                                                     bool aIsFront,
@@ -1455,55 +1459,13 @@ bool RENDER_3D_OPENGL::appendPostMachiningGeometry( std::shared_ptr<TRIANGLE_DIS
     const float zTop = std::max( aZSurface, zEnd );
     const float zBot = std::min( aZSurface, zEnd );
 
-    const int diameterBIU = std::max( aSizeIU,
-                                      std::max( 1,
-                                                (int) ( ( aHoleInnerRadius * 2.0f )
-                                                        / aUnitScale ) ) );
-    const unsigned int nrSegments =
-            std::max( 12u, m_boardAdapter.GetCircleSegmentCount( diameterBIU ) );
+    const int diameterBIU = std::max( aSizeIU, std::max( 1, (int) ( ( aHoleInnerRadius * 2.0f ) / aUnitScale ) ) );
+    const unsigned int nrSegments = std::max( 12u, m_boardAdapter.GetCircleSegmentCount( diameterBIU ) );
 
-    if( aMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
-    {
-        generateCylinder( aHoleCenter, radius, radius + aPlatingThickness3d, zTop, zBot,
-                          nrSegments, aDstLayer );
-        return true;
-    }
-
-    float csTopRadius = radius;
-    float csBotRadius = aHoleInnerRadius;
-
-    std::vector< SFVEC2F > innerContourTop, outerContourTop;
-    std::vector< SFVEC2F > innerContourBot, outerContourBot;
-
-    generateRing( aHoleCenter, csTopRadius, csTopRadius + aPlatingThickness3d, nrSegments,
-                  innerContourTop, outerContourTop, false );
-    generateRing( aHoleCenter, csBotRadius, csBotRadius + aPlatingThickness3d, nrSegments,
-                  innerContourBot, outerContourBot, false );
-
-    for( unsigned int i = 0; i < ( innerContourTop.size() - 1 ); ++i )
-    {
-        const SFVEC2F& vi0_top = innerContourTop[i + 0];
-        const SFVEC2F& vi1_top = innerContourTop[i + 1];
-        const SFVEC2F& vo0_top = outerContourTop[i + 0];
-        const SFVEC2F& vo1_top = outerContourTop[i + 1];
-
-        const SFVEC2F& vi0_bot = innerContourBot[i + 0];
-        const SFVEC2F& vi1_bot = innerContourBot[i + 1];
-        const SFVEC2F& vo0_bot = outerContourBot[i + 0];
-        const SFVEC2F& vo1_bot = outerContourBot[i + 1];
-
-        aDstLayer->m_layer_middle_contours_quads->AddQuad(
-                SFVEC3F( vi1_top.x, vi1_top.y, zTop ),
-                SFVEC3F( vi0_top.x, vi0_top.y, zTop ),
-                SFVEC3F( vi0_bot.x, vi0_bot.y, zBot ),
-                SFVEC3F( vi1_bot.x, vi1_bot.y, zBot ) );
-
-        aDstLayer->m_layer_middle_contours_quads->AddQuad(
-                SFVEC3F( vo1_top.x, vo1_top.y, zTop ),
-                SFVEC3F( vo0_top.x, vo0_top.y, zTop ),
-                SFVEC3F( vo0_bot.x, vo0_bot.y, zBot ),
-                SFVEC3F( vo1_bot.x, vo1_bot.y, zBot ) );
-    }
+    if( aMode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+        generateInvCone( aHoleCenter, radius, radius + aPlatingThickness3d, zTop, zBot, nrSegments, aDstLayer, aAngle );
+    else
+        generateCylinder( aHoleCenter, radius, radius + aPlatingThickness3d, zTop, zBot, nrSegments, aDstLayer );
 
     return true;
 }
@@ -1511,7 +1473,10 @@ bool RENDER_3D_OPENGL::appendPostMachiningGeometry( std::shared_ptr<TRIANGLE_DIS
 
 void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUnitScale )
 {
-    if( !m_boardAdapter.GetBoard() || m_boardAdapter.GetViaCount() <= 0 )
+    if( !m_boardAdapter.GetBoard() )
+        return;
+
+    if( m_boardAdapter.GetHoleCount() <= 0 && m_boardAdapter.GetViaCount() <= 0 )
         return;
 
     if( !m_boardAdapter.m_Cfg->m_Render.show_plated_barrels )
@@ -1520,8 +1485,10 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
     float        averageDiameter = m_boardAdapter.GetAverageViaHoleDiameter();
     unsigned int averageSegCount = m_boardAdapter.GetCircleSegmentCount( averageDiameter );
     unsigned int trianglesEstimate = averageSegCount * 8 * m_boardAdapter.GetViaCount();
+    auto         triangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( trianglesEstimate );
 
-    std::shared_ptr<TRIANGLE_DISPLAY_LIST> layerTriangleVIA = std::make_shared<TRIANGLE_DISPLAY_LIST>( trianglesEstimate );
+    const BOARD_STACKUP& stackup = m_boardAdapter.GetBoard()->GetStackupOrDefault();
+    LSEQ                 cuStack = m_boardAdapter.GetBoard()->GetEnabledLayers().CuStack();
 
     for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
     {
@@ -1531,17 +1498,16 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
         const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
         bool isBackdrilled = via->GetSecondaryDrillSize().has_value();
         bool isTertiarydrilled = via->GetTertiaryDrillSize().has_value();
-        bool hasFrontPostMachining = via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-                                     != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN
-                                     && via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-                                                != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;
-        bool hasBackPostMachining = via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-                                    != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN
-                                    && via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-                                               != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;
+        bool hasFrontPostMachining = via->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+                                  || via->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+        bool hasBackPostMachining = via->GetBackPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+                                 || via->GetBackPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
 
-        if( via->GetViaType() == VIATYPE::THROUGH && !isBackdrilled
-                && !hasFrontPostMachining && !hasBackPostMachining )
+        if( via->GetViaType() == VIATYPE::THROUGH
+                && !isBackdrilled
+                && !isTertiarydrilled
+                && !hasFrontPostMachining
+                && !hasBackPostMachining )
         {
             continue;
         }
@@ -1550,8 +1516,7 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
         const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
         const float hole_inner_radius = holediameter / 2.0f;
 
-        const SFVEC2F via_center( via->GetStart().x * aUnitScale,
-                                  -via->GetStart().y * aUnitScale );
+        const SFVEC2F via_center( via->GetStart().x * aUnitScale, -via->GetStart().y * aUnitScale );
 
         PCB_LAYER_ID top_layer, bottom_layer;
         via->LayerPair( &top_layer, &bottom_layer );
@@ -1566,56 +1531,72 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
         float ztop_plated = ztop;
         float zbot_plated = zbot;
 
-        if( isBackdrilled )
+        for( const PADSTACK::DRILL_PROPS& backdrill : { via->Padstack().SecondaryDrill(),
+                                                        via->Padstack().TertiaryDrill() } )
         {
-            PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
-            float secZEnd;
-
-            // Backdrill goes from the back surface up to secEnd, so get the top of that layer
-            // as the bottom of the plated barrel
-            getLayerZPos( secEnd, secZEnd, dummy );
-            zbot_plated = std::max( zbot_plated, secZEnd );
-        }
-
-        if( isTertiarydrilled )
-        {
-            PCB_LAYER_ID terEnd = via->GetTertiaryDrillEndLayer();
-            float terZEnd;
-
-            // Tertiary drill goes from the front surface down to terEnd, so get the bottom of that layer
-            // as the top of the plated barrel
-            getLayerZPos( terEnd, dummy, terZEnd );
-            ztop_plated = std::min( ztop_plated, terZEnd );
-        }
-
-        auto applyViaPostMachining = [&]( bool isFront )
-        {
-            auto modeOpt = isFront ? via->GetFrontPostMachining()
-                                   : via->GetBackPostMachining();
-
-            if( !modeOpt
-                    || modeOpt.value() == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+            if( backdrill.start == F_Cu && backdrill.size.x > 0 )
             {
-                return;
-            }
+                int          depthIU = stackup.GetLayerDistance( backdrill.start, backdrill.end );
+                PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
 
-            int sizeIU = isFront ? via->GetFrontPostMachiningSize()
-                                  : via->GetBackPostMachiningSize();
-            int depthIU = isFront ? via->GetFrontPostMachiningDepth()
-                                   : via->GetBackPostMachiningDepth();
-            float zSurface = isFront ? ztop : zbot;
-            float zEnd = 0.0f;
+                if( mustNotCut != UNDEFINED_LAYER )
+                    depthIU += stackup.GetLayerDistance( backdrill.end, mustNotCut ) / 2;
 
-            if( appendPostMachiningGeometry( layerTriangleVIA, via_center, modeOpt.value(),
-                                             sizeIU, depthIU, hole_inner_radius, zSurface,
-                                             isFront, aPlatingThickness3d, aUnitScale, &zEnd ) )
-            {
-                if( isFront )
+                float zEnd = 0.0f;
+
+                if( appendPostMachiningGeometry( triangles, via_center, PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
+                                                 backdrill.size.x, depthIU, EDA_ANGLE( 82.0, DEGREES_T ),
+                                                 hole_inner_radius, ztop, true, aPlatingThickness3d, aUnitScale,
+                                                 &zEnd ) )
+                {
                     ztop_plated = std::min( ztop_plated, zEnd );
-                else
-                    zbot_plated = std::max( zbot_plated, zEnd );
+                }
             }
-        };
+            else if( backdrill.end == B_Cu && backdrill.size.x > 0 )
+            {
+                int          depthIU = stackup.GetLayerDistance( backdrill.end, backdrill.start );
+                PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
+
+                if( mustNotCut != UNDEFINED_LAYER )
+                    depthIU += stackup.GetLayerDistance( mustNotCut, backdrill.end ) / 2;
+
+                float zEnd = 0.0f;
+
+                if( appendPostMachiningGeometry( triangles, via_center, PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
+                                                 backdrill.size.x, depthIU, EDA_ANGLE( 82.0, DEGREES_T ),
+                                                 hole_inner_radius, zbot, false, aPlatingThickness3d, aUnitScale,
+                                                 &zEnd ) )
+                {
+                    zbot_plated = std::max( zbot_plated, zEnd );
+                }
+            }
+        }
+
+        auto applyViaPostMachining =
+                [&]( bool isFront )
+                {
+                    auto modeOpt = isFront ? via->GetFrontPostMachining() : via->GetBackPostMachining();
+
+                    if( !modeOpt || modeOpt.value() == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+                        return;
+
+                    int       sizeIU = isFront ? via->GetFrontPostMachiningSize() : via->GetBackPostMachiningSize();
+                    int       depthIU = isFront ? via->GetFrontPostMachiningDepth() : via->GetBackPostMachiningDepth();
+                    EDA_ANGLE angle( isFront ? via->GetFrontPostMachiningAngle() : via->GetBackPostMachiningAngle(),
+                                     TENTHS_OF_A_DEGREE_T );
+                    float     zSurface = isFront ? ztop : zbot;
+                    float     zEnd = 0.0f;
+
+                    if( appendPostMachiningGeometry( triangles, via_center, modeOpt.value(), sizeIU, depthIU, angle,
+                                                     hole_inner_radius, zSurface, isFront, aPlatingThickness3d,
+                                                     aUnitScale, &zEnd ) )
+                    {
+                        if( isFront )
+                            ztop_plated = std::min( ztop_plated, zEnd );
+                        else
+                            zbot_plated = std::max( zbot_plated, zEnd );
+                    }
+                };
 
         if( hasFrontPostMachining )
             applyViaPostMachining( true );
@@ -1623,7 +1604,7 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
             applyViaPostMachining( false );
 
         generateCylinder( via_center, hole_inner_radius, hole_inner_radius + aPlatingThickness3d, ztop_plated,
-                          zbot_plated, nrSegments, layerTriangleVIA );
+                          zbot_plated, nrSegments, triangles );
     }
 
     const float padFrontSurface =
@@ -1646,41 +1627,35 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
             if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE )
                 continue;
 
-            const SFVEC2F padCenter( pad->GetPosition().x * aUnitScale,
-                                        -pad->GetPosition().y * aUnitScale );
-            const float holeInnerRadius =
-                    pad->GetDrillSize().x * 0.5f * aUnitScale;
+            const SFVEC2F padCenter( pad->GetPosition().x * aUnitScale, -pad->GetPosition().y * aUnitScale );
+            const float holeInnerRadius = pad->GetDrillSize().x * 0.5f * aUnitScale;
 
-            auto emitPadPostMachining = [&]( bool isFront )
-            {
-                auto modeOpt = isFront ? pad->GetFrontPostMachining()
-                                        : pad->GetBackPostMachining();
+            auto emitPadPostMachining =
+                    [&]( bool isFront )
+                    {
+                        auto modeOpt = isFront ? pad->GetFrontPostMachining() : pad->GetBackPostMachining();
 
-                if( !modeOpt
-                        || modeOpt.value() == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
-                {
-                    return;
-                }
+                        if( !modeOpt || modeOpt.value() == PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED )
+                            return;
 
-                int sizeIU = isFront ? pad->GetFrontPostMachiningSize()
-                                        : pad->GetBackPostMachiningSize();
-                int depthIU = isFront ? pad->GetFrontPostMachiningDepth()
-                                        : pad->GetBackPostMachiningDepth();
-                float zSurface = isFront ? padFrontSurface : padBackSurface;
+                        int       sizeIU = isFront ? pad->GetFrontPostMachiningSize() : pad->GetBackPostMachiningSize();
+                        int       depthIU = isFront ? pad->GetFrontPostMachiningDepth()
+                                                    : pad->GetBackPostMachiningDepth();
+                        EDA_ANGLE angle( isFront ? pad->GetFrontPostMachiningAngle() : pad->GetBackPostMachiningAngle(),
+                                         TENTHS_OF_A_DEGREE_T );
+                        float     zSurface = isFront ? padFrontSurface : padBackSurface;
 
-                appendPostMachiningGeometry( layerTriangleVIA, padCenter, modeOpt.value(),
-                                                sizeIU, depthIU, holeInnerRadius, zSurface,
-                                                isFront, aPlatingThickness3d, aUnitScale,
-                                                nullptr );
-            };
+                        appendPostMachiningGeometry( triangles, padCenter, modeOpt.value(), sizeIU, depthIU, angle,
+                                                     holeInnerRadius, zSurface, isFront, aPlatingThickness3d,
+                                                     aUnitScale, nullptr );
+                    };
 
             emitPadPostMachining( true );
             emitPadPostMachining( false );
         }
     }
 
-    assignRenderPtr( m_microviaHoles,
-                     std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangleVIA, 0, 0.0f, 0.0f ) );
+    assignRenderPtr( m_microviaHoles, std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( triangles, 0, 0.0f, 0.0f ) );
 }
 
 
@@ -1838,8 +1813,10 @@ void RENDER_3D_OPENGL::generateViaCovers( float aPlatingThickness3d, float aUnit
         bool hasBackPostMachining = backPostMachining != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
                                     && backPostMachining != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
 
-        bool hasFrontBackdrill = via->GetSecondaryDrillStartLayer() == F_Cu;
-        bool hasBackBackdrill = via->GetSecondaryDrillStartLayer() == B_Cu;
+        bool hasFrontBackdrill = via->GetSecondaryDrillStartLayer() == F_Cu
+                                    || via->GetTertiaryDrillStartLayer() == F_Cu;
+        bool hasBackBackdrill = via->GetSecondaryDrillStartLayer() == B_Cu
+                                    || via->GetTertiaryDrillStartLayer() == B_Cu;
 
         const float depth = hole_radius * 0.3f;
 
@@ -1861,12 +1838,10 @@ void RENDER_3D_OPENGL::generateViaCovers( float aPlatingThickness3d, float aUnit
     }
 
     if( frontCover->m_layer_top_triangles->GetVertexSize() > 0 )
-        assignRenderPtr( m_viaFrontCover,
-                         std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( frontCover, 0, 0.0f, 0.0f ) );
+        assignRenderPtr( m_viaFrontCover, std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( frontCover, 0, 0.0f, 0.0f ) );
 
     if( backCover->m_layer_bot_triangles->GetVertexSize() > 0 )
-        assignRenderPtr( m_viaBackCover,
-                         std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( backCover, 0, 0.0f, 0.0f ) );
+        assignRenderPtr( m_viaBackCover, std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( backCover, 0, 0.0f, 0.0f ) );
 }
 
 

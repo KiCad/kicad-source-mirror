@@ -336,24 +336,24 @@ public:
      *  Get the secondary and tertiary drill polygons.
      *
      */
-    const SHAPE_POLY_SET& GetSecondarydrillPolys() const noexcept
+    const SHAPE_POLY_SET& GetFrontBackdrillPolys() const noexcept
     {
-        return m_SecondarydrillPolys;
+        return m_FrontBackdrillPolys;
     }
 
-    const SHAPE_POLY_SET& GetTertiarydrillPolys() const noexcept
+    const SHAPE_POLY_SET& GetBackBackdrillPolys() const noexcept
     {
-        return m_TertiarydrillPolys;
+        return m_BackBackdrillPolys;
     }
 
-    const BVH_CONTAINER_2D& GetBackdrillCutouts() const noexcept
+    const BVH_CONTAINER_2D& GetFrontBackdrillCutouts() const noexcept
     {
-        return m_backdrillCutouts;
+        return m_frontBackdrillCutouts;
     }
 
-    const BVH_CONTAINER_2D& GetTertiarydrillCutouts() const noexcept
+    const BVH_CONTAINER_2D& GetBackBackdrillCutouts() const noexcept
     {
-        return m_tertiarydrillCutouts;
+        return m_backBackdrillCutouts;
     }
 
     /**
@@ -596,8 +596,8 @@ private:
     MAP_POLY                m_layerHoleOdPolys;     ///< Hole outer diameters (per layer)
     MAP_POLY                m_layerHoleIdPolys;     ///< Hole inner diameters (per layer)
 
-    SHAPE_POLY_SET          m_SecondarydrillPolys;  ///< Board secondary dril polygons F.Cu->in
-    SHAPE_POLY_SET          m_TertiarydrillPolys;   ///< Board tertiary drill polygons B.Cu->in
+    SHAPE_POLY_SET          m_FrontBackdrillPolys;  ///< Board front backdril polygons F.Cu->in
+    SHAPE_POLY_SET          m_BackBackdrillPolys;   ///< Board back backdrill polygons B.Cu->in
 
     SHAPE_POLY_SET          m_NPTH_ODPolys;         ///< NPTH outer diameters
     SHAPE_POLY_SET          m_TH_ODPolys;           ///< PTH outer diameters
@@ -624,8 +624,10 @@ private:
     BVH_CONTAINER_2D        m_viaAnnuli;            ///< List of via annular rings
     BVH_CONTAINER_2D        m_viaTH_ODs;            ///< List of via hole outer diameters
 
-    BVH_CONTAINER_2D        m_backdrillCutouts;          ///< Backdrill cutouts
-    BVH_CONTAINER_2D        m_tertiarydrillCutouts;      ///< Tertiary drill cutouts
+    BVH_CONTAINER_2D        m_frontBackdrillCutouts;     ///< Backdrill cutouts to the front of the board
+                                                         ///<   (may come from either secondary or tertiary drills)
+    BVH_CONTAINER_2D        m_backBackdrillCutouts;      ///< Backdrill cutouts to the back of the board
+                                                         ///<   (may come from either secondary or tertiary drills)
 
     BVH_CONTAINER_2D        m_frontCounterboreCutouts;   ///< Counterbore cutouts on front (top)
     BVH_CONTAINER_2D        m_backCounterboreCutouts;    ///< Counterbore cutouts on back (bottom)

@@ -2088,7 +2088,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     }
 
 
-    if( aPad->Padstack().SecondaryDrill().size.x > 0 )
+    if( aPad->Padstack().SecondaryDrill().size.x > 0 && aPad->Padstack().SecondaryDrill().start != UNDEFINED_LAYER )
     {
         m_out->Print( "(backdrill (size %s) (layers %s %s))",
                         formatInternalUnits( aPad->Padstack().SecondaryDrill().size.x ).c_str(),
@@ -2096,7 +2096,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                         m_out->Quotew( LSET::Name( aPad->Padstack().SecondaryDrill().end ) ).c_str() );
     }
 
-    if( aPad->Padstack().TertiaryDrill().size.x > 0 )
+    if( aPad->Padstack().TertiaryDrill().size.x > 0 && aPad->Padstack().TertiaryDrill().start != UNDEFINED_LAYER )
     {
         m_out->Print( "(tertiary_drill (size %s) (layers %s %s))",
                         formatInternalUnits( aPad->Padstack().TertiaryDrill().size.x ).c_str(),
@@ -3288,7 +3288,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
         else
             m_out->Print( "(drill %s)", formatInternalUnits( via->GetDrillValue() ).c_str() );
 
-        if( via->Padstack().SecondaryDrill().size.x > 0 )
+        if( via->Padstack().SecondaryDrill().size.x > 0 && via->Padstack().SecondaryDrill().start != UNDEFINED_LAYER )
         {
             m_out->Print( "(backdrill (size %s) (layers %s %s))",
                           formatInternalUnits( via->Padstack().SecondaryDrill().size.x ).c_str(),
@@ -3296,7 +3296,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack ) const
                           m_out->Quotew( LSET::Name( via->Padstack().SecondaryDrill().end ) ).c_str() );
         }
 
-        if( via->Padstack().TertiaryDrill().size.x > 0 )
+        if( via->Padstack().TertiaryDrill().size.x > 0 && via->Padstack().TertiaryDrill().start != UNDEFINED_LAYER )
         {
             m_out->Print( "(tertiary_drill (size %s) (layers %s %s))",
                           formatInternalUnits( via->Padstack().TertiaryDrill().size.x ).c_str(),

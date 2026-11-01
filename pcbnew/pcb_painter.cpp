@@ -2179,14 +2179,14 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSize().x > 0 )
         {
             const VECTOR2I& holePos = slot->GetSeg().A;
-            const VECTOR2I& secDrill = aPad->GetSecondaryDrillSize();
-            const VECTOR2I& terDrill = aPad->GetTertiaryDrillSize();
+            const VECTOR2I& secondaryDrill = aPad->GetSecondaryDrillSize();
+            const VECTOR2I& tertiaryDrill = aPad->GetTertiaryDrillSize();
 
-            if( secDrill.x > 0 )
-                drawBackdrillIndicator( aPad, holePos, secDrill.x, aPad->GetSecondaryDrillEndLayer(), 0 );
+            if( secondaryDrill.x > 0 )
+                drawBackdrillIndicator( aPad, holePos, secondaryDrill.x, aPad->GetSecondaryDrillEndLayer(), 0 );
 
-            if( terDrill.x > 0 )
-                drawBackdrillIndicator( aPad, holePos, terDrill.x, aPad->GetTertiaryDrillEndLayer(), 1 );
+            if( tertiaryDrill.x > 0 )
+                drawBackdrillIndicator( aPad, holePos, tertiaryDrill.x, aPad->GetTertiaryDrillEndLayer(), 1 );
         }
 
         return;

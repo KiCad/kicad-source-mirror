@@ -43,7 +43,7 @@
 #include <eda_3d_viewer_frame.h>
 #include <pad.h>
 #include <pcb_track.h>
-
+#include <layer_range.h>
 #include <base_units.h>
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 
@@ -309,29 +309,30 @@ void RENDER_3D_RAYTRACE_BASE::createItemsFromContainer( const BVH_CONTAINER_2D* 
 
             // Clip counterbore/countersink cutouts from copper layers
             // Front cutouts affect F_Cu, back cutouts affect B_Cu
-            auto clipCutouts = [this, &object2d_A, &object2d_B]( const BVH_CONTAINER_2D& cutouts )
-            {
-                if( !cutouts.GetList().empty() )
-                {
-                    CONST_LIST_OBJECT2D intersecting;
-                    cutouts.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
+            auto clipCutouts =
+                    [this, &object2d_A, &object2d_B]( const BVH_CONTAINER_2D& cutouts )
+                    {
+                        if( !cutouts.GetList().empty() )
+                        {
+                            CONST_LIST_OBJECT2D intersecting;
+                            cutouts.GetIntersectingObjects( object2d_A->GetBBox(), intersecting );
 
-                    for( const OBJECT_2D* cutout : intersecting )
-                        object2d_B->push_back( cutout );
-                }
-            };
+                            for( const OBJECT_2D* cutout : intersecting )
+                                object2d_B->push_back( cutout );
+                        }
+                    };
 
             if( aLayer_id == F_Cu )
             {
                 clipCutouts( m_boardAdapter.GetFrontCounterboreCutouts() );
                 clipCutouts( m_boardAdapter.GetFrontCountersinkCutouts() );
-                clipCutouts( m_boardAdapter.GetTertiarydrillCutouts() );
+                clipCutouts( m_boardAdapter.GetFrontBackdrillCutouts() );
             }
             else if( aLayer_id == B_Cu )
             {
                 clipCutouts( m_boardAdapter.GetBackCounterboreCutouts() );
                 clipCutouts( m_boardAdapter.GetBackCountersinkCutouts() );
-                clipCutouts( m_boardAdapter.GetBackdrillCutouts() );
+                clipCutouts( m_boardAdapter.GetBackBackdrillCutouts() );
             }
         }
 
@@ -1288,33 +1289,54 @@ void RENDER_3D_RAYTRACE_BASE::backfillPostMachine()
         const float viaZBot = m_boardAdapter.GetLayerBottomZPos( bottomLayer );
 
         // Handle backdrill plugs
-        const auto secondaryDrillSize = via->GetSecondaryDrillSize();
-
-        if( secondaryDrillSize.has_value() && secondaryDrillSize.value() > 0 )
+        for( const PADSTACK::DRILL_PROPS& backdrill : { via->Padstack().SecondaryDrill(),
+                                                        via->Padstack().TertiaryDrill() } )
         {
-            const float backdrillRadius = secondaryDrillSize.value() * 0.5f * unitScale;
+            const float backdrillRadius = backdrill.size.x * 0.5f * unitScale;
 
             if( backdrillRadius > holeOuterRadius )
             {
-                PCB_LAYER_ID secStart = via->GetSecondaryDrillStartLayer();
-                PCB_LAYER_ID secEnd = via->GetSecondaryDrillEndLayer();
-
-                // Calculate where the backdrill ends and plug should start
-                const float secEndZ = m_boardAdapter.GetLayerBottomZPos( secEnd );
-
                 float plugZTop, plugZBot;
 
-                if( secStart == F_Cu )
+                if( backdrill.start == F_Cu )
                 {
-                    // Backdrill from top: plug goes from below backdrill end to via bottom
-                    plugZTop = secEndZ;
-                    plugZBot = viaZBot;
+                    plugZTop = m_boardAdapter.GetLayerTopZPos( F_Cu );
+                    float mustCutZ = m_boardAdapter.GetLayerBottomZPos( backdrill.end );
+
+                    // backdrill.end is the must-cut layer; the depth of the backdrill is 1/2-way through
+                    // the next dielectric layer.
+                    LAYER_RANGE copperLayers( backdrill.end, B_Cu, m_boardAdapter.GetBoard()->BoardCopperLayerCount() );
+                    auto        it = ++copperLayers.begin();
+
+                    if( it == copperLayers.end() )
+                    {
+                        plugZBot = mustCutZ;
+                    }
+                    else
+                    {
+                        float mustNotCutZ = m_boardAdapter.GetLayerTopZPos( *it );
+                        plugZBot = ( mustCutZ + mustNotCutZ ) / 2;
+                    }
                 }
                 else
                 {
-                    // Backdrill from bottom: plug goes from via top to above backdrill end
-                    plugZTop = viaZTop;
-                    plugZBot = secEndZ;
+                    plugZBot = m_boardAdapter.GetLayerBottomZPos( B_Cu );
+                    float mustCutZ = m_boardAdapter.GetLayerTopZPos( backdrill.end );
+
+                    // backdrill.end is the must-cut layer; the depth of the backdrill is 1/2-way through
+                    // the next dielectric layer.
+                    LAYER_RANGE copperLayers( B_Cu, backdrill.end, m_boardAdapter.GetBoard()->BoardCopperLayerCount() );
+                    auto        it = ++copperLayers.begin();
+
+                    if( it == copperLayers.end() )
+                    {
+                        plugZTop = mustCutZ;
+                    }
+                    else
+                    {
+                        float mustNotCutZ = m_boardAdapter.GetLayerBottomZPos( *it );
+                        plugZTop = (mustCutZ + mustNotCutZ ) / 2;
+                    }
                 }
 
                 if( plugZTop > plugZBot )

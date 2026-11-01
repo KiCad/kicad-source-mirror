@@ -1371,11 +1371,14 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     switch( static_cast<BACKDRILL_MODE>( m_backdrillChoice->GetSelection() ) )
                     {
                     case BACKDRILL_MODE::NO_BACKDRILL:
+                        secondaryDrill.size = VECTOR2I( 0, 0 );
                         secondaryDrill.start = UNDEFINED_LAYER;
+                        tertiaryDrill.size = VECTOR2I( 0, 0 );
                         tertiaryDrill.start = UNDEFINED_LAYER;
                         break;
 
                     case BACKDRILL_MODE::BACKDRILL_BOTTOM:
+                        secondaryDrill.size = VECTOR2I( 0, 0 );
                         secondaryDrill.start = UNDEFINED_LAYER;
                         tertiaryDrill.start = B_Cu;
                         tertiaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
@@ -1396,6 +1399,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     case BACKDRILL_MODE::BACKDRILL_TOP:
                         secondaryDrill.start = F_Cu;
                         secondaryDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
+                        tertiaryDrill.size = VECTOR2I( 0, 0 );
                         tertiaryDrill.start = UNDEFINED_LAYER;
 
                         if( !m_backdrillFrontSize.IsIndeterminate() && !m_backdrillFrontSize.IsNull() )

@@ -1042,6 +1042,9 @@ std::optional<int> PCB_VIA::GetSecondaryDrillSize() const
 void PCB_VIA::SetSecondaryDrillStartLayer( PCB_LAYER_ID aLayer )
 {
     m_padStack.SecondaryDrill().start = aLayer;
+
+    if( aLayer == UNDEFINED_LAYER )
+        m_padStack.SecondaryDrill().size = VECTOR2I( 0, 0 );
 }
 
 
@@ -1090,6 +1093,9 @@ std::optional<int> PCB_VIA::GetTertiaryDrillSize() const
 void PCB_VIA::SetTertiaryDrillStartLayer( PCB_LAYER_ID aLayer )
 {
     m_padStack.TertiaryDrill().start = aLayer;
+
+    if( aLayer == UNDEFINED_LAYER )
+        m_padStack.TertiaryDrill().size = VECTOR2I( 0, 0 );
 }
 
 

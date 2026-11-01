@@ -2817,13 +2817,16 @@ LSET PCB_IO_KICAD_SEXPR_PARSER::lookUpLayerSet( const LSET_MAP& aMap )
 }
 
 
-PCB_LAYER_ID PCB_IO_KICAD_SEXPR_PARSER::lookUpLayer( const LAYER_ID_MAP& aMap )
+PCB_LAYER_ID PCB_IO_KICAD_SEXPR_PARSER::lookUpLayer( const LAYER_ID_MAP& aMap, bool aAllowUndefined )
 {
     // avoid constructing another std::string, use lexer's directly
     LAYER_ID_MAP::const_iterator it = aMap.find( curText );
 
     if( it == aMap.end() )
     {
+        if( curText == "UNDEFINED" && aAllowUndefined )
+            return UNDEFINED_LAYER;
+
         m_undefinedLayers.insert( curText );
         return Rescue;
     }
@@ -7545,9 +7548,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_layers:
                 {
                     NextTok();
-                    secondary.start = lookUpLayer( m_layerIndices );
+                    secondary.start = lookUpLayer( m_layerIndices, true );
                     NextTok();
-                    secondary.end = lookUpLayer( m_layerIndices );
+                    secondary.end = lookUpLayer( m_layerIndices, true );
                     NeedRIGHT();
                     break;
                 }
@@ -7556,6 +7559,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                     Expecting( "size or layers" );
                 }
             }
+
+            if( secondary.start == UNDEFINED_LAYER )
+                secondary.size = VECTOR2I( 0, 0 );
 
             break;
         }
@@ -7585,9 +7591,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_layers:
                 {
                     NextTok();
-                    tertiary.start = lookUpLayer( m_layerIndices );
+                    tertiary.start = lookUpLayer( m_layerIndices, true );
                     NextTok();
-                    tertiary.end = lookUpLayer( m_layerIndices );
+                    tertiary.end = lookUpLayer( m_layerIndices, true );
                     NeedRIGHT();
                     break;
                 }
@@ -7596,6 +7602,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                     Expecting( "size or layers" );
                 }
             }
+
+            if( tertiary.start == UNDEFINED_LAYER )
+                tertiary.size = VECTOR2I( 0, 0 );
 
             break;
         }
@@ -9368,9 +9377,9 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
                 case T_layers:
                 {
                     NextTok();
-                    secondary.start = lookUpLayer( m_layerIndices );
+                    secondary.start = lookUpLayer( m_layerIndices, true );
                     NextTok();
-                    secondary.end = lookUpLayer( m_layerIndices );
+                    secondary.end = lookUpLayer( m_layerIndices, true );
                     NeedRIGHT();
                     break;
                 }
@@ -9379,6 +9388,9 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
                     Expecting( "size or layers" );
                 }
             }
+
+            if( secondary.start == UNDEFINED_LAYER )
+                secondary.size = VECTOR2I( 0, 0 );
 
             break;
         }
@@ -9408,9 +9420,9 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
                 case T_layers:
                 {
                     NextTok();
-                    tertiary.start = lookUpLayer( m_layerIndices );
+                    tertiary.start = lookUpLayer( m_layerIndices, true );
                     NextTok();
-                    tertiary.end = lookUpLayer( m_layerIndices );
+                    tertiary.end = lookUpLayer( m_layerIndices, true );
                     NeedRIGHT();
                     break;
                 }
@@ -9419,6 +9431,9 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
                     Expecting( "size or layers" );
                 }
             }
+
+            if( tertiary.start == UNDEFINED_LAYER )
+                tertiary.size = VECTOR2I( 0, 0 );
 
             break;
         }

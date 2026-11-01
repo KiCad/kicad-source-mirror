@@ -381,7 +381,7 @@ private:
      * @throw IO_ERROR if the layer is not valid.
      * @throw PARSE_ERROR if the layer syntax is incorrect.
      */
-    PCB_LAYER_ID lookUpLayer( const LAYER_ID_MAP& aMap );
+    PCB_LAYER_ID lookUpLayer( const LAYER_ID_MAP& aMap, bool aAllowUndefined = false );
     LSET lookUpLayerSet( const LSET_MAP& aMap );
 
     /**

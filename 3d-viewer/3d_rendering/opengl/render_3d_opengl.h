@@ -157,6 +157,7 @@ private:
                                       PAD_DRILL_POST_MACHINING_MODE aMode,
                                       int aSizeIU,
                                       int aDepthIU,
+                                      const EDA_ANGLE& aAngle,
                                       float aHoleInnerRadius,
                                       float aZSurface,
                                       bool aIsFront,
