@@ -734,10 +734,13 @@ void PANEL_SYMBOL_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 {
     LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
+    bool           sameSymbolDifferentUnit = false;
 
     if( node && node->m_LibId.IsValid() )
     {
-        if( node->m_LibId != m_curSymbolId )
+        if( node->m_LibId == m_curSymbolId )
+            sameSymbolDifferentUnit = true;
+        else
             m_field_edits.clear();
 
         m_curSymbolId = node->m_LibId;
@@ -752,6 +755,10 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
             wxCommandEvent evt( EVT_FOOTPRINT_SELECTED );
             evt.SetString( node->m_Footprint);
             onFootprintSelected( evt );
+        }
+        else if( sameSymbolDifferentUnit && !m_fp_override.IsEmpty())
+        {
+            showFootprint( m_fp_override );
         }
         else
         {
