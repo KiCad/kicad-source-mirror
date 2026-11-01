@@ -609,7 +609,7 @@ public:
      * Called after netlist is updated.
      *
      * @param aUpdater is the updater object that was run.
-     * @param aRunDragCommand is set to true if the drag command was invoked by this call.
+     * @param aRunDragCommand [out] is set to true if a drag command should be run following this call.
      */
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 

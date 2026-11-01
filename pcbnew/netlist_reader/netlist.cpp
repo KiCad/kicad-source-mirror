@@ -79,7 +79,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
 }
 
 
-void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand )
+void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aDidRunDragCommand )
 {
     BOARD* board = GetBoard();
 
@@ -147,7 +147,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
         std::copy( newFootprints.begin(), newFootprints.end(), std::back_inserter( items ) );
         GetToolManager()->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &items );
 
-        *aRunDragCommand = true;
+        *aDidRunDragCommand = true;
     }
 
     board->CompileRatsnest();

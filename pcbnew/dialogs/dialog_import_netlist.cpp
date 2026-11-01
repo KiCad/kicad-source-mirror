@@ -233,7 +233,7 @@ void DIALOG_IMPORT_NETLIST::loadNetlist( bool aDryRun )
     BOARD_NETLIST_UPDATER updater( m_parent, m_parent->GetBoard() );
     updater.SetReporter( &reporter );
     updater.SetIsDryRun( aDryRun );
-    updater.SetWillDrag( false );
+    updater.SetWillDrag( !aDryRun );
     updater.SetLookupByTimestamp( m_matchByTimestamp->GetSelection() == 0 );
     updater.SetDeleteUnusedFootprints( m_cbDeleteExtraFootprints->GetValue());
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
