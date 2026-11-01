@@ -32,9 +32,9 @@
 
 
 class WIDGET_DIFF_CANVAS;
-class wxBoxSizer;
 class wxButton;
 class wxChoice;
+class wxWrapSizer;
 
 
 /**
@@ -125,9 +125,9 @@ private:
     REVISION_HANDLER m_revisionHandler;
     wxChoice*        m_revisionChoice = nullptr;
 
-    UP_HANDLER  m_upHandler;
-    wxButton*   m_btnUp = nullptr;
-    wxBoxSizer* m_filterSizer = nullptr;
+    UP_HANDLER   m_upHandler;
+    wxButton*    m_btnUp = nullptr;
+    wxWrapSizer* m_filterSizer = nullptr;
 
     /// Maps tree item IDs to the underlying change record so selection can
     /// find the data without walking the diff again. Group nodes have no

@@ -134,10 +134,9 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         for( const auto& [layer, name] : scene.comparisonGeometry.layerNames )
             layerNames[layer] = name;
 
-        m_filterSizer = new wxBoxSizer( wxHORIZONTAL );
-
-        // A board can have dozens of layers, so the checkboxes wrap rather than widen the dialog
-        wxWrapSizer* checkboxSizer = new wxWrapSizer( wxHORIZONTAL );
+        // A board can have dozens of layers, so the checkboxes wrap rather than widen the dialog. The wrap
+        // sizer sits directly in the vertical detail sizer, the only parent that tells it its width
+        m_filterSizer = new wxWrapSizer( wxHORIZONTAL );
 
         const std::array<std::pair<KICAD_DIFF::CATEGORY, wxString>, 4> categories{ {
                 { KICAD_DIFF::CATEGORY::ADDED, _( "Added" ) },
@@ -156,12 +155,12 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
                           m_canvas->SetCategoryVisible( cat, aEvent.IsChecked() );
                           buildTree();
                       } );
-            checkboxSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+            m_filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
         }
 
         if( geometryLayers.any() )
         {
-            checkboxSizer->Add( new wxStaticText( m_panelDetail, wxID_ANY, _( "Layers:" ) ),
+            m_filterSizer->Add( new wxStaticText( m_panelDetail, wxID_ANY, _( "Layers:" ) ),
                                 wxSizerFlags().Border( wxLEFT | wxRIGHT, 4 ).Centre() );
 
             for( PCB_LAYER_ID layer : geometryLayers.UIOrder() )
@@ -175,11 +174,9 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
                           {
                               m_canvas->SetLayerVisible( layer, aEvent.IsChecked() );
                           } );
-                checkboxSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
+                m_filterSizer->Add( cb, wxSizerFlags().Border( wxRIGHT, 8 ).Centre() );
             }
         }
-
-        m_filterSizer->Add( checkboxSizer, wxSizerFlags( 1 ).Centre() );
 
         // Toggle the property list so the board can use the full detail panel.
 
