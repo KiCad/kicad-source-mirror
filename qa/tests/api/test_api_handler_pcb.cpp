@@ -768,16 +768,12 @@ BOOST_AUTO_TEST_CASE( TaskQueriesAllowedDuringTask )
     API_HANDLER_PCB handler( m_context );
 
     // Status/result retrieval is safe while a task runs
-    BOOST_CHECK( handler.AllowsDuringTask(
-            kiapi::board::tasks::GetDrcTaskResult().GetTypeName() ) );
+    BOOST_CHECK( handler.AllowsDuringTask( std::string( kiapi::board::tasks::GetDrcTaskResult().GetTypeName() ) ) );
 
     // Starting or mutating commands is not
-    BOOST_CHECK( !handler.AllowsDuringTask(
-            kiapi::board::tasks::StartDrcTask().GetTypeName() ) );
-    BOOST_CHECK( !handler.AllowsDuringTask(
-            kiapi::board::tasks::StartRefillZonesTask().GetTypeName() ) );
-    BOOST_CHECK( !handler.AllowsDuringTask(
-            kiapi::common::commands::GetItems().GetTypeName() ) );
+    BOOST_CHECK( !handler.AllowsDuringTask( std::string( kiapi::board::tasks::StartDrcTask().GetTypeName() ) ) );
+    BOOST_CHECK( !handler.AllowsDuringTask( std::string( kiapi::board::tasks::StartRefillZonesTask().GetTypeName() ) ) );
+    BOOST_CHECK( !handler.AllowsDuringTask( std::string( kiapi::common::commands::GetItems().GetTypeName() ) ) );
 }
 
 
