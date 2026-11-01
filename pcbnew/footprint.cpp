@@ -1435,6 +1435,13 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_3D_Drawings   = aOther.m_3D_Drawings;
     m_height        = aOther.m_height;
 
+    // Clear the other item's containers since this is a move
+
+    for( PCB_3D_BODY* body : m_bodies )
+        delete body;
+
+    m_bodies.clear();
+
     for( PCB_3D_BODY* body : aOther.m_bodies )
         Add( static_cast<PCB_3D_BODY*>( body->Clone() ), ADD_MODE::APPEND );
 
