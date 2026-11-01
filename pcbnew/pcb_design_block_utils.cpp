@@ -581,7 +581,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     if( group )
     {
         m_toolManager->RunAction( ACTIONS::selectionClear );
-        m_toolManager->RunAction( ACTIONS::selectItem, group );
+        m_toolManager->RunAction( ACTIONS::selectItem, group->AsEdaItem() );
 
         BOARD_COMMIT commit( m_toolManager );
         bool         changed = false;
@@ -653,7 +653,7 @@ bool PCB_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
             commit.Push( _( "Group Items" ) );
 
             m_toolManager->RunAction( ACTIONS::selectionClear );
-            m_toolManager->RunAction( ACTIONS::selectItem, newGroup );
+            m_toolManager->RunAction( ACTIONS::selectItem, newGroup->AsEdaItem() );
         }
         else
         {
