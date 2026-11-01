@@ -1783,6 +1783,9 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                         }
 
                         currentVariant->RemoveFieldValue( fieldName );
+
+                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                        changed = true;
                     }
                 }
             }
