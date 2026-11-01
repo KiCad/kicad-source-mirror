@@ -4139,7 +4139,6 @@ void EDA_SHAPE::GetEndingTangents( EDA_ANGLE& aStartTangent, EDA_ANGLE& aEndTang
     }
 
     case SHAPE_T::ELLIPSE_ARC:
-    case SHAPE_T::ARC:
     {
         // Don't factor in the shortening.  If I have a cardinal-section arc, then I expect my arrowhead
         // to be cardinally rotated.  Having the arrow be on the tangent of the arc at the back of the
@@ -4157,6 +4156,28 @@ void EDA_SHAPE::GetEndingTangents( EDA_ANGLE& aStartTangent, EDA_ANGLE& aEndTang
         {
             aStartTangent = startAngle - ANGLE_90;
             aEndTangent = endAngle + ANGLE_90;
+        }
+
+        break;
+    }
+
+    case SHAPE_T::ARC:
+    {
+        // Don't factor in the shortening.  If I have a cardinal-section arc, then I expect my arrowhead
+        // to be cardinally rotated.  Having the arrow be on the tangent of the arc at the back of the
+        // arrowhead looks prettier, but can be misleading as to intent.
+
+        SHAPE_ARC arc( GetStart(), GetArcMid(), GetEnd(), 0 );
+
+        if( arc.GetCentralAngle() < ANGLE_0 )
+        {
+            aStartTangent = arc.GetStartAngle() + ANGLE_90;
+            aEndTangent = arc.GetEndAngle() - ANGLE_90;
+        }
+        else
+        {
+            aStartTangent = arc.GetStartAngle() - ANGLE_90;
+            aEndTangent = arc.GetEndAngle() + ANGLE_90;
         }
 
         break;
