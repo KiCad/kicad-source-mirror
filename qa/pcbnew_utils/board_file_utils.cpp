@@ -141,33 +141,6 @@ std::unique_ptr<BOARD> RequireBoardFromPcbnewQAData( const std::filesystem::path
 }
 
 
-std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
-                                                          std::istream& aFallback )
-{
-    std::istream* in_stream = nullptr;
-    std::ifstream file_stream;
-
-    if( aFilename.empty() )
-    {
-        // no file, read stdin
-        in_stream = &aFallback;
-    }
-    else
-    {
-        file_stream.open( aFilename );
-
-        if( !file_stream.is_open() )
-        {
-            return nullptr;
-        }
-
-        in_stream = &file_stream;
-    }
-
-    return ReadItemFromStream<FOOTPRINT>( *in_stream );
-}
-
-
 std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& aFilename,
                                                   const wxString& aFootprintName )
 {
@@ -180,14 +153,35 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& a
     else
         libPath = aFilename.string();
 
-    return io.FootprintLoad( libPath, aFootprintName, true );
+    try
+    {
+        return io.FootprintLoad( libPath, aFootprintName, true );
+    }
+    catch( const IO_ERROR& exc )
+    {
+        BOOST_TEST_CHECKPOINT( "Exception '" << exc.what() << "' occurred reading footprint file '" << aFilename );
+    }
+
+    return nullptr;
 }
 
 
 void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::filesystem::path& aLibraryPath )
 {
     PCB_IO_KICAD_SEXPR io;
-    io.FootprintSave( aLibraryPath.string(), &aFootprint, nullptr );
+
+    try
+    {
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( aLibraryPath.string() );
+
+        io.SetOutputFormatter( &formatter );
+        io.FormatFootprintLibFile( const_cast<FOOTPRINT*>( &aFootprint ) );
+        formatter.Finish();
+    }
+    catch( const IO_ERROR& exc )
+    {
+        BOOST_TEST_CHECKPOINT( "Exception '" << exc.what() << "' occurred writing footprint file '" << aLibraryPath );
+    }
 }
 
 

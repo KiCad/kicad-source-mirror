@@ -113,8 +113,6 @@ std::unique_ptr<BOARD> ReadBoardFromFile( const std::filesystem::path& aFilename
  */
 std::unique_ptr<BOARD> RequireBoardFromPcbnewQAData( const std::filesystem::path& aFilename );
 
-std::unique_ptr<FOOTPRINT> ReadFootprintFromFileOrStream( const std::string& aFilename,
-                                                          std::istream& aFallback = std::cin );
 /**
  * Read a footprint object  \a aFootprintName from \a aFileName.
  *

@@ -278,19 +278,18 @@ void LoadAndTestFootprintFile( const wxString& aLibRelativePath, const wxString&
          * written properly, we don't leave a library behind that will cause exceptions
          * when the cache is set up on future runs.
          */
+        wxString                    fileName = fp1->GetFPID().GetUniStringLibItemName() + ".kicad_mod";
         SCOPED_TEMP_DIR             tempDir( "kicad_qa_fp_roundtrip" );
         const std::filesystem::path libPath = tempDir.CreateChildDir( "fp_roundtrip.pretty" );
-        const wxString              fpFilename = fp1->GetFPID().GetLibItemName() + wxString( ".kicad_mod" );
+        const std::filesystem::path savePath = libPath / fileName.ToStdString();
 
-        BOOST_TEST_MESSAGE( "Resaving footprint: " << fpFilename << " in " << libPath );
+        BOOST_TEST_MESSAGE( "Resaving footprint: " << savePath.stem() << " in " << libPath );
 
-        KI_TEST::DumpFootprintToFile( *fp1, libPath );
+        KI_TEST::DumpFootprintToFile( *fp1, savePath );
 
-        const std::filesystem::path fp2Path = libPath / fpFilename.ToStdString();
+        BOOST_TEST_MESSAGE( "Re-reading footprint: " << savePath.stem() << " in " << libPath );
 
-        BOOST_TEST_MESSAGE( "Re-reading footprint: " << fpFilename << " in " << libPath );
-
-        std::unique_ptr<FOOTPRINT> fp2 = KI_TEST::ReadFootprintFromFile( fp2Path, aFpName );
+        std::unique_ptr<FOOTPRINT> fp2 = KI_TEST::ReadFootprintFromFile( savePath, aFpName );
 
         // Should load again
         BOOST_REQUIRE( fp2 );

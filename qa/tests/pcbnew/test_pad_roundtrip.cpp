@@ -67,7 +67,7 @@ struct PAD_ROUNDTRIP_FIXTURE
 
         KI_TEST::DumpFootprintToFile( m_Footprint, savePath );
 
-        return KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
+        return KI_TEST::ReadFootprintFromFile( savePath, savePath.stem().string() );
     }
 
     FOOTPRINT m_Footprint;
