@@ -1135,16 +1135,17 @@ SHAPE_LINE_CHAIN SHAPE_ELLIPSE::ConvertToPolyline( int aMaxError ) const
     const double sinRot = m_sinRot;
     const double cosRot = m_cosRot;
 
-    auto eval = [=]( double theta ) -> VECTOR2I
-    {
-        const double ct = std::cos( theta );
-        const double st = std::sin( theta );
-        const double lx = a * ct;
-        const double ly = b * st;
-        const double wx = lx * cosRot - ly * sinRot;
-        const double wy = lx * sinRot + ly * cosRot;
-        return VECTOR2I( static_cast<int>( std::round( cx + wx ) ), static_cast<int>( std::round( cy + wy ) ) );
-    };
+    auto eval =
+            [=]( double theta ) -> VECTOR2I
+            {
+                const double ct = std::cos( theta );
+                const double st = std::sin( theta );
+                const double lx = a * ct;
+                const double ly = b * st;
+                const double wx = lx * cosRot - ly * sinRot;
+                const double wy = lx * sinRot + ly * cosRot;
+                return VECTOR2I( KiROUND( cx + wx ), KiROUND( cy + wy ) );
+            };
 
     double tStart, tEnd;
     sweepRange( tStart, tEnd );

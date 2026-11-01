@@ -3031,14 +3031,10 @@ void EDA_SHAPE::TransformWithLineEndingsToPolygon( SHAPE_POLY_SET& aBuffer, int 
             if( GetShortenedBodyPolyPoints( chain, 0, pts, width ) )
             {
                 for( size_t jj = 1; jj < pts.size(); ++jj )
-                {
                     TransformOvalToPolygon( aBuffer, pts[jj - 1], pts[jj], width, aError, aErrorLoc );
-                }
 
                 if( chain.IsClosed() )
-                {
                     TransformOvalToPolygon( aBuffer, pts.back(), pts.front(), width, aError, aErrorLoc );
-                }
             }
 
             break;

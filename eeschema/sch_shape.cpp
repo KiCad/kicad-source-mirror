@@ -467,10 +467,16 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     {
         ptList.clear();     // clear every time; it's static
 
-        SHAPE_LINE_CHAIN chain = buildShapeEllipse().ConvertToPolyline( getMaxError() );
+        for( const VECTOR2I& pt : buildShapeEllipse().ConvertToPolyline( getMaxError() ).CPoints() )
+            ptList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
 
-        if( GetShortenedBodyPolyPoints( chain, 0, ptList, pen_size ) )
+        if( ShortenBodyPolyPoints( ptList, 0, pen_size ) )
+        {
+            if( GetShape() == SHAPE_T::ELLIPSE )
+                ptList.push_back( ptList.front() );
+
             aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
+        }
 
         break;
     }
