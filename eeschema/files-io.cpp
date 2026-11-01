@@ -1408,7 +1408,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         success &= savedThisSheet;
     }
 
-    if( success )
+    if( success && !saveCopy )
     {
         if( m_autoSaveTimer )
             m_autoSaveTimer->Stop();
