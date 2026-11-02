@@ -44,6 +44,16 @@ namespace KIPLATFORM
             return CredWriteW( &cred, 0 );
         }
 
+        void StoreSecretAsync( const wxString& aService, const wxString& aKey, const wxString& aSecret,
+                               std::function<void( bool )> aDone )
+        {
+            // Credential Manager never prompts, so storing cannot hold the event loop
+            bool stored = StoreSecret( aService, aKey, aSecret );
+
+            if( aDone )
+                aDone( stored );
+        }
+
         bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret )
         {
             wxString display = aService + wxS( ":" ) + aKey;
@@ -59,6 +69,16 @@ namespace KIPLATFORM
             }
 
             return result;
+        }
+
+        void GetSecretAsync( const wxString& aService, const wxString& aKey,
+                             std::function<void( bool, const wxString& )> aDone )
+        {
+            // Credential Manager never prompts, so reading cannot hold the event loop
+            wxString secret;
+            bool     found = GetSecret( aService, aKey, secret );
+
+            aDone( found, secret );
         }
 
         bool GetSecretNoPrompt( const wxString& aService, const wxString& aKey, wxString& aSecret )

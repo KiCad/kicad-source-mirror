@@ -21,6 +21,8 @@
 
 #include <libsecret/secret.h>
 
+#include <memory>
+
 namespace KIPLATFORM
 {
     namespace SECRETS
@@ -65,6 +67,32 @@ namespace KIPLATFORM
             return true;
         }
 
+        static void storeFinished( GObject* aSource, GAsyncResult* aResult, gpointer aDone )
+        {
+            std::unique_ptr<std::function<void( bool )>> done( static_cast<std::function<void( bool )>*>( aDone ) );
+            bool                                         stored = secret_password_store_finish( aResult, nullptr );
+
+            if( *done )
+                ( *done )( stored );
+        }
+
+        void StoreSecretAsync( const wxString& aService, const wxString& aKey, const wxString& aSecret,
+                               std::function<void( bool )> aDone )
+        {
+            wxString display = aService + ":" + aKey;
+
+            wxScopedCharBuffer utf8Display = display.utf8_str();
+            wxScopedCharBuffer utf8Secret = aSecret.utf8_str();
+            wxScopedCharBuffer utf8Service = aService.utf8_str();
+            wxScopedCharBuffer utf8Key = aKey.utf8_str();
+
+            // The sync call spins a private main context while any unlock prompt is up, which starves the
+            // GTK loop; the async one finishes on the default context the GTK loop already iterates
+            secret_password_store( &schema, SECRET_COLLECTION_DEFAULT, utf8Display.data(), utf8Secret.data(), nullptr,
+                                   storeFinished, new std::function<void( bool )>( std::move( aDone ) ), "service",
+                                   utf8Service.data(), "key", utf8Key.data(), nullptr );
+        }
+
         bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret )
         {
             GError* error = nullptr;
@@ -91,6 +119,37 @@ namespace KIPLATFORM
             g_free( secret );
 
             return true;
+        }
+
+        static void lookupFinished( GObject* aSource, GAsyncResult* aResult, gpointer aDone )
+        {
+            using DONE = std::function<void( bool, const wxString& )>;
+
+            std::unique_ptr<DONE> done( static_cast<DONE*>( aDone ) );
+            gchar*                secret = secret_password_lookup_finish( aResult, nullptr );
+
+            // A missing entry and a failed lookup both come back as a null secret
+            if( !secret )
+            {
+                ( *done )( false, wxEmptyString );
+                return;
+            }
+
+            wxString value = wxString::FromUTF8( secret );
+            g_free( secret );
+            ( *done )( true, value );
+        }
+
+        void GetSecretAsync( const wxString& aService, const wxString& aKey,
+                             std::function<void( bool, const wxString& )> aDone )
+        {
+            wxScopedCharBuffer utf8Service = aService.utf8_str();
+            wxScopedCharBuffer utf8Key = aKey.utf8_str();
+
+            // Finishes on the default context the GTK loop iterates, so an unlock prompt stays drawable
+            secret_password_lookup( &schema, nullptr, lookupFinished,
+                                    new std::function<void( bool, const wxString& )>( std::move( aDone ) ),
+                                    "service", utf8Service.data(), "key", utf8Key.data(), nullptr );
         }
 
         bool GetSecretNoPrompt( const wxString& aService, const wxString& aKey, wxString& aSecret )

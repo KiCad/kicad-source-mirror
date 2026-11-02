@@ -20,6 +20,8 @@
 #ifndef KIPLATFORM_SECRETS_H_
 #define KIPLATFORM_SECRETS_H_
 
+#include <functional>
+
 #include <wx/string.h>
 
 namespace KIPLATFORM
@@ -29,7 +31,23 @@ namespace KIPLATFORM
 
         bool StoreSecret( const wxString& aService, const wxString& aKey, const wxString& aSecret );
 
+        /**
+         * Like StoreSecret(), but never blocks the event loop while the platform asks the user to unlock
+         * the store. Call it from the main thread; aDone, when given, runs there with the outcome, possibly
+         * before this returns on platforms that store without prompting.
+         */
+        void StoreSecretAsync( const wxString& aService, const wxString& aKey, const wxString& aSecret,
+                               std::function<void( bool )> aDone = nullptr );
+
         bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret );
+
+        /**
+         * Like GetSecret(), but never blocks the event loop while the platform asks the user to unlock
+         * the store. Call it from the main thread; aDone runs there with whether the secret was found and
+         * its value, possibly before this returns on platforms that read without prompting.
+         */
+        void GetSecretAsync( const wxString& aService, const wxString& aKey,
+                             std::function<void( bool, const wxString& )> aDone );
 
         /**
          * Like GetSecret(), but never waits on the user. A locked keyring is reported as not found

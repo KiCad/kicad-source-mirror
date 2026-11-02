@@ -124,10 +124,21 @@ bool KIGIT::PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJ
 
     wxString username = entered.username ? *entered.username : identity.username;
 
-    if( dlg.SaveCredentials() && !KIPLATFORM::SECRETS::StoreSecret( identity.remote, username, entered.password ) )
+    if( dlg.SaveCredentials() )
     {
-        DisplayInfoMessage( aParent, _( "The credentials could not be saved to the system keychain, so they "
-                                        "are kept for this session only." ) );
+        // A locked keyring prompts to unlock, which must not hold the event loop
+        wxWeakRef<wxWindow> parent( aParent );
+
+        KIPLATFORM::SECRETS::StoreSecretAsync(
+                identity.remote, username, entered.password,
+                [parent]( bool aStored )
+                {
+                    if( !aStored && parent )
+                    {
+                        DisplayInfoMessage( parent, _( "The credentials could not be saved to the system keychain, "
+                                                       "so they are kept for this session only." ) );
+                    }
+                } );
     }
 
     // A correction only in the session would be reverted by the next attach.

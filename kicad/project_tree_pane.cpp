@@ -1828,9 +1828,10 @@ static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, c
 // local settings. Runs only after the remote itself was set up successfully.
 static void saveAcceptedRemoteSettings( PROJECT& aProject, const RemoteConfig& aConfig )
 {
-    // Keyed like the attach-time lookup, which never sees credentials embedded in the address
-    KIPLATFORM::SECRETS::StoreSecret( KIGIT_COMMON::ParseRemoteURL( aConfig.url ).url, aConfig.username,
-                                      aConfig.password );
+    // Keyed like the attach-time lookup, which never sees credentials embedded in the address. Async so an
+    // unlock prompt cannot hold the event loop
+    KIPLATFORM::SECRETS::StoreSecretAsync( KIGIT_COMMON::ParseRemoteURL( aConfig.url ).url, aConfig.username,
+                                           aConfig.password );
     aProject.GetLocalSettings().m_GitRepoUsername = aConfig.username;
     aProject.GetLocalSettings().m_GitSSHKey = aConfig.sshKey;
 
