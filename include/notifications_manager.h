@@ -26,7 +26,10 @@
 #include <list>
 #include <vector>
 
-class wxString;
+#include <wx/filename.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
+
 class KISTATUSBAR;
 struct NOTIFICATION;
 class NOTIFICATIONS_LIST;
