@@ -5427,7 +5427,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEllipseBody( SCH_SHAPE* aShape, bool aIsArc
             if( !aIsSchematic )
                 Expecting( "uuid only valid in schematic context" );
             NeedSYMBOL();
-            const_cast<KIID&>( aShape->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( aShape->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
