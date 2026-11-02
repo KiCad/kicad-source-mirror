@@ -155,7 +155,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
         }
 #endif
 
-        if( !field_copy.IsMandatory() )
+        if( !field_copy.IsMandatory() && m_sheet->GetField( field_copy.GetName() ) )
         {
             wxString text = m_sheet->GetFieldText( field_copy.GetName(), &instance, variantName );
             field_copy.SetText( schematic.ConvertKIIDsToRefs( text ) );
