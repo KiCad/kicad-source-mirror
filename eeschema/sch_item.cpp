@@ -986,7 +986,10 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     for( const auto& [name, value] : aOther.m_customProperties )
     {
         if( !m_customProperties.contains( name ) )
-            return -1;
+        {
+            if( !value.IsEmpty() )
+                return -1;
+        }
     }
 
     return 0;
