@@ -284,6 +284,32 @@ BOOST_AUTO_TEST_CASE( ForeignProjectLockOpensReadOnlyAndIsNotStolen )
 }
 
 
+// An override the user granted is applied by the load itself, so the lock file is never released
+// and recreated in between
+BOOST_AUTO_TEST_CASE( GrantedOverrideTakesForeignProjectLockOnLoad )
+{
+    nlohmann::json owner;
+    owner["username"] = "someone-else";
+    owner["hostname"] = "another-host";
+
+    wxString projectPath = seedLockedProject( m_tempDir, "overridden", owner );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath, true, true ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+
+    BOOST_CHECK( !project->IsReadOnly() );
+    BOOST_REQUIRE( project->GetProjectLock() != nullptr );
+    BOOST_CHECK( project->GetProjectLock()->Valid() );
+
+    std::ifstream in( LOCKFILE::LockPathFor( projectPath ).ToStdString() );
+    BOOST_CHECK_EQUAL( nlohmann::json::parse( in ).value( "username", std::string() ),
+                       std::string( wxGetUserId().mb_str() ) );
+}
+
+
 // A live same-user lock held by another KiCad process must never be taken
 BOOST_AUTO_TEST_CASE( LiveProjectLockNotStolenFromAnotherExecutable )
 {

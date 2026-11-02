@@ -987,10 +987,6 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
         if( !AskOverrideLock( this, msg ) )
             return false;  // User clicked Cancel - abort project loading entirely
 
-        // Clear the lock so the load below can take it
-        LOCKFILE overridden( fullPath );
-        overridden.OverrideLock();
-
         lockOverrideGranted = true;
     }
 
@@ -1006,7 +1002,9 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // current extension. Be very careful with aProjectFileName vs. Prj().GetProjectPath()
     // from here on out.
 
-    Pgm().GetSettingsManager().LoadProject( fullPath );
+    // The load overrides the lock in place.  Releasing it here and taking it again there would
+    // delete and recreate the lock file, which fails on Windows while another handle is open.
+    Pgm().GetSettingsManager().LoadProject( fullPath, true, lockOverrideGranted );
 
     // Propagate lock override decision to the loaded project
     if( lockOverrideGranted )
