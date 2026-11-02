@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE( GrantedOverrideTakesForeignProjectLockOnLoad )
 
     {
         std::ofstream out( pro.string() );
-        out << "{}";
+        out << R"({"meta": {"filename": "overridden.kicad_pro", "version": 3}})";
     }
 
     wxString projectPath = wxString( pro.string() );
