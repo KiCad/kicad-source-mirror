@@ -1794,24 +1794,19 @@ void RENDER_3D_OPENGL::generateViaCovers( float aPlatingThickness3d, float aUnit
         getLayerZPos( top_layer, ztop, dummy );
         getLayerZPos( bottom_layer, dummy, zbot );
 
-        bool frontCovering = via->GetFrontCoveringMode() == COVERING_MODE::COVERED
+        bool frontCovering = via->ResolveFrontCoveringMode() == COVERING_MODE::COVERED
                              || via->IsTented( F_Mask );
-        bool backCovering = via->GetBackCoveringMode() == COVERING_MODE::COVERED
+        bool backCovering = via->ResolveBackCoveringMode() == COVERING_MODE::COVERED
                             || via->IsTented( B_Mask );
-        bool frontPlugged = via->GetFrontPluggingMode() == PLUGGING_MODE::PLUGGED;
-        bool backPlugged  = via->GetBackPluggingMode() == PLUGGING_MODE::PLUGGED;
-        bool filled = via->GetFillingMode() == FILLING_MODE::FILLED
-                      || via->GetCappingMode() == CAPPING_MODE::CAPPED;
+        bool frontPlugged = via->ResolveFrontPluggingMode() == PLUGGING_MODE::PLUGGED;
+        bool backPlugged  = via->ResolveBackPluggingMode() == PLUGGING_MODE::PLUGGED;
+        bool filled = via->ResolveFillingMode() == FILLING_MODE::FILLED
+                      || via->ResolveCappingMode() == CAPPING_MODE::CAPPED;
 
-        const auto frontPostMachining =
-                via->GetFrontPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED );
-        const auto backPostMachining =
-                via->GetBackPostMachining().value_or( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED );
-
-        bool hasFrontPostMachining = frontPostMachining != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-                                     && frontPostMachining != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-        bool hasBackPostMachining = backPostMachining != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-                                    && backPostMachining != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+        bool hasFrontPostMachining = via->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+                                  || via->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+        bool hasBackPostMachining = via->GetBackPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+                                 || via->GetBackPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
 
         bool hasFrontBackdrill = via->GetSecondaryDrillStartLayer() == F_Cu
                                     || via->GetTertiaryDrillStartLayer() == F_Cu;

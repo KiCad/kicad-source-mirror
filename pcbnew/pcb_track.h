@@ -536,24 +536,32 @@ public:
 
     void         SetFrontTentingMode( TENTING_MODE aMode );
     TENTING_MODE GetFrontTentingMode() const;
+    TENTING_MODE ResolveFrontTentingMode() const;
     void         SetBackTentingMode( TENTING_MODE aMode );
     TENTING_MODE GetBackTentingMode() const;
+    TENTING_MODE ResolveBackTentingMode() const;
 
     void          SetFrontCoveringMode( COVERING_MODE aMode );
     COVERING_MODE GetFrontCoveringMode() const;
+    COVERING_MODE ResolveFrontCoveringMode() const;
     void          SetBackCoveringMode( COVERING_MODE aMode );
     COVERING_MODE GetBackCoveringMode() const;
+    COVERING_MODE ResolveBackCoveringMode() const;
 
     void          SetFrontPluggingMode( PLUGGING_MODE aMode );
     PLUGGING_MODE GetFrontPluggingMode() const;
+    PLUGGING_MODE ResolveFrontPluggingMode() const;
     void          SetBackPluggingMode( PLUGGING_MODE aMode );
     PLUGGING_MODE GetBackPluggingMode() const;
+    PLUGGING_MODE ResolveBackPluggingMode() const;
 
     void         SetCappingMode( CAPPING_MODE aMode );
     CAPPING_MODE GetCappingMode() const;
+    CAPPING_MODE ResolveCappingMode() const;
 
     void         SetFillingMode( FILLING_MODE aMode );
     FILLING_MODE GetFillingMode() const;
+    FILLING_MODE ResolveFillingMode() const;
 
     bool IsTented( PCB_LAYER_ID aLayer ) const override;
     int GetSolderMaskExpansion() const;

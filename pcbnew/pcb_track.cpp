@@ -1463,6 +1463,20 @@ TENTING_MODE PCB_VIA::GetFrontTentingMode() const
 }
 
 
+TENTING_MODE PCB_VIA::ResolveFrontTentingMode() const
+{
+    if( GetFrontTentingMode() == TENTING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_TentViasFront )
+            return TENTING_MODE::TENTED;
+        else
+            return TENTING_MODE::NOT_TENTED;
+    }
+
+    return GetFrontTentingMode();
+}
+
+
 void PCB_VIA::SetBackTentingMode( TENTING_MODE aMode )
 {
     switch( aMode )
@@ -1483,6 +1497,20 @@ TENTING_MODE PCB_VIA::GetBackTentingMode() const
     }
 
     return TENTING_MODE::FROM_BOARD;
+}
+
+
+TENTING_MODE PCB_VIA::ResolveBackTentingMode() const
+{
+    if( GetBackTentingMode() == TENTING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_TentViasBack )
+            return TENTING_MODE::TENTED;
+        else
+            return TENTING_MODE::NOT_TENTED;
+    }
+
+    return GetBackTentingMode();
 }
 
 
@@ -1509,6 +1537,20 @@ COVERING_MODE PCB_VIA::GetFrontCoveringMode() const
 }
 
 
+COVERING_MODE PCB_VIA::ResolveFrontCoveringMode() const
+{
+    if( GetFrontCoveringMode() == COVERING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_CoverViasFront )
+            return COVERING_MODE::COVERED;
+        else
+            return COVERING_MODE::NOT_COVERED;
+    }
+
+    return GetFrontCoveringMode();
+}
+
+
 void PCB_VIA::SetBackCoveringMode( COVERING_MODE aMode )
 {
     switch( aMode )
@@ -1529,6 +1571,20 @@ COVERING_MODE PCB_VIA::GetBackCoveringMode() const
     }
 
     return COVERING_MODE::FROM_BOARD;
+}
+
+
+COVERING_MODE PCB_VIA::ResolveBackCoveringMode() const
+{
+    if( GetBackCoveringMode() == COVERING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_CoverViasBack )
+            return COVERING_MODE::COVERED;
+        else
+            return COVERING_MODE::NOT_COVERED;
+    }
+
+    return GetBackCoveringMode();
 }
 
 
@@ -1555,6 +1611,20 @@ PLUGGING_MODE PCB_VIA::GetFrontPluggingMode() const
 }
 
 
+PLUGGING_MODE PCB_VIA::ResolveFrontPluggingMode() const
+{
+    if( GetFrontPluggingMode() == PLUGGING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_PlugViasFront )
+            return PLUGGING_MODE::PLUGGED;
+        else
+            return PLUGGING_MODE::NOT_PLUGGED;
+    }
+
+    return GetFrontPluggingMode();
+}
+
+
 void PCB_VIA::SetBackPluggingMode( PLUGGING_MODE aMode )
 {
     switch( aMode )
@@ -1575,6 +1645,20 @@ PLUGGING_MODE PCB_VIA::GetBackPluggingMode() const
     }
 
     return PLUGGING_MODE::FROM_BOARD;
+}
+
+
+PLUGGING_MODE PCB_VIA::ResolveBackPluggingMode() const
+{
+    if( GetBackPluggingMode() == PLUGGING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_PlugViasBack )
+            return PLUGGING_MODE::PLUGGED;
+        else
+            return PLUGGING_MODE::NOT_PLUGGED;
+    }
+
+    return GetBackPluggingMode();
 }
 
 
@@ -1601,6 +1685,20 @@ CAPPING_MODE PCB_VIA::GetCappingMode() const
 }
 
 
+CAPPING_MODE PCB_VIA::ResolveCappingMode() const
+{
+    if( GetCappingMode() == CAPPING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_CapVias )
+            return CAPPING_MODE::CAPPED;
+        else
+            return CAPPING_MODE::NOT_CAPPED;
+    }
+
+    return GetCappingMode();
+}
+
+
 void PCB_VIA::SetFillingMode( FILLING_MODE aMode )
 {
     switch( aMode )
@@ -1621,6 +1719,20 @@ FILLING_MODE PCB_VIA::GetFillingMode() const
     }
 
     return FILLING_MODE::FROM_BOARD;
+}
+
+
+FILLING_MODE PCB_VIA::ResolveFillingMode() const
+{
+    if( GetFillingMode() == FILLING_MODE::FROM_BOARD )
+    {
+        if( GetBoard() && GetBoard()->GetDesignSettings().m_FillVias )
+            return FILLING_MODE::FILLED;
+        else
+            return FILLING_MODE::NOT_FILLED;
+    }
+
+    return GetFillingMode();
 }
 
 

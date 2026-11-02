@@ -2758,8 +2758,8 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 
 void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 {
-    const DRILL_OPERATION* op = m_fabDrillModel->Find(
-            DRILL_SPAN( aVia->TopLayer(), aVia->BottomLayer(), false, false ), aVia );
+    const DRILL_OPERATION* op = m_fabDrillModel->Find( DRILL_SPAN( aVia->TopLayer(), aVia->BottomLayer(), false, false ),
+                                                       aVia );
     size_t hash = ipcPadstackHash( aVia, op );
     wxString name = wxString::Format( "PADSTACK_%zu", m_padstack_dict.size() + 1 );
     auto [ via_pair, success ] = m_padstack_dict.emplace( hash, name );
@@ -2804,8 +2804,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
                           else
                               shape.SetEnd( { KiROUND( aViaShape->GetWidth( aLayer ) / 2.0 ), 0 } );
 
-                          wxXmlNode* padStackPadDefNode =
-                                  appendNode( padStackDefNode, "PadstackPadDef" );
+                          wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
                           addAttribute( padStackPadDefNode, "layerRef", aLayerRef );
                           addAttribute( padStackPadDefNode, "padUse", "REGULAR" );
 
@@ -2815,11 +2814,8 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 
     for( PCB_LAYER_ID layer : layer_seq )
     {
-        if( !aVia->FlashLayer( layer ) || !m_board->IsLayerEnabled( layer )
-            || !layerIncluded( layer ) )
-        {
+        if( !aVia->FlashLayer( layer ) || !m_board->IsLayerEnabled( layer ) || !layerIncluded( layer ) )
             continue;
-        }
 
         addPadShape( layer, aVia, m_layer_name_map[layer], false );
     }

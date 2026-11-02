@@ -81,51 +81,9 @@ std::optional<DRILL_OPERATION> backdrillOperation( const PADSTACK::DRILL_PROPS& 
 }
 
 
-void enumerateVia( PCB_VIA* aVia, const BOARD& aBoard, const DRILL_QUERY& aQuery,
-                   std::vector<DRILL_OPERATION>& aOut )
+void enumerateVia( PCB_VIA* aVia, const BOARD& aBoard, const DRILL_QUERY& aQuery, std::vector<DRILL_OPERATION>& aOut )
 {
-    const DRILL_SPAN&            span = aQuery.m_Span;
-    const BOARD_DESIGN_SETTINGS& bds = aBoard.GetDesignSettings();
-
-    auto boardSide =
-            [&]( PCB_LAYER_ID aLayer, bool aFront, bool aBack )
-            {
-                return aLayer == F_Cu ? aFront : aLayer == B_Cu ? aBack : false;
-            };
-
-    auto covered =
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                bool fallback = boardSide( aLayer, bds.m_CoverViasFront, bds.m_CoverViasBack );
-                return aVia->Padstack().IsCovered( aLayer ).value_or( fallback );
-            };
-
-    auto plugged =
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                bool fallback = boardSide( aLayer, bds.m_PlugViasFront, bds.m_PlugViasBack );
-                return aVia->Padstack().IsPlugged( aLayer ).value_or( fallback );
-            };
-
-    auto tented =
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                bool fallback = boardSide( aLayer, bds.m_TentViasFront, bds.m_TentViasBack );
-                return aVia->Padstack().IsTented( aLayer ).value_or( fallback );
-            };
-
-    auto setProtection =
-            [&]( DRILL_OPERATION& aOp, std::optional<bool> aFilled, std::optional<bool> aCapped )
-            {
-                aOp.m_Filled = aFilled.value_or( bds.m_FillVias );
-                aOp.m_Capped = aCapped.value_or( bds.m_CapVias );
-                aOp.m_TopCovered = covered( aOp.m_TopLayer );
-                aOp.m_BottomCovered = covered( aOp.m_BottomLayer );
-                aOp.m_TopPlugged = plugged( aOp.m_TopLayer );
-                aOp.m_BottomPlugged = plugged( aOp.m_BottomLayer );
-                aOp.m_TopTented = tented( aOp.m_TopLayer );
-                aOp.m_BottomTented = tented( aOp.m_BottomLayer );
-            };
+    const DRILL_SPAN& span = aQuery.m_Span;
 
     auto stubLength =
             [&]( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd ) -> std::optional<int>
@@ -194,7 +152,23 @@ void enumerateVia( PCB_VIA* aVia, const BOARD& aBoard, const DRILL_QUERY& aQuery
     op.m_Position = aVia->GetStart();
     op.m_TopLayer = topLayer;
     op.m_BottomLayer = bottomLayer;
-    setProtection( op, aVia->Padstack().IsFilled(), aVia->Padstack().IsCapped() );
+    op.m_Filled = aVia->ResolveFillingMode() == FILLING_MODE::FILLED;
+    op.m_Capped = aVia->ResolveCappingMode() == CAPPING_MODE::CAPPED;
+
+    if( op.m_TopLayer == F_Cu )
+    {
+        op.m_TopCovered = aVia->ResolveFrontCoveringMode() == COVERING_MODE::COVERED;
+        op.m_TopPlugged = aVia->ResolveFrontPluggingMode() == PLUGGING_MODE::PLUGGED;
+        op.m_TopTented = aVia->ResolveFrontTentingMode() == TENTING_MODE::TENTED;
+    }
+
+    if( op.m_BottomLayer == B_Cu )
+    {
+        op.m_BottomCovered = aVia->ResolveBackCoveringMode() == COVERING_MODE::COVERED;
+        op.m_BottomPlugged = aVia->ResolveBackPluggingMode() == PLUGGING_MODE::PLUGGED;
+        op.m_BottomTented = aVia->ResolveBackTentingMode() == TENTING_MODE::TENTED;
+    }
+
     op.m_FrontPostMachining = fromPadstack( aVia->Padstack().FrontPostMachining() );
     op.m_BackPostMachining = fromPadstack( aVia->Padstack().BackPostMachining() );
     op.m_DrillStart = aVia->Padstack().Drill().start;

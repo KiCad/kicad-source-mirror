@@ -721,7 +721,7 @@ bool EXPORTER_STEP::IsViaHoleOpen( const PCB_VIA& aVia, bool aFillAllVias )
     if( aFillAllVias )
         return false;
 
-    return aVia.GetFillingMode() != FILLING_MODE::FILLED && aVia.GetCappingMode() != CAPPING_MODE::CAPPED;
+    return aVia.ResolveFillingMode() != FILLING_MODE::FILLED && aVia.ResolveCappingMode() != CAPPING_MODE::CAPPED;
 }
 
 
