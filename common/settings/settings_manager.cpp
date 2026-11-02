@@ -985,7 +985,7 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
 }
 
 
-bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
+bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive, bool aOverrideLock )
 {
     // Normalize path to current project extension. Users may open legacy .pro files,
     // or the OS may hand us a .kicad_sch/.kicad_pcb via file association or drag-and-drop.
@@ -1003,6 +1003,9 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         return true;
 
     LOCKFILE lockFile( fullPath );
+
+    if( !lockFile.Valid() && aSetActive && aOverrideLock )
+        lockFile.OverrideLock();
 
     if( !lockFile.Valid() )
     {

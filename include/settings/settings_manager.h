@@ -294,9 +294,11 @@ public:
      *
      * @param aFullPath is the full path to the project.
      * @param aSetActive if true will set the loaded project as the active project.
+     * @param aOverrideLock if true, an active load takes the project lock even when another
+     *                      session holds it.  Callers use this once the user has agreed to it.
      * @return true if the #PROJECT_FILE was successfully loaded from disk.
      */
-    bool LoadProject( const wxString& aFullPath, bool aSetActive = true );
+    bool LoadProject( const wxString& aFullPath, bool aSetActive = true, bool aOverrideLock = false );
 
     /**
      * Save, unload and unregister the given #PROJECT.

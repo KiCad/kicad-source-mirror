@@ -926,39 +926,39 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     lockFn.SetExt( lockFn.GetExt() + wxS( "." ) + FILEEXT::LockFileExtension );
     bool lockFilePreExisted = lockFn.FileExists();
 
+    bool overrideLock = false;
     bool lockOverrideGranted = false;
 
     if( lockFilePreExisted )
     {
-        // A lock file exists. Create a LOCKFILE to read who owns it and decide what to do.
+        // Only read the owner here.  SETTINGS_MANAGER::LoadProject() takes the lock and overrides
+        // it in place, because releasing it here would delete and recreate the lock file, which
+        // fails on Windows while another handle is open.
         LOCKFILE lockFile( fullPath );
-
-        if( !lockFile.Valid() && lockFile.IsLockedByMe() )
-        {
-            // If we cannot acquire the lock but we appear to be the one who locked it, check to
-            // see if there is another KiCad instance running. If not, then we can override the
-            // lock. This could happen if KiCad crashed or was interrupted.
-            if( !Pgm().SingleInstance()->IsAnotherRunning() )
-                lockFile.OverrideLock();
-        }
 
         if( !lockFile.Valid() )
         {
-            wxString msg;
-            msg.Printf( _( "Project '%s' is already open by '%s' at '%s'." ),
-                        fullPath,
-                        lockFile.GetUsername(),
-                        lockFile.GetHostname() );
+            // If we appear to be the one who locked it and no other KiCad instance is running,
+            // KiCad crashed or was interrupted and the lock is stale.
+            if( lockFile.IsLockedByMe() && !Pgm().SingleInstance()->IsAnotherRunning() )
+            {
+                overrideLock = true;
+            }
+            else
+            {
+                wxString msg;
+                msg.Printf( _( "Project '%s' is already open by '%s' at '%s'." ),
+                            fullPath,
+                            lockFile.GetUsername(),
+                            lockFile.GetHostname() );
 
-            if( !AskOverrideLock( this, msg ) )
-                return false;  // User clicked Cancel - abort project loading entirely
+                if( !AskOverrideLock( this, msg ) )
+                    return false;  // User clicked Cancel - abort project loading entirely
 
-            lockFile.OverrideLock();
-            lockOverrideGranted = true;
+                overrideLock = true;
+                lockOverrideGranted = true;
+            }
         }
-
-        // The LOCKFILE goes out of scope here and releases/removes the lock file.
-        // SETTINGS_MANAGER::LoadProject() will create the actual persistent lock.
     }
 
     // Any open KIFACE's must be closed if they are not part of the new project.
@@ -973,7 +973,7 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     // current extension. Be very careful with aProjectFileName vs. Prj().GetProjectPath()
     // from here on out.
 
-    Pgm().GetSettingsManager().LoadProject( fullPath );
+    Pgm().GetSettingsManager().LoadProject( fullPath, true, overrideLock );
 
     // Propagate lock override decision to the loaded project
     if( lockOverrideGranted )

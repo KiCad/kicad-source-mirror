@@ -176,4 +176,42 @@ BOOST_AUTO_TEST_CASE( ProjectOwnsItsLockBeforeTheChangeIsAnnounced )
 }
 
 
+// An override the user granted is applied by the load itself, so the lock file is never released
+// and recreated in between
+BOOST_AUTO_TEST_CASE( GrantedOverrideTakesForeignProjectLockOnLoad )
+{
+    fs::path pro = m_tempDir / "overridden.kicad_pro";
+
+    {
+        std::ofstream out( pro.string() );
+        out << "{}";
+    }
+
+    wxString projectPath = wxString( pro.string() );
+
+    wxFileName lockFn( projectPath );
+    lockFn.SetName( FILEEXT::LockFilePrefix + lockFn.GetName() );
+    lockFn.SetExt( lockFn.GetExt() + '.' + FILEEXT::LockFileExtension );
+
+    {
+        std::ofstream lck( lockFn.GetFullPath().ToStdString() );
+        lck << R"({"username":"someone-else","hostname":"another-host"})";
+    }
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath, true, true ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+
+    BOOST_CHECK( !project->IsReadOnly() );
+    BOOST_REQUIRE( project->GetProjectLock() != nullptr );
+    BOOST_CHECK( project->GetProjectLock()->Valid() );
+
+    std::ifstream in( lockFn.GetFullPath().ToStdString() );
+    BOOST_CHECK_EQUAL( nlohmann::json::parse( in ).value( "username", std::string() ),
+                       std::string( wxGetUserId().mb_str() ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
