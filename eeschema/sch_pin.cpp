@@ -2094,19 +2094,39 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
     if( m_number != tmp->m_number )
     {
-        // StrNumCmp: sort the same as the pads in the footprint file
-        return StrNumCmp( m_number, tmp->m_number );
-    }
+        // Sort based on natural sort (same as pads in the footprint file), but don't consider
+        // naturally-equivalent values to be equal.  Run them through a second, non-natural compare.
 
-    if( m_name != tmp->m_name )
-    {
-        retv = StrNumCmp( m_name, tmp->m_name );
+        // StrNumCmp: sort the same as the pads in the footprint file
+        retv = StrNumCmp( m_number, tmp->m_number, CMP_T::CASE_SENSITIVE );
 
         if( retv != 0 )
             return retv;
 
-        // If StrNumCmp() thinks they're equivalent, disambiguate with a straigh-up Cmp()
-        return m_name.Cmp( tmp->m_name );
+        // Don't make the mistake of conflating naturally-equivalent with equal.  Run them through
+        // a second, non-natural compare.
+        retv = m_number.Cmp( tmp->m_number );
+
+        if( retv != 0 )
+            return retv;
+    }
+
+    if( m_name != tmp->m_name )
+    {
+        // Sort based on natural sort (same as pads in the footprint file), but don't consider
+        // naturally-equivalent values to be equal.  Run them through a second, non-natural compare.
+
+        retv = StrNumCmp( m_name, tmp->m_name, CMP_T::CASE_SENSITIVE );
+
+        if( retv != 0 )
+            return retv;
+
+        // Don't make the mistake of conflating naturally-equivalent with equal.  Run them through
+        // a second, non-natural compare.
+        retv = m_name.Cmp( tmp->m_name );
+
+        if( retv != 0 )
+            return retv;
     }
 
     if( m_position.x != tmp->m_position.x )
