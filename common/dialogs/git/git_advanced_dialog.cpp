@@ -655,17 +655,28 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
 
                 if( outcome->hostKey )
                 {
-                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust ) )
+                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust )
+                        == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                    {
                         onFetch( true );
+                    }
 
                     return;
                 }
 
-                if( outcome->authFailure
-                    && KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj(), outcome->error ) )
+                if( outcome->authFailure )
                 {
-                    onFetch( aRetriedAfterTrust );
-                    return;
+                    KIGIT::PROMPT_ANSWER answer =
+                            KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj(), outcome->error );
+
+                    if( answer == KIGIT::PROMPT_ANSWER::ABANDONED )
+                        return;
+
+                    if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                    {
+                        onFetch( aRetriedAfterTrust );
+                        return;
+                    }
                 }
 
                 wxString error = outcome->error;

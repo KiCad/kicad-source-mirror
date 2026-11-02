@@ -551,17 +551,28 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
                 if( outcome->hostKey )
                 {
-                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust ) )
+                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust )
+                        == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                    {
                         onForcePush( true );
+                    }
 
                     return;
                 }
 
-                if( outcome->authFailure
-                    && KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), outcome->error ) )
+                if( outcome->authFailure )
                 {
-                    onForcePush( aRetriedAfterTrust );
-                    return;
+                    KIGIT::PROMPT_ANSWER answer =
+                            KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), outcome->error );
+
+                    if( answer == KIGIT::PROMPT_ANSWER::ABANDONED )
+                        return;
+
+                    if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                    {
+                        onForcePush( aRetriedAfterTrust );
+                        return;
+                    }
                 }
 
                 wxString error = outcome->error;

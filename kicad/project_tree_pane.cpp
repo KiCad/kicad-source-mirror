@@ -1820,7 +1820,7 @@ void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 // Prompts for git credentials after an auth failure. Returns false if cancelled.
 static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, const wxString& aExplanation )
 {
-    return KIGIT::PromptForCredentials( aParent, aCommon, &Prj(), aExplanation );
+    return KIGIT::PromptForCredentials( aParent, aCommon, &Prj(), aExplanation ) == KIGIT::PROMPT_ANSWER::ACCEPTED;
 }
 
 
@@ -1931,7 +1931,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
         if( std::optional<KIGIT::HOST_KEY_FAILURE> hostKey = handler.GetHostKeyFailure() )
         {
-            if( !KIGIT::PromptToTrustHost( m_parent, *hostKey, retriedAfterTrust ) )
+            if( KIGIT::PromptToTrustHost( m_parent, *hostKey, retriedAfterTrust ) != KIGIT::PROMPT_ANSWER::ACCEPTED )
                 break;
 
             retriedAfterTrust = true;

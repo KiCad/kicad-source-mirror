@@ -35,6 +35,13 @@ class PROJECT;
 namespace KIGIT
 {
 
+enum class PROMPT_ANSWER
+{
+    ACCEPTED,
+    DECLINED,
+    ABANDONED ///< The parent closed while the prompt was up, so the caller must not touch it
+};
+
 /**
  * Ask the user for the credentials of the session's remote and apply them to the session.
  * Optionally stores them in the OS keychain. Clears the auth-failure state so the caller
@@ -45,19 +52,19 @@ namespace KIGIT
  * @param aProject When given, the corrected username and key are also written to the project's
  *                 stored settings, so a later repository attach does not revert them.
  * @param aExplanation Why the last attempt failed, shown above the fields. Nothing is shown when empty.
- * @return True when the user confirmed and credentials were applied.
+ * @return ACCEPTED when the user confirmed and credentials were applied.
  */
-bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr,
-                           const wxString& aExplanation = wxEmptyString );
+PROMPT_ANSWER PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aProject = nullptr,
+                                    const wxString& aExplanation = wxEmptyString );
 
 /**
  * Ask whether to trust a server seen for the first time, and remember its key when the user agrees.
  * A changed or revoked key is refused with an explanation and no way to accept it.
  *
  * @param aRetriedAfterTrust The operation already ran again after a trust, so it is refused instead.
- * @return True when the key was saved and the operation should be tried again.
+ * @return ACCEPTED when the key was saved and the operation should be tried again.
  */
-bool PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
+PROMPT_ANSWER PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
 
 /// The status bar source under which background fetch failures are listed.
 inline constexpr const wxChar* SYNC_WARNING_SOURCE = wxS( "git" );

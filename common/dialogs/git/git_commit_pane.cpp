@@ -2331,9 +2331,11 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( aHostKey )
     {
-        if( KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust ) )
+        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust );
+
+        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPush( aCommon, true );
-        else
+        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
             setBusy( false, wxEmptyString );
 
         return;
@@ -2341,9 +2343,11 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( aAuthFailure )
     {
-        if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError ) )
+        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError );
+
+        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPush( aCommon, aRetriedAfterTrust );
-        else
+        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
             setBusy( false, _( "Cancelled." ) );
 
         return;
@@ -2904,9 +2908,11 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( aHostKey )
     {
-        if( KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust ) )
+        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust );
+
+        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPull( aCommon, aThenPush, true );
-        else
+        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
             setBusy( false, wxEmptyString );
 
         return;
@@ -2914,9 +2920,11 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( aAuthFailure )
     {
-        if( KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError ) )
+        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError );
+
+        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPull( aCommon, aThenPush, aRetriedAfterTrust );
-        else
+        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
             setBusy( false, _( "Cancelled." ) );
 
         return;

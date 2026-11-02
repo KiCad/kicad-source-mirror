@@ -464,7 +464,7 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
 
         if( hostKey )
         {
-            if( !KIGIT::PromptToTrustHost( m_frame, *hostKey, retriedAfterTrust ) )
+            if( KIGIT::PromptToTrustHost( m_frame, *hostKey, retriedAfterTrust ) != KIGIT::PROMPT_ANSWER::ACCEPTED )
                 return -1;
 
             retriedAfterTrust = true;

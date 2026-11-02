@@ -304,7 +304,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
                 break;
 
             // The prompt has told the user why, so a declined key ends the test here
-            if( !KIGIT::PromptToTrustHost( this, *hostKey, retriedAfterTrust ) )
+            if( KIGIT::PromptToTrustHost( this, *hostKey, retriedAfterTrust ) != KIGIT::PROMPT_ANSWER::ACCEPTED )
                 return;
 
             retriedAfterTrust = true;
