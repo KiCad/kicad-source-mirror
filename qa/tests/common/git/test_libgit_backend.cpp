@@ -536,7 +536,9 @@ BOOST_AUTO_TEST_CASE( FetchHeadMarksAtMostOneBranchToMerge )
         BOOST_REQUIRE( clearUpstreamConfig( repo, wxT( "master" ) ) );
 
         GIT_PULL_HANDLER handler( &common );
-        BOOST_REQUIRE_MESSAGE( handler.PerformFetch(), handler.GetErrorString() );
+        const bool       fetched = handler.PerformFetch();
+
+        BOOST_REQUIRE_MESSAGE( fetched, handler.GetErrorString() );
 
         MARKED marked = collect( repo );
         BOOST_CHECK_EQUAL( marked.total, 3 );
@@ -549,7 +551,9 @@ BOOST_AUTO_TEST_CASE( FetchHeadMarksAtMostOneBranchToMerge )
         BOOST_REQUIRE( setUpstreamConfig( repo, wxT( "master" ) ) );
 
         GIT_PULL_HANDLER handler( &common );
-        BOOST_REQUIRE_MESSAGE( handler.PerformFetch(), handler.GetErrorString() );
+        const bool       fetched = handler.PerformFetch();
+
+        BOOST_REQUIRE_MESSAGE( fetched, handler.GetErrorString() );
 
         MARKED marked = collect( repo );
         BOOST_CHECK_EQUAL( marked.total, 3 );

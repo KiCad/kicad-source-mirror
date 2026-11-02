@@ -2699,8 +2699,9 @@ BOOST_AUTO_TEST_CASE( SwitchToBranchAtHeadKeepsUncommittedChanges )
     BOOST_REQUIRE( common.CreateBranch( "topic" ) );
 
     GIT_BRANCH_HANDLER handler( &common );
-    BOOST_REQUIRE_MESSAGE( handler.SwitchToBranch( wxS( "topic" ) ) == BranchResult::Success,
-                           handler.GetErrorString() );
+    const BranchResult result = handler.SwitchToBranch( wxS( "topic" ) );
+
+    BOOST_REQUIRE_MESSAGE( result == BranchResult::Success, handler.GetErrorString() );
 
     BOOST_CHECK_EQUAL( common.GetCurrentBranchName(), wxS( "topic" ) );
     BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( TempPath(), "file.txt" ) ), "v2\n" );
