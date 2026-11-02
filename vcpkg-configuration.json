@@ -9,7 +9,7 @@
     {
       "kind": "git",
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
-      "baseline": "203685d9b41277c7db9830a18ef579c9733969de",
+      "baseline": "03576c9d135f448309646bbecb1296f4f1c12bbb",
       "packages": [
         "opencascade",
         "wxwidgets-33",
