@@ -37,7 +37,7 @@ std::vector<size_t> OrderAvlRows( const std::vector<AVL_ROW>& aRows )
                    if( compare != 0 )
                        return compare < 0;
 
-                   compare = StrNumCmp( aRows[aLeft].m_reference, aRows[aRight].m_reference, true );
+                   compare = StrNumCmp( aRows[aLeft].m_reference, aRows[aRight].m_reference, CMP_T::IGNORE_CASE );
 
                    return compare != 0 ? compare < 0 : aLeft < aRight;
                } );

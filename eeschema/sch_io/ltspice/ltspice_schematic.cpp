@@ -292,7 +292,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, cons
                        const SCH_FIELD* fieldA = sheetA->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD );
                        const SCH_FIELD* fieldB = sheetB->GetField( SCH_IO_LTSPICE_PARSER::LT_INSTNAME_FIELD );
                        int              cmp = StrNumCmp( fieldA ? fieldA->GetText() : wxString(),
-                                                         fieldB ? fieldB->GetText() : wxString(), true );
+                                                         fieldB ? fieldB->GetText() : wxString(), CMP_T::IGNORE_CASE );
 
                        if( cmp != 0 )
                            return cmp < 0;

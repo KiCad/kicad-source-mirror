@@ -65,7 +65,7 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( const std::vector<wxString>& aShownCol
         std::sort( sort_buf.begin(), sort_buf.end(),
                 []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
                 {
-                    return StrNumCmp( a->m_Name, b->m_Name, true ) > 0;
+                    return StrNumCmp( a->m_Name, b->m_Name, CMP_T::IGNORE_CASE ) > 0;
                 } );
 
         for( int i = 0; i < (int) sort_buf.size(); ++i )

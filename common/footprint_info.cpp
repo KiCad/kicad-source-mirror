@@ -100,7 +100,7 @@ bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 
 bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
 {
-    int retv = StrNumCmp( lhs.m_nickname, rhs.m_nickname, false );
+    int retv = StrNumCmp( lhs.m_nickname, rhs.m_nickname, CMP_T::CASE_SENSITIVE );
 
     if( retv != 0 )
         return retv < 0;
@@ -109,7 +109,7 @@ bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs )
     // as the footprint name.  On windows this would be problematic because windows does
     // not support case sensitive file names by default.  This should not cause any issues
     // and allow for a future change to use the name defined in the footprint file.
-    return StrNumCmp( lhs.m_fpname, rhs.m_fpname, false ) < 0;
+    return StrNumCmp( lhs.m_fpname, rhs.m_fpname, CMP_T::CASE_SENSITIVE ) < 0;
 }
 
 

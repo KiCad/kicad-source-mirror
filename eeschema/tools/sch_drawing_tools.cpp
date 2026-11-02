@@ -3366,7 +3366,7 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
     std::sort( labels.begin(), labels.end(),
                []( const SCH_HIERLABEL* label1, const SCH_HIERLABEL* label2 )
                {
-                   return StrNumCmp( label1->GetText(), label2->GetText(), true ) < 0;
+                   return StrNumCmp( label1->GetText(), label2->GetText(), CMP_T::IGNORE_CASE ) < 0;
                } );
 
     for( SCH_HIERLABEL* label : labels )

@@ -103,7 +103,7 @@ static wxString GetNetclassPatternForSet( const std::set<wxString>& aNetNames )
     }
 
     // Sort the net names to have a consistent order.
-    StrNumSort( netNames, CASE_SENSITIVITY::INSENSITIVE );
+    StrNumSort( netNames, CMP_T::IGNORE_CASE );
 
     // Get the common prefix of all net names.
     const wxString commonPrefix = GetStringCommonPrefix( netNames );

@@ -1539,7 +1539,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
                     std::sort( sourcePins.begin(), sourcePins.end(),
                                []( const SCH_PIN* lhs, const SCH_PIN* rhs )
                                {
-                                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+                                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), CMP_T::IGNORE_CASE ) < 0;
                                } );
                 }
 

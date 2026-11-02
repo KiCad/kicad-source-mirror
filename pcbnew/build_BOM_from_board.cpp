@@ -148,14 +148,14 @@ int BOARD_EDITOR_CONTROL::GenBOMFileFromBoard( const TOOL_EVENT& aEvent )
         std::sort( curEntry.m_Refs.begin(), curEntry.m_Refs.end(),
                 []( const wxString& lhs, const wxString& rhs )
                 {
-                    return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+                    return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
                 } );
     }
 
     std::sort( list.begin(), list.end(),
             []( const BOM_ENTRY& lhs, const BOM_ENTRY& rhs )
             {
-                return StrNumCmp( lhs.m_Refs[0], rhs.m_Refs[0], true /* ignore case */ ) < 0;
+                return StrNumCmp( lhs.m_Refs[0], rhs.m_Refs[0], CMP_T::IGNORE_CASE ) < 0;
             } );
 
     // Print list.

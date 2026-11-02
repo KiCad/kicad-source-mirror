@@ -93,7 +93,7 @@ void FOOTPRINT_LIST_IMPL::WithFootprintsForLibrary(
                 if( !a || !b )
                     return false;
 
-                return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
+                return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), CMP_T::CASE_SENSITIVE ) < 0;
             } );
 
     dummyPtr.release();

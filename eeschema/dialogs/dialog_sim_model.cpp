@@ -118,7 +118,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
                []( const SCH_PIN* lhs, const SCH_PIN* rhs )
                {
                    // We sort by StrNumCmp because SIM_MODEL_BASE sorts with it too.
-                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), CMP_T::IGNORE_CASE ) < 0;
                } );
 
     m_waveformChoice->Clear();
@@ -1170,7 +1170,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( SIM_MODEL* aModel, int aPar
                 inductors.Sort(
                         []( const wxString& a, const wxString& b ) -> int
                         {
-                            return StrNumCmp( a, b, true );
+                            return StrNumCmp( a, b, CMP_T::IGNORE_CASE );
                         } );
             }
 

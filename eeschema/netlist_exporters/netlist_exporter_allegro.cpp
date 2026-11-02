@@ -125,7 +125,7 @@ bool NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef( const wxString& aRefText1,
 bool NETLIST_EXPORTER_ALLEGRO::CompareLibPin( const SCH_PIN* aPin1, const SCH_PIN* aPin2 )
 {
     // return "lhs < rhs"
-    return StrNumCmp( aPin1->GetShownNumber(), aPin2->GetShownNumber(), true ) < 0;
+    return StrNumCmp( aPin1->GetShownNumber(), aPin2->GetShownNumber(), CMP_T::IGNORE_CASE ) < 0;
 }
 
 
@@ -145,7 +145,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
                 [&sheet]( SCH_SYMBOL* a, SCH_SYMBOL* b )
                 {
                     return ( StrNumCmp( a->GetRef( &sheet, false ),
-                                        b->GetRef( &sheet, false ), true ) < 0 );
+                                        b->GetRef( &sheet, false ), CMP_T::IGNORE_CASE ) < 0 );
                 };
 
         std::set<SCH_SYMBOL*, decltype( cmp )> ordered_symbols( cmp );

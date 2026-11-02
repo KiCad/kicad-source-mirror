@@ -371,7 +371,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     std::sort( pins.begin(), pins.end(),
                []( const PIN_INFO& lhs, const PIN_INFO& rhs )
                {
-                   return StrNumCmp( lhs.num, rhs.num, true ) < 0;
+                   return StrNumCmp( lhs.num, rhs.num, CMP_T::IGNORE_CASE ) < 0;
                } );
 
     // Remove duplicate Pins in m_SortedSymbolPinList

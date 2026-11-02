@@ -1015,7 +1015,7 @@ void CVPCB_MAINFRAME::BuildLibrariesList()
     {
         bool operator()( const wxString& lhs, const wxString& rhs ) const
         {
-            return StrNumCmp( lhs, rhs, true ) < 0;
+            return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
         }
     };
 

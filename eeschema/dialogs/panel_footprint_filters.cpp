@@ -87,7 +87,7 @@ public:
         std::sort( result.m_MatchingNames.begin(), result.m_MatchingNames.end(),
                    []( const wxString& aLeft, const wxString& aRight )
                    {
-                       return StrNumCmp( aLeft, aRight, true ) < 0;
+                       return StrNumCmp( aLeft, aRight, CMP_T::IGNORE_CASE ) < 0;
                    } );
 
         auto sameName = []( const wxString& aLeft, const wxString& aRight )

@@ -968,7 +968,7 @@ protected:
     // Used for sorting items that are grouped within a single row by their item identifiers.
     virtual bool cmpRowItems( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem )
     {
-        int cmp = StrNumCmp( getItemIdentifier( lhItem ), getItemIdentifier( rhItem ), true );
+        int cmp = StrNumCmp( getItemIdentifier( lhItem ), getItemIdentifier( rhItem ), CMP_T::IGNORE_CASE );
 
         // Duplicate removal only merges neighbours, so each channel's units must sort together
         return cmp != 0 ? cmp < 0 : getItemRefSuffix( lhItem ) < getItemRefSuffix( rhItem );

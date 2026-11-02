@@ -128,7 +128,7 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelection
     std::sort( fpInSelection.begin(), fpInSelection.end(),
                []( const FOOTPRINT* aA, const FOOTPRINT* aB ) -> bool
                {
-                   int ii = StrNumCmp( aA->GetReference(), aB->GetReference(), true );
+                   int ii = StrNumCmp( aA->GetReference(), aB->GetReference(), CMP_T::IGNORE_CASE );
 
                    if( ii == 0 )
                    {

@@ -191,6 +191,13 @@ KICOMMON_API char* StrPurge( char* text );
  */
 KICOMMON_API wxString GetISO8601CurrentDateTime();
 
+
+enum class CMP_T
+{
+    CASE_SENSITIVE,
+    IGNORE_CASE
+};
+
 /**
  * Compare two strings with alphanumerical content.
  *
@@ -206,26 +213,19 @@ KICOMMON_API wxString GetISO8601CurrentDateTime();
  *         than \a aString2.
  */
 KICOMMON_API int StrNumCmp( const wxString& aString1, const wxString& aString2,
-                            bool aIgnoreCase = false );
-
-
-enum class CASE_SENSITIVITY
-{
-    SENSITIVE,
-    INSENSITIVE
-};
+                            CMP_T aCaseSensitivity = CMP_T::CASE_SENSITIVE );
 
 
 /**
  * Sort a container of wxString objects, in place, using the StrNumCmp() function.
  */
 template <typename T>
-inline void StrNumSort( T& aList, CASE_SENSITIVITY aCaseSensitivity )
+inline void StrNumSort( T& aList, CMP_T aCaseSensitivity )
 {
     std::sort( aList.begin(), aList.end(),
                [aCaseSensitivity]( const wxString& lhs, const wxString& rhs )
                {
-                   return StrNumCmp( lhs, rhs, aCaseSensitivity == CASE_SENSITIVITY::INSENSITIVE ) < 0;
+                   return StrNumCmp( lhs, rhs, aCaseSensitivity ) < 0;
                } );
 }
 

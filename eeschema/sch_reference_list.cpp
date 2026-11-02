@@ -148,7 +148,7 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
 bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
                                               const SCH_REFERENCE& item2 )
 {
-    int ii = StrNumCmp( item1.GetRef(), item2.GetRef(), false );
+    int ii = StrNumCmp( item1.GetRef(), item2.GetRef(), CMP_T::CASE_SENSITIVE );
 
     if( ii == 0 )
         ii = item1.m_unit - item2.m_unit;

@@ -222,7 +222,10 @@ SIM_MODEL_INPUT SIM_LIB_MGR::CaptureModelInput( const SCH_SHEET_PATH* aSheetPath
     std::sort( input.inferencePins.begin(), input.inferencePins.end() );
     input.modelPins = SIM_MODEL::PinNumbers( aSymbol.GetAllLibPins() );
     std::sort( input.modelPins.begin(), input.modelPins.end(),
-               []( const wxString& lhs, const wxString& rhs ) { return StrNumCmp( lhs, rhs, true ) < 0; } );
+               []( const wxString& lhs, const wxString& rhs )
+               {
+                   return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
+               } );
     return input;
 }
 

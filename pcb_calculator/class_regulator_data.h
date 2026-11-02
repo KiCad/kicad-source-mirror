@@ -80,7 +80,7 @@ public:
 
         for( ; ii < m_List.size(); ii++ )
         {
-            if( StrNumCmp( aItem->m_Name, m_List[ii]->m_Name, true ) < 0 )
+            if( StrNumCmp( aItem->m_Name, m_List[ii]->m_Name, CMP_T::IGNORE_CASE ) < 0 )
                 break;
         }
 

@@ -218,7 +218,8 @@ public:
         // Sort based on natural sort, but don't consider naturally-equivalent values
         // to be equal.  Run them through a second, non-natural compare.
 
-        int natural = StrNumCmp( m_value, item.m_value, false );
+        // Values are compared with case sensitivity
+        int natural = StrNumCmp( m_value, item.m_value, CMP_T::CASE_SENSITIVE );
 
         if( natural != 0 )
             return natural;
@@ -231,7 +232,8 @@ public:
         // Sort based on natural sort, but don't consider naturally-equivalent values
         // to be equal.  Run them through a second, non-natural compare.
 
-        int natural = StrNumCmp( m_ref, item.m_ref, false );
+        // References are compared ignoring case
+        int natural = StrNumCmp( m_ref, item.m_ref, CMP_T::IGNORE_CASE );
 
         if( natural != 0 )
             return natural;

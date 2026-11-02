@@ -908,7 +908,7 @@ wxString GetISO8601CurrentDateTime()
 }
 
 
-int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreCase )
+int StrNumCmp( const wxString& aString1, const wxString& aString2, CMP_T aCaseSensitivity )
 {
     int nb1 = 0, nb2 = 0;
 
@@ -953,7 +953,7 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
         }
 
         // Any numerical comparisons to here are identical.
-        if( aIgnoreCase )
+        if( aCaseSensitivity == CMP_T::IGNORE_CASE )
         {
             if( c1 != c2 )
             {

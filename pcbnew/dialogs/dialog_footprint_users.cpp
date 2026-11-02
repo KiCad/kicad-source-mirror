@@ -83,14 +83,18 @@ public:
                 aAttr.SetItalic( true );
                 return true;
             }
+
             break;
+
         case COL_FOOTPRINT_USERS_PINS:
             if( GetItemData( GetItem( aRow ) ) & ROW_DATA_FLAG_PIN_COUNT_MATCHES )
             {
                 aAttr.SetBold( true );
                 return true;
             }
+
             break;
+
         default:
             break;
         }
@@ -231,15 +235,13 @@ void DIALOG_FOOTPRINT_USERS::showUsers( const FOOTPRINT_USERS_RESULT& aResult )
             []( const FOOTPRINT_USER_MATCH& aLeft, const FOOTPRINT_USER_MATCH& aRight )
             {
                 const int libCmp = StrNumCmp( aLeft.m_Symbol.GetUniStringLibNickname(),
-                                              aRight.m_Symbol.GetUniStringLibNickname(),
-                                              true );
+                                              aRight.m_Symbol.GetUniStringLibNickname(), CMP_T::IGNORE_CASE );
 
                 if( libCmp != 0 )
                     return libCmp < 0;
 
                 return StrNumCmp( aLeft.m_Symbol.GetUniStringLibItemName(),
-                                  aRight.m_Symbol.GetUniStringLibItemName(),
-                                  true ) < 0;
+                                  aRight.m_Symbol.GetUniStringLibItemName(), CMP_T::IGNORE_CASE ) < 0;
             };
 
     std::sort( matches.begin(), matches.end(), libThenSymbolNameCmp );
@@ -287,13 +289,13 @@ void DIALOG_FOOTPRINT_USERS::showUsers( const FOOTPRINT_USERS_RESULT& aResult )
     }
     else if( aResult.m_IsLimited )
     {
-        m_statusText->SetLabel(
-                wxString::Format( _( "This footprint is referenced by more than %zu symbols" ), matches.size() ) );
+        m_statusText->SetLabel( wxString::Format( _( "This footprint is referenced by more than %zu symbols" ),
+                                                  matches.size() ) );
     }
     else
     {
-        m_statusText->SetLabel(
-                wxString::Format( _( "This footprint is referenced by %zu symbols" ), matches.size() ) );
+        m_statusText->SetLabel( wxString::Format( _( "This footprint is referenced by %zu symbols" ),
+                                                  matches.size() ) );
     }
 
     Layout();
@@ -306,8 +308,8 @@ void DIALOG_FOOTPRINT_USERS::showLoadIndication( bool aShow, float aProgress )
 
     if( aShow )
     {
-        m_statusText->SetLabel(
-                wxString::Format( _( "Loading symbol libraries (%d%%)..." ), static_cast<int>( aProgress * 100.0f ) ) );
+        m_statusText->SetLabel( wxString::Format( _( "Loading symbol libraries (%d%%)..." ),
+                                                  static_cast<int>( aProgress * 100.0f ) ) );
     }
     else
     {

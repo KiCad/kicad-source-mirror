@@ -480,7 +480,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
             // Sort the list of symbols for easier search
             symbolNames.Sort( []( const wxString& a, const wxString& b ) -> int
                               {
-                                  return StrNumCmp( a, b, true );
+                                  return StrNumCmp( a, b, CMP_T::IGNORE_CASE );
                               } );
 
             // Don't allow a symbol to be derived from itself

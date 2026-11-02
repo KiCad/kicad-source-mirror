@@ -909,7 +909,7 @@ void sortSignals( std::vector<wxString>& signals )
                 else if( !lhs.Upper().StartsWith( 'V' ) && rhs.Upper().StartsWith( 'V' ) )
                     return false;
 
-                return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+                return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
             } );
 }
 

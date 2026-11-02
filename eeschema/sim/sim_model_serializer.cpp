@@ -125,7 +125,7 @@ std::string SIM_MODEL_SERIALIZER::GeneratePins() const
     std::sort( pins.begin(), pins.end(),
                []( const SIM_MODEL_PIN& lhs, const SIM_MODEL_PIN& rhs )
                {
-                   return StrNumCmp( lhs.symbolPinNumber, rhs.symbolPinNumber, true ) < 0;
+                   return StrNumCmp( lhs.symbolPinNumber, rhs.symbolPinNumber, CMP_T::IGNORE_CASE ) < 0;
                } );
 
     for( const std::reference_wrapper<const SIM_MODEL_PIN>& pin : pins )

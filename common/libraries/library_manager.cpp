@@ -1398,7 +1398,7 @@ std::vector<wxString> LIBRARY_MANAGER_ADAPTER::GetLibraryNames() const
             ret.emplace_back( nickname );
     }
 
-    StrNumSort( ret, CASE_SENSITIVITY::INSENSITIVE );
+    StrNumSort( ret, CMP_T::IGNORE_CASE );
 
     wxLogTrace( traceLibraries, "GetLibraryNames: returning %zu of %zu libraries", ret.size(), rows.size() );
     return ret;

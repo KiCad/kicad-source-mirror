@@ -116,7 +116,7 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
     std::sort( dedup_labels_ori.begin(), dedup_labels_ori.end(),
                []( const SCH_HIERLABEL* label1, const SCH_HIERLABEL* label2 )
                {
-                   return StrNumCmp( label1->GetText(), label2->GetText(), true ) < 0;
+                   return StrNumCmp( label1->GetText(), label2->GetText(), CMP_T::IGNORE_CASE ) < 0;
                } );
 
     auto check_matched = [&]( SCH_HIERLABEL* label )

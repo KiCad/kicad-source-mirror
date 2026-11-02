@@ -2458,7 +2458,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
           {
               SCH_SHEET* firstSheet = static_cast<SCH_SHEET*>( firstItem );
               SCH_SHEET* secondSheet = static_cast<SCH_SHEET*>( secondItem );
-              return StrNumCmp( firstSheet->GetName(), secondSheet->GetName(), false ) < 0;
+              return StrNumCmp( firstSheet->GetName(), secondSheet->GetName(), CMP_T::CASE_SENSITIVE ) < 0;
           } );
 
 

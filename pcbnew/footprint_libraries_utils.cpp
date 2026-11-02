@@ -1462,13 +1462,13 @@ void PCB_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
     std::sort( aItemsToDisplay.begin(), aItemsToDisplay.end(),
                []( const wxArrayString& a, const wxArrayString& b )
                {
-                   return StrNumCmp( a[0], b[0], true ) < 0;
+                   return StrNumCmp( a[0], b[0], CMP_T::IGNORE_CASE ) < 0;
                } );
 
     std::sort( unpinned.begin(), unpinned.end(),
                []( const wxArrayString& a, const wxArrayString& b )
                {
-                   return StrNumCmp( a[0], b[0], true ) < 0;
+                   return StrNumCmp( a[0], b[0], CMP_T::IGNORE_CASE ) < 0;
                } );
 
     std::ranges::copy( unpinned, std::back_inserter( aItemsToDisplay ) );

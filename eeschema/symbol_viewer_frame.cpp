@@ -635,7 +635,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         std::sort( symbols.begin(), symbols.end(),
                    []( LIB_SYMBOL* a, LIB_SYMBOL* b ) -> bool
                    {
-                       return StrNumCmp( b->GetName(), a->GetName(), true ) > 0;
+                       return StrNumCmp( b->GetName(), a->GetName(), CMP_T::IGNORE_CASE ) > 0;
                    } );
 
         std::set<wxString> excludes;

@@ -179,7 +179,7 @@ protected:
         std::sort( aNetnames.begin(), aNetnames.end(),
                 []( const wxString& lhs, const wxString& rhs )
                 {
-                    return StrNumCmp( lhs, rhs, true /* ignore case */ ) < 0;
+                    return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE ) < 0;
                 } );
 
         // Special handling for <no net>

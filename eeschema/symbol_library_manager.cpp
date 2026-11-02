@@ -131,7 +131,7 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
 
     res.Sort( []( const wxString& lhs, const wxString& rhs ) -> int
               {
-                  return StrNumCmp( lhs, rhs, true );
+                  return StrNumCmp( lhs, rhs, CMP_T::IGNORE_CASE );
               } );
 
     return res;

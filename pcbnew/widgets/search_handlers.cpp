@@ -84,9 +84,9 @@ void PCB_SEARCH_HANDLER::Sort( int aCol, bool aAscending, std::vector<long>* aSe
                 // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
                 // to get the opposite sort.  i.e. ~(a<b) != (a>b)
                 if( aAscending )
-                    return StrNumCmp( getResultCell( a, col ), getResultCell( b, col ), true ) < 0;
+                    return StrNumCmp( getResultCell( a, col ), getResultCell( b, col ), CMP_T::IGNORE_CASE ) < 0;
                 else
-                    return StrNumCmp( getResultCell( b, col ), getResultCell( a, col ), true ) < 0;
+                    return StrNumCmp( getResultCell( b, col ), getResultCell( a, col ), CMP_T::IGNORE_CASE ) < 0;
             } );
 
 
