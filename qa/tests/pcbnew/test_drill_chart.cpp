@@ -677,7 +677,7 @@ BOOST_AUTO_TEST_CASE( CellFormattingFollowsItsGroupWhenAGroupIsAdded )
     chart.RebuildCells( board );
 
     // The 3.2 mm mounting hole, which is the largest and so the last data row
-    const int before = rowShowingDiameter( chart, wxT( "3.200" ) );
+    const int before = rowShowingDiameter( chart, wxT( "3.200 mm" ) );
 
     BOOST_REQUIRE( before > 1 );
     BOOST_REQUIRE( chart.IsDataRow( before ) );
@@ -697,7 +697,7 @@ BOOST_AUTO_TEST_CASE( CellFormattingFollowsItsGroupWhenAGroupIsAdded )
 
     chart.RebuildCells( board );
 
-    const int after = rowShowingDiameter( chart, wxT( "3.200" ) );
+    const int after = rowShowingDiameter( chart, wxT( "3.200 mm" ) );
 
     BOOST_REQUIRE( after > 1 );
     BOOST_CHECK_NE( after, before );
@@ -716,7 +716,7 @@ BOOST_AUTO_TEST_CASE( CellFormattingFollowsItsGroupWhenAGroupIsRemoved )
     PCB_DRILL_CHART chart( &board );
     chart.RebuildCells( board );
 
-    const int before = rowShowingDiameter( chart, wxT( "3.200" ) );
+    const int before = rowShowingDiameter( chart, wxT( "3.200 mm" ) );
 
     BOOST_REQUIRE( before > 1 );
 
@@ -751,7 +751,7 @@ BOOST_AUTO_TEST_CASE( CellFormattingFollowsItsGroupWhenAGroupIsRemoved )
     // The group really did go, or the rest of this proves nothing
     BOOST_REQUIRE_EQUAL( chart.GetRowCount(), rowsBefore - 1 );
 
-    const int after = rowShowingDiameter( chart, wxT( "3.200" ) );
+    const int after = rowShowingDiameter( chart, wxT( "3.200 mm" ) );
 
     BOOST_REQUIRE( after > 1 );
     BOOST_REQUIRE_NE( after, before );
