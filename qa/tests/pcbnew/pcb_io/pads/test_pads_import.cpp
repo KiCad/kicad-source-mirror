@@ -37,6 +37,7 @@
 #include <board_design_settings.h>
 #include <pcb_dimension.h>
 #include <project/net_settings.h>
+#include <settings/settings_manager.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <map>
 #include <set>
@@ -2153,6 +2154,39 @@ BOOST_AUTO_TEST_CASE( Issue25274_IndirectDecalGeometry )
         BOOST_CHECK_SMALL( std::abs( std::abs( offset.x ) - pcbIUScale.mmToIU( 0.41 ) ), tolerance );
         BOOST_CHECK_SMALL( std::abs( std::abs( offset.y ) - pcbIUScale.mmToIU( 0.335 ) ), tolerance );
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( Issue25616_BoardDesignRules )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue25616/260806.asc";
+
+    std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+    board->SetProject( &settingsManager.Prj() );
+
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    std::shared_ptr<NETCLASS> defaultNc = bds.m_NetSettings->GetDefaultNetclass();
+
+    BOOST_REQUIRE( defaultNc != nullptr );
+
+    // Rule set 1 of the file is 228600 and 225000 BASIC units, i.e. 6 mil and 0.15 mm
+    BOOST_CHECK_EQUAL( defaultNc->GetClearance(), 152400 );
+    BOOST_CHECK_EQUAL( defaultNc->GetTrackWidth(), 150000 );
+    BOOST_CHECK_EQUAL( bds.m_TrackMinWidth, 150000 );
+    BOOST_CHECK_EQUAL( bds.m_HoleToHoleMin, 152400 );
+    BOOST_CHECK_EQUAL( bds.m_CopperEdgeClearance, 152400 );
+
+    // The file declares no minimum via rules so KiCad's own values must stand
+    BOARD defaults;
+    BOOST_CHECK_EQUAL( bds.m_ViasMinSize, defaults.GetDesignSettings().m_ViasMinSize );
+    BOOST_CHECK_EQUAL( bds.m_MinThroughDrill, defaults.GetDesignSettings().m_MinThroughDrill );
 }
 
 

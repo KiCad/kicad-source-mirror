@@ -127,6 +127,26 @@ struct PARAMETERS
     std::string default_signal_via;        ///< VIAPSHVIA
 };
 
+enum class DESIGN_RULE_FIELD : unsigned
+{
+    MIN_CLEARANCE = 1u << 0,
+    DEFAULT_CLEARANCE = 1u << 1,
+    MIN_TRACK_WIDTH = 1u << 2,
+    DEFAULT_TRACK_WIDTH = 1u << 3,
+    MIN_VIA_SIZE = 1u << 4,
+    DEFAULT_VIA_SIZE = 1u << 5,
+    MIN_VIA_DRILL = 1u << 6,
+    DEFAULT_VIA_DRILL = 1u << 7,
+    HOLE_TO_HOLE = 1u << 8,
+    SILK_CLEARANCE = 1u << 9,
+    MASK_CLEARANCE = 1u << 10,
+    COPPER_EDGE_CLEARANCE = 1u << 11
+};
+
+/**
+ * Board design rules. The initial values are in mils and only meaningful for MILS files, so
+ * consumers must apply a value only when IsSpecified() reports that the file declared it.
+ */
 struct DESIGN_RULES
 {
     double min_clearance = 8.0;           ///< MINCLEAR
@@ -141,6 +161,12 @@ struct DESIGN_RULES
     double silk_clearance = 5.0;          ///< SILKCLEAR
     double mask_clearance = 3.0;          ///< MASKCLEAR
     double copper_edge_clearance = 10.0;  ///< OUTLINE_TO_*
+
+    unsigned specified = 0;
+
+    void MarkSpecified( DESIGN_RULE_FIELD aField ) { specified |= static_cast<unsigned>( aField ); }
+
+    bool IsSpecified( DESIGN_RULE_FIELD aField ) const { return ( specified & static_cast<unsigned>( aField ) ) != 0; }
 };
 
 struct ATTRIBUTE

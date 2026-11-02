@@ -232,6 +232,9 @@ void PCB_IO_PADS_BINARY::loadNets()
 
     std::shared_ptr<NET_SETTINGS> netSettings = m_loadBoard->GetDesignSettings().m_NetSettings;
 
+    // Without this flag BOARD::SetProject drops the imported net classes
+    m_loadBoard->m_LegacyNetclassesLoaded = true;
+
     for( const PADS_IO::BIN_NET_CLASS_DEF& nc : netClasses )
     {
         if( nc.name.empty() || nc.nets.empty() )

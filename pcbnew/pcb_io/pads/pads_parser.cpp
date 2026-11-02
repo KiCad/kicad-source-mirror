@@ -484,46 +484,57 @@ void PARSER::parseSectionPCB( std::ifstream& aStream )
         else if( token == "MINCLEAR" )
         {
             iss >> m_design_rules.min_clearance;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MIN_CLEARANCE );
         }
         else if( token == "DEFAULTCLEAR" )
         {
             iss >> m_design_rules.default_clearance;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::DEFAULT_CLEARANCE );
         }
         else if( token == "MINTRACKWID" )
         {
             iss >> m_design_rules.min_track_width;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MIN_TRACK_WIDTH );
         }
         else if( token == "DEFAULTTRACKWID" )
         {
             iss >> m_design_rules.default_track_width;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::DEFAULT_TRACK_WIDTH );
         }
         else if( token == "MINVIASIZE" )
         {
             iss >> m_design_rules.min_via_size;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MIN_VIA_SIZE );
         }
         else if( token == "DEFAULTVIASIZE" )
         {
             iss >> m_design_rules.default_via_size;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::DEFAULT_VIA_SIZE );
         }
         else if( token == "MINVIADRILL" )
         {
             iss >> m_design_rules.min_via_drill;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MIN_VIA_DRILL );
         }
         else if( token == "DEFAULTVIADRILL" )
         {
             iss >> m_design_rules.default_via_drill;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::DEFAULT_VIA_DRILL );
         }
         else if( token == "HOLEHOLE" )
         {
             iss >> m_design_rules.hole_to_hole;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::HOLE_TO_HOLE );
         }
         else if( token == "SILKCLEAR" )
         {
             iss >> m_design_rules.silk_clearance;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::SILK_CLEARANCE );
         }
         else if( token == "MASKCLEAR" )
         {
             iss >> m_design_rules.mask_clearance;
+            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MASK_CLEARANCE );
         }
     }
 }
@@ -4708,6 +4719,15 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
 
                     if( isDefaultRuleSet )
                     {
+                        if( m_design_rules.default_clearance != std::numeric_limits<double>::max() )
+                        {
+                            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::DEFAULT_CLEARANCE );
+                            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MIN_CLEARANCE );
+                        }
+
+                        if( m_design_rules.copper_edge_clearance != std::numeric_limits<double>::max() )
+                            m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::COPPER_EDGE_CLEARANCE );
+
                         if( m_design_rules.default_clearance
                             == std::numeric_limits<double>::max() )
                         {
@@ -4828,14 +4848,17 @@ void PARSER::parseSectionMISC( std::ifstream& aStream )
                     if( token == "MIN_TRACK_WIDTH" )
                     {
                         m_design_rules.min_track_width = val;
+                        m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::MIN_TRACK_WIDTH );
                     }
                     else if( token == "REC_TRACK_WIDTH" )
                     {
                         m_design_rules.default_track_width = val;
+                        m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::DEFAULT_TRACK_WIDTH );
                     }
                     else if( token == "DRILL_TO_DRILL" )
                     {
                         m_design_rules.hole_to_hole = val;
+                        m_design_rules.MarkSpecified( DESIGN_RULE_FIELD::HOLE_TO_HOLE );
                     }
                     else if( token == "OUTLINE_TO_TRACK" || token == "OUTLINE_TO_VIA"
                              || token == "OUTLINE_TO_PAD" || token == "OUTLINE_TO_COPPER"
