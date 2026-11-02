@@ -495,6 +495,15 @@ void LIB_TREE::RefreshLibTree()
 }
 
 
+bool LIB_TREE::isShown( const LIB_ID& aLibId ) const
+{
+    wxDataViewItem item = m_adapter->FindItem( aLibId );
+
+    // A row the filter hides has no native row to select
+    return item.IsOk() && m_adapter->GetTreeNodeFor( item )->m_Score > 0;
+}
+
+
 wxWindow* LIB_TREE::GetFocusTarget()
 {
     if( m_query_ctrl )
@@ -642,7 +651,7 @@ void LIB_TREE::setState( const STATE& aState )
     // command is issued, otherwise it selects a random item (Windows)
     m_tree_ctrl->Thaw();
 
-    if( !aState.selection.GetLibItemName().empty() || !aState.selection.GetLibNickname().empty() )
+    if( isShown( aState.selection ) )
         SelectLibId( aState.selection );
 }
 

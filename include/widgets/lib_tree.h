@@ -223,6 +223,9 @@ protected:
      */
     STATE getState() const;
 
+    /// True when aLibId has a row the filter shows
+    bool isShown( const LIB_ID& aLibId ) const;
+
     /**
      * Restore the symbol tree widget state from an object.
      */

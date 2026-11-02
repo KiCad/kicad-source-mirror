@@ -903,6 +903,10 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::showResults()
                     if( n->m_Name.StartsWith( "-- " ) )
                         return -1; // Skip this node and its children
 
+                    // A row the filter hides has no native row to select
+                    if( n->m_Score <= 0 )
+                        return -1;
+
                     if( n->m_Type == LIB_TREE_NODE::TYPE::ITEM
                               && ( n->m_Children.empty() || !m_preselect_unit )
                               && m_preselect_lib_id == n->m_LibId )
@@ -941,6 +945,9 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::showResults()
         recursiveDescent( m_tree,
                 [&]( const LIB_TREE_NODE* n )
                 {
+                    if( n->m_Score <= 0 )
+                        return -1;
+
                     if( n->m_Type == LIB_TREE_NODE::TYPE::ITEM )
                     {
                         firstMatch = n;
