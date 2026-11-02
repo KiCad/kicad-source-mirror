@@ -683,7 +683,7 @@ void SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         {
             // Select the first library entry (if available) when the previous entry name no longer exists.
             m_symbolList->SetSelection( m_symbolList->IsEmpty() ? -1 : 0, true );
-            m_currentSymbol.SetLibItemName( m_symbolList->GetStringSelection() );
+            m_currentSymbol.SetLibItemName( EscapeString( m_symbolList->GetStringSelection(), CTX_LIBID ) );
             m_bodyStyle = BODY_STYLE::BASE;
             m_unit      = 1;
         }
