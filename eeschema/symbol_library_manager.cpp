@@ -210,7 +210,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                 }
             }
 
-            libBuf.ClearDeletedBuffer();
+            libBuf.ClearAddedAndDeletedBufferLists();
         }
     }
     else

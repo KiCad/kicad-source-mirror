@@ -363,7 +363,7 @@ BOOST_AUTO_TEST_CASE( DeletedSymbolsAreRemovedFromFile )
         }
 
         plugin->SaveLibrary( libPath );
-        libBuffer.ClearDeletedBuffer();
+        libBuffer.ClearAddedAndDeletedBufferLists();
     }
 
     // Step 5: Reload the library and verify the derived symbol is gone
