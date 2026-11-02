@@ -965,6 +965,10 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     // Recompute component classes
     m_board->GetComponentClassManager().ForceComponentClassRecalculation();
 
+    // fromTo() conditions are evaluated by every provider, not only the length ones
+    if( std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity() )
+        connectivity->GetFromToCache()->Rebuild( m_board );
+
     int timestamp = m_board->GetTimeStamp();
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )

@@ -20,6 +20,8 @@
 #ifndef FROM_TO_CACHE_H
 #define FROM_TO_CACHE_H
 
+#include <list>
+#include <mutex>
 #include <set>
 
 class PAD;
@@ -66,7 +68,8 @@ private:
 
 private:
     std::vector<FT_ENDPOINT> m_ftEndpoints;
-    std::vector<FT_PATH>     m_ftPaths;
+    std::list<FT_PATH>       m_ftPaths;
+    std::recursive_mutex     m_mutex;
 
     BOARD*                   m_board;
 };
