@@ -42,14 +42,14 @@ class EMBEDDED_FILES;
 
 struct GRID_CELL_URL_EDITOR_CONTEXT
 {
-    // Files searched when opening an embedded URI, in lookup order.
-    // For a lib symbol row, this is going to go up the parent symbol.
+    // Files searched when opening an embedded URI, in most-global to most-local order.  Files will be
+    // searched from the top of the "stack" (ie: back of the std::vector).  For a lib symbol row, this is
+    // going to go up the parent symbol.
     std::vector<EMBEDDED_FILES*> m_filesStack;
 
-    // All the things that are going to end up having the newly selected
-    // file embeddeded in them. E.g. you have a lib symbol table row
-    // with a collapsed bunch of symbols and you select a datasheet for one of them,
-    // it should be embedded in all of them.
+    // All the things that are going to end up having the newly selected file embeddeded in them. E.g.
+    // you have a lib symbol table row with a collapsed bunch of symbols and you select a datasheet for
+    // one of them, it should be embedded in all of them.
     std::vector<EMBEDDED_FILES*> m_embedTargets;
 };
 
@@ -117,7 +117,7 @@ public:
                         std::vector<EMBEDDED_FILES*> embedTargets;
 
                         if( !aFilesStack.empty() )
-                            embedTargets.push_back( aFilesStack.front() );
+                            embedTargets.push_back( aFilesStack.back() );
 
                         return MakeGridCellUrlEditorContext( embedTargets, aFilesStack );
                     } )

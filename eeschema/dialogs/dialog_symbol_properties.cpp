@@ -332,7 +332,10 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
 
     if( m_part )
+    {
+        m_part->AppendParentEmbeddedFiles( embeddedFilesStack );
         embeddedFilesStack.push_back( m_part->GetEmbeddedFiles() );
+    }
 
     embeddedFilesStack.push_back( m_symbol->Schematic() );
 

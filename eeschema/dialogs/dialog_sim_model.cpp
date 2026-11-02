@@ -86,23 +86,18 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( &aSymbol );
         m_filesStack.push_back( symbol->Schematic()->GetEmbeddedFiles() );
+
+        if( symbol->GetLibSymbolRef() )
+            symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( m_filesStack );
+    }
+    else if constexpr (std::is_same_v<T, LIB_SYMBOL>)
+    {
+        LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( &aSymbol );
+        symbol->AppendParentEmbeddedFiles( m_filesStack );
     }
 
     if( EMBEDDED_FILES* symbolEmbeddedFiles = aSymbol.GetEmbeddedFiles() )
-    {
         m_filesStack.push_back( symbolEmbeddedFiles );
-
-        if constexpr (std::is_same_v<T, SCH_SYMBOL>)
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( &aSymbol );
-            symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( m_filesStack );
-        }
-        else if constexpr (std::is_same_v<T, LIB_SYMBOL>)
-        {
-            LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( &aSymbol );
-            symbol->AppendParentEmbeddedFiles( m_filesStack );
-        }
-    }
 
     m_libraryModelsMgr.SetFilesStack( m_filesStack );
     m_builtinModelsMgr.SetFilesStack( m_filesStack );
@@ -1412,7 +1407,7 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 
     if( customize.GetEmbed() )
     {
-        EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesStack[0]->AddFile( fn, false );
+        EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesStack.back()->AddFile( fn, false );
         path = result->GetLink();
     }
     else if( fn.MakeRelativeTo( Prj().GetProjectPath() ) && !fn.GetFullPath().StartsWith( wxS( ".." ) ) )

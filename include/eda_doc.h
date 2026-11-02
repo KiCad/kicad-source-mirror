@@ -24,8 +24,7 @@
  * @see   common.h
  */
 
-#ifndef __INCLUDE__EDA_DOC_H__
-#define __INCLUDE__EDA_DOC_H__ 1
+#pragma once
 
 #include <kicommon.h>
 
@@ -34,15 +33,15 @@ class EMBEDDED_FILES;
 /**
  * Open a document (file) with the suitable browser.
  *
- * Environmental variables are substituted before the document name is resolved for
- * either browser or file.  If \a aDocName has an associated URI handler on the system,
- * the default handler will be launched.
+ * Environmental variables are substituted before the document name is resolved for either browser or
+ * file.  If \a aDocName has an associated URI handler on the system, the default handler will be launched.
  *
  * @param aParent main frame.
  * @param aDocName filename of file to open (Full filename or short filename).
  * @param aProject provides variable substitutions.
  * @param aPaths Additional paths to search for local disk datasheet files.
- * @param aFilesStack is the list of embedded files.
+ * @param aFilesStack is the list of embedded files in most-global to most-local order.  The stack is
+ *                    searched from top to bottom (ie: in reverse std::vector order).
  *
  * @return True if the document was successfully opened. Otherwise, false.
  */
@@ -50,5 +49,3 @@ bool KICOMMON_API GetAssociatedDocument( wxWindow* aParent, const wxString& aDoc
                                          SEARCH_STACK* aPaths = nullptr,
                                          std::vector<EMBEDDED_FILES*> aFilesStack = {} );
 
-
-#endif /* __INCLUDE__EDA_DOC_H__ */

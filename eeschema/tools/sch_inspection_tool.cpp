@@ -1328,6 +1328,8 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         datasheet = symbol->GetDatasheetField().GetText();
+
+        symbol->AppendParentEmbeddedFiles( filesStack );
         filesStack.push_back( symbol );
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) )
@@ -1338,6 +1340,8 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
             return 0;
 
         datasheet = entry->GetDatasheetField().GetText();
+
+        entry->AppendParentEmbeddedFiles( filesStack );
         filesStack.push_back( entry );
     }
     else if( m_frame->IsType( FRAME_SCH ) )
@@ -1352,10 +1356,14 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
         // Use GetShownText() to resolve any text variables
         datasheet = field->GetShownText( &symbol->Schematic()->CurrentSheet(), FOR_GUI );
+
         filesStack.push_back( symbol->Schematic() );
 
         if( symbol->GetLibSymbolRef() )
-            filesStack.push_back( symbol->GetLibSymbolRef().get() );
+            symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( filesStack );
+
+        if( symbol->GetEmbeddedFiles() )
+            filesStack.push_back( symbol->GetEmbeddedFiles() );
     }
 
     if( datasheet.IsEmpty() || datasheet == wxS( "~" ) )

@@ -3198,6 +3198,8 @@ void LIB_SYMBOL::AppendParentEmbeddedFiles( std::vector<EMBEDDED_FILES*>& aStack
     std::set<const LIB_SYMBOL*> visited;
     visited.insert( this );
 
+    std::vector<EMBEDDED_FILES*> ancestralEmbeddedFiles;
+
     std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
 
     while( parent )
@@ -3206,16 +3208,19 @@ void LIB_SYMBOL::AppendParentEmbeddedFiles( std::vector<EMBEDDED_FILES*>& aStack
         if( visited.count( parent.get() ) )
         {
             wxLogTrace( traceSymbolInheritance,
-                        wxT( "AppendParentEmbeddedFiles: Circular inheritance detected in "
-                             "symbol '%s' (lib: %s)" ),
+                        wxT( "AppendParentEmbeddedFiles: Circular inheritance detected in symbol '%s' (lib: %s)" ),
                         m_name, m_libId.GetLibNickname().wx_str() );
             break;
         }
 
         visited.insert( parent.get() );
-        aStack.push_back( parent->GetEmbeddedFiles() );
+        ancestralEmbeddedFiles.push_back( parent->GetEmbeddedFiles() );
         parent = parent->GetParent().lock();
     }
+
+    // Embedded files stack goes from most-global to most-local
+    for( EMBEDDED_FILES* files : std::ranges::reverse_view( ancestralEmbeddedFiles ) )
+        aStack.push_back( files );
 }
 
 

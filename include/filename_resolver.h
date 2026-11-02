@@ -90,14 +90,15 @@ public:
     /**
      * Determine the full path of the given file name.
      *
-     * In the future remote files may be supported, in which case it is best to require a full
-     * URI in which case ResolvePath should check that the URI conforms to RFC-2396 and related
-     * documents and copies \a aFileName into aResolvedName if the URI is valid.
+     * In the future remote files may be supported, in which case it is best to require a full URI in
+     * which case ResolvePath should check that the URI conforms to RFC-2396 and related documents and
+     * copies \a aFileName into aResolvedName if the URI is valid.
      *
      * @param aFileName The configured file path to resolve.
      * @param aWorkingPath The current working path for relative path resolutions.
-     * @param aEmbeddedFilesStack is a list of pointers to the embedded files list.  They will
-     *                            be searched from the front of the list.
+     * @param aEmbeddedFilesStack is a list of pointers to the embedded files list in most-global to
+     *                            most-local order.  They will be searched from the top of the "stack"
+     *                            (back of the std::vector).
      */
     wxString ResolvePath( const wxString& aFileName, const wxString& aWorkingPath,
                           std::vector<const EMBEDDED_FILES*> aEmbeddedFilesStack );

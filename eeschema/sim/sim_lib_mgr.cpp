@@ -62,8 +62,7 @@ wxString SIM_LIB_MGR::ResolveLibraryPath( const wxString& aLibraryPath, REPORTER
     for( const EMBEDDED_FILES* embeddedFiles : m_embeddedFilesStack )
         embeddedFilesStack.push_back( embeddedFiles );
 
-    wxString resolvedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString,
-                                                  std::move( embeddedFilesStack ) );
+    wxString resolvedPath = resolver.ResolvePath( aLibraryPath, wxEmptyString, std::move( embeddedFilesStack ) );
 
     // If FILENAME_RESOLVER found the file, use that result
     if( !resolvedPath.IsEmpty() )

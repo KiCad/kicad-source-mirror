@@ -52,9 +52,7 @@ static GRID_CELL_URL_EDITOR_CONTEXT getDatasheetContext( const std::vector<FOOTP
     std::vector<EMBEDDED_FILES*> inheritedFiles;
 
     for( FOOTPRINT_REF footprint : aFootprints )
-    {
         embedTargets.push_back( footprint.GetFootprint().GetEmbeddedFiles() );
-    }
 
     return MakeGridCellUrlEditorContext( embedTargets, inheritedFiles );
 }
@@ -72,8 +70,8 @@ class LIB_FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS : public FIELDS_TABLE_GRID_TRICKS
 {
 public:
     LIB_FOOTPRINT_FIELDS_EDITOR_GRID_TRICKS( DIALOG_LIB_FOOTPRINT_FIELDS_TABLE* aParent, WX_GRID* aGrid,
-                                   VIEW_CONTROLS_GRID_DATA_MODEL*     aViewFieldsData,
-                                   LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel ) :
+                                             VIEW_CONTROLS_GRID_DATA_MODEL* aViewFieldsData,
+                                             LIB_FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel ) :
             FIELDS_TABLE_GRID_TRICKS( aParent, aGrid, aDataModel ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),

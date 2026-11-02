@@ -276,21 +276,20 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
 
         wxString path = tname.Mid( wxString( FILEEXT::KiCadUriPrefix + "://" ).length() );
 
-        wxFileName temp_file = aEmbeddedFilesStack[0]->GetTemporaryFileName( path );
-        int        ii = 1;
+        // It's a "stack" stored in a std::vector.  Search from the back.
+        int        ii = (int) aEmbeddedFilesStack.size() - 1;
+        wxFileName temp_file = aEmbeddedFilesStack[ii--]->GetTemporaryFileName( path );
 
-        while( !temp_file.IsOk() && ii < (int) aEmbeddedFilesStack.size() )
-            temp_file = aEmbeddedFilesStack[ii++]->GetTemporaryFileName( path );
+        while( !temp_file.IsOk() && ii >= 0 )
+            temp_file = aEmbeddedFilesStack[ii--]->GetTemporaryFileName( path );
 
         if( !temp_file.IsOk() )
         {
-            wxLogTrace( wxT( "KICAD_EMBED" ),
-                        wxT( "Failed to get temp file '%s' for kicad_embed URI" ), path );
+            wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Failed to get temp file '%s' for kicad_embed URI" ), path );
             return wxEmptyString;
         }
 
-        wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Opening embedded file '%s' as '%s'" ),
-                    tname, temp_file.GetFullPath() );
+        wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Opening embedded file '%s' as '%s'" ), tname, temp_file.GetFullPath() );
 
         return temp_file.GetFullPath();
     }

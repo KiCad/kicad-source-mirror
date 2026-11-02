@@ -79,8 +79,8 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     std::vector<EMBEDDED_FILES*> embeddedFilesStack;
-    embeddedFilesStack.push_back( m_embeddedFiles->GetLocalFiles() );
     embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
+    embeddedFilesStack.push_back( m_embeddedFiles->GetLocalFiles() );
 
     m_fields = new PCB_FIELDS_GRID_TABLE( m_frame, this, std::move( embeddedFilesStack ) );
 

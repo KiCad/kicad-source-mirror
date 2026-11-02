@@ -772,6 +772,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                         std::vector<EMBEDDED_FILES*> embeddedFilesStack;
                         embeddedFilesStack.push_back( m_frame->Schematic().GetEmbeddedFiles() );
 
+                        if( symbol->GetLibSymbolRef() )
+                            symbol->GetLibSymbolRef()->AppendParentEmbeddedFiles( embeddedFilesStack );
+
                         if( EMBEDDED_FILES* symbolEmbeddedFile = symbol->GetEmbeddedFiles() )
                             embeddedFilesStack.push_back( symbolEmbeddedFile );
 

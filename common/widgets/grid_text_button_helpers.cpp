@@ -54,6 +54,12 @@ GRID_CELL_URL_EDITOR_CONTEXT MakeGridCellUrlEditorContext( const std::vector<EMB
     GRID_CELL_URL_EDITOR_CONTEXT context;
     std::set<EMBEDDED_FILES*>    filesSeen;
 
+    for( EMBEDDED_FILES* files : aAdditionalLookupFiles )
+    {
+        if( files && filesSeen.insert( files ).second )
+            context.m_filesStack.push_back( files );
+    }
+
     for( EMBEDDED_FILES* files : aEmbedTargets )
     {
         if( !files || !filesSeen.insert( files ).second )
@@ -61,12 +67,6 @@ GRID_CELL_URL_EDITOR_CONTEXT MakeGridCellUrlEditorContext( const std::vector<EMB
 
         context.m_embedTargets.push_back( files );
         context.m_filesStack.push_back( files );
-    }
-
-    for( EMBEDDED_FILES* files : aAdditionalLookupFiles )
-    {
-        if( files && filesSeen.insert( files ).second )
-            context.m_filesStack.push_back( files );
     }
 
     return context;

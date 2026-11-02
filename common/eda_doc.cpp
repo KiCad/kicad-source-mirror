@@ -86,36 +86,33 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
             {
                 if( aFilesStack.empty() )
                 {
-                    wxLogTrace( wxT( "KICAD_EMBED" ),
-                                wxT( "No EMBEDDED_FILES object provided for kicad_embed URI" ) );
+                    wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "No EMBEDDED_FILES object provided for kicad_embed URI" ) );
                     return false;
                 }
 
                 if( !docname.starts_with( FILEEXT::KiCadUriPrefix + "://" ) )
                 {
-                    wxLogTrace( wxT( "KICAD_EMBED" ),
-                                wxT( "Invalid kicad_embed URI '%s'" ), docname );
+                    wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Invalid kicad_embed URI '%s'" ), docname );
                     return false;
                 }
 
                 docname = docname.Mid( wxString( FILEEXT::KiCadUriPrefix + "://" ).length() );
 
-                wxFileName temp_file = aFilesStack[0]->GetTemporaryFileName( docname );
-                int        ii = 1;
+                // It's a "stack" stored in a std::vector.  Search from the back.
+                int        ii = (int) aFilesStack.size() - 1;
+                wxFileName temp_file = aFilesStack[ii--]->GetTemporaryFileName( docname );
 
-                while( !temp_file.IsOk() && ii < (int) aFilesStack.size() )
-                    temp_file = aFilesStack[ii++]->GetTemporaryFileName( docname );
+                while( !temp_file.IsOk() && ii >= 0 )
+                    temp_file = aFilesStack[ii--]->GetTemporaryFileName( docname );
 
                 if( !temp_file.IsOk() )
                 {
-                    wxLogTrace( wxT( "KICAD_EMBED" ),
-                                wxT( "Failed to get temp file '%s' for kicad_embed URI" ), docname );
+                    wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Failed to get temp file '%s' for kicad_embed URI" ),
+                                docname );
                     return false;
                 }
 
-                wxLogTrace( wxT( "KICAD_EMBED" ),
-                            wxT( "Opening embedded file '%s' as '%s'" ),
-                            docname,
+                wxLogTrace( wxT( "KICAD_EMBED" ), wxT( "Opening embedded file '%s' as '%s'" ), docname,
                             temp_file.GetFullPath() );
                 docname = temp_file.GetFullPath();
             }
