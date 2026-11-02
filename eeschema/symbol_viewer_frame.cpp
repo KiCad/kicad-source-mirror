@@ -627,76 +627,71 @@ void SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 
     wxString libName = m_currentSymbol.GetUniStringLibNickname();
 
-    if( libName.IsEmpty() )
+    if( !libName.IsEmpty() )
     {
-        updatePreviewSymbol();
-        DisplayLibInfos();
-        GetCanvas()->Refresh();
-        return;
-    }
+        SYMBOL_LIBRARY_ADAPTER*  adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
+        std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( libName );
 
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-    std::vector<LIB_SYMBOL*> symbols = adapter->GetSymbols( libName );
+        std::sort( symbols.begin(), symbols.end(),
+                   []( LIB_SYMBOL* a, LIB_SYMBOL* b ) -> bool
+                   {
+                       return StrNumCmp( b->GetName(), a->GetName(), true ) > 0;
+                   } );
 
-    std::sort( symbols.begin(), symbols.end(),
-               []( LIB_SYMBOL* a, LIB_SYMBOL* b ) -> bool
-               {
-                   return StrNumCmp( b->GetName(), a->GetName(), true ) > 0;
-               } );
+        std::set<wxString> excludes;
 
-    std::set<wxString> excludes;
-
-    if( !m_symbolFilter->GetValue().IsEmpty() )
-    {
-        wxStringTokenizer tokenizer( m_symbolFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
-
-        while( tokenizer.HasMoreTokens() )
+        if( !m_symbolFilter->GetValue().IsEmpty() )
         {
-            const wxString       filterTerm = tokenizer.GetNextToken().Lower();
-            EDA_COMBINED_MATCHER matcher( filterTerm, CTX_LIBITEM );
+            wxStringTokenizer tokenizer( m_symbolFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
 
-            for( LIB_SYMBOL* symbol : symbols )
+            while( tokenizer.HasMoreTokens() )
             {
-                int matched = matcher.ScoreTerms( symbol->GetSearchTerms() );
+                const wxString       filterTerm = tokenizer.GetNextToken().Lower();
+                EDA_COMBINED_MATCHER matcher( filterTerm, CTX_LIBITEM );
 
-                if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)symbol->GetPinCount() )
-                    matched++;
+                for( LIB_SYMBOL* symbol : symbols )
+                {
+                    int matched = matcher.ScoreTerms( symbol->GetSearchTerms() );
 
-                if( !matched )
-                    excludes.insert( symbol->GetName() );
+                    if( filterTerm.IsNumber() && wxAtoi( filterTerm ) == (int)symbol->GetPinCount() )
+                        matched++;
+
+                    if( !matched )
+                        excludes.insert( symbol->GetName() );
+                }
             }
+        }
+
+        wxString subLib = m_currentSymbol.GetSubLibraryName();
+
+        for( const LIB_SYMBOL* symbol : symbols )
+        {
+            if( adapter->SupportsSubLibraries( libName ) && !subLib.IsSameAs( symbol->GetLibId().GetSubLibraryName() ) )
+                continue;
+
+            if( !excludes.count( symbol->GetName() ) )
+                m_symbolList->Append( UnescapeString( symbol->GetName() ) );
+        }
+
+        int  index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
+
+        if( index != wxNOT_FOUND )
+        {
+            m_symbolList->SetSelection( index, true );
+        }
+        else
+        {
+            // Select the first library entry (if available) when the previous entry name no longer exists.
+            m_symbolList->SetSelection( m_symbolList->IsEmpty() ? -1 : 0, true );
+            m_currentSymbol.SetLibItemName( m_symbolList->GetStringSelection() );
+            m_bodyStyle = BODY_STYLE::BASE;
+            m_unit      = 1;
         }
     }
 
-    wxString subLib = m_currentSymbol.GetSubLibraryName();
-
-    for( const LIB_SYMBOL* symbol : symbols )
-    {
-        if( adapter->SupportsSubLibraries( libName ) && !subLib.IsSameAs( symbol->GetLibId().GetSubLibraryName() ) )
-            continue;
-
-        if( !excludes.count( symbol->GetName() ) )
-            m_symbolList->Append( UnescapeString( symbol->GetName() ) );
-    }
-
-    int  index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
-
-    if( index != wxNOT_FOUND )
-    {
-        m_symbolList->SetSelection( index, true );
-    }
-    else
-    {
-        // Select the first library entry (if available) when the previous entry name no longer exists.
-        m_symbolList->SetSelection( m_symbolList->IsEmpty() ? -1 : 0, true );
-        m_currentSymbol.SetLibItemName( m_symbolList->GetStringSelection() );
-        m_bodyStyle = BODY_STYLE::BASE;
-        m_unit      = 1;
-
-        updatePreviewSymbol();
-        DisplayLibInfos();
-        GetCanvas()->Refresh();
-    }
+    updatePreviewSymbol();
+    DisplayLibInfos();
+    GetCanvas()->Refresh();
 }
 
 
