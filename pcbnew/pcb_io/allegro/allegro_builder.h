@@ -177,6 +177,16 @@ private:
     std::unique_ptr<PCB_TEXT>  buildPcbText( const BLK_0x30_STR_WRAPPER& aStrWrapper, BOARD_ITEM_CONTAINER& aParent );
 
     /**
+     * Add a 0x30 text object to a footprint, either as one of the built-in fields or as a
+     * graphic, depending on the Allegro class it is on.
+     *
+     * @param aValueFieldSet tracks whether the VALUE field has been filled already, so only
+     *                       the first candidate replaces it.
+     */
+    void addFootprintText( FOOTPRINT& aFp, GRAPHIC_DEDUP& aGraphics, const BLK_0x30_STR_WRAPPER& aStrWrapper,
+                           bool& aValueFieldSet );
+
+    /**
      * Build a rectangular shape from a 0x24 RECT block.
      */
     std::unique_ptr<PCB_SHAPE> buildRect( const BLK_0x24_RECT& aRect, BOARD_ITEM_CONTAINER& aParent );

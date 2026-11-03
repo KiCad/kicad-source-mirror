@@ -109,6 +109,27 @@ allegroDefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputL
 }
 
 
+/**
+ * Parse a whole Allegro file into the intermediate database of blocks and strings.
+ *
+ * The parsed database owns copies of everything it needs, so the source data can go away
+ * once this returns.
+ */
+static std::unique_ptr<ALLEGRO::BRD_DB> parseAllegroData( const uint8_t* aData, size_t aSize,
+                                                          PROGRESS_REPORTER* aProgressReporter )
+{
+    ALLEGRO::FILE_STREAM allegroStream( aData, aSize );
+
+    ALLEGRO::PARSER parser( allegroStream, aProgressReporter );
+
+    // When parsing a file "for real", encountering an unknown block is fatal, as we then
+    // cannot know how long that block is, and thus can't proceed to find any later blocks.
+    parser.EndAtUnknownBlock( false );
+
+    return parser.Parse();
+}
+
+
 PCB_IO_ALLEGRO::PCB_IO_ALLEGRO() : PCB_IO( wxS( "Allegro" ) )
 {
     LAYER_MAPPABLE_PLUGIN::RegisterCallback( allegroDefaultLayerMappingCallback );
@@ -160,21 +181,13 @@ void PCB_IO_ALLEGRO::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
 
 bool PCB_IO_ALLEGRO::LoadBoardFromData( const uint8_t* aData, size_t aSize, BOARD& aBoard )
 {
-    ALLEGRO::FILE_STREAM allegroStream( aData, aSize );
-
-    ALLEGRO::PARSER parser( allegroStream, m_progressReporter );
-
-    // When parsing a file "for real", encountering an unknown block is fatal, as we then
-    // cannot know how long that block is, and thus can't proceed to find any later blocks.
-    parser.EndAtUnknownBlock( false );
-
     PROF_TIMER totalTimer;
 
     wxLogTrace( traceAllegroPerf, wxT( "=== Allegro Import Performance ===" ) );
 
     // Import phase 1: turn the file into the C++ structs
     PROF_TIMER phaseTimer;
-    std::unique_ptr<ALLEGRO::BRD_DB> brdDb = parser.Parse();
+    std::unique_ptr<ALLEGRO::BRD_DB> brdDb = parseAllegroData( aData, aSize, m_progressReporter );
     phaseTimer.Stop();
 
     wxLogTrace( traceAllegroPerf, wxT( "Phase 1 (binary parse): %.3f ms" ), phaseTimer.msecs() ); //format:allow
