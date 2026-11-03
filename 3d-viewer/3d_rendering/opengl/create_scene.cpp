@@ -1648,7 +1648,7 @@ void RENDER_3D_OPENGL::generateComplexHoles( float aPlatingThickness3d, float aU
                 float zEnd = 0.0f;
 
                 if( appendPostMachiningGeometry( triangles, via_center, PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
-                                                 backdrill.size.x, depthIU, EDA_ANGLE( 82.0, DEGREES_T ),
+                                                 backdrill.size.x, depthIU, EDA_ANGLE( 118.0, DEGREES_T ),
                                                  holeInnerR, ztop, true, aPlatingThickness3d, aUnitScale,
                                                  &zEnd ) )
                 {
@@ -1666,7 +1666,7 @@ void RENDER_3D_OPENGL::generateComplexHoles( float aPlatingThickness3d, float aU
                 float zEnd = 0.0f;
 
                 if( appendPostMachiningGeometry( triangles, via_center, PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
-                                                 backdrill.size.x, depthIU, EDA_ANGLE( 82.0, DEGREES_T ),
+                                                 backdrill.size.x, depthIU, EDA_ANGLE( 118.0, DEGREES_T ),
                                                  holeInnerR, zbot, false, aPlatingThickness3d, aUnitScale,
                                                  &zEnd ) )
                 {
