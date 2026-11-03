@@ -3217,11 +3217,12 @@ void BOARD_BUILDER::addFootprintText( FOOTPRINT& aFp, GRAPHIC_DEDUP& aGraphics,
     }
     else if( textClass == LAYER_INFO::CLASS::REF_DES && isAssembly )
     {
-        // Assembly refdes becomes a user field with the KiCad reference variable
-        PCB_FIELD* field = new PCB_FIELD( *text, FIELD_T::USER, wxS( "Ref Des" ) );
-        field->SetText( wxS( "${REFERENCE}" ) );
-        field->SetVisible( false );
-        aFp.Add( field, ADD_MODE::APPEND );
+        // Assembly refdes becomes a text item with the magic ${REFERENCE}
+        // if it's an un-referenced refdes (e.g. in an unplaced footprint)
+        if( text->GetText().Contains( wxS( "*" ) ) )
+            text->SetText( wxS( "${REFERENCE}" ) );
+
+        aFp.Add( text.release() );
     }
     else if( textClass == LAYER_INFO::CLASS::COMPONENT_VALUE && isAssembly )
     {
