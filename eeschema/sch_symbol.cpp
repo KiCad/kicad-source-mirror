@@ -5092,8 +5092,10 @@ std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET
                 {
                     if( field.GetUntranslatedName() == wxT( "Component Class" ) )
                     {
-                        if( field.GetShownText( aPath, INTERNAL ) != wxEmptyString )
-                            componentClass.insert( field.GetShownText( aPath, INTERNAL, aVariantName ) );
+                        const wxString classname = field.GetShownText( aPath, INTERNAL, aVariantName );
+
+                        if( classname != wxEmptyString )
+                            componentClass.insert( classname );
                     }
                 }
             };
@@ -5105,9 +5107,7 @@ std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET
     for( const SCH_RULE_AREA* ruleArea : m_rule_areas_cache )
     {
         for( const SCH_DIRECTIVE_LABEL* label : ruleArea->GetDirectives() )
-        {
             getComponentClassFields( label->GetFields() );
-        }
     }
 
     return componentClass;
