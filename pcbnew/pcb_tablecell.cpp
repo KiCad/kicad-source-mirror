@@ -34,16 +34,17 @@
 #include <properties/property_mgr.h>
 
 
-PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :
-        PCB_TEXTBOX( aParent, PCB_TABLECELL_T ),
+PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParentTable ) :
+        PCB_TEXTBOX( aParentTable, PCB_TABLECELL_T ),
         m_colSpan( 1 ),
         m_rowSpan( 1 )
 {
-    if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
-    {
-        if( parentFP->IsFlipped() )
-            SetMirrored( true );
-    }
+    if( FOOTPRINT* parentFP = aParentTable->GetParentFootprint() )
+        SetMirrored( parentFP->IsFlipped() );
+    else if( BOARD* board = aParentTable->GetBoard() )
+        SetMirrored( board->IsBackLayer( aParentTable->GetLayer() ) );
+    else
+        SetMirrored( IsBackLayer( aParentTable->GetLayer() ) );
 
     SetRectangleHeight( std::numeric_limits<int>::max() / 2 );
     SetRectangleWidth( std::numeric_limits<int>::max() / 2 );
