@@ -133,6 +133,10 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
         m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
         m_originalFootprintCopy->SetParent( nullptr );
 
+        // Mirror the load baseline into the tab context so it survives a tab switch (the frame
+        // members are only a borrowed view of the active context's baseline).
+        ctx->SetOriginalFootprintCopy( std::unique_ptr<FOOTPRINT>( static_cast<FOOTPRINT*>( aFootprint->Clone() ) ) );
+
         // For undo/redo:
         ClearUndoRedoList();
         GetScreen()->SetContentModified( false );
