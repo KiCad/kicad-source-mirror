@@ -487,6 +487,18 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                                 BVH_CONTAINER_2D* layerHoleContainer = m_layerHoleMap[layer];
 
                                 layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius, *track ) );
+
+                                // CounterboreCutouts are also required for silkscreen clipping
+                                if( IsFrontLayer( layer ) )
+                                {
+                                    m_frontCounterboreCutouts.Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius,
+                                                                   *track ) );
+                                }
+                                else
+                                {
+                                    m_backCounterboreCutouts.Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius,
+                                                                  *track ) );
+                                }
                             }
                         }
 
@@ -1291,30 +1303,6 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
     m_backCounterborePolys.Simplify();
     m_frontCountersinkPolys.Simplify();
     m_backCountersinkPolys.Simplify();
-
-    // Remove counterbore/countersink/backdrill cutouts from via annuli (both front and back)
-    // The via annuli are used for silkscreen clipping and shouldn't include areas removed
-    // by counterbore, countersink, or backdrill operations
-    if( m_viaAnnuliPolys.OutlineCount() > 0 )
-    {
-        if( m_frontCounterborePolys.OutlineCount() > 0 )
-            m_viaAnnuliPolys.BooleanSubtract( m_frontCounterborePolys );
-
-        if( m_backCounterborePolys.OutlineCount() > 0 )
-            m_viaAnnuliPolys.BooleanSubtract( m_backCounterborePolys );
-
-        if( m_frontCountersinkPolys.OutlineCount() > 0 )
-            m_viaAnnuliPolys.BooleanSubtract( m_frontCountersinkPolys );
-
-        if( m_backCountersinkPolys.OutlineCount() > 0 )
-            m_viaAnnuliPolys.BooleanSubtract( m_backCountersinkPolys );
-
-        if( m_FrontBackdrillPolys.OutlineCount() > 0 )
-            m_viaAnnuliPolys.BooleanSubtract( m_FrontBackdrillPolys );
-
-        if( m_BackBackdrillPolys.OutlineCount() > 0 )
-            m_viaAnnuliPolys.BooleanSubtract( m_BackBackdrillPolys );
-    }
 
     // Build Tech layers
     // Based on:

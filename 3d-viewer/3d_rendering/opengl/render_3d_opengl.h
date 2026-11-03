@@ -337,8 +337,8 @@ private:
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_boardWithHoles;
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_postMachinePlugs;     ///< Board material plugs for backdrill/counterbore/countersink
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_antiBoard;
-    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerThroughHoles;
-    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerViaThroughHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_frontOuterThroughHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_backOuterThroughHoles;
     std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerThroughHoleRings;
     std::vector<std::shared_ptr<void>>           m_retiredRenderPtrs;
 

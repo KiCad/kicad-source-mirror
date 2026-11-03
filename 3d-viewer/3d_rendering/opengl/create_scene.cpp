@@ -976,11 +976,27 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
 
     outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly() );
 
-    assignRenderPtr( m_outerThroughHoles, generateHoles( m_boardAdapter.GetTH_ODs().GetList(), outerPolyTHT, 1.0f, 0.0f,
-                                                         false, &m_boardAdapter.GetTH_IDs() ) );
+    LIST_OBJECT2D frontODs = m_boardAdapter.GetTH_ODs().GetList();
 
-    assignRenderPtr( m_outerViaThroughHoles, generateHoles( m_boardAdapter.GetViaTH_ODs().GetList(),
-                                                             m_boardAdapter.GetViaTH_ODPolys(), 1.0f, 0.0f, false ) );
+    for( OBJECT_2D* obj : m_boardAdapter.GetFrontCounterboreCutouts().GetList() )
+        frontODs.emplace_back( obj );
+
+    for( OBJECT_2D* obj : m_boardAdapter.GetFrontCountersinkCutouts().GetList() )
+        frontODs.emplace_back( obj );
+
+    assignRenderPtr( m_frontOuterThroughHoles, generateHoles( frontODs, outerPolyTHT, 1.0f, 0.0f, false,
+                                                              &m_boardAdapter.GetTH_IDs() ) );
+
+    LIST_OBJECT2D backODs = m_boardAdapter.GetTH_ODs().GetList();
+
+    for( OBJECT_2D* obj : m_boardAdapter.GetBackCounterboreCutouts().GetList() )
+        backODs.emplace_back( obj );
+
+    for( OBJECT_2D* obj : m_boardAdapter.GetBackCountersinkCutouts().GetList() )
+        backODs.emplace_back( obj );
+
+    assignRenderPtr( m_backOuterThroughHoles, generateHoles( backODs, outerPolyTHT, 1.0f, 0.0f, false,
+                                                             &m_boardAdapter.GetTH_IDs() ) );
 
     if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annuli )
     {
