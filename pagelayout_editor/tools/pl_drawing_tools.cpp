@@ -316,7 +316,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 // Pop the undo stack and delete the item being placed
                 m_frame->RollbackFromUndo();
-                continue;
             }
 
             if( evt->IsPointEditor() || evt->IsMoveTool() )
