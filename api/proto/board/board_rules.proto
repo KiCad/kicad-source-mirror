@@ -238,6 +238,9 @@ message DrcMarker
   // This field is report-only: it is filled in when available and is read-only to API clients.
   // Since: 11.0
   bool excluded = 8;
+
+  // Since: 11.0
+  kiapi.common.types.MarkerType marker_type = 9;
 }
 
 message DrcSeveritySetting

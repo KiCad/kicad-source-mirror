@@ -115,6 +115,10 @@ void PCB_MARKER::ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMark
             aMsg.add_items()->set_value( id.AsStdString() );
     }
 
+    // TODO: why won't this link?
+    //aMsg.set_marker_type(
+    //        ToProtoEnum<MARKER_BASE::MARKER_T, kiapi::common::types::MarkerType>( aMarker.GetMarkerType() ) );
+
     // Only store the layer for error types where it affects identity.
     bool storeLayer = false;
 
@@ -130,7 +134,7 @@ void PCB_MARKER::ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMark
 
     case DRCE_UNRESOLVED_VARIABLE:
         if( aMarker.GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
-            storeLayer = true;
+            aMsg.set_marker_type( kiapi::common::types::MT_MARKER_DRAWING_SHEET );
 
         break;
 
@@ -176,7 +180,10 @@ PCB_MARKER* PCB_MARKER::FromProto( const kiapi::board::DrcMarker& aMsg )
         return nullptr;
 
     VECTOR2I pos = kiapi::common::UnpackVector2( aMsg.position() );
-    PCB_LAYER_ID layer = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( aMsg.layer() );
+    int      layer = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( aMsg.layer() );
+
+    if( aMsg.marker_type() == kiapi::common::types::MT_MARKER_DRAWING_SHEET )
+        layer = LAYER_DRAWINGSHEET;
 
     PCB_MARKER* marker = new PCB_MARKER( drcItem, pos, layer );
 
