@@ -67,7 +67,7 @@ RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
     m_outerThroughHoles = nullptr;
     m_outerThroughHoleRings = nullptr;
     m_outerViaThroughHoles = nullptr;
-    m_microviaHoles = nullptr;
+    m_complexPlatedHoles = nullptr;
     m_padHoles = nullptr;
     m_viaFrontCover = nullptr;
     m_viaBackCover = nullptr;
@@ -648,16 +648,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving )
 
     bool skipThickness = aIsMoving && cfg.opengl_thickness_disableOnMove;
     bool skipRenderHoles = aIsMoving && cfg.opengl_holes_disableOnMove;
-    bool skipRenderMicroVias = aIsMoving && cfg.opengl_microvias_disableOnMove;
+    bool skipRenderComplexHoles = aIsMoving && cfg.opengl_microvias_disableOnMove;
     bool showThickness = !skipThickness;
 
     std::bitset<LAYER_3D_END> layerFlags = m_boardAdapter.GetVisibleLayers();
 
     setLayerMaterial( B_Cu );
 
-    if( !( skipRenderMicroVias || skipRenderHoles ) && m_microviaHoles )
+    if( !( skipRenderComplexHoles || skipRenderHoles ) && m_complexPlatedHoles )
     {
-        if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_microviaHoles->MakeOrGet() )
+        if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_complexPlatedHoles->MakeOrGet() )
             ogl_disp_list->DrawAll();
     }
 
@@ -1088,7 +1088,7 @@ void RENDER_3D_OPENGL::freeAllLists()
     DELETE_AND_FREE( m_outerViaThroughHoles )
     DELETE_AND_FREE( m_outerThroughHoleRings )
 
-    DELETE_AND_FREE( m_microviaHoles )
+    DELETE_AND_FREE( m_complexPlatedHoles )
     DELETE_AND_FREE( m_padHoles )
     DELETE_AND_FREE( m_viaFrontCover )
     DELETE_AND_FREE( m_viaBackCover )

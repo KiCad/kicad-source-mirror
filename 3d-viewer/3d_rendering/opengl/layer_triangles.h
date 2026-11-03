@@ -264,8 +264,8 @@ public:
 
         if( !m_openglRenderList )
         {
-            m_openglRenderList =
-                    std::make_shared<OPENGL_RENDER_LIST>( *m_layerTriangles, m_textureIndexForSegEnds, m_zBot, m_zTop );
+            m_openglRenderList = std::make_shared<OPENGL_RENDER_LIST>( *m_layerTriangles, m_textureIndexForSegEnds,
+                                                                       m_zBot, m_zTop );
 
             m_openglRenderList->SetItIsTransparent( m_defaultTransparent );
         }
