@@ -86,12 +86,19 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::TransferDataToWindow()
     if( !m_data )
         return false;
 
-    if( m_data->IsIntegerOnly() )
+    if( m_data->IsIntegerOnly() || m_data->IsUnitless() )
     {
         auto* ctrl = dynamic_cast<wxTextCtrl*>( m_fields[0]->GetControl() );
 
         if( ctrl )
-            ctrl->ChangeValue( wxString::Format( "%d", (int) m_data->GetNumericInputValue() ) );
+        {
+            const double value = m_data->GetNumericInputValue();
+
+            if( m_data->IsIntegerOnly() )
+                ctrl->ChangeValue( wxString::Format( "%d", (int) value ) );
+            else
+                ctrl->ChangeValue( wxString::Format( "%g", value ) );
+        }
     }
     else
     {
@@ -107,15 +114,26 @@ bool DRC_RE_NUMERIC_INPUT_OVERLAY_PANEL::TransferDataFromWindow()
     if( !m_data )
         return false;
 
-    if( m_data->IsIntegerOnly() )
+    if( m_data->IsIntegerOnly() || m_data->IsUnitless() )
     {
         auto* ctrl = dynamic_cast<wxTextCtrl*>( m_fields[0]->GetControl() );
 
         if( ctrl )
         {
-            long val = 0;
-            ctrl->GetValue().Strip( wxString::both ).ToLong( &val );
-            m_data->SetNumericInputValue( static_cast<double>( val ) );
+            wxString text = ctrl->GetValue().Strip( wxString::both );
+
+            if( m_data->IsIntegerOnly() )
+            {
+                long val = 0;
+                text.ToLong( &val );
+                m_data->SetNumericInputValue( static_cast<double>( val ) );
+            }
+            else
+            {
+                double val = 0.0;
+                text.ToDouble( &val );
+                m_data->SetNumericInputValue( val );
+            }
         }
     }
     else

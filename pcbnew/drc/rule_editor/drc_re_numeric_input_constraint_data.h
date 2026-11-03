@@ -88,6 +88,8 @@ public:
 
     virtual bool IsIntegerOnly() const { return false; }
 
+    virtual bool IsUnitless() const { return false; }
+
     VALIDATION_RESULT Validate() const override
     {
         VALIDATION_RESULT result;

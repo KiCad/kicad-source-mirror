@@ -209,6 +209,7 @@ class DRC_RE_HOLE_ASPECT_RATIO_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CON
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_hole_aspect_ratio; }
+    bool    IsUnitless() const override { return true; }
 
     // A label here would be overwritten by the unit binder, so the drawing carries the meaning.
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
