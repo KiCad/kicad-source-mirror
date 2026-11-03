@@ -3302,12 +3302,16 @@ bool PNS_KICAD_IFACE_BASE::TouchesCopperZone( const PNS::ITEM* aItem ) const
     const BOX2I bbox = shape->BBox();
 
     // Teardrops hug existing joints and carry no connectivity of their own
-    auto touches = [&]( const ZONE* aZone )
-    {
-        return !aZone->GetIsRuleArea() && !aZone->IsTeardropArea() && aZone->GetNet() == aItem->Net()
-               && aZone->IsOnLayer( layer ) && aZone->GetBoundingBox().Intersects( bbox )
-               && aZone->Outline()->Collide( shape );
-    };
+    auto touches =
+            [&]( const ZONE* aZone )
+            {
+                return !aZone->GetIsRuleArea()
+                        && !aZone->IsTeardropArea()
+                        && aZone->GetNet() == aItem->Net()
+                        && aZone->IsOnLayer( layer )
+                        && aZone->GetBoundingBox().Intersects( bbox )
+                        && aZone->GetBoardOutline().Collide( shape );
+            };
 
     for( const ZONE* zone : m_board->Zones() )
     {
