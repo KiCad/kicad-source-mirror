@@ -58,6 +58,8 @@ std::optional<FIELD_VALUE> ALLEGRO::GetFirstFieldOfType( const BRD_DB& aDb, uint
             break;
         }
         case 0x66:
+        case 0x67:
+        case 0x6A:
         {
             const uint32_t* val = std::get_if<uint32_t>( &field.m_Substruct );
 

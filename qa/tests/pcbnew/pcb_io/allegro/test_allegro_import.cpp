@@ -1232,6 +1232,29 @@ BOOST_AUTO_TEST_CASE( Footprint3DModels )
 }
 
 
+/**
+ * Constraint set netclasses must be assigned to nets and inherited by the diff pair classes.
+ * https://gitlab.com/kicad/code/kicad/-/issues/25654
+ */
+BOOST_AUTO_TEST_CASE( ConstraintSetsAreAssigned )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "issue25654/MIPI_Camera_Sub.brd" );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+
+    BOOST_REQUIRE( netSettings->HasNetclass( wxS( "DP_CSI_A_CLK" ) ) );
+    BOOST_CHECK_EQUAL( netSettings->GetNetclasses().at( wxS( "DP_CSI_A_CLK" ) )->GetClearance(), 177800 );
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net->GetNetCode() > 0 )
+            BOOST_CHECK_NE( net->GetNetClass()->GetName(), NETCLASS::Default );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

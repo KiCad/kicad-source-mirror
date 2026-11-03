@@ -1335,6 +1335,28 @@ void BOARD_BUILDER::applyConstraintSets()
             setName = resolveConstraintSetNameFromField( csBlock.m_FieldPtr );
         }
 
+        // Pre-V172 boards store the name as an index into the 0x36 name table
+        if( setName.IsEmpty() && !isV172Plus && ( csBlock.m_NameStrKey >> 24 ) == 0x03 )
+        {
+            const uint32_t index = csBlock.m_NameStrKey & 0x00FFFFFF;
+
+            TYPED_LL_WALKER<BLK_0x36_DEF_TABLE> nameTables( m_brdDb.m_Header->m_LL_0x36.m_Head,
+                                                            m_brdDb.m_Header->m_LL_0x36.m_Tail, m_brdDb );
+
+            for( const BLK_0x36_DEF_TABLE& table : nameTables )
+            {
+                if( table.m_Code != 0x03 || index >= table.m_Items.size() )
+                    continue;
+
+                const auto& item = std::get<BLK_0x36_DEF_TABLE::X03>( table.m_Items[index] );
+
+                if( item.m_Str16x.has_value() )
+                    setName = wxString( item.m_Str16x.value() );
+
+                break;
+            }
+        }
+
         if( setName.IsEmpty() )
             setName = wxString::Format( wxS( "CS_%d" ), csIndex );
 
@@ -1435,24 +1457,33 @@ void BOARD_BUILDER::applyConstraintSets()
     {
         // Field 0x1a0 references the constraint set. It can be an integer (string table key
         // that matches 0x1D.m_NameStrKey) or a direct string (the constraint set name).
-        auto csField = GetFirstFieldOfType( m_brdDb, netBlk.m_FieldsPtr, netBlk.m_Key,
-                                            FIELD_KEYS::PHYS_CONSTRAINT_SET );
-
-        wxString assignedSetName;
-
-        if( csField.has_value() )
+        auto resolveSetName = [&]( const std::optional<FIELD_VALUE>& aField ) -> wxString
         {
-            if( auto* intVal = std::get_if<uint32_t>( &csField.value() ) )
+            if( !aField.has_value() )
+                return wxEmptyString;
+
+            if( auto* intVal = std::get_if<uint32_t>( &aField.value() ) )
             {
                 auto it = keyToSetName.find( *intVal );
-
-                if( it != keyToSetName.end() )
-                    assignedSetName = it->second;
+                return it != keyToSetName.end() ? it->second : wxString();
             }
-            else if( auto* strVal = std::get_if<wxString>( &csField.value() ) )
+
+            if( auto* strVal = std::get_if<wxString>( &aField.value() ) )
+                return constraintSets.count( *strVal ) ? *strVal : wxString();
+
+            return wxEmptyString;
+        };
+
+        wxString assignedSetName = resolveSetName( GetFirstFieldOfType( m_brdDb, netBlk.m_FieldsPtr, netBlk.m_Key,
+                                                                         FIELD_KEYS::PHYS_CONSTRAINT_SET ) );
+
+        // Differential pairs carry the set on their match group table instead of on the net
+        if( assignedSetName.IsEmpty() )
+        {
+            if( const BLK_0x2C_TABLE* table = resolveMatchGroupTable( netBlk ) )
             {
-                if( constraintSets.count( *strVal ) )
-                    assignedSetName = *strVal;
+                assignedSetName = resolveSetName( GetFirstFieldOfType( m_brdDb, table->m_Ptr2, table->m_Key,
+                                                                        FIELD_KEYS::PHYS_CONSTRAINT_SET ) );
             }
         }
 
@@ -1549,15 +1580,15 @@ void BOARD_BUILDER::applyNetConstraints()
 }
 
 
-wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
+const BLK_0x2C_TABLE* BOARD_BUILDER::resolveMatchGroupTable( const BLK_0x1B_NET& aNet ) const
 {
     if( aNet.m_MatchGroupPtr == 0 )
-        return wxEmptyString;
+        return nullptr;
 
     const BLOCK_BASE* block = m_brdDb.GetObjectByKey( aNet.m_MatchGroupPtr );
 
     if( !block )
-        return wxEmptyString;
+        return nullptr;
 
     uint32_t tableKey = 0;
 
@@ -1586,20 +1617,26 @@ wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
     }
     else
     {
-        return wxEmptyString;
+        return nullptr;
     }
 
     if( tableKey == 0 )
-        return wxEmptyString;
+        return nullptr;
 
     // Verify the target is actually a 0x2C TABLE before calling expectBlockByKey to
     // avoid noisy warnings on boards with unexpected pointer chain configurations.
     const BLOCK_BASE* tableBlock = m_brdDb.GetObjectByKey( tableKey );
 
     if( !tableBlock || tableBlock->GetBlockType() != 0x2C )
-        return wxEmptyString;
+        return nullptr;
 
-    const BLK_0x2C_TABLE* tbl = expectBlockByKey<BLK_0x2C_TABLE>( tableKey );
+    return expectBlockByKey<BLK_0x2C_TABLE>( tableKey );
+}
+
+
+wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
+{
+    const BLK_0x2C_TABLE* tbl = resolveMatchGroupTable( aNet );
 
     if( !tbl || tbl->m_StringPtr == 0 )
         return wxEmptyString;
@@ -1607,7 +1644,7 @@ wxString BOARD_BUILDER::resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const
     const wxString& name = m_brdDb.GetString( tbl->m_StringPtr );
 
     wxLogTrace( traceAllegroBuilder, "Resolving match group name for NET '%s': found table at key %#010x, subtype %#x, name '%s'",
-                m_brdDb.GetString( aNet.m_NetName ), tableKey, tbl->m_SubType, name );
+                m_brdDb.GetString( aNet.m_NetName ), tbl->m_Key, tbl->m_SubType, name );
 
     // A group made from a schematic path keeps Cadence's \name\ wrapper, which is not part of the name
     return DecodeEscapedIdentifiers( name );

@@ -282,6 +282,13 @@ private:
     wxString resolveMatchGroupName( const BLK_0x1B_NET& aNet ) const;
 
     /**
+     * Follow a net's match group pointer to its 0x2C TABLE.
+     *
+     * @return the table, or nullptr if the net is in no match group
+     */
+    const BLK_0x2C_TABLE* resolveMatchGroupTable( const BLK_0x1B_NET& aNet ) const;
+
+    /**
      * Extract constraint set name from a 0x03 FIELD block pointer.
      *
      * Some boards store the constraint set name in a FIELD block referenced by m_FieldPtr in

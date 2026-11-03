@@ -330,9 +330,9 @@
                     "netCount": 2
                 },
                 {
-                    "comment": "Verify that constraint set netclasses and per-net trace width netclasses coexist. ProiectBoard has both a constraint set (CS_0) and per-net trace widths (W20mil, W24mil).",
+                    "comment": "Verify that constraint set netclasses and per-net trace width netclasses coexist. ProiectBoard has both a constraint set (Allegro_Default) and per-net trace widths (W20mil, W24mil).",
                     "type": "netclass",
-                    "name": "CS_0",
+                    "name": "Allegro_Default",
                     "trackWidth": "5 mil",
                     "clearance": "5 mil"
                 },
@@ -473,7 +473,7 @@
                 {
                     "comment": "Verify constraint set import on a pre-V172 board (TRS80_POWER).\nPre-V172 boards    have no dedicated clearance field, so spacing is used as the clearance fallback.\nPre-V172 f[0]=line_width=15 mil (381000 nm), f[1]=spacing=7 mil (177800 nm) used as clearance",
                     "type": "netclass",
-                    "name": "CS_0",
+                    "name": "Allegro_Default",
                     "trackWidth": "15 mil",
                     "clearance": "7 mil"
                 }
