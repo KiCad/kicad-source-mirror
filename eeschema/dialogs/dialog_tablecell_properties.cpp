@@ -191,11 +191,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         if( SCHEMATIC* schematic = cell->Schematic() )
             text = schematic->ConvertKIIDsToRefs( text );
 
-        m_cellText->SetValue( text );
-        m_cellText->EmptyUndoBuffer();
-
         if( firstCell )
         {
+            m_cellText->SetValue( text );
+            m_cellText->EmptyUndoBuffer();
+
             m_fontCtrl->SetFontSelection( cell->GetFont() );
             m_textSize.SetValue( cell->GetTextWidth() );
 
@@ -227,6 +227,12 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         }
         else
         {
+            if( text != m_cellText->GetValue() )
+            {
+                m_cellText->SetValue( INDETERMINATE_STATE );
+                m_cellText->EmptyUndoBuffer();
+            }
+
             if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) )
                 m_fontCtrl->SetSelection( -1 );
 
@@ -361,22 +367,25 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
     for( SCH_TABLECELL* cell : m_cells )
     {
-        wxString text = m_cellTextCtrl->GetValue();
+        if( m_cellTextCtrl->GetValue() != INDETERMINATE_STATE )
+        {
+            wxString text = m_cellTextCtrl->GetValue();
 
-        // convert any text variable cross-references to their UUIDs
-        if( SCHEMATIC* schematic = cell->Schematic() )
-            text = schematic->ConvertRefsToKIIDs( text );
+            // convert any text variable cross-references to their UUIDs
+            if( SCHEMATIC* schematic = cell->Schematic() )
+                text = schematic->ConvertRefsToKIIDs( text );
 
 #ifdef __WXMAC__
-        // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
-        text.Replace( "\r", "\n" );
+            // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
+            text.Replace( "\r", "\n" );
 #elif defined( __WINDOWS__ )
-        // On Windows, a new line is coded as \r\n.  We use only \n in KiCad files and in
-        // drawing routines so strip the \r char.
-        text.Replace( "\r", "" );
+            // On Windows, a new line is coded as \r\n.  We use only \n in KiCad files and in
+            // drawing routines so strip the \r char.
+            text.Replace( "\r", "" );
 #endif
 
-        cell->SetText( text );
+            cell->SetText( text );
+        }
 
         if( m_bold->Get3StateValue() == wxCHK_CHECKED )
             cell->SetBold( true );
