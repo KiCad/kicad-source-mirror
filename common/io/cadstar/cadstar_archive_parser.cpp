@@ -127,9 +127,10 @@ void CADSTAR_ARCHIVE_PARSER::HEADER::Parse( XNODE* aNode, PARSER_CONTEXT* aConte
         {
             XNODE* subNode = cNode->GetChildren();
 
-            if( ( subNode->GetName() == wxT( "METRIC" ) )
-                    && ( GetXmlAttributeIDString( subNode, 0 ) == wxT( "HUNDREDTH" ) )
-                    && ( GetXmlAttributeIDString( subNode, 1 ) == wxT( "MICRON" ) ) )
+            if( subNode
+                    && subNode->GetName() == wxT( "METRIC" )
+                    && GetXmlAttributeIDString( subNode, 0 ) == wxT( "HUNDREDTH" )
+                    && GetXmlAttributeIDString( subNode, 1 ) == wxT( "MICRON" ) )
             {
                 Resolution = RESOLUTION::HUNDREDTH_MICRON;
             }
