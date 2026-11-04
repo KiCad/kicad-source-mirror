@@ -654,21 +654,19 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 }
 
 
-static bool matchesSymbolFilter( const wxString& aReference, SYMBOL_FILTER aSymbolFilter )
+static bool matchesSymbolFilter( SCH_SYMBOL* aSymbol, SYMBOL_FILTER aSymbolFilter )
 {
-    bool isPowerSymbol = !aReference.IsEmpty() && aReference[0] == wxT( '#' );
-
     switch( aSymbolFilter )
     {
     case SYMBOL_FILTER_POWER:
-        return isPowerSymbol;
+        return aSymbol->IsPower();
 
     case SYMBOL_FILTER_ALL:
         return true;
 
     case SYMBOL_FILTER_NON_POWER:
     default:
-        return !isPowerSymbol;
+        return !aSymbol->IsPower();
     }
 }
 
@@ -689,7 +687,7 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
 {
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
     // affects power symbols.
-    if( matchesSymbolFilter( aSymbol->GetRef( this ), aSymbolFilter ) )
+    if( matchesSymbolFilter( aSymbol, aSymbolFilter ) )
     {
         if( aSymbol->GetLibSymbolRef() || aForceIncludeOrphanSymbols )
         {
@@ -715,9 +713,7 @@ void SCH_SHEET_PATH::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList
 void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_SYMBOL* aSymbol,
                                             SYMBOL_FILTER aSymbolFilter ) const
 {
-    // Skip pseudo-symbols, which have a reference starting with #.  This mainly
-    // affects power symbols.
-    if( !matchesSymbolFilter( aSymbol->GetRef( this ), aSymbolFilter ) )
+    if( !matchesSymbolFilter( aSymbol, aSymbolFilter ) )
         return;
 
     LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
