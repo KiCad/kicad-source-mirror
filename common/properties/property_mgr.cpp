@@ -503,8 +503,8 @@ void PROPERTY_MANAGER::PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aPr
 PROPERTY_COMMIT_HANDLER::PROPERTY_COMMIT_HANDLER( COMMIT* aCommit )
 {
     // This is a hard failure.  wxCHECK2() will just allow us to crash later in a less-pertinent place
-    wxASSERT_MSG( PROPERTY_MANAGER::Instance().m_managedCommit == nullptr,
-                  wxT( "Can't have more than one managed commit at a time!" ) );
+    if( PROPERTY_MANAGER::Instance().m_managedCommit != nullptr )
+        throw std::runtime_error( "Can't have more than one managed commit at a time!" );
 
     PROPERTY_MANAGER::Instance().m_managedCommit = aCommit;
     m_ownsCommit = true;
