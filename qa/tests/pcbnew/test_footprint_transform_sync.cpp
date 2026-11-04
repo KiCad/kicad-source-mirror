@@ -2989,7 +2989,7 @@ BOOST_AUTO_TEST_CASE( TableInRotatedFootprintCellsAreVisuallyRotated )
 
     for( int i = 0; i < 4; ++i )
     {
-        PCB_TABLECELL* cell = new PCB_TABLECELL( &board );
+        PCB_TABLECELL* cell = new PCB_TABLECELL( table );
         cell->SetStart( VECTOR2I( ( i % 2 ) * colW, ( i / 2 ) * rowH ) );
         cell->SetEnd( VECTOR2I( ( i % 2 + 1 ) * colW, ( i / 2 + 1 ) * rowH ) );
         table->AddCell( cell );
@@ -3256,7 +3256,7 @@ BOOST_AUTO_TEST_CASE( TableRotates90Cleanly )
 
     for( int i = 0; i < 4; ++i )
     {
-        PCB_TABLECELL* cell = new PCB_TABLECELL( &board );
+        PCB_TABLECELL* cell = new PCB_TABLECELL( table );
         cell->SetStart( VECTOR2I( ( i % 2 ) * colW, ( i / 2 ) * rowH ) );
         cell->SetEnd( VECTOR2I( ( i % 2 + 1 ) * colW, ( i / 2 + 1 ) * rowH ) );
         table->AddCell( cell );

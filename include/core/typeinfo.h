@@ -377,8 +377,16 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_BEZIER_T:
     case PCB_SHAPE_LOCATE_ELLIPSE_T:
     case PCB_SHAPE_LOCATE_ELLIPSE_ARC_T:
+        return false;
 
     case PCB_DIMENSION_T:
+        // base class is not instantiable
+        return false;
+
+    case SCH_TABLECELL_T:
+    case PCB_TABLECELL_T:
+        // must be instantiated as part of a SCH_TABLE or PCB_TABLE
+        return false;
 
     case SCH_SCREEN_T:
     case PCB_ITEM_LIST_T:

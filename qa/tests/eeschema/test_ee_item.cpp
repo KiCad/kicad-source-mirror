@@ -112,7 +112,6 @@ public:
         case SCH_BITMAP_T:          return new SCH_BITMAP();
         case SCH_TEXT_T:            return new SCH_TEXT( VECTOR2I( 0, 0 ), "test text" );
         case SCH_TEXTBOX_T:         return new SCH_TEXTBOX( LAYER_NOTES, 0, FILL_T::NO_FILL, "test textbox" );
-        case SCH_TABLECELL_T:       return new SCH_TABLECELL();
 
         case SCH_TABLE_T:
         {

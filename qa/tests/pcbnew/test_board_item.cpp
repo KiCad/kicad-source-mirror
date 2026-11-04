@@ -94,7 +94,6 @@ public:
 
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
-        case PCB_TABLECELL_T:         return new PCB_TABLECELL( &m_board );
 
         case PCB_TABLE_T:
         {
@@ -117,7 +116,7 @@ public:
 
                 for( int col = 0; col < 2; ++col )
                 {
-                    PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
+                    PCB_TABLECELL* cell = new PCB_TABLECELL( table );
                     cell->SetRectangleHeight( 0 );
                     cell->SetRectangleWidth( 0 );
                     cell->SetStart( VECTOR2I( x, y ) );
@@ -168,7 +167,7 @@ public:
 
                 for( int col = 0; col < 2; ++col )
                 {
-                    PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
+                    PCB_TABLECELL* cell = new PCB_TABLECELL( chart );
                     cell->SetRectangleHeight( 0 );
                     cell->SetRectangleWidth( 0 );
                     cell->SetStart( VECTOR2I( x, y ) );
@@ -481,7 +480,7 @@ static PCB_TABLE* makeTable( BOARD& aBoard, const int aColWidths[2], const int a
 
         for( int col = 0; col < 2; ++col )
         {
-            PCB_TABLECELL* cell = new PCB_TABLECELL( &aBoard );
+            PCB_TABLECELL* cell = new PCB_TABLECELL( table );
             cell->SetStart( VECTOR2I( x, y ) );
             cell->SetEnd( VECTOR2I( x + aColWidths[col], y + aRowHeights[row] ) );
             cell->SetText( wxString::Format( wxT( "%c%d" ), 'A' + col, row + 1 ) );
