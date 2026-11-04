@@ -178,7 +178,7 @@ PCB_MARKER* PCB_MARKER::FromProto( const kiapi::board::DrcMarker& aMsg )
     // MarkerType will be set by the c'tor, based on the PCB_DRC_CODE and the layer.  Since the
     // LAYER_DRAWINGSHEET can't be represented in a PCB_LAYER_ID (it's a GAL_LAYER_ID), we have
     // to give that one a little bit of help.
-    if( aMsg.marker_type() == kiapi::common::types::MT_MARKER_DRAWING_SHEET )
+    if( aMsg.marker_type() == kiapi::common::types::MT_DRAWING_SHEET )
         layer = LAYER_DRAWINGSHEET;
 
     PCB_MARKER* marker = new PCB_MARKER( drcItem, pos, layer );

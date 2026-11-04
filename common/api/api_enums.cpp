@@ -1014,13 +1014,13 @@ MARKER_BASE::MARKER_T FromProtoEnum( types::MarkerType aMarkerType )
     switch( aMarkerType )
     {
     default:
-    case types::MarkerType::MT_MARKER_UNSPEC:        return MARKER_BASE::MARKER_UNSPEC;
-    case types::MarkerType::MT_MARKER_ERC:           return MARKER_BASE::MARKER_ERC;
-    case types::MarkerType::MT_MARKER_DRC:           return MARKER_BASE::MARKER_DRC;
-    case types::MarkerType::MT_MARKER_DRAWING_SHEET: return MARKER_BASE::MARKER_DRAWING_SHEET;
-    case types::MarkerType::MT_MARKER_RATSNEST:      return MARKER_BASE::MARKER_RATSNEST;
-    case types::MarkerType::MT_MARKER_PARITY:        return MARKER_BASE::MARKER_PARITY;
-    case types::MarkerType::MT_MARKER_SIMUL:         return MARKER_BASE::MARKER_SIMUL;
+    case types::MarkerType::MT_UNKNOWN:       return MARKER_BASE::MARKER_UNSPEC;
+    case types::MarkerType::MT_ERC:           return MARKER_BASE::MARKER_ERC;
+    case types::MarkerType::MT_DRC:           return MARKER_BASE::MARKER_DRC;
+    case types::MarkerType::MT_DRAWING_SHEET: return MARKER_BASE::MARKER_DRAWING_SHEET;
+    case types::MarkerType::MT_RATSNEST:      return MARKER_BASE::MARKER_RATSNEST;
+    case types::MarkerType::MT_PARITY:        return MARKER_BASE::MARKER_PARITY;
+    case types::MarkerType::MT_SIMULATION:    return MARKER_BASE::MARKER_SIMULATION;
     }
 }
 
@@ -1030,16 +1030,16 @@ types::MarkerType ToProtoEnum( MARKER_BASE::MARKER_T aMarkerType )
 {
     switch( aMarkerType )
     {
-    case MARKER_BASE::MARKER_UNSPEC:        return types::MarkerType::MT_MARKER_UNSPEC;
-    case MARKER_BASE::MARKER_ERC:           return types::MarkerType::MT_MARKER_ERC;
-    case MARKER_BASE::MARKER_DRC:           return types::MarkerType::MT_MARKER_DRC;
-    case MARKER_BASE::MARKER_DRAWING_SHEET: return types::MarkerType::MT_MARKER_DRAWING_SHEET;
-    case MARKER_BASE::MARKER_RATSNEST:      return types::MarkerType::MT_MARKER_RATSNEST;
-    case MARKER_BASE::MARKER_PARITY:        return types::MarkerType::MT_MARKER_PARITY;
-    case MARKER_BASE::MARKER_SIMUL:         return types::MarkerType::MT_MARKER_SIMUL;
+    case MARKER_BASE::MARKER_UNSPEC:        return types::MarkerType::MT_UNKNOWN;
+    case MARKER_BASE::MARKER_ERC:           return types::MarkerType::MT_ERC;
+    case MARKER_BASE::MARKER_DRC:           return types::MarkerType::MT_DRC;
+    case MARKER_BASE::MARKER_DRAWING_SHEET: return types::MarkerType::MT_DRAWING_SHEET;
+    case MARKER_BASE::MARKER_RATSNEST:      return types::MarkerType::MT_RATSNEST;
+    case MARKER_BASE::MARKER_PARITY:        return types::MarkerType::MT_PARITY;
+    case MARKER_BASE::MARKER_SIMULATION:    return types::MarkerType::MT_SIMULATION;
 
     default:
-        wxCHECK_MSG( false, types::MarkerType::MT_MARKER_UNSPEC, "Unhandled case in ToProtoEnum<MARKER_T>" );
+        wxCHECK_MSG( false, types::MarkerType::MT_UNKNOWN, "Unhandled case in ToProtoEnum<MARKER_T>" );
     }
 
 }

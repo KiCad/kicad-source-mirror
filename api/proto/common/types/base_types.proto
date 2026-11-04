@@ -633,11 +633,11 @@ message CustomProperty
 
 enum MarkerType
 {
-    MT_MARKER_UNSPEC        = 0;
-    MT_MARKER_ERC           = 1;
-    MT_MARKER_DRC           = 2;
-    MT_MARKER_DRAWING_SHEET = 3;
-    MT_MARKER_RATSNEST      = 4;
-    MT_MARKER_PARITY        = 5;
-    MT_MARKER_SIMUL         = 6;
+    MT_UNKNOWN       = 0;
+    MT_ERC           = 1;
+    MT_DRC           = 2;
+    MT_DRAWING_SHEET = 3;
+    MT_RATSNEST      = 4;
+    MT_PARITY        = 5;
+    MT_SIMULATION    = 6;
 }
