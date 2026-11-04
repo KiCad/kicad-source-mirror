@@ -84,14 +84,25 @@ void getFootprintPadNumbers( const wxString& aFootprint, PROJECT* aProject, std:
     if( !adapter )
         return;
 
-    adapter->LoadOne( fpID.GetLibNickname() );
+    if( fpID.GetLibNickname().empty() )
+    {
+        for( const LIBRARY_TABLE_ROW* row : adapter->Rows() )
+        {
+            if( !adapter->IsLibraryLoaded( row->Nickname() ) )
+                adapter->LoadOne( row->Nickname() );
+        }
+    }
+    else
+    {
+        adapter->LoadOne( fpID.GetLibNickname() );
+    }
 
     std::unique_ptr<FOOTPRINT> footprint;
 
     // This runs across the kiface boundary, so let nothing escape into the caller's ERC loop.
     try
     {
-        footprint.reset( adapter->LoadFootprint( fpID, false ) );
+        footprint.reset( adapter->LoadFootprintWithOptionalNickname( fpID, false ) );
     }
     catch( ... )
     {
