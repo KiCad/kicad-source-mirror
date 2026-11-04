@@ -507,6 +507,13 @@ int ERC_TESTER::TestPinMap( KIFACE* aCvPcb, PROJECT* aProject )
                 {
                     std::map<wxString, wxString> padToPin;
 
+                    // Enter identity maps for those pins that aren't explicitly mapped
+                    for( const wxString& pinNumber : pinNumbers )
+                    {
+                        if( !map.HasEntry( pinNumber ) )
+                            padToPin[pinNumber] = pinNumber;
+                    }
+
                     for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
                     {
                         for( const wxString& pad : ExpandStackedPinNotation( entry.m_PadNumber ) )
