@@ -66,14 +66,29 @@ ACTION_MENU::~ACTION_MENU()
     for( auto subitem : GetMenuItems() )
         subitem->SetBitmap( wxNullBitmap );
 
+    // Free submenus while their native handles are alive. The base class frees our handle first, which on
+    // Windows frees theirs too, and each orphaned submenu would then free its dead handle again
+    for( int i = GetMenuItemCount() - 1; i >= 0; --i )
+    {
+        wxMenuItem* item = FindItemByPosition( i );
+
+        if( !item->IsSubMenu() )
+            continue;
+
+        wxMenu* submenu = item->GetSubMenu();
+
+        m_submenus.remove_if(
+                [submenu]( ACTION_MENU* aMenu )
+                {
+                    return aMenu == submenu;
+                } );
+
+        Destroy( item );
+    }
+
     // Set parent to NULL to prevent submenus from unregistering from a nonexistent object
     for( ACTION_MENU* menu : m_submenus )
-    {
-        for( auto menuItem : GetMenuItems() )
-            menuItem->SetBitmap( wxNullBitmap );
-
         menu->SetParent( nullptr );
-    }
 
     ACTION_MENU* parent = dynamic_cast<ACTION_MENU*>( GetParent() );
 
