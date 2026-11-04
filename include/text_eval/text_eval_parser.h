@@ -52,7 +52,7 @@ namespace calc_parser
     // Simple token type for parser compatibility
     struct TOKEN_TYPE
     {
-        char   text[4096];  // Fixed size buffer for strings
+        char   text[1024];  // Fixed size buffer for strings
         double dValue;      // Numeric value
         bool   isString;    // Flag to indicate if this is a string token
     };
