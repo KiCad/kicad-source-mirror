@@ -47,6 +47,7 @@
 #include <stroke_params.h>
 #include <widgets/report_severity.h>
 #include <embedded_files.h>
+#include <marker_base.h>
 
 using namespace kiapi;
 using namespace kiapi::common;
@@ -733,9 +734,9 @@ PAD_SIM_ELECTRICAL_TYPE FromProtoEnum( board::types::PadSimElectricalType aValue
 {
     switch( aValue )
     {
-    case board::types::PadSimElectricalType::PSET_NONE: return PAD_SIM_ELECTRICAL_TYPE::NONE;
+    case board::types::PadSimElectricalType::PSET_NONE:   return PAD_SIM_ELECTRICAL_TYPE::NONE;
     case board::types::PadSimElectricalType::PSET_SOURCE: return PAD_SIM_ELECTRICAL_TYPE::SOURCE;
-    case board::types::PadSimElectricalType::PSET_SINK: return PAD_SIM_ELECTRICAL_TYPE::SINK;
+    case board::types::PadSimElectricalType::PSET_SINK:   return PAD_SIM_ELECTRICAL_TYPE::SINK;
 
     default:
         wxCHECK_MSG( false, PAD_SIM_ELECTRICAL_TYPE::NONE,
@@ -749,9 +750,9 @@ board::types::PadSimElectricalType ToProtoEnum( PAD_SIM_ELECTRICAL_TYPE aValue )
 {
     switch( aValue )
     {
-    case PAD_SIM_ELECTRICAL_TYPE::NONE: return board::types::PadSimElectricalType::PSET_NONE;
+    case PAD_SIM_ELECTRICAL_TYPE::NONE:   return board::types::PadSimElectricalType::PSET_NONE;
     case PAD_SIM_ELECTRICAL_TYPE::SOURCE: return board::types::PadSimElectricalType::PSET_SOURCE;
-    case PAD_SIM_ELECTRICAL_TYPE::SINK: return board::types::PadSimElectricalType::PSET_SINK;
+    case PAD_SIM_ELECTRICAL_TYPE::SINK:   return board::types::PadSimElectricalType::PSET_SINK;
 
     default:
         wxCHECK_MSG( false, board::types::PadSimElectricalType::PSET_NONE,
@@ -846,7 +847,7 @@ types::PageSize ToProtoEnum( PAGE_SIZE_TYPE aValue )
     case PAGE_SIZE_TYPE::D:         return types::PageSize::PS_ANSI_D;
     case PAGE_SIZE_TYPE::E:         return types::PageSize::PS_ANSI_E;
     case PAGE_SIZE_TYPE::GERBER:    return types::PageSize::PS_GERBER;
-    case PAGE_SIZE_TYPE::USLetter: return types::PageSize::PS_US_LETTER;
+    case PAGE_SIZE_TYPE::USLetter:  return types::PageSize::PS_US_LETTER;
     case PAGE_SIZE_TYPE::USLegal:   return types::PageSize::PS_US_LEGAL;
     case PAGE_SIZE_TYPE::USLedger:  return types::PageSize::PS_US_LEDGER;
     case PAGE_SIZE_TYPE::User:      return types::PageSize::PS_USER;
@@ -928,9 +929,6 @@ LIBRARY_TABLE_TYPE FromProtoEnum( types::LibraryType aType )
     case types::LibraryType::LT_DESIGN_BLOCK: return LIBRARY_TABLE_TYPE::DESIGN_BLOCK;
     default:                                  return LIBRARY_TABLE_TYPE::UNINITIALIZED;
     }
-
-    wxCHECK_MSG( false, LIBRARY_TABLE_TYPE::UNINITIALIZED,
-                 "Unhandled case in ToProtoEnum<LibraryType>" );
 }
 
 
@@ -944,9 +942,6 @@ types::LibraryType ToProtoEnum( LIBRARY_TABLE_TYPE aType )
     case LIBRARY_TABLE_TYPE::DESIGN_BLOCK: return types::LibraryType::LT_DESIGN_BLOCK;
     default:                               return types::LibraryType::LT_UNKNOWN;
     }
-
-    wxCHECK_MSG( false, common::types::LT_UNKNOWN,
-                 "Unhandled case in ToProtoEnum<LIBRARY_TABLE_TYPE>" );
 }
 
 
@@ -960,9 +955,6 @@ LIBRARY_TABLE_SCOPE FromProtoEnum( types::LibraryTableScope aScope )
     case types::LibraryTableScope::LTS_BOTH:    return LIBRARY_TABLE_SCOPE::BOTH;
     default:                                    return LIBRARY_TABLE_SCOPE::UNINITIALIZED;
     }
-
-    wxCHECK_MSG( false, LIBRARY_TABLE_SCOPE::UNINITIALIZED,
-                 "Unhandled case in FromProtoEnum<LibraryTableScope>" );
 }
 
 
@@ -975,11 +967,11 @@ types::LibraryTableScope ToProtoEnum( LIBRARY_TABLE_SCOPE aScope )
     case LIBRARY_TABLE_SCOPE::PROJECT:       return types::LibraryTableScope::LTS_PROJECT;
     case LIBRARY_TABLE_SCOPE::BOTH:          return types::LibraryTableScope::LTS_BOTH;
     case LIBRARY_TABLE_SCOPE::UNINITIALIZED: return types::LibraryTableScope::LTS_UNKNOWN;
-    default: break;
-    }
 
-    wxCHECK_MSG( false, common::types::LibraryTableScope::LTS_UNKNOWN,
-                 "Unhandled case in ToProtoEnum<LIBRARY_TABLE_SCOPE>" );
+    default:
+        wxCHECK_MSG( false, common::types::LibraryTableScope::LTS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<LIBRARY_TABLE_SCOPE>" );
+    }
 }
 
 
@@ -993,10 +985,10 @@ LOAD_STATUS FromProtoEnum( types::LibraryLoadStatus aStatus )
     case types::LibraryLoadStatus::LLS_LOADING: return LOAD_STATUS::LOADING;
     case types::LibraryLoadStatus::LLS_LOADED:  return LOAD_STATUS::LOADED;
     case types::LibraryLoadStatus::LLS_ERROR:   return LOAD_STATUS::LOAD_ERROR;
-    default: break;
-    }
 
-    wxCHECK_MSG( false, LOAD_STATUS::INVALID, "Unhandled case in FromProtoEnum<LibraryLoadStatus>" );
+    default:
+        wxCHECK_MSG( false, LOAD_STATUS::INVALID, "Unhandled case in FromProtoEnum<LibraryLoadStatus>" );
+    }
 }
 
 
@@ -1009,8 +1001,46 @@ types::LibraryLoadStatus ToProtoEnum( LOAD_STATUS aStatus )
     case LOAD_STATUS::LOADING:      return types::LibraryLoadStatus::LLS_LOADING;
     case LOAD_STATUS::LOADED:       return types::LibraryLoadStatus::LLS_LOADED;
     case LOAD_STATUS::LOAD_ERROR:   return types::LibraryLoadStatus::LLS_ERROR;
-    default: break;
+
+    default:
+        wxCHECK_MSG( false, types::LibraryLoadStatus::LLS_UNKNOWN, "Unhandled case in ToProtoEnum<LOAD_STATUS>" );
+    }
+}
+
+
+template<> KICOMMON_API
+MARKER_BASE::MARKER_T FromProtoEnum( types::MarkerType aMarkerType )
+{
+    switch( aMarkerType )
+    {
+    default:
+    case types::MarkerType::MT_MARKER_UNSPEC:        return MARKER_BASE::MARKER_UNSPEC;
+    case types::MarkerType::MT_MARKER_ERC:           return MARKER_BASE::MARKER_ERC;
+    case types::MarkerType::MT_MARKER_DRC:           return MARKER_BASE::MARKER_DRC;
+    case types::MarkerType::MT_MARKER_DRAWING_SHEET: return MARKER_BASE::MARKER_DRAWING_SHEET;
+    case types::MarkerType::MT_MARKER_RATSNEST:      return MARKER_BASE::MARKER_RATSNEST;
+    case types::MarkerType::MT_MARKER_PARITY:        return MARKER_BASE::MARKER_PARITY;
+    case types::MarkerType::MT_MARKER_SIMUL:         return MARKER_BASE::MARKER_SIMUL;
+    }
+}
+
+
+template<> KICOMMON_API
+types::MarkerType ToProtoEnum( MARKER_BASE::MARKER_T aMarkerType )
+{
+    switch( aMarkerType )
+    {
+    case MARKER_BASE::MARKER_UNSPEC:        return types::MarkerType::MT_MARKER_UNSPEC;
+    case MARKER_BASE::MARKER_ERC:           return types::MarkerType::MT_MARKER_ERC;
+    case MARKER_BASE::MARKER_DRC:           return types::MarkerType::MT_MARKER_DRC;
+    case MARKER_BASE::MARKER_DRAWING_SHEET: return types::MarkerType::MT_MARKER_DRAWING_SHEET;
+    case MARKER_BASE::MARKER_RATSNEST:      return types::MarkerType::MT_MARKER_RATSNEST;
+    case MARKER_BASE::MARKER_PARITY:        return types::MarkerType::MT_MARKER_PARITY;
+    case MARKER_BASE::MARKER_SIMUL:         return types::MarkerType::MT_MARKER_SIMUL;
+
+    default:
+        wxCHECK_MSG( false, types::MarkerType::MT_MARKER_UNSPEC, "Unhandled case in ToProtoEnum<MARKER_T>" );
     }
 
-    wxCHECK_MSG( false, types::LibraryLoadStatus::LLS_UNKNOWN, "Unhandled case in ToProtoEnum<LOAD_STATUS>" );
 }
+

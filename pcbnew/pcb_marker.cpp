@@ -115,9 +115,8 @@ void PCB_MARKER::ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMark
             aMsg.add_items()->set_value( id.AsStdString() );
     }
 
-    // TODO: why won't this link?
-    //aMsg.set_marker_type(
-    //        ToProtoEnum<MARKER_BASE::MARKER_T, kiapi::common::types::MarkerType>( aMarker.GetMarkerType() ) );
+    aMsg.set_marker_type(
+            ToProtoEnum<MARKER_BASE::MARKER_T, kiapi::common::types::MarkerType>( aMarker.GetMarkerType() ) );
 
     // Only store the layer for error types where it affects identity.
     bool storeLayer = false;
@@ -130,12 +129,6 @@ void PCB_MARKER::ToProto( kiapi::board::DrcMarker& aMsg, const PCB_MARKER& aMark
     case DRCE_UNCONNECTED_ITEMS:
     case DRCE_STARVED_THERMAL:
         storeLayer = true;
-        break;
-
-    case DRCE_UNRESOLVED_VARIABLE:
-        if( aMarker.GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
-            aMsg.set_marker_type( kiapi::common::types::MT_MARKER_DRAWING_SHEET );
-
         break;
 
     default:
@@ -182,6 +175,9 @@ PCB_MARKER* PCB_MARKER::FromProto( const kiapi::board::DrcMarker& aMsg )
     VECTOR2I pos = kiapi::common::UnpackVector2( aMsg.position() );
     int      layer = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( aMsg.layer() );
 
+    // MarkerType will be set by the c'tor, based on the PCB_DRC_CODE and the layer.  Since the
+    // LAYER_DRAWINGSHEET can't be represented in a PCB_LAYER_ID (it's a GAL_LAYER_ID), we have
+    // to give that one a little bit of help.
     if( aMsg.marker_type() == kiapi::common::types::MT_MARKER_DRAWING_SHEET )
         layer = LAYER_DRAWINGSHEET;
 

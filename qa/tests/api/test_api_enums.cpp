@@ -641,4 +641,9 @@ BOOST_AUTO_TEST_CASE( LibraryLoadStatus )
     testEnums<LOAD_STATUS, types::LibraryLoadStatus>();
 }
 
+BOOST_AUTO_TEST_CASE( MarkerType )
+{
+    testEnums<MARKER_BASE::MARKER_T, types::MarkerType>( false, MARKER_BASE::MARKER_T::MARKER_UNSPEC );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
