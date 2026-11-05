@@ -49,6 +49,9 @@ public:
         Add( ACTIONS::removeFromGroup );
     }
 
+    void SetSelectionTool( SELECTION_TOOL* aTool ) { m_selectionTool = aTool; }
+
+protected:
     ACTION_MENU* create() const override
     {
         GROUP_CONTEXT_MENU* menu = new GROUP_CONTEXT_MENU();
@@ -56,9 +59,6 @@ public:
         return menu;
     }
 
-    void SetSelectionTool( SELECTION_TOOL* aTool ) { m_selectionTool = aTool; }
-
-private:
     void update() override
     {
         int  selectionCount = 0;
@@ -94,7 +94,7 @@ private:
 
         Enable( ACTIONS::group.GetUIId(),           selectionCount >= 2 );
         Enable( ACTIONS::ungroup.GetUIId(),         hasGroup );
-        Enable( ACTIONS::addToGroup.GetUIId(), onlyOneGroup && hasNonGroupItems );
+        Enable( ACTIONS::addToGroup.GetUIId(),      onlyOneGroup && hasNonGroupItems );
         Enable( ACTIONS::removeFromGroup.GetUIId(), hasMember );
     }
 
@@ -201,7 +201,7 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( item->Type() == PCB_GROUP_T || item->Type() == SCH_GROUP_T )
+        if( item->IsType( { SCH_GROUP_T, PCB_GROUP_T } ) )
         {
             // Only allow one group to be selected for adding to existing group
             if( group != nullptr )
@@ -262,38 +262,61 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         m_toolMgr->RunAction( ACTIONS::selectionCursor );
 
-    std::set<EDA_GROUP*> affectedGroups;
+    std::map<EDA_GROUP*, size_t> finalGroupMemberCounts;
 
     for( EDA_ITEM* item : selection )
     {
         if( EDA_GROUP* group = item->GetParentGroup() )
         {
-            m_commit->Modify( group->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
-            m_commit->Modify( item, m_frame->GetScreen() );
-            group->RemoveItem( item );
-            affectedGroups.insert( group );
+            if( !finalGroupMemberCounts.contains( group ) )
+                finalGroupMemberCounts[group] = group->GetGroupMemberIds().size();
+
+            if( finalGroupMemberCounts[group] > 0 )
+                finalGroupMemberCounts[group]--;
         }
     }
 
-    for( EDA_GROUP* group : affectedGroups )
+    for( EDA_ITEM* item : selection )
     {
-        if( group->GetItems().size() < 2 )
+        if( EDA_GROUP* group = item->GetParentGroup() )
         {
-            if( group->GetItems().size() == 1 )
+            if( finalGroupMemberCounts[group] == 0 )
             {
-                EDA_ITEM* lastMember = *group->GetItems().begin();
-                m_commit->Modify( group->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
-                m_commit->Modify( lastMember, m_frame->GetScreen() );
-                group->RemoveItem( lastMember );
+                // we want to ungroup in a single single commit line, so don't stage the group here,
+                // or stage or remove any of its members.
             }
+            else
+            {
+                m_commit->Modify( group->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+                m_commit->Modify( item, m_frame->GetScreen() );
+                group->RemoveItem( item );
+            }
+        }
+    }
+
+    for( const auto& [group, finalMemberCount] : finalGroupMemberCounts )
+    {
+        if( finalMemberCount == 0 )
+        {
+            // If we're editing members, then the group is entered.  However, it won't come back
+            // from undo in an entered state, so make sure it's selected.
+            group->AsEdaItem()->SetFlags( SELECTED );
 
             m_commit->Remove( group->AsEdaItem(), m_frame->GetScreen() );
+
+            for( EDA_ITEM* member : group->GetItems() )
+                m_commit->Modify( member, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+
+            group->RemoveAll();
         }
     }
 
     m_commit->Push( _( "Remove Group Items" ) );
 
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+    // If we're editing members, then the group is entered.  However, the selected items are no
+    // longer members, so they don't pass the selection filter.
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
     m_frame->OnModify();
 
     return 0;
@@ -304,11 +327,8 @@ int GROUP_TOOL::EnterGroup( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.GetSize() == 1 &&
-            (selection[0]->Type() == SCH_GROUP_T || selection[0]->Type() == PCB_GROUP_T) )
-    {
+    if( selection.GetSize() == 1 && selection[0]->IsType( { SCH_GROUP_T, PCB_GROUP_T } ) )
         m_selectionTool->EnterGroup();
-    }
 
     return 0;
 }
