@@ -28,6 +28,8 @@
 #include <io/idf/idf_outlines.h>
 #include <io/idf/idf_parser.h>
 
+#include "string_utils.h"
+
 using namespace IDF3;
 using namespace std;
 
@@ -1920,7 +1922,7 @@ void OTHER_OUTLINE::writeData( std::ostream& aBoardFile )
     // write RECORD 2
     if( outlineType == OUTLINE_TYPE::OTLN_OTHER )
     {
-        aBoardFile << "\"" << uniqueID << "\" ";
+        aBoardFile << "\"" << EscapeString( uniqueID, CTX_QUOTED_STR ) << "\" ";
 
         if( unit != IDF_UNIT::UNIT_THOU )
             aBoardFile << setiosflags( ios::fixed ) << setprecision( 5 ) << thickness << " ";
@@ -2956,7 +2958,7 @@ void GROUP_OUTLINE::writeData( std::ostream& aBoardFile )
         break;
     }
 
-    aBoardFile << " \"" << groupName << "\"\n";
+    aBoardFile << " \"" << EscapeString( groupName, CTX_QUOTED_STR ) << "\"\n";
 
     // write RECORD 3
     writeOutlines( aBoardFile );
@@ -3101,7 +3103,7 @@ void IDF3_COMP_OUTLINE::readProperties( std::istream& aLibFile )
             ostringstream ostr;
 
             ostr << "\n* invalid outline: " << GetOutlineTypeString( outlineType ) << "\n";
-            ostr << "* violation: duplicate property name \"" << pname << "\"\n";
+            ostr << "* violation: duplicate property name \"" << EscapeString( pname, CTX_QUOTED_STR ) << "\"\n";
             ostr << "* line: '" << iline << "'\n";
             ostr << "* file position: " << pos;
 
@@ -3121,8 +3123,8 @@ bool IDF3_COMP_OUTLINE::writeProperties( std::ostream& aLibFile )
 
     while( itS != itE )
     {
-        aLibFile << "PROP " << "\"" << itS->first << "\" \""
-        << itS->second << "\"\n";
+        aLibFile << "PROP " << "\"" << EscapeString( itS->first, CTX_QUOTED_STR ) << "\" \""
+                                    << EscapeString( itS->second, CTX_QUOTED_STR ) << "\"\n";
         ++itS;
     }
 
@@ -3419,13 +3421,18 @@ void IDF3_COMP_OUTLINE::writeData( std::ostream& aLibFile )
 
     // RECORD 2
     // [GEOM] [PART] [UNIT] [HEIGHT]
-    aLibFile << "\"" << geometry << "\" \"" << part << "\" ";
+    aLibFile << "\"" << EscapeString( geometry, CTX_QUOTED_STR ) << "\" \""
+                     << EscapeString( part, CTX_QUOTED_STR ) << "\" ";
 
     if( unit != IDF_UNIT::UNIT_THOU )
+    {
         aLibFile << "MM " << setiosflags( ios::fixed ) << setprecision( 5 ) << thickness << "\n";
+    }
     else
+    {
         aLibFile << "THOU " << setiosflags( ios::fixed ) << setprecision( 1 )
                  << ( thickness / IDF_THOU_TO_MM ) << "\n";
+    }
 
     writeOutlines( aLibFile );
 
