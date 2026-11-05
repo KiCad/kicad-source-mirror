@@ -36,6 +36,9 @@
 #include <tools/zone_filler_tool.h>
 #include <view/view_controls.h>
 
+#include "pcb_track.h"
+#include "pcb_io/pads/pads_parser.h"
+
 
 void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERACTIVE_PLACER_BASE* aPlacer,
                                                 const wxString& aCommitMessage, int aOptions )
@@ -205,15 +208,6 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERAC
                 if( !newItem  )
                     continue;
 
-                if( !view()->IsLayerVisible( newItem->GetLayer() ) )
-                {
-                    if( APPEARANCE_CONTROLS* controls = frame()->GetAppearancePanel() )
-                    {
-                        controls->SetLayerVisible( newItem->GetLayer(), true );
-                        frame()->GetCanvas()->Refresh();
-                    }
-                }
-
                 controls()->CaptureCursor( true );
                 controls()->SetAutoPan( true );
             }
@@ -245,6 +239,55 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERAC
                     makeNewItem( controls()->GetCursorPosition() );
 
                 setCursor();
+            }
+
+            if( APPEARANCE_CONTROLS* controls = frame()->GetAppearancePanel() )
+            {
+                auto ensureVisible =
+                        [&]( int aLayer )
+                        {
+                            if( aLayer < PCB_LAYER_ID::PCB_LAYER_ID_COUNT )
+                            {
+                                if( !view()->IsLayerVisible( aLayer  ) )
+                                {
+                                    controls->SetLayerVisible( aLayer, true );
+                                    frame()->GetCanvas()->Refresh();
+                                }
+                            }
+                            else
+                            {
+                                if( !board()->IsElementVisible( (GAL_LAYER_ID) aLayer ) )
+                                {
+                                    controls->SetObjectVisible( (GAL_LAYER_ID) aLayer, true );
+                                    frame()->GetCanvas()->Refresh();
+                                }
+                            }
+                        };
+
+                if( newItem->Type() == PCB_POINT_T )
+                {
+                    ensureVisible( LAYER_POINTS );
+                }
+                else if( newItem->Type() == PCB_VIA_T )
+                {
+                    ensureVisible( LAYER_VIAS );
+
+                    switch( static_cast<PCB_VIA*>( newItem.get() )->GetViaType() )
+                    {
+                    case VIATYPE::BURIED:   ensureVisible( LAYER_VIA_BURIED );   break;
+                    case VIATYPE::BLIND:    ensureVisible( LAYER_VIA_BLIND );    break;
+                    case VIATYPE::MICROVIA: ensureVisible( LAYER_VIA_MICROVIA ); break;
+                    default:                                                     break;
+                    }
+                }
+                else if( newItem->Type() == PCB_PAD_T )
+                {
+                    ensureVisible( LAYER_PADS );
+                }
+                else
+                {
+                    ensureVisible( newItem->GetLayer() );
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
