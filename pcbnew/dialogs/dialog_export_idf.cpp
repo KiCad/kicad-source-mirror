@@ -355,6 +355,10 @@ void DIALOG_EXPORT_IDF3::doExport()
     if( !exporter.Export( m_filePickerIDF->GetPath() ) )
     {
         wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), m_filePickerIDF->GetPath() ) );
+
+        if( resetJob )
+            m_job = nullptr;
+
         return;
     }
 
