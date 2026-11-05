@@ -197,6 +197,8 @@ public:
 
     void SetOptionsFromOther( const DRC_CONSTRAINT& aOther ) { m_options = aOther.m_options; }
 
+    void Merge( const DRC_CONSTRAINT& aOther );
+
     void ToProto( kiapi::board::CustomRuleConstraint& aProto ) const;
 
 public:

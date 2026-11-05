@@ -697,53 +697,68 @@ bool PCB_TRACK::ApproxCollinear( const PCB_TRACK& aTrack )
 
 MINOPTMAX<int> PCB_TRACK::GetWidthConstraint( wxString* aSource ) const
 {
-    DRC_CONSTRAINT constraint;
+    DRC_CONSTRAINT aggregate;
 
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    if( const BOARD* board = GetBoard() )
     {
-        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, this,
-                                                                             nullptr, m_layer );
+        const std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine ;
+
+        if( drcEngine )
+        {
+            // Tracks are, at present, single layer
+            aggregate = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, this, nullptr, m_layer );
+        }
     }
 
     if( aSource )
-        *aSource = constraint.GetName();
+        *aSource = aggregate.GetName();
 
-    return constraint.Value();
+    return aggregate.Value();
 }
 
 
 MINOPTMAX<int> PCB_VIA::GetWidthConstraint( wxString* aSource ) const
 {
-    DRC_CONSTRAINT constraint;
+    DRC_CONSTRAINT aggregate;
 
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    if( const BOARD* board = GetBoard() )
     {
-        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, this,
-                                                                             nullptr, m_layer );
+        int layerCount = board->GetCopperLayerCount();
+        const std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine ;
+
+        if( drcEngine )
+        {
+            for( PCB_LAYER_ID layer : LAYER_RANGE( m_padStack.StartLayer(), m_padStack.EndLayer(), layerCount ) )
+                aggregate.Merge( drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, this, nullptr, layer ) );
+        }
     }
 
     if( aSource )
-        *aSource = constraint.GetName();
+        *aSource = aggregate.GetName();
 
-    return constraint.Value();
+    return aggregate.Value();
 }
 
 
 MINOPTMAX<int> PCB_VIA::GetDrillConstraint( wxString* aSource ) const
 {
-    DRC_CONSTRAINT constraint;
+    DRC_CONSTRAINT aggregate;
 
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    if( const BOARD* board = GetBoard() )
     {
-        // Holes are not layer-specific, as in the hole size test
-        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this,
-                                                                             nullptr, UNDEFINED_LAYER );
+        const std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine ;
+
+        if( drcEngine )
+        {
+            // Holes are not layer-specific, as in the hole size test
+            aggregate = drcEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this, nullptr, UNDEFINED_LAYER );
+        }
     }
 
     if( aSource )
-        *aSource = constraint.GetName();
+        *aSource = aggregate.GetName();
 
-    return constraint.Value();
+    return aggregate.Value();
 }
 
 
@@ -781,10 +796,12 @@ int PCB_VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 
     DRC_CONSTRAINT constraint;
 
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
+    if( const BOARD* board = GetBoard() )
     {
-        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, this,
-                                                                             nullptr, aLayer );
+        const std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine ;
+
+        if( drcEngine )
+            constraint = drcEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, this, nullptr, aLayer );
     }
 
     if( constraint.Value().HasMin() )

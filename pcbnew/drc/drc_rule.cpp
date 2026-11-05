@@ -118,6 +118,30 @@ bool DRC_CONSTRAINT::IsUnary() const
 }
 
 
+void DRC_CONSTRAINT::Merge( const DRC_CONSTRAINT& aOther )
+{
+    if( aOther.GetValue().HasMin()
+            && ( !GetValue().HasMin() || (aOther.GetValue().Min() > GetValue().Min() ) ) )
+    {
+        Value().SetMin( aOther.GetValue().Min() );
+        m_minRule = aOther.GetMinRule() ? aOther.GetMinRule() : aOther.GetParentRule();
+    }
+
+    if( aOther.GetValue().HasMax()
+            && ( !GetValue().HasMax() || aOther.GetValue().Max() < GetValue().Max() ) )
+    {
+        Value().SetMax( aOther.GetValue().Max() );
+        m_maxRule = aOther.GetMaxRule() ? aOther.GetMaxRule() : aOther.GetParentRule();
+    }
+
+    if( aOther.GetValue().HasOpt() && !GetValue().HasOpt() )
+    {
+        Value().SetOpt( aOther.GetValue().Opt() );
+        m_parentRule = aOther.GetParentRule();
+    }
+}
+
+
 wxString DRC_RULE::FormatRuleFromProto( const kiapi::board::CustomRule& aRule, wxString* aErrorText )
 {
     if( aErrorText )
