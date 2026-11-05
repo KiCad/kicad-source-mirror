@@ -2600,9 +2600,10 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly, bool aPhysicalLayersOnly 
                 bbox.Merge( aZone->GetBoundingBox() );
         }
 
-        for( PCB_POINT* point : m_points )
+        if( !aPhysicalLayersOnly )
         {
-            bbox.Merge( point->GetBoundingBox() );
+            for( PCB_POINT* point : m_points )
+                bbox.Merge( point->GetBoundingBox() );
         }
     }
 
