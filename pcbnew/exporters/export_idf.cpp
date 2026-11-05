@@ -622,14 +622,14 @@ IDF3_COMP_OUTLINE* IDF_EXPORTER::createOutlineFromExtrudedBody( const FOOTPRINT*
     }
 
     auto cleanup =
-        [&lines]()
-        {
-            while( !lines.empty() )
+            [&lines]()
             {
-                delete lines.front();
-                lines.pop_front();
-            }
-        };
+                while( !lines.empty() )
+                {
+                    delete lines.front();
+                    lines.pop_front();
+                }
+            };
 
     const PCB_FIELD* field = aFootprint->GetField( m_settings->m_partNumberField );
 
@@ -808,7 +808,7 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
             delete cutout;
     }
 
-    for( auto pad : aFootprint->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
     {
         drill = (double) pad->GetDrillSize().x * scale;
         x     = pad->GetPosition().x * scale + dx;

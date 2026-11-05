@@ -906,23 +906,26 @@ std::vector<std::vector<PCB_VIA*>> PCB_VIA::CollectMicroviaColumns( BOARD* aBoar
             microvias.push_back( via );
     }
 
-    auto upper = [&]( PCB_VIA* aVia )
-    {
-        return std::min( ordinals[aVia->TopLayer()], ordinals[aVia->BottomLayer()] );
-    };
+    auto upper =
+            [&]( PCB_VIA* aVia )
+            {
+                return std::min( ordinals[aVia->TopLayer()], ordinals[aVia->BottomLayer()] );
+            };
 
-    auto lower = [&]( PCB_VIA* aVia )
-    {
-        return std::max( ordinals[aVia->TopLayer()], ordinals[aVia->BottomLayer()] );
-    };
+    auto lower =
+            [&]( PCB_VIA* aVia )
+            {
+                return std::max( ordinals[aVia->TopLayer()], ordinals[aVia->BottomLayer()] );
+            };
 
     // Touching holes have no wall between them, so they count as one column too.
-    auto overlaps = []( PCB_VIA* aFirst, PCB_VIA* aSecond )
-    {
-        double reach = ( aFirst->GetDrillValue() + aSecond->GetDrillValue() ) / 2.0;
+    auto overlaps =
+            []( PCB_VIA* aFirst, PCB_VIA* aSecond )
+            {
+                double reach = ( aFirst->GetDrillValue() + aSecond->GetDrillValue() ) / 2.0;
 
-        return ( aFirst->GetPosition() - aSecond->GetPosition() ).EuclideanNorm() <= reach;
-    };
+                return ( aFirst->GetPosition() - aSecond->GetPosition() ).EuclideanNorm() <= reach;
+            };
 
     // Overlap needs the centres closer than the largest hole, so bucket the vias by landing
     // layer and position and only the neighbouring buckets have to be looked at.
@@ -931,10 +934,11 @@ std::vector<std::vector<PCB_VIA*>> PCB_VIA::CollectMicroviaColumns( BOARD* aBoar
     for( PCB_VIA* via : microvias )
         cellSize = std::max( cellSize, via->GetDrillValue() );
 
-    auto cellOf = [&]( int aCoord )
-    {
-        return (int) std::floor( (double) aCoord / cellSize );
-    };
+    auto cellOf =
+            [&]( int aCoord )
+            {
+                return (int) std::floor( (double) aCoord / cellSize );
+            };
 
     std::map<std::tuple<int, int, int>, std::vector<PCB_VIA*>> byCell;
 
@@ -945,29 +949,30 @@ std::vector<std::vector<PCB_VIA*>> PCB_VIA::CollectMicroviaColumns( BOARD* aBoar
     }
 
     // The via a given one lands on, if any.
-    auto below = [&]( PCB_VIA* aVia ) -> PCB_VIA*
-    {
-        VECTOR2I pos = aVia->GetPosition();
-
-        for( int dx = -1; dx <= 1; ++dx )
-        {
-            for( int dy = -1; dy <= 1; ++dy )
+    auto below =
+            [&]( PCB_VIA* aVia ) -> PCB_VIA*
             {
-                auto it = byCell.find( { lower( aVia ), cellOf( pos.x ) + dx, cellOf( pos.y ) + dy } );
+                VECTOR2I pos = aVia->GetPosition();
 
-                if( it == byCell.end() )
-                    continue;
-
-                for( PCB_VIA* other : it->second )
+                for( int dx = -1; dx <= 1; ++dx )
                 {
-                    if( other != aVia && overlaps( aVia, other ) )
-                        return other;
-                }
-            }
-        }
+                    for( int dy = -1; dy <= 1; ++dy )
+                    {
+                        auto it = byCell.find( { lower( aVia ), cellOf( pos.x ) + dx, cellOf( pos.y ) + dy } );
 
-        return nullptr;
-    };
+                        if( it == byCell.end() )
+                            continue;
+
+                        for( PCB_VIA* other : it->second )
+                        {
+                            if( other != aVia && overlaps( aVia, other ) )
+                                return other;
+                        }
+                    }
+                }
+
+                return nullptr;
+            };
 
     std::set<PCB_VIA*> carried;
 
@@ -2177,39 +2182,39 @@ PCB_VIA::ValidateViaParameters( std::optional<int> aDiameter,
 
     std::optional<LSET> copperMask;
 
-    auto validateLayer = [&]( std::optional<PCB_LAYER_ID> aLayer,
-                              VIA_PARAMETER_ERROR::FIELD aField ) -> bool
-    {
-        if( !aLayer.has_value() )
-            return true;
-
-        PCB_LAYER_ID layer = aLayer.value();
-
-        if( layer == UNDEFINED_LAYER )
-            return true;
-
-        if( !IsCopperLayer( layer ) )
-        {
-            error.m_Message = _( "Via layer must be a copper layer." );
-            error.m_Field = aField;
-            return false;
-        }
-
-        if( aCopperLayerCount > 0 )
-        {
-            if( !copperMask.has_value() )
-                copperMask = LSET::AllCuMask( aCopperLayerCount );
-
-            if( !copperMask->Contains( layer ) )
+    auto validateLayer =
+            [&]( std::optional<PCB_LAYER_ID> aLayer, VIA_PARAMETER_ERROR::FIELD aField ) -> bool
             {
-                error.m_Message = _( "Via layer is outside the board stack." );
-                error.m_Field = aField;
-                return false;
-            }
-        }
+                if( !aLayer.has_value() )
+                    return true;
 
-        return true;
-    };
+                PCB_LAYER_ID layer = aLayer.value();
+
+                if( layer == UNDEFINED_LAYER )
+                    return true;
+
+                if( !IsCopperLayer( layer ) )
+                {
+                    error.m_Message = _( "Via layer must be a copper layer." );
+                    error.m_Field = aField;
+                    return false;
+                }
+
+                if( aCopperLayerCount > 0 )
+                {
+                    if( !copperMask.has_value() )
+                        copperMask = LSET::AllCuMask( aCopperLayerCount );
+
+                    if( !copperMask->Contains( layer ) )
+                    {
+                        error.m_Message = _( "Via layer is outside the board stack." );
+                        error.m_Field = aField;
+                        return false;
+                    }
+                }
+
+                return true;
+            };
 
     if( !validateLayer( aPrimaryStartLayer, VIA_PARAMETER_ERROR::FIELD::START_LAYER ) )
         return error;
@@ -3165,7 +3170,7 @@ VECTOR2I PCB_ARC::GetPosition() const
 
 double PCB_ARC::GetRadius() const
 {
-    auto center = CalcArcCenter( m_Start, m_Mid , m_End );
+    VECTOR2I center = CalcArcCenter( m_Start, m_Mid , m_End );
     return std::min( center.Distance( m_Start ), (double) INT_MAX / 2.0 );
 }
 
@@ -3647,13 +3652,13 @@ static struct TRACK_VIA_DESC
         const wxString groupTechLayers = _HKI( "Technical Layers" );
 
         auto isExternalLayerTrack =
-            []( INSPECTABLE* aItem )
-            {
-                if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
-                    return IsExternalCopperLayer( track->GetLayer() );
+                []( INSPECTABLE* aItem )
+                {
+                    if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( aItem ) )
+                        return IsExternalCopperLayer( track->GetLayer() );
 
-                return false;
-            };
+                    return false;
+                };
 
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, bool>( _HKI( "Soldermask" ),
                     &PCB_TRACK::SetHasSolderMask, &PCB_TRACK::HasSolderMask ), groupTechLayers )
