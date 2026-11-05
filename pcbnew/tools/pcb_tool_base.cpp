@@ -22,6 +22,7 @@
 #include <tool/tool_manager.h>
 #include <board_commit.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <widgets/appearance_controls.h>
 #include <footprint.h>
 #include <pcb_draw_panel_gal.h>
 #include <pgm_base.h>
@@ -36,8 +37,7 @@
 #include <view/view_controls.h>
 
 
-void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
-                                                INTERACTIVE_PLACER_BASE* aPlacer,
+void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERACTIVE_PLACER_BASE* aPlacer,
                                                 const wxString& aCommitMessage, int aOptions )
 {
     using namespace std::placeholders;
@@ -204,6 +204,15 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                 // no item created, so wait for another click
                 if( !newItem  )
                     continue;
+
+                if( !view()->IsLayerVisible( newItem->GetLayer() ) )
+                {
+                    if( APPEARANCE_CONTROLS* controls = frame()->GetAppearancePanel() )
+                    {
+                        controls->SetLayerVisible( newItem->GetLayer(), true );
+                        frame()->GetCanvas()->Refresh();
+                    }
+                }
 
                 controls()->CaptureCursor( true );
                 controls()->SetAutoPan( true );
