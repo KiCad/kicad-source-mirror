@@ -3065,6 +3065,62 @@ BOOST_AUTO_TEST_CASE( MergeConflictFinishesWithAnUntrackedFilePresent )
 }
 
 
+// Under core.autocrlf a hand-merged file written with CRLF must be committed with LF, as git add would
+BOOST_AUTO_TEST_CASE( MergeConflictResolutionPassesCleanFilters )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_config_set_bool( config, "core.autocrlf", 1 ), GIT_OK );
+    git_config_free( config );
+
+    git_reference* headRef = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &headRef, repo ), GIT_OK );
+    git_oid baseOid = *git_reference_target( headRef );
+    git_reference_free( headRef );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "mine\n" ), wxT( "Local change" ) );
+    git_oid remoteCommitOid = createDetachedCommit( repo, baseOid, wxT( "file.txt" ), "remote\n", "Remote change" );
+    writeFetchHead( remoteCommitOid );
+
+    KIGIT_COMMON common( repo );
+
+    wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
+    wxString                          headOid, theirsOid, conflictsError;
+    KIGIT_ERROR_MESSAGE               error;
+    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
+
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, conflictsError ),
+                           "GetMergeConflicts failed: " + conflictsError.ToStdString() );
+    BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
+
+    wxString mergedFile = tempBase() + wxFileName::GetPathSeparator() + wxT( "merged.txt" );
+    {
+        std::ofstream f( mergedFile.ToStdString(), std::ios::binary );
+        f << "mine\r\nremote\r\n";
+    }
+
+    BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, mergedFile } }, error )
+                                   == MergeCommitResult::Success,
+                           "CreateMergedCommit failed: " + error.summary.ToStdString() );
+
+    git_object* blob = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &blob, repo, "HEAD:file.txt" ), GIT_OK );
+
+    const git_blob* contents = reinterpret_cast<const git_blob*>( blob );
+    BOOST_CHECK_EQUAL( std::string( static_cast<const char*>( git_blob_rawcontent( contents ) ),
+                                    static_cast<size_t>( git_blob_rawsize( contents ) ) ),
+                       "mine\nremote\n" );
+
+    git_object_free( blob );
+    git_repository_free( repo );
+}
+
+
 // A rename on the remote arrives as two conflict entries, the old name with no remote side and the
 // new name with no base. Taking theirs on both must leave the content on the new name only.
 BOOST_AUTO_TEST_CASE( MergeConflictRenameTakeTheirsLandsOnNewPath )

@@ -3967,9 +3967,19 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
         std::string bytes( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
 
-        git_oid blobOid;
+        git_oid          blobOid;
+        git_writestream* stream = nullptr;
 
-        if( git_blob_create_from_buffer( &blobOid, aRepo, bytes.data(), bytes.size() ) != GIT_OK )
+        // The path picks the clean filters that core.autocrlf and .gitattributes name, as "git add" would
+        bool stored = git_blob_create_from_stream( &stream, aRepo, pathUtf8.c_str() ) == GIT_OK;
+
+        if( stored && stream->write( stream, bytes.data(), bytes.size() ) != GIT_OK )
+        {
+            stream->free( stream );
+            stored = false;
+        }
+
+        if( !stored || git_blob_create_from_stream_commit( &blobOid, stream ) != GIT_OK )
         {
             aError.details = wxString::Format( _( "Could not store the resolved file for '%s'." ), path );
             return MergeCommitResult::FailedCleanly;
