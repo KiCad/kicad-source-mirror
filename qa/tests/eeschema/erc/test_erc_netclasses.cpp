@@ -65,10 +65,7 @@ BOOST_AUTO_TEST_CASE( ERCMissingNetclassesIncludeSheetsWithoutElectricalIslands 
         const auto pins = child->GetPins();
 
         for( SCH_SHEET_PIN* pin : pins )
-        {
             child->RemovePin( pin );
-            delete pin;
-        }
 
         child->GetFields().emplace_back( child, FIELD_T::SHEET_USER, "Netclass" );
         child->GetFields().back().SetText( "MissingRootClass" );
