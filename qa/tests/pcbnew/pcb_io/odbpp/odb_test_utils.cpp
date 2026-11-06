@@ -32,6 +32,7 @@
 #include <reporter.h>
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
 #include <richio.h>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -66,6 +67,20 @@ std::vector<std::string> ReadLines( const fs::path& aFile )
         lines.push_back( line );
 
     return lines;
+}
+
+
+std::vector<std::string> ReadLineFields( const std::string& aLine )
+{
+    // From C++23, we could use ispanstream and take a string_view instead of copying the string.
+    std::istringstream       stream( aLine );
+    std::vector<std::string> fields;
+    std::string              token;
+
+    while( stream >> token )
+        fields.push_back( token );
+
+    return fields;
 }
 
 

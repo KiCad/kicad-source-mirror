@@ -209,12 +209,7 @@ BOOST_AUTO_TEST_CASE( OdbTestPointFeatureAndCadnetFlag )
 
     for( const std::string& line : ReadLines( root / "steps" / "pcb" / "netlists" / "cadnet" / "netlist" ) )
     {
-        std::istringstream stream( line );
-        std::vector<std::string> fields;
-        std::string token;
-
-        while( stream >> token )
-            fields.push_back( token );
+        const std::vector<std::string> fields = ReadLineFields( line );
 
         if( fields.size() <= NP_IDX_NODRILL_EXP )
             continue;
@@ -275,12 +270,7 @@ BOOST_AUTO_TEST_CASE( OdbConnectedViaIsCadnetMidpoint )
 
     for( const std::string& line : ReadLines( root / "steps" / "pcb" / "netlists" / "cadnet" / "netlist" ) )
     {
-        std::istringstream       stream( line );
-        std::vector<std::string> fields;
-        std::string              token;
-
-        while( stream >> token )
-            fields.push_back( token );
+        const std::vector<std::string> fields = ReadLineFields( line );
 
         const bool isVia = std::find( fields.begin(), fields.end(), "v" ) != fields.end();
 

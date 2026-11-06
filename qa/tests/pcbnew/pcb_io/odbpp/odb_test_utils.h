@@ -72,6 +72,11 @@ std::filesystem::path ExportOdb( const BOARD& aBoard, const std::filesystem::pat
  */
 std::vector<std::string> ReadLines( const std::filesystem::path& aFile );
 
+/**
+ * Return the tokenised fields of a line, split by whitespace.
+ */
+std::vector<std::string> ReadLineFields( const std::string& aLine );
+
 const KI_TEST::SCOPED_TEMP_DIR& TempDir();
 
 size_t CountPads( const BOARD& aBoard, PAD_PROP aProperty, PCB_LAYER_ID aLayer );
