@@ -205,6 +205,32 @@ BOOST_AUTO_TEST_CASE( FootprintExcludeFromSimulationRoundTrip )
 }
 
 
+BOOST_AUTO_TEST_CASE( FootprintNetTieEscapedPadRoundTrip )
+{
+    BOARD     board;
+    FOOTPRINT footprint( &board );
+
+    // The file format escapes a comma inside a pad number with a backslash
+    footprint.AddNetTiePadGroup( wxS( "A\\,B, C" ) );
+
+    kiapi::board::types::Footprint proto;
+    footprint.SerializeDefinition( &proto );
+
+    BOOST_REQUIRE_EQUAL( proto.net_ties_size(), 1 );
+    BOOST_REQUIRE_EQUAL( proto.net_ties( 0 ).pad_number_size(), 2 );
+    BOOST_CHECK_EQUAL( proto.net_ties( 0 ).pad_number( 0 ), "A,B" );
+    BOOST_CHECK_EQUAL( proto.net_ties( 0 ).pad_number( 1 ), "C" );
+
+    FOOTPRINT restored( &board );
+    BOOST_REQUIRE( restored.DeserializeDefinition( proto ) );
+
+    std::map<wxString, int> groups = restored.MapPadNumbersToNetTieGroups();
+
+    BOOST_CHECK( groups.contains( wxS( "A,B" ) ) && groups[wxS( "A,B" )] == 0 );
+    BOOST_CHECK( groups.contains( wxS( "C" ) ) && groups[wxS( "C" )] == 0 );
+}
+
+
 BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
 {
     KI_TEST::LoadBoard( m_settingsManager, "api_kitchen_sink", m_board );

@@ -158,6 +158,51 @@ private:
 };
 
 
+// Net-tie groups are comma-separated with backslash escapes and free whitespace, so compare and
+// serialize the parsed pad numbers rather than the raw text
+static std::vector<wxString> parseNetTiePadGroup( const wxString& aGroup )
+{
+    std::vector<wxString> padNumbers;
+    wxString              pad;
+    bool                  esc = false;
+
+    auto addPad =
+            [&]()
+            {
+                pad.Trim( true ).Trim( false );
+
+                if( !pad.IsEmpty() )
+                    padNumbers.push_back( pad );
+
+                pad.Clear();
+            };
+
+    for( wxUniChar ch : aGroup )
+    {
+        if( esc )
+        {
+            esc = false;
+            pad.Append( ch );
+        }
+        else if( ch == '\\' )
+        {
+            esc = true;
+        }
+        else if( ch == ',' )
+        {
+            addPad();
+        }
+        else
+        {
+            pad.Append( ch );
+        }
+    }
+
+    addPad();
+    return padNumbers;
+}
+
+
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
         m_attributes( 0 ),
@@ -572,10 +617,9 @@ void FOOTPRINT::SerializeDefinition( kiapi::board::types::Footprint* aOutput ) c
     for( const wxString& group : GetNetTiePadGroups() )
     {
         types::NetTieDefinition* netTie = aOutput->add_net_ties();
-        wxStringTokenizer tokenizer( group, ", \t\r\n", wxTOKEN_STRTOK );
 
-        while( tokenizer.HasMoreTokens() )
-            netTie->add_pad_number( tokenizer.GetNextToken().ToUTF8() );
+        for( const wxString& padNumber : parseNetTiePadGroup( group ) )
+            netTie->add_pad_number( padNumber.ToUTF8() );
     }
 
     for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
@@ -672,10 +716,19 @@ bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aIn
         wxString group;
 
         for( const std::string& pad : netTieMsg.pad_number() )
-            group.Append( wxString::Format( wxT( "%s, " ), pad ) );
+        {
+            wxString escaped = wxString::FromUTF8( pad );
 
-        group.Trim();
-        AddNetTiePadGroup( group.BeforeLast( ',' ) );
+            escaped.Replace( wxS( "\\" ), wxS( "\\\\" ) );
+            escaped.Replace( wxS( "," ), wxS( "\\," ) );
+
+            if( !group.IsEmpty() )
+                group += wxS( ", " );
+
+            group += escaped;
+        }
+
+        AddNetTiePadGroup( group );
     }
 
     SetDuplicatePadNumbersAreJumpers( aInput.jumpers().duplicate_names_are_jumpered() );
@@ -4469,48 +4522,10 @@ std::map<wxString, int> FOOTPRINT::MapPadNumbersToNetTieGroups() const
     for( const PAD* pad : m_pads )
         padNumberToGroupIdxMap[ pad->GetNumber() ] = -1;
 
-    auto processPad =
-            [&]( wxString aPad, int aGroup )
-            {
-                aPad.Trim( true ).Trim( false );
-
-                if( !aPad.IsEmpty() )
-                    padNumberToGroupIdxMap[ aPad ] = aGroup;
-            };
-
     for( int ii = 0; ii < (int) m_netTiePadGroups.size(); ++ii )
     {
-        wxString group( m_netTiePadGroups[ ii ] );
-        bool esc = false;
-        wxString pad;
-
-        for( wxUniCharRef ch : group )
-        {
-            if( esc )
-            {
-                esc = false;
-                pad.Append( ch );
-                continue;
-            }
-
-            switch( static_cast<unsigned char>( ch ) )
-            {
-            case '\\':
-                esc = true;
-                break;
-
-            case ',':
-                processPad( pad, ii );
-                pad.Clear();
-                break;
-
-            default:
-                pad.Append( ch );
-                break;
-            }
-        }
-
-        processPad( pad, ii );
+        for( const wxString& padNumber : parseNetTiePadGroup( m_netTiePadGroups[ii] ) )
+            padNumberToGroupIdxMap[padNumber] = ii;
     }
 
     return padNumberToGroupIdxMap;
@@ -4596,22 +4611,6 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
                 return *aLeft == *aRight;
             };
 
-    // Delimiters are not significant, "1,2" and "1, 2" tie the same pads
-    auto equalPadGroups =
-            []( const wxString& aLeft, const wxString& aRight )
-            {
-                wxStringTokenizer left( aLeft, ", \t\r\n", wxTOKEN_STRTOK );
-                wxStringTokenizer right( aRight, ", \t\r\n", wxTOKEN_STRTOK );
-
-                while( left.HasMoreTokens() && right.HasMoreTokens() )
-                {
-                    if( left.GetNextToken() != right.GetNextToken() )
-                        return false;
-                }
-
-                return !left.HasMoreTokens() && !right.HasMoreTokens();
-            };
-
     if( !std::ranges::equal( m_pads, aOther.m_pads, equalItems ) )
         return false;
 
@@ -4624,8 +4623,14 @@ bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
     if( !std::ranges::equal( m_groups, aOther.m_groups, equalItems ) )
         return false;
 
-    if( !std::ranges::equal( m_netTiePadGroups, aOther.m_netTiePadGroups, equalPadGroups ) )
+    if( !std::ranges::equal( m_netTiePadGroups, aOther.m_netTiePadGroups,
+                             []( const wxString& aLeft, const wxString& aRight )
+                             {
+                                 return parseNetTiePadGroup( aLeft ) == parseNetTiePadGroup( aRight );
+                             } ) )
+    {
         return false;
+    }
 
     if( m_jumperPadGroups != aOther.m_jumperPadGroups )
         return false;
