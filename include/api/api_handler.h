@@ -157,11 +157,17 @@ protected:
 
                     if( response.has_value() )
                     {
-                        envelope.mutable_status()->set_status( ApiStatusCode::AS_OK );
-
                         if( !envelope.mutable_message()->PackFrom( *response ) )
+                        {
                             wxFAIL_MSG( wxString::Format( "Failed to pack '%s'", typeName ) );
 
+                            ApiResponseStatus status;
+                            status.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+                            status.set_error_message( "the response could not be serialized" );
+                            return tl::unexpected( status );
+                        }
+
+                        envelope.mutable_status()->set_status( ApiStatusCode::AS_OK );
                         return envelope;
                     }
                     else
