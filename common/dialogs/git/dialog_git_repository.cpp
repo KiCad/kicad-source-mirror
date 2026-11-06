@@ -26,6 +26,7 @@
 #include <git/kicad_git_common.h>
 #include <git/kigit_ssh_keys.h>
 #include <git/git_repo_mixin.h>
+#include <git/kigit_transport.h>
 #include <gestfich.h>
 
 #include <cerrno>
@@ -238,16 +239,10 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     if( wxString( url ).Trim().Trim( false ).IsEmpty() || reportUnusableKey() )
         return;
 
-    wxString error;
-    wxString details;
-    bool success = false;
+    wxString    error;
+    wxString    details;
+    bool        success = false;
     git_remote* remote = nullptr;
-    git_remote_callbacks callbacks;
-    git_remote_init_callbacks( &callbacks, GIT_REMOTE_CALLBACKS_VERSION );
-
-    // We track if we have already tried to connect.
-    // If we have, the server may come back to offer another connection
-    // type, so we need to keep track of how many times we have tried.
 
     KIGIT_COMMON common( m_repository );
     common.SetRemote( url );
@@ -259,14 +254,6 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     common.SetSSHKey( GetRepoSSHPath() );
 
     KIGIT_REPO_MIXIN repoMixin( &common );
-    callbacks.payload = &repoMixin;
-    callbacks.credentials = credentials_cb;
-    callbacks.certificate_check = certificate_check_cb;
-
-    git_proxy_options proxyOpts;
-    git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
-    proxyOpts.type = GIT_PROXY_AUTO;
-    proxyOpts.url = "";
 
     int                 result = git_remote_create_anonymous( &remote, m_repository, url.utf8_str() );
     KIGIT::GitRemotePtr remotePtr( remote );
@@ -277,24 +264,19 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
         if( const char* remoteUrl = git_remote_url( remote ) )
             common.FollowRewrittenUrl( wxString::FromUTF8( remoteUrl ) );
 
-        bool retriedAfterTrust = false;
+        KIGIT::REMOTE_TRANSPORT transport( &repoMixin, remote );
+        bool                    retriedAfterTrust = false;
 
         while( true )
         {
-            repoMixin.ResetTransferState();
-            result = git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, &proxyOpts, nullptr );
-
-            if( result == GIT_OK )
+            if( transport.Check() == GIT_OK )
             {
-                repoMixin.RememberWorkingSSHKey();
-                git_remote_disconnect( remote );
                 success = true;
                 break;
             }
 
-            KIGIT_FAILURE_REPORT report = repoMixin.ReportTransferFailure( KIGIT_COMMON::GetLastGitErrorInfo( result ),
-                                                                           KIGIT_OPERATION::CONNECT, wxEmptyString );
-            git_remote_disconnect( remote );
+            KIGIT_FAILURE_REPORT report = repoMixin.ReportTransferFailure( transport.Error(), KIGIT_OPERATION::CONNECT,
+                                                                           wxEmptyString );
             error = report.summary;
             details = report.details;
 

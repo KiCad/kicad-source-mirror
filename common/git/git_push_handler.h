@@ -53,10 +53,23 @@ public:
     /// True without an expectation, or when both values match the captured target.
     bool MatchesExpectedTarget( const wxString& aBranch, const wxString& aHeadOid ) const;
 
+    /// Pin the remote and the address the caller confirmed, so a push queued behind a change to
+    /// either is refused rather than sent somewhere else
+    void SetExpectedDestination( const wxString& aRemoteName, const wxString& aPushUrl );
+
+    bool HasExpectedDestination() const { return m_hasExpectedDestination; }
+
+    /// True without an expectation, or when both values match the confirmed destination
+    bool MatchesExpectedDestination( const wxString& aRemoteName, const wxString& aPushUrl ) const;
+
 private:
     bool     m_hasExpectedTarget = false;
     wxString m_expectedBranch;
     wxString m_expectedHeadOid;
+
+    bool     m_hasExpectedDestination = false;
+    wxString m_expectedRemoteName;
+    wxString m_expectedPushUrl;
 };
 
 #endif // _GIT_PUSH_HANDLER_H_

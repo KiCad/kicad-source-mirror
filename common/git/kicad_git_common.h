@@ -377,11 +377,6 @@ public:
      */
     bool ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, const PROMPTED_CREDENTIALS& aEntered );
 
-    // Holds a temporary variable that can be used by the authentication callback
-    // to remember which types of authentication have been tested so that we
-    // don't loop forever.
-    std::atomic<unsigned>& TestedTypes() { return m_testedTypes; }
-
     /// True when HEAD has commits its upstream does not, or has no upstream yet.
     /// False for a detached or unborn HEAD.
     bool HasLocalCommits() const;
@@ -546,6 +541,9 @@ public:
     /// fallback policy used by push/pull/fetch paths.
     wxString GetRemoteNameOrDefault() const;
 
+    /// The address a push to aRemoteName connects to, its push URL or else its URL. Empty without one
+    wxString GetPushUrl( const wxString& aRemoteName ) const;
+
     /**
      * Keep symlinks in the repository path so Git status paths match the project tree.
      */
@@ -602,13 +600,6 @@ public:
         std::lock_guard<std::mutex> lock( m_credentialsMutex );
         return m_remote;
     }
-
-    /// Offer the agent's keys once, then the next key file, recording in aAttempt which file was offered.
-    int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername, KIGIT_AUTH_ATTEMPT& aAttempt );
-
-    int HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername );
-
-    int HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername );
 
     /// libgit2's last message, without credentials from any URL it quotes, so it is safe to show or trace.
     static wxString GetLastGitError();
@@ -718,8 +709,6 @@ protected:
     wxString m_username;
     wxString m_password;
 
-    std::atomic<unsigned> m_testedTypes;
-
     std::mutex m_gitActionMutex;
 
     /// Serializes the credential fields between the UI thread and the authentication
@@ -774,36 +763,10 @@ private:
     mutable std::mutex m_operationMutex;
     CANCEL_TOKEN       m_activeCancel;
     bool               m_shutdown = false;
-
-    // Create a dummy flag to tell if we have tested ssh agent credentials separately
-    // from the ssh key credentials. Our own bit, so it must clear every git_credential_t
-    // value. The highest is GIT_CREDENTIAL_SSH_MEMORY at 1 << 6.
-    static const unsigned KIGIT_CREDENTIAL_SSH_AGENT = 1u << ( sizeof( unsigned ) * 8 - 1 );
 };
-
-extern "C" APIEXPORT int  progress_cb( const char* str, int len, void* data );
-extern "C" APIEXPORT void clone_progress_cb( const char* str, size_t len, size_t total, void* data );
-extern "C" APIEXPORT int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload );
-extern "C" APIEXPORT int update_cb( const char* aRefname, const git_oid* aFirst, const git_oid* aSecond,
-                                    void* aPayload );
-extern "C" APIEXPORT int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aTotal,
-                                                    size_t aBytes, void* aPayload );
-extern "C" APIEXPORT int push_update_reference_cb( const char* aRefname, const char* aStatus,
-                                                   void* aPayload );
 
 extern "C" APIEXPORT int fetchhead_foreach_cb( const char*, const char*,
                                                const git_oid* aOID, unsigned int aIsMerge, void* aPayload );
-extern "C" APIEXPORT int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
-                                         unsigned int aAllowedTypes, void* aPayload );
-
-/**
- * Check an SSH host key against known_hosts, which decides alone. A listed key returns 0, and any other
- * state fails with GIT_ECERTIFICATE and is recorded with KIGIT_REPO_MIXIN::SetHostKeyFailure. A key KiCad
- * cannot read, or a host or port that does not match the synced remote, fails without a record. Other
- * certificates, such as HTTPS ones, are left to libgit2. Never returns a positive value, which libgit2 1.9
- * takes as accepting an unverified SSH host.
- */
-extern "C" APIEXPORT int certificate_check_cb( git_cert* aCert, int aValid, const char* aHost, void* aPayload );
 
 
 class wxWindow;

@@ -33,6 +33,7 @@
 #include <eda_base_frame.h>
 #include <git/git_push_handler.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_failure.h>
 #include <project.h>
 
 
@@ -424,6 +425,8 @@ void PANEL_GIT_BRANCHES::onForcePush( bool aRetriedAfterTrust )
         wxString branch;
         wxString headOid;
         wxString upstream;
+        wxString remoteName;
+        wxString pushUrl;
         bool     hasRemote = false;
         bool     detached = false;
         bool     checked = false;
@@ -442,7 +445,9 @@ void PANEL_GIT_BRANCHES::onForcePush( bool aRetriedAfterTrust )
                 outcome->headOid = aCommon.GetHeadCommitId();
 
                 // Push targets the same-named remote ref, even with a differently named upstream.
-                outcome->upstream = aCommon.GetRemoteNameOrDefault() + wxS( "/" ) + outcome->branch;
+                outcome->remoteName = aCommon.GetRemoteNameOrDefault();
+                outcome->pushUrl = aCommon.GetPushUrl( outcome->remoteName );
+                outcome->upstream = outcome->remoteName + wxS( "/" ) + outcome->branch;
                 outcome->checked = true;
             },
             [this, common, outcome, aRetriedAfterTrust]()
@@ -466,20 +471,25 @@ void PANEL_GIT_BRANCHES::onForcePush( bool aRetriedAfterTrust )
 
                 wxRichMessageDialog confirm(
                         this,
-                        wxString::Format( _( "Force push replaces '%s' with your local '%s'.\n\n"
+                        wxString::Format( _( "Force push replaces '%s' at %s with your local '%s'.\n\n"
                                              "Commits that exist only on the remote will be lost." ),
-                                          outcome->upstream, outcome->branch ),
+                                          outcome->upstream, KIGIT::StripEmbeddedUserinfo( outcome->pushUrl ),
+                                          outcome->branch ),
                         _( "Force Push" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
                 confirm.SetYesNoLabels( _( "Force &Push" ), _( "Cancel" ) );
 
                 if( confirm.ShowModal() == wxID_YES && m_dialog->SessionStillCurrent() )
-                    startForcePush( common, outcome->branch, outcome->headOid, aRetriedAfterTrust );
+                {
+                    startForcePush( common, outcome->branch, outcome->headOid, outcome->remoteName, outcome->pushUrl,
+                                    aRetriedAfterTrust );
+                }
             } );
 }
 
 
 void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aExpectedBranch,
-                                         const wxString& aExpectedHeadOid, bool aRetriedAfterTrust )
+                                         const wxString& aExpectedHeadOid, const wxString& aRemoteName,
+                                         const wxString& aPushUrl, bool aRetriedAfterTrust )
 {
     // Carried rather than captured by reference, because Start returns before the work runs.
     struct OUTCOME
@@ -503,7 +513,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
     bool started = m_push.Start(
             "git force push",
-            [aCommon, outcome, aExpectedBranch, aExpectedHeadOid, alive = m_push.Alive(),
+            [aCommon, outcome, aExpectedBranch, aExpectedHeadOid, aRemoteName, aPushUrl, alive = m_push.Alive(),
              dialog = m_dialog]( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
             {
                 GIT_PUSH_HANDLER handler( aCommon.get() );
@@ -516,6 +526,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                 handler.SetCancelToken( aToken );
                 handler.SetWaitForActionLock( true );
                 handler.SetExpectedTarget( aExpectedBranch, aExpectedHeadOid );
+                handler.SetExpectedDestination( aRemoteName, aPushUrl );
                 outcome->result = handler.PerformPush( true );
                 KIGIT_ERROR_MESSAGE error = handler.PopError();
                 outcome->error = error.summary;

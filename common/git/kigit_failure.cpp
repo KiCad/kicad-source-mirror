@@ -181,7 +181,7 @@ static KIGIT_FAILURE classifyGitFailure( const KIGIT_ERROR_INFO& aError, const K
             return KIGIT_FAILURE::PROXY;
 
         if( connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS )
-            return KIGIT_FAILURE::AUTH_HTTPS_REJECTED;
+            return aAuth.passwordGiven ? KIGIT_FAILURE::AUTH_HTTPS_REJECTED : KIGIT_FAILURE::AUTH_HTTPS_NEEDED;
 
         // An empty or absent agent fails exactly as a rejected agent key does, so neither is claimed
         if( connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
@@ -288,6 +288,11 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
     case KIGIT_FAILURE::AUTH_HTTPS_REJECTED:
         return wxString::Format( _( "%s did not accept the username and password. Many servers require a personal "
                                     "access token in place of a password." ),
+                                 host );
+
+    case KIGIT_FAILURE::AUTH_HTTPS_NEEDED:
+        return wxString::Format( _( "%s needs a username and password. Many servers require a personal access token "
+                                    "in place of a password." ),
                                  host );
 
     case KIGIT_FAILURE::KEY_LOAD_FAILED:
@@ -457,7 +462,8 @@ wxString KIGIT::UnexplainedFailure( KIGIT_OPERATION aOperation, const wxString& 
 bool KIGIT::IsCredentialFailure( KIGIT_FAILURE aKind )
 {
     return aKind == KIGIT_FAILURE::AUTH_SSH_KEY_REJECTED || aKind == KIGIT_FAILURE::AUTH_NO_SSH_KEY
-           || aKind == KIGIT_FAILURE::AUTH_HTTPS_REJECTED || aKind == KIGIT_FAILURE::KEY_LOAD_FAILED;
+           || aKind == KIGIT_FAILURE::AUTH_HTTPS_REJECTED || aKind == KIGIT_FAILURE::AUTH_HTTPS_NEEDED
+           || aKind == KIGIT_FAILURE::KEY_LOAD_FAILED;
 }
 
 

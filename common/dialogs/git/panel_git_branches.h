@@ -63,7 +63,8 @@ private:
     /// already rerun after a trusted host key.
     void onForcePush( bool aRetriedAfterTrust = false );
     void startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aExpectedBranch,
-                         const wxString& aExpectedHeadOid, bool aRetriedAfterTrust );
+                         const wxString& aExpectedHeadOid, const wxString& aRemoteName, const wxString& aPushUrl,
+                         bool aRetriedAfterTrust );
 
     GIT_ADVANCED_DIALOG* m_dialog;
     EDA_BASE_FRAME*      m_frame;

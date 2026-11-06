@@ -65,20 +65,6 @@ public:
     }
 
     /**
-     * @brief Reset the next public key to test
-     */
-    void ResetNextKey() { m_common->ResetNextKey(); }
-
-    /**
-     * @brief Get the next public key
-     * @return The next public key
-     */
-    wxString GetNextPublicKey()
-    {
-        return m_common->GetNextPublicKey();
-    }
-
-    /**
      * @brief Get the connection type
      * @return The connection type
      */
@@ -141,12 +127,6 @@ public:
         return m_common->GetProjectDir();
     }
 
-    /**
-     * @brief Return the connection types that have been tested for authentication
-     * @return The connection types that have been tested for authentication
-     */
-    std::atomic<unsigned>& TestedTypes() { return m_common->TestedTypes(); }
-
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override
     {
         // The transfer callbacks poll this token and abort on their next tick.
@@ -191,12 +171,11 @@ public:
 
     void            SetHostKeyRefusal( const wxString& aReason ) { m_hostKeyRefusal = aReason; }
 
-    /// Start a transfer with nothing left from an earlier one on this handler or session: no keys or
-    /// methods marked tried, and no refused host key, offered key, server text or failure on record.
+    /// Start a transfer with nothing left from an earlier one on this handler or session: the first key
+    /// offered next, and no refused host key, offered key, server text or failure on record.
     void ResetTransferState()
     {
-        TestedTypes() = 0;
-        ResetNextKey();
+        m_common->ResetNextKey();
         ClearHostKeyFailure();
         m_hostKeyRefusal.clear();
         m_authAttempt = KIGIT_AUTH_ATTEMPT();

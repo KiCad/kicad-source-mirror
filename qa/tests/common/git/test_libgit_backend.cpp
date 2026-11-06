@@ -40,6 +40,7 @@
 #include <git/git_push_handler.h>
 #include <git/git_commit_handler.h>
 #include <git/git_clone_handler.h>
+#include <git/kigit_transport.h>
 #include <qa_utils/git_test_fixture.h>
 
 #include <git2.h>
@@ -437,16 +438,36 @@ BOOST_AUTO_TEST_CASE( PushProgressStopsWhenTheOperationIsCancelled )
     BOOST_TEST_REQUIRE( repo );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    KIGIT_COMMON     common( repo );
-    GIT_PUSH_HANDLER handler( &common );
+    BOOST_REQUIRE( addOrigin( repo ) );
 
-    // Running normally, the push carries on.
-    BOOST_CHECK_EQUAL( push_transfer_progress_cb( 1, 10, 128, &handler ), 0 );
+    git_oid  local = createCommit( repo, wxT( "pushed.txt" ), wxT( "new\n" ), wxT( "Push me" ) );
+    wxString refspec = wxString::FromUTF8( git_oid_tostr_s( &local ) ) + wxS( ":refs/heads/master" );
 
-    handler.CancelThisOperation();
+    git_remote* remote = nullptr;
+    BOOST_REQUIRE_EQUAL( git_remote_lookup( &remote, repo, "origin" ), GIT_OK );
+    KIGIT::GitRemotePtr remotePtr( remote );
 
-    BOOST_CHECK_MESSAGE( push_transfer_progress_cb( 2, 10, 256, &handler ) != 0,
+    KIGIT_COMMON            common( repo );
+    GIT_PUSH_HANDLER        handler( &common );
+    KIGIT::REMOTE_TRANSPORT transport( &handler, remote );
+
+    // Cancelled once connected, so only a transfer tick is left to notice
+    BOOST_CHECK_MESSAGE( transport.Push(
+                                 [&]()
+                                 {
+                                     handler.CancelThisOperation();
+                                     return refspec;
+                                 } )
+                                 != GIT_OK,
                          "a cancelled push should stop at its next progress tick" );
+
+    git_repository* bare = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &bare, remotePath().ToUTF8().data() ), GIT_OK );
+    KIGIT::GitRepositoryPtr barePtr( bare );
+
+    git_oid remoteHead;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, bare, "refs/heads/master" ), GIT_OK );
+    BOOST_CHECK( !git_oid_equal( &remoteHead, &local ) );
 }
 
 

@@ -47,3 +47,17 @@ bool GIT_PUSH_HANDLER::MatchesExpectedTarget( const wxString& aBranch, const wxS
 {
     return !m_hasExpectedTarget || ( m_expectedBranch == aBranch && m_expectedHeadOid == aHeadOid );
 }
+
+
+void GIT_PUSH_HANDLER::SetExpectedDestination( const wxString& aRemoteName, const wxString& aPushUrl )
+{
+    m_hasExpectedDestination = true;
+    m_expectedRemoteName = aRemoteName;
+    m_expectedPushUrl = aPushUrl;
+}
+
+
+bool GIT_PUSH_HANDLER::MatchesExpectedDestination( const wxString& aRemoteName, const wxString& aPushUrl ) const
+{
+    return !m_hasExpectedDestination || ( m_expectedRemoteName == aRemoteName && m_expectedPushUrl == aPushUrl );
+}

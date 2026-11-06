@@ -128,6 +128,7 @@ set( KICOMMON_SRCS
     git/kigit_failure.cpp
     git/kigit_known_hosts.cpp
     git/kigit_ssh_keys.cpp
+    git/kigit_transport.cpp
     git/libgit_backend.cpp
 
     # Diff/merge engine

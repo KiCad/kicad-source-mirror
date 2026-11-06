@@ -40,6 +40,7 @@ struct KIGIT_AUTH_ATTEMPT
     wxString                    acceptedKey;             ///< An encrypted key whose public half the server accepted.
     bool                        lastKeyRefused = false;  ///< The server refused the last key's public half.
     wxString                    probing; ///< The encrypted key whose public half is out to the server now.
+    bool                        passwordGiven = false;   ///< A password went with the last username offered.
 };
 
 
@@ -49,6 +50,7 @@ enum class KIGIT_FAILURE
     AUTH_SSH_KEY_REJECTED,
     AUTH_NO_SSH_KEY,
     AUTH_HTTPS_REJECTED,
+    AUTH_HTTPS_NEEDED, ///< The server asked for a login before any password was offered.
     KEY_LOAD_FAILED,
     HOST_KEY_UNKNOWN,
     HOST_KEY_CHANGED,

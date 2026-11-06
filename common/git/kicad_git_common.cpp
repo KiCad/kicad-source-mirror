@@ -61,7 +61,6 @@ KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo, const wxString& aProjectPath 
         m_repo( aRepo ),
         m_projectPath( aProjectPath ),
         m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ),
-        m_testedTypes( 0 ),
         m_nextPublicKey( 0 ),
         m_secretFetched( false )
 {}
@@ -79,7 +78,6 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         m_port( aOther.m_port ),
         m_username( aOther.m_username ),
         m_password( aOther.m_password ),
-        m_testedTypes( aOther.m_testedTypes.load() ),
 
         // The mutex is default-initialized, not copied
         m_gitActionMutex(),
@@ -1786,6 +1784,20 @@ wxString KIGIT_COMMON::GetRemoteNameOrDefault() const
 }
 
 
+wxString KIGIT_COMMON::GetPushUrl( const wxString& aRemoteName ) const
+{
+    git_remote* remote = nullptr;
+
+    if( !m_repo || git_remote_lookup( &remote, m_repo, aRemoteName.utf8_string().c_str() ) != GIT_OK )
+        return wxEmptyString;
+
+    KIGIT::GitRemotePtr remotePtr( remote );
+    const char*         url = git_remote_pushurl( remote ) ? git_remote_pushurl( remote ) : git_remote_url( remote );
+
+    return url ? wxString::FromUTF8( url ) : wxString();
+}
+
+
 wxString KIGIT_COMMON::remoteNameWithoutUpstream() const
 {
     wxString     retval;
@@ -1968,7 +1980,6 @@ bool KIGIT_COMMON::ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, co
     }
 
     m_nextPublicKey = 0;
-    m_testedTypes = 0;
     return true;
 }
 
@@ -2597,120 +2608,6 @@ void KIGIT_COMMON::updateConnectionTypeUnlocked()
 }
 
 
-// The server accepted the key's public half. Refusing to sign ends the request before any login is tried.
-// Recorded here because the server may disconnect before libgit2 asks for another credential
-extern "C" int ssh_probe_sign_cb( LIBSSH2_SESSION*, unsigned char**, size_t*, const unsigned char*, size_t,
-                                  void** aAbstract )
-{
-    if( !aAbstract || !*aAbstract )
-        return -1;
-
-    KIGIT_AUTH_ATTEMPT* attempt = static_cast<KIGIT_AUTH_ATTEMPT*>( *aAbstract );
-    attempt->lastKeyRefused = false;
-
-    if( attempt->acceptedKey.IsEmpty() )
-    {
-        attempt->acceptedKey = attempt->probing;
-        attempt->passphraseGiven = false;
-    }
-
-    return -1;
-}
-
-
-int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername, KIGIT_AUTH_ATTEMPT& aAttempt )
-{
-    if( !( m_testedTypes & KIGIT_CREDENTIAL_SSH_AGENT ) )
-    {
-        if( HandleSSHAgentAuthentication( aOut, aUsername ) == GIT_OK )
-        {
-            aAttempt.agentTried = true;
-            return GIT_OK;
-        }
-
-        // Agent unavailable or has no matching key; fall through to configured key.
-    }
-
-    if( !aAttempt.probing.IsEmpty() )
-    {
-        wxLogTrace( traceGit, aAttempt.lastKeyRefused ? "Server refuses %s" : "Server accepts %s", aAttempt.probing );
-        aAttempt.probing.clear();
-    }
-
-    wxString password = GetPassword();
-    wxString sshKey = GetNextPublicKey();
-
-    if( sshKey.IsEmpty() )
-    {
-        wxLogTrace( traceGit, "Finished testing all possible ssh keys" );
-        m_testedTypes |= GIT_CREDENTIAL_SSH_KEY;
-        return GIT_PASSTHROUGH;
-    }
-
-    // Without a passphrase no encrypted key can sign, so asking the server first is the only way to learn which
-    // one it takes. With one, the probe's extra round would cost a counted attempt for nothing
-    if( password.IsEmpty() && KIGIT::IsPrivateKeyFileEncrypted( sshKey ) )
-    {
-        const std::string blob = KIGIT::PublicKeyBlob( sshKey );
-
-        if( !blob.empty()
-            && git_credential_ssh_custom_new( aOut, aUsername.mbc_str(), blob.data(), blob.size(), ssh_probe_sign_cb,
-                                              &aAttempt )
-                       == GIT_OK )
-        {
-            wxLogTrace( traceGit, "Asking whether the server takes %s", sshKey );
-            aAttempt.probing = sshKey;
-            aAttempt.lastKeyRefused = true;
-            aAttempt.keysTried.push_back( sshKey );
-            return GIT_OK;
-        }
-    }
-
-    wxString sshPubKey = KIGIT::PublicKeyPath( sshKey );
-
-    wxLogTrace( traceGit, "Testing %s\n", sshKey );
-
-    if( git_credential_ssh_key_new( aOut, aUsername.mbc_str(), sshPubKey.mbc_str(), sshKey.mbc_str(),
-                                    password.mbc_str() ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to create SSH key credential for %s: %s", sshKey,
-                    KIGIT_COMMON::GetLastGitError() );
-        return GIT_PASSTHROUGH;
-    }
-
-    // libssh2 reads the file only once authentication starts, so a load failure names this key
-    aAttempt.keysTried.push_back( sshKey );
-    aAttempt.lastKeyRefused = false;
-    aAttempt.passphraseGiven = !password.IsEmpty();
-    return GIT_OK;
-}
-
-
-int KIGIT_COMMON::HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername )
-{
-    wxString password = GetPassword();
-
-    int rc = git_credential_userpass_plaintext_new( aOut, aUsername.mbc_str(), password.mbc_str() );
-    m_testedTypes |= GIT_CREDENTIAL_USERPASS_PLAINTEXT;
-
-    return rc;
-}
-
-
-int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername )
-{
-    m_testedTypes |= KIGIT_CREDENTIAL_SSH_AGENT;
-
-    if( git_credential_ssh_key_from_agent( aOut, aUsername.mbc_str() ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to create SSH agent credential: %s", KIGIT_COMMON::GetLastGitError() );
-        return GIT_PASSTHROUGH;
-    }
-
-    return GIT_OK;
-}
-
-
 // libgit2 marks at most one entry to merge, the branch the current one tracks, so the name is
 // not needed to tell them apart. FetchHeadMarksAtMostOneBranchToMerge holds that to account.
 extern "C" int fetchhead_foreach_cb( const char*, const char*,
@@ -2720,297 +2617,6 @@ extern "C" int fetchhead_foreach_cb( const char*, const char*,
         git_oid_cpy( (git_oid*) aPayload, aOID );
 
     return 0;
-}
-
-
-extern "C" void clone_progress_cb( const char* aStr, size_t aLen, size_t aTotal, void* aPayload )
-{
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-
-    wxString progressMessage( aStr );
-    parent->UpdateProgress( aLen, aTotal, progressMessage );
-}
-
-
-extern "C" int progress_cb( const char* str, int len, void* aPayload )
-{
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-
-    if( parent->IsThisOperationCancelled() )
-    {
-        wxLogTrace( traceGit, "Progress CB cancelled" );
-        return GIT_EUSER;
-    }
-
-    parent->ReceiveSideband( str, len );
-    return 0;
-}
-
-
-extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* aPayload )
-{
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-
-    wxString progressMessage = wxString::Format( _( "Received %u of %u objects" ),
-                                                 aStats->received_objects,
-                                                 aStats->total_objects );
-    if( parent->IsThisOperationCancelled() )
-    {
-        wxLogTrace( traceGit, "Transfer progress cancelled" );
-        return GIT_EUSER;
-    }
-
-    parent->UpdateProgress( aStats->received_objects, aStats->total_objects, progressMessage );
-
-    return 0;
-}
-
-
-extern "C" int update_cb( const char* aRefname, const git_oid* aFirst, const git_oid* aSecond,
-                          void* aPayload )
-{
-    constexpr int cstring_len = 8;
-    char          a_str[cstring_len + 1];
-    char          b_str[cstring_len + 1];
-
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-    wxString          status;
-
-    git_oid_tostr( b_str, cstring_len, aSecond );
-
-#if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
-    if( !git_oid_is_zero( aFirst ) )
-#else
-    if( !git_oid_iszero( aFirst ) )
-#endif
-    {
-        git_oid_tostr( a_str, cstring_len, aFirst );
-        status = wxString::Format( _( "* [updated] %s..%s %s" ), a_str, b_str, aRefname );
-    }
-    else
-    {
-        status = wxString::Format( _( "* [new] %s %s" ), b_str, aRefname );
-    }
-
-    parent->UpdateProgress( 0, 0, status );
-
-    return 0;
-}
-
-
-extern "C" int push_transfer_progress_cb( unsigned int aCurrent, unsigned int aTotal, size_t aBytes,
-                                          void* aPayload )
-{
-    long long         progress = 100;
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-
-    if( parent->IsThisOperationCancelled() )
-    {
-        wxLogTrace( traceGit, "Push progress cancelled" );
-        return GIT_EUSER;
-    }
-
-    if( aTotal != 0 )
-    {
-        progress = ( aCurrent * 100ll ) / aTotal;
-    }
-
-    wxString progressMessage = wxString::Format( _( "Writing objects: %lld%% (%u/%u), %zu bytes" ),
-                                                 progress, aCurrent, aTotal, aBytes );
-    parent->UpdateProgress( aCurrent, aTotal, progressMessage );
-
-    return 0;
-}
-
-
-extern "C" int push_update_reference_cb( const char* aRefname, const char* aStatus, void* aPayload )
-{
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-
-    if( aStatus && *aStatus )
-    {
-        const wxString status = KIGIT::DecodeServerText( aStatus, strlen( aStatus ) );
-
-        parent->SetPushRefusal( wxString::Format( wxS( "%s: %s" ), aRefname, status ) );
-
-        wxString statusMessage = wxString::Format( _( "* [rejected] %s (%s)" ), aRefname,
-                                                   KIGIT::PrintableServerText( status ) );
-        parent->UpdateProgress( 0, 0, statusMessage );
-
-        // Without this the push reports success even though the remote refused it.
-        git_error_set_str( GIT_ERROR_NET, aStatus );
-        return GIT_ERROR;
-    }
-    else
-    {
-        wxString statusMessage = wxString::Format( _( "[updated] %s" ), aRefname );
-        parent->UpdateProgress( 0, 0, statusMessage );
-    }
-
-    return 0;
-}
-
-
-extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
-                               unsigned int aAllowedTypes, void* aPayload )
-{
-    KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-    KIGIT_COMMON* common = parent->GetCommon();
-
-    // The transport's URL outranks a cached remote that may be empty or stale
-    common->SyncRemoteUrl( wxString::FromUTF8( aUrl ) );
-
-    // The configured remote URL may embed a password. Keep it out of the trace log.
-    wxString safeUrl = KIGIT::StripEmbeddedUserinfo( wxString::FromUTF8( aUrl ) );
-
-    wxLogTrace( traceGit, "Credentials callback for %s, testing %d", safeUrl, aAllowedTypes );
-
-    parent->AuthAttempt().connType = parent->GetConnType();
-
-    if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
-    {
-        wxLogTrace( traceGit, "Local repository, no credentials needed" );
-        return GIT_PASSTHROUGH;
-    }
-
-    if( aAllowedTypes & GIT_CREDENTIAL_USERNAME
-        && !( parent->TestedTypes() & GIT_CREDENTIAL_USERNAME ) )
-    {
-        wxString username = parent->GetUsername().Trim().Trim( false );
-        // A token in the URL parses as the username, so no trace names it
-        wxLogTrace( traceGit, "Username credential at %s with allowed type %d", safeUrl, aAllowedTypes );
-
-        // An empty username makes the server answer "unsupported authentication", which tells
-        // the user nothing. Fail authentication instead, so the caller prompts and retries.
-        if( username.IsEmpty() )
-        {
-            git_error_clear();
-            git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-            parent->SetAuthFailure();
-            return GIT_EAUTH;
-        }
-
-        if( int rc = git_credential_username_new( aOut, username.ToStdString().c_str() ); rc != GIT_OK )
-        {
-            wxLogTrace( traceGit, "Failed to create username credential: %s", KIGIT_COMMON::GetLastGitError() );
-            return rc;
-        }
-        else
-        {
-            wxLogTrace( traceGit, "Created username credential" );
-        }
-
-        parent->TestedTypes() |= GIT_CREDENTIAL_USERNAME;
-    }
-    else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS
-                && ( aAllowedTypes & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
-                && !( parent->TestedTypes() & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
-                && !parent->GetUsername().IsEmpty() )
-    {
-        // Plaintext authentication
-        wxLogTrace( traceGit, "Plaintext authentication at %s with allowed type %d", safeUrl, aAllowedTypes );
-        return common->HandlePlaintextAuthentication( aOut, parent->GetUsername() );
-    }
-    else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
-                && ( aAllowedTypes & GIT_CREDENTIAL_SSH_KEY )
-                && !( parent->TestedTypes() & GIT_CREDENTIAL_SSH_KEY ) )
-    {
-        // libgit2 fails a credential whose user differs from the one the SSH session already uses
-        wxString sshUser = ( aUsername && *aUsername ) ? wxString::FromUTF8( aUsername ) : parent->GetUsername();
-
-        // SSH key authentication
-        int result = common->HandleSSHKeyAuthentication( aOut, sshUser, parent->AuthAttempt() );
-
-        // Translate exhausted-keys PASSTHROUGH into a proper auth error so the
-        // retry loop runs and libgit2 doesn't emit "no callback set".
-        if( result == GIT_PASSTHROUGH )
-        {
-            git_error_clear();
-            git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-            parent->SetAuthFailure();
-            return GIT_EAUTH;
-        }
-
-        return result;
-    }
-    else
-    {
-        // Signal an auth failure so the caller prompts and retries, rather than letting libgit2 report
-        // "no callback set" as a dead end.
-        git_error_clear();
-        git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-        parent->SetAuthFailure();
-        return GIT_EAUTH;
-    }
-
-    return GIT_OK;
-};
-
-
-extern "C" int certificate_check_cb( git_cert* aCert, int aValid, const char* aHost, void* aPayload )
-{
-    if( !aCert || !aHost || !aPayload || aCert->cert_type != GIT_CERT_HOSTKEY_LIBSSH2 )
-        return GIT_PASSTHROUGH;
-
-    const git_cert_hostkey* cert = reinterpret_cast<const git_cert_hostkey*>( aCert );
-
-    KIGIT_REPO_MIXIN* handler = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
-
-    auto refuse = [&]( const wxString& aReason )
-    {
-        // libgit2 v1.9.0 ssh_libssh2.c:758-760 replaces any error the callback sets
-        handler->SetHostKeyRefusal( aReason );
-        return GIT_ECERTIFICATE;
-    };
-
-    // libgit2 1.9 connects on a passthrough even when nothing was verified
-    auto refuseUnreadable = [&]()
-    {
-        wxLogTrace( traceGit, "Host key from %s cannot be read, refusing it", aHost );
-        return refuse( wxString::Format( _( "KiCad could not read the key %s presented, so the connection was not "
-                                            "made. Ask your administrator which host key the server uses." ),
-                                         wxString::FromUTF8( aHost ) ) );
-    };
-
-    if( !( cert->type & GIT_CERT_SSH_RAW ) || !cert->hostkey || cert->hostkey_len == 0 )
-        return refuseUnreadable();
-
-    KIGIT::HOST_KEY_FAILURE key;
-    key.rawKey.assign( cert->hostkey, cert->hostkey_len );
-    key.host = wxString::FromUTF8( aHost );
-
-    // An SCP address hands over an IPv6 host still in its brackets
-    if( key.host.StartsWith( wxS( "[" ) ) && key.host.EndsWith( wxS( "]" ) ) )
-        key.host = key.host.Mid( 1, key.host.length() - 2 );
-
-    key.port = handler->GetCommon()->SSHPortFor( key.host );
-
-    // Checking another port's entries would let a wildcard or plain-host line vouch for this server
-    if( key.port < 0 )
-    {
-        wxLogTrace( traceGit, "Host %s does not match the synced remote, refusing its key", key.host );
-        return refuse( wxString::Format( _( "The address of %s could not be matched to the remote, so its key was "
-                                            "not checked. Check the remote URL." ),
-                                         key.host ) );
-    }
-
-    key.keyType = KIGIT::HostKeyType( key.rawKey );
-    key.fingerprint = KIGIT::HostKeyFingerprint( key.rawKey );
-
-    if( key.keyType.IsEmpty() )
-        return refuseUnreadable();
-
-    key.state = KIGIT::LookupKnownHost( KIGIT::ReadKnownHosts(), key.host, key.port, key.keyType, key.rawKey );
-
-    wxLogTrace( traceGit, "Host key %s SHA256:%s for %s port %d, known_hosts state %d, libgit2 valid %d", key.keyType,
-                key.fingerprint, key.host, key.port, static_cast<int>( key.state ), aValid );
-
-    // libssh2 accepts revoked keys and port-22 lines for other ports, and 1.5.0 reads no known_hosts at all
-    if( key.state == KIGIT::KNOWN_HOST_STATE::MATCH )
-        return 0;
-
-    handler->SetHostKeyFailure( key );
-    return GIT_ECERTIFICATE;
 }
 
 
