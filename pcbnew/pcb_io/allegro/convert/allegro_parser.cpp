@@ -915,7 +915,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x11( FILE_STREAM& aStream, FMT_VE
 
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x12( FILE_STREAM& aStream, FMT_VER aVer )
 {
-    auto block = std::make_unique<BLOCK<BLK_0x12_XREF>>( aStream.Position() );
+    auto block = std::make_unique<BLOCK<BLK_0x12_PIN_INST>>( aStream.Position() );
 
     auto& data = block->GetData();
 
@@ -923,9 +923,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x12( FILE_STREAM& aStream, FMT_VE
     data.m_R = aStream.ReadU16();
     data.m_Key = aStream.ReadU32();
     block->SetKey( data.m_Key );
-    data.m_Ptr1 = aStream.ReadU32();
-    data.m_Ptr2 = aStream.ReadU32();
-    data.m_Ptr3 = aStream.ReadU32();
+    data.m_Next = aStream.ReadU32();
+    block->SetNext( data.m_Next );
+    data.m_PtrPinName = aStream.ReadU32();
+    data.m_PtrPad = aStream.ReadU32();
     data.m_Unknown1 = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_Unknown2 );
@@ -1964,7 +1965,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStr
     data.m_ParentFp = aStream.ReadU32();
     data.m_Track = aStream.ReadU32();
     data.m_PadPtr = aStream.ReadU32();
-    data.m_Ptr6 = aStream.ReadU32();
+    data.m_PinInstance = aStream.ReadU32();
     data.m_Ratline = aStream.ReadU32();
     data.m_PtrPinNumber = aStream.ReadU32();
     data.m_NextInCompInst = aStream.ReadU32();

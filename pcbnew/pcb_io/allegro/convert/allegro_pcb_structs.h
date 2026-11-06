@@ -1051,22 +1051,30 @@ struct BLK_0x11_PIN_NAME
 
 
 /**
- * Cross-reference between objects. Exact semantics not fully understood; appears in
- * component and function instance chains.
+ * Three-way cross-reference between a placed pad, a function instance, and a pin name.
+ *
+ * 0x10 FUNCTION_INST object have a list of 0x12 PIN_INSTANCE objects.
  */
-struct BLK_0x12_XREF
+struct BLK_0x12_PIN_INST
 {
     static constexpr uint8_t BLOCK_TYPE_CODE = 0x12;
 
     uint8_t  m_Type;
     uint16_t m_R;
     uint32_t m_Key;
-    uint32_t m_Ptr1;
-    uint32_t m_Ptr2;
-    uint32_t m_Ptr3;
+    /// Pointer to the next 0x12 PIN_INST object or back to the parent
+    /// 0x10 FUNCTION_INST object
+    uint32_t m_Next;
+    /// Pointer to 0x11 PIN_NAME object
+    uint32_t m_PtrPinName;
+    /// Pointer to the 0x32 PLACED_PAD object
+    uint32_t m_PtrPad;
+    /// Always zero so far.
     uint32_t m_Unknown1;
 
+    /// Always zero so far.
     COND_GE<FMT_VER::V_165, uint32_t> m_Unknown2;
+    /// Always zero so far.
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
 };
 
@@ -2192,7 +2200,14 @@ struct BLK_0x32_PLACED_PAD
     uint32_t m_ParentFp;
     uint32_t m_Track;
     uint32_t m_PadPtr;
-    uint32_t m_Ptr6;
+
+    /**
+     * 0x12 pin instance binding this pad to a function instance and pin name, 0 if unnamed.
+     *
+     * The field is always present, but non-zero only before V_172.
+     */
+    uint32_t m_PinInstance;
+
     uint32_t m_Ratline;
     uint32_t m_PtrPinNumber;
     uint32_t m_NextInCompInst;
