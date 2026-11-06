@@ -233,7 +233,9 @@ void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
 {
     kiapi::common::project::NetClass nc;
     Serialize( nc );
-    aContainer.PackFrom( nc );
+
+    if( !aContainer.PackFrom( nc ) )
+        wxFAIL_MSG( wxT( "Failed to pack NETCLASS" ) );
 }
 
 

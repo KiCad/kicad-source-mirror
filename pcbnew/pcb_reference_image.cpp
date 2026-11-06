@@ -199,7 +199,8 @@ void PCB_REFERENCE_IMAGE::Serialize( google::protobuf::Any& aContainer ) const
     refImage.mutable_orientation()->set_value_degrees( m_referenceImage.GetOrientation().AsDegrees() );
     refImage.set_opacity( m_referenceImage.GetOpacity() );
 
-    aContainer.PackFrom( refImage );
+    if( !aContainer.PackFrom( refImage ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_REFERENCE_IMAGE" ) );
 }
 
 

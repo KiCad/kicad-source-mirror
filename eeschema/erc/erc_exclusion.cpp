@@ -90,7 +90,10 @@ ERC_EXCLUSION ERC_EXCLUSION::FromMarker( const SCH_MARKER& aMarker )
     google::protobuf::Any container;
 
     aMarker.Serialize( container );
-    container.UnpackTo( ex.m_impl->message.mutable_marker() );
+
+    if( !container.UnpackTo( ex.m_impl->message.mutable_marker() ) )
+        wxFAIL_MSG( wxT( "Failed to unpack ERC_EXCLUSION from internal serialization" ) );
+
     canonicalizeExclusion( ex.m_impl->message );
     ex.SetComment( aMarker.GetComment() );
 

@@ -556,8 +556,9 @@ void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems, 
     else
     {
         std::string payload;
-        kiapi::common::PackKiwayApiMessage( sync, payload );
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, payload, this );
+
+        if( kiapi::common::PackKiwayApiMessage( sync, payload ) )
+            Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, payload, this );
     }
 }
 
@@ -575,8 +576,9 @@ void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
     else
     {
         std::string payload;
-        kiapi::common::PackKiwayApiMessage( message, payload );
-        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, payload, this );
+
+        if( kiapi::common::PackKiwayApiMessage( message, payload ) )
+            Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, payload, this );
     }
 }
 
@@ -630,8 +632,9 @@ void PCB_EDIT_FRAME::SendCrossProbeItem( BOARD_ITEM* aSyncItem )
     else
     {
         std::string payload;
-        kiapi::common::PackKiwayApiMessage( message, payload );
-        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, payload, this );
+
+        if( kiapi::common::PackKiwayApiMessage( message, payload ) )
+            Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, payload, this );
     }
 }
 

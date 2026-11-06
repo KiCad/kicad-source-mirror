@@ -270,7 +270,9 @@ void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
     }
 
     kiapi::common::PackCustomProperties( constraint.mutable_custom_properties(), *this );
-    aContainer.PackFrom( constraint );
+
+    if( !aContainer.PackFrom( constraint ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_CONSTRAINT" ) );
 }
 
 

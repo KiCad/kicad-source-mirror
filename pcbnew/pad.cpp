@@ -441,7 +441,9 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     kiapi::common::PackCustomProperties( pad.mutable_custom_properties(), *this );
-    aContainer.PackFrom( pad );
+
+    if( !aContainer.PackFrom( pad ) )
+        wxFAIL_MSG( wxT( "Failed to pack PAD" ) );
 }
 
 
@@ -458,13 +460,16 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetLocked( pad.locked() == kiapi::common::types::LockedState::LS_LOCKED );
     SetAttribute( FromProtoEnum<PAD_ATTRIB>( pad.type() ) );
     SetNumber( wxString::FromUTF8( pad.number() ) );
-    SetPadToDieLength( pad.pad_to_die_length().value_nm() );
-    SetPadToDieDelay( pad.pad_to_die_delay().value_as() );
+    SetPadToDieLength( (int) pad.pad_to_die_length().value_nm() );
+    SetPadToDieDelay( (int) pad.pad_to_die_delay().value_as() );
     SetSimElectricalType( FromProtoEnum<PAD_SIM_ELECTRICAL_TYPE>( pad.sim_electrical_type() ) );
     SetProperty( FromProtoEnum<PAD_PROP>( pad.fab_property() ) );
 
     google::protobuf::Any padStackWrapper;
-    padStackWrapper.PackFrom( pad.pad_stack() );
+
+    if( !padStackWrapper.PackFrom( pad.pad_stack() ) )
+        wxFAIL_MSG( wxT( "Failed to pack PADSTACK" ) );
+
     m_padStack.Deserialize( padStackWrapper );
     SetOrientation( m_padStack.GetOrientation() );
 

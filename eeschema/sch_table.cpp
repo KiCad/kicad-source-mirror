@@ -111,7 +111,9 @@ void SCH_TABLE::Serialize( google::protobuf::Any& aContainer ) const
     PackStroke( *table.mutable_separators_stroke(), m_separatorsStroke, schIUScale );
 
     kiapi::common::PackCustomProperties( table.mutable_custom_properties(), *this );
-    aContainer.PackFrom( table );
+
+    if( !aContainer.PackFrom( table ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_TABLE" ) );
 }
 
 

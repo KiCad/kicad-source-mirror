@@ -1733,7 +1733,9 @@ void SCH_LABEL::Serialize( google::protobuf::Any& aContainer ) const
     packLabel( label, *this );
 
     kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
-    aContainer.PackFrom( label );
+
+    if( !aContainer.PackFrom( label ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_LABEL" ) );
 }
 
 
@@ -1839,7 +1841,9 @@ void SCH_DIRECTIVE_LABEL::Serialize( google::protobuf::Any& aContainer ) const
     kiapi::common::PackDistance( *label.mutable_symbol_size(), m_symbolSize, schIUScale );
 
     kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
-    aContainer.PackFrom( label );
+
+    if( !aContainer.PackFrom( label ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_DIRECTIVE_LABEL" ) );
 }
 
 
@@ -2216,7 +2220,9 @@ void SCH_GLOBALLABEL::Serialize( google::protobuf::Any& aContainer ) const
         field->Serialize( *label.mutable_intersheet_refs_field(), schIUScale );
 
     kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
-    aContainer.PackFrom( label );
+
+    if( !aContainer.PackFrom( label ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_GLOBALLABEL" ) );
 }
 
 
@@ -2461,7 +2467,9 @@ void SCH_HIERLABEL::Serialize( google::protobuf::Any& aContainer ) const
     label.set_shape( ToProtoEnum<LABEL_FLAG_SHAPE, kiapi::schematic::types::SchematicLabelShape>( GetShape() ) );
 
     kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
-    aContainer.PackFrom( label );
+
+    if( !aContainer.PackFrom( label ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_HIERLABEL" ) );
 }
 
 

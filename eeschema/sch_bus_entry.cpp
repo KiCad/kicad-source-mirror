@@ -133,7 +133,9 @@ void SCH_BUS_ENTRY_BASE::Serialize( google::protobuf::Any& aContainer ) const
         PackColor( *stroke->mutable_color(), m_stroke.GetColor() );
 
     kiapi::common::PackCustomProperties( entry.mutable_custom_properties(), *this );
-    aContainer.PackFrom( entry );
+
+    if( !aContainer.PackFrom( entry ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_BUS_ENTRY" ) );
 }
 
 

@@ -187,7 +187,9 @@ void PCB_TABLE::Serialize( google::protobuf::Any& aContainer ) const
         table.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
     kiapi::common::PackCustomProperties( table.mutable_custom_properties(), *this );
-    aContainer.PackFrom( table );
+
+    if( !aContainer.PackFrom( table ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_TABLE" ) );
 }
 
 

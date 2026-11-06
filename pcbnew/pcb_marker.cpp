@@ -198,7 +198,9 @@ void PCB_MARKER::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::board::DrcMarker msg;
     ToProto( msg, *this );
-    aContainer.PackFrom( msg );
+
+    if( !aContainer.PackFrom( msg ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_MARKER" ) );
 }
 
 

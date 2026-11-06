@@ -470,7 +470,9 @@ void PCB_TRACK::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     kiapi::common::PackCustomProperties( track.mutable_custom_properties(), *this );
-    aContainer.PackFrom( track );
+
+    if( !aContainer.PackFrom( track ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_TRACK" ) );
 }
 
 
@@ -539,7 +541,9 @@ void PCB_ARC::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     kiapi::common::PackCustomProperties( arc.mutable_custom_properties(), *this );
-    aContainer.PackFrom( arc );
+
+    if( !aContainer.PackFrom( arc ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_ARC" ) );
 }
 
 
@@ -591,7 +595,9 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 {
     kiapi::board::types::Via via;
     Serialize( via );
-    aContainer.PackFrom( via );
+
+    if( !aContainer.PackFrom( via ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_VIA" ) );
 }
 
 
@@ -653,9 +659,8 @@ bool PCB_VIA::Deserialize( const kiapi::board::types::Via& aVia )
     SetEnd( GetStart() );
 
     google::protobuf::Any padStackWrapper;
-    padStackWrapper.PackFrom( aVia.pad_stack() );
 
-    if( !m_padStack.Deserialize( padStackWrapper ) )
+    if( !padStackWrapper.PackFrom( aVia.pad_stack() ) || !m_padStack.Deserialize( padStackWrapper ) )
         return false;
 
     // PADSTACK::m_layerSet is not used by vias

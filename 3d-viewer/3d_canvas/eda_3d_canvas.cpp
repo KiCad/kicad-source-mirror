@@ -1248,10 +1248,12 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
             sync.set_context( kiapi::common::commands::SyncSelectionContext::SSC_IMPLICIT );
 
             std::string payload;
-            kiapi::common::PackKiwayApiMessage( sync, payload );
 
-            frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, payload, frame );
-            frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, payload, frame );
+            if( kiapi::common::PackKiwayApiMessage( sync, payload ) )
+            {
+                frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, payload, frame );
+                frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, payload, frame );
+            }
         }
     }
 

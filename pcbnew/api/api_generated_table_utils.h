@@ -44,7 +44,9 @@ void PackGeneratedTable( const PCB_GENERATED_TABLE& aTable, MSG& aMsg )
 {
     google::protobuf::Any tableAny;
     aTable.PCB_TABLE::Serialize( tableAny );
-    tableAny.UnpackTo( aMsg.mutable_table() );
+
+    if( !tableAny.UnpackTo( aMsg.mutable_table() ) )
+        wxFAIL_MSG( wxT( "Failed to unpack PCB_GENERATED_TABLE from internal serialization" ) );
 
     for( const GENERATED_TABLE_COLUMN& col : aTable.AllColumns() )
     {
@@ -78,7 +80,9 @@ template <typename MSG>
 bool UnpackGeneratedTable( const MSG& aMsg, PCB_GENERATED_TABLE& aTable )
 {
     google::protobuf::Any tableAny;
-    tableAny.PackFrom( aMsg.table() );
+
+    if( !tableAny.PackFrom( aMsg.table() ) )
+        return false;
 
     if( !aTable.PCB_TABLE::Deserialize( tableAny ) )
         return false;

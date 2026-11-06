@@ -136,7 +136,8 @@ void SCH_BITMAP::Serialize( google::protobuf::Any& aContainer ) const
     image.mutable_orientation()->set_value_degrees( m_referenceImage.GetOrientation().AsDegrees() );
     image.set_opacity( m_referenceImage.GetOpacity() );
 
-    aContainer.PackFrom( image );
+    if( !aContainer.PackFrom( image ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_BITMAP" ) );
 }
 
 

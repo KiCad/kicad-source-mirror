@@ -232,7 +232,7 @@ BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
     for( int64_t width : { int64_t( 0 ), int64_t( GENERATED_TABLE_MAX_COLUMN_WIDTH ) } )
     {
         proto.mutable_columns( 0 )->mutable_width()->set_value_nm( width );
-        any.PackFrom( proto );
+        (void) any.PackFrom( proto );
         PCB_DRILL_CHART restored( m_board.get() );
         BOOST_REQUIRE( restored.Deserialize( any ) );
         BOOST_CHECK_EQUAL( restored.Columns().front().m_Width, width );
@@ -242,7 +242,7 @@ BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
                           std::numeric_limits<int64_t>::max() } )
     {
         proto.mutable_columns( 0 )->mutable_width()->set_value_nm( width );
-        any.PackFrom( proto );
+        (void) any.PackFrom( proto );
         PCB_DRILL_CHART restored( m_board.get() );
         BOOST_REQUIRE( restored.Deserialize( any ) );
         BOOST_CHECK_EQUAL( restored.Columns().front().m_Width,
@@ -462,7 +462,7 @@ BOOST_AUTO_TEST_CASE( Body3D )
 
     // A model-kind body is reserved and must be rejected on deserialize
     msg.set_kind( kiapi::board::types::BDK_MODEL );
-    any.PackFrom( msg );
+    BOOST_REQUIRE( any.PackFrom( msg ) );
 
     std::unique_ptr<PCB_3D_BODY> modelBody = makeBody();
     BOOST_CHECK( !modelBody->Deserialize( any ) );
@@ -478,7 +478,7 @@ BOOST_AUTO_TEST_CASE( Body3D )
     msg.mutable_id()->set_value( KIID().AsStdString() );
     msg.mutable_parent()->set_value( "00000000-0000-0000-0000-000000000001" );
     msg.mutable_extruded()->mutable_height()->set_value_nm( pcbIUScale.mmToIU( 2 ) );
-    any.PackFrom( msg );
+    BOOST_REQUIRE( any.PackFrom( msg ) );
     *definition.add_items() = any;
 
     BOOST_CHECK( target.DeserializeDefinition( definition ) );
@@ -535,7 +535,7 @@ BOOST_AUTO_TEST_CASE( PadCustomShapeProxyItems )
     mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_top_left()->set_y_nm( 0 );
     mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_bottom_right()->set_x_nm( 1 );
     mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_bottom_right()->set_y_nm( 1 );
-    mismatchedAny.PackFrom( mismatchedProto );
+    BOOST_REQUIRE( mismatchedAny.PackFrom( mismatchedProto ) );
 
     PCB_SHAPE mismatched( &pad, SHAPE_T::RECTANGLE );
     BOOST_REQUIRE( mismatched.Deserialize( mismatchedAny ) );

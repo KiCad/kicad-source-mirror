@@ -76,7 +76,9 @@ void PCB_TABLECELL::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::board::types::TableCell cell;
     Serialize( cell );
-    aContainer.PackFrom( cell );
+
+    if( !aContainer.PackFrom( cell ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_TABLECELL" ) );
 }
 
 

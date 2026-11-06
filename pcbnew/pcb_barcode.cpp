@@ -207,7 +207,9 @@ void PCB_BARCODE::Serialize( google::protobuf::Any& aContainer ) const
                                    : kiapi::common::types::LockedState::LS_UNLOCKED );
 
     kiapi::common::PackCustomProperties( barcode.mutable_custom_properties(), *this );
-    aContainer.PackFrom( barcode );
+
+    if( !aContainer.PackFrom( barcode ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_BARCODE" ) );
 }
 
 

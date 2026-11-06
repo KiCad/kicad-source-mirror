@@ -450,7 +450,8 @@ void PCB_DRILL_CHART::Serialize( google::protobuf::Any& aContainer ) const
     for( const auto& [row, shapeIndex] : m_rowShapes )
         ( *chart.mutable_row_shapes() )[row] = shapeIndex;
 
-    aContainer.PackFrom( chart );
+    if( !aContainer.PackFrom( chart ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_DRILL_CHART" ) );
 }
 
 

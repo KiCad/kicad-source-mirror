@@ -326,7 +326,9 @@ void SCH_PIN::Serialize( google::protobuf::Any& aContainer ) const
         pin.set_active_alternate( m_alt.ToUTF8() );
 
     kiapi::common::PackCustomProperties( pin.mutable_custom_properties(), *this );
-    aContainer.PackFrom( pin );
+
+    if( !aContainer.PackFrom( pin ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_PIN" ) );
 }
 
 

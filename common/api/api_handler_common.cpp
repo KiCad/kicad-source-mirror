@@ -126,7 +126,7 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const
 
     const PROJECT& prj = Pgm().GetSettingsManager().Prj();
 
-    if( aProject.name().compare( prj.GetProjectName().ToUTF8() ) != 0 )
+    if( aProject.name() == prj.GetProjectName().ToUTF8() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -134,7 +134,7 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const
         return tl::unexpected( e );
     }
 
-    if( aProject.path().compare( prj.GetProjectPath().ToUTF8() ) != 0 )
+    if( aProject.path() == prj.GetProjectPath().ToUTF8() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -154,18 +154,24 @@ HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( cons
 
     NetClassesResponse reply;
 
-    std::shared_ptr<NET_SETTINGS>& netSettings =
-            Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
+    std::shared_ptr<NET_SETTINGS>& netSettings = Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
 
     google::protobuf::Any any;
 
     netSettings->GetDefaultNetclass()->Serialize( any );
-    any.UnpackTo( reply.add_net_classes() );
 
-    for( const auto& netClass : netSettings->GetNetclasses() | std::views::values )
+    if( !any.UnpackTo( reply.add_net_classes() ) )
+        wxFAIL_MSG( wxT( "Failed to unpack Default netclasss from internal serialization" ) );
+
+    for( const std::shared_ptr<NETCLASS>& netClass : netSettings->GetNetclasses() | std::views::values )
     {
         netClass->Serialize( any );
-        any.UnpackTo( reply.add_net_classes() );
+
+        if( !any.UnpackTo( reply.add_net_classes() ) )
+        {
+            wxFAIL_MSG( wxString::Format( wxT( "Failed to unpack netclass %s from internal serialization" ),
+                                          netClass->GetName() ) );
+        }
     }
 
     return reply;
@@ -177,8 +183,7 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses( const HANDLER_CON
     if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.project(), true ); !result )
         return tl::unexpected( result.error() );
 
-    std::shared_ptr<NET_SETTINGS>& netSettings =
-            Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
+    std::shared_ptr<NET_SETTINGS>& netSettings = Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
 
     if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
         netSettings->ClearNetclasses();
@@ -186,23 +191,24 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses( const HANDLER_CON
     auto netClasses = netSettings->GetNetclasses();
     google::protobuf::Any any;
 
-    for( const auto& ncProto : aCtx.Request.net_classes() )
+    for( const kiapi::common::project::NetClass& ncProto : aCtx.Request.net_classes() )
     {
-        any.PackFrom( ncProto );
         wxString name = wxString::FromUTF8( ncProto.name() );
-
         bool deserialized = false;
 
-        if( name == wxT( "Default" ) )
+        if( any.PackFrom( ncProto ) )
         {
-            deserialized = netSettings->GetDefaultNetclass()->Deserialize( any );
-        }
-        else
-        {
-            if( !netClasses.contains( name ) )
-                netClasses.insert( { name, std::make_shared<NETCLASS>( name, false ) } );
+            if( name == wxT( "Default" ) )
+            {
+                deserialized = netSettings->GetDefaultNetclass()->Deserialize( any );
+            }
+            else
+            {
+                if( !netClasses.contains( name ) )
+                    netClasses.insert( { name, std::make_shared<NETCLASS>( name, false ) } );
 
-            deserialized = netClasses[name]->Deserialize( any );
+                deserialized = netClasses[name]->Deserialize( any );
+            }
         }
 
         if( !deserialized )
@@ -355,14 +361,12 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handlePing( const HANDLER_CONTEXT<Ping
 }
 
 
-HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents(
-        const HANDLER_CONTEXT<GetTextExtents>& aCtx )
+HANDLER_RESULT<types::Box2> API_HANDLER_COMMON::handleGetTextExtents( const HANDLER_CONTEXT<GetTextExtents>& aCtx )
 {
     EDA_TEXT text( pcbIUScale );
     google::protobuf::Any any;
-    any.PackFrom( aCtx.Request.text() );
 
-    if( !text.Deserialize( any ) )
+    if( !any.PackFrom( aCtx.Request.text() ) || !text.Deserialize( any ) )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -406,9 +410,8 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
 
         EDA_TEXT text( pcbIUScale );
         google::protobuf::Any any;
-        any.PackFrom( *textPtr );
 
-        if( !text.Deserialize( any ) )
+        if( !any.PackFrom( *textPtr ) || !text.Deserialize( any ) )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -426,13 +429,15 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
             EDA_SHAPE proxy( *subshape );
             proxy.Serialize( any );
             GraphicShape* shapeMsg = entry->mutable_shapes()->add_shapes();
-            any.UnpackTo( shapeMsg );
+
+            if( !any.UnpackTo( shapeMsg ) )
+                wxFAIL_MSG( wxT( "Failed to unpack text-as-shapes component from internal serialization" ) );
         }
 
         if( textMsg.has_textbox() && textMsg.textbox().border_enabled() )
         {
             GraphicShape* border = entry->mutable_shapes()->add_shapes();
-            int width = textMsg.textbox().attributes().stroke_width().value_nm();
+            int width = (int) textMsg.textbox().attributes().stroke_width().value_nm();
             border->mutable_attributes()->mutable_stroke()->mutable_width()->set_value_nm( width );
             VECTOR2I tl = UnpackVector2( textMsg.textbox().top_left() );
             VECTOR2I br = UnpackVector2( textMsg.textbox().bottom_right() );

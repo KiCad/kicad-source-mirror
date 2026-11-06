@@ -476,7 +476,9 @@ void LIB_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::schematic::types::SchematicSymbol def;
     Serialize( def );
-    aContainer.PackFrom( def );
+
+    if( !aContainer.PackFrom( def ) )
+        wxFAIL_MSG( wxT( "Failed to pack LIB_SYMBOL" ) );
 }
 
 

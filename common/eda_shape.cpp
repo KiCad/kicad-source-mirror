@@ -356,7 +356,9 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE
 {
     kiapi::common::types::GraphicShape shape;
     Serialize( shape, aScale );
-    aContainer.PackFrom( shape );
+
+    if( !aContainer.PackFrom( shape ) )
+        wxFAIL_MSG( wxT( "Failed to pack EDA_SHAPE" ) );
 }
 
 

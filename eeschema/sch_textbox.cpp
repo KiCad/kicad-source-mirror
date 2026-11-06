@@ -139,7 +139,9 @@ void SCH_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::schematic::types::SchematicTextBox textBox;
     Serialize( textBox, schIUScale );
-    aContainer.PackFrom( textBox );
+
+    if( !aContainer.PackFrom( textBox ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_TEXTBOX" ) );
 }
 
 

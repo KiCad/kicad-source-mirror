@@ -55,6 +55,8 @@ bool API_HANDLER_FP_LIBRARIES::packLibraryItem( const LIB_ID& aId, google::proto
     kiapi::board::types::Footprint definition;
     footprint->SerializeDefinition( &definition );
 
-    aOutput.PackFrom( definition );
+    if( !aOutput.PackFrom( definition ) )
+        wxFAIL_MSG( wxString::Format( wxT( "Failed to pack footprint '%s'" ), aId.GetUniStringLibId() ) );
+
     return true;
 }

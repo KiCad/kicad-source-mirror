@@ -75,7 +75,9 @@ void SCH_GROUP::Serialize( google::protobuf::Any& aContainer ) const
         group.add_items()->set_value( member->m_Uuid.AsStdString() );
 
     kiapi::common::PackCustomProperties( group.mutable_custom_properties(), *this );
-    aContainer.PackFrom( group );
+
+    if( !aContainer.PackFrom( group ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_GROUP" ) );
 }
 
 

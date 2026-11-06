@@ -571,7 +571,9 @@ void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::board::BoardStackup stackup;
     Serialize( stackup );
-    aContainer.PackFrom( stackup );
+
+    if( !aContainer.PackFrom( stackup ) )
+        wxFAIL_MSG( wxT( "Failed to pack BOARD_STACKUP" ) );
 }
 
 

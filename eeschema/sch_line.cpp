@@ -174,7 +174,9 @@ void SCH_LINE::Serialize( google::protobuf::Any &aContainer ) const
         PackLineEnding( *line.mutable_end_ending(), GetEndEnding(), schIUScale );
 
     kiapi::common::PackCustomProperties( line.mutable_custom_properties(), *this );
-    aContainer.PackFrom( line );
+
+    if( !aContainer.PackFrom( line ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_LINE" ) );
 }
 
 

@@ -271,7 +271,9 @@ void PCB_POINT::Serialize( google::protobuf::Any& aContainer ) const
         point.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
     kiapi::common::PackCustomProperties( point.mutable_custom_properties(), *this );
-    aContainer.PackFrom( point );
+
+    if( !aContainer.PackFrom( point ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_POINT" ) );
 }
 
 

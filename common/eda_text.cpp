@@ -185,7 +185,6 @@ void EDA_TEXT::Serialize( kiapi::common::types::Text& text, const EDA_IU_SCALE& 
 
     PackTextAttributes( *attrs, GetAttributes(), aScale );
     attrs->set_visible( true );
-
 }
 
 
@@ -193,7 +192,9 @@ void EDA_TEXT::Serialize( google::protobuf::Any& aContainer, const EDA_IU_SCALE&
 {
     kiapi::common::types::Text text;
     Serialize( text, aScale );
-    aContainer.PackFrom( text );
+
+    if( !aContainer.PackFrom( text ) )
+        wxFAIL_MSG( wxT( "Failed to pack EDA_TEXT" ) );
 }
 
 

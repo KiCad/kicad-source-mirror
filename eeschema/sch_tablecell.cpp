@@ -53,7 +53,9 @@ void SCH_TABLECELL::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::schematic::types::SchematicTableCell cell;
     Serialize( cell );
-    aContainer.PackFrom( cell );
+
+    if( !aContainer.PackFrom( cell ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_TABLECELL" ) );
 }
 
 

@@ -665,12 +665,12 @@ bool ApplySheetInstance( commands::ItemStatus* aStatus, SCH_SHEET* aSheet,
 }
 
 
-tl::expected<bool, ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput )
+tl::expected<bool, ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput,
+                                                   const kiapi::schematic::types::SheetSymbol& aInput )
 {
     google::protobuf::Any any;
-    any.PackFrom( aInput );
 
-    if( !aOutput->Deserialize( any ) )
+    if( !any.PackFrom( aInput ) || !aOutput->Deserialize( any ) )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );

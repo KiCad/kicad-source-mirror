@@ -2183,7 +2183,9 @@ void PCB_TUNING_PATTERN::Serialize( google::protobuf::Any& aContainer ) const
         pattern.add_members()->set_value( member->m_Uuid.AsStdString() );
 
     kiapi::common::PackCustomProperties( pattern.mutable_custom_properties(), *this );
-    aContainer.PackFrom( pattern );
+
+    if( !aContainer.PackFrom( pattern ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_TUNING_PATTERN" ) );
 }
 
 

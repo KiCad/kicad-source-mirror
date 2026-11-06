@@ -67,7 +67,9 @@ void SCH_NO_CONNECT::Serialize( google::protobuf::Any& aContainer ) const
                                   : types::LockedState::LS_UNLOCKED );
 
     kiapi::common::PackCustomProperties( marker.mutable_custom_properties(), *this );
-    aContainer.PackFrom( marker );
+
+    if( !aContainer.PackFrom( marker ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_NO_CONNECT" ) );
 }
 
 

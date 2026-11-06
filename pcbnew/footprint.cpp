@@ -553,7 +553,8 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
             unitMsg->add_pin_numbers( pinNumber.ToUTF8() );
     }
 
-    aContainer.PackFrom( footprint );
+    if( !aContainer.PackFrom( footprint ) )
+        wxFAIL_MSG( wxT( "Failed to pack FOOTPRINT" ) );
 }
 
 
@@ -646,7 +647,9 @@ void FOOTPRINT::SerializeDefinition( kiapi::board::types::Footprint* aOutput ) c
         kiapi::common::PackVector3D( *modelMsg.mutable_offset(), model.m_Offset );
         modelMsg.set_visible( model.m_Show );
         modelMsg.set_opacity( model.m_Opacity );
-        itemMsg->PackFrom( modelMsg );
+
+        if( !itemMsg->PackFrom( modelMsg ) )
+            wxFAIL_MSG( wxT( "Failed to pack FP_3DMODEL" ) );
     }
 }
 
@@ -794,7 +797,10 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     {
         mandatoryField = footprint.reference_field();
         mandatoryField.mutable_id()->set_id( (int) FIELD_T::REFERENCE );
-        buf.PackFrom( mandatoryField );
+
+        if( !buf.PackFrom( mandatoryField ) )
+            wxFAIL_MSG( wxT( "Failed to pack footprint reference field" ) );
+
         GetField( FIELD_T::REFERENCE )->Deserialize( buf );
     }
 
@@ -802,7 +808,10 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     {
         mandatoryField = footprint.value_field();
         mandatoryField.mutable_id()->set_id( (int) FIELD_T::VALUE );
-        buf.PackFrom( mandatoryField );
+
+        if( !buf.PackFrom( mandatoryField ) )
+            wxFAIL_MSG( wxT( "Failed to pack footpring value field" ) );
+
         GetField( FIELD_T::VALUE )->Deserialize( buf );
     }
 
@@ -810,7 +819,10 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     {
         mandatoryField = footprint.datasheet_field();
         mandatoryField.mutable_id()->set_id( (int) FIELD_T::DATASHEET );
-        buf.PackFrom( mandatoryField );
+
+        if( !buf.PackFrom( mandatoryField ) )
+            wxFAIL_MSG( wxT( "Failed to pack footprint datasheet field" ) );
+
         GetField( FIELD_T::DATASHEET )->Deserialize( buf );
     }
 
@@ -818,7 +830,10 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     {
         mandatoryField = footprint.description_field();
         mandatoryField.mutable_id()->set_id( (int) FIELD_T::DESCRIPTION );
-        buf.PackFrom( mandatoryField );
+
+        if( !buf.PackFrom( mandatoryField ) )
+            wxFAIL_MSG( wxT( "Failed to pack footprint description field" ) );
+
         GetField( FIELD_T::DESCRIPTION )->Deserialize( buf );
     }
 

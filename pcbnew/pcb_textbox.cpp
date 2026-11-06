@@ -111,7 +111,9 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::board::types::BoardTextBox boardText;
     Serialize( boardText );
-    aContainer.PackFrom( boardText );
+
+    if( !aContainer.PackFrom( boardText ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_TEXTBOX" ) );
 }
 
 

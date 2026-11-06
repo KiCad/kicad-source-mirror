@@ -140,7 +140,9 @@ void PCB_TEXT::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::board::types::BoardText boardText;
     Serialize( boardText );
-    aContainer.PackFrom( boardText );
+
+    if( !aContainer.PackFrom( boardText ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_TEXT" ) );
 }
 
 

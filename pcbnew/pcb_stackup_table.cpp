@@ -75,7 +75,8 @@ void PCB_STACKUP_TABLE::Serialize( google::protobuf::Any& aContainer ) const
 
     PackGeneratedTable( *this, table );
 
-    aContainer.PackFrom( table );
+    if( !aContainer.PackFrom( table ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_STACKUP_TABLE" ) );
 }
 
 

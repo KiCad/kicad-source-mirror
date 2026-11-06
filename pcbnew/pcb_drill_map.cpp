@@ -296,7 +296,8 @@ void PCB_DRILL_MAP::Serialize( google::protobuf::Any& aContainer ) const
     map.set_guide_cross( m_guideCross );
     kiapi::common::PackDistance( *map.mutable_symbol_size(), m_symbolSize );
 
-    aContainer.PackFrom( map );
+    if( !aContainer.PackFrom( map ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_DRILL_MAP" ) );
 }
 
 

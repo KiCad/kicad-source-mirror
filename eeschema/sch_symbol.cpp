@@ -874,7 +874,9 @@ void SCH_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::schematic::types::SchematicSymbolInstance symbol;
     Serialize( symbol );
-    aContainer.PackFrom( symbol );
+
+    if( !aContainer.PackFrom( symbol ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_SYMBOL" ) );
 }
 
 

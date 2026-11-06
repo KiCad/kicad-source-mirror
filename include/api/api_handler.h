@@ -142,7 +142,7 @@ protected:
                       wxString::Format( "Duplicate API handler for type %s", typeName ) );
 
         m_handlers[typeName] =
-                HANDLER_ENTRY{ [this, aHandler]( ApiRequest& aRequest ) -> API_RESULT
+                HANDLER_ENTRY{ [this, aHandler, typeName]( ApiRequest& aRequest ) -> API_RESULT
                 {
                     HANDLER_CONTEXT<RequestType> ctx;
                     ApiResponse envelope;
@@ -158,7 +158,10 @@ protected:
                     if( response.has_value() )
                     {
                         envelope.mutable_status()->set_status( ApiStatusCode::AS_OK );
-                        envelope.mutable_message()->PackFrom( *response );
+
+                        if( !envelope.mutable_message()->PackFrom( *response ) )
+                            wxFAIL_MSG( wxString::Format( "Failed to pack '%s'", typeName ) );
+
                         return envelope;
                     }
                     else

@@ -89,7 +89,9 @@ void SCH_TEXT::Serialize( google::protobuf::Any& aContainer ) const
     PackVector2( *text.mutable_text()->mutable_position(), GetPosition(), schIUScale );
 
     PackCustomProperties( text.mutable_custom_properties(), *this );
-    aContainer.PackFrom( text );
+
+    if( !aContainer.PackFrom( text ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_TEXT" ) );
 }
 
 

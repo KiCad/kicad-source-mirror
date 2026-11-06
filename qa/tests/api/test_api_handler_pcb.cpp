@@ -125,7 +125,7 @@ kiapi::common::ApiRequest makeBeginCommitRequest()
 
     kiapi::common::ApiRequest request;
     request.mutable_header()->set_client_name( "kicad.qa" );
-    request.mutable_message()->PackFrom( command );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
 
     return request;
 }
@@ -139,7 +139,7 @@ kiapi::common::ApiRequest makeRevertRequest( BOARD* aBoard )
 
     kiapi::common::ApiRequest request;
     request.mutable_header()->set_client_name( "kicad.qa" );
-    request.mutable_message()->PackFrom( command );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
 
     return request;
 }

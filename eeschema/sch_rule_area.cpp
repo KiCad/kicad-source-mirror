@@ -90,7 +90,9 @@ void SCH_RULE_AREA::Serialize( google::protobuf::Any& aContainer ) const
     EDA_SHAPE::Serialize( *ruleArea.mutable_shape(), schIUScale );
 
     kiapi::common::PackCustomProperties( ruleArea.mutable_custom_properties(), *this );
-    aContainer.PackFrom( ruleArea );
+
+    if( !aContainer.PackFrom( ruleArea ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_RULE_AREA" ) );
 }
 
 

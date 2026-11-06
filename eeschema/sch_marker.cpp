@@ -280,7 +280,9 @@ void SCH_MARKER::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::schematic::ErcMarker msg;
     ToProto( msg, *this );
-    aContainer.PackFrom( msg );
+
+    if( !aContainer.PackFrom( msg ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_MARKER" ) );
 }
 
 

@@ -218,7 +218,9 @@ void SCH_SHEET::Serialize( google::protobuf::Any& aContainer ) const
         pin->Serialize( *sheet.add_pins() );
 
     kiapi::common::PackCustomProperties( sheet.mutable_custom_properties(), *this );
-    aContainer.PackFrom( sheet );
+
+    if( !aContainer.PackFrom( sheet ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_SHEET" ) );
 }
 
 

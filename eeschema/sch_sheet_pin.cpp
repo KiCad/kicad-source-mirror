@@ -82,7 +82,9 @@ void SCH_SHEET_PIN::Serialize( google::protobuf::Any& aContainer ) const
 {
     kiapi::schematic::types::SheetPin pin;
     Serialize( pin );
-    aContainer.PackFrom( pin );
+
+    if( !aContainer.PackFrom( pin ) )
+        wxFAIL_MSG( wxT( "Failed to pack SCH_SHEET_PIN" ) );
 }
 
 

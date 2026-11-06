@@ -96,7 +96,7 @@ kiapi::common::ApiRequest makeRevertRequest( const SCHEMATIC& aSchematic )
 
     kiapi::common::ApiRequest request;
     request.mutable_header()->set_client_name( "kicad.qa" );
-    request.mutable_message()->PackFrom( command );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
 
     return request;
 }
@@ -316,7 +316,7 @@ BOOST_AUTO_TEST_CASE( CustomPropertyCannotDuplicateSystemProperty )
     line.add_custom_properties()->set_key( "linE Width" );
     line.add_custom_properties()->set_key( "start X" );
 
-    command.add_items()->PackFrom( line );
+    BOOST_REQUIRE( command.add_items()->PackFrom( line ) );
 
     ApiRequest request;
     request.mutable_header()->set_client_name( "kicad.qa" );
@@ -362,7 +362,7 @@ BOOST_AUTO_TEST_CASE( SymbolFieldTakesPrecedenceOverCustomProperty )
     prop->set_key( "MPN" );
     prop->set_value( "456" );
 
-    command.add_items()->PackFrom( symbol );
+    BOOST_REQUIRE( command.add_items()->PackFrom( symbol ) );
 
     ApiRequest request;
     request.mutable_header()->set_client_name( "kicad.qa" );

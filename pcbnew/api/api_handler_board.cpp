@@ -423,7 +423,14 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
         if( type == PCB_DIMENSION_T )
         {
             board::types::Dimension dimension;
-            anyItem.UnpackTo( &dimension );
+
+            if( !anyItem.UnpackTo( &dimension ) )
+            {
+                status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                status.set_error_message( "Failed to unpack dimension" );
+                aItemHandler( status, anyItem );
+                continue;
+            }
 
             switch( dimension.dimension_style_case() )
             {
@@ -439,7 +446,14 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
         if( *type == PCB_SHAPE_T )
         {
             board::types::BoardGraphicShape shape;
-            anyItem.UnpackTo( &shape );
+
+            if(! anyItem.UnpackTo( &shape ) )
+            {
+                status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                status.set_error_message( "Failed to unpack shape" );
+                aItemHandler( status, anyItem );
+                continue;
+            }
 
             if( shape.has_pad_custom_shape_options() )
             {

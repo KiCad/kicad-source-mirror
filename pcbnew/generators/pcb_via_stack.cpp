@@ -1079,7 +1079,9 @@ void PCB_VIA_STACK::Serialize( google::protobuf::Any& aContainer ) const
         stack.add_members()->set_value( member->m_Uuid.AsStdString() );
 
     kiapi::common::PackCustomProperties( stack.mutable_custom_properties(), *this );
-    aContainer.PackFrom( stack );
+
+    if( !aContainer.PackFrom( stack ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_VIA_STACK" ) );
 }
 
 

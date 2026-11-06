@@ -395,8 +395,9 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
     else
     {
         std::string payload;
-        kiapi::common::PackKiwayApiMessage( sync, payload );
-        Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, payload, this );
+
+        if( kiapi::common::PackKiwayApiMessage( sync, payload ) )
+            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, payload, this );
     }
 }
 
@@ -410,8 +411,9 @@ static void sendHighlightNets( SCH_EDIT_FRAME* aFrame, const kiapi::common::comm
     else
     {
         std::string payload;
-        kiapi::common::PackKiwayApiMessage( aMessage, payload );
-        aFrame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, payload, aFrame );
+
+        if( kiapi::common::PackKiwayApiMessage( aMessage, payload ) )
+            aFrame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, payload, aFrame );
     }
 }
 

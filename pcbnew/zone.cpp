@@ -398,7 +398,9 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
     zone.mutable_border()->mutable_pitch()->set_value_nm( m_borderHatchPitch );
 
     kiapi::common::PackCustomProperties( zone.mutable_custom_properties(), *this );
-    aContainer.PackFrom( zone );
+
+    if( !aContainer.PackFrom( zone ) )
+        wxFAIL_MSG( wxT( "Failed to pack ZONE" ) );
 }
 
 

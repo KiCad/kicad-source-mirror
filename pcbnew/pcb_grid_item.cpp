@@ -134,7 +134,9 @@ void PCB_GRID_ITEM::Serialize( google::protobuf::Any& aContainer ) const
                                 : kiapi::common::types::LockedState::LS_UNLOCKED );
 
     kiapi::common::PackCustomProperties( grid.mutable_custom_properties(), *this );
-    aContainer.PackFrom( grid );
+
+    if( !aContainer.PackFrom( grid ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_GRID_ITEM" ) );
 }
 
 

@@ -75,7 +75,9 @@ void PCB_GROUP::Serialize( google::protobuf::Any &aContainer ) const
         kiapi::common::PackLibId( group.mutable_lib_id(), GetDesignBlockLibId() );
 
     kiapi::common::PackCustomProperties( group.mutable_custom_properties(), *this );
-    aContainer.PackFrom( group );
+
+    if( !aContainer.PackFrom( group ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_GROUP" ) );
 }
 
 

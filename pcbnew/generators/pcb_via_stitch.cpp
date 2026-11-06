@@ -751,7 +751,9 @@ void PCB_VIA_STITCH::Serialize( google::protobuf::Any& aContainer ) const
         stitch.add_members()->set_value( member->m_Uuid.AsStdString() );
 
     kiapi::common::PackCustomProperties( stitch.mutable_custom_properties(), *this );
-    aContainer.PackFrom( stitch );
+
+    if( !aContainer.PackFrom( stitch ) )
+        wxFAIL_MSG( wxT( "Failed to pack PCB_VIA_STITCH" ) );
 }
 
 
