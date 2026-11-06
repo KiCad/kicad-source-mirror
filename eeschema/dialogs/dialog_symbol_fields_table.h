@@ -45,6 +45,9 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    /// Take the schematic's variant list again, moving to the default when the one shown is gone.
+    void ReloadVariants();
+
 private:
     wxGridCellEditor* createDatasheetEditor() override;
     wxGridCellEditor* createFootprintEditor() override;

@@ -800,6 +800,14 @@ public:
      */
     void DeleteVariantDefinition( const wxString& aVariantName );
 
+    /**
+     * Take the variant list from the project file again after it was reread.  Variants the
+     * symbols use are kept.  A current variant the file no longer names falls back to the default.
+     *
+     * @return true if the variant list or the current variant changed.
+     */
+    bool ReloadProjectVariants();
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

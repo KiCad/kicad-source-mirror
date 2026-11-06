@@ -1106,14 +1106,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
     if( !m_parent->ShowAddVariantDialog( this ) )
         return;
 
-    wxArrayString ctrlContents;
-    ctrlContents.Add( GetDefaultVariantName() );
-
-    for( const wxString& variant : m_parent->Schematic().GetVariantNames() )
-        ctrlContents.Add( variant );
-
-    ctrlContents.Sort( SortVariantNames );  // SortVariantNames ensures the default is always first
-    m_variantListBox->Set( ctrlContents );
+    m_variantListBox->Set( m_parent->Schematic().GetVariantNamesForUI() );
 
     wxString currentVariant = m_parent->Schematic().GetCurrentVariant();
 
@@ -1382,6 +1375,30 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
 
     updateVariantButtonStates();
     syncBomFmtPresetSelection();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::ReloadVariants()
+{
+    int      selection = m_variantListBox->GetSelection();
+    wxString selected = selection == wxNOT_FOUND ? wxString() : m_variantListBox->GetString( selection );
+
+    m_variantListBox->Set( m_parent->Schematic().GetVariantNamesForUI() );
+
+    // Variant names are case sensitive, but the list box's own lookup is not
+    int restored = m_variantListBox->FindString( selected, true );
+
+    if( restored != wxNOT_FOUND )
+    {
+        m_variantListBox->SetSelection( restored );
+        updateVariantButtonStates();
+        return;
+    }
+
+    m_variantListBox->SetSelection( 0 );
+
+    wxCommandEvent dummy;
+    onVariantSelectionChange( dummy );
 }
 
 

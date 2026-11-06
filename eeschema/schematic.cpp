@@ -3753,6 +3753,24 @@ void SCHEMATIC::LoadVariants()
 }
 
 
+bool SCHEMATIC::ReloadProjectVariants()
+{
+    std::set<wxString> before;
+    before.swap( m_variantNames );
+    LoadVariants();
+
+    bool changed = m_variantNames != before;
+
+    if( !m_currentVariant.IsEmpty() && !m_variantNames.contains( m_currentVariant ) )
+    {
+        SetCurrentVariant( wxEmptyString );
+        changed = true;
+    }
+
+    return changed;
+}
+
+
 void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
 {
     if( !IsValid() )

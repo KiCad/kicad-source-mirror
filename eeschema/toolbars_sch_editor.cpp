@@ -301,8 +301,9 @@ void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNa
 
     m_currentVariantCtrl->Set( contents );
 
-    if( !m_currentVariantCtrl->SetStringSelection( currentSelection ) )
-        m_currentVariantCtrl->SetSelection( 0 );        // default variant
+    // Variant names are case sensitive, but the choice's own string lookup is not
+    int selection = m_currentVariantCtrl->FindString( currentSelection, true );
+    m_currentVariantCtrl->SetSelection( selection == wxNOT_FOUND ? 0 : selection );
 }
 
 
@@ -449,8 +450,9 @@ void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
 
     if( m_currentVariantCtrl )
     {
-        if( !m_currentVariantCtrl->SetStringSelection( aVariantName ) )
-            m_currentVariantCtrl->SetSelection( 0 );    // default variant
+        // The schematic falls back to the default for a name it does not have
+        int selection = m_currentVariantCtrl->FindString( Schematic().GetCurrentVariant(), true );
+        m_currentVariantCtrl->SetSelection( selection == wxNOT_FOUND ? 0 : selection );
     }
 
     UpdateProperties();

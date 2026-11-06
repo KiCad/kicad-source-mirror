@@ -23,6 +23,7 @@
 #include <confirm.h>
 #include <dialogs/dialog_schematic_setup.h>
 #include <dialogs/dialog_erc.h>
+#include <dialogs/dialog_symbol_fields_table.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
 #include <dialogs/panel_base_display_options.h>
@@ -245,6 +246,17 @@ void SCH_EDIT_FRAME::ReloadProjectFileSettings()
     {
         ShowInfoBarWarning( _( "The reloaded project file defines no bus aliases. The ones in use are kept "
                                "and will be saved with the project." ), true );
+    }
+
+    if( Schematic().ReloadProjectVariants() )
+    {
+        UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+
+        // The choice keeps its old text, which may name a variant the reread file dropped
+        SetCurrentVariant( Schematic().GetCurrentVariant() );
+
+        if( m_symbolFieldsTableDialog )
+            m_symbolFieldsTableDialog->ReloadVariants();
     }
 
     RefreshProjectSettings( aliases == SCHEMATIC::BUS_ALIAS_RELOAD::CHANGED );
