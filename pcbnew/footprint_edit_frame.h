@@ -256,9 +256,14 @@ public:
     void RenameFootprintTab( const LIB_ID& aOldId, const LIB_ID& aNewId );
 
     /**
-     * Return true if any footprint editor tab has unsaved changes.
+     * Return true if any footprint editor tab has unsaved changes, or with aLibraryOnly any tab holding a
+     * library footprint.
      */
-    bool HasModifiedFootprintTabs() const;
+    bool HasModifiedFootprintTabs( bool aLibraryOnly = false ) const;
+
+    /// Save every tab with unsaved edits to a library footprint, then return to the tab that was
+    /// active. False when a save failed; the tabs after it are left unsaved.
+    bool SaveModifiedLibraryTabs();
 
     /**
      * Replace the clean open editor tab matching aFootprint, if any, with the saved footprint.

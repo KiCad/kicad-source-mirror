@@ -66,6 +66,8 @@ enum MAIL_T
     MAIL_PCB_RECONCILE_NETS,    // Name the PCB nets after the schematic nets they match
     MAIL_SCH_LINK_FOOTPRINTS,   // Fill empty symbol footprint fields from footprint references and LIB_IDs
     MAIL_SCH_GET_REF_SUFFIXES,  // Fetch the composed reference suffix of each sheet path in page order
+    MAIL_LIB_SAVE_ALL,          // Save every modified library in a library editor; replies "success" or "failed"
+    MAIL_LIB_HAS_UNSAVED,       // Whether a library editor holds unsaved edits in any tab; replies "yes" or "no"
 };
 
 /**

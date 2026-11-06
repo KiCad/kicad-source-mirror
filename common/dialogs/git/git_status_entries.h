@@ -88,8 +88,8 @@ enum class GIT_EDITOR_PREP
 
 /**
  * Offer to save unsaved schematic and board edits before a git operation. Returns false when
- * the user cancelled or a save failed. Library edits must be saved or discarded in their editor
- * before a working tree rewrite. They do not block a commit or take part in its save prompt.
+ * the user cancelled or a save failed. Before a working tree rewrite the library editors are saved
+ * too, or the rewrite is cancelled. Library edits do not block a commit or take part in its save prompt.
  *
  * When the working tree is about to be rewritten the only choices are to save or to cancel,
  * since a stale editor's next save would overwrite whatever arrived. The project file is

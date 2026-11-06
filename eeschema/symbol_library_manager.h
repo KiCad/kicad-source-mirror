@@ -264,9 +264,9 @@ public:
      */
     bool UpdateLibraryBuffer( const wxString& aLibrary );
 
-    /// Forget the buffers of libraries with no unsaved changes, so they are read again from their
-    /// files, and return those libraries' names
-    std::vector<wxString> DropUnmodifiedBuffers();
+    /// Forget the buffers of libraries with no unsaved changes, except those in aKeep, so they are
+    /// read again from their files, and return those libraries' names
+    std::vector<wxString> DropUnmodifiedBuffers( const std::set<wxString>& aKeep = {} );
 
     /**
      * Remove the symbol from the symbol buffer.

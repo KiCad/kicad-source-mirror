@@ -930,13 +930,13 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateLibraryBuffer( const wxString& aLibrary )
 }
 
 
-std::vector<wxString> SYMBOL_LIBRARY_MANAGER::DropUnmodifiedBuffers()
+std::vector<wxString> SYMBOL_LIBRARY_MANAGER::DropUnmodifiedBuffers( const std::set<wxString>& aKeep )
 {
     std::vector<wxString> dropped;
 
     for( auto it = m_libs.begin(); it != m_libs.end(); )
     {
-        if( it->second.IsModified() )
+        if( it->second.IsModified() || aKeep.contains( it->first ) )
         {
             ++it;
             continue;

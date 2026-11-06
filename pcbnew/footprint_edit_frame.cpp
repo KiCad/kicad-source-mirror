@@ -1533,19 +1533,15 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::HasModifiedFootprintTabs() const
+bool FOOTPRINT_EDIT_FRAME::HasModifiedFootprintTabs( bool aLibraryOnly ) const
 {
     for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
     {
-        if( ctx.get() == m_activeTab )
-        {
-            if( GetScreen() && GetScreen()->IsContentModified() )
-                return true;
-        }
-        else if( ctx->IsModified() )
-        {
+        if( aLibraryOnly && ctx->IsFromBoard() )
+            continue;
+
+        if( ctx.get() == m_activeTab ? IsContentModified() : ctx->IsModified() )
             return true;
-        }
     }
 
     return false;
@@ -1592,6 +1588,37 @@ void FOOTPRINT_EDIT_FRAME::RefreshLibraryFootprintTab( const FOOTPRINT& aFootpri
     UpdateView();
     GetCanvas()->ForceRefresh();
     Update3DView( true, true );
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::SaveModifiedLibraryTabs()
+{
+    FOOTPRINT_EDITOR_TAB_CONTEXT* original = m_activeTab;
+    bool                          saved = true;
+
+    for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+    {
+        if( ctx->IsFromBoard() || !( ctx.get() == m_activeTab ? IsContentModified() : ctx->IsModified() ) )
+            continue;
+
+        if( ctx.get() != m_activeTab )
+            activateFootprintTab( ctx.get() );
+
+        FOOTPRINT* footprint = GetBoard() ? GetBoard()->GetFirstFootprint() : nullptr;
+
+        if( !footprint || !SaveFootprint( footprint ) )
+        {
+            saved = false;
+            break;
+        }
+
+        ClearModify();
+    }
+
+    if( original && m_activeTab != original )
+        activateFootprintTab( original );
+
+    return saved;
 }
 
 

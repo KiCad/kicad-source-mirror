@@ -489,6 +489,14 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         break;
     }
 
+    case MAIL_LIB_SAVE_ALL:
+        mail.SetPayload( SaveModifiedLibraryTabs() ? "success" : "failed" );
+        break;
+
+    case MAIL_LIB_HAS_UNSAVED:
+        mail.SetPayload( HasModifiedFootprintTabs( true ) ? "yes" : "no" );
+        break;
+
     case MAIL_RELOAD_LIB:
         SyncLibraryTree( true );
         RefreshLibraryTree();
