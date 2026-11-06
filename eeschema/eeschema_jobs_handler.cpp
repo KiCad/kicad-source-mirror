@@ -2116,7 +2116,7 @@ int EESCHEMA_JOBS_HANDLER::JobDowngrade( JOB* aJob )
         std::vector<wxString> variants( sch->GetVariantNames().begin(), sch->GetVariantNames().end() );
 
         for( const wxString& name : variants )
-            sch->DeleteVariant( name );
+            sch->DeleteVariant( name, nullptr /* no undo */ );
     }
 
     // Keep designs, companion metadata, and libraries staged until every file is verified.

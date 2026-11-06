@@ -699,7 +699,7 @@ public:
      * Delete all information for @a aVariantName.
      *
      * @param aVariantName is the name of the variant to remove.
-     * @param aCommit is the commit object to handle undo/redo actions.
+     * @param aCommit is an optional SCH_COMMIT for undo/redo support.
      */
     void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit );
 
@@ -714,8 +714,7 @@ public:
      * @param aNewName is the new name for the variant.
      * @param aCommit is an optional SCH_COMMIT for undo/redo support.
      */
-    void RenameVariant( const wxString& aOldName, const wxString& aNewName,
-                        SCH_COMMIT* aCommit = nullptr );
+    void RenameVariant( const wxString& aOldName, const wxString& aNewName, SCH_COMMIT* aCommit );
 
     /**
      * Copy a variant from @a aSourceVariant to @a aNewVariant.
@@ -727,8 +726,7 @@ public:
      * @param aNewVariant is the name of the new variant to create.
      * @param aCommit is an optional SCH_COMMIT for undo/redo support.
      */
-    void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant,
-                      SCH_COMMIT* aCommit = nullptr );
+    void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant, SCH_COMMIT* aCommit );
 
     /**
      * Return the set of variant names (without the default placeholder).

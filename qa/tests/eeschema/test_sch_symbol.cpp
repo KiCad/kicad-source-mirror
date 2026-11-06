@@ -555,7 +555,7 @@ BOOST_AUTO_TEST_CASE( RenameVariantPreservesData )
                                                                          INTERNAL, oldName ), wxS( "100K" ) );
 
     // Rename the variant
-    m_schematic->RenameVariant( oldName, newName );
+    m_schematic->RenameVariant( oldName, newName, nullptr );
 
     // Verify old name is gone
     BOOST_CHECK( !m_schematic->GetVariantNames().contains( oldName ) );
@@ -609,7 +609,7 @@ BOOST_AUTO_TEST_CASE( CopyVariantCreatesIndependentCopy )
     symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "47K" ), &m_schematic->Hierarchy()[0], sourceVariant );
 
     // Copy the variant
-    m_schematic->CopyVariant( sourceVariant, copyVariant );
+    m_schematic->CopyVariant( sourceVariant, copyVariant, nullptr );
 
     // Verify both variants exist
     BOOST_CHECK( m_schematic->GetVariantNames().contains( sourceVariant ) );

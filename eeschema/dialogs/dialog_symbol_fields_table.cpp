@@ -1262,8 +1262,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
     // An empty or default selection cannot be copied.
     if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
     {
-        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot copy the default variant." ),
-                                                 10000, wxICON_ERROR );
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot copy the default variant." ), 10000, wxICON_ERROR );
         return;
     }
 
@@ -1296,7 +1295,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    m_parent->Schematic().CopyVariant( sourceVariantName, newVariantName );
+    m_parent->Schematic().CopyVariant( sourceVariantName, newVariantName, nullptr /* no undo */ );
     m_parent->OnModify();
 
     wxArrayString ctrlContents = m_variantListBox->GetStrings();

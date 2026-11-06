@@ -548,7 +548,7 @@ BOOST_FIXTURE_TEST_CASE( RenamingAndDeletingVariantsRetargetsPendingEdits, ISSUE
     model->SetCurrentVariant( wxS( "A" ) );
     model->SetValue( m_row, m_col, wxS( "A staged" ) );
     model->RenameStoredVariant( wxS( "A" ), wxS( "Renamed" ) );
-    m_schematic->RenameVariant( wxS( "A" ), wxS( "Renamed" ) );
+    m_schematic->RenameVariant( wxS( "A" ), wxS( "Renamed" ), nullptr );
     BOOST_CHECK_EQUAL( model->GetCurrentVariant(), wxS( "Renamed" ) );
     BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "A staged" ) );
 
@@ -556,7 +556,7 @@ BOOST_FIXTURE_TEST_CASE( RenamingAndDeletingVariantsRetargetsPendingEdits, ISSUE
     model->SetCurrentVariant( wxS( "Deleted" ) );
     model->SetValue( m_row, m_col, wxS( "discarded" ) );
     model->DeleteStoredVariant( wxS( "Deleted" ) );
-    m_schematic->DeleteVariant( wxS( "Deleted" ) );
+    m_schematic->DeleteVariant( wxS( "Deleted" ), nullptr );
     model->SetCurrentVariant( wxS( "Renamed" ) );
     Apply( *model );
 
