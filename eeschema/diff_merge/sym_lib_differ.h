@@ -70,6 +70,11 @@ public:
     static std::pair<std::vector<std::unique_ptr<LIB_SYMBOL>>, SYMBOL_MAP>
     LoadLibrary( const wxString& aPath );
 
+    /// True when aMerged differs from each side of a three-way merge exactly as the other side differs
+    /// from aAncestor, so no edit from either side was dropped, altered or added to
+    static bool MergeKeepsBothSides( const SYMBOL_MAP& aAncestor, const SYMBOL_MAP& aOurs, const SYMBOL_MAP& aTheirs,
+                                     const SYMBOL_MAP& aMerged );
+
 private:
     const SYMBOL_MAP& m_before;
     const SYMBOL_MAP& m_after;

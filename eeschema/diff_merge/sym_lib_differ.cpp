@@ -29,7 +29,10 @@
 #include <sch_item.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 
+#include <wx/arrstr.h>
 #include <wx/filename.h>
+
+#include <algorithm>
 
 
 namespace KICAD_DIFF
@@ -105,12 +108,33 @@ SYM_LIB_DIFFER::LoadLibrary( const wxString& aPath )
 
 namespace
 {
+    // Compare also sees symbol state that no property or element carries
+    constexpr int SYMBOL_COMPARE_FLAGS = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::IDENTITY );
+
+
+    std::vector<PROPERTY_DELTA> symbolDeltas( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
+    {
+        std::vector<PROPERTY_DELTA> deltas = DiffItemProperties( aBefore, aAfter );
+        wxString                    before = wxJoin( aBefore->GetFPFilters(), ' ' );
+        wxString                    after = wxJoin( aAfter->GetFPFilters(), ' ' );
+
+        if( before != after )
+        {
+            deltas.push_back(
+                    { wxS( "Footprint Filters" ), DIFF_VALUE::FromString( before ), DIFF_VALUE::FromString( after ) } );
+        }
+
+        return deltas;
+    }
+
+
     bool hasSymbolDifferences( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
     {
         std::unique_ptr<LIB_SYMBOL> before = aBefore->Flatten();
         std::unique_ptr<LIB_SYMBOL> after = aAfter->Flatten();
 
-        return !DiffItemProperties( before.get(), after.get() ).empty()
+        return before->Compare( *after, SYMBOL_COMPARE_FLAGS ) != 0
+               || !symbolDeltas( before.get(), after.get() ).empty()
                || !DiffSymbolElements( before.get(), after.get() ).empty();
     }
 } // namespace
@@ -143,7 +167,7 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
         std::unique_ptr<LIB_SYMBOL> before = beforeIt->second->Flatten();
         std::unique_ptr<LIB_SYMBOL> after = afterIt->second->Flatten();
 
-        change.properties = DiffItemProperties( before.get(), after.get() );
+        change.properties = symbolDeltas( before.get(), after.get() );
 
         for( const SYM_ELEMENT& element : DiffSymbolElements( before.get(), after.get() ) )
         {
@@ -160,6 +184,34 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
     }
 
     return result;
+}
+
+
+bool SYM_LIB_DIFFER::MergeKeepsBothSides( const SYMBOL_MAP& aAncestor, const SYMBOL_MAP& aOurs,
+                                          const SYMBOL_MAP& aTheirs, const SYMBOL_MAP& aMerged )
+{
+    auto carries = [&]( const SYMBOL_MAP& aSide, const SYMBOL_MAP& aOther )
+    {
+        std::map<KIID_PATH, ITEM_CHANGE> applied;
+        std::map<KIID_PATH, ITEM_CHANGE> wanted;
+
+        for( ITEM_CHANGE& change : SYM_LIB_DIFFER( aSide, aMerged ).Diff().changes )
+            applied.emplace( change.id, std::move( change ) );
+
+        for( ITEM_CHANGE& change : SYM_LIB_DIFFER( aAncestor, aOther ).Diff().changes )
+            wanted.emplace( change.id, std::move( change ) );
+
+        // The bounding box only places a change on screen, and comes from a different symbol on each side
+        return std::equal( applied.begin(), applied.end(), wanted.begin(), wanted.end(),
+                           []( const auto& aA, const auto& aB )
+                           {
+                               return aA.first == aB.first && aA.second.kind == aB.second.kind
+                                      && aA.second.properties == aB.second.properties
+                                      && aA.second.children == aB.second.children;
+                           } );
+    };
+
+    return carries( aOurs, aTheirs ) && carries( aTheirs, aOurs );
 }
 
 } // namespace KICAD_DIFF

@@ -37,6 +37,8 @@
 
 #include <wx/filename.h>
 
+#include <functional>
+
 
 using namespace KICAD_DIFF;
 
@@ -377,6 +379,55 @@ BOOST_AUTO_TEST_CASE( AddedGraphicYieldsSingleAddedElement )
     BOOST_CHECK_EQUAL( added, 1 );
     BOOST_CHECK_EQUAL( removed, 0 );
     BOOST_CHECK_EQUAL( modified, 0 );
+}
+
+
+// Edit the index'th plain symbol with pins, the same symbol in every load of one library
+static void editSymbol( const std::vector<std::unique_ptr<LIB_SYMBOL>>& aOwners, size_t aIndex,
+                        const std::function<void( LIB_SYMBOL& )>& aEdit )
+{
+    for( const std::unique_ptr<LIB_SYMBOL>& owner : aOwners )
+    {
+        if( !owner || owner->IsDerived() || owner->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() )
+            continue;
+
+        if( aIndex-- == 0 )
+        {
+            aEdit( *owner );
+            return;
+        }
+    }
+
+    BOOST_FAIL( "the library has too few symbols with pins" );
+}
+
+
+// A merge that drops either side's edit to a symbol the other side left alone must not pass for clean
+BOOST_AUTO_TEST_CASE( MergeKeepsBothSidesRejectsADroppedEdit )
+{
+    auto [ancestorOwners, ancestor] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [oursOwners, ours] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [theirsOwners, theirs] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [mergedOwners, merged] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    auto movePin = []( LIB_SYMBOL& aSymbol )
+    {
+        aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).front()->Move( VECTOR2I( 1270, 0 ) );
+    };
+
+    // Footprint filters are neither a registered property nor an element
+    auto setFilters = []( LIB_SYMBOL& aSymbol )
+    {
+        aSymbol.SetFPFilters( wxArrayString( 1, wxS( "QA_Filter_*" ) ) );
+    };
+
+    editSymbol( oursOwners, 0, movePin );
+    editSymbol( theirsOwners, 1, setFilters );
+    editSymbol( mergedOwners, 0, movePin );
+    editSymbol( mergedOwners, 1, setFilters );
+
+    BOOST_CHECK( SYM_LIB_DIFFER::MergeKeepsBothSides( ancestor, ours, theirs, merged ) );
+    BOOST_CHECK( !SYM_LIB_DIFFER::MergeKeepsBothSides( ancestor, ours, theirs, ours ) );
 }
 
 

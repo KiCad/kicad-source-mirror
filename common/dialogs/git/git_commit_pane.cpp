@@ -74,6 +74,7 @@
 #include <project/project_local_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <set>
 #include <thread>
 #include <wildcards_and_files_ext.h>
 #include <widgets/file_checklist_ctrl.h>
@@ -2714,6 +2715,9 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
     // Files the user merged by hand. The scratch directory holding them goes when this returns.
     int handMerged = 0;
 
+    // Each file gets one try at a merge that needs no answers, before the user is asked
+    std::set<size_t> autoTried;
+
     for( size_t ii = 0; ii < conflicts.size(); )
     {
         if( !canResolve() )
@@ -2728,6 +2732,23 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
         // it could drop an edit unseen.
         const bool mergeable = kind != KICAD_DIFF::DOC_KIND::UNKNOWN && kind != KICAD_DIFF::DOC_KIND::FOOTPRINT
                                && conflict.hasAncestor && conflict.hasOurs && conflict.hasTheirs;
+
+        // Two people editing different symbols of one library collide line by line, not part by part.
+        // The engine reports success only for a merge that keeps both sides' edits
+        if( mergeable && kind == KICAD_DIFF::DOC_KIND::SYM_LIB && autoTried.insert( ii ).second )
+        {
+            wxString mergedOut = workspace.Root() + sep + wxString::Format( wxS( "a%zu_" ), ii )
+                                 + wxFileName( conflict.path ).GetFullName();
+
+            if( KICAD_DIFF::DispatchMerge( m_frame->Kiway(), kind, conflict.ancestorFile, conflict.oursFile,
+                                           conflict.theirsFile, mergedOut, false, false, nullptr )
+                == CLI::EXIT_CODES::SUCCESS )
+            {
+                resolved.emplace_back( conflict.path, mergedOut );
+                ++ii;
+                continue;
+            }
+        }
 
         wxArrayString choices;
 
