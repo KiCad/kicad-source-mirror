@@ -1771,7 +1771,7 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
     KIID_PATH      path( ref );
     KIID           uuid( 0 );
 
-    if( path.size() > 1 )
+    if( path.size() > 0 )
         uuid = path.back();
 
     SCH_SHEET_PATH sheetPath;
