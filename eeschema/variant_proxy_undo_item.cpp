@@ -46,7 +46,7 @@ void VARIANT_PROXY_UNDO_ITEM::Restore( SCHEMATIC* aSchematic )
     }
 
     for( const wxString& excessVariant : currentVariants )
-        aSchematic->DeleteVariant( excessVariant );
+        aSchematic->DoDeleteVariant( excessVariant );
 
     if( m_currentVariant != aSchematic->GetCurrentVariant() )
         aSchematic->SetCurrentVariant( m_currentVariant );

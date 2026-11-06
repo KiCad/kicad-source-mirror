@@ -701,7 +701,7 @@ public:
      * @param aVariantName is the name of the variant to remove.
      * @param aCommit is the commit object to handle undo/redo actions.
      */
-    void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit = nullptr );
+    void DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit );
 
     void AddVariant( const wxString& aVariantName );
 
@@ -763,6 +763,13 @@ public:
      * be removed.
      */
     void LoadVariants();
+
+    /**
+     * Delete the definition of a variant.  (Use DeleteVariant() if you also want any variant-overrides
+     * deleted with it.  This is primarily used internally and by the undo code.)
+     * @param aVariantName
+     */
+    void DeleteVariantDefinition( const wxString& aVariantName );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
