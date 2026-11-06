@@ -7070,4 +7070,18 @@ BOOST_AUTO_TEST_CASE( WireFreePinJunctionsRetainVisibleLocalConnections )
 }
 
 
+BOOST_AUTO_TEST_CASE( BlockInSeparateDesignWarns )
+{
+    wxFileName dsn( KI_TEST::GetEeschemaTestDataDir(), wxS( "CLAYR6.DSN" ) );
+    dsn.AppendDir( wxS( "issue26003" ) );
+
+    WX_STRING_REPORTER reporter;
+    m_plugin.SetReporter( &reporter );
+    m_plugin.LoadSchematicFile( dsn.GetFullPath(), m_schematic.get() );
+
+    BOOST_CHECK( reporter.GetMessages().Contains( wxS( "'IMU'" ) ) );
+    BOOST_CHECK( reporter.GetMessages().Contains( wxS( "'SOFT_PWR_SW'" ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -828,6 +828,17 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                     if( it != hierarchyLinks.end() )
                         block.childName = it->second;
                 }
+
+                // A block linked to no folder or back to the root has no imported implementation
+                std::string childKey = OrcadLower( block.childName );
+
+                if( childKey.empty() || childKey == OrcadLower( rootFolder )
+                    || !design.childFolderPages.count( childKey ) )
+                {
+                    warnFn( wxString::Format( _( "Hierarchical block '%s' could not be linked to an imported "
+                                                 "schematic." ),
+                                              wxString::FromUTF8( block.name ) ) );
+                }
             }
         }
 
