@@ -57,6 +57,7 @@ bool KINNG_REQUEST_SERVER::Start()
 
     m_shutdown.store( false );
     m_pendingReply.clear();
+    m_hasReply = false;
     m_thread = std::thread( [&]() { listenThread(); } );
     return true;
 }
@@ -68,11 +69,12 @@ void KINNG_REQUEST_SERVER::Stop()
         return;
 
     {
+        // Set under the lock so the listener cannot test the flag and then miss this wakeup
         std::lock_guard<std::mutex> lock( m_mutex );
-        m_replyReady.notify_all();
+        m_shutdown.store( true );
     }
 
-    m_shutdown.store( true );
+    m_replyReady.notify_all();
     m_thread.join();
 }
 
@@ -81,6 +83,7 @@ void KINNG_REQUEST_SERVER::Reply( const std::string& aReply )
 {
     std::lock_guard<std::mutex> lock( m_mutex );
     m_pendingReply = aReply;
+    m_hasReply = true;
     m_replyReady.notify_all();
 }
 
@@ -109,6 +112,7 @@ void KINNG_REQUEST_SERVER::listenThread()
         wxLogTrace( TraceNng,
                     wxString::Format( wxS( "Got error code %d from nng_listener_create!" ),
                                       retCode ) );
+        nng_close( socket );
         return;
     }
 
@@ -155,7 +159,7 @@ void KINNG_REQUEST_SERVER::listenThread()
             m_callback( &m_sharedMessage );
 
         std::unique_lock<std::mutex> lock( m_mutex );
-        m_replyReady.wait( lock, [&]() { return m_shutdown.load() || !m_pendingReply.empty(); } );
+        m_replyReady.wait( lock, [&]() { return m_shutdown.load() || m_hasReply; } );
 
         if( m_shutdown.load() )
             break;
@@ -168,7 +172,9 @@ void KINNG_REQUEST_SERVER::listenThread()
             wxLogTrace( TraceNng,
                         wxString::Format( wxS( "Got error code %d from nng_send!" ), retCode ) );
         }
+
         m_pendingReply.clear();
+        m_hasReply = false;
     }
 
     wxLogTrace( TraceNng, wxS( "KINNG_REQUEST_SERVER shutting down" ) );

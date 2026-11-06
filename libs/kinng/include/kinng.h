@@ -62,6 +62,9 @@ private:
 
     std::string m_pendingReply;
 
+    /// Set by Reply(); an empty reply is valid, so emptiness cannot signal readiness
+    bool m_hasReply = false;
+
     std::condition_variable m_replyReady;
 
     std::mutex m_mutex;
