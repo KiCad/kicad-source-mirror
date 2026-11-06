@@ -332,6 +332,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     // Measured while every control is still shown.
     m_minDockWidth = GetSizer()->CalcMin().x;
 
+    OnGitTransfersChanged();
     RefreshFileList();
 }
 
@@ -405,6 +406,10 @@ void GIT_COMMIT_PANE::SetFileSelectedHandler( std::function<void( const wxString
 
 GIT_COMMIT_PANE::~GIT_COMMIT_PANE()
 {
+    // Before the members go, so neither a handler nor another pane's Cancel reaches this pane
+    m_transferLink.reset();
+    m_ownHold.Release();
+
     m_refresh.Cancel();
     m_actionQuery.Cancel();
 
@@ -442,6 +447,7 @@ void GIT_COMMIT_PANE::syncListener()
         m_actionPending = false;
         setBusy( false, wxEmptyString );
     }
+
     m_hasRepo = false;
 
     m_amendCheckbox->SetValue( false );
@@ -460,6 +466,10 @@ void GIT_COMMIT_PANE::syncListener()
                                 } );
     m_listenerSession = common;
     updateCommitButton();
+
+    // Another window's transfer on this repository shows here and this pane's Cancel can stop it
+    m_transferLink = common->Transfers().Subscribe( this );
+    OnGitTransfersChanged();
 }
 
 
@@ -938,7 +948,7 @@ void GIT_COMMIT_PANE::updateCommitButton()
 {
     // While a transfer runs the busy state owns the controls. Checklist or message edits
     // must not re-enable the buttons under it.
-    if( m_transfer.IsBusy() || m_actionPending )
+    if( m_transfer.IsBusy() || othersBusy() || m_actionPending )
         return;
 
     // Until the repository's status arrives the ticked rows may still be another repository's
@@ -1458,6 +1468,19 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
 {
     syncListener();
 
+    // The button reads Cancel for another window's transfer, which only its owner can stop
+    if( othersBusy() && !m_transfer.IsBusy() )
+    {
+        if( othersCanCancel() )
+        {
+            // Before the calls, which may end the transfers and restore the button
+            m_pullButton->Enable( false );
+            transfers().CancelAll();
+        }
+
+        return;
+    }
+
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
     if( !common->GetRepo() )
@@ -1479,6 +1502,10 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
         m_transfer.Cancel();
 
         m_pullButton->Enable( false );
+
+        // The one Cancel button stops the other windows' transfers as well
+        transfers().CancelAll();
+
         m_frame->SetStatusText( _( "Cancelling. A stalled connection stops only when it times out." ) );
         return;
     }
@@ -1496,7 +1523,7 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
 bool GIT_COMMIT_PANE::transferCanStart()
 {
     // The Advanced window also calls this, with the panel's status out of sight.
-    if( m_transfer.IsBusy() || m_actionPending )
+    if( m_transfer.IsBusy() || othersBusy() || m_actionPending )
     {
         KIGIT::ShowBusyMessage( this );
         return false;
@@ -1684,7 +1711,7 @@ void GIT_COMMIT_PANE::onUndoCommit( wxCommandEvent& aEvent )
 {
     syncListener();
 
-    if( m_actionPending || m_transfer.IsBusy() )
+    if( m_actionPending || m_transfer.IsBusy() || othersBusy() )
     {
         KIGIT::ShowBusyMessage( this );
         return;
@@ -1890,7 +1917,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     if( !m_hasRepo )
         return;
 
-    if( m_actionPending || m_transfer.IsBusy() )
+    if( m_actionPending || m_transfer.IsBusy() || othersBusy() )
     {
         KIGIT::ShowBusyMessage( this );
         return;
@@ -2134,8 +2161,12 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
 void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std::function<void( KIGIT_COMMON& )> aWork,
                                       std::function<void()> aDone, const wxString& aStatus )
 {
-    if( m_actionPending || m_transfer.IsBusy() )
+    if( m_actionPending || m_transfer.IsBusy() || othersBusy() )
     {
+        // A finished transfer's follow-up must still end its hold and hand the controls over
+        if( !m_actionPending && !m_transfer.IsBusy() )
+            setBusy( false, wxEmptyString );
+
         KIGIT::ShowBusyMessage( this );
         return;
     }
@@ -2154,7 +2185,15 @@ void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std
             [this, aCommon, read, done = std::move( aDone )]()
             {
                 m_actionPending = false;
+
+                // Hands the controls to another window's transfer that started meanwhile
                 setBusy( false, wxEmptyString );
+
+                if( othersBusy() )
+                {
+                    KIGIT::ShowBusyMessage( this );
+                    return;
+                }
 
                 if( *read && aCommon == m_frame->Prj().GetGitCommon() && !aCommon->IsShuttingDown()
                     && aCommon->GetRepo() && Pgm().GetCommonSettings()->m_Git.enableGit )
@@ -2165,12 +2204,51 @@ void GIT_COMMIT_PANE::runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std
 }
 
 
-void GIT_COMMIT_PANE::SetTransferBusy( bool aBusy, const wxString& aStatus )
+GIT_TRANSFER_BUSY& GIT_COMMIT_PANE::transfers() const
 {
-    if( !aBusy && m_transfer.IsBusy() )
-        return;
+    // The project keeps its session alive, so the reference outlives the temporary
+    return m_frame->Prj().GetGitCommon()->Transfers();
+}
 
-    setBusy( aBusy, aStatus );
+
+bool GIT_COMMIT_PANE::othersBusy() const
+{
+    return transfers().IsBusy( m_ownHold );
+}
+
+
+wxString GIT_COMMIT_PANE::othersStatus() const
+{
+    return transfers().Status( m_ownHold );
+}
+
+
+bool GIT_COMMIT_PANE::othersCanCancel() const
+{
+    return transfers().CanCancel( m_ownHold );
+}
+
+
+void GIT_COMMIT_PANE::OnGitTransfersChanged()
+{
+    // This pane's own transfer keeps the controls, and only the status line follows the others
+    if( m_transfer.IsBusy() )
+    {
+        m_frame->SetStatusText( othersBusy() ? othersStatus() : m_transferStatus );
+        return;
+    }
+
+    if( othersBusy() )
+    {
+        m_showingOthers = true;
+        setBusy( true, othersStatus() );
+        m_pullButton->Enable( othersCanCancel() );
+        return;
+    }
+
+    // A pending action of this pane's own keeps the controls and its Cancel
+    if( std::exchange( m_showingOthers, false ) )
+        setBusy( m_actionPending, wxEmptyString );
 }
 
 
@@ -2182,6 +2260,19 @@ void GIT_COMMIT_PANE::ShowTransferProgress( const wxString& aText )
 
 void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 {
+    if( !aBusy )
+        m_ownHold.Release();
+
+    // Another window's transfer keeps the pane busy until its owner ends it, and its status replaces
+    // whatever this pane's own work showed
+    if( !aBusy && othersBusy() )
+    {
+        m_showingOthers = true;
+        setBusy( true, othersStatus() );
+        m_pullButton->Enable( othersCanCancel() );
+        return;
+    }
+
     m_checklist->Enable( !aBusy );
     m_commitButton->Enable( !aBusy );
     m_amendCheckbox->Enable( !aBusy );
@@ -2253,7 +2344,13 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon, bool aR
 void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead,
                                  bool aRetriedAfterTrust )
 {
-    setBusy( true, _( "Pushing..." ) );
+    m_transferStatus = _( "Pushing..." );
+    setBusy( true, m_transferStatus );
+    m_ownHold.Begin( aCommon, m_transferStatus,
+                     [this]()
+                     {
+                         m_transfer.Cancel();
+                     } );
 
     // Carried rather than captured by reference, because Start returns before the work runs.
     struct OUTCOME
@@ -2338,6 +2435,9 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
+    // A prompt runs an event loop in which this pane can close
+    std::weak_ptr<bool> alive = m_transfer.Alive();
+
     if( aCancelled )
     {
         setBusy( false, _( "Cancelled." ) );
@@ -2347,6 +2447,9 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     if( aHostKey )
     {
         KIGIT::PROMPT_ANSWER answer = KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust );
+
+        if( alive.expired() )
+            return;
 
         if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPush( aCommon, true );
@@ -2359,6 +2462,9 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     if( aAuthFailure )
     {
         KIGIT::PROMPT_ANSWER answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError );
+
+        if( alive.expired() )
+            return;
 
         if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPush( aCommon, aRetriedAfterTrust );
@@ -2812,7 +2918,13 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
 void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush, bool aRetriedAfterTrust )
 {
-    setBusy( true, _( "Getting changes..." ) );
+    m_transferStatus = _( "Getting changes..." );
+    setBusy( true, m_transferStatus );
+    m_ownHold.Begin( aCommon, m_transferStatus,
+                     [this]()
+                     {
+                         m_transfer.Cancel();
+                     } );
 
     // Record what the open documents look like on disk now, so only the ones the merge actually
     // rewrites are reloaded afterwards.
@@ -2913,6 +3025,9 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
+    // A prompt runs an event loop in which this pane can close
+    std::weak_ptr<bool> alive = m_transfer.Alive();
+
     // A rejected login is not a merge problem, so offer the credentials prompt and retry,
     // matching the push path.
     if( aCancelled )
@@ -2925,6 +3040,9 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     {
         KIGIT::PROMPT_ANSWER answer = KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust );
 
+        if( alive.expired() )
+            return;
+
         if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPull( aCommon, aThenPush, true );
         else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
@@ -2936,6 +3054,9 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     if( aAuthFailure )
     {
         KIGIT::PROMPT_ANSWER answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError );
+
+        if( alive.expired() )
+            return;
 
         if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
             submitPull( aCommon, aThenPush, aRetriedAfterTrust );

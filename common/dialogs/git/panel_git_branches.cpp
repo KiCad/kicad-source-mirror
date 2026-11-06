@@ -125,6 +125,9 @@ PANEL_GIT_BRANCHES::~PANEL_GIT_BRANCHES()
 void PANEL_GIT_BRANCHES::StopTransfer()
 {
     m_push.Cancel();
+
+    // The completion never reaches a closed window to release it
+    m_pushBusy.Release();
 }
 
 
@@ -492,7 +495,11 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
     auto outcome = std::make_shared<OUTCOME>();
 
-    m_dialog->SetPaneTransferBusy( true, _( "Pushing..." ) );
+    m_pushBusy.Begin( aCommon, _( "Pushing..." ),
+                      [this]()
+                      {
+                          m_push.Cancel();
+                      } );
 
     bool started = m_push.Start(
             "git force push",
@@ -535,7 +542,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                 if( !m_dialog->SessionStillCurrent() )
                     return;
 
-                m_dialog->SetPaneTransferBusy( false );
+                m_pushBusy.Release();
 
                 if( !outcome->cancelled && outcome->result == PushResult::Success )
                     KIGIT::ClearSyncWarnings( aCommon.get() );
@@ -549,30 +556,32 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                     return;
                 }
 
-                if( outcome->hostKey )
-                {
-                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust )
-                        == KIGIT::PROMPT_ANSWER::ACCEPTED )
-                    {
-                        onForcePush( true );
-                    }
+                // A prompt runs an event loop in which this window can close
+                std::weak_ptr<bool>                 alive = m_push.Alive();
+                std::optional<KIGIT::PROMPT_ANSWER> answer;
 
+                if( outcome->hostKey )
+                    answer = KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust );
+                else if( outcome->authFailure )
+                    answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), outcome->error );
+
+                // Also a window closed some other way than its prompt's parent going, such as a project switch
+                if( alive.expired() || answer == KIGIT::PROMPT_ANSWER::ABANDONED )
+                    return;
+
+                if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                {
+                    onForcePush( aRetriedAfterTrust || outcome->hostKey.has_value() );
                     return;
                 }
 
-                if( outcome->authFailure )
+                // Declining a prompt is the user's answer, not an error
+                if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
                 {
-                    KIGIT::PROMPT_ANSWER answer =
-                            KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), outcome->error );
+                    if( !outcome->hostKey )
+                        m_dialog->ShowTransferProgress( _( "Cancelled." ) );
 
-                    if( answer == KIGIT::PROMPT_ANSWER::ABANDONED )
-                        return;
-
-                    if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
-                    {
-                        onForcePush( aRetriedAfterTrust );
-                        return;
-                    }
+                    return;
                 }
 
                 wxString error = outcome->error;
@@ -585,7 +594,7 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
 
     if( !started )
     {
-        m_dialog->SetPaneTransferBusy( false );
+        m_pushBusy.Release();
         DisplayInfoMessage( this, _( "Could not start the force push." ) );
     }
 }

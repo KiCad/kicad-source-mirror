@@ -22,6 +22,7 @@
 
 #include <git/git_backend.h>
 #include <git/git_compare_handler.h>
+#include <git/git_transfer_busy.h>
 #include <git/kicad_git_errors.h>
 #include <git/kigit_known_hosts.h>
 #include <import_export.h>
@@ -698,6 +699,9 @@ public:
     void RemoveRefreshListener( void* aOwner );
     void NotifyRefreshListeners();
 
+    /// The transfers running on this repository, which every window shows and may cancel. UI thread only
+    GIT_TRANSFER_BUSY& Transfers() { return m_transfers; }
+
 protected:
     git_repository* m_repo;
 
@@ -724,6 +728,8 @@ protected:
     mutable std::mutex m_credentialsMutex;
 
     std::vector<std::pair<void*, std::function<void()>>> m_refreshListeners;
+
+    GIT_TRANSFER_BUSY m_transfers;
 
     // Make git handlers friends so they can access the mutex
     friend class GIT_PUSH_HANDLER;

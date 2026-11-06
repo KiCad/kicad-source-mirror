@@ -134,6 +134,10 @@ namespace UTIL {
 
     LINK& LINK::operator=( LINK&& other )
     {
+        if( this == &other )
+            return *this;
+
+        reset();
         token_ = std::move( other.token_ );
         other.token_.reset();
         observer_ = other.observer_;

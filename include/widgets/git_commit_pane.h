@@ -28,6 +28,7 @@
 
 #include <dialogs/git/git_commit_pane_base.h>
 #include <dialogs/git/git_transfer.h>
+#include <git/git_transfer_busy.h>
 #include <git/git_editor_snapshot.h>
 #include <git/kigit_known_hosts.h>
 
@@ -47,7 +48,7 @@ class wxStaticText;
  * options, the changed files with a checkbox each, the commit and Get Changes buttons, and a
  * gear holding the commit settings and the advanced Git window.
  */
-class GIT_COMMIT_PANE : public GIT_COMMIT_PANE_BASE
+class GIT_COMMIT_PANE : public GIT_COMMIT_PANE_BASE, public GIT_TRANSFER_WATCHER
 {
 public:
     GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent );
@@ -56,6 +57,9 @@ public:
     /// gear's entry for opening that window is left out there.
     GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame );
     ~GIT_COMMIT_PANE() override;
+
+    /// Follow a transfer on this pane's repository beginning or ending in any window.
+    void OnGitTransfersChanged() override;
 
     /// Lay out the pane, then re-wrap the status line when the width its column got has changed.
     bool Layout() override;
@@ -72,11 +76,6 @@ public:
 
     /// Read the project's git status and repopulate the list.
     void RefreshFileList();
-
-    /// Put the panel into the state it uses while a transfer runs, for one started elsewhere.
-    /// The advanced window hosts this panel, so a fetch or a force push begun from there must
-    /// disable the same controls. A transfer this panel started keeps the state until it ends.
-    void SetTransferBusy( bool aBusy, const wxString& aStatus = wxEmptyString );
 
     /// Show a line of transfer progress. Called from the UI thread by a KIGIT_STATUS_REPORTER.
     void ShowTransferProgress( const wxString& aText );
@@ -187,6 +186,14 @@ private:
     /// Enable or disable the controls while a network operation runs, showing a status.
     void setBusy( bool aBusy, const wxString& aStatus );
 
+    /// The transfers on the repository this pane shows.
+    GIT_TRANSFER_BUSY& transfers() const;
+
+    /// The transfers on it that other windows started, leaving out this pane's own.
+    bool     othersBusy() const;
+    wxString othersStatus() const;
+    bool     othersCanCancel() const;
+
     /// Read an action's prerequisites off the UI thread, then resume only in the same project.
     void runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std::function<void( KIGIT_COMMON& )> aWork,
                          std::function<void()> aDone, const wxString& aStatus );
@@ -292,6 +299,18 @@ private:
 
     /// The push or pull this panel submitted last.
     KIGIT_TRANSFER m_transfer;
+
+    /// The status m_transfer began with, shown again once other windows' transfers end before it
+    wxString m_transferStatus;
+
+    /// m_transfer's hold on the repository, so every other pane on it follows and can cancel it
+    GIT_TRANSFER_BUSY::HOLD m_ownHold;
+
+    /// Follows the transfers other windows run on this pane's repository
+    UTIL::LINK m_transferLink;
+
+    /// The busy state shows another window's transfer, which this pane releases when the last one ends
+    bool m_showingOthers = false;
 
 
     /// Told when a transfer starts and ends. Empty unless an owning window asked.

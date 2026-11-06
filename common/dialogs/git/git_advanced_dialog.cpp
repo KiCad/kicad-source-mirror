@@ -53,6 +53,7 @@
 #include <project/project_local_settings.h>
 #include <settings/common_settings.h>
 #include <thread>
+#include <utility>
 #include <widgets/git_commit_pane.h>
 #include <widgets/ui_common.h>
 #include <widgets/wx_treebook.h>
@@ -298,6 +299,10 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
         m_pane->SetMessageChangedHandler( nullptr );
     }
 
+    // A transfer's completion finds this window gone, so release its holds before the panels'
+    // Cancel can reach it
+    m_fetchBusy.Release();
+
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
@@ -331,17 +336,6 @@ void GIT_ADVANCED_DIALOG::syncListener()
                                 } );
     m_listenerSession = common;
     m_listenerAttached = true;
-}
-
-
-void GIT_ADVANCED_DIALOG::SetPaneTransferBusy( bool aBusy, const wxString& aStatus )
-{
-    // Two forms on one project, so both follow the transfer.
-    if( m_changesPane )
-        m_changesPane->SetTransferBusy( aBusy, aStatus );
-
-    if( m_pane )
-        m_pane->SetTransferBusy( aBusy, aStatus );
 }
 
 
@@ -544,7 +538,7 @@ void GIT_ADVANCED_DIALOG::onFetch( bool aRetriedAfterTrust )
     if( !SessionStillCurrent() )
         return;
 
-    if( m_fetch.IsBusy() || m_fetchQuery.IsBusy() )
+    if( m_fetch.IsBusy() || m_fetchQuery.IsBusy() || m_fetchPreflight )
     {
         KIGIT::ShowBusyMessage( this );
         return;
@@ -555,9 +549,15 @@ void GIT_ADVANCED_DIALOG::onFetch( bool aRetriedAfterTrust )
 
     m_fetchButton->SetLabel( _( "Fetching..." ) );
     m_fetchButton->Disable();
-    SetPaneTransferBusy( true, _( "Fetching..." ) );
+    m_fetchBusy.Begin( common, _( "Fetching..." ),
+                       [this]()
+                       {
+                           if( !abandonFetchPreflight() )
+                               m_fetch.Cancel();
+                       } );
     Layout();
 
+    m_fetchPreflight = true;
     m_fetchQuery.Run(
             common,
             [hasRemote]( KIGIT_COMMON& aCommon )
@@ -571,8 +571,7 @@ void GIT_ADVANCED_DIALOG::onFetch( bool aRetriedAfterTrust )
 
                 if( !*hasRemote )
                 {
-                    m_fetchButton->SetLabel( _( "Fetch" ) );
-                    m_fetchButton->Enable();
+                    abandonFetchPreflight();
                     Layout();
                     DisplayInfoMessage( this, _( "No remote is configured to get changes from." ) );
                     return;
@@ -583,8 +582,34 @@ void GIT_ADVANCED_DIALOG::onFetch( bool aRetriedAfterTrust )
 }
 
 
+bool GIT_ADVANCED_DIALOG::abandonFetchPreflight()
+{
+    if( !std::exchange( m_fetchPreflight, false ) )
+        return false;
+
+    // The cancelled check never completes, so its reset of the button and the panes happens here
+    m_fetchQuery.Cancel();
+    endFetch( wxEmptyString );
+    return true;
+}
+
+
+void GIT_ADVANCED_DIALOG::endFetch( const wxString& aStatus )
+{
+    m_fetchButton->SetLabel( _( "Fetch" ) );
+    m_fetchButton->Enable();
+    m_fetchBusy.Release();
+    Layout();
+
+    // After the release, whose restore of the panels clears their status line
+    if( !aStatus.IsEmpty() )
+        ShowTransferProgress( aStatus );
+}
+
+
 void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust )
 {
+    m_fetchPreflight = false;
     m_fetchButton->SetLabel( _( "Fetching..." ) );
     m_fetchButton->Disable();
     Layout();
@@ -642,42 +667,43 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
                 if( !SessionStillCurrent() )
                     return;
 
-                m_fetchButton->SetLabel( _( "Fetch" ) );
-                m_fetchButton->Enable();
-                SetPaneTransferBusy( false );
-                Layout();
-
                 if( outcome->fetched && !outcome->cancelled )
                     KIGIT::ClearSyncWarnings( aCommon.get() );
 
-                if( outcome->cancelled || outcome->fetched )
+                if( outcome->fetched || outcome->cancelled )
+                {
+                    endFetch( outcome->fetched ? wxString() : wxString( _( "Cancelled." ) ) );
                     return;
+                }
 
+                // A prompt runs an event loop in which this window can close
+                std::weak_ptr<bool>                 alive = m_fetch.Alive();
+                std::optional<KIGIT::PROMPT_ANSWER> answer;
+
+                // The Fetch button and the panels stay busy until the prompt is answered
                 if( outcome->hostKey )
-                {
-                    if( KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust )
-                        == KIGIT::PROMPT_ANSWER::ACCEPTED )
-                    {
-                        onFetch( true );
-                    }
+                    answer = KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust );
+                else if( outcome->authFailure )
+                    answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj(), outcome->error );
 
+                // Also a window closed some other way than its prompt's parent going, such as a project switch
+                if( alive.expired() || answer == KIGIT::PROMPT_ANSWER::ABANDONED )
+                    return;
+
+                if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                {
+                    onFetch( aRetriedAfterTrust || outcome->hostKey.has_value() );
                     return;
                 }
 
-                if( outcome->authFailure )
+                // Declining a prompt is the user's answer, not an error
+                if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
                 {
-                    KIGIT::PROMPT_ANSWER answer =
-                            KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj(), outcome->error );
-
-                    if( answer == KIGIT::PROMPT_ANSWER::ABANDONED )
-                        return;
-
-                    if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
-                    {
-                        onFetch( aRetriedAfterTrust );
-                        return;
-                    }
+                    endFetch( outcome->hostKey ? wxString() : wxString( _( "Cancelled." ) ) );
+                    return;
                 }
+
+                endFetch( wxEmptyString );
 
                 wxString error = outcome->error;
 
@@ -689,10 +715,7 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
 
     if( !started )
     {
-        m_fetchButton->SetLabel( _( "Fetch" ) );
-        m_fetchButton->Enable();
-        SetPaneTransferBusy( false );
-        Layout();
+        endFetch( wxEmptyString );
         DisplayInfoMessage( this, _( "Could not start the fetch." ) );
     }
 }

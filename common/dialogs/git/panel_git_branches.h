@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <dialogs/git/git_transfer.h>
+#include <git/git_transfer_busy.h>
 #include <dialogs/git/panel_git_branches_base.h>
 
 class EDA_BASE_FRAME;
@@ -73,6 +74,9 @@ private:
 
     /// The force push this page started.
     KIGIT_TRANSFER m_push;
+
+    /// The force push's hold on its repository while it runs
+    GIT_TRANSFER_BUSY::HOLD m_pushBusy;
 
     /// List and detail reads share the session lock without waiting on the UI thread.
     KIGIT_QUERY m_listQuery;

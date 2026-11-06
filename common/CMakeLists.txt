@@ -119,6 +119,7 @@ set( KICOMMON_SRCS
     git/git_repo_mixin.cpp
     git/git_status_handler.cpp
     git/git_switch_branch_handler.cpp
+    git/git_transfer_busy.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
     git/text_diff.cpp

@@ -29,6 +29,7 @@
 
 #include <dialogs/git/dialog_git_advanced_base.h>
 #include <dialogs/git/git_transfer.h>
+#include <git/git_transfer_busy.h>
 
 class EDA_BASE_FRAME;
 #include <git/git_editor_snapshot.h>
@@ -99,10 +100,6 @@ public:
 
     void ReloadPages();
 
-    /// Put the hosted commit panel into, or out of, its transfer state, for a transfer this
-    /// window or one of its pages started.
-    void SetPaneTransferBusy( bool aBusy, const wxString& aStatus = wxEmptyString );
-
     /// Show a line of transfer progress on the hosted commit panel's status line.
     void ShowTransferProgress( const wxString& aText );
 
@@ -158,6 +155,12 @@ private:
     void onFetch( bool aRetriedAfterTrust = false );
     void startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust );
 
+    /// Stop a pending remote check and release what the fetch holds. False when none is pending.
+    bool abandonFetchPreflight();
+
+    /// Restore the Fetch button and release the fetch's hold, then show aStatus on the commit panel.
+    void endFetch( const wxString& aStatus );
+
     /// On-disk identity of the open documents, taken by ConfirmWorkingTreeChange() so only the
     /// documents an operation actually rewrote are reloaded.
     EDITOR_SNAPSHOT m_docsBeforeChange;
@@ -170,6 +173,9 @@ private:
 
     /// Weak because the pane can be destroyed before this dialog's deferred delete runs.
     wxWeakRef<GIT_COMMIT_PANE> m_pane;
+
+    /// The top bar fetch's hold on its repository, from its remote check until it ends
+    GIT_TRANSFER_BUSY::HOLD m_fetchBusy;
 
     PANEL_GIT_HISTORY*    m_historyPage;
     PANEL_GIT_BRANCHES*   m_branchesPage;
@@ -196,6 +202,9 @@ private:
     /// Preflight reads for actions that may replace the working tree.
     KIGIT_QUERY m_actionQuery;
     KIGIT_QUERY m_fetchQuery;
+
+    /// The fetch is checking its remote, before its transfer starts, and holds the panes busy
+    bool m_fetchPreflight = false;
 
     /// Where the user left the sash between the Changes page's list and its diff area.
     int m_changesSashPos = 0;
