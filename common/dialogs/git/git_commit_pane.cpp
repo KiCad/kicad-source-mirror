@@ -459,6 +459,7 @@ void GIT_COMMIT_PANE::syncListener()
                                     RefreshFileList();
                                 } );
     m_listenerSession = common;
+    updateCommitButton();
 }
 
 
@@ -939,6 +940,17 @@ void GIT_COMMIT_PANE::updateCommitButton()
     // must not re-enable the buttons under it.
     if( m_transfer.IsBusy() || m_actionPending )
         return;
+
+    // Until the repository's status arrives the ticked rows may still be another repository's
+    if( !m_hasRepo )
+    {
+        m_commitButton->Enable( false );
+        m_commitAndPushItem->Enable( false );
+        m_pullButton->SetLabel( _( "Get Changes" ) );
+        m_pullButton->UnsetToolTip();
+        m_pullButton->Enable( false );
+        return;
+    }
 
     if( m_operationInProgress )
     {
@@ -1874,6 +1886,9 @@ struct GIT_COMMIT_PANE::COMMIT_REQUEST
 void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 {
     syncListener();
+
+    if( !m_hasRepo )
+        return;
 
     if( m_actionPending || m_transfer.IsBusy() )
     {
