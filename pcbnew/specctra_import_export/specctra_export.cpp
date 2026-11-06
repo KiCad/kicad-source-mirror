@@ -916,16 +916,18 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         // T_place_keepout, T_via_keepout, T_wire_keepout,
         // T_bend_keepout, T_elongate_keepout, T_keepout.
         // Pcbnew knows only T_keepout, T_via_keepout and T_wire_keepout
+        // Rule areas that allow tracks and vias mean nothing to the router
+        if( !zone->GetDoNotAllowVias() && !zone->GetDoNotAllowTracks() )
+            continue;
+
         DSN_T keepout_type;
 
         if( zone->GetDoNotAllowVias() && zone->GetDoNotAllowTracks() )
             keepout_type = T_keepout;
         else if( zone->GetDoNotAllowVias() )
             keepout_type = T_via_keepout;
-        else if( zone->GetDoNotAllowTracks() )
-            keepout_type = T_wire_keepout;
         else
-            keepout_type = T_keepout;
+            keepout_type = T_wire_keepout;
 
         // Now, build keepout polygon on each copper layer where the zone
         // keepout is living (keepout zones can live on many copper layers)
@@ -1374,16 +1376,18 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             // Keepout areas have a type: T_place_keepout, T_via_keepout, T_wire_keepout,
             // T_bend_keepout, T_elongate_keepout, T_keepout.
             // Pcbnew knows only T_keepout, T_via_keepout and T_wire_keepout
+            // Rule areas that allow tracks and vias mean nothing to the router
+            if( !zone->GetDoNotAllowVias() && !zone->GetDoNotAllowTracks() )
+                continue;
+
             DSN_T keepout_type;
 
             if( zone->GetDoNotAllowVias() && zone->GetDoNotAllowTracks() )
                 keepout_type = T_keepout;
             else if( zone->GetDoNotAllowVias() )
                 keepout_type = T_via_keepout;
-            else if( zone->GetDoNotAllowTracks() )
-                keepout_type = T_wire_keepout;
             else
-                keepout_type = T_keepout;
+                keepout_type = T_wire_keepout;
 
             // Now, build keepout polygon on each copper layer where the zone
             // keepout is living (keepout zones can live on many copper layers)
