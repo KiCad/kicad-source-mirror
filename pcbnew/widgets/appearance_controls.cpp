@@ -2994,6 +2994,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
             if( idx != wxNOT_FOUND )
             {
+                m_layerPresets.erase( presetName );
+
                 if( m_lastSelectedUserPreset && m_lastSelectedUserPreset->name == presetName )
                     m_lastSelectedUserPreset = nullptr;
 
