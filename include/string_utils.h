@@ -235,9 +235,8 @@ inline void StrNumSort( T& aList, CMP_T aCaseSensitivity )
  *
  * @return true if pattern matched otherwise false.
  */
-KICOMMON_API bool WildCompareString( const wxString& pattern,
-                        const wxString& string_to_tst,
-                        bool            case_sensitive = true );
+KICOMMON_API bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
+                                     bool case_sensitive = true );
 
 /**
  * Compare strings like the strcmp function but handle numbers and modifiers within the
@@ -249,15 +248,22 @@ KICOMMON_API bool WildCompareString( const wxString& pattern,
 KICOMMON_API int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
 
 /**
+ *
+ * @param aStr
+ * @param aValueOut [out] optional parameter to accept the number if it is a duck.
+ * @return true if aStr can be parsed as a numeric value (including units and scalers, so
+ *         something like "4K7Ω" will return true).
+ */
+KICOMMON_API bool QuacksLikeADuck( const wxString& aStr, double* aValueOut );
+
+/**
  * Break a string into three parts: he alphabetic preamble, the numeric part, and any
  * alphabetic ending.
  *
  * For example C10A is split to C 10 A
  */
-KICOMMON_API int SplitString( const wxString& strToSplit,
-                 wxString* strBeginning,
-                 wxString* strDigits,
-                 wxString* strEnd );
+KICOMMON_API int SplitString( const wxString& strToSplit, wxString* strBeginning, wxString* strDigits,
+                              wxString* strEnd );
 
 /**
  * Gets the trailing int, if any, from a string.

@@ -211,6 +211,7 @@ public:
             m_units( EDA_UNITS::UNSCALED ),
             m_valueDbl( 0 ),
             m_stringIsWildcard( false ),
+            m_stringIsLiteral( false ),
             m_isDeferredDbl( false ),
             m_isDeferredStr( false )
     {}
@@ -221,6 +222,7 @@ public:
             m_valueDbl( 0 ),
             m_valueStr( aStr ),
             m_stringIsWildcard( aIsWildcard ),
+            m_stringIsLiteral( true ),
             m_isDeferredDbl( false ),
             m_isDeferredStr( false )
     {}
@@ -230,6 +232,7 @@ public:
             m_units( EDA_UNITS::UNSCALED ),
             m_valueDbl( aVal ),
             m_stringIsWildcard( false ),
+            m_stringIsLiteral( false ),
             m_isDeferredDbl( false ),
             m_isDeferredStr( false )
     {}
@@ -315,6 +318,8 @@ public:
 
     bool StringIsWildcard() const { return m_stringIsWildcard; }
 
+    bool StringIsLiteral() const { return m_stringIsLiteral; }
+
 private:
     VAR_TYPE_T                m_type;
     EDA_UNITS                 m_units;
@@ -324,6 +329,7 @@ private:
     INPLACE_FUNCTION<double()>   m_lambdaDbl;
     INPLACE_FUNCTION<wxString()> m_lambdaStr;
     bool                         m_stringIsWildcard;
+    bool                         m_stringIsLiteral;
     mutable bool                 m_isDeferredDbl;
     mutable bool                 m_isDeferredStr;
 

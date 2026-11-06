@@ -1279,19 +1279,37 @@ int UOP::Exec( CONTEXT* ctx )
 
     if( m_op & TR_OP_BINARY_MASK )
     {
+        LIBEVAL::VALUE  autoConverted;
         LIBEVAL::VALUE* arg2 = ctx->Pop();
         LIBEVAL::VALUE* arg1 = ctx->Pop();
         double          result;
 
-        if( ctx->HasErrorCallback() )
+        if( arg1 && arg1->GetType() == VT_STRING && arg2 && arg2->GetType() == VT_NUMERIC )
         {
-            if( arg1 && arg1->GetType() == VT_STRING && arg2 && arg2->GetType() == VT_NUMERIC )
+            double doubleVal;
+
+            if( !arg1->StringIsLiteral() && QuacksLikeADuck( arg1->AsString(), &doubleVal ) )
+            {
+                autoConverted = LIBEVAL::VALUE( doubleVal );
+                arg1 = &autoConverted;
+            }
+            else if( ctx->HasErrorCallback() )
             {
                 ctx->ReportError( wxString::Format( _( "Type mismatch between '%s' and %lf" ),
                                                     arg1->AsString(),
                                                     arg2->AsDouble() ) );
             }
-            else if( arg1 && arg1->GetType() == VT_NUMERIC && arg2 && arg2->GetType() == VT_STRING )
+        }
+        else if( arg1 && arg1->GetType() == VT_NUMERIC && arg2 && arg2->GetType() == VT_STRING )
+        {
+            double doubleVal;
+
+            if( !arg2->StringIsLiteral() && QuacksLikeADuck( arg1->AsString(), &doubleVal ) )
+            {
+                autoConverted = LIBEVAL::VALUE( doubleVal );
+                arg2 = &autoConverted;
+            }
+            else if( ctx->HasErrorCallback() )
             {
                 ctx->ReportError( wxString::Format( _( "Type mismatch between %lf and '%s'" ),
                                                     arg1->AsDouble(),

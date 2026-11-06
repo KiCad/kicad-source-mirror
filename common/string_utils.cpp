@@ -1067,6 +1067,21 @@ bool ApplyModifier( double& value, const wxString& aString )
     wxChar   modifier;
     wxString units;
 
+    if( aString.Strip() == wxT( "m" ) )
+    {
+        // a single m is meters, not milli-undefineds
+        return true;
+    }
+    else if( aString.Strip() == wxT( "mils" ) )
+    {
+        value *= 0.0000254;
+        return true;
+    }
+    else if( aString.Strip() == wxT( "in" ) )
+    {
+        value *= 0.0254;
+        return true;
+    }
     if( modifiers.Find( aString[ 0 ] ) >= 0 )
     {
         modifier = aString[ 0 ];
@@ -1081,10 +1096,13 @@ bool ApplyModifier( double& value, const wxString& aString )
     if( units.length()
             && !units.IsSameAs( wxT( "F" ), false )
             && !units.IsSameAs( wxT( "hz" ), false )
+            && !units.IsSameAs( wxT( "Ω" ), false )
             && !units.IsSameAs( wxT( "W" ), false )
             && !units.IsSameAs( wxT( "V" ), false )
             && !units.IsSameAs( wxT( "A" ), false )
-            && !units.IsSameAs( wxT( "H" ), false ) )
+            && !units.IsSameAs( wxT( "H" ), false )
+            && !units.IsSameAs( wxT( "s" ), false )
+            && !units.IsSameAs( wxT( "m" ), false ) )
     {
         return false;
     }
@@ -1105,6 +1123,8 @@ bool ApplyModifier( double& value, const wxString& aString )
         value *= 1.0e-3;
     else if( modifier == 'R' || modifier == 'F' )
         ; // unity scalar
+    else if( modifier == 'c' )  // primarily for cm
+        value *= 1.0e2;
     else if( modifier == 'k' || modifier == 'K' )
         value *= 1.0e3;
     else if( modifier == 'M' )
@@ -1236,6 +1256,35 @@ bool convertSeparators( wxString* value )
     // Convert to C-locale
     value->Replace( thousandsSeparator, wxEmptyString );
     value->Replace( decimalSeparator, '.' );
+
+    return true;
+}
+
+
+bool QuacksLikeADuck( const wxString& aStr, double* aValue )
+{
+    if( aValue )
+        *aValue = NAN;
+
+    wxString str = UnescapeString( aStr );
+
+    wxString beforeDigits, digits, afterDigits;
+    SplitString( str, &beforeDigits, &digits, &afterDigits );
+
+    if( !beforeDigits.Trim( true ).Trim( false ).IsEmpty() )
+        return false;
+
+    double number = 0;
+    convertSeparators( &digits );
+
+    if( !digits.ToCDouble( &number ) )
+        return false;
+
+   if( !afterDigits.IsEmpty() && !ApplyModifier( number, afterDigits ) )
+       return false;
+
+    if( aValue )
+        *aValue = number;
 
     return true;
 }
