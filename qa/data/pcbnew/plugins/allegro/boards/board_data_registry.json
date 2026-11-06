@@ -1,5 +1,14 @@
 {
     "boards": {
+        "ABX00162_UNOQ": {
+            "url": "https://www.unoq.example",
+            "license": "unknown",
+            "formatVersion": "17.5",
+            "header": {
+                "comment": "Unusually, layer map slots past 24 are populated in this one",
+                "skip": false
+            }
+        },
         "BeagleBone_Black_RevC": {
             "formatVersion": "17.2",
             "boardFile": "BeagleBone_Black_RevC.brd",
@@ -197,8 +206,7 @@
             "description": "CutiePi 2.3, up-revved with DB Doctor 18",
             "formatVersion": "18.0",
             "header": {
-                "comment": "This one appears to be reading only 1264 bytes",
-                "skip": true
+                "skip": false
             }
         },
         "EVK_BaseBoard": {
@@ -231,6 +239,7 @@
         },
         "Olympus_15061-1b_v165": {
             "url": "https://www.opencompute.org/wiki/Server/ProjectOlympus",
+            "url2": "https://files.opencompute.org/oc/public.php?service=files&t=e969672c57d6e17647adea54f2c3e5a7",
             "license": "OWFa-1.0",
             "description": "Olympus 15061 1b board file, saved in Allegro",
             "formatVersion": "16.5",
@@ -350,6 +359,9 @@
             "description": "QWICC FPC interposer board, format magic 0x00150200",
             "formatVersion": "18.1",
             "boardFile": "fpc_interposer.brd",
+            "header": {
+                "skip": false
+            },
             "boardExpectations": [
                 {
                     "type": "item",

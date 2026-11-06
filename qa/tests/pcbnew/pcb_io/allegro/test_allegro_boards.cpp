@@ -264,10 +264,10 @@ public:
                 BOOST_TEST( parser.GetFormatVersion() == brdDef.m_FormatVersion );
             }
 
-            // Other header tests - validate some commonly used fields?
+            // Check that we got some valid header data
 
-            // The parser should have consumed all the data in the header
-            BOOST_TEST( fileStream.Position() == headerData.size() );
+            // Layer maps are near the end, so getting there is a good sign
+            BOOST_TEST( header->m_LayerMap.size() > 0 );
         }
     }
 

@@ -271,7 +271,11 @@ struct FILE_HEADER
 {
     struct LAYER_MAP_ENTRY
     {
+        // Meaning unknown. Small value.
         uint32_t m_A;
+
+        // Key of the 0x2A LAYER_LIST block holding the subclass names for this
+        // class.
         uint32_t m_LayerList0x2A;
     };
 
@@ -389,12 +393,21 @@ struct FILE_HEADER
     uint32_t m_UnitsDivisor;
 
     /**
-     * The layer maps is a list of groups of two numbers.
+     * All versions of Allegro PCB files observed so far have 28 layer map entries,
+     * indexed by Allegro layer CLASS.
      *
-     * All files so far seem to have 25 entries, but unsure if that
-     * is a universal value. But there's no obvious nearby value of '25'.
+     * But this appears to be embedded in a region with space for up to 64 entries,
+     * so this could be either reserved or normally-unused space. So if we find
+     * layer maps with values in this region is could be possible.
      */
-    std::array<LAYER_MAP_ENTRY, 25> m_LayerMap;
+    static constexpr size_t LAYER_MAP_ENTRY_COUNT = 28;
+
+    /**
+     * The layer map is a list of entry counts for each Allegro layer class.
+     *
+     * Entries with a zero in either field are considered empty.
+     */
+    std::array<LAYER_MAP_ENTRY, LAYER_MAP_ENTRY_COUNT> m_LayerMap;
 
     uint32_t GetStringsCount() const
     {

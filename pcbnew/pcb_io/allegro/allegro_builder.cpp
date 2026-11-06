@@ -1816,14 +1816,14 @@ void BOARD_BUILDER::setupLayers()
 {
     wxLogTrace( traceAllegroBuilder, "Setting up layer mapping from Allegro to KiCad" );
 
-    const std::array<FILE_HEADER::LAYER_MAP_ENTRY, 25>& layerMap = m_brdDb.m_Header->m_LayerMap;
-
-    for( size_t i = 0; i < layerMap.size(); ++i )
+    for( size_t i = 0; i < m_brdDb.m_Header->m_LayerMap.size(); ++i )
     {
-        const uint8_t classNum = static_cast<uint8_t>( i );
+        FILE_HEADER::LAYER_MAP_ENTRY& layerMapEntry = m_brdDb.m_Header->m_LayerMap[i];
 
-        const uint32_t x2aKey = layerMap[i].m_LayerList0x2A;
+        const uint8_t  classNum = static_cast<uint8_t>( i );
+        const uint32_t x2aKey = layerMapEntry.m_LayerList0x2A;
 
+        // Skip empty layer map entries
         if( x2aKey == 0 )
             continue;
 
