@@ -541,6 +541,27 @@ void PCB_TABLE::OnFootprintRescaled( double aRatioX, double aRatioY, double aLin
 }
 
 
+static void mirrorCellColumns( std::vector<PCB_TABLECELL*>& aCells, int aRowCount, int aColCount )
+{
+    const std::vector<PCB_TABLECELL*> oldCells = aCells;
+
+    for( int row = 0; row < aRowCount; ++row )
+    {
+        const int rowOffset = row * aColCount;
+
+        for( int col = 0; col < aColCount; )
+        {
+            const int span = std::clamp( oldCells[rowOffset + col]->GetColSpan(), 1, aColCount - col );
+
+            for( int ii = 0; ii < span; ++ii )
+                aCells[rowOffset + aColCount - col - span + ii] = oldCells[rowOffset + col + ii];
+
+            col += span;
+        }
+    }
+}
+
+
 void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // FP-child path keeps cells in lib frame, the standalone path below
@@ -552,16 +573,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
         // Flipping a cell also turns its text 180 degrees, so in the frame the table reads in
         // it always comes out mirrored left to right.
-        std::vector<PCB_TABLECELL*> oldCells = m_cells;
-        int                         rowOffset = 0;
-
-        for( int row = 0; row < GetRowCount(); ++row )
-        {
-            for( int col = 0; col < GetColCount(); ++col )
-                m_cells[rowOffset + col] = oldCells[rowOffset + GetColCount() - 1 - col];
-
-            rowOffset += GetColCount();
-        }
+        mirrorCellColumns( m_cells, GetRowCount(), GetColCount() );
 
         std::map<int, int> newColWidths;
 
@@ -601,16 +613,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     // Flipping a cell turns its text 180 degrees and the grid is laid out in the frame the
     // cells read in, so that turn reverses the rows already. Only the columns are left.
-    std::vector<PCB_TABLECELL*> oldCells = m_cells;
-    int                         rowOffset = 0;
-
-    for( int row = 0; row < GetRowCount(); ++row )
-    {
-        for( int col = 0; col < GetColCount(); ++col )
-            m_cells[rowOffset + col] = oldCells[rowOffset + GetColCount() - 1 - col];
-
-        rowOffset += GetColCount();
-    }
+    mirrorCellColumns( m_cells, GetRowCount(), GetColCount() );
 
     std::map<int, int> newColWidths;
 
