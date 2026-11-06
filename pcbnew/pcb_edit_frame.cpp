@@ -1630,9 +1630,15 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::ResolveDRCExclusions( bool aCreateMarkers )
 {
+    addExclusionMarkers( GetBoard()->ResolveDRCExclusions( aCreateMarkers ) );
+}
+
+
+void PCB_EDIT_FRAME::addExclusionMarkers( const std::vector<PCB_MARKER*>& aMarkers )
+{
     BOARD_COMMIT commit( this );
 
-    for( PCB_MARKER* marker : GetBoard()->ResolveDRCExclusions( aCreateMarkers ) )
+    for( PCB_MARKER* marker : aMarkers )
     {
         if( marker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
             marker->GetRCItem()->SetItems( GetCanvas()->GetDrawingSheet() );
@@ -2051,6 +2057,30 @@ void PCB_EDIT_FRAME::ReloadProjectFileSettings()
 
     if( EDA_3D_VIEWER_FRAME* viewer = GetOur3DViewerFrame() )
         viewer->ApplyProjectFileSettings();
+
+    std::vector<PCB_MARKER*> stale;
+    std::vector<PCB_MARKER*> created = GetBoard()->ReloadDRCExclusions( stale );
+
+    if( !stale.empty() )
+    {
+        m_toolManager->RunAction( ACTIONS::selectionClear );
+
+        std::unordered_set<const EDA_ITEM*> freed( stale.begin(), stale.end() );
+        m_undoList.ForgetItems( freed );
+        m_redoList.ForgetItems( freed );
+    }
+
+    for( PCB_MARKER* marker : stale )
+    {
+        GetCanvas()->GetView()->Remove( marker );
+        GetBoard()->Delete( marker );
+    }
+
+    addExclusionMarkers( created );
+
+    // The dialog lists marker pointers, some of which were just deleted
+    if( DIALOG_DRC* drcDialog = m_toolManager->GetTool<DRC_TOOL>()->GetDRCDialog() )
+        drcDialog->UpdateData();
 
     RefreshProjectSettings();
 

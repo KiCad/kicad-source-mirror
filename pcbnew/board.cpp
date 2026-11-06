@@ -599,6 +599,9 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
+        if( !marker->GetRCItem() )
+            continue;
+
         DRC_EXCLUSION lookup = DRC_EXCLUSION::FromMarker( *marker );
 
         if( auto it = exclusions.find( lookup ); it != exclusions.end() )
@@ -641,6 +644,31 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
                 m_designSettings->m_DrcExclusions.insert( exclusion );
             }
         }
+    }
+
+    return newMarkers;
+}
+
+
+std::vector<PCB_MARKER*> BOARD::ReloadDRCExclusions( std::vector<PCB_MARKER*>& aStale )
+{
+    std::vector<PCB_MARKER*> wereExcluded;
+
+    for( PCB_MARKER* marker : m_markers )
+    {
+        if( marker->IsExcluded() )
+        {
+            wereExcluded.push_back( marker );
+            marker->SetExcluded( false );
+        }
+    }
+
+    std::vector<PCB_MARKER*> newMarkers = ResolveDRCExclusions( true );
+
+    for( PCB_MARKER* marker : wereExcluded )
+    {
+        if( !marker->IsExcluded() )
+            aStale.push_back( marker );
     }
 
     return newMarkers;

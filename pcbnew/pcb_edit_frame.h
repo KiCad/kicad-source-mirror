@@ -864,6 +864,9 @@ private:
     /// Recompile the design rules, reporting a parse error in the infobar.
     void recompileDesignRules();
 
+    /// Add the markers a resolve created for exclusions and redraw every excluded marker.
+    void addExclusionMarkers( const std::vector<PCB_MARKER*>& aMarkers );
+
     friend struct PCB::IFACE;
     friend class APPEARANCE_CONTROLS;
 

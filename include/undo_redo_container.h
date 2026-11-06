@@ -26,6 +26,7 @@
 #include <eda_item_flags.h>
 #include <functional>
 #include <kiid.h>
+#include <unordered_set>
 #include <vector>
 #include <wx/string.h>
 
@@ -299,6 +300,12 @@ public:
     PICKED_ITEMS_LIST* PopCommand();
 
     void ClearCommandList();
+
+    /**
+     * Drop every picker that refers to one of \a aItems, before they are freed outside the undo
+     * system.  Commands left with no pickers are removed.
+     */
+    void ForgetItems( const std::unordered_set<const EDA_ITEM*>& aItems );
 
     std::vector <PICKED_ITEMS_LIST*> m_CommandsList;   // the list of possible undo/redo commands
 };

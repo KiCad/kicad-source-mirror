@@ -2529,6 +2529,45 @@ void SCHEMATIC::ResolveERCExclusionsPostUpdate()
 }
 
 
+std::vector<SCH_MARKER*> SCHEMATIC::ReloadERCExclusions()
+{
+    // The reread file carries every exclusion the old unresolved list held
+    m_unresolvedErcExclusions.clear();
+
+    std::vector<std::pair<SCH_MARKER*, SCH_SCREEN*>> wereExcluded;
+    SCH_SCREENS                                       screens( Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->IsExcluded() )
+            {
+                wereExcluded.emplace_back( marker, screen );
+                marker->SetExcluded( false );
+            }
+        }
+    }
+
+    ResolveERCExclusionsPostUpdate();
+
+    std::vector<SCH_MARKER*> stale;
+
+    for( auto& [marker, screen] : wereExcluded )
+    {
+        if( !marker->IsExcluded() )
+        {
+            screen->Remove( marker );
+            stale.push_back( marker );
+        }
+    }
+
+    return stale;
+}
+
+
 EMBEDDED_FILES* SCHEMATIC::GetEmbeddedFiles()
 {
     return static_cast<EMBEDDED_FILES*>( this );

@@ -32,6 +32,7 @@
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
+#include <sch_marker.h>
 #include <settings/color_settings.h>
 #include <sch_painter.h>
 #include <connection_graph.h>
@@ -49,6 +50,7 @@
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <sim/spice_settings.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
 
@@ -199,6 +201,26 @@ void SCH_EDIT_FRAME::ReloadProjectFileSettings()
     ApplyProjectFileSettings();
     BASE_SCREEN::m_DrawingSheetFileName = Schematic().Settings().m_SchDrawingSheetFileName;
     LoadDrawingSheet();
+
+    std::vector<SCH_MARKER*> stale = Schematic().ReloadERCExclusions();
+
+    if( !stale.empty() )
+    {
+        m_toolManager->RunAction( ACTIONS::selectionClear );
+
+        std::unordered_set<const EDA_ITEM*> freed( stale.begin(), stale.end() );
+        m_undoList.ForgetItems( freed );
+        m_redoList.ForgetItems( freed );
+    }
+
+    for( SCH_MARKER* marker : stale )
+    {
+        GetCanvas()->GetView()->Remove( marker );
+        delete marker;
+    }
+
+    // Markers the file added are on their screens but not yet in the view
+    GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
 
     SCHEMATIC::BUS_ALIAS_RELOAD aliases = Schematic().ReloadProjectBusAliases();
 

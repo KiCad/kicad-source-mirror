@@ -549,6 +549,14 @@ public:
     void ResolveERCExclusionsPostUpdate();
 
     /**
+     * Resolve exclusions again after the project file was reread.
+     *
+     * @return the markers whose exclusion the file no longer holds.  A fresh load would not have
+     *         them, so they come off their screens and the caller owns them.
+     */
+    std::vector<SCH_MARKER*> ReloadERCExclusions();
+
+    /**
      * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for
      * listeners.
      */

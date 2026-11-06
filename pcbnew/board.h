@@ -795,6 +795,15 @@ public:
     std::vector<PCB_MARKER*> ResolveDRCExclusions( bool aCreateMarkers );
 
     /**
+     * Resolve exclusions again after the project file was reread.
+     *
+     * @param aStale receives the markers whose exclusion the file no longer holds.  A fresh load
+     *               would not have them, so the caller removes them.
+     * @return the markers created for exclusions that had none, as ResolveDRCExclusions( true ).
+     */
+    std::vector<PCB_MARKER*> ReloadDRCExclusions( std::vector<PCB_MARKER*>& aStale );
+
+    /**
      * Scan existing markers and record data from any that are Excluded.
      */
     void RecordDRCExclusions();

@@ -326,6 +326,32 @@ void UNDO_REDO_CONTAINER::ClearCommandList()
 }
 
 
+void UNDO_REDO_CONTAINER::ForgetItems( const std::unordered_set<const EDA_ITEM*>& aItems )
+{
+    for( PICKED_ITEMS_LIST* cmd : m_CommandsList )
+    {
+        for( unsigned ii = cmd->GetCount(); ii-- > 0; )
+        {
+            if( !aItems.contains( cmd->GetPickedItem( ii ) ) )
+                continue;
+
+            delete cmd->GetPickedItemLink( ii );
+            cmd->RemovePicker( ii );
+        }
+    }
+
+    std::erase_if( m_CommandsList,
+                   []( PICKED_ITEMS_LIST* cmd )
+                   {
+                       if( cmd->GetCount() > 0 )
+                           return false;
+
+                       delete cmd;
+                       return true;
+                   } );
+}
+
+
 void UNDO_REDO_CONTAINER::PushCommand( PICKED_ITEMS_LIST* aItem )
 {
     m_CommandsList.push_back( aItem );
