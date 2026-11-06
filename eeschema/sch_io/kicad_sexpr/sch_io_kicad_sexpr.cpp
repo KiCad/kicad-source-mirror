@@ -666,7 +666,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
     m_out = aFormatter;
 
     std::map<wxString, LIB_SYMBOL*> libSymbols;
-    SCH_SCREEN*                     screen = aSelection->GetScreen();
+    SCH_SCREEN*                     screen = aSelectionPath->LastScreen();
     std::set<SCH_TABLE*>            promotedTables;
 
     for( EDA_ITEM* item : *aSelection )
