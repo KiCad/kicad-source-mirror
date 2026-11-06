@@ -845,9 +845,21 @@ name (`m_NameStrKey`) and dimension value. Not currently imported.
 
 ## Block 0x27 (Constraint Manager Cross-Reference Table)
 
-The 0x27 block extends to an offset defined in the header (`m_0x27_End`).
-Size scales with board complexity (10KB for simple boards to 4MB for
-VCU118).
+The 0x27 block extends to an offset defined in the header (`m_0x27_End`),
+or to the end of the file if the offset is zero.
+
+There is apparently no explicit length field for this block: the
+length must be inferred from offset or the end of the file.
+
+The block contains keys of "non-container" objects, such as segments, arcs,
+placed pads, vias, ratlines, etc. Container types like tracks, text
+wrappers, 0x14, 0x03, nets, footprints, etc. are not found in this block.
+
+The keys appear to be stored in "chunks" separated by zero values. It
+is not known what these blocks represent.
+
+It is not known how these chunks are organized or exactly how these
+keys are used.
 
 ### Binary Layout
 

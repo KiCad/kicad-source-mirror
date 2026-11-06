@@ -1739,13 +1739,24 @@ struct BLK_0x26_MATCH_GROUP
  * material stackup, color palette, and constraint manager state. NOT a heap pointer table.
  *
  * Pre-V172 uses runtime heap pointer format. V172+ uses compact indices that match
- * geometric block keys. The block extends to an offset defined in the header (m_0x27_End).
- * Not imported directly since it is a display/navigation structure, not design data.
+ * geometric block keys. The block extends to an offset defined in the header (m_0x27_End),
+ * or to the end of the file when that offset is zero. Not imported directly since it is a
+ * display/navigation structure, not design data.
  */
 struct BLK_0x27_CSTRMGR_XREF
 {
     static constexpr uint8_t BLOCK_TYPE_CODE = 0x27;
 
+    /**
+     * Non-zero values from the table, in file order.
+     *
+     * Values in this table appear to be references to other blocks, specifically of "non-container"
+     * types like SEGMENT, ARC, 0x31 strings, 0x32 placed pads, 0x23 ratlines etc.
+     *
+     * Depending on what these values are and how they are used (if useful at all), we may
+     * need to store them in a map, vector of vectors, or some other structure to represent
+     * the relationships.
+     */
     std::vector<uint32_t> m_Refs;
 };
 

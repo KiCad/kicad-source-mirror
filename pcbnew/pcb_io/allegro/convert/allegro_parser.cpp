@@ -1486,13 +1486,35 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x26( FILE_STREAM& aStream, FMT_VE
 }
 
 
+/**
+ * Parse the 0x27 constraint-manager cross-reference block.
+ *
+ * @param aEndOff one past the last byte of the block, or zero when the file records no end
+ *                for it. In that case the block occupies the rest of the file.
+ */
 static std::unique_ptr<BLOCK_BASE> ParseBlock_0x27( FILE_STREAM& aStream, FMT_VER aVer, size_t aEndOff )
 {
     auto block = std::make_unique<BLOCK<BLK_0x27_CSTRMGR_XREF>>( aStream.Position() );
 
     auto& data = block->GetData();
 
-    const size_t totalBytes = aEndOff - 1 - aStream.Position();
+    size_t totalBytes = 0;
+
+    if( aEndOff == 0 )
+    {
+        // We take the rest of the file as the block content.
+        totalBytes = aStream.Size() - aStream.Position();
+    }
+    else
+    {
+        if( aEndOff - 1 > aStream.Size() )
+        {
+            THROW_IO_ERRORF( wxT( "Block 0x27 end offset %#010zx is past the end of the file at %#010zx" ),
+                             aEndOff, aStream.Size() );
+        }
+
+        totalBytes = aEndOff - 1 - aStream.Position();
+    }
 
     // The blob starts with 3 bytes of padding, then uint32 LE values
     constexpr size_t kPadding = 3;
@@ -1509,10 +1531,16 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x27( FILE_STREAM& aStream, FMT_VE
     const size_t numValues = payloadBytes / 4;
     const size_t remainder = payloadBytes % 4;
 
-    data.m_Refs.resize( numValues );
-
+    // A zero word (apparently) separates sections of the table.
+    // Until we work out the exact structure, we simply collect all non-zero references
+    // in order.
     for( size_t i = 0; i < numValues; i++ )
-        data.m_Refs[i] = aStream.ReadU32();
+    {
+        const uint32_t ref = aStream.ReadU32();
+
+        if( ref != 0 )
+            data.m_Refs.push_back( ref );
+    }
 
     if( remainder > 0 )
         aStream.Skip( remainder );
@@ -2610,13 +2638,18 @@ std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjec
     }
     case 0x27:
     {
-        if( m_x27_end <= m_stream.Position() )
+        if( m_x27_end != 0 && m_x27_end <= m_stream.Position() )
         {
             THROW_IO_ERRORF( wxT( "Current offset %#010zx is at or past the expected end of block 0x27 at %#010zx" ),
                              m_stream.Position(), m_x27_end );
         }
 
         block = ParseBlock_0x27( m_stream, m_ver, m_x27_end );
+
+        // With no end offset, we're done at the end of the file.
+        if( m_x27_end == 0 )
+            aEndOfObjectsMarker = true;
+
         break;
     }
     case 0x28:
