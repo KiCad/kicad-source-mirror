@@ -801,13 +801,7 @@ void TARGET3001_PCB_BUILDER::buildPourAreas()
     std::map<std::pair<uint16_t, PCB_LAYER_ID>, SHAPE_POLY_SET> pours;
 
     for( POUR_AREA& area : m_pourAreas )
-    {
-        // TARGET 3001! leaves an area unfilled when its anchor lies outside the contour box
-        if( m_contourBox.IsValid() && !m_contourBox.Contains( area.anchor ) )
-            continue;
-
         pours[{ area.signal, area.layer }].Append( area.outline );
-    }
 
     for( auto& [key, outline] : pours )
     {
@@ -1171,65 +1165,13 @@ bool TARGET3001_PCB_BUILDER::elementOutline( const ELEMENT& aElem, SHAPE_POLY_SE
 }
 
 
-void TARGET3001_PCB_BUILDER::mergeContour( const ELEMENT& aElem )
+void TARGET3001_PCB_BUILDER::noteContour( const ELEMENT& aElem )
 {
-    const ELEMENT_BASE& b = aElem.base;
-
-    m_contourBox.Merge( toKi( b.x, b.y ) );
-
     if( ( aElem.type == ELEMENT_TYPE::LINE && aElem.line.clearance == 0 )
         || ( aElem.type == ELEMENT_TYPE::ARC && aElem.arc.clearance == 0 )
         || ( aElem.type == ELEMENT_TYPE::SPLINE && aElem.spline.clearance == 0 ) )
     {
         m_contourCarvesNothing = true;
-    }
-
-    switch( aElem.type )
-    {
-    case ELEMENT_TYPE::LINE:
-        m_contourBox.Merge( toKi( aElem.line.x2, aElem.line.y2 ) );
-        break;
-
-    case ELEMENT_TYPE::ARC:
-    {
-        const ARC& a = aElem.arc;
-        double     start = std::fmod( double( a.startAngle ), 360.0 );
-        double     end = start + a.Sweep();
-
-        auto onArc = [&]( double aDeg )
-        {
-            return VECTOR2I( a.centerX + KiROUND( a.radius * cos( DEG2RAD( aDeg ) ) ),
-                             a.centerY + KiROUND( a.radius * sin( DEG2RAD( aDeg ) ) ) );
-        };
-
-        // Every axis crossing inside the sweep extends the box
-        for( double axis = std::ceil( start / 90.0 ) * 90.0; axis <= end; axis += 90.0 )
-        {
-            VECTOR2I p = onArc( axis );
-            m_contourBox.Merge( toKi( p.x, p.y ) );
-        }
-
-        VECTOR2I p0 = onArc( start );
-        VECTOR2I p1 = onArc( end );
-        m_contourBox.Merge( toKi( p0.x, p0.y ) );
-        m_contourBox.Merge( toKi( p1.x, p1.y ) );
-        m_contourBox.Merge( toKi( a.endX, a.endY ) );
-        break;
-    }
-
-    case ELEMENT_TYPE::TRIANGLE:
-    case ELEMENT_TYPE::RECTANGLE:
-    {
-        SHAPE_POLY_SET outline;
-
-        if( elementOutline( aElem, outline ) )
-            m_contourBox.Merge( outline.BBox() );
-
-        break;
-    }
-
-    default:
-        break;
     }
 }
 
@@ -1240,7 +1182,7 @@ void TARGET3001_PCB_BUILDER::addItem( const ELEMENT& aElem, BOARD_ITEM_CONTAINER
     const ELEMENT_BASE& b = aElem.base;
 
     if( b.layer == m_contourLayer && b.flags == 0 && aElem.type != ELEMENT_TYPE::TEXT )
-        mergeContour( aElem );
+        noteContour( aElem );
 
     // Hidden board elements are not drawn; hidden text is kept as invisible text
     if( ( b.flags & 1 ) && aElem.type != ELEMENT_TYPE::TEXT )
@@ -1285,7 +1227,7 @@ void TARGET3001_PCB_BUILDER::addItem( const ELEMENT& aElem, BOARD_ITEM_CONTAINER
 
         // Flagged areas take no part in the fill
         if( isArea && b.signal && b.flags == 0 )
-            m_pourAreas.push_back( { b.signal, *pourLayer, toKi( b.x, b.y ), std::move( outline ) } );
+            m_pourAreas.push_back( { b.signal, *pourLayer, std::move( outline ) } );
         else if( !isArea )
             m_pourKeepouts[*pourLayer].Append( outline );
 

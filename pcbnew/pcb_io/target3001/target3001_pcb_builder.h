@@ -135,8 +135,8 @@ private:
     /// Outline of a filled element (rectangle, triangle, disc, stroked line or arc) in KiCad coordinates
     bool elementOutline( const TARGET3001::ELEMENT& aElem, SHAPE_POLY_SET& aOut ) const;
 
-    /// Grow the board contour box by the defining points of an element, ignoring line widths
-    void mergeContour( const TARGET3001::ELEMENT& aElem );
+    /// Record whether a board contour stroke carries a clearance
+    void noteContour( const TARGET3001::ELEMENT& aElem );
 
     /// Copper, mask and paste layers of the padstack a pad layer >= 101 selects
     std::optional<LSET> padstackLayers( int aLayer ) const;
@@ -148,7 +148,6 @@ private:
     {
         uint16_t       signal;
         PCB_LAYER_ID   layer;
-        VECTOR2I       anchor;
         SHAPE_POLY_SET outline;
     };
 
@@ -163,7 +162,6 @@ private:
     std::map<std::pair<int, int>, SHAPE_POLY_SET> m_copperFills; ///< (net, KiCad layer) -> filled copper
     std::vector<POUR_AREA>                   m_pourAreas;
     std::optional<int>                       m_contourLayer;    ///< first TARGET layer holding the contour
-    BOX2I                                    m_contourBox;
     bool                                     m_contourCarvesNothing = false; ///< a contour stroke has no clearance
     std::map<int, SHAPE_POLY_SET>            m_pourKeepouts;    ///< KiCad layer -> pour keepout
     std::map<int64_t, SHAPE_POLY_SET>        m_polygonFills;    ///< POLYGONID -> stored fill without spokes
