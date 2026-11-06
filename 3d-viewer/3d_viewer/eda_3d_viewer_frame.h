@@ -93,6 +93,9 @@ public:
      */
     void ReloadRequest();
 
+    /// Take the saved 3D viewports from the project file, as at startup and after it was reread.
+    void ApplyProjectFileSettings();
+
     // !TODO: review this function: it need a way to tell what changed,
     // to only reload/rebuild things that have really changed
     /**

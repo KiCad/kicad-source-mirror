@@ -949,23 +949,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     }
 
     case MAIL_PCB_PROJECT_SETTINGS_CHANGED:
-        // Replace cached copies a save would write back, before the net sync reads the net colors
-        ApplyProjectFileSettings();
-        LoadDrawingSheet();
-
-        // The settings were reread, but every net caches its resolved netclass, so routing would
-        // keep the old widths and clearances until they resynchronize.
-        GetBoard()->SynchronizeTuningProfileProperties();
-        GetBoard()->SynchronizeNetsAndNetClasses( true );
-
-        if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
-            wxLogTrace( traceGit, wxS( "Could not load component class assignment rules" ) );
-
-        Prj().IncrementNetclassesTicker();
-        Prj().IncrementTextVarsTicker();
-
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-        GetCanvas()->Refresh();
+        ReloadProjectFileSettings();
         break;
 
     case MAIL_RELOAD_LIB:

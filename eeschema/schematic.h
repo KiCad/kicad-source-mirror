@@ -426,6 +426,19 @@ public:
     // An explicit project table, including an empty one, supersedes legacy sheet definitions.
     bool HasProjectBusAliases() const;
 
+    enum class BUS_ALIAS_RELOAD
+    {
+        UNCHANGED,
+        CHANGED,       ///< The project table changed the aliases in use, so connectivity needs a rebuild
+        TABLE_REMOVED  ///< The reread file has no table; the one in use is kept, even empty, and saved back
+    };
+
+    /**
+     * Take the bus aliases from the project file again after it was reread.  A file without a table
+     * keeps the aliases in use, since the sheets' own definitions only take effect when they are read.
+     */
+    BUS_ALIAS_RELOAD ReloadProjectBusAliases();
+
     const std::vector<std::shared_ptr<BUS_ALIAS>>& GetAllBusAliases() const
     {
         return m_busAliases;
@@ -904,6 +917,9 @@ private:
     void updateProjectBusAliases();
 
     std::vector<std::shared_ptr<BUS_ALIAS>> m_busAliases;
+
+    /// The aliases in use came from a project table rather than from the sheets
+    bool m_busAliasesFromTable = false;
 
     wxString m_currentVariant;
 

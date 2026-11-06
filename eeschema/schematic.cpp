@@ -1655,7 +1655,10 @@ void SCHEMATIC::SetBusAliases( const std::vector<std::shared_ptr<BUS_ALIAS>>& aA
     updateProjectBusAliases();
 
     if( m_project )
+    {
         m_project->GetProjectFile().m_BusAliasesDefined = true;
+        m_busAliasesFromTable = true;
+    }
 }
 
 
@@ -1668,6 +1671,7 @@ bool SCHEMATIC::HasProjectBusAliases() const
 void SCHEMATIC::loadBusAliasesFromProject()
 {
     m_busAliases.clear();
+    m_busAliasesFromTable = HasProjectBusAliases();
 
     if( !m_project )
         return;
@@ -1683,6 +1687,39 @@ void SCHEMATIC::loadBusAliasesFromProject()
 
         m_busAliases.push_back( busAlias );
     }
+}
+
+
+SCHEMATIC::BUS_ALIAS_RELOAD SCHEMATIC::ReloadProjectBusAliases()
+{
+    if( !m_project )
+        return BUS_ALIAS_RELOAD::UNCHANGED;
+
+    if( !HasProjectBusAliases() )
+    {
+        // The reread cleared the project copy, and a save without it would drop the aliases in use
+        updateProjectBusAliases();
+
+        if( !m_busAliasesFromTable )
+            return BUS_ALIAS_RELOAD::UNCHANGED;
+
+        // Kept as a table, so an empty one still suppresses the sheets' legacy aliases on reopen
+        m_project->GetProjectFile().m_BusAliasesDefined = true;
+        return BUS_ALIAS_RELOAD::TABLE_REMOVED;
+    }
+
+    std::map<wxString, std::vector<wxString>> inUse;
+
+    for( const std::shared_ptr<BUS_ALIAS>& alias : m_busAliases )
+    {
+        if( alias )
+            inUse.insert_or_assign( alias->GetName(), alias->Members() );
+    }
+
+    loadBusAliasesFromProject();
+
+    return inUse != m_project->GetProjectFile().m_BusAliases ? BUS_ALIAS_RELOAD::CHANGED
+                                                              : BUS_ALIAS_RELOAD::UNCHANGED;
 }
 
 

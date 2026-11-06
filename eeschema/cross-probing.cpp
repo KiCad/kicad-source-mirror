@@ -707,18 +707,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         break;
 
     case MAIL_SCH_PROJECT_SETTINGS_CHANGED:
-        // Net colors and widths resolve through per-net caches, and text variables at draw time,
-        // so both need a flush and a repaint.
-        Prj().GetProjectFile().NetSettings()->ClearAllCaches();
-        Prj().IncrementNetclassesTicker();
-        Prj().IncrementTextVarsTicker();
-
-        // Otherwise the next save writes this frame's cached copies back over the reread file
-        ApplyProjectFileSettings();
-        LoadDrawingSheet();
-
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-        GetCanvas()->Refresh();
+        ReloadProjectFileSettings();
         break;
 
     case MAIL_RELOAD_LIB:

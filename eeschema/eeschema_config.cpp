@@ -72,14 +72,13 @@ void SCH_EDIT_FRAME::ApplyProjectFileSettings()
     GetRenderSettings()->m_ShowDNPMarkers = settings.m_ShowDNPMarkers;
     GetRenderSettings()->SetDashLengthRatio( settings.m_DashedLineDashRatio );
     GetRenderSettings()->SetGapLengthRatio( settings.m_DashedLineGapRatio );
-
-    BASE_SCREEN::m_DrawingSheetFileName = settings.m_SchDrawingSheetFileName;
 }
 
 
 bool SCH_EDIT_FRAME::LoadProjectSettings()
 {
     ApplyProjectFileSettings();
+    BASE_SCREEN::m_DrawingSheetFileName = Schematic().Settings().m_SchDrawingSheetFileName;
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 
@@ -148,49 +147,68 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         Kiway().CommonSettingsChanged( TEXTVARS_CHANGED );
 
-        Prj().IncrementTextVarsTicker();
-        Prj().IncrementNetclassesTicker();
-
-        // CROSS_REF keys deliberately excluded — those are driven by per-item
-        // SCH_COMMIT changes.
-        if( SCHEMATIC_TEXT_VAR_ADAPTER* adapter = Schematic().GetTextVarAdapter() )
-            adapter->Tracker().InvalidateProjectScoped();
-
         Pgm().GetSettingsManager().SaveProject();
 
-        GetRenderSettings()->SetDefaultPenWidth( Schematic().Settings().m_DefaultLineWidth );
-        GetRenderSettings()->m_LabelSizeRatio  = Schematic().Settings().m_LabelSizeRatio;
-        GetRenderSettings()->m_TextOffsetRatio = Schematic().Settings().m_TextOffsetRatio;
-        GetRenderSettings()->m_PinSymbolSize   = Schematic().Settings().m_PinSymbolSize;
-        GetRenderSettings()->m_SymbolLineWidth = Schematic().Settings().m_DefaultLineWidth;
-        GetRenderSettings()->m_ShowDNPMarkers = Schematic().Settings().m_ShowDNPMarkers;
-
-        GetRenderSettings()->SetDashLengthRatio( Schematic().Settings().m_DashedLineDashRatio );
-        GetRenderSettings()->SetGapLengthRatio( Schematic().Settings().m_DashedLineGapRatio );
-
-        GetCanvas()->GetView()->MarkDirty();
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
-
-        std::map<wxString, std::vector<wxString>> newAliases = Prj().GetProjectFile().m_BusAliases;
-
-        if( oldAliases != newAliases )
-        {
-            RecalculateConnections( nullptr, GLOBAL_CLEANUP );
-        }
-        else if( CONNECTION_GRAPH* graph = Schematic().ConnectionGraph() )
-        {
-            // No connectivity rebuild ran, so a net-chain netclass override or a deleted/renamed
-            // netclass would otherwise leave the chain-derived assignments stale.  Re-derive them
-            // directly; chain membership is unaffected by the setup dialog.
-            graph->ApplyNetChainNetclasses();
-        }
-
-        RefreshOperatingPointDisplay();
-        GetCanvas()->Refresh();
-
-        if( m_ercDialog )
-            m_ercDialog->UpdateData();
+        ApplyProjectFileSettings();
+        RefreshProjectSettings( oldAliases != Prj().GetProjectFile().m_BusAliases );
     }
+}
+
+
+void SCH_EDIT_FRAME::RefreshProjectSettings( bool aAliasesChanged )
+{
+    // Net colors and widths resolve through per-net caches
+    Prj().GetProjectFile().NetSettings()->ClearAllCaches();
+    Prj().IncrementTextVarsTicker();
+    Prj().IncrementNetclassesTicker();
+
+    // CROSS_REF keys deliberately excluded — those are driven by per-item
+    // SCH_COMMIT changes.
+    if( SCHEMATIC_TEXT_VAR_ADAPTER* adapter = Schematic().GetTextVarAdapter() )
+        adapter->Tracker().InvalidateProjectScoped();
+
+    ShowAllIntersheetRefs( Schematic().Settings().m_IntersheetRefsShow );
+
+    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::LAYERS | KIGFX::GEOMETRY | KIGFX::REPAINT );
+
+    if( aAliasesChanged )
+    {
+        // Skip the cleanup pass, which can edit wires and dirty a schematic nobody changed
+        RecalculateConnections( nullptr, GLOBAL_CLEANUP, nullptr, true );
+    }
+    else if( CONNECTION_GRAPH* graph = Schematic().ConnectionGraph() )
+    {
+        // No connectivity rebuild ran, so a net-chain netclass override or a deleted/renamed
+        // netclass would otherwise leave the chain-derived assignments stale.  Re-derive them
+        // directly; chain membership is unaffected by project settings.
+        graph->ApplyNetChainNetclasses();
+    }
+
+    RefreshOperatingPointDisplay();
+    GetCanvas()->Refresh();
+
+    if( m_ercDialog )
+        m_ercDialog->UpdateData();
+}
+
+
+void SCH_EDIT_FRAME::ReloadProjectFileSettings()
+{
+    // Everything this frame copied from the project file and would write back on save
+    ApplyProjectFileSettings();
+    BASE_SCREEN::m_DrawingSheetFileName = Schematic().Settings().m_SchDrawingSheetFileName;
+    LoadDrawingSheet();
+
+    SCHEMATIC::BUS_ALIAS_RELOAD aliases = Schematic().ReloadProjectBusAliases();
+
+    if( aliases == SCHEMATIC::BUS_ALIAS_RELOAD::TABLE_REMOVED )
+    {
+        ShowInfoBarWarning( _( "The reloaded project file defines no bus aliases. The ones in use are kept "
+                               "and will be saved with the project." ), true );
+    }
+
+    RefreshProjectSettings( aliases == SCHEMATIC::BUS_ALIAS_RELOAD::CHANGED );
 }
 
 

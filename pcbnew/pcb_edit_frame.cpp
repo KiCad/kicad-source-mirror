@@ -1937,95 +1937,126 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, wxWindo
     // QuasiModal required for Scintilla auto-complete
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        // Note: We must synchronise time domain properties before nets and classes, otherwise the updates
-        // called by the board listener events are using stale data
-        GetBoard()->SynchronizeTuningProfileProperties();
-        GetBoard()->SynchronizeNetsAndNetClasses( true );
-
-        if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
-        {
-            m_infoBar->RemoveAllButtons();
-            m_infoBar->AddCloseButton();
-            m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ), wxICON_WARNING,
-                                    WX_INFOBAR::MESSAGE_TYPE::GENERIC );
-        }
-
         // We don't know if anything was modified, so err on the side of requiring a save
         OnModify();
 
         Kiway().CommonSettingsChanged( TEXTVARS_CHANGED );
-
-        Prj().IncrementTextVarsTicker();
-        Prj().IncrementNetclassesTicker();
-
-        // CROSS_REF keys deliberately excluded — those are driven by per-item
-        // BOARD_COMMIT changes.
-        if( BOARD_TEXT_VAR_ADAPTER* adapter = GetBoard()->GetTextVarAdapter() )
-            adapter->Tracker().InvalidateProjectScoped();
-
-        PCBNEW_SETTINGS* settings = GetPcbNewSettings();
-        static LSET      maskAndPasteLayers = LSET( { F_Mask, F_Paste, B_Mask, B_Paste } );
-
-        GetCanvas()->GetView()->UpdateAllItemsConditionally(
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
-                {
-                    int flags = 0;
-
-                    if( !aItem->IsBOARD_ITEM() )
-                        return flags;
-
-                    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aItem );
-
-                    if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
-                    {
-                        // Note: KIGFX::REPAINT isn't enough for things that go from invisible
-                        // to visible as they won't be found in the view layer's itemset for
-                        // re-painting.
-                        if( ( GetBoard()->GetVisibleLayers() & maskAndPasteLayers ).any() )
-                            flags |= KIGFX::ALL;
-                    }
-
-                    if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T || item->Type() == PCB_VIA_T )
-                    {
-                        if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
-                            flags |= KIGFX::REPAINT;
-                    }
-
-                    if( item->Type() == PCB_PAD_T )
-                    {
-                        if( settings->m_Display.m_PadClearance )
-                            flags |= KIGFX::REPAINT;
-                    }
-
-                    if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
-                    {
-                        if( text->HasTextVars() )
-                        {
-                            text->ClearRenderCache();
-                            text->ClearBoundingBoxCache();
-                            flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
-                        }
-                    }
-
-                    return flags;
-                } );
-
-        GetCanvas()->Refresh();
-
-        UpdateUserInterface();
-        ReCreateAuxiliaryToolbar();
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-
-        //this event causes the routing tool to reload its design rules information
-        TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
-        toolEvent.SetHasPosition( false );
-        m_toolManager->ProcessEvent( toolEvent );
+        RefreshProjectSettings();
     }
 
     GetCanvas()->SetFocus();
 
     // Reset m_boardSetupDlg after the dialog is closed
     m_boardSetupDlg = nullptr;
+}
+
+
+void PCB_EDIT_FRAME::RefreshProjectSettings()
+{
+    // Note: We must synchronise time domain properties before nets and classes, otherwise the updates
+    // called by the board listener events are using stale data
+    GetBoard()->SynchronizeTuningProfileProperties();
+    GetBoard()->SynchronizeNetsAndNetClasses( true );
+
+    if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
+    {
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddCloseButton();
+        m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ), wxICON_WARNING,
+                                WX_INFOBAR::MESSAGE_TYPE::GENERIC );
+    }
+
+    // Text variables resolve through the board's own copy of them before the project's
+    GetBoard()->SynchronizeProperties();
+
+    Prj().IncrementTextVarsTicker();
+    Prj().IncrementNetclassesTicker();
+
+    // CROSS_REF keys deliberately excluded — those are driven by per-item
+    // BOARD_COMMIT changes.
+    if( BOARD_TEXT_VAR_ADAPTER* adapter = GetBoard()->GetTextVarAdapter() )
+        adapter->Tracker().InvalidateProjectScoped();
+
+    PCBNEW_SETTINGS* settings = GetPcbNewSettings();
+    static LSET      maskAndPasteLayers = LSET( { F_Mask, F_Paste, B_Mask, B_Paste } );
+
+    GetCanvas()->GetView()->UpdateAllItemsConditionally(
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
+            {
+                int flags = 0;
+
+                if( !aItem->IsBOARD_ITEM() )
+                    return flags;
+
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aItem );
+
+                if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
+                {
+                    // Note: KIGFX::REPAINT isn't enough for things that go from invisible
+                    // to visible as they won't be found in the view layer's itemset for
+                    // re-painting.
+                    if( ( GetBoard()->GetVisibleLayers() & maskAndPasteLayers ).any() )
+                        flags |= KIGFX::ALL;
+                }
+
+                if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T || item->Type() == PCB_VIA_T )
+                {
+                    if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
+                        flags |= KIGFX::REPAINT;
+                }
+
+                if( item->Type() == PCB_PAD_T )
+                {
+                    if( settings->m_Display.m_PadClearance )
+                        flags |= KIGFX::REPAINT;
+                }
+
+                if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
+                {
+                    if( text->HasTextVars() )
+                    {
+                        text->ClearRenderCache();
+                        text->ClearBoundingBoxCache();
+                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
+                    }
+                }
+
+                return flags;
+            } );
+
+    GetCanvas()->Refresh();
+
+    UpdateUserInterface();
+    ReCreateAuxiliaryToolbar();
+    // Before the model change, which makes the router reload its rules from the engine
+    recompileDesignRules();
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    //this event causes the routing tool to reload its design rules information
+    TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
+    toolEvent.SetHasPosition( false );
+    m_toolManager->ProcessEvent( toolEvent );
+}
+
+
+void PCB_EDIT_FRAME::ReloadProjectFileSettings()
+{
+    // Everything this frame copied from the project file and would write back on save or close
+    ApplyProjectFileSettings();
+    LoadDrawingSheet();
+
+    LAYER_PAIR current = m_layerPairSettings->GetCurrentLayerPair();
+    m_layerPairSettings->SetLayerPairs( Prj().GetProjectFile().m_LayerPairInfos );
+    m_layerPairSettings->SetCurrentLayerPair( current );
+
+    if( EDA_3D_VIEWER_FRAME* viewer = GetOur3DViewerFrame() )
+        viewer->ApplyProjectFileSettings();
+
+    RefreshProjectSettings();
+
+    // Net colors and the drawing sheet reach every item, not just the ones the refresh picks
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->Refresh();
 }
 
 
@@ -2837,6 +2868,18 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 
     // Netclass definitions could have changed, either by us or by Eeschema, so we need to
     // recompile the implicit rules
+    recompileDesignRules();
+
+    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    GetCanvas()->ForceRefresh();
+
+    Layout();
+    SendSizeEvent();
+}
+
+
+void PCB_EDIT_FRAME::recompileDesignRules()
+{
     DRC_TOOL*   drcTool = m_toolManager->GetTool<DRC_TOOL>();
     WX_INFOBAR* infobar = GetInfoBar();
 
@@ -2859,12 +2902,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
         infobar->ShowMessage( _( "Could not compile custom design rules." ), wxICON_ERROR,
                               WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR );
     }
-
-    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    GetCanvas()->ForceRefresh();
-
-    Layout();
-    SendSizeEvent();
 }
 
 

@@ -228,6 +228,17 @@ public:
     /// Apply what the project file sets and this frame caches, leaving the local settings alone.
     void ApplyProjectFileSettings();
 
+    /**
+     * Bring the frame in line with a project file that was reread from disk.
+     *
+     * Every value this frame copies out of the project file and writes back on save or close must be
+     * refreshed here; a copy left stale silently undoes the new file on the next save.
+     */
+    void ReloadProjectFileSettings();
+
+    /// Update what depends on the board's project settings after they changed in memory.
+    void RefreshProjectSettings();
+
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -850,6 +861,9 @@ public:
     void UpdateProperties() override;
 
 private:
+    /// Recompile the design rules, reporting a parse error in the infobar.
+    void recompileDesignRules();
+
     friend struct PCB::IFACE;
     friend class APPEARANCE_CONTROLS;
 

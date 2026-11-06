@@ -488,6 +488,7 @@ std::vector<VIEWPORT3D> APPEARANCE_CONTROLS_3D::GetUserViewports() const
 void APPEARANCE_CONTROLS_3D::SetUserViewports( std::vector<VIEWPORT3D>& aViewportList )
 {
     m_viewports.clear();
+    m_viewportMRU.clear();
 
     for( const VIEWPORT3D& viewport : aViewportList )
     {
@@ -504,6 +505,7 @@ void APPEARANCE_CONTROLS_3D::SetUserViewports( std::vector<VIEWPORT3D>& aViewpor
     // Now is as good a time as any to initialize the layer presets as well.
     rebuildLayerPresetsWidget( true );
 
+    m_presetMRU.clear();
     m_presetMRU.Add( FOLLOW_PCB );
     m_presetMRU.Add( FOLLOW_PLOT_SETTINGS );
 

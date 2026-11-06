@@ -141,7 +141,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     LoadSettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
     loadCommonSettings();
 
-    m_appearancePanel->SetUserViewports( Prj().GetProjectFile().m_Viewports3D );
+    ApplyProjectFileSettings();
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
@@ -424,6 +424,12 @@ void EDA_3D_VIEWER_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 
     if( m_spaceMouse && aEvent.IsIconized() )
         m_spaceMouse->SetFocus( false );
+}
+
+
+void EDA_3D_VIEWER_FRAME::ApplyProjectFileSettings()
+{
+    m_appearancePanel->SetUserViewports( Prj().GetProjectFile().m_Viewports3D );
 }
 
 
