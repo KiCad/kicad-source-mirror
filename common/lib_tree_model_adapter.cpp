@@ -189,8 +189,9 @@ LIB_TREE_MODEL_ADAPTER::ResetTreeView::ResetTreeView( LIB_TREE_MODEL_ADAPTER& aA
 
 LIB_TREE_MODEL_ADAPTER::ResetTreeView::~ResetTreeView()
 {
-    m_adapter.AfterReset();
+    // AfterReset rebuilds the view from GetParent(), which reports no parents while frozen
     m_adapter.Thaw();
+    m_adapter.AfterReset();
 }
 
 
@@ -375,8 +376,10 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         m_tree.UpdateScore( termMatchers, m_filter );
 
         m_tree.SortNodes( m_sort_mode == BEST_MATCH );
-        AfterReset();
+
+        // AfterReset rebuilds the view from GetParent(), which reports no parents while frozen
         Thaw();
+        AfterReset();
 
         // Move showResults inside the update locker to ensure all tree manipulation
         // (including ExpandAncestors) happens while the window is frozen. This prevents

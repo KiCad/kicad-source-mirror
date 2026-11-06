@@ -1732,9 +1732,9 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
 
         if( resyncLibTree )
         {
-            FreezeLibraryTree();
+            m_treePane->Freeze();
             SyncLibraries( true, false, forceRefresh );
-            ThawLibraryTree();
+            m_treePane->Thaw();
         }
     }
 

@@ -2079,12 +2079,14 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         // Untouched buffers hold the files as they were, and a pull may have changed them since
         std::vector<wxString> dropped = m_libMgr->DropUnmodifiedBuffers();
 
-        FreezeLibraryTree();
+        // Only the pane is frozen. A frozen adapter hides every parent, and the view rebuilt from it
+        // at the end of the sync is left with rows that no longer exist.
+        m_treePane->Freeze();
 
         // Suppress the progress dialog for this background reload. It would steal focus from the
         // editor that broadcast the reload, and the tree is already frozen around the sync.
         SyncLibraries( false );
-        ThawLibraryTree();
+        m_treePane->Thaw();
         RefreshLibraryTree();
 
         LIB_SYMBOL* current = GetCurSymbol();
