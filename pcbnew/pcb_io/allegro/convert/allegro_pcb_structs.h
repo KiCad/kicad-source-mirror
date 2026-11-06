@@ -651,6 +651,8 @@ enum FIELD_KEYS
     LOGICAL_PATH = 0x37,
     MIN_LINE_WIDTH = 0x55,
     NET_SCHEDULE = 0x77,          ///< Net class/schedule assignment
+    CLIP_N = 0x87,                ///< Next CLIP_n value
+    CLIP_DRAWING = 0x88,          ///< Items pasted from a clipboard, holds CLIP_<n> or FALSE
     MAX_LINE_WIDTH = 0x173,
     MIN_NECK_WIDTH = 0x5c,
     MAX_NECK_LENGTH = 0x1fb,

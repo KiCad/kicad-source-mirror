@@ -587,6 +587,45 @@ aspect ratio (m_W vs m_H) with the drill aspect ratio (drillW vs
 drillH). If they disagree on orientation, the drill dimensions are
 swapped. Round drills (equal W and H) skip the check.
 
+## Field blocks (0x03)
+
+A 0x03 block is one name/value property attached to another object. `m_Hdr1`
+is the property code and `m_SubType` says how the value is stored.
+
+- Subtype 0x68 holds a string, with its length in `m_Size`
+- 0x64, 0x66, 0x67 and 0x6A hold a u32
+- 0x69 two u32s
+- 0x65 nothing at all
+- 0x6C, 0x70, 0x74, 0xF6 hold lists or fixed records of some kind.
+
+| Code | Meaning |
+|------|---------|
+| 0x37 | Logical path, e.g. `@lib.lib(sch_1):\10MIL\` |
+| 0x55 | Minimum line width |
+| 0x77 | Net schedule |
+| 0x87 | `CLIP_n` |
+| 0x88 | `CLIP_DRAWING` |
+| 0x173 | Maximum line width |
+| 0x1a0 | Physical constraint set |
+| 0x345 | 3D model file and cache data |
+| 0x346 | 3D model placement |
+
+Properties can be carried by item-level lists in objects in the database.
+There is also a board-level list in the `m_LL_0x03_0x30` linked list in the
+file header, which contains board-level properties not attached to any specific item.
+
+### CLIP_DRAWING (0x87 and 0x88)
+
+This is a property Allegro stamps on items taken from the clipboard. Its value
+is `CLIP_<n>`, where n counts the paste operations performed on the drawing, or
+`FALSE` for an item that carries the property without belonging to a clip.
+
+0x87 carries the next `CLIP_n` value which persists across paste operations and
+file loading.
+
+See https://www.flowcad.de/datasheets/FlowCAD_AN_PCB_subdrawing.pdf for more
+description of the CLIP_DRAWING property.
+
 ## Definition tables (0x36)
 
 The 0x36 block contains a heterogeneous list of substruct variants.
