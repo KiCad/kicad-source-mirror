@@ -49,7 +49,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
         m_topLevelSheets(),
         m_boards(),
         m_project( nullptr ),
-        m_wasMigrated( false )
+        m_wasMigrated( false ),
+        m_topLevelSheetsChanged( false )
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -821,7 +822,10 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
 bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
 {
+    std::vector<TOP_LEVEL_SHEET_INFO> previousSheets = m_topLevelSheets;
     bool success = JSON_SETTINGS::LoadFromFile( aDirectory );
+
+    m_topLevelSheetsChanged = false;
 
     if( success )
     {
@@ -878,6 +882,9 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
                 }
             }
         }
+
+        // A first read, or one over a list never written, has nothing to differ from
+        m_topLevelSheetsChanged = !previousSheets.empty() && m_topLevelSheets != previousSheets;
     }
 
     return success;
@@ -907,7 +914,13 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
     // save should be cleared at this.
     m_wasMigrated = false;
 
-    return JSON_SETTINGS::SaveToFile( aDirectory, force );
+    bool saved = JSON_SETTINGS::SaveToFile( aDirectory, force );
+
+    // The file now holds the list in memory, so a change read before is settled
+    if( saved )
+        m_topLevelSheetsChanged = false;
+
+    return saved;
 }
 
 

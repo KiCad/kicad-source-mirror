@@ -41,6 +41,7 @@
 
 
 struct HISTORY_FILE_DATA;
+struct TOP_LEVEL_SHEET_INFO;
 class BUS_ALIAS;
 class CONNECTION_GRAPH;
 class EDA_BASE_FRAME;
@@ -290,6 +291,15 @@ public:
     std::vector<SCH_SHEET*> GetTopLevelSheets() const;
 
     SCH_SHEET* GetTopLevelSheet( int aIndex = 0 ) const;
+
+    /// The top-level sheets as the project file records them, with file names relative to the project.
+    std::vector<TOP_LEVEL_SHEET_INFO> TopLevelSheetInfos() const;
+
+    /**
+     * Check a project file's top-level sheet list against the sheets this schematic loaded.  A nil
+     * UUID in the list matches any sheet, as it does when loading.
+     */
+    bool TopLevelSheetsMatch( const std::vector<TOP_LEVEL_SHEET_INFO>& aSheets ) const;
 
     /**
      * Check if a UUID names one of this schematic's top level sheets.

@@ -106,6 +106,24 @@ bool SCH_EDIT_FRAME::ReloadFromDisk()
     // Resolve the filename before changing sheets.
     file = Prj().AbsolutePath( file );
 
+    // A pull can replace the first top-level sheet, and the load follows the project's list anyway
+    bool legacy = wxFileName( file ).GetExt() == FILEEXT::LegacySchematicFileExtension;
+
+    for( const TOP_LEVEL_SHEET_INFO& info : Prj().GetProjectFile().GetTopLevelSheets() )
+    {
+        wxFileName listed( Prj().AbsolutePath( info.filename ) );
+
+        // The load reads a legacy project's listed sheets under the legacy extension
+        if( legacy )
+            listed.SetExt( FILEEXT::LegacySchematicFileExtension );
+
+        if( listed.IsFileReadable() )
+        {
+            file = listed.GetFullPath();
+            break;
+        }
+    }
+
     if( GetCurrentSheet().Last() != &Schematic().Root() )
     {
         // Use the hierarchy's root path so it includes the root sheet's KIID.
@@ -121,6 +139,36 @@ bool SCH_EDIT_FRAME::ReloadFromDisk()
 
     ReleaseFile();
     return OpenProjectFiles( std::vector<wxString>( 1, file ), KICTL_REVERT );
+}
+
+
+bool SCH_EDIT_FRAME::ConfirmReloadFromDisk( const wxString& aMessage, const wxString& aTitle )
+{
+    if( !IsContentModified() )
+        return true;
+
+    wxMessageDialog dlg( this, aMessage, aTitle, wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+    dlg.SetYesNoLabels( _( "&Reload" ), _( "&Keep My Edits" ) );
+
+    return dlg.ShowModal() == wxID_YES;
+}
+
+
+bool SCH_EDIT_FRAME::TopLevelSheetsChangedOnDisk()
+{
+    PROJECT_FILE& projectFile = Prj().GetProjectFile();
+
+    if( !projectFile.TopLevelSheetsChangedOnLoad() )
+        return false;
+
+    // A list that only spells the open sheets differently is settled, so a later local edit is not taken for it
+    if( Schematic().TopLevelSheetsMatch( projectFile.GetTopLevelSheets() ) )
+    {
+        projectFile.AcknowledgeTopLevelSheetChange();
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -211,7 +259,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     WX_STRING_REPORTER loadReporter;
     LOAD_INFO_REPORTER_SCOPE loadReporterScope( &loadReporter );
 
-    bool differentProject = pro.GetFullPath() != Prj().GetProjectFullName();
+    // A revert reloads the open project, whose first top-level sheet need not share its name
+    bool differentProject = !( aCtl & KICTL_REVERT ) && pro.GetFullPath() != Prj().GetProjectFullName();
 
     // This is for handling standalone mode schematic changes
     if( differentProject )
@@ -844,6 +893,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
+    Prj().GetProjectFile().AcknowledgeTopLevelSheetChange();
 
     wxFileName fn = Prj().AbsolutePath( GetScreen()->GetFileName() );
 
@@ -1739,6 +1789,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     default:
         break;
     }
+
+    if( success )
+        Prj().GetProjectFile().AcknowledgeTopLevelSheetChange();
 
     return success;
 }

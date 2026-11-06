@@ -47,7 +47,6 @@
 #include <widgets/properties_panel.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
-#include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <sim/spice_settings.h>
 #include <tool/actions.h>
@@ -197,6 +196,24 @@ void SCH_EDIT_FRAME::RefreshProjectSettings( bool aAliasesChanged )
 
 void SCH_EDIT_FRAME::ReloadProjectFileSettings()
 {
+    // The sheet list decides what the schematic holds, so only a reload can follow a change to it
+    if( TopLevelSheetsChangedOnDisk() )
+    {
+        if( ConfirmReloadFromDisk( _( "The project file now lists different top-level sheets.\n\n"
+                                      "Reloading loses your unsaved edits. Keeping them keeps the sheets "
+                                      "you have open, and your next save writes those back to the "
+                                      "project file." ),
+                                   _( "Top-Level Sheets Changed on Disk" ) )
+            && ReloadFromDisk() )
+        {
+            return;
+        }
+
+        ShowInfoBarWarning( _( "The project file lists different top-level sheets. This schematic keeps "
+                               "its own until it is reloaded, and saving writes them to the project file." ),
+                            true );
+    }
+
     // Everything this frame copied from the project file and would write back on save
     ApplyProjectFileSettings();
     BASE_SCREEN::m_DrawingSheetFileName = Schematic().Settings().m_SchDrawingSheetFileName;
@@ -236,9 +253,8 @@ void SCH_EDIT_FRAME::ReloadProjectFileSettings()
 
 void SCH_EDIT_FRAME::saveProjectSettings()
 {
-    wxFileName fn = Schematic().RootScreen()->GetFileName();  //ConfigFileName
-
-    fn.SetExt( FILEEXT::ProjectFileExtension );
+    // The first top-level sheet need not be named after the project
+    wxFileName fn( Prj().GetProjectFullName() );
 
     if( !fn.HasName() || !IsWritable( fn, false ) )
         return;
@@ -293,39 +309,10 @@ void SCH_EDIT_FRAME::saveProjectSettings()
     }
 
     // Update top-level sheets information in the project file
-    const std::vector<SCH_SHEET*>& topLevelSheets = Schematic().GetTopLevelSheets();
+    std::vector<TOP_LEVEL_SHEET_INFO> topLevelSheets = Schematic().TopLevelSheetInfos();
 
     if( !topLevelSheets.empty() )
-    {
-        std::vector<TOP_LEVEL_SHEET_INFO>& projectSheets = Prj().GetProjectFile().GetTopLevelSheets();
-        projectSheets.clear();
-
-        wxString projectPath = Prj().GetProjectPath();
-
-        for( SCH_SHEET* sheet : topLevelSheets )
-        {
-            TOP_LEVEL_SHEET_INFO info;
-            info.uuid = sheet->m_Uuid;
-            info.name = sheet->GetName();
-
-            // For top-level sheets, get the filename from the screen, not from the sheet's
-            // SHEET_FILENAME field (which is only used for sheet instances on parent sheets)
-            wxString filename;
-
-            if( sheet->GetScreen() )
-                filename = sheet->GetScreen()->GetFileName();
-
-            // Make the filename relative to the project path
-            wxFileName sheetFn( filename );
-
-            if( sheetFn.IsAbsolute() )
-                sheetFn.MakeRelativeTo( projectPath );
-
-            info.filename = sheetFn.GetFullPath();
-
-            projectSheets.push_back( std::move( info ) );
-        }
-    }
+        Prj().GetProjectFile().GetTopLevelSheets() = std::move( topLevelSheets );
 
     GetSettingsManager()->SaveProject( fn.GetFullPath() );
 }

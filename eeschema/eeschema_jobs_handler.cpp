@@ -2599,28 +2599,10 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
         }
 
         // Reload uses the top-level sheet list, not the UUID-to-name map.
-        const std::vector<SCH_SHEET*>& topLevelSheets = schematic->GetTopLevelSheets();
+        std::vector<TOP_LEVEL_SHEET_INFO> topLevelSheets = schematic->TopLevelSheetInfos();
 
         if( !topLevelSheets.empty() )
-        {
-            std::vector<TOP_LEVEL_SHEET_INFO>& infos = project.GetProjectFile().GetTopLevelSheets();
-            infos.clear();
-
-            wxString projectPath = project.GetProjectPath();
-
-            for( SCH_SHEET* sheet : topLevelSheets )
-            {
-                if( !sheet || !sheet->GetScreen() )
-                    continue;
-
-                wxFileName sheetFn( sheet->GetScreen()->GetFileName() );
-
-                if( sheetFn.IsAbsolute() )
-                    sheetFn.MakeRelativeTo( projectPath );
-
-                infos.emplace_back( sheet->m_Uuid, sheet->GetName(), sheetFn.GetFullPath() );
-            }
-        }
+            project.GetProjectFile().GetTopLevelSheets() = std::move( topLevelSheets );
     }
 
     // Extra top-level sheets need a project file to remain reachable.

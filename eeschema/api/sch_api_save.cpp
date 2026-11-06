@@ -102,35 +102,10 @@ void UpdateProjectFile( SCHEMATIC& aSchematic, PROJECT& aProject )
         aProject.GetProjectFile().m_IP2581Bom.schRevision = rootScreen->GetTitleBlock().GetRevision();
     }
 
-    const std::vector<SCH_SHEET*>& topLevelSheets = aSchematic.GetTopLevelSheets();
+    std::vector<TOP_LEVEL_SHEET_INFO> topLevelSheets = aSchematic.TopLevelSheetInfos();
 
     if( !topLevelSheets.empty() )
-    {
-        std::vector<TOP_LEVEL_SHEET_INFO>& projectSheets = aProject.GetProjectFile().GetTopLevelSheets();
-        projectSheets.clear();
-
-        wxString projectPath = aProject.GetProjectPath();
-
-        for( SCH_SHEET* sheet : topLevelSheets )
-        {
-            TOP_LEVEL_SHEET_INFO info;
-            info.uuid = sheet->m_Uuid;
-            info.name = sheet->GetName();
-
-            wxString filename;
-
-            if( sheet->GetScreen() )
-                filename = sheet->GetScreen()->GetFileName();
-
-            wxFileName sheetFn( filename );
-
-            if( sheetFn.IsAbsolute() )
-                sheetFn.MakeRelativeTo( projectPath );
-
-            info.filename = sheetFn.GetFullPath();
-            projectSheets.push_back( std::move( info ) );
-        }
-    }
+        aProject.GetProjectFile().GetTopLevelSheets() = std::move( topLevelSheets );
 
     std::vector<FILE_INFO_PAIR>& sheets = aProject.GetProjectFile().GetSheets();
     sheets.clear();

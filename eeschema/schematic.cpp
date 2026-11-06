@@ -68,6 +68,7 @@
 #include <text_eval/text_eval_wrapper.h>
 #include <tool/tool_manager.h>
 #include <undo_redo_container.h>
+#include <wildcards_and_files_ext.h>
 #include <local_history.h>
 #include <richio.h>
 #include <sch_io/sch_io_mgr.h>
@@ -75,6 +76,7 @@
 #include <sch_io/sch_io.h>
 
 #include <connectivity/conn_facade.h>
+#include <wx/filename.h>
 #include <wx/log.h>
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
@@ -3336,6 +3338,61 @@ SCH_SHEET* SCHEMATIC::GetTopLevelSheet( int aIndex ) const
         return nullptr;
 
     return m_topLevelSheets[index];
+}
+
+
+std::vector<TOP_LEVEL_SHEET_INFO> SCHEMATIC::TopLevelSheetInfos() const
+{
+    std::vector<TOP_LEVEL_SHEET_INFO> infos;
+    wxString                          projectPath = m_project ? m_project->GetProjectPath() : wxString();
+
+    for( SCH_SHEET* sheet : GetTopLevelSheets() )
+    {
+        if( !sheet->GetScreen() )
+            continue;
+
+        // A top-level sheet's file is its screen's; the SHEET_FILENAME field is for instances
+        wxFileName sheetFn( sheet->GetScreen()->GetFileName() );
+
+        if( sheetFn.IsAbsolute() )
+            sheetFn.MakeRelativeTo( projectPath );
+
+        infos.emplace_back( sheet->m_Uuid, sheet->GetName(), sheetFn.GetFullPath() );
+    }
+
+    return infos;
+}
+
+
+bool SCHEMATIC::TopLevelSheetsMatch( const std::vector<TOP_LEVEL_SHEET_INFO>& aSheets ) const
+{
+    std::vector<TOP_LEVEL_SHEET_INFO> loaded = TopLevelSheetInfos();
+
+    if( loaded.size() != aSheets.size() )
+        return false;
+
+    wxString projectPath = m_project ? m_project->GetProjectPath() : wxString();
+
+    for( size_t ii = 0; ii < loaded.size(); ++ii )
+    {
+        wxFileName have( loaded[ii].filename );
+        wxFileName want( aSheets[ii].filename );
+
+        have.MakeAbsolute( projectPath );
+        want.MakeAbsolute( projectPath );
+
+        // A legacy project loads its listed sheet under the legacy extension
+        if( have.GetExt() == FILEEXT::LegacySchematicFileExtension )
+            want.SetExt( FILEEXT::LegacySchematicFileExtension );
+
+        if( ( aSheets[ii].uuid != niluuid && aSheets[ii].uuid != loaded[ii].uuid )
+                || aSheets[ii].name != loaded[ii].name || !have.SameAs( want ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

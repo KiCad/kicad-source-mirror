@@ -148,6 +148,12 @@ public:
         return m_topLevelSheets;
     }
 
+    /// True when the last read of the file replaced a top-level sheet list held from before it
+    bool TopLevelSheetsChangedOnLoad() const { return m_topLevelSheetsChanged; }
+
+    /// Settle a changed list once the schematic has been loaded from it
+    void AcknowledgeTopLevelSheetChange() { m_topLevelSheetsChanged = false; }
+
     std::shared_ptr<NET_SETTINGS>& NetSettings()
     {
         return m_NetSettings;
@@ -299,6 +305,7 @@ private:
     PROJECT* m_project;
 
     bool m_wasMigrated;
+    bool m_topLevelSheetsChanged;
 };
 
 // Specializations to allow directly reading/writing FILE_INFO_PAIRs from JSON

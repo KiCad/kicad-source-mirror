@@ -539,6 +539,20 @@ public:
      */
     bool ReloadFromDisk();
 
+    /**
+     * Ask whether to reload when that would discard unsaved edits.
+     *
+     * @return true when there are no unsaved edits or the user chose to reload.
+     */
+    bool ConfirmReloadFromDisk( const wxString& aMessage, const wxString& aTitle );
+
+    /**
+     * Check whether the last read of the project file brought a top-level sheet list that the
+     * open schematic does not have.  An unsaved change made here is not one.  A reread list that
+     * matches the open sheets is settled.
+     */
+    bool TopLevelSheetsChangedOnDisk();
+
     void SetSchematic( SCHEMATIC* aSchematic );
 
     wxString GetCurrentFileName() const override;

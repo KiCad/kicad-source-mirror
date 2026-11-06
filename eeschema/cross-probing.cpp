@@ -676,26 +676,21 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                 }
             }
 
-            if( !mine )
+            // A new top-level sheet is not one of this schematic's files yet
+            if( !TopLevelSheetsChangedOnDisk() && !mine )
                 break;
         }
 
         // Neither choice is safe without asking: reloading discards the unsaved edits, keeping
         // them means the next save overwrites what arrived.
-        if( IsContentModified() )
+        if( !ConfirmReloadFromDisk( _( "The schematic changed on disk while you were editing it.\n\n"
+                                       "Reloading loses your unsaved edits. Keeping them means your "
+                                       "next save overwrites the changes that just arrived. To get those "
+                                       "back later, use Discard Changes on the file in the Version Control "
+                                       "panel, which drops your edits to it." ),
+                                    _( "Schematic Changed on Disk" ) ) )
         {
-            wxMessageDialog dlg( this,
-                                 _( "The schematic changed on disk while you were editing it.\n\n"
-                                    "Reloading loses your unsaved edits. Keeping them means your "
-                                    "next save overwrites the changes that just arrived. To get those "
-                                    "back later, use Discard Changes on the file in the Version Control "
-                                    "panel, which drops your edits to it." ),
-                                 _( "Schematic Changed on Disk" ),
-                                 wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
-            dlg.SetYesNoLabels( _( "&Reload" ), _( "&Keep My Edits" ) );
-
-            if( dlg.ShowModal() != wxID_YES )
-                break;
+            break;
         }
 
         ReloadFromDisk();
