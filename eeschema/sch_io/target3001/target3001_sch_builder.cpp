@@ -38,6 +38,7 @@
 #include <sch_junction.h>
 #include <sch_label.h>
 #include <sch_line.h>
+#include <sch_no_connect.h>
 #include <sch_pin.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
@@ -724,6 +725,10 @@ void TARGET3001_SCH_BUILDER::addComponent( const ELEMENT& aComponent )
             {
                 int signal = child.base.signal ? int( child.base.signal ) : -( ++m_unconnectedPins );
                 m_pinSignals[sheetOf( gate )].emplace_back( toSch( child.base.x, child.base.y ), signal );
+
+                // Open pins get a flag unless the NC pin type already draws a cross
+                if( !child.base.signal && pinType( child ) != ELECTRICAL_PINTYPE::PT_NC )
+                    addToSheet( sheetOf( gate ), new SCH_NO_CONNECT( toSch( child.base.x, child.base.y ) ) );
 
                 if( child.base.signal )
                 {
