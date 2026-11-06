@@ -26,32 +26,6 @@
 #include <string>
 #include <io/idf/idf_common.h>
 
-/**
- * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
- *
- * wxstring is a wxString, not a wxT() or _().  The scope of the return value
- * is very limited and volatile, but can be used with printf() style functions well.
- *
- * NOTE: Taken from KiCad include/macros.h
- */
-#define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
-
-/**
- * Convert a UTF8 encoded C string to a wxString for all wxWidgets build modes.
- *
- * NOTE: Taken from KiCad include/macros.h
- */
-static inline wxString From_UTF8( const char* cstring )
-{
-    wxString line = wxString::FromUTF8( cstring );
-
-    if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
-        line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
-
-    return line;
-}
-
-
 #define ERROR_IDF std::cerr << "* " << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): "
 
 // minimum drill diameters / slot widths to be represented in the IDF output

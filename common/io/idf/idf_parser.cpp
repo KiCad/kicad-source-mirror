@@ -34,6 +34,7 @@
 #include "streamwrapper.h"
 
 #include <reporter.h>
+#include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 
 using namespace std;
