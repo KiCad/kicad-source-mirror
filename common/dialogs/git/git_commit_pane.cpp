@@ -2724,8 +2724,10 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
 
         // The merge tool needs all three sides. A deletion is kept or undone whole, and two files
         // created independently have no base to merge from, so they are kept or taken whole too.
-        const bool mergeable = kind != KICAD_DIFF::DOC_KIND::UNKNOWN && conflict.hasAncestor && conflict.hasOurs
-                               && conflict.hasTheirs;
+        // The footprint merge never shows its tool and its comparison skips fields such as keywords, so
+        // it could drop an edit unseen.
+        const bool mergeable = kind != KICAD_DIFF::DOC_KIND::UNKNOWN && kind != KICAD_DIFF::DOC_KIND::FOOTPRINT
+                               && conflict.hasAncestor && conflict.hasOurs && conflict.hasTheirs;
 
         wxArrayString choices;
 
@@ -2798,7 +2800,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
             WX_STRING_REPORTER reporter;
             int                rc = KICAD_DIFF::DispatchMerge(
                     m_frame->Kiway(), kind, conflict.ancestorFile, conflict.oursFile, conflict.theirsFile, mergedOut,
-                    /* interactive */ true, kind == KICAD_DIFF::DOC_KIND::FOOTPRINT, &reporter );
+                    /* interactive */ true, false, &reporter );
 
             if( rc != 0 )
             {
