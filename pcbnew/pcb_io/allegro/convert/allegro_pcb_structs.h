@@ -2197,7 +2197,14 @@ struct BLK_0x32_PLACED_PAD
     uint32_t m_PtrPinNumber;
     uint32_t m_NextInCompInst;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown2;
+    /**
+     * The 0x07 component instance that owns this pad, duplicating the parent 0x2D's
+     * m_InstRef.
+     *
+     * Zero for pads owned by an 0x2B library definition instead of
+     * a placed instance.
+     */
+    COND_GE<FMT_VER::V_172, uint32_t> m_ComponentInst;
 
     uint32_t m_NameText;
     uint32_t m_Ptr11;

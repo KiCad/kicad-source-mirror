@@ -1969,7 +1969,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x32_PLACED_PAD( FILE_STREAM& aStr
     data.m_PtrPinNumber = aStream.ReadU32();
     data.m_NextInCompInst = aStream.ReadU32();
 
-    ReadCond( aStream, aVer, data.m_Unknown2 );
+    ReadCond( aStream, aVer, data.m_ComponentInst );
 
     data.m_NameText = aStream.ReadU32();
     data.m_Ptr11 = aStream.ReadU32();
