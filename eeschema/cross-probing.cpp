@@ -713,6 +713,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         Prj().IncrementNetclassesTicker();
         Prj().IncrementTextVarsTicker();
 
+        // Otherwise the next save writes this frame's cached copies back over the reread file
+        ApplyProjectFileSettings();
+        LoadDrawingSheet();
+
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();
         break;

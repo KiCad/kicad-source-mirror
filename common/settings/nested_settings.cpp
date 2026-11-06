@@ -122,6 +122,10 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
     Load();
 
+    // A reread of the file must reach settings nested more than one level down
+    for( NESTED_SETTINGS* settings : m_nested_settings )
+        settings->LoadFromFile();
+
     return success;
 }
 

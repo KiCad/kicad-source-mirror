@@ -166,6 +166,9 @@ public:
      */
     bool LoadProjectSettings();
 
+    /// Apply what the project file sets and this frame caches, leaving the local settings alone.
+    void ApplyProjectFileSettings();
+
     /**
      * Load the drawing sheet file.
      */

@@ -57,18 +57,40 @@ void PCB_EDIT_FRAME::LoadDrawingSheet()
 }
 
 
-bool PCB_EDIT_FRAME::LoadProjectSettings()
+void PCB_EDIT_FRAME::ApplyProjectFileSettings()
 {
-    PROJECT_FILE&           project       = Prj().GetProjectFile();
-    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+    PROJECT_FILE& project = Prj().GetProjectFile();
 
     BASE_SCREEN::m_DrawingSheetFileName = project.m_BoardDrawingSheetFile;
 
+    KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    std::map<int, KIGFX::COLOR4D>& netColors = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs )->GetNetColorMap();
+    netColors.clear();
+
+    for( const auto& [netname, color] : project.NetSettings()->GetNetColorAssignments() )
+    {
+        if( color != COLOR4D::UNSPECIFIED )
+        {
+            if( NETINFO_ITEM* net = GetBoard()->GetNetInfo().GetNetItem( netname ) )
+                netColors[net->GetNetCode()] = color;
+        }
+    }
+
+    m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
+    m_appearancePanel->SetUserViewports( project.m_Viewports );
+}
+
+
+bool PCB_EDIT_FRAME::LoadProjectSettings()
+{
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    ApplyProjectFileSettings();
+
     // Load render settings that aren't stored in PCB_DISPLAY_OPTIONS
 
-    std::shared_ptr<NET_SETTINGS>& netSettings = project.NetSettings();
-    KIGFX::RENDER_SETTINGS*        rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
-    KIGFX::PCB_RENDER_SETTINGS*    renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
+    KIGFX::RENDER_SETTINGS*     rs = GetCanvas()->GetView()->GetPainter()->GetSettings();
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rs );
 
     const NETINFO_LIST& nets = GetBoard()->GetNetInfo();
 
@@ -86,21 +108,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
         if( localSettings.m_HiddenNetclasses.count( net->GetNetClass()->GetName() ) )
             hiddenNets.insert( net->GetNetCode() );
     }
-
-    std::map<int, KIGFX::COLOR4D>& netColors = renderSettings->GetNetColorMap();
-    netColors.clear();
-
-    for( const auto& [netname, color] : netSettings->GetNetColorAssignments() )
-    {
-        if( color != COLOR4D::UNSPECIFIED )
-        {
-            if( NETINFO_ITEM* net = GetBoard()->GetNetInfo().GetNetItem( netname ) )
-                netColors[ net->GetNetCode() ] = color;
-        }
-    }
-
-    m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
-    m_appearancePanel->SetUserViewports( project.m_Viewports );
 
     PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     PCB_SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();

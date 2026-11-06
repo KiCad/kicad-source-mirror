@@ -60,7 +60,7 @@ COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 }
 
 
-bool SCH_EDIT_FRAME::LoadProjectSettings()
+void SCH_EDIT_FRAME::ApplyProjectFileSettings()
 {
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
@@ -74,6 +74,12 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     GetRenderSettings()->SetGapLengthRatio( settings.m_DashedLineGapRatio );
 
     BASE_SCREEN::m_DrawingSheetFileName = settings.m_SchDrawingSheetFileName;
+}
+
+
+bool SCH_EDIT_FRAME::LoadProjectSettings()
+{
+    ApplyProjectFileSettings();
 
     PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
 

@@ -1562,6 +1562,9 @@ std::vector<LAYER_PRESET> APPEARANCE_CONTROLS::GetUserLayerPresets() const
 
 void APPEARANCE_CONTROLS::SetUserLayerPresets( std::vector<LAYER_PRESET>& aPresetList )
 {
+    // Points into the map about to be rebuilt
+    m_lastSelectedUserPreset = nullptr;
+
     // Reset to defaults
     loadDefaultLayerPresets();
 
@@ -1576,6 +1579,9 @@ void APPEARANCE_CONTROLS::SetUserLayerPresets( std::vector<LAYER_PRESET>& aPrese
     }
 
     rebuildLayerPresetsWidget( true );
+
+    // The reset selects All Layers, which a later save would persist over what is actually shown
+    syncLayerPresetSelection();
 }
 
 
@@ -1637,6 +1643,7 @@ std::vector<VIEWPORT> APPEARANCE_CONTROLS::GetUserViewports() const
 void APPEARANCE_CONTROLS::SetUserViewports( std::vector<VIEWPORT>& aViewportList )
 {
     m_viewports.clear();
+    m_viewportMRU.clear();
 
     for( const VIEWPORT& viewport : aViewportList )
     {

@@ -225,6 +225,9 @@ public:
      */
     bool LoadProjectSettings();
 
+    /// Apply what the project file sets and this frame caches, leaving the local settings alone.
+    void ApplyProjectFileSettings();
+
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

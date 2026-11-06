@@ -949,6 +949,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     }
 
     case MAIL_PCB_PROJECT_SETTINGS_CHANGED:
+        // Replace cached copies a save would write back, before the net sync reads the net colors
+        ApplyProjectFileSettings();
+        LoadDrawingSheet();
+
         // The settings were reread, but every net caches its resolved netclass, so routing would
         // keep the old widths and clearances until they resynchronize.
         GetBoard()->SynchronizeTuningProfileProperties();
