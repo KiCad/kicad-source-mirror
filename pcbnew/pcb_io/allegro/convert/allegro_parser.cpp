@@ -878,11 +878,15 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x10( FILE_STREAM& stream, FMT_VER
     data.m_Key = stream.ReadU32();
     block->SetKey( data.m_Key );
 
-    ReadCond( stream, aVer, data.m_Unknown1 );
+    ReadCond( stream, aVer, data.m_Next );
+    block->SetNext( data.m_Next.value_or( 0 ) );
+
     data.m_ComponentInstPtr = stream.ReadU32();
-    ReadCond( stream, aVer, data.m_Unknown2 );
-    data.m_PtrX12 = stream.ReadU32();
-    data.m_Unknown3 = stream.ReadU32();
+    ReadCond( stream, aVer, data.m_Unknown1 );
+
+    data.m_FirstPinInstance16x = stream.ReadU32();
+    data.m_FirstPinInstance = stream.ReadU32();
+
     data.m_FunctionName = stream.ReadU32();
     data.m_Slots = stream.ReadU32();
     data.m_Fields = stream.ReadU32();

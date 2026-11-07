@@ -1013,14 +1013,22 @@ struct BLK_0x10_FUNCTION_INST
 
     uint32_t m_Key;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
+    /// Next function instance of the same component, or the owning 0x07 at the end
+    COND_GE<FMT_VER::V_172, uint32_t> m_Next;
 
+    /// Pointer to the component instance (0x07) this function instance belongs to
     uint32_t m_ComponentInstPtr;
 
-    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+    /// Always zero so far.
+    COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
-    uint32_t m_PtrX12;
-    uint32_t m_Unknown3;
+    /// Pointer to the first pin instance (0x12) for this function instance
+    /// Zero in versions above V172
+    uint32_t m_FirstPinInstance16x;
+    /// Pointer to the first pin instance (0x12) for this function instance
+    /// Zero in versions below V172
+    uint32_t m_FirstPinInstance;
+
     uint32_t m_FunctionName;
     uint32_t m_Slots; // 0x0F?
     uint32_t m_Fields;     // Presumably a pointer to a string
