@@ -381,10 +381,15 @@ size_t PADS_SCH_PARSER::parseSectionSCH( const std::vector<std::string>& aLines,
             std::string second;
             iss >> second;
 
-            if( second == "SIZE" )
+            // Accept either SIZE SIZECODE as two tokens, or concatentated as a single token
+            if( second.starts_with( "SIZE" ) )
             {
                 std::string sizeCode;
-                iss >> sizeCode;
+
+                if( second == "SIZE" )
+                    iss >> sizeCode;
+                else
+                    sizeCode = second.substr( 4 );
 
                 m_parameters.sheet_size.name = sizeCode;
 
