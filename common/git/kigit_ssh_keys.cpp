@@ -543,7 +543,7 @@ std::vector<wxString> KIGIT::DefaultSSHKeyCandidates( const wxString& aHomeDir, 
         candidates.insert( candidates.end(), configured.begin(), configured.end() );
     }
 
-    for( const wxString& name : { wxS( "id_ed25519" ), wxS( "id_ecdsa" ), wxS( "id_rsa" ), wxS( "id_dsa" ) } )
+    for( const wxString name : { wxS( "id_ed25519" ), wxS( "id_ecdsa" ), wxS( "id_rsa" ), wxS( "id_dsa" ) } )
         candidates.push_back( wxFileName( sshDir.GetPath(), name ).GetFullPath() );
 
     auto isKnown = [&]( const wxString& aPath )

@@ -1408,7 +1408,7 @@ void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
             // Altium names a channel's parts after its sheet, as R1_CH2, so the channels share one base
             wxString channel = wxT( "_" ) + sheet->GetName();
 
-            for( const wxString& reserved : { wxT( " " ), wxT( "?" ), wxT( "," ) } )
+            for( const wxString reserved : { wxT( " " ), wxT( "?" ), wxT( "," ) } )
                 channel.Replace( reserved, wxT( "_" ) );
 
             std::set<wxString>& used = suffixesByFile[sheet->GetFileName().Lower()];
