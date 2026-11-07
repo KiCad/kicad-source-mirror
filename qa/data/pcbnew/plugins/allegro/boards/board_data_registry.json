@@ -344,6 +344,51 @@
                 }
              ]
         },
+        "qwicc_fpc_interposer_v181": {
+            "url": "https://github.com/xarxsm/qwicc_fpc_interposer",
+            "license": "MIT",
+            "description": "QWICC FPC interposer board, format magic 0x00150200",
+            "formatVersion": "18.1",
+            "boardFile": "fpc_interposer.brd",
+            "boardExpectations": [
+                {
+                    "type": "item",
+                    "itemType": "footprint",
+                    "count": {
+                        "min": 2,
+                        "max": 2
+                    }
+                },
+                {
+                    "type": "item",
+                    "itemType": "pad",
+                    "count": {
+                        "min": 12,
+                        "max": 12
+                    }
+                },
+                {
+                    "type": "item",
+                    "itemType": "track",
+                    "count": {
+                        "min": 10,
+                        "max": 10
+                    }
+                },
+                {
+                    "type": "item",
+                    "itemType": "via",
+                    "count": {
+                        "min": 11,
+                        "max": 11
+                    }
+                },
+                {
+                    "type": "layers",
+                    "cuNames": ["TOP", "BOTTOM"]
+                }
+            ]
+        },
         "rects": {
             "formatVersion": "17.4",
             "boardFile": "rects.brd"
