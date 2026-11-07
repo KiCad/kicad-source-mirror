@@ -126,7 +126,7 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const
 
     const PROJECT& prj = Pgm().GetSettingsManager().Prj();
 
-    if( aProject.name() == prj.GetProjectName().ToUTF8() )
+    if( aProject.name() == prj.GetProjectName().utf8_str() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -134,7 +134,7 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const
         return tl::unexpected( e );
     }
 
-    if( aProject.path() == prj.GetProjectPath().ToUTF8() )
+    if( aProject.path() == prj.GetProjectPath().utf8_str() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
