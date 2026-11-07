@@ -95,13 +95,14 @@ static void TestBeagleBoneBlack_0x0F_SlotG1( const BLOCK_BASE& aBlock )
     const auto& blk = static_cast<const BLOCK<BLK_0x0F_FUNCTION_SLOT>&>( aBlock ).GetData();
     BOOST_TEST( blk.m_Key == 0xbf0 );
 
-    BOOST_TEST( blk.m_Ptr0x06 == 0xb91 );
-    BOOST_TEST( blk.m_Next.value_or( 0 ) == 0xb91 ); // Last slot in component
+    BOOST_TEST( blk.m_Next == 0xb91 );
+    BOOST_TEST( blk.m_ParentComponentPtr.value_or( 0 ) == 0xb91 ); // Last slot, so both point at the 0x06
 
-    BOOST_TEST( blk.m_SlotName == 0x2ba );
-    BOOST_TEST( blk.m_Ptr0x11 == 0x060aa );
+    BOOST_TEST( blk.m_SlotNameStrId == 0x2ba );
+    BOOST_TEST( blk.m_PinNamePtr == 0x060aa );
 
-    BOOST_TEST( blk.GetCompDeviceTypeStr() == "RES_10K_1/16W_1%_0402_402_10K,1" );
+    BOOST_REQUIRE( blk.GetCompDeviceTypeStr().has_value() );
+    BOOST_TEST( *blk.GetCompDeviceTypeStr() == "RES_10K_1/16W_1%_0402_402_10K,1" );
 }
 
 
@@ -115,13 +116,14 @@ static void TestOpenBreath_0x0F_SlotAM4096_G1( const BLOCK_BASE& aBlock )
     const auto& blk = static_cast<const BLOCK<BLK_0x0F_FUNCTION_SLOT>&>( aBlock ).GetData();
     BOOST_TEST( blk.m_Key == 0x12d );
 
-    BOOST_TEST( blk.m_Ptr0x06 == 0x126 );
-    BOOST_TEST( blk.m_Next.value_or( 0 ) == 0x126 ); // Last slot in component
+    BOOST_TEST( blk.m_ParentComponentPtr.value_or( 0 ) == 0x126 );
+    BOOST_TEST( blk.m_Next == 0x126 ); // Last slot in component
 
-    BOOST_TEST( blk.m_SlotName == 0x87 );
-    BOOST_TEST( blk.m_Ptr0x11 == 0x264 ); // ptr to "ZERO"
+    BOOST_TEST( blk.m_SlotNameStrId == 0x87 );
+    BOOST_TEST( blk.m_PinNamePtr == 0x264 ); // ptr to "ZERO"
 
-    BOOST_TEST( blk.GetCompDeviceTypeStr() == "AM4096" );
+    BOOST_REQUIRE( blk.GetCompDeviceTypeStr().has_value() );
+    BOOST_TEST( *blk.GetCompDeviceTypeStr() == "AM4096" );
 }
 
 

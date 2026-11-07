@@ -97,6 +97,11 @@ static T ReadField( FILE_STREAM& aStream )
     {
         field = aStream.ReadU8();
     }
+    else if constexpr( std::is_same_v<T, char> )
+    {
+        // char is a distinct type from uint8_t, and is used for raw byte strings
+        field = static_cast<char>( aStream.ReadU8() );
+    }
     else if constexpr( std::is_same_v<T, uint16_t> )
     {
         field = aStream.ReadU16();
@@ -115,8 +120,12 @@ static T ReadField( FILE_STREAM& aStream )
     }
     else if constexpr( requires { std::tuple_size<T>::value; } )
     {
+        using element_type = std::tuple_element_t<0, T>;
+
         for( size_t i = 0; i < std::tuple_size_v<T>; ++i )
-            field[i] = aStream.ReadU32();
+        {
+            field[i] = ReadField<element_type>( aStream );
+        }
     }
     else
     {
@@ -847,20 +856,19 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x0F( FILE_STREAM& stream, FMT_VER
 
     data.m_Key = stream.ReadU32();
     block->SetKey( data.m_Key );
-    data.m_SlotName = stream.ReadU32();
+    data.m_SlotNameStrId = stream.ReadU32();
 
     ReadCond( stream, aVer, data.m_Unknown1 );
 
-    if( aVer < FMT_VER::V_190 )
-        stream.ReadBytes( data.m_CompDeviceType.data(), data.m_CompDeviceType.size() );
+    ReadCond( stream, aVer, data.m_CompDeviceType );
+    ReadCond( stream, aVer, data.m_CompDeviceTypeStrId );
 
-    ReadCond( stream, aVer, data.m_CompDeviceTypePtr );
+    data.m_Next = stream.ReadU32();
+    block->SetNext( data.m_Next );
 
-    ReadCond( stream, aVer, data.m_Next );
-    block->SetNext( data.m_Next.value_or( 0 ) );
+    ReadCond( stream, aVer, data.m_ParentComponentPtr );
 
-    data.m_Ptr0x06 = stream.ReadU32();
-    data.m_Ptr0x11 = stream.ReadU32();
+    data.m_PinNamePtr = stream.ReadU32();
     data.m_Unknown2 = stream.ReadU32();
 
     return block;

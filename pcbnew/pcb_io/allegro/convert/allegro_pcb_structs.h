@@ -979,25 +979,37 @@ struct BLK_0x0F_FUNCTION_SLOT
 
     uint32_t m_Key;
 
-    uint32_t m_SlotName;
+    uint32_t m_SlotNameStrId;
 
+    /// Always zero so far.
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown1;
 
-    std::array<char, 32> m_CompDeviceType;
+    /// Component device type as a fixed-length string (V190 and below)
+    COND_LT<FMT_VER::V_190, std::array<char, 32>> m_CompDeviceType;
+    /// Pointer to the component device type string (V190 and above)
+    COND_GE<FMT_VER::V_190, uint32_t> m_CompDeviceTypeStrId;
 
-    COND_GE<FMT_VER::V_190, uint32_t> m_CompDeviceTypePtr;
+    // Next slot in this component's chain, or the owning 0x06 when last
+    uint32_t m_Next;
 
-    COND_GE<FMT_VER::V_172, uint32_t> m_Next;
+    // Direct back-reference to the owning 0x06 (V172+)
+    COND_GE<FMT_VER::V_172, uint32_t> m_ParentComponentPtr;
 
-    uint32_t m_Ptr0x06;
-    uint32_t m_Ptr0x11;
+    /// Pointer to the head of the pin name list (0x11) for this slot
+    /// For example an ORGATE may have "O", "I1", "I0" as its pin names.
+    uint32_t m_PinNamePtr;
 
+    /// Always zero so far.
     uint32_t m_Unknown2;
 
-    std::string GetCompDeviceTypeStr() const
+    /// Get the component device type as a string (in V190 and below)
+    std::optional<std::string> GetCompDeviceTypeStr() const
     {
+        if( !m_CompDeviceType.has_value() )
+            return std::nullopt;
+
         // The string is stored as a fixed-length array, but is null-terminated
-        return std::string( m_CompDeviceType.data(), strnlen( m_CompDeviceType.data(), m_CompDeviceType.size() ) );
+        return std::string( m_CompDeviceType->data(), strnlen( m_CompDeviceType->data(), m_CompDeviceType->size() ) );
     }
 };
 
