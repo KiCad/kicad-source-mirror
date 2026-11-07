@@ -4040,14 +4040,25 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             // continue receiving no properties so their existing design-settings import paths remain
             // unchanged.
             const std::map<std::string, UTF8>* importProperties = nullptr;
-            std::map<std::string, UTF8>        easyEdaProProperties;
+            std::map<std::string, UTF8>        importPropertyStorage;
 
-            if( !job->m_importPcbId.empty()
-                && ( fileType == PCB_IO_MGR::EASYEDAPRO || fileType == PCB_IO_MGR::EASYEDAPRO_V3 ) )
+            if( fileType == PCB_IO_MGR::EASYEDAPRO || fileType == PCB_IO_MGR::EASYEDAPRO_V3 )
             {
-                easyEdaProProperties.emplace( "pcb_id", std::string( job->m_importPcbId.ToUTF8() ) );
-                importProperties = &easyEdaProProperties;
+                if( !job->m_importPcbId.empty() )
+                {
+                    importPropertyStorage.emplace( "pcb_id", std::string( job->m_importPcbId.ToUTF8() ) );
+                    importProperties = &importPropertyStorage;
+                }
             }
+            else if( fileType == PCB_IO_MGR::EAGLE )
+            {
+                // PCB_IO_EAGLE uses these to center the BOARD
+                VECTOR2I pageSize = board->GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS );
+                importPropertyStorage["page_width"] = std::to_string( pageSize.x );
+                importPropertyStorage["page_height"] = std::to_string( pageSize.y );
+                importProperties = &importPropertyStorage;
+            }
+
 
             board = pi->LoadBoard( job->m_inputFile, importProperties, projectPtr );
         }

@@ -659,7 +659,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( m_importProperties )
                 props.insert( m_importProperties->begin(), m_importProperties->end() );
 
-            // PCB_IO_EAGLE uses this info to center the BOARD
+            // PCB_IO_EAGLE uses these to center the BOARD
             props["page_width"] = std::to_string( GetPageSizeIU().x );
             props["page_height"] = std::to_string( GetPageSizeIU().y );
 
