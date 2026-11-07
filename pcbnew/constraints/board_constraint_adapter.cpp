@@ -782,13 +782,23 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
         {
             vars.kind = shape->GetShape() == SHAPE_T::ELLIPSE ? SHAPE_KIND::ELLIPSE : SHAPE_KIND::ELLIPSE_ARC;
 
-            VECTOR2I center = shape->GetEllipseCenter();
-            double   major = shape->GetEllipseMajorRadius();
-            double   minor = shape->GetEllipseMinorRadius();
-            double   phi = shape->GetEllipseRotation().AsRadians();
+            VECTOR2I  center = shape->GetEllipseCenter();
+            double    major = shape->GetEllipseMajorRadius();
+            double    minor = shape->GetEllipseMinorRadius();
+            double    phi = shape->GetEllipseRotation().AsRadians();
+            EDA_ANGLE startAngle = shape->GetEllipseStartAngle();
+            EDA_ANGLE endAngle = shape->GetEllipseEndAngle();
+
+            if( minor > major )
+            {
+                std::swap( major, minor );
+                phi += M_PI / 2;
+                startAngle -= ANGLE_90;
+                endAngle -= ANGLE_90;
+            }
 
             // GCS parameterizes an ellipse as center + first focus + minor radius.
-            double focal = major > minor ? std::sqrt( major * major - minor * minor ) : 0.0;
+            double focal = std::sqrt( major * major - minor * minor );
             double cx = normalizeX( center.x );
             double cy = normalizeY( center.y );
 
@@ -796,7 +806,7 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
             pushParam( cy );
             vars.focusX = pushParam( cx + focal * m_invScale * std::cos( phi ) );
             pushParam( cy + focal * m_invScale * std::sin( phi ) );
-            vars.radius = pushParam( std::min( major, minor ) * m_invScale );
+            vars.radius = pushParam( minor * m_invScale );
 
             // Tie the focus to the center, or a solve moving the center would leave the focus
             // behind and distort the ellipse.
@@ -817,8 +827,8 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
                 pushParam( normalizeY( start.y ) );
                 vars.arcEndX = pushParam( normalizeX( end.x ) );
                 pushParam( normalizeY( end.y ) );
-                vars.startAngle = pushParam( shape->GetEllipseStartAngle().AsRadians() );
-                vars.endAngle = pushParam( shape->GetEllipseEndAngle().AsRadians() );
+                vars.startAngle = pushParam( startAngle.AsRadians() );
+                vars.endAngle = pushParam( endAngle.AsRadians() );
 
                 GCS::ArcOfEllipse arc;
                 arc.center = GCS::Point{ &m_params[vars.startX], &m_params[vars.startX + 1] };
