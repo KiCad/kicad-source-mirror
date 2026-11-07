@@ -40,10 +40,8 @@
 #include <wx/log.h>
 
 
-std::unique_ptr<BOARD> BOARD_LOADER::Load( const wxString& aFileName,
-                                           PCB_IO_MGR::PCB_FILE_T aFormat,
-                                           PROJECT* aProject,
-                                           const OPTIONS& aOptions )
+std::unique_ptr<BOARD> BOARD_LOADER::Load( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat,
+                                           PROJECT* aProject, const OPTIONS& aOptions )
 {
     if( !aProject || aFormat == PCB_IO_MGR::FILE_TYPE_NONE )
         return nullptr;

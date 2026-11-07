@@ -3793,8 +3793,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     // Check that input file exists
     if( !wxFile::Exists( job->m_inputFile ) )
     {
-        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ),
-                                              job->m_inputFile ),
+        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ), job->m_inputFile ),
                             RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
@@ -3804,7 +3803,9 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 
     switch( job->m_format )
     {
-    case JOB_PCB_IMPORT::FORMAT::AUTO: fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile ); break;
+    case JOB_PCB_IMPORT::FORMAT::AUTO:
+        fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile );
+        break;
 
     // "pads" names the vendor format, not the dialect: PADS writes both an ASCII export and a
     // binary PowerPCB database, and both use the .pcb extension. Resolve the dialect by content
@@ -3812,33 +3813,25 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     // reader, which parses nothing and silently yields an empty board.
     case JOB_PCB_IMPORT::FORMAT::PADS_ASCII:
         fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile ) == PCB_IO_MGR::PADS_BINARY
-                           ? PCB_IO_MGR::PADS_BINARY
-                           : PCB_IO_MGR::PADS;
+                                                                                           ? PCB_IO_MGR::PADS_BINARY
+                                                                                           : PCB_IO_MGR::PADS;
         break;
 
-    case JOB_PCB_IMPORT::FORMAT::ALTIUM: fileType = PCB_IO_MGR::ALTIUM_DESIGNER; break;
-
-    case JOB_PCB_IMPORT::FORMAT::EAGLE: fileType = PCB_IO_MGR::EAGLE; break;
-
-    case JOB_PCB_IMPORT::FORMAT::CADSTAR: fileType = PCB_IO_MGR::CADSTAR_PCB_ARCHIVE; break;
-
-    case JOB_PCB_IMPORT::FORMAT::FABMASTER: fileType = PCB_IO_MGR::FABMASTER; break;
-
-    case JOB_PCB_IMPORT::FORMAT::PCAD: fileType = PCB_IO_MGR::PCAD; break;
-
-    case JOB_PCB_IMPORT::FORMAT::SOLIDWORKS: fileType = PCB_IO_MGR::SOLIDWORKS_PCB; break;
-
-    case JOB_PCB_IMPORT::FORMAT::EASYPC: fileType = PCB_IO_MGR::EASYPC; break;
-
-    case JOB_PCB_IMPORT::FORMAT::TARGET3001: fileType = PCB_IO_MGR::TARGET3001; break;
+    case JOB_PCB_IMPORT::FORMAT::ALTIUM:     fileType = PCB_IO_MGR::ALTIUM_DESIGNER;     break;
+    case JOB_PCB_IMPORT::FORMAT::EAGLE:      fileType = PCB_IO_MGR::EAGLE;               break;
+    case JOB_PCB_IMPORT::FORMAT::CADSTAR:    fileType = PCB_IO_MGR::CADSTAR_PCB_ARCHIVE; break;
+    case JOB_PCB_IMPORT::FORMAT::FABMASTER:  fileType = PCB_IO_MGR::FABMASTER;           break;
+    case JOB_PCB_IMPORT::FORMAT::PCAD:       fileType = PCB_IO_MGR::PCAD;                break;
+    case JOB_PCB_IMPORT::FORMAT::SOLIDWORKS: fileType = PCB_IO_MGR::SOLIDWORKS_PCB;      break;
+    case JOB_PCB_IMPORT::FORMAT::EASYPC:     fileType = PCB_IO_MGR::EASYPC;              break;
+    case JOB_PCB_IMPORT::FORMAT::TARGET3001: fileType = PCB_IO_MGR::TARGET3001;          break;
     }
 
     // FindPluginTypeFromBoardPath returns FILE_TYPE_NONE (not PCB_FILE_UNKNOWN) when no plugin
     // claims the file.  Quiet sentinel: lets the top-level `import` command try the schematic face.
     if( fileType == PCB_IO_MGR::PCB_FILE_UNKNOWN || fileType == PCB_IO_MGR::FILE_TYPE_NONE )
     {
-        m_reporter->Report( wxString::Format( _( "No PCB importer recognizes the file format of "
-                                                 "'%s'\n" ),
+        m_reporter->Report( wxString::Format( _( "No PCB importer recognizes the file format of '%s'\n" ),
                                               job->m_inputFile ),
                             RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT;
@@ -3904,8 +3897,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 
     if( !projectPtr )
     {
-        m_reporter->Report( _( "Could not establish a project for the import\n" ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "Could not establish a project for the import\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 
@@ -4037,9 +4029,9 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
                                    "layer remapping; it will be ignored" ) );
         }
 
-        m_reporter->Report(
-                wxString::Format( _( "Importing '%s' using %s format...\n" ), job->m_inputFile, formatName ),
-                RPT_SEVERITY_INFO );
+        m_reporter->Report( wxString::Format( _( "Importing '%s' using %s format...\n" ),
+                                              job->m_inputFile, formatName ),
+                            RPT_SEVERITY_INFO );
 
         // LoadBoard reports load failures and user cancellations by throwing.
         try
@@ -4085,10 +4077,8 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         // every board compete to publish the same .pretty directory.
         if( PCB_IO_MGR::ImportGeneratesProjectLibrary( fileType ) )
         {
-            const wxString reconciliationPath =
-                    job->m_importPcbId.empty() ? job->m_inputFile : outputPath;
-            ReconcileImportedFootprints( *pi, *board, *projectPtr, reconciliationPath, nullptr,
-                                         *m_reporter );
+            const wxString reconciliationPath = job->m_importPcbId.empty() ? job->m_inputFile : outputPath;
+            ReconcileImportedFootprints( *pi, *board, *projectPtr, reconciliationPath, nullptr, *m_reporter );
         }
 
         // Flag explicit map entries that never matched a source layer so typos do not pass silently.
@@ -4098,10 +4088,9 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             {
                 if( !seenSourceLayers.contains( source ) )
                 {
-                    warnings.push_back( wxString::Format(
-                            _( "Layer map entry '%s' does not match any source layer in the "
-                               "imported file; it will be ignored" ),
-                            source ) );
+                    warnings.push_back( wxString::Format( _( "Layer map entry '%s' does not match any source layer "
+                                                             "in the imported file; it will be ignored" ),
+                                                          source ) );
                 }
             }
         }

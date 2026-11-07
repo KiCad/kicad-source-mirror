@@ -568,8 +568,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
         statusBar->ClearWarningMessages( "load" );
 
-    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Create PCB" ) : _( "Load PCB" ), 1,
-                                           PR_CAN_ABORT );
+    WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Create PCB" ) : _( "Load PCB" ), 1, PR_CAN_ABORT );
     WX_STRING_REPORTER loadReporter;
     LOAD_INFO_REPORTER_SCOPE loadReporterScope( &loadReporter );
 
@@ -647,8 +646,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
-        BOARD*              loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
-        bool failedLoad = false;
+        BOARD* loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
+        bool   failedLoad = false;
 
         // importer template footprints, captured at load for reconciliation
         std::vector<std::unique_ptr<FOOTPRINT>> importedLibFootprints;
@@ -660,7 +659,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             if( m_importProperties )
                 props.insert( m_importProperties->begin(), m_importProperties->end() );
 
-            // PCB_IO_EAGLE can use this info to center the BOARD, but it does not yet.
+            // PCB_IO_EAGLE uses this info to center the BOARD
             props["page_width"] = std::to_string( GetPageSizeIU().x );
             props["page_height"] = std::to_string( GetPageSizeIU().y );
 
@@ -726,11 +725,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                         }
 
                         aPlugin.SetQueryUserCallback(
-                                [&]( wxString aTitle, int aIcon, wxString aMessage,
-                                     wxString aAction ) -> bool
+                                [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool
                                 {
-                                    KIDIALOG dlg( nullptr, aMessage, aTitle,
-                                                  wxOK | wxCANCEL | aIcon );
+                                    KIDIALOG dlg( nullptr, aMessage, aTitle, wxOK | wxCANCEL | aIcon );
 
                                     if( !aAction.IsEmpty() )
                                         dlg.SetOKLabel( aAction );
@@ -741,14 +738,12 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                 } );
                     };
 
-            std::unique_ptr<BOARD> loaded =
-                    BOARD_LOADER::Load( fullFileName, pluginType, &Prj(), loaderOptions );
+            std::unique_ptr<BOARD> loaded = BOARD_LOADER::Load( fullFileName, pluginType, &Prj(), loaderOptions );
 
             if( loaded && props.count( IMPORT_PROJ_PROPS::NET_NAME_MAP ) )
             {
                 std::optional<std::map<wxString, wxString>> netNames =
-                        IMPORT_PROJ_PROPS::SplitNetNameMap(
-                                props.at( IMPORT_PROJ_PROPS::NET_NAME_MAP ).wx_str() );
+                        IMPORT_PROJ_PROPS::SplitNetNameMap( props.at( IMPORT_PROJ_PROPS::NET_NAME_MAP ).wx_str() );
 
                 if( !netNames )
                     THROW_IO_ERROR( _( "Invalid imported net-name map." ) );
