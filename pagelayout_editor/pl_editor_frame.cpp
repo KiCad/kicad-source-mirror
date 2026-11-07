@@ -899,7 +899,7 @@ DS_DATA_ITEM* PL_EDITOR_FRAME::CreateDrawingSheetItem( int aType )
 
 void PL_EDITOR_FRAME::SyncDataItem( DS_DATA_ITEM* aItem )
 {
-    DS_DRAW_ITEM_LIST dummy( drawSheetIUScale );
+    DS_DRAW_ITEM_LIST dummy( drawSheetIUScale, FOR_CANVAS );
     dummy.SetPaperFormat( GetPageSettings().GetTypeAsString() );
     dummy.SetTitleBlock( &GetTitleBlock() );
     dummy.SetProject( &Prj() );

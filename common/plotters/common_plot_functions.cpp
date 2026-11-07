@@ -62,7 +62,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     if( plotColor == COLOR4D::UNSPECIFIED )
         plotColor = COLOR4D( RED );
 
-    DS_DRAW_ITEM_LIST drawList( unityScale );
+    DS_DRAW_ITEM_LIST drawList( unityScale, FOR_CANVAS );
 
     // Print only a short filename, if aFilename is the full filename
     wxFileName fn( aFilename );

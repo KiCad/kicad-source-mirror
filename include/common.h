@@ -131,19 +131,19 @@ KICOMMON_API std::vector<TEXT_VAR_REF_KEY> ExtractTextVarReferences( const wxStr
 /**
  * Multi-pass text variable expansion and math expression evaluation.
  *
- * Performs recursive resolution of both ${...} variable references and \@{...} math expressions,
- * then cleans up escape sequences (\${...} and \@{...}) to display literals.
+ * Performs recursive resolution of both ${...} variable references and \@{...} math expressions.
  *
  * This helper encapsulates the common pattern used across schematic text components:
  * - While text contains ${...} or \@{...} and depth < max:
  *   - Expand variables via ExpandTextVars()
  *   - Evaluate math expressions via EXPRESSION_EVALUATOR
- * - Convert escape markers back to literals
+ *
+ * Escaped references are left as markers.
  *
  * @param aSource The source text containing variables and/or expressions
  * @param aResolver Function to resolve variable references
  * @param aDepth Current recursion depth (passed by reference, will be incremented)
- * @return Fully expanded and evaluated text with escape sequences cleaned up
+ * @return Expanded and evaluated text, escaped references still as markers
  */
 KICOMMON_API wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver,
                                        int& aDepth );

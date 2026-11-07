@@ -106,7 +106,7 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 {
     GAL*              gal = aView->GetGAL();
     RENDER_SETTINGS*  settings = aView->GetPainter()->GetSettings();
-    DS_DRAW_ITEM_LIST drawList( m_iuScale );
+    DS_DRAW_ITEM_LIST drawList( m_iuScale, FOR_CANVAS );
 
     buildDrawList( aView, m_properties, &drawList );
 
@@ -260,7 +260,7 @@ DS_PROXY_VIEW_ITEM::~DS_PROXY_VIEW_ITEM()
 bool DS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const VECTOR2I& aPosition )
 {
     int               accuracy = (int) aView->ToWorld( 5.0 );   // five pixels at current zoom
-    DS_DRAW_ITEM_LIST drawList( m_iuScale );
+    DS_DRAW_ITEM_LIST drawList( m_iuScale, FOR_CANVAS );
 
     buildDrawList( aView, m_properties, &drawList );
 

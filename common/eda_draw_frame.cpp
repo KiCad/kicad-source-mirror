@@ -1138,7 +1138,7 @@ void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPage
                         const wxString& aPageNumber, double aMils2Iu, const PROJECT* aProject,
                         const wxString& aSheetLayer, bool aIsFirstPage )
 {
-    DS_DRAW_ITEM_LIST drawList( unityScale );
+    DS_DRAW_ITEM_LIST drawList( unityScale, FOR_CANVAS );
 
     drawList.SetDefaultPenSize( aSettings->GetDefaultPenWidth() );
     drawList.SetPlotterMilsToIUfactor( aMils2Iu );

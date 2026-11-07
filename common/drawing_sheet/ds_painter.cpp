@@ -228,6 +228,8 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
         retv = evaluator.Evaluate( retv );
     }
 
+    FinalizeTextVarExpansion( retv, m_context );
+
     return retv;
 }
 

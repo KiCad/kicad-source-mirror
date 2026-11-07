@@ -303,4 +303,38 @@ BOOST_AUTO_TEST_CASE( RepeatedLabelStepsPastNonAsciiCharacters, *boost::unit_tes
 }
 
 
+BOOST_AUTO_TEST_CASE( EscapedTextVariableReachesTheSheetAsALiteral )
+{
+    auto shownText = []( RESOLUTION_CONTEXT aContext ) -> std::string
+    {
+        DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
+        model.ClearList();
+
+        DS_DATA_ITEM_TEXT* text = new DS_DATA_ITEM_TEXT( wxT( "\\${SOMEVAR}" ) );
+        text->SetStart( 60.0, 60.0, LT_CORNER );
+        model.Append( text );
+
+        PAGE_INFO   page;
+        TITLE_BLOCK tb;
+
+        DS_DRAW_ITEM_LIST drawList( unityScale, aContext );
+        drawList.BuildDrawItemsList( page, tb );
+
+        for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+        {
+            if( item->Type() == WSG_TEXT_T )
+                return static_cast<DS_DRAW_ITEM_TEXT*>( item )->GetText().ToStdString();
+        }
+
+        return {};
+    };
+
+    // What the user typed, with the escape consumed.
+    BOOST_CHECK_EQUAL( shownText( FOR_CANVAS ), std::string( "${SOMEVAR}" ) );
+
+    // ERC keeps the escape so a later pass does not read it as a live reference.
+    BOOST_CHECK_EQUAL( shownText( FOR_ERC_DRC ), std::string( "\\${SOMEVAR}" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
