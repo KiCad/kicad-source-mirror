@@ -2214,10 +2214,10 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
     for( const VECTOR2I& v : intersectionPoints )
     {
-        minx = v.x < minx ? v.x : minx;
-        maxx = v.x > maxx ? v.x : maxx;
-        miny = v.x < miny ? v.x : miny;
-        maxy = v.x > maxy ? v.x : maxy;
+        minx = std::min( v.x, minx );
+        maxx = std::max( v.x, maxx );
+        miny = std::min( v.y, miny );
+        maxy = std::max( v.y, maxy );
     }
 
     if( abs( maxx - minx ) > abs( maxy - miny ) )
