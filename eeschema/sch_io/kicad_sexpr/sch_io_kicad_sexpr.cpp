@@ -990,19 +990,19 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     for( const std::unique_ptr<SCH_PIN>& pin : aSymbol->GetRawPins() )
     {
+        m_out->Print( "(pin %s", m_out->Quotew( pin->GetNumber() ).c_str() );
+        KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
+        KICAD_FORMAT::FormatCustomProperties( m_out, *pin );
+
         // There was a bug introduced somewhere in the original alternated pin code that would
         // set the alternate pin to the default pin name which caused a number of library symbol
         // comparison issues.  Clearing the alternate pin resolves this issue.
         if( pin->GetAlt().IsEmpty() || ( pin->GetAlt() == pin->GetBaseName() ) )
         {
-            m_out->Print( "(pin %s", m_out->Quotew( pin->GetNumber() ).c_str() );
-            KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
             m_out->Print( ")" );
         }
         else
         {
-            m_out->Print( "(pin %s", m_out->Quotew( pin->GetNumber() ).c_str() );
-            KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
             m_out->Print( "(alternate %s))", m_out->Quotew( pin->GetAlt() ).c_str() );
         }
     }
@@ -1297,6 +1297,7 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
         KICAD_FORMAT::FormatUuid( m_out, pin->m_Uuid );
 
         pin->Format( m_out, 0 );
+        KICAD_FORMAT::FormatCustomProperties( m_out, *pin );
 
         m_out->Print( ")" );  // Closes pin token.
     }

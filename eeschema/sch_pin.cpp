@@ -195,6 +195,7 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
 
     SetName( m_libPin->GetName() );
     SetNumber( m_libPin->GetNumber() );
+    SetCustomProperties( m_libPin->GetCustomProperties() );
     m_position = m_libPin->GetPosition();
 
     m_layer = LAYER_PIN;

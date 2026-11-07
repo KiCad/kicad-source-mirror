@@ -274,6 +274,9 @@ message SheetPin
   SchematicLabelShape shape = 5;
   SheetSide side = 6;
   kiapi.common.types.LockedState locked = 7;
+
+  // Since: 11.0
+  repeated kiapi.common.types.CustomProperty custom_properties = 8;
 }
 
 message SheetSymbol

@@ -1249,6 +1249,7 @@ void SCH_SYMBOL::updatePins()
         ii->second.erase( it );
         pin->GetAlternates() = libPin->GetAlternates();
         pin->SetLibPin( libPin );
+        pin->SetCustomProperties( libPin->GetCustomProperties() );
         pin->SetPosition( libPin->GetPosition() );
         pin->SetUnit( libPin->GetUnit() );
         pin->SetBodyStyle( libPin->GetBodyStyle() );

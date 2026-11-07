@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20260830)
+	(version 20261106)
 	(generator "eeschema")
 	(generator_version "10.99")
 	(uuid "d6ee7e6a-6570-43fd-93e6-b98f9cea3e37")
@@ -2364,6 +2364,8 @@
 		)
 		(pin "4"
 			(uuid "79f7b14d-37ed-4e9a-ac1a-a5d29bd809fe")
+			(custom_property "AnotherPinProp" "4")
+			(custom_property "MyPinProp" "APinVal")
 			(alternate "TIM1_CH1 (PA0)")
 		)
 		(pin "5"
@@ -2696,6 +2698,7 @@
 				)
 				(justify left)
 			)
+			(custom_property "MySheetPinProp" "PropValue")
 		)
 		(pin "REF_NODE" input
 			(at 129.54 77.47 0)

@@ -2960,6 +2960,10 @@ SCH_SHEET_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
             NeedRIGHT();
             break;
 
+        case T_custom_property:
+            parseCustomProperty( sheetPin.get() );
+            break;
+
         default:
             Expecting( "at, uuid or effects" );
         }
@@ -4074,6 +4078,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             wxString number;
             KIID     uuid;
             wxString alt;
+            std::map<wxString, wxString> pin_properties;
 
             NeedSYMBOL();
             number = FromUTF8();
@@ -4104,12 +4109,25 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                     NeedRIGHT();
                     break;
 
+                case T_custom_property:
+                {
+                    NeedSYMBOL();
+                    wxString key = FromUTF8();
+                    NeedSYMBOL();
+                    wxString value = FromUTF8();
+                    pin_properties[key] = value;
+                    NeedRIGHT();
+                    break;
+                }
+
                 default:
                     Expecting( "alternate or uuid" );
                 }
             }
 
-            symbol->GetRawPins().emplace_back( std::make_unique<SCH_PIN>( symbol.get(), number, alt, uuid ) );
+            std::unique_ptr<SCH_PIN>& pin =
+                    symbol->GetRawPins().emplace_back( std::make_unique<SCH_PIN>( symbol.get(), number, alt, uuid ) );
+            pin->SetCustomProperties( pin_properties );
             break;
         }
 
