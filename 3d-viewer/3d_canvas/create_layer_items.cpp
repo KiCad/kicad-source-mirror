@@ -1246,41 +1246,42 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
         std::atomic<size_t> threadsFinished( 0 );
 
         size_t parallelThreadCount = std::min<size_t>( zones.size(),
-                std::max<size_t>( std::thread::hardware_concurrency(), 2 ) );
+                                                       std::max<size_t>( std::thread::hardware_concurrency(), 2 ) );
 
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
-            std::thread t = std::thread( [&]()
-            {
-                for( size_t areaId = nextZone.fetch_add( 1 );
-                            areaId < zones.size();
-                            areaId = nextZone.fetch_add( 1 ) )
-                {
-                    ZONE* zone = zones[areaId].first;
-
-                    if( zone == nullptr )
-                        break;
-
-                    PCB_LAYER_ID layer = zones[areaId].second;
-
-                    if( m_layerMap.contains( layer ) )
-                        addSolidAreasShapes( zone, m_layerMap[layer], layer );
-
-                    if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL
-                            && m_layers_poly.contains( layer ) )
+            std::thread t = std::thread(
+                    [&]()
                     {
-                        auto mut_it = layer_lock.find( layer );
-
-                        if( mut_it != layer_lock.end() )
+                        for( size_t areaId = nextZone.fetch_add( 1 );
+                                    areaId < zones.size();
+                                    areaId = nextZone.fetch_add( 1 ) )
                         {
-                            std::lock_guard< std::mutex > lock( *( mut_it->second ) );
-                            zone->TransformSolidAreasShapesToPolygon( layer, *m_layers_poly[layer] );
-                        }
-                    }
-                }
+                            ZONE* zone = zones[areaId].first;
 
-                threadsFinished++;
-            } );
+                            if( zone == nullptr )
+                                break;
+
+                            PCB_LAYER_ID layer = zones[areaId].second;
+
+                            if( m_layerMap.contains( layer ) )
+                                addSolidAreasShapes( zone, m_layerMap[layer], layer );
+
+                            if( cfg.opengl_copper_thickness && cfg.engine == RENDER_ENGINE::OPENGL
+                                    && m_layers_poly.contains( layer ) )
+                            {
+                                auto mut_it = layer_lock.find( layer );
+
+                                if( mut_it != layer_lock.end() )
+                                {
+                                    std::lock_guard< std::mutex > lock( *( mut_it->second ) );
+                                    zone->TransformSolidAreasShapesToPolygon( layer, *m_layers_poly[layer] );
+                                }
+                            }
+                        }
+
+                        threadsFinished++;
+                    } );
 
             t.detach();
         }
@@ -1766,9 +1767,8 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
             std::atomic<size_t> nextItem( 0 );
             std::atomic<size_t> threadsFinished( 0 );
 
-            size_t parallelThreadCount = std::min<size_t>(
-                    std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-                    selected_layer_id.size() );
+            size_t parallelThreadCount = std::min<size_t>( std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+                                                           selected_layer_id.size() );
 
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
