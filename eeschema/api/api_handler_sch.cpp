@@ -1372,9 +1372,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 if( wxString rawFilename = sheet->GetFileName(); !rawFilename.IsEmpty() )
                 {
                     wxFileName fileName( ExpandTextVars( rawFilename, &schematic()->Project(), INTERNAL ) );
+                    wxFileName parentFileName( targetPath.LastScreen()->GetFileName() );
 
                     if( !fileName.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
-                                             targetPath.LastScreen()->GetFileName() ) )
+                                             parentFileName.GetPath() ) )
                     {
                         status.set_code( ItemStatusCode::ISC_INVALID_DATA );
                         status.set_error_message( fmt::format( "could not resolve sheet filename '{}' for new sheet",
