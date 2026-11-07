@@ -802,6 +802,9 @@ static void on_frame_clock_after_paint( GdkFrameClock* clock, GtkWidget* widget 
                     s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
                     ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
 
+            zwp_confined_pointer_v1_add_listener( s_wl_confined_pointer, &confined_pointer_listener,
+                                                  NULL );
+
             wl_display_roundtrip( wldisp );
         }
     }
@@ -879,10 +882,7 @@ bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 
     if( GDK_IS_WAYLAND_DISPLAY( disp ) )
     {
-        if( s_wl_confined_pointer != NULL )
-        {
-            KIPLATFORM::UI::InfiniteDragReleaseWindow();
-        }
+        KIPLATFORM::UI::InfiniteDragReleaseWindow();
 
         GdkSeat*   seat = gdk_display_get_default_seat( disp );
         GdkDevice* ptrdev = gdk_seat_get_pointer( seat );
@@ -901,6 +901,13 @@ bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 
         s_wl_confinement_region = wl_compositor_create_region( s_wl_compositor );
         wl_region_add( s_wl_confinement_region, x, y, width, height );
+
+        // One constraint per surface, so after-paint confines once the lock is gone
+        if( s_wl_locked_pointer )
+        {
+            wxLogTrace( traceWayland, wxS( "Deferring confinement: warp lock pending" ) );
+            return true;
+        }
 
         s_wl_confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
                 s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
