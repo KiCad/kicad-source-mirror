@@ -202,8 +202,14 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
                 if( tokenUpdated )
                 {
-                   *token = ExpandTextVars( *token, m_project, m_context );
-                   return true;
+                    std::function<bool( wxString* )> projectResolver = [&]( wxString* aToken ) -> bool
+                    {
+                        return m_project && m_project->TextVarResolver( aToken );
+                    };
+
+                    int depth = 0;
+                    *token = ResolveTextVars( *token, &projectResolver, depth );
+                    return true;
                 }
 
                 if( m_project && m_project->TextVarResolver( token ) )

@@ -2682,7 +2682,11 @@ wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText, const 
                 return aSymbolContext->ResolveTextVar( &m_schematic->CurrentSheet(), token );
             };
 
-    return ExpandTextVars( aSourceText, &symbolResolver, FOR_CANVAS );
+    int      depth = 0;
+    wxString text = ResolveTextVars( aSourceText, &symbolResolver, depth );
+    FinalizeTextVarExpansion( text, FOR_CANVAS );
+
+    return text;
 }
 
 
