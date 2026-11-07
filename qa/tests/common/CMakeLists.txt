@@ -55,6 +55,7 @@ set( QA_COMMON_SRCS
     test_eda_text.cpp
     test_editor_tabs_panel.cpp
     test_edit_relations.cpp
+    test_embedded_si_literals.cpp
     test_union_find.cpp
     test_unit_binder.cpp
     test_wx_dataviewctrl.cpp
