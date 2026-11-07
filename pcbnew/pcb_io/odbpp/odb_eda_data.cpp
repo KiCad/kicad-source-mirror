@@ -246,7 +246,7 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp, const ODB_FORMAT& aFormat )
 
     fp->SetOrientation( ANGLE_0 );
 
-    size_t   hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
+    size_t   hash = hash_fp_item( fp.get(), HASH_POS | RELATIVE_TO_PARENT_COORDS );
     size_t   pkg_index = packages_map.size();
     wxString fp_name = fp->GetFPID().GetLibItemName().wx_str();
     ODB::RemoveWhitespace( fp_name );

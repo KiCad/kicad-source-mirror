@@ -673,12 +673,7 @@ size_t PCB_IO_IPC2581::lineHash( int aWidth, LINE_STYLE aDashType )
 
 size_t PCB_IO_IPC2581::shapeHash( const PCB_SHAPE& aShape )
 {
-    size_t hash = hash_fp_item( &aShape, HASH_POS | REL_COORD );
-
-    // hash_fp_item does not distinguish rectangles by their corner radius, so two rects that
-    // differ only in radius would otherwise share one primitive.
-    if( aShape.GetShape() == SHAPE_T::RECTANGLE )
-        hash_combine( hash, aShape.GetCornerRadius() );
+    size_t hash = hash_fp_item( &aShape, HASH_POS );
 
     return hash;
 }
@@ -1825,7 +1820,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         if( fp->IsFlipped() )
             fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
 
-        size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
+        size_t hash = hash_fp_item( fp.get(), HASH_POS | RELATIVE_TO_PARENT_COORDS );
         auto iter = m_footprint_dict.find( hash );
 
         if( iter == m_footprint_dict.end() )
@@ -3291,7 +3286,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     if( fp->IsFlipped() )
         fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
 
-    size_t hash = hash_fp_item( fp.get(), HASH_POS | REL_COORD );
+    size_t hash = hash_fp_item( fp.get(), HASH_POS | RELATIVE_TO_PARENT_COORDS );
     wxString name = genString( wxString::Format( "%s_%zu",
                                                  fp->GetFPID().GetLibItemName().wx_str(),
                                                  m_footprint_dict.size() + 1 ) );
@@ -4254,6 +4249,14 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     }
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
+
+                    if( fp->GetOrientation() != ANGLE_0 )
+                    {
+                        wxXmlNode* xformNode = appendNode( tempFeature, "Xform" );
+                        EDA_ANGLE angle = fp->GetOrientation().Normalize();
+
+                        xformNode->AddAttribute( "rotation", floatVal( angle.AsDegrees() ) );
+                    }
 
                     addLocationNode( tempFeature, *shape );
                     addShape( tempFeature, *shape );

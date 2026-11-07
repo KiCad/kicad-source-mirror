@@ -1813,7 +1813,7 @@ void ODB_STEP_ENTITY::InitEdaData()
         ++j;
 
         const EDA_DATA::PACKAGE& eda_pkg =
-                m_edaData.GetPackage( hash_fp_item( fp_pkg.get(), HASH_POS | REL_COORD ) );
+                m_edaData.GetPackage( hash_fp_item( fp_pkg.get(), HASH_POS | RELATIVE_TO_PARENT_COORDS ) );
 
         bool hasCourtyard = std::any_of( fp->GraphicalItems().begin(), fp->GraphicalItems().end(),
                                          []( const BOARD_ITEM* item )

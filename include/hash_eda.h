@@ -40,19 +40,16 @@ class EDA_ITEM;
  */
 enum HASH_FLAGS
 {
-    HASH_POS    = 0x01,
+    HASH_POS                  = 0x01,
+    RELATIVE_TO_PARENT_COORDS = 0x02,    /// Use coordinates relative to the parent object (footprint).
+    RELATIVE_TO_SHAPE_POS     = 0x04,    /// Use coordinates relative to the shape position.
 
-    /// Use coordinates relative to the parent object.
-    REL_COORD   = 0x02,
-
-    /// Use coordinates relative to the shape position.
-    REL_POS     = 0x04,
-    HASH_ROT    = 0x08,
-    HASH_LAYER  = 0x10,
-    HASH_NET    = 0x20,
-    HASH_REF    = 0x40,
-    HASH_VALUE  = 0x80,
-    HASH_ALL    = 0xff
+    HASH_ROT                  = 0x08,
+    HASH_LAYER                = 0x10,
+    HASH_NET                  = 0x20,
+    HASH_REF                  = 0x40,
+    HASH_VALUE                = 0x80,
+    HASH_ALL                  = 0xff & ~( RELATIVE_TO_PARENT_COORDS | RELATIVE_TO_SHAPE_POS )
 };
 
 /**
@@ -62,6 +59,6 @@ enum HASH_FLAGS
  * @param aFlags are the flags to determine what gets hashed.
  * @return Hash value.
  */
-std::size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_ALL );
+std::size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags );
 
 #endif

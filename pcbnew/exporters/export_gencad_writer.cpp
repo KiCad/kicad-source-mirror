@@ -713,7 +713,7 @@ void GENCAD_EXPORTER::createPadsShapesSection()
 static size_t hashFootprint( const FOOTPRINT* aFootprint )
 {
     size_t    ret = 0x11223344;
-    constexpr int flags = HASH_FLAGS::HASH_POS | HASH_FLAGS::REL_COORD
+    constexpr int flags = HASH_FLAGS::HASH_POS | HASH_FLAGS::RELATIVE_TO_PARENT_COORDS
                             | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
 
     for( BOARD_ITEM* i : aFootprint->GraphicalItems() )
@@ -746,11 +746,11 @@ void GENCAD_EXPORTER::createShapesSection()
             wxString shapeName = footprint->GetFPID().Format();
 
             auto shapeIt = shapes.find( shapeName );
-            size_t modHash = hashFootprint( footprint );
+            size_t fpHash = hashFootprint( footprint );
 
             if( shapeIt != shapes.end() )
             {
-                if( modHash != shapeIt->second )
+                if( fpHash != shapeIt->second )
                 {
                     // there is an entry for this footprint, but it has a modified shape,
                     // so we need to create a new entry
@@ -764,23 +764,23 @@ void GENCAD_EXPORTER::createShapesSection()
                         shapeIt = shapes.find( newShapeName );
                         ++suffix;
                     }
-                    while( shapeIt != shapes.end() && shapeIt->second != modHash );
+                    while( shapeIt != shapes.end() && shapeIt->second != fpHash );
 
                     shapeName = newShapeName;
                 }
 
-                if( shapeIt != shapes.end() && modHash == shapeIt->second )
+                if( shapeIt != shapes.end() && fpHash == shapeIt->second )
                 {
                     // shape found, so reuse it
-                    componentShapes[footprint] = modHash;
+                    componentShapes[footprint] = fpHash;
                     continue;
                 }
             }
 
             // new shape
-            componentShapes[footprint] = modHash;
-            shapeNames[modHash] = shapeName;
-            shapes[shapeName] = modHash;
+            componentShapes[footprint] = fpHash;
+            shapeNames[fpHash] = shapeName;
+            shapes[shapeName] = fpHash;
             footprintWriteShape( footprint, shapeName );
         }
         else // individual shape for each component

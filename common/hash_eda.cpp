@@ -165,7 +165,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( aFlags & HASH_POS )
         {
-            if( aFlags & REL_COORD )
+            if( aFlags & RELATIVE_TO_PARENT_COORDS )
                 hash_combine( ret, pad->GetFPRelativePosition().x, pad->GetFPRelativePosition().y );
             else
                 hash_combine( ret, pad->GetPosition().x, pad->GetPosition().y );
@@ -203,7 +203,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         if( aFlags & HASH_POS )
         {
-            VECTOR2I pos = ( aFlags & REL_COORD ) ? text->GetFPRelativePosition()
+            VECTOR2I pos = ( aFlags & RELATIVE_TO_PARENT_COORDS ) ? text->GetFPRelativePosition()
                                                   : text->GetPosition();
 
             hash_combine( ret, pos.x, pos.y );
@@ -256,6 +256,9 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
             }
         }
 
+        if( shape->GetShape() == SHAPE_T::RECTANGLE )
+            hash_combine( ret, shape->GetCornerRadius() );
+
         if( aFlags & HASH_POS )
         {
             std::vector<VECTOR2I> points;
@@ -263,34 +266,39 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
             points.push_back( shape->GetStart() );
             points.push_back( shape->GetEnd() );
 
-            if( shape->GetShape() == SHAPE_T::CIRCLE )
-                points.push_back( shape->GetCenter() );
-
-            if( shape->GetShape() == SHAPE_T::ARC )
-                points.push_back( shape->GetArcMid() );
-
-            if( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+            switch( shape->GetShape() )
             {
+            case SHAPE_T::CIRCLE:
+                points.push_back( shape->GetCenter() );
+                break;
+
+            case SHAPE_T::ARC:
+                points.push_back( shape->GetArcMid() );
+                break;
+
+            case SHAPE_T::ELLIPSE:
+            case SHAPE_T::ELLIPSE_ARC:
                 points.push_back( shape->GetEllipseCenter() );
+                break;
+
+            case SHAPE_T::POLY:
+                for( auto it = shape->GetPolyShape().CIterateWithHoles(); it; it++ )
+                    points.push_back( *it );
+
+                break;
+
+            case SHAPE_T::BEZIER:
+                points.push_back( shape->GetBezierC1() );
+                points.push_back( shape->GetBezierC2() );
+                break;
+
+            default:
+                break;
             }
 
             FOOTPRINT* parentFP = shape->GetParentFootprint();
 
-            if( shape->GetShape() == SHAPE_T::POLY )
-            {
-                const SHAPE_POLY_SET& poly = shape->GetPolyShape();
-
-                for( auto it = poly.CIterateWithHoles(); it; it++ )
-                    points.push_back( *it );
-            }
-
-            if( shape->GetShape() == SHAPE_T::BEZIER )
-            {
-                points.push_back( shape->GetBezierC1() );
-                points.push_back( shape->GetBezierC2() );
-            }
-
-            if( parentFP && ( aFlags & REL_COORD ) )
+            if( parentFP && ( aFlags & RELATIVE_TO_PARENT_COORDS ) )
             {
                 for( VECTOR2I& point : points )
                 {
@@ -299,7 +307,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
                 }
             }
 
-            if( aFlags & REL_POS )
+            if( aFlags & RELATIVE_TO_SHAPE_POS )
             {
                 for( VECTOR2I& point : points )
                     point -= shape->GetPosition();
@@ -310,9 +318,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
             if( points.size() > 1 )
             {
                 if( points[0].x > points[1].x || points[0].y > points[1].y )
-                {
                     std::swap( points[0], points[1] );
-                }
             }
 
             for( VECTOR2I& point : points )
@@ -350,7 +356,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
             FOOTPRINT* parentFP = textbox->GetParentFootprint();
 
-            if( parentFP && ( aFlags & REL_COORD ) )
+            if( parentFP && ( aFlags & RELATIVE_TO_PARENT_COORDS ) )
             {
                 start -= parentFP->GetPosition();
                 end -= parentFP->GetPosition();
