@@ -441,30 +441,14 @@ static SPECCTRA_SHAPE_ID appendPadstackShape( PADSTACK* aPadstack, PAD* aPad, PC
     case PAD_SHAPE::ROUNDRECT:
     {
         // Export the shape as as polygon, round rect does not exist as primitive
-        const int      circleToSegmentsCount = 36;
         int            rradius = aPad->GetRoundRectCornerRadius( aPadLayer );
         SHAPE_POLY_SET cornerBuffer;
+        bool           doChamfer = aPad->GetShape( aPadLayer ) == PAD_SHAPE::CHAMFERED_RECT;
 
-        // Use a slightly bigger shape because the round corners are approximated by
-        // segments, giving to the polygon a slightly smaller shape than the actual shape
-
-        /* calculates the coeff to compensate radius reduction of holes clearance
-         * due to the segment approx.
-         * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
-         * correctionFactor is cos( PI/s_CircleToSegmentsCount  )
-         */
-        double correctionFactor = cos( M_PI / (double) circleToSegmentsCount );
-        int    extra_clearance = KiROUND( rradius * ( 1.0 - correctionFactor ) );
-        VECTOR2I psize = padSize;
-        psize.x += extra_clearance * 2;
-        psize.y += extra_clearance * 2;
-        rradius += extra_clearance;
-        bool doChamfer = aPad->GetShape( aPadLayer ) == PAD_SHAPE::CHAMFERED_RECT;
-
-        TransformRoundChamferedRectToPolygon( cornerBuffer, VECTOR2I( 0, 0 ), psize, ANGLE_0,
-                rradius, aPad->GetChamferRectRatio( aPadLayer ),
-                doChamfer ? aPad->GetChamferPositions( aPadLayer ) : 0,
-                0, aPad->GetMaxError(), ERROR_INSIDE );
+        TransformRoundChamferedRectToPolygon( cornerBuffer, VECTOR2I( 0, 0 ), padSize, ANGLE_0, rradius,
+                                              aPad->GetChamferRectRatio( aPadLayer ),
+                                              doChamfer ? aPad->GetChamferPositions( aPadLayer ) : 0,
+                                              0, aPad->GetMaxError(), ERROR_OUTSIDE );
 
         SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
 
@@ -486,8 +470,7 @@ static SPECCTRA_SHAPE_ID appendPadstackShape( PADSTACK* aPadstack, PAD* aPad, PC
 
             for( int idx = 0; idx < polygonal_shape.PointCount(); idx++ )
             {
-                POINT corner( scale( polygonal_shape.CPoint( idx ).x ),
-                              scale( -polygonal_shape.CPoint( idx ).y ) );
+                POINT corner( scale( polygonal_shape.CPoint( idx ).x ), scale( -polygonal_shape.CPoint( idx ).y ) );
                 corner += dsnOffset;
                 polygon->AppendPoint( corner );
 
