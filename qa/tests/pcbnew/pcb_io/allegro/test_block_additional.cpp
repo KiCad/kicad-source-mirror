@@ -265,6 +265,35 @@ static void TestMIMXRT1170_0x36_X05DefTable( const BLOCK_BASE& aBlock )
 
 
 /**
+ * The only 0x35 file reference record in this board. Seems to hold "terminator.log".
+ */
+static void TestRects0x35FileRef( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x35 );
+
+    const auto& blk = static_cast<const BLOCK<BLK_0x35_FILE_REF>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_T2 == 0x00 );
+    BOOST_TEST( blk.m_T3 == 0x01 );
+
+    // The header pair for this board is tail 0x77, head 0xa5
+    BOOST_TEST( blk.m_Next == 0x77 );
+    BOOST_TEST( blk.m_Key == 0xa5 );
+
+    BOOST_TEST( aBlock.GetNext() == 0x77 );
+    BOOST_TEST( aBlock.GetKey() == 0xa5 );
+
+
+    BOOST_TEST( std::string( blk.m_LogFile.data() ) == "terminator.log" );
+    BOOST_TEST( std::string( blk.m_EclReportFile.data() ) == "eclrpt.txt" );
+    BOOST_TEST( std::string( blk.m_EclLogFile.data() ) == "eclrep.log" );
+    BOOST_TEST( blk.m_UnusedFile[0] == '\0' );
+
+    BOOST_TEST( std::string( blk.m_Version.data() ) == "1.0" );
+}
+
+
+/**
  * The registry of additional block tests, keyed by board name and block offset.
  *
  * The test function takes the parsed block as an argument, and can perform any additional
@@ -290,6 +319,9 @@ static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlock
 
     // 0x36 definition tables
     { { "MIMXRT1170_EVKB",            0x00cce25c }, TestMIMXRT1170_0x36_X05DefTable },
+
+    // 0x35 file reference records
+    { { "rects",                      0x00032410 }, TestRects0x35FileRef },
 };
 // clang-format on
 

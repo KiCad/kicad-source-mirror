@@ -2237,16 +2237,36 @@ struct BLK_0x34_KEEPOUT
 
 /**
  * File path references to Allegro log and report files (terminator.log, eclrpt.txt).
- * Content is a 120-byte fixed buffer with null-terminated path strings. Not imported.
  */
 struct BLK_0x35_FILE_REF
 {
     static constexpr uint8_t BLOCK_TYPE_CODE = 0x35;
 
     uint8_t  m_T2;
-    uint16_t m_T3;
+    uint16_t m_T3; // Always 0x01 so far
 
-    std::array<uint8_t, 120> m_Content;
+    uint32_t m_Next;
+
+    uint32_t m_Unknown1; // 0x7fffffff usually
+
+    std::array<char, 20> m_LogFile; // Usually "terminator.log"
+
+    uint32_t m_Unknown2; // 0x01010101 usually
+
+    std::array<char, 20> m_UnusedFile;    // Always 0x00
+    std::array<char, 20> m_EclReportFile; // "eclrpt.txt"
+    std::array<char, 20> m_EclLogFile;    // "eclrep.log"
+
+    uint32_t m_Unknown3;
+
+    std::array<char, 8> m_Version; // Always '1.0'
+
+    uint32_t m_Unknown4;
+    uint32_t m_Unknown5;
+    uint32_t m_Unknown6;
+
+    /// Key of this record.
+    uint32_t m_Key;
 };
 
 

@@ -2029,7 +2029,30 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x35( FILE_STREAM& aStream, FMT_VE
 
     data.m_T2 = aStream.ReadU8();
     data.m_T3 = aStream.ReadU16();
-    aStream.ReadBytes( data.m_Content.data(), data.m_Content.size() );
+
+    data.m_Next = aStream.ReadU32();
+    block->SetNext( data.m_Next );
+
+    data.m_Unknown1 = aStream.ReadU32();
+
+    aStream.ReadBytes( data.m_LogFile.data(), data.m_LogFile.size() );
+
+    data.m_Unknown2 = aStream.ReadU32();
+
+    aStream.ReadBytes( data.m_UnusedFile.data(), data.m_UnusedFile.size() );
+    aStream.ReadBytes( data.m_EclReportFile.data(), data.m_EclReportFile.size() );
+    aStream.ReadBytes( data.m_EclLogFile.data(), data.m_EclLogFile.size() );
+
+    data.m_Unknown3 = aStream.ReadU32();
+
+    aStream.ReadBytes( data.m_Version.data(), data.m_Version.size() );
+
+    data.m_Unknown4 = aStream.ReadU32();
+    data.m_Unknown5 = aStream.ReadU32();
+    data.m_Unknown6 = aStream.ReadU32();
+
+    data.m_Key = aStream.ReadU32();
+    block->SetKey( data.m_Key );
 
     return block;
 }

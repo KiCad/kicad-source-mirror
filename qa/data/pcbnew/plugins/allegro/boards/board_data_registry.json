@@ -391,7 +391,15 @@
         },
         "rects": {
             "formatVersion": "17.4",
-            "boardFile": "rects.brd"
+            "boardFile": "rects.brd",
+            "blocks": [
+                {
+                    "type": "0x35",
+                    "offset": "0x00032410",
+                    "comment": "File reference record with 'terminator.log'",
+                    "extraBlockTest": true
+                }
+            ]
         },
         "TRS80_POWER": {
             "formatVersion": "16.6",
