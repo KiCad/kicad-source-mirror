@@ -430,17 +430,21 @@ namespace
     }
 
 
-    SOURCE_POINT pageExtent( uint8_t aPage, const SOURCE_PROVENANCE& aSource )
+    SOURCE_POINT pageExtent( const std::string& aPage, const SOURCE_PROVENANCE& aSource )
     {
-        switch( aPage )
-        {
-        case 'A': return { 22000, 17000, aSource };
-        case 'B': return { 34000, 22000, aSource };
-        case 'C': return { 44000, 34000, aSource };
-        case 'D': return { 68000, 44000, aSource };
-        case 'E': return { 88000, 68000, aSource };
-        default: throwDecodeError( aSource, wxS( "invalid design page-size token" ) );
-        }
+        if(      aPage == "A5" ) return { 16535, 11654, aSource };
+        else if( aPage == "A4" ) return { 23386, 16535, aSource };
+        else if( aPage == "A3" ) return { 33071, 23386, aSource };
+        else if( aPage == "A2" ) return { 46772, 33071, aSource };
+        else if( aPage == "A1" ) return { 66220, 46772, aSource };
+        else if( aPage == "A0" ) return { 93622, 66220, aSource };
+        else if( aPage == "A" )  return { 22000, 17000, aSource };
+        else if( aPage == "B" )  return { 34000, 22000, aSource };
+        else if( aPage == "C" )  return { 44000, 34000, aSource };
+        else if( aPage == "D" )  return { 68000, 44000, aSource };
+        else if( aPage == "E" )  return { 88000, 68000, aSource };
+
+        throwDecodeError( aSource, wxS( "invalid design page-size token" ) );
     }
 
 
@@ -4682,29 +4686,31 @@ namespace
                                                      settingsOffset, settingsPool.usedBytes, -1 );
         aModel.settings.source = settingsSource;
 
-        uint8_t pageDesignator = 0;
+        constexpr size_t PAGE_FIELD_OFFSET = 264;
+        constexpr size_t PAGE_FIELD_BYTES = 11;
+        const size_t     pageFieldOffset = settingsOffset + PAGE_FIELD_OFFSET;
+        size_t           pageFieldEnd = pageFieldOffset;
 
-        if( std::equal( aBytes.begin() + settingsOffset + 264, aBytes.begin() + settingsOffset + 268, "SIZE" )
-            && aBytes[settingsOffset + 269] == 0 )
-        {
-            pageDesignator = aBytes[settingsOffset + 268];
-        }
-        else if( std::equal( aBytes.begin() + settingsOffset + 264, aBytes.begin() + settingsOffset + 273, "WDITBSIZE" )
-                 && aBytes[settingsOffset + 274] == 0 )
-        {
-            pageDesignator = aBytes[settingsOffset + 273];
-        }
-        else
-        {
-            SOURCE_PROVENANCE source = settingsSource;
-            source.absoluteOffset += 264;
-            source.length = 11;
-            throwDecodeError( source, wxS( "invalid design page-size field" ) );
-        }
+        while( pageFieldEnd < pageFieldOffset + PAGE_FIELD_BYTES && aBytes[pageFieldEnd] != 0 )
+            ++pageFieldEnd;
 
         SOURCE_PROVENANCE pageSource = settingsSource;
-        pageSource.absoluteOffset += 264;
-        pageSource.length = 11;
+        pageSource.absoluteOffset += PAGE_FIELD_OFFSET;
+        pageSource.length = PAGE_FIELD_BYTES;
+
+        if( pageFieldEnd == pageFieldOffset + PAGE_FIELD_BYTES )
+            throwDecodeError( pageSource, wxS( "invalid design page-size field" ) );
+
+        std::string pageField( aBytes.begin() + pageFieldOffset, aBytes.begin() + pageFieldEnd );
+        std::string pageDesignator;
+
+        if( pageField.starts_with( "SIZE" ) && pageField.size() > 4 )
+            pageDesignator = pageField.substr( 4 );
+        else if( pageField.starts_with( "WDITBSIZE" ) && pageField.size() > 9 )
+            pageDesignator = pageField.substr( 9 );
+        else
+            throwDecodeError( pageSource, wxS( "invalid design page-size field" ) );
+
         aModel.settings.pageSize = pageExtent( pageDesignator, pageSource );
         aModel.settings.defaultLineWidth = static_cast<int64_t>( aCursor.U32At( settingsOffset + 12 ) ) * 2;
         aModel.settings.defaultBusWidth = static_cast<int64_t>( aCursor.U32At( settingsOffset + 16 ) ) * 2;
