@@ -1541,8 +1541,7 @@ HANDLER_RESULT<CreateItemsResponse> API_HANDLER_BOARD::handleParseAndCreateItems
 }
 
 
-HANDLER_RESULT<BoardLayers> API_HANDLER_BOARD::handleGetVisibleLayers(
-        const HANDLER_CONTEXT<GetVisibleLayers>& aCtx )
+HANDLER_RESULT<BoardLayers> API_HANDLER_BOARD::handleGetVisibleLayers( const HANDLER_CONTEXT<GetVisibleLayers>& aCtx )
 {
     if( std::optional<ApiResponseStatus> headless = checkForHeadless( "GetVisibleLayers" ) )
         return tl::unexpected( *headless );
@@ -1554,15 +1553,14 @@ HANDLER_RESULT<BoardLayers> API_HANDLER_BOARD::handleGetVisibleLayers(
 
     BoardLayers response;
 
-    for( PCB_LAYER_ID layer : board()->GetVisibleLayers() )
+    for( PCB_LAYER_ID layer : LSET( board()->GetEnabledLayers() & board()->GetVisibleLayers() ) )
         response.add_layers( ToProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( layer ) );
 
     return response;
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_BOARD::handleSetVisibleLayers(
-        const HANDLER_CONTEXT<SetVisibleLayers>& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_BOARD::handleSetVisibleLayers( const HANDLER_CONTEXT<SetVisibleLayers>& aCtx )
 {
     if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SetVisibleLayers" ) )
         return tl::unexpected( *headless );
