@@ -9,7 +9,7 @@ as implemented in this importer. This is not an official specification.
 Offset 0x0000: File Header (~4KB)
   - Magic number (4 bytes)
   - Object count
-  - Linked lists: 22 for pre-V180, 28 for V180+
+  - Linked lists: 22 for pre-V180, 24 for V180+
   - Allegro version string (60 bytes)
   - Board units (1 byte: 0x01=Imperial, 0x02=Metric)
   - Units divisor (4 bytes)
@@ -78,9 +78,12 @@ placed instance are board-absolute with final layers already applied.
 ## Linked Lists
 
 Most block types form singly-linked lists via a `m_Next` field containing
-the key of the next block. The header contains 22 linked list descriptors
-with head and tail keys. Walking a linked list starts from the head key,
-looks up each block by key, and follows `m_Next` until 0 or the tail key.
+the key of the next block. The header list descriptors. Each descriptor is
+a tail word followed by a head word. Walking a linked list starts from the
+head key, looks up each block by key, and follows `m_Next` until 0 or the tail key.
+
+The tail is a per-list terminator: a value that is normally not the key of any
+block, so a chain ends when a block's `m_Next` equals it.
 
 The `m_Key` field serves as a global block identifier. All blocks are
 indexed by key in a flat hash map (`m_ObjectKeyMap`).
@@ -942,24 +945,25 @@ V16/V17.
 
 ### Linked Lists
 
-V18 has 28 linked lists compared to 22 in pre-V18 files.
+V18 has 24 linked lists compared to 22 in pre-V18 files. They begin at
+file offset 0x60, directly after 9 header words whose meaning is not yet
+determined (`m_Unknown2h_V18`).
 
-| V18 Position | Pre-V18 Position | Field            |
-|-------------|-----------------|------------------|
-| 0-4         | (new)           | m_LL_V18_1..5    |
-| 5-22        | 0-17            | Same 18 shared   |
-| 23          | 19              | m_LL_Unknown5    |
-| 24          | 18              | m_LL_0x36        |
-| 25-26       | 20-21           | Same 2 shared    |
-| 27          | (new)           | m_LL_V18_6       |
+| V18 Position | Pre-V18 Position | Field         |
+|--------------|------------------|---------------|
+| 0-17         | 0-17             | Same 18 shared, same order |
+| 18           | 18               | m_LL_Unknown5 |
+| 19           | 19               | m_LL_0x36     |
+| 20-21        | 20-21            | Same 2 shared |
+| 22-23        | (new)            | m_LL_V18_1..2 |
 
-Note positions 23-24: m_LL_0x36 and m_LL_Unknown5 are swapped
-relative to their pre-V18 order.
+The tails of the 24 descriptors are consecutive, and each one terminates
+only its own list.
 
-### Head/Tail Word Order
+### Trailing Word
 
-Each linked list descriptor is two 32-bit words. Pre-V18 reads
-word1=tail, word2=head. V18 reverses this to word1=head, word2=tail.
+V18 stores a single word after the last linked list instead of the pre-V18
+0x35 start/end pair. Its meaning is not yet determined.
 
 ### String Count
 
@@ -971,8 +975,7 @@ early header parsing) and has no separate field. Similarly,
 ### 0x35 File References
 
 Pre-V18 stores 0x35 extents (start/end) between the first 18 LLs
-and the last 4 LLs. V18 stores them after all 28 linked lists as
-two scalar uint32 values.
+and the last 4 LLs. See the Trailing Word section for the V18 layout.
 
 ### Object Stream Gaps
 

@@ -282,7 +282,11 @@ struct FILE_HEADER
      */
     struct LINKED_LIST
     {
+        // Chain terminator: a chain ends when a block's next key equals this value.
+        // It is normally not the key of any block.
         uint32_t m_Tail;
+
+        // Key of the first block in the chain, or 0 if the chain is empty.
         uint32_t m_Head;
     };
 
@@ -314,13 +318,9 @@ struct FILE_HEADER
     COND_GE<FMT_VER::V_180, uint32_t> m_StringCount_V18;
     COND_GE<FMT_VER::V_180, uint32_t> m_Unknown2g_V18;          // 0x00
 
-    // V180 has 6 additional linked lists in the header
-    // 5 of them are at the start
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_1;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_2;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_3;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_4;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_5;
+    // V18 inserts 9 words between the fields above and the linked lists. They are not
+    // list descriptors, and their meaning has not been determined.
+    COND_GE<FMT_VER::V_180, std::array<uint32_t, 9>> m_Unknown2h_V18;
 
     // Linked lists grouping top-level elements by type
     LINKED_LIST m_LL_0x04;              // Net assignments
@@ -355,13 +355,14 @@ struct FILE_HEADER
 
     COND_LT<FMT_VER::V_180, uint32_t> m_Unknown3;
 
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_6;
+    // Two further lists that pre-V18 files do not have.
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_1;
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_2;
 
-    COND_GE<FMT_VER::V_180, uint32_t> m_0x35_Start_V18;
+    // V18 stores a single word here, rather than the pre-V18 start/end pair.
+    COND_GE<FMT_VER::V_180, uint32_t> m_0x35_End_V18;
 
     COND_GE<FMT_VER::V_181, std::array<uint32_t, 8>> m_Unknown_V181;
-
-    COND_GE<FMT_VER::V_180, uint32_t> m_0x35_End_V18;
 
     // Fixed length string field
     std::array<char, 60> m_AllegroVersion;
@@ -418,14 +419,6 @@ struct FILE_HEADER
             return m_0x27_End_V18.value();
 
         return m_0x27_End_preV18.value();
-    }
-
-    const LINKED_LIST& GetUnknown5() const
-    {
-        if( m_LL_Unknown5_V18.has_value() )
-            return m_LL_Unknown5_V18.value();
-
-        return m_LL_Unknown5_preV18.value();
     }
 };
 

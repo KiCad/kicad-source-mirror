@@ -190,7 +190,7 @@ public:
             {
                 m_current = ( *m_nextFunc )( *m_currBlock );
 
-                if( m_current == m_tail || m_board->IsSentinel( m_current ) )
+                if( m_current == m_tail )
                 {
                     m_current = 0;
                 }

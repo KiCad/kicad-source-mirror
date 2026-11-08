@@ -23,7 +23,6 @@
 #include <cstdint>
 #include <memory>
 #include <unordered_map>
-#include <unordered_set>
 
 #include <convert/allegro_pcb_structs.h>
 
@@ -36,8 +35,8 @@ class BLOCK_BASE;
 /**
  * An Allegro board database representing the contents of a .brd (and presumably .dra) file.
  *
- * Owns all parsed blocks, the string table, sentinel keys, file header, and
- * the key-to-block lookup map.
+ * Owns all parsed blocks, the string table, the file header, and the key-to-block
+ * lookup map.
  */
 class BRD_DB
 {
@@ -51,17 +50,6 @@ public:
 
     size_t GetObjectCount() const { return m_Blocks.size(); }
 
-    bool IsSentinel( uint32_t aKey ) const
-    {
-        return m_SentinelKeys.count( aKey ) > 0 && m_ObjectKeyMap.count( aKey ) == 0;
-    }
-
-    void AddSentinelKey( uint32_t aKey )
-    {
-        if( aKey != 0 )
-            m_SentinelKeys.insert( aKey );
-    }
-
     void InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock );
 
     /**
@@ -73,11 +61,6 @@ public:
      * @param aFileSize size of the source file, used to bound the header's claimed counts.
      */
     void ReserveCapacity( size_t aObjectCount, size_t aStringCount, size_t aFileSize );
-
-    /**
-     * Populate sentinel keys from the file header linked lists.
-     */
-    bool ResolveAndValidate();
 
     /**
      * Get a block by its key.
@@ -104,10 +87,6 @@ public:
     std::vector<std::unique_ptr<BLOCK_BASE>>  m_Blocks;
     std::unordered_map<uint32_t, BLOCK_BASE*> m_ObjectKeyMap;
     std::unordered_map<uint32_t, wxString>    m_StringTable;
-
-private:
-    // V18+ linked list sentinel keys. References to these are null (end-of-chain).
-    std::unordered_set<uint32_t> m_SentinelKeys;
 };
 
 } // namespace ALLEGRO

@@ -20,11 +20,7 @@
 
 #include "convert/allegro_db.h"
 
-#include <set>
-
-#include <wx/log.h>
-
-#include <ki_exception.h>
+#include <algorithm>
 
 #include <convert/allegro_pcb_structs.h>
 
@@ -56,58 +52,7 @@ void BRD_DB::InsertBlock( std::unique_ptr<BLOCK_BASE> aBlock )
 }
 
 
-static void collectSentinelKeys( const FILE_HEADER& aHeader, BRD_DB& aDb )
-{
-    auto addTail = [&]( const FILE_HEADER::LINKED_LIST& aLL )
-    {
-        aDb.AddSentinelKey( aLL.m_Tail );
-    };
-
-    addTail( aHeader.m_LL_0x04 );
-    addTail( aHeader.m_LL_0x06 );
-    addTail( aHeader.m_LL_0x0C );
-    addTail( aHeader.m_LL_Shapes );
-    addTail( aHeader.m_LL_0x14 );
-    addTail( aHeader.m_LL_0x1B_Nets );
-    addTail( aHeader.m_LL_0x1C );
-    addTail( aHeader.m_LL_0x24_0x28 );
-    addTail( aHeader.m_LL_Unknown1 );
-    addTail( aHeader.m_LL_0x2B );
-    addTail( aHeader.m_LL_0x03_0x30 );
-    addTail( aHeader.m_LL_0x0A );
-    addTail( aHeader.m_LL_0x1D_0x1E_0x1F );
-    addTail( aHeader.m_LL_Unknown2 );
-    addTail( aHeader.m_LL_0x38 );
-    addTail( aHeader.m_LL_0x2C );
-    addTail( aHeader.m_LL_0x0C_2 );
-    addTail( aHeader.m_LL_Unknown3 );
-    addTail( aHeader.m_LL_0x36 );
-    addTail( aHeader.GetUnknown5() );
-    addTail( aHeader.m_LL_Unknown6 );
-    addTail( aHeader.m_LL_0x0A_2 );
-
-    if( aHeader.m_LL_V18_1.has_value() )
-    {
-        addTail( aHeader.m_LL_V18_1.value() );
-        addTail( aHeader.m_LL_V18_2.value() );
-        addTail( aHeader.m_LL_V18_3.value() );
-        addTail( aHeader.m_LL_V18_4.value() );
-        addTail( aHeader.m_LL_V18_5.value() );
-        addTail( aHeader.m_LL_V18_6.value() );
-    }
-}
-
-
 BRD_DB::BRD_DB() :
         m_FmtVer( FMT_VER::V_UNKNOWN )
 {
-}
-
-
-bool BRD_DB::ResolveAndValidate()
-{
-    if( m_FmtVer >= FMT_VER::V_180 )
-        collectSentinelKeys( *m_Header, *this );
-
-    return true;
 }
