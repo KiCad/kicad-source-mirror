@@ -409,6 +409,7 @@ struct MODEL_PIN_DEFINITION
     SOURCE_STRING                decalName;
     SOURCE_POINT                 position;
     uint32_t                     side = 0;
+    uint32_t                     xym = 0;
     int                          angle = 0;
     uint16_t                     presentationFlags = 0;
     uint16_t                     visibilityAndNumberPresentationFlags = 0;

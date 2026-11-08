@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <functional>
 #include <iterator>
 #include <map>
@@ -448,34 +449,64 @@ namespace
     }
 
 
+    // PADS nine-way text justification.  Valid codes are a sparse 3x3 table: 4 is center-bottom and 6 is
+    // center-top.
     MODEL_JUSTIFICATION horizontalJustification( uint16_t aValue )
     {
-        const uint16_t justification = aValue & 0x00FF;
-        const uint16_t horizontal = justification >= 8   ? justification - 8
-                                    : justification >= 2 ? justification - 2
-                                                         : justification;
-
-        switch( horizontal )
+        switch( aValue & 0x00FF )
         {
-        default:
-        case 0: return MODEL_JUSTIFICATION::LEFT;
-        case 1: return MODEL_JUSTIFICATION::RIGHT;
-        case 4: return MODEL_JUSTIFICATION::CENTER;
+        case 1:
+        case 3:
+        case 9: return MODEL_JUSTIFICATION::RIGHT;
+
+        case 4:
+        case 5:
+        case 6:
+        case 12: return MODEL_JUSTIFICATION::CENTER;
+
+        default: return MODEL_JUSTIFICATION::LEFT;
         }
     }
 
 
     MODEL_JUSTIFICATION verticalJustification( uint16_t aValue )
     {
-        const uint16_t justification = aValue & 0x00FF;
+        switch( aValue & 0x00FF )
+        {
+        case 2:
+        case 3:
+        case 6: return MODEL_JUSTIFICATION::LEFT;   // KiCad TOP mapping
 
-        if( justification >= 8 )
-            return MODEL_JUSTIFICATION::CENTER;
+        case 8:
+        case 9:
+        case 12: return MODEL_JUSTIFICATION::CENTER;
 
-        if( justification >= 2 )
-            return MODEL_JUSTIFICATION::LEFT;
+        default: return MODEL_JUSTIFICATION::RIGHT; // KiCad BOTTOM mapping
+        }
+    }
 
-        return MODEL_JUSTIFICATION::RIGHT;
+
+    uint16_t rotatedFieldJustification( uint16_t aValue, int aAngle )
+    {
+        // PADS swaps the side-selector bits for field text rotated by
+        // 90/270 degrees.  This mirrors the ASCII importer behavior.
+        const int quarterTurns = NormalizeAngle( aAngle ) / 900;
+
+        if( ( quarterTurns & 1 ) == 0 )
+            return aValue;
+
+        const uint16_t bit0 = aValue & 0x0001;
+        const uint16_t bit1 = aValue & 0x0002;
+
+        aValue &= static_cast<uint16_t>( ~0x0003 );
+
+        if( bit0 )
+            aValue |= 0x0002;
+
+        if( bit1 )
+            aValue |= 0x0001;
+
+        return aValue;
     }
 
 
@@ -1676,46 +1707,55 @@ namespace
                 definitionPin.source = pinSource;
                 definitionPin.position = { decodeTerminalCoordinate( aCursor.U16At( terminalOffset + 2 ) ),
                                            decodeTerminalCoordinate( aCursor.U16At( terminalOffset + 4 ) ), pinSource };
+
                 definitionPin.presentation.source = pinSource;
-                definitionPin.presentation.height =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 6 ) ) ) * 2;
-                definitionPin.presentation.width =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 8 ) ) ) * 2;
-                definitionPin.presentation.visible = ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
-                definitionPin.namePresentation = definitionPin.presentation;
-                definitionPin.numberPresentation.source = pinSource;
-                definitionPin.numberPresentation.height =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 10 ) ) ) * 2;
-                definitionPin.numberPresentation.width =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 12 ) ) ) * 2;
+                definitionPin.presentation.visible = true;
+                SOURCE_PROVENANCE numberPresentationSource = source;
+                numberPresentationSource.absoluteOffset = offset + 92;
+                numberPresentationSource.length = 2;
+                SOURCE_PROVENANCE namePresentationSource = source;
+                namePresentationSource.absoluteOffset = offset + 94;
+                namePresentationSource.length = 2;
+
+                definitionPin.numberPresentation.source = numberPresentationSource;
+                definitionPin.numberPresentation.height = static_cast<int64_t>( aCursor.U16At( offset + 92 ) ) * 2;
+                definitionPin.numberPresentation.width = static_cast<int64_t>( aCursor.U8At( offset + 98 ) ) * 2;
+                definitionPin.namePresentation.source = namePresentationSource;
+                definitionPin.namePresentation.height = static_cast<int64_t>( aCursor.U16At( offset + 94 ) ) * 2;
+                definitionPin.namePresentation.width = static_cast<int64_t>( aCursor.U8At( offset + 99 ) ) * 2;
+
+                definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
                 definitionPin.namePresentation.visible = definitionPin.namePresentation.height != 0
                                                          && ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
-                definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
-                definitionPin.nameOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 14 ) ),
-                                             decodeLocalCoordinate( aCursor.U16At( terminalOffset + 16 ) ), pinSource };
-                definitionPin.numberOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 18 ) ),
-                                               decodeLocalCoordinate( aCursor.U16At( terminalOffset + 20 ) ),
+
+                // The first T-line pair locates the pin number; the second locates the pin name.
+                definitionPin.numberOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 6 ) ),
+                                               decodeLocalCoordinate( aCursor.U16At( terminalOffset + 8 ) ),
                                                pinSource };
+                definitionPin.nameOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 10 ) ),
+                                             decodeLocalCoordinate( aCursor.U16At( terminalOffset + 12 ) ), pinSource };
                 const uint16_t presentationFlags = aCursor.U16At( terminalOffset + 22 );
                 const uint16_t visibilityFlags = aCursor.U16At( terminalOffset + 24 );
-                const uint16_t side = presentationFlags & 0x0006;
                 definitionPin.presentationFlags = presentationFlags;
                 definitionPin.visibilityAndNumberPresentationFlags = visibilityFlags;
-                definitionPin.side = side / 2;
+
+                // PADS binary stores the same terminal-local X/Y mirror state as the ASCII T-line xym field,
+                // shifted left by one because bit 0 carries the terminal quarter-turn flag.
+                definitionPin.xym = ( presentationFlags & 0x0006 ) >> 1;
 
                 definitionPin.angle = ( presentationFlags & 0x0001 ) != 0 ? 900 : 0;
-                definitionPin.nameAngle = ( presentationFlags & 0x0100 ) != 0 ? 900 : 0;
-                definitionPin.numberAngle = ( visibilityFlags & 0x0001 ) != 0 ? 900 : 0;
+                definitionPin.numberAngle = ( presentationFlags & 0x0100 ) != 0 ? 900 : 0;
+                definitionPin.nameAngle = ( visibilityFlags & 0x0001 ) != 0 ? 900 : 0;
 
-                definitionPin.nameJustification =
-                        terminalJustification( ( presentationFlags >> 12 ) & 0x0F, definitionPin.nameAngle != 0 );
+                definitionPin.numberJustification =
+                        terminalJustification( ( presentationFlags >> 12 ) & 0x0F, definitionPin.numberAngle != 0 );
 
                 if( ( presentationFlags & 0x00F8 ) != 0 )
                     PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal side" ), presentationFlags, pinSource,
                                                                aModel.diagnostics );
 
-                definitionPin.numberJustification =
-                        terminalJustification( ( visibilityFlags >> 4 ) & 0x0F, definitionPin.numberAngle != 0 );
+                definitionPin.nameJustification =
+                        terminalJustification( ( visibilityFlags >> 4 ) & 0x0F, definitionPin.nameAngle != 0 );
                 const uint16_t nameOffsetFlags = visibilityFlags & 0x0F00;
                 definitionPin.nameOffsetAngle = ( nameOffsetFlags & 0x0100 ) != 0 ? 900 : 0;
                 definitionPin.numberOffsetAngle = ( nameOffsetFlags & 0x0200 ) != 0 ? 900 : 0;
@@ -1824,7 +1864,8 @@ namespace
                         wxS( "pin_number_width_half_mils" ),
                         wxString::Format( wxS( "%lld" ), definitionPin.numberPresentation.width ), pinSource ) );
                 definitionPin.properties.push_back(
-                        sourceProperty( wxS( "terminal_side" ), wxString::Format( wxS( "%u" ), side ), pinSource ) );
+                        sourceProperty( wxS( "terminal_xym" ),
+                                        wxString::Format( wxS( "%u" ), definitionPin.xym ), pinSource ) );
                 decal.definition->pins.push_back( std::move( definitionPin ) );
             }
         }
@@ -2767,8 +2808,9 @@ namespace
         field.presentation.height = decodeHalfMils( aDecode.cursor.U16At( aOffset + aFieldLayout.height ) );
         field.presentation.width = decodeHalfMils( aDecode.cursor.U8At( aOffset + aFieldLayout.width ) );
         const uint16_t justification = aDecode.cursor.U16At( aOffset + aFieldLayout.angle + 2 );
-        field.presentation.horizontalJustification = horizontalJustification( justification );
-        field.presentation.verticalJustification = verticalJustification( justification );
+        const uint16_t rotatedJustification = rotatedFieldJustification( justification, field.angle );
+        field.presentation.horizontalJustification = horizontalJustification( rotatedJustification );
+        field.presentation.verticalJustification = verticalJustification( rotatedJustification );
         SOURCE_PROVENANCE fontSource = fieldSource;
         fontSource.absoluteOffset = aOffset + aFieldLayout.font;
         fontSource.length = 2;
@@ -2833,9 +2875,10 @@ namespace
                 throwDecodeError( fieldSource, wxS( "unsupported placement-field rotation" ) );
 
             const uint8_t justification = aDecode.cursor.U8At( fieldOffset + aDecode.layout.customJustification );
+            const uint16_t rotatedJustification = rotatedFieldJustification( justification, field.angle );
             field.presentation.source = fieldSource;
-            field.presentation.horizontalJustification = horizontalJustification( justification );
-            field.presentation.verticalJustification = verticalJustification( justification );
+            field.presentation.horizontalJustification = horizontalJustification( rotatedJustification );
+            field.presentation.verticalJustification = verticalJustification( rotatedJustification );
             field.presentation.height = decodeHalfMils( aDecode.cursor.U16At( fieldOffset + aDecode.layout.customHeight ) );
             field.presentation.width = decodeHalfMils( aDecode.cursor.U8At( fieldOffset + aDecode.layout.customWidth ) );
             field.presentation.visible = ( displayFlags & 8 ) == 0;
@@ -3803,8 +3846,36 @@ namespace
             label.sheet = { aModel.sheets[aDecode.sheetIndex].id, source };
             label.text = ownerNet->name;
             label.position = offpagePosition( aDecode, record, aModel.version );
-            label.angle = NormalizeAngle( aDecode.cursor.U16At( offset + 26 ) );
+
+            // Apply the PADS off-page mirror flags to the label direction.  The ASCII
+            // rotation/mirror pair maps to binary words +26/+28; ignoring +28 reverses
+            // horizontal $OSR_SYMS attached to left-facing pins.
+            int32_t        offpageAngle = NormalizeAngle( aDecode.cursor.U16At( offset + 26 ) );
+            const uint16_t offpageMirrorFlags = aDecode.cursor.U16At( offset + 28 );
+
+            if( offpageMirrorFlags & 1 )
+                offpageAngle = NormalizeAngle( 1800 - offpageAngle );
+
+            if( offpageMirrorFlags & 2 )
+                offpageAngle = NormalizeAngle( -offpageAngle );
+
+            label.angle = offpageAngle;
             label.symbolVariant = rawKind;
+            SOURCE_PROVENANCE mirrorSource = source;
+            mirrorSource.absoluteOffset += 28;
+            mirrorSource.length = 2;
+            label.properties.push_back( sourceProperty( wxS( "offpage_mirror_flags" ),
+                                                        wxString::Format( wxS( "%u" ), offpageMirrorFlags ),
+                                                        mirrorSource ) );
+
+            if( offpageMirrorFlags & ~3U )
+            {
+                SOURCE_PROPERTY& property = label.properties.back();
+                property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                aModel.diagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, property,
+                                                                      wxS( "unsupported PADS off-page mirror flag "
+                                                                           "bits preserved" ) ) );
+            }
 
             if( rawKind == 0xFE )
             {
@@ -4098,6 +4169,7 @@ namespace
 
                 label->presentation = std::move( presentation );
                 label->textOffset = textOffset;
+                label->angle = NormalizeAngle( aDecode.cursor.U16At( offset + 24 ) );
                 label->properties.push_back(
                         sourceProperty( wxS( "net_name_text_offset" ),
                                         wxString::Format( wxS( "%lld,%lld" ), textOffset.x, textOffset.y ), source ) );
