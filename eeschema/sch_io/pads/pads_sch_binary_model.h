@@ -297,6 +297,14 @@ enum class MODEL_JUSTIFICATION
 };
 
 
+enum class MODEL_FONT_MODE
+{
+    STROKE,
+    SYSTEM,
+    UNKNOWN
+};
+
+
 struct MODEL_TEXT_PRESENTATION
 {
     SOURCE_PROVENANCE            source;
@@ -323,6 +331,8 @@ struct DESIGN_SETTINGS
     SOURCE_POINT                 pageSize;
     int64_t                      defaultLineWidth = 0;
     int64_t                      defaultBusWidth = 0;
+    MODEL_FONT_MODE              fontMode = MODEL_FONT_MODE::STROKE;
+    SOURCE_STRING                defaultSystemFont;
     std::vector<SOURCE_PROPERTY> properties;
 
     bool operator==( const DESIGN_SETTINGS& ) const = default;

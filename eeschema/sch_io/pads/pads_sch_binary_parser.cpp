@@ -788,18 +788,21 @@ namespace
 
     struct PLACEMENT_GLOBALS
     {
-        size_t   attributeHeapBase = 0;
-        uint32_t attributeHeapBytes = 0;
-        size_t   groupBase = 0;
-        uint32_t groupCount = 0;
-        size_t   attributeOffsetBase = 0;
-        uint32_t attributeOffsetCount = 0;
-        size_t   fontBase = 0;
-        uint32_t fontCount = 0;
+        size_t          attributeHeapBase = 0;
+        uint32_t        attributeHeapBytes = 0;
+        size_t          groupBase = 0;
+        uint32_t        groupCount = 0;
+        size_t          attributeOffsetBase = 0;
+        uint32_t        attributeOffsetCount = 0;
+        size_t          fontBase = 0;
+        uint32_t        fontCount = 0;
+        MODEL_FONT_MODE fontMode = MODEL_FONT_MODE::STROKE;
+        SOURCE_STRING   defaultSystemFont;
     };
 
 
-    PLACEMENT_GLOBALS placementGlobals( const PADS_SCH_SDB& aSdb, const wxString& aSourceName )
+    PLACEMENT_GLOBALS placementGlobals( const PADS_SCH_SDB& aSdb, const wxString& aSourceName,
+                                        const DESIGN_SETTINGS& aSettings )
     {
         PLACEMENT_GLOBALS result;
 
@@ -830,6 +833,8 @@ namespace
         result.attributeOffsetCount = aSdb.Pools()[7].count;
         result.fontBase = outerControllerOffset( aSdb, 19 );
         result.fontCount = aSdb.Pools()[19].count;
+        result.fontMode = aSettings.fontMode;
+        result.defaultSystemFont = aSettings.defaultSystemFont;
         return result;
     }
 
@@ -842,7 +847,11 @@ namespace
     {
         if( aHandle == -1 || aHandle == -4 )
         {
-            aPresentation.font = decodedDefinitionFont( aHandle, aHandleSource );
+            if( aGlobals.fontMode == MODEL_FONT_MODE::SYSTEM && !aGlobals.defaultSystemFont.text.IsEmpty() )
+                aPresentation.font = aGlobals.defaultSystemFont;
+            else
+                aPresentation.font = decodedDefinitionFont( aHandle, aHandleSource );
+
             return;
         }
 
@@ -1723,6 +1732,27 @@ namespace
                 definitionPin.namePresentation.source = namePresentationSource;
                 definitionPin.namePresentation.height = static_cast<int64_t>( aCursor.U16At( offset + 94 ) ) * 2;
                 definitionPin.namePresentation.width = static_cast<int64_t>( aCursor.U8At( offset + 99 ) ) * 2;
+
+                SOURCE_PROVENANCE numberFontSource = source;
+                numberFontSource.absoluteOffset = offset + 104;
+                numberFontSource.length = 2;
+                SOURCE_PROVENANCE nameFontSource = source;
+                nameFontSource.absoluteOffset = offset + 106;
+                nameFontSource.length = 2;
+                int16_t numberFontHandle = static_cast<int16_t>( aCursor.U16At( numberFontSource.absoluteOffset ) );
+                int16_t nameFontHandle = static_cast<int16_t>( aCursor.U16At( nameFontSource.absoluteOffset ) );
+                definitionPin.numberPresentation.font = decodedDefinitionFont( numberFontHandle, numberFontSource );
+                definitionPin.namePresentation.font = decodedDefinitionFont( nameFontHandle, nameFontSource );
+
+                if( aModel.settings.fontMode == MODEL_FONT_MODE::SYSTEM
+                    && !aModel.settings.defaultSystemFont.text.IsEmpty() )
+                {
+                    if( numberFontHandle == -1 || numberFontHandle == -4 )
+                        definitionPin.numberPresentation.font = aModel.settings.defaultSystemFont;
+
+                    if( nameFontHandle == -1 || nameFontHandle == -4 )
+                        definitionPin.namePresentation.font = aModel.settings.defaultSystemFont;
+                }
 
                 definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
                 definitionPin.namePresentation.visible = definitionPin.namePresentation.height != 0
@@ -4280,6 +4310,72 @@ namespace
     }
 
 
+    void inheritDefaultSystemFont( MODEL_TEXT_PRESENTATION& aPresentation, const DESIGN_SETTINGS& aSettings )
+    {
+        if( aSettings.fontMode != MODEL_FONT_MODE::SYSTEM || aSettings.defaultSystemFont.text.IsEmpty() )
+            return;
+
+        if( aPresentation.font.text.IsEmpty() || aPresentation.font.text == wxS( "Default Font" ) )
+            aPresentation.font = aSettings.defaultSystemFont;
+    }
+
+
+    void inheritDefaultSystemFonts( PADS_SCH_MODEL& aModel )
+    {
+        const DESIGN_SETTINGS& settings = aModel.settings;
+
+        const auto applyField =
+                [&]( MODEL_FIELD& aField )
+                {
+                    inheritDefaultSystemFont( aField.presentation, settings );
+                };
+
+        const auto applyGraphic =
+                [&]( MODEL_GRAPHIC& aGraphic )
+                {
+                    if( aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+                        inheritDefaultSystemFont( aGraphic.presentation, settings );
+                };
+
+        for( MODEL_SHEET& sheet : aModel.sheets )
+        {
+            std::ranges::for_each( sheet.border, applyGraphic );
+            std::ranges::for_each( sheet.titleBlockFields, applyField );
+        }
+
+        for( MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+        {
+            std::ranges::for_each( definition.graphics, applyGraphic );
+            std::ranges::for_each( definition.fields, applyField );
+
+            for( MODEL_PIN_DEFINITION& pin : definition.pins )
+            {
+                inheritDefaultSystemFont( pin.presentation, settings );
+                inheritDefaultSystemFont( pin.namePresentation, settings );
+                inheritDefaultSystemFont( pin.numberPresentation, settings );
+            }
+        }
+
+        for( MODEL_PART_TYPE& partType : aModel.partTypes )
+            std::ranges::for_each( partType.fields, applyField );
+
+        for( MODEL_PLACEMENT& placement : aModel.placements )
+            std::ranges::for_each( placement.fields, applyField );
+
+        for( MODEL_LABEL& label : aModel.labels )
+            inheritDefaultSystemFont( label.presentation, settings );
+
+        for( MODEL_TEXT& text : aModel.texts )
+            inheritDefaultSystemFont( text.presentation, settings );
+
+        for( MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
+            applyGraphic( graphic.graphic );
+
+        for( MODEL_WORKSHEET& worksheet : aModel.worksheets )
+            std::ranges::for_each( worksheet.graphics, applyGraphic );
+    }
+
+
     void assignFieldIds( PADS_SCH_MODEL& aModel )
     {
         auto assign = []( MODEL_FIELD& aField, FIELD_ID_DOMAIN aDomain, uint32_t aOwner, size_t aOrdinal )
@@ -4787,6 +4883,59 @@ namespace
         aModel.settings.defaultLineWidth = static_cast<int64_t>( aCursor.U32At( settingsOffset + 12 ) ) * 2;
         aModel.settings.defaultBusWidth = static_cast<int64_t>( aCursor.U32At( settingsOffset + 16 ) ) * 2;
 
+        SOURCE_PROVENANCE fontModeSource = settingsSource;
+        fontModeSource.absoluteOffset += 252;
+        fontModeSource.length = 4;
+        const uint32_t fontModeRaw = aCursor.U32At( settingsOffset + 252 );
+        aModel.settings.properties.push_back( sourceProperty( wxS( "font_mode_raw" ),
+                                                              wxString::Format( wxS( "%u" ), fontModeRaw ),
+                                                              fontModeSource ) );
+
+        if( fontModeRaw == 0 )
+        {
+            aModel.settings.fontMode = MODEL_FONT_MODE::STROKE;
+        }
+        else if( fontModeRaw == 1 )
+        {
+            aModel.settings.fontMode = MODEL_FONT_MODE::SYSTEM;
+        }
+        else
+        {
+            aModel.settings.fontMode = MODEL_FONT_MODE::UNKNOWN;
+            SOURCE_PROPERTY& property = aModel.settings.properties.back();
+            property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+            aModel.diagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, property,
+                                                                  wxS( "unknown PADS schematic font mode preserved; "
+                                                                       "using KiCad stroke font" ) ) );
+        }
+
+        const SCH_SDB_POOL& fontPool = aSdb.Pools()[19];
+
+        if( fontPool.usedBytes != fontPool.count * FONT_RECORD_BYTES )
+        {
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "font directory" ), 19, 0,
+                                                 outerControllerOffset( aSdb, 19 ), fontPool.usedBytes, -1 );
+            throwDecodeError( source, wxS( "controller byte count does not match 36-byte records" ) );
+        }
+
+        if( fontPool.count > 0 )
+        {
+            const size_t defaultFontOffset = outerControllerOffset( aSdb, 19 );
+            SOURCE_PROVENANCE defaultFontSource = sourceAt( aSourceName, aModel.version, wxS( "default system font" ),
+                                                            19, 0, defaultFontOffset + 4, 32, -1 );
+            aModel.settings.defaultSystemFont = decodeFixedString( aBytes, defaultFontOffset + 4, 32,
+                                                                   defaultFontSource, aModel.diagnostics );
+        }
+        else if( aModel.settings.fontMode == MODEL_FONT_MODE::SYSTEM )
+        {
+            SOURCE_PROPERTY property = sourceProperty( wxS( "default_system_font" ), wxS( "" ), fontModeSource );
+            property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+            aModel.diagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, property,
+                                                                  wxS( "PADS system-font mode has no default font "
+                                                                       "record; using KiCad stroke font" ) ) );
+            aModel.settings.properties.push_back( std::move( property ) );
+        }
+
         std::vector<MODEL_FIELD> titleFields;
         const SCH_SDB_POOL&      titleFieldPool = aSdb.Pools()[1];
         size_t                   titleOffset = outerControllerOffset( aSdb, 1 );
@@ -5028,7 +5177,7 @@ namespace
 
         if( placementSchema.decoded )
         {
-            placementData = placementGlobals( aSdb, aSourceName );
+            placementData = placementGlobals( aSdb, aSourceName, aModel.settings );
             connectivityData = connectivityGlobals( aBytes, aCursor, aSdb, aSourceName, aModel );
         }
 
@@ -5224,6 +5373,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
     decodeSheets( aBytes, cursor, sdb, aSourceName, titleFields, model );
     decodeSheetBlocks( aBytes, cursor, sdb, aSourceName, model );
     decodeOleImages( aBytes, sdb, aSourceName, model );
+    inheritDefaultSystemFonts( model );
     assignFieldIds( model );
     model.ValidateOrThrow();
     return model;
