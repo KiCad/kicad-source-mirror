@@ -33,41 +33,43 @@ void UpdateOperatingPointVoltages( SCHEMATIC& aSchematic, const std::function<vo
     const SCHEMATIC_SETTINGS& settings = aSchematic.Settings();
     const wxString            variant = aSchematic.GetCurrentVariant();
 
-    auto assignVoltage = [&]( const wxString& aNetName, const SCH_SHEET_PATH& aSheet, const auto& aItems )
-    {
-        if( aSheet.GetExcludedFromSim( variant ) )
-            return;
-
-        wxString op = aSchematic.GetOperatingPoint( aNetName, settings.m_OPO_VPrecision, settings.m_OPO_VRange );
-
-        if( op.IsEmpty() || op == wxS( "--" ) || op == wxS( "?" ) )
-            return;
-
-        SCH_LINE* longestWire = nullptr;
-        double    length = 0.0;
-
-        for( SCH_ITEM* item : aItems )
-        {
-            if( item->Type() == SCH_LINE_T )
+    auto assignVoltage =
+            [&]( const wxString& aNetName, const SCH_SHEET_PATH& aSheet, const auto& aItems )
             {
-                SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+                if( aSheet.GetExcludedFromSim( variant ) )
+                    return;
 
-                if( wire->IsWire() && wire->GetLength() > length )
+                wxString op = aSchematic.GetOperatingPoint( aNetName, settings.m_OPO_VPrecision,
+                                                            settings.m_OPO_VRange );
+
+                if( op.IsEmpty() || op == wxS( "--" ) || op == wxS( "?" ) )
+                    return;
+
+                SCH_LINE* longestWire = nullptr;
+                double    length = 0.0;
+
+                for( SCH_ITEM* item : aItems )
                 {
-                    longestWire = wire;
-                    length = wire->GetLength();
+                    if( item->Type() == SCH_LINE_T )
+                    {
+                        SCH_LINE* wire = static_cast<SCH_LINE*>( item );
+
+                        if( wire->IsWire() && wire->GetLength() > length )
+                        {
+                            longestWire = wire;
+                            length = wire->GetLength();
+                        }
+                    }
                 }
-            }
-        }
 
-        if( longestWire )
-        {
-            longestWire->SetOperatingPoint( op );
+                if( longestWire )
+                {
+                    longestWire->SetOperatingPoint( op );
 
-            if( aOnChanged )
-                aOnChanged( longestWire );
-        }
-    };
+                    if( aOnChanged )
+                        aOnChanged( longestWire );
+                }
+            };
 
     if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
     {
