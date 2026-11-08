@@ -4004,6 +4004,9 @@ namespace
                 }
             }
 
+            if( label.kind == MODEL_LABEL_KIND::GROUND || label.kind == MODEL_LABEL_KIND::POWER )
+                label.presentation.visible = false;
+
             label.properties.push_back(
                     sourceProperty( wxS( "offpage_variant" ), wxString::Format( wxS( "%u" ), rawKind ), source ) );
             aModel.labels.push_back( std::move( label ) );
