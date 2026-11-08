@@ -241,6 +241,11 @@ namespace
     }
 
 
+    int64_t decodeHalfMils( uint16_t aRaw )
+    {
+        return (int64_t) aRaw * 2;
+    }
+
     int64_t decodeCoordinate( uint16_t aRaw )
     {
         return static_cast<int64_t>( aRaw ) * 4 - 198144;
@@ -1036,8 +1041,8 @@ namespace
     {
         MODEL_TEXT_PRESENTATION presentation;
         presentation.source = aSource;
-        presentation.height = aCursor.U16At( aOffset + 22 );
-        presentation.width = aCursor.U8At( aOffset + 30 );
+        presentation.height = decodeHalfMils( aCursor.U16At( aOffset + 22 ) );
+        presentation.width = decodeHalfMils( aCursor.U8At( aOffset + 30 ) );
         presentation.properties.push_back( sourceProperty(
                 wxS( "display_flags" ), wxString::Format( wxS( "%u" ), aCursor.U8At( aOffset + 31 ) ), aSource ) );
         presentation.horizontalJustification = horizontalJustification( aCursor.U16At( aOffset + 18 ) );
@@ -2148,8 +2153,8 @@ namespace
                                        fieldSource };
                     field.angle = NormalizeAngle( aCursor.U16At( usedOffset + 64 + standard * 8 ) );
                     field.presentation.source = fieldSource;
-                    field.presentation.height = aCursor.U16At( usedOffset + 88 + standard * 2 );
-                    field.presentation.width = aCursor.U8At( usedOffset + 96 + standard );
+                    field.presentation.height = decodeHalfMils( aCursor.U16At( usedOffset + 88 + standard * 2 ) );
+                    field.presentation.width = decodeHalfMils( aCursor.U8At( usedOffset + 96 + standard ) );
                     SOURCE_PROVENANCE fontSource = fieldSource;
                     fontSource.absoluteOffset = usedOffset + 100 + standard * 2;
                     fontSource.length = 2;
@@ -2755,8 +2760,8 @@ namespace
         field.presentation.source = fieldSource;
         field.visible = aVisible;
         field.presentation.visible = aVisible;
-        field.presentation.height = aDecode.cursor.U16At( aOffset + aFieldLayout.height );
-        field.presentation.width = aDecode.cursor.U8At( aOffset + aFieldLayout.width );
+        field.presentation.height = decodeHalfMils( aDecode.cursor.U16At( aOffset + aFieldLayout.height ) );
+        field.presentation.width = decodeHalfMils( aDecode.cursor.U8At( aOffset + aFieldLayout.width ) );
         const uint16_t justification = aDecode.cursor.U16At( aOffset + aFieldLayout.angle + 2 );
         field.presentation.horizontalJustification = horizontalJustification( justification );
         field.presentation.verticalJustification = verticalJustification( justification );
@@ -2827,8 +2832,8 @@ namespace
             field.presentation.source = fieldSource;
             field.presentation.horizontalJustification = horizontalJustification( justification );
             field.presentation.verticalJustification = verticalJustification( justification );
-            field.presentation.height = aDecode.cursor.U16At( fieldOffset + aDecode.layout.customHeight );
-            field.presentation.width = aDecode.cursor.U8At( fieldOffset + aDecode.layout.customWidth );
+            field.presentation.height = decodeHalfMils( aDecode.cursor.U16At( fieldOffset + aDecode.layout.customHeight ) );
+            field.presentation.width = decodeHalfMils( aDecode.cursor.U8At( fieldOffset + aDecode.layout.customWidth ) );
             field.presentation.visible = ( displayFlags & 8 ) == 0;
             field.visible = field.presentation.visible;
 
@@ -3906,8 +3911,8 @@ namespace
     {
         MODEL_TEXT_PRESENTATION presentation;
         presentation.source = aSource;
-        presentation.height = aDecode.cursor.U16At( aOffset + 2 );
-        presentation.width = aDecode.cursor.U16At( aOffset + 4 );
+        presentation.height = decodeHalfMils( aDecode.cursor.U16At( aOffset + 2 ) );
+        presentation.width = decodeHalfMils( aDecode.cursor.U16At( aOffset + 4 ) );
         presentation.horizontalJustification = horizontalJustification( aDecode.cursor.U16At( aOffset + 26 ) );
         presentation.verticalJustification = verticalJustification( aDecode.cursor.U16At( aOffset + 26 ) );
         const int16_t     fontHandle = static_cast<int16_t>( aDecode.cursor.U16At( aOffset ) );
