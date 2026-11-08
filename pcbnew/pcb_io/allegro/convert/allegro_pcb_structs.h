@@ -341,26 +341,17 @@ struct FILE_HEADER
     LINKED_LIST m_LL_0x2C;              // Tables
     LINKED_LIST m_LL_0x0C_2;            // Secondary pin definitions
     LINKED_LIST m_LL_Unknown3;
+    LINKED_LIST m_LL_0x35;              // 0x35 file records.
+    LINKED_LIST m_LL_0x36;              // Definition tables
+    LINKED_LIST m_LL_Unknown4;
+    LINKED_LIST m_LL_Unknown5;
+    LINKED_LIST m_LL_0x0A_2;            // A second DRC element list
 
-    // For some reason the 0x35 extents are recorded in the header
-    COND_LT<FMT_VER::V_180, uint32_t> m_0x35_Start_preV18;
-    COND_LT<FMT_VER::V_180, uint32_t> m_0x35_End_preV18;
+    // Only V18 onwards has this one. It holds field objects, which earlier versions
+    // keep in m_LL_0x03_0x30 instead.
+    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_0x03_2;
 
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_Unknown5_V18;
-    LINKED_LIST m_LL_0x36;
-    COND_LT<FMT_VER::V_180, LINKED_LIST> m_LL_Unknown5_preV18;
-
-    LINKED_LIST m_LL_Unknown6;
-    LINKED_LIST m_LL_0x0A_2;
-
-    COND_LT<FMT_VER::V_180, uint32_t> m_Unknown3;
-
-    // Two further lists that pre-V18 files do not have.
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_1;
-    COND_GE<FMT_VER::V_180, LINKED_LIST> m_LL_V18_2;
-
-    // V18 stores a single word here, rather than the pre-V18 start/end pair.
-    COND_GE<FMT_VER::V_180, uint32_t> m_0x35_End_V18;
+    uint32_t m_Unknown_LlTrailer;
 
     COND_GE<FMT_VER::V_181, std::array<uint32_t, 8>> m_Unknown_V181;
 

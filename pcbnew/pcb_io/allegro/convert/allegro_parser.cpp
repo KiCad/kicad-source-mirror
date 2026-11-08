@@ -238,21 +238,15 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
     header->m_LL_0x0C_2 = ReadLL( m_stream );
     header->m_LL_Unknown3 = ReadLL( m_stream );
 
-    ReadCond( m_stream, m_fmtVer, header->m_0x35_Start_preV18 );
-    ReadCond( m_stream, m_fmtVer, header->m_0x35_End_preV18 );
-
-    ReadCond( m_stream, m_fmtVer, header->m_LL_Unknown5_V18 );
+    header->m_LL_0x35 = ReadLL( m_stream );
     header->m_LL_0x36 = ReadLL( m_stream );
-    ReadCond( m_stream, m_fmtVer, header->m_LL_Unknown5_preV18 );
-
-    header->m_LL_Unknown6 = ReadLL( m_stream );
+    header->m_LL_Unknown4 = ReadLL( m_stream );
+    header->m_LL_Unknown5 = ReadLL( m_stream );
     header->m_LL_0x0A_2 = ReadLL( m_stream );
 
-    ReadCond( m_stream, m_fmtVer, header->m_Unknown3 );
+    ReadCond( m_stream, m_fmtVer, header->m_LL_0x03_2 );
 
-    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_1 );
-    ReadCond( m_stream, m_fmtVer, header->m_LL_V18_2 );
-    ReadCond( m_stream, m_fmtVer, header->m_0x35_End_V18 );
+    header->m_Unknown_LlTrailer = m_stream.ReadU32();
 
     ReadCond( m_stream, m_fmtVer, header->m_Unknown_V181 );
 
@@ -2885,14 +2879,17 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
             dumpLL( "0x2C", board->m_Header->m_LL_0x2C );
             dumpLL( "0x0C_2", board->m_Header->m_LL_0x0C_2 );
             dumpLL( "Unknown3", board->m_Header->m_LL_Unknown3 );
-            dumpLL( "Unknown5", board->m_Header->m_LL_Unknown5_preV18 );
-            dumpLL( "Unknown5", board->m_Header->m_LL_Unknown5_V18 );
+
+            dumpLL( "0x35", board->m_Header->m_LL_0x35 );
             dumpLL( "0x36", board->m_Header->m_LL_0x36 );
-            dumpLL( "Unknown6", board->m_Header->m_LL_Unknown6 );
+            dumpLL( "Unknown4", board->m_Header->m_LL_Unknown4 );
+            dumpLL( "Unknown5", board->m_Header->m_LL_Unknown5 );
             dumpLL( "0x0A_2", board->m_Header->m_LL_0x0A_2 );
 
-            dumpLL( "V18_1", board->m_Header->m_LL_V18_1 );
-            dumpLL( "V18_2", board->m_Header->m_LL_V18_2 );
+            dumpLL( "0x03_2", board->m_Header->m_LL_0x03_2 );
+
+            wxLogTrace( traceAllegroParser, "  LL trailing word       %#010x",
+                        board->m_Header->m_Unknown_LlTrailer );
         }
     }
     catch( const IO_ERROR& e )
