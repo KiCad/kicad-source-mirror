@@ -163,6 +163,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24290_local_labels_across_top_sheets.cpp
     test_issue24217_cli_variant_export.cpp
     test_issue24409_cli_hierarchical_instances.cpp
+    test_issue25978_operating_point_voltages.cpp
     test_issue24760_plot_page_numbers.cpp
     test_issue24858_variant_persistence.cpp
     test_issue24915_job_variant_fields.cpp

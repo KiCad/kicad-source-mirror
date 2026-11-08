@@ -72,6 +72,7 @@
 #include <advanced_config.h>
 #include <connectivity/conn_facade.h>
 #include <sim/simulator_frame.h>
+#include <sim/operating_point.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
@@ -1842,42 +1843,11 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
         }
     }
 
-    for( const auto& [ key, subgraphList ] : m_schematic->m_connectionGraph->GetNetMap() )
-    {
-        wxString op = m_schematic->GetOperatingPoint( key.Name, settings.m_OPO_VPrecision, settings.m_OPO_VRange );
-
-        if( !op.IsEmpty() && op != wxS( "--" ) && op != wxS( "?" ) )
-        {
-            for( CONNECTION_SUBGRAPH* subgraph : subgraphList )
+    UpdateOperatingPointVoltages( *m_schematic,
+            [this]( SCH_LINE* aWire )
             {
-                SCH_LINE* longestWire = nullptr;
-                double    length = 0.0;
-
-                if( subgraph->GetSheet().GetExcludedFromSim( variant ) )
-                    continue;
-
-                for( SCH_ITEM* item : subgraph->GetItems() )
-                {
-                    if( item->Type() == SCH_LINE_T )
-                    {
-                        SCH_LINE* line = static_cast<SCH_LINE*>( item );
-
-                        if( line->IsWire() && line->GetLength() > length )
-                        {
-                            longestWire = line;
-                            length = line->GetLength();
-                        }
-                    }
-                }
-
-                if( longestWire )
-                {
-                    longestWire->SetOperatingPoint( op );
-                    GetCanvas()->GetView()->Update( longestWire );
-                }
-            }
-        }
-    }
+                GetCanvas()->GetView()->Update( aWire );
+            } );
 }
 
 
