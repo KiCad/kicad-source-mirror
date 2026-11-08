@@ -431,12 +431,13 @@ message DrillProperties
 
 }
 
+// Since: 11.0
 message PostMachiningProperties
 {
   ViaDrillPostMachiningMode mode = 1;
-  int32 size = 2;
-  int32 depth = 3;
-  int32 angle = 4;
+  kiapi.common.types.Distance size = 2;
+  kiapi.common.types.Distance depth = 3;
+  kiapi.common.types.Angle angle = 4;
 }
 
 // A pad stack definition for a multilayer pad or via.

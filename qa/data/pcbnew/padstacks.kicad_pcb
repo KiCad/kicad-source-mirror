@@ -1115,6 +1115,11 @@
 		(size 0.6)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
+		(front_post_machining countersink
+			(size 0.5)
+			(depth 0.25)
+			(angle 82)
+		)
 		(free yes)
 		(tenting none)
 		(net 1)

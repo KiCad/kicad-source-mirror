@@ -273,9 +273,9 @@ bool PADSTACK::Deserialize( const kiapi::board::types::PadStack& padstack )
         default: aDest.mode = std::nullopt; break;
         }
 
-        aDest.size = aProto.size();
-        aDest.depth = aProto.depth();
-        aDest.angle = aProto.angle();
+        aDest.size = kiapi::common::UnpackDistance( aProto.size() );
+        aDest.depth = kiapi::common::UnpackDistance( aProto.depth() );
+        aDest.angle = EDA_ANGLE( aProto.angle().value_degrees(), DEGREES_T ).AsTenthsOfADegree();
     };
 
 
@@ -696,9 +696,9 @@ void PADSTACK::Serialize( kiapi::board::types::PadStack& padstack ) const
             }
         }
 
-        aProto->set_size( aProps.size );
-        aProto->set_depth( aProps.depth );
-        aProto->set_angle( aProps.angle );
+        kiapi::common::PackDistance( *aProto->mutable_size(), aProps.size );
+        kiapi::common::PackDistance( *aProto->mutable_depth(), aProps.depth );
+        aProto->mutable_angle()->set_value_degrees( EDA_ANGLE( aProps.angle / 10.0, DEGREES_T ).AsDegrees() );
     };
 
     if( m_frontPostMachining.mode.has_value() || m_frontPostMachining.size > 0 )
