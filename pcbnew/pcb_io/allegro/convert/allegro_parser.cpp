@@ -2266,6 +2266,25 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x37( FILE_STREAM& aStream, FMT_VE
 
     ReadCond( aStream, aVer, data.m_Unknown3 );
 
+    // The table is m_Capacity entries long. m_Count indicates how many entries are valid.
+    // But we read all of them.
+
+    // Defend against a mis-parse that would index beyond the end of the file
+    const size_t maxCapacity = ( aStream.Size() - aStream.Position() ) / sizeof( uint32_t );
+
+    if( data.m_Capacity > maxCapacity )
+    {
+        THROW_IO_ERRORF( wxT( "Block 0x37 capacity %u exceeds the %zu entries left in the file at offset %#010zx" ),
+                         data.m_Capacity, maxCapacity, aStream.Position() );
+    }
+
+    if( data.m_Count > data.m_Capacity )
+    {
+        THROW_IO_ERRORF( wxT( "Block 0x37 count %u exceeds capacity %u at offset %#010zx" ),
+                         data.m_Count, data.m_Capacity, aStream.Position() );
+    }
+
+    data.m_Ptrs.resize( data.m_Capacity );
     ReadArrayU32( aStream, data.m_Ptrs );
 
     return block;

@@ -2388,9 +2388,11 @@ struct BLK_0x36_DEF_TABLE
 
 
 /**
- * Fixed-capacity pointer array (100 entries). Used in zone net resolution where
- * m_Ptrs[0] points to the owning 0x1B NET block. m_Count indicates how many entries
- * are valid.
+ * Pointer array. Used in zone net resolution where m_Ptrs[0] points to the owning
+ * 0x1B NET block. m_Count indicates how many entries are valid, counted from the
+ * start.
+ *
+ * m_Capacity is usually 100, but a 25.1 board was seen with 4096 (TinyCircularTMR).
  */
 struct BLK_0x37_PTR_ARRAY
 {
@@ -2407,7 +2409,7 @@ struct BLK_0x37_PTR_ARRAY
 
     COND_GE<FMT_VER::V_174, uint32_t> m_Unknown3;
 
-    std::array<uint32_t, 100> m_Ptrs;
+    std::vector<uint32_t> m_Ptrs;
 };
 
 

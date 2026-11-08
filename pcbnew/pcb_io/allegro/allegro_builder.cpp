@@ -4412,7 +4412,7 @@ std::vector<const BLOCK_BASE*> BOARD_BUILDER::getShapeRelatedBlocks( const BLK_0
     if( !ptrArray || ptrArray->m_Count == 0 )
         return ret;
 
-    const size_t count = std::min( std::min( ptrArray->m_Count, ptrArray->m_Capacity ), 100u );
+    const size_t count = std::min<size_t>( ptrArray->m_Count, ptrArray->m_Ptrs.size() );
     ret.resize( count );
 
     for( size_t i = 0; i < count; i++ )
