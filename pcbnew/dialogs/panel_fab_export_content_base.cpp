@@ -37,7 +37,7 @@ PANEL_FAB_EXPORT_CONTENT_BASE::PANEL_FAB_EXPORT_CONTENT_BASE( wxWindow* parent, 
 	m_choiceDataSet->SetSelection( 0 );
 	m_choiceDataSet->SetToolTip( _("Which sections of the design the file carries, per the IPC-2581 function mode table") );
 
-	fgSizer4->Add( m_choiceDataSet, 0, wxEXPAND|wxRIGHT, 5 );
+	fgSizer4->Add( m_choiceDataSet, 0, wxEXPAND, 5 );
 
 	m_lblNetNames = new wxStaticText( this, wxID_ANY, _("Net names:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblNetNames->Wrap( -1 );
@@ -49,7 +49,7 @@ PANEL_FAB_EXPORT_CONTENT_BASE::PANEL_FAB_EXPORT_CONTENT_BASE( wxWindow* parent, 
 	m_choiceNetNames->SetSelection( 0 );
 	m_choiceNetNames->SetToolTip( _("Anonymized names keep connectivity for netlist compare without carrying the design intent") );
 
-	fgSizer4->Add( m_choiceNetNames, 0, wxEXPAND|wxRIGHT, 5 );
+	fgSizer4->Add( m_choiceNetNames, 0, wxEXPAND, 5 );
 
 	m_lblVariant = new wxStaticText( this, wxID_ANY, _("Variant:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblVariant->Wrap( -1 );
@@ -61,7 +61,7 @@ PANEL_FAB_EXPORT_CONTENT_BASE::PANEL_FAB_EXPORT_CONTENT_BASE( wxWindow* parent, 
 	m_choiceVariant->SetSelection( 0 );
 	m_choiceVariant->SetToolTip( _("Select a board variant for this export") );
 
-	fgSizer4->Add( m_choiceVariant, 0, wxEXPAND|wxRIGHT, 5 );
+	fgSizer4->Add( m_choiceVariant, 0, wxEXPAND, 5 );
 
 	m_lblRefDes = new wxStaticText( this, wxID_ANY, _("Reference designators:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblRefDes->Wrap( -1 );
@@ -73,20 +73,23 @@ PANEL_FAB_EXPORT_CONTENT_BASE::PANEL_FAB_EXPORT_CONTENT_BASE( wxWindow* parent, 
 	m_choiceRefDes->SetSelection( 0 );
 	m_choiceRefDes->SetToolTip( _("Omits the designator from the component, BOM and artwork metadata. Reference text drawn on silkscreen is artwork the fabricator must reproduce and is always kept.") );
 
-	fgSizer4->Add( m_choiceRefDes, 0, wxEXPAND|wxRIGHT, 5 );
+	fgSizer4->Add( m_choiceRefDes, 0, wxEXPAND, 5 );
 
 
-	bSizerRightCol->Add( fgSizer4, 1, wxALL|wxEXPAND, 5 );
+	bSizerRightCol->Add( fgSizer4, 1, wxEXPAND|wxALL, 5 );
 
 	wxString m_variantOutputChoices[] = { _("One package per variant"), _("One package, all variants inside") };
 	int m_variantOutputNChoices = sizeof( m_variantOutputChoices ) / sizeof( wxString );
-	m_variantOutput = new wxRadioBox( this, wxID_ANY, _("Variant output"), wxDefaultPosition, wxDefaultSize, m_variantOutputNChoices, m_variantOutputChoices, 1, wxRA_SPECIFY_COLS );
+	m_variantOutput = new wxRadioBox( this, wxID_ANY, _("Variant Output"), wxDefaultPosition, wxDefaultSize, m_variantOutputNChoices, m_variantOutputChoices, 1, wxRA_SPECIFY_COLS );
 	m_variantOutput->SetSelection( 0 );
 	bSizerRightCol->Add( m_variantOutput, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_variantHint = new wxStaticText( this, wxID_ANY, _("${VARIANT} is replaced per package"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_variantHint->Wrap( 280 );
-	bSizerRightCol->Add( m_variantHint, 0, wxLEFT|wxRIGHT, 5 );
+	bSizerRightCol->Add( m_variantHint, 0, wxALL, 5 );
+
+
+	bSizerRightCol->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_lblIncludes = new wxStaticText( this, wxID_ANY, _("Includes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblIncludes->Wrap( 280 );
@@ -95,13 +98,13 @@ PANEL_FAB_EXPORT_CONTENT_BASE::PANEL_FAB_EXPORT_CONTENT_BASE( wxWindow* parent, 
 	bSizerContentButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_btnCustomize = new wxButton( this, wxID_ANY, _("Customize..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerContentButtons->Add( m_btnCustomize, 0, wxRIGHT, 5 );
+	bSizerContentButtons->Add( m_btnCustomize, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerContentButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_btnBomFields = new wxButton( this, wxID_ANY, _("BOM Fields..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerContentButtons->Add( m_btnBomFields, 0, wxLEFT, 5 );
+	bSizerContentButtons->Add( m_btnBomFields, 0, wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizerRightCol->Add( bSizerContentButtons, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
@@ -137,9 +140,15 @@ DIALOG_FAB_CUSTOMIZE_BASE::DIALOG_FAB_CUSTOMIZE_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_intro = new wxStaticText( this, wxID_ANY, _("Choose the optional sections to include"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	bMainSizer->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	m_intro = new wxStaticText( this, wxID_ANY, _("Choose the optional sections to include:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_intro->Wrap( -1 );
-	bMainSizer->Add( m_intro, 0, wxALL, 10 );
+	bMainSizer->Add( m_intro, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bMainSizer->Add( 0, 2, 0, wxEXPAND, 5 );
 
 	m_sections = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES|wxDV_VERT_RULES|wxBORDER_SIMPLE );
 	m_sections->SetMinSize( wxSize( 520,410 ) );

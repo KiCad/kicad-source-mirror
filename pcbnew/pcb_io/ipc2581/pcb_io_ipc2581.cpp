@@ -671,14 +671,6 @@ size_t PCB_IO_IPC2581::lineHash( int aWidth, LINE_STYLE aDashType )
 }
 
 
-size_t PCB_IO_IPC2581::shapeHash( const PCB_SHAPE& aShape )
-{
-    size_t hash = hash_fp_item( &aShape, HASH_POS );
-
-    return hash;
-}
-
-
 wxXmlNode* PCB_IO_IPC2581::generateContentStackup( wxXmlNode* aContentNode )
 {
     const BOARD_STACKUP& stackup = m_fabStackup->Stackup();
@@ -1307,7 +1299,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
 
 void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape, bool aInline )
 {
-    size_t hash = shapeHash( aShape );
+    size_t hash = hash_fp_item( &aShape, HASH_POS | RELATIVE_TO_PARENT_COORDS );
     auto iter = m_user_shape_dict.find( hash );
     wxString name;
 
@@ -1517,12 +1509,11 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
             if( aShape.GetFillMode() != FILL_T::NO_FILL )
             {
                 // IPC2581 does not allow strokes on filled elements
-                addContourNode( special_node, poly_set, ii, FILL_T::FILLED_SHAPE, 0,
-                                LINE_STYLE::SOLID );
+                addContourNode( special_node, poly_set, ii, FILL_T::FILLED_SHAPE, 0, LINE_STYLE::SOLID );
             }
 
-            addContourNode( special_node, poly_set, ii, FILL_T::NO_FILL,
-                            aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle() );
+            addContourNode( special_node, poly_set, ii, FILL_T::NO_FILL, aShape.GetStroke().GetWidth(),
+                            aShape.GetStroke().GetLineStyle() );
         }
 
         break;
@@ -1545,11 +1536,12 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
 
     case SHAPE_T::BEZIER:
     {
-        wxXmlNode* polyline_node = appendNode( aContentNode, "Polyline" );
-        std::vector<VECTOR2I> ctrlPoints = { aShape.GetStart(), aShape.GetBezierC1(),
-                                             aShape.GetBezierC2(), aShape.GetEnd() };
-        BEZIER_POLY converter( ctrlPoints );
+        wxXmlNode*            polyline_node = appendNode( aContentNode, "Polyline" );
+        std::vector<VECTOR2I> ctrlPoints = { aShape.GetStart(), aShape.GetBezierC1(), aShape.GetBezierC2(),
+                                             aShape.GetEnd() };
+        BEZIER_POLY           converter( ctrlPoints );
         std::vector<VECTOR2I> points;
+
         converter.GetPoly( points, ARC_HIGH_DEF );
 
         wxXmlNode* point_node = appendNode( polyline_node, "PolyBegin" );
@@ -2037,74 +2029,73 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
 
             switch ( stackup_item->GetType() )
             {
-                case BS_ITEM_TYPE_COPPER:
+            case BS_ITEM_TYPE_COPPER:
+            {
+                addAttribute( propertyNode, "text", "COPPER" );
+                wxXmlNode* conductorNode = appendNode( specNode, "Conductor" );
+                addAttribute( conductorNode, "type", "CONDUCTIVITY" );
+                propertyNode = appendNode( conductorNode, "Property" );
+                addAttribute( propertyNode, "unit", wxT( "SIEMENS/M" ) );
+                addAttribute( propertyNode, "value", wxT( "5.959E7" ) );
+                break;
+            }
+
+            case BS_ITEM_TYPE_DIELECTRIC:
+            {
+                addAttribute( propertyNode, "text", stackup_item->GetMaterial() );
+                propertyNode = appendNode( generalNode, "Property" );
+                addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
+                                                                    stackup_item->GetTypeName() ) );
+                wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
+                addAttribute( dielectricNode, "type", "DIELECTRIC_CONSTANT" );
+                propertyNode = appendNode( dielectricNode, "Property" );
+                addAttribute( propertyNode, "value", floatVal( stackup_item->GetEpsilonR( sublayer_id ) ) );
+                dielectricNode = appendNode( specNode, "Dielectric" );
+                addAttribute( dielectricNode, "type", "LOSS_TANGENT" );
+                propertyNode = appendNode( dielectricNode, "Property" );
+                addAttribute( propertyNode, "value", floatVal( stackup_item->GetLossTangent( sublayer_id ) ) );
+                break;
+            }
+
+            case BS_ITEM_TYPE_SILKSCREEN:
+                addAttribute( propertyNode,  "text", stackup_item->GetTypeName() );
+                propertyNode = appendNode( generalNode, "Property" );
+                addAttribute( propertyNode,  "text", wxString::Format( "Color : %s", stackup_item->GetColor() ) );
+                propertyNode = appendNode( generalNode, "Property" );
+                addAttribute( propertyNode,  "text", wxString::Format( "Type : %s", stackup_item->GetTypeName() ) );
+                break;
+
+            case BS_ITEM_TYPE_SOLDERMASK:
+            {
+                addAttribute( propertyNode,  "text", "SOLDERMASK" );
+                propertyNode = appendNode( generalNode, "Property" );
+                addAttribute( propertyNode,  "text", wxString::Format( "Color : %s", stackup_item->GetColor() ) );
+                propertyNode = appendNode( generalNode, "Property" );
+                addAttribute( propertyNode,  "text", wxString::Format( "Type : %s", stackup_item->GetTypeName() ) );
+
+                // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified)
+                if( stackup_item->GetEpsilonR( sublayer_id ) > 1.0 )
                 {
-                    addAttribute( propertyNode, "text", "COPPER" );
-                    wxXmlNode* conductorNode = appendNode( specNode, "Conductor" );
-                    addAttribute( conductorNode, "type", "CONDUCTIVITY" );
-                    propertyNode = appendNode( conductorNode, "Property" );
-                    addAttribute( propertyNode, "unit", wxT( "SIEMENS/M" ) );
-                    addAttribute( propertyNode, "value", wxT( "5.959E7" ) );
-                    break;
-                }
-                case BS_ITEM_TYPE_DIELECTRIC:
-                {
-                    addAttribute( propertyNode, "text", stackup_item->GetMaterial() );
-                    propertyNode = appendNode( generalNode, "Property" );
-                    addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
-                                                                        stackup_item->GetTypeName() ) );
                     wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
                     addAttribute( dielectricNode, "type", "DIELECTRIC_CONSTANT" );
                     propertyNode = appendNode( dielectricNode, "Property" );
-                    addAttribute( propertyNode, "value",
-                                  floatVal( stackup_item->GetEpsilonR( sublayer_id ) ) );
-                    dielectricNode = appendNode( specNode, "Dielectric" );
+                    addAttribute( propertyNode, "value", floatVal( stackup_item->GetEpsilonR( sublayer_id ) ) );
+                }
+
+                // Generate LossTangent if > 0.0 (value <= 0.0 means not specified)
+                if( stackup_item->GetLossTangent( sublayer_id ) > 0.0 )
+                {
+                    wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
                     addAttribute( dielectricNode, "type", "LOSS_TANGENT" );
                     propertyNode = appendNode( dielectricNode, "Property" );
-                    addAttribute( propertyNode, "value",
-                                  floatVal( stackup_item->GetLossTangent( sublayer_id ) ) );
-                    break;
+                    addAttribute( propertyNode, "value", floatVal( stackup_item->GetLossTangent( sublayer_id ) ) );
                 }
-                case BS_ITEM_TYPE_SILKSCREEN:
-                    addAttribute( propertyNode,  "text", stackup_item->GetTypeName() );
-                    propertyNode = appendNode( generalNode, "Property" );
-                    addAttribute( propertyNode,  "text", wxString::Format( "Color : %s",
-                                                                           stackup_item->GetColor() ) );
-                    propertyNode = appendNode( generalNode, "Property" );
-                    addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
-                                                                           stackup_item->GetTypeName() ) );
-                    break;
-                case BS_ITEM_TYPE_SOLDERMASK:
-                {
-                    addAttribute( propertyNode,  "text", "SOLDERMASK" );
-                    propertyNode = appendNode( generalNode, "Property" );
-                    addAttribute( propertyNode,  "text", wxString::Format( "Color : %s",
-                                                                           stackup_item->GetColor() ) );
-                    propertyNode = appendNode( generalNode, "Property" );
-                    addAttribute( propertyNode,  "text", wxString::Format( "Type : %s",
-                                                                           stackup_item->GetTypeName() ) );
 
-                    // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified)
-                    if( stackup_item->GetEpsilonR( sublayer_id ) > 1.0 )
-                    {
-                        wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
-                        addAttribute( dielectricNode, "type", "DIELECTRIC_CONSTANT" );
-                        propertyNode = appendNode( dielectricNode, "Property" );
-                        addAttribute( propertyNode, "value", floatVal( stackup_item->GetEpsilonR( sublayer_id ) ) );
-                    }
+                break;
+            }
 
-                    // Generate LossTangent if > 0.0 (value <= 0.0 means not specified)
-                    if( stackup_item->GetLossTangent( sublayer_id ) > 0.0 )
-                    {
-                        wxXmlNode* dielectricNode = appendNode( specNode, "Dielectric" );
-                        addAttribute( dielectricNode, "type", "LOSS_TANGENT" );
-                        propertyNode = appendNode( dielectricNode, "Property" );
-                        addAttribute( propertyNode, "value", floatVal( stackup_item->GetLossTangent( sublayer_id ) ) );
-                    }
-                    break;
-                }
-                default:
-                    break;
+            default:
+                break;
             }
         }
     }
@@ -2208,10 +2199,9 @@ void PCB_IO_IPC2581::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
         {
             addAttribute( aNode, "layerFunction", "CONDUCTOR" );
             addAttribute( aNode, "polarity", "POSITIVE" );
-            addAttribute( aNode, "side",
-                          aLayer == F_Cu ? "TOP"
-                                         : aLayer == B_Cu ? "BOTTOM"
-                                                          : "INTERNAL" );
+            addAttribute( aNode, "side", aLayer == F_Cu ? "TOP"
+                                                        : aLayer == B_Cu ? "BOTTOM"
+                                                                         : "INTERNAL" );
         }
         else if( IsUserLayer( aLayer ) )
         {
@@ -2534,8 +2524,8 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
             }
             else
             {
-                addAttribute( node, "name",
-                              genLayersString( std::get<1>( layers ), std::get<2>( layers ), TO_UTF8( name ) ) );
+                addAttribute( node, "name", genLayersString( std::get<1>( layers ), std::get<2>( layers ),
+                                                             TO_UTF8( name ) ) );
 
                 const bool first_external = std::get<1>( layers ) == F_Cu || std::get<1>( layers ) == B_Cu;
                 const bool second_external = std::get<2>( layers ) == F_Cu || std::get<2>( layers ) == B_Cu;
@@ -4249,14 +4239,6 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     }
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
-
-                    if( fp->GetOrientation() != ANGLE_0 )
-                    {
-                        wxXmlNode* xformNode = appendNode( tempFeature, "Xform" );
-                        EDA_ANGLE angle = fp->GetOrientation().Normalize();
-
-                        xformNode->AddAttribute( "rotation", floatVal( angle.AsDegrees() ) );
-                    }
 
                     addLocationNode( tempFeature, *shape );
                     addShape( tempFeature, *shape );

@@ -45,7 +45,7 @@ std::vector<SECTION_ROW> sectionRows()
 
     return {
         { SECTION::BOM_AVL, _( "BOM" ), wxS( "components PRP, boms/" ), wxS( "Bom, Avl" ) },
-        { SECTION::PACKAGES, _( "packages" ), wxS( "eda/data PKG" ), wxS( "Package" ) },
+        { SECTION::PACKAGES, _( "footprints" ), wxS( "eda/data PKG" ), wxS( "Package" ) },
         { SECTION::COMPONENTS, _( "components" ), wxS( "comp_+_top, comp_+_bot" ), wxS( "Component" ) },
         { SECTION::PADSTACKS, _( "padstacks" ), wxS( "features .geometry" ), wxS( "PadStackDef" ) },
         { SECTION::STACKUP, _( "stackup" ), wxS( "matrix/stackup.xml" ), wxS( "Stackup, Spec" ) },
@@ -94,8 +94,8 @@ public:
 
         if( odb )
         {
-            m_intro->SetLabel(
-                    _( "Choose sections to include. Intentional shorts are written when the board has net ties." ) );
+            m_intro->SetLabel( _( "Choose sections to include. Intentional shorts are written when the board has "
+                                  "net ties." ) );
             wxVector<wxVariant> values;
             values.push_back( wxVariant( aBoardMetadata ) );
             values.push_back( wxVariant( _( "board metadata" ) ) );
@@ -161,6 +161,7 @@ private:
         m_restoring = false;
     }
 
+private:
     std::vector<FAB::SECTION> m_rows;
     std::vector<bool>         m_editable;
     unsigned int              m_metadataRow = 0;
@@ -366,8 +367,8 @@ FAB::SECTION_SET PANEL_FAB_EXPORT_CONTENT::ResolvedSections() const
 
         // Table 4 by itself only gives the schema sections
         return m_format == FAB_CONTENT_FORMAT::ODBPP
-                       ? selected
-                       : IPC2581::ResolveSections( IPC2581::REVISION::C, mode, selected ).m_included;
+                                       ? selected
+                                       : IPC2581::ResolveSections( IPC2581::REVISION::C, mode, selected ).m_included;
     }
 
     if( m_format == FAB_CONTENT_FORMAT::ODBPP )
@@ -383,8 +384,6 @@ void PANEL_FAB_EXPORT_CONTENT::updateSummary()
 {
     FAB::SECTION_SET      sections = ResolvedSections();
     wxString              summary = _( "Includes: " );
-    wxString              line = summary;
-    int                   lines = 1;
     std::vector<wxString> labels;
 
     for( const SECTION_ROW& row : sectionRows() )
@@ -398,27 +397,21 @@ void PANEL_FAB_EXPORT_CONTENT::updateSummary()
 
     for( const wxString& label : labels )
     {
-        wxString item = label;
-        bool     first = line == _( "Includes: " );
-        item = first ? item : wxS( ", " ) + item;
+        bool first = summary == _( "Includes: " );
 
-        if( line.length() + item.length() > 70 && !first )
-        {
-            summary << wxS( "\n" );
-            line.clear();
-            ++lines;
-            item = label;
-        }
+        if( !first )
+            summary += wxS( ", " );
 
-        summary << item;
-        line << item;
+        if( summary.AfterLast( '\n' ).length() + label.length() > 60 )
+            summary += '\n';
+
+        summary += label;
     }
 
     m_lblIncludes->SetLabel( summary );
-    m_lblIncludes->SetMinSize( wxSize( -1, lines * GetCharHeight() + 5 ) );
-    m_btnBomFields->Enable(
-            sections.Contains( FAB::SECTION::BOM_AVL )
-            || ( m_format == FAB_CONTENT_FORMAT::ODBPP && sections.Contains( FAB::SECTION::COMPONENTS ) ) );
+    m_lblIncludes->SetMinSize( wxSize( -1, ( summary.Freq( '\n' ) + 1 ) * GetCharHeight() + 5 ) );
+    m_btnBomFields->Enable( sections.Contains( FAB::SECTION::BOM_AVL )
+                        || ( m_format == FAB_CONTENT_FORMAT::ODBPP && sections.Contains( FAB::SECTION::COMPONENTS ) ) );
     Layout();
 
     if( GetParent() )
