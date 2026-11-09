@@ -23,6 +23,7 @@
 
 #include <kicommon.h>
 #include <functional>
+#include <list>
 #include <vector>
 
 class wxString;
@@ -101,8 +102,8 @@ private:
     void onListWindowClosed( wxCloseEvent& aEvent );
 
 private:
-    /// Current stack of notifications.
-    std::vector<NOTIFICATION>        m_notifications;
+    /// Current stack of notifications. A list, since shown panels hold pointers to its elements.
+    std::list<NOTIFICATION>          m_notifications;
 
     /// Currently shown notification lists.
     std::vector<NOTIFICATIONS_LIST*> m_shownDialogs;

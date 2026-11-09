@@ -45,6 +45,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <list>
 #include <map>
 #include <optional>
 #include <tuple>
@@ -80,7 +81,11 @@ public:
         mainSizer->Add( m_stTitle, 0, wxALL | wxEXPAND, 1 );
 
         m_stDescription = new wxStaticText( this, wxID_ANY, aNoti->description );
-        m_stDescription->Wrap( -1 );
+
+        // Leave room for the borders and a scrollbar that may appear later
+        int margin = FromDIP( 8 ) + wxSystemSettings::GetMetric( wxSYS_VSCROLL_X, aParent );
+
+        m_stDescription->Wrap( std::max( FromDIP( 100 ), aParent->GetClientSize().x - margin ) );
         mainSizer->Add( m_stDescription, 0, wxALL | wxEXPAND, 1 );
 
         wxBoxSizer* tailSizer;
@@ -103,6 +108,9 @@ public:
         m_hlDismiss->Bind( wxEVT_HYPERLINK, &NOTIFICATION_PANEL::onDismiss, this );
 
         SetSizer( mainSizer );
+
+        // Grow past the default height when the description wraps
+        SetMinSize( wxSize( -1, std::max( GetMinSize().y, mainSizer->GetMinSize().y ) ) );
         Layout();
     }
 
@@ -286,7 +294,7 @@ void NOTIFICATIONS_MANAGER::Load()
     {
         saved_json_stream >> saved_json;
 
-        m_notifications = saved_json.get<std::vector<NOTIFICATION>>();
+        m_notifications = saved_json.get<std::list<NOTIFICATION>>();
     }
     catch( std::exception& )
     {
@@ -325,25 +333,26 @@ void NOTIFICATIONS_MANAGER::CreateOrUpdate( const wxString& aKey,
                                 return noti.key == aKey;
                             } );
 
+    NOTIFICATION* noti = nullptr;
+
     if( it != m_notifications.end() )
     {
-        NOTIFICATION& noti = *it;
-
-        noti.title = aTitle;
-        noti.description = aDescription;
-        noti.href = aHref;
+        noti = &*it;
+        noti->title = aTitle;
+        noti->description = aDescription;
+        noti->href = aHref;
     }
     else
     {
-        m_notifications.emplace_back( NOTIFICATION{ aTitle, aDescription, aHref,
-                                                    aKey, wxEmptyString } );
+        noti = &m_notifications.emplace_back( NOTIFICATION{ aTitle, aDescription, aHref,
+                                                            aKey, wxEmptyString } );
     }
 
-    if( m_shownDialogs.size() > 0 )
+    // Replace an updated notification's panel rather than add a second one
+    for( NOTIFICATIONS_LIST* list : m_shownDialogs )
     {
-        // update dialogs
-        for( NOTIFICATIONS_LIST* list : m_shownDialogs )
-            list->Add( &m_notifications.back() );
+        list->Remove( noti );
+        list->Add( noti );
     }
 
     for( KISTATUSBAR* statusBar : m_statusBars )
