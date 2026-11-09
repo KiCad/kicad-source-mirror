@@ -391,27 +391,24 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
 }
 
 
-void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
-                                            SCHEMATIC*             aSchematic,
+void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
                                             const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
+    wxCHECK_RET( aSheet->GetScreen(), "Sheet has no screen." );
 
-    if( aSheet->GetScreen() )
+    wxString sanityResult = aSheet->GetScreen()->GroupsSanityCheck();
+
+    if( sanityResult != wxEmptyString && m_queryUserCallback )
     {
-        wxString sanityResult = aSheet->GetScreen()->GroupsSanityCheck();
-
-        if( sanityResult != wxEmptyString && m_queryUserCallback )
+        if( !m_queryUserCallback( _( "Internal Group Data Error" ), wxICON_ERROR,
+                                  wxString::Format( _( "Error validating group structure: %s\n\n"
+                                                       "Please report this bug." ),
+                                                    sanityResult ),
+                                  _( "Save Anyway" ) ) )
         {
-            if( !m_queryUserCallback( _( "Internal Group Data Error" ), wxICON_ERROR,
-                                      wxString::Format( _( "Please report this bug.  Error validating group "
-                                                           "structure: %s\n\nSave anyway?" ),
-                                                        sanityResult ),
-                                      _( "Save Anyway" ) ) )
-            {
-                return;
-            }
+            return;
         }
     }
 
@@ -425,8 +422,7 @@ void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET
     FormatSchematicToFormatter( &formatter, aSheet, aSchematic, aProperties );
     formatter.Finish();
 
-    if( aSheet->GetScreen() )
-        aSheet->GetScreen()->SetFileExists( true );
+    aSheet->GetScreen()->SetFileExists( true );
 }
 
 
