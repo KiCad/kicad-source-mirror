@@ -53,7 +53,7 @@ public:
 
     bool IsSentinel( uint32_t aKey ) const
     {
-        return m_SentinelKeys.count( aKey ) > 0;
+        return m_SentinelKeys.count( aKey ) > 0 && m_ObjectKeyMap.count( aKey ) == 0;
     }
 
     void AddSentinelKey( uint32_t aKey )

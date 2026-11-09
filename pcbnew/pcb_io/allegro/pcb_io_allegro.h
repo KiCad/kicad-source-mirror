@@ -32,7 +32,7 @@ public:
     // -----<PUBLIC PCB_IO API>--------------------------------------------------
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "Allegro PCB files" ), { "brd" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Allegro PCB files" ), { "brd", "mdd" } );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override { return IO_BASE::IO_FILE_DESC( wxEmptyString, {} ); }
