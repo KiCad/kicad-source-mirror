@@ -22,7 +22,6 @@ Offset 0x1200: String Table
 After strings: Object Blocks
   - Repeated: [1-byte type tag] [type-specific data]
   - Each block type has a fixed layout with version-conditional fields
-  - V180 files may have zero-padded gaps between block groups
 ```
 
 ## Version Detection
@@ -988,13 +987,11 @@ after the layer map. V18 stores it in `m_Unknown2[5]` (read during
 early header parsing) and has no separate field. Similarly,
 `m_0x27_End` is relocated to `m_Unknown2[2]`.
 
-### Object Stream Gaps
+### Object Stream Termination
 
-V18 files can have zero-padded gaps between groups of object blocks.
-After encountering the end-of-objects marker (0x00 type byte), the
-parser skips consecutive zero bytes, then checks if a valid block
-type tag (0x01-0x3C) follows. If so, parsing continues from the
-4-byte-aligned position before that tag.
+A 0x00 type tag ends the object stream, as does reaching the end of the
+file. There is no padding between blocks: every block is a whole number of
+4-byte words and the next type tag follows immediately.
 
 ### Padstack Trailer
 

@@ -1867,6 +1867,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x30_STR_WRAPPER( FILE_STREAM& aSt
     data.m_Rotation = aStream.ReadU32();
 
     ReadCond( aStream, aVer, data.m_PtrGroup_16x );
+    ReadCond( aStream, aVer, data.m_Ptr0x3E_V181 );
 
     return block;
 }
@@ -2777,42 +2778,6 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
 
         if( endOfObjectsMarker )
         {
-            if( ver >= FMT_VER::V_180 )
-            {
-                // V18 files can have zero-padded gaps between block groups. Skip
-                // consecutive zero bytes and check if more blocks follow.
-                size_t scanPos = m_stream.Position();
-                uint8_t nextByte = 0;
-
-                while( m_stream.GetU8( nextByte ) && nextByte == 0x00 )
-                    scanPos = m_stream.Position();
-
-                if( nextByte > 0x00 && nextByte <= 0x3E )
-                {
-                    size_t blockStart = scanPos;
-
-                    if( blockStart % 4 != 0 )
-                        blockStart -= ( blockStart % 4 );
-
-                    // After backward alignment the byte at blockStart may
-                    // differ from the non-zero byte we found. Verify it
-                    // still looks like a valid block type before continuing.
-                    uint8_t alignedByte = 0;
-                    m_stream.Seek( blockStart );
-                    m_stream.GetU8( alignedByte );
-                    m_stream.Seek( blockStart );
-
-                    if( alignedByte == 0x00 || alignedByte > 0x3E )
-                        break;
-
-                    wxLogTrace( traceAllegroParser,
-                                wxString::Format( "V18 zero gap from %#010zx to %#010zx, "
-                                                  "continuing at block type %#04x",
-                                                  offset, blockStart, nextByte ) );
-                    continue;
-                }
-            }
-
             if( wxLog::IsAllowedTraceMask( traceAllegroParser ) )
             {
                 wxLogTrace( traceAllegroParser,

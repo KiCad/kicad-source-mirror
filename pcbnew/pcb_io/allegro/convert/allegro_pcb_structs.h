@@ -2097,6 +2097,9 @@ struct BLK_0x30_STR_WRAPPER
 
     COND_LT<FMT_VER::V_172, uint32_t> m_PtrGroup_16x;
 
+    /// Zero or key of a 0x3E block.
+    COND_GE<FMT_VER::V_181, uint32_t> m_Ptr0x3E_V181;
+
     uint32_t GetGroupPtr() const
     {
         return m_PtrGroup_17x.value_or( m_PtrGroup_16x.value_or( 0 ) );
