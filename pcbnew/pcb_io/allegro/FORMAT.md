@@ -989,9 +989,13 @@ early header parsing) and has no separate field. Similarly,
 
 ### Object Stream Termination
 
-A 0x00 type tag ends the object stream, as does reaching the end of the
-file. There is no padding between blocks: every block is a whole number of
-4-byte words and the next type tag follows immediately.
+The object stream ends when the file ends, or when a 0x00 type byte is
+reached. There is no padding between blocks: every block is a whole number
+of 4-byte words and the next type tag follows immediately.
+
+Some files include zero padding after the last real block. This is only
+valid if all remaining bytes to the end of the file are zero, otherwise
+encountering a zero type tag is a mis-read of a previous block's length.
 
 ### Padstack Trailer
 

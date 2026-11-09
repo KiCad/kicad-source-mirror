@@ -2731,7 +2731,9 @@ std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjec
     }
     case 0x00:
     {
-        // Block type 0x00 marks the end of the objects section
+        // A 0x00 type byte is not a block.
+        // It's only "real" if the rest of the file is zero padding, otherwise
+        // it's probably an error in the previous block's length.
         aEndOfObjectsMarker = true;
         break;
     }
@@ -2762,10 +2764,6 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
     {
         const size_t offset = m_stream.Position();
 
-        // This seems to be always true and is quite useful for debugging out-of-sync objects
-        wxASSERT_MSG( offset % 4 == 0,
-                      wxString::Format( "Allegro object at %#010zx, offset not aligned to 4 bytes", offset ) );
-
         // Peek at the block type byte before ParseBlock consumes it so we
         // have the value available for error messages if the type is unknown
         // and ParseBlock returns nullptr.
@@ -2773,16 +2771,47 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         m_stream.GetU8( blockTypeByte );
         m_stream.Seek( offset );
 
+        // This seems to be always true and is quite useful for debugging out-of-sync
+        // objects with non-zero type tags.
+        if( blockTypeByte != 0x00 )
+        {
+            wxASSERT_MSG( offset % 4 == 0,
+                          wxString::Format( "Allegro object at %#010zx, offset not aligned to 4 bytes",
+                                            offset ) );
+        }
+
         bool                        endOfObjectsMarker = false;
         std::unique_ptr<BLOCK_BASE> block = blockParser.ParseBlock( endOfObjectsMarker );
 
         if( endOfObjectsMarker )
         {
+            // Everything from here has to be zero padding. Anything else means an earlier
+            // block was parsed into the wrong length, and ending the stream would junk
+            // real content after the presumed end of objects.
+            const size_t zeroRunStart = m_stream.Position();
+
+            while( !m_stream.Eof() )
+            {
+                const size_t  zeroOffset = m_stream.Position();
+                const uint8_t zeroValue = m_stream.ReadU8();
+
+                if( zeroValue != 0x00 )
+                {
+                    THROW_IO_ERRORF( wxT( "Expected only zero padding to the end of the file after the " )
+                                     wxT( "zero type byte at offset %#010zx, but found %#02x at offset " )
+                                     wxT( "%#010zx, at object index %zu of %u" ),
+                                     offset, zeroValue, zeroOffset, aBoard.GetObjectCount(),
+                                     aBoard.m_Header->m_ObjectCount );
+                }
+            }
+
             if( wxLog::IsAllowedTraceMask( traceAllegroParser ) )
             {
                 wxLogTrace( traceAllegroParser,
-                            wxString::Format( "End of objects marker (0x00) at index %zu, offset %#010zx",
-                                              aBoard.GetObjectCount(), offset ) );
+                            wxString::Format( "End of objects at index %zu, offset %#010zx, "
+                                              "%zu bytes of zero padding to the end of the file",
+                                              aBoard.GetObjectCount(), offset,
+                                              m_stream.Size() - zeroRunStart ) );
             }
 
             break;
