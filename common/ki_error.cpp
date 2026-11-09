@@ -51,7 +51,7 @@ wxString KI_ERROR::AsString() const
 }
 
 
-auto format_as( const KI_ERROR& aError )
+std::string format_as( const KI_ERROR& aError )
 {
     return aError.AsString().ToStdString( wxConvUTF8 );
 }
