@@ -147,6 +147,7 @@ ALLEGRO::FMT_VER getFormatVersionFromStr( const std::string& aFmtVerStr )
         { "17.5", FMT_VER::V_175 },
         { "18.0", FMT_VER::V_180 },
         { "18.1", FMT_VER::V_181 },
+        { "19.0", FMT_VER::V_190 },
     };
     // clang-format on
 

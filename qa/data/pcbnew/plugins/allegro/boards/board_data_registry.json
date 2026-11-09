@@ -389,6 +389,54 @@
                 }
             ]
         },
+        "fulladd_routed_v190": {
+            "url": "https://github.com/Hongcheng-Gao/EngiWorld",
+            "license": "MIT",
+            "description": "Placed and routed full adder, saved by DB Doctor",
+            "formatVersion": "19.0",
+            "boardFile": "fulladd_placed_routed.brd",
+            "header": {
+                "skip": false
+            },
+            "boardExpectations": [
+                {
+                    "type": "item",
+                    "itemType": "footprint",
+                    "count": {
+                        "min": 4,
+                        "max": 4
+                    }
+                },
+                {
+                    "type": "item",
+                    "itemType": "pad",
+                    "count": {
+                        "min": 56,
+                        "max": 56
+                    }
+                },
+                {
+                    "type": "item",
+                    "itemType": "track",
+                    "count": {
+                        "min": 92,
+                        "max": 92
+                    }
+                },
+                {
+                    "type": "item",
+                    "itemType": "via",
+                    "count": {
+                        "min": 0,
+                        "max": 0
+                    }
+                },
+                {
+                    "type": "layers",
+                    "cuNames": ["TOP", "BOTTOM"]
+                }
+            ]
+        },
         "rects": {
             "formatVersion": "17.4",
             "boardFile": "rects.brd",
