@@ -51,19 +51,20 @@ public:
 
     friend void swap( SCH_NETCHAIN& aLeft, SCH_NETCHAIN& aRight ) noexcept
     {
-        const auto swapMember = []<typename T>( T& a, T& b ) noexcept
-        {
-            static_assert( std::is_nothrow_swappable_v<T> );
-            using std::swap;
-            swap( a, b );
-        };
+        const auto swapMember =
+                []<typename T>( T& a, T& b ) noexcept
+                {
+                    static_assert( std::is_nothrow_swappable_v<T> );
+                    using std::swap;
+                    swap( a, b );
+                };
 
         swapMember( aLeft.m_name, aRight.m_name );
         swapMember( aLeft.m_nets, aRight.m_nets );
         swapMember( aLeft.m_symbols, aRight.m_symbols );
         swapMember( aLeft.m_terminalPins, aRight.m_terminalPins );
         swapMember( aLeft.m_terminalPaths, aRight.m_terminalPaths );
-        swapMember( aLeft.m_terminalRef, aRight.m_terminalRef );
+        swapMember( aLeft.m_terminalRefDes, aRight.m_terminalRefDes );
         swapMember( aLeft.m_terminalPinNum, aRight.m_terminalPinNum );
         swapMember( aLeft.m_netClass, aRight.m_netClass );
         swapMember( aLeft.m_color, aRight.m_color );
@@ -161,18 +162,19 @@ public:
     void SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
     const KIGFX::COLOR4D& GetColor() const { return m_color; }
 
-    void SetTerminalRefs( const wxString& aRefA, const wxString& aPinA, const wxString& aRefB, const wxString& aPinB )
+    void SetTerminalRefs( const wxString& aRefDesA, const wxString& aPinNumA, const wxString& aRefDesB,
+                          const wxString& aPinNumB )
     {
-        m_terminalRef[0] = aRefA;
-        m_terminalPinNum[0] = aPinA;
-        m_terminalRef[1] = aRefB;
-        m_terminalPinNum[1] = aPinB;
+        m_terminalRefDes[0] = aRefDesA;
+        m_terminalPinNum[0] = aPinNumA;
+        m_terminalRefDes[1] = aRefDesB;
+        m_terminalPinNum[1] = aPinNumB;
     }
 
-    const wxString& GetTerminalRef( int aIdx ) const
+    const wxString& GetTerminalRefDes( int aIdx ) const
     {
         wxASSERT( aIdx >= 0 && aIdx < 2 );
-        return m_terminalRef[aIdx];
+        return m_terminalRefDes[aIdx];
     }
 
     const wxString& GetTerminalPinNum( int aIdx ) const
@@ -187,7 +189,7 @@ private:
     std::set<class SCH_SYMBOL*>       m_symbols;
     KIID                              m_terminalPins[2];
     KIID_PATH                         m_terminalPaths[2];
-    wxString                          m_terminalRef[2];
+    wxString                          m_terminalRefDes[2];
     wxString                          m_terminalPinNum[2];
     wxString                          m_netClass;
     KIGFX::COLOR4D                    m_color = KIGFX::COLOR4D::UNSPECIFIED;

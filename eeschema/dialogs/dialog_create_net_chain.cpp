@@ -609,8 +609,8 @@ void DIALOG_CREATE_NET_CHAIN::loadPotentials()
 
         // Surface the terminal refs in the row so a ref-keyed filter (e.g. right-click on a
         // single symbol → focus on chains touching that symbol) can match them.
-        wxString terminalA = chain->GetTerminalRef( 0 );
-        wxString terminalB = chain->GetTerminalRef( 1 );
+        wxString terminalA = chain->GetTerminalRefDes( 0 );
+        wxString terminalB = chain->GetTerminalRefDes( 1 );
 
         if( !chain->GetTerminalPinNum( 0 ).IsEmpty() )
             terminalA += wxT( ":" ) + chain->GetTerminalPinNum( 0 );
@@ -942,10 +942,10 @@ const SCH_SHEET_PATH& DIALOG_CREATE_NET_CHAIN::findSheetForRow( POTENTIAL_ROW& a
 
     if( aRow.livePtr )
     {
-        targetRef = aRow.livePtr->GetTerminalRef( 0 );
+        targetRef = aRow.livePtr->GetTerminalRefDes( 0 );
 
         if( targetRef.IsEmpty() )
-            targetRef = aRow.livePtr->GetTerminalRef( 1 );
+            targetRef = aRow.livePtr->GetTerminalRefDes( 1 );
     }
     else
     {

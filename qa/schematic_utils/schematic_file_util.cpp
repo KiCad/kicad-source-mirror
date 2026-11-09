@@ -102,8 +102,8 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJE
 
         for( const auto& [name, terms] : parser.GetNetChainTerminalRefs() )
         {
-            termRefs[name] = { { terms.first.ref, terms.first.pin },
-                               { terms.second.ref, terms.second.pin } };
+            termRefs[name] = { { terms.first.refDes, terms.first.pinNum },
+                               { terms.second.refDes, terms.second.pinNum } };
         }
 
         schematic->ConnectionGraph()->SetNetChainTerminalRefOverrides( termRefs );

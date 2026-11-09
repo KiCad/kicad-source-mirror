@@ -366,8 +366,8 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_DistinguishesSharedScreenInstances, SIGN
             auto* ambiguous = manager.CreateManualNetChain(
                     "AMBIGUOUS_INSTANCE", first->GetSymbols(), first->GetNets(),
                     first->GetTerminalPinA(), first->GetTerminalPinB(),
-                    first->GetTerminalRef( 0 ), first->GetTerminalPinNum( 0 ),
-                    first->GetTerminalRef( 1 ), first->GetTerminalPinNum( 1 ) );
+                    first->GetTerminalRefDes( 0 ), first->GetTerminalPinNum( 0 ),
+                    first->GetTerminalRefDes( 1 ), first->GetTerminalPinNum( 1 ) );
             BOOST_CHECK( !ambiguous );
 
             if( ambiguous )

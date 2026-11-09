@@ -109,8 +109,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshCommittedChainAcrossUnconditionalRecalc
 
     // Terminal pin/ref data must also survive the round trip; the setup panel and the PCB
     // tuner walk these to find the bookend pads.
-    BOOST_CHECK( !refreshed->GetTerminalRef( 0 ).IsEmpty() );
-    BOOST_CHECK( !refreshed->GetTerminalRef( 1 ).IsEmpty() );
+    BOOST_CHECK( !refreshed->GetTerminalRefDes( 0 ).IsEmpty() );
+    BOOST_CHECK( !refreshed->GetTerminalRefDes( 1 ).IsEmpty() );
 
     // A second round trip must remain stable (no slow leak of derived state).
     graph->Recalculate( sheets, /*aUnconditional=*/true );
@@ -221,7 +221,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride, NETCHAIN_
             BOOST_CHECK( chain->GetTerminalPinB() == replacementId );
             BOOST_REQUIRE( chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 1, originalB, path.Path() } ) );
             BOOST_REQUIRE( chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 0, replacementId, path.Path() } ) );
-            BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+            BOOST_CHECK_EQUAL( chain->GetTerminalRefDes( 0 ), replacementRef );
             BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
             BOOST_CHECK( !chains.ReplaceNetChainTerminalPin( { "TERM_OVERRIDE", 2, originalA, path.Path() } ) );
 
@@ -232,7 +232,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride, NETCHAIN_
                 BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
                 BOOST_CHECK( chain->GetTerminalPinB() == originalB );
                 BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
-                BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+                BOOST_CHECK_EQUAL( chain->GetTerminalRefDes( 0 ), replacementRef );
                 BOOST_CHECK_EQUAL( chain->GetTerminalPinNum( 0 ), replacementNumber );
             }
 
@@ -242,7 +242,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride, NETCHAIN_
             schematic->RebuildConnectivity();
             BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
             BOOST_CHECK( chain->GetTerminalPath( 0 ) == path.Path() );
-            BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+            BOOST_CHECK_EQUAL( chain->GetTerminalRefDes( 0 ), replacementRef );
             BOOST_CHECK_EQUAL( chain->GetNets().size(), 4u );
 
             replacementRef = "R900";
@@ -250,7 +250,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride, NETCHAIN_
             schematic->RebuildConnectivity();
             BOOST_CHECK( chains.GetNetChainByName( "TERM_OVERRIDE" ) == chain );
             BOOST_CHECK( chain->GetTerminalPinA() == replacementId );
-            BOOST_CHECK_EQUAL( chain->GetTerminalRef( 0 ), replacementRef );
+            BOOST_CHECK_EQUAL( chain->GetTerminalRefDes( 0 ), replacementRef );
             BOOST_CHECK_EQUAL( chain->GetTerminalPinNum( 0 ), replacementNumber );
 
             replacementRef = "R901";
@@ -267,7 +267,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RefreshPreservesTerminalPinOverride, NETCHAIN_
             BOOST_REQUIRE( restored );
             BOOST_CHECK( restored->GetTerminalPinA() == replacementId );
             BOOST_CHECK( restored->GetTerminalPinB() == originalB );
-            BOOST_CHECK_EQUAL( restored->GetTerminalRef( 0 ), replacementRef );
+            BOOST_CHECK_EQUAL( restored->GetTerminalRefDes( 0 ), replacementRef );
             BOOST_CHECK_EQUAL( restored->GetTerminalPinNum( 0 ), replacementNumber );
             stream.close();
             wxRemoveFile( file );

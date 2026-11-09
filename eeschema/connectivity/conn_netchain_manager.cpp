@@ -540,8 +540,8 @@ void SCH_CONNECTIVITY::NETCHAIN_MANAGER::RefreshTerminalReferences()
 void SCH_CONNECTIVITY::NETCHAIN_MANAGER::storeTerminalRefs( const SCH_NETCHAIN& aChain )
 {
     m_netChainTerminalRefOverrides[aChain.GetName()] = {
-        { aChain.GetTerminalRef( 0 ), aChain.GetTerminalPinNum( 0 ) },
-        { aChain.GetTerminalRef( 1 ), aChain.GetTerminalPinNum( 1 ) }
+        { aChain.GetTerminalRefDes( 0 ), aChain.GetTerminalPinNum( 0 ) },
+        { aChain.GetTerminalRefDes( 1 ), aChain.GetTerminalPinNum( 1 ) }
     };
 }
 
@@ -1345,8 +1345,8 @@ SCH_NETCHAIN* SCH_CONNECTIVITY::NETCHAIN_MANAGER::CreateNetChainFromPotential( S
         sig->AddSymbol( sym );
     sig->SetName( aName );
     sig->SetTerminalPins( aPotential->GetTerminalPinA(), aPotential->GetTerminalPinB() );
-    sig->SetTerminalRefs( aPotential->GetTerminalRef( 0 ), aPotential->GetTerminalPinNum( 0 ),
-                          aPotential->GetTerminalRef( 1 ), aPotential->GetTerminalPinNum( 1 ) );
+    sig->SetTerminalRefs( aPotential->GetTerminalRefDes( 0 ), aPotential->GetTerminalPinNum( 0 ),
+                          aPotential->GetTerminalRefDes( 1 ), aPotential->GetTerminalPinNum( 1 ) );
 
     sig->SetTerminalPaths( aPotential->GetTerminalPath( 0 ), aPotential->GetTerminalPath( 1 ) );
 

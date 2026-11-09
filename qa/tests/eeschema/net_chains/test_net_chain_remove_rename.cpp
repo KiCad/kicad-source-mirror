@@ -76,9 +76,9 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     // chain so the values match whatever pins the fixture's potential picked.
     // This exercises the same restore path RebuildNetChains() takes after a
     // file reload, and stays valid if the fixture is edited.
-    const wxString liveRefA  = committed->GetTerminalRef( 0 );
+    const wxString liveRefA  = committed->GetTerminalRefDes( 0 );
     const wxString livePinA  = committed->GetTerminalPinNum( 0 );
-    const wxString liveRefB  = committed->GetTerminalRef( 1 );
+    const wxString liveRefB  = committed->GetTerminalRefDes( 1 );
     const wxString livePinB  = committed->GetTerminalPinNum( 1 );
     const KIID     livePinUA = committed->GetTerminalPinA();
     const KIID     livePinUB = committed->GetTerminalPinB();

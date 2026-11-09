@@ -75,16 +75,16 @@ BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_NetChainTerminalPinsRoundTrip,
     }
 
     BOOST_REQUIRE_MESSAGE( candidate, "fixture must produce a 4-net potential chain" );
-    BOOST_REQUIRE_MESSAGE( !candidate->GetTerminalRef( 0 ).IsEmpty()
-                                   && !candidate->GetTerminalRef( 1 ).IsEmpty(),
+    BOOST_REQUIRE_MESSAGE( !candidate->GetTerminalRefDes( 0 ).IsEmpty()
+                                   && !candidate->GetTerminalRefDes( 1 ).IsEmpty(),
                            "potential chain must have terminal refs populated" );
 
     SCH_NETCHAIN* committed = graph->CreateNetChainFromPotential( candidate, wxT( "SIG_TEST" ) );
     BOOST_REQUIRE( committed );
 
-    const wxString expectRefA = committed->GetTerminalRef( 0 );
+    const wxString expectRefA = committed->GetTerminalRefDes( 0 );
     const wxString expectPinA = committed->GetTerminalPinNum( 0 );
-    const wxString expectRefB = committed->GetTerminalRef( 1 );
+    const wxString expectRefB = committed->GetTerminalRefDes( 1 );
     const wxString expectPinB = committed->GetTerminalPinNum( 1 );
 
     wxFileName netFile = m_schematic->Project().GetProjectFullName();

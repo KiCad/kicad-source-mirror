@@ -137,8 +137,8 @@ public:
 
     struct CHAIN_TERMINAL
     {
-        wxString ref;
-        wxString pin;
+        wxString refDes;
+        wxString pinNum;
     };
     using CHAIN_TERMINALS = std::pair<CHAIN_TERMINAL, CHAIN_TERMINAL>;
 

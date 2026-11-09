@@ -146,9 +146,9 @@ BOOST_FIXTURE_TEST_CASE( NetChain_ManualForceCreate_CommitsAndQueryable, NETCHAI
     BOOST_CHECK_EQUAL( committed->GetNets().count( netB ), 1u );
     BOOST_CHECK_EQUAL( committed->GetSymbols().count( symA ), 1u );
     BOOST_CHECK_EQUAL( committed->GetSymbols().count( symB ), 1u );
-    BOOST_CHECK_EQUAL( committed->GetTerminalRef( 0 ), refA );
+    BOOST_CHECK_EQUAL( committed->GetTerminalRefDes( 0 ), refA );
     BOOST_CHECK_EQUAL( committed->GetTerminalPinNum( 0 ), pinNumA );
-    BOOST_CHECK_EQUAL( committed->GetTerminalRef( 1 ), refB );
+    BOOST_CHECK_EQUAL( committed->GetTerminalRefDes( 1 ), refB );
     BOOST_CHECK_EQUAL( committed->GetTerminalPinNum( 1 ), pinNumB );
 
     // Chain must be reachable through the public accessors that IO save, netlist
