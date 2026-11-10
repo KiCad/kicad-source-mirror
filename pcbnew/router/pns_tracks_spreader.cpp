@@ -638,17 +638,9 @@ const std::vector<SEG> TRACKS_SPREADER::findNoOptSegments( const LINE&          
             if( commonParallelProjection( headSeg, spreadSeg, c1, c2 ) )
             {
                 int dist = headSeg.Distance( spreadSeg );
-                int spreadDist = Settings().GetSpreadTracksDistance();
 
-                //int remainder = dist % spreadDist;
-                //const int threshold = 100;
-
-                //if( remainder > spreadDist - threshold || remainder < threshold )
-                {
-                    PNS_DBG( Dbg(), AddShape, spreadSeg, LIGHTBLUE, 200000,
-                             wxString::Format( "com-par dist %d", dist ) );
-                    segs.push_back( spreadSeg );
-                }
+                PNS_DBG( Dbg(), AddShape, spreadSeg, LIGHTBLUE, 200000, wxString::Format( "com-par dist %d", dist ) );
+                segs.push_back( spreadSeg );
             }
         }
     }

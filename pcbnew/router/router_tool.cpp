@@ -2527,8 +2527,6 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->ForceCursorPosition( false );
 
-    PNS::NODE* world = m_router->GetWorld();
-
     m_router->SetMode( mode );
     m_cancelled = false;
     m_startWithVia = false;
