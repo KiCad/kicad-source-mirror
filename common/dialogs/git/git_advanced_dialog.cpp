@@ -130,6 +130,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     m_fetchButton->Bind( wxEVT_BUTTON,
                          [this]( wxCommandEvent& )
                          {
+                             m_credentialPrompts = 0;
                              onFetch();
                          } );
     // The choice is empty until the repository is read, so without a floor the top bar lays
@@ -558,6 +559,7 @@ void GIT_ADVANCED_DIALOG::onFetch( bool aRetriedAfterTrust )
     Layout();
 
     m_fetchPreflight = true;
+    ++m_fetchRequest;
     m_fetchQuery.Run(
             common,
             [hasRemote]( KIGIT_COMMON& aCommon )
@@ -609,6 +611,18 @@ void GIT_ADVANCED_DIALOG::endFetch( const wxString& aStatus )
 
 void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust )
 {
+    // Read the keyring here, where an unlock prompt can show. The preflight stays open so Cancel still ends it
+    if( KIGIT_COMMON::DeferForSecret( aCommon, m_fetch.Alive(),
+                                      [this, aCommon, aRetriedAfterTrust, request = m_fetchRequest]()
+                                      {
+                                          // A fetch cancelled and started again meanwhile is another request
+                                          if( request == m_fetchRequest && m_fetchPreflight && SessionStillCurrent() )
+                                              startFetch( aCommon, aRetriedAfterTrust );
+                                      } ) )
+    {
+        return;
+    }
+
     m_fetchPreflight = false;
     m_fetchButton->SetLabel( _( "Fetching..." ) );
     m_fetchButton->Disable();
@@ -672,35 +686,32 @@ void GIT_ADVANCED_DIALOG::startFetch( std::shared_ptr<KIGIT_COMMON> aCommon, boo
 
                 if( outcome->fetched || outcome->cancelled )
                 {
+                    m_credentialPrompts = 0;
                     endFetch( outcome->fetched ? wxString() : wxString( _( "Cancelled." ) ) );
                     return;
                 }
 
-                // A prompt runs an event loop in which this window can close
-                std::weak_ptr<bool>                 alive = m_fetch.Alive();
-                std::optional<KIGIT::PROMPT_ANSWER> answer;
+                KIGIT::TRANSFER_FAILURE failure;
+                failure.authFailure = outcome->authFailure;
+                failure.hostKey = outcome->hostKey;
+                failure.error = outcome->error;
 
                 // The Fetch button and the panels stay busy until the prompt is answered
-                if( outcome->hostKey )
-                    answer = KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust );
-                else if( outcome->authFailure )
-                    answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_parent->Prj(), outcome->error );
-
-                // Also a window closed some other way than its prompt's parent going, such as a project switch
-                if( alive.expired() || answer == KIGIT::PROMPT_ANSWER::ABANDONED )
-                    return;
-
-                if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                switch( KIGIT::AnswerTransferFailure( this, m_fetch.Alive(), aCommon.get(), &m_parent->Prj(), failure,
+                                                      aRetriedAfterTrust, m_credentialPrompts ) )
                 {
-                    onFetch( aRetriedAfterTrust || outcome->hostKey.has_value() );
-                    return;
-                }
+                case KIGIT::TRANSFER_RETRY::RETRY: onFetch( aRetriedAfterTrust ); return;
+
+                case KIGIT::TRANSFER_RETRY::RETRY_TRUSTED: onFetch( true ); return;
 
                 // Declining a prompt is the user's answer, not an error
-                if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
-                {
-                    endFetch( outcome->hostKey ? wxString() : wxString( _( "Cancelled." ) ) );
-                    return;
+                case KIGIT::TRANSFER_RETRY::CANCELLED: endFetch( _( "Cancelled." ) ); return;
+
+                case KIGIT::TRANSFER_RETRY::HOST_DECLINED: endFetch( wxEmptyString ); return;
+
+                case KIGIT::TRANSFER_RETRY::GONE: return;
+
+                case KIGIT::TRANSFER_RETRY::REPORT: break;
                 }
 
                 endFetch( wxEmptyString );

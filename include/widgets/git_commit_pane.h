@@ -198,6 +198,15 @@ private:
     void runActionQuery( std::shared_ptr<KIGIT_COMMON> aCommon, std::function<void( KIGIT_COMMON& )> aWork,
                          std::function<void()> aDone, const wxString& aStatus );
 
+    /// Read the keyring before a transfer, holding the pane busy as aStatus, then call aStart unless
+    /// cancelled or the session changed. False when nothing needs reading
+    bool deferForSecret( const std::shared_ptr<KIGIT_COMMON>& aCommon, const wxString& aStatus,
+                         std::function<void()> aStart );
+    void abandonKeyringWait();
+
+    /// Forget a keyring wait without touching the busy state. True when one was pending
+    bool dropKeyringWait();
+
     // The on*Done continuations run back on the UI thread, so credential prompts and
     // confirmations stay there. aRetriedAfterTrust marks a transfer already rerun after a trusted host key.
     void submitPush( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust = false );
@@ -299,6 +308,13 @@ private:
 
     /// The push or pull this panel submitted last.
     KIGIT_TRANSFER m_transfer;
+
+    /// Keyring reads and credential prompts the current request has shown, reset when it ends
+    int m_credentialPrompts = 0;
+
+    /// A push or pull waits on the keyring. The count fences off an answer from a cancelled wait
+    bool     m_keyringWait = false;
+    unsigned m_keyringRequest = 0;
 
     /// The status m_transfer began with, shown again once other windows' transfers end before it
     wxString m_transferStatus;

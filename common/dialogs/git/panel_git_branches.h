@@ -76,6 +76,9 @@ private:
     /// The force push this page started.
     KIGIT_TRANSFER m_push;
 
+    /// Keyring reads and credential prompts the current force push has shown, reset when it ends
+    int m_credentialPrompts = 0;
+
     /// The force push's hold on its repository while it runs
     GIT_TRANSFER_BUSY::HOLD m_pushBusy;
 

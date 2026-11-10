@@ -239,6 +239,62 @@ KIGIT::PROMPT_ANSWER KIGIT::PromptToTrustHost( wxWindow* aParent, const HOST_KEY
 }
 
 
+KIGIT::TRANSFER_RETRY KIGIT::AnswerTransferFailure( wxWindow* aParent, const std::weak_ptr<bool>& aAlive,
+                                                    KIGIT_COMMON* aCommon, PROJECT* aProject,
+                                                    const TRANSFER_FAILURE& aFailure, bool aRetriedAfterTrust,
+                                                    int& aPrompts )
+{
+    if( aFailure.cancelled )
+    {
+        aPrompts = 0;
+        return TRANSFER_RETRY::CANCELLED;
+    }
+
+    // A prompt runs an event loop in which the window can close
+    if( aFailure.hostKey )
+    {
+        PROMPT_ANSWER answer = PromptToTrustHost( aParent, *aFailure.hostKey, aRetriedAfterTrust );
+
+        if( aAlive.expired() || answer == PROMPT_ANSWER::ABANDONED )
+            return TRANSFER_RETRY::GONE;
+
+        if( answer == PROMPT_ANSWER::DECLINED )
+        {
+            aPrompts = 0;
+            return TRANSFER_RETRY::HOST_DECLINED;
+        }
+
+        return TRANSFER_RETRY::RETRY_TRUSTED;
+    }
+
+    // A remote that keeps changing could otherwise send the request back to the keyring forever
+    if( !aFailure.authFailure || aPrompts >= MAX_CREDENTIAL_PROMPTS )
+    {
+        aPrompts = 0;
+        return TRANSFER_RETRY::REPORT;
+    }
+
+    ++aPrompts;
+
+    // A stored secret answers before anyone is asked to type one
+    if( !aCommon->SecretRead() )
+        return TRANSFER_RETRY::RETRY;
+
+    PROMPT_ANSWER answer = PromptForCredentials( aParent, aCommon, aProject, aFailure.error );
+
+    if( aAlive.expired() || answer == PROMPT_ANSWER::ABANDONED )
+        return TRANSFER_RETRY::GONE;
+
+    if( answer == PROMPT_ANSWER::DECLINED )
+    {
+        aPrompts = 0;
+        return TRANSFER_RETRY::CANCELLED;
+    }
+
+    return TRANSFER_RETRY::RETRY;
+}
+
+
 void KIGIT::ClearSyncWarnings( wxWindow* aWindow )
 {
     for( wxWindow* window = aWindow; window; window = window->GetParent() )

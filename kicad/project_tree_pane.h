@@ -171,6 +171,7 @@ private:
      * Configure (or change) the default remote on an already-initialized repository
      */
     void onGitRemoteSettings( wxCommandEvent& event );
+    void showGitRemoteSettings( const wxString& aExistingURL, const wxString& aUsername, const wxString& aPassword );
 
     /**
      * Open the advanced Git window on its History page

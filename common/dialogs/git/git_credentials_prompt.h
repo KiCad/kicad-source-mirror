@@ -25,6 +25,7 @@
 #include <settings/common_settings.h>
 
 #include <memory>
+#include <optional>
 #include <wx/string.h>
 
 class EDA_BASE_FRAME;
@@ -65,6 +66,39 @@ PROMPT_ANSWER PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PR
  * @return ACCEPTED when the key was saved and the operation should be tried again.
  */
 PROMPT_ANSWER PromptToTrustHost( wxWindow* aParent, const HOST_KEY_FAILURE& aFailure, bool aRetriedAfterTrust );
+
+/// Keyring reads and credential prompts that may follow a request's failures before one is reported instead.
+/// The read before the first transfer is not counted
+constexpr int MAX_CREDENTIAL_PROMPTS = 3;
+
+/// Why a transfer to a remote failed
+struct TRANSFER_FAILURE
+{
+    bool                            cancelled = false;   ///< The user cancelled the transfer
+    bool                            authFailure = false; ///< The remote refused every credential offered
+    std::optional<HOST_KEY_FAILURE> hostKey;             ///< The server's key is unknown or has changed
+    wxString                        error;               ///< Shown above the credential fields
+};
+
+/// What a window does after AnswerTransferFailure
+enum class TRANSFER_RETRY
+{
+    RETRY,         ///< Run the transfer again
+    RETRY_TRUSTED, ///< Run it again, now that the server's key is trusted
+    CANCELLED,     ///< Stop and say so, the user cancelled the transfer or a prompt
+    HOST_DECLINED, ///< Stop without a message, the user chose not to trust the server
+    GONE,          ///< The window closed during a prompt, so the caller must not touch it
+    REPORT         ///< Show the failure
+};
+
+/**
+ * Answer a failed transfer the way every window does. A host key is trusted or refused first, then a
+ * credential failure reads the keyring or prompts, at most MAX_CREDENTIAL_PROMPTS times in a row as
+ * counted in aPrompts. aAlive expiring during a prompt reads as GONE.
+ */
+TRANSFER_RETRY AnswerTransferFailure( wxWindow* aParent, const std::weak_ptr<bool>& aAlive, KIGIT_COMMON* aCommon,
+                                      PROJECT* aProject, const TRANSFER_FAILURE& aFailure, bool aRetriedAfterTrust,
+                                      int& aPrompts );
 
 /// The status bar source under which background fetch failures are listed.
 inline constexpr const wxChar* SYNC_WARNING_SOURCE = wxS( "git" );

@@ -112,6 +112,7 @@ PANEL_GIT_BRANCHES::PANEL_GIT_BRANCHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* 
     m_forcePushButton->Bind( wxEVT_BUTTON,
                              [this]( wxCommandEvent& )
                              {
+                                 m_credentialPrompts = 0;
                                  onForcePush();
                              } );
 }
@@ -435,6 +436,17 @@ void PANEL_GIT_BRANCHES::onForcePush( bool aRetriedAfterTrust )
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
     auto                          outcome = std::make_shared<OUTCOME>();
 
+    // Read the keyring before the confirmation, so no unlock prompt comes between it and the push
+    if( KIGIT_COMMON::DeferForSecret( common, m_push.Alive(),
+                                      [this, aRetriedAfterTrust]()
+                                      {
+                                          // Checks again that nothing started and the session is still this one
+                                          onForcePush( aRetriedAfterTrust );
+                                      } ) )
+    {
+        return;
+    }
+
     m_actionQuery.Run(
             common,
             [outcome]( KIGIT_COMMON& aCommon )
@@ -478,11 +490,18 @@ void PANEL_GIT_BRANCHES::onForcePush( bool aRetriedAfterTrust )
                         _( "Force Push" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
                 confirm.SetYesNoLabels( _( "Force &Push" ), _( "Cancel" ) );
 
-                if( confirm.ShowModal() == wxID_YES && m_dialog->SessionStillCurrent() )
+                if( confirm.ShowModal() != wxID_YES || !m_dialog->SessionStillCurrent() )
+                    return;
+
+                // Two clicks during a keyring read each reach a confirmation, and the second must not replace the first
+                if( m_push.IsBusy() )
                 {
-                    startForcePush( common, outcome->branch, outcome->headOid, outcome->remoteName, outcome->pushUrl,
-                                    aRetriedAfterTrust );
+                    KIGIT::ShowBusyMessage( this );
+                    return;
                 }
+
+                startForcePush( common, outcome->branch, outcome->headOid, outcome->remoteName, outcome->pushUrl,
+                                aRetriedAfterTrust );
             } );
 }
 
@@ -559,40 +578,37 @@ void PANEL_GIT_BRANCHES::startForcePush( std::shared_ptr<KIGIT_COMMON> aCommon, 
                     KIGIT::ClearSyncWarnings( aCommon.get() );
 
                 if( outcome->cancelled || outcome->result == PushResult::Success )
+                {
+                    m_credentialPrompts = 0;
                     return;
+                }
 
                 if( outcome->result == PushResult::Busy )
                 {
+                    m_credentialPrompts = 0;
                     KIGIT::ShowBusyMessage( this );
                     return;
                 }
 
-                // A prompt runs an event loop in which this window can close
-                std::weak_ptr<bool>                 alive = m_push.Alive();
-                std::optional<KIGIT::PROMPT_ANSWER> answer;
+                KIGIT::TRANSFER_FAILURE failure;
+                failure.authFailure = outcome->authFailure;
+                failure.hostKey = outcome->hostKey;
+                failure.error = outcome->error;
 
-                if( outcome->hostKey )
-                    answer = KIGIT::PromptToTrustHost( this, *outcome->hostKey, aRetriedAfterTrust );
-                else if( outcome->authFailure )
-                    answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), outcome->error );
-
-                // Also a window closed some other way than its prompt's parent going, such as a project switch
-                if( alive.expired() || answer == KIGIT::PROMPT_ANSWER::ABANDONED )
-                    return;
-
-                if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
+                switch( KIGIT::AnswerTransferFailure( this, m_push.Alive(), aCommon.get(), &m_frame->Prj(), failure,
+                                                      aRetriedAfterTrust, m_credentialPrompts ) )
                 {
-                    onForcePush( aRetriedAfterTrust || outcome->hostKey.has_value() );
-                    return;
-                }
+                case KIGIT::TRANSFER_RETRY::RETRY: onForcePush( aRetriedAfterTrust ); return;
+
+                case KIGIT::TRANSFER_RETRY::RETRY_TRUSTED: onForcePush( true ); return;
 
                 // Declining a prompt is the user's answer, not an error
-                if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
-                {
-                    if( !outcome->hostKey )
-                        m_dialog->ShowTransferProgress( _( "Cancelled." ) );
+                case KIGIT::TRANSFER_RETRY::CANCELLED: m_dialog->ShowTransferProgress( _( "Cancelled." ) ); return;
 
-                    return;
+                case KIGIT::TRANSFER_RETRY::HOST_DECLINED:
+                case KIGIT::TRANSFER_RETRY::GONE: return;
+
+                case KIGIT::TRANSFER_RETRY::REPORT: break;
                 }
 
                 wxString error = outcome->error;

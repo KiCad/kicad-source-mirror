@@ -31,6 +31,7 @@
 #include <atomic>
 #include <chrono>
 #include <functional>
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <set>
@@ -314,7 +315,25 @@ public:
         return m_username;
     }
 
+    /// The secret for the remote, read without ever prompting, so it is safe on a transfer worker
     wxString GetPassword();
+
+    /**
+     * Read the remote's secret from the keyring on the UI thread without blocking it, so an unlock prompt
+     * can show before a transfer starts. Returns false when nothing needs reading. Otherwise aRetry runs on
+     * the UI thread once the read finishes, unless aOwner or aCommon has gone by then. A locked,
+     * dismissed or empty keyring still runs aRetry, so the transfer goes ahead and prompts as usual.
+     */
+    static bool DeferForSecret( const std::shared_ptr<KIGIT_COMMON>& aCommon, const std::weak_ptr<bool>& aOwner,
+                                std::function<void()> aRetry );
+
+    /// False while the keyring has not been read for the current remote
+    bool SecretRead() const
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        return secretReadLocked();
+    }
+
     GIT_CONN_TYPE GetConnType() const;
 
     /// For a remote whose address names no transport, the user picks one in the prompt.
@@ -734,6 +753,12 @@ private:
     {
         std::lock_guard<std::mutex> lock( m_operationMutex );
         return m_activeCancel;
+    }
+
+    /// SecretRead() for a caller already holding m_credentialsMutex
+    bool secretReadLocked() const
+    {
+        return m_secretFetched || m_connType == GIT_CONN_TYPE::GIT_CONN_LOCAL || m_remote.IsEmpty();
     }
 
     /// Remote to use when HEAD names no upstream, empty when several remotes leave it ambiguous.

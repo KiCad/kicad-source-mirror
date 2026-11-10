@@ -206,6 +206,12 @@ private:
     /// The fetch is checking its remote, before its transfer starts, and holds the panes busy
     bool m_fetchPreflight = false;
 
+    /// Counts the fetches begun, so a keyring read finishing late starts only its own
+    unsigned m_fetchRequest = 0;
+
+    /// Keyring reads and credential prompts the current fetch has shown, reset when it ends
+    int m_credentialPrompts = 0;
+
     /// Where the user left the sash between the Changes page's list and its diff area.
     int m_changesSashPos = 0;
 };

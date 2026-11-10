@@ -1992,16 +1992,48 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
         }
     }
 
-    wxWindow*             topLevelParent = wxGetTopLevelParent( this );
-    DIALOG_GIT_REPOSITORY dlg( topLevelParent, repo, existingURL );
-    dlg.SetTitle( _( "Configure Default Remote" ) );
-
     // Credentials are stored separately from the remote URL.
     KIGIT_COMMON credentials( nullptr );
     credentials.SetUsername( common->GetUsername() );
     credentials.SetRemote( existingURL );
-    dlg.SetUsername( credentials.GetUsername() );
-    dlg.SetPassword( credentials.GetPassword() );
+
+    if( credentials.SecretRead() )
+    {
+        showGitRemoteSettings( existingURL, credentials.GetUsername(), credentials.GetPassword() );
+        return;
+    }
+
+    wxWeakRef<PROJECT_TREE_PANE>  self( this );
+    std::shared_ptr<KIGIT_COMMON> session = gitCommon();
+    wxString                      username = credentials.GetUsername();
+
+    // Saving the dialog stores its password, so a locked keyring must unlock rather than read as empty
+    KIPLATFORM::SECRETS::GetSecretAsync(
+            credentials.GetRemote(), username,
+            [self, session, existingURL, username]( bool aFound, const wxString& aSecret )
+            {
+                if( !self || self->gitCommon() != session || session->IsShuttingDown() || !session->GetRepo() )
+                    return;
+
+                self->showGitRemoteSettings( existingURL, username, aFound ? aSecret : wxString() );
+            } );
+}
+
+
+void PROJECT_TREE_PANE::showGitRemoteSettings( const wxString& aExistingURL, const wxString& aUsername,
+                                               const wxString& aPassword )
+{
+    KIGIT_COMMON*   common = gitCommon().get();
+    git_repository* repo = common ? common->GetRepo() : nullptr;
+
+    if( !repo )
+        return;
+
+    wxWindow*             topLevelParent = wxGetTopLevelParent( this );
+    DIALOG_GIT_REPOSITORY dlg( topLevelParent, repo, aExistingURL );
+    dlg.SetTitle( _( "Configure Default Remote" ) );
+    dlg.SetUsername( aUsername );
+    dlg.SetPassword( aPassword );
     dlg.SetRepoSSHPath( Prj().GetLocalSettings().m_GitSSHKey );
 
     if( dlg.ShowModal() != wxID_OK )

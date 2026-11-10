@@ -198,10 +198,10 @@ wxString KIGIT_COMMON::GetPassword()
         username = m_username;
     }
 
-    // The lock is not held here: asking the operating system can raise a permission dialog, so
-    // it finishes only once a person has decided.
+    // Transfer workers call this, so a locked keyring reads as empty rather than prompting off the UI
+    // thread. DeferForSecret reads it with a prompt first
     wxString secret;
-    bool     found = KIPLATFORM::SECRETS::GetSecret( remote, username, secret );
+    bool     found = KIPLATFORM::SECRETS::GetSecretNoPrompt( remote, username, secret );
 
     std::lock_guard<std::mutex> lock( m_credentialsMutex );
 
@@ -210,11 +210,60 @@ wxString KIGIT_COMMON::GetPassword()
     if( m_secretFetched || m_remote != remote || m_username != username )
         return m_password;
 
+    // A miss may be a locked keyring, which DeferForSecret must still get to unlock
     if( found )
+    {
         m_password = secret;
+        m_secretFetched = true;
+    }
 
-    m_secretFetched = true;
     return m_password;
+}
+
+
+bool KIGIT_COMMON::DeferForSecret( const std::shared_ptr<KIGIT_COMMON>& aCommon, const std::weak_ptr<bool>& aOwner,
+                                   std::function<void()> aRetry )
+{
+    wxString remote;
+    wxString username;
+
+    {
+        std::lock_guard<std::mutex> lock( aCommon->m_credentialsMutex );
+
+        if( aCommon->secretReadLocked() )
+            return false;
+
+        remote = aCommon->m_remote;
+        username = aCommon->m_username;
+    }
+
+    auto finish = [weak = std::weak_ptr<KIGIT_COMMON>( aCommon ), aOwner, remote, username,
+                   retry = std::move( aRetry )]( bool aFound, const wxString& aSecret )
+    {
+        // Held here because a project teardown can drop the last owner on a worker
+        std::shared_ptr<KIGIT_COMMON> common = weak.lock();
+
+        if( !common || aOwner.expired() )
+            return;
+
+        {
+            std::lock_guard<std::mutex> lock( common->m_credentialsMutex );
+
+            // A password typed meanwhile wins, and an answer about another remote is dropped
+            if( !common->m_secretFetched && common->m_remote == remote && common->m_username == username )
+            {
+                if( aFound )
+                    common->m_password = aSecret;
+
+                common->m_secretFetched = true;
+            }
+        }
+
+        retry();
+    };
+
+    KIPLATFORM::SECRETS::GetSecretAsync( remote, username, std::move( finish ) );
+    return true;
 }
 
 

@@ -441,6 +441,7 @@ void GIT_COMMIT_PANE::syncListener()
 
     m_refresh.Cancel();
     m_actionQuery.Cancel();
+    dropKeyringWait();
 
     if( m_actionPending )
     {
@@ -674,6 +675,7 @@ void GIT_COMMIT_PANE::ShowHistory()
 void GIT_COMMIT_PANE::showDisabledState()
 {
     m_actionQuery.Cancel();
+    dropKeyringWait();
 
     if( m_actionPending )
     {
@@ -1488,6 +1490,7 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
 
     if( m_actionPending )
     {
+        abandonKeyringWait();
         m_actionQuery.Cancel();
         m_actionPending = false;
         setBusy( false, _( "Cancelled." ) );
@@ -1564,6 +1567,7 @@ void GIT_COMMIT_PANE::Pull()
         return;
     }
 
+    m_credentialPrompts = 0;
     submitPull( common, false );
 }
 
@@ -1589,6 +1593,7 @@ void GIT_COMMIT_PANE::Push()
         return;
     }
 
+    m_credentialPrompts = 0;
     submitPush( common );
 }
 
@@ -1952,6 +1957,7 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
         if( !aAndPush || !m_hasUnpushedCommits )
             return;
 
+        m_credentialPrompts = 0;
         submitPush( common );
         return;
     }
@@ -2152,7 +2158,10 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     common->NotifyRefreshListeners();
 
     if( aRequest.andPush )
+    {
+        m_credentialPrompts = 0;
         submitPush( common );
+    }
     else
         setBusy( false, _( "Committed." ) );
 }
@@ -2307,6 +2316,73 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
 }
 
 
+bool GIT_COMMIT_PANE::deferForSecret( const std::shared_ptr<KIGIT_COMMON>& aCommon, const wxString& aStatus,
+                                      std::function<void()> aStart )
+{
+    if( aCommon->SecretRead() )
+        return false;
+
+    // Busy and cancellable through the read, as the transfer it stands for would be
+    unsigned request = ++m_keyringRequest;
+    m_keyringWait = true;
+    m_actionPending = true;
+    setBusy( true, aStatus );
+    m_ownHold.Begin( aCommon, aStatus,
+                     [this]()
+                     {
+                         abandonKeyringWait();
+                     } );
+
+    bool deferred = KIGIT_COMMON::DeferForSecret( aCommon, m_transfer.Alive(),
+                                                  [this, aCommon, request, start = std::move( aStart )]()
+                                                  {
+                                                      if( request != m_keyringRequest || !m_keyringWait )
+                                                          return;
+
+                                                      m_keyringWait = false;
+                                                      m_actionPending = false;
+
+                                                      if( aCommon != m_frame->Prj().GetGitCommon()
+                                                          || aCommon->IsShuttingDown() )
+                                                      {
+                                                          setBusy( false, wxEmptyString );
+                                                          return;
+                                                      }
+
+                                                      start();
+                                                  } );
+
+    if( !deferred && request == m_keyringRequest )
+    {
+        m_keyringWait = false;
+        m_actionPending = false;
+    }
+
+    return deferred;
+}
+
+
+bool GIT_COMMIT_PANE::dropKeyringWait()
+{
+    if( !std::exchange( m_keyringWait, false ) )
+        return false;
+
+    // The read still finishes, and its answer is kept, but nothing starts from it
+    ++m_keyringRequest;
+    return true;
+}
+
+
+void GIT_COMMIT_PANE::abandonKeyringWait()
+{
+    if( !dropKeyringWait() )
+        return;
+
+    m_actionPending = false;
+    setBusy( false, _( "Cancelled." ) );
+}
+
+
 void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon, bool aRetriedAfterTrust )
 {
     struct TARGET
@@ -2344,6 +2420,16 @@ void GIT_COMMIT_PANE::submitPush( std::shared_ptr<KIGIT_COMMON> aCommon, bool aR
 void GIT_COMMIT_PANE::startPush( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranch, const wxString& aHead,
                                  bool aRetriedAfterTrust )
 {
+    // Read the keyring here, where an unlock prompt can show, then come back
+    if( deferForSecret( aCommon, _( "Pushing..." ),
+                        [this, aCommon, aBranch, aHead, aRetriedAfterTrust]()
+                        {
+                            startPush( aCommon, aBranch, aHead, aRetriedAfterTrust );
+                        } ) )
+    {
+        return;
+    }
+
     m_transferStatus = _( "Pushing..." );
     setBusy( true, m_transferStatus );
     m_ownHold.Begin( aCommon, m_transferStatus,
@@ -2422,6 +2508,8 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( result == PushResult::Success )
     {
+        m_credentialPrompts = 0;
+
         // The shared refresh already ran in the completion.
         setBusy( false, _( "Pushed to remote." ) );
         KIGIT::ClearSyncWarnings( aCommon.get() );
@@ -2435,43 +2523,26 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
-    // A prompt runs an event loop in which this pane can close
-    std::weak_ptr<bool> alive = m_transfer.Alive();
+    KIGIT::TRANSFER_FAILURE failure;
+    failure.cancelled = aCancelled;
+    failure.authFailure = aAuthFailure;
+    failure.hostKey = aHostKey;
+    failure.error = aError;
 
-    if( aCancelled )
+    switch( KIGIT::AnswerTransferFailure( this, m_transfer.Alive(), aCommon.get(), &m_frame->Prj(), failure,
+                                          aRetriedAfterTrust, m_credentialPrompts ) )
     {
-        setBusy( false, _( "Cancelled." ) );
-        return;
-    }
+    case KIGIT::TRANSFER_RETRY::RETRY: submitPush( aCommon, aRetriedAfterTrust ); return;
 
-    if( aHostKey )
-    {
-        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust );
+    case KIGIT::TRANSFER_RETRY::RETRY_TRUSTED: submitPush( aCommon, true ); return;
 
-        if( alive.expired() )
-            return;
+    case KIGIT::TRANSFER_RETRY::CANCELLED: setBusy( false, _( "Cancelled." ) ); return;
 
-        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
-            submitPush( aCommon, true );
-        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
-            setBusy( false, wxEmptyString );
+    case KIGIT::TRANSFER_RETRY::HOST_DECLINED: setBusy( false, wxEmptyString ); return;
 
-        return;
-    }
+    case KIGIT::TRANSFER_RETRY::GONE: return;
 
-    if( aAuthFailure )
-    {
-        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError );
-
-        if( alive.expired() )
-            return;
-
-        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
-            submitPush( aCommon, aRetriedAfterTrust );
-        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
-            setBusy( false, _( "Cancelled." ) );
-
-        return;
+    case KIGIT::TRANSFER_RETRY::REPORT: break;
     }
 
     // The remote moved on since the last sync. Offer to bring those changes in and push
@@ -2918,6 +2989,16 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
 void GIT_COMMIT_PANE::startPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aThenPush, bool aRetriedAfterTrust )
 {
+    // Read the keyring here, where an unlock prompt can show, then come back
+    if( deferForSecret( aCommon, _( "Getting changes..." ),
+                        [this, aCommon, aThenPush, aRetriedAfterTrust]()
+                        {
+                            startPull( aCommon, aThenPush, aRetriedAfterTrust );
+                        } ) )
+    {
+        return;
+    }
+
     m_transferStatus = _( "Getting changes..." );
     setBusy( true, m_transferStatus );
     m_ownHold.Begin( aCommon, m_transferStatus,
@@ -3008,6 +3089,7 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
 
     if( result == PullResult::Success || result == PullResult::FastForward || result == PullResult::UpToDate )
     {
+        m_credentialPrompts = 0;
         KIGIT::ClearSyncWarnings( aCommon.get() );
 
         // The editor reloads and the panel refresh already ran in the completion, before the
@@ -3025,45 +3107,28 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
-    // A prompt runs an event loop in which this pane can close
-    std::weak_ptr<bool> alive = m_transfer.Alive();
+    KIGIT::TRANSFER_FAILURE failure;
+    failure.cancelled = aCancelled;
+    failure.authFailure = aAuthFailure;
+    failure.hostKey = aHostKey;
+    failure.error = aError;
 
     // A rejected login is not a merge problem, so offer the credentials prompt and retry,
     // matching the push path.
-    if( aCancelled )
+    switch( KIGIT::AnswerTransferFailure( this, m_transfer.Alive(), aCommon.get(), &m_frame->Prj(), failure,
+                                          aRetriedAfterTrust, m_credentialPrompts ) )
     {
-        setBusy( false, _( "Cancelled." ) );
-        return;
-    }
+    case KIGIT::TRANSFER_RETRY::RETRY: submitPull( aCommon, aThenPush, aRetriedAfterTrust ); return;
 
-    if( aHostKey )
-    {
-        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptToTrustHost( this, *aHostKey, aRetriedAfterTrust );
+    case KIGIT::TRANSFER_RETRY::RETRY_TRUSTED: submitPull( aCommon, aThenPush, true ); return;
 
-        if( alive.expired() )
-            return;
+    case KIGIT::TRANSFER_RETRY::CANCELLED: setBusy( false, _( "Cancelled." ) ); return;
 
-        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
-            submitPull( aCommon, aThenPush, true );
-        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
-            setBusy( false, wxEmptyString );
+    case KIGIT::TRANSFER_RETRY::HOST_DECLINED: setBusy( false, wxEmptyString ); return;
 
-        return;
-    }
+    case KIGIT::TRANSFER_RETRY::GONE: return;
 
-    if( aAuthFailure )
-    {
-        KIGIT::PROMPT_ANSWER answer = KIGIT::PromptForCredentials( this, aCommon.get(), &m_frame->Prj(), aError );
-
-        if( alive.expired() )
-            return;
-
-        if( answer == KIGIT::PROMPT_ANSWER::ACCEPTED )
-            submitPull( aCommon, aThenPush, aRetriedAfterTrust );
-        else if( answer == KIGIT::PROMPT_ANSWER::DECLINED )
-            setBusy( false, _( "Cancelled." ) );
-
-        return;
+    case KIGIT::TRANSFER_RETRY::REPORT: break;
     }
 
     // Conflicting changes are resolved file by file, with the visual merge for design files.
