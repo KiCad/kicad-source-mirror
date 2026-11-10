@@ -671,8 +671,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
 }
 
 
-void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName,
-                                                wxString* aLibPath )
+void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib )
 {
     if( GetBoard()->GetFirstFootprint() == nullptr )
     {
@@ -704,23 +703,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
             return;
     }
 
-    if( !aLibName.IsEmpty() )
-        nickname = aLibName; // non-interactive callers
-
     prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
-
-    if( aLibPath )
-    {
-        if( std::optional<wxString> optUri =
-                    Pgm().GetLibraryManager().GetFullURI( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname ) )
-        {
-            *aLibPath = *optUri;
-        }
-        else
-        {
-            *aLibPath = nickname;
-        }
-    }
 
     for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {

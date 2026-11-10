@@ -494,8 +494,7 @@ public:
      *                 \a aStoreInNewLib as true.
      * @param aLibPath is the path to export the library to.
      */
-    void ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString,
-                                    wxString* aLibPath = nullptr );
+    void ExportFootprintsToLibrary( bool aStoreInNewLib );
 
     /**
      * Create the file(s) exporting current BOARD to a VRML file.
