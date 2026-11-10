@@ -844,6 +844,17 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
     return out;
 }
 
+// Binary resolves the default font in system-font mode; ASCII names its face with a style prefix
+static std::string canonicalAsciiFont( const PADS_SCH::PARAMETERS& aParameters, const std::string& aFont )
+{
+    if( aParameters.font_mode != "System" || aFont != "Default Font" || aParameters.default_font.empty() )
+        return aFont;
+
+    const std::string& face = aParameters.default_font;
+    return face.starts_with( "Regular " ) ? face.substr( 8 ) : face;
+}
+
+
 static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SCH::PADS_SCH_PARSER& aParser )
 {
     std::vector<CANONICAL_SEMANTIC_RECORD> out;
@@ -853,17 +864,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         return out.back();
     };
     const auto& p = aParser.GetParameters();
-
-    // Binary resolves the default font in system-font mode; ASCII names its face with a style prefix
-    const auto canonicalFont = [&]( const std::string& aFont ) -> std::string
-    {
-        if( p.font_mode != "System" || aFont != "Default Font" || p.default_font.empty() )
-            return aFont;
-
-        return p.default_font.starts_with( "Regular " ) ? p.default_font.substr( 8 ) : p.default_font;
-    };
-
-    auto addOwned = [&]( CANONICAL_KIND aKind, int aSheet, std::string aKey = {} ) -> CANONICAL_SEMANTIC_RECORD&
+    auto        addOwned = [&]( CANONICAL_KIND aKind, int aSheet, std::string aKey = {} ) -> CANONICAL_SEMANTIC_RECORD&
     {
         auto  sheet = std::ranges::find_if( aParser.GetSheetHeaders(),
                                             [&]( const PADS_SCH::SHEET_HEADER& aCandidate )
@@ -990,7 +991,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["fill"] = { "none" };
             r.properties["text"] = { t.content };
             r.properties["visible"] = { t.visible };
-            r.properties["font"] = { canonicalFont( t.font_name ) };
+            r.properties["font"] = { canonicalAsciiFont( p, t.font_name ) };
             r.properties["height_half_mils"] = { int64_t( std::llround( t.size * 2 ) ) };
             r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
             r.geometry.points.push_back( point( t.position ) );
@@ -1027,7 +1028,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             auto& q = add( CANONICAL_KIND::FIELD, ownerSheet, f.name );
             q.properties["value"] = { f.value };
             q.properties["visible"] = { f.visible };
-            q.properties["font"] = { canonicalFont( f.font_name ) };
+            q.properties["font"] = { canonicalAsciiFont( p, f.font_name ) };
             q.geometry.points.push_back( point( f.position ) );
             q.geometry.angleTenths = canonicalAngle( std::llround( f.rotation * 10 ) );
         }
@@ -1216,7 +1217,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["visible"] = { true };
             r.properties["height_half_mils"] = { int64_t( t.height * 2 ) };
             r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
-            r.properties["font"] = { canonicalFont( t.font_name ) };
+            r.properties["font"] = { canonicalAsciiFont( p, t.font_name ) };
             r.geometry.points.push_back( point( t.position ) );
             r.geometry.points.back().xHalfMils += std::llround( lines.origin.x * 2 );
             r.geometry.points.back().yHalfMils += std::llround( lines.origin.y * 2 );
@@ -1228,7 +1229,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         auto& r = addOwned( CANONICAL_KIND::LABEL, -1, label.net_name );
         r.properties["kind"] = { "local" };
         r.properties["visible"] = { true };
-        r.properties["font"] = { canonicalFont( label.font_name ) };
+        r.properties["font"] = { canonicalAsciiFont( p, label.font_name ) };
         r.properties["horizontal_justification"] = canonicalHorizontalJustification( label.justification );
         r.properties["vertical_justification"] = canonicalVerticalJustification( label.justification );
         r.geometry.points.push_back( point( PADS_SCH::POINT{ double( label.x_offset ), double( label.y_offset ) } ) );
@@ -4229,9 +4230,11 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
     BOOST_CHECK_EQUAL( binaryText.text.text, wxString::FromUTF8( asciiPrimitive->texts[0].content ) );
     BOOST_CHECK_EQUAL( binaryText.points[0].x, std::llround( asciiPrimitive->texts[0].position.x * 2 ) );
     BOOST_CHECK_EQUAL( binaryText.points[0].y, std::llround( asciiPrimitive->texts[0].position.y * 2 ) );
-    BOOST_CHECK_EQUAL( binaryText.presentation.height, std::llround( asciiPrimitive->texts[0].size ) );
-    BOOST_CHECK_EQUAL( binaryText.presentation.width, asciiPrimitive->texts[0].width_factor );
-    BOOST_CHECK_EQUAL( binaryText.presentation.font.text, wxString::FromUTF8( asciiPrimitive->font1 ) );
+    BOOST_CHECK_EQUAL( binaryText.presentation.height, std::llround( asciiPrimitive->texts[0].size * 2 ) );
+    BOOST_CHECK_EQUAL( binaryText.presentation.width, asciiPrimitive->texts[0].width_factor * 2 );
+    BOOST_CHECK_EQUAL(
+            binaryText.presentation.font.text,
+            wxString::FromUTF8( canonicalAsciiFont( primitiveAscii.GetParameters(), asciiPrimitive->font1 ) ) );
     BOOST_CHECK_EQUAL( binaryText.angle, std::llround( asciiPrimitive->texts[0].rotation * 10 ) );
     BOOST_CHECK_EQUAL( binaryText.presentation.visible, asciiPrimitive->texts[0].visible );
     BOOST_CHECK( canonicalJustification( binaryText.presentation.horizontalJustification ).value
@@ -4259,10 +4262,12 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].position.y,
                                std::llround( asciiFields->attrs[field].position.y * 2 ) );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].angle, asciiFields->attrs[field].angle * 10 );
-            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.height, asciiFields->attrs[field].height );
-            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.width, asciiFields->attrs[field].width );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.height,
+                               asciiFields->attrs[field].height * 2 );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.width, asciiFields->attrs[field].width * 2 );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.font.text,
-                               wxString::FromUTF8( asciiFields->attrs[field].font_name ) );
+                               wxString::FromUTF8( canonicalAsciiFont( fieldsAscii.GetParameters(),
+                                                                       asciiFields->attrs[field].font_name ) ) );
             BOOST_CHECK(
                     canonicalJustification( fieldsDefinition.fields[field].presentation.horizontalJustification ).value
                     == canonicalHorizontalJustification( asciiFields->attrs[field].justification ).value );
