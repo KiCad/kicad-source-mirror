@@ -889,7 +889,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
     std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     SCH_REFERENCE_LIST allRefs;
-    m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
+    m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_NON_POWER );
 
     for( SCH_ITEM* item : aSchItem )
     {
@@ -957,7 +957,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
     std::set<KIID_PATH> savedSelection = SaveGridSelection();
 
     SCH_REFERENCE_LIST allRefs;
-    m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
+    m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_NON_POWER );
 
     for( SCH_ITEM* item : aSchItem )
     {

@@ -654,20 +654,16 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 }
 
 
-static bool matchesSymbolFilter( SCH_SYMBOL* aSymbol, SYMBOL_FILTER aSymbolFilter )
+static bool matchesSymbolFilter( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath, SYMBOL_FILTER aSymbolFilter )
 {
-    switch( aSymbolFilter )
-    {
-    case SYMBOL_FILTER_POWER:
-        return aSymbol->IsPower();
-
-    case SYMBOL_FILTER_ALL:
+    if( aSymbolFilter == SYMBOL_FILTER_ALL )
         return true;
 
-    case SYMBOL_FILTER_NON_POWER:
-    default:
-        return !aSymbol->IsPower();
-    }
+    // A # reference still marks virtual symbols that lack the power flag, as in legacy libraries
+    const wxString ref = aSymbol->GetRef( &aSheetPath );
+    const bool     isPseudoSymbol = aSymbol->IsPower() || ( !ref.IsEmpty() && ref[0] == wxT( '#' ) );
+
+    return aSymbolFilter == SYMBOL_FILTER_POWER ? isPseudoSymbol : !isPseudoSymbol;
 }
 
 
@@ -687,7 +683,7 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
 {
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
     // affects power symbols.
-    if( matchesSymbolFilter( aSymbol, aSymbolFilter ) )
+    if( matchesSymbolFilter( aSymbol, *this, aSymbolFilter ) )
     {
         if( aSymbol->GetLibSymbolRef() || aForceIncludeOrphanSymbols )
         {
@@ -713,7 +709,7 @@ void SCH_SHEET_PATH::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList
 void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_SYMBOL* aSymbol,
                                             SYMBOL_FILTER aSymbolFilter ) const
 {
-    if( !matchesSymbolFilter( aSymbol, aSymbolFilter ) )
+    if( !matchesSymbolFilter( aSymbol, *this, aSymbolFilter ) )
         return;
 
     LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
