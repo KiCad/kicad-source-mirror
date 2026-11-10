@@ -866,7 +866,7 @@ void KICAD_NETLIST_PARSER::parseGroup()
      */
 
     wxString   name;
-    KIID       uuid;
+    wxString               uuid;
     wxString               libId; // Design block library link
     std::vector<KIID_PATH> members;
 
@@ -889,15 +889,7 @@ void KICAD_NETLIST_PARSER::parseGroup()
         case T_uuid:
         {
             NeedSYMBOLorNUMBER();
-            wxString uuidStr = From_UTF8( CurText() );
-
-            // An instance path collapses to a deterministic uuid so re-reading the same
-            // netlist finds the same board group.
-            if( uuidStr.StartsWith( wxT( "/" ) ) )
-                uuid = KIID::FromName( std::string( KIID_PATH( uuidStr ).AsString().ToUTF8() ) );
-            else
-                uuid = uuidStr;
-
+            uuid = From_UTF8( CurText() );
             NeedRIGHT();
             break;
         }
@@ -962,8 +954,7 @@ void KICAD_NETLIST_PARSER::parseGroup()
         THROW_IO_ERROR( error );
     }
 
-    NETLIST_GROUP* group = new NETLIST_GROUP{ std::move( name ), std::move( uuid ), std::move( groupLibId ),
-                                              std::move( members ) };
+    NETLIST_GROUP* group = new NETLIST_GROUP( name, uuid, groupLibId, std::move( members ) );
     m_netlist->AddGroup( group );
 }
 

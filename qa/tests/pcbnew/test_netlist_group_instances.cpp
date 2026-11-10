@@ -134,7 +134,8 @@ BOOST_AUTO_TEST_CASE( BareUuidMembersStillResolve )
     member.push_back( symbolUuid );
 
     KIID groupUuid;
-    netlist.AddGroup( new NETLIST_GROUP{ wxS( "Amp" ), groupUuid, LIB_ID(), std::vector<KIID_PATH>{ member } } );
+    netlist.AddGroup(
+            new NETLIST_GROUP( wxS( "Amp" ), groupUuid.AsString(), LIB_ID(), std::vector<KIID_PATH>{ member } ) );
 
     netlist.ApplyGroupMembership();
 
