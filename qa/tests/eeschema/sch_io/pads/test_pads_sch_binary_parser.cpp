@@ -2659,15 +2659,19 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].angle, 0 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].length, 280 );
     BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_name_height_half_mils" ) ),
-                       wxS( "100" ) );
+                       wxS( "200" ) );
     BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_number_height_half_mils" ) ),
-                       wxS( "100" ) );
+                       wxS( "200" ) );
+    BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "terminal_p_line_position_1" ) ),
+                       wxS( "-200,-100" ) );
+    BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "terminal_p_line_position_2" ) ),
+                       wxS( "500,-100" ) );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].namePresentation.width, 20 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberPresentation.width, 20 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.x, -200 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, -100 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 500 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.y, -100 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.x, 200 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, 20 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 200 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.y, 20 );
     BOOST_CHECK( pinDefinition.pins[2].presentation.visible );
     BOOST_CHECK( pinDefinition.pins[2].namePresentation.visible );
     BOOST_CHECK( !pinDefinition.pins[6].namePresentation.visible );

@@ -1854,7 +1854,7 @@ namespace
 
                 definitionPin.properties.push_back( sourceProperty(
                         wxS( "pin_name_height_half_mils" ),
-                        wxString::Format( wxS( "%lld" ), definitionPin.presentation.height ), pinSource ) );
+                        wxString::Format( wxS( "%lld" ), definitionPin.namePresentation.height ), pinSource ) );
                 definitionPin.properties.push_back( sourceProperty(
                         wxS( "pin_number_height_half_mils" ),
                         wxString::Format( wxS( "%lld" ), definitionPin.numberPresentation.height ), pinSource ) );
@@ -1867,6 +1867,18 @@ namespace
                 definitionPin.properties.push_back(
                         sourceProperty( wxS( "terminal_side" ),
                                         wxString::Format( wxS( "%u" ), definitionPin.side ), pinSource ) );
+
+                // Keep the ASCII P-line positions; PADS draws nothing at them so their meaning is unknown
+                for( int pair = 0; pair < 2; ++pair )
+                {
+                    const size_t pairOffset = terminalOffset + 14 + pair * 4;
+                    definitionPin.properties.push_back( sourceProperty(
+                            wxString::Format( wxS( "terminal_p_line_position_%d" ), pair + 1 ),
+                            wxString::Format( wxS( "%lld,%lld" ), decodeLocalCoordinate( aCursor.U16At( pairOffset ) ),
+                                              decodeLocalCoordinate( aCursor.U16At( pairOffset + 2 ) ) ),
+                            pinSource ) );
+                }
+
                 decal.definition->pins.push_back( std::move( definitionPin ) );
             }
         }
