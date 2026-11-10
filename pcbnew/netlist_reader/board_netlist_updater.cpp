@@ -2111,21 +2111,20 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
         }
 
-        // A group member may be another group's uuid (a nested group).  Restore that
-        // parent/child relationship on the board.
+        // A group member may be another group (a nested group).  Restore that parent/child
+        // relationship on the board.
         for( const KIID_PATH& member : netlistGroup->members )
         {
-            if( member.empty() )
-                continue;
+            NETLIST_GROUP* memberGroup = aNetlist.GetGroupByPath( member );
 
-            KIID memberGroupUuid =
-                    member.size() == 1 ? member.front() : KIID::FromName( std::string( member.AsString().ToUTF8() ) );
+            if( !memberGroup )
+                continue;
 
             PCB_GROUP* childGroup = nullptr;
 
             for( PCB_GROUP* candidate : m_board->Groups() )
             {
-                if( candidate->m_Uuid == memberGroupUuid )
+                if( candidate->m_Uuid == memberGroup->uuid )
                 {
                     childGroup = candidate;
                     break;

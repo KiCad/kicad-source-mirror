@@ -331,6 +331,43 @@ NETLIST_GROUP* NETLIST::GetGroupByUuid( const KIID& aUuid )
 }
 
 
+static KIID deriveGroupUuid( const wxString& aUuid )
+{
+    // An instance path collapses to a deterministic uuid so re-reading the same netlist finds
+    // the same board group.
+    if( aUuid.StartsWith( wxT( "/" ) ) )
+        return KIID::FromName( std::string( KIID_PATH( aUuid ).AsString().ToUTF8() ) );
+
+    return KIID( aUuid );
+}
+
+
+NETLIST_GROUP::NETLIST_GROUP( const wxString& aName, const wxString& aUuid, const LIB_ID& aLibId,
+                              std::vector<KIID_PATH> aMembers ) :
+        name( aName ),
+        uuid( deriveGroupUuid( aUuid ) ),
+        libId( aLibId ),
+        path( aUuid ),
+        members( std::move( aMembers ) )
+{
+}
+
+
+NETLIST_GROUP* NETLIST::GetGroupByPath( const KIID_PATH& aPath )
+{
+    if( aPath.empty() )
+        return nullptr;
+
+    for( NETLIST_GROUP& group : m_groups )
+    {
+        if( group.path == aPath )
+            return &group;
+    }
+
+    return nullptr;
+}
+
+
 COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 {
     COMPONENT* component = nullptr;

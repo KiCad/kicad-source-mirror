@@ -21,6 +21,9 @@
  * Regression test for https://gitlab.com/kicad/code/kicad/-/work_items/24766
  *
  * A nested schematic group must stay nested on the board after Update PCB from Schematic.
+ *
+ * nested_groups.net was exported by KiCad from qa/data/eeschema/nested_groups.kicad_sch:
+ *     kicad-cli sch export netlist --format kicadsexpr
  */
 
 #include <board.h>
@@ -28,10 +31,12 @@
 #include <pcb_group.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/netlist_reader.h>
 #include <lib_id.h>
 #include <project.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -76,6 +81,35 @@ KIID_PATH pathOf( const KIID& aUuid )
     return path;
 }
 
+
+PCB_GROUP* findGroupByName( BOARD* aBoard, const wxString& aName )
+{
+    for( PCB_GROUP* group : aBoard->Groups() )
+    {
+        if( group->GetName() == aName )
+            return group;
+    }
+
+    return nullptr;
+}
+
+
+void loadNetlist( NETLIST& aNetlist, const wxString& aFileName )
+{
+    try
+    {
+        std::unique_ptr<NETLIST_READER> netlistReader(
+                NETLIST_READER::GetNetlistReader( &aNetlist, aFileName, wxEmptyString ) );
+
+        BOOST_REQUIRE_MESSAGE( netlistReader, "no netlist reader for " + aFileName );
+        netlistReader->LoadNetlist();
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        BOOST_FAIL( "netlist load failed: " + ioe.What().ToStdString() );
+    }
+}
+
 } // namespace
 
 
@@ -111,13 +145,13 @@ BOOST_AUTO_TEST_CASE( NestedSchematicGroupNestsOnBoard )
     KIID childUuid;
     KIID parentUuid;
 
-    netlist.AddGroup( new NETLIST_GROUP{ wxS( "RPI" ), childUuid, LIB_ID(),
-                                         std::vector<KIID_PATH>{ pathOf( r1 ), pathOf( r2 ) } } );
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "RPI" ), childUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( r1 ), pathOf( r2 ) } ) );
 
-    // RPI1 nests RPI: its members include the child group's uuid.
-    netlist.AddGroup( new NETLIST_GROUP{
-            wxS( "RPI1" ), parentUuid, LIB_ID(),
-            std::vector<KIID_PATH>{ pathOf( x3 ), pathOf( x4 ), pathOf( x5 ), pathOf( childUuid ) } } );
+    // RPI1 nests RPI: its members include the path RPI is referred to by.
+    netlist.AddGroup( new NETLIST_GROUP(
+            wxS( "RPI1" ), parentUuid.AsString(), LIB_ID(),
+            std::vector<KIID_PATH>{ pathOf( x3 ), pathOf( x4 ), pathOf( x5 ), pathOf( childUuid ) } ) );
 
     netlist.ApplyGroupMembership();
 
@@ -146,6 +180,54 @@ BOOST_AUTO_TEST_CASE( NestedSchematicGroupNestsOnBoard )
 
     BOOST_CHECK_MESSAGE( parentGroup->GetItems().count( childGroup ) == 1,
                          "parent group RPI1 does not list child group RPI as a member" );
+}
+
+
+BOOST_AUTO_TEST_CASE( RootSheetNestedGroupNestsOnBoard )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &settingsManager.Prj() );
+
+    LIB_ID fpid;
+    BOOST_REQUIRE_EQUAL( fpid.Parse( wxS( "Resistor_SMD:R_0805_2012Metric" ) ), -1 );
+
+    addFootprint( board.get(), wxS( "R1" ), fpid );
+    addFootprint( board.get(), wxS( "R2" ), fpid );
+    addFootprint( board.get(), wxS( "R3" ), fpid );
+
+    NETLIST netlist;
+    loadNetlist( netlist, wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() ) + wxS( "netlists/nested_groups.net" ) );
+
+    BOOST_REQUIRE_EQUAL( netlist.GetCount(), 3 );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+    updater.SetIsDryRun( false );
+    updater.SetWillDrag( false );
+    updater.SetTransferGroups( true );
+    updater.SetReplaceFootprints( false );
+    updater.SetDeleteUnusedFootprints( false );
+
+    BOOST_REQUIRE( updater.UpdateNetlist( netlist ) );
+
+    BOOST_CHECK_EQUAL( board->Groups().size(), 2u );
+
+    PCB_GROUP* outer = findGroupByName( board.get(), wxS( "OUTER" ) );
+    PCB_GROUP* inner = findGroupByName( board.get(), wxS( "INNER" ) );
+
+    BOOST_REQUIRE_MESSAGE( outer, "group OUTER was not created on the board" );
+    BOOST_REQUIRE_MESSAGE( inner, "group INNER was not created on the board" );
+
+    BOOST_CHECK_MESSAGE( inner->GetParentGroup() == static_cast<EDA_GROUP*>( outer ),
+                         "group INNER is not nested inside group OUTER" );
+
+    BOOST_CHECK_MESSAGE( outer->GetItems().count( inner ) == 1, "group OUTER does not list group INNER as a member" );
 }
 
 

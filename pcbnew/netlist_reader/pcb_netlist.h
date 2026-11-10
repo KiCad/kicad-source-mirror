@@ -86,9 +86,22 @@ typedef std::vector< COMPONENT_NET > COMPONENT_NETS;
 
 struct NETLIST_GROUP
 {
+    /**
+     * @param aUuid is the group's uuid as the netlist declares it, either an instance path or a
+     *              bare uuid.  It fixes both #path and #uuid, which have to agree.
+     */
+    NETLIST_GROUP( const wxString& aName, const wxString& aUuid, const LIB_ID& aLibId,
+                   std::vector<KIID_PATH> aMembers );
+
     wxString name;
+
+    // The group's identity on the board
     KIID uuid;
+
     LIB_ID            libId;
+
+    // The path other items use to refer to this group (sheet path + group uuid)
+    KIID_PATH path;
 
     // Full instance paths of the member symbols (sheet path + symbol uuid)
     std::vector<KIID_PATH> members;
@@ -442,6 +455,15 @@ public:
      * @return a pointer to the #NETLIST_GROUP that matches \a aUuid if found.  Otherwise NULL.
      */
     NETLIST_GROUP* GetGroupByUuid( const KIID& aUuid );
+
+    /**
+     * @brief Return a #NETLIST_GROUP by \a aPath.
+     *
+     * @param aPath is the KIID_PATH [ sheetUUID, .., groupUUID ] the group was declared with.
+     *
+     * @return a pointer to the #NETLIST_GROUP that matches \a aPath if found.  Otherwise NULL.
+     */
+    NETLIST_GROUP* GetGroupByPath( const KIID_PATH& aPath );
 
     /**
      * After groups and components are parsed, apply the group memberships to the
