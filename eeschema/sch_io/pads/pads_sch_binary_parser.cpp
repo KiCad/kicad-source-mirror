@@ -1769,9 +1769,9 @@ namespace
                 definitionPin.presentationFlags = presentationFlags;
                 definitionPin.visibilityAndNumberPresentationFlags = visibilityFlags;
 
-                // PADS binary stores the same terminal-local X/Y mirror state as the ASCII T-line xym field,
+                // PADS binary stores the same terminal-local X/Y mirror state as the ASCII T-line side field,
                 // shifted left by one because bit 0 carries the terminal quarter-turn flag.
-                definitionPin.xym = ( presentationFlags & 0x0006 ) >> 1;
+                definitionPin.side = ( presentationFlags & 0x0006 ) >> 1;
 
                 definitionPin.angle = ( presentationFlags & 0x0001 ) != 0 ? 900 : 0;
                 definitionPin.numberAngle = ( presentationFlags & 0x0100 ) != 0 ? 900 : 0;
@@ -1894,8 +1894,8 @@ namespace
                         wxS( "pin_number_width_half_mils" ),
                         wxString::Format( wxS( "%lld" ), definitionPin.numberPresentation.width ), pinSource ) );
                 definitionPin.properties.push_back(
-                        sourceProperty( wxS( "terminal_xym" ),
-                                        wxString::Format( wxS( "%u" ), definitionPin.xym ), pinSource ) );
+                        sourceProperty( wxS( "terminal_side" ),
+                                        wxString::Format( wxS( "%u" ), definitionPin.side ), pinSource ) );
                 decal.definition->pins.push_back( std::move( definitionPin ) );
             }
         }
