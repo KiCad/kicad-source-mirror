@@ -153,22 +153,23 @@ struct SYMBOL_PIN
     bool        clock = false;
 
     int         side = 0;
-    int         pn_h = 0;
-    int         pn_w = 0;
+
+    // T line groups place the pin number (pn) and the pin label (pl); sizes come from the decal header
+    POINT       pn_offset;
     int         pn_angle = 0;
     int         pn_just = 0;
-    int         pl_h = 0;
-    int         pl_w = 0;
+    POINT       pl_offset;
     int         pl_angle = 0;
     int         pl_just = 0;
     std::string pin_decal_name;
 
-    POINT       pn_offset;
-    int         pn_off_angle = 0;
-    int         pn_off_just = 0;
-    POINT       pl_offset;
-    int         pl_off_angle = 0;
-    int         pl_off_just = 0;
+    // PADS draws nothing at the P line positions, so their meaning is unknown
+    POINT       p_position1;
+    int         p_angle1 = 0;
+    int         p_just1 = 0;
+    POINT       p_position2;
+    int         p_angle2 = 0;
+    int         p_just2 = 0;
     int         p_flags = 0;
 };
 

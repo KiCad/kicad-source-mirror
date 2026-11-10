@@ -1181,20 +1181,24 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
 
         SYMBOL_PIN pin;
 
-        // T line: T<x> y angle side pn_h pn_w pn_angle pn_just pl_h pl_w pl_angle pl_just
+        // T line: T<x> y angle side pn_x pn_y pn_angle pn_just pl_x pl_y pl_angle pl_just
         //         pin_decal_name
         if( tLine.size() > 1 && tLine[0] == 'T' )
         {
             std::string tContent = tLine.substr( 1 );
             std::istringstream tiss( tContent );
-            int tx = 0, ty = 0, angle = 0;
+            int                tx = 0, ty = 0, angle = 0, pnx = 0, pny = 0, plx = 0, ply = 0;
 
-            tiss >> tx >> ty >> angle >> pin.side >> pin.pn_h >> pin.pn_w >> pin.pn_angle >> pin.pn_just >> pin.pl_h
-                    >> pin.pl_w >> pin.pl_angle >> pin.pl_just >> pin.pin_decal_name;
+            tiss >> tx >> ty >> angle >> pin.side >> pnx >> pny >> pin.pn_angle >> pin.pn_just >> plx >> ply
+                    >> pin.pl_angle >> pin.pl_just >> pin.pin_decal_name;
 
             pin.position.x = tx;
             pin.position.y = ty;
             pin.rotation = angle;
+            pin.pn_offset.x = pnx;
+            pin.pn_offset.y = pny;
+            pin.pl_offset.x = plx;
+            pin.pl_offset.y = ply;
 
             // The pin decal name encodes inverted/clock styles
             if( pin.pin_decal_name == "PINB" || pin.pin_decal_name == "PINORB" || pin.pin_decal_name == "PCLKB"
@@ -1232,13 +1236,13 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
                 std::istringstream piss( pContent );
                 int px1 = 0, py1 = 0, px2 = 0, py2 = 0;
 
-                piss >> px1 >> py1 >> pin.pn_off_angle >> pin.pn_off_just >> px2 >> py2 >> pin.pl_off_angle
-                        >> pin.pl_off_just >> pin.p_flags;
+                piss >> px1 >> py1 >> pin.p_angle1 >> pin.p_just1 >> px2 >> py2 >> pin.p_angle2 >> pin.p_just2
+                        >> pin.p_flags;
 
-                pin.pn_offset.x = px1;
-                pin.pn_offset.y = py1;
-                pin.pl_offset.x = px2;
-                pin.pl_offset.y = py2;
+                pin.p_position1.x = px1;
+                pin.p_position1.y = py1;
+                pin.p_position2.x = px2;
+                pin.p_position2.y = py2;
 
                 // Pin name hidden if flags bit 128 set
                 if( pin.p_flags & 128 )

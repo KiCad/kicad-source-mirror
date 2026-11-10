@@ -172,11 +172,10 @@
         "inverted_pin_decal",
         "clock_pin_decal",
         "hidden_pin_name",
-        "hidden_pin_number",
         "pin_names_and_numbers",
         "hidden_signal_pin"
       ],
-      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; native save and all-section Logic 9.0 re-export retained placed part U2, pin electrical types L/S/U/P, PINB inversion, PCLK clock marking, names, numbers, and SIGPIN 8 VCC_HIDDEN. Independent visibility is retained: pin 3 has number text height/width 0/0 while its name text remains 100/10; pin 7 separately carries hidden-name flag 128. No third-party design content"
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; native save and all-section Logic 9.0 re-export retained placed part U2, pin electrical types L/S/U/P, PINB inversion, PCLK clock marking, names, numbers, and SIGPIN 8 VCC_HIDDEN. Pin 3 has number offset 0/0; pin 7 carries hidden-name flag 128. No third-party design content"
     },
     {
       "binary": "multigate.sch",

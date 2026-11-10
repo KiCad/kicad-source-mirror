@@ -4150,7 +4150,8 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
     const PADS_SCH::GATE_DEF& asciiGate = asciiParser.GetPartTypes().at( "BATCHB-PIN-STYLES" ).gates[0];
     BOOST_REQUIRE_EQUAL( asciiGate.pins.size(), binaryDefinition.pins.size() );
 
-    auto checkPinPresentation = []( const MODEL_PIN_DEFINITION& aBinaryPin, const PADS_SCH::SYMBOL_PIN& aAsciiPin )
+    auto checkPinPresentation = []( const MODEL_PIN_DEFINITION& aBinaryPin, const PADS_SCH::SYMBOL_DEF& aAsciiSymbol,
+                                    const PADS_SCH::SYMBOL_PIN& aAsciiPin )
     {
         BOOST_CHECK( canonicalPinStyle( aBinaryPin.graphicStyle )
                      == canonicalPinStyle( aAsciiPin.inverted, aAsciiPin.clock ) );
@@ -4159,26 +4160,26 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
         BOOST_CHECK_EQUAL( aBinaryPin.position.y, std::llround( aAsciiPin.position.y * 2 ) );
         BOOST_CHECK_EQUAL( aBinaryPin.side, aAsciiPin.side );
         BOOST_CHECK_EQUAL( aBinaryPin.angle, std::llround( aAsciiPin.rotation * 10 ) );
-        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.height, aAsciiPin.pn_h * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.width, aAsciiPin.pn_w * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.height, aAsciiPin.pl_h * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.width, aAsciiPin.pl_w * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.x, aAsciiPin.pn_offset.x * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.y, aAsciiPin.pn_offset.y * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.x, aAsciiPin.pl_offset.x * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.y, aAsciiPin.pl_offset.y * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameAngle, aAsciiPin.pn_angle * 10 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberAngle, aAsciiPin.pl_angle * 10 );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameJustification, aAsciiPin.pn_just );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberJustification, aAsciiPin.pl_just );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameOffsetAngle, aAsciiPin.pn_off_angle * 10 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberOffsetAngle, aAsciiPin.pl_off_angle * 10 );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameOffsetJustification, aAsciiPin.pn_off_just );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberOffsetJustification, aAsciiPin.pl_off_just );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.height, aAsciiSymbol.height * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.width, aAsciiSymbol.width * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.height, aAsciiSymbol.h2 * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.width, aAsciiSymbol.w2 * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.x, std::llround( aAsciiPin.pn_offset.x * 2 ) );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.y, std::llround( aAsciiPin.pn_offset.y * 2 ) );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.x, std::llround( aAsciiPin.pl_offset.x * 2 ) );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.y, std::llround( aAsciiPin.pl_offset.y * 2 ) );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberAngle, aAsciiPin.pn_angle * 10 );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameAngle, aAsciiPin.pl_angle * 10 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberJustification, aAsciiPin.pn_just );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameJustification, aAsciiPin.pl_just );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameOffsetAngle, aAsciiPin.p_angle1 * 10 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberOffsetAngle, aAsciiPin.p_angle2 * 10 );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameOffsetJustification, aAsciiPin.p_just1 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberOffsetJustification, aAsciiPin.p_just2 );
         BOOST_CHECK_EQUAL( aBinaryPin.visibilityFlags, aAsciiPin.p_flags );
         BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.visible,
-                           aAsciiPin.pn_h != 0 && ( aAsciiPin.p_flags & 128 ) == 0 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.visible, aAsciiPin.pl_h != 0 );
+                           aAsciiSymbol.h2 != 0 && ( aAsciiPin.p_flags & 128 ) == 0 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.visible, aAsciiSymbol.height != 0 );
     };
 
     for( size_t i = 0; i < binaryDefinition.pins.size(); ++i )
@@ -4187,7 +4188,7 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
         BOOST_CHECK_EQUAL( binaryDefinition.pins[i].name.text, wxString::FromUTF8( asciiGate.pins[i].pin_name ) );
         BOOST_CHECK( canonicalPinType( binaryDefinition.pins[i].electricalType )
                      == canonicalPinType( asciiGate.pins[i].pin_type ) );
-        checkPinPresentation( binaryDefinition.pins[i], asciiDefinition->pins[i] );
+        checkPinPresentation( binaryDefinition.pins[i], *asciiDefinition, asciiDefinition->pins[i] );
     }
 
     PADS_SCH_MODEL primitiveBinary =
@@ -4407,7 +4408,7 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
                                             << binarySymbol.pins[pin].presentationFlags << "/"
                                             << binarySymbol.pins[pin].visibilityAndNumberPresentationFlags )
                 {
-                    checkPinPresentation( binarySymbol.pins[pin], asciiSymbol->pins[pin] );
+                    checkPinPresentation( binarySymbol.pins[pin], *asciiSymbol, asciiSymbol->pins[pin] );
                 }
             }
         }
@@ -4497,12 +4498,10 @@ BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
 
         for( size_t pin = 0; pin < binaryDefinition.pins.size(); ++pin )
         {
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle,
-                               asciiDefinition->pins[pin].pn_angle * 10 );
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle,
-                               asciiDefinition->pins[pin].pl_angle * 10 );
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameJustification, asciiDefinition->pins[pin].pn_just );
-            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberJustification, asciiDefinition->pins[pin].pl_just );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberAngle, asciiDefinition->pins[pin].pn_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameAngle, asciiDefinition->pins[pin].pl_angle * 10 );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].numberJustification, asciiDefinition->pins[pin].pn_just );
+            BOOST_CHECK_EQUAL( binaryDefinition.pins[pin].nameJustification, asciiDefinition->pins[pin].pl_just );
         }
     }
 }
