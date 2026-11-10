@@ -28,7 +28,9 @@
     "height": -1,
     "keep_annotations": false,
     "lib_tree": {
-      "column_widths": {}
+      "column_widths": {},
+      "columns": [],
+      "open_libs": []
     },
     "place_as_group": true,
     "place_as_sheet": false,
@@ -37,6 +39,9 @@
     "sash_pos_v": -1,
     "sort_mode": 0,
     "width": -1
+  },
+  "editing": {
+    "arc_draw_mode": 0
   },
   "export_image": {
     "height": 0,
@@ -66,11 +71,18 @@
     "columns": [],
     "open_libs": []
   },
+  "main_view": {
+    "projection_mode": 1
+  },
   "meta": {
-    "version": 4
+    "version": 5
   },
   "plugins": {
     "actions": []
+  },
+  "preview": {
+    "projection_mode": 0,
+    "show_board_body": true
   },
   "printing": {
     "as_item_checkboxes": false,
@@ -87,6 +99,7 @@
     "use_theme": false
   },
   "render": {
+    "board_layer_thickness_scale": 1.0,
     "clip_silk_on_via_annulus": false,
     "engine": 0,
     "grid_type": 0,
@@ -158,6 +171,36 @@
     "show_board_body": true,
     "show_comments": true,
     "show_copper_bottom": true,
+    "show_copper_inner1": true,
+    "show_copper_inner10": true,
+    "show_copper_inner11": true,
+    "show_copper_inner12": true,
+    "show_copper_inner13": true,
+    "show_copper_inner14": true,
+    "show_copper_inner15": true,
+    "show_copper_inner16": true,
+    "show_copper_inner17": true,
+    "show_copper_inner18": true,
+    "show_copper_inner19": true,
+    "show_copper_inner2": true,
+    "show_copper_inner20": true,
+    "show_copper_inner21": true,
+    "show_copper_inner22": true,
+    "show_copper_inner23": true,
+    "show_copper_inner24": true,
+    "show_copper_inner25": true,
+    "show_copper_inner26": true,
+    "show_copper_inner27": true,
+    "show_copper_inner28": true,
+    "show_copper_inner29": true,
+    "show_copper_inner3": true,
+    "show_copper_inner30": true,
+    "show_copper_inner4": true,
+    "show_copper_inner5": true,
+    "show_copper_inner6": true,
+    "show_copper_inner7": true,
+    "show_copper_inner8": true,
+    "show_copper_inner9": true,
     "show_copper_top": true,
     "show_drawings": true,
     "show_eco1": true,
@@ -270,6 +313,7 @@
       "override_wires_idx": 19,
       "overrides_enabled": true,
       "show": true,
+      "show_major": true,
       "sizes": [
         {
           "name": "",
