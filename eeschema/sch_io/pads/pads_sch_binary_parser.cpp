@@ -449,40 +449,29 @@ namespace
     }
 
 
-    // PADS nine-way text justification.  Valid codes are a sparse 3x3 table: 4 is center-bottom and 6 is
-    // center-top.
+    // PADS justification is a bitfield where center wins: bit 2 centers and bit 0 right-aligns horizontally
     MODEL_JUSTIFICATION horizontalJustification( uint16_t aValue )
     {
-        switch( aValue & 0x00FF )
-        {
-        case 1:
-        case 3:
-        case 9: return MODEL_JUSTIFICATION::RIGHT;
+        if( aValue & 0x0004 )
+            return MODEL_JUSTIFICATION::CENTER;
 
-        case 4:
-        case 5:
-        case 6:
-        case 12: return MODEL_JUSTIFICATION::CENTER;
+        if( aValue & 0x0001 )
+            return MODEL_JUSTIFICATION::RIGHT;
 
-        default: return MODEL_JUSTIFICATION::LEFT;
-        }
+        return MODEL_JUSTIFICATION::LEFT;
     }
 
 
+    // Bit 3 centers and bit 1 top-aligns vertically; LEFT and RIGHT stand for top and bottom
     MODEL_JUSTIFICATION verticalJustification( uint16_t aValue )
     {
-        switch( aValue & 0x00FF )
-        {
-        case 2:
-        case 3:
-        case 6: return MODEL_JUSTIFICATION::LEFT;   // KiCad TOP mapping
+        if( aValue & 0x0008 )
+            return MODEL_JUSTIFICATION::CENTER;
 
-        case 8:
-        case 9:
-        case 12: return MODEL_JUSTIFICATION::CENTER;
+        if( aValue & 0x0002 )
+            return MODEL_JUSTIFICATION::LEFT;
 
-        default: return MODEL_JUSTIFICATION::RIGHT; // KiCad BOTTOM mapping
-        }
+        return MODEL_JUSTIFICATION::RIGHT;
     }
 
 
@@ -509,24 +498,6 @@ namespace
         return aValue;
     }
 
-
-    MODEL_JUSTIFICATION freeTextHorizontalJustification( uint16_t aValue )
-    {
-        switch( aValue & 0x000F )
-        {
-        case 0:
-        case 2:
-        case 8: return MODEL_JUSTIFICATION::LEFT;
-
-        case 4:
-        case 6:
-        case 10:
-        case 12:
-        case 14: return MODEL_JUSTIFICATION::CENTER;
-
-        default: return MODEL_JUSTIFICATION::RIGHT;
-        }
-    }
 
     constexpr uint32_t CP1252_HIGH[] = { 0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
                                          0x02C6, 0x2030, 0x0160, 0x2039, 0x0152, 0xFFFD, 0x017D, 0xFFFD,
@@ -5132,7 +5103,7 @@ namespace
             text.presentation.width = aCursor.U8At( recordOffset + 30 );
             const uint8_t displayFlags = aCursor.U8At( recordOffset + 31 );
             text.presentation.visible = ( displayFlags & 1 ) == 0;
-            text.presentation.horizontalJustification = freeTextHorizontalJustification( justification );
+            text.presentation.horizontalJustification = horizontalJustification( justification );
             text.presentation.verticalJustification = verticalJustification( justification );
 
             SOURCE_PROVENANCE fontHandleSource = textSource;

@@ -25,8 +25,6 @@
 #include <sch_io/pads/pads_sch_sdb.h>
 #include <sch_io/pads/pads_sch_parser.h>
 
-#include <io/pads/pads_common.h>
-
 #include <ki_exception.h>
 #include <algorithm>
 #include <cmath>
@@ -455,34 +453,30 @@ static CANONICAL_PROPERTY canonicalVerticalJustification( MODEL_JUSTIFICATION aJ
     return unknownEnum( static_cast<int64_t>( aJustification ) );
 }
 
+// PADS renders justification as a bitfield where center wins, see TextOptionMatrix
 static CANONICAL_PROPERTY canonicalHorizontalJustification( int aJustification )
 {
-    const int justification = aJustification & 0xFF;
-    const int horizontal = justification >= 8   ? justification - 8
-                           : justification >= 2 ? justification - 2
-                                                : justification;
+    if( aJustification & 0x4 )
+        return { "center" };
 
-    switch( horizontal )
-    {
-    default:
-    case 0: return { "left" };
-    case 1: return { "right" };
-    case 4: return { "center" };
-    }
+    if( aJustification & 0x1 )
+        return { "right" };
+
+    return { "left" };
 }
 
 static CANONICAL_PROPERTY canonicalVerticalJustification( int aJustification )
 {
-    if( aJustification >= 8 )
+    if( aJustification < 0 )
+        return unknownEnum( aJustification );
+
+    if( aJustification & 0x8 )
         return { "center" };
 
-    if( aJustification >= 2 )
+    if( aJustification & 0x2 )
         return { "top" };
 
-    if( aJustification >= 0 )
-        return { "bottom" };
-
-    return unknownEnum( aJustification );
+    return { "bottom" };
 }
 
 static CANONICAL_PROPERTY canonicalLabelKind( MODEL_LABEL_KIND aKind )
@@ -1673,12 +1667,12 @@ BOOST_AUTO_TEST_CASE( FreeText )
     };
 
     for( const JUSTIFICATION_CASE& expected :
-         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::LEFT },
-           { 7, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::LEFT },
-           { 15, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
+         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
+           { 7, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
+           { 15, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
            { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
            { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
-           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
+           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
            { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT } } )
     {
         std::vector<uint8_t> changedJustification = loadBinaryFixture( "text_encoding.sch" );
@@ -1737,25 +1731,18 @@ BOOST_AUTO_TEST_CASE( TextOptionMatrix )
         return *found;
     };
 
-    const std::array<MODEL_JUSTIFICATION, 16> horizontal = { MODEL_JUSTIFICATION::LEFT,   MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::LEFT,   MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::LEFT,   MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
-                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT };
+    // Measured from the PADS render of this fixture; vertical LEFT is top and RIGHT is bottom
+    constexpr MODEL_JUSTIFICATION L = MODEL_JUSTIFICATION::LEFT;
+    constexpr MODEL_JUSTIFICATION C = MODEL_JUSTIFICATION::CENTER;
+    constexpr MODEL_JUSTIFICATION R = MODEL_JUSTIFICATION::RIGHT;
+    const std::array<MODEL_JUSTIFICATION, 16> horizontal = { L, R, L, R, C, C, C, C, L, R, L, R, C, C, C, C };
+    const std::array<MODEL_JUSTIFICATION, 16> vertical = { R, R, L, L, R, R, L, L, C, C, C, C, C, C, C, C };
 
     for( size_t ii = 0; ii < horizontal.size(); ++ii )
     {
-        // The vertical half of the code splits at 2 and 8, the way PADS_COMMON::DecodeJustification
-        // splits it for the ASCII importer
-        const MODEL_JUSTIFICATION vertical = ii >= 8   ? MODEL_JUSTIFICATION::CENTER
-                                             : ii >= 2 ? MODEL_JUSTIFICATION::LEFT
-                                                       : MODEL_JUSTIFICATION::RIGHT;
-        const MODEL_TEXT&         text = textByName( wxString::Format( wxS( "JUST_%02zu" ), ii ) );
+        const MODEL_TEXT& text = textByName( wxString::Format( wxS( "JUST_%02zu" ), ii ) );
         BOOST_CHECK( text.presentation.horizontalJustification == horizontal[ii] );
-        BOOST_CHECK( text.presentation.verticalJustification == vertical );
+        BOOST_CHECK( text.presentation.verticalJustification == vertical[ii] );
     }
 
     for( const auto& [name, angle] : { std::pair{ wxS( "ANGLE_000" ), 0 }, std::pair{ wxS( "ANGLE_090" ), 900 },
@@ -2773,8 +2760,8 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
                        wxS( "-4" ) );
     BOOST_CHECK_EQUAL( propertyValue( definition.fields[3].presentation.properties, wxS( "font_handle" ) ),
                        wxS( "-4" ) );
-    BOOST_CHECK( definition.fields[0].presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
-    BOOST_CHECK( definition.fields[0].presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT );
+    BOOST_CHECK( definition.fields[0].presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER );
+    BOOST_CHECK( definition.fields[0].presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
     BOOST_CHECK( definition.fields[2].presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER );
     BOOST_CHECK( definition.fields[2].presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT );
 
@@ -3191,19 +3178,10 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 BOOST_CHECK_EQUAL( binaryField.presentation.italic,
                                    wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Italic " ) ) );
 
-                const uint16_t            justification = asciiField.justification;
-                const uint16_t            horizontal = justification >= 8   ? justification - 8
-                                                       : justification >= 2 ? justification - 2
-                                                                            : justification;
-                const MODEL_JUSTIFICATION expectedHorizontal = horizontal == 1   ? MODEL_JUSTIFICATION::RIGHT
-                                                               : horizontal == 4 ? MODEL_JUSTIFICATION::CENTER
-                                                                                 : MODEL_JUSTIFICATION::LEFT;
-                const MODEL_JUSTIFICATION expectedVertical = asciiField.justification >= 8 ? MODEL_JUSTIFICATION::CENTER
-                                                             : asciiField.justification >= 2
-                                                                     ? MODEL_JUSTIFICATION::LEFT
-                                                                     : MODEL_JUSTIFICATION::RIGHT;
-                BOOST_CHECK( binaryField.presentation.horizontalJustification == expectedHorizontal );
-                BOOST_CHECK( binaryField.presentation.verticalJustification == expectedVertical );
+                BOOST_CHECK( canonicalJustification( binaryField.presentation.horizontalJustification ).value
+                             == canonicalHorizontalJustification( asciiField.justification ).value );
+                BOOST_CHECK( canonicalVerticalJustification( binaryField.presentation.verticalJustification ).value
+                             == canonicalVerticalJustification( asciiField.justification ).value );
 
                 if( fieldIndex >= 2 )
                 {
@@ -4505,8 +4483,8 @@ BOOST_AUTO_TEST_CASE( TerminalJustificationCodes )
     }
 }
 
-// The free-text justification word is the same code space every other PADS record uses, so the
-// vertical half must decode the same way PADS_COMMON::DecodeJustification splits it.
+// Free text shares the justification code space of every other PADS record; expectations follow the PADS
+// render in TextOptionMatrix, where code 4 is center-bottom
 BOOST_AUTO_TEST_CASE( FreeTextVerticalJustification )
 {
     PADS_SCH_BINARY_PARSER parser;
@@ -4515,26 +4493,30 @@ BOOST_AUTO_TEST_CASE( FreeTextVerticalJustification )
     BOOST_REQUIRE_EQUAL( model.texts.size(), 1 );
     const size_t justificationOffset = model.texts.front().source.absoluteOffset + 18;
 
-    for( uint16_t code : { 0, 1, 2, 3, 4, 6, 8, 9, 12 } )
+    struct VERTICAL_CASE
     {
-        BOOST_TEST_CONTEXT( "justification " << code )
+        uint16_t            code;
+        MODEL_JUSTIFICATION vertical;
+    };
+
+    for( const VERTICAL_CASE& expected : { VERTICAL_CASE{ 0, MODEL_JUSTIFICATION::RIGHT },
+                                           { 1, MODEL_JUSTIFICATION::RIGHT },
+                                           { 2, MODEL_JUSTIFICATION::LEFT },
+                                           { 3, MODEL_JUSTIFICATION::LEFT },
+                                           { 4, MODEL_JUSTIFICATION::RIGHT },
+                                           { 6, MODEL_JUSTIFICATION::LEFT },
+                                           { 8, MODEL_JUSTIFICATION::CENTER },
+                                           { 9, MODEL_JUSTIFICATION::CENTER },
+                                           { 12, MODEL_JUSTIFICATION::CENTER } } )
+    {
+        BOOST_TEST_CONTEXT( "justification " << expected.code )
         {
             std::vector<uint8_t> bytes = loadBinaryFixture( "text_encoding.sch" );
-            writeU16( bytes, justificationOffset, code );
+            writeU16( bytes, justificationOffset, expected.code );
 
             PADS_SCH_MODEL patched = parser.Parse( bytes, wxS( "text_encoding.sch" ) );
             BOOST_REQUIRE_EQUAL( patched.texts.size(), 1 );
-
-            GR_TEXT_H_ALIGN_T expectedHorizontal = GR_TEXT_H_ALIGN_LEFT;
-            GR_TEXT_V_ALIGN_T expectedVertical = GR_TEXT_V_ALIGN_CENTER;
-            PADS_COMMON::DecodeJustification( code, expectedHorizontal, expectedVertical );
-
-            MODEL_JUSTIFICATION vertical = patched.texts.front().presentation.verticalJustification;
-            MODEL_JUSTIFICATION expected = expectedVertical == GR_TEXT_V_ALIGN_CENTER ? MODEL_JUSTIFICATION::CENTER
-                                           : expectedVertical == GR_TEXT_V_ALIGN_TOP  ? MODEL_JUSTIFICATION::LEFT
-                                                                                      : MODEL_JUSTIFICATION::RIGHT;
-
-            BOOST_CHECK( vertical == expected );
+            BOOST_CHECK( patched.texts.front().presentation.verticalJustification == expected.vertical );
         }
     }
 }
