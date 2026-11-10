@@ -853,7 +853,17 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         return out.back();
     };
     const auto& p = aParser.GetParameters();
-    auto        addOwned = [&]( CANONICAL_KIND aKind, int aSheet, std::string aKey = {} ) -> CANONICAL_SEMANTIC_RECORD&
+
+    // Binary resolves the default font in system-font mode; ASCII names its face with a style prefix
+    const auto canonicalFont = [&]( const std::string& aFont ) -> std::string
+    {
+        if( p.font_mode != "System" || aFont != "Default Font" || p.default_font.empty() )
+            return aFont;
+
+        return p.default_font.starts_with( "Regular " ) ? p.default_font.substr( 8 ) : p.default_font;
+    };
+
+    auto addOwned = [&]( CANONICAL_KIND aKind, int aSheet, std::string aKey = {} ) -> CANONICAL_SEMANTIC_RECORD&
     {
         auto  sheet = std::ranges::find_if( aParser.GetSheetHeaders(),
                                             [&]( const PADS_SCH::SHEET_HEADER& aCandidate )
@@ -869,6 +879,15 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
     };
     auto& settings = add( CANONICAL_KIND::SETTINGS, -1 );
     settings.properties["coordinate_units_per_mil"] = { int64_t( 2 ) };
+
+    if( !p.font_mode.empty() )
+    {
+        settings.properties["font_mode_raw"] =
+                p.font_mode == "System"
+                        ? CANONICAL_PROPERTY{ std::string( "1" ) }
+                        : CANONICAL_PROPERTY{ "unknown:" + p.font_mode, PROPERTY_DISPOSITION::UNSUPPORTED };
+    }
+
     settings.properties["line_width_half_mils"] = { int64_t( std::llround( p.line_width * 2 ) ) };
     settings.properties["bus_width_half_mils"] = { int64_t( p.bus_width * 2 ) };
     settings.geometry.points.push_back( point( PADS_SCH::POINT{ p.sheet_size.width, p.sheet_size.height } ) );
@@ -971,9 +990,9 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["fill"] = { "none" };
             r.properties["text"] = { t.content };
             r.properties["visible"] = { t.visible };
-            r.properties["font"] = { t.font_name };
-            r.properties["height_half_mils"] = { int64_t( std::llround( t.size ) ) };
-            r.properties["width_half_mils"] = { int64_t( t.width_factor ) };
+            r.properties["font"] = { canonicalFont( t.font_name ) };
+            r.properties["height_half_mils"] = { int64_t( std::llround( t.size * 2 ) ) };
+            r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
             r.geometry.points.push_back( point( t.position ) );
             r.geometry.angleTenths = canonicalAngle( std::llround( t.rotation * 10 ) );
         }
@@ -1008,7 +1027,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             auto& q = add( CANONICAL_KIND::FIELD, ownerSheet, f.name );
             q.properties["value"] = { f.value };
             q.properties["visible"] = { f.visible };
-            q.properties["font"] = { f.font_name };
+            q.properties["font"] = { canonicalFont( f.font_name ) };
             q.geometry.points.push_back( point( f.position ) );
             q.geometry.angleTenths = canonicalAngle( std::llround( f.rotation * 10 ) );
         }
@@ -1195,9 +1214,9 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["text"] = { t.content };
             r.properties["page_graphic_group"] = { lines.name };
             r.properties["visible"] = { true };
-            r.properties["height_half_mils"] = { int64_t( t.height ) };
-            r.properties["width_half_mils"] = { int64_t( t.width_factor ) };
-            r.properties["font"] = { t.font_name };
+            r.properties["height_half_mils"] = { int64_t( t.height * 2 ) };
+            r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
+            r.properties["font"] = { canonicalFont( t.font_name ) };
             r.geometry.points.push_back( point( t.position ) );
             r.geometry.points.back().xHalfMils += std::llround( lines.origin.x * 2 );
             r.geometry.points.back().yHalfMils += std::llround( lines.origin.y * 2 );
@@ -1209,7 +1228,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         auto& r = addOwned( CANONICAL_KIND::LABEL, -1, label.net_name );
         r.properties["kind"] = { "local" };
         r.properties["visible"] = { true };
-        r.properties["font"] = { label.font_name };
+        r.properties["font"] = { canonicalFont( label.font_name ) };
         r.properties["horizontal_justification"] = canonicalHorizontalJustification( label.justification );
         r.properties["vertical_justification"] = canonicalVerticalJustification( label.justification );
         r.geometry.points.push_back( point( PADS_SCH::POINT{ double( label.x_offset ), double( label.y_offset ) } ) );
@@ -3815,6 +3834,7 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
             { "endpoint_1_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED },
             { "raw_connection_marker", PROPERTY_DISPOSITION::EXACT },
             { "offpage_variant", PROPERTY_DISPOSITION::EXACT },
+            { "offpage_mirror_flags", PROPERTY_DISPOSITION::EXACT },
             { "connection_record", PROPERTY_DISPOSITION::EXACT },
             { "preserved_drawing_text_relationship", PROPERTY_DISPOSITION::UNSUPPORTED },
             { "preserved_graphic_presentation", PROPERTY_DISPOSITION::PRESERVED },
