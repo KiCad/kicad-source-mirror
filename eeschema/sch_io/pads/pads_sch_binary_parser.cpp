@@ -3881,7 +3881,8 @@ namespace
                                                         wxString::Format( wxS( "%u" ), offpageMirrorFlags ),
                                                         mirrorSource ) );
 
-            if( offpageMirrorFlags & ~3U )
+            // Real designs carry unrelated data in the high byte, so only unknown low bits warrant a warning
+            if( offpageMirrorFlags & 0x00FC )
             {
                 SOURCE_PROPERTY& property = label.properties.back();
                 property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;

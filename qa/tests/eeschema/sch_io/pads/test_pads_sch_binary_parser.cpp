@@ -4526,4 +4526,26 @@ BOOST_AUTO_TEST_CASE( FreeTextVerticalJustification )
 }
 
 
+// Vendor designs carry 0xFF00 in the off-page mirror word, so the high byte must not warn
+BOOST_AUTO_TEST_CASE( OffpageMirrorHighByte )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    std::vector<uint8_t>   bytes = loadBinaryFixture( "text_encoding.sch" );
+    PADS_SCH_MODEL         model = parser.Parse( bytes, wxS( "text_encoding.sch" ) );
+    BOOST_REQUIRE_EQUAL( model.labels.size(), 1 );
+
+    writeU16( bytes, model.labels.front().source.absoluteOffset + 28, 0xFF00 );
+
+    PADS_SCH_MODEL patched = parser.Parse( bytes, wxS( "text_encoding.sch" ) );
+    BOOST_REQUIRE_EQUAL( patched.labels.size(), 1 );
+    BOOST_CHECK_EQUAL( patched.labels.front().angle, model.labels.front().angle );
+    BOOST_CHECK( std::ranges::none_of( patched.diagnostics,
+                                       []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                       {
+                                           return aDiagnostic.property
+                                                  && aDiagnostic.property->name == wxS( "offpage_mirror_flags" );
+                                       } ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
