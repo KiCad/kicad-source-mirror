@@ -1121,7 +1121,8 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
                 std::vector<VECTOR3I> curr_wire_shape = aLine->BuildWireWithHopShape( this, arcRadius );
 
                 // The hop pieces are standalone copies/shapes without the connection map, so
-                // resolve the net-class color and style from the original wire and reuse them.
+                // resolve the net-class width, color and style from the original wire and reuse them.
+                int        penWidth = aLine->GetPenWidth();
                 COLOR4D    lineColor = aLine->GetLineColor();
                 LINE_STYLE lineStyle = aLine->GetEffectiveLineStyle();
 
@@ -1137,6 +1138,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
                         SCH_LINE curr_line( *aLine );
                         curr_line.SetStartPoint( start );
                         curr_line.SetEndPoint( end );
+                        curr_line.SetLineWidth( penWidth );
                         curr_line.SetLineColor( lineColor );
                         curr_line.SetLineStyle( lineStyle );
                         curr_line.Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
