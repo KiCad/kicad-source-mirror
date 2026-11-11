@@ -38,6 +38,7 @@
 #include <wx/filename.h>
 
 #include <functional>
+#include <set>
 
 
 using namespace KICAD_DIFF;
@@ -272,6 +273,36 @@ BOOST_AUTO_TEST_CASE( ModifiedSymbolCarriesPinChildDelta )
     }
 
     BOOST_CHECK( foundPinChild );
+}
+
+
+// Symbol compare ignores unit and body style names, so only the deltas show a rename
+BOOST_AUTO_TEST_CASE( UnitAndBodyStyleNamesAreDetected )
+{
+    auto [ownersA, mapA] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    auto victim = std::ranges::find_if( ownersB,
+                                        []( const std::unique_ptr<LIB_SYMBOL>& aOwner )
+                                        {
+                                            return aOwner && !aOwner->IsDerived();
+                                        } );
+
+    BOOST_REQUIRE( victim != ownersB.end() );
+
+    ( *victim )->GetUnitDisplayNames()[1] = wxS( "QA_Unit" );
+    ( *victim )->SetBodyStyleNames( { wxS( "QA_Normal" ), wxS( "QA_Alternate" ) } );
+
+    std::set<wxString> names;
+
+    for( const ITEM_CHANGE& change : SYM_LIB_DIFFER( mapA, mapB ).Diff().changes )
+    {
+        for( const PROPERTY_DELTA& delta : change.properties )
+            names.insert( delta.name );
+    }
+
+    BOOST_CHECK( names.contains( wxS( "Unit Names" ) ) );
+    BOOST_CHECK( names.contains( wxS( "Body Style Names" ) ) );
 }
 
 

@@ -124,6 +124,45 @@ namespace
                     { wxS( "Footprint Filters" ), DIFF_VALUE::FromString( before ), DIFF_VALUE::FromString( after ) } );
         }
 
+        // Unit and body style names are not properties, so a merge could drop one unnoticed
+        auto unitNames = []( const LIB_SYMBOL* aSymbol )
+        {
+            wxArrayString names;
+
+            for( const auto& [unit, name] : aSymbol->GetUnitDisplayNames() )
+                names.Add( wxString::Format( wxS( "%d: %s" ), unit, name ) );
+
+            return wxJoin( names, ',' );
+        };
+
+        before = unitNames( aBefore );
+        after = unitNames( aAfter );
+
+        if( before != after )
+        {
+            deltas.push_back(
+                    { wxS( "Unit Names" ), DIFF_VALUE::FromString( before ), DIFF_VALUE::FromString( after ) } );
+        }
+
+        auto bodyStyleNames = []( const LIB_SYMBOL* aSymbol )
+        {
+            wxArrayString names;
+
+            for( const wxString& name : aSymbol->GetBodyStyleNames() )
+                names.Add( name );
+
+            return wxJoin( names, ',' );
+        };
+
+        before = bodyStyleNames( aBefore );
+        after = bodyStyleNames( aAfter );
+
+        if( before != after )
+        {
+            deltas.push_back( { wxS( "Body Style Names" ), DIFF_VALUE::FromString( before ),
+                                DIFF_VALUE::FromString( after ) } );
+        }
+
         return deltas;
     }
 
