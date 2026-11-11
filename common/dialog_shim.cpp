@@ -839,7 +839,9 @@ void DIALOG_SHIM::SaveControlState( const std::optional<wxPoint>& aPosition )
                     }
                     else if( wxSplitterWindow* splitter = dynamic_cast<wxSplitterWindow*>( win ) )
                     {
-                        dlgMap[ key ] = splitter->GetSashPosition();
+                        // An unsplit sash is meaningless, so keep the one saved while split
+                        if( splitter->IsSplit() )
+                            dlgMap[ key ] = splitter->GetSashPosition();
                     }
                     else if( wxScrolledWindow* scrolled = dynamic_cast<wxScrolledWindow*>( win ) )
                     {
