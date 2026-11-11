@@ -333,4 +333,27 @@ BOOST_AUTO_TEST_CASE( NativeDxfImportPreservesLocales )
 }
 
 
+BOOST_AUTO_TEST_CASE( DxfForgedPointCountsIssue26011 )
+{
+    auto importDxf = []( const wxString& aName )
+    {
+        DXF_IMPORT_PLUGIN      plugin;
+        TEST_GRAPHICS_IMPORTER importer;
+        plugin.SetUnit( DXF_IMPORT_UNITS::MM );
+        plugin.SetImporter( &importer );
+
+        const wxString path =
+                wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + wxS( "/common/import_gfx/" ) + aName;
+
+        BOOST_REQUIRE( plugin.Load( path ) );
+        BOOST_REQUIRE( plugin.Import() );
+        return importer.m_lines.size();
+    };
+
+    // Both files declare over a billion points but supply at most two
+    BOOST_CHECK_EQUAL( importDxf( wxS( "issue26011_lwpolyline.dxf" ) ), 1 );
+    BOOST_CHECK_EQUAL( importDxf( wxS( "issue26011_spline.dxf" ) ), 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

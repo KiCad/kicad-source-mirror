@@ -27,12 +27,14 @@
 
 #include "dl_global.h"
 
+#include <array>
 #include <limits>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <sstream>
 #include <map>
+#include <vector>
 
 #include "dl_attributes.h"
 #include "dl_codes.h"
@@ -491,28 +493,24 @@ private:
     DL_Codes::version version;
 
     std::string polylineLayer;
-    double* vertices;
-    int maxVertices;
-    int vertexIndex;
 
-    double* knots;
-    int maxKnots;
-    int knotIndex;
+    // Point storage grows as points are read; the max* counts declared by the file only cap it
+    std::vector<std::array<double, 4>> vertices;
+    int                                maxVertices;
 
-    double* weights;
-    int weightIndex;
+    std::vector<double> knots;
+    int                 maxKnots;
 
-    double* controlPoints;
-    int maxControlPoints;
-    int controlPointIndex;
+    std::vector<double> weights;
 
-    double* fitPoints;
-    int maxFitPoints;
-    int fitPointIndex;
+    std::vector<std::array<double, 3>> controlPoints;
+    int                                maxControlPoints;
 
-    double* leaderVertices;
-    int maxLeaderVertices;
-    int leaderVertexIndex;
+    std::vector<std::array<double, 3>> fitPoints;
+    int                                maxFitPoints;
+
+    std::vector<std::array<double, 3>> leaderVertices;
+    int                                maxLeaderVertices;
 
     bool firstHatchLoop;
     DL_HatchEdgeData hatchEdge;

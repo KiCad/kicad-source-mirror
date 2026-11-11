@@ -44,28 +44,11 @@ DL_Dxf::DL_Dxf()
 {
     version = DL_VERSION_2000;
 
-    vertices = NULL;
     maxVertices = 0;
-    vertexIndex = 0;
-
-    knots = NULL;
     maxKnots = 0;
-    knotIndex = 0;
-
-    weights = NULL;
-    weightIndex = 0;
-
-    controlPoints = NULL;
     maxControlPoints = 0;
-    controlPointIndex = 0;
-
-    fitPoints = NULL;
     maxFitPoints = 0;
-    fitPointIndex = 0;
-
-    leaderVertices = NULL;
     maxLeaderVertices = 0;
-    leaderVertexIndex = 0;
 
     // Aux members, initialized here to avoid warnings in analysers
     firstHatchLoop = true;
@@ -85,35 +68,6 @@ DL_Dxf::DL_Dxf()
  */
 DL_Dxf::~DL_Dxf()
 {
-    if( vertices!=NULL )
-    {
-        delete[] vertices;
-    }
-
-    if( knots!=NULL )
-    {
-        delete[] knots;
-    }
-
-    if( controlPoints!=NULL )
-    {
-        delete[] controlPoints;
-    }
-
-    if( fitPoints!=NULL )
-    {
-        delete[] fitPoints;
-    }
-
-    if( weights!=NULL )
-    {
-        delete[] weights;
-    }
-
-    if( leaderVertices!=NULL )
-    {
-        delete[] leaderVertices;
-    }
 }
 
 
@@ -1210,16 +1164,13 @@ void DL_Dxf::addPolyline( DL_CreationInterface* creationInterface )
 
     creationInterface->addPolyline( pd );
 
-    maxVertices = std::min( maxVertices, vertexIndex + 1 );
+    maxVertices = std::min( maxVertices, static_cast<int>( vertices.size() ) );
 
     if( currentObjectType==DL_ENTITY_LWPOLYLINE )
     {
-        for( int i = 0; i<maxVertices; i++ )
+        for( const std::array<double, 4>& v : vertices )
         {
-            DL_VertexData d( vertices[i * 4],
-                    vertices[i * 4 + 1],
-                    vertices[i * 4 + 2],
-                    vertices[i * 4 + 3] );
+            DL_VertexData d( v[0], v[1], v[2], v[3] );
 
             creationInterface->addVertex( d );
         }
@@ -1259,11 +1210,8 @@ void DL_Dxf::addVertex( DL_CreationInterface* creationInterface )
  */
 void DL_Dxf::addSpline( DL_CreationInterface* creationInterface )
 {
-    DL_SplineData sd( getIntValue( 71, 3 ),
-            maxKnots,
-            maxControlPoints,
-            maxFitPoints,
-            getIntValue( 70, 4 ) );
+    DL_SplineData sd( getIntValue( 71, 3 ), static_cast<int>( knots.size() ), static_cast<int>( controlPoints.size() ),
+                      static_cast<int>( fitPoints.size() ), getIntValue( 70, 4 ) );
 
     sd.tangentStartX = getRealValue( 12, 0.0 );
     sd.tangentStartY = getRealValue( 22, 0.0 );
@@ -1274,32 +1222,26 @@ void DL_Dxf::addSpline( DL_CreationInterface* creationInterface )
 
     creationInterface->addSpline( sd );
 
-    int i;
-
-    for( i = 0; i<maxControlPoints; i++ )
+    for( size_t i = 0; i < controlPoints.size(); i++ )
     {
-        DL_ControlPointData d( controlPoints[i * 3],
-                controlPoints[i * 3 + 1],
-                controlPoints[i * 3 + 2],
-                weights[i] );
+        const std::array<double, 3>& p = controlPoints[i];
+        DL_ControlPointData          d( p[0], p[1], p[2], i < weights.size() ? weights[i] : 1.0 );
 
         creationInterface->addControlPoint( d );
     }
 
-    for( i = 0; i<maxFitPoints; i++ )
+    for( const std::array<double, 3>& p : fitPoints )
     {
-        DL_FitPointData d( fitPoints[i * 3],
-                fitPoints[i * 3 + 1],
-                fitPoints[i * 3 + 2] );
+        DL_FitPointData d( p[0], p[1], p[2] );
 
         creationInterface->addFitPoint( d );
     }
 
-    for( i = 0; i<maxKnots; i++ )
+    for( double k : knots )
     {
-        DL_KnotData k( knots[i] );
+        DL_KnotData kd( k );
 
-        creationInterface->addKnot( k );
+        creationInterface->addKnot( kd );
     }
 
     creationInterface->endEntity();
@@ -1669,51 +1611,25 @@ bool DL_Dxf::handleMTextData( DL_CreationInterface* creationInterface )
  */
 bool DL_Dxf::handleLWPolylineData( DL_CreationInterface*    /*creationInterface*/ )
 {
-    // Allocate LWPolyline vertices (group code 90):
+    // LWPolyline vertex count (group code 90)
     if( groupCode==90 )
     {
         maxVertices = toInt( groupValue );
-
-        if( maxVertices>0 )
-        {
-            if( vertices!=NULL )
-            {
-                delete[] vertices;
-            }
-
-            vertices = new double[4 * maxVertices];
-
-            for( int i = 0; i<maxVertices; ++i )
-            {
-                vertices[i * 4] = 0.0;
-                vertices[i * 4 + 1] = 0.0;
-                vertices[i * 4 + 2] = 0.0;
-                vertices[i * 4 + 3] = 0.0;
-            }
-        }
-
-        vertexIndex = -1;
+        vertices.clear();
         return true;
     }
     // Process LWPolylines vertices (group codes 10/20/30/42):
     else if( groupCode==10 || groupCode==20
              || groupCode==30 || groupCode==42 )
     {
-        if( vertexIndex<maxVertices - 1 && groupCode==10 )
+        if( groupCode == 10 && static_cast<int>( vertices.size() ) < maxVertices )
         {
-            vertexIndex++;
+            vertices.emplace_back();
         }
 
-        if( groupCode<=30 )
+        if( !vertices.empty() )
         {
-            if( vertexIndex>=0 && vertexIndex<maxVertices )
-            {
-                vertices[4 * vertexIndex + (groupCode / 10 - 1)] = toReal( groupValue );
-            }
-        }
-        else if( groupCode == 42 && vertexIndex < maxVertices && vertexIndex >= 0 )
-        {
-            vertices[4 * vertexIndex + 3] = toReal( groupValue );
+            vertices.back()[groupCode == 42 ? 3 : groupCode / 10 - 1] = toReal( groupValue );
         }
 
         return true;
@@ -1728,94 +1644,34 @@ bool DL_Dxf::handleLWPolylineData( DL_CreationInterface*    /*creationInterface*
  */
 bool DL_Dxf::handleSplineData( DL_CreationInterface*    /*creationInterface*/ )
 {
-    // Allocate Spline knots (group code 72):
+    // Spline knot count (group code 72)
     if( groupCode==72 )
     {
         maxKnots = toInt( groupValue );
-
-        if( maxKnots>0 )
-        {
-            if( knots!=NULL )
-            {
-                delete[] knots;
-            }
-
-            knots = new double[maxKnots];
-
-            for( int i = 0; i<maxKnots; ++i )
-            {
-                knots[i] = 0.0;
-            }
-        }
-
-        knotIndex = -1;
+        knots.clear();
         return true;
     }
-    // Allocate Spline control points / weights (group code 73):
+    // Spline control point / weight count (group code 73)
     else if( groupCode==73 )
     {
         maxControlPoints = toInt( groupValue );
-
-        if( maxControlPoints>0 )
-        {
-            if( controlPoints!=NULL )
-            {
-                delete[] controlPoints;
-            }
-
-            if( weights!=NULL )
-            {
-                delete[] weights;
-            }
-
-            controlPoints = new double[3 * maxControlPoints];
-            weights = new double[maxControlPoints];
-
-            for( int i = 0; i<maxControlPoints; ++i )
-            {
-                controlPoints[i * 3] = 0.0;
-                controlPoints[i * 3 + 1] = 0.0;
-                controlPoints[i * 3 + 2] = 0.0;
-                weights[i] = 1.0;
-            }
-        }
-
-        controlPointIndex = -1;
-        weightIndex = -1;
+        controlPoints.clear();
+        weights.clear();
         return true;
     }
-    // Allocate Spline fit points (group code 74):
+    // Spline fit point count (group code 74)
     else if( groupCode==74 )
     {
         maxFitPoints = toInt( groupValue );
-
-        if( maxFitPoints>0 )
-        {
-            if( fitPoints!=NULL )
-            {
-                delete[] fitPoints;
-            }
-
-            fitPoints = new double[3 * maxFitPoints];
-
-            for( int i = 0; i<maxFitPoints; ++i )
-            {
-                fitPoints[i * 3] = 0.0;
-                fitPoints[i * 3 + 1] = 0.0;
-                fitPoints[i * 3 + 2] = 0.0;
-            }
-        }
-
-        fitPointIndex = -1;
+        fitPoints.clear();
         return true;
     }
     // Process spline knot vertices (group code 40):
     else if( groupCode==40 )
     {
-        if( knotIndex<maxKnots - 1 )
+        if( static_cast<int>( knots.size() ) < maxKnots )
         {
-            knotIndex++;
-            knots[knotIndex] = toReal( groupValue );
+            knots.push_back( toReal( groupValue ) );
         }
 
         return true;
@@ -1824,14 +1680,14 @@ bool DL_Dxf::handleSplineData( DL_CreationInterface*    /*creationInterface*/ )
     else if( groupCode==10 || groupCode==20
              || groupCode==30 )
     {
-        if( controlPointIndex<maxControlPoints - 1 && groupCode==10 )
+        if( groupCode == 10 && static_cast<int>( controlPoints.size() ) < maxControlPoints )
         {
-            controlPointIndex++;
+            controlPoints.emplace_back();
         }
 
-        if( controlPointIndex>=0 && controlPointIndex<maxControlPoints )
+        if( !controlPoints.empty() )
         {
-            controlPoints[3 * controlPointIndex + (groupCode / 10 - 1)] = toReal( groupValue );
+            controlPoints.back()[groupCode / 10 - 1] = toReal( groupValue );
         }
 
         return true;
@@ -1839,14 +1695,14 @@ bool DL_Dxf::handleSplineData( DL_CreationInterface*    /*creationInterface*/ )
     // Process spline fit points (group codes 11/21/31):
     else if( groupCode==11 || groupCode==21 || groupCode==31 )
     {
-        if( fitPointIndex<maxFitPoints - 1 && groupCode==11 )
+        if( groupCode == 11 && static_cast<int>( fitPoints.size() ) < maxFitPoints )
         {
-            fitPointIndex++;
+            fitPoints.emplace_back();
         }
 
-        if( fitPointIndex>=0 && fitPointIndex<maxFitPoints )
+        if( !fitPoints.empty() )
         {
-            fitPoints[3 * fitPointIndex + ( (groupCode - 1) / 10 - 1 )] = toReal( groupValue );
+            fitPoints.back()[( groupCode - 1 ) / 10 - 1] = toReal( groupValue );
         }
 
         return true;
@@ -1854,14 +1710,14 @@ bool DL_Dxf::handleSplineData( DL_CreationInterface*    /*creationInterface*/ )
     // Process spline weights (group code 41)
     else if( groupCode==41 )
     {
-        if( weightIndex<maxControlPoints - 1 )
+        if( static_cast<int>( weights.size() ) < maxControlPoints )
         {
-            weightIndex++;
+            weights.push_back( 1.0 );
         }
 
-        if( weightIndex>=0 && weightIndex<maxControlPoints )
+        if( !weights.empty() )
         {
-            weights[weightIndex] = toReal( groupValue );
+            weights.back() = toReal( groupValue );
         }
 
         return true;
@@ -1876,47 +1732,24 @@ bool DL_Dxf::handleSplineData( DL_CreationInterface*    /*creationInterface*/ )
  */
 bool DL_Dxf::handleLeaderData( DL_CreationInterface*    /*creationInterface*/ )
 {
-    // Allocate Leader vertices (group code 76):
+    // Leader vertex count (group code 76)
     if( groupCode==76 )
     {
         maxLeaderVertices = toInt( groupValue );
-
-        if( maxLeaderVertices>0 )
-        {
-            if( leaderVertices!=NULL )
-            {
-                delete[] leaderVertices;
-            }
-
-            leaderVertices = new double[3 * maxLeaderVertices];
-
-            for( int i = 0; i<maxLeaderVertices; ++i )
-            {
-                leaderVertices[i * 3] = 0.0;
-                leaderVertices[i * 3 + 1] = 0.0;
-                leaderVertices[i * 3 + 2] = 0.0;
-            }
-        }
-
-        leaderVertexIndex = -1;
+        leaderVertices.clear();
         return true;
     }
     // Process Leader vertices (group codes 10/20/30):
     else if( groupCode==10 || groupCode==20 || groupCode==30 )
     {
-        if( leaderVertexIndex<maxLeaderVertices - 1 && groupCode==10 )
+        if( groupCode == 10 && static_cast<int>( leaderVertices.size() ) < maxLeaderVertices )
         {
-            leaderVertexIndex++;
+            leaderVertices.emplace_back();
         }
 
-        if( groupCode<=30 )
+        if( !leaderVertices.empty() )
         {
-            if( leaderVertexIndex>=0
-                && leaderVertexIndex<maxLeaderVertices )
-            {
-                leaderVertices[3 * leaderVertexIndex + (groupCode / 10 - 1)]
-                    = toReal( groupValue );
-            }
+            leaderVertices.back()[groupCode / 10 - 1] = toReal( groupValue );
         }
 
         return true;
@@ -2268,11 +2101,9 @@ void DL_Dxf::addLeader( DL_CreationInterface* creationInterface )
 
     creationInterface->addLeader( le );
 
-    for( int i = 0; i<maxLeaderVertices; i++ )
+    for( const std::array<double, 3>& v : leaderVertices )
     {
-        DL_LeaderVertexData d( leaderVertices[i * 3],
-                leaderVertices[i * 3 + 1],
-                leaderVertices[i * 3 + 2] );
+        DL_LeaderVertexData d( v[0], v[1], v[2] );
 
         creationInterface->addLeaderVertex( d );
     }
