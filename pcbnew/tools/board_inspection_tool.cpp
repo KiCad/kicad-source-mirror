@@ -2287,10 +2287,13 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
                 dirFn.AppendDir( wxS( "kicad-history-" ) + hash.Left( 8 ) );
                 const wxString tempDir = dirFn.GetPath();
 
-                // Extract just the board and project file (its real net classes and
-                // design settings), skipping the schematic, 3D models, gerbers, etc.
+                // Extract just the board, the project file (its real net classes and
+                // design settings) and the rules and library tables the board differ
+                // compares, skipping the schematic, 3D models, gerbers, etc.
                 if( !history.ExtractAllFilesAtCommit( projectPath, hash, tempDir,
-                                                      { wxS( ".kicad_pcb" ), wxS( ".kicad_pro" ) } ) )
+                                                      { wxS( ".kicad_pcb" ), wxS( ".kicad_pro" ),
+                                                        wxS( ".kicad_dru" ), wxS( "fp-lib-table" ),
+                                                        wxS( "sym-lib-table" ) } ) )
                 {
                     wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
                     return false;
