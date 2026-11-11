@@ -2964,6 +2964,9 @@ void PCB_EDIT_FRAME::ProjectChanged()
                 },
                 GetBoard()->GetHistoryLifetimeToken() );
     }
+
+    // A standalone editor has no project manager to record the project's own files
+    Kiway().LocalHistory().RegisterProjectSaver( &Prj() );
 }
 
 

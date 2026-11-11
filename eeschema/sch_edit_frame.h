@@ -1083,7 +1083,7 @@ protected:
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
 private:
-    /// Register the loaded schematic for autosave history. A no-op when it already is.
+    /// Register the loaded schematic and its project for autosave history. A no-op when they already are.
     void registerHistorySaver();
 
     /// Select the schematic's current variant in the toolbar control, which must exist.

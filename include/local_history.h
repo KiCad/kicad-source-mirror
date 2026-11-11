@@ -37,6 +37,7 @@
 #include <wx/window.h>
 
 class PROGRESS_REPORTER;
+class PROJECT;
 
 enum class SNAPSHOT_COMMIT_RESULT
 {
@@ -59,6 +60,7 @@ struct KICOMMON_API HISTORY_FILE_DATA
     wxString    sourcePath;     ///< For file-copy savers (small files like .kicad_pro)
     bool        prettify = false;
     KICAD_FORMAT::FORMAT_MODE formatMode = KICAD_FORMAT::FORMAT_MODE::NORMAL;
+    bool        removed = false; ///< The file no longer exists and leaves the snapshot
 };
 
 struct KICOMMON_API LOCAL_HISTORY_SNAPSHOT_INFO
@@ -108,6 +110,10 @@ public:
             const void* aSaverObject,
             const std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )>& aSaver,
             const std::weak_ptr<void>& aLifetime = {} );
+
+    /** Register \a aProject's own files (project, rules and library tables) for history snapshots.
+     *  Every editor may call this; the project is registered once. */
+    void RegisterProjectSaver( PROJECT* aProject );
 
     /** Unregister a previously registered saver callback.
      *  @param aSaverObject The object pointer that was used to register the saver */

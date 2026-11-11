@@ -566,16 +566,17 @@ void PROJECT::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_F
         return;
 
     wxFileName projectFn( projectFile );
-    wxFileName requestedFn( aProjectPath );
+    wxFileName requestedDir = wxFileName::DirName( aProjectPath );
     // wxPATH_NORM_ALL is now deprecated.
     // So define a similar option
     int norm_opt = wxPATH_NORM_ENV_VARS|wxPATH_NORM_DOTS|wxPATH_NORM_TILDE|wxPATH_NORM_ABSOLUTE
                    |wxPATH_NORM_LONG|wxPATH_NORM_SHORTCUT;
 
-    if( !projectFn.Normalize( norm_opt ) || !requestedFn.Normalize( norm_opt ) )
+    if( !projectFn.Normalize( norm_opt ) || !requestedDir.Normalize( norm_opt ) )
         return;
 
-    if( projectFn.GetFullPath() != requestedFn.GetFullPath() )
+    // Savers are handed the project directory, not the project file
+    if( projectFn.GetPath() != requestedDir.GetPath() )
         return;
 
     HISTORY_FILE_DATA proEntry;
@@ -590,14 +591,23 @@ void PROJECT::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_F
 
     aFileData.push_back( std::move( proEntry ) );
 
-    wxFileName prlFile( projectFn.GetPath(), projectFn.GetName(),
-                        FILEEXT::ProjectLocalSettingsFileExtension );
+    // Board Setup writes the rules file and the table editors write the tables, so the disk copies are current
+    const wxString dir = projectFn.GetPath();
+    const wxString name = projectFn.GetName();
 
-    if( prlFile.FileExists() )
+    for( const wxFileName& file : { wxFileName( dir, name, FILEEXT::ProjectLocalSettingsFileExtension ),
+                                    wxFileName( dir, name, FILEEXT::DesignRulesFileExtension ),
+                                    wxFileName( dir, FILEEXT::FootprintLibraryTableFileName ),
+                                    wxFileName( dir, FILEEXT::SymbolLibraryTableFileName ) } )
     {
-        HISTORY_FILE_DATA prlEntry;
-        prlEntry.relativePath = prlFile.GetFullName();
-        prlEntry.sourcePath = prlFile.GetFullPath();
-        aFileData.push_back( std::move( prlEntry ) );
+        HISTORY_FILE_DATA entry;
+        entry.relativePath = file.GetFullName();
+
+        if( file.FileExists() )
+            entry.sourcePath = file.GetFullPath();
+        else
+            entry.removed = true;
+
+        aFileData.push_back( std::move( entry ) );
     }
 }

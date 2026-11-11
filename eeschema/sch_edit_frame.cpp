@@ -1605,6 +1605,9 @@ void SCH_EDIT_FRAME::registerHistorySaver()
                 m_schematic->SaveToHistory( aProjectPath, aFileData );
             },
             m_schematic->GetHistoryLifetimeToken() );
+
+    // A standalone editor has no project manager to record the project's own files
+    Kiway().LocalHistory().RegisterProjectSaver( &Prj() );
 }
 
 

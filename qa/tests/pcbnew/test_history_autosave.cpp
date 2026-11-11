@@ -163,7 +163,7 @@ void addViaStackPreset( BOARD_DESIGN_SETTINGS& aSettings, const wxString& aName 
 std::string snapshotProjectBytes( PROJECT& aProject )
 {
     std::vector<HISTORY_FILE_DATA> fileData;
-    aProject.SaveToHistory( aProject.GetProjectFullName(), fileData );
+    aProject.SaveToHistory( aProject.GetProjectPath(), fileData );
 
     auto it = std::find_if( fileData.begin(), fileData.end(),
                             []( const HISTORY_FILE_DATA& aEntry )
@@ -999,6 +999,54 @@ BOOST_AUTO_TEST_CASE( ProjectSnapshotDoesNotDirtyACleanProject )
     BOOST_CHECK_MESSAGE( !projectFile.SaveToFile( tc.m_tempDir.PathStr() ),
                          "an unchanged project must not be rewritten after a snapshot" );
     BOOST_CHECK_EQUAL( before, readTextFile( tc.m_proPath ) );
+}
+
+
+// History compares read the rules and library tables from the snapshot, so it must track them
+BOOST_AUTO_TEST_CASE( ProjectSnapshotTracksRulesAndLibTables )
+{
+    LIBGIT2_SCOPE              libgit;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
+
+    SNAPSHOT_PROJECT tc( wxS( "kicad_qa_pro_snapshot_files" ), wxS( "files.kicad_pro" ) );
+    const wxString   rules = tc.m_tempDir.ChildPathStr( wxS( "files.kicad_dru" ) );
+    const wxString   path = tc.Project().GetProjectPath();
+
+    writeTextFile( rules, wxS( "(version 1)\n" ) );
+    writeTextFile( tc.m_tempDir.ChildPathStr( wxS( "fp-lib-table" ) ), wxS( "(fp_lib_table)\n" ) );
+
+    LOCAL_HISTORY history;
+    history.RegisterProjectSaver( &tc.Project() );
+
+    auto headHas = [&]( const char* aName )
+    {
+        git_repository* repo = nullptr;
+        BOOST_REQUIRE( git_repository_open( &repo, ( path + wxS( ".history" ) ).mb_str().data() ) == 0 );
+
+        git_oid     headOid;
+        git_commit* head = nullptr;
+        git_tree*   tree = nullptr;
+        BOOST_REQUIRE( git_reference_name_to_id( &headOid, repo, "HEAD" ) == 0 );
+        BOOST_REQUIRE( git_commit_lookup( &head, repo, &headOid ) == 0 );
+        BOOST_REQUIRE( git_commit_tree( &tree, head ) == 0 );
+
+        const bool found = git_tree_entry_byname( tree, aName ) != nullptr;
+
+        git_tree_free( tree );
+        git_commit_free( head );
+        git_repository_free( repo );
+        return found;
+    };
+
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Save" ), wxS( "pcb" ) ) );
+    BOOST_CHECK( headHas( "files.kicad_dru" ) );
+    BOOST_CHECK( headHas( "fp-lib-table" ) );
+
+    BOOST_REQUIRE( wxRemoveFile( rules ) );
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Save" ), wxS( "pcb" ) ) );
+    BOOST_CHECK( !headHas( "files.kicad_dru" ) );
+
+    history.UnregisterSaver( &tc.Project() );
 }
 
 
