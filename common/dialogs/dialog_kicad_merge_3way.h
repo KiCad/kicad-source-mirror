@@ -32,8 +32,10 @@
 #include <functional>
 #include <map>
 #include <optional>
+#include <set>
 
 
+class REPORTER;
 class WIDGET_DIFF_CANVAS;
 
 
@@ -94,6 +96,17 @@ public:
         /// neighbours. Left empty, or returning nothing, falls back to the item's identifier.
         std::function<wxString( const KIID_PATH& )> describeItem;
     };
+
+    using LIBRARY_ITEM_DRAWER = std::function<void( WIDGET_DIFF_CANVAS&, SIDE, const wxString& aName )>;
+
+    /**
+     * Context for merging a library, whose items are known by the names in aNames. aDraw draws
+     * the named item as it is on a side, and gets an empty name when no conflict is chosen.
+     */
+    static CONFLICT_CONTEXT LibraryContext( const std::set<wxString>& aNames, LIBRARY_ITEM_DRAWER aDraw );
+
+    /// Report to aReporter and return false when this process cannot open a dialog.
+    static bool CanOpen( REPORTER& aReporter );
 
     DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent, const KICAD_DIFF::MERGE_PLAN& aPlan,
                              CONFLICT_CONTEXT aContext = {} );

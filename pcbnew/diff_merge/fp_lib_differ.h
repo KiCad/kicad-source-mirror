@@ -25,6 +25,7 @@
 #define FP_LIB_DIFFER_H
 
 #include <diff_merge/kicad_differ.h>
+#include <diff_merge/lib_element_diff.h>
 
 #include <wx/string.h>
 
@@ -68,6 +69,13 @@ private:
     const FOOTPRINT_MAP& m_after;
     wxString             m_path;
 };
+
+/**
+ * Compare the elements of two library footprints. Fields match by name, and pads, graphics and
+ * zones match as they would in DiffUnkeyedElements, since pad numbers repeat. Only changed
+ * elements are returned. Either footprint may be null for a whole footprint add or remove.
+ */
+std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter );
 
 } // namespace KICAD_DIFF
 

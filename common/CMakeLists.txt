@@ -986,6 +986,7 @@ set( COMMON_SRCS
     diff_merge/diff_renderer_gal.cpp
     diff_merge/diff_renderer_plotter.cpp
     diff_merge/diff_job_output.cpp
+    diff_merge/lib_element_diff.cpp
 
     origin_viewitem.cpp
 

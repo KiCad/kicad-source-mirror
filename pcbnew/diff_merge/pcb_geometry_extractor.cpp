@@ -356,4 +356,19 @@ DOCUMENT_GEOMETRY ExtractFootprintGeometry( const FOOTPRINT& aFootprint, const K
     return out;
 }
 
+
+DOCUMENT_GEOMETRY ExtractFootprintGeometry( const std::map<wxString, const FOOTPRINT*>& aFootprints,
+                                            const KIGFX::COLOR4D&                       aColor )
+{
+    DOCUMENT_GEOMETRY out;
+
+    for( const auto& [name, footprint] : aFootprints )
+    {
+        if( footprint )
+            AppendGeometry( out, ExtractFootprintGeometry( *footprint, aColor ) );
+    }
+
+    return out;
+}
+
 } // namespace KICAD_DIFF

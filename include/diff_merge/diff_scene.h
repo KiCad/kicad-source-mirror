@@ -291,6 +291,17 @@ struct KICOMMON_API DIFF_COLOR_THEME
     /// added/removed/modified overlays.
     KIGFX::COLOR4D reference = KIGFX::COLOR4D( 0.38, 0.38, 0.38, 0.55 );
     KIGFX::COLOR4D comparison = KIGFX::COLOR4D( 0.38, 0.38, 0.38, 0.55 );
+
+    /// Color of an added, removed or modified element.
+    const KIGFX::COLOR4D& ForKind( KICAD_DIFF::CHANGE_KIND aKind ) const
+    {
+        switch( aKind )
+        {
+        case KICAD_DIFF::CHANGE_KIND::ADDED: return added;
+        case KICAD_DIFF::CHANGE_KIND::REMOVED: return removed;
+        default: return modified;
+        }
+    }
 };
 
 

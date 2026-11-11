@@ -3133,7 +3133,11 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
 
         // The selected symbol is drawn whole, since outlines of every symbol pile up in one place
         DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result );
-        KICAD_DIFF::ShowSymbolChanges( dlg, result, mapA, mapB );
+        dlg.DrawChosenLibraryItem(
+                [&]( WIDGET_DIFF_CANVAS& aCanvas, const wxString& aName )
+                {
+                    KICAD_DIFF::ShowSymbolPair( aCanvas, mapA, mapB, aName );
+                } );
         dlg.ShowModal();
 
         return CLI::EXIT_CODES::SUCCESS;
@@ -3152,18 +3156,6 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
 #include <diff_merge/sch_merge_applier.h>
 #include <dialogs/dialog_kicad_merge_3way.h>
 #include <jobs/scratch_doc.h>
-
-
-static bool canShowMergeDialog( REPORTER& aReporter )
-{
-    if( Pgm().IsGUI() )
-        return true;
-
-    aReporter.Report( _( "--interactive requires a GUI KiCad process; the console "
-                         "kicad-cli cannot open dialogs.\n" ),
-                      RPT_SEVERITY_ERROR );
-    return false;
-}
 
 
 int EESCHEMA_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& aAncestor,
@@ -3238,7 +3230,7 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
-        if( !canShowMergeDialog( *m_reporter ) )
+        if( !DIALOG_KICAD_MERGE_3WAY::CanOpen( *m_reporter ) )
             return CLI::EXIT_CODES::ERR_ARGS;
 
         const KICAD_DIFF::DIFF_COLOR_THEME        theme;
@@ -3679,41 +3671,31 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
 
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
-        if( !canShowMergeDialog( *m_reporter ) )
+        if( !DIALOG_KICAD_MERGE_3WAY::CanOpen( *m_reporter ) )
             return CLI::EXIT_CODES::ERR_ARGS;
 
-        std::map<KIID_PATH, wxString> names;
+        std::set<wxString> names;
 
         for( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side : { &ancestor.map, &ours.map, &theirs.map } )
         {
             for( const auto& [name, symbol] : *side )
-                names.emplace( KICAD_DIFF::LibraryItemKiidPath( name ), name );
+                names.insert( name );
         }
 
-        auto nameOf = [&names]( const KIID_PATH& aId ) -> wxString
-        {
-            auto it = names.find( aId );
-            return it != names.end() ? it->second : wxString();
-        };
-
-        DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
-
-        ctx.describeItem = nameOf;
-
         // Each side is drawn over the common version so its own edits stand out
-        ctx.drawSide = [&ancestor, &ours, &theirs, nameOf]( WIDGET_DIFF_CANVAS&             aCanvas,
-                                                             DIALOG_KICAD_MERGE_3WAY::SIDE   aSide,
-                                                             const std::optional<KIID_PATH>& aId )
-        {
-            const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side = &ours.map;
+        auto ctx = DIALOG_KICAD_MERGE_3WAY::LibraryContext(
+                names,
+                [&]( WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide, const wxString& aName )
+                {
+                    const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side = &ours.map;
 
-            if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS )
-                side = &theirs.map;
-            else if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR )
-                side = &ancestor.map;
+                    if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS )
+                        side = &theirs.map;
+                    else if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR )
+                        side = &ancestor.map;
 
-            KICAD_DIFF::ShowSymbolPair( aCanvas, ancestor.map, *side, aId ? nameOf( *aId ) : wxString() );
-        };
+                    KICAD_DIFF::ShowSymbolPair( aCanvas, ancestor.map, *side, aName );
+                } );
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
 

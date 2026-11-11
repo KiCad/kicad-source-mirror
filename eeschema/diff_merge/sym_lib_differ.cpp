@@ -169,7 +169,7 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
 
         change.properties = symbolDeltas( before.get(), after.get() );
 
-        for( const SYM_ELEMENT& element : DiffSymbolElements( before.get(), after.get() ) )
+        for( const LIB_ELEMENT& element : DiffSymbolElements( before.get(), after.get() ) )
         {
             ITEM_CHANGE child;
             child.typeName = element.typeName;

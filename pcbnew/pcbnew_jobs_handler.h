@@ -101,7 +101,7 @@ private:
     int runPcbMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,
                      const wxString& aOutput, bool aInteractive );
     int runFpLibMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,
-                       const wxString& aOutput, bool aSingleFile );
+                       const wxString& aOutput, bool aInteractive, bool aSingleFile );
 
 public:
 

@@ -4342,7 +4342,7 @@ int PCBNEW_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& a
                                                aReporter ? aReporter : m_reporter );
 
     if( aKind == KICAD_DIFF::DOC_KIND::FP_LIB || aKind == KICAD_DIFF::DOC_KIND::FOOTPRINT )
-        return runFpLibMerge( aAncestor, aOurs, aTheirs, aOutput, aSingleFile );
+        return runFpLibMerge( aAncestor, aOurs, aTheirs, aOutput, aInteractive, aSingleFile );
 
     return runPcbMerge( aAncestor, aOurs, aTheirs, aOutput, aInteractive );
 }
@@ -4394,13 +4394,8 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
 
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
-        if( !Pgm().IsGUI() )
-        {
-            m_reporter->Report( _( "--interactive requires a GUI KiCad process; the console "
-                                   "kicad-cli cannot open dialogs.\n" ),
-                                RPT_SEVERITY_ERROR );
+        if( !DIALOG_KICAD_MERGE_3WAY::CanOpen( *m_reporter ) )
             return CLI::EXIT_CODES::ERR_ARGS;
-        }
 
         // Geometry context so the conflict viewer can render the actual
         // boards behind the conflict bbox highlight.
@@ -4694,23 +4689,6 @@ static int loadFootprintLibrarySide( const wxString& aPath,
 }
 
 
-// Flatten a footprint-library name map into a single DOCUMENT_GEOMETRY tinted
-// with the supplied per-side theme colour.
-static KICAD_DIFF::DOCUMENT_GEOMETRY
-footprintLibraryGeometry( const KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP& aMap, const KIGFX::COLOR4D& aColor )
-{
-    KICAD_DIFF::DOCUMENT_GEOMETRY geometry;
-
-    for( const auto& [name, footprint] : aMap )
-    {
-        if( footprint )
-            KICAD_DIFF::AppendGeometry( geometry, KICAD_DIFF::ExtractFootprintGeometry( *footprint, aColor ) );
-    }
-
-    return geometry;
-}
-
-
 int PCBNEW_JOBS_HANDLER::JobFpDiff( JOB* aJob )
 {
     JOB_FP_DIFF* diffJob = dynamic_cast<JOB_FP_DIFF*>( aJob );
@@ -4752,9 +4730,9 @@ int PCBNEW_JOBS_HANDLER::JobFpDiff( JOB* aJob )
             KICAD_DIFF::MakeEmitOptions( *diffJob, diffJob->m_inputA, diffJob->m_inputB );
     emitOpts.docKind            = KICAD_DIFF::DOC_KIND::FP_LIB;
     emitOpts.referenceGeometry  = [&]( const KIGFX::COLOR4D& aColor )
-                                  { return footprintLibraryGeometry( mapA, aColor ); };
+                                  { return KICAD_DIFF::ExtractFootprintGeometry( mapA, aColor ); };
     emitOpts.comparisonGeometry = [&]( const KIGFX::COLOR4D& aColor )
-                                  { return footprintLibraryGeometry( mapB, aColor ); };
+                                  { return KICAD_DIFF::ExtractFootprintGeometry( mapB, aColor ); };
 
     return KICAD_DIFF::EmitDiffResult( result, emitOpts, diffExitCode, *m_reporter );
 }
@@ -4881,26 +4859,13 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 
-    KICAD_DIFF::DOCUMENT_DIFF     result;
-    KICAD_DIFF::DOCUMENT_GEOMETRY refGeometry;
-    KICAD_DIFF::DOCUMENT_GEOMETRY compGeometry;
+    const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
+    const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
 
-    auto loadFootprintFile = [&]( const wxString& aPath ) -> std::unique_ptr<FOOTPRINT>
-    {
-        if( aPath.IsEmpty() )
-            return nullptr;
-
-        wxFileName fn( aPath );
-        fn.MakeAbsolute();
-
-        // A single .kicad_mod's internal (footprint ...) name need not match its
-        // filename, so load the file's sole footprint via ImportFootprint rather
-        // than FootprintLoad (which treats the directory as a .pretty library and
-        // keys by basename), matching runFpLibMerge's single-file path.
-        PCB_IO_KICAD_SEXPR io;
-        wxString           name;
-        return io.ImportFootprint( fn.GetFullPath(), name );
-    };
+    std::vector<std::unique_ptr<FOOTPRINT>>  ownersA;
+    std::vector<std::unique_ptr<FOOTPRINT>>  ownersB;
+    KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
+    KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
 
     switch( aKind )
     {
@@ -4913,19 +4878,14 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
 
         BOARD* boardA = sides.boardA;
         BOARD* boardB = sides.boardB;
-        result = std::move( sides.diff );
 
         // Background geometry, so the dialog's canvas shows the board outline and footprints
         // beneath the change rectangles.
         const KICAD_DIFF::DIFF_COLOR_THEME theme;
-        refGeometry = KICAD_DIFF::ExtractBoardGeometry( *boardA, theme.reference );
-        compGeometry = KICAD_DIFF::ExtractBoardGeometry( *boardB, theme.comparison );
-
-        const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
-        const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
 
         DIALOG_KICAD_DIFF dlg(
-                parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ),
+                parent, labelA, labelB, sides.diff, KICAD_DIFF::ExtractBoardGeometry( *boardA, theme.reference ),
+                KICAD_DIFF::ExtractBoardGeometry( *boardB, theme.comparison ),
                 [boardA, boardB, color = theme.reference]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& )
                 {
                     KICAD_DIFF::ConfigurePcbDiffCanvasContext( aCanvas, boardA, boardB, color );
@@ -4936,11 +4896,6 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     }
     case KICAD_DIFF::DOC_KIND::FP_LIB:
     {
-        std::vector<std::unique_ptr<FOOTPRINT>>  ownersA;
-        std::vector<std::unique_ptr<FOOTPRINT>>  ownersB;
-        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
-        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
-
         if( int rc = loadFootprintLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
@@ -4953,63 +4908,47 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
             return rc;
         }
 
-        KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, aFileB );
-        result = differ.Diff();
-
-        const KICAD_DIFF::DIFF_COLOR_THEME theme;
-        refGeometry = footprintLibraryGeometry( mapA, theme.reference );
-        compGeometry = footprintLibraryGeometry( mapB, theme.comparison );
         break;
     }
     case KICAD_DIFF::DOC_KIND::FOOTPRINT:
     {
-        std::unique_ptr<FOOTPRINT> footprintA;
-        std::unique_ptr<FOOTPRINT> footprintB;
+        const wxString nameA = wxFileName( aFileA ).GetName();
+        const wxString nameB = wxFileName( aFileB ).GetName();
+        const wxString itemName = !nameB.IsEmpty() ? nameB : nameA;
 
-        try
+        auto loadSide = [&]( const wxString& aPath, std::vector<std::unique_ptr<FOOTPRINT>>& aOwners,
+                             KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP& aMap ) -> bool
         {
-            footprintA = loadFootprintFile( aFileA );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aFileA, ioe.What() ),
-                                RPT_SEVERITY_ERROR );
+            if( aPath.IsEmpty() )
+                return true;
+
+            wxFileName fn( aPath );
+            fn.MakeAbsolute();
+
+            try
+            {
+                // The footprint name inside a .kicad_mod need not match its filename
+                PCB_IO_KICAD_SEXPR io;
+                wxString           name;
+
+                if( std::unique_ptr<FOOTPRINT> footprint = io.ImportFootprint( fn.GetFullPath(), name ) )
+                {
+                    aMap[itemName] = footprint.get();
+                    aOwners.push_back( std::move( footprint ) );
+                }
+
+                return true;
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aPath, ioe.What() ),
+                                    RPT_SEVERITY_ERROR );
+                return false;
+            }
+        };
+
+        if( !loadSide( aFileA, ownersA, mapA ) || !loadSide( aFileB, ownersB, mapB ) )
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-        }
-
-        try
-        {
-            footprintB = loadFootprintFile( aFileB );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aFileB, ioe.What() ),
-                                RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-        }
-
-        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
-        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
-        const wxString                           nameA = wxFileName( aFileA ).GetName();
-        const wxString                           nameB = wxFileName( aFileB ).GetName();
-        const wxString                           itemName = !nameB.IsEmpty() ? nameB : nameA;
-
-        if( footprintA )
-            mapA[itemName] = footprintA.get();
-
-        if( footprintB )
-            mapB[itemName] = footprintB.get();
-
-        KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, aFileB );
-        result = differ.Diff();
-
-        const KICAD_DIFF::DIFF_COLOR_THEME theme;
-
-        if( footprintA )
-            refGeometry = KICAD_DIFF::ExtractFootprintGeometry( *footprintA, theme.reference );
-
-        if( footprintB )
-            compGeometry = KICAD_DIFF::ExtractFootprintGeometry( *footprintB, theme.comparison );
 
         break;
     }
@@ -5018,10 +4957,21 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
-    const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
-    const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
+    KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, aFileB );
+    KICAD_DIFF::DOCUMENT_DIFF result = differ.Diff();
 
-    DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ) );
+    const KICAD_DIFF::DIFF_COLOR_THEME theme;
+
+    DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result,
+                           KICAD_DIFF::ExtractFootprintGeometry( mapA, theme.reference ),
+                           KICAD_DIFF::ExtractFootprintGeometry( mapB, theme.comparison ) );
+
+    dlg.DrawChosenLibraryItem(
+            [&]( WIDGET_DIFF_CANVAS& aCanvas, const wxString& aName )
+            {
+                KICAD_DIFF::ShowFootprintPair( aCanvas, mapA, mapB, aName );
+            } );
+
     dlg.ShowModal();
 
     return CLI::EXIT_CODES::SUCCESS;
@@ -5037,7 +4987,7 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
 
 int PCBNEW_JOBS_HANDLER::runFpLibMerge( const wxString& aAncestor, const wxString& aOurs,
                                         const wxString& aTheirs, const wxString& aOutput,
-                                        bool aSingleFile )
+                                        bool aInteractive, bool aSingleFile )
 {
     if( aOutput.IsEmpty() )
     {
@@ -5127,6 +5077,43 @@ int PCBNEW_JOBS_HANDLER::runFpLibMerge( const wxString& aAncestor, const wxStrin
 
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
+
+    if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
+    {
+        if( !DIALOG_KICAD_MERGE_3WAY::CanOpen( *m_reporter ) )
+            return CLI::EXIT_CODES::ERR_ARGS;
+
+        std::set<wxString> names;
+
+        for( const KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP* side : { &ancestor.map, &ours.map, &theirs.map } )
+        {
+            for( const auto& [name, footprint] : *side )
+                names.insert( name );
+        }
+
+        // Each side is drawn over the common version so its own edits stand out
+        auto ctx = DIALOG_KICAD_MERGE_3WAY::LibraryContext(
+                names,
+                [&]( WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide, const wxString& aName )
+                {
+                    const KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP* side = &ours.map;
+
+                    if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS )
+                        side = &theirs.map;
+                    else if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR )
+                        side = &ancestor.map;
+
+                    KICAD_DIFF::ShowFootprintPair( aCanvas, ancestor.map, *side, aName );
+                } );
+
+        DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
+
+        // Cancelling leaves the conflicts unresolved and the files untouched
+        if( dlg.ShowModal() != wxID_APPLY )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        plan = dlg.GetResolvedPlan();
+    }
 
     const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
 

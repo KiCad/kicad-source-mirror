@@ -1202,7 +1202,11 @@ int SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
     KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
 
     DIALOG_KICAD_DIFF dlgDiff( editFrame, currentLib, otherPath, result );
-    KICAD_DIFF::ShowSymbolChanges( dlgDiff, result, beforeMap, afterMap );
+    dlgDiff.DrawChosenLibraryItem(
+            [&]( WIDGET_DIFF_CANVAS& aCanvas, const wxString& aName )
+            {
+                KICAD_DIFF::ShowSymbolPair( aCanvas, beforeMap, afterMap, aName );
+            } );
 
     dlgDiff.ShowModal();
 

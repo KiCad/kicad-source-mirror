@@ -24,6 +24,9 @@
 #include "fp_lib_differ.h"
 
 #include <footprint.h>
+#include <pad.h>
+#include <pcb_field.h>
+#include <zone.h>
 #include <io/io_utils.h>
 #include <io/io_base.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
@@ -92,6 +95,58 @@ DOCUMENT_DIFF FP_LIB_DIFFER::Diff()
             {
                 return !( *aA == *aB );
             } );
+}
+
+
+std::vector<LIB_ELEMENT> DiffFootprintElements( const FOOTPRINT* aBefore, const FOOTPRINT* aAfter )
+{
+    auto fields = []( const FOOTPRINT* aFootprint )
+    {
+        std::map<wxString, const EDA_ITEM*> out;
+
+        if( aFootprint )
+        {
+            for( const PCB_FIELD* field : aFootprint->GetFields() )
+                out[field->GetName()] = field;
+        }
+
+        return out;
+    };
+
+    auto others = []( const FOOTPRINT* aFootprint )
+    {
+        std::vector<const EDA_ITEM*> out;
+
+        if( aFootprint )
+        {
+            out.insert( out.end(), aFootprint->Pads().begin(), aFootprint->Pads().end() );
+            out.insert( out.end(), aFootprint->GraphicalItems().begin(), aFootprint->GraphicalItems().end() );
+            out.insert( out.end(), aFootprint->Zones().begin(), aFootprint->Zones().end() );
+        }
+
+        return out;
+    };
+
+    std::vector<LIB_ELEMENT> out;
+
+    DiffKeyedElements( out, _( "Field" ), fields( aBefore ), fields( aAfter ) );
+    DiffUnkeyedElements(
+            out, others( aBefore ), others( aAfter ),
+            []( const EDA_ITEM* aItem )
+            {
+                return aItem->GetFriendlyName();
+            },
+            []( const EDA_ITEM* aA, const EDA_ITEM* aB )
+            {
+                // Polygon points and pad primitives are no property. Pads are compared as pads, since
+                // their BOARD_ITEM comparison also wants a parent that two loads never share
+                if( aA->Type() == PCB_PAD_T )
+                    return static_cast<const PAD&>( *aA ) == static_cast<const PAD&>( *aB );
+
+                return static_cast<const BOARD_ITEM&>( *aA ) == static_cast<const BOARD_ITEM&>( *aB );
+            } );
+
+    return out;
 }
 
 } // namespace KICAD_DIFF

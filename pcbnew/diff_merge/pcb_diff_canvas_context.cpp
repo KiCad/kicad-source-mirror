@@ -278,4 +278,75 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
     aCanvas.SetItemCategories( std::move( itemCategories ) );
 }
 
+
+void ConfigureFpDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, FOOTPRINT* aBefore, FOOTPRINT* aAfter,
+                                   std::shared_ptr<const void> aOwner )
+{
+    if( !aBefore && !aAfter )
+    {
+        aCanvas.SetContextItems( {} );
+        return;
+    }
+
+    const DIFF_COLOR_THEME         theme;
+    std::map<KIID, KIGFX::COLOR4D> overrides;
+    std::vector<KIGFX::VIEW_ITEM*> items;
+
+    if( !aBefore || !aAfter )
+    {
+        // A whole footprint added or removed takes its colour from the footprint
+        FOOTPRINT* shown = aAfter ? aAfter : aBefore;
+        overrides[shown->m_Uuid] = aAfter ? theme.added : theme.removed;
+        items = CollectFootprintDiffContextItems( *shown );
+    }
+    else
+    {
+        items = CollectFootprintDiffContextItems( *aAfter );
+
+        for( const LIB_ELEMENT& element : DiffFootprintElements( aBefore, aAfter ) )
+        {
+            overrides[PcbDiffItemId( *element.item )] = theme.ForKind( element.kind );
+
+            // Removed elements exist only on the before side
+            if( element.kind == CHANGE_KIND::REMOVED )
+                items.push_back( const_cast<EDA_ITEM*>( element.item ) );
+        }
+    }
+
+    aCanvas.SetContextPainter( MakePcbDiffContextPainter( aCanvas.GetGAL(), theme.reference, std::move( overrides ) ) );
+    aCanvas.SetContextItems( items, std::move( aOwner ) );
+    ApplyPcbGalLayerOrder( aCanvas.GetView() );
+    ApplyPcbGalLayerDeps( aCanvas.GetView() );
+    aCanvas.ZoomToFit();
+}
+
+
+void ShowFootprintPair( WIDGET_DIFF_CANVAS& aCanvas, const FP_LIB_DIFFER::FOOTPRINT_MAP& aBefore,
+                        const FP_LIB_DIFFER::FOOTPRINT_MAP& aAfter, const wxString& aName )
+{
+    // Each view takes over the items it draws, so it gets copies parented to a board of their own
+    auto holder = std::make_shared<BOARD>();
+    holder->SetBoardUse( BOARD_USE::FPHOLDER );
+
+    // Pads only draw on layers their board enables, and a library footprint may use any of them
+    holder->SetEnabledLayers( LSET::AllLayersMask() );
+
+    auto copy = [&]( const FP_LIB_DIFFER::FOOTPRINT_MAP& aSide ) -> FOOTPRINT*
+    {
+        auto footprint = aSide.find( aName );
+
+        if( footprint == aSide.end() || !footprint->second )
+            return nullptr;
+
+        FOOTPRINT* clone = static_cast<FOOTPRINT*>( footprint->second->Clone() );
+        holder->Add( clone, ADD_MODE::APPEND, true );
+        return clone;
+    };
+
+    FOOTPRINT* before = copy( aBefore );
+    FOOTPRINT* after = copy( aAfter );
+
+    ConfigureFpDiffCanvasContext( aCanvas, before, after, holder );
+}
+
 } // namespace KICAD_DIFF

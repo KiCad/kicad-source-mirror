@@ -17,6 +17,8 @@
 #include <kiid.h>
 #include <pcb_painter.h>
 
+#include <diff_merge/fp_lib_differ.h>
+
 #include <map>
 #include <memory>
 #include <vector>
@@ -50,6 +52,14 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
                                     const KIGFX::COLOR4D& aColor, const std::map<KIID, KIGFX::COLOR4D>& aOverrides = {},
                                     const std::vector<KIGFX::VIEW_ITEM*>&       aExtraItems = {},
                                     const std::map<KIID, KICAD_DIFF::CATEGORY>& aCategories = {} );
+
+/// Draw aAfter with its changes from aBefore marked. aOwner keeps both alive while they are shown.
+void ConfigureFpDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, FOOTPRINT* aBefore, FOOTPRINT* aAfter,
+                                   std::shared_ptr<const void> aOwner = nullptr );
+
+/// Draw the footprint aName as it is in aBefore and aAfter.
+void ShowFootprintPair( WIDGET_DIFF_CANVAS& aCanvas, const FP_LIB_DIFFER::FOOTPRINT_MAP& aBefore,
+                        const FP_LIB_DIFFER::FOOTPRINT_MAP& aAfter, const wxString& aName );
 
 } // namespace KICAD_DIFF
 

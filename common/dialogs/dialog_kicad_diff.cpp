@@ -595,8 +595,9 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 {
     m_listProperties->DeleteAllItems();
 
-    if( m_changeSelectedFn )
-        m_changeSelectedFn( aChange ? aChange->id : KIID_PATH() );
+    // Library differs name each change after its item
+    if( m_drawLibraryItem && m_canvas )
+        m_drawLibraryItem( *m_canvas, aChange && aChange->refdes ? *aChange->refdes : wxString() );
 
     if( !aChange )
     {
@@ -683,8 +684,14 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 }
 
 
-void DIALOG_KICAD_DIFF::SelectFirstChange()
+void DIALOG_KICAD_DIFF::DrawChosenLibraryItem( LIBRARY_ITEM_DRAWER aDraw )
 {
+    m_drawLibraryItem = std::move( aDraw );
+
+    // The whole-library geometry only seeds the layer checkboxes, drawn together it piles up
+    if( m_canvas )
+        m_canvas->SetScene( KICAD_DIFF::BuildScene( m_diff, KICAD_DIFF::DIFF_COLOR_THEME{} ) );
+
     // A canvas configured before it is shown keeps a black background, so select once it is
     CallAfter(
             [this]()

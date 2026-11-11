@@ -30,6 +30,9 @@
 #include <diff_merge/pcb_geometry_extractor.h>
 
 #include <footprint.h>
+#include <pad.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_shape.h>
 
 #include <json_common.h>
 
@@ -206,6 +209,56 @@ BOOST_AUTO_TEST_CASE( OutputOrderingIsDeterministicAcrossRuns )
     DOCUMENT_DIFF r2 = differ2.Diff();
 
     BOOST_CHECK_EQUAL( r1.ToJson().dump(), r2.ToJson().dump() );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintElementsFindTheEditedPad )
+{
+    auto [ownersA, mapA] = FP_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = FP_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    BOOST_REQUIRE( !ownersB.empty() && !ownersB.front()->Pads().empty() );
+
+    PAD* pad = ownersB.front()->Pads().front();
+    pad->SetLocalClearance( pcbIUScale.mmToIU( 0.3 ) );
+
+    std::vector<LIB_ELEMENT> elements = DiffFootprintElements( ownersA.front().get(), ownersB.front().get() );
+
+    BOOST_REQUIRE_EQUAL( elements.size(), 1u );
+    BOOST_CHECK( elements[0].kind == CHANGE_KIND::MODIFIED );
+    BOOST_CHECK( elements[0].item == pad );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintElementsFindAMovedPolygonCorner )
+{
+    const wxString path = KI_TEST::GetPcbnewTestDataDir() + "issue24045/QFN-24_L4.0-W4.0-P0.50-BL-EP2.6.kicad_mod";
+
+    PCB_IO_KICAD_SEXPR         io;
+    wxString                   name;
+    std::unique_ptr<FOOTPRINT> before = io.ImportFootprint( path, name );
+    std::unique_ptr<FOOTPRINT> after = io.ImportFootprint( path, name );
+
+    BOOST_REQUIRE( before && after );
+
+    PCB_SHAPE* polygon = nullptr;
+
+    for( BOARD_ITEM* item : after->GraphicalItems() )
+    {
+        if( item->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY )
+            polygon = static_cast<PCB_SHAPE*>( item );
+    }
+
+    BOOST_REQUIRE( polygon );
+
+    // Pulling an inner corner inwards keeps the position and bounding box, so only the geometry differs
+    polygon->GetPolyShape().SetVertex( 2, polygon->GetPolyShape().CVertex( 2 ) + VECTOR2I( 50000, 50000 ) );
+
+    std::vector<LIB_ELEMENT> elements = DiffFootprintElements( before.get(), after.get() );
+
+    BOOST_REQUIRE_EQUAL( elements.size(), 1u );
+    BOOST_CHECK( elements[0].kind == CHANGE_KIND::MODIFIED );
+    BOOST_CHECK( elements[0].item == polygon );
 }
 
 

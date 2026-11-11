@@ -26,6 +26,8 @@
 
 #include <diff_merge/diff_scene.h>
 
+#include <map>
+
 
 class BOARD;
 class FOOTPRINT;
@@ -58,6 +60,10 @@ DOCUMENT_GEOMETRY ExtractBoardGeometry( const BOARD& aBoard, const KIGFX::COLOR4
  * wrapper to walk.
  */
 DOCUMENT_GEOMETRY ExtractFootprintGeometry( const FOOTPRINT& aFootprint, const KIGFX::COLOR4D& aColor );
+
+/// Flatten every footprint of a library name map into one DOCUMENT_GEOMETRY.
+DOCUMENT_GEOMETRY ExtractFootprintGeometry( const std::map<wxString, const FOOTPRINT*>& aFootprints,
+                                            const KIGFX::COLOR4D&                       aColor );
 
 } // namespace KICAD_DIFF
 

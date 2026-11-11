@@ -37,7 +37,7 @@ namespace KICAD_DIFF
 
 namespace
 {
-    wxString graphicTypeName( const SCH_ITEM* aItem )
+    wxString graphicTypeName( const EDA_ITEM* aItem )
     {
         switch( aItem->Type() )
         {
@@ -45,44 +45,6 @@ namespace
         case SCH_TEXT_T:    return _( "Text" );
         case SCH_TEXTBOX_T: return _( "Text Box" );
         default:            return _( "Item" );
-        }
-    }
-
-
-    void diffKeyed( std::vector<SYM_ELEMENT>& aOut, const wxString& aTypeName,
-                    const std::map<wxString, const EDA_ITEM*>& aBefore,
-                    const std::map<wxString, const EDA_ITEM*>& aAfter )
-    {
-        std::set<wxString> keys;
-
-        for( const auto& [key, item] : aBefore )
-            keys.insert( key );
-
-        for( const auto& [key, item] : aAfter )
-            keys.insert( key );
-
-        for( const wxString& key : keys )
-        {
-            auto            beforeIt = aBefore.find( key );
-            auto            afterIt = aAfter.find( key );
-            const EDA_ITEM* before = beforeIt != aBefore.end() ? beforeIt->second : nullptr;
-            const EDA_ITEM* after = afterIt != aAfter.end() ? afterIt->second : nullptr;
-
-            if( before && after )
-            {
-                std::vector<PROPERTY_DELTA> deltas = DiffItemProperties( before, after );
-
-                if( !deltas.empty() )
-                    aOut.push_back( { after, aTypeName, key, CHANGE_KIND::MODIFIED, std::move( deltas ) } );
-            }
-            else if( before )
-            {
-                aOut.push_back( { before, aTypeName, key, CHANGE_KIND::REMOVED, ItemProperties( before, false ) } );
-            }
-            else
-            {
-                aOut.push_back( { after, aTypeName, key, CHANGE_KIND::ADDED, ItemProperties( after, true ) } );
-            }
         }
     }
 
@@ -124,9 +86,9 @@ namespace
     }
 
 
-    std::vector<const SCH_ITEM*> graphics( const LIB_SYMBOL* aSym )
+    std::vector<const EDA_ITEM*> graphics( const LIB_SYMBOL* aSym )
     {
-        std::vector<const SCH_ITEM*> out;
+        std::vector<const EDA_ITEM*> out;
 
         if( aSym )
         {
@@ -142,88 +104,13 @@ namespace
 } // namespace
 
 
-std::vector<SYM_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
+std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
 {
-    std::vector<SYM_ELEMENT> out;
+    std::vector<LIB_ELEMENT> out;
 
-    diffKeyed( out, _( "Pin" ), pinsByNumber( aBefore ), pinsByNumber( aAfter ) );
-    diffKeyed( out, _( "Field" ), fieldsByName( aBefore ), fieldsByName( aAfter ) );
-
-    std::vector<const SCH_ITEM*> beforeGraphics = graphics( aBefore );
-    std::vector<const SCH_ITEM*> afterGraphics = graphics( aAfter );
-    std::set<const SCH_ITEM*>    matchedBefore;
-    std::set<const SCH_ITEM*>    matchedAfter;
-
-    // Pass 1: consume graphics the property diff sees as identical so unchanged
-    // geometry never shows up.
-    for( const SCH_ITEM* after : afterGraphics )
-    {
-        for( const SCH_ITEM* before : beforeGraphics )
-        {
-            if( matchedBefore.count( before ) || before->Type() != after->Type() )
-                continue;
-
-            if( DiffItemProperties( before, after ).empty() )
-            {
-                matchedBefore.insert( before );
-                matchedAfter.insert( after );
-                break;
-            }
-        }
-    }
-
-    // Pass 2: pair each leftover after-graphic with its nearest same-type
-    // leftover before-graphic (a modified shape), else it is newly added.
-    for( const SCH_ITEM* after : afterGraphics )
-    {
-        if( matchedAfter.count( after ) )
-            continue;
-
-        const SCH_ITEM* best = nullptr;
-        double          bestDist = 0.0;
-
-        for( const SCH_ITEM* before : beforeGraphics )
-        {
-            if( matchedBefore.count( before ) || before->Type() != after->Type() )
-                continue;
-
-            VECTOR2I delta = before->GetPosition() - after->GetPosition();
-            double   dist = (double) delta.x * delta.x + (double) delta.y * delta.y;
-
-            if( !best || dist < bestDist )
-            {
-                best = before;
-                bestDist = dist;
-            }
-        }
-
-        if( best )
-        {
-            matchedBefore.insert( best );
-
-            std::vector<PROPERTY_DELTA> deltas = DiffItemProperties( best, after );
-
-            if( !deltas.empty() )
-            {
-                out.push_back( { after, graphicTypeName( after ), wxEmptyString, CHANGE_KIND::MODIFIED,
-                                 std::move( deltas ) } );
-            }
-        }
-        else
-        {
-            out.push_back( { after, graphicTypeName( after ), wxEmptyString, CHANGE_KIND::ADDED,
-                             ItemProperties( after, true ) } );
-        }
-    }
-
-    for( const SCH_ITEM* before : beforeGraphics )
-    {
-        if( !matchedBefore.count( before ) )
-        {
-            out.push_back( { before, graphicTypeName( before ), wxEmptyString, CHANGE_KIND::REMOVED,
-                             ItemProperties( before, false ) } );
-        }
-    }
+    DiffKeyedElements( out, _( "Pin" ), pinsByNumber( aBefore ), pinsByNumber( aAfter ) );
+    DiffKeyedElements( out, _( "Field" ), fieldsByName( aBefore ), fieldsByName( aAfter ) );
+    DiffUnkeyedElements( out, graphics( aBefore ), graphics( aAfter ), graphicTypeName );
 
     return out;
 }

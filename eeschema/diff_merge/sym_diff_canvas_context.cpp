@@ -22,7 +22,6 @@
 #include <diff_merge/sch_diff_canvas_context.h>
 #include <diff_merge/sym_item_diff.h>
 #include <diff_merge/diff_scene.h>
-#include <dialogs/dialog_kicad_diff.h>
 
 #include <gal/painter.h>
 #include <kiid.h>
@@ -48,22 +47,12 @@ void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBe
 
     const DIFF_COLOR_THEME theme;
 
-    auto colorFor = [&]( CHANGE_KIND aKind ) -> KIGFX::COLOR4D
-    {
-        switch( aKind )
-        {
-        case CHANGE_KIND::ADDED: return theme.added;
-        case CHANGE_KIND::REMOVED: return theme.removed;
-        default: return theme.modified;
-        }
-    };
-
-    std::vector<SYM_ELEMENT>       elements = DiffSymbolElements( aBefore, aAfter );
+    std::vector<LIB_ELEMENT>       elements = DiffSymbolElements( aBefore, aAfter );
     std::map<KIID, KIGFX::COLOR4D> overrides;
 
-    for( const SYM_ELEMENT& element : elements )
+    for( const LIB_ELEMENT& element : elements )
     {
-        overrides[element.item->m_Uuid] = colorFor( element.kind );
+        overrides[element.item->m_Uuid] = theme.ForKind( element.kind );
         const_cast<EDA_ITEM*>( element.item )->SetBrightened();
     }
 
@@ -75,7 +64,7 @@ void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBe
             items.push_back( &item );
     }
 
-    for( const SYM_ELEMENT& element : elements )
+    for( const LIB_ELEMENT& element : elements )
     {
         if( element.kind == CHANGE_KIND::REMOVED )
             items.push_back( const_cast<EDA_ITEM*>( element.item ) );
@@ -101,34 +90,6 @@ void ShowSymbolPair( WIDGET_DIFF_CANVAS& aCanvas, const SYM_LIB_DIFFER::SYMBOL_M
             flatten( aBefore ), flatten( aAfter ) );
 
     ConfigureSymDiffCanvasContext( aCanvas, pair->first.get(), pair->second.get(), pair );
-}
-
-
-void ShowSymbolChanges( DIALOG_KICAD_DIFF& aDialog, const DOCUMENT_DIFF& aDiff,
-                        const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore, const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter )
-{
-    std::map<KIID_PATH, wxString> names;
-
-    for( const ITEM_CHANGE& change : aDiff.changes )
-    {
-        if( change.refdes )
-            names[change.id] = *change.refdes;
-    }
-
-    aDialog.SetChangeSelectedHandler(
-            [&aDialog, &aBefore, &aAfter, names]( const KIID_PATH& aId )
-            {
-                WIDGET_DIFF_CANVAS* canvas = aDialog.DiffCanvas();
-
-                if( !canvas )
-                    return;
-
-                auto name = names.find( aId );
-
-                ShowSymbolPair( *canvas, aBefore, aAfter, name != names.end() ? name->second : wxString() );
-            } );
-
-    aDialog.SelectFirstChange();
 }
 
 } // namespace KICAD_DIFF

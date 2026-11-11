@@ -77,12 +77,13 @@ public:
     /// no chooser is shown.
     void SetRevisionChooser( const std::vector<wxString>& aLabels, int aSelected, REVISION_HANDLER aOnChange );
 
-    using CHANGE_SELECTED_FN = std::function<void( const KIID_PATH& )>;
+    using LIBRARY_ITEM_DRAWER = std::function<void( WIDGET_DIFF_CANVAS&, const wxString& aName )>;
 
-    void SetChangeSelectedHandler( CHANGE_SELECTED_FN aFn ) { m_changeSelectedFn = std::move( aFn ); }
-
-    /// Select the first change in the tree, for documents whose canvas shows nothing until one is chosen.
-    void SelectFirstChange();
+    /**
+     * Draw only the library item named by the chosen change, since the outlines of a whole library
+     * pile up in one place. The first change is chosen so the canvas is never empty.
+     */
+    void DrawChosenLibraryItem( LIBRARY_ITEM_DRAWER aDraw );
 
     using UP_HANDLER = std::function<void()>;
 
@@ -150,7 +151,7 @@ private:
     SHEET_SWITCHER m_sheetSwitcher;
     KIID_PATH      m_currentCanvasSheet;
 
-    CHANGE_SELECTED_FN m_changeSelectedFn;
+    LIBRARY_ITEM_DRAWER m_drawLibraryItem;
 };
 
 #endif // DIALOG_KICAD_DIFF_H

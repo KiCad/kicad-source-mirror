@@ -25,7 +25,6 @@
 
 #include <memory>
 
-class DIALOG_KICAD_DIFF;
 class LIB_SYMBOL;
 class WIDGET_DIFF_CANVAS;
 
@@ -40,13 +39,6 @@ void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBe
 /// Draw the symbol aName as it is in aBefore and aAfter.
 void ShowSymbolPair( WIDGET_DIFF_CANVAS& aCanvas, const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore,
                      const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter, const wxString& aName );
-
-/**
- * Draw each symbol chosen in aDialog as it is in aBefore and aAfter, which aDiff compares. Both
- * maps must outlive the dialog.
- */
-void ShowSymbolChanges( DIALOG_KICAD_DIFF& aDialog, const DOCUMENT_DIFF& aDiff,
-                        const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore, const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter );
 
 } // namespace KICAD_DIFF
 

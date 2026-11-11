@@ -22,6 +22,7 @@
 #define SYM_ITEM_DIFF_H
 
 #include <diff_merge/kicad_diff_types.h>
+#include <diff_merge/lib_element_diff.h>
 
 #include <memory>
 #include <set>
@@ -36,23 +37,13 @@ class EDA_ITEM;
 namespace KICAD_DIFF
 {
 
-struct SYM_ELEMENT
-{
-    const EDA_ITEM*             item;     // after-side item, or before-side for REMOVED
-    wxString                    typeName; // "Pin", "Field", "Graphic", "Text"
-    wxString                    key;      // pin number or field name, empty for graphics
-    CHANGE_KIND                 kind;     // ADDED, REMOVED or MODIFIED
-    std::vector<PROPERTY_DELTA> deltas;
-};
-
-
 /**
  * Compares the elements of two library symbols. Pins match by number and
  * fields by name. Graphics and text first match identical shapes, then pair up
  * the leftovers so an edited shape reads as modified. Only changed elements are
  * returned. Either symbol may be null for a whole symbol add or remove.
  */
-std::vector<SYM_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter );
+std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter );
 
 /// The properties, fields and pins aChange edits, by the names a user would know them by.
 std::set<wxString> EditedNames( const ITEM_CHANGE& aChange );

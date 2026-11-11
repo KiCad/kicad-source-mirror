@@ -25,6 +25,8 @@
 
 #include <diff_merge/auto_resolution.h>
 #include <diff_merge/diff_scene.h>
+#include <pgm_base.h>
+#include <reporter.h>
 #include <trace_helpers.h>
 #include <widgets/widget_diff_canvas.h>
 
@@ -97,6 +99,45 @@ AUTO_MODE loadAutoResolutionFile( std::map<wxString, KICAD_DIFF::ITEM_RES>& aOut
 }
 
 } // namespace
+
+
+DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT
+DIALOG_KICAD_MERGE_3WAY::LibraryContext( const std::set<wxString>& aNames, LIBRARY_ITEM_DRAWER aDraw )
+{
+    std::map<KIID_PATH, wxString> names;
+
+    for( const wxString& name : aNames )
+        names.emplace( KICAD_DIFF::LibraryItemKiidPath( name ), name );
+
+    auto nameOf = [names = std::move( names )]( const KIID_PATH& aId ) -> wxString
+    {
+        auto it = names.find( aId );
+        return it != names.end() ? it->second : wxString();
+    };
+
+    CONFLICT_CONTEXT ctx;
+
+    ctx.describeItem = nameOf;
+    ctx.drawSide = [nameOf, draw = std::move( aDraw )]( WIDGET_DIFF_CANVAS& aCanvas, SIDE aSide,
+                                                        const std::optional<KIID_PATH>& aId )
+    {
+        draw( aCanvas, aSide, aId ? nameOf( *aId ) : wxString() );
+    };
+
+    return ctx;
+}
+
+
+bool DIALOG_KICAD_MERGE_3WAY::CanOpen( REPORTER& aReporter )
+{
+    if( Pgm().IsGUI() )
+        return true;
+
+    aReporter.Report( _( "--interactive requires a GUI KiCad process; the console "
+                         "kicad-cli cannot open dialogs.\n" ),
+                      RPT_SEVERITY_ERROR );
+    return false;
+}
 
 
 DIALOG_KICAD_MERGE_3WAY::DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent,
