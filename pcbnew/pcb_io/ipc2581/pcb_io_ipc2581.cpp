@@ -1909,7 +1909,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         addAttribute( stepRefNode,  "name", genString( fn.GetName(), "BOARD" ) );
     }
 
-    for( const auto& entry : bom_entries )
+    for( const std::unique_ptr<BOM_ENTRY>& entry : bom_entries )
     {
         wxXmlNode* bomEntryNode = appendNode( bomNode, "BomItem" );
         addAttribute( bomEntryNode,  "OEMDesignNumberRef", entry->m_OEMDesignRef );
@@ -2471,7 +2471,7 @@ void PCB_IO_IPC2581::generateAuxilliaryLayers( wxXmlNode* aCadLayerNode )
                 new_layers.emplace_back( auxLayerType::TENTING, layer, UNDEFINED_LAYER );
         }
 
-        for( auto& tuple : new_layers )
+        for( std::tuple<auxLayerType, PCB_LAYER_ID, PCB_LAYER_ID>& tuple : new_layers )
             m_auxilliary_Layers[tuple].push_back( via );
     }
 
@@ -3474,7 +3474,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     std::map<PCB_LAYER_ID, wxXmlNode*> layer_nodes;
     std::map<PCB_LAYER_ID, BOX2I> layer_bbox;
 
-    for( auto layer : { F_Fab, B_Fab } )
+    for( PCB_LAYER_ID layer : { F_Fab, B_Fab } )
     {
         if( elements.find( layer ) != elements.end() )
         {
@@ -3568,7 +3568,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         }
     }
 
-    for( auto&[layer, bbox] : layer_bbox )
+    for( auto& [layer, bbox] : layer_bbox )
     {
         if( bbox.GetWidth() > 0 )
         {
@@ -3988,8 +3988,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
 
                 if( it == m_padstack_dict.end() )
                 {
-                    Report( _( "Via uses unsupported padstack; omitted from drill data." ),
-                            RPT_SEVERITY_WARNING );
+                    Report( _( "Via uses unsupported padstack; omitted from drill data." ), RPT_SEVERITY_WARNING );
                     continue;
                 }
 
