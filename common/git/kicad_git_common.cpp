@@ -939,28 +939,9 @@ std::optional<KIGIT_AHEAD_BEHIND> KIGIT_COMMON::compareRefs( const git_reference
 
 bool KIGIT_COMMON::HasLocalCommits() const
 {
-    if( !m_repo || IsHeadDetached() )
-        return false;
+    std::optional<KIGIT_UPSTREAM_STATUS> status = UpstreamStatus();
 
-    git_reference* head = nullptr;
-
-    if( git_repository_head( &head, m_repo ) != GIT_OK )
-        return false;
-
-    KIGIT::GitReferencePtr headPtr( head );
-    git_reference*         upstream = nullptr;
-    int                    result = git_branch_upstream( &upstream, head );
-
-    if( result != GIT_OK )
-    {
-        // Treat a branch without an upstream as unpublished.
-        return result == GIT_ENOTFOUND;
-    }
-
-    KIGIT::GitReferencePtr            upstreamPtr( upstream );
-    std::optional<KIGIT_AHEAD_BEHIND> counts = compareRefs( head, upstream );
-
-    return counts && counts->ahead > 0;
+    return status && status->HasLocalCommits();
 }
 
 
@@ -987,17 +968,9 @@ bool KIGIT_COMMON::IsPullRebaseConfigured() const
 }
 
 
-bool KIGIT_COMMON::HasUpstreamCommits() const
+std::optional<KIGIT_UPSTREAM_STATUS> KIGIT_COMMON::UpstreamStatus() const
 {
-    std::optional<KIGIT_AHEAD_BEHIND> counts = UpstreamDivergence();
-
-    return counts && counts->behind > 0;
-}
-
-
-std::optional<KIGIT_AHEAD_BEHIND> KIGIT_COMMON::UpstreamDivergence() const
-{
-    if( !m_repo )
+    if( !m_repo || IsHeadDetached() )
         return std::nullopt;
 
     git_reference* head = nullptr;
@@ -1007,13 +980,21 @@ std::optional<KIGIT_AHEAD_BEHIND> KIGIT_COMMON::UpstreamDivergence() const
 
     KIGIT::GitReferencePtr headPtr( head );
     git_reference*         upstream = nullptr;
+    int                    result = git_branch_upstream( &upstream, head );
 
-    if( git_branch_upstream( &upstream, head ) != GIT_OK )
+    if( result == GIT_ENOTFOUND )
+        return KIGIT_UPSTREAM_STATUS();
+
+    if( result != GIT_OK )
         return std::nullopt;
 
-    KIGIT::GitReferencePtr upstreamPtr( upstream );
+    KIGIT::GitReferencePtr            upstreamPtr( upstream );
+    std::optional<KIGIT_AHEAD_BEHIND> counts = compareRefs( head, upstream );
 
-    return compareRefs( head, upstream );
+    if( !counts )
+        return std::nullopt;
+
+    return KIGIT_UPSTREAM_STATUS{ true, *counts };
 }
 
 

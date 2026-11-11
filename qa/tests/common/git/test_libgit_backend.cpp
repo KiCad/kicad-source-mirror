@@ -1780,7 +1780,7 @@ BOOST_AUTO_TEST_CASE( GetFileStatusMatchesPathspecLiterally )
 
 
 // The panel can only say the remote moved on if the session can tell.
-BOOST_AUTO_TEST_CASE( HasUpstreamCommitsSeesTheRemoteMoveOn )
+BOOST_AUTO_TEST_CASE( UpstreamStatusSeesTheRemoteMoveOn )
 {
     BOOST_TEST_REQUIRE( ready() );
 
@@ -1804,14 +1804,18 @@ BOOST_AUTO_TEST_CASE( HasUpstreamCommitsSeesTheRemoteMoveOn )
     BOOST_REQUIRE_EQUAL( git_branch_set_upstream( head, upstreamName.c_str() ), GIT_OK );
 
     // In step with the upstream.
-    BOOST_CHECK( !common.HasUpstreamCommits() );
+    std::optional<KIGIT_UPSTREAM_STATUS> status = common.UpstreamStatus();
+    BOOST_REQUIRE( status && status->hasUpstream );
+    BOOST_CHECK_EQUAL( status->divergence.behind, 0u );
 
     // The upstream moves on.
     git_oid remoteTip = createDetachedCommit( repo, base, wxT( "file.txt" ), "remote\n", "Remote change" );
     BOOST_REQUIRE_EQUAL( git_reference_create( &tracking, repo, trackingRef.c_str(), &remoteTip, 1, nullptr ), GIT_OK );
     git_reference_free( tracking );
 
-    BOOST_CHECK( common.HasUpstreamCommits() );
+    status = common.UpstreamStatus();
+    BOOST_REQUIRE( status );
+    BOOST_CHECK_EQUAL( status->divergence.behind, 1u );
 
     git_reference_free( head );
     git_repository_free( repo );

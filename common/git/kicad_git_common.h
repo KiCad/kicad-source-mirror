@@ -98,6 +98,17 @@ struct KIGIT_AHEAD_BEHIND
 };
 
 
+/// Where the current branch stands against its upstream.
+struct KIGIT_UPSTREAM_STATUS
+{
+    bool               hasUpstream = false;
+    KIGIT_AHEAD_BEHIND divergence;          ///< HEAD against its upstream, zero without one.
+
+    /// True when HEAD has commits its upstream does not, or has no upstream yet.
+    bool HasLocalCommits() const { return !hasUpstream || divergence.ahead > 0; }
+};
+
+
 // What the Branches page's detail pane shows about one branch.
 struct KIGIT_BRANCH_DETAIL
 {
@@ -400,11 +411,9 @@ public:
     /// False for a detached or unborn HEAD.
     bool HasLocalCommits() const;
 
-    /// True when the upstream branch has commits the current branch does not.
-    bool HasUpstreamCommits() const;
-
-    /// Commits HEAD and its upstream each have that the other lacks. No value without an upstream.
-    std::optional<KIGIT_AHEAD_BEHIND> UpstreamDivergence() const;
+    /// The current branch against its upstream. No value for a detached or unborn HEAD, or when
+    /// git fails, so a missing upstream is not mistaken for an error.
+    std::optional<KIGIT_UPSTREAM_STATUS> UpstreamStatus() const;
 
     /// True when the repository is set to rebase rather than merge when getting changes.
     bool IsPullRebaseConfigured() const;

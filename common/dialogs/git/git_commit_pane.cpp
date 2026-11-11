@@ -534,16 +534,16 @@ void GIT_COMMIT_PANE::RefreshFileList()
             {
                 status->hasRepo = true;
                 status->entries = BuildGitChangeEntries( aCommon, projectPath, dark );
-                status->hasLocalCommits = aCommon.HasLocalCommits();
                 status->hasRemote = aCommon.HasPushAndPullRemote();
                 status->headDetached = aCommon.IsHeadDetached();
                 status->operationInProgress = aCommon.IsOperationInProgress();
                 status->operation = aCommon.OperationInProgress();
 
-                if( std::optional<KIGIT_AHEAD_BEHIND> counts = aCommon.UpstreamDivergence() )
+                if( std::optional<KIGIT_UPSTREAM_STATUS> upstream = aCommon.UpstreamStatus() )
                 {
-                    status->upstreamAhead = counts->behind;
-                    status->unpushed = counts->ahead;
+                    status->hasLocalCommits = upstream->HasLocalCommits();
+                    status->upstreamAhead = upstream->divergence.behind;
+                    status->unpushed = upstream->divergence.ahead;
                 }
 
                 status->branches = aCommon.GetBranches();

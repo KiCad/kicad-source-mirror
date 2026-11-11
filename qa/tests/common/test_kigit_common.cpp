@@ -1054,7 +1054,7 @@ BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
     BOOST_REQUIRE( common.IsHeadUnborn() );
     BOOST_CHECK( common.GetBranches().empty() );
     BOOST_CHECK( !common.HasLocalCommits() );
-    BOOST_CHECK( !common.HasUpstreamCommits() );
+    BOOST_CHECK( !common.UpstreamStatus() );
     BOOST_CHECK( !common.GetUnmergedCommitCount( "main" ) );
     BOOST_CHECK( !common.GetBranchDetail( "main" ).divergence );
 
@@ -1680,12 +1680,14 @@ BOOST_AUTO_TEST_CASE( DetachedHeadHasNoLocalCommits )
     // On a branch with no upstream the commit really is unpublished.
     BOOST_REQUIRE( !common.IsHeadDetached() );
     BOOST_CHECK( common.HasLocalCommits() );
-    BOOST_CHECK( !common.HasUpstreamCommits() );
+    std::optional<KIGIT_UPSTREAM_STATUS> status = common.UpstreamStatus();
+    BOOST_REQUIRE( status );
+    BOOST_CHECK( !status->hasUpstream );
 
     BOOST_REQUIRE( common.CheckoutTag( "v1.0" ) );
     BOOST_REQUIRE( common.IsHeadDetached() );
     BOOST_CHECK( !common.HasLocalCommits() );
-    BOOST_CHECK( !common.HasUpstreamCommits() );
+    BOOST_CHECK( !common.UpstreamStatus() );
 
     std::optional<size_t> count = common.GetUnmergedCommitCount( "main" );
     BOOST_REQUIRE( count );
@@ -2041,7 +2043,9 @@ BOOST_AUTO_TEST_CASE( BranchComparisonsUseTheSelectedBranchAndItsOwnUpstream )
     BOOST_CHECK_EQUAL( main.divergence->ahead, 0u );
     BOOST_CHECK_EQUAL( main.divergence->behind, 3u );
     BOOST_CHECK( !common.HasLocalCommits() );
-    BOOST_CHECK( common.HasUpstreamCommits() );
+    std::optional<KIGIT_UPSTREAM_STATUS> status = common.UpstreamStatus();
+    BOOST_REQUIRE( status );
+    BOOST_CHECK_EQUAL( status->divergence.behind, 3u );
 
     commitOn( "main", "local main one" );
     main = common.GetBranchDetail( "main" );
@@ -2049,7 +2053,10 @@ BOOST_AUTO_TEST_CASE( BranchComparisonsUseTheSelectedBranchAndItsOwnUpstream )
     BOOST_CHECK_EQUAL( main.divergence->ahead, 1u );
     BOOST_CHECK_EQUAL( main.divergence->behind, 3u );
     BOOST_CHECK( common.HasLocalCommits() );
-    BOOST_CHECK( common.HasUpstreamCommits() );
+    status = common.UpstreamStatus();
+    BOOST_REQUIRE( status );
+    BOOST_CHECK_EQUAL( status->divergence.ahead, 1u );
+    BOOST_CHECK_EQUAL( status->divergence.behind, 3u );
 }
 
 
@@ -2057,7 +2064,7 @@ BOOST_AUTO_TEST_CASE( BranchComparisonsStayUnknownWhenReferencesCannotBeRead )
 {
     KIGIT_COMMON unavailable( nullptr );
     BOOST_CHECK( !unavailable.HasLocalCommits() );
-    BOOST_CHECK( !unavailable.HasUpstreamCommits() );
+    BOOST_CHECK( !unavailable.UpstreamStatus() );
     BOOST_CHECK( !unavailable.GetUnmergedCommitCount( "main" ) );
     BOOST_CHECK( !unavailable.GetBranchDetail( "main" ).divergence );
 
@@ -2077,7 +2084,7 @@ BOOST_AUTO_TEST_CASE( BranchComparisonsStayUnknownWhenReferencesCannotBeRead )
     BOOST_CHECK_EQUAL( detail.upstream.ToStdString(), "broken" );
     BOOST_CHECK( !detail.divergence );
     BOOST_CHECK( !common.HasLocalCommits() );
-    BOOST_CHECK( !common.HasUpstreamCommits() );
+    BOOST_CHECK( !common.UpstreamStatus() );
     BOOST_CHECK( !common.GetUnmergedCommitCount( "broken" ) );
 }
 
