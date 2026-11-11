@@ -223,8 +223,8 @@ protected:
      */
     STATE getState() const;
 
-    /// True when aLibId has a row the filter shows
-    bool isShown( const LIB_ID& aLibId ) const;
+    /// True when aTreeId has a row the filter shows
+    bool isShown( const wxDataViewItem& aTreeId ) const;
 
     /**
      * Restore the symbol tree widget state from an object.
