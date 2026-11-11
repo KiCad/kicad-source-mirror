@@ -14,7 +14,7 @@ PANEL_GIT_REMOTES_BASE::PANEL_GIT_REMOTES_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_remotesSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_remotesSplitter = new WX_SPLITTER_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_remotesSplitter->SetSashGravity( 0.6 );
 	m_remotesSplitter->SetMinimumPaneSize( 200 );
 

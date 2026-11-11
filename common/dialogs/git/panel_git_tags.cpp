@@ -41,6 +41,8 @@ PANEL_GIT_TAGS::PANEL_GIT_TAGS( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog,
 
     KIGIT::MarkDestructive( m_deleteTagButton );
 
+    KIGIT::KeepDetailWidth( m_tagsSplitter );
+
     // The detail pane appears once a tag is selected.
     m_tagSashPos = FromDIP( 460 );
     m_tagsSplitter->Unsplit( m_tagDetail );

@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/wx_splitter_window.h"
 #include <wx/string.h>
 #include <wx/srchctrl.h>
 #include <wx/gdicmn.h>
@@ -38,7 +39,7 @@ class PANEL_GIT_BRANCHES_BASE : public wxPanel
 
 	protected:
 		wxSearchCtrl* m_branchSearch;
-		wxSplitterWindow* m_branchesSplitter;
+		WX_SPLITTER_WINDOW* m_branchesSplitter;
 		wxPanel* m_branchListPanel;
 		wxListCtrl* m_branchesList;
 		wxStaticText* m_branchCount;

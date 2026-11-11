@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/wx_splitter_window.h"
 #include <wx/listctrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -36,7 +37,7 @@ class PANEL_GIT_TAGS_BASE : public wxPanel
 	private:
 
 	protected:
-		wxSplitterWindow* m_tagsSplitter;
+		WX_SPLITTER_WINDOW* m_tagsSplitter;
 		wxPanel* m_tagListPanel;
 		wxListCtrl* m_tagsList;
 		wxStaticText* m_tagCount;

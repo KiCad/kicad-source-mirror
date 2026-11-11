@@ -14,7 +14,7 @@ PANEL_GIT_TAGS_BASE::PANEL_GIT_TAGS_BASE( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_tagsSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_tagsSplitter = new WX_SPLITTER_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_tagsSplitter->SetSashGravity( 0.6 );
 	m_tagsSplitter->SetMinimumPaneSize( 200 );
 

@@ -34,6 +34,7 @@
 #include <diff_merge/diff_scene.h>
 #include <git/kicad_git_common.h>
 #include <kiplatform/ui.h>
+#include <widgets/wx_splitter_window.h>
 
 
 void KIGIT::ShowBusyMessage( wxWindow* aParent )
@@ -130,7 +131,7 @@ void KIGIT::UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, in
 }
 
 
-void KIGIT::KeepDetailWidth( wxSplitterWindow* aSplitter )
+void KIGIT::KeepDetailWidth( WX_SPLITTER_WINDOW* aSplitter )
 {
     wxWindow* detail = aSplitter->GetWindow2();
     int       detailMin = detail->GetSizer()->CalcMin().x;
@@ -138,17 +139,7 @@ void KIGIT::KeepDetailWidth( wxSplitterWindow* aSplitter )
 
     detail->SetMinSize( wxSize( detailMin, -1 ) );
     aSplitter->SetMinSize( wxSize( aSplitter->GetMinimumPaneSize() + frame + detailMin, -1 ) );
-
-    // The splitter stops honouring pane minimums once they no longer both fit, so a drag at the
-    // window's minimum width could otherwise push the detail off the edge
-    aSplitter->Bind( wxEVT_SPLITTER_SASH_POS_CHANGING,
-                     [aSplitter, detailMin, frame]( wxSplitterEvent& aEvent )
-                     {
-                         int widest = aSplitter->GetClientSize().x - frame - detailMin;
-
-                         aEvent.SetSashPosition( std::max( aSplitter->GetMinimumPaneSize(),
-                                                           std::min( aEvent.GetSashPosition(), widest ) ) );
-                     } );
+    aSplitter->SetPaneMinimums( aSplitter->GetMinimumPaneSize(), frame + detailMin );
 }
 
 

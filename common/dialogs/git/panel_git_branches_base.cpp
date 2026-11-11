@@ -21,7 +21,7 @@ PANEL_GIT_BRANCHES_BASE::PANEL_GIT_BRANCHES_BASE( wxWindow* parent, wxWindowID i
 	m_branchSearch->ShowCancelButton( false );
 	bMainSizer->Add( m_branchSearch, 0, wxEXPAND|wxALL, 4 );
 
-	m_branchesSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_branchesSplitter = new WX_SPLITTER_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_branchesSplitter->SetSashGravity( 0.6 );
 	m_branchesSplitter->SetMinimumPaneSize( 200 );
 

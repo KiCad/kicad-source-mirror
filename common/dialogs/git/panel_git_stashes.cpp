@@ -72,6 +72,8 @@ PANEL_GIT_STASHES::PANEL_GIT_STASHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
     KIGIT::MarkDestructive( m_dropStashButton );
 
+    KIGIT::KeepDetailWidth( m_stashesSplitter );
+
     // The detail pane appears once a stash is selected.
     m_stashSashPos = FromDIP( 460 );
     m_stashesSplitter->Unsplit( m_stashDetail );

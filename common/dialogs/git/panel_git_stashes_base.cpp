@@ -14,7 +14,7 @@ PANEL_GIT_STASHES_BASE::PANEL_GIT_STASHES_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_stashesSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_stashesSplitter = new WX_SPLITTER_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_stashesSplitter->SetSashGravity( 0.6 );
 	m_stashesSplitter->SetMinimumPaneSize( 200 );
 

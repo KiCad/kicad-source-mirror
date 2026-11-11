@@ -25,6 +25,7 @@
 
 class KIGIT_COMMON;
 struct KIGIT_BRANCH_INFO;
+class WX_SPLITTER_WINDOW;
 class wxButton;
 class wxDateTime;
 class wxListCtrl;
@@ -59,7 +60,7 @@ void UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, int& aSas
 
 /// Keep a split detail pane at the width its controls need, against both a narrow window and a
 /// dragged sash. Call while the pane is split and every control in it is shown.
-void KeepDetailWidth( wxSplitterWindow* aSplitter );
+void KeepDetailWidth( WX_SPLITTER_WINDOW* aSplitter );
 
 /// Paint a button's text the diff's red, for one that throws something away.
 void MarkDestructive( wxButton* aButton );

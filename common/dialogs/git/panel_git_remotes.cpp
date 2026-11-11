@@ -42,6 +42,8 @@ PANEL_GIT_REMOTES::PANEL_GIT_REMOTES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
 
     KIGIT::MarkDestructive( m_removeRemoteButton );
 
+    KIGIT::KeepDetailWidth( m_remotesSplitter );
+
     // The detail pane appears once a remote is selected.
     m_remoteSashPos = FromDIP( 460 );
     m_remotesSplitter->Unsplit( m_remoteDetail );
