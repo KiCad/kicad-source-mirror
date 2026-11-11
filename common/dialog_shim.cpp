@@ -505,6 +505,7 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
 
         wxRect      savedDialogRect;
+        wxSize      savedClientSize;
         std::string key = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
 
         if( COMMON_SETTINGS* settings = Pgm().GetCommonSettings() )
@@ -520,6 +521,7 @@ bool DIALOG_SHIM::Show( bool show )
                     const nlohmann::json& g = geoIt->second;
                     savedDialogRect.SetPosition( wxPoint( g.value( "x", 0 ), g.value( "y", 0 ) ) );
                     savedDialogRect.SetSize( wxSize( g.value( "w", 500 ), g.value( "h", 300 ) ) );
+                    savedClientSize = wxSize( g.value( "cw", 0 ), g.value( "ch", 0 ) );
                 }
             }
         }
@@ -536,9 +538,22 @@ bool DIALOG_SHIM::Show( bool show )
             }
             else
             {
-                SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
-                         std::max( wxDialog::GetSize().x, restoredSize.x ),
-                         std::max( wxDialog::GetSize().y, restoredSize.y ), 0 );
+                // GTK may not know the decorations of a process's first window yet, so a frame size
+                // restored there lands as the client size and the dialog grows on every open
+                if( savedClientSize.x > 0 && savedClientSize.y > 0 )
+                {
+                    Move( savedDialogRect.GetPosition() );
+
+                    wxSize restoredClient = FromDIP( savedClientSize );
+                    SetClientSize( std::max( wxDialog::GetClientSize().x, restoredClient.x ),
+                                   std::max( wxDialog::GetClientSize().y, restoredClient.y ) );
+                }
+                else
+                {
+                    SetSize( savedDialogRect.GetPosition().x, savedDialogRect.GetPosition().y,
+                             std::max( wxDialog::GetSize().x, restoredSize.x ),
+                             std::max( wxDialog::GetSize().y, restoredSize.y ), 0 );
+                }
 
                 // Reset minimum size so the user can resize the dialog smaller than
                 // the saved size. We must clear the current minimum and invalidate
@@ -722,11 +737,14 @@ void DIALOG_SHIM::SaveControlState()
 
     wxPoint pos = GetPosition();
     wxSize  dipSize = ToDIP( GetSize() );
+    wxSize  dipClientSize = ToDIP( GetClientSize() );
     nlohmann::json geom;
     geom[ "x" ] = pos.x;
     geom[ "y" ] = pos.y;
     geom[ "w" ] = dipSize.x;
     geom[ "h" ] = dipSize.y;
+    geom[ "cw" ] = dipClientSize.x;
+    geom[ "ch" ] = dipClientSize.y;
     dlgMap[ "__geometry" ] = geom;
 
     std::function<void( wxWindow* )> saveFn =
