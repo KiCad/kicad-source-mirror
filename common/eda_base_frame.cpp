@@ -767,9 +767,12 @@ void EDA_BASE_FRAME::SelectToolbarAction( const TOOL_ACTION& aAction )
 
 void EDA_BASE_FRAME::RecreateToolbars()
 {
+    if( GetFrameType() == FRAME_PYTHON )    // Frame python has no toolbars
+        return;
+
     wxWindowUpdateLocker dummy( this );
 
-    wxASSERT( m_toolbarSettings );
+    wxCHECK( m_toolbarSettings, /*void*/ );
 
     if( m_tbRight )
         m_tbRight->ClearToolbar();
