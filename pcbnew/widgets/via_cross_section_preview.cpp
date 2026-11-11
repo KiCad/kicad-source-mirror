@@ -156,10 +156,9 @@ void VIA_CROSS_SECTION_PREVIEW::onPaint( wxPaintEvent& aEvent )
     wxPaintDC dc( this );
 
     if( GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
-    {
         dc.SetBackground( wxBrush( GetParent()->GetBackgroundColour() ) );
-        dc.Clear();
-    }
+
+    dc.Clear();
 
     const bool dark = KIPLATFORM::UI::IsDarkTheme();
 
