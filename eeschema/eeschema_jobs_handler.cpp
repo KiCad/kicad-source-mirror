@@ -3669,6 +3669,8 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
                        return !unresolved.contains( aId );
                    } );
 
+    bool userDecided = false;
+
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
         if( !DIALOG_KICAD_MERGE_3WAY::CanOpen( *m_reporter ) )
@@ -3704,6 +3706,7 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
             return CLI::EXIT_CODES::ERR_CANCELLED;
 
         plan = dlg.GetResolvedPlan();
+        userDecided = true;
     }
 
     const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
@@ -3746,9 +3749,14 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     // The merged library was saved above, so the output is always valid.
     try
     {
-        // Unresolved symbols fall back to one side, so a merge is clean only when it provably keeps both
+        // A pick can still orphan a derived symbol, which the reload rejects
         auto [mergedOwners, mergedMap] = KICAD_DIFF::SYM_LIB_DIFFER::LoadLibrary( outFn.GetFullPath() );
 
+        // A side the user picks drops the other side's edit on purpose
+        if( userDecided && planSnapshot.Resolved() && !hadSilentFallback )
+            return CLI::EXIT_CODES::SUCCESS;
+
+        // Unresolved symbols fall back to one side, so a merge is clean only when it provably keeps both
         if( KICAD_DIFF::SYM_LIB_DIFFER::MergeKeepsBothSides( ancestor.map, ours.map, theirs.map, mergedMap ) )
             return CLI::EXIT_CODES::SUCCESS;
     }
