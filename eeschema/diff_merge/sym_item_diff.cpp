@@ -21,8 +21,11 @@
 #include <diff_merge/sym_item_diff.h>
 #include <diff_merge/property_diff.h>
 #include <diff_merge/kicad_merge_engine.h>
+#include <diff_merge/sym_lib_differ.h>
 
 #include <lib_symbol.h>
+#include <richio.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_field.h>
 #include <sch_item.h>
 #include <sch_pin.h>
@@ -136,8 +139,9 @@ std::set<wxString> EditedNames( const ITEM_CHANGE& aChange )
 }
 
 
-std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aOurs, const LIB_SYMBOL& aTheirs,
-                                                const ITEM_CHANGE& aOurChange, const ITEM_CHANGE& aTheirChange )
+std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aAncestor, const LIB_SYMBOL& aOurs,
+                                                const LIB_SYMBOL& aTheirs, const ITEM_CHANGE& aOurChange,
+                                                const ITEM_CHANGE& aTheirChange )
 {
     // Edits are compared on flattened symbols, so an inherited field cannot be copied back safely
     if( aOurs.IsDerived() || aTheirs.IsDerived() )
@@ -170,33 +174,90 @@ std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aOurs, const L
 
     const LIB_SYMBOL&  donor = theirsDonates ? aTheirs : aOurs;
     const ITEM_CHANGE& donation = theirsDonates ? aTheirChange : aOurChange;
-    auto               merged = std::make_unique<LIB_SYMBOL>( theirsDonates ? aOurs : aTheirs );
 
-    for( const ITEM_CHANGE& child : donation.children )
+    auto donate = [&]( const LIB_SYMBOL& aBase ) -> std::unique_ptr<LIB_SYMBOL>
     {
-        const SCH_FIELD* from = donor.GetField( *child.refdes );
+        auto target = std::make_unique<LIB_SYMBOL>( aBase );
 
-        if( !from )
+        for( const ITEM_CHANGE& child : donation.children )
+        {
+            const SCH_FIELD* from = donor.GetField( *child.refdes );
+
+            if( !from )
+                return nullptr;
+
+            if( SCH_FIELD* to = target->GetField( *child.refdes ) )
+                *to = *from;
+            else
+                target->AddField( new SCH_FIELD( *from ) );
+        }
+
+        std::vector<PROPERTY_RESOLUTION> props;
+
+        for( const PROPERTY_DELTA& delta : donation.properties )
+        {
+            PROPERTY_RESOLUTION prop;
+            prop.name = delta.name;
+            prop.kind = PROP_RES::THEIRS;
+            props.push_back( std::move( prop ) );
+        }
+
+        if( ApplyPropertyResolutions( target.get(), props, nullptr, &donor, nullptr ).failed > 0 )
             return nullptr;
 
-        if( SCH_FIELD* to = merged->GetField( *child.refdes ) )
-            *to = *from;
-        else
-            merged->AddField( new SCH_FIELD( *from ) );
-    }
+        return target;
+    };
 
-    std::vector<PROPERTY_RESOLUTION> props;
-
-    for( const PROPERTY_DELTA& delta : donation.properties )
+    // The saved form holds everything a symbol carries, including state no diff reports
+    auto saved = []( const LIB_SYMBOL& aSymbol )
     {
-        PROPERTY_RESOLUTION prop;
-        prop.name = delta.name;
-        prop.kind = PROP_RES::THEIRS;
-        props.push_back( std::move( prop ) );
-    }
+        LIB_SYMBOL       copy( aSymbol );
+        STRING_FORMATTER formatter;
 
-    if( ApplyPropertyResolutions( merged.get(), props, nullptr, &donor, nullptr ).failed > 0 )
+        SCH_IO_KICAD_SEXPR::FormatLibSymbol( &copy, formatter );
+        return formatter.GetString();
+    };
+
+    // Judge the merge as it will be written, since a symbol can hold state its file drops
+    auto reload = [&]( const LIB_SYMBOL& aSymbol ) -> std::unique_ptr<LIB_SYMBOL>
+    {
+        std::string text = saved( aSymbol );
+
+        try
+        {
+            std::vector<LIB_SYMBOL*> parsed = SCH_IO_KICAD_SEXPR::ParseLibSymbols( text, "combined symbol" );
+            std::vector<std::unique_ptr<LIB_SYMBOL>> owned( parsed.begin(), parsed.end() );
+
+            if( owned.size() == 1 )
+                return std::move( owned.front() );
+
+            return nullptr;
+        }
+        catch( const IO_ERROR& )
+        {
+            return nullptr;
+        }
+    };
+
+    std::unique_ptr<LIB_SYMBOL> replay = donate( aAncestor );
+
+    if( !replay || saved( *replay ) != saved( donor ) )
         return nullptr;
+
+    std::unique_ptr<LIB_SYMBOL> merged = donate( theirsDonates ? aOurs : aTheirs );
+
+    if( merged )
+        merged = reload( *merged );
+
+    const wxString& name = aAncestor.GetName();
+
+    // A donated property can undo the other side's edit, as a lower unit count drops its pins
+    if( !merged
+        || !SYM_LIB_DIFFER::MergeKeepsBothSides( { { name, &aAncestor } }, { { name, &aOurs } },
+                                                 { { name, &aTheirs } }, { { name, merged.get() } } ) )
+    {
+        return nullptr;
+    }
 
     return merged;
 }

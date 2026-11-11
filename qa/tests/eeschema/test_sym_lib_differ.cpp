@@ -24,6 +24,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <schematic_utils/schematic_file_util.h>
 
+#include <diff_merge/sym_item_diff.h>
 #include <diff_merge/sym_lib_differ.h>
 #include <diff_merge/kicad_diff_types.h>
 #include <diff_merge/sch_geometry_extractor.h>
@@ -460,6 +461,102 @@ BOOST_AUTO_TEST_CASE( MergeKeepsBothSidesRejectsADroppedEdit )
 
     BOOST_CHECK( SYM_LIB_DIFFER::MergeKeepsBothSides( ancestor, ours, theirs, merged ) );
     BOOST_CHECK( !SYM_LIB_DIFFER::MergeKeepsBothSides( ancestor, ours, theirs, ours ) );
+}
+
+
+// State the change record misses must still block the combine, or the merge drops it silently
+BOOST_AUTO_TEST_CASE( CombineSymbolEditsRejectsUnreportedState )
+{
+    auto [owners, symbols] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    const LIB_SYMBOL* ancestor = nullptr;
+
+    for( const auto& [name, symbol] : symbols )
+    {
+        if( !symbol->IsDerived() )
+        {
+            ancestor = symbol;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( ancestor );
+
+    LIB_SYMBOL ours( *ancestor );
+    LIB_SYMBOL theirs( *ancestor );
+
+    ours.GetDatasheetField().SetText( wxS( "https://example.com/qa.pdf" ) );
+    theirs.GetFootprintField().SetText( wxS( "QA:Footprint" ) );
+
+    auto fieldEdit = []( const wxString& aField )
+    {
+        ITEM_CHANGE child;
+        child.typeName = _( "Field" );
+        child.refdes = aField;
+
+        ITEM_CHANGE change;
+        change.children.push_back( std::move( child ) );
+        return change;
+    };
+
+    const ITEM_CHANGE ourChange = fieldEdit( wxS( "Datasheet" ) );
+    const ITEM_CHANGE theirChange = fieldEdit( wxS( "Footprint" ) );
+
+    std::unique_ptr<LIB_SYMBOL> merged = CombineSymbolEdits( *ancestor, ours, theirs, ourChange, theirChange );
+
+    BOOST_REQUIRE( merged );
+    BOOST_CHECK_EQUAL( merged->GetFootprintField().GetText(), wxS( "QA:Footprint" ) );
+
+    theirs.SetBodyStyleNames( { wxS( "QA_Normal" ), wxS( "QA_Alternate" ) } );
+
+    BOOST_CHECK( !CombineSymbolEdits( *ancestor, ours, theirs, ourChange, theirChange ) );
+}
+
+
+// A lower unit count from one side must not combine with an edit the other side makes to a dropped unit
+BOOST_AUTO_TEST_CASE( CombineSymbolEditsKeepsTheOtherSidesEdits )
+{
+    auto [owners, symbols] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    auto plain = std::ranges::find_if( owners,
+                                       []( const std::unique_ptr<LIB_SYMBOL>& aOwner )
+                                       {
+                                           return aOwner && !aOwner->IsDerived() && aOwner->GetUnitCount() == 1;
+                                       } );
+
+    BOOST_REQUIRE( plain != owners.end() );
+
+    LIB_SYMBOL ancestor( **plain );
+    ancestor.SetUnitCount( 2, false );
+
+    LIB_SYMBOL ours( ancestor );
+    LIB_SYMBOL theirs( ancestor );
+
+    SCH_PIN* pin = new SCH_PIN( &ours );
+    pin->SetUnit( 2 );
+    pin->SetNumber( wxS( "QA" ) );
+    ours.AddDrawItem( pin );
+
+    theirs.SetUnitCount( 1, false );
+
+    const wxString name = ancestor.GetName();
+
+    auto changeTo = [&]( const LIB_SYMBOL& aAfter )
+    {
+        DOCUMENT_DIFF diff = SYM_LIB_DIFFER( { { name, &ancestor } }, { { name, &aAfter } } ).Diff();
+        BOOST_REQUIRE_EQUAL( diff.changes.size(), 1 );
+        return diff.changes.front();
+    };
+
+    const ITEM_CHANGE ourChange = changeTo( ours );
+    const ITEM_CHANGE theirChange = changeTo( theirs );
+
+    BOOST_CHECK( !CombineSymbolEdits( ancestor, ours, theirs, ourChange, theirChange ) );
+
+    // The unit count keeps a dropped unit's name in memory but not in the file
+    LIB_SYMBOL named( ancestor );
+    named.GetUnitDisplayNames()[2] = wxS( "QA_Unit" );
+
+    BOOST_CHECK( !CombineSymbolEdits( ancestor, named, theirs, changeTo( named ), theirChange ) );
 }
 
 

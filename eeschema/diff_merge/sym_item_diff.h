@@ -51,11 +51,14 @@ std::set<wxString> EditedNames( const ITEM_CHANGE& aChange );
 /**
  * Combine two edits of one library symbol when neither can lose anything. One side may have
  * changed anything, the other only fields and symbol properties, and no name may be touched by
- * both. Returns the first side with the other side's edits applied, or null when the edits must
- * be resolved by hand.
+ * both. The field-only side's edits must also rebuild that side from aAncestor exactly, so state
+ * no diff reports is never dropped, and must leave every edit of the other side in place. Returns
+ * the first side with the other side's edits applied, or null when the edits must be resolved by
+ * hand.
  */
-std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aOurs, const LIB_SYMBOL& aTheirs,
-                                                const ITEM_CHANGE& aOurChange, const ITEM_CHANGE& aTheirChange );
+std::unique_ptr<LIB_SYMBOL> CombineSymbolEdits( const LIB_SYMBOL& aAncestor, const LIB_SYMBOL& aOurs,
+                                                const LIB_SYMBOL& aTheirs, const ITEM_CHANGE& aOurChange,
+                                                const ITEM_CHANGE& aTheirChange );
 
 } // namespace KICAD_DIFF
 

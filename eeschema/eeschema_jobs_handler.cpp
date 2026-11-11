@@ -3594,14 +3594,15 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
         if( !aOurs || !aTheirs || !aOurs->refdes )
             return false;
 
+        auto ancestorSymbol = ancestor.map.find( *aOurs->refdes );
         auto ourSymbol = ours.map.find( *aOurs->refdes );
         auto theirSymbol = theirs.map.find( *aOurs->refdes );
 
-        if( ourSymbol == ours.map.end() || theirSymbol == theirs.map.end() )
+        if( ancestorSymbol == ancestor.map.end() || ourSymbol == ours.map.end() || theirSymbol == theirs.map.end() )
             return false;
 
-        std::unique_ptr<LIB_SYMBOL> symbol =
-                KICAD_DIFF::CombineSymbolEdits( *ourSymbol->second, *theirSymbol->second, *aOurs, *aTheirs );
+        std::unique_ptr<LIB_SYMBOL> symbol = KICAD_DIFF::CombineSymbolEdits(
+                *ancestorSymbol->second, *ourSymbol->second, *theirSymbol->second, *aOurs, *aTheirs );
 
         if( !symbol )
             return false;
