@@ -268,6 +268,9 @@ private:
 
     void updatePcmButtonBadge();
 
+    /// Reread the project and local settings files after a history restore rewrote them.
+    void reloadProjectSettings();
+
 private:
     bool                  m_openSavedWindows;
     bool                  m_restoredFromHistory;  ///< Set after restore to mark editors dirty

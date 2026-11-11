@@ -201,10 +201,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_netClasses.clear();
+
                 if( !aJson.is_array() )
                     return;
-
-                m_netClasses.clear();
 
                 for( const nlohmann::json& entry : aJson )
                 {
@@ -236,10 +236,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_netColorAssignments.clear();
+
                 if( !aJson.is_object() )
                     return;
-
-                m_netColorAssignments.clear();
 
                 for( const auto& pair : aJson.items() )
                 {
@@ -267,10 +267,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_netChainClasses.clear();
+
                 if( !aJson.is_object() )
                     return;
-
-                m_netChainClasses.clear();
 
                 for( const auto& pair : aJson.items() )
                 {
@@ -301,10 +301,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_netChainNetClasses.clear();
+
                 if( !aJson.is_object() )
                     return;
-
-                m_netChainNetClasses.clear();
 
                 for( const auto& pair : aJson.items() )
                 {
@@ -343,10 +343,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_netClassLabelAssignments.clear();
+
                 if( !aJson.is_object() )
                     return;
-
-                m_netClassLabelAssignments.clear();
 
                 for( const auto& pair : aJson.items() )
                 {
@@ -380,10 +380,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
+                m_netClassPatternAssignments.clear();
+
                 if( !aJson.is_array() )
                     return;
-
-                m_netClassPatternAssignments.clear();
 
                 for( const nlohmann::json& entry : aJson )
                 {
