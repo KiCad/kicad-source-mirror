@@ -289,8 +289,15 @@ bool PGM_KICAD::OnPgmInit()
 
     if( appType == FRAME_MERGETOOL )
     {
-        MERGETOOL_PATHS paths{ parser.GetParam( 0 ), parser.GetParam( 1 ),
-                               parser.GetParam( 2 ), parser.GetParam( 3 ) };
+        // A later project load can change the working directory, so resolve git's relative paths now
+        auto absolute = [&]( size_t aIndex )
+        {
+            wxFileName fn( parser.GetParam( aIndex ) );
+            fn.MakeAbsolute();
+            return fn.GetFullPath();
+        };
+
+        MERGETOOL_PATHS paths{ absolute( 0 ), absolute( 1 ), absolute( 2 ), absolute( 3 ) };
         mergetoolFrame = new MERGETOOL_FRAME( &Kiway, nullptr, paths );
         frame          = mergetoolFrame;
     }

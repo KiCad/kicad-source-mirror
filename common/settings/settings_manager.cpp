@@ -1072,9 +1072,12 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive, 
         // set the cwd but don't impact kicad-cli
         if( wxTheApp && wxTheApp->IsGUI() )
         {
-            // The null project has no directory, and the one being replaced may be deleted
-            wxSetWorkingDirectory( projectPath.GetPath().IsEmpty() ? PATHS::GetUserSettingsPath()
-                                                                   : projectPath.GetPath() );
+            // The null project has no directory, and the one being replaced may be deleted. At
+            // startup there is none, and the launch directory resolves relative command-line paths
+            if( !projectPath.GetPath().IsEmpty() )
+                wxSetWorkingDirectory( projectPath.GetPath() );
+            else if( switching )
+                wxSetWorkingDirectory( PATHS::GetUserSettingsPath() );
         }
 
         // Anchor text_eval VCS lookups to the project directory. The GUI relies on cwd,
