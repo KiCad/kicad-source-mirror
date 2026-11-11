@@ -271,22 +271,17 @@ API_HANDLER_COMMON::handleSetNetClassAssignments( const HANDLER_CONTEXT<SetNetCl
     for( const wxString& name : netSettings->GetNetclasses() | std::views::keys )
         knownNetclasses.insert( name );
 
-    auto checkNetclassName = [&]( const std::string& aName, const char* aKind ) -> std::optional<ApiResponseStatus>
-    {
-        if( knownNetclasses.contains( wxString::FromUTF8( aName ) ) )
-            return std::nullopt;
+    auto checkNetclassName =
+            [&]( const std::string& aName, const char* aKind ) -> std::optional<ApiResponseStatus>
+            {
+                if( knownNetclasses.contains( wxString::FromUTF8( aName ) ) )
+                    return std::nullopt;
 
-        ApiResponseStatus e;
-        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( fmt::format( "unknown netclass '{}' in {} assignment", aName, aKind ) );
-        return e;
-    };
-
-    if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
-    {
-        netSettings->ClearNetclassLabelAssignments();
-        netSettings->ClearNetclassPatternAssignments();
-    }
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( fmt::format( "unknown netclass '{}' in {} assignment", aName, aKind ) );
+                return e;
+            };
 
     for( const project::NetClassAssignment& assignment : aCtx.Request.assignments() )
     {
@@ -303,16 +298,6 @@ API_HANDLER_COMMON::handleSetNetClassAssignments( const HANDLER_CONTEXT<SetNetCl
             if( std::optional<ApiResponseStatus> err = checkNetclassName( netclassName, "net" ) )
                 return tl::unexpected( *err );
         }
-
-        std::set<wxString> netclasses;
-
-        for( const std::string& netclassName : assignment.netclasses() )
-            netclasses.insert( wxString::FromUTF8( netclassName ) );
-
-        if( netclasses.empty() )
-            netSettings->ClearNetclassLabelAssignment( wxString::FromUTF8( assignment.net() ) );
-        else
-            netSettings->SetNetclassLabelAssignment( wxString::FromUTF8( assignment.net() ), netclasses );
     }
 
     for( const project::NetClassPatternAssignment& pattern : aCtx.Request.pattern_assignments() )
@@ -330,7 +315,29 @@ API_HANDLER_COMMON::handleSetNetClassAssignments( const HANDLER_CONTEXT<SetNetCl
             if( std::optional<ApiResponseStatus> err = checkNetclassName( pattern.netclass(), "pattern" ) )
                 return tl::unexpected( *err );
         }
+    }
 
+    if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
+    {
+        netSettings->ClearNetclassLabelAssignments();
+        netSettings->ClearNetclassPatternAssignments();
+    }
+
+    for( const project::NetClassAssignment& assignment : aCtx.Request.assignments() )
+    {
+        std::set<wxString> netclasses;
+
+        for( const std::string& netclassName : assignment.netclasses() )
+            netclasses.insert( wxString::FromUTF8( netclassName ) );
+
+        if( netclasses.empty() )
+            netSettings->ClearNetclassLabelAssignment( wxString::FromUTF8( assignment.net() ) );
+        else
+            netSettings->SetNetclassLabelAssignment( wxString::FromUTF8( assignment.net() ), netclasses );
+    }
+
+    for( const project::NetClassPatternAssignment& pattern : aCtx.Request.pattern_assignments() )
+    {
         std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>> kept;
 
         for( auto& existing : netSettings->GetNetclassPatternAssignments() )
