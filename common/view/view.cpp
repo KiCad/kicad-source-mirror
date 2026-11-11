@@ -575,13 +575,12 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
     wxCHECK( (unsigned) aLayerId < m_layers.size(), /*void*/ );
     wxCHECK( (unsigned) aRequiredId < m_layers.size(), /*void*/ );
 
-    if( aRequired )
-        m_layers[aLayerId].requiredLayers.insert( aRequiredId );
-    else
-        m_layers[aLayerId].requiredLayers.erase( aRequiredId );
+    std::set<int>& required = m_layers[aLayerId].requiredLayers;
+    const bool     changed = aRequired ? required.insert( aRequiredId ).second : required.erase( aRequiredId ) > 0;
 
     // redrawRect() skips layers whose required layers are hidden, so the cached output is stale.
-    layerStateChanged( aLayerId );
+    if( changed )
+        layerStateChanged( aLayerId );
 }
 
 

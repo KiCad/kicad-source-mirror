@@ -258,6 +258,7 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
     aCanvas.SetContextItems( items );
 
     ApplyPcbGalLayerOrder( aCanvas.GetView() );
+    ApplyPcbGalLayerDeps( aCanvas.GetView() );
 
     std::map<KIGFX::VIEW_ITEM*, KICAD_DIFF::CATEGORY> itemCategories;
 

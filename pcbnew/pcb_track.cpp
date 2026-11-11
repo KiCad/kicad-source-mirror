@@ -2744,20 +2744,8 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
         else
         {
-            LSET visible;
-
-            if( board )
-            {
-                visible = board->GetVisibleLayers();
-                visible &= board->GetEnabledLayers();
-            }
-            else
-            {
-                visible = LSET::AllLayersMask();
-            }
-
             // Hide netnames unless pad is flashed to a visible layer
-            if( !FlashLayer( visible ) )
+            if( !FlashLayer( viewVisibleLayers( aView ) ) )
                 return LOD_HIDE;
         }
 

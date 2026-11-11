@@ -50,6 +50,7 @@ class FOOTPRINT;
 namespace KIGFX
 {
     class RENDER_SETTINGS;
+    class VIEW;
 };
 
 namespace KIFONT
@@ -616,6 +617,9 @@ protected:
 
     /// Area of \a aPolySet with every contour closed first, holes subtracted.
     static double polygonArea( SHAPE_POLY_SET& aPolySet );
+
+    /// Enabled board layers that \a aView shows, for LOD checks on views that hide layers on their own.
+    LSET viewVisibleLayers( const KIGFX::VIEW* aView ) const;
 
 protected:
     PCB_LAYER_ID    m_layer;

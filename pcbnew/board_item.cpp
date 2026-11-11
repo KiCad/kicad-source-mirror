@@ -35,6 +35,7 @@
 #include <font/font.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <view/view.h>
 
 
 bool BOARD_ITEM::FitsEnabledLayers( const LSET& aEnabledLayers, int aCopperLayerCount ) const
@@ -407,6 +408,21 @@ double BOARD_ITEM::GetCoverageArea( int aTextMargin ) const
     SHAPE_POLY_SET poly;
     TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
     return polygonArea( poly );
+}
+
+
+LSET BOARD_ITEM::viewVisibleLayers( const KIGFX::VIEW* aView ) const
+{
+    const BOARD* board = GetBoard();
+    LSET         visible;
+
+    for( PCB_LAYER_ID layer : board ? board->GetEnabledLayers() : LSET::AllLayersMask() )
+    {
+        if( aView->IsLayerVisibleCached( layer ) )
+            visible.set( layer );
+    }
+
+    return visible;
 }
 
 
