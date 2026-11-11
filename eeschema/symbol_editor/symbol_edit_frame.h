@@ -700,6 +700,14 @@ private:
     void closeSymbolTab( const LIB_ID& aLibId );
 
     /**
+     * Close the library tabs of aLibrary, or of every library when it is empty, limited to aSymbol
+     * when given. Schematic instance tabs stay open.
+     *
+     * @return the closed active tab's symbol, or an empty LIB_ID.
+     */
+    LIB_ID closeLibraryTabs( const wxString& aLibrary, const wxString& aSymbol );
+
+    /**
      * Capture the current view zoom/center for the active tab's snapshot.
      */
     EDITOR_TAB_CONTEXT::VIEW_SNAPSHOT captureSymbolViewSnapshot() const;

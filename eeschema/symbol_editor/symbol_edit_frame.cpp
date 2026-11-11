@@ -606,11 +606,19 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return IsSymbolEditable() && m_symbol && m_symbol->CanUpdateFieldsFromParent();
             };
 
-    auto symbolModifiedCondition =
+    auto revertableCondition =
             [this]( const SELECTION& sel )
             {
-                return m_libMgr && m_libMgr->IsSymbolModified( GetTargetLibId().GetLibItemName(),
-                                                               GetTargetLibId().GetLibNickname() );
+                if( !m_libMgr )
+                    return false;
+
+                const LIB_ID target = GetTargetLibId();
+
+                // A library row reverts the whole library
+                if( target.GetLibItemName().empty() )
+                    return m_libMgr->IsLibraryModified( target.GetLibNickname() );
+
+                return m_libMgr->IsSymbolModified( target.GetLibItemName(), target.GetLibNickname() );
             };
 
     auto libSelectedCondition =
@@ -656,7 +664,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::undo,                ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
-    mgr->SetConditions( ACTIONS::revert,              ENABLE( symbolModifiedCondition ) );
+    mgr->SetConditions( ACTIONS::revert,              ENABLE( revertableCondition ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );

@@ -249,13 +249,14 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbol( LIB_SYMBOL* aEntry, const wxString
     LIB_SYMBOL* lib_symbol = m_libMgr->GetBufferedSymbol( aEntry->GetName(), aLibrary );
     wxCHECK( lib_symbol, false );
 
-    m_unit = aUnit > 0 ? aUnit : 1;
-    m_bodyStyle = aBodyStyle > 0 ? aBodyStyle : 1;
+    // Activating the tab installs these, the outgoing tab must first save the frame's own
+    const int unit = aUnit > 0 ? aUnit : 1;
+    const int bodyStyle = aBodyStyle > 0 ? aBodyStyle : 1;
 
     // Open as a preview tab that the next library-open reuses until the symbol is edited.
     bool                       wasCreated = false;
     SYMBOL_EDITOR_TAB_CONTEXT* ctx = findOrCreateSymbolTab( aLibrary, lib_symbol->GetName(),
-                                                            m_unit, m_bodyStyle, true,
+                                                            unit, bodyStyle, true,
                                                             &wasCreated );
     wxCHECK( ctx, false );
 
@@ -1447,37 +1448,18 @@ void SYMBOL_EDIT_FRAME::Revert( LIB_ID& aTarget, bool aConfirm )
     // Empty if this is the library itself that is selected.
     const wxString& symbolName = aTarget.GetLibItemName();
 
+    if( libName.IsEmpty() )
+        return;
+
     wxString msg = wxString::Format( _( "Revert '%s' to last version saved?" ),
                                      symbolName.IsEmpty() ? libName : symbolName );
 
     if( aConfirm && !ConfirmRevertDialog( this, msg ) )
         return;
 
-    bool reload_currentSymbol = false;
-    wxString curr_symbolName = symbolName;
-
-    if( GetCurSymbol() )
-    {
-        // the library itself is reverted: the current symbol will be reloaded only if it is
-        // owned by this library
-        if( symbolName.IsEmpty() )
-        {
-            LIB_ID curr_libId = GetCurSymbol()->GetLibId();
-            reload_currentSymbol = libName == curr_libId.GetLibNickname().wx_str();
-
-            if( reload_currentSymbol )
-                curr_symbolName = curr_libId.GetUniStringLibItemName();
-        }
-        else
-        {
-            reload_currentSymbol = IsCurrentSymbol( aTarget );
-        }
-    }
-
-    int unit = m_unit;
-
-    if( reload_currentSymbol )
-        emptyScreen();
+    // Other tabs may hold unsaved edits, so close only the reverted ones
+    int          unit = m_unit;
+    const LIB_ID active = closeLibraryTabs( libName, symbolName );
 
     if( symbolName.IsEmpty() )
     {
@@ -1490,8 +1472,20 @@ void SYMBOL_EDIT_FRAME::Revert( LIB_ID& aTarget, bool aConfirm )
         m_treePane->GetLibTree()->SelectLibId( aTarget );
     }
 
-    if( reload_currentSymbol && m_libMgr->SymbolExists( curr_symbolName, libName ) )
-        LoadSymbol( curr_symbolName, libName, unit );
+    // A derived symbol still shown draws its parent's items, which the revert just replaced
+    if( m_symbol && m_symbol->IsDerived() )
+    {
+        m_symbol->ClearCaches();
+        RebuildSymbolUnitAndBodyStyleLists();
+        RebuildView();
+    }
+
+    // A reverted rename brings the symbol back under its old name
+    const wxString reload = symbolName.IsEmpty() ? active.GetUniStringLibItemName()
+                                                 : aTarget.GetUniStringLibItemName();
+
+    if( !active.GetLibItemName().empty() && m_libMgr->SymbolExists( reload, libName ) )
+        LoadSymbol( reload, libName, unit );
 
     m_treePane->Refresh();
 }
@@ -1501,9 +1495,57 @@ void SYMBOL_EDIT_FRAME::RevertAll()
 {
     wxCHECK_RET( m_libMgr, "Library manager object not created." );
 
+    // Every library buffer is restored in place, so no library tab may keep its working copy
+    int          unit = m_unit;
+    const LIB_ID active = closeLibraryTabs( wxEmptyString, wxEmptyString );
+
     LIB_ID target = GetTargetLibId();
     Revert( target, false );
     m_libMgr->RevertAll();
+
+    if( m_libMgr->SymbolExists( active.GetUniStringLibItemName(), active.GetUniStringLibNickname() ) )
+        LoadSymbol( active.GetUniStringLibItemName(), active.GetUniStringLibNickname(), unit );
+}
+
+
+LIB_ID SYMBOL_EDIT_FRAME::closeLibraryTabs( const wxString& aLibrary, const wxString& aSymbol )
+{
+    const wxString      activeKey = m_activeTab ? m_activeTab->GetTabKey() : wxString();
+    std::vector<LIB_ID> tabs;
+
+    // Reactivating a tab restores its stored unit and body style, which lag the frame's
+    if( m_activeTab )
+    {
+        m_activeTab->SetUnit( m_unit );
+        m_activeTab->SetBodyStyle( m_bodyStyle );
+    }
+    LIB_ID              active;
+
+    for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+    {
+        if( ctx->IsTransient() )
+            continue;
+
+        if( !aLibrary.IsEmpty() && ctx->GetLibrary() != aLibrary )
+            continue;
+
+        if( !aSymbol.IsEmpty() && ctx->GetName() != aSymbol )
+            continue;
+
+        tabs.emplace_back( ctx->GetLibrary(), ctx->GetName() );
+
+        if( ctx.get() == m_activeTab )
+            active = tabs.back();
+    }
+
+    for( const LIB_ID& tab : tabs )
+        closeSymbolTab( tab );
+
+    // Closing an inactive tab selects its neighbour, so return to the tab that was active
+    if( int activeIdx = m_tabsPanel->FindTab( activeKey ); activeIdx >= 0 )
+        m_tabsPanel->SelectTab( activeIdx );
+
+    return active;
 }
 
 
