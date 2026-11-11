@@ -184,6 +184,15 @@ SettleLibraryMerges( MERGE_PLAN& aPlan, const std::function<bool( const KIID_PAT
                      const std::function<std::set<wxString>( const KIID_PATH& )>& aEditedNames = {} );
 
 
+/// The properties and elements aChange edits, by the names a user would know them by.
+KICOMMON_API std::set<wxString> EditedNames( const ITEM_CHANGE& aChange );
+
+
+/// What either side edits in an item, for SettleLibraryMerges. Both diffs must outlive the result.
+KICOMMON_API std::function<std::set<wxString>( const KIID_PATH& )> EditedNamesIn( const DOCUMENT_DIFF& aOurs,
+                                                                                const DOCUMENT_DIFF& aTheirs );
+
+
 /**
  * Resolve the best bounding box for a conflicted item across the three
  * sides of a 3-way merge.

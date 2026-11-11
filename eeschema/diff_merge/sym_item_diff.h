@@ -45,9 +45,6 @@ namespace KICAD_DIFF
  */
 std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter );
 
-/// The properties, fields and pins aChange edits, by the names a user would know them by.
-std::set<wxString> EditedNames( const ITEM_CHANGE& aChange );
-
 /**
  * Combine two edits of one library symbol when neither can lose anything. One side may have
  * changed anything, the other only fields and symbol properties, and no name may be touched by

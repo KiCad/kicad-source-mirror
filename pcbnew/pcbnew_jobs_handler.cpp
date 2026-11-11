@@ -5078,6 +5078,15 @@ int PCBNEW_JOBS_HANDLER::runFpLibMerge( const wxString& aAncestor, const wxStrin
     KICAD_DIFF::KICAD_MERGE_ENGINE engine;
     KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
 
+    // Footprint edits are never combined, so one edited on both sides stays a conflict
+    KICAD_DIFF::SettleLibraryMerges(
+            plan,
+            []( const KIID_PATH& )
+            {
+                return false;
+            },
+            KICAD_DIFF::EditedNamesIn( ourDocDiff, theirDocDiff ) );
+
     if( aInteractive && !KICAD_DIFF::BuildConflictList( plan ).empty() )
     {
         if( !DIALOG_KICAD_MERGE_3WAY::CanOpen( *m_reporter ) )

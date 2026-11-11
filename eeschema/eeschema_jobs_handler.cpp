@@ -3617,20 +3617,7 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
 
     // Only the dialog can settle two edits of one symbol that do not combine
     if( aInteractive )
-    {
-        editedNames = [&]( const KIID_PATH& aId )
-        {
-            std::set<wxString> edited;
-
-            for( const std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*>* changes : { &ourChanges, &theirChanges } )
-            {
-                if( const KICAD_DIFF::ITEM_CHANGE* change = changeFor( *changes, aId ) )
-                    edited.merge( KICAD_DIFF::EditedNames( *change ) );
-            }
-
-            return edited;
-        };
-    }
+        editedNames = KICAD_DIFF::EditedNamesIn( ourDocDiff, theirDocDiff );
 
     KICAD_DIFF::SettleLibraryMerges(
             plan,

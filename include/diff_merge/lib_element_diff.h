@@ -60,6 +60,9 @@ void DiffUnkeyedElements( std::vector<LIB_ELEMENT>& aOut, const std::vector<cons
                           const std::function<wxString( const EDA_ITEM* )>&              aTypeName,
                           const std::function<bool( const EDA_ITEM*, const EDA_ITEM* )>& aSameGeometry = {} );
 
+/// Add each element to aChange as a child change, which is how a library item reports its elements.
+void AppendElementChanges( ITEM_CHANGE& aChange, const std::vector<LIB_ELEMENT>& aElements );
+
 } // namespace KICAD_DIFF
 
 #endif // LIB_ELEMENT_DIFF_H

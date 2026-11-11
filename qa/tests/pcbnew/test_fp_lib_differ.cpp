@@ -230,6 +230,24 @@ BOOST_AUTO_TEST_CASE( FootprintElementsFindTheEditedPad )
 }
 
 
+// The detail list reads the edited elements from the change, as it does for symbols
+BOOST_AUTO_TEST_CASE( DiffCarriesTheEditedPad )
+{
+    auto [ownersA, mapA] = FP_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = FP_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    BOOST_REQUIRE( !ownersB.empty() && !ownersB.front()->Pads().empty() );
+
+    ownersB.front()->Pads().front()->SetLocalClearance( pcbIUScale.mmToIU( 0.3 ) );
+
+    DOCUMENT_DIFF result = FP_LIB_DIFFER( mapA, mapB ).Diff();
+
+    BOOST_REQUIRE_EQUAL( result.changes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( result.changes[0].children.size(), 1u );
+    BOOST_CHECK( !result.changes[0].children[0].properties.empty() );
+}
+
+
 BOOST_AUTO_TEST_CASE( FootprintElementsFindAMovedPolygonCorner )
 {
     const wxString path = KI_TEST::GetPcbnewTestDataDir() + "issue24045/QFN-24_L4.0-W4.0-P0.50-BL-EP2.6.kicad_mod";

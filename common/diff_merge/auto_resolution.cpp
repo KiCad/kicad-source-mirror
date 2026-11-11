@@ -259,6 +259,44 @@ void SettleLibraryMerges( MERGE_PLAN& aPlan, const std::function<bool( const KII
 }
 
 
+std::set<wxString> EditedNames( const ITEM_CHANGE& aChange )
+{
+    std::set<wxString> names;
+
+    for( const PROPERTY_DELTA& delta : aChange.properties )
+        names.insert( delta.name );
+
+    for( const ITEM_CHANGE& child : aChange.children )
+    {
+        // A bare pin number could collide with a field of that name
+        if( child.refdes && child.typeName == _( "Pin" ) )
+            names.insert( wxString::Format( _( "Pin %s" ), *child.refdes ) );
+        else
+            names.insert( child.refdes.value_or( child.typeName ) );
+    }
+
+    return names;
+}
+
+
+std::function<std::set<wxString>( const KIID_PATH& )> EditedNamesIn( const DOCUMENT_DIFF& aOurs,
+                                                                    const DOCUMENT_DIFF& aTheirs )
+{
+    return [ours = IndexChangesByKiid( aOurs ), theirs = IndexChangesByKiid( aTheirs )]( const KIID_PATH& aId )
+    {
+        std::set<wxString> edited;
+
+        for( const std::map<KIID_PATH, const ITEM_CHANGE*>* changes : { &ours, &theirs } )
+        {
+            if( auto it = changes->find( aId ); it != changes->end() )
+                edited.merge( EditedNames( *it->second ) );
+        }
+
+        return edited;
+    };
+}
+
+
 std::optional<BOX2I>
 ResolveConflictBBox( const KIID_PATH&                  aId,
                      const std::map<KIID_PATH, BOX2I>& aPrimary,

@@ -150,4 +150,20 @@ void DiffUnkeyedElements( std::vector<LIB_ELEMENT>& aOut, const std::vector<cons
     }
 }
 
+void AppendElementChanges( ITEM_CHANGE& aChange, const std::vector<LIB_ELEMENT>& aElements )
+{
+    for( const LIB_ELEMENT& element : aElements )
+    {
+        ITEM_CHANGE child;
+        child.typeName = element.typeName;
+        child.kind = element.kind;
+        child.properties = element.deltas;
+
+        if( !element.key.IsEmpty() )
+            child.refdes = element.key;
+
+        aChange.children.push_back( std::move( child ) );
+    }
+}
+
 } // namespace KICAD_DIFF

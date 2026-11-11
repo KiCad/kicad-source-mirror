@@ -85,7 +85,7 @@ FP_LIB_DIFFER::LoadLibrary( const wxString& aPrettyPath )
 
 DOCUMENT_DIFF FP_LIB_DIFFER::Diff()
 {
-    return DiffLibraryByName(
+    DOCUMENT_DIFF result = DiffLibraryByName(
             m_before, m_after, m_path, wxS( "pretty" ), wxS( "FOOTPRINT" ), m_options,
             []( const FOOTPRINT* aFp )
             {
@@ -95,6 +95,20 @@ DOCUMENT_DIFF FP_LIB_DIFFER::Diff()
             {
                 return !( *aA == *aB );
             } );
+
+    for( ITEM_CHANGE& change : result.changes )
+    {
+        if( change.kind != CHANGE_KIND::MODIFIED || !change.refdes )
+            continue;
+
+        auto beforeIt = m_before.find( *change.refdes );
+        auto afterIt = m_after.find( *change.refdes );
+
+        if( beforeIt != m_before.end() && afterIt != m_after.end() )
+            AppendElementChanges( change, DiffFootprintElements( beforeIt->second, afterIt->second ) );
+    }
+
+    return result;
 }
 
 

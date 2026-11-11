@@ -207,19 +207,7 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
         std::unique_ptr<LIB_SYMBOL> after = afterIt->second->Flatten();
 
         change.properties = symbolDeltas( before.get(), after.get() );
-
-        for( const LIB_ELEMENT& element : DiffSymbolElements( before.get(), after.get() ) )
-        {
-            ITEM_CHANGE child;
-            child.typeName = element.typeName;
-            child.kind = element.kind;
-            child.properties = element.deltas;
-
-            if( !element.key.IsEmpty() )
-                child.refdes = element.key;
-
-            change.children.push_back( std::move( child ) );
-        }
+        AppendElementChanges( change, DiffSymbolElements( before.get(), after.get() ) );
     }
 
     return result;

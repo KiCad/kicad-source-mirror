@@ -19,6 +19,7 @@
  */
 
 #include <diff_merge/sym_item_diff.h>
+#include <diff_merge/auto_resolution.h>
 #include <diff_merge/property_diff.h>
 #include <diff_merge/kicad_merge_engine.h>
 #include <diff_merge/sym_lib_differ.h>
@@ -116,26 +117,6 @@ std::vector<LIB_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LI
     DiffUnkeyedElements( out, graphics( aBefore ), graphics( aAfter ), graphicTypeName );
 
     return out;
-}
-
-
-std::set<wxString> EditedNames( const ITEM_CHANGE& aChange )
-{
-    std::set<wxString> names;
-
-    for( const PROPERTY_DELTA& delta : aChange.properties )
-        names.insert( delta.name );
-
-    for( const ITEM_CHANGE& child : aChange.children )
-    {
-        // A bare pin number could collide with a field of that name
-        if( child.refdes && child.typeName == _( "Pin" ) )
-            names.insert( wxString::Format( _( "Pin %s" ), *child.refdes ) );
-        else
-            names.insert( child.refdes.value_or( child.typeName ) );
-    }
-
-    return names;
 }
 
 
