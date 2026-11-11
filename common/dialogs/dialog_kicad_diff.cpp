@@ -429,6 +429,9 @@ void DIALOG_KICAD_DIFF::SetRevisionChooser( const std::vector<wxString>& aLabels
 
     m_revisionChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices );
     m_revisionChoice->SetSelection( aSelected );
+
+    // The caller loads the revision it selects, so a restored choice would disagree with the diff
+    OptOut( m_revisionChoice );
     row->Add( m_revisionChoice, wxSizerFlags( 1 ).Centre() );
 
     wxButton* olderBtn = new wxButton( this, wxID_ANY, _( "Older" ), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
