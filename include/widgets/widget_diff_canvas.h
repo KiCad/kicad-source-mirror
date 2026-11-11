@@ -91,10 +91,11 @@ public:
     /// forced neutral color. The diff overlay remains owned by this widget.
     void SetContextPainter( std::unique_ptr<KIGFX::PAINTER> aPainter );
 
-    /// Replace source document context items. Items are not owned by the
-    /// widget; callers must keep the source documents alive while the dialog
-    /// is open.
-    void SetContextItems( const std::vector<KIGFX::VIEW_ITEM*>& aItems );
+    /// Replace source document context items. The widget holds aOwner until the items are
+    /// replaced or the widget is destroyed, so items made only for display can live there.
+    /// Without an owner the caller keeps the source documents alive while they are shown.
+    void SetContextItems( const std::vector<KIGFX::VIEW_ITEM*>& aItems,
+                          std::shared_ptr<const void>           aOwner = nullptr );
 
     /// Tag context items by change category so SetCategoryVisible can hide /
     /// show them in lockstep with the diff-category checkboxes.
@@ -223,6 +224,7 @@ private:
     bool m_hasNativeContext = false;
     std::unique_ptr<KIGFX::VIEW_GROUP> m_contextGroup;
     std::vector<KIGFX::VIEW_ITEM*>                    m_contextGroupItems;
+    std::shared_ptr<const void>                       m_contextOwner;
     std::map<KIGFX::VIEW_ITEM*, KICAD_DIFF::CATEGORY> m_itemCategories;
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_overlay;
 

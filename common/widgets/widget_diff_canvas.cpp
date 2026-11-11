@@ -166,7 +166,8 @@ void WIDGET_DIFF_CANVAS::SetContextPainter( std::unique_ptr<KIGFX::PAINTER> aPai
 }
 
 
-void WIDGET_DIFF_CANVAS::SetContextItems( const std::vector<KIGFX::VIEW_ITEM*>& aItems )
+void WIDGET_DIFF_CANVAS::SetContextItems( const std::vector<KIGFX::VIEW_ITEM*>& aItems,
+                                          std::shared_ptr<const void>           aOwner )
 {
     if( !m_contextGroup )
         return;
@@ -177,6 +178,8 @@ void WIDGET_DIFF_CANVAS::SetContextItems( const std::vector<KIGFX::VIEW_ITEM*>& 
             m_view->Remove( item );
     }
 
+    // The old items are out of the view, so whatever kept them alive may go
+    m_contextOwner = std::move( aOwner );
     m_contextGroupItems.clear();
     m_itemCategories.clear();
     m_hasNativeContext = false;

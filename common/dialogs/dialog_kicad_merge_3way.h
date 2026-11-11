@@ -98,7 +98,7 @@ public:
     DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent, const KICAD_DIFF::MERGE_PLAN& aPlan,
                              CONFLICT_CONTEXT aContext = {} );
 
-    ~DIALOG_KICAD_MERGE_3WAY() override;
+    ~DIALOG_KICAD_MERGE_3WAY() override = default;
 
     /// Returns the plan with the user's resolutions applied. Only meaningful
     /// after the dialog returns wxID_APPLY.

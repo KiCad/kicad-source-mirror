@@ -500,11 +500,9 @@ DIALOG_KICAD_DIFF::SHEET_SWITCHER makeSchSwitcher( SCHEMATIC* aRef, SCHEMATIC* a
                                                    std::map<KIID, KICAD_DIFF::CATEGORY> aCategories,
                                                    const KICAD_DIFF::DIFF_COLOR_THEME&  aTheme )
 {
-    auto holder = std::make_shared<std::vector<std::unique_ptr<SCH_ITEM>>>();
-
     return [aRef, aComp, modifiedColor = aTheme.modified, removedColor = aTheme.removed,
-            refO = std::move( aRefOverrides ), compO = std::move( aCompOverrides ), cats = std::move( aCategories ),
-            holder]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& aSheetPath )
+            refO = std::move( aRefOverrides ), compO = std::move( aCompOverrides ),
+            cats = std::move( aCategories )]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& aSheetPath )
     {
         SCH_SCREEN* compScreen = aComp->RootScreen();
         SCH_SCREEN* refScreen = aRef->RootScreen();
@@ -518,8 +516,8 @@ DIALOG_KICAD_DIFF::SHEET_SWITCHER makeSchSwitcher( SCHEMATIC* aRef, SCHEMATIC* a
                 refScreen = sp->LastScreen();
         }
 
-        aCanvas.SetContextItems( {} );
-        holder->clear();
+        // Removed items exist only in the reference, so the canvas keeps copies of them
+        auto removed = std::make_shared<std::vector<std::unique_ptr<SCH_ITEM>>>();
 
         if( refScreen )
         {
@@ -533,7 +531,7 @@ DIALOG_KICAD_DIFF::SHEET_SWITCHER makeSchSwitcher( SCHEMATIC* aRef, SCHEMATIC* a
                     if( item && item->m_Uuid == kiid )
                     {
                         if( auto* clone = dynamic_cast<SCH_ITEM*>( item->Clone() ) )
-                            holder->emplace_back( clone );
+                            removed->emplace_back( clone );
 
                         break;
                     }
@@ -543,11 +541,11 @@ DIALOG_KICAD_DIFF::SHEET_SWITCHER makeSchSwitcher( SCHEMATIC* aRef, SCHEMATIC* a
 
         std::vector<KIGFX::VIEW_ITEM*> extras;
 
-        for( const auto& clone : *holder )
+        for( const auto& clone : *removed )
             extras.push_back( clone.get() );
 
         KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, nullptr, aComp, modifiedColor, compO, extras, cats, nullptr,
-                                                   compScreen );
+                                                   compScreen, removed );
     };
 }
 

@@ -24,7 +24,6 @@
 #include <diff_merge/sym_lib_differ.h>
 
 #include <memory>
-#include <vector>
 
 class DIALOG_KICAD_DIFF;
 class LIB_SYMBOL;
@@ -34,15 +33,13 @@ class WIDGET_DIFF_CANVAS;
 namespace KICAD_DIFF
 {
 
-void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBefore, LIB_SYMBOL* aAfter );
+/// Draw aBefore and aAfter, which aOwner keeps alive for as long as the canvas shows them.
+void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBefore, LIB_SYMBOL* aAfter,
+                                    std::shared_ptr<const void> aOwner = nullptr );
 
-/**
- * Draw the symbol aName as it is in aBefore and aAfter.  The canvas does not own what it draws,
- * so the flattened copies are kept in aShown until the next call replaces them.
- */
+/// Draw the symbol aName as it is in aBefore and aAfter.
 void ShowSymbolPair( WIDGET_DIFF_CANVAS& aCanvas, const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore,
-                     const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter, const wxString& aName,
-                     std::vector<std::unique_ptr<LIB_SYMBOL>>& aShown );
+                     const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter, const wxString& aName );
 
 /**
  * Draw each symbol chosen in aDialog as it is in aBefore and aAfter, which aDiff compares. Both

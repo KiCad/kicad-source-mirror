@@ -37,7 +37,8 @@
 namespace KICAD_DIFF
 {
 
-void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBefore, LIB_SYMBOL* aAfter )
+void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBefore, LIB_SYMBOL* aAfter,
+                                    std::shared_ptr<const void> aOwner )
 {
     if( !aBefore && !aAfter )
     {
@@ -82,14 +83,13 @@ void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBe
 
     aCanvas.SetWorldUnitLength( SCH_WORLD_UNIT );
     aCanvas.SetContextPainter( MakeSchDiffContextPainter( aCanvas.GetGAL(), nullptr, theme.reference, overrides ) );
-    aCanvas.SetContextItems( items );
+    aCanvas.SetContextItems( items, std::move( aOwner ) );
     aCanvas.ZoomToFit();
 }
 
 
 void ShowSymbolPair( WIDGET_DIFF_CANVAS& aCanvas, const SYM_LIB_DIFFER::SYMBOL_MAP& aBefore,
-                     const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter, const wxString& aName,
-                     std::vector<std::unique_ptr<LIB_SYMBOL>>& aShown )
+                     const SYM_LIB_DIFFER::SYMBOL_MAP& aAfter, const wxString& aName )
 {
     auto flatten = [&]( const SYM_LIB_DIFFER::SYMBOL_MAP& aSide ) -> std::unique_ptr<LIB_SYMBOL>
     {
@@ -97,15 +97,10 @@ void ShowSymbolPair( WIDGET_DIFF_CANVAS& aCanvas, const SYM_LIB_DIFFER::SYMBOL_M
         return symbol != aSide.end() ? symbol->second->Flatten() : nullptr;
     };
 
-    std::unique_ptr<LIB_SYMBOL> before = flatten( aBefore );
-    std::unique_ptr<LIB_SYMBOL> after = flatten( aAfter );
+    auto pair = std::make_shared<std::pair<std::unique_ptr<LIB_SYMBOL>, std::unique_ptr<LIB_SYMBOL>>>(
+            flatten( aBefore ), flatten( aAfter ) );
 
-    ConfigureSymDiffCanvasContext( aCanvas, before.get(), after.get() );
-
-    // Released only after the canvas has let go of the previous pair
-    aShown.clear();
-    aShown.push_back( std::move( before ) );
-    aShown.push_back( std::move( after ) );
+    ConfigureSymDiffCanvasContext( aCanvas, pair->first.get(), pair->second.get(), pair );
 }
 
 
@@ -120,10 +115,8 @@ void ShowSymbolChanges( DIALOG_KICAD_DIFF& aDialog, const DOCUMENT_DIFF& aDiff,
             names[change.id] = *change.refdes;
     }
 
-    auto shown = std::make_shared<std::vector<std::unique_ptr<LIB_SYMBOL>>>();
-
     aDialog.SetChangeSelectedHandler(
-            [&aDialog, &aBefore, &aAfter, names, shown]( const KIID_PATH& aId )
+            [&aDialog, &aBefore, &aAfter, names]( const KIID_PATH& aId )
             {
                 WIDGET_DIFF_CANVAS* canvas = aDialog.DiffCanvas();
 
@@ -132,8 +125,7 @@ void ShowSymbolChanges( DIALOG_KICAD_DIFF& aDialog, const DOCUMENT_DIFF& aDiff,
 
                 auto name = names.find( aId );
 
-                ShowSymbolPair( *canvas, aBefore, aAfter, name != names.end() ? name->second : wxString(),
-                                *shown );
+                ShowSymbolPair( *canvas, aBefore, aAfter, name != names.end() ? name->second : wxString() );
             } );
 
     aDialog.SelectFirstChange();

@@ -51,7 +51,8 @@ void ConfigureSchDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, SCHEMATIC* aRef
                                     const KIGFX::COLOR4D& aColor, const std::map<KIID, KIGFX::COLOR4D>& aOverrides = {},
                                     const std::vector<KIGFX::VIEW_ITEM*>&       aExtraItems = {},
                                     const std::map<KIID, KICAD_DIFF::CATEGORY>& aCategories = {},
-                                    SCH_SCREEN* aReferenceScreen = nullptr, SCH_SCREEN* aComparisonScreen = nullptr );
+                                    SCH_SCREEN* aReferenceScreen = nullptr, SCH_SCREEN* aComparisonScreen = nullptr,
+                                    std::shared_ptr<const void> aOwner = nullptr );
 
 } // namespace KICAD_DIFF
 

@@ -237,14 +237,6 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
 }
 
 
-DIALOG_KICAD_DIFF::~DIALOG_KICAD_DIFF()
-{
-    // The canvas's items belong to callbacks that die with this dialog, before its child windows do
-    if( m_canvas )
-        m_canvas->SetContextItems( {} );
-}
-
-
 void DIALOG_KICAD_DIFF::OnClose( wxCloseEvent& aEvent )
 {
     EndModal( wxID_OK );

@@ -3696,17 +3696,14 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
             return it != names.end() ? it->second : wxString();
         };
 
-        // Outlives the dialog, which detaches the canvas items when it closes
-        std::vector<std::unique_ptr<LIB_SYMBOL>> shown;
-
         DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
 
         ctx.describeItem = nameOf;
 
         // Each side is drawn over the common version so its own edits stand out
-        ctx.drawSide = [&ancestor, &ours, &theirs, &shown, nameOf]( WIDGET_DIFF_CANVAS&             aCanvas,
-                                                                     DIALOG_KICAD_MERGE_3WAY::SIDE   aSide,
-                                                                     const std::optional<KIID_PATH>& aId )
+        ctx.drawSide = [&ancestor, &ours, &theirs, nameOf]( WIDGET_DIFF_CANVAS&             aCanvas,
+                                                             DIALOG_KICAD_MERGE_3WAY::SIDE   aSide,
+                                                             const std::optional<KIID_PATH>& aId )
         {
             const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP* side = &ours.map;
 
@@ -3715,7 +3712,7 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
             else if( aSide == DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR )
                 side = &ancestor.map;
 
-            KICAD_DIFF::ShowSymbolPair( aCanvas, ancestor.map, *side, aId ? nameOf( *aId ) : wxString(), shown );
+            KICAD_DIFF::ShowSymbolPair( aCanvas, ancestor.map, *side, aId ? nameOf( *aId ) : wxString() );
         };
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );

@@ -286,14 +286,6 @@ DIALOG_KICAD_MERGE_3WAY::SIDE DIALOG_KICAD_MERGE_3WAY::activeSide() const
 }
 
 
-DIALOG_KICAD_MERGE_3WAY::~DIALOG_KICAD_MERGE_3WAY()
-{
-    // The canvas's items belong to callbacks that die with this dialog, before its child windows do
-    if( m_canvas )
-        m_canvas->SetContextItems( {} );
-}
-
-
 void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
 {
     if( !m_canvas )
