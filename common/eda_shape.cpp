@@ -4861,11 +4861,13 @@ static struct EDA_SHAPE_DESC
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                    shapeProps ).SetIsCopyable();
+                    shapeProps )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>( _HKI( "Line Style" ),
                     &EDA_SHAPE::SetLineStyle, &EDA_SHAPE::GetLineStyle ),
-                    shapeProps ).SetIsCopyable();
+                    shapeProps )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),
                     &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ),
@@ -4929,7 +4931,8 @@ static struct EDA_SHAPE_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, UI_FILL_MODE>( _HKI( "Fill" ),
                     &EDA_SHAPE::SetFillModeProp, &EDA_SHAPE::GetFillModeProp ),
                     shapeProps )
-                .SetAvailableFunc( fillAvailable ).SetIsCopyable();
+                .SetAvailableFunc( fillAvailable )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Fill Color" ),
                     &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ),

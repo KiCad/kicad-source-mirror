@@ -2285,24 +2285,29 @@ static struct DIMENSION_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_MODE>( _HKI( "Units" ),
                     &PCB_DIMENSION_BASE::ChangeUnitsMode, &PCB_DIMENSION_BASE::GetUnitsMode ),
                     groupDimension )
-                .SetAvailableFunc( isNotLeader ).SetIsCopyable();
+                .SetAvailableFunc( isNotLeader )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_FORMAT>( _HKI( "Units Format" ),
                     &PCB_DIMENSION_BASE::ChangeUnitsFormat, &PCB_DIMENSION_BASE::GetUnitsFormat ),
                     groupDimension )
-                .SetAvailableFunc( isNotLeader ).SetIsCopyable();
+                .SetAvailableFunc( isNotLeader )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_PRECISION>( _HKI( "Precision" ),
                     &PCB_DIMENSION_BASE::ChangePrecision, &PCB_DIMENSION_BASE::GetPrecision ),
                     groupDimension )
-                .SetAvailableFunc( isNotLeader ).SetIsCopyable();
+                .SetAvailableFunc( isNotLeader )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, bool>( _HKI( "Suppress Trailing Zeroes" ),
                     &PCB_DIMENSION_BASE::ChangeSuppressZeroes, &PCB_DIMENSION_BASE::GetSuppressZeroes ),
                     groupDimension )
-                .SetAvailableFunc( isNotLeader ).SetIsCopyable();
+                .SetAvailableFunc( isNotLeader )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_ARROW_DIRECTION>( _HKI( "Arrow Direction"),
                     &PCB_DIMENSION_BASE::ChangeArrowDirection, &PCB_DIMENSION_BASE::GetArrowDirection ),
                     groupDimension )
-                .SetAvailableFunc( isMultiArrowDirection ).SetIsCopyable();
+                .SetAvailableFunc( isMultiArrowDirection )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Line Thickness" ),
                     &PCB_DIMENSION_BASE::ChangeLineThickness, &PCB_DIMENSION_BASE::GetLineThickness,
@@ -2314,20 +2319,23 @@ static struct DIMENSION_DESC
                     &PCB_DIMENSION_BASE::ChangeArrowLength, &PCB_DIMENSION_BASE::GetArrowLength,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupDimension )
-                .SetAvailableFunc( isNotCenter ).SetIsCopyable();
+                .SetAvailableFunc( isNotCenter )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, int>( _HKI( "Extension Line Offset" ),
                     &PCB_DIMENSION_BASE::ChangeExtensionOffset, &PCB_DIMENSION_BASE::GetExtensionOffset,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupDimension )
-                .SetAvailableFunc( isNotCenter ).SetIsCopyable();
+                .SetAvailableFunc( isNotCenter )
+                .SetIsCopyable();
 
         const wxString groupText = _HKI( "Text Properties" );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_TEXT_POSITION>( _HKI( "Text Position" ),
                     &PCB_DIMENSION_BASE::ChangeTextPositionMode, &PCB_DIMENSION_BASE::GetTextPositionMode ),
                     groupText )
-                .SetAvailableFunc( isNotLeader ).SetIsCopyable();
+                .SetAvailableFunc( isNotLeader )
+                .SetIsCopyable();
 
         const auto isTextOrientationWriteable =
                 []( INSPECTABLE* aItem ) -> bool

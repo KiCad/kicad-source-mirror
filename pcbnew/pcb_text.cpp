@@ -929,11 +929,13 @@ static struct PCB_TEXT_DESC
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, BOARD_ITEM>( _HKI( "Knockout" ),
                     &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
-                    _HKI( "Text Properties" ) ).SetIsCopyable();
+                    _HKI( "Text Properties" ) )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, EDA_TEXT>( _HKI( "Keep Upright" ),
                     &PCB_TEXT::SetKeepUpright, &PCB_TEXT::IsKeepUpright ),
-                    _HKI( "Text Properties" ) ).SetIsCopyable();
+                    _HKI( "Text Properties" ) )
+                .SetIsCopyable();
 
         auto isFootprintText =
                 []( INSPECTABLE* aItem ) -> bool

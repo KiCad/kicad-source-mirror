@@ -2666,7 +2666,8 @@ static struct ZONE_DESC
                     &ZONE::SetThievingOrientation, &ZONE::GetThievingOrientation,
                     PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFill )
-                .SetAvailableFunc( isThievingFill ).SetIsCopyable();
+                .SetAvailableFunc( isThievingFill )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ISLAND_REMOVAL_MODE>( _HKI( "Remove Islands" ),
                     &ZONE::SetIslandRemovalMode, &ZONE::GetIslandRemovalMode ),

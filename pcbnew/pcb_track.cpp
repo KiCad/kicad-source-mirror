@@ -3626,7 +3626,8 @@ static struct TRACK_VIA_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_TRACK ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, int>( _HKI( "Width" ),
-                    &PCB_TRACK::SetWidth, &PCB_TRACK::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) ).SetIsCopyable();
+                    &PCB_TRACK::SetWidth, &PCB_TRACK::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) )
+                .SetIsCopyable();
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
                     new PROPERTY<PCB_TRACK, int>( _HKI( "Start X" ),
                                 &PCB_TRACK::SetStartX, &PCB_TRACK::GetStartX, PROPERTY_DISPLAY::PT_COORD,
@@ -3655,12 +3656,14 @@ static struct TRACK_VIA_DESC
 
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, bool>( _HKI( "Soldermask" ),
                     &PCB_TRACK::SetHasSolderMask, &PCB_TRACK::HasSolderMask ), groupTechLayers )
-                .SetAvailableFunc( isExternalLayerTrack ).SetIsCopyable();
+                .SetAvailableFunc( isExternalLayerTrack )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_TRACK, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
                     &PCB_TRACK::SetLocalSolderMaskMargin, &PCB_TRACK::GetLocalSolderMaskMargin,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupTechLayers )
-                .SetAvailableFunc( isExternalLayerTrack ).SetIsCopyable();
+                .SetAvailableFunc( isExternalLayerTrack )
+                .SetIsCopyable();
 
         // Arc
         REGISTER_TYPE( PCB_ARC );
@@ -3683,11 +3686,13 @@ static struct TRACK_VIA_DESC
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Diameter" ),
                     &PCB_VIA::SetFrontWidth, &PCB_VIA::GetFrontWidth, PROPERTY_DISPLAY::PT_SIZE ),
                     groupVia )
-                .SetValidator( viaDiameterPropertyValidator ).SetIsCopyable();
+                .SetValidator( viaDiameterPropertyValidator )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_VIA, int>( _HKI( "Hole" ),
                     &PCB_VIA::SetDrill, &PCB_VIA::GetDrillValue, PROPERTY_DISPLAY::PT_SIZE ),
                     groupVia )
-                .SetValidator( viaDrillPropertyValidator ).SetIsCopyable();
+                .SetValidator( viaDrillPropertyValidator )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PCB_LAYER_ID>( _HKI( "Layer Top" ),
                     &PCB_VIA::SetTopLayer, &PCB_VIA::GetLayer ),
                     groupVia )
@@ -3701,28 +3706,36 @@ static struct TRACK_VIA_DESC
                     groupVia );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Front Tenting" ),
                     &PCB_VIA::SetFrontTentingMode, &PCB_VIA::GetFrontTentingMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, TENTING_MODE>( _HKI( "Back Tenting" ),
                     &PCB_VIA::SetBackTentingMode, &PCB_VIA::GetBackTentingMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Front Covering" ),
                     &PCB_VIA::SetFrontCoveringMode, &PCB_VIA::GetFrontCoveringMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, COVERING_MODE>( _HKI( "Back Covering" ),
                     &PCB_VIA::SetBackCoveringMode, &PCB_VIA::GetBackCoveringMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Front Plugging" ),
                     &PCB_VIA::SetFrontPluggingMode, &PCB_VIA::GetFrontPluggingMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, PLUGGING_MODE>( _HKI( "Back Plugging" ),
                     &PCB_VIA::SetBackPluggingMode, &PCB_VIA::GetBackPluggingMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, CAPPING_MODE>( _HKI( "Capping" ),
                     &PCB_VIA::SetCappingMode, &PCB_VIA::GetCappingMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, FILLING_MODE>( _HKI( "Filling" ),
                     &PCB_VIA::SetFillingMode, &PCB_VIA::GetFillingMode ),
-                    groupVia ).SetIsCopyable();
+                    groupVia )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_VIA, BACKDRILL_MODE>( _HKI( "Backdrill Mode" ),
                     &PCB_VIA::SetBackdrillMode, &PCB_VIA::GetBackdrillMode ),

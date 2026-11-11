@@ -4002,24 +4002,29 @@ static struct PAD_DESC
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Clearance Override" ),
                     &PAD::SetLocalClearance, &PAD::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides ).SetIsCopyable();
+                    groupOverrides )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
                     &PAD::SetLocalSolderMaskMargin, &PAD::GetLocalSolderMaskMargin, PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides ).SetIsCopyable();
+                    groupOverrides )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Solderpaste Margin Override" ),
                     &PAD::SetLocalSolderPasteMargin, &PAD::GetLocalSolderPasteMargin, PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides ).SetIsCopyable();
+                    groupOverrides )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<double>>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &PAD::SetLocalSolderPasteMarginRatio, &PAD::GetLocalSolderPasteMarginRatio,
                     PROPERTY_DISPLAY::PT_RATIO ),
-                    groupOverrides ).SetIsCopyable();
+                    groupOverrides )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),
                     &PAD::SetLocalZoneConnection, &PAD::GetLocalZoneConnection ),
-                    groupOverrides ).SetIsCopyable();
+                    groupOverrides )
+                .SetIsCopyable();
 
         constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
 
@@ -4027,18 +4032,21 @@ static struct PAD_DESC
                     &PAD::SetLocalThermalSpokeWidthOverride, &PAD::GetLocalThermalSpokeWidthOverride,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides )
-                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> ).SetIsCopyable();
+                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
                     &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ),
-                    groupOverrides ).SetIsCopyable();
+                    groupOverrides )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetLocalThermalGapOverride, &PAD::GetLocalThermalGapOverride,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides )
-                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator ).SetIsCopyable();
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )
+                .SetIsCopyable();
 
         // TODO delta, drill shape offset, layer set
     }

@@ -2057,7 +2057,8 @@ static struct PCB_SHAPE_DESC
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
                     new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID>( _HKI( "Layer" ),
-                                shapeLayerSetter, shapeLayerGetter ) ).SetIsCopyable();
+                                shapeLayerSetter, shapeLayerGetter ) )
+                .SetIsCopyable();
 
         auto isPolygonOrEllipse =
                 []( INSPECTABLE* aItem ) -> bool
@@ -2212,12 +2213,14 @@ static struct PCB_SHAPE_DESC
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Soldermask" ),
                     &PCB_SHAPE::SetHasSolderMask, &PCB_SHAPE::HasSolderMask ),
                     groupTechLayers )
-                .SetAvailableFunc( isExternalCuLayer ).SetIsCopyable();
+                .SetAvailableFunc( isExternalCuLayer )
+                .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, std::optional<int>>( _HKI( "Soldermask Margin Override" ),
                     &PCB_SHAPE::SetLocalSolderMaskMargin, &PCB_SHAPE::GetLocalSolderMaskMargin,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupTechLayers )
-                .SetAvailableFunc( isExternalCuLayer ).SetIsCopyable();
+                .SetAvailableFunc( isExternalCuLayer )
+                .SetIsCopyable();
     }
 } _PCB_SHAPE_DESC;
