@@ -2186,6 +2186,9 @@ bool ZONE::operator==( const ZONE& aOther ) const
     if( GetIsRuleArea() != other.GetIsRuleArea() )
         return false;
 
+    if( GetLayerSet() != other.GetLayerSet() )
+        return false;
+
      if( GetIsRuleArea() )
      {
          if( GetDoNotAllowZoneFills() != other.GetDoNotAllowZoneFills() )

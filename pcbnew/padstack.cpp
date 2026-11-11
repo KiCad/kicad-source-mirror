@@ -145,7 +145,7 @@ bool PADSTACK::operator==( const PADSTACK& aOther ) const
         if( *m_customName != *aOther.m_customName )
             return false;
     }
-    else if( (bool) m_customName != (bool) m_customName )
+    else if( (bool) m_customName != (bool) aOther.m_customName )
     {
         return false;
     }
@@ -1783,8 +1783,12 @@ bool PADSTACK::COPPER_LAYER_PROPS::operator==( const COPPER_LAYER_PROPS& aOther 
 
     if( custom_shapes.size() != aOther.custom_shapes.size() ) return false;
 
-    // Deep compare of shapes?
-    // For now, just check pointers or size
+    for( size_t ii = 0; ii < custom_shapes.size(); ++ii )
+    {
+        if( !( *custom_shapes[ii] == *aOther.custom_shapes[ii] ) )
+            return false;
+    }
+
     return true;
 }
 

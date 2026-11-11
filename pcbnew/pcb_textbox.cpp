@@ -1030,7 +1030,8 @@ bool PCB_TEXTBOX::operator==( const BOARD_ITEM& aBoardItem ) const
 
 bool PCB_TEXTBOX::operator==( const PCB_TEXTBOX& aOther ) const
 {
-    return m_borderEnabled == aOther.m_borderEnabled && EDA_TEXT::operator==( aOther );
+    return m_borderEnabled == aOther.m_borderEnabled && EDA_TEXT::operator==( aOther )
+           && PCB_SHAPE::operator==( static_cast<const PCB_SHAPE&>( aOther ) );
 }
 
 

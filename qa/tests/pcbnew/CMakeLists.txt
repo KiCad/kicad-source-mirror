@@ -126,6 +126,7 @@ set( QA_PCBNEW_SRCS
     test_lib_table_diff_merge.cpp
     test_applier_helpers.cpp
     test_fp_lib_differ.cpp
+    test_footprint_item_equality.cpp
     test_pad_setters.cpp
     test_pad_swap_positions.cpp
     test_pad_tenting.cpp
