@@ -809,6 +809,14 @@ void DIALOG_SHIM::SaveControlState( const std::optional<wxPoint>& aPosition )
                     {
                         dlgMap[ key ] = od_combo->GetSelection();
                     }
+                    else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                    {
+                        dlgMap[ key ] = spin->GetValue();
+                    }
+                    else if( wxSpinCtrlDouble* spinDouble = dynamic_cast<wxSpinCtrlDouble*>( win ) )
+                    {
+                        dlgMap[ key ] = spinDouble->GetValue();
+                    }
                     else if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
                     {
                         dlgMap[ key ] = textEntry->GetValue();
@@ -820,10 +828,6 @@ void DIALOG_SHIM::SaveControlState( const std::optional<wxPoint>& aPosition )
                     else if( wxCheckBox* check = dynamic_cast<wxCheckBox*>( win ) )
                     {
                         dlgMap[ key ] = check->GetValue();
-                    }
-                    else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
-                    {
-                        dlgMap[ key ] = spin->GetValue();
                     }
                     else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
                     {
@@ -966,6 +970,16 @@ void DIALOG_SHIM::LoadControlState()
                                     od_combo->SetSelection( index );
                             }
                         }
+                        else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
+                        {
+                            if( j.is_number_integer() )
+                                spin->SetValue( j.get<int>() );
+                        }
+                        else if( wxSpinCtrlDouble* spinDouble = dynamic_cast<wxSpinCtrlDouble*>( win ) )
+                        {
+                            if( j.is_number() )
+                                spinDouble->SetValue( j.get<double>() );
+                        }
                         else if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
                         {
                             if( j.is_string() )
@@ -985,11 +999,6 @@ void DIALOG_SHIM::LoadControlState()
                         {
                             if( j.is_boolean() )
                                 check->SetValue( j.get<bool>() );
-                        }
-                        else if( wxSpinCtrl* spin = dynamic_cast<wxSpinCtrl*>( win ) )
-                        {
-                            if( j.is_number_integer() )
-                                spin->SetValue( j.get<int>() );
                         }
                         else if( wxRadioButton* radio = dynamic_cast<wxRadioButton*>( win ) )
                         {
