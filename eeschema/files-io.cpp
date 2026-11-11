@@ -111,11 +111,7 @@ bool SCH_EDIT_FRAME::ReloadFromDisk()
 
     for( const TOP_LEVEL_SHEET_INFO& info : Prj().GetProjectFile().GetTopLevelSheets() )
     {
-        wxFileName listed( Prj().AbsolutePath( info.filename ) );
-
-        // The load reads a legacy project's listed sheets under the legacy extension
-        if( legacy )
-            listed.SetExt( FILEEXT::LegacySchematicFileExtension );
+        wxFileName listed = SCHEMATIC::TopLevelSheetFile( info, Prj().GetProjectPath(), legacy );
 
         if( listed.IsFileReadable() )
         {
@@ -395,14 +391,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     // Load each top-level sheet
                     for( const TOP_LEVEL_SHEET_INFO& sheetInfo : topLevelSheets )
                     {
-                        wxFileName sheetFileName( sheetInfo.filename );
-                        sheetFileName.MakeAbsolute( Prj().GetProjectPath() );
-
-                        // When loading legacy schematic files, ensure we are referencing the correct extension
-                        if( schFileType == SCH_IO_MGR::SCH_LEGACY )
-                            sheetFileName.SetExt( FILEEXT::LegacySchematicFileExtension );
-
-                        wxString sheetPath = sheetFileName.GetFullPath();
+                        wxString sheetPath = SCHEMATIC::TopLevelSheetFile( sheetInfo, Prj().GetProjectPath(),
+                                                                           schFileType == SCH_IO_MGR::SCH_LEGACY )
+                                                     .GetFullPath();
 
                         if( !wxFileName::FileExists( sheetPath ) )
                         {

@@ -3376,14 +3376,10 @@ bool SCHEMATIC::TopLevelSheetsMatch( const std::vector<TOP_LEVEL_SHEET_INFO>& aS
     for( size_t ii = 0; ii < loaded.size(); ++ii )
     {
         wxFileName have( loaded[ii].filename );
-        wxFileName want( aSheets[ii].filename );
-
         have.MakeAbsolute( projectPath );
-        want.MakeAbsolute( projectPath );
 
-        // A legacy project loads its listed sheet under the legacy extension
-        if( have.GetExt() == FILEEXT::LegacySchematicFileExtension )
-            want.SetExt( FILEEXT::LegacySchematicFileExtension );
+        wxFileName want = TopLevelSheetFile( aSheets[ii], projectPath,
+                                             have.GetExt() == FILEEXT::LegacySchematicFileExtension );
 
         if( ( aSheets[ii].uuid != niluuid && aSheets[ii].uuid != loaded[ii].uuid )
                 || aSheets[ii].name != loaded[ii].name || !have.SameAs( want ) )
@@ -3393,6 +3389,19 @@ bool SCHEMATIC::TopLevelSheetsMatch( const std::vector<TOP_LEVEL_SHEET_INFO>& aS
     }
 
     return true;
+}
+
+
+wxFileName SCHEMATIC::TopLevelSheetFile( const TOP_LEVEL_SHEET_INFO& aSheet, const wxString& aProjectPath,
+                                         bool aLegacy )
+{
+    wxFileName fn( aSheet.filename );
+    fn.MakeAbsolute( aProjectPath );
+
+    if( aLegacy )
+        fn.SetExt( FILEEXT::LegacySchematicFileExtension );
+
+    return fn;
 }
 
 

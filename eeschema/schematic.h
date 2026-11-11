@@ -57,6 +57,7 @@ class SCH_GLOBALLABEL;
 class SCH_REFERENCE;
 class PROGRESS_REPORTER;
 class TOOL_MANAGER;
+class wxFileName;
 class PICKED_ITEMS_LIST;
 
 namespace SCH_CONNECTIVITY
@@ -300,6 +301,10 @@ public:
      * UUID in the list matches any sheet, as it does when loading.
      */
     bool TopLevelSheetsMatch( const std::vector<TOP_LEVEL_SHEET_INFO>& aSheets ) const;
+
+    /// The file loaded for a listed top-level sheet. A legacy project reads it under the legacy extension.
+    static wxFileName TopLevelSheetFile( const TOP_LEVEL_SHEET_INFO& aSheet, const wxString& aProjectPath,
+                                         bool aLegacy );
 
     /**
      * Check if a UUID names one of this schematic's top level sheets.
