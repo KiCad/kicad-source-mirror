@@ -310,10 +310,7 @@ void DIALOG_KICAD_DIFF::buildTree( const std::optional<KIID_PATH>& aSelect )
     }
 
     if( !aSelect || !selectChangeById( *aSelect ) )
-    {
         showChange( nullptr );
-        showDiffSummary();
-    }
 
     applyHiddenToTree();
 }
@@ -606,7 +603,7 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 
     if( !aChange )
     {
-        m_labelSummary->SetLabel( _( "Select a change in the tree to view details" ) );
+        showDiffSummary();
 
         if( m_canvas )
             m_canvas->HighlightChange( std::nullopt );
