@@ -186,11 +186,11 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses( const HANDLER_CON
 
     std::shared_ptr<NET_SETTINGS>& netSettings = Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
 
-    if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
-        netSettings->ClearNetclasses();
+    std::map<wxString, std::shared_ptr<NETCLASS>> netClasses;
+    google::protobuf::Any                         any;
 
-    auto netClasses = netSettings->GetNetclasses();
-    google::protobuf::Any any;
+    if( aCtx.Request.merge_mode() != MapMergeMode::MMM_REPLACE )
+        netClasses = netSettings->GetNetclasses();
 
     for( const kiapi::common::project::NetClass& ncProto : aCtx.Request.net_classes() )
     {
