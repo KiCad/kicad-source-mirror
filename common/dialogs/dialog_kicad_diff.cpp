@@ -547,6 +547,9 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
 
     showChange( nullptr );
     Layout();
+
+    // The detail panel sits in a splitter, so the dialog Layout() skips it at an unchanged size
+    m_panelDetail->Layout();
 }
 
 
