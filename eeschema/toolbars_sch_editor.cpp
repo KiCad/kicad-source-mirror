@@ -362,9 +362,7 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
     if( selectedString != GetDefaultVariantName() )
         selectedVariant = selectedString;
 
-    Schematic().SetCurrentVariant( selectedVariant );
-    UpdateProperties();
-    HardRedraw();
+    SetCurrentVariant( selectedVariant );
 
     // Refresh message panel for current selection
     SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
@@ -458,6 +456,9 @@ void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
 
     if( m_currentVariantCtrl )
         selectCurrentVariant();
+
+    if( m_symbolFieldsTableDialog )
+        m_symbolFieldsTableDialog->FollowCurrentVariant();
 
     UpdateProperties();
     HardRedraw();

@@ -1383,25 +1383,32 @@ void DIALOG_SYMBOL_FIELDS_TABLE::showSelectedVariant()
 
 void DIALOG_SYMBOL_FIELDS_TABLE::ReloadVariants()
 {
-    int      selection = m_variantListBox->GetSelection();
-    wxString selected = selection == wxNOT_FOUND ? wxString() : m_variantListBox->GetString( selection );
+    const wxString shown = m_variantListBox->GetStringSelection();
 
     m_variantListBox->Set( m_parent->Schematic().GetVariantNamesForUI() );
 
+    // A job keeps its own variant, otherwise follow the schematic, which an undo may be restoring
+    selectVariant( m_job ? shown : m_parent->Schematic().GetCurrentVariant(), shown );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::FollowCurrentVariant()
+{
+    if( !m_job )
+        selectVariant( m_parent->Schematic().GetCurrentVariant(), m_variantListBox->GetStringSelection() );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::selectVariant( const wxString& aVariant, const wxString& aShown )
+{
     // Variant names are case sensitive, but the list box's own lookup is not
-    int restored = m_variantListBox->FindString( selected, true );
+    int index = m_variantListBox->FindString( aVariant, true );
+    m_variantListBox->SetSelection( index == wxNOT_FOUND ? 0 : index );
 
-    if( restored != wxNOT_FOUND )
-    {
-        m_variantListBox->SetSelection( restored );
+    if( m_variantListBox->GetStringSelection() == aShown )
         updateVariantButtonStates();
-        return;
-    }
-
-    // Follow the schematic, which an undo may be restoring right now
-    restored = m_variantListBox->FindString( m_parent->Schematic().GetCurrentVariant(), true );
-    m_variantListBox->SetSelection( restored == wxNOT_FOUND ? 0 : restored );
-    showSelectedVariant();
+    else
+        showSelectedVariant();
 }
 
 

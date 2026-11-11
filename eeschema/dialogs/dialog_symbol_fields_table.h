@@ -45,8 +45,11 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    /// Take the schematic's variant list again, moving to the default when the one shown is gone.
+    /// Take the schematic's variant list again and show its current variant.
     void ReloadVariants();
+
+    /// Show the schematic's current variant, which the toolbar or an undo may have just changed.
+    void FollowCurrentVariant();
 
 private:
     wxGridCellEditor* createDatasheetEditor() override;
@@ -96,6 +99,9 @@ private:
 
     /// Show the list box's selected variant in the grid without touching the schematic.
     void showSelectedVariant();
+
+    /// Select \a aVariant, or the default when it is gone, rebuilding rows unless \a aShown stays.
+    void selectVariant( const wxString& aVariant, const wxString& aShown );
 
     void updateVariantButtonStates();
 
