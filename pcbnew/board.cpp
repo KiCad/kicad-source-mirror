@@ -4415,13 +4415,14 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FIL
         return;
     }
 
-    wxString boardPath = GetFileName();
-
-    if( boardPath.IsEmpty() )
+    if( GetFileName().IsEmpty() )
         return; // unsaved board
 
+    // A loaded board's name uses forward slashes, which never prefix a Windows project path
+    wxString boardPath = wxFileName( GetFileName() ).GetFullPath();
+
     // Derive relative path from project root.
-    if( !boardPath.StartsWith( projPath ) )
+    if( !boardPath.Left( projPath.length() ).IsSameAs( projPath, wxFileName::IsCaseSensitive() ) )
     {
         wxLogTrace( traceAutoSave, wxS( "[history] pcb saver skipping - board not under project: %s" ), boardPath );
         return; // not under project
@@ -4451,6 +4452,7 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FIL
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogTrace( traceAutoSave, wxS( "[history] pcb saver serialize failed: %s" ), wxString::FromUTF8( ioe.What() ) );
+        wxLogTrace( traceAutoSave, wxS( "[history] pcb saver serialize failed: %s" ),
+                    wxString::FromUTF8( ioe.What() ) );
     }
 }

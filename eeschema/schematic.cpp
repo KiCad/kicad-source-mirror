@@ -3834,7 +3834,8 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
 
         wxString absPath = abs.GetFullPath();
 
-        if( absPath.IsEmpty() || !absPath.StartsWith( projPath ) )
+        if( absPath.IsEmpty()
+            || !absPath.Left( projPath.length() ).IsSameAs( projPath, wxFileName::IsCaseSensitive() ) )
             continue;
 
         wxString rel = absPath.Mid( projPath.length() );
