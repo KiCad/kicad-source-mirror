@@ -1,24 +1,31 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/user/application_security/sast/#available-cicd-variables
+# Secret Detection customization: https://docs.gitlab.com/user/application_security/secret_detection/pipeline/configure/
+# Dependency Scanning customization: https://docs.gitlab.com/user/application_security/dependency_scanning/dependency_scanning_sbom/#customizing-analyzer-behavior
+# Container Scanning customization: https://docs.gitlab.com/user/application_security/container_scanning/#customizing-analyzer-behavior
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ci/variables/#cicd-variable-precedence
 stages:
-  - build
-  - test
-  - report
-
+- build
+- test
+- report
 variables:
   DEFAULT_FEDORA_IMAGE: registry.gitlab.com/kicad/kicad-ci/source_containers/master/fedora:41
-
 default:
   image:
-    name: $DEFAULT_FEDORA_IMAGE
-    entrypoint: ["/bin/sh", "-c"]
-
+    name: "$DEFAULT_FEDORA_IMAGE"
+    entrypoint:
+    - "/bin/sh"
+    - "-c"
 include:
-  - local: '/.gitlab/templates.yml'
-  - local: '/.gitlab/Fedora-Linux-CI.yml'
-  - local: '/.gitlab/Ubuntu-20.04-CI.yml'
-  - local: '/.gitlab/Windows-CI.yml'
-  - local: '/.gitlab/macOS-CI.yml'
-  - local: '/.gitlab/coverity.yml'
-  - local: '/.gitlab/linux-metadata-validate.yml'
-  - local: '/.gitlab/doxygen.yml'
-  - local: '/.gitlab/mr_formatting.yml'
-  - local: '/.gitlab/source_checks.yml'
+- local: "/.gitlab/templates.yml"
+- local: "/.gitlab/Fedora-Linux-CI.yml"
+- local: "/.gitlab/Ubuntu-20.04-CI.yml"
+- local: "/.gitlab/Windows-CI.yml"
+- local: "/.gitlab/macOS-CI.yml"
+- local: "/.gitlab/coverity.yml"
+- local: "/.gitlab/linux-metadata-validate.yml"
+- local: "/.gitlab/doxygen.yml"
+- local: "/.gitlab/mr_formatting.yml"
+- local: "/.gitlab/source_checks.yml"
+- template: Jobs/Dependency-Scanning.v2.gitlab-ci.yml
