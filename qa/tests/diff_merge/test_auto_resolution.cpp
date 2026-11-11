@@ -650,14 +650,14 @@ BOOST_AUTO_TEST_CASE( BBox_FallbackOrderOursThenTheirsThenAncestor )
 
 // BuildConflictDetailText --------------------------------------------------
 
-BOOST_AUTO_TEST_CASE( DetailText_ContainsIdAndKind )
+BOOST_AUTO_TEST_CASE( DetailText_ContainsKindButNoRawId )
 {
     ITEM_RESOLUTION r;
     r.id   = MakePath( 4100 );
     r.kind = ITEM_RES::TAKE_OURS;
 
     wxString text = BuildConflictDetailText( r );
-    BOOST_CHECK( text.Contains( r.id.AsString() ) );
+    BOOST_CHECK( !text.Contains( r.id.AsString() ) );
 
     // Run the comparison strings through `_()` so the assertions stay
     // locale-stable: if a translation is loaded, both the production

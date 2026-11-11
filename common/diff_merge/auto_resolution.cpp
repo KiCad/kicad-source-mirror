@@ -334,7 +334,6 @@ ResolveConflictBBox( const KIID_PATH&                  aId,
 wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution )
 {
     wxString text;
-    text << _( "Item id: " ) << aResolution.id.AsString() << wxS( "\n" );
     text << _( "Current resolution: " );
 
     switch( aResolution.kind )

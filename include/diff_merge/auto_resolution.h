@@ -231,8 +231,9 @@ ResolveConflictBBox( const KIID_PATH&                  aId,
  * resolution panel for a given ITEM_RESOLUTION.
  *
  * Output format:
- *   "Item id: <KIID_PATH>\nCurrent resolution: <kind label>\n\n
- *    <N> property edit(s) in this resolution.\n"
+ *   "Current resolution: <kind label>\n\n<N> property edit(s) in this resolution.\n"
+ *
+ * The item is named by the caller's own label, so the raw KIID_PATH is not repeated here.
  *
  * The kind labels are locale-aware (`_(...)`). Pure dispatch + text
  * formatting; useful for any UI surface displaying a resolution's
