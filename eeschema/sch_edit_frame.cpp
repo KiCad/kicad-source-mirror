@@ -1592,15 +1592,19 @@ void SCH_EDIT_FRAME::ProjectChanged()
         m_symbolFieldsTableDialog = nullptr;
     }
 
-    // Register schematic saver for autosave history
+    registerHistorySaver();
+    m_designBlocksPane->ProjectChanged();
+}
+
+
+void SCH_EDIT_FRAME::registerHistorySaver()
+{
     Kiway().LocalHistory().RegisterSaver( m_schematic,
             [this]( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
             {
                 m_schematic->SaveToHistory( aProjectPath, aFileData );
             },
             m_schematic->GetHistoryLifetimeToken() );
-
-    m_designBlocksPane->ProjectChanged();
 }
 
 
@@ -3309,6 +3313,7 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
     m_toolManager->SetEnvironment( m_schematic, GetCanvas()->GetView(), GetCanvas()->GetViewControls(), config(),
                                    this );
     subscribeConnectivity();
+    registerHistorySaver();
 }
 
 
