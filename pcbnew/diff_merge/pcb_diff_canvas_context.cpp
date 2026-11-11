@@ -96,6 +96,13 @@ private:
     /// The drawn layer plus the one PCB_RENDER_SETTINGS::GetColor takes its colour from.
     static std::vector<int> colorSourceLayers( int aLayer )
     {
+        // Numbers, netnames and drill holes sit on their item, so in its colour they vanish
+        if( IsNetnameLayer( aLayer ) || aLayer == LAYER_PAD_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES
+            || aLayer == LAYER_VIA_HOLES )
+        {
+            return {};
+        }
+
         if( IsPadCopperLayer( aLayer ) )
             return { aLayer, aLayer - LAYER_PAD_COPPER_START, LAYER_VIA_HOLES };
 
@@ -110,12 +117,6 @@ private:
 
         if( aLayer == LAYER_PAD_HOLEWALLS )
             return { aLayer, LAYER_VIA_HOLES };
-
-        if( aLayer == LAYER_PAD_FR_NETNAMES )
-            return { aLayer, GetNetnameLayer( F_Cu ) };
-
-        if( aLayer == LAYER_PAD_BK_NETNAMES )
-            return { aLayer, GetNetnameLayer( B_Cu ) };
 
         return { aLayer };
     }
@@ -184,6 +185,11 @@ void ConfigurePcbDiffContextRenderSettings( KIGFX::PCB_RENDER_SETTINGS& aSetting
     aSettings.SetAllLayerColors( gray );
     aSettings.SetLayerColor( LAYER_BRIGHTENED, aColor );
     aSettings.SetLayerColor( LAYER_PCB_BACKGROUND, background );
+    aSettings.SetLayerColor( LAYER_PAD_PLATEDHOLES, background );
+
+    // Labels sit on grey or diff coloured copper and on light drills, where only dark text reads
+    for( int layer = NETNAMES_LAYER_ID_START; layer < NETNAMES_LAYER_ID_END; ++layer )
+        aSettings.SetLayerColor( layer, KIGFX::COLOR4D::BLACK );
     aSettings.SetBackgroundColor( background );
 
     PCB_DISPLAY_OPTIONS displayOptions;
