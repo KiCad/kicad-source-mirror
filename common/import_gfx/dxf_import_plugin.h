@@ -241,7 +241,6 @@ public:
     }
 
     bool Load( const wxString& aFileName ) override;
-    bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) override;
     bool Import() override;
 
     double GetImageWidth() const override;
@@ -320,13 +319,6 @@ public:
      * @param aFile is the full filename.
      */
     bool ImportDxfFile( const wxString& aFile );
-
-    /**
-     * Implementation of the method used for communicate with this filter.
-     *
-     * @param aMemBuffer is the memory bufferr.
-     */
-    bool ImportDxfFile( const wxMemoryBuffer& aMemBuffer );
 
     /**
      * @return the list of messages in one string. Each message ends by '\n'

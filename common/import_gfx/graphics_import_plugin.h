@@ -87,8 +87,10 @@ public:
      * Set memory buffer with content for import.
      *
      * It is necessary to have the GRAPHICS_IMPORTER object set before.
+     *
+     * @return false if the plugin cannot load from memory.
      */
-    virtual bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) = 0;
+    virtual bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) { return false; }
 
     /**
      * Return image height from original imported file.

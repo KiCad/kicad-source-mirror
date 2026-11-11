@@ -134,26 +134,6 @@ bool DXF_IMPORT_PLUGIN::Load( const wxString& aFileName )
 }
 
 
-bool DXF_IMPORT_PLUGIN::LoadFromMemory( const wxMemoryBuffer& aMemBuffer )
-{
-    try
-    {
-        return ImportDxfFile( aMemBuffer );
-    }
-    catch( const std::bad_alloc& )
-    {
-        m_layers.clear();
-        m_blocks.clear();
-        m_styles.clear();
-
-        m_internalImporter.ClearShapes();
-
-        ReportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
-        return false;
-    }
-}
-
-
 bool DXF_IMPORT_PLUGIN::Import()
 {
     wxCHECK( m_importer, false );
@@ -224,18 +204,6 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
 
     // The DXF reader closes the file after reading.
     bool success = dxf_reader.in( fp, this );
-
-    return success;
-}
-
-
-bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxMemoryBuffer& aMemBuffer )
-{
-    DL_Dxf dxf_reader;
-
-    std::string str( reinterpret_cast<char*>( aMemBuffer.GetData() ), aMemBuffer.GetDataLen() );
-
-    bool success = dxf_reader.in( str, this );
 
     return success;
 }
