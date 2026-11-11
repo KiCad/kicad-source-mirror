@@ -2009,6 +2009,41 @@ struct PCB_DIFF_VIEW
 };
 
 
+/// One loaded history snapshot. Freeing it unloads its project and removes its extracted files.
+struct HISTORY_REVISION
+{
+    explicit HISTORY_REVISION( SETTINGS_MANAGER* aMgr ) :
+            mgr( aMgr )
+    {
+    }
+
+    ~HISTORY_REVISION()
+    {
+        // The view's clones and switcher may reference the board
+        view = PCB_DIFF_VIEW();
+
+        if( board )
+        {
+            board->ClearProject();
+            board.reset();
+        }
+
+        // Skip a project the manager already evicted
+        if( prj && mgr->IsProjectLoaded( prj ) )
+            mgr->UnloadProject( prj, false );
+
+        if( !tempDir.IsEmpty() )
+            wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+    }
+
+    SETTINGS_MANAGER*      mgr;
+    std::unique_ptr<BOARD> board;
+    PROJECT*               prj = nullptr;
+    wxString               tempDir;
+    PCB_DIFF_VIEW          view;
+};
+
+
 PCB_DIFF_VIEW buildPcbDiffView( BOARD* aLive, BOARD* aOther, const wxString& aOtherPath )
 {
     PCB_DIFF_VIEW view;
@@ -2249,33 +2284,6 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
         labels.push_back( wxString::Format( wxS( "%s (%s)" ), summary, s.hash.Left( 8 ) ) );
     }
 
-    // State for the revision currently shown. Swapped on each dropdown change.
-    std::unique_ptr<BOARD> curBoard;
-    PROJECT*               curPrj = nullptr;
-    wxString               curTempDir;
-
-    auto cleanupCurrent =
-            [&]()
-            {
-                if( curBoard )
-                {
-                    curBoard->ClearProject();
-                    curBoard.reset();
-                }
-
-                // Skip if the project was already evicted from the manager.
-                if( curPrj && mgr->IsProjectLoaded( curPrj ) )
-                    mgr->UnloadProject( curPrj, false );
-
-                curPrj = nullptr;
-
-                if( !curTempDir.IsEmpty() )
-                {
-                    wxFileName::Rmdir( curTempDir, wxPATH_RMDIR_RECURSIVE );
-                    curTempDir.Clear();
-                }
-            };
-
     // Extract + load snapshot aIndex into the out-params. Cleans up its own temp
     // on any failure.
     auto loadRevision =
@@ -2284,7 +2292,8 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
                 const wxString hash = snapshots[aIndex].hash;
                 wxFileName     dirFn;
                 dirFn.AssignDir( wxFileName::GetTempDir() );
-                dirFn.AppendDir( wxS( "kicad-history-" ) + hash.Left( 8 ) );
+                // Unique per load, another process or a kept revision may hold the same snapshot
+                dirFn.AppendDir( wxS( "kicad-history-" ) + KIID().AsString() );
                 const wxString tempDir = dirFn.GetPath();
 
                 // Extract just the board, the project file (its real net classes and
@@ -2347,34 +2356,32 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
     // Load a revision and build its diff view, guarding both the parse and the
     // diff so a bad snapshot is skipped instead of crashing.
     auto loadView =
-            [&]( int aIndex, std::unique_ptr<BOARD>& aBoard, PROJECT*& aPrj, wxString& aTempDir,
-                 PCB_DIFF_VIEW& aView ) -> bool
+            [&]( int aIndex ) -> std::unique_ptr<HISTORY_REVISION>
             {
-                if( !loadRevision( aIndex, aBoard, aPrj, aTempDir ) )
-                    return false;
+                auto revision = std::make_unique<HISTORY_REVISION>( mgr );
+
+                if( !loadRevision( aIndex, revision->board, revision->prj, revision->tempDir ) )
+                    return nullptr;
 
                 try
                 {
-                    aView = buildPcbDiffView( liveBoard, aBoard.get(), aTempDir + wxS( "/" ) + relPath );
+                    // A load that skips initialisation leaves the board without its net classes and settings
+                    revision->board->SetProject( revision->prj );
+                    revision->view = buildPcbDiffView( liveBoard, revision->board.get(),
+                                                       revision->tempDir + wxS( "/" ) + relPath );
                 }
                 catch( ... )
                 {
-                    aBoard->ClearProject();
-                    aBoard.reset();
-                    mgr->UnloadProject( aPrj, false );
-                    aPrj = nullptr;
-                    wxFileName::Rmdir( aTempDir, wxPATH_RMDIR_RECURSIVE );
-                    aTempDir.Clear();
-                    return false;
+                    return nullptr;
                 }
 
-                return true;
+                return revision;
             };
 
-    PCB_DIFF_VIEW view;
-    int           startIndex = 0;
+    std::unique_ptr<HISTORY_REVISION> shown = loadView( 0 );
+    int                               startIndex = 0;
 
-    if( !loadView( 0, curBoard, curPrj, curTempDir, view ) )
+    if( !shown )
     {
         m_frame->ShowInfoBarError( _( "Could not compare against the selected snapshot." ) );
         return 0;
@@ -2382,25 +2389,23 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
 
     // Default to the first commit back from HEAD that actually differs from the
     // current board, so opening lands on real changes rather than an in-sync HEAD.
-    while( view.result.Empty() && startIndex + 1 < static_cast<int>( snapshots.size() ) )
+    while( shown->view.result.Empty() && startIndex + 1 < static_cast<int>( snapshots.size() ) )
     {
-        std::unique_ptr<BOARD> nextBoard;
-        PROJECT*               nextPrj = nullptr;
-        wxString               nextTempDir;
-        PCB_DIFF_VIEW          nextView;
+        std::unique_ptr<HISTORY_REVISION> next = loadView( startIndex + 1 );
 
-        if( !loadView( startIndex + 1, nextBoard, nextPrj, nextTempDir, nextView ) )
+        if( !next )
             break;
 
-        cleanupCurrent();
-        view = std::move( nextView );
-        curBoard = std::move( nextBoard );
-        curPrj = nextPrj;
-        curTempDir = nextTempDir;
+        shown = std::move( next );
         startIndex++;
     }
 
-    int shownIndex = startIndex;
+    // Every revision the canvas may reference, declared first so it outlives the dialog
+    std::vector<std::unique_ptr<HISTORY_REVISION>> revisions;
+    revisions.push_back( std::move( shown ) );
+
+    int                  shownIndex = startIndex;
+    const PCB_DIFF_VIEW& view = revisions.back()->view;
 
     auto dlgDiff = std::make_unique<DIALOG_KICAD_DIFF>( m_frame, liveBoard->GetFileName(), labels[startIndex],
                                                         view.result, view.referenceGeometry,
@@ -2413,35 +2418,40 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
                 if( aIndex == shownIndex )
                     return;
 
-                std::unique_ptr<BOARD> newBoard;
-                PROJECT*               newPrj = nullptr;
-                wxString               newTempDir;
-                PCB_DIFF_VIEW          newView;
+                std::unique_ptr<HISTORY_REVISION> next = loadView( aIndex );
 
-                if( !loadView( aIndex, newBoard, newPrj, newTempDir, newView ) )
+                if( !next )
                 {
                     m_frame->ShowInfoBarError( _( "Could not compare against the selected snapshot." ) );
                     return;
                 }
 
-                dlgDiff->Reload( liveBoard->GetFileName(), labels[aIndex], newView.result,
-                                 newView.referenceGeometry, newView.comparisonGeometry, newView.switcher, {} );
+                // A reload that throws can leave the canvas on either revision, so keep both
+                revisions.push_back( std::move( next ) );
+                const PCB_DIFF_VIEW& nextView = revisions.back()->view;
 
-                // The canvas now references newBoard, so the previous one can go.
-                cleanupCurrent();
-                view = std::move( newView );
-                curBoard = std::move( newBoard );
-                curPrj = newPrj;
-                curTempDir = newTempDir;
+                try
+                {
+                    dlgDiff->Reload( liveBoard->GetFileName(), labels[aIndex], nextView.result,
+                                     nextView.referenceGeometry, nextView.comparisonGeometry, nextView.switcher,
+                                     {} );
+                }
+                catch( ... )
+                {
+                    m_frame->ShowInfoBarError( _( "Could not compare against the selected snapshot." ) );
+                    dlgDiff->EndModal( wxID_CANCEL );
+                    return;
+                }
+
+                // The canvas now references only the new revision
+                revisions.erase( revisions.begin(), revisions.end() - 1 );
                 shownIndex = aIndex;
             } );
 
     dlgDiff->ShowModal();
 
-    // Destroy the dialog before the board it references is freed.
+    // Destroy the dialog before the boards it references are freed.
     dlgDiff.reset();
-
-    cleanupCurrent();
     return 0;
 }
 

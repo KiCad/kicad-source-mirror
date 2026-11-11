@@ -246,21 +246,22 @@ void DIALOG_KICAD_DIFF::OnTreeSelectionChanged( wxTreeEvent& aEvent )
 }
 
 
-void DIALOG_KICAD_DIFF::buildTree()
+std::optional<KIID_PATH> DIALOG_KICAD_DIFF::selectedChangeId() const
 {
-    // Snapshot the selected change so it can be restored after rebuild —
-    // wxTreeItemIds don't survive DeleteAllItems, so we re-find the node
-    // by its underlying KIID_PATH below.
-    std::optional<KIID_PATH> selectedId;
-
     if( wxTreeItemId sel = m_treeChanges->GetSelection(); sel.IsOk() )
     {
         auto it = m_changeByTreeId.find( reinterpret_cast<wxUIntPtr>( sel.GetID() ) );
 
         if( it != m_changeByTreeId.end() && it->second )
-            selectedId = it->second->id;
+            return it->second->id;
     }
 
+    return std::nullopt;
+}
+
+
+void DIALOG_KICAD_DIFF::buildTree( const std::optional<KIID_PATH>& aSelect )
+{
     wxWindowUpdateLocker updateLock( m_treeChanges );
 
     m_treeChanges->DeleteAllItems();
@@ -296,7 +297,7 @@ void DIALOG_KICAD_DIFF::buildTree()
         m_treeChanges->Expand( groupNode );
     }
 
-    if( selectedId && !selectChangeById( *selectedId ) )
+    if( aSelect && !selectChangeById( *aSelect ) )
         showChange( nullptr );
 
     applyHiddenToTree();
@@ -496,6 +497,9 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
     m_pathReference->SetLabel( aReferencePath );
     m_pathComparison->SetLabel( aComparisonPath );
 
+    // The tree rows point into the diff being replaced
+    const std::optional<KIID_PATH> selected = selectedChangeId();
+    m_changeByTreeId.clear();
     m_diff = std::move( aDiff );
 
     // Outlives the canvas reconfigure below: it owns cloned items the view still references.
@@ -537,7 +541,7 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
         m_canvas->EndUpdate();
     }
 
-    buildTree();
+    buildTree( selected );
 
     if( m_diff.Empty() )
         m_labelSummary->SetLabel( _( "No differences detected." ) );

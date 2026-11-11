@@ -98,8 +98,15 @@ protected:
     void OnOK( wxCommandEvent& aEvent ) override;
 
 private:
-    /// Populate the tree from m_diff. Groups by CHANGE_KIND.
-    void buildTree();
+    /// Populate the tree from m_diff, keeping the selected change. Groups by CHANGE_KIND.
+    void buildTree() { buildTree( selectedChangeId() ); }
+
+    /// Populate the tree from m_diff and select \a aSelect when it is still listed. Tree ids do not
+    /// survive the rebuild, so the row is found again by its change id.
+    void buildTree( const std::optional<KIID_PATH>& aSelect );
+
+    /// The selected row's change id. Valid only while m_diff still owns the listed changes.
+    std::optional<KIID_PATH> selectedChangeId() const;
 
     /// Populate the property list for the change associated with the selected
     /// tree node, or clear the list if no change is selected (e.g. group node).
