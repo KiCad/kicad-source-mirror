@@ -79,6 +79,7 @@ class DIALOG_TEXTBOX_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_ThicknessCtrl;
 		wxStaticText* m_ThicknessUnits;
 		BITMAP_BUTTON* m_autoTextThickness;
+		wxCheckBox* m_knockout;
 		wxStaticText* m_OrientLabel;
 		wxComboBox* m_OrientCtrl;
 		wxStaticText* m_borderWidthLabel;

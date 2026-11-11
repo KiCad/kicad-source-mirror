@@ -162,7 +162,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	gbSizer1->Add( m_SizeXUnits, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderCheckbox = new wxCheckBox( this, wxID_ANY, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_borderCheckbox, wxGBPosition( 5, 4 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	gbSizer1->Add( m_borderCheckbox, wxGBPosition( 5, 4 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 25 );
 
 	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYLabel->Wrap( -1 );
@@ -201,22 +201,31 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 
 	gbSizer1->Add( bSizer5, wxGBPosition( 7, 2 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	m_knockout = new wxCheckBox( this, wxID_ANY, _("Knockout"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_knockout, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 25 );
+
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_OrientLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientLabel->Wrap( -1 );
 	m_OrientLabel->SetToolTip( _("Text orientation") );
 
-	gbSizer1->Add( m_OrientLabel, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	bSizer6->Add( m_OrientLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_OrientCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_OrientCtrl->Append( _("0.0") );
 	m_OrientCtrl->Append( _("90.0") );
 	m_OrientCtrl->Append( _("-90.0") );
 	m_OrientCtrl->Append( _("180.0") );
-	gbSizer1->Add( m_OrientCtrl, wxGBPosition( 1, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	bSizer6->Add( m_OrientCtrl, 1, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer1->Add( bSizer6, wxGBPosition( 1, 5 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 	m_borderWidthLabel = new wxStaticText( this, wxID_ANY, _("Border width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderWidthLabel->Wrap( -1 );
-	gbSizer1->Add( m_borderWidthLabel, wxGBPosition( 6, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	gbSizer1->Add( m_borderWidthLabel, wxGBPosition( 6, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 25 );
 
 	m_borderWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_borderWidthCtrl, wxGBPosition( 6, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
@@ -227,7 +236,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 
 	m_borderStyleLabel = new wxStaticText( this, wxID_ANY, _("Border style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderStyleLabel->Wrap( -1 );
-	gbSizer1->Add( m_borderStyleLabel, wxGBPosition( 7, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	gbSizer1->Add( m_borderStyleLabel, wxGBPosition( 7, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 25 );
 
 	m_borderStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_borderStyleCombo->SetMinSize( wxSize( 240,-1 ) );
@@ -235,7 +244,7 @@ DIALOG_TEXTBOX_PROPERTIES_BASE::DIALOG_TEXTBOX_PROPERTIES_BASE( wxWindow* parent
 	gbSizer1->Add( m_borderStyleCombo, wxGBPosition( 7, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 5 );
 
 
-	gbSizer1->AddGrowableCol( 3 );
+	gbSizer1->AddGrowableCol( 2 );
 
 	bMainSizer->Add( gbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 10 );
 

@@ -94,7 +94,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_cbKnockout = new wxCheckBox( this, wxID_ANY, _("Knockout"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_cbKnockout, 1, wxALL, 15 );
+	bSizer7->Add( m_cbKnockout, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer7->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -102,7 +102,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_KeepUpright = new wxCheckBox( this, wxID_ANY, _("Keep upright"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_KeepUpright->SetToolTip( _("Keep text upright") );
 
-	bSizer7->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL, 10 );
+	bSizer7->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 15 );
 
 
 	bSizer7->Add( 20, 0, 1, wxEXPAND, 5 );
@@ -121,10 +121,15 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
 	m_fontCtrl = new FONT_CHOICE( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
 	m_fontCtrl->SetSelection( 0 );
-	gbSizer1->Add( m_fontCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	gbSizer1->Add( m_fontCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizerButtonBar;
 	bSizerButtonBar = new wxBoxSizer( wxHORIZONTAL );
+
+	m_separator0 = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator0->Enable( false );
+
+	bSizerButtonBar->Add( m_separator0, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bold = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
 	bSizerButtonBar->Add( m_bold, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -216,7 +221,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_PositionXLabel->Wrap( -1 );
 	m_PositionXLabel->SetToolTip( _("Text pos X") );
 
-	gbSizer1->Add( m_PositionXLabel, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+	gbSizer1->Add( m_PositionXLabel, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	gbSizer1->Add( m_PositionXCtrl, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
@@ -229,7 +234,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_PositionYLabel->Wrap( -1 );
 	m_PositionYLabel->SetToolTip( _("Text pos Y") );
 
-	gbSizer1->Add( m_PositionYLabel, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+	gbSizer1->Add( m_PositionYLabel, wxGBPosition( 4, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	gbSizer1->Add( m_PositionYCtrl, wxGBPosition( 4, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
@@ -242,7 +247,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_OrientLabel->Wrap( -1 );
 	m_OrientLabel->SetToolTip( _("Text orientation") );
 
-	gbSizer1->Add( m_OrientLabel, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+	gbSizer1->Add( m_OrientLabel, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_OrientCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_OrientCtrl->Append( _("0.0") );

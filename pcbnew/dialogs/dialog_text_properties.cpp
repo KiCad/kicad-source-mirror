@@ -171,6 +171,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
                        m_PositionYCtrl, m_OrientCtrl,    m_sdbSizerOK,         m_sdbSizerCancel };
     }
 
+    m_separator0->SetIsSeparator();
+
     m_bold->SetIsCheckButton();
     m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
