@@ -454,13 +454,8 @@ void WIDGET_DIFF_CANVAS::ZoomToBBox( const BOX2I& aBBox )
     if( !aBBox.GetWidth() || !aBBox.GetHeight() )
         return;
 
-    BOX2D viewport( VECTOR2D( aBBox.GetLeft(), aBBox.GetTop() ), VECTOR2D( aBBox.GetWidth(), aBBox.GetHeight() ) );
-
-    // Inflate slightly so the outermost shape isn't flush with the edge.
-    viewport.Inflate( aBBox.GetWidth() * 0.05, aBBox.GetHeight() * 0.05 );
-
-    m_view->SetViewport( viewport );
-    Refresh();
+    // The base fit is redone on each resize until the view moves, so a fit before layout does not stay small
+    EDA_DRAW_PANEL_GAL::ZoomToFit( aBBox, 1.10 );
 }
 
 
