@@ -252,8 +252,8 @@ void PANEL_DESIGN_BLOCK_CHOOSER::FinishSetup()
 
         APP_SETTINGS_BASE::PANEL_DESIGN_BLOCK_CHOOSER& panelCfg = cfg->m_DesignBlockChooserPanel;
 
-        int w = panelCfg.width > 40 ? panelCfg.width : horizPixelsFromDU( 440 );
-        int h = panelCfg.height > 40 ? panelCfg.height : vertPixelsFromDU( 340 );
+        int w = panelCfg.width > 40 ? GetParent()->FromDIP( panelCfg.width ) : horizPixelsFromDU( 440 );
+        int h = panelCfg.height > 40 ? GetParent()->FromDIP( panelCfg.height ) : vertPixelsFromDU( 340 );
 
         GetParent()->SetSize( wxSize( w, h ) );
         GetParent()->Layout();
