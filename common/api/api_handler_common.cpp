@@ -126,7 +126,7 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const
 
     const PROJECT& prj = Pgm().GetSettingsManager().Prj();
 
-    if( aProject.name() == prj.GetProjectName().utf8_string() )
+    if( !aProject.name().empty() && aProject.name() != prj.GetProjectName().utf8_string() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -134,11 +134,12 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const
         return tl::unexpected( e );
     }
 
-    if( aProject.path() == prj.GetProjectPath().utf8_string() )
+    if( !aProject.path().empty() && aProject.path() != prj.GetProjectPath().utf8_string() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( fmt::format( "the requested project {} is not open at path {}", aProject.name(),
+        e.set_error_message( fmt::format( "the requested project {} is not open at path {}",
+                                          aProject.name(),
                                           aProject.path() ) );
         return tl::unexpected( e );
     }
