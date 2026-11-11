@@ -167,6 +167,22 @@ BOOST_AUTO_TEST_CASE( Groups_RecursesIntoChildren )
 }
 
 
+BOOST_AUTO_TEST_CASE( Groups_FootprintLibraryKeepsPadsUnderTheirFootprint )
+{
+    DOCUMENT_DIFF diff;
+    diff.docType = wxS( "pretty" );
+
+    ITEM_CHANGE fp = MakeChange( wxS( "FOOTPRINT" ), CHANGE_KIND::MODIFIED, wxS( "R_0402" ) );
+    fp.children.push_back( MakeChange( wxS( "Pad" ), CHANGE_KIND::MODIFIED, wxS( "2" ) ) );
+    diff.changes.push_back( std::move( fp ) );
+
+    auto groups = BuildChangeTreeGroups( diff, wxS( "" ), AllVisible() );
+    BOOST_REQUIRE_EQUAL( groups.size(), 1u );
+    BOOST_REQUIRE_EQUAL( groups[0].entries.size(), 1u );
+    BOOST_CHECK( *groups[0].entries[0].change->refdes == wxS( "R_0402" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( Groups_CollapsesSameNetRoutingChanges )
 {
     DOCUMENT_DIFF diff;

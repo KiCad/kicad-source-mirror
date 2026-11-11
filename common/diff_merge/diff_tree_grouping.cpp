@@ -22,6 +22,7 @@
  */
 
 #include <diff_merge/diff_tree_grouping.h>
+#include <diff_merge/diff_doc_kind.h>
 
 #include <wx/intl.h>
 
@@ -76,7 +77,9 @@ std::vector<CHANGE_TREE_GROUP> BuildChangeTreeGroups( const DOCUMENT_DIFF& aDiff
     std::map<CHANGE_KIND, std::vector<CHANGE_TREE_ENTRY>>          byKind;
     std::map<std::pair<CHANGE_KIND, wxString>, const ITEM_CHANGE*> netEntries;
 
-    const bool listChildren = aDiff.docType != wxS( "kicad_sym" );
+    // A library item lists its element edits in its own property list, and the canvas draws items by name
+    const DOC_KIND docKind = DocKindFromDocType( aDiff.docType );
+    const bool     listChildren = docKind != DOC_KIND::SYM_LIB && docKind != DOC_KIND::FP_LIB;
 
     auto collect = [&byKind, &netEntries, listChildren]( auto& aSelf, const ITEM_CHANGE& aC ) -> void
     {
