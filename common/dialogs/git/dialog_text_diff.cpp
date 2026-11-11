@@ -45,6 +45,10 @@ void FillTextDiffControl( wxStyledTextCtrl* aCtrl, const std::vector<KIGIT::TEXT
     stc->StyleClearAll();
     stc->SetMarginWidth( 1, 0 );
 
+    // Scintilla scrolls a fixed 2000 px unless told to follow the widest line, and the width only grows
+    stc->SetScrollWidth( 1 );
+    stc->SetScrollWidthTracking( true );
+
     const KICAD_DIFF::DIFF_COLOR_THEME theme = KICAD_DIFF::DIFF_COLOR_THEME::ForText( KIPLATFORM::UI::IsDarkTheme() );
 
     stc->StyleSetForeground( STYLE_ADDED, theme.added.ToColour() );
