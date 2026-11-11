@@ -112,6 +112,9 @@ private:
     /// tree node, or clear the list if no change is selected (e.g. group node).
     void showChange( const KICAD_DIFF::ITEM_CHANGE* aChange );
 
+    /// Report the number of changes in the summary label.
+    void showDiffSummary();
+
     /// Select the tree row whose change has the given KIID_PATH. Wired to
     /// the canvas's pick handler so clicking a rectangle on the canvas
     /// scrolls/selects the matching change in the tree. Returns false when

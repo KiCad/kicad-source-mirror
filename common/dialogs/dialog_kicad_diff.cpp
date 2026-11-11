@@ -206,14 +206,18 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
     }
 
     buildTree();
+    showDiffSummary();
+    Layout();
+}
 
+
+void DIALOG_KICAD_DIFF::showDiffSummary()
+{
     if( m_diff.Empty() )
         m_labelSummary->SetLabel( _( "No differences detected." ) );
     else
         m_labelSummary->SetLabel( wxString::Format(
                 wxPLURAL( "%zu change detected.", "%zu changes detected.", m_diff.Size() ), m_diff.Size() ) );
-
-    Layout();
 }
 
 
@@ -546,15 +550,15 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
         m_canvas->EndUpdate();
     }
 
+    // Reselecting a change that survived the switch already showed its details
     buildTree( selected );
 
-    if( m_diff.Empty() )
-        m_labelSummary->SetLabel( _( "No differences detected." ) );
-    else
-        m_labelSummary->SetLabel( wxString::Format(
-                wxPLURAL( "%zu change detected.", "%zu changes detected.", m_diff.Size() ), m_diff.Size() ) );
+    if( !selectedChangeId() )
+    {
+        showChange( nullptr );
+        showDiffSummary();
+    }
 
-    showChange( nullptr );
     Layout();
 
     // The detail panel sits in a splitter, so the dialog Layout() skips it at an unchanged size
