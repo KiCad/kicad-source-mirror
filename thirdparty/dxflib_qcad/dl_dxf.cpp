@@ -2762,7 +2762,7 @@ void DL_Dxf::writePolyline( DL_WriterA& dw,
     {
         dw.entity( "LWPOLYLINE" );
         dw.dxfString( 100, "AcDbEntity" );
-        dw.entityAttributes( attrib );
+        dw.entityAttributes( aAttrib );
         dw.dxfString( 100, "AcDbPolyline" );
         dw.dxfInt( 90, (int) data.number );
         dw.dxfInt( 70, data.flags );
@@ -2770,8 +2770,8 @@ void DL_Dxf::writePolyline( DL_WriterA& dw,
     else
     {
         dw.entity( "POLYLINE" );
-        dw.entityAttributes( attrib );
-        polylineLayer = attrib.getLayer();
+        dw.entityAttributes( aAttrib );
+        polylineLayer = aAttrib.getLayer();
         dw.dxfInt( 66, 1 );
         dw.dxfInt( 70, data.flags );
         dw.coord( DL_VERTEX_COORD_CODE, 0.0, 0.0, 0.0 );
@@ -4306,11 +4306,10 @@ void DL_Dxf::writeLayer( DL_WriterA& dw,
 
     if( version>=DL_VERSION_2000 && aAttrib.getColor24()!=-1 )
     {
-        dw.dxfInt( 420, attrib.getColor24() );
+        dw.dxfInt( 420, aAttrib.getColor24() );
     }
 
-    dw.dxfString( 6, ( attrib.getLinetype().length()==0 ?
-                       std::string( "CONTINUOUS" ) : attrib.getLinetype() ) );
+    dw.dxfString( 6, ( aAttrib.getLinetype().length() == 0 ? std::string( "CONTINUOUS" ) : aAttrib.getLinetype() ) );
 
     if( version>=DL_VERSION_2000 )
     {
@@ -4324,9 +4323,9 @@ void DL_Dxf::writeLayer( DL_WriterA& dw,
         }
     }
 
-    if( version>=DL_VERSION_2000 && attrib.getWidth()!=-1 )
+    if( version >= DL_VERSION_2000 && aAttrib.getWidth() != -1 )
     {
-        dw.dxfInt( 370, attrib.getWidth() );
+        dw.dxfInt( 370, aAttrib.getWidth() );
     }
 
     if( version>=DL_VERSION_2000 )
