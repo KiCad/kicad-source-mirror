@@ -37,7 +37,7 @@ class PROGRESS_REPORTER;
 void ApplyPcbGalLayerOrder( KIGFX::VIEW* aView );
 
 /// Make pcbnew's derived layers (pad copper, zones, holes, netnames) follow their board layer's
-/// visibility on any view.
+/// visibility on any view, and keep the zoom-sized footprint anchor uncached.
 void ApplyPcbGalLayerDeps( KIGFX::VIEW* aView );
 
 class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL

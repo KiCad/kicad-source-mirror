@@ -827,6 +827,10 @@ void ApplyPcbGalLayerDeps( KIGFX::VIEW* aView )
 
     aView->SetRequired( LAYER_PAD_NETNAMES, LAYER_PADS );
 
+    // The anchor is sized from the zoom at draw time, so a cached copy scales with the view
+    aView->SetLayerTarget( LAYER_ANCHOR, KIGFX::TARGET_NONCACHED );
+    aView->SetLayerDisplayOnly( LAYER_ANCHOR );
+
     // Holes can be independent of their host objects (cf: printing drill marks)
     aView->SetRequired( LAYER_VIA_HOLES, LAYER_VIAS );
     aView->SetRequired( LAYER_VIA_HOLEWALLS, LAYER_VIAS );
@@ -916,9 +920,6 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     }
 
     ApplyPcbGalLayerDeps( m_view );
-
-    m_view->SetLayerTarget( LAYER_ANCHOR, KIGFX::TARGET_NONCACHED );
-    m_view->SetLayerDisplayOnly( LAYER_ANCHOR );
 
     // Use TARGET_OVERLAY for LAYER_CONFLICTS_SHADOW, it is for items
     // that may change while the view stays the same.
