@@ -1035,21 +1035,22 @@ void FOOTPRINT_EDIT_FRAME::activateFootprintTab( FOOTPRINT_EDITOR_TAB_CONTEXT* a
 }
 
 
+void FOOTPRINT_EDIT_FRAME::recombineEditedPad()
+{
+    PAD_TOOL* padTool = m_toolManager ? m_toolManager->GetTool<PAD_TOOL>() : nullptr;
+
+    if( padTool && padTool->InPadEditMode() )
+        m_toolManager->RunAction( PCB_ACTIONS::recombinePad );
+}
+
+
 void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx, BOARD* aBoard )
 {
     // Install the successor board and tool environment before the caller frees the outgoing context
     // so no tool Reset() or repaint ever sees a freed or null m_pcb. Never calls the base SetBoard,
     // which would delete m_pcb and reset tools while the model still aliases it.
 
-    // Leaving a board mid pad edit would strand the pad's primitives as loose copper, so fold them back first
-    if( m_toolManager )
-    {
-        PAD_TOOL* padTool = m_toolManager->GetTool<PAD_TOOL>();
-
-        if( padTool && padTool->InPadEditMode() )
-            m_toolManager->RunAction( PCB_ACTIONS::recombinePad );
-    }
-
+    recombineEditedPad();
     detachActiveFootprintTab();
 
     // Drop selection and unwind a mid-draw tool while the outgoing board is still valid (#24975).

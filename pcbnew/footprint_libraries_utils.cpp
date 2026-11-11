@@ -35,7 +35,6 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/board_editor_control.h>
-#include <tools/pad_tool.h>
 #include <footprint.h>
 #include <zone.h>
 #include <pcb_group.h>
@@ -751,10 +750,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
     if( !aFootprint )      // Happen if no footprint loaded
         return false;
 
-    PAD_TOOL* padTool = m_toolManager->GetTool<PAD_TOOL>();
-
-    if( padTool->InPadEditMode() )
-        m_toolManager->RunAction( PCB_ACTIONS::recombinePad );
+    recombineEditedPad();
 
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();

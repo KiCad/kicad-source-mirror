@@ -523,6 +523,9 @@ private:
      */
     void installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx, BOARD* aBoard );
 
+    /// Fold a pad being edited back together, so its primitives are not left as loose copper.
+    void recombineEditedPad();
+
     /**
      * Snapshot the active tab's view/selection, fold the dirty state back into it, and clear
      * m_activeTab.
