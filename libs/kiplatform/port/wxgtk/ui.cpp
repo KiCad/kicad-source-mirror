@@ -20,9 +20,12 @@
 
 #include <kiplatform/ui.h>
 
+#include <algorithm>
+
 #include <wx/choice.h>
 #include <wx/dataview.h>
 #include <wx/dialog.h>
+#include <wx/display.h>
 #include <wx/nonownedwnd.h>
 #include <wx/popupwin.h>
 #include <wx/settings.h>
@@ -269,8 +272,21 @@ wxPoint KIPLATFORM::UI::GetRestorablePosition( wxWindow* aWindow )
     {
         if( GdkWindow* gdkWindow = gtk_widget_get_window( widget ) )
         {
-            wxPoint origin;
+            wxPoint      origin;
+            GdkRectangle frame;
             gdk_window_get_origin( gdkWindow, &origin.x, &origin.y );
+            gdk_window_get_frame_extents( gdkWindow, &frame );
+
+            // Heal a position that crept up before static gravity, so the title bar comes back on screen
+            int displayIdx = wxDisplay::GetFromWindow( aWindow );
+
+            if( displayIdx != wxNOT_FOUND )
+            {
+                wxRect workArea = wxDisplay( (unsigned int) displayIdx ).GetClientArea();
+                origin.x += std::max( 0, workArea.x - frame.x );
+                origin.y += std::max( 0, workArea.y - frame.y );
+            }
+
             return origin;
         }
     }

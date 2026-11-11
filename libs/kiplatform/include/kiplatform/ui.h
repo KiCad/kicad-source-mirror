@@ -236,7 +236,9 @@ namespace KIPLATFORM
          * Return the point that wxWindow::Move() needs to put a stabilized window back where it is.
          *
          * Static gravity makes GTK place a window by its client origin, while GetPosition() reports
-         * the origin of the decorations.  Other platforms, and hidden windows, return GetPosition().
+         * the origin of the decorations.  On GTK the point is pulled down and right as needed to put
+         * the decorations back inside the work area.  Other platforms, and hidden windows, return
+         * GetPosition().
          *
          * @param aWindow window previously prepared by StabilizeWindowPosition()
          */
