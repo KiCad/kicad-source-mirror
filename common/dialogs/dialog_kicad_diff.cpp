@@ -30,6 +30,7 @@
 #include <eda_draw_frame.h>
 #include <layer_ids.h>
 #include <lseq.h>
+#include <property_holder.h>
 #include <set>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
@@ -140,6 +141,9 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         for( const auto& [cat, label] : categories )
         {
             wxCheckBox* cb = new wxCheckBox( m_panelDetail, wxID_ANY, label );
+
+            // A restored value never reaches the canvas, and position-based keys shift between documents
+            OptOut( cb );
             cb->SetValue( true );
             cb->Bind( wxEVT_CHECKBOX,
                       [this, cat]( wxCommandEvent& aEvent )
@@ -156,6 +160,7 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         // Toggle the property list so the board can use the full detail panel.
 
         wxCheckBox* propsToggle = new wxCheckBox( m_panelDetail, wxID_ANY, _( "Properties" ) );
+        OptOut( propsToggle );
         propsToggle->SetValue( true );
         propsToggle->Bind( wxEVT_CHECKBOX,
                            [this, detailSplitter]( wxCommandEvent& aEvent )
@@ -702,7 +707,11 @@ void DIALOG_KICAD_DIFF::DrawChosenLibraryItem( LIBRARY_ITEM_DRAWER aDraw )
 void DIALOG_KICAD_DIFF::buildLayerControls( const KICAD_DIFF::DIFF_SCENE& aScene )
 {
     for( wxWindow* control : m_layerControls )
+    {
+        // The dialog frees opt-out markers only on its own close
+        delete PROPERTY_HOLDER::SafeCast( control->GetClientData() );
         control->Destroy();
+    }
 
     m_layerControls.clear();
 
@@ -721,6 +730,7 @@ void DIALOG_KICAD_DIFF::buildLayerControls( const KICAD_DIFF::DIFF_SCENE& aScene
 
     auto add = [&]( wxWindow* aControl, const wxSizerFlags& aFlags )
     {
+        OptOut( aControl );
         m_filterSizer->Insert( index++, aControl, aFlags );
         m_layerControls.push_back( aControl );
     };

@@ -218,6 +218,7 @@ DIALOG_SHIM::~DIALOG_SHIM()
                     {
                         delete PROPERTY_HOLDER::SafeCast( child->GetClientData() );
                         child->SetClientData( nullptr );
+                        clearOptOuts( child->GetChildren() );
                     }
                 };
 
