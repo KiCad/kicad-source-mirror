@@ -26,8 +26,12 @@
 #include "eeschema_test_utils.h"
 
 #include <eeschema/api/sch_api_save.h>
+#include <eeschema/eeschema_helpers.h>
 #include <eeschema/save_project_utils.h>
+#include <pgm_base.h>
 #include <schematic.h>
+#include <settings/settings_manager.h>
+#include <title_block.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
@@ -342,6 +346,52 @@ BOOST_AUTO_TEST_CASE( ApiSaveCopyWritesTheTopLevelSheet )
 
     for( const wxString& reference : references )
         BOOST_CHECK( content.Contains( wxS( "\"" ) + reference + wxS( "\"" ) ) );
+}
+
+// The API took the project file from the first top-level sheet, so a project named otherwise
+// kept its stale settings
+BOOST_AUTO_TEST_CASE( ApiSaveWritesTheLoadedProjectFile )
+{
+    wxFileName dataDir( KI_TEST::GetEeschemaTestDataDir() );
+    dataDir.AppendDir( wxS( "variants" ) );
+
+    for( const wxString& name : { wxS( "variants.kicad_pro" ), wxS( "variants.kicad_sch" ),
+                                  wxS( "pic_sockets.kicad_sch" ) } )
+    {
+        BOOST_REQUIRE( wxCopyFile( dataDir.GetPathWithSep() + name, m_baseDir.GetPathWithSep() + name ) );
+    }
+
+    wxFileName projectFile( m_baseDir.GetPath(), wxS( "variants" ), FILEEXT::ProjectFileExtension );
+    wxFileName schematicFile( m_baseDir.GetPath(), wxS( "variants" ), FILEEXT::KiCadSchematicFileExtension );
+
+    // The API opens projects through the global manager
+    SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
+    bool              loaded = manager.LoadProject( projectFile.GetFullPath(), false );
+    PROJECT*          project = manager.GetProject( projectFile.GetFullPath() );
+
+    // A failed check must not leave the project in the global manager
+    auto unload = [&manager]( PROJECT* aProject ) { manager.UnloadProject( aProject, false ); };
+    std::unique_ptr<PROJECT, decltype( unload )> unloadGuard( project, unload );
+
+    BOOST_REQUIRE( loaded && project );
+
+    std::unique_ptr<SCHEMATIC> schematic(
+            EESCHEMA_HELPERS::LoadSchematic( schematicFile.GetFullPath(), false, false, project ) );
+    BOOST_REQUIRE( schematic );
+
+    SCH_SCREEN* firstScreen = schematic->RootScreen();
+    firstScreen->SetFileName( m_baseDir.GetPathWithSep() + wxS( "first_sheet.kicad_sch" ) );
+
+    TITLE_BLOCK titleBlock = firstScreen->GetTitleBlock();
+    titleBlock.SetRevision( wxS( "api-save-revision" ) );
+    firstScreen->SetTitleBlock( titleBlock );
+
+    BOOST_CHECK( SCH_API_SAVE::SaveSchematic( *schematic, *project ) );
+
+    wxFFile  written( projectFile.GetFullPath(), wxS( "rb" ) );
+    wxString content;
+    BOOST_REQUIRE( written.IsOpened() && written.ReadAll( &content ) );
+    BOOST_CHECK( content.Contains( wxS( "api-save-revision" ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

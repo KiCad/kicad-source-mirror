@@ -80,27 +80,16 @@ bool SaveSheetToFile( SCH_SHEET* aSheet, SCHEMATIC& aSchematic, const wxString& 
 }
 
 
-void UpdateProjectFile( SCHEMATIC& aSchematic, PROJECT& aProject )
+namespace
 {
-    SCH_SCREEN* rootScreen = aSchematic.RootScreen();
 
-    if( !rootScreen )
-        return;
-
-    wxFileName projectFile( rootScreen->GetFileName() );
-    projectFile.SetExt( FILEEXT::ProjectFileExtension );
-
-    if( !projectFile.HasName() || !projectFile.IsOk() )
-        return;
-
+void syncProjectFile( SCHEMATIC& aSchematic, PROJECT& aProject, SCH_SCREEN* aRootScreen )
+{
     aSchematic.RecordERCExclusions();
 
     aProject.GetProjectFile().m_SchematicSettings->m_SchDrawingSheetFileName = BASE_SCREEN::m_DrawingSheetFileName;
 
-    if( rootScreen )
-    {
-        aProject.GetProjectFile().m_IP2581Bom.schRevision = rootScreen->GetTitleBlock().GetRevision();
-    }
+    aProject.GetProjectFile().m_IP2581Bom.schRevision = aRootScreen->GetTitleBlock().GetRevision();
 
     std::vector<TOP_LEVEL_SHEET_INFO> topLevelSheets = aSchematic.TopLevelSheetInfos();
 
@@ -122,12 +111,10 @@ void UpdateProjectFile( SCHEMATIC& aSchematic, PROJECT& aProject )
         if( !sheet->IsVirtualRootSheet() )
             sheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
     }
-
-    Pgm().GetSettingsManager().SaveProject( projectFile.GetFullPath() );
 }
 
 
-bool SaveSchematic( SCHEMATIC& aSchematic, PROJECT& aProject )
+bool saveScreens( SCHEMATIC& aSchematic )
 {
     SCH_SCREEN* rootScreen = aSchematic.RootScreen();
 
@@ -163,10 +150,34 @@ bool SaveSchematic( SCHEMATIC& aSchematic, PROJECT& aProject )
             screen->SetContentModified( false );
     }
 
-    if( success )
-        UpdateProjectFile( aSchematic, aProject );
-
     return success;
+}
+
+} // namespace
+
+
+void UpdateProjectFile( SCHEMATIC& aSchematic, PROJECT& aProject )
+{
+    SCH_SCREEN* rootScreen = aSchematic.RootScreen();
+
+    // The first top-level sheet need not be named after the project
+    wxFileName projectFile( aProject.GetProjectFullName() );
+
+    if( !rootScreen || !projectFile.HasName() || !projectFile.IsOk() )
+        return;
+
+    syncProjectFile( aSchematic, aProject, rootScreen );
+    Pgm().GetSettingsManager().SaveProject( projectFile.GetFullPath(), &aProject );
+}
+
+
+bool SaveSchematic( SCHEMATIC& aSchematic, PROJECT& aProject )
+{
+    if( !saveScreens( aSchematic ) )
+        return false;
+
+    UpdateProjectFile( aSchematic, aProject );
+    return true;
 }
 
 
@@ -221,9 +232,11 @@ bool SaveSchematicAs( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString& 
     aSchematic.Root().SetFileName( schematicFileName.GetFullName() );
     aSchematic.RootScreen()->SetFileName( schematicFileName.GetFullPath() );
 
-    if( !SaveSchematic( aSchematic, aProject ) )
+    // Saving the old project file here would rewrite the project we are leaving
+    if( !saveScreens( aSchematic ) )
         return false;
 
+    syncProjectFile( aSchematic, aProject, aSchematic.RootScreen() );
     aProject.SetReadOnly( false );
 
     wxFileName projectFile( schematicFileName );
