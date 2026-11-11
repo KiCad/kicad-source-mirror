@@ -58,6 +58,10 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
 {
     SetEscapeId( wxID_OK );
 
+    // The base class resets the sash on the first idle event, after the saved one is restored
+    m_splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_KICAD_DIFF_BASE::m_splitterOnIdle ), nullptr, this );
+    m_splitter->SetSashPosition( FromDIP( 280 ) );
+
     m_treeChanges->Bind( wxEVT_TREE_ITEM_MENU, &DIALOG_KICAD_DIFF::OnTreeItemMenu, this );
 
     m_pathReference->SetLabel( aReferencePath );
