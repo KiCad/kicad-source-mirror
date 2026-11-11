@@ -60,8 +60,6 @@ public:
 
     ~DIALOG_KICAD_DIFF() override = default;
 
-    void                SwitchCanvasToSheet( const KIID_PATH& aSheetPath );
-    const KIID_PATH&    CurrentCanvasSheet() const { return m_currentCanvasSheet; }
     WIDGET_DIFF_CANVAS* DiffCanvas() const { return m_canvas; }
 
     /// Swap in a fresh diff with new schematics. Rebuilds tree and scene,

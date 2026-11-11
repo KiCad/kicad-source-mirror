@@ -565,24 +565,6 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
 }
 
 
-void DIALOG_KICAD_DIFF::SwitchCanvasToSheet( const KIID_PATH& aSheetPath )
-{
-    if( !m_canvas || !m_sheetSwitcher )
-        return;
-
-    if( aSheetPath == m_currentCanvasSheet )
-        return;
-
-    m_currentCanvasSheet = aSheetPath;
-    m_sheetSwitcher( *m_canvas, aSheetPath );
-
-    if( m_treeChanges )
-        m_treeChanges->UnselectAll();
-
-    showChange( nullptr );
-}
-
-
 void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 {
     m_listProperties->DeleteAllItems();
