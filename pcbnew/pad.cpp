@@ -3329,6 +3329,9 @@ bool PAD::operator==( const BOARD_ITEM& aBoardItem ) const
 
 bool PAD::operator==( const PAD& aOther ) const
 {
+    if( GetNumber() != aOther.GetNumber() )
+        return false;
+
     if( Padstack() != aOther.Padstack() )
         return false;
 

@@ -133,4 +133,20 @@ BOOST_AUTO_TEST_CASE( ZoneLayersCount )
 }
 
 
+BOOST_AUTO_TEST_CASE( PadNumberCounts )
+{
+    const std::string path = "plugins/cadstar/lib/footprint-with-thermal-pad.pretty/CP_32_7.kicad_mod";
+
+    std::unique_ptr<FOOTPRINT> before = loadFootprint( path );
+    std::unique_ptr<FOOTPRINT> after = loadFootprint( path );
+
+    BOOST_REQUIRE( before && after && !after->Pads().empty() );
+    BOOST_REQUIRE( *before == *after );
+
+    after->Pads().front()->SetNumber( after->Pads().front()->GetNumber() + wxS( "0" ) );
+
+    BOOST_CHECK( !( *before == *after ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
