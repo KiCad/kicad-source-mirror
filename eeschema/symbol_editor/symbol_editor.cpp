@@ -1488,7 +1488,6 @@ void SYMBOL_EDIT_FRAME::Revert( LIB_ID& aTarget, bool aConfirm )
         aTarget = m_libMgr->RevertSymbol( aTarget );
 
         m_treePane->GetLibTree()->SelectLibId( aTarget );
-        m_libMgr->ClearSymbolModified( aTarget.GetLibItemName(), aTarget.GetLibNickname() );
     }
 
     if( reload_currentSymbol && m_libMgr->SymbolExists( curr_symbolName, libName ) )
