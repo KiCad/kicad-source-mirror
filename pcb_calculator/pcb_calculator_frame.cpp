@@ -345,9 +345,6 @@ void PCB_CALCULATOR_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& aEvent )
 
 void PCB_CALCULATOR_FRAME::onThemeChanged( wxSysColourChangedEvent& aEvent )
 {
-    // Force the bitmaps to refresh
-    GetBitmapStore()->ThemeChanged();
-
     // Update the panels
     for( auto& panel : m_panels )
         panel->ThemeChanged();

@@ -1790,7 +1790,6 @@ git_repository* PROJECT_TREE_PANE::gitRepo() const
 
 void PROJECT_TREE_PANE::onThemeChanged( wxSysColourChangedEvent &aEvent )
 {
-    GetBitmapStore()->ThemeChanged();
     m_TreeProject->LoadIcons();
     m_TreeProject->Refresh();
 

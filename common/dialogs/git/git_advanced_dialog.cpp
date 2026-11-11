@@ -199,11 +199,9 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     // A commit, push or pull from any surface broadcasts a change, so the window never goes stale.
     syncListener();
 
-    // Top-level windows hear a theme switch in no set order, so this one cannot wait on the frame's store reset
     Bind( wxEVT_SYS_COLOUR_CHANGED,
           [this]( wxSysColourChangedEvent& aEvent )
           {
-              GetBitmapStore()->ThemeChanged();
               setIcons();
               aEvent.Skip();
           } );

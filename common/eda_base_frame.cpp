@@ -2007,8 +2007,6 @@ wxSize EDA_BASE_FRAME::GetWindowSize()
 
 void EDA_BASE_FRAME::HandleSystemColorChange()
 {
-    // Update the icon theme when the system theme changes and update the toolbars
-    GetBitmapStore()->ThemeChanged();
     ThemeChanged();
 
     // This isn't handled by ThemeChanged()

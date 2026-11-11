@@ -190,7 +190,6 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 
 void PANEL_KICAD_LAUNCHER::onThemeChanged( wxSysColourChangedEvent& aEvent )
 {
-    GetBitmapStore()->ThemeChanged();
     CreateLaunchers();
 
     aEvent.Skip();

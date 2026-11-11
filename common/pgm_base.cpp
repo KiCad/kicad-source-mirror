@@ -26,6 +26,8 @@
  *        (locale handling)
  */
 
+#include <wx/dialog.h>
+#include <wx/eventfilter.h>
 #include <wx/html/htmlwin.h>
 #include <wx/fs_zip.h>
 #include <wx/dir.h>
@@ -44,6 +46,7 @@
 #include <api/python_manager.h>
 #include <app_monitor.h>
 #include <background_jobs_monitor.h>
+#include <bitmap_store.h>
 #include <bitmaps.h>
 #include <build_version.h>
 #include <common.h>
@@ -1043,6 +1046,40 @@ void PGM_BASE::ClearLibraryLoadMessages()
         if( statusBar )
             statusBar->ClearWarningMessages( "load" );
     }
+}
+
+
+int PGM_BASE::FilterAppEvent( wxEvent& aEvent )
+{
+    // Windows hear a theme switch in no set order, and each reloads its icons from the store
+    if( aEvent.GetEventType() == wxEVT_SYS_COLOUR_CHANGED )
+        GetBitmapStore()->ThemeChanged();
+
+    if( aEvent.GetEventType() == wxEVT_SHOW )
+    {
+        wxShowEvent& event = static_cast<wxShowEvent&>( aEvent );
+        wxDialog*    dialog = dynamic_cast<wxDialog*>( event.GetEventObject() );
+
+        if( dialog )
+        {
+            if( event.IsShown() && dialog->IsModal() )
+            {
+                m_ModalDialogs.push_back( dialog );
+            }
+            // Under GTK, sometimes the modal flag is cleared before hiding
+            else if( !event.IsShown() && !m_ModalDialogs.empty() )
+            {
+                // If we close the expected dialog, remove it from our stack
+                if( m_ModalDialogs.back() == dialog )
+                    m_ModalDialogs.pop_back();
+                // If an out-of-order, remove all dialogs added after the closed one
+                else if( auto it = std::ranges::find( m_ModalDialogs, dialog ); it != m_ModalDialogs.end() )
+                    m_ModalDialogs.erase( it, m_ModalDialogs.end() );
+            }
+        }
+    }
+
+    return wxEventFilter::Event_Skip;
 }
 
 

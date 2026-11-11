@@ -1215,7 +1215,6 @@ bool ACTION_TOOLBAR::KiRealize()
 
 void ACTION_TOOLBAR::onThemeChanged( wxSysColourChangedEvent &aEvent )
 {
-    GetBitmapStore()->ThemeChanged();
     RefreshBitmaps();
 
     aEvent.Skip();

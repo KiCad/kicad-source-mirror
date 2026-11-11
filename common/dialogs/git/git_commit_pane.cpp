@@ -878,7 +878,6 @@ void GIT_COMMIT_PANE::applyTheme()
 void GIT_COMMIT_PANE::onThemeChanged( wxSysColourChangedEvent& aEvent )
 {
     // Icons and colours picked at construction belong to the theme that was active then
-    GetBitmapStore()->ThemeChanged();
     applyTheme();
 
     // The list's row colours are chosen when its status is read

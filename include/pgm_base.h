@@ -40,6 +40,7 @@
 #include <wx/filename.h>
 
 class wxApp;
+class wxEvent;
 class wxMenu;
 class wxWindow;
 class wxSplashScreen;
@@ -401,6 +402,12 @@ public:
      * Clear library load messages from all registered status bars.
      */
     void ClearLibraryLoadMessages();
+
+    /**
+     * Handle events that must be seen once per application, before any window processes them.
+     * Each application's wxApp::FilterEvent() forwards here.
+     */
+    int FilterAppEvent( wxEvent& aEvent );
 
     /**
      * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
