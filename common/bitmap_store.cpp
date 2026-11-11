@@ -120,6 +120,9 @@ BITMAP_STORE::BITMAP_STORE() :
 }
 
 
+BITMAP_STORE::~BITMAP_STORE() = default;
+
+
 wxBitmap BITMAP_STORE::GetBitmap( BITMAPS aBitmapId, int aHeight )
 {
     return wxBitmap( getImage( aBitmapId, aHeight ) );

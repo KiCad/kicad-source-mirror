@@ -48,7 +48,8 @@ class KICOMMON_API BITMAP_STORE
 public:
     BITMAP_STORE();
 
-    ~BITMAP_STORE() = default;
+    // Out of line, since MSVC builds an exported class's destructor wherever the header is included
+    ~BITMAP_STORE();
 
     /**
      * Retrieves a bitmap from the given bitmap id
