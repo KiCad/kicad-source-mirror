@@ -22,6 +22,7 @@
 
 #include <advanced_config.h>
 #include <api/api_plugin_manager.h>
+#include <dialogs/dialog_symbol_fields_table.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <variant_proxy_undo_item.h>
@@ -250,7 +251,7 @@ void SCH_EDIT_FRAME::configureToolbars()
 
                 m_currentVariantCtrl->SetToolTip( _( "Select the current variant to display and edit." ) );
                 aToolbar->Add( m_currentVariantCtrl );
-                UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+                SyncVariantUI();
             };
 
     RegisterCustomToolbarControlFactory( SCH_ACTION_TOOLBAR_CONTROLS::currentVariant, variantSelectionCtrlFactory );
@@ -287,22 +288,29 @@ void SCH_EDIT_FRAME::ClearToolbarControl( int aId )
 }
 
 
-void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNames )
+void SCH_EDIT_FRAME::SyncVariantUI()
 {
-    if( !m_currentVariantCtrl )
-        return;
+    if( m_currentVariantCtrl )
+    {
+        // Add all variant names, a separator, and "Add New Variant..." at the end
+        wxArrayString contents = Schematic().GetVariantNamesForUI();
+        contents.Add( wxS( "---" ) );
+        contents.Add( _( "Add New Design Variant..." ) );
 
-    wxString currentSelection = m_currentVariantCtrl->GetStringSelection();
+        m_currentVariantCtrl->Set( contents );
+        selectCurrentVariant();
+    }
 
-    // Add all variant names, a separator, and "Add New Variant..." at the end
-    wxArrayString contents = aVariantNames;
-    contents.Add( wxS( "---" ) );
-    contents.Add( _( "Add New Design Variant..." ) );
+    if( m_symbolFieldsTableDialog )
+        m_symbolFieldsTableDialog->ReloadVariants();
+}
 
-    m_currentVariantCtrl->Set( contents );
 
-    // Variant names are case sensitive, but the choice's own string lookup is not
-    int selection = m_currentVariantCtrl->FindString( currentSelection, true );
+void SCH_EDIT_FRAME::selectCurrentVariant()
+{
+    // Variant names are case sensitive, but the choice's own string lookup is not.  The schematic
+    // falls back to the default for a name it does not have.
+    int selection = m_currentVariantCtrl->FindString( Schematic().GetCurrentVariant(), true );
     m_currentVariantCtrl->SetSelection( selection == wxNOT_FOUND ? 0 : selection );
 }
 
@@ -437,7 +445,7 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog( wxWindow* aParent )
     SaveCopyInUndoList( undoCmd, UNDO_REDO::VARIANTS, false /* append */ );
 
     // Update the variant selector and select the new variant
-    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+    SyncVariantUI();
     SetCurrentVariant( variantName );
     OnModify();
     return true;
@@ -449,11 +457,7 @@ void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
     Schematic().SetCurrentVariant( aVariantName );
 
     if( m_currentVariantCtrl )
-    {
-        // The schematic falls back to the default for a name it does not have
-        int selection = m_currentVariantCtrl->FindString( Schematic().GetCurrentVariant(), true );
-        m_currentVariantCtrl->SetSelection( selection == wxNOT_FOUND ? 0 : selection );
-    }
+        selectCurrentVariant();
 
     UpdateProperties();
     HardRedraw();

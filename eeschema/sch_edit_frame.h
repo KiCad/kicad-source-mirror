@@ -302,13 +302,11 @@ public:
     void CopyVariant();
 
     /**
-     * Update the variant name control on the main toolbar.
+     * Refill the toolbar variant control and any open symbol fields table from the schematic.
      *
-     * Updating will attempt to maintain the current selection if it's available.  If the current
-     * selection is no longer available, the default (no variant) will be selected.
-     *
+     * The control selects the schematic's current variant.
      */
-    void UpdateVariantSelectionCtrl( const wxArrayString& aVariantNames );
+    void SyncVariantUI();
 
     void SetCurrentVariant( const wxString& aVariantName );
 
@@ -1085,6 +1083,9 @@ protected:
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
 private:
+    /// Select the schematic's current variant in the toolbar control, which must exist.
+    void selectCurrentVariant();
+
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );
 

@@ -759,7 +759,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 screen->MigrateSimModels();
 
             Schematic().LoadVariants();
-            UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+            SyncVariantUI();
         }
 
         // After the schematic is successfully loaded, we load the drawing sheet.
@@ -1751,7 +1751,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         SyncView();
 
         UpdateHierarchyNavigator( false, true );
-        UpdateVariantSelectionCtrl( m_schematic->GetVariantNamesForUI() );
+        SyncVariantUI();
         SetCurrentVariant( m_schematic->GetCurrentVariant() );
 
         CallAfter(

@@ -250,13 +250,10 @@ void SCH_EDIT_FRAME::ReloadProjectFileSettings()
 
     if( Schematic().ReloadProjectVariants() )
     {
-        UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+        SyncVariantUI();
 
-        // The choice keeps its old text, which may name a variant the reread file dropped
+        // Variant overrides change field text, which the refresh below leaves cached
         SetCurrentVariant( Schematic().GetCurrentVariant() );
-
-        if( m_symbolFieldsTableDialog )
-            m_symbolFieldsTableDialog->ReloadVariants();
     }
 
     RefreshProjectSettings( aliases == SCHEMATIC::BUS_ALIAS_RELOAD::CHANGED );

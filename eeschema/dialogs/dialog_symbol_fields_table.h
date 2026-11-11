@@ -94,6 +94,9 @@ private:
     void onEditVariantDescription( wxCommandEvent& aEvent ) override;
     void onVariantSelectionChange( wxCommandEvent& aEvent ) override;
 
+    /// Show the list box's selected variant in the grid without touching the schematic.
+    void showSelectedVariant();
+
     void updateVariantButtonStates();
 
     wxString resolveVariant() const override;

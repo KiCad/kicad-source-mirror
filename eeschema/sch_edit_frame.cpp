@@ -3432,7 +3432,7 @@ void SCH_EDIT_FRAME::RemoveVariant()
     if( Schematic().GetCurrentVariant() == variantName )
         SetCurrentVariant( wxEmptyString );
 
-    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+    SyncVariantUI();
 
     GetCanvas()->Refresh();
 }
@@ -3531,11 +3531,9 @@ void SCH_EDIT_FRAME::RenameVariant()
     // The registry entry changes even when no symbol carries an override, so always mark dirty.
     OnModify();
 
-    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+    SyncVariantUI();
 
-    // The renamed label just disappeared from the control, so a plain repopulate falls back to the
-    // default selection.  Re-selecting the new name resyncs the toolbar and (via SetCurrentVariant)
-    // repaints ${VARIANT} text; a non-current rename needs no redraw.
+    // Repaint ${VARIANT} text under the new name; a non-current rename needs no redraw
     if( wasCurrent )
         SetCurrentVariant( newName );
 }
@@ -3597,7 +3595,7 @@ void SCH_EDIT_FRAME::CopyVariant()
     // The new registry entry changes project state even when no symbol carries an override.
     OnModify();
 
-    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+    SyncVariantUI();
 
     // Switching to the freshly-created variant already refreshes properties and redraws.
     SetCurrentVariant( newName );

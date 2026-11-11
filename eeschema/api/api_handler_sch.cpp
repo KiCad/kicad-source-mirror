@@ -2875,7 +2875,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleAddVariant( const HANDLER_CONTEXT<A
         undoCmd->SetDescription( _( "Add Variant" ) );
         frame()->PushCommandToUndoList( undoCmd );
 
-        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
+        frame()->SyncVariantUI();
     }
 
     return Empty();
@@ -2938,7 +2938,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleDeleteVariant( const HANDLER_CONTEX
         if( frame()->Schematic().GetCurrentVariant().CmpNoCase( name ) == 0 )
             frame()->SetCurrentVariant( wxEmptyString );
 
-        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
+        frame()->SyncVariantUI();
         frame()->GetCanvas()->Refresh();
     }
 
@@ -3018,15 +3018,11 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
         undoCmd->SetDescription( _( "Rename Variant" ) );
         frame()->PushCommandToUndoList( undoCmd );
 
-        // This will zero out the selection if it happened to point to the old name
-        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
+        frame()->SyncVariantUI();
 
+        // Repaint ${VARIANT} text under the new name
         if( isCurrent )
-        {
-            // This will reset the variant-selection-ctrl's selection, but only if the
-            // names have already been updated to include the new name
             frame()->SetCurrentVariant( newName );
-        }
     }
 
     return Empty();
@@ -3106,7 +3102,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleCopyVariant( const HANDLER_CONTEXT<
         undoCmd->SetDescription( _( "Copy Variant" ) );
         frame()->PushCommandToUndoList( undoCmd );
 
-        frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
+        frame()->SyncVariantUI();
     }
 
     return Empty();

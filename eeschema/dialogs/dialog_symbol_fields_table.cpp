@@ -1173,7 +1173,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     }
 
     updateVariantButtonStates();
-    m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
+    m_parent->SyncVariantUI();
 }
 
 
@@ -1243,7 +1243,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     m_variantListBox->SetStringSelection( newVariantName );
 
     updateVariantButtonStates();
-    m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
+    m_parent->SyncVariantUI();
 
     if( wasCurrent )
         m_parent->SetCurrentVariant( newVariantName );
@@ -1301,7 +1301,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
     m_variantListBox->SetStringSelection( newVariantName );
 
     onVariantSelectionChange( aEvent );
-    m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
+    m_parent->SyncVariantUI();
 }
 
 
@@ -1358,14 +1358,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    wxString selectedVariant = getSelectedVariant();
-
-    // Activating a variant only selects its staged values. Apply writes all edited variants.
-    m_dataModel->SetCurrentVariant( selectedVariant );
-
     if( !m_job && m_parent )
-        m_parent->SetCurrentVariant( selectedVariant );
+        m_parent->SetCurrentVariant( getSelectedVariant() );
 
+    showSelectedVariant();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::showSelectedVariant()
+{
+    // Activating a variant only selects its staged values. Apply writes all edited variants.
+    m_dataModel->SetCurrentVariant( getSelectedVariant() );
     m_dataModel->RebuildRows();
 
     if( m_nbPages->GetSelection() == 1 )
@@ -1395,10 +1398,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::ReloadVariants()
         return;
     }
 
-    m_variantListBox->SetSelection( 0 );
-
-    wxCommandEvent dummy;
-    onVariantSelectionChange( dummy );
+    // Follow the schematic, which an undo may be restoring right now
+    restored = m_variantListBox->FindString( m_parent->Schematic().GetCurrentVariant(), true );
+    m_variantListBox->SetSelection( restored == wxNOT_FOUND ? 0 : restored );
+    showSelectedVariant();
 }
 
 
