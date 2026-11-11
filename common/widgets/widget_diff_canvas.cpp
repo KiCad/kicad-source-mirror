@@ -143,6 +143,17 @@ void WIDGET_DIFF_CANVAS::SetScene( KICAD_DIFF::DIFF_SCENE aScene )
 }
 
 
+void WIDGET_DIFF_CANVAS::SetChangeOutlinesShown( bool aShown )
+{
+    if( m_changeOutlinesShown == aShown )
+        return;
+
+    m_changeOutlinesShown = aShown;
+    buildRenderScene();
+    rebuildOverlay();
+}
+
+
 void WIDGET_DIFF_CANVAS::SetWorldUnitLength( double aWorldUnitLength )
 {
     if( m_gal->GetWorldUnitLength() == aWorldUnitLength )
@@ -488,6 +499,14 @@ void WIDGET_DIFF_CANVAS::CenterOnHighlight()
 void WIDGET_DIFF_CANVAS::buildRenderScene()
 {
     m_renderScene = m_scene;
+
+    if( !m_changeOutlinesShown )
+    {
+        m_renderScene.addedShapes.clear();
+        m_renderScene.removedShapes.clear();
+        m_renderScene.modifiedShapes.clear();
+        m_renderScene.conflictShapes.clear();
+    }
 
     if( m_hasNativeContext )
     {

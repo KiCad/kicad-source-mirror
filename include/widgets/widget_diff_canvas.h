@@ -84,6 +84,10 @@ public:
     /// Replace the displayed scene. Pass an empty scene to clear the canvas.
     void SetScene( KICAD_DIFF::DIFF_SCENE aScene );
 
+    /// Draw the scene's change outlines or keep them for picking only. A library compare draws its items one at a
+    /// time at the origin, where the outlines of every item would pile up.
+    void SetChangeOutlinesShown( bool aShown );
+
     void SetWorldUnitLength( double aWorldUnitLength );
 
     /// Install the native painter used for drawing source document context.
@@ -218,6 +222,8 @@ private:
 
     /// While true, rebuildOverlay()/ZoomToFit() are held so a batch renders once.
     bool m_holdRebuild = false;
+
+    bool m_changeOutlinesShown = true;
 
     LSET m_layerVisible;
 

@@ -206,7 +206,6 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
     }
 
     buildTree();
-    showDiffSummary();
     Layout();
 }
 
@@ -306,8 +305,11 @@ void DIALOG_KICAD_DIFF::buildTree( const std::optional<KIID_PATH>& aSelect )
         m_treeChanges->Expand( groupNode );
     }
 
-    if( aSelect && !selectChangeById( *aSelect ) )
+    if( !aSelect || !selectChangeById( *aSelect ) )
+    {
         showChange( nullptr );
+        showDiffSummary();
+    }
 
     applyHiddenToTree();
 }
@@ -550,14 +552,7 @@ void DIALOG_KICAD_DIFF::Reload( const wxString& aReferencePath, const wxString& 
         m_canvas->EndUpdate();
     }
 
-    // Reselecting a change that survived the switch already showed its details
     buildTree( selected );
-
-    if( !selectedChangeId() )
-    {
-        showChange( nullptr );
-        showDiffSummary();
-    }
 
     Layout();
 
@@ -590,7 +585,17 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 
     // Library differs name each change after its item
     if( m_drawLibraryItem && m_canvas )
+    {
+        // Every library item sits at the origin, so only the one on show may be picked
+        KICAD_DIFF::DOCUMENT_DIFF shown;
+        shown.docType = m_diff.docType;
+
+        if( aChange )
+            shown.changes.push_back( *aChange );
+
+        m_canvas->SetScene( KICAD_DIFF::BuildScene( shown, KICAD_DIFF::DIFF_COLOR_THEME{} ) );
         m_drawLibraryItem( *m_canvas, aChange && aChange->refdes ? *aChange->refdes : wxString() );
+    }
 
     if( !aChange )
     {
@@ -683,7 +688,10 @@ void DIALOG_KICAD_DIFF::DrawChosenLibraryItem( LIBRARY_ITEM_DRAWER aDraw )
 
     // The whole-library geometry only seeds the layer checkboxes, drawn together it piles up
     if( m_canvas )
+    {
+        m_canvas->SetChangeOutlinesShown( false );
         m_canvas->SetScene( KICAD_DIFF::BuildScene( m_diff, KICAD_DIFF::DIFF_COLOR_THEME{} ) );
+    }
 
     // A canvas configured before it is shown keeps a black background, so select once it is
     CallAfter(
