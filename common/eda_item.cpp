@@ -160,8 +160,15 @@ void EDA_ITEM::SetParent( EDA_ITEM* aParent )
 
 void EDA_ITEM::RemoveCustomProperty( const wxString& aKey )
 {
-    m_customProperties.erase( aKey );
-    m_customPropsStorageCache.erase( aKey );
+    for( auto it = m_customProperties.begin(); it != m_customProperties.end(); it++ )
+    {
+        if( it->first.CmpNoCase( aKey ) == 0 )
+        {
+            m_customPropsStorageCache.erase( it->first );
+            m_customProperties.erase( it );
+            return;
+        }
+    }
 }
 
 
@@ -187,13 +194,16 @@ std::vector<wxString> EDA_ITEM::RemoveConflictingCustomProperties()
 
 bool EDA_ITEM::GetCustomProperty( const wxString& aKey, wxString& aValue ) const
 {
-    auto it = m_customProperties.find( aKey );
+    for( const auto& [key, value] : m_customProperties )
+    {
+        if( key.CmpNoCase( aKey ) == 0 )
+        {
+            aValue = value;
+            return true;
+        }
+    }
 
-    if( it == m_customProperties.end() )
-        return false;
-
-    aValue = it->second;
-    return true;
+    return false;
 }
 
 
