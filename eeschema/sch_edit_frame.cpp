@@ -1421,6 +1421,15 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
+void SCH_EDIT_FRAME::SetContentModified( bool aModified )
+{
+    if( SCH_SCREEN* screen = GetScreen() )
+        screen->SetContentModified( aModified );
+
+    updateTitle();
+}
+
+
 void SCH_EDIT_FRAME::OnUpdatePCB()
 {
     if( Kiface().IsSingle() )

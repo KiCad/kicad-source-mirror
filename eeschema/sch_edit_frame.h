@@ -211,6 +211,13 @@ public:
      */
     void OnModify() override;
 
+    /**
+     * Set whether the schematic has unsaved changes.
+     *
+     * @param aModified is true when the schematic has unsaved changes.
+     */
+    void SetContentModified( bool aModified );
+
     SEVERITY GetSeverity( int aErrorCode ) const override;
 
     /**

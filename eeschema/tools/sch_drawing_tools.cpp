@@ -989,7 +989,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 else
                 {
                     commit.Revert();
-                    screen->SetContentModified( screenWasModified );
+                    m_frame->SetContentModified( screenWasModified );
                 }
 
                 selectionTool->RebuildSelection();
