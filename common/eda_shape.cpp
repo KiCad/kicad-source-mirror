@@ -3935,7 +3935,8 @@ bool EDA_SHAPE::operator==( const EDA_SHAPE& aOther ) const
     if( m_fill != aOther.m_fill )
         return false;
 
-    if( m_stroke.GetWidth() != aOther.m_stroke.GetWidth() )
+    // Effective width, so pcbnew's clamped -1 sentinel equals 0
+    if( GetWidth() != aOther.GetWidth() )
         return false;
 
     if( m_stroke.GetLineStyle() != aOther.m_stroke.GetLineStyle() )

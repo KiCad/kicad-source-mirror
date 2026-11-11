@@ -686,6 +686,10 @@ message BoardTextBox
 
   // Since: 11.0
   repeated kiapi.common.types.CustomProperty custom_properties = 7;
+
+  // Width and line style of the border; only drawn when textbox.border_enabled is true
+  // Since: 11.0
+  kiapi.common.types.StrokeAttributes border_stroke = 8;
 }
 
 // NOTE: There has been some discussion about what to do with pad attributes and properties.

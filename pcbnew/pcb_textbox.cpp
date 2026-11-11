@@ -97,6 +97,7 @@ void PCB_TEXTBOX::Serialize( kiapi::board::types::BoardTextBox& boardText ) cons
     text.mutable_margin_bottom()->set_value_nm( GetMarginBottom() );
 
     boardText.set_knockout( IsKnockout() );
+    kiapi::common::PackStroke( *boardText.mutable_border_stroke(), GetStroke() );
 
     if( FOOTPRINT* parent = GetParentFootprint() )
         boardText.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
@@ -153,6 +154,13 @@ bool PCB_TEXTBOX::Deserialize( const kiapi::board::types::BoardTextBox& boardTex
 
     SetBorderEnabled( text.border_enabled() );
     SetIsKnockout( boardText.knockout() );
+
+    if( boardText.has_border_stroke() )
+    {
+        STROKE_PARAMS stroke;
+        kiapi::common::UnpackStroke( stroke, boardText.border_stroke() );
+        SetStroke( stroke );
+    }
 
     kiapi::common::UnpackCustomProperties( boardText.custom_properties(), *this );
 
