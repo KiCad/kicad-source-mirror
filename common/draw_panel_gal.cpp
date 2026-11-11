@@ -1285,15 +1285,41 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
 
             m_drawingEnabled = true;
         }
-        else
+        else if( IsShownOnScreen() )
         {
             // Try again soon
             m_refreshTimer.StartOnce( 100 );
             return;
         }
+        else
+        {
+            // Polling a canvas nobody can see wakes the app ten times a second for as long as it stays hidden
+            if( !m_awaitingShow )
+            {
+                m_awaitingShow = true;
+                Bind( wxEVT_IDLE, &EDA_DRAW_PANEL_GAL::onIdleAwaitShow, this );
+            }
+
+            return;
+        }
     }
 
     DoRePaint( false );
+}
+
+
+void EDA_DRAW_PANEL_GAL::onIdleAwaitShow( wxIdleEvent& aEvent )
+{
+    aEvent.Skip();
+
+    if( !m_drawingEnabled && !IsShownOnScreen() )
+        return;
+
+    m_awaitingShow = false;
+    Unbind( wxEVT_IDLE, &EDA_DRAW_PANEL_GAL::onIdleAwaitShow, this );
+
+    if( !m_drawingEnabled )
+        ForceRefresh();
 }
 
 
@@ -1348,6 +1374,12 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
     m_refreshTimer.Stop();
     m_drawingEnabled = false;
+
+    if( m_awaitingShow )
+    {
+        m_awaitingShow = false;
+        Unbind( wxEVT_IDLE, &EDA_DRAW_PANEL_GAL::onIdleAwaitShow, this );
+    }
 
     Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr, this );
     Disconnect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );

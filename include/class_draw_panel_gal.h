@@ -388,6 +388,7 @@ protected:
     void onLostFocus( wxFocusEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
+    void onIdleAwaitShow( wxIdleEvent& aEvent );
     void onShowEvent( wxShowEvent& aEvent );
 
     bool recoverFromGalError( const std::exception& aErr );
@@ -467,6 +468,9 @@ protected:
 
     /** The refresh timer was armed by Refresh() for a repaint it postponed */
     bool                     m_refreshDeferred = false;
+
+    /// A hidden canvas whose GAL is not ready yet waits for idle instead of polling
+    bool                     m_awaitingShow = false;
 
     /// Last cursor position sent to GAL for drawing
     VECTOR2D                 m_lastCursorPosition;
