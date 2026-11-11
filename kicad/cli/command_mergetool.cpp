@@ -124,7 +124,7 @@ int CLI::MERGETOOL_COMMAND::doPerform( KIWAY& /* aKiway */ )
     if( !supportsMergetoolKind( kind ) )
     {
         wxFprintf( stderr,
-                   _( "Unsupported output extension '%s'. "
+                   _( "Unsupported output file '%s'. "
                       "Expected .kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod\n" ),
                    output );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;   // contract code 3 — bad input
