@@ -2002,6 +2002,8 @@ namespace
 struct PCB_DIFF_VIEW
 {
     KICAD_DIFF::DOCUMENT_DIFF                result;
+    KICAD_DIFF::DOCUMENT_GEOMETRY            referenceGeometry;
+    KICAD_DIFF::DOCUMENT_GEOMETRY            comparisonGeometry;
     std::vector<std::unique_ptr<BOARD_ITEM>> clones;
     DIALOG_KICAD_DIFF::SHEET_SWITCHER        switcher;
 };
@@ -2015,6 +2017,10 @@ PCB_DIFF_VIEW buildPcbDiffView( BOARD* aLive, BOARD* aOther, const wxString& aOt
     view.result = differ.Diff();
 
     const KICAD_DIFF::DIFF_COLOR_THEME theme;
+
+    // The layer checkboxes come from the geometry
+    view.referenceGeometry = KICAD_DIFF::ExtractBoardGeometry( *aLive, theme.reference );
+    view.comparisonGeometry = KICAD_DIFF::ExtractBoardGeometry( *aOther, theme.comparison );
 
     std::map<KIID, KIGFX::COLOR4D>       refOverrides;
     std::map<KIID, KIGFX::COLOR4D>       compOverrides;
@@ -2159,8 +2165,8 @@ int BOARD_INSPECTION_TOOL::showBoardComparison( const wxString& aOtherPath, cons
     PCB_DIFF_VIEW view = buildPcbDiffView( board, otherBoard.get(), aOtherPath );
 
     auto dlgDiff = std::make_unique<DIALOG_KICAD_DIFF>( m_frame, board->GetFileName(), aComparisonLabel, view.result,
-                                                        KICAD_DIFF::DOCUMENT_GEOMETRY{},
-                                                        KICAD_DIFF::DOCUMENT_GEOMETRY{}, view.switcher );
+                                                        view.referenceGeometry, view.comparisonGeometry,
+                                                        view.switcher );
     dlgDiff->ShowModal();
 
     // Destroy the dialog (its canvas drops its references to the board's items)
@@ -2394,8 +2400,8 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
     int shownIndex = startIndex;
 
     auto dlgDiff = std::make_unique<DIALOG_KICAD_DIFF>( m_frame, liveBoard->GetFileName(), labels[startIndex],
-                                                        view.result, KICAD_DIFF::DOCUMENT_GEOMETRY{},
-                                                        KICAD_DIFF::DOCUMENT_GEOMETRY{}, view.switcher );
+                                                        view.result, view.referenceGeometry,
+                                                        view.comparisonGeometry, view.switcher );
 
     dlgDiff->SetRevisionChooser(
             labels, startIndex,
@@ -2416,7 +2422,7 @@ int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
                 }
 
                 dlgDiff->Reload( liveBoard->GetFileName(), labels[aIndex], newView.result,
-                                 /*aReferenceGeometry=*/{}, /*aComparisonGeometry=*/{}, newView.switcher, {} );
+                                 newView.referenceGeometry, newView.comparisonGeometry, newView.switcher, {} );
 
                 // The canvas now references newBoard, so the previous one can go.
                 cleanupCurrent();

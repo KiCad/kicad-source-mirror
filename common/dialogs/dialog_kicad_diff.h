@@ -114,6 +114,9 @@ private:
     /// Grey out tree rows whose change is in m_hiddenChanges, restore the rest.
     void applyHiddenToTree();
 
+    /// Replace the layer checkboxes with one per layer of aScene's geometry, after the category filters.
+    void buildLayerControls( const KICAD_DIFF::DIFF_SCENE& aScene );
+
     /// Change ids a tree row stands for. A routing net row collapses every
     /// segment of the net, so hiding it must hide them all.
     std::vector<KIID_PATH> changeRowIds( const KICAD_DIFF::ITEM_CHANGE& aChange ) const;
@@ -129,6 +132,10 @@ private:
     UP_HANDLER   m_upHandler;
     wxButton*    m_btnUp = nullptr;
     wxWrapSizer* m_filterSizer = nullptr;
+
+    /// Index in m_filterSizer of the first layer control, which follow the category filters.
+    size_t                 m_layerControlsIndex = 0;
+    std::vector<wxWindow*> m_layerControls;
 
     /// Maps tree item IDs to the underlying change record so selection can
     /// find the data without walking the diff again. Group nodes have no
