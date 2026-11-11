@@ -30,7 +30,9 @@
 
 #include <wx/string.h>
 
+#include <functional>
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -169,6 +171,17 @@ KICOMMON_API std::vector<CONFLICT_LIST_ENTRY> BuildConflictList( const MERGE_PLA
 KICOMMON_API std::vector<KIID_PATH>
 CollectUnresolvedConflicts( const MERGE_PLAN&                aPlan,
                             const std::vector<std::size_t>&  aConflictActionIndices );
+
+
+/**
+ * Settle the MERGE_PROPS of a library merge, where an item is combined whole or not at all. Items
+ * aCanCombine accepts are resolved, and the applier's combiner builds them. With aEditedNames,
+ * every other one becomes a conflict for the user, with a property row per edited name. Without
+ * it, the applier takes our side and reports the item.
+ */
+KICOMMON_API void
+SettleLibraryMerges( MERGE_PLAN& aPlan, const std::function<bool( const KIID_PATH& )>& aCanCombine,
+                     const std::function<std::set<wxString>( const KIID_PATH& )>& aEditedNames = {} );
 
 
 /**

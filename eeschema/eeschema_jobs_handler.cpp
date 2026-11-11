@@ -3586,32 +3586,6 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
     std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> ourChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
     std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*> theirChanges = KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
 
-    // Combined symbols stand in for our side, so the applier takes them like any other edit of ours
-    std::vector<std::unique_ptr<LIB_SYMBOL>> combined;
-
-    auto combine = [&]( const KICAD_DIFF::ITEM_CHANGE* aOurs, const KICAD_DIFF::ITEM_CHANGE* aTheirs ) -> bool
-    {
-        if( !aOurs || !aTheirs || !aOurs->refdes )
-            return false;
-
-        auto ancestorSymbol = ancestor.map.find( *aOurs->refdes );
-        auto ourSymbol = ours.map.find( *aOurs->refdes );
-        auto theirSymbol = theirs.map.find( *aOurs->refdes );
-
-        if( ancestorSymbol == ancestor.map.end() || ourSymbol == ours.map.end() || theirSymbol == theirs.map.end() )
-            return false;
-
-        std::unique_ptr<LIB_SYMBOL> symbol = KICAD_DIFF::CombineSymbolEdits(
-                *ancestorSymbol->second, *ourSymbol->second, *theirSymbol->second, *aOurs, *aTheirs );
-
-        if( !symbol )
-            return false;
-
-        ourSymbol->second = symbol.get();
-        combined.push_back( std::move( symbol ) );
-        return true;
-    };
-
     auto changeFor = []( const std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*>& aChanges,
                          const KIID_PATH& aId ) -> const KICAD_DIFF::ITEM_CHANGE*
     {
@@ -3619,56 +3593,52 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
         return it != aChanges.end() ? it->second : nullptr;
     };
 
-    std::set<KIID_PATH> unresolved( plan.unresolved.begin(), plan.unresolved.end() );
-
-    for( KICAD_DIFF::ITEM_RESOLUTION& action : plan.actions )
+    auto combine = [&]( const KIID_PATH& aId ) -> std::unique_ptr<LIB_SYMBOL>
     {
-        if( action.kind != KICAD_DIFF::ITEM_RES::MERGE_PROPS )
-            continue;
+        const KICAD_DIFF::ITEM_CHANGE* ourChange = changeFor( ourChanges, aId );
+        const KICAD_DIFF::ITEM_CHANGE* theirChange = changeFor( theirChanges, aId );
 
-        const KICAD_DIFF::ITEM_CHANGE* ourChange = changeFor( ourChanges, action.id );
-        const KICAD_DIFF::ITEM_CHANGE* theirChange = changeFor( theirChanges, action.id );
+        if( !ourChange || !theirChange || !ourChange->refdes )
+            return nullptr;
 
-        if( combine( ourChange, theirChange ) )
+        const wxString& name = *ourChange->refdes;
+        auto            ancestorSymbol = ancestor.map.find( name );
+        auto            ourSymbol = ours.map.find( name );
+        auto            theirSymbol = theirs.map.find( name );
+
+        if( ancestorSymbol == ancestor.map.end() || ourSymbol == ours.map.end() || theirSymbol == theirs.map.end() )
+            return nullptr;
+
+        return KICAD_DIFF::CombineSymbolEdits( *ancestorSymbol->second, *ourSymbol->second, *theirSymbol->second,
+                                               *ourChange, *theirChange );
+    };
+
+    std::function<std::set<wxString>( const KIID_PATH& )> editedNames;
+
+    // Only the dialog can settle two edits of one symbol that do not combine
+    if( aInteractive )
+    {
+        editedNames = [&]( const KIID_PATH& aId )
         {
-            action.kind = KICAD_DIFF::ITEM_RES::TAKE_OURS;
-            action.props.clear();
-            unresolved.erase( action.id );
-            continue;
-        }
+            std::set<wxString> edited;
 
-        // The applier cannot combine two edits of one symbol, so the user picks a side for each
-        if( !aInteractive )
-            continue;
+            for( const std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*>* changes : { &ourChanges, &theirChanges } )
+            {
+                if( const KICAD_DIFF::ITEM_CHANGE* change = changeFor( *changes, aId ) )
+                    edited.merge( KICAD_DIFF::EditedNames( *change ) );
+            }
 
-        action.kind = KICAD_DIFF::ITEM_RES::KEEP;
-        action.props.clear();
-
-        // Named for the details, which would otherwise omit field and pin edits
-        std::set<wxString> edited;
-
-        for( const KICAD_DIFF::ITEM_CHANGE* change : { ourChange, theirChange } )
-        {
-            if( change )
-                edited.merge( KICAD_DIFF::EditedNames( *change ) );
-        }
-
-        for( const wxString& name : edited )
-        {
-            KICAD_DIFF::PROPERTY_RESOLUTION prop;
-            prop.name = name;
-            action.props.push_back( std::move( prop ) );
-        }
-
-        if( unresolved.insert( action.id ).second )
-            plan.unresolved.push_back( action.id );
+            return edited;
+        };
     }
 
-    std::erase_if( plan.unresolved,
-                   [&]( const KIID_PATH& aId )
-                   {
-                       return !unresolved.contains( aId );
-                   } );
+    KICAD_DIFF::SettleLibraryMerges(
+            plan,
+            [&]( const KIID_PATH& aId )
+            {
+                return combine( aId ) != nullptr;
+            },
+            editedNames );
 
     bool userDecided = false;
 
@@ -3712,12 +3682,11 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
 
     const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
 
-    KICAD_DIFF::SYM_LIB_MERGE_APPLIER        applier( ancestor.map, ours.map, theirs.map, std::move( plan ) );
+    KICAD_DIFF::SYM_LIB_MERGE_APPLIER        applier( ancestor.map, ours.map, theirs.map, std::move( plan ), combine );
     std::vector<std::unique_ptr<LIB_SYMBOL>> merged = applier.Apply();
 
-    // Per-property symbol merge isn't implemented; MERGE_PROPS resolutions are
-    // downgraded to TAKE_OURS. Surface that as unresolved so the user sees a
-    // marker instead of silent partial-merge.
+    // A symbol whose edits do not combine falls back to our side. Surface that
+    // as unresolved so the user sees a marker instead of silent partial-merge.
     const bool hadSilentFallback = applier.GetReport().mergePropsFallback > 0;
 
     // Serialize via the sexpr lib cache: create at output path, add each

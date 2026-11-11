@@ -342,6 +342,33 @@ BOOST_AUTO_TEST_CASE( MergeProps_FallsBackToOurs_AndTracksId )
 }
 
 
+BOOST_AUTO_TEST_CASE( MergeProps_TakesTheCombinedItem )
+{
+    ItemStore anc{ { wxS( "R" ), wxS( "anc" ) } };
+    ItemStore ours{ { wxS( "R" ), wxS( "ours" ) } };
+    ItemStore theirs{ { wxS( "R" ), wxS( "theirs" ) } };
+
+    MERGE_PLAN plan;
+    plan.actions.push_back( Action( wxS( "R" ), ITEM_RES::MERGE_PROPS ) );
+
+    ItemMap ancMap = MakeMap( anc );
+    ItemMap oursMap = MakeMap( ours );
+    ItemMap theirsMap = MakeMap( theirs );
+
+    LIB_MERGE_APPLIER<TestItem> applier( ancMap, oursMap, theirsMap, std::move( plan ),
+                                         []( const KIID_PATH& )
+                                         {
+                                             return std::make_unique<TestItem>( TestItem{ wxS( "R" ),
+                                                                                          wxS( "both" ) } );
+                                         } );
+    auto out = applier.Apply();
+
+    BOOST_REQUIRE_EQUAL( out.size(), 1 );
+    BOOST_CHECK( out[0]->side == wxS( "both" ) );
+    BOOST_CHECK_EQUAL( applier.GetReport().mergePropsFallback, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( NoActionForItem_PassesAncestorThrough )
 {
     // An item present in ancestor but with no plan action stays in `live`

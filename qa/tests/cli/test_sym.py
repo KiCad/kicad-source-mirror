@@ -355,3 +355,44 @@ def test_sym_export_svg_single_derived_file_from_symdir(
     # Only "C" is plotted, not the parent or any other sibling symbol.
     svg_files = sorted(p.name for p in svg_output_path.glob("*.svg"))
     assert svg_files == ["C_unit1.svg"]
+
+
+def test_sym_merge_driver_combines_field_and_pin_edits(kitest: KiTestFixture) -> None:
+    """
+    One side edits a field of a symbol and the other moves one of its pins. The merge combines
+    both edits, which must count as a clean merge rather than a dropped edit.
+    """
+
+    ancestor = kitest.get_data_file_path("eeschema/variants/pic_programmer.kicad_sym")
+    output_path = kitest.get_output_path("cli/sym_merge_combine/")
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    text = ancestor.read_text(encoding="utf-8")
+    datasheet = "https://example.com/24c16.pdf"
+    ours = output_path / "ours.kicad_sym"
+    theirs = output_path / "theirs.kicad_sym"
+    merged = output_path / "merged.kicad_sym"
+
+    ours.write_text(text.replace('(property "Datasheet" ""', f'(property "Datasheet" "{datasheet}"', 1),
+                    encoding="utf-8")
+    theirs.write_text(text.replace("(at -17.78 5.08 0)", "(at -17.78 2.54 0)", 1), encoding="utf-8")
+
+    merge_cmd = [
+        utils.kicad_cli(),
+        "git-mergedriver",
+        "--kind",
+        "sym",
+        str(ancestor),
+        str(ours),
+        str(theirs),
+        "-o",
+        str(merged),
+    ]
+    stdout, stderr, exitcode = utils.run_and_capture(merge_cmd)
+
+    assert exitcode == 0, stdout + stderr
+
+    result = merged.read_text(encoding="utf-8")
+    assert datasheet in result
+    assert result.count("(at -17.78 2.54 0)") == text.count("(at -17.78 2.54 0)") + 1
+

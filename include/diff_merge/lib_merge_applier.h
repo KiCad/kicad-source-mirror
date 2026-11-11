@@ -29,6 +29,7 @@
 
 #include <trace_helpers.h>
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -49,10 +50,10 @@ namespace KICAD_DIFF
  * applier reconstructs the same KIID_PATH from each input map's keys and
  * looks up matching resolutions.
  *
- * Per-property merge (MERGE_PROPS) at the item level is not implemented;
- * such resolutions are downgraded to TAKE_OURS and counted in
- * `mergePropsFallback` so the job handler can surface them as unresolved
- * to the user.
+ * A MERGE_PROPS item is built by the combiner, which owns the knowledge of
+ * how two edits of one item fit together. Without a combiner, or when it
+ * returns null, the item is downgraded to TAKE_OURS and counted in
+ * `mergePropsFallback` so the job handler can surface it as unresolved.
  */
 template <typename ITEM>
 class LIB_MERGE_APPLIER
@@ -60,11 +61,16 @@ class LIB_MERGE_APPLIER
 public:
     using ITEM_MAP = std::map<wxString, const ITEM*>;
 
-    LIB_MERGE_APPLIER( const ITEM_MAP& aAncestor, const ITEM_MAP& aOurs, const ITEM_MAP& aTheirs, MERGE_PLAN aPlan ) :
+    /// Both sides' edits of the item with this id applied to one copy, or null when they cannot be combined.
+    using COMBINER = std::function<std::unique_ptr<ITEM>( const KIID_PATH& aId )>;
+
+    LIB_MERGE_APPLIER( const ITEM_MAP& aAncestor, const ITEM_MAP& aOurs, const ITEM_MAP& aTheirs, MERGE_PLAN aPlan,
+                       COMBINER aCombine = {} ) :
             m_ancestor( aAncestor ),
             m_ours( aOurs ),
             m_theirs( aTheirs ),
-            m_plan( std::move( aPlan ) )
+            m_plan( std::move( aPlan ) ),
+            m_combine( std::move( aCombine ) )
     {
     }
 
@@ -75,6 +81,7 @@ public:
         std::size_t itemsTakenAncestor = 0;
         std::size_t itemsDeleted = 0;
         std::size_t itemsKept = 0;
+        std::size_t itemsCombined = 0;
         std::size_t mergePropsFallback = 0;
 
         /// Item IDs (KIID_PATH from LibraryItemKiidPath) for resolutions that
@@ -88,7 +95,8 @@ public:
     {
         m_report = {};
 
-        std::map<wxString, const ITEM*> live = m_ancestor;
+        std::map<wxString, const ITEM*>            live = m_ancestor;
+        std::map<wxString, std::unique_ptr<ITEM>> combined;
 
         std::map<KIID_PATH, const ITEM_RESOLUTION*> actionsById;
 
@@ -141,8 +149,14 @@ public:
             }
 
             case ITEM_RES::MERGE_PROPS:
-                // Per-property library-item merge would have to splice pins,
-                // fields, primitives, parent weak_ptr graphs — out of scope.
+                if( std::unique_ptr<ITEM> item = m_combine ? m_combine( res.id ) : nullptr )
+                {
+                    live[name] = item.get();
+                    combined[name] = std::move( item );
+                    ++m_report.itemsCombined;
+                    break;
+                }
+
                 // Take ours so the chosen side at least lands intact, and
                 // surface the count + ID so the handler can rebuild the
                 // marker plan with this item flagged.
@@ -161,7 +175,9 @@ public:
 
         for( const auto& [name, item] : live )
         {
-            if( item )
+            if( auto it = combined.find( name ); it != combined.end() )
+                out.push_back( std::move( it->second ) );
+            else if( item )
                 out.emplace_back( std::make_unique<ITEM>( *item ) );
         }
 
@@ -206,6 +222,7 @@ private:
     const ITEM_MAP& m_ours;
     const ITEM_MAP& m_theirs;
     MERGE_PLAN      m_plan;
+    COMBINER        m_combine;
     REPORT          m_report;
 };
 

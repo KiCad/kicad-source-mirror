@@ -217,6 +217,48 @@ CollectUnresolvedConflicts( const MERGE_PLAN&                aPlan,
 }
 
 
+void SettleLibraryMerges( MERGE_PLAN& aPlan, const std::function<bool( const KIID_PATH& )>& aCanCombine,
+                          const std::function<std::set<wxString>( const KIID_PATH& )>& aEditedNames )
+{
+    std::set<KIID_PATH> unresolved( aPlan.unresolved.begin(), aPlan.unresolved.end() );
+
+    for( ITEM_RESOLUTION& action : aPlan.actions )
+    {
+        if( action.kind != ITEM_RES::MERGE_PROPS )
+            continue;
+
+        if( aCanCombine( action.id ) )
+        {
+            unresolved.erase( action.id );
+            continue;
+        }
+
+        if( !aEditedNames )
+            continue;
+
+        action.kind = ITEM_RES::KEEP;
+        action.props.clear();
+
+        // Named for the details, which would otherwise omit field and pin edits
+        for( const wxString& name : aEditedNames( action.id ) )
+        {
+            PROPERTY_RESOLUTION prop;
+            prop.name = name;
+            action.props.push_back( std::move( prop ) );
+        }
+
+        if( unresolved.insert( action.id ).second )
+            aPlan.unresolved.push_back( action.id );
+    }
+
+    std::erase_if( aPlan.unresolved,
+                   [&]( const KIID_PATH& aId )
+                   {
+                       return !unresolved.contains( aId );
+                   } );
+}
+
+
 std::optional<BOX2I>
 ResolveConflictBBox( const KIID_PATH&                  aId,
                      const std::map<KIID_PATH, BOX2I>& aPrimary,
