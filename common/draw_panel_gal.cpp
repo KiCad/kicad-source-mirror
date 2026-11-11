@@ -1284,6 +1284,13 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
             Connect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );
 
             m_drawingEnabled = true;
+            DoRePaint( false );
+
+            // A freshly mapped GL drawable can drop its first frame, and a refresh skips an unchanged view
+            if( m_drawingEnabled )
+                m_refreshTimer.StartOnce( 50 );
+
+            return;
         }
         else if( IsShownOnScreen() )
         {
