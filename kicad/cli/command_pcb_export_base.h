@@ -72,6 +72,9 @@ namespace CLI
 #define ARG_BACKGROUND_COLOR "--bg-color"
 #define ARG_BACKGROUND_COLOR_DESC "Background color, can be in hex #rrggbb, #rrggbbaa; or css rgb(r,g,b), rgba(r,g,b,a) format"
 
+#define ARG_USE_THEME_BACKGROUND "--use-theme-background"
+#define ARG_USE_THEME_BACKGROUND_DESC "Use the color theme background color instead of a transparent background."
+
 #define ARG_CHECK_ZONES "--check-zones"
 #define ARG_CHECK_ZONES_DESC "Check and refill zones if required"
 #define ARG_FAB_UNITS "--units"
