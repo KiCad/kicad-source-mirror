@@ -2331,57 +2331,57 @@ static struct ZONE_DESC
                 layerEnum.Map( layer, LSET::Name( layer ) );
         }
 
-        ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
+        ENUM_MAP<ZONE_CONNECTION>& zoneConnectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
-        if( zcMap.Choices().GetCount() == 0 )
+        if( zoneConnectionEnum.Choices().GetCount() == 0 )
         {
-            zcMap.Undefined( ZONE_CONNECTION::INHERITED );
-            zcMap.Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
-                 .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
-                 .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
-                 .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
-                 .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
+            zoneConnectionEnum.Undefined( ZONE_CONNECTION::INHERITED );
+            zoneConnectionEnum.Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
+                              .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
+                              .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
+                              .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
+                              .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
         }
 
-        ENUM_MAP<ZONE_FILL_MODE>& zfmMap = ENUM_MAP<ZONE_FILL_MODE>::Instance();
+        ENUM_MAP<ZONE_FILL_MODE>& zoneFillModeEnum = ENUM_MAP<ZONE_FILL_MODE>::Instance();
 
-        if( zfmMap.Choices().GetCount() == 0 )
+        if( zoneFillModeEnum.Choices().GetCount() == 0 )
         {
-            zfmMap.Undefined( ZONE_FILL_MODE::POLYGONS );
-            zfmMap.Map( ZONE_FILL_MODE::POLYGONS,        _HKI( "Solid fill" ) )
-                  .Map( ZONE_FILL_MODE::HATCH_PATTERN,   _HKI( "Hatch pattern" ) )
-                  .Map( ZONE_FILL_MODE::COPPER_THIEVING, _HKI( "Copper thieving" ) );
+            zoneFillModeEnum.Undefined( ZONE_FILL_MODE::POLYGONS );
+            zoneFillModeEnum.Map( ZONE_FILL_MODE::POLYGONS,        _HKI( "Solid fill" ) )
+                            .Map( ZONE_FILL_MODE::HATCH_PATTERN,   _HKI( "Hatch pattern" ) )
+                            .Map( ZONE_FILL_MODE::COPPER_THIEVING, _HKI( "Copper thieving" ) );
         }
 
-        ENUM_MAP<THIEVING_PATTERN>& tpMap = ENUM_MAP<THIEVING_PATTERN>::Instance();
+        ENUM_MAP<THIEVING_PATTERN>& thievingPatternEnum = ENUM_MAP<THIEVING_PATTERN>::Instance();
 
-        if( tpMap.Choices().GetCount() == 0 )
+        if( thievingPatternEnum.Choices().GetCount() == 0 )
         {
-            tpMap.Undefined( THIEVING_PATTERN::DOTS );
-            tpMap.Map( THIEVING_PATTERN::DOTS,    _HKI( "Dots" ) )
-                 .Map( THIEVING_PATTERN::SQUARES, _HKI( "Squares" ) )
-                 .Map( THIEVING_PATTERN::HATCH,   _HKI( "Hatch" ) );
+            thievingPatternEnum.Undefined( THIEVING_PATTERN::DOTS );
+            thievingPatternEnum.Map( THIEVING_PATTERN::DOTS,    _HKI( "Dots" ) )
+                               .Map( THIEVING_PATTERN::SQUARES, _HKI( "Squares" ) )
+                               .Map( THIEVING_PATTERN::HATCH,   _HKI( "Hatch" ) );
         }
 
-        ENUM_MAP<ISLAND_REMOVAL_MODE>& irmMap = ENUM_MAP<ISLAND_REMOVAL_MODE>::Instance();
+        ENUM_MAP<ISLAND_REMOVAL_MODE>& islandRemovalModeEnum = ENUM_MAP<ISLAND_REMOVAL_MODE>::Instance();
 
-        if( irmMap.Choices().GetCount() == 0 )
+        if( islandRemovalModeEnum.Choices().GetCount() == 0 )
         {
-            irmMap.Undefined( ISLAND_REMOVAL_MODE::ALWAYS );
-            irmMap.Map( ISLAND_REMOVAL_MODE::ALWAYS, _HKI( "Always" ) )
-                  .Map( ISLAND_REMOVAL_MODE::NEVER,  _HKI( "Never" ) )
-                  .Map( ISLAND_REMOVAL_MODE::AREA,   _HKI( "Below area limit" ) );
+            islandRemovalModeEnum.Undefined( ISLAND_REMOVAL_MODE::ALWAYS );
+            islandRemovalModeEnum.Map( ISLAND_REMOVAL_MODE::ALWAYS, _HKI( "Always" ) )
+                                 .Map( ISLAND_REMOVAL_MODE::NEVER,  _HKI( "Never" ) )
+                                 .Map( ISLAND_REMOVAL_MODE::AREA,   _HKI( "Below area limit" ) );
         }
 
-        ENUM_MAP<PLACEMENT_SOURCE_T>& rapstMap = ENUM_MAP<PLACEMENT_SOURCE_T>::Instance();
+        ENUM_MAP<PLACEMENT_SOURCE_T>& placementSourceEnum = ENUM_MAP<PLACEMENT_SOURCE_T>::Instance();
 
-        if( rapstMap.Choices().GetCount() == 0 )
+        if( placementSourceEnum.Choices().GetCount() == 0 )
         {
-            rapstMap.Undefined( PLACEMENT_SOURCE_T::SHEETNAME );
-            rapstMap.Map( PLACEMENT_SOURCE_T::SHEETNAME,       _HKI( "Sheet Name" ) )
-                    .Map( PLACEMENT_SOURCE_T::COMPONENT_CLASS, _HKI( "Component Class" ) )
-                    .Map( PLACEMENT_SOURCE_T::GROUP_PLACEMENT, _HKI( "Group" ) )
-                    .Map( PLACEMENT_SOURCE_T::DESIGN_BLOCK,    _HKI( "Design Block" ) );
+            placementSourceEnum.Undefined( PLACEMENT_SOURCE_T::SHEETNAME );
+            placementSourceEnum.Map( PLACEMENT_SOURCE_T::SHEETNAME,       _HKI( "Sheet Name" ) )
+                               .Map( PLACEMENT_SOURCE_T::COMPONENT_CLASS, _HKI( "Component Class" ) )
+                               .Map( PLACEMENT_SOURCE_T::GROUP_PLACEMENT, _HKI( "Group" ) )
+                               .Map( PLACEMENT_SOURCE_T::DESIGN_BLOCK,    _HKI( "Design Block" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
