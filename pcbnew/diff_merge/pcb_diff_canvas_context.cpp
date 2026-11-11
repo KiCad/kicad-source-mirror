@@ -69,15 +69,22 @@ public:
             if( it != m_overrides.end() && m_dimmed->count( key ) == 0 )
             {
                 // PCB_PAINTER tints normal items via the layer color, not via
-                // LAYER_BRIGHTENED. Swap the layer color we are drawing on so
-                // the override paints the changed item.
+                // LAYER_BRIGHTENED. Swap the colors of the layer we are drawing on
+                // and the layer it takes its color from so the override paints the item.
                 KIGFX::PCB_RENDER_SETTINGS* settings = GetSettings();
-                KIGFX::COLOR4D              saved = settings->GetLayerColor( aLayer );
-                settings->SetLayerColor( aLayer, it->second );
+                std::vector<std::pair<int, KIGFX::COLOR4D>> saved;
+
+                for( int layer : colorSourceLayers( aLayer ) )
+                {
+                    saved.emplace_back( layer, settings->GetLayerColor( layer ) );
+                    settings->SetLayerColor( layer, it->second );
+                }
 
                 bool result = KIGFX::PCB_PAINTER::Draw( aItem, aLayer );
 
-                settings->SetLayerColor( aLayer, saved );
+                for( const auto& [layer, color] : saved )
+                    settings->SetLayerColor( layer, color );
+
                 return result;
             }
         }
@@ -86,6 +93,33 @@ public:
     }
 
 private:
+    /// The drawn layer plus the one PCB_RENDER_SETTINGS::GetColor takes its colour from.
+    static std::vector<int> colorSourceLayers( int aLayer )
+    {
+        if( IsPadCopperLayer( aLayer ) )
+            return { aLayer, aLayer - LAYER_PAD_COPPER_START, LAYER_VIA_HOLES };
+
+        if( IsViaCopperLayer( aLayer ) )
+            return { aLayer, aLayer - LAYER_VIA_COPPER_START };
+
+        if( IsClearanceLayer( aLayer ) )
+            return { aLayer, aLayer - LAYER_CLEARANCE_START };
+
+        if( IsZoneFillLayer( aLayer ) )
+            return { aLayer, aLayer - LAYER_ZONE_START };
+
+        if( aLayer == LAYER_PAD_HOLEWALLS )
+            return { aLayer, LAYER_VIA_HOLES };
+
+        if( aLayer == LAYER_PAD_FR_NETNAMES )
+            return { aLayer, GetNetnameLayer( F_Cu ) };
+
+        if( aLayer == LAYER_PAD_BK_NETNAMES )
+            return { aLayer, GetNetnameLayer( B_Cu ) };
+
+        return { aLayer };
+    }
+
     std::map<KIID, KIGFX::COLOR4D>  m_overrides;
     std::shared_ptr<std::set<KIID>> m_dimmed;
 };
