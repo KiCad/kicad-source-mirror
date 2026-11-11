@@ -612,9 +612,15 @@ bool DIALOG_SHIM::Show( bool show )
             m_eventLoop->Exit( GetReturnCode() );   // Needed for APP-MODAL dlgs on OSX
 #endif
 
+        // Controls settle on the focus loss that hiding sends, but the restorable position needs a mapped window
+        std::optional<wxPoint> position;
+
+        if( IsShown() )
+            position = KIPLATFORM::UI::GetRestorablePosition( this );
+
         ret = wxDialog::Show( show );
 
-        SaveControlState();
+        SaveControlState( position );
         focusParentCanvas();
     }
 
@@ -726,7 +732,7 @@ std::string DIALOG_SHIM::generateKey( const wxWindow* aWin ) const
 }
 
 
-void DIALOG_SHIM::SaveControlState()
+void DIALOG_SHIM::SaveControlState( const std::optional<wxPoint>& aPosition )
 {
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
@@ -736,17 +742,21 @@ void DIALOG_SHIM::SaveControlState()
     std::string dialogKey = m_hash_key.empty() ? getDialogKeyFromTitle( GetTitle() ) : m_hash_key;
     std::map<std::string, nlohmann::json>& dlgMap = settings->CsInternals().m_dialogControlValues[ dialogKey ];
 
-    wxPoint pos = GetPosition();
-    wxSize  dipSize = ToDIP( GetSize() );
-    wxSize  dipClientSize = ToDIP( GetClientSize() );
-    nlohmann::json geom;
-    geom[ "x" ] = pos.x;
-    geom[ "y" ] = pos.y;
-    geom[ "w" ] = dipSize.x;
-    geom[ "h" ] = dipSize.y;
-    geom[ "cw" ] = dipClientSize.x;
-    geom[ "ch" ] = dipClientSize.y;
-    dlgMap[ "__geometry" ] = geom;
+    // A hidden GTK dialog reports its frame origin, which static gravity would restore off by the decorations
+    if( aPosition || IsShown() )
+    {
+        wxPoint pos = aPosition ? *aPosition : KIPLATFORM::UI::GetRestorablePosition( this );
+        wxSize  dipSize = ToDIP( GetSize() );
+        wxSize  dipClientSize = ToDIP( GetClientSize() );
+        nlohmann::json geom;
+        geom[ "x" ] = pos.x;
+        geom[ "y" ] = pos.y;
+        geom[ "w" ] = dipSize.x;
+        geom[ "h" ] = dipSize.y;
+        geom[ "cw" ] = dipClientSize.x;
+        geom[ "ch" ] = dipClientSize.y;
+        dlgMap[ "__geometry" ] = geom;
+    }
 
     std::function<void( wxWindow* )> saveFn =
             [&]( wxWindow* win )

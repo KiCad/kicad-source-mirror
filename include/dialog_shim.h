@@ -26,6 +26,7 @@
 #include <kiway_holder.h>
 #include <wx/dialog.h>
 #include <map>
+#include <optional>
 #include <set>
 #include <vector>
 #include <wx/variant.h>
@@ -163,8 +164,11 @@ public:
 
     /**
      * Save control values and geometry to the current project's local settings.
+     *
+     * @param aPosition the restorable position captured while the dialog was still shown.  Without
+     *                  it a hidden dialog keeps its previously saved geometry.
      */
-    void SaveControlState();
+    void SaveControlState( const std::optional<wxPoint>& aPosition = std::nullopt );
 
     /**
      * Opt out of control state saving.

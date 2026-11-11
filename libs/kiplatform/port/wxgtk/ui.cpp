@@ -260,6 +260,25 @@ void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
 }
 
 
+wxPoint KIPLATFORM::UI::GetRestorablePosition( wxWindow* aWindow )
+{
+    GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+
+    if( aWindow->IsShown() && widget && GTK_IS_WINDOW( widget )
+        && gtk_window_get_gravity( GTK_WINDOW( widget ) ) == GDK_GRAVITY_STATIC )
+    {
+        if( GdkWindow* gdkWindow = gtk_widget_get_window( widget ) )
+        {
+            wxPoint origin;
+            gdk_window_get_origin( gdkWindow, &origin.x, &origin.y );
+            return origin;
+        }
+    }
+
+    return aWindow->GetPosition();
+}
+
+
 static const char* const WM_CLASS_DATA_KEY = "kicad-wm-class";
 
 

@@ -233,6 +233,16 @@ namespace KIPLATFORM
         void StabilizeWindowPosition( wxWindow* aWindow );
 
         /**
+         * Return the point that wxWindow::Move() needs to put a stabilized window back where it is.
+         *
+         * Static gravity makes GTK place a window by its client origin, while GetPosition() reports
+         * the origin of the decorations.  Other platforms, and hidden windows, return GetPosition().
+         *
+         * @param aWindow window previously prepared by StabilizeWindowPosition()
+         */
+        wxPoint GetRestorablePosition( wxWindow* aWindow );
+
+        /**
          * Intended to set the floating window level in macOS on a window
          */
         void SetFloatLevel( wxWindow* aWindow );

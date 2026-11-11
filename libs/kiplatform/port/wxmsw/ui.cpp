@@ -97,6 +97,12 @@ void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
 }
 
 
+wxPoint KIPLATFORM::UI::GetRestorablePosition( wxWindow* aWindow )
+{
+    return aWindow->GetPosition();
+}
+
+
 void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform

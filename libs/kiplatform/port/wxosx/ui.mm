@@ -118,6 +118,12 @@ void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
 }
 
 
+wxPoint KIPLATFORM::UI::GetRestorablePosition( wxWindow* aWindow )
+{
+    return aWindow->GetPosition();
+}
+
+
 void KIPLATFORM::UI::ReparentWindow( wxNonOwnedWindow* aWindow, wxTopLevelWindow* aParent )
 {
     NSWindow* parentWindow = aParent->GetWXWindow();
