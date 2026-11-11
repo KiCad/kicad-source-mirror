@@ -30,6 +30,7 @@
 #include <wx/debug.h>
 #include <wx/log.h>
 
+#include <algorithm>
 #include <iterator>
 #include <map>
 
@@ -70,11 +71,12 @@ namespace
 {
     struct NET_SHAPE_GROUP
     {
-        KIID_PATH   firstChangeId;
-        wxString    netName;
-        CHANGE_KIND kind;
-        BOX2I       bbox;
-        bool        hasBBox = false;
+        KIID_PATH              firstChangeId;
+        std::vector<KIID_PATH> changeIds;
+        wxString               netName;
+        CHANGE_KIND            kind;
+        BOX2I                  bbox;
+        bool                   hasBBox = false;
     };
 
 
@@ -248,6 +250,8 @@ namespace
         {
             auto& group = aNetGroups[std::make_pair( aChange.kind, *aChange.refdes )];
 
+            group.changeIds.push_back( aChange.id );
+
             if( !group.hasBBox )
             {
                 group.firstChangeId = aChange.id;
@@ -284,6 +288,9 @@ namespace
             SCENE_SHAPE shape;
             shape.bbox = group.bbox;
             shape.changeId = group.firstChangeId;
+
+            if( group.changeIds.size() > 1 )
+                shape.mergedChangeIds = group.changeIds;
             shape.color = ThemeColorFor( aTheme, cat );
             shape.label = wxS( "NET [" ) + group.netName + wxS( "]" );
 
@@ -456,21 +463,97 @@ DIFF_SCENE BuildScene( const DOCUMENT_DIFF& aDiff, const DIFF_COLOR_THEME& aThem
 }
 
 
-SIDE_BY_SIDE_SCENES SplitSceneBySide( const DIFF_SCENE& aScene )
+namespace
+{
+    // A net shape spans every segment it merged, which can each sit elsewhere in the older version
+    std::optional<BOX2I> olderShapeBox( const SCENE_SHAPE& aShape, const CHANGE_BOX_LOOKUP& aOlderBox )
+    {
+        std::optional<BOX2I> box;
+
+        if( !aOlderBox )
+            return box;
+
+        auto merge = [&]( const KIID_PATH& aChange )
+        {
+            std::optional<BOX2I> older = aOlderBox( aChange );
+
+            if( !older || older->GetWidth() <= 0 || older->GetHeight() <= 0 )
+                return;
+
+            if( box )
+                box->Merge( *older );
+            else
+                box = older;
+        };
+
+        if( aShape.mergedChangeIds.empty() )
+            merge( aShape.changeId );
+
+        for( const KIID_PATH& change : aShape.mergedChangeIds )
+            merge( change );
+
+        return box;
+    }
+} // namespace
+
+
+SIDE_BY_SIDE_SCENES SplitSceneBySide( const DIFF_SCENE& aScene, const CHANGE_BOX_LOOKUP& aOlderBox )
 {
     SIDE_BY_SIDE_SCENES sides;
 
     sides.reference = aScene;
     sides.reference.addedShapes.clear();
-    sides.reference.removedShapes.clear();
     sides.reference.modifiedShapes.clear();
     sides.reference.conflictShapes.clear();
     sides.reference.comparisonGeometry = {};
+
+    // A modified shape is the newer item's box, which is somewhere else in the older version once it moved
+    for( const SCENE_SHAPE& shape : aScene.modifiedShapes )
+    {
+        std::optional<BOX2I> older = olderShapeBox( shape, aOlderBox );
+
+        if( !older )
+            continue;
+
+        SCENE_SHAPE marked = shape;
+        marked.bbox = *older;
+        marked.polygons.clear();
+        sides.reference.modifiedShapes.push_back( std::move( marked ) );
+    }
 
     sides.comparison = aScene;
     sides.comparison.referenceGeometry = {};
 
     return sides;
+}
+
+
+std::optional<BOX2I> SideBySideFocusBox( const DIFF_SCENE& aScene, const CHANGE_BOX_LOOKUP& aOlderBox )
+{
+    for( const std::vector<SCENE_SHAPE>* shapes :
+         { &aScene.modifiedShapes, &aScene.addedShapes, &aScene.removedShapes } )
+    {
+        if( shapes->empty() )
+            continue;
+
+        const SCENE_SHAPE& first = shapes->front();
+        BOX2I              box = first.bbox;
+
+        if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
+            continue;
+
+        // The shape is the newer bbox, which misses an item that moved
+        if( std::optional<BOX2I> older = olderShapeBox( first, aOlderBox ) )
+            box.Merge( *older );
+
+        int minSide = IuScaleForDocKind( aScene.docKind ).mmToIU( 50 );
+        int padX = static_cast<int>( minSide - box.GetWidth() ) / 2;
+        int padY = static_cast<int>( minSide - box.GetHeight() ) / 2;
+        box.Inflate( std::max( 0, padX ), std::max( 0, padY ) );
+        return box;
+    }
+
+    return std::nullopt;
 }
 
 

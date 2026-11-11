@@ -205,6 +205,8 @@ void WIDGET_DIFF_CANVAS::SetContextItems( const std::vector<KIGFX::VIEW_ITEM*>& 
         m_hasNativeContext = true;
     }
 
+    indexContextItems();
+
     buildRenderScene();
     rebuildOverlay();
 }
@@ -234,22 +236,15 @@ void WIDGET_DIFF_CANVAS::HighlightChange( std::optional<KIID_PATH> aChangeId )
         m_hoverBox->shown = false;
     }
 
-    if( focusKiid )
+    KIGFX::VIEW_ITEM* item = focusKiid ? findContextItem( *focusKiid ) : nullptr;
+
+    if( item )
     {
         const KICAD_DIFF::DIFF_COLOR_THEME theme;
+        const BOX2I                        bb = item->ViewBBox();
 
-        for( KIGFX::VIEW_ITEM* item : m_contextGroupItems )
+        if( bb.GetWidth() > 0 && bb.GetHeight() > 0 )
         {
-            EDA_ITEM* eda = dynamic_cast<EDA_ITEM*>( item );
-
-            if( !eda || getItemId( *eda ) != *focusKiid )
-                continue;
-
-            const BOX2I bb = item->ViewBBox();
-
-            if( bb.GetWidth() <= 0 || bb.GetHeight() <= 0 )
-                break;
-
             auto           catIt = m_itemCategories.find( item );
             KIGFX::COLOR4D base = catIt != m_itemCategories.end() ? KICAD_DIFF::ThemeColorFor( theme, catIt->second )
                                                                   : theme.modified;
@@ -259,11 +254,46 @@ void WIDGET_DIFF_CANVAS::HighlightChange( std::optional<KIID_PATH> aChangeId )
             m_highlightBox->bbox = bb;
             m_highlightBox->color = base;
             m_highlightBox->shown = true;
-            break;
         }
     }
 
     rebuildOverlay( /*aOverlayOnly=*/true );
+}
+
+
+std::optional<BOX2I> WIDGET_DIFF_CANVAS::ContextItemBBox( const KIID& aItemId ) const
+{
+    // The box the differ gives the newer item, where a view box can add a margin such as clearance
+    if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( findContextItem( aItemId ) ) )
+        return item->GetBoundingBox();
+
+    return std::nullopt;
+}
+
+
+KIGFX::VIEW_ITEM* WIDGET_DIFF_CANVAS::findContextItem( const KIID& aItemId ) const
+{
+    auto it = m_contextItemsById.find( aItemId );
+    return it == m_contextItemsById.end() ? nullptr : it->second;
+}
+
+
+void WIDGET_DIFF_CANVAS::SetItemIdGetter( const ITEM_ID_GETTER& aGetter )
+{
+    m_itemIdGetter = aGetter;
+    indexContextItems();
+}
+
+
+void WIDGET_DIFF_CANVAS::indexContextItems()
+{
+    m_contextItemsById.clear();
+
+    for( KIGFX::VIEW_ITEM* item : m_contextGroupItems )
+    {
+        if( EDA_ITEM* eda = dynamic_cast<EDA_ITEM*>( item ) )
+            m_contextItemsById.try_emplace( getItemId( *eda ), item );
+    }
 }
 
 

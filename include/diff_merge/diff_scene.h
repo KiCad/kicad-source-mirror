@@ -34,6 +34,7 @@
 #include <wx/string.h>
 
 #include <array>
+#include <functional>
 #include <map>
 #include <optional>
 
@@ -97,6 +98,9 @@ struct KICOMMON_API SCENE_SHAPE
     /// and the rendered scene without relying on bbox equality (two distinct
     /// changes can share an enclosing rectangle).
     KIID_PATH changeId;
+
+    /// Every change a net shape merges, changeId first. Empty for a shape of a single change.
+    std::vector<KIID_PATH> mergedChangeIds;
 
     using PolygonList = std::vector<std::vector<std::vector<VECTOR2I>>>;
     PolygonList polygons;
@@ -335,10 +339,14 @@ KICOMMON_API CATEGORY CategoryFor( CHANGE_KIND aKind );
 KICOMMON_API void ExpandBBoxToGeometry( DIFF_SCENE& aScene );
 
 
+/// Gives the bounding box of a change's item in the older version, or std::nullopt where that version has none
+using CHANGE_BOX_LOOKUP = std::function<std::optional<BOX2I>( const KIID_PATH& )>;
+
+
 /**
- * The two halves of a side by side view. The reference half shows what was there, plain. The
- * comparison half shows what is there now, with every change marked on it. The documentBBox
- * goes to both, so the halves fit the same area.
+ * The two halves of a side by side view. The reference half shows what was there, with the removed and modified
+ * items marked where the older version has them. The comparison half shows what is there now, with every change
+ * marked on it. The documentBBox goes to both, so the halves fit the same area.
  */
 struct KICOMMON_API SIDE_BY_SIDE_SCENES
 {
@@ -346,7 +354,19 @@ struct KICOMMON_API SIDE_BY_SIDE_SCENES
     DIFF_SCENE comparison;
 };
 
-KICOMMON_API SIDE_BY_SIDE_SCENES SplitSceneBySide( const DIFF_SCENE& aScene );
+/// @param aOlderBox places the modified marks on the reference half, which leaves out an item it has no box for
+KICOMMON_API SIDE_BY_SIDE_SCENES SplitSceneBySide( const DIFF_SCENE& aScene, const CHANGE_BOX_LOOKUP& aOlderBox );
+
+
+/**
+ * The box both halves of a side by side view open on, so they start at the same place and pan together.
+ *
+ * It frames the first change in both versions, since a moved item sits somewhere else in the older one, and grows
+ * to at least 50 mm square so a small change is readable.
+ *
+ * @return std::nullopt when no change has an extent.
+ */
+KICOMMON_API std::optional<BOX2I> SideBySideFocusBox( const DIFF_SCENE& aScene, const CHANGE_BOX_LOOKUP& aOlderBox );
 
 
 /**

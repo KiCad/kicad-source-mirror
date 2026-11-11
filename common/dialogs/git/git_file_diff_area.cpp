@@ -19,7 +19,6 @@
 
 #include <dialogs/git/git_file_diff_area.h>
 
-#include <algorithm>
 #include <fstream>
 #include <optional>
 #include <utility>
@@ -44,32 +43,6 @@
 
 namespace
 {
-
-// Where to open the before and after canvases: on the first change, padded to a readable size.
-std::optional<BOX2I> firstChangeBox( const KICAD_DIFF::DIFF_SCENE& aScene, KICAD_DIFF::DOC_KIND aKind )
-{
-    for( const std::vector<KICAD_DIFF::SCENE_SHAPE>* shapes : { &aScene.modifiedShapes,
-                                                                &aScene.addedShapes,
-                                                                &aScene.removedShapes } )
-    {
-        if( shapes->empty() )
-            continue;
-
-        BOX2I box = shapes->front().bbox;
-
-        if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
-            continue;
-
-        int minSide = KICAD_DIFF::IuScaleForDocKind( aKind ).mmToIU( 50 );
-        int padX = static_cast<int>( minSide - box.GetWidth() ) / 2;
-        int padY = static_cast<int>( minSide - box.GetHeight() ) / 2;
-        box.Inflate( std::max( 0, padX ), std::max( 0, padY ) );
-        return box;
-    }
-
-    return std::nullopt;
-}
-
 
 std::string readAll( const wxString& aFile )
 {
@@ -282,12 +255,17 @@ bool GIT_FILE_DIFF_AREA::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxSt
     KICAD_DIFF::DIFF_SCENE       scene = KICAD_DIFF::BuildScene( diff, theme );
     scene.docKind = aKind;
 
+    KICAD_DIFF::CHANGE_BOX_LOOKUP olderBox = [this]( const KIID_PATH& aChange ) -> std::optional<BOX2I>
+    {
+        return aChange.empty() ? std::nullopt : m_beforeCanvas->ContextItemBBox( aChange.back() );
+    };
+
     // Both sides open on the same change. The user pans from there and the other side follows.
-    std::optional<BOX2I> focus = firstChangeBox( scene, aKind );
+    std::optional<BOX2I> focus = KICAD_DIFF::SideBySideFocusBox( scene, olderBox );
     m_beforeCanvas->SetFocusBox( focus );
     m_afterCanvas->SetFocusBox( focus );
 
-    KICAD_DIFF::SIDE_BY_SIDE_SCENES sides = KICAD_DIFF::SplitSceneBySide( scene );
+    KICAD_DIFF::SIDE_BY_SIDE_SCENES sides = KICAD_DIFF::SplitSceneBySide( scene, olderBox );
 
     m_beforeLabel->SetLabel( aBeforeLabel );
     m_afterLabel->SetLabel( aAfterLabel );

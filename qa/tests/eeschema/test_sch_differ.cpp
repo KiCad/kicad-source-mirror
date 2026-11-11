@@ -24,8 +24,11 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <schematic_utils/schematic_file_util.h>
 
+#include <algorithm>
+
 #include <diff_merge/sch_differ.h>
 
+#include <diff_merge/diff_scene.h>
 #include <diff_merge/kicad_diff_types.h>
 #include <diff_merge/sch_geometry_extractor.h>
 
@@ -397,6 +400,84 @@ BOOST_AUTO_TEST_CASE( ExtractSchematicGeometryProducesDrawableContext )
 
     BOOST_CHECK( !geometry.Empty() );
     BOOST_CHECK( BBoxFromGeometry( geometry ).has_value() );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+// Both symbols moved further than the focus box is wide
+struct SIDE_BY_SIDE_FIXTURE
+{
+    SIDE_BY_SIDE_FIXTURE()
+    {
+        KI_TEST::LoadSchematic( m_settingsOlder, "side_by_side_focus/sensor-board-d76bd49f", m_older );
+        KI_TEST::LoadSchematic( m_settingsNewer, "side_by_side_focus/sensor-board-977fc611", m_newer );
+        BOOST_REQUIRE( m_older && m_newer );
+
+        SCH_DIFFER differ( m_older.get(), m_newer.get(), wxS( "sensor-board.kicad_sch" ) );
+        m_scene = BuildScene( differ.Diff(), DIFF_COLOR_THEME() );
+        m_scene.docKind = DOC_KIND::SCH;
+        BOOST_REQUIRE( !m_scene.modifiedShapes.empty() );
+    }
+
+    // What the before canvas gives the panel for a change, its root sheet item's bounding box
+    std::optional<BOX2I> olderBox( const KIID_PATH& aChange ) const
+    {
+        for( SCH_ITEM* item : m_older->RootScreen()->Items() )
+        {
+            if( item->m_Uuid == aChange.back() )
+                return item->GetBoundingBox();
+        }
+
+        return std::nullopt;
+    }
+
+    SETTINGS_MANAGER           m_settingsOlder;
+    SETTINGS_MANAGER           m_settingsNewer;
+    std::unique_ptr<SCHEMATIC> m_older;
+    std::unique_ptr<SCHEMATIC> m_newer;
+    DIFF_SCENE                 m_scene;
+};
+
+
+BOOST_FIXTURE_TEST_SUITE( SchSideBySideFocus, SIDE_BY_SIDE_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( FocusFramesMovedSymbolInOlderVersion )
+{
+    std::optional<BOX2I> focus = SideBySideFocusBox( m_scene,
+                                                     [this]( const KIID_PATH& aChange )
+                                                     {
+                                                         return olderBox( aChange );
+                                                     } );
+    std::optional<BOX2I> before = olderBox( m_scene.modifiedShapes.front().changeId );
+
+    BOOST_REQUIRE( focus && before );
+    BOOST_CHECK( focus->Contains( *before ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( OlderSideMarksMovedSymbolWhereItWas )
+{
+    SIDE_BY_SIDE_SCENES sides = SplitSceneBySide( m_scene,
+                                                  [this]( const KIID_PATH& aChange )
+                                                  {
+                                                      return olderBox( aChange );
+                                                  } );
+
+    const SCENE_SHAPE&   moved = m_scene.modifiedShapes.front();
+    std::optional<BOX2I> before = olderBox( moved.changeId );
+    BOOST_REQUIRE( before && *before != moved.bbox );
+
+    auto marked = std::ranges::find_if( sides.reference.modifiedShapes,
+                                        [&]( const SCENE_SHAPE& aShape )
+                                        {
+                                            return aShape.changeId == moved.changeId;
+                                        } );
+
+    BOOST_REQUIRE( marked != sides.reference.modifiedShapes.end() );
+    BOOST_CHECK( marked->bbox == *before );
 }
 
 

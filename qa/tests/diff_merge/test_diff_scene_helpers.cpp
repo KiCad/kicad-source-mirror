@@ -29,6 +29,7 @@
 #include <diff_merge/kicad_merge_engine.h>
 
 #include <algorithm>
+#include <map>
 
 
 using namespace KICAD_DIFF;
@@ -60,8 +61,7 @@ BOOST_AUTO_TEST_CASE( PaintOrderIsExhaustiveAndUnique )
 
 // SplitSceneBySide ------------------------------------------------------------
 
-// A side by side view draws the old document plain, and the new document with every change
-// marked. The fit area is shared so the halves line up.
+// Each change is marked on the half whose document has the item, and the halves share one fit area
 BOOST_AUTO_TEST_CASE( SplitSceneBySideKeepsEachHalfToItsOwnDocument )
 {
     DIFF_SCENE scene;
@@ -91,11 +91,17 @@ BOOST_AUTO_TEST_CASE( SplitSceneBySideKeepsEachHalfToItsOwnDocument )
     after.radius = 2;
     scene.comparisonGeometry.circles.push_back( after );
 
-    SIDE_BY_SIDE_SCENES sides = SplitSceneBySide( scene );
+    const BOX2I         olderBox( VECTOR2I( 50, 50 ), VECTOR2I( 10, 10 ) );
+    SIDE_BY_SIDE_SCENES sides = SplitSceneBySide( scene,
+                                                  [&]( const KIID_PATH& ) -> std::optional<BOX2I>
+                                                  {
+                                                      return olderBox;
+                                                  } );
 
     BOOST_CHECK( sides.reference.addedShapes.empty() );
-    BOOST_CHECK( sides.reference.removedShapes.empty() );
-    BOOST_CHECK( sides.reference.modifiedShapes.empty() );
+    BOOST_CHECK_EQUAL( sides.reference.removedShapes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( sides.reference.modifiedShapes.size(), 1u );
+    BOOST_CHECK( sides.reference.modifiedShapes.front().bbox == olderBox );
     BOOST_CHECK( sides.reference.conflictShapes.empty() );
     BOOST_CHECK_EQUAL( sides.reference.referenceGeometry.segments.size(), 1u );
     BOOST_CHECK( sides.reference.comparisonGeometry.Empty() );
@@ -111,6 +117,40 @@ BOOST_AUTO_TEST_CASE( SplitSceneBySideKeepsEachHalfToItsOwnDocument )
     BOOST_CHECK( sides.comparison.docKind == DOC_KIND::SCH );
     BOOST_CHECK( sides.reference.documentBBox == scene.documentBBox );
     BOOST_CHECK( sides.comparison.documentBBox == scene.documentBBox );
+}
+
+
+// Two segments of one net change apart, and the net is one merged box on each half
+BOOST_AUTO_TEST_CASE( SplitSceneBySideSpansEverySegmentOfANet )
+{
+    DOCUMENT_DIFF              diff;
+    std::map<KIID_PATH, BOX2I> older;
+
+    for( int x : { 0, 1000 } )
+    {
+        ITEM_CHANGE change;
+        change.id.push_back( KIID() );
+        change.typeName = wxS( "PCB_TRACK" );
+        change.refdes = wxS( "GND" );
+        change.kind = CHANGE_KIND::MODIFIED;
+        change.bbox = BOX2I( VECTOR2I( x, 0 ), VECTOR2I( 10, 10 ) );
+        older[change.id] = BOX2I( VECTOR2I( x, 500 ), VECTOR2I( 10, 10 ) );
+        diff.changes.push_back( change );
+    }
+
+    DIFF_SCENE scene = BuildScene( diff, DIFF_COLOR_THEME() );
+    BOOST_REQUIRE_EQUAL( scene.modifiedShapes.size(), 1u );
+
+    SIDE_BY_SIDE_SCENES sides = SplitSceneBySide( scene,
+                                                  [&]( const KIID_PATH& aChange ) -> std::optional<BOX2I>
+                                                  {
+                                                      return older.at( aChange );
+                                                  } );
+
+    BOOST_REQUIRE_EQUAL( sides.reference.modifiedShapes.size(), 1u );
+
+    for( const auto& [change, box] : older )
+        BOOST_CHECK( sides.reference.modifiedShapes.front().bbox.Contains( box ) );
 }
 
 

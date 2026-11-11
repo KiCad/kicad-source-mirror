@@ -33,6 +33,7 @@
 #include <memory>
 #include <optional>
 #include <set>
+#include <unordered_map>
 #include <vector>
 
 class EDA_ITEM;
@@ -107,7 +108,7 @@ public:
 
     /// Override context item identity when a differ uses IDs other than the item UUID.
     using ITEM_ID_GETTER = std::function<KIID( const EDA_ITEM& )>;
-    void SetItemIdGetter( const ITEM_ID_GETTER& aGetter ) { m_itemIdGetter = aGetter; }
+    void SetItemIdGetter( const ITEM_ID_GETTER& aGetter );
 
     /// Kiface-supplied callback that dims/undims a context item.
     using DIMMER = std::function<void( KIGFX::VIEW_ITEM*, bool aDim )>;
@@ -118,6 +119,9 @@ public:
     /// example — and all matching shapes get the highlight treatment. Pass
     /// std::nullopt to clear.
     void HighlightChange( std::optional<KIID_PATH> aChangeId );
+
+    /// Bounding box of the context item with this id, or std::nullopt when no context item has it.
+    std::optional<BOX2I> ContextItemBBox( const KIID& aItemId ) const;
 
     /// Toggle whether shapes of a given change category render. Defaults
     /// to all visible.
@@ -188,6 +192,10 @@ private:
 
     KIID getItemId( const EDA_ITEM& aItem ) const;
 
+    KIGFX::VIEW_ITEM* findContextItem( const KIID& aItemId ) const;
+
+    void indexContextItems();
+
     /// Hit test in screen coordinates → topmost SCENE_SHAPE under the cursor.
     const KICAD_DIFF::SCENE_SHAPE* shapeAt( const wxPoint& aScreenPoint ) const;
 
@@ -231,6 +239,9 @@ private:
     bool m_hasNativeContext = false;
     std::unique_ptr<KIGFX::VIEW_GROUP>                m_contextGroup;
     std::vector<KIGFX::VIEW_ITEM*>                    m_contextGroupItems;
+
+    /// The context items by id, the first of an id winning, so a lookup never walks a whole board
+    std::unordered_map<KIID, KIGFX::VIEW_ITEM*>       m_contextItemsById;
     std::shared_ptr<const void>                       m_contextOwner;
     std::map<KIGFX::VIEW_ITEM*, KICAD_DIFF::CATEGORY> m_itemCategories;
     std::shared_ptr<KIGFX::VIEW_OVERLAY>              m_overlay;
