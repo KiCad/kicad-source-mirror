@@ -155,7 +155,8 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilo
 
     int rrClearance = m_ruleResolver->Clearance( aA, aB, aUseClearanceEpsilon );
 
-    if( rrClearance > 0 && aOpts.m_overrideClearance )
+    // Same-net pairs resolve to -1, so honor the override when they are searched explicitly
+    if( aOpts.m_overrideClearance && ( rrClearance > 0 || !aOpts.m_differentNetsOnly ) )
     {
         int overriddenClearance = aOpts.m_overrideClearance( aA, aB, CLEARANCE_ASPECT::ASP_DEFAULT );
         
