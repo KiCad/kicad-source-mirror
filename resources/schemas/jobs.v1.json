@@ -19,7 +19,7 @@
           "items": {
             "$ref": "#/definitions/Job"
           }
-        },
+        }
     },
     "required": [
         "meta",
@@ -41,7 +41,7 @@
             },
             "settings": {
               "type": "object"
-            },
+            }
           },
           "required": [
             "meta",
@@ -61,6 +61,6 @@
           "required": [
             "version"
           ]
-        },
+        }
     }
 }
