@@ -659,31 +659,26 @@ private:
     void unhighlightInternal( EDA_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
 
 private:
-    PCB_BASE_FRAME*          m_frame;                // Pointer to the parent frame
+    PCB_BASE_FRAME*          m_frame;                ///< Pointer to the parent frame
     bool                     m_isFootprintEditor;
 
-    PCB_SELECTION            m_selection;            // Current state of selection
+    PCB_SELECTION            m_selection;            ///< Current state of selection
 
-    PCB_SELECTION m_blockedSelection; // Empty selection returned when locked items
-                                      // block an action, real selection stays intact
+    PCB_SELECTION            m_blockedSelection;     ///< Empty selection returned when locked items block an action,
+                                                     ///<   real selection stays intact
 
     PCB_SELECTION_FILTER_OPTIONS m_filter;
 
-    KICURSOR                 m_nonModifiedCursor;    // Cursor in the absence of shift/ctrl/alt
+    PCB_GROUP*               m_enteredGroup;         ///< If non-null, selections are limited to members of this group
+    KIGFX::VIEW_GROUP        m_enteredGroupOverlay;  ///< Overlay for the entered group's frame.
 
-    PCB_GROUP*               m_enteredGroup;         // If non-null, selections are limited to
-                                                     // members of this group
-    KIGFX::VIEW_GROUP        m_enteredGroupOverlay;  // Overlay for the entered group's frame.
-
-    SELECTION_MODE           m_selectionMode;        // Current selection mode
+    SELECTION_MODE           m_selectionMode;        ///< Current selection mode
 
     bool                     m_lockedItemsFiltered;
 
-    /// Anchor cell for shift+click range selection in a PCB_TABLE.
-    PCB_TABLECELL*           m_previousFirstCell;
+    PCB_TABLECELL*           m_previousFirstCell;    ///< Anchor cell for shift+click range selection in a PCB_TABLE.
 
-    /// Private state (opaque pointer/compilation firewall)
-    class PRIV;
+    class PRIV;                                      ///< Private state (opaque pointer/compilation firewall)
     std::unique_ptr<PRIV>    m_priv;
 };
 
