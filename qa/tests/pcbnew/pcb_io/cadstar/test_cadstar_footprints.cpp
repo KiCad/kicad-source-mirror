@@ -220,4 +220,26 @@ BOOST_AUTO_TEST_CASE( UnknownReassignShapeIsSkipped )
 }
 
 
+/**
+ * A part with more pins than its footprint has pads must still have its pads named after the pins.
+ */
+BOOST_AUTO_TEST_CASE( CadstarPartPinsExceedPads )
+{
+    wxString filePath = KI_TEST::GetPcbnewTestDataDir() + "plugins/cadstar/pin_names/test3_pinname_pads.cpa";
+
+    std::unique_ptr<BOARD> board = cstarPlugin.LoadBoard( filePath );
+    BOOST_REQUIRE( board != nullptr );
+
+    FOOTPRINT* j1 = board->FindFootprintByReference( wxT( "J1" ) );
+    BOOST_REQUIRE( j1 != nullptr );
+
+    const std::vector<wxString> expected{ wxT( "N" ), wxT( "E" ), wxT( "L" ), wxT( "E2" ) };
+
+    BOOST_REQUIRE_EQUAL( j1->Pads().size(), expected.size() );
+
+    for( size_t i = 0; i < expected.size(); ++i )
+        BOOST_CHECK_EQUAL( j1->Pads()[i]->GetNumber(), expected[i] );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

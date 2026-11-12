@@ -1790,25 +1790,42 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         {
             PART part = Parts.PartDefinitions.at( comp.PartID );
 
-            // Only do this when the number of pins in the part definition equals the number of
-            // pads in the footprint.
-            if( part.Definition.Pins.size() == footprint->Pads().size() )
+            // CADSTAR joins a part pin to the pad with the same identifier, so the pin count may
+            // exceed the pad count. Renames are collected first so one cannot capture another
+            std::map<wxString, std::vector<PAD*>> padsByIdentifier;
+
+            for( PAD* pad : footprint->Pads() )
+                padsByIdentifier[pad->GetNumber()].push_back( pad );
+
+            std::map<PAD*, wxString> renames;
+            const bool               sameCount = part.Definition.Pins.size() == footprint->Pads().size();
+
+            for( const auto& [pinID, pin] : part.Definition.Pins )
             {
-                for( std::pair<PART_DEFINITION_PIN_ID, PART::DEFINITION::PIN> pinPair :
-                        part.Definition.Pins )
-                {
-                    PART::DEFINITION::PIN pin = pinPair.second;
-                    wxString              pinName = pin.Name;
+                wxString pinName = pin.Name;
 
-                    if( pinName.empty() )
-                        pinName = pin.Identifier;
+                if( pinName.empty() )
+                    pinName = pin.Identifier;
 
-                    if( pinName.empty() )
-                        pinName = wxString::Format( wxT( "%ld" ), pin.ID );
+                if( pinName.empty() )
+                    pinName = wxString::Format( wxT( "%ld" ), pin.ID );
 
-                    getPadReference( footprint, pin.ID )->SetNumber( pinName );
-                }
+                std::vector<PAD*> targets;
+
+                auto it = padsByIdentifier.find( pin.Identifier );
+
+                // PCB-only pads have no identifier and must not match a pin without one
+                if( !pin.Identifier.empty() && it != padsByIdentifier.end() )
+                    targets = it->second;
+                else if( sameCount )
+                    targets.push_back( getPadReference( footprint, pin.ID ) );
+
+                for( PAD* pad : targets )
+                    renames.emplace( pad, pinName );
             }
+
+            for( const auto& [pad, name] : renames )
+                pad->SetNumber( name );
         }
 
         //Override pads with pad exceptions
