@@ -73,6 +73,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/easyeda/test_easyeda_sch_import.cpp
     sch_io/orcad/test_orcad_sch_import.cpp
     sch_io/cadstar/test_issue14447_arc_connection.cpp
+    sch_io/cadstar/test_issue26030_net_label_split.cpp
     sch_io/cadstar/test_issue26031_wire_over_pin.cpp
     sch_io/kicad_sexpr/test_sch_io_kicad_sexpr_leak_cache.cpp
 
