@@ -347,8 +347,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         cadstarBoardStackup.back().ConstructionLayers.clear();
     }
 
+    const int sourceCopperLayers = m_numCopperLayers;
+
     // Make sure it is an even number of layers (KiCad doesn't yet support unbalanced stack-ups)
-    if( ( m_numCopperLayers % 2 ) != 0 )
+    if( cadstarBoardStackup.size() == 1 )
+    {
+        // Single-sided board gets an empty back copper layer
+        cadstarBoardStackup.emplace_back();
+        ++m_numCopperLayers;
+    }
+    else if( ( m_numCopperLayers % 2 ) != 0 )
     {
         LAYER_BLOCK bottomLayer = cadstarBoardStackup.back();
         cadstarBoardStackup.pop_back();
@@ -560,7 +568,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         auto selectLayerID =
             [&]( PCB_LAYER_ID aFront, PCB_LAYER_ID aBack, LOG_LEVEL aLogType )
             {
-                bool isBack = numElecLayersProcessed >= m_numCopperLayers;
+                // Padding layers have no CADSTAR counterpart to count
+                bool isBack = numElecLayersProcessed >= sourceCopperLayers;
 
                 // Stack order is only a fallback, it says nothing about the side
                 if( curLayer.Type == LAYER_TYPE::NONELEC && curLayer.PhysicalLayer != UNDEFINED_PHYSICAL_LAYER )
