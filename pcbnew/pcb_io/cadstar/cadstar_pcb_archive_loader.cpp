@@ -528,6 +528,17 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
     int numElecLayersProcessed = 0;
 
+    // Non-electrical layers name their side through the physical layer they sit on
+    PHYSICAL_LAYER_ID bottomPhysicalLayer = 1;
+
+    for( const LAYER_ID& cadstarLayerID : Assignments.Layerdefs.LayerStack )
+    {
+        const LAYER& layer = Assignments.Layerdefs.Layers.at( cadstarLayerID );
+
+        if( layer.Type == LAYER_TYPE::ELEC || layer.Type == LAYER_TYPE::POWER )
+            bottomPhysicalLayer = std::max( bottomPhysicalLayer, layer.PhysicalLayer );
+    }
+
     // Map CADSTAR documentation layers to KiCad "User layers"
     int                       currentDocLayer = 0;
     std::vector<PCB_LAYER_ID> docLayers = { Dwgs_User, Cmts_User, User_1, User_2, User_3, User_4,
@@ -549,10 +560,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         auto selectLayerID =
             [&]( PCB_LAYER_ID aFront, PCB_LAYER_ID aBack, LOG_LEVEL aLogType )
             {
-                if( numElecLayersProcessed >= m_numCopperLayers )
-                    kicadLayerID = aBack;
-                else
-                    kicadLayerID = aFront;
+                bool isBack = numElecLayersProcessed >= m_numCopperLayers;
+
+                // Stack order is only a fallback, it says nothing about the side
+                if( curLayer.Type == LAYER_TYPE::NONELEC && curLayer.PhysicalLayer != UNDEFINED_PHYSICAL_LAYER )
+                {
+                    if( curLayer.PhysicalLayer <= 1 )
+                        isBack = false;
+                    else if( curLayer.PhysicalLayer >= bottomPhysicalLayer )
+                        isBack = true;
+                }
+
+                kicadLayerID = isBack ? aBack : aFront;
 
                 switch( aLogType )
                 {
