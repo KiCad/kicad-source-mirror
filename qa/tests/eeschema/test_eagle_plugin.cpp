@@ -37,6 +37,8 @@
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_sheet_path.h>
+#include <connection_graph.h>
+#include <sch_connection.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
@@ -728,4 +730,81 @@ BOOST_AUTO_TEST_CASE( BinaryLongStringsFollowRecordOrder )
     // The blob holds a part's long value before its long name
     BOOST_REQUIRE( led );
     BOOST_CHECK( led->GetField( FIELD_T::REFERENCE )->GetText().StartsWith( wxS( "PWR_LED" ) ) );
+}
+
+
+// Name of the net a symbol pin sits on, after the connection graph has been built
+static wxString eagleNetOf( const SCH_SHEET_LIST& aSheets, const wxString& aRef, const wxString& aPinNumber )
+{
+    for( const SCH_SHEET_PATH& sheetPath : aSheets )
+    {
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol->GetRef( &sheetPath ) != aRef )
+                continue;
+
+            for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
+            {
+                if( pin->GetNumber() == aPinNumber && pin->Connection( &sheetPath ) )
+                    return pin->Connection( &sheetPath )->Name();
+            }
+        }
+    }
+
+    BOOST_ERROR( "pin has no connection" );
+
+    return wxString();
+}
+
+
+// a wire end of one Eagle net landing mid-wire on another must not merge the two nets in KiCad
+BOOST_AUTO_TEST_CASE( TouchingWireEndsKeepNetsSeparate )
+{
+    const wxFileName eagleFn = getEagleTestSchematic( "issue24829_brenner.sch" );
+    BOOST_REQUIRE( wxFileExists( eagleFn.GetFullPath() ) );
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_touching_nets" ), schematic );
+
+    // The editor joins a wire end lying on another wire the same way when it cleans up after import
+    schematic->FixupJunctionsAfterImport();
+
+    const SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
+    schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    auto netOf = [&]( const wxString& aRef, const wxString& aPinNumber )
+    {
+        return eagleNetOf( sheets, aRef, aPinNumber );
+    };
+
+    BOOST_CHECK_EQUAL( netOf( wxS( "R13" ), wxS( "1" ) ), wxString( wxS( "VPP_8_14_18" ) ) );
+    BOOST_CHECK_EQUAL( netOf( wxS( "IC1" ), wxS( "7" ) ), wxString( wxS( "VPP_8_14_18" ) ) );
+    BOOST_CHECK_EQUAL( netOf( wxS( "Q5" ), wxS( "E" ) ), wxString( wxS( "VDD" ) ) );
+}
+
+
+// a pin lying on a wire of another Eagle net must not join the two nets in KiCad
+BOOST_AUTO_TEST_CASE( WireOverForeignPinKeepsNetsSeparate )
+{
+    const wxFileName eagleFn = getEagleTestSchematic( "issue26039_wire_over_pin.sch" );
+    BOOST_REQUIRE( wxFileExists( eagleFn.GetFullPath() ) );
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_wire_over_pin" ), schematic );
+
+    schematic->FixupJunctionsAfterImport();
+
+    const SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
+    schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    // R1.2 ends one wire on the wire running R3 to R4, R5.1 ends one on the wire running R7 to R8
+    BOOST_CHECK_EQUAL( eagleNetOf( sheets, wxS( "R1" ), wxS( "2" ) ), eagleNetOf( sheets, wxS( "R2" ), wxS( "1" ) ) );
+    BOOST_CHECK_EQUAL( eagleNetOf( sheets, wxS( "R3" ), wxS( "1" ) ), eagleNetOf( sheets, wxS( "R4" ), wxS( "2" ) ) );
+    BOOST_CHECK_NE( eagleNetOf( sheets, wxS( "R1" ), wxS( "2" ) ), eagleNetOf( sheets, wxS( "R3" ), wxS( "1" ) ) );
+
+    BOOST_CHECK_EQUAL( eagleNetOf( sheets, wxS( "R5" ), wxS( "1" ) ), eagleNetOf( sheets, wxS( "R6" ), wxS( "2" ) ) );
+    BOOST_CHECK_EQUAL( eagleNetOf( sheets, wxS( "R7" ), wxS( "1" ) ), eagleNetOf( sheets, wxS( "R8" ), wxS( "2" ) ) );
+    BOOST_CHECK_NE( eagleNetOf( sheets, wxS( "R5" ), wxS( "1" ) ), eagleNetOf( sheets, wxS( "R7" ), wxS( "1" ) ) );
 }

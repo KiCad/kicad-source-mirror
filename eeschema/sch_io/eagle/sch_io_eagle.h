@@ -28,6 +28,7 @@
 #include <sch_line.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
+#include <sch_io/sch_io_wire_detour.h>
 #include <io/eagle/eagle_parser.h>
 #include <geometry/seg.h>
 
@@ -145,8 +146,17 @@ private:
     std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const VECTOR2I&         aPoint,
                                                           const std::vector<SEG>& aLines ) const;
 
+    /// Wires and the pins and junctions around them on one sheet, for keeping wires off other nets' pins
+    struct SHEET_WIRING
+    {
+        SCH_IO_WIRE_DETOUR      Detour;
+        std::map<wxString, int> NetIds;
+    };
+
+    SHEET_WIRING collectSheetWiring( const std::unique_ptr<ESHEET>& aSheet, SCH_SCREEN* aScreen );
+
     void          loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments, const wxString& aNetName,
-                                const wxString& aNetClass, bool aIsBus = false );
+                                const wxString& aNetClass, SHEET_WIRING& aWiring, bool aIsBus = false );
     SCH_SHAPE*    loadPolyLine( const std::unique_ptr<EPOLYGON>& aPolygon );
     SCH_ITEM*     loadWire( const std::unique_ptr<EWIRE>& aWire, SEG& endpoints );
     SCH_SHAPE*    loadCircle( const std::unique_ptr<ECIRCLE>& aCircle );

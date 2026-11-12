@@ -1020,6 +1020,8 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
                                                       : m_eagleDoc->drawing->schematic->parts );
     }
 
+    SHEET_WIRING wiring = collectSheetWiring( aSheet, screen );
+
     // Loop through all buses
     // From the DTD: "Buses receive names which determine which signals they include.
     // A bus is a drawing object. It does not create any electrical connections.
@@ -1030,7 +1032,7 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         wxString busName = translateEagleBusName( ebus->name );
 
         // Load segments of this bus
-        loadSegments( ebus->segments, busName, wxString(), /* aIsBus */ true );
+        loadSegments( ebus->segments, busName, wxString(), wiring, /* aIsBus */ true );
     }
 
     for( const std::unique_ptr<ENET>& enet : aSheet->nets )
@@ -1040,7 +1042,7 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         wxString netClass = wxString::Format( wxS( "%i" ), enet->netcode );
 
         // Load segments of this net
-        loadSegments( enet->segments, netName, netClass );
+        loadSegments( enet->segments, netName, netClass, wiring );
     }
 
     adjustNetLabels(); // needs to be called before addBusEntries()
@@ -1471,8 +1473,85 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
 }
 
 
+SCH_IO_EAGLE::SHEET_WIRING SCH_IO_EAGLE::collectSheetWiring( const std::unique_ptr<ESHEET>& aSheet,
+                                                              SCH_SCREEN* aScreen )
+{
+    SHEET_WIRING             wiring;
+    std::map<VECTOR2I, int>  netAt;
+
+    for( const std::unique_ptr<ENET>& enet : aSheet->nets )
+    {
+        auto netId = wiring.NetIds.try_emplace( enet->netname, static_cast<int>( wiring.NetIds.size() ) + 1 ).first;
+        const int net = netId->second;
+
+        for( const std::unique_ptr<ESEGMENT>& esegment : enet->segments )
+        {
+            std::vector<SEG> segmentWires;
+
+            for( const std::unique_ptr<EWIRE>& ewire : esegment->wires )
+            {
+                if( kiCadLayer( ewire->layer ) != LAYER_WIRE )
+                    continue;
+
+                SEG seg( VECTOR2I( ewire->x1.ToSchUnits(), -ewire->y1.ToSchUnits() ),
+                         VECTOR2I( ewire->x2.ToSchUnits(), -ewire->y2.ToSchUnits() ) );
+
+                wiring.Detour.AddWire( seg, net );
+                segmentWires.push_back( seg );
+                netAt.try_emplace( seg.A, net );
+                netAt.try_emplace( seg.B, net );
+            }
+
+            for( const std::unique_ptr<EJUNCTION>& ejunction : esegment->junctions )
+            {
+                VECTOR2I pos( ejunction->x.ToSchUnits(), -ejunction->y.ToSchUnits() );
+
+                wiring.Detour.AddContact( pos, net );
+                netAt.try_emplace( pos, net );
+            }
+
+            // A detached label is moved onto its wire later, so only labels already on a wire are obstacles
+            for( const std::unique_ptr<ELABEL>& elabel : esegment->labels )
+            {
+                const VECTOR2I pos( elabel->x.ToSchUnits(), -elabel->y.ToSchUnits() );
+
+                if( std::any_of( segmentWires.begin(), segmentWires.end(),
+                                 [&]( const SEG& aSeg )
+                                 {
+                                     return aSeg.Contains( pos );
+                                 } ) )
+                {
+                    wiring.Detour.AddContact( pos, net );
+                }
+            }
+        }
+    }
+
+    // Eagle joins a pin only where a wire of its net ends
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        int         unit = symbol->GetUnit();
+
+        for( const SCH_PIN* pin : symbol->GetLibPins() )
+        {
+            if( unit && pin->GetUnit() && pin->GetUnit() != unit )
+                continue;
+
+            const VECTOR2I pos = symbol->GetPinPhysicalPosition( pin );
+            auto           it = netAt.find( pos );
+
+            wiring.Detour.AddContact( pos, it != netAt.end() ? it->second : wiring.Detour.AnonymousNet() );
+        }
+    }
+
+    return wiring;
+}
+
+
 void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments,
-                                 const wxString& netName, const wxString& aNetClass, bool aIsBus )
+                                 const wxString& netName, const wxString& aNetClass,
+                                 SHEET_WIRING& aWiring, bool aIsBus )
 {
     // Loop through all segments
     SCH_SCREEN* screen = getCurrentScreen();
@@ -1492,36 +1571,77 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
 
         for( const std::unique_ptr<EWIRE>& ewire : esegment->wires )
         {
-            // TODO: Check how intersections used in adjustNetLabels should be
-            // calculated - for now we pretend that all wires are line segments.
-            SEG thisWire;
-            SCH_ITEM* wire = loadWire( ewire, thisWire );
-            m_connPoints[thisWire.A].emplace( wire );
-            m_connPoints[thisWire.B].emplace( wire );
+            SEG       eagleWire;
+            SCH_ITEM* wire = loadWire( ewire, eagleWire );
 
-            if( !firstWireFound )
+            std::vector<SEG>       pieces = { eagleWire };
+            std::vector<SCH_ITEM*> items = { wire };
+
+            if( !aIsBus && wire->GetLayer() == LAYER_WIRE )
             {
-                firstWire = thisWire;
-                firstWireFound = true;
-            }
+                SCH_IO_WIRE_DETOUR::RESULT detour =
+                        aWiring.Detour.Route( eagleWire, aWiring.NetIds[netName] );
 
-            // Test for intersections with other wires
-            for( SEG_DESC& desc : m_segments )
-            {
-                if( !desc.labels.empty() && desc.labels.front()->GetText() == netName )
-                    continue; // no point in saving intersections of the same net
+                pieces = detour.Pieces;
 
-                for( const SEG& seg : desc.segs )
+                if( detour.Failed )
                 {
-                    OPT_VECTOR2I intersection = thisWire.Intersect( seg, true );
-
-                    if( intersection )
-                        m_wireIntersections.push_back( *intersection );
+                    Report( wxString::Format( _( "A wire of net %s passes over a pin or wire of another net and could "
+                                                 "not be rerouted. The nets may be joined and require manual fixing." ),
+                                              netName ),
+                            RPT_SEVERITY_WARNING );
                 }
             }
 
-            segDesc.segs.push_back( thisWire );
-            screen->Append( wire );
+            for( size_t i = 1; i < pieces.size(); i++ )
+            {
+                SCH_LINE* piece = new SCH_LINE;
+
+                piece->SetLayer( LAYER_WIRE );
+                piece->SetStroke( static_cast<SCH_LINE*>( wire )->GetStroke() );
+                items.push_back( piece );
+            }
+
+            for( size_t i = 0; i < pieces.size(); i++ )
+            {
+                if( pieces.size() > 1 )
+                {
+                    SCH_LINE* line = static_cast<SCH_LINE*>( items[i] );
+
+                    line->SetStartPoint( pieces[i].A );
+                    line->SetEndPoint( pieces[i].B );
+                }
+
+                // TODO: Check how intersections used in adjustNetLabels should be
+                // calculated - for now we pretend that all wires are line segments.
+                const SEG& thisWire = pieces[i];
+                m_connPoints[thisWire.A].emplace( items[i] );
+                m_connPoints[thisWire.B].emplace( items[i] );
+
+                if( !firstWireFound )
+                {
+                    firstWire = thisWire;
+                    firstWireFound = true;
+                }
+
+                // Test for intersections with other wires
+                for( SEG_DESC& desc : m_segments )
+                {
+                    if( !desc.labels.empty() && desc.labels.front()->GetText() == netName )
+                        continue; // no point in saving intersections of the same net
+
+                    for( const SEG& seg : desc.segs )
+                    {
+                        OPT_VECTOR2I intersection = thisWire.Intersect( seg, true );
+
+                        if( intersection )
+                            m_wireIntersections.push_back( *intersection );
+                    }
+                }
+
+                segDesc.segs.push_back( thisWire );
+                screen->Append( items[i] );
+            }
         }
 
         for( const std::unique_ptr<EJUNCTION>& ejunction : esegment->junctions )

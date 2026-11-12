@@ -105,6 +105,7 @@ set( EESCHEMA_SCH_IO
     sch_io/pads/pads_sch_sdb.cpp
     sch_io/ole_emf.cpp
     sch_io/ole_image.cpp
+    sch_io/sch_io_wire_detour.cpp
 
     # DipTrace IO plugin
     sch_io/diptrace/sch_io_diptrace.cpp
