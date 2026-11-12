@@ -159,11 +159,16 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
         wxASSERT( m_symDefTerminalsMap.count( symbolID ) ); //loadSymDef should have populated this
 
 
-        // Update the pin numbers to match those defined in the Cadstar part
+        // Look up every terminal's pins before renumbering, as a new number can match a later terminal
+        std::vector<std::pair<TERMINAL_ID, std::vector<SCH_PIN*>>> terminalPins;
+
         for( auto& [storedPinNum, termID] : m_symDefTerminalsMap[symbolID] )
+            terminalPins.emplace_back( termID, kiSymDef->GetPinsByNumber( storedPinNum ) );
+
+        // Update the pin numbers to match those defined in the Cadstar part
+        for( auto& [termID, pins] : terminalPins )
         {
             wxCHECK( termID > 0 && sym.m_Pins.size() >= size_t( termID ), nullptr );
-            std::vector<SCH_PIN*> pins = kiSymDef->GetPinsByNumber( storedPinNum );
             size_t                termIdx = size_t( termID ) - 1;
 
             // For now leave numerical pin number. Otherwise, when loading the
@@ -1998,13 +2003,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
     std::unique_ptr<LIB_SYMBOL> kiSymDef( loadSymdef( aSymdefID )->Duplicate() );
     wxCHECK( kiSymDef, /*void*/ );
 
+    // Look up every terminal's pins before renumbering, as a new number can match a later terminal
+    std::vector<std::pair<TERMINAL_ID, std::vector<SCH_PIN*>>> terminalPins;
+
+    for( auto&& [storedPinNum, termID] : m_symDefTerminalsMap[aSymdefID] )
+        terminalPins.emplace_back( termID, kiSymDef->GetPinsByNumber( storedPinNum ) );
+
     // Update the pin numbers to match those defined in the Cadstar part
     TERMINAL_TO_PINNUM_MAP pinNumMap;
 
-    for( auto&& [storedPinNum, termID] : m_symDefTerminalsMap[aSymdefID] )
+    for( auto&& [termID, pins] : terminalPins )
     {
         PART::DEFINITION::PIN     csPin = getPartDefinitionPin( aCadstarPart, aGateID, termID );
-        std::vector<SCH_PIN*>     pins = kiSymDef->GetPinsByNumber( storedPinNum );
 
         wxString pinName = HandleTextOverbar( csPin.Label );
         wxString pinNum = HandleTextOverbar( csPin.Name );
