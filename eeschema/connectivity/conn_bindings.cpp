@@ -69,8 +69,7 @@ BUNDLE_INPUT PrepareBundle( const PARTITION& aPartition, const RECORD_STORE::REC
     if( result.claims.empty() )
         return result;
 
-    std::swap( result.claims.front(),
-               *std::ranges::max_element( result.claims, CLAIM_LESS{ aKeys }, &BUNDLE_CLAIM::claim ) );
+    std::swap( result.claims.front(), *SelectDriver( result.claims, CLAIM_LESS{ aKeys }, &BUNDLE_CLAIM::claim ) );
 
     for( BUNDLE_CLAIM& source : result.claims )
     {

@@ -39,6 +39,7 @@
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
+#include <scoped_set_reset.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 
@@ -235,6 +236,28 @@ BOOST_FIXTURE_TEST_CASE( SheetPinBusConnectionSurvivesMove, LABEL_BUS_CONNECTIVI
 
     BOOST_REQUIRE_MESSAGE( pinConn != nullptr, "Sheet pin lost its connection after the move" );
     BOOST_CHECK_MESSAGE( pinConn->IsBus(), "Sheet pin lost its bus connection after the move" );
+}
+
+
+// A superset bus label drives even when the subset's name sorts first
+BOOST_FIXTURE_TEST_CASE( BusSupersetLabelDrives, LABEL_BUS_CONNECTIVITY_FIXTURE )
+{
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, true );
+
+    SCH_LINE* busWire = new SCH_LINE( VECTOR2I( 0, 0 ), LAYER_BUS );
+    busWire->SetEndPoint( VECTOR2I( 5000000, 0 ) );
+    m_screen->Append( busWire );
+    m_screen->Append( new SCH_LABEL( VECTOR2I( 1000000, 0 ), wxS( "BUS{B}" ) ) );
+    m_screen->Append( new SCH_LABEL( VECTOR2I( 4000000, 0 ), wxS( "BUS{Z B}" ) ) );
+
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    const auto view = m_schematic->Connectivity().Connection( busWire->m_Uuid, sheets[0].Path() );
+    BOOST_REQUIRE( view );
+    BOOST_CHECK_EQUAL( view->Name( true ), wxS( "BUS{Z B}" ) );
+    BOOST_CHECK_EQUAL( view->Members().leaves.size(), 2 );
 }
 
 

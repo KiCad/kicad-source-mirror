@@ -237,6 +237,10 @@ ISLAND_RECORD BuildIslandRecord( const RECORD_GEOMETRY& aIsland, const INSTANCE_
     }
 
     std::sort( result.claims.rbegin(), result.claims.rend(), CLAIM_LESS{ aKeys } );
+
+    if( const auto driver = SelectDriver( result.claims, CLAIM_LESS{ aKeys } ); driver != result.claims.end() )
+        std::rotate( result.claims.begin(), driver, std::next( driver ) );
+
     result.kind = ( result.claims.empty() ? aIsland.hasBusLine : bool( result.claims.front().schema ) ) ? KIND::BUNDLE
                                                                                                         : KIND::SIGNAL;
     result.atoms.kindConflict = ( aIsland.hasWire && ( aIsland.hasBusLine || result.kind == KIND::BUNDLE ) )

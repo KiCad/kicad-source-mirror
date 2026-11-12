@@ -24,8 +24,11 @@
 #include "conn_keys.h"
 #include "conn_frame.h"
 
+#include <algorithm>
 #include <array>
+#include <functional>
 #include <memory>
+#include <ranges>
 #include <span>
 
 namespace SCH_CONNECTIVITY
@@ -79,6 +82,42 @@ struct CLAIM_LESS
     bool                operator()( const CLAIM& aLeft, const CLAIM& aRight ) const;
 };
 
+/**
+ * The driver of \a aClaims. A strict superset bus at the same priority and depth replaces the greatest claim by
+ * CLAIM_LESS until none remains, so name order never drops bus members. Container order never decides.
+ */
+template <std::ranges::forward_range RANGE, typename PROJ = std::identity>
+std::ranges::iterator_t<RANGE> SelectDriver( RANGE& aClaims, const CLAIM_LESS& aLess, PROJ aProj = {} )
+{
+    const auto end = std::ranges::end( aClaims );
+    auto       driver = std::ranges::max_element( aClaims, aLess, aProj );
+
+    while( driver != end )
+    {
+        const CLAIM& current = std::invoke( aProj, *driver );
+        auto         wider = end;
+
+        for( auto it = std::ranges::begin( aClaims ); current.schema && it != end; ++it )
+        {
+            const CLAIM& claim = std::invoke( aProj, *it );
+
+            if( claim.priority == current.priority && claim.depth == current.depth && claim.schema
+                && claim.schema->StrictlyContains( *current.schema )
+                && ( wider == end || aLess( std::invoke( aProj, *wider ), claim ) ) )
+            {
+                wider = it;
+            }
+        }
+
+        if( wider == end )
+            break;
+
+        driver = wider;
+    }
+
+    return driver;
+}
+
 struct SOURCE_CLAIMS
 {
     KICAD_T                type = TYPE_NOT_INIT;
@@ -115,7 +154,7 @@ struct ISLAND_RECORD
 {
     KIND                  kind = KIND::SIGNAL;
     std::vector<KIID>     items;
-    std::vector<CLAIM>    claims; ///< Descending by CLAIM_LESS, so front() is the island driver.
+    std::vector<CLAIM>    claims; ///< front() is the SelectDriver() result, the rest descend by CLAIM_LESS.
     std::vector<NAME_KEY> edges;
     std::vector<NAME_ID>  netclasses;
     ERC_ATOMS             atoms;

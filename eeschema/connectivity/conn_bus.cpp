@@ -189,6 +189,26 @@ std::optional<SCH_CONNECTIVITY::BUS_SCHEMA> SCH_CONNECTIVITY::BUS_SCHEMA::Parse(
     return SCHEMA_PARSER( aAliases ).Parse( aText );
 }
 
+bool SCH_CONNECTIVITY::BUS_SCHEMA::StrictlyContains( const BUS_SCHEMA& aOther ) const
+{
+    std::set<wxString> mine;
+
+    for( const LEAF& leaf : leaves )
+        mine.insert( leaf.name );
+
+    std::set<wxString> theirs;
+
+    for( const LEAF& leaf : aOther.leaves )
+    {
+        if( !mine.contains( leaf.name ) )
+            return false;
+
+        theirs.insert( leaf.name );
+    }
+
+    return theirs.size() < mine.size();
+}
+
 bool SCH_CONNECTIVITY::BUS_PARSE_CACHE::SetAliases( const BUS_ALIASES& aAliases )
 {
     BUS_ALIASES normalized;

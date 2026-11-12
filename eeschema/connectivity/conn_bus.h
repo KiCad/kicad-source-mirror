@@ -112,6 +112,11 @@ struct BUS_SCHEMA
     }
 
     /**
+     * True for a strict superset by leaf name. Containment is a partial order, so it cannot join a sort key.
+     */
+    bool StrictlyContains( const BUS_SCHEMA& aOther ) const;
+
+    /**
      * Parse a vector or group bus text.
      *
      * Input and output names use CTX_NETNAME escaping. Alias definitions are unescaped text.
