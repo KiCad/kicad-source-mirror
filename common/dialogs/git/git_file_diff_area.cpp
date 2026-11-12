@@ -102,6 +102,8 @@ GIT_FILE_DIFF_AREA::GIT_FILE_DIFF_AREA( wxWindow* aParent, EDA_BASE_FRAME* aFram
         m_afterLabel( nullptr ),
         m_beforeCanvas( nullptr ),
         m_afterCanvas( nullptr ),
+        m_beforeAbsent( nullptr ),
+        m_afterAbsent( nullptr ),
         m_textDiff( nullptr ),
         m_legend( nullptr )
 {
@@ -292,6 +294,17 @@ bool GIT_FILE_DIFF_AREA::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxSt
     m_beforeCanvas->SetScene( std::move( sides.reference ) );
     m_afterCanvas->SetScene( std::move( sides.comparison ) );
 
+    // A side with no file has nothing for its canvas to frame, which then never paints
+    auto showSide = []( WIDGET_DIFF_CANVAS* aCanvas, wxStaticText* aAbsent, bool aPresent )
+    {
+        aCanvas->Show( aPresent );
+        aAbsent->Show( !aPresent );
+        aCanvas->GetParent()->Layout();
+    };
+
+    showSide( m_beforeCanvas, m_beforeAbsent, !aBefore.IsEmpty() );
+    showSide( m_afterCanvas, m_afterAbsent, !aAfter.IsEmpty() );
+
     m_note->Hide();
     m_textDiff->Hide();
     m_canvasSplitter->Show();
@@ -314,22 +327,25 @@ void GIT_FILE_DIFF_AREA::ensureCanvases()
             backend = frame->GetCanvas()->GetBackend();
     }
 
-    auto makeSide = [&]( wxStaticText** aLabel, WIDGET_DIFF_CANVAS** aCanvas )
+    auto makeSide = [&]( wxStaticText** aLabel, WIDGET_DIFF_CANVAS** aCanvas, wxStaticText** aAbsent )
     {
         wxPanel*    side = new wxPanel( m_canvasSplitter );
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
         *aLabel = new wxStaticText( side, wxID_ANY, wxEmptyString );
         *aCanvas = new WIDGET_DIFF_CANVAS( side, backend );
+        *aAbsent = new wxStaticText( side, wxID_ANY, _( "The file is not in this version." ) );
+        ( *aAbsent )->Hide();
 
         sizer->Add( *aLabel, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 4 );
         sizer->Add( *aCanvas, 1, wxEXPAND );
+        sizer->Add( *aAbsent, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8 );
         side->SetSizer( sizer );
         return side;
     };
 
-    wxPanel* before = makeSide( &m_beforeLabel, &m_beforeCanvas );
-    wxPanel* after = makeSide( &m_afterLabel, &m_afterCanvas );
+    wxPanel* before = makeSide( &m_beforeLabel, &m_beforeCanvas, &m_beforeAbsent );
+    wxPanel* after = makeSide( &m_afterLabel, &m_afterCanvas, &m_afterAbsent );
 
     m_canvasSplitter->SplitVertically( before, after );
 
@@ -359,6 +375,8 @@ void GIT_FILE_DIFF_AREA::destroyCanvases()
     m_afterCanvas = nullptr;
     m_beforeLabel = nullptr;
     m_afterLabel = nullptr;
+    m_beforeAbsent = nullptr;
+    m_afterAbsent = nullptr;
 }
 
 

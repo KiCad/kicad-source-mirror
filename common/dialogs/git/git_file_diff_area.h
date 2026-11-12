@@ -86,6 +86,10 @@ private:
     wxStaticText*       m_afterLabel;
     WIDGET_DIFF_CANVAS* m_beforeCanvas;
     WIDGET_DIFF_CANVAS* m_afterCanvas;
+
+    /// Each shown in place of its side's canvas when the file is not in that version.
+    wxStaticText*       m_beforeAbsent;
+    wxStaticText*       m_afterAbsent;
     wxStyledTextCtrl*   m_textDiff;
     wxSizer*            m_legend;
 
