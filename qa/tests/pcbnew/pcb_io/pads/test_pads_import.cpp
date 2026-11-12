@@ -2170,4 +2170,25 @@ BOOST_AUTO_TEST_CASE( Issue25511_PulsonixSigHeaderRoutes )
 }
 
 
+// A test point via with copper on both outer layers stays a via
+BOOST_AUTO_TEST_CASE( Issue26036_TestPointViaKept )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue26036.asc";
+
+    std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int vias = std::ranges::count_if( board->Tracks(),
+                                      []( PCB_TRACK* aTrack )
+                                      {
+                                          return aTrack->Type() == PCB_VIA_T;
+                                      } );
+
+    BOOST_CHECK_EQUAL( vias, 3 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

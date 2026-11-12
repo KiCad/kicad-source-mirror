@@ -1282,6 +1282,31 @@ void PCB_IO_PADS::loadReuseBlockGroups()
 }
 
 
+// A test point via with copper on both outer layers is an ordinary via, not an in-circuit pad
+static bool isPlainViaTestPoint( const PADS_IO::TEST_POINT& aTestPoint, const PADS_IO::PARSER& aParser )
+{
+    auto it = aParser.GetViaDefs().find( aTestPoint.symbol_name );
+
+    if( aTestPoint.type != "VIA" || it == aParser.GetViaDefs().end() )
+        return false;
+
+    int  layerCount = aParser.GetParameters().layer_count;
+    bool hasTop = false;
+    bool hasBottom = false;
+
+    for( const PADS_IO::PAD_STACK_LAYER& row : it->second.stack )
+    {
+        if( row.sizeA <= 0.0 || !PADS_IO::IsCopperPadRow( row ) )
+            continue;
+
+        hasTop |= row.layer == PADS_LAYER_MAPPER::LAYER_PAD_STACK_TOP || row.layer == 1;
+        hasBottom |= row.layer == PADS_LAYER_MAPPER::LAYER_PAD_STACK_BOTTOM || row.layer == layerCount;
+    }
+
+    return hasTop && hasBottom;
+}
+
+
 void PCB_IO_PADS::loadTestPoints()
 {
     const std::vector<PADS_IO::TEST_POINT>&        test_points = m_parser->GetTestPoints();
@@ -1289,6 +1314,9 @@ void PCB_IO_PADS::loadTestPoints()
 
     for( const PADS_IO::TEST_POINT& tp : test_points )
     {
+        if( isPlainViaTestPoint( tp, *m_parser ) )
+            continue;
+
         FOOTPRINT* footprint = new FOOTPRINT( m_loadBoard );
 
         wxString refDes = wxString::Format( wxT( "TP%d" ), m_testPointIndex++ );
@@ -1406,7 +1434,7 @@ void PCB_IO_PADS::loadTracksAndVias()
 
     for( const PADS_IO::TEST_POINT& tp : m_parser->GetTestPoints() )
     {
-        if( tp.type == "VIA" )
+        if( tp.type == "VIA" && !isPlainViaTestPoint( tp, *m_parser ) )
             testPointPositions.emplace( scaleCoord( tp.x, true ), scaleCoord( tp.y, false ) );
     }
 
