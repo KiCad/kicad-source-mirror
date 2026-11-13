@@ -39,7 +39,7 @@
 
 namespace
 {
-Standard_Integer PackColor( const SFVEC3F& aColor )
+int PackColor( const SFVEC3F& aColor )
 {
     auto component = []( float aValue )
     {
@@ -47,8 +47,8 @@ Standard_Integer PackColor( const SFVEC3F& aColor )
     };
 
     // Transparency is carried by the presentation, so the packed alpha is always opaque.
-    return static_cast<Standard_Integer>( component( aColor.r ) | component( aColor.g ) << 8
-                                          | component( aColor.b ) << 16 | 0xFFu << 24 );
+    return static_cast<int>( component( aColor.r ) | component( aColor.g ) << 8 | component( aColor.b ) << 16
+                             | 0xFFu << 24 );
 }
 
 
@@ -101,7 +101,7 @@ Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, co
     if( !aMesh.m_Positions || !aMesh.m_FaceIdx || aMesh.m_VertexSize == 0 )
         return {};
 
-    Standard_Integer triangleCount = 0;
+    int triangleCount = 0;
 
     for( unsigned int offset = 0; offset + 2 < aMesh.m_FaceIdxSize; offset += 3 )
     {
@@ -114,7 +114,7 @@ Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, co
 
     const bool hasNormals = aMesh.m_Normals != nullptr;
     Handle( Poly_Triangulation ) triangulation = new Poly_Triangulation(
-            static_cast<Standard_Integer>( aMesh.m_VertexSize ), triangleCount, false, hasNormals );
+            static_cast<int>( aMesh.m_VertexSize ), triangleCount, false, hasNormals );
 
     for( unsigned int vertex = 0; vertex < aMesh.m_VertexSize; ++vertex )
     {
@@ -123,7 +123,7 @@ Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, co
         if( !std::isfinite( position.x ) || !std::isfinite( position.y ) || !std::isfinite( position.z ) )
             return {};
 
-        triangulation->SetNode( static_cast<Standard_Integer>( vertex + 1 ),
+        triangulation->SetNode( static_cast<int>( vertex + 1 ),
                                 gp_Pnt( position.x, position.y, position.z ) );
 
         if( hasNormals )
@@ -132,14 +132,14 @@ Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, co
             const double   lengthSquared = normal.x * normal.x + normal.y * normal.y + normal.z * normal.z;
 
             if( lengthSquared > 0.0 && std::isfinite( lengthSquared ) )
-                triangulation->SetNormal( static_cast<Standard_Integer>( vertex + 1 ),
+                triangulation->SetNormal( static_cast<int>( vertex + 1 ),
                                           gp_Dir( normal.x, normal.y, normal.z ) );
             else
-                triangulation->SetNormal( static_cast<Standard_Integer>( vertex + 1 ), gp_Dir( 0, 0, 1 ) );
+                triangulation->SetNormal( static_cast<int>( vertex + 1 ), gp_Dir( 0, 0, 1 ) );
         }
     }
 
-    Standard_Integer triangle = 1;
+    int triangle = 1;
 
     for( unsigned int offset = 0; offset + 2 < aMesh.m_FaceIdxSize; offset += 3 )
     {
@@ -147,9 +147,9 @@ Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, co
             continue;
 
         triangulation->SetTriangle(
-                triangle++, Poly_Triangle( static_cast<Standard_Integer>( aMesh.m_FaceIdx[offset] + 1 ),
-                                           static_cast<Standard_Integer>( aMesh.m_FaceIdx[offset + 1] + 1 ),
-                                           static_cast<Standard_Integer>( aMesh.m_FaceIdx[offset + 2] + 1 ) ) );
+                triangle++, Poly_Triangle( static_cast<int>( aMesh.m_FaceIdx[offset] + 1 ),
+                                           static_cast<int>( aMesh.m_FaceIdx[offset + 1] + 1 ),
+                                           static_cast<int>( aMesh.m_FaceIdx[offset + 2] + 1 ) ) );
     }
 
     Handle( AIS_Triangulation ) presentation = new AIS_Triangulation( triangulation );
@@ -164,11 +164,10 @@ Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, co
     // mesh actually carries per-vertex colours.
     if( aMesh.m_Color )
     {
-        Handle( TColStd_HArray1OfInteger ) colors =
-                new TColStd_HArray1OfInteger( 1, static_cast<Standard_Integer>( aMesh.m_VertexSize ) );
+        auto colors = new TColStd_HArray1OfInteger( 1, static_cast<int>( aMesh.m_VertexSize ) );
 
         for( unsigned int vertex = 0; vertex < aMesh.m_VertexSize; ++vertex )
-            colors->SetValue( static_cast<Standard_Integer>( vertex + 1 ), PackColor( aMesh.m_Color[vertex] ) );
+            colors->SetValue( static_cast<int>( vertex + 1 ), PackColor( aMesh.m_Color[vertex] ) );
 
         presentation->SetColors( colors );
     }
