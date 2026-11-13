@@ -78,7 +78,8 @@ public:
 
         EVENT_ENTRY() :
                 type( EVT_START_ROUTE ),
-                layer( 0 )
+                layer( 0 ),
+                useConnectedTrackWidth( false )
         {
         }
 
