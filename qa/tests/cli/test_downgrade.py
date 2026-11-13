@@ -27,6 +27,12 @@ HATCH_FOOTPRINT = """(footprint "Hatch" (version 20260623) (generator "pcbnew")
   (fp_rect (start 0 0) (end 10 5) (stroke (width 0.2) (type default))
     (fill hatch) (layer "F.SilkS")))
 """
+SCALED_FOOTPRINT = """(footprint "Scaled" (version 20260623) (generator "pcbnew")
+  (layer "F.Cu")
+  (transform (translate 0 0) (rotate 0) (scale 2 2))
+  (fp_rect (start 0 0) (end 10 5) (stroke (width 0.2) (type default))
+    (fill no) (layer "F.SilkS")))
+"""
 HATCH_SYMBOL = """(kicad_symbol_lib (version 20260629) (generator "eeschema")
   (symbol "Hatch"
     (property "Reference" "U" (at 0 2 0) (effects (font (size 1 1))))
@@ -1236,6 +1242,11 @@ class TestLibraryDowngrade(unittest.TestCase):
     def sources(self):
         return (self.symbols.read_bytes(), (self.footprints / "Hatch.kicad_mod").read_bytes())
 
+    def tree(self):
+        """Every path in the scratch area except the settings KiCad writes for itself."""
+        return sorted(p.relative_to(self.root) for p in self.root.rglob("*")
+                      if "config" not in p.relative_to(self.root).parts)
+
     def library(self, kind):
         return self.symbols if kind == "sym" else self.footprints
 
@@ -1263,17 +1274,20 @@ class TestLibraryDowngrade(unittest.TestCase):
     def test_drop_approximations_omits_the_fill(self):
         for kind, fill in (("sym", "(type none)"), ("fp", "(fill no)")):
             with self.subTest(kind=kind):
+                original = self.sources()
                 output = self.output(kind, f"dropped-{kind}")
                 self.require_success(self.downgrade(kind, output, "--force", "--drop-approximations"))
                 self.assertIn(fill, self.converted(kind, output))
+                self.assertEqual(self.sources(), original)
 
     def test_dry_run_reports_without_writing(self):
         for kind in ("sym", "fp"):
             with self.subTest(kind=kind):
+                before = self.tree()
                 original = self.sources()
                 self.require_success(self.downgrade(kind, None, "--dry-run"))
+                self.assertEqual(self.tree(), before)
                 self.assertEqual(self.sources(), original)
-                self.assertFalse((self.root / f"converted-{kind}").exists())
 
     def test_lossy_conversion_needs_force(self):
         for kind in ("sym", "fp"):
@@ -1286,11 +1300,14 @@ class TestLibraryDowngrade(unittest.TestCase):
 
     def test_blocked_library_is_refused_despite_force(self):
         self.symbols.write_text(HATCH_SYMBOL.replace('(symbol "Hatch"', '(symbol "Hatch" (power local)', 1))
-        original = self.sources()
-        output = self.output("sym", "blocked")
-        self.assertNotEqual(self.downgrade("sym", output, "--force").returncode, 0)
-        self.assertFalse(output.exists())
-        self.assertEqual(self.sources(), original)
+        (self.footprints / "Hatch.kicad_mod").write_text(SCALED_FOOTPRINT)
+        for kind in ("sym", "fp"):
+            with self.subTest(kind=kind):
+                original = self.sources()
+                output = self.output(kind, f"blocked-{kind}")
+                self.assertNotEqual(self.downgrade(kind, output, "--force").returncode, 0)
+                self.assertFalse(output.exists())
+                self.assertEqual(self.sources(), original)
 
     def test_existing_output_is_left_alone(self):
         for kind in ("sym", "fp"):
