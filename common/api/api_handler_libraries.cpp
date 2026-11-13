@@ -47,8 +47,7 @@ API_HANDLER_LIBRARIES::API_HANDLER_LIBRARIES( LIBRARY_TABLE_TYPE aType ) :
         m_type( aType )
 {
     registerHandler<GetLibraryItems, LibraryItemsResponse>( &API_HANDLER_LIBRARIES::handleGetLibraryItems );
-    registerHandler<GetLibraryStatuses, LibraryStatusResponse>(
-            &API_HANDLER_LIBRARIES::handleGetLibraryStatuses );
+    registerHandler<GetLibraryStatuses, LibraryStatusResponse>( &API_HANDLER_LIBRARIES::handleGetLibraryStatuses );
     registerHandler<ReloadLibrary, LibraryCommandStatus>( &API_HANDLER_LIBRARIES::handleReloadLibrary );
     registerHandler<GetItemsFromLibrary, GetItemsResponse>( &API_HANDLER_LIBRARIES::handleGetItemsFromLibrary );
 
@@ -58,8 +57,7 @@ API_HANDLER_LIBRARIES::API_HANDLER_LIBRARIES( LIBRARY_TABLE_TYPE aType ) :
     // (ordered by pointer, not registration order) could route the command to an instance
     // without a KIWAY, which would fail the request.
     if( aType == LIBRARY_TABLE_TYPE::DESIGN_BLOCK )
-        registerHandler<LoadAllLibraries, LibraryCommandStatus>(
-                &API_HANDLER_LIBRARIES::handleLoadAllLibraries );
+        registerHandler<LoadAllLibraries, LibraryCommandStatus>( &API_HANDLER_LIBRARIES::handleLoadAllLibraries );
 }
 
 
