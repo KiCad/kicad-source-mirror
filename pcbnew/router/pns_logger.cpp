@@ -237,7 +237,7 @@ nlohmann::json LOGGER::formatSizesAsJSON( const SIZES_SETTINGS& aSizes )
             { "trackWidthIsExplicit", aSizes.TrackWidthIsExplicit() },
             { "layerBottom", aSizes.GetLayerBottom() },
             { "layerTop", aSizes.GetLayerTop() },
-            { "viaType", aSizes.ViaType() },
+            { "viaType", (int) aSizes.ViaType() },
             { "diffPairWidth", aSizes.DiffPairWidth() },
             { "diffPairGap", aSizes.DiffPairGap() },
             { "diffPairViaGap", aSizes.DiffPairViaGap() }
@@ -353,6 +353,8 @@ SIZES_SETTINGS LOGGER::parseSizesFromJSON( const nlohmann::json& aJSON )
         sizes.SetDiffPairViaGap( aJSON.at("diffPairViaGap").get<int>() );
         sizes.SetDiffPairGap( aJSON.at("diffPairGap").get<int>() );
         sizes.SetDiffPairWidth( aJSON.at("diffPairWidth").get<int>() );
+        sizes.SetViaType( static_cast<VIATYPE>( aJSON.at("viaType").get<int>() ) );
+        sizes.AddLayerPair( aJSON.at("layerTop").get<int>(), aJSON.at("layerBottom").get<int>() );
 
         sizes.SetDiffPairViaGapSameAsTraceGap( sizes.DiffPairViaGap() == sizes.DiffPairGap() );
     }
