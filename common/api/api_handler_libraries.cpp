@@ -284,7 +284,22 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
     if( aCtx.Request.nickname_size() > 0 )
     {
         for( const std::string& nickname : aCtx.Request.nickname() )
+        {
+            std::optional<LIBRARY_TABLE_ROW*> row = manager.GetRow( tableType, nickname, scope );
+
+            if( !row.has_value() )
+            {
+                return makeStatus( LibraryCommandStatus::LCS_NOT_FOUND,
+                                   wxString::Format( "Library '%s' not found", nickname ) );
+            }
+            else if( row.value()->Disabled() )
+            {
+                return makeStatus( LibraryCommandStatus::LCS_NOT_FOUND,
+                                   wxString::Format( "Library '%s' not enabled", nickname ) );
+            }
+
             nicknames.emplace_back( wxString::FromUTF8( nickname ) );
+        }
     }
     else
     {
@@ -297,15 +312,6 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
 
     if( nicknames.empty() )
         return makeStatus( LibraryCommandStatus::LCS_NOT_FOUND, "No libraries found to reload" );
-
-    for( const wxString& nickname : nicknames )
-    {
-        if( !manager.GetRow( tableType, nickname, scope ) )
-        {
-            return makeStatus( LibraryCommandStatus::LCS_NOT_FOUND,
-                               wxString::Format( "Library '%s' not found", nickname ) );
-        }
-    }
 
     for( const wxString& nickname : nicknames )
         manager.ReloadLibraryEntry( tableType, nickname, scope );
