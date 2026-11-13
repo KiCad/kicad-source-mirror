@@ -90,6 +90,7 @@
 #include "cli/command_fp.h"
 #include "cli/command_fp_export.h"
 #include "cli/command_fp_export_svg.h"
+#include "cli/command_fp_downgrade.h"
 #include "cli/command_fp_upgrade.h"
 #include "cli/command_sch.h"
 #include "cli/command_sch_erc.h"
@@ -101,6 +102,7 @@
 #include "cli/command_sym.h"
 #include "cli/command_sym_export.h"
 #include "cli/command_sym_export_svg.h"
+#include "cli/command_sym_downgrade.h"
 #include "cli/command_sym_upgrade.h"
 #include "cli/command_gerber.h"
 #include "cli/command_gerber_convert.h"
@@ -226,11 +228,13 @@ static CLI::FP_DIFF_COMMAND         fpDiffCmd{};
 static CLI::FP_EXPORT_COMMAND       fpExportCmd{};
 static CLI::FP_EXPORT_SVG_COMMAND   fpExportSvgCmd{};
 static CLI::FP_UPGRADE_COMMAND      fpUpgradeCmd{};
+static CLI::FP_DOWNGRADE_COMMAND         fpDowngradeCmd{};
 static CLI::SYM_COMMAND             symCmd{};
 static CLI::SYM_DIFF_COMMAND        symDiffCmd{};
 static CLI::SYM_EXPORT_COMMAND      symExportCmd{};
 static CLI::SYM_EXPORT_SVG_COMMAND  symExportSvgCmd{};
 static CLI::SYM_UPGRADE_COMMAND     symUpgradeCmd{};
+static CLI::SYM_DOWNGRADE_COMMAND        symDowngradeCmd{};
 static CLI::GERBER_COMMAND          gerberCmd{};
 static CLI::GERBER_CONVERT_COMMAND  gerberConvertCmd{};
 static CLI::GERBER_CONVERT_PNG_COMMAND gerberConvertPngCmd{};
@@ -263,6 +267,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             },
             {
                 &fpUpgradeCmd
+            },
+            {
+                &fpDowngradeCmd
             }
         }
     },
@@ -378,6 +385,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             },
             {
                 &symUpgradeCmd
+            },
+            {
+                &symDowngradeCmd
             }
         }
     },

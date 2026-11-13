@@ -50,6 +50,7 @@
 #include <jobs/job_import_utils.h>
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
+#include <jobs/job_sym_downgrade.h>
 #include <schematic.h>
 #include <import_net_map.h>
 #include <schematic_settings.h>
@@ -168,6 +169,11 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "symupgrade", std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "symdowngrade", std::bind( &EESCHEMA_JOBS_HANDLER::JobSymDowngrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
@@ -1258,6 +1264,122 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     }
 
     return exitCode;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobSymDowngrade( JOB* aJob )
+{
+    JOB_SYM_DOWNGRADE* job = dynamic_cast<JOB_SYM_DOWNGRADE*>( aJob );
+
+    wxCHECK( job, CLI::EXIT_CODES::ERR_UNKNOWN );
+
+    const DOWNGRADE_TARGET* target =
+            job->m_target.IsEmpty() ? &GetDowngradeTargets().front() : FindDowngradeTarget( job->m_target );
+
+    if( !target )
+    {
+        m_reporter->Report( wxString::Format( _( "Unknown target version '%s'. Valid targets: %s\n" ), job->m_target,
+                                              DowngradeTargetNames() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    // The cache owns the symbols, so it outlives every use of them
+    SCH_IO_KICAD_SEXPR       pi;
+    std::vector<LIB_SYMBOL*> symbols;
+
+    try
+    {
+        pi.EnumerateSymbolLib( symbols, job->m_libraryPath );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Error loading symbol library '%s'.\n%s" ), job->m_libraryPath,
+                                              ioe.What().GetData() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    COMPATIBILITY_REPORT report;
+
+    for( const LIB_SYMBOL* symbol : symbols )
+        report.Merge( ClassifyLibSymbolForDowngrade( symbol, *target, job->m_dropInsteadOfApproximate ) );
+
+    job->m_report = report;
+    report.Print( m_reporter );
+
+    if( job->m_dryRun )
+        return CLI::EXIT_CODES::SUCCESS;
+
+    if( report.IsBlocked() )
+    {
+        m_reporter->Report( _( "Cannot export: the library uses features the target cannot represent.\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    if( report.IsLossy() && !job->m_force )
+    {
+        m_reporter->Report( _( "Export would lose data. Re-run with --force to export anyway.\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    wxString error;
+
+    if( !ValidateFreshDowngradeOutput( job->m_outputLibraryPath, error ) )
+    {
+        m_reporter->Report( error + wxS( "\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    DOWNGRADE_OUTPUT_DIRECTORIES outputDirectories;
+    wxFileName                   output( job->m_outputLibraryPath );
+
+    if( !outputDirectories.Create( output.GetPath() ) )
+    {
+        m_reporter->Report( _( "Could not create the output folder.\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    // Staged so a failed write leaves no half-written library at the destination
+    DOWNGRADE_FILE_TRANSACTION transaction;
+    wxString                   staged = transaction.Stage( job->m_outputLibraryPath );
+
+    if( staged.IsEmpty() )
+    {
+        m_reporter->Report( _( "Could not export the downgraded library.\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    try
+    {
+        for( LIB_SYMBOL* symbol : symbols )
+            DowngradeLibSymbolInPlace( symbol, *target, job->m_dropInsteadOfApproximate );
+
+        SaveSymbolLibraryForTarget( symbols, staged, *target );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report(
+                wxString::Format( _( "Error exporting '%s'.\n%s" ), job->m_libraryPath, ioe.What().GetData() ),
+                RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    wxString failedDestination = transaction.Commit();
+
+    if( !failedDestination.IsEmpty() )
+    {
+        m_reporter->Report( wxString::Format( _( "Could not replace '%s'.\n" ), failedDestination ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    outputDirectories.Commit();
+    m_reporter->Report( _( "Downgraded symbol library\n" ), RPT_SEVERITY_INFO );
+
+    return CLI::EXIT_CODES::SUCCESS;
 }
 
 

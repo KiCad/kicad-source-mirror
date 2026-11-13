@@ -1208,5 +1208,104 @@ class TestDropApproximations(unittest.TestCase):
                 self.assertEqual(self.source_snapshot(), original)
 
 
+class TestLibraryDowngrade(unittest.TestCase):
+    """sym downgrade and fp downgrade convert one library with no design involved."""
+
+    def setUp(self):
+        self.scratch = tempfile.TemporaryDirectory(prefix="kicad_library_downgrade_")
+        self.addCleanup(self.scratch.cleanup)
+        self.root = Path(self.scratch.name)
+        self.symbols = self.root / "Local.kicad_sym"
+        self.symbols.write_text(HATCH_SYMBOL)
+        self.footprints = self.root / "Local.pretty"
+        self.footprints.mkdir()
+        (self.footprints / "Hatch.kicad_mod").write_text(HATCH_FOOTPRINT)
+        self.env = os.environ.copy()
+        self.env["KICAD_CONFIG_HOME"] = str(self.root / "config")
+        self.env["LC_ALL"] = "C"
+
+    def cli(self, *args):
+        return subprocess.run(
+            [os.environ.get("KICAD_CLI", "kicad-cli"), *map(str, args)],
+            env=self.env, capture_output=True, text=True, timeout=60,
+        )
+
+    def require_success(self, result):
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def sources(self):
+        return (self.symbols.read_bytes(), (self.footprints / "Hatch.kicad_mod").read_bytes())
+
+    def library(self, kind):
+        return self.symbols if kind == "sym" else self.footprints
+
+    def output(self, kind, name):
+        return self.root / name / ("Local.kicad_sym" if kind == "sym" else "Local.pretty")
+
+    def converted(self, kind, output):
+        return (output if kind == "sym" else output / "Hatch.kicad_mod").read_text()
+
+    def downgrade(self, kind, output, *options):
+        where = ["--output", output] if output else []
+        return self.cli(kind, "downgrade", self.library(kind), "--target", "9.0", *where, *options)
+
+    def test_library_converts_without_a_design(self):
+        for kind, version, fill in (("sym", 20241209, "(type outline)"), ("fp", 20241229, "(fill yes)")):
+            with self.subTest(kind=kind):
+                original = self.sources()
+                output = self.output(kind, f"converted-{kind}")
+                self.require_success(self.downgrade(kind, output, "--force"))
+                converted = self.converted(kind, output)
+                self.assertIn(f"(version {version})", converted)
+                self.assertIn(fill, converted)
+                self.assertEqual(self.sources(), original)
+
+    def test_drop_approximations_omits_the_fill(self):
+        for kind, fill in (("sym", "(type none)"), ("fp", "(fill no)")):
+            with self.subTest(kind=kind):
+                output = self.output(kind, f"dropped-{kind}")
+                self.require_success(self.downgrade(kind, output, "--force", "--drop-approximations"))
+                self.assertIn(fill, self.converted(kind, output))
+
+    def test_dry_run_reports_without_writing(self):
+        for kind in ("sym", "fp"):
+            with self.subTest(kind=kind):
+                original = self.sources()
+                self.require_success(self.downgrade(kind, None, "--dry-run"))
+                self.assertEqual(self.sources(), original)
+                self.assertFalse((self.root / f"converted-{kind}").exists())
+
+    def test_lossy_conversion_needs_force(self):
+        for kind in ("sym", "fp"):
+            with self.subTest(kind=kind):
+                original = self.sources()
+                output = self.output(kind, f"refused-{kind}")
+                self.assertNotEqual(self.downgrade(kind, output).returncode, 0)
+                self.assertFalse(output.exists())
+                self.assertEqual(self.sources(), original)
+
+    def test_blocked_library_is_refused_despite_force(self):
+        self.symbols.write_text(HATCH_SYMBOL.replace('(symbol "Hatch"', '(symbol "Hatch" (power local)', 1))
+        original = self.sources()
+        output = self.output("sym", "blocked")
+        self.assertNotEqual(self.downgrade("sym", output, "--force").returncode, 0)
+        self.assertFalse(output.exists())
+        self.assertEqual(self.sources(), original)
+
+    def test_existing_output_is_left_alone(self):
+        for kind in ("sym", "fp"):
+            with self.subTest(kind=kind):
+                output = self.output(kind, f"occupied-{kind}")
+                output.parent.mkdir()
+                if kind == "sym":
+                    output.write_bytes(b"existing user data")
+                else:
+                    output.mkdir()
+                    (output / "keep.txt").write_bytes(b"existing user data")
+                self.assertNotEqual(self.downgrade(kind, output, "--force").returncode, 0)
+                kept = output if kind == "sym" else output / "keep.txt"
+                self.assertEqual(kept.read_bytes(), b"existing user data")
+
+
 if __name__ == "__main__":
     unittest.main()

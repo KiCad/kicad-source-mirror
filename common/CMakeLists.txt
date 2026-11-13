@@ -188,6 +188,7 @@ set( KICOMMON_SRCS
     jobs/jobset.cpp
     jobs/job_fp_export_svg.cpp
     jobs/job_fp_upgrade.cpp
+    jobs/job_fp_downgrade.cpp
     jobs/job_gerber_diff.cpp
     jobs/job_gerber_export_png.cpp
     jobs/job_gerber_info.cpp
@@ -206,6 +207,7 @@ set( KICOMMON_SRCS
     jobs/job_sch_erc.cpp
     jobs/job_sym_export_svg.cpp
     jobs/job_sym_upgrade.cpp
+    jobs/job_sym_downgrade.cpp
     jobs/job_pcb_upgrade.cpp
     jobs/job_pcb_downgrade.cpp
     jobs/job_sch_upgrade.cpp

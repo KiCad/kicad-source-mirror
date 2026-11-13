@@ -80,6 +80,7 @@
 #include <jobs/job_import_utils.h>
 #include <jobs/job_pcb_upgrade.h>
 #include <jobs/job_pcb_downgrade.h>
+#include <jobs/job_fp_downgrade.h>
 #include <downgrade/board_downgrade.h>
 #include <downgrade_scan.h>
 #include <downgrade_copy.h>
@@ -423,6 +424,11 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "fpupgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "fpdowngrade", std::bind( &PCBNEW_JOBS_HANDLER::JobFpDowngrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
@@ -3688,6 +3694,93 @@ int PCBNEW_JOBS_HANDLER::JobDowngrade( JOB* aJob )
                             RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobFpDowngrade( JOB* aJob )
+{
+    JOB_FP_DOWNGRADE* job = dynamic_cast<JOB_FP_DOWNGRADE*>( aJob );
+
+    wxCHECK( job, CLI::EXIT_CODES::ERR_UNKNOWN );
+
+    const DOWNGRADE_TARGET* target =
+            job->m_target.IsEmpty() ? &GetDowngradeTargets().front() : FindDowngradeTarget( job->m_target );
+
+    if( !target )
+    {
+        m_reporter->Report( wxString::Format( _( "Unknown target version '%s'. Valid targets: %s\n" ), job->m_target,
+                                              DowngradeTargetNames() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !wxDirExists( job->m_libraryPath ) )
+    {
+        m_reporter->Report( wxString::Format( _( "The library folder '%s' does not exist.\n" ), job->m_libraryPath ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    COMPATIBILITY_REPORT report;
+    classifyFootprintLibraries( job->m_libraryPath, *target, report, job->m_dropInsteadOfApproximate );
+    job->m_report = report;
+    report.Print( m_reporter );
+
+    if( job->m_dryRun )
+        return CLI::EXIT_CODES::SUCCESS;
+
+    if( report.IsBlocked() )
+    {
+        m_reporter->Report( _( "Cannot export: the library uses features the target cannot represent.\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    if( report.IsLossy() && !job->m_force )
+    {
+        m_reporter->Report( _( "Export would lose data. Re-run with --force to export anyway.\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    wxString                     error;
+    DOWNGRADE_OUTPUT_DIRECTORIES outputDirectories;
+
+    // The copy is validated, made and then converted, so a failure never reaches the original
+    if( !CopyDowngradeLibraryDirectory( job->m_libraryPath, job->m_outputLibraryPath, outputDirectories, error ) )
+    {
+        m_reporter->Report( error + wxT( "\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    try
+    {
+        wxString recoveryError;
+        wxString badLib = downgradeFootprintLibraries( job->m_outputLibraryPath, *target,
+                                                       job->m_dropInsteadOfApproximate, nullptr, &recoveryError );
+
+        if( !badLib.IsEmpty() )
+        {
+            m_reporter->Report( footprintRefusedMessage( badLib, *target ), RPT_SEVERITY_ERROR );
+
+            if( !recoveryError.IsEmpty() )
+                m_reporter->Report( recoveryError, RPT_SEVERITY_ERROR );
+
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report(
+                wxString::Format( _( "Error exporting '%s'.\n%s" ), job->m_libraryPath, ioe.What().GetData() ),
+                RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    outputDirectories.Commit();
+    m_reporter->Report( _( "Downgraded footprint library\n" ), RPT_SEVERITY_INFO );
 
     return CLI::EXIT_CODES::SUCCESS;
 }

@@ -55,6 +55,7 @@ public:
     int JobExportPlot( JOB* aJob );
     int JobSchErc( JOB* aJob );
     int JobSymUpgrade( JOB* aJob );
+    int JobSymDowngrade( JOB* aJob );
     int JobSymExportSvg( JOB* aJob );
     int JobUpgrade( JOB* aJob );
     int JobDowngrade( JOB* aJob );

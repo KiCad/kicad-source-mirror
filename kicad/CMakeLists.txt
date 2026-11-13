@@ -100,6 +100,7 @@ set( KICAD_CLI_SRCS
     cli/command_import.cpp
     cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp
+    cli/command_fp_downgrade.cpp
     cli/command_sch_upgrade.cpp
     cli/command_sch_downgrade.cpp
     cli/command_sch_export_pythonbom.cpp
@@ -108,6 +109,7 @@ set( KICAD_CLI_SRCS
     cli/command_sch_erc.cpp
     cli/command_sym_export_svg.cpp
     cli/command_sym_upgrade.cpp
+    cli/command_sym_downgrade.cpp
     cli/command_gerber_info.cpp
     cli/command_gerber_convert_png.cpp
     cli/command_gerber_diff.cpp
