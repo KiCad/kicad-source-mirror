@@ -62,7 +62,7 @@ protected:
     void onGridCellLeftClick( wxGridEvent& aEvent ) override;
     bool handleDoubleClick( wxGridEvent& aEvent ) override;
 
-    void onCharHook( wxKeyEvent& ev );
+    void onCharHook( wxKeyEvent& ev ) override;
 
     /*
      * Handle specialized clipboard text, either s-expr syntax starting with a lib table preamble

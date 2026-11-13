@@ -101,7 +101,7 @@ protected:
     void onGridLabelRightClick( wxGridEvent& event );
     void onPopupSelection( wxCommandEvent& event );
     void onKeyDown( wxKeyEvent& event );
-    void onCharHook( wxKeyEvent& event );
+    virtual void onCharHook( wxKeyEvent& event );
     void onUpdateUI( wxUpdateUIEvent& event );
     void onGridMotion( wxMouseEvent& event );
 
