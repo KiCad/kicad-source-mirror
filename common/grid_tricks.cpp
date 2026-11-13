@@ -924,7 +924,7 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
     // fill txt with a format that is compatible with most spreadsheets
     for( int row = m_sel_row_start;  row < m_sel_row_start + m_sel_row_count;  ++row )
     {
-        if( !txt.IsEmpty() )
+        if( row != m_sel_row_start )
             txt += ROW_SEP;
 
         for( int col = m_sel_col_start;  col < m_sel_col_start + m_sel_col_count; ++col )
