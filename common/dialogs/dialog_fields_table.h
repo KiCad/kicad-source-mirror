@@ -135,6 +135,8 @@ protected:
     void SavePanelLayout();
     void SaveColumnWidths();
 
+    int getStoredColumnWidth( const std::string& aFieldName ) const;
+
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
     void updateExpanderColumn();

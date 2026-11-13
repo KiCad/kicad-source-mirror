@@ -58,6 +58,15 @@
 #endif
 
 
+static constexpr int MAX_COL_WIDTH = 100000;
+
+
+static bool isValidColumnWidth( int aWidth )
+{
+    return aWidth > 0 && aWidth <= MAX_COL_WIDTH;
+}
+
+
 namespace
 {
 template <typename PRESET>
@@ -690,14 +699,30 @@ void DIALOG_FIELDS_TABLE::SavePanelLayout()
 }
 
 
+int DIALOG_FIELDS_TABLE::getStoredColumnWidth( const std::string& aFieldName ) const
+{
+    auto it = m_cfgDialogSettings.field_widths.find( aFieldName );
+
+    if( it == m_cfgDialogSettings.field_widths.end() || !isValidColumnWidth( it->second ) )
+        return 0;
+
+    return m_grid->FromDIP( it->second );
+}
+
+
 void DIALOG_FIELDS_TABLE::SaveColumnWidths()
 {
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
         if( m_grid->IsColShown( i ) )
         {
+            int width = m_grid->ToDIP( m_grid->GetColSize( i ) );
+
+            if( !isValidColumnWidth( width ) )
+                continue;
+
             std::string fieldName( getDataModel()->GetColFieldName( i ).ToUTF8() );
-            m_cfgDialogSettings.field_widths[fieldName] = m_grid->GetColSize( i );
+            m_cfgDialogSettings.field_widths[fieldName] = width;
         }
     }
 }
@@ -833,9 +858,9 @@ void DIALOG_FIELDS_TABLE::SetupAllColumnProperties()
 
             std::string key( getDataModel()->GetColFieldName( col ).ToUTF8() );
 
-            if( m_cfgDialogSettings.field_widths.count( key ) && ( m_cfgDialogSettings.field_widths.at( key ) > 0 ) )
+            if( int storedWidth = getStoredColumnWidth( key ); storedWidth > 0 )
             {
-                m_grid->SetColSize( col, m_cfgDialogSettings.field_widths.at( key ) );
+                m_grid->SetColSize( col, storedWidth );
             }
             else
             {
@@ -1681,8 +1706,8 @@ void DIALOG_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         m_viewControlsDataModel->SetValue( i, LABEL_COLUMN, label );
         m_grid->SetColLabelValue( col, label );
 
-        if( m_cfgDialogSettings.field_widths.count( fieldNameStr ) )
-            m_grid->SetColSize( col, m_cfgDialogSettings.field_widths.at( fieldNameStr ) );
+        if( int storedWidth = getStoredColumnWidth( fieldNameStr ); storedWidth > 0 )
+            m_grid->SetColSize( col, storedWidth );
 
         // Set shown columns
         bool show = getDataModel()->GetShowColumn( col );
