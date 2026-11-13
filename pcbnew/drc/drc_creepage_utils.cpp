@@ -16,6 +16,8 @@
     * along with this program.  If not, see <https://www.gnu.org/licenses/>.
     */
 
+#include <optional>
+
 #include "drc/drc_creepage_utils.h"
 
 #include <geometry/intersection.h>
@@ -1647,18 +1649,18 @@ std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
 
     CU_SHAPE_CIRCLE  csc1( aS2.GetStartPoint(), halfWidth2 );
     CU_SHAPE_CIRCLE  csc2( aS2.GetEndPoint(), halfWidth2 );
-    PATH_CONNECTION* bestPath = nullptr;
+    std::optional<PATH_CONNECTION> bestPath;
 
     for( PATH_CONNECTION& pc : this->Paths( csc1, aMaxWeight, aMaxSquaredWeight ) )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
-            bestPath = &pc;
+            bestPath = pc;
     }
 
     for( PATH_CONNECTION& pc : this->Paths( csc2, aMaxWeight, aMaxSquaredWeight ) )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
-            bestPath = &pc;
+            bestPath = pc;
     }
 
     CU_SHAPE_CIRCLE csc3( s_start, halfWidth1 );
@@ -1667,14 +1669,14 @@ std::vector<PATH_CONNECTION> CU_SHAPE_SEGMENT::Paths( const CU_SHAPE_ARC& aS2, d
     for( PATH_CONNECTION& pc : csc3.Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
-            bestPath = &pc;
+            bestPath = pc;
     }
 
 
     for( PATH_CONNECTION& pc : csc4.Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
     {
         if( !bestPath || ( bestPath->weight > pc.weight ) )
-            bestPath = &pc;
+            bestPath = pc;
     }
 
     if( bestPath )

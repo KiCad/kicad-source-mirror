@@ -255,6 +255,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_issue24875.cpp
     drc/test_drc_creepage_issue24885.cpp
     drc/test_drc_creepage_issue25439.cpp
+    drc/test_drc_creepage_issue25821.cpp
     drc/test_drc_creepage_circle_prune.cpp
     drc/test_creepage_engine_parity.cpp
     drc/test_creepage_engine_incremental.cpp
