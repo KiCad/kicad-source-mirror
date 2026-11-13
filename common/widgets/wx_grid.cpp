@@ -254,7 +254,34 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
             hiddenCols.push_back( col );
     }
 
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    const wxGridSizesInfo savedColSizes = GetColSizes();
+    const wxGridSizesInfo savedRowSizes = GetRowSizes();
+#endif
+
     aEvt.Skip();
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CallAfter(
+            [this, savedColSizes, savedRowSizes]()
+            {
+                BeginBatch();
+
+                for( const auto& [col, size] : savedColSizes.m_customSizes )
+                {
+                    if( size > 0 && static_cast<int>( col ) < GetNumberCols() )
+                        SetColSize( col, size );
+                }
+
+                for( const auto& [row, size] : savedRowSizes.m_customSizes )
+                {
+                    if( size > 0 && static_cast<int>( row ) < GetNumberRows() )
+                        SetRowSize( row, size );
+                }
+
+                EndBatch();
+            } );
+#endif
 
     if( !hiddenCols.empty() )
     {

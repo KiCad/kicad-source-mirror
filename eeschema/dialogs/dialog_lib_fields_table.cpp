@@ -61,6 +61,27 @@ using DIALOG_NEW_SYMBOL = DIALOG_LIB_NEW_SYMBOL;
 #endif
 
 
+static constexpr int MAX_COL_WIDTH = 100000;
+
+
+static bool isValidColumnWidth( int aWidth )
+{
+    return aWidth > 0 && aWidth <= MAX_COL_WIDTH;
+}
+
+
+static int getStoredColumnWidth( const std::map<std::string, int>& aWidths, const std::string& aFieldName,
+                                 const wxWindow* aWindow )
+{
+    auto it = aWidths.find( aFieldName );
+
+    if( it == aWidths.end() || !isValidColumnWidth( it->second ) )
+        return 0;
+
+    return aWindow->FromDIP( it->second );
+}
+
+
 class VIEW_CONTROLS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
@@ -360,8 +381,13 @@ DIALOG_LIB_FIELDS_TABLE::~DIALOG_LIB_FIELDS_TABLE()
     {
         if( m_grid->IsColShown( i ) )
         {
+            int width = m_grid->ToDIP( m_grid->GetColSize( i ) );
+
+            if( !isValidColumnWidth( width ) )
+                continue;
+
             std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg.field_widths[fieldName] = m_grid->GetColSize( i );
+            cfg.field_widths[fieldName] = width;
         }
     }
 
@@ -506,10 +532,10 @@ void DIALOG_LIB_FIELDS_TABLE::SetupAllColumnProperties()
 
             std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
 
-            if( cfg->m_LibFieldEditor.field_widths.count( key )
-                && ( cfg->m_LibFieldEditor.field_widths.at( key ) > 0 ) )
+            if( int storedWidth = getStoredColumnWidth( cfg->m_LibFieldEditor.field_widths, key, m_grid );
+                storedWidth > 0 )
             {
-                m_grid->SetColSize( col, cfg->m_LibFieldEditor.field_widths.at( key ) );
+                m_grid->SetColSize( col, storedWidth );
             }
             else
             {
@@ -1166,8 +1192,13 @@ void DIALOG_LIB_FIELDS_TABLE::OnColMove(wxGridEvent& aEvent)
     {
         if( m_grid->IsColShown( i ) )
         {
+            int width = m_grid->ToDIP( m_grid->GetColSize( i ) );
+
+            if( !isValidColumnWidth( width ) )
+                continue;
+
             std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg->m_LibFieldEditor.field_widths[fieldName] = m_grid->GetColSize( i );
+            cfg->m_LibFieldEditor.field_widths[fieldName] = width;
         }
     }
 

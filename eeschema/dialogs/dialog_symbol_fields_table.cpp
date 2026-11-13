@@ -67,6 +67,27 @@ wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 #define COLUMN_MARGIN 15
 #endif
 
+
+static constexpr int MAX_COL_WIDTH = 100000;
+
+
+static bool isValidColumnWidth( int aWidth )
+{
+    return aWidth > 0 && aWidth <= MAX_COL_WIDTH;
+}
+
+
+static int getStoredColumnWidth( const std::map<std::string, int>& aWidths, const std::string& aFieldName,
+                                 const wxWindow* aWindow )
+{
+    auto it = aWidths.find( aFieldName );
+
+    if( it == aWidths.end() || !isValidColumnWidth( it->second ) )
+        return 0;
+
+    return aWindow->FromDIP( it->second );
+}
+
 using SCOPE = FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
 
@@ -378,8 +399,13 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     {
         if( m_grid->IsColShown( i ) )
         {
+            int width = m_grid->ToDIP( m_grid->GetColSize( i ) );
+
+            if( !isValidColumnWidth( width ) )
+                continue;
+
             std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg.field_widths[fieldName] = m_grid->GetColSize( i );
+            cfg.field_widths[fieldName] = width;
         }
     }
 
@@ -506,10 +532,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
 
             std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
 
-            if( cfg->m_FieldEditorPanel.field_widths.count( key )
-                && ( cfg->m_FieldEditorPanel.field_widths.at( key ) > 0 ) )
+            if( int storedWidth = getStoredColumnWidth( cfg->m_FieldEditorPanel.field_widths, key, m_grid );
+                storedWidth > 0 )
             {
-                m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( key ) );
+                m_grid->SetColSize( col, storedWidth );
             }
             else
             {
@@ -1081,8 +1107,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
     {
         if( m_grid->IsColShown( i ) )
         {
+            int width = m_grid->ToDIP( m_grid->GetColSize( i ) );
+
+            if( !isValidColumnWidth( width ) )
+                continue;
+
             std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
+            cfg->m_FieldEditorPanel.field_widths[fieldName] = width;
         }
     }
 
@@ -2089,8 +2120,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         m_viewControlsDataModel->SetValue( i, LABEL_COLUMN, label );
         m_grid->SetColLabelValue( col, label );
 
-        if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
-            m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
+        if( int storedWidth = getStoredColumnWidth( cfg->m_FieldEditorPanel.field_widths, fieldNameStr, m_grid );
+            storedWidth > 0 )
+        {
+            m_grid->SetColSize( col, storedWidth );
+        }
 
         // Set shown columns
         bool show = m_dataModel->GetShowColumn( col );
