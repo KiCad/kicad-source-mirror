@@ -892,14 +892,14 @@ void PROJECT_TREE_PANE::showContextMenu()
     {
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER, _( "Switch to this Project" ),
                            _( "Close all editors, and switch to the selected project" ),
-                           KiBitmap( BITMAPS::open_project ) );
+                           KiBitmapBundle( BITMAPS::open_project ) );
         popup_menu.AppendSeparator();
     }
 
     if( can_create_new_directory )
     {
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New Directory..." ),
-                           _( "Create a New Directory" ), KiBitmap( BITMAPS::directory ) );
+                           _( "Create a New Directory" ), KiBitmapBundle( BITMAPS::directory ) );
     }
 
     if( can_open_this_directory )
@@ -926,7 +926,7 @@ void PROJECT_TREE_PANE::showContextMenu()
         }
 
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_OPEN_DIR, text, help_text,
-                           KiBitmap( BITMAPS::directory_browser ) );
+                           KiBitmapBundle( BITMAPS::directory_browser ) );
     }
 
     if( can_edit )
@@ -937,13 +937,13 @@ void PROJECT_TREE_PANE::showContextMenu()
             help_text = _( "Open files in a Text Editor" );
 
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "Edit in a Text Editor" ), help_text,
-                           KiBitmap( BITMAPS::editor ) );
+                           KiBitmapBundle( BITMAPS::editor ) );
     }
 
     if( run_jobs && selection.size() == 1 )
     {
         KIUI::AddMenuItem( &popup_menu, ID_JOBS_RUN, _( "Run Jobs" ), help_text,
-                           KiBitmap( BITMAPS::exchange ) );
+                           KiBitmapBundle( BITMAPS::exchange ) );
     }
 
     if( can_rename )
@@ -960,7 +960,7 @@ void PROJECT_TREE_PANE::showContextMenu()
         }
 
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_RENAME, text, help_text,
-                           KiBitmap( BITMAPS::right ) );
+                           KiBitmapBundle( BITMAPS::right ) );
     }
 
     if( can_delete )
@@ -981,10 +981,10 @@ void PROJECT_TREE_PANE::showContextMenu()
 
 #ifdef __WINDOWS__
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text,
-                           KiBitmap( BITMAPS::trash ) );
+                           KiBitmapBundle( BITMAPS::trash ) );
 #else
         KIUI::AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Move to Trash" ), help_text,
-                           KiBitmap( BITMAPS::trash ) );
+                           KiBitmapBundle( BITMAPS::trash ) );
 #endif
     }
 
