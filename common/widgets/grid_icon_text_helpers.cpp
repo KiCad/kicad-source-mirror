@@ -287,6 +287,21 @@ void GRID_CELL_ICON_TEXT_POPUP::Create( wxWindow* aParent, wxWindowID aId,
             Combo()->Append( m_names[ i ] );
     }
 
+#if defined( __WXMAC__ )
+    // A click in the generic popup takes focus from the combo, so stay open until the popup closes
+    Combo()->Bind( wxEVT_COMBOBOX_CLOSEUP,
+                   [this]( wxCommandEvent& aEvent )
+                   {
+                       wxEvtHandler* handler = m_control->GetEventHandler();
+
+                       // Destroying an open combo closes its popup after the grid handler is popped
+                       if( handler != m_control )
+                           static_cast<wxGridCellEditorEvtHandler*>( handler )->SetInSetFocus( false );
+
+                       aEvent.Skip();
+                   } );
+#endif
+
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }
 
@@ -337,7 +352,7 @@ void GRID_CELL_ICON_TEXT_POPUP::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 
     // When dropping down the menu, a kill focus event
     // happens after this point, so we can't reset the flag yet.
-#if !defined(__WXGTK__)
+#if !defined( __WXGTK__ ) && !defined( __WXMAC__ )
     evtHandler->SetInSetFocus( false );
 #endif
 }
