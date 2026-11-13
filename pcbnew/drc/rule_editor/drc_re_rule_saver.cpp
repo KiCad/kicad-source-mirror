@@ -22,6 +22,7 @@
 #include <board.h>
 #include <kiplatform/io.h>
 #include <lset.h>
+#include <tuple>
 #include <string_utils.h>
 
 #include <drc_rules_lexer.h>
@@ -45,6 +46,16 @@ wxString formatLayerClause( const wxString& aLayerSource )
     return wxString::Format( wxS( "(layer \"%s\")" ), EscapeString( aLayerSource, CTX_QUOTED_STR ) );
 }
 
+
+std::pair<wxString, wxString> splitLeadingTrivia( const wxString& aTrivia )
+{
+    size_t blank = aTrivia.rfind( wxS( "\n\n" ) );
+
+    if( blank == wxString::npos )
+        return { wxEmptyString, aTrivia };
+
+    return { aTrivia.Left( blank + 2 ), aTrivia.Mid( blank + 2 ) };
+}
 }
 
 
@@ -74,9 +85,8 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
     if( result.IsEmpty() )
         result = wxS( "(version 2)" );
 
-    // Group entries by (sourceRule, ruleName, condition, layerSource) for merging same-rule constraints.
-    // Including the layer source prevents rules with different layer scopes from being
-    // incorrectly merged (e.g. separate "outer" and "inner" rules must remain distinct).
+    // Constraints with the same group came from one rule and go back into one. The layer
+    // source tells "outer" and "inner" of the same name apart.
     using GroupKey = std::tuple<int, wxString, wxString, wxString>;
 
     std::vector<std::pair<GroupKey, std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>>>
@@ -85,7 +95,7 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 
     for( const DRC_RE_LOADED_PANEL_ENTRY& entry : aEntries )
     {
-        auto key = std::make_tuple( entry.sourceRule, entry.ruleName, entry.condition, entry.layerSource );
+        auto key = std::make_tuple( entry.ruleGroupId, entry.ruleName, entry.condition, entry.layerSource );
         auto it = groupIndex.find( key );
 
         if( it == groupIndex.end() )
@@ -99,14 +109,56 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
         }
     }
 
+    size_t                triviaCount = aTrivia.leadingTrivia.size();
+    std::vector<wxString> floating( triviaCount );
+    std::vector<wxString> attached( triviaCount );
+    std::vector<bool>     present( triviaCount, false );
+
+    for( size_t i = 0; i < triviaCount; ++i )
+        std::tie( floating[i], attached[i] ) = splitLeadingTrivia( aTrivia.leadingTrivia[i] );
+
+    // A group that generates nothing leaves its comment to the trivia, the way a deleted rule
+    // does, so every rule's text is known before any comment is placed.
+    std::vector<std::pair<int, wxString>> rules;
+
     size_t nextTrivia = 0;
 
-    // Generate rule text for each group
+    auto emitUpTo = [&]( size_t aLast )
+    {
+        while( nextTrivia <= aLast )
+        {
+            result += floating[nextTrivia];
+
+            if( !present[nextTrivia] )
+                result += attached[nextTrivia];
+
+            nextTrivia++;
+        }
+    };
+
     for( const auto& [key, entries] : groupedEntries )
     {
         wxString ruleText;
 
-        if( entries.size() == 1 )
+        // An untouched rule goes back exactly as it was read.
+        bool     anyEdited = false;
+        wxString originalText;
+
+        for( const DRC_RE_LOADED_PANEL_ENTRY* entry : entries )
+        {
+            if( entry->wasEdited )
+                anyEdited = true;
+
+            if( originalText.IsEmpty() )
+                originalText = entry->originalRuleText;
+        }
+
+        if( !anyEdited && !originalText.IsEmpty()
+            && static_cast<int>( entries.size() ) == entries[0]->originalEntryCount )
+        {
+            ruleText = originalText;
+        }
+        else if( entries.size() == 1 )
         {
             // Single entry, no merge needed
             ruleText = generateRuleText( *entries[0], aBoard );
@@ -120,25 +172,41 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
         if( ruleText.IsEmpty() )
             continue;
 
-        // Comments of deleted rules are kept, and a file rule split by an edit emits its own only once
-        int source = entries[0]->sourceRule;
+        rules.emplace_back( entries[0]->sourceRule, ruleText );
+    }
 
-        if( source >= 0 && static_cast<size_t>( source ) >= nextTrivia
-            && static_cast<size_t>( source ) < aTrivia.leadingTrivia.size() )
-        {
-            while( nextTrivia <= static_cast<size_t>( source ) )
-                result += aTrivia.leadingTrivia[nextTrivia++];
-        }
+    for( const auto& [source, ruleText] : rules )
+    {
+        if( source >= 0 && static_cast<size_t>( source ) < triviaCount )
+            present[source] = true;
+    }
+
+    std::vector<bool> attachedWritten( triviaCount, false );
+
+    for( const auto& [source, ruleText] : rules )
+    {
+        bool known = source >= 0 && static_cast<size_t>( source ) < triviaCount;
+
+        if( known && static_cast<size_t>( source ) >= nextTrivia )
+            emitUpTo( source );
         else
-        {
             result += wxS( "\n" );
+
+        // Comments of deleted rules are kept, and a file rule split by an edit emits its own only once
+        if( known && !attachedWritten[source] )
+        {
+            if( !attached[source].StartsWith( wxS( "\n" ) ) && !result.EndsWith( wxS( "\n" ) ) )
+                result += wxS( "\n" );
+
+            result += attached[source];
+            attachedWritten[source] = true;
         }
 
         result += ruleText;
     }
 
-    while( nextTrivia < aTrivia.leadingTrivia.size() )
-        result += aTrivia.leadingTrivia[nextTrivia++];
+    if( triviaCount > 0 )
+        emitUpTo( triviaCount - 1 );
 
     if( aTrivia.header.IsEmpty() )
         result += wxS( "\n" );
@@ -152,12 +220,6 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEntry,
                                             const BOARD*                     aBoard )
 {
-    // Round-trip preservation: return original text if not edited. A rule that was split
-    // into several entries must be regenerated once any of them is gone.
-    if( !aEntry.wasEdited && !aEntry.originalRuleText.IsEmpty() && aEntry.originalEntryCount == 1 )
-        return aEntry.originalRuleText;
-
-    // Otherwise, regenerate from panel data
     if( !aEntry.constraintData )
         return wxEmptyString;
 
@@ -278,31 +340,14 @@ wxString DRC_RULE_SAVER::generateMergedRuleText(
     if( aEntries.empty() )
         return wxEmptyString;
 
-    // Check if all entries are unedited and the first one has original text
-    // If so, we can use round-trip preservation
-    bool allUnedited = true;
-
-    for( const auto* entry : aEntries )
-    {
-        if( entry->wasEdited )
-        {
-            allUnedited = false;
-            break;
-        }
-    }
-
-    if( allUnedited && !aEntries[0]->originalRuleText.IsEmpty()
-        && static_cast<int>( aEntries.size() ) == aEntries[0]->originalEntryCount )
-    {
-        return aEntries[0]->originalRuleText;
-    }
-
-    // Otherwise, merge constraint clauses from all entries
     const DRC_RE_LOADED_PANEL_ENTRY* firstEntry = aEntries[0];
 
     RULE_GENERATION_CONTEXT ctx;
     ctx.ruleName = firstEntry->ruleName;
     ctx.conditionExpression = firstEntry->condition;
+
+    if( firstEntry->constraintData )
+        ctx.comment = firstEntry->constraintData->GetComment();
 
     // Generate layer clause from first entry with layer info (all entries in a
     // merged group share the same layerSource because it's part of the grouping key)
@@ -345,6 +390,12 @@ wxString DRC_RULE_SAVER::generateMergedRuleText(
     wxString rule;
     rule << wxS( "(rule " ) << DRC_RE_BASE_CONSTRAINT_DATA::formatRuleName( ctx.ruleName )
          << wxS( "\n" );
+
+    for( const wxString& line : wxSplit( ctx.comment, '\n', '\0' ) )
+    {
+        if( !line.IsEmpty() )
+            rule << wxS( "\t# " ) << line << wxS( "\n" );
+    }
 
     if( !ctx.layerClause.IsEmpty() )
         rule << wxS( "\t" ) << ctx.layerClause << wxS( "\n" );

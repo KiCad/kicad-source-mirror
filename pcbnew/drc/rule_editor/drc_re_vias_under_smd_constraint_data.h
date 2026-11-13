@@ -34,11 +34,11 @@ public:
     {
     }
 
-    explicit DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
+    explicit DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA( int aId, const wxString& aRuleName,
                                                     bool aDisallowThroughVias = false, bool aDisallowMicroVias = false,
                                                     bool aDisallowBlindVias = false,
                                                     bool aDisallowBuriedVias = false ) :
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName ),
             m_disallowThroughVias( aDisallowThroughVias ),
             m_disallowMicroVias( aDisallowMicroVias ),
             m_disallowBlindVias( aDisallowBlindVias ),

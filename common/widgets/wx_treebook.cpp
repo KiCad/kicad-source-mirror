@@ -98,6 +98,13 @@ bool WX_TREEBOOK::AddLazySubPage( std::function<wxWindow*( wxWindow* aParent )> 
 }
 
 
+bool WX_TREEBOOK::InsertLazySubPage( size_t aPos, std::function<wxWindow*( wxWindow* aParent )> aLazyCtor,
+                                     const wxString& text, bool bSelect, int imageId )
+{
+    return InsertSubPage( aPos, new LAZY_PAGE( this, std::move( aLazyCtor ) ), text, bSelect, imageId );
+}
+
+
 wxWindow* WX_TREEBOOK::ResolvePage( size_t aPage )
 {
     wxWindow* page = GetPage( aPage );

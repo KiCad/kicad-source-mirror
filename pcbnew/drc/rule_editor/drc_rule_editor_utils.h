@@ -48,6 +48,13 @@ public:
 
     static std::shared_ptr<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA> CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType );
 
+    /**
+     * Create the data object that holds a rule of the given constraint type, taking the
+     * identity fields from aBase.
+     */
+    static std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>
+    CreateConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType, const DRC_RE_BASE_CONSTRAINT_DATA& aBase );
+
     static std::shared_ptr<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>
                             CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME aType,
                             const DRC_RE_BASE_CONSTRAINT_DATA& aBase );
@@ -87,15 +94,6 @@ public:
      * @return The textual representation suitable for a rules file.
      */
     static wxString ConstraintToKicadDrc( DRC_RULE_EDITOR_CONSTRAINT_NAME aType );
-
-    /**
-     * Populate a constraint data object using a keyword from a .kicad_drc file.
-     *
-     * @param aCode The keyword read from the rules file.
-     * @param aData The constraint data instance to update.
-     * @return True if a matching constraint type was found.
-     */
-    static bool ConstraintFromKicadDrc( const wxString& aCode, DRC_RE_BASE_CONSTRAINT_DATA* aData );
 
     /**
      * Validates a numeric input control, checking if the value is valid, non-empty, and greater than zero.
@@ -288,6 +286,15 @@ public:
      * @return The layer clause string (e.g., "(layer \"F.CrtYd\")") or condition string.
      */
     static wxString TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType, bool aIsTop );
+
+    /**
+     * The layer a side of the board means for a constraint, which is not copper for every one.
+     *
+     * @param aConstraintType The constraint type.
+     * @param aIsTop True for top/front, false for bottom/back.
+     * @return The layer that side selects.
+     */
+    static PCB_LAYER_ID TopBottomLayerId( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType, bool aIsTop );
 
     enum class SELECTOR_KIND
     {

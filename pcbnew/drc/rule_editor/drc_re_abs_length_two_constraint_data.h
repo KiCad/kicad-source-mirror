@@ -34,9 +34,9 @@ public:
     {
     }
 
-    explicit DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA( int aId, int aParentId, double aOptLength, double aTolerance,
+    explicit DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA( int aId, double aOptLength, double aTolerance,
                                                          const wxString& aRuleName ) :
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName ),
             m_optLength( aOptLength ),
             m_tolerance( aTolerance )
     {

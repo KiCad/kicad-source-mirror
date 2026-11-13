@@ -34,10 +34,10 @@ public:
     {
     }
 
-    explicit DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
-                                                       double aOptWidth, double aWidthTolerance, double aOptGap,
-                                                       double aGapTolerance, double aMaxUncoupledLength ) :
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
+    explicit DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA( int aId, const wxString& aRuleName, double aOptWidth,
+                                                       double aWidthTolerance, double aOptGap, double aGapTolerance,
+                                                       double aMaxUncoupledLength ) :
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName ),
             m_optWidth( aOptWidth ),
             m_widthTolerance( aWidthTolerance ),
             m_optGap( aOptGap ),

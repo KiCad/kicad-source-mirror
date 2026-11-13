@@ -30,19 +30,27 @@
 #include <panel_setup_constraints_base.h>
 
 class BOARD;
+class DRC_RULE_DOCUMENT;
 class FIELD_WARNING_ICON;
 class PAGED_DIALOG;
 class PCB_EDIT_FRAME;
 class wxCommandEvent;
+class wxPopupTransientWindow;
 
 
 class PANEL_SETUP_CONSTRAINTS : public PANEL_SETUP_CONSTRAINTS_BASE
 {
 public:
-    PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
+    PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, DRC_RULE_DOCUMENT* aDocument );
     ~PANEL_SETUP_CONSTRAINTS( ) override { };
 
     void ImportSettingsFrom( BOARD* aBoard );
+
+    /**
+     * Reads the values a rule page edits back into their fields. This page only shows those, so
+     * it has to be told when the page that edits one has written it.
+     */
+    void RefreshDefaults();
 
 private:
     bool TransferDataToWindow() override;
@@ -53,11 +61,26 @@ private:
     /// Show a warning icon, with the reason as its tooltip, over each field whose value has an issue.
     void updateWarnings();
 
+    /// Pop up what a board constraint is read with, each entry a link to where it is set.
+    void showOverridingRules( const wxString& aSetting, wxWindow* aAnchor, bool aFromHover );
+
+    /// Close a popup opened by hovering once the pointer has left both it and its icon.
+    void closeHoveredPopup();
+
     struct CONSTRAINT_FIELD
     {
-        wxString            m_Setting;
-        wxWindow*           m_Ctrl;
-        FIELD_WARNING_ICON* m_Warning;
+        wxString     m_Setting;
+        wxWindow*    m_Ctrl;
+        UNIT_BINDER* m_Binder = nullptr;
+        int BOARD_DESIGN_SETTINGS::* m_Member = nullptr;
+        FIELD_WARNING_ICON*          m_Warning = nullptr;
+
+        /// Opens the list of what this value is read with, where anything else can set it
+        FIELD_WARNING_ICON* m_Override = nullptr;
+
+        /// The value as this page last read it, so an untouched field does not write back over
+        /// an edit made to the same value on the page that also holds it
+        int m_Loaded = 0;
     };
 
 public:
@@ -81,8 +104,35 @@ public:
 private:
     PCB_EDIT_FRAME*               m_Frame;
     BOARD_DESIGN_SETTINGS*        m_BrdSettings;
+    DRC_RULE_DOCUMENT*            m_document;
+
+    /// The rule page that also holds the spoke count, a spin control rather than a bound field
+    wxString                      m_spokeCountPage;
+
+    /// The spoke count as this page last read it
+    int                           m_spokeCountLoaded = 0;
     std::vector<CONSTRAINT_FIELD> m_fields;
     wxTimer                       m_validationTimer;
+
+    /// The popup a hover or a click opened, while it is up
+    wxPopupTransientWindow* m_popup = nullptr;
+
+    /// The icon that popup belongs to, which the pointer may return to without closing it
+    wxWindow* m_popupAnchor = nullptr;
+
+    /// A popup a click opened stays until it is dismissed; one a hover opened follows the pointer
+    bool m_popupFromHover = false;
+
+    /// The field a hover is waiting to open, and the icon it would hang under
+    wxString  m_hoverSetting;
+    wxWindow* m_hoverAnchor = nullptr;
+
+    wxTimer m_hoverTimer;
+    wxTimer m_closeTimer;
+
+    /// The field whose own help is held back while a popup covers it, and the text to give back
+    wxWindow* m_mutedField = nullptr;
+    wxString  m_mutedTip;
 };
 
 #endif //PANEL_SETUP_CONSTRAINTS_H

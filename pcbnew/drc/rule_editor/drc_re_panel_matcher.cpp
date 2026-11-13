@@ -393,3 +393,29 @@ DRC_RULE_EDITOR_CONSTRAINT_NAME DRC_PANEL_MATCHER::GetPanelForConstraint( DRC_CO
 
     return CUSTOM_RULE;
 }
+
+
+DRC_RULE_EDITOR_CONSTRAINT_NAME DRC_PANEL_MATCHER::GetHomePanel( DRC_CONSTRAINT_T aConstraintType )
+{
+    // These have a page of their own besides a combined panel that outranks it
+    switch( aConstraintType )
+    {
+    case HOLE_SIZE_CONSTRAINT: return HOLE_SIZE;
+    case SILK_CLEARANCE_CONSTRAINT: return SILK_TO_SILK_CLEARANCE;
+    case LENGTH_CONSTRAINT: return ABSOLUTE_LENGTH;
+    default: break;
+    }
+
+    DRC_RULE_EDITOR_CONSTRAINT_NAME single = GetPanelForConstraint( aConstraintType );
+
+    if( single != CUSTOM_RULE )
+        return single;
+
+    for( const DRC_PANEL_CLAIM& claim : m_claims )
+    {
+        if( claim.requiredConstraints.count( aConstraintType ) || claim.optionalConstraints.count( aConstraintType ) )
+            return claim.panelType;
+    }
+
+    return CUSTOM_RULE;
+}

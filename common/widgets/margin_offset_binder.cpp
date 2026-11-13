@@ -19,6 +19,7 @@
 
 #include <widgets/margin_offset_binder.h>
 
+#include <wx/dcclient.h>
 #include <wx/stattext.h>
 #include <wx/textentry.h>
 #include <wx/regex.h>
@@ -62,6 +63,19 @@ MARGIN_OFFSET_BINDER::MARGIN_OFFSET_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWi
     {
         m_eventSource->Connect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( MARGIN_OFFSET_BINDER::onUnitsChanged ),
                                 nullptr, this );
+    }
+
+    // UNIT_BINDER sizes the field it binds, which is why the forms leave its size unset. This
+    // field holds an offset and a ratio together, so it is sized for that combined value.
+    if( m_valueCtrl && dynamic_cast<wxTextEntry*>( m_valueCtrl ) )
+    {
+        wxClientDC dc( m_valueCtrl );
+
+        wxSize minSize = m_valueCtrl->GetMinSize();
+        int    minWidth = dc.GetTextExtent( wxT( "-XX.XXXXmm - XX%" ) ).GetWidth();
+
+        if( minSize.GetWidth() < minWidth )
+            m_valueCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
     }
 
     // Update the unit label to indicate combined format

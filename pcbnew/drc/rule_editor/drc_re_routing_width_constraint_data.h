@@ -34,9 +34,9 @@ public:
     {
     }
 
-    explicit DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName, double aOptWidth,
+    explicit DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA( int aId, const wxString& aRuleName, double aOptWidth,
                                                    double aWidthTolerance ) :
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName ),
             m_optWidth( aOptWidth ),
             m_widthTolerance( aWidthTolerance )
     {

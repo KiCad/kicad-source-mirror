@@ -42,6 +42,12 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
+    /**
+     * Reads the values a rule page sets back into their fields. This page only shows those, so
+     * it has to be told when the page that sets one has written it.
+     */
+    void RefreshDefaults();
+
 private:
     PCB_EDIT_FRAME*         m_Frame;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
@@ -50,6 +56,17 @@ private:
     UNIT_BINDER             m_maskMinWidth;
     UNIT_BINDER             m_maskToCopperClearance;
     MARGIN_OFFSET_BINDER    m_pasteMargin;
+
+    /// The rule pages that also hold these values, where they do
+    wxString m_maskExpansionPage;
+    wxString m_maskMinWidthPage;
+    wxString m_pasteMarginPage;
+
+    /// The values as this page last read them, so an untouched field does not write back over
+    /// an edit made on the page that also holds it
+    int m_maskExpansionLoaded = 0;
+    int m_maskMinWidthLoaded = 0;
+    int m_pasteMarginLoaded = 0;
 };
 
 

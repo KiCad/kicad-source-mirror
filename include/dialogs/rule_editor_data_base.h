@@ -22,7 +22,6 @@
 
 #include <lset.h>
 #include <lseq.h>
-#include <optional>
 
 /**
  * Abstract interface class to enable polymorphic copying between objects.
@@ -43,8 +42,10 @@ class RULE_EDITOR_DATA_BASE : public ICopyable
 public:
     RULE_EDITOR_DATA_BASE() = default;
 
-    explicit RULE_EDITOR_DATA_BASE( int aId, int aParentId, wxString aRuleName ) :
-            m_id( aId ), m_parentId( aParentId ), m_ruleName( aRuleName ), m_isNew( false )
+    explicit RULE_EDITOR_DATA_BASE( int aId, wxString aRuleName ) :
+            m_id( aId ),
+            m_ruleName( aRuleName ),
+            m_isNew( false )
     {
     }
 
@@ -65,25 +66,11 @@ public:
     void SetId( int aId ) { m_id = aId; }
 
     /**
-     * Get the parent ID of the rule.
-     *
-     * @return The parent ID of the rule, or -1 if no parent is set.
-     */
-    int GetParentId() { return m_parentId.value_or( -1 ); }
-
-    /**
-     * Set the parent ID of the rule.
-     *
-     * @param aParentId The parent ID to set.
-     */
-    void SetParentId( int aParentId ) { m_parentId = aParentId; }
-
-    /**
      * Get the name of the rule.
      *
      * @return The name of the rule.
      */
-    wxString GetRuleName() { return m_ruleName; }
+    wxString GetRuleName() const { return m_ruleName; }
 
     /**
      * Set the name of the rule.
@@ -133,8 +120,7 @@ public:
     }
 
 private:
-    int                m_id;       // Unique ID of the rule.
-    std::optional<int> m_parentId; // Optional parent ID of the rule.
+    int                m_id = 0; // Unique ID of the rule.
     wxString           m_ruleName;
     wxString           m_comment;
     bool               m_isNew = false; /**< Flag indicating if the user is creating a new rule (true)

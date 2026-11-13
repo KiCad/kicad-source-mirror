@@ -53,7 +53,6 @@
 #include <dialogs/dialog_assign_netclass.h>
 #include <dialogs/dialog_footprint_fields_table.h>
 #include <dialog_plot.h>
-#include <dialogs/rule_editor_dialog_base.h>
 #include <dialogs/dialog_find_by_properties.h>
 #include <kiface_base.h>
 #include <kiway.h>
@@ -514,25 +513,6 @@ int BOARD_EDITOR_CONTROL::ExportForOlderVersion( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 {
-    wxWindow* focus = wxWindow::FindFocus();
-
-    if( focus )
-    {
-        wxWindow* topLevel = focus;
-
-        while( topLevel && !topLevel->IsTopLevel() )
-            topLevel = topLevel->GetParent();
-
-        RULE_EDITOR_DIALOG_BASE* reDlg = dynamic_cast<RULE_EDITOR_DIALOG_BASE*>( topLevel );
-
-        if( reDlg )
-        {
-            wxCommandEvent evt;
-            reDlg->OnSave( evt );
-            return 0;
-        }
-    }
-
     m_frame->SaveBoard();
     return 0;
 }
@@ -678,6 +658,13 @@ int BOARD_EDITOR_CONTROL::FindByProperties( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
 {
     getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog();
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::DesignRules( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog( _( "Clearance" ) );
     return 0;
 }
 
@@ -2408,6 +2395,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::OpenNonKicadBoard,      PCB_ACTIONS::openNonKicadBoard.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportFootprints,       PCB_ACTIONS::exportFootprints.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::DesignRules,            PCB_ACTIONS::drcRuleEditor.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );

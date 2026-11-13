@@ -43,12 +43,11 @@ public:
     {
     }
 
-    explicit DRC_RE_VIA_STYLE_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName,
-                                               double aMinViaDiameter, double aMaxViaDiameter,
-                                               double aMinViaHoleSize, double aMaxViaHoleSize,
+    explicit DRC_RE_VIA_STYLE_CONSTRAINT_DATA( int aId, const wxString& aRuleName, double aMinViaDiameter,
+                                               double aMaxViaDiameter, double aMinViaHoleSize, double aMaxViaHoleSize,
                                                VIA_STYLE_TYPE aViaType = VIA_STYLE_TYPE::ANY ) :
 
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName ),
             m_minViaDiameter( aMinViaDiameter ),
             m_maxViaDiameter( aMaxViaDiameter ),
             m_minViaHoleSize( aMinViaHoleSize ),
@@ -88,11 +87,11 @@ public:
 
         if( hasDiameter )
         {
-            if( m_minViaDiameter <= 0 )
-                result.AddError( _( "Minimum Via Diameter must be greater than 0" ) );
+            if( m_minViaDiameter < 0 )
+                result.AddError( _( "Minimum Via Diameter cannot be negative" ) );
 
-            if( m_maxViaDiameter <= 0 )
-                result.AddError( _( "Maximum Via Diameter must be greater than 0" ) );
+            if( m_maxViaDiameter < 0 )
+                result.AddError( _( "Maximum Via Diameter cannot be negative" ) );
 
             if( m_minViaDiameter > 0 && m_maxViaDiameter > 0 && m_minViaDiameter > m_maxViaDiameter )
                 result.AddError( _( "Minimum Via Diameter cannot be greater than Maximum Via Diameter" ) );
@@ -100,11 +99,11 @@ public:
 
         if( hasHoleSize )
         {
-            if( m_minViaHoleSize <= 0 )
-                result.AddError( _( "Minimum Via Hole Size must be greater than 0" ) );
+            if( m_minViaHoleSize < 0 )
+                result.AddError( _( "Minimum Via Hole Size cannot be negative" ) );
 
-            if( m_maxViaHoleSize <= 0 )
-                result.AddError( _( "Maximum Via Hole Size must be greater than 0" ) );
+            if( m_maxViaHoleSize < 0 )
+                result.AddError( _( "Maximum Via Hole Size cannot be negative" ) );
 
             if( m_minViaHoleSize > 0 && m_maxViaHoleSize > 0 && m_minViaHoleSize > m_maxViaHoleSize )
                 result.AddError( _( "Minimum Via Hole Size cannot be greater than Maximum Via Hole Size" ) );
@@ -123,40 +122,31 @@ public:
             return formatDouble( aValue ) + wxS( "mm" );
         };
 
+        auto formatRange = [&]( const wxString& aCode, double aMin, double aOpt, double aMax )
+        {
+            wxString clause = wxS( "(constraint " ) + aCode;
+
+            if( aMin > 0 )
+                clause << wxS( " (min " ) << formatDimension( aMin ) << wxS( ")" );
+
+            if( aOpt > 0 && aOpt >= aMin && ( aMax <= 0 || aOpt <= aMax ) )
+                clause << wxS( " (opt " ) << formatDimension( aOpt ) << wxS( ")" );
+
+            if( aMax > 0 )
+                clause << wxS( " (max " ) << formatDimension( aMax ) << wxS( ")" );
+
+            return clause + wxS( ")" );
+        };
+
         std::vector<wxString> clauses;
 
-        if( m_minViaDiameter > 0 && m_maxViaDiameter > 0 )
-        {
-            if( m_optViaDiameter >= m_minViaDiameter && m_optViaDiameter <= m_maxViaDiameter )
-            {
-                clauses.push_back( wxString::Format( wxS( "(constraint via_diameter (min %s) (opt %s) (max %s))" ),
-                                                     formatDimension( m_minViaDiameter ),
-                                                     formatDimension( m_optViaDiameter ),
-                                                     formatDimension( m_maxViaDiameter ) ) );
-            }
-            else
-            {
-                clauses.push_back( wxString::Format( wxS( "(constraint via_diameter (min %s) (max %s))" ),
-                                                     formatDimension( m_minViaDiameter ),
-                                                     formatDimension( m_maxViaDiameter ) ) );
-            }
-        }
+        if( m_minViaDiameter > 0 || m_maxViaDiameter > 0 )
+            clauses.push_back(
+                    formatRange( wxS( "via_diameter" ), m_minViaDiameter, m_optViaDiameter, m_maxViaDiameter ) );
 
-        if( m_minViaHoleSize > 0 && m_maxViaHoleSize > 0 )
-        {
-            if( m_optViaHoleSize >= m_minViaHoleSize && m_optViaHoleSize <= m_maxViaHoleSize )
-            {
-                clauses.push_back( wxString::Format(
-                        wxS( "(constraint hole_size (min %s) (opt %s) (max %s))" ), formatDimension( m_minViaHoleSize ),
-                        formatDimension( m_optViaHoleSize ), formatDimension( m_maxViaHoleSize ) ) );
-            }
-            else
-            {
-                clauses.push_back( wxString::Format( wxS( "(constraint hole_size (min %s) (max %s))" ),
-                                                     formatDimension( m_minViaHoleSize ),
-                                                     formatDimension( m_maxViaHoleSize ) ) );
-            }
-        }
+        if( m_minViaHoleSize > 0 || m_maxViaHoleSize > 0 )
+            clauses.push_back(
+                    formatRange( wxS( "hole_size" ), m_minViaHoleSize, m_optViaHoleSize, m_maxViaHoleSize ) );
 
         return clauses;
     }

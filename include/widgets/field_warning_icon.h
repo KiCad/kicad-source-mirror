@@ -20,6 +20,7 @@
 #pragma once
 
 #include <kicommon.h>
+#include <bitmaps/bitmaps_list.h>
 #include <wx/arrstr.h>
 #include <wx/generic/statbmpg.h>
 
@@ -30,11 +31,14 @@ class wxWindowDestroyEvent;
 /**
  * A warning icon drawn inside the right edge of a field, left of its dropdown button when it has
  * one, with the warnings as its tooltip.  The icon is shown only while there is something to warn
- * about.  It marks a combo box, a choice or a text control.
+ * about.  It marks a combo box, a choice, a spin control or a text control.
  *
  * The icon is a sibling of the field, since native combo boxes cannot host child windows on every
  * port, and follows the field when it moves or changes size.  Like any child window it belongs to the
  * field's parent, which destroys it.
+ *
+ * A field that carries a button of its own at that edge, a combo box or a spin control, is given
+ * room for it.
  */
 class KICOMMON_API FIELD_WARNING_ICON : public wxGenericStaticBitmap
 {
@@ -43,7 +47,9 @@ public:
     static constexpr size_t MAX_LINES = 10;
 
     /// @param aField the field to mark, which needs a parent window
-    explicit FIELD_WARNING_ICON( wxWindow* aField );
+    /// @param aIcon the glyph to draw
+    /// @param aSlot place at the right edge, counting inwards from zero
+    explicit FIELD_WARNING_ICON( wxWindow* aField, BITMAPS aIcon = BITMAPS::small_warning, int aSlot = 0 );
     ~FIELD_WARNING_ICON() override;
 
     /// Lists aMessages in the tooltip, once each with a count when repeated, and shows the icon, or hides it when
@@ -53,6 +59,9 @@ public:
     /// Shows aMessage as the tooltip, or hides the icon when it is empty
     void SetWarning( const wxString& aMessage );
 
+    /// Shows the icon with no tooltip of its own, for one that opens something on click or hover
+    void ShowAsBadge();
+
     /// Moves the icon back over the field after the field has moved or changed size
     void Reposition();
 
@@ -61,4 +70,5 @@ private:
     void onFieldDestroyed( wxWindowDestroyEvent& aEvent );
 
     wxWindow* m_field; ///< Null once the field has been destroyed
+    int       m_slot;
 };

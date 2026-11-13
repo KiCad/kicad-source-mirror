@@ -38,6 +38,10 @@
 #include <panel_embedded_files.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_rules.h>
+#include <dialogs/panel_setup_constraint_rules.h>
+#include <drc/drc_engine.h>
+#include <drc/rule_editor/drc_rule_document.h>
+#include <ki_exception.h>
 #include <dialogs/panel_setup_teardrops.h>
 #include <dialogs/panel_setup_zones.h>
 #include <dialogs/panel_setup_tuning_patterns.h>
@@ -80,16 +84,19 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_formattingPage( 0 ),
         m_maskAndPastePage( 0 ),
         m_constraintsPage( 0 ),
+        m_customRulesPage( 0 ),
         m_tracksAndViasPage( 0 ),
         m_viaStacksPage( 0 ),
         m_teardropsPage( 0 ),
         m_tuningPatternsPage( 0 ),
         m_netclassesPage( 0 ),
-        m_customRulesPage( 0 ),
         m_severitiesPage( 0 ),
         m_tuningProfilesPage( 0 ),
         m_initComplete( false )
 {
+    m_ruleDocument = std::make_unique<DRC_RULE_DOCUMENT>( m_frame->GetBoard() );
+    m_ruleDocument->Load();
+
     SetEvtHandlerEnabled( false );
 
     /*
@@ -127,13 +134,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_BOARD_FINISH( aParent, m_frame );
             }, _( "Board Finish" ) );
 
-    m_maskAndPastePage = m_treebook->GetPageCount();
-    m_treebook->AddLazySubPage(
-            [this]( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
-            }, _( "Solder Mask/Paste" ) );
-
     m_drillChartPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
@@ -169,8 +169,52 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_SETUP_CONSTRAINTS( aParent, m_frame );
-            }, _( "Constraints" ) );
+                return new PANEL_SETUP_CONSTRAINTS( aParent, m_frame, m_ruleDocument.get() );
+            },
+            _( "Constraints" ) );
+
+    const std::vector<std::pair<PANEL_SETUP_CONSTRAINT_RULES::FAMILY, wxString>> ruleFamilies = {
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::CLEARANCE, _( "Clearance" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::TRACKS_AND_VIAS, _( "Tracks and Vias" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::HOLES, _( "Holes" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::SILKSCREEN, _( "Silkscreen" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::SOLDER_MASK, _( "Mask and Paste" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::HIGH_SPEED, _( "High Speed" ) },
+        { PANEL_SETUP_CONSTRAINT_RULES::FAMILY::FOOTPRINT_RULES, _( "Footprints" ) }
+    };
+
+    for( const auto& [family, familyTitle] : ruleFamilies )
+    {
+        size_t familyPage = m_treebook->GetPageCount();
+
+        // An empty page, so selecting the family drops through to the first page under it, as
+        // the other tree level nodes do.
+        m_treebook->AddSubPage( new wxPanel( GetTreebook() ), familyTitle );
+
+        if( family == PANEL_SETUP_CONSTRAINT_RULES::FAMILY::SOLDER_MASK )
+        {
+            // The rules in this family are read against these defaults, so they sit together.
+            m_maskAndPastePage = m_treebook->GetPageCount();
+            m_treebook->InsertLazySubPage(
+                    familyPage,
+                    [this]( wxWindow* aParent ) -> wxWindow*
+                    {
+                        return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
+                    },
+                    _( "Solder Mask/Paste" ) );
+        }
+
+        for( const CONSTRAINT_SECTION& section : PANEL_SETUP_CONSTRAINT_RULES::SectionsFor( family ) )
+        {
+            m_treebook->InsertLazySubPage(
+                    familyPage,
+                    [this, section]( wxWindow* aParent ) -> wxWindow*
+                    {
+                        return new PANEL_SETUP_CONSTRAINT_RULES( aParent, m_frame, m_ruleDocument.get(), section );
+                    },
+                    section.title );
+        }
+    }
 
     m_tracksAndViasPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -250,7 +294,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
             {
-                return new PANEL_SETUP_RULES( aParent, m_frame );
+                return new PANEL_SETUP_RULES( aParent, m_frame, m_ruleDocument.get() );
             },
             _( "Custom Rules" ) );
 
@@ -309,6 +353,20 @@ DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 {
     Unbind( wxEVT_BUTTON, &DIALOG_BOARD_SETUP::onCancelButton, this, wxID_CANCEL );
     Unbind( wxEVT_CLOSE_WINDOW, &DIALOG_BOARD_SETUP::onCloseWindow, this );
+
+    // Pages reading m_ruleDocument would outlive it in ~wxWindow, so empty their lazy holders now
+    // and leave the tree intact for ~PAGED_DIALOG
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        wxWindow* page = m_treebook->GetResolvedPage( i );
+
+        if( page && page != m_treebook->GetPage( i )
+            && ( dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( page ) || dynamic_cast<PANEL_SETUP_RULES*>( page )
+                 || dynamic_cast<PANEL_SETUP_CONSTRAINTS*>( page ) ) )
+        {
+            m_treebook->GetPage( i )->DestroyChildren();
+        }
+    }
 }
 
 
@@ -316,7 +374,7 @@ bool DIALOG_BOARD_SETUP::canDiscardChanges()
 {
     auto* rules = static_cast<PANEL_SETUP_RULES*>( m_treebook->GetResolvedPage( m_customRulesPage ) );
 
-    if( !rules || !rules->IsModified() )
+    if( !m_ruleDocument->IsModified() && ( !rules || !rules->IsModified() ) )
         return true;
 
     return OKOrCancelDialog( this, _( "Confirmation" ), _( "Discard changes to custom rules?" ), wxEmptyString,
@@ -343,20 +401,31 @@ void DIALOG_BOARD_SETUP::onCloseWindow( wxCloseEvent& aEvent )
 }
 
 
-void DIALOG_BOARD_SETUP::onPageChanging( wxBookCtrlEvent& aEvent )
-{
-    // Rules are written to disk only on OK so Cancel can still discard them
-    if( aEvent.GetOldSelection() == (int) m_customRulesPage )
-        return;
-
-    PAGED_DIALOG::onPageChanging( aEvent );
-}
-
-
 bool DIALOG_BOARD_SETUP::TransferDataFromWindow()
 {
     if( !PAGED_DIALOG::TransferDataFromWindow() )
         return false;
+
+    if( m_ruleDocument->IsModified() && !m_frame->GetBoard()->GetDesignRulesPath().IsEmpty() )
+    {
+        wxString error;
+
+        if( !m_ruleDocument->Save( &error ) )
+        {
+            SetError( wxString::Format( _( "Cannot save design rules: %s" ), error ), nullptr, nullptr );
+            return false;
+        }
+
+        try
+        {
+            m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine(
+                    m_frame->GetBoard()->GetDesignRulesPath() );
+        }
+        catch( PARSE_ERROR& )
+        {
+            // The rules are saved. DRC reports any compile problem when it runs.
+        }
+    }
 
     // References to renamed profiles can only be fixed up after all pages have saved
     auto* tuningProfiles =
@@ -395,7 +464,24 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 {
     PAGED_DIALOG::onPageChanged( aEvent );
 
-    size_t page = aEvent.GetSelection();
+    size_t page = m_treebook->GetSelection();
+
+    if( int selected = m_treebook->GetSelection(); selected != wxNOT_FOUND )
+        refreshRulePage( selected );
+
+    // A constraint can be set on its rule page or on the page it has always been set on, and
+    // leaving either one writes it, so every open page showing that value reads it again
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        wxWindow* resolved = m_treebook->GetResolvedPage( i );
+
+        if( auto* rulesPage = dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( resolved ) )
+            rulesPage->RefreshDefaults();
+        else if( auto* constraintsPage = dynamic_cast<PANEL_SETUP_CONSTRAINTS*>( resolved ) )
+            constraintsPage->RefreshDefaults();
+        else if( auto* maskPage = dynamic_cast<PANEL_SETUP_MASK_AND_PASTE*>( resolved ) )
+            maskPage->RefreshDefaults();
+    }
 
     if( m_initComplete )
     {
@@ -449,6 +535,52 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
     }
 
     m_currentPage = page;
+}
+
+
+void DIALOG_BOARD_SETUP::forEachOpenRulePage( const std::function<void( PANEL_SETUP_CONSTRAINT_RULES* )>& aAction )
+{
+    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    {
+        if( auto* page = dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( m_treebook->GetResolvedPage( i ) ) )
+            aAction( page );
+    }
+}
+
+
+void DIALOG_BOARD_SETUP::importRuleDefaults( BOARD* aBoard, const wxString& aGroup )
+{
+    BOARD_DESIGN_SETTINGS& settings = m_frame->GetBoard()->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& other = aBoard->GetDesignSettings();
+
+    // A rule page writes the default it edits, and a page that was never opened never will, so
+    // the import is written here and the pages that are open read it back
+    for( const auto& [group, field] : PANEL_SETUP_CONSTRAINT_RULES::EditedDefaults() )
+    {
+        if( group == aGroup )
+            settings.*( field.member ) = other.*( field.member );
+    }
+
+    forEachOpenRulePage(
+            []( PANEL_SETUP_CONSTRAINT_RULES* aPage )
+            {
+                aPage->RefreshDefaults();
+            } );
+}
+
+
+void DIALOG_BOARD_SETUP::refreshRulePage( size_t aPage )
+{
+    wxWindow* resolved = m_treebook->GetResolvedPage( aPage );
+
+    if( auto* rulesPage = dynamic_cast<PANEL_SETUP_CONSTRAINT_RULES*>( resolved ) )
+        rulesPage->RefreshFromDocument();
+    else if( auto* textPage = dynamic_cast<PANEL_SETUP_RULES*>( resolved ) )
+        textPage->RefreshFromDocument();
+    else if( auto* constraintsPage = dynamic_cast<PANEL_SETUP_CONSTRAINTS*>( resolved ) )
+        constraintsPage->RefreshDefaults();
+    else if( auto* maskPage = dynamic_cast<PANEL_SETUP_MASK_AND_PASTE*>( resolved ) )
+        maskPage->RefreshDefaults();
 }
 
 
@@ -564,7 +696,11 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             RESOLVE_PAGE( PANEL_SETUP_FORMATTING, m_formattingPage )->ImportSettingsFrom( other );
 
         if( importDlg.m_ConstraintsOpt->GetValue() )
+        {
+            importRuleDefaults( other, _( "Constraints" ) );
+
             RESOLVE_PAGE( PANEL_SETUP_CONSTRAINTS, m_constraintsPage )->ImportSettingsFrom( other );
+        }
 
         if( importDlg.m_NetclassesOpt->GetValue() )
         {
@@ -598,13 +734,27 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             RESOLVE_PAGE( PANEL_SETUP_TUNING_PATTERNS, m_tuningPatternsPage )->ImportSettingsFrom( other );
 
         if( importDlg.m_MaskAndPasteOpt->GetValue() )
+        {
+            importRuleDefaults( other, _( "Solder Mask/Paste" ) );
+
             RESOLVE_PAGE( PANEL_SETUP_MASK_AND_PASTE, m_maskAndPastePage )->ImportSettingsFrom( other );
+        }
 
         if( importDlg.m_ZoneHatchingOffsetsOpt->GetValue() )
             RESOLVE_PAGE( PANEL_SETUP_ZONES, m_zonesPage )->ImportHatchOffsetsFrom( other );
 
         if( importDlg.m_CustomRulesOpt->GetValue() )
-            RESOLVE_PAGE( PANEL_SETUP_RULES, m_customRulesPage )->ImportSettingsFrom( other );
+        {
+            m_ruleDocument->LoadFrom( other->GetDesignRulesPath() );
+
+            refreshRulePage( m_customRulesPage );
+
+            forEachOpenRulePage(
+                    []( PANEL_SETUP_CONSTRAINT_RULES* aPage )
+                    {
+                        aPage->RefreshFromDocument();
+                    } );
+        }
 
         if( importDlg.m_SeveritiesOpt->GetValue() )
         {

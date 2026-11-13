@@ -46,7 +46,6 @@
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <reporter.h>
-#include <dialogs/rule_editor_dialog_base.h>
 #include <footprint.h>
 #include <pcbnew_utils/board_file_utils.h>
 
@@ -54,7 +53,7 @@ BOOST_AUTO_TEST_SUITE( DRC_RULE_EDITOR )
 
 BOOST_AUTO_TEST_CASE( RoundTripViaStyle )
 {
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA original( 0, 0, "My_Via_Rule", 0.5, 0.8, 0.2, 0.4 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA original( 0, "My_Via_Rule", 0.5, 0.8, 0.2, 0.4 );
     original.SetConstraintCode( "via_style" );
     original.SetRuleCondition( "A.NetClass == 'Power'" );
 
@@ -105,7 +104,7 @@ BOOST_AUTO_TEST_CASE( ShowMatchesIgnoresPairTokensInStringLiterals )
 
 BOOST_AUTO_TEST_CASE( RoundTripRoutingWidth )
 {
-    DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA original( 0, 0, "My_Track_Rule", 0.3, 0.1 );
+    DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA original( 0, "My_Track_Rule", 0.3, 0.1 );
     original.SetConstraintCode( "track_width" );
     original.SetRuleCondition( "A.NetClass == 'Signal'" );
 
@@ -132,12 +131,12 @@ BOOST_AUTO_TEST_CASE( SaveRules )
 {
     std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>> rules;
 
-    auto rule1 = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, 0, "ViaRule", 0.5, 0.8, 0.2, 0.4 );
+    auto rule1 = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, "ViaRule", 0.5, 0.8, 0.2, 0.4 );
     rule1->SetConstraintCode( "via_style" );
     rule1->SetRuleCondition( "A.NetClass == 'Power'" );
     rules.push_back( rule1 );
 
-    auto rule2 = std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( 0, 0, "TrackRule", 0.3, 0.1 );
+    auto rule2 = std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( 0, "TrackRule", 0.3, 0.1 );
     rule2->SetConstraintCode( "track_width" );
     rule2->SetRuleCondition( "A.NetClass == 'Signal'" );
     rules.push_back( rule2 );
@@ -152,6 +151,7 @@ BOOST_AUTO_TEST_CASE( SaveRules )
     BOOST_REQUIRE( file.IsOpened() );
     wxString content;
     file.ReadAll( &content );
+    file.Close();
 
     // Verify content
     BOOST_CHECK( content.Contains( "(version 2)" ) );
@@ -165,43 +165,39 @@ BOOST_AUTO_TEST_CASE( SaveRules )
     wxRemoveFile( filename );
 }
 
-BOOST_AUTO_TEST_CASE( SaveRulesToFileLogic )
+BOOST_AUTO_TEST_CASE( RoundTripPreservesUneditedRuleWithCommentParens )
 {
-    // Mimic m_ruleTreeNodeDatas
-    std::vector<RULE_TREE_NODE> ruleTreeNodeDatas;
+    // The parens inside the comment must not move the rule boundary.
+    wxString input = "(version 2)\n"
+                     "(rule MyRule\n"
+                     "\t(constraint clearance (min 0.2mm))\n"
+                     "\t# old: (condition \"A.x\"))\n"
+                     "\t(severity error))\n";
 
-    // Add a rule node
-    RULE_TREE_NODE node;
-    node.m_nodeId = 1;
-    node.m_nodeName = "TestRule";
-    node.m_nodeType = RULE; // 4
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( input );
 
-    auto data = std::make_shared<DRC_RE_BASE_CONSTRAINT_DATA>( 1, 0, "TestRule" );
-    data->SetConstraintCode( "clearance" );
-    node.m_nodeData = data;
+    BOOST_REQUIRE( !entries.empty() );
 
-    ruleTreeNodeDatas.push_back( node );
+    BOOST_CHECK( entries[0].originalRuleText.Contains( "(severity error)" ) );
+    BOOST_CHECK( entries[0].originalRuleText.Contains( "# old:" ) );
+    BOOST_CHECK( !entries[0].wasEdited );
 
-    // Mimic SaveRulesToFile logic
-    std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>> rules;
+    DRC_RULE_SAVER saver;
+    wxString       output = saver.GenerateRulesText( entries, nullptr );
 
-    for( const RULE_TREE_NODE& n : ruleTreeNodeDatas )
-    {
-        if( n.m_nodeType != RULE )
-            continue;
+    BOOST_CHECK( output.Contains( "(rule MyRule" ) );
+    BOOST_CHECK( output.Contains( "# old: (condition \"A.x\"))" ) );
+    BOOST_CHECK( output.Contains( "(severity error))" ) );
 
-        auto d = std::dynamic_pointer_cast<DRC_RE_BASE_CONSTRAINT_DATA>( n.m_nodeData );
-
-        if( d )
-            rules.push_back( d );
-    }
-
-    BOOST_CHECK_EQUAL( rules.size(), 1 );
+    DRC_RULE_LOADER                        loader2;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> reparsed = loader2.LoadFromString( output );
+    BOOST_CHECK( !reparsed.empty() );
 }
 
 BOOST_AUTO_TEST_CASE( SaveNumericRules )
 {
-    auto rule = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 0, 0.2, "ClearanceRule" );
+    auto rule = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 0.2, "ClearanceRule" );
     rule->SetConstraintCode( "clearance" );
 
     RULE_GENERATION_CONTEXT ctx;
@@ -213,7 +209,7 @@ BOOST_AUTO_TEST_CASE( SaveNumericRules )
     BOOST_CHECK( ruleText.Contains( "(constraint clearance (min 0.2mm))" ) );
 
     // Test via_count (max, unitless)
-    auto rule2 = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 0, 10, "ViaCountRule" );
+    auto rule2 = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 10, "ViaCountRule" );
     rule2->SetConstraintCode( "via_count" );
     ctx.ruleName = rule2->GetRuleName();
     ctx.constraintCode = rule2->GetConstraintCode();
@@ -222,7 +218,7 @@ BOOST_AUTO_TEST_CASE( SaveNumericRules )
     BOOST_CHECK( ruleText.Contains( "(constraint via_count (max 10))" ) );
 
     // Test track_angle (min, deg)
-    auto rule3 = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 0, 45, "AngleRule" );
+    auto rule3 = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>( 0, 45, "AngleRule" );
     rule3->SetConstraintCode( "track_angle" );
     ctx.ruleName = rule3->GetRuleName();
     ctx.constraintCode = rule3->GetConstraintCode();
@@ -233,7 +229,7 @@ BOOST_AUTO_TEST_CASE( SaveNumericRules )
 
 BOOST_AUTO_TEST_CASE( SaveBoolRules )
 {
-    auto rule = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( 0, 0, true, "DisallowTestRule" );
+    auto rule = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( 0, true, "DisallowTestRule" );
     rule->SetConstraintCode( "disallow" );
 
     RULE_GENERATION_CONTEXT ctx;
@@ -245,7 +241,7 @@ BOOST_AUTO_TEST_CASE( SaveBoolRules )
     BOOST_CHECK( ruleText.Contains( "(constraint disallow)" ) );
 
     // Test false value (should not generate constraint)
-    auto rule2 = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( 0, 0, false, "NoDisallowTestRule" );
+    auto rule2 = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( 0, false, "NoDisallowTestRule" );
     rule2->SetConstraintCode( "disallow" );
     ctx.ruleName = rule2->GetRuleName();
     ctx.constraintCode = rule2->GetConstraintCode();
@@ -301,7 +297,7 @@ BOOST_AUTO_TEST_CASE( FactoryRegistration )
             if( aRule->FindConstraint( CLEARANCE_CONSTRAINT ) )
             {
                 parserCalled = true;
-                auto data = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, 0, aRule->m_Name );
+                auto data = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, aRule->m_Name );
                 data->SetConstraintCode( "custom_clearance" );
                 return data;
             }
@@ -318,7 +314,7 @@ BOOST_AUTO_TEST_CASE( FactoryRegistration )
 
 BOOST_AUTO_TEST_CASE( ValidateViaStyleValid )
 {
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "ValidRule", 0.5, 0.8, 0.2, 0.4 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, "ValidRule", 0.5, 0.8, 0.2, 0.4 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -329,7 +325,7 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleValid )
 BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidMinGreaterThanMax )
 {
     // min > max for via diameter
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "InvalidRule", 0.9, 0.5, 0.2, 0.4 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, "InvalidRule", 0.9, 0.5, 0.2, 0.4 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -349,7 +345,7 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidMinGreaterThanMax )
 BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidNegativeValues )
 {
     // Negative values
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "NegativeRule", -0.5, 0.8, 0.2, 0.4 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, "NegativeRule", -0.5, 0.8, 0.2, 0.4 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -360,7 +356,7 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidNegativeValues )
     bool foundNegativeError = false;
     for( const auto& error : result.errors )
     {
-        if( error.find( "must be greater than 0" ) != std::string::npos )
+        if( error.find( "cannot be negative" ) != std::string::npos )
             foundNegativeError = true;
     }
     BOOST_CHECK( foundNegativeError );
@@ -467,16 +463,16 @@ BOOST_AUTO_TEST_CASE( EditedRulesKeepTheirLayers )
 // A negative optimum is an error, not an absent field.
 BOOST_AUTO_TEST_CASE( ValidateDiffPairRejectsNegativeOptimums )
 {
-    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA negWidth( 0, 0, "NegWidth", -0.2, 0.0, 0.2, 0.02, 0.0 );
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA negWidth( 0, "NegWidth", -0.2, 0.0, 0.2, 0.02, 0.0 );
 
     BOOST_CHECK( !negWidth.Validate().isValid );
 
-    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA negGap( 0, 0, "NegGap", 0.2, 0.02, -0.2, 0.0, 0.0 );
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA negGap( 0, "NegGap", 0.2, 0.02, -0.2, 0.0, 0.0 );
 
     BOOST_CHECK( !negGap.Validate().isValid );
 
     // Zero still means the field was left empty.
-    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA gapOnly( 0, 0, "GapOnly", 0.0, 0.0, 0.2, 0.02, 0.0 );
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA gapOnly( 0, "GapOnly", 0.0, 0.0, 0.2, 0.02, 0.0 );
 
     BOOST_CHECK( gapOnly.Validate().isValid );
 }
@@ -487,7 +483,7 @@ BOOST_AUTO_TEST_CASE( FactoryOverwrite )
     DRC_RULE_EDITOR_UTILS::RegisterRuleConverter(
         []( const std::shared_ptr<DRC_RULE>& aRule ) -> std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> {
             if( aRule->m_Name == "Test" )
-                return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, 0, aRule->m_Name + "_1" );
+                return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, aRule->m_Name + "_1" );
             return nullptr;
         } );
 
@@ -495,7 +491,7 @@ BOOST_AUTO_TEST_CASE( FactoryOverwrite )
     DRC_RULE_EDITOR_UTILS::RegisterRuleConverter(
         []( const std::shared_ptr<DRC_RULE>& aRule ) -> std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA> {
             if( aRule->m_Name == "Test" )
-                return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, 0, aRule->m_Name + "_2" );
+                return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, aRule->m_Name + "_2" );
             return nullptr;
         } );
 
@@ -546,10 +542,102 @@ BOOST_AUTO_TEST_CASE( EditedViaStyleRuleKeepsOptimums )
 }
 
 
+BOOST_AUTO_TEST_CASE( RegeneratedRuleWithoutLayerClauseStaysOnAllLayers )
+{
+    wxString rules = wxS( "(version 2)\n"
+                          "(rule \"under_fpga\"\n"
+                          "\t(constraint clearance (min 0.1mm))\n"
+                          "\t(constraint hole_size (min 0.2mm) (max 0.5mm))\n"
+                          "\t(constraint via_diameter (min 0.4mm) (max 0.9mm))\n"
+                          "\t(condition \"A.intersectsArea('underFPGA')\"))\n" );
+
+    BOARD           board;
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 2 );
+
+    for( DRC_RE_LOADED_PANEL_ENTRY& entry : entries )
+    {
+        if( entry.panelType == MINIMUM_CLEARANCE )
+            entry.wasEdited = true;
+    }
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, &board );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(layer" ) ) == wxString::npos,
+                         "a rule without a layer clause gained one: " << saved.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( MovedRuleKeepsItsOwnComment )
+{
+    wxString rules = wxS( "(version 2)\n"
+                          "# file header\n"
+                          "\n"
+                          "(rule \"a\"\n"
+                          "\t(constraint clearance (min 0.1mm)))\n"
+                          "\n"
+                          "# b is special\n"
+                          "(rule \"b\"\n"
+                          "\t(constraint clearance (min 0.2mm)))\n" );
+
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 2 );
+
+    std::swap( entries[0], entries[1] );
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, nullptr, loader.GetFileTrivia() );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "# b is special\n(rule \"b\"" ) ) != wxString::npos,
+                         "the comment did not move with its rule: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "# file header" ) ) < saved.find( wxS( "(rule" ) ),
+                         "the file header did not stay first: " << saved.ToStdString() );
+    BOOST_CHECK_EQUAL( saved.Freq( '#' ), 2 );
+    BOOST_CHECK( saved.find( wxS( "(rule \"b\"" ) ) < saved.find( wxS( "(rule \"a\"" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ViaStyleWithoutMaximumRoundTrips )
+{
+    wxString rules = wxS( "(version 2)\n"
+                          "(rule \"small_vias\"\n"
+                          "\t(constraint hole_size (min 0.2mm))\n"
+                          "\t(constraint via_diameter (min 0.4mm)))\n" );
+
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_REQUIRE_EQUAL( entries[0].panelType, VIA_STYLE );
+
+    entries[0].wasEdited = true;
+
+    BOOST_CHECK( entries[0].constraintData->Validate().isValid );
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(max" ) ) == wxString::npos,
+                         "an open upper limit was written as a number: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(constraint via_diameter (min 0.4mm))" ) ) != wxString::npos,
+                         "the via diameter minimum was lost: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(constraint hole_size (min 0.2mm))" ) ) != wxString::npos,
+                         "the hole size minimum was lost: " << saved.ToStdString() );
+}
+
+
 // A pair with both ends negative is an error, not an empty pair.
 BOOST_AUTO_TEST_CASE( ValidateViaStyleBothNegative )
 {
-    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "BothNegative", -0.5, -0.2, 0.2, 0.4 );
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, "BothNegative", -0.5, -0.2, 0.2, 0.4 );
 
     BOOST_CHECK( !data.Validate().isValid );
 }
@@ -558,7 +646,7 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleBothNegative )
 BOOST_AUTO_TEST_CASE( ValidateAbsLengthTwoValid )
 {
     // Valid: min < opt < max, all positive
-    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA data( 0, 0, 3.0, 2.0, "ValidLengthRule" );
+    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA data( 0, 3.0, 2.0, "ValidLengthRule" );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -569,7 +657,7 @@ BOOST_AUTO_TEST_CASE( ValidateAbsLengthTwoValid )
 BOOST_AUTO_TEST_CASE( ValidateAbsLengthTwoInvalid )
 {
     // Invalid: tolerance too large, resulting minimum length is not positive
-    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA data1( 0, 0, 2.0, 5.0, "InvalidToleranceRule" );
+    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA data1( 0, 2.0, 5.0, "InvalidToleranceRule" );
 
     VALIDATION_RESULT result1 = data1.Validate();
 
@@ -587,7 +675,7 @@ BOOST_AUTO_TEST_CASE( ValidateAbsLengthTwoInvalid )
     BOOST_CHECK( foundToleranceError );
 
     // Invalid: negative tolerance
-    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA data2( 0, 0, 3.0, -1.0, "NegativeToleranceRule" );
+    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA data2( 0, 3.0, -1.0, "NegativeToleranceRule" );
 
     VALIDATION_RESULT result2 = data2.Validate();
 
@@ -608,7 +696,7 @@ BOOST_AUTO_TEST_CASE( ValidateDiffPairValid )
 {
     // Valid: all positive, min <= preferred <= max for width and gap
     // Constructor: id, parentId, ruleName, optWidth, widthTolerance, optGap, gapTolerance, maxUncoupledLength, maxSkew
-    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA data( 0, 0, "ValidDiffPairRule", 0.3, 0.1, 0.15, 0.05, 10.0 );
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA data( 0, "ValidDiffPairRule", 0.3, 0.1, 0.15, 0.05, 10.0 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -619,7 +707,7 @@ BOOST_AUTO_TEST_CASE( ValidateDiffPairValid )
 BOOST_AUTO_TEST_CASE( ValidateDiffPairInvalid )
 {
     // Invalid: min width > max width
-    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA data1( 0, 0, "InvalidWidthRule", 0.3, 0.5, 0.15, 0.05, 10.0 );
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA data1( 0, "InvalidWidthRule", 0.3, 0.5, 0.15, 0.05, 10.0 );
 
     VALIDATION_RESULT result1 = data1.Validate();
 
@@ -635,7 +723,7 @@ BOOST_AUTO_TEST_CASE( ValidateDiffPairInvalid )
     BOOST_CHECK( foundWidthError );
 
     // Invalid: negative gap
-    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA data2( 0, 0, "NegativeGapRule", 0.3, 0.1, 0.15, -0.1, 10.0 );
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA data2( 0, "NegativeGapRule", 0.3, 0.1, 0.15, -0.1, 10.0 );
 
     VALIDATION_RESULT result2 = data2.Validate();
 
@@ -653,7 +741,7 @@ BOOST_AUTO_TEST_CASE( ValidateDiffPairInvalid )
 BOOST_AUTO_TEST_CASE( ValidatePermittedLayersValid )
 {
     // Valid: at least one layer is selected (top layer enabled)
-    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data1( 0, 0, "ValidTopLayerRule", true, false );
+    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data1( 0, "ValidTopLayerRule", true, false );
 
     VALIDATION_RESULT result1 = data1.Validate();
 
@@ -661,7 +749,7 @@ BOOST_AUTO_TEST_CASE( ValidatePermittedLayersValid )
     BOOST_CHECK( result1.errors.empty() );
 
     // Valid: at least one layer is selected (bottom layer enabled)
-    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data2( 0, 0, "ValidBottomLayerRule", false, true );
+    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data2( 0, "ValidBottomLayerRule", false, true );
 
     VALIDATION_RESULT result2 = data2.Validate();
 
@@ -669,7 +757,7 @@ BOOST_AUTO_TEST_CASE( ValidatePermittedLayersValid )
     BOOST_CHECK( result2.errors.empty() );
 
     // Valid: both layers enabled
-    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data3( 0, 0, "ValidBothLayersRule", true, true );
+    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data3( 0, "ValidBothLayersRule", true, true );
 
     VALIDATION_RESULT result3 = data3.Validate();
 
@@ -680,7 +768,7 @@ BOOST_AUTO_TEST_CASE( ValidatePermittedLayersValid )
 BOOST_AUTO_TEST_CASE( ValidatePermittedLayersInvalid )
 {
     // Invalid: no layers selected
-    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data( 0, 0, "NoLayersRule", false, false );
+    DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA data( 0, "NoLayersRule", false, false );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -698,7 +786,7 @@ BOOST_AUTO_TEST_CASE( ValidatePermittedLayersInvalid )
 
 BOOST_AUTO_TEST_CASE( ValidateNumericInputValid )
 {
-    DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA data( 0, 0, 0.5, "ValidRule" );
+    DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA data( 0, 0.5, "ValidRule" );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -708,7 +796,7 @@ BOOST_AUTO_TEST_CASE( ValidateNumericInputValid )
 
 BOOST_AUTO_TEST_CASE( ValidateNumericInputInvalidNegative )
 {
-    DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA data( 0, 0, -0.5, "InvalidRule" );
+    DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA data( 0, -0.5, "InvalidRule" );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -727,7 +815,7 @@ BOOST_AUTO_TEST_CASE( ValidateNumericInputInvalidNegative )
 
 BOOST_AUTO_TEST_CASE( ValidateRoutingWidthValid )
 {
-    DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA data( 0, 0, "ValidRule", 0.3, 0.1 );
+    DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA data( 0, "ValidRule", 0.3, 0.1 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -738,7 +826,7 @@ BOOST_AUTO_TEST_CASE( ValidateRoutingWidthValid )
 BOOST_AUTO_TEST_CASE( ValidateRoutingWidthInvalidToleranceTooLarge )
 {
     // tolerance >= opt width
-    DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA data( 0, 0, "InvalidRule", 0.3, 0.5 );
+    DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA data( 0, "InvalidRule", 0.3, 0.5 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -757,7 +845,7 @@ BOOST_AUTO_TEST_CASE( ValidateRoutingWidthInvalidToleranceTooLarge )
 BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationValid )
 {
     // Valid: at least one orientation is selected (0 degrees)
-    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data1( 0, 0, true, false, false, false, false, "ValidZeroDegRule" );
+    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data1( 0, true, false, false, false, false, "ValidZeroDegRule" );
 
     VALIDATION_RESULT result1 = data1.Validate();
 
@@ -765,7 +853,7 @@ BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationValid )
     BOOST_CHECK( result1.errors.empty() );
 
     // Valid: 90 degrees selected
-    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data2( 0, 0, false, true, false, false, false, "ValidNinetyDegRule" );
+    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data2( 0, false, true, false, false, false, "ValidNinetyDegRule" );
 
     VALIDATION_RESULT result2 = data2.Validate();
 
@@ -773,7 +861,7 @@ BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationValid )
     BOOST_CHECK( result2.errors.empty() );
 
     // Valid: all degrees selected
-    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data3( 0, 0, false, false, false, false, true, "ValidAllDegreesRule" );
+    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data3( 0, false, false, false, false, true, "ValidAllDegreesRule" );
 
     VALIDATION_RESULT result3 = data3.Validate();
 
@@ -781,7 +869,7 @@ BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationValid )
     BOOST_CHECK( result3.errors.empty() );
 
     // Valid: multiple orientations selected
-    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data4( 0, 0, true, true, false, false, false, "ValidMultipleRule" );
+    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data4( 0, true, true, false, false, false, "ValidMultipleRule" );
 
     VALIDATION_RESULT result4 = data4.Validate();
 
@@ -792,7 +880,7 @@ BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationValid )
 BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationInvalid )
 {
     // Invalid: no orientation selected
-    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data( 0, 0, false, false, false, false, false, "NoOrientationRule" );
+    DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA data( 0, false, false, false, false, false, "NoOrientationRule" );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -811,7 +899,7 @@ BOOST_AUTO_TEST_CASE( ValidateAllowedOrientationInvalid )
 BOOST_AUTO_TEST_CASE( ValidateBoolInputValid )
 {
     // Test with true value
-    DRC_RE_BOOL_INPUT_CONSTRAINT_DATA dataTrue( 0, 0, true, "BoolRuleTrue" );
+    DRC_RE_BOOL_INPUT_CONSTRAINT_DATA dataTrue( 0, true, "BoolRuleTrue" );
 
     VALIDATION_RESULT resultTrue = dataTrue.Validate();
 
@@ -819,7 +907,7 @@ BOOST_AUTO_TEST_CASE( ValidateBoolInputValid )
     BOOST_CHECK( resultTrue.errors.empty() );
 
     // Test with false value
-    DRC_RE_BOOL_INPUT_CONSTRAINT_DATA dataFalse( 0, 0, false, "BoolRuleFalse" );
+    DRC_RE_BOOL_INPUT_CONSTRAINT_DATA dataFalse( 0, false, "BoolRuleFalse" );
 
     VALIDATION_RESULT resultFalse = dataFalse.Validate();
 
@@ -830,7 +918,7 @@ BOOST_AUTO_TEST_CASE( ValidateBoolInputValid )
 BOOST_AUTO_TEST_CASE( ValidateMinTxtHtThValid )
 {
     // Valid: both text height and thickness are positive
-    DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA data( 0, 0, "ValidTextRule", 1.0, 0.15 );
+    DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA data( 0, "ValidTextRule", 1.0, 0.15 );
 
     VALIDATION_RESULT result = data.Validate();
 
@@ -841,7 +929,7 @@ BOOST_AUTO_TEST_CASE( ValidateMinTxtHtThValid )
 BOOST_AUTO_TEST_CASE( ValidateMinTxtHtThInvalid )
 {
     // Invalid: negative text height
-    DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA data1( 0, 0, "NegativeHeightRule", -1.0, 0.15 );
+    DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA data1( 0, "NegativeHeightRule", -1.0, 0.15 );
 
     VALIDATION_RESULT result1 = data1.Validate();
 
@@ -857,7 +945,7 @@ BOOST_AUTO_TEST_CASE( ValidateMinTxtHtThInvalid )
     BOOST_CHECK( foundHeightError );
 
     // Invalid: negative text thickness
-    DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA data2( 0, 0, "NegativeThicknessRule", 1.0, -0.15 );
+    DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA data2( 0, "NegativeThicknessRule", 1.0, -0.15 );
 
     VALIDATION_RESULT result2 = data2.Validate();
 
@@ -882,7 +970,7 @@ BOOST_AUTO_TEST_CASE( ValidateMinTxtHtThInvalid )
 
 BOOST_AUTO_TEST_CASE( ValidateCustomRuleValid )
 {
-    DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA data( 0, 0, "ValidCustomRule" );
+    DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA data( 0, "ValidCustomRule" );
     data.SetRuleText( "(constraint clearance (min 0.2mm))" );
 
     VALIDATION_RESULT result = data.Validate();
@@ -893,7 +981,7 @@ BOOST_AUTO_TEST_CASE( ValidateCustomRuleValid )
 
 BOOST_AUTO_TEST_CASE( ValidateCustomRuleInvalid )
 {
-    DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA data( 0, 0, "InvalidCustomRule" );
+    DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA data( 0, "InvalidCustomRule" );
     data.SetRuleText( "" );
 
     VALIDATION_RESULT result = data.Validate();
@@ -2525,13 +2613,13 @@ BOOST_AUTO_TEST_CASE( RuleSaverSilkToSilkWithCondition )
 BOOST_AUTO_TEST_CASE( ValidateViasUnderSmdValid )
 {
     // Valid: at least one via type is selected
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data1( 0, 0, "OnlyMicro", false, true, false, false );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data1( 0, "OnlyMicro", false, true, false, false );
     VALIDATION_RESULT                     result1 = data1.Validate();
     BOOST_CHECK( result1.isValid );
     BOOST_CHECK( result1.errors.empty() );
 
     // Valid: all selected
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data2( 0, 0, "AllVias", true, true, true, true );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data2( 0, "AllVias", true, true, true, true );
     VALIDATION_RESULT                     result2 = data2.Validate();
     BOOST_CHECK( result2.isValid );
     BOOST_CHECK( result2.errors.empty() );
@@ -2540,7 +2628,7 @@ BOOST_AUTO_TEST_CASE( ValidateViasUnderSmdValid )
 BOOST_AUTO_TEST_CASE( ValidateViasUnderSmdInvalid )
 {
     // Invalid: no via type selected
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data( 0, 0, "NoneSelected", false, false, false, false );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA data( 0, "NoneSelected", false, false, false, false );
     VALIDATION_RESULT                     result = data.Validate();
     BOOST_CHECK( !result.isValid );
     BOOST_CHECK( !result.errors.empty() );
@@ -2561,14 +2649,14 @@ BOOST_AUTO_TEST_CASE( ViasUnderSmdClauseGeneration )
     ctx.constraintCode = "disallow_via";
 
     // All four selected - shorthand "via" used
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA allData( 0, 0, "AllRule", true, true, true, true );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA allData( 0, "AllRule", true, true, true, true );
     auto                                  clauses = allData.GetConstraintClauses( ctx );
     BOOST_REQUIRE_EQUAL( clauses.size(), 1 );
     BOOST_CHECK( clauses[0].Contains( "disallow via" ) );
     BOOST_CHECK( !clauses[0].Contains( "through_via" ) );
 
     // Only micro_via selected - specific token
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA microOnly( 0, 0, "MicroRule", false, true, false, false );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA microOnly( 0, "MicroRule", false, true, false, false );
     clauses = microOnly.GetConstraintClauses( ctx );
     BOOST_REQUIRE_EQUAL( clauses.size(), 1 );
     BOOST_CHECK( clauses[0].Contains( "micro_via" ) );
@@ -2577,7 +2665,7 @@ BOOST_AUTO_TEST_CASE( ViasUnderSmdClauseGeneration )
     BOOST_CHECK( !clauses[0].Contains( "buried_via" ) );
 
     // Through + blind selected - both tokens, no shorthand
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA twoTypes( 0, 0, "TwoRule", true, false, true, false );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA twoTypes( 0, "TwoRule", true, false, true, false );
     clauses = twoTypes.GetConstraintClauses( ctx );
     BOOST_REQUIRE_EQUAL( clauses.size(), 1 );
     BOOST_CHECK( clauses[0].Contains( "through_via" ) );
@@ -2586,7 +2674,7 @@ BOOST_AUTO_TEST_CASE( ViasUnderSmdClauseGeneration )
     BOOST_CHECK( !clauses[0].Contains( "buried_via" ) );
 
     // None selected - empty
-    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA noneData( 0, 0, "NoneRule", false, false, false, false );
+    DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA noneData( 0, "NoneRule", false, false, false, false );
     clauses = noneData.GetConstraintClauses( ctx );
     BOOST_CHECK( clauses.empty() );
 }
@@ -2901,7 +2989,7 @@ BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainLengthLoadsStructured )
 
 BOOST_AUTO_TEST_CASE( RoundTripTimeDomainLength )
 {
-    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA original( 0, 0, 220.0, 10.0, "clk_delay" );
+    DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA original( 0, 220.0, 10.0, "clk_delay" );
     original.SetConstraintCode( "length" );
     original.SetTimeDomain( true );
 

@@ -72,7 +72,7 @@ public:
      * @param aRulesText The text content of the rules.
      * @return Vector of panel entries for all rules in the text.
      */
-    std::vector<DRC_RE_LOADED_PANEL_ENTRY> LoadFromString( const wxString& aRulesText );
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> LoadFromString( const wxString& aRulesText, bool* aParsed = nullptr );
 
     /**
      * @return The text outside the rules of the last loaded file, for DRC_RULE_SAVER.

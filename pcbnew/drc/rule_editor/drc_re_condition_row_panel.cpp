@@ -24,6 +24,9 @@
 #include <widgets/netclass_selector.h>
 #include <widgets/area_selector.h>
 #include <bitmaps.h>
+#include <widgets/ui_common.h>
+
+#include <algorithm>
 
 #include <wx/sizer.h>
 #include <wx/choice.h>
@@ -58,6 +61,16 @@ DRC_RE_CONDITION_ROW_PANEL::DRC_RE_CONDITION_ROW_PANEL( wxWindow* aParent, BOARD
     m_objectChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, objectChoices );
     m_objectChoice->SetSelection( 0 );
     m_objectChoice->SetToolTip( _( "Which of the two compared objects this condition applies to" ) );
+
+    // The best size ellipsises these labels, so fit the widest plus room for the drop-down arrow
+    int widest = 0;
+
+    for( const wxString& choice : objectChoices )
+        widest = std::max( widest, KIUI::GetTextSize( choice, m_objectChoice ).x );
+
+    widest += m_objectChoice->FromDIP( 34 );
+
+    m_objectChoice->SetMinSize( wxSize( std::max( widest, m_objectChoice->GetBestSize().x ), -1 ) );
     m_rowSizer->Add( m_objectChoice, 0, wxALL | wxALIGN_CENTER_VERTICAL, 2 );
 
     if( !aShowObjectSelector )

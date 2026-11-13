@@ -30,11 +30,13 @@
 #include <wx/combo.h>
 #include <wx/combobox.h>
 #include <wx/settings.h>
+#include <wx/spinctrl.h>
 
 
-FIELD_WARNING_ICON::FIELD_WARNING_ICON( wxWindow* aField ) :
-        wxGenericStaticBitmap( aField->GetParent(), wxID_ANY, KiBitmapBundle( BITMAPS::small_warning ) ),
-        m_field( aField )
+FIELD_WARNING_ICON::FIELD_WARNING_ICON( wxWindow* aField, BITMAPS aIcon, int aSlot ) :
+        wxGenericStaticBitmap( aField->GetParent(), wxID_ANY, KiBitmapBundle( aIcon ) ),
+        m_field( aField ),
+        m_slot( aSlot )
 {
     Hide();
 
@@ -112,6 +114,15 @@ void FIELD_WARNING_ICON::SetWarning( const wxString& aMessage )
 }
 
 
+void FIELD_WARNING_ICON::ShowAsBadge()
+{
+    // A tooltip of its own, however empty, keeps the field's help from showing through the icon
+    SetToolTip( wxS( " " ) );
+    Show( true );
+    Reposition();
+}
+
+
 void FIELD_WARNING_ICON::Reposition()
 {
     if( !m_field )
@@ -120,10 +131,10 @@ void FIELD_WARNING_ICON::Reposition()
     const wxSize fieldSize = m_field->GetSize();
     int          buttonWidth = 0;
 
-    // A dropdown button is about as wide as the field is tall, except on Windows where it has the width of a
-    // scrollbar
+    // A dropdown button, or a spin control's arrows, is about as wide as the field is tall, except on Windows
+    // where it has the width of a scrollbar
     if( dynamic_cast<wxComboBox*>( m_field ) || dynamic_cast<wxChoice*>( m_field )
-        || dynamic_cast<wxComboCtrl*>( m_field ) )
+        || dynamic_cast<wxComboCtrl*>( m_field ) || dynamic_cast<wxSpinCtrl*>( m_field ) )
     {
 #ifdef __WXMSW__
         buttonWidth = wxSystemSettings::GetMetric( wxSYS_VSCROLL_X, m_field );
@@ -135,8 +146,11 @@ void FIELD_WARNING_ICON::Reposition()
     const wxSize iconSize = GetSize();
     const int    gap = m_field->FromDIP( 3 );
 
-    SetPosition( m_field->GetPosition()
-                 + wxPoint( fieldSize.x - buttonWidth - iconSize.x - gap, ( fieldSize.y - iconSize.y ) / 2 ) );
+    const int slotOffset = m_slot * ( iconSize.x + gap );
+
+    SetPosition(
+            m_field->GetPosition()
+            + wxPoint( fieldSize.x - buttonWidth - iconSize.x - gap - slotOffset, ( fieldSize.y - iconSize.y ) / 2 ) );
     Raise();
 }
 

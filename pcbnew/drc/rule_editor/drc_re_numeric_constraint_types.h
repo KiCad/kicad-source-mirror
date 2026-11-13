@@ -31,7 +31,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_copper_to_edge_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 208, 263, 177, wxS( "mm" ), LABEL_POSITION::RIGHT,
+        return { { 228, 283, 177, wxS( "mm" ), LABEL_POSITION::RIGHT,
                    _( "Minimum clearance between copper items and the board edge" ) } };
     }
 };
@@ -95,7 +95,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_hole_size; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 72, 127, 34, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Minimum hole diameter" ) } };
+        return { { 137, 192, 45, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Minimum hole diameter" ) } };
     }
 };
 
@@ -146,7 +146,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 205, 260, 119, wxS( "mm" ), LABEL_POSITION::RIGHT,
+        return { { 225, 280, 119, wxS( "mm" ), LABEL_POSITION::RIGHT,
                    _( "Minimum clearance between copper items on different nets" ) } };
     }
 };
@@ -239,7 +239,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_via_diameter; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 186, 241, 117, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Minimum outer diameter of vias" ) } };
+        return { { 216, 271, 117, wxS( "mm" ), LABEL_POSITION::RIGHT, _( "Minimum outer diameter of vias" ) } };
     }
 };
 

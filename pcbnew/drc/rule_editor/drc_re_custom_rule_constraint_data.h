@@ -31,8 +31,8 @@ class DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA : public DRC_RE_BASE_CONSTRAINT_DATA
 public:
     DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA() = default;
 
-    DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA( int aId, int aParentId, const wxString& aRuleName ) :
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName )
+    DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA( int aId, const wxString& aRuleName ) :
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName )
     {
     }
 

@@ -21,7 +21,6 @@
 #include "drc_re_via_style_constraint_data.h"
 #include "drc_rule_editor_utils.h"
 
-#include <dialogs/rule_editor_dialog_base.h>
 #include <eda_base_frame.h>
 #include <base_units.h>
 #include <widgets/unit_binder.h>
@@ -94,35 +93,10 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
                                            maxViaHoleField->GetLabel(), false, false );
     maxViaHoleField->SetUnitBinder( m_maxViaHoleSizeBinder.get() );
 
-    auto notifyModified = [this]( wxCommandEvent& )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->SetModified();
-    };
-
-    auto notifySave = [this]( wxCommandEvent& aEvent )
-    {
-        RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
-        if( dlg )
-            dlg->OnSave( aEvent );
-    };
-
-    minViaDiameterField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxViaDiameterField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    minViaHoleField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-    maxViaHoleField->GetControl()->Bind( wxEVT_TEXT, notifyModified );
-
-    minViaDiameterField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    maxViaDiameterField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    minViaHoleField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-    maxViaHoleField->GetControl()->Bind( wxEVT_TEXT_ENTER, notifySave );
-
-    m_viaTypeChoice->Bind( wxEVT_CHOICE, notifyModified );
 
     // Position all fields and update the panel layout
-    PositionFields();
     TransferDataToWindow();
+    PositionFields();
 }
 
 
@@ -133,11 +107,19 @@ bool DRC_RE_VIA_STYLE_OVERLAY_PANEL::TransferDataToWindow()
 
     // Convert mm values to internal units and set them in the unit binders
     // Use ChangeDoubleValue to avoid triggering modification events during loading
-    m_minViaDiameterBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinViaDiameter() ) );
-    m_maxViaDiameterBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxViaDiameter() ) );
+    auto show = []( UNIT_BINDER* aBinder, double aMM )
+    {
+        // An open end is shown as an empty field, not as zero.
+        if( aMM > 0 )
+            aBinder->ChangeDoubleValue( pcbIUScale.mmToIU( aMM ) );
+        else
+            aBinder->ChangeValue( wxEmptyString );
+    };
 
-    m_minViaHoleSizeBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMinViaHoleSize() ) );
-    m_maxViaHoleSizeBinder->ChangeDoubleValue( pcbIUScale.mmToIU( m_data->GetMaxViaHoleSize() ) );
+    show( m_minViaDiameterBinder.get(), m_data->GetMinViaDiameter() );
+    show( m_maxViaDiameterBinder.get(), m_data->GetMaxViaDiameter() );
+    show( m_minViaHoleSizeBinder.get(), m_data->GetMinViaHoleSize() );
+    show( m_maxViaHoleSizeBinder.get(), m_data->GetMaxViaHoleSize() );
 
     m_viaTypeChoice->SetSelection( static_cast<int>( m_data->GetViaType() ) );
 

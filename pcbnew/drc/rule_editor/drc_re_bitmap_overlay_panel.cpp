@@ -17,8 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+
 #include "drc_re_bitmap_overlay_panel.h"
 #include "drc_re_overlay_field.h"
+#include "panel_drc_rule_editor.h"
 
 #include <bitmaps.h>
 
@@ -27,6 +30,12 @@
 #include <wx/dcbuffer.h>
 #include <wx/dcclient.h>
 #include <wx/stattext.h>
+#include <wx/textctrl.h>
+
+
+/// Space between a field and the label beside it, in DIP. The positioning code places labels at
+/// this distance and roomBeforeNextField() has to reserve the same.
+static constexpr int LABEL_GAP = 4;
 
 
 DRC_RE_BITMAP_OVERLAY_PANEL::DRC_RE_BITMAP_OVERLAY_PANEL( wxWindow* aParent, wxWindowID aId ) :
@@ -34,8 +43,10 @@ DRC_RE_BITMAP_OVERLAY_PANEL::DRC_RE_BITMAP_OVERLAY_PANEL( wxWindow* aParent, wxW
         m_bitmapId( BITMAPS::INVALID_BITMAP ),
         m_logicalBitmapSize( 0, 0 )
 {
-    // Must set background style BEFORE creating the window
-    SetBackgroundStyle( wxBG_STYLE_PAINT );
+    // The illustration has no background of its own, so let the page behind it show through.
+    // Where the port cannot, the paint handler erases it with a buffered DC that needs wxBG_STYLE_PAINT
+    m_erasesBackground = !aParent->IsTransparentBackgroundSupported();
+    SetBackgroundStyle( m_erasesBackground ? wxBG_STYLE_PAINT : wxBG_STYLE_TRANSPARENT );
     Create( aParent, aId );
 
     Bind( wxEVT_PAINT, &DRC_RE_BITMAP_OVERLAY_PANEL::OnPaint, this );
@@ -51,15 +62,27 @@ DRC_RE_BITMAP_OVERLAY_PANEL::~DRC_RE_BITMAP_OVERLAY_PANEL()
 
 void DRC_RE_BITMAP_OVERLAY_PANEL::OnPaint( wxPaintEvent& aEvent )
 {
-    wxAutoBufferedPaintDC dc( this );
+    if( m_erasesBackground )
+    {
+        wxAutoBufferedPaintDC dc( this );
 
-    dc.SetBackground( wxBrush( GetBackgroundColour() ) );
-    dc.Clear();
+        dc.SetBackground( wxBrush( pageBackground() ) );
+        dc.Clear();
+        drawBitmap( dc );
+    }
+    else
+    {
+        wxPaintDC dc( this );
 
-    if( !m_bitmap.IsOk() )
-        return;
+        drawBitmap( dc );
+    }
+}
 
-    dc.DrawBitmap( m_bitmap, 0, 0, true );
+
+void DRC_RE_BITMAP_OVERLAY_PANEL::drawBitmap( wxDC& aDC )
+{
+    if( m_bitmap.IsOk() )
+        aDC.DrawBitmap( m_bitmap, 0, 0, true );
 }
 
 
@@ -67,8 +90,28 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::OnDPIChanged( wxDPIChangedEvent& aEvent )
 {
     LoadBitmap();
     PositionFields();
+
+    // Positioning the fields changed the panel's minimum size, which only reaches the screen
+    // once the sizers above it run again.
+    if( PANEL_DRC_RULE_EDITOR* editor = PANEL_DRC_RULE_EDITOR::FindEditor( this ) )
+        editor->RelayoutHost();
+    else if( wxWindow* parent = GetParent() )
+        parent->Layout();
+
     Refresh();
     aEvent.Skip();
+}
+
+
+wxColour DRC_RE_BITMAP_OVERLAY_PANEL::pageBackground() const
+{
+    // Take the colour of whatever holds the illustration, not the default panel colour, which
+    // is darker on some themes. Read it when painting, because a parent only inherits its own
+    // once the hierarchy is built.
+    if( GetParent() )
+        return GetParent()->GetBackgroundColour();
+
+    return GetBackgroundColour();
 }
 
 
@@ -141,7 +184,26 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
             continue;
 
         int heightLogical = ctrl->GetBestSize().GetHeight();
-        int widthLogical = FromDIP( pos.xEnd - pos.xStart );
+
+        // The slots were drawn for millimetre values. Give a longer one the room its text
+        // needs, up to where the next field on the line begins.
+        int slotLogical = FromDIP( pos.xEnd - pos.xStart );
+        int widthLogical = slotLogical;
+
+        if( wxTextCtrl* text = dynamic_cast<wxTextCtrl*>( ctrl ) )
+        {
+            int textWidth = 0;
+            int textHeight = 0;
+
+            text->GetTextExtent( text->GetValue(), &textWidth, &textHeight );
+            widthLogical = std::max( widthLogical, textWidth + FromDIP( 24 ) );
+        }
+
+        // Where there is a neighbour the field stops short of it, and it never goes below the
+        // slot the drawing was made for, however little room the neighbour leaves.
+        if( std::optional<int> roomLogical = roomBeforeNextField( field.get() ) )
+            widthLogical = std::min( widthLogical, std::max( *roomLogical, slotLogical ) );
+
         int xLogical = FromDIP( pos.xStart );
         int yLogical = FromDIP( pos.yCenter ) - heightLogical / 2;
 
@@ -155,6 +217,61 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
         if( field->HasPrefixLabel() )
             PositionPrefixLabel( field.get() );
     }
+
+    // A field, and the unit label after it, can reach past the right edge of the drawing, so
+    // ask for the room they use rather than the room the bitmap takes.
+    int used = m_logicalBitmapSize.x;
+
+    for( const auto& field : m_fields )
+    {
+        if( wxControl* ctrl = field->GetControl() )
+            used = std::max( used, ctrl->GetPosition().x + ctrl->GetSize().x );
+
+        if( field->HasLabel() )
+            used = std::max( used, field->GetLabel()->GetPosition().x + field->GetLabel()->GetSize().x );
+
+        if( field->HasPrefixLabel() )
+            used = std::max( used, field->GetPrefixLabel()->GetPosition().x + field->GetPrefixLabel()->GetSize().x );
+    }
+
+    int height = m_logicalBitmapSize.y;
+
+    if( m_minHeightDIP > 0 )
+        height = std::max( height, FromDIP( m_minHeightDIP ) );
+
+    SetMinSize( wxSize( used, height ) );
+}
+
+
+std::optional<int> DRC_RE_BITMAP_OVERLAY_PANEL::roomBeforeNextField( const DRC_RE_OVERLAY_FIELD* aField ) const
+{
+    const DRC_RE_FIELD_POSITION& pos = aField->GetPosition();
+    std::optional<int>           room;
+
+    // Leave room for what is drawn between the two fields: this field's unit label and the
+    // next field's prefix.
+    int reserved = FromDIP( LABEL_GAP );
+
+    if( aField->HasLabel() && pos.labelPosition == LABEL_POSITION::RIGHT )
+        reserved += aField->GetLabel()->GetBestSize().GetWidth() + FromDIP( LABEL_GAP );
+
+    for( const auto& other : m_fields )
+    {
+        const DRC_RE_FIELD_POSITION& otherPos = other->GetPosition();
+
+        if( other.get() == aField || otherPos.yCenter != pos.yCenter || otherPos.xStart <= pos.xStart )
+            continue;
+
+        int limit = FromDIP( otherPos.xStart - pos.xStart ) - reserved;
+
+        if( other->HasPrefixLabel() )
+            limit -= other->GetPrefixLabel()->GetBestSize().GetWidth() + FromDIP( LABEL_GAP );
+
+        if( !room || limit < *room )
+            room = limit;
+    }
+
+    return room;
 }
 
 
@@ -172,7 +289,7 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionLabel( DRC_RE_OVERLAY_FIELD* aField )
     wxSize labelSize = label->GetBestSize();
 
     wxPoint labelPos;
-    int     GAP = FromDIP( 4 );
+    int     GAP = FromDIP( LABEL_GAP );
 
     switch( pos.labelPosition )
     {
@@ -218,7 +335,7 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionPrefixLabel( DRC_RE_OVERLAY_FIELD* aFi
     wxSize  ctrlSize = ctrl->GetSize();
     wxSize prefixSize = prefix->GetBestSize();
 
-    int GAP = FromDIP( 4 );
+    int GAP = FromDIP( LABEL_GAP );
 
     wxPoint prefixPos;
     prefixPos.x = ctrlPos.x - prefixSize.GetWidth() - GAP;

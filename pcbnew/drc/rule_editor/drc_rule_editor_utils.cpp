@@ -36,6 +36,12 @@
 #include "drc_re_routing_width_constraint_data.h"
 #include "drc_re_numeric_input_constraint_data.h"
 #include "drc_re_bool_input_constraint_data.h"
+#include "drc_re_abs_length_two_constraint_data.h"
+#include "drc_re_min_txt_ht_th_constraint_data.h"
+#include "drc_re_rtg_diff_pair_constraint_data.h"
+#include "drc_re_permitted_layers_constraint_data.h"
+#include "drc_re_allowed_orientation_constraint_data.h"
+#include "drc_re_vias_under_smd_constraint_data.h"
 #include <board.h>
 #include <wx/ffile.h>
 #include <wx/regex.h>
@@ -173,7 +179,7 @@ static void RegisterDefaultConverters()
                 }
                 else if( DRC_RULE_EDITOR_UTILS::IsBoolInputType( type ) )
                 {
-                    auto data = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( 0, 0, true, aRule->m_Name );
+                    auto data = std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( 0, true, aRule->m_Name );
                     data->SetConstraintCode( code );
                     return data;
                 }
@@ -187,8 +193,7 @@ static void RegisterDefaultConverters()
                     if( optW > 0 )
                         tol = std::max( optW - minW, maxW - optW );
 
-                    auto data =
-                            std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( 0, 0, aRule->m_Name, optW, tol );
+                    auto data = std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( 0, aRule->m_Name, optW, tol );
                     data->SetConstraintCode( code );
                     return data;
                 }
@@ -227,7 +232,7 @@ static void RegisterDefaultConverters()
                         viaType = VIA_STYLE_TYPE::BURIED;
                 }
 
-                auto data = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, 0, aRule->m_Name, minDia, maxDia,
+                auto data = std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( 0, aRule->m_Name, minDia, maxDia,
                                                                                 minDrill, maxDrill, viaType );
                 data->SetConstraintCode( "via_style" );
                 return data;
@@ -260,23 +265,6 @@ std::optional<DRC_RULE_EDITOR_CONSTRAINT_NAME> DRC_RULE_EDITOR_UTILS::GetConstra
 wxString DRC_RULE_EDITOR_UTILS::ConstraintToKicadDrc( DRC_RULE_EDITOR_CONSTRAINT_NAME aType )
 {
     return GetConstraintCode( aType );
-}
-
-
-bool DRC_RULE_EDITOR_UTILS::ConstraintFromKicadDrc( const wxString& aCode, DRC_RE_BASE_CONSTRAINT_DATA* aData )
-{
-    if( !aData )
-        return false;
-
-    auto type = GetConstraintTypeFromCode( aCode );
-    if( type )
-    {
-        aData->SetConstraintCode( GetConstraintCode( *type ) );
-        return true;
-    }
-
-    aData->SetConstraintCode( aCode );
-    return false;
 }
 
 
@@ -737,7 +725,7 @@ std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>> DRC_RULE_EDITOR_UTILS:
 
         if( !data )
         {
-            auto customData = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, 0, rule->m_Name );
+            auto customData = std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( 0, rule->m_Name );
             customData->SetRuleText( wxString::Format( "(rule \"%s\" ...)", rule->m_Name ) );
             data = customData;
         }
@@ -854,24 +842,32 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
 }
 
 
+PCB_LAYER_ID DRC_RULE_EDITOR_UTILS::TopBottomLayerId( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType, bool aIsTop )
+{
+    switch( aConstraintType )
+    {
+    case COURTYARD_CLEARANCE: return aIsTop ? F_CrtYd : B_CrtYd;
+    case SILK_TO_SOLDERMASK_CLEARANCE: return aIsTop ? F_SilkS : B_SilkS;
+    default: return aIsTop ? F_Cu : B_Cu;
+    }
+}
+
+
 wxString DRC_RULE_EDITOR_UTILS::TranslateTopBottomLayer( DRC_RULE_EDITOR_CONSTRAINT_NAME aConstraintType,
                                                          bool aIsTop )
 {
     switch( aConstraintType )
     {
-    case COURTYARD_CLEARANCE:
-        return wxString::Format( wxS( "(layer \"%s\")" ),
-                                 aIsTop ? wxS( "F.CrtYd" ) : wxS( "B.CrtYd" ) );
-
     case SILK_TO_SOLDERMASK_CLEARANCE:
-        // Generates a condition to match silk on one side with mask on the same side
+        // Matches silk on one side against the mask on that same side
         return wxString::Format( wxS( "(condition \"A.Layer == '%s' && B.Layer == '%s'\")" ),
-                                 aIsTop ? wxS( "F.SilkS" ) : wxS( "B.SilkS" ),
+                                 LSET::Name( TopBottomLayerId( aConstraintType, aIsTop ) ),
                                  aIsTop ? wxS( "F.Mask" ) : wxS( "B.Mask" ) );
 
+    case COURTYARD_CLEARANCE:
     case VIAS_UNDER_SMD:
     case ALLOWED_ORIENTATION:
-        return wxString::Format( wxS( "(layer \"%s\")" ), aIsTop ? wxS( "F.Cu" ) : wxS( "B.Cu" ) );
+        return wxString::Format( wxS( "(layer \"%s\")" ), LSET::Name( TopBottomLayerId( aConstraintType, aIsTop ) ) );
 
     default:
         return wxEmptyString;
@@ -968,4 +964,35 @@ DRC_RULE_EDITOR_UTILS::ParseSelectorCondition( const wxString& aExpr )
         return SELECTOR_CONDITION{ SELECTOR_KIND::ENCLOSED_BY_AREA, enclosedRe.GetMatch( aExpr, 1 ) };
 
     return std::nullopt;
+}
+
+
+std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>
+DRC_RULE_EDITOR_UTILS::CreateConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME    aType,
+                                             const DRC_RE_BASE_CONSTRAINT_DATA& aBase )
+{
+    switch( aType )
+    {
+    case VIA_STYLE: return std::make_shared<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( aBase );
+    case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
+        return std::make_shared<DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA>( aBase );
+    case ROUTING_DIFF_PAIR: return std::make_shared<DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA>( aBase );
+    case ROUTING_WIDTH: return std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>( aBase );
+    case PERMITTED_LAYERS: return std::make_shared<DRC_RE_PERMITTED_LAYERS_CONSTRAINT_DATA>( aBase );
+    case ALLOWED_ORIENTATION: return std::make_shared<DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA>( aBase );
+    case CUSTOM_RULE: return std::make_shared<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( aBase );
+    case ABSOLUTE_LENGTH: return std::make_shared<DRC_RE_ABSOLUTE_LENGTH_TWO_CONSTRAINT_DATA>( aBase );
+    case MATCHED_LENGTH_DIFF_PAIR: return std::make_shared<DRC_RE_MATCHED_LENGTH_DIFF_PAIR_CONSTRAINT_DATA>( aBase );
+    case VIAS_UNDER_SMD: return std::make_shared<DRC_RE_VIAS_UNDER_SMD_CONSTRAINT_DATA>( aBase );
+    default: break;
+    }
+
+    if( IsNumericInputType( aType ) )
+        return CreateNumericConstraintData( aType, aBase );
+
+    if( IsBoolInputType( aType ) )
+        return std::make_shared<DRC_RE_BOOL_INPUT_CONSTRAINT_DATA>( aBase );
+
+    wxLogWarning( "No factory found for constraint type: %d", aType );
+    return std::make_shared<DRC_RE_BASE_CONSTRAINT_DATA>( aBase );
 }

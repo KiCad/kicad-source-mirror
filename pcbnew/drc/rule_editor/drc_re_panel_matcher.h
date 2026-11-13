@@ -120,6 +120,12 @@ public:
      */
     DRC_RULE_EDITOR_CONSTRAINT_NAME GetPanelForConstraint( DRC_CONSTRAINT_T aConstraintType );
 
+    /**
+     * The panel whose page lists a text rule that sets this constraint, or CUSTOM_RULE when no
+     * panel edits it.
+     */
+    DRC_RULE_EDITOR_CONSTRAINT_NAME GetHomePanel( DRC_CONSTRAINT_T aConstraintType );
+
 private:
     void initClaims();
 

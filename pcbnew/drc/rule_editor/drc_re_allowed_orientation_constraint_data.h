@@ -34,11 +34,10 @@ public:
     {
     }
 
-    explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA( int aId, int aParentId, bool aAllowZeroDegrees,
-                                                         bool aAllowNinetyDegrees, bool aAllowOneEightyDegrees,
-                                                         bool aAllowTwoSeventyDegrees, bool aAllowAllDegrees,
-                                                         const wxString& aRuleName ) :
-            DRC_RE_BASE_CONSTRAINT_DATA( aId, aParentId, aRuleName ),
+    explicit DRC_RE_ALLOWED_ORIENTATION_CONSTRAINT_DATA( int aId, bool aAllowZeroDegrees, bool aAllowNinetyDegrees,
+                                                         bool aAllowOneEightyDegrees, bool aAllowTwoSeventyDegrees,
+                                                         bool aAllowAllDegrees, const wxString& aRuleName ) :
+            DRC_RE_BASE_CONSTRAINT_DATA( aId, aRuleName ),
             m_allowZeroDegrees( aAllowZeroDegrees || aAllowAllDegrees ),
             m_allowNinetyDegrees( aAllowNinetyDegrees || aAllowAllDegrees ),
             m_allowOneEightyDegrees( aAllowOneEightyDegrees || aAllowAllDegrees ),

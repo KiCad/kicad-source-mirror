@@ -227,6 +227,9 @@ set( PCBNEW_DIALOGS
     dialogs/panel_assign_component_classes_base.cpp
     dialogs/panel_setup_constraints.cpp
     dialogs/panel_setup_constraints_base.cpp
+    dialogs/panel_setup_constraint_rules.cpp
+    dialogs/constraint_rules_list.cpp
+    dialogs/constraint_rules_list_base.cpp
     dialogs/panel_setup_defaults.cpp
     dialogs/panel_setup_defaults_base.cpp
     dialogs/panel_setup_dimensions.cpp
@@ -368,7 +371,7 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_panel_matcher.cpp
     drc/rule_editor/drc_re_rule_loader.cpp
     drc/rule_editor/drc_re_rule_saver.cpp
-    drc/rule_editor/dialog_drc_rule_editor.cpp
+    drc/rule_editor/drc_rule_document.cpp
     drc/rule_editor/panel_drc_rule_editor_base.cpp
     drc/rule_editor/panel_drc_rule_editor.cpp
     drc/rule_editor/drc_re_bitmap_overlay_panel.cpp
@@ -388,8 +391,6 @@ set( PCBNEW_DRC_SRCS
     drc/rule_editor/drc_re_condition_row_panel.cpp
     drc/rule_editor/drc_re_condition_group_panel.cpp
     drc/rule_editor/drc_re_custom_rule_panel.cpp
-    drc/rule_editor/panel_drc_group_header_base.cpp
-    drc/rule_editor/panel_drc_group_header.cpp
     drc/rule_editor/drc_re_validator_checkbox_list.cpp
     drc/rule_editor/drc_re_validator_combo_ctrl.cpp
     drc/rule_editor/drc_re_validator_min_max_ctrl.cpp
@@ -558,7 +559,6 @@ set( PCBNEW_CLASS_SRCS
     tools/generator_tool.cpp
     tools/generator_tool_pns_proxy.cpp
     tools/multichannel_tool.cpp
-    tools/drc_rule_editor_tool.cpp
 
     footprint_preview_panel.cpp
     footprint_tree_pane.cpp
