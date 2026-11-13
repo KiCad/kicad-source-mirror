@@ -34,6 +34,7 @@
 #include <OpenGl_GraphicDriver.hxx>
 #include <WNT_Window.hxx>
 #include <AIS_ViewController.hxx>
+#include <NCollection_Vec2.hxx>
 #include <OSD.hxx>
 #include <V3d_Viewer.hxx>
 
@@ -630,7 +631,7 @@ LRESULT WINAPI KICAD_3D_PREVIEW_HANDLER::PreviewWindowProc( HWND aHwnd, UINT aMs
     case WM_MBUTTONDOWN:
     case WM_RBUTTONDOWN:
     {
-        const Graphic3d_Vec2i  aPos( LOWORD( aParamL ), HIWORD( aParamL ) );
+        const NCollection_Vec2<int> aPos( LOWORD( aParamL ), HIWORD( aParamL ) );
         const Aspect_VKeyFlags aFlags = WNT_Window::MouseKeyFlagsFromEvent( aParamW );
         Aspect_VKeyMouse       aButton = Aspect_VKeyMouse_NONE;
         switch( aMsg )
@@ -660,10 +661,10 @@ LRESULT WINAPI KICAD_3D_PREVIEW_HANDLER::PreviewWindowProc( HWND aHwnd, UINT aMs
     }
     case WM_MOUSEMOVE:
     {
-        Graphic3d_Vec2i  aPos( LOWORD( aParamL ), HIWORD( aParamL ) );
-        Aspect_VKeyMouse aButtons = WNT_Window::MouseButtonsFromEvent( aParamW );
-        Aspect_VKeyFlags aFlags = WNT_Window::MouseKeyFlagsFromEvent( aParamW );
-        CURSORINFO       aCursor;
+        NCollection_Vec2<int> aPos( LOWORD( aParamL ), HIWORD( aParamL ) );
+        Aspect_VKeyMouse      aButtons = WNT_Window::MouseButtonsFromEvent( aParamW );
+        Aspect_VKeyFlags      aFlags = WNT_Window::MouseKeyFlagsFromEvent( aParamW );
+        CURSORINFO            aCursor;
         aCursor.cbSize = sizeof( aCursor );
 
         if( ::GetCursorInfo( &aCursor ) != FALSE )
@@ -687,7 +688,7 @@ LRESULT WINAPI KICAD_3D_PREVIEW_HANDLER::PreviewWindowProc( HWND aHwnd, UINT aMs
         const int              aDelta = GET_WHEEL_DELTA_WPARAM( aParamW );
         const double           aDeltaF = double( aDelta ) / double( WHEEL_DELTA );
         const Aspect_VKeyFlags aFlags = WNT_Window::MouseKeyFlagsFromEvent( aParamW );
-        Graphic3d_Vec2i        aPos( int( short( LOWORD( aParamL ) ) ), int( short( HIWORD( aParamL ) ) ) );
+        NCollection_Vec2<int>  aPos( int( short( LOWORD( aParamL ) ) ), int( short( HIWORD( aParamL ) ) ) );
         POINT                  aCursorPnt = { aPos.x(), aPos.y() };
 
         if( ::ScreenToClient( aHwnd, &aCursorPnt ) )
