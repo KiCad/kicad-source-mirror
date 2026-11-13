@@ -353,6 +353,8 @@ SIZES_SETTINGS LOGGER::parseSizesFromJSON( const nlohmann::json& aJSON )
         sizes.SetDiffPairViaGap( aJSON.at("diffPairViaGap").get<int>() );
         sizes.SetDiffPairGap( aJSON.at("diffPairGap").get<int>() );
         sizes.SetDiffPairWidth( aJSON.at("diffPairWidth").get<int>() );
+
+        sizes.SetDiffPairViaGapSameAsTraceGap( sizes.DiffPairViaGap() == sizes.DiffPairGap() );
     }
     catch ( nlohmann::json::exception& )
     {
