@@ -82,6 +82,7 @@ public:
     int ExplicitCrossProbeToPcb( const TOOL_EVENT& aEvent );
 
     int ExportSymbolsToLibrary( const TOOL_EVENT& aEvent );
+    int ExportForOlderVersion( const TOOL_EVENT& aEvent );
 
     int SimProbe( const TOOL_EVENT& aEvent );
     int SimTune( const TOOL_EVENT& aEvent );

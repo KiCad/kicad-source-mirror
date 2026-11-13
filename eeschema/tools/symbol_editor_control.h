@@ -51,6 +51,7 @@ public:
     int DuplicateSymbol( const TOOL_EVENT& aEvent );
     int RenameSymbol( const TOOL_EVENT& newName );
     int ExportSymbol( const TOOL_EVENT& aEvent );
+    int ExportForOlderVersion( const TOOL_EVENT& aEvent );
     int OpenDirectory( const TOOL_EVENT& aEvent );
     int OpenWithTextEditor( const TOOL_EVENT& aEvent );
     int ExportView( const TOOL_EVENT& aEvent );

@@ -21,6 +21,10 @@
 
 #include <confirm.h>
 #include <downgrade_target.h>
+#include <eda_base_frame.h>
+#include <wx/msgdlg.h>
+
+#include "dialog_downgrade_report.h"
 
 
 DIALOG_EXPORT_OLDER_VERSION::DIALOG_EXPORT_OLDER_VERSION( wxWindow* aParent, const wxArrayString& aTargets,
@@ -99,4 +103,74 @@ bool DIALOG_EXPORT_OLDER_VERSION::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void RunExportForOlderVersion( EDA_BASE_FRAME* aFrame, const DOWNGRADE_EXPORT_RUNNER& aRun )
+{
+    const wxString                       title = _( "Export for Older KiCad Version" );
+    const std::vector<DOWNGRADE_TARGET>& targets = GetDowngradeTargets();
+    wxArrayString                        names;
+
+    for( const DOWNGRADE_TARGET& target : targets )
+        names.Add( target.m_name );
+
+    // Probe against the oldest target. It drops the most, so its variant list covers the
+    // picker no matter which target the user chooses.
+    DOWNGRADE_EXPORT_PASS   probe;
+    DOWNGRADE_EXPORT_RESULT result;
+
+    probe.m_target = targets.back().m_name;
+    probe.m_dryRun = true;
+
+    if( !aRun( probe, result ) )
+    {
+        wxMessageBox( result.m_error, title, wxOK | wxICON_ERROR, aFrame );
+        return;
+    }
+
+    wxArrayString variantNames;
+
+    for( const wxString& name : result.m_variantsFound )
+        variantNames.Add( name );
+
+    DIALOG_EXPORT_OLDER_VERSION setupDlg( aFrame, names, variantNames, aFrame->GetMruPath() );
+
+    if( setupDlg.ShowModal() != wxID_OK )
+        return;
+
+    DOWNGRADE_EXPORT_PASS pass;
+    pass.m_target = setupDlg.GetTarget();
+    pass.m_variant = setupDlg.GetVariant();
+    pass.m_folder = setupDlg.GetPath();
+    pass.m_dropInsteadOfApproximate = setupDlg.GetDropInsteadOfApproximate();
+    pass.m_dryRun = true;
+
+    result = DOWNGRADE_EXPORT_RESULT();
+
+    if( !aRun( pass, result ) )
+    {
+        wxMessageBox( result.m_error, title, wxOK | wxICON_ERROR, aFrame );
+        return;
+    }
+
+    if( result.m_report.IsBlocked() || result.m_report.IsLossy() )
+    {
+        DIALOG_DOWNGRADE_REPORT reportDlg( aFrame, pass.m_target, result.m_report );
+
+        if( reportDlg.ShowModal() != wxID_OK || result.m_report.IsBlocked() )
+            return;
+    }
+
+    pass.m_dryRun = false;
+    result = DOWNGRADE_EXPORT_RESULT();
+
+    if( !aRun( pass, result ) )
+    {
+        wxMessageBox( result.m_error, title, wxOK | wxICON_ERROR, aFrame );
+        return;
+    }
+
+    wxMessageBox( wxString::Format( _( "Exported to '%s'." ), pass.m_folder ), title, wxOK | wxICON_INFORMATION,
+                  aFrame );
 }

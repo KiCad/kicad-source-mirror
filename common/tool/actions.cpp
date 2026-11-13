@@ -128,6 +128,12 @@ TOOL_ACTION ACTIONS::pageSettings( TOOL_ACTION_ARGS()
         .Tooltip( _( "Settings for paper size and title block info" ) )
         .Icon( BITMAPS::sheetset ) );
 
+TOOL_ACTION ACTIONS::exportForOlderVersion( TOOL_ACTION_ARGS()
+                                                    .Name( "common.Control.exportForOlderVersion" )
+                                                    .Scope( AS_GLOBAL )
+                                                    .FriendlyName( _( "Export for Older KiCad Version..." ) )
+                                                    .Tooltip( _( "Export a copy that an older KiCad can open" ) ) );
+
 TOOL_ACTION ACTIONS::print( TOOL_ACTION_ARGS()
         .Name( "common.Control.print" )
         .Scope( AS_GLOBAL )

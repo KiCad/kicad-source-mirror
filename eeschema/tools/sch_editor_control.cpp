@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <dialogs/dialog_export_older_version.h>
+#include <jobs/job_sch_downgrade.h>
 #include <advanced_config.h>
 #include <symbol_edit_frame.h>
 #include "tools/sch_editor_control.h"
@@ -591,6 +593,54 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     SCH_SELECTION&      selection = aForce ? selTool->RequestSelection() : selTool->GetSelection();
 
     m_frame->SendSelectItemsToPcb( selection.GetItemsSortedBySelectionOrder(), aForce );
+}
+
+
+int SCH_EDITOR_CONTROL::ExportForOlderVersion( const TOOL_EVENT& aEvent )
+{
+    const wxString title = _( "Export for Older KiCad Version" );
+
+    // The export reads the files on disk, so they have to match what is on screen.
+    if( m_frame->IsContentModified() )
+    {
+        int answer = wxMessageBox( _( "You have unsaved changes. Save them before exporting?" ), title,
+                                   wxYES_NO | wxCANCEL | wxICON_WARNING, m_frame );
+
+        if( answer == wxCANCEL )
+            return 0;
+
+        if( answer == wxYES && !m_frame->SaveProject() )
+        {
+            wxMessageBox( _( "The schematic was not saved. Nothing was exported." ), title, wxOK | wxICON_ERROR,
+                          m_frame );
+            return 0;
+        }
+    }
+
+    const wxString schematic = m_frame->Schematic().RootScreen()->GetFileName();
+
+    RunExportForOlderVersion( m_frame,
+                              [&]( const DOWNGRADE_EXPORT_PASS& aPass, DOWNGRADE_EXPORT_RESULT& aResult ) -> bool
+                              {
+                                  JOB_SCH_DOWNGRADE job;
+                                  job.m_filename = schematic;
+                                  job.m_variant = aPass.m_variant;
+
+                                  if( !aPass.m_dryRun )
+                                  {
+                                      wxFileName out( aPass.m_folder, wxEmptyString );
+                                      out.AppendDir( wxFileName( schematic ).GetName() );
+                                      job.m_outputDir = out.GetPath();
+                                  }
+
+                                  if( !RunDowngradeJob( m_frame->Kiway(), KIWAY::FACE_SCH, job, aPass, aResult ) )
+                                      return false;
+
+                                  aResult.m_variantsFound = job.m_foundVariants;
+                                  return true;
+                              } );
+
+    return 0;
 }
 
 
@@ -3913,6 +3963,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ToggleAnnotateAuto,      SCH_ACTIONS::toggleAnnotateAuto.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary,  SCH_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExportForOlderVersion, ACTIONS::exportForOlderVersion.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::PlaceLinkedDesignBlock,  SCH_ACTIONS::placeLinkedDesignBlock.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveToLinkedDesignBlock, SCH_ACTIONS::saveToLinkedDesignBlock.MakeEvent() );

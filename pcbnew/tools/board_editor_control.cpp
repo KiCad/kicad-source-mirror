@@ -19,6 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <dialogs/dialog_export_older_version.h>
+#include <jobs/job_pcb_downgrade.h>
 #include "board_editor_control.h"
 
 #include <algorithm>
@@ -467,6 +469,46 @@ bool BOARD_EDITOR_CONTROL::Init()
         m_toolMgr->RunAction( PCB_ACTIONS::angleSnapModeChanged );
 
     return true;
+}
+
+
+int BOARD_EDITOR_CONTROL::ExportForOlderVersion( const TOOL_EVENT& aEvent )
+{
+    const wxString title = _( "Export for Older KiCad Version" );
+
+    // The export reads the files on disk, so they have to match what is on screen.
+    if( m_frame->IsContentModified() )
+    {
+        int answer = wxMessageBox( _( "You have unsaved changes. Save them before exporting?" ), title,
+                                   wxYES_NO | wxCANCEL | wxICON_WARNING, m_frame );
+
+        if( answer == wxCANCEL )
+            return 0;
+
+        if( answer == wxYES && !m_frame->SaveBoard() )
+        {
+            wxMessageBox( _( "The board was not saved. Nothing was exported." ), title, wxOK | wxICON_ERROR, m_frame );
+            return 0;
+        }
+    }
+
+    const wxString board = m_frame->GetBoard()->GetFileName();
+
+    RunExportForOlderVersion(
+            m_frame,
+            [&]( const DOWNGRADE_EXPORT_PASS& aPass, DOWNGRADE_EXPORT_RESULT& aResult ) -> bool
+            {
+                JOB_PCB_DOWNGRADE job;
+                job.m_filename = board;
+                job.m_variant = aPass.m_variant;
+
+                if( !aPass.m_dryRun )
+                    job.m_outputFile = wxFileName( aPass.m_folder, wxFileName( board ).GetFullName() ).GetFullPath();
+
+                return RunDowngradeJob( m_frame->Kiway(), KIWAY::FACE_PCB, job, aPass, aResult );
+            } );
+
+    return 0;
 }
 
 
@@ -2361,6 +2403,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::New,                    ACTIONS::doNew.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Open,                   ACTIONS::open.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Save,                   ACTIONS::save.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportForOlderVersion, ACTIONS::exportForOlderVersion.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::SaveAs,                 ACTIONS::saveAs.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::SaveCopy,               ACTIONS::saveCopy.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::Revert,                 ACTIONS::revert.MakeEvent() );

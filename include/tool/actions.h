@@ -57,6 +57,7 @@ public:
     static TOOL_ACTION saveAll;
     static TOOL_ACTION revert;
     static TOOL_ACTION pageSettings;
+    static TOOL_ACTION exportForOlderVersion;
     static TOOL_ACTION print;
     static TOOL_ACTION plot;
     static TOOL_ACTION quit;

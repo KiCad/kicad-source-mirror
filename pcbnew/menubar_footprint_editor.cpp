@@ -75,6 +75,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
 
     submenuExport->Add( PCB_ACTIONS::exportFootprint, ACTION_MENU::NORMAL, _( "Footprint..." ) );
     submenuExport->Add( PCB_ACTIONS::exportFootprintAsSVG, ACTION_MENU::NORMAL, _( "Footprint as &SVG..." ) );
+    submenuExport->Add( ACTIONS::exportForOlderVersion, ACTION_MENU::NORMAL, _( "For Older KiCad Version..." ) );
     submenuExport->Add( _( "View as &PNG..." ),
                         _( "Create a PNG file from the current view" ),
                         ID_FPEDIT_SAVE_PNG,

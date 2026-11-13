@@ -35,7 +35,6 @@ public:
     static TOOL_ACTION openJobsetFile;
     static TOOL_ACTION closeProject;
     static TOOL_ACTION loadProject;
-    static TOOL_ACTION exportForOlderVersion;
     static TOOL_ACTION viewDroppedGerbers;
 
     static TOOL_ACTION editSchematic;

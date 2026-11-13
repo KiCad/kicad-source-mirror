@@ -111,7 +111,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::saveAs );
-    fileMenu->Add( KICAD_MANAGER_ACTIONS::exportForOlderVersion );
+    fileMenu->Add( ACTIONS::exportForOlderVersion );
 
     fileMenu->AppendSeparator();
 

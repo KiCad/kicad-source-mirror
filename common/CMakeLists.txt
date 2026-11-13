@@ -652,6 +652,10 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_plugin_options.cpp
     dialogs/dialog_plugin_options_base.cpp
     dialogs/dialog_text_entry_base.cpp
+    dialogs/dialog_downgrade_report.cpp
+    dialogs/dialog_downgrade_report_base.cpp
+    dialogs/dialog_export_older_version.cpp
+    dialogs/dialog_export_older_version_base.cpp
     dialogs/dialog_page_settings.cpp
     dialogs/dialog_print_generic.cpp
     dialogs/dialog_print_generic_base.cpp
