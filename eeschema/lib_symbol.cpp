@@ -497,7 +497,7 @@ bool LIB_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbol& aI
     {
     case SchematicSymbolType::SST_GLOBAL_POWER: SetGlobalPower(); break;
     case SchematicSymbolType::SST_LOCAL_POWER:  SetLocalPower();  break;
-    default: break;
+    default:                                                      break;
     }
 
     if( def.has_attributes() )
@@ -590,7 +590,9 @@ bool LIB_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbol& aI
 
     SetShowPinNumbers( def.show_pin_numbers() );
     SetShowPinNames( def.show_pin_names() );
-    SetPinNameOffset( UnpackDistance( def.pin_name_offset(), schIUScale ) );
+
+    if( def.has_pin_name_offset() )
+        SetPinNameOffset( UnpackDistance( def.pin_name_offset(), schIUScale ) );
 
     if( def.has_extends() )
         SetParentName( wxString::FromUTF8( def.extends().entry_name() ) );
