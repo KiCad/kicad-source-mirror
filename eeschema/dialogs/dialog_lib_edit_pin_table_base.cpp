@@ -307,8 +307,8 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnClose ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnUpdateUI ) );
 	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellEdited ), NULL, this );
-	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnSize ), NULL, this );
 	m_cbGroup->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
 	m_groupSelected->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnGroupSelected ), NULL, this );
@@ -334,8 +334,8 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::~DIALOG_LIB_EDIT_PIN_TABLE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnClose ) );
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnUpdateUI ) );
 	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellEdited ), NULL, this );
-	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCellSelected ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnSize ), NULL, this );
 	m_cbGroup->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
 	m_groupSelected->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnGroupSelected ), NULL, this );

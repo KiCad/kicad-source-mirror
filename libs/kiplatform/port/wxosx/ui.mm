@@ -240,6 +240,18 @@ bool KIPLATFORM::UI::SupportsKeyState()
 }
 
 
+wxKeyEvent KIPLATFORM::UI::GetNativePopupDismissalEvent()
+{
+    return wxKeyEvent();
+}
+
+
+bool KIPLATFORM::UI::PrepareChoicePopup( wxWindow* )
+{
+    return true;
+}
+
+
 wxPoint KIPLATFORM::UI::GetMousePosition()
 {
     // wxOSX flips the pointer against screen 0, which raises NSRangeException with no window

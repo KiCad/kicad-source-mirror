@@ -24,6 +24,8 @@
 #include <kicommon.h>
 #include <bitset>
 #include <functional>
+#include <utility>
+#include <vector>
 
 #include <wx/grid.h>
 #include <wx/event.h>
@@ -50,6 +52,8 @@ enum
 };
 
 
+class wxComboCtrl;
+
 /**
  * Add mouse and command handling (such as cut, copy, and paste) to a #WX_GRID instance.
  */
@@ -59,6 +63,17 @@ public:
     explicit GRID_TRICKS( WX_GRID* aGrid );
 
     GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler );
+
+    /**
+     * Apply an edit to every selected cell in the edited cell's column.
+     *
+     * The grid switches to native wxGrid selection so disjoint selections survive opening an editor.
+     */
+    void EnableColumnBulkEdit( bool aEnable = true )
+    {
+        m_columnBulkEditEnabled = aEnable;
+        m_grid->SetUseNativeSelection( aEnable );
+    }
 
     /**
      * Enable the tooltip for a column.
@@ -105,6 +120,20 @@ protected:
     void onUpdateUI( wxUpdateUIEvent& event );
     void onGridMotion( wxMouseEvent& event );
 
+    void         onGridCellChanging( wxGridEvent& aEvent );
+    void         onGridCellChanged( wxGridEvent& aEvent );
+    void         onGridEditorCreated( wxGridEditorCreatedEvent& aEvent );
+    void         onGridEditorShown( wxGridEvent& aEvent );
+    void         onGridEditorHidden( wxGridEvent& aEvent );
+    void         onEditorInput( wxCommandEvent& aEvent );
+    void         onEditorKeyDown( wxKeyEvent& aEvent );
+    void         onEditorTextEnter( wxCommandEvent& aEvent );
+    void         onEditorDropdownOpened( wxCommandEvent& aEvent );
+    void         onEditorDropdownClosed( wxCommandEvent& aEvent );
+    void         finishDropdown();
+    wxComboCtrl* shownGenericPopup( const wxKeyEvent& aEnterKey );
+    bool         finishEditor( bool aCancel, bool aMoveDown = false );
+
     virtual bool handleDoubleClick( wxGridEvent& aEvent );
     virtual void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent );
     virtual void appendPopupMenuItems( wxMenu& aMenu ) {}
@@ -123,6 +152,27 @@ protected:
     virtual void cutcopy( bool doCopy, bool doDelete );
 
 protected:
+    struct BULK_EDIT_SESSION
+    {
+        void Begin( const wxGridCellCoords& aSource )
+        {
+            const unsigned int generation = Generation + 1;
+            *this = {};
+            Source = aSource;
+            Generation = generation;
+        }
+
+        wxGridCellCoords               Source;
+        std::vector<int>               Rows;
+        std::vector<wxGridBlockCoords> Selection;
+        unsigned int                   Generation = 0;
+        bool                           Commit = false;
+        bool                           Input = false;
+        bool                           TextInitialized = false;
+        bool                           KeyboardNavigation = false;
+        wxKeyEvent                     PopupKey;
+    };
+
     WX_GRID* m_grid;     ///< I don't own the grid, but he owns me
 
     // row & col "selection" acquisition
@@ -138,6 +188,14 @@ protected:
 
     bool                                   m_enableSingleClickEdit;
     bool                                   m_multiCellEditEnabled;
+    bool                                   m_columnBulkEditEnabled = false;
+    wxGridCellCoords                       m_bulkEditSource;
+    wxString                               m_bulkEditValue;
+    std::vector<std::pair<int, wxString>>  m_bulkEditRows;
+    BULK_EDIT_SESSION                      m_bulkEditor;
+    bool                                   m_bulkEditorEnterHandled = false;
+    bool                                   m_bulkEditorOpening = false;
+    bool                                   m_bulkEditorClosing = false;
 };
 
 #endif  // _GRID_TRICKS_H_

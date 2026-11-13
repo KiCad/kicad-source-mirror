@@ -584,7 +584,7 @@
                         <property name="window_name"></property>
                         <property name="window_style"></property>
                         <event name="OnGridCellChange">OnCellEdited</event>
-                        <event name="OnGridCellLeftClick">OnCellSelected</event>
+                        <event name="OnGridSelectCell">OnCellSelected</event>
                         <event name="OnGridEditorShown">OnCellSelected</event>
                         <event name="OnSize">OnSize</event>
                       </object>

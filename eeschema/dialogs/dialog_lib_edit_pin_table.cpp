@@ -296,37 +296,6 @@ public:
 };
 
 
-void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
-{
-    wxGridCellCoordsArray topLeft  = aGrid->GetSelectionBlockTopLeft();
-    wxGridCellCoordsArray botRight = aGrid->GetSelectionBlockBottomRight();
-
-    wxArrayInt  cols = aGrid->GetSelectedCols();
-    wxArrayInt  rows = aGrid->GetSelectedRows();
-
-    if( topLeft.Count() && botRight.Count() )
-    {
-        *aRowStart = topLeft[0].GetRow();
-        *aRowCount = botRight[0].GetRow() - *aRowStart + 1;
-    }
-    else if( cols.Count() )
-    {
-        *aRowStart = 0;
-        *aRowCount = aGrid->GetNumberRows();
-    }
-    else if( rows.Count() )
-    {
-        *aRowStart = rows[0];
-        *aRowCount = rows.Count();
-    }
-    else
-    {
-        *aRowStart = aGrid->GetGridCursorRow();
-        *aRowCount = *aRowStart >= 0 ? 1 : 0;
-    }
-}
-
-
 class PIN_TABLE_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
 public:
@@ -621,14 +590,9 @@ public:
                 for( SCH_PIN* pin : aPins )
                     pin->ClearTempFlags();
 
-                int firstSelectedRow;
-                int selectedRowCount;
-
-                getSelectedArea( grid, &firstSelectedRow, &selectedRowCount );
-
-                for( int ii = 0; ii < selectedRowCount; ++ii )
+                for( int row : grid->GetSelectedRowIndices() )
                 {
-                    for( SCH_PIN* pin : m_rows[ firstSelectedRow + ii ] )
+                    for( SCH_PIN* pin : m_rows[row] )
                     {
                         pin->SetFlags( CANDIDATE );
                         clear_flags.push_back( pin );
@@ -834,10 +798,13 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_originalColWidths[ i ] = m_grid->GetColSize( i );
 
     m_grid->SetTable( m_dataModel );
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid, [this]( wxCommandEvent& aEvent )
-                                                       {
-                                                           OnAddRow( aEvent );
-                                                       } ) );
+    GRID_TRICKS* gridTricks = new GRID_TRICKS( m_grid,
+                                               [this]( wxCommandEvent& aEvent )
+                                               {
+                                                   OnAddRow( aEvent );
+                                               } );
+    gridTricks->EnableColumnBulkEdit();
+    m_grid->PushEventHandler( gridTricks );
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
     m_grid->ShowHideColumns( "0 1 2 3 4 5 9 10" );
     m_columnsShown = m_grid->GetShownColumns();
@@ -1073,6 +1040,9 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnColSort( wxGridEvent& aEvent )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int sortCol = aEvent.GetCol();
     bool ascending;
 
@@ -1165,7 +1135,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::RemovePin( SCH_PIN* pin )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnCellEdited( wxGridEvent& event )
 {
-    updateSummary();
+    // A bulk edit sends one event per row, so rebuild the summary once from OnUpdateUI
+    m_summaryDirty = true;
 }
 
 
@@ -1200,9 +1171,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
         m_editFrame->GetCanvas()->Refresh();
     }
 
-    // Let WX_GRID run its editor-positioning handler
-    if( event.GetEventType() == wxEVT_GRID_EDITOR_SHOWN )
-        event.Skip();
+    event.Skip();
 }
 
 
@@ -1214,6 +1183,9 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::IsDisplayGrouped()
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnGroupSelected( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     m_cbGroup->SetValue( false );
 
     m_dataModel->RebuildRows( m_pins, false, true );
@@ -1575,10 +1547,13 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
             adjustGridColumns();
     }
 
-    int firstSelectedRow;
-    int selectedRowCount;
+    if( m_summaryDirty )
+    {
+        m_summaryDirty = false;
+        updateSummary();
+    }
 
-    getSelectedArea( m_grid, &firstSelectedRow, &selectedRowCount );
+    const size_t selectedRowCount = m_grid->GetSelectedRowIndices().size();
 
     if( ( selectedRowCount > 1 ) != m_groupSelected->IsEnabled() )
         m_groupSelected->Enable( selectedRowCount > 1 );
@@ -1593,8 +1568,12 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCancel( wxCommandEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
 {
-    // This is a cancel, so commit quietly as we're going to throw the results away anyway.
-    m_grid->CommitPendingChanges( true );
+    // Closing can still save, so a pending bulk edit needs the events a quiet commit skips
+    if( !m_grid->CommitPendingChanges() && event.CanVeto() )
+    {
+        event.Veto();
+        return;
+    }
 
     int retval = wxID_CANCEL;
 

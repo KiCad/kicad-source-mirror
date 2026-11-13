@@ -19,12 +19,17 @@
  */
 
 #include <grid_tricks.h>
+#include <kiplatform/ui.h>
 #include <wx/defs.h>
 #include <wx/event.h>
 #include <wx/tokenzr.h>
 #include <wx/clipbrd.h>
+#include <wx/combo.h>
 #include <wx/log.h>
 #include <wx/stc/stc.h>
+#include <wx/textctrl.h>
+#include <wx/toplevel.h>
+#include <wx/weakref.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
@@ -38,21 +43,37 @@
 #define ROW_SEP_R   wxT( '\r' )
 
 
+// wxBitmapComboBox is a native wxComboBox on GTK and MSW but a generic wxComboCtrl on macOS
+static bool isDropdown( wxWindow* aControl )
+{
+    return dynamic_cast<wxComboBox*>( aControl ) || dynamic_cast<wxComboCtrl*>( aControl );
+}
+
+
+static void dismissDropdown( wxWindow* aControl )
+{
+    if( wxComboBox* combo = dynamic_cast<wxComboBox*>( aControl ) )
+        combo->Dismiss();
+    else if( wxComboCtrl* comboCtrl = dynamic_cast<wxComboCtrl*>( aControl ) )
+        comboCtrl->Dismiss();
+}
+
+
 GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ) :
-    m_grid( aGrid ),
-    m_addHandler( []( wxCommandEvent& ) {} ),
-    m_enableSingleClickEdit( true ),
-    m_multiCellEditEnabled( true )
+        m_grid( aGrid ),
+        m_addHandler( nullptr ),
+        m_enableSingleClickEdit( true ),
+        m_multiCellEditEnabled( true )
 {
     init();
 }
 
 
 GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid, std::function<void( wxCommandEvent& )> aAddHandler ) :
-    m_grid( aGrid ),
-    m_addHandler( aAddHandler ),
-    m_enableSingleClickEdit( true ),
-    m_multiCellEditEnabled( true )
+        m_grid( aGrid ),
+        m_addHandler( aAddHandler ),
+        m_enableSingleClickEdit( true ),
+        m_multiCellEditEnabled( true )
 {
     init();
 }
@@ -64,6 +85,12 @@ void GRID_TRICKS::init()
     m_sel_col_start = 0;
     m_sel_row_count = 0;
     m_sel_col_count = 0;
+
+    Bind( wxEVT_GRID_CELL_CHANGING, &GRID_TRICKS::onGridCellChanging, this );
+    Bind( wxEVT_GRID_CELL_CHANGED, &GRID_TRICKS::onGridCellChanged, this );
+    Bind( wxEVT_GRID_EDITOR_CREATED, &GRID_TRICKS::onGridEditorCreated, this );
+    Bind( wxEVT_GRID_EDITOR_SHOWN, &GRID_TRICKS::onGridEditorShown, this );
+    Bind( wxEVT_GRID_EDITOR_HIDDEN, &GRID_TRICKS::onGridEditorHidden, this );
 
     m_grid->Bind( wxEVT_GRID_CELL_LEFT_CLICK, &GRID_TRICKS::onGridCellLeftClick, this );
     m_grid->Bind( wxEVT_GRID_CELL_LEFT_DCLICK, &GRID_TRICKS::onGridCellLeftDClick, this );
@@ -124,6 +151,33 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
 {
     if( isCheckbox( aRow, aCol ) )
     {
+        if( m_columnBulkEditEnabled )
+        {
+            if( isReadOnly( aRow, aCol ) )
+                return false;
+
+            const wxString oldValue = m_grid->GetCellValue( aRow, aCol );
+            const wxString newValue = oldValue == wxT( "1" ) ? wxT( "0" ) : wxT( "1" );
+            wxGridEvent    changing( m_grid->GetId(), wxEVT_GRID_CELL_CHANGING, m_grid, aRow, aCol );
+            changing.SetString( newValue );
+            m_grid->GetEventHandler()->ProcessEvent( changing );
+
+            if( !changing.IsAllowed() )
+                return true;
+
+            m_grid->SetCellValue( aRow, aCol, newValue );
+
+            wxGridEvent changed( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, aRow, aCol );
+            changed.SetString( oldValue );
+            m_grid->GetEventHandler()->ProcessEvent( changed );
+
+            if( !changed.IsAllowed() )
+                m_grid->SetCellValue( aRow, aCol, oldValue );
+
+            m_grid->ForceRefresh();
+            return true;
+        }
+
         if( !aPreserveSelection )
         {
             m_grid->ClearSelection();
@@ -162,19 +216,30 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol, bool aPreserveSelection )
 
 bool GRID_TRICKS::showEditor( int aRow, int aCol )
 {
+    m_bulkEditor.Selection.clear();
+
     if( m_grid->GetGridCursorRow() != aRow || m_grid->GetGridCursorCol() != aCol )
         m_grid->SetGridCursor( aRow, aCol );
 
     if( !isReadOnly( aRow, aCol ) )
     {
-        m_grid->ClearSelection();
+        if( !m_columnBulkEditEnabled )
+            m_grid->ClearSelection();
+        else
+        {
+            if( !m_grid->IsInSelection( aRow, aCol ) )
+                m_grid->SelectBlock( aRow, aCol, aRow, aCol );
+
+            for( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
+                m_bulkEditor.Selection.push_back( block );
+        }
 
         m_sel_row_start = aRow;
         m_sel_col_start = aCol;
         m_sel_row_count = 1;
         m_sel_col_count = 1;
 
-        if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
+        if( !m_columnBulkEditEnabled && m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
         {
             wxArrayInt rows = m_grid->GetSelectedRows();
 
@@ -208,10 +273,22 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
     // Don't make users click twice to toggle a checkbox or edit a text cell
     if( !aEvent.GetModifiers() )
     {
+        // A plain click starts a new selection so an edit never fans out to cells the user forgot about
+        if( m_columnBulkEditEnabled )
+        {
+            m_grid->SetGridCursor( row, col );
+            m_grid->SelectBlock( row, col, row, col );
+        }
+
         bool toggled = false;
 
         if( toggleCell( row, col, true ) )
+        {
+            if( m_columnBulkEditEnabled )
+                return;
+
             toggled = true;
+        }
         else if( m_enableSingleClickEdit && showEditor( row, col ) )
             return;
 
@@ -243,6 +320,469 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
 
             return;
         }
+    }
+
+    aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onGridCellChanging( wxGridEvent& aEvent )
+{
+    m_bulkEditRows.clear();
+
+    if( !m_columnBulkEditEnabled )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    const int        row = aEvent.GetRow();
+    const int        col = aEvent.GetCol();
+    std::vector<int> selectedRows;
+
+    if( m_bulkEditor.Commit && m_bulkEditor.Source == wxGridCellCoords( row, col ) )
+    {
+        // Copied, not moved, so a vetoed commit can be retried against the same rows
+        selectedRows = m_bulkEditor.Rows;
+    }
+    else if( m_grid->IsInSelection( row, col ) )
+    {
+        for( int otherRow = 0; otherRow < m_grid->GetNumberRows(); ++otherRow )
+        {
+            if( m_grid->IsInSelection( otherRow, col ) )
+                selectedRows.push_back( otherRow );
+        }
+    }
+
+    m_bulkEditor.Commit = false;
+    GetNextHandler()->ProcessEvent( aEvent );
+    aEvent.Skip( false );
+
+    if( !aEvent.IsAllowed() )
+        return;
+
+    for( int otherRow : selectedRows )
+    {
+        if( otherRow == row || otherRow >= m_grid->GetNumberRows() || isReadOnly( otherRow, col ) )
+        {
+            continue;
+        }
+
+        wxGridEvent changing( m_grid->GetId(), wxEVT_GRID_CELL_CHANGING, m_grid, otherRow, col );
+        changing.SetString( aEvent.GetString() );
+        GetNextHandler()->ProcessEvent( changing );
+
+        if( !changing.IsAllowed() )
+        {
+            m_bulkEditRows.clear();
+            aEvent.Veto();
+            return;
+        }
+
+        m_bulkEditRows.emplace_back( otherRow, m_grid->GetCellValue( otherRow, col ) );
+    }
+
+    m_bulkEditSource = wxGridCellCoords( row, col );
+    m_bulkEditValue = aEvent.GetString();
+}
+
+
+void GRID_TRICKS::onGridEditorCreated( wxGridEditorCreatedEvent& aEvent )
+{
+    if( m_columnBulkEditEnabled )
+    {
+        wxWindow* control = aEvent.GetWindow();
+        control->Bind( wxEVT_TEXT, &GRID_TRICKS::onEditorInput, this );
+        control->Bind( wxEVT_COMBOBOX, &GRID_TRICKS::onEditorInput, this );
+
+        if( isDropdown( control ) )
+        {
+            control->Bind( wxEVT_TEXT_ENTER, &GRID_TRICKS::onEditorTextEnter, this );
+            control->GetEventHandler()->Bind( wxEVT_KEY_DOWN, &GRID_TRICKS::onEditorKeyDown, this );
+            control->GetEventHandler()->Bind( wxEVT_COMBOBOX_DROPDOWN, &GRID_TRICKS::onEditorDropdownOpened, this );
+            control->GetEventHandler()->Bind( wxEVT_COMBOBOX_CLOSEUP, &GRID_TRICKS::onEditorDropdownClosed, this );
+        }
+    }
+
+    aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onGridEditorShown( wxGridEvent& aEvent )
+{
+    std::vector<wxGridBlockCoords> selection = std::move( m_bulkEditor.Selection );
+    m_bulkEditor.Begin( wxGridCellCoords( aEvent.GetRow(), aEvent.GetCol() ) );
+
+    for( const wxGridBlockCoords& block : selection )
+        m_grid->SelectBlock( block.GetTopRow(), block.GetLeftCol(), block.GetBottomRow(), block.GetRightCol(), true );
+
+    const int row = aEvent.GetRow();
+    const int col = aEvent.GetCol();
+
+    if( m_columnBulkEditEnabled && m_grid->IsInSelection( row, col ) )
+    {
+        for( int otherRow = 0; otherRow < m_grid->GetNumberRows(); ++otherRow )
+        {
+            if( m_grid->IsInSelection( otherRow, col ) )
+                m_bulkEditor.Rows.push_back( otherRow );
+        }
+    }
+
+    aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onEditorInput( wxCommandEvent& aEvent )
+{
+    if( m_bulkEditorOpening )
+    {
+        if( aEvent.GetEventType() == wxEVT_TEXT )
+            m_bulkEditor.TextInitialized = true;
+
+        aEvent.Skip();
+        return;
+    }
+
+    const int row = m_grid->GetGridCursorRow();
+    const int col = m_grid->GetGridCursorCol();
+
+    if( m_columnBulkEditEnabled && row >= 0 && col >= 0 )
+    {
+        if( aEvent.GetEventType() == wxEVT_TEXT && dynamic_cast<wxTextCtrl*>( aEvent.GetEventObject() ) )
+        {
+            if( m_bulkEditor.TextInitialized || aEvent.GetString() != m_grid->GetCellValue( row, col ) )
+                m_bulkEditor.Input = true;
+
+            m_bulkEditor.TextInitialized = true;
+        }
+        else if( aEvent.GetEventType() == wxEVT_COMBOBOX || aEvent.GetString() != m_grid->GetCellValue( row, col ) )
+        {
+            m_bulkEditor.Input = true;
+        }
+
+        if( aEvent.GetEventType() == wxEVT_COMBOBOX
+            && ( !m_bulkEditor.KeyboardNavigation || m_bulkEditor.PopupKey.GetKeyCode() != WXK_NONE ) )
+        {
+            finishDropdown();
+        }
+    }
+
+    aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onEditorKeyDown( wxKeyEvent& aEvent )
+{
+    if( m_columnBulkEditEnabled && ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER ) )
+    {
+        m_bulkEditorEnterHandled = !aEvent.GetModifiers();
+    }
+
+    if( wxComboCtrl* comboCtrl = shownGenericPopup( aEvent ) )
+    {
+        // The grid editor handler would take Enter before the combo, so hand it to the popup directly
+        m_bulkEditor.PopupKey = aEvent;
+        comboCtrl->GetPopupControl()->GetControl()->GetEventHandler()->ProcessEvent( aEvent );
+        return;
+    }
+
+    if( m_columnBulkEditEnabled && !aEvent.GetModifiers() )
+    {
+        switch( aEvent.GetKeyCode() )
+        {
+        case WXK_UP:
+        case WXK_DOWN:
+        case WXK_HOME:
+        case WXK_END:
+        case WXK_PAGEUP:
+        case WXK_PAGEDOWN: m_bulkEditor.KeyboardNavigation = true; break;
+
+        case WXK_RETURN:
+        case WXK_NUMPAD_ENTER: finishEditor( false, true ); return;
+
+        case WXK_ESCAPE: finishEditor( true ); return;
+        }
+    }
+
+    aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onEditorTextEnter( wxCommandEvent& aEvent )
+{
+    if( !m_columnBulkEditEnabled || !m_bulkEditorEnterHandled )
+        aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onEditorDropdownOpened( wxCommandEvent& aEvent )
+{
+    if( m_columnBulkEditEnabled )
+    {
+        wxWindow* control = dynamic_cast<wxWindow*>( aEvent.GetEventObject() );
+        wxCHECK_RET( control, wxT( "Missing grid dropdown control" ) );
+
+        if( !KIPLATFORM::UI::PrepareChoicePopup( control ) )
+        {
+            CallAfter(
+                    [control = wxWeakRef<wxWindow>( control )]()
+                    {
+                        if( control )
+                            KIPLATFORM::UI::PrepareChoicePopup( control );
+                    } );
+        }
+    }
+
+    if( !m_bulkEditorOpening )
+        aEvent.Skip();
+}
+
+
+void GRID_TRICKS::onEditorDropdownClosed( wxCommandEvent& aEvent )
+{
+    if( !m_columnBulkEditEnabled )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    if( m_bulkEditorClosing || !m_grid->IsCellEditControlEnabled() )
+        return;
+
+    // A generic popup closes before it reports the choice, so keep the Enter it was given
+    if( m_bulkEditor.PopupKey.GetKeyCode() == WXK_NONE )
+        m_bulkEditor.PopupKey = KIPLATFORM::UI::GetNativePopupDismissalEvent();
+
+    wxWeakRef<WX_GRID> grid( m_grid );
+    const unsigned int generation = m_bulkEditor.Generation;
+
+    CallAfter(
+            [this, grid, generation]()
+            {
+                if( grid && m_bulkEditor.Generation == generation && grid->IsCellEditControlEnabled() )
+                    finishDropdown();
+            } );
+}
+
+
+void GRID_TRICKS::finishDropdown()
+{
+    const wxKeyEvent key = m_bulkEditor.PopupKey;
+    const bool       enter = key.GetKeyCode() == WXK_RETURN || key.GetKeyCode() == WXK_NUMPAD_ENTER;
+    const bool       committed = finishEditor( key.GetKeyCode() == WXK_ESCAPE, enter && !key.GetModifiers() );
+
+    if( committed && enter && key.GetModifiers() == wxMOD_SHIFT )
+    {
+        if( wxTopLevelWindow* window = dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( m_grid ) ) )
+        {
+            wxWindow* button = window->GetDefaultItem();
+
+            if( button && button->IsEnabled() )
+            {
+                wxCommandEvent accept( wxEVT_BUTTON, button->GetId() );
+                accept.SetEventObject( button );
+                wxPostEvent( button, accept );
+            }
+        }
+    }
+}
+
+
+wxComboCtrl* GRID_TRICKS::shownGenericPopup( const wxKeyEvent& aEnterKey )
+{
+    if( !m_columnBulkEditEnabled || aEnterKey.GetModifiers() || !m_grid->IsCellEditControlEnabled()
+        || ( aEnterKey.GetKeyCode() != WXK_RETURN && aEnterKey.GetKeyCode() != WXK_NUMPAD_ENTER ) )
+    {
+        return nullptr;
+    }
+
+    wxGridCellEditor* editor = m_grid->GetCellEditor( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+    wxComboCtrl*      comboCtrl = dynamic_cast<wxComboCtrl*>( editor->GetWindow() );
+    editor->DecRef();
+
+    // Native popups grab the keyboard, so only a generic one can be open while its control sees keys
+    return comboCtrl && comboCtrl->IsPopupShown() ? comboCtrl : nullptr;
+}
+
+
+bool GRID_TRICKS::finishEditor( bool aCancel, bool aMoveDown )
+{
+    if( m_bulkEditorClosing || !m_grid->IsCellEditControlEnabled() )
+        return false;
+
+    m_bulkEditorClosing = true;
+
+    const int row = m_grid->GetGridCursorRow();
+    const int col = m_grid->GetGridCursorCol();
+    int       nextRow = row + 1;
+
+    if( aMoveDown )
+    {
+        while( nextRow < m_grid->GetNumberRows()
+               && ( m_grid->IsInSelection( nextRow, col ) || !m_grid->IsRowShown( nextRow ) ) )
+        {
+            ++nextRow;
+        }
+    }
+
+    wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
+
+    dismissDropdown( editor->GetWindow() );
+
+    bool committed = false;
+
+    if( aCancel )
+    {
+        m_bulkEditor.Input = false;
+        m_bulkEditor.Rows.clear();
+        m_grid->CancelPendingChanges();
+    }
+    else
+    {
+        committed = m_grid->CommitPendingChanges();
+    }
+
+    editor->DecRef();
+
+    if( committed && aMoveDown && nextRow < m_grid->GetNumberRows() )
+    {
+        m_grid->GoToCell( nextRow, col );
+
+        if( m_grid->GetGridCursorRow() == nextRow && m_grid->GetGridCursorCol() == col )
+            m_grid->SelectBlock( nextRow, col, nextRow, col );
+    }
+
+    m_bulkEditorClosing = false;
+    return committed;
+}
+
+
+void GRID_TRICKS::onGridEditorHidden( wxGridEvent& aEvent )
+{
+    if( !m_columnBulkEditEnabled )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    const int         row = aEvent.GetRow();
+    const int         col = aEvent.GetCol();
+    wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
+
+    if( !editor->IsCreated() )
+    {
+        editor->DecRef();
+        m_bulkEditor.Rows.clear();
+        aEvent.Skip();
+        return;
+    }
+
+    const wxString value = editor->GetValue();
+    editor->DecRef();
+
+    if( value == m_grid->GetCellValue( row, col ) && !m_bulkEditor.Input )
+    {
+        m_bulkEditor.Rows.clear();
+        aEvent.Skip();
+        return;
+    }
+
+    m_bulkEditor.Commit = true;
+    GetNextHandler()->ProcessEvent( aEvent );
+    aEvent.Skip( false );
+
+    if( !aEvent.IsAllowed() )
+    {
+        m_bulkEditor.Commit = false;
+        return;
+    }
+
+    if( value != m_grid->GetCellValue( row, col ) )
+    {
+        m_bulkEditor.Input = false;
+        return;
+    }
+
+    wxGridEvent changing( m_grid->GetId(), wxEVT_GRID_CELL_CHANGING, m_grid, row, col );
+    changing.SetString( value );
+    m_grid->GetEventHandler()->ProcessEvent( changing );
+
+    if( !changing.IsAllowed() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
+    m_bulkEditor.Input = false;
+
+    if( !m_bulkEditRows.empty() )
+    {
+        wxGridEvent changed( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+        changed.SetString( value );
+        m_grid->GetEventHandler()->ProcessEvent( changed );
+
+        if( !changed.IsAllowed() )
+            aEvent.Veto();
+    }
+}
+
+
+void GRID_TRICKS::onGridCellChanged( wxGridEvent& aEvent )
+{
+    if( m_columnBulkEditEnabled && m_bulkEditSource == wxGridCellCoords( aEvent.GetRow(), aEvent.GetCol() )
+        && !m_bulkEditRows.empty() )
+    {
+        const int                             col = aEvent.GetCol();
+        const wxString                        sourceOldValue = aEvent.GetString();
+        std::vector<std::pair<int, wxString>> rows;
+        rows.swap( m_bulkEditRows );
+
+        wxGridUpdateLocker lock( m_grid );
+
+        for( const auto& [row, oldValue] : rows )
+            m_grid->SetCellValue( row, col, m_bulkEditValue );
+
+        bool allowed = true;
+
+        for( const auto& [row, oldValue] : rows )
+        {
+            wxGridEvent changed( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+            changed.SetString( oldValue );
+            GetNextHandler()->ProcessEvent( changed );
+
+            if( !changed.IsAllowed() )
+            {
+                allowed = false;
+                break;
+            }
+        }
+
+        if( allowed )
+        {
+            GetNextHandler()->ProcessEvent( aEvent );
+            allowed = aEvent.IsAllowed();
+        }
+
+        aEvent.Skip( false );
+
+        if( !allowed )
+        {
+            for( const auto& [row, oldValue] : rows )
+                m_grid->SetCellValue( row, col, oldValue );
+
+            m_grid->SetCellValue( aEvent.GetRow(), col, sourceOldValue );
+            aEvent.Veto();
+        }
+        else
+        {
+            m_grid->EvaluateCell( aEvent.GetRow(), col );
+
+            for( const auto& [row, oldValue] : rows )
+                m_grid->EvaluateCell( row, col );
+        }
+
+        m_grid->ForceRefresh();
+        return;
     }
 
     aEvent.Skip();
@@ -288,6 +828,28 @@ bool GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 
 void GRID_TRICKS::getSelectedArea()
 {
+    if( m_columnBulkEditEnabled && m_grid->IsSelection() )
+    {
+        int firstRow = m_grid->GetNumberRows();
+        int firstCol = m_grid->GetNumberCols();
+        int lastRow = -1;
+        int lastCol = -1;
+
+        for( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
+        {
+            firstRow = std::min( firstRow, block.GetTopRow() );
+            firstCol = std::min( firstCol, block.GetLeftCol() );
+            lastRow = std::max( lastRow, block.GetBottomRow() );
+            lastCol = std::max( lastCol, block.GetRightCol() );
+        }
+
+        m_sel_row_start = firstRow;
+        m_sel_col_start = firstCol;
+        m_sel_row_count = lastRow - firstRow + 1;
+        m_sel_col_count = lastCol - firstCol + 1;
+        return;
+    }
+
     wxGridCellCoordsArray topLeft  = m_grid->GetSelectionBlockTopLeft();
     wxGridCellCoordsArray botRight = m_grid->GetSelectionBlockBottomRight();
 
@@ -328,7 +890,8 @@ void GRID_TRICKS::getSelectedArea()
 
 void GRID_TRICKS::onGridCellRightClick( wxGridEvent& aEvent  )
 {
-    m_grid->CommitPendingChanges( true );
+    if( !m_grid->CommitPendingChanges( !m_columnBulkEditEnabled ) )
+        return;
 
     // Select the right-clicked row if it is not already part of the current selection
     int row = aEvent.GetRow();
@@ -343,7 +906,12 @@ void GRID_TRICKS::onGridCellRightClick( wxGridEvent& aEvent  )
     else
     {
         if( !m_grid->IsInSelection( row, aEvent.GetCol() ) )
+        {
             m_grid->SetGridCursor( row, aEvent.GetCol() );
+
+            if( m_columnBulkEditEnabled )
+                m_grid->SelectBlock( row, aEvent.GetCol(), row, aEvent.GetCol() );
+        }
     }
 
     wxMenu menu;
@@ -497,9 +1065,67 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 {
     bool handled = false;
 
-    if( ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER )
-        && ev.GetModifiers() == wxMOD_NONE
-        && m_grid->GetGridCursorRow() == m_grid->GetNumberRows() - 1 )
+    if( m_columnBulkEditEnabled && ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER ) )
+    {
+        m_bulkEditorEnterHandled = !ev.GetModifiers();
+    }
+
+    // Let Enter arrive as KEY_DOWN so onEditorKeyDown() can pass it to the open popup
+    if( shownGenericPopup( ev ) )
+    {
+        ev.Skip();
+        return;
+    }
+
+    if( m_columnBulkEditEnabled && !ev.GetModifiers()
+        && ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER ) )
+    {
+        const int row = m_grid->GetGridCursorRow();
+        const int col = m_grid->GetGridCursorCol();
+
+        if( m_grid->IsCellEditControlEnabled() )
+        {
+            finishEditor( false, true );
+        }
+        else if( m_addHandler && row == m_grid->GetNumberRows() - 1 && m_grid->GetSelectedRowIndices().size() <= 1 )
+        {
+            wxCommandEvent dummy;
+            m_addHandler( dummy );
+        }
+        else if( row >= 0 && col >= 0 && !isReadOnly( row, col ) )
+        {
+            if( !m_grid->IsInSelection( row, col ) )
+                m_grid->SelectBlock( row, col, row, col );
+
+            m_bulkEditorOpening = true;
+            m_grid->EnableCellEditControl();
+            m_bulkEditorOpening = false;
+
+            if( m_grid->IsCellEditControlEnabled() )
+            {
+                wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
+
+#ifndef __WXOSX__
+                // The macOS editors already open their popup in BeginEdit
+                if( wxComboBox* combo = dynamic_cast<wxComboBox*>( editor->GetWindow() ) )
+                {
+                    auto handler = static_cast<wxGridCellEditorEvtHandler*>( combo->GetEventHandler() );
+                    m_bulkEditorOpening = true;
+                    handler->SetInSetFocus( true );
+                    combo->Popup();
+                    handler->SetInSetFocus( false );
+                    m_bulkEditorOpening = false;
+                }
+#endif
+
+                editor->DecRef();
+            }
+        }
+
+        handled = true;
+    }
+    else if( ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER ) && ev.GetModifiers() == wxMOD_NONE
+             && m_grid->GetGridCursorRow() == m_grid->GetNumberRows() - 1 )
     {
         if( m_grid->IsCellEditControlShown() )
         {
@@ -508,8 +1134,12 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
         }
         else
         {
-            wxCommandEvent dummy;
-            m_addHandler( dummy );
+            if( m_addHandler )
+            {
+                wxCommandEvent dummy;
+                m_addHandler( dummy );
+            }
+
             handled = true;
         }
     }
@@ -595,7 +1225,11 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
     {
         if( m_grid->IsCellEditControlShown() )
         {
-            m_grid->CancelPendingChanges();
+            if( m_columnBulkEditEnabled )
+                finishEditor( true );
+            else
+                m_grid->CancelPendingChanges();
+
             handled = true;
         }
     }
@@ -607,7 +1241,13 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
 
 void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
 {
-    if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'A' )
+    if( m_columnBulkEditEnabled && !ev.GetModifiers()
+        && ( ev.GetKeyCode() == WXK_RETURN || ev.GetKeyCode() == WXK_NUMPAD_ENTER ) )
+    {
+        onCharHook( ev );
+        return;
+    }
+    else if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'A' )
     {
         m_grid->SelectAll();
         return;
@@ -640,6 +1280,18 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
     // space-bar toggling of checkboxes
     if( m_grid->IsEditable() && ev.GetKeyCode() == ' ' )
     {
+        if( m_columnBulkEditEnabled )
+        {
+            const int row = m_grid->GetGridCursorRow();
+            const int col = m_grid->GetGridCursorCol();
+
+            if( row >= 0 && col >= 0 && toggleCell( row, col, true ) )
+                return;
+
+            ev.Skip();
+            return;
+        }
+
         bool retVal = false;
 
         // If only rows can be selected, only toggle the first cell in a row
@@ -782,8 +1434,8 @@ void GRID_TRICKS::paste_clipboard()
             // Some editors use windows linefeeds (\r\n), which wx re-writes to \n\n
             text.Replace( "\n\n", "\n" );
 #endif
-            m_grid->CommitPendingChanges( true );
-            paste_text( text );
+            if( m_grid->CommitPendingChanges( !m_columnBulkEditEnabled ) )
+                paste_text( text );
         }
 
         wxTheClipboard->Close();
@@ -889,6 +1541,9 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
             wxString cellTxt = cols.GetNextToken();
 
+            if( m_columnBulkEditEnabled && is_selection && !m_grid->IsInSelection( row, col ) )
+                continue;
+
             // Allow paste to anything that can take a string, including things like color
             // swatches and checkboxes
             if( tbl->CanSetValueAs( row, col, wxGRID_VALUE_STRING ) && !isReadOnly( row, col ) )
@@ -932,12 +1587,16 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
             if( !m_grid->IsColShown( col ) )
                 continue;
 
-            txt += tbl->GetValue( row, col );
+            const bool selected =
+                    !m_columnBulkEditEnabled || !m_grid->IsSelection() || m_grid->IsInSelection( row, col );
+
+            if( selected )
+                txt += tbl->GetValue( row, col );
 
             if( col < m_sel_col_start + m_sel_col_count - 1 )   // that was not last column
                 txt += COL_SEP;
 
-            if( doDelete )
+            if( doDelete && selected )
             {
                 // Do NOT allow clear of things that can take strings but aren't textEntries
                 // (ie: color swatches, textboxes, etc.).

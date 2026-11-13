@@ -522,7 +522,10 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
                                COL_P2D_DELAY } );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    GRID_TRICKS* gridTricks = new GRID_TRICKS( m_grid );
+    gridTricks->EnableColumnBulkEdit();
+    m_grid->PushEventHandler( gridTricks );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     m_buttonAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_buttonDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -1196,7 +1199,8 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
                 view->Update( target, KIGFX::REPAINT | KIGFX::LAYERS );
             }
 
-            base->GetCanvas()->ForceRefresh();
+            // A bulk edit sends one event per row; Refresh() coalesces their repaints
+            base->GetCanvas()->Refresh();
         }
     }
 }

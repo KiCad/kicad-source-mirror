@@ -239,6 +239,12 @@ public:
 
     void SetAutoEvalCols( const std::vector<int>& aCols ) { m_autoEvalCols = aCols; }
 
+    void EvaluateCell( int aRow, int aCol );
+
+    void SetUseNativeSelection( bool aUseNative ) { m_useNativeSelection = aUseNative; }
+
+    std::vector<int> GetSelectedRowIndices() const;
+
     /**
      * Set the unit and unit data type to use for a given column
      */
@@ -428,6 +434,7 @@ private:
 protected:
     bool                       m_weOwnTable;
     bool                       m_cursorRowColumnHighlight = false;
+    bool                       m_useNativeSelection = false;
 
     std::map<int, UNITS_PROVIDER*>                                 m_unitsProviders;
     std::unique_ptr<NUMERIC_EVALUATOR>                             m_eval;

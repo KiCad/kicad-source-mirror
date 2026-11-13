@@ -535,6 +535,78 @@ bool KIPLATFORM::UI::SupportsKeyState()
 }
 
 
+static gboolean onChoicePopupEvent( GtkWidget* aPopup, GdkEvent* aEvent, gpointer )
+{
+    if( aEvent->type == GDK_KEY_PRESS
+        && ( aEvent->key.keyval == GDK_KEY_Return || aEvent->key.keyval == GDK_KEY_KP_Enter )
+        && ( aEvent->key.state & GDK_SHIFT_MASK ) )
+    {
+        GtkWidget* selected = gtk_menu_shell_get_selected_item( GTK_MENU_SHELL( aPopup ) );
+
+        if( selected )
+        {
+            gtk_menu_shell_activate_item( GTK_MENU_SHELL( aPopup ), selected, TRUE );
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+
+static void onChoicePopupHidden( GtkWidget* aPopup, gpointer )
+{
+    g_signal_handlers_disconnect_by_func( aPopup, reinterpret_cast<gpointer>( onChoicePopupEvent ), nullptr );
+    g_signal_handlers_disconnect_by_func( aPopup, reinterpret_cast<gpointer>( onChoicePopupHidden ), nullptr );
+}
+
+
+bool KIPLATFORM::UI::PrepareChoicePopup( wxWindow* aControl )
+{
+    GtkWidget* popup = gtk_grab_get_current();
+
+    if( !GTK_IS_MENU( popup ) || gtk_menu_get_attach_widget( GTK_MENU( popup ) ) != aControl->GetHandle() )
+        return false;
+
+    g_signal_handlers_disconnect_by_func( popup, reinterpret_cast<gpointer>( onChoicePopupEvent ), nullptr );
+    g_signal_handlers_disconnect_by_func( popup, reinterpret_cast<gpointer>( onChoicePopupHidden ), nullptr );
+    g_signal_connect( popup, "event", G_CALLBACK( onChoicePopupEvent ), nullptr );
+    g_signal_connect( popup, "hide", G_CALLBACK( onChoicePopupHidden ), nullptr );
+    return true;
+}
+
+
+wxKeyEvent KIPLATFORM::UI::GetNativePopupDismissalEvent()
+{
+    wxKeyEvent key;
+    GdkEvent*  event = gtk_get_current_event();
+
+    if( event )
+    {
+        guint keyval = 0;
+
+        if( gdk_event_get_keyval( event, &keyval ) )
+        {
+            switch( keyval )
+            {
+            case GDK_KEY_Return: key.m_keyCode = WXK_RETURN; break;
+            case GDK_KEY_KP_Enter: key.m_keyCode = WXK_NUMPAD_ENTER; break;
+            case GDK_KEY_Escape: key.m_keyCode = WXK_ESCAPE; break;
+            }
+
+            key.SetShiftDown( event->key.state & GDK_SHIFT_MASK );
+            key.SetControlDown( event->key.state & GDK_CONTROL_MASK );
+            key.SetAltDown( event->key.state & GDK_MOD1_MASK );
+            key.SetMetaDown( event->key.state & GDK_META_MASK );
+        }
+
+        gdk_event_free( event );
+    }
+
+    return key;
+}
+
+
 #if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
 
 static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkWindow* aWindow,

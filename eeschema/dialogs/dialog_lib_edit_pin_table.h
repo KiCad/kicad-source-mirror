@@ -84,6 +84,7 @@ protected:
 protected:
     SYMBOL_EDIT_FRAME*    m_editFrame;
     bool                  m_initialized = false;
+    bool                  m_summaryDirty = false;
     int                   m_originalColWidths[ COL_COUNT ];
     std::bitset<64>       m_columnsShown;
     LIB_SYMBOL*           m_symbol;
