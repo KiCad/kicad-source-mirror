@@ -1172,10 +1172,14 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetDXFPlotUnits( sel == 0 ? DXF_UNITS::INCH : DXF_UNITS::MM );
 
     if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() ) // Currently, only DXF supports this option
+    {
         tempOptions.SetTextMode( PLOT_TEXT_MODE::DEFAULT );
+    }
     else
-        tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ? PLOT_TEXT_MODE::DEFAULT :
-                                                                           PLOT_TEXT_MODE::NATIVE );
+    {
+        tempOptions.SetTextMode( m_DXF_plotTextStrokeFontOpt->GetValue() ? PLOT_TEXT_MODE::DEFAULT
+                                                                         : PLOT_TEXT_MODE::NATIVE );
+    }
 
     tempOptions.SetDXFMultiLayeredExportOption( m_DXF_exportAsMultiLayeredFile->GetValue() );
 
@@ -1252,17 +1256,25 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetFormat( getPlotFormat() );
 
-    tempOptions.SetDisableGerberMacros( m_disableApertMacros->GetValue() );
-    tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
-    tempOptions.SetUseGerberX2format( m_useGerberX2Format->GetValue() );
-    tempOptions.SetIncludeGerberNetlistInfo( m_useGerberNetAttributes->GetValue() );
-    tempOptions.SetCreateGerberJobFile( m_generateGerberJobFile->GetValue() );
-
-    tempOptions.SetGerberPrecision( m_coordFormatCtrl->GetSelection() == 0 ? 5 : 6 );
-    tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue() );
-    tempOptions.SetSvgFitPageToBoard( m_SVG_fitPageToBoard->GetValue() );
-    tempOptions.SetPngDPI( m_pngDPI->GetValue() );
-    tempOptions.SetPngAntialias( m_pngAntialias->GetValue() );
+    if( getPlotFormat() == PLOT_FORMAT::GERBER )
+    {
+        tempOptions.SetDisableGerberMacros( m_disableApertMacros->GetValue() );
+        tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
+        tempOptions.SetUseGerberX2format( m_useGerberX2Format->GetValue() );
+        tempOptions.SetIncludeGerberNetlistInfo( m_useGerberNetAttributes->GetValue() );
+        tempOptions.SetCreateGerberJobFile( m_generateGerberJobFile->GetValue() );
+        tempOptions.SetGerberPrecision( m_coordFormatCtrl->GetSelection() == 0 ? 5 : 6 );
+    }
+    else if( getPlotFormat() == PLOT_FORMAT::SVG )
+    {
+        tempOptions.SetSvgPrecision( m_svgPrecsision->GetValue() );
+        tempOptions.SetSvgFitPageToBoard( m_SVG_fitPageToBoard->GetValue() );
+    }
+    else if( getPlotFormat() == PLOT_FORMAT::PNG )
+    {
+        tempOptions.SetPngDPI( m_pngDPI->GetValue() );
+        tempOptions.SetPngAntialias( m_pngAntialias->GetValue() );
+    }
 
     LSET selectedLayers;
 
@@ -1441,7 +1453,11 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             }
         }
 
-        pcbPlotter.Plot( outputDir.GetPath(), layersToPlot, commonLayers, m_useGerberExtensions->GetValue() );
+        bool plotAllLayersToOneFile = m_plotOpts.m_PDFSingle || m_plotOpts.GetDXFMultiLayeredExportOption();
+        bool forceAllLayersToOnePage = false;
+
+        pcbPlotter.Plot( outputDir.GetPath(), layersToPlot, commonLayers, m_plotOpts.GetUseGerberProtelExtensions(),
+                         plotAllLayersToOneFile, forceAllLayersToOnePage );
 
         board->SetCurrentVariant( oldVariant );
     }

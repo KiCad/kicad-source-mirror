@@ -1450,8 +1450,8 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         image = image.Mirror( false );
 
         image.SetOption( wxIMAGE_OPTION_QUALITY, 90 );
-        image.SaveFile( outPath,
-                        aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG );
+        image.SaveFile( outPath, aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
+                                                                                     : wxBITMAP_TYPE_JPEG );
     }
 
     if( success )
@@ -1468,7 +1468,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
 
 
 bool PCBNEW_JOBS_HANDLER::preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard,
-                                            TOOL_MANAGER* aToolManager, LSEQ& aLayersToPlot )
+                                             TOOL_MANAGER* aToolManager, LSEQ& aLayersToPlot )
 {
     if( aJob->m_checkZonesBeforePlot )
     {
@@ -1512,13 +1512,14 @@ wxString PCBNEW_JOBS_HANDLER::resolvePlotOutputPath( JOB_EXPORT_PCB_PLOT* aJob, 
 
 // PDF single-document output need not use overrides; PNG never uses them.
 static int plotJob( JOB_EXPORT_PCB_PLOT* aJob, PCB_PLOTTER& aPlotter, const LSEQ& aLayersToPlot,
-                    const wxString& aOutPath, bool aSingleOutput, bool aUseOverrides )
+                    const wxString& aOutPath, bool aSingleOutput, bool aUseVarOverrides,
+                    bool aForceAllLayersToOnePage = false )
 {
     std::optional<wxString> layerName;
     std::optional<wxString> sheetName;
     std::optional<wxString> sheetPath;
 
-    if( aUseOverrides )
+    if( aUseVarOverrides )
     {
         if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
             layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
@@ -1530,10 +1531,11 @@ static int plotJob( JOB_EXPORT_PCB_PLOT* aJob, PCB_PLOTTER& aPlotter, const LSEQ
             sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
+    bool                  useGerberFileExtensions = false;
     std::vector<wxString> outputPaths;
 
-    if( !aPlotter.Plot( aOutPath, aLayersToPlot, aJob->m_plotOnAllLayersSequence, false,
-                        aSingleOutput, layerName, sheetName, sheetPath, &outputPaths ) )
+    if( !aPlotter.Plot( aOutPath, aLayersToPlot, aJob->m_plotOnAllLayersSequence, useGerberFileExtensions,
+                        aSingleOutput, aForceAllLayersToOnePage, layerName, sheetName, sheetPath, &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -1562,6 +1564,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         brd->SetCurrentVariant( aSvgJob->m_variant );
 
     const bool isSingle = aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE;
+    const bool useVarOverrides = isSingle;
 
     wxString outPath = resolvePlotOutputPath( aSvgJob, brd, PLOT_FORMAT::SVG, isSingle );
 
@@ -1581,7 +1584,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-    return plotJob( aSvgJob, plotter, layersToPlot, outPath, isSingle, isSingle );
+    return plotJob( aSvgJob, plotter, layersToPlot, outPath, isSingle, useVarOverrides );
 }
 
 
@@ -1608,6 +1611,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     const bool isSingle = aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE;
+    const bool useVarOverrides = isSingle;
 
     wxString outPath = resolvePlotOutputPath( aDxfJob, brd, PLOT_FORMAT::DXF, isSingle );
 
@@ -1622,13 +1626,12 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-    return plotJob( aDxfJob, plotter, layersToPlot, outPath, isSingle, isSingle );
+    return plotJob( aDxfJob, plotter, layersToPlot, outPath, isSingle, useVarOverrides );
 }
 
 
 int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 {
-    bool                plotAllLayersOneFile = false;
     JOB_EXPORT_PCB_PDF* pdfJob = dynamic_cast<JOB_EXPORT_PCB_PDF*>( aJob );
 
     if( pdfJob == nullptr )
@@ -1649,10 +1652,18 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( !preparePlotLayers( pdfJob, brd, toolManager, layersToPlot ) )
         return CLI::EXIT_CODES::ERR_ARGS;
 
-    if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
-        plotAllLayersOneFile = true;
+    bool outputIsSingle = pdfJob->m_pdfSingle;
+    bool useVarOverrides = outputIsSingle;
+    bool forceAllLayersToOnePage = false;
 
-    const bool outputIsSingle = plotAllLayersOneFile || pdfJob->m_pdfSingle;
+    // This mode is deprecated, but for now it exports all layers to a single page (instead of
+    // all layers to a single file, with one page per layer).
+    if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
+    {
+        outputIsSingle = true;
+        useVarOverrides = true;
+        forceAllLayersToOnePage = true;
+    }
 
     wxString outPath = resolvePlotOutputPath( pdfJob, brd, PLOT_FORMAT::PDF, outputIsSingle );
 
@@ -1667,7 +1678,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    return plotJob( pdfJob, pcbPlotter, layersToPlot, outPath, outputIsSingle, plotAllLayersOneFile );
+    return plotJob( pdfJob, pcbPlotter, layersToPlot, outPath, outputIsSingle, useVarOverrides,
+                    forceAllLayersToOnePage );
 }
 
 
@@ -1694,6 +1706,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     bool isSingle = pngJob->m_genMode == JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE;
+    bool useVarOverrides = isSingle;
 
     wxString outPath = resolvePlotOutputPath( pngJob, brd, PLOT_FORMAT::PNG, isSingle );
 
@@ -1708,7 +1721,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    return plotJob( pngJob, pcbPlotter, layersToPlot, outPath, isSingle, false );
+    return plotJob( pngJob, pcbPlotter, layersToPlot, outPath, isSingle, useVarOverrides );
 }
 
 
@@ -1735,6 +1748,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
         return CLI::EXIT_CODES::ERR_ARGS;
 
     bool isSingle = psJob->m_genMode == JOB_EXPORT_PCB_PS::GEN_MODE::SINGLE;
+    bool useVarOverrides = isSingle;
 
     wxString outPath = resolvePlotOutputPath( psJob, brd, PLOT_FORMAT::POST, isSingle );
 
@@ -1749,7 +1763,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    return plotJob( psJob, pcbPlotter, layersToPlot, outPath, isSingle, isSingle );
+    return plotJob( psJob, pcbPlotter, layersToPlot, outPath, isSingle, useVarOverrides );
 }
 
 

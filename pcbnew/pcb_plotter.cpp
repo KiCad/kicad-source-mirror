@@ -67,8 +67,9 @@ PCB_PLOTTER::PCB_PLOTTER( BOARD* aBoard, REPORTER* aReporter, PCB_PLOT_PARAMS& a
 
 bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                         const LSEQ& aCommonLayers, bool aUseGerberFileExtensions,
-                        bool aOutputPathIsSingle, std::optional<wxString> aLayerName,
-                        std::optional<wxString> aSheetName, std::optional<wxString> aSheetPath,
+                        bool aPlotAllLayersToSingleFile, bool aForceAllLayersToSinglePage,
+                        std::optional<wxString> aLayerName, std::optional<wxString> aSheetName,
+                        std::optional<wxString> aSheetPath,
                         std::vector<wxString>* aOutputFiles )
 {
     std::function<bool( wxString* )> textResolver =
@@ -92,7 +93,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
     PAGE_INFO existingPageInfo = m_board->GetPageSettings();
     VECTOR2I  existingAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();
 
-    if( m_plotOpts.GetFormat() == PLOT_FORMAT::SVG && m_plotOpts.GetSvgFitPagetoBoard() ) // Page is board boundary size
+    if( m_plotOpts.GetSvgFitPagetoBoard() ) // Page is board boundary size
     {
         BOX2I     bbox = m_board->ComputeBoundingBox( false, false );
         SHAPE_POLY_SET boardOutlines;
@@ -118,9 +119,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
     LSEQ layersToPlot;
     LSEQ commonLayers;
 
-    const bool isPdfMultiPage = ( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle );
-
-    if( aOutputPathIsSingle && !m_plotOpts.GetDXFMultiLayeredExportOption() && !isPdfMultiPage )
+    if( aPlotAllLayersToSingleFile && aForceAllLayersToSinglePage )
     {
         layersToPlot.push_back( aLayersToPlot[0] );
 
@@ -149,7 +148,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
 
     std::unique_ptr<GERBER_JOBFILE_WRITER> jobfile_writer;
 
-    if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && !aOutputPathIsSingle )
+    if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && !aPlotAllLayersToSingleFile )
         jobfile_writer = std::make_unique<GERBER_JOBFILE_WRITER>( m_board, m_reporter );
 
     PLOT_FORMAT plot_format = m_plotOpts.GetFormat();
@@ -171,7 +170,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         wxString   layerName = m_board->GetLayerName( layer );
         wxFileName fn;
 
-        if( aOutputPathIsSingle )
+        if( aPlotAllLayersToSingleFile )
         {
             fn = wxFileName( aOutputPath );
         }
@@ -185,9 +184,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
             if( m_plotOpts.GetFormat() == PLOT_FORMAT::GERBER && aUseGerberFileExtensions )
                 fileExt = GetGerberProtelExtension( layer );
 
-            if( plot_format == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle )
+            if( plot_format == PLOT_FORMAT::PDF && aPlotAllLayersToSingleFile )
                 fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
-            else if ( plot_format == PLOT_FORMAT::DXF && m_plotOpts.GetDXFMultiLayeredExportOption() )
+            else if ( plot_format == PLOT_FORMAT::DXF && aPlotAllLayersToSingleFile )
                 fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
             else
                 BuildPlotFileName( &fn, aOutputPath, layerName, fileExt );
@@ -199,14 +198,9 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
             jobfile_writer->AddGbrFile( layer, fullname );
         }
 
-        if( ( plot_format != PLOT_FORMAT::PDF && plot_format != PLOT_FORMAT::DXF )
-            || ( !m_plotOpts.m_PDFSingle && !m_plotOpts.GetDXFMultiLayeredExportOption() )
-            || ( pageNum == 1
-                 && ( ( plot_format == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle )
-                      || ( plot_format == PLOT_FORMAT::DXF && m_plotOpts.GetDXFMultiLayeredExportOption() ) ) ) )
+        if( !aPlotAllLayersToSingleFile || pageNum == 1 )
         {
-            // this will only be used by pdf
-            wxString pageNumber = wxString::Format( "%d", pageNum );
+            wxString pageNumber = wxString::Format( "%d", pageNum );    // this will only be used by pdf
             wxString pageName = layerName;
             wxString sheetName = layerName;
 
@@ -259,7 +253,8 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                 break;
             }
 
-            if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF && m_plotOpts.m_PDFSingle && pageNum != finalPageCount )
+            if( m_plotOpts.GetFormat() == PLOT_FORMAT::PDF
+                    && aPlotAllLayersToSingleFile && !aForceAllLayersToSinglePage && pageNum != finalPageCount )
             {
                 wxString     pageNumber = wxString::Format( "%d", pageNum + 1 );
                 size_t       nextI = i + 1;
@@ -282,11 +277,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                                         sheetPath, pageNumber, finalPageCount );
             }
 
-            // last page
-            if( ( plot_format != PLOT_FORMAT::PDF && plot_format != PLOT_FORMAT::DXF )
-                || ( !m_plotOpts.m_PDFSingle && !m_plotOpts.GetDXFMultiLayeredExportOption() )
-                || i == aLayersToPlot.size() - 1
-                || pageNum == finalPageCount )
+            if( !aPlotAllLayersToSingleFile || i == aLayersToPlot.size() - 1 || pageNum == finalPageCount )
             {
                 try
                 {
@@ -600,7 +591,10 @@ bool PlotFootprintToSVG( const FOOTPRINT& aFootprint, PROJECT& aProject,
     aPlotOpts.SetSkipPlotNPTH_Pads( false );
 
     PCB_PLOTTER plotter( brd.get(), aReporter, aPlotOpts );
+    bool        useGerberFileExtensions = false;
+    bool        singleFile = true;
+    bool        forceAllLayersToOnePage = false;
 
-    return plotter.Plot( aFileName, aLayersToPlot, aLayersOnAll, false, true, wxEmptyString, wxEmptyString,
-                         wxEmptyString );
+    return plotter.Plot( aFileName, aLayersToPlot, aLayersOnAll, useGerberFileExtensions, singleFile,
+                         forceAllLayersToOnePage, wxEmptyString, wxEmptyString, wxEmptyString );
 }
