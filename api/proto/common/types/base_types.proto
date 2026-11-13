@@ -633,11 +633,22 @@ message CustomProperty
 
 enum MarkerType
 {
-    MT_UNKNOWN       = 0;
-    MT_ERC           = 1;
-    MT_DRC           = 2;
-    MT_DRAWING_SHEET = 3;
-    MT_RATSNEST      = 4;
-    MT_PARITY        = 5;
-    MT_SIMULATION    = 6;
+  MT_UNKNOWN       = 0;
+  MT_ERC           = 1;
+  MT_DRC           = 2;
+  MT_DRAWING_SHEET = 3;
+  MT_RATSNEST      = 4;
+  MT_PARITY        = 5;
+  MT_SIMULATION    = 6;
+}
+
+// Since: 11.0
+message DesignBlock
+{
+  kiapi.common.types.LibraryIdentifier id = 1;
+  string schematic_filename = 2;
+  string board_filename = 3;
+  string lib_description = 4;
+  string keywords = 5;
+  repeated kiapi.common.types.CustomProperty fields = 6;
 }

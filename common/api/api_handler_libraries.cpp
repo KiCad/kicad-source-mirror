@@ -35,6 +35,7 @@
 #include <api/common/types/library_types.pb.h>
 
 #include <design_block_library_adapter.h>
+#include <design_block.h>
 
 using namespace kiapi::common::commands;
 using kiapi::common::types::LibraryCommandStatus;
@@ -512,3 +513,19 @@ API_HANDLER_LIBRARIES::handleGetItemsFromLibrary( const HANDLER_CONTEXT<GetItems
     response.set_status( kiapi::common::types::ItemRequestStatus::IRS_OK );
     return response;
 }
+
+
+bool API_HANDLER_LIBRARIES::packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const
+{
+    DESIGN_BLOCK_LIBRARY_ADAPTER* adapter =
+            static_cast<DESIGN_BLOCK_LIBRARY_ADAPTER*>( adapterForProject( Pgm().GetSettingsManager().Prj() ) );
+
+    DESIGN_BLOCK* designBlock = adapter->LoadDesignBlock( aId.GetLibNickname(), aId.GetLibItemName() );
+
+    if( !designBlock )
+        return false;
+
+    designBlock->Serialize( aOutput );
+    return true;
+}
+

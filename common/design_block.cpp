@@ -20,6 +20,7 @@
 #include <design_block.h>
 
 #include <wx/tokenzr.h>
+#include <api/api_utils.h>
 
 
 std::vector<SEARCH_TERM>& DESIGN_BLOCK::GetSearchTerms()
@@ -41,4 +42,71 @@ std::vector<SEARCH_TERM>& DESIGN_BLOCK::GetSearchTerms()
     m_searchTerms.emplace_back( SEARCH_TERM( GetDesc(), 1 ) );
 
     return m_searchTerms;
+}
+
+
+void DESIGN_BLOCK::Serialize( kiapi::common::types::DesignBlock& aDesignBlock ) const
+{
+    using namespace kiapi::common;
+    using namespace kiapi::common::types;
+
+    DesignBlock& def = aDesignBlock;
+    def.Clear();
+    PackLibId( def.mutable_id(), m_lib_id );
+
+    def.set_schematic_filename( m_schematicFile.ToUTF8() );
+    def.set_board_filename( m_boardFile.ToUTF8() );
+    def.set_lib_description( m_libDescription.ToUTF8() );
+    def.set_keywords( m_keywords.ToUTF8() );
+
+    for( const auto& [name, value] : m_fields )
+    {
+        types::CustomProperty* field = def.mutable_fields()->Add();
+        field->set_key( name.ToUTF8() );
+        field->set_value( value.ToUTF8() );
+    }
+}
+
+
+void DESIGN_BLOCK::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::common::types::DesignBlock designBlock;
+    Serialize( designBlock );
+
+    if( !aContainer.PackFrom( designBlock ) )
+        wxFAIL_MSG( wxT( "Failed to pack DESIGN_BLOCK" ) );
+}
+
+
+bool DESIGN_BLOCK::Deserialize( const kiapi::common::types::DesignBlock& aDesignBlock )
+{
+    using namespace kiapi::common;
+    using namespace kiapi::common::types;
+
+    const DesignBlock& def = aDesignBlock;
+
+    m_lib_id = UnpackLibId( def.id() );
+
+    m_schematicFile = def.schematic_filename();
+    m_boardFile = def.board_filename();
+    m_libDescription = def.lib_description();
+    m_keywords = def.keywords();
+
+    m_fields.clear();
+
+    for( const types::CustomProperty& prop : def.fields() )
+        m_fields[wxString::FromUTF8( prop.key() )] = wxString::FromUTF8( prop.value() );
+
+    return true;
+}
+
+
+bool DESIGN_BLOCK::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::common::types::DesignBlock designBlock;
+
+    if( !aContainer.UnpackTo( &designBlock ) )
+        return false;
+
+    return Deserialize( designBlock );
 }

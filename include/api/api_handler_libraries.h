@@ -78,10 +78,7 @@ protected:
     HANDLER_RESULT<kiapi::common::commands::GetItemsResponse>
     handleGetItemsFromLibrary( const HANDLER_CONTEXT<kiapi::common::commands::GetItemsFromLibrary>& aCtx );
 
-    virtual bool packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const
-    {
-        return false;
-    }
+    virtual bool packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const;
 
     LIBRARY_TABLE_TYPE libraryType() const { return m_type; }
 

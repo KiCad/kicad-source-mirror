@@ -18,16 +18,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DESIGN_BLOCK_H
-#define DESIGN_BLOCK_H
+#pragma once
 
 #include <kicommon.h>
 #include <lib_id.h>
 #include <lib_tree_item.h>
 #include <json_common.h>
 
+#include <api/common/types/base_types.pb.h>
+#include <api/serializable.h>
 
-class KICOMMON_API DESIGN_BLOCK : public LIB_TREE_ITEM
+
+class KICOMMON_API DESIGN_BLOCK : public LIB_TREE_ITEM, public SERIALIZABLE
 {
 public:
     // LIB_TREE_ITEM interface
@@ -39,7 +41,7 @@ public:
 
     void          SetLibId( const LIB_ID& aName ) { m_lib_id = aName; }
     const LIB_ID& GetLibId() const { return m_lib_id; }
-    LIB_ID& GetLibId() { return m_lib_id; }
+    LIB_ID&       GetLibId() { return m_lib_id; }
 
     const wxString& GetLibDescription() const { return m_libDescription; }
     void            SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }
@@ -54,7 +56,13 @@ public:
     void            SetBoardFile( const wxString& aFile ) { m_boardFile = aFile; }
 
     const nlohmann::ordered_map<wxString, wxString>& GetFields() const { return m_fields; }
-    nlohmann::ordered_map<wxString, wxString>& GetFields() { return m_fields; }
+    nlohmann::ordered_map<wxString, wxString>&       GetFields() { return m_fields; }
+
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    void Serialize( kiapi::common::types::DesignBlock& aDesignBlock ) const;
+
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+    bool Deserialize( const kiapi::common::types::DesignBlock& aDesignBlock );
 
     DESIGN_BLOCK() = default;
 
@@ -62,14 +70,12 @@ public:
     DESIGN_BLOCK( DESIGN_BLOCK&& aOther ) = delete;
 
 private:
-    LIB_ID m_lib_id;
-    wxString m_schematicFile;  ///< File name and path for schematic file.
-    wxString m_boardFile;      ///< File name and path for board file
-    wxString m_libDescription; ///< File name and path for documentation file.
-    wxString m_keywords;       ///< Search keywords to find design block in library.
+    LIB_ID                                    m_lib_id;
+    wxString                                  m_schematicFile;  ///< File name and path for schematic file.
+    wxString                                  m_boardFile;      ///< File name and path for board file
+    wxString                                  m_libDescription; ///< File name and path for documentation file.
+    wxString                                  m_keywords;       ///< Search keywords to find design block in library.
 
     nlohmann::ordered_map<wxString, wxString> m_fields;
-    std::vector<SEARCH_TERM> m_searchTerms;
+    std::vector<SEARCH_TERM>                  m_searchTerms;
 };
-
-#endif
