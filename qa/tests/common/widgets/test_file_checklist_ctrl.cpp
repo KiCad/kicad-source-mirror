@@ -27,7 +27,6 @@ static FILE_CHECKLIST_ENTRY makeEntry( const wxString& aSection, const wxString&
     FILE_CHECKLIST_ENTRY entry;
     entry.section = aSection;
     entry.path = aPath;
-    entry.label = aPath.AfterLast( '/' );
     entry.status = wxT( "Modified" );
     entry.icon = BITMAPS::icon_pcbnew_16;
     entry.checked = aChecked;

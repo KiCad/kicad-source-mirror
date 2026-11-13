@@ -161,7 +161,6 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         FILE_CHECKLIST_ENTRY entry;
         entry.section = _( "Changes" );
         entry.path = relativePath;
-        entry.label = wxFileName( relativePath ).GetFullName();
         entry.status = word;
         entry.statusColour = colour;
         entry.icon = icon;

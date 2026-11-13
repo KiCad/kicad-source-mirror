@@ -39,8 +39,7 @@
 struct KICOMMON_API FILE_CHECKLIST_ENTRY
 {
     wxString section;
-    wxString path;    ///< Row identity.
-    wxString label;   ///< Shown in place of the path.
+    wxString path;    ///< Row identity, and what the row shows.
     wxString status;  ///< Free text, e.g. "Modified".
     wxColour statusColour; ///< Text colour for the status, or the default when not set.
     BITMAPS  icon = BITMAPS::INVALID_BITMAP;
@@ -107,19 +106,8 @@ public:
     /// Path of the file row for aItem, or empty for a section header or invalid item.
     wxString GetItemPath( const wxDataViewItem& aItem ) const;
 
-    /// WX_DATAVIEWCTRL drops tooltips for every data view it is the base of. This one shows
-    /// them, and remembers what the owner asked for so the row tooltip can give way to it.
-    void DoSetToolTipText( const wxString& aTip ) override;
-
 private:
-    /// wxDataViewCtrl sends no mouse moves, so the hovered row is read on idle. LIB_TREE
-    /// tracks its preview the same way.
-    void onIdle( wxIdleEvent& aEvent );
-
     wxObjectDataPtr<FILE_CHECKLIST_MODEL> m_model;
-
-    wxString m_ownerTooltip; ///< What the owner set, shown when no row has more to say.
-    wxString m_shownTooltip; ///< What is on screen, so an unchanged hover is left alone.
 };
 
 #endif // FILE_CHECKLIST_CTRL_H

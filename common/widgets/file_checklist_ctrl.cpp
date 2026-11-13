@@ -208,7 +208,7 @@ public:
             switch( aCol )
             {
             case COL_CHECK: aVariant = row.checked; break;
-            case COL_NAME: aVariant << wxDataViewIconText( row.label, KiBitmapBundle( row.icon ) ); break;
+            case COL_NAME: aVariant << wxDataViewIconText( row.path, KiBitmapBundle( row.icon ) ); break;
             default: aVariant = row.status; break;
             }
         }
@@ -339,46 +339,6 @@ FILE_CHECKLIST_CTRL::FILE_CHECKLIST_CTRL( wxWindow* aParent, wxWindowID aId ) :
                         wxCOL_WIDTH_AUTOSIZE );
     AppendIconTextColumn( _( "File" ), FILE_CHECKLIST_MODEL::COL_NAME, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
     AppendTextColumn( _( "Status" ), FILE_CHECKLIST_MODEL::COL_STATUS, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
-
-    Bind( wxEVT_IDLE, &FILE_CHECKLIST_CTRL::onIdle, this );
-}
-
-
-void FILE_CHECKLIST_CTRL::DoSetToolTipText( const wxString& aTip )
-{
-    m_ownerTooltip = aTip;
-    m_shownTooltip = aTip;
-    wxDataViewCtrl::DoSetToolTipText( aTip );
-}
-
-
-// A row shows the file name alone, so two files with the same name in different directories
-// read the same. Hovering one shows the path that tells them apart.
-void FILE_CHECKLIST_CTRL::onIdle( wxIdleEvent& aEvent )
-{
-    aEvent.Skip();
-
-    wxString tip = m_ownerTooltip;
-    wxPoint  screenPos = wxGetMousePosition();
-
-    if( IsShownOnScreen() && GetScreenRect().Contains( screenPos ) )
-    {
-        wxDataViewItem    item;
-        wxDataViewColumn* column = nullptr;
-
-        HitTest( ScreenToClient( screenPos ), item, column );
-
-        wxString path = GetItemPath( item );
-
-        if( !path.IsEmpty() && path != wxFileName( path ).GetFullName() )
-            tip = path;
-    }
-
-    if( tip == m_shownTooltip )
-        return;
-
-    m_shownTooltip = tip;
-    wxDataViewCtrl::DoSetToolTipText( tip );
 }
 
 
