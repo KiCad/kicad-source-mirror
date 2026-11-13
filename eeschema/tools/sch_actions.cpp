@@ -1689,7 +1689,11 @@ TOOL_ACTION SCH_ACTIONS::navigateNext( TOOL_ACTION_ARGS()
 TOOL_ACTION SCH_ACTIONS::showHierarchy( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorTool.showHierarchy" )
         .Scope( AS_GLOBAL )
+#if defined( __WXMAC__ )
+        .DefaultHotkey( MD_ALT + 'H' )
+#else
         .DefaultHotkey( MD_CTRL + 'H' )
+#endif
         .FriendlyName( _( "Hierarchy Navigator" ) )
         .Tooltip( _( "Show/hide the schematic sheet hierarchy navigator" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
