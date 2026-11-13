@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
@@ -29,6 +31,7 @@
 #include <callback_gal.h>
 #include <component_classes/component_class.h>
 #include <confirm.h>
+#include <core/leak_at_exit.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <fmt/format.h>
 #include <font/fontconfig.h>
@@ -3803,6 +3806,12 @@ PCB_IO_KICAD_SEXPR::PCB_IO_KICAD_SEXPR( int aControlFlags ) :
 PCB_IO_KICAD_SEXPR::~PCB_IO_KICAD_SEXPR()
 {
     delete m_cache;
+}
+
+
+void PCB_IO_KICAD_SEXPR::LeakCacheAtExit()
+{
+    LSAN_IGNORE( std::exchange( m_cache, nullptr ) );
 }
 
 

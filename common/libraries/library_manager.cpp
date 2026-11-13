@@ -715,6 +715,15 @@ void LIBRARY_MANAGER::RestartAsyncLoads()
 }
 
 
+void LIBRARY_MANAGER::LeakCachesAtExit()
+{
+    std::scoped_lock lock( m_adaptersMutex );
+
+    for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+        adapter->LeakCachesAtExit();
+}
+
+
 void LIBRARY_MANAGER::RegisterAdapter( LIBRARY_TABLE_TYPE aType,
                                        std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter )
 {
@@ -1191,6 +1200,31 @@ void LIBRARY_MANAGER_ADAPTER::RestartAsyncLoad()
 
     if( m_rearmPending )
         asyncLoadLocked();
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::LeakCachesAtExit()
+{
+    // Joins every worker, so nothing else reads the plugins below
+    abortLoad( true );
+
+    {
+        std::unique_lock lock( m_librariesMutex );
+
+        for( LIB_DATA& lib : m_libraries | std::views::values )
+        {
+            if( lib.plugin )
+                lib.plugin->LeakCacheAtExit();
+        }
+    }
+
+    std::unique_lock lock( globalLibsMutex() );
+
+    for( LIB_DATA& lib : globalLibs() | std::views::values )
+    {
+        if( lib.global_owner == this && lib.plugin )
+            lib.plugin->LeakCacheAtExit();
+    }
 }
 
 

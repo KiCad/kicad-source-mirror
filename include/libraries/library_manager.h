@@ -195,6 +195,10 @@ public:
     /// AsyncLoad() that started. Unlike AsyncLoad() it waits for a load lock held elsewhere, so it is never dropped.
     void RestartAsyncLoad();
 
+    /// Ends every load, then gives up the cache of each library this adapter owns without freeing it.
+    /// Only for use as the process exits.
+    void LeakCachesAtExit();
+
     bool IsLibraryLoaded( const wxString& aNickname );
 
     /// Returns the status of a loaded library, or nullopt if the library hasn't been loaded (yet)
@@ -440,6 +444,10 @@ public:
 
     /// Queues again the libraries that any cancelling abort left INVALID, for every registered adapter
     void RestartAsyncLoads();
+
+    /// Gives up the library caches of every adapter without freeing them. Only for use as the process exits, just
+    /// before the manager is destroyed.
+    void LeakCachesAtExit();
 
     void RegisterAdapter( LIBRARY_TABLE_TYPE aType,
                           std::unique_ptr<LIBRARY_MANAGER_ADAPTER>&& aAdapter );

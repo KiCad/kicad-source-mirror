@@ -195,6 +195,10 @@ void PGM_BASE::Destroy()
         m_libraryPreloadReturn.wait();
     }
 
+    // Freeing thousands of cached libraries one item at a time would hold up the exit for seconds
+    if( m_library_manager )
+        m_library_manager->LeakCachesAtExit();
+
     // Clean up library IO plugins before static destruction
     m_library_manager.reset();
 

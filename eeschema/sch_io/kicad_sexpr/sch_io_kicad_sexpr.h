@@ -137,6 +137,8 @@ public:
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
+    void LeakCacheAtExit() override;
+
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
 

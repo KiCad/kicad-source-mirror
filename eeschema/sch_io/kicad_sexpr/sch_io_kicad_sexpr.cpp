@@ -21,6 +21,7 @@
  */
 
 #include <algorithm>
+#include <utility>
 
 #include <fmt/format.h>
 #include <magic_enum.hpp>
@@ -32,6 +33,7 @@
 #include <base_units.h>
 #include <bitmap_base.h>
 #include <common.h> // ExpandTextVars
+#include <core/leak_at_exit.h>
 #include <wildcards_and_files_ext.h>
 #include <build_version.h>
 #include <sch_selection.h>
@@ -86,6 +88,12 @@ SCH_IO_KICAD_SEXPR::SCH_IO_KICAD_SEXPR() : SCH_IO( wxS( "Eeschema s-expression" 
 SCH_IO_KICAD_SEXPR::~SCH_IO_KICAD_SEXPR()
 {
     delete m_cache;
+}
+
+
+void SCH_IO_KICAD_SEXPR::LeakCacheAtExit()
+{
+    LSAN_IGNORE( std::exchange( m_cache, nullptr ) );
 }
 
 

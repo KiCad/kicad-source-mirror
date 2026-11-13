@@ -171,6 +171,12 @@ public:
     virtual void ResumeLoad() noexcept {}
 
     /**
+     * Give up the library cache without freeing it.  Only for use as the process exits, since freeing the caches
+     * of thousands of libraries one item at a time holds it up for seconds.  Plugins without a large cache ignore it.
+     */
+    virtual void LeakCacheAtExit() {}
+
+    /**
      * Return true if the library at @a aLibraryPath is writable.
      *
      * The system libraries are typically read only because of where they are installed..

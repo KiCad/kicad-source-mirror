@@ -413,6 +413,8 @@ public:
 
     bool CachesEnumeratedFootprints() const override { return true; }
 
+    void LeakCacheAtExit() override;
+
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
