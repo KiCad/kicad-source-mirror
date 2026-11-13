@@ -50,7 +50,7 @@ void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
         m_validator->ProcessEvent( event );
     }
 
-    if( event.GetSkipped() )
+    if( !m_validator || event.GetSkipped() )
     {
         wxGridCellTextEditor::StartingKey( event );
         event.Skip( false );
