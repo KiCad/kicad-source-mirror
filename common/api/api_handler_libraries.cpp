@@ -268,8 +268,8 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
 
     const LIBRARY_TABLE_TYPE  tableType = FromProtoEnum<LIBRARY_TABLE_TYPE, LibraryType>( aCtx.Request.type() );
     const LIBRARY_TABLE_SCOPE scope = ( aCtx.Request.scope() == LibraryTableScope::LTS_GLOBAL )
-                                              ? LIBRARY_TABLE_SCOPE::GLOBAL
-                                              : LIBRARY_TABLE_SCOPE::PROJECT;
+                                                                                      ? LIBRARY_TABLE_SCOPE::GLOBAL
+                                                                                      : LIBRARY_TABLE_SCOPE::PROJECT;
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
@@ -318,16 +318,17 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
 HANDLER_RESULT<LibraryCommandStatus>
 API_HANDLER_LIBRARIES::handleLoadAllLibraries( const HANDLER_CONTEXT<LoadAllLibraries>& aCtx )
 {
-    auto makeStatus = []( LibraryCommandStatus::Code aCode, const wxString& aMessage = wxEmptyString )
-    {
-        LibraryCommandStatus status;
-        status.set_code( aCode );
+    auto makeStatus =
+            []( LibraryCommandStatus::Code aCode, const wxString& aMessage = wxEmptyString )
+            {
+                LibraryCommandStatus status;
+                status.set_code( aCode );
 
-        if( !aMessage.empty() )
-            status.set_error_message( aMessage.ToUTF8() );
+                if( !aMessage.empty() )
+                    status.set_error_message( aMessage.ToUTF8() );
 
-        return status;
-    };
+                return status;
+            };
 
     if( Pgm().IsGUI() )
     {
@@ -341,8 +342,8 @@ API_HANDLER_LIBRARIES::handleLoadAllLibraries( const HANDLER_CONTEXT<LoadAllLibr
 
     if( aCtx.Request.type_size() == 0 )
     {
-        typesToLoad = { { LIBRARY_TABLE_TYPE::SYMBOL, KIWAY::FACE_SCH },
-                        { LIBRARY_TABLE_TYPE::FOOTPRINT, KIWAY::FACE_PCB },
+        typesToLoad = { { LIBRARY_TABLE_TYPE::SYMBOL,       KIWAY::FACE_SCH },
+                        { LIBRARY_TABLE_TYPE::FOOTPRINT,    KIWAY::FACE_PCB },
                         { LIBRARY_TABLE_TYPE::DESIGN_BLOCK, KIWAY::KIWAY_FACE_COUNT } };
     }
     else
@@ -350,8 +351,7 @@ API_HANDLER_LIBRARIES::handleLoadAllLibraries( const HANDLER_CONTEXT<LoadAllLibr
         for( int protoRaw : aCtx.Request.type() )
         {
             LibraryType protoType = static_cast<LibraryType>( protoRaw );
-            LIBRARY_TABLE_TYPE type =
-                    FromProtoEnum<LIBRARY_TABLE_TYPE, LibraryType>( static_cast<LibraryType>( protoType ) );
+            LIBRARY_TABLE_TYPE type = FromProtoEnum<LIBRARY_TABLE_TYPE, LibraryType>( protoType );
 
             switch( type )
             {
@@ -363,8 +363,8 @@ API_HANDLER_LIBRARIES::handleLoadAllLibraries( const HANDLER_CONTEXT<LoadAllLibr
             {
                 ApiResponseStatus e;
                 e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                e.set_error_message(
-                        wxString::Format( "invalid library type %s", magic_enum::enum_name( protoType ) ).ToUTF8() );
+                e.set_error_message( wxString::Format( wxS( "invalid library type %s" ),
+                                                       magic_enum::enum_name( protoType ) ).ToUTF8() );
                 return tl::unexpected( e );
             }
             }
@@ -381,26 +381,39 @@ API_HANDLER_LIBRARIES::handleLoadAllLibraries( const HANDLER_CONTEXT<LoadAllLibr
     }
 
     KIWAY& kiway = *m_kiway;
+    bool   error = false;
 
     for( const auto& [type, face] : typesToLoad )
     {
         if( type == LIBRARY_TABLE_TYPE::DESIGN_BLOCK )
         {
-            loadAllLibraries();
+            LibraryCommandStatus status = loadAllLibraries();
+
+            if( status.code() != LibraryCommandStatus::LCS_OK )
+                error = true;
+
             continue;
         }
 
         KIFACE* kiface = kiway.KiFACE( face );
 
-        wxCHECK2( kiface, continue );
+        if( !kiface )
+        {
+            wxFAIL;
+            error = true;
+            continue;
+        }
 
         if( m_handlerRegisterCallback )
             m_handlerRegisterCallback( kiface );
 
-        kiface->LoadAllLibraries();
+        // A result of "true" only means that it -started- a load, not that it finished successfully.
+        // But we should still report an error if it couldn't even start.
+        if( !kiface->LoadAllLibraries() )
+            error = true;
     }
 
-    return makeStatus( LibraryCommandStatus::LCS_OK );
+    return makeStatus( error ? LibraryCommandStatus::LCS_ERROR : LibraryCommandStatus::LCS_OK );
 }
 
 
@@ -408,11 +421,13 @@ LibraryCommandStatus API_HANDLER_LIBRARIES::loadAllLibraries()
 {
     // This base implementation handles design blocks
     LIBRARY_MANAGER_ADAPTER* adapter = adapterForProject( Pgm().GetSettingsManager().Prj() );
-
-    LibraryCommandStatus status;
+    LibraryCommandStatus     status;
 
     if( !adapter )
+    {
+        status.set_code( LibraryCommandStatus::LCS_ERROR );
         return status;
+    }
 
     adapter->AsyncLoad();
     status.set_code( LibraryCommandStatus::LCS_OK );
