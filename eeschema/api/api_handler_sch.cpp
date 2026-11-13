@@ -3221,7 +3221,19 @@ HANDLER_RESULT<PlaceFromLibraryResponse> API_HANDLER_SCH::handlePlaceSymbolFromL
     }
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &project() );
-    LIB_SYMBOL* libSymbol = adapter->LoadSymbol( libId );
+    LIB_SYMBOL* libSymbol = nullptr;
+
+    try
+    {
+        libSymbol = adapter->LoadSymbol( libId );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "error loading symbol '{}' from library", libId.Format().wx_str() ) );
+        return tl::unexpected( e );
+    }
 
     if( !libSymbol )
     {
