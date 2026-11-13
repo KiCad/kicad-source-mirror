@@ -484,6 +484,11 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 if( isInvisibleText( item ) )
                     return true;
 
+                // processWorkUnit() tests only copper and silkscreen items; don't build shapes for
+                // the rest
+                if( !item->IsOnCopperLayer() && !item->IsOnLayer( F_SilkS ) && !item->IsOnLayer( B_SilkS ) )
+                    return true;
+
                 if( item->Type() == PCB_ZONE_T )
                 {
                     // Rule areas have no copper and are purely logical -- skip edge clearance.
