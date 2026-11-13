@@ -7,11 +7,15 @@
 #pragma once
 
 #include <filesystem>
+#include <string>
 #include <system_error>
 #include <vector>
 #include <wx/filename.h>
 #include <wx/intl.h>
+#include <compatibility_report.h>
 #include <downgrade_scan.h>
+#include <downgrade_target.h>
+#include <kiplatform/io.h>
 
 inline std::filesystem::path DowngradeNativePath( const wxString& aPath )
 {
@@ -30,6 +34,43 @@ inline wxString DowngradeWxPath( const std::filesystem::path& aPath )
     return wxString::FromUTF8( aPath.string() );
 #endif
 }
+
+/// A report destination that is a design or library file is a mistyped path, not a report.
+inline bool ValidateDowngradeReportPath( const wxString& aPath, wxString& aError )
+{
+    if( !IsDowngradeDesignFile( aPath ) )
+        return true;
+
+    aError = _( "The report file must not be a design or library file." );
+    return false;
+}
+
+
+/// Write the readable compatibility report, the same text the export dialog shows. Does nothing
+/// when no path was asked for, or when the target is one the command itself already refused.
+inline bool WriteDowngradeReport( const COMPATIBILITY_REPORT& aReport, const wxString& aTarget, const wxString& aPath,
+                                  wxString& aError )
+{
+    if( aPath.IsEmpty() )
+        return true;
+
+    const DOWNGRADE_TARGET* target =
+            aTarget.IsEmpty() ? &GetDowngradeTargets().front() : FindDowngradeTarget( aTarget );
+
+    if( !target )
+        return true;
+
+    const std::string text( aReport.ToText( target->m_name ).ToUTF8() );
+
+    if( !KIPLATFORM::IO::AtomicWriteFile( aPath, text.data(), text.size(), &aError ) )
+    {
+        aError = wxString::Format( _( "Could not write the report to '%s'." ), aPath );
+        return false;
+    }
+
+    return true;
+}
+
 
 inline bool ValidateFreshDowngradeOutput( const wxString& aOutput, wxString& aError )
 {

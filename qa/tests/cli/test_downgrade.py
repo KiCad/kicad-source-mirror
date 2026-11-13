@@ -1307,5 +1307,87 @@ class TestLibraryDowngrade(unittest.TestCase):
                 self.assertEqual(kept.read_bytes(), b"existing user data")
 
 
+class TestCompatibilityReportFile(unittest.TestCase):
+    """--report writes the readable compatibility report that the dialog shows."""
+
+    def setUp(self):
+        self.scratch = tempfile.TemporaryDirectory(prefix="kicad_downgrade_report_")
+        self.addCleanup(self.scratch.cleanup)
+        self.root = Path(self.scratch.name)
+        self.source = self.root / "source"
+        self.source.mkdir()
+        shutil.copyfile(GOLDEN / "current/body_styles.kicad_pro", self.source / "body_styles.kicad_pro")
+        shutil.copyfile(GOLDEN / "current/body_styles.kicad_sch", self.source / "body_styles.kicad_sch")
+        shutil.copyfile(GOLDEN / "current/graphics.kicad_pcb", self.source / "body_styles.kicad_pcb")
+        self.symbols = self.source / "Local.kicad_sym"
+        self.symbols.write_text(HATCH_SYMBOL)
+        self.footprints = self.source / "Local.pretty"
+        self.footprints.mkdir()
+        (self.footprints / "Hatch.kicad_mod").write_text(HATCH_FOOTPRINT)
+        self.env = os.environ.copy()
+        self.env["KICAD_CONFIG_HOME"] = str(self.root / "config")
+        self.env["LC_ALL"] = "C"
+
+    def cli(self, *args):
+        return subprocess.run(
+            [os.environ.get("KICAD_CLI", "kicad-cli"), *map(str, args)],
+            env=self.env, capture_output=True, text=True, timeout=60,
+        )
+
+    def require_success(self, result):
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def source_snapshot(self):
+        return {str(p.relative_to(self.source)): p.read_bytes()
+                for p in self.source.rglob("*") if p.is_file()}
+
+    def commands(self):
+        return (("project", self.source / "body_styles.kicad_pro"),
+                ("sch", self.source / "body_styles.kicad_sch"),
+                ("pcb", self.source / "body_styles.kicad_pcb"),
+                ("sym", self.symbols),
+                ("fp", self.footprints))
+
+    def test_every_downgrade_command_can_write_the_report(self):
+        for group, source in self.commands():
+            with self.subTest(group=group):
+                report = self.root / f"report-{group}.txt"
+                self.require_success(self.cli(group, "downgrade", source, "--target", "9.0", "--dry-run"))
+                self.assertFalse(report.exists())
+                self.require_success(
+                    self.cli(group, "downgrade", source, "--target", "9.0", "--dry-run", "--report", report))
+                self.assertGreater(len(report.read_text().splitlines()), 1)
+
+    def test_text_and_json_reports_describe_the_same_findings(self):
+        text = self.root / "report.txt"
+        js = self.root / "report.json"
+        self.require_success(
+            self.cli("project", "downgrade", self.source / "body_styles.kicad_pro", "--target", "9.0",
+                     "--dry-run", "--report", text, "--report-json", js))
+        written = text.read_text()
+        entries = json.loads(js.read_text())["entries"]
+        self.assertTrue(entries)
+        for entry in entries:
+            self.assertIn(entry["feature"], written)
+
+    def test_report_is_written_even_when_the_export_is_refused(self):
+        original = self.source_snapshot()
+        report = self.root / "refused.txt"
+        result = self.cli("sym", "downgrade", self.symbols, "--target", "9.0",
+                          "--output", self.root / "out/Local.kicad_sym", "--report", report)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertGreater(len(report.read_text().strip()), 0)
+        self.assertEqual(self.source_snapshot(), original)
+
+    def test_report_cannot_overwrite_a_design_or_library(self):
+        victim = self.source / "body_styles.kicad_sch"
+        for group, source in self.commands():
+            with self.subTest(group=group):
+                original = self.source_snapshot()
+                result = self.cli(group, "downgrade", source, "--target", "9.0", "--dry-run", "--report", victim)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(self.source_snapshot(), original)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -20,6 +20,7 @@
 #include "command_sch_downgrade.h"
 #include "jobs/job_sch_downgrade.h"
 #include "cli/exit_codes.h"
+#include <downgrade_copy.h>
 #include <wx/crt.h>
 #include <wx/file.h>
 #include <wx/filename.h>
@@ -30,6 +31,7 @@
 #define ARG_LIBRARIES "--libraries"
 #define ARG_VARIANT "--variant"
 #define ARG_DROP_APPROXIMATIONS "--drop-approximations"
+#define ARG_REPORT "--report"
 
 CLI::SCH_DOWNGRADE_COMMAND::SCH_DOWNGRADE_COMMAND() :
         COMMAND( "downgrade" )
@@ -55,6 +57,10 @@ CLI::SCH_DOWNGRADE_COMMAND::SCH_DOWNGRADE_COMMAND() :
             .help( UTF8STDSTR(
                     _( "Omit features instead of approximating them; may remove drawing or electrical data" ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_REPORT )
+            .default_value( std::string() )
+            .help( UTF8STDSTR( _( "Also write the compatibility report as text to this file" ) ) );
 
     m_argParser.add_argument( ARG_LIBRARIES )
             .default_value( std::string() )
@@ -108,5 +114,23 @@ int CLI::SCH_DOWNGRADE_COMMAND::doPerform( KIWAY& aKiway )
         }
     }
 
-    return aKiway.ProcessJob( KIWAY::FACE_SCH, job.get() );
+    wxString reportPath = wxString::FromUTF8( m_argParser.get<std::string>( ARG_REPORT ) );
+    wxString reportError;
+
+    if( !ValidateDowngradeReportPath( reportPath, reportError ) )
+    {
+        wxFprintf( stderr, wxS( "%s\n" ), reportError );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, job.get() );
+
+    // Written after the run, so a refused export still explains itself
+    if( !WriteDowngradeReport( job->m_report, job->m_target, reportPath, reportError ) )
+    {
+        wxFprintf( stderr, wxS( "%s\n" ), reportError );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    return exitCode;
 }

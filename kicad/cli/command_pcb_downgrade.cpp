@@ -21,6 +21,7 @@
 #include "jobs/job_pcb_downgrade.h"
 #include "cli/exit_codes.h"
 #include <downgrade_copy.h>
+#include <downgrade_copy.h>
 #include <wx/crt.h>
 #include <wx/file.h>
 #include <wx/filename.h>
@@ -31,6 +32,7 @@
 #define ARG_LIBRARIES "--libraries"
 #define ARG_VARIANT "--variant"
 #define ARG_DROP_APPROXIMATIONS "--drop-approximations"
+#define ARG_REPORT "--report"
 
 CLI::PCB_DOWNGRADE_COMMAND::PCB_DOWNGRADE_COMMAND() :
         COMMAND( "downgrade" )
@@ -55,6 +57,10 @@ CLI::PCB_DOWNGRADE_COMMAND::PCB_DOWNGRADE_COMMAND() :
             .help( UTF8STDSTR(
                     _( "Omit features instead of approximating them; may remove drawing or electrical data" ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_REPORT )
+            .default_value( std::string() )
+            .help( UTF8STDSTR( _( "Also write the compatibility report as text to this file" ) ) );
 
     m_argParser.add_argument( ARG_LIBRARIES )
             .default_value( std::string() )
@@ -84,22 +90,40 @@ int CLI::PCB_DOWNGRADE_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    if( job->m_dryRun )
-        return aKiway.ProcessJob( KIWAY::FACE_PCB, job.get() );
-
-    if( job->m_outputFile.IsEmpty() )
+    if( !job->m_dryRun )
     {
-        wxFprintf( stderr, _( "An output file is required. Use --output.\n" ) );
+        if( job->m_outputFile.IsEmpty() )
+        {
+            wxFprintf( stderr, _( "An output file is required. Use --output.\n" ) );
+            return EXIT_CODES::ERR_ARGS;
+        }
+
+        wxString error;
+
+        if( !ValidateFreshDowngradeOutput( job->m_outputFile, error ) )
+        {
+            wxFprintf( stderr, wxT( "%s\n" ), error );
+            return EXIT_CODES::ERR_ARGS;
+        }
+    }
+
+    wxString reportPath = wxString::FromUTF8( m_argParser.get<std::string>( ARG_REPORT ) );
+    wxString reportError;
+
+    if( !ValidateDowngradeReportPath( reportPath, reportError ) )
+    {
+        wxFprintf( stderr, wxS( "%s\n" ), reportError );
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString error;
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, job.get() );
 
-    if( !ValidateFreshDowngradeOutput( job->m_outputFile, error ) )
+    // Written after the run, so a refused export still explains itself
+    if( !WriteDowngradeReport( job->m_report, job->m_target, reportPath, reportError ) )
     {
-        wxFprintf( stderr, wxT( "%s\n" ), error );
+        wxFprintf( stderr, wxS( "%s\n" ), reportError );
         return EXIT_CODES::ERR_ARGS;
     }
 
-    return aKiway.ProcessJob( KIWAY::FACE_PCB, job.get() );
+    return exitCode;
 }

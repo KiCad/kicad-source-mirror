@@ -24,6 +24,7 @@
 #include <json_common.h>
 #include <filesystem>
 #include <kiplatform/io.h>
+#include <downgrade_copy.h>
 #include <downgrade_scan.h>
 
 #include <wx/crt.h>
@@ -37,6 +38,7 @@
 #define ARG_FORCE "--force"
 #define ARG_DRY_RUN "--dry-run"
 #define ARG_REPORT_JSON "--report-json"
+#define ARG_REPORT "--report"
 #define ARG_VARIANT "--variant"
 #define ARG_DROP_APPROXIMATIONS "--drop-approximations"
 
@@ -68,6 +70,10 @@ CLI::PROJECT_DOWNGRADE_COMMAND::PROJECT_DOWNGRADE_COMMAND() :
     m_argParser.add_argument( ARG_REPORT_JSON )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Also write the compatibility report as JSON to this file" ) ) );
+
+    m_argParser.add_argument( ARG_REPORT )
+            .default_value( std::string() )
+            .help( UTF8STDSTR( _( "Also write the compatibility report as text to this file" ) ) );
 
     m_argParser.add_argument( ARG_VARIANT )
             .default_value( std::string() )
@@ -124,6 +130,15 @@ int CLI::PROJECT_DOWNGRADE_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
+    wxString reportPath = wxString::FromUTF8( m_argParser.get<std::string>( ARG_REPORT ) );
+    wxString reportError;
+
+    if( !ValidateDowngradeReportPath( reportPath, reportError ) )
+    {
+        wxFprintf( stderr, wxS( "%s\n" ), reportError );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
     wxString jsonPath = wxString::FromUTF8( m_argParser.get<std::string>( ARG_REPORT_JSON ) );
 
     if( !jsonPath.IsEmpty() )
@@ -164,6 +179,12 @@ int CLI::PROJECT_DOWNGRADE_COMMAND::doPerform( KIWAY& aKiway )
 
     // The same printer the pcb and sch downgrade commands use, so the vocabulary matches.
     report.Print( &CLI_REPORTER::GetInstance() );
+
+    if( !WriteDowngradeReport( report, targetName, reportPath, reportError ) )
+    {
+        wxFprintf( stderr, wxS( "%s\n" ), reportError );
+        return EXIT_CODES::ERR_ARGS;
+    }
 
     if( !jsonPath.IsEmpty() )
     {
