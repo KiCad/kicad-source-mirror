@@ -2554,6 +2554,12 @@ namespace
  */
 bool checkForLockedFiles( const wxString& aProjectPath, std::vector<wxString>& aLockedFiles )
 {
+    // A symlinked folder can loop back or lead out of the project
+    DIR_LOOP_GUARD guard( aProjectPath );
+
+    if( !guard.IsRooted() )
+        return true;
+
     std::function<void( const wxString& )> findLocks =
             [&]( const wxString& dirPath )
             {
@@ -2577,7 +2583,8 @@ bool checkForLockedFiles( const wxString& aProjectPath, std::vector<wxString>& a
 
                     if( fullPath.DirExists() )
                     {
-                        findLocks( fullPath.GetFullPath() );
+                        if( guard.ShouldDescend( fullPath.GetFullPath() ) )
+                            findLocks( fullPath.GetFullPath() );
                     }
                     else if( fullPath.FileExists()
                              && filename.StartsWith( FILEEXT::LockFilePrefix )
