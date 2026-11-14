@@ -2879,7 +2879,14 @@ wxString BranchNameError( const wxString& aName )
 
     int valid = 0;
 
-    if( git_branch_name_is_valid( &valid, aName.utf8_string().c_str() ) != GIT_OK || !valid )
+#if LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 5 )
+    valid = git_branch_name_is_valid( &valid, aName.utf8_string().c_str() ) == GIT_OK && valid;
+#else
+    std::string refName = "refs/heads/" + aName.utf8_string();
+    valid = aName != wxS( "HEAD" ) && git_reference_is_valid_name( refName.c_str() );
+#endif
+
+    if( !valid )
         return wxString::Format( _( "'%s' is not a valid branch name." ), aName );
 
     return wxEmptyString;

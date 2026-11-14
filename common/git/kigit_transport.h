@@ -50,7 +50,7 @@ public:
      * aHandler supplies the session and records progress, the credentials offered and why a call
      * failed. aRemote is the caller's and must outlive the transport. A transport for a clone takes none.
      * Without aFollowRedirects a push the server redirects fails, so it reaches only the address the
-     * caller checked.
+     * caller checked. Older libgit2 versions cannot enforce this and use their default redirect behavior.
      */
     explicit REMOTE_TRANSPORT( KIGIT_REPO_MIXIN* aHandler, git_remote* aRemote = nullptr,
                                bool aFollowRedirects = true );

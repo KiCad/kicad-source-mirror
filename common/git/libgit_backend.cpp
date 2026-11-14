@@ -880,15 +880,18 @@ static int reachableFromRemote( git_repository* aRepo, const git_oid& aCommit, w
     if( tips.empty() )
         return 0;
 
-    if( int reachable = git_graph_reachable_from_any( aRepo, &aCommit, tips.data(), tips.size() ); reachable <= 0 )
+#if LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 5 )
+    int reachable = git_graph_reachable_from_any( aRepo, &aCommit, tips.data(), tips.size() );
+
+    if( reachable <= 0 ) // Not reachable, or an error occurred
         return reachable;
 
     // One walk answers the common unpublished case, so only a published commit pays to find which branch holds it
     for( size_t ii = 0; ii < tips.size(); ++ii )
     {
-        int reachable = git_graph_reachable_from_any( aRepo, &aCommit, &tips[ii], 1 );
+        reachable = git_graph_reachable_from_any( aRepo, &aCommit, &tips[ii], 1 );
 
-        if( reachable < 0 )
+        if( reachable < 0 ) // Error occurred
             return reachable;
 
         if( reachable > 0 )
@@ -899,6 +902,24 @@ static int reachableFromRemote( git_repository* aRepo, const git_oid& aCommit, w
     }
 
     return 1;
+#else
+    for( size_t ii = 0; ii < tips.size(); ++ii )
+    {
+        int reachable =
+                git_oid_equal( &aCommit, &tips[ii] ) ? 1 : git_graph_descendant_of( aRepo, &tips[ii], &aCommit );
+
+        if( reachable < 0 ) // Error occurred
+            return reachable;
+
+        if( reachable > 0 )
+        {
+            aRemoteRef = names[ii];
+            return 1;
+        }
+    }
+
+    return 0;
+#endif
 }
 
 
@@ -1098,7 +1119,8 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     if( aHandler->IsThisOperationCancelled() )
         return PushResult::Error;
 
-    // A redirect would land the pinned push on a server nobody confirmed
+    // A redirect would land the pinned push on a server nobody confirmed. Older libgit2 versions
+    // cannot disable redirects, so this protection is unavailable with those versions.
     KIGIT::REMOTE_TRANSPORT transport( aHandler, remote, !aHandler->HasExpectedDestination() );
     KIGIT::GitReferencePtr  headPtr;
     bool                    refused = false;
@@ -1346,7 +1368,11 @@ bool LIBGIT_BACKEND::IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& a
 
     // A repository git refuses to open is still a repository. Answering false here sends the
     // initialize path into reinitializing it.
+#if KIGIT_HAS_EOWNER
     return error == GIT_EOWNER;
+#else
+    return false;
+#endif
 }
 
 
@@ -2107,6 +2133,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 
     // KiCad runs no filter program, so merging a version that keeps design files in Git LFS
     // would put pointer text where the design belongs. Judged before anything is written.
+    // With libgit2 before 1.3, this checks only current index and working tree attributes.
     if( KIGIT_COMMON* common = aHandler->GetCommon() )
     {
         wxString example;
@@ -2676,6 +2703,7 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxS
     {
         wxLogTrace( traceGit, "Can't open repo for %s: %s", aFilename, KIGIT_COMMON::GetLastGitError() );
 
+#if KIGIT_HAS_EOWNER
         // Left unexplained, a repository git refuses to open looks like no repository at all.
         if( rc == GIT_EOWNER && aError )
         {
@@ -2697,6 +2725,7 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxS
                     *aTrustCommand = refusal.trustCommand;
             }
         }
+#endif
 
         return nullptr;
     }

@@ -31,6 +31,13 @@
 #include <git2/sys/errors.h>
 #endif
 
+// GIT_EOWNER was introduced in 1.3.1, 1.4.3 and 1.5.0.
+#define KIGIT_HAS_EOWNER                                                                                               \
+    ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1                                                                \
+           && ( LIBGIT2_VER_MINOR >= 5                                                                                 \
+                || ( LIBGIT2_VER_MINOR == 4 && LIBGIT2_VER_REVISION >= 3 )                                             \
+                || ( LIBGIT2_VER_MINOR == 3 && LIBGIT2_VER_REVISION >= 1 ) ) ) )
+
 // GIT_OPT_GET_HOMEDIR and GIT_OPT_SET_HOMEDIR were added in libgit2 1.6
 #define KIGIT_HAS_HOMEDIR_OPT ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 6 ) )
 

@@ -26,6 +26,9 @@
 #include <wx/filename.h>
 
 #include "kicad_git_memory.h"
+#include <git/kicad_git_compat.h>
+#include <trace_helpers.h>
+#include <wx/log.h>
 #include <wx/string.h>
 #include <string_utils.h>
 
@@ -295,22 +298,32 @@ bool PROJECT_GIT_UTILS::PathUsesGitLfs( git_repository* aRepo, const wxString& a
     if( !aRepo || aPath.IsEmpty() )
         return false;
 
-    const char*      value = nullptr;
+    const char* value = nullptr;
+
+#if LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 3 )
+    // Check attributes from the index, working tree, and optionally the specified commit.
     git_attr_options opts = {};
     opts.version = GIT_ATTR_OPTIONS_VERSION;
     opts.flags = GIT_ATTR_CHECK_INDEX_THEN_FILE;
 
     if( aCommit )
     {
-        // The rules a version carries decide what its own files are, whatever is in hand.
+        // Include the commit's rules when checking a version before checkout.
         opts.flags |= GIT_ATTR_CHECK_INCLUDE_COMMIT;
         git_oid_cpy( &opts.attr_commit_id, aCommit );
     }
 
     if( git_attr_get_ext( &value, aRepo, &opts, aPath.utf8_string().c_str(), "filter" ) != GIT_OK )
-    {
         return false;
+#else
+    // Only check the index and working tree.
+
+    if( git_attr_get( &value, aRepo, GIT_ATTR_CHECK_INDEX_THEN_FILE, aPath.utf8_string().c_str(), "filter" ) != GIT_OK )
+    {
+        wxLogTrace( traceGit, "Could not read Git attributes: %s", KIGIT_COMMON::GetLastGitError() );
+        return true;
     }
+#endif
 
     return git_attr_value( value ) == GIT_ATTR_VALUE_STRING && strcmp( value, "lfs" ) == 0;
 }

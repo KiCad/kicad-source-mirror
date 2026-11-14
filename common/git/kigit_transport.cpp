@@ -484,6 +484,7 @@ REMOTE_TRANSPORT::~REMOTE_TRANSPORT() = default;
 
 int REMOTE_TRANSPORT::connect( git_direction aDirection, const git_remote_callbacks& aCallbacks )
 {
+#if LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 4 )
     git_remote_connect_options options;
     git_remote_connect_options_init( &options, GIT_REMOTE_CONNECT_OPTIONS_VERSION );
     options.callbacks = aCallbacks;
@@ -495,6 +496,13 @@ int REMOTE_TRANSPORT::connect( git_direction aDirection, const git_remote_callba
 
     if( int rc = git_remote_connect_ext( m_remote, aDirection, &options ) )
         return m_state->Fail( rc );
+#else
+    // No per-connection redirect control.
+    git_proxy_options proxy = autoProxy();
+
+    if( int rc = git_remote_connect( m_remote, aDirection, &aCallbacks, &proxy, nullptr ) )
+        return m_state->Fail( rc );
+#endif
 
     // libgit2 asks for nothing more once a credential works, so the key just offered is the one to try first
     m_state->handler->RememberWorkingSSHKey();
@@ -546,8 +554,10 @@ int REMOTE_TRANSPORT::Push( const std::function<wxString()>& aConnected )
     options.callbacks = callbacksFor( *m_state );
     options.proxy_opts = autoProxy();
 
+#if LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 4 )
     if( !m_followRedirects )
         options.follow_redirects = GIT_REMOTE_REDIRECT_NONE;
+#endif
 
     if( int rc = connect( GIT_DIRECTION_PUSH, options.callbacks ) )
         return rc;

@@ -150,8 +150,8 @@ public:
     static std::optional<wxString> ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath );
 
     /// Whether git routes @p aPath through the Git LFS filter.
-    /// aCommit reads the attributes that commit carries rather than the ones in hand, for
-    /// judging a version before it is checked out.
+    /// aCommit also includes that commit's attributes when judging a version before checkout,
+    /// with libgit2 1.3 or later. Older versions only check the index and working tree.
     static bool PathUsesGitLfs( git_repository* aRepo, const wxString& aPath, const git_oid* aCommit = nullptr );
 
     /**
