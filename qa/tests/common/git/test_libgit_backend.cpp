@@ -2374,6 +2374,22 @@ BOOST_AUTO_TEST_CASE( GetFileStatusReportsTypeChangeAsModified )
     BOOST_CHECK( it->second.gitStatus & GIT_STATUS_WT_TYPECHANGE );
     BOOST_CHECK( it->second.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED );
 
+    // A staged type change on a file since deleted still commits as a deletion
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), 0 );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "board.txt" ), 0 );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), 0 );
+    git_index_free( index );
+    BOOST_REQUIRE( wxRemoveFile( board ) );
+
+    status = handler.GetFileStatus( wxEmptyString, true );
+    it = std::find_if( status.begin(), status.end(),
+                       []( const auto& aEntry ) { return aEntry.first.EndsWith( wxT( "/board.txt" ) ); } );
+
+    BOOST_REQUIRE( it != status.end() );
+    BOOST_CHECK( it->second.gitStatus & GIT_STATUS_INDEX_TYPECHANGE );
+    BOOST_CHECK( it->second.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED );
+
     git_repository_free( repo );
 }
 #endif
