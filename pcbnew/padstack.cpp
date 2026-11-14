@@ -1192,9 +1192,8 @@ PADSTACK::COPPER_LAYER_PROPS& PADSTACK::CopperLayer( PCB_LAYER_ID aLayer )
             return m_copperProps[INNER_LAYERS];
     }
 
-    // A write for an undefined non-copper layer must land where the readers look, which for
-    // CUSTOM mode resolves back to the defined copper side.  Copper layers still get their own
-    // entry, as per-layer padstacks rely on that.
+    // A write for an undefined non-copper layer must land where the readers look. Copper layers
+    // keep their own entry, which per-layer padstacks rely on.
     if( m_mode == MODE::CUSTOM && IsNonCopperLayer( aLayer ) )
         return const_cast<COPPER_LAYER_PROPS&>( std::as_const( *this ).CopperLayer( aLayer ) );
 

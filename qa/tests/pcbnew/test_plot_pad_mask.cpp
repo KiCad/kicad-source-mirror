@@ -288,15 +288,7 @@ BOOST_AUTO_TEST_CASE( PthPadKeepsMaskOpeningWhenCopperRemoved )
 }
 
 
-// Regression test for custom padstacks (MODE::CUSTOM) with custom-shaped pads.
-//
-// When plotting F.Mask, the CUSTOM pad path builds a dummy pad from the merged
-// primitives and re-adds them with dummy.AddPrimitivePoly( aLayer, ... ) where
-// aLayer is F_Mask. The non-const PADSTACK::CopperLayer() had no MODE::CUSTOM
-// fallback, so m_copperProps[F_Mask] was silently created and the primitives
-// landed in an entry that the plotter (which resolves F_Mask back to F_Cu)
-// never reads. The mask aperture ended up containing only the anchor pad
-// instead of the full aggregate custom shape.
+// The mask of a MODE::CUSTOM pad must cover the aggregate custom shape, not just its anchor.
 BOOST_AUTO_TEST_CASE( CustomPadstackCustomPadMaskCoversAggregate )
 {
     const int maskClearance = pcbIUScale.mmToIU( 0.2 );
@@ -310,8 +302,7 @@ BOOST_AUTO_TEST_CASE( CustomPadstackCustomPadMaskCoversAggregate )
     auto pad = new PAD( footprint.get() );
     pad->SetAttribute( PAD_ATTRIB::SMD );
     pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
-    // Pad defined on F_Cu (as the pad editor does for a front-side padstack pad);
-    // primitives live under the F_Cu key. The mask dummy-pad write uses F_Mask.
+    // Defined on F_Cu, as the pad editor does. The mask dummy-pad write uses F_Mask.
     pad->SetShape( F_Cu, PAD_SHAPE::CUSTOM );
     pad->SetAnchorPadShape( F_Cu, PAD_SHAPE::CIRCLE );
     pad->SetSize( F_Cu, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
@@ -330,7 +321,6 @@ BOOST_AUTO_TEST_CASE( CustomPadstackCustomPadMaskCoversAggregate )
     footprint->Add( pad );
     board.Add( footprint.release() );
 
-    // Reference: the aggregate outline with clearance applied.
     SHAPE_POLY_SET expected;
     pad->TransformShapeToPolygon( expected, F_Mask, maskClearance, pcbIUScale.mmToIU( 0.005 ), ERROR_INSIDE );
 
@@ -369,9 +359,6 @@ BOOST_AUTO_TEST_CASE( CustomPadstackCustomPadMaskCoversAggregate )
     if( wxFileExists( gbrPath ) )
         wxRemoveFile( gbrPath );
 
-    // Bounding box of everything plotted on F.Mask must match the aggregate
-    // (anchor + primitive) expanded by the mask clearance. With the bug only
-    // the anchor is plotted and the bbox is far smaller.
     std::regex coordRe( R"(X(-?\d+)Y(-?\d+)D0[12]\*)" );
     auto       coordBegin = std::sregex_iterator( buffer.begin(), buffer.end(), coordRe );
     auto       coordEnd = std::sregex_iterator();
@@ -399,10 +386,8 @@ BOOST_AUTO_TEST_CASE( CustomPadstackCustomPadMaskCoversAggregate )
     const long long plottedW = maxX - minX;
     const long long plottedH = maxY - minY;
 
-    // Gerber device units differ from internal IU, so compare the scale-free
-    // aspect ratio. The aggregate (anchor + rect + clearance) is 5.4 x 4.4 mm
-    // (aspect 1.23); the anchor-only bug plots a 1.4 x 1.4 mm circle (aspect
-    // 1.0), which fails hard.
+    // Gerber device units are not internal units, so compare the scale-free aspect ratio.
+    // The anchor-only bug plots a circle, giving 1.0 against the aggregate's 1.23.
     const double expectedAspect = static_cast<double>( expectedBB.GetWidth() ) / expectedBB.GetHeight();
     const double plottedAspect = static_cast<double>( plottedW ) / plottedH;
 
