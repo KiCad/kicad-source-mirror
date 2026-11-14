@@ -4248,7 +4248,11 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
     cafWriter.ChangeCoordinateSystemConverter().SetInputLengthUnit( 0.001 );
     cafWriter.ChangeCoordinateSystemConverter().SetInputCoordinateSystem( RWMesh_CoordinateSystem_Zup );
 
+#if OCC_VERSION_HEX >= 0x080000
     NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString> metadata;
+#else
+    TColStd_IndexedDataMapOfStringString metadata;
+#endif
 
     metadata.Add( TCollection_AsciiString( "pcb_name" ),
                   TCollection_ExtendedString( fn.GetName().wc_str() ) );
