@@ -2094,7 +2094,8 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( [[maybe_unused]] bool aProgress )
     FOOTPRINT_LIBRARY_ADAPTER*     footprints = PROJECT_PCB::FootprintLibAdapter( &Prj() );
     FP_TREE_SYNCHRONIZING_ADAPTER* adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     LIB_ID                         target = GetTargetFPID();
-    bool                           targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
+    bool                           targetSelected = !target.GetLibNickname().empty()
+                                                    && target == GetLibTree()->GetSelectedLibId();
     std::vector<LIB_ID>            expanded = GetLibTree()->GetExpandedLibraries();
 
     // Unselect before syncing to avoid null reference in the adapter
