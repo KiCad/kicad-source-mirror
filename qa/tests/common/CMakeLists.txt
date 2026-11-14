@@ -183,6 +183,7 @@ set( QA_COMMON_SRCS
     test_netname_validator.cpp
 
     # GAL tests
+    test_gal_cursor.cpp
     test_gal_xor_mode.cpp
     test_gal_resize_strategy.cpp
 

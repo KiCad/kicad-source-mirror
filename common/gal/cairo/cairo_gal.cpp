@@ -1477,6 +1477,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( CAIRO_GAL::skipMouseEvent ) );
 #endif
 
     Bind( wxEVT_GESTURE_ZOOM, &CAIRO_GAL::skipGestureEvent, this );

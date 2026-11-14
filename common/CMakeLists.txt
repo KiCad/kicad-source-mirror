@@ -324,6 +324,7 @@ set( KICOMMON_SRCS
     dpi_scaling.cpp
     dpi_scaling_common.cpp
     dsnlexer.cpp
+    eda_cursor_broadcaster.cpp
     eda_doc.cpp
     eda_pattern_match.cpp
     eda_units.cpp

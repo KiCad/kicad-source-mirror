@@ -199,9 +199,8 @@ void EDA_DRAW_PANEL_GAL::presentFrame()
 }
 
 
-EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
-                                        const wxPoint& aPosition, const wxSize& aSize,
-                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
+EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
+                                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
         wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ),
         m_MouseCapturedLost( false ),
         m_parent( aParentWindow ),
@@ -209,6 +208,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_drawing( false ),
         m_drawingEnabled( false ),
         m_needIdleRefresh( false ),
+        m_cursorInCanvas( false ),
+        m_cursorVisibilityDirty( false ),
         m_gal( nullptr ),
         m_view( nullptr ),
         m_painter( nullptr ),
@@ -311,6 +312,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
              nullptr, this );
 
     Connect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ), nullptr, this );
+
+    EDA_CURSOR_BROADCASTER::Instance().Register( this );
 }
 
 
@@ -319,6 +322,7 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
     wxLogTrace( traceRhi, wxS( "DrawPanel: destructor windowId=%u backend=%d" ),
                 m_windowId, static_cast<int>( m_backend ) );
 
+    EDA_CURSOR_BROADCASTER::Instance().Unregister( this );
     m_touchpadGestureHandler.reset();
 
     // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
@@ -343,6 +347,25 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
     KIPLATFORM::UI::ImeNotifyCancelComposition( this );
     wxScrolledCanvas::SetFocus();
     m_lostFocus = false;
+}
+
+
+void EDA_DRAW_PANEL_GAL::SetCursorInCanvas( bool aCursorInCanvas )
+{
+    if( m_cursorInCanvas == aCursorInCanvas )
+        return;
+
+    m_cursorInCanvas = aCursorInCanvas;
+    m_cursorVisibilityDirty = true;
+
+    if( m_gal )
+        m_gal->SetCursorInCanvas( m_cursorInCanvas );
+
+    if( m_cursorInCanvas )
+        EDA_CURSOR_BROADCASTER::Instance().NotifyCursorEntered( this );
+
+    // Not ForceRefresh(), which would restart drawing on a canvas stopped for teardown
+    Refresh();
 }
 
 
@@ -707,7 +730,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
         VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
         bool viewDirty = m_view->IsDirty();
-        bool cursorMoved = ( cursorPos != m_lastCursorPosition );
+        bool     cursorMoved = cursorPos != m_lastCursorPosition || m_cursorVisibilityDirty;
         bool hasPendingItemUpdates = m_view->HasPendingItemUpdates();
 
         // Skip all update work when nothing has changed since the previous frame.
@@ -756,6 +779,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         }
 
         m_lastCursorPosition = cursorPos;
+        m_cursorVisibilityDirty = false;
 
         // A cursor move alone reuses the cached scene and skips the view traversal and upload
         const bool useOverlayFastPath = m_backend == GAL_TYPE_MODERN
@@ -1607,6 +1631,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     m_gal = nullptr;
 
     m_gal = new_gal;
+    m_gal->SetCursorInCanvas( m_cursorInCanvas );
 
     // The view lays itself out in the editor's world units as it attaches
     if( worldUnitLength > 0.0 )
@@ -1827,6 +1852,10 @@ void EDA_DRAW_PANEL_GAL::onShowEvent( wxShowEvent& aEvent )
                                 "IsShownOnScreen=%d galInit=%d" ),
                 m_windowId, aEvent.IsShown(), IsShown(), IsShownOnScreen(),
                 m_gal ? m_gal->IsInitialized() : -1 );
+
+    // A hidden canvas gets no leave event.  Only an enter event sets the state again.
+    if( !IsShownOnScreen() )
+        SetCursorInCanvas( false );
 
     if( m_gal && m_gal->IsInitialized() && m_gal->IsVisible() )
     {

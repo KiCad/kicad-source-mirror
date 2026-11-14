@@ -84,6 +84,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     m_crossHairMode = CROSS_HAIR_MODE::SMALL_CROSS;
     m_forceDisplayCursor = false;
+    m_cursorInCanvas = false;
     SetCursorEnabled( false );
 
     // Initialize the native widget to an arrow cursor

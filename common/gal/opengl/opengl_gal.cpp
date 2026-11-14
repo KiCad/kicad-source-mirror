@@ -389,6 +389,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
 
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
+    Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
     Bind( wxEVT_GESTURE_ZOOM, &OPENGL_GAL::skipGestureEvent, this );
