@@ -1299,7 +1299,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
 
 void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape, bool aInline )
 {
-    size_t hash = hash_fp_item( &aShape, HASH_POS | RELATIVE_TO_PARENT_COORDS );
+    size_t hash = hash_fp_item( &aShape, HASH_POS );
     auto iter = m_user_shape_dict.find( hash );
     wxString name;
 
