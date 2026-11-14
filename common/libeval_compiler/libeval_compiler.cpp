@@ -1304,7 +1304,7 @@ int UOP::Exec( CONTEXT* ctx )
         {
             double doubleVal;
 
-            if( !arg2->StringIsLiteral() && QuacksLikeADuck( arg1->AsString(), &doubleVal ) )
+            if( !arg2->StringIsLiteral() && QuacksLikeADuck( arg2->AsString(), &doubleVal ) )
             {
                 autoConverted = LIBEVAL::VALUE( doubleVal );
                 arg2 = &autoConverted;
