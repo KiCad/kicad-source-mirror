@@ -428,12 +428,6 @@ void FILTER_COMBOPOPUP::onMouseClick( wxMouseEvent& aEvent )
 
 void FILTER_COMBOPOPUP::onKeyDown( wxKeyEvent& aEvent )
 {
-    if( aEvent.ControlDown() || aEvent.CmdDown() )
-    {
-        aEvent.Skip();
-        return;
-    }
-
     switch( aEvent.GetKeyCode() )
     {
     // Control keys go to the parent combobox
@@ -469,6 +463,12 @@ void FILTER_COMBOPOPUP::onKeyDown( wxKeyEvent& aEvent )
 
     // Everything else goes to the filter textbox
     default:
+        if( aEvent.ControlDown() || aEvent.CmdDown() )
+        {
+            aEvent.Skip();
+            return;
+        }
+
         if( !m_filterCtrl->HasFocus() )
         {
             doSetFocus( m_filterCtrl );
