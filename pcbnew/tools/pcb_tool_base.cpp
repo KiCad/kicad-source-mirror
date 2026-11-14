@@ -130,6 +130,59 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERAC
                     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
             };
 
+    auto ensureVisibility =
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( APPEARANCE_CONTROLS* controls = frame()->GetAppearancePanel() )
+                {
+                    auto ensureLayerVisible =
+                            [&]( int aLayer )
+                            {
+                                if( aLayer < PCB_LAYER_ID::PCB_LAYER_ID_COUNT )
+                                {
+                                    if( !view()->IsLayerVisible( aLayer  ) )
+                                    {
+                                        controls->SetLayerVisible( aLayer, true );
+                                        frame()->GetCanvas()->Refresh();
+                                    }
+                                }
+                                else
+                                {
+                                    if( !board()->IsElementVisible( (GAL_LAYER_ID) aLayer ) )
+                                    {
+                                        controls->SetObjectVisible( (GAL_LAYER_ID) aLayer, true );
+                                        frame()->GetCanvas()->Refresh();
+                                    }
+                                }
+                            };
+
+                    if( aItem->Type() == PCB_POINT_T )
+                    {
+                        ensureLayerVisible( LAYER_POINTS );
+                    }
+                    else if( aItem->Type() == PCB_VIA_T )
+                    {
+                        ensureLayerVisible( LAYER_VIAS );
+
+                        switch( static_cast<PCB_VIA*>( aItem )->GetViaType() )
+                        {
+                        case VIATYPE::BURIED:   ensureLayerVisible( LAYER_VIA_BURIED );   break;
+                        case VIATYPE::BLIND:    ensureLayerVisible( LAYER_VIA_BLIND );    break;
+                        case VIATYPE::MICROVIA: ensureLayerVisible( LAYER_VIA_MICROVIA ); break;
+                        default:                                                          break;
+                        }
+                    }
+                    else if( aItem->Type() == PCB_PAD_T )
+                    {
+                        ensureLayerVisible( LAYER_PADS );
+                    }
+                    else
+                    {
+                        ensureLayerVisible( aItem->GetLayer() );
+                    }
+                }
+            };
+
     // Set initial cursor
     setCursor();
 
@@ -208,6 +261,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERAC
                 if( !newItem  )
                     continue;
 
+                ensureVisibility( newItem.get() );
                 controls()->CaptureCursor( true );
                 controls()->SetAutoPan( true );
             }
@@ -216,6 +270,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERAC
                 BOARD_ITEM*    newBoardItem = newItem.release();
                 EDA_ITEM_FLAGS oldFlags = newBoardItem->GetFlags();
 
+                ensureVisibility( newBoardItem );
                 newBoardItem->ClearFlags();
 
                 if( !aPlacer->PlaceItem( newBoardItem, commit ) )
@@ -239,55 +294,6 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT& aTool, INTERAC
                     makeNewItem( controls()->GetCursorPosition() );
 
                 setCursor();
-            }
-
-            if( APPEARANCE_CONTROLS* controls = frame()->GetAppearancePanel() )
-            {
-                auto ensureVisible =
-                        [&]( int aLayer )
-                        {
-                            if( aLayer < PCB_LAYER_ID::PCB_LAYER_ID_COUNT )
-                            {
-                                if( !view()->IsLayerVisible( aLayer  ) )
-                                {
-                                    controls->SetLayerVisible( aLayer, true );
-                                    frame()->GetCanvas()->Refresh();
-                                }
-                            }
-                            else
-                            {
-                                if( !board()->IsElementVisible( (GAL_LAYER_ID) aLayer ) )
-                                {
-                                    controls->SetObjectVisible( (GAL_LAYER_ID) aLayer, true );
-                                    frame()->GetCanvas()->Refresh();
-                                }
-                            }
-                        };
-
-                if( newItem->Type() == PCB_POINT_T )
-                {
-                    ensureVisible( LAYER_POINTS );
-                }
-                else if( newItem->Type() == PCB_VIA_T )
-                {
-                    ensureVisible( LAYER_VIAS );
-
-                    switch( static_cast<PCB_VIA*>( newItem.get() )->GetViaType() )
-                    {
-                    case VIATYPE::BURIED:   ensureVisible( LAYER_VIA_BURIED );   break;
-                    case VIATYPE::BLIND:    ensureVisible( LAYER_VIA_BLIND );    break;
-                    case VIATYPE::MICROVIA: ensureVisible( LAYER_VIA_MICROVIA ); break;
-                    default:                                                     break;
-                    }
-                }
-                else if( newItem->Type() == PCB_PAD_T )
-                {
-                    ensureVisible( LAYER_PADS );
-                }
-                else
-                {
-                    ensureVisible( newItem->GetLayer() );
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
