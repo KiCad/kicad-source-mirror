@@ -476,7 +476,7 @@ void DESIGN_BLOCK_IO::DesignBlockDelete( const wxString& aLibPath, const wxStrin
     wxFileName dbDir = wxFileName( aLibPath + wxFileName::GetPathSeparator() + aDesignBlockName
                                    + wxT( "." ) + FILEEXT::KiCadDesignBlockPathExtension );
 
-    if( !dbDir.DirExists() )
+    if( !wxFileName::DirExists( dbDir.GetFullPath() ) )
         THROW_IO_ERRORF( _( "Design block '%s' does not exist." ), dbDir.GetFullName() );
 
     // Delete the whole design block folder
