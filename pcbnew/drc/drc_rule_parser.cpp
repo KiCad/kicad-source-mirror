@@ -559,8 +559,9 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_hole_to_hole:              c.m_Type = HOLE_TO_HOLE_CONSTRAINT;              break;
     case T_courtyard_clearance:       c.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;       break;
     case T_silk_clearance:            c.m_Type = SILK_CLEARANCE_CONSTRAINT;            break;
+    case T_line_width:                c.m_Type = LINE_WIDTH_CONSTRAINT;                break;
     case T_text_height:               c.m_Type = TEXT_HEIGHT_CONSTRAINT;               break;
-    case T_text_thickness:            c.m_Type = TEXT_THICKNESS_CONSTRAINT;            break;
+    case T_text_thickness:            c.m_Type = LINE_WIDTH_CONSTRAINT;                break;
     case T_track_width:               c.m_Type = TRACK_WIDTH_CONSTRAINT;               break;
     case T_track_angle:               c.m_Type = TRACK_ANGLE_CONSTRAINT;               break;
     case T_track_segment_length:      c.m_Type = TRACK_SEGMENT_LENGTH_CONSTRAINT;      break;
@@ -597,7 +598,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                        "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
                        "min_resolved_spokes, microvia_stack_depth, hole_aspect_ratio, solder_mask_expansion, "
                        "solder_mask_sliver, "
-                       "solder_paste_abs_margin, solder_paste_rel_margin, length, net_chain_length, "
+                       "solder_paste_abs_margin, solder_paste_rel_margin, length, line_width, net_chain_length, "
                        "skew, via_count, via_dangling, via_diameter, diff_pair_gap, "
                        "diff_pair_uncoupled or bridged_mask" ) );
         return;

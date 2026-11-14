@@ -332,7 +332,7 @@ wxString DRC_TOOL::FixDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem
         return _( "Edit Pad Properties..." );
     }
     else if( aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
-                || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
+                || aDRCItem->GetErrorCode() == DRCE_LINE_WIDTH
                 || aDRCItem->GetErrorCode() == DRCE_MIRRORED_TEXT_ON_FRONT_LAYER
                 || aDRCItem->GetErrorCode() == DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER )
     {
@@ -342,6 +342,8 @@ wxString DRC_TOOL::FixDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem
             return _( "Edit Dimension Properties..." );
         else if( item && item->Type() == PCB_FIELD_T )
             return _( "Edit Field Properties..." );
+        else if( item && item->Type() == PCB_SHAPE_T )
+            return _( "Edit Graphic Properties..." );
         else
             return _( "Edit Text Properties..." );
     }
@@ -386,7 +388,7 @@ void DRC_TOOL::FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
                 || aDRCItem->GetErrorCode() == DRCE_PADSTACK
                 || aDRCItem->GetErrorCode() == DRCE_PADSTACK_INVALID
                 || aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
-                || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
+                || aDRCItem->GetErrorCode() == DRCE_LINE_WIDTH
                 || aDRCItem->GetErrorCode() == DRCE_MIRRORED_TEXT_ON_FRONT_LAYER
                 || aDRCItem->GetErrorCode() == DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER)
 

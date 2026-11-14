@@ -355,16 +355,16 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_textThicknessLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum text thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textThicknessLabel->Wrap( -1 );
-	fgFeatureConstraints->Add( m_textThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	m_lineWidthLabel = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Minimum line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel->Wrap( -1 );
+	fgFeatureConstraints->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
-	m_textThicknessCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgFeatureConstraints->Add( m_textThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	m_lineWidthCtrl = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_lineWidthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
-	m_textThicknessUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textThicknessUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_textThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	m_lineWidthUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 
 	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND, 5 );

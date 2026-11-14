@@ -34,7 +34,7 @@
     Text dimensions tests.
     Errors generated:
     - DRCE_TEXT_HEIGHT
-    - DRCE_TEXT_THICKNESS
+    - DRCE_LINE_WIDTH
 */
 
 class DRC_TEST_PROVIDER_TEXT_DIMS : public DRC_TEST_PROVIDER
@@ -58,14 +58,14 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     int       ii = 0;
 
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_HEIGHT )
-            && m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
+            && m_drcEngine->IsErrorLimitExceeded( DRCE_LINE_WIDTH ) )
     {
         REPORT_AUX( wxT( "Text dimension violations ignored. Tests not run." ) );
         return true;        // continue with other tests
     }
 
     if( !m_drcEngine->HasRulesForConstraintType( TEXT_HEIGHT_CONSTRAINT )
-            && !m_drcEngine->HasRulesForConstraintType( TEXT_THICKNESS_CONSTRAINT ) )
+            && !m_drcEngine->HasRulesForConstraintType( LINE_WIDTH_CONSTRAINT ) )
     {
         REPORT_AUX( wxT( "No text height or text thickness constraints found. Tests not run." ) );
         return true;        // continue with other tests
@@ -120,7 +120,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
     auto checkTextThickness =
             [&]( BOARD_ITEM* item, EDA_TEXT* text ) -> bool
             {
-                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( TEXT_THICKNESS_CONSTRAINT, item,
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( LINE_WIDTH_CONSTRAINT, item,
                                                                     nullptr, item->GetLayer() );
 
                 if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
@@ -191,7 +191,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     if( collapsedStroke || collapsedArea )
                     {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LINE_WIDTH );
                         drcItem->SetErrorDetail( _( "(TrueType font characters with insufficient stroke weight)" ) );
                         drcItem->SetItems( item );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
@@ -205,7 +205,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     if( constraint.Value().HasMin() && actualThickness < constraint.Value().Min() )
                     {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LINE_WIDTH );
                         drcItem->SetErrorDetail( formatMsg( _( "(%s min thickness %s; actual %s)" ),
                                                             constraint.GetName(),
                                                             constraint.Value().Min(),
@@ -218,7 +218,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     if( constraint.Value().HasMax() && actualThickness > constraint.Value().Max() )
                     {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TEXT_THICKNESS );
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LINE_WIDTH );
                         drcItem->SetErrorDetail( formatMsg( _( "(%s max thickness %s; actual %s)" ),
                                                             constraint.GetName(),
                                                             constraint.Value().Max(),
@@ -259,7 +259,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     if( !text->IsVisible() )
                         return true;
 
-                    if( m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_THICKNESS ) )
+                    if( m_drcEngine->IsErrorLimitExceeded( DRCE_LINE_WIDTH ) )
                         strikes++;
                     else
                         checkTextThickness( item, text );

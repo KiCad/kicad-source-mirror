@@ -291,9 +291,12 @@ bool downgradeProtoExclusion( const nlohmann::json& aEntry, bool aPreTen, nlohma
 
     if( type.is_string() )
     {
+        // DRCET_LINE_WIDTH is a later alias of the frozen DRCET_TEXT_THICKNESS value
+        const std::string name = type == "DRCET_LINE_WIDTH" ? "DRCET_TEXT_THICKNESS" : type.get<std::string>();
+
         for( const LEGACY_DRC_ERROR& candidate : legacyDrcErrors )
         {
-            if( type == candidate.m_protoName )
+            if( name == candidate.m_protoName )
                 error = &candidate;
         }
     }
@@ -957,6 +960,24 @@ void downgradeBoardSettings( nlohmann::json& aDoc, bool aPreTen, COMPATIBILITY_R
             entry.erase( "td_enabled" );
         }
     }
+
+    // Schema 4 renamed the text thickness keys to line width
+    auto restoreKey = [&settings]( const char* aParent, const char* aCurrent, const char* aLegacy )
+    {
+        if( !settings.contains( aParent ) || !settings[aParent].is_object() )
+            return;
+
+        nlohmann::json& parent = settings[aParent];
+
+        if( !parent.contains( aCurrent ) )
+            return;
+
+        parent[aLegacy] = parent[aCurrent];
+        parent.erase( aCurrent );
+    };
+
+    restoreKey( "rule_severities", "line_width", "text_thickness" );
+    restoreKey( "rules", "min_silk_line_width", "min_text_thickness" );
 
     if( settings.contains( "meta" ) && settings["meta"].is_object() )
         settings["meta"]["version"] = 2;

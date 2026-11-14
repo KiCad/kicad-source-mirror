@@ -90,7 +90,7 @@ public:
         wxString heightClause =
                 wxString::Format( wxS( "(constraint text_height (min %s))" ), formatDimension( m_minTextHeight ) );
 
-        wxString thicknessClause = wxString::Format( wxS( "(constraint text_thickness (min %s))" ),
+        wxString thicknessClause = wxString::Format( wxS( "(constraint line_width (min %s))" ),
                                                      formatDimension( m_minTextThickness ) );
 
         return { heightClause, thicknessClause };

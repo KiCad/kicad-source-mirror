@@ -795,7 +795,7 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleGetBoardDesignRu
     constraints->mutable_silk_clearance()->set_value_nm( bds.m_SilkClearance );
     constraints->set_min_resolved_spokes( bds.m_MinResolvedSpokes );
     constraints->mutable_min_silk_text_height()->set_value_nm( bds.m_MinSilkTextHeight );
-    constraints->mutable_min_silk_text_thickness()->set_value_nm( bds.m_MinSilkTextThickness );
+    constraints->mutable_min_silk_text_thickness()->set_value_nm( bds.m_MinSilkLineWidth );
 
     kiapi::board::PredefinedSizes* sizes = rules->mutable_predefined_sizes();
 
@@ -941,7 +941,7 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleSetBoardDesignRu
         newSettings.m_SilkClearance = constraints.silk_clearance().value_nm();
         newSettings.m_MinResolvedSpokes = constraints.min_resolved_spokes();
         newSettings.m_MinSilkTextHeight = constraints.min_silk_text_height().value_nm();
-        newSettings.m_MinSilkTextThickness = constraints.min_silk_text_thickness().value_nm();
+        newSettings.m_MinSilkLineWidth = constraints.min_silk_text_thickness().value_nm();
     }
 
     if( rules.has_predefined_sizes() )

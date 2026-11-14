@@ -34,7 +34,7 @@ struct PROJECT_SCHEMAS_REVIEWED
     int m_TuningProfiles = 2;
     int m_ComponentClasses = 0;
     int m_Erc = 1;
-    int m_BoardDesignSettings = 3;
+    int m_BoardDesignSettings = 4;
 };
 
 /// Migrate a .kicad_pro document down to what the target release expects. The downgrade twin

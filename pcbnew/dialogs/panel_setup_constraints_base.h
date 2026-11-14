@@ -113,9 +113,9 @@ class PANEL_SETUP_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_textHeightLabel;
 		wxTextCtrl* m_textHeightCtrl;
 		wxStaticText* m_textHeightUnits;
-		wxStaticText* m_textThicknessLabel;
-		wxTextCtrl* m_textThicknessCtrl;
-		wxStaticText* m_textThicknessUnits;
+		wxStaticText* m_lineWidthLabel;
+		wxTextCtrl* m_lineWidthCtrl;
+		wxStaticText* m_lineWidthUnits;
 		wxStaticText* m_stCircleToPolyOpt;
 		wxStaticLine* m_staticline19;
 		wxStaticText* m_maxErrorTitle;

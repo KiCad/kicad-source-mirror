@@ -72,10 +72,10 @@ void DRC_PANEL_MATCHER::initClaims()
             std::set<DRC_CONSTRAINT_T>{},
             90 );
 
-    // Priority 80: MINIMUM_TEXT_HEIGHT_THICKNESS claims text_height + text_thickness
+    // Priority 80: MINIMUM_TEXT_HEIGHT_THICKNESS claims text_height + line_width
     m_claims.emplace_back(
             MINIMUM_TEXT_HEIGHT_AND_THICKNESS,
-            std::set<DRC_CONSTRAINT_T>{ TEXT_HEIGHT_CONSTRAINT, TEXT_THICKNESS_CONSTRAINT },
+            std::set<DRC_CONSTRAINT_T>{ TEXT_HEIGHT_CONSTRAINT, LINE_WIDTH_CONSTRAINT },
             std::set<DRC_CONSTRAINT_T>{},
             80 );
 

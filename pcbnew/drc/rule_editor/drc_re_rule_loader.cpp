@@ -88,6 +88,17 @@ static bool isSymmetricMinOptMax( const DRC_CONSTRAINT* aConstraint )
 }
 
 
+static bool isMinOnly( const DRC_CONSTRAINT* aConstraint )
+{
+    if( !aConstraint )
+        return true;
+
+    const auto& value = aConstraint->GetValue();
+
+    return value.HasMin() && !value.HasOpt() && !value.HasMax();
+}
+
+
 // The DRC lexer treats a line whose first non-blank character is # as a comment
 static bool isOnCommentLine( const wxString& aContent, size_t aPos )
 {
@@ -414,12 +425,16 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
     case MINIMUM_TEXT_HEIGHT_AND_THICKNESS:
     {
+        const DRC_CONSTRAINT* textHeight = findConstraint( aRule, TEXT_HEIGHT_CONSTRAINT );
+        const DRC_CONSTRAINT* textThickness = findConstraint( aRule, LINE_WIDTH_CONSTRAINT );
+
+        // The panel saves only minimums, so a max or opt would be lost on edit
+        if( !isMinOnly( textHeight ) || !isMinOnly( textThickness ) )
+            return makeCustomRuleData( aRule );
+
         auto data = std::make_shared<DRC_RE_MINIMUM_TEXT_HEIGHT_THICKNESS_CONSTRAINT_DATA>();
         data->SetRuleName( aRule.m_Name );
         data->SetConstraintCode( "text_height" );
-
-        const DRC_CONSTRAINT* textHeight = findConstraint( aRule, TEXT_HEIGHT_CONSTRAINT );
-        const DRC_CONSTRAINT* textThickness = findConstraint( aRule, TEXT_THICKNESS_CONSTRAINT );
 
         if( textHeight )
             data->SetMinTextHeight( toMM( textHeight->GetValue().Min() ) );

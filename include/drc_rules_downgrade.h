@@ -34,7 +34,8 @@
 
 // The old rules parsers are all-or-nothing. One unknown keyword anywhere makes the target drop
 // every custom rule and refuse to run DRC. So the export filters the file: rules the target
-// cannot parse are commented out and reported, surviving rules are kept byte-identical.
+// cannot parse are commented out and reported, surviving rules are kept byte-identical apart
+// from constraint kinds the target reads by an older name.
 
 /// The vocabulary a target release could parse, generated from its release tags by
 /// tools/generate_drc_rules_vocabulary.py. A release without one cannot be exported to.
@@ -61,6 +62,36 @@ inline constexpr const char* DRC_RULE_SEMANTIC_BREAKS[] = {
 inline bool DrcVocabularyHas( const char* const* aWords, size_t aCount, const std::string& aWord )
 {
     return std::binary_search( aWords, aWords + aCount, aWord );
+}
+
+
+/// A constraint kind renamed after a release. The release reads the same check by its old name.
+struct DRC_CONSTRAINT_RENAME
+{
+    const char* m_current;
+    const char* m_legacy;
+};
+
+
+inline constexpr DRC_CONSTRAINT_RENAME DRC_CONSTRAINT_RENAMES[] = {
+    // Releases before 11.0 check only text with it, graphic shapes go unchecked
+    { "line_width", "text_thickness" },
+};
+
+
+/// The name the target reads a constraint kind by.
+inline std::string DrcConstraintKindForTarget( const std::string& aKind, const DRC_RULE_VOCABULARY& aVocabulary )
+{
+    if( DrcVocabularyHas( aVocabulary.m_tokens, aVocabulary.m_tokenCount, aKind ) )
+        return aKind;
+
+    for( const DRC_CONSTRAINT_RENAME& rename : DRC_CONSTRAINT_RENAMES )
+    {
+        if( aKind == rename.m_current )
+            return rename.m_legacy;
+    }
+
+    return aKind;
 }
 
 
@@ -212,9 +243,11 @@ inline bool SplitDrcRuleBlocks( const std::vector<DRC_RULE_TOKEN>& aTokens, std:
 }
 
 
-/// True if the rule uses something the target's parser or evaluator cannot handle.
+/// True if the rule uses something the target's parser or evaluator cannot handle. Constraint kinds
+/// the target reads by an older name are added to aRenamed as token indices.
 inline bool DrcRuleUnsupportedByTarget( const std::vector<DRC_RULE_TOKEN>& aTokens, const DRC_RULE_BLOCK& aBlock,
-                                        const DRC_RULE_VOCABULARY& aVocabulary )
+                                        const DRC_RULE_VOCABULARY& aVocabulary,
+                                        std::vector<size_t>*       aRenamed = nullptr )
 {
     std::vector<std::string> nodes;
     std::vector<std::string> words;
@@ -318,7 +351,13 @@ inline bool DrcRuleUnsupportedByTarget( const std::vector<DRC_RULE_TOKEN>& aToke
         {
             // The constraint kind is grammar, and three kinds change how what follows is read.
             kindPending = false;
-            words.push_back( token.m_text );
+
+            std::string kind = DrcConstraintKindForTarget( token.m_text, aVocabulary );
+
+            if( aRenamed && kind != token.m_text )
+                aRenamed->push_back( i );
+
+            words.push_back( kind );
 
             if( token.m_text == "assertion" || token.m_text == "disallow" || token.m_text == "zone_connection" )
                 nodes.back() = token.m_text;
@@ -469,8 +508,9 @@ inline std::string CommentOutDrcBlock( const std::string& aBlock )
 }
 
 
-/// Filter a .kicad_dru file for the target. Kept rules stay byte-identical, unsupported rules
-/// become comments and are listed by name. On a syntax error m_error is set, write nothing.
+/// Filter a .kicad_dru file for the target. Kept rules stay byte-identical except for renamed
+/// constraint kinds, unsupported rules become comments and are listed by name. On a syntax error
+/// m_error is set, write nothing.
 inline DRC_RULES_FILTER_RESULT FilterDrcRulesForTarget( const wxString& aRulesText, const DOWNGRADE_TARGET& aTarget )
 {
     std::string text = aRulesText.ToStdString( wxConvUTF8 );
@@ -529,7 +569,20 @@ inline DRC_RULES_FILTER_RESULT FilterDrcRulesForTarget( const wxString& aRulesTe
             headerWritten = true;
         }
 
-        bool unsupported = block.m_head != "rule" || DrcRuleUnsupportedByTarget( tokens, block, *vocabulary );
+        std::vector<size_t> renamed;
+        bool unsupported = block.m_head != "rule" || DrcRuleUnsupportedByTarget( tokens, block, *vocabulary, &renamed );
+
+        if( !unsupported )
+        {
+            // Back to front, so earlier offsets stay valid
+            for( auto it = renamed.rbegin(); it != renamed.rend(); ++it )
+            {
+                const DRC_RULE_TOKEN& token = tokens[*it];
+                size_t                at = body.find( token.m_text, token.m_offset - block.m_start );
+
+                body.replace( at, token.m_text.size(), DrcConstraintKindForTarget( token.m_text, *vocabulary ) );
+            }
+        }
 
         result.m_text += prefix;
 

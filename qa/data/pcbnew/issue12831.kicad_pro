@@ -124,7 +124,7 @@
         "min_resolved_spokes": 2,
         "min_silk_clearance": 0.15,
         "min_text_height": 1.016,
-        "min_text_thickness": 0.15239999999999998,
+        "min_text_thickness": 0.12,
         "min_through_hole_diameter": 0.3,
         "min_track_width": 0.254,
         "min_via_annular_width": 0.13,

@@ -112,7 +112,7 @@ static wxString GetConstraintCodeFromType( DRC_CONSTRAINT_T aType )
     case COURTYARD_CLEARANCE_CONSTRAINT:     return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_courtyard_clearance );
     case SILK_CLEARANCE_CONSTRAINT:          return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_silk_clearance );
     case TEXT_HEIGHT_CONSTRAINT:             return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_text_height );
-    case TEXT_THICKNESS_CONSTRAINT:          return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_text_thickness );
+    case LINE_WIDTH_CONSTRAINT:              return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_line_width );
     case TRACK_ANGLE_CONSTRAINT:             return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_track_angle );
     case TRACK_SEGMENT_LENGTH_CONSTRAINT:    return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_track_segment_length );
     case CONNECTION_WIDTH_CONSTRAINT:        return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_connection_width );

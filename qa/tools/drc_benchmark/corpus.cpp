@@ -162,7 +162,7 @@ const char* ConstraintTypeName( DRC_CONSTRAINT_T aType )
     case COURTYARD_CLEARANCE_CONSTRAINT:     return "courtyard_clearance";
     case SILK_CLEARANCE_CONSTRAINT:          return "silk_clearance";
     case TEXT_HEIGHT_CONSTRAINT:             return "text_height";
-    case TEXT_THICKNESS_CONSTRAINT:          return "text_thickness";
+    case LINE_WIDTH_CONSTRAINT:              return "line_width";
     case TRACK_WIDTH_CONSTRAINT:             return "track_width";
     case TRACK_SEGMENT_LENGTH_CONSTRAINT:    return "track_segment_length";
     case ANNULAR_WIDTH_CONSTRAINT:           return "annular_width";
@@ -211,7 +211,7 @@ const std::vector<DRC_CONSTRAINT_T>& AllConstraintTypes()
                                                          COURTYARD_CLEARANCE_CONSTRAINT,
                                                          SILK_CLEARANCE_CONSTRAINT,
                                                          TEXT_HEIGHT_CONSTRAINT,
-                                                         TEXT_THICKNESS_CONSTRAINT,
+                                                         LINE_WIDTH_CONSTRAINT,
                                                          TRACK_WIDTH_CONSTRAINT,
                                                          TRACK_SEGMENT_LENGTH_CONSTRAINT,
                                                          ANNULAR_WIDTH_CONSTRAINT,

@@ -345,6 +345,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_test_provider_hole_to_hole.cpp
     drc/drc_test_provider_hole_size.cpp
     drc/drc_test_provider_library_parity.cpp
+    drc/drc_test_provider_line_width.cpp
     drc/drc_test_provider_schematic_parity.cpp
     drc/drc_test_provider_misc.cpp
     drc/drc_test_provider_net_chain_tuning_profiles.cpp

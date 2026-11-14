@@ -1198,6 +1198,24 @@ BOOST_AUTO_TEST_CASE( DrcRulesFilterForKicad9 )
 }
 
 
+// Released targets read line_width as text_thickness, so the kind is renamed instead of dropping the rule
+BOOST_AUTO_TEST_CASE( LineWidthRuleDowngradesToTextThickness )
+{
+    const wxString rules = wxT( "(version 1)\n"
+                                "(rule \"line_width\" (layer F.SilkS) (constraint line_width (min 0.2mm)))\n" );
+
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        DRC_RULES_FILTER_RESULT result = FilterDrcRulesForTarget( rules, target );
+
+        BOOST_CHECK( result.m_dropped.empty() );
+        BOOST_CHECK_EQUAL( result.m_text, wxString( wxT( "(version 1)\n"
+                                                         "(rule \"line_width\" (layer F.SilkS) "
+                                                         "(constraint text_thickness (min 0.2mm)))\n" ) ) );
+    }
+}
+
+
 static size_t ParsedDrcRuleCount( const wxString& aText, const wxString& aSource )
 {
     DRC_RULES_PARSER                       parser( aText, aSource );
@@ -4392,6 +4410,40 @@ BOOST_AUTO_TEST_CASE( CurrentProjectSchemasAndSupportedDrcExclusionsMigrateForBo
         DowngradeProjectFileJson( doc, target, second );
         BOOST_CHECK( doc == migrated );
         BOOST_CHECK( !second.IsLossy() );
+    }
+}
+
+
+// Schema 4 renamed the text thickness keys and enum to line width, released targets read the old names
+BOOST_AUTO_TEST_CASE( LineWidthSettingsDowngradeToTextThickness )
+{
+    const nlohmann::json exclusion = { { "marker",
+                                         { { "error_type", "DRCET_LINE_WIDTH" },
+                                           { "position", { { "x_nm", "1" }, { "y_nm", "2" } } },
+                                           { "items", { { { "value", "11111111-1111-1111-1111-111111111111" } } } } } } };
+
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        nlohmann::json doc = {
+            { "meta", { { "version", 4 } } },
+            { "board",
+              { { "design_settings",
+                  { { "meta", { { "version", 4 } } },
+                    { "rule_severities", { { "line_width", "ignore" } } },
+                    { "rules", { { "min_silk_line_width", 0.2 } } },
+                    { "drc_exclusions", { exclusion } } } } } }
+        };
+        COMPATIBILITY_REPORT report;
+        DowngradeProjectFileJson( doc, target, report );
+
+        const auto& settings = doc["board"]["design_settings"];
+        BOOST_CHECK_EQUAL( settings["meta"]["version"].get<int>(), 2 );
+        BOOST_CHECK_EQUAL( settings["rule_severities"].value( "text_thickness", "" ), "ignore" );
+        BOOST_CHECK( !settings["rule_severities"].contains( "line_width" ) );
+        BOOST_CHECK_EQUAL( settings["rules"].value( "min_text_thickness", 0.0 ), 0.2 );
+        BOOST_CHECK( !settings["rules"].contains( "min_silk_line_width" ) );
+        BOOST_REQUIRE_EQUAL( settings["drc_exclusions"].size(), 1 );
+        BOOST_CHECK( settings["drc_exclusions"][0][0].get<std::string>().starts_with( "text_thickness|1|2|" ) );
     }
 }
 

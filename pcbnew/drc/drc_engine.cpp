@@ -213,12 +213,12 @@ void DRC_ENGINE::loadImplicitRules()
     silkTextHeightConstraint.Value().SetMin( bds.m_MinSilkTextHeight );
     rule->AddConstraint( silkTextHeightConstraint );
 
-    rule = createImplicitRule( _( "board setup constraints silk text thickness" ),
+    rule = createImplicitRule( _( "board setup constraints silk line width" ),
                                DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     rule->m_LayerCondition = LSET( { F_SilkS, B_SilkS } );
-    DRC_CONSTRAINT silkTextThicknessConstraint( TEXT_THICKNESS_CONSTRAINT );
-    silkTextThicknessConstraint.Value().SetMin( bds.m_MinSilkTextThickness );
-    rule->AddConstraint( silkTextThicknessConstraint );
+    DRC_CONSTRAINT lineWidthConstraint( LINE_WIDTH_CONSTRAINT );
+    lineWidthConstraint.Value().SetMin( bds.m_MinSilkLineWidth );
+    rule->AddConstraint( lineWidthConstraint );
 
     rule = createImplicitRule( _( "board setup constraints hole" ), DRC_IMPLICIT_SOURCE::BOARD_SETUP_CONSTRAINT );
     DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
@@ -1513,12 +1513,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 case VIA_DIAMETER_CONSTRAINT:
                 case HOLE_SIZE_CONSTRAINT:
                 case TEXT_HEIGHT_CONSTRAINT:
-                case TEXT_THICKNESS_CONSTRAINT:
                 case DIFF_PAIR_GAP_CONSTRAINT:
                 case LENGTH_CONSTRAINT:
                 case NET_CHAIN_LENGTH_CONSTRAINT:
                 case NET_CHAIN_STUB_LENGTH_CONSTRAINT:
                 case NET_CHAIN_RETURN_PATH_CONSTRAINT:
+                case LINE_WIDTH_CONSTRAINT:
                 case CONNECTION_WIDTH_CONSTRAINT:
                 case HOLE_TO_HOLE_CONSTRAINT:
                 {
@@ -1580,7 +1580,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                             break;
 
                         case TEXT_HEIGHT_CONSTRAINT:
-                        case TEXT_THICKNESS_CONSTRAINT:
+                        case LINE_WIDTH_CONSTRAINT:
                         case CONNECTION_WIDTH_CONSTRAINT:
                             REPORT( wxString::Format( _( "Checking %s: min %s." ),
                                                       EscapeHTML( c->constraint.GetName() ),
@@ -2665,6 +2665,7 @@ enum class SHOWMATCH_DOMAIN
     EDGE_ITEMS,
     FOOTPRINTS,
     HOLE_ITEMS,
+    LINE_WIDTH_ITEMS,
     MASK_EXPANSION_ITEMS,
     MASK_ITEMS,
     PADS,
@@ -2732,6 +2733,12 @@ bool matchesShowMatchDomain( const BOARD_ITEM* aItem, SHOWMATCH_DOMAIN aDomain )
 
     case SHOWMATCH_DOMAIN::HOLE_ITEMS:
         return aItem->HasHole();
+
+    case SHOWMATCH_DOMAIN::LINE_WIDTH_ITEMS:
+        if( aItem->Type() == PCB_SHAPE_T )
+            return !static_cast<const PCB_SHAPE*>( aItem )->IsSolidFill();
+
+        return matchesShowMatchDomain( aItem, SHOWMATCH_DOMAIN::TEXT_ITEMS );
 
     case SHOWMATCH_DOMAIN::MASK_EXPANSION_ITEMS:
         switch( aItem->Type() )
@@ -2851,8 +2858,10 @@ SHOWMATCH_DOMAIN_SPEC getShowMatchDomainSpec( DRC_CONSTRAINT_T aConstraint )
         return { SHOWMATCH_DOMAIN::PADS };
 
     case TEXT_HEIGHT_CONSTRAINT:
-    case TEXT_THICKNESS_CONSTRAINT:
         return { SHOWMATCH_DOMAIN::TEXT_ITEMS };
+
+    case LINE_WIDTH_CONSTRAINT:
+        return { SHOWMATCH_DOMAIN::LINE_WIDTH_ITEMS };
 
     case SOLDER_MASK_EXPANSION_CONSTRAINT:
         return { SHOWMATCH_DOMAIN::MASK_EXPANSION_ITEMS };

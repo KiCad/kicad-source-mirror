@@ -42,6 +42,7 @@ message MinimumConstraints
   kiapi.common.types.Distance silk_clearance = 13;
   int32 min_resolved_spokes = 14;
   kiapi.common.types.Distance min_silk_text_height = 15;
+  // Minimum silkscreen line width, which also applies to graphic shapes since 11.0
   kiapi.common.types.Distance min_silk_text_thickness = 16;
 }
 
@@ -131,6 +132,8 @@ message ViaProtectionDefaults
 
 enum DrcErrorType
 {
+  option allow_alias = true;
+
   DRCET_UNKNOWN = 0;
   DRCET_UNCONNECTED_ITEMS = 1;
   DRCET_SHORTING_ITEMS = 2;
@@ -184,7 +187,10 @@ enum DrcErrorType
   DRCET_SILK_EDGE_CLEARANCE = 50;
   DRCET_SOLDERMASK_BRIDGE = 51;
   DRCET_TEXT_HEIGHT = 52;
-  DRCET_TEXT_THICKNESS = 53;
+  // Since: 11.0
+  DRCET_LINE_WIDTH = 53;
+  // Replaced by DRCET_LINE_WIDTH, which also covers graphic shapes
+  DRCET_TEXT_THICKNESS = 53 [deprecated = true];
   DRCET_LENGTH_OUT_OF_RANGE = 54;
   DRCET_SKEW_OUT_OF_RANGE = 55;
   DRCET_VIA_COUNT_OUT_OF_RANGE = 56;
@@ -264,6 +270,8 @@ enum CustomRuleLayerMode
 
 enum CustomRuleConstraintType
 {
+  option allow_alias = true;
+
   CRCT_UNKNOWN = 0;
   CRCT_CLEARANCE = 1;
   CRCT_CREEPAGE = 2;
@@ -274,7 +282,10 @@ enum CustomRuleConstraintType
   CRCT_COURTYARD_CLEARANCE = 7;
   CRCT_SILK_CLEARANCE = 8;
   CRCT_TEXT_HEIGHT = 9;
-  CRCT_TEXT_THICKNESS = 10;
+  // Since: 11.0
+  CRCT_LINE_WIDTH = 10;
+  // Replaced by CRCT_LINE_WIDTH, which also covers graphic shapes
+  CRCT_TEXT_THICKNESS = 10 [deprecated = true];
   CRCT_TRACK_WIDTH = 11;
   CRCT_TRACK_SEGMENT_LENGTH = 12;
   CRCT_ANNULAR_WIDTH = 13;

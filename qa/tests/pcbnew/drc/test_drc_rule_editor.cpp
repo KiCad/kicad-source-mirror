@@ -1075,7 +1075,7 @@ BOOST_AUTO_TEST_CASE( PanelMatcherTextHeightAndThickness )
     textHeight.Value().SetMin( 1000000 );
     rule.AddConstraint( textHeight );
 
-    DRC_CONSTRAINT textThickness( TEXT_THICKNESS_CONSTRAINT );
+    DRC_CONSTRAINT textThickness( LINE_WIDTH_CONSTRAINT );
     textThickness.Value().SetMin( 150000 );
     rule.AddConstraint( textThickness );
 
@@ -1325,7 +1325,7 @@ BOOST_AUTO_TEST_CASE( RuleLoaderTextHeightThicknessFromText )
         "(version 1)\n"
         "(rule \"Text Test\"\n"
         "    (constraint text_height (min 1mm))\n"
-        "    (constraint text_thickness (min 0.15mm)))";
+        "    (constraint line_width (min 0.15mm)))";
 
     DRC_RULE_LOADER loader;
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
@@ -1338,6 +1338,22 @@ BOOST_AUTO_TEST_CASE( RuleLoaderTextHeightThicknessFromText )
 
     BOOST_CHECK_CLOSE( textData->GetMinTextHeight(), 1.0, 0.0001 );
     BOOST_CHECK_CLOSE( textData->GetMinTextThickness(), 0.15, 0.0001 );
+}
+
+BOOST_AUTO_TEST_CASE( RuleLoaderTextLineWidthWithMaxFallsBackToCustom )
+{
+    // The text panel saves only minimums, so the max must not be dropped on edit
+    wxString ruleText =
+        "(version 1)\n"
+        "(rule \"Text Test\"\n"
+        "    (constraint text_height (min 1mm))\n"
+        "    (constraint line_width (min 0.15mm) (max 0.3mm)))";
+
+    DRC_RULE_LOADER loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, CUSTOM_RULE );
 }
 
 BOOST_AUTO_TEST_CASE( RuleLoaderAbsoluteLengthFromText )

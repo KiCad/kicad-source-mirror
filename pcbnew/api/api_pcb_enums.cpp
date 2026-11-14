@@ -336,7 +336,7 @@ CustomRuleConstraintType ToProtoEnum( DRC_CONSTRAINT_T aValue )
     case COURTYARD_CLEARANCE_CONSTRAINT:    return CustomRuleConstraintType::CRCT_COURTYARD_CLEARANCE;
     case SILK_CLEARANCE_CONSTRAINT:         return CustomRuleConstraintType::CRCT_SILK_CLEARANCE;
     case TEXT_HEIGHT_CONSTRAINT:            return CustomRuleConstraintType::CRCT_TEXT_HEIGHT;
-    case TEXT_THICKNESS_CONSTRAINT:         return CustomRuleConstraintType::CRCT_TEXT_THICKNESS;
+    case LINE_WIDTH_CONSTRAINT:             return CustomRuleConstraintType::CRCT_LINE_WIDTH;
     case TRACK_WIDTH_CONSTRAINT:            return CustomRuleConstraintType::CRCT_TRACK_WIDTH;
     case TRACK_SEGMENT_LENGTH_CONSTRAINT:   return CustomRuleConstraintType::CRCT_TRACK_SEGMENT_LENGTH;
     case ANNULAR_WIDTH_CONSTRAINT:          return CustomRuleConstraintType::CRCT_ANNULAR_WIDTH;
@@ -391,7 +391,7 @@ DRC_CONSTRAINT_T FromProtoEnum( CustomRuleConstraintType aValue )
     case CustomRuleConstraintType::CRCT_COURTYARD_CLEARANCE:    return COURTYARD_CLEARANCE_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_SILK_CLEARANCE:         return SILK_CLEARANCE_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_TEXT_HEIGHT:            return TEXT_HEIGHT_CONSTRAINT;
-    case CustomRuleConstraintType::CRCT_TEXT_THICKNESS:         return TEXT_THICKNESS_CONSTRAINT;
+    case CustomRuleConstraintType::CRCT_LINE_WIDTH:             return LINE_WIDTH_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_TRACK_WIDTH:            return TRACK_WIDTH_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_TRACK_SEGMENT_LENGTH:   return TRACK_SEGMENT_LENGTH_CONSTRAINT;
     case CustomRuleConstraintType::CRCT_ANNULAR_WIDTH:          return ANNULAR_WIDTH_CONSTRAINT;
@@ -2432,7 +2432,7 @@ DrcErrorType ToProtoEnum( PCB_DRC_CODE aValue )
     case DRCE_SILK_EDGE_CLEARANCE:           return DrcErrorType::DRCET_SILK_EDGE_CLEARANCE;
     case DRCE_SOLDERMASK_BRIDGE:             return DrcErrorType::DRCET_SOLDERMASK_BRIDGE;
     case DRCE_TEXT_HEIGHT:                   return DrcErrorType::DRCET_TEXT_HEIGHT;
-    case DRCE_TEXT_THICKNESS:                return DrcErrorType::DRCET_TEXT_THICKNESS;
+    case DRCE_LINE_WIDTH:                    return DrcErrorType::DRCET_LINE_WIDTH;
     case DRCE_LENGTH_OUT_OF_RANGE:           return DrcErrorType::DRCET_LENGTH_OUT_OF_RANGE;
     case DRCE_SKEW_OUT_OF_RANGE:             return DrcErrorType::DRCET_SKEW_OUT_OF_RANGE;
     case DRCE_NET_CHAIN_STUB_TOO_LONG:       return DrcErrorType::DRCET_NET_CHAIN_STUB_TOO_LONG;
@@ -2520,7 +2520,7 @@ PCB_DRC_CODE FromProtoEnum( DrcErrorType aValue )
     case DrcErrorType::DRCET_SILK_EDGE_CLEARANCE:                 return DRCE_SILK_EDGE_CLEARANCE;
     case DrcErrorType::DRCET_SOLDERMASK_BRIDGE:                   return DRCE_SOLDERMASK_BRIDGE;
     case DrcErrorType::DRCET_TEXT_HEIGHT:                         return DRCE_TEXT_HEIGHT;
-    case DrcErrorType::DRCET_TEXT_THICKNESS:                      return DRCE_TEXT_THICKNESS;
+    case DrcErrorType::DRCET_LINE_WIDTH:                          return DRCE_LINE_WIDTH;
     case DrcErrorType::DRCET_LENGTH_OUT_OF_RANGE:                 return DRCE_LENGTH_OUT_OF_RANGE;
     case DrcErrorType::DRCET_NET_CHAIN_STUB_TOO_LONG:             return DRCE_NET_CHAIN_STUB_TOO_LONG;
     case DrcErrorType::DRCET_NET_CHAIN_RETURN_PATH_BREAK:         return DRCE_NET_CHAIN_RETURN_PATH_BREAK;

@@ -113,7 +113,7 @@ enum PCB_DRC_CODE
     DRCE_SILK_EDGE_CLEARANCE,
     DRCE_SILK_CLEARANCE, // silk-to-silk or silk-to-other clearance error
     DRCE_TEXT_HEIGHT,
-    DRCE_TEXT_THICKNESS,
+    DRCE_LINE_WIDTH,
 
     DRCE_LENGTH_OUT_OF_RANGE,
     DRCE_NET_CHAIN_STUB_TOO_LONG,     // Routed stub on a net chain exceeds the (stub_length max) constraint
@@ -276,7 +276,7 @@ private:
     static DRC_ITEM solderMaskBridge;
     static DRC_ITEM silkClearance;
     static DRC_ITEM textHeightOutOfRange;
-    static DRC_ITEM textThicknessOutOfRange;
+    static DRC_ITEM lineWidthOutOfRange;
     static DRC_ITEM lengthOutOfRange;
     static DRC_ITEM netChainStubTooLong;
     static DRC_ITEM netChainReturnPathBreak;

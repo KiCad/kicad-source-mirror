@@ -49,7 +49,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         m_silkClearance( aFrame, m_silkClearanceLabel, m_silkClearanceCtrl, m_silkClearanceUnits ),
         m_minGrooveWidth( aFrame, m_minGrooveWidthLabel, m_minGrooveWidthCtrl, m_minGrooveWidthUnits ),
         m_minTextHeight( aFrame, m_textHeightLabel, m_textHeightCtrl, m_textHeightUnits ),
-        m_minTextThickness( aFrame, m_textThicknessLabel, m_textThicknessCtrl, m_textThicknessUnits ),
+        m_minLineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
         m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits ),
         m_validationTimer( this )
 {
@@ -98,7 +98,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl,          nullptr },
         { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl,         nullptr },
         { wxS( "min_text_height" ),           m_textHeightCtrl,             nullptr },
-        { wxS( "min_text_thickness" ),        m_textThicknessCtrl,          nullptr },
+        { wxS( "min_silk_line_width" ),       m_lineWidthCtrl,              nullptr },
         { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl,          nullptr },
         { wxS( "max_error" ),                 m_maxErrorCtrl,               nullptr }
     };
@@ -155,7 +155,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
 
     m_silkClearance.SetValue( m_BrdSettings->m_SilkClearance );
     m_minTextHeight.SetValue( m_BrdSettings->m_MinSilkTextHeight );
-    m_minTextThickness.SetValue( m_BrdSettings->m_MinSilkTextThickness );
+    m_minLineWidth.SetValue( m_BrdSettings->m_MinSilkLineWidth );
 
     updateWarnings();
 
@@ -190,7 +190,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
             { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl },
             { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl },
             { wxS( "min_text_height" ),           m_textHeightCtrl },
-            { wxS( "min_text_thickness" ),        m_textThicknessCtrl },
+            { wxS( "min_silk_line_width" ),       m_lineWidthCtrl },
             { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl },
             { wxS( "max_error" ),                 m_maxErrorCtrl },
             { wxS( "min_resolved_spokes" ),       m_minResolvedSpokeCountCtrl }
@@ -236,7 +236,7 @@ void PANEL_SETUP_CONSTRAINTS::applyValues( BOARD_DESIGN_SETTINGS& aSettings ) co
 
     aSettings.m_SilkClearance = m_silkClearance.GetValue();
     aSettings.m_MinSilkTextHeight = m_minTextHeight.GetValue();
-    aSettings.m_MinSilkTextThickness = m_minTextThickness.GetValue();
+    aSettings.m_MinSilkLineWidth = m_minLineWidth.GetValue();
 }
 
 

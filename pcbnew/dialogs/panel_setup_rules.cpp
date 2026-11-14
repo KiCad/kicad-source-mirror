@@ -481,6 +481,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                     || token == wxT( "disallow" )
                     || token == wxT( "edge_clearance" )
                     || token == wxT( "length" )
+                    || token == wxT( "line_width" )
                     || token == wxT( "hole_clearance" )
                     || token == wxT( "hole_size" )
                     || token == wxT( "hole_to_hole" )
@@ -703,6 +704,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                           "disallow|"
                           "edge_clearance|"
                           "length|"
+                          "line_width|"
                           "hole_clearance|"
                           "hole_size|"
                           "hole_to_hole|"
@@ -715,7 +717,6 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                           "solder_paste_abs_margin|"
                           "solder_paste_rel_margin|"
                           "text_height|"
-                          "text_thickness|"
                           "thermal_relief_gap|"
                           "thermal_spoke_width|"
                           "track_width|"

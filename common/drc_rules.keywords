@@ -28,6 +28,7 @@ ignore
 inner
 layer
 length
+line_width
 net_chain_length
 return_path
 stub_length

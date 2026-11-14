@@ -335,7 +335,7 @@ BOOST_AUTO_TEST_CASE( DesignRuleType )
                                 DRCE_SILK_EDGE_CLEARANCE,
                                 DRCE_SOLDERMASK_BRIDGE,
                                 DRCE_TEXT_HEIGHT,
-                                DRCE_TEXT_THICKNESS,
+                                DRCE_LINE_WIDTH,
                                 DRCE_LENGTH_OUT_OF_RANGE,
                                 DRCE_SKEW_OUT_OF_RANGE,
                                 DRCE_VIA_COUNT_OUT_OF_RANGE,
