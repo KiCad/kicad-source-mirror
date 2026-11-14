@@ -4160,7 +4160,8 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             else if( fileType == PCB_IO_MGR::EAGLE )
             {
                 // PCB_IO_EAGLE uses these to center the BOARD
-                VECTOR2I pageSize = board->GetPageSettings().GetSizeIU( pcbIUScale.IU_PER_MILS );
+                PAGE_INFO defaultPaper;
+                VECTOR2I  pageSize = defaultPaper.GetSizeIU( pcbIUScale.IU_PER_MILS );
                 importPropertyStorage["page_width"] = std::to_string( pageSize.x );
                 importPropertyStorage["page_height"] = std::to_string( pageSize.y );
                 importProperties = &importPropertyStorage;
