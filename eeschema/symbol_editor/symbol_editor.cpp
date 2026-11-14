@@ -1733,7 +1733,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
         // Update the library modification time so that we don't reload based on the watcher
         if( aLibrary == getTargetLib() )
         {
-            if( fn.DirExists() )
+            if( wxFileName::DirExists( fn.GetFullPath() ) )
             {
                 SetSymModificationTime( KIPLATFORM::IO::TimestampDir(
                         fn.GetFullPath(),
