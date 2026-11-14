@@ -1205,6 +1205,9 @@ void LIBRARY_MANAGER_ADAPTER::RestartAsyncLoad()
 
 void LIBRARY_MANAGER_ADAPTER::LeakCachesAtExit()
 {
+    // Else a load still running could publish a plugin after the marking below
+    abortLoad( true );
+
     {
         std::shared_lock lock( m_librariesMutex );
 

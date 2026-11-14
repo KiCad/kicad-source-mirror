@@ -195,7 +195,8 @@ public:
     /// AsyncLoad() that started. Unlike AsyncLoad() it waits for a load lock held elsewhere, so it is never dropped.
     void RestartAsyncLoad();
 
-    /// Marks the cache of each library this adapter owns to be left unfreed when its plugin is destroyed.
+    /// Ends every load, then marks the cache of each library this adapter owns to be left unfreed when its plugin is
+    /// destroyed.
     /// Only for use as the process exits.
     void LeakCachesAtExit();
 
