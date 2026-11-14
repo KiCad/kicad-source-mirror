@@ -1326,9 +1326,6 @@ public:
         m_enableLimitedView = aEnable;
     }
 
-    void LockY( bool aLock ) { m_yLocked = aLock; }
-    bool GetYLocked() const { return m_yLocked; }
-
     void ZoomUndo();
     void ZoomRedo();
     int UndoZoomStackSize() const { return m_undoZoomStack.size(); }
@@ -1410,8 +1407,6 @@ protected:
     int m_scrY;             // !< Current view's Y dimension
     int m_clickedX;         // !< Last mouse click X position, for centering and zooming the view
     int m_clickedY;         // !< Last mouse click Y position, for centering and zooming the view
-
-    bool m_yLocked;
 
     /** These are updated in Fit, ZoomIn, ZoomOut, ZoomRect, SetXView, SetYView and may be different
      *  from the real borders (layer coordinates) only if lock aspect ratio is true.

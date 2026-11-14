@@ -2263,7 +2263,7 @@ SIM_VIEW* SIM_PLOT_TAB::AddView()
 
     // Fixed Y axis ranges apply across all views in the tab, so a newly added view must
     // pick up whatever locks are already in effect on the existing ones.
-    if( SIM_VIEW* firstView = m_views.empty() ? nullptr : m_views[0] )
+    if( SIM_VIEW* firstView = GetDefaultView() )
     {
         double min, max;
 

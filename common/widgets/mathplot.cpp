@@ -1974,12 +1974,6 @@ void mpWindow::ZoomRect( wxPoint p0, wxPoint p1 )
     double  zoom_y_min = p0y<p1y ? p0y : p1y;
     double  zoom_y_max = p0y>p1y ? p0y : p1y;
 
-    if( m_yLocked )
-    {
-        zoom_y_min = m_desiredYmin;
-        zoom_y_max = m_desiredYmax;
-    }
-
     Fit( zoom_x_min, zoom_x_max, zoom_y_min, zoom_y_max );
 
     // Even with the input rectangle constrained to the plot area, it's still possible for the
@@ -2234,14 +2228,6 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
 
 void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor, wxOrientation directions )
 {
-    if( m_yLocked )
-    {
-        if( directions == wxVERTICAL )
-            return;
-
-        directions = wxHORIZONTAL;
-    }
-
     const bool horizontally = ( directions & wxHORIZONTAL ) != 0;
     const bool vertically   = ( directions & wxVERTICAL )   != 0;
 
@@ -2393,13 +2379,8 @@ void mpWindow::PerformMouseWheelAction( wxMouseEvent& event, MouseWheelAction ac
         break;
 
     case MouseWheelAction::PAN_UP_DOWN:
-        if( !m_yLocked )
-        {
-            SetYView( m_posY + changeUnitsY, m_desiredYmax + changeUnitsY,
-                      m_desiredYmin + changeUnitsY );
-            UpdateAll();
-        }
-
+        SetYView( m_posY + changeUnitsY, m_desiredYmax + changeUnitsY, m_desiredYmin + changeUnitsY );
+        UpdateAll();
         break;
 
     case MouseWheelAction::ZOOM:
@@ -2652,7 +2633,6 @@ mpWindow::mpWindow( DelegatingContructorTag, Ts&&... windowArgs ) :
         m_scrY( 64 ),
         m_clickedX( 0 ),
         m_clickedY( 0 ),
-        m_yLocked( false ),
         m_desiredXmin( 0.0 ),
         m_desiredXmax( 1.0 ),
         m_desiredYmin( 0.0 ),
