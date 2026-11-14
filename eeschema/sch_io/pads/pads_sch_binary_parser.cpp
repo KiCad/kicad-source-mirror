@@ -4842,19 +4842,16 @@ namespace
         aModel.settings.source = settingsSource;
 
         constexpr size_t PAGE_FIELD_OFFSET = 264;
-        constexpr size_t PAGE_FIELD_BYTES = 11;
+        constexpr size_t PAGE_FIELD_MAX_BYTES = 11;
         const size_t     pageFieldOffset = settingsOffset + PAGE_FIELD_OFFSET;
         size_t           pageFieldEnd = pageFieldOffset;
 
-        while( pageFieldEnd < pageFieldOffset + PAGE_FIELD_BYTES && aBytes[pageFieldEnd] != 0 )
+        while( pageFieldEnd < pageFieldOffset + PAGE_FIELD_MAX_BYTES && aBytes[pageFieldEnd] != 0 )
             ++pageFieldEnd;
 
         SOURCE_PROVENANCE pageSource = settingsSource;
         pageSource.absoluteOffset += PAGE_FIELD_OFFSET;
-        pageSource.length = PAGE_FIELD_BYTES;
-
-        if( pageFieldEnd == pageFieldOffset + PAGE_FIELD_BYTES )
-            throwDecodeError( pageSource, wxS( "invalid design page-size field" ) );
+        pageSource.length = pageFieldEnd - PAGE_FIELD_OFFSET;
 
         std::string pageField( aBytes.begin() + pageFieldOffset, aBytes.begin() + pageFieldEnd );
         std::string pageDesignator;
