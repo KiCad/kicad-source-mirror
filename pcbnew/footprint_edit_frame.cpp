@@ -2111,6 +2111,10 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( [[maybe_unused]] bool aProgress )
     for( const LIB_ID& libId : expanded )
         GetLibTree()->ExpandLibId( libId );
 
+    // A filter selects its best match, which tree actions would take for the user's choice
+    if( !targetSelected )
+        GetLibTree()->Unselect();
+
     if( target.IsValid() )
     {
         if( adapter->FindItem( target ) )
