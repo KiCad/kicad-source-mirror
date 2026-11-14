@@ -1261,6 +1261,8 @@ bool convertSeparators( wxString* value )
 }
 
 
+// Return true if aStr can be parsed as a numeric value (including units and scalers, so
+// something like "4K7Ω" will return true).
 bool QuacksLikeADuck( const wxString& aStr, double* aValue )
 {
     if( aValue )

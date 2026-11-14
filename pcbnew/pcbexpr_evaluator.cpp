@@ -575,10 +575,13 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             // If it quacks like a duck, it is a duck
             double doubleVal;
 
-            if( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, str, doubleVal ) )
+            if( QuacksLikeADuck( str, &doubleVal ) )
                 return new LIBEVAL::VALUE( doubleVal );
 
-            return new LIBEVAL::VALUE( str );
+            bool isWildcard = false;
+            bool isLiteral = false;
+
+            return new LIBEVAL::VALUE( str, isWildcard, isLiteral );
         }
 
         case PCBEXPR_PROPERTY_KIND::ENUM:

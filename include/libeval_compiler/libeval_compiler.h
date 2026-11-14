@@ -216,13 +216,13 @@ public:
             m_isDeferredStr( false )
     {}
 
-    VALUE( const wxString& aStr, bool aIsWildcard = false ) :
+    VALUE( const wxString& aStr, bool aIsWildcard = false, bool aIsLiteral = true ) :
             m_type( VT_STRING ),
             m_units( EDA_UNITS::UNSCALED ),
             m_valueDbl( 0 ),
             m_valueStr( aStr ),
             m_stringIsWildcard( aIsWildcard ),
-            m_stringIsLiteral( true ),
+            m_stringIsLiteral( aIsLiteral ),
             m_isDeferredDbl( false ),
             m_isDeferredStr( false )
     {}
