@@ -137,7 +137,7 @@ public:
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
-    void LeakCacheAtExit() override;
+    void LeakCacheAtExit() override { m_leakCacheAtExit = true; }
 
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
@@ -191,6 +191,7 @@ protected:
     SCHEMATIC*              m_schematic = nullptr;  ///< init() reads this before assigning it.
     OUTPUTFORMATTER*        m_out;              ///< The formatter for saving SCH_SCREEN objects.
     SCH_IO_KICAD_SEXPR_LIB_CACHE* m_cache;
+    bool                    m_leakCacheAtExit = false;
 
     /// initialize PLUGIN like a constructor would.
     void init( SCHEMATIC* aSchematic, const std::map<std::string, UTF8>* aProperties = nullptr );

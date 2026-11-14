@@ -18,8 +18,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <utility>
-
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
@@ -3805,13 +3803,10 @@ PCB_IO_KICAD_SEXPR::PCB_IO_KICAD_SEXPR( int aControlFlags ) :
 
 PCB_IO_KICAD_SEXPR::~PCB_IO_KICAD_SEXPR()
 {
-    delete m_cache;
-}
-
-
-void PCB_IO_KICAD_SEXPR::LeakCacheAtExit()
-{
-    LSAN_IGNORE( std::exchange( m_cache, nullptr ) );
+    if( m_leakCacheAtExit )
+        LSAN_IGNORE( m_cache );
+    else
+        delete m_cache;
 }
 
 

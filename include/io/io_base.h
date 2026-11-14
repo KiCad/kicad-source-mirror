@@ -171,8 +171,9 @@ public:
     virtual void ResumeLoad() noexcept {}
 
     /**
-     * Give up the library cache without freeing it.  Only for use as the process exits, since freeing the caches
-     * of thousands of libraries one item at a time holds it up for seconds.  Plugins without a large cache ignore it.
+     * Have the destructor leave the library cache unfreed.  Only for use as the process exits, since freeing the
+     * caches of thousands of libraries one item at a time holds it up for seconds.  The cache stays usable until the
+     * plugin is destroyed, so threads still reading it are safe.  Plugins without a large cache ignore it.
      */
     virtual void LeakCacheAtExit() {}
 

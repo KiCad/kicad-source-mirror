@@ -21,7 +21,6 @@
  */
 
 #include <algorithm>
-#include <utility>
 
 #include <fmt/format.h>
 #include <magic_enum.hpp>
@@ -87,13 +86,10 @@ SCH_IO_KICAD_SEXPR::SCH_IO_KICAD_SEXPR() : SCH_IO( wxS( "Eeschema s-expression" 
 
 SCH_IO_KICAD_SEXPR::~SCH_IO_KICAD_SEXPR()
 {
-    delete m_cache;
-}
-
-
-void SCH_IO_KICAD_SEXPR::LeakCacheAtExit()
-{
-    LSAN_IGNORE( std::exchange( m_cache, nullptr ) );
+    if( m_leakCacheAtExit )
+        LSAN_IGNORE( m_cache );
+    else
+        delete m_cache;
 }
 
 

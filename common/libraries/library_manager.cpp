@@ -1205,11 +1205,8 @@ void LIBRARY_MANAGER_ADAPTER::RestartAsyncLoad()
 
 void LIBRARY_MANAGER_ADAPTER::LeakCachesAtExit()
 {
-    // Joins every worker, so nothing else reads the plugins below
-    abortLoad( true );
-
     {
-        std::unique_lock lock( m_librariesMutex );
+        std::shared_lock lock( m_librariesMutex );
 
         for( LIB_DATA& lib : m_libraries | std::views::values )
         {
@@ -1218,7 +1215,7 @@ void LIBRARY_MANAGER_ADAPTER::LeakCachesAtExit()
         }
     }
 
-    std::unique_lock lock( globalLibsMutex() );
+    std::shared_lock lock( globalLibsMutex() );
 
     for( LIB_DATA& lib : globalLibs() | std::views::values )
     {

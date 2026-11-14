@@ -195,7 +195,7 @@ public:
     /// AsyncLoad() that started. Unlike AsyncLoad() it waits for a load lock held elsewhere, so it is never dropped.
     void RestartAsyncLoad();
 
-    /// Ends every load, then gives up the cache of each library this adapter owns without freeing it.
+    /// Marks the cache of each library this adapter owns to be left unfreed when its plugin is destroyed.
     /// Only for use as the process exits.
     void LeakCachesAtExit();
 
@@ -445,8 +445,8 @@ public:
     /// Queues again the libraries that any cancelling abort left INVALID, for every registered adapter
     void RestartAsyncLoads();
 
-    /// Gives up the library caches of every adapter without freeing them. Only for use as the process exits, just
-    /// before the manager is destroyed.
+    /// Marks the library caches of every adapter to be left unfreed when their plugins are destroyed. Only for use
+    /// as the process exits, just before the manager is destroyed.
     void LeakCachesAtExit();
 
     void RegisterAdapter( LIBRARY_TABLE_TYPE aType,
