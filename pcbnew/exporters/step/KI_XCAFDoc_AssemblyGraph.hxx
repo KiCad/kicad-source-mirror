@@ -19,9 +19,14 @@
 #include <NCollection_IndexedMap.hxx>
 #include <Standard.hxx>
 #include <Standard_Type.hxx>
+#include <Standard_Version.hxx>
 #include <TCollection_AsciiString.hxx>
 #include <TColStd_PackedMapOfInteger.hxx>
 #include <TDF_Label.hxx>
+
+#if OCC_VERSION_HEX < 0x080000
+#include <TDF_LabelIndexedMap.hxx>
+#endif
 
 class TDocStd_Document;
 class XCAFDoc_ShapeTool;
@@ -155,7 +160,13 @@ public:
 
   //! \brief Returns the unordered set of graph nodes.
   //! \return graph nodes.
-  const NCollection_IndexedMap<TDF_Label>& GetNodes() const
+#if OCC_VERSION_HEX >= 0x080000
+  using LabelMap = NCollection_IndexedMap<TDF_Label>;
+#else
+  using LabelMap = TDF_LabelIndexedMap;
+#endif
+
+  const LabelMap& GetNodes() const
   {
     return myNodes;
   }
@@ -208,7 +219,7 @@ private:
 
   Handle(XCAFDoc_ShapeTool)                       myShapeTool;    //!< Document shape tool.
   TColStd_PackedMapOfInteger                      myRoots;        //!< IDs of the root nodes.
-  NCollection_IndexedMap<TDF_Label>                myNodes;        //!< Maps assembly/part entries to graph node IDs.
+  LabelMap                                        myNodes;        //!< Maps assembly/part entries to graph node IDs.
   AdjacencyMap                                    myAdjacencyMap; //!< "Part-of" relations.
   NCollection_DataMap<int, NodeType> myNodeTypes;    //!< Node types.
   NCollection_DataMap<int, 

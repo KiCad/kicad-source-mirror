@@ -128,11 +128,13 @@
 
 #include <BRepBndLib.hxx>
 #include <Bnd_BoundSortBox.hxx>
+
 #if OCC_VERSION_HEX >= 0x080000
 #include <NCollection_HArray1.hxx>
 #else
 #include <Bnd_HArray1OfBox.hxx>
 #endif
+
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 
@@ -147,6 +149,10 @@
 
 #include <RWGltf_CafWriter.hxx>
 #include <StlAPI_Writer.hxx>
+
+#if OCC_VERSION_HEX < 0x080000
+#include <TColStd_IndexedDataMapOfStringString.hxx>
+#endif
 
 #include "glb_utils.h"
 
@@ -4156,7 +4162,12 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 #if OCC_VERSION_HEX >= 0x070700
     cafWriter.SetParallel( true );
 #endif
+
+#if OCC_VERSION_HEX >= 0x080000
     NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString> metadata;
+#else
+    TColStd_IndexedDataMapOfStringString metadata;
+#endif
 
     metadata.Add( TCollection_AsciiString( "pcb_name" ),
                   TCollection_ExtendedString( fn.GetName().wc_str() ) );
