@@ -25,6 +25,8 @@
 #include <io/idf/idf_common.h>
 #include <io/idf/idf_helpers.h>
 
+#include "string_utils.h"
+
 using namespace std;
 using namespace IDF3;
 
@@ -115,7 +117,7 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString, bool
 
     }
 
-    aIDFString = ostr.str();
+    aIDFString = hasQuotes ? UnescapeString( ostr.str() ) : ostr.str();
     aIndex = idx;
 
     return true;
