@@ -221,6 +221,7 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses( const HANDLER_CON
         }
     }
 
+    netSettings->ClearNetclasses();
     netSettings->SetNetclasses( netClasses );
     requestNetSettingsNotification();
 
