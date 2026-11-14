@@ -806,6 +806,27 @@ const TOOL_ACTION* SCH_BASE_FRAME::drawArcAction( ARC_DRAW_MODE aMode ) const
 
 void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
 {
+    std::optional<wxString> uri;
+
+    if( aID )
+        uri = Pgm().GetLibraryManager().GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aID->GetLibNickname() );
+
+    wxString tmp = uri ? ExpandEnvVarSubstitutions( *uri, &Prj() ) : wxString();
+
+    // Re-arming the same library would take a change still in the debounce as the new baseline
+    if( m_watcher && uri )
+    {
+        wxFileName target;
+
+        if( wxFileName::DirExists( tmp ) )
+            target.AssignDir( tmp );
+        else
+            target.Assign( tmp );
+
+        if( target == m_watcherFileName )
+            return;
+    }
+
     Unbind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
 
     if( m_watcher )
@@ -819,16 +840,11 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     if( !aID )
         return;
 
-    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    std::optional<wxString> uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aID->GetLibNickname() );
-
     if( !uri )
     {
         wxLogTrace( traceLibWatch, "Could not get URI for library %s", wxString( aID->GetLibNickname().c_str() ) );
         return;
     }
-
-    wxString tmp = ExpandEnvVarSubstitutions( *uri, &Prj() );
 
     wxLogTrace( traceLibWatch, "Setting up watcher for %s", tmp );
 
