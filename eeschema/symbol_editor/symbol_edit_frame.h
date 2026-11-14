@@ -506,6 +506,8 @@ protected:
 
     void updateSelectionFilterVisbility() override;
 
+    bool hasUnsavedLibraryEdits( const wxString& aLibNickname ) const override;
+
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
 private:

@@ -2276,6 +2276,13 @@ bool SYMBOL_EDIT_FRAME::IsContentModified() const
 }
 
 
+bool SYMBOL_EDIT_FRAME::hasUnsavedLibraryEdits( const wxString& aLibNickname ) const
+{
+    // Edits in any tab of the library live in its buffer, which a reload replaces
+    return SCH_BASE_FRAME::hasUnsavedLibraryEdits( aLibNickname ) || m_libMgr->IsLibraryModified( aLibNickname );
+}
+
+
 void SYMBOL_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount )
 {
     if( aItemCount == 0 )

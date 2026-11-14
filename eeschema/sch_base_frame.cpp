@@ -846,6 +846,8 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
         return;
     }
 
+    m_watcherLibName = aID->GetLibNickname().wx_str();
+
     wxLogTrace( traceLibWatch, "Setting up watcher for %s", tmp );
 
     if( wxFileName::DirExists( tmp ) )
@@ -989,7 +991,7 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     m_inSymChangeTimerEvent = true;
 
-    if( !GetScreen()->IsContentModified()
+    if( !hasUnsavedLibraryEdits( m_watcherLibName )
           || IsOK( this, _( "The library containing the current symbol has changed.\n"
                             "Do you want to reload the library?" ) ) )
     {
