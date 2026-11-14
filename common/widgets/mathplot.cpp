@@ -970,8 +970,22 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
     {
         minVvis = m_axisMin;
         maxVvis = m_axisMax;
-        m_offset = -m_axisMin;
-        m_scale = 1.0 / ( m_axisMax - m_axisMin );
+
+        double plotTop = w.p2y( w.GetMarginTop() );
+        double plotBottom = w.p2y( w.GetScrY() - w.GetMarginBottom() );
+        double plotSpan = plotTop - plotBottom;
+        double axisSpan = m_axisMax - m_axisMin;
+
+        if( axisSpan > 0.0 && plotSpan > 0.0 )
+        {
+            m_scale = plotSpan / axisSpan;
+            m_offset = plotBottom / m_scale - m_axisMin;
+        }
+        else
+        {
+            m_offset = -m_axisMin;
+            m_scale = 1.0 / axisSpan;
+        }
     }
     else if( m_masterScale )
     {
