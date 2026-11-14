@@ -80,15 +80,17 @@
 #include <Standard_Failure.hxx>
 #include <Standard_Handle.hxx>
 #include <Standard_Version.hxx>
+#include <TCollection_AsciiString.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TDocStd_Document.hxx>
 #include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_ChildIterator.hxx>
+#include <NCollection_IndexedDataMap.hxx>
+#include <NCollection_IndexedMap.hxx>
 #include <NCollection_Sequence.hxx>
-#include <TColStd_IndexedDataMapOfStringString.hxx>
 #include <TDF_Tool.hxx>
-#include <TopTools_IndexedMapOfShape.hxx>
+#include <TopTools_ShapeMapHasher.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <XCAFApp_Application.hxx>
@@ -126,7 +128,11 @@
 
 #include <BRepBndLib.hxx>
 #include <Bnd_BoundSortBox.hxx>
+#if OCC_VERSION_HEX >= 0x080000
+#include <NCollection_HArray1.hxx>
+#else
 #include <Bnd_HArray1OfBox.hxx>
+#endif
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 
@@ -154,6 +160,16 @@
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
+
+
+static const char* occFailureMessage( const Standard_Failure& aFailure )
+{
+#if OCC_VERSION_HEX >= 0x080000
+    return aFailure.what();
+#else
+    return aFailure.GetMessageString();
+#endif
+}
 
 // nominal offset from the board
 static constexpr double BOARD_OFFSET = 0.05;
@@ -715,7 +731,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
         aReporter->Report( wxString::Format( _( "OpenCASCADE error while fusing shapes: %s\n"
                                                 "This may indicate insufficient memory. Consider "
                                                 "disabling shape fusing or reducing board complexity." ),
-                                             e.GetMessageString() ),
+                                             occFailureMessage( e ) ),
                           RPT_SEVERITY_ERROR );
         return false;
     }
@@ -781,7 +797,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
         catch( const Standard_Failure& e )
         {
             aReporter->Report( wxString::Format( _( "OpenCASCADE error while unifying shapes: %s" ),
-                                                 e.GetMessageString() ),
+                                                 occFailureMessage( e ) ),
                               RPT_SEVERITY_ERROR );
             return false;
         }
@@ -1298,9 +1314,9 @@ bool STEP_PCB_MODEL::AddCounterbore( const VECTOR2I& aPosition, int aDiameter, i
     }
     catch( const Standard_Failure& e )
     {
-        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: EXCEPTION - %s" ), e.GetMessageString() );
+        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: EXCEPTION - %s" ), occFailureMessage( e ) );
         m_reporter->Report( wxString::Format( _( "OCC exception creating counterbore: %s" ),
-                                              e.GetMessageString() ),
+                                              occFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -1453,9 +1469,9 @@ bool STEP_PCB_MODEL::AddCountersink( const VECTOR2I& aPosition, int aDiameter, i
     }
     catch( const Standard_Failure& e )
     {
-        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: EXCEPTION - %s" ), e.GetMessageString() );
+        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: EXCEPTION - %s" ), occFailureMessage( e ) );
         m_reporter->Report( wxString::Format( _( "OCC exception creating countersink: %s" ),
-                                              e.GetMessageString() ),
+                                              occFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2121,7 +2137,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR
     catch( const Standard_Failure& e )
     {
         m_reporter->Report( wxString::Format( _( "OCC exception building shape segment: %s" ),
-                                              e.GetMessageString() ),
+                                              occFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2136,7 +2152,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR
     catch( const Standard_Failure& e )
     {
         m_reporter->Report( wxString::Format( _( "OCC exception building face: %s" ),
-                                              e.GetMessageString() ),
+                                              occFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2354,7 +2370,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
     catch( const Standard_Failure& e )
     {
         aReporter->Report( wxString::Format( _( "OCC exception creating wire: %s" ),
-                                             e.GetMessageString() ),
+                                             occFailureMessage( e ) ),
                            RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2525,7 +2541,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             {
                 m_reporter->Report( wxString::Format( _( "OCC exception creating contour %d: %s" ),
                                                       static_cast<int>( contId ),
-                                                      e.GetMessageString() ),
+                                                      occFailureMessage( e ) ),
                                     RPT_SEVERITY_ERROR );
                 return false;
             }
@@ -2696,7 +2712,12 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                 // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
                 Bnd_Box brdWithHolesBndBox = brdBndBox;
 
+#if OCC_VERSION_HEX >= 0x080000
+                Handle( NCollection_HArray1<Bnd_Box> ) holeBoxSet =
+                        new NCollection_HArray1<Bnd_Box>( 0, input.size() - 1 );
+#else
                 Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, input.size() - 1 );
+#endif
                 holeBoxes.resize( input.size() );
 
                 for( size_t i = 0; i < input.size(); i++ )
@@ -3501,7 +3522,7 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
     file << "]]></shape>" << std::endl;
     file << "    <topology>" << std::endl;
 
-    TopTools_IndexedMapOfShape mainMap;
+    NCollection_IndexedMap<TopoDS_Shape, TopTools_ShapeMapHasher> mainMap;
     TopExp::MapShapes( shape, mainMap );
     std::set<int> topo[4];
 
@@ -4135,7 +4156,7 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 #if OCC_VERSION_HEX >= 0x070700
     cafWriter.SetParallel( true );
 #endif
-    TColStd_IndexedDataMapOfStringString metadata;
+    NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString> metadata;
 
     metadata.Add( TCollection_AsciiString( "pcb_name" ),
                   TCollection_ExtendedString( fn.GetName().wc_str() ) );
@@ -4216,7 +4237,7 @@ bool STEP_PCB_MODEL::WritePLY( const wxString& aFileName )
     cafWriter.ChangeCoordinateSystemConverter().SetInputLengthUnit( 0.001 );
     cafWriter.ChangeCoordinateSystemConverter().SetInputCoordinateSystem( RWMesh_CoordinateSystem_Zup );
 
-    TColStd_IndexedDataMapOfStringString metadata;
+    NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString> metadata;
 
     metadata.Add( TCollection_AsciiString( "pcb_name" ),
                   TCollection_ExtendedString( fn.GetName().wc_str() ) );
