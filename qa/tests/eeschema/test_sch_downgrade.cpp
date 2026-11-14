@@ -1559,28 +1559,37 @@ BOOST_AUTO_TEST_CASE( UnrepresentableErcExclusionsAreReportedAndDropped )
 }
 
 
+// Derived from the reviewed versions so reviewing a schema bump cannot turn a case into a current schema
 BOOST_AUTO_TEST_CASE( UnreviewedProjectSchemasBlockWithoutMutation )
 {
+    using POINTER = nlohmann::json::json_pointer;
+
+    const PROJECT_SCHEMAS_REVIEWED reviewed;
+
+    const std::vector<std::pair<POINTER, int>> schemas = {
+        { POINTER( "/meta/version" ), reviewed.m_Project + 1 },
+        { POINTER( "/net_settings/meta/version" ), reviewed.m_NetSettings + 1 },
+        { POINTER( "/tuning_profiles/meta/version" ), reviewed.m_TuningProfiles + 1 },
+        { POINTER( "/component_class_settings/meta/version" ), reviewed.m_ComponentClasses + 1 },
+        { POINTER( "/erc/meta/version" ), reviewed.m_Erc + 1 },
+        { POINTER( "/board/design_settings/meta/version" ), reviewed.m_BoardDesignSettings + 1 },
+    };
+
     for( const auto& target : { kicad9, kicad10 } )
     {
-        for( int schema = 0; schema < 5; ++schema )
+        for( const auto& [pointer, version] : schemas )
         {
-            nlohmann::json document = currentErcExclusionDocument();
-            if( schema == 0 )
-                document["meta"]["version"] = 5;
-            else if( schema == 1 )
-                document["board"]["design_settings"]["meta"]["version"] = 4;
-            else if( schema == 2 )
-                document["erc"]["meta"]["version"] = 2;
-            else if( schema == 3 )
-                document["tuning_profiles"]["meta"]["version"] = 3;
-            else
-                document["net_settings"]["meta"]["version"] = 6;
-            const nlohmann::json original = document;
-            COMPATIBILITY_REPORT report;
-            DowngradeProjectFileJson( document, target, report );
-            BOOST_CHECK( report.IsBlocked() );
-            BOOST_CHECK( document == original );
+            BOOST_TEST_CONTEXT( pointer.to_string() )
+            {
+                nlohmann::json document = currentErcExclusionDocument();
+                document[pointer] = version;
+
+                const nlohmann::json original = document;
+                COMPATIBILITY_REPORT report;
+                DowngradeProjectFileJson( document, target, report );
+                BOOST_CHECK( report.IsBlocked() );
+                BOOST_CHECK( document == original );
+            }
         }
     }
 }
