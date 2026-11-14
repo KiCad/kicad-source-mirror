@@ -518,39 +518,39 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
                 const wxString& name = it->second.property->Name();
 
                 if( name == wxT( "Do not Populate" ) )
-                    return new LIBEVAL::VALUE( static_cast<double>( fp->GetDNPForVariant( variant ) ) );
+                    return new LIBEVAL::VALUE( (double) fp->GetDNPForVariant( variant ) );
                 else if( name == wxT( "Exclude From Bill of Materials" ) )
-                    return new LIBEVAL::VALUE( static_cast<double>( fp->GetExcludedFromBOMForVariant( variant ) ) );
+                    return new LIBEVAL::VALUE( (double) fp->GetExcludedFromBOMForVariant( variant ) );
                 else if( name == wxT( "Exclude From Simulation" ) )
-                    return new LIBEVAL::VALUE( static_cast<double>( fp->GetExcludedFromSimForVariant( variant ) ) );
+                    return new LIBEVAL::VALUE( (double) fp->GetExcludedFromSimForVariant( variant ) );
                 else if( name == wxT( "Exclude From Position Files" ) )
-                    return new LIBEVAL::VALUE(
-                            static_cast<double>( fp->GetExcludedFromPosFilesForVariant( variant ) ) );
+                    return new LIBEVAL::VALUE( (double) fp->GetExcludedFromPosFilesForVariant( variant ) );
             }
         }
 
         switch( it->second.kind )
         {
         case PCBEXPR_PROPERTY_KIND::INT_KIND:
-            return new LIBEVAL::VALUE( static_cast<double>( item->Get<int>( it->second.property ) ) );
+            return new LIBEVAL::VALUE( (double) item->Get<int>( it->second.property ) );
 
         case PCBEXPR_PROPERTY_KIND::OPTIONAL_INT:
         {
             std::optional<int> val = item->Get<std::optional<int>>( it->second.property );
 
             if( val )
-                return new LIBEVAL::VALUE( static_cast<double>( *val ) );
+                return new LIBEVAL::VALUE( (double) *val );
 
             return LIBEVAL::VALUE::MakeNullValue();
         }
 
         case PCBEXPR_PROPERTY_KIND::UNSIGNED:
-            return new LIBEVAL::VALUE( static_cast<double>( item->Get<unsigned>( it->second.property ) ) );
+            return new LIBEVAL::VALUE( (double) item->Get<unsigned>( it->second.property ) );
 
         case PCBEXPR_PROPERTY_KIND::LONG_LONG:
-            return new LIBEVAL::VALUE( static_cast<double>( item->Get<long long int>( it->second.property ) ) );
+            return new LIBEVAL::VALUE( (double) item->Get<long long int>( it->second.property ) );
 
-        case PCBEXPR_PROPERTY_KIND::DOUBLE: return new LIBEVAL::VALUE( item->Get<double>( it->second.property ) );
+        case PCBEXPR_PROPERTY_KIND::DOUBLE:
+            return new LIBEVAL::VALUE( item->Get<double>( it->second.property ) );
 
         case PCBEXPR_PROPERTY_KIND::OPTIONAL_DOUBLE:
         {
@@ -563,7 +563,7 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         }
 
         case PCBEXPR_PROPERTY_KIND::BOOL_KIND:
-            return new LIBEVAL::VALUE( static_cast<double>( item->Get<bool>( it->second.property ) ) );
+            return new LIBEVAL::VALUE( (double) item->Get<bool>( it->second.property ) );
 
         case PCBEXPR_PROPERTY_KIND::STRING:
         {
@@ -613,7 +613,8 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         case PCBEXPR_PROPERTY_KIND::COLOR:
             return new LIBEVAL::VALUE( item->Get<COLOR4D>( it->second.property ).ToCSSString() );
 
-        case PCBEXPR_PROPERTY_KIND::UNSUPPORTED: return new LIBEVAL::VALUE();
+        case PCBEXPR_PROPERTY_KIND::UNSUPPORTED:
+            return new LIBEVAL::VALUE();
         }
     }
 
