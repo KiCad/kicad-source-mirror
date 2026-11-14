@@ -337,8 +337,8 @@ PL_SELECTION& PL_SELECTION_TOOL::RequestSelection()
 
 bool PL_SELECTION_TOOL::selectMultiple()
 {
-    bool cancelled = false;     // Was the tool cancelled while it was running?
-    m_multiple = true;          // Multiple selection mode is active
+    bool cancelled = false;         // Was the tool cancelled while it was running?
+    m_inSelectMultiple = true;      // A selection box is being dragged out
     KIGFX::VIEW* view = getView();
 
     KIGFX::PREVIEW::SELECTION_AREA area;
@@ -430,7 +430,7 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
     // Stop drawing the selection box
     view->Remove( &area );
-    m_multiple = false;         // Multiple selection mode is inactive
+    m_inSelectMultiple = false;         // Multiple selection mode is inactive
 
     if( !cancelled )
         m_selection.ClearReferencePoint();

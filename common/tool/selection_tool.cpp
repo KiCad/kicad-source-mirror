@@ -33,7 +33,7 @@ SELECTION_TOOL::SELECTION_TOOL( const std::string& aName ) :
     m_additive( false ),
     m_subtractive( false ),
     m_exclusive_or( false ),
-    m_multiple( false ),
+    m_inSelectMultiple( false ),
     m_skip_heuristics( false ),
     m_highlight_modifier( false ),
     m_drag_additive( false ),

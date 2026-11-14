@@ -131,8 +131,7 @@ protected:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    virtual void unhighlight( EDA_ITEM* aItem, int aHighlightMode,
-                              SELECTION* aGroup = nullptr ) = 0;
+    virtual void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) = 0;
 
     /**
      * Set the configuration of m_additive, m_subtractive, m_exclusive_or, m_skip_heuristics
@@ -156,7 +155,7 @@ protected:
     bool            m_additive;          ///< Items should be added to sel (instead of replacing).
     bool            m_subtractive;       ///< Items should be removed from selection.
     bool            m_exclusive_or;      ///< Items' selection state should be toggled.
-    bool            m_multiple;          ///< Multiple selection mode is active.
+    bool            m_inSelectMultiple;  ///< A selection box is being dragged out.
 
     /// Show disambiguation menu for all items under the cursor rather than trying to narrow
     /// them down first using heuristics.

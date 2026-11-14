@@ -1489,7 +1489,6 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             // Passing reactivation would nest another selection loop and retain its view items.
             evt->SetPassEvent( false );
-            m_frame->GetCanvas()->SetCurrentCursor( m_nonModifiedCursor );
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
@@ -1753,7 +1752,7 @@ int SCH_SELECTION_TOOL::disambiguateCursor( const TOOL_EVENT& aEvent )
 
 void SCH_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
 {
-    if( m_frame->ToolStackIsEmpty() && !m_multiple )
+    if( m_frame->IsActive() && m_frame->IsEnabled() && m_frame->ToolStackIsEmpty() && !m_inSelectMultiple )
     {
         wxMouseState keyboardState = wxGetMouseState();
 
@@ -2047,7 +2046,7 @@ bool SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const std::vector<
 int SCH_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
     SCH_COLLECTOR collection;
-    m_multiple = true;          // Multiple selection mode is active
+    m_inSelectMultiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
 
     std::vector<EDA_ITEM*> sheetPins;
@@ -2096,7 +2095,7 @@ int SCH_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_multiple = false;
+    m_inSelectMultiple = false;
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     m_frame->GetCanvas()->ForceRefresh();
@@ -2105,7 +2104,7 @@ int SCH_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
 {
-    m_multiple = true;          // Multiple selection mode is active
+    m_inSelectMultiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
 
     // hold all visible items
@@ -2137,7 +2136,7 @@ int SCH_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_multiple = false;
+    m_inSelectMultiple = false;
 
     m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     m_frame->GetCanvas()->ForceRefresh();
@@ -2661,7 +2660,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
         return false;
 
     bool cancelled = false;     // Was the tool canceled while it was running?
-    m_multiple = true;          // Multiple selection mode is active
+    m_inSelectMultiple = true;          // Multiple selection mode is active
     KIGFX::VIEW* view = getView();
 
     KIGFX::PREVIEW::SELECTION_AREA area;
@@ -2722,7 +2721,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 
     // Stop drawing the selection box
     view->Remove( &area );
-    m_multiple = false;         // Multiple selection mode is inactive
+    m_inSelectMultiple = false;         // Multiple selection mode is inactive
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
@@ -2734,7 +2733,7 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 bool SCH_SELECTION_TOOL::selectLasso()
 {
     bool cancelled = false;
-    m_multiple = true;
+    m_inSelectMultiple = true;
     KIGFX::PREVIEW::SELECTION_AREA area;
     getView()->Add( &area );
     getView()->SetVisible( &area, true );
@@ -2822,7 +2821,7 @@ bool SCH_SELECTION_TOOL::selectLasso()
     getViewControls()->SetAutoPan( false );
     getView()->SetVisible( &area, false );
     getView()->Remove( &area );
-    m_multiple = false;
+    m_inSelectMultiple = false;
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
@@ -3255,7 +3254,7 @@ void SCH_SELECTION_TOOL::SelectCellsBetween( const VECTOR2D& start, const VECTOR
 bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
 {
     bool cancelled = false;
-    m_multiple = true;
+    m_inSelectMultiple = true;
 
     InitializeSelectionState( aTable );
 
@@ -3308,7 +3307,7 @@ bool SCH_SELECTION_TOOL::selectTableCells( SCH_TABLE* aTable )
 
     getViewControls()->SetAutoPan( false );
 
-    m_multiple = false;
+    m_inSelectMultiple = false;
 
     if( !cancelled )
         m_selection.ClearReferencePoint();

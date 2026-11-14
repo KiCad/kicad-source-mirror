@@ -400,16 +400,14 @@ void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 
 void PCB_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
 {
-    if( m_frame->IsActive() && m_frame->IsEnabled() && m_frame->ToolStackIsEmpty() )
+    if( m_frame->IsActive() && m_frame->IsEnabled() && m_frame->ToolStackIsEmpty() && !m_inSelectMultiple )
     {
         bool         dragSelected = m_frame->GetDragAction() == MOUSE_DRAG_ACTION::DRAG_SELECTED;
         wxMouseState keyboardState = wxGetMouseState();
 
         setModifiersState( keyboardState.ShiftDown(), keyboardState.ControlDown(), keyboardState.AltDown() );
 
-        if( m_multiple )
-            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-        else if( m_additive )
+        if( m_additive )
             m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
         else if( m_subtractive )
             m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
@@ -1366,7 +1364,7 @@ bool PCB_SELECTION_TOOL::toggleTableCellSelection( const VECTOR2I& aPosition )
 bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
-    m_multiple = true;          // Multiple selection mode is active
+    m_inSelectMultiple = true;          // Multiple selection mode is active
 
     // Shift+click can jitter into IsDrag, collapsing DragOrigin..Position to the press
     // point; honour the cached anchor instead.  Snapshot its coordinate so the drag loop
@@ -1442,7 +1440,7 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
 
     getViewControls()->SetAutoPan( false );
 
-    m_multiple = false;         // Multiple selection mode is inactive
+    m_inSelectMultiple = false;         // Multiple selection mode is inactive
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
@@ -1460,7 +1458,7 @@ int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
 bool PCB_SELECTION_TOOL::DragSelectionArea( TOOL_INTERACTIVE& aTool, AREA_PREVIEW aPreview )
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
-    m_multiple = true;          // Multiple selection mode is active
+    m_inSelectMultiple = true;          // Multiple selection mode is active
     KIGFX::VIEW*   view = getView();
 
     KIGFX::PREVIEW::SELECTION_AREA area;
@@ -1540,7 +1538,7 @@ bool PCB_SELECTION_TOOL::DragSelectionArea( TOOL_INTERACTIVE& aTool, AREA_PREVIE
 
     // Stop drawing the selection box
     view->Remove( &area );
-    m_multiple = false; // Multiple selection mode is inactive
+    m_inSelectMultiple = false; // Multiple selection mode is inactive
 
     if( !cancelled )
         m_selection.ClearReferencePoint();
