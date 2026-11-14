@@ -108,6 +108,8 @@ public:
 
     void ResumeLoad() noexcept override;
 
+    void StopBackgroundRefresh() override { stopBackgroundRefresh(); }
+
     DATABASE_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
     /// @return the symbol name a row is listed under, or empty if the row has no key

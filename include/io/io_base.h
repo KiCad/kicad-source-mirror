@@ -178,6 +178,12 @@ public:
     virtual void LeakCacheAtExit() {}
 
     /**
+     * Stop and join any thread that reads other libraries through the library adapter.  Called before the plugin
+     * is retired, while every library such a thread could reach is still alive.  The plugin is not used again.
+     */
+    virtual void StopBackgroundRefresh() {}
+
+    /**
      * Return true if the library at @a aLibraryPath is writable.
      *
      * The system libraries are typically read only because of where they are installed..

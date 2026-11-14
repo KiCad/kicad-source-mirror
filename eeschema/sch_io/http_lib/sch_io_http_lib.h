@@ -56,6 +56,8 @@ public:
     SCH_IO_HTTP_LIB();
     ~SCH_IO_HTTP_LIB() override { stopBackgroundRefresh(); }
 
+    void StopBackgroundRefresh() override { stopBackgroundRefresh(); }
+
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
         return IO_BASE::IO_FILE_DESC( _HKI( "KiCad HTTP library files" ), { FILEEXT::HTTPLibraryFileExtension } );

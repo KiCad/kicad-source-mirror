@@ -44,8 +44,7 @@ DESIGN_BLOCK_LIBRARY_ADAPTER::DESIGN_BLOCK_LIBRARY_ADAPTER( LIBRARY_MANAGER& aMa
 
 DESIGN_BLOCK_LIBRARY_ADAPTER::~DESIGN_BLOCK_LIBRARY_ADAPTER()
 {
-    resetProjectCache( true );
-    evictOwnedGlobalEntries();
+    retireAllLibraries();
 }
 
 

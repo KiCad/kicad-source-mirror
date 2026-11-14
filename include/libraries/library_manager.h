@@ -274,10 +274,21 @@ protected:
     /// Erases this adapter's own entries (LIB_DATA::global_owner == this) from the process-wide
     /// globalLibs() cache. The cached LIB_DATA::row pointers reference this manager's tables, so
     /// they must be dropped before the manager is destroyed or a later manager's fetchIfLoaded()
-    /// would dereference freed rows. Derived destructors must call this while globalLibs() is
-    /// still resolvable. Derived destructors must also call resetProjectCache() so plugin worker
-    /// threads are joined while the derived adapter is still alive.
+    /// would dereference freed rows.
     void evictOwnedGlobalEntries();
+
+    /// For derived destructors, while globalLibs() is still resolvable and plugin worker threads
+    /// can still call back into the derived adapter. Stops the refresh threads of both scopes
+    /// before either is retired, since a thread of one scope may read libraries of the other, then
+    /// resets the project cache and evicts this adapter's global entries.
+    void retireAllLibraries();
+
+    /// Stops the refresh threads of the plugins in @a aLibs that @a aRetiring selects, or of all
+    /// of them when it is empty. Called before those entries change, since the threads read other
+    /// entries through this adapter without holding its locks.
+    void stopRefreshThreads( std::map<wxString, LIB_DATA>& aLibs, std::shared_mutex& aMutex,
+                             const std::function<bool( const wxString& aNickname, const LIB_DATA& aLib )>&
+                                     aRetiring = {} );
 
     /// Aborts any async load in progress; blocks until fully done aborting.
     /// A cancelled library is left INVALID and recorded for RestartAsyncLoad(), so a caller that cancels and keeps
