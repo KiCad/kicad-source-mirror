@@ -56,6 +56,7 @@
 #include <unistd.h>
 #endif
 
+#include <algorithm>
 #include <fstream>
 #include <future>
 #include <optional>
@@ -2343,6 +2344,39 @@ BOOST_AUTO_TEST_CASE( GetFileStatusMatchesPathspecLiterally )
 
     git_repository_free( repo );
 }
+
+
+#ifndef __WINDOWS__
+// A file swapped for a symlink is a change the commit pane has to list
+BOOST_AUTO_TEST_CASE( GetFileStatusReportsTypeChangeAsModified )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "board.txt" ), wxT( "committed\n" ), wxT( "Add board" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+    wxString board = workDir + wxT( "board.txt" );
+
+    BOOST_REQUIRE( wxRemoveFile( board ) );
+    BOOST_REQUIRE_EQUAL( symlink( "file.txt", board.fn_str() ), 0 );
+
+    KIGIT_COMMON       common( repo );
+    GIT_STATUS_HANDLER handler( &common );
+
+    std::map<wxString, FileStatus> status = handler.GetFileStatus( wxEmptyString, true );
+    auto it = std::find_if( status.begin(), status.end(),
+                            []( const auto& aEntry ) { return aEntry.first.EndsWith( wxT( "/board.txt" ) ); } );
+
+    BOOST_REQUIRE( it != status.end() );
+    BOOST_CHECK( it->second.gitStatus & GIT_STATUS_WT_TYPECHANGE );
+    BOOST_CHECK( it->second.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED );
+
+    git_repository_free( repo );
+}
+#endif
 
 
 // The panel can only say the remote moved on if the session can tell.

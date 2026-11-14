@@ -62,7 +62,8 @@ KIGIT_COMMON::GIT_STATUS GIT_STATUS_HANDLER::ConvertStatus( unsigned int aGitSta
     {
         return KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED;
     }
-    else if( aGitStatus & ( GIT_STATUS_INDEX_MODIFIED | GIT_STATUS_WT_MODIFIED ) )
+    else if( aGitStatus & ( GIT_STATUS_INDEX_MODIFIED | GIT_STATUS_WT_MODIFIED | GIT_STATUS_INDEX_TYPECHANGE
+                            | GIT_STATUS_WT_TYPECHANGE ) )
     {
         return KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED;
     }
