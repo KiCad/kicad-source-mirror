@@ -1732,12 +1732,11 @@ applySchematicPlotSettings( const schematic::jobs::SchematicPlotSettings& aSetti
     if( aSettings.page_size() != schematic::jobs::SchematicJobPageSize::SJPS_UNKNOWN )
         aJob.m_pageSizeSelect = FromProtoEnum<JOB_PAGE_SIZE>( aSettings.page_size() );
 
+    // An unspecified sheet mode keeps the value from aSettings.plot_all()
     if( aSettings.sheet_mode() == schematic::jobs::SJSM_ALL_SHEETS )
         aJob.m_plotAll = true;
     else if( aSettings.sheet_mode() == schematic::jobs::SJSM_SINGLE_SHEET )
         aJob.m_plotAll = false;
-    else
-        ;  // keep value from aSettings.plot_all()
 
     if( aDocument.has_sheet_path() )
         aJob.m_sheetPath = UnpackSheetPath( aDocument.sheet_path() ).AsString();
