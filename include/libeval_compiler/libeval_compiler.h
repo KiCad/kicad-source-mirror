@@ -352,6 +352,12 @@ public:
 class KICOMMON_API CONTEXT
 {
 public:
+    struct STACK_OVERFLOW {};
+
+    using ERROR_CALLBACK = std::function<void( const wxString& aMessage, int aOffset )>;
+
+    static constexpr int STACK_CAPACITY = 100;
+
     CONTEXT() :
             m_stack(),
             m_stackPtr( 0 ),
@@ -414,9 +420,12 @@ public:
         return m_ownedValues.back();
     }
 
-    void Push( VALUE* v )
+    void Push( VALUE* aValue )
     {
-        m_stack[ m_stackPtr++ ] = v;
+        if( m_stackPtr >= STACK_CAPACITY )
+            stackOverflow();
+
+        m_stack[ m_stackPtr++ ] = aValue;
     }
 
     VALUE* Pop()
@@ -447,9 +456,22 @@ public:
         return m_stackPtr;
     };
 
-    void SetErrorCallback( std::function<void( const wxString& aMessage, int aOffset )> aCallback )
+    /// Discard operands while retaining allocated values and context settings.
+    void ClearStack()
+    {
+        m_stackPtr = 0;
+    }
+
+    void SetErrorCallback( ERROR_CALLBACK aCallback )
     {
         m_errorCallback = std::move( aCallback );
+    }
+
+    /// Install a callback and return the previous one.
+    ERROR_CALLBACK ExchangeErrorCallback( ERROR_CALLBACK aCallback )
+    {
+        m_errorCallback.swap( aCallback );
+        return aCallback;
     }
 
     bool HasErrorCallback() { return m_errorCallback != nullptr; }
@@ -459,19 +481,21 @@ public:
 private:
     static constexpr std::size_t INLINE_VALUE_COUNT = 32;
 
+    [[noreturn]] void stackOverflow();
+
     VALUE* inlineValue( std::size_t aIndex )
     {
         return reinterpret_cast<VALUE*>( m_inlineStorage ) + aIndex;
     }
 
     std::vector<VALUE*> m_ownedValues;
-    VALUE*              m_stack[100];       // std::stack not performant enough
+    VALUE*              m_stack[STACK_CAPACITY];    // std::stack not performant enough
     int                 m_stackPtr;
 
     alignas( VALUE ) unsigned char m_inlineStorage[INLINE_VALUE_COUNT * sizeof( VALUE )];
     std::size_t                    m_inlineUsed;
 
-    std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
+    ERROR_CALLBACK m_errorCallback;
 };
 
 

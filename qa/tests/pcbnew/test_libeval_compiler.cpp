@@ -28,6 +28,7 @@
 #include <geometry/eda_angle.h>
 #include <pcbnew/pcbexpr_evaluator.h>
 #include <drc/drc_rule.h>
+#include <drc/drc_rule_condition.h>
 #include <drc/drc_rule_parser.h>
 #include <ki_exception.h>
 #include <reporter.h>
@@ -701,6 +702,133 @@ BOOST_AUTO_TEST_CASE( FunctionArgumentValidation )
     expectCompileError( wxS( "A.fromTo('U1-1')" ) );
     expectCompileError( wxS( "A.intersectsFrontCourtyard(B.UnknownProperty)" ) );
     expectCompileError( wxS( "A.intersectsFrontCourtyard(B.Parent.unknownFunction())" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ExpressionStackCapacity )
+{
+    LIBEVAL::UCODE   code;
+    LIBEVAL::CONTEXT context;
+
+    // Reach the exact capacity before reducing the operands to a single result.
+    for( int i = 0; i < LIBEVAL::CONTEXT::STACK_CAPACITY; ++i )
+        code.AddOp( new LIBEVAL::UOP( TR_UOP_PUSH_VALUE, std::make_unique<VAL>( 1.0 ) ) );
+
+    for( int i = 1; i < LIBEVAL::CONTEXT::STACK_CAPACITY; ++i )
+        code.AddOp( new LIBEVAL::UOP( TR_OP_ADD ) );
+
+    wxString error;
+    context.SetErrorCallback( [&]( const wxString& aMessage, int ) { error = aMessage; } );
+
+    BOOST_CHECK_EQUAL( code.Run( &context )->AsDouble(), LIBEVAL::CONTEXT::STACK_CAPACITY );
+    BOOST_CHECK( error.IsEmpty() );
+    BOOST_CHECK_EQUAL( context.SP(), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ExpressionStackOverflow )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    wxString args = wxS( "'F.Cu'" );
+
+    for( int i = 0; i < LIBEVAL::CONTEXT::STACK_CAPACITY; ++i )
+        args += wxS( ", 'F.Cu'" );
+
+    PCBEXPR_COMPILER literalCompiler( new PCBEXPR_UNIT_RESOLVER() );
+    PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, F_Cu );
+    PCBEXPR_UCODE    literalCode;
+
+    BOOST_CHECK( !literalCompiler.Compile( wxS( "A.existsOnLayer(" ) + args + wxS( ")" ),
+                                           &literalCode, &preflight ) );
+    BOOST_CHECK_EQUAL( literalCompiler.GetError().message,
+                       wxS( "Expression evaluation stack overflow" ) );
+    BOOST_CHECK_EQUAL( preflight.SP(), 0 );
+    BOOST_CHECK( !preflight.HasErrorCallback() );
+
+    // A dynamic argument skips literal preflight. Exercise the runtime limit and the
+    // short-circuit loop with a condition like the one read from a custom rule file.
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+    PCBEXPR_UCODE    dynamicCode;
+    wxString         expression = wxS( "A.Layer == 'F.Cu' && A.existsOnLayer(B.Layer, " )
+                                   + args + wxS( ")" );
+
+    BOOST_REQUIRE_MESSAGE( compiler.Compile( expression, &dynamicCode, &preflight ),
+                           compiler.GetError().message );
+    BOOST_REQUIRE_MESSAGE( !compiler.IsErrorPending(), compiler.GetError().message );
+
+    BOARD     board;
+    PCB_TRACK track( &board );
+    track.SetLayer( F_Cu );
+
+    PCBEXPR_CONTEXT context( NULL_CONSTRAINT, F_Cu );
+    context.SetItems( &track, &track );
+
+    wxString error;
+    context.SetErrorCallback( [&]( const wxString& aMessage, int ) { error = aMessage; } );
+
+    BOOST_CHECK_EQUAL( dynamicCode.Run( &context )->AsDouble(), 0.0 );
+    BOOST_CHECK_EQUAL( error, wxS( "Expression evaluation stack overflow" ) );
+    BOOST_CHECK_EQUAL( context.SP(), 0 );
+
+    PCBEXPR_UCODE validCode;
+    BOOST_REQUIRE( compiler.Compile( wxS( "A.existsOnLayer('F.Cu')" ), &validCode, &preflight ) );
+    BOOST_CHECK_EQUAL( validCode.Run( &context )->AsDouble(), 1.0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( MalformedConditionSwappedItemRetry )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    BOARD     board;
+    PCB_TRACK trackA( &board );
+    PCB_TRACK trackB( &board );
+    trackA.SetLayer( F_Cu );
+    trackB.SetLayer( B_Cu );
+
+    // The first run leaves unused arguments plus the function result on the stack.
+    // Without cleanup, the swapped-item retry exceeds the capacity at twice argumentCount.
+    for( int argumentCount : { LIBEVAL::CONTEXT::STACK_CAPACITY / 2,
+                              LIBEVAL::CONTEXT::STACK_CAPACITY / 2 + 1 } )
+    {
+        BOOST_TEST_CONTEXT( argumentCount )
+        {
+            wxString args = wxS( "'F.Cu'" );
+
+            for( int i = 1; i < argumentCount; ++i )
+                args += wxS( ", 'F.Cu'" );
+
+            wxString source = wxS( "(version 1)(rule test (condition \"A.existsOnLayer(" )
+                              + args + wxS( ")\")(constraint clearance (min 0.2mm)))" );
+            std::vector<std::shared_ptr<DRC_RULE>> rules;
+            DRC_RULES_PARSER parser( source, wxS( "stack cleanup regression" ) );
+            WX_STRING_REPORTER reporter;
+
+            parser.Parse( rules, &reporter );
+            BOOST_REQUIRE_MESSAGE( !reporter.GetMessages().Contains( wxS( "ERROR:" ) ),
+                                   reporter.GetMessages() );
+            BOOST_REQUIRE_EQUAL( rules.size(), 1 );
+            BOOST_REQUIRE( rules.front()->m_Condition );
+            reporter.Clear();
+
+            BOOST_CHECK( !rules.front()->m_Condition->EvaluateFor(
+                    &trackA, &trackB, CLEARANCE_CONSTRAINT, F_Cu, &reporter ) );
+
+            wxString messages = reporter.GetMessages();
+            BOOST_CHECK( !messages.Contains( wxS( "stack overflow" ) ) );
+            BOOST_CHECK_EQUAL( messages.Replace( wxS( "Malformed expression" ), wxEmptyString ), 2 );
+
+            // Also exercise the reused thread-local context used by DRC without a reporter.
+            BOOST_CHECK( !rules.front()->m_Condition->EvaluateFor(
+                    &trackA, &trackB, CLEARANCE_CONSTRAINT, F_Cu ) );
+
+            DRC_RULE_CONDITION validCondition( wxS( "A.Layer == 'B.Cu' && B.Layer == 'F.Cu'" ) );
+            BOOST_REQUIRE( validCondition.Compile( nullptr ) );
+            BOOST_CHECK( validCondition.EvaluateFor(
+                    &trackA, &trackB, CLEARANCE_CONSTRAINT, F_Cu ) );
+        }
+    }
 }
 
 

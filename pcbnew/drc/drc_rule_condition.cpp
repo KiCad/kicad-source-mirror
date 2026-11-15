@@ -146,6 +146,10 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
     PCBEXPR_CONTEXT preflightContext( 0, F_Cu );
 
     bool ok = compiler.Compile( GetExpression().ToUTF8().data(), m_ucode.get(), &preflightContext );
+
+    if( !ok )
+        m_ucode.reset();
+
     return ok;
 }
 

@@ -703,6 +703,13 @@ void CONTEXT::ReportError( const wxString& aErrorMsg )
 }
 
 
+void CONTEXT::stackOverflow()
+{
+    ReportError( _( "Expression evaluation stack overflow" ) );
+    throw STACK_OVERFLOW{};
+}
+
+
 void COMPILER::reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, int aPos )
 {
     if( aPos == -1 )
@@ -997,14 +1004,9 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
                     if( func && literalArgs )
                     {
-                        for( TREE_NODE* pnode : params )
-                        {
-                            VALUE*   param = aPreflightContext->AllocValue();
-                            param->Set( formatNode( pnode ) );
-                            aPreflightContext->Push( param );
-                        }
+                        bool overflow = false;
 
-                        aPreflightContext->SetErrorCallback(
+                        auto previousCallback = aPreflightContext->ExchangeErrorCallback(
                                 [&]( const wxString& aMessage, int aOffset )
                                 {
                                     size_t loc = node->leaf[1]->leaf[1]->srcPos;
@@ -1013,12 +1015,31 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
                         try
                         {
+                            for( TREE_NODE* pnode : params )
+                            {
+                                VALUE* param = aPreflightContext->AllocValue();
+                                param->Set( formatNode( pnode ) );
+                                aPreflightContext->Push( param );
+                            }
+
                             func( aPreflightContext, vref.get() );
                             aPreflightContext->Pop();           // return value
+                        }
+                        catch( const CONTEXT::STACK_OVERFLOW& )
+                        {
+                            overflow = true;
                         }
                         catch( ... )
                         {
                         }
+
+                        // Each preflight checks one call.
+                        // Also reset the error callback, so we don't leak the local variables
+                        aPreflightContext->ClearStack();
+                        aPreflightContext->SetErrorCallback( std::move( previousCallback ) );
+
+                        if( overflow )
+                            return false;
                     }
 
                     node->leaf[0]->isVisited = true;
@@ -1463,8 +1484,9 @@ VALUE* UCODE::Run( CONTEXT* ctx )
                 op->Exec( ctx );
         }
     }
-    catch(...)
+    catch( ... )
     {
+        ctx->ClearStack();
         // rules which fail outright should not be fired; return 0/false
         return ctx->StoreValue( new VALUE( 0 ) );
     }
@@ -1473,17 +1495,11 @@ VALUE* UCODE::Run( CONTEXT* ctx )
     {
         return ctx->Pop();
     }
-    else
-    {
-        // If stack is corrupted after execution it suggests a problem with the compiler, not
-        // the rule....
 
-        // do not use "assert"; it crashes outright on OSX
-        wxASSERT( ctx->SP() == 1 );
-
-        // non-well-formed rules should not be fired on a release build
-        return ctx->StoreValue( new VALUE( 0 ) );
-    }
+    // Extra function arguments can leave values on the stack even without an overflow.
+    ctx->ClearStack();
+    ctx->ReportError( _( "Malformed expression" ) );
+    return ctx->StoreValue( new VALUE( 0 ) );
 }
 
 
