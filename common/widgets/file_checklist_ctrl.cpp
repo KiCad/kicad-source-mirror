@@ -170,18 +170,6 @@ public:
         return m_data.Rows( node->section )[node->index].path;
     }
 
-    unsigned int GetColumnCount() const override { return COL_COUNT; }
-
-    wxString GetColumnType( unsigned int aCol ) const override
-    {
-        switch( aCol )
-        {
-        case COL_CHECK: return wxT( "bool" );
-        case COL_NAME: return wxT( "wxDataViewIconText" );
-        default: return wxT( "string" );
-        }
-    }
-
     void GetValue( wxVariant& aVariant, const wxDataViewItem& aItem, unsigned int aCol ) const override
     {
         CHECKLIST_NODE* node = toNode( aItem );
