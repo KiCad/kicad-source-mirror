@@ -1012,18 +1012,7 @@ int BOARD_EDITOR_CONTROL::ShowEeschema( const TOOL_EVENT& aEvent )
                     // On Windows, it happens always after the library editor was called,
                     // and the dialog field editor was used
                     if( !frame )
-                    {
-                        try
-                        {
-                            frame = boardFrame->Kiway().Player( FRAME_SCH, true );
-                        }
-                        catch( const IO_ERROR& err )
-                        {
-                            DisplayErrorMessage( boardFrame,
-                                                 _( "Eeschema failed to load." ) + wxS( "\n" ) + err.What() );
-                            return;
-                        }
-                    }
+                        frame = boardFrame->Kiway().Player( FRAME_SCH, true );
 
                     wxEventBlocker blocker( boardFrame );
 

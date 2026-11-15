@@ -163,17 +163,7 @@ int CVPCB_CONTROL::ShowFootprintViewer( const TOOL_EVENT& aEvent )
         // DISPLAY_FOOTPRINTS_FRAME needs a PCBNEW_SETTINGS because most of its settings
         // come from it, and needs _pcbnew.dll/so code. So load it if the dll is not yet loaded
         // (for instance if the board editor was never loaded)
-        if( !m_frame->Kiway().KiFACE( KIWAY::FACE_PCB, false ) )
-        {
-            try
-            {
-                m_frame->Kiway().KiFACE( KIWAY::FACE_PCB, true );
-            }
-            catch( ... )
-            {
-                // _pcbnew.dll/so is not available (install problem).
-            }
-        }
+        m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
 
         fpframe = (DISPLAY_FOOTPRINTS_FRAME*) m_frame->Kiway().Player( FRAME_CVPCB_DISPLAY, true,
                                                                        m_frame );
