@@ -23,6 +23,9 @@
 #include <git/kicad_git_common.h>
 #include <wx/settings.h>
 #include <wx/dcmemory.h>
+#include <wx/image.h>
+
+#include <cstring>
 
 #include "project_tree_item.h"
 #include "project_tree_pane.h"
@@ -31,6 +34,17 @@
 
 
 IMPLEMENT_ABSTRACT_CLASS( PROJECT_TREE, wxTreeCtrl )
+
+
+// A wxBitmap made from a size alone holds uninitialized memory, which draws as a solid block.
+static wxBitmap blankStatusBitmap( int aSize )
+{
+    wxImage image( aSize, aSize );
+    image.InitAlpha();
+    memset( image.GetAlpha(), wxIMAGE_ALPHA_TRANSPARENT, aSize * aSize );
+
+    return wxBitmap( image );
+}
 
 
 #ifdef __WXMSW__
@@ -140,7 +154,7 @@ void PROJECT_TREE::LoadIcons()
     // that is otherwise available since wxWidgets 3.3 on other platforms.
 #if wxCHECK_VERSION( 3, 3, 0 ) || defined( __WXMAC__ )
     wxVector<wxBitmapBundle> stateImages;
-    stateImages.push_back( wxBitmapBundle( wxBitmap( c_gitDefSize, c_gitDefSize ) ) );      // GIT_STATUS_UNTRACKED
+    stateImages.push_back( wxBitmapBundle( blankStatusBitmap( c_gitDefSize ) ) );           // GIT_STATUS_UNTRACKED
     stateImages.push_back( KiBitmapBundleDef( BITMAPS::git_good_check, c_gitDefSize ) );    // GIT_STATUS_CURRENT
     stateImages.push_back( KiBitmapBundleDef( BITMAPS::git_modified, c_gitDefSize ) );      // GIT_STATUS_MODIFIED
     stateImages.push_back( KiBitmapBundleDef( BITMAPS::git_add, c_gitDefSize ) );           // GIT_STATUS_ADDED
@@ -148,12 +162,12 @@ void PROJECT_TREE::LoadIcons()
     stateImages.push_back( KiBitmapBundleDef( BITMAPS::git_out_of_date, c_gitDefSize ) );   // GIT_STATUS_BEHIND
     stateImages.push_back( KiBitmapBundleDef( BITMAPS::git_changed_ahead, c_gitDefSize ) ); // GIT_STATUS_AHEAD
     stateImages.push_back( KiBitmapBundleDef( BITMAPS::git_conflict, c_gitDefSize ) );      // GIT_STATUS_CONFLICTED
-    stateImages.push_back( wxBitmapBundle( wxBitmap( c_gitDefSize, c_gitDefSize ) ) );      // GIT_STATUS_IGNORED
+    stateImages.push_back( wxBitmapBundle( blankStatusBitmap( c_gitDefSize ) ) );           // GIT_STATUS_IGNORED
 
     SetStateImages( stateImages );
 #else
     // Make an image list containing small icons
-    wxBitmap blank_bitmap( c_gitDefSize, c_gitDefSize );
+    wxBitmap blank_bitmap = blankStatusBitmap( c_gitDefSize );
 
     delete m_statusImageList;
     m_statusImageList = new wxImageList( c_gitDefSize, c_gitDefSize, true,
