@@ -21,6 +21,7 @@
 #include "git_backend.h"
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/kigit_ignore.h>
 #include <git/project_git_utils.h>
 #include <paths.h>
 #include <trace_helpers.h>
@@ -31,7 +32,6 @@
 #include <string>
 
 #include <wx/ffile.h>
-#include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
@@ -41,28 +41,15 @@
 // An existing file belongs to the team and is left alone.
 static void ensureProjectGitignore( const wxString& aProjectPath )
 {
-    wxFileName ignoreFile( aProjectPath, wxS( ".gitignore" ) );
+    const wxFileName ignoreFile = KIGIT::ProjectIgnoreFile( aProjectPath );
 
     if( ignoreFile.FileExists() )
         return;
 
-    // Exclusive create, so a file that appears between the test above and here is left alone.
-    wxFile out;
+    wxString error;
 
-    if( !out.Create( ignoreFile.GetFullPath(), false ) )
-        return;
-
-    wxString contents = wxS( "# KiCad-generated files and directories.\n" );
-
-    for( const wxString& entry : KIGIT::PROJECT_GIT_UTILS::TransientGitIgnorePatterns() )
-        contents += entry + wxS( "\n" );
-
-    // A half written file would be taken for the team's own on every later init.
-    if( !out.Write( contents ) || !out.Close() )
-    {
-        out.Close();
-        wxRemoveFile( ignoreFile.GetFullPath() );
-    }
+    KIGIT::AddIgnoreRules( ignoreFile, KIGIT::PROJECT_GIT_UTILS::TransientGitIgnorePatterns(),
+                           wxS( "KiCad-generated files and directories." ), error );
 }
 
 

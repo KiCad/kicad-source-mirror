@@ -126,6 +126,7 @@ set( KICOMMON_SRCS
     git/git_backend.cpp
     git/kigit_orphan_registry.cpp
     git/kigit_failure.cpp
+    git/kigit_ignore.cpp
     git/kigit_known_hosts.cpp
     git/kigit_ssh_keys.cpp
     git/kigit_transport.cpp
