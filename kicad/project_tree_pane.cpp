@@ -2470,12 +2470,16 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
         return;
     }
 
-    std::stack<wxTreeItemId> items;
-    items.push(m_TreeProject->GetRootItem());
+    const wxColour normal = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    const wxColour dimmed = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+
+    // Git reports an ignored folder on its own, so the flag travels down to its contents.
+    std::stack<std::pair<wxTreeItemId, bool>> items;
+    items.push( { m_TreeProject->GetRootItem(), false } );
 
     while( !items.empty() )
     {
-        wxTreeItemId current = items.top();
+        auto [current, parentIgnored] = items.top();
         items.pop();
 
         if( current.IsOk() && m_TreeProject->ItemHasChildren( current ) )
@@ -2485,15 +2489,22 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
             while( child.IsOk() )
             {
-                items.push( child );
+                auto       it = m_gitStatusIcons.find( child );
+                const bool known = it != m_gitStatusIcons.end();
+                const bool ignored =
+                        parentIgnored || ( known && it->second == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED );
 
-                auto      it = m_gitStatusIcons.find( child );
-                const int state =
-                        it != m_gitStatusIcons.end() ? static_cast<int>( it->second ) : wxTREE_ITEMSTATE_NONE;
+                items.push( { child, ignored } );
 
-                // Setting it repaints the row, so only a change is worth writing.
+                const int      state = known && !ignored ? static_cast<int>( it->second ) : wxTREE_ITEMSTATE_NONE;
+                const wxColour colour = ignored ? dimmed : normal;
+
+                // Setting either repaints the row, so only a change is worth writing.
                 if( m_TreeProject->GetItemState( child ) != state )
                     m_TreeProject->SetItemState( child, state );
+
+                if( m_TreeProject->GetItemTextColour( child ) != colour )
+                    m_TreeProject->SetItemTextColour( child, colour );
 
                 child = m_TreeProject->GetNextChild( current, cookie );
             }

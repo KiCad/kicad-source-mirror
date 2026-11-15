@@ -1205,8 +1205,10 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
 
     // Per-file icons need an entry for every tracked file, so an icon clears when a file goes
     // back to unmodified. Listing only changes does not, and costs a walk of the whole repo.
+    // Ignored paths come with them, so the project tree can dim them. Without
+    // GIT_STATUS_OPT_RECURSE_IGNORED_DIRS an ignored directory arrives as one entry.
     if( !aChangedOnly )
-        status_options.flags |= GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
+        status_options.flags |= GIT_STATUS_OPT_INCLUDE_UNMODIFIED | GIT_STATUS_OPT_INCLUDE_IGNORED;
 
     std::string pathspec_str;
     std::vector<const char*> pathspec_ptrs;
@@ -1243,10 +1245,15 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
         std::string path( entry->head_to_index ? entry->head_to_index->old_file.path
                                                : entry->index_to_workdir->old_file.path );
 
+        // Git names an ignored directory with a trailing slash. Callers match plain paths.
+        const bool isDirectory = !path.empty() && path.back() == '/';
+
+        if( isDirectory )
+            path.pop_back();
+
         wxString absPath = repoWorkDir + path;
-        fileStatusMap[absPath] = FileStatus{ absPath,
-                                             aHandler->ConvertStatus( entry->status ),
-                                             static_cast<unsigned int>( entry->status ) };
+        fileStatusMap[absPath] = FileStatus{ absPath, aHandler->ConvertStatus( entry->status ),
+                                             static_cast<unsigned int>( entry->status ), isDirectory };
     }
 
     return fileStatusMap;

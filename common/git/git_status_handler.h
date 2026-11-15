@@ -33,6 +33,9 @@ struct FileStatus
     wxString filePath;
     KIGIT_COMMON::GIT_STATUS status;
     unsigned int gitStatus;  // Raw git status flags
+
+    /// Git reports an ignored directory rather than the files inside it
+    bool isDirectory = false;
 };
 
 class APIEXPORT GIT_STATUS_HANDLER : public KIGIT_REPO_MIXIN

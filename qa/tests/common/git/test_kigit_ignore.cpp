@@ -84,6 +84,10 @@ struct GIT_IGNORE_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
     std::map<wxString, FileStatus> changes( KIGIT_COMMON& aCommon ) { return reported( aCommon, true ); }
 
 
+    /// What the project tree is built from, ignored paths included.
+    std::map<wxString, FileStatus> treeStatus( KIGIT_COMMON& aCommon ) { return reported( aCommon, false ); }
+
+
     wxFileName ignoreFile() const { return KIGIT::ProjectIgnoreFile( projectPath() ); }
 
     /// The project directory, which is where its ignore file belongs.
@@ -127,6 +131,7 @@ BOOST_AUTO_TEST_CASE( RuleNamesOnlyThePathPicked )
 }
 
 
+// The tree still hears about an ignored file, so it can dim the name instead of dropping it.
 BOOST_AUTO_TEST_CASE( IgnoredFileLeavesTheCommitList )
 {
     writeFile( wxT( "out/top.gbr" ), wxT( "gerber\n" ) );
@@ -142,10 +147,17 @@ BOOST_AUTO_TEST_CASE( IgnoredFileLeavesTheCommitList )
 
     BOOST_CHECK( changes( common ).count( wxT( "out/top.gbr" ) ) == 0 );
     BOOST_CHECK( KIGIT::IgnoreState( common, wxT( "out/top.gbr" ), false ).ignored );
+
+    const std::map<wxString, FileStatus> tree = treeStatus( common );
+    const auto                           entry = tree.find( wxT( "out/top.gbr" ) );
+
+    BOOST_REQUIRE( entry != tree.end() );
+    BOOST_CHECK( entry->second.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED );
+    BOOST_CHECK( !entry->second.isDirectory );
 }
 
 
-// Ignoring a folder takes everything inside it out of the commit list.
+// Git names an ignored folder alone, which is why the tree dims its children itself.
 BOOST_AUTO_TEST_CASE( IgnoredFolderLeavesTheCommitList )
 {
     writeFile( wxT( "gerbers/top.gbr" ), wxT( "gerber\n" ) );
@@ -163,6 +175,14 @@ BOOST_AUTO_TEST_CASE( IgnoredFolderLeavesTheCommitList )
     BOOST_CHECK( changed.count( wxT( "gerbers/top.gbr" ) ) == 0 );
     BOOST_CHECK( changed.count( wxT( "gerbers/bottom.gbr" ) ) == 0 );
     BOOST_CHECK( KIGIT::IgnoreState( common, wxT( "gerbers" ), true ).ignored );
+
+    const std::map<wxString, FileStatus> tree = treeStatus( common );
+    const auto                           folder = tree.find( wxT( "gerbers" ) );
+
+    BOOST_REQUIRE_MESSAGE( folder != tree.end(), "the tree needs the folder itself to dim it" );
+    BOOST_CHECK( folder->second.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED );
+    BOOST_CHECK( folder->second.isDirectory );
+    BOOST_CHECK( tree.count( wxT( "gerbers/top.gbr" ) ) == 0 );
 }
 
 
