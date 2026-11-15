@@ -116,7 +116,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, cons
     // TODO: Custom paths go here (non-recursive)
 
     // Default LTspice libs, which are absent when LTspice is not installed
-    for( const wxString& libDir : { wxS( "sub" ), wxS( "sym" ) } )
+    for( const wxString libDir : { wxS( "sub" ), wxS( "sym" ) } )
     {
         wxString path = m_ltspiceDataDir.GetPathWithSep() + libDir;
 
