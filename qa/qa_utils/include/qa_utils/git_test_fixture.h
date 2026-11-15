@@ -26,6 +26,7 @@
 #include <qa_utils/scoped_git_backend.h>
 
 #include <wx/file.h>
+#include <wx/filefn.h>
 #include <wx/filename.h>
 
 #include <filesystem>
@@ -87,11 +88,15 @@ public:
     GIT_TEST_FIXTURE() :
             m_tempDir( "kicad-qa-git" ),
             m_configDir( "kicad-qa-gitconfig" ),
-            m_configSearchPath( toWxString( m_configDir.Path() ).utf8_string() )
+            m_configSearchPath( toWxString( m_configDir.Path() ).utf8_string() ),
+            m_originalCwd( wxGetCwd() )
     {
         // Resolve temporary-directory symlinks to match libgit2's workdir path.
         m_tempPath = toWxString( std::filesystem::canonical( m_tempDir.Path() ) );
     }
+
+    /// Loading a project in a GUI app moves the working directory into it, so leave before the temp dir goes.
+    ~GIT_TEST_FIXTURE() { wxSetWorkingDirectory( m_originalCwd ); }
 
     const wxString& TempPath() const { return m_tempPath; }
     LIBGIT_BACKEND* Backend() const { return m_backend.Backend(); }
@@ -111,6 +116,7 @@ private:
     SCOPED_TEMP_DIR               m_tempDir;
     SCOPED_TEMP_DIR               m_configDir;
     SCOPED_GIT_CONFIG_SEARCH_PATH m_configSearchPath;
+    wxString                      m_originalCwd;
     wxString                      m_tempPath;
 };
 

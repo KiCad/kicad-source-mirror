@@ -52,8 +52,7 @@ static const char* TEST_COMMIT_MSG   = "Initial test commit";
  */
 struct VCS_TEST_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
 {
-    VCS_TEST_FIXTURE() :
-            m_originalDir( wxGetCwd() )
+    VCS_TEST_FIXTURE()
     {
         KIGIT::GitRepositoryPtr repo =
                 KI_TEST::InitGitRepository( TempPath(), "main", TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
@@ -62,14 +61,11 @@ struct VCS_TEST_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
         BOOST_REQUIRE( wxSetWorkingDirectory( TempPath() ) );
     }
 
-    ~VCS_TEST_FIXTURE() { wxSetWorkingDirectory( m_originalDir ); }
-
     const wxString& tempDir() const { return TempPath(); }
 
 private:
     // These tests exercise cwd-based discovery independently of projects loaded by other tests.
     TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE m_context{ wxString() };
-    wxString                          m_originalDir;
 };
 
 
