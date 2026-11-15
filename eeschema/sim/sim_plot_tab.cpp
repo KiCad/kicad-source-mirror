@@ -36,6 +36,7 @@
 #include <functional>
 #include <limits>
 
+#include <wx/dcclient.h>
 
 
 static wxString formatFloat( double x, int nDigits )
