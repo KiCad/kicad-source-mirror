@@ -1333,5 +1333,3 @@ LTSPICE_SCHEMATIC::ParseAscFiles( const std::map<wxString, wxString>& aAscFilesC
 
     return ascFiles;
 }
-
-
