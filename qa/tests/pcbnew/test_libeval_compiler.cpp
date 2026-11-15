@@ -38,6 +38,7 @@
 #include <pcbnew/pcb_table.h>
 #include <pcbnew/pcb_track.h>
 #include <pcbnew/footprint.h>
+#include <pcbnew/pad.h>
 #include <pcbnew/pcb_text.h>
 #include <pcbnew/zone.h>
 #include <project/net_settings.h>
@@ -259,6 +260,30 @@ BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
     footprint.SetLocalSolderPasteMarginRatio( std::nullopt );
 
     testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), false, &footprint );
+}
+
+
+BOOST_AUTO_TEST_CASE( UnitlessStringProperties )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD     brd;
+    FOOTPRINT footprint( &brd );
+    PAD*      pad = new PAD( &footprint );
+    PCB_TEXT  text( &brd );
+
+    footprint.SetReference( wxT( "R1" ) );
+    pad->SetNumber( wxT( "2" ) );
+    footprint.Add( pad );
+    text.SetText( wxT( "4k7" ) );
+
+    testEvalExpr( wxT( "A.Pad_Number == '2'" ), VAL( 1.0 ), false, pad );
+    testEvalExpr( wxT( "A.Pad_Number == 2" ), VAL( 1.0 ), false, pad );
+    testEvalExpr( wxT( "A.Reference == 'R1'" ), VAL( 1.0 ), false, &footprint );
+    testEvalExpr( wxT( "A.Text == '4k7'" ), VAL( 1.0 ), false, &text );
+    testEvalExpr( wxT( "A.Text > 4000" ), VAL( 1.0 ), false, &text );
+    testEvalExpr( wxT( "A.Text < 1" ), VAL( 0.0 ), false, &text );
 }
 
 
