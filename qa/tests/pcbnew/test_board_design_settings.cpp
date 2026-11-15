@@ -482,4 +482,52 @@ BOOST_AUTO_TEST_CASE( LaterBoardReadsOldHoleSeverity )
 }
 
 
+// A 5.1 project import converts its courtyard rules and keeps external zone fillets as 5.1 did
+BOOST_AUTO_TEST_CASE( LegacyProjectImportKeepsCourtyardRulesAndFillets )
+{
+    namespace fs = std::filesystem;
+
+    KI_TEST::SCOPED_TEMP_DIR dir( "kicad_qa_bds_legacy_import" );
+
+    std::ifstream     source( fs::path( KI_TEST::GetPcbnewTestDataDir() ) / "issue4257.pro" );
+    std::stringstream legacy;
+    legacy << source.rdbuf();
+
+    // The file's values match the defaults, so flip them to tell a conversion apart
+    std::string text = legacy.str();
+
+    auto flip =
+            [&]( const std::string& aFrom, const std::string& aTo )
+            {
+                size_t pos = text.find( aFrom );
+                BOOST_REQUIRE( pos != std::string::npos );
+                text.replace( pos, aFrom.size(), aTo );
+            };
+
+    flip( "RequireCourtyardDefinitions=0", "RequireCourtyardDefinitions=1" );
+    flip( "ProhibitOverlappingCourtyards=1", "ProhibitOverlappingCourtyards=0" );
+
+    std::ofstream( dir.Path() / "issue4257.pro" ) << text;
+
+    fs::path proPath = dir.Path() / "issue4257.kicad_pro";
+
+    BOOST_REQUIRE( m_settingsManager.LoadProject( wxString::FromUTF8( proPath.string() ) ) );
+
+    auto board = std::make_unique<BOARD>();
+
+    m_board->SetProject( &m_settingsManager.Prj() );
+    board->SetProject( &m_settingsManager.Prj() );
+
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+
+    BOOST_CHECK( bds.GetSeverity( DRCE_MISSING_COURTYARD ) == RPT_SEVERITY_ERROR );
+    BOOST_CHECK( bds.GetSeverity( DRCE_OVERLAPPING_FOOTPRINTS ) == RPT_SEVERITY_IGNORE );
+    BOOST_CHECK( bds.m_ZoneKeepExternalFillets );
+
+    board->ClearProject();
+    m_board->ClearProject();
+    m_settingsManager.UnloadProject( &m_settingsManager.Prj(), false );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

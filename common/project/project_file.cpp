@@ -632,11 +632,14 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacy<int>( aCfg, "DimensionUnits",     bp + "defaults.dimension_units" );
     fromLegacy<int>( aCfg, "DimensionPrecision", bp + "defaults.dimension_precision" );
 
-    std::string sev = bp + "rule_severities";
+    std::string sev = bp + "rule_severities.";
 
     fromLegacy<bool>( aCfg, "RequireCourtyardDefinitions", sev + "legacy_no_courtyard_defined" );
 
     fromLegacy<bool>( aCfg, "ProhibitOverlappingCourtyards", sev + "legacy_courtyards_overlap" );
+
+    // 5.1 and earlier always kept external zone fillets
+    Set( bp + "zones_allow_external_fillets", true );
 
     {
         int      idx     = 1;
