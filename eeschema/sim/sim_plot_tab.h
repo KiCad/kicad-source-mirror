@@ -185,6 +185,15 @@ public:
     const std::vector<double>& GetDataX() const { return m_xs; }
     const std::vector<double>& GetDataY() const { return m_ys; }
 
+    /**
+     * Linearly interpolate this trace's value at a given X (in the trace's own data space).
+     *
+     * For multi-run (swept) traces, only the most recent run is considered.
+     *
+     * @return false if aX is outside the available data (or there isn't enough data).
+     */
+    bool GetValueAtX( double aX, double* aY ) const;
+
     bool HasCursor( int aCursorId ) { return m_cursors[ aCursorId ] != nullptr; }
 
     void SetCursor( int aCursorId, CURSOR* aCursor ) { m_cursors[ aCursorId ] = aCursor; }
@@ -347,6 +356,49 @@ struct SMITH_STASHED_CURSOR
 };
 
 
+/// A crosshair that follows the mouse pointer (rather than being manually positioned) and shows
+/// every trace's value at the current X position in a floating box.
+///
+/// Every SIM_VIEW of a tab carries one.  They are all driven from the same plot-space X, so a
+/// pointer over any one of the stacked charts reads out all of them at the same X.
+class TRACK_CURSOR : public mpInfoLayer
+{
+public:
+    TRACK_CURSOR( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aView ) :
+            mpInfoLayer( wxRect( 0, 0, 1, 1 ), wxTRANSPARENT_BRUSH ),
+            m_plotTab( aPlotTab ),
+            m_view( aView ),
+            m_plotX( 0.0 )
+    {
+        m_visible = false;
+    }
+
+    void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    // Never draggable/clickable; it just tracks the mouse.
+    bool Inside( const wxPoint& aPoint ) const override { return false; }
+    void Move( wxPoint aDelta ) override {}
+    void UpdateReference() override {}
+
+    /// The X position is kept in plot space (not pixels), because the stacked views share an
+    /// X range but not necessarily their margins.
+    void SetPlotX( double aPlotX )
+    {
+        m_plotX = aPlotX;
+        SetVisible( true );
+    }
+
+    void SetHidden() { SetVisible( false ); }
+
+    double GetPlotX() const { return m_plotX; }
+
+private:
+    SIM_PLOT_TAB* m_plotTab;
+    SIM_VIEW*     m_view;
+    double        m_plotX;
+};
+
+
 /**
  * A single stacked plot area within a SIM_PLOT_TAB.
  *
@@ -504,6 +556,19 @@ public:
     void SmithZoomAt( const wxPoint& aPos, double aFactor );
     void SmithPanBy( const wxPoint& aDelta );
 
+    // ---- Track cursor -------------------------------------------------------------------
+
+    /// Position this view's track cursor at a shared plot-space X.
+    /// @return true if that changed what the view shows (and it needs redrawing).
+    bool SetTrackCursorPlotX( double aPlotX );
+
+    /// @return true if the track cursor was showing (and the view needs redrawing).
+    bool HideTrackCursor();
+
+    /// Move the floating overlays (legend, track cursor) to the end of the layer stack so they
+    /// draw on top of the traces and their cursors, rather than being painted over by them.
+    void RaiseOverlays();
+
 public:
     wxPoint m_lastLegendPosition;
 
@@ -530,8 +595,13 @@ private:
 
     bool getSmithView( SMITH_VIEW& aView ) const;
 
+    void onPlotMouseMove( wxMouseEvent& aEvent );
+    void onPlotMouseLeave( wxMouseEvent& aEvent );
+
 private:
     SIM_PLOT_TAB* m_plotTab;
+
+    TRACK_CURSOR* m_trackCursor;
 
     SMITH_GRID* m_smithGrid;
 
@@ -655,6 +725,16 @@ public:
     std::vector<SMITH_STASHED_TRACE>&  SmithStashedTraces() { return m_smithStashedTraces; }
     std::vector<SMITH_STASHED_CURSOR>& SmithStashedCursors() { return m_smithStashedCursors; }
 
+    /// Turn on/off the crosshair that follows the mouse and reads out every trace's value.
+    /// It is a tab-wide mode: the crosshair shows on every stacked view at the same X.
+    void EnableTrackCursor( bool aEnable );
+    bool IsTrackCursorEnabled() const { return m_trackCursorEnabled; }
+
+    /// Show the track cursor of every view at a shared plot-space X.
+    void SetTrackCursorX( double aPlotX );
+
+    void HideTrackCursor();
+
     /// Turn on/off the cursor for a particular trace.
     void EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName );
     void DisableCursor( TRACE* aTrace, int aCursorId );
@@ -745,6 +825,8 @@ private:
 
     // Re-entrancy guard for SyncXView()
     bool m_syncingXView;
+
+    bool m_trackCursorEnabled;
 
     // Smith-chart mode is a property of the whole tab; each SIM_VIEW carries its own grid
     // layer and pan/zoom state.

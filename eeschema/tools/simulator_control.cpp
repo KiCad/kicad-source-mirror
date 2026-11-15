@@ -563,6 +563,18 @@ int SIMULATOR_CONTROL::ToggleDarkModePlots( const TOOL_EVENT& aEvent )
 }
 
 
+int SIMULATOR_CONTROL::ToggleTrackCursor( const TOOL_EVENT& aEvent )
+{
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
+    {
+        plotTab->EnableTrackCursor( !plotTab->IsTrackCursorEnabled() );
+        m_simulatorFrame->OnModify();
+    }
+
+    return 0;
+}
+
+
 int SIMULATOR_CONTROL::EditAnalysisTab( const TOOL_EVENT& aEvent )
 {
     m_simulatorFrame->EditAnalysis();
@@ -769,6 +781,7 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::ToggleDottedSecondary,  SCH_ACTIONS::toggleDottedSecondary.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleSmithChart,       SCH_ACTIONS::toggleSmithChart.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleDarkModePlots,    SCH_ACTIONS::toggleDarkModePlots.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleTrackCursor,      SCH_ACTIONS::toggleTrackCursor.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::EditAnalysisTab,        SCH_ACTIONS::simAnalysisProperties.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RunSimulation,          SCH_ACTIONS::runSimulation.MakeEvent() );

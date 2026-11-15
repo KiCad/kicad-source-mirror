@@ -247,7 +247,11 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
             m_winY  = scry;
         }
 
-        dc.SetBrush( m_brush );
+        // Opaque, so the traces and the grid it overlaps cannot show through and make the
+        // labels hard to read.  It follows the plot's own background, dark mode included.
+        wxBrush background( w.GetBackgroundColour() );
+
+        dc.SetBrush( background );
         dc.SetFont( GetPlotFont() );
 
         const int baseWidth = mpLEGEND_MARGIN * 2 + mpLEGEND_LINEWIDTH;
@@ -274,7 +278,7 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
         }
 
         dc.SetPen( m_pen );
-        dc.SetBrush( m_brush );
+        dc.SetBrush( background );
         m_dim.width = textX;
 
         if( textY != mpLEGEND_MARGIN )    // Don't draw any thing if there are no visible layers
@@ -1161,12 +1165,15 @@ void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
     m_offset    = -m_minV;
     m_scale     = 1.0 / ( m_maxV - m_minV );
 
+    // Ticks are measured against whatever font the DC currently has set, so set ours first;
+    // otherwise recalculateTicks() sizes m_maxLabelHeight from a leftover font, throwing off
+    // where the axis name is placed relative to the bottom margin.
+    dc.SetFont( GetPlotFont() );
     recalculateTicks( dc, w );
 
     if( m_visible )
     {
         dc.SetPen( m_pen );
-        dc.SetFont( GetPlotFont() );
         int orgy = 0;
 
         const int extend = w.GetScrX();    ///2;
@@ -1324,12 +1331,14 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
     m_offset    = -m_minV;
     m_scale     = 1.0 / ( m_maxV - m_minV );
 
+    // See mpScaleXBase::Plot(): set the font before measuring so label extents match what is
+    // actually drawn.
+    dc.SetFont( GetPlotFont() );
     recalculateTicks( dc, w );
 
     if( m_visible )
     {
         dc.SetPen( m_pen );
-        dc.SetFont( GetPlotFont() );
 
         int orgx = 0;
 
