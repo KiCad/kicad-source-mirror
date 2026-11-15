@@ -2280,8 +2280,13 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
             {
                 items.push( child );
 
-                if( auto it = m_gitStatusIcons.find( child ); it != m_gitStatusIcons.end() )
-                    m_TreeProject->SetItemState( child, static_cast<int>( it->second ) );
+                auto      it = m_gitStatusIcons.find( child );
+                const int state =
+                        it != m_gitStatusIcons.end() ? static_cast<int>( it->second ) : wxTREE_ITEMSTATE_NONE;
+
+                // Setting it repaints the row, so only a change is worth writing.
+                if( m_TreeProject->GetItemState( child ) != state )
+                    m_TreeProject->SetItemState( child, state );
 
                 child = m_TreeProject->GetNextChild( current, cookie );
             }
@@ -2450,21 +2455,26 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
     bool updated = currentStatus != m_gitLastStatus;
     m_gitLastStatus = std::move( currentStatus );
 
-    // Update status icons based on file status
+    // Rebuilt rather than added to, so an item git has stopped reporting on loses its badge.
+    std::map<wxTreeItemId, KIGIT_COMMON::GIT_STATUS> icons;
+
     for( const auto& [absPath, fileStatus] : fileStatusMap )
     {
         auto iter = m_gitTreeCache.find( absPath );
+
         if( iter == m_gitTreeCache.end() )
         {
             wxLogTrace( traceGit, wxS( "File '%s' not found in tree cache" ), absPath );
             continue;
         }
 
-        auto [it, inserted] = m_gitStatusIcons.try_emplace( iter->second, fileStatus.status );
-        if( inserted || it->second != fileStatus.status )
-            updated = true;
-        it->second = fileStatus.status;
+        icons[iter->second] = fileStatus.status;
     }
+
+    if( icons != m_gitStatusIcons )
+        updated = true;
+
+    m_gitStatusIcons = std::move( icons );
 
     // Get the current branch name
     wxString branchName = statusHandler.GetCurrentBranchName();
