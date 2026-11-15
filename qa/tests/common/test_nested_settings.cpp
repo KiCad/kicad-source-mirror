@@ -578,4 +578,38 @@ BOOST_AUTO_TEST_CASE( RemovedKeyInDeepNestedMapIsDroppedFromFile )
 }
 
 
+// A top-level settings object whose migration renames a key, as the app settings migrations do
+class RENAMING_SETTINGS : public JSON_SETTINGS
+{
+public:
+    RENAMING_SETTINGS() :
+            JSON_SETTINGS( "renaming", SETTINGS_LOC::NONE, 1, false, false, false )
+    {
+        registerMigration( 0, 1,
+                           [this]()
+                           {
+                               Set( "new_key", *GetJson( "old_key" ) );
+                               m_internals->erase( "old_key" );
+                               return true;
+                           } );
+    }
+
+    std::string Format() { return formatFileContents(); }
+};
+
+
+BOOST_AUTO_TEST_CASE( MigratedSaveDropsRenamedKey )
+{
+    RENAMING_SETTINGS settings;
+
+    BOOST_REQUIRE( settings.LoadFromBuffer( R"({ "meta": { "version": 0 }, "old_key": 1, "unknown_key": 2 })" ) );
+
+    nlohmann::json saved = nlohmann::json::parse( settings.Format() );
+
+    BOOST_CHECK( !saved.contains( "old_key" ) );
+    BOOST_CHECK_EQUAL( saved["new_key"].get<int>(), 1 );
+    BOOST_CHECK( saved.contains( "unknown_key" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

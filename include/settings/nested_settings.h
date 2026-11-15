@@ -59,6 +59,18 @@ public:
 
 protected:
 
+    /**
+     * Replace this object's subtree in the parent's copy loaded from disk with the current store,
+     * so a save does not bring back keys removed from the store since the load.
+     */
+    void refreshParentOriginal();
+
+    /**
+     * Remove a key, given relative to this object, from the parent's copy loaded from disk, so a
+     * save does not bring it back.
+     */
+    void dropFromParentOriginal( const std::string& aPath );
+
     /// A pointer to the parent object to load and store from
     JSON_SETTINGS* m_parent;
 

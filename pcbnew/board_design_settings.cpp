@@ -1583,8 +1583,6 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 severities[drcName( DRCE_MISSING_COURTYARD )] = "error";
             else
                 severities[drcName( DRCE_MISSING_COURTYARD )] = "ignore";
-
-            severities.erase( no_courtyard_key );
         }
 
         if( severities.contains( courtyard_overlap_key ) )
@@ -1593,8 +1591,6 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 severities[drcName( DRCE_OVERLAPPING_FOOTPRINTS )] = "error";
             else
                 severities[drcName( DRCE_OVERLAPPING_FOOTPRINTS )] = "ignore";
-
-            severities.erase( courtyard_overlap_key );
         }
     }
     catch( ... )
@@ -1603,13 +1599,20 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
     bool ret = NESTED_SETTINGS::LoadFromFile( aDirectory );
 
-    if( Contains( "legacy" ) )
-    {
-        // This defaults to false for new boards, but version 5.1.x and prior kept the fillets
-        // so we do the same for legacy boards.
-        m_ZoneKeepExternalFillets = true;
+    // Erase only these keys from the baseline, since the flushed store lacks severities from newer versions
+    for( const std::string& key : { no_courtyard_key, courtyard_overlap_key, std::string( "hole_near_hole" ) } )
+        dropFromParentOriginal( "rule_severities." + key );
 
-        project->At( "legacy" ).erase( "pcbnew" );
+    // A 5.1 import wrote these without a separator. Nothing reads them, so the parent copy goes too
+    for( const char* key :
+         { "rule_severitieslegacy_no_courtyard_defined", "rule_severitieslegacy_courtyards_overlap" } )
+    {
+        Internals()->erase( key );
+
+        if( project->Contains( "board.design_settings" ) )
+            project->At( "board.design_settings" ).erase( key );
+
+        dropFromParentOriginal( key );
     }
 
     return ret;

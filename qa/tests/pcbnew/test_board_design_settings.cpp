@@ -17,19 +17,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_design_settings_defaults.h>
 #include <drc/drc_engine.h>
+#include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <settings/json_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
 #include <json_common.h>
+
+#include <filesystem>
+#include <fstream>
+#include <functional>
+#include <sstream>
 
 
 namespace
@@ -39,6 +47,40 @@ struct BDS_TEST_FIXTURE
     BDS_TEST_FIXTURE() :
             m_board( new BOARD() )
     { }
+
+    std::filesystem::path LoadCtrlBoard( const std::filesystem::path&                aDir,
+                                         const std::function<void( nlohmann::json& )>& aEdit )
+    {
+        namespace fs = std::filesystem;
+
+        fs::path       proPath = aDir / "ctrl-board.kicad_pro";
+        fs::path       sourcePath = fs::path( KI_TEST::GetPcbnewTestDataDir() ) / "mdw_ctrl_board";
+        std::ifstream  source( sourcePath / "ctrl-board.kicad_pro" );
+        nlohmann::json doc = nlohmann::json::parse( source );
+
+        aEdit( doc );
+        std::ofstream( proPath ) << doc.dump( 2 );
+
+        BOOST_REQUIRE( m_settingsManager.LoadProject( wxString::FromUTF8( proPath.string() ) ) );
+        return proPath;
+    }
+
+    nlohmann::json SaveCtrlBoard( const std::function<void( nlohmann::json& )>& aEdit )
+    {
+        KI_TEST::SCOPED_TEMP_DIR dir( "kicad_qa_bds_ctrl_board" );
+        std::filesystem::path    proPath = LoadCtrlBoard( dir.Path(), aEdit );
+
+        m_board->SetProject( &m_settingsManager.Prj() );
+
+        m_board->GetDesignSettings().m_MinClearance += pcbIUScale.mmToIU( 0.05 );
+        BOOST_REQUIRE( m_settingsManager.SaveProject() );
+
+        m_board->ClearProject();
+        m_settingsManager.UnloadProject( &m_settingsManager.Prj(), false );
+
+        std::ifstream savedFile( proPath );
+        return nlohmann::json::parse( savedFile );
+    }
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
@@ -364,6 +406,79 @@ BOOST_AUTO_TEST_CASE( AnAbsurdPresetPitchIsClampedOnLoad )
 
     BOOST_REQUIRE_EQUAL( bds.m_ViaStackPresets.size(), 1u );
     BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[0].m_Pitch, pcbIUScale.mmToIU( MAX_MICROVIA_STACK_PITCH_MM ) );
+}
+
+
+// A save after migration drops the keys it renamed but keeps keys this build does not know
+BOOST_AUTO_TEST_CASE( MigratedSaveDropsRenamedKeys )
+{
+    nlohmann::json saved = SaveCtrlBoard(
+            []( nlohmann::json& aDoc )
+            {
+                aDoc["from_a_newer_kicad"] = true;
+                aDoc["board"]["design_settings"]["rule_severities"]["from_a_newer_kicad"] = "ignore";
+            } );
+
+    const nlohmann::json& bds = saved["board"]["design_settings"];
+
+    BOOST_CHECK( !bds["rules"].contains( "min_text_thickness" ) );
+    BOOST_CHECK( bds["rules"].contains( "min_silk_line_width" ) );
+    BOOST_CHECK( !bds["rule_severities"].contains( "text_thickness" ) );
+    BOOST_CHECK( bds["rule_severities"].contains( "line_width" ) );
+    BOOST_CHECK( saved.contains( "from_a_newer_kicad" ) );
+    BOOST_CHECK( bds["rule_severities"].contains( "from_a_newer_kicad" ) );
+}
+
+
+// Keys converted at load time outside a migration keep their value under the current key only
+BOOST_AUTO_TEST_CASE( LoadTimeConvertedKeysDropOnSave )
+{
+    nlohmann::json saved = SaveCtrlBoard(
+            []( nlohmann::json& aDoc )
+            {
+                nlohmann::json& severities = aDoc["board"]["design_settings"]["rule_severities"];
+
+                // The fixture carries both hole keys, and only the old one exercises its conversion
+                severities.erase( "hole_to_hole" );
+                severities["legacy_no_courtyard_defined"] = true;
+                severities["legacy_courtyards_overlap"] = false;
+            } );
+
+    const nlohmann::json& bds = saved["board"]["design_settings"];
+    const nlohmann::json& severities = bds["rule_severities"];
+
+    BOOST_CHECK( !severities.contains( "hole_near_hole" ) );
+    BOOST_CHECK_EQUAL( severities.value( "hole_to_hole", "" ), "error" );
+    BOOST_CHECK( !severities.contains( "legacy_no_courtyard_defined" ) );
+    BOOST_CHECK_EQUAL( severities.value( "missing_courtyard", "" ), "error" );
+    BOOST_CHECK( !severities.contains( "legacy_courtyards_overlap" ) );
+    BOOST_CHECK_EQUAL( severities.value( "courtyards_overlap", "" ), "ignore" );
+    BOOST_CHECK( !bds.contains( "rule_severitieslegacy_no_courtyard_defined" ) );
+    BOOST_CHECK( !bds.contains( "rule_severitieslegacy_courtyards_overlap" ) );
+}
+
+
+// A board attached after the frame's blank one, as on the project manager path, still reads the old key
+BOOST_AUTO_TEST_CASE( LaterBoardReadsOldHoleSeverity )
+{
+    KI_TEST::SCOPED_TEMP_DIR dir( "kicad_qa_bds_later_board" );
+
+    LoadCtrlBoard( dir.Path(),
+                   []( nlohmann::json& aDoc )
+                   {
+                       aDoc["board"]["design_settings"]["rule_severities"].erase( "hole_to_hole" );
+                   } );
+
+    auto board = std::make_unique<BOARD>();
+
+    m_board->SetProject( &m_settingsManager.Prj() );
+    board->SetProject( &m_settingsManager.Prj() );
+
+    BOOST_CHECK( board->GetDesignSettings().GetSeverity( DRCE_DRILLED_HOLES_TOO_CLOSE ) == RPT_SEVERITY_ERROR );
+
+    board->ClearProject();
+    m_board->ClearProject();
+    m_settingsManager.UnloadProject( &m_settingsManager.Prj(), false );
 }
 
 

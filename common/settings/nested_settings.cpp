@@ -47,11 +47,10 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
     m_internals->clear();
     bool success = false;
     bool migrationFailed = false;
+    nlohmann::json::json_pointer ptr = m_internals->PointerFromString( m_path );
 
     if( m_parent )
     {
-        nlohmann::json::json_pointer ptr = m_internals->PointerFromString( m_path );
-
         if( m_parent->m_internals->contains( ptr ) )
         {
             try
@@ -108,6 +107,11 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 success = false;
                 migrationFailed = true;
             }
+            else
+            {
+                // A save must not bring back keys the migration renamed or removed
+                refreshParentOriginal();
+            }
         }
         else if( filever > m_schemaVersion )
         {
@@ -137,6 +141,25 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
     }
 
     return success;
+}
+
+
+void NESTED_SETTINGS::refreshParentOriginal()
+{
+    nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( m_path );
+
+    // The cast keeps basic_json's converting ctor from mangling the derived internals
+    if( m_parent && m_parent->m_internals->m_original.contains( ptr ) )
+        m_parent->m_internals->m_original[ptr] = static_cast<const nlohmann::json&>( *m_internals );
+}
+
+
+void NESTED_SETTINGS::dropFromParentOriginal( const std::string& aPath )
+{
+    nlohmann::json::json_pointer ptr = JSON_SETTINGS_INTERNALS::PointerFromString( m_path + "." + aPath );
+
+    if( m_parent && m_parent->m_internals->m_original.contains( ptr ) )
+        m_parent->m_internals->m_original.at( ptr.parent_pointer() ).erase( ptr.back() );
 }
 
 

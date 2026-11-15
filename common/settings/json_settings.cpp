@@ -384,9 +384,16 @@ bool JSON_SETTINGS::parseAndMigrate( const std::function<bool( nlohmann::json& )
                         filever, m_schemaVersion );
 
             if( Migrate() )
+            {
                 aMigrated = true;
+
+                // A save must not bring back keys the migration renamed or removed
+                m_internals->m_original = doc;
+            }
             else
+            {
                 wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
+            }
         }
         else if( filever > m_schemaVersion )
         {
