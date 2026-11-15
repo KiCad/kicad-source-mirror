@@ -1089,67 +1089,77 @@ void PROJECT_TREE_PANE::showContextMenu()
 
     if( vcs_menu )
     {
+        // Setting up the repository, its history, its branch and whether git is used at all
+        // apply to the whole project, so they are offered on the project file and nowhere else.
+        // Ignoring is the only thing here that acts on the item clicked.
+        const bool repoWide =
+                selection.size() == 1 && selection[0] && selection[0]->GetId() == m_TreeProject->GetRootItem();
         wxMenu*     vcs_submenu = new wxMenu();
-        wxMenu*     branch_submenu = new wxMenu();
         wxMenuItem* vcs_menuitem = nullptr;
 
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_INITIALIZE_PROJECT,
-                                            _( "Add Project to Version Control..." ),
-                                            _( "Initialize a new repository" ) );
-        vcs_menuitem->Enable( vcs_can_init );
-
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOTE_SETTINGS, _( "Configure Default Remote..." ),
-                                            _( "Set or change the default remote URL and credentials" ) );
-        vcs_menuitem->Enable( vcs_can_set_remote );
-
-        // Committing, pushing and pulling are done from the docked Version Control panel, so
-        // the version-control submenu keeps only repository setup, history and branch operations.
-        vcs_submenu->AppendSeparator();
-
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_HISTORY, _( "Version History..." ),
-                                            _( "Show the commits made to this project" ) );
-        vcs_menuitem->Enable( vcs_can_show_history );
-
-        // Reading the branch list walks the repository. On contention the submenu is built
-        // without the shortcuts rather than reading it concurrently.
-        std::shared_ptr<KIGIT_COMMON> common = gitCommon();
         m_gitMenuBranches.clear();
-        m_gitMenuSession = common;
-        std::vector<KIGIT_BRANCH_INFO> branches;
 
+        if( repoWide )
         {
-            std::unique_lock<std::mutex> branchLock = common->TryLockAction();
+            vcs_menuitem = vcs_submenu->Append( ID_GIT_INITIALIZE_PROJECT, _( "Add Project to Version Control..." ),
+                                                _( "Initialize a new repository" ) );
+            vcs_menuitem->Enable( vcs_can_init );
 
-            if( branchLock.owns_lock() )
-                branches = common->GetBranches();
-        }
+            vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOTE_SETTINGS, _( "Configure Default Remote..." ),
+                                                _( "Set or change the default remote URL and credentials" ) );
+            vcs_menuitem->Enable( vcs_can_set_remote );
 
-        KIGIT::SortBranchesForDisplay( branches );
+            // Committing, pushing and pulling are done from the docked Version Control panel, so
+            // the version-control submenu keeps only repository setup, history and branch operations.
+            vcs_submenu->AppendSeparator();
 
-        for( const KIGIT_BRANCH_INFO& branch : branches )
-        {
-            if( branch.isRemote || branch.isCurrent )
-                continue;
+            vcs_menuitem = vcs_submenu->Append( ID_GIT_HISTORY, _( "Version History..." ),
+                                                _( "Show the commits made to this project" ) );
+            vcs_menuitem->Enable( vcs_can_show_history );
 
-            m_gitMenuBranches.push_back( branch.name );
+            // Reading the branch list walks the repository. On contention the submenu is built
+            // without the shortcuts rather than reading it concurrently.
+            std::shared_ptr<KIGIT_COMMON>  common = gitCommon();
+            std::vector<KIGIT_BRANCH_INFO> branches;
 
-            if( m_gitMenuBranches.size() == 5 )
-                break;
-        }
+            m_gitMenuSession = common;
 
-        for( size_t ii = 0; ii < m_gitMenuBranches.size(); ++ii )
-        {
-            wxString msg = _( "Switch to branch " ) + m_gitMenuBranches[ii];
-            vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_QUICK1 + ii, m_gitMenuBranches[ii], msg );
+            {
+                std::unique_lock<std::mutex> branchLock = common->TryLockAction();
+
+                if( branchLock.owns_lock() )
+                    branches = common->GetBranches();
+            }
+
+            KIGIT::SortBranchesForDisplay( branches );
+
+            for( const KIGIT_BRANCH_INFO& branch : branches )
+            {
+                if( branch.isRemote || branch.isCurrent )
+                    continue;
+
+                m_gitMenuBranches.push_back( branch.name );
+
+                if( m_gitMenuBranches.size() == 5 )
+                    break;
+            }
+
+            wxMenu* branch_submenu = new wxMenu();
+
+            for( size_t ii = 0; ii < m_gitMenuBranches.size(); ++ii )
+            {
+                wxString msg = _( "Switch to branch " ) + m_gitMenuBranches[ii];
+                vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_QUICK1 + ii, m_gitMenuBranches[ii], msg );
+                vcs_menuitem->Enable( vcs_can_switch );
+            }
+
+            vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Other..." ),
+                                                   _( "Switch to a different branch" ) );
+            vcs_menuitem->Enable( vcs_can_switch );
+
+            vcs_menuitem = vcs_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Switch to Branch" ), branch_submenu );
             vcs_menuitem->Enable( vcs_can_switch );
         }
-
-        vcs_menuitem = branch_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Other..." ),
-                                     _( "Switch to a different branch" ) );
-        vcs_menuitem->Enable( vcs_can_switch );
-
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Switch to Branch" ), branch_submenu );
-        vcs_menuitem->Enable( vcs_can_switch );
 
         bool    ignore_usable = false;
         wxMenu* ignore_submenu = buildIgnoreSubmenu( selection, ignore_usable );
@@ -1157,20 +1167,23 @@ void PROJECT_TREE_PANE::showContextMenu()
         vcs_menuitem = vcs_submenu->AppendSubMenu( ignore_submenu, _( "Ignore" ) );
         vcs_menuitem->Enable( ignore_usable );
 
-        vcs_submenu->AppendSeparator();
-
-        if( gitIntegrationDisabled )
+        if( repoWide )
         {
-            vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Enable Git Integration" ),
-                                 _( "Re-enable Git integration for this project" ) );
-        }
-        else
-        {
-            vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Disable Git Integration" ),
-                                 _( "Disable Git integration for this project" ) );
-        }
+            vcs_submenu->AppendSeparator();
 
-        vcs_menuitem->Enable( vcs_can_remove );
+            if( gitIntegrationDisabled )
+            {
+                vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Enable Git Integration" ),
+                                                    _( "Re-enable Git integration for this project" ) );
+            }
+            else
+            {
+                vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOVE_VCS, _( "Disable Git Integration" ),
+                                                    _( "Disable Git integration for this project" ) );
+            }
+
+            vcs_menuitem->Enable( vcs_can_remove );
+        }
 
         popup_menu.AppendSeparator();
         popup_menu.AppendSubMenu( vcs_submenu, _( "Version Control" ) );
