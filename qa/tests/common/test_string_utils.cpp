@@ -23,6 +23,9 @@
 
 #include <string_utils.h>
 
+#include <wx/filefn.h>
+#include <wx/utils.h>
+
 
 BOOST_AUTO_TEST_SUITE( StringUtilsTests )
 
@@ -127,11 +130,41 @@ BOOST_AUTO_TEST_CASE( ReplaceIllegalFileNameChars_WxString_ReplacementChar )
     BOOST_TEST( name == "a_bad_name_file" );
 }
 
+#ifdef __WINDOWS__
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_WindowsAbsolutePath )
+{
+    wxString systemRoot;
+    BOOST_REQUIRE( wxGetEnv( wxS( "SystemRoot" ), &systemRoot ) );
+
+    wxString expected = wxS( "file:///" ) + systemRoot;
+    expected.Replace( wxS( "\\" ), wxS( "/" ) );
+
+    BOOST_TEST( ConvertPathToFileUri( systemRoot, nullptr ) == expected );
+}
+
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_WindowsRootedPath )
+{
+    wxString systemRoot;
+    BOOST_REQUIRE( wxGetEnv( wxS( "SystemRoot" ), &systemRoot ) );
+
+    // A rooted path takes the drive of the working directory
+    BOOST_REQUIRE( wxGetCwd().Left( 2 ).IsSameAs( systemRoot.Left( 2 ), false ) );
+
+    wxString rooted = systemRoot.Mid( 2 );
+    rooted.Replace( wxS( "\\" ), wxS( "/" ) );
+
+    wxString expected = wxS( "file:///" ) + systemRoot;
+    expected.Replace( wxS( "\\" ), wxS( "/" ) );
+
+    BOOST_TEST( ConvertPathToFileUri( rooted, nullptr ) == expected );
+}
+#else
 BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_UnixAbsolutePath )
 {
     // /tmp exists on all Unix CI machines
     BOOST_TEST( ConvertPathToFileUri( wxS( "/tmp" ), nullptr ) == wxString( "file:///tmp" ) );
 }
+#endif
 
 BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_AlreadyHasScheme )
 {

@@ -1764,14 +1764,25 @@ wxString ConvertPathToFileUri( const wxString& aPath, const PROJECT* aProject )
         resolved = fname.GetFullPath();
     }
 
+#ifdef __WINDOWS__
+    // A rooted path names no drive, so it lives on the current one
+    if( !fname.IsAbsolute() && aPath.StartsWith( wxS( "/" ) ) )
+    {
+        fname.MakeAbsolute();
+        resolved = fname.GetFullPath();
+    }
+#endif
+
     // Only convert if the file actually exists
     bool isUNC = resolved.StartsWith( wxS( "\\\\" ) );
 
     if( !isUNC && !wxFileExists( resolved ) && !wxDirExists( resolved ) )
         return aPath;
 
+#ifndef __WINDOWS__
     if( aPath.StartsWith( wxS( "/" ) ) )
         return wxS( "file://" ) + aPath;
+#endif
 
     if( aPath.StartsWith( wxS( "${" ) ) )
         return wxS( "file://" ) + aPath;
@@ -1787,9 +1798,10 @@ wxString ConvertPathToFileUri( const wxString& aPath, const PROJECT* aProject )
         return wxS( "file://" ) + path;
     }
 
-    if( aPath.Length() >= 2 && wxIsalpha( aPath[0] ) && aPath[1] == ':' )
+    if( aPath.StartsWith( wxS( "/" ) ) || ( aPath.Length() >= 2 && wxIsalpha( aPath[0] ) && aPath[1] == ':' ) )
     {
-        wxString path = aPath;
+        // A rooted path needs the resolved drive, while a drive path keeps its variables as typed
+        wxString path = aPath.StartsWith( wxS( "/" ) ) ? resolved : aPath;
         path.Replace( wxS( "\\" ), wxS( "/" ) );
         return wxS( "file:///" ) + path;
     }
