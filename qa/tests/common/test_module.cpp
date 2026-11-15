@@ -50,10 +50,9 @@ bool init_unit_test()
 
     bool ok = wxInitialize();
 
-#ifdef __WXMSW__
+    // wxLogGui flushes pending errors into a modal dialog whenever a nested event loop goes idle
     if( ok )
-        wxLog::SetActiveTarget( new wxLogStderr );
-#endif
+        delete wxLog::SetActiveTarget( new wxLogStderr );
 
     wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 
