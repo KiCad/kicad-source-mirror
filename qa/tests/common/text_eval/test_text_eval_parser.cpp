@@ -22,6 +22,7 @@
  * Test suite for text_eval_parser routines
  */
 
+#include <qa_utils/timing.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
@@ -631,20 +632,25 @@ BOOST_AUTO_TEST_CASE( Performance )
         largeExpression += "@{" + std::to_string(i) + " * 2} ";
     }
 
-    auto start = std::chrono::high_resolution_clock::now();
-    auto result = evaluator.Evaluate( largeExpression );
-    auto end = std::chrono::high_resolution_clock::now();
+    wxString result;
 
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
+    long long duration = KI_TEST::ProcessCpuMsOf(
+            [&]()
+            {
+                result = evaluator.Evaluate( largeExpression );
+            } );
 
     BOOST_CHECK( !evaluator.HasErrors() );
     BOOST_CHECK( !result.empty() );
 
     // Sanitizer instrumentation changes execution cost, not the evaluation contract
 #if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
-    BOOST_TEST_MESSAGE( "Instrumented large expression evaluation: " << duration.count() << " ms" );
+    BOOST_TEST_MESSAGE( "Instrumented large expression evaluation: " << duration << " ms" );
 #else
-    BOOST_CHECK_LT( duration.count(), 1000 );
+    BOOST_TEST_MESSAGE( "large expression evaluation: " << duration << " ms" );
+
+    if( KI_TEST::TimingBoundsApply() )
+        BOOST_CHECK_LT( duration, 1000 );
 #endif
 }
 

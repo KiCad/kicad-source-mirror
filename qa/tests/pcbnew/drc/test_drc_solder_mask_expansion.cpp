@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/timing.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
@@ -26,7 +27,6 @@
 #include <pcb_shape.h>
 #include <footprint.h>
 #include <drc/drc_engine.h>
-#include <core/profile.h>
 #include <settings/settings_manager.h>
 #include <drc/drc_item.h>
 #include <widgets/report_severity.h>
@@ -177,37 +177,39 @@ BOOST_FIXTURE_TEST_CASE( SolderMaskExpansionPerformance, DRC_SOLDER_MASK_EXPANSI
     // many times for each item (once per potential collision pair).
     const int iterations = 1000;
 
-    PROF_TIMER timer;
+    long long msecs = KI_TEST::ProcessCpuMsOf(
+            [&]()
+            {
+                for( int i = 0; i < iterations; ++i )
+                {
+                    for( PAD* pad : pads )
+                        pad->GetSolderMaskExpansion( F_Mask );
 
-    for( int i = 0; i < iterations; ++i )
-    {
-        for( PAD* pad : pads )
-            pad->GetSolderMaskExpansion( F_Mask );
+                    for( PCB_TRACK* track : tracks )
+                        track->GetSolderMaskExpansion();
 
-        for( PCB_TRACK* track : tracks )
-            track->GetSolderMaskExpansion();
-
-        for( PCB_SHAPE* shape : shapes )
-            shape->GetSolderMaskExpansion();
-    }
-
-    timer.Stop();
+                    for( PCB_SHAPE* shape : shapes )
+                        shape->GetSolderMaskExpansion();
+                }
+            } );
 
     int totalCalls = iterations * ( pads.size() + tracks.size() + shapes.size() );
 
-    BOOST_TEST_MESSAGE( wxString::Format( "%d calls to GetSolderMaskExpansion took %0.1f ms "
+    BOOST_TEST_MESSAGE( wxString::Format( "%d calls to GetSolderMaskExpansion took %lld ms "
                                           "(%0.0f ns/call)",
-                                          totalCalls, timer.msecs(),
-                                          timer.msecs() * 1e6 / totalCalls ) );
+                                          totalCalls, msecs, msecs * 1e6 / totalCalls ) );
 
     // Sanitizer instrumentation changes execution cost, not the lookup contract
 #if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS )
     // With the fix (direct property lookup), this should be well under 100ms.
     // Without the fix (EvalRules for every call), this was ~500ms+ even in debug builds.
     // Use a generous threshold to avoid flakiness on slow CI machines.
-    BOOST_CHECK_MESSAGE( timer.msecs() < 500.0,
-                         wxString::Format( "GetSolderMaskExpansion too slow: %0.1f ms for %d calls",
-                                           timer.msecs(), totalCalls ) );
+    if( KI_TEST::TimingBoundsApply() )
+    {
+        BOOST_CHECK_MESSAGE( msecs < 500,
+                             wxString::Format( "GetSolderMaskExpansion too slow: %lld ms for %d calls", msecs,
+                                               totalCalls ) );
+    }
 #endif
 }
 

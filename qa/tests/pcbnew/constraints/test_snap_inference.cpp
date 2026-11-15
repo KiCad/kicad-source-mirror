@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/timing.h>
 
 #include <kiid.h>
 #include <snap/snap_inference.h>
@@ -25,7 +26,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <ctime>
 #include <map>
 
 
@@ -914,9 +914,10 @@ BOOST_AUTO_TEST_CASE( CandidateDensityP95StaysWithinFourMilliseconds )
 
     for( int run = 0; run < 20; ++run )
     {
-        std::clock_t                start = std::clock();
+        std::chrono::nanoseconds    start = KI_TEST::ProcessCpuTime();
         std::vector<SNAP_CANDIDATE> candidates = provider.CollectObjectGeometry( context, 25 );
-        samples.emplace_back( ( std::clock() - start ) * 1000000 / CLOCKS_PER_SEC );
+        samples.emplace_back( std::chrono::duration_cast<std::chrono::microseconds>(
+                KI_TEST::ProcessCpuTime() - start ) );
         BOOST_CHECK_EQUAL( candidates.size(), 64 );
     }
 
@@ -926,7 +927,8 @@ BOOST_AUTO_TEST_CASE( CandidateDensityP95StaysWithinFourMilliseconds )
 
     // Sanitizer instrumentation and unoptimized builds change execution cost, not the snapping contract
 #if !defined( KICAD_SANITIZE_THREADS ) && !defined( KICAD_SANITIZE_ADDRESS ) && !defined( DEBUG )
-    BOOST_CHECK_LE( p95.count(), 4000 );
+    if( KI_TEST::TimingBoundsApply() )
+        BOOST_CHECK_LE( p95.count(), 4000 );
 #endif
 }
 

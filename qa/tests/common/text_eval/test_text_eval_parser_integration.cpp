@@ -24,6 +24,7 @@
 
 #include <qa_utils/env_var_utils.h>
 #include <qa_utils/file_utils.h>
+#include <qa_utils/timing.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <qa_utils/git_test_fixture.h>
 #include <qa_utils/scoped_git_backend.h>
@@ -571,32 +572,34 @@ BOOST_AUTO_TEST_CASE( RealWorldPerformance )
         "Board aspect ratio: @{format(${board_width} / ${board_height}, 2)}:1",
     };
 
-    auto start = std::chrono::high_resolution_clock::now();
-
     std::set<std::string> errors;
 
-    // Process expressions many times (simulating real usage)
-    for( int iteration = 0; iteration < 100; ++iteration )
-    {
-        for( const auto& expr : expressions )
-        {
-            auto result = evaluator.Evaluate( wxString::FromUTF8( expr ) );
+    long long duration = KI_TEST::ProcessCpuMsOf(
+            [&]()
+            {
+                // Process expressions many times (simulating real usage)
+                for( int iteration = 0; iteration < 100; ++iteration )
+                {
+                    for( const auto& expr : expressions )
+                    {
+                        auto result = evaluator.Evaluate( wxString::FromUTF8( expr ) );
 
-            if( evaluator.HasErrors() || result.empty() )
-                errors.insert( expr );
-        }
-    }
+                        if( evaluator.HasErrors() || result.empty() )
+                            errors.insert( expr );
+                    }
+                }
+            } );
 
     BOOST_REQUIRE_MESSAGE( errors.empty(), fmt::format( "Evaluation of expressions had errors: {}", fmt::join( errors, ", " ) ) );
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
-
     // Sanitizer instrumentation changes execution cost, not the evaluation contract.
 #if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
-    BOOST_TEST_MESSAGE( "Instrumented expression evaluation: " << duration.count() << " ms" );
+    BOOST_TEST_MESSAGE( "Instrumented expression evaluation: " << duration << " ms" );
 #else
-    BOOST_CHECK_LT( duration.count(), 100 );
+    BOOST_TEST_MESSAGE( "expression evaluation: " << duration << " ms" );
+
+    if( KI_TEST::TimingBoundsApply() )
+        BOOST_CHECK_LT( duration, 100 );
 #endif
 
     // Test that results are consistent

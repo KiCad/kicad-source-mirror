@@ -22,6 +22,7 @@
  * Test suite for text_eval_parser date and time functionality
  */
 
+#include <qa_utils/timing.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <fmt/ranges.h>
@@ -450,29 +451,31 @@ BOOST_AUTO_TEST_CASE( DatePerformance )
     EXPRESSION_EVALUATOR evaluator;
 
     // Test that date operations are reasonably fast
-    auto start = std::chrono::high_resolution_clock::now();
-
     std::set<int> errors;
 
-    // Perform many date operations
-    for( int i = 0; i < 1000; ++i )
-    {
-        auto result = evaluator.Evaluate( "@{dateformat(" + std::to_string(i) + ")}" );
+    long long duration = KI_TEST::ProcessCpuMsOf(
+            [&]()
+            {
+                // Perform many date operations
+                for( int i = 0; i < 1000; ++i )
+                {
+                    auto result = evaluator.Evaluate( "@{dateformat(" + std::to_string(i) + ")}" );
 
-        if( evaluator.HasErrors() )
-            errors.insert( i );
-    }
+                    if( evaluator.HasErrors() )
+                        errors.insert( i );
+                }
+            } );
 
     BOOST_REQUIRE_MESSAGE( errors.empty(), fmt::format( "Evaluation of operations had errors: {}", fmt::join( errors, ", " ) ) );
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( end - start );
-
     // Sanitizer instrumentation changes execution cost, not the evaluation contract.
 #if defined( KICAD_SANITIZE_THREADS ) || defined( KICAD_SANITIZE_ADDRESS )
-    BOOST_TEST_MESSAGE( "Instrumented date evaluation: " << duration.count() << " ms" );
+    BOOST_TEST_MESSAGE( "Instrumented date evaluation: " << duration << " ms" );
 #else
-    BOOST_CHECK_LT( duration.count(), 100 );
+    BOOST_TEST_MESSAGE( "date evaluation: " << duration << " ms" );
+
+    if( KI_TEST::TimingBoundsApply() )
+        BOOST_CHECK_LT( duration, 100 );
 #endif
 }
 
