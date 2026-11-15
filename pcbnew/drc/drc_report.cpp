@@ -175,15 +175,17 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         if( !marker )
             return;
 
+        if( IsValidLayer( marker->GetLayer() ) )
+            aViolation.layer = m_board->GetLayerName( marker->GetLayer() );
+        else if( marker->GetPosition() == VECTOR2I() )
+            return;
+
         RC_JSON::COORDINATE pos;
         pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( unitsProvider.GetIuScale(), unitsProvider.GetUserUnits(),
                                                 marker->GetPosition().x );
         pos.y = EDA_UNIT_UTILS::UI::ToUserUnit( unitsProvider.GetIuScale(), unitsProvider.GetUserUnits(),
                                                 marker->GetPosition().y );
         aViolation.pos = pos;
-
-        if( IsValidLayer( marker->GetLayer() ) )
-            aViolation.layer = m_board->GetLayerName( marker->GetLayer() );
     };
 
     for( int i = 0; i < m_markersProvider->GetCount(); ++i )

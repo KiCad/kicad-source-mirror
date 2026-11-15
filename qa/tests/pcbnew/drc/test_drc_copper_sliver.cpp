@@ -69,6 +69,40 @@ struct DRC_REGRESSION_TEST_FIXTURE
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
 };
+
+
+nlohmann::json writeAndReadJsonReport( BOARD* aBoard )
+{
+    auto markersProvider =
+            std::make_shared<DRC_ITEMS_PROVIDER>( aBoard, MARKER_BASE::MARKER_DRC, MARKER_BASE::MARKER_DRAWING_SHEET );
+    auto ratsnestProvider = std::make_shared<DRC_ITEMS_PROVIDER>( aBoard, MARKER_BASE::MARKER_RATSNEST );
+    auto fpWarningsProvider = std::make_shared<DRC_ITEMS_PROVIDER>( aBoard, MARKER_BASE::MARKER_PARITY );
+
+    int allSeverities = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
+    markersProvider->SetSeverities( allSeverities );
+    ratsnestProvider->SetSeverities( allSeverities );
+    fpWarningsProvider->SetSeverities( allSeverities );
+
+    DRC_REPORT report( aBoard, EDA_UNITS::MM, markersProvider, ratsnestProvider, fpWarningsProvider );
+
+    wxString jsonPath = wxFileName::CreateTempFileName( wxT( "kicad-drc-json-" ) );
+    bool     written = report.WriteJsonReport( jsonPath );
+
+    nlohmann::json reportJson;
+
+    if( written )
+    {
+        std::ifstream reportStream( jsonPath.fn_str() );
+
+        if( reportStream.is_open() )
+            reportStream >> reportJson;
+    }
+
+    wxRemoveFile( jsonPath );
+    BOOST_REQUIRE( written );
+
+    return reportJson;
+}
 } // namespace
 
 
@@ -201,7 +235,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperSliverJsonReportsMarkerLocation, DRC_REGRESSIO
 
     VECTOR2I expectedPos;
     int      expectedLayer = UNDEFINED_LAYER;
-    bool     sawSliver = false;
+    int      sliverCount = 0;
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
@@ -212,7 +246,7 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperSliverJsonReportsMarkerLocation, DRC_REGRESSIO
 
                 expectedPos = aPos;
                 expectedLayer = aLayer;
-                sawSliver = true;
+                ++sliverCount;
 
                 PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
 
@@ -225,31 +259,10 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperSliverJsonReportsMarkerLocation, DRC_REGRESSIO
     bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
     bds.m_DRCEngine->ClearViolationHandler();
 
-    BOOST_REQUIRE( sawSliver );
+    BOOST_REQUIRE_EQUAL( sliverCount, 1 );
     BOOST_REQUIRE( IsValidLayer( expectedLayer ) );
 
-    auto markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_board.get(), MARKER_BASE::MARKER_DRC,
-                                                                 MARKER_BASE::MARKER_DRAWING_SHEET );
-    auto ratsnestProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_board.get(), MARKER_BASE::MARKER_RATSNEST );
-    auto fpWarningsProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_board.get(), MARKER_BASE::MARKER_PARITY );
-
-    int allSeverities = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
-    markersProvider->SetSeverities( allSeverities );
-    ratsnestProvider->SetSeverities( allSeverities );
-    fpWarningsProvider->SetSeverities( allSeverities );
-
-    DRC_REPORT report( m_board.get(), EDA_UNITS::MM, markersProvider, ratsnestProvider, fpWarningsProvider );
-
-    wxString jsonPath = wxFileName::CreateTempFileName( wxT( "kicad-drc-sliver-json-" ) );
-    BOOST_REQUIRE( report.WriteJsonReport( jsonPath ) );
-
-    std::ifstream reportStream( jsonPath.fn_str() );
-    BOOST_REQUIRE( reportStream.is_open() );
-
-    nlohmann::json reportJson;
-    reportStream >> reportJson;
-    reportStream.close();
-    wxRemoveFile( jsonPath );
+    nlohmann::json reportJson = writeAndReadJsonReport( m_board.get() );
 
     bool foundSliver = false;
 
@@ -275,4 +288,38 @@ BOOST_FIXTURE_TEST_CASE( DRCCopperSliverJsonReportsMarkerLocation, DRC_REGRESSIO
     }
 
     BOOST_CHECK( foundSliver );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( DRCJsonReportOmitsUnknownMarkerLocation, DRC_REGRESSION_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "sliver", m_board );
+    BOOST_REQUIRE( m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
+        bds.m_DRCSeverities[ii] = SEVERITY::RPT_SEVERITY_IGNORE;
+
+    bds.m_DRCSeverities[DRCE_MISSING_FOOTPRINT] = SEVERITY::RPT_SEVERITY_ERROR;
+
+    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
+    drcItem->SetErrorMessage( wxT( "Missing footprint" ) );
+    m_board->Add( new PCB_MARKER( drcItem, VECTOR2I(), UNDEFINED_LAYER ) );
+
+    nlohmann::json reportJson = writeAndReadJsonReport( m_board.get() );
+
+    bool foundMissingFootprint = false;
+
+    for( const auto& violation : reportJson["schematic_parity"] )
+    {
+        if( violation.value( "type", std::string() ) != "missing_footprint" )
+            continue;
+
+        foundMissingFootprint = true;
+        BOOST_CHECK( !violation.contains( "pos" ) );
+        BOOST_CHECK( !violation.contains( "layer" ) );
+    }
+
+    BOOST_CHECK( foundMissingFootprint );
 }
