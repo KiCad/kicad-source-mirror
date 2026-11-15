@@ -21,6 +21,7 @@
 
 #include <cli/exit_codes.h>
 #include <kiway.h>
+#include <reporter.h>
 
 #include <wx/log.h>
 
@@ -61,22 +62,29 @@ protected:
 BOOST_AUTO_TEST_SUITE( KiwayLoad )
 
 
-BOOST_AUTO_TEST_CASE( MissingKifaceIsReportedNotThrown )
+BOOST_AUTO_TEST_CASE( MissingKifaceIsReportedOnceNotThrown )
 {
-    MISSING_DSO_KIWAY kiway;
-    CAPTURE_LOG       log;
-    wxLog*            prevLog = wxLog::SetActiveTarget( &log );
-    KIFACE*           kiface = nullptr;
-    int               exitCode = CLI::EXIT_CODES::SUCCESS;
+    MISSING_DSO_KIWAY  kiway;
+    CAPTURE_LOG        log;
+    WX_STRING_REPORTER reporter;
+    wxLog*             prevLog = wxLog::SetActiveTarget( &log );
+    KIFACE*            kiface = nullptr;
+    wxString           firstLog;
+    int                exitCode = CLI::EXIT_CODES::SUCCESS;
 
     BOOST_CHECK_NO_THROW( kiface = kiway.KiFACE( KIWAY::FACE_SCH ) );
-    BOOST_CHECK_NO_THROW( exitCode = kiway.ProcessJob( KIWAY::FACE_SCH, nullptr ) );
+    firstLog = log.m_text;
+    log.m_text.clear();
+
+    BOOST_CHECK_NO_THROW( exitCode = kiway.ProcessJob( KIWAY::FACE_SCH, nullptr, &reporter ) );
 
     wxLog::SetActiveTarget( prevLog );
 
     BOOST_CHECK( kiface == nullptr );
+    BOOST_CHECK( firstLog.Contains( wxS( "Failed to load kiface library" ) ) );
     BOOST_CHECK_EQUAL( exitCode, CLI::EXIT_CODES::ERR_UNKNOWN );
-    BOOST_CHECK( log.m_text.Contains( wxS( "Failed to load kiface library" ) ) );
+    BOOST_CHECK( reporter.GetMessages().Contains( wxS( "_missing.kiface" ) ) );
+    BOOST_CHECK_MESSAGE( log.m_text.IsEmpty(), "second lookup logged again: " << log.m_text );
 }
 
 

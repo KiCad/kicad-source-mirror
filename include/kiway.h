@@ -380,7 +380,7 @@ public:
      * KIFACE::OnKifaceStart().
      *
      * @return the KIFACE, or nullptr if it is not loaded and @a doLoad is false or if loading
-     *         failed.  A load failure is reported through wxLog; this never throws.
+     *         failed.  A load failure is reported once through wxLog; this never throws.
      */
     virtual KIFACE* KiFACE( FACE_T aFaceId, bool doLoad = true );
 
@@ -551,6 +551,8 @@ private:
 
     static std::array<KIFACE*,KIWAY_FACE_COUNT>  m_kiface;
     static std::array<int,KIWAY_FACE_COUNT>      m_kiface_version;
+
+    std::array<bool, KIWAY_FACE_COUNT>           m_kifaceLoadFailed = {};
 
     int             m_ctl;
 

@@ -28,6 +28,7 @@
 #include <kiway_player.h>
 #include <kiway_mail.h>
 #include <paths.h>
+#include <reporter.h>
 #include <pgm_base.h>
 #include <config.h>
 #include <id.h>
@@ -226,6 +227,10 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
     if( m_kiface[aFaceId] )
         return m_kiface[aFaceId];
 
+    // A missing or broken DSO stays that way, so report it once per session
+    if( m_kifaceLoadFailed[aFaceId] )
+        return nullptr;
+
     // DSO with KIFACE has not been loaded yet, does caller want to load it?
     if( doLoad )
     {
@@ -259,6 +264,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         if( !codeSignOk )
         {
             wxLogError( _( "Failed to verify kiface library '%s' signature." ), dname );
+            m_kifaceLoadFailed[aFaceId] = true;
             return nullptr;
         }
 #endif
@@ -284,11 +290,13 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         if( !success )
         {
             wxLogError( _( "Failed to load kiface library '%s'." ), dname );
+            m_kifaceLoadFailed[aFaceId] = true;
             return nullptr;
         }
         else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == nullptr )
         {
             wxLogError( _( "Could not read instance name and version from kiface library '%s'." ), dname );
+            m_kifaceLoadFailed[aFaceId] = true;
             return nullptr;
         }
         else
@@ -753,7 +761,15 @@ int KIWAY::ProcessJob( KIWAY::FACE_T aFace, JOB* job, REPORTER* aReporter, PROGR
     KIFACE* kiface = KiFACE( aFace );
 
     if( !kiface )
+    {
+        if( aReporter )
+        {
+            aReporter->Report( wxString::Format( _( "Failed to load kiface library '%s'." ), dso_search_path( aFace ) ),
+                               RPT_SEVERITY_ERROR );
+        }
+
         return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
 
     return kiface->HandleJob( job, aReporter, aProgressReporter );
 }
