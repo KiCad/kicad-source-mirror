@@ -38,9 +38,10 @@ patch (re-apply on upstream re-sync):
 | `GCS.cpp` | `#include <boost_graph_adjacency_list.hpp>` | `#include <boost/graph/adjacency_list.hpp>` |
 | `GCS.h`, `Constraints.h`, `Geo.h` | `#include "../../SketcherGlobal.h"` | `#include "planegcs_shim.h"` |
 
-`SubSystem::initialize()` orders its unknowns as the caller declared them instead of
-by address. Upstream intersects two `std::set<double*>`, so the Jacobian column order,
-and with it the rounding of every solve, followed heap layout. MSVC's `std::deque<double>`
+`SubSystem::initialize()` and the two-subsystem `System::solve()` order their unknowns
+as the caller declared them instead of by address. Upstream intersects or sorts sets of
+`double*`, so the variable order, and with it the rounding of every solve, followed heap
+layout. MSVC's `std::deque<double>`
 allocates two doubles per block, which made the same edit land a few nanometres apart
 from one session to the next. Re-apply on upstream re-sync.
 

@@ -4529,22 +4529,26 @@ void System::extractSubsystem(SubSystem* subsys, bool isRedundantsolving)
 // treating the first of them as of higher priority than the second
 int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool isRedundantsolving)
 {
-    int xsizeA = subsysA->pSize();
-    int xsizeB = subsysB->pSize();
     int csizeA = subsysA->cSize();
 
-    VEC_pD plistAB(xsizeA + xsizeB);
+    VEC_pD plistAB;
     {
         VEC_pD plistA, plistB;
         subsysA->getParamList(plistA);
         subsysB->getParamList(plistB);
 
-        std::sort(plistA.begin(), plistA.end());
-        std::sort(plistB.begin(), plistB.end());
+        SET_pD subsysParams(plistA.begin(), plistA.end());
+        subsysParams.insert(plistB.begin(), plistB.end());
 
-        VEC_pD::const_iterator it;
-        it = std::set_union(plistA.begin(), plistA.end(), plistB.begin(), plistB.end(), plistAB.begin());
-        plistAB.resize(it - plistAB.begin());
+        // Keep the declared order. Address order sets the SQP variable order, so the result
+        // followed heap layout
+        for (double* param : plist) {
+            if (subsysParams.erase(param) > 0) {
+                plistAB.push_back(param);
+            }
+        }
+
+        assert(subsysParams.empty());
     }
     int xsize = plistAB.size();
 
