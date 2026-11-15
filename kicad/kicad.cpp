@@ -179,8 +179,6 @@ bool PGM_KICAD::OnPgmInit()
         if( appType == FRAME_T_COUNT )
         {
             wxLogError( wxT( "Unknown frame: %s" ), frameName );
-            // Clean up
-            OnPgmExit();
             return false;
         }
     }
@@ -382,11 +380,6 @@ bool PGM_KICAD::OnPgmInit()
             // OpenProjectFiles() API asks that it report failure to the UI.
             // Nothing further to say here.
 
-            // We've already initialized things at this point, but wx won't call OnExit if
-            // we fail out. Call our own cleanup routine here to ensure the relevant resources
-            // are freed at the right time (if they aren't, segfaults will occur).
-            OnPgmExit();
-
             // Fail the process startup if the file could not be opened,
             // although this is an optional choice, one that can be reversed
             // also in the KIFACE specific OpenProjectFiles() return value.
@@ -506,9 +499,12 @@ void PGM_KICAD::OnPgmExit()
     // setting it here the pool wait below can block for up to 120 seconds.
     m_libraryPreloadAbort.store( true );
 
-    // Abort and wait on any background jobs
-    GetKiCadThreadPool().purge();
-    GetKiCadThreadPool().wait();
+    // Abort and wait on any background jobs, if InitPgm() got far enough to start the pool
+    if( m_singleton.m_ThreadPool )
+    {
+        GetKiCadThreadPool().purge();
+        GetKiCadThreadPool().wait();
+    }
 
     Kiway.OnKiwayEnd();
 
@@ -522,9 +518,13 @@ void PGM_KICAD::OnPgmExit()
 
     // Destroy PGM_KICAD earlier than wxApp and static destruction would
     Destroy();
-    GetGitBackend()->Shutdown();
-    delete GetGitBackend();
-    SetGitBackend( nullptr );
+
+    if( GIT_BACKEND* backend = GetGitBackend() )
+    {
+        backend->Shutdown();
+        delete backend;
+        SetGitBackend( nullptr );
+    }
 }
 
 

@@ -695,9 +695,12 @@ int PGM_KICAD::OnPgmRun()
 
 void PGM_KICAD::OnPgmExit()
 {
-    // Abort and wait on any background jobs
-    GetKiCadThreadPool().purge();
-    GetKiCadThreadPool().wait();
+    // Abort and wait on any background jobs, if InitPgm() got far enough to start the pool
+    if( m_singleton.m_ThreadPool )
+    {
+        GetKiCadThreadPool().purge();
+        GetKiCadThreadPool().wait();
+    }
 
     for( KIWAY::FACE_T face : { KIWAY::FACE_SCH, KIWAY::FACE_PCB } )
     {
@@ -791,13 +794,19 @@ struct APP_KICAD_CLI : public wxAppConsole
         }
 #endif
 
-        if( !program.OnPgmInit() )
+        // An escaping exception would skip OnPgmExit() and crash the static teardown
+        try
         {
-            program.OnPgmExit();
-            return false;
+            if( program.OnPgmInit() )
+                return true;
+        }
+        catch( ... )
+        {
+            Pgm().HandleException( std::current_exception() );
         }
 
-        return true;
+        program.OnPgmExit();
+        return false;
     }
 
     int OnExit() override
