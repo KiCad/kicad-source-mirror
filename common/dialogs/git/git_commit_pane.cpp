@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <optional>
 
 #include <wx/app.h>
 #include <wx/aui/floatpane.h>
@@ -62,6 +63,7 @@
 #include <diff_merge/diff_scene.h>
 #include <reporter.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_ignore.h>
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
 #include <git/git_commit_handler.h>
@@ -1356,10 +1358,42 @@ void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
     if( path.IsEmpty() )
         return;
 
+    // The list holds only files, so the target is never a directory.
+    GIT_IGNORE_TARGET target;
+
+    // Git keeps tracking a file it already knows, so ignoring is only offered for one it does not.
+    bool canIgnore = false;
+
+    {
+        std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+        std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+        if( lock.owns_lock() )
+        {
+            const std::optional<wxString> prefix = common->GetProjectPrefix();
+
+            if( prefix && path.StartsWith( *prefix ) )
+                target.path = path.Mid( prefix->length() );
+
+            canIgnore = !target.path.IsEmpty() && !KIGIT::IgnoreState( *common, target.path, false ).tracked;
+        }
+    }
+
+    const wxString extensionRule = KIGIT::ExtensionIgnoreRule( target.path );
+
     wxMenu menu;
     menu.Append( 1, _( "Show History for This File" ) );
     menu.AppendSeparator();
     menu.Append( 2, _( "Discard Changes" ) );
+
+    if( canIgnore )
+    {
+        menu.AppendSeparator();
+        menu.Append( 3, _( "Ignore This File" ) );
+
+        if( !extensionRule.IsEmpty() )
+            menu.Append( 4, wxString::Format( _( "Ignore All '%s' Files" ), extensionRule ) );
+    }
 
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
@@ -1375,6 +1409,10 @@ void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
     case 2:
         discardFile( m_frame->Prj().GetGitCommon(), path );
         break;
+
+    case 3: ChangeGitIgnore( m_frame, this, GIT_IGNORE_CHANGE::IGNORE_PATH, { target } ); break;
+
+    case 4: ChangeGitIgnore( m_frame, this, GIT_IGNORE_CHANGE::IGNORE_EXTENSION, { target } ); break;
 
     default:
         break;
