@@ -38,6 +38,7 @@
 #include <wx/timer.h>
 #include <wx/treebase.h>
 
+#include <dialogs/git/git_status_entries.h>
 #include <git/kicad_git_common.h>
 #include <git/kigit_failure.h>
 #include "tree_file_type.h"
@@ -185,6 +186,28 @@ private:
     void switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aBranchName, bool aCreate );
 
     /**
+     * Add the selected files to, or take them out of, the project's ignored files
+     */
+    void onGitIgnore( wxCommandEvent& event );
+
+    /**
+     * Open the project's ignore file, for rules the menu items cannot reach
+     */
+    void onGitEditIgnoreFile( wxCommandEvent& event );
+
+    /**
+     * Build the Ignore submenu for a selection, and remember what its items apply to.
+     *
+     * @param aUsable Receives false when nothing in the submenu would take effect.
+     */
+    wxMenu* buildIgnoreSubmenu( const std::vector<PROJECT_TREE_ITEM*>& aSelection, bool& aUsable );
+
+    /**
+     * Open files in the user's text editor, or explain that none is chosen
+     */
+    void openInTextEditor( const std::vector<wxString>& aFileNames );
+
+    /**
      * Remove the git repository from the current project directory
      */
     void onGitRemoveVCS( wxCommandEvent& event );
@@ -300,8 +323,9 @@ private:
     std::weak_ptr<KIGIT_COMMON> m_gitListenerSession;
 
     /// Preserve the shortcut targets while the context menu runs its event loop.
-    std::vector<wxString>       m_gitMenuBranches;
-    std::weak_ptr<KIGIT_COMMON> m_gitMenuSession;
+    std::vector<wxString>          m_gitMenuBranches;
+    std::vector<GIT_IGNORE_TARGET> m_gitMenuIgnoreTargets;
+    std::weak_ptr<KIGIT_COMMON>    m_gitMenuSession;
 
     /// Owns the branch-switch preflight and suppresses callbacks when the project closes.
     std::unique_ptr<KIGIT_QUERY> m_branchQuery;

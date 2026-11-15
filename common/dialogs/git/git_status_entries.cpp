@@ -49,6 +49,7 @@
 #include <eda_base_frame.h>
 #include <frame_type.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_ignore.h>
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
 #include <i18n_utility.h>
@@ -1087,6 +1088,80 @@ void loadModalGitDiff( const std::shared_ptr<MODAL_GIT_DIFF_REQUEST>& aRequest, 
 }
 
 } // namespace
+
+
+void ChangeGitIgnore( EDA_BASE_FRAME* aFrame, wxWindow* aParent, GIT_IGNORE_CHANGE aChange,
+                      const std::vector<GIT_IGNORE_TARGET>& aTargets )
+{
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+
+    if( !common->GetRepo() || aTargets.empty() )
+        return;
+
+    const bool ignoring = aChange == GIT_IGNORE_CHANGE::IGNORE_PATH || aChange == GIT_IGNORE_CHANGE::IGNORE_EXTENSION;
+    const bool byExtension =
+            aChange == GIT_IGNORE_CHANGE::IGNORE_EXTENSION || aChange == GIT_IGNORE_CHANGE::KEEP_EXTENSION;
+    const wxFileName ignoreFile = KIGIT::ProjectIgnoreFile( aFrame->Prj().GetProjectPath() );
+
+    std::vector<wxString> rules;
+
+    for( const GIT_IGNORE_TARGET& target : aTargets )
+    {
+        wxString rule = byExtension ? KIGIT::ExtensionIgnoreRule( target.path )
+                                    : KIGIT::PathIgnoreRule( target.path, target.isDirectory );
+
+        if( !rule.IsEmpty() )
+            rules.push_back( rule );
+    }
+
+    if( rules.empty() )
+        return;
+
+    wxString error;
+    bool     written = ignoring ? KIGIT::AddIgnoreRules( ignoreFile, rules, wxEmptyString, error )
+                                : KIGIT::RemoveIgnoreRules( ignoreFile, rules, error );
+
+    if( !written )
+    {
+        DisplayErrorMessage( aParent, _( "Could not change which files are ignored." ), error );
+        return;
+    }
+
+    common->NotifyRefreshListeners();
+
+    if( ignoring )
+        return;
+
+    std::vector<wxString> stillIgnored;
+
+    {
+        // Only to explain the result, so a busy repository is not worth waiting for.
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+            return;
+
+        for( const GIT_IGNORE_TARGET& target : aTargets )
+        {
+            if( KIGIT::IgnoreState( *common, target.path, target.isDirectory ).ignored )
+                stillIgnored.push_back( target.path );
+        }
+    }
+
+    if( stillIgnored.empty() )
+        return;
+
+    const wxString message =
+            stillIgnored.size() == 1
+                    ? wxString::Format( _( "'%s' is still ignored by another rule." ), stillIgnored.front() )
+                    : wxString::Format( _( "%zu of the selected files are still ignored by another rule." ),
+                                        stillIgnored.size() );
+
+    DisplayInfoMessage( aParent, message,
+                        wxString::Format( _( "That rule covers more than this, so it was left in "
+                                             "place. Edit '%s' to change it." ),
+                                          ignoreFile.GetFullPath() ) );
+}
 
 
 void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )

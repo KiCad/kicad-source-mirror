@@ -73,6 +73,7 @@
 #include <git/git_status_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/kigit_ignore.h>
 #include <git/project_git_utils.h>
 
 #include <dialogs/git/dialog_git_repository.h>
@@ -107,6 +108,97 @@ static bool gitTaskStillRunning( const std::future<void>& aTask )
 {
     return aTask.valid() && aTask.wait_for( std::chrono::seconds( 0 ) ) != std::future_status::ready;
 }
+
+
+namespace
+{
+
+// What the Ignore submenu can offer. A selection whose paths disagree offers nothing.
+struct IGNORE_SELECTION
+{
+    std::vector<GIT_IGNORE_TARGET> targets;
+
+    /// The rule for the extension every target shares, when they are all files sharing one.
+    wxString extensionRule;
+
+    /// None of them is tracked or already ignored, so a rule would take effect.
+    bool canIgnore = false;
+
+    /// All of them are ignored, so the menu offers taking that back.
+    bool ignored = false;
+
+    /// The project's own ignore file holds the rule, so it can be taken out again.
+    bool canKeepPath = false;
+    bool canKeepExtension = false;
+};
+
+
+// Reads the repository, so the caller holds the action lock.
+IGNORE_SELECTION gitIgnoreSelection( KIGIT_COMMON& aCommon, const wxString& aProjectPath,
+                                     const std::vector<PROJECT_TREE_ITEM*>& aSelection )
+{
+    const std::vector<wxString> rules = KIGIT::ReadIgnoreRules( KIGIT::ProjectIgnoreFile( aProjectPath ) );
+
+    IGNORE_SELECTION selection;
+    bool             allIgnored = true;
+    bool             allNamed = true;
+    bool             allFiles = true;
+    bool             anyTracked = false;
+
+    for( PROJECT_TREE_ITEM* item : aSelection )
+    {
+        if( !item )
+            return IGNORE_SELECTION();
+
+        wxString path = item->GetFileName();
+
+        if( !path.StartsWith( aProjectPath ) )
+            return IGNORE_SELECTION();
+
+        path = path.Mid( aProjectPath.length() );
+
+#ifdef __WINDOWS__
+        path.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+
+        // The project folder holds the ignore file, so it cannot be one of its rules.
+        if( path.IsEmpty() )
+            return IGNORE_SELECTION();
+
+        const bool                isDirectory = item->GetType() == TREE_FILE_TYPE::DIRECTORY;
+        const KIGIT::IGNORE_STATE state = KIGIT::IgnoreState( aCommon, path, isDirectory );
+
+        allIgnored &= state.ignored;
+        anyTracked |= state.tracked;
+        allNamed &= alg::contains( rules, KIGIT::PathIgnoreRule( path, isDirectory ) );
+        allFiles &= !isDirectory;
+
+        const wxString extensionRule = KIGIT::ExtensionIgnoreRule( path );
+
+        if( selection.targets.empty() )
+            selection.extensionRule = extensionRule;
+        else if( selection.extensionRule != extensionRule )
+            selection.extensionRule.Clear();
+
+        selection.targets.push_back( { path, isDirectory } );
+    }
+
+    if( selection.targets.empty() )
+        return selection;
+
+    if( !allFiles )
+        selection.extensionRule.Clear();
+
+    selection.canIgnore = !anyTracked && !allIgnored;
+    selection.ignored = allIgnored;
+    selection.canKeepPath = allIgnored && allNamed;
+    selection.canKeepExtension =
+            allIgnored && !selection.extensionRule.IsEmpty() && alg::contains( rules, selection.extensionRule );
+
+    return selection;
+}
+
+} // namespace
 
 
 // list of files extensions listed in the tree project window
@@ -181,6 +273,11 @@ enum project_tree_ids
     ID_GIT_SWITCH_QUICK3,      // Switch the local repository to the third quick branch
     ID_GIT_SWITCH_QUICK4,      // Switch the local repository to the fourth quick branch
     ID_GIT_SWITCH_QUICK5,      // Switch the local repository to the fifth quick branch
+    ID_GIT_IGNORE_PATH,        // Add the selected paths to the project's ignored files
+    ID_GIT_IGNORE_EXTENSION,   // Ignore every file sharing the selection's extension
+    ID_GIT_KEEP_PATH,          // Take the selected paths out of the ignored files
+    ID_GIT_KEEP_EXTENSION,     // Stop ignoring every file sharing the selection's extension
+    ID_GIT_EDIT_IGNORE_FILE,   // Open the project's ignore file in a text editor
 
     ID_JOBS_RUN,
 };
@@ -202,6 +299,8 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_GIT_HISTORY, PROJECT_TREE_PANE::onGitHistory )
     EVT_MENU( ID_GIT_SWITCH_BRANCH, PROJECT_TREE_PANE::onGitSwitchBranch )
     EVT_MENU_RANGE( ID_GIT_SWITCH_QUICK1, ID_GIT_SWITCH_QUICK5, PROJECT_TREE_PANE::onGitSwitchBranch )
+    EVT_MENU_RANGE( ID_GIT_IGNORE_PATH, ID_GIT_KEEP_EXTENSION, PROJECT_TREE_PANE::onGitIgnore )
+    EVT_MENU( ID_GIT_EDIT_IGNORE_FILE, PROJECT_TREE_PANE::onGitEditIgnoreFile )
     EVT_MENU( ID_GIT_REMOVE_VCS, PROJECT_TREE_PANE::onGitRemoveVCS )
 
     EVT_MENU( ID_JOBS_RUN, PROJECT_TREE_PANE::onRunSelectedJobsFile )
@@ -1052,6 +1151,12 @@ void PROJECT_TREE_PANE::showContextMenu()
         vcs_menuitem = vcs_submenu->Append( ID_GIT_SWITCH_BRANCH, _( "Switch to Branch" ), branch_submenu );
         vcs_menuitem->Enable( vcs_can_switch );
 
+        bool    ignore_usable = false;
+        wxMenu* ignore_submenu = buildIgnoreSubmenu( selection, ignore_usable );
+
+        vcs_menuitem = vcs_submenu->AppendSubMenu( ignore_submenu, _( "Ignore" ) );
+        vcs_menuitem->Enable( ignore_usable );
+
         vcs_submenu->AppendSeparator();
 
         if( gitIntegrationDisabled )
@@ -1076,7 +1181,7 @@ void PROJECT_TREE_PANE::showContextMenu()
 }
 
 
-void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event )
+void PROJECT_TREE_PANE::openInTextEditor( const std::vector<wxString>& aFileNames )
 {
     wxString editorname = Pgm().GetTextEditor();
 
@@ -1086,17 +1191,22 @@ void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event 
         return;
     }
 
-    std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
-
-    for( PROJECT_TREE_ITEM* item_data : tree_data )
+    for( const wxString& fullFileName : aFileNames )
     {
-        wxString fullFileName = item_data->GetFileName();
-
         if( !fullFileName.IsEmpty() )
-        {
             ExecuteFile( editorname, fullFileName.wc_str(), nullptr, false );
-        }
     }
+}
+
+
+void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event )
+{
+    std::vector<wxString> fileNames;
+
+    for( PROJECT_TREE_ITEM* item_data : GetSelectedData() )
+        fileNames.push_back( item_data->GetFileName() );
+
+    openInTextEditor( fileNames );
 }
 
 
@@ -1655,6 +1765,7 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
 {
     m_branchQuery->Cancel();
     m_gitMenuBranches.clear();
+    m_gitMenuIgnoreTargets.clear();
     m_gitMenuSession.reset();
     KIGIT::ClearSyncWarnings( m_Parent );
 
@@ -1743,6 +1854,7 @@ void PROJECT_TREE_PANE::releaseGitRepo()
 {
     m_branchQuery->Cancel();
     m_gitMenuBranches.clear();
+    m_gitMenuIgnoreTargets.clear();
     m_gitMenuSession.reset();
     Prj().ReleaseGitCommon();
 }
@@ -1763,6 +1875,7 @@ void PROJECT_TREE_PANE::syncGitListener()
 
     m_branchQuery->Cancel();
     m_gitMenuBranches.clear();
+    m_gitMenuIgnoreTargets.clear();
     m_gitMenuSession.reset();
     KIGIT::ClearSyncWarnings( m_Parent );
 
@@ -2194,6 +2307,100 @@ void PROJECT_TREE_PANE::switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, 
     };
 
     ProjectClearOfUncommittedWork( m_Parent, this, *m_branchQuery, std::move( createBranch ) );
+}
+
+
+wxMenu* PROJECT_TREE_PANE::buildIgnoreSubmenu( const std::vector<PROJECT_TREE_ITEM*>& aSelection, bool& aUsable )
+{
+    wxMenu*                       submenu = new wxMenu();
+    std::shared_ptr<KIGIT_COMMON> common = gitCommon();
+    IGNORE_SELECTION              ignore;
+
+    m_gitMenuIgnoreTargets.clear();
+
+    if( !Prj().GetLocalSettings().m_GitIntegrationDisabled && common->GetRepo() )
+    {
+        // Reading the state walks the index, so a busy repository leaves the submenu disabled.
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( lock.owns_lock() )
+            ignore = gitIgnoreSelection( *common, Prj().GetProjectPath(), aSelection );
+    }
+
+    m_gitMenuIgnoreTargets = ignore.targets;
+
+    const bool single = ignore.targets.size() == 1;
+    const bool folder = single && ignore.targets.front().isDirectory;
+
+    auto append = [submenu]( int aId, const wxString& aLabel, const wxString& aHelp, bool aEnabled )
+    {
+        submenu->Append( aId, aLabel, aHelp )->Enable( aEnabled );
+    };
+
+    if( ignore.ignored )
+    {
+        // Only a rule in the project's own ignore file can be taken out of it.
+        append( ID_GIT_KEEP_PATH,
+                folder   ? _( "Stop Ignoring This Folder" )
+                : single ? _( "Stop Ignoring This File" )
+                         : _( "Stop Ignoring Selected Items" ),
+                _( "Take the rule naming these out of the project's ignored files" ), ignore.canKeepPath );
+
+        if( ignore.canKeepExtension )
+        {
+            append( ID_GIT_KEEP_EXTENSION,
+                    wxString::Format( _( "Stop Ignoring All '%s' Files" ), ignore.extensionRule ),
+                    _( "Take that rule out of the project's ignored files" ), true );
+        }
+    }
+    else
+    {
+        append( ID_GIT_IGNORE_PATH,
+                folder   ? _( "Ignore This Folder" )
+                : single ? _( "Ignore This File" )
+                         : _( "Ignore Selected Items" ),
+                _( "Leave these out of version control" ), ignore.canIgnore );
+
+        if( !ignore.extensionRule.IsEmpty() )
+        {
+            append( ID_GIT_IGNORE_EXTENSION, wxString::Format( _( "Ignore All '%s' Files" ), ignore.extensionRule ),
+                    _( "Leave every file with this extension out of version control" ), ignore.canIgnore );
+        }
+    }
+
+    // A pattern matching nothing on disk has no item to right-click, so the file stays reachable.
+    const bool haveIgnoreFile = KIGIT::ProjectIgnoreFile( Prj().GetProjectPath() ).FileExists();
+
+    submenu->AppendSeparator();
+    append( ID_GIT_EDIT_IGNORE_FILE, _( "Edit Ignore File..." ),
+            _( "Open the project's ignored files in a text editor" ), haveIgnoreFile );
+
+    aUsable = ignore.canIgnore || ignore.canKeepPath || ignore.canKeepExtension || haveIgnoreFile;
+
+    return submenu;
+}
+
+
+void PROJECT_TREE_PANE::onGitIgnore( wxCommandEvent& aEvent )
+{
+    GIT_IGNORE_CHANGE change;
+
+    switch( aEvent.GetId() )
+    {
+    case ID_GIT_IGNORE_PATH: change = GIT_IGNORE_CHANGE::IGNORE_PATH; break;
+    case ID_GIT_IGNORE_EXTENSION: change = GIT_IGNORE_CHANGE::IGNORE_EXTENSION; break;
+    case ID_GIT_KEEP_PATH: change = GIT_IGNORE_CHANGE::KEEP_PATH; break;
+    case ID_GIT_KEEP_EXTENSION: change = GIT_IGNORE_CHANGE::KEEP_EXTENSION; break;
+    default: return;
+    }
+
+    ChangeGitIgnore( m_Parent, this, change, m_gitMenuIgnoreTargets );
+}
+
+
+void PROJECT_TREE_PANE::onGitEditIgnoreFile( wxCommandEvent& aEvent )
+{
+    openInTextEditor( { KIGIT::ProjectIgnoreFile( Prj().GetProjectPath() ).GetFullPath() } );
 }
 
 
