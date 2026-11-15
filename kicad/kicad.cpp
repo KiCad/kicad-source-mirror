@@ -604,13 +604,19 @@ struct APP_KICAD : public wxApp
         }
 #endif
 
-        if( !program.OnPgmInit() )
+        // An escaping exception would skip OnPgmExit() and crash the static teardown
+        try
         {
-            program.OnPgmExit();
-            return false;
+            if( program.OnPgmInit() )
+                return true;
+        }
+        catch( ... )
+        {
+            Pgm().HandleException( std::current_exception() );
         }
 
-        return true;
+        program.OnPgmExit();
+        return false;
     }
 
     int OnExit() override
