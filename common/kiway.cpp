@@ -21,6 +21,7 @@
 #include <cstring>
 
 #include <app_monitor.h>
+#include <cli/exit_codes.h>
 #include <core/ignore.h>
 #include <macros.h>
 #include <kiway.h>
@@ -256,7 +257,10 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         bool codeSignOk = KIPLATFORM::ENV::VerifyFileSignature( dname );
 
         if( !codeSignOk )
-            THROW_IO_ERRORF( _( "Failed to verify kiface library '%s' signature." ), dname );
+        {
+            wxLogError( _( "Failed to verify kiface library '%s' signature." ), dname );
+            return nullptr;
+        }
 #endif
 
         wxDynamicLibrary dso;
@@ -276,22 +280,16 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         APP_MONITOR::AddNavigationBreadcrumb( wxString::Format( "Loading kiface %d", aFaceId ), "kiway.kiface" );
 
+        // Return null instead of throwing, since an exception escaping an event handler or startup ends the program
         if( !success )
         {
-            // Failure: error reporting UI was done via wxLogSysError().
-            // No further reporting required here.  Apparently this is not true on all
-            // platforms and/or wxWidgets builds and KiCad will crash.  Throwing the exception
-            // here and catching it in the KiCad launcher resolves the crash issue.  See bug
-            // report https://bugs.launchpad.net/kicad/+bug/1577786.
-
-            THROW_IO_ERRORF( _( "Failed to load kiface library '%s'." ), dname );
+            wxLogError( _( "Failed to load kiface library '%s'." ), dname );
+            return nullptr;
         }
         else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == nullptr )
         {
-            // Failure: error reporting UI was done via wxLogSysError().
-            // No further reporting required here.  Assume the same thing applies here as
-            // above with the Load() call.  This has not been tested.
-            THROW_IO_ERRORF( _( "Could not read instance name and version from kiface library '%s'." ), dname );
+            wxLogError( _( "Could not read instance name and version from kiface library '%s'." ), dname );
+            return nullptr;
         }
         else
         {
@@ -754,6 +752,9 @@ int KIWAY::ProcessJob( KIWAY::FACE_T aFace, JOB* job, REPORTER* aReporter, PROGR
 {
     KIFACE* kiface = KiFACE( aFace );
 
+    if( !kiface )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
     return kiface->HandleJob( job, aReporter, aProgressReporter );
 }
 
@@ -762,7 +763,7 @@ bool KIWAY::ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aW
 {
     KIFACE* kiface = KiFACE( aFace );
 
-    return kiface->HandleJobConfig( aJob, aWindow );
+    return kiface && kiface->HandleJobConfig( aJob, aWindow );
 }
 
 

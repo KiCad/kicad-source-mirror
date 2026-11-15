@@ -32,7 +32,6 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     DIALOG_SHIM( aParent, wxID_ANY, _( "Hotkey List" ) )
 {
     wxBoxSizer* main_sizer = new wxBoxSizer( wxVERTICAL );
-    KIFACE*     kiface = nullptr;
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
 
@@ -46,17 +45,11 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
             m_hk_list->ActionsList().push_back( action );
     }
 
-    kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
-    kiface->GetActions( m_hk_list->ActionsList() );
-
-    kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
-    kiface->GetActions( m_hk_list->ActionsList() );
-
-    kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
-    kiface->GetActions( m_hk_list->ActionsList() );
-
-    kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
-    kiface->GetActions( m_hk_list->ActionsList() );
+    for( KIWAY::FACE_T face : { KIWAY::FACE_SCH, KIWAY::FACE_PCB, KIWAY::FACE_GERBVIEW, KIWAY::FACE_PL_EDITOR } )
+    {
+        if( KIFACE* kiface = Kiway().KiFACE( face ) )
+            kiface->GetActions( m_hk_list->ActionsList() );
+    }
 
     // Update all of the action hotkeys. The process of loading the actions through
     // the KiFACE will only get us the default hotkeys

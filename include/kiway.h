@@ -378,6 +378,9 @@ public:
      *
      * If it is not already loaded, the KIFACE is loaded and initialized with a call to
      * KIFACE::OnKifaceStart().
+     *
+     * @return the KIFACE, or nullptr if it is not loaded and @a doLoad is false or if loading
+     *         failed.  A load failure is reported through wxLog; this never throws.
      */
     virtual KIFACE* KiFACE( FACE_T aFaceId, bool doLoad = true );
 
@@ -524,10 +527,11 @@ public:
     bool HasBlockingDialog() const { return m_blockingDialog != wxID_NONE; }
     void SetBlockingDialog( wxWindow* aWin );
 
-private:
+protected:
     /// Get the [path &] name of the DSO holding the requested FACE_T.
-    const wxString dso_search_path( FACE_T aFaceId );
+    virtual const wxString dso_search_path( FACE_T aFaceId );
 
+private:
     bool set_kiface( FACE_T aFaceType, KIFACE* aKiface )
     {
         if( (unsigned) aFaceType < (unsigned) KIWAY_FACE_COUNT )

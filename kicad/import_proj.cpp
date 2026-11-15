@@ -315,6 +315,9 @@ void IMPORT_PROJ_HELPER::addLocalLibraries( const std::set<wxString>& aNames, FR
 {
     KIWAY_PLAYER* frame = m_frame->Kiway().Player( aFrameType, true );
 
+    if( !frame )
+        return;
+
     std::stringstream ss;
 
     // First line is the source project directory so the handler can distinguish
