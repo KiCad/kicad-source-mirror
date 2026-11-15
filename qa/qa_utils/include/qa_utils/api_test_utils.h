@@ -88,11 +88,21 @@ void testEnums( bool aPartiallyMapped = false, std::optional<KiCadEnum> aNullMap
 
             if( aPartiallyMapped )
             {
+                bool unmapped = false;
+
                 try
                 {
                     result = ToProtoEnum<KiCadEnum, ProtoEnum>( value );
+
+                    // wx builds with asserts compiled out return unknown instead of throwing
+                    unmapped = result == static_cast<ProtoEnum>( 0 ) && !( aNullMapping && *aNullMapping == value );
                 }
                 catch( KI_TEST::WX_ASSERT_ERROR )
+                {
+                    unmapped = true;
+                }
+
+                if( unmapped )
                 {
                     // If it wasn't mapped from KiCad to Proto, it shouldn't be mapped the other way
                     BOOST_REQUIRE_MESSAGE( !protoToKiCadSeen.right.count( value ),
