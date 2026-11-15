@@ -69,19 +69,40 @@ BOOST_AUTO_TEST_CASE( MissingKifaceIsReportedOnceNotThrown )
     WX_STRING_REPORTER reporter;
     wxLog*             prevLog = wxLog::SetActiveTarget( &log );
     KIFACE*            kiface = nullptr;
-    wxString           firstLog;
+    KIWAY_PLAYER*      player = nullptr;
+    wxString           loadLog;
+    wxString           openLogs[2];
     int                exitCode = CLI::EXIT_CODES::SUCCESS;
 
+    auto takeLog =
+            [&]()
+            {
+                wxString text = log.m_text;
+                log.m_text.clear();
+                return text;
+            };
+
     BOOST_CHECK_NO_THROW( kiface = kiway.KiFACE( KIWAY::FACE_SCH ) );
-    firstLog = log.m_text;
-    log.m_text.clear();
+    loadLog = takeLog();
+
+    // Every explicit open answers, unlike the implicit lookup below
+    for( wxString& openLog : openLogs )
+    {
+        player = kiway.Player( FRAME_SCH, true );
+        openLog = takeLog();
+    }
 
     BOOST_CHECK_NO_THROW( exitCode = kiway.ProcessJob( KIWAY::FACE_SCH, nullptr, &reporter ) );
 
     wxLog::SetActiveTarget( prevLog );
 
     BOOST_CHECK( kiface == nullptr );
-    BOOST_CHECK( firstLog.Contains( wxS( "Failed to load kiface library" ) ) );
+    BOOST_CHECK( player == nullptr );
+    BOOST_CHECK( loadLog.Contains( wxS( "Failed to load kiface library" ) ) );
+
+    for( const wxString& openLog : openLogs )
+        BOOST_CHECK_MESSAGE( openLog.Contains( wxS( "Application cannot start" ) ), "open was silent: " << openLog );
+
     BOOST_CHECK_EQUAL( exitCode, CLI::EXIT_CODES::ERR_UNKNOWN );
     BOOST_CHECK( reporter.GetMessages().Contains( wxS( "_missing.kiface" ) ) );
     BOOST_CHECK_MESSAGE( log.m_text.IsEmpty(), "second lookup logged again: " << log.m_text );

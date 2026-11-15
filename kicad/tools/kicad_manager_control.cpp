@@ -1018,11 +1018,8 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 
     player = m_frame->Kiway().Player( playerType, true );
 
-    if ( !player )
-    {
-        wxLogError( _( "Application cannot start." ) );
+    if( !player )
         return -1;
-    }
 
     if( !player->IsVisible() )   // A hidden frame might not have the document loaded.
     {

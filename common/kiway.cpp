@@ -431,7 +431,13 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
             KIFACE* kiface = KiFACE( face_type );
 
             if( !kiface )
+            {
+                // KiFACE() reports a broken DSO only once, but every explicit open needs an answer
+                if( (unsigned) face_type < KIWAY_FACE_COUNT && m_kifaceLoadFailed[face_type] )
+                    wxLogError( _( "Application cannot start." ) );
+
                 return nullptr;
+            }
 
             frame = (KIWAY_PLAYER*) kiface->CreateKiWindow(
                                             aParent,    // Parent window of frame in modal mode,
