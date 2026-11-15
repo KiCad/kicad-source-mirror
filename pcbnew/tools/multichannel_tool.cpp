@@ -3352,6 +3352,60 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             aCommit->Remove( item );
         }
 
+        // Every target shares the commit, so copies staged for another target count as copper too
+        std::vector<std::pair<BOX2I, BOARD_CONNECTED_ITEM*>> copper;
+
+        auto touchesOtherNet =
+                [&]( BOARD_CONNECTED_ITEM* aCopy )
+                {
+                    if( copper.empty() )
+                    {
+                        std::set<EDA_ITEM*> removed;
+
+                        for( const auto& [staged, change] : aCommit->StagedItems() )
+                        {
+                            BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( staged );
+
+                            if( ( change & CHT_TYPE ) == CHT_REMOVE )
+                                removed.insert( staged );
+                            else if( bci && ( change & CHT_TYPE ) == CHT_ADD )
+                                copper.emplace_back( bci->GetBoundingBox(), bci );
+                        }
+
+                        for( PCB_TRACK* track : board()->Tracks() )
+                        {
+                            if( !removed.contains( track ) )
+                                copper.emplace_back( track->GetBoundingBox(), track );
+                        }
+
+                        for( FOOTPRINT* fp : board()->Footprints() )
+                        {
+                            for( PAD* pad : fp->Pads() )
+                                copper.emplace_back( pad->GetBoundingBox(), pad );
+                        }
+                    }
+
+                    const BOX2I box = aCopy->GetBoundingBox();
+
+                    for( const auto& [otherBox, other] : copper )
+                    {
+                        if( other->GetNetCode() == aCopy->GetNetCode() || !box.Intersects( otherBox ) )
+                            continue;
+
+                        for( PCB_LAYER_ID layer : aCopy->GetLayerSet().CuStack() )
+                        {
+                            if( other->IsOnLayer( layer )
+                                && aCopy->GetEffectiveShape( layer )->Collide(
+                                        other->GetEffectiveShape( layer ).get() ) )
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                };
+
         for( BOARD_CONNECTED_ITEM* item : refRouting )
         {
             // Never copy pads as part of routing copy.
@@ -3373,10 +3427,18 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Duplicate( false ) );
 
             fixupNet( item, copied, hasMatches, netMap );
-            fixupParentGroup( item, copied );
-
             copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
+
+            // Routing reaching past the area must not short the channel to a neighbour's copper
+            if( !copied->HitTest( newTargetOutline, true ) && touchesOtherNet( copied ) )
+            {
+                delete copied;
+                continue;
+            }
+
+            fixupParentGroup( item, copied );
+
             aCompatData.m_groupableItems.insert( copied );
             aCommit->Add( copied );
         }

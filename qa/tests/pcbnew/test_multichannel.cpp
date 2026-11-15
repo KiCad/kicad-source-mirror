@@ -43,6 +43,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_utils.h>
 #include <lib_id.h>
+#include <string_utils.h>
 #include <atomic>
 
 struct MULTICHANNEL_TEST_FIXTURE
@@ -4364,8 +4365,7 @@ BOOST_FIXTURE_TEST_CASE( RepeatFromSelection, REPEAT_TOOL_FIXTURE )
     BOOST_REQUIRE( anchor );
 
     std::vector<std::pair<FOOTPRINT*, VECTOR2I>> expected;
-    FOOTPRINT*                                   probeRef = nullptr;
-    FOOTPRINT*                                   probeTarget = nullptr;
+    std::vector<std::pair<FOOTPRINT*, FOOTPRINT*>> probes;
 
     for( const auto& [area, compat] : m_tool->GetData()->m_compatMap )
     {
@@ -4379,15 +4379,24 @@ BOOST_FIXTURE_TEST_CASE( RepeatFromSelection, REPEAT_TOOL_FIXTURE )
             expected.emplace_back( targetFp,
                                    targetAnchor->GetPosition() + refFp->GetPosition() - anchor->GetPosition() );
 
-            if( !probeRef && refFp != anchor )
-            {
-                probeRef = refFp;
-                probeTarget = targetFp;
-            }
+            if( refFp != anchor )
+                probes.emplace_back( refFp, targetFp );
         }
     }
 
-    BOOST_REQUIRE( probeRef );
+    BOOST_REQUIRE( !probes.empty() );
+
+    // Drag the same part on every run, the first by reference
+    const auto [probeRef, probeTarget] = *std::ranges::min_element(
+            probes,
+            []( const auto& aA, const auto& aB )
+            {
+                if( int cmp = StrNumCmp( aA.first->GetReference(), aB.first->GetReference() ) )
+                    return cmp < 0;
+
+                return StrNumCmp( aA.second->GetReference(), aB.second->GetReference() ) < 0;
+            } );
+
     BOOST_CHECK_EQUAL( m_tool->ApplyRepeat(), 0 );
     BOOST_CHECK_GT( m_board->Tracks().size(), tracksBefore );
 
@@ -4429,6 +4438,13 @@ BOOST_FIXTURE_TEST_CASE( RepeatFromSelection, REPEAT_TOOL_FIXTURE )
     BOOST_CHECK( m_tool->UpdateLinkedLayouts( refZone ) );
     BOOST_CHECK_EQUAL( probeTarget->GetPosition(), targetBefore + delta );
 
+    // Dragging D78 out sends its counterparts' copied exit routing over a neighbour's copper
+    FOOTPRINT* diode = m_board->FindFootprintByReference( wxT( "D78" ) );
+
+    BOOST_REQUIRE( diode );
+    diode->SetPosition( VECTOR2I( outside.x, diode->GetPosition().y ) );
+    BOOST_CHECK( m_tool->UpdateLinkedLayouts( refZone ) );
+
     // Repeating unlinked areas again replaces what was copied, boundary segments included. The first
     // repeats settle the target outlines, after which every repeat starts from identical geometry
     m_tool->UnlinkAreas( std::set<ZONE*>( created.begin(), created.end() ) );
@@ -4444,7 +4460,35 @@ BOOST_FIXTURE_TEST_CASE( RepeatFromSelection, REPEAT_TOOL_FIXTURE )
 
                 m_tool->GetData()->m_options.m_connectedRoutingOnly = false;
                 m_tool->GetData()->m_options.m_groupItems = false;
+
+                std::set<KIID> before;
+
+                for( PCB_TRACK* track : m_board->Tracks() )
+                    before.insert( track->m_Uuid );
+
                 BOOST_REQUIRE( m_tool->RepeatLayout( TOOL_EVENT(), refZone ) >= 0 );
+
+                // Every copy lying in a target keeps a net of that channel
+                for( const auto& [area, compat] : m_tool->GetData()->m_compatMap )
+                {
+                    std::set<int> nets;
+
+                    for( const auto& [refFp, targetFp] : compat.m_matchingComponents )
+                    {
+                        for( PAD* pad : targetFp->Pads() )
+                            nets.insert( pad->GetNetCode() );
+                    }
+
+                    for( PCB_TRACK* track : m_board->Tracks() )
+                    {
+                        if( !before.contains( track->m_Uuid ) && area->m_zone->Outline()->Contains( track->GetStart() )
+                            && area->m_zone->Outline()->Contains( track->GetEnd() ) )
+                        {
+                            BOOST_CHECK_MESSAGE( nets.contains( track->GetNetCode() ),
+                                                 track->GetNetname().ToStdString() );
+                        }
+                    }
+                }
             };
 
     repeat();
