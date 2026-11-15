@@ -248,13 +248,31 @@ static bool outlinesOverlap( const SHAPE_POLY_SET& aA, const SHAPE_POLY_SET& aB 
 }
 
 
+// The matched pair whose reference part sorts first, so the choice does not follow heap addresses
+static const std::pair<FOOTPRINT* const, FOOTPRINT*>& firstPair( const TMATCH::COMPONENT_MATCHES& aMatches )
+{
+    return *std::ranges::min_element( aMatches,
+                                      []( const auto& aA, const auto& aB )
+                                      {
+                                          FOOTPRINT* a = aA.first;
+                                          FOOTPRINT* b = aB.first;
+
+                                          if( int cmp = StrNumCmp( a->GetReference(), b->GetReference() ) )
+                                              return cmp < 0;
+
+                                          return std::tuple( a->GetPosition().x, a->GetPosition().y, a->m_Uuid )
+                                                 < std::tuple( b->GetPosition().x, b->GetPosition().y, b->m_Uuid );
+                                      } );
+}
+
+
 // The matched pair holding the anchor footprint. An anchor outside the reference area falls back to the
 // first pair, so the group is not shifted to center alignment
 static const std::pair<FOOTPRINT* const, FOOTPRINT*>& anchorPair( const TMATCH::COMPONENT_MATCHES& aMatches,
                                                                   const KIID&                      aAnchor )
 {
     auto it = std::ranges::find_if( aMatches, [&]( const auto& aPair ) { return aPair.first->m_Uuid == aAnchor; } );
-    return it != aMatches.end() ? *it : *aMatches.begin();
+    return it != aMatches.end() ? *it : firstPair( aMatches );
 }
 
 
@@ -2512,7 +2530,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
         && aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && aOptions.m_anchor == niluuid )
     {
         if( !compat.m_matchingComponents.empty() )
-            aOptions.m_anchor = compat.m_matchingComponents.begin()->first->m_Uuid;
+            aOptions.m_anchor = firstPair( compat.m_matchingComponents ).first->m_Uuid;
     }
 
     copyRuleAreaContents( &aRefArea, &aTargetArea, &commit, aOptions, compat );

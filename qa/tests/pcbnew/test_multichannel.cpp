@@ -3105,6 +3105,9 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutUnmirrorsIdenticalReceptacles, MU
                                           srcChir, dstChir ) );
 
     BOOST_CHECK_MESSAGE( srcChir * dstChir > 0.0, "Applied layout left the receptacles mirrored (NC/NO swapped)" );
+
+    // Without an anchor the block's first part by reference holds its place
+    BOOST_CHECK_EQUAL( dstNC0->GetPosition(), mm( 40, 40 ) );
 }
 
 
