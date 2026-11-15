@@ -183,7 +183,8 @@ bool ALTIUM_PCB_COMPOUND_FILE::CacheLibModels()
             if( !fileName.ToLong( &fileNumber ) )
                 return 0;
 
-            if( !m_reader->IsStream( stepEntry ) || fileNumber >= long( models.size() ) )
+            if( !m_reader->IsStream( stepEntry ) || fileNumber < 0
+                || static_cast<size_t>( fileNumber ) >= models.size() )
                 return 0;
 
             size_t            stepSize = static_cast<size_t>( stepEntry->size );
