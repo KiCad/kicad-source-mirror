@@ -21,6 +21,7 @@
 
 #include <constraints/constraint_system_2d.h>
 #include <GCS.h>
+#include <SubSystem.h>
 
 #include <algorithm>
 #include <chrono>
@@ -86,6 +87,25 @@ BOOST_AUTO_TEST_CASE( PrefixRestorePreservesLaterStableStorage )
     BOOST_REQUIRE( system.RestorePrefix( snapshot ) );
     BOOST_CHECK_EQUAL( system.Parameter( first ), 1.0 );
     BOOST_CHECK_EQUAL( system.Parameter( temporary ), 4.0 );
+}
+
+
+// Unknown order sets the Jacobian columns and so the rounding. Address order follows heap layout,
+// which on MSVC moved a block edit by 28 nm between sessions
+BOOST_AUTO_TEST_CASE( SubsystemKeepsTheDeclaredUnknownOrder )
+{
+    std::vector<double> storage{ 1.0, 2.0, 3.0, 4.0 };
+    GCS::VEC_pD         declared{ &storage[3], &storage[1], &storage[2], &storage[0] };
+
+    GCS::ConstraintEqual          first( &storage[0], &storage[3] );
+    GCS::ConstraintEqual          second( &storage[1], &storage[2] );
+    std::vector<GCS::Constraint*> constraints{ &first, &second };
+
+    GCS::SubSystem subsystem( constraints, declared );
+    GCS::VEC_pD    unknowns;
+    subsystem.getParamList( unknowns );
+
+    BOOST_CHECK( unknowns == declared );
 }
 
 

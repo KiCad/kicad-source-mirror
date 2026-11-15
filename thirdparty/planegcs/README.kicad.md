@@ -38,6 +38,12 @@ patch (re-apply on upstream re-sync):
 | `GCS.cpp` | `#include <boost_graph_adjacency_list.hpp>` | `#include <boost/graph/adjacency_list.hpp>` |
 | `GCS.h`, `Constraints.h`, `Geo.h` | `#include "../../SketcherGlobal.h"` | `#include "planegcs_shim.h"` |
 
+`SubSystem::initialize()` orders its unknowns as the caller declared them instead of
+by address. Upstream intersects two `std::set<double*>`, so the Jacobian column order,
+and with it the rounding of every solve, followed heap layout. MSVC's `std::deque<double>`
+allocates two doubles per block, which made the same edit land a few nanometres apart
+from one session to the next. Re-apply on upstream re-sync.
+
 No other source edits. For production the shim's `Console`/`TimeElapsed` should
 route to `wxLogTrace` / a `std::chrono` timer; the spike keeps them trivial.
 
