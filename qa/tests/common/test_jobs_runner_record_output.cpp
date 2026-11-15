@@ -27,6 +27,8 @@
 #include <jobs_runner.h>
 #include <reporter.h>
 
+#include <wx/log.h>
+
 #include <filesystem>
 #include <fstream>
 
@@ -123,6 +125,9 @@ BOOST_AUTO_TEST_CASE( ExecuteCommandRecordOutputFailureNamesLog )
 BOOST_AUTO_TEST_CASE( ExecuteCommandRecordOutputWriteFailureNamesLog )
 {
     m_execute->SetConfiguredOutputPath( wxS( "/dev/full" ) );
+
+    // wx logs the expected ENOSPC itself, the reporter message is what the test checks
+    wxLogNull noLog;
 
     WX_STRING_REPORTER reporter;
 
