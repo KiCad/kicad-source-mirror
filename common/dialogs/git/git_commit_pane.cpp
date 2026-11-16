@@ -2675,8 +2675,8 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     // again, rather than force over them.
     if( result == PushResult::NonFastForward )
     {
-        // Edits still in an editor block getting their changes, and offering the click anyway would
-        // only fail later. The merge itself refuses only over files it changes
+        // Edits still in an editor block getting their changes, and offering the click anyway would only fail
+        // later. Uncommitted files are left to the pull, as a merge keeps unrelated ones and a rebase refuses
         auto     worktree = std::make_shared<GIT_WORKTREE_STATUS>();
         wxString projectPath = m_frame->Prj().GetProjectPath();
 

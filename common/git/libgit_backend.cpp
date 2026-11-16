@@ -2589,17 +2589,21 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
         const git_oid*    theirsOid = git_annotated_commit_id( aMergeHeads[0] );
         git_oid           headOid;
         git_oid           baseOid;
+        int               baseRc = GIT_ERROR;
         KIGIT::GitTreePtr theirsTree = commitTree( repo, theirsOid );
         KIGIT::GitTreePtr baseTree;
 
         // The merge writes only what changed on the incoming side since the shared history
-        if( git_reference_name_to_id( &headOid, repo, "HEAD" ) == GIT_OK
-            && git_merge_base( &baseOid, repo, &headOid, theirsOid ) == GIT_OK )
-        {
-            baseTree = commitTree( repo, &baseOid );
-        }
+        if( git_reference_name_to_id( &headOid, repo, "HEAD" ) == GIT_OK )
+            baseRc = git_merge_base( &baseOid, repo, &headOid, theirsOid );
 
-        if( !theirsTree || !baseTree )
+        // Unrelated histories have no base, so every incoming path counts as changed
+        if( baseRc == GIT_OK )
+            baseTree = commitTree( repo, &baseOid );
+        else if( baseRc == GIT_ENOTFOUND )
+            git_error_clear();
+
+        if( !theirsTree || ( baseRc != GIT_ENOTFOUND && !baseTree ) )
         {
             aHandler->AddGitError( _( "Could not read the fetched commit." ) );
             return PullResult::Error;
@@ -4147,8 +4151,8 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
     KIGIT::GitTreePtr treePtr( tree );
 
-    // The lock is released while the user resolves, so a dirty file the merge writes was edited
-    // meanwhile. Untracked recovery copies the panel writes beside a conflicted file do not count
+    // The lock is released while the user resolves, so a dirty or untracked file where the merge writes
+    // appeared meanwhile. The recovery copies the panel writes beside a conflicted file lie elsewhere
     {
         KIGIT::GitTreePtr     oursTree = commitTree( aRepo, git_commit_id( ours.get() ) );
         std::vector<wxString> overlap;
@@ -4164,6 +4168,20 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
             aError.details = _( "Files changed while the conflicts were being resolved, and finishing the "
                                 "merge would overwrite those changes. Get changes again to redo the merge "
                                 "with the current files." );
+            return MergeCommitResult::FailedCleanly;
+        }
+
+        std::vector<wxString> collisions;
+
+        if( !untrackedFilesOverwrittenBy( aRepo, tree, collisions ) )
+        {
+            aError.details = _( "Could not read the repository status." );
+            return MergeCommitResult::FailedCleanly;
+        }
+
+        if( !collisions.empty() )
+        {
+            aError.details = describeUntrackedCollisions( collisions );
             return MergeCommitResult::FailedCleanly;
         }
     }
