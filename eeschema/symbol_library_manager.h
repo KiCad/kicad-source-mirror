@@ -118,6 +118,16 @@ public:
 
     void RevertAddedBuffers();
 
+    /**
+     * Restore \a aSymbolBuf to its last saved state and clear its modified flag.
+     *
+     * @param aDropNeverSaved removes a symbol that was never written to the library file instead,
+     *                        unless other symbols derive from it.  The caller must hold its own
+     *                        reference to \a aSymbolBuf.
+     * @return the restored symbol name, or empty if the symbol was removed.
+     */
+    wxString RevertBuffer( SYMBOL_BUFFER& aSymbolBuf, bool aDropNeverSaved );
+
     /// Return the deleted symbol buffers that need to be removed from the library file.
     const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& GetDeletedBuffers() const { return m_deleted; }
 
@@ -364,10 +374,12 @@ public:
     /**
      * Revert unsaved changes for a symbol and clear its modified flag.
      *
+     * @param aDropNeverSaved removes a symbol that was never saved to the library file, which has
+     *                        no saved version to return to.
      * @return The LIB_ID of the reverted symbol (which may be different in the case
-     * of a rename)
+     * of a rename), with an empty item name if the symbol was removed
      */
-    LIB_ID RevertSymbol( const LIB_ID& aIdToRevert );
+    LIB_ID RevertSymbol( const LIB_ID& aIdToRevert, bool aDropNeverSaved = false );
 
     /**
      * Revert unsaved changes for a symbol library.

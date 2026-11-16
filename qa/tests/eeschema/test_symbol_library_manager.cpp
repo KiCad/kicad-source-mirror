@@ -944,4 +944,100 @@ BOOST_AUTO_TEST_CASE( SaveKeepsChangesMadeUnderTheBuffer )
 }
 
 
+/// Fill a buffer from the acme power library the way SYMBOL_LIBRARY_MANAGER does
+static void loadAcmePower( LIB_BUFFER& aBuffer, const wxString& aPath )
+{
+    IO_RELEASER<SCH_IO>      plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    std::vector<LIB_SYMBOL*> originals;
+    plugin->EnumerateSymbolLib( originals, aPath );
+
+    for( LIB_SYMBOL* symbol : originals )
+        aBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( *symbol ), std::make_unique<SCH_SCREEN>() );
+
+    BOOST_REQUIRE_EQUAL( aBuffer.GetBuffers().size(), 4 );
+}
+
+
+static wxString acmePowerPath()
+{
+    return wxFileName( KI_TEST::GetEeschemaTestDataDir(), wxS( "acme_power.kicad_sym" ) ).GetFullPath();
+}
+
+
+// Reverting a symbol that was never saved left it in the library tree
+BOOST_AUTO_TEST_CASE( RevertDropsNeverSavedSymbol )
+{
+    LIB_BUFFER libBuffer( wxS( "acme-power" ) );
+    loadAcmePower( libBuffer, acmePowerPath() );
+
+    auto parent = std::make_unique<LIB_SYMBOL>( wxS( "TPS7A2033" ) );
+    auto child = std::make_unique<LIB_SYMBOL>( wxS( "TPS7A2033_ALT" ) );
+    child->SetParent( parent.get() );
+
+    libBuffer.CreateBuffer( std::move( parent ), std::make_unique<SCH_SCREEN>(), true );
+    libBuffer.CreateBuffer( std::move( child ), std::make_unique<SCH_SCREEN>(), true );
+
+    std::shared_ptr<SYMBOL_BUFFER> saved = libBuffer.GetBuffer( wxS( "GND" ) );
+    std::shared_ptr<SYMBOL_BUFFER> added = libBuffer.GetBuffer( wxS( "TPS7A2033" ) );
+    std::shared_ptr<SYMBOL_BUFFER> derived = libBuffer.GetBuffer( wxS( "TPS7A2033_ALT" ) );
+    BOOST_REQUIRE( saved && added && derived );
+
+    BOOST_CHECK_EQUAL( libBuffer.RevertBuffer( *saved, true ), wxS( "GND" ) );
+
+    // A never-saved parent stays while a symbol derives from it
+    BOOST_CHECK_EQUAL( libBuffer.RevertBuffer( *added, true ), wxS( "TPS7A2033" ) );
+    BOOST_CHECK( libBuffer.RevertBuffer( *derived, true ).IsEmpty() );
+    BOOST_CHECK( libBuffer.RevertBuffer( *added, true ).IsEmpty() );
+
+    BOOST_CHECK_EQUAL( libBuffer.GetBuffers().size(), 4 );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "GND" ) ) );
+    BOOST_CHECK( !libBuffer.GetSymbol( wxS( "TPS7A2033" ) ) );
+}
+
+
+// Discarding a tab's edits must keep a pasted or new symbol, only the Revert command drops it
+BOOST_AUTO_TEST_CASE( DiscardKeepsNeverSavedSymbol )
+{
+    LIB_BUFFER libBuffer( wxS( "acme-power" ) );
+    loadAcmePower( libBuffer, acmePowerPath() );
+
+    libBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( wxS( "TPS7A2033" ) ), std::make_unique<SCH_SCREEN>(), true );
+
+    std::shared_ptr<SYMBOL_BUFFER> added = libBuffer.GetBuffer( wxS( "TPS7A2033" ) );
+    BOOST_REQUIRE( added );
+
+    BOOST_CHECK_EQUAL( libBuffer.RevertBuffer( *added, false ), wxS( "TPS7A2033" ) );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "TPS7A2033" ) ) );
+}
+
+
+// A symbol already written to the file must survive Revert even if the rest of its library save failed
+BOOST_AUTO_TEST_CASE( RevertKeepsWrittenSymbol )
+{
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( tempDir );
+    wxFileName::Mkdir( tempDir );
+    wxString libPath = wxFileName( tempDir, wxS( "acme_power.kicad_sym" ) ).GetFullPath();
+
+    BOOST_REQUIRE( wxCopyFile( acmePowerPath(), libPath ) );
+
+    LIB_BUFFER libBuffer( wxS( "acme-power" ) );
+    loadAcmePower( libBuffer, libPath );
+
+    auto newScreen = std::make_unique<SCH_SCREEN>();
+    newScreen->SetContentModified();
+    libBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( wxS( "TPS7A2033" ) ), std::move( newScreen ), true );
+
+    std::shared_ptr<SYMBOL_BUFFER> added = libBuffer.GetBuffer( wxS( "TPS7A2033" ) );
+    BOOST_REQUIRE( added );
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    BOOST_REQUIRE( libBuffer.SaveModifiedBuffers( libPath, &*plugin ) );
+
+    BOOST_CHECK_EQUAL( libBuffer.RevertBuffer( *added, true ), wxS( "TPS7A2033" ) );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "TPS7A2033" ) ) );
+
+    wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -1467,7 +1467,7 @@ void SYMBOL_EDIT_FRAME::Revert( LIB_ID& aTarget, bool aConfirm )
     }
     else
     {
-        aTarget = m_libMgr->RevertSymbol( aTarget );
+        aTarget = m_libMgr->RevertSymbol( aTarget, true );
 
         m_treePane->GetLibTree()->SelectLibId( aTarget );
     }

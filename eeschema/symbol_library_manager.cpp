@@ -523,7 +523,7 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const
 }
 
 
-LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const LIB_ID& aIdToRevert )
+LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const LIB_ID& aIdToRevert, bool aDropNeverSaved )
 {
     auto it = m_libs.find( aIdToRevert.GetLibNickname() );
 
@@ -532,22 +532,11 @@ LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const LIB_ID& aIdToRevert )
 
     std::shared_ptr<SYMBOL_BUFFER> symbolBuf = it->second.GetBuffer( aIdToRevert.GetLibItemName() );
     wxCHECK( symbolBuf, aIdToRevert );
-    LIB_SYMBOL original( symbolBuf->GetOriginal() );
 
-    if( original.GetName() != aIdToRevert.GetLibItemName().wx_str() )
-    {
-        UpdateSymbolAfterRename( &original, aIdToRevert.GetLibItemName(), aIdToRevert.GetLibNickname() );
-    }
-    else
-    {
-        // copy the initial data to the current symbol to restore
-        symbolBuf->GetSymbol() = original;
-        OnDataChanged();
-    }
+    const wxString name = it->second.RevertBuffer( *symbolBuf, aDropNeverSaved );
+    OnDataChanged();
 
-    symbolBuf->GetScreen()->SetContentModified( false );
-
-    return LIB_ID( aIdToRevert.GetLibNickname(), original.GetName() );
+    return LIB_ID( aIdToRevert.GetLibNickname(), name );
 }
 
 
@@ -1097,6 +1086,40 @@ void LIB_BUFFER::RevertAddedBuffers()
 }
 
 
+wxString LIB_BUFFER::RevertBuffer( SYMBOL_BUFFER& aSymbolBuf, bool aDropNeverSaved )
+{
+    const auto sameBufferPredicate =
+            [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+            {
+                return aBuf.get() == &aSymbolBuf;
+            };
+
+    auto addedIt = std::find_if( m_added.begin(), m_added.end(), sameBufferPredicate );
+
+    // Dropping a parent would leave its derived symbols without one
+    if( aDropNeverSaved && addedIt != m_added.end() && !HasDerivedSymbols( aSymbolBuf.GetSymbol().GetName() ) )
+    {
+        std::erase_if( m_symbols, sameBufferPredicate );
+        m_added.erase( addedIt );
+        ++m_hash;
+
+        return wxEmptyString;
+    }
+
+    LIB_SYMBOL original( aSymbolBuf.GetOriginal() );
+
+    // The tree only shows a reverted rename once the hash changes
+    if( original.GetName() != aSymbolBuf.GetSymbol().GetName() )
+        UpdateBuffer( aSymbolBuf, original );
+    else
+        aSymbolBuf.GetSymbol() = original;
+
+    aSymbolBuf.GetScreen()->SetContentModified( false );
+
+    return original.GetName();
+}
+
+
 /// Name of the parent a buffered symbol inherits from, or empty if it is a root symbol.
 static wxString getParentName( const SYMBOL_BUFFER& aSymbolBuf )
 {
@@ -1130,7 +1153,13 @@ bool LIB_BUFFER::SaveModifiedBuffers( const wxString& aFileName, SCH_IO* aPlugin
     {
         wxCHECK2( symbolBuf, continue );
 
-        if( symbolBuf->IsModified() && !SaveBuffer( *symbolBuf, aFileName, aPlugin, true ) )
+        if( !symbolBuf->IsModified() )
+            continue;
+
+        // A symbol written here is no longer new, even if another symbol fails and the library save reports failure
+        if( SaveBuffer( *symbolBuf, aFileName, aPlugin, true ) )
+            std::erase( m_added, symbolBuf );
+        else
             res = false;
     }
 
