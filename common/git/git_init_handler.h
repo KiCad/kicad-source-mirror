@@ -70,10 +70,12 @@ public:
 
 
 /**
- * Apply KiCad's standard repo conventions to a project directory:
- *   - seed .gitignore with KiCad-generated paths
+ * Apply KiCad's standard repo conventions to a repository:
+ *   - seed .gitignore with KiCad-generated paths (new repositories only)
  *   - seed .gitattributes with `merge=kicad-*` lines so the in-process
- *     libgit2 drivers and external `git merge` both route design files
+ *     libgit2 drivers and external `git merge` both route design files.
+ *     A clone writes them to .git/info/attributes instead, which is never
+ *     committed, so the cloned work tree stays clean
  *   - configure repo-local merge.kicad-*.driver / mergetool.kicad.cmd
  *     pointing at the kicad-cli binary alongside the running process
  *
@@ -81,8 +83,11 @@ public:
  * overwritten. Safe to call repeatedly. Used by both GIT_INIT_HANDLER
  * (after init) and GIT_CLONE_HANDLER (after clone) so freshly-cloned
  * repos get the same setup as freshly-init'd ones.
+ *
+ * @param aRepo is the open repository.
+ * @param aClone is true when aRepo was cloned from a remote.
  */
-APIEXPORT void ApplyKicadGitConventions( const wxString& aProjectPath );
+APIEXPORT void ApplyKicadGitConventions( git_repository* aRepo, bool aClone );
 
 
 #endif // GIT_INIT_HANDLER_H
