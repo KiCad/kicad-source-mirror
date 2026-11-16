@@ -1125,6 +1125,19 @@ private:
     void initScreenZoom();
 
     /**
+     * Leave the frame on an empty schematic after a load that failed or was cancelled.
+     *
+     * SetSchematic() has already freed the old sheets, so every view that holds a sheet path,
+     * such as the hierarchy navigator and the navigation history, is rebuilt.
+     */
+    void showEmptySchematic();
+
+    /**
+     * Send #EDA_EVT_SCHEMATIC_CHANGED to this frame and to every schematic change listener.
+     */
+    void broadcastSchematicChanged();
+
+    /**
      * Verify that the symbol library links \a aSheet and all of its child sheets have
      * been remapped to the symbol library table.
      *

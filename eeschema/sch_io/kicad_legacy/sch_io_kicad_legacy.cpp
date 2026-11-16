@@ -237,6 +237,11 @@ void SCH_IO_KICAD_LEGACY::loadHierarchy( SCH_SHEET* aSheet )
             {
                 loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
             }
+            catch( const IO_CANCELLED& )
+            {
+                // A cancel ends the whole load rather than being recorded as one sheet's error
+                throw;
+            }
             catch( const IO_ERROR& ioe )
             {
                 // If there is a problem loading the root sheet, there is no recovery.

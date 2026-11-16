@@ -129,6 +129,7 @@
 #include <reporter.h>
 #include <scoped_set_reset.h>
 #include <progress_reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
 #include <kiplatform/io.h>
@@ -4489,11 +4490,11 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 // (drawing-sheet path, DRC severities, net classes). The destructor severs the
 // BOARD->project link in the right order. Used by every PCB diff/merge job.
 static SCRATCH_DOC<BOARD> loadScratchBoard( SETTINGS_MANAGER& aMgr, const wxString& aPath,
-                                            bool aInitializeAfterLoad = true )
+                                            bool aInitializeAfterLoad = true, PROGRESS_REPORTER* aProgress = nullptr )
 {
     return LoadScratchDoc<BOARD>(
             aMgr, aPath,
-            [aPath, aInitializeAfterLoad]( PROJECT* aProject ) -> std::unique_ptr<BOARD>
+            [aPath, aInitializeAfterLoad, aProgress]( PROJECT* aProject ) -> std::unique_ptr<BOARD>
             {
                 PCB_IO_MGR::PCB_FILE_T pluginType =
                         PCB_IO_MGR::FindPluginTypeFromBoardPath( aPath, KICTL_KICAD_ONLY );
@@ -4503,6 +4504,7 @@ static SCRATCH_DOC<BOARD> loadScratchBoard( SETTINGS_MANAGER& aMgr, const wxStri
 
                 BOARD_LOADER::OPTIONS opts;
                 opts.initialize_after_load = aInitializeAfterLoad;
+                opts.progress_reporter = aProgress;
 
                 try
                 {
@@ -5018,11 +5020,24 @@ struct PCB_DIFF_SIDES
 };
 
 
+// A progress reporter gets one phase per side and one for the diff, and a cancel returns ERR_CANCELLED
 static int loadPcbDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const wxString& aFileA,
-                             const wxString& aFileB, PCB_DIFF_SIDES& aSides )
+                             const wxString& aFileB, PCB_DIFF_SIDES& aSides, PROGRESS_REPORTER* aProgress = nullptr )
 {
-    aSides.a = loadScratchBoard( aMgr, aFileA, /* aInitializeAfterLoad */ false );
-    aSides.b = loadScratchBoard( aMgr, aFileB, /* aInitializeAfterLoad */ false );
+    aSides.a = loadScratchBoard( aMgr, aFileA, /* aInitializeAfterLoad */ false, aProgress );
+
+    if( aProgress )
+    {
+        if( aProgress->IsCancelled() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        aProgress->AdvancePhase();
+    }
+
+    aSides.b = loadScratchBoard( aMgr, aFileB, /* aInitializeAfterLoad */ false, aProgress );
+
+    if( aProgress && aProgress->IsCancelled() )
+        return CLI::EXIT_CODES::ERR_CANCELLED;
 
     if( !aSides.a.doc && !aFileA.IsEmpty() )
     {
@@ -5042,7 +5057,16 @@ static int loadPcbDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const 
     aSides.boardB = aSides.b.doc ? aSides.b.doc.get() : &aSides.emptyB;
 
     KICAD_DIFF::PCB_DIFFER differ( aSides.boardA, aSides.boardB, aFileB );
-    aSides.diff = differ.Diff();
+    KICAD_DIFF::ReportDiffProgress( differ, aProgress );
+
+    try
+    {
+        aSides.diff = differ.Diff();
+    }
+    catch( const IO_CANCELLED& )
+    {
+        return CLI::EXIT_CODES::ERR_CANCELLED;
+    }
 
     return CLI::EXIT_CODES::SUCCESS;
 }
@@ -5129,8 +5153,20 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     {
         PCB_DIFF_SIDES sides;
 
-        if( int rc = loadPcbDiffSides( mgr, *m_reporter, aFileA, aFileB, sides ); rc != CLI::EXIT_CODES::SUCCESS )
+        // The boards load on the UI thread before the window opens, which takes seconds for a large board
+        auto progress = std::make_unique<WX_PROGRESS_REPORTER>( parent, _( "Compare Files" ), 4, PR_CAN_ABORT );
+        progress->SetRefreshOnPhaseChange( true );
+
+        if( int rc = loadPcbDiffSides( mgr, *m_reporter, aFileA, aFileB, sides, progress.get() );
+            rc != CLI::EXIT_CODES::SUCCESS )
+        {
             return rc;
+        }
+
+        progress->AdvancePhase( _( "Drawing..." ) );
+
+        if( !progress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
 
         BOARD* boardA = sides.boardA;
         BOARD* boardB = sides.boardB;
@@ -5146,6 +5182,8 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
                 {
                     KICAD_DIFF::ConfigurePcbDiffCanvasContext( aCanvas, boardA, boardB, color );
                 } );
+
+        progress.reset();
         dlg.ShowModal();
 
         return CLI::EXIT_CODES::SUCCESS;

@@ -10,6 +10,7 @@
 set( QA_DIFF_MERGE_SRCS
     test_module.cpp
     test_diff_scene_helpers.cpp
+    test_diff_progress.cpp
     test_diff_types.cpp
     test_identity_reconciler.cpp
     test_merge_engine.cpp

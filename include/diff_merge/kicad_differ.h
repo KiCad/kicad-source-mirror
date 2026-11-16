@@ -29,6 +29,8 @@
 #include <functional>
 #include <set>
 
+class PROGRESS_REPORTER;
+
 
 namespace KICAD_DIFF
 {
@@ -79,6 +81,14 @@ protected:
 
     OPTIONS m_options;
 };
+
+
+/**
+ * Start a "Comparing" phase on @p aProgress and advance it as @p aDiffer runs, so a diff on the UI
+ * thread keeps the window responding. Once the user cancels, the differ's Diff() throws IO_CANCELLED.
+ * Does nothing without a reporter.
+ */
+KICOMMON_API void ReportDiffProgress( KICAD_DIFFER& aDiffer, PROGRESS_REPORTER* aProgress );
 
 
 /**

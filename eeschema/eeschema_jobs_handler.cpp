@@ -80,6 +80,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <paths.h>
 #include <reporter.h>
+#include <widgets/wx_progress_reporters.h>
 #include <scoped_set_reset.h>
 #include <string_utils.h>
 
@@ -2809,17 +2810,19 @@ DS_PROXY_VIEW_ITEM* EESCHEMA_JOBS_HANDLER::getDrawingSheetProxyView( SCHEMATIC* 
 // a second LoadProject(path, true) destroys the first project and the first
 // schematic's m_project dangles. The destructor severs the link via
 // SetProject( nullptr ). Shared by every SCH diff/merge job.
-static SCRATCH_DOC<SCHEMATIC> loadScratchSchematic( SETTINGS_MANAGER& aMgr, const wxString& aPath )
+static SCRATCH_DOC<SCHEMATIC> loadScratchSchematic( SETTINGS_MANAGER& aMgr, const wxString& aPath,
+                                                    PROGRESS_REPORTER* aProgress = nullptr )
 {
     return LoadScratchDoc<SCHEMATIC>(
             aMgr, aPath,
-            [aPath]( PROJECT* aProject )
+            [aPath, aProgress]( PROJECT* aProject )
             {
                 return std::unique_ptr<SCHEMATIC>(
                         EESCHEMA_HELPERS::LoadSchematic( aPath,
                                                          /*aSetActive=*/false,
                                                          /*aForceDefaultProject=*/false, aProject,
-                                                         /*aCalculateConnectivity=*/false ) );
+                                                         /*aCalculateConnectivity=*/false,
+                                                         /*aRootReporter=*/nullptr, aProgress ) );
             },
             []( SCHEMATIC* aSch )
             {
@@ -3035,11 +3038,24 @@ struct SCH_DIFF_SIDES
 };
 
 
+// A progress reporter gets one phase per side and one for the diff, and a cancel returns ERR_CANCELLED
 static int loadSchDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const wxString& aFileA,
-                             const wxString& aFileB, SCH_DIFF_SIDES& aSides )
+                             const wxString& aFileB, SCH_DIFF_SIDES& aSides, PROGRESS_REPORTER* aProgress = nullptr )
 {
-    aSides.a = loadScratchSchematic( aMgr, aFileA );
-    aSides.b = loadScratchSchematic( aMgr, aFileB );
+    aSides.a = loadScratchSchematic( aMgr, aFileA, aProgress );
+
+    if( aProgress )
+    {
+        if( aProgress->IsCancelled() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
+
+        aProgress->AdvancePhase();
+    }
+
+    aSides.b = loadScratchSchematic( aMgr, aFileB, aProgress );
+
+    if( aProgress && aProgress->IsCancelled() )
+        return CLI::EXIT_CODES::ERR_CANCELLED;
 
     if( !aSides.a.doc && !aFileA.IsEmpty() )
     {
@@ -3066,7 +3082,16 @@ static int loadSchDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const 
     aSides.schB = aSides.b.doc ? aSides.b.doc.get() : aSides.emptyB.doc.get();
 
     KICAD_DIFF::SCH_DIFFER differ( aSides.schA, aSides.schB, aFileB );
-    aSides.diff = differ.Diff();
+    KICAD_DIFF::ReportDiffProgress( differ, aProgress );
+
+    try
+    {
+        aSides.diff = differ.Diff();
+    }
+    catch( const IO_CANCELLED& )
+    {
+        return CLI::EXIT_CODES::ERR_CANCELLED;
+    }
 
     return CLI::EXIT_CODES::SUCCESS;
 }
@@ -3155,11 +3180,21 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
     {
         SCH_DIFF_SIDES sides;
 
-        if( int rc = loadSchDiffSides( Pgm().GetSettingsManager(), *m_reporter, aFileA, aFileB, sides );
+        // The schematics load on the UI thread before the window opens, which takes seconds for a large one
+        auto progress = std::make_unique<WX_PROGRESS_REPORTER>( parent, _( "Compare Files" ), 4, PR_CAN_ABORT );
+        progress->SetRefreshOnPhaseChange( true );
+
+        if( int rc = loadSchDiffSides( Pgm().GetSettingsManager(), *m_reporter, aFileA, aFileB, sides,
+                                       progress.get() );
             rc != CLI::EXIT_CODES::SUCCESS )
         {
             return rc;
         }
+
+        progress->AdvancePhase( _( "Drawing..." ) );
+
+        if( !progress->KeepRefreshing() )
+            return CLI::EXIT_CODES::ERR_CANCELLED;
 
         SCHEMATIC*                         schA = sides.schA;
         SCHEMATIC*                         schB = sides.schB;
@@ -3228,6 +3263,8 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
                                    KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, nullptr, schB, color, {},
                                                                               deletedItems, {}, nullptr, compScreen );
                                } );
+
+        progress.reset();
         dlg.ShowModal();
 
         return CLI::EXIT_CODES::SUCCESS;

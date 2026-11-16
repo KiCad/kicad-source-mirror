@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE( ProgressReporterGatingThrottlesBulkCalls )
     // Only the priming refresh should run inside the throttle window.
     for( int progress = 0; progress < maxProgress; ++progress )
     {
-        if( WX_PROGRESS_REPORTER::shouldRefresh( progress, maxProgress, 0, 1, throttle ) )
+        if( WX_PROGRESS_REPORTER::shouldRefresh( progress, maxProgress, 0, 1, 0, false, throttle ) )
             refreshes++;
     }
 
@@ -78,11 +78,11 @@ BOOST_AUTO_TEST_CASE( ProgressReporterGatingAlwaysRefreshesFinalTick )
     int maxProgress = 1000;
 
     // Consume the priming refresh.
-    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 0, 1, throttle ) );
-    BOOST_CHECK( !WX_PROGRESS_REPORTER::shouldRefresh( 500, maxProgress, 0, 1, throttle ) );
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 0, 1, 0, false, throttle ) );
+    BOOST_CHECK( !WX_PROGRESS_REPORTER::shouldRefresh( 500, maxProgress, 0, 1, 0, false, throttle ) );
 
     // The final tick must refresh regardless of throttle state.
-    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( maxProgress, maxProgress, 0, 1, throttle ) );
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( maxProgress, maxProgress, 0, 1, 0, false, throttle ) );
 }
 
 
@@ -93,13 +93,31 @@ BOOST_AUTO_TEST_CASE( ProgressReporterGatingThrottlesPhaseBoundaries )
     int maxProgress = 1000;
 
     // Consume the priming refresh.
-    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 0, 2, throttle ) );
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 0, 2, 0, false, throttle ) );
 
     // Intermediate phase completion must stay throttled.
-    BOOST_CHECK( !WX_PROGRESS_REPORTER::shouldRefresh( maxProgress, maxProgress, 0, 2, throttle ) );
+    BOOST_CHECK( !WX_PROGRESS_REPORTER::shouldRefresh( maxProgress, maxProgress, 0, 2, 0, false, throttle ) );
 
     // The last phase is the terminal tick.
-    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( maxProgress, maxProgress, 1, 2, throttle ) );
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( maxProgress, maxProgress, 1, 2, 0, false, throttle ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ProgressReporterGatingShowsEachNewPhaseOnlyWhenAsked )
+{
+    THROTTLE asked( std::chrono::milliseconds( 100 ) );
+    THROTTLE plain( std::chrono::milliseconds( 100 ) );
+
+    int maxProgress = 1000;
+
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 0, 3, 0, true, asked ) );
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 0, 3, 0, false, plain ) );
+
+    // Inside the throttle window, or a short phase such as the last one may never show
+    BOOST_CHECK( WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 1, 3, 0, true, asked ) );
+
+    // A caller advancing a phase per item would otherwise refresh on every one
+    BOOST_CHECK( !WX_PROGRESS_REPORTER::shouldRefresh( 0, maxProgress, 1, 3, 0, false, plain ) );
 }
 
 

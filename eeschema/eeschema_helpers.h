@@ -28,6 +28,7 @@ class SCH_EDIT_FRAME;
 class SETTINGS_MANAGER;
 class PROJECT;
 class REPORTER;
+class PROGRESS_REPORTER;
 
 /**
  * Helper functions to do things like load schematics behind the scenes for special functions
@@ -44,13 +45,15 @@ public:
                                             bool aForceDefaultProject,
                                             PROJECT* aProject = nullptr,
                                             bool aCalculateConnectivity = true,
-                                            REPORTER* aRootReporter = nullptr );
+                                            REPORTER* aRootReporter = nullptr,
+                                            PROGRESS_REPORTER* aProgressReporter = nullptr );
     static SCHEMATIC*        LoadSchematic( const wxString& aFileName,
                                             SCH_IO_MGR::SCH_FILE_T aFormat,
                                             bool aSetActive, bool aForceDefaultProject,
                                             PROJECT* aProject = nullptr,
                                             bool aCalculateConnectivity = true,
-                                            REPORTER* aRootReporter = nullptr );
+                                            REPORTER* aRootReporter = nullptr,
+                                            PROGRESS_REPORTER* aProgressReporter = nullptr );
 
 private:
     static SCH_EDIT_FRAME*   s_SchEditFrame;

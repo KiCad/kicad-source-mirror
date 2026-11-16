@@ -54,18 +54,19 @@ void EESCHEMA_HELPERS::SetSchEditFrame( SCH_EDIT_FRAME* aSchEditFrame )
 
 SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName, bool aSetActive,
                                             bool aForceDefaultProject, PROJECT* aProject,
-                                            bool aCalculateConnectivity, REPORTER* aRootReporter )
+                                            bool aCalculateConnectivity, REPORTER* aRootReporter,
+                                            PROGRESS_REPORTER* aProgressReporter )
 {
     if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
         return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive, aForceDefaultProject,
-                              aProject, aCalculateConnectivity, aRootReporter );
+                              aProject, aCalculateConnectivity, aRootReporter, aProgressReporter );
     else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
         return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject,
-                              aProject, aCalculateConnectivity, aRootReporter );
+                              aProject, aCalculateConnectivity, aRootReporter, aProgressReporter );
 
     // as fall back for any other kind use the legacy format
     return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive, aForceDefaultProject, aProject,
-                          aCalculateConnectivity, aRootReporter );
+                          aCalculateConnectivity, aRootReporter, aProgressReporter );
 }
 
 
@@ -91,7 +92,8 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                                             bool aSetActive,
                                             bool aForceDefaultProject,
                                             PROJECT* aProject,
-                                            bool aCalculateConnectivity, REPORTER* aRootReporter )
+                                            bool aCalculateConnectivity, REPORTER* aRootReporter,
+                                            PROGRESS_REPORTER* aProgressReporter )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -132,6 +134,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
         project = &mgr.Prj();
 
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFormat ) );
+    pi->SetProgressReporter( aProgressReporter );
 
     std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( project );
     schematic->CreateDefaultScreens();

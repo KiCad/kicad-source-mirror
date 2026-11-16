@@ -76,6 +76,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/cadstar/test_issue26025_pin_renumber.cpp
     sch_io/cadstar/test_issue26030_net_label_split.cpp
     sch_io/cadstar/test_issue26031_wire_over_pin.cpp
+    sch_io/test_sch_io_cancel.cpp
     sch_io/kicad_sexpr/test_sch_io_kicad_sexpr_leak_cache.cpp
 
     erc/test_erc_annotation.cpp

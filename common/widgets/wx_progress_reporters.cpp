@@ -49,7 +49,8 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
         m_reservedSize( aReserveSpaceForMessage ),
         m_updateThrottle( std::chrono::milliseconds( 100 ) ),
         m_lastUpdateResult( true ),
-        m_indeterminate( false )
+        m_indeterminate( false ),
+        m_shownPhase( -1 )
 {
     // wxAppProgressIndicator doesn't like value > max, ever. However there are some risks
     // with multithreaded setting of those values making a mess
@@ -65,11 +66,15 @@ WX_PROGRESS_REPORTER::~WX_PROGRESS_REPORTER()
 
 bool WX_PROGRESS_REPORTER::updateUI()
 {
-    if( !shouldRefresh( m_progress.load(), m_maxProgress.load(), m_phase.load(), m_numPhases.load(),
-                        m_updateThrottle ) )
+    const int phase = m_phase.load();
+
+    if( !shouldRefresh( m_progress.load(), m_maxProgress.load(), phase, m_numPhases.load(), m_shownPhase.load(),
+                        m_refreshOnPhaseChange, m_updateThrottle ) )
     {
         return !m_cancelled.load() && m_lastUpdateResult.load();
     }
+
+    m_shownPhase.store( phase );
 
     int cur = CurrentProgress();
 

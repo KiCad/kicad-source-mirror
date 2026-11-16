@@ -278,6 +278,10 @@ void SCH_IO_KICAD_SEXPR::loadHierarchy( const SCH_SHEET_PATH& aParentSheetPath, 
             {
                 loadFile( fileName.GetFullPath(), aSheet );
             }
+            catch( const IO_CANCELLED& )
+            {
+                throw;
+            }
             catch( const IO_ERROR& ioe )
             {
                 // If there is a problem loading the root sheet, there is no recovery.

@@ -376,6 +376,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         pi->SetProgressReporter( &progressReporter );
 
         bool failedLoad = false;
+        bool cancelledLoad = false;
 
         try
         {
@@ -389,7 +390,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                 if( !topLevelSheets.empty() )
                 {
-                    std::vector<SCH_SHEET*> loadedSheets;
+                    // Owned until every root has loaded, so one that throws does not leak the others
+                    std::vector<std::unique_ptr<SCH_SHEET>> loadedSheets;
 
                     // Load each top-level sheet
                     for( const TOP_LEVEL_SHEET_INFO& sheetInfo : topLevelSheets )
@@ -404,7 +406,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             continue;
                         }
 
-                        SCH_SHEET* sheet = pi->LoadSchematicFile( sheetPath, newSchematic.get() );
+                        std::unique_ptr<SCH_SHEET> sheet( pi->LoadSchematicFile( sheetPath, newSchematic.get() ) );
 
                         if( sheet )
                         {
@@ -416,16 +418,24 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             }
 
                             sheet->SetName( sheetInfo.name );
-                            loadedSheets.push_back( sheet );
 
                             wxLogTrace( tracePathsAndFiles, wxS( "Loaded top-level sheet '%s' (UUID %s) from %s" ),
                                         sheet->GetName(), sheet->m_Uuid.AsString(), sheetPath );
+
+                            loadedSheets.push_back( std::move( sheet ) );
                         }
                     }
 
                     if( !loadedSheets.empty() )
                     {
-                        newSchematic->SetTopLevelSheets( loadedSheets );
+                        std::vector<SCH_SHEET*> topSheets;
+
+                        topSheets.reserve( loadedSheets.size() );
+
+                        for( std::unique_ptr<SCH_SHEET>& sheet : loadedSheets )
+                            topSheets.push_back( sheet.release() );
+
+                        newSchematic->SetTopLevelSheets( topSheets );
                     }
                     else
                     {
@@ -480,6 +490,14 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             failedLoad = true;
         }
+        catch( const IO_CANCELLED& )
+        {
+            newSchematic->CreateDefaultScreens();
+            progressReporter.Hide();
+
+            failedLoad = true;
+            cancelledLoad = true;
+        }
         catch( const IO_ERROR& ioe )
         {
             newSchematic->CreateDefaultScreens();
@@ -508,17 +526,18 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( failedLoad )
         {
-            // Do not leave g_RootSheet == NULL because it is expected to be
-            // a valid sheet. Therefore create a dummy empty root sheet and screen.
-            CreateDefaultScreens();
-            m_toolManager->RunAction( ACTIONS::zoomFitScreen );
+            showEmptySchematic();
 
-            // Show any messages collected before the failure
-            if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-                statusBar->AddWarningMessages( "load", loadReporter.GetMessages() );
+            // A cancel is the user's choice, so it reports no failure
+            if( !cancelledLoad )
+            {
+                // Show any messages collected before the failure
+                if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+                    statusBar->AddWarningMessages( "load", loadReporter.GetMessages() );
 
-            msg.Printf( _( "Failed to load '%s'." ), fullFileName );
-            SetMsgPanel( wxEmptyString, msg );
+                msg.Printf( _( "Failed to load '%s'." ), fullFileName );
+                SetMsgPanel( wxEmptyString, msg );
+            }
 
             return false;
         }
@@ -690,8 +709,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
                 if( dlg.ShowModal() == wxID_CANCEL )
                 {
-                    Schematic().Reset();
-                    CreateDefaultScreens();
+                    showEmptySchematic();
                     return false;
                 }
             }
@@ -849,8 +867,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     RefreshNetNavigator();
             } );
 
-    wxCommandEvent changedEvt( EDA_EVT_SCHEMATIC_CHANGED );
-    ProcessEventLocally( changedEvt );
+    broadcastSchematicChanged();
 
     if( !differentProject )
     {
@@ -859,20 +876,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // When running under the project manager, KIWAY::ProjectChanged() was called before
         // this frame existed, so we need to call our own ProjectChanged() now.
         ProjectChanged();
-    }
-
-    for( wxEvtHandler* listener : m_schematicChangeListeners )
-    {
-        wxCHECK2( listener, continue );
-
-        // Use the windows variant when handling event messages in case there is any special
-        // event handler pre and/or post processing specific to windows.
-        wxWindow* win = dynamic_cast<wxWindow*>( listener );
-
-        if( win )
-            win->HandleWindowEvent( e );
-        else
-            listener->SafelyProcessEvent( e );
     }
 
     updateTitle();
@@ -912,6 +915,46 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     RefreshGitCommitPane();
 
     return true;
+}
+
+
+void SCH_EDIT_FRAME::showEmptySchematic()
+{
+    // Do not leave g_RootSheet == NULL because it is expected to be
+    // a valid sheet. Therefore create a dummy empty root sheet and screen.
+    CreateDefaultScreens();
+
+    initScreenZoom();
+    SetSheetNumberAndCount();
+    SyncView();
+
+    // The navigator and the navigation history still hold paths into the freed hierarchy
+    UpdateHierarchyNavigator( false, true );
+    m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
+
+    broadcastSchematicChanged();
+    updateTitle();
+}
+
+
+void SCH_EDIT_FRAME::broadcastSchematicChanged()
+{
+    wxCommandEvent changedEvt( EDA_EVT_SCHEMATIC_CHANGED );
+    ProcessEventLocally( changedEvt );
+
+    for( wxEvtHandler* listener : m_schematicChangeListeners )
+    {
+        wxCHECK2( listener, continue );
+
+        // Use the windows variant when handling event messages in case there is any special
+        // event handler pre and/or post processing specific to windows.
+        wxWindow* win = dynamic_cast<wxWindow*>( listener );
+
+        if( win )
+            win->HandleWindowEvent( changedEvt );
+        else
+            listener->SafelyProcessEvent( changedEvt );
+    }
 }
 
 
@@ -1762,23 +1805,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                         RefreshNetNavigator();
                 } );
 
-        wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGED );
-        ProcessEventLocally( e );
-
-        for( wxEvtHandler* listener : m_schematicChangeListeners )
-        {
-            wxCHECK2( listener, continue );
-
-            // Use the windows variant when handling event messages in case there is any
-            // special event handler pre and/or post processing specific to windows.
-            wxWindow* win = dynamic_cast<wxWindow*>( listener );
-
-            if( win )
-                win->HandleWindowEvent( e );
-            else
-                listener->SafelyProcessEvent( e );
-        }
-
+        broadcastSchematicChanged();
         updateTitle();
 
         if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )

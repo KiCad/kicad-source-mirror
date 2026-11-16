@@ -22,11 +22,37 @@
  */
 
 #include <diff_merge/kicad_differ.h>
+#include <ki_exception.h>
+#include <progress_reporter.h>
+
+#include <wx/intl.h>
 
 
 namespace KICAD_DIFF
 {
 
 KICAD_DIFFER::~KICAD_DIFFER() = default;
+
+
+void ReportDiffProgress( KICAD_DIFFER& aDiffer, PROGRESS_REPORTER* aProgress )
+{
+    if( !aProgress )
+        return;
+
+    aProgress->AdvancePhase( _( "Comparing..." ) );
+
+    KICAD_DIFFER::OPTIONS options = aDiffer.GetOptions();
+
+    options.progress = [aProgress]( double aFraction )
+    {
+        aProgress->SetCurrentProgress( aFraction );
+
+        // Stops the pairing at once, which otherwise runs on for seconds after Cancel
+        if( !aProgress->KeepRefreshing() )
+            THROW_IO_CANCELLED();
+    };
+
+    aDiffer.SetOptions( options );
+}
 
 } // namespace KICAD_DIFF

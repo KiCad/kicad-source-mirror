@@ -80,13 +80,19 @@ public:
 
     void SetIndeterminate( bool aIndeterminate ) override { m_indeterminate.store( aIndeterminate ); }
 
+    /**
+     * Show each new phase at once, past the throttle, so a short phase's message is never skipped. Off by
+     * default, as a caller that advances a phase per item would refresh on every one.
+     */
+    void SetRefreshOnPhaseChange( bool aRefresh ) { m_refreshOnPhaseChange = aRefresh; }
+
     ///< Gate expensive dialog work while always allowing the final tick.
-    static bool shouldRefresh( int aProgress, int aMaxProgress, int aPhase, int aNumPhases,
-                               THROTTLE& aThrottle )
+    static bool shouldRefresh( int aProgress, int aMaxProgress, int aPhase, int aNumPhases, int aShownPhase,
+                               bool aRefreshOnPhaseChange, THROTTLE& aThrottle )
     {
         bool finalTick = aMaxProgress > 0 && aProgress >= aMaxProgress && aPhase + 1 >= aNumPhases;
 
-        return finalTick || aThrottle.Ready();
+        return finalTick || ( aRefreshOnPhaseChange && aPhase != aShownPhase ) || aThrottle.Ready();
     }
 
 protected:
@@ -100,6 +106,8 @@ private:
     THROTTLE               m_updateThrottle;
     std::atomic_bool       m_lastUpdateResult;
     std::atomic_bool       m_indeterminate;
+    std::atomic_int        m_shownPhase;
+    bool                   m_refreshOnPhaseChange = false;
 };
 
 
