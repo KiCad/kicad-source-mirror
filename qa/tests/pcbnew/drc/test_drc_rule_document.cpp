@@ -346,6 +346,34 @@ BOOST_AUTO_TEST_CASE( ARangeWithBothEndsStillReachesItsPanel )
 }
 
 
+BOOST_AUTO_TEST_CASE( AnEditedTextRuleKeepsItsIndent )
+{
+    BOARD             board;
+    DRC_RULE_DOCUMENT document( &board );
+
+    document.SetText( wxS( "(version 2)\n"
+                           "(rule \"min_only\"\n"
+                           "\t(condition \"A.NetClass == 'Default'\")\n"
+                           "\t(constraint track_width (min 0.2mm)))\n" ) );
+
+    BOOST_REQUIRE_EQUAL( document.IndicesFor( CUSTOM_RULE ).size(), 1 );
+
+    int                       index = document.IndicesFor( CUSTOM_RULE ).front();
+    DRC_RE_LOADED_PANEL_ENTRY edited = document.Entries()[index];
+
+    edited.ruleName = wxS( "renamed" );
+    document.UpdateEntry( index, edited );
+
+    wxString text = document.GetText();
+
+    BOOST_CHECK_MESSAGE( text.Contains( wxS( "(rule \"renamed\"\n"
+                                             "\t(condition \"A.NetClass == 'Default'\")\n"
+                                             "\t(constraint track_width (min 0.2mm)))" ) ),
+                         "the body lost its indent:\n"
+                                 << text );
+}
+
+
 BOOST_AUTO_TEST_CASE( AWidthOrGapMissingABoundIsKeptAsWritten )
 {
     // The width and gap panels write min, opt and max around one optimum, so a rule naming fewer

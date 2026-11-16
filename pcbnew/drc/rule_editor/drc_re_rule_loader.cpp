@@ -320,14 +320,53 @@ wxString DRC_RULE_LOADER::ExtractRuleBody( const wxString& aOriginalText )
     if( bodyStart == (int) wxString::npos )
         return aOriginalText;
 
-    wxString body = text.Mid( bodyStart );
+    // Take the first clause from the start of its line so it keeps its indent beside the others
+    size_t lineStart = text.rfind( '\n', bodyStart );
+    lineStart = ( lineStart == wxString::npos ) ? 0 : lineStart + 1;
+
+    bool ownLine = text.find_first_not_of( wxS( " \t" ), lineStart ) == (size_t) bodyStart;
+
+    wxString body = text.Mid( ownLine ? lineStart : bodyStart );
     body.Trim( true );
 
     if( body.EndsWith( wxS( ")" ) ) )
         body = body.Left( body.Length() - 1 );
     body.Trim( true );
 
-    return body;
+    // The body is edited and saved without the indent the lines share; FormatRule puts one back
+    wxArrayString           lines = wxSplit( body, '\n', '\0' );
+    std::optional<wxString> indent;
+
+    for( size_t i = ownLine ? 0 : 1; i < lines.size(); ++i )
+    {
+        size_t textStart = lines[i].find_first_not_of( wxS( " \t" ) );
+
+        if( textStart == wxString::npos )
+            continue;
+
+        wxString lead = lines[i].Left( textStart );
+
+        if( !indent )
+            indent = lead;
+
+        size_t common = 0;
+
+        while( common < indent->length() && common < lead.length() && ( *indent )[common] == lead[common] )
+            ++common;
+
+        indent = indent->Left( common );
+    }
+
+    if( !indent || indent->IsEmpty() )
+        return body;
+
+    for( size_t i = ownLine ? 0 : 1; i < lines.size(); ++i )
+    {
+        if( lines[i].StartsWith( *indent ) )
+            lines[i] = lines[i].Mid( indent->length() );
+    }
+
+    return wxJoin( lines, '\n', '\0' );
 }
 
 
