@@ -2405,6 +2405,7 @@ DrcErrorType ToProtoEnum( PCB_DRC_CODE aValue )
     case DRCE_MICROVIA_STACK_DEPTH:          return DrcErrorType::DRCET_MICROVIA_STACK_DEPTH;
     case DRCE_HOLE_ASPECT_RATIO:             return DrcErrorType::DRCET_HOLE_ASPECT_RATIO;
     case DRCE_MICROVIA_CROSSES_CORE:         return DrcErrorType::DRCET_MICROVIA_CROSSES_CORE;
+    case DRCE_MICROVIA_SPANS_DIELECTRICS: return DrcErrorType::DRCET_MICROVIA_SPANS_DIELECTRICS;
     case DRCE_COPPER_OUTSIDE_BOARD:          return DrcErrorType::DRCET_COPPER_OUTSIDE_BOARD;
     case DRCE_OVERLAPPING_FOOTPRINTS:        return DrcErrorType::DRCET_OVERLAPPING_FOOTPRINTS;
     case DRCE_MISSING_COURTYARD:             return DrcErrorType::DRCET_MISSING_COURTYARD;
@@ -2493,6 +2494,7 @@ PCB_DRC_CODE FromProtoEnum( DrcErrorType aValue )
     case DrcErrorType::DRCET_MICROVIA_STACK_DEPTH:                return DRCE_MICROVIA_STACK_DEPTH;
     case DrcErrorType::DRCET_HOLE_ASPECT_RATIO:                   return DRCE_HOLE_ASPECT_RATIO;
     case DrcErrorType::DRCET_MICROVIA_CROSSES_CORE:               return DRCE_MICROVIA_CROSSES_CORE;
+    case DrcErrorType::DRCET_MICROVIA_SPANS_DIELECTRICS:          return DRCE_MICROVIA_SPANS_DIELECTRICS;
     case DrcErrorType::DRCET_COPPER_OUTSIDE_BOARD:                return DRCE_COPPER_OUTSIDE_BOARD;
     case DrcErrorType::DRCET_OVERLAPPING_FOOTPRINTS:              return DRCE_OVERLAPPING_FOOTPRINTS;
     case DrcErrorType::DRCET_MISSING_COURTYARD:                   return DRCE_MISSING_COURTYARD;
