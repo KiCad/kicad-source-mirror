@@ -410,6 +410,12 @@ public:
     int FilterAppEvent( wxEvent& aEvent );
 
     /**
+     * Return true while the operating system is closing the application because the user
+     * session is ending, so close handlers can tell it apart from a close the user asked for.
+     */
+    bool IsSessionEnding() const { return m_sessionEnding; }
+
+    /**
      * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
      */
     bool m_Printing;
@@ -452,6 +458,8 @@ protected:
     wxString        m_pdf_browser;            ///< Filename of the app selected for browsing PDFs.
 
     wxString        m_text_editor;
+
+    bool m_sessionEnding; ///< Set while wx handles a session-end event.
 
     KICAD_SINGLETON m_singleton;
 

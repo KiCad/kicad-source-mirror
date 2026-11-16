@@ -26,6 +26,7 @@
  *        (locale handling)
  */
 
+#include <wx/app.h>
 #include <wx/dialog.h>
 #include <wx/eventfilter.h>
 #include <wx/html/htmlwin.h>
@@ -63,6 +64,7 @@
 #include <pgm_base.h>
 #include <design_block_library_adapter.h>
 #include <policy_keys.h>
+#include <scoped_set_reset.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>
@@ -156,6 +158,7 @@ PGM_BASE::PGM_BASE()
     m_locale = nullptr;
     m_Printing = false;
     m_Quitting = false;
+    m_sessionEnding = false;
     m_argcUtf8 = 0;
     m_argvUtf8 = nullptr;
     m_splash = nullptr;
@@ -528,6 +531,26 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
 
     if( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval != 0 )
         wxUpdateUIEvent::SetUpdateInterval( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval );
+
+#if defined( __WXMSW__ ) || defined( __WXOSX__ )
+    // wx ends a session by closing the top window with an ordinary close event
+    if( !aHeadless )
+    {
+        App().Bind( wxEVT_QUERY_END_SESSION,
+                    [this]( wxCloseEvent& aEvent )
+                    {
+                        SCOPED_SET_RESET<bool> sessionEnding( m_sessionEnding, true );
+                        App().OnQueryEndSession( aEvent );
+                    } );
+
+        App().Bind( wxEVT_END_SESSION,
+                    [this]( wxCloseEvent& aEvent )
+                    {
+                        SCOPED_SET_RESET<bool> sessionEnding( m_sessionEnding, true );
+                        App().OnEndSession( aEvent );
+                    } );
+    }
+#endif
 
     // Now the application can safely start, show the splash screen
     if( !aHeadless )

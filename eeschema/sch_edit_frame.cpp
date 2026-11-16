@@ -1207,11 +1207,8 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
-    {
+    if( isBlockableSessionEnd() && IsContentModified() )
         return false;
-    }
 
     if( Kiface().IsSingle() )
     {

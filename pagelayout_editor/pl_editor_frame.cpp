@@ -419,12 +419,8 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 bool PL_EDITOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( KIPLATFORM::APP::SupportsShutdownBlockReason()
-            && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
-    {
+    if( isBlockableSessionEnd() && IsContentModified() )
         return false;
-    }
 
     if( IsContentModified() )
     {

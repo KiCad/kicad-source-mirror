@@ -1939,8 +1939,7 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible, before any modal prompt.
     // IsContentModified only sees the active tab, so also account for dirty inactive tabs.
-    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-                                                       && ( IsContentModified() || hasDirtyInactiveTabs() ) )
+    if( isBlockableSessionEnd() && ( IsContentModified() || hasDirtyInactiveTabs() ) )
     {
         aEvent.Veto();
         return false;

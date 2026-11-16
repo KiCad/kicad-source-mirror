@@ -391,7 +391,7 @@ bool CVPCB_MAINFRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( m_modified )
     {
         // Shutdown blocks must be determined and vetoed as early as possible
-        if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION )
+        if( isBlockableSessionEnd() )
             return false;
 
         if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. Save changes?" ),
