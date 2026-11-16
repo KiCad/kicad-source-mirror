@@ -827,13 +827,20 @@ void GIT_COMMIT_PANE::updateDockMinHeight()
     if( !pane.IsOk() )
         return;
 
-    // A refresh passes through shorter states, so compare with what the manager already has
-    const bool changed = pane.min_size.y != m_dockMinHeight;
+    wxAuiFloatingFrame* floating = wxDynamicCast( pane.frame, wxAuiFloatingFrame );
+    int                 minHeight = m_dockMinHeight;
 
-    pane.MinSize( pane.min_size.x, m_dockMinHeight );
+    // A minimum taller than the frame makes AUI place the pane past the bottom, so let the pane scroll instead
+    if( !floating && manager->GetManagedWindow() )
+        minHeight = std::min( minHeight, manager->GetManagedWindow()->GetClientSize().y );
+
+    // A refresh passes through shorter states, so compare with what the manager already has
+    const bool changed = pane.min_size.y != minHeight;
+
+    pane.MinSize( pane.min_size.x, minHeight );
 
     // A floating pane is laid out by a copy of its info in the floating frame's own manager
-    if( wxAuiFloatingFrame* floating = wxDynamicCast( pane.frame, wxAuiFloatingFrame ) )
+    if( floating )
     {
         wxAuiManager&  inner = floating->GetAuiManager();
         wxAuiPaneInfo& innerPane = inner.GetPane( this );
