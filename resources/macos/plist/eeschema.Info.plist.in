@@ -41,6 +41,7 @@
     <key>CSResourcesFileMapped</key>                <true/>
     <key>LSRequiresCarbon</key>                     <true/>
     <key>NSHumanReadableCopyright</key>             <string>Copyright The KiCad Developers</string>
+    <key>NSLocalNetworkUsageDescription</key>       <string>KiCad connects to version control servers on your local network.</string>
     <key>NSHighResolutionCapable</key>              <true/>
 </dict>
 </plist>

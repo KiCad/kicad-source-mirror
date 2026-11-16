@@ -129,6 +129,7 @@ set( QA_COMMON_SRCS
     git/test_git_compare_handler.cpp
     git/test_kigit_ignore.cpp
     git/test_text_diff.cpp
+    git/test_kigit_failure.cpp
     text_eval/test_text_eval_parser.cpp
     text_eval/test_text_eval_parser_core.cpp
     text_eval/test_text_eval_parser_datetime.cpp

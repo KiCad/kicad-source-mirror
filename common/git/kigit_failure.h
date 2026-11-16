@@ -131,6 +131,9 @@ APIEXPORT KIGIT_FAILURE_REPORT DescribeGitFailure( const KIGIT_ERROR_INFO& aErro
 /// The summary for an operation that failed without saying why, naming the server it was talking to.
 APIEXPORT wxString UnexplainedFailure( KIGIT_OPERATION aOperation, const wxString& aUrl );
 
+/// True when @p aHost is a literal address in a private or link-local range, or a .local mDNS name.
+APIEXPORT bool IsLocalNetworkHost( const wxString& aHost );
+
 /// True for the failures another login, key or passphrase can fix, which the credential prompt answers.
 APIEXPORT bool IsCredentialFailure( KIGIT_FAILURE aKind );
 

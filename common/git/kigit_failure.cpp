@@ -34,6 +34,7 @@
 #include <wx/translation.h>
 
 #include <algorithm>
+#include <cctype>
 #include <cstdlib>
 #include <filesystem>
 #include <memory>
@@ -319,6 +320,15 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
                                  host );
 
     case KIGIT_FAILURE::HOST_UNREACHABLE:
+#ifdef __APPLE__
+        if( KIGIT::IsLocalNetworkHost( parsed.hostname ) )
+        {
+            return wxString::Format( _( "%s did not answer. Check your network connection, and that KiCad is "
+                                        "allowed in System Settings > Privacy & Security > Local Network." ),
+                                     host );
+        }
+#endif
+
         return wxString::Format( _( "%s did not answer. Check your network or VPN connection, then try again." ),
                                  host );
 
@@ -456,6 +466,58 @@ wxString KIGIT::UnexplainedFailure( KIGIT_OPERATION aOperation, const wxString& 
     context.operation = aOperation;
     context.url = aUrl;
     return summaryFor( KIGIT_FAILURE::OTHER, {}, context );
+}
+
+
+bool KIGIT::IsLocalNetworkHost( const wxString& aHost )
+{
+    const std::string host = aHost.Lower().ToStdString();
+
+    if( host.size() > 6 && host.compare( host.size() - 6, 6, ".local" ) == 0 )
+        return true;
+
+    if( host.find( ':' ) != std::string::npos )
+    {
+        // Only the first group decides fc00::/7 and fe80::/10
+        const std::string first = host.substr( 0, host.find( ':' ) );
+        const auto        isHex = []( unsigned char c ) { return std::isxdigit( c ) != 0; };
+
+        if( first.size() > 4 || !std::all_of( first.begin(), first.end(), isHex ) )
+            return false;
+
+        const unsigned long group = first.empty() ? 0 : std::strtoul( first.c_str(), nullptr, 16 );
+
+        return ( group & 0xfe00 ) == 0xfc00 || ( group & 0xffc0 ) == 0xfe80;
+    }
+
+    int octets[4] = { 0, 0, 0, 0 };
+    int count = 0;
+    int digits = 0;
+
+    for( char c : host )
+    {
+        if( c == '.' )
+        {
+            if( digits == 0 || ++count > 3 )
+                return false;
+
+            digits = 0;
+        }
+        else if( c >= '0' && c <= '9' && ++digits <= 3 )
+        {
+            octets[count] = octets[count] * 10 + ( c - '0' );
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    if( count != 3 || digits == 0 || octets[0] > 255 || octets[1] > 255 )
+        return false;
+
+    return octets[0] == 10 || ( octets[0] == 172 && octets[1] >= 16 && octets[1] <= 31 )
+           || ( octets[0] == 192 && octets[1] == 168 ) || ( octets[0] == 169 && octets[1] == 254 );
 }
 
 
