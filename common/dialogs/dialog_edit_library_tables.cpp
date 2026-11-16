@@ -20,6 +20,8 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <confirm.h>
+#include <kidialog.h>
+#include <libraries/library_table.h>
 #include <lib_table_notebook_panel.h>
 
 #include <dialogs/dialog_edit_library_tables.h>
@@ -92,6 +94,20 @@ bool DIALOG_EDIT_LIBRARY_TABLES::TransferDataFromWindow()
      * because m_contentPanel->TransferDataFromWindow() is called here.
      */
     return m_contentPanel->TransferDataFromWindow();
+}
+
+
+bool DIALOG_EDIT_LIBRARY_TABLES::ConfirmOverwrite( const LIBRARY_TABLE& aTable )
+{
+    if( !aTable.DiskChanged() )
+        return true;
+
+    KIDIALOG dlg( this, wxString::Format( _( "'%s' changed on disk after it was loaded." ), aTable.Path() ),
+                  _( "Overwrite Library Table?" ), wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxICON_WARNING );
+    dlg.SetExtendedMessage( _( "Saving replaces the version on disk with the one in this dialog." ) );
+    dlg.SetOKCancelLabels( _( "Overwrite" ), _( "Cancel" ) );
+
+    return dlg.ShowModal() == wxID_OK;
 }
 
 

@@ -190,7 +190,7 @@ public:
         m_loadedStamp.reset();
     }
 
-    /// True when the file on disk differs from what this table was loaded from or last saved to
+    /// True when the file's content differs from what this table was loaded from or last saved to
     bool DiskChanged() const;
 
     LIBRARY_TABLE_TYPE Type() const { return m_type; }
@@ -232,7 +232,8 @@ public:
     std::optional<LIBRARY_TABLE_ROW*> Row( const wxString& aNickname );
     std::optional<const LIBRARY_TABLE_ROW*> Row( const wxString& aNickname ) const;
 
-    LIBRARY_RESULT<void> Save();
+    /// @param aOverwriteChanged writes even when the file changed on disk since it was loaded
+    LIBRARY_RESULT<void> Save( bool aOverwriteChanged = false );
 
     static std::map<std::string, UTF8> ParseOptions( const std::string& aOptionsList );
     static UTF8 FormatOptions( const std::map<std::string, UTF8>* aProperties );
@@ -245,7 +246,7 @@ private:
     /// The full path to the file this table was parsed from, if any
     wxString m_path;
 
-    /// The file's state when it was loaded or last saved, so a write can tell that it would clobber a newer file
+    /// A hash of the file content when it was loaded or last saved, so a write can tell it would clobber a newer file
     std::optional<wxString> m_loadedStamp;
 
     LIBRARY_TABLE_SCOPE m_scope = LIBRARY_TABLE_SCOPE::UNINITIALIZED;

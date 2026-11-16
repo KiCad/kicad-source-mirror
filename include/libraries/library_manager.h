@@ -444,8 +444,8 @@ public:
 
     void ReloadTables( LIBRARY_TABLE_SCOPE aScope, std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
-    /// Reload the global or project tables whose files appeared, changed or vanished since they were loaded
-    void ReloadChangedTables();
+    /// Reload the global or project table of a type if its file appeared, changed or vanished since it was loaded
+    void ReloadChangedTables( LIBRARY_TABLE_TYPE aType );
 
     /// Notify all adapters that the project has changed
     void ProjectChanged();

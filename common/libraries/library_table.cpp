@@ -36,6 +36,7 @@
 
 #include <wx/buffer.h>
 #include <wx/ffile.h>
+#include <wx/file.h>
 
 
 const wxString LIBRARY_TABLE_ROW::TABLE_TYPE_NAME = wxT( "Table" );
@@ -68,6 +69,7 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
     wxFileName fn( aPath );
     WX_FILENAME::ResolvePossibleSymlinks( fn );
     m_path = fn.GetAbsolutePath();
+    // Stamp before parsing so a change during the load is seen as a change
     m_loadedStamp = diskStamp();
 
     if( !fn.FileExists() )
@@ -292,13 +294,18 @@ std::optional<const LIBRARY_TABLE_ROW*> LIBRARY_TABLE::Row( const wxString& aNic
 
 wxString LIBRARY_TABLE::diskStamp() const
 {
-    wxFileName fn( m_path );
-
-    if( !fn.FileExists() )
+    if( !wxFileName::FileExists( m_path ) )
         return wxS( "missing" );
 
-    return wxString::Format( wxS( "%lld:%lld" ), fn.GetModificationTime().GetValue().GetValue(),
-                             fn.GetSize().GetValue() );
+    wxFile file( m_path );
+
+    if( !file.IsOpened() )
+        return wxS( "missing" );
+
+    std::string data( file.Length(), '\0' );
+    file.Read( data.data(), data.size() );
+
+    return wxString::Format( wxS( "%zx" ), std::hash<std::string>{}( data ) );
 }
 
 
@@ -319,7 +326,7 @@ bool LIBRARY_TABLE::IsReadOnly() const
 }
 
 
-LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
+LIBRARY_RESULT<void> LIBRARY_TABLE::Save( bool aOverwriteChanged )
 {
     if( IsReadOnly() )
     {
@@ -327,7 +334,7 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
                 wxString::Format( _( "Library table '%s' is read-only" ), Path() ) ) );
     }
 
-    if( DiskChanged() )
+    if( !aOverwriteChanged && DiskChanged() )
     {
         return tl::unexpected( LIBRARY_ERROR( wxString::Format( _( "Library table '%s' changed on disk after it was "
                                                                    "loaded, so it was not overwritten" ),

@@ -304,6 +304,7 @@ void LIBRARY_MANAGER::createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_
 
         m_tables[aType] = std::make_unique<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
         m_tables[aType]->SetType( aType );
+        m_tables[aType]->SetOk();
     }
     else if( aScope == LIBRARY_TABLE_SCOPE::PROJECT )
     {
@@ -993,22 +994,30 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
 }
 
 
-void LIBRARY_MANAGER::ReloadChangedTables()
+void LIBRARY_MANAGER::ReloadChangedTables( LIBRARY_TABLE_TYPE aType )
 {
-    auto changed = []( const auto& aTables )
+    auto changed = [aType]( const auto& aTables )
     {
-        return std::ranges::any_of( aTables | std::views::values,
-                                    []( const auto& aTable )
-                                    {
-                                        return aTable->DiskChanged();
-                                    } );
+        auto it = aTables.find( aType );
+
+        if( it == aTables.end() || !it->second->DiskChanged() )
+            return false;
+
+        wxLogTrace( traceLibraries, "Reloading %s, its file changed after it was loaded", it->second->Path() );
+        return true;
     };
 
     if( changed( m_tables ) )
-        ReloadTables( LIBRARY_TABLE_SCOPE::GLOBAL );
+    {
+        ReloadTables( LIBRARY_TABLE_SCOPE::GLOBAL, { aType } );
+
+        // A vanished global file leaves an empty table so the dialogs always have one to edit
+        if( !m_tables.contains( aType ) )
+            createEmptyTable( aType, LIBRARY_TABLE_SCOPE::GLOBAL );
+    }
 
     if( changed( m_projectTables ) )
-        ReloadTables( LIBRARY_TABLE_SCOPE::PROJECT );
+        ReloadTables( LIBRARY_TABLE_SCOPE::PROJECT, { aType } );
 }
 
 

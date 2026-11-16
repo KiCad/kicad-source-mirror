@@ -572,14 +572,58 @@ BOOST_AUTO_TEST_CASE( TableFileCreatedAfterLoadIsNotOverwritten )
     BOOST_CHECK( !model.value()->Save().has_value() );
     BOOST_CHECK_EQUAL( std::filesystem::file_size( tablePath ), std::filesystem::file_size( source ) );
 
-    manager.ReloadChangedTables();
+    manager.ReloadChangedTables( LIBRARY_TABLE_TYPE::SYMBOL );
 
     model = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
     BOOST_REQUIRE( model.has_value() );
     BOOST_CHECK_EQUAL( model.value()->Rows().size(), fileRows );
 
+    // The table's own writes must not look like outside changes
+    LIBRARY_TABLE_ROW& row = model.value()->InsertRow();
+    row.SetNickname( wxS( "Added" ) );
+    row.SetURI( wxS( "${KIPRJMOD}/Added.kicad_sym" ) );
+    row.SetType( wxS( "KiCad" ) );
+
+    BOOST_CHECK( model.value()->Save().has_value() );
+    BOOST_CHECK( model.value()->Save().has_value() );
+    BOOST_CHECK( !model.value()->DiskChanged() );
+
     settings.UnloadProject( &settings.Prj(), false );
     std::filesystem::remove_all( dir, ec );
+}
+
+
+BOOST_AUTO_TEST_CASE( GlobalTableFileVanishedAfterLoadLeavesAnEmptyTable )
+{
+    const wxString tablePath = LIBRARY_MANAGER::DefaultGlobalTablePath( LIBRARY_TABLE_TYPE::SYMBOL );
+
+    wxFFile  in( tablePath, wxT( "rb" ) );
+    wxString contents;
+
+    BOOST_REQUIRE( in.IsOpened() && in.ReadAll( &contents ) );
+    in.Close();
+
+    struct RESTORE
+    {
+        wxString path;
+        wxString contents;
+
+        ~RESTORE()
+        {
+            wxFFile out( path, wxT( "wb" ) );
+            out.Write( contents );
+        }
+    } restore{ tablePath, contents };
+
+    LIBRARY_MANAGER manager;
+    manager.LoadGlobalTables();
+    BOOST_REQUIRE( manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL ).has_value() );
+
+    BOOST_REQUIRE( wxRemoveFile( tablePath ) );
+    manager.ReloadChangedTables( LIBRARY_TABLE_TYPE::SYMBOL );
+
+    BOOST_CHECK_MESSAGE( manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL ).has_value(),
+                         "A global table whose file vanished must stay available, the dialogs need one to edit" );
 }
 
 

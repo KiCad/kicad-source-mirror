@@ -27,6 +27,9 @@
 #include <widgets/wx_infobar.h>
 
 
+class LIBRARY_TABLE;
+
+
 class DIALOG_EDIT_LIBRARY_TABLES : public DIALOG_SHIM
 {
 public:
@@ -53,6 +56,9 @@ public:
     }
 
     bool CanClose();
+
+    /// Ask before a save replaces a table file that changed on disk after the table was loaded
+    bool ConfirmOverwrite( const LIBRARY_TABLE& aTable );
 
 protected:
     WX_INFOBAR*    m_infoBar;
