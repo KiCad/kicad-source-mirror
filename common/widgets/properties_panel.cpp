@@ -208,7 +208,8 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     Bind( wxEVT_TIMER,
           [this]( wxTimerEvent& )
           {
-              rebuildProperties( m_deferredSelection );
+              // The selection may have changed or lost items since the deferral
+              UpdateData();
           },
           m_deferredRebuildTimer.GetId() );
 }
@@ -259,10 +260,11 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     if( static_cast<PROPERTIES_PANEL_GRID*>( m_grid )->IsProcessingWxPGEvent() )
     {
         hideCategoryButtons();
-        m_deferredSelection = aSelection;
         m_deferredRebuildTimer.StartOnce( 1 );
         return;
     }
+
+    m_deferredRebuildTimer.Stop();
 
     auto reset =
             [&]()
@@ -449,7 +451,11 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     }
 
     if( !existingProps.empty() && existingProps == availableProps )
+    {
+        // A deferred rebuild hid the buttons and ends up here when the selection is unchanged
+        updateCategoryButtons();
         return;
+    }
 
     // Some difference exists:  start from scratch
     reset();

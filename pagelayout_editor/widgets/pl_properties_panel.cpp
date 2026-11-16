@@ -176,7 +176,6 @@ PL_PROPERTIES_PANEL::PL_PROPERTIES_PANEL( PL_EDITOR_FRAME* aFrame ) :
 PL_PROPERTIES_PANEL::~PL_PROPERTIES_PANEL()
 {
     m_deferredRebuildTimer.Stop();
-    m_deferredSelection.Clear();
     m_unitEditor->UpdateFrame( nullptr );
 }
 
@@ -186,9 +185,6 @@ void PL_PROPERTIES_PANEL::UpdateData()
     if( !m_editor->GetToolManager() )
         return;
 
-    // A deferred grid rebuild must never retain adapters for deleted or reloaded definitions.
-    m_deferredRebuildTimer.Stop();
-    m_deferredSelection.Clear();
     m_selection.Clear();
     m_itemProperties.clear();
 

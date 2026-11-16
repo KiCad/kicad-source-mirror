@@ -185,8 +185,7 @@ protected:
 
     /// Not CallAfter(): on macOS the pending-event queue is drained from inside tool events,
     /// where a deferred rebuild would only re-defer itself forever.
-    wxTimer   m_deferredRebuildTimer;
-    SELECTION m_deferredSelection;
+    wxTimer m_deferredRebuildTimer;
 
     wxString m_editingOriginalLabel;
 
