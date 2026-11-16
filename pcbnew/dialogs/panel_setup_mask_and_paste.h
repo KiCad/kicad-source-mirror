@@ -27,20 +27,24 @@
 #include <dialogs/panel_setup_mask_and_paste_base.h>
 
 class PCB_EDIT_FRAME;
-class BOARD;
 class BOARD_DESIGN_SETTINGS;
 
 
 class PANEL_SETUP_MASK_AND_PASTE : public PANEL_SETUP_MASK_AND_PASTE_BASE
 {
 public:
-    PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
+    /**
+     * @param aSettings is where this page reads and writes its values. Board Setup passes a copy
+     *                  that reaches the board only when the dialog is accepted.
+     */
+    PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, BOARD_DESIGN_SETTINGS& aSettings );
     ~PANEL_SETUP_MASK_AND_PASTE( ) { };
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ImportSettingsFrom( BOARD* aBoard );
+    /// Copies every value this page edits, which is what the Solder Mask/Paste import group carries
+    static void CopySettings( const BOARD_DESIGN_SETTINGS& aFrom, BOARD_DESIGN_SETTINGS& aTo );
 
     /**
      * Reads the values a rule page sets back into their fields. This page only shows those, so

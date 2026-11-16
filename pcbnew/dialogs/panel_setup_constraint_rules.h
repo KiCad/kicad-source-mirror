@@ -114,8 +114,12 @@ public:
         FOOTPRINT_RULES
     };
 
+    /**
+     * @param aSettings is where this page reads and writes its defaults. Board Setup passes a copy
+     *                  that reaches the board only when the dialog is accepted.
+     */
     PANEL_SETUP_CONSTRAINT_RULES( wxWindow* aParent, PCB_EDIT_FRAME* aFrame, DRC_RULE_DOCUMENT* aDocument,
-                                  const CONSTRAINT_SECTION& aSection );
+                                  BOARD_DESIGN_SETTINGS& aSettings, const CONSTRAINT_SECTION& aSection );
 
     /**
      * The sections of one family, in the order they are shown in the tree.
@@ -159,6 +163,9 @@ public:
      * changed them.
      */
     void RefreshDefaults();
+
+    /// The Import Settings group this page's defaults travel with.
+    wxString ImportGroup() const;
 
     void RefreshFromDocument();
 

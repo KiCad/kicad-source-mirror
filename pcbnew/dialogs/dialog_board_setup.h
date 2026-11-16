@@ -25,6 +25,7 @@
 #include "panel_setup_formatting.h"
 
 class BOARD;
+class BOARD_DESIGN_SETTINGS;
 class PCB_EDIT_FRAME;
 class DRC_RULE_DOCUMENT;
 class PANEL_SETUP_CONSTRAINTS;
@@ -58,8 +59,8 @@ protected:
 
     void refreshRulePage( size_t aPage );
 
-    /// Writes the board defaults a rule page edits, for one of the import dialog's groups
-    void importRuleDefaults( BOARD* aBoard, const wxString& aGroup );
+    /// Reads the staged settings back into the open pages of one Import Settings group
+    void refreshStagedPages( const wxString& aGroup );
     void forEachOpenRulePage( const std::function<void( PANEL_SETUP_CONSTRAINT_RULES* )>& aAction );
 
     bool TransferDataFromWindow() override;
@@ -81,9 +82,7 @@ private:
     size_t m_boardFinishPage;
     size_t m_defaultsPage;
     size_t m_formattingPage;
-    size_t m_maskAndPastePage;
     size_t m_drillChartPage;
-    size_t m_constraintsPage;
     size_t m_customRulesPage;
     size_t m_tracksAndViasPage;
     size_t m_viaStacksPage;
@@ -98,4 +97,8 @@ private:
     bool   m_initComplete;
 
     std::unique_ptr<DRC_RULE_DOCUMENT> m_ruleDocument;
+
+    /// The constraint, mask and rule pages edit one value from several pages, so they share this
+    /// copy, which an import also writes and which reaches the board only on OK
+    std::unique_ptr<BOARD_DESIGN_SETTINGS> m_stagedSettings;
 };

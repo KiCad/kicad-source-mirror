@@ -46,10 +46,11 @@
 
 PANEL_SETUP_CONSTRAINT_RULES::PANEL_SETUP_CONSTRAINT_RULES( wxWindow* aParent, PCB_EDIT_FRAME* aFrame,
                                                             DRC_RULE_DOCUMENT*        aDocument,
+                                                            BOARD_DESIGN_SETTINGS&    aSettings,
                                                             const CONSTRAINT_SECTION& aSection ) :
         wxPanel( aParent, wxID_ANY ),
         m_frame( aFrame ),
-        m_settings( &aFrame->GetBoard()->GetDesignSettings() ),
+        m_settings( &aSettings ),
         m_document( aDocument ),
         m_section( aSection ),
         m_note( nullptr ),
@@ -399,6 +400,18 @@ bool PANEL_SETUP_CONSTRAINT_RULES::TransferDataToWindow()
 }
 
 
+static wxString importGroup( const CONSTRAINT_SECTION& aSection )
+{
+    return aSection.settingsPage.IsEmpty() ? _( "Constraints" ) : aSection.settingsPage;
+}
+
+
+wxString PANEL_SETUP_CONSTRAINT_RULES::ImportGroup() const
+{
+    return importGroup( m_section );
+}
+
+
 void PANEL_SETUP_CONSTRAINT_RULES::RefreshFromDocument()
 {
     if( m_list )
@@ -415,7 +428,7 @@ std::vector<std::pair<wxString, CONSTRAINT_DEFAULT_FIELD>> PANEL_SETUP_CONSTRAIN
     {
         for( const CONSTRAINT_SECTION& section : SectionsFor( family ) )
         {
-            wxString group = section.settingsPage.IsEmpty() ? _( "Constraints" ) : section.settingsPage;
+            wxString group = importGroup( section );
 
             for( const CONSTRAINT_DEFAULT_FIELD& field : section.defaults )
                 fields.emplace_back( group, field );

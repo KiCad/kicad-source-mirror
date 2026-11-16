@@ -25,8 +25,8 @@
 #include <panel_setup_mask_and_paste.h>
 
 
-PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow,
-                                                        PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
+                                                        BOARD_DESIGN_SETTINGS& aSettings ) :
         PANEL_SETUP_MASK_AND_PASTE_BASE( aParentWindow ),
         m_maskExpansion( aFrame, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
         m_maskMinWidth( aFrame, m_maskMinWidthLabel, m_maskMinWidthCtrl, m_maskMinWidthUnits ),
@@ -35,7 +35,7 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow,
         m_pasteMargin( aFrame, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits )
 {
     m_Frame = aFrame;
-    m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
+    m_BrdSettings = &aSettings;
 
     m_staticTextInfoPaste->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
@@ -74,11 +74,10 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow,
 
 bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
 {
-    m_maskExpansion.SetValue( m_BrdSettings->m_SolderMaskExpansion );
-    m_maskMinWidth.SetValue( m_BrdSettings->m_SolderMaskMinWidth );
-    m_maskToCopperClearance.SetValue( m_BrdSettings->m_SolderMaskToCopperClearance );
+    // Also records the baselines for the values a rule page edits
+    RefreshDefaults();
 
-    m_pasteMargin.SetOffsetValue( m_BrdSettings->m_SolderPasteMargin );
+    m_maskToCopperClearance.SetValue( m_BrdSettings->m_SolderMaskToCopperClearance );
     m_pasteMargin.SetRatioValue( m_BrdSettings->m_SolderPasteMarginRatio );
 
     m_allowBridges->SetValue( m_BrdSettings->m_AllowSoldermaskBridgesInFPs );
@@ -134,12 +133,12 @@ void PANEL_SETUP_MASK_AND_PASTE::RefreshDefaults()
 }
 
 
-void PANEL_SETUP_MASK_AND_PASTE::ImportSettingsFrom( BOARD* aBoard )
+void PANEL_SETUP_MASK_AND_PASTE::CopySettings( const BOARD_DESIGN_SETTINGS& aFrom, BOARD_DESIGN_SETTINGS& aTo )
 {
-    BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
-
-    m_BrdSettings = &aBoard->GetDesignSettings();
-    TransferDataToWindow();
-
-    m_BrdSettings = savedSettings;
+    aTo.m_SolderMaskExpansion = aFrom.m_SolderMaskExpansion;
+    aTo.m_SolderMaskMinWidth = aFrom.m_SolderMaskMinWidth;
+    aTo.m_SolderMaskToCopperClearance = aFrom.m_SolderMaskToCopperClearance;
+    aTo.m_SolderPasteMargin = aFrom.m_SolderPasteMargin;
+    aTo.m_SolderPasteMarginRatio = aFrom.m_SolderPasteMarginRatio;
+    aTo.m_AllowSoldermaskBridgesInFPs = aFrom.m_AllowSoldermaskBridgesInFPs;
 }

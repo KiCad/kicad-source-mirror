@@ -28,6 +28,8 @@
 #include <drc/rule_editor/drc_rule_editor_enums.h>
 #include <drc/rule_editor/drc_rule_editor_utils.h>
 #include <dialogs/panel_setup_constraint_rules.h>
+#include <dialogs/panel_setup_constraints.h>
+#include <dialogs/panel_setup_mask_and_paste.h>
 
 #include <wx/ffile.h>
 #include <wx/filename.h>
@@ -660,29 +662,40 @@ BOOST_AUTO_TEST_CASE( EveryConstraintWithARulePageHasItsDefaultThere )
 }
 
 
-BOOST_AUTO_TEST_CASE( EachDefaultTravelsWithTheRightImportGroup )
+BOOST_AUTO_TEST_CASE( EachDefaultTravelsWithItsImportGroup )
 {
-    // Import Settings from Another Board writes these by group, so a default in the wrong one
-    // either arrives when it should not or stays behind when it should come
-    std::map<wxString, wxString> groups;
+    using BDS = BOARD_DESIGN_SETTINGS;
+    using COPY = void ( * )( const BDS&, BDS& );
+
+    // Board Setup imports a group and commits its staged values with the same copy, so a value
+    // the copy misses is neither imported nor saved
+    const std::map<wxString, COPY> copies = { { wxS( "Constraints" ), &PANEL_SETUP_CONSTRAINTS::CopySettings },
+                                              { wxS( "Solder Mask/Paste" ),
+                                                &PANEL_SETUP_MASK_AND_PASTE::CopySettings } };
+
+    auto travels = []( COPY aCopy, int BDS::* aMember )
+    {
+        BOARD from;
+        BOARD to;
+
+        from.GetDesignSettings().*aMember = to.GetDesignSettings().*aMember + 1234;
+        aCopy( from.GetDesignSettings(), to.GetDesignSettings() );
+
+        return to.GetDesignSettings().*aMember == from.GetDesignSettings().*aMember;
+    };
 
     for( const auto& [group, field] : PANEL_SETUP_CONSTRAINT_RULES::EditedDefaults() )
-        groups[field.settingName] = group;
-
-    for( const wxString& setting :
-         { wxS( "min_clearance" ), wxS( "min_track_width" ), wxS( "min_through_hole_diameter" ),
-           wxS( "min_resolved_spokes" ), wxS( "min_microvia_diameter" ) } )
     {
-        BOOST_CHECK_MESSAGE( groups[setting] == wxS( "Constraints" ),
-                             setting.ToStdString() << " travels with '" << groups[setting].ToStdString() << "'" );
+        auto it = copies.find( group );
+
+        BOOST_REQUIRE_MESSAGE( it != copies.end(), "no import carries group " << group.ToStdString() );
+        BOOST_CHECK_MESSAGE( travels( it->second, field.member ),
+                             field.settingName.ToStdString() << " does not travel with " << group.ToStdString() );
     }
 
-    for( const wxString& setting :
-         { wxS( "solder_mask_expansion" ), wxS( "solder_mask_min_width" ), wxS( "solder_paste_margin" ) } )
-    {
-        BOOST_CHECK_MESSAGE( groups[setting] == wxS( "Solder Mask/Paste" ),
-                             setting.ToStdString() << " travels with '" << groups[setting].ToStdString() << "'" );
-    }
+    // No rule page holds these two, so only the Constraints page carries them
+    BOOST_CHECK( travels( &PANEL_SETUP_CONSTRAINTS::CopySettings, &BDS::m_MaxError ) );
+    BOOST_CHECK( travels( &PANEL_SETUP_CONSTRAINTS::CopySettings, &BDS::m_MinGrooveWidth ) );
 }
 
 

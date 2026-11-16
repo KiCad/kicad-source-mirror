@@ -230,7 +230,7 @@ void openRuleInEditor( wxWindow* aContext, const wxString& aTitle, DRC_RULE_EDIT
 
 
 PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame,
-                                                  DRC_RULE_DOCUMENT* aDocument ) :
+                                                  DRC_RULE_DOCUMENT* aDocument, BOARD_DESIGN_SETTINGS& aSettings ) :
         PANEL_SETUP_CONSTRAINTS_BASE( aParentWindow ),
         m_minClearance( aFrame, m_clearanceTitle, m_clearanceCtrl, m_clearanceUnits ),
         m_minConn( aFrame, m_MinConnTitle, m_MinConnCtrl, m_MinConnUnits ),
@@ -254,7 +254,7 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         m_closeTimer( this )
 {
     m_Frame = aFrame;
-    m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
+    m_BrdSettings = &aSettings;
 
     m_filletBitmap->SetBitmap( KiBitmapBundle( BITMAPS::zone_fillet, 24 ) );
     m_spokeBitmap->SetBitmap( KiBitmapBundle( BITMAPS::thermal_spokes, 24 ) );
@@ -686,12 +686,21 @@ void PANEL_SETUP_CONSTRAINTS::updateWarnings()
 }
 
 
-void PANEL_SETUP_CONSTRAINTS::ImportSettingsFrom( BOARD* aBoard )
+void PANEL_SETUP_CONSTRAINTS::CopySettings( const BOARD_DESIGN_SETTINGS& aFrom, BOARD_DESIGN_SETTINGS& aTo )
 {
-    BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
+    using BDS = BOARD_DESIGN_SETTINGS;
 
-    m_BrdSettings = &aBoard->GetDesignSettings();
-    TransferDataToWindow();
+    // Must cover every m_fields member or an import or OK drops it
+    for( int BDS::* member :
+         { &BDS::m_MinClearance, &BDS::m_MinConn, &BDS::m_TrackMinWidth, &BDS::m_ViasMinAnnularWidth,
+           &BDS::m_ViasMinSize, &BDS::m_MinThroughDrill, &BDS::m_MicroViasMinSize, &BDS::m_MicroViasMinDrill,
+           &BDS::m_HoleToHoleMin, &BDS::m_HoleClearance, &BDS::m_SilkClearance, &BDS::m_MinGrooveWidth,
+           &BDS::m_MinSilkTextHeight, &BDS::m_MinSilkLineWidth, &BDS::m_CopperEdgeClearance, &BDS::m_MaxError,
+           &BDS::m_MinResolvedSpokes } )
+    {
+        aTo.*member = aFrom.*member;
+    }
 
-    m_BrdSettings = savedSettings;
+    aTo.m_UseHeightForLengthCalcs = aFrom.m_UseHeightForLengthCalcs;
+    aTo.m_ZoneKeepExternalFillets = aFrom.m_ZoneKeepExternalFillets;
 }

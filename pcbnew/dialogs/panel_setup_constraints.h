@@ -29,7 +29,6 @@
 #include <widgets/unit_binder.h>
 #include <panel_setup_constraints_base.h>
 
-class BOARD;
 class DRC_RULE_DOCUMENT;
 class FIELD_WARNING_ICON;
 class PAGED_DIALOG;
@@ -41,10 +40,16 @@ class wxPopupTransientWindow;
 class PANEL_SETUP_CONSTRAINTS : public PANEL_SETUP_CONSTRAINTS_BASE
 {
 public:
-    PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, DRC_RULE_DOCUMENT* aDocument );
+    /**
+     * @param aSettings is where this page reads and writes its values. Board Setup passes a copy
+     *                  that reaches the board only when the dialog is accepted.
+     */
+    PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame, DRC_RULE_DOCUMENT* aDocument,
+                             BOARD_DESIGN_SETTINGS& aSettings );
     ~PANEL_SETUP_CONSTRAINTS( ) override { };
 
-    void ImportSettingsFrom( BOARD* aBoard );
+    /// Copies every value this page edits, which is what the Constraints import group carries
+    static void CopySettings( const BOARD_DESIGN_SETTINGS& aFrom, BOARD_DESIGN_SETTINGS& aTo );
 
     /**
      * Reads the values a rule page edits back into their fields. This page only shows those, so
