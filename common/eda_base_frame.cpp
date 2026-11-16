@@ -843,6 +843,11 @@ void EDA_BASE_FRAME::RecreateToolbars()
     }
 
     syncToolbarSelections();
+
+    // Realize() grows each toolbar to fit all its tools, so put docked ones back in their panes to overflow
+    // there instead of painting over the status bar
+    if( m_auimgr.GetManagedWindow() )
+        m_auimgr.Update();
 }
 
 

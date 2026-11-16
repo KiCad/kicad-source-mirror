@@ -91,14 +91,13 @@ int ACTION_GROUP::GetUIId() const
 
 void ACTION_GROUP::SetDefaultAction( const TOOL_ACTION& aDefault )
 {
-    bool valid = std::any_of( m_actions.begin(), m_actions.end(),
-                              [&]( const TOOL_ACTION* aAction ) -> bool
-                              {
-                                  // For some reason, we can't compare the actions directly
-                                  return aAction->GetId() == aDefault.GetId();
-                              } );
-
-    wxASSERT_MSG( valid, wxS( "Action must be present in a group to be the default" ) );
+    wxASSERT_MSG( std::any_of( m_actions.begin(), m_actions.end(),
+                               [&]( const TOOL_ACTION* aAction ) -> bool
+                               {
+                                   // For some reason, we can't compare the actions directly
+                                   return aAction->GetId() == aDefault.GetId();
+                               } ),
+                  wxS( "Action must be present in a group to be the default" ) );
 
     m_defaultAction = &aDefault;
 }
@@ -1166,8 +1165,11 @@ void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem, co
 
 bool ACTION_TOOLBAR::KiRealize()
 {
+    // Realize() leaves out a hidden overflow button and nothing adds it back once the tools stop fitting
+    SetOverflowVisible( true );
+
 #if wxCHECK_VERSION( 3, 3, 0 )
-    return Realize();
+    bool retval = Realize();
 #else
     wxClientDC dc( this );
 
@@ -1208,8 +1210,10 @@ bool ACTION_TOOLBAR::KiRealize()
     }
 
     Refresh( false );
-    return retval;
 #endif
+
+    SetOverflowVisible( !GetToolBarFits() );
+    return retval;
 }
 
 
