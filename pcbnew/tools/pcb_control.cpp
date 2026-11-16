@@ -2216,6 +2216,12 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
         pi.SetProgressReporter( &progressReporter );
         pi.LoadAndAppendBoard( fileName, *brd, &props, nullptr );
     }
+    catch( const IO_CANCELLED& )
+    {
+        clearSkipStructOnExistingItems();
+
+        return 1;
+    }
     catch( const IO_ERROR& ioe )
     {
         DisplayErrorMessage( editFrame, _( "Error loading board." ), ioe.What() );

@@ -2770,6 +2770,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::remapAppendedLayers( const std::vector<LAYER>& a
     if( progressWindow )
         progressWindow->Show();
 
+    if( remap.empty() )
+        THROW_IO_CANCELLED();
+
     LSET enabled = m_board->GetEnabledLayers();
 
     for( const LAYER& src : aSourceLayers )

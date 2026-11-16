@@ -479,10 +479,16 @@ BOOST_AUTO_TEST_CASE( Issue24642_AppendBoardPromptsOnlyOnNameMismatch )
     bool handlerCalled = false;
 
     kicadPlugin.RegisterCallback(
-            [&]( const std::vector<INPUT_LAYER_DESC>& ) -> std::map<wxString, PCB_LAYER_ID>
+            [&]( const std::vector<INPUT_LAYER_DESC>& aDescs ) -> std::map<wxString, PCB_LAYER_ID>
             {
                 handlerCalled = true;
-                return {};
+
+                std::map<wxString, PCB_LAYER_ID> remap;
+
+                for( const INPUT_LAYER_DESC& desc : aDescs )
+                    remap[desc.Name] = desc.AutoMapLayer;
+
+                return remap;
             } );
 
     // Appending onto a board with identical layer names must not prompt

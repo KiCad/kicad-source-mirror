@@ -50,6 +50,7 @@ class DIALOG_IMPORTED_LAYERS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbKeepKiCadLayerNames;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
