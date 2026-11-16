@@ -4593,6 +4593,7 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
     double divergingLim = 1e6 * subsysA->error() + 1e12;
 
     double mu = 0;
+    bool nonFinite = false;
     lambda.setZero();
     for (int iter = 1; iter < maxIterNumber; iter++) {
         int status = qp_eq(B, grad, JA, resA, xdir, Y, Z);
@@ -4669,6 +4670,13 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
             subsysA->calcJacobi(plistAB, JA);
             subsysA->calcResidual(resA);
         }
+
+        // Degenerate geometry can take a derivative to 0/0, and a NaN would poison B and every later step
+        if (!grad.allFinite() || !JA.allFinite()) {
+            nonFinite = true;
+            break;
+        }
+
         y = grad - JA.transpose() * lambda - y;  // Eq. 18.13
 
         if (iter > 1) {
@@ -4691,7 +4699,10 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
     }
 
     int ret;
-    if (subsysA->error() <= smallF) {
+    if (nonFinite) {
+        ret = Failed;
+    }
+    else if (subsysA->error() <= smallF) {
         ret = Success;
     }
     else if (h.norm() <= (isRedundantsolving ? convergenceRedundant : convergence)) {

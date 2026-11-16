@@ -52,6 +52,11 @@ weigh `1e-4`, so their curvature is `1e-8` and the identity overstates it so far
 `1e-10` step test ends the solve short of the optimum, at a point the unknown order picks.
 Re-apply on upstream re-sync.
 
+The same solve returns `Failed` as soon as the soft gradient or the hard Jacobian is no
+longer finite. A contradiction can be met by collapsing a segment, where a distance
+constraint's derivative is 0/0. Upstream then lets the NaN through the `yTh != 0` test into
+the BFGS matrix and every later step. Re-apply on upstream re-sync.
+
 No other source edits. For production the shim's `Console`/`TimeElapsed` should
 route to `wxLogTrace` / a `std::chrono` timer; the spike keeps them trivial.
 

@@ -298,4 +298,24 @@ BOOST_AUTO_TEST_CASE( NonFiniteStateIsNeverSatisfied )
     BOOST_CHECK( !adapter.CurrentRelationsSatisfied() );
 }
 
+// A contradiction satisfied by collapsing a segment loses the length derivative, and the solve must stop there
+BOOST_AUTO_TEST_CASE( ContradictionLeavesFiniteGeometry )
+{
+    BOARD b;
+    auto* locked = addSegment( b, { 0, 0 }, { 10 * MM, 0 } );
+    auto* free = addSegment( b, { 0, 5 * MM }, { 8 * MM, 3 * MM } );
+    locked->SetLocked( true );
+    author( b, PCB_CONSTRAINT_TYPE::PARALLEL, { whole( locked ), whole( free ) } );
+    addConstraint( b, PCB_CONSTRAINT_TYPE::PERPENDICULAR, { whole( locked ), whole( free ) } );
+
+    // Authoring the second relation solves with the first member's start pinned where it is
+    std::vector<PCB_CONSTRAINT*> constraints( b.Constraints().begin(), b.Constraints().end() );
+    BOARD_CONSTRAINT_ADAPTER     adapter;
+    BOOST_REQUIRE( adapter.Build( { locked, free }, constraints ) );
+    adapter.Solve( { locked->m_Uuid, CONSTRAINT_ANCHOR::START }, locked->GetStart(), true );
+
+    for( double param : adapter.Snapshot() )
+        BOOST_CHECK( std::isfinite( param ) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
