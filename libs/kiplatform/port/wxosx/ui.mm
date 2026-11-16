@@ -285,17 +285,13 @@ void KIPLATFORM::UI::SetFloatLevel( wxWindow* aWindow )
 
 void KIPLATFORM::UI::ReleaseChildWindow( wxNonOwnedWindow* aWindow )
 {
-    if( wxTopLevelWindow* parent = static_cast<wxTopLevelWindow*>(
-            wxGetTopLevelParent( aWindow->GetParent() ) ) )
-    {
-        NSWindow* parentWindow = parent->GetWXWindow();
-        NSWindow* theWindow = aWindow->GetWXWindow();
+    NSWindow* theWindow = aWindow->GetWXWindow();
 
-        if( parentWindow && theWindow )
-        {
-            [parentWindow removeChildWindow:theWindow];
-            [theWindow setLevel:NSFloatingWindowLevel];
-        }
+    // ReparentWindow can attach to a window other than the wx parent, e.g. a report onto the DRC dialog
+    if( NSWindow* parentWindow = [theWindow parentWindow] )
+    {
+        [parentWindow removeChildWindow:theWindow];
+        [theWindow setLevel:NSFloatingWindowLevel];
     }
 }
 
