@@ -164,7 +164,7 @@ void EDA_ITEM::RemoveCustomProperty( const wxString& aKey )
     {
         if( it->first.CmpNoCase( aKey ) == 0 )
         {
-            m_customPropsStorageCache.erase( it->first );
+            // Keep the cached property alive, the properties grid may still point at it
             m_customProperties.erase( it );
             return;
         }

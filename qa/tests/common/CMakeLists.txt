@@ -51,6 +51,7 @@ set( QA_COMMON_SRCS
     test_desktop_app_id.cpp
     test_dialog_kicad_merge_3way.cpp
     test_dialog_shim.cpp
+    test_eda_item.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
     test_editor_tabs_panel.cpp
