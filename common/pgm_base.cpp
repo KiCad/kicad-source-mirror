@@ -533,7 +533,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
         wxUpdateUIEvent::SetUpdateInterval( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval );
 
 #if defined( __WXMSW__ ) || defined( __WXOSX__ )
-    // wx ends a session by closing the top window with an ordinary close event
+    // wx ends a session by closing the top window with an ordinary close event. Calling wx's handler
+    // here instead of Skip() keeps that close inside the flag's scope
     if( !aHeadless )
     {
         App().Bind( wxEVT_QUERY_END_SESSION,

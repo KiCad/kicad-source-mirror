@@ -298,6 +298,8 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         if( event.CanVeto() )
             event.Veto();
 
+        // A vetoed close must not mark the file as open for the next session
+        m_isNonUserClose = false;
         return;
     }
 
@@ -331,6 +333,8 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     {
         if( event.CanVeto() )
             event.Veto();
+
+        m_isNonUserClose = false;
     }
 }
 

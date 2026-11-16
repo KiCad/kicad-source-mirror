@@ -458,8 +458,7 @@ protected:
     wxString        m_pdf_browser;            ///< Filename of the app selected for browsing PDFs.
 
     wxString        m_text_editor;
-
-    bool m_sessionEnding; ///< Set while wx handles a session-end event.
+    bool            m_sessionEnding; ///< Set while wx handles a session-end event.
 
     KICAD_SINGLETON m_singleton;
 
