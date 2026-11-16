@@ -910,6 +910,32 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
 }
 
 
+PCB_GROUP* BOARD_NETLIST_UPDATER::findBoardGroup( const KIID& aUuid ) const
+{
+    for( PCB_GROUP* group : m_board->Groups() )
+    {
+        if( group->m_Uuid == aUuid )
+            return group;
+    }
+
+    return nullptr;
+}
+
+
+PCB_GROUP* BOARD_NETLIST_UPDATER::addBoardGroup( const NETLIST_GROUP& aNetlistGroup )
+{
+    PCB_GROUP* group = new PCB_GROUP( m_board );
+    group->SetUuid( aNetlistGroup.uuid );
+    group->SetName( aNetlistGroup.name );
+
+    m_board->Add( group );
+    m_commit.Added( group );
+    m_addedGroups.push_back( group );
+
+    return group;
+}
+
+
 bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
                                                   COMPONENT* aNetlistComponent )
 {
@@ -932,21 +958,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
     // These hold the info for group and group KIID coming from the netlist
     // newGroup may point to an existing group on the board if we find an
     // incoming group UUID that matches an existing group
-    PCB_GROUP* newGroup = nullptr;
     KIID       newGroupKIID = aNetlistComponent->GetGroup() ? aNetlistComponent->GetGroup()->uuid : 0;
 
     PCB_GROUP* existingGroup = static_cast<PCB_GROUP*>( aPcbFootprint->GetParentGroup() );
     KIID       existingGroupKIID = existingGroup ? existingGroup->m_Uuid : 0;
 
-    // Find existing group based on matching UUIDs
-    auto it = std::find_if( m_board->Groups().begin(), m_board->Groups().end(),
-                [&](PCB_GROUP* group) {
-                    return group->m_Uuid == newGroupKIID;
-                });
-
-    // If we find a group with the same UUID, use it
-    if( it != m_board->Groups().end() )
-        newGroup = *it;
+    PCB_GROUP* newGroup = findBoardGroup( newGroupKIID );
 
     // No changes, nothing to do
     if( newGroupKIID == existingGroupKIID )
@@ -1000,15 +1017,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
 
             if( newGroup == nullptr )
             {
-                newGroup = new PCB_GROUP( m_board );
-                newGroup->SetUuid( newGroupKIID );
-                newGroup->SetName( aNetlistComponent->GetGroup()->name );
-
-                // Add the group to the board manually so we can find it by checking
-                // board groups for later footprints that are checking for existing groups
-                m_board->Add( newGroup );
-                m_commit.Added( newGroup );
-                m_addedGroups.push_back( newGroup );
+                newGroup = addBoardGroup( *aNetlistComponent->GetGroup() );
             }
             else
             {
@@ -1899,6 +1908,30 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
 
     wxString msg;
 
+    for( size_t ii = 0; ii < m_board->Groups().size(); ++ii )
+    {
+        PCB_GROUP*     childGroup = m_board->Groups()[ii];
+        NETLIST_GROUP* childNetlistGroup = aNetlist.GetGroupByUuid( childGroup->m_Uuid );
+
+        if( !childNetlistGroup )
+            continue;
+
+        NETLIST_GROUP* parentNetlistGroup = aNetlist.GetParentGroup( childNetlistGroup->path );
+
+        if( !parentNetlistGroup || findBoardGroup( parentNetlistGroup->uuid ) )
+            continue;
+
+        if( m_isDryRun )
+        {
+            msg.Printf( _( "Add group '%s' to group '%s'." ), EscapeHTML( childGroup->GetName() ),
+                        EscapeHTML( parentNetlistGroup->name ) );
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+            continue;
+        }
+
+        addBoardGroup( *parentNetlistGroup );
+    }
+
     for( PCB_GROUP* pcbGroup : m_board->Groups() )
     {
         NETLIST_GROUP* netlistGroup = aNetlist.GetGroupByUuid( pcbGroup->m_Uuid );
@@ -1955,16 +1988,7 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
             if( !memberGroup )
                 continue;
 
-            PCB_GROUP* childGroup = nullptr;
-
-            for( PCB_GROUP* candidate : m_board->Groups() )
-            {
-                if( candidate->m_Uuid == memberGroup->uuid )
-                {
-                    childGroup = candidate;
-                    break;
-                }
-            }
+            PCB_GROUP* childGroup = findBoardGroup( memberGroup->uuid );
 
             if( !childGroup || childGroup == pcbGroup || childGroup->GetParentGroup() == pcbGroup )
             {
