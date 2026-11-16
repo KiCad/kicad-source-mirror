@@ -76,6 +76,7 @@ enum PCB_DRC_CODE
     DRCE_MICROVIA_STACK_DEPTH,           // Microvia stack exceeds the maximum depth
     DRCE_HOLE_ASPECT_RATIO,              // Hole is too deep for its diameter
     DRCE_MICROVIA_CROSSES_CORE,          // Microvia crosses core rather than build-up material
+    DRCE_MICROVIA_SPANS_DIELECTRICS,     // Microvia spans more than the one dielectric a laser can drill
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
     DRCE_MISSING_COURTYARD,              // footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,            // footprint has a courtyard but malformed
@@ -251,6 +252,7 @@ private:
     static DRC_ITEM microviaStackDepth;
     static DRC_ITEM holeAspectRatio;
     static DRC_ITEM microviaCrossesCore;
+    static DRC_ITEM microviaSpansDielectrics;
     static DRC_ITEM courtyardsOverlap;
     static DRC_ITEM missingCourtyard;
     static DRC_ITEM malformedCourtyard;

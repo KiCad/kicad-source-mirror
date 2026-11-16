@@ -56,6 +56,9 @@ struct VIA_STACK_DRC_FIXTURE
     int m_depth = 0;
     int m_aspect = 0;
     int m_crossesCore = 0;
+    int m_spansDielectrics = 0;
+
+    wxString m_spanMessage;
 
     std::vector<int> m_ignored;
 
@@ -90,6 +93,31 @@ struct VIA_STACK_DRC_FIXTURE
         m_rulePath = rulePath;
     }
 
+    void buildBoard( int aCopperLayers )
+    {
+        m_board = std::make_unique<BOARD>();
+        m_board->SetCopperLayerCount( aCopperLayers );
+        m_board->SetEnabledLayers( LSET::AllCuMask( aCopperLayers ) | LSET::AllTechMask() );
+
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+        bds.SetCopperLayerCount( aCopperLayers );
+        bds.GetStackupDescriptor().BuildDefaultStackupList( &bds, aCopperLayers );
+        bds.m_HasStackup = true;
+    }
+
+
+    // The default stackup alternates core and prepreg, which a case about laser drilling
+    // has to override.
+    void makeBuildUpStackup()
+    {
+        for( BOARD_STACKUP_ITEM* item : m_board->GetDesignSettings().GetStackupDescriptor().GetList() )
+        {
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+                item->SetTypeName( KEY_PREPREG );
+        }
+    }
+
+
     // Cases whose subject is the stackup still build their board here: a
     // synthesized stackup is not written to the board file, so a fixture would
     // come back with no thicknesses and quietly test something else.
@@ -123,6 +151,7 @@ struct VIA_STACK_DRC_FIXTURE
         bds.m_DRCSeverities[DRCE_MICROVIA_STACK_DEPTH] = SEVERITY::RPT_SEVERITY_ERROR;
         bds.m_DRCSeverities[DRCE_HOLE_ASPECT_RATIO] = SEVERITY::RPT_SEVERITY_ERROR;
         bds.m_DRCSeverities[DRCE_MICROVIA_CROSSES_CORE] = SEVERITY::RPT_SEVERITY_WARNING;
+        bds.m_DRCSeverities[DRCE_MICROVIA_SPANS_DIELECTRICS] = SEVERITY::RPT_SEVERITY_WARNING;
 
         for( int code : m_ignored )
             bds.m_DRCSeverities[code] = SEVERITY::RPT_SEVERITY_IGNORE;
@@ -138,6 +167,10 @@ struct VIA_STACK_DRC_FIXTURE
                     case DRCE_MICROVIA_STACK_DEPTH: m_depth++; break;
                     case DRCE_HOLE_ASPECT_RATIO: m_aspect++; break;
                     case DRCE_MICROVIA_CROSSES_CORE: m_crossesCore++; break;
+                    case DRCE_MICROVIA_SPANS_DIELECTRICS:
+                        m_spansDielectrics++;
+                        m_spanMessage = aItem->GetErrorMessage( false );
+                        break;
                     default: break;
                     }
                 } );
@@ -146,6 +179,9 @@ struct VIA_STACK_DRC_FIXTURE
         bds.m_DRCEngine->ClearViolationHandler();
     }
 };
+
+
+static const VECTOR2I VIA_POS( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
 
 
 static PCB_VIA* makeMicrovia( BOARD* aBoard, const VECTOR2I& aPos, PCB_LAYER_ID aTop, PCB_LAYER_ID aBottom,
@@ -966,6 +1002,141 @@ BOOST_FIXTURE_TEST_CASE( UnplatedHoleIsNotChecked, VIA_STACK_DRC_FIXTURE )
 
     run();
     BOOST_CHECK_EQUAL( m_aspect, 0 );
+}
+
+
+// With no core to cross, the core check cannot be what catches this hop.
+BOOST_FIXTURE_TEST_CASE( MicroviaSpanningTwoBuildUpDielectricsIsReported, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+    makeBuildUpStackup();
+
+    // F_Cu to In2_Cu steps over In1_Cu, so the hole spans two dielectrics.
+    makeMicrovia( m_board.get(), VIA_POS, F_Cu, In2_Cu, true );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 1 );
+    BOOST_CHECK_EQUAL( m_crossesCore, 0 );
+    BOOST_CHECK( m_spanMessage.Contains( wxT( "2 dielectrics" ) ) );
+
+    // No aspect ratio rule is set, so the span is what reported it.
+    BOOST_CHECK_EQUAL( m_aspect, 0 );
+}
+
+
+// One dielectric per hop is what IPC-2226 asks for, so it has to stay silent.
+BOOST_FIXTURE_TEST_CASE( MicroviaSpanningOneDielectricIsSilent, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+    makeBuildUpStackup();
+
+    makeMicrovia( m_board.get(), VIA_POS, F_Cu, In1_Cu, true );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 0 );
+}
+
+
+// Only a microvia is laser drilled, so nothing else answers to the one hop rule.
+BOOST_FIXTURE_TEST_CASE( NonMicroviaSpanningSeveralDielectricsIsSilent, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+
+    PCB_VIA* via = makeVia( m_board.get(), VIA_POS, VIATYPE::BURIED, In1_Cu, In4_Cu, pcbIUScale.mmToIU( 0.3 ) );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 0 );
+
+    // The same hole as a microvia reports three, so the via type is what silenced it.
+    via->SetViaType( VIATYPE::MICROVIA );
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 1 );
+    BOOST_CHECK( m_spanMessage.Contains( wxT( "3 dielectrics" ) ) );
+}
+
+
+// The two checks are independent, so a core in the way must not hide the span.
+BOOST_FIXTURE_TEST_CASE( MicroviaCrossingCoreAlsoReportsItsSpan, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+
+    // The default stackup alternates core and prepreg, so this span holds one of each.
+    makeMicrovia( m_board.get(), VIA_POS, F_Cu, In2_Cu, true );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_crossesCore, 1 );
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 1 );
+}
+
+
+// Ignoring one check must leave the other alone.
+BOOST_FIXTURE_TEST_CASE( IgnoredSpanLeavesTheCoreCheckAlone, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+
+    m_ignored.push_back( DRCE_MICROVIA_SPANS_DIELECTRICS );
+
+    makeMicrovia( m_board.get(), VIA_POS, F_Cu, In2_Cu, true );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 0 );
+    BOOST_CHECK_EQUAL( m_crossesCore, 1 );
+}
+
+
+// Depth comes from stacking single dielectric hops, so a deep structure built the way IPC-2226
+// asks for must stay silent however many layers it crosses.
+BOOST_FIXTURE_TEST_CASE( StackedColumnGoingDeepIsSilent, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+    makeBuildUpStackup();
+
+    makeMicrovia( m_board.get(), VIA_POS, F_Cu, In1_Cu, true );
+    makeMicrovia( m_board.get(), VIA_POS, In1_Cu, In2_Cu, true );
+    makeMicrovia( m_board.get(), VIA_POS, In2_Cu, In3_Cu, true );
+    makeMicrovia( m_board.get(), VIA_POS, In3_Cu, In4_Cu, true );
+
+    BOOST_REQUIRE_EQUAL( m_board->Tracks().size(), 4u );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 0 );
+}
+
+
+// A buried microvia is drilled from an inner layer, so the span is counted the same way there.
+BOOST_FIXTURE_TEST_CASE( BuriedMicroviaSpanningTwoDielectricsIsReported, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+    makeBuildUpStackup();
+
+    // In1_Cu to In3_Cu steps over In2_Cu.
+    makeMicrovia( m_board.get(), VIA_POS, In1_Cu, In3_Cu, true );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 1 );
+    BOOST_CHECK_EQUAL( m_crossesCore, 0 );
+    BOOST_CHECK( m_spanMessage.Contains( wxT( "2 dielectrics" ) ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( BuriedMicroviaSpanningOneDielectricIsSilent, VIA_STACK_DRC_FIXTURE )
+{
+    buildBoard( 6 );
+    makeBuildUpStackup();
+
+    makeMicrovia( m_board.get(), VIA_POS, In1_Cu, In2_Cu, true );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_spansDielectrics, 0 );
 }
 
 

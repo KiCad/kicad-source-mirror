@@ -46,6 +46,7 @@
     - DRCE_MICROVIA_STACK_DEPTH
     - DRCE_HOLE_ASPECT_RATIO
     - DRCE_MICROVIA_CROSSES_CORE
+    - DRCE_MICROVIA_SPANS_DIELECTRICS
 
     The span test asks whether a generator's hops still tile the span it declares. Nothing
     rebuilds a stack on load, so a file can carry one that does not. The others ask whether
@@ -82,7 +83,7 @@ private:
     void checkSpan( PCB_VIA_STACK* aStack, int aCopperLayers );
     void checkColumn( const std::vector<PCB_VIA*>& aColumn );
     void checkLooseMicrovias( BOARD* aBoard );
-    void checkAspectRatio( BOARD* aBoard );
+    void checkConstructability( BOARD* aBoard );
 };
 
 
@@ -239,13 +240,14 @@ static int stackThickness( const std::vector<BOARD_STACKUP_ITEM*>& aStack, int a
 }
 
 
-void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
+void DRC_TEST_PROVIDER_VIA_STACK::checkConstructability( BOARD* aBoard )
 {
     bool checkRatio = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO )
                       && m_drcEngine->HasRulesForConstraintType( HOLE_ASPECT_RATIO_CONSTRAINT );
     bool checkCore = !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE );
+    bool checkDielectrics = !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_SPANS_DIELECTRICS );
 
-    if( !checkRatio && !checkCore )
+    if( !checkRatio && !checkCore && !checkDielectrics )
         return;
 
     BOARD_STACKUP                           stackup = aBoard->GetStackupOrDefault();
@@ -263,9 +265,6 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
             continue;
 
         PCB_VIA* via = static_cast<PCB_VIA*>( track );
-
-        if( via->GetDrillValue() <= 0 )
-            continue;
 
         int first = -1;
         int last = -1;
@@ -310,7 +309,31 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
             }
         }
 
-        if( !checkRatio )
+        // A hop spans one dielectric, the laser stops at the copper it lands on. Sublayers are
+        // one lamination, so they count once.
+        if( via->GetViaType() == VIATYPE::MICROVIA && checkDielectrics )
+        {
+            int dielectrics = 0;
+
+            for( int i = first + 1; i < last; ++i )
+            {
+                if( stack[i]->IsEnabled() && stack[i]->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+                    dielectrics++;
+            }
+
+            if( dielectrics > 1 )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MICROVIA_SPANS_DIELECTRICS );
+
+                drcItem->SetErrorMessage( wxString::Format( _( "The stackup gives %d dielectrics between %s and %s" ),
+                                                            dielectrics, LSET::Name( via->TopLayer() ),
+                                                            LSET::Name( via->BottomLayer() ) ) );
+                drcItem->SetItems( via );
+                reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
+            }
+        }
+
+        if( !checkRatio || via->GetDrillValue() <= 0 )
             continue;
 
         DRC_CONSTRAINT ratioConstraint = m_drcEngine->EvalRules( HOLE_ASPECT_RATIO_CONSTRAINT, via, nullptr,
@@ -420,7 +443,8 @@ bool DRC_TEST_PROVIDER_VIA_STACK::Run()
         && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_STACK_NOT_FILLED )
         && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_STACK_DEPTH )
         && m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO )
-        && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE ) )
+        && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE )
+        && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_SPANS_DIELECTRICS ) )
     {
         return true;
     }
@@ -452,9 +476,10 @@ bool DRC_TEST_PROVIDER_VIA_STACK::Run()
 
     if( !m_drcEngine->IsCancelled()
         && !( m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO )
-              && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE ) ) )
+              && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE )
+              && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_SPANS_DIELECTRICS ) ) )
     {
-        checkAspectRatio( board );
+        checkConstructability( board );
     }
 
     return !m_drcEngine->IsCancelled();
