@@ -184,7 +184,14 @@ public:
     LIBRARY_TABLE_ROW& InsertRow();
 
     const wxString& Path() const { return m_path; }
-    void SetPath( const wxString &aPath ) { m_path = aPath; }
+    void            SetPath( const wxString& aPath )
+    {
+        m_path = aPath;
+        m_loadedStamp.reset();
+    }
+
+    /// True when the file on disk differs from what this table was loaded from or last saved to
+    bool DiskChanged() const;
 
     LIBRARY_TABLE_TYPE Type() const { return m_type; }
     void SetType( const LIBRARY_TABLE_TYPE aType ) { m_type = aType; }
@@ -233,9 +240,13 @@ public:
 private:
     bool initFromIR( const LIBRARY_TABLE_IR& aIR );
     bool addRowFromIR( const LIBRARY_TABLE_ROW_IR& aIR );
+    wxString diskStamp() const;
 
     /// The full path to the file this table was parsed from, if any
     wxString m_path;
+
+    /// The file's state when it was loaded or last saved, so a write can tell that it would clobber a newer file
+    std::optional<wxString> m_loadedStamp;
 
     LIBRARY_TABLE_SCOPE m_scope = LIBRARY_TABLE_SCOPE::UNINITIALIZED;
 

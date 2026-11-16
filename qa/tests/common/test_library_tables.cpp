@@ -530,6 +530,59 @@ BOOST_AUTO_TEST_CASE( RowsAddedToANewProjectTableAreEnumerated )
 }
 
 
+BOOST_AUTO_TEST_CASE( TableFileCreatedAfterLoadIsNotOverwritten )
+{
+    std::error_code       ec;
+    std::filesystem::path dir =
+            std::filesystem::temp_directory_path( ec ) / std::filesystem::path( "kicad_qa_stale_project_table" );
+
+    std::filesystem::remove_all( dir, ec );
+    std::filesystem::create_directories( dir, ec );
+
+    std::filesystem::path proPath = dir / "stale_table.kicad_pro";
+
+    {
+        std::ofstream proFile( proPath );
+        proFile << R"({ "meta": { "filename": "stale_table.kicad_pro", "version": 3 } })";
+    }
+
+    SETTINGS_MANAGER& settings = Pgm().GetSettingsManager();
+    BOOST_REQUIRE( settings.LoadProject( wxString( proPath.string() ) ) );
+
+    LIBRARY_MANAGER manager;
+
+    std::optional<LIBRARY_TABLE*> model = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    BOOST_REQUIRE( model.has_value() );
+    BOOST_REQUIRE( model.value()->Rows().empty() );
+
+    std::filesystem::path source =
+            std::filesystem::path( KI_TEST::GetTestDataRootDir() ) / "libraries" / "sym-lib-table";
+    std::filesystem::path tablePath = dir / "sym-lib-table";
+
+    std::filesystem::copy_file( source, tablePath, ec );
+    BOOST_REQUIRE( !ec );
+
+    size_t fileRows = LIBRARY_TABLE( wxFileName( wxString( tablePath.string() ) ), LIBRARY_TABLE_SCOPE::PROJECT,
+                                     LIBRARY_TABLE_TYPE::SYMBOL )
+                              .Rows()
+                              .size();
+    BOOST_REQUIRE( fileRows > 0 );
+
+    // A save from the stale table must not replace the file that appeared after it was loaded
+    BOOST_CHECK( !model.value()->Save().has_value() );
+    BOOST_CHECK_EQUAL( std::filesystem::file_size( tablePath ), std::filesystem::file_size( source ) );
+
+    manager.ReloadChangedTables();
+
+    model = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    BOOST_REQUIRE( model.has_value() );
+    BOOST_CHECK_EQUAL( model.value()->Rows().size(), fileRows );
+
+    settings.UnloadProject( &settings.Prj(), false );
+    std::filesystem::remove_all( dir, ec );
+}
+
+
 BOOST_AUTO_TEST_CASE( LibOverrideSettings )
 {
     // Test that LIB_OVERRIDE serialization in KICAD_SETTINGS works via the

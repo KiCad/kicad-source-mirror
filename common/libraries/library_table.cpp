@@ -68,6 +68,7 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
     wxFileName fn( aPath );
     WX_FILENAME::ResolvePossibleSymlinks( fn );
     m_path = fn.GetAbsolutePath();
+    m_loadedStamp = diskStamp();
 
     if( !fn.FileExists() )
     {
@@ -289,6 +290,24 @@ std::optional<const LIBRARY_TABLE_ROW*> LIBRARY_TABLE::Row( const wxString& aNic
 }
 
 
+wxString LIBRARY_TABLE::diskStamp() const
+{
+    wxFileName fn( m_path );
+
+    if( !fn.FileExists() )
+        return wxS( "missing" );
+
+    return wxString::Format( wxS( "%lld:%lld" ), fn.GetModificationTime().GetValue().GetValue(),
+                             fn.GetSize().GetValue() );
+}
+
+
+bool LIBRARY_TABLE::DiskChanged() const
+{
+    return m_loadedStamp && *m_loadedStamp != diskStamp();
+}
+
+
 bool LIBRARY_TABLE::IsReadOnly() const
 {
     if( m_path.IsEmpty() )
@@ -306,6 +325,13 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
     {
         return tl::unexpected( LIBRARY_ERROR(
                 wxString::Format( _( "Library table '%s' is read-only" ), Path() ) ) );
+    }
+
+    if( DiskChanged() )
+    {
+        return tl::unexpected( LIBRARY_ERROR( wxString::Format( _( "Library table '%s' changed on disk after it was "
+                                                                   "loaded, so it was not overwritten" ),
+                                                                Path() ) ) );
     }
 
     wxLogTrace( traceLibraries, "Saving %s", Path() );
@@ -360,6 +386,7 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
         return tl::unexpected( LIBRARY_ERROR( e.Problem(), e.Where() ) );
     }
 
+    m_loadedStamp = diskStamp();
     return LIBRARY_RESULT<void>();
 }
 

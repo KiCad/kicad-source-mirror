@@ -993,6 +993,25 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
 }
 
 
+void LIBRARY_MANAGER::ReloadChangedTables()
+{
+    auto changed = []( const auto& aTables )
+    {
+        return std::ranges::any_of( aTables | std::views::values,
+                                    []( const auto& aTable )
+                                    {
+                                        return aTable->DiskChanged();
+                                    } );
+    };
+
+    if( changed( m_tables ) )
+        ReloadTables( LIBRARY_TABLE_SCOPE::GLOBAL );
+
+    if( changed( m_projectTables ) )
+        ReloadTables( LIBRARY_TABLE_SCOPE::PROJECT );
+}
+
+
 void LIBRARY_MANAGER::ReloadTables( LIBRARY_TABLE_SCOPE aScope,
                                     std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {

@@ -400,6 +400,8 @@ PANEL_DESIGN_BLOCK_LIB_TABLE::PANEL_DESIGN_BLOCK_LIB_TABLE( DIALOG_EDIT_LIBRARY_
     for( auto& [fileType, desc] : m_supportedDesignBlockFiles )
         m_pluginChoices.Add( DESIGN_BLOCK_IO_MGR::ShowType( fileType ) );
 
+    Pgm().GetLibraryManager().ReloadChangedTables();
+
     std::optional<LIBRARY_TABLE*> table = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
                                                                            LIBRARY_TABLE_SCOPE::GLOBAL );
     wxASSERT( table.has_value() );
