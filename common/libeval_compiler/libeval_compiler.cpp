@@ -709,6 +709,10 @@ void CONTEXT::stackOverflow()
     throw STACK_OVERFLOW{};
 }
 
+#if defined( __MINGW64__ ) // needed on MINGW to avoid a link issue
+constexpr int CONTEXT::STACK_CAPACITY;
+#endif
+
 
 void COMPILER::reportError( COMPILATION_STAGE stage, const wxString& aErrorMsg, int aPos )
 {
