@@ -202,9 +202,8 @@ bool KIPLATFORM::SECRETS::DeleteSecret(const wxString& aService, const wxString&
 {
     std::lock_guard<std::mutex> lock( keychainMutex() );
 
-    CFMutableDictionaryRef query = secretQuery( aService, aKey );
+    DICTIONARY query = secretQuery( aService, aKey );
 
     OSStatus status = SecItemDelete(query);
-    CFRelease(query);
     return status == errSecSuccess || status == errSecItemNotFound;
 }
