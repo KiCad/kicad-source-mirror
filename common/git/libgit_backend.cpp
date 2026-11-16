@@ -1935,16 +1935,91 @@ static bool untrackedFilesOverwrittenBy( git_repository* aRepo, git_tree* aIncom
 }
 
 
-static wxString describeUntrackedCollisions( const std::vector<wxString>& aPaths )
+// Deletions and renames overlap too, and an unreadable status or diff must not read as none
+static bool dirtyFilesChangedBy( git_repository* aRepo, git_tree* aIncomingTree, std::vector<wxString>& aOverlap )
+{
+    git_status_options statusOpts;
+    git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+    statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+
+    git_status_list* statusList = nullptr;
+
+    if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        return false;
+
+    KIGIT::GitStatusListPtr statusListPtr( statusList );
+    std::set<std::string>   dirty;
+
+    for( size_t ii = 0; ii < git_status_list_entrycount( statusList ); ++ii )
+    {
+        const git_status_entry* entry = git_status_byindex( statusList, ii );
+
+        for( const git_diff_delta* delta : { entry->head_to_index, entry->index_to_workdir } )
+        {
+            if( !delta )
+                continue;
+
+            for( const char* path : { delta->old_file.path, delta->new_file.path } )
+            {
+                if( path )
+                    dirty.insert( path );
+            }
+        }
+    }
+
+    if( dirty.empty() )
+        return true;
+
+    git_object* headTree = nullptr;
+
+    if( git_revparse_single( &headTree, aRepo, "HEAD^{tree}" ) != GIT_OK )
+        return false;
+
+    KIGIT::GitObjectPtr headTreePtr( headTree );
+    git_diff*           diff = nullptr;
+
+    if( git_diff_tree_to_tree( &diff, aRepo, reinterpret_cast<git_tree*>( headTree ), aIncomingTree, nullptr )
+        != GIT_OK )
+    {
+        return false;
+    }
+
+    KIGIT::GitDiffPtr     diffPtr( diff );
+    std::set<std::string> overlap;
+
+    KIGIT::CollectDiffDeltas( diff,
+                              [&]( const git_diff_delta& aDelta )
+                              {
+                                  for( const char* path : { aDelta.old_file.path, aDelta.new_file.path } )
+                                  {
+                                      if( path && dirty.count( path ) )
+                                          overlap.insert( path );
+                                  }
+                              } );
+
+    for( const std::string& path : overlap )
+        aOverlap.push_back( wxString::FromUTF8( path ) );
+
+    return true;
+}
+
+
+static wxString pathList( const std::vector<wxString>& aPaths )
 {
     wxString listed;
 
     for( const wxString& path : aPaths )
         listed += wxS( "\n    " ) + path;
 
+    return listed;
+}
+
+
+static wxString describeUntrackedCollisions( const std::vector<wxString>& aPaths )
+{
     return wxString::Format( _( "Getting changes would overwrite files that were never committed:%s\n\n"
                                 "Commit or discard them first." ),
-                             listed );
+                             pathList( aPaths ) );
 }
 
 
@@ -2288,18 +2363,19 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
     KIGIT::GitTreePtr targetTreePtr( targetTree );
 
     // A skipped file would leave the local edit reading as a reversal of the remote change.
-    TREE_STATE treeState = trackedTreeState( aHandler->GetRepo() );
+    std::vector<wxString> overlap;
 
-    if( treeState == TREE_STATE::UNKNOWN )
+    if( !dirtyFilesChangedBy( aHandler->GetRepo(), targetTree, overlap ) )
     {
         aHandler->AddGitError( _( "Could not read the status of the project files, so getting changes was stopped." ) );
         return PullResult::Error;
     }
 
-    if( treeState == TREE_STATE::DIRTY )
+    if( !overlap.empty() )
     {
-        aHandler->AddErrorString( _( "There are changes that are not committed yet, and getting changes would "
-                                     "run over them. Commit them first." ) );
+        aHandler->AddErrorString( wxString::Format( _( "The incoming changes would run over changes that are not "
+                                                       "committed yet:%s\n\nCommit them first." ),
+                                                    pathList( overlap ) ) );
         return PullResult::DirtyWorkdir;
     }
 
@@ -2407,53 +2483,32 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 }
 
 
-bool LIBGIT_BACKEND::hasUnstagedChanges( git_repository* aRepo )
+// A conflicted merge resets the whole tree to HEAD and a merge commits the whole index, so
+// unlike a fast-forward these need every tracked change committed
+static std::optional<PullResult> refuseUncommittedChanges( GIT_PULL_HANDLER* aHandler )
 {
-    if( !aRepo )
-        return false;
-
-    git_status_options opts;
-    git_status_init_options( &opts, GIT_STATUS_OPTIONS_VERSION );
-
-    // Only check workdir changes (unstaged), not index changes (staged)
-    opts.show = GIT_STATUS_SHOW_WORKDIR_ONLY;
-    opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED;
-
-    git_status_list* status_list = nullptr;
-
-    if( git_status_list_new( &status_list, aRepo, &opts ) != GIT_OK )
+    switch( trackedTreeState( aHandler->GetRepo() ) )
     {
-        wxLogTrace( traceGit, "Failed to get status list: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
+    case TREE_STATE::CLEAN: return std::nullopt;
+
+    case TREE_STATE::DIRTY:
+        aHandler->AddErrorString( _( "Combining the incoming changes with your own commits needs every change "
+                                     "committed first. Commit them, then get changes again." ) );
+        return PullResult::DirtyWorkdir;
+
+    case TREE_STATE::UNKNOWN: break;
     }
 
-    KIGIT::GitStatusListPtr status_list_ptr( status_list );
-    size_t count = git_status_list_entrycount( status_list );
-
-    // Check if any of the entries are actual modifications (not just untracked files)
-    for( size_t ii = 0; ii < count; ++ii )
-    {
-        const git_status_entry* entry = git_status_byindex( status_list, ii );
-
-        // Check for actual workdir modifications, not just untracked files
-        if( entry->status & ( GIT_STATUS_WT_MODIFIED | GIT_STATUS_WT_DELETED | GIT_STATUS_WT_TYPECHANGE ) )
-            return true;
-    }
-
-    return false;
+    aHandler->AddGitError( _( "Could not read the status of the project files, so getting changes was stopped." ) );
+    return PullResult::Error;
 }
 
 
 PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_annotated_commit** aMergeHeads,
                                         size_t aMergeHeadsCount )
 {
-    // Check for unstaged changes before attempting merge
-    if( hasUnstagedChanges( aHandler->GetRepo() ) )
-    {
-        aHandler->AddErrorString( _( "Cannot merge: you have unstaged changes. Please commit or stash them "
-                                     "before pulling." ) );
-        return PullResult::DirtyWorkdir;
-    }
+    if( std::optional<PullResult> refused = refuseUncommittedChanges( aHandler ) )
+        return *refused;
 
     git_repository* repo = aHandler->GetRepo();
 
@@ -2688,13 +2743,8 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
 PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler, const git_annotated_commit** aMergeHeads,
                                          size_t aMergeHeadsCount )
 {
-    // Check for unstaged changes before attempting rebase
-    if( hasUnstagedChanges( aHandler->GetRepo() ) )
-    {
-        aHandler->AddErrorString( _( "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
-                                     "them before pulling." ) );
-        return PullResult::DirtyWorkdir;
-    }
+    if( std::optional<PullResult> refused = refuseUncommittedChanges( aHandler ) )
+        return *refused;
 
     return rebaseOnto( aHandler, aHandler->GetRepo(), aMergeHeads[0] );
 }

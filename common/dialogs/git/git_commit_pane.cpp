@@ -3119,7 +3119,8 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
             },
             [this, aCommon, aThenPush, aRetriedAfterTrust, result]()
             {
-                if( !ProjectSafeToRewrite( m_frame, this, result->worktree ) )
+                // The pull refuses an uncommitted file only when the incoming commits touch it, as git does
+                if( !ProjectSafeToRewrite( m_frame, this, result->worktree, true ) )
                     return;
 
                 // A non-fast-forward pull creates a commit, so obtain its identity before
@@ -3131,7 +3132,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
                     return;
 
                 // The identity prompt can allow new editor changes while it is open.
-                if( !ProjectSafeToRewrite( m_frame, this, result->worktree ) )
+                if( !ProjectSafeToRewrite( m_frame, this, result->worktree, true ) )
                     return;
 
                 startPull( aCommon, aThenPush, aRetriedAfterTrust );
@@ -3292,7 +3293,7 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
         return;
     }
 
-    // Something uncommitted appeared after the pre-pull check, or an untracked file collides
+    // An uncommitted change is in the way of the incoming files, or an untracked file collides
     // with an incoming one. This is the panel's own job to fix, not the command line's.
     if( result == PullResult::DirtyWorkdir )
     {
