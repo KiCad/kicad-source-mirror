@@ -1879,11 +1879,11 @@ static std::vector<std::string> changedPaths( git_repository* aRepo )
 
 // Tracked files only. Callers read CLEAN as permission to roll back over the tree, so an
 // unreadable status gets its own answer rather than passing as clean.
-static TREE_STATE trackedTreeState( git_repository* aRepo )
+static TREE_STATE trackedTreeState( git_repository* aRepo, git_status_show_t aShow = GIT_STATUS_SHOW_INDEX_AND_WORKDIR )
 {
     git_status_options statusOpts;
     git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
-    statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+    statusOpts.show = aShow;
 
     git_status_list* statusList = nullptr;
 
@@ -1935,8 +1935,48 @@ static bool untrackedFilesOverwrittenBy( git_repository* aRepo, git_tree* aIncom
 }
 
 
+static KIGIT::GitTreePtr commitTree( git_repository* aRepo, const git_oid* aCommit )
+{
+    git_commit* commit = nullptr;
+    git_tree*   tree = nullptr;
+
+    if( git_commit_lookup( &commit, aRepo, aCommit ) == GIT_OK )
+    {
+        KIGIT::GitCommitPtr commitPtr( commit );
+        git_commit_tree( &tree, commit );
+    }
+
+    return KIGIT::GitTreePtr( tree );
+}
+
+
+// A rename reports two paths, and both count
+static bool pathsChangedBetween( git_repository* aRepo, git_tree* aFrom, git_tree* aTo, std::set<std::string>& aPaths )
+{
+    git_diff* diff = nullptr;
+
+    if( git_diff_tree_to_tree( &diff, aRepo, aFrom, aTo, nullptr ) != GIT_OK )
+        return false;
+
+    KIGIT::GitDiffPtr diffPtr( diff );
+
+    KIGIT::CollectDiffDeltas( diff,
+                              [&]( const git_diff_delta& aDelta )
+                              {
+                                  for( const char* path : { aDelta.old_file.path, aDelta.new_file.path } )
+                                  {
+                                      if( path )
+                                          aPaths.insert( path );
+                                  }
+                              } );
+
+    return true;
+}
+
+
 // Deletions and renames overlap too, and an unreadable status or diff must not read as none
-static bool dirtyFilesChangedBy( git_repository* aRepo, git_tree* aIncomingTree, std::vector<wxString>& aOverlap )
+static bool dirtyFilesChangedBy( git_repository* aRepo, git_tree* aBase, git_tree* aIncoming,
+                                 std::vector<wxString>& aOverlap )
 {
     git_status_options statusOpts;
     git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
@@ -1948,7 +1988,23 @@ static bool dirtyFilesChangedBy( git_repository* aRepo, git_tree* aIncomingTree,
         return false;
 
     KIGIT::GitStatusListPtr statusListPtr( statusList );
-    std::set<std::string>   dirty;
+    git_config*             config = nullptr;
+    int                     ignoreCase = 0;
+
+    if( git_repository_config( &config, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr configPtr( config );
+    git_config_get_bool( &ignoreCase, config, "core.ignorecase" );
+
+    // A case-only twin is the same file on such a file system
+    auto key = [&]( const char* aPath )
+    {
+        wxString path = wxString::FromUTF8( aPath );
+        return ignoreCase ? path.Lower() : path;
+    };
+
+    std::map<wxString, wxString> dirty;
 
     for( size_t ii = 0; ii < git_status_list_entrycount( statusList ); ++ii )
     {
@@ -1962,7 +2018,7 @@ static bool dirtyFilesChangedBy( git_repository* aRepo, git_tree* aIncomingTree,
             for( const char* path : { delta->old_file.path, delta->new_file.path } )
             {
                 if( path )
-                    dirty.insert( path );
+                    dirty.emplace( key( path ), wxString::FromUTF8( path ) );
             }
         }
     }
@@ -1970,36 +2026,20 @@ static bool dirtyFilesChangedBy( git_repository* aRepo, git_tree* aIncomingTree,
     if( dirty.empty() )
         return true;
 
-    git_object* headTree = nullptr;
+    std::set<std::string> incoming;
 
-    if( git_revparse_single( &headTree, aRepo, "HEAD^{tree}" ) != GIT_OK )
+    if( !pathsChangedBetween( aRepo, aBase, aIncoming, incoming ) )
         return false;
 
-    KIGIT::GitObjectPtr headTreePtr( headTree );
-    git_diff*           diff = nullptr;
+    std::set<wxString> overlap;
 
-    if( git_diff_tree_to_tree( &diff, aRepo, reinterpret_cast<git_tree*>( headTree ), aIncomingTree, nullptr )
-        != GIT_OK )
+    for( const std::string& path : incoming )
     {
-        return false;
+        if( auto it = dirty.find( key( path.c_str() ) ); it != dirty.end() )
+            overlap.insert( it->second );
     }
 
-    KIGIT::GitDiffPtr     diffPtr( diff );
-    std::set<std::string> overlap;
-
-    KIGIT::CollectDiffDeltas( diff,
-                              [&]( const git_diff_delta& aDelta )
-                              {
-                                  for( const char* path : { aDelta.old_file.path, aDelta.new_file.path } )
-                                  {
-                                      if( path && dirty.count( path ) )
-                                          overlap.insert( path );
-                                  }
-                              } );
-
-    for( const std::string& path : overlap )
-        aOverlap.push_back( wxString::FromUTF8( path ) );
-
+    aOverlap.insert( aOverlap.end(), overlap.begin(), overlap.end() );
     return true;
 }
 
@@ -2012,6 +2052,27 @@ static wxString pathList( const std::vector<wxString>& aPaths )
         listed += wxS( "\n    " ) + path;
 
     return listed;
+}
+
+
+// A skipped file would leave the local edit reading as a reversal of the incoming change
+static std::optional<PullResult> refuseDirtyOverlap( GIT_PULL_HANDLER* aHandler, git_tree* aBase, git_tree* aIncoming )
+{
+    std::vector<wxString> overlap;
+
+    if( !dirtyFilesChangedBy( aHandler->GetRepo(), aBase, aIncoming, overlap ) )
+    {
+        aHandler->AddGitError( _( "Could not read the status of the project files, so getting changes was stopped." ) );
+        return PullResult::Error;
+    }
+
+    if( overlap.empty() )
+        return std::nullopt;
+
+    aHandler->AddErrorString( wxString::Format( _( "The incoming changes would run over changes that are not "
+                                                   "committed yet:%s\n\nCommit them first." ),
+                                                pathList( overlap ) ) );
+    return PullResult::DirtyWorkdir;
 }
 
 
@@ -2361,23 +2422,16 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
     }
 
     KIGIT::GitTreePtr targetTreePtr( targetTree );
+    KIGIT::GitTreePtr headTree( KIGIT::ResolveRefToTree( aHandler->GetRepo(), wxS( "HEAD" ) ) );
 
-    // A skipped file would leave the local edit reading as a reversal of the remote change.
-    std::vector<wxString> overlap;
-
-    if( !dirtyFilesChangedBy( aHandler->GetRepo(), targetTree, overlap ) )
+    if( !headTree )
     {
-        aHandler->AddGitError( _( "Could not read the status of the project files, so getting changes was stopped." ) );
+        aHandler->AddErrorString( _( "Could not read the current commit." ) );
         return PullResult::Error;
     }
 
-    if( !overlap.empty() )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "The incoming changes would run over changes that are not "
-                                                       "committed yet:%s\n\nCommit them first." ),
-                                                    pathList( overlap ) ) );
-        return PullResult::DirtyWorkdir;
-    }
+    if( std::optional<PullResult> refused = refuseDirtyOverlap( aHandler, headTree.get(), targetTree ) )
+        return *refused;
 
     std::vector<wxString> collisions;
 
@@ -2483,17 +2537,22 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 }
 
 
-// A conflicted merge resets the whole tree to HEAD and a merge commits the whole index, so
-// unlike a fast-forward these need every tracked change committed
-static std::optional<PullResult> refuseUncommittedChanges( GIT_PULL_HANDLER* aHandler )
+// A rebase aborts with a hard reset of the whole tree, so it needs every tracked change committed.
+// A merge commits the whole index, so it needs only the staged ones
+static std::optional<PullResult> refuseUncommittedChanges( GIT_PULL_HANDLER* aHandler, bool aStagedOnly )
 {
-    switch( trackedTreeState( aHandler->GetRepo() ) )
+    switch( trackedTreeState( aHandler->GetRepo(),
+                              aStagedOnly ? GIT_STATUS_SHOW_INDEX_ONLY : GIT_STATUS_SHOW_INDEX_AND_WORKDIR ) )
     {
     case TREE_STATE::CLEAN: return std::nullopt;
 
     case TREE_STATE::DIRTY:
-        aHandler->AddErrorString( _( "Combining the incoming changes with your own commits needs every change "
-                                     "committed first. Commit them, then get changes again." ) );
+        aHandler->AddErrorString( aStagedOnly ? _( "Combining the incoming changes with your own commits would "
+                                                   "also commit the changes staged for your next commit. Commit "
+                                                   "them, then get changes again." )
+                                              : _( "Combining the incoming changes with your own commits needs "
+                                                   "every change committed first. Commit them, then get changes "
+                                                   "again." ) );
         return PullResult::DirtyWorkdir;
 
     case TREE_STATE::UNKNOWN: break;
@@ -2507,7 +2566,7 @@ static std::optional<PullResult> refuseUncommittedChanges( GIT_PULL_HANDLER* aHa
 PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_annotated_commit** aMergeHeads,
                                         size_t aMergeHeadsCount )
 {
-    if( std::optional<PullResult> refused = refuseUncommittedChanges( aHandler ) )
+    if( std::optional<PullResult> refused = refuseUncommittedChanges( aHandler, true ) )
         return *refused;
 
     git_repository* repo = aHandler->GetRepo();
@@ -2527,34 +2586,56 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     }
 
     {
-        git_commit* theirs = nullptr;
+        const git_oid*    theirsOid = git_annotated_commit_id( aMergeHeads[0] );
+        git_oid           headOid;
+        git_oid           baseOid;
+        KIGIT::GitTreePtr theirsTree = commitTree( repo, theirsOid );
+        KIGIT::GitTreePtr baseTree;
 
-        if( git_commit_lookup( &theirs, repo, git_annotated_commit_id( aMergeHeads[0] ) ) == GIT_OK )
+        // The merge writes only what changed on the incoming side since the shared history
+        if( git_reference_name_to_id( &headOid, repo, "HEAD" ) == GIT_OK
+            && git_merge_base( &baseOid, repo, &headOid, theirsOid ) == GIT_OK )
         {
-            KIGIT::GitCommitPtr theirsPtr( theirs );
-            git_tree*           theirsTree = nullptr;
+            baseTree = commitTree( repo, &baseOid );
+        }
 
-            if( git_commit_tree( &theirsTree, theirs ) == GIT_OK )
-            {
-                KIGIT::GitTreePtr     theirsTreePtr( theirsTree );
-                std::vector<wxString> collisions;
+        if( !theirsTree || !baseTree )
+        {
+            aHandler->AddGitError( _( "Could not read the fetched commit." ) );
+            return PullResult::Error;
+        }
 
-                if( !untrackedFilesOverwrittenBy( repo, theirsTree, collisions ) )
-                {
-                    aHandler->AddErrorString( _( "Could not read the status of the project files, so getting "
-                                                 "changes was stopped. Files that were never committed could "
-                                                 "have been overwritten." ) );
-                    return PullResult::Error;
-                }
+        if( std::optional<PullResult> refused = refuseDirtyOverlap( aHandler, baseTree.get(), theirsTree.get() ) )
+            return *refused;
 
-                if( !collisions.empty() )
-                {
-                    aHandler->AddErrorString( describeUntrackedCollisions( collisions ) );
-                    return PullResult::DirtyWorkdir;
-                }
-            }
+        std::vector<wxString> collisions;
+
+        if( !untrackedFilesOverwrittenBy( repo, theirsTree.get(), collisions ) )
+        {
+            aHandler->AddErrorString( _( "Could not read the status of the project files, so getting "
+                                         "changes was stopped. Files that were never committed could "
+                                         "have been overwritten." ) );
+            return PullResult::Error;
+        }
+
+        if( !collisions.empty() )
+        {
+            aHandler->AddErrorString( describeUntrackedCollisions( collisions ) );
+            return PullResult::DirtyWorkdir;
         }
     }
+
+    // Only the paths the merge wrote, so uncommitted edits elsewhere survive
+    auto undoMerge = [&]()
+    {
+        wxString error;
+
+        if( AbandonOperation( repo, error ) )
+            return true;
+
+        aHandler->AddError( _( "Could not undo the merge, so the project files may be left part way merged." ), error );
+        return false;
+    };
 
     if( git_merge( repo, aMergeHeads, aMergeHeadsCount, nullptr, nullptr ) )
     {
@@ -2567,26 +2648,14 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     if( git_repository_index( &index, repo ) != GIT_OK )
     {
         aHandler->AddErrorString( _( "Could not read repository index after merge." ) );
+        undoMerge();
         return PullResult::MergeFailed;
     }
 
     KIGIT::GitIndexPtr indexPtr( index );
 
     if( git_index_has_conflicts( index ) )
-    {
-        // Abort the merge and restore the pre-pull state
-        git_object* head_obj = nullptr;
-
-        if( git_revparse_single( &head_obj, repo, "HEAD" ) == GIT_OK )
-        {
-            KIGIT::GitObjectPtr headObjPtr( head_obj );
-            git_reset( repo, head_obj, GIT_RESET_HARD, nullptr );
-        }
-
-        git_repository_state_cleanup( repo );
-
-        return PullResult::Conflict;
-    }
+        return undoMerge() ? PullResult::Conflict : PullResult::MergeFailed;
 
     git_oid        tree_oid;
     git_tree*      tree = nullptr;
@@ -2595,20 +2664,6 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     git_commit*    head_commit = nullptr;
     git_commit*    merge_commit = nullptr;
     git_signature* signature = nullptr;
-
-    // Merged on disk but not recorded, so a failure from here puts the tree back at HEAD.
-    auto undoMerge = [&]()
-    {
-        git_object* headObj = nullptr;
-
-        if( git_revparse_single( &headObj, repo, "HEAD" ) == GIT_OK )
-        {
-            KIGIT::GitObjectPtr headObjPtr( headObj );
-            git_reset( repo, headObj, GIT_RESET_HARD, nullptr );
-        }
-
-        git_repository_state_cleanup( repo );
-    };
 
     if( git_index_write_tree( &tree_oid, index ) != GIT_OK || git_tree_lookup( &tree, repo, &tree_oid ) != GIT_OK )
     {
@@ -2743,7 +2798,7 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
 PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler, const git_annotated_commit** aMergeHeads,
                                          size_t aMergeHeadsCount )
 {
-    if( std::optional<PullResult> refused = refuseUncommittedChanges( aHandler ) )
+    if( std::optional<PullResult> refused = refuseUncommittedChanges( aHandler, false ) )
         return *refused;
 
     return rebaseOnto( aHandler, aHandler->GetRepo(), aMergeHeads[0] );
@@ -3226,7 +3281,8 @@ static bool restorePathsFromCommit( git_repository* aRepo, git_commit* aCommit, 
 
     git_checkout_options checkoutOpts;
     git_checkout_init_options( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
-    checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_REMOVE_UNTRACKED;
+    checkoutOpts.checkout_strategy =
+            GIT_CHECKOUT_FORCE | GIT_CHECKOUT_REMOVE_UNTRACKED | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;
     checkoutOpts.paths.strings = pathSpec.data();
     checkoutOpts.paths.count = pathSpec.size();
 
@@ -3279,28 +3335,11 @@ static bool rollbackWorkingTree( git_repository* aRepo, git_commit* aHeadCommit,
     if( git_commit_tree( &previousTree, aHeadCommit ) != GIT_OK )
         return false;
 
-    KIGIT::GitTreePtr previousTreePtr( previousTree );
-
-    git_diff* diff = nullptr;
-
-    if( git_diff_tree_to_tree( &diff, aRepo, previousTree, aWrittenTree, nullptr ) != GIT_OK )
-        return false;
-
-    KIGIT::GitDiffPtr diffPtr( diff );
-
+    KIGIT::GitTreePtr     previousTreePtr( previousTree );
     std::set<std::string> touched;
 
-    for( size_t ii = 0; ii < git_diff_num_deltas( diff ); ii++ )
-    {
-        const git_diff_delta* delta = git_diff_get_delta( diff, ii );
-
-        // A rename reports two paths, and both need putting back.
-        for( const char* path : { delta->old_file.path, delta->new_file.path } )
-        {
-            if( path )
-                touched.emplace( path );
-        }
-    }
+    if( !pathsChangedBetween( aRepo, previousTree, aWrittenTree, touched ) )
+        return false;
 
     std::vector<std::string> restorable;
     bool                     leftBehind = false;
@@ -3336,11 +3375,37 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
                                              git_reference* aHeadRef, git_commit* aRollbackCommit,
                                              const char* aReflogLabel, wxString& aGitError )
 {
+    git_tree*             previousTree = nullptr;
+    std::set<std::string> touched;
+
+    if( git_commit_tree( &previousTree, aRollbackCommit ) != GIT_OK )
+    {
+        aGitError = KIGIT_COMMON::GetLastGitError();
+        return PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK;
+    }
+
+    KIGIT::GitTreePtr previousTreePtr( previousTree );
+
+    if( !pathsChangedBetween( aRepo, previousTree, aTree, touched ) )
+    {
+        aGitError = KIGIT_COMMON::GetLastGitError();
+        return PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK;
+    }
+
+    // Forced, so only the paths the commit changes, or uncommitted edits elsewhere are reverted.
+    // No paths at all would mean every path
+    std::vector<char*> paths;
+
+    for( const std::string& path : touched )
+        paths.push_back( const_cast<char*>( path.c_str() ) );
+
     git_checkout_options checkoutOpts;
     git_checkout_options_init( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
-    checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE;
+    checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;
+    checkoutOpts.paths.strings = paths.data();
+    checkoutOpts.paths.count = paths.size();
 
-    if( git_checkout_tree( aRepo, reinterpret_cast<git_object*>( aTree ), &checkoutOpts ) != GIT_OK )
+    if( !paths.empty() && git_checkout_tree( aRepo, reinterpret_cast<git_object*>( aTree ), &checkoutOpts ) != GIT_OK )
     {
         aGitError = KIGIT_COMMON::GetLastGitError();
 
@@ -3855,7 +3920,7 @@ bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
 
         git_checkout_options checkoutOpts;
         git_checkout_options_init( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
-        checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE;
+        checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;
         checkoutOpts.paths.strings = paths.data();
         checkoutOpts.paths.count = paths.size();
 
@@ -3978,33 +4043,6 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
         return MergeCommitResult::FailedCleanly;
     }
 
-    // The lock is released while the user resolves, so anything dirty now appeared during
-    // resolution and the checkout below would revert it. Untracked files do not count, since
-    // the recovery copies the panel writes beside a conflicted file are untracked.
-    {
-        git_status_options statusOpts;
-        git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
-        statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
-
-        git_status_list* statusList = nullptr;
-
-        if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
-        {
-            aError.details = _( "Could not read the repository status." );
-            return MergeCommitResult::FailedCleanly;
-        }
-
-        KIGIT::GitStatusListPtr statusListPtr( statusList );
-
-        if( git_status_list_entrycount( statusList ) > 0 )
-        {
-            aError.details = _( "Files changed while the conflicts were being resolved, and finishing the "
-                                "merge would overwrite those changes. Get changes again to redo the merge "
-                                "with the current files." );
-            return MergeCommitResult::FailedCleanly;
-        }
-    }
-
     KIGIT::GitIndexPtr  mergedIndex;
     KIGIT::GitCommitPtr ours;
     KIGIT::GitCommitPtr theirs;
@@ -4108,6 +4146,27 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
     }
 
     KIGIT::GitTreePtr treePtr( tree );
+
+    // The lock is released while the user resolves, so a dirty file the merge writes was edited
+    // meanwhile. Untracked recovery copies the panel writes beside a conflicted file do not count
+    {
+        KIGIT::GitTreePtr     oursTree = commitTree( aRepo, git_commit_id( ours.get() ) );
+        std::vector<wxString> overlap;
+
+        if( !oursTree || !dirtyFilesChangedBy( aRepo, oursTree.get(), tree, overlap ) )
+        {
+            aError.details = _( "Could not read the repository status." );
+            return MergeCommitResult::FailedCleanly;
+        }
+
+        if( !overlap.empty() )
+        {
+            aError.details = _( "Files changed while the conflicts were being resolved, and finishing the "
+                                "merge would overwrite those changes. Get changes again to redo the merge "
+                                "with the current files." );
+            return MergeCommitResult::FailedCleanly;
+        }
+    }
 
     git_signature* signature = nullptr;
 

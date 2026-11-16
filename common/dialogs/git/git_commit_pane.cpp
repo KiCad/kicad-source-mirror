@@ -2675,8 +2675,8 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     // again, rather than force over them.
     if( result == PushResult::NonFastForward )
     {
-        // Getting their changes needs a clean tree. Files left unticked at the commit, or edits
-        // still in an editor, block it, and offering the click anyway would only fail later.
+        // Edits still in an editor block getting their changes, and offering the click anyway would
+        // only fail later. The merge itself refuses only over files it changes
         auto     worktree = std::make_shared<GIT_WORKTREE_STATUS>();
         wxString projectPath = m_frame->Prj().GetProjectPath();
 
@@ -2688,7 +2688,7 @@ void GIT_COMMIT_PANE::onPushDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
                 },
                 [this, aCommon, worktree]()
                 {
-                    if( !ProjectSafeToRewrite( m_frame, this, *worktree ) )
+                    if( !ProjectSafeToRewrite( m_frame, this, *worktree, true ) )
                         return;
 
                     if( IsOK( this, _( "Someone else pushed changes first.\n\n"

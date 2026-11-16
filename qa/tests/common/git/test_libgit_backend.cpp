@@ -1800,6 +1800,162 @@ BOOST_AUTO_TEST_CASE( PullMergeRefusesOverStagedChange )
 }
 
 
+// Aborting the conflicted merge and finishing it after resolution both touch only the merged paths
+BOOST_AUTO_TEST_CASE( ConflictedMergeAbortKeepsUnrelatedEdit )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_TEST_REQUIRE( repo );
+
+    pullCampaignProject( repo.get() );
+
+    std::string localSch = replaced( campaignFile( CAMPAIGN_SCH ), "(rev \"3\")", "(rev \"4\")" );
+    KI_TEST::WriteGitFile( repoPath(), CAMPAIGN_SCH, localSch );
+    git_oid localHead = KI_TEST::CommitGitFile( repo.get(), CAMPAIGN_SCH, wxT( "Local bumps the sheet revision" ) );
+
+    std::string remoteSch = replaced( campaignFile( CAMPAIGN_SCH ), "(rev \"3\")", "(rev \"5\")" );
+    advanceRemote( CAMPAIGN_SCH, remoteSch, "Remote bumps the sheet revision" );
+
+    std::string localPro = replaced( campaignFile( CAMPAIGN_PRO ), "\"text_variables\": {}",
+                                     "\"text_variables\": { \"STAGE\": \"local\" }" );
+    KI_TEST::WriteGitFile( repoPath(), CAMPAIGN_PRO, localPro );
+
+    KIGIT_COMMON common( repo.get() );
+
+    auto checkProKept = [&]()
+    {
+        BOOST_CHECK( workingFile( CAMPAIGN_PRO ) == localPro );
+
+        unsigned int status = 0;
+        BOOST_REQUIRE_EQUAL( git_status_file( &status, repo.get(), CAMPAIGN_PRO ), GIT_OK );
+        BOOST_CHECK_EQUAL( status, static_cast<unsigned int>( GIT_STATUS_WT_MODIFIED ) );
+    };
+
+    {
+        GIT_PULL_HANDLER handler( &common );
+        BOOST_REQUIRE_EQUAL( static_cast<int>( handler.PerformPull() ), static_cast<int>( PullResult::Conflict ) );
+    }
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo.get(), "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &localHead, &headAfter ) );
+    BOOST_CHECK_EQUAL( git_repository_state( repo.get() ), GIT_REPOSITORY_STATE_NONE );
+    BOOST_CHECK( workingFile( CAMPAIGN_SCH ) == localSch );
+    checkProKept();
+
+    wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
+    wxString                          headOid, theirsOid, conflictsError;
+    KIGIT_ERROR_MESSAGE               error;
+    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
+
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, conflictsError ),
+                           conflictsError.ToStdString() );
+    BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
+
+    BOOST_REQUIRE_MESSAGE(
+            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].theirsFile } }, error )
+                    == MergeCommitResult::Success,
+            error.details.utf8_string() );
+
+    BOOST_CHECK( workingFile( CAMPAIGN_SCH ) == remoteSch );
+    checkProKept();
+}
+
+
+// As git does, a merge leaves uncommitted edits in files the incoming commits do not change
+BOOST_AUTO_TEST_CASE( MergeKeepsUncommittedEditsTheIncomingCommitsDoNotTouch )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_TEST_REQUIRE( repo );
+
+    pullCampaignProject( repo.get() );
+
+    // Only the local side changed the project file, so it is not part of the incoming change
+    std::string committedPro = replaced( campaignFile( CAMPAIGN_PRO ), "\"text_variables\": {}",
+                                         "\"text_variables\": { \"STAGE\": \"committed\" }" );
+    KI_TEST::WriteGitFile( repoPath(), CAMPAIGN_PRO, committedPro );
+    git_oid localHead = KI_TEST::CommitGitFile( repo.get(), CAMPAIGN_PRO, wxT( "Local edits the project file" ) );
+
+    std::string localPro = replaced( campaignFile( CAMPAIGN_PRO ), "\"text_variables\": {}",
+                                     "\"text_variables\": { \"STAGE\": \"local\" }" );
+    KI_TEST::WriteGitFile( repoPath(), CAMPAIGN_PRO, localPro );
+
+    std::string remoteSch = replaced( campaignFile( CAMPAIGN_SCH ), "(rev \"3\")", "(rev \"4\")" );
+    advanceRemote( CAMPAIGN_SCH, remoteSch, "Remote bumps the sheet revision" );
+
+    KIGIT_COMMON common( repo.get() );
+
+    {
+        GIT_PULL_HANDLER handler( &common );
+        BOOST_REQUIRE_EQUAL( static_cast<int>( handler.PerformPull() ), static_cast<int>( PullResult::Success ) );
+    }
+
+    BOOST_CHECK( workingFile( CAMPAIGN_SCH ) == remoteSch );
+    BOOST_CHECK( workingFile( CAMPAIGN_PRO ) == localPro );
+
+    unsigned int status = 0;
+    BOOST_REQUIRE_EQUAL( git_status_file( &status, repo.get(), CAMPAIGN_PRO ), GIT_OK );
+    BOOST_CHECK_EQUAL( status, static_cast<unsigned int>( GIT_STATUS_WT_MODIFIED ) );
+
+    git_commit* rawMerge = nullptr;
+    git_oid     mergeOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &mergeOid, repo.get(), "HEAD" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &rawMerge, repo.get(), &mergeOid ), GIT_OK );
+    KIGIT::GitCommitPtr mergeCommit( rawMerge );
+    BOOST_CHECK_EQUAL( git_commit_parentcount( rawMerge ), 2u );
+    BOOST_CHECK( git_oid_equal( git_commit_parent_id( rawMerge, 0 ), &localHead ) );
+
+    // Once the incoming commits do change it, the merge refuses and names it
+    advanceRemote( CAMPAIGN_PRO,
+                   replaced( campaignFile( CAMPAIGN_PRO ), "\"text_variables\": {}",
+                             "\"text_variables\": { \"STAGE\": \"remote\" }" ),
+                   "Remote edits the project file" );
+
+    GIT_PULL_HANDLER handler( &common );
+
+    BOOST_CHECK_EQUAL( static_cast<int>( handler.PerformPull() ), static_cast<int>( PullResult::DirtyWorkdir ) );
+    BOOST_CHECK( handler.GetErrorString().Contains( CAMPAIGN_PRO ) );
+    BOOST_CHECK( workingFile( CAMPAIGN_PRO ) == localPro );
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo.get(), "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &mergeOid, &headAfter ) );
+}
+
+
+// On a case-insensitive file system both names are one file, so the edit would be run over
+BOOST_AUTO_TEST_CASE( PullRefusesACaseOnlyCollisionWithADirtyFile )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_TEST_REQUIRE( repo );
+
+    pullCampaignProject( repo.get() );
+
+    git_config* rawConfig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &rawConfig, repo.get() ), GIT_OK );
+    KIGIT::GitConfigPtr config( rawConfig );
+    BOOST_REQUIRE_EQUAL( git_config_set_bool( rawConfig, "core.ignorecase", 1 ), GIT_OK );
+
+    std::string localPro = replaced( campaignFile( CAMPAIGN_PRO ), "\"text_variables\": {}",
+                                     "\"text_variables\": { \"STAGE\": \"local\" }" );
+    KI_TEST::WriteGitFile( repoPath(), CAMPAIGN_PRO, localPro );
+
+    advanceRemote( wxString( CAMPAIGN_PRO ).Upper(), campaignFile( CAMPAIGN_PRO ), "Remote adds a case twin" );
+
+    KIGIT_COMMON     common( repo.get() );
+    GIT_PULL_HANDLER handler( &common );
+
+    BOOST_CHECK_EQUAL( static_cast<int>( handler.PerformPull() ), static_cast<int>( PullResult::DirtyWorkdir ) );
+    BOOST_CHECK( handler.GetErrorString().Contains( CAMPAIGN_PRO ) );
+    BOOST_CHECK( workingFile( CAMPAIGN_PRO ) == localPro );
+}
+
+
 // Equivalent to git checkout HEAD with a path, so other changes and untracked files stay.
 BOOST_AUTO_TEST_CASE( DiscardChangesRestoresOnlyTheGivenPaths )
 {
@@ -3052,7 +3208,7 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
     }
 
     BOOST_CHECK_EQUAL( static_cast<int>( common.CreateMergedCommit(
-                               headOid, theirsOid, { { conflicts[0].path, conflicts[0].oursFile } }, error ) ),
+                               headOid, theirsOid, { { conflicts[0].path, conflicts[0].theirsFile } }, error ) ),
                        static_cast<int>( MergeCommitResult::FailedCleanly ) );
 
     {
