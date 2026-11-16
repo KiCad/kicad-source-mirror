@@ -29,15 +29,15 @@
 #include <wx/font.h>
 #include <wx/artprov.h>
 #include <wx/tokenzr.h>
+#include <wx/log.h>
 #include <fmt/format.h>
 #include <array>
 #include <ranges>
 #include <widgets/kistatusbar.h>
+#include <widgets/kistatusbar_popup.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/ui_common.h>
 #include <widgets/wx_collapsible_pane.h>
-#include <wx/frame.h>
-#include <wx/time.h>
 #include <kiplatform/ui.h>
 #include <map>
 #include <pgm_base.h>
@@ -151,19 +151,15 @@ public:
 };
 
 
-static long long g_warning_list_closed_timer = 0;
-
-
-class STATUSBAR_WARNING_LIST : public wxFrame
+class STATUSBAR_WARNING_LIST : public KISTATUSBAR_POPUP
 {
 public:
-    STATUSBAR_WARNING_LIST( KISTATUSBAR* aStatusBar, wxWindow* aParent ) :
-            wxFrame( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                     wxFRAME_NO_TASKBAR | wxBORDER_STATIC ),
+    STATUSBAR_WARNING_LIST( KISTATUSBAR* aStatusBar ) :
+            KISTATUSBAR_POPUP( aStatusBar ),
             m_statusBar( aStatusBar )
     {
         // FromDIP() dispatches through the window vtable, so it may not be used until the
-        // wxFrame base is constructed
+        // popup base is constructed
         const wxSize panelSize = FromDIP( wxSize( 600, 200 ) );
 
         SetSize( panelSize );
@@ -197,21 +193,7 @@ public:
         SetSizer( mainSizer );
         Layout();
 
-        Bind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
-        m_scrolledWindow->Bind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
-        Bind( wxEVT_CHAR_HOOK, &STATUSBAR_WARNING_LIST::onCharHook, this );
-        Bind( wxEVT_CLOSE_WINDOW, &STATUSBAR_WARNING_LIST::onClose, this );
-
         rebuildMessages();
-    }
-
-
-    ~STATUSBAR_WARNING_LIST() override
-    {
-        Unbind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
-        m_scrolledWindow->Unbind( wxEVT_KILL_FOCUS, &STATUSBAR_WARNING_LIST::onFocusLoss, this );
-        Unbind( wxEVT_CHAR_HOOK, &STATUSBAR_WARNING_LIST::onCharHook, this );
-        Unbind( wxEVT_CLOSE_WINDOW, &STATUSBAR_WARNING_LIST::onClose, this );
     }
 
 
@@ -244,41 +226,15 @@ public:
     }
 
 
+protected:
+    void OnDismiss() override
+    {
+        KISTATUSBAR_POPUP::OnDismiss();
+        m_statusBar->m_warningList = nullptr;
+    }
+
+
 private:
-    void onFocusLoss( wxFocusEvent& aEvent )
-    {
-        if( !IsDescendant( aEvent.GetWindow() ) )
-        {
-            Close( true );
-            g_warning_list_closed_timer = wxGetLocalTimeMillis().GetValue();
-        }
-
-        aEvent.Skip();
-    }
-
-
-    void onCharHook( wxKeyEvent& aEvent )
-    {
-        if( aEvent.GetKeyCode() == WXK_ESCAPE )
-        {
-            Close( true );
-            g_warning_list_closed_timer = wxGetLocalTimeMillis().GetValue();
-            return;
-        }
-
-        aEvent.Skip();
-    }
-
-
-    void onClose( wxCloseEvent& aEvent )
-    {
-        if( m_statusBar )
-            m_statusBar->CloseWarningList();
-
-        aEvent.Skip();
-    }
-
-
     void onClearButtonClick( wxCommandEvent& aEvent )
     {
         if( m_statusBar )
@@ -377,7 +333,7 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, ST
     SetStatusStyles( styles.size(), styles.data() );
 
     Bind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
-    m_backgroundProgressBar->Bind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick, this );
+    m_backgroundProgressBar->Bind( wxEVT_LEFT_UP, &KISTATUSBAR::onBackgroundProgressClick, this );
 
     HideBackgroundProgressBar();
     Layout();
@@ -395,7 +351,7 @@ KISTATUSBAR::~KISTATUSBAR()
     CloseWarningList();
 
     Unbind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
-    m_backgroundProgressBar->Unbind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick,
+    m_backgroundProgressBar->Unbind( wxEVT_LEFT_UP, &KISTATUSBAR::onBackgroundProgressClick,
                                      this );
 }
 
@@ -812,12 +768,8 @@ void KISTATUSBAR::ClearWarningMessages( const wxString& aSource )
 
 void KISTATUSBAR::onLoadWarningsIconClick( wxCommandEvent& aEvent )
 {
-    // Debounce clicking on the icon with a list already showing
-    if( wxGetLocalTimeMillis().GetValue() - g_warning_list_closed_timer < 300 )
-    {
-        g_warning_list_closed_timer = 0;
+    if( KISTATUSBAR_POPUP::IsDismissingClick( typeid( STATUSBAR_WARNING_LIST ) ) )
         return;
-    }
 
     if( m_warningList )
     {
@@ -836,38 +788,18 @@ void KISTATUSBAR::openWarningList()
 {
     wxCHECK( m_warningButton, /* void */ );
 
-    m_warningList = new STATUSBAR_WARNING_LIST( this, GetParent() );
-    PositionWarningPanel();
-    m_warningList->Show();
-    KIPLATFORM::UI::ReparentModal( m_warningList );
-    KIPLATFORM::UI::ForceFocus( m_warningList );
-}
-
-
-void KISTATUSBAR::PositionWarningPanel()
-{
-    if( !m_warningList || !m_warningButton )
-        return;
-
     wxRect iconRect = m_warningButton->GetScreenRect();
 
-    wxSize windowSize = m_warningList->GetSize();
-    wxPoint pos;
-    pos.x = iconRect.GetRight() + 1 - windowSize.GetWidth();
-    pos.y = iconRect.GetTop() - windowSize.GetHeight();
-
-    m_warningList->SetPosition( pos );
-    m_warningList->Layout();
+    m_warningList = new STATUSBAR_WARNING_LIST( this );
+    m_warningList->PopupAt( wxPoint( iconRect.GetRight() + 1, iconRect.GetTop() ) );
 }
 
 
 void KISTATUSBAR::CloseWarningList()
 {
-    if( !m_warningList )
-        return;
-
-    m_warningList->Destroy();
-    m_warningList = nullptr;
+    // Dismissal clears m_warningList
+    if( m_warningList )
+        m_warningList->DismissAndNotify();
 }
 
 

@@ -48,6 +48,8 @@ class STATUSBAR_WARNING_LIST;
 
 class KICOMMON_API KISTATUSBAR : public wxStatusBar
 {
+    friend class STATUSBAR_WARNING_LIST;
+
 public:
     enum STYLE_FLAGS : int
     {
@@ -130,10 +132,6 @@ public:
      */
     void CloseWarningList();
 
-    /**
-     * Position the warning message overlay panel above the warning icon.
-     */
-    void PositionWarningPanel();
     virtual void SetStatusWidths( int aSize, const int* aWidths ) override;
 
 private:
