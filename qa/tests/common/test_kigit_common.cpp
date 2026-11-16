@@ -2842,7 +2842,7 @@ BOOST_AUTO_TEST_CASE( WorktreeRefusalPrioritizesUnsavedDocumentAndLibraryEditors
     BOOST_CHECK( stashMessage.Contains( "Footprint Editor" ) );
     BOOST_CHECK( stashMessage.Contains( "unsaved changes" ) );
     BOOST_CHECK( stashMessage.Contains( "Save or discard" ) );
-    BOOST_CHECK( stashMessage.Contains( "before stashing" ) );
+    BOOST_CHECK( stashMessage.Contains( "before continuing" ) );
 
     // A failed disk check must still explain the unsaved work the user can resolve first.
     status.checked = false;

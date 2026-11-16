@@ -781,7 +781,7 @@ wxString GIT_WORKTREE_STATUS::RefusalMessage( const std::vector<wxString>& aUnsa
 
         wxString message = aAllowTrackedChanges
                                    ? _( "The following editors have unsaved changes:%s\n\n"
-                                        "Save or discard those changes before stashing." )
+                                        "Save or discard those changes before continuing." )
                                    : _( "The following editors have unsaved changes:%s\n\n"
                                         "Save or discard those changes first. If saving leaves uncommitted "
                                         "files, commit or stash them before trying again." );

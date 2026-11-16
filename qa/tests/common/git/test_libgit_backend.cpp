@@ -89,7 +89,7 @@ static std::string campaignFile( const char* aName )
 }
 
 
-/// aText with its single occurrence of aFrom replaced by aTo.
+/// aText with its single occurrence of aFrom replaced by aTo
 static std::string replaced( std::string aText, const std::string& aFrom, const std::string& aTo )
 {
     size_t at = aText.find( aFrom );
@@ -138,7 +138,7 @@ struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
 
 
     /// Create a commit on top of aParentOid setting aFile to aContent, or removing it when there
-    /// is no content, without moving HEAD.
+    /// is no content, without moving HEAD
     git_oid createDetachedCommit( git_repository* aRepo, const git_oid& aParentOid, const wxString& aFile,
                                   const std::optional<std::string>& aContent, const char* aMessage )
     {
@@ -188,7 +188,7 @@ struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
         return result;
     }
 
-    /// Move the remote's master to a new commit that sets aFile to aContent, or removes it.
+    /// Move the remote's master to a new commit that sets aFile to aContent, or removes it
     void advanceRemote( const wxString& aFile, const std::optional<std::string>& aContent, const char* aMessage )
     {
         git_repository* rawRemote = nullptr;
@@ -206,7 +206,7 @@ struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
     }
 
 
-    /// Bring the campaign's ctrl-board files in through a pull, so both sides share that history.
+    /// Bring the campaign's ctrl-board files in through a pull, so both sides share that history
     void pullCampaignProject( git_repository* aRepo )
     {
         advanceRemote( CAMPAIGN_PRO, campaignFile( CAMPAIGN_PRO ), "Import the project file" );
@@ -1752,6 +1752,10 @@ BOOST_AUTO_TEST_CASE( PullRefusesWhenIncomingTouchesDirtyFile )
         BOOST_CHECK( workingFile( CAMPAIGN_PRO ) == localPro );
     };
 
+    checkRefused();
+
+    // The same edit once staged, where only the index differs from HEAD
+    stageFile( repo.get(), CAMPAIGN_PRO );
     checkRefused();
 
     // Net of both commits the file is deleted, which overlaps the edit just the same

@@ -3119,7 +3119,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
             },
             [this, aCommon, aThenPush, aRetriedAfterTrust, result]()
             {
-                // The pull refuses an uncommitted file only when the incoming commits touch it, as git does
+                // The backend decides, refusing a fast-forward only over files it changes
                 if( !ProjectSafeToRewrite( m_frame, this, result->worktree, true ) )
                     return;
 
@@ -3294,7 +3294,7 @@ void GIT_COMMIT_PANE::onPullDone( std::shared_ptr<KIGIT_COMMON> aCommon, int aRe
     }
 
     // An uncommitted change is in the way of the incoming files, or an untracked file collides
-    // with an incoming one. This is the panel's own job to fix, not the command line's.
+    // with an incoming one. This is the panel's own job to fix, not the command line's
     if( result == PullResult::DirtyWorkdir )
     {
         setBusy( false, _( "Commit your changes first." ) );
