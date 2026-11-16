@@ -5253,4 +5253,31 @@ BOOST_FIXTURE_TEST_CASE( KeepoutBBoxTracksFootprintTransform, BOARD_FIXTURE )
 }
 
 
+// The pad dialog writes the same primitives back unedited, and they already carry library
+// coordinates, so re-seeding lib from their baked values applied the scale twice.
+BOOST_AUTO_TEST_CASE( PadPrimitivesSurviveAnUneditedDialogRoundTrip )
+{
+    FOOTPRINT fp( nullptr );
+
+    PAD* pad = new PAD( &fp );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
+    fp.Add( pad, ADD_MODE::APPEND );
+
+    fp.SetTransformScale( 2.0, 2.0 );
+
+    PCB_SHAPE* prim = new PCB_SHAPE( nullptr, SHAPE_T::SEGMENT );
+    prim->SetStart( VECTOR2I( 0, 0 ) );
+    prim->SetEnd( VECTOR2I( 1000000, 0 ) );
+    pad->AddPrimitive( PADSTACK::ALL_LAYERS, prim );
+
+    // A millimetre of library geometry on a pad scaled by two.
+    BOOST_REQUIRE_EQUAL( pad->GetPrimitives( PADSTACK::ALL_LAYERS )[0]->GetEnd().x, 2000000 );
+
+    std::vector<std::shared_ptr<PCB_SHAPE>> roundTrip = pad->GetPrimitives( PADSTACK::ALL_LAYERS );
+    pad->ReplacePrimitives( PADSTACK::ALL_LAYERS, roundTrip );
+
+    BOOST_CHECK_EQUAL( pad->GetPrimitives( PADSTACK::ALL_LAYERS )[0]->GetEnd().x, 2000000 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -3420,9 +3420,14 @@ void PAD::ReplacePrimitives( PCB_LAYER_ID aLayer, const std::vector<std::shared_
 
 void PAD::AppendPrimitives( PCB_LAYER_ID aLayer, const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
-    // Add duplicates of aPrimitivesList to the pad primitives list:
     for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
-        AddPrimitive( aLayer, new PCB_SHAPE( *prim ) );
+    {
+        PCB_SHAPE* copy = new PCB_SHAPE( *prim );
+
+        copy->SetParent( this );
+        rebakePrimitiveToFootprint( copy );
+        m_padStack.AddPrimitive( copy, aLayer );
+    }
 
     SetDirty();
 }
@@ -3432,8 +3437,8 @@ void PAD::AddPrimitive( PCB_LAYER_ID aLayer, PCB_SHAPE* aPrimitive )
 {
     aPrimitive->SetParent( this );
 
-    // Seed lib state from the primitive's current values, then rebake so the
-    // runtime cache reflects the parent FP transform reachable via the pad.
+    // The primitive arrives in library coordinates. Seed lib state from its current values,
+    // then rebake so the runtime cache reflects the parent FP transform reachable via the pad.
     aPrimitive->OverrideLibCoords( aPrimitive->GetStart(), aPrimitive->GetEnd(),
                                    aPrimitive->GetShape() == SHAPE_T::ARC ? aPrimitive->GetArcMid()
                                                                           : VECTOR2I( 0, 0 ) );
