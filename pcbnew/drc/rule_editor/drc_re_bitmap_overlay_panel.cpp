@@ -43,10 +43,8 @@ DRC_RE_BITMAP_OVERLAY_PANEL::DRC_RE_BITMAP_OVERLAY_PANEL( wxWindow* aParent, wxW
         m_bitmapId( BITMAPS::INVALID_BITMAP ),
         m_logicalBitmapSize( 0, 0 )
 {
-    // The illustration has no background of its own, so let the page behind it show through.
-    // Where the port cannot, the paint handler erases it with a buffered DC that needs wxBG_STYLE_PAINT
-    m_erasesBackground = !aParent->IsTransparentBackgroundSupported();
-    SetBackgroundStyle( m_erasesBackground ? wxBG_STYLE_PAINT : wxBG_STYLE_TRANSPARENT );
+    // A transparent child turns black on GTK once it repaints, so the paint handler fills it instead
+    SetBackgroundStyle( wxBG_STYLE_PAINT );
     Create( aParent, aId );
 
     Bind( wxEVT_PAINT, &DRC_RE_BITMAP_OVERLAY_PANEL::OnPaint, this );
@@ -62,27 +60,13 @@ DRC_RE_BITMAP_OVERLAY_PANEL::~DRC_RE_BITMAP_OVERLAY_PANEL()
 
 void DRC_RE_BITMAP_OVERLAY_PANEL::OnPaint( wxPaintEvent& aEvent )
 {
-    if( m_erasesBackground )
-    {
-        wxAutoBufferedPaintDC dc( this );
+    wxAutoBufferedPaintDC dc( this );
 
-        dc.SetBackground( wxBrush( pageBackground() ) );
-        dc.Clear();
-        drawBitmap( dc );
-    }
-    else
-    {
-        wxPaintDC dc( this );
+    dc.SetBackground( wxBrush( pageBackground() ) );
+    dc.Clear();
 
-        drawBitmap( dc );
-    }
-}
-
-
-void DRC_RE_BITMAP_OVERLAY_PANEL::drawBitmap( wxDC& aDC )
-{
     if( m_bitmap.IsOk() )
-        aDC.DrawBitmap( m_bitmap, 0, 0, true );
+        dc.DrawBitmap( m_bitmap, 0, 0, true );
 }
 
 
@@ -105,11 +89,13 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::OnDPIChanged( wxDPIChangedEvent& aEvent )
 
 wxColour DRC_RE_BITMAP_OVERLAY_PANEL::pageBackground() const
 {
-    // Take the colour of whatever holds the illustration, not the default panel colour, which
-    // is darker on some themes. Read it when painting, because a parent only inherits its own
-    // once the hierarchy is built.
-    if( GetParent() )
-        return GetParent()->GetBackgroundColour();
+    // A panel with no colour of its own shows the window behind it, and GTK reports a darker one
+    // for it, so take the first ancestor that paints. Read it when painting, once the parents exist
+    for( wxWindow* window = GetParent(); window; window = window->GetParent() )
+    {
+        if( window->UseBgCol() || window->IsTopLevel() )
+            return window->GetBackgroundColour();
+    }
 
     return GetBackgroundColour();
 }
