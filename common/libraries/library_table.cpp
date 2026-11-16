@@ -302,8 +302,15 @@ wxString LIBRARY_TABLE::diskStamp() const
     if( !file.IsOpened() )
         return wxS( "missing" );
 
-    std::string data( file.Length(), '\0' );
-    file.Read( data.data(), data.size() );
+    wxFileOffset length = file.Length();
+
+    if( length < 0 )
+        return wxS( "unreadable" );
+
+    std::string data( length, '\0' );
+
+    if( file.Read( data.data(), data.size() ) != length )
+        return wxS( "unreadable" );
 
     return wxString::Format( wxS( "%zx" ), std::hash<std::string>{}( data ) );
 }
@@ -334,11 +341,19 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save( bool aOverwriteChanged )
                 wxString::Format( _( "Library table '%s' is read-only" ), Path() ) ) );
     }
 
+    if( !m_ok && wxFileName::FileExists( m_path ) )
+    {
+        return tl::unexpected( LIBRARY_ERROR( wxString::Format(
+                _( "Library table '%s' cannot be read, so it was not overwritten. Fix or remove the file by hand." ),
+                Path() ) ) );
+    }
+
     if( !aOverwriteChanged && DiskChanged() )
     {
-        return tl::unexpected( LIBRARY_ERROR( wxString::Format( _( "Library table '%s' changed on disk after it was "
-                                                                   "loaded, so it was not overwritten" ),
-                                                                Path() ) ) );
+        return tl::unexpected( LIBRARY_ERROR( wxString::Format(
+                _( "Library table '%s' changed on disk after it was loaded, so it was not overwritten. Discard the "
+                   "changes and reopen this dialog to see the current file." ),
+                Path() ) ) );
     }
 
     wxLogTrace( traceLibraries, "Saving %s", Path() );

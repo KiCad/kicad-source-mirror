@@ -577,6 +577,11 @@ private:
 
     void loadNestedTables( LIBRARY_TABLE& aTable );
 
+    /// Loads the global tables without the PCM maintenance that LoadGlobalTables() adds, which can save them
+    void loadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad );
+
+    void maintainPcmLibraries();
+
     /// Applies user overrides (disabled/hidden) to rows of a read-only nested table
     void applyLibOverrides( LIBRARY_TABLE& aTable );
 
