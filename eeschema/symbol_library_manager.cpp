@@ -436,7 +436,7 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aSymbolNa
             msg.Printf( _( "Error loading symbol %s from library '%s'." ),
                         aSymbolName,
                         aLibrary );
-            DisplayErrorMessage( &m_frame, msg, e.What() );
+            DisplayErrorMessage( &m_frame, msg, e.Problem() );
             bufferedSymbol = nullptr;
         }
     }

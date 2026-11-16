@@ -149,9 +149,9 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodySt
                 wxString msg;
 
                 msg.Printf( _( "Error loading symbol %s from library '%s'." ),
-                            aLibId.GetUniStringLibId(),
-                            aLibId.GetUniStringLibItemName() );
-                DisplayErrorMessage( this, msg, ioe.What() );
+                            aLibId.GetUniStringLibItemName(),
+                            aLibId.GetUniStringLibNickname() );
+                DisplayErrorMessage( this, msg, ioe.Problem() );
                 return false;
             }
         }
@@ -217,7 +217,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromLib( const wxString& aLibName, const wxStr
         msg.Printf( _( "Error loading symbol %s from library '%s'." ),
                     UnescapeString( aSymbolName ),
                     UnescapeString( aLibName ) );
-        DisplayErrorMessage( this, msg, ioe.What() );
+        DisplayErrorMessage( this, msg, ioe.Problem() );
         return false;
     }
 
