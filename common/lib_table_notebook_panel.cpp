@@ -126,7 +126,7 @@ bool LIB_TABLE_NOTEBOOK_PANEL::TableModified()
     LIBRARY_TABLE& table = GetModel()->Table();
     wxFileName     file( table.Path() );
 
-    std::unique_ptr<LIBRARY_TABLE> sourceTable = std::make_unique<LIBRARY_TABLE>( file, table.Scope() );
+    std::unique_ptr<LIBRARY_TABLE> sourceTable = std::make_unique<LIBRARY_TABLE>( file, table.Scope(), table.Type() );
 
     if( table.IsReadOnly() )
     {

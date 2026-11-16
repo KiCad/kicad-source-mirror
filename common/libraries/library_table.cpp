@@ -72,6 +72,7 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
     if( !fn.FileExists() )
     {
         m_ok = false;
+        m_type = aExpectedType;
         m_errorDescription = wxString::Format( _( "The library table path '%s' does not exist" ),
                                                fn.GetFullPath() );
         return;
