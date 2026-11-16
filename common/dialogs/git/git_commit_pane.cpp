@@ -830,9 +830,12 @@ void GIT_COMMIT_PANE::updateDockMinHeight()
     wxAuiFloatingFrame* floating = wxDynamicCast( pane.frame, wxAuiFloatingFrame );
     int                 minHeight = m_dockMinHeight;
 
+    if( manager->GetManagedWindow() )
+        m_dockFrameHeight = manager->GetManagedWindow()->GetClientSize().y;
+
     // A minimum taller than the frame makes AUI place the pane past the bottom, so let the pane scroll instead
-    if( !floating && manager->GetManagedWindow() )
-        minHeight = std::min( minHeight, manager->GetManagedWindow()->GetClientSize().y );
+    if( !floating && m_dockFrameHeight >= 0 )
+        minHeight = std::min( minHeight, m_dockFrameHeight );
 
     // A refresh passes through shorter states, so compare with what the manager already has
     const bool changed = pane.min_size.y != minHeight;
@@ -899,6 +902,15 @@ void GIT_COMMIT_PANE::onThemeChanged( wxSysColourChangedEvent& aEvent )
 void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 {
     aEvent.Skip();
+
+    // The clamp follows the frame, which resizes without the pane's layout changing
+    wxAuiManager* manager = wxAuiManager::GetManager( this );
+
+    if( manager && manager->GetManagedWindow()
+        && manager->GetManagedWindow()->GetClientSize().y != m_dockFrameHeight )
+    {
+        m_dockUpdatePending = true;
+    }
 
     // Update() from inside Layout() would recurse, and during a sash drag it would drop the drag
     if( m_dockUpdatePending && !wxWindow::GetCapture() )

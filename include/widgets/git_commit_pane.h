@@ -346,6 +346,9 @@ private:
     /// The controls' minimum height from the last layout, applied to the AUI pane at idle time.
     int       m_dockMinHeight = -1;
     wxWindow* m_dockParent = nullptr;
+
+    /// The managed window's client height the AUI minimum was last clamped to.
+    int       m_dockFrameHeight = -1;
     bool      m_dockUpdatePending = false;
 
     /// True once this panel has attached its refresh listener to a session at least once. A
