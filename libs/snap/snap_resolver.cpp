@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <limits>
 #include <ostream>
+#include <set>
 #include <sstream>
 #include <tuple>
 
@@ -831,6 +832,8 @@ SNAP_RESULT SNAP_RESOLVER::Resolve( const SNAP_SOURCE_CONTEXT& aContext ) const
         }
     }
 
+    std::set<SNAP_RELATION> lateGridAxes;
+
     for( size_t i = 0; i < ranked.size(); ++i )
     {
         const SNAP_CANDIDATE& candidate = *ranked[i].candidate;
@@ -841,11 +844,17 @@ SNAP_RESULT SNAP_RESOLVER::Resolve( const SNAP_SOURCE_CONTEXT& aContext ) const
         if( result.remainingDof == 0 )
             break;
 
-        // Grid axes are the floor every caller relies on, and there are at most two of them
-        if( candidate.priority != SNAP_PRIORITY_TIER::GRID && m_clock() - start >= m_deadline )
+        if( m_clock() - start >= m_deadline )
         {
-            budgetExhausted = true;
-            continue;
+            // Every caller relies on grid snap, so the best grid candidate per axis still runs late
+            const bool firstGridOnAxis =
+                    candidate.priority == SNAP_PRIORITY_TIER::GRID && lateGridAxes.insert( candidate.relation ).second;
+
+            if( !firstGridOnAxis )
+            {
+                budgetExhausted = true;
+                continue;
+            }
         }
 
         const std::optional<bool> axis = layoutAxis( candidate );

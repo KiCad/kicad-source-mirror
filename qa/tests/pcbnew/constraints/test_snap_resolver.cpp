@@ -738,8 +738,10 @@ BOOST_AUTO_TEST_CASE( GridAxesApplyAfterRejectedObjectExhaustsBudget )
                                                   SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 12, 28 }, 0.2 ) );
     resolver.AddCandidate( SNAP_CANDIDATE::AxisX( id( "grid-x" ), SNAP_PRIORITY_TIER::GRID,
                                                   SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, 10, 3.0 ) );
+    resolver.AddCandidate( SNAP_CANDIDATE::AxisX( id( "grid-x-alt" ), SNAP_PRIORITY_TIER::GRID,
+                                                  SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, 12, 3.5 ) );
     resolver.AddCandidate( SNAP_CANDIDATE::AxisY( id( "grid-y" ), SNAP_PRIORITY_TIER::GRID,
-                                                  SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, 30, 3.0 ) );
+                                                  SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, 30, 4.0 ) );
     resolver.SetFeasibilityCallback(
             [&]( const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDATE>& aTrial )
             {
@@ -774,6 +776,7 @@ BOOST_AUTO_TEST_CASE( GridAxesApplyAfterRejectedObjectExhaustsBudget )
     BOOST_CHECK_EQUAL( result.position, VECTOR2I( 10, 30 ) );
     BOOST_CHECK( result.Accepted( id( "grid-x" ) ) );
     BOOST_CHECK( result.Accepted( id( "grid-y" ) ) );
+    BOOST_CHECK( !result.Accepted( id( "grid-x-alt" ) ) );
 }
 
 

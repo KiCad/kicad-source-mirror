@@ -284,7 +284,7 @@ public:
 
     /**
      * Set the time after which Resolve() stops trialling optional candidates and reports
-     * BUDGET_EXHAUSTED.  Grid axes are still trialled so the result never loses grid snap.
+     * BUDGET_EXHAUSTED.  The best grid candidate on each axis is still trialled after the deadline.
      */
     void SetDeadline( CLOCK::duration aDeadline );
 
