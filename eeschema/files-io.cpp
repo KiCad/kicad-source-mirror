@@ -98,6 +98,9 @@
 
 bool SCH_EDIT_FRAME::ReloadFromDisk()
 {
+    if( IsClosing() )
+        return false;
+
     wxString file = Schematic().GetFileName();
 
     if( file.IsEmpty() )
@@ -285,7 +288,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Crash-recovery: when zip-format autosave is active, look for autosave files newer
     // than the saved schematic and offer to recover them before any sheet is loaded.
     if( !is_new )
-        CheckForAutosaveFiles( wx_filename.GetPath(), { FILEEXT::KiCadSchematicFileExtension } );
+        CheckForAutosaveFiles( wx_filename.GetPath(), { FILEEXT::KiCadSchematicFileExtension }, aCtl );
 
     // Start a new schematic object now that we sorted out our project
     std::unique_ptr<SCHEMATIC> newSchematic = std::make_unique<SCHEMATIC>( &Prj() );

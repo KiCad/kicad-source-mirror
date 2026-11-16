@@ -473,6 +473,9 @@ int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard, bool aShowUserMsg )
 
 bool PCB_EDIT_FRAME::ReloadFromDisk()
 {
+    if( IsClosing() )
+        return false;
+
     wxString fileName = GetBoard()->GetFileName();
 
     if( fileName.IsEmpty() )
@@ -630,7 +633,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Crash-recovery: when zip-format autosave is active, look for autosave files newer than
     // the saved board and offer to recover them before the load happens.
     if( !is_new )
-        CheckForAutosaveFiles( wx_filename.GetPath(), { FILEEXT::KiCadPcbFileExtension } );
+        CheckForAutosaveFiles( wx_filename.GetPath(), { FILEEXT::KiCadPcbFileExtension }, aCtl );
 
     // custom rules the importer derived, saved with the board once its name is known
     wxString importedRules;

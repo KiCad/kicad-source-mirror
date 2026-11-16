@@ -753,6 +753,33 @@ LOCAL_HISTORY::FindStaleAutosaveFiles( const wxString& aProjectPath, const std::
 }
 
 
+std::vector<std::pair<wxString, wxString>>
+LOCAL_HISTORY::ResolveAutosavesForLoad( const wxString& aProjectPath, const std::vector<wxString>& aExtensions,
+                                        bool aReverting ) const
+{
+    if( !aReverting )
+        return FindStaleAutosaveFiles( aProjectPath, aExtensions );
+
+    std::vector<wxString> sources;
+
+    for( const auto& [autosavePath, srcPath] : findAutosaveFilePairs( aProjectPath ) )
+    {
+        wxString ext = wxFileName( srcPath ).GetExt();
+
+        auto matches = [&]( const wxString& aExt )
+        {
+            return ext.IsSameAs( aExt, false );
+        };
+
+        if( std::any_of( aExtensions.begin(), aExtensions.end(), matches ) )
+            sources.push_back( srcPath );
+    }
+
+    RemoveAutosaveFiles( aProjectPath, sources );
+    return {};
+}
+
+
 void LOCAL_HISTORY::RemoveAutosaveFiles( const wxString& aProjectPath ) const
 {
     // After a successful manual save the source typically has a newer mtime than its

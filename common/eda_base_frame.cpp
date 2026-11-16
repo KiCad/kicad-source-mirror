@@ -23,6 +23,7 @@
 #include "dialogs/panel_maintenance.h"
 #include "kicad_manager_frame.h"
 #include <eda_base_frame.h>
+#include <kiway_player.h>
 #include <nlohmann/json.hpp>
 
 #include <advanced_config.h>
@@ -466,9 +467,10 @@ static wxString buildRecoveredFileName( const wxFileName& aSrcFn, const wxDateTi
 }
 
 
-void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions )
+void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions,
+                                            int aCtl )
 {
-    auto stale = Kiway().LocalHistory().FindStaleAutosaveFiles( aProjectPath, aExtensions );
+    auto stale = Kiway().LocalHistory().ResolveAutosavesForLoad( aProjectPath, aExtensions, aCtl & KICTL_REVERT );
 
     if( stale.empty() )
         return;

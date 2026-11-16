@@ -23,6 +23,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <local_history.h>
+#include <pcbnew_utils/board_file_utils.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -889,6 +890,50 @@ BOOST_AUTO_TEST_CASE( DivergentAutosaveStillFlaggedStale )
 
     BOOST_CHECK_MESSAGE( stale.size() == 1,
                          "Genuinely divergent autosave must still be flagged stale for recovery" );
+}
+
+
+// Revert discards the edits an autosave holds, so a reload must not offer it for recovery (WIN-49).
+BOOST_AUTO_TEST_CASE( RevertDiscardsTheReloadedDocumentsAutosave )
+{
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
+    Pgm().GetCommonSettings()->m_Backup.location = BACKUP_LOCATION::PROJECT_DIR;
+
+    KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_revert_autosave" ) );
+    const wxString& path = project.PathStr();
+    const wxString  sep = wxFileName::GetPathSeparator();
+
+    writeTextFile( path + sep + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    SCOPED_PROJECT_LOAD loadedProject( mgr, path + sep + wxS( "p.kicad_pro" ) );
+
+    const wxString sourcePath = path + sep + wxS( "p.kicad_pcb" );
+    const wxString autosavePath = path + sep + wxS( "_autosave-p.kicad_pcb" );
+    const wxString schAutosave = path + sep + wxS( "_autosave-p.kicad_sch" );
+    const wxString board =
+            wxString::FromUTF8( readTextFile( KI_TEST::GetPcbnewTestDataDir() + "api_kitchen_sink.kicad_pcb" ) );
+
+    writeTextFile( sourcePath, board );
+    writeTextFile( autosavePath, board + wxS( "\n" ) );
+    writeTextFile( path + sep + wxS( "p.kicad_sch" ), wxS( "(kicad_sch)\n" ) );
+    writeTextFile( schAutosave, wxS( "(kicad_sch (edited yes))\n" ) );
+
+    wxDateTime newerMtime = wxFileName( sourcePath ).GetModificationTime() + wxTimeSpan::Seconds( 60 );
+    BOOST_REQUIRE( wxFileName( autosavePath ).SetTimes( &newerMtime, &newerMtime, nullptr ) );
+    BOOST_REQUIRE( wxFileName( schAutosave ).SetTimes( &newerMtime, &newerMtime, nullptr ) );
+
+    LOCAL_HISTORY         history;
+    std::vector<wxString> exts{ wxS( "kicad_pcb" ) };
+
+    auto offered = history.ResolveAutosavesForLoad( path, exts, false );
+    BOOST_CHECK_EQUAL( offered.size(), 1u );
+    BOOST_REQUIRE( wxFileExists( autosavePath ) );
+
+    offered = history.ResolveAutosavesForLoad( path, exts, true );
+    BOOST_CHECK( offered.empty() );
+    BOOST_CHECK( !wxFileExists( autosavePath ) );
+    BOOST_CHECK_MESSAGE( wxFileExists( schAutosave ), "revert of a board must not drop the schematic autosave" );
 }
 
 

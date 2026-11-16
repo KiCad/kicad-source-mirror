@@ -156,6 +156,15 @@ public:
                                                                        const std::vector<wxString>& aExtensions ) const;
 
     /**
+     * Resolve the autosaves a document load must offer for recovery.  A revert discards the
+     * edits the autosaves hold, so the autosaves of @p aExtensions are removed and nothing is
+     * returned; any other load returns FindStaleAutosaveFiles().
+     */
+    std::vector<std::pair<wxString, wxString>> ResolveAutosavesForLoad( const wxString&              aProjectPath,
+                                                                        const std::vector<wxString>& aExtensions,
+                                                                        bool                         aReverting ) const;
+
+    /**
      * Enumerate every (autosave, source) pair found under @p aAutosaveRoot for the project
      * at @p aProjectPath, honoring @p aLocation for name resolution.  The walk terminates on
      * symlink cycles and refuses to follow links out of @p aAutosaveRoot, so a project

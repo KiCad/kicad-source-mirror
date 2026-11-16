@@ -718,7 +718,7 @@ protected:
      *                     extensions are considered. PCB editor passes kicad_pcb,
      *                     schematic editor passes kicad_sch.
      */
-    void CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions );
+    void CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions, int aCtl );
 
     virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
     virtual void doCloseWindow() { }
