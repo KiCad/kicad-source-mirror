@@ -41,6 +41,9 @@ public:
 
     void SetState( const STATE& aState );
 
+    /// The dialog paints the background, so the hole and the cuts show it through.
+    bool HasTransparentBackground() override { return true; }
+
 private:
     void onPaint( wxPaintEvent& aEvent );
 

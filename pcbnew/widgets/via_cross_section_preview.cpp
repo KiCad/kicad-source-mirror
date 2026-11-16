@@ -131,10 +131,6 @@ VIA_CROSS_SECTION_PREVIEW::VIA_CROSS_SECTION_PREVIEW( wxWindow* aParent, wxWindo
                                                       const wxSize& aSize, long aStyle ) :
         wxPanel()
 {
-    // The dialog shows through the hole and the cuts, the way it does through a static bitmap
-    if( !SetBackgroundStyle( wxBG_STYLE_TRANSPARENT ) )
-        SetBackgroundStyle( wxBG_STYLE_PAINT );
-
     Create( aParent, aId, aPos, aSize, aStyle );
     SetMinSize( FromDIP( wxSize( 150, 300 ) ) );
     SetToolTip( _( "Schematic cross section. Layer positions and cut depths are to scale with the "
@@ -154,12 +150,6 @@ void VIA_CROSS_SECTION_PREVIEW::SetState( const STATE& aState )
 void VIA_CROSS_SECTION_PREVIEW::onPaint( wxPaintEvent& aEvent )
 {
     wxPaintDC dc( this );
-
-    if( GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
-    {
-        dc.SetBackground( wxBrush( GetParent()->GetBackgroundColour() ) );
-        dc.Clear();
-    }
 
     const bool dark = KIPLATFORM::UI::IsDarkTheme();
 
