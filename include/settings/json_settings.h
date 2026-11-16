@@ -406,6 +406,12 @@ protected:
     /// Whether or not to delete legacy file after migration
     bool m_deleteLegacyAfterMigration;
 
+    /**
+     * Whether migration and default fill may write the file by themselves.  When false, they
+     * reach the file only with the next real change.  Nested settings inherit it from the parent.
+     */
+    bool m_writeImplicitly;
+
     /// Whether or not to set parameters to their default value if missing from JSON on Load()
     bool m_resetParamsIfMissing;
 

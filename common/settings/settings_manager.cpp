@@ -1379,7 +1379,7 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath, PROJECT* aProje
     aProject->GetLocalSettings().SetReadOnly( aProject->IsReadOnly() );
 
     project->SetFilename( fn.GetName() );
-    project->SaveToFile( fn.GetPath() );
+    project->SaveToFile( fn.GetPath(), true );
 
     aProject->GetLocalSettings().SetFilename( fn.GetName() );
     aProject->GetLocalSettings().SaveToFile( fn.GetPath() );
@@ -1405,7 +1405,7 @@ bool SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath, PROJECT* aPro
     project->SetReadOnly( false );
 
     project->SetFilename( fn.GetName() );
-    const bool projectOk = project->SaveToFile( fn.GetPath() );
+    const bool projectOk = project->SaveToFile( fn.GetPath(), true );
     project->SetFilename( oldName );
 
     // PROJECT_LOCAL_SETTINGS save is best-effort: SaveToFile returns false for

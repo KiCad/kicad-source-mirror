@@ -454,7 +454,7 @@ BOOST_AUTO_TEST_CASE( NoRewriteWhenUnchanged )
 
         SETTINGS_MANAGER mgr;
         BOOST_REQUIRE( mgr.LoadProject( wxString( proPath.string() ), true ) );
-        BOOST_REQUIRE( mgr.SaveProject() );
+        BOOST_REQUIRE( mgr.Prj().GetProjectFile().SaveToFile( wxString( projectDir.string() ), true ) );
         mgr.UnloadProject( &mgr.Prj(), false );
     }
 
@@ -497,7 +497,7 @@ BOOST_AUTO_TEST_CASE( NoRewriteWhenUnchanged )
     mgr.UnloadProject( &mgr.Prj(), false );
     BOOST_REQUIRE( mgr.LoadProject( wxString( proPath.string() ), true ) );
     PROJECT_FILE& edited = mgr.Prj().GetProjectFile();
-    BOOST_REQUIRE( !edited.GetJson( "schematic.bus_aliases" ) );
+    BOOST_REQUIRE( !edited.m_BusAliasesDefined );
     edited.m_BusAliasesDefined = true;
     BOOST_REQUIRE( edited.SaveToFile( wxString( projectDir.string() ) ) );
     nlohmann::json saved = nlohmann::json::parse( readFile( proPath ) );
@@ -525,7 +525,9 @@ BOOST_AUTO_TEST_CASE( AliasMigrationPreservesNonemptyDefinitions )
     BOOST_REQUIRE( project.m_BusAliasesDefined );
     BOOST_REQUIRE_EQUAL( project.m_BusAliases.size(), 1 );
     BOOST_CHECK( project.m_BusAliases.at( "USB" ) == std::vector<wxString>( { "D+", "D-" } ) );
-    BOOST_REQUIRE( project.SaveToFile( wxString( m_tempDir.string() ) ) );
+
+    // A migration alone does not modify the file, so write it explicitly
+    BOOST_REQUIRE( project.SaveToFile( wxString( m_tempDir.string() ), true ) );
     std::ifstream input( projectPath );
     const nlohmann::json saved = nlohmann::json::parse( input );
     BOOST_CHECK_EQUAL( saved["meta"]["version"].get<int>(), 4 );

@@ -78,6 +78,7 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
         m_fileSynced( false ),
         m_lastSaveFailed( false ),
         m_deleteLegacyAfterMigration( true ),
+        m_writeImplicitly( true ),
         m_resetParamsIfMissing( true ),
         m_schemaVersion( aSchemaVersion ),
         m_isFutureFormat( false ),
@@ -312,13 +313,17 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
     wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(), m_schemaVersion );
 
+    // Settle migration and default fill in the store so that only a later change is a modification
+    if( !m_writeImplicitly )
+        Store();
+
     m_modified = false;
 
     // A missing backing file leaves the store empty, which must not count as synchronized
     m_fileSynced = success;
 
     // Skip writeback when running QA tests
-    bool doWrite = m_writeFile && !wxGetEnv( wxT( "KICAD_INHIBIT_SETTINGS_WRITES" ), nullptr );
+    bool doWrite = m_writeFile && m_writeImplicitly && !wxGetEnv( wxT( "KICAD_INHIBIT_SETTINGS_WRITES" ), nullptr );
 
     // If we migrated, clean up the legacy file (with no extension). Save the migrated
     // contents FIRST so that if the save fails we still have the legacy file on disk to

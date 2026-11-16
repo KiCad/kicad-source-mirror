@@ -1553,8 +1553,6 @@ bool BOARD_DESIGN_SETTINGS::migrateSchema3to4()
 
 bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
-    bool ret = NESTED_SETTINGS::LoadFromFile( aDirectory );
-
     // A number of things won't have been translated by the PROJECT_FILE migration because of
     // descoped objects required to decode this data.  So, it will be in the legacy.pcbnew
     // section and needs to be pulled out here
@@ -1562,9 +1560,7 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
     PROJECT_FILE* project = dynamic_cast<PROJECT_FILE*>( GetParent() );
 
     if( !project )
-        return ret;
-
-    bool migrated = false;
+        return NESTED_SETTINGS::LoadFromFile( aDirectory );
 
     auto drcName =
             []( int aCode ) -> std::string
@@ -1572,10 +1568,10 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 return std::string( DRC_ITEM::Create( aCode )->GetSettingsKey().ToUTF8() );
             };
 
-    const std::string rs = "rule_severities.";
     const std::string no_courtyard_key = "legacy_no_courtyard_defined";
     const std::string courtyard_overlap_key = "legacy_courtyards_overlap";
 
+    // Translate in the parent first, since the load settles what it read back into the parent
     try
     {
         nlohmann::json& severities =
@@ -1584,28 +1580,28 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
         if( severities.contains( no_courtyard_key ) )
         {
             if( severities[no_courtyard_key].get<bool>() )
-                Set( rs + drcName( DRCE_MISSING_COURTYARD ), "error" );
+                severities[drcName( DRCE_MISSING_COURTYARD )] = "error";
             else
-                Set( rs + drcName( DRCE_MISSING_COURTYARD ), "ignore" );
+                severities[drcName( DRCE_MISSING_COURTYARD )] = "ignore";
 
             severities.erase( no_courtyard_key );
-            migrated = true;
         }
 
         if( severities.contains( courtyard_overlap_key ) )
         {
             if( severities[courtyard_overlap_key].get<bool>() )
-                Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "error" );
+                severities[drcName( DRCE_OVERLAPPING_FOOTPRINTS )] = "error";
             else
-                Set( rs + drcName( DRCE_OVERLAPPING_FOOTPRINTS ), "ignore" );
+                severities[drcName( DRCE_OVERLAPPING_FOOTPRINTS )] = "ignore";
 
             severities.erase( courtyard_overlap_key );
-            migrated = true;
         }
     }
     catch( ... )
     {
     }
+
+    bool ret = NESTED_SETTINGS::LoadFromFile( aDirectory );
 
     if( Contains( "legacy" ) )
     {
@@ -1615,10 +1611,6 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
         project->At( "legacy" ).erase( "pcbnew" );
     }
-
-    // Now that we have everything, we need to load again
-    if( migrated )
-        Load();
 
     return ret;
 }

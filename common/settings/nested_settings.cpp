@@ -46,6 +46,7 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
 {
     m_internals->clear();
     bool success = false;
+    bool migrationFailed = false;
 
     if( m_parent )
     {
@@ -105,6 +106,7 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
             {
                 wxLogTrace( traceSettings, wxT( "%s: migration failed!" ), GetFullFilename() );
                 success = false;
+                migrationFailed = true;
             }
         }
         else if( filever > m_schemaVersion )
@@ -125,6 +127,14 @@ bool NESTED_SETTINGS::LoadFromFile( const wxString& aDirectory )
     // A reread of the file must reach settings nested more than one level down
     for( NESTED_SETTINGS* settings : m_nested_settings )
         settings->LoadFromFile();
+
+    // Hand migration and default fill to the parent so they do not read as a change later, unless
+    // the migration failed (as in a load from the base ctor) and a later load must rerun it
+    if( !m_writeImplicitly && !migrationFailed )
+    {
+        SaveToFile( wxEmptyString, true );
+        m_modified = false;
+    }
 
     return success;
 }
@@ -203,6 +213,7 @@ void NESTED_SETTINGS::SetParent( JSON_SETTINGS* aParent, bool aLoadFromFile )
 
     if( m_parent )
     {
+        m_writeImplicitly = m_parent->m_writeImplicitly;
         m_parent->AddNestedSettings( this );
 
         // In case we were created after the parent's ctor

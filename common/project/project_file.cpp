@@ -55,6 +55,9 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
 
+    // A shared project file changes only with the user's own edits
+    m_writeImplicitly = false;
+
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "sheets", &m_sheets, {} ) );
 
     m_params.emplace_back( new PARAM_LIST<TOP_LEVEL_SHEET_INFO>( "schematic.top_level_sheets",
@@ -842,7 +845,8 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
 
             m_topLevelSheets.push_back( std::move( defaultSheet ) );
 
-            // Mark as migrated so it will be saved with the new format
+            // Like a schema migration, this reaches the file with the next real change
+            Set( "schematic.top_level_sheets", nlohmann::json( m_topLevelSheets ) );
             m_wasMigrated = true;
 
             wxLogTrace( traceSettings, wxT( "PROJECT_FILE: Migrated old single-root format to top_level_sheets" ) );
@@ -907,14 +911,11 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
 
-    // Even if parameters were not modified, we should resave after migration
-    bool force = aForce || m_wasMigrated;
-
     // If we're actually going ahead and doing the save, the flag that keeps code from doing the
     // save should be cleared at this.
     m_wasMigrated = false;
 
-    bool saved = JSON_SETTINGS::SaveToFile( aDirectory, force );
+    bool saved = JSON_SETTINGS::SaveToFile( aDirectory, aForce );
 
     // The file now holds the list in memory, so a change read before is settled
     if( saved )
