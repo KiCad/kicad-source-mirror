@@ -1114,7 +1114,8 @@ wxString LIB_BUFFER::RevertBuffer( SYMBOL_BUFFER& aSymbolBuf, bool aDropNeverSav
     else
         aSymbolBuf.GetSymbol() = original;
 
-    aSymbolBuf.GetScreen()->SetContentModified( false );
+    // A never-saved symbol must stay modified, or no save would ever write it
+    aSymbolBuf.GetScreen()->SetContentModified( addedIt != m_added.end() );
 
     return original.GetName();
 }

@@ -995,19 +995,40 @@ BOOST_AUTO_TEST_CASE( RevertDropsNeverSavedSymbol )
 }
 
 
-// Discarding a tab's edits must keep a pasted or new symbol, only the Revert command drops it
+// Discarding a tab's edits must keep a pasted or new symbol, and keep it for the next save
 BOOST_AUTO_TEST_CASE( DiscardKeepsNeverSavedSymbol )
 {
-    LIB_BUFFER libBuffer( wxS( "acme-power" ) );
-    loadAcmePower( libBuffer, acmePowerPath() );
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( tempDir );
+    wxFileName::Mkdir( tempDir );
+    wxString libPath = wxFileName( tempDir, wxS( "acme_power.kicad_sym" ) ).GetFullPath();
 
-    libBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( wxS( "TPS7A2033" ) ), std::make_unique<SCH_SCREEN>(), true );
+    BOOST_REQUIRE( wxCopyFile( acmePowerPath(), libPath ) );
+
+    LIB_BUFFER libBuffer( wxS( "acme-power" ) );
+    loadAcmePower( libBuffer, libPath );
+
+    auto newScreen = std::make_unique<SCH_SCREEN>();
+    newScreen->SetContentModified();
+    libBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( wxS( "TPS7A2033" ) ), std::move( newScreen ), true );
 
     std::shared_ptr<SYMBOL_BUFFER> added = libBuffer.GetBuffer( wxS( "TPS7A2033" ) );
     BOOST_REQUIRE( added );
 
     BOOST_CHECK_EQUAL( libBuffer.RevertBuffer( *added, false ), wxS( "TPS7A2033" ) );
     BOOST_CHECK( libBuffer.GetSymbol( wxS( "TPS7A2033" ) ) );
+    BOOST_CHECK( added->IsModified() );
+
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        BOOST_REQUIRE( libBuffer.SaveModifiedBuffers( libPath, &*plugin ) );
+        plugin->SaveLibrary( libPath );
+    }
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    BOOST_CHECK( plugin->LoadSymbol( libPath, wxS( "TPS7A2033" ) ) );
+
+    wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
 }
 
 
@@ -1039,5 +1060,6 @@ BOOST_AUTO_TEST_CASE( RevertKeepsWrittenSymbol )
 
     wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()
