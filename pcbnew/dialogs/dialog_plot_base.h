@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,6 +81,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* scalingLabel;
 		wxChoice* m_scaleOpt;
+		wxStaticText* m_colorThemeLabel;
+		wxChoice* m_colorTheme;
 		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
@@ -152,6 +154,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void onBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSVGColorChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPDFColorChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }

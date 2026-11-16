@@ -65,6 +65,7 @@ private:
     void onAllCopperLayers( wxCommandEvent& event ) override;
     void onDNPCheckbox( wxCommandEvent& event ) override;
     void onSketchPads( wxCommandEvent& event ) override;
+    void onSVGColorChoice( wxCommandEvent& event ) override;
     void onPDFColorChoice( wxCommandEvent& event ) override;
 
     // other functions
@@ -73,9 +74,9 @@ private:
     PLOT_FORMAT getPlotFormat();
     wxString    getSelectedVariant() const;
     COLOR_SETTINGS* getColorSettings() const;
+    COLOR_SETTINGS* getEditorColorSettings() const;
 
     void arrangeAllLayersList( const LSEQ& aSeq );
-    void addColorThemeSelector();
     void populateColorThemeSelector();
     void setColorThemeSelection( const wxString& aTheme );
     bool formatUsesColorTheme();
@@ -111,9 +112,6 @@ private:
 
     STD_BITMAP_BUTTON*  m_bpMoveUp;
     STD_BITMAP_BUTTON*  m_bpMoveDown;
-
-    wxStaticText* m_colorThemeLabel;
-    wxChoice*     m_colorTheme;
 
     JOB_EXPORT_PCB_PLOT* m_job;
 
