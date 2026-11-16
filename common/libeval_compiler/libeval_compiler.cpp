@@ -32,6 +32,7 @@
 #endif
 
 #include <libeval_compiler/libeval_compiler.h>
+#include <libeval/numeric_evaluator.h>
 
 /* The (generated) lemon parser is written in C.
  * In order to keep its symbol from the global namespace include the parser code with
@@ -468,18 +469,24 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
         return true;
     }
 
-    auto isDecimalSeparator =
-            [&]( wxUniChar ch ) -> bool
-            {
-                return ( ch == m_localeDecimalSeparator || ch == '.' || ch == ',' );
-            };
-
     // Lambda: get value as string, store into clToken.token and update current index.
     auto extractNumber =
             [&]()
             {
                 bool      haveSeparator = false;
+                bool      haveDigit = false;
                 wxUniChar ch = m_tokenizer.GetChar();
+
+                auto isDecimalSeparator =
+                        [&]( wxUniChar c ) -> bool
+                            {
+                                double dummy;
+
+                                return ( c == m_localeDecimalSeparator
+                                      || c == '.'
+                                      || c == ','
+                                      || ( haveDigit && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &dummy ) ) );
+                            };
 
                 do
                 {
@@ -490,15 +497,18 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
 
                     if( isDecimalSeparator( ch ) )
                         haveSeparator = true;
+                    else
+                        haveDigit = true;
 
                     m_tokenizer.NextChar();
                     ch = m_tokenizer.GetChar();
                 } while( isdigit( ch ) || isDecimalSeparator( ch ) );
 
-                // Ensure that the systems decimal separator is used
+                // Ensure that the systems decimal separator is used.  Keep infix for now, as we'll need it later
+                // to scale the number.
                 for( int i = current.length(); i; i-- )
                 {
-                    if( isDecimalSeparator( current[i - 1] ) )
+                    if( current[i - 1] == '.' || current[i - 1] == ',' )
                         current[i - 1] = m_localeDecimalSeparator;
                 }
             };

@@ -572,13 +572,6 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             if( it->second.property->Name() == wxT( "Pin Type" ) )
                 return new PCBEXPR_PINTYPE_VALUE( str );
 
-            // Only values with units convert here so R1 or pad '2' still match as strings
-            // Bare numbers convert lazily against a numeric operand
-            double doubleVal;
-
-            if( EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, str, doubleVal ) )
-                return new LIBEVAL::VALUE( doubleVal );
-
             bool isWildcard = false;
             bool isLiteral = false;
 

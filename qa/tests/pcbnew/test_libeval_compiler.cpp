@@ -40,15 +40,17 @@
 #include <pcbnew/footprint.h>
 #include <pcbnew/pad.h>
 #include <pcbnew/pcb_text.h>
+#include <pcbnew/pad.h>
 #include <pcbnew/zone.h>
 #include <project/net_settings.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 #include <dialogs/dialog_find_by_properties.h>
 
-BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
 
-struct EXPR_TO_TEST
+BOOST_AUTO_TEST_SUITE(Libeval_Compiler)
+
+    struct EXPR_TO_TEST
 {
     wxString       expression;
     bool           expectError;
@@ -63,59 +65,8 @@ struct EXPR_TO_TEST
 
 using VAL = LIBEVAL::VALUE;
 
-const static std::vector<EXPR_TO_TEST> simpleExpressions = {
-    { "10mm + 20 mm", false, VAL( 30e6 ) },
-    { "3*(7+8)", false, VAL( 3 * ( 7 + 8 ) ) },
-    { "3*7+8", false, VAL( 3 * 7 + 8 ) },
-    { "(3*7)+8", false, VAL( 3 * 7 + 8 ) },
-    { "10mm + 20)", true, VAL( 0 ) },
-
-    { "1", false, VAL(1) },
-    { "1.5", false, VAL(1.5) },
-    { "1,5", false, VAL(1.5) },
-    { "1mm", false, VAL(1e6) },
-    // Any White-space is OK
-    { "   1 +     2    ", false, VAL(3) },
-    // Decimals are OK in expressions
-    { "1.5 + 0.2 + 0.1", false, VAL(1.8) },
-    // Negatives are OK
-    { "3 - 10", false, VAL(-7) },
-    // Lots of operands
-    { "1 + 2 + 10 + 1000.05", false, VAL(1013.05) },
-    // Operator precedence
-    { "1 + 2 - 4 * 20 / 2", false, VAL(-37) },
-    // Parens
-    { "(1)", false, VAL(1) },
-    // Parens affect precedence
-    { "-(1 + (2 - 4)) * 20.8 / 2", false, VAL(10.4) },
-    // Unary addition is a sign, not a leading operator
-    { "+2 - 1", false, VAL(1) },
-    // A short-circuited || must yield a normalized 1, not the raw (nonzero) left operand, so a
-    // boolean feeding a further operator behaves the same as the non-short-circuited path.
-    { "(2 || 0) == 1", false, VAL(1) },
-    { "(7 || 0) + 5", false, VAL(6) }
-};
-
-
-const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
-    { "A.type == 'Pad' && B.type == 'Pad' && (A.existsOnLayer('F.Cu'))", false, VAL( 0.0 ) },
-    { "A.Width > B.Width", false, VAL( 0.0 ) },
-    { "A.Width + B.Width", false, VAL( pcbIUScale.MilsToIU(10) + pcbIUScale.MilsToIU(20) ) },
-    { "A.Netclass", false, VAL( "HV_LINE" ) },
-    { "A.Net_Class == 'HV_LINE'", false, VAL( 1.0 ) },
-    { "(A.Netclass == 'HV_LINE') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false, VAL( 1.0 ) },
-    { "A.Netclass + 1.0", false, VAL( 1.0 ) },
-    { "A.hasNetclass('HV_LINE')", false, VAL( 1.0 ) },
-    { "A.hasNetclass('HV_*')", false, VAL( 1.0 ) },
-    { "A.existsOnLayer(B.Layer)", false, VAL( 1.0 ) },
-    { "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'", false, VAL( 1.0 ) },
-    { "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", false, VAL( 1.0 ) },
-    { "A.type == 'Via' && A.isMicroVia()", false, VAL(0.0) }
-};
-
-
-static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedResult, bool expectError = false,
-                          BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
+static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedResult,
+                          BOARD_ITEM* itemA, BOARD_ITEM* itemB, bool expectError = false )
 {
     PCBEXPR_COMPILER  compiler( new PCBEXPR_UNIT_RESOLVER() );
     PCBEXPR_UCODE     ucode;
@@ -188,9 +139,54 @@ static void expectCompileSuccess( const wxString& aExpr )
 }
 
 
-BOOST_DATA_TEST_CASE( SimpleExpressions, boost::unit_test::data::make( simpleExpressions ), expr )
+BOOST_AUTO_TEST_CASE( SimpleExpressions )
 {
-    testEvalExpr( expr.expression, expr.expectedResult, expr.expectError );
+    auto test =
+        [&]( const wxString& expr, const LIBEVAL::VALUE& expectedResult )
+            {
+                testEvalExpr( expr, expectedResult, nullptr, nullptr );
+            };
+
+    test( "10mm + 20 mm",              VAL( 30e6 ) );
+    test( "3*(7+8)",                   VAL( 3 * ( 7 + 8 ) ) );
+    test( "3*7+8",                     VAL( 3 * 7 + 8 ) );
+    test( "(3*7)+8",                   VAL( 3 * 7 + 8 ) );
+
+    testEvalExpr( "10mm + 20)",        VAL( 0 ), nullptr, nullptr, true );
+
+    test( "1",                         VAL( 1 ) );
+    test( "1.5",                       VAL( 1.5 ) );
+    test( "1,5",                       VAL( 1.5 ) );
+    test( "1mm",                       VAL( 1e6 ) );
+
+    // Any White-space is OK
+    test( "   1 +     2    ",          VAL( 3 ) );
+
+    // Decimals are OK in expressions
+    test( "1.5 + 0.2 + 0.1",           VAL( 1.8 ) );
+
+    // Negatives are OK
+    test( "3 - 10",                    VAL( -7 ) );
+
+    // Lots of operands
+    test( "1 + 2 + 10 + 1000.05",      VAL( 1013.05 ) );
+
+    // Operator precedence
+    test( "1 + 2 - 4 * 20 / 2",        VAL( -37 ) );
+
+    // Parens
+    test( "(1)",                       VAL( 1 ) );
+
+    // Parens affect precedence
+    test( "-(1 + (2 - 4)) * 20.8 / 2", VAL( 10.4 ) );
+
+    // Unary addition is a sign, not a leading operator
+    test( "+2 - 1",                    VAL( 1 ) );
+
+    // A short-circuited || must yield a normalized 1, not the raw (nonzero) left operand, so a
+    // boolean feeding a further operator behaves the same as the non-short-circuited path.
+    test( "(2 || 0) == 1",             VAL( 1 ) );
+    test( "(7 || 0) + 5",              VAL( 6 ) );
 }
 
 
@@ -223,10 +219,25 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     trackA.SetWidth( pcbIUScale.MilsToIU( 10 ) );
     trackB.SetWidth( pcbIUScale.MilsToIU( 20 ) );
 
-    for( const auto& expr : introspectionExpressions )
-    {
-        testEvalExpr( expr.expression, expr.expectedResult, expr.expectError, &trackA, &trackB );
-    }
+    auto test =
+        [&]( const wxString& expr, const LIBEVAL::VALUE& expectedResult )
+        {
+            testEvalExpr( expr, expectedResult, &trackA, &trackB );
+        };
+
+    test( "A.type == 'Pad' && B.type == 'Pad' && (A.existsOnLayer('F.Cu'))", VAL( 0.0 ) );
+    test( "A.Width > B.Width",            VAL( 0.0 ) );
+    test( "A.Width + B.Width",            VAL( pcbIUScale.MilsToIU( 10 ) + pcbIUScale.MilsToIU( 20 ) ) );
+    test( "A.Netclass",                   VAL( "HV_LINE" ) );
+    test( "A.Net_Class == 'HV_LINE'",     VAL( 1.0 ) );
+    test( "(A.Netclass == 'HV_LINE') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", VAL( 1.0 ) );
+    test( "A.Netclass + 1.0",             VAL( 1.0 ) );
+    test( "A.hasNetclass('HV_LINE')",     VAL( 1.0 ) );
+    test( "A.hasNetclass('HV_*')",        VAL( 1.0 ) );
+    test( "A.existsOnLayer(B.Layer)",     VAL( 1.0 ) );
+    test( "A.type == 'Track' && B.type == 'Track' && A.layer == 'F.Cu'",       VAL( 1.0 ) );
+    test( "(A.type == 'Track') && (B.type == 'Track') && (A.layer == 'F.Cu')", VAL( 1.0 ) );
+    test( "A.type == 'Via' && A.isMicroVia()",                                 VAL( 0.0 ) );
 }
 
 
@@ -243,23 +254,23 @@ BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
     zone.SetHatchOrientation( EDA_ANGLE( 45.0, DEGREES_T ) );
     zone.SetMinIslandArea( 123456789LL );
 
-    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 1.0 ), false, &zone );
-    testEvalExpr( wxT( "A.Hatch_Orientation == 45deg" ), VAL( 1.0 ), false, &zone );
-    testEvalExpr( wxT( "A.Minimum_Island_Area == 123456789" ), VAL( 1.0 ), false, &zone );
+    testEvalExpr( wxT( "A.Priority == 7" ),                    VAL( 1.0 ), &zone, &zone );
+    testEvalExpr( wxT( "A.Hatch_Orientation == 45deg" ),       VAL( 1.0 ), &zone, &zone );
+    testEvalExpr( wxT( "A.Minimum_Island_Area == 123456789" ), VAL( 1.0 ), &zone, &zone );
 
     PCB_SHAPE ellipse( &brd, SHAPE_T::ELLIPSE );
     ellipse.SetEllipseRotation( EDA_ANGLE( 30.0, DEGREES_T ) );
 
-    testEvalExpr( wxT( "A.Ellipse_Rotation == 30deg" ), VAL( 1.0 ), false, &ellipse );
+    testEvalExpr( wxT( "A.Ellipse_Rotation == 30deg" ), VAL( 1.0 ), &ellipse, &ellipse );
 
     FOOTPRINT footprint( &brd );
     footprint.SetLocalSolderPasteMarginRatio( 0.125 );
 
-    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == 0.125" ), VAL( 1.0 ), false, &footprint );
+    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == 0.125" ), VAL( 1.0 ), &footprint, &footprint );
 
     footprint.SetLocalSolderPasteMarginRatio( std::nullopt );
 
-    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), false, &footprint );
+    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), &footprint, &footprint );
 }
 
 
@@ -274,16 +285,20 @@ BOOST_AUTO_TEST_CASE( UnitlessStringProperties )
     PCB_TEXT  text( &brd );
 
     footprint.SetReference( wxT( "R1" ) );
+    footprint.SetValue( wxT( "4k7" ) );
     pad->SetNumber( wxT( "2" ) );
     footprint.Add( pad );
     text.SetText( wxT( "4k7" ) );
 
-    testEvalExpr( wxT( "A.Pad_Number == '2'" ), VAL( 1.0 ), false, pad );
-    testEvalExpr( wxT( "A.Pad_Number == 2" ), VAL( 1.0 ), false, pad );
-    testEvalExpr( wxT( "A.Reference == 'R1'" ), VAL( 1.0 ), false, &footprint );
-    testEvalExpr( wxT( "A.Text == '4k7'" ), VAL( 1.0 ), false, &text );
-    testEvalExpr( wxT( "A.Text > 4000" ), VAL( 1.0 ), false, &text );
-    testEvalExpr( wxT( "A.Text < 1" ), VAL( 0.0 ), false, &text );
+    testEvalExpr( wxT( "A.Pad_Number == '2'" ),        VAL( 1.0 ), pad, pad );
+    testEvalExpr( wxT( "A.Pad_Number == 2" ),          VAL( 1.0 ), pad, pad );
+    testEvalExpr( wxT( "A.Reference == 'R1'" ),        VAL( 1.0 ), &footprint, &footprint );
+    testEvalExpr( wxT( "A.Text == '4k7'" ),            VAL( 1.0 ), &text, &text );
+    testEvalExpr( wxT( "A.Text != '4700'" ),           VAL( 1.0 ), &text, &text );
+    testEvalExpr( wxT( "A.Text == 4700" ),             VAL( 1.0 ), &text, &text );
+    testEvalExpr( wxT( "A.getField('Value') > 3300" ), VAL( 1.0 ), &footprint, &footprint );
+    testEvalExpr( wxT( "A.getField('Value') > 3k3" ),  VAL( 1.0 ), &footprint, &footprint );
+    testEvalExpr( wxT( "A.Text < 1" ),                 VAL( 0.0 ), &text, &text );
 }
 
 
@@ -301,13 +316,13 @@ BOOST_AUTO_TEST_CASE( RenamedProperties )
     expectCompileSuccess( wxT( "A.Origin_X == 1mm" ) );
     expectCompileSuccess( wxT( "A.Origin_Y == 2mm" ) );
 
-    testEvalExpr( wxT( "A.Origin_X == 1mm" ), VAL( 1.0 ), false, &track );
-    testEvalExpr( wxT( "A.Origin_Y == 2mm" ), VAL( 1.0 ), false, &track );
-    testEvalExpr( wxT( "A.Origin_X != A.End_X" ), VAL( 1.0 ), false, &track );
-    testEvalExpr( wxT( "A.origin_y != A.End_Y" ), VAL( 1.0 ), false, &track );
+    testEvalExpr( wxT( "A.Origin_X == 1mm" ),     VAL( 1.0 ), &track, &track );
+    testEvalExpr( wxT( "A.Origin_Y == 2mm" ),     VAL( 1.0 ), &track, &track );
+    testEvalExpr( wxT( "A.Origin_X != A.End_X" ), VAL( 1.0 ), &track, &track );
+    testEvalExpr( wxT( "A.origin_y != A.End_Y" ), VAL( 1.0 ), &track, &track );
 
-    testEvalExpr( wxT( "A.Start_X == 1mm" ), VAL( 1.0 ), false, &track );
-    testEvalExpr( wxT( "A.Start_Y == 2mm" ), VAL( 1.0 ), false, &track );
+    testEvalExpr( wxT( "A.Start_X == 1mm" ),      VAL( 1.0 ), &track, &track );
+    testEvalExpr( wxT( "A.Start_Y == 2mm" ),      VAL( 1.0 ), &track, &track );
 }
 
 
@@ -326,7 +341,7 @@ BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
                 BOOST_CHECK_EQUAL( aColor.ToCSSString(), aExpectedCss );
 
                 wxString expression = wxT( "A.Border_Color == '" ) + aExpectedCss + wxT( "'" );
-                testEvalExpr( expression, VAL( 1.0 ), false, &table );
+                testEvalExpr( expression, VAL( 1.0 ), &table, &table );
             };
 
     checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ), wxT( "rgba(64, 128, 191, 0.502)" ) );
@@ -392,11 +407,11 @@ BOOST_AUTO_TEST_CASE( IntrospectedPropertyAvailability )
     zone.SetAssignedPriority( 7 );
     zone.SetIsRuleArea( true );
 
-    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 0.0 ), false, &zone );
+    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 0.0 ), &zone, &zone );
 
     zone.SetIsRuleArea( false );
 
-    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 1.0 ), false, &zone );
+    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 1.0 ), &zone, &zone );
 }
 
 
@@ -427,17 +442,17 @@ BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
 
     // A chain with no class assignment must not match any inNetChainClass() pattern,
     // including the '*' wildcard.
-    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackUnclassified, &trackUnclassified );
-    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 0.0 ), false, &trackUnclassified, &trackUnclassified );
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ),         VAL( 0.0 ), &trackUnclassified, &trackUnclassified );
+    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 0.0 ), &trackUnclassified, &trackUnclassified );
 
     // Net with no chain at all must not match either.
-    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackNoChain, &trackNoChain );
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ),         VAL( 0.0 ), &trackNoChain, &trackNoChain );
 
     // Properly classified chain must match both wildcard and exact patterns.
-    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
-    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
-    testEvalExpr( wxT( "A.inNetChainClass('High*')" ), VAL( 1.0 ), false, &trackClassified, &trackClassified );
-    testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ),         VAL( 1.0 ), &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 1.0 ), &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('High*')" ),     VAL( 1.0 ), &trackClassified, &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ),  VAL( 0.0 ), &trackClassified, &trackClassified );
 }
 
 BOOST_AUTO_TEST_CASE( StackedMicroviaExpression )
@@ -479,24 +494,24 @@ BOOST_AUTO_TEST_CASE( StackedMicroviaExpression )
     brd.Add( through );
 
     // Both hops of a stack are in it, not just the one on top.
-    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, upperHop, upperHop );
-    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, lowerHop, lowerHop );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), upperHop, upperHop );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), lowerHop, lowerHop );
 
     // A microvia landing on nothing is not a stack.
-    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 0.0 ), false, lone, lone );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 0.0 ), lone, lone );
 
     // A through via sharing the position of a stack is not part of it.
-    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 0.0 ), false, through, through );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 0.0 ), through, through );
 
     // The predicate composes with the rest of the language.
-    testEvalExpr( wxT( "A.isMicroVia() && !A.isStackedVia()" ), VAL( 1.0 ), false, lone, lone );
+    testEvalExpr( wxT( "A.isMicroVia() && !A.isStackedVia()" ), VAL( 1.0 ), lone, lone );
 
     // The relation is cached for the whole board, so an edit has to drop it.
     PCB_VIA* landing = microvia( &brd, away, In1_Cu, In2_Cu );
     brd.IncrementTimeStamp();
 
-    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, lone, lone );
-    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), false, landing, landing );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), lone, lone );
+    testEvalExpr( wxT( "A.isStackedVia()" ), VAL( 1.0 ), landing, landing );
 }
 
 BOOST_AUTO_TEST_CASE( ParentNavigation )
@@ -517,21 +532,21 @@ BOOST_AUTO_TEST_CASE( ParentNavigation )
 
     // The headline capability: getField() only returns a value when its receiver is a
     // footprint, so this passes solely because navigation steps from the text to its parent.
-    testEvalExpr( wxT( "A.Parent.getField('Reference') == 'J1'" ), VAL( 1.0 ), false, text, text );
+    testEvalExpr( wxT( "A.Parent.getField('Reference') == 'J1'" ), VAL( 1.0 ), text, text );
 
     // The exact pattern from the issue (parent field compared to the text's own value).
-    testEvalExpr( wxT( "A.Parent.getField('Reference') == A.Text" ), VAL( 1.0 ), false, text, text );
+    testEvalExpr( wxT( "A.Parent.getField('Reference') == A.Text" ), VAL( 1.0 ), text, text );
 
     // The parent resolves to a footprint object that can be type-queried.
-    testEvalExpr( wxT( "A.Parent.Type == 'Footprint'" ), VAL( 1.0 ), false, text, text );
+    testEvalExpr( wxT( "A.Parent.Type == 'Footprint'" ), VAL( 1.0 ), text, text );
 
     // Regression: the terminal "Parent" string still yields the parent footprint reference,
     // i.e. the object and the string refer to the same parent.
-    testEvalExpr( wxT( "A.Parent == 'J1'" ), VAL( 1.0 ), false, text, text );
+    testEvalExpr( wxT( "A.Parent == 'J1'" ), VAL( 1.0 ), text, text );
 
     // Without navigation getField() has a non-footprint receiver and returns "", so this must
     // NOT match - it guards against the navigation silently applying to the base item.
-    testEvalExpr( wxT( "A.getField('Reference') == 'J1'" ), VAL( 0.0 ), false, text, text );
+    testEvalExpr( wxT( "A.getField('Reference') == 'J1'" ), VAL( 0.0 ), text, text );
 
     // Error cases.  These are code-generation errors (not parse errors), which the shared
     // testEvalExpr does not observe through Compile()'s return value, so check the pending-error
@@ -558,8 +573,8 @@ BOOST_AUTO_TEST_CASE( PropertyParentFallback )
     PCB_TEXT* text = new PCB_TEXT( &fp );
     fp.Add( text );
 
-    testEvalExpr( wxT( "A.Reference == 'J1'" ), VAL( 1.0 ), false, text, text );
-    testEvalExpr( wxT( "A.Reference == 'J2'" ), VAL( 0.0 ), false, text, text );
+    testEvalExpr( wxT( "A.Reference == 'J1'" ), VAL( 1.0 ), text, text );
+    testEvalExpr( wxT( "A.Reference == 'J2'" ), VAL( 0.0 ), text, text );
 }
 
 
@@ -572,11 +587,11 @@ BOOST_AUTO_TEST_CASE( BoolPropertyEvaluation )
 
     FOOTPRINT fp( &brd );
 
-    testEvalExpr( wxT( "A.Do_not_Populate == 0" ), VAL( 1.0 ), false, &fp, &fp );
+    testEvalExpr( wxT( "A.Do_not_Populate == 0" ), VAL( 1.0 ), &fp, &fp );
 
     fp.SetDNP( true );
 
-    testEvalExpr( wxT( "A.Do_not_Populate == 1" ), VAL( 1.0 ), false, &fp, &fp );
+    testEvalExpr( wxT( "A.Do_not_Populate == 1" ), VAL( 1.0 ), &fp, &fp );
 }
 
 
@@ -597,14 +612,14 @@ BOOST_AUTO_TEST_CASE( VariantAwareEvaluation )
     brd.AddVariant( wxT( "V1" ) );
     brd.SetCurrentVariant( wxT( "V1" ) );
 
-    testEvalExpr( wxT( "A.Do_not_Populate == 1" ), VAL( 1.0 ), false, &fp, &fp );
-    testEvalExpr( wxT( "A.getField('Value') == 'VariantVal'" ), VAL( 1.0 ), false, &fp, &fp );
+    testEvalExpr( wxT( "A.Do_not_Populate == 1" ),              VAL( 1.0 ), &fp, &fp );
+    testEvalExpr( wxT( "A.getField('Value') == 'VariantVal'" ), VAL( 1.0 ), &fp, &fp );
 
     // Without a current variant the base values apply.
     brd.SetCurrentVariant( wxEmptyString );
 
-    testEvalExpr( wxT( "A.Do_not_Populate == 0" ), VAL( 1.0 ), false, &fp, &fp );
-    testEvalExpr( wxT( "A.getField('Value') == 'BaseVal'" ), VAL( 1.0 ), false, &fp, &fp );
+    testEvalExpr( wxT( "A.Do_not_Populate == 0" ),           VAL( 1.0 ), &fp, &fp );
+    testEvalExpr( wxT( "A.getField('Value') == 'BaseVal'" ), VAL( 1.0 ), &fp, &fp );
 }
 
 
