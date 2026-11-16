@@ -81,6 +81,12 @@ public:
         return {};
     }
 
+    /**
+     * Returns a predicate this panel holds in its own fields rather than in the rule condition,
+     * such as a via type. It is written in front of the condition, joined with &&.
+     */
+    virtual wxString GetConditionPredicate() const { return wxEmptyString; }
+
     std::vector<PCB_LAYER_ID> GetLayers() { return m_layers; }
 
     void SetLayers( std::vector<PCB_LAYER_ID> aLayers ) { m_layers = aLayers; }

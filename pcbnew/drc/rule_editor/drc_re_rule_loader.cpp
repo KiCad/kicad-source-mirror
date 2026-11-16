@@ -27,6 +27,7 @@
 #include <wx/ffile.h>
 
 #include <algorithm>
+#include <optional>
 #include <tuple>
 #include <utility>
 
@@ -99,6 +100,30 @@ static bool isSymmetricTriple( const DRC_CONSTRAINT* aConstraint )
     const auto& value = aConstraint->GetValue();
 
     return value.HasMin() && value.HasOpt() && value.HasMax() && isSymmetricMinOptMax( aConstraint );
+}
+
+
+// A panel writes the predicate it holds back as "predicate && rest", so it can only take a
+// condition that is already in that form
+static std::optional<wxString> takeLeadingPredicate( const wxString& aCondition, const wxString& aPredicate )
+{
+    wxString condition = aCondition;
+    condition.Trim( true ).Trim( false );
+
+    if( condition == aPredicate )
+        return wxString();
+
+    wxString rest;
+
+    if( !condition.StartsWith( aPredicate + wxS( " &&" ), &rest ) )
+        return std::nullopt;
+
+    rest.Trim( true ).Trim( false );
+
+    if( rest.IsEmpty() )
+        return std::nullopt;
+
+    return rest;
 }
 
 
@@ -398,28 +423,30 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
                 data->SetOptViaHoleSize( toMM( holeSize->GetValue().Opt() ) );
         }
 
-        if( aRule.m_Condition )
+        wxString condition = aRule.m_Condition ? aRule.m_Condition->GetExpression() : wxString();
+
+        if( condition.Contains( wxS( "Via_Type" ) ) )
         {
-            wxString expr = aRule.m_Condition->GetExpression();
+            std::optional<wxString> rest;
 
-            if( expr.Contains( wxS( "'Micro'" ) ) )
-                data->SetViaType( VIA_STYLE_TYPE::MICRO );
-            else if( expr.Contains( wxS( "'Through'" ) ) )
-                data->SetViaType( VIA_STYLE_TYPE::THROUGH );
-            else if( expr.Contains( wxS( "'Blind'" ) ) )
-                data->SetViaType( VIA_STYLE_TYPE::BLIND );
-            else if( expr.Contains( wxS( "'Buried'" ) ) )
-                data->SetViaType( VIA_STYLE_TYPE::BURIED );
+            for( VIA_STYLE_TYPE type :
+                 { VIA_STYLE_TYPE::MICRO, VIA_STYLE_TYPE::THROUGH, VIA_STYLE_TYPE::BLIND, VIA_STYLE_TYPE::BURIED } )
+            {
+                data->SetViaType( type );
+                rest = takeLeadingPredicate( condition, data->GetConditionPredicate() );
 
-            // Strip the via type condition so it doesn't duplicate on save
-            wxString cleanedCondition = expr;
-            cleanedCondition.Replace( wxS( "A.Via_Type == 'Micro'" ), wxS( "" ) );
-            cleanedCondition.Replace( wxS( "A.Via_Type == 'Through'" ), wxS( "" ) );
-            cleanedCondition.Replace( wxS( "A.Via_Type == 'Blind'" ), wxS( "" ) );
-            cleanedCondition.Replace( wxS( "A.Via_Type == 'Buried'" ), wxS( "" ) );
+                if( rest )
+                    break;
+            }
 
-            data->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
+            // The panel's choice cannot write back any other via type test
+            if( !rest )
+                return makeCustomRuleData( aRule );
+
+            condition = *rest;
         }
+
+        data->SetRuleCondition( condition );
 
         return data;
     }
@@ -657,6 +684,14 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         data->SetRuleName( aRule.m_Name );
         data->SetConstraintCode( wxS( "disallow_via" ) );
 
+        std::optional<wxString> rest = takeLeadingPredicate(
+                aRule.m_Condition ? aRule.m_Condition->GetExpression() : wxString(), data->GetConditionPredicate() );
+
+        if( !rest )
+            return makeCustomRuleData( aRule );
+
+        data->SetRuleCondition( *rest );
+
         const DRC_CONSTRAINT* constraint = findConstraint( aRule, DISALLOW_CONSTRAINT );
 
         if( constraint )
@@ -848,16 +883,6 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
             constraintData->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
         }
 
-        if( match.panelType == VIAS_UNDER_SMD )
-        {
-            wxString cleanedCondition = condition;
-
-            cleanedCondition.Replace( wxS( "A.Pad_Type == 'SMD'" ), wxS( "" ) );
-            cleanedCondition.Replace( wxS( "B.Pad_Type == 'SMD'" ), wxS( "" ) );
-
-            constraintData->SetRuleCondition( cleanStrippedCondition( cleanedCondition ) );
-        }
-
         if( match.panelType == CUSTOM_RULE && customFallback )
         {
             customFallback->SetRuleText( ExtractRuleBody( aOriginalText ) );
@@ -895,12 +920,14 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         entries.push_back( std::move( entry ) );
     }
 
-    // Text holds the whole rule body, so beside a panel entry it would drop or revive clauses on save
+    // Text holds the whole rule body, so beside a panel entry it would drop or revive clauses on save,
+    // and a predicate one part took out of the shared condition would leave it for the other parts
     if( entries.size() > 1
         && std::any_of( entries.begin(), entries.end(),
                         []( const DRC_RE_LOADED_PANEL_ENTRY& aEntry )
                         {
-                            return aEntry.panelType == CUSTOM_RULE;
+                            return aEntry.panelType == CUSTOM_RULE
+                                   || !aEntry.constraintData->GetConditionPredicate().IsEmpty();
                         } ) )
     {
         entries.clear();

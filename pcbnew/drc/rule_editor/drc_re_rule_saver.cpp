@@ -56,6 +56,20 @@ std::pair<wxString, wxString> splitLeadingTrivia( const wxString& aTrivia )
 
     return { aTrivia.Left( blank + 2 ), aTrivia.Mid( blank + 2 ) };
 }
+
+
+wxString savedCondition( const DRC_RE_LOADED_PANEL_ENTRY& aEntry )
+{
+    wxString predicate = aEntry.constraintData ? aEntry.constraintData->GetConditionPredicate() : wxString();
+
+    if( predicate.IsEmpty() )
+        return aEntry.condition;
+
+    if( aEntry.condition.IsEmpty() )
+        return predicate;
+
+    return predicate + wxS( " && " ) + aEntry.condition;
+}
 }
 
 
@@ -87,6 +101,7 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 
     // Constraints with the same group came from one rule and go back into one. The layer
     // source tells "outer" and "inner" of the same name apart.
+    // A predicate such as a via type narrows only its own part, so that part becomes its own rule
     using GroupKey = std::tuple<int, wxString, wxString, wxString>;
 
     std::vector<std::pair<GroupKey, std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>>>
@@ -95,7 +110,7 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 
     for( const DRC_RE_LOADED_PANEL_ENTRY& entry : aEntries )
     {
-        auto key = std::make_tuple( entry.ruleGroupId, entry.ruleName, entry.condition, entry.layerSource );
+        auto key = std::make_tuple( entry.ruleGroupId, entry.ruleName, savedCondition( entry ), entry.layerSource );
         auto it = groupIndex.find( key );
 
         if( it == groupIndex.end() )
@@ -344,7 +359,7 @@ wxString DRC_RULE_SAVER::generateMergedRuleText(
 
     RULE_GENERATION_CONTEXT ctx;
     ctx.ruleName = firstEntry->ruleName;
-    ctx.conditionExpression = firstEntry->condition;
+    ctx.conditionExpression = savedCondition( *firstEntry );
 
     if( firstEntry->constraintData )
         ctx.comment = firstEntry->constraintData->GetComment();

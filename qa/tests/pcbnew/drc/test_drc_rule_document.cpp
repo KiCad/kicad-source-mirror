@@ -24,6 +24,7 @@
 #include <drc/rule_editor/drc_re_loaded_rule.h>
 #include <drc/rule_editor/drc_re_numeric_input_constraint_data.h>
 #include <drc/rule_editor/drc_re_panel_matcher.h>
+#include <drc/rule_editor/drc_re_via_style_constraint_data.h>
 #include <drc/rule_editor/drc_rule_document.h>
 #include <drc/rule_editor/drc_rule_editor_enums.h>
 #include <drc/rule_editor/drc_rule_editor_utils.h>
@@ -373,6 +374,113 @@ BOOST_AUTO_TEST_CASE( AWidthOrGapMissingABoundIsKeptAsWritten )
         BOOST_CHECK_MESSAGE( text.Contains( clauses ), "the clauses were rewritten, from " << clauses << ":\n"
                                                                                            << text );
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( ASplitRuleKeepsThePredicateItsPartsShare )
+{
+    // One part of each takes the predicate out of the condition all of the parts are read with
+    const std::vector<std::pair<wxString, wxString>> rules = {
+        { wxS( "(constraint via_diameter (min 0.2mm))\n\t(constraint hole_size (min 0.1mm))" ),
+          wxS( "A.Via_Type == 'Micro' && A.NetClass == 'HS'" ) },
+        { wxS( "(constraint disallow via)" ), wxS( "A.Pad_Type == 'SMD' && A.NetClass == 'HS'" ) },
+    };
+
+    for( const auto& [clauses, condition] : rules )
+    {
+        for( size_t i = 0;; ++i )
+        {
+            BOARD             board;
+            DRC_RULE_DOCUMENT document( &board );
+
+            document.SetText( wxS( "(version 2)\n(rule \"split\"\n\t" ) + clauses
+                              + wxS( "\n\t(constraint clearance (min 0.15mm))\n\t(condition \"" ) + condition
+                              + wxS( "\"))\n" ) );
+
+            if( i >= document.Entries().size() )
+                break;
+
+            // As the rule page applies an edit, with the condition its form holds
+            DRC_RE_LOADED_PANEL_ENTRY edited = document.Entries()[i];
+            edited.ruleName = wxS( "renamed" );
+            edited.condition = edited.constraintData->GetRuleCondition();
+            document.UpdateEntry( (int) i, edited );
+
+            wxString text = document.GetText();
+
+            BOOST_CHECK_MESSAGE( text.Contains( wxS( "(condition \"" ) + condition + wxS( "\")" ) ),
+                                 "editing part " << i << " changed the condition:\n"
+                                                 << text );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( AConditionThePanelCannotWriteBackIsKeptAsWritten )
+{
+    // A panel puts its predicate back in front of the rest, so only that form survives an edit
+    const std::vector<wxString> conditions = {
+        wxS( "A.Via_Type != 'Micro'" ),
+        wxS( "A.Via_Type == 'Micro' || A.Via_Type == 'Blind'" ),
+        wxS( "A.NetClass == 'HS' && A.Via_Type == 'Micro'" ),
+        wxS( "A.NetName == 'Micro'" ),
+    };
+
+    for( const wxString& condition : conditions )
+    {
+        BOARD             board;
+        DRC_RULE_DOCUMENT document( &board );
+
+        document.SetText( wxS( "(version 2)\n(rule \"vias\"\n"
+                               "\t(constraint via_diameter (min 0.2mm))\n"
+                               "\t(constraint hole_size (min 0.1mm))\n"
+                               "\t(condition \"" )
+                          + condition + wxS( "\"))\n" ) );
+
+        BOOST_REQUIRE_EQUAL( document.Entries().size(), 1 );
+
+        DRC_RE_LOADED_PANEL_ENTRY edited = document.Entries()[0];
+        edited.ruleName = wxS( "renamed" );
+        edited.condition = edited.constraintData->GetRuleCondition();
+        document.UpdateEntry( 0, edited );
+
+        wxString text = document.GetText();
+
+        BOOST_CHECK_MESSAGE( text.Contains( wxS( "(condition \"" ) + condition + wxS( "\")" ) ),
+                             "the condition was rewritten, from " << condition << ":\n"
+                                                                  << text );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( AViaTypeChosenForASplitRuleNarrowsOnlyTheViaPart )
+{
+    BOARD             board;
+    DRC_RULE_DOCUMENT document( &board );
+
+    document.SetText( ONE_RULE_THREE_CONSTRAINTS );
+
+    BOOST_REQUIRE_EQUAL( document.IndicesFor( VIA_STYLE ).size(), 1 );
+
+    int                       index = document.IndicesFor( VIA_STYLE ).front();
+    DRC_RE_LOADED_PANEL_ENTRY edited = document.Entries()[index];
+
+    std::static_pointer_cast<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( edited.constraintData )
+            ->SetViaType( VIA_STYLE_TYPE::MICRO );
+    edited.condition = edited.constraintData->GetRuleCondition();
+    document.UpdateEntry( index, edited );
+
+    wxString text = document.GetText();
+
+    BOOST_CHECK_MESSAGE(
+            text.Contains( wxS( "(condition \"A.Via_Type == 'Micro' && A.intersectsArea('underFPGA')\")" ) ),
+            "the via type was dropped:\n"
+                    << text );
+
+    // The clearance part still applies to every item in the area
+    BOOST_CHECK_MESSAGE( text.Contains( wxS( "(condition \"A.intersectsArea('underFPGA')\")" ) ),
+                         "the via type narrowed the other parts:\n"
+                                 << text );
 }
 
 

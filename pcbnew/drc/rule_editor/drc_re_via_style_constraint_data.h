@@ -151,11 +151,13 @@ public:
         return clauses;
     }
 
+    wxString GetConditionPredicate() const override { return GetViaTypeCondition(); }
+
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
     {
         RULE_GENERATION_CONTEXT ctx = aContext;
 
-        wxString viaTypeCondition = GetViaTypeCondition();
+        wxString viaTypeCondition = GetConditionPredicate();
 
         if( !viaTypeCondition.IsEmpty() )
         {

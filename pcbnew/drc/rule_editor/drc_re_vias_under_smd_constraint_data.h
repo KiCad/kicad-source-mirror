@@ -101,11 +101,13 @@ public:
         return { wxString::Format( wxS( "(constraint disallow %s)" ), items ) };
     }
 
+    wxString GetConditionPredicate() const override { return wxS( "A.Pad_Type == 'SMD'" ); }
+
     wxString GenerateRule( const RULE_GENERATION_CONTEXT& aContext ) override
     {
         RULE_GENERATION_CONTEXT ctx = aContext;
 
-        wxString padTypeCondition = wxS( "A.Pad_Type == 'SMD'" );
+        wxString padTypeCondition = GetConditionPredicate();
 
         if( ctx.conditionExpression.IsEmpty() )
             ctx.conditionExpression = padTypeCondition;
