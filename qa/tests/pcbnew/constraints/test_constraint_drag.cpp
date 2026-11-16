@@ -418,7 +418,7 @@ BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionFallsBackAfterRejectedObject, DRAG
             SNAP_CANDIDATE::AxisX( gridId, SNAP_PRIORITY_TIER::GRID, SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, 0, 1.0 ) );
 
     SNAP_RESULT result = resolver.Resolve( context );
-    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_REQUIRE_EQUAL( result.status, SNAP_RESULT_STATUS::SUCCESS );
     BOOST_CHECK( !result.Accepted( objectId ) );
     BOOST_CHECK( result.Accepted( gridId ) );
     BOOST_CHECK_EQUAL( result.position, VECTOR2I( 0, 0 ) );
