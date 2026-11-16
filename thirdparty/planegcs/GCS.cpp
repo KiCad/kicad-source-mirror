@@ -4614,12 +4614,14 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
             double alpha = 1;
             alpha = std::min(alpha, subsysA->maxStep(plistAB, xdir));
 
-            // Eq. 18.36
-            mu = std::max(
-                mu,
-                (grad.dot(xdir) + std::max(0., 0.5 * xdir.dot(B * xdir)))
-                    / ((1. - rho) * resA.lpNorm<1>())
-            );
+            // Eq. 18.36, which divides by zero on a feasible iterate and would turn the merit into inf * 0
+            if (resA.lpNorm<1>() > 0) {
+                mu = std::max(
+                    mu,
+                    (grad.dot(xdir) + std::max(0., 0.5 * xdir.dot(B * xdir)))
+                        / ((1. - rho) * resA.lpNorm<1>())
+                );
+            }
 
             // Eq. 18.27
             double f0 = subsysB->error() + mu * resA.lpNorm<1>();

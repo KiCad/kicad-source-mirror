@@ -57,6 +57,12 @@ longer finite. A contradiction can be met by collapsing a segment, where a dista
 constraint's derivative is 0/0. Upstream then lets the NaN through the `yTh != 0` test into
 the BFGS matrix and every later step. Re-apply on upstream re-sync.
 
+The penalty weight `mu` (Eq. 18.36) is left unchanged on an iterate that already meets
+every hard constraint. Upstream divides by that zero violation, so `mu` becomes infinite,
+the merit becomes `inf * 0`, and every line-search test passes. The perpendicular(2 seg)
+Sweep solve then runs to the iteration limit instead of converging in 29 iterations.
+Re-apply on upstream re-sync.
+
 No other source edits. For production the shim's `Console`/`TimeElapsed` should
 route to `wxLogTrace` / a `std::chrono` timer; the spike keeps them trivial.
 
