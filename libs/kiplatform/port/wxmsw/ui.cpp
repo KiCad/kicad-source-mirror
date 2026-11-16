@@ -85,12 +85,6 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 }
 
 
-void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
-{
-    // Not needed on this platform
-}
-
-
 void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
 {
     // Not needed on this platform

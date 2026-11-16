@@ -97,21 +97,6 @@ bool KIPLATFORM::UI::IsWindowActive( wxWindow* aWindow )
 }
 
 
-void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
-{
-    NSView* view = (NSView*)aWindow->GetHandle();
-    if( view )
-    {
-        NSWindow* nsWindow = [view window];
-        if( nsWindow )
-        {
-            [nsWindow setCollectionBehavior:
-                NSWindowCollectionBehaviorCanJoinAllSpaces];
-        }
-    }
-}
-
-
 void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
 {
     // Not needed on this platform
