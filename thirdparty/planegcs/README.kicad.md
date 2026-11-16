@@ -45,6 +45,13 @@ as the caller declared them instead of by address. Upstream intersects or sorts 
 layout. MSVC's `std::deque<double>` allocates two doubles per block, so the same edit
 landed a few nanometres apart from one session to the next. Re-apply on upstream re-sync.
 
+The two-subsystem `System::solve()` seeds its BFGS matrix with the soft subsystem's
+Gauss-Newton curvature `JB^T JB`, plus `1e-10` of its largest diagonal so directions no
+soft constraint sees stay bounded. Upstream starts from the identity. KiCad's stay-put pins
+weigh `1e-4`, so their curvature is `1e-8` and the identity overstates it so far that the
+`1e-10` step test ends the solve short of the optimum, at a point the unknown order picks.
+Re-apply on upstream re-sync.
+
 No other source edits. For production the shim's `Console`/`TimeElapsed` should
 route to `wxLogTrace` / a `std::chrono` timer; the spike keeps them trivial.
 

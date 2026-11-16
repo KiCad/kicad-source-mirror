@@ -4570,6 +4570,20 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
     subsysA->calcJacobi(plistAB, JA);
     subsysA->calcResidual(resA);
 
+    // Seed BFGS with the soft objective's own curvature, since the identity overstates a weak pin's so far
+    // that the step test stops the solve short of the optimum and the unknown order picks where
+    {
+        Eigen::MatrixXd JB;
+        subsysB->calcJacobi(plistAB, JB);
+        Eigen::MatrixXd gaussNewton = JB.transpose() * JB;
+        double scale = xsize > 0 ? gaussNewton.diagonal().maxCoeff() : 0.0;
+
+        if (scale > 0) {
+            // A sliver of the largest curvature keeps directions no soft constraint sees bounded
+            B = gaussNewton + 1e-10 * scale * Eigen::MatrixXd::Identity(xsize, xsize);
+        }
+    }
+
     // double convergence = isFine ? XconvergenceFine : XconvergenceRough;
     int maxIterNumber
         = (isRedundantsolving
