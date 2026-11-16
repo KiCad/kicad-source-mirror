@@ -482,10 +482,12 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
                             {
                                 double dummy;
 
-                                return ( c == m_localeDecimalSeparator
-                                      || c == '.'
-                                      || c == ','
-                                      || ( haveDigit && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &dummy ) ) );
+                                if( c == m_localeDecimalSeparator || c == '.' || c == ',' )
+                                    return true;
+
+                                // Infix only between digits so 4k7 scales while 5mm and 100ps keep their units
+                                return haveDigit && wxIsdigit( m_tokenizer.GetChar( 1 ) )
+                                       && NUMERIC_EVALUATOR::IsOldSchoolDecimalSeparator( c, &dummy );
                             };
 
                 do
