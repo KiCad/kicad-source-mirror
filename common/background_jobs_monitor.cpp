@@ -22,7 +22,6 @@
 #include <unordered_map>
 
 #include <wx/gauge.h>
-#include <wx/frame.h>
 #include <wx/panel.h>
 #include <wx/settings.h>
 #include <wx/scrolwin.h>
@@ -32,6 +31,7 @@
 
 #include <background_jobs_monitor.h>
 #include <widgets/kistatusbar.h>
+#include <widgets/kistatusbar_popup.h>
 
 
 class BACKGROUND_JOB_PANEL : public wxPanel
@@ -88,15 +88,12 @@ private:
 };
 
 
-class BACKGROUND_JOB_LIST : public wxFrame
+class BACKGROUND_JOB_LIST : public KISTATUSBAR_POPUP
 {
 public:
-    BACKGROUND_JOB_LIST( wxWindow* parent, const wxPoint& pos ) :
-            wxFrame( parent, wxID_ANY, _( "Background Jobs" ), pos, wxSize( 300, 150 ),
-                     wxFRAME_NO_TASKBAR | wxBORDER_SIMPLE )
+    BACKGROUND_JOB_LIST( wxWindow* parent ) :
+            KISTATUSBAR_POPUP( parent )
     {
-        SetSizeHints( wxDefaultSize, wxDefaultSize );
-
 	    wxBoxSizer* bSizer1;
         bSizer1 = new wxBoxSizer( wxVERTICAL );
 
@@ -110,18 +107,8 @@ public:
         m_contentSizer->Fit( m_scrolledWindow );
         bSizer1->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 0 );
 
-        Bind( wxEVT_KILL_FOCUS, &BACKGROUND_JOB_LIST::onFocusLoss, this );
-
 	    SetSizer( bSizer1 );
         Layout();
-
-        SetFocus();
-    }
-
-    void onFocusLoss( wxFocusEvent& aEvent )
-    {
-        Close( true );
-        aEvent.Skip();
     }
 
 
@@ -289,14 +276,6 @@ void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
 }
 
 
-void BACKGROUND_JOBS_MONITOR::onListWindowClosed( wxCloseEvent& aEvent )
-{
-    removeShownDialog( aEvent.GetEventObject() );
-
-    aEvent.Skip();
-}
-
-
 void BACKGROUND_JOBS_MONITOR::onListWindowDestroyed( wxWindowDestroyEvent& aEvent )
 {
     removeShownDialog( aEvent.GetEventObject() );
@@ -321,7 +300,10 @@ void BACKGROUND_JOBS_MONITOR::removeShownDialog( wxObject* aWindow )
 
 void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 {
-    BACKGROUND_JOB_LIST* list = new BACKGROUND_JOB_LIST( aParent, aPos );
+    if( KISTATUSBAR_POPUP::IsDismissingClick() )
+        return;
+
+    BACKGROUND_JOB_LIST* list = new BACKGROUND_JOB_LIST( aParent );
 
     {
         std::lock_guard<std::shared_mutex> lock( m_mutex );
@@ -332,14 +314,8 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
         m_shownDialogs.push_back( list );
     }
 
-    list->Bind( wxEVT_CLOSE_WINDOW, &BACKGROUND_JOBS_MONITOR::onListWindowClosed, this );
     list->Bind( wxEVT_DESTROY, &BACKGROUND_JOBS_MONITOR::onListWindowDestroyed, this );
-
-    // correct the position
-    wxSize windowSize = list->GetSize();
-    list->SetPosition( aPos - windowSize );
-
-    list->Show();
+    list->PopupAt( aPos );
 }
 
 

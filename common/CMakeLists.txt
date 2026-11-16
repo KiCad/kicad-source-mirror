@@ -284,6 +284,7 @@ set( KICOMMON_SRCS
     widgets/html_window.cpp
     widgets/indicator_icon.cpp
     widgets/kistatusbar.cpp
+    widgets/kistatusbar_popup.cpp
     widgets/number_badge.cpp
     widgets/progress_reporter_base.cpp
     widgets/report_severity.cpp

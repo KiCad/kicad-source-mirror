@@ -21,18 +21,17 @@
 #include <wx/filename.h>
 #include <wx/hyperlink.h>
 #include <wx/panel.h>
-#include <wx/popupwin.h>
 #include <wx/scrolwin.h>
 #include <wx/sizer.h>
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/string.h>
-#include <wx/time.h>
 
 #include <paths.h>
 
 #include <notifications_manager.h>
 #include <widgets/kistatusbar.h>
+#include <widgets/kistatusbar_popup.h>
 #include <widgets/ui_common.h>
 
 #include <algorithm>
@@ -51,8 +50,6 @@
 #include <tuple>
 #include <vector>
 
-
-static long long g_last_closed_timer = 0;
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( NOTIFICATION, title, description, href, key, date )
 
@@ -154,15 +151,13 @@ private:
 };
 
 
-class NOTIFICATIONS_LIST : public wxPopupTransientWindow
+class NOTIFICATIONS_LIST : public KISTATUSBAR_POPUP
 {
 public:
     NOTIFICATIONS_LIST( NOTIFICATIONS_MANAGER* aManager, wxWindow* parent ) :
-            wxPopupTransientWindow( parent, wxBORDER_SIMPLE | wxPU_CONTAINS_CONTROLS ),
+            KISTATUSBAR_POPUP( parent ),
             m_manager( aManager )
     {
-        SetSize( wxSize( 300, 150 ) );
-
         wxBoxSizer* bSizer1;
         bSizer1 = new wxBoxSizer( wxVERTICAL );
 
@@ -188,29 +183,8 @@ public:
         m_noNotificationsText->Wrap( -1 );
         m_contentSizer->Add( m_noNotificationsText, 1, wxALL | wxEXPAND, 5 );
 
-        Bind( wxEVT_CHAR_HOOK, &NOTIFICATIONS_LIST::onCharHook, this );
-
         SetSizer( bSizer1 );
         Layout();
-    }
-
-
-    void OnDismiss() override
-    {
-        g_last_closed_timer = wxGetLocalTimeMillis().GetValue();
-
-        // MSW dismisses again on the deactivation that hiding on Escape causes
-        if( !wxPendingDelete.Member( this ) )
-            Destroy();
-    }
-
-
-    void onCharHook( wxKeyEvent& aEvent )
-    {
-        if( aEvent.GetKeyCode() == WXK_ESCAPE )
-            DismissAndNotify();
-        else
-            aEvent.Skip();
     }
 
 
@@ -393,12 +367,8 @@ void NOTIFICATIONS_MANAGER::onListWindowDestroyed( wxWindowDestroyEvent& aEvent 
 
 void NOTIFICATIONS_MANAGER::ShowList( wxWindow* aParent, wxPoint aPos )
 {
-    // The click that dismisses a shown list can still reach the icon, which must not reopen it
-    if( wxGetLocalTimeMillis().GetValue() - g_last_closed_timer < 300 )
-    {
-        g_last_closed_timer = 0;
+    if( KISTATUSBAR_POPUP::IsDismissingClick() )
         return;
-    }
 
     NOTIFICATIONS_LIST* list = new NOTIFICATIONS_LIST( this, aParent );
 
@@ -409,9 +379,7 @@ void NOTIFICATIONS_MANAGER::ShowList( wxWindow* aParent, wxPoint aPos )
 
     list->Bind( wxEVT_DESTROY, &NOTIFICATIONS_MANAGER::onListWindowDestroyed, this );
 
-    // Open above and left of the icon to stay inside the frame, as Wayland never moves a popup back on screen
-    list->Move( aPos - list->GetSize() );
-    list->Popup();
+    list->PopupAt( aPos );
 }
 
 

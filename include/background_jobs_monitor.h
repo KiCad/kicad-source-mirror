@@ -38,7 +38,6 @@ class BACKGROUND_JOB_REPORTER;
 class BACKGROUND_JOB_LIST;
 class BACKGROUND_JOBS_MONITOR;
 class wxWindow;
-class wxCloseEvent;
 class wxWindowDestroyEvent;
 
 class KICOMMON_API BACKGROUND_JOB_REPORTER : public PROGRESS_REPORTER_BASE
@@ -138,12 +137,7 @@ public:
 
 private:
     /**
-     * Handles removing the shown list window from our list of shown windows
-     */
-    void onListWindowClosed( wxCloseEvent& aEvent );
-
-    /**
-     * Handles a list window that its parent destroys without a close event
+     * Handles removing a destroyed list window from our list of shown windows
      */
     void onListWindowDestroyed( wxWindowDestroyEvent& aEvent );
 
