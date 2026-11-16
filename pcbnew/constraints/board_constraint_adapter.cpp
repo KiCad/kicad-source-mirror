@@ -2362,15 +2362,29 @@ std::optional<VECTOR2I> BOARD_CONSTRAINT_ADAPTER::AnchorPosition( const CONSTRAI
 
 bool BOARD_CONSTRAINT_ADAPTER::solveSucceeded( int aSolveResult )
 {
-    if( aSolveResult == GCS::Success || aSolveResult == GCS::Converged )
+    if( ( aSolveResult == GCS::Success || aSolveResult == GCS::Converged ) && parametersFinite() )
         return true;
 
     return hardRelationsSatisfied();
 }
 
 
+bool BOARD_CONSTRAINT_ADAPTER::parametersFinite() const
+{
+    return std::ranges::all_of( m_params,
+                                []( double aParam )
+                                {
+                                    return std::isfinite( aParam );
+                                } );
+}
+
+
 bool BOARD_CONSTRAINT_ADAPTER::hardRelationsSatisfied() const
 {
+    // Every residual test below is false for NaN, so a diverged state would otherwise read as satisfied
+    if( !parametersFinite() )
+        return false;
+
     // planegcs bases Success only on the hard subsystem residual but the soft stay-put subsystem
     // perturbs the SQP trajectory so a valid solve often still reports Failed judge the hard
     // constraints directly instead a genuine contradiction still leaves a large or non-finite residual

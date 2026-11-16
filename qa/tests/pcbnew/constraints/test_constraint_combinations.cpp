@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -277,6 +278,24 @@ BOOST_AUTO_TEST_CASE( RotateRestoresParallel )
     // constraint stays satisfiable.
     BOOST_CHECK_LE( parallelErr(), 0.05 );
     BOOST_CHECK( DiagnoseBoardConstraints( &b ).conflicting.empty() );
+}
+
+// A reference constraint leaves no driving residual to catch a diverged solve, so the state itself must
+BOOST_AUTO_TEST_CASE( NonFiniteStateIsNeverSatisfied )
+{
+    BOARD b;
+    auto* s = addSegment( b, { 0, 0 }, { 10 * MM, 2 * MM } );
+    PCB_CONSTRAINT* reference = addConstraint( b, PCB_CONSTRAINT_TYPE::HORIZONTAL, { whole( s ) } );
+    reference->SetDriving( false );
+
+    BOARD_CONSTRAINT_ADAPTER adapter;
+    BOOST_REQUIRE( adapter.Build( { s }, { reference } ) );
+
+    BOARD_CONSTRAINT_ADAPTER::SNAPSHOT state = adapter.Snapshot();
+    std::ranges::fill( state, std::numeric_limits<double>::quiet_NaN() );
+    BOOST_REQUIRE( adapter.Restore( state ) );
+
+    BOOST_CHECK( !adapter.CurrentRelationsSatisfied() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

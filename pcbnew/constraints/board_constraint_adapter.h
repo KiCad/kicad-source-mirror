@@ -405,10 +405,12 @@ private:
     /// minimal-movement solve @p aEdited must list every edited shape or a neighbour gets held back
     void pinUneditedShapes( const std::set<KIID>& aEdited, int aTag );
 
-    /// Decide whether a solve reached a usable result a raw Success or Converged always qualifies
-    /// while a Failed code is accepted only when every driving hard constraint is still satisfied
+    /// Decide whether a solve reached a usable result a raw Success or Converged qualifies while
+    /// a Failed code is accepted only when every driving hard constraint is still satisfied
+    /// A state with a non-finite parameter never qualifies, so it can never be written to the board
     bool solveSucceeded( int aSolveResult );
     bool hardRelationsSatisfied() const;
+    bool parametersFinite() const;
 
     /// Driving constraint tags whose residual is already out of tolerance, ignoring dropped ones.
     std::vector<int> staleRelationTags() const;
