@@ -33,6 +33,7 @@
 
 
 class wxHyperlinkCtrl;
+class wxStaticText;
 
 
 enum
@@ -213,6 +214,12 @@ public:
      */
     void FixSize();
 
+    /**
+     * Lay out the infobar, keeping the links and buttons level with the first line of a
+     * multi-line message.
+     */
+    bool Layout() override;
+
 protected:
     /**
      * Event handler for showing the infobar using a wxCommandEvent of the type
@@ -265,6 +272,8 @@ protected:
     wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
     MESSAGE_TYPE  m_type;           ///< The type of message being displayed
     wxString      m_message;        ///< The original message without wrapping
+    wxBoxSizer*   m_buttonArea;     ///< The links and buttons, laid out apart from the message
+    wxStaticText* m_messageText;    ///< The message control, which wxInfoBarGeneric keeps private
 
     std::optional<std::function<void(void)>> m_callback;   ///< Optional callback made when closing infobar
 

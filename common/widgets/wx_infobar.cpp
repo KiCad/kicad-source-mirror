@@ -32,6 +32,8 @@
 #include <wx/timer.h>
 #include <wx/dcclient.h>
 
+#include <algorithm>
+
 #ifdef __WXMSW__
 #include <dpi_scaling_common.h>
 #endif
@@ -82,7 +84,9 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid, bool aOverlay )
           m_overlay( aOverlay ),
           m_anchor( aParent ),
           m_showTimer( nullptr ),
-          m_type( MESSAGE_TYPE::GENERIC )
+          m_type( MESSAGE_TYPE::GENERIC ),
+          m_buttonArea( nullptr ),
+          m_messageText( nullptr )
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
@@ -131,6 +135,19 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid, bool aOverlay )
     {
         sizer->Detach( defaultCloseButton );
         defaultCloseButton->Hide();
+    }
+
+    // One gap before the area separates the message from its links, however many links follow
+    m_buttonArea = new wxBoxSizer( wxHORIZONTAL );
+    sizer->Add( m_buttonArea, wxSizerFlags().Expand().Border( wxLEFT ) );
+
+    for( wxWindow* child : GetChildren() )
+    {
+        if( wxStaticText* text = dynamic_cast<wxStaticText*>( child ) )
+        {
+            m_messageText = text;
+            break;
+        }
     }
 
     Layout();
@@ -303,6 +320,31 @@ void WX_INFOBAR::FixSize()
 }
 
 
+bool WX_INFOBAR::Layout()
+{
+    bool laidOut = wxInfoBarGeneric::Layout();
+
+    if( !m_messageText || !m_buttonArea || !m_buttonArea->AreAnyItemsShown() )
+        return laidOut;
+
+    int lineCount = m_messageText->GetLabel().Freq( '\n' ) + 1;
+
+    // Centred links would move down as the message grows, so hold them level with its first line
+    if( lineCount > 1 )
+    {
+        wxRect text = m_messageText->GetRect();
+        int    lineCentre = text.y + text.height / ( 2 * lineCount );
+        int    height = std::max( 2 * lineCentre, m_buttonArea->GetMinSize().y );
+        int    top = std::clamp( lineCentre - height / 2, 0, std::max( 0, GetClientSize().y - height ) );
+
+        m_buttonArea->SetDimension( wxPoint( m_buttonArea->GetPosition().x, top ),
+                                    wxSize( m_buttonArea->GetSize().x, height ) );
+    }
+
+    return laidOut;
+}
+
+
 void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
 {
     doSize();
@@ -455,9 +497,10 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     aButton->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 #endif // __WXMAC__
 
-    auto element = sizer->Add( aButton, wxSizerFlags( 0 ).Centre().Border( wxRIGHT ) );
+    auto element = m_buttonArea->Add( aButton, wxSizerFlags( 0 ).Centre().Border( wxRIGHT ) );
 
-    element->SetFlag( wxSTRETCH_MASK );
+    // SetFlag replaces every flag, so keep the centring and border set above
+    element->SetFlag( element->GetFlag() | wxSTRETCH_MASK );
 
     if( IsShownOnScreen() )
     {
@@ -474,7 +517,7 @@ void WX_INFOBAR::AddLink(const wxString& aLinkText, const std::function<void(wxH
 
     button->Bind( wxEVT_COMMAND_HYPERLINK, aFn );
 
-    sizer->Add( button, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
+    m_buttonArea->Add( button, wxSizerFlags().Centre().Border( wxRIGHT ).Shaped() );
 
     if( IsShownOnScreen() )
     {
@@ -496,29 +539,7 @@ void WX_INFOBAR::AddCloseButton( const wxString& aTooltip )
 
 void WX_INFOBAR::RemoveAllButtons()
 {
-    wxSizer* sizer = GetSizer();
-
-    if( sizer->GetItemCount() == 0 )
-        return;
-
-    // The last item is already the spacer
-    if( sizer->GetItem( sizer->GetItemCount() - 1 )->IsSpacer() )
-        return;
-
-    for( int i = (int) sizer->GetItemCount() - 1; i >= 0; i-- )
-    {
-        wxSizerItem* sItem = sizer->GetItem( i );
-
-        // The spacer is the end of the custom buttons
-        if( sItem->IsSpacer() )
-            break;
-
-        if( wxWindow* button = sItem->GetWindow() )
-        {
-            sizer->Detach( button );
-            button->Destroy();
-        }
-    }
+    m_buttonArea->Clear( true );
 }
 
 
@@ -530,18 +551,10 @@ bool WX_INFOBAR::HasCloseButton() const
 
 wxBitmapButton* WX_INFOBAR::GetCloseButton() const
 {
-    wxSizer* sizer = GetSizer();
-
-    if( !sizer )
+    if( m_buttonArea->GetItemCount() == 0 )
         return nullptr;
 
-    if( sizer->GetItemCount() == 0 )
-        return nullptr;
-
-    if( sizer->GetItem( sizer->GetItemCount() - 1 )->IsSpacer() )
-        return nullptr;
-
-    wxSizerItem* item = sizer->GetItem( sizer->GetItemCount() - 1 );
+    wxSizerItem* item = m_buttonArea->GetItem( m_buttonArea->GetItemCount() - 1 );
 
     if( item && item->GetWindow() && item->GetWindow()->GetId() == ID_CLOSE_INFOBAR )
         return static_cast<wxBitmapButton*>( item->GetWindow() );
