@@ -298,15 +298,12 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         if( event.CanVeto() )
             event.Veto();
 
-        // A vetoed close must not mark the file as open for the next session
-        m_isNonUserClose = false;
         return;
     }
 
 
     // End session means the OS is going to terminate us
-    if( Pgm().IsSessionEnding() )
-        m_isNonUserClose = true;
+    SCOPED_SET_RESET<bool> nonUserClose( m_isNonUserClose, m_isNonUserClose || Pgm().IsSessionEnding() );
 
     SCOPED_SET_RESET<bool> closeGuard( m_closeInProgress, true );
 
@@ -333,8 +330,6 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     {
         if( event.CanVeto() )
             event.Veto();
-
-        m_isNonUserClose = false;
     }
 }
 
