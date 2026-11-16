@@ -1805,21 +1805,6 @@ bool SYMBOL_EDIT_FRAME::IsCurrentSymbol( const LIB_ID& aLibId ) const
 }
 
 
-void SYMBOL_EDIT_FRAME::emptyScreen()
-{
-    GetLibTree()->Unselect();
-
-    // Tear down every tab first so no context observes the about-to-be-deleted working symbol.
-    closeAllSymbolTabsSilently();
-
-    SetCurSymbol( nullptr, false );
-    SetScreen( m_dummyScreen );
-    ClearUndoRedoList();
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
-    Refresh();
-}
-
-
 void SYMBOL_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aFlags );

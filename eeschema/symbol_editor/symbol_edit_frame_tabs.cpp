@@ -618,36 +618,6 @@ bool SYMBOL_EDIT_FRAME::promptToSaveInactiveInstanceTabs()
 }
 
 
-void SYMBOL_EDIT_FRAME::closeAllSymbolTabsSilently()
-{
-    if( m_tabContexts.empty() )
-        return;
-
-    m_silentSymbolTabClose = true;
-
-    // Remove through the panel so its widget pages and the contexts stay in sync.
-    m_tabsPanel->CloseAll();
-
-    // Repoint the frame before the active tab's objects return to its soon-deleted context.
-    if( m_activeTab )
-    {
-        ClearUndoRedoList();
-        m_activeTab->AdoptWorkingObjects( m_symbol, static_cast<SCH_SCREEN*>( GetScreen() ) );
-        m_activeTab = nullptr;
-        m_symbol = nullptr;
-        SetScreen( m_dummyScreen );
-    }
-
-    // Free undo/redo for any contexts the panel path did not already close.
-    for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
-        clearSymbolTabUndoRedo( *ctx );
-
-    m_tabContexts.clear();
-
-    m_silentSymbolTabClose = false;
-}
-
-
 void SYMBOL_EDIT_FRAME::closeSymbolTab( const LIB_ID& aLibId )
 {
     const wxString key = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aLibId.GetLibNickname(), aLibId.GetLibItemName() );

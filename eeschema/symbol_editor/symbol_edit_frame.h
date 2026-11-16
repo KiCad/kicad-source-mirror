@@ -488,9 +488,6 @@ public:
     /// Return true if \a aLibId is an alias for the editor screen symbol.
     bool IsCurrentSymbol( const LIB_ID& aLibId ) const;
 
-    /// Restore the empty editor screen, without any symbol or library selected.
-    void emptyScreen();
-
     void ClearToolbarControl( int aId ) override;
 
 protected:
@@ -688,12 +685,6 @@ private:
      * query early, since those tabs are invisible to IsContentModified (which sees only the active tab).
      */
     bool hasDirtyInactiveInstanceTabs() const;
-
-    /**
-     * Close every tab without prompting and return the frame to the empty state. Used by the paths
-     * that leave the tab model. The caller handles any unsaved-change prompting.
-     */
-    void closeAllSymbolTabsSilently();
 
     /**
      * Close the open tab for aLibId, if any, without prompting and leaving the other tabs open. The
