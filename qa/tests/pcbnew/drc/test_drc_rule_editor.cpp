@@ -369,7 +369,7 @@ BOOST_AUTO_TEST_CASE( DeletedSplitEntryStaysDeleted )
                           "(rule \"Combo\"\n"
                           "  (condition \"A.NetClass == 'HV'\")\n"
                           "  (constraint clearance (min 0.5mm))\n"
-                          "  (constraint track_width (opt 0.3mm)))\n" );
+                          "  (constraint track_width (min 0.25mm) (opt 0.3mm) (max 0.35mm)))\n" );
 
     DRC_RULE_LOADER loader;
 
@@ -1619,15 +1619,14 @@ BOOST_AUTO_TEST_CASE( RuleLoaderWithCondition )
 BOOST_AUTO_TEST_CASE( RuleLoaderMultipleRules )
 {
     // Test: Load multiple rules and verify order preservation
-    wxString ruleText =
-        "(version 1)\n"
-        "(rule \"Rule A\"\n"
-        "    (constraint clearance (min 0.2mm)))\n"
-        "(rule \"Rule B\"\n"
-        "    (constraint track_width (min 0.15mm)))\n"
-        "(rule \"Rule C\"\n"
-        "    (constraint via_diameter (min 0.5mm))\n"
-        "    (constraint hole_size (min 0.3mm)))";
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"Rule A\"\n"
+                        "    (constraint clearance (min 0.2mm)))\n"
+                        "(rule \"Rule B\"\n"
+                        "    (constraint track_width (min 0.15mm) (opt 0.2mm) (max 0.25mm)))\n"
+                        "(rule \"Rule C\"\n"
+                        "    (constraint via_diameter (min 0.5mm))\n"
+                        "    (constraint hole_size (min 0.3mm)))";
 
     DRC_RULE_LOADER loader;
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
@@ -2276,16 +2275,15 @@ BOOST_AUTO_TEST_CASE( IntegrationSaveLoadViaStyleRoundTrip )
 BOOST_AUTO_TEST_CASE( IntegrationSplitRulePreservesOrder )
 {
     // Test: A rule with multiple constraint types splits and preserves order
-    wxString ruleText =
-        "(version 1)\n"
-        "(rule \"Rule A\"\n"
-        "    (constraint clearance (min 0.2mm)))\n"
-        "(rule \"Rule B\"\n"
-        "    (constraint via_diameter (min 0.5mm))\n"
-        "    (constraint hole_size (min 0.2mm))\n"
-        "    (constraint track_width (min 0.15mm)))\n"
-        "(rule \"Rule C\"\n"
-        "    (constraint edge_clearance (min 0.3mm)))";
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"Rule A\"\n"
+                        "    (constraint clearance (min 0.2mm)))\n"
+                        "(rule \"Rule B\"\n"
+                        "    (constraint via_diameter (min 0.5mm))\n"
+                        "    (constraint hole_size (min 0.2mm))\n"
+                        "    (constraint track_width (min 0.15mm) (opt 0.2mm) (max 0.25mm)))\n"
+                        "(rule \"Rule C\"\n"
+                        "    (constraint edge_clearance (min 0.3mm)))";
 
     DRC_RULE_LOADER loader;
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );

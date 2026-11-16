@@ -345,6 +345,37 @@ BOOST_AUTO_TEST_CASE( ARangeWithBothEndsStillReachesItsPanel )
 }
 
 
+BOOST_AUTO_TEST_CASE( AWidthOrGapMissingABoundIsKeptAsWritten )
+{
+    // The width and gap panels write min, opt and max around one optimum, so a rule naming fewer
+    // would come back with every wider track or gap an error
+    const std::vector<wxString> partial = {
+        wxS( "(constraint track_width (min 0.2mm))" ),
+        wxS( "(constraint track_width (min 0.2mm) (max 0.4mm))" ),
+        wxS( "(constraint diff_pair_gap (min 0.1mm))" ),
+    };
+
+    for( const wxString& clauses : partial )
+    {
+        BOARD             board;
+        DRC_RULE_DOCUMENT document( &board );
+
+        document.SetText( wxS( "(version 2)\n(rule \"partial\"\n\t" ) + clauses + wxS( ")\n" ) );
+
+        BOOST_REQUIRE_MESSAGE( !document.Entries().empty(), "nothing loaded for " << clauses );
+
+        DRC_RE_LOADED_PANEL_ENTRY edited = document.Entries()[0];
+        edited.ruleName = wxS( "renamed" );
+        document.UpdateEntry( 0, edited );
+
+        wxString text = document.GetText();
+
+        BOOST_CHECK_MESSAGE( text.Contains( clauses ), "the clauses were rewritten, from " << clauses << ":\n"
+                                                                                           << text );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( RenamingOneConstraintRenamesTheWholeRule )
 {
     BOARD             board;

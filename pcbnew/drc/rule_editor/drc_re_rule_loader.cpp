@@ -89,6 +89,19 @@ static bool isSymmetricMinOptMax( const DRC_CONSTRAINT* aConstraint )
 }
 
 
+// The width and gap panels write min, opt and max around one optimum, so a range missing any of them
+// would be rewritten
+static bool isSymmetricTriple( const DRC_CONSTRAINT* aConstraint )
+{
+    if( !aConstraint )
+        return true;
+
+    const auto& value = aConstraint->GetValue();
+
+    return value.HasMin() && value.HasOpt() && value.HasMax() && isSymmetricMinOptMax( aConstraint );
+}
+
+
 static bool isMinOnly( const DRC_CONSTRAINT* aConstraint )
 {
     if( !aConstraint )
@@ -417,10 +430,8 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         const DRC_CONSTRAINT* diffGap = findConstraint( aRule, DIFF_PAIR_GAP_CONSTRAINT );
         const DRC_CONSTRAINT* uncoupled = findConstraint( aRule, MAX_UNCOUPLED_CONSTRAINT );
 
-        if( !isSymmetricMinOptMax( trackWidth ) || !isSymmetricMinOptMax( diffGap ) || !hasMaxBound( uncoupled ) )
-        {
+        if( !isSymmetricTriple( trackWidth ) || !isSymmetricTriple( diffGap ) || !hasMaxBound( uncoupled ) )
             return makeCustomRuleData( aRule );
-        }
 
         auto data = std::make_shared<DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA>();
         data->SetRuleName( aRule.m_Name );
@@ -478,7 +489,7 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
     {
         const DRC_CONSTRAINT* trackWidth = findConstraint( aRule, TRACK_WIDTH_CONSTRAINT );
 
-        if( !isSymmetricMinOptMax( trackWidth ) )
+        if( !isSymmetricTriple( trackWidth ) )
             return makeCustomRuleData( aRule );
 
         auto data = std::make_shared<DRC_RE_ROUTING_WIDTH_CONSTRAINT_DATA>();
