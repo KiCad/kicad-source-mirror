@@ -156,8 +156,8 @@ BOOST_AUTO_TEST_CASE( LargeParameterHandlingRecordsTelemetry )
 }
 
 
-// Unknown order sets the Jacobian columns and so the rounding. Address order follows heap layout,
-// which on MSVC moved a block edit by 28 nm between sessions
+// Unknown order sets the Jacobian columns and so the rounding, so it follows the declaration and
+// not the heap layout that moved an MSVC block edit by 28 nm between sessions
 BOOST_AUTO_TEST_CASE( SubsystemKeepsTheDeclaredUnknownOrder )
 {
     std::vector<double> storage{ 1.0, 2.0, 3.0, 4.0 };
@@ -172,10 +172,18 @@ BOOST_AUTO_TEST_CASE( SubsystemKeepsTheDeclaredUnknownOrder )
     subsystem.getParamList( unknowns );
 
     BOOST_CHECK( unknowns == declared );
+
+    // An equality folds its second parameter into the first, which keeps its declared place
+    GCS::MAP_pD_pD reduction{ { &storage[2], &storage[1] } };
+    GCS::SubSystem reduced( constraints, declared, reduction );
+    GCS::VEC_pD    reducedUnknowns;
+    reduced.getParamList( reducedUnknowns );
+
+    BOOST_CHECK( reducedUnknowns == GCS::VEC_pD( { &storage[3], &storage[1], &storage[0] } ) );
 }
 
 
-// A soft solve ran its variables in address order too, so moving the parameters moved the result
+// A soft solve orders its variables as declared too, so moving the parameters must not move the result
 BOOST_AUTO_TEST_CASE( SoftSolveDoesNotDependOnParameterAddresses )
 {
     const std::vector<double> start{ 0.0, 0.0, 10.0, 5.0, 20.0, 0.0, 20.0, 10.0 };

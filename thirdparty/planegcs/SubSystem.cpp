@@ -68,8 +68,7 @@ void SubSystem::initialize(VEC_pD& params, MAP_pD_pD& reductionmap)
             s2.insert(constr_params.begin(), constr_params.end());
         }
 
-        // Keep the declared order. Address order sets the Jacobian columns, so the result
-        // followed heap layout
+        // Declared order, since address order would tie the rounding to heap layout
         for (double* param : params) {
             if (s2.erase(param) > 0) {
                 tmpplist.push_back(param);

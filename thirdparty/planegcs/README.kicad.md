@@ -11,8 +11,9 @@ geometric drafting constraints). See the design doc for how it is used.
 - **License:** LGPL-2.1-or-later (unchanged; see file headers). Compatible with
   KiCad's GPL-3.0+. Kept out of permissive `libs/kimath`; the KiCad adapter that
   consumes it lives in `pcbnew/constraints/`.
-- **Files (11, upstream-faithful):** `Constraints.{cpp,h}`, `GCS.{cpp,h}`,
-  `Geo.{cpp,h}`, `SubSystem.{cpp,h}`, `Util.h`, `qp_eq.{cpp,h}`.
+- **Files (11, upstream apart from the edits under KiCad modifications):**
+  `Constraints.{cpp,h}`, `GCS.{cpp,h}`, `Geo.{cpp,h}`, `SubSystem.{cpp,h}`, `Util.h`,
+  `qp_eq.{cpp,h}`.
 
 ## Dependencies
 
@@ -40,10 +41,9 @@ patch (re-apply on upstream re-sync):
 
 `SubSystem::initialize()` and the two-subsystem `System::solve()` order their unknowns
 as the caller declared them instead of by address. Upstream intersects or sorts sets of
-`double*`, so the variable order, and with it the rounding of every solve, followed heap
-layout. MSVC's `std::deque<double>`
-allocates two doubles per block, which made the same edit land a few nanometres apart
-from one session to the next. Re-apply on upstream re-sync.
+`double*`, so the variable order, and with it the rounding of every solve, follows heap
+layout. MSVC's `std::deque<double>` allocates two doubles per block, so the same edit
+landed a few nanometres apart from one session to the next. Re-apply on upstream re-sync.
 
 No other source edits. For production the shim's `Console`/`TimeElapsed` should
 route to `wxLogTrace` / a `std::chrono` timer; the spike keeps them trivial.

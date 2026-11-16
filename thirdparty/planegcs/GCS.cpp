@@ -4539,16 +4539,10 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
 
         SET_pD subsysParams(plistA.begin(), plistA.end());
         subsysParams.insert(plistB.begin(), plistB.end());
+        plistAB.assign(subsysParams.begin(), subsysParams.end());
 
-        // Keep the declared order. Address order sets the SQP variable order, so the result
-        // followed heap layout
-        for (double* param : plist) {
-            if (subsysParams.erase(param) > 0) {
-                plistAB.push_back(param);
-            }
-        }
-
-        assert(subsysParams.empty());
+        // Declared order, since address order would tie the rounding to heap layout
+        std::ranges::sort(plistAB, {}, [this](double* param) { return pIndex.at(param); });
     }
     int xsize = plistAB.size();
 
