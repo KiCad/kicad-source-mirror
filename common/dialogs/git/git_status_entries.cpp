@@ -338,7 +338,10 @@ void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore )
 
     for( const EDITOR_DOC& doc : g_editorDocs )
     {
-        if( !aKiway.Player( doc.frameType, false ) )
+        KIWAY_PLAYER* player = aKiway.Player( doc.frameType, false );
+
+        // A frame that is quitting would reopen its file and leave a lock behind
+        if( !player || player->IsClosing() )
             continue;
 
         // Reloading throws away undo history and the view state, so only do it for a document
