@@ -134,6 +134,65 @@ bool ComputeFootprintShift( const FOOTPRINT& aExisting, const FOOTPRINT& aNew, V
 }
 
 
+PAD_CHANGE_SUMMARY ComparePads( const FOOTPRINT& aPlaced, const FOOTPRINT& aLibrary )
+{
+    // Absorbs the rounding of library positions in footprints placed at arbitrary angles
+    const int tolerance = pcbIUScale.mmToIU( 0.001 );
+
+    struct PAD_GROUP
+    {
+        std::vector<VECTOR2I> libraryPositions;
+        int                   unmatchedPlaced = 0;
+    };
+
+    std::map<wxString, PAD_GROUP> groups;
+
+    for( PAD* pad : aLibrary.Pads() )
+    {
+        VECTOR2I pos = pad->GetLibraryPosition();
+
+        // A back-side footprint's library frame is mirrored, see ComputeFootprintShift
+        if( aPlaced.IsFlipped() != aLibrary.IsFlipped() )
+            MIRROR( pos.y, 0 );
+
+        groups[pad->GetNumber()].libraryPositions.push_back( pos );
+    }
+
+    for( PAD* pad : aPlaced.Pads() )
+    {
+        PAD_GROUP&             group = groups[pad->GetNumber()];
+        std::vector<VECTOR2I>& candidates = group.libraryPositions;
+        const VECTOR2I         placedPos = pad->GetLibraryPosition();
+
+        auto it = std::find_if( candidates.begin(), candidates.end(),
+                                [&]( const VECTOR2I& aPos )
+                                {
+                                    return std::abs( aPos.x - placedPos.x ) <= tolerance
+                                           && std::abs( aPos.y - placedPos.y ) <= tolerance;
+                                } );
+
+        if( it != candidates.end() )
+            candidates.erase( it );
+        else
+            group.unmatchedPlaced++;
+    }
+
+    PAD_CHANGE_SUMMARY summary;
+
+    for( const auto& [number, group] : groups )
+    {
+        const int unmatchedLibrary = static_cast<int>( group.libraryPositions.size() );
+        const int moved = std::min( unmatchedLibrary, group.unmatchedPlaced );
+
+        summary.moved += moved;
+        summary.added += unmatchedLibrary - moved;
+        summary.removed += group.unmatchedPlaced - moved;
+    }
+
+    return summary;
+}
+
+
 void FOOTPRINT_UTILS::CheckFootprintAttributes(
         const FOOTPRINT& aFootprint, const std::function<void( const wxString& )>& aErrorHandler )
 {

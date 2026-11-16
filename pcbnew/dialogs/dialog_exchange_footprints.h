@@ -63,6 +63,13 @@ private:
     wxRadioButton* getRadioButtonForMode();
 
     bool isMatch( FOOTPRINT* );
+
+    /**
+     * Ask before an update that moves, adds or removes pads on any matching footprint.
+     *
+     * @return false if the user cancelled.
+     */
+    bool confirmPadChanges();
     void processMatchingFootprints();
     void processFootprint( FOOTPRINT* aFootprint, const LIB_ID& aNewFPID );
 

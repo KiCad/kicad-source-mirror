@@ -59,6 +59,33 @@ bool ComputeFootprintShift( const FOOTPRINT& aExisting, const FOOTPRINT& aNew, V
                             EDA_ANGLE& aAngleShift );
 
 
+/**
+ * Pad differences between a placed footprint and the library footprint that would replace it.
+ */
+struct PAD_CHANGE_SUMMARY
+{
+    int moved = 0;
+    int added = 0;
+    int removed = 0;
+
+    bool Any() const { return moved || added || removed; }
+};
+
+
+/**
+ * Count the pads that exchanging @a aPlaced for @a aLibrary would move, add or remove.
+ *
+ * Positions are compared in the library frame, so the placed footprint's position, rotation
+ * and side do not count as changes.  A changed anchor reports every pad as moved, even when
+ * "match pad positions" would compensate for it.
+ *
+ * Pads are matched by number.  Pads that share a number, including unnumbered pads such as
+ * mounting holes, first pair up by position.  The leftovers pair up as moved pads, and any
+ * remainder counts as added or removed.
+ */
+PAD_CHANGE_SUMMARY ComparePads( const FOOTPRINT& aPlaced, const FOOTPRINT& aLibrary );
+
+
 namespace FOOTPRINT_UTILS
 {
 

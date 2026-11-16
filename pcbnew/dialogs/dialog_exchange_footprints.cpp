@@ -23,8 +23,10 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <footprint.h>
+#include <footprint_utils.h>
 #include <pad.h>
 #include <dialog_exchange_footprints.h>
+#include <kidialog.h>
 #include <string_utils.h>
 #include <kiway.h>
 #include <kiway_mail.h>
@@ -35,6 +37,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 
+#include <map>
 #include <ranges>
 
 
@@ -48,6 +51,12 @@ int g_matchModeForUpdate           = ID_MATCH_FP_ALL;
 int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
 int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
+
+
+static wxString formatPadChanges( const PAD_CHANGE_SUMMARY& aChanges )
+{
+    return wxString::Format( _( "%d moved, %d added, %d removed" ), aChanges.moved, aChanges.added, aChanges.removed );
+}
 
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint,
@@ -296,8 +305,59 @@ void DIALOG_EXCHANGE_FOOTPRINTS::checkAll( bool aCheck )
 }
 
 
+bool DIALOG_EXCHANGE_FOOTPRINTS::confirmPadChanges()
+{
+    std::map<LIB_ID, std::unique_ptr<FOOTPRINT>> libFootprints;
+    PAD_CHANGE_SUMMARY                           total;
+    int                                          changedCount = 0;
+
+    {
+        wxBusyCursor busy;
+
+        for( FOOTPRINT* footprint : m_parent->GetBoard()->Footprints() )
+        {
+            if( !isMatch( footprint ) )
+                continue;
+
+            auto [it, inserted] = libFootprints.try_emplace( footprint->GetFPID() );
+
+            if( inserted )
+                it->second.reset( m_parent->LoadFootprint( footprint->GetFPID() ) );
+
+            if( !it->second )
+                continue;
+
+            PAD_CHANGE_SUMMARY changes = ComparePads( *footprint, *it->second );
+
+            if( changes.Any() )
+            {
+                total.moved += changes.moved;
+                total.added += changes.added;
+                total.removed += changes.removed;
+                changedCount++;
+            }
+        }
+    }
+
+    if( !total.Any() )
+        return true;
+
+    KIDIALOG dlg( this,
+                  wxString::Format( _( "Updating changes the pads of %d footprint(s) (%s)." ), changedCount,
+                                    formatPadChanges( total ) ),
+                  _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+    dlg.SetExtendedMessage( _( "Tracks and vias may no longer connect to the changed pads." ) );
+    dlg.SetOKLabel( _( "Update" ) );
+
+    return dlg.ShowModal() == wxID_OK;
+}
+
+
 void DIALOG_EXCHANGE_FOOTPRINTS::OnOKClicked( wxCommandEvent& aEvent )
 {
+    if( m_updateMode && !confirmPadChanges() )
+        return;
+
     PCB_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     wxBusyCursor        dummy;
 
@@ -380,6 +440,8 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     bool updated = !m_updateMode || aFootprint->FootprintNeedsUpdate( newFootprint );
     bool shifted = false;
 
+    PAD_CHANGE_SUMMARY padChanges = m_updateMode ? ComparePads( *aFootprint, *newFootprint ) : PAD_CHANGE_SUMMARY();
+
     m_parent->GetBoard()->ExchangeFootprint( aFootprint, newFootprint, m_commit,
                                              m_parent->GetPcbNewSettings()->m_FlipDirection,
                                              m_matchPadPositions->GetValue(),
@@ -408,6 +470,11 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
             msg += _( ": (no changes)" );
 
         m_MessageWindow->Report( msg, RPT_SEVERITY_INFO );
+    }
+    else if( padChanges.Any() )
+    {
+        msg += wxString::Format( _( ": pads changed (%s)" ), formatPadChanges( padChanges ) );
+        m_MessageWindow->Report( msg, RPT_SEVERITY_WARNING );
     }
     else
     {
