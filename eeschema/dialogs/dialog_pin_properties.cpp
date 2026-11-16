@@ -502,7 +502,7 @@ void DIALOG_PIN_PROPERTIES::OnPropertiesChange( wxCommandEvent& event )
     if( event.GetEventObject() == m_checkApplyToAllParts && m_frame->SynchronizePins() )
     {
         m_infoBar->ShowMessage( getSyncPinsMessage() );
-        m_infoBar->GetSizer()->Layout();
+        m_infoBar->Layout();
     }
 
     m_previewWidget->DisplayPart( m_dummyParent, m_dummyPin->GetUnit(), m_dummyPin->GetBodyStyle() );

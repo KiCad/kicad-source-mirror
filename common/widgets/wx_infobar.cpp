@@ -497,10 +497,8 @@ void WX_INFOBAR::AddButton( wxButton* aButton )
     aButton->SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 #endif // __WXMAC__
 
-    auto element = m_buttonArea->Add( aButton, wxSizerFlags( 0 ).Centre().Border( wxRIGHT ) );
-
-    // SetFlag replaces every flag, so keep the centring and border set above
-    element->SetFlag( element->GetFlag() | wxSTRETCH_MASK );
+    // Shaped without alignment keeps each button at its own aspect at the top of the bar
+    m_buttonArea->Add( aButton, 0, wxSTRETCH_MASK );
 
     if( IsShownOnScreen() )
     {
