@@ -1989,6 +1989,44 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
         }
     }
 
+    // Run after the nesting above so a child that moved to another parent is already there.
+    // The netlist does not describe board-only members, so only a child group it knows about
+    // can be said to have left its parent.
+    for( PCB_GROUP* childGroup : m_board->Groups() )
+    {
+        NETLIST_GROUP* childNetlistGroup = aNetlist.GetGroupByUuid( childGroup->m_Uuid );
+
+        if( !childNetlistGroup || !childGroup->GetParentGroup() )
+            continue;
+
+        PCB_GROUP*     parentGroup = static_cast<PCB_GROUP*>( childGroup->GetParentGroup() );
+        NETLIST_GROUP* parentNetlistGroup = aNetlist.GetGroupByUuid( parentGroup->m_Uuid );
+
+        if( !parentNetlistGroup )
+            continue;
+
+        const std::vector<KIID_PATH>& members = parentNetlistGroup->members;
+
+        if( std::find( members.begin(), members.end(), childNetlistGroup->path ) != members.end() )
+            continue;
+
+        if( m_isDryRun )
+        {
+            msg.Printf( _( "Remove group '%s' from group '%s'." ), EscapeHTML( childGroup->GetName() ),
+                        EscapeHTML( parentGroup->GetName() ) );
+        }
+        else
+        {
+            msg.Printf( _( "Removed group '%s' from group '%s'." ), EscapeHTML( childGroup->GetName() ),
+                        EscapeHTML( parentGroup->GetName() ) );
+            m_commit.Modify( parentGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+            m_commit.Modify( childGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+            parentGroup->RemoveItem( childGroup );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
     return true;
 }
 
