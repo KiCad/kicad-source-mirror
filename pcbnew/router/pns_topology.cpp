@@ -548,6 +548,7 @@ std::vector<LINE> TOPOLOGY::findLinesFromVia( ROUTER_IFACE* aRouterIface, VIA* a
 
     opts.m_differentNetsOnly = false;
     opts.SetFixedClearanceOverride( 0 );
+    opts.m_overrideExemptPairs = true;
     opts.m_kindMask = ITEM::SEGMENT_T | ITEM::ARC_T;
 
     m_world->QueryColliding( aVia, obstacles, opts );

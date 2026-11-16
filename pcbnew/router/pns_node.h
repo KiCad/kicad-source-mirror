@@ -138,6 +138,10 @@ struct COLLISION_SEARCH_OPTIONS
     bool m_useClearanceEpsilon = true;
     COLLISION_FILTER_FUNC m_filter = nullptr;
     CLEARANCE_OVERRIDE_FUNC m_overrideClearance = nullptr;
+
+    /// Apply m_overrideClearance even to pairs the resolver exempts, such as same-net items
+    bool m_overrideExemptPairs = false;
+
     int m_layer = -1;
     
     void SetFixedClearanceOverride( int aClearance )
