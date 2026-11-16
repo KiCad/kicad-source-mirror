@@ -53,9 +53,12 @@ weigh `1e-4`, so their curvature is `1e-8` and the identity overstates it so far
 Re-apply on upstream re-sync.
 
 The same solve returns `Failed` as soon as the soft gradient or the hard Jacobian is no
-longer finite. A contradiction can be met by collapsing a segment, where a distance
-constraint's derivative is 0/0. Upstream then lets the NaN through the `yTh != 0` test into
-the BFGS matrix and every later step. Re-apply on upstream re-sync.
+longer finite, at the start or after any step, and hands back the parameters it started
+from. A contradiction can be met by collapsing a segment, where a distance constraint's
+derivative is 0/0. Upstream then lets the NaN through the `yTh != 0` test into the BFGS
+matrix and every later step. Stopping at the collapsed iterate instead is no better, because
+it can satisfy every hard constraint and be written back as a solution. Re-apply on upstream
+re-sync.
 
 The penalty weight `mu` (Eq. 18.36) is left unchanged on an iterate that already meets
 every hard constraint. Upstream divides by that zero violation, so `mu` becomes infinite,

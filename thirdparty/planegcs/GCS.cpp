@@ -4565,6 +4565,7 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
     subsysB->getParams(plistAB, x);
     subsysA->getParams(plistAB, x);
     subsysB->setParams(plistAB, x);  // just to ensure that A and B are synchronized
+    Eigen::VectorXd xStart = x;
 
     subsysB->calcGrad(plistAB, grad);
     subsysA->calcJacobi(plistAB, JA);
@@ -4593,9 +4594,14 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
     double divergingLim = 1e6 * subsysA->error() + 1e12;
 
     double mu = 0;
-    bool nonFinite = false;
+    auto derivativesFinite = [&] { return grad.allFinite() && JA.allFinite(); };
     lambda.setZero();
     for (int iter = 1; iter < maxIterNumber; iter++) {
+        // Degenerate geometry, at the start or after a step, can take a derivative to 0/0 and make the step NaN
+        if (!derivativesFinite()) {
+            break;
+        }
+
         int status = qp_eq(B, grad, JA, resA, xdir, Y, Z);
         if (status) {
             break;
@@ -4673,12 +4679,6 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
             subsysA->calcResidual(resA);
         }
 
-        // Degenerate geometry can take a derivative to 0/0, and a NaN would poison B and every later step
-        if (!grad.allFinite() || !JA.allFinite()) {
-            nonFinite = true;
-            break;
-        }
-
         y = grad - JA.transpose() * lambda - y;  // Eq. 18.13
 
         if (iter > 1) {
@@ -4701,7 +4701,12 @@ int System::solve(SubSystem* subsysA, SubSystem* subsysB, bool /*isFine*/, bool 
     }
 
     int ret;
-    if (nonFinite) {
+
+    // Judged on the final derivatives, since the convergence test or the last iteration can exit past the check above
+    if (!derivativesFinite()) {
+        // Hand back the start, since an iterate that met a 0/0 is degenerate yet can satisfy every hard constraint
+        subsysA->setParams(plistAB, xStart);
+        subsysB->setParams(plistAB, xStart);
         ret = Failed;
     }
     else if (subsysA->error() <= smallF) {

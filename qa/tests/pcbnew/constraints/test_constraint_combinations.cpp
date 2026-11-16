@@ -318,4 +318,23 @@ BOOST_AUTO_TEST_CASE( ContradictionLeavesFiniteGeometry )
         BOOST_CHECK( std::isfinite( param ) );
 }
 
+// The perpendicular contradicts the parallel, and the solve that meets a collapse must not move either segment
+BOOST_AUTO_TEST_CASE( ContradictoryAuthoringLeavesTheBoard )
+{
+    BOARD b;
+    auto* s1 = addSegment( b, { 0, 0 }, { 10 * MM, 0 } );
+    auto* s2 = addSegment( b, { 0, 5 * MM }, { 8 * MM, 3 * MM } );
+    author( b, PCB_CONSTRAINT_TYPE::PARALLEL, { whole( s1 ), whole( s2 ) } );
+
+    const VECTOR2I s1End = s1->GetEnd();
+    const VECTOR2I s2Start = s2->GetStart();
+    const VECTOR2I s2End = s2->GetEnd();
+
+    author( b, PCB_CONSTRAINT_TYPE::PERPENDICULAR, { whole( s1 ), whole( s2 ) } );
+
+    BOOST_CHECK_EQUAL( s1->GetEnd(), s1End );
+    BOOST_CHECK_EQUAL( s2->GetStart(), s2Start );
+    BOOST_CHECK_EQUAL( s2->GetEnd(), s2End );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
