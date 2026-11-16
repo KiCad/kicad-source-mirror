@@ -34,7 +34,7 @@ class KISTATUSBAR;
 struct NOTIFICATION;
 class NOTIFICATIONS_LIST;
 class wxWindow;
-class wxCloseEvent;
+class wxWindowDestroyEvent;
 
 
 struct KICOMMON_API NOTIFICATION
@@ -102,7 +102,7 @@ private:
     /**
      * Handle removing the shown list window from our list of shown windows.
      */
-    void onListWindowClosed( wxCloseEvent& aEvent );
+    void onListWindowDestroyed( wxWindowDestroyEvent& aEvent );
 
 private:
     /// Current stack of notifications. A list, since shown panels hold pointers to its elements.

@@ -19,9 +19,9 @@
  */
 
 #include <wx/filename.h>
-#include <wx/frame.h>
 #include <wx/hyperlink.h>
 #include <wx/panel.h>
+#include <wx/popupwin.h>
 #include <wx/scrolwin.h>
 #include <wx/sizer.h>
 #include <wx/settings.h>
@@ -154,15 +154,14 @@ private:
 };
 
 
-class NOTIFICATIONS_LIST : public wxFrame
+class NOTIFICATIONS_LIST : public wxPopupTransientWindow
 {
 public:
-    NOTIFICATIONS_LIST( NOTIFICATIONS_MANAGER* aManager, wxWindow* parent, const wxPoint& pos ) :
-            wxFrame( parent, wxID_ANY, _( "Notifications" ), pos, wxSize( 300, 150 ),
-                     wxFRAME_NO_TASKBAR | wxBORDER_SIMPLE ),
+    NOTIFICATIONS_LIST( NOTIFICATIONS_MANAGER* aManager, wxWindow* parent ) :
+            wxPopupTransientWindow( parent, wxBORDER_SIMPLE | wxPU_CONTAINS_CONTROLS ),
             m_manager( aManager )
     {
-        SetSizeHints( wxDefaultSize, wxDefaultSize );
+        SetSize( wxSize( 300, 150 ) );
 
         wxBoxSizer* bSizer1;
         bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -189,39 +188,29 @@ public:
         m_noNotificationsText->Wrap( -1 );
         m_contentSizer->Add( m_noNotificationsText, 1, wxALL | wxEXPAND, 5 );
 
-        Bind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
-        m_scrolledWindow->Bind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
+        Bind( wxEVT_CHAR_HOOK, &NOTIFICATIONS_LIST::onCharHook, this );
 
         SetSizer( bSizer1 );
         Layout();
-
-        SetFocus();
     }
 
 
-    ~NOTIFICATIONS_LIST()
+    void OnDismiss() override
     {
-        // Unbind focus handlers before base class destructors run. GTK fires focus-out signals
-        // during window teardown, which would invoke onFocusLoss through a partially-destroyed
-        // object and crash in the wxWidgets event handler chain.
-        Unbind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
-        m_scrolledWindow->Unbind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
+        g_last_closed_timer = wxGetLocalTimeMillis().GetValue();
+
+        // MSW dismisses again on the deactivation that hiding on Escape causes
+        if( !wxPendingDelete.Member( this ) )
+            Destroy();
     }
 
 
-    void onFocusLoss( wxFocusEvent& aEvent )
+    void onCharHook( wxKeyEvent& aEvent )
     {
-        if( IsDescendant( aEvent.GetWindow() ) )
-        {
-            // Child (such as the hyperlink texts) got focus
-        }
+        if( aEvent.GetKeyCode() == WXK_ESCAPE )
+            DismissAndNotify();
         else
-        {
-            Close( true );
-            g_last_closed_timer = wxGetLocalTimeMillis().GetValue();
-        }
-
-        aEvent.Skip();
+            aEvent.Skip();
     }
 
 
@@ -390,13 +379,12 @@ void NOTIFICATIONS_MANAGER::Remove( const wxString& aKey )
 }
 
 
-void NOTIFICATIONS_MANAGER::onListWindowClosed( wxCloseEvent& aEvent )
+void NOTIFICATIONS_MANAGER::onListWindowDestroyed( wxWindowDestroyEvent& aEvent )
 {
-    NOTIFICATIONS_LIST* evtWindow = dynamic_cast<NOTIFICATIONS_LIST*>( aEvent.GetEventObject() );
-
+    // dynamic_cast fails during base destruction so compare the upcast address
     std::erase_if( m_shownDialogs, [&]( NOTIFICATIONS_LIST* dialog )
                                     {
-                                        return dialog == evtWindow;
+                                        return static_cast<wxObject*>( dialog ) == aEvent.GetEventObject();
                                     } );
 
     aEvent.Skip();
@@ -405,30 +393,25 @@ void NOTIFICATIONS_MANAGER::onListWindowClosed( wxCloseEvent& aEvent )
 
 void NOTIFICATIONS_MANAGER::ShowList( wxWindow* aParent, wxPoint aPos )
 {
-    // Debounce clicking on the icon with a list already showing.  The button will get focus
-    // first, which will cause a focus-loss on the list (thereby closing it), and then we'd open
-    // it again without this guard.
+    // The click that dismisses a shown list can still reach the icon, which must not reopen it
     if( wxGetLocalTimeMillis().GetValue() - g_last_closed_timer < 300 )
     {
         g_last_closed_timer = 0;
         return;
     }
 
-    NOTIFICATIONS_LIST* list = new NOTIFICATIONS_LIST( this, aParent, aPos );
+    NOTIFICATIONS_LIST* list = new NOTIFICATIONS_LIST( this, aParent );
 
     for( NOTIFICATION& job : m_notifications )
         list->Add( &job );
 
     m_shownDialogs.push_back( list );
 
-    list->Bind( wxEVT_CLOSE_WINDOW, &NOTIFICATIONS_MANAGER::onListWindowClosed, this );
+    list->Bind( wxEVT_DESTROY, &NOTIFICATIONS_MANAGER::onListWindowDestroyed, this );
 
-    // correct the position
-    wxSize windowSize = list->GetSize();
-    list->SetPosition( aPos - windowSize );
-
-    list->Show();
-    KIPLATFORM::UI::ForceFocus( list );
+    // Open above and left of the icon to stay inside the frame, as Wayland never moves a popup back on screen
+    list->Move( aPos - list->GetSize() );
+    list->Popup();
 }
 
 
