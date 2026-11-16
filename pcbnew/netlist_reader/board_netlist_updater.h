@@ -28,6 +28,7 @@
 class BOARD;
 class REPORTER;
 class NETLIST;
+struct NETLIST_GROUP;
 class COMPONENT;
 class FOOTPRINT;
 class LIB_ID;
@@ -182,6 +183,10 @@ private:
     void cacheCopperZoneConnections();
 
     bool updateCopperZoneNets( NETLIST& aNetlist );
+
+    PCB_GROUP* findBoardGroup( const KIID& aUuid ) const;
+
+    PCB_GROUP* addBoardGroup( const NETLIST_GROUP& aNetlistGroup );
 
     bool updateGroups( NETLIST& aNetlist );
 

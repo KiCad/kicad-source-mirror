@@ -306,4 +306,135 @@ BOOST_AUTO_TEST_CASE( UnnestedSchematicGroupUnnestsOnBoard )
 }
 
 
+BOOST_AUTO_TEST_CASE( SchematicParentHoldingOnlyGroupsIsCreatedOnBoard )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &settingsManager.Prj() );
+
+    LIB_ID fpid;
+    BOOST_REQUIRE_EQUAL( fpid.Parse( wxS( "TestLib:R" ) ), -1 );
+
+    addFootprint( board.get(), wxS( "R1" ), fpid );
+
+    NETLIST netlist;
+
+    KIID r1 = addComponent( netlist, wxS( "R1" ), fpid );
+
+    KIID innerUuid;
+    KIID outerUuid;
+    KIID topUuid;
+
+    // Only INNER holds symbols. OUTER and TOP hold nothing but the group below them, so the
+    // footprint update has nothing to create them from.
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "INNER" ), innerUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( r1 ) } ) );
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "OUTER" ), outerUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( innerUuid ) } ) );
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "TOP" ), topUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( outerUuid ) } ) );
+    netlist.ApplyGroupMembership();
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    auto update = [&]()
+    {
+        BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+        updater.SetIsDryRun( false );
+        updater.SetWillDrag( false );
+        updater.SetTransferGroups( true );
+        updater.SetReplaceFootprints( false );
+        updater.SetDeleteUnusedFootprints( false );
+
+        BOOST_REQUIRE( updater.UpdateNetlist( netlist ) );
+    };
+
+    update();
+
+    PCB_GROUP* inner = findGroup( board.get(), innerUuid );
+    PCB_GROUP* outer = findGroup( board.get(), outerUuid );
+    PCB_GROUP* top = findGroup( board.get(), topUuid );
+
+    BOOST_REQUIRE_MESSAGE( inner, "group INNER was not created on the board" );
+    BOOST_REQUIRE_MESSAGE( outer, "group OUTER was not created on the board" );
+    BOOST_REQUIRE_MESSAGE( top, "group TOP was not created on the board" );
+
+    BOOST_CHECK_MESSAGE( inner->GetParentGroup() == static_cast<EDA_GROUP*>( outer ),
+                         "group INNER is not nested inside group OUTER" );
+
+    BOOST_CHECK_MESSAGE( outer->GetParentGroup() == static_cast<EDA_GROUP*>( top ),
+                         "group OUTER is not nested inside group TOP" );
+
+    // A second update of an unchanged schematic must not create the parents again.
+    update();
+
+    BOOST_CHECK_EQUAL( board->Groups().size(), 3u );
+}
+
+
+BOOST_AUTO_TEST_CASE( DryRunDoesNotCreateTheMissingParent )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &settingsManager.Prj() );
+
+    LIB_ID fpid;
+    BOOST_REQUIRE_EQUAL( fpid.Parse( wxS( "TestLib:R" ) ), -1 );
+
+    addFootprint( board.get(), wxS( "R1" ), fpid );
+    addFootprint( board.get(), wxS( "R2" ), fpid );
+
+    NETLIST netlist;
+
+    KIID r1 = addComponent( netlist, wxS( "R1" ), fpid );
+    KIID r2 = addComponent( netlist, wxS( "R2" ), fpid );
+
+    KIID innerUuid;
+    KIID outerUuid;
+
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "INNER" ), innerUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( r1 ), pathOf( r2 ) } ) );
+    netlist.ApplyGroupMembership();
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    auto update = [&]( bool aDryRun )
+    {
+        BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+        updater.SetIsDryRun( aDryRun );
+        updater.SetWillDrag( false );
+        updater.SetTransferGroups( true );
+        updater.SetReplaceFootprints( false );
+        updater.SetDeleteUnusedFootprints( false );
+
+        BOOST_REQUIRE( updater.UpdateNetlist( netlist ) );
+    };
+
+    update( false );
+
+    BOOST_REQUIRE_EQUAL( board->Groups().size(), 1u );
+
+    // The schematic now wraps INNER, so a real update would create OUTER.  A dry run must not.
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "OUTER" ), outerUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( innerUuid ) } ) );
+
+    update( true );
+
+    BOOST_CHECK_MESSAGE( board->Groups().size() == 1, "a dry run created a group on the board" );
+    BOOST_CHECK_MESSAGE( findGroup( board.get(), outerUuid ) == nullptr, "a dry run created group OUTER on the board" );
+
+    update( false );
+
+    BOOST_CHECK_EQUAL( board->Groups().size(), 2u );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -368,6 +368,21 @@ NETLIST_GROUP* NETLIST::GetGroupByPath( const KIID_PATH& aPath )
 }
 
 
+NETLIST_GROUP* NETLIST::GetParentGroup( const KIID_PATH& aMemberPath )
+{
+    if( aMemberPath.empty() )
+        return nullptr;
+
+    for( NETLIST_GROUP& group : m_groups )
+    {
+        if( std::find( group.members.begin(), group.members.end(), aMemberPath ) != group.members.end() )
+            return &group;
+    }
+
+    return nullptr;
+}
+
+
 COMPONENT* NETLIST::GetComponentByReference( const wxString& aReference )
 {
     COMPONENT* component = nullptr;

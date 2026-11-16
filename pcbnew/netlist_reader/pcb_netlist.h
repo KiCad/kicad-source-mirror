@@ -466,6 +466,15 @@ public:
     NETLIST_GROUP* GetGroupByPath( const KIID_PATH& aPath );
 
     /**
+     * @brief Return the #NETLIST_GROUP that lists \a aMemberPath among its members.
+     *
+     * @param aMemberPath is the KIID_PATH of a symbol or of a nested group.
+     *
+     * @return a pointer to the #NETLIST_GROUP holding \a aMemberPath if found. Otherwise NULL.
+     */
+    NETLIST_GROUP* GetParentGroup( const KIID_PATH& aMemberPath );
+
+    /**
      * After groups and components are parsed, apply the group memberships to the
      * internal components based on the group member UUIDs.
      */
