@@ -146,7 +146,8 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     mainSizer->Add( m_infoBar, 0, wxEXPAND, 0 );
 
     m_tbTopMain = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                      wxAUI_TB_DEFAULT_STYLE|wxAUI_TB_HORZ_LAYOUT|wxAUI_TB_PLAIN_BACKGROUND );
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_PLAIN_BACKGROUND
+                                              | wxAUI_TB_OVERFLOW );
     m_tbTopMain->Realize();
     mainSizer->Add( m_tbTopMain, 0, wxEXPAND, 5 );
 
