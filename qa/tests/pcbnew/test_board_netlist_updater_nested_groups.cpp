@@ -231,4 +231,79 @@ BOOST_AUTO_TEST_CASE( RootSheetNestedGroupNestsOnBoard )
 }
 
 
+BOOST_AUTO_TEST_CASE( UnnestedSchematicGroupUnnestsOnBoard )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &settingsManager.Prj() );
+
+    LIB_ID fpid;
+    BOOST_REQUIRE_EQUAL( fpid.Parse( wxS( "TestLib:R" ) ), -1 );
+
+    addFootprint( board.get(), wxS( "R1" ), fpid );
+    addFootprint( board.get(), wxS( "R2" ), fpid );
+    addFootprint( board.get(), wxS( "R3" ), fpid );
+
+    NETLIST netlist;
+
+    KIID r1 = addComponent( netlist, wxS( "R1" ), fpid );
+    KIID r2 = addComponent( netlist, wxS( "R2" ), fpid );
+    KIID r3 = addComponent( netlist, wxS( "R3" ), fpid );
+
+    KIID innerUuid;
+    KIID outerUuid;
+
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "INNER" ), innerUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( r1 ), pathOf( r2 ) } ) );
+    netlist.AddGroup( new NETLIST_GROUP( wxS( "OUTER" ), outerUuid.AsString(), LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( r3 ), pathOf( innerUuid ) } ) );
+    netlist.ApplyGroupMembership();
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    auto update = [&]()
+    {
+        BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+        updater.SetIsDryRun( false );
+        updater.SetWillDrag( false );
+        updater.SetTransferGroups( true );
+        updater.SetReplaceFootprints( false );
+        updater.SetDeleteUnusedFootprints( false );
+
+        BOOST_REQUIRE( updater.UpdateNetlist( netlist ) );
+    };
+
+    update();
+
+    PCB_GROUP* outer = findGroup( board.get(), outerUuid );
+    PCB_GROUP* inner = findGroup( board.get(), innerUuid );
+
+    BOOST_REQUIRE_MESSAGE( outer, "group OUTER was not created on the board" );
+    BOOST_REQUIRE_MESSAGE( inner, "group INNER was not created on the board" );
+    BOOST_REQUIRE_MESSAGE( inner->GetParentGroup() == static_cast<EDA_GROUP*>( outer ),
+                           "the first update did not nest INNER inside OUTER" );
+
+    // INNER is un-nested in the schematic, so the next netlist no longer lists it in OUTER.
+    NETLIST_GROUP* outerNetlistGroup = netlist.GetGroupByUuid( outerUuid );
+
+    BOOST_REQUIRE( outerNetlistGroup );
+    outerNetlistGroup->members = { pathOf( r3 ) };
+
+    update();
+
+    outer = findGroup( board.get(), outerUuid );
+    inner = findGroup( board.get(), innerUuid );
+
+    BOOST_REQUIRE_MESSAGE( outer && inner, "the second update dropped one of the groups" );
+
+    BOOST_CHECK_MESSAGE( outer->GetItems().count( inner ) == 0, "group OUTER still lists group INNER as a member" );
+
+    BOOST_CHECK_MESSAGE( inner->GetParentGroup() == nullptr, "group INNER is still nested inside group OUTER" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
