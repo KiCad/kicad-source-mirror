@@ -841,10 +841,11 @@ SNAP_RESULT SNAP_RESOLVER::Resolve( const SNAP_SOURCE_CONTEXT& aContext ) const
         if( result.remainingDof == 0 )
             break;
 
-        if( m_clock() - start >= m_deadline )
+        // Grid axes are the floor every caller relies on, and there are at most two of them
+        if( candidate.priority != SNAP_PRIORITY_TIER::GRID && m_clock() - start >= m_deadline )
         {
             budgetExhausted = true;
-            break;
+            continue;
         }
 
         const std::optional<bool> axis = layoutAxis( candidate );
@@ -861,12 +862,6 @@ SNAP_RESULT SNAP_RESOLVER::Resolve( const SNAP_SOURCE_CONTEXT& aContext ) const
         }
 
         acceptCandidate( i );
-
-        if( m_clock() - start >= m_deadline && i + 1 != ranked.size() )
-        {
-            budgetExhausted = true;
-            break;
-        }
     }
 
     for( const SNAP_CANDIDATE& candidate : acceptedCandidates )
