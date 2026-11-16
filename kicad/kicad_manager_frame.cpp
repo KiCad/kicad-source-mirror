@@ -731,6 +731,24 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
 
 bool KICAD_MANAGER_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
+    // Shutdown blocks must be determined and vetoed as early as possible, before any jobset prompt
+    if( isBlockableSessionEnd() )
+    {
+        for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
+        {
+            PANEL_JOBSET* jobset = dynamic_cast<PANEL_JOBSET*>( m_notebook->GetPage( i ) );
+
+            if( jobset && jobset->GetJobsFile()->GetDirty() )
+            {
+                KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Jobset changes are unsaved" ) );
+                return false;
+            }
+        }
+
+        // Drop the reason a cancelled logoff left behind once its jobset has been saved
+        KIPLATFORM::APP::RemoveShutdownBlockReason( this );
+    }
+
     KICAD_SETTINGS* settings = kicadSettings();
     settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
 
