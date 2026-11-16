@@ -22,6 +22,7 @@
 
 #include <git/git_repo_mixin.h>
 #include <import_export.h>
+#include <settings/common_settings.h>
 #include <wx/string.h>
 
 struct GitUserConfig
@@ -32,6 +33,43 @@ struct GitUserConfig
     bool hasEmail = false;
 };
 
+struct git_config;
+struct git_repository;
+
+namespace KIGIT
+{
+/**
+ * Read a git config value, decoded as UTF-8.
+ *
+ * @return true when the key is set
+ */
+APIEXPORT bool ReadConfigString( git_config* aConfig, const char* aKey, wxString& aValue );
+
+/**
+ * Read the author set in a repository's own config and the one set in the global, XDG or system config.
+ * A value counts as set only when it is not empty, and the has flags say so.
+ */
+APIEXPORT void ReadAuthorConfig( git_repository* aRepo, GitUserConfig& aLocal, GitUserConfig& aGlobal );
+
+/**
+ * Resolve the author recorded for new commits.
+ *
+ * The repository's own config wins, so a Set Author for one repository is honored. Next comes the preference
+ * when it is not set to the default author, then the global git config, then the workspace account. The OS user
+ * name is not recorded as an author, callers may offer it as a prefill.
+ *
+ * @param aPrefs the author preference
+ * @param aLocal the values set in the repository's own config
+ * @param aGlobal the values set in the global, XDG or system config
+ * @param aAccountName the workspace account's display name, empty when there is none
+ * @param aAccountEmail the workspace account's email, empty when there is none
+ * @return the author, whose has flags say which values were found
+ */
+APIEXPORT GitUserConfig ResolveAuthor( const COMMON_SETTINGS::GIT& aPrefs, const GitUserConfig& aLocal,
+                                       const GitUserConfig& aGlobal, const wxString& aAccountName = wxEmptyString,
+                                       const wxString& aAccountEmail = wxEmptyString );
+} // namespace KIGIT
+
 class APIEXPORT GIT_CONFIG_HANDLER : public KIGIT_REPO_MIXIN
 {
 public:
@@ -39,20 +77,10 @@ public:
     virtual ~GIT_CONFIG_HANDLER();
 
     /**
-     * Get user configuration (name and email) from git config
-     * Falls back to common settings if not found in git config
+     * Get the author (name and email) that new commits use, resolved by KIGIT::ResolveAuthor
      * @return GitUserConfig structure with author information
      */
     GitUserConfig GetUserConfig();
-
-private:
-    /**
-     * Get a string value from git config
-     * @param aKey Configuration key to retrieve
-     * @param aValue Output parameter for the value
-     * @return True if value was found, false otherwise
-     */
-    bool GetConfigString( const wxString& aKey, wxString& aValue );
 };
 
 #endif // GIT_CONFIG_HANDLER_H

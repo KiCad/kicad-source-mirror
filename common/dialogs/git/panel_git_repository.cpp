@@ -66,8 +66,7 @@ void PANEL_GIT_REPOSITORY::Populate()
                 if( !m_dialog->SessionStillCurrent() )
                     return;
 
-                GitUserConfig config =
-                        KIGIT::ResolveGitIdentity( *identity, Pgm().GetCommonSettings()->m_Git, wxGetUserName() );
+                GitUserConfig config = KIGIT::PrefillAuthor( *identity );
                 m_repoUserName->ChangeValue( config.authorName );
                 m_repoUserEmail->ChangeValue( config.authorEmail );
             } );

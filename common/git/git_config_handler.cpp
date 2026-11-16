@@ -36,28 +36,9 @@ GIT_CONFIG_HANDLER::~GIT_CONFIG_HANDLER()
 
 GitUserConfig GIT_CONFIG_HANDLER::GetUserConfig()
 {
-    GitUserConfig userConfig;
+    GitUserConfig local;
+    GitUserConfig global;
 
-    // Try to get from git config first
-    userConfig.hasName = GetConfigString( "user.name", userConfig.authorName );
-    userConfig.hasEmail = GetConfigString( "user.email", userConfig.authorEmail );
-
-    // Fall back to common settings if not found in git config
-    if( !userConfig.hasName )
-    {
-        userConfig.authorName = Pgm().GetCommonSettings()->m_Git.authorName;
-    }
-
-    if( !userConfig.hasEmail )
-    {
-        userConfig.authorEmail = Pgm().GetCommonSettings()->m_Git.authorEmail;
-    }
-
-    return userConfig;
-}
-
-
-bool GIT_CONFIG_HANDLER::GetConfigString( const wxString& aKey, wxString& aValue )
-{
-    return GetGitBackend()->GetConfigString( this, aKey, aValue );
+    KIGIT::ReadAuthorConfig( GetRepo(), local, global );
+    return KIGIT::ResolveAuthor( Pgm().GetCommonSettings()->m_Git, local, global );
 }

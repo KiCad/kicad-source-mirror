@@ -33,7 +33,6 @@ class GIT_CLONE_HANDLER;
 class GIT_COMMIT_HANDLER;
 class GIT_PUSH_HANDLER;
 class GIT_STATUS_HANDLER;
-class GIT_CONFIG_HANDLER;
 class GIT_INIT_HANDLER;
 class GIT_BRANCH_HANDLER;
 class GIT_PULL_HANDLER;
@@ -141,9 +140,6 @@ public:
                                      std::map<wxString, FileStatus>& aFileStatus ) = 0;
 
     virtual wxString GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler ) = 0;
-
-    virtual bool GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxString& aKey,
-                                  wxString& aValue ) = 0;
 
     virtual bool IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath ) = 0;
     virtual InitResult InitializeRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath ) = 0;

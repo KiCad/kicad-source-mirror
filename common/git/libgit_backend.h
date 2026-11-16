@@ -61,9 +61,6 @@ public:
 
     wxString GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler ) override;
 
-    bool GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxString& aKey,
-                          wxString& aValue ) override;
-
     bool IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath ) override;
     InitResult InitializeRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath ) override;
     bool SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig& aConfig ) override;

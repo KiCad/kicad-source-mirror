@@ -41,6 +41,8 @@
 #include <wx/log.h>
 #include <gestfich.h>
 #include <paths.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <algorithm>
 #include <cstring>
 #include <fstream>
@@ -120,13 +122,36 @@ bool LIBGIT_BACKEND::IsLibraryAvailable()
 }
 
 
-// git_signature_default answers GIT_ENOTFOUND only when user.name or user.email is not set
+// defaultSignature answers GIT_ENOTFOUND only when no name or no email is set anywhere
 static KIGIT_ERROR_MESSAGE describeSignatureFailure( int aRc )
 {
     if( aRc == GIT_ENOTFOUND )
         return { _( "Set your name and email before committing (gear menu > Set Author...)." ), wxEmptyString };
 
     return { _( "Could not record the commit author." ), KIGIT_COMMON::GetLastGitError() };
+}
+
+
+// The commit pane records the same author
+static int defaultSignature( git_signature** aSignature, git_repository* aRepo )
+{
+    GitUserConfig local;
+    GitUserConfig global;
+    KIGIT::ReadAuthorConfig( aRepo, local, global );
+
+    COMMON_SETTINGS::GIT prefs{};
+    prefs.useDefaultAuthor = true;
+
+    if( PGM_BASE* pgm = PgmOrNull(); pgm && pgm->GetCommonSettings() )
+        prefs = pgm->GetCommonSettings()->m_Git;
+
+    GitUserConfig author = KIGIT::ResolveAuthor( prefs, local, global );
+
+    if( !author.hasName || !author.hasEmail )
+        return GIT_ENOTFOUND;
+
+    return git_signature_now( aSignature, author.authorName.utf8_string().c_str(),
+                              author.authorEmail.utf8_string().c_str() );
 }
 
 
@@ -1327,38 +1352,6 @@ void LIBGIT_BACKEND::UpdateRemoteStatus( GIT_STATUS_HANDLER* aHandler,
 wxString LIBGIT_BACKEND::GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler )
 {
     return aHandler->GetProjectDir();
-}
-
-
-bool LIBGIT_BACKEND::GetConfigString( GIT_CONFIG_HANDLER* aHandler, const wxString& aKey, wxString& aValue )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return false;
-
-    git_config* config = nullptr;
-
-    if( git_repository_config( &config, repo ) != GIT_OK )
-    {
-        wxLogTrace( traceGit, "Failed to get repository config: %s", KIGIT_COMMON::GetLastGitError() );
-        return false;
-    }
-
-    KIGIT::GitConfigPtr configPtr( config );
-
-    git_config_entry* entry = nullptr;
-    int                      result = git_config_get_entry( &entry, config, aKey.utf8_string().c_str() );
-    KIGIT::GitConfigEntryPtr entryPtr( entry );
-
-    if( result != GIT_OK || entry == nullptr )
-    {
-        wxLogTrace( traceGit, "Config key '%s' not found", aKey );
-        return false;
-    }
-
-    aValue = wxString( entry->value );
-    return true;
 }
 
 
@@ -2575,7 +2568,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     {
         git_signature* probe = nullptr;
 
-        if( int rc = git_signature_default( &probe, repo ); rc != GIT_OK )
+        if( int rc = defaultSignature( &probe, repo ); rc != GIT_OK )
         {
             KIGIT_ERROR_MESSAGE failure = describeSignatureFailure( rc );
             aHandler->AddError( failure );
@@ -2699,7 +2692,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     KIGIT::GitCommitPtr headCommitPtr( head_commit );
     KIGIT::GitCommitPtr mergeCommitPtr( merge_commit );
 
-    if( int rc = git_signature_default( &signature, repo ); rc != GIT_OK )
+    if( int rc = defaultSignature( &signature, repo ); rc != GIT_OK )
     {
         KIGIT_ERROR_MESSAGE failure = describeSignatureFailure( rc );
         aHandler->AddError( failure );
@@ -2731,7 +2724,7 @@ static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo,
 {
     git_signature* signature = nullptr;
 
-    if( int rc = git_signature_default( &signature, aRepo ); rc != GIT_OK )
+    if( int rc = defaultSignature( &signature, aRepo ); rc != GIT_OK )
     {
         KIGIT_ERROR_MESSAGE failure = describeSignatureFailure( rc );
         aHandler->AddError( failure );
@@ -2910,7 +2903,7 @@ bool LIBGIT_BACKEND::StashSave( git_repository* aRepo, const wxString& aMessage 
 
     git_signature* signature = nullptr;
 
-    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    if( defaultSignature( &signature, aRepo ) != GIT_OK )
         return false;
 
     KIGIT::GitSignaturePtr signaturePtr( signature );
@@ -3030,7 +3023,7 @@ bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName, co
     // An annotated tag carries the message, and who made it, from the repository's identity.
     git_signature* tagger = nullptr;
 
-    if( git_signature_default( &tagger, aRepo ) != GIT_OK )
+    if( defaultSignature( &tagger, aRepo ) != GIT_OK )
         return false;
 
     KIGIT::GitSignaturePtr taggerPtr( tagger );
@@ -3621,7 +3614,7 @@ RestoreResult LIBGIT_BACKEND::RestoreVersion( KIGIT_COMMON& aCommon, const wxStr
 
     git_signature* signature = nullptr;
 
-    if( int rc = git_signature_default( &signature, repo ); rc != GIT_OK )
+    if( int rc = defaultSignature( &signature, repo ); rc != GIT_OK )
     {
         aError = describeSignatureFailure( rc );
         return RestoreResult::Error;
@@ -4188,7 +4181,7 @@ MergeCommitResult LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, con
 
     git_signature* signature = nullptr;
 
-    if( int rc = git_signature_default( &signature, aRepo ); rc != GIT_OK )
+    if( int rc = defaultSignature( &signature, aRepo ); rc != GIT_OK )
     {
         aError = describeSignatureFailure( rc );
         return MergeCommitResult::FailedCleanly;

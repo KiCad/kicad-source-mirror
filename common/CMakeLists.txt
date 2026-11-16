@@ -122,6 +122,7 @@ set( KICOMMON_SRCS
     git/git_transfer_busy.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
+    git/kigit_author.cpp
     git/text_diff.cpp
     git/git_backend.cpp
     git/kigit_orphan_registry.cpp

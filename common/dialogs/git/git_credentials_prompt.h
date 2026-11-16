@@ -110,19 +110,19 @@ void ClearSyncWarnings( wxWindow* aWindow );
 /// open on the project whose session \a aCommon is.
 void ClearSyncWarnings( const KIGIT_COMMON* aCommon );
 
-/// Repository values and whether Git can use them to record a commit.
+/// The author values the repository's own config and the global config hold
 struct GIT_IDENTITY
 {
-    GitUserConfig config;
-    bool          configured = false;
+    GitUserConfig local;
+    GitUserConfig global;
 };
 
 /// Read on a worker while holding the session's action lock.
 GIT_IDENTITY ReadGitIdentity( KIGIT_COMMON& aCommon );
 
-/// Fill missing values from custom preferences, then use the OS user name if needed.
-GitUserConfig ResolveGitIdentity( const GIT_IDENTITY& aIdentity, const COMMON_SETTINGS::GIT& aPreferences,
-                                  const wxString& aUserName );
+/// The author to show in the editor. It falls back to the OS user name for the name, which is never recorded
+/// unless the user saves it. UI thread only.
+GitUserConfig PrefillAuthor( const GIT_IDENTITY& aIdentity );
 
 /// Edit the repository's author and refresh Git views after saving. UI thread only.
 /// Refuse to save if the frame changes project while the dialog is open.
