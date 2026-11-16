@@ -94,7 +94,7 @@ public:
     BACKGROUND_JOB_LIST( wxWindow* parent ) :
             KISTATUSBAR_POPUP( parent )
     {
-	    wxBoxSizer* bSizer1;
+        wxBoxSizer* bSizer1;
         bSizer1 = new wxBoxSizer( wxVERTICAL );
 
         m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition,
@@ -107,7 +107,7 @@ public:
         m_contentSizer->Fit( m_scrolledWindow );
         bSizer1->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 0 );
 
-	    SetSizer( bSizer1 );
+        SetSizer( bSizer1 );
         Layout();
     }
 
@@ -300,7 +300,7 @@ void BACKGROUND_JOBS_MONITOR::removeShownDialog( wxObject* aWindow )
 
 void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 {
-    if( KISTATUSBAR_POPUP::IsDismissingClick() )
+    if( KISTATUSBAR_POPUP::IsDismissingClick( typeid( BACKGROUND_JOB_LIST ) ) )
         return;
 
     BACKGROUND_JOB_LIST* list = new BACKGROUND_JOB_LIST( aParent );

@@ -19,16 +19,18 @@
 
 #include <widgets/kistatusbar_popup.h>
 
+#include <wx/app.h>
 #include <wx/time.h>
 
 
-long long KISTATUSBAR_POPUP::s_lastDismissed = 0;
+long long             KISTATUSBAR_POPUP::s_lastDismissed = 0;
+const std::type_info* KISTATUSBAR_POPUP::s_lastDismissedType = nullptr;
 
 
 KISTATUSBAR_POPUP::KISTATUSBAR_POPUP( wxWindow* aParent ) :
         wxPopupTransientWindow( aParent, wxBORDER_SIMPLE | wxPU_CONTAINS_CONTROLS )
 {
-    SetSize( wxSize( 300, 150 ) );
+    SetSize( FromDIP( wxSize( 300, 150 ) ) );
 
     Bind( wxEVT_CHAR_HOOK, &KISTATUSBAR_POPUP::onCharHook, this );
 }
@@ -41,8 +43,11 @@ void KISTATUSBAR_POPUP::PopupAt( const wxPoint& aCorner )
 }
 
 
-bool KISTATUSBAR_POPUP::IsDismissingClick()
+bool KISTATUSBAR_POPUP::IsDismissingClick( const std::type_info& aPopupType )
 {
+    if( !s_lastDismissedType || *s_lastDismissedType != aPopupType )
+        return false;
+
     if( wxGetLocalTimeMillis().GetValue() - s_lastDismissed >= 300 )
         return false;
 
@@ -54,9 +59,10 @@ bool KISTATUSBAR_POPUP::IsDismissingClick()
 void KISTATUSBAR_POPUP::OnDismiss()
 {
     s_lastDismissed = wxGetLocalTimeMillis().GetValue();
+    s_lastDismissedType = &typeid( *this );
 
-    // MSW dismisses again on the deactivation that hiding on Escape causes
-    if( !wxPendingDelete.Member( this ) )
+    // Dismissal can repeat before the deferred delete runs, as MSW deactivation does after Escape
+    if( !wxTheApp->IsScheduledForDestruction( this ) )
         Destroy();
 }
 

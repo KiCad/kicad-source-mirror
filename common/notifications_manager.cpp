@@ -367,7 +367,7 @@ void NOTIFICATIONS_MANAGER::onListWindowDestroyed( wxWindowDestroyEvent& aEvent 
 
 void NOTIFICATIONS_MANAGER::ShowList( wxWindow* aParent, wxPoint aPos )
 {
-    if( KISTATUSBAR_POPUP::IsDismissingClick() )
+    if( KISTATUSBAR_POPUP::IsDismissingClick( typeid( NOTIFICATIONS_LIST ) ) )
         return;
 
     NOTIFICATIONS_LIST* list = new NOTIFICATIONS_LIST( this, aParent );
