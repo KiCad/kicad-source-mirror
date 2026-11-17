@@ -699,11 +699,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Update all symbol library links for all sheets.
             schematic.UpdateSymbolLinks( &loadReporter );
 
-            m_infoBar->RemoveAllButtons();
-            m_infoBar->AddCloseButton();
-            m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
-                                       "It will be converted to the new format when saved." ),
-                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
+            showOutdatedFormatInfo( false );
 
             // Legacy schematic can have duplicate time stamps so fix that before converting
             // to the s-expression format.
@@ -724,13 +720,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 first_screen = schematic.GetNext();
 
             if( first_screen && first_screen->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
-            {
-                m_infoBar->RemoveAllButtons();
-                m_infoBar->AddCloseButton();
-                m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
-                                           "It will be converted to the new format when saved." ),
-                                        wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
-            }
+                showOutdatedFormatInfo( true );
 
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 screen->UpdateLocalLibSymbolLinks();
@@ -1041,6 +1031,28 @@ void SCH_EDIT_FRAME::OnImportProject()
 }
 
 
+void SCH_EDIT_FRAME::showOutdatedFormatInfo( bool aOfferUpgrade )
+{
+    m_infoBar->RemoveAllButtons();
+    m_infoBar->AddCloseButton();
+
+    if( aOfferUpgrade && Pgm().GetCommonSettings()->m_Git.enableGit && !Prj().IsNullProject()
+        && Prj().AttachGitRepository() )
+    {
+        // SaveProject writes every screen while the loaded format is older than the current one
+        m_infoBar->AddLink( _( "Upgrade Format Now" ),
+                            [this]( wxHyperlinkEvent& )
+                            {
+                                CallAfter( [this]() { SaveProject(); } );
+                            } );
+    }
+
+    m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
+                               "It will be converted to the new format when saved." ),
+                            wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
+}
+
+
 bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath, bool isSaveAs )
 {
     wxString msg;
@@ -1092,9 +1104,6 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     // Save
     wxLogTrace( traceAutoSave, wxS( "Saving file " ) + schematicFileName.GetFullPath() );
-
-    if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
-        m_infoBar->Dismiss();
 
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromSchPath( schematicFileName.GetFullPath() );
 
@@ -1538,7 +1547,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
     updateTitle();
 
-    if( m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
+    if( success && !saveCopy && m_infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE )
         m_infoBar->Dismiss();
 
     if( backupReporter.HasMessage() )

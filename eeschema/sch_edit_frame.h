@@ -1154,6 +1154,15 @@ private:
     bool saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath, bool isSaveAs );
 
     /**
+     * Show the older-format infobar.
+     *
+     * @param aOfferUpgrade adds an "Upgrade Format Now" link in a Git-tracked project, which saves every
+     *                      sheet unchanged in the current format so the upgrade can be committed apart
+     *                      from any edit.
+     */
+    void showOutdatedFormatInfo( bool aOfferUpgrade );
+
+    /**
      * Fill a map of uuid -> reference from the currently loaded schematic.
      *
      * @param aMap is a map to fill

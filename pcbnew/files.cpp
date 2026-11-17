@@ -897,6 +897,18 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddCloseButton();
+
+            if( pluginType == PCB_IO_MGR::KICAD_SEXP && Pgm().GetCommonSettings()->m_Git.enableGit
+                && !Prj().IsNullProject() && Prj().AttachGitRepository() )
+            {
+                // Saving an unmodified board still writes it in the current format
+                m_infoBar->AddLink( _( "Upgrade Format Now" ),
+                                    [this]( wxHyperlinkEvent& )
+                                    {
+                                        CallAfter( [this]() { SaveBoard(); } );
+                                    } );
+            }
+
             m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
                                        "It will be converted to the new format when saved." ),
                                     wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
