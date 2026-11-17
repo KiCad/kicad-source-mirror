@@ -2682,9 +2682,6 @@ LENGTH_TUNING_MODE FromProtoEnum( types::TuningPatternMode aValue )
     default:
     case types::TuningPatternMode::TPM_UNKNOWN:        return LENGTH_TUNING_MODE::SINGLE;
     }
-
-    wxCHECK_MSG( false, LENGTH_TUNING_MODE::SINGLE,
-                 "Unhandled case in FromProtoEnum<types::TuningPatternMode>" );
 }
 
 
@@ -2717,9 +2714,6 @@ PNS::MEANDER_SIDE FromProtoEnum( types::TuningPatternMeanderSide aValue )
     default:
     case types::TuningPatternMeanderSide::TPMS_UNKNOWN: return PNS::MEANDER_SIDE_DEFAULT;
     }
-
-    wxCHECK_MSG( false, PNS::MEANDER_SIDE_DEFAULT,
-                 "Unhandled case in FromProtoEnum<types::TuningPatternMeanderSide>" );
 }
 
 template<>
@@ -2748,9 +2742,6 @@ PNS::MEANDER_STYLE FromProtoEnum( types::TuningPatternCornerStyle aValue )
     default:
     case types::TuningPatternCornerStyle::TPCS_UNKNOWN:   return PNS::MEANDER_STYLE_CHAMFER;
     }
-
-    wxCHECK_MSG( false, PNS::MEANDER_STYLE_CHAMFER,
-                 "Unhandled case in FromProtoEnum<types::TuningPatternCornerStyle>" );
 }
 
 template<>
@@ -2781,9 +2772,6 @@ PNS::MEANDER_PLACER_BASE::TUNING_STATUS FromProtoEnum( types::TuningPatternStatu
     default:
     case types::TuningPatternStatus::TPS_UNKNOWN:   return PNS::MEANDER_PLACER_BASE::TUNED;
     }
-
-    wxCHECK_MSG( false, PNS::MEANDER_PLACER_BASE::TUNED,
-                 "Unhandled case in FromProtoEnum<types::TuningPatternStatus>" );
 }
 
 
@@ -2815,9 +2803,6 @@ PCB_VIA_STITCH_LAYOUT FromProtoEnum( types::ViaStitchLayout aValue )
     default:
     case types::ViaStitchLayout::VSL_UNKNOWN:   return PCB_VIA_STITCH_LAYOUT::PLAIN;
     }
-
-    wxCHECK_MSG( false, PCB_VIA_STITCH_LAYOUT::PLAIN,
-                 "Unhandled case in FromProtoEnum<types::ViaStitchLayout>" );
 }
 
 
@@ -2847,9 +2832,6 @@ PCB_VIA_STITCH_MODE FromProtoEnum( types::ViaStitchMode aValue )
     default:
     case types::ViaStitchMode::VSM_UNKNOWN: return PCB_VIA_STITCH_MODE::STITCH;
     }
-
-    wxCHECK_MSG( false, PCB_VIA_STITCH_MODE::STITCH,
-                 "Unhandled case in FromProtoEnum<types::ViaStitchMode>" );
 }
 
 
@@ -2879,9 +2861,6 @@ VIA_STACK_STYLE FromProtoEnum( types::ViaStackStyle aValue )
     default:
     case types::ViaStackStyle::VSK_UNKNOWN:   return VIA_STACK_STYLE::STACKED;
     }
-
-    wxCHECK_MSG( false, VIA_STACK_STYLE::STACKED,
-                 "Unhandled case in FromProtoEnum<types::ViaStackStyle>" );
 }
 
 
