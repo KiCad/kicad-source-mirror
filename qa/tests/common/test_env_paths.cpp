@@ -20,6 +20,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <env_paths.h>
+#include <wx_filename.h>
 
 #include <wx/filename.h>
 
@@ -55,7 +56,7 @@ BOOST_AUTO_TEST_CASE( MakeRelativePathToProject )
 BOOST_AUTO_TEST_CASE( NormalizePathForProjectPrecedence )
 {
     wxFileName tempDir = wxFileName::DirName( wxFileName::GetTempDir() );
-    tempDir.Normalize( wxPATH_NORM_ALL & ~wxPATH_NORM_CASE );
+    tempDir.Normalize( FN_NORMALIZE_FLAGS );
 
     const wxString   temp = tempDir.GetPathWithSep();
     const wxString   sheet = temp + wxS( "sheets" ) + wxFileName::GetPathSeparator() + wxS( "a4.kicad_wks" );
