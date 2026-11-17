@@ -3547,17 +3547,10 @@ void CALLBACK ErrorCallback( GLenum aErrorCode )
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator )
 {
-#if defined( _MSC_VER )
-#pragma warning( push )
-#pragma warning( disable : 4191 )
-#endif
-    gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA, (void( CALLBACK* )()) VertexCallback );
-    gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, (void( CALLBACK* )()) CombineCallback );
-    gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG, (void( CALLBACK* )()) EdgeCallback );
-    gluTessCallback( aTesselator, GLU_TESS_ERROR, (void( CALLBACK* )()) ErrorCallback );
-#if defined( _MSC_VER )
-#pragma warning( pop )
-#endif
+    gluTessCallback( aTesselator, GLU_TESS_VERTEX_DATA, ToGluCallback( VertexCallback ) );
+    gluTessCallback( aTesselator, GLU_TESS_COMBINE_DATA, ToGluCallback( CombineCallback ) );
+    gluTessCallback( aTesselator, GLU_TESS_EDGE_FLAG, ToGluCallback( EdgeCallback ) );
+    gluTessCallback( aTesselator, GLU_TESS_ERROR, ToGluCallback( ErrorCallback ) );
 }
 
 

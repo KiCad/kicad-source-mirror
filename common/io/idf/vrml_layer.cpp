@@ -40,15 +40,6 @@
 #define CALLBACK
 #endif
 
-using TESS_CALLBACK = void( CALLBACK* )();
-
-// GLU takes every tessellator callback untyped, and only a hop through void* converts one without C4191
-template <typename FN>
-static TESS_CALLBACK tessCallback( FN* aCallback )
-{
-    return reinterpret_cast<TESS_CALLBACK>( reinterpret_cast<void*>( aCallback ) );
-}
-
 // minimum sides to a circle
 #define MIN_NSIDES 6
 
@@ -193,15 +184,15 @@ VRML_LAYER::VRML_LAYER()
         return;
 
     // set up the tesselator callbacks
-    gluTessCallback( tess, GLU_TESS_BEGIN_DATA, tessCallback( vrml_tess_begin ) );
+    gluTessCallback( tess, GLU_TESS_BEGIN_DATA, ToGluCallback( vrml_tess_begin ) );
 
-    gluTessCallback( tess, GLU_TESS_VERTEX_DATA, tessCallback( vrml_tess_vertex ) );
+    gluTessCallback( tess, GLU_TESS_VERTEX_DATA, ToGluCallback( vrml_tess_vertex ) );
 
-    gluTessCallback( tess, GLU_TESS_END_DATA, tessCallback( vrml_tess_end ) );
+    gluTessCallback( tess, GLU_TESS_END_DATA, ToGluCallback( vrml_tess_end ) );
 
-    gluTessCallback( tess, GLU_TESS_ERROR_DATA, tessCallback( vrml_tess_err ) );
+    gluTessCallback( tess, GLU_TESS_ERROR_DATA, ToGluCallback( vrml_tess_err ) );
 
-    gluTessCallback( tess, GLU_TESS_COMBINE_DATA, tessCallback( vrml_tess_combine ) );
+    gluTessCallback( tess, GLU_TESS_COMBINE_DATA, ToGluCallback( vrml_tess_combine ) );
 
     gluTessProperty( tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 

@@ -101,26 +101,18 @@ private:
     using REMOVE_WINDOW_SUBCLASS = BOOL( WINAPI* )( HWND, SUBCLASSPROC, UINT_PTR );
     using DEF_SUBCLASS_PROC = LRESULT( WINAPI* )( HWND, UINT, WPARAM, LPARAM );
 
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4191 )
-#endif
-
+    // FARPROC erases the export's type, and only a hop through void* restores it without C4191
     template <typename T>
     static T loadNamedProc( HMODULE aModule, const char* aName )
     {
-        return reinterpret_cast<T>( GetProcAddress( aModule, aName ) );
+        return reinterpret_cast<T>( reinterpret_cast<void*>( GetProcAddress( aModule, aName ) ) );
     }
 
     template <typename T>
     static T loadOrdinalProc( HMODULE aModule, WORD aOrdinal )
     {
-        return reinterpret_cast<T>( GetProcAddress( aModule, MAKEINTRESOURCEA( aOrdinal ) ) );
+        return loadNamedProc<T>( aModule, MAKEINTRESOURCEA( aOrdinal ) );
     }
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
 
     HWND getHwnd() const { return reinterpret_cast<HWND>( m_inputWindow->GetHandle() ); }
 
