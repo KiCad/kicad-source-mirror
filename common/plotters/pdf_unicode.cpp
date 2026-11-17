@@ -32,8 +32,8 @@ std::string FormatPdfUtf16Hex( uint32_t aCodepoint )
     if( aCodepoint <= 0x10FFFF )
     {
         const uint32_t value = aCodepoint - 0x10000;
-        const uint16_t high = 0xD800 + ( value >> 10 );
-        const uint16_t low = 0xDC00 + ( value & 0x3FF );
+        const uint16_t high = static_cast<uint16_t>( 0xD800 + ( value >> 10 ) );
+        const uint16_t low = static_cast<uint16_t>( 0xDC00 + ( value & 0x3FF ) );
         return fmt::format( "{:04X}{:04X}", high, low );
     }
 
