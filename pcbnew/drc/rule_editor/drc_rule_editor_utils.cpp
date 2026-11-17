@@ -270,10 +270,8 @@ wxString DRC_RULE_EDITOR_UTILS::ConstraintToKicadDrc( DRC_RULE_EDITOR_CONSTRAINT
 
 bool DRC_RULE_EDITOR_UTILS::IsBoolInputType( const DRC_RULE_EDITOR_CONSTRAINT_NAME& aConstraintType )
 {
-    switch( aConstraintType )
-    {
-    default: return false;
-    }
+    // No constraint takes a boolean input yet
+    return false;
 }
 
 
