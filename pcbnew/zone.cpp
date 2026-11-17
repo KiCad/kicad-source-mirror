@@ -1220,7 +1220,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     if( layers.size() == 1 )
     {
-        layerDesc.Printf( _( "%s" ), GetLayerName( layers[0] ) );
+        layerDesc.Printf( wxS( "%s" ), GetLayerName( layers[0] ) );
     }
     else if( layers.size() == 2 )
     {

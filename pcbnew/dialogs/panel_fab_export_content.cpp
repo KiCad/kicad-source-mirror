@@ -77,7 +77,7 @@ public:
         bool odb = aFormat == FAB_CONTENT_FORMAT::ODBPP;
         m_sections->AppendToggleColumn( wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE, 36 );
         m_sections->AppendTextColumn( _( "Section" ), wxDATAVIEW_CELL_INERT, 170 );
-        m_sections->AppendTextColumn( odb ? _( "ODB++" ) : _( "IPC-2581" ), wxDATAVIEW_CELL_INERT, 260 );
+        m_sections->AppendTextColumn( odb ? wxS( "ODB++" ) : wxS( "IPC-2581" ), wxDATAVIEW_CELL_INERT, 260 );
         FAB::SECTION_SET optional = FAB::OptionalSections( aMode );
 
         for( const SECTION_ROW& row : sectionRows() )

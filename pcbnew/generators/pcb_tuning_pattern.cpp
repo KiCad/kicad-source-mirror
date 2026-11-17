@@ -2441,7 +2441,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         if( !netName.IsEmpty() )
         {
             if( !netChainName.IsEmpty() )
-                scopeLine = wxString::Format( _( "%s | %s" ), netName, netChainName );
+                scopeLine = wxString::Format( wxS( "%s | %s" ), netName, netChainName );
             else
                 scopeLine = netName;
         }

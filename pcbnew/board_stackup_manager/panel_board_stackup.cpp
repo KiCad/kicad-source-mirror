@@ -913,9 +913,9 @@ void PANEL_SETUP_BOARD_STACKUP::lazyBuildRowUI( BOARD_STACKUP_ROW_UI_ITEM& ui_ro
         textCtrl->SetMinSize( m_numericTextCtrlSize );
        	bSizerMat->Add( textCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-       	wxButton* m_buttonMat = new wxButton( m_scGridWin, ID_ITEM_MATERIAL+row, _( "..." ), wxDefaultPosition,
-       	                                      wxDefaultSize, wxBU_EXACTFIT );
-       	bSizerMat->Add( m_buttonMat, 0, wxALIGN_CENTER_VERTICAL, 2 );
+        wxButton* m_buttonMat = new wxButton( m_scGridWin, ID_ITEM_MATERIAL + row, wxS( "..." ), wxDefaultPosition,
+                                              wxDefaultSize, wxBU_EXACTFIT );
+        bSizerMat->Add( m_buttonMat, 0, wxALIGN_CENTER_VERTICAL, 2 );
 
         m_buttonMat->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
                               wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ),

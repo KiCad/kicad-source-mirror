@@ -564,7 +564,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
                 if( totalSeconds >= 60 )
                     return wxString::Format( _( "%1$d min %2$d s" ), totalSeconds / 60, totalSeconds % 60 );
 
-                return wxString::Format( _( "%.2f s" ), elapsedMs / 1000.0 );
+                return wxString::Format( wxS( "%.2f s" ), elapsedMs / 1000.0 );
             };
 
     if( m_cancelled )

@@ -1171,7 +1171,7 @@ wxString CURSOR::getID()
     for( const auto& [ id, cursor ] : m_trace->GetCursors() )
     {
         if( cursor == this )
-            return wxString::Format( _( "%d" ), id );
+            return wxString::Format( wxS( "%d" ), id );
     }
 
     return wxEmptyString;

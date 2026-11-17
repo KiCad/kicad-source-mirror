@@ -1699,8 +1699,7 @@ void PCB_NET_INSPECTOR_PANEL::generateReport()
 
         if( col.has_units )
         {
-            txt += wxString::Format( _( "%s (%s)" ),
-                                     col.csv_name,
+            txt += wxString::Format( wxS( "%s (%s)" ), col.csv_name,
                                      EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
         }
         else

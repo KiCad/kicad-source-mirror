@@ -92,7 +92,7 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, WINDOW_SETTINGS* aCf
         if( !gridSize.name.IsEmpty() )
             name = gridSize.name + ": ";
 
-        msg.Printf( _( "%s%s (%s)" ), name, gridSize.MessageText( scale, primaryUnit, true ),
+        msg.Printf( wxS( "%s%s (%s)" ), name, gridSize.MessageText( scale, primaryUnit, true ),
                     gridSize.MessageText( scale, secondaryUnit, true ) );
 
         aGridsList->Add( msg );

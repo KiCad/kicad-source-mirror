@@ -138,7 +138,7 @@ void PANEL_GRID_SETTINGS::RebuildGridSizes()
         if( !name.IsEmpty() )
             name += wxT( ": " );
 
-        msg.Printf( _( "%s%s (%s)" ), name, grid.MessageText( scale, primaryUnit, true ),
+        msg.Printf( wxS( "%s%s (%s)" ), name, grid.MessageText( scale, primaryUnit, true ),
                     grid.MessageText( scale, secondaryUnit, true ) );
 
         grids.Add( msg );

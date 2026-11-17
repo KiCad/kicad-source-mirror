@@ -95,7 +95,7 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     // Size units choice
     m_choiceSizeUnits = new wxChoice( this, wxID_ANY );
     m_choiceSizeUnits->Append( _( "pixels" ) );
-    m_choiceSizeUnits->Append( _( "%" ) );
+    m_choiceSizeUnits->Append( wxS( "%" ) );
     m_choiceSizeUnits->Append( _( "mm" ) );
     m_choiceSizeUnits->Append( _( "in" ) );
     m_choiceSizeUnits->SetSelection( static_cast<int>( m_sizeUnits ) );
