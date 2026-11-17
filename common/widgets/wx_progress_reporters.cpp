@@ -23,6 +23,7 @@
 #include <thread>
 #include <widgets/wx_event_utils.h>
 #include <widgets/wx_progress_reporters.h>
+#include <wx/dcclient.h>
 
 
 static wxString getPlaceholderText()
