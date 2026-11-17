@@ -22,6 +22,7 @@
  * Tests for PROJECT_TEMPLATE class.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <project_template.h>
 #include <settings/settings_manager.h>
@@ -103,11 +104,11 @@ BOOST_AUTO_TEST_CASE( DirectoriesRenamedCorrectly )
     fs::path destPath = m_tempDir / "myproject";
     fs::create_directories( destPath );
 
-    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( templatePath.string() ) );
+    PROJECT_TEMPLATE tmpl( KI_TEST::ToWxPath( templatePath ) );
 
     // GetDestinationFiles expects a wxFileName with the project file path
     wxFileName newProjectPath;
-    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetPath( KI_TEST::ToWxPath( destPath ) );
     newProjectPath.SetName( wxS( "myproject" ) );
     newProjectPath.SetExt( wxS( "kicad_pro" ) );
 
@@ -153,11 +154,11 @@ BOOST_AUTO_TEST_CASE( CreateProjectRenamesDirectories )
     fs::path destPath = m_tempDir / "newproject";
     fs::create_directories( destPath );
 
-    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( templatePath.string() ) );
+    PROJECT_TEMPLATE tmpl( KI_TEST::ToWxPath( templatePath ) );
 
     // CreateProject expects a wxFileName with the project file path (including extension)
     wxFileName newProjectPath;
-    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetPath( KI_TEST::ToWxPath( destPath ) );
     newProjectPath.SetName( wxS( "newproject" ) );
     newProjectPath.SetExt( wxS( "kicad_pro" ) );
 
@@ -185,11 +186,11 @@ BOOST_AUTO_TEST_CASE( ExactMatchDirectoryRenamed )
     fs::path destPath = m_tempDir / "finalproject";
     fs::create_directories( destPath );
 
-    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( templatePath.string() ) );
+    PROJECT_TEMPLATE tmpl( KI_TEST::ToWxPath( templatePath ) );
 
     // GetDestinationFiles expects a wxFileName with the project file path
     wxFileName newProjectPath;
-    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetPath( KI_TEST::ToWxPath( destPath ) );
     newProjectPath.SetName( wxS( "finalproject" ) );
     newProjectPath.SetExt( wxS( "kicad_pro" ) );
 
@@ -232,7 +233,7 @@ BOOST_AUTO_TEST_CASE( TemplateWithoutMetaDirSetsErrorTitle )
     f << "{}";
     f.close();
 
-    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( noMetaPath.string() ) );
+    PROJECT_TEMPLATE tmpl( KI_TEST::ToWxPath( noMetaPath ) );
 
     wxString* title = tmpl.GetTitle();
     BOOST_REQUIRE( title != nullptr );
@@ -255,7 +256,7 @@ BOOST_AUTO_TEST_CASE( TemplateWithMetaDirButNoInfoHtml )
     f << "{}";
     f.close();
 
-    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( tmplPath.string() ) );
+    PROJECT_TEMPLATE tmpl( KI_TEST::ToWxPath( tmplPath ) );
 
     wxString* title = tmpl.GetTitle();
     BOOST_REQUIRE( title != nullptr );
@@ -269,7 +270,7 @@ BOOST_AUTO_TEST_CASE( TemplateWithMetaDirButNoInfoHtml )
 // directory and yield a directory that PROJECT_TEMPLATE can load as a valid template.
 BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateSeedsBaseDir )
 {
-    wxString   baseDir = wxString::FromUTF8( ( m_tempDir / "default_seed" ).string() );
+    wxString   baseDir = KI_TEST::ToWxPath( m_tempDir / "default_seed" );
     wxFileName seeded = EnsureDefaultProjectTemplate( baseDir );
 
     BOOST_REQUIRE_MESSAGE( seeded.IsOk(), "Seeding the default template should succeed" );
@@ -297,7 +298,7 @@ BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateSeedsBaseDir )
 
 BOOST_AUTO_TEST_CASE( ProjectCreatedFromDefaultTemplateLoads )
 {
-    wxString   baseDir = wxString::FromUTF8( ( m_tempDir / "default_load" ).string() );
+    wxString   baseDir = KI_TEST::ToWxPath( m_tempDir / "default_load" );
     wxFileName seeded = EnsureDefaultProjectTemplate( baseDir );
 
     BOOST_REQUIRE( seeded.IsOk() );
@@ -308,7 +309,7 @@ BOOST_AUTO_TEST_CASE( ProjectCreatedFromDefaultTemplateLoads )
     PROJECT_TEMPLATE tmpl( seeded.GetPath() );
 
     wxFileName newProjectPath;
-    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetPath( KI_TEST::ToWxPath( destPath ) );
     newProjectPath.SetName( wxS( "fromdefault" ) );
     newProjectPath.SetExt( wxS( "kicad_pro" ) );
 
@@ -336,7 +337,7 @@ BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateRejectsEmptyBaseDir )
 // Calling EnsureDefaultProjectTemplate twice must be idempotent and not clobber existing content.
 BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateIsIdempotent )
 {
-    wxString baseDir = wxString::FromUTF8( ( m_tempDir / "default_idempotent" ).string() );
+    wxString baseDir = KI_TEST::ToWxPath( m_tempDir / "default_idempotent" );
 
     wxFileName first = EnsureDefaultProjectTemplate( baseDir );
     BOOST_REQUIRE( first.IsOk() );
@@ -379,10 +380,10 @@ BOOST_AUTO_TEST_CASE( ReadOnlyTemplateProducesWritableProject )
                          fs::perm_options::remove );
     }
 
-    PROJECT_TEMPLATE tmpl( wxString::FromUTF8( templatePath.string() ) );
+    PROJECT_TEMPLATE tmpl( KI_TEST::ToWxPath( templatePath ) );
 
     wxFileName newProjectPath;
-    newProjectPath.SetPath( wxString::FromUTF8( destPath.string() ) );
+    newProjectPath.SetPath( KI_TEST::ToWxPath( destPath ) );
     newProjectPath.SetName( wxS( "rwproject" ) );
     newProjectPath.SetExt( wxS( "kicad_pro" ) );
 
@@ -401,7 +402,7 @@ BOOST_AUTO_TEST_CASE( ReadOnlyTemplateProducesWritableProject )
 
     for( const fs::path& file : projectFiles )
     {
-        wxFileName fn( wxString::FromUTF8( file.string() ) );
+        wxFileName fn( KI_TEST::ToWxPath( file ) );
 
         BOOST_REQUIRE_MESSAGE( fn.FileExists(), file.string() + " was not created" );
         BOOST_CHECK_MESSAGE( fn.IsFileWritable(), file.string() + " is read only" );

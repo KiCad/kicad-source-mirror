@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE( FootprintCutoutIsExported )
 
     IDF_EXPORTER exporter( board.get(), &resolver, &job, &reporter );
 
-    const bool ok = exporter.Export( wxString::FromUTF8( emnPath.string().c_str() ) );
+    const bool ok = exporter.Export( KI_TEST::ToWxPath( emnPath ) );
 
     BOOST_REQUIRE_MESSAGE( ok, "IDF export failed: " << reporter.GetMessages() );
     BOOST_REQUIRE( std::filesystem::exists( emnPath ) );
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE( RotatedPolygonCutoutIsExported )
 
     IDF_EXPORTER exporter( board.get(), &resolver, &job, &reporter );
 
-    const bool ok = exporter.Export( wxString::FromUTF8( emnPath.string().c_str() ) );
+    const bool ok = exporter.Export( KI_TEST::ToWxPath( emnPath ) );
 
     BOOST_REQUIRE_MESSAGE( ok, "IDF export failed: " << reporter.GetMessages() );
     BOOST_REQUIRE( std::filesystem::exists( emnPath ) );

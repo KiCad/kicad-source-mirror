@@ -19,6 +19,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <qa_utils/file_utils.h>
 
 #include <algorithm>
 #include <map>
@@ -292,7 +293,7 @@ BOOST_AUTO_TEST_CASE( OdbLayerTypeOverrides )
                                  { Dwgs_User, true, wxEmptyString, wxS( "SOLDER_MASK" ) },
                                  { In1_Cu, true, wxEmptyString, wxS( "SIGNAL" ) },
                                  { B_Cu, true, wxEmptyString, wxS( "SILK_SCREEN" ) } };
-    BOOST_REQUIRE_NO_THROW( plugin.Export( wxString::FromUTF8( dir.Path().string() ), *board, options ) );
+    BOOST_REQUIRE_NO_THROW( plugin.Export( dir.PathStr(), *board, options ) );
     std::vector<FIELDS> rows = MatrixLayers( dir.Path() );
 
     const FIELDS* silk = FindRow( rows, "f.silkscreen" );
@@ -448,7 +449,7 @@ BOOST_AUTO_TEST_CASE( OdbCollidingLayerNamesKeepMatrixReferences )
             PCB_IO_ODBPP plugin;
             ODB_EXPORT_OPTIONS options;
             options.m_sections = FAB::LegacySections();
-            BOOST_REQUIRE_NO_THROW( plugin.Export( wxString::FromUTF8( root.string() ), *board, options ) );
+            BOOST_REQUIRE_NO_THROW( plugin.Export( KI_TEST::ToWxPath( root ), *board, options ) );
         }
         else
         {

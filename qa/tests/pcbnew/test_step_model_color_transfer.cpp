@@ -40,6 +40,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <pcbnew_utils/board_file_utils.h>
+#include <qa_utils/file_utils.h>
 #include <reporter.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_segment.h>
@@ -123,7 +124,7 @@ BOOST_AUTO_TEST_CASE( TO252_2_ColorsPreserved )
 
     BOOST_REQUIRE( model.CreatePCB( outline, VECTOR2D( 0, 0 ), true ) );
 
-    const wxString modelPath = wxString::FromUTF8( sourceModel.string().c_str() );
+    const wxString modelPath = KI_TEST::ToWxPath( sourceModel );
 
     const bool added = model.AddComponent( wxT( "TO-252-2" ), modelPath, {}, wxT( "U1" ), false,
                                            VECTOR2D( 5.0, 5.0 ), 0.0, VECTOR3D( 0.0, 0.0, 0.0 ),
@@ -132,7 +133,7 @@ BOOST_AUTO_TEST_CASE( TO252_2_ColorsPreserved )
 
     BOOST_REQUIRE_MESSAGE( added, "AddComponent failed for TO-252-2.step" );
 
-    const wxString outputPath = wxString::FromUTF8( outputFile.string().c_str() );
+    const wxString outputPath = KI_TEST::ToWxPath( outputFile );
 
     BOOST_REQUIRE_MESSAGE( model.WriteSTEP( outputPath, false, false ),
                            "WriteSTEP returned failure" );

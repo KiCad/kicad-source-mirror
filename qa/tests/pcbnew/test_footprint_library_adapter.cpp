@@ -576,7 +576,7 @@ BOOST_AUTO_TEST_CASE( SaveKeepsUserFieldUuids )
     std::filesystem::copy_file( source.GetFullPath().ToStdString(), libPath / "R_0402_1005Metric.kicad_mod" );
 
     IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
-    const wxString      lib = wxString::FromUTF8( libPath.string() );
+    const wxString      lib = KI_TEST::ToWxPath( libPath );
 
     std::unique_ptr<FOOTPRINT> footprint( plugin->FootprintLoad( lib, wxS( "R_0402_1005Metric" ), true ) );
     BOOST_REQUIRE( footprint );

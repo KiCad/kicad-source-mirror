@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <json_common.h>
@@ -1517,7 +1518,7 @@ BOOST_AUTO_TEST_CASE( CanReadLibraryRefusesBinaryContainer )
     }
 
     SCH_IO_PADS plugin;
-    wxString    path = wxString::FromUTF8( binaryAsTxt.string() );
+    wxString    path = KI_TEST::ToWxPath( binaryAsTxt );
 
     BOOST_CHECK( plugin.CanReadSchematicFile( path ) );
     BOOST_CHECK( !plugin.CanReadLibrary( path ) );

@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <database/database_lib_settings.h>
 #include <json_common.h>
@@ -67,7 +68,7 @@ BOOST_AUTO_TEST_CASE( UnknownKeysSurviveAnEdit )
 
     {
         std::unique_ptr<DATABASE_LIB_SETTINGS> settings =
-                LoadDatabaseLibSettingsReadOnly( wxString::FromUTF8( path.string() ) );
+                LoadDatabaseLibSettingsReadOnly( KI_TEST::ToWxPath( path ) );
 
         settings->m_Tables[0].key_col = "MPN";
         settings->SetReadOnly( false );

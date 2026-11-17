@@ -83,7 +83,7 @@ void BOARD_DUMPER::DumpBoardToFile( BOARD& aBoard, const std::string& aName ) co
     path += ".kicad_pcb";
 
     BOOST_TEST_MESSAGE( "Dumping board file: " << path.string() );
-    ::KI_TEST::DumpBoardToFile( aBoard, path.string() );
+    ::KI_TEST::DumpBoardToFile( aBoard, path );
 }
 
 
@@ -232,10 +232,10 @@ void LoadAndTestBoardFile( const wxString aRelativePath, bool aRoundtrip,
     {
         SCOPED_TEMP_DIR tempDir( "kicad_qa_brd_roundtrip" );
 
-        const auto savePath = tempDir.Path() / ( aRelativePath.ToStdString() + ".kicad_pcb" );
-        KI_TEST::DumpBoardToFile( *board1, savePath.string() );
+        const auto savePath = tempDir.Path() / ToFsPath( aRelativePath + wxS( ".kicad_pcb" ) );
+        KI_TEST::DumpBoardToFile( *board1, savePath );
 
-        std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
+        std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFile( savePath );
 
         // Should load again
         BOOST_REQUIRE( board2 );

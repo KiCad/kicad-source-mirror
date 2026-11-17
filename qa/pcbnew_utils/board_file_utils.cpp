@@ -18,6 +18,7 @@
  */
 
 #include <boost/test/tools/context.hpp>
+#include <fstream>
 #include <memory>
 
 #include <boost/test/unit_test.hpp>
@@ -31,6 +32,7 @@
 #include <board.h>
 #include <footprint.h>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/stdstream_line_reader.h>
 
 namespace KI_TEST
@@ -66,7 +68,7 @@ std::string GetPcbnewTestDataDir()
 void DumpBoardToFile( BOARD& board, const std::filesystem::path& aFilename )
 {
     PCB_IO_KICAD_SEXPR io;
-    io.SaveBoard( aFilename.string(), board );
+    io.SaveBoard( ToWxPath( aFilename ), board );
 }
 
 
@@ -121,7 +123,12 @@ std::unique_ptr<BOARD> ReadBoardFromFileOrStream( const std::string& aFilename,
 
 std::unique_ptr<BOARD> ReadBoardFromFile( const std::filesystem::path& aFilename )
 {
-    return ReadBoardFromFileOrStream( aFilename.string() );
+    std::ifstream file_stream( aFilename );
+
+    if( !file_stream.is_open() )
+        return nullptr;
+
+    return ReadItemFromStream<BOARD>( file_stream );
 }
 
 
@@ -146,12 +153,12 @@ std::unique_ptr<FOOTPRINT> ReadFootprintFromFile( const std::filesystem::path& a
 {
     PCB_IO_KICAD_SEXPR io;
     wxString           libPath;
-    wxFileName         fn( aFilename.string() );
+    wxFileName         fn( ToWxPath( aFilename ) );
 
     if( fn.GetExt().Lower() == FILEEXT::KiCadFootprintFileExtension )
         libPath = fn.GetPath();
     else
-        libPath = aFilename.string();
+        libPath = ToWxPath( aFilename );
 
     try
     {
@@ -172,7 +179,7 @@ void DumpFootprintToFile( const FOOTPRINT& aFootprint, const std::filesystem::pa
 
     try
     {
-        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( aLibraryPath.string() );
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( ToWxPath( aLibraryPath ) );
 
         io.SetOutputFormatter( &formatter );
         io.FormatFootprintLibFile( const_cast<FOOTPRINT*>( &aFootprint ) );

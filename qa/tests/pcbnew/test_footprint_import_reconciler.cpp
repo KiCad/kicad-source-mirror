@@ -64,7 +64,7 @@ namespace
 wxString stageProject( const std::filesystem::path& aProjectRoot, const wxString& aStem )
 {
     wxString sep = wxFileName::GetPathSeparator();
-    wxString projectPath = wxString::FromUTF8( aProjectRoot.string() ) + sep + aStem + wxT( ".kicad_pro" );
+    wxString projectPath = KI_TEST::ToWxPath( aProjectRoot ) + sep + aStem + wxT( ".kicad_pro" );
 
     Pgm().GetSettingsManager().LoadProject( projectPath );
     Pgm().GetLibraryManager().LoadProjectTables(

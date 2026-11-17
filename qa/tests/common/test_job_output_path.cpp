@@ -35,14 +35,14 @@ BOOST_AUTO_TEST_CASE( DrillAbsoluteDirectoryIsKept )
     KI_TEST::SCOPED_TEMP_DIR projectRoot( wxS( "kicad_job_output_path_prj" ) );
     KI_TEST::SCOPED_TEMP_DIR tempRoot( wxS( "kicad_job_output_path_tmp" ) );
 
-    wxString dataDir = wxFileName::DirName( wxString::FromUTF8( ( projectRoot.Path() / "data" ).string().c_str() ) )
+    wxString dataDir = wxFileName::DirName( KI_TEST::ToWxPath( projectRoot.Path() / "data" ) )
                                .GetFullPath();
 
     JOB_EXPORT_PCB_DRILL drill;
     BOOST_REQUIRE( drill.GetOutputPathIsDirectory() );
 
     drill.SetConfiguredOutputPath( dataDir );
-    drill.SetTempOutputDirectory( wxString::FromUTF8( tempRoot.Path().string().c_str() ) );
+    drill.SetTempOutputDirectory( tempRoot.PathStr() );
 
     BOOST_CHECK_EQUAL( drill.GetFullOutputPath( nullptr ), dataDir );
 }

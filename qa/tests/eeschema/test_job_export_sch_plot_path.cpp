@@ -50,11 +50,10 @@ BOOST_AUTO_TEST_CASE( SchPlotJobOutputFolderGetsDefaultName )
     fs::path schematic = fs::path( KI_TEST::GetTestDataRootDir() ) / "eeschema" / "issue24217" / "issue24217.kicad_sch";
 
     JOB_EXPORT_SCH_PLOT_PDF job;
-    job.m_filename = wxString::FromUTF8( schematic.string().c_str() );
+    job.m_filename = KI_TEST::ToWxPath( schematic );
 
     // A path such as ${KIPRJMOD}/ resolves to a folder with a trailing separator
-    job.SetConfiguredOutputPath( wxString::FromUTF8( outputDir.Path().string().c_str() )
-                                 + wxFileName::GetPathSeparator() );
+    job.SetConfiguredOutputPath( outputDir.PathStr() + wxFileName::GetPathSeparator() );
 
     EESCHEMA_JOBS_HANDLER handler( nullptr );
     WX_STRING_REPORTER    reporter;
@@ -85,8 +84,8 @@ BOOST_AUTO_TEST_CASE( SchJobsOutputFolderGetDefaultName )
     KI_TEST::SCOPED_TEMP_DIR outputDir( wxS( "kicad_sch_job_folder" ) );
 
     fs::path schematic = fs::path( KI_TEST::GetTestDataRootDir() ) / "eeschema" / "issue24217" / "issue24217.kicad_sch";
-    wxString schPath = wxString::FromUTF8( schematic.string().c_str() );
-    wxString folder = wxString::FromUTF8( outputDir.Path().string().c_str() ) + wxFileName::GetPathSeparator();
+    wxString schPath = KI_TEST::ToWxPath( schematic );
+    wxString folder = outputDir.PathStr() + wxFileName::GetPathSeparator();
 
     JOB_EXPORT_SCH_NETLIST   netJob;
     JOB_EXPORT_BOM           bomJob;

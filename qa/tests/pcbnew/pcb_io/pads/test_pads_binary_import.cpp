@@ -136,7 +136,7 @@ static std::shared_ptr<BOARD> CachedLoad( const wxString& aFilename, bool aBinar
                                           std::filesystem::perm_options::add );
 
             PCB_IO_PADS_BINARY plugin;
-            board.reset( plugin.LoadBoard( wxString::FromUTF8( stagedPath.string() ), nullptr ).release() );
+            board.reset( plugin.LoadBoard( KI_TEST::ToWxPath( stagedPath ), nullptr ).release() );
         }
         else
         {
@@ -2037,7 +2037,7 @@ BOOST_AUTO_TEST_CASE( DecalNameTableRejectsOversizedCount )
 
     PADS_IO::BINARY_PARSER parser;
 
-    BOOST_CHECK_EXCEPTION( parser.Parse( wxString::FromUTF8( mutated.string() ) ), IO_ERROR,
+    BOOST_CHECK_EXCEPTION( parser.Parse( KI_TEST::ToWxPath( mutated ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
                            {
                                return aError.What().Contains( wxT( "decal-name table extent" ) );
