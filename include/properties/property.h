@@ -465,8 +465,8 @@ protected:
         {
             if constexpr( std::is_same_v<T, bool> )
                 return a.RawAs<bool>();
-
-            a = a.RawAs<bool>() ? 1 : 0;
+            else
+                a = a.RawAs<bool>() ? 1 : 0;
         }
 
         if ( !( std::is_enum<T>::value && a.CheckType<int>() ) && !a.CheckType<T>() )

@@ -702,13 +702,8 @@ void LENGTH_DELAY_CALCULATION::optimiseVias(
             }
         }
 
-        const PAD* coincidentPad = nullptr;
-
-        for( PAD* pad : m_board->GetConnectivity()->GetConnectedPads( pcbVia ) )
-        {
-            coincidentPad = pad;
-            break;
-        }
+        const std::vector<PAD*> connectedPads = m_board->GetConnectivity()->GetConnectedPads( pcbVia );
+        const PAD*              coincidentPad = connectedPads.empty() ? nullptr : connectedPads.front();
 
         LSET spanLayers;
 
