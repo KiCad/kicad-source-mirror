@@ -57,7 +57,7 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             }
         }
 
-        if( aProperty->HasFlag( wxPG_PROP_READONLY ) && !( aFlags & Selected ) )
+        if( aProperty->HasFlag( PG_PROP_READONLY ) && !( aFlags & Selected ) )
         {
             wxColour disabledFg = aGrid->GetCellDisabledTextColour();
 

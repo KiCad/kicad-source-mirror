@@ -28,6 +28,7 @@
 #include <import_export.h>
 #include <pgm_base.h>
 #include <properties/pg_cell_renderer.h>
+#include <properties/pg_properties.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 #include <widgets/bitmap_button.h>
@@ -440,7 +441,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             pgProp->SetChoices( choices );
 
         pgProp->SetValue( commonVal );
-        pgProp->ChangeFlag( wxPG_PROP_READONLY, !writeable );
+        pgProp->ChangeFlag( PG_PROP_READONLY, !writeable );
 
         // If it's no longer writable any pending edits will be lost.  Life's tough.
         if( !writeable && pgProp == m_grid->GetSelection() && m_grid->IsEditorFocused() )
@@ -472,7 +473,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
                 pgProp->SetChoices( choices );
 
             pgProp->SetValue( commonVal );
-            pgProp->ChangeFlag( wxPG_PROP_READONLY, !writeable );
+            pgProp->ChangeFlag( PG_PROP_READONLY, !writeable );
             m_displayed.push_back( property );
 
             wxASSERT( displayOrder.count( name ) );
@@ -830,7 +831,7 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
                 []( wxPGProperty* aProp )
                 {
                     return aProp && !aProp->IsCategory() && aProp->IsVisible() && aProp->IsEnabled()
-                           && !aProp->HasFlag( wxPG_PROP_READONLY ) && aProp->GetEditorClass();
+                           && !aProp->HasFlag( PG_PROP_READONLY ) && aProp->GetEditorClass();
                 };
 
         auto findTarget =

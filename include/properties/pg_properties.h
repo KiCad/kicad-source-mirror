@@ -37,6 +37,15 @@ class EDA_DRAW_FRAME;
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame );
 
+/// The read-only property flag in the type each wxWidgets version takes without deprecation
+#if wxCHECK_VERSION( 3, 3, 1 )
+inline constexpr wxPGFlags PG_PROP_READONLY = wxPGFlags::ReadOnly;
+#elif wxCHECK_VERSION( 3, 3, 0 )
+inline constexpr wxPGPropertyFlags PG_PROP_READONLY = wxPGPropertyFlags::ReadOnly;
+#else
+inline constexpr wxPGPropertyFlags PG_PROP_READONLY = wxPG_PROP_READONLY;
+#endif
+
 /// Customized abstract wxPGProperty class to handle coordinate/size units
 class PGPROPERTY_DISTANCE
 {
