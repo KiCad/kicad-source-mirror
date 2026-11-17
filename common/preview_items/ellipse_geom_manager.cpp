@@ -19,6 +19,7 @@
 
 #include <preview_items/ellipse_geom_manager.h>
 
+#include <math/util.h>
 #include <trigo.h>
 #include <algorithm>
 
@@ -127,5 +128,6 @@ bool ELLIPSE_GEOM_MANAGER::setEndAngle( const VECTOR2I& aPt )
 
 ELLIPSE<int> ELLIPSE_GEOM_MANAGER::GetEllipse() const
 {
-    return ELLIPSE<int>( m_center, m_majorRadius, m_minorRadius, m_rotation, m_startAngle, m_endAngle );
+    return ELLIPSE<int>( m_center, KiROUND( m_majorRadius ), KiROUND( m_minorRadius ), m_rotation, m_startAngle,
+                         m_endAngle );
 }
