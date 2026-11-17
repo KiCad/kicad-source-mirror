@@ -71,6 +71,8 @@ protected:
     void updateAliasMembers( int aAliasIndex );
 
 private:
+    void showMembersPage( int aPage );
+
     SCH_EDIT_FRAME* m_frame;
     wxString        m_membersLabelTemplate;
 

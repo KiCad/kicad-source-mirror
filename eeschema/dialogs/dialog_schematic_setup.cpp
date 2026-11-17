@@ -187,12 +187,11 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
 void DIALOG_SCHEMATIC_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const
 {
-    // A page that has not been built yet is answered from the project instead
-    if( !m_treebook->GetBuiltPageForSearch( aPage ) )
-    {
-        if( aPage == m_severitiesPage )
-            return;
+    wxWindow* page = m_treebook->GetResolvedPage( aPage );
 
+    // A page reusing the labels of an earlier opening is answered from the project
+    if( !page )
+    {
         if( aPage == m_textVarsPage )
         {
             AppendTextVarSearchTerms( aTerms );
@@ -235,9 +234,9 @@ void DIALOG_SCHEMATIC_SETUP::AppendSearchTerms( size_t aPage, std::vector<wxStri
 
             return;
         }
-    }
 
-    wxWindow* page = m_treebook->ResolvePageForSearch( aPage );
+        return;
+    }
 
     if( aPage == m_netChainsPage )
         static_cast<PANEL_SETUP_NET_CHAINS*>( page )->AppendSearchTerms( aTerms );

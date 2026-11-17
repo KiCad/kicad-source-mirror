@@ -24,6 +24,7 @@
 #include <bitmaps.h>
 #include <wx/tokenzr.h>
 #include <widgets/wx_grid.h>
+#include <widgets/focus_snapshot.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/paged_dialog.h>
 #include <confirm.h>
@@ -140,7 +141,7 @@ void PANEL_SETUP_BUSES::loadAliases()
     for( const std::shared_ptr<BUS_ALIAS>& alias : m_aliases )
         m_aliasesGrid->SetCellValue( ii++, 0, alias->GetName() );
 
-    m_membersBook->SetSelection( 1 );
+    showMembersPage( 1 );
 }
 
 
@@ -159,9 +160,12 @@ void PANEL_SETUP_BUSES::AppendSearchTerms( std::vector<wxString>& aTerms ) const
     {
         aTerms.push_back( wxString::Format( m_membersLabelTemplate, m_aliasesGrid->GetCellValue( row, 0 ) ) );
 
-        // Include members of unselected aliases.
-        const std::vector<wxString>& members = m_aliases[row]->Members();
-        aTerms.insert( aTerms.end(), members.begin(), members.end() );
+        // Include members of unselected aliases
+        if( static_cast<size_t>( row ) < m_aliases.size() )
+        {
+            const std::vector<wxString>& members = m_aliases[row]->Members();
+            aTerms.insert( aTerms.end(), members.begin(), members.end() );
+        }
     }
 }
 
@@ -456,14 +460,14 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
 
         if( row < 0 )
         {
-            m_membersBook->SetSelection( 1 );
+            showMembersPage( 1 );
         }
         else if( row != m_lastAlias || aliasName != m_lastAliasName )
         {
             m_lastAlias = row;
             m_lastAliasName = aliasName;
 
-            m_membersBook->SetSelection( 0 );
+            showMembersPage( 0 );
             m_membersBook->GetPage( 0 )->Layout();
 
             const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ row ];
@@ -473,6 +477,16 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
             Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
         }
     }
+}
+
+
+void PANEL_SETUP_BUSES::showMembersPage( int aPage )
+{
+    // wxSimplebook focuses the page it shows, but this is never the user moving to it
+    FOCUS_SNAPSHOT focus;
+
+    m_membersBook->SetSelection( aPage );
+    focus.Restore();
 }
 
 
@@ -511,7 +525,7 @@ void PANEL_SETUP_BUSES::ImportSettingsFrom( const std::map<wxString, std::vector
     m_lastAlias = -1;
     m_lastAliasName = wxEmptyString;
     doReloadMembersGrid();
-    m_membersBook->SetSelection( 1 );
+    showMembersPage( 1 );
 }
 
 
