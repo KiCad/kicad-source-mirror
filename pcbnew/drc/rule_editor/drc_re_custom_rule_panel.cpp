@@ -138,7 +138,6 @@ void DRC_RE_CUSTOM_RULE_PANEL::onScintillaCharAdded( wxStyledTextEvent& aEvent )
 
     m_textCtrl->SearchAnchor();
 
-    wxString rules = m_textCtrl->GetText();
     int      currentPos = m_textCtrl->GetCurrentPos();
     int      startPos = 0;
 

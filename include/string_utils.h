@@ -576,15 +576,4 @@ KICOMMON_API wxString ExpandVariantOutputPath( const wxString& aPath, const wxSt
 
 KICOMMON_API int SortVariantNames( const wxString& aLhs, const wxString& aRhs );
 
-class IO_ERROR;
-
-/**
- * Parse library load error messages, extracting user-facing information while
- * stripping internal code locations. Mainly used because of nested exceptions from IO plugins.
- *
- * @param aException is the raw IO exception from a loader plugin
- * @return a single-line friendly
- */
-KICOMMON_API wxString ExtractLibraryLoadException( const IO_ERROR& aException );
-
 #endif  // STRING_UTILS_H

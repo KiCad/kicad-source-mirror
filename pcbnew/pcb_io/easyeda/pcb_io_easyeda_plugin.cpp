@@ -176,9 +176,6 @@ void PCB_IO_EASYEDA::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
             wxArrayString parts = wxSplit( layerLine, '~', '\0' );
             int           layerId = wxAtoi( parts[0] );
             wxString      layerName = parts[1];
-            wxString      layerColor = parts[2];
-            wxString      visible = parts[3];
-            wxString      active = parts[4];
             bool          enabled = parts[5] != wxS( "false" );
 
             if( layerId >= innerStart && layerId <= innerEnd && enabled )

@@ -1588,9 +1588,7 @@ void ALTIUM_PCB::ParseFileHeader( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     reader.ReadAndSetSubrecordLength();
-    wxString header = reader.ReadWxString();
-
-    //std::cout << "HEADER: " << header << std::endl;  // tells me: PCB 5.0 Binary File
+    reader.ReadWxString(); // header, "PCB 5.0 Binary File"
 
     //reader.SkipSubrecord();
 

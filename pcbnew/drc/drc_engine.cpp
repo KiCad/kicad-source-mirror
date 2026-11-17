@@ -2400,8 +2400,6 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
 
         m_logReporter->Report( msg );
 
-        wxString violatingItemsStr = wxT( "Violating items: " );
-
         m_logReporter->Report( wxString::Format( wxT( "  |- violating position (%d, %d)" ),
                                               aPos.x,
                                               aPos.y ) );

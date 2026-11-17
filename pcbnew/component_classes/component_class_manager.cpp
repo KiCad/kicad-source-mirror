@@ -54,7 +54,6 @@ COMPONENT_CLASS* COMPONENT_CLASS_MANAGER::GetEffectiveStaticComponentClass(
 
     // Handle composite component classes
     const std::vector<wxString> sortedClassNames = sortClassNames( classNames );
-    wxString fullName = GetFullClassNameForConstituents( sortedClassNames );
 
     COMPONENT_CLASS* effectiveClass =
             getOrCreateEffectiveClass( sortedClassNames, COMPONENT_CLASS::USAGE::STATIC );
@@ -400,7 +399,6 @@ COMPONENT_CLASS_MANAGER::GetDynamicComponentClassesForFootprint( const FOOTPRINT
 
     // Handle composite component classes
     const std::vector<wxString> sortedClassNames = sortClassNames( classNames );
-    const wxString fullName = GetFullClassNameForConstituents( sortedClassNames );
 
     // No matching component classes
     if( classNames.empty() )

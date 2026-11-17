@@ -44,7 +44,7 @@ bool PCAD_COPPER_POUR::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                               const wxString& aActualConversion )
 {
     XNODE*          lNode;
-    wxString        pourType, str, propValue;
+    wxString        propValue;
     int             pourSpacing, thermalWidth;
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );

@@ -1827,7 +1827,7 @@ EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString,
                                 return false; // Don't replace, just detect
                             };
 
-                    wxString expandedResult = ExpandTextVars( testString, &resolver, INTERNAL );
+                    ExpandTextVars( testString, &resolver, INTERNAL );
 
                     if( wasResolved )
                     {
@@ -2189,9 +2189,6 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
     // Replace bare variable names with ${variable} syntax
     for( const wxString& varName : varNames )
     {
-        // Create a regex to match the variable name as a whole word
-        // This avoids replacing parts of other words
-        wxString pattern = "\\b" + varName + "\\b";
         wxString replacement = "${" + varName + "}";
 
         // Simple string replacement (not regex for now to avoid complexity)

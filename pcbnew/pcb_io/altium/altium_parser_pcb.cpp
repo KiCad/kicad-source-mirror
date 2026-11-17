@@ -750,8 +750,6 @@ ADIMENSION6::ADIMENSION6( ALTIUM_BINARY_PARSER& aReader )
 
     arrowsize = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "ARROWSIZE" ), wxT( "60mil" ) );
 
-    wxString text_position_raw = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "TEXTPOSITION" ), wxT( "" ) );
-
     xy1 = VECTOR2I( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "X1" ), wxT( "0mil" ) ),
                     -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "Y1" ), wxT( "0mil" ) ) );
 

@@ -2358,8 +2358,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
         bool has_next_sublayer = true;
         int sublayer_idx = 0;       // the index of dielectric sub layers
                                     // sublayer 0 is always existing (main sublayer)
-        wxString specFreqUnits;
-        wxString dielectricModel;
 
         while( has_next_sublayer )
         {

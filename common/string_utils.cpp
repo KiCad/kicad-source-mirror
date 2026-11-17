@@ -27,7 +27,6 @@
 #include <map>
 #include <core/map_helpers.h>
 #include <fmt/core.h>
-#include <ki_exception.h>
 #include <macros.h>
 #include <core/kicad_algo.h>
 #include <string_utils.h>
@@ -2154,33 +2153,6 @@ int SortVariantNames( const wxString& aLhs, const wxString& aRhs )
         return 1;
 
     return StrNumCmp( aLhs, aRhs );
-}
-
-
-wxString ExtractLibraryLoadException( const IO_ERROR& aException )
-{
-    wxString err;
-
-    // Errors are separated by newlines. We want to keep:
-    // - Lines starting with "Library '" (library-level errors)
-    // - Lines containing "Expecting" (file error location)
-    // And strip:
-    // - Lines starting with "from " (internal code location info)
-    wxStringTokenizer tokenizer( aException.What(), wxS( "\n" ), wxTOKEN_STRTOK );
-#if 0
-    while( tokenizer.HasMoreTokens() )
-    {
-        wxString line = tokenizer.GetNextToken();
-
-        // Skip internal code location lines (e.g., "from pcb_io_kicad_sexpr_parser.cpp : ...")
-        if( line.StartsWith( wxS( "from " ) ) )
-            continue;
-
-        if( line.StartsWith( wxS( "Library '" ) ) || line.Contains( wxS( "Expecting" ) ) )
-        messages.push_back( KI_ERROR( static_cast<SEVERITY>( aSeverity ), line ) );
-    }
-#endif
-    return err;
 }
 
 

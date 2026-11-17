@@ -502,6 +502,6 @@ static struct PCB_REFERENCE_IMAGE_DESC
         // clang-format on
 
         // For future use
-        const wxString greyscale = _HKI( "Greyscale" );
+        [[maybe_unused]] const wxString greyscale = _HKI( "Greyscale" );
     }
 } _PCB_REFERENCE_IMAGE_DESC;
