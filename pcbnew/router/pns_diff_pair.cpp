@@ -1137,7 +1137,7 @@ static int minDimensionForPrimitive( const ITEM* aPrim )
 
 int DP_PRIMITIVE_PAIR::GetMinDimension() const
 {
-    if( !m_primN || !m_primN )
+    if( !m_primP || !m_primN )
         return 0;
 
     return std::min( minDimensionForPrimitive( m_primN ), minDimensionForPrimitive( m_primP ) );
