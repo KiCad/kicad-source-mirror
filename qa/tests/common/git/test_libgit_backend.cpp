@@ -41,6 +41,7 @@
 #include <git/git_commit_handler.h>
 #include <git/git_clone_handler.h>
 #include <git/kigit_transport.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/git_test_fixture.h>
 
 #include <git2.h>
@@ -960,7 +961,8 @@ BOOST_AUTO_TEST_CASE( Push_ReportsNonFastForwardWhenRemoteIsAhead )
 // A refusal the client-side check let through arrives only on the per-reference callback. A
 // read-only refs directory provokes one, which directory permissions cannot do on Windows.
 #ifndef __WINDOWS__
-BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate )
+BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate,
+                      *boost::unit_test::precondition( KI_TEST::WriteBitsBind ) )
 {
     BOOST_TEST_REQUIRE( ready() );
 
@@ -974,10 +976,6 @@ BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate )
                         + wxT( "heads" );
 
     BOOST_REQUIRE( wxFileName::DirExists( headsDir ) );
-
-    // Directory permissions do not bind root, so there the refusal cannot be staged.
-    if( geteuid() == 0 )
-        return;
 
     // Put the permissions back however the test ends, or the fixture cannot remove its directory.
     struct WRITABLE_AGAIN
@@ -3623,8 +3621,8 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
 #ifndef __WINDOWS__
     // A failure after the checkout, injected here by making the branch ref unwritable, must
     // roll the working files back automatically. The operation required a clean tree, so the
-    // rollback is lossless by construction. Directory permissions do not bind root.
-    if( geteuid() != 0 )
+    // rollback is lossless by construction.
+    if( KI_TEST::WriteBitsBind( {} ) )
     {
         // The ref update writes a lock file next to the ref and renames it into place, so the
         // way to make it fail is denying writes on the containing directory.

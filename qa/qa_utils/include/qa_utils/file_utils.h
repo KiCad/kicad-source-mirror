@@ -21,6 +21,9 @@
 
 #include <filesystem>
 
+#include <boost/test/detail/global_typedef.hpp>
+#include <boost/test/tools/assertion_result.hpp>
+
 #include <wx/string.h>
 
 #include <wx_filename.h>
@@ -198,5 +201,10 @@ public:
 private:
     SCOPED_TEMP_DIR m_dir;
 };
+
+/**
+ * A Boost precondition for a test that makes a save fail by clearing a file's write bits, which the superuser ignores.
+ */
+boost::test_tools::assertion_result WriteBitsBind( boost::unit_test::test_unit_id );
 
 } // namespace KI_TEST

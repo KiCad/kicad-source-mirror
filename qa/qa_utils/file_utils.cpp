@@ -33,6 +33,10 @@
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
+#ifndef __WINDOWS__
+#include <unistd.h>
+#endif
+
 
 using namespace KI_TEST;
 
@@ -310,4 +314,17 @@ SCOPED_PROCESS_TEMP_DIR::~SCOPED_PROCESS_TEMP_DIR()
     // If any temporary directory has been retained, we must retain this one too
     if( SCOPED_TEMP_DIR::AnyTempDirRetained() )
         m_dir.Retain();
+}
+
+
+boost::test_tools::assertion_result KI_TEST::WriteBitsBind( boost::unit_test::test_unit_id )
+{
+#ifdef __WINDOWS__
+    boost::test_tools::assertion_result result( true );
+#else
+    boost::test_tools::assertion_result result( geteuid() != 0 );
+#endif
+
+    result.message() << "write bits do not bind the superuser";
+    return result;
 }
