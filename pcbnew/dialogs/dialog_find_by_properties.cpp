@@ -297,7 +297,7 @@ wxString formatFindByPropertiesDisplayValue( PCB_EDIT_FRAME* aFrame, PROPERTY_BA
 
     if( pgProperty )
     {
-        wxString formatted = pgProperty->ValueToString( valueCopy, 0 );
+        wxString formatted = pgProperty->ValueToString( valueCopy );
         delete pgProperty;
 
         if( !formatted.IsEmpty() )
