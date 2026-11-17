@@ -117,7 +117,7 @@ bool IDF3::GetIDFString( const std::string& aLine, std::string& aIDFString, bool
 
     }
 
-    aIDFString = hasQuotes ? UnescapeString( ostr.str() ) : ostr.str();
+    aIDFString = hasQuotes ? UnescapeString( ostr.str() ).utf8_string() : ostr.str();
     aIndex = idx;
 
     return true;
