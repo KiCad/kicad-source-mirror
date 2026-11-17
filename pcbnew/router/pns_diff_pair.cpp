@@ -1132,8 +1132,6 @@ static int minDimensionForPrimitive( const ITEM* aPrim )
         const BOX2I& bbox = shape->BBox();
         return std::min( bbox.GetWidth(), bbox.GetHeight() );
     }
-
-    return 0;
 }
 
 

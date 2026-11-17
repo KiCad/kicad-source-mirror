@@ -328,10 +328,12 @@ wxString DRC_RULE_SAVER::generateLayerClause( const LSET& aLayers )
 
     // The parser only accepts a single layer name, and a user name only where the board registered
     // it, so emit the canonical name of the first layer. Multi-layer sets use outer or inner above
-    for( PCB_LAYER_ID layer : aLayers.Seq() )
-        return wxString::Format( wxS( "(layer \"%s\")" ), LSET::Name( layer ) );
+    const LSEQ layers = aLayers.Seq();
 
-    return wxEmptyString;
+    if( layers.empty() )
+        return wxEmptyString;
+
+    return wxString::Format( wxS( "(layer \"%s\")" ), LSET::Name( layers.front() ) );
 }
 
 
