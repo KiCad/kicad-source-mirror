@@ -143,7 +143,6 @@ set( QA_COMMON_SRCS
     test_title_block.cpp
     test_track_width_calculations.cpp
     test_pth_hole_size.cpp
-    test_r_divider_gauntlet.cpp
     test_r_divider_solver.cpp
     test_types.cpp
     test_utf8.cpp

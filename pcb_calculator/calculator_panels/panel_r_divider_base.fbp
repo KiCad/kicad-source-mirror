@@ -1297,7 +1297,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -1363,7 +1362,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -1429,7 +1427,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -1505,7 +1502,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -1571,7 +1567,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -1637,7 +1632,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                     <object class="sizeritem" expanded="false">
@@ -1703,7 +1697,6 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
-                        <event name="OnRadioButton">OnESeriesSelection</event>
                       </object>
                     </object>
                   </object>
@@ -1968,7 +1961,7 @@
                     <property name="rows">9</property>
                     <property name="show">1</property>
                     <property name="size"></property>
-                    <property name="subclass"></property>
+                    <property name="subclass">WX_GRID; widgets/wx_grid.h; forward_declare</property>
                     <property name="toolbar_pane">0</property>
                     <property name="tooltip"></property>
                     <property name="window_extra_style"></property>

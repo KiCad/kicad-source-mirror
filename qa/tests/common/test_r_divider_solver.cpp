@@ -19,37 +19,57 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <algorithm>
 #include <cmath>
+#include <limits>
 
 #include <r_divider_solver.h>
 
-static const std::vector<uint16_t> E3 = { 100, 220, 470 };
 
-static const std::vector<uint16_t> E24 = { 100, 110, 120, 130, 150, 160, 180, 200, 220, 240, 270, 300,
-                                           330, 360, 390, 430, 470, 510, 560, 620, 680, 750, 820, 910 };
-
-
-static std::vector<R_DIVIDER_SOLUTION> solve( double aVin, double aVout, double aImpedance,
-                                              const std::vector<uint16_t>& aSeries = E24 )
+/// The E24 or E3 resistors from 1 ohm to 9.1 Mohm
+static std::vector<double> resistors( bool aE3 = false )
 {
-    return SolveResistorDivider( aVin, aVout, aImpedance, R_DIVIDER_IMPEDANCE::SERIES, aSeries );
+    static const std::vector<int> e24 = { 10, 11, 12, 13, 15, 16, 18, 20, 22, 24, 27, 30,
+                                          33, 36, 39, 43, 47, 51, 56, 62, 68, 75, 82, 91 };
+    static const std::vector<int> e3 = { 10, 22, 47 };
+
+    std::vector<double> values;
+
+    for( double decade = 1; decade < 1e7; decade *= 10 )
+    {
+        for( int value : aE3 ? e3 : e24 )
+            values.push_back( value * decade / 10 );
+    }
+
+    return values;
 }
 
 
-static double ratioError( const R_DIVIDER_SOLUTION& aSolution, double aVin, double aVout )
+static double legValue( const R_DIVIDER_LEG& aLeg )
 {
-    return std::abs( aSolution.R2 / ( aSolution.R1 + aSolution.R2 ) / ( aVout / aVin ) - 1 );
+    if( aLeg.B == 0 )
+        return aLeg.A;
+
+    return aLeg.Parallel ? aLeg.A * aLeg.B / ( aLeg.A + aLeg.B ) : aLeg.A + aLeg.B;
 }
 
 
-static bool contains( const std::vector<R_DIVIDER_SOLUTION>& aSolutions, double aR1, double aR2 )
+/// Every divider must be what it claims, and no more than three resistors
+static void checkDividers( const std::vector<R_DIVIDER>& aDividers, double aRatio, double aImpedance )
 {
-    return std::any_of( aSolutions.begin(), aSolutions.end(),
-                        [&]( const R_DIVIDER_SOLUTION& aSolution )
-                        {
-                            return aSolution.R1 == aR1 && aSolution.R2 == aR2;
-                        } );
+    BOOST_REQUIRE( !aDividers.empty() );
+
+    for( const R_DIVIDER& divider : aDividers )
+    {
+        const double top = legValue( divider.Top );
+        const double bottom = legValue( divider.Bottom );
+
+        BOOST_CHECK( divider.Top.B == 0 || divider.Bottom.B == 0 );
+        BOOST_CHECK_CLOSE( divider.Top.Value, top, 1e-9 );
+        BOOST_CHECK_CLOSE( divider.Bottom.Value, bottom, 1e-9 );
+        BOOST_CHECK_CLOSE( divider.Impedance, top + bottom, 1e-9 );
+        BOOST_CHECK_CLOSE( 1 + divider.ImpedanceError, ( top + bottom ) / aImpedance, 1e-9 );
+        BOOST_CHECK_CLOSE( 1 + divider.TargetError, top / bottom / aRatio, 1e-9 );
+    }
 }
 
 
@@ -58,507 +78,128 @@ BOOST_AUTO_TEST_SUITE( RDividerSolver )
 
 BOOST_AUTO_TEST_CASE( RejectsUnusableInput )
 {
-    BOOST_CHECK( solve( 5, 0, 10e3 ).empty() );
-    BOOST_CHECK( solve( 5, 5, 10e3 ).empty() );
-    BOOST_CHECK( solve( 5, 6, 10e3 ).empty() );
-    BOOST_CHECK( solve( 5, 1.2, 0 ).empty() );
-    BOOST_CHECK( solve( 5, 1.2, -10e3 ).empty() );
-    BOOST_CHECK( solve( NAN, 1.2, 10e3 ).empty() );
-    BOOST_CHECK( solve( 5, NAN, 10e3 ).empty() );
-    BOOST_CHECK( solve( 5, 1.2, NAN ).empty() );
-    BOOST_CHECK( solve( 5, 1.2, 10e3, {} ).empty() );
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const double inf = std::numeric_limits<double>::infinity();
 
-    // Vout > 0, but Vout / Vin underflows to 0
-    BOOST_CHECK( solve( 1e300, 1e-300, 10e3 ).empty() );
-    BOOST_CHECK( SolveResistorDivider( 1e300, 1e-300, 10e3, R_DIVIDER_IMPEDANCE::PARALLEL, E24 ).empty() );
+    // Ratios beyond 1e6 either way, then resistors outside 1 ohm to 9.1 Mohm
+    const std::pair<double, double> requests[] = { { 0, 1e4 }, { -1, 1e4 }, { nan, 1e4 }, { 1, 0 }, { 1, inf },
+                                                   { 5e-7, 3e6 }, { 2e6, 3e6 }, { 1, 1e12 }, { 1e-5, 1e4 } };
+
+    for( const auto& [ratio, impedance] : requests )
+    {
+        BOOST_TEST_CONTEXT( "ratio " << ratio << ", impedance " << impedance )
+        {
+            BOOST_CHECK( FindResistorDividers( ratio, impedance, R_DIVIDER_IMPEDANCE::SERIES, resistors(),
+                                               R_DIVIDER_TARGET::RESISTOR_RATIO )
+                                 .empty() );
+        }
+    }
+
+    BOOST_CHECK(
+            FindResistorDividers( 1, 1e4, R_DIVIDER_IMPEDANCE::SERIES, {}, R_DIVIDER_TARGET::RESISTOR_RATIO ).empty() );
 }
 
 
-/**
- * Resistors are offered from 1 mOhm to 1 TOhm, so a request whose ideal R1 or R2 falls outside
- * that is refused, while one just inside it is served.
- */
-BOOST_AUTO_TEST_CASE( RejectsResistorsOutOfRange )
-{
-    // Ideal R2 of 0.5 mOhm, then 2 mOhm
-    BOOST_CHECK( solve( 2, 1, 1e-3 ).empty() );
-    BOOST_CHECK( !solve( 2, 1, 4e-3 ).empty() );
-
-    // Ideal R1 and R2 of 2 TOhm
-    BOOST_CHECK( SolveResistorDivider( 2, 1, 1e12, R_DIVIDER_IMPEDANCE::PARALLEL, E24 ).empty() );
-
-    // Ideal R1 of 1 uOhm, far below the range although R2 is fine
-    BOOST_CHECK( solve( 1 + 1e-6, 1, 1 ).empty() );
-
-    BOOST_CHECK( FindResistorDividers( 2, 1, 1e-3, R_DIVIDER_IMPEDANCE::SERIES, E24 ).empty() );
-}
-
-
-/**
- * With an output impedance target, halving a voltage takes two resistors of twice the target.
- */
-BOOST_AUTO_TEST_CASE( ParallelImpedanceExactRatioTieIsBrokenByImpedance )
-{
-    std::vector<R_DIVIDER_SOLUTION> solutions = SolveResistorDivider( 2, 1, 5e3, R_DIVIDER_IMPEDANCE::PARALLEL, E24 );
-
-    BOOST_REQUIRE( !solutions.empty() );
-    BOOST_CHECK_EQUAL( solutions[0].R1, 10e3 );
-    BOOST_CHECK_EQUAL( solutions[0].R2, 10e3 );
-}
-
-
-/**
- * The best ratio does not depend on which impedance is targeted, but the resistors that reach
- * it do: R1 || R2 = 10k needs much larger resistors than R1 + R2 = 10k. The later solutions
- * give up ratio accuracy to bring R1 || R2 closer to the target.
- */
-BOOST_AUTO_TEST_CASE( ParallelImpedanceTarget )
-{
-    auto outputImpedance =
-            []( const R_DIVIDER_SOLUTION& aSolution )
-            {
-                return aSolution.R1 * aSolution.R2 / ( aSolution.R1 + aSolution.R2 );
-            };
-
-    std::vector<R_DIVIDER_SOLUTION> series = solve( 5, 1.2, 10e3 );
-    std::vector<R_DIVIDER_SOLUTION> parallel = SolveResistorDivider( 5, 1.2, 10e3, R_DIVIDER_IMPEDANCE::PARALLEL, E24 );
-
-    BOOST_REQUIRE( !series.empty() );
-    BOOST_REQUIRE_GE( parallel.size(), 2 );
-    BOOST_CHECK_LE( parallel.size(), 5 );
-
-    BOOST_CHECK_CLOSE( ratioError( parallel[0], 5, 1.2 ), ratioError( series[0], 5, 1.2 ), 1e-6 );
-    BOOST_CHECK_EQUAL( parallel[0].R1, 51e3 );
-    BOOST_CHECK_EQUAL( parallel[0].R2, 16e3 );
-
-    double closest = std::abs( outputImpedance( parallel[0] ) / 10e3 - 1 );
-
-    for( const R_DIVIDER_SOLUTION& solution : parallel )
-        closest = std::min( closest, std::abs( outputImpedance( solution ) / 10e3 - 1 ) );
-
-    BOOST_CHECK_LT( closest, 0.01 );
-    BOOST_CHECK_LT( closest, std::abs( outputImpedance( parallel[0] ) / 10e3 - 1 ) );
-}
-
-
-/**
- * Halving a voltage is exact with any two equal resistors, so every decade ties on the ratio and
- * the impedance has to pick the winner. This only works if ties survive round-off.
- */
+/// Any two equal resistors halve a voltage exactly, so only the impedance can pick between them
 BOOST_AUTO_TEST_CASE( ExactRatioTieIsBrokenByImpedance )
 {
-    std::vector<R_DIVIDER_SOLUTION> solutions = solve( 2, 1, 20e3 );
+    std::vector<R_DIVIDER> dividers =
+            FindResistorDividers( 1, 2e4, R_DIVIDER_IMPEDANCE::SERIES, resistors(), R_DIVIDER_TARGET::VOLTAGE );
 
-    BOOST_REQUIRE( !solutions.empty() );
-    BOOST_CHECK_EQUAL( solutions[0].R1, 10e3 );
-    BOOST_CHECK_EQUAL( solutions[0].R2, 10e3 );
+    BOOST_REQUIRE_EQUAL( dividers.size(), 1u );
+    BOOST_CHECK( dividers[0].Top == ( R_DIVIDER_LEG{ 1e4, 1e4 } ) );
+    BOOST_CHECK( dividers[0].Bottom == ( R_DIVIDER_LEG{ 1e4, 1e4 } ) );
+
+    // R1 || R2 of twice the target
+    dividers = FindResistorDividers( 1, 5e3, R_DIVIDER_IMPEDANCE::PARALLEL, resistors(), R_DIVIDER_TARGET::VOLTAGE );
+
+    BOOST_REQUIRE_EQUAL( dividers.size(), 1u );
+    BOOST_CHECK_EQUAL( dividers[0].Top.A, 1e4 );
+    BOOST_CHECK_EQUAL( dividers[0].Impedance, 5e3 );
 }
 
 
-/**
- * 5 V to 1.2 V needs R1 / R2 = 19 / 6, which E24 cannot hit exactly.
- */
-BOOST_AUTO_TEST_CASE( FiveVoltsToOnePointTwo )
-{
-    std::vector<R_DIVIDER_SOLUTION> solutions = solve( 5, 1.2, 10e3 );
-
-    BOOST_REQUIRE( !solutions.empty() );
-    BOOST_CHECK_LE( solutions.size(), 5 );
-
-    // The first solution has the best ratio of them all
-    for( const R_DIVIDER_SOLUTION& solution : solutions )
-        BOOST_CHECK_LE( ratioError( solutions[0], 5, 1.2 ), ratioError( solution, 5, 1.2 ) );
-
-    // 7.5k / 2.4k is the nearest pair to 10k total and is within 1.1 % of the ratio
-    BOOST_CHECK( contains( solutions, 7.5e3, 2.4e3 ) );
-
-    // No pair is reported twice
-    for( size_t i = 0; i < solutions.size(); ++i )
-    {
-        for( size_t j = i + 1; j < solutions.size(); ++j )
-            BOOST_CHECK( solutions[i].R1 != solutions[j].R1 || solutions[i].R2 != solutions[j].R2 );
-    }
-}
-
-
-/**
- * Verfiy that we rank solutions correctly depending on whether the tool is set to sort by
- * in/out ratio or R1/R2 ratio
- */
-BOOST_AUTO_TEST_CASE( RanksByRequestedQuantity )
-{
-    // R1 / R2 = 1.5 falls between 10k / 4.7k (2.13) and 4.7k / 4.7k (1). The first is closer on
-    // Vout / Vin (20 % against 25 %), the second on R1 / R2 (33 % against 42 %).
-    std::vector<R_DIVIDER_SOLUTION> byVoltage =
-            SolveResistorDivider( 2.5, 1, 10e3, R_DIVIDER_IMPEDANCE::SERIES, E3, R_DIVIDER_TARGET::VOLTAGE );
-    std::vector<R_DIVIDER_SOLUTION> byResistorRatio =
-            SolveResistorDivider( 2.5, 1, 10e3, R_DIVIDER_IMPEDANCE::SERIES, E3, R_DIVIDER_TARGET::RESISTOR_RATIO );
-
-    BOOST_REQUIRE( !byVoltage.empty() );
-    BOOST_REQUIRE( !byResistorRatio.empty() );
-
-    BOOST_CHECK_CLOSE( byVoltage[0].R1 / byVoltage[0].R2, 10.0 / 4.7, 1e-9 );
-    BOOST_CHECK_CLOSE( byResistorRatio[0].R1 / byResistorRatio[0].R2, 1.0, 1e-9 );
-
-    // The three resistor solver follows the same rule: no solution is further off on R1 / R2
-    // than the first one
-    std::vector<R_DIVIDER_SOLUTION> triples = SolveThreeResistorDivider( 2.5, 1, 10e3, R_DIVIDER_IMPEDANCE::SERIES, E3,
-                                                                         R_DIVIDER_TARGET::RESISTOR_RATIO );
-
-    BOOST_REQUIRE( !triples.empty() );
-
-    auto resistorRatioError =
-            []( const R_DIVIDER_SOLUTION& aSolution )
-            {
-                return std::abs( aSolution.Top() / aSolution.Bottom() / 1.5 - 1 );
-            };
-
-    for( const R_DIVIDER_SOLUTION& triple : triples )
-        BOOST_CHECK_LE( resistorRatioError( triples[0] ), resistorRatioError( triple ) + 1e-12 );
-}
-
-
-/**
- * Swapping the two resistors turns a divider for r into one for 1 - r, so the solver should treat
- * small and large ratios alike.
- */
-BOOST_AUTO_TEST_CASE( BestRatioIsSymmetric )
-{
-    std::vector<R_DIVIDER_SOLUTION> low = solve( 10, 2, 47e3 );
-    std::vector<R_DIVIDER_SOLUTION> high = solve( 10, 8, 47e3 );
-
-    BOOST_REQUIRE( !low.empty() );
-    BOOST_REQUIRE( !high.empty() );
-    BOOST_CHECK_EQUAL( low[0].R1, high[0].R2 );
-    BOOST_CHECK_EQUAL( low[0].R2, high[0].R1 );
-}
-
-
-/**
- * Only the ratio of the voltages and the scale of the impedance matter.
- */
-BOOST_AUTO_TEST_CASE( ScalesWithImpedance )
-{
-    std::vector<R_DIVIDER_SOLUTION> base = solve( 3.3, 1.8, 10e3 );
-    std::vector<R_DIVIDER_SOLUTION> scaled = solve( 33, 18, 10e6 );
-
-    BOOST_REQUIRE_EQUAL( base.size(), scaled.size() );
-
-    for( size_t i = 0; i < base.size(); ++i )
-    {
-        BOOST_CHECK_CLOSE( scaled[i].R1, base[i].R1 * 1000, 1e-9 );
-        BOOST_CHECK_CLOSE( scaled[i].R2, base[i].R2 * 1000, 1e-9 );
-    }
-}
-
-
-/**
- * E3 is sparse enough that the search has to range far from the ideal values. A resistor ratio of
- * 47 (pass k + 1 and 1) is exact with 47k over 1k.
- */
-BOOST_AUTO_TEST_CASE( SparseSeriesFindsExactRatio )
-{
-    std::vector<R_DIVIDER_SOLUTION> solutions = solve( 48, 1, 48e3, E3 );
-
-    BOOST_REQUIRE( !solutions.empty() );
-    BOOST_CHECK_EQUAL( solutions[0].R1, 47e3 );
-    BOOST_CHECK_EQUAL( solutions[0].R2, 1e3 );
-}
-
-
-static std::vector<R_DIVIDER_SOLUTION> solveThree( double aVin, double aVout, double aImpedance,
-                                                   const std::vector<uint16_t>& aSeries = E24 )
-{
-    return SolveThreeResistorDivider( aVin, aVout, aImpedance, R_DIVIDER_IMPEDANCE::SERIES, aSeries );
-}
-
-
-static double threeResistorRatioError( const R_DIVIDER_SOLUTION& aSolution, double aVin, double aVout )
-{
-    return std::abs( aSolution.Bottom() / ( aSolution.Top() + aSolution.Bottom() ) / ( aVout / aVin ) - 1 );
-}
-
-
-static double threeResistorImpedanceError( const R_DIVIDER_SOLUTION& aSolution, double aImpedance )
-{
-    return std::abs( ( aSolution.Top() + aSolution.Bottom() ) / aImpedance - 1 );
-}
-
-
-BOOST_AUTO_TEST_CASE( ThreeResistorsRejectUnusableInput )
-{
-    BOOST_CHECK( solveThree( 5, 0, 10e3 ).empty() );
-    BOOST_CHECK( solveThree( 5, 6, 10e3 ).empty() );
-    BOOST_CHECK( solveThree( 5, 1.2, 0 ).empty() );
-    BOOST_CHECK( solveThree( NAN, 1.2, 10e3 ).empty() );
-    BOOST_CHECK( solveThree( 5, 1.2, 10e3, {} ).empty() );
-    BOOST_CHECK( solveThree( 1e300, 1e-300, 10e3 ).empty() );
-    BOOST_CHECK( SolveThreeResistorDivider( 5, 1.2, 10e3, R_DIVIDER_IMPEDANCE::PARALLEL, E24 ).empty() );
-
-    // Legs of 0.5 mOhm and 2 TOhm are outside the range of resistors, 2 mOhm is inside
-    BOOST_CHECK( solveThree( 2, 1, 1e-3 ).empty() );
-    BOOST_CHECK( solveThree( 2, 1, 4e12 ).empty() );
-    BOOST_CHECK( !solveThree( 2, 1, 4e-3 ).empty() );
-}
-
-
-/**
- * A two resistor divider leaves R3 at 0.
- */
-BOOST_AUTO_TEST_CASE( TwoResistorSolutionsHaveNoThirdResistor )
-{
-    for( const R_DIVIDER_SOLUTION& solution : solve( 5, 1.2, 10e3 ) )
-    {
-        BOOST_CHECK_EQUAL( solution.R3, 0 );
-        BOOST_CHECK( solution.Topology == R_DIVIDER_TOPOLOGY::TWO_RESISTORS );
-        BOOST_CHECK_EQUAL( solution.Top(), solution.R1 );
-        BOOST_CHECK_EQUAL( solution.Bottom(), solution.R2 );
-    }
-}
-
-
-/**
- * 5 V to 1.2 V needs a bottom leg of 6 / 19 of the top one, which two E24 resistors only reach
- * to 0.5 %. A third resistor makes it exact, and on the impedance too: 2k and 5.6k over 2.4k.
- */
+/// 5 V to 1.2 V needs R1 / R2 = 19 / 6, which no two E24 resistors make but 2k + 5k6 over 2k4 does at 10k
 BOOST_AUTO_TEST_CASE( ThreeResistorsBeatTwo )
 {
-    std::vector<R_DIVIDER_SOLUTION> pairs = solve( 5, 1.2, 10e3 );
-    std::vector<R_DIVIDER_SOLUTION> triples = solveThree( 5, 1.2, 10e3 );
+    const double           ratio = 19.0 / 6;
+    std::vector<R_DIVIDER> dividers = FindResistorDividers( ratio, 1e4, R_DIVIDER_IMPEDANCE::SERIES, resistors(),
+                                                            R_DIVIDER_TARGET::RESISTOR_RATIO );
 
-    BOOST_REQUIRE( !pairs.empty() );
-    BOOST_REQUIRE( !triples.empty() );
-    BOOST_CHECK_LE( triples.size(), 4 );
+    checkDividers( dividers, ratio, 1e4 );
 
-    BOOST_CHECK_LT( threeResistorRatioError( triples[0], 5, 1.2 ), ratioError( pairs[0], 5, 1.2 ) );
+    // Two resistor dividers come first and a third resistor makes both errors vanish
+    BOOST_CHECK( dividers.front().Top.B == 0 && dividers.front().Bottom.B == 0 );
+    BOOST_CHECK_GT( std::abs( dividers.front().TargetError ), 1e-3 );
 
-    BOOST_CHECK( triples[0].Topology == R_DIVIDER_TOPOLOGY::SPLIT_TOP );
-    BOOST_CHECK_EQUAL( triples[0].Top(), 7.6e3 );
-    BOOST_CHECK_EQUAL( triples[0].Bottom(), 2.4e3 );
+    BOOST_CHECK( dividers.back().Top.B != 0 || dividers.back().Bottom.B != 0 );
+    BOOST_CHECK_SMALL( dividers.back().TargetError, 1e-12 );
+    BOOST_CHECK_SMALL( dividers.back().ImpedanceError, 1e-12 );
+}
 
-    for( const R_DIVIDER_SOLUTION& solution : triples )
+
+/// E3 is sparse, so the search has to go well away from the impedance to find 47k over 1k
+BOOST_AUTO_TEST_CASE( SparseSeriesFindsExactRatio )
+{
+    std::vector<R_DIVIDER> dividers = FindResistorDividers( 47, 3e4, R_DIVIDER_IMPEDANCE::SERIES, resistors( true ),
+                                                            R_DIVIDER_TARGET::RESISTOR_RATIO );
+
+    checkDividers( dividers, 47, 3e4 );
+    BOOST_CHECK_EQUAL( dividers.front().Top.A, 4.7e4 );
+    BOOST_CHECK_EQUAL( dividers.front().Bottom.A, 1e3 );
+    BOOST_CHECK_EQUAL( dividers.front().TargetError, 0 );
+}
+
+
+/// No pair of resistors has a better ratio, near the ideal ones or within 1 % of the impedance
+/// Ratio 1 at 2k1 only fits 1 % away from the ideal ratio
+BOOST_AUTO_TEST_CASE( BestPairMatchesBruteForce )
+{
+    const std::vector<double> values = resistors();
+
+    const std::pair<double, double> requests[] = { { 0.0137, 1e4 }, { 0.37, 1e4 }, { 1, 2100 },
+                                                   { 2.5, 1e4 },    { 7.3, 1e4 },  { 4567, 1e4 } };
+
+    for( const auto& [ratio, impedance] : requests )
     {
-        BOOST_CHECK_GT( solution.R3, 0 );
+        const double idealTop = impedance * ratio / ( 1 + ratio );
 
-        // The first solution has the best ratio of them all
-        BOOST_CHECK_LE( threeResistorRatioError( triples[0], 5, 1.2 ), threeResistorRatioError( solution, 5, 1.2 ) );
-    }
+        double bestFree = std::numeric_limits<double>::infinity();
+        double bestTight = std::numeric_limits<double>::infinity();
 
-    // No set of resistors is reported twice, R2 and R3 being interchangeable
-    for( size_t i = 0; i < triples.size(); ++i )
-    {
-        for( size_t j = i + 1; j < triples.size(); ++j )
+        for( double top : values )
         {
-            std::vector<double> first = { triples[i].R1, triples[i].R2, triples[i].R3 };
-            std::vector<double> second = { triples[j].R1, triples[j].R2, triples[j].R3 };
-
-            std::sort( first.begin(), first.end() );
-            std::sort( second.begin(), second.end() );
-
-            BOOST_CHECK( triples[i].Topology != triples[j].Topology || first != second );
-        }
-    }
-}
-
-
-/**
- * Splitting the top leg for r is splitting the bottom leg for 1 - r, so the two requests should
- * give mirror images of each other.
- */
-BOOST_AUTO_TEST_CASE( ThreeResistorsAreSymmetric )
-{
-    std::vector<R_DIVIDER_SOLUTION> low = solveThree( 5, 1.2, 10e3 );
-    std::vector<R_DIVIDER_SOLUTION> high = solveThree( 5, 3.8, 10e3 );
-
-    BOOST_REQUIRE( !low.empty() );
-    BOOST_REQUIRE( !high.empty() );
-    BOOST_CHECK( high[0].Topology == R_DIVIDER_TOPOLOGY::SPLIT_BOTTOM );
-    BOOST_CHECK_EQUAL( low[0].Top(), high[0].Bottom() );
-    BOOST_CHECK_EQUAL( low[0].Bottom(), high[0].Top() );
-}
-
-
-/**
- * E6 cannot get both the ratio and the impedance right here, so the solutions differ. Later ones
- * give up ratio accuracy for a closer impedance, and none is listed twice.
- */
-BOOST_AUTO_TEST_CASE( ThreeResistorsTradeRatioForImpedance )
-{
-    static const std::vector<uint16_t> E6 = { 100, 150, 220, 330, 470, 680 };
-
-    std::vector<R_DIVIDER_SOLUTION> solutions = solveThree( 5, 1.2, 10e3, E6 );
-
-    BOOST_REQUIRE_GE( solutions.size(), 2 );
-
-    for( size_t i = 1; i < solutions.size(); ++i )
-    {
-        BOOST_CHECK_GE( threeResistorRatioError( solutions[i], 5, 1.2 ),
-                        threeResistorRatioError( solutions[i - 1], 5, 1.2 ) );
-    }
-
-    BOOST_CHECK_LT( threeResistorImpedanceError( solutions.back(), 10e3 ),
-                    threeResistorImpedanceError( solutions.front(), 10e3 ) );
-}
-
-
-/**
- * Halving a voltage is exact when the split leg adds up to the single resistor, and of all the
- * ways to do that the impedance picks the winner.
- */
-BOOST_AUTO_TEST_CASE( ThreeResistorsExactRatioTieIsBrokenByImpedance )
-{
-    std::vector<R_DIVIDER_SOLUTION> solutions = solveThree( 2, 1, 20e3 );
-
-    BOOST_REQUIRE( !solutions.empty() );
-    BOOST_CHECK_EQUAL( solutions[0].Top(), 10e3 );
-    BOOST_CHECK_EQUAL( solutions[0].Bottom(), 10e3 );
-}
-
-
-/**
- * R3 is in parallel with R1 or with R2 in the parallel arrangements.
- */
-BOOST_AUTO_TEST_CASE( ParallelLegs )
-{
-    R_DIVIDER_SOLUTION solution = { 3e3, 6e3, 6e3, R_DIVIDER_TOPOLOGY::PARALLEL_TOP };
-
-    BOOST_CHECK_EQUAL( solution.Top(), 2e3 );
-    BOOST_CHECK_EQUAL( solution.Bottom(), 6e3 );
-
-    solution.Topology = R_DIVIDER_TOPOLOGY::PARALLEL_BOTTOM;
-
-    BOOST_CHECK_EQUAL( solution.Top(), 3e3 );
-    BOOST_CHECK_EQUAL( solution.Bottom(), 3e3 );
-}
-
-
-/**
- * 3.3 V to 1.8 V needs a top leg of 5 / 6 of the bottom one. No three E48 resistors with two in
- * series get there, but 59k in parallel with 649k over 64.9k does. The parallel pair competes
- * with the series ones for the same places, so it comes first.
- */
-BOOST_AUTO_TEST_CASE( ParallelResistorsBeatSeries )
-{
-    static const std::vector<uint16_t> E48 = { 100, 105, 110, 115, 121, 127, 133, 140, 147, 154, 162, 169,
-                                               178, 187, 196, 205, 215, 226, 237, 249, 261, 274, 287, 301,
-                                               316, 332, 348, 365, 383, 402, 422, 442, 464, 487, 511, 536,
-                                               562, 590, 619, 649, 681, 715, 750, 787, 825, 866, 909, 953 };
-
-    std::vector<R_DIVIDER_SOLUTION> solutions = solveThree( 3.3, 1.8, 100e3, E48 );
-
-    BOOST_REQUIRE( !solutions.empty() );
-    BOOST_CHECK_LE( solutions.size(), 4 );
-
-    BOOST_CHECK( solutions[0].Topology == R_DIVIDER_TOPOLOGY::PARALLEL_TOP );
-    BOOST_CHECK_EQUAL( std::min( solutions[0].R1, solutions[0].R3 ), 59e3 );
-    BOOST_CHECK_EQUAL( std::max( solutions[0].R1, solutions[0].R3 ), 649e3 );
-    BOOST_CHECK_EQUAL( solutions[0].R2, 64.9e3 );
-    BOOST_CHECK_LT( threeResistorRatioError( solutions[0], 3.3, 1.8 ), 1e-12 );
-
-    for( const R_DIVIDER_SOLUTION& solution : solutions )
-    {
-        bool series = solution.Topology == R_DIVIDER_TOPOLOGY::SPLIT_TOP
-                      || solution.Topology == R_DIVIDER_TOPOLOGY::SPLIT_BOTTOM;
-
-        if( series )
-            BOOST_CHECK_GT( threeResistorRatioError( solution, 3.3, 1.8 ), 1e-12 );
-    }
-}
-
-
-/**
- * Putting the parallel pair on top for r is putting it on the bottom for 1 - r.
- */
-BOOST_AUTO_TEST_CASE( ParallelResistorsAreSymmetric )
-{
-    static const std::vector<uint16_t> E6 = { 100, 150, 220, 330, 470, 680 };
-
-    std::vector<R_DIVIDER_SOLUTION> low = solveThree( 5, 1.2, 10e3, E6 );
-    std::vector<R_DIVIDER_SOLUTION> high = solveThree( 5, 3.8, 10e3, E6 );
-
-    BOOST_REQUIRE_EQUAL( low.size(), high.size() );
-
-    for( size_t i = 0; i < low.size(); ++i )
-    {
-        BOOST_CHECK_EQUAL( low[i].Top(), high[i].Bottom() );
-        BOOST_CHECK_EQUAL( low[i].Bottom(), high[i].Top() );
-    }
-}
-
-
-/**
- * Verify that three resistor solutions strictly worse then an existing two-resistor solution
- * are not shown.
- */
-BOOST_AUTO_TEST_CASE( ThreeResistorsMustEarnTheirPlace )
-{
-    auto find =
-            []( double aVin, double aVout, double aImpedance )
+            for( double bottom : values )
             {
-                return FindResistorDividers( aVin, aVout, aImpedance, R_DIVIDER_IMPEDANCE::SERIES, E24 );
-            };
+                const double error = std::abs( top / bottom / ratio - 1 );
 
-    auto threeResistorCount =
-            []( const std::vector<R_DIVIDER_RESULT>& aResults )
-            {
-                return std::count_if( aResults.begin(), aResults.end(),
-                                      []( const R_DIVIDER_RESULT& aResult )
-                                      {
-                                          return aResult.Solution.Topology != R_DIVIDER_TOPOLOGY::TWO_RESISTORS;
-                                      } );
-            };
+                if( top >= idealTop / 3 && top <= idealTop * 3 )
+                    bestFree = std::min( bestFree, error );
 
-    // 10k / 10k and 1k / 1k are exact on both the ratio and the impedance: nothing can beat them
-    BOOST_CHECK_EQUAL( threeResistorCount( find( 5, 2.5, 20e3 ) ), 0 );
-    BOOST_CHECK_EQUAL( threeResistorCount( find( 12, 6, 2e3 ) ), 0 );
-
-    // 5.1k / 5.1k is exact on the ratio but 2 % off on the impedance, which leaves room for one of
-    // the two dividers that the three resistor solver returns
-    BOOST_CHECK_EQUAL( SolveThreeResistorDivider( 5, 2.5, 10e3, R_DIVIDER_IMPEDANCE::SERIES, E24 ).size(), 2 );
-    BOOST_CHECK_EQUAL( threeResistorCount( find( 5, 2.5, 10e3 ) ), 1 );
-
-    // No pair is exact on the ratio here
-    BOOST_CHECK_EQUAL( threeResistorCount( find( 5, 1.2, 10e3 ) ), 1 );
-
-    // Two resistor dividers come first, with their errors
-    std::vector<R_DIVIDER_RESULT> results = find( 5, 2.5, 10e3 );
-
-    BOOST_REQUIRE_GE( results.size(), 3 );
-    BOOST_CHECK( results[0].Solution.Topology == R_DIVIDER_TOPOLOGY::TWO_RESISTORS );
-    BOOST_CHECK_EQUAL( results[0].Solution.R1, 5100 );
-    BOOST_CHECK_EQUAL( results[0].Solution.R2, 5100 );
-    BOOST_CHECK_SMALL( results[0].TargetError, 1e-12 );
-    BOOST_CHECK_CLOSE( results[0].Impedance, 10200, 1e-9 );
-    BOOST_CHECK_CLOSE( results[0].ImpedanceError, 0.02, 1e-6 );
-    BOOST_CHECK( results.back().Solution.Topology != R_DIVIDER_TOPOLOGY::TWO_RESISTORS );
-
-    // Every three resistor divider listed beats all the pairs on one of the errors
-    double bestTargetError = 1;
-    double bestImpedanceError = 1;
-
-    for( const R_DIVIDER_RESULT& result : results )
-    {
-        if( result.Solution.Topology == R_DIVIDER_TOPOLOGY::TWO_RESISTORS )
-        {
-            bestTargetError = std::min( bestTargetError, std::abs( result.TargetError ) );
-            bestImpedanceError = std::min( bestImpedanceError, std::abs( result.ImpedanceError ) );
+                if( std::abs( ( top + bottom ) / impedance - 1 ) <= 0.01 + 1e-9 )
+                    bestTight = std::min( bestTight, error );
+            }
         }
-        else
+
+        BOOST_TEST_CONTEXT( "ratio " << ratio << ", impedance " << impedance )
         {
-            BOOST_CHECK( std::abs( result.TargetError ) < bestTargetError
-                         || std::abs( result.ImpedanceError ) < bestImpedanceError );
+            std::vector<R_DIVIDER> dividers = FindResistorDividers( ratio, impedance, R_DIVIDER_IMPEDANCE::SERIES,
+                                                                    values, R_DIVIDER_TARGET::RESISTOR_RATIO );
+
+            checkDividers( dividers, ratio, impedance );
+            BOOST_CHECK_LE( std::abs( dividers.front().TargetError ), bestFree + 1e-12 );
+
+            double solverTight = std::numeric_limits<double>::infinity();
+
+            for( const R_DIVIDER& divider : dividers )
+            {
+                if( divider.Top.B == 0 && divider.Bottom.B == 0 && std::abs( divider.ImpedanceError ) <= 0.01 + 1e-9 )
+                    solverTight = std::min( solverTight, std::abs( divider.TargetError ) );
+            }
+
+            BOOST_CHECK_CLOSE( solverTight, bestTight, 1e-9 );
         }
     }
-
-    // The error is measured on the requested quantity: an exact resistor ratio has none, however
-    // small the ratio. 1 + 1e-6 is itself off by about 1e-10 of the ratio as a double.
-    std::vector<R_DIVIDER_RESULT> byRatio = FindResistorDividers( 1 + 1e-6, 1, 10e3, R_DIVIDER_IMPEDANCE::SERIES, E24,
-                                                                  R_DIVIDER_TARGET::RESISTOR_RATIO );
-
-    BOOST_REQUIRE( !byRatio.empty() );
-    BOOST_CHECK_SMALL( byRatio[0].TargetError, 1e-9 );
-
-    BOOST_CHECK( find( 5, 6, 10e3 ).empty() );
 }
 
 

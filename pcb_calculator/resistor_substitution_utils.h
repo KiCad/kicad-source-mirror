@@ -41,6 +41,11 @@ const double epsilon = 1e-12; // machine epsilon for floating-point equality tes
 // This value is only pertinent to the resistor calculator. See above.
 #define RES_EQUIV_CALC_LAST_VALUE 1e6
 
+/**
+ * Format a resistance in ohms with three significant digits as in IEC 60062, e.g. 4K7, 102R, 1M.
+ */
+std::string strValue( double aValue );
+
 // Struct representing resistance value together with its composition, e.g. {20.0, "10R + 10R"}
 struct RESISTANCE
 {

@@ -23,8 +23,6 @@
 #include <utility>
 #include <vector>
 
-#include <r_divider_solver.h>
-
 #include "panel_r_divider_base.h"
 
 class PCB_CALCULATOR_SETTINGS;
@@ -36,7 +34,6 @@ public:
     PANEL_R_DIVIDER( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL,
                      const wxString& name = wxEmptyString );
-    ~PANEL_R_DIVIDER();
 
     // Methods from CALCULATOR_PANEL that must be overridden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
@@ -45,47 +42,17 @@ public:
 
     // Event handlers from PANEL_R_DIVIDER_BASE
     void OnModeChange( wxCommandEvent& aEvent ) override;
-    void OnESeriesSelection( wxCommandEvent& aEvent ) override;
     void OnCalculate( wxCommandEvent& aEvent ) override;
 
 private:
-    enum COLUMN
-    {
-        COL_R1 = 0,
-        COL_R2,
-        COL_TARGET,
-        COL_TARGET_ERROR,
-        COL_IMPEDANCE,
-        COL_IMPEDANCE_ERROR
-    };
-
     /// The E-series radio buttons paired with their ESERIES enum values
     std::vector<std::pair<wxRadioButton*, int>> seriesButtons() const;
 
-    bool isVoltageMode() const { return m_rbModeVoltage->GetValue(); }
-    bool isParallelImpedance() const { return m_impedanceParallel->GetValue(); }
+    /// The ESERIES enum value of the checked E-series radio button
+    int selectedSeries() const;
 
-    /**
-     * Enable the input fields of the selected mode, disable the others, and relabel the results columns.
-     */
+    /// Enable the inputs of the selected mode and relabel the results columns
     void updateModeUI();
-
-    void fillResults( const std::vector<R_DIVIDER_RESULT>& aResults, double aVin );
-
-    void clearResults();
-
-    /**
-     * Work out the minimum width of each results column and fix the grid's minimum size from them.
-     */
-    void sizeColumns();
-
-    /**
-     * Widen the results columns so that they fill the grid.
-     */
-    void stretchColumns();
-
-    int              m_series;       // ESERIES enum value
-    std::vector<int> m_minColWidths; // Results column widths before stretching
 };
 
 #endif // PANEL_R_DIVIDER_H

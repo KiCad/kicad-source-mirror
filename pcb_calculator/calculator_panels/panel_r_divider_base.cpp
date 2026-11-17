@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "panel_r_divider_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -173,7 +175,7 @@ PANEL_R_DIVIDER_BASE::PANEL_R_DIVIDER_BASE( wxWindow* parent, wxWindowID id, con
 	wxStaticBoxSizer* sbSizerRDividerSolutions;
 	sbSizerRDividerSolutions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Solutions") ), wxVERTICAL );
 
-	m_resultsGrid = new wxGrid( sbSizerRDividerSolutions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_resultsGrid = new WX_GRID( sbSizerRDividerSolutions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_resultsGrid->CreateGrid( 9, 6 );
@@ -240,13 +242,6 @@ PANEL_R_DIVIDER_BASE::PANEL_R_DIVIDER_BASE( wxWindow* parent, wxWindowID id, con
 	// Connect Events
 	m_rbModeRatio->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnModeChange ), NULL, this );
 	m_rbModeVoltage->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnModeChange ), NULL, this );
-	m_e3->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e6->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e12->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e24->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e48->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e96->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e192->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
 	m_btnCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnCalculate ), NULL, this );
 }
 
@@ -255,13 +250,6 @@ PANEL_R_DIVIDER_BASE::~PANEL_R_DIVIDER_BASE()
 	// Disconnect Events
 	m_rbModeRatio->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnModeChange ), NULL, this );
 	m_rbModeVoltage->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnModeChange ), NULL, this );
-	m_e3->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e6->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e12->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e24->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e48->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e96->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
-	m_e192->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnESeriesSelection ), NULL, this );
 	m_btnCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_R_DIVIDER_BASE::OnCalculate ), NULL, this );
 
 }

@@ -24,6 +24,9 @@
 #include <functional>
 #include <stdexcept>
 #include <optional>
+#include <ranges>
+
+#include <fmt/format.h>
 
 // If BENCHMARK is defined, calculations will print their execution time to the STDERR
 // #define BENCHMARK
@@ -217,46 +220,34 @@ static inline RESISTANCE parallelResistanceSimple( const RESISTANCE& aR1, const 
     return RESISTANCE( parallelValue( aR1.value, aR2.value ), name, parts );
 }
 
-// Return a string from aValue (aValue is expected in ohms).
-// If aValue < 1000 the returned string is aValue with unit = R.
-// If aValue >= 1000 the returned string is aValue/1000 with unit = K
-// with notation similar to 2K2.
-// If aValue >= 1e6 the returned string is aValue/1e6 with unit = M
-// with notation = 1M.
-static std::string strValue( double aValue )
+std::string strValue( double aValue )
 {
-    std::string result;
+    static constexpr std::pair<double, char> units[] = {
+        { 1e12, 'T' }, { 1e9, 'G' }, { 1e6, 'M' }, { 1e3, 'K' }, { 1, 'R' }, { 1e-3, 'L' }
+    };
 
-    if( aValue < 1000.0 )
-    {
-        result = std::to_string( static_cast<int>( aValue ) );
-        result += 'R';
-    }
-    else
-    {
-        double div = 1e3;
-        char   unit = 'K';
+    // Rounding first keeps 999.9 from coming out as 1000R
+    const double digit = std::pow( 10.0, std::floor( std::log10( aValue ) ) - 2 );
 
-        if( aValue >= 1e6 )
-        {
-            div = 1e6;
-            unit = 'M';
-        }
+    aValue = std::round( aValue / digit ) * digit;
 
-        aValue /= div;
+    auto unit = std::ranges::find_if( units,
+                                      [&]( const auto& aUnit )
+                                      {
+                                          return aValue >= aUnit.first;
+                                      } );
 
-        int valueAsInt = static_cast<int>( aValue );
-        result = std::to_string( valueAsInt );
-        result += unit;
+    if( unit == std::end( units ) )
+        unit = std::prev( std::end( units ) );
 
-        // Add mantissa: 1 digit, suitable for series up to E24
-        double mantissa = aValue - valueAsInt;
+    std::string text = fmt::format( "{:g}", aValue / unit->first );
+    size_t      point = text.find( '.' );
 
-        if( mantissa > 0 )
-            result += std::to_string( lround( mantissa * 10 ) );
-    }
+    if( point == std::string::npos )
+        return text + unit->second;
 
-    return result;
+    text[point] = unit->second;
+    return text;
 }
 
 

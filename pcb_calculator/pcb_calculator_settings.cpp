@@ -35,16 +35,13 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
         m_Regulators(), m_cableSize(), m_wavelength(), m_TrackWidth(), m_TransLine(), m_ViaSize(),
         m_RDivider()
 {
-    // Board Classes
+    // Build settings:
     m_params.emplace_back( new PARAM<int>( "board_class_units", &m_BoardClassUnits, 0 ) );
 
-    // Color Code
     m_params.emplace_back( new PARAM<int>( "color_code_tolerance", &m_ColorCodeTolerance, 0 ) );
 
-    // Calculator window
     m_params.emplace_back( new PARAM<int>( "last_page", &m_LastPage, 1 ) );
 
-    // Transmission Lines
     m_params.emplace_back( new PARAM<int>( "translines.type", &m_TransLine.type, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "translines.dielectric_model",
@@ -71,7 +68,6 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "translines.soldermask_fills_gaps",
                                            &m_TransLine.soldermask_fills_gaps, 1 ) );
 
-    // RF Attenuators
     m_params.emplace_back( new PARAM<int>( "attenuators.type", &m_Attenuators.type, 0 ) );
 
     const std::array<std::string, 4> att_names = { "att_pi", "att_tee",
@@ -88,7 +84,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
         m_params.emplace_back( new PARAM<double>( path + ".zout", &att->zout, 50.0 ) );
     }
 
-    // Electrical Spacing
+    // Electrical spacing params
     m_params.emplace_back( new PARAM<int>( "electrical.spacing_units",
             &m_Electrical.spacing_units, 0 ) );
 
@@ -125,7 +121,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<double>( "electrical.iec60664_altitude",
             &m_Electrical.iec60664_altitude, 2000 ) );
 
-    // Regulators
+    // Regulators params
     m_params.emplace_back( new PARAM<wxString>( "regulators.resTol", &m_Regulators.resTol,
                                                 DEFAULT_REGULATOR_RESTOL ) );
 
@@ -160,7 +156,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "regulators.last_param", &m_Regulators.last_param, 0 ) );
 
-    // Cable Size
+    // cable_size params
     m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorMaterialResitivity",
                                                 &m_cableSize.conductorMaterialResitivity, "" ) );
 
@@ -183,7 +179,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "cable_size.lengthUnit", &m_cableSize.lengthUnit, 0 ) );
 
-    // Wavelength
+    // wavelength params
     m_params.emplace_back(
             new PARAM<double>( "wavelength.frequency", &m_wavelength.frequency, 1e9 ) );
 
@@ -206,7 +202,6 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "wavelength.speedUnit", &m_wavelength.speedUnit, 0 ) );
 
-    // Track Width
     m_params.emplace_back( new PARAM<wxString>( "track_width.current",
             &m_TrackWidth.current, "1.0" ) );
 
@@ -246,7 +241,6 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "track_width.int_track_thickness_units",
             &m_TrackWidth.int_track_thickness_units, 1 ) );
 
-    // Transmission Lines
     {
         const std::array<std::string, 9> transline_names = { "MicroStrip", "CoPlanar", "GrCoPlanar",
                 "RectWaveGuide", "Coax", "Coupled_MicroStrip", "Coupled_Stripline", "StripLine",
@@ -267,7 +261,6 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
         }
     }
 
-    // Via Size
     m_params.emplace_back( new PARAM<wxString>( "via_size.hole_diameter",
             &m_ViaSize.hole_diameter, "0.4" ) );
 
@@ -318,27 +311,19 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "via_size.pulse_rise_time",
             &m_ViaSize.pulse_rise_time, "1" ) );
 
-    // Galvanic Corrosion
     m_params.emplace_back( new PARAM<wxString>( "corrosion_table.threshold_voltage",
             &m_CorrosionTable.threshold_voltage, "0" ) );
 
     m_params.emplace_back( new PARAM<bool>( "corrosion_table.show_symbols",
             &m_CorrosionTable.show_symbols, true ) );
 
-    // Resistor Divider
     m_params.emplace_back( new PARAM<int>( "r_divider.mode", &m_RDivider.mode, 0 ) );
-
     m_params.emplace_back( new PARAM<wxString>( "r_divider.ratio", &m_RDivider.ratio, "1" ) );
-
     m_params.emplace_back( new PARAM<wxString>( "r_divider.vin", &m_RDivider.vin, "5" ) );
-
     m_params.emplace_back( new PARAM<wxString>( "r_divider.vout", &m_RDivider.vout, "1.2" ) );
-
     m_params.emplace_back( new PARAM<int>( "r_divider.impedance_type", &m_RDivider.impedanceType, 0 ) );
-
     m_params.emplace_back( new PARAM<wxString>( "r_divider.impedance", &m_RDivider.impedance, "100" ) );
-
-    m_params.emplace_back( new PARAM<int>( "r_divider.series", &m_RDivider.series, 4 ) ); // Default to E24
+    m_params.emplace_back( new PARAM<int>( "r_divider.series", &m_RDivider.series, 4 ) ); // ESERIES::E24
 }
 
 

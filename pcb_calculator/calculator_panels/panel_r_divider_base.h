@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "widgets/html_window.h"
 #include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
@@ -68,13 +70,12 @@ class PANEL_R_DIVIDER_BASE : public CALCULATOR_PANEL
 		wxRadioButton* m_e192;
 		wxStaticLine* m_staticline61;
 		wxButton* m_btnCalculate;
-		wxGrid* m_resultsGrid;
+		WX_GRID* m_resultsGrid;
 		wxStaticBitmap* m_bitmapDivider;
 		HTML_WINDOW* m_panelHelp;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnModeChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculate( wxCommandEvent& event ) { event.Skip(); }
 
 
