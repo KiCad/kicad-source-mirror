@@ -1631,8 +1631,11 @@ void RENDER_3D_OPENGL::generateComplexHoles( float aPlatingThickness3d, float aU
         unsigned int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
         float        holeInnerR = (float) via->GetDrillValue() * 0.5f * aUnitScale;
 
-        float ztop = m_boardAdapter.GetLayerBottomZPos( F_Cu ) + m_boardAdapter.GetFrontCopperThickness() * 0.99f;
-        float zbot = m_boardAdapter.GetLayerBottomZPos( B_Cu ) - m_boardAdapter.GetBackCopperThickness() * 0.99f;
+        PCB_LAYER_ID top_layer, bottom_layer;
+        via->LayerPair( &top_layer, &bottom_layer );
+
+        float ztop = m_boardAdapter.GetLayerTopZPos( top_layer );
+        float zbot = m_boardAdapter.GetLayerBottomZPos( bottom_layer );
 
         float ztop_plated = ztop;
         float zbot_plated = zbot;
