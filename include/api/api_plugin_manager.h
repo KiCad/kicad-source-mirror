@@ -100,6 +100,9 @@ private:
 
     void processPluginDependencies();
 
+    /// Queue the jobs that make one plugin ready; the caller checks it is not busy
+    bool queuePluginDependencies( const API_PLUGIN& aPlugin );
+
     void processNextJob( wxCommandEvent& aEvent );
 
     bool cancelPluginJobs( const wxString& aIdentifier );

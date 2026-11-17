@@ -336,6 +336,10 @@ bool API_PLUGIN_MANAGER::RecreatePluginEnvironment( const wxString& aIdentifier 
     if( plugin->Runtime().type != PLUGIN_RUNTIME_TYPE::PYTHON )
         return false;
 
+    // Keep the old environment when there is nothing to rebuild it with
+    if( Pgm().GetCommonSettings()->m_Api.python_interpreter.IsEmpty() )
+        return false;
+
     std::optional<wxString> env = PYTHON_MANAGER::GetPythonEnvironment( plugin->Identifier() );
     wxCHECK( env.has_value(), false );
 
@@ -406,7 +410,16 @@ void API_PLUGIN_MANAGER::HandlePythonInterpreterChanged()
             continue;
 
         if( !PYTHON_MANAGER::IsVenvStale( *env, Pgm().GetCommonSettings()->m_Api.python_interpreter ) )
+        {
+            // A plugin skipped for want of an interpreter has no environment yet, so build it now
+            if( !m_readyPlugins.contains( plugin->Identifier() ) && !m_busyPlugins.contains( plugin->Identifier() )
+                && queuePluginDependencies( *plugin ) )
+            {
+                addedAnyJobs = true;
+            }
+
             continue;
+        }
 
         m_readyPlugins.erase( plugin->Identifier() );
 
@@ -784,78 +797,8 @@ void API_PLUGIN_MANAGER::processPluginDependencies()
         if( m_busyPlugins.contains( plugin->Identifier() ) )
             continue;
 
-        wxLogTrace( traceApi, wxString::Format( "Manager: processing dependencies for %s",
-                                                plugin->Identifier() ) );
-        m_environmentCache[plugin->Identifier()] = wxEmptyString;
-
-        if( plugin->Runtime().type != PLUGIN_RUNTIME_TYPE::PYTHON )
-        {
-            wxLogTrace( traceApi, wxString::Format( "Manager: %s is not a Python plugin, all set",
-                                                    plugin->Identifier() ) );
-            m_readyPlugins.insert( plugin->Identifier() );
-            continue;
-        }
-
-        std::optional<wxString> env = PYTHON_MANAGER::GetPythonEnvironment( plugin->Identifier() );
-
-        if( !env )
-        {
-            wxLogTrace( traceApi, wxString::Format( "Manager: could not create env for %s",
-                                                     plugin->Identifier() ) );
-            continue;
-        }
-
-        m_busyPlugins.insert( plugin->Identifier() );
-
-        wxFileName envConfigPath( *env, wxS( "pyvenv.cfg" ) );
-        envConfigPath.MakeAbsolute();
-
-        if( envConfigPath.IsFileReadable() )
-        {
-            bool broken = !PYTHON_MANAGER::IsVenvUsable( *env );
-            bool stale = PYTHON_MANAGER::IsVenvStale( *env, Pgm().GetCommonSettings()->m_Api.python_interpreter );
-
-            if( broken || stale )
-            {
-                wxLogTrace( traceApi, wxString::Format( "Manager: Python env for %s at %s needs recreation (%s)",
-                                                        plugin->Identifier(), envConfigPath.GetPath(),
-                                                        broken ? "broken" : "interpreter changed" ) );
-
-                if( RecreatePluginEnvironment( plugin->Identifier() ) )
-                {
-                    addedAnyJobs = true;
-                    continue;
-                }
-
-                wxLogTrace( traceApi, wxString::Format( "Manager: could not remove env for %s; "
-                                                        "scheduling creation anyway",
-                                                        plugin->Identifier() ) );
-            }
-            else
-            {
-                wxLogTrace( traceApi, wxString::Format( "Manager: Python env for %s exists at %s", plugin->Identifier(),
-                                                        envConfigPath.GetPath() ) );
-
-                JOB job;
-                job.type = JOB_TYPE::INSTALL_REQUIREMENTS;
-                job.identifier = plugin->Identifier();
-                job.plugin_path = plugin->BasePath();
-                job.env_path = envConfigPath.GetPath();
-                m_jobs.emplace_back( job );
-                addedAnyJobs = true;
-                continue;
-            }
-        }
-
-        wxLogTrace( traceApi, wxString::Format( "Manager: will create Python env for %s at %s",
-                                                plugin->Identifier(), envConfigPath.GetPath() ) );
-        JOB job;
-        job.type = JOB_TYPE::CREATE_ENV;
-        job.identifier = plugin->Identifier();
-        job.plugin_path = plugin->BasePath();
-        job.env_path = envConfigPath.GetPath();
-        m_jobs.emplace_back( job );
-        addedAnyJobs = true;
+        if( queuePluginDependencies( *plugin ) )
+            addedAnyJobs = true;
     }
 
     if( addedAnyJobs )
@@ -863,6 +806,86 @@ void API_PLUGIN_MANAGER::processPluginDependencies()
         wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
         QueueEvent( evt );
     }
+}
+
+
+bool API_PLUGIN_MANAGER::queuePluginDependencies( const API_PLUGIN& aPlugin )
+{
+    const wxString& id = aPlugin.Identifier();
+
+    wxLogTrace( traceApi, wxString::Format( "Manager: processing dependencies for %s", id ) );
+    m_environmentCache[id] = wxEmptyString;
+
+    if( aPlugin.Runtime().type != PLUGIN_RUNTIME_TYPE::PYTHON )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Manager: %s is not a Python plugin, all set", id ) );
+        m_readyPlugins.insert( id );
+        return false;
+    }
+
+    // An empty interpreter path would run the working directory as a command
+    if( Pgm().GetCommonSettings()->m_Api.python_interpreter.IsEmpty() )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Manager: no Python interpreter for %s", id ) );
+
+        reportPluginLoadMessage( m_reloadReporter.get(), pluginName( id ),
+                                 _( "No Python interpreter is configured. Set one in Preferences > Plugins." ),
+                                 wxEmptyString );
+        return false;
+    }
+
+    std::optional<wxString> env = PYTHON_MANAGER::GetPythonEnvironment( id );
+
+    if( !env )
+    {
+        wxLogTrace( traceApi, wxString::Format( "Manager: could not create env for %s", id ) );
+        return false;
+    }
+
+    m_busyPlugins.insert( id );
+
+    wxFileName envConfigPath( *env, wxS( "pyvenv.cfg" ) );
+    envConfigPath.MakeAbsolute();
+
+    JOB job;
+    job.identifier = id;
+    job.plugin_path = aPlugin.BasePath();
+    job.env_path = envConfigPath.GetPath();
+
+    if( envConfigPath.IsFileReadable() )
+    {
+        bool broken = !PYTHON_MANAGER::IsVenvUsable( *env );
+        bool stale = PYTHON_MANAGER::IsVenvStale( *env, Pgm().GetCommonSettings()->m_Api.python_interpreter );
+
+        if( broken || stale )
+        {
+            wxLogTrace( traceApi, wxString::Format( "Manager: Python env for %s at %s needs recreation (%s)", id,
+                                                    envConfigPath.GetPath(),
+                                                    broken ? "broken" : "interpreter changed" ) );
+
+            if( RecreatePluginEnvironment( id ) )
+                return true;
+
+            wxLogTrace( traceApi, wxString::Format( "Manager: could not remove env for %s; scheduling creation anyway",
+                                                    id ) );
+        }
+        else
+        {
+            wxLogTrace( traceApi, wxString::Format( "Manager: Python env for %s exists at %s", id,
+                                                    envConfigPath.GetPath() ) );
+
+            job.type = JOB_TYPE::INSTALL_REQUIREMENTS;
+            m_jobs.emplace_back( job );
+            return true;
+        }
+    }
+
+    wxLogTrace( traceApi, wxString::Format( "Manager: will create Python env for %s at %s", id,
+                                            envConfigPath.GetPath() ) );
+
+    job.type = JOB_TYPE::CREATE_ENV;
+    m_jobs.emplace_back( job );
+    return true;
 }
 
 

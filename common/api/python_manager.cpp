@@ -85,6 +85,10 @@ private:
 
 PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
 {
+    // Normalizing an empty path yields the working directory
+    if( aInterpreterPath.IsEmpty() )
+        return;
+
     wxFileName path( aInterpreterPath );
     path.Normalize( FN_NORMALIZE_FLAGS );
     m_interpreterPath = path.GetFullPath();
@@ -114,6 +118,12 @@ long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
         const std::function<void(int, const wxString&, const wxString&)>& aCallback,
         const wxExecuteEnv* aEnv, bool aSaveOutput )
 {
+    if( m_interpreterPath.IsEmpty() )
+    {
+        aCallback( -1, wxEmptyString, _( "No Python interpreter is configured" ) );
+        return 0;
+    }
+
     PYTHON_PROCESS* process = new PYTHON_PROCESS( aCallback );
     process->Redirect();
 
@@ -213,6 +223,14 @@ long PYTHON_MANAGER::ExecuteSync( const std::vector<wxString>& aArgs,
                                   wxString* aStdout, wxString* aStderr,
                                   const wxExecuteEnv* aEnv )
 {
+    if( m_interpreterPath.IsEmpty() )
+    {
+        if( aStderr )
+            *aStderr = _( "No Python interpreter is configured" );
+
+        return -1;
+    }
+
     wxWCharBuffer interpreterBuf = m_interpreterPath.wc_str();
     std::vector<wxWCharBuffer> argBufs;
     argBufs.reserve( aArgs.size() );
