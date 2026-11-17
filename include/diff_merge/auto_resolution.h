@@ -36,6 +36,8 @@
 #include <string>
 #include <vector>
 
+class UNITS_PROVIDER;
+
 
 namespace KICAD_DIFF
 {
@@ -227,6 +229,15 @@ ResolveConflictBBox( const KIID_PATH&                  aId,
 
 
 /**
+ * The ancestor, ours and theirs values of each edit aResolution names, taken from each side's change
+ * to the item. A side that did not make an edit shows the ancestor value. Lengths are given in aUnits,
+ * or in internal units without it.
+ */
+KICOMMON_API wxString ConflictValuesText( const ITEM_RESOLUTION& aResolution, const ITEM_CHANGE* aOurs,
+                                          const ITEM_CHANGE* aTheirs, const UNITS_PROVIDER* aUnits = nullptr );
+
+
+/**
  * Build the human-readable detail text shown in the merge dialog's
  * resolution panel for a given ITEM_RESOLUTION.
  *
@@ -235,12 +246,15 @@ ResolveConflictBBox( const KIID_PATH&                  aId,
  *
  * The item is named by the caller's own label, so the raw KIID_PATH is not repeated here.
  *
+ * Given each side's change to the item, the text ends with ConflictValuesText.
+ *
  * The kind labels are locale-aware (`_(...)`). Pure dispatch + text
  * formatting; useful for any UI surface displaying a resolution's
  * summary.
  */
-KICOMMON_API wxString
-BuildConflictDetailText( const ITEM_RESOLUTION& aResolution );
+KICOMMON_API wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution, const ITEM_CHANGE* aOurs = nullptr,
+                                               const ITEM_CHANGE*    aTheirs = nullptr,
+                                               const UNITS_PROVIDER* aUnits = nullptr );
 
 } // namespace KICAD_DIFF
 

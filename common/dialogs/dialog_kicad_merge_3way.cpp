@@ -483,21 +483,31 @@ void DIALOG_KICAD_MERGE_3WAY::showConflict( int aIndex )
     m_labelDetail->SetLabel(
             wxString::Format( _( "Conflict on %s, %s" ), describe( action.id, action.id.AsString() ), shown ) );
 
+    auto changeOn = [&]( const std::map<KIID_PATH, const KICAD_DIFF::ITEM_CHANGE*>& aChanges )
+    {
+        auto it = aChanges.find( action.id );
+        return it != aChanges.end() ? it->second : nullptr;
+    };
+
+    const KICAD_DIFF::ITEM_CHANGE* ours = changeOn( m_context.oursChanges );
+    const KICAD_DIFF::ITEM_CHANGE* theirs = changeOn( m_context.theirsChanges );
+
     if( action.kind == KICAD_DIFF::ITEM_RES::MERGE_PROPS )
     {
         // The detail box does not wrap, so the lines are broken here.
-        m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action )
+        m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action, ours, theirs, m_context.units.get() )
                                 + _( "\n\nBoth sides changed this item, and their edits are combined.\n"
                                      "Where both changed the same thing, your version is kept.\n"
                                      "Pick a side to take that version whole instead." ) );
     }
     else if( m_radioUnresolved->GetValue() )
     {
-        m_textDetail->SetValue( _( "Pick Ours, Theirs, or Ancestor to preview and keep that version." ) );
+        m_textDetail->SetValue( _( "Pick Ours, Theirs, or Ancestor to preview and keep that version." ) + wxS( "\n" )
+                                + KICAD_DIFF::ConflictValuesText( action, ours, theirs, m_context.units.get() ) );
     }
     else
     {
-        m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action ) );
+        m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action, ours, theirs, m_context.units.get() ) );
     }
 
     rebuildCanvas();

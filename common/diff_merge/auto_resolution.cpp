@@ -24,6 +24,7 @@
 #include <diff_merge/auto_resolution.h>
 
 #include <nlohmann/json.hpp>
+#include <units_provider.h>
 
 #include <wx/intl.h>
 
@@ -259,6 +260,48 @@ void SettleLibraryMerges( MERGE_PLAN& aPlan, const std::function<bool( const KII
 }
 
 
+namespace
+{
+
+    wxString editedName( const ITEM_CHANGE& aChild )
+    {
+        // A bare pin number could collide with a field of that name
+        if( aChild.refdes && aChild.typeName == _( "Pin" ) )
+            return wxString::Format( _( "Pin %s" ), *aChild.refdes );
+
+        return aChild.refdes.value_or( aChild.typeName );
+    }
+
+
+    /// The deltas aChange makes to the edit EditedNames calls aName, keyed by what the details call each one
+    std::map<wxString, const PROPERTY_DELTA*> deltasNamed( const ITEM_CHANGE* aChange, const wxString& aName )
+    {
+        std::map<wxString, const PROPERTY_DELTA*> deltas;
+
+        if( !aChange )
+            return deltas;
+
+        for( const PROPERTY_DELTA& delta : aChange->properties )
+        {
+            if( delta.name == aName )
+                deltas[aName] = &delta;
+        }
+
+        for( const ITEM_CHANGE& child : aChange->children )
+        {
+            if( editedName( child ) != aName )
+                continue;
+
+            for( const PROPERTY_DELTA& delta : child.properties )
+                deltas[aName + wxS( " " ) + delta.name] = &delta;
+        }
+
+        return deltas;
+    }
+
+} // namespace
+
+
 std::set<wxString> EditedNames( const ITEM_CHANGE& aChange )
 {
     std::set<wxString> names;
@@ -267,13 +310,7 @@ std::set<wxString> EditedNames( const ITEM_CHANGE& aChange )
         names.insert( delta.name );
 
     for( const ITEM_CHANGE& child : aChange.children )
-    {
-        // A bare pin number could collide with a field of that name
-        if( child.refdes && child.typeName == _( "Pin" ) )
-            names.insert( wxString::Format( _( "Pin %s" ), *child.refdes ) );
-        else
-            names.insert( child.refdes.value_or( child.typeName ) );
-    }
+        names.insert( editedName( child ) );
 
     return names;
 }
@@ -331,7 +368,50 @@ ResolveConflictBBox( const KIID_PATH&                  aId,
 }
 
 
-wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution )
+wxString ConflictValuesText( const ITEM_RESOLUTION& aResolution, const ITEM_CHANGE* aOurs, const ITEM_CHANGE* aTheirs,
+                             const UNITS_PROVIDER* aUnits )
+{
+    wxString text;
+
+    auto show = [&]( const DIFF_VALUE& aValue )
+    {
+        wxString shown = aUnits ? aValue.ToDisplayString( aUnits->GetUserUnits(), aUnits->GetIuScale() )
+                                : aValue.ToDisplayString();
+
+        // Each value takes one indented line
+        shown.Replace( wxS( "\n" ), wxS( " " ) );
+        return shown;
+    };
+
+    for( const PROPERTY_RESOLUTION& prop : aResolution.props )
+    {
+        std::map<wxString, const PROPERTY_DELTA*> ours = deltasNamed( aOurs, prop.name );
+        std::map<wxString, const PROPERTY_DELTA*> theirs = deltasNamed( aTheirs, prop.name );
+        std::map<wxString, const PROPERTY_DELTA*> either = theirs;
+
+        either.insert( ours.begin(), ours.end() );
+
+        for( const auto& [label, delta] : either )
+        {
+            auto valueOn = [&]( const std::map<wxString, const PROPERTY_DELTA*>& aSide )
+            {
+                auto it = aSide.find( label );
+                return show( it != aSide.end() ? it->second->after : delta->before );
+            };
+
+            text << wxS( "\n" ) << label << wxS( "\n    " )
+                 << wxString::Format( _( "Ancestor: %s" ), show( delta->before ) ) << wxS( "\n    " )
+                 << wxString::Format( _( "Ours: %s" ), valueOn( ours ) ) << wxS( "\n    " )
+                 << wxString::Format( _( "Theirs: %s" ), valueOn( theirs ) ) << wxS( "\n" );
+        }
+    }
+
+    return text;
+}
+
+
+wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution, const ITEM_CHANGE* aOurs,
+                                  const ITEM_CHANGE* aTheirs, const UNITS_PROVIDER* aUnits )
 {
     wxString text;
     text << _( "Current resolution: " );
@@ -365,7 +445,7 @@ wxString BuildConflictDetailText( const ITEM_RESOLUTION& aResolution )
     if( !names.IsEmpty() )
         text << wxString::Format( _( "Changed on either side: %s\n" ), names );
 
-    return text;
+    return text + ConflictValuesText( aResolution, aOurs, aTheirs, aUnits );
 }
 
 } // namespace KICAD_DIFF

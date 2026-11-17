@@ -4618,6 +4618,7 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
         const KICAD_DIFF::DIFF_COLOR_THEME        theme;
         DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
         ctx.formatNotice = formatNotice;
+        ctx.units = std::make_shared<UNITS_PROVIDER>( pcbIUScale, EDA_UNITS::MM );
         ctx.ancestorGeometry = KICAD_DIFF::ExtractBoardGeometry( *ancestor, theme.reference );
         ctx.oursGeometry = KICAD_DIFF::ExtractBoardGeometry( *ours, theme.reference );
         ctx.theirsGeometry = KICAD_DIFF::ExtractBoardGeometry( *theirs, theme.comparison );
@@ -4626,13 +4627,13 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
         // at its theirs-side coordinates when the user previews Theirs.
         KICAD_DIFF::CollectChangeBBoxes( ourDocDiff, ctx.oursBBoxes );
         KICAD_DIFF::CollectChangeBBoxes( theirDocDiff, ctx.theirsBBoxes );
+        ctx.oursChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
+        ctx.theirsChanges = KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
 
-        ctx.describeItem = [ours, theirs, ancestor]( const KIID_PATH& aId ) -> wxString
+        ctx.describeItem = [ours, theirs, ancestor, units = ctx.units]( const KIID_PATH& aId ) -> wxString
         {
             if( aId.empty() )
                 return wxEmptyString;
-
-            UNITS_PROVIDER units( pcbIUScale, EDA_UNITS::MM );
 
             for( BOARD* board : { ours, theirs, ancestor } )
             {
@@ -4640,7 +4641,7 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
                     continue;
 
                 if( BOARD_ITEM* item = board->ResolveItem( aId.back(), true ) )
-                    return item->GetItemDescription( &units, false );
+                    return item->GetItemDescription( units.get(), false );
             }
 
             return wxEmptyString;

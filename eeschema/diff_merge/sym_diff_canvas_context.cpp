@@ -26,6 +26,7 @@
 #include <gal/painter.h>
 #include <kiid.h>
 #include <lib_symbol.h>
+#include <sch_field.h>
 #include <sch_item.h>
 #include <sch_view.h>
 #include <widgets/widget_diff_canvas.h>
@@ -58,16 +59,23 @@ void ConfigureSymDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, LIB_SYMBOL* aBe
 
     std::vector<KIGFX::VIEW_ITEM*> items;
 
+    // A hidden field such as the description would print across the body
+    auto add = [&]( EDA_ITEM* aItem )
+    {
+        if( aItem->Type() != SCH_FIELD_T || static_cast<SCH_FIELD*>( aItem )->IsVisible() )
+            items.push_back( aItem );
+    };
+
     if( aAfter )
     {
         for( SCH_ITEM& item : aAfter->GetDrawItems() )
-            items.push_back( &item );
+            add( &item );
     }
 
     for( const LIB_ELEMENT& element : elements )
     {
         if( element.kind == CHANGE_KIND::REMOVED )
-            items.push_back( const_cast<EDA_ITEM*>( element.item ) );
+            add( const_cast<EDA_ITEM*>( element.item ) );
     }
 
     aCanvas.SetWorldUnitLength( SCH_WORLD_UNIT );

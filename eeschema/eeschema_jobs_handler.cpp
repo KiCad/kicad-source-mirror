@@ -3358,6 +3358,7 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
         const KICAD_DIFF::DIFF_COLOR_THEME        theme;
         DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
         ctx.formatNotice = formatNotice;
+        ctx.units = std::make_shared<UNITS_PROVIDER>( schIUScale, EDA_UNITS::MM );
 
         if( ancestor.doc )
             ctx.ancestorGeometry = KICAD_DIFF::ExtractSchematicGeometry( *ancestor.doc, theme.reference );
@@ -3370,13 +3371,13 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
 
         KICAD_DIFF::CollectChangeBBoxes( ourDocDiff, ctx.oursBBoxes );
         KICAD_DIFF::CollectChangeBBoxes( theirDocDiff, ctx.theirsBBoxes );
+        ctx.oursChanges = KICAD_DIFF::IndexChangesByKiid( ourDocDiff );
+        ctx.theirsChanges = KICAD_DIFF::IndexChangesByKiid( theirDocDiff );
 
-        ctx.describeItem = [&ours, &theirs, &ancestor]( const KIID_PATH& aId ) -> wxString
+        ctx.describeItem = [&ours, &theirs, &ancestor, units = ctx.units]( const KIID_PATH& aId ) -> wxString
         {
             if( aId.empty() )
                 return wxEmptyString;
-
-            UNITS_PROVIDER units( schIUScale, EDA_UNITS::MM );
 
             for( SCHEMATIC* doc : { ours.doc.get(), theirs.doc.get(), ancestor.doc.get() } )
             {
@@ -3384,7 +3385,7 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
                     continue;
 
                 if( SCH_ITEM* item = doc->ResolveItem( aId.back(), nullptr, true ) )
-                    return item->GetItemDescription( &units, false );
+                    return item->GetItemDescription( units.get(), false );
             }
 
             return wxEmptyString;
@@ -3778,6 +3779,10 @@ int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxSt
 
                     KICAD_DIFF::ShowSymbolPair( aCanvas, ancestor.map, *side, aName );
                 } );
+
+        ctx.oursChanges = ourChanges;
+        ctx.theirsChanges = theirChanges;
+        ctx.units = std::make_shared<UNITS_PROVIDER>( schIUScale, EDA_UNITS::MM );
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
 
