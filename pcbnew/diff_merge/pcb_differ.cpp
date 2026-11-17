@@ -786,12 +786,12 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
 
     auto boardVariants = []( const BOARD* aBoard )
     {
-        std::map<wxString, wxString> result;
+        std::map<wxString, wxString> variants;
 
         for( const wxString& name : aBoard->GetVariantNames() )
-            result[name] = aBoard->GetVariantDescription( name );
+            variants[name] = aBoard->GetVariantDescription( name );
 
-        return result;
+        return variants;
     };
 
     appendKeyedDeltas( DOC_PROP_BOARD_PROPERTY, m_before->GetProperties(), m_after->GetProperties() );
