@@ -837,7 +837,7 @@ void KICAD_MANAGER_FRAME::SaveOpenJobSetsToLocalSettings( bool aIsExplicitUserSa
 
 void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 {
-    Close( true );
+    Close( false );
 }
 
 

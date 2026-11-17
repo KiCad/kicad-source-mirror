@@ -68,6 +68,7 @@ set( QA_COMMON_SRCS
     test_drawing_sheet_reactive.cpp
     test_file_history.cpp
     test_filename_resolver.cpp
+    test_frame_close_block.cpp
     test_hashtables.cpp
     test_hotkey_store.cpp
     test_increment.cpp

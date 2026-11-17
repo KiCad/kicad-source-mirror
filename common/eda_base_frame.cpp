@@ -74,6 +74,7 @@
 #include <wx/app.h>
 #include <wx/config.h>
 #include <wx/display.h>
+#include <wx/evtloop.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/msgdlg.h>
@@ -178,7 +179,9 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
         // A notice already showing is not replaced, so the sender keeps this one
         if( !m_infoBar || m_infoBar->IsShown() )
         {
+            // Unhandled must reach the sender, not a parent frame's infobar
             aEvent.Skip();
+            aEvent.StopPropagation();
             return;
         }
 
@@ -288,6 +291,53 @@ wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
 }
 
 
+static wxDialog* findBlockingModalDialog( const wxWindow* aFrame, bool aFrameIsModal )
+{
+    const std::vector<void*>& modals = Pgm().m_ModalDialogs;
+
+    for( auto it = modals.rbegin(); it != modals.rend(); ++it )
+    {
+        wxDialog* dlg = static_cast<wxDialog*>( *it );
+
+        // A stale entry must not veto every close with nothing to raise
+        if( !wxTopLevelWindows.Find( dlg ) )
+            continue;
+
+        // A modal frame is not destroyed, but closing it under its own dialog would exit the wrong loop
+        if( !aFrameIsModal )
+            return dlg;
+
+        for( const wxWindow* win = dlg; win; win = win->GetParent() )
+        {
+            if( win == aFrame )
+                return dlg;
+        }
+    }
+
+    return nullptr;
+}
+
+
+FRAME_CLOSE_BLOCK GetFrameCloseBlock( bool aFrameIsModal, bool aCanVeto, bool aNestedLoop, bool aUnderLoopOwner,
+                                      bool aModalDialog, bool aQuasiModal )
+{
+    if( aQuasiModal )
+        return FRAME_CLOSE_BLOCK::QUASI_MODAL;
+
+    // Closing a window inside the loop owner frees nothing the loop runs on, so even a forced close goes through
+    const bool inLoopUi = aNestedLoop && !aFrameIsModal && aUnderLoopOwner;
+
+    if( aModalDialog && !inLoopUi )
+        return FRAME_CLOSE_BLOCK::MODAL_DIALOG;
+
+    // Forced and end-session closes are not held back by the loop alone
+    if( aNestedLoop && !aFrameIsModal && !inLoopUi && aCanVeto )
+        return FRAME_CLOSE_BLOCK::NESTED_LOOP;
+
+    return FRAME_CLOSE_BLOCK::NONE;
+}
+
+
 void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 {
     // Guard against re-entrant close events. GTK can deliver a second wxEVT_CLOSE_WINDOW
@@ -314,14 +364,49 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         return;
     }
 
-    // Don't allow closing when a quasi-modal is open.
-    wxWindow* quasiModal = findQuasiModalDialog();
+    // Refuse while a quasi-modal or modal dialog is open, since destroying the frame would free the tool
+    // coroutine stack a modal loop may be running on
+    wxWindow*  quasiModal = findQuasiModalDialog();
+    wxDialog*  modalDlg = findBlockingModalDialog( this, IsModal() );
+    const bool nestedLoop = wxTheApp && wxEventLoopBase::GetActive() != wxTheApp->GetMainLoop();
 
-    if( quasiModal )
+    // Quasi-modals, modal frames and a loop whose dialog hid without exiting are not in the registry
+    wxWindow* loopOwner = nullptr;
+    bool      underLoopOwner = false;
+
+    if( nestedLoop && !IsModal() )
+    {
+        for( wxWindow* win : wxTopLevelWindows )
+        {
+            const EDA_BASE_FRAME* frame = dynamic_cast<const EDA_BASE_FRAME*>( win );
+            const DIALOG_SHIM*    shim = dynamic_cast<const DIALOG_SHIM*>( win );
+            const wxDialog*       dlg = dynamic_cast<const wxDialog*>( win );
+
+            if( win != this && win->IsShown()
+                && ( ( shim && shim->IsQuasiModal() ) || ( dlg && dlg->IsModal() ) || ( frame && frame->IsModal() ) ) )
+            {
+                loopOwner = win;
+            }
+        }
+
+        for( const wxWindow* win = GetParent(); win && loopOwner; win = win->GetParent() )
+            underLoopOwner |= win == loopOwner;
+    }
+
+    const FRAME_CLOSE_BLOCK block = GetFrameCloseBlock( IsModal(), event.CanVeto(), nestedLoop, underLoopOwner,
+                                                        modalDlg != nullptr, quasiModal != nullptr );
+
+    if( block != FRAME_CLOSE_BLOCK::NONE )
     {
         // Raise and notify; don't give the user a warning regarding "quasi-modal dialogs"
         // when they have no idea what those are.
-        quasiModal->Raise();
+        wxWindow* blockingDlg = block == FRAME_CLOSE_BLOCK::QUASI_MODAL    ? quasiModal
+                                : block == FRAME_CLOSE_BLOCK::MODAL_DIALOG ? static_cast<wxWindow*>( modalDlg )
+                                                                           : loopOwner;
+
+        if( blockingDlg )
+            blockingDlg->Raise();
+
         wxBell();
 
         if( event.CanVeto() )
