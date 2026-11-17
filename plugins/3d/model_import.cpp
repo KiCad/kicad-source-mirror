@@ -44,7 +44,7 @@
 
 #include <decompress.hpp>
 
-#include <Standard_Failure.hxx>
+#include <occ_failure_message.h>
 
 #ifdef _WIN32
 namespace
@@ -475,7 +475,8 @@ S3D::MODEL_IMPORT_RESULT S3D::ImportModel( const std::string& aFileName, const M
 
         try
         {
-            result.m_diagnostic = e.GetMessageString() ? e.GetMessageString() : "OCCT import failure";
+            const char* message = OccFailureMessage( e );
+            result.m_diagnostic = message ? message : "OCCT import failure";
         }
         catch( ... )
         {

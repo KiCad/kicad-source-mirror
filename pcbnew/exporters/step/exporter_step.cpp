@@ -51,7 +51,7 @@
 #include <new>                        // std::bad_alloc
 #include <Message.hxx>                // OpenCascade messenger
 #include <Message_PrinterOStream.hxx> // OpenCascade output messenger
-#include <Standard_Failure.hxx>       // In open cascade
+#include <occ_failure_message.h>
 
 #include <Standard_Version.hxx>
 
@@ -649,7 +649,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             m_reporter->Report( wxString::Format( _( "Could not add 3D model for %s.\n"
                                                      "OpenCASCADE error: %s\n" ),
                                                   aFootprint->GetReference(),
-                                                  e.GetMessageString() ),
+                                                  OccFailureMessage( e ) ),
                                 RPT_SEVERITY_WARNING );
         }
 
@@ -690,7 +690,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             {
                 m_reporter->Report( wxString::Format( _( "Could not add extruded body for %s.\n"
                                                          "OpenCASCADE error: %s\n" ),
-                                                      aFootprint->GetReference(), e.GetMessageString() ),
+                                                      aFootprint->GetReference(), OccFailureMessage( e ) ),
                                     RPT_SEVERITY_WARNING );
             }
 
@@ -705,7 +705,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
                 {
                     m_reporter->Report( wxString::Format( _( "Could not add extruded pins for %s.\n"
                                                              "OpenCASCADE error: %s\n" ),
-                                                          aFootprint->GetReference(), e.GetMessageString() ),
+                                                          aFootprint->GetReference(), OccFailureMessage( e ) ),
                                         RPT_SEVERITY_WARNING );
                 }
             }
@@ -1524,7 +1524,7 @@ bool EXPORTER_STEP::Export()
     }
     catch( const Standard_Failure& e )
     {
-        wxString errorMsg = e.GetMessageString();
+        wxString errorMsg = OccFailureMessage( e );
         m_reporter->Report( wxString::Format( _( "\nOpenCASCADE error: %s\n" ), errorMsg ),
                             RPT_SEVERITY_ERROR );
 

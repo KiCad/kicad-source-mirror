@@ -77,7 +77,7 @@
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPCAFControl_Writer.hxx>
 #include <APIHeaderSection_MakeHeader.hxx>
-#include <Standard_Failure.hxx>
+#include <occ_failure_message.h>
 #include <Standard_Handle.hxx>
 #include <Standard_Version.hxx>
 #include <TCollection_AsciiString.hxx>
@@ -166,16 +166,6 @@
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
-
-
-static const char* occFailureMessage( const Standard_Failure& aFailure )
-{
-#if OCC_VERSION_HEX >= 0x080000
-    return aFailure.what();
-#else
-    return aFailure.GetMessageString();
-#endif
-}
 
 // nominal offset from the board
 static constexpr double BOARD_OFFSET = 0.05;
@@ -737,7 +727,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
         aReporter->Report( wxString::Format( _( "OpenCASCADE error while fusing shapes: %s\n"
                                                 "This may indicate insufficient memory. Consider "
                                                 "disabling shape fusing or reducing board complexity." ),
-                                             occFailureMessage( e ) ),
+                                             OccFailureMessage( e ) ),
                           RPT_SEVERITY_ERROR );
         return false;
     }
@@ -803,7 +793,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
         catch( const Standard_Failure& e )
         {
             aReporter->Report( wxString::Format( _( "OpenCASCADE error while unifying shapes: %s" ),
-                                                 occFailureMessage( e ) ),
+                                                 OccFailureMessage( e ) ),
                               RPT_SEVERITY_ERROR );
             return false;
         }
@@ -1320,9 +1310,9 @@ bool STEP_PCB_MODEL::AddCounterbore( const VECTOR2I& aPosition, int aDiameter, i
     }
     catch( const Standard_Failure& e )
     {
-        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: EXCEPTION - %s" ), occFailureMessage( e ) );
+        wxLogTrace( traceKiCad2Step, wxT( "AddCounterbore: EXCEPTION - %s" ), OccFailureMessage( e ) );
         m_reporter->Report( wxString::Format( _( "OCC exception creating counterbore: %s" ),
-                                              occFailureMessage( e ) ),
+                                              OccFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -1475,9 +1465,9 @@ bool STEP_PCB_MODEL::AddCountersink( const VECTOR2I& aPosition, int aDiameter, i
     }
     catch( const Standard_Failure& e )
     {
-        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: EXCEPTION - %s" ), occFailureMessage( e ) );
+        wxLogTrace( traceKiCad2Step, wxT( "AddCountersink: EXCEPTION - %s" ), OccFailureMessage( e ) );
         m_reporter->Report( wxString::Format( _( "OCC exception creating countersink: %s" ),
-                                              occFailureMessage( e ) ),
+                                              OccFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2143,7 +2133,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR
     catch( const Standard_Failure& e )
     {
         m_reporter->Report( wxString::Format( _( "OCC exception building shape segment: %s" ),
-                                              occFailureMessage( e ) ),
+                                              OccFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2158,7 +2148,7 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape, const VECTOR
     catch( const Standard_Failure& e )
     {
         m_reporter->Report( wxString::Format( _( "OCC exception building face: %s" ),
-                                              occFailureMessage( e ) ),
+                                              OccFailureMessage( e ) ),
                             RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2376,7 +2366,7 @@ static bool makeWireFromChain( BRepLib_MakeWire& aMkWire, const SHAPE_LINE_CHAIN
     catch( const Standard_Failure& e )
     {
         aReporter->Report( wxString::Format( _( "OCC exception creating wire: %s" ),
-                                             occFailureMessage( e ) ),
+                                             OccFailureMessage( e ) ),
                            RPT_SEVERITY_ERROR );
         return false;
     }
@@ -2547,7 +2537,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             {
                 m_reporter->Report( wxString::Format( _( "OCC exception creating contour %d: %s" ),
                                                       static_cast<int>( contId ),
-                                                      occFailureMessage( e ) ),
+                                                      OccFailureMessage( e ) ),
                                     RPT_SEVERITY_ERROR );
                 return false;
             }
