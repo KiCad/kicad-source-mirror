@@ -121,7 +121,7 @@ public:
 
     void SetNetChainName( const wxString& aValue )
     {
-        m_column_changed[COLUMN_NET_CHAIN] |= ( m_netChainName != aValue );
+        m_column_changed[COLUMN_NET_CHAIN] |= static_cast<int>( m_netChainName != aValue );
         m_netChainName = aValue;
     }
 
