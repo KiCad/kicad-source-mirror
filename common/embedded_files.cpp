@@ -324,6 +324,11 @@ EMBEDDED_FILES::RETURN_CODE EMBEDDED_FILES::DecompressAndDecode( EMBEDDED_FILE& 
     // the modulo 4 padding of the base64 encoding
     compressedSize = wxBase64Decode( compressed, compressedSize, aFile.compressedEncodedData );
 
+    if( compressedSize == wxCONV_FAILED )
+    {
+        return RETURN_CODE::OUT_OF_MEMORY;
+    }
+
     unsigned long long estDecompressedSize = ZSTD_getFrameContentSize( compressed, compressedSize );
 
     if( estDecompressedSize > 1e9 ) // Limit to 1GB
