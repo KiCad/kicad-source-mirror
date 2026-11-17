@@ -1713,9 +1713,6 @@ void RENDER_3D_OPENGL::generateComplexHoles( float aPlatingThickness3d, float aU
     float ztop = m_boardAdapter.GetLayerBottomZPos( F_Cu ) + m_boardAdapter.GetFrontCopperThickness() * 0.99f;
     float zbot = m_boardAdapter.GetLayerBottomZPos( B_Cu ) - m_boardAdapter.GetBackCopperThickness() * 0.99f;
 
-    float ztop_plated = ztop;
-    float zbot_plated = zbot;
-
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
         for( const PAD* pad : footprint->Pads() )
@@ -1738,6 +1735,8 @@ void RENDER_3D_OPENGL::generateComplexHoles( float aPlatingThickness3d, float aU
                                     - (float) pad->GetPosition().y * aUnitScale );
             unsigned int nrSegments = m_boardAdapter.GetCircleSegmentCount( pad->GetDrillSize().x );
             float        holeInnerR = (float) pad->GetDrillSize().x * 0.5f * aUnitScale;
+            float        ztop_plated = ztop;
+            float        zbot_plated = zbot;
 
             if( pad->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
                     || pad->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
