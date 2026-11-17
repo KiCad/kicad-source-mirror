@@ -36,10 +36,6 @@
 #include <io/idf/vrml_layer.h>
 #include <trigo.h>
 
-#ifndef CALLBACK
-#define CALLBACK
-#endif
-
 // minimum sides to a circle
 #define MIN_NSIDES 6
 

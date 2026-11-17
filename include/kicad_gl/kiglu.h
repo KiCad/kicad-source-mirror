@@ -35,7 +35,8 @@
 #include <GL/glu.h>
 #endif
 
-#ifndef CALLBACK
+// Windows headers define CALLBACK, so a Windows build without it should fail rather than lose __stdcall
+#if !defined( CALLBACK ) && !defined( _WIN32 )
 #define CALLBACK
 #endif
 
