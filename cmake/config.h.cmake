@@ -49,11 +49,12 @@
 #include <iso646.h>
 #endif
 
-#if !defined( HAVE_STRCASECMP )
+// OpenCASCADE's Standard_CString.hxx may already map these
+#if !defined( HAVE_STRCASECMP ) && !defined( strcasecmp )
 #define strcasecmp stricmp
 #endif
 
-#if !defined( HAVE_STRNCASECMP )
+#if !defined( HAVE_STRNCASECMP ) && !defined( strncasecmp )
 #define strncasecmp strnicmp
 #endif
 
