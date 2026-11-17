@@ -197,6 +197,9 @@ private:
     // Restore original signal handlers
     void restoreSignalHandlers();
 
+    /// Start a run with no warning for unprefixed stderr lines to continue.
+    void resetStderrSeverity();
+
     // Signal handler for crashes
     static void signalHandler( int aSignal );
 

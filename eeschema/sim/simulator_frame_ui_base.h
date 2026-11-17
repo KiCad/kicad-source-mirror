@@ -84,6 +84,7 @@ class SIMULATOR_FRAME_UI_BASE : public wxPanel
 		virtual void onPlotClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void OnConsoleFilterChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCursorsGridCellChanged( wxGridEvent& event ) { event.Skip(); }
+		virtual void onMeasurementsTreeActivated( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onMeasurementsTreeContextMenu( wxDataViewEvent& event ) { event.Skip(); }
 
 

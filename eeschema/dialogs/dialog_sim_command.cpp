@@ -228,13 +228,23 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
         m_axisScalesSizer->Show( !plotTab->GetLabelY1().IsEmpty() || !plotTab->GetLabelY2().IsEmpty()
                                  || !plotTab->GetLabelY3().IsEmpty() );
 
+        // The axis name carries its tick prefix, "Current (mA)", which would contradict the unit by the fields
+        auto axisName = []( const wxString& aLabel, const wxString& aUnits )
+        {
+            if( aUnits.IsEmpty() || !aLabel.EndsWith( aUnits + wxS( ")" ) ) || !aLabel.Contains( wxS( " (" ) ) )
+                return aLabel;
+
+            return aLabel.BeforeLast( '(' ).Trim();
+        };
+
         m_bSizerY1->Show( !plotTab->GetLabelY1().IsEmpty() );
         m_bSizerY2->Show( !plotTab->GetLabelY2().IsEmpty() );
         m_bSizerY3->Show( !plotTab->GetLabelY3().IsEmpty() );
 
         if( !plotTab->GetLabelY1().IsEmpty() )
         {
-            m_lockY1->SetLabel( wxString::Format( m_lockY1->GetLabel(), plotTab->GetLabelY1() ) );
+            m_lockY1->SetLabel( wxString::Format( m_lockY1->GetLabel(),
+                                                   axisName( plotTab->GetLabelY1(), plotTab->GetUnitsY1() ) ) );
             m_y1Units->SetLabel( plotTab->GetUnitsY1() );
 
             double min = 0.0, max = 0.0;
@@ -250,7 +260,8 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 
         if( !plotTab->GetLabelY2().IsEmpty() )
         {
-            m_lockY2->SetLabel( wxString::Format( m_lockY2->GetLabel(), plotTab->GetLabelY2() ) );
+            m_lockY2->SetLabel( wxString::Format( m_lockY2->GetLabel(),
+                                                   axisName( plotTab->GetLabelY2(), plotTab->GetUnitsY2() ) ) );
             m_y2Units->SetLabel( plotTab->GetUnitsY2() );
 
             double min = 0.0, max = 0.0;
@@ -266,7 +277,8 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 
         if( !plotTab->GetLabelY3().IsEmpty() )
         {
-            m_lockY3->SetLabel( wxString::Format( m_lockY3->GetLabel(), plotTab->GetLabelY3() ) );
+            m_lockY3->SetLabel( wxString::Format( m_lockY3->GetLabel(),
+                                                   axisName( plotTab->GetLabelY3(), plotTab->GetUnitsY3() ) ) );
             m_y3Units->SetLabel( plotTab->GetUnitsY3() );
 
             double min = 0.0, max = 0.0;
@@ -723,6 +735,14 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
                                         + wxT( "  \u2014  " )
                                         + SPICE_SIMULATOR::TypeToName( type, false ) );
         }
+
+        // Creation fixed the minimum size to fit the short entries
+        int width = 0;
+
+        for( const wxString& item : m_commandType->GetStrings() )
+            width = std::max( width, m_commandType->GetTextExtent( item ).x );
+
+        m_commandType->SetMinSize( wxSize( width + FromDIP( 48 ), -1 ) );
 
         m_commandTypeSizer->Show( true );
         m_commandType->SetSelection( 0 );

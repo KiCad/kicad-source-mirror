@@ -1551,6 +1551,7 @@
                                           <property name="window_extra_style"></property>
                                           <property name="window_name"></property>
                                           <property name="window_style">wxBORDER_NONE</property>
+                                          <event name="OnDataViewCtrlItemActivated">onMeasurementsTreeActivated</event>
                                           <event name="OnDataViewCtrlItemContextMenu">onMeasurementsTreeContextMenu</event>
                                         </object>
                                       </object>

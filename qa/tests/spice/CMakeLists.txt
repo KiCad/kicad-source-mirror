@@ -58,6 +58,8 @@ set( QA_SPICE_SRCS
     test_sim_model_ngspice.cpp
     test_sim_model_source_pwl.cpp
     test_sim_regressions.cpp
+    test_sim_signal_utils.cpp
+    test_spice_value.cpp
 
     # IBIS files
     test_kibis.cpp

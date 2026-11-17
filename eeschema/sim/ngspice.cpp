@@ -309,10 +309,19 @@ bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxS
 }
 
 
+void NGSPICE::resetStderrSeverity()
+{
+    std::lock_guard<std::mutex> lock( m_reporterMutex );
+    m_lastStderrSeverity = RPT_SEVERITY_UNDEFINED;
+}
+
+
 bool NGSPICE::LoadNetlist( const std::string& aNetlist )
 {
     LOCALE_IO         c_locale; // ngspice works correctly only with C locale
     std::stringstream ss( aNetlist );
+
+    resetStderrSeverity();
 
     // Own the deck as strings so a bad_alloc mid-build cannot leak or leave m_netlist
     // half-populated.  ngSpice_Circ only reads the array during the call, so plain string
@@ -349,6 +358,8 @@ bool NGSPICE::Run()
 
     // Install signal handlers to catch ngspice crashes in the background thread
     installSignalHandlers();
+
+    resetStderrSeverity();
 
     return Command( "bg_run" );     // bg_* commands execute in a separate thread
 }
@@ -837,7 +848,8 @@ int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQ
         if( reporter )
         {
             reporter->Report( _( "Simulation terminated by ngspice. This may be caused by insufficient "
-                                 "memory or an internal error. The simulator will be reset." ) );
+                                 "memory or an internal error. The simulator will be reset." ),
+                              RPT_SEVERITY_ERROR );
         }
 
         if( stateListener )

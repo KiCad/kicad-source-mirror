@@ -242,6 +242,7 @@ SIMULATOR_FRAME_UI_BASE::SIMULATOR_FRAME_UI_BASE( wxWindow* parent, wxWindowID i
 	m_consoleFilterWarnings->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( SIMULATOR_FRAME_UI_BASE::OnConsoleFilterChanged ), NULL, this );
 	m_consoleFilterErrors->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( SIMULATOR_FRAME_UI_BASE::OnConsoleFilterChanged ), NULL, this );
 	m_cursorsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_UI_BASE::onCursorsGridCellChanged ), NULL, this );
+	m_measurementsTree->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( SIMULATOR_FRAME_UI_BASE::onMeasurementsTreeActivated ), NULL, this );
 	m_measurementsTree->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( SIMULATOR_FRAME_UI_BASE::onMeasurementsTreeContextMenu ), NULL, this );
 }
 
@@ -262,6 +263,7 @@ SIMULATOR_FRAME_UI_BASE::~SIMULATOR_FRAME_UI_BASE()
 	m_consoleFilterWarnings->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( SIMULATOR_FRAME_UI_BASE::OnConsoleFilterChanged ), NULL, this );
 	m_consoleFilterErrors->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( SIMULATOR_FRAME_UI_BASE::OnConsoleFilterChanged ), NULL, this );
 	m_cursorsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( SIMULATOR_FRAME_UI_BASE::onCursorsGridCellChanged ), NULL, this );
+	m_measurementsTree->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( SIMULATOR_FRAME_UI_BASE::onMeasurementsTreeActivated ), NULL, this );
 	m_measurementsTree->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( SIMULATOR_FRAME_UI_BASE::onMeasurementsTreeContextMenu ), NULL, this );
 
 }

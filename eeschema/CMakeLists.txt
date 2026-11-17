@@ -329,6 +329,7 @@ set( EESCHEMA_SIM_SRCS
     sim/sim_plot_colors.cpp
     sim/sim_plot_tab.cpp
     sim/sim_property.cpp
+    sim/sim_signal_utils.cpp
     sim/sim_tab.cpp
     sim/spice_simulator.cpp
     sim/spice_value.cpp

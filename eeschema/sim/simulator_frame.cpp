@@ -77,7 +77,11 @@ public:
         return *this;
     }
 
-    void Clear() override { m_entries.clear(); }
+    void Clear() override
+    {
+        REPORTER::Clear();
+        m_entries.clear();
+    }
 
     std::vector<SIM_CONSOLE_ENTRY> TakePendingEntries()
     {
@@ -239,6 +243,9 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     CallAfter(
             [this]()
             {
+                // Showing the frame can still resize it, and sash gravity would shift the restored positions
+                m_ui->SetSubWindowsSashSize();
+
                 m_workbookModified = false;
                 UpdateTitle();
             } );
@@ -593,6 +600,12 @@ const std::vector<wxString> SIMULATOR_FRAME::SimPlotVectors()
 const std::vector<wxString> SIMULATOR_FRAME::Signals()
 {
     return m_ui->Signals();
+}
+
+
+const std::vector<wxString>& SIMULATOR_FRAME::NativeSignals()
+{
+    return m_ui->NativeSignals();
 }
 
 

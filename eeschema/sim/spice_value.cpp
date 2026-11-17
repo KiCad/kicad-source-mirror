@@ -235,8 +235,17 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
         return wxString::FromCDouble( angle.AsDegrees(), aFormat.Precision ) + wxS( "°" );
     }
 
-    if( range.StartsWith( wxS( "~" ) ) )
+    bool autoRange = range.StartsWith( wxS( "~" ) );
+
+    if( autoRange )
     {
+        // Rounding first keeps a value just under a decade from printing as "1000m"
+        if( aFormat.Precision > 0 && m_base != 0.0 && std::isfinite( m_base ) )
+        {
+            double step = std::pow( 10, std::floor( std::log10( std::fabs( m_base ) ) ) - aFormat.Precision + 1 );
+            m_base = std::round( m_base / step ) * step;
+        }
+
         Normalize();
         range = si_prefix( m_prefix ) + range.Right( range.Length() - 1 );
     }
@@ -267,9 +276,21 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
 
     wxString res = wxString::FromCDouble( mantissa, std::max( 0, aFormat.Precision - scale - 1 ) );
 
+    // The sign is not a digit, so negative values would fall back to scientific notation
+    size_t digits = res.length() - ( res.StartsWith( wxS( "-" ) ) ? 1 : 0 );
+
     // If we have an excessively long number, switch to scientific notation
-    if( ssize_t( res.length() ) > aFormat.Precision + static_cast<long long>( scale ) + 1 )
+    if( ssize_t( digits ) > aFormat.Precision + static_cast<long long>( scale ) + 1 )
+    {
         res = wxString::FromCDouble( mantissa );
+
+        // An exponent beside a picked prefix reads as two scales, so fold the prefix into the exponent
+        if( autoRange )
+        {
+            res = wxString::FromCDouble( mantissa * std::pow( 10, (int) m_prefix ) );
+            range = range.Mid( si_prefix( m_prefix ).Length() );
+        }
+    }
 
     return res + range;
 }

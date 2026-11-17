@@ -227,25 +227,8 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
 {
     if( m_visible )
     {
-        // Adjust relative position inside the window
         int scrx    = w.GetScrX();
         int scry    = w.GetScrY();
-
-        if( m_winX != scrx || m_winY != scry )
-        {
-            if( m_winX > 1 )
-                m_dim.x = (int) floor( (double) ( m_dim.x * scrx / m_winX ) );
-
-            if( m_winY > 1 )
-            {
-                m_dim.y = (int) floor( (double) ( m_dim.y * scry / m_winY ) );
-                UpdateReference();
-            }
-
-            // Finally update window size
-            m_winX  = scrx;
-            m_winY  = scry;
-        }
 
         // Opaque, so the traces and the grid it overlaps cannot show through and make the
         // labels hard to read.  It follows the plot's own background, dark mode included.
@@ -285,6 +268,15 @@ void mpInfoLegend::Plot( wxDC& dc, mpWindow& w )
         {
             textY += mpLEGEND_MARGIN;
             m_dim.height = textY;
+
+            // Clamped rather than scaled with the window, since a pre-layout paint threw it out of the frame
+            // Only m_dim moves, because a drag in progress offsets from m_reference
+            int maxX = std::max( w.GetMarginLeft(), scrx - w.GetMarginRight() - m_dim.width );
+            int maxY = std::max( w.GetMarginTop(), scry - w.GetMarginBottom() - m_dim.height );
+
+            m_dim.x = std::clamp( m_dim.x, w.GetMarginLeft(), maxX );
+            m_dim.y = std::clamp( m_dim.y, w.GetMarginTop(), maxY );
+
             dc.DrawRectangle( m_dim.x, m_dim.y, m_dim.width, m_dim.height );
 
             // Set explicitly: other layers (e.g. plot cursors) leave their own text colour on
@@ -1328,12 +1320,15 @@ mpScaleY::mpScaleY( const wxString& name, int flags, bool ticks )
 
 void mpScaleY::Plot( wxDC& dc, mpWindow& w )
 {
-    // An axis that was never ranged has m_minV == m_maxV.
-    if( mpIsDegenerateRange( m_minV, m_maxV ) )
-        mpPadDegenerateRange( m_minV, m_maxV );
+    double minV = m_minV;
+    double maxV = m_maxV;
 
-    m_offset    = -m_minV;
-    m_scale     = 1.0 / ( m_maxV - m_minV );
+    // An axis that was never ranged has m_minV == m_maxV
+    if( mpIsDegenerateRange( minV, maxV ) )
+        mpPadDegenerateRange( minV, maxV );
+
+    m_offset    = -minV;
+    m_scale     = 1.0 / ( maxV - minV );
 
     // See mpScaleXBase::Plot(): set the font before measuring so label extents match what is
     // actually drawn.
@@ -1448,14 +1443,18 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
             dc.DrawText( m_name, labelW + 8, 4 );
             break;
 
-        case mpALIGN_LEFT: dc.DrawText( m_name, nameX, minYpx - ty - 4 ); break;
+        case mpALIGN_LEFT:
+            dc.DrawText( m_name, nameX, minYpx - ty - 4 );
+            break;
 
         case mpALIGN_CENTER:
             dc.DrawText( m_name, orgx + 4, 4 );
             break;
 
         case mpALIGN_RIGHT:
-        case mpALIGN_FAR_RIGHT: dc.DrawText( m_name, nameX, minYpx - ty - 4 ); break;
+        case mpALIGN_FAR_RIGHT:
+            dc.DrawText( m_name, nameX, minYpx - ty - 4 );
+            break;
 
         case mpALIGN_BORDER_RIGHT:
             dc.DrawText( m_name, orgx - 6 - tx - labelW, 4 );

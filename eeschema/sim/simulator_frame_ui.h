@@ -86,6 +86,9 @@ public:
 
     std::vector<wxString> Signals() const;
 
+    /// The schematic signals only, already split into their AC/SP forms
+    const std::vector<wxString>& NativeSignals() const { return m_signals; }
+
     const std::vector<wxString>& Netnames() const { return m_netnames; }
 
     std::vector<wxString> DeviceVoltages() const;
@@ -469,7 +472,13 @@ private:
     void OnConsoleFilterChanged( wxCommandEvent& aEvent ) override;
     void onCursorsGridCellChanged( wxGridEvent& aEvent ) override;
     void onMeasurementsTreeContextMenu( wxDataViewEvent& aEvent ) override;
+    void onMeasurementsTreeActivated( wxDataViewEvent& aEvent ) override;
     void onMeasurementsTreeMenuSelection( wxCommandEvent& aEvent );
+
+    /// Prompt for a new text for measurement \a aRow of the current tab.
+    void editMeasurement( int aRow );
+
+    void deleteMeasurements( std::vector<int> aRows );
 
     enum class SIM_CONSOLE_FILTER
     {
@@ -606,14 +615,12 @@ private:
     /// Quote the schematic net names in a SPICE expression ('-' and '/' are legal in net names).
     wxString quoteNetNames( const wxString& aExpression ) const;
 
-    /// First component-voltage id, clear of the user-defined ids.
-    static constexpr int DEVICE_VOLTAGE_ID_BASE = 1000000;
-
+    /// Component voltages have their own vector namespace, see deviceVectorName().
     std::map<wxString, int> m_deviceVoltageIds;
 
     /// Every id handed out this session; ids are never reused.
     std::map<wxString, int> m_deviceVoltageIdRegistry;
-    int                     m_nextDeviceVoltageId = DEVICE_VOLTAGE_ID_BASE;
+    int                     m_nextDeviceVoltageId = 0;
 
     std::map<int, wxString> m_deviceVoltageExprs;
 

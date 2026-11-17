@@ -129,6 +129,13 @@ private:
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         finishDialogSettings();
+
+        // Nothing re-lays out after parseCommand() widens the analysis type choice, and an earlier Layout()
+        // would size the dialog to the page shown then, clipping larger pages
+        Layout();
+
+        // A notebook page relays out only when resized, and hiding the axis scales doesn't resize it
+        m_panelPlotSetup->Layout();
     }
 
     /**

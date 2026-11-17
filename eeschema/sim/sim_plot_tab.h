@@ -513,7 +513,9 @@ public:
 
     void SetLegendPosition( const wxPoint& aPosition )
     {
-        m_legend->Move( aPosition );
+        // Move() offsets from the reference, which is no longer the origin since the legend starts inset
+        m_legend->UpdateReference();
+        m_legend->Move( aPosition - m_legend->GetPosition() );
         m_legend->UpdateReference();
         m_lastLegendPosition = aPosition;
     }
@@ -543,7 +545,7 @@ public:
     static constexpr int MIN_MARGIN_LEFT = 70;
     static constexpr int LABEL_MARGIN_PADDING = 12;
 
-    /// Keep the left margin from oscillating with its tick labels, whose widths depend on the plot width.
+    /// Hysteresis so a few pixels of label-width jitter between paints doesn't re-fit the plot each time.
     static constexpr int MARGIN_SHRINK_SLACK = 12;
     static constexpr int MAX_MARGIN_REFITS = 3;
 

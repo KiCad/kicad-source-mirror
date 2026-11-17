@@ -104,6 +104,14 @@
 // -----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_MATHPLOT mpLayer;
+class WXDLLIMPEXP_MATHPLOT mpFX;
+class WXDLLIMPEXP_MATHPLOT mpFY;
+class WXDLLIMPEXP_MATHPLOT mpFXY;
+class WXDLLIMPEXP_MATHPLOT mpFXYVector;
+class WXDLLIMPEXP_MATHPLOT mpScaleX;
+class WXDLLIMPEXP_MATHPLOT mpScaleY;
+class WXDLLIMPEXP_MATHPLOT mpWindow;
+class WXDLLIMPEXP_MATHPLOT mpPrintout;
 
 
 /// @return true if [aMin, aMax] is non-finite, empty, or too narrow relative to the values to label.
@@ -132,14 +140,6 @@ inline void mpPadDegenerateRange( double& aMin, double& aMax )
     aMin = mid - pad;
     aMax = mid + pad;
 }
-class WXDLLIMPEXP_MATHPLOT mpFX;
-class WXDLLIMPEXP_MATHPLOT mpFY;
-class WXDLLIMPEXP_MATHPLOT mpFXY;
-class WXDLLIMPEXP_MATHPLOT mpFXYVector;
-class WXDLLIMPEXP_MATHPLOT mpScaleX;
-class WXDLLIMPEXP_MATHPLOT mpScaleY;
-class WXDLLIMPEXP_MATHPLOT mpWindow;
-class WXDLLIMPEXP_MATHPLOT mpPrintout;
 
 /**
  * Find the smallest and largest finite value in \a aValues.
@@ -715,18 +715,17 @@ public:
     {
         if( !m_rangeSet )
         {
-            m_minV  = minV;
-            m_maxV  = maxV;
+            m_dataMinV = minV;
+            m_dataMaxV = maxV;
             m_rangeSet = true;
         }
         else
         {
-            m_minV  = std::min( minV, m_minV );
-            m_maxV  = std::max( maxV, m_maxV );
+            m_dataMinV = std::min( minV, m_dataMinV );
+            m_dataMaxV = std::max( maxV, m_dataMaxV );
         }
 
-        if( mpIsDegenerateRange( m_minV, m_maxV ) )
-            mpPadDegenerateRange( m_minV, m_maxV );
+        updateDisplayRange();
     }
 
     /** Force this axis' data range to an explicit [minV, maxV], as if it had been computed by
@@ -735,12 +734,11 @@ public:
      */
     void SetDataRange( double minV, double maxV )
     {
-        m_minV = minV;
-        m_maxV = maxV;
+        m_dataMinV = minV;
+        m_dataMaxV = maxV;
         m_rangeSet = true;
 
-        if( mpIsDegenerateRange( m_minV, m_maxV ) )
-            mpPadDegenerateRange( m_minV, m_maxV );
+        updateDisplayRange();
     }
 
     virtual void ResetDataRange()
@@ -814,6 +812,16 @@ protected:
     virtual void formatLabels() {};
 
 protected:
+    /// Padding a running hull after every trace would make the result depend on trace order.
+    void updateDisplayRange()
+    {
+        m_minV = m_dataMinV;
+        m_maxV = m_dataMaxV;
+
+        if( mpIsDegenerateRange( m_minV, m_maxV ) )
+            mpPadDegenerateRange( m_minV, m_maxV );
+    }
+
     std::vector<double>     m_tickValues;
     std::vector<TICK_LABEL> m_tickLabels;
 
@@ -822,8 +830,10 @@ protected:
     int                     m_flags;            // !< Flag for axis alignment
     int                     m_nameFlags;
     bool                    m_ticks;            // !< Flag to toggle between ticks or grid
-    double                  m_minV, m_maxV;
+    double                  m_minV, m_maxV;     // !< Display range, padded when degenerate
     bool                    m_rangeSet;
+    double                  m_dataMinV = 0.0;   // !< Hull of the data, never padded
+    double                  m_dataMaxV = 0.0;
     bool                    m_axisLocked;
     double                  m_axisMin;
     double                  m_axisMax;

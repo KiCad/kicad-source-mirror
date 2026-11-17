@@ -45,4 +45,34 @@ BOOST_AUTO_TEST_CASE( ConstructWithoutToolkit )
 }
 
 
+BOOST_AUTO_TEST_CASE( DataRangeIndependentOfTraceOrder )
+{
+    mpScaleY nearConstantFirst( wxS( "V" ) );
+    mpScaleY widerFirst( wxS( "V" ) );
+
+    nearConstantFirst.ExtendDataRange( 1.0, 1.0 + 1e-10 );
+    nearConstantFirst.ExtendDataRange( 1.0, 1.0001 );
+
+    widerFirst.ExtendDataRange( 1.0, 1.0001 );
+    widerFirst.ExtendDataRange( 1.0, 1.0 + 1e-10 );
+
+    double minA, maxA, minB, maxB;
+    nearConstantFirst.GetDataRange( minA, maxA );
+    widerFirst.GetDataRange( minB, maxB );
+
+    BOOST_CHECK_EQUAL( minA, minB );
+    BOOST_CHECK_EQUAL( maxA, maxB );
+    BOOST_CHECK_EQUAL( minA, 1.0 );
+    BOOST_CHECK_EQUAL( maxA, 1.0001 );
+
+    // A lone constant trace is still widened so it can be labelled
+    mpScaleY constant( wxS( "V" ) );
+    constant.ExtendDataRange( 5.0, 5.0 );
+    constant.GetDataRange( minA, maxA );
+
+    BOOST_CHECK_LT( minA, 5.0 );
+    BOOST_CHECK_GT( maxA, 5.0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

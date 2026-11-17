@@ -132,6 +132,9 @@ public:
      */
     const std::vector<wxString> Signals();
 
+    /// @return the schematic signals without the user defined ones.
+    const std::vector<wxString>& NativeSignals();
+
     /// @return the schematic net names.
     const std::vector<wxString>& Netnames();
 

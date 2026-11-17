@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,7 +53,7 @@ DIALOG_USER_DEFINED_SIGNALS_BASE::DIALOG_USER_DEFINED_SIGNALS_BASE( wxWindow* pa
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_grid->SetMinSize( wxSize( -1,120 ) );
+	m_grid->SetMinSize( wxSize( 500,240 ) );
 
 	bMainSizer->Add( m_grid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 

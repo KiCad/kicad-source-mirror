@@ -54,6 +54,7 @@
 #include <sim/simulator_frame_ui.h>
 #include <sim/simulator_frame.h>
 #include <sim/sim_plot_tab.h>
+#include <sim/sim_signal_utils.h>
 #include <sim/spice_simulator.h>
 #include <dialogs/dialog_text_entry.h>
 #include <dialogs/dialog_sim_format_value.h>
@@ -106,6 +107,7 @@ enum
     MYID_FORMAT_VALUE,
     MYID_DELETE_MEASUREMENT,
     MYID_MEASUREMENT_ADD,
+    MYID_MEASUREMENT_EDIT,
     MYID_MEASURE_ALL
 };
 
@@ -120,18 +122,19 @@ enum
 
     MYID_TREE_VIEW_BASE = 30100,   // + index into getViewChoices() (0 == unplotted)
     MYID_TREE_YSCALE_BASE = 30200, // + index into getYScaleChoices()
-    MYID_TREE_CURSOR_BASE = 30300  // + cursor id
+    MYID_TREE_CURSOR_BASE = 30300, // + cursor id
+    MYID_TREE_MEASURE_BASE = 30400 // + index into measurementFunctions()
 };
 
 
 /// Plot indicator: a dot in the trace colour when plotted, a hollow ring otherwise.
-static wxBitmapBundle makeSignalDot( const wxColour& aColor, bool aFilled )
+static wxBitmap makeSignalDotBitmap( const wxColour& aColor, bool aFilled, int aScale )
 {
-    const int    size = 12;
+    const int    size = 12 * aScale;
     const double center = size / 2.0;
-    const double outer = center - 1.0;
-    const double inner = outer - 1.8; // ring thickness, hollow state only
-    const int    ss = 3;              // supersampling steps per axis
+    const double outer = center - aScale;
+    const double inner = outer - 1.8 * aScale; // ring thickness, hollow state only
+    const int    ss = 3;                       // supersampling steps per axis
 
     wxImage image( size, size );
     image.InitAlpha();
@@ -162,7 +165,15 @@ static wxBitmapBundle makeSignalDot( const wxColour& aColor, bool aFilled )
         }
     }
 
-    return wxBitmapBundle( wxBitmap( image ) );
+    return wxBitmap( image );
+}
+
+
+static wxBitmapBundle makeSignalDot( const wxColour& aColor, bool aFilled )
+{
+    // A 2x variant so scaled displays get a sharp dot instead of an upscaled one
+    return wxBitmapBundle::FromBitmaps( makeSignalDotBitmap( aColor, aFilled, 1 ),
+                                        makeSignalDotBitmap( aColor, aFilled, 2 ) );
 }
 
 
@@ -229,6 +240,10 @@ public:
         return true;
     }
 
+#if wxUSE_ACCESSIBILITY
+    wxString GetAccessibleDescription() const override { return m_value; }
+#endif
+
 private:
     wxString m_value;
 };
@@ -283,12 +298,16 @@ public:
         return true;
     }
 
+#if wxUSE_ACCESSIBILITY
+    wxString GetAccessibleDescription() const override { return m_value.GetText(); }
+#endif
+
 private:
     wxSize bitmapSize() const
     {
         const wxBitmapBundle& bundle = m_value.GetBitmapBundle();
 
-        return bundle.IsOk() ? bundle.GetPreferredBitmapSizeFor( GetView() ) : wxSize( 0, 0 );
+        return bundle.IsOk() ? bundle.GetPreferredLogicalSizeFor( GetView() ) : wxSize( 0, 0 );
     }
 
     int gap() const { return m_value.GetBitmapBundle().IsOk() ? 4 : 0; }
@@ -664,10 +683,10 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
     m_signalsModel->DecRef(); // AssociateModel() took its own reference
 
     m_signalsTree->AppendColumn( new wxDataViewColumn( _( "Signal" ), new SIM_TREE_ICON_TEXT_RENDERER(),
-                                                       SIM_TREE_MODEL::COL_NAME, 180, wxALIGN_LEFT,
+                                                       SIM_TREE_MODEL::COL_NAME, FromDIP( 180 ), wxALIGN_LEFT,
                                                        wxDATAVIEW_COL_RESIZABLE ) );
     m_signalsTree->AppendColumn( new wxDataViewColumn( _( "Plot" ), new SIM_TREE_TEXT_RENDERER(),
-                                                       SIM_TREE_MODEL::COL_VALUE, 60, wxALIGN_LEFT,
+                                                       SIM_TREE_MODEL::COL_VALUE, FromDIP( 60 ), wxALIGN_LEFT,
                                                        wxDATAVIEW_COL_RESIZABLE ) );
 
     m_tunerNotebook = new wxNotebook( m_panelTuners, wxID_ANY );
@@ -680,11 +699,28 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
     m_measurementsTree->AssociateModel( m_measurementsModel );
     m_measurementsModel->DecRef(); // AssociateModel() took its own reference
 
+    // Backspace is the delete key on macOS keyboards
+    m_measurementsTree->Bind( wxEVT_CHAR_HOOK,
+                              [this]( wxKeyEvent& aEvent )
+                              {
+                                  int key = aEvent.GetKeyCode();
+
+                                  if( aEvent.GetModifiers() == wxMOD_NONE
+                                      && ( key == WXK_DELETE || key == WXK_BACK ) )
+                                  {
+                                      deleteMeasurements( getSelectedMeasurements( wxDataViewItem() ) );
+                                  }
+                                  else
+                                  {
+                                      aEvent.Skip();
+                                  }
+                              } );
+
     m_measurementsTree->AppendColumn( new wxDataViewColumn( _( "Measurement" ), new SIM_TREE_ICON_TEXT_RENDERER(),
-                                                            SIM_TREE_MODEL::COL_NAME, 200, wxALIGN_LEFT,
+                                                            SIM_TREE_MODEL::COL_NAME, FromDIP( 200 ), wxALIGN_LEFT,
                                                             wxDATAVIEW_COL_RESIZABLE ) );
     m_measurementsTree->AppendColumn( new wxDataViewColumn( _( "Value" ), new SIM_TREE_TEXT_RENDERER(),
-                                                            SIM_TREE_MODEL::COL_VALUE, 90, wxALIGN_LEFT,
+                                                            SIM_TREE_MODEL::COL_VALUE, FromDIP( 90 ), wxALIGN_LEFT,
                                                             wxDATAVIEW_COL_RESIZABLE ) );
 
     applyTreeRowHeight();
@@ -714,6 +750,22 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_ED
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
     Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_FRAME_UI::onPlotCursorUpdate, this );
+
+    // Hollow dots are drawn in the system grey, so a theme change needs new bitmaps
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          [this]( wxSysColourChangedEvent& aEvent )
+          {
+              aEvent.Skip();
+              m_signalDotCache.clear();
+
+              for( SIM_TREE_MODEL::NODE* leaf : m_signalsModel->Leaves() )
+                  leaf->icon = wxBitmapBundle();
+
+              for( SIM_TREE_MODEL::NODE* group : m_measurementsModel->Groups() )
+                  group->icon = wxBitmapBundle();
+
+              updateSignalsTree();
+          } );
 
     Bind( wxEVT_TIMER,
             [&]( wxTimerEvent& aEvent )
@@ -844,6 +896,8 @@ void SIMULATOR_FRAME_UI::ShowChangedLanguage()
         m_signalsTree->GetColumn( SIM_TREE_MODEL::COL_VALUE )->SetTitle( _( "Plot" ) );
     }
 
+    // The gain/phase suffixes in m_signals are translated
+    rebuildSignalsList();
     rebuildSignalsTree( m_filter->GetValue() );
 
     if( m_measurementsTree->GetColumnCount() >= 2 )
@@ -993,8 +1047,11 @@ void SIMULATOR_FRAME_UI::SetSubWindowsSashSize()
     if( m_splitterCursorsSashPosition > 0 )
         m_splitterCursors->SetSashPosition( m_splitterCursorsSashPosition );
 
+    // A negative position sizes the right pane, so a first open fits the cursor and measurement columns
     if( m_splitterCenterRightSashPosition > 0 )
         m_splitterCenterRight->SetSashPosition( m_splitterCenterRightSashPosition );
+    else
+        m_splitterCenterRight->SetSashPosition( -FromDIP( 400 ) );
 }
 
 
@@ -1015,6 +1072,7 @@ void sortSignals( std::vector<wxString>& signals )
 
 
 wxString vectorNameFromSignalId( int aUserDefinedSignalId );
+static wxString deviceVectorName( int aDeviceVoltageId );
 
 
 wxString SimSignalBaseName( const wxString& aSignal )
@@ -1179,8 +1237,15 @@ void SIMULATOR_FRAME_UI::rebuildSignalsTree( wxString aFilter )
         for( const wxString& signal : m_signals )
             signals.push_back( signal );
 
+        std::set<wxString> native( m_signals.begin(), m_signals.end() );
+
         auto addUserDefined = [&]( const wxString& aSignal )
         {
+            // Same text as a native signal is the same expression, and a second row would drag the
+            // native one into the user-defined group
+            if( native.count( aSignal ) )
+                return;
+
             signals.push_back( aSignal );
             userDefined.insert( aSignal );
         };
@@ -1286,14 +1351,70 @@ void SIMULATOR_FRAME_UI::rebuildSignalsTree( wxString aFilter )
         groups.push_back( group );
     }
 
+    // Signal names are unique, so they survive the rebuild where node pointers do not
+    auto rowKey = [&]( SIM_TREE_MODEL::NODE* aNode ) -> wxString
+    {
+        if( !aNode )
+            return wxEmptyString;
+
+        return aNode->IsGroup() ? wxS( "\n" ) + signalTreeGroupKey( aNode ) : aNode->name;
+    };
+
+    wxDataViewItemArray selection;
+    std::set<wxString>  selectedKeys;
+    wxString            topKey = rowKey( SIM_TREE_MODEL::ToNode( m_signalsTree->GetTopItem() ) );
+
+    m_signalsTree->GetSelections( selection );
+
+    for( const wxDataViewItem& item : selection )
+        selectedKeys.insert( rowKey( SIM_TREE_MODEL::ToNode( item ) ) );
+
     m_signalsModel->SetContents( groups );
+
+    wxDataViewItem top;
+    wxDataViewItem last;
 
     for( SIM_TREE_MODEL::NODE* group : m_signalsModel->Groups() )
     {
         auto it = m_signalGroupExpanded.find( signalTreeGroupKey( group ) );
+        bool expanded = filtering || it == m_signalGroupExpanded.end() || it->second;
 
-        if( filtering || it == m_signalGroupExpanded.end() || it->second )
+        if( expanded )
             m_signalsTree->Expand( SIM_TREE_MODEL::ToItem( group ) );
+
+        // Select() and EnsureVisible() expand collapsed ancestors, so only rows already shown are restored
+        bool shown = !group->parent || m_signalsTree->IsExpanded( SIM_TREE_MODEL::ToItem( group->parent ) );
+
+        if( shown )
+        {
+            if( rowKey( group ) == topKey )
+                top = SIM_TREE_MODEL::ToItem( group );
+
+            last = SIM_TREE_MODEL::ToItem( group );
+        }
+
+        for( const std::unique_ptr<SIM_TREE_MODEL::NODE>& leaf : group->children )
+        {
+            if( leaf->IsGroup() || !shown || !expanded )
+                continue;
+
+            wxString key = rowKey( leaf.get() );
+
+            if( selectedKeys.count( key ) )
+                m_signalsTree->Select( SIM_TREE_MODEL::ToItem( leaf.get() ) );
+
+            if( key == topKey )
+                top = SIM_TREE_MODEL::ToItem( leaf.get() );
+
+            last = SIM_TREE_MODEL::ToItem( leaf.get() );
+        }
+    }
+
+    // EnsureVisible() scrolls the least, so coming from the end leaves the old top row at the top
+    if( top.IsOk() && last.IsOk() )
+    {
+        m_signalsTree->EnsureVisible( last );
+        m_signalsTree->EnsureVisible( top );
     }
 
     m_signalsTreeFiltered = filtering;
@@ -1445,12 +1566,35 @@ void SIMULATOR_FRAME_UI::setSignalView( const wxString& aSignal, SIM_VIEW* aView
     }
     else
     {
-        TRACE* existing = plotTab->GetTrace( vectorName, traceType );
+        TRACE*                existing = plotTab->GetTrace( vectorName, traceType );
+        std::map<int, double> cursorXs;
 
         if( existing && existing->GetView() != aView )
+        {
+            // The trace is re-created on the new view, so its cursors have to move with it
+            for( const auto& [id, cursor] : existing->GetCursors() )
+            {
+                if( cursor )
+                    cursorXs[id] = cursor->GetCoords().x;
+            }
+
             plotTab->DeleteTrace( existing );
+        }
 
         updateTrace( vectorName, traceType, plotTab, nullptr, false, aView );
+
+        TRACE* moved = cursorXs.empty() ? nullptr : plotTab->GetTrace( vectorName, traceType );
+
+        if( moved && moved->GetView() )
+        {
+            for( const auto& [id, x] : cursorXs )
+            {
+                plotTab->EnableCursor( moved, id, aSignal );
+
+                if( CURSOR* cursor = moved->GetCursor( id ) )
+                    cursor->SetCoordX( x );
+            }
+        }
     }
 }
 
@@ -1545,49 +1689,38 @@ void SIMULATOR_FRAME_UI::rebuildDeviceVoltages()
     // Ids are re-evaluated per plot.
     m_appliedDeviceVoltages.clear();
 
-    auto isGround = []( const wxString& aNet )
-    {
-        return aNet.IsSameAs( wxS( "GND" ), false ) || aNet == wxS( "0" );
-    };
-
     if( !circuitModel() )
         return;
 
-    const std::set<wxString> nets = circuitModel()->GetNets();
+    // ngspice node names ignore case
+    std::set<wxString> netsLower;
+
+    for( const wxString& net : circuitModel()->GetNets() )
+        netsLower.insert( net.Lower() );
 
     for( const SPICE_ITEM& item : circuitModel()->GetItems() )
     {
         // Only enabled two-pin parts have a voltage across them.
-        if( !item.model || !item.model->IsEnabled() || item.model->GetPinCount() != 2 || item.pinNetNames.size() != 2 )
+        if( !item.model || !item.model->IsEnabled() || item.model->GetPinCount() != 2 )
             continue;
 
-        wxString netA = item.pinNetNames[0];
-        wxString netB = item.pinNetNames[1];
+        // Model pin order, so V(D1) is anode minus cathode like I(D1) and P(D1)
+        std::vector<std::string> modelPins;
 
-        NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &netA );
-        NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( &netB );
+        for( const SIM_MODEL_PIN& pin : item.model->GetPins() )
+            modelPins.push_back( pin.symbolPinNumber.ToStdString() );
 
-        if( netA.IsEmpty() || netB.IsEmpty() || netA == netB )
-            continue;
+        wxString expr = SIM_SIGNAL::DeviceVoltageExpression( modelPins, item.pinNumbers, item.pinNetNames );
 
-        if( isGround( netA ) && isGround( netB ) )
+        if( expr.IsEmpty() )
             continue;
 
         wxString refName = item.model->SpiceGenerator().ItemName( item );
         wxString name = wxString::Format( wxS( "V(%s)" ), refName );
 
         // A net named "R1" owns V(R1).  m_netnames may be stale, so ask the model.
-        if( nets.count( refName ) )
+        if( netsLower.count( refName.Lower() ) )
             continue;
-
-        wxString expr;
-
-        if( isGround( netB ) )
-            expr = wxString::Format( wxS( "V(%s)" ), netA );
-        else if( isGround( netA ) )
-            expr = wxString::Format( wxS( "-V(%s)" ), netB );
-        else
-            expr = wxString::Format( wxS( "V(%s) - V(%s)" ), netA, netB );
 
         // Keep a device's id across netlist changes so existing traces stay valid.
         auto [reg, isNew] = m_deviceVoltageIdRegistry.try_emplace( name, m_nextDeviceVoltageId );
@@ -1599,7 +1732,7 @@ void SIMULATOR_FRAME_UI::rebuildDeviceVoltages()
 
         m_deviceVoltageIds[name] = id;
         m_deviceVoltageExprs[id] = expr;
-        m_deviceVoltageVectors[vectorNameFromSignalId( id )] = id;
+        m_deviceVoltageVectors[deviceVectorName( id )] = id;
     }
 }
 
@@ -1828,19 +1961,11 @@ wxString vectorNameFromSignalId( int aUserDefinedSignalId )
 }
 
 
-/// True for the "user<N>" vectors backing user-defined signals and component voltages.
-static bool isUserSignalVector( const wxString& aVectorName )
+
+
+static wxString deviceVectorName( int aDeviceVoltageId )
 {
-    if( !aVectorName.StartsWith( wxS( "user" ) ) || aVectorName.Length() == 4 )
-        return false;
-
-    for( size_t ii = 4; ii < aVectorName.Length(); ++ii )
-    {
-        if( aVectorName[ii] < '0' || aVectorName[ii] > '9' )
-            return false;
-    }
-
-    return true;
+    return wxString::Format( wxS( "%s%d" ), SIM_SIGNAL::DEVICE_VECTOR_PREFIX, aDeviceVoltageId );
 }
 
 
@@ -1924,7 +2049,7 @@ wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab, c
         if( aTraceType )
             *aTraceType = ( *aTraceType & ( SPT_SP_MASK | SPT_AC_GAIN | SPT_AC_PHASE ) ) | SPT_VOLTAGE;
 
-        return vectorNameFromSignalId( it->second );
+        return deviceVectorName( it->second );
     }
 
     for( const auto& [id, signal] : m_userDefinedSignals )
@@ -1967,7 +2092,7 @@ wxString SIMULATOR_FRAME_UI::signalNameFromVectorName( const wxString& aVectorNa
     // The name is the stable identity; ids are assigned per session.
     for( const auto& [name, id] : m_deviceVoltageIds )
     {
-        if( vectorName == vectorNameFromSignalId( id ) )
+        if( vectorName == deviceVectorName( id ) )
             return name + suffix;
     }
 
@@ -2018,6 +2143,7 @@ void SIMULATOR_FRAME_UI::onSignalsTreeActivated( wxDataViewEvent& aEvent )
 
 
 static const std::vector<wxString>& measurementFunctions();
+static wxString measurementFunctionLabel( const wxString& aFunc, SIM_TYPE aSimType );
 
 
 void SIMULATOR_FRAME_UI::onSignalsTreeContextMenu( wxDataViewEvent& aEvent )
@@ -2028,6 +2154,13 @@ void SIMULATOR_FRAME_UI::onSignalsTreeContextMenu( wxDataViewEvent& aEvent )
         return;
 
     m_signalsMenuSignals = getSelectedSignals( aEvent.GetItem() );
+
+    // The menu acts on the clicked row, so show it selected
+    if( aEvent.GetItem().IsOk() && !m_signalsTree->IsSelected( aEvent.GetItem() ) )
+    {
+        m_signalsTree->UnselectAll();
+        m_signalsTree->Select( aEvent.GetItem() );
+    }
 
     wxMenu menu;
 
@@ -2085,7 +2218,18 @@ void SIMULATOR_FRAME_UI::onSignalsTreeContextMenu( wxDataViewEvent& aEvent )
 
         if( simType == ST_TRAN || simType == ST_AC || simType == ST_DC || simType == ST_SP )
         {
-            wxMenuItem* measureItem = menu.Append( MYID_MEASURE_ALL, _( "Add Measurements" ) );
+            wxMenu* measureMenu = new wxMenu;
+
+            for( size_t ii = 0; ii < measurementFunctions().size(); ++ii )
+            {
+                measureMenu->Append( MYID_TREE_MEASURE_BASE + (int) ii,
+                                     measurementFunctionLabel( measurementFunctions()[ii], simType ) );
+            }
+
+            measureMenu->AppendSeparator();
+            measureMenu->Append( MYID_MEASURE_ALL, _( "All" ) );
+
+            wxMenuItem* measureItem = menu.AppendSubMenu( measureMenu, _( "Add Measurement" ) );
             wxString    measured;
 
             // Phase traces have no MEAS equivalent.
@@ -2256,6 +2400,11 @@ void SIMULATOR_FRAME_UI::onSignalsTreeMenuSelection( wxCommandEvent& aEvent )
         for( const wxString& signal : signals )
             AddMeasurements( signal, measurementFunctions() );
     }
+    else if( id >= MYID_TREE_MEASURE_BASE && id < MYID_TREE_MEASURE_BASE + (int) measurementFunctions().size() )
+    {
+        for( const wxString& signal : signals )
+            AddMeasurements( signal, { measurementFunctions()[id - MYID_TREE_MEASURE_BASE] } );
+    }
     else if( id == MYID_FOURIER )
     {
         wxString title;
@@ -2365,29 +2514,6 @@ static const std::vector<wxString>& measurementFunctions()
 }
 
 
-/// Split "MIN V(OUT)" into its function ("MIN") and its signal ("V(OUT)").
-static void splitMeasurement( const wxString& aCmd, wxString& aFunc, wxString& aSignal )
-{
-    wxString cmd = aCmd;
-    cmd.Trim( false );
-
-    int space = cmd.Find( ' ' );
-
-    if( space == wxNOT_FOUND )
-    {
-        aFunc = cmd;
-        aSignal = wxEmptyString;
-    }
-    else
-    {
-        aFunc = cmd.Left( space );
-        aSignal = cmd.Mid( space + 1 );
-        aSignal.Trim( false );
-        aSignal.Trim( true );
-    }
-}
-
-
 static wxString measurementFunctionLabel( const wxString& aFunc, SIM_TYPE aSimType )
 {
     bool     freqDomain = aSimType == ST_AC || aSimType == ST_SP;
@@ -2414,63 +2540,6 @@ static wxString measurementFunctionLabel( const wxString& aFunc, SIM_TYPE aSimTy
 }
 
 
-/// True for a single V(...) reference, not a compound expression.
-static bool isSingleVoltageRef( const wxString& aExpression )
-{
-    if( aExpression.Length() < 4 || !aExpression.Upper().StartsWith( wxS( "V(" ) ) )
-        return false;
-
-    int depth = 0;
-
-    for( size_t ii = 1; ii < aExpression.Length(); ++ii )
-    {
-        if( aExpression[ii] == '(' )
-        {
-            depth++;
-        }
-        else if( aExpression[ii] == ')' && --depth == 0 )
-        {
-            return ii == aExpression.Length() - 1;
-        }
-    }
-
-    return false;
-}
-
-
-/// True if MEAS takes \a aSignal as it is: a vector name, or a V(), VDB(), ..., I() reference.
-static bool isMeasVector( const wxString& aSignal )
-{
-    static const std::set<wxString> refs = { wxS( "V" ),  wxS( "VDB" ), wxS( "VM" ), wxS( "VP" ),
-                                             wxS( "VR" ), wxS( "VI" ),  wxS( "I" ) };
-
-    int open = aSignal.Find( '(' );
-
-    if( open == wxNOT_FOUND )
-        return !aSignal.IsEmpty() && aSignal.find_first_of( wxS( " +-*/^," ) ) == wxString::npos;
-
-    if( !refs.count( aSignal.Left( open ).Upper() ) )
-        return false;
-
-    int  depth = 0;
-    bool quoted = false;
-
-    for( size_t ii = open; ii < aSignal.Length(); ++ii )
-    {
-        if( aSignal[ii] == '"' )
-            quoted = !quoted;
-        else if( quoted )
-            continue;
-        else if( aSignal[ii] == '(' )
-            depth++;
-        else if( aSignal[ii] == ')' && --depth == 0 )
-            return ii == aSignal.Length() - 1;
-    }
-
-    return false;
-}
-
-
 bool SIMULATOR_FRAME_UI::measurementSignal( const wxString& aSignal, wxString& aResult ) const
 {
     // Suffixes are translated, so their length varies.
@@ -2484,15 +2553,14 @@ bool SIMULATOR_FRAME_UI::measurementSignal( const wxString& aSignal, wxString& a
     else if( aSignal.EndsWith( _( " (amplitude)" ) ) )
         suffix = _( " (amplitude)" );
 
-    aResult = aSignal.Left( aSignal.Length() - suffix.Length() );
+    SIM_SIGNAL::PART part = SIM_SIGNAL::PART::VALUE;
 
-    // Gain and amplitude are plotted in dB.
-    if( !suffix.IsEmpty() && isSingleVoltageRef( aResult ) )
-        aResult = wxS( "vdb" ) + aResult.Mid( 1 );
-    else if( suffix == _( " (gain)" ) )
-        aResult = wxS( "db(" ) + aResult + wxS( ")" );
+    if( suffix == _( " (gain)" ) )
+        part = SIM_SIGNAL::PART::GAIN;
+    else if( suffix == _( " (amplitude)" ) )
+        part = SIM_SIGNAL::PART::AMPLITUDE;
 
-    return true;
+    return SIM_SIGNAL::MeasurableSignal( aSignal.Left( aSignal.Length() - suffix.Length() ), part, aResult );
 }
 
 
@@ -2578,8 +2646,8 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsTree( const std::map<wxString, wxStr
 
     for( int ii = 0; ii < (int) measurements.size(); ++ii )
     {
-        wxString func, signal;
-        splitMeasurement( measurements[ii].first, func, signal );
+        wxString func, signal, params;
+        SIM_SIGNAL::SplitMeasurement( measurements[ii].first, func, signal, params );
 
         if( signal.IsEmpty() ) // a measurement we can't parse; file it under its own text
             signal = measurements[ii].first;
@@ -2601,6 +2669,32 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsTree( const std::map<wxString, wxStr
         group.name = signal;
         group.entries = bySignal[signal.Lower()];
         groups.push_back( group );
+    }
+
+    // Measurement indices may already be stale, so rows are matched by their labels
+    auto rowKey = []( SIM_TREE_MODEL::NODE* aNode ) -> wxString
+    {
+        if( !aNode )
+            return wxEmptyString;
+
+        return aNode->parent ? aNode->parent->name + wxS( "\n" ) + aNode->name : aNode->name;
+    };
+
+    wxDataViewItemArray selection;
+    std::set<wxString>  selectedKeys;
+    wxString            topKey = rowKey( SIM_TREE_MODEL::ToNode( m_measurementsTree->GetTopItem() ) );
+
+    m_measurementsTree->GetSelections( selection );
+
+    for( const wxDataViewItem& item : selection )
+        selectedKeys.insert( rowKey( SIM_TREE_MODEL::ToNode( item ) ) );
+
+    std::set<wxString> collapsed;
+
+    for( SIM_TREE_MODEL::NODE* group : m_measurementsModel->Groups() )
+    {
+        if( !m_measurementsTree->IsExpanded( SIM_TREE_MODEL::ToItem( group ) ) )
+            collapsed.insert( group->name.Lower() );
     }
 
     m_measurementsModel->SetContents( groups );
@@ -2626,9 +2720,61 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsTree( const std::map<wxString, wxStr
     refreshMeasurementGroupIcons();
 
     for( SIM_TREE_MODEL::NODE* group : m_measurementsModel->Groups() )
-        m_measurementsTree->Expand( SIM_TREE_MODEL::ToItem( group ) );
+    {
+        if( !collapsed.count( group->name.Lower() ) )
+            m_measurementsTree->Expand( SIM_TREE_MODEL::ToItem( group ) );
+    }
 
     applyTreeRowHeight();
+
+    // Cleared() drops the selection, and on macOS also scrolls to the top
+    wxDataViewItem top;
+    wxDataViewItem firstSelected;
+    wxDataViewItem last;
+
+    for( SIM_TREE_MODEL::NODE* group : m_measurementsModel->Groups() )
+    {
+        if( rowKey( group ) == topKey )
+            top = SIM_TREE_MODEL::ToItem( group );
+
+        last = SIM_TREE_MODEL::ToItem( group );
+
+        // Selecting or scrolling to a hidden row would expand its group again
+        if( collapsed.count( group->name.Lower() ) )
+            continue;
+
+        for( const std::unique_ptr<SIM_TREE_MODEL::NODE>& leaf : group->children )
+        {
+            if( leaf->IsGroup() )
+                continue;
+
+            wxString key = rowKey( leaf.get() );
+
+            if( selectedKeys.count( key ) )
+            {
+                m_measurementsTree->Select( SIM_TREE_MODEL::ToItem( leaf.get() ) );
+
+                if( !firstSelected.IsOk() )
+                    firstSelected = SIM_TREE_MODEL::ToItem( leaf.get() );
+            }
+
+            if( key == topKey )
+                top = SIM_TREE_MODEL::ToItem( leaf.get() );
+
+            last = SIM_TREE_MODEL::ToItem( leaf.get() );
+        }
+    }
+
+    // EnsureVisible() scrolls the least, so coming from the end leaves the old top row at the top
+    if( top.IsOk() && last.IsOk() )
+    {
+        m_measurementsTree->EnsureVisible( last );
+        m_measurementsTree->EnsureVisible( top );
+    }
+    else if( firstSelected.IsOk() )
+    {
+        m_measurementsTree->EnsureVisible( firstSelected );
+    }
 
     for( int index : toEvaluate )
         UpdateMeasurement( index );
@@ -2657,6 +2803,8 @@ bool SIMULATOR_FRAME_UI::refreshMeasurementGroupIcons()
                 signal = wxS( "V" ) + signal.Mid( 3 );
             else if( simType == ST_AC && signal.StartsWith( wxS( "db(" ) ) && signal.EndsWith( wxS( ")" ) ) )
                 signal = signal.Mid( 3, signal.Length() - 4 );
+            else if( simType == ST_SP && signal.StartsWith( wxS( "mag(" ) ) && signal.EndsWith( wxS( ")" ) ) )
+                signal = signal.Mid( 4, signal.Length() - 5 );
 
             signal += simType == ST_AC ? _( " (gain)" ) : _( " (amplitude)" );
         }
@@ -2761,10 +2909,20 @@ void SIMULATOR_FRAME_UI::onMeasurementsTreeContextMenu( wxDataViewEvent& aEvent 
 
     m_measurementsMenuRows = getSelectedMeasurements( aEvent.GetItem() );
 
+    // The menu acts on the clicked row, so show it selected
+    if( aEvent.GetItem().IsOk() && !m_measurementsTree->IsSelected( aEvent.GetItem() ) )
+    {
+        m_measurementsTree->UnselectAll();
+        m_measurementsTree->Select( aEvent.GetItem() );
+    }
+
     wxMenu menu;
 
     if( m_measurementsMenuRows.size() == 1 )
+    {
+        menu.Append( MYID_MEASUREMENT_EDIT, _( "Edit Measurement..." ) );
         menu.Append( MYID_FORMAT_VALUE, _( "Format Value..." ) );
+    }
 
     if( !m_measurementsMenuRows.empty() )
     {
@@ -2799,18 +2957,14 @@ void SIMULATOR_FRAME_UI::onMeasurementsTreeMenuSelection( wxCommandEvent& aEvent
             OnModify();
         }
     }
+    else if( aEvent.GetId() == MYID_MEASUREMENT_EDIT )
+    {
+        if( m_measurementsMenuRows.size() == 1 )
+            editMeasurement( m_measurementsMenuRows.front() );
+    }
     else if( aEvent.GetId() == MYID_DELETE_MEASUREMENT )
     {
-        std::vector<int>             rows = m_measurementsMenuRows;
-        std::map<wxString, wxString> values = shownMeasurementValues();
-
-        std::sort( rows.begin(), rows.end(), std::greater<>() );
-
-        for( int row : rows )
-            DeleteMeasurement( row );
-
-        rebuildMeasurementsTree( &values );
-        OnModify();
+        deleteMeasurements( m_measurementsMenuRows );
     }
     else if( aEvent.GetId() == MYID_MEASUREMENT_ADD )
     {
@@ -2821,6 +2975,60 @@ void SIMULATOR_FRAME_UI::onMeasurementsTreeMenuSelection( wxCommandEvent& aEvent
 
         AddMeasurement( dlg.GetValue() );
     }
+}
+
+
+void SIMULATOR_FRAME_UI::onMeasurementsTreeActivated( wxDataViewEvent& aEvent )
+{
+    SIM_TREE_MODEL::NODE* node = SIM_TREE_MODEL::ToNode( aEvent.GetItem() );
+
+    if( node && !node->IsGroup() )
+        editMeasurement( node->index );
+}
+
+
+void SIMULATOR_FRAME_UI::editMeasurement( int aRow )
+{
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+
+    if( !plotTab || aRow < 0 || aRow >= (int) plotTab->Measurements().size() )
+        return;
+
+    wxString             current = plotTab->Measurements()[aRow].first;
+    WX_TEXT_ENTRY_DIALOG dlg( this, _( "Measurement:" ), _( "Edit Measurement" ), current );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxString text = dlg.GetValue();
+    text.Trim( true ).Trim( false );
+
+    if( text.IsEmpty() || text == current )
+        return;
+
+    std::map<wxString, wxString> values = shownMeasurementValues();
+
+    plotTab->Measurements()[aRow].first = text;
+
+    rebuildMeasurementsTree( &values );
+    OnModify();
+}
+
+
+void SIMULATOR_FRAME_UI::deleteMeasurements( std::vector<int> aRows )
+{
+    if( aRows.empty() )
+        return;
+
+    std::map<wxString, wxString> values = shownMeasurementValues();
+
+    std::sort( aRows.begin(), aRows.end(), std::greater<>() );
+
+    for( int row : aRows )
+        DeleteMeasurement( row );
+
+    rebuildMeasurementsTree( &values );
+    OnModify();
 }
 
 
@@ -2912,6 +3120,14 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             // Our syntax is different from ngspice for power signals
             text = func + " " + deviceName + ":power";
         }
+        else if( signalType == wxS( "MAG" ) )
+        {
+            // S-parameters are dimensionless
+            if( deviceName.Upper().StartsWith( wxS( "I(" ) ) )
+                units = wxS( "A" );
+            else if( deviceName.Upper().StartsWith( wxS( "V(" ) ) )
+                units = wxS( "V" );
+        }
         else
         {
             units = wxS( "V" );
@@ -2964,22 +3180,7 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
         wxString measExpr = text;
         wxString measFunc, measSignal, measParams;
 
-        splitMeasurement( text, measFunc, measSignal );
-
-        // "MAX V(out) from=1m to=2m": the parameters are not part of the signal.
-        if( int eq = measSignal.Find( '=' ); eq != wxNOT_FOUND )
-        {
-            int start = eq;
-
-            while( start > 0 && measSignal[start - 1] == ' ' )
-                start--;
-
-            while( start > 0 && ( wxIsalpha( measSignal[start - 1] ) || measSignal[start - 1] == '_' ) )
-                start--;
-
-            measParams = wxS( " " ) + measSignal.Mid( start );
-            measSignal = measSignal.Left( start ).Trim();
-        }
+        SIM_SIGNAL::SplitMeasurement( text, measFunc, measSignal, measParams );
 
         // WHEN, FIND, TRIG etc. have their own syntax.
         bool simpleFunc = std::any_of( measurementFunctions().begin(), measurementFunctions().end(),
@@ -2993,9 +3194,9 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             wxString spiceSig = spiceSignal( measSignal );
 
             // MEAS takes a single vector, not an expression.
-            if( spiceSig != measSignal || !isMeasVector( measSignal ) )
+            if( spiceSig != measSignal || !SIM_SIGNAL::IsMeasVector( measSignal ) )
             {
-                if( !isUserSignalVector( spiceSig ) )
+                if( !SIM_SIGNAL::IsDerivedSignalVector( spiceSig ) )
                 {
                     wxString vector = wxString::Format( wxS( "meas_signal_%u" ), aRow );
 
@@ -3004,7 +3205,20 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
                     spiceSig = vector;
                 }
 
-                measExpr = measFunc + wxS( " " ) + spiceSig + measParams;
+                measExpr = measFunc + wxS( " " ) + spiceSig;
+
+                if( !measParams.IsEmpty() )
+                    measExpr += wxS( " " ) + measParams;
+            }
+        }
+
+        // A failed MEAS leaves the vector alone, so a deleted measurement's result would show instead
+        for( const std::string& vector : simulator()->AllVectors() )
+        {
+            if( resultName.IsSameAs( vector, false ) )
+            {
+                simulator()->Command( "unlet " + resultName.ToStdString() );
+                break;
             }
         }
 
@@ -3015,7 +3229,15 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
         std::vector<double> resultVec = simulator()->GetGainVector( resultName.ToStdString() );
 
         if( resultVec.size() > 0 )
+        {
             result = SPICE_VALUE( resultVec[0] ).ToString( GetMeasureFormat( aRow ) );
+        }
+        else
+        {
+            appendConsoleText( wxString::Format( _( "Cannot evaluate measurement '%s'.\n" ),
+                                                 measurements[aRow].first ),
+                               RPT_SEVERITY_ERROR );
+        }
     }
 
     setMeasurementValue( aRow, result );
@@ -3078,10 +3300,10 @@ void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL*
         }
         catch( const KI_PARAM_ERROR& e )
         {
-            DisplayErrorMessage( nullptr, e.What() );
-
-            // Don't leave an empty tab behind when the slider ctor throws.
+            // Before the modal dialog, which would otherwise show the empty tab behind it
             pruneEmptyTunerPages();
+
+            DisplayErrorMessage( nullptr, e.What() );
         }
     }
 }
@@ -3496,7 +3718,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
     // Only user vectors have a display name; skip the lookup for the rest.
     auto nameTrace = [this]( TRACE* aTrace, const wxString& aName )
     {
-        if( !aTrace || !isUserSignalVector( aName ) )
+        if( !aTrace || !SIM_SIGNAL::IsDerivedSignalVector( aName ) )
             return;
 
         wxString displayName = signalNameFromVectorName( aName );
@@ -3746,90 +3968,7 @@ void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceTyp
 
 wxString SIMULATOR_FRAME_UI::quoteNetNames( const wxString& aExpression ) const
 {
-    std::vector<bool> mask( aExpression.length(), false );
-    std::vector<bool> userQuoted( aExpression.length(), false );
-
-    auto isNetnameChar = []( wxUniChar aChar ) -> bool
-    {
-        wxUint32 value = aChar.GetValue();
-
-        if( ( value >= '0' && value <= '9' ) || ( value >= 'A' && value <= 'Z' ) || ( value >= 'a' && value <= 'z' ) )
-        {
-            return true;
-        }
-
-        switch( value )
-        {
-        case '_':
-        case '/':
-        case '+':
-        case '-':
-        case '~':
-        case '.': return true;
-        default: break;
-        }
-
-        return false;
-    };
-
-    // Leave names the user already quoted alone.
-    bool inQuote = false;
-
-    for( size_t i = 0; i < aExpression.length(); ++i )
-    {
-        if( aExpression[i] == '"' )
-            inQuote = !inQuote;
-
-        userQuoted[i] = inQuote || aExpression[i] == '"';
-    }
-
-    for( const wxString& netname : m_netnames )
-    {
-        size_t pos = aExpression.find( netname );
-
-        while( pos != wxString::npos )
-        {
-            size_t end = pos + netname.length();
-
-            // Whole names only: not "IN" in "SIN(", nor "A" in net "A-B".
-            bool whole = ( pos == 0 || !isNetnameChar( aExpression[pos - 1] ) )
-                         && ( end == aExpression.length() || !isNetnameChar( aExpression[end] ) );
-
-            if( whole && !userQuoted[pos] )
-            {
-                for( size_t i = pos; i < end; ++i )
-                    mask[i] = true; // Mark the positions of the netname
-            }
-
-            pos = aExpression.find( netname, pos + 1 ); // Find the next occurrence
-        }
-    }
-
-    wxString quotedNetnames = "";
-    bool     startQuote = true;
-
-    // put quotes around all the positions that were found above
-    for( size_t i = 0; i < aExpression.length(); i++ )
-    {
-        if( mask[i] && startQuote )
-        {
-            quotedNetnames = quotedNetnames + "\"";
-            startQuote = false;
-        }
-        else if( !mask[i] && !startQuote )
-        {
-            quotedNetnames = quotedNetnames + "\"";
-            startQuote = true;
-        }
-
-        wxString ch = aExpression[i];
-        quotedNetnames = quotedNetnames + ch;
-    }
-
-    if( !startQuote )
-        quotedNetnames = quotedNetnames + "\"";
-
-    return quotedNetnames;
+    return SIM_SIGNAL::QuoteNetNames( aExpression, m_netnames );
 }
 
 
@@ -3837,13 +3976,15 @@ void SIMULATOR_FRAME_UI::ensureDeviceVoltage( int aId )
 {
     auto expr = m_deviceVoltageExprs.find( aId );
 
-    if( expr == m_deviceVoltageExprs.end() || !simulator() )
+    // A command would read the vectors while the background thread reallocates them
+    if( expr == m_deviceVoltageExprs.end() || !simulator() || simulator()->IsRunning() )
         return;
 
     if( !m_appliedDeviceVoltages[simulator()->CurrentPlotName()].insert( aId ).second )
         return;
 
-    simulator()->Command( fmt::format( "let user{} = {}", aId, quoteNetNames( expr->second ).ToStdString() ) );
+    simulator()->Command( fmt::format( "let {} = {}", deviceVectorName( aId ).ToStdString(),
+                                       quoteNetNames( expr->second ).ToStdString() ) );
 }
 
 
@@ -3858,43 +3999,15 @@ void SIMULATOR_FRAME_UI::ensureDeviceVoltage( const wxString& aVectorName )
 
 wxString SIMULATOR_FRAME_UI::expandDeviceVoltages( const wxString& aExpression ) const
 {
-    // VDB(R1), VM(R1), ... wrap the difference in the ngspice function they stand for.
-    static const std::pair<wxString, wxString> forms[] = {
-        { wxS( "V" ), wxS( "" ) },    { wxS( "VDB" ), wxS( "db" ) },  { wxS( "VM" ), wxS( "mag" ) },
-        { wxS( "VP" ), wxS( "ph" ) }, { wxS( "VR" ), wxS( "real" ) }, { wxS( "VI" ), wxS( "imag" ) }
-    };
-
-    wxString result = aExpression;
+    std::map<wxString, wxString> deviceExprs;
 
     for( const auto& [name, id] : m_deviceVoltageIds )
     {
-        auto expr = m_deviceVoltageExprs.find( id );
-
-        if( expr == m_deviceVoltageExprs.end() )
-            continue;
-
-        for( const auto& [prefix, function] : forms )
-        {
-            wxString pattern = prefix + name.Mid( 1 ); // name is "V(R1)"
-            wxString replacement = function + wxS( "(" ) + expr->second + wxS( ")" );
-            size_t   pos = 0;
-
-            while( ( pos = result.Upper().find( pattern.Upper(), pos ) ) != wxString::npos )
-            {
-                // "IV(R1)" is a different function.
-                if( pos > 0 && ( wxIsalnum( result[pos - 1] ) || result[pos - 1] == '_' ) )
-                {
-                    pos += pattern.length();
-                    continue;
-                }
-
-                result.replace( pos, pattern.length(), replacement );
-                pos += replacement.length();
-            }
-        }
+        if( auto expr = m_deviceVoltageExprs.find( id ); expr != m_deviceVoltageExprs.end() )
+            deviceExprs[name.Mid( 2, name.Length() - 3 )] = expr->second; // name is "V(R1)"
     }
 
-    return result;
+    return SIM_SIGNAL::ExpandDeviceVoltages( aExpression, deviceExprs );
 }
 
 
@@ -3911,7 +4024,7 @@ wxString SIMULATOR_FRAME_UI::spiceSignal( const wxString& aSignal )
         if( aSignal.IsSameAs( name, false ) )
         {
             ensureDeviceVoltage( id );
-            return vectorNameFromSignalId( id );
+            return deviceVectorName( id );
         }
     }
 
@@ -3934,12 +4047,28 @@ void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 {
     constexpr const char* cmd = "let user{} = {}";
 
+    std::set<wxString> plottedVectors;
+
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
+    {
+        for( const auto& [name, trace] : plotTab->GetTraces() )
+            plottedVectors.insert( trace->GetVectorName() );
+    }
+
     for( const auto& [id, signal] : m_userDefinedSignals )
     {
         wxString expanded = expandDeviceVoltages( signal );
+        wxString vector = vectorNameFromSignalId( id );
 
         simulator()->Command( "echo " + fmt::format( cmd, id, expanded.ToStdString() ) );
         simulator()->Command( fmt::format( cmd, id, quoteNetNames( expanded ).ToStdString() ) );
+
+        // ngspice can reject an expression without a word, which would leave an empty trace
+        if( plottedVectors.count( vector ) && simulator()->GetGainVector( vector.ToStdString(), 1 ).empty() )
+        {
+            appendConsoleText( wxString::Format( _( "Cannot evaluate user-defined signal '%s'.\n" ), signal ),
+                               RPT_SEVERITY_ERROR );
+        }
     }
 
     // Component voltages are re-evaluated on demand for this plot.
@@ -4005,6 +4134,9 @@ bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
 
     m_plotNotebook->DeleteAllPages();
     m_userDefinedSignals.clear();
+
+    // New tabs can reuse the addresses of the deleted ones
+    m_lastSignalView.clear();
 
     if( legacy )
     {
@@ -4212,12 +4344,18 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                         // (30, 70 or 160, 45, 70) were entered by the user.
                         const nlohmann::json& margins_js = tab_js["margins"];
                         const int             defaults[4] = { 30, 70, 45, 70 };
+                        SIM_VIEW*             view = plotTab->GetDefaultView();
+
+                        // Workbooks from before this change may hold a bottom margin grown to fit the font
+                        int autoBottom = view ? std::max( view->calcBottomMargin(), defaults[2] ) : defaults[2];
 
                         for( int idx = 0; idx < 4; ++idx )
                         {
-                            int value = margins_js.value( MARGIN_KEYS[idx], defaults[idx] );
+                            int  value = margins_js.value( MARGIN_KEYS[idx], defaults[idx] );
+                            bool automatic = value == defaults[idx] || ( idx == 1 && value == 160 )
+                                             || ( idx == 2 && value >= defaults[2] && value <= autoBottom );
 
-                            if( value != defaults[idx] && !( idx == 1 && value == 160 ) )
+                            if( !automatic )
                                 userMargins[idx] = value;
                         }
                     }
@@ -5681,6 +5819,13 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             }
         }
 
+        // Component voltages are listed only when all voltages are saved, but a plotted one stays
+        for( auto& [trace, info] : traceMap )
+        {
+            if( info.Vector.IsEmpty() && m_deviceVoltageVectors.count( trace->GetVectorName() ) )
+                info = { trace->GetVectorName(), trace->GetType(), !aFinal };
+        }
+
         // Two passes so that DC-sweep sub-traces get deleted and re-created:
 
         for( const auto& [trace, traceInfo] : traceMap )
@@ -5797,6 +5942,10 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             }
         }
     }
+
+    // The let and meas commands above report through ngspice, which would otherwise wait for the next run
+    if( aFinal )
+        FlushSimConsole();
 }
 
 

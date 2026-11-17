@@ -50,6 +50,10 @@ static wxString formatFloat( double x, int nDigits )
 
     rv.Printf( fmt, x );
 
+    // A tick a rounding error below zero would otherwise read "-0.0"
+    if( rv.StartsWith( wxS( "-" ) ) && rv.find_first_not_of( wxS( "-0." ) ) == wxString::npos )
+        rv = rv.Mid( 1 );
+
     return rv;
 }
 
@@ -241,9 +245,7 @@ public:
 
     void ResetDataRange() override
     {
-        m_minV = m_startTime;
-        m_maxV = m_endTime;
-        m_rangeSet = true;
+        SetDataRange( m_startTime, m_endTime );
     }
 
 protected:
@@ -1918,20 +1920,29 @@ void SIM_VIEW::UpdateMargins()
     if( !m_inMarginRefit )
         m_marginRefits = 0;
 
-    int  oldLeft = GetMarginLeft();
+    int  oldTop = GetMarginTop();
     int  oldRight = GetMarginRight();
+    int  oldBottom = GetMarginBottom();
+    int  oldLeft = GetMarginLeft();
     int  left = calcLeftMargin();
     bool tranOrDC = m_plotTab->GetSimType() == ST_TRAN || m_plotTab->GetSimType() == ST_DC;
+    bool powerAxis = false;
+
+    // Stacked views share an X scale, so one Power axis widens every view's right margin
+    for( SIM_VIEW* view : m_plotTab->GetViews() )
+        powerAxis |= view->m_axis_y3 && view->m_axis_y3->IsVisible();
 
     auto userOr = [this]( int aIndex, int aAuto )
     {
         return m_userMargins[aIndex] >= 0 ? m_userMargins[aIndex] : aAuto;
     };
 
+    int right = userOr( 1, tranOrDC && powerAxis ? 160 : 70 );
+
     // Reserve the Power margin only while the Power axis has traces.
     if( tranOrDC && m_axis_y3 && m_axis_y3->IsVisible() )
     {
-        SetMargins( userOr( 0, 30 ), userOr( 1, 160 ), userOr( 2, calcBottomMargin() ), left );
+        SetMargins( userOr( 0, 30 ), right, userOr( 2, calcBottomMargin() ), left );
 
         if( m_axis_y2 )
             m_axis_y2->SetNameAlign( mpALIGN_BORDER_RIGHT );
@@ -1941,7 +1952,7 @@ void SIM_VIEW::UpdateMargins()
     }
     else if( tranOrDC )
     {
-        SetMargins( userOr( 0, 30 ), userOr( 1, 70 ), userOr( 2, calcBottomMargin() ), left );
+        SetMargins( userOr( 0, 30 ), right, userOr( 2, calcBottomMargin() ), left );
 
         if( m_axis_y2 )
             m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
@@ -1953,12 +1964,23 @@ void SIM_VIEW::UpdateMargins()
     }
 
     // Margins feed the data->pixel transform, so re-fit to the desired bounds (keeping zoom/pan).
-    if( GetMarginRight() != oldRight || GetMarginLeft() != oldLeft )
+    if( GetMarginTop() != oldTop || GetMarginRight() != oldRight || GetMarginBottom() != oldBottom
+        || GetMarginLeft() != oldLeft )
     {
         // Siblings have their own margins, so don't mirror the X range onto them.
         m_suppressXSync = true;
         Fit( m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax );
         m_suppressXSync = false;
+    }
+
+    // Stacked views share their side margins, and a sibling already at them stops the recursion
+    if( GetMarginLeft() != oldLeft || GetMarginRight() != oldRight )
+    {
+        for( SIM_VIEW* view : m_plotTab->GetViews() )
+        {
+            if( view != this && ( view->GetMarginLeft() != left || view->GetMarginRight() != right ) )
+                view->UpdateMargins();
+        }
     }
 }
 
@@ -2636,8 +2658,9 @@ SIM_VIEW* SIM_PLOT_TAB::AddView()
 
     view->updateAxes();
 
-    // a mpInfoLegend displays the name of traces on the left top panel corner:
-    mpInfoLegend* legend = new mpInfoLegend( wxRect( 0, 0, 200, 40 ), wxTRANSPARENT_BRUSH );
+    // Inside the plot area, so the opaque legend does not hide the Y axis name and top labels
+    mpInfoLegend* legend = new mpInfoLegend( wxRect( view->GetMarginLeft() + 8, view->GetMarginTop() + 8, 200, 40 ),
+                                             wxTRANSPARENT_BRUSH );
     legend->SetVisible( false );
     view->AddLayer( legend );
     view->m_legend = legend;
@@ -2959,22 +2982,34 @@ bool SIM_PLOT_TAB::GetY3Scale( double* aMin, double* aMax ) const
 
 void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
 {
+    // Stacked views need not all have this axis
     for( SIM_VIEW* view : m_views )
-        view->SetY1Scale( aLock, aMin, aMax );
+    {
+        if( !view->GetLabelY1().IsEmpty() )
+            view->SetY1Scale( aLock, aMin, aMax );
+    }
 }
 
 
 void SIM_PLOT_TAB::SetY2Scale( bool aLock, double aMin, double aMax )
 {
+    // Stacked views need not all have this axis
     for( SIM_VIEW* view : m_views )
-        view->SetY2Scale( aLock, aMin, aMax );
+    {
+        if( !view->GetLabelY2().IsEmpty() )
+            view->SetY2Scale( aLock, aMin, aMax );
+    }
 }
 
 
 void SIM_PLOT_TAB::SetY3Scale( bool aLock, double aMin, double aMax )
 {
+    // Stacked views need not all have this axis
     for( SIM_VIEW* view : m_views )
-        view->SetY3Scale( aLock, aMin, aMax );
+    {
+        if( !view->GetLabelY3().IsEmpty() )
+            view->SetY3Scale( aLock, aMin, aMax );
+    }
 }
 
 

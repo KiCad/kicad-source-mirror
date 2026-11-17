@@ -856,9 +856,6 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	bPlotSetupSizer->Add( m_appearanceSizer, 0, wxEXPAND|wxALL, 5 );
 
-
-	bPlotSetupSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_marginsSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelPlotSetup, wxID_ANY, _("Margins") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerMargins;
@@ -925,6 +922,9 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 
 	bPlotSetupSizer->Add( m_marginsSizer, 0, wxEXPAND|wxALL, 5 );
+
+
+	bPlotSetupSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	m_panelPlotSetup->SetSizer( bPlotSetupSizer );
