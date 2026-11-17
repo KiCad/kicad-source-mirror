@@ -51,18 +51,35 @@ public:
     wxWindow* ResolvePageForSearch( size_t aPage );
 
     /**
-     * @return the page contents, or nullptr for a lazy page that has not been shown or resolved.
+     * Destroy a lazy page that was built for search and never shown, so it is built again when
+     * it is shown. Does nothing to any other page.
      */
-    wxWindow* GetResolvedPage( size_t aPage );
+    void ReleasePageBuiltForSearch( size_t aPage );
 
-    wxWindow* GetBuiltPageForSearch( size_t aPage ) const;
+    /**
+     * @return the page contents, or nullptr for a lazy page that has not been built. A page built
+     *         only for search is returned too, so a dialog can keep it in step with shared data.
+     */
+    wxWindow* GetResolvedPage( size_t aPage ) const;
+
+    /**
+     * @return true when the page takes part in validation and settings writeback, which a lazy
+     *         page does once it has been shown or resolved, but not when it was built for search.
+     */
+    bool IsPageActive( size_t aPage ) const;
 
     bool IsLazyPage( size_t aPage ) const;
 
     wxTreeItemId GetPageTreeItem( size_t aPage ) const { return m_treeIds[aPage]; }
 
+    /// True while a lazy page is being constructed and loaded, before its controls are final
+    bool IsBuildingPage() const { return m_buildingPage; }
+
 private:
+    friend class LAZY_PAGE;
+
     bool m_resolvingForSearch;
+    bool m_buildingPage;
 };
 
 

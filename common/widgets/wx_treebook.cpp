@@ -29,8 +29,9 @@
 class LAZY_PAGE : public wxPanel
 {
 public:
-    LAZY_PAGE( wxWindow* aParent, std::function<wxWindow*( wxWindow* aParent )> aLazyCtor ) :
-            wxPanel( aParent, wxID_ANY ),
+    LAZY_PAGE( WX_TREEBOOK* aBook, std::function<wxWindow*( wxWindow* aParent )> aLazyCtor ) :
+            wxPanel( aBook, wxID_ANY ),
+            m_book( aBook ),
             m_lazyCtor( std::move( aLazyCtor ) ),
             m_mainSizer( nullptr ),
             m_contents( nullptr ),
@@ -60,9 +61,18 @@ public:
         return m_contents;
     }
 
-    wxWindow* Contents() const { return m_active ? m_contents : nullptr; }
+    wxWindow* Contents() const { return m_contents; }
 
-    wxWindow* BuiltContents() const { return m_contents; }
+    void Release()
+    {
+        if( m_active || !m_contents )
+            return;
+
+        m_contents->Destroy();
+        m_contents = nullptr;
+    }
+
+    bool IsActive() const { return m_active; }
 
     bool Validate() override { return !m_active || wxPanel::Validate(); }
 
@@ -88,6 +98,8 @@ private:
         if( m_contents )
             return;
 
+        SCOPED_SET_RESET building( m_book->m_buildingPage, true );
+
         m_contents = m_lazyCtor( this );
         m_mainSizer->Add( m_contents, 1, wxEXPAND, 5 );
         m_mainSizer->Layout();
@@ -98,6 +110,7 @@ private:
             dlg->SelectAllInTextCtrls( GetChildren() );
     }
 
+    WX_TREEBOOK*                                  m_book;
     std::function<wxWindow*( wxWindow* aParent )> m_lazyCtor;
 
     wxSizer*   m_mainSizer;
@@ -109,7 +122,8 @@ private:
 WX_TREEBOOK::WX_TREEBOOK( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
                           const wxString& name ) :
         wxTreebook( parent, id, pos, size, style, name ),
-        m_resolvingForSearch( false )
+        m_resolvingForSearch( false ),
+        m_buildingPage( false )
 {
 }
 
@@ -155,7 +169,7 @@ wxWindow* WX_TREEBOOK::ResolvePageForSearch( size_t aPage )
 }
 
 
-wxWindow* WX_TREEBOOK::GetResolvedPage( size_t aPage )
+wxWindow* WX_TREEBOOK::GetResolvedPage( size_t aPage ) const
 {
     wxWindow* page = GetPage( aPage );
 
@@ -166,16 +180,23 @@ wxWindow* WX_TREEBOOK::GetResolvedPage( size_t aPage )
 }
 
 
-bool WX_TREEBOOK::IsLazyPage( size_t aPage ) const
+void WX_TREEBOOK::ReleasePageBuiltForSearch( size_t aPage )
 {
-    return dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) != nullptr;
+    if( LAZY_PAGE* lazyPage = dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) )
+        lazyPage->Release();
 }
 
 
-wxWindow* WX_TREEBOOK::GetBuiltPageForSearch( size_t aPage ) const
+bool WX_TREEBOOK::IsPageActive( size_t aPage ) const
 {
-    if( LAZY_PAGE* page = dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) )
-        return page->BuiltContents();
+    if( LAZY_PAGE* lazyPage = dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) )
+        return lazyPage->IsActive();
 
-    return GetPage( aPage );
+    return true;
+}
+
+
+bool WX_TREEBOOK::IsLazyPage( size_t aPage ) const
+{
+    return dynamic_cast<LAZY_PAGE*>( GetPage( aPage ) ) != nullptr;
 }

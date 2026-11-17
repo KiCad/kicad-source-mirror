@@ -1676,6 +1676,8 @@ void EDA_BASE_FRAME::ShowPreferences( const wxString& aStartPage, const wxString
     PAGED_DIALOG dlg( this, _( "Preferences" ), true, true, wxEmptyString,
                       wxWindow::FromDIP( wxSize( 980, 560 ), nullptr ) );
 
+    // Each page is built by its own kiface and refers to no other, so search need not keep them
+    dlg.ReleasePagesAfterIndexing();
     dlg.SetEvtHandlerEnabled( false );
 
     {

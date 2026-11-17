@@ -24,7 +24,10 @@
 #include <dialog_shim.h>
 #include <widgets/wx_treebook.h>
 
+#include <optional>
 #include <set>
+
+#include <wx/weakref.h>
 
 
 class WX_INFOBAR;
@@ -85,6 +88,12 @@ public:
      */
     void ReuseSearchLabels( const wxString& aScope, const wxString& aIdentity, const std::set<size_t>& aPages );
 
+    /**
+     * Destroy each page the search builds once its labels and values are read, instead of keeping
+     * every page of the dialog built. Only for dialogs whose pages hold no pointers to each other.
+     */
+    void ReleasePagesAfterIndexing() { m_releaseIndexedPages = true; }
+
 protected:
     void finishInitialization();
 
@@ -104,7 +113,15 @@ protected:
     void onSearchEnter( wxCommandEvent& aEvent );
     void onSearchCharHook( wxKeyEvent& aEvent );
 
+    /**
+     * Append the current values on page aPage, which can change after its labels were read.
+     * The base reads the controls of a built page and never builds one, so a dialog that reuses
+     * labels for an unbuilt page must supply that page's values from its own data.
+     */
     virtual void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const;
+
+    /// Called before AppendSearchTerms() is asked about each page for one query
+    virtual void BeginSearchPass() {}
 
     /**
      * Read current control values and choices without committing edits.
@@ -112,6 +129,13 @@ protected:
      */
     static void AppendControlSearchTerms( wxWindow* aWindow, std::vector<wxString>& aTerms,
                                           bool aIncludeValues = true );
+
+    /**
+     * Replace the first aShown among aTerms from aFirst on with aCurrent, or append aCurrent when
+     * aShown is not there. A page not shown uses it for a value changed since the page last read it.
+     */
+    static void ReplaceSearchTerm( std::vector<wxString>& aTerms, size_t aFirst, const wxString& aShown,
+                                   const wxString& aCurrent );
 
     /// Terms for a page listing the project's text variables, which it reads rather than owns.
     void AppendTextVarSearchTerms( std::vector<wxString>& aTerms ) const;
@@ -137,14 +161,19 @@ private:
     /// Tree path used to identify collapsed sections.
     wxString pagePath( size_t aPage ) const;
 
-    void saveTreeExpansion() const;
-    void loadTreeExpansion();
+    std::set<wxString> collapsedNodes() const;
+    void               saveTreeExpansion() const;
+    void               loadTreeExpansion();
+    void               restoreTreeExpansion( const std::set<wxString>& aCollapsed );
+
+    bool isExcludedFromSearch( const wxWindow* aWindow ) const;
 
     /// Tree path of a page, lowercased, prefixed by its parent so "schematic colors" finds Colors
     wxString              pageSearchTitle( size_t aPage ) const;
     void                  onSearchIdle( wxIdleEvent& aEvent );
     void                  collectSearchText( wxWindow* aWindow, std::vector<wxString>& aTexts ) const;
     std::vector<wxString> buildPageSearchIndex( size_t aPage );
+    void                  indexPage( size_t aPage );
     void                  refreshSearch();
     void                  updateSearch( SEARCH_ACTION aAction );
 
@@ -159,13 +188,20 @@ private:
 
     wxSearchCtrl*                      m_searchCtrl;
     std::vector<std::vector<wxString>> m_searchIndex; ///< Lowercased page title and labels, per page
-    std::set<wxWindow*>                m_searchExcludedControls;
-    std::set<wxBookCtrlBase*>          m_searchExcludedBookTitles;
+    std::vector<wxWeakRef<wxWindow>>   m_searchExcludedControls;
+    std::vector<wxWeakRef<wxWindow>>   m_searchExcludedBookTitles;
     wxString                           m_searchReuseScope;
     std::set<wxString>                 m_reusableSearchPaths;
     std::vector<bool>                  m_searchLabelsPending; ///< Pages still waiting for their labels
+    std::vector<std::vector<wxString>> m_releasedPageValues;  ///< Lowercased values of released pages
+    bool                               m_releaseIndexedPages = false;
+    bool                               m_indexingPage = false;
     bool                               m_indexingSearch = false;
     SEARCH_ACTION                      m_pendingSearchAction = SEARCH_ACTION::REFRESH;
+    bool                               m_selectingSearchMatch = false;
+
+    /// Sections collapsed before the query, restored when it is cleared
+    std::optional<std::set<wxString>> m_collapsedBeforeSearch;
 
     wxBoxSizer* m_buttonsSizer;
 

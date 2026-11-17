@@ -152,9 +152,7 @@ private:
             return;
         }
 
-        if( m_treebook->GetBuiltPageForSearch( aPage ) )
-            PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
-
+        PAGED_DIALOG::AppendSearchTerms( aPage, aTerms );
         aTerms.push_back( m_liveTerm );
 
         if( m_notebook )
@@ -169,6 +167,98 @@ private:
     wxNotebook*   m_notebook = nullptr;
 
     std::optional<wxString> m_termOnPageChange;
+};
+
+
+class COUNTING_PANEL : public wxPanel
+{
+public:
+    explicit COUNTING_PANEL( wxWindow* aParent ) :
+            wxPanel( aParent )
+    {
+        new wxStaticText( this, wxID_ANY, wxS( "Deep setting" ) );
+        new wxTextCtrl( this, wxID_ANY, wxS( "Value 4217" ) );
+    }
+
+    bool Validate() override
+    {
+        ++m_validated;
+        return true;
+    }
+
+    bool TransferDataFromWindow() override
+    {
+        ++m_transferred;
+        return true;
+    }
+
+    int m_validated = 0;
+    int m_transferred = 0;
+};
+
+
+/// Alpha, Group > Leaf, Beta, Lazy
+class TEST_TREE_DIALOG : public PAGED_DIALOG
+{
+public:
+    static constexpr size_t ALPHA = 0;
+    static constexpr size_t GROUP = 1;
+    static constexpr size_t BETA = 3;
+    static constexpr size_t LAZY = 4;
+
+    explicit TEST_TREE_DIALOG( bool aReleasePages = false ) :
+            PAGED_DIALOG( nullptr, wxS( "Search tree regression test" ), false, false )
+    {
+        if( aReleasePages )
+            ReleasePagesAfterIndexing();
+
+        SetEvtHandlerEnabled( false );
+        m_treebook->AddPage( textPage( wxS( "Shared leaf word" ) ), wxS( "Alpha" ) );
+        m_treebook->AddPage( textPage( wxS( "Group options" ) ), wxS( "Group" ) );
+        m_treebook->AddSubPage( textPage( wxS( "Shared word" ) ), wxS( "Leaf" ) );
+        m_treebook->AddPage( textPage( wxS( "Beta setting 4217" ) ), wxS( "Beta" ) );
+        m_treebook->AddLazyPage(
+                [this]( wxWindow* aParent ) -> wxWindow*
+                {
+                    m_counting = new COUNTING_PANEL( aParent );
+                    return m_counting;
+                },
+                wxS( "Lazy" ) );
+        SetEvtHandlerEnabled( true );
+    }
+
+    void SetQuery( const wxString& aQuery )
+    {
+        wxSearchCtrl* search = dynamic_cast<wxSearchCtrl*>( FindWindowByName( wxSearchCtrlNameStr, this ) );
+        BOOST_REQUIRE( search );
+        search->SetValue( aQuery );
+    }
+
+    void FinishSearch()
+    {
+        for( size_t page = 0; page <= m_treebook->GetPageCount(); ++page )
+        {
+            wxIdleEvent event;
+            ProcessWindowEvent( event );
+
+            if( !event.MoreRequested() )
+                return;
+        }
+
+        BOOST_FAIL( "Search indexing did not finish" );
+    }
+
+    bool Accept() { return Validate() && TransferDataFromWindow(); }
+
+    COUNTING_PANEL* m_counting = nullptr;
+
+private:
+    wxPanel* textPage( const wxString& aText )
+    {
+        wxPanel* panel = new wxPanel( m_treebook );
+        new wxStaticText( panel, wxID_ANY, aText );
+        return panel;
+    }
 };
 } // namespace
 
@@ -275,9 +365,6 @@ BOOST_AUTO_TEST_CASE( InitialSearchYieldsBetweenPagesAndUsesTheLatestQuery )
     dialog->SetQuery( wxS( "No matching setting" ) );
     BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
 
-    BOOST_CHECK( dialog->IndexNextPage() );
-    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
-
     dialog->SetQuery( wxS( "Static setting" ) );
     dialog->FinishSearch();
     BOOST_CHECK( !lazyPage->GetChildren().IsEmpty() );
@@ -292,7 +379,6 @@ BOOST_AUTO_TEST_CASE( ClearingSearchStopsPendingPageConstruction )
     wxWindow*           lazyPage = dialog->GetTreebook()->GetPage( 1 );
 
     dialog->SetQuery( wxS( "Static setting" ) );
-    BOOST_CHECK( dialog->IndexNextPage() );
     dialog->SetQuery( wxEmptyString );
     BOOST_CHECK( !dialog->IndexNextPage() );
     BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
@@ -424,7 +510,7 @@ BOOST_AUTO_TEST_CASE( RevealedControlsRefreshMatchesWithoutChangingPages )
     dialog->FinishSearch();
     BOOST_CHECK( dialog->PageMatches() );
     BOOST_CHECK_EQUAL( dialog->GetTreebook()->GetSelection(), 0 );
-    BOOST_CHECK( !dialog->GetTreebook()->GetResolvedPage( 1 ) );
+    BOOST_CHECK( !dialog->GetTreebook()->IsPageActive( 1 ) );
 
     BOOST_CHECK( dialog->SearchMatches( wxS( "sheet backgrounds" ) ) );
     background->Hide();
@@ -554,6 +640,132 @@ BOOST_AUTO_TEST_CASE( GridSearchReadsTheEditorWithoutCommittingIt )
     grid->DeleteRows( 0 );
     BOOST_CHECK( !dialog->SearchMatches( wxS( "DraftVariableName" ) ) );
     BOOST_CHECK( !dialog->SearchMatches( wxS( "VariableContent" ) ) );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( PagesBuiltForSearchSkipWritebackUntilShown )
+{
+    TEST_TREE_DIALOG* dialog = new TEST_TREE_DIALOG();
+    WX_TREEBOOK*      book = dialog->GetTreebook();
+
+    // Beta matches first, so the search builds Lazy without showing it
+    dialog->SetQuery( wxS( "setting" ) );
+    dialog->FinishSearch();
+    BOOST_REQUIRE( dialog->m_counting );
+    BOOST_CHECK_EQUAL( book->GetSelection(), static_cast<int>( TEST_TREE_DIALOG::BETA ) );
+
+    // The dialog keeps a page built for search in step with its data, but OK leaves it alone
+    BOOST_CHECK( book->GetResolvedPage( TEST_TREE_DIALOG::LAZY ) == dialog->m_counting );
+    BOOST_CHECK( !book->IsPageActive( TEST_TREE_DIALOG::LAZY ) );
+    BOOST_CHECK( dialog->Accept() );
+    BOOST_CHECK_EQUAL( dialog->m_counting->m_validated, 0 );
+    BOOST_CHECK_EQUAL( dialog->m_counting->m_transferred, 0 );
+
+    book->SetSelection( TEST_TREE_DIALOG::LAZY );
+    BOOST_CHECK( book->IsPageActive( TEST_TREE_DIALOG::LAZY ) );
+    BOOST_CHECK( dialog->Accept() );
+    BOOST_CHECK_EQUAL( dialog->m_counting->m_validated, 1 );
+    BOOST_CHECK_EQUAL( dialog->m_counting->m_transferred, 1 );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( ClearingTheQueryRestoresCollapsedSections )
+{
+    TEST_TREE_DIALOG* dialog = new TEST_TREE_DIALOG();
+    WX_TREEBOOK*      book = dialog->GetTreebook();
+
+    book->CollapseNode( TEST_TREE_DIALOG::GROUP );
+    dialog->SetQuery( wxS( "shared" ) );
+    dialog->FinishSearch();
+    BOOST_CHECK( book->IsNodeExpanded( TEST_TREE_DIALOG::GROUP ) );
+    BOOST_CHECK_EQUAL( book->GetSelection(), static_cast<int>( TEST_TREE_DIALOG::ALPHA ) );
+
+    dialog->SetQuery( wxEmptyString );
+    BOOST_CHECK( !book->IsNodeExpanded( TEST_TREE_DIALOG::GROUP ) );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( PageChosenWhileIndexingIsKeptWhenIndexingFinishes )
+{
+    TEST_TREE_DIALOG* control = new TEST_TREE_DIALOG();
+
+    control->SetQuery( wxS( "deep" ) );
+    control->FinishSearch();
+    BOOST_CHECK_EQUAL( control->GetTreebook()->GetSelection(), static_cast<int>( TEST_TREE_DIALOG::LAZY ) );
+    control->Destroy();
+
+    TEST_TREE_DIALOG* dialog = new TEST_TREE_DIALOG();
+
+    dialog->SetQuery( wxS( "deep" ) );
+    dialog->GetTreebook()->SetSelection( TEST_TREE_DIALOG::BETA );
+    wxTheApp->ProcessPendingEvents();
+    dialog->FinishSearch();
+    BOOST_CHECK_EQUAL( dialog->GetTreebook()->GetSelection(), static_cast<int>( TEST_TREE_DIALOG::BETA ) );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( VisitingAReusedPageKeepsItsLabelsForTheNextOpening )
+{
+    TEST_SEARCH_DIALOG* first = new TEST_SEARCH_DIALOG( true, wxS( "visit regression" ) );
+    BOOST_CHECK( first->SearchMatches( wxS( "Static setting" ) ) );
+    first->Destroy();
+
+    // Building the page excludes its heading, which must not count as a change of its labels
+    TEST_SEARCH_DIALOG* second = new TEST_SEARCH_DIALOG( true, wxS( "visit regression" ) );
+    second->GetTreebook()->SetSelection( 1 );
+    second->Destroy();
+
+    TEST_SEARCH_DIALOG* third = new TEST_SEARCH_DIALOG( true, wxS( "visit regression" ) );
+    wxWindow*           lazyPage = third->GetTreebook()->GetPage( 1 );
+
+    third->SetQuery( wxS( "General" ) );
+    third->FinishSearch();
+    BOOST_CHECK( lazyPage->GetChildren().IsEmpty() );
+    BOOST_CHECK( third->SearchMatches( wxS( "Static setting" ) ) );
+    third->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( ReleasedPagesStillMatchTheirLabelsAndValues )
+{
+    TEST_TREE_DIALOG* dialog = new TEST_TREE_DIALOG( true );
+    WX_TREEBOOK*      book = dialog->GetTreebook();
+
+    dialog->SetQuery( wxS( "zzqqxx" ) );
+    dialog->FinishSearch();
+    BOOST_CHECK( !book->GetResolvedPage( TEST_TREE_DIALOG::LAZY ) );
+
+    // Beta matches both queries first, so Lazy is never shown and answers from what it held
+    dialog->SetQuery( wxS( "setting" ) );
+    dialog->FinishSearch();
+    BOOST_CHECK( book->GetTreeCtrl()->IsBold( book->GetPageTreeItem( TEST_TREE_DIALOG::LAZY ) ) );
+
+    dialog->SetQuery( wxS( "4217" ) );
+    dialog->FinishSearch();
+    BOOST_CHECK( !book->GetResolvedPage( TEST_TREE_DIALOG::LAZY ) );
+    BOOST_CHECK( book->GetTreeCtrl()->IsBold( book->GetPageTreeItem( TEST_TREE_DIALOG::LAZY ) ) );
+
+    // Showing it builds it again
+    book->SetSelection( TEST_TREE_DIALOG::LAZY );
+    BOOST_CHECK( book->GetResolvedPage( TEST_TREE_DIALOG::LAZY ) );
+    dialog->Destroy();
+}
+
+
+BOOST_AUTO_TEST_CASE( OpenPageMatchesOnItsLabelsFromTheFirstKey )
+{
+    TEST_TREE_DIALOG* dialog = new TEST_TREE_DIALOG();
+    WX_TREEBOOK*      book = dialog->GetTreebook();
+
+    book->SetSelection( TEST_TREE_DIALOG::ALPHA );
+
+    // Leaf matches on its title straight away, but Alpha holds the word too and is not left
+    dialog->SetQuery( wxS( "leaf" ) );
+    BOOST_CHECK_EQUAL( book->GetSelection(), static_cast<int>( TEST_TREE_DIALOG::ALPHA ) );
     dialog->Destroy();
 }
 
