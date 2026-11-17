@@ -48,7 +48,7 @@ struct PROJECT_FILE_IMPLICIT_SAVE_FIXTURE
         fs::remove_all( m_dir );
         fs::create_directories( m_dir );
 
-        fs::path source = fs::path( KI_TEST::GetPcbnewTestDataDir() ) / "mdw_ctrl_board";
+        fs::path source = fs::path( KI_TEST::GetTestDataRootDir() ) / "common" / "git" / "mdw_ctrl_board";
 
         for( const char* name : { "ctrl-board.kicad_pro", "ctrl-board.kicad_pcb" } )
             fs::copy_file( source / name, m_dir / name );

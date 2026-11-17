@@ -43,6 +43,7 @@
 namespace
 {
 const int MM = pcbIUScale.mmToIU( 1.0 );
+const char* CTRL_BOARD = "../common/git/mdw_ctrl_board/ctrl-board.kicad_pcb";
 
 
 class HEADLESS_GAL : public KIGFX::GAL
@@ -190,7 +191,7 @@ struct PCB_OUTLINE_SNAP_FIXTURE : PCB_SNAP_FIXTURE
 
     PCB_OUTLINE_SNAP_FIXTURE()
     {
-        std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( "snap/ctrl-board.kicad_pcb" );
+        std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( CTRL_BOARD );
         const VECTOR2I         start( pcbIUScale.mmToIU( 73.66 ), pcbIUScale.mmToIU( 40.64 ) );
         const VECTOR2I         end( pcbIUScale.mmToIU( 173.99 ), pcbIUScale.mmToIU( 40.64 ) );
 
@@ -243,7 +244,7 @@ BOOST_FIXTURE_TEST_CASE( CommittedRemovalTakesItsExtensions, PCB_OUTLINE_SNAP_FI
 
 BOOST_FIXTURE_TEST_CASE( RemovedFootprintChildTakesItsExtensions, PCB_SNAP_FIXTURE )
 {
-    std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( "snap/ctrl-board.kicad_pcb" );
+    std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( CTRL_BOARD );
     FOOTPRINT*             footprint = nullptr;
     PCB_SHAPE*             child = nullptr;
 
@@ -289,7 +290,7 @@ BOOST_FIXTURE_TEST_CASE( RemovedFootprintChildTakesItsExtensions, PCB_SNAP_FIXTU
 
 BOOST_FIXTURE_TEST_CASE( RemovedFootprintChildIsNotRetained, PCB_SNAP_FIXTURE )
 {
-    std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( "snap/ctrl-board.kicad_pcb" );
+    std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( CTRL_BOARD );
     FOOTPRINT*             footprint = nullptr;
 
     for( FOOTPRINT* candidate : loaded->Footprints() )

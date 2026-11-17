@@ -41,7 +41,7 @@ BOOST_FIXTURE_TEST_CASE( CloneLeavesWorkTreeClean, KI_TEST::GIT_TEST_FIXTURE )
     const wxString sourcePath = TempPath() + sep + wxS( "source" );
     const wxString barePath = TempPath() + sep + wxS( "ctrl-board.git" );
     const wxString clonePath = TempPath() + sep + wxS( "clone" );
-    const wxString dataDir = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + wxS( "/common/git/ctrl-board/" );
+    const wxString dataDir = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + wxS( "/common/git/mdw_ctrl_board/" );
 
     // The campaign's ctrl-board seed keeps its .gitignore under a neutral name in the data directory
     const std::pair<wxString, wxString> files[] = { { wxS( "ctrl-board.kicad_pro" ), wxS( "ctrl-board.kicad_pro" ) },

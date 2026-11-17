@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE( OutdatedSymbolsListsRevisedInstances )
     SETTINGS_MANAGER           settingsManager;
     std::unique_ptr<SCHEMATIC> schematic;
 
-    KI_TEST::LoadSchematic( settingsManager, "outdated_symbols/ctrl-board", schematic );
+    KI_TEST::LoadSchematic( settingsManager, "../common/git/mdw_ctrl_board/ctrl-board", schematic );
 
     // carol's Rev 2 passives revises R and leaves C untouched
     KI_TEST::SCOPED_PROJECT_SYMBOL_LIBRARY library( schematic->Project(), "acme-passives",

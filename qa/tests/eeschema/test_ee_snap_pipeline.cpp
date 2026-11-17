@@ -78,7 +78,7 @@ struct EE_SNAP_FIXTURE
             view( nullptr ),
             painter( &gal )
     {
-        KI_TEST::LoadSchematic( settingsManager, wxS( "snap/pic_sockets" ), schematic );
+        KI_TEST::LoadSchematic( settingsManager, wxS( "../common/git/mdw_ctrl_board/pic_sockets" ), schematic );
 
         const VECTOR2I start( schIUScale.mmToIU( 259.08 ), schIUScale.mmToIU( 157.48 ) );
         const VECTOR2I end( schIUScale.mmToIU( 259.08 ), schIUScale.mmToIU( 119.38 ) );
