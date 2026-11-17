@@ -37,15 +37,10 @@ PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( wxWindow* aParen
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
     COLOR_SETTINGS*            current = ::GetColorSettings( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
-    // Store the current settings before reloading below
-    current->Store();
-    Pgm().GetSettingsManager().SaveColorSettings( current, "board" );
-
     m_optOverrideColors->SetValue( current->GetOverrideSchItemColors() );
 
     m_currentSettings = new COLOR_SETTINGS( *current );
 
-    Pgm().GetSettingsManager().ReloadColorSettings();
     createThemeList( cfg ? cfg->m_ColorTheme : DEFAULT_THEME );
 
     m_validLayers.push_back( F_Cu );
