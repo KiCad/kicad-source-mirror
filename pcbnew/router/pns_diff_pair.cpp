@@ -222,7 +222,7 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarge
 
     int              mask = aEntry.AllowedAngles() | DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_OBTUSE;
     auto             dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
-    wxString         failReason;
+    [[maybe_unused]] wxString failReason; // read only under DIFF_PLACER_EXTRA_VERBOSE
     bool             fail = false;
 
 #ifdef DIFF_PLACER_EXTRA_VERBOSE

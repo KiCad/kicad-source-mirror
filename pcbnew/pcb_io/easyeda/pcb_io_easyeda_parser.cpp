@@ -207,8 +207,6 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer( BOARD_ITEM_CONTAINER* aCo
 
             VECTOR2D fpOrigin( Convert( paramsRoot[1] ), Convert( paramsRoot[2] ) );
 
-            wxString packageName = wxString::Format( wxS( "Unknown_%s_%s" ), paramsRoot[1], paramsRoot[2] );
-
             wxArrayString paramParts = wxSplit( paramsRoot[3], '`', '\0' );
 
             EDA_ANGLE orientation;
@@ -225,13 +223,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer( BOARD_ITEM_CONTAINER* aCo
 
             for( int i = 1; i < (int) paramParts.size(); i += 2 )
             {
-                wxString key = paramParts[i - 1];
-                wxString value = paramParts[i];
-
-                if( key == wxS( "package" ) )
-                    packageName = value;
-
-                innerParamMap[key] = value;
+                innerParamMap[paramParts[i - 1]] = paramParts[i];
             }
 
             parts.RemoveAt( 0 );
