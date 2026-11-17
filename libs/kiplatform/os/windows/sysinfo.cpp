@@ -403,7 +403,10 @@ bool SYSINFO::gpuFromDirectX( std::vector<GPU_INFO>& aGpuInfos )
     IIDFromString( L"{7b7166ec-21c7-44ae-b21a-c9ae321ae369}", &iid_IDXGIFactory );
 
     IDXGIAdapter* pAdapter = NULL;
-    pCreateDXGIFactory     = (LPCREATEDXGIFACTORY) GetProcAddress( hDXGI, "CreateDXGIFactory" );
+    // Only a hop through void* restores the export's type without C4191
+    pCreateDXGIFactory = reinterpret_cast<LPCREATEDXGIFACTORY>(
+            reinterpret_cast<void*>( GetProcAddress( hDXGI, "CreateDXGIFactory" ) ) );
+
     if( pCreateDXGIFactory )
     {
         IDXGIFactory* pDXGIFactory;

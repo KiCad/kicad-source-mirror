@@ -319,7 +319,9 @@ bool RepairPlatformModelPreviewRegistration( wxString& aError )
     }
 
     using REGISTER_SERVER = HRESULT( STDAPICALLTYPE* )();
-    REGISTER_SERVER registerServer = reinterpret_cast<REGISTER_SERVER>( GetProcAddress( module, "DllRegisterServer" ) );
+    // FARPROC erases the export's type, and only a hop through void* restores it without C4191
+    REGISTER_SERVER registerServer = reinterpret_cast<REGISTER_SERVER>(
+            reinterpret_cast<void*>( GetProcAddress( module, "DllRegisterServer" ) ) );
     HRESULT         result = registerServer ? registerServer() : HRESULT_FROM_WIN32( ERROR_PROC_NOT_FOUND );
     FreeLibrary( module );
 

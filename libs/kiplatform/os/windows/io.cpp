@@ -366,8 +366,9 @@ long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString
 
         if( ntdll )
         {
-            pNtQueryDirectoryFile =
-                    (PFN_NtQueryDirectoryFile) GetProcAddress( ntdll, "NtQueryDirectoryFile" );
+            // Only a hop through void* restores the export's type without C4191
+            pNtQueryDirectoryFile = reinterpret_cast<PFN_NtQueryDirectoryFile>(
+                    reinterpret_cast<void*>( GetProcAddress( ntdll, "NtQueryDirectoryFile" ) ) );
         }
     }
 
