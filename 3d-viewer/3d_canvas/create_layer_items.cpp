@@ -494,7 +494,7 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                                     m_frontCounterboreCutouts.Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius,
                                                                    *track ) );
                                 }
-                                else
+                                else if( IsBackLayer( layer ) )
                                 {
                                     m_backCounterboreCutouts.Add( new FILLED_CIRCLE_2D( via_center, backdrillRadius,
                                                                   *track ) );
