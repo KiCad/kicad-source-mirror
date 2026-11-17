@@ -450,7 +450,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_minResolvedSpokesLabel->Wrap( -1 );
 	bSizer111->Add( m_minResolvedSpokesLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_minResolvedSpokeCountCtrl = new wxSpinCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_minResolvedSpokeCountCtrl = new wxSpinCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 0, 99, 0 );
 	bSizer111->Add( m_minResolvedSpokeCountCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
