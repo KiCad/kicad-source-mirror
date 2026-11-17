@@ -451,6 +451,7 @@ endif()
 
 # Keep build-system dependencies from the original single-entry registration
 add_dependencies( qa_all_tests qa_pcbnew )
+kicad_qa_fail_fast( qa_pcbnew )
 
 if( NOT KICAD_BUILD_QA_TESTS )
     set_target_properties( qa_pcbnew PROPERTIES EXCLUDE_FROM_ALL TRUE )

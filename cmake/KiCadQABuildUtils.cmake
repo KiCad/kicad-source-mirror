@@ -45,11 +45,27 @@ add_custom_target( qa_all
     DEPENDS qa_all_tests qa_all_tools
 )
 
+# Make faults, abort() and CRT asserts in a Windows QA executable fail at once instead of waiting on a dialog
+function( kicad_qa_fail_fast TEST_EXEC_TARGET )
+    if( WIN32 )
+        target_sources( ${TEST_EXEC_TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/qa/qa_utils/fail_fast.cpp )
+    endif()
+endfunction()
+
 # Add a target as a "QA test" executable:
 #   * Added as a CTest test with the given name
 #   * Excluded from ALL when KICAD_BUILD_QA_TESTS not set
 #   * Is a dependency of qa_all_tests
+#
+# NO_CATCH_SYSTEM_ERRORS lets a crash on any thread end the run, where Boost would hang that thread in the runner
+# TIMEOUT overrides the CTest default, in seconds
 function( kicad_add_boost_test TEST_EXEC_TARGET TEST_NAME)
+
+cmake_parse_arguments( ARG "NO_CATCH_SYSTEM_ERRORS" "TIMEOUT" "" ${ARGN} )
+
+if( ARG_UNPARSED_ARGUMENTS )
+    message( FATAL_ERROR "kicad_add_boost_test( ${TEST_NAME} ): unknown arguments ${ARG_UNPARSED_ARGUMENTS}" )
+endif()
 
 set(BOOST_TEST_PARAMS "")
 
@@ -61,10 +77,20 @@ if( KICAD_TEST_XML_OUTPUT )
     set(BOOST_TEST_PARAMS --logger=JUNIT,warning,${TEST_NAME}.boost-results.xml:HRF,message)
 endif()
 
+if( ARG_NO_CATCH_SYSTEM_ERRORS )
+    list( APPEND BOOST_TEST_PARAMS --catch_system_errors=no )
+endif()
+
 # Add the test to the CTest registry
 add_test( NAME ${TEST_NAME}
     COMMAND $<TARGET_FILE:${TEST_EXEC_TARGET}> ${BOOST_TEST_PARAMS}
 )
+
+if( ARG_TIMEOUT )
+    set_tests_properties( ${TEST_NAME} PROPERTIES TIMEOUT ${ARG_TIMEOUT} )
+endif()
+
+kicad_qa_fail_fast( ${TEST_EXEC_TARGET} )
 
 # Make the overall test meta-target depend on this test
 add_dependencies( qa_all_tests ${TEST_EXEC_TARGET} )
