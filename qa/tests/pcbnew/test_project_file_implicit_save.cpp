@@ -25,6 +25,7 @@
 #include <json_common.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <qa_utils/file_utils.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
@@ -42,12 +43,10 @@ namespace fs = std::filesystem;
  */
 struct PROJECT_FILE_IMPLICIT_SAVE_FIXTURE
 {
-    PROJECT_FILE_IMPLICIT_SAVE_FIXTURE()
+    PROJECT_FILE_IMPLICIT_SAVE_FIXTURE() :
+            m_temp( "kicad_qa_project_file_implicit_save" ),
+            m_dir( m_temp.Path() )
     {
-        m_dir = fs::temp_directory_path() / "kicad_qa_project_file_implicit_save";
-        fs::remove_all( m_dir );
-        fs::create_directories( m_dir );
-
         fs::path source = fs::path( KI_TEST::GetTestDataRootDir() ) / "common" / "git" / "mdw_ctrl_board";
 
         for( const char* name : { "ctrl-board.kicad_pro", "ctrl-board.kicad_pcb" } )
@@ -63,8 +62,6 @@ struct PROJECT_FILE_IMPLICIT_SAVE_FIXTURE
 
         if( m_mgr.IsProjectOpen() )
             m_mgr.UnloadProject( &m_mgr.Prj(), false );
-
-        fs::remove_all( m_dir );
     }
 
     static std::string readFile( const fs::path& aPath )
@@ -85,11 +82,12 @@ struct PROJECT_FILE_IMPLICIT_SAVE_FIXTURE
         BOOST_REQUIRE( m_board );
     }
 
-    fs::path               m_dir;
-    fs::path               m_proPath;
-    std::string            m_original;
-    SETTINGS_MANAGER       m_mgr;
-    std::unique_ptr<BOARD> m_board;
+    KI_TEST::SCOPED_TEMP_DIR m_temp;
+    fs::path                 m_dir;
+    fs::path                 m_proPath;
+    std::string              m_original;
+    SETTINGS_MANAGER         m_mgr;
+    std::unique_ptr<BOARD>   m_board;
 };
 
 
