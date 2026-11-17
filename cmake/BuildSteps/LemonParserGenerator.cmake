@@ -26,21 +26,22 @@
 # Get the name without extension
 get_filename_component( GRAMMAR_BASE ${GRAMMAR_FILE} NAME_WE )
 
-# Only regenerate the lemon code if the grammar is newer than the current code
-if( ${GRAMMAR_FILE} IS_NEWER_THAN ${GRAMMAR_DIR}/${GRAMMAR_BASE}.c )
+# The custom command decides when to regenerate, so a new lemon or template reaches an existing build
+execute_process(
+    COMMAND ${LEMON_EXE} -T${LEMON_TEMPLATE} -d${GRAMMAR_DIR} -q ${GRAMMAR_FILE}
+    WORKING_DIRECTORY ${GRAMMAR_DIR}
+    OUTPUT_VARIABLE _lemon_output
+    ERROR_VARIABLE  _lemon_error
+    RESULT_VARIABLE _lemon_result
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-    execute_process(
-        COMMAND ${LEMON_EXE} -T${LEMON_TEMPLATE} -d${GRAMMAR_DIR} -q ${GRAMMAR_FILE}
-        WORKING_DIRECTORY ${GRAMMAR_DIR}
-        OUTPUT_VARIABLE _lemon_output
-        ERROR_VARIABLE  _lemon_error
-        RESULT_VARIABLE _lemon_result
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-
-    if( NOT ${_lemon_result} EQUAL 0)
-        message( FATAL_ERROR "Lemon generator for ${GRAMMAR_FILE} has failed\n"
-                             "Error: ${_lemon_error}" )
-    endif()
-
+if( NOT "${_lemon_result}" EQUAL 0 )
+    # A partial output newer than its inputs would pass for current, so the next build would not retry
+    file( REMOVE ${GRAMMAR_DIR}/${GRAMMAR_BASE}.c ${GRAMMAR_DIR}/${GRAMMAR_BASE}.h )
+    message( FATAL_ERROR "Lemon generator for ${GRAMMAR_FILE} has failed\n"
+                         "Error: ${_lemon_error}" )
 endif()
+
+# Lemon leaves an unchanged header alone, which would leave this command out of date on every build
+file( TOUCH ${GRAMMAR_DIR}/${GRAMMAR_BASE}.h )

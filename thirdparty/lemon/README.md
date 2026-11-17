@@ -8,3 +8,8 @@ The files come from:
 * lemon.c - https://www.sqlite.org/src/file/tool/lemon.c
 
 It has been released into the public domain with the sqlite project.
+
+Local changes, to keep when updating from upstream:
+* lemon.c - The %extra_argument and %extra_context fetch macros cast the fetched
+  local to void, so a parser routine that never reads it raises no unused
+  variable warning (MSVC C4189 in yy_destructor).
