@@ -35,6 +35,10 @@
 #include <GL/glu.h>
 #endif
 
+#ifndef CALLBACK
+#define CALLBACK
+#endif
+
 /**
  * Convert a tessellator callback to the untyped pointer gluTessCallback takes.
  *
