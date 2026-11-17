@@ -175,6 +175,7 @@ private:
     std::vector<wxString> buildPageSearchIndex( size_t aPage );
     void                  indexPage( size_t aPage );
     void                  refreshSearch();
+    void                  refadeSearchMisses();
     void                  updateSearch( SEARCH_ACTION aAction );
 
     /**

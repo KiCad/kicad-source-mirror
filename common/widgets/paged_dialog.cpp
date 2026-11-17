@@ -98,6 +98,21 @@ void pruneDestroyed( std::vector<wxWeakRef<wxWindow>>& aWindows )
                        return !aRef;
                    } );
 }
+
+
+wxColour fadedTextColour( const wxTreeCtrl* aTree )
+{
+#ifdef __WXMAC__
+    // GRAYTEXT draws almost as dark as normal text on macOS, so fade the tree's own text halfway
+    wxColour fg = aTree->GetForegroundColour();
+    wxColour bg = aTree->GetBackgroundColour();
+
+    return wxColour( ( fg.Red() + bg.Red() ) / 2, ( fg.Green() + bg.Green() ) / 2, ( fg.Blue() + bg.Blue() ) / 2 );
+#else
+    // A high contrast palette picks this colour to stay readable
+    return wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+#endif
+}
 } // namespace
 
 
@@ -213,6 +228,14 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     m_searchCtrl->Bind( wxEVT_SEARCH, &PAGED_DIALOG::onSearchEnter, this );
     m_searchCtrl->Bind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onSearchCharHook, this );
     Bind( wxEVT_IDLE, &PAGED_DIALOG::onSearchIdle, this );
+
+    // Faded rows hold the colours of the theme they were drawn in, so fade them again after the tree updates
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          [this]( wxSysColourChangedEvent& aEvent )
+          {
+              aEvent.Skip();
+              CallAfter( &PAGED_DIALOG::refadeSearchMisses );
+          } );
 }
 
 
@@ -1187,7 +1210,7 @@ int PAGED_DIALOG::applySearch()
         }
     }
 
-    wxColour greyed = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    wxColour greyed = fadedTextColour( tree );
     int      current = m_treebook->GetSelection();
     int      target = wxNOT_FOUND;
 
@@ -1205,6 +1228,22 @@ int PAGED_DIALOG::applySearch()
     }
 
     return target;
+}
+
+
+void PAGED_DIALOG::refadeSearchMisses()
+{
+    wxTreeCtrl* tree = m_treebook->GetTreeCtrl();
+    wxColour    greyed = fadedTextColour( tree );
+
+    // Rerunning the search would also reopen sections the user collapsed since
+    for( size_t ii = 0; ii < m_treebook->GetPageCount(); ++ii )
+    {
+        wxTreeItemId item = m_treebook->GetPageTreeItem( ii );
+
+        if( tree->GetItemTextColour( item ).IsOk() )
+            tree->SetItemTextColour( item, greyed );
+    }
 }
 
 
