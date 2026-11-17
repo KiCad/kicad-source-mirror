@@ -3231,7 +3231,8 @@ HANDLER_RESULT<PlaceFromLibraryResponse> API_HANDLER_SCH::handlePlaceSymbolFromL
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( fmt::format( "error loading symbol '{}' from library", libId.Format().wx_str() ) );
+        e.set_error_message( fmt::format( "error loading symbol '{}' from library: {}", libId.Format().wx_str(),
+                                          ioe.What().utf8_string() ) );
         return tl::unexpected( e );
     }
 
