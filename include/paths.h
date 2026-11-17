@@ -260,7 +260,7 @@ public:
     static const wxString& GetBuildRoot();
 
     /**
-     * True when KiCad runs from its build tree or KICAD_RUN_FROM_BUILD_DIR is set.
+     * True when KICAD_RUN_FROM_BUILD_DIR is set or, outside macOS and Windows, the executable is in a build tree.
      */
     static bool RunningFromBuildDir();
 

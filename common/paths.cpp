@@ -196,17 +196,23 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
     if( aRespectRunFromBuildDir && RunningFromBuildDir() )
     {
         // Allow debugging from build dir by placing relevant files/folders in the build root
-#if defined( __WXMAC__ )
-        wxFileName fn;
-        fn.AssignDir( getOSXBundleRoot() );
-        fn.RemoveLastDir(); // Above the .app bundle
-        fn.RemoveLastDir(); // Above the target subdirectory to build root
-        path = fn.GetPath();
-#elif defined( __WXMSW__ )
-        path = getWindowsKiCadRoot();
-#else
         path = GetBuildRoot();
 
+#if defined( __WXMAC__ )
+        // KICAD_RUN_FROM_BUILD_DIR can be set outside a build tree
+        if( path.IsEmpty() )
+        {
+            wxFileName fn;
+            fn.AssignDir( getOSXBundleRoot() );
+            fn.RemoveLastDir(); // Above the .app bundle
+            fn.RemoveLastDir(); // Above the target subdirectory to build root
+            path = fn.GetPath();
+        }
+#elif defined( __WXMSW__ )
+        // KICAD_RUN_FROM_BUILD_DIR can be set outside a build tree
+        if( path.IsEmpty() )
+            path = getWindowsKiCadRoot();
+#else
         wxASSERT_MSG( !path.IsEmpty(), wxString::Format( wxT( "Could not find build root directory above %s" ),
                                                          GetExecutablePath() ) );
 #endif
@@ -742,13 +748,17 @@ const wxString& PATHS::GetBuildRoot()
 
 bool PATHS::RunningFromBuildDir()
 {
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
+    // The build root only locates stock data here; running from the tree stays opt-in
+    return wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr );
+#else
     return wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) || !GetBuildRoot().IsEmpty();
+#endif
 }
 
 
 wxString PATHS::FindKiCadBuildRoot( const wxString& aExecutablePath )
 {
-#if !defined( __WXMAC__ ) && !defined( __WXMSW__ )
     if( aExecutablePath.IsEmpty() )
         return wxEmptyString;
 
@@ -780,8 +790,4 @@ wxString PATHS::FindKiCadBuildRoot( const wxString& aExecutablePath )
         return wxEmptyString;
 
     return fn.GetPath();
-#else
-    wxUnusedVar( aExecutablePath );
-    return wxEmptyString;
-#endif
 }

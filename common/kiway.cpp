@@ -237,11 +237,10 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         wxString dname = dso_search_path( aFaceId );
 
         // Insert DLL search path for kicad_3dsg from build dir
-        const wxString& buildRoot = PATHS::GetBuildRoot();
-
         if( PATHS::RunningFromBuildDir() )
         {
-            wxFileName myPath;
+            const wxString& buildRoot = PATHS::GetBuildRoot();
+            wxFileName      myPath;
 
             if( !buildRoot.IsEmpty() )
                 myPath.AssignDir( buildRoot );
