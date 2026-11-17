@@ -1197,7 +1197,10 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             std::vector<VECTOR2I> stationarySelfPoints;
             std::vector<SEG>      stationarySelfSegments;
 
-            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+            // Table cells are rectangles but don't have corner handles, our generalized logic
+            // below would crash, so we skip them here
+            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item );
+                shape && item->Type() != SCH_TABLECELL_T )
             {
                 int editedIndex = getEditedPointIndex();
 
