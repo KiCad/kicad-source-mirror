@@ -162,7 +162,6 @@ std::unique_ptr<FOOTPRINT> PCB_IO::FootprintLoad( const wxString& aLibraryPath, 
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
-    return nullptr;
 }
 
 
