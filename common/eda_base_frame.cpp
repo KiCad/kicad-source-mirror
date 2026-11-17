@@ -70,6 +70,7 @@
 #include <widgets/wx_aui_art_providers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/wx_treebook.h>
+#include <ui_events.h>
 #include <wx/app.h>
 #include <wx/config.h>
 #include <wx/display.h>
@@ -171,6 +172,33 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     // hook wxEVT_CLOSE_WINDOW so we can call SaveSettings().  This function seems
     // to be called before any other hook for wxCloseEvent, which is necessary.
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
+
+    auto showInfoBar = [this]( wxCommandEvent& aEvent, int aIcon )
+    {
+        // A notice already showing is not replaced, so the sender keeps this one
+        if( !m_infoBar || m_infoBar->IsShown() )
+        {
+            aEvent.Skip();
+            return;
+        }
+
+        // Stays until closed so it cannot vanish unread
+        m_infoBar->RemoveAllButtons();
+        m_infoBar->AddCloseButton();
+        m_infoBar->ShowMessage( aEvent.GetString(), aIcon );
+    };
+
+    Bind( EDA_EVT_SHOW_ERROR_INFOBAR,
+          [showInfoBar]( wxCommandEvent& aEvent )
+          {
+              showInfoBar( aEvent, wxICON_ERROR );
+          } );
+
+    Bind( EDA_EVT_SHOW_WARNING_INFOBAR,
+          [showInfoBar]( wxCommandEvent& aEvent )
+          {
+              showInfoBar( aEvent, wxICON_WARNING );
+          } );
 
     KIPLATFORM::UI::SetWMClass( this, Pgm().GetDesktopAppId() );
 
