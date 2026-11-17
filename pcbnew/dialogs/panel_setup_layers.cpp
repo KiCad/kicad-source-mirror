@@ -828,6 +828,10 @@ bool PANEL_SETUP_LAYERS::transferDataFromWindow()
             default: t = LT_UNDEFINED; break;
             }
 
+            // A user layer loaded as "user" has no type and is shown as auxiliary, so keep it as loaded
+            if( t == LT_AUX && m_pcb->GetLayerType( layer ) == LT_UNDEFINED )
+                t = LT_UNDEFINED;
+
             if( m_pcb->GetLayerType( layer ) != t )
             {
                 m_pcb->SetLayerType( layer, t );
