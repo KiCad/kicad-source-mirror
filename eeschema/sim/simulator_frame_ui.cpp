@@ -1035,8 +1035,11 @@ void SIMULATOR_FRAME_UI::InitWorkbook()
 
 void SIMULATOR_FRAME_UI::SetSubWindowsSashSize()
 {
+    // The base class default is in raw pixels, which is too narrow on a scaled display
     if( m_splitterLeftRightSashPosition > 0 )
         m_splitterLeftRight->SetSashPosition( m_splitterLeftRightSashPosition );
+    else
+        m_splitterLeftRight->SetSashPosition( FromDIP( 300 ) );
 
     if( m_splitterPlotAndConsoleSashPosition > 0 )
         m_splitterPlotAndConsole->SetSashPosition( m_splitterPlotAndConsoleSashPosition );
