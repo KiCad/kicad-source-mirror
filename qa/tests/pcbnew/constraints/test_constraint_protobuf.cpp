@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE( DeserializeIgnoresIndexOnNonVertexAnchor )
     m->set_index( 5 );
 
     google::protobuf::Any container;
-    container.PackFrom( constraint );
+    BOOST_REQUIRE( container.PackFrom( constraint ) );
 
     PCB_CONSTRAINT restored( nullptr );
     BOOST_REQUIRE( restored.Deserialize( container ) );
@@ -185,7 +185,7 @@ BOOST_AUTO_TEST_CASE( DeserializeVertexWithoutIndexGetsSentinel )
     m->set_anchor( ConstraintAnchor::CA_VERTEX );
 
     google::protobuf::Any container;
-    container.PackFrom( constraint );
+    BOOST_REQUIRE( container.PackFrom( constraint ) );
 
     PCB_CONSTRAINT restored( nullptr );
     BOOST_REQUIRE( restored.Deserialize( container ) );
