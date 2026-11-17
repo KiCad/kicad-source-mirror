@@ -455,7 +455,7 @@ std::vector<REGION> BuildRegions( const S3DMODEL& aModel, const glm::dvec3& aSca
                 for( unsigned int corner = 0; corner < 3; ++corner )
                 {
                     unsigned int source = mesh.m_FaceIdx[offset + corner];
-                    auto [entry, inserted] = indices.emplace( source, indices.size() );
+                    auto [entry, inserted] = indices.emplace( source, static_cast<unsigned int>( indices.size() ) );
 
                     if( inserted )
                     {
