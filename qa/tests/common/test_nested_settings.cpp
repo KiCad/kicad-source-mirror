@@ -511,4 +511,71 @@ BOOST_AUTO_TEST_CASE( DefaultFillDoesNotChurnExistingFile )
 }
 
 
+/**
+ * A nested map param must drop a removed key from disk even when its settings sit two levels
+ * below the file, as the ngspice settings do under the schematic settings in a project file.
+ */
+class MAP_NESTED_SETTINGS : public NESTED_SETTINGS
+{
+public:
+    MAP_NESTED_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
+            NESTED_SETTINGS( "test_map", 0, aParent, aPath, false )
+    {
+        m_params.emplace_back( new PARAM_MAP<wxString>( "options", &m_options, {} ) );
+        LoadFromFile();
+    }
+
+    ~MAP_NESTED_SETTINGS() override { m_parent = nullptr; }
+
+    std::map<std::string, wxString> m_options;
+};
+
+
+BOOST_AUTO_TEST_CASE( RemovedKeyInDeepNestedMapIsDroppedFromFile )
+{
+    wxFileName tempDir( wxStandardPaths::Get().GetTempDir(), wxEmptyString );
+    wxString   tempName = wxString::Format( wxT( "kicad_qa_deep_map_%ld" ), wxGetProcessId() );
+    tempDir.AppendDir( tempName );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( tempDir.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    wxFileName tempFile( tempDir.GetPath(), wxT( "parent.json" ) );
+
+    {
+        DISK_PARENT_SETTINGS parent( tempFile.GetFullPath() );
+        ( *parent.Internals() )["/middle/leaf/options"_json_pointer] = { { "gmin", "1e-10" }, { "method", "gear" } };
+        BOOST_REQUIRE( parent.SaveToFile( wxEmptyString, true ) );
+    }
+
+    // Reopening from disk gives the root the baseline that would resurrect the key
+    {
+        DISK_PARENT_SETTINGS parent( tempFile.GetFullPath() );
+        parent.SetManager( reinterpret_cast<SETTINGS_MANAGER*>( 1 ) );
+        BOOST_REQUIRE( parent.LoadFromFile() );
+
+        TEST_NESTED_SETTINGS middle( &parent, "middle" );
+        MAP_NESTED_SETTINGS  leaf( &middle, "leaf" );
+
+        BOOST_REQUIRE_EQUAL( leaf.m_options.size(), 2u );
+        leaf.m_options.erase( "method" );
+
+        BOOST_REQUIRE( leaf.SaveToFile() );
+
+        // Unchecked, since a resurrected key leaves the bytes unchanged and skips the write
+        parent.SaveToFile();
+        parent.ReleaseNestedSettings( &middle );
+    }
+
+    std::ifstream  in( tempFile.GetFullPath().fn_str(), std::ios::in | std::ios::binary );
+    std::string    contents( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    nlohmann::json options = nlohmann::json::parse( contents )["middle"]["leaf"]["options"];
+
+    BOOST_CHECK( options.contains( "gmin" ) );
+    BOOST_CHECK( !options.contains( "method" ) );
+
+    wxRemoveFile( tempFile.GetFullPath() );
+    wxFileName::Rmdir( tempDir.GetPath() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

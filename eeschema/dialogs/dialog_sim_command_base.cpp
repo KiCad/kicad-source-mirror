@@ -890,6 +890,257 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_panelPlotSetup->Layout();
 	bPlotSetupSizer->Fit( m_panelPlotSetup );
 	m_notebook1->AddPage( m_panelPlotSetup, _("Plot Setup"), false );
+	m_panelSimOptions = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizerSimOptions;
+	bSizerSimOptions = new wxBoxSizer( wxVERTICAL );
+
+	m_simOptionsHint = new wxStaticText( m_panelSimOptions, wxID_ANY, _("These values are passed to ngspice as .options.  Leave a field empty to use the ngspice default.  Any .options directive on the schematic overrides these."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_simOptionsHint->Wrap( 500 );
+	bSizerSimOptions->Add( m_simOptionsHint, 0, wxALL, 10 );
+
+	wxBoxSizer* bSizerSimOptionsColumns;
+	bSizerSimOptionsColumns = new wxBoxSizer( wxHORIZONTAL );
+
+	wxFlexGridSizer* fgSimOptionsLeft;
+	fgSimOptionsLeft = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSimOptionsLeft->AddGrowableCol( 1 );
+	fgSimOptionsLeft->SetFlexibleDirection( wxHORIZONTAL );
+	fgSimOptionsLeft->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_labelMethod;
+	m_labelMethod = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Integration method (method):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelMethod->Wrap( -1 );
+	m_labelMethod->SetToolTip( _("Numerical integration method") );
+
+	fgSimOptionsLeft->Add( m_labelMethod, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxString m_optMethodChoices[] = { _("(default)"), _("trap"), _("gear") };
+	int m_optMethodNChoices = sizeof( m_optMethodChoices ) / sizeof( wxString );
+	m_optMethod = new wxChoice( m_panelSimOptions, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_optMethodNChoices, m_optMethodChoices, 0 );
+	m_optMethod->SetSelection( 0 );
+	m_optMethod->SetToolTip( _("Numerical integration method") );
+
+	fgSimOptionsLeft->Add( m_optMethod, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSimOptionsLeft->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	wxStaticText* m_labelReltol;
+	m_labelReltol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Relative tolerance (reltol):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelReltol->Wrap( -1 );
+	m_labelReltol->SetToolTip( _("Relative error tolerance (default 1e-3)") );
+
+	fgSimOptionsLeft->Add( m_labelReltol, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optReltol = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optReltol->SetToolTip( _("Relative error tolerance (default 1e-3)") );
+
+	fgSimOptionsLeft->Add( m_optReltol, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSimOptionsLeft->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	wxStaticText* m_labelAbstol;
+	m_labelAbstol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Absolute current tolerance (abstol):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelAbstol->Wrap( -1 );
+	m_labelAbstol->SetToolTip( _("Absolute current error tolerance (default 1e-12 A)") );
+
+	fgSimOptionsLeft->Add( m_labelAbstol, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optAbstol = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optAbstol->SetToolTip( _("Absolute current error tolerance (default 1e-12 A)") );
+
+	fgSimOptionsLeft->Add( m_optAbstol, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsAbstol;
+	m_unitsAbstol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("A"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsAbstol->Wrap( -1 );
+	fgSimOptionsLeft->Add( m_unitsAbstol, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelVntol;
+	m_labelVntol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Absolute voltage tolerance (vntol):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelVntol->Wrap( -1 );
+	m_labelVntol->SetToolTip( _("Absolute voltage error tolerance (default 1e-6 V)") );
+
+	fgSimOptionsLeft->Add( m_labelVntol, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optVntol = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optVntol->SetToolTip( _("Absolute voltage error tolerance (default 1e-6 V)") );
+
+	fgSimOptionsLeft->Add( m_optVntol, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsVntol;
+	m_unitsVntol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsVntol->Wrap( -1 );
+	fgSimOptionsLeft->Add( m_unitsVntol, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelChgtol;
+	m_labelChgtol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Charge tolerance (chgtol):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelChgtol->Wrap( -1 );
+	m_labelChgtol->SetToolTip( _("Absolute charge error tolerance (default 1e-14 C)") );
+
+	fgSimOptionsLeft->Add( m_labelChgtol, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optChgtol = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optChgtol->SetToolTip( _("Absolute charge error tolerance (default 1e-14 C)") );
+
+	fgSimOptionsLeft->Add( m_optChgtol, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsChgtol;
+	m_unitsChgtol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("C"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsChgtol->Wrap( -1 );
+	fgSimOptionsLeft->Add( m_unitsChgtol, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelTrtol;
+	m_labelTrtol = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Truncation error factor (trtol):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelTrtol->Wrap( -1 );
+	m_labelTrtol->SetToolTip( _("Transient truncation error factor (default 7)") );
+
+	fgSimOptionsLeft->Add( m_labelTrtol, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optTrtol = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optTrtol->SetToolTip( _("Transient truncation error factor (default 7)") );
+
+	fgSimOptionsLeft->Add( m_optTrtol, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSimOptionsLeft->Add( 0, 0, 0, wxEXPAND, 5 );
+
+
+	bSizerSimOptionsColumns->Add( fgSimOptionsLeft, 1, wxEXPAND|wxRIGHT, 10 );
+
+	wxFlexGridSizer* fgSimOptionsRight;
+	fgSimOptionsRight = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSimOptionsRight->AddGrowableCol( 1 );
+	fgSimOptionsRight->SetFlexibleDirection( wxHORIZONTAL );
+	fgSimOptionsRight->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* m_labelGmin;
+	m_labelGmin = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Minimum conductance (gmin):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelGmin->Wrap( -1 );
+	m_labelGmin->SetToolTip( _("Minimum conductance across junctions (default 1e-12 S)") );
+
+	fgSimOptionsRight->Add( m_labelGmin, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optGmin = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optGmin->SetToolTip( _("Minimum conductance across junctions (default 1e-12 S)") );
+
+	fgSimOptionsRight->Add( m_optGmin, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsGmin;
+	m_unitsGmin = new wxStaticText( m_panelSimOptions, wxID_ANY, _("S"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsGmin->Wrap( -1 );
+	fgSimOptionsRight->Add( m_unitsGmin, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelGshunt;
+	m_labelGshunt = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Node-to-ground conductance (gshunt):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelGshunt->Wrap( -1 );
+	m_labelGshunt->SetToolTip( _("Conductance added from each node to ground (default 0)") );
+
+	fgSimOptionsRight->Add( m_labelGshunt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optGshunt = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optGshunt->SetToolTip( _("Conductance added from each node to ground (default 0)") );
+
+	fgSimOptionsRight->Add( m_optGshunt, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsGshunt;
+	m_unitsGshunt = new wxStaticText( m_panelSimOptions, wxID_ANY, _("S"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsGshunt->Wrap( -1 );
+	fgSimOptionsRight->Add( m_unitsGshunt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelRshunt;
+	m_labelRshunt = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Node-to-ground resistance (rshunt):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRshunt->Wrap( -1 );
+	m_labelRshunt->SetToolTip( _("Resistance added from each node to ground (default off)") );
+
+	fgSimOptionsRight->Add( m_labelRshunt, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optRshunt = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optRshunt->SetToolTip( _("Resistance added from each node to ground (default off)") );
+
+	fgSimOptionsRight->Add( m_optRshunt, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsRshunt;
+	m_unitsRshunt = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Ω"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsRshunt->Wrap( -1 );
+	fgSimOptionsRight->Add( m_unitsRshunt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelItl1;
+	m_labelItl1 = new wxStaticText( m_panelSimOptions, wxID_ANY, _("DC iteration limit (itl1):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelItl1->Wrap( -1 );
+	m_labelItl1->SetToolTip( _("Operating point iteration limit (default 100)") );
+
+	fgSimOptionsRight->Add( m_labelItl1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optItl1 = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optItl1->SetToolTip( _("Operating point iteration limit (default 100)") );
+
+	fgSimOptionsRight->Add( m_optItl1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSimOptionsRight->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	wxStaticText* m_labelItl4;
+	m_labelItl4 = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Transient iteration limit (itl4):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelItl4->Wrap( -1 );
+	m_labelItl4->SetToolTip( _("Iteration limit per transient time step (default 10)") );
+
+	fgSimOptionsRight->Add( m_labelItl4, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optItl4 = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optItl4->SetToolTip( _("Iteration limit per transient time step (default 10)") );
+
+	fgSimOptionsRight->Add( m_optItl4, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSimOptionsRight->Add( 0, 0, 0, wxEXPAND, 5 );
+
+	wxStaticText* m_labelTemp;
+	m_labelTemp = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Temperature (temp):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelTemp->Wrap( -1 );
+	m_labelTemp->SetToolTip( _("Operating temperature (default 27 °C)") );
+
+	fgSimOptionsRight->Add( m_labelTemp, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optTemp = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optTemp->SetToolTip( _("Operating temperature (default 27 °C)") );
+
+	fgSimOptionsRight->Add( m_optTemp, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsTemp;
+	m_unitsTemp = new wxStaticText( m_panelSimOptions, wxID_ANY, _("°C"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsTemp->Wrap( -1 );
+	fgSimOptionsRight->Add( m_unitsTemp, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxStaticText* m_labelTnom;
+	m_labelTnom = new wxStaticText( m_panelSimOptions, wxID_ANY, _("Nominal temperature (tnom):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelTnom->Wrap( -1 );
+	m_labelTnom->SetToolTip( _("Temperature at which model parameters were measured (default 27 °C)") );
+
+	fgSimOptionsRight->Add( m_labelTnom, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_optTnom = new wxTextCtrl( m_panelSimOptions, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_optTnom->SetToolTip( _("Temperature at which model parameters were measured (default 27 °C)") );
+
+	fgSimOptionsRight->Add( m_optTnom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxStaticText* m_unitsTnom;
+	m_unitsTnom = new wxStaticText( m_panelSimOptions, wxID_ANY, _("°C"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsTnom->Wrap( -1 );
+	fgSimOptionsRight->Add( m_unitsTnom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizerSimOptionsColumns->Add( fgSimOptionsRight, 1, wxEXPAND|wxLEFT, 10 );
+
+
+	bSizerSimOptions->Add( bSizerSimOptionsColumns, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_panelSimOptions->SetSizer( bSizerSimOptions );
+	m_panelSimOptions->Layout();
+	bSizerSimOptions->Fit( m_panelSimOptions );
+	m_notebook1->AddPage( m_panelSimOptions, _("Simulator Options"), false );
 
 	bSizer1->Add( m_notebook1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 

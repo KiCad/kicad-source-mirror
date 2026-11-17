@@ -20,12 +20,15 @@
  */
 
 #include "spice_circuit_model.h"
+#include "spice_settings.h"
 
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 
 #include <locale_io.h>
 #include <richio.h>
+#include <schematic.h>
+#include <schematic_settings.h>
 #include <string_utils.h>
 
 SIM_TRACE_TYPE SPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
@@ -252,6 +255,15 @@ void SPICE_CIRCUIT_MODEL::WriteDirectives( const wxString& aSimCommand, unsigned
 {
     if( aSimCommand.IsEmpty() )
         aSimOptions |= OPTION_SIM_COMMAND;
+
+    // Precedes the schematic directives so a schematic .options wins; ngspice keeps the last value
+    if( NGSPICE_SETTINGS* settings = m_schematic->Settings().m_NgspiceSettings.get() )
+    {
+        wxString options = settings->GetOptionsDirective();
+
+        if( !options.IsEmpty() )
+            aFormatter.Print( 0, "%s\n", TO_UTF8( options ) );
+    }
 
     NETLIST_EXPORTER_SPICE::WriteDirectives( aSimCommand, aSimOptions, aFormatter );
 

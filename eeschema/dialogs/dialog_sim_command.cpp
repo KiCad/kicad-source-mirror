@@ -29,8 +29,13 @@
 
 #include <wx/tokenzr.h>
 
+#include <algorithm>
 #include <vector>
 #include <utility>
+
+
+// Keywords for the integration methods, in the order of m_optMethod's choices
+static const std::vector<std::string> SIM_METHODS = { "", "trap", "gear" };
 
 
 // Helper function to shorten conditions
@@ -62,7 +67,8 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
         m_simulatorFrame( aParent ),
         m_circuitModel( aCircuitModel ),
         m_settings( aSettings ),
-        m_spiceEmptyValidator( true )
+        m_spiceEmptyValidator( true ),
+        m_iterationLimitValidator( nullptr, wxNUM_VAL_ZERO_AS_BLANK )
 {
     m_simPages->Hide();
 
@@ -121,8 +127,28 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
             m_noiseSrc->Append( item.refName );
     }
 
+    m_simOptionCtrls = { { "reltol", m_optReltol }, { "abstol", m_optAbstol }, { "vntol", m_optVntol },
+                         { "chgtol", m_optChgtol }, { "trtol", m_optTrtol },   { "gmin", m_optGmin },
+                         { "gshunt", m_optGshunt }, { "rshunt", m_optRshunt }, { "itl1", m_optItl1 },
+                         { "itl4", m_optItl4 },     { "temp", m_optTemp },     { "tnom", m_optTnom } };
+
+    // Focus loss rewrites an empty field to the minimum, and only zero shows as blank
+    m_iterationLimitValidator.SetMin( 0 );
+
+    for( const auto& [key, ctrl] : m_simOptionCtrls )
+    {
+        if( key == "itl1" || key == "itl4" )
+            ctrl->SetValidator( m_iterationLimitValidator );
+        else
+            ctrl->SetValidator( m_spiceEmptyValidator );
+    }
+
     if( !dynamic_cast<NGSPICE_SETTINGS*>( aSettings.get() ) )
+    {
         m_compatibilityModeSizer->Show( false );
+        m_notebook1->DeletePage( m_notebook1->FindPage( m_panelSimOptions ) );
+        m_simOptionCtrls.clear();
+    }
 
     int minWidth = GetTextExtent( wxS( "XXX.XXXXXXX" ) ).x;
     m_y1Min->SetMinSize( wxSize( minWidth, -1 ) );
@@ -161,6 +187,14 @@ bool DIALOG_SIM_COMMAND::TransferDataToWindow()
         default:    wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_COMPATIBILITY_MODE %d.",
                                                   settings->GetCompatibilityMode() ) );       break;
         }
+
+        auto method = std::find( SIM_METHODS.begin(), SIM_METHODS.end(),
+                                 settings->GetOption( "method" ).Lower().ToStdString() );
+
+        m_optMethod->SetSelection( method == SIM_METHODS.end() ? 0 : (int) ( method - SIM_METHODS.begin() ) );
+
+        for( const auto& [key, ctrl] : m_simOptionCtrls )
+            ctrl->ChangeValue( settings->GetOption( key ) );
     }
 
     return true;
@@ -298,19 +332,11 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    // The simulator dependent settings always get transferred.
-    if( NGSPICE_SETTINGS* settings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() ) )
-    {
-        switch( m_compatibilityMode->GetSelection() )
-        {
-        case 0: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::USER_CONFIG ); break;
-        case 1: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::NGSPICE );     break;
-        case 2: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::PSPICE );      break;
-        case 3: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LTSPICE );     break;
-        case 4: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );   break;
-        case 5: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::HSPICE );      break;
-        }
-    }
+    NGSPICE_SETTINGS*               ngspiceSettings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() );
+    std::map<std::string, wxString> simOptions;
+
+    if( ngspiceSettings && !readSimOptions( simOptions ) )
+        return false;
 
     wxString previousSimCommand = m_simCommand;
     wxWindow* page = m_simPages->GetCurrentPage();
@@ -489,7 +515,61 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     if( previousSimCommand != m_simCommand )
         m_simCommand.Trim();
 
+    // Settings are live, so write them only once everything validated or Cancel would keep them
+    if( ngspiceSettings )
+    {
+        switch( m_compatibilityMode->GetSelection() )
+        {
+        case 0: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::USER_CONFIG ); break;
+        case 1: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::NGSPICE );     break;
+        case 2: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::PSPICE );      break;
+        case 3: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LTSPICE );     break;
+        case 4: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );   break;
+        case 5: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::HSPICE );      break;
+        }
+
+        for( const auto& [key, value] : simOptions )
+            ngspiceSettings->SetOption( key, value );
+    }
+
     m_settings->SetFixIncludePaths( m_fixIncludePaths->GetValue() );
+
+    return true;
+}
+
+
+bool DIALOG_SIM_COMMAND::readSimOptions( std::map<std::string, wxString>& aOptions )
+{
+    auto showOptionsPage =
+            [&]()
+            {
+                m_notebook1->SetSelection( m_notebook1->FindPage( m_panelSimOptions ) );
+            };
+
+    if( !m_panelSimOptions->Validate() )
+    {
+        showOptionsPage();
+        return false;
+    }
+
+    aOptions["method"] = SIM_METHODS[std::max( 0, m_optMethod->GetSelection() )];
+
+    for( const auto& [key, ctrl] : m_simOptionCtrls )
+    {
+        std::optional<wxString> value = NGSPICE_SETTINGS::NormalizeOption( key, ctrl->GetValue() );
+
+        if( !value )
+        {
+            showOptionsPage();
+            ctrl->SetFocus();
+            ctrl->SelectAll();
+            DisplayError( this, wxString::Format( _( "'%s' is not a valid value for %s." ), ctrl->GetValue(),
+                                                  wxString::FromUTF8( key ) ) );
+            return false;
+        }
+
+        aOptions[key] = *value;
+    }
 
     return true;
 }

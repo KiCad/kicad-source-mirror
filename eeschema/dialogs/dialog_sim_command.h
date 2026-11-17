@@ -29,6 +29,11 @@
 
 #include <wx/valnum.h>
 
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
 class SPICE_CIRCUIT_MODEL;
 class SPICE_SETTINGS;
 class SIMULATOR_FRAME;
@@ -164,6 +169,13 @@ private:
 
     void loadDirectives();
 
+    /**
+     * Validate and normalize the simulator option fields into \a aOptions.
+     *
+     * @return false, after showing the offending field, if any value is invalid.
+     */
+    bool readSimOptions( std::map<std::string, wxString>& aOptions );
+
 private:
     SIMULATOR_FRAME*                     m_simulatorFrame;
     wxString                             m_simCommand;
@@ -172,7 +184,10 @@ private:
     SPICE_VALIDATOR                      m_spiceValidator;
     SPICE_VALIDATOR                      m_spiceEmptyValidator;
     wxIntegerValidator<int>              m_posIntValidator;
+    wxIntegerValidator<int>              m_iterationLimitValidator;
     std::set<wxString>                   m_fftInputSignals;
+
+    std::vector<std::pair<std::string, wxTextCtrl*>> m_simOptionCtrls;
 };
 
 #endif /* DIALOG_SIM_COMMAND_H */

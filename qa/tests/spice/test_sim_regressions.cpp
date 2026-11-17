@@ -24,6 +24,8 @@
 #include <sim/sim_model_raw_spice.h>
 #include <sim/spice_circuit_model.h>
 #include <sim/spice_generator.h>
+#include <sim/spice_settings.h>
+#include <schematic_settings.h>
 #include <richio.h>
 #include <reporter.h>
 #include <wx/ffile.h>
@@ -266,6 +268,89 @@ BOOST_FIXTURE_TEST_CASE( FFTCommandNotBareInNetlist, TEST_SIM_REGRESSIONS_FIXTUR
         {
             BOOST_CHECK_MESSAGE( !line.StartsWith( wxS( "linearize" ) ) && !line.StartsWith( wxS( "fft" ) ),
                                  "Bare control command leaked into netlist: " << line );
+        }
+    }
+}
+
+
+// Project simulator options reach the netlist that both the simulator and Show SPICE Netlist read,
+// normalized, and ahead of the schematic's own .option so that one still wins
+BOOST_FIXTURE_TEST_CASE( SimulatorOptionsPrecedeSchematicOptions, TEST_SIM_REGRESSIONS_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    LoadSchematic( SchematicQAPath( wxS( "issue13431" ) ) );
+
+    NGSPICE_SETTINGS* settings = m_schematic->Settings().m_NgspiceSettings.get();
+    BOOST_REQUIRE( settings );
+
+    settings->SetOption( "method", wxS( "GEAR" ) );
+    settings->SetOption( "gmin", wxS( "1,5e-10" ) );
+    settings->SetOption( "itl1", wxS( " 500 " ) );
+    settings->SetOption( "rshunt", wxS( "abc" ) );
+
+    SPICE_CIRCUIT_MODEL model( m_schematic.get(), nullptr );
+    STRING_FORMATTER    formatter;
+
+    BOOST_REQUIRE( model.GetNetlist( wxEmptyString, GetNetlistOptions(), &formatter, *m_reporter ) );
+
+    wxString          netlist( formatter.GetString().c_str(), wxConvUTF8 );
+    wxStringTokenizer lines( netlist, wxS( "\n" ), wxTOKEN_RET_EMPTY_ALL );
+    int               lineNo = 0;
+    int               panelLine = -1;
+    int               schematicLine = -1;
+
+    while( lines.HasMoreTokens() )
+    {
+        wxString line = lines.GetNextToken();
+
+        if( line == wxS( ".options method=gear gmin=1.5e-10 itl1=500" ) )
+            panelLine = lineNo;
+        else if( line.Lower() == wxS( ".option interp" ) )
+            schematicLine = lineNo;
+
+        lineNo++;
+    }
+
+    BOOST_TEST_INFO( netlist );
+    BOOST_CHECK_GE( panelLine, 0 );
+    BOOST_CHECK_GT( schematicLine, panelLine );
+}
+
+
+BOOST_AUTO_TEST_CASE( NormalizeSimulatorOption )
+{
+    struct CASE
+    {
+        std::string             name;
+        wxString                value;
+        std::optional<wxString> expected;
+    };
+
+    const std::vector<CASE> cases = {
+        { "gmin", wxS( "" ), wxS( "" ) },
+        { "gmin", wxS( "1,5e-12" ), wxS( "1.5e-12" ) },
+        { "temp", wxS( "-40" ), wxS( "-40" ) },
+        { "rshunt", wxS( "10Meg" ), wxS( "10Meg" ) },
+        { "abstol", wxS( ".5pA" ), wxS( ".5pA" ) },
+        { "gmin", wxS( "abc" ), std::nullopt },
+        { "gmin", wxS( "1 m" ), std::nullopt },
+        { "gmin", wxS( "nan" ), std::nullopt },
+        { "gmin", wxS( "-inf" ), std::nullopt },
+        { "gmin", wxS( "0x10" ), std::nullopt },
+        { "method", wxS( "Trap" ), wxS( "trap" ) },
+        { "method", wxS( "euler" ), std::nullopt },
+        { "itl4", wxS( "20" ), wxS( "20" ) },
+        { "itl4", wxS( "0" ), std::nullopt },
+        { "itl4", wxS( "2.5" ), std::nullopt },
+        { "itl4", wxS( "1,000" ), std::nullopt },
+    };
+
+    for( const CASE& c : cases )
+    {
+        BOOST_TEST_CONTEXT( c.name << "=" << c.value )
+        {
+            BOOST_CHECK( NGSPICE_SETTINGS::NormalizeOption( c.name, c.value ) == c.expected );
         }
     }
 }
