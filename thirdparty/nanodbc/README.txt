@@ -19,3 +19,7 @@ is HYC00 or HY092, allowing connection attempts when login timeout support is un
 
 Note: catalog::columns::column_size() returns 0 when COLUMN_SIZE is NULL, as decimal_digits() already
 does, instead of throwing null_access_error.
+
+Note: size() and list_datasources()/list_drivers() measure SQLCHAR strings without
+std::char_traits, backported from upstream nanodbc PR #434 (5ce9504ccfb6). libc++ deprecates
+char_traits for unsigned short, which is SQLWCHAR on macOS. Upstream 3.0.8 already has it.
