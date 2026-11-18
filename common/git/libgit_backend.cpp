@@ -365,7 +365,7 @@ static bool applySelectedPaths( git_repository* aRepo, git_index* aIndex, const 
                                              wxFILE_EXISTS_ANY | wxFILE_EXISTS_NO_FOLLOW );
 
         // Adding a nested repository records a gitlink, which for local history is never project content
-        bool stopTracking = onDisk && KIGIT::PROJECT_GIT_UTILS::IsTransientGitlink( file )
+        bool stopTracking = onDisk && KIGIT::PROJECT_GIT_UTILS::IsTransientGitlink( aRepo, file )
                             && wxFileName::Exists( wxString::FromUTF8( workdir ) + file,
                                                    wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW );
 

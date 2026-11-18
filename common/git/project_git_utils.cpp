@@ -544,9 +544,31 @@ bool PROJECT_GIT_UTILS::IsHiddenTransient( const wxString& aRelativePath, const 
 }
 
 
-bool PROJECT_GIT_UTILS::IsTransientGitlink( const wxString& aRelativePath )
+bool PROJECT_GIT_UTILS::IsTransientGitlink( git_repository* aRepo, const wxString& aRelativePath )
 {
-    return IsTransientGitFile( wxFileName( aRelativePath.AfterLast( '/' ) ), true );
+    if( !IsTransientGitFile( wxFileName( aRelativePath.AfterLast( '/' ) ), true ) )
+        return false;
+
+    // Lookup finds a gitlink only in the index or HEAD, and gives GIT_EEXISTS for an unregistered nested
+    // repository. Any other failure keeps tracking it
+    git_submodule* submodule = nullptr;
+    int            rc = git_submodule_lookup( &submodule, aRepo, aRelativePath.utf8_str() );
+
+    if( rc == GIT_EEXISTS || rc == GIT_ENOTFOUND )
+    {
+        git_error_clear();
+        return true;
+    }
+
+    if( rc != GIT_OK )
+        return false;
+
+    unsigned int location = 0;
+    bool         configured =
+            git_submodule_location( &location, submodule ) != GIT_OK || ( location & GIT_SUBMODULE_STATUS_IN_CONFIG );
+
+    git_submodule_free( submodule );
+    return !configured;
 }
 
 

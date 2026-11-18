@@ -142,7 +142,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         }
 
         // Committing the row removes the gitlink from the index and keeps the folder on disk
-        if( fileStatus.isDirectory && KIGIT::PROJECT_GIT_UTILS::IsTransientGitlink( relativePath ) )
+        if( fileStatus.isDirectory && KIGIT::PROJECT_GIT_UTILS::IsTransientGitlink( aCommon.GetRepo(), relativePath ) )
         {
             word = _( "Stop Tracking" );
             icon = BITMAPS::git_delete;

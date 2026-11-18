@@ -3341,13 +3341,20 @@ BOOST_AUTO_TEST_CASE( BuildGitChangeEntries_HidesLocalHistoryRepository )
     const wxString projectPath = commitCtrlBoard( repo.get() );
     LOCAL_HISTORY  history;
 
+    const wxString projectFile = CTRL_BOARD_PREFIX + CAMPAIGN_PRO;
+    KI_TEST::WriteGitFile( repoPath(), projectFile,
+                           replaced( campaignFile( CAMPAIGN_PRO ), "\"text_variables\": {}",
+                                     "\"text_variables\": { \"STAGE\": \"local\" }" ) );
+
     auto checkHidden = [&]( const char* aState )
     {
+        wxArrayString paths;
+
         for( const FILE_CHECKLIST_ENTRY& entry : changeEntries( repo.get(), projectPath ) )
-        {
-            BOOST_CHECK_MESSAGE( !entry.path.StartsWith( CTRL_BOARD_PREFIX + wxS( ".history" ) ),
-                                 aState << " local history is listed as " << entry.path );
-        }
+            paths.Add( entry.path );
+
+        BOOST_CHECK_MESSAGE( paths.size() == 1 && paths[0] == projectFile,
+                             aState << " local history listing is " << wxJoin( paths, ',' ) );
     };
 
     BOOST_REQUIRE( history.Init( projectPath ) );
@@ -3374,7 +3381,7 @@ BOOST_AUTO_TEST_CASE( CommitStopsTrackingCommittedLocalHistory )
     KI_TEST::CommitGitFile( repo.get(), historyPath, wxS( "Commit local history as a gitlink" ) );
 
     std::vector<FILE_CHECKLIST_ENTRY> entries = changeEntries( repo.get(), projectPath );
-    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_REQUIRE_EQUAL( entries.size(), 1u );
     BOOST_CHECK_EQUAL( entries[0].path, historyPath );
     BOOST_CHECK_EQUAL( entries[0].status, wxS( "Stop Tracking" ) );
     BOOST_CHECK( entries[0].checked );
@@ -3393,6 +3400,7 @@ BOOST_AUTO_TEST_CASE( CommitStopsTrackingCommittedLocalHistory )
 }
 
 
+// A registered submodule is project content, even when its name matches a transient pattern
 BOOST_AUTO_TEST_CASE( RealSubmoduleIsNeverStopTracked )
 {
     BOOST_REQUIRE( ready() );
@@ -3401,35 +3409,69 @@ BOOST_AUTO_TEST_CASE( RealSubmoduleIsNeverStopTracked )
     useEmptyGlobalIgnore( repo.get() );
 
     const wxString projectPath = commitCtrlBoard( repo.get() );
-    const wxString subPath = CTRL_BOARD_PREFIX + wxS( "lib/sub" );
-    const wxString subRoot = repoPath() + wxS( "/" ) + subPath;
+    const std::vector<wxString>          subPaths = { CTRL_BOARD_PREFIX + wxS( "lib/sub" ),
+                                                      CTRL_BOARD_PREFIX + wxS( "lib/parts-backups" ) };
+    std::vector<KIGIT::GitRepositoryPtr> subs;
+    std::string                          modules;
 
+    for( const wxString& subPath : subPaths )
     {
-        KIGIT::GitRepositoryPtr sub =
-                KI_TEST::InitGitRepository( subRoot, "master", TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+        const wxString subRoot = repoPath() + wxS( "/" ) + subPath;
+        subs.push_back( KI_TEST::InitGitRepository( subRoot, "master", TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ) );
         KI_TEST::WriteGitFile( subRoot, CAMPAIGN_SCH, campaignFile( CAMPAIGN_SCH ) );
-        KI_TEST::CommitGitFile( sub.get(), CAMPAIGN_SCH, wxS( "Add the shared sheet" ) );
+        KI_TEST::CommitGitFile( subs.back().get(), CAMPAIGN_SCH, wxS( "Add the shared sheet" ) );
+
+        const std::string path = subPath.utf8_string();
+        modules += "[submodule \"" + path + "\"]\n\tpath = " + path + "\n\turl = ../" + path + ".git\n";
     }
 
-    KI_TEST::CommitGitFile( repo.get(), subPath, wxS( "Add the submodule" ) );
-    KI_TEST::WriteGitFile( subRoot, CAMPAIGN_SCH, sheetRevision( "4" ) );
+    KI_TEST::WriteGitFile( repoPath(), wxS( ".gitmodules" ), modules );
+
+    {
+        git_index* rawIndex = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &rawIndex, repo.get() ), GIT_OK );
+        KIGIT::GitIndexPtr index( rawIndex );
+        BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), ".gitmodules" ), GIT_OK );
+
+        for( const wxString& subPath : subPaths )
+            BOOST_REQUIRE_EQUAL( git_index_add_bypath( index.get(), subPath.utf8_str() ), GIT_OK );
+
+        BOOST_REQUIRE_EQUAL( git_index_write( index.get() ), GIT_OK );
+    }
+
+    KI_TEST::CommitGitIndex( repo.get(), wxS( "Add the submodules" ) );
+
+    // A new submodule commit makes the parent commit record a new gitlink, not leave the old one alone
+    std::vector<git_oid> subHeads;
+
+    for( size_t ii = 0; ii < subPaths.size(); ++ii )
+    {
+        KI_TEST::WriteGitFile( repoPath() + wxS( "/" ) + subPaths[ii], CAMPAIGN_SCH, sheetRevision( "4" ) );
+        subHeads.push_back( KI_TEST::CommitGitFile( subs[ii].get(), CAMPAIGN_SCH, wxS( "Bump the sheet" ) ) );
+    }
 
     std::vector<FILE_CHECKLIST_ENTRY> entries = changeEntries( repo.get(), projectPath );
-    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
-    BOOST_CHECK_EQUAL( entries[0].path, subPath );
-    BOOST_CHECK_EQUAL( entries[0].status, wxS( "Modified" ) );
+    BOOST_REQUIRE_EQUAL( entries.size(), subPaths.size() );
+
+    for( const FILE_CHECKLIST_ENTRY& entry : entries )
+        BOOST_CHECK_MESSAGE( entry.status == wxS( "Modified" ), entry.path << " reads " << entry.status );
 
     GIT_COMMIT_HANDLER handler( repo.get() );
-    BOOST_CHECK(
-            handler.PerformCommit( { subPath }, wxS( "Commit the submodule" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
-            != CommitResult::Error );
+    BOOST_REQUIRE(
+            handler.PerformCommit( subPaths, wxS( "Commit the submodules" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
+            == CommitResult::Success );
 
     git_index* rawIndex = nullptr;
     BOOST_REQUIRE_EQUAL( git_repository_index( &rawIndex, repo.get() ), GIT_OK );
-    KIGIT::GitIndexPtr     index( rawIndex );
-    const git_index_entry* entry = git_index_get_bypath( index.get(), subPath.utf8_str(), 0 );
-    BOOST_REQUIRE( entry );
-    BOOST_CHECK_EQUAL( entry->mode, GIT_FILEMODE_COMMIT );
+    KIGIT::GitIndexPtr index( rawIndex );
+
+    for( size_t ii = 0; ii < subPaths.size(); ++ii )
+    {
+        const git_index_entry* entry = git_index_get_bypath( index.get(), subPaths[ii].utf8_str(), 0 );
+        BOOST_REQUIRE_MESSAGE( entry, subPaths[ii] << " was dropped from the index" );
+        BOOST_CHECK_EQUAL( entry->mode, GIT_FILEMODE_COMMIT );
+        BOOST_CHECK( git_oid_equal( &entry->id, &subHeads[ii] ) );
+    }
 }
 
 

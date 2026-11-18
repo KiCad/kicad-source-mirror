@@ -155,9 +155,9 @@ public:
     static bool IsHiddenTransient( const wxString& aRelativePath, const wxString& aProjectPrefix,
                                    unsigned int aGitStatus, bool aIsDirectory = false );
 
-    /// Whether a nested repository at @p aRelativePath is local history or a backup folder, which a
-    /// commit stops tracking rather than recording as a submodule.
-    static bool IsTransientGitlink( const wxString& aRelativePath );
+    /// Whether a commit stops tracking the nested repository at @p aRelativePath rather than recording it.
+    /// Its name matches a transient pattern and no submodule is configured for it.
+    static bool IsTransientGitlink( git_repository* aRepo, const wxString& aRelativePath );
 
     /**
      * The project's folder inside the repository, ending in a slash.
