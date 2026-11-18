@@ -102,8 +102,8 @@ void drawPcbShapeWithStyle( const PCB_SHAPE* aDrwShape, SHAPE_POLY_SET* aLayerPo
         STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &renderSettings,
                 [&]( const VECTOR2I& a, const VECTOR2I& b )
                 {
-                    TransformOvalToPolygon( *aLayerPoly, a, b, aDrwShape->GetWidth(), maxError,
-                                             ERROR_OUTSIDE, minSegCount );
+                    TransformOvalToPolygon( *aLayerPoly, a, b, aDrwShape->GetWidth(), maxError, ERROR_OUTSIDE,
+                                            minSegCount );
                } );
     }
 

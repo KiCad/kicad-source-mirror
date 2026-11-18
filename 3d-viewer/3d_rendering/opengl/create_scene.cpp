@@ -531,7 +531,7 @@ void RENDER_3D_OPENGL::backfillPostMachine()
                 plugZTop = std::min( plugZTop, viaZTop - depth );
                 plugR = std::max( plugR, drillRadius );
             }
-            else if( backdrill.end == B_Cu && backdrill.size.x > 0 )
+            else if( backdrill.start == B_Cu && backdrill.size.x > 0 )
             {
                 int          depthIU = stackup.GetLayerDistance( backdrill.end, backdrill.start );
                 PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
@@ -635,7 +635,7 @@ void RENDER_3D_OPENGL::backfillPostMachine()
                     plugZTop = std::min( plugZTop, padZTop - depth );
                     plugR = std::max( plugR, drillRadius );
                 }
-                else if( backdrill.end == B_Cu && backdrill.size.x > 0 )
+                else if( backdrill.start == B_Cu && backdrill.size.x > 0 )
                 {
                     int          depthIU = stackup.GetLayerDistance( backdrill.end, backdrill.start );
                     PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
@@ -1661,7 +1661,7 @@ void RENDER_3D_OPENGL::generateComplexHoles( float aPlatingThickness3d, float aU
                     ztop_plated = std::min( ztop_plated, zEnd );
                 }
             }
-            else if( backdrill.end == B_Cu && backdrill.size.x > 0 )
+            else if( backdrill.start == B_Cu && backdrill.size.x > 0 )
             {
                 int          depthIU = stackup.GetLayerDistance( backdrill.end, backdrill.start );
                 PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, backdrill.start, backdrill.end );
