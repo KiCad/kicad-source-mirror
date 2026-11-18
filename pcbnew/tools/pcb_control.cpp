@@ -1744,6 +1744,12 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
         for( NETINFO_ITEM* net : isolatedNets )
             tempCommit.Added( net );
 
+        for( const auto& [item, change] : tempCommit.StagedItems() )
+        {
+            if( item && ( change & CHT_TYPE ) == CHT_ADD && item->Type() == PCB_NETINFO_T )
+                dbRA.m_temporaryNets.insert( static_cast<NETINFO_ITEM*>( item ) );
+        }
+
         wxString repeatErr;
         int      result = mct->RepeatLayout( aEvent, dbRA, destRA, options, &sharedCommit, &repeatErr );
 

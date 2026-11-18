@@ -3145,7 +3145,6 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             repeatedOutline( aRefArea, aTargetArea, aOpts.m_anchor, aCompatData.m_matchingComponents, disp, rot );
 
     // Reference net to the net of the first matching target pad, built once for all copied items
-    const bool         hasMatches = !aCompatData.m_matchingComponents.empty();
     std::map<int, int> netMap;
 
     for( const auto& [refFP, targetFP] : aCompatData.m_matchingComponents )
@@ -3161,6 +3160,16 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 netMap.emplace( refPad->GetNetCode(), targetPads[0]->GetNetCode() );
         }
     }
+
+    auto assignCopiedNet = [&]( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aCopy )
+    {
+        auto it = netMap.find( aRef->GetNetCode() );
+
+        if( it != netMap.end() )
+            aCopy->SetNetCode( it->second );
+        else if( aCompatData.m_matchingComponents.empty() || aRefArea->m_temporaryNets.contains( aRef->GetNet() ) )
+            aCopy->SetNetCode( 0 );
+    };
 
     SHAPE_POLY_SET refPoly;
     refPoly.AddOutline( aRefArea->m_zone->Outline()->COutline( 0 ) );
@@ -3426,7 +3435,7 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             BOARD_CONNECTED_ITEM* copied = static_cast<BOARD_CONNECTED_ITEM*>( item->Duplicate( false ) );
 
-            fixupNet( item, copied, hasMatches, netMap );
+            assignCopiedNet( item, copied );
             copied->Rotate( VECTOR2( 0, 0 ), rot );
             copied->Move( disp );
 
@@ -3550,7 +3559,7 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                         child->ClearFlags();
 
                         if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( child ) )
-                            fixupNet( bci, bci, hasMatches, netMap );
+                            assignCopiedNet( bci, bci );
 
                         aCommit->Add( child );
                     },
@@ -3644,7 +3653,7 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 }
 
                 ZONE* targetZone = static_cast<ZONE*>( item->Duplicate( false ) );
-                fixupNet( zone, targetZone, hasMatches, netMap );
+                assignCopiedNet( zone, targetZone );
 
                 copied = targetZone;
             }
@@ -3883,28 +3892,6 @@ void MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
     aTargetArea->m_zone->UnHatchBorder();
     aTargetArea->m_zone->HatchBorder();
 }
-
-/**
- * @brief Attempts to make sure copied items are assigned the right net
- *
- */
-void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
-                                  bool aHasMatches,
-                                  const std::map<int, int>& aNetMap )
-{
-    // Copy as no-net.
-    if( !aHasMatches )
-    {
-        aTarget->SetNetCode( 0 );
-        return;
-    }
-
-    auto it = aNetMap.find( aRef->GetNetCode() );
-
-    if( it != aNetMap.end() )
-        aTarget->SetNetCode( it->second );
-}
-
 
 std::vector<NETINFO_ITEM*> MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( BOARD*                      aBoard,
                                                                           const std::set<FOOTPRINT*>& aFootprints,

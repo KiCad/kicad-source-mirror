@@ -1317,8 +1317,8 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
                 return fp;
             };
 
-    // Source: a "design block" with two matched footprints and a silkscreen rectangle that
-    // is not associated with any footprint.
+    // Source: a "design block" with two matched footprints, a silkscreen rectangle,
+    // and a track that is not associated with any pad.
     FOOTPRINT* refFp1 = makeFootprint( wxT( "R1" ),
                                        VECTOR2I( pcbIUScale.mmToIU( 0 ), pcbIUScale.mmToIU( 0 ) ) );
     FOOTPRINT* refFp2 = makeFootprint( wxT( "R2" ),
@@ -1330,6 +1330,25 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
     silkRect->SetLayer( F_SilkS );
     silkRect->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
     m_board->Add( silkRect );
+
+    NETINFO_ITEM* unmappedNet = new NETINFO_ITEM( m_board.get(), wxT( "BLOCK_ONLY" ), 2 );
+    m_board->Add( unmappedNet );
+
+    PCB_TRACK* unmappedTrack = new PCB_TRACK( m_board.get() );
+    unmappedTrack->SetLayer( F_Cu );
+    unmappedTrack->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+    unmappedTrack->SetStart( VECTOR2I( pcbIUScale.mmToIU( 4 ), pcbIUScale.mmToIU( 2 ) ) );
+    unmappedTrack->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 6 ), pcbIUScale.mmToIU( 2 ) ) );
+    unmappedTrack->SetNet( unmappedNet );
+    m_board->Add( unmappedTrack );
+
+    NETINFO_ITEM* retainedNet = new NETINFO_ITEM( m_board.get(), wxT( "BOARD_NET" ), 3 );
+    m_board->Add( retainedNet );
+
+    PCB_TRACK* retainedTrack = static_cast<PCB_TRACK*>( unmappedTrack->Duplicate( false ) );
+    retainedTrack->Move( VECTOR2I( 0, pcbIUScale.mmToIU( -4 ) ) );
+    retainedTrack->SetNet( retainedNet );
+    m_board->Add( retainedTrack );
 
     // Destination: a group containing the matched pair so RepeatLayout can find a parent group.
     FOOTPRINT* destFp1 = makeFootprint( wxT( "R3" ),
@@ -1369,6 +1388,9 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
     dbRA.m_designBlockItems.insert( refFp1 );
     dbRA.m_designBlockItems.insert( refFp2 );
     dbRA.m_designBlockItems.insert( silkRect );
+    dbRA.m_designBlockItems.insert( unmappedTrack );
+    dbRA.m_designBlockItems.insert( retainedTrack );
+    dbRA.m_temporaryNets.insert( unmappedNet );
 
     // The Apply Design Block flow uses a synthetic copper-only rule area zone. The destination
     // zone is a temporary zone never added to the board.
@@ -1407,6 +1429,34 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
 
     int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
     BOOST_CHECK_MESSAGE( result >= 0, "RepeatLayout failed" );
+
+    int copiedTracks = 0;
+    int copiedUnmapped = 0;
+    int copiedRetained = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track != unmappedTrack && track != retainedTrack )
+        {
+            copiedTracks++;
+            copiedUnmapped += track->GetNetCode() == 0;
+            copiedRetained += track->GetNetCode() == retainedNet->GetNetCode();
+        }
+    }
+
+    BOOST_CHECK_EQUAL( copiedTracks, 2 );
+    BOOST_CHECK_EQUAL( copiedUnmapped, 1 );
+    BOOST_CHECK_EQUAL( copiedRetained, 1 );
+
+    dbRA.m_designBlockItems.erase( unmappedTrack );
+    dbRA.m_temporaryNets.clear();
+    m_board->Remove( unmappedTrack );
+    m_board->Remove( unmappedNet );
+    delete unmappedTrack;
+    delete unmappedNet;
+    m_board->BuildConnectivity();
+
+    BOOST_CHECK_GE( mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts ), 0 );
 
     delete dbRA.m_zone;
     delete destRA.m_zone;

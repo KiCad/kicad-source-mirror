@@ -68,6 +68,7 @@ struct RULE_AREA
     ZONE*                     m_zone = nullptr;
     std::set<FOOTPRINT*>      m_components;
     std::unordered_set<EDA_ITEM*> m_designBlockItems;
+    std::unordered_set<NETINFO_ITEM*> m_temporaryNets;
     PCB_GROUP*                    m_group = nullptr;
     bool                      m_generateEnabled = false;
     wxString                  m_sheetPath;
@@ -253,9 +254,6 @@ private:
      * @return false if the user cancelled.
      */
     bool       resolveTopologies( const wxString& aTitle, const std::vector<TOPOLOGY_JOB>& aJobs );
-    void       fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
-                         bool aHasMatches,
-                         const std::map<int, int>& aNetMap );
     bool       pruneExistingGroups( COMMIT& aCommit, const std::unordered_set<BOARD_ITEM*>& aItemsToCheck );
 
     std::unique_ptr<REPORTER> m_reporter;
