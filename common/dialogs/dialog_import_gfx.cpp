@@ -25,6 +25,7 @@
 #include <import_gfx/dxf_import_plugin.h>
 #include <bitmap_tracing.h>
 #include <cmath>
+#include <limits>
 
 #include <base_units.h>
 #include <kiface_base.h>
@@ -38,11 +39,20 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <kiplatform/ui.h>
+#include <math/util.h>
 
 #include <dialogs/html_message_box.h>
 #include <widgets/std_bitmap_button.h>
 
 #include <memory>
+
+
+// A large scale can put the size past the range of board coordinates
+static int scaledIU( const EDA_IU_SCALE& aIuScale, double aMM )
+{
+    return KiROUND<double, int>( aMM * aIuScale.IU_PER_MM, true );
+}
+
 
 // Static members of DIALOG_IMPORT_GFX, to remember the user's choices during the session
 bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
@@ -118,7 +128,8 @@ bool DIALOG_IMPORT_GFX::TransferDataToWindow()
     // to be told what it is before they are filled in.
     const double scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
 
-    if( scale > 0.0 )
+    // An entry too large for a double reads as the largest one
+    if( scale > 0.0 && scale < std::numeric_limits<double>::max() )
     {
         m_xScale = scale;
         m_yScale = scale;
@@ -223,8 +234,8 @@ void DIALOG_IMPORT_GFX::sizeFromScale()
     }
 
     // ChangeValue(), so that writing one field does not look like the user typing in it.
-    m_importWidth.ChangeValue( m_parent->GetIuScale().mmToIU( m_sourceSizeMM.x * m_xScale ) );
-    m_importHeight.ChangeValue( m_parent->GetIuScale().mmToIU( m_sourceSizeMM.y * m_yScale ) );
+    m_importWidth.ChangeValue( scaledIU( m_parent->GetIuScale(), m_sourceSizeMM.x * m_xScale ) );
+    m_importHeight.ChangeValue( scaledIU( m_parent->GetIuScale(), m_sourceSizeMM.y * m_yScale ) );
 }
 
 
@@ -233,15 +244,20 @@ void DIALOG_IMPORT_GFX::scaleFromSize( bool aFromWidth )
     if( m_sourceSizeMM.x <= 0 || m_sourceSizeMM.y <= 0 )
         return;
 
-    const double width = m_parent->GetIuScale().IUTomm( m_importWidth.GetValue() );
-    const double height = m_parent->GetIuScale().IUTomm( m_importHeight.GetValue() );
-    const bool   locked = m_aspectRatioCheckbox->IsChecked();
+    const long long width = m_importWidth.GetValue();
+    const long long height = m_importHeight.GetValue();
+    const bool      locked = m_aspectRatioCheckbox->IsChecked();
 
-    // A half typed number is not a size to work from.
-    if( aFromWidth && width > 0 )
-        m_xScale = width / m_sourceSizeMM.x;
-    else if( !aFromWidth && height > 0 )
-        m_yScale = height / m_sourceSizeMM.y;
+    auto usable = []( long long aIU )
+    {
+        return aIU > 0 && aIU <= std::numeric_limits<int>::max();
+    };
+
+    // A half typed number, or one past the range of board coordinates, is not a size to work from.
+    if( aFromWidth && usable( width ) )
+        m_xScale = m_parent->GetIuScale().IUTomm( static_cast<int>( width ) ) / m_sourceSizeMM.x;
+    else if( !aFromWidth && usable( height ) )
+        m_yScale = m_parent->GetIuScale().IUTomm( static_cast<int>( height ) ) / m_sourceSizeMM.y;
     else
         return;
 
@@ -257,9 +273,9 @@ void DIALOG_IMPORT_GFX::scaleFromSize( bool aFromWidth )
 
     // The field the user is typing in is left alone; only the one that follows is written.
     if( locked && aFromWidth )
-        m_importHeight.ChangeValue( m_parent->GetIuScale().mmToIU( m_sourceSizeMM.y * m_yScale ) );
+        m_importHeight.ChangeValue( scaledIU( m_parent->GetIuScale(), m_sourceSizeMM.y * m_yScale ) );
     else if( locked )
-        m_importWidth.ChangeValue( m_parent->GetIuScale().mmToIU( m_sourceSizeMM.x * m_xScale ) );
+        m_importWidth.ChangeValue( scaledIU( m_parent->GetIuScale(), m_sourceSizeMM.x * m_xScale ) );
 }
 
 
@@ -267,7 +283,7 @@ void DIALOG_IMPORT_GFX::onScaleChanged( wxCommandEvent& event )
 {
     const double scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
 
-    if( scale <= 0.0 )
+    if( scale <= 0.0 || scale >= std::numeric_limits<double>::max() )
         return;
 
     m_xScale = scale;
@@ -396,7 +412,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
     wxString ext = wxFileName( m_textCtrlFileName->GetValue() ).GetExt();
     double   scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
 
-    if( scale <= 0.0 )
+    if( scale <= 0.0 || scale >= std::numeric_limits<double>::max() )
     {
         wxMessageBox( _( "Import scale must be a positive number." ) );
         return false;
@@ -406,6 +422,27 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
     double yscale = m_yScale;
 
     VECTOR2D origin( m_xOrigin.GetValue() / xscale, m_yOrigin.GetValue() / yscale );
+
+    // The origin is passed on as whole IU, so it must fit in an int
+    auto fitsInt = []( double aValue )
+    {
+        return std::trunc( aValue ) >= std::numeric_limits<int>::min()
+               && std::trunc( aValue ) <= std::numeric_limits<int>::max();
+    };
+
+    if( !fitsInt( origin.x ) || !fitsInt( origin.y ) )
+    {
+        // Interactive placement ignores the disabled position fields
+        if( m_placementInteractive )
+        {
+            origin = VECTOR2D( 0, 0 );
+        }
+        else
+        {
+            wxMessageBox( _( "Import position is too far from the origin for this scale." ) );
+            return false;
+        }
+    }
 
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )
     {
@@ -426,8 +463,8 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         }
 
         m_importer->SetPlugin( std::move( plugin ) );
-        m_importer->SetImportOffsetMM(
-                { m_parent->GetIuScale().IUTomm( origin.x ), m_parent->GetIuScale().IUTomm( origin.y ) } );
+        m_importer->SetImportOffsetMM( { m_parent->GetIuScale().IUTomm( static_cast<int>( origin.x ) ),
+                                         m_parent->GetIuScale().IUTomm( static_cast<int>( origin.y ) ) } );
 
         LOCALE_IO dummy; // Ensure floats can be read.
 
