@@ -1103,6 +1103,20 @@ public:
         m_FillInfos.emplace_back( &aZone, aLayer, std::move( aFilledArea ) );
     }
 
+    void AppendPolygonForZone( ZONE& aZone, SHAPE_POLY_SET aFilledArea, PCB_LAYER_ID aLayer )
+    {
+        for( FILL_INFO& fillInfo : m_FillInfos )
+        {
+            if( fillInfo.m_Zone == &aZone && fillInfo.m_Layer == aLayer )
+            {
+                fillInfo.m_CombinedFill.Append( aFilledArea );
+                return;
+            }
+        }
+
+        QueuePolygonForZone( aZone, std::move( aFilledArea ), aLayer );
+    }
+
 private:
     std::vector<FILL_INFO> m_FillInfos;
 };
@@ -4357,6 +4371,8 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
     }
 
     SHAPE_POLY_SET combinedFill;
+    int            linkedFillNet = NETINFO_LIST::UNCONNECTED;
+    bool           conflictingFillNets = false;
 
     for( const BLOCK_BASE* block : aRelatedBlocks )
     {
@@ -4388,6 +4404,19 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
         {
             const BLK_0x28_SHAPE& shapeData = BlockDataAs<BLK_0x28_SHAPE>( *block );
 
+            if( auto it = m_zoneFillShapes.find( block->GetKey() ); it != m_zoneFillShapes.end() )
+            {
+                int fillNet = it->second.netCode;
+
+                if( fillNet != NETINFO_LIST::UNCONNECTED )
+                {
+                    if( linkedFillNet == NETINFO_LIST::UNCONNECTED )
+                        linkedFillNet = fillNet;
+                    else if( fillNet != linkedFillNet )
+                        conflictingFillNets = true;
+                }
+            }
+
             SHAPE_POLY_SET fillPolySet = shapeToPolySet( shapeData, xform );
             combinedFill.Append( fillPolySet );
             m_usedZoneFillShapes.emplace( block->GetKey() );
@@ -4396,6 +4425,10 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
         default: break;
         }
     }
+
+    // If the boundary has no NET record, use its directly listed fills' net when they agree.
+    if( isCopperZone && netCode == NETINFO_LIST::UNCONNECTED && !conflictingFillNets )
+        netCode = linkedFillNet;
 
     // Set net code AFTER layer assignment. SetNetCode checks IsOnCopperLayer() and
     // forces net=0 if the zone isn't on a copper layer yet.
@@ -4516,6 +4549,7 @@ void BOARD_BUILDER::createZones()
 
     std::vector<std::unique_ptr<ZONE>> newZones;
     std::vector<std::unique_ptr<ZONE>> keepoutZones;
+    std::unordered_map<uint32_t, ZONE*> zoneByTable;
 
     ZONE_FILL_HANDLER zoneFillHandler;
 
@@ -4527,6 +4561,7 @@ void BOARD_BUILDER::createZones()
     {
         std::unique_ptr<ZONE> zone;
         LAYER_INFO            layerInfo{};
+        uint32_t              tableKey = 0;
 
         switch( block->GetBlockType() )
         {
@@ -4561,6 +4596,8 @@ void BOARD_BUILDER::createZones()
 
             zone = buildZone( *block, getShapeRelatedBlocks( shapeData ), zoneFillHandler, m_board );
             layerInfo = shapeData.m_Layer;
+            if( shapeData.m_Layer.m_Class == LAYER_INFO::CLASS::BOUNDARY )
+                tableKey = shapeData.GetTablePtr();
             break;
         }
         default:
@@ -4578,6 +4615,16 @@ void BOARD_BUILDER::createZones()
                         layerInfo.m_Subclass );
 
             stampIds( *zone, block->GetKey() );
+
+            if( tableKey != 0 )
+            {
+                auto [it, inserted] = zoneByTable.emplace( tableKey, zone.get() );
+
+                // If multiple boundaries use this table, do not guess which one owns a fill.
+                if( !inserted )
+                    it->second = nullptr;
+            }
+
             newZones.push_back( std::move( zone ) );
         }
     }
@@ -4626,6 +4673,38 @@ void BOARD_BUILDER::createZones()
             stampIds( *zone, block->GetKey() );
             newZones.push_back( std::move( zone ) );
         }
+    }
+
+    // A boundary's pointer array can omit calculated copper pieces. Those pieces
+    // can still point through a 0x26 block to the boundary's 0x2C table.
+    for( const auto& [fillKey, fill] : m_zoneFillShapes )
+    {
+        if( m_usedZoneFillShapes.contains( fillKey ) || fill.netCode == NETINFO_LIST::UNCONNECTED )
+            continue;
+
+        const BLOCK_BASE* groupBlock = m_brdDb.GetObjectByKey( fill.shape->GetTablePtr() );
+
+        if( !groupBlock || groupBlock->GetBlockType() != BLK_0x26_MATCH_GROUP::BLOCK_TYPE_CODE )
+            continue;
+
+        const auto& group = BlockDataAs<BLK_0x26_MATCH_GROUP>( *groupBlock );
+        auto        zoneIt = zoneByTable.find( group.m_GroupPtr );
+
+        if( zoneIt == zoneByTable.end() || !zoneIt->second )
+            continue;
+
+        ZONE* zone = zoneIt->second;
+
+        if( zone->GetIsRuleArea() || zone->GetNetCode() != fill.netCode || !zone->IsOnLayer( fill.layer ) )
+            continue;
+
+        SHAPE_POLY_SET fillPolys = shapeToPolySet( *fill.shape );
+        fillPolys.Simplify();
+
+        zoneFillHandler.AppendPolygonForZone( *zone, std::move( fillPolys ), fill.layer );
+        zone->SetIsFilled( true );
+        zone->SetNeedRefill( false );
+        m_usedZoneFillShapes.insert( fillKey );
     }
 
     // Deal with all the collected zone fill polygons now, all at once

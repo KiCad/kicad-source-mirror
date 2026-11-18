@@ -792,8 +792,8 @@ struct BLK_0x08_PIN_NUMBER
 
 
 /**
- * Intermediate link between copper fills and their parent shapes. Appears in fill-to-shape
- * resolution chains. Not directly imported.
+ * Found in net-assignment chains for ETCH shapes, pads, and vias on tested boards.
+ * Despite this struct's name, it does not link a calculated fill to its source BOUNDARY.
  */
 struct BLK_0x09_FILL_LINK
 {
@@ -1698,8 +1698,10 @@ struct BLK_0x24_RECT
 
 
 /**
- * Match group indirection for differential pairs and match groups.
- * NET.m_MatchGroupPtr -> 0x26 -> m_GroupPtr -> 0x2C TABLE -> group name string (V172+).
+ * Indirection used for match groups and, on tested boards, calculated copper fills.
+ * For a NET match group: NET.m_MatchGroupPtr -> this block -> m_GroupPtr -> 0x2C TABLE.
+ * For a fill: ETCH shape.m_TablePtr -> this block -> m_GroupPtr -> the same 0x2C TABLE
+ * as its source BOUNDARY. The exact Cadence name for this record is not known.
  */
 struct BLK_0x26_MATCH_GROUP
 {
@@ -1741,8 +1743,8 @@ struct BLK_0x27_CSTRMGR_XREF
  * m_LL_Shapes), computed copper fills (on net assignment chains), board outline, keepout
  * areas, place bounds, and custom pad shapes (shape symbol type 0x16).
  *
- * Zone net resolution follows m_Ptr7 (V172+) or m_Ptr7_16x (pre-V172) through a
- * 0x2C TABLE and 0x37 pointer array to reach the owning 0x1B NET.
+ * A BOUNDARY's m_TablePtr (V172+) or m_TablePtr_16x (pre-V172) leads through a
+ * 0x2C TABLE and 0x37 pointer array to its 0x1B NET record when one is present.
  */
 struct BLK_0x28_SHAPE
 {

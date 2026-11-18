@@ -158,7 +158,7 @@ have 24 descriptors starting at offset 0x60.
 | 0x06 | BLK_0x06                | Component/symbol definition          |
 | 0x07 | BLK_0x07                | Footprint instance reference data    |
 | 0x08 | BLK_0x08                | Pin number                           |
-| 0x09 | BLK_0x09                | Intermediate (fill-to-shape link)    |
+| 0x09 | BLK_0x09                | Net-assignment chain entry           |
 | 0x0A | BLK_0x0A_DRC            | DRC error marker                     |
 | 0x0C | BLK_0x0C                | Pin definition                       |
 | 0x0D | BLK_0x0D_PAD            | Pad geometry and placement           |
@@ -376,23 +376,23 @@ and custom pad shapes.
 
 ### Zone Outlines vs Copper Fills
 
-0x28 shapes appear in two distinct contexts:
+0x28 shapes appear in these contexts:
 
 1. On the `m_LL_Shapes` header linked list with BOUNDARY class (0x15):
    these are zone outlines and are imported as ZONE objects.
 
 2. On the net assignment chain (reachable from 0x1B NET via 0x04/0x05):
-   these have ETCH class and include both zone outlines repeated as
-   copper shapes and actual computed fills. applyZoneFills() matches
-   fills to zones by net code, layer, and bounding box overlap, then
-   applies the genuine fills via SetFilledPolysList(). Unmatched fills
-   also serve as a fallback for zone net resolution when
-   resolveShapeNet() returns UNCONNECTED.
+   these have ETCH class and include calculated fills and standalone copper
+   shapes. A boundary's 0x37 pointer array can name its fills, but may omit
+   some. An omitted fill can instead point through a 0x26 block to the same
+   0x2C table as its boundary. The importer attaches it only if that table
+   identifies one boundary and the net and layer match. Directly listed
+   fills can also supply a boundary's net when its NET entry is missing.
 
-3. Also on the net assignment chain but with NO corresponding BOUNDARY
-   zone: these are standalone copper polygons (Allegro "shapes" drawn
-   directly on ETCH layers). They are imported as filled PCB_SHAPE
-   objects with the appropriate net assignment.
+3. Also on the net assignment chain but with NO confirmed BOUNDARY zone:
+   these are standalone copper polygons (Allegro "shapes" drawn directly
+   on ETCH layers). They are imported as filled PCB_SHAPE objects with the
+   appropriate net assignment.
 
    On V172+ boards, the m_Unknown2 field in 0x28 SHAPE blocks is a
    discriminator for dynamic copper. Bit 12 (0x1000) marks shapes that
@@ -401,12 +401,16 @@ and custom pad shapes.
 
    - 0x3001: classic teardrop shapes (5 vertices, asymmetric bbox)
    - 0x1001: dynamic copper fillets at via/pad junctions
-   - 0x0001: genuine standalone copper pours
+   - 0x0101: boundaries and calculated fills on tested boards
+   - 0x0001: standalone copper shapes on tested boards
    - 0x0000: pre-V172 boards (field absent, value_or(0) returns 0)
 
+   The meaning of bit 0x100 is not confirmed. The importer does not use
+   that bit alone to identify a fill's boundary.
+
    Shapes with bit 12 set are imported as KiCad teardrop ZONE objects
-   (TEARDROP_TYPE::TD_VIAPAD). Shapes without this flag are imported
-   as filled PCB_SHAPE objects (standalone copper).
+   (TEARDROP_TYPE::TD_VIAPAD). Unclaimed shapes without this flag are
+   imported as filled PCB_SHAPE objects (standalone copper).
 
    After teardrop zones are created, enablePadTeardrops() finds the
    anchoring pad/via for each teardrop by checking which pad/via
@@ -422,7 +426,7 @@ To find the net for a BOUNDARY shape, follow this pointer chain:
 
 ```
 BOUNDARY 0x28 shape
-  └─ m_Ptr7 (V172+) or m_Ptr7_16x (pre-V172)
+  └─ m_TablePtr (V172+) or m_TablePtr_16x (pre-V172)
        └─ 0x2C TABLE
             └─ m_Ptr1
                  └─ 0x37 pointer array
@@ -430,8 +434,8 @@ BOUNDARY 0x28 shape
                            └─ 0x1B NET block
 ```
 
-The `m_Ptr7` field is version-conditional: `m_Ptr7` exists in V172+,
-`m_Ptr7_16x` exists in pre-V172. One or the other will be populated.
+The table pointer is version-conditional: `m_TablePtr` exists in V172+,
+`m_TablePtr_16x` exists in pre-V172. One or the other will be populated.
 
 The 0x37 pointer array holds keys of blocks, of which the 0x1B NET
 block provides net information and 0x28 SHAPE blocks specify fills.
