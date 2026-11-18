@@ -1082,6 +1082,28 @@ BOOST_AUTO_TEST_CASE( UnlinkedCalculatedFillsJoinZones )
 }
 
 
+BOOST_AUTO_TEST_CASE( CopperZonesInheritNetClearance )
+{
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "ABX00162_UNOQ/20250806_UNOQ.brd" );
+    BOOST_REQUIRE( board );
+
+    int copperZones = 0;
+    int unexpectedClearances = 0;
+
+    for( const ZONE* zone : board->Zones() )
+    {
+        if( zone->GetIsRuleArea() || !zone->IsOnCopperLayer() )
+            continue;
+
+        copperZones++;
+        unexpectedClearances += zone->GetLocalClearance().value_or( -1 ) != 0;
+    }
+
+    BOOST_CHECK_GT( copperZones, 0 );
+    BOOST_CHECK_EQUAL( unexpectedClearances, 0 );
+}
+
+
 /**
  * Test that copper_text.brd imports the "TESTING" text on F.Cu.
  */

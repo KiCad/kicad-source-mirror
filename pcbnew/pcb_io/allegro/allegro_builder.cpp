@@ -4342,6 +4342,9 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
     {
         zone->SetLayer( layer );
         zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+        // Allegro clearance constraints are imported as net classes. Do not impose
+        // KiCad's default local zone clearance as another minimum.
+        zone->SetLocalClearance( 0 );
     }
     else
     {
