@@ -920,6 +920,18 @@ public:
     int ChangeSymbolLibNickname( const wxString& aFrom, const wxString& aTo );
 
     /**
+     * Find the placed symbols whose embedded library symbol differs from the library copy.
+     *
+     * Symbols without an embedded copy or whose library symbol cannot be loaded are skipped.  Each returned
+     * symbol is a screen item, so one entry stands for every instance of a reused sheet.
+     *
+     * @param aLibraries provides the library copies.
+     * @param aCompareFlags are the #SCH_ITEM::COMPARE_FLAGS used to compare the flattened copies.
+     * @return the outdated symbols.
+     */
+    std::vector<SCH_SYMBOL*> OutdatedSymbols( SYMBOL_LIBRARY_ADAPTER& aLibraries, int aCompareFlags );
+
+    /**
      * Check if one of the schematics in the list of screens is \a aSchematicFileName.
      *
      * Schematic file names in SCH_SCREEN object are stored with the absolute path to

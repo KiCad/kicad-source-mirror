@@ -38,6 +38,16 @@
 
 #include <qa_utils/stdstream_line_reader.h>
 
+#include <kiid.h>
+#include <libraries/library_manager.h>
+#include <libraries/library_table.h>
+#include <libraries/symbol_library_adapter.h>
+#include <pgm_base.h>
+#include <project_sch.h>
+
+#include <wx/file.h>
+#include <wx/filename.h>
+
 namespace KI_TEST
 {
 
@@ -178,6 +188,47 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
 
     SCH_RULE_AREA::UpdateRuleAreasInScreens( allScreens, nullptr );
     aSchematic->ConnectionGraph()->Recalculate( sheets, true );
+}
+
+
+static wxString projectSymbolTableDirectory( SYMBOL_LIBRARY_ADAPTER* aAdapter )
+{
+    BOOST_REQUIRE( aAdapter );
+    const auto table = aAdapter->ProjectTable();
+    return table && *table ? wxFileName( ( *table )->Path() ).GetPath() : wxString();
+}
+
+
+SCOPED_PROJECT_SYMBOL_LIBRARY::SCOPED_PROJECT_SYMBOL_LIBRARY( PROJECT& aProject, const wxString& aNickname,
+                                                              const wxString& aUri ) :
+        adapter( PROJECT_SCH::SymbolLibAdapter( &aProject ) ),
+        restore{ projectSymbolTableDirectory( adapter ), wxString() }
+{
+    restore.directory = wxFileName::GetTempDir() + "/qa-symbol-library-" + KIID().AsString();
+    BOOST_REQUIRE( wxFileName::Mkdir( restore.directory, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    BOOST_REQUIRE(
+            wxFile( restore.directory + "/sym-lib-table", wxFile::write ).Write( "(sym_lib_table (version 7))\n" ) );
+    Pgm().GetLibraryManager().LoadProjectTables( restore.directory, { LIBRARY_TABLE_TYPE::SYMBOL } );
+
+    LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
+    BOOST_REQUIRE( table );
+
+    row = &table->InsertRow();
+    row->SetNickname( aNickname );
+    row->SetURI( aUri );
+    row->SetType( "KiCad" );
+    row->SetScope( LIBRARY_TABLE_SCOPE::PROJECT );
+    adapter->LoadOne( row->Nickname() );
+    BOOST_REQUIRE( adapter->IsLibraryLoaded( row->Nickname() ) );
+}
+
+
+SCOPED_PROJECT_SYMBOL_LIBRARY::TABLE_RESTORE::~TABLE_RESTORE()
+{
+    Pgm().GetLibraryManager().LoadProjectTables( previousDirectory, { LIBRARY_TABLE_TYPE::SYMBOL } );
+
+    if( !directory.IsEmpty() )
+        wxFileName::Rmdir( directory, wxPATH_RMDIR_RECURSIVE );
 }
 
 } // namespace KI_TEST

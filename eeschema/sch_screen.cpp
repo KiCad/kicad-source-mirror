@@ -21,6 +21,7 @@
  */
 
 #include <atomic>
+#include <map>
 #include <stack>
 #include <vector>
 #include <wx/filefn.h>
@@ -2526,6 +2527,38 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
     }
 
     return cnt;
+}
+
+
+std::vector<SCH_SYMBOL*> SCH_SCREENS::OutdatedSymbols( SYMBOL_LIBRARY_ADAPTER& aLibraries, int aCompareFlags )
+{
+    std::vector<SCH_SYMBOL*>                      outdated;
+    std::map<LIB_ID, std::unique_ptr<LIB_SYMBOL>> flattened;
+
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*       symbol = static_cast<SCH_SYMBOL*>( item );
+            const LIB_SYMBOL* embedded = symbol->GetLibSymbolRef().get();
+
+            if( !embedded )
+                continue;
+
+            auto it = flattened.find( symbol->GetLibId() );
+
+            if( it == flattened.end() )
+            {
+                LIB_SYMBOL* libSymbol = aLibraries.LoadSymbol( symbol->GetLibId() );
+                it = flattened.emplace( symbol->GetLibId(), libSymbol ? libSymbol->Flatten() : nullptr ).first;
+            }
+
+            if( it->second && it->second->Compare( *embedded, aCompareFlags ) != 0 )
+                outdated.push_back( symbol );
+        }
+    }
+
+    return outdated;
 }
 
 

@@ -33,13 +33,7 @@
 #include <erc/erc_exclusion.h>
 #include <api/schematic/schematic_rules.pb.h>
 #include <set>
-#include <pgm_base.h>
-#include <project_sch.h>
-#include <libraries/library_manager.h>
-#include <libraries/library_table.h>
 #include <libraries/symbol_library_adapter.h>
-#include <wx/filename.h>
-#include <wx/file.h>
 #include <sch_marker.h>
 #include <sch_sheet.h>
 #include <scoped_set_reset.h>
@@ -55,50 +49,17 @@ struct ERC_LIB_SYMBOL_MISMATCH_FIXTURE
 
 namespace
 {
-struct SCOPED_NATIVE_LIBRARY
+struct SCOPED_NATIVE_LIBRARY : KI_TEST::SCOPED_PROJECT_SYMBOL_LIBRARY
 {
-    struct TABLE_RESTORE
-    {
-        LIBRARY_MANAGER& manager;
-        wxString         directory;
-        ~TABLE_RESTORE() { manager.LoadProjectTables( directory, { LIBRARY_TABLE_TYPE::SYMBOL } ); }
-    };
-
-    static wxString PreviousDirectory( SYMBOL_LIBRARY_ADAPTER* aAdapter )
-    {
-        BOOST_REQUIRE( aAdapter );
-        const auto table = aAdapter->ProjectTable();
-        return table && *table ? wxFileName( ( *table )->Path() ).GetPath() : wxString();
-    }
-
     explicit SCOPED_NATIVE_LIBRARY( PROJECT& aProject ) :
-            adapter( PROJECT_SCH::SymbolLibAdapter( &aProject ) ),
-            restore{ Pgm().GetLibraryManager(), PreviousDirectory( adapter ) }
+            SCOPED_PROJECT_SYMBOL_LIBRARY( aProject, "NativeCapturedLibrary",
+                                           wxString( KI_TEST::GetEeschemaTestDataDir() ) + "libs/4xxx.kicad_sym" ),
+            external( adapter->LoadSymbol( row->Nickname(), "4001" ) )
     {
-        const wxString directory = wxFileName::GetTempDir() + "/library-erc-" + KIID().AsString();
-        BOOST_REQUIRE( wxFileName::Mkdir( directory, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-        wxFile tableFile( directory + "/sym-lib-table", wxFile::write );
-        BOOST_REQUIRE( tableFile.IsOpened() );
-        BOOST_REQUIRE( tableFile.Write( "(sym_lib_table (version 7))\n" ) );
-        tableFile.Close();
-        restore.manager.LoadProjectTables( directory, { LIBRARY_TABLE_TYPE::SYMBOL } );
-        LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
-        BOOST_REQUIRE( table );
-        row = &table->InsertRow();
-        row->SetNickname( "NativeCapturedLibrary" );
-        row->SetURI( wxString( KI_TEST::GetEeschemaTestDataDir() ) + "libs/4xxx.kicad_sym" );
-        row->SetType( "KiCad" );
-        row->SetScope( LIBRARY_TABLE_SCOPE::PROJECT );
-        adapter->LoadOne( row->Nickname() );
-        BOOST_REQUIRE( adapter->IsLibraryLoaded( row->Nickname() ) );
-        external = adapter->LoadSymbol( row->Nickname(), "4001" );
         BOOST_REQUIRE( external );
     }
 
-    SYMBOL_LIBRARY_ADAPTER* adapter;
-    TABLE_RESTORE           restore;
-    LIBRARY_TABLE_ROW*      row = nullptr;
-    LIB_SYMBOL*             external = nullptr;
+    LIB_SYMBOL* external;
 };
 }
 

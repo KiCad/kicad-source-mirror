@@ -2959,6 +2959,15 @@ int ERC_TESTER::TestLibSymbolIssues()
     int                     err_count = 0;
 
     const bool captured = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+    const int  flags = m_schematic->Settings().SymbolCompareFlags();
+
+    std::set<const SCH_SYMBOL*> outdated;
+
+    if( !captured && m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
+    {
+        for( SCH_SYMBOL* symbol : SCH_SCREENS( m_schematic->Root() ).OutdatedSymbols( *adapter, flags ) )
+            outdated.insert( symbol );
+    }
 
     struct LIBRARY_ISSUE
     {
@@ -3022,15 +3031,13 @@ int ERC_TESTER::TestLibSymbolIssues()
                 if( !m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
                     return issues;
 
-                std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
-                const int                   flags = m_schematic->Settings().SymbolCompareFlags();
-                bool                        mismatch = false;
+                bool mismatch = false;
 
                 if( captured )
                 {
                     if( aSource.attributes.duplicatePinNumbersAreJumpers || !aSource.HasDuplicatePins() )
                     {
-                        mismatch = !SCH_CONNECTIVITY::ExtractLibrarySymbolFact( *flattenedSymbol )
+                        mismatch = !SCH_CONNECTIVITY::ExtractLibrarySymbolFact( *libSymbol->Flatten() )
                                             .Matches( aSource, flags );
                     }
                 }
@@ -3048,7 +3055,7 @@ int ERC_TESTER::TestLibSymbolIssues()
                         CheckDuplicatePins( embedded, messages, &unitsProvider );
                     }
 
-                    mismatch = messages.empty() && flattenedSymbol->Compare( *embedded, flags ) != 0;
+                    mismatch = messages.empty() && outdated.contains( aSymbol );
                 }
 
                 if( mismatch )
