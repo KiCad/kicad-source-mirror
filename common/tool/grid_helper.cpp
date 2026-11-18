@@ -26,6 +26,7 @@
 #include <numbers>
 
 #include <advanced_config.h>
+#include <eda_item.h>
 #include <trace_helpers.h>
 #include <wx/log.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -112,6 +113,23 @@ GRID_HELPER::~GRID_HELPER()
 
     if( m_anchorDebug )
         view.Remove( m_anchorDebug.get() );
+}
+
+
+void GRID_HELPER::addAnchor( const VECTOR2I& aPos, int aFlags, std::vector<EDA_ITEM*> aItems, int aPointTypes )
+{
+    if( ( aFlags & m_maskTypes ) != aFlags )
+        return;
+
+    std::vector<SNAP_TARGET_ID> targets;
+
+    for( const EDA_ITEM* item : aItems )
+    {
+        if( item )
+            targets.push_back( SnapTargetId( item->m_Uuid ) );
+    }
+
+    addAnchor( aPos, aFlags, std::move( aItems ), std::move( targets ), aPointTypes );
 }
 
 

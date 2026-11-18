@@ -24,6 +24,7 @@
 
 #include <initializer_list>
 #include <set>
+#include <unordered_map>
 #include <vector>
 
 #include <settings/snap_settings.h>
@@ -77,6 +78,10 @@ public:
     void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedItem ) override;
 
     void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+
+    void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
+                                 std::vector<BOARD_ITEM*>& aRemovedItems,
+                                 std::vector<BOARD_ITEM*>& aChangedItems ) override;
 
     /**
      * Choose the "best" snap anchor around the given point, optionally taking layers from
@@ -152,6 +157,15 @@ public:
     static std::vector<ANCHOR_SPEC> GetArcAnchors( const PCB_ARC& aArc, bool aFrom );
 
 private:
+    /**
+     * Drop the retained snap and the construction batches if they hold any of \a aRemovedItems
+     * or their children.  Only pointers are compared, as the cached ones may already be stale.
+     */
+    void forgetRemovedItems( const std::vector<BOARD_ITEM*>& aRemovedItems );
+
+    /// Drop the construction batches if they hold a child that \a aFootprint no longer contains.
+    void forgetOrphanedChildren( const FOOTPRINT* aFootprint );
+
     static BOX2I layoutBounds( const BOARD_ITEM& aItem );
 
     /**
@@ -203,6 +217,9 @@ private:
     std::vector<NEARABLE_GEOM>       m_pointOnLineCandidates;
 
     bool                             m_constructionGeometryEnabled = true;
+
+    /// Parent footprint of each footprint child given construction, keyed and compared by pointer only
+    std::unordered_map<const EDA_ITEM*, const FOOTPRINT*> m_constructionParents;
 
     std::set<SNAP_CANDIDATE_SUBTYPE> m_suppressedSnapSubtypes;
 };

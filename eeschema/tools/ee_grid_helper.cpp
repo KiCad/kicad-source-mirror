@@ -179,7 +179,8 @@ void EE_GRID_HELPER::AddConstructionItems( std::vector<SCH_ITEM*> aItems, bool a
         for( KIGFX::CONSTRUCTION_GEOM::DRAWABLE& drawable : drawables )
             entries.push_back( { std::move( drawable ), 1 } );
 
-        batch->push_back( { CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS, item, std::move( entries ) } );
+        batch->push_back( { CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS, item, std::move( entries ),
+                            SnapTargetId( item->m_Uuid ) } );
     }
 
     getSnapManager().GetConstructionManager().ProposeConstructionItems( std::move( batch ), aIsPersistent );
@@ -404,24 +405,16 @@ SNAP_RESULT EE_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GR
 
     const auto anchorId = [&]( const ANCHOR& aAnchor )
     {
-        std::vector<SNAP_TARGET_ID> targets;
-
-        for( const EDA_ITEM* item : aAnchor.items )
-        {
-            if( item )
-                targets.push_back( SnapTargetId( item->m_Uuid ) );
-        }
-
         SNAP_ID_KIND kind =
                 aAnchor.flags & CONSTRUCTED ? SNAP_ID_KIND::CONSTRUCTED_ANCHOR : SNAP_ID_KIND::INTRINSIC_ANCHOR;
 
-        if( targets.empty() )
+        if( aAnchor.targets.empty() )
             return MakePointSnapId( kind, aAnchor.pos, aAnchor.pointTypes );
 
-        if( targets.size() == 1 )
-            return SNAP_STABLE_ID{ kind, targets.front(), aAnchor.pointTypes, 0 };
+        if( aAnchor.targets.size() == 1 )
+            return SNAP_STABLE_ID{ kind, aAnchor.targets.front(), aAnchor.pointTypes, 0 };
 
-        return MakeCompositeSnapId( kind, targets, aAnchor.pointTypes );
+        return MakeCompositeSnapId( kind, aAnchor.targets, aAnchor.pointTypes );
     };
 
     SNAP_SOURCE_CONTEXT context;
@@ -551,11 +544,9 @@ SNAP_RESULT EE_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GR
         {
             for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM& item : batch )
             {
-                SNAP_TARGET_ID target = item.Item ? SnapTargetId( item.Item->m_Uuid ) : SNAP_TARGET_ID{};
-
                 for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY& entry : item.Constructions )
                 {
-                    SNAP_STABLE_ID id{ SNAP_ID_KIND::CONSTRUCTION, target, constructionIndex++, 0 };
+                    SNAP_STABLE_ID id{ SNAP_ID_KIND::CONSTRUCTION, item.Target, constructionIndex++, 0 };
 
                     std::visit(
                             [&]( const auto& drawable )
@@ -656,19 +647,24 @@ SNAP_RESULT EE_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GR
     }
     else if( output.presentation && output.presentation->payload.anchor )
     {
-        const PRESENTATION&    presentation = output.presentation->payload;
-        std::vector<SCH_ITEM*> items;
+        const PRESENTATION& presentation = output.presentation->payload;
 
-        for( EDA_ITEM* item : presentation.anchor->items )
+        // A retained anchor's items may have been freed, and it never proposes construction
+        if( presentation.proposeConstruction && constructionEnabled )
         {
-            if( item && item->IsSCH_ITEM() )
-                items.push_back( static_cast<SCH_ITEM*>( item ) );
-        }
+            std::vector<SCH_ITEM*> items;
 
-        if( presentation.proposeConstruction && constructionEnabled && !items.empty() )
-        {
-            AddConstructionItems( std::move( items ), true, false );
-            keepConstructionProposal = true;
+            for( EDA_ITEM* item : presentation.anchor->items )
+            {
+                if( item && item->IsSCH_ITEM() )
+                    items.push_back( static_cast<SCH_ITEM*>( item ) );
+            }
+
+            if( !items.empty() )
+            {
+                AddConstructionItems( std::move( items ), true, false );
+                keepConstructionProposal = true;
+            }
         }
 
         m_snapItem = *presentation.anchor;

@@ -21,6 +21,8 @@
 #ifndef SCH_SELECTION_TOOL_H
 #define SCH_SELECTION_TOOL_H
 
+#include <memory>
+
 #include <project/sch_project_settings.h>
 #include <tool/selection_tool.h>
 #include <tool/action_menu.h>
@@ -409,6 +411,9 @@ private:
     SELECTION_MODE m_selectionMode; // Current selection mode
 
     SCH_TABLECELL* m_previous_first_cell; // First selected cell for shift+click selection range
+
+    /// Snap helper kept across #Main runs; Reset() clears it on every reset except REDRAW.
+    std::unique_ptr<EE_GRID_HELPER> m_grid;
 };
 
 #endif //SCH_SELECTION_TOOL_H

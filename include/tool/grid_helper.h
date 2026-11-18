@@ -221,10 +221,15 @@ protected:
          *               unwanted anchors per the settings).
          * @param aPointTypes The point types that this anchor represents in geometric terms.
          * @param aItems The items to which the anchor belongs.
+         * @param aTargets The snap identities of the non-null items in \a aItems.
          */
-        ANCHOR( const VECTOR2I& aPos, int aFlags, int aPointTypes, std::vector<EDA_ITEM*> aItems ) :
-                pos( aPos ), flags( aFlags ), pointTypes( aPointTypes ),
-                items( std::move( aItems ) )
+        ANCHOR( const VECTOR2I& aPos, int aFlags, int aPointTypes, std::vector<EDA_ITEM*> aItems,
+                std::vector<SNAP_TARGET_ID> aTargets ) :
+                pos( aPos ),
+                flags( aFlags ),
+                pointTypes( aPointTypes ),
+                items( std::move( aItems ) ),
+                targets( std::move( aTargets ) )
         {
         }
 
@@ -235,6 +240,10 @@ protected:
         /// Items that are associated with this anchor (can be more than one, e.g. for an
         /// intersection).
         std::vector<EDA_ITEM*> items;
+
+        /// Snap identities of #items, captured while they are alive.  A retained anchor can
+        /// outlive its items, so its identity must never be read back through #items.
+        std::vector<SNAP_TARGET_ID> targets;
 
         double Distance( const VECTOR2I& aP ) const
         {
@@ -253,11 +262,17 @@ protected:
         addAnchor( aPos, aFlags, std::vector<EDA_ITEM*>{ aItem }, aPointTypes );
     }
 
+    void addAnchor( const VECTOR2I& aPos, int aFlags, std::vector<EDA_ITEM*> aItems, int aPointTypes );
+
+    /**
+     * Add an anchor whose items may no longer be alive, so their snap identities are supplied
+     * by the caller rather than read from the items.
+     */
     void addAnchor( const VECTOR2I& aPos, int aFlags, std::vector<EDA_ITEM*> aItems,
-                    int aPointTypes )
+                    std::vector<SNAP_TARGET_ID> aTargets, int aPointTypes )
     {
         if( ( aFlags & m_maskTypes ) == aFlags )
-            m_anchors.emplace_back( ANCHOR( aPos, aFlags, aPointTypes, std::move( aItems ) ) );
+            m_anchors.emplace_back( ANCHOR( aPos, aFlags, aPointTypes, std::move( aItems ), std::move( aTargets ) ) );
     }
 
     void clearAnchors()

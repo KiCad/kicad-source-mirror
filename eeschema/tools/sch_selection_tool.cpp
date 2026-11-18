@@ -771,6 +771,9 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
         // Remove pointers to the selected items from containers without changing their
         // properties (as they are already deleted while a new sheet is loaded)
         m_selection.Clear();
+
+        if( m_grid )
+            m_grid->FullReset();
     }
 
     if( aReason == RESET_REASON::SHUTDOWN )
@@ -808,7 +811,11 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     KIID lastRolloverItemId = niluuid;
-    EE_GRID_HELPER grid( m_toolMgr );
+
+    if( !m_grid )
+        m_grid = std::make_unique<EE_GRID_HELPER>( m_toolMgr );
+
+    EE_GRID_HELPER& grid = *m_grid;
 
     auto pinOrientation =
             []( EDA_ITEM* aItem )

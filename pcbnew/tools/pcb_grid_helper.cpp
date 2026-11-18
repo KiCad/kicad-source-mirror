@@ -300,10 +300,14 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
                     CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY{ std::move( drawable ), 1 } );
         }
 
+        if( const FOOTPRINT* parent = item->GetParentFootprint() )
+            m_constructionParents[item] = parent;
+
         constructionItemsBatch->emplace_back( CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM{
                 CONSTRUCTION_MANAGER::SOURCE::FROM_ITEMS,
                 item,
                 std::move( drawableEntries ),
+                SnapTargetId( item->m_Uuid ),
         } );
     }
 
@@ -513,30 +517,125 @@ VECTOR2I PCB_GRID_HELPER::SnapToPad( const VECTOR2I& aMousePos, std::deque<PAD*>
 
 void PCB_GRID_HELPER::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedItem )
 {
-    // If the item being removed is involved in the snap, clear the snap item
-    if( m_snapItem )
-    {
-        for( EDA_ITEM* eda_item : m_snapItem->items )
-        {
-            if( eda_item && eda_item->IsBOARD_ITEM() )
-            {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
+    forgetRemovedItems( { aRemovedItem } );
+}
 
-                if( item == aRemovedItem || item->GetParentFootprint() == aRemovedItem )
-                {
-                    m_snapItem = std::nullopt;
-                    break;
-                }
+
+void PCB_GRID_HELPER::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    // This is a bulk-remove.  Simply clearing the snap caches will be the most performant.
+    m_snapItem = std::nullopt;
+    getSnapManager().GetConstructionManager().Clear();
+    m_constructionParents.clear();
+}
+
+
+void PCB_GRID_HELPER::OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
+                                              std::vector<BOARD_ITEM*>& aRemovedItems,
+                                              std::vector<BOARD_ITEM*>& aChangedItems )
+{
+    // Commits report their removals here rather than through OnBoardItemRemoved
+    if( !aRemovedItems.empty() )
+        forgetRemovedItems( aRemovedItems );
+
+    // A footprint child removed by a commit or undo is reported only as a change to its footprint
+    for( BOARD_ITEM* item : aChangedItems )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            // An undone footprint change can free the retained snap's child with no further notice
+            m_snapItem = std::nullopt;
+            forgetOrphanedChildren( static_cast<FOOTPRINT*>( item ) );
+        }
+    }
+}
+
+
+void PCB_GRID_HELPER::forgetOrphanedChildren( const FOOTPRINT* aFootprint )
+{
+    CONSTRUCTION_MANAGER& constructionManager = getSnapManager().GetConstructionManager();
+
+    std::vector<CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH> batches;
+    constructionManager.GetConstructionItems( batches );
+    constructionManager.GetPendingConstructionItems( batches );
+
+    std::unordered_set<const EDA_ITEM*> children;
+    bool                                childrenCollected = false;
+
+    for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH& batch : batches )
+    {
+        for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM& item : batch )
+        {
+            auto parent = m_constructionParents.find( item.Item );
+
+            if( parent == m_constructionParents.end() || parent->second != aFootprint )
+                continue;
+
+            if( !childrenCollected )
+            {
+                aFootprint->RunOnChildren(
+                        [&]( BOARD_ITEM* aChild )
+                        {
+                            children.insert( aChild );
+                        },
+                        RECURSE_MODE::RECURSE );
+                childrenCollected = true;
+            }
+
+            if( !children.contains( item.Item ) )
+            {
+                constructionManager.Clear();
+                m_constructionParents.clear();
+                return;
             }
         }
     }
 }
 
 
-void PCB_GRID_HELPER::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+void PCB_GRID_HELPER::forgetRemovedItems( const std::vector<BOARD_ITEM*>& aRemovedItems )
 {
-    // This is a bulk-remove.  Simply clearing the snap item will be the most performant.
-    m_snapItem = std::nullopt;
+    std::unordered_set<const EDA_ITEM*> removed;
+
+    for( BOARD_ITEM* item : aRemovedItems )
+    {
+        removed.insert( item );
+        item->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    removed.insert( aChild );
+                },
+                RECURSE_MODE::RECURSE );
+    }
+
+    if( m_snapItem
+        && std::any_of( m_snapItem->items.begin(), m_snapItem->items.end(),
+                        [&]( const EDA_ITEM* aItem )
+                        {
+                            return removed.contains( aItem );
+                        } ) )
+    {
+        m_snapItem = std::nullopt;
+    }
+
+    CONSTRUCTION_MANAGER& constructionManager = getSnapManager().GetConstructionManager();
+
+    std::vector<CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH> batches;
+    constructionManager.GetConstructionItems( batches );
+    constructionManager.GetPendingConstructionItems( batches );
+
+    for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM_BATCH& batch : batches )
+    {
+        for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM& item : batch )
+        {
+            if( removed.contains( item.Item ) )
+            {
+                constructionManager.Clear();
+                m_constructionParents.clear();
+                return;
+            }
+        }
+    }
 }
 
 
@@ -732,7 +831,10 @@ SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, const LSET& a
             m_enableSnap && inferenceSettings.constructionExtensions && ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
 
     if( !constructionEnabled )
+    {
         getSnapManager().GetConstructionManager().Clear();
+        m_constructionParents.clear();
+    }
 
     //Respect limits of coordinates representation
     const BOX2I visibilityHorizon =
@@ -1062,20 +1164,14 @@ SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, const LSET& a
 
         for( EDA_ITEM* item : aItems )
         {
-            if( !item->IsBOARD_ITEM() )
+            // Null items are geometry not tied to a board item, such as snap lines, and add no construction
+            if( !item || !item->IsBOARD_ITEM() )
                 continue;
 
             BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-            // Null items are allowed to arrive here as they represent geometry that isn't
-            // specifically tied to a board item. For example snap lines from some
-            // other anchor.
-            // But they don't produce new construction items.
-            if( boardItem )
-            {
-                if( m_magneticSettings->allLayers || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
-                    items.push_back( boardItem );
-            }
+            if( m_magneticSettings->allLayers || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
+                items.push_back( boardItem );
         }
 
         // Temporary construction items are not persistent and don't
@@ -1086,21 +1182,14 @@ SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, const LSET& a
 
     const auto anchorId = [&]( const ANCHOR& aAnchor )
     {
-        std::vector<SNAP_TARGET_ID> targets;
-
-        for( const EDA_ITEM* item : aAnchor.items )
-        {
-            if( item )
-                targets.push_back( SnapTargetId( item->m_Uuid ) );
-        }
-
         SNAP_ID_KIND kind =
                 aAnchor.flags & CONSTRUCTED ? SNAP_ID_KIND::CONSTRUCTED_ANCHOR : SNAP_ID_KIND::INTRINSIC_ANCHOR;
         SNAP_STABLE_ID pointId = MakePointSnapId( kind, aAnchor.pos, aAnchor.pointTypes );
 
-        if( targets.empty() )
+        if( aAnchor.targets.empty() )
             return pointId;
 
+        std::vector<SNAP_TARGET_ID> targets = aAnchor.targets;
         targets.push_back( pointId.target );
         return MakeCompositeSnapId( kind, targets, aAnchor.pointTypes );
     };
@@ -1581,6 +1670,7 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems, co
     {
         for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM& constructionItem : batch )
         {
+            // The board listener drops batches whose items leave the board or their footprint, so this is live
             BOARD_ITEM* involvedItem = static_cast<BOARD_ITEM*>( constructionItem.Item );
 
             for( const CONSTRUCTION_MANAGER::CONSTRUCTION_ITEM::DRAWABLE_ENTRY& drawable : constructionItem.Constructions )

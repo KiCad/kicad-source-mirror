@@ -41,7 +41,8 @@ public:
 
     void RetainSnapForTest( const VECTOR2I& aPosition )
     {
-        m_snapItem.emplace( aPosition, ANCHOR_FLAGS::SNAPPABLE, POINT_TYPE::PT_NONE, std::vector<EDA_ITEM*>{} );
+        m_snapItem.emplace( aPosition, ANCHOR_FLAGS::SNAPPABLE, POINT_TYPE::PT_NONE, std::vector<EDA_ITEM*>{},
+                            std::vector<SNAP_TARGET_ID>{} );
     }
 
     /// Positions the mask actually admitted, in the order production accepted them.

@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <preview_items/construction_geom.h>
+#include <snap/snap_resolver.h>
 
 template <typename T>
 class ACTIVATION_HELPER;
@@ -182,6 +183,11 @@ public:
         };
 
         std::vector<DRAWABLE_ENTRY> Constructions;
+
+        /// Snap identity of #Item, captured while it is alive.  A cached batch can outlive
+        /// #Item, so only an owner that purges its batches when items are removed may
+        /// dereference #Item; for any other owner it is only an identity key.
+        SNAP_TARGET_ID Target{};
     };
 
     // A single batch of construction items. Once batch contains all the items (and associated

@@ -23,6 +23,7 @@
 #include <thread>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
 
 #include <board.h>
 #include <footprint.h>
@@ -179,10 +180,146 @@ struct PCB_SNAP_FIXTURE
         return pads;
     }
 };
+
+
+/// The board's top outline edge, moved from ctrl-board into the fixture board, with its extensions active
+struct PCB_OUTLINE_SNAP_FIXTURE : PCB_SNAP_FIXTURE
+{
+    PCB_SHAPE*     edge = nullptr;
+    const VECTOR2I cursor{ pcbIUScale.mmToIU( 180 ), pcbIUScale.mmToIU( 40.69 ) };
+
+    PCB_OUTLINE_SNAP_FIXTURE()
+    {
+        std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( "snap/ctrl-board.kicad_pcb" );
+        const VECTOR2I         start( pcbIUScale.mmToIU( 73.66 ), pcbIUScale.mmToIU( 40.64 ) );
+        const VECTOR2I         end( pcbIUScale.mmToIU( 173.99 ), pcbIUScale.mmToIU( 40.64 ) );
+
+        for( BOARD_ITEM* item : loaded->Drawings() )
+        {
+            PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+            if( shape && shape->GetShape() == SHAPE_T::SEGMENT && shape->GetStart() == start && shape->GetEnd() == end )
+                edge = shape;
+        }
+
+        BOOST_REQUIRE( edge );
+        loaded->Remove( edge );
+        board.Add( edge );
+
+        view.SetCenter( VECTOR2D( cursor ) );
+        helper->SetUseGrid( false );
+        helper->AddConstructionItems( { edge }, true, true );
+        BOOST_REQUIRE_EQUAL( helper->ResolveSnap( cursor, LSET::AllLayersMask() ).position.y, end.y );
+    }
+
+    ~PCB_OUTLINE_SNAP_FIXTURE() { delete edge; }
+};
 } // namespace
 
 
 BOOST_AUTO_TEST_SUITE( PcbSnapPipeline )
+
+
+BOOST_FIXTURE_TEST_CASE( RemovedItemTakesItsExtensions, PCB_OUTLINE_SNAP_FIXTURE )
+{
+    board.Remove( edge );
+
+    BOOST_CHECK_EQUAL( helper->ResolveSnap( cursor, LSET::AllLayersMask() ).position, cursor );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( CommittedRemovalTakesItsExtensions, PCB_OUTLINE_SNAP_FIXTURE )
+{
+    std::vector<BOARD_ITEM*> added;
+    std::vector<BOARD_ITEM*> removed{ edge };
+    std::vector<BOARD_ITEM*> changed;
+
+    board.Remove( edge, REMOVE_MODE::BULK );
+    board.OnItemsCompositeUpdate( added, removed, changed );
+
+    BOOST_CHECK_EQUAL( helper->ResolveSnap( cursor, LSET::AllLayersMask() ).position, cursor );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RemovedFootprintChildTakesItsExtensions, PCB_SNAP_FIXTURE )
+{
+    std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( "snap/ctrl-board.kicad_pcb" );
+    FOOTPRINT*             footprint = nullptr;
+    PCB_SHAPE*             child = nullptr;
+
+    for( FOOTPRINT* candidate : loaded->Footprints() )
+    {
+        for( BOARD_ITEM* item : candidate->GraphicalItems() )
+        {
+            PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+            if( !child && shape && shape->GetShape() == SHAPE_T::SEGMENT && shape->GetLength() > 0 )
+            {
+                footprint = candidate;
+                child = shape;
+            }
+        }
+    }
+
+    BOOST_REQUIRE( child );
+    loaded->Remove( footprint );
+    board.Add( footprint );
+
+    // Just off the child's extension, so only that extension can pull the cursor
+    const VECTOR2D direction = VECTOR2D( child->GetEnd() - child->GetStart() ).Resize( 5 * MM );
+    const VECTOR2I cursor =
+            child->GetEnd() + VECTOR2I( direction ) + VECTOR2I( direction.Perpendicular().Resize( 50000 ) );
+
+    view.SetCenter( VECTOR2D( cursor ) );
+    helper->SetUseGrid( false );
+    helper->AddConstructionItems( { child }, true, true );
+    BOOST_REQUIRE_NE( helper->ResolveSnap( cursor, LSET::AllLayersMask() ).position, cursor );
+
+    std::vector<BOARD_ITEM*> added;
+    std::vector<BOARD_ITEM*> removed;
+    std::vector<BOARD_ITEM*> changed{ footprint };
+
+    footprint->Remove( child );
+    board.OnItemsCompositeUpdate( added, removed, changed );
+
+    BOOST_CHECK_EQUAL( helper->ResolveSnap( cursor, LSET::AllLayersMask() ).position, cursor );
+    delete child;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RemovedFootprintChildIsNotRetained, PCB_SNAP_FIXTURE )
+{
+    std::unique_ptr<BOARD> loaded = KI_TEST::RequireBoardFromPcbnewQAData( "snap/ctrl-board.kicad_pcb" );
+    FOOTPRINT*             footprint = nullptr;
+
+    for( FOOTPRINT* candidate : loaded->Footprints() )
+    {
+        if( !footprint && !candidate->Pads().empty() )
+            footprint = candidate;
+    }
+
+    BOOST_REQUIRE( footprint );
+    loaded->Remove( footprint );
+    board.Add( footprint );
+    view.Add( footprint );
+
+    const VECTOR2I position = footprint->Pads().front()->GetPosition();
+    view.SetCenter( VECTOR2D( position ) );
+    helper->ResolveSnap( position, LSET::AllLayersMask() );
+
+    BOARD_ITEM* pad = helper->GetSnapped();
+    BOOST_REQUIRE( pad && pad->GetParentFootprint() == footprint );
+
+    std::vector<BOARD_ITEM*> added;
+    std::vector<BOARD_ITEM*> removed;
+    std::vector<BOARD_ITEM*> changed{ footprint };
+
+    footprint->Remove( pad );
+    board.OnItemsCompositeUpdate( added, removed, changed );
+
+    BOOST_CHECK_NE( helper->GetSnapped(), pad );
+    delete pad;
+}
 
 
 BOOST_FIXTURE_TEST_CASE( DisabledSnapUsesGridWhenEnabled, PCB_SNAP_FIXTURE )
