@@ -84,6 +84,7 @@
 #include <core/kicad_algo.h>
 #include <dialogs/hotkey_cycle_popup.h>
 #include <dialogs/dialog_map_layers.h>
+#include <pcbnew_settings.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rule.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
@@ -2176,6 +2177,13 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     // Keep also the count of copper layers, to adjust if necessary
     int  initialCopperLayerCount = brd->GetCopperLayerCount();
     LSET initialEnabledLayers = brd->GetEnabledLayers();
+    std::map<PCB_LAYER_ID, wxString> initialLayerNames;
+
+    for( PCB_LAYER_ID layer : initialEnabledLayers )
+        initialLayerNames.emplace( layer, brd->GetLayerName( layer ) );
+
+    bool                             layerMappingShown = false;
+    std::map<PCB_LAYER_ID, wxString> renamedLayers;
 
     // Load the data
     try
@@ -2205,9 +2213,11 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
         if( LAYER_MAPPABLE_PLUGIN* mappable = dynamic_cast<LAYER_MAPPABLE_PLUGIN*>( &pi ) )
         {
             mappable->RegisterCallback(
-                    [editFrame]( const std::vector<INPUT_LAYER_DESC>& aLayerDescs )
+                    [editFrame, brd, &layerMappingShown,
+                     &renamedLayers]( const std::vector<INPUT_LAYER_DESC>& aLayerDescs )
                     {
-                        return DIALOG_MAP_LAYERS::RunModal( editFrame, aLayerDescs );
+                        layerMappingShown = true;
+                        return DIALOG_MAP_LAYERS::RunModal( editFrame, aLayerDescs, &renamedLayers, brd );
                     } );
         }
 
@@ -2215,9 +2225,28 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
         pi.SetProgressReporter( &progressReporter );
         pi.LoadAndAppendBoard( fileName, *brd, &props, nullptr );
+
+        if( layerMappingShown && editFrame->GetPcbNewSettings()->m_ImportKeepKiCadLayerNames )
+        {
+            for( PCB_LAYER_ID layer : brd->GetEnabledLayers() )
+            {
+                auto it = initialLayerNames.find( layer );
+                brd->SetLayerName( layer, it != initialLayerNames.end() ? it->second : wxString() );
+            }
+        }
+        else
+        {
+            for( const auto& [layer, name] : renamedLayers )
+                brd->SetLayerName( layer, name );
+        }
     }
     catch( const IO_CANCELLED& )
     {
+        if( brd->GetCopperLayerCount() != initialCopperLayerCount )
+            brd->SetCopperLayerCount( initialCopperLayerCount );
+
+        if( brd->GetEnabledLayers() != initialEnabledLayers )
+            brd->SetEnabledLayers( initialEnabledLayers );
         clearSkipStructOnExistingItems();
 
         return 1;

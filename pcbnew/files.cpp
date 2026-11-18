@@ -651,6 +651,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         BOARD* loadedBoard = nullptr;   // it will be set to non-NULL if loaded OK
         bool   failedLoad = false;
+        std::map<PCB_LAYER_ID, wxString> renamedLayers;
 
         // importer template footprints, captured at load for reconciliation
         std::vector<std::unique_ptr<FOOTPRINT>> importedLibFootprints;
@@ -706,10 +707,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                             if( !ADVANCED_CFG::GetCfg().m_ImportSkipLayerMapping )
                             {
                                 const auto layerMapCallback =
-                                        [this]( const std::vector<INPUT_LAYER_DESC>& aLayers )
-                                        {
-                                            return DIALOG_MAP_LAYERS::RunModal( this, aLayers );
-                                        };
+                                        [this, &renamedLayers]( const std::vector<INPUT_LAYER_DESC>& aLayers )
+                                {
+                                    return DIALOG_MAP_LAYERS::RunModal( this, aLayers, &renamedLayers );
+                                };
 
                                 mappable_pi->RegisterCallback( layerMapCallback );
                             }
@@ -808,6 +809,33 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             for( PCB_LAYER_ID layer : loadedBoard->GetEnabledLayers().Seq() )
                 loadedBoard->SetLayerName( layer, wxEmptyString );
+        }
+        else
+        {
+            for( const auto& [layer, name] : renamedLayers )
+                loadedBoard->SetLayerName( layer, name );
+        }
+
+        if( converted && !renamedLayers.empty() && !GetPcbNewSettings()->m_ImportKeepKiCadLayerNames )
+        {
+            for( const auto& [renamedLayer, name] : renamedLayers )
+            {
+                if( !loadedBoard->IsLayerEnabled( renamedLayer ) )
+                    continue;
+
+                for( PCB_LAYER_ID layer : loadedBoard->GetEnabledLayers() )
+                {
+                    if( layer == renamedLayer || loadedBoard->GetLayerName( layer ) != name )
+                        continue;
+
+                    progressReporter.Hide();
+                    DisplayErrorMessage( this, _( "Duplicate imported layer name" ),
+                                         wxString::Format( _( "Layer name '%s' is already in use." ), name ) );
+                    delete loadedBoard;
+                    Clear_Pcb( false );
+                    return false;
+                }
+            }
         }
 
         // This fixes a focus issue after the progress reporter is done on GTK.  It shouldn't
