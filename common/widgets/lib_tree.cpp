@@ -931,6 +931,15 @@ void LIB_TREE::onTreeCharHook( wxKeyEvent& aKeyStroke )
         return;
     }
 
+    // Let the native control extend the selection on Shift+Up/Down
+    if( aKeyStroke.GetEventObject() == m_tree_ctrl && m_tree_ctrl->HasFlag( wxDV_MULTIPLE )
+        && aKeyStroke.GetModifiers() == wxMOD_SHIFT
+        && ( aKeyStroke.GetKeyCode() == WXK_UP || aKeyStroke.GetKeyCode() == WXK_DOWN ) )
+    {
+        aKeyStroke.Skip();
+        return;
+    }
+
     onQueryCharHook( aKeyStroke );
 
     if( aKeyStroke.GetSkipped() )
