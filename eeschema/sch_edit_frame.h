@@ -1138,6 +1138,16 @@ private:
     void broadcastSchematicChanged();
 
     /**
+     * Make the symbol fields table let go of the schematic before it is freed.
+     *
+     * The table is destroyed with any unsaved edits, as on a project change.
+     */
+    void releaseSchematic();
+
+    /// Destroy the symbol fields table, which holds pointers into the schematic, discarding unsaved edits.
+    void destroySymbolFieldsTable();
+
+    /**
      * Verify that the symbol library links \a aSheet and all of its child sheets have
      * been remapped to the symbol library table.
      *

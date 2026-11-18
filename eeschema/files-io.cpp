@@ -245,6 +245,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         ClearRepeatItemsList();
         SetScreen( nullptr );
         m_toolManager->GetTool<SCH_INSPECTION_TOOL>()->Reset( TOOL_BASE::SUPERMODEL_RELOAD );
+        destroySymbolFieldsTable();
     }
 
     SetStatusText( wxEmptyString );
@@ -1016,6 +1017,14 @@ void SCH_EDIT_FRAME::OnImportProject()
 
     eeconfig()->m_System.show_import_issues = importOptions.GetShowIssues();
 
+    wxFileName fn = dlg.GetPath();
+
+    if( !fn.IsFileReadable() )
+    {
+        wxLogError( _( "Insufficient permissions to read file '%s'." ), fn.GetFullPath() );
+        return;
+    }
+
     // Don't leave dangling pointers to previously-opened document.
     m_toolManager->GetTool<SCH_SELECTION_TOOL>()->ClearSelection();
     ClearUndoRedoList();
@@ -1029,19 +1038,12 @@ void SCH_EDIT_FRAME::OnImportProject()
         // Clear view before destroying schematic as repaints depend on schematic being valid
         SetScreen( nullptr );
 
+        releaseSchematic();
         Schematic().Reset();
 
         wxFileName projectFn( dlg.GetPath() );
         projectFn.SetExt( FILEEXT::ProjectFileExtension );
         GetSettingsManager()->LoadProject( projectFn.GetFullPath() );
-    }
-
-    wxFileName fn = dlg.GetPath();
-
-    if( !fn.IsFileReadable() )
-    {
-        wxLogError( _( "Insufficient permissions to read file '%s'." ), fn.GetFullPath() );
-        return;
     }
 
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN;

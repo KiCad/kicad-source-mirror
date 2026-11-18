@@ -1134,6 +1134,8 @@ wxString SCH_EDIT_FRAME::GetFullScreenDesc() const
 
 void SCH_EDIT_FRAME::CreateDefaultScreens()
 {
+    // Resetting the schematic frees its hierarchy
+    releaseSchematic();
     m_schematic->CreateDefaultScreens();
     SetScreen( Schematic().RootScreen() );
 
@@ -1142,6 +1144,24 @@ void SCH_EDIT_FRAME::CreateDefaultScreens()
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
         SetScreen( screen );
     }
+}
+
+
+void SCH_EDIT_FRAME::destroySymbolFieldsTable()
+{
+    if( !m_symbolFieldsTableDialog )
+        return;
+
+    // A destroyed window lives on until the next idle, so it must stop reaching into the schematic now
+    m_symbolFieldsTableDialog->DetachFromSchematic();
+    m_symbolFieldsTableDialog->Destroy();
+    m_symbolFieldsTableDialog = nullptr;
+}
+
+
+void SCH_EDIT_FRAME::releaseSchematic()
+{
+    destroySymbolFieldsTable();
 }
 
 
@@ -1343,11 +1363,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
         m_ercDialog = nullptr;
     }
 
-    if( m_symbolFieldsTableDialog )
-    {
-        m_symbolFieldsTableDialog->Destroy();
-        m_symbolFieldsTableDialog = nullptr;
-    }
+    destroySymbolFieldsTable();
 
     // Make sure local settings are persisted
     if( Prj().GetLocalSettings().ShouldAutoSave() )
@@ -1596,11 +1612,7 @@ void SCH_EDIT_FRAME::ProjectChanged()
     SCH_BASE_FRAME::ProjectChanged();
 
     // Drop the symbol fields table so export paths re-bind to the new project (#22395).
-    if( m_symbolFieldsTableDialog )
-    {
-        m_symbolFieldsTableDialog->Destroy();
-        m_symbolFieldsTableDialog = nullptr;
-    }
+    destroySymbolFieldsTable();
 
     registerHistorySaver();
     m_designBlocksPane->ProjectChanged();
@@ -2734,11 +2746,7 @@ wxGenericTreeCtrl* SCH_EDIT_FRAME::GetNetNavigator()
 
 void SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog( wxCommandEvent& aEvent )
 {
-    if( m_symbolFieldsTableDialog )
-    {
-        m_symbolFieldsTableDialog->Destroy();
-        m_symbolFieldsTableDialog = nullptr;
-    }
+    destroySymbolFieldsTable();
 }
 
 
@@ -3312,6 +3320,7 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
         ClearUndoRedoList();
         ClearRepeatItemsList();
         SetScreen( nullptr );
+        releaseSchematic();
         m_schematic->SetProject( nullptr );
 
         // Detach before the outgoing schematic (and its tracker) is freed.

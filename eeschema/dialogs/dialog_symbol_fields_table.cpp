@@ -886,6 +886,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::DetachFromSchematic()
+{
+    // A discarded table's open edit must not land in a model that is going away
+    m_grid->CancelPendingChanges();
+    m_parent->Schematic().RemoveListener( this );
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem )
 {
     std::set<KIID_PATH> savedSelection = SaveGridSelection();

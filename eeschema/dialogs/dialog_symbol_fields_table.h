@@ -51,6 +51,9 @@ public:
     /// Show the schematic's current variant, which the toolbar or an undo may have just changed.
     void FollowCurrentVariant();
 
+    /// The schematic is about to be freed, so stop listening to it before the deferred destruction.
+    void DetachFromSchematic();
+
 private:
     wxGridCellEditor* createDatasheetEditor() override;
     wxGridCellEditor* createFootprintEditor() override;
