@@ -1231,6 +1231,26 @@ int PAGED_DIALOG::applySearch()
 }
 
 
+bool PAGED_DIALOG::showHistoryControl( wxWindow* aCtrl )
+{
+    for( size_t ii = 0; ii < m_treebook->GetPageCount(); ++ii )
+    {
+        wxWindow* page = m_treebook->GetResolvedPage( ii );
+
+        if( !page || ( page != aCtrl && !page->IsDescendant( aCtrl ) ) )
+            continue;
+
+        if( static_cast<int>( ii ) != m_treebook->GetSelection() )
+            m_treebook->SetSelection( ii );
+
+        // Leaving the open page can be refused
+        return static_cast<int>( ii ) == m_treebook->GetSelection();
+    }
+
+    return true;
+}
+
+
 void PAGED_DIALOG::refadeSearchMisses()
 {
     wxTreeCtrl* tree = m_treebook->GetTreeCtrl();

@@ -220,6 +220,13 @@ public:
 
 protected:
     /**
+     * Bring aCtrl into view before undo or redo changes it.
+     *
+     * @return false when it cannot be shown, which leaves the step where it is.
+     */
+    virtual bool showHistoryControl( wxWindow* aCtrl ) { return true; }
+
+    /**
      * In all dialogs, we must call the same functions to fix minimal dlg size, the default
      * position and perhaps some others to fix a few issues depending on Windows Managers
      * this helper function does these calls.
@@ -348,6 +355,8 @@ private:
     void onGridCellChanged( wxGridEvent& aEvent );
     void onPropertyGridChanged( wxPropertyGridEvent& aEvent );
     void onDataViewListChanged( wxDataViewEvent& aEvent );
+    void      onTrackedControlDestroyed( wxWindowDestroyEvent& aEvent );
+    void      forgetControlHistory( wxWindow* aCtrl );
     void doUndo();
     void doRedo();
     wxVariant getControlValue( wxWindow* aCtrl );
@@ -393,6 +402,7 @@ protected:
         wxWindow* ctrl;
         wxVariant before;
         wxVariant after;
+        unsigned  id;
     };
 
     std::vector<UNDO_STEP>            m_undoStack;
@@ -401,6 +411,7 @@ protected:
     std::set<wxWindow*>               m_controlsWithPendingChanges;
     std::set<wxWindow*>               m_noControlUndoRedo;
     bool                              m_handlingUndoRedo;
+    unsigned                          m_lastUndoStepId = 0;
     bool                              m_childReleased;
 };
 

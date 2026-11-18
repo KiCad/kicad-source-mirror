@@ -100,6 +100,9 @@ protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    /// Selects the page holding aCtrl, so the step lands on a page that is read when it is left
+    bool showHistoryControl( wxWindow* aCtrl ) override;
+
     virtual void onAuxiliaryAction( wxCommandEvent& aEvent ) { aEvent.Skip(); }
     virtual void onResetButton( wxCommandEvent& aEvent );
     virtual void onOpenPrefsDir( wxCommandEvent& aEvent );
