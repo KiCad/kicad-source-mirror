@@ -53,6 +53,10 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
 {
+    // The editor keeps its own undo, and a refresh from the rule pages must not become a dialog undo step
+    if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( aParentWindow ) ) )
+        dlg->ExcludeFromControlUndoRedo( m_textEditor );
+
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "()" ), false,
             // onAcceptFn
             [this]( wxKeyEvent& aEvent )
