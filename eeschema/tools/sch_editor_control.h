@@ -48,6 +48,9 @@ public:
 
     ~SCH_EDITOR_CONTROL() { }
 
+    /// Drop the clipboard's sheet screens when the whole schematic is replaced.
+    void Reset( RESET_REASON aReason ) override;
+
     int New( const TOOL_EVENT& aEvent );
     int Open( const TOOL_EVENT& aEvent );
     int Save( const TOOL_EVENT& aEvent );

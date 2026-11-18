@@ -1038,6 +1038,9 @@ void SCH_EDIT_FRAME::OnImportProject()
         // Clear view before destroying schematic as repaints depend on schematic being valid
         SetScreen( nullptr );
 
+        // Tools must let go of the hierarchy before it is freed
+        m_toolManager->ResetTools( TOOL_BASE::SUPERMODEL_RELOAD );
+
         releaseSchematic();
         Schematic().Reset();
 

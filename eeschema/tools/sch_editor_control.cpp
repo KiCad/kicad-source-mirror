@@ -376,6 +376,16 @@ wxImage renderSelectionToImageForClipboard( SCH_EDIT_FRAME* aFrame, const SCH_SE
 } // namespace
 
 
+void SCH_EDITOR_CONTROL::Reset( RESET_REASON aReason )
+{
+    SCH_TOOL_BASE::Reset( aReason );
+
+    // The screens belong to the outgoing schematic, which frees them
+    if( aReason == SUPERMODEL_RELOAD )
+        m_supplementaryClipboard.clear();
+}
+
+
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
     m_frame->NewProject();

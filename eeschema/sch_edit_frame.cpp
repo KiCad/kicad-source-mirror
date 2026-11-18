@@ -1134,7 +1134,10 @@ wxString SCH_EDIT_FRAME::GetFullScreenDesc() const
 
 void SCH_EDIT_FRAME::CreateDefaultScreens()
 {
-    // Resetting the schematic frees its hierarchy
+    // Resetting the schematic frees its hierarchy, so tools must let go of it first
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::SUPERMODEL_RELOAD );
+
     releaseSchematic();
     m_schematic->CreateDefaultScreens();
     SetScreen( Schematic().RootScreen() );
@@ -3320,6 +3323,11 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
         ClearUndoRedoList();
         ClearRepeatItemsList();
         SetScreen( nullptr );
+
+        // Tools must let go of the outgoing schematic before it is freed
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::SUPERMODEL_RELOAD );
+
         releaseSchematic();
         m_schematic->SetProject( nullptr );
 
