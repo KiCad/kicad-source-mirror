@@ -441,8 +441,8 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
 
                 const bool capped = via->ResolveCappingMode() == CAPPING_MODE::CAPPED;
 
-                const SFVEC2F via_center( via->GetStart().x * m_biuTo3Dunits,
-                                          -via->GetStart().y * m_biuTo3Dunits );
+                const SFVEC2F via_center( via->GetPosition().x * m_biuTo3Dunits,
+                                          -via->GetPosition().y * m_biuTo3Dunits );
 
                 if( viatype != VIATYPE::THROUGH )
                 {
@@ -611,10 +611,10 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                 if( viatype != VIATYPE::THROUGH )
                 {
                     // Add PCB_VIA hole contours
-                    TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(), hole_outer_radius,
+                    TransformCircleToPolygon( *layerOuterHolesPoly, via->GetPosition(), hole_outer_radius,
                                               via->GetMaxError(), ERROR_INSIDE );
 
-                    TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(), holediameter / 2,
+                    TransformCircleToPolygon( *layerInnerHolesPoly, via->GetPosition(), holediameter / 2,
                                               via->GetMaxError(), ERROR_INSIDE );
                 }
                 else if( layer == layer_ids[0] ) // it only adds once the THT holes
@@ -622,16 +622,16 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                     const int hole_outer_ring_radius = KiROUND( via->GetWidth( layer ) / 2.0 );
 
                     // Add through hole contours
-                    TransformCircleToPolygon( m_TH_ODPolys, via->GetStart(), hole_outer_radius,
+                    TransformCircleToPolygon( m_TH_ODPolys, via->GetPosition(), hole_outer_radius,
                                               via->GetMaxError(), ERROR_INSIDE );
 
                     // Add same thing for vias only
-                    TransformCircleToPolygon( m_viaTH_ODPolys, via->GetStart(), hole_outer_radius,
+                    TransformCircleToPolygon( m_viaTH_ODPolys, via->GetPosition(), hole_outer_radius,
                                               via->GetMaxError(), ERROR_INSIDE );
 
                     if( cfg.clip_silk_on_via_annuli )
                     {
-                        TransformCircleToPolygon( m_viaAnnuliPolys, via->GetStart(), hole_outer_ring_radius,
+                        TransformCircleToPolygon( m_viaAnnuliPolys, via->GetPosition(), hole_outer_ring_radius,
                                                   via->GetMaxError(), ERROR_INSIDE );
                     }
                 }
@@ -654,14 +654,24 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                             // Iterate through layers affected by backdrill
                             if( LAYER_RANGE( backdrill.start, backdrill.end, m_copperLayersCount ).Contains( layer ) )
                             {
-                                TransformCircleToPolygon( *m_layerHoleOdPolys[layer], via->GetStart(),
+                                TransformCircleToPolygon( *m_layerHoleOdPolys[layer], via->GetPosition(),
                                                           backdrillOuterRadiusBIU, via->GetMaxError(), ERROR_INSIDE );
 
-                                TransformCircleToPolygon( *m_layerHoleIdPolys[layer], via->GetStart(),
+                                TransformCircleToPolygon( *m_layerHoleIdPolys[layer], via->GetPosition(),
                                                           backdrillRadiusBIU, via->GetMaxError(), ERROR_INSIDE );
 
-                                TransformCircleToPolygon( m_FrontBackdrillPolys, via->GetStart(),
-                                                          backdrillOuterRadiusBIU, via->GetMaxError(), ERROR_INSIDE );
+                                if( IsFrontLayer( layer ) )
+                                {
+                                    TransformCircleToPolygon( m_FrontBackdrillPolys, via->GetPosition(),
+                                                              backdrillOuterRadiusBIU, via->GetMaxError(),
+                                                              ERROR_INSIDE );
+                                }
+                                else if( IsBackLayer( layer ) )
+                                {
+                                    TransformCircleToPolygon( m_BackBackdrillPolys, via->GetPosition(),
+                                                              backdrillOuterRadiusBIU, via->GetMaxError(),
+                                                              ERROR_INSIDE );
+                                }
                             }
                         }
                     }
@@ -679,18 +689,18 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
 
                         if( via->GetFrontPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
                         {
-                            TransformCircleToPolygon( m_frontCounterborePolys, via->GetStart(), frontRadiusBIU,
+                            TransformCircleToPolygon( m_frontCounterborePolys, via->GetPosition(), frontRadiusBIU,
                                                       via->GetMaxError(), ERROR_INSIDE );
                         }
                         else
                         {
-                            TransformCircleToPolygon( m_frontCountersinkPolys, via->GetStart(), frontRadiusBIU,
+                            TransformCircleToPolygon( m_frontCountersinkPolys, via->GetPosition(), frontRadiusBIU,
                                                       via->GetMaxError(), ERROR_INSIDE );
                         }
 
-                        TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(), frontRadiusOuterBIU,
+                        TransformCircleToPolygon( *layerOuterHolesPoly, via->GetPosition(), frontRadiusOuterBIU,
                                                   via->GetMaxError(), ERROR_INSIDE );
-                        TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(), frontRadiusBIU,
+                        TransformCircleToPolygon( *layerInnerHolesPoly, via->GetPosition(), frontRadiusBIU,
                                                   via->GetMaxError(), ERROR_INSIDE );
                     }
                 }
@@ -706,18 +716,18 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
 
                         if( via->GetBackPostMachiningMode() == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
                         {
-                            TransformCircleToPolygon( m_backCounterborePolys, via->GetStart(), backRadiusBIU,
+                            TransformCircleToPolygon( m_backCounterborePolys, via->GetPosition(), backRadiusBIU,
                                                       via->GetMaxError(), ERROR_INSIDE );
                         }
                         else
                         {
-                            TransformCircleToPolygon( m_backCountersinkPolys, via->GetStart(), backRadiusBIU,
+                            TransformCircleToPolygon( m_backCountersinkPolys, via->GetPosition(), backRadiusBIU,
                                                       via->GetMaxError(), ERROR_INSIDE );
                         }
 
-                        TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(), backRadiusOuterBIU,
+                        TransformCircleToPolygon( *layerOuterHolesPoly, via->GetPosition(), backRadiusOuterBIU,
                                                   via->GetMaxError(), ERROR_INSIDE );
-                        TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(), backRadiusBIU,
+                        TransformCircleToPolygon( *layerInnerHolesPoly, via->GetPosition(), backRadiusBIU,
                                                   via->GetMaxError(), ERROR_INSIDE );
                     }
                 }
