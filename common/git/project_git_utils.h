@@ -139,7 +139,25 @@ public:
 
     /// Match a project-relative path against the shared transient patterns.
     /// Callers must keep tracked and staged files visible even when their names match.
-    static bool IsTransientGitFile( const wxFileName& aFile );
+    /// @param aIsDirectory The path is a directory git reported as one entry.
+    static bool IsTransientGitFile( const wxFileName& aFile, bool aIsDirectory = false );
+
+    /**
+     * Whether a changed file is left out of what the project has to commit. Only a file git does not know
+     * at all qualifies, inside the project and matching the transient patterns. A tracked or staged file is
+     * carried by a commit and blocks a merge, so hiding it would leave nothing to commit and no way forward.
+     *
+     * @param aRelativePath The file relative to the working directory, '/'-separated.
+     * @param aProjectPrefix The project's folder as ProjectPrefix gives it.
+     * @param aGitStatus The file's git_status_t flags.
+     * @param aIsDirectory Git reported the path as a directory or a submodule.
+     */
+    static bool IsHiddenTransient( const wxString& aRelativePath, const wxString& aProjectPrefix,
+                                   unsigned int aGitStatus, bool aIsDirectory = false );
+
+    /// Whether a nested repository at @p aRelativePath is local history or a backup folder, which a
+    /// commit stops tracking rather than recording as a submodule.
+    static bool IsTransientGitlink( const wxString& aRelativePath );
 
     /**
      * The project's folder inside the repository, ending in a slash.

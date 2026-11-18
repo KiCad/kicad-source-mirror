@@ -34,7 +34,7 @@ struct FileStatus
     KIGIT_COMMON::GIT_STATUS status;
     unsigned int gitStatus;  // Raw git status flags
 
-    /// Git reports an ignored directory rather than the files inside it
+    /// Git reports a directory or a submodule rather than the files inside it
     bool isDirectory = false;
 };
 

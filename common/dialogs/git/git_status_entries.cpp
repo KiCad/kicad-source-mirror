@@ -135,28 +135,18 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( KIGIT_COMMON& aCommon, 
         relativePath.Replace( wxS( "\\" ), wxS( "/" ) );
 #endif
 
-        // Only files git does not know at all are hidden. One that is tracked, or staged to be,
-        // is carried by a commit and blocks a merge, so hiding it would leave the user with
-        // nothing to commit and no way forward.
-        bool untracked = ( fileStatus.gitStatus & GIT_STATUS_WT_NEW )
-                         && !( fileStatus.gitStatus & GIT_STATUS_INDEX_NEW );
-
-        if( untracked )
+        if( KIGIT::PROJECT_GIT_UTILS::IsHiddenTransient( relativePath, *prefix, fileStatus.gitStatus,
+                                                         fileStatus.isDirectory ) )
         {
-            // Use the session prefix so a project opened through a symlink has the same paths.
-            const wxString pathPrefix = relativePath.Left( prefix->length() );
+            continue;
+        }
 
-#ifdef __WINDOWS__
-            bool inProject = pathPrefix.CmpNoCase( *prefix ) == 0;
-#else
-            bool inProject = pathPrefix == *prefix;
-#endif
-
-            if( inProject
-                && KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( relativePath.Mid( prefix->length() ) ) ) )
-            {
-                continue;
-            }
+        // Committing the row removes the gitlink from the index and keeps the folder on disk
+        if( fileStatus.isDirectory && KIGIT::PROJECT_GIT_UTILS::IsTransientGitlink( relativePath ) )
+        {
+            word = _( "Stop Tracking" );
+            icon = BITMAPS::git_delete;
+            colour = theme.removed.ToColour();
         }
 
         FILE_CHECKLIST_ENTRY entry;

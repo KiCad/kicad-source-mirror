@@ -506,7 +506,7 @@ namespace
 } // namespace
 
 
-bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile )
+bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile, bool aIsDirectory )
 {
     static const PATHSPEC_PTR filePatterns = transientPathspec( false );
     static const PATHSPEC_PTR directoryPatterns = transientPathspec( true );
@@ -520,7 +520,33 @@ bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile )
             return true;
     }
 
-    return false;
+    return aIsDirectory && directoryPatterns
+           && git_pathspec_matches_path( directoryPatterns.get(), 0, aFile.GetFullName().utf8_str() );
+}
+
+
+bool PROJECT_GIT_UTILS::IsHiddenTransient( const wxString& aRelativePath, const wxString& aProjectPrefix,
+                                           unsigned int aGitStatus, bool aIsDirectory )
+{
+    if( !( aGitStatus & GIT_STATUS_WT_NEW ) || ( aGitStatus & GIT_STATUS_INDEX_NEW ) )
+        return false;
+
+    // Use the session prefix so a project opened through a symlink has the same paths
+    const wxString pathPrefix = aRelativePath.Left( aProjectPrefix.length() );
+
+#ifdef __WINDOWS__
+    bool inProject = pathPrefix.CmpNoCase( aProjectPrefix ) == 0;
+#else
+    bool inProject = pathPrefix == aProjectPrefix;
+#endif
+
+    return inProject && IsTransientGitFile( wxFileName( aRelativePath.Mid( aProjectPrefix.length() ) ), aIsDirectory );
+}
+
+
+bool PROJECT_GIT_UTILS::IsTransientGitlink( const wxString& aRelativePath )
+{
+    return IsTransientGitFile( wxFileName( aRelativePath.AfterLast( '/' ) ), true );
 }
 
 

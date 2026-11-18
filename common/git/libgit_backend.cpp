@@ -364,11 +364,16 @@ static bool applySelectedPaths( git_repository* aRepo, git_index* aIndex, const 
                       && wxFileName::Exists( wxString::FromUTF8( workdir ) + file,
                                              wxFILE_EXISTS_ANY | wxFILE_EXISTS_NO_FOLLOW );
 
+        // Adding a nested repository records a gitlink, which for local history is never project content
+        bool stopTracking = onDisk && KIGIT::PROJECT_GIT_UTILS::IsTransientGitlink( file )
+                            && wxFileName::Exists( wxString::FromUTF8( workdir ) + file,
+                                                   wxFILE_EXISTS_DIR | wxFILE_EXISTS_NO_FOLLOW );
+
         // libgit2 paths are UTF-8, so convert explicitly rather than through the locale.
         std::string path = file.utf8_string();
 
-        int rc =
-                onDisk ? git_index_add_bypath( aIndex, path.c_str() ) : git_index_remove_bypath( aIndex, path.c_str() );
+        int rc = onDisk && !stopTracking ? git_index_add_bypath( aIndex, path.c_str() )
+                                         : git_index_remove_bypath( aIndex, path.c_str() );
 
         if( rc != 0 )
             return false;
@@ -1214,6 +1219,12 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 }
 
 
+static bool isGitlink( const git_diff_delta* aDelta )
+{
+    return aDelta && ( aDelta->old_file.mode == GIT_FILEMODE_COMMIT || aDelta->new_file.mode == GIT_FILEMODE_COMMIT );
+}
+
+
 std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
                                                               bool aChangedOnly )
 {
@@ -1270,11 +1281,14 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
         std::string path( entry->head_to_index ? entry->head_to_index->old_file.path
                                                : entry->index_to_workdir->old_file.path );
 
-        // Git names an ignored directory with a trailing slash. Callers match plain paths.
-        const bool isDirectory = !path.empty() && path.back() == '/';
+        // Git names an ignored directory or a nested repository with a trailing slash, callers match plain paths
+        const bool trailingSlash = !path.empty() && path.back() == '/';
 
-        if( isDirectory )
+        if( trailingSlash )
             path.pop_back();
+
+        const bool isDirectory =
+                trailingSlash || isGitlink( entry->head_to_index ) || isGitlink( entry->index_to_workdir );
 
         wxString absPath = repoWorkDir + path;
         fileStatusMap[absPath] = FileStatus{ absPath, aHandler->ConvertStatus( entry->status ),
