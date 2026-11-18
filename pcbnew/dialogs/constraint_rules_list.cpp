@@ -97,8 +97,8 @@ CONSTRAINT_RULES_LIST::CONSTRAINT_RULES_LIST( wxWindow* aParent, PCB_EDIT_FRAME*
     m_list->Bind( wxEVT_SIZE,
                   [this]( wxSizeEvent& aEvent )
                   {
-                      // Fitting toggles the horizontal scrollbar, which resizes the list again
-                      if( m_list->GetClientSize().x != m_fittedWidth )
+                      // A scrollbar coming or going changes only the client size, which fitting ignores
+                      if( m_list->GetSize().x != m_fittedWidth )
                           fitColumns();
 
                       aEvent.Skip();
@@ -246,36 +246,39 @@ void CONSTRAINT_RULES_LIST::RefreshRules()
 
 void CONSTRAINT_RULES_LIST::fitColumns()
 {
-    m_fittedWidth = m_list->GetClientSize().x;
+    m_fittedWidth = m_list->GetSize().x;
 
     wxClientDC dc( m_list );
     dc.SetFont( m_list->GetFont() );
 
-    for( int col : { 1, 3, 4 } )
+    auto fit = [&]( int aCol )
     {
         wxListItem header;
         header.SetMask( wxLIST_MASK_TEXT );
-        m_list->GetColumn( col, header );
+        m_list->GetColumn( aCol, header );
 
         int width = dc.GetTextExtent( header.GetText() ).x;
 
         for( long row = 0; row < m_list->GetItemCount(); ++row )
-            width = std::max( width, dc.GetTextExtent( m_list->GetItemText( row, col ) ).x );
+            width = std::max( width, dc.GetTextExtent( m_list->GetItemText( row, aCol ) ).x );
 
-        m_list->SetColumnWidth( col, std::max( width + 40, 90 ) );
-    }
+        return std::max( width + 40, 90 );
+    };
+
+    // Leave room for a vertical scrollbar so fitting never toggles one
+    // wxMSW applies widths late while resizing, so they are not read back
+    int client = m_fittedWidth - m_list->GetWindowBorderSize().x
+                 - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X, m_list ) - 4;
+    int name = std::min( fit( 1 ), client / 4 );
+    int layers = fit( 3 );
+    int value = std::min( fit( 4 ), client * 2 / 5 );
 
     // Give the name and value columns a share of the width and let the condition take what
     // is left, so the last column is never pushed off the edge.
-    int client = m_list->GetClientSize().x - 4;
-
-    m_list->SetColumnWidth( 1, std::min( m_list->GetColumnWidth( 1 ), client / 4 ) );
-    m_list->SetColumnWidth( 4, std::min( m_list->GetColumnWidth( 4 ), client * 2 / 5 ) );
-
-    int others = m_list->GetColumnWidth( 0 ) + m_list->GetColumnWidth( 1 ) + m_list->GetColumnWidth( 3 )
-                 + m_list->GetColumnWidth( 4 );
-
-    m_list->SetColumnWidth( 2, std::max( client - others, 160 ) );
+    m_list->SetColumnWidth( 1, name );
+    m_list->SetColumnWidth( 3, layers );
+    m_list->SetColumnWidth( 4, value );
+    m_list->SetColumnWidth( 2, std::max( client - m_list->GetColumnWidth( 0 ) - name - layers - value, 160 ) );
 }
 
 
