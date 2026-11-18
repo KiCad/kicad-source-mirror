@@ -194,6 +194,16 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
             }
         }
 
+        try
+        {
+            pi->SaveLibrary( aFileName );
+        }
+        catch( ... )
+        {
+            // return false because something happened; the library was not successfully saved
+            res = false;
+        }
+
         // clear the deleted symbols buffer only if data is saved to the original file
         if( res && toOriginal )
         {
@@ -221,65 +231,65 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
             libBuf.ClearAddedAndDeletedBufferLists();
         }
+
+        return res;
     }
-    else
+
+    // Handle original library
+    for( LIB_SYMBOL* symbol : getOriginalSymbols( aLibrary ) )
     {
-        // Handle original library
-        for( LIB_SYMBOL* symbol : getOriginalSymbols( aLibrary ) )
+        try
         {
-            try
+            if( symbol->IsDerived() )
             {
-                if( symbol->IsDerived() )
+                std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
+
+                wxCHECK_MSG( oldParent, false, wxString::Format( wxT( "Derived symbol '%s' found with undefined "
+                                                                      "parent." ),
+                                                                 symbol->GetName() ) );
+
+                LIB_SYMBOL* libParent = pi->LoadSymbol( aFileName, oldParent->GetName(), &properties );
+
+                if( !libParent )
                 {
-                    std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
+                    std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *oldParent );
+                    pi->SaveSymbol( aFileName, std::move( newParent ), &properties );
 
-                    wxCHECK_MSG( oldParent, false,
-                                 wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
-                                                   symbol->GetName() ) );
-
-                    LIB_SYMBOL* libParent = pi->LoadSymbol( aFileName, oldParent->GetName(), &properties );
-
-                    if( !libParent )
-                    {
-                        std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *oldParent );
-                        pi->SaveSymbol( aFileName, std::move( newParent ), &properties );
-
-                        // We cannot use the old parent after handing it to the plugin, we
-                        // must borrow a new copy from the plugin cache to reparent the derived symbol.
-                        libParent = pi->LoadSymbol( aFileName, oldParent->GetName(), &properties );
-                    }
-                    else
-                    {
-                        // Copy embedded files from the in-memory parent to the loaded parent
-                        // This ensures that any embedded files added to the parent are preserved
-                        //
-                        // We do this manually rather than using the assignment operator to avoid
-                        // potential ABI issues where the size of EMBEDDED_FILES differs between
-                        // compilation units, potentially causing the assignment to overwrite
-                        // members of LIB_SYMBOL (like m_me) that follow the EMBEDDED_FILES base.
-                        libParent->ClearEmbeddedFiles();
-
-                        for( const auto& [name, file] : oldParent->EmbeddedFileMap() )
-                            libParent->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
-
-                        libParent->SetAreFontsEmbedded( oldParent->GetAreFontsEmbedded() );
-                        libParent->SetFileAddedCallback( oldParent->GetFileAddedCallback() );
-                    }
-
-                    std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
-                    newSymbol->SetParent( libParent );
-                    pi->SaveSymbol( aFileName, std::move( newSymbol ), &properties );
+                    // We cannot use the old parent after handing it to the plugin, we
+                    // must borrow a new copy from the plugin cache to reparent the derived symbol.
+                    libParent = pi->LoadSymbol( aFileName, oldParent->GetName(), &properties );
                 }
-                else if( !pi->LoadSymbol( aFileName, symbol->GetName(), &properties ) )
+                else
                 {
-                    pi->SaveSymbol( aFileName, std::make_unique<LIB_SYMBOL>( *symbol ), &properties );
+                    // Copy embedded files from the in-memory parent to the loaded parent
+                    // This ensures that any embedded files added to the parent are preserved
+                    //
+                    // We do this manually rather than using the assignment operator to avoid
+                    // potential ABI issues where the size of EMBEDDED_FILES differs between
+                    // compilation units, potentially causing the assignment to overwrite
+                    // members of LIB_SYMBOL (like m_me) that follow the EMBEDDED_FILES base.
+                    libParent->ClearEmbeddedFiles();
+
+                    for( const auto& [name, file] : oldParent->EmbeddedFileMap() )
+                        libParent->AddFile( new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
+
+                    libParent->SetAreFontsEmbedded( oldParent->GetAreFontsEmbedded() );
+                    libParent->SetFileAddedCallback( oldParent->GetFileAddedCallback() );
                 }
+
+                std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
+                newSymbol->SetParent( libParent );
+                pi->SaveSymbol( aFileName, std::move( newSymbol ), &properties );
             }
-            catch( ... )
+            else if( !pi->LoadSymbol( aFileName, symbol->GetName(), &properties ) )
             {
-                res = false;
-                break;
+                pi->SaveSymbol( aFileName, std::make_unique<LIB_SYMBOL>( *symbol ), &properties );
             }
+        }
+        catch( ... )
+        {
+            res = false;
+            break;
         }
     }
 
@@ -289,8 +299,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
     }
     catch( ... )
     {
-        // return false because something happens.
-        // The library is not successfully saved
+        // return false because something happened; the library was not successfully saved
         res = false;
     }
 
