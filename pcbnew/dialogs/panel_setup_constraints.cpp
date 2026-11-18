@@ -443,6 +443,55 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
 
+    wxString message;
+
+    if( wxWindow* field = firstInvalidField( &message ) )
+    {
+        PAGED_DIALOG::GetDialog( this )->SetError( message, this, field );
+        return false;
+    }
+
+    m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
+    m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
+
+    writeEditedDefaults();
+    return true;
+}
+
+
+bool PANEL_SETUP_CONSTRAINTS::StageEditedDefaults()
+{
+    return !firstInvalidField( nullptr ) && writeEditedDefaults();
+}
+
+
+std::vector<std::pair<wxString, wxString>> PANEL_SETUP_CONSTRAINTS::StaleSearchValues() const
+{
+    std::vector<std::pair<wxString, wxString>> stale;
+
+    for( const CONSTRAINT_FIELD& field : m_fields )
+    {
+        const int staged = m_BrdSettings->*( field.m_Member );
+        auto*     entry = dynamic_cast<wxTextEntry*>( field.m_Ctrl );
+
+        if( entry && staged != field.m_Loaded && field.m_Binder->GetIntValue() == field.m_Loaded )
+            stale.emplace_back( entry->GetValue(), m_Frame->StringFromValue( staged, true ) );
+    }
+
+    const int stagedSpokes = m_BrdSettings->m_MinResolvedSpokes;
+
+    if( stagedSpokes != m_spokeCountLoaded && m_minResolvedSpokeCountCtrl->GetValue() == m_spokeCountLoaded )
+    {
+        stale.emplace_back( m_minResolvedSpokeCountCtrl->GetTextValue(),
+                            wxString::Format( wxS( "%d" ), stagedSpokes ) );
+    }
+
+    return stale;
+}
+
+
+wxWindow* PANEL_SETUP_CONSTRAINTS::firstInvalidField( wxString* aMessage ) const
+{
     BOARD_DESIGN_SETTINGS temp( *m_BrdSettings );
 
     applyValues( temp );
@@ -459,12 +508,19 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
         if( it == fieldToControl.end() )
             continue;
 
-        PAGED_DIALOG::GetDialog( this )->SetError( error.error_message, this, it->second );
-        return false;
+        if( aMessage )
+            *aMessage = error.error_message;
+
+        return it->second;
     }
 
-    m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
-    m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
+    return nullptr;
+}
+
+
+bool PANEL_SETUP_CONSTRAINTS::writeEditedDefaults()
+{
+    bool written = false;
 
     // A constraint can also be set with the rules read against it, so a field the user did not
     // touch here must not write back over an edit made on that page
@@ -472,6 +528,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
     {
         m_spokeCountLoaded = m_minResolvedSpokeCountCtrl->GetValue();
         m_BrdSettings->m_MinResolvedSpokes = m_spokeCountLoaded;
+        written = true;
     }
 
     for( CONSTRAINT_FIELD& field : m_fields )
@@ -482,10 +539,11 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
         {
             field.m_Loaded = value;
             m_BrdSettings->*( field.m_Member ) = value;
+            written = true;
         }
     }
 
-    return true;
+    return written;
 }
 
 

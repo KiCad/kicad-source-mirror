@@ -164,15 +164,29 @@ public:
      */
     void RefreshDefaults();
 
+    /**
+     * Writes the defaults edited here to the staged settings, as leaving the page does, unless
+     * one is out of range.
+     *
+     * @return true when a value was written.
+     */
+    bool StageEditedDefaults();
+
     /// The Import Settings group this page's defaults travel with.
     wxString ImportGroup() const;
 
     void RefreshFromDocument();
 
-    void AppendSearchTerms( const DRC_RULE_DOCUMENT& aDocument, std::vector<wxString>& aTerms ) const;
+    /// The label of the button that adds or edits a rule on this page, when it is shown
+    wxString GetSearchActionLabel() const;
 
+    /**
+     * Append what aSection shows whether or not its page is built: the board defaults in aSettings,
+     * the net class values and the rules of aDocument at aRuleIndices.
+     */
     static void AppendSearchTerms( const CONSTRAINT_SECTION& aSection, PCB_EDIT_FRAME* aFrame,
-                                   const DRC_RULE_DOCUMENT& aDocument, std::vector<wxString>& aTerms );
+                                   const BOARD_DESIGN_SETTINGS& aSettings, const DRC_RULE_DOCUMENT& aDocument,
+                                   const std::vector<int>& aRuleIndices, std::vector<wxString>& aTerms );
 
     bool TransferDataToWindow() override;
 
@@ -200,6 +214,12 @@ private:
 
     /// Writes the default fields to the board, or reports the first value out of range
     bool applyDefaults();
+
+    /// The field of the first default out of range, with the reason in aMessage
+    wxTextCtrl* firstInvalidDefault( wxString* aMessage ) const;
+
+    /// Writes the fields changed since they were read, returning true when one was
+    bool writeEditedDefaults();
 
     /// Copies the defaults this page edits into aSettings
     void writeDefaults( BOARD_DESIGN_SETTINGS& aSettings ) const;

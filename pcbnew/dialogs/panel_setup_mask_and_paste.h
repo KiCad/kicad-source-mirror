@@ -52,7 +52,27 @@ public:
      */
     void RefreshDefaults();
 
+    /**
+     * Writes the values a rule page also sets to the staged settings, as leaving the page does,
+     * unless a value here is out of range.
+     *
+     * @return true when a value was written.
+     */
+    bool StageEditedDefaults();
+
+    /**
+     * Each field left untouched here whose staged value another page has changed, as the text it
+     * shows paired with the text it will show once read again.
+     */
+    std::vector<std::pair<wxString, wxString>> StaleSearchValues() const;
+
 private:
+    /// The field of the first value out of range, with the reason in aMessage
+    wxWindow* firstInvalidField( wxString* aMessage ) const;
+
+    /// Writes the shared fields changed since they were read, returning true when one was
+    bool writeEditedDefaults();
+
     PCB_EDIT_FRAME*         m_Frame;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 

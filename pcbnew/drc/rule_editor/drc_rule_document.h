@@ -20,6 +20,7 @@
 #ifndef DRC_RULE_DOCUMENT_H
 #define DRC_RULE_DOCUMENT_H
 
+#include <map>
 #include <set>
 #include <vector>
 #include <wx/string.h>
@@ -75,6 +76,9 @@ public:
     const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& Entries() const { return m_entries; }
 
     std::vector<int> IndicesFor( DRC_RULE_EDITOR_CONSTRAINT_NAME aType ) const;
+
+    /// IndicesFor() of every page at once, which reads each custom rule once instead of once per page
+    std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, std::vector<int>> IndicesByType() const;
 
     /// Every rule that sets aConstraint, whichever page edits it
     std::vector<int> IndicesSetting( DRC_CONSTRAINT_T aConstraint ) const;

@@ -220,10 +220,21 @@ std::set<DRC_CONSTRAINT_T> DRC_RULE_DOCUMENT::ConstraintsOf( const DRC_RE_LOADED
 
 std::vector<int> DRC_RULE_DOCUMENT::IndicesFor( DRC_RULE_EDITOR_CONSTRAINT_NAME aType ) const
 {
+    std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, std::vector<int>> byType = IndicesByType();
+
+    if( auto it = byType.find( aType ); it != byType.end() )
+        return std::move( it->second );
+
+    return {};
+}
+
+
+std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, std::vector<int>> DRC_RULE_DOCUMENT::IndicesByType() const
+{
     // A rule no graphical panel could take apart is kept as text. It still belongs on the
     // page of every constraint it sets.
-    static DRC_PANEL_MATCHER matcher;
-    std::vector<int>         result;
+    static DRC_PANEL_MATCHER                                    matcher;
+    std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, std::vector<int>> result;
 
     // The entries are a previous parse, so they no longer describe the text
     if( m_hasRawText )
@@ -236,20 +247,20 @@ std::vector<int> DRC_RULE_DOCUMENT::IndicesFor( DRC_RULE_EDITOR_CONSTRAINT_NAME 
         if( !entry.constraintData )
             continue;
 
-        if( entry.panelType == aType )
+        result[entry.panelType].push_back( (int) i );
+
+        if( entry.panelType != CUSTOM_RULE )
+            continue;
+
+        std::set<DRC_RULE_EDITOR_CONSTRAINT_NAME> homes;
+
+        for( DRC_CONSTRAINT_T constraint : ConstraintsOf( entry ) )
+            homes.insert( matcher.GetHomePanel( constraint ) );
+
+        for( DRC_RULE_EDITOR_CONSTRAINT_NAME home : homes )
         {
-            result.push_back( (int) i );
-        }
-        else if( entry.panelType == CUSTOM_RULE && aType != CUSTOM_RULE )
-        {
-            for( DRC_CONSTRAINT_T constraint : ConstraintsOf( entry ) )
-            {
-                if( matcher.GetHomePanel( constraint ) == aType )
-                {
-                    result.push_back( (int) i );
-                    break;
-                }
-            }
+            if( home != CUSTOM_RULE )
+                result[home].push_back( (int) i );
         }
     }
 

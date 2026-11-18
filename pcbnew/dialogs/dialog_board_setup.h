@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
+#include <optional>
+#include <vector>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_setup_constraint_rules.h>
 #include "panel_setup_formatting.h"
@@ -59,6 +62,7 @@ protected:
     void onCloseWindow( wxCloseEvent& aEvent );
 
     void AppendSearchTerms( size_t aPage, std::vector<wxString>& aTerms ) const override;
+    void BeginSearchPass() override;
 
     /// The rules the search reads, which is the text editor's draft while it is being typed
     const DRC_RULE_DOCUMENT& searchDocument() const;
@@ -109,4 +113,7 @@ private:
     /// copy, which an import also writes and which reaches the board only on OK
     std::unique_ptr<BOARD_DESIGN_SETTINGS> m_stagedSettings;
     std::map<size_t, CONSTRAINT_SECTION>   m_ruleSearchSections;
+
+    /// The rules of each rule page, sorted once per search query
+    mutable std::optional<std::map<DRC_RULE_EDITOR_CONSTRAINT_NAME, std::vector<int>>> m_searchRuleIndices;
 };

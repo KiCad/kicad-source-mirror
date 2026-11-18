@@ -57,11 +57,31 @@ public:
      */
     void RefreshDefaults();
 
+    /**
+     * Writes the values a rule page also edits to the staged settings, as leaving the page does,
+     * unless a value here is out of range.
+     *
+     * @return true when a value was written.
+     */
+    bool StageEditedDefaults();
+
+    /**
+     * Each field left untouched here whose staged value another page has changed, as the text it
+     * shows paired with the text it will show once read again.
+     */
+    std::vector<std::pair<wxString, wxString>> StaleSearchValues() const;
+
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void applyValues( BOARD_DESIGN_SETTINGS& aSettings ) const;
+
+    /// The field of the first value out of range, with the reason in aMessage
+    wxWindow* firstInvalidField( wxString* aMessage ) const;
+
+    /// Writes the shared fields changed since they were read, returning true when one was
+    bool writeEditedDefaults();
 
     /// Show a warning icon, with the reason as its tooltip, over each field whose value has an issue.
     void updateWarnings();

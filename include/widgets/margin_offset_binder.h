@@ -46,6 +46,11 @@ class MARGIN_OFFSET_BINDER : public wxEvtHandler
 {
 public:
     /**
+     * Format the offset and ratio values into a display string.
+     */
+    wxString formatValue( std::optional<int> aOffset, std::optional<double> aRatio ) const;
+
+    /**
      * @param aParent is the parent EDA_DRAW_FRAME, used to fetch units and coordinate systems.
      * @param aLabel is the static text used to label the text input widget
      * @param aValueCtrl is the control used to edit the combined value (wxTextCtrl or wxComboBox)
@@ -116,10 +121,6 @@ protected:
     bool parseInput( const wxString& aInput, std::optional<int>& aOffset,
                      std::optional<double>& aRatio ) const;
 
-    /**
-     * Format the offset and ratio values into a display string.
-     */
-    wxString formatValue( std::optional<int> aOffset, std::optional<double> aRatio ) const;
 
     /**
      * Get the current text from the control.
