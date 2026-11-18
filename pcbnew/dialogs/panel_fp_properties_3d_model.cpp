@@ -865,17 +865,17 @@ MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const w
     if( !resolv->ValidateFileName( aFilename, hasAlias ) )
         return MODEL_VALIDATE_ERRORS::ILLEGAL_FILENAME;
 
-    wxString libraryName = m_footprint->GetFPID().GetLibNickname();
+    wxString fpLibrary = m_footprint->GetFPID().GetLibNickname();
     wxString footprintBasePath = wxEmptyString;
 
-    std::optional<LIBRARY_TABLE_ROW*> fpRow =
-                            PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->GetRow( libraryName );
+    std::optional<LIBRARY_TABLE_ROW*> fpRow = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->GetRow( fpLibrary );
+
     if( fpRow )
         footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
 
     std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
-    embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
     embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
+    embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
 
     wxString fullPath = resolv->ResolvePath( aFilename, footprintBasePath, std::move( embeddedFilesStack ) );
 
