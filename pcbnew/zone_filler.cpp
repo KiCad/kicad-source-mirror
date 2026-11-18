@@ -4642,8 +4642,11 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 if( !otherZone->HigherPriority( aZone ) )
                     return;
 
-                // Same gate as the initial fill so the refill's knockout set matches; same-net
-                // fills are subtracted un-inflated, so a plain bbox test suffices.
+                // Equal-priority zones on the same net share copper, so do not subtract their fills.
+                if( otherZone->SameNet( aZone ) && otherZone->GetAssignedPriority() == aZone->GetAssignedPriority() )
+                    return;
+
+                // Same-net fills are subtracted un-inflated, so a plain bbox test suffices.
                 if( otherZone->SameNet( aZone ) )
                 {
                     if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
