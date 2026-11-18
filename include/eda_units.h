@@ -236,16 +236,13 @@ namespace EDA_UNIT_UTILS
         KICOMMON_API wxString MessageTextFromMinOptMax( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
                                                         const MINOPTMAX<int>& aValue );
         /**
-         * Return in internal units the value \a aValue given in a real unit such as "in", "mm",
-         * or "deg".
+         * Return in internal units the value \a aValue given in a real unit such as "in", "mm", or "deg".
          */
         KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
 
 
         /**
          * Convert \a aTextValue to a double.
-         *
-         * @warning This utilizes the current locale and will break if decimal formats differ.
          *
          * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
@@ -264,8 +261,6 @@ namespace EDA_UNIT_UTILS
 
         /**
          * Convert \a aTextValue in \a aUnits to internal units used by the application.
-         *
-         * @warning This utilizes the current locale and will break if decimal formats differ
          *
          * @param aIuScale The internal units scale for the current frame/app.
          * @param aUnits The units of \a aTextValue.
