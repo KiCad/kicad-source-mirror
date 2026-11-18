@@ -40,6 +40,7 @@
 #include <reporter.h>
 #include <richio.h>
 #include <string_utils.h>
+#include <wildcards_and_files_ext.h>
 #include <tools/board_editor_control.h>
 #include <exporters/board_exporter_base.h>
 #include <exporters/export_hyperlynx.h>
@@ -726,14 +727,13 @@ bool ExportBoardToHyperlynxFile( BOARD* aBoard, const wxString& aFullFilename )
 
 int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
 {
-    wxString    wildcard =  wxT( "*.hyp" );
     BOARD*      board = m_frame->GetBoard();
     wxFileName  fn = board->GetFileName();
 
-    fn.SetExt( wxT("hyp") );
+    fn.SetExt( FILEEXT::HyperlynxFileExtension );
 
     wxFileDialog dlg( m_frame, _( "Export Hyperlynx Layout" ), fn.GetPath(), fn.GetFullName(),
-                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      FILEEXT::HyperlynxFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
@@ -743,7 +743,7 @@ int BOARD_EDITOR_CONTROL::ExportHyperlynx( const TOOL_EVENT& aEvent )
     fn = dlg.GetPath();
 
     // always enforce filename extension, user may not have entered it.
-    fn.SetExt( wxT( "hyp" ) );
+    fn.SetExt( FILEEXT::HyperlynxFileExtension );
 
     ExportBoardToHyperlynxFile( board, fn.GetFullPath() );
 

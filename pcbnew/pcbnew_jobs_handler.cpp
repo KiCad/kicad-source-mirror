@@ -24,6 +24,7 @@
 #include <string_utils.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
+#include <wx/filedlg.h>
 #include <wx/zipstrm.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
@@ -72,6 +73,7 @@
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <jobs/job_export_pcb_stackup.h>
+#include <jobs/job_export_pcb_hyperlynx.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_render.h>
@@ -107,6 +109,7 @@
 #include <project/project_file.h>
 #include <exporters/export_idf.h>
 #include <exporters/export_gencad_writer.h>
+#include <exporters/export_hyperlynx.h>
 #include <exporters/export_d356.h>
 #include <kiface_services.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -128,6 +131,7 @@
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
 #include <kiplatform/io.h>
+#include <kiplatform/ui.h>
 #include <settings/settings_manager.h>
 #include <dialogs/dialog_gendrill.h>
 #include <dialogs/dialog_gen_footprint_position.h>
@@ -353,6 +357,68 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   DIALOG_BOARD_STACKUP_JOB dlg( parent, stackupJob );
 
                   return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "hyperlynx", std::bind( &PCBNEW_JOBS_HANDLER::JobExportHyperlynx, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_HYPERLYNX* hyperlynxJob = dynamic_cast<JOB_EXPORT_PCB_HYPERLYNX*>( job );
+
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( hyperlynxJob && editFrame, false );
+
+                  if( hyperlynxJob->m_filename.IsEmpty() && editFrame->GetBoard() )
+                  {
+                      wxFileName boardName = editFrame->GetBoard()->GetFileName();
+                      hyperlynxJob->m_filename = boardName.GetFullPath();
+                  }
+
+                  wxWindow* parent = aParent ? aParent : static_cast<wxWindow*>( editFrame );
+
+                  const wxString& configuredPath = hyperlynxJob->GetConfiguredOutputPath();
+                  wxFileName      outputPath( configuredPath );
+
+                  if( configuredPath.IsEmpty() )
+                  {
+                      outputPath = hyperlynxJob->m_filename;
+                      outputPath.SetExt( FILEEXT::HyperlynxFileExtension );
+                  }
+
+                  wxFileName       configuredFile( configuredPath );
+                  wxString         initialDirectory = outputPath.GetPath();
+
+                  if( !outputPath.IsAbsolute() )
+                  {
+                      if( initialDirectory.IsEmpty() )
+                          initialDirectory = wxS( "." );
+
+                      initialDirectory = ResolveProjectPath( initialDirectory, &editFrame->Prj() );
+                  }
+
+                  wxFileDialog dlg( parent, _( "Export Hyperlynx Layout" ), initialDirectory,
+                                    outputPath.GetFullName(), FILEEXT::HyperlynxFileWildcard(),
+                                    wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+                  KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
+                  if( dlg.ShowModal() != wxID_OK )
+                      return false;
+
+                  outputPath = dlg.GetPath();
+                  outputPath.SetExt( FILEEXT::HyperlynxFileExtension );
+
+                  // Keep the jobset destination when the user accepts the starting directory.
+                  if( ( configuredPath.IsEmpty() || !configuredFile.IsAbsolute() )
+                      && wxFileName::DirName( dlg.GetDirectory() ).SameAs( wxFileName::DirName( initialDirectory ) ) )
+                  {
+                      configuredFile.SetFullName( outputPath.GetFullName() );
+                      outputPath = configuredFile;
+                  }
+
+                  hyperlynxJob->SetConfiguredOutputPath( outputPath.GetFullPath() );
+
+                  return true;
               } );
     Register( "gerber", std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
@@ -3169,6 +3235,48 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 
     if( !GenerateIpc2581File( *job, brd, m_progressReporter, m_reporter ) )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportHyperlynx( JOB* aJob )
+{
+    JOB_EXPORT_PCB_HYPERLYNX* job = dynamic_cast<JOB_EXPORT_PCB_HYPERLYNX*>( aJob );
+
+    if( job == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( job->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( job->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetExt( FILEEXT::HyperlynxFileExtension );
+
+        job->SetWorkingOutputPath( fn.GetFullName() );
+    }
+
+    wxString outPath = resolveJobOutputPath( aJob, brd );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    if( !ExportBoardToHyperlynxFile( brd, outPath ) )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to write Hyperlynx file '%s'.\n" ), outPath ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    job->AddOutput( outPath );
+    m_reporter->Report( wxString::Format( _( "Wrote Hyperlynx file to '%s'.\n" ), outPath ), RPT_SEVERITY_ACTION );
 
     return CLI::EXIT_CODES::SUCCESS;
 }

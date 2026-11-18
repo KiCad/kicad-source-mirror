@@ -211,6 +211,7 @@ const std::string FILEEXT::IdfV3BoardFileExtension( "emn" );
 const std::string FILEEXT::IdfV3LibraryFileExtension( "emp" );
 
 const std::string FILEEXT::GencadFileExtension( "cad" );
+const std::string FILEEXT::HyperlynxFileExtension( "hyp" );
 
 const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 
@@ -567,6 +568,12 @@ wxString FILEEXT::ZipFileWildcard()
 wxString FILEEXT::GencadFileWildcard()
 {
     return _( "GenCAD 1.4 board files" ) + AddFileExtListToFilter( { GencadFileExtension } );
+}
+
+
+wxString FILEEXT::HyperlynxFileWildcard()
+{
+    return _( "Hyperlynx files" ) + AddFileExtListToFilter( { HyperlynxFileExtension } );
 }
 
 

@@ -76,6 +76,7 @@ public:
     int JobExportIpcD356( JOB* aJob );
     int JobExportStats( JOB* aJob );
     int JobExportStackup( JOB* aJob );
+    int JobExportHyperlynx( JOB* aJob );
     int JobUpgrade( JOB* aJob );
     int JobDowngrade( JOB* aJob );
     int JobImport( JOB* aJob );

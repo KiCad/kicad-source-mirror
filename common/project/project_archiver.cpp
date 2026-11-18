@@ -243,6 +243,7 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
         extensions.emplace( FILEEXT::IbisFileExtension );
         extensions.emplace( "pkg" );
         extensions.emplace( FILEEXT::GencadFileExtension );
+        extensions.emplace( FILEEXT::HyperlynxFileExtension );
     }
 
     // Gerber files (g?, g??, .gm12 (from protel export)).

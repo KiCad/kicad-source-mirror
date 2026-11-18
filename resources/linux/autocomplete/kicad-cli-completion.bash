@@ -83,7 +83,7 @@ _kicad_cli()
             return 0
             ;;
         "pcb export")
-            COMPREPLY=( $(compgen -W "3dpdf brep drill dxf gencad gerbers glb hpgl ipc2581 ipcd356 odb pdf ply pos ps stackup stats step stl stpz svg u3d vrml xao --help -h" -- "$cur") )
+            COMPREPLY=( $(compgen -W "3dpdf brep drill dxf gencad gerbers glb hpgl hyperlynx ipc2581 ipcd356 odb pdf ply pos ps stackup stats step stl stpz svg u3d vrml xao --help -h" -- "$cur") )
             return 0
             ;;
         "pcb export 3dpdf")
@@ -116,6 +116,10 @@ _kicad_cli()
             ;;
         "pcb export hpgl")
             COMPREPLY=( $(compgen -W "--help --output -h -o" -- "$cur") )
+            return 0
+            ;;
+        "pcb export hyperlynx")
+            COMPREPLY=( $(compgen -W "--define-var --help --output -D -h -o" -- "$cur") )
             return 0
             ;;
         "pcb export ipc2581")

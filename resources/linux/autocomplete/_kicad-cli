@@ -366,6 +366,7 @@ _kicad_cli_pcb_export_commands() {
         'gerbers:Plot multiple Gerbers for a PCB, including the ability to use stored board plot settings'
         'glb:Export GLB (binary GLTF)'
         'hpgl:No longer supported as of KiCad 10.0.'
+        'hyperlynx:Export the PCB in Hyperlynx format'
         'ipc2581:Export the PCB in IPC-2581 format'
         'ipcd356:Generate IPC-D-356 netlist file'
         'odb:Export the PCB in ODB++ format'
@@ -421,6 +422,9 @@ _kicad_cli_pcb_export() {
                     ;;
                 (hpgl)
                     _kicad_cli_pcb_export_hpgl
+                    ;;
+                (hyperlynx)
+                    _kicad_cli_pcb_export_hyperlynx
                     ;;
                 (ipc2581)
                     _kicad_cli_pcb_export_ipc2581
@@ -684,6 +688,17 @@ _kicad_cli_pcb_export_hpgl() {
     _arguments -C \
         '(--help -h)'{--help,-h}'[Shows help message and exits]' \
         '(--output -o)'{--output,-o}'[Output directory \[nargs=0..1\] \[default: ""\]]' \
+        && return 0
+}
+
+_kicad_cli_pcb_export_hyperlynx() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(--define-var -D)'{--define-var,-D}'[]' \
+        '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '(--output -o)'{--output,-o}'[Output file \[nargs=0..1\] \[default: ""\]]' \
         && return 0
 }
 

@@ -66,6 +66,7 @@
 #include "cli/command_pcb_export_dxf.h"
 #include "cli/command_pcb_export_gerbers.h"
 #include "cli/command_pcb_export_hpgl.h"
+#include "cli/command_pcb_export_hyperlynx.h"
 #include "cli/command_pcb_export_gencad.h"
 #include "cli/command_pcb_export_specctra.h"
 #include "cli/command_pcb_export_ipc2581.h"
@@ -193,6 +194,7 @@ static CLI::PCB_EXPORT_STATS_COMMAND     exportPcbStatsCmd{};
 static CLI::PCB_EXPORT_STACKUP_COMMAND   exportPcbStackupCmd{};
 static CLI::PCB_EXPORT_GERBERS_COMMAND   exportPcbGerbersCmd{};
 static CLI::PCB_EXPORT_HPGL_COMMAND      exportPcbHpglCmd{};
+static CLI::PCB_EXPORT_HYPERLYNX_COMMAND exportPcbHyperlynxCmd{};
 static CLI::PCB_EXPORT_GENCAD_COMMAND    exportPcbGencadCmd{};
 static CLI::PCB_EXPORT_SPECCTRA_COMMAND  exportPcbSpecctraCmd{};
 static CLI::PCB_EXPORT_IPC2581_COMMAND   exportPcbIpc2581Cmd{};
@@ -297,6 +299,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbDxfCmd,
                     &exportPcbGerbersCmd,
                     &exportPcbHpglCmd,
+                    &exportPcbHyperlynxCmd,
                     &exportPcbGencadCmd,
                     &exportPcbGlbCmd,
                     &exportPcbIpc2581Cmd,
