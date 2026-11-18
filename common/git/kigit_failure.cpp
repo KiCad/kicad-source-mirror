@@ -176,7 +176,11 @@ static KIGIT_FAILURE classifyGitFailure( const KIGIT_ERROR_INFO& aError, const K
     if( !aContext.pushRefusal.IsEmpty() )
         return KIGIT_FAILURE::SERVER_REFUSED;
 
-    if( aError.code == GIT_EAUTH )
+    // WinHTTP reports a rejected password as an OS error, with localized system text after this prefix
+    const bool winHttpRejected = aError.klass == GIT_ERROR_OS
+                                 && lower.Contains( wxS( "failed to parse supported auth schemes" ) );
+
+    if( aError.code == GIT_EAUTH || winHttpRejected )
     {
         if( aError.klass == GIT_ERROR_HTTP && lower.Contains( wxS( "proxy" ) ) )
             return KIGIT_FAILURE::PROXY;
@@ -235,7 +239,8 @@ static KIGIT_FAILURE classifyGitFailure( const KIGIT_ERROR_INFO& aError, const K
 namespace
 {
 
-wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const KIGIT_FAILURE_CONTEXT& aContext )
+wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const KIGIT_FAILURE_CONTEXT& aContext,
+                     const wxString& aServerLine = wxString() )
 {
     const KIGIT_COMMON::REMOTE_URL parsed = KIGIT_COMMON::ParseRemoteURL( aContext.url );
     const wxString                 key = aKind == KIGIT_FAILURE::AUTH_SSH_KEY_REJECTED
@@ -361,6 +366,13 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
                                  host );
 
     case KIGIT_FAILURE::SERVER_REFUSED:
+        if( !aServerLine.IsEmpty() )
+        {
+            return wxString::Format( aContext.operation == KIGIT_OPERATION::PUSH ? _( "%s refused the push: %s" )
+                                                                                 : _( "%s refused the request: %s" ),
+                                     host, aServerLine );
+        }
+
         if( aContext.operation == KIGIT_OPERATION::PUSH )
             return wxString::Format( _( "%s refused the push. The server's reason is shown in the details." ), host );
 
@@ -454,7 +466,18 @@ KIGIT_FAILURE_REPORT KIGIT::DescribeGitFailure( const KIGIT_ERROR_INFO& aError, 
 {
     KIGIT_FAILURE_REPORT report;
     report.kind = classifyGitFailure( aError, aAuth, aContext );
-    report.summary = summaryFor( report.kind, aAuth, aContext );
+
+    wxString serverLine;
+
+    for( const wxString* text : { &aContext.serverMessage, &aContext.pushRefusal, &aError.message } )
+    {
+        serverLine = serverText( *text ).BeforeFirst( '\n' );
+
+        if( !serverLine.IsEmpty() )
+            break;
+    }
+
+    report.summary = summaryFor( report.kind, aAuth, aContext, KIGIT::StripEmbeddedUserinfo( serverLine ) );
     report.details = detailsFor( aError, aAuth, aContext );
     return report;
 }

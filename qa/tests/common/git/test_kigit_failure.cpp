@@ -40,6 +40,42 @@ BOOST_AUTO_TEST_CASE( LocalNetworkHostRanges )
 }
 
 
+BOOST_AUTO_TEST_CASE( WinHttpRejectedPasswordIsCredentialFailure )
+{
+    KIGIT_ERROR_INFO error;
+    error.klass = GIT_ERROR_OS;
+    error.code = -1;
+    error.message = wxS( "failed to parse supported auth schemes: The operation identifier is not valid." );
+
+    KIGIT_AUTH_ATTEMPT auth;
+    auth.passwordGiven = true;
+
+    KIGIT_FAILURE_CONTEXT context;
+    context.url = wxS( "https://gitea.example.com/team/repo.git" );
+
+    BOOST_CHECK( KIGIT::DescribeGitFailure( error, auth, context ).kind == KIGIT_FAILURE::AUTH_HTTPS_REJECTED );
+}
+
+
+BOOST_AUTO_TEST_CASE( HookRefusalHeadlineQuotesServer )
+{
+    KIGIT_ERROR_INFO error;
+    error.message = wxS( "failed to push some refs" );
+
+    KIGIT_FAILURE_CONTEXT context;
+    context.operation = KIGIT_OPERATION::PUSH;
+    context.url = wxS( "https://gitea.example.com/team/repo.git" );
+    context.pushRefusal = wxS( "refs/heads/main: pre-receive hook declined" );
+    context.serverMessage = wxS( "remote: Gitea: User permission denied for writing." );
+
+    const KIGIT_FAILURE_REPORT report = KIGIT::DescribeGitFailure( error, {}, context );
+
+    BOOST_REQUIRE( report.kind == KIGIT_FAILURE::SERVER_REFUSED );
+    BOOST_CHECK( report.summary.Contains( wxS( "User permission denied for writing" ) ) );
+    BOOST_CHECK( !report.summary.Contains( wxS( "shown in the details" ) ) );
+}
+
+
 #ifdef __APPLE__
 static wxString unreachableSummary( const wxString& aUrl )
 {
