@@ -169,7 +169,7 @@ void GRAPHICS_IMPORTER_PL_EDITOR::AddArc( const VECTOR2D& aCenter, const VECTOR2
 
     // The arc runs from its start by the angle given, the way the other importers turn it.
     std::vector<VECTOR2D> points =
-            flattenEllipseArc( aCenter, radius, radius, ANGLE_0, startAngle, -aAngle.AsRadians() );
+            flattenEllipseArc( aCenter, radius, radius, ANGLE_0, startAngle, aAngle.AsRadians() );
 
     for( VECTOR2D& point : points )
         point = mapPoint( point );
