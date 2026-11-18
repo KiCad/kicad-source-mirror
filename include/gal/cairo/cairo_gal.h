@@ -559,6 +559,8 @@ protected:
     WX_CURSOR_TYPE      m_currentwxCursor;     ///< wx cursor showing the current native cursor
 
     std::vector<wxRect> m_overlayExclusions;   ///< Areas the frame blit must leave alone
+    wxBitmap            m_presentBitmap;       ///< Frame for the paint event where blits are not shown
+    bool                m_presentPending;      ///< EndDrawing requested the pending paint
 };
 
 } // namespace KIGFX

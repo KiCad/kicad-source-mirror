@@ -26,6 +26,7 @@
 #include <wx/image.h>
 #include <wx/log.h>
 #include <wx/dcclient.h>
+#include <wx/utils.h>
 
 #include <gal/cairo/cairo_gal.h>
 #include <gal/cairo/cairo_compositor.h>
@@ -1444,6 +1445,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 
     m_bitmapBuffer = nullptr;
     m_wxOutput = nullptr;
+    m_presentPending = false;
 
     m_parentWindow = aParent;
     m_mouseListener = aMouseListener;
@@ -1556,6 +1558,23 @@ void CAIRO_GAL::EndDrawing()
     wxImage    img( m_wxBufferWidth, m_screenSize.y, m_wxOutput, true );
     wxBitmap   bmp( img );
     wxMemoryDC mdc( bmp );
+
+    // Now it is the time to blit the mouse cursor
+    blitCursor( mdc );
+
+#ifdef __WXGTK__
+    // GTK on Wayland only shows what is drawn in the paint event
+    if( wxGetDisplayInfo().type == wxDisplayType::wxDisplayWayland )
+    {
+        mdc.SelectObject( wxNullBitmap );
+        m_presentBitmap = bmp;
+        m_presentPending = true;
+        wxWindow::Refresh( false );
+        deinitSurface();
+        return;
+    }
+#endif
+
     wxClientDC clientDC( this );
 
     // This blit runs outside the paint cycle, so it ignores windows stacked over the canvas
@@ -1579,8 +1598,6 @@ void CAIRO_GAL::EndDrawing()
         clientDC.SetDeviceClippingRegion( visible );
     }
 
-    // Now it is the time to blit the mouse cursor
-    blitCursor( mdc );
     clientDC.Blit( 0, 0, m_screenSize.x, m_screenSize.y, &mdc, 0, 0, wxCOPY );
 
     deinitSurface();
@@ -1607,6 +1624,9 @@ void CAIRO_GAL::ResizeScreen( int aWidth, int aHeight )
         m_compositor->Resize( aWidth, aHeight );
 
     m_validCompositor = false;
+
+    // The resize paint can coalesce with a pending present and must still post a redraw
+    m_presentPending = false;
 
     SetSize( wxSize( aWidth, aHeight ) );
 }
@@ -1772,6 +1792,17 @@ void CAIRO_GAL::onPaint( wxPaintEvent& aEvent )
     // sending paint events because it thinks the window still needs to be painted, causing
     // high CPU usage in fallback mode (Cairo).
     wxPaintDC dc( this );
+
+    if( m_presentBitmap.IsOk() )
+        dc.DrawBitmap( m_presentBitmap, 0, 0 );
+
+    // EndDrawing asked for this paint, so posting another redraw would loop
+    if( m_presentPending )
+    {
+        m_presentPending = false;
+        return;
+    }
+
     PostPaint( aEvent );
 }
 
@@ -1808,6 +1839,7 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     if( super::updatedGalDisplayOptions( aOptions ) )
     {
+        m_presentPending = false;
         Refresh();
         refresh = true;
     }
