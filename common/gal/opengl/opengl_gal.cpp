@@ -42,6 +42,7 @@
 #include <trace_helpers.h>
 
 #include <wx/app.h>
+#include <wx/evtloop.h>
 #include <wx/frame.h>
 #include <wx/image.h>
 
@@ -530,14 +531,30 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
         KIGFX::VC_SETTINGS dummy;
         opengl_gal = new KIGFX::OPENGL_GAL( dummy, aOptions, testFrame );
 
+#ifdef __WXGTK__
+        // GTK may not realize a frame shown without activation before the yield ends
         testFrame->Raise();
         testFrame->Show();
+#else
+        // Activating it would take focus from the window that asked for a canvas
+        if( wxEventLoopBase::GetActive() )
+        {
+            testFrame->ShowWithoutActivating();
+        }
+        else
+        {
+            testFrame->Raise();
+            testFrame->Show();
+        }
+#endif
 
 #ifdef __WXGTK__
         // On GTK, Show() only queues realization. The GDK drawing window
         // needed by SetCurrent() may not exist yet. Yield to let the event
         // loop process the realize signal before we try to lock the context.
-        wxYield();
+        // Input waits, so a click is not handled in the middle of the caller's work
+        wxEventLoopGuarantor ensureLoop;
+        wxEventLoopBase::GetActive()->YieldFor( wxEVT_CATEGORY_UI );
 #endif
 
         GAL_CONTEXT_LOCKER lock( opengl_gal );
