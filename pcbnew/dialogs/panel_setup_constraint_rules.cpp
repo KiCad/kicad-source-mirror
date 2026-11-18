@@ -311,7 +311,7 @@ bool PANEL_SETUP_CONSTRAINT_RULES::applyDefaults()
     // must not write back over an edit made there
     for( DEFAULT_FIELD& field : m_defaults )
     {
-        int value = field.binder->GetValue();
+        int value = field.binder->GetIntValue();
 
         if( value != field.loaded )
         {
@@ -327,7 +327,7 @@ bool PANEL_SETUP_CONSTRAINT_RULES::applyDefaults()
 void PANEL_SETUP_CONSTRAINT_RULES::writeDefaults( BOARD_DESIGN_SETTINGS& aSettings ) const
 {
     for( const DEFAULT_FIELD& field : m_defaults )
-        aSettings.*( field.member ) = field.binder->GetValue();
+        aSettings.*( field.member ) = field.binder->GetIntValue();
 }
 
 

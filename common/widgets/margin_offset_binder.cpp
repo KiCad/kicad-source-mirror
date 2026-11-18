@@ -23,6 +23,8 @@
 #include <wx/stattext.h>
 #include <wx/textentry.h>
 #include <wx/regex.h>
+#include <algorithm>
+#include <limits>
 #include <eda_units.h>
 #include <eda_draw_frame.h>
 
@@ -406,7 +408,7 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
                 if( result.ToDouble( &value ) )
                 {
                     // Convert from user units to internal units
-                    int iuValue = EDA_UNIT_UTILS::UI::ValueFromString( *m_iuScale, m_units, term );
+                    long long iuValue = EDA_UNIT_UTILS::UI::ValueFromString( *m_iuScale, m_units, term );
                     totalOffset += sign * iuValue;
                     hasOffset = true;
                     invalidTerm = false;
@@ -420,8 +422,12 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
         sign = 1.0;  // Reset sign for next term
     }
 
+    // Clamp rather than wrap, so a range check still sees an oversized value as one
     if( hasOffset )
-        aOffset = static_cast<int>( totalOffset );
+    {
+        aOffset = static_cast<int>( std::clamp<double>( totalOffset, std::numeric_limits<int>::lowest(),
+                                                        std::numeric_limits<int>::max() ) );
+    }
 
     if( hasRatio )
         aRatio = totalRatio;

@@ -476,7 +476,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 
     for( CONSTRAINT_FIELD& field : m_fields )
     {
-        int value = field.m_Binder->GetValue();
+        int value = field.m_Binder->GetIntValue();
 
         if( value != field.m_Loaded )
         {
@@ -497,7 +497,7 @@ void PANEL_SETUP_CONSTRAINTS::applyValues( BOARD_DESIGN_SETTINGS& aSettings ) co
     aSettings.m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();
 
     for( const CONSTRAINT_FIELD& field : m_fields )
-        aSettings.*( field.m_Member ) = field.m_Binder->GetValue();
+        aSettings.*( field.m_Member ) = field.m_Binder->GetIntValue();
 }
 
 
