@@ -102,12 +102,12 @@ public:
      * @param aLabel The label of the control for error messages.
      * @param aCanBeZero If true, zero is allowed; otherwise, the value must be greater than zero.
      * @param aErrorCount The count of errors encountered during validation.
-     * @param aValidationMessage The validation error messages accumulated.
+     * @param aMsg The validation error messages accumulated.
      *
      * @return True if the control value is valid; otherwise, false.
      */
     static bool ValidateNumericCtrl( wxTextCtrl* aTextCtrl, const wxString& aLabel, bool aCanBeZero, int* aErrorCount,
-                                     wxString* aValidationMessage );
+                                     wxString* aMsg );
 
     /**
      * Validates an integer input control, ensuring the value is a valid integer, non-empty, and greater than zero.
@@ -116,12 +116,12 @@ public:
      * @param aLabel The label of the control for error messages.
      * @param aCanBeZero If true, zero is allowed; otherwise, the value must be greater than zero.
      * @param aErrorCount The count of errors encountered during validation.
-     * @param aValidationMessage The validation error messages accumulated.
+     * @param aMsg The validation error messages accumulated.
      *
      * @return True if the control value is valid; otherwise, false.
      */
     static bool ValidateIntegerCtrl( wxTextCtrl* aTextCtrl, const wxString& aLabel, bool aCanBeZero, int* aErrorCount,
-                                     wxString* aValidationMessage );
+                                     wxString* aMsg );
 
     /**
      * Validates a combo box control, ensuring that a selection has been made.
@@ -129,12 +129,12 @@ public:
      * @param aComboBox The combo box control to validate.
      * @param aLabel The label of the combo box for error messages.
      * @param aErrorCount The count of errors encountered during validation.
-     * @param aValidationMessage The validation error messages accumulated.
+     * @param aMsg The validation error messages accumulated.
      *
      * @return True if the control value is valid; otherwise, false.
      */
     static bool ValidateComboCtrl( wxComboBox* aComboBox, const wxString& aLabel, int* aErrorCount,
-                                   wxString* aValidationMessage );
+                                   wxString* aMsg );
 
     /**
      * Validates the minimum and maximum value controls, ensuring that the minimum value is not greater than the maximum value.
@@ -144,12 +144,12 @@ public:
      * @param aMinLabel The label for the minimum value text control.
      * @param aMaxLabel The label for the maximum value text control.
      * @param aErrorCount The count of errors encountered during validation.
-     * @param aValidationMessage The validation error messages accumulated.
+     * @param aMsg The validation error messages accumulated.
      *
      * @return True if the validation passes; otherwise, false.
      */
     static bool ValidateMinMaxCtrl( wxTextCtrl* aMinTextCtrl, wxTextCtrl* aMaxTextCtrl, const wxString& aMinLabel,
-                                    const wxString& aMaxLabel, int* aErrorCount, wxString* aValidationMessage );
+                                    const wxString& aMaxLabel, int* aErrorCount, wxString* aMsg );
 
     /**
      * Validates the minimum, preferred, and maximum value controls, ensuring that:
@@ -164,14 +164,14 @@ public:
      * @param aPreferredLabel The label for the preferred value text control.
      * @param aMaxLabel The label for the maximum value text control.
      * @param aErrorCount The count of errors encountered during validation.
-     * @param aValidationMessage The validation error messages accumulated.
+     * @param aMsg The validation error messages accumulated.
      *
      * @return True if the validation passes; otherwise, false.
      */
     static bool ValidateMinPreferredMaxCtrl( wxTextCtrl* aMinTextCtrl, wxTextCtrl* aPreferredTextCtrl,
                                              wxTextCtrl* aMaxTextCtrl, const wxString& aMinLabel,
                                              const wxString& aPreferredLabel, const wxString& aMaxLabel,
-                                             int* aErrorCount, wxString* aValidationMessage );
+                                             int* aErrorCount, wxString* aMsg );
 
     /**
      * Validates a list of checkboxes, ensuring that at least one option is selected.
@@ -179,12 +179,12 @@ public:
      * @param aCheckboxes A vector of wxCheckBox controls to validate.
      * @param aLabel The label for the checkbox list.
      * @param aErrorCount The count of errors encountered during validation.
-     * @param aValidationMessage The validation error messages accumulated.
+     * @param aMsg The validation error messages accumulated.
      *
      * @return True if the validation passes; otherwise, false.
      */
     static bool ValidateCheckBoxCtrls( const std::vector<wxCheckBox*>& aCheckboxes, const wxString& aLabel,
-                                       int* aErrorCount, wxString* aValidationMessage );
+                                       int* aErrorCount, wxString* aMsg );
 
     // ==================== Pure Validators (No GUI Dependencies) ====================
     // These can be used in headless tests and by constraint data classes.
