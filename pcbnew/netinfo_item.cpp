@@ -99,6 +99,10 @@ void NETINFO_ITEM::ResolveTerminalPads( BOARD* aBoard )
         if( m_terminalPads[i] )
             continue;
 
+        // A nil UUID names no pad, so the whole board scan can only fail.
+        if( m_terminalPadUuids[i] == niluuid )
+            continue;
+
         if( aBoard )
             m_terminalPads[i] = aBoard->FindPadByUuid( m_terminalPadUuids[i] );
     }
