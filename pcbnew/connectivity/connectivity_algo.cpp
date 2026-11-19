@@ -787,8 +787,8 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_
             {
                 const int count = zone->GetFilledPolysList( layer )->OutlineCount();
 
-                for( int ii = 0; ii < count; ++ii )
-                    layerIslands.m_IsolatedOutlines.push_back( ii );
+                for( int idx = 0; idx < count; ++idx )
+                    layerIslands.m_IsolatedOutlines.push_back( idx );
             }
         }
     }
