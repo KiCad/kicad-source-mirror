@@ -196,6 +196,14 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
 
     const TRACKS& tracks = aBoard->Tracks();
 
+    // An arc has to build its shape to know its extents, which is far too expensive to
+    // repeat for every pair it is compared against.
+    std::vector<BOX2I> bboxes;
+    bboxes.reserve( tracks.size() );
+
+    for( PCB_TRACK* track : tracks )
+        bboxes.push_back( track->GetBoundingBox() );
+
     for( size_t ii = 0; ii < tracks.size(); ++ii )
     {
         PCB_TRACK* track = tracks[ii];
@@ -205,6 +213,9 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
 
         if( !track->IsType( trackTypes ) )
             continue;
+
+        const LSET  trackLayers = track->GetLayerSet() & LSET::AllCuMask();
+        const BOX2I trackBBox = bboxes[ii];
 
         // The gap between two tracks is the same whichever one is asked first, so each
         // pair only needs visiting once.
@@ -218,7 +229,14 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
             if( !otherTrack->IsType( trackTypes ) )
                 continue;
 
-            LSET commonLayers = track->GetLayerSet() & otherTrack->GetLayerSet() & LSET::AllCuMask();
+            // The boxes enclose the copper, so anything further apart than the smallest gap
+            // found so far cannot improve on it. Squared, to keep this to integer work.
+            BOX2I::ecoord_type best = aData.minClearanceTrackToTrack;
+
+            if( trackBBox.SquaredDistance( bboxes[jj] ) >= best * best )
+                continue;
+
+            LSET commonLayers = trackLayers & otherTrack->GetLayerSet();
 
             for( PCB_LAYER_ID layer : commonLayers.CuStack() )
             {
