@@ -2838,10 +2838,8 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         }
         else
         {
-            wxLogTrace( traceAllegroParserBlocks,
-                        wxString::Format( "Added block %zu, type %#04x from %#010zx to %#010zx",
-                                          aBoard.GetObjectCount(), block->GetBlockType(), offset,
-                                          m_stream.Position() ) );
+            wxLogTrace( traceAllegroParserBlocks, "Added block %zu, type %#04x from %#010zx to %#010zx",
+                        aBoard.GetObjectCount(), block->GetBlockType(), offset, m_stream.Position() );
 
             aBoard.InsertBlock( std::move( block ) );
 
