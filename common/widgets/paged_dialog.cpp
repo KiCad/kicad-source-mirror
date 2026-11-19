@@ -493,7 +493,11 @@ bool PAGED_DIALOG::TransferDataToWindow()
 
     lastPageIndex = std::max( 0, lastPageIndex );
     m_treebook->SetSelection( lastPageIndex );
+    m_treebook->ResolvePage( lastPageIndex );
     UpdateResetButton( lastPageIndex );
+
+    // The tree reached its final width after the first page fired onPageChanged
+    fitToCurrentPage();
 
     return true;
 }
@@ -1354,31 +1358,8 @@ void PAGED_DIALOG::onSearchCharHook( wxKeyEvent& aEvent )
 }
 
 
-void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
+void PAGED_DIALOG::fitToCurrentPage()
 {
-    int sel = event.GetSelection();
-
-    if( sel == wxNOT_FOUND )
-        return;
-
-    size_t page = static_cast<size_t>( sel );
-
-    // Use the first sub-page when a tree level node is selected, but only if the node is
-    // expanded. When the user collapses a branch, wxTreebook auto-selects the parent node.
-    // Redirecting to the first child here would undo the collapse.
-    wxWindow* currentPage = m_treebook->GetCurrentPage();
-
-    if( currentPage && currentPage->GetChildren().IsEmpty()
-            && page + 1 < m_treebook->GetPageCount()
-            && m_treebook->IsNodeExpanded( page ) )
-    {
-        m_treebook->ChangeSelection( page + 1 );
-    }
-
-    page = m_treebook->GetSelection();
-
-    UpdateResetButton( page );
-
     // Make sure the dialog size is enough to fit the page content.
     m_treebook->InvalidateBestSize();
 
@@ -1406,6 +1387,35 @@ void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
 
     if( newSize != currentSize )
         SetSize( newSize );
+}
+
+
+void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
+{
+    int sel = event.GetSelection();
+
+    if( sel == wxNOT_FOUND )
+        return;
+
+    size_t page = static_cast<size_t>( sel );
+
+    // Use the first sub-page when a tree level node is selected, but only if the node is
+    // expanded. When the user collapses a branch, wxTreebook auto-selects the parent node.
+    // Redirecting to the first child here would undo the collapse.
+    wxWindow* currentPage = m_treebook->GetCurrentPage();
+
+    if( currentPage && currentPage->GetChildren().IsEmpty()
+            && page + 1 < m_treebook->GetPageCount()
+            && m_treebook->IsNodeExpanded( page ) )
+    {
+        m_treebook->ChangeSelection( page + 1 );
+    }
+
+    page = m_treebook->GetSelection();
+
+    UpdateResetButton( page );
+
+    fitToCurrentPage();
 
 #ifdef __WXMAC__
     // Work around an OSX wxWidgets issue where the wxGrid children don't get placed correctly

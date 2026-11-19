@@ -97,6 +97,9 @@ public:
 protected:
     void finishInitialization();
 
+    /// Recompute the dialog minimum and size from the current page and tree width.
+    void fitToCurrentPage();
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
