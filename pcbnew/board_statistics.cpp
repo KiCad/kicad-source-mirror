@@ -63,16 +63,17 @@ void CollectDrillLineItems( BOARD* board, std::vector<DRILL_LINE_ITEM>& out )
                 continue;
 
             PCB_LAYER_ID top, bottom;
+            LSEQ         cuStack = pad->GetLayerSet().CuStack();
 
-            if( pad->GetLayerSet().CuStack().empty() )
+            if( cuStack.empty() )
             {
                 top = UNDEFINED_LAYER;
                 bottom = UNDEFINED_LAYER;
             }
             else
             {
-                top = pad->GetLayerSet().CuStack().front();
-                bottom = pad->GetLayerSet().CuStack().back();
+                top = cuStack.front();
+                bottom = cuStack.back();
             }
 
             DRILL_LINE_ITEM d( xs, ys, pad->GetDrillShape(), pad->GetAttribute() != PAD_ATTRIB::NPTH, true, top,
