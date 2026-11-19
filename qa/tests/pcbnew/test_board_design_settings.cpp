@@ -54,7 +54,7 @@ struct BDS_TEST_FIXTURE
         namespace fs = std::filesystem;
 
         fs::path       proPath = aDir / "ctrl-board.kicad_pro";
-        fs::path       sourcePath = fs::path( KI_TEST::GetPcbnewTestDataDir() ) / "mdw_ctrl_board";
+        fs::path       sourcePath = fs::path( KI_TEST::GetTestDataRootDir() ) / "common" / "git" / "mdw_ctrl_board";
         std::ifstream  source( sourcePath / "ctrl-board.kicad_pro" );
         nlohmann::json doc = nlohmann::json::parse( source );
 
