@@ -185,8 +185,12 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
         updatePadCounts( footprint, aData );
     }
 
-    for( PCB_TRACK* track : aBoard->Tracks() )
+    const TRACKS& tracks = aBoard->Tracks();
+
+    for( size_t ii = 0; ii < tracks.size(); ++ii )
     {
+        PCB_TRACK* track = tracks[ii];
+
         if( track->Type() == PCB_TRACE_T )
             aData.minTrackWidth = std::min( aData.minTrackWidth, track->GetWidth() );
 
@@ -196,8 +200,12 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
         PCB_LAYER_ID layer = track->GetLayer();
         auto         trackShapeA = track->GetEffectiveShape( layer );
 
-        for( PCB_TRACK* otherTrack : aBoard->Tracks() )
+        // The gap between two tracks is the same whichever one is asked first, so each
+        // pair only needs visiting once.
+        for( size_t jj = ii + 1; jj < tracks.size(); ++jj )
         {
+            PCB_TRACK* otherTrack = tracks[jj];
+
             if( layer != otherTrack->GetLayer() )
                 continue;
 
