@@ -101,7 +101,6 @@ set( QA_COMMON_SRCS
     test_markup_parser.cpp
     test_notifications_manager.cpp
     test_paged_dialog.cpp
-    test_paths.cpp
     test_project_archiver.cpp
     test_property.cpp
     test_svg_plotter.cpp
