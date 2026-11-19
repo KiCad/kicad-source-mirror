@@ -759,6 +759,37 @@ void NET_SETTINGS::SetNetclassPatternAssignment( const wxString& pattern, const 
 }
 
 
+/**
+ * Tell a plain pattern from one that has to be matched. These are the characters the netclass
+ * matchers give a meaning to. A pattern with none of them matches itself and nothing else.
+ */
+static bool isLiteralPattern( const wxString& aPattern )
+{
+    static const wxString special = wxT( ".*+?^${}()|[]/\\" );
+
+    return !aPattern.IsEmpty() && aPattern.find_first_of( special ) == wxString::npos;
+}
+
+
+void NET_SETTINGS::buildPatternIndex()
+{
+    m_literalPatternIndex.clear();
+    m_patternsNeedingMatch.clear();
+
+    for( size_t ii = 0; ii < m_netClassPatternAssignments.size(); ++ii )
+    {
+        const auto& [matcher, netclassName] = m_netClassPatternAssignments[ii];
+
+        if( matcher && isLiteralPattern( matcher->GetPattern() ) )
+            m_literalPatternIndex[matcher->GetPattern()].push_back( netclassName );
+        else
+            m_patternsNeedingMatch.push_back( ii );
+    }
+
+    m_patternIndexValid = true;
+}
+
+
 void NET_SETTINGS::addSinglePatternAssignment( const wxString& pattern, const wxString& netclass )
 {
     // Avoid exact duplicates - these shouldn't cause problems, due to later de-duplication
@@ -786,6 +817,9 @@ void NET_SETTINGS::SetNetclassPatternAssignments(
 std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>&
 NET_SETTINGS::GetNetclassPatternAssignments()
 {
+    // The caller can rewrite the list through this reference, so the index may no longer fit it.
+    m_patternIndexValid = false;
+
     return m_netClassPatternAssignments;
 }
 
@@ -793,6 +827,7 @@ NET_SETTINGS::GetNetclassPatternAssignments()
 void NET_SETTINGS::ClearNetclassPatternAssignments()
 {
     m_netClassPatternAssignments.clear();
+    m_patternIndexValid = false;
 }
 
 
@@ -866,6 +901,7 @@ void NET_SETTINGS::ClearCacheForNet( const wxString& netName )
 
 void NET_SETTINGS::ClearAllCaches()
 {
+    m_patternIndexValid = false;
     m_effectiveNetclassCache.clear();
     m_compositeNetClasses.clear();
     m_netclassBusMembers.clear();
@@ -1066,6 +1102,16 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     }
 
     // Now find any pattern-matched netclass assignments (user + chain-derived)
+    auto addNetclassByName = [&]( const wxString& netclassName )
+    {
+        std::shared_ptr<NETCLASS> netclass = getExplicitNetclass( netclassName );
+
+        if( netclass )
+            resolvedNetclasses.insert( std::move( netclass ) );
+        else
+            resolvedNetclasses.insert( getOrAddImplicitNetcless( netclassName ) );
+    };
+
     auto applyPatternList =
             [&]( const std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>&
                          patterns )
@@ -1073,18 +1119,26 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
                 for( const auto& [matcher, netclassName] : patterns )
                 {
                     if( matcher->StartsWith( aNetName ) )
-                    {
-                        std::shared_ptr<NETCLASS> netclass = getExplicitNetclass( netclassName );
-
-                        if( netclass )
-                            resolvedNetclasses.insert( std::move( netclass ) );
-                        else
-                            resolvedNetclasses.insert( getOrAddImplicitNetcless( netclassName ) );
-                    }
+                        addNetclassByName( netclassName );
                 }
             };
 
-    applyPatternList( m_netClassPatternAssignments );
+    if( !m_patternIndexValid )
+        buildPatternIndex();
+
+    if( auto it = m_literalPatternIndex.find( aNetName ); it != m_literalPatternIndex.end() )
+    {
+        for( const wxString& netclassName : it->second )
+            addNetclassByName( netclassName );
+    }
+
+    for( size_t idx : m_patternsNeedingMatch )
+    {
+        const auto& [matcher, netclassName] = m_netClassPatternAssignments[idx];
+
+        if( matcher->StartsWith( aNetName ) )
+            addNetclassByName( netclassName );
+    }
 
     for( const auto& [source, chainPatterns] : m_netClassChainPatternAssignments )
         applyPatternList( chainPatterns );

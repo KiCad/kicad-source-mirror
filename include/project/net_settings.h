@@ -352,6 +352,9 @@ private:
     /// @brief Adds a single pattern assignment without bus expansion (internal helper)
     void addSinglePatternAssignment( const wxString& pattern, const wxString& netclass );
 
+    /// @brief Sorts the pattern assignments into the ones a lookup can answer and the rest
+    void buildPatternIndex();
+
     /// @brief Adds a single chain-derived pattern assignment without bus expansion (internal helper)
     void addSingleChainPatternAssignment( NET_CHAIN_SOURCE aSource, const wxString& pattern,
                                           const wxString& netclass );
@@ -390,6 +393,17 @@ private:
     /// netclass to enable DRC rules and name resolution, but do not contribute parameters
     // to the effective netclasses which contain them.
     std::map<wxString, std::shared_ptr<NETCLASS>> m_impicitNetClasses;
+
+    /// @brief Netclasses from patterns that are plain text, keyed by that text
+    ///
+    /// A plain pattern matches one net name, so a lookup answers for it. The patterns stay in
+    /// m_netClassPatternAssignments, which is what gets saved and shown to the user.
+    std::map<wxString, std::vector<wxString>> m_literalPatternIndex;
+
+    /// @brief Patterns that still have to be matched, as positions in m_netClassPatternAssignments
+    std::vector<size_t> m_patternsNeedingMatch;
+
+    bool m_patternIndexValid = false;
 
     /// @brief Cache of nets to pattern-matched netclasses
     std::map<wxString, std::shared_ptr<NETCLASS>> m_effectiveNetclassCache;

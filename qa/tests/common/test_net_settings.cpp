@@ -165,6 +165,31 @@ BOOST_AUTO_TEST_CASE( ClearChainPatternAssignmentsLeavesUserPatterns )
 }
 
 
+// A net can pick up one class from a pattern that names it and another from a wildcard. The
+// two are found by different means, so both have to end up on the net.
+BOOST_AUTO_TEST_CASE( PlainAndWildcardPatternsBothApply )
+{
+    NET_SETTINGS settings( nullptr, "" );
+
+    std::shared_ptr<NETCLASS>                     power = std::make_shared<NETCLASS>( wxS( "Power" ), false );
+    std::shared_ptr<NETCLASS>                     highSpeed = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    std::map<wxString, std::shared_ptr<NETCLASS>> classes;
+    classes[wxS( "Power" )] = power;
+    classes[wxS( "HighSpeed" )] = highSpeed;
+    settings.SetNetclasses( classes );
+
+    settings.SetNetclassPatternAssignment( wxS( "VCC_3V3" ), wxS( "Power" ) );
+    settings.SetNetclassPatternAssignment( wxS( "VCC_*" ), wxS( "HighSpeed" ) );
+
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "VCC_3V3" ), wxS( "Power" ) ) );
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "VCC_3V3" ), wxS( "HighSpeed" ) ) );
+
+    // A wildcard still has to reach the nets no pattern names outright.
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "VCC_5V" ), wxS( "HighSpeed" ) ) );
+    BOOST_CHECK( !resolvesToNetclass( settings, wxS( "VCC_5V" ), wxS( "Power" ) ) );
+}
+
+
 // The schematic and the board share one NET_SETTINGS and each derives chain patterns from the
 // membership only it can see.  A rebuild by one must leave the other's entries alone, otherwise a
 // board resync before DRC or save reverts the schematic's chain netclasses.
