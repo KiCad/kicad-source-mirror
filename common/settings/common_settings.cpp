@@ -411,6 +411,36 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "relative_path_defaults.jobset_destination",
                                             &m_RelativePathDefaults.jobset_destination, false ) );
 
+    const BOARD_OPACITY_DEFAULTS defaultOpacity;
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.tracks",
+                                              &m_BoardOpacityDefaults.m_TrackOpacity,
+                                              defaultOpacity.m_TrackOpacity, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.vias",
+                                              &m_BoardOpacityDefaults.m_ViaOpacity,
+                                              defaultOpacity.m_ViaOpacity, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.pads",
+                                              &m_BoardOpacityDefaults.m_PadOpacity,
+                                              defaultOpacity.m_PadOpacity, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.zones",
+                                              &m_BoardOpacityDefaults.m_ZoneOpacity,
+                                              defaultOpacity.m_ZoneOpacity, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.images",
+                                              &m_BoardOpacityDefaults.m_ImageOpacity,
+                                              defaultOpacity.m_ImageOpacity, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.shapes",
+                                              &m_BoardOpacityDefaults.m_ShapeOpacity,
+                                              defaultOpacity.m_ShapeOpacity, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "project_defaults.board_opacity.outside_group",
+                                              &m_BoardOpacityDefaults.m_OutsideGroupOpacity,
+                                              defaultOpacity.m_OutsideGroupOpacity, 0.0, 1.0 ) );
+
     m_params.emplace_back( new PARAM_LIST<wxString>( "system.extra_3d_search_dirs",
             &m_Extra3DSearchDirs, {} ) );
 

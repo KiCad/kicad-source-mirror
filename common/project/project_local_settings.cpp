@@ -29,7 +29,8 @@
 const int projectLocalSettingsVersion = 7;
 
 
-PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename ) :
+PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename,
+                                                const BOARD_OPACITY_DEFAULTS& aOpacityDefaults ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
@@ -39,13 +40,13 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_AutoTrackWidth( true ),
         m_ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ),
         m_PrototypeZoneFill( false ),
-        m_TrackOpacity( DEFAULT_TRACK_OPACITY ),
-        m_ViaOpacity( DEFAULT_VIA_OPACITY ),
-        m_PadOpacity( DEFAULT_PAD_OPACITY ),
-        m_ZoneOpacity( DEFAULT_ZONE_OPACITY ),
-        m_ShapeOpacity( DEFAULT_FILLED_SHAPE_OPACITY ),
-        m_ImageOpacity( DEFAULT_IMAGE_OPACITY ),
-        m_OutsideGroupOpacity( 1.0 ),
+        m_TrackOpacity( aOpacityDefaults.m_TrackOpacity ),
+        m_ViaOpacity( aOpacityDefaults.m_ViaOpacity ),
+        m_PadOpacity( aOpacityDefaults.m_PadOpacity ),
+        m_ZoneOpacity( aOpacityDefaults.m_ZoneOpacity ),
+        m_ShapeOpacity( aOpacityDefaults.m_ShapeOpacity ),
+        m_ImageOpacity( aOpacityDefaults.m_ImageOpacity ),
+        m_OutsideGroupOpacity( aOpacityDefaults.m_OutsideGroupOpacity ),
         m_PcbSelectionFilter(),
         m_GitIntegrationDisabled( false ),
         m_project( aProject ),
@@ -183,13 +184,20 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            &m_ContrastModeDisplay, HIGH_CONTRAST_MODE::NORMAL,
                            HIGH_CONTRAST_MODE::NORMAL, HIGH_CONTRAST_MODE::HIDDEN ) );
 
-    m_params.emplace_back( new PARAM<double>( "board.opacity.tracks", &m_TrackOpacity, DEFAULT_TRACK_OPACITY ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.vias", &m_ViaOpacity, DEFAULT_VIA_OPACITY ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.pads", &m_PadOpacity, DEFAULT_PAD_OPACITY ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.zones", &m_ZoneOpacity, DEFAULT_ZONE_OPACITY ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.images", &m_ImageOpacity, DEFAULT_IMAGE_OPACITY ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.shapes", &m_ShapeOpacity, DEFAULT_FILLED_SHAPE_OPACITY ) );
-    m_params.emplace_back( new PARAM<double>( "board.opacity.outside_group", &m_OutsideGroupOpacity, 1.0 ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.tracks", &m_TrackOpacity,
+                                              aOpacityDefaults.m_TrackOpacity ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.vias", &m_ViaOpacity,
+                                              aOpacityDefaults.m_ViaOpacity ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.pads", &m_PadOpacity,
+                                              aOpacityDefaults.m_PadOpacity ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.zones", &m_ZoneOpacity,
+                                              aOpacityDefaults.m_ZoneOpacity ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.images", &m_ImageOpacity,
+                                              aOpacityDefaults.m_ImageOpacity ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.shapes", &m_ShapeOpacity,
+                                              aOpacityDefaults.m_ShapeOpacity ) );
+    m_params.emplace_back( new PARAM<double>( "board.opacity.outside_group", &m_OutsideGroupOpacity,
+                                              aOpacityDefaults.m_OutsideGroupOpacity ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "board.hidden_nets", &m_HiddenNets, {} ) );
 

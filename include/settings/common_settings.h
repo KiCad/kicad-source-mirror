@@ -23,6 +23,7 @@
 #include <memory>
 #include <vector>
 #include <mouse_drag_action.h>
+#include <project/board_opacity_defaults.h>
 #include <settings/environment.h>
 #include <settings/json_settings.h>
 #include <template_fieldnames.h>
@@ -288,6 +289,7 @@ public:
     DO_NOT_SHOW_AGAIN   m_DoNotShowAgain;
     EMBED_FILE_DEFAULTS m_EmbedFileDefaults;
     RELATIVE_PATH_DEFAULTS m_RelativePathDefaults;
+    BOARD_OPACITY_DEFAULTS m_BoardOpacityDefaults;
     PACKAGE_MANAGER     m_PackageManager;
     GIT                 m_Git;
     API                 m_Api;

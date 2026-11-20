@@ -563,7 +563,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_PCBNEW_ACTION_PLUGINS( aParent );
 
         case PANEL_PCB_PROJECT_DEFAULTS:
-            return new PANEL_PROJECT_DEFAULTS( aParent, GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) );
+            return new PANEL_PROJECT_DEFAULTS( aParent );
 
         case PANEL_3DV_DISPLAY_OPTIONS:
             return new PANEL_3D_DISPLAY_OPTIONS( aParent );

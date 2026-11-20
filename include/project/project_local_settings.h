@@ -23,6 +23,7 @@
 #define KICAD_PROJECT_LOCAL_SETTINGS_H
 
 #include <layer_ids.h>
+#include <project/board_opacity_defaults.h>
 #include <project/board_project_settings.h>
 #include <project/sch_project_settings.h>
 #include <settings/json_settings.h>
@@ -54,7 +55,11 @@ struct KICOMMON_API PROJECT_FILE_STATE
 class KICOMMON_API PROJECT_LOCAL_SETTINGS : public JSON_SETTINGS
 {
 public:
-    PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename );
+    /**
+     * @param aOpacityDefaults are the board opacities used when the file does not set them.
+     */
+    PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename,
+                            const BOARD_OPACITY_DEFAULTS& aOpacityDefaults = BOARD_OPACITY_DEFAULTS() );
 
     virtual ~PROJECT_LOCAL_SETTINGS() {}
 

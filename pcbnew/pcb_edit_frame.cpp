@@ -570,6 +570,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     resolveCanvasType();
     ActivateGalCanvas();
 
+    // Starting without a file still shows a board, so give it the project settings as File > New does
+    LoadProjectSettings();
+
     // Default shutdown reason until a file is loaded
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New PCB file is unsaved" ) );
 

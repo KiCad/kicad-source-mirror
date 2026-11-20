@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,15 +21,13 @@
 
 #include <panel_project_defaults_base.h>
 
-class PCBNEW_SETTINGS;
-class APP_SETTINGS_BASE;
+struct BOARD_OPACITY_DEFAULTS;
 
 
 class PANEL_PROJECT_DEFAULTS : public PANEL_PROJECT_DEFAULTS_BASE
 {
 public:
-    PANEL_PROJECT_DEFAULTS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
-    ~PANEL_PROJECT_DEFAULTS() override;
+    PANEL_PROJECT_DEFAULTS( wxWindow* aParent );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -37,8 +35,5 @@ public:
     void ResetPanel() override;
 
 private:
-    void loadPCBSettings( PCBNEW_SETTINGS* aCfg );
-
-private:
-    bool m_isPCBEdit;
+    void applyOpacities( const BOARD_OPACITY_DEFAULTS& aOpacities );
 };

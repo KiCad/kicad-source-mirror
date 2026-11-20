@@ -21,8 +21,10 @@
 #include "kicad_manager_frame.h"
 #include <kiway.h>
 #include <kiway_mail.h>
+#include <pgm_base.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <gestfich.h>
 #include <confirm.h>
@@ -104,7 +106,8 @@ wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnFile( const wxString& aSrcFilePath
         }
         else if( ext == FILEEXT::ProjectLocalSettingsFileExtension )
         {
-            PROJECT_LOCAL_SETTINGS projectLocalSettings( nullptr, aSrcFilePath );
+            PROJECT_LOCAL_SETTINGS projectLocalSettings( nullptr, aSrcFilePath,
+                                                         Pgm().GetCommonSettings()->m_BoardOpacityDefaults );
             projectLocalSettings.LoadFromFile();
             projectLocalSettings.SaveAs( destFile.GetPath(), destFile.GetName() );
         }

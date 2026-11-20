@@ -1116,7 +1116,12 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive, 
 
     wxString fn( path.GetName() );
 
-    PROJECT_LOCAL_SETTINGS* settings = new PROJECT_LOCAL_SETTINGS( m_projects[fullPath], fn );
+    BOARD_OPACITY_DEFAULTS opacityDefaults;
+
+    if( m_common_settings )
+        opacityDefaults = m_common_settings->m_BoardOpacityDefaults;
+
+    PROJECT_LOCAL_SETTINGS* settings = new PROJECT_LOCAL_SETTINGS( m_projects[fullPath], fn, opacityDefaults );
 
     if( aSetActive )
         settings = RegisterSettings( settings );
