@@ -34,6 +34,7 @@
 
 class wxWindow;
 
+#include <wx/msgdlg.h>      // for xxMessageDialog
 
 // On Windows, to have the best dark mode experience we need to sub in the generic dialogs
 // as wx can't retheme the native dialogs

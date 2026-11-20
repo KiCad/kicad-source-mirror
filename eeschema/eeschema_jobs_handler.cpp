@@ -108,6 +108,7 @@
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <confirm.h>
 #include <project_sch.h>
+#include <wx/app.h>
 
 #include <libraries/symbol_library_adapter.h>
 

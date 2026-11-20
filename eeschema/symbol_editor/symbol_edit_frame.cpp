@@ -100,6 +100,7 @@
 #include <wx/log.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
+#include <wx/app.h>
 #include <trace_helpers.h>
 
 
