@@ -301,3 +301,9 @@ void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
 {
     // Child windows are native and clip their parent's surface
 }
+
+
+void KIPLATFORM::UI::RebindOnRealize( wxWindow* aWindow )
+{
+    // Win32 windows keep their HWND when reparented
+}

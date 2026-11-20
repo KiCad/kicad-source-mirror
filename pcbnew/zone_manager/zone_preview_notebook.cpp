@@ -48,26 +48,30 @@ enum LAYER_ICON_SIZE
 class ZONE_PREVIEW_NOTEBOOK_PAGE : public wxPanel
 {
 public:
-    ZONE_PREVIEW_NOTEBOOK_PAGE( wxWindow* aParent, BOARD* aBoard, ZONE* aZone, PCB_LAYER_ID aLayer,
-                                GAL_DISPLAY_OPTIONS_IMPL& aOpts, EDA_DRAW_PANEL_GAL::GAL_TYPE aGalType ) :
+    ZONE_PREVIEW_NOTEBOOK_PAGE( wxWindow* aParent, PCB_LAYER_ID aLayer ) :
             wxPanel( aParent ),
             m_layer( aLayer ),
             m_canvas( nullptr )
     {
         SetSizer( new wxBoxSizer( wxHORIZONTAL ) );
+    }
 
-        m_canvas = new ZONE_PREVIEW_CANVAS( aBoard, std::unique_ptr<ZONE>( aZone->Clone( aLayer ) ), aLayer, this,
+    // Only once the page is in the notebook, as adding it reparents the page and strands an EGL surface
+    void CreateCanvas( BOARD* aBoard, ZONE* aZone, GAL_DISPLAY_OPTIONS_IMPL& aOpts,
+                       EDA_DRAW_PANEL_GAL::GAL_TYPE aGalType )
+    {
+        m_canvas = new ZONE_PREVIEW_CANVAS( aBoard, std::unique_ptr<ZONE>( aZone->Clone( m_layer ) ), m_layer, this,
                                             aOpts, aGalType );
         GetSizer()->Add( m_canvas, 1, wxEXPAND );
         Layout();
         GetSizer()->Fit( this );
     }
 
-    int  GetLayer() const { return m_layer; }
+    PCB_LAYER_ID GetLayer() const { return m_layer; }
     ZONE_PREVIEW_CANVAS* GetCanvas() const { return m_canvas; }
 
 private:
-    int                  m_layer;
+    PCB_LAYER_ID         m_layer;
     ZONE_PREVIEW_CANVAS* m_canvas;
 };
 
@@ -138,12 +142,11 @@ void ZONE_PREVIEW_NOTEBOOK::OnZoneSelectionChanged( ZONE* aZone )
     {
         BOARD*                      board = m_pcbFrame->GetBoard();
         wxString                    layerName = board->GetLayerName( layer );
-        ZONE_PREVIEW_NOTEBOOK_PAGE* page =
-                new ZONE_PREVIEW_NOTEBOOK_PAGE( this, board, aZone, layer,
-                                               m_pcbFrame->GetGalDisplayOptions(),
-                                               m_pcbFrame->GetCanvas()->GetBackend() );
+        ZONE_PREVIEW_NOTEBOOK_PAGE* page = new ZONE_PREVIEW_NOTEBOOK_PAGE( this, layer );
 
         AddPage( page, layerName, false, layer );
+        page->CreateCanvas( board, aZone, m_pcbFrame->GetGalDisplayOptions(),
+                            m_pcbFrame->GetCanvas()->GetBackend() );
         page->Layout();
 
         if( m_hasSavedZoom )
@@ -185,7 +188,7 @@ PCB_LAYER_ID ZONE_PREVIEW_NOTEBOOK::GetCurrentLayer() const
     if( !page )
         return UNDEFINED_LAYER;
 
-    return static_cast<PCB_LAYER_ID>( static_cast<const ZONE_PREVIEW_NOTEBOOK_PAGE*>( page )->GetLayer() );
+    return static_cast<const ZONE_PREVIEW_NOTEBOOK_PAGE*>( page )->GetLayer();
 }
 
 

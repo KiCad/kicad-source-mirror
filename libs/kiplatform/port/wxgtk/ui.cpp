@@ -1293,3 +1293,34 @@ void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
         wxLogTrace( traceRhi, wxS( "KeepAboveExternalRendering: gdk_window_ensure_native failed" ) );
 #endif
 }
+
+
+#if defined( GDK_WINDOWING_X11 ) && !wxCHECK_VERSION( 3, 3, 3 )
+static void rebindRealizedWindow( GtkWidget*, wxWindow* aWindow )
+{
+    aWindow->GTKHandleRealized();
+}
+#endif
+
+
+void KIPLATFORM::UI::RebindOnRealize( wxWindow* aWindow )
+{
+#if defined( GDK_WINDOWING_X11 ) && !wxCHECK_VERSION( 3, 3, 3 )
+    GtkWidget* widget = aWindow->GetConnectWidget();
+
+    // Only X11 binds a surface to the native window, and wx before 3.2.3 rebuilds Wayland surfaces on each call
+    if( !widget || !GDK_IS_X11_DISPLAY( gtk_widget_get_display( widget ) ) )
+        return;
+
+    guint realize = g_signal_lookup( "realize", GTK_TYPE_WIDGET );
+
+    // wx connects its own handler, keyed on the window, when the widget was unrealized at creation
+    if( g_signal_handler_find( widget, GSignalMatchType( G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA ), realize, 0,
+                               nullptr, nullptr, aWindow ) )
+    {
+        return;
+    }
+
+    g_signal_connect( widget, "realize", G_CALLBACK( rebindRealizedWindow ), aWindow );
+#endif
+}

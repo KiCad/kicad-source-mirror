@@ -344,3 +344,9 @@ void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
 {
     // Child views are composited above the Metal layer of their parent
 }
+
+
+void KIPLATFORM::UI::RebindOnRealize( wxWindow* aWindow )
+{
+    // An NSView keeps its identity when reparented
+}

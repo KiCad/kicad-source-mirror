@@ -23,6 +23,7 @@
 #include <gal/hidpi_gl_canvas.h>
 
 #include <dpi_scaling.h>
+#include <kiplatform/ui.h>
 
 
 HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow* aParent,
@@ -32,6 +33,8 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow*
         wxGLCanvas( aParent, aGLAttribs, aId, aPos, aSize, aStyle, aName, aPalette ),
         m_settings( aSettings )
 {
+    // Otherwise an EGL canvas created in a shown dialog keeps its surface on a destroyed window
+    KIPLATFORM::UI::RebindOnRealize( this );
 }
 
 
