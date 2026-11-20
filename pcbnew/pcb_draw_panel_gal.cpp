@@ -701,6 +701,8 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( KIGFX::VIEW& aView, const BOARD* 
     aView.SetLayerVisible( LAYER_RATSNEST, true );
     aView.SetLayerVisible( LAYER_MARKER_SHADOWS, true );
     aView.SetLayerVisible( LAYER_DRC_HIGHLIGHTED, true );
+    aView.SetLayerVisible( LAYER_ROUTER_PREVIEW_SHADOW, true );
+    aView.SetLayerVisible( LAYER_ROUTER_PREVIEW_COLLISION, true );
 }
 
 
