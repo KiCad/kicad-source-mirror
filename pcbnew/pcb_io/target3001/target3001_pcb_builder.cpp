@@ -775,12 +775,15 @@ void TARGET3001_PCB_BUILDER::buildAreaSpokes( const std::vector<const ELEMENT*>&
 
         // Untagged, the pad joins its area and the local connection picks spokes over solid
         pad->SetCustomProperty( wxS( "TARGET3001_AURA" ), wxS( "0" ) );
-        pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
-        pad->SetLocalThermalSpokeWidthOverride( spoke->line.width );
-        pad->SetThermalSpokeAngle( EDA_ANGLE( degrees, DEGREES_T ) );
+
+        // TARGET 3001! supports only an inflation/deflation value (called "extra addition") per padstack
+        // layer.  Thermal spoke properties are not alterable per layer through the GUI.
+        pad->Padstack().ZoneConnection( PADSTACK::ALL_LAYERS ) = ZONE_CONNECTION::THERMAL;
+        pad->Padstack().ThermalSpokeWidth( PADSTACK::ALL_LAYERS ) = spoke->line.width;
+        pad->Padstack().ThermalSpokeAngle( PADSTACK::ALL_LAYERS ) = EDA_ANGLE( degrees, DEGREES_T );
 
         if( std::optional<int> aura = pad->GetLocalClearance(); aura && *aura > 0 )
-            pad->SetLocalThermalGapOverride( aura );
+            pad->Padstack().ThermalGap( PADSTACK::ALL_LAYERS ) = aura;
     }
 
     // Vias get no spokes in a solid fill, so a spoked via joins its area solidly
@@ -1524,6 +1527,10 @@ void TARGET3001_PCB_BUILDER::addPad( const ELEMENT& aElem, FOOTPRINT* aFootprint
     VECTOR2I            size( std::max( 1, src.width ), std::max( 1, src.height ) );
     std::optional<LSET> padstack = padstackLayers( b.layer );
 
+    // TARGET 3001! supports custom margins (called "extra addition") per padstack layer, but that's it.
+    // You can't change shapes or any other properties.
+    // (We could implement the margins by creating inflated/deflated shapes, but we don't at present.)
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetSize( PADSTACK::ALL_LAYERS, size );
 
     switch( TARGET3001::PAD_SHAPE( src.shape ) )
@@ -1693,9 +1700,9 @@ void TARGET3001_PCB_BUILDER::addPadstackCuts( const BOARD_ITEM& aItem, int aPads
     {
         LAYER_FUNCTION f = LayerFunction( layer );
 
-        if( !def.onLayer[layer]
-            || ( f != LAYER_FUNCTION::DELETION_BOTTOM && f != LAYER_FUNCTION::DELETION_INSIDE
-                 && f != LAYER_FUNCTION::DELETION_TOP ) )
+        if( !def.onLayer[layer] || (   f != LAYER_FUNCTION::DELETION_BOTTOM
+                                    && f != LAYER_FUNCTION::DELETION_INSIDE
+                                    && f != LAYER_FUNCTION::DELETION_TOP ) )
         {
             continue;
         }
@@ -1749,8 +1756,11 @@ void TARGET3001_PCB_BUILDER::addVia( const ELEMENT& aElem )
 
     // Copper without a hole is a pad-shaped piece of copper; a hole larger than its copper is unplated.
     // Slots, oval or rectangular copper and padstacks missing a copper layer have no via equivalent.
-    if( src.drill <= 0 || std::max( src.width, src.height ) < src.drill || slotted
-        || shape == TARGET3001::PAD_SHAPE::OVAL || shape == TARGET3001::PAD_SHAPE::RECTANGLE
+    if( src.drill <= 0
+        || std::max( src.width, src.height ) < src.drill
+        || slotted
+        || shape == TARGET3001::PAD_SHAPE::OVAL
+        || shape == TARGET3001::PAD_SHAPE::RECTANGLE
         || ( padstack && ( *padstack & allCopper ) != allCopper ) )
     {
         addPad( aElem, nullptr );
@@ -1759,7 +1769,13 @@ void TARGET3001_PCB_BUILDER::addVia( const ELEMENT& aElem )
 
     PCB_VIA* via = new PCB_VIA( m_board );
     via->SetPosition( toKi( b.x, b.y ) );
+
+    // TARGET 3001! supports custom margins (called "extra addition") per padstack layer, but that's it.
+    // You can't change shapes or any other properties.
+    // (We could implement the margins by creating inflated/deflated shapes, but we don't at present.)
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
     via->SetWidth( PADSTACK::ALL_LAYERS, std::max( src.width, src.height ) );
+
     via->SetDrill( src.drill );
     via->SetViaType( VIATYPE::THROUGH );
     via->SetLayerPair( F_Cu, B_Cu );
@@ -1804,8 +1820,8 @@ void TARGET3001_PCB_BUILDER::configureText( PCB_TEXT* aText, const ELEMENT& aEle
 }
 
 
-void TARGET3001_PCB_BUILDER::addText( const ELEMENT& aElem, BOARD_ITEM_CONTAINER* aParent,
-                                      FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer )
+void TARGET3001_PCB_BUILDER::addText( const ELEMENT& aElem, BOARD_ITEM_CONTAINER* aParent, FOOTPRINT* aFootprint,
+                                      PCB_LAYER_ID aLayer )
 {
     const TEXT& t = aElem.text;
 
