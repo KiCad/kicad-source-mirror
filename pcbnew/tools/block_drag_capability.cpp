@@ -75,9 +75,11 @@ BLOCK_DRAG_CAPABILITY BlockDragCapability( const BOARD_ITEM& aItem )
     case PCB_TRACE_T:
     case PCB_ARC_T:
     case PCB_VIA_T:
-    case PCB_FOOTPRINT_T: return footprintHolder ? BLOCK_DRAG_CAPABILITY::UNSUPPORTED : BLOCK_DRAG_CAPABILITY::ROUTER;
+    case PCB_FOOTPRINT_T:
+        return footprintHolder ? BLOCK_DRAG_CAPABILITY::UNSUPPORTED : BLOCK_DRAG_CAPABILITY::ROUTER;
 
-    case PCB_PAD_T: return footprintHolder ? BLOCK_DRAG_CAPABILITY::RIGID : BLOCK_DRAG_CAPABILITY::ROUTER;
+    case PCB_PAD_T:
+        return footprintHolder ? BLOCK_DRAG_CAPABILITY::RIGID : BLOCK_DRAG_CAPABILITY::ROUTER;
 
     case PCB_ZONE_T:
         // A zone inside a footprint belongs to that footprint. Reshaping it from the
@@ -99,13 +101,16 @@ BLOCK_DRAG_CAPABILITY BlockDragCapability( const BOARD_ITEM& aItem )
         case SHAPE_T::POLY:
         case SHAPE_T::RECTANGLE:
         case SHAPE_T::ELLIPSE:
-        case SHAPE_T::ELLIPSE_ARC: return BLOCK_DRAG_CAPABILITY::DEFORMABLE;
+        case SHAPE_T::ELLIPSE_ARC:
+            return BLOCK_DRAG_CAPABILITY::DEFORMABLE;
 
         case SHAPE_T::ARC:
         case SHAPE_T::CIRCLE:
-        case SHAPE_T::BEZIER: return BLOCK_DRAG_CAPABILITY::RIGID;
+        case SHAPE_T::BEZIER:
+            return BLOCK_DRAG_CAPABILITY::RIGID;
 
-        default: return BLOCK_DRAG_CAPABILITY::UNSUPPORTED;
+        default:
+            return BLOCK_DRAG_CAPABILITY::UNSUPPORTED;
         }
     }
 
@@ -146,9 +151,12 @@ BLOCK_DRAG_CAPABILITY BlockDragCapability( const BOARD_ITEM& aItem )
     case PCB_POINT_T:
     case PCB_GRID_ITEM_T:
     case PCB_DRILL_CHART_T:
-    case PCB_DRILL_MAP_T: return BLOCK_DRAG_CAPABILITY::RIGID;
+    case PCB_DRILL_MAP_T:
+    case PCB_STACKUP_TABLE_T:
+        return BLOCK_DRAG_CAPABILITY::RIGID;
 
-    default: return BLOCK_DRAG_CAPABILITY::UNSUPPORTED;
+    default:
+        return BLOCK_DRAG_CAPABILITY::UNSUPPORTED;
     }
 }
 
