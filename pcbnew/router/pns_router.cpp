@@ -233,14 +233,14 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode )
 
 bool ROUTER::hasDiffPairMembers( const ITEM_SET& aItems ) const
 {
-     auto rr = GetRuleResolver();
+    RULE_RESOLVER* rr = GetRuleResolver();
 
-    for( auto item : aItems.CItems() )
+    for( ITEM* item : aItems.CItems() )
     {
-
         if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
         {
             NET_HANDLE coupledNet = rr->DpCoupledNet( item->Net() );
+
             if( coupledNet )
             {
                 PNS_DBG( dbg(), Message, wxString::Format( wxT("found DP in itemset: %s/%s"),
@@ -460,8 +460,7 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
         wxString          errorMsg;
 
         
-        if( !dpPlacer.FindDpPrimitivePair( m_world.get(), startPoint, aStartItem, dpPair,
-                                                    &errorMsg ) )
+        if( !dpPlacer.FindDpPrimitivePair( m_world.get(), startPoint, aStartItem, dpPair, &errorMsg ) )
         {
             SetFailureReason( errorMsg );
             return false;

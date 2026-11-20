@@ -2545,6 +2545,7 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
         frame->ShowInfoBarError( _( "Please select a group of tracks you want to spread." ) );
         return 0;
     }
+
     frame->ShowInfoBarMsg( _( "Pick a track you want to spread other tracks around." ) );
 
     // Main loop: keep receiving events
@@ -2597,6 +2598,7 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
                 pickingStartPoint = false;
 
                 frame->GetInfoBar()->Dismiss();
+
                 if( !m_router->StartRouting( m_startSnapPoint, m_startItem, m_startItem->Layer(), trackItems ) )
                 {
                     m_cancelled = true;
