@@ -355,6 +355,10 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
 
 void BACKGROUND_JOBS_MONITOR::RegisterStatusBar( KISTATUSBAR* aStatusBar )
 {
+    // Frames without a status bar (e.g. the symbol chooser) pass nullptr
+    if( !aStatusBar )
+        return;
+
     std::shared_ptr<BACKGROUND_JOB> frontJob;
 
     {
