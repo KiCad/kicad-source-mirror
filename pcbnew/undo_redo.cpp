@@ -46,6 +46,7 @@ using namespace std::placeholders;
 #include <wx/msgdlg.h>
 #include <pcb_board_outline.h>
 #include <pcb_drill_map.h>
+#include <undo_group_state.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -431,6 +432,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 }
             };
 
+    UNDO_GROUP_STATE groupState( *GetBoard(), *aList );
+
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
@@ -660,41 +663,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     if( not_found )
         wxMessageBox( _( "Incomplete undo/redo operation: some items not found" ) );
 
-    // We have now swapped all the group parent and group member pointers.  But it is a
-    // risky proposition to bet on the pointers being invariant, so validate them all.
-    for( int ii = 0; ii < (int) aList->GetCount(); ++ii )
-    {
-        ITEM_PICKER& wrapper = aList->GetItemWrapper( ii );
-
-        if( wrapper.GetStatus() == UNDO_REDO::DELETED )
-            continue;
-
-        BOARD_ITEM* parentGroup = GetBoard()->ResolveItem( wrapper.GetGroupId(), true );
-        BOARD_ITEM* boardItem = GetBoard()->ResolveItem( wrapper.GetItem()->m_Uuid, true );
-
-        if( boardItem )
-            boardItem->SetParentGroup( dynamic_cast<PCB_GROUP*>( parentGroup ) );
-
-        // Restore the group's member list, which BOARD::Remove() cleared above.
-        if( PCB_GROUP* parentPcbGroup = dynamic_cast<PCB_GROUP*>( parentGroup ) )
-            parentPcbGroup->GetItems().insert( boardItem );
-
-        if( EDA_GROUP* group = dynamic_cast<PCB_GROUP*>( wrapper.GetItem() ) )
-        {
-            // Items list may contain dodgy pointers, so don't use RemoveAll()
-            group->GetItems().clear();
-
-            for( const KIID& member : wrapper.GetGroupMembers() )
-            {
-                if( BOARD_ITEM* memberItem = GetBoard()->ResolveItem( member, true ) )
-                    group->AddItem( memberItem );
-            }
-        }
-
-        // And prepare for a redo by updating group info based on current image
-        if( EDA_ITEM* item = wrapper.GetLink() )
-            wrapper.SetLink( item );
-    }
+    groupState.Restore( *aList );
 
     if( IsType( FRAME_PCB_EDITOR ) )
     {

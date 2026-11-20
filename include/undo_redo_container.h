@@ -92,6 +92,15 @@ public:
     KIID GetGroupId() const { return m_groupId; }
     std::vector<KIID> GetGroupMembers() const { return m_groupMembers; }
 
+    /**
+     * Replace the group state recorded from the item or its link.
+     */
+    void SetGroupState( const KIID& aGroupId, const std::vector<KIID>& aGroupMembers )
+    {
+        m_groupId = aGroupId;
+        m_groupMembers = aGroupMembers;
+    }
+
     BASE_SCREEN* GetScreen() const { return m_screen; }
 
 private:

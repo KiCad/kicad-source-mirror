@@ -496,6 +496,7 @@ set( PCBNEW_CLASS_SRCS
     toolbars_footprint_wizard.cpp
     toolbars_pcb_editor.cpp
     tracks_cleaner.cpp
+    undo_group_state.cpp
     undo_redo.cpp
     zone_filler.cpp
     zone_settings_bag.cpp
