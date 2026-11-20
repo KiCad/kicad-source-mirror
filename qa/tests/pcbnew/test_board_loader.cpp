@@ -22,6 +22,8 @@
 #include <board.h>
 #include <board_loader.h>
 #include <board_design_settings.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <pcb_io/pcb_io_mgr.h>
@@ -115,4 +117,23 @@ BOOST_AUTO_TEST_CASE( CollinearTrackArcLoadsAsTrack )
     BOOST_CHECK_EQUAL( track->GetWidth(), pcbIUScale.mmToIU( 0.15 ) );
     BOOST_CHECK_EQUAL( track->GetLayer(), In2_Cu );
     BOOST_CHECK_EQUAL( track->GetNetname(), wxString( "FMCP_HSPC_DP11_C2M_N" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyPadNumericNetNameLoads )
+{
+    const std::string path = KI_TEST::GetPcbnewTestDataDir() + "c4_motherboard.kicad_pcb";
+
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( path );
+
+    BOOST_REQUIRE( board );
+
+    FOOTPRINT* vrm = board->FindFootprintByReference( wxS( "VRM901" ) );
+
+    BOOST_REQUIRE( vrm );
+
+    PAD* pad = vrm->FindPadByNumber( wxS( "B8" ) );
+
+    BOOST_REQUIRE( pad );
+    BOOST_CHECK_EQUAL( pad->GetNetname(), wxString( "+12" ) );
 }

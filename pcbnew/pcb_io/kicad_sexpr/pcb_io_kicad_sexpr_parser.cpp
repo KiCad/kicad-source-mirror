@@ -7641,7 +7641,8 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 token = NextTok();
             }
 
-            if( !IsSymbol( token ) )
+            // Legacy net names are unquoted, so a name like +12 lexes as a number
+            if( !IsSymbol( token ) && !IsNumber( token ) )
             {
                 Expecting( "net name" );
                 break;
