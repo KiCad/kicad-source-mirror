@@ -563,6 +563,33 @@ BOOST_AUTO_TEST_CASE( FetchHeadMarksAtMostOneBranchToMerge )
 }
 
 
+// libgit2 reads a missing drive path as an SCP address on host "C", so the fetch must name the path, not a server
+BOOST_AUTO_TEST_CASE( FetchFromMissingDrivePathNamesThePath )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    const wxString missing = wxS( "C:\\Users\\nobody\\team-lib.git" );
+    git_remote*    remote = nullptr;
+
+    BOOST_REQUIRE_EQUAL( git_remote_create( &remote, repo, "origin", missing.utf8_str() ), GIT_OK );
+    git_remote_free( remote );
+
+    KIGIT_COMMON     common( repo, repoPath() );
+    GIT_PULL_HANDLER handler( &common );
+
+    BOOST_REQUIRE( !handler.PerformFetch() );
+
+    // Each read pops the error, and MSVC builds the message before it tests the condition
+    const wxString error = handler.GetErrorString();
+
+    BOOST_CHECK_MESSAGE( error.Contains( wxS( "There is no repository at " ) + missing ), error );
+}
+
+
 // KiCad cannot read or write Git LFS, so an operation that would put a pointer file where a
 // design file belongs is refused. The remote can start using LFS at any time, so the commit
 // being merged has to be judged, not the one already held.

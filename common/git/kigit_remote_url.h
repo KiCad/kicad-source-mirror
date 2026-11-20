@@ -49,6 +49,12 @@ struct REMOTE_URL
 /// Split a remote address the way libgit2 reads it, so a host key is checked against the host it dials
 APIEXPORT REMOTE_URL ParseRemoteURL( const wxString& aURL );
 
+/**
+ * The folder aUrl names when it is a drive, UNC or absolute path or a file:// URL, else empty. A relative path is
+ * left to libgit2, since only it knows the folder that path is relative to.
+ */
+APIEXPORT wxString LocalRemotePath( const wxString& aUrl );
+
 /// The host and port aUrl reaches, as `host[:port]` without the scheme's default port. Empty for a local path
 /// or an address naming no usable host.
 APIEXPORT wxString CredentialServer( const wxString& aUrl );

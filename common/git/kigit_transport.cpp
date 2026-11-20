@@ -686,6 +686,22 @@ namespace
     }
 
 
+    /// Fail with libgit2's own words when aUrl is a local path that does not exist. libgit2 would read a missing
+    /// drive path as an SCP address on the host its letter names, and report a server it cannot find
+    int refuseMissingPath( const char* aUrl )
+    {
+        const wxString  path = aUrl ? LocalRemotePath( wxString::FromUTF8( aUrl ) ) : wxString();
+        std::error_code ec;
+
+        if( path.IsEmpty() || std::filesystem::exists( fsPath( path ), ec ) || ec )
+            return GIT_OK;
+
+        git_error_set_str( GIT_ERROR_REPOSITORY,
+                           ( "could not find repository at '" + path.utf8_string() + "'" ).c_str() );
+        return GIT_ENOTFOUND;
+    }
+
+
     /// Remove what a clone wrote into aPath, and aPath itself unless it was there before
     void removeClone( const wxString& aPath, bool aExisted )
     {
@@ -741,7 +757,12 @@ namespace
         if( const char* url = git_remote_url( *aOut ) )
             session->FollowRewrittenUrl( wxString::FromUTF8( url ) );
 
-        if( int rc = withholdUrlLogin( *aOut, *session, false ); rc != GIT_OK )
+        int rc = refuseMissingPath( git_remote_url( *aOut ) );
+
+        if( rc == GIT_OK )
+            rc = withholdUrlLogin( *aOut, *session, false );
+
+        if( rc != GIT_OK )
         {
             git_remote_free( *aOut );
             *aOut = nullptr;
@@ -827,9 +848,14 @@ int REMOTE_TRANSPORT::connect( git_direction aDirection, const git_remote_callba
 
     const char* pushUrl = aDirection == GIT_DIRECTION_PUSH ? git_remote_pushurl( m_remote ) : nullptr;
 
+    const char* url = pushUrl ? pushUrl : git_remote_url( m_remote );
+
     // The host key is checked before any credential is asked for, so the session must already name this host
-    if( const char* url = pushUrl ? pushUrl : git_remote_url( m_remote ) )
+    if( url )
         m_state->session->SyncRemoteUrl( wxString::FromUTF8( url ) );
+
+    if( int rc = refuseMissingPath( url ) )
+        return m_state->Fail( rc );
 
     if( int rc = withholdUrlLogin( m_remote, *m_state->session, pushUrl != nullptr ) )
         return m_state->Fail( rc );

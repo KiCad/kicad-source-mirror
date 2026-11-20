@@ -62,6 +62,8 @@ const TEXT_PATTERN c_textPatterns[] = {
     { "error loading known_hosts", KIGIT_FAILURE::KNOWN_HOSTS_UNREADABLE },
     { "unable to open public key file", KIGIT_FAILURE::KEY_LOAD_FAILED },
     { "proxy returned unexpected status", KIGIT_FAILURE::PROXY },
+    // A folder that holds no repository, which the transport also reports for a local path that is missing
+    { "could not find repository at", KIGIT_FAILURE::REPO_NOT_FOUND },
 };
 
 
@@ -348,6 +350,9 @@ wxString summaryFor( KIGIT_FAILURE aKind, const KIGIT_AUTH_ATTEMPT& aAuth, const
                                  host );
 
     case KIGIT_FAILURE::REPO_NOT_FOUND:
+        if( const wxString path = KIGIT::LocalRemotePath( aContext.url ); !path.IsEmpty() )
+            return KIGIT::NoRepositoryAt( path );
+
         // Clone and Test Connection show the address in their own Location field
         if( aContext.operation == KIGIT_OPERATION::CLONE || aContext.operation == KIGIT_OPERATION::CONNECT )
         {
@@ -489,6 +494,14 @@ wxString KIGIT::UnexplainedFailure( KIGIT_OPERATION aOperation, const wxString& 
     context.operation = aOperation;
     context.url = aUrl;
     return summaryFor( KIGIT_FAILURE::OTHER, {}, context );
+}
+
+
+wxString KIGIT::NoRepositoryAt( const wxString& aPath )
+{
+    return wxString::Format( _( "There is no repository at %s. Check the path, and that its drive or network share "
+                                "is available." ),
+                             aPath );
 }
 
 

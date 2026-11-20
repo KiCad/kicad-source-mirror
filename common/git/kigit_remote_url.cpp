@@ -386,6 +386,40 @@ REMOTE_URL ParseRemoteURL( const wxString& aURL )
 }
 
 
+wxString LocalRemotePath( const wxString& aUrl )
+{
+    static const wxString fileScheme = wxS( "file://" );
+
+    if( aUrl.Lower().StartsWith( fileScheme ) )
+    {
+        wxString path = aUrl.Mid( fileScheme.length() );
+
+        // libgit2 takes only this computer as the host of a file URL
+        if( path.Lower().StartsWith( wxS( "localhost/" ) ) )
+            path = path.Mid( 9 );
+
+        if( !path.StartsWith( wxS( "/" ) ) )
+            return wxEmptyString;
+
+        path = decodePercent( path );
+
+        if( path.length() >= 3 && wxIsalpha( path[1] ) && path[2] == ':' )
+            path = path.Mid( 1 );
+
+        return path;
+    }
+
+    // A colon then a slash, so a one-letter SSH host alias such as c:repo.git stays an address
+    const bool drive =
+            aUrl.length() >= 3 && wxIsalpha( aUrl[0] ) && aUrl[1] == ':' && ( aUrl[2] == '\\' || aUrl[2] == '/' );
+
+    if( drive || aUrl.StartsWith( wxS( "/" ) ) || aUrl.StartsWith( wxS( "\\\\" ) ) )
+        return aUrl;
+
+    return wxEmptyString;
+}
+
+
 wxString CredentialServer( const wxString& aUrl )
 {
     REMOTE_URL parsed = ParseRemoteURL( aUrl );
