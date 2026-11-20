@@ -281,7 +281,8 @@ void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
 DIALOG_MAP_LAYERS::DIALOG_MAP_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc,
                                       const BOARD* aValidationBoard, bool aImportNames ) :
         DIALOG_IMPORTED_LAYERS_BASE( aParent ),
-        m_validationBoard( aValidationBoard )
+        m_validationBoard( aValidationBoard ),
+        m_importNames( aImportNames )
 {
     if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( aParent ) )
         m_board = frame->GetBoard();
@@ -594,6 +595,30 @@ void DIALOG_MAP_LAYERS::OnNameEdited( wxListEvent& event )
 }
 
 
+bool DIALOG_MAP_LAYERS::TransferDataFromWindow()
+{
+    // If the user accepted with no mappings, apply suggested AutoMapLayer values.
+    if( m_matched_layers_map.empty() )
+        AutoMatchLayers();
+
+    if( !GetUnmappedRequiredLayers().empty() )
+    {
+        wxMessageBox( _( "All required layers (marked with '*') must be matched. Please click "
+                         "'Auto-Match Layers' to automatically match the remaining layers" ),
+                      _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
+        return false;
+    }
+
+    if( m_importNames && !m_cbKeepKiCadLayerNames->GetValue() && !GetInvalidLayerNames().empty() )
+    {
+        UpdateNameWarning();
+        return false;
+    }
+
+    return true;
+}
+
+
 std::map<wxString, PCB_LAYER_ID> DIALOG_MAP_LAYERS::RunModal( wxWindow*                            aParent,
                                                               const std::vector<INPUT_LAYER_DESC>& aLayerDesc,
                                                               std::map<PCB_LAYER_ID, wxString>*    aRenamedLayers,
@@ -601,40 +626,13 @@ std::map<wxString, PCB_LAYER_ID> DIALOG_MAP_LAYERS::RunModal( wxWindow*         
 {
     DIALOG_MAP_LAYERS dlg( aParent, aLayerDesc, aValidationBoard, aRenamedLayers != nullptr );
 
-    while( true )
+    // Validation lives in TransferDataFromWindow(). wxWidgets 3.3.4 cannot re-show a closed dialog.
+    if( dlg.ShowModal() != wxID_OK )
     {
-        if( dlg.ShowModal() != wxID_OK )
-        {
-            if( aRenamedLayers )
-                THROW_IO_CANCELLED();
+        if( aRenamedLayers )
+            THROW_IO_CANCELLED();
 
-            return {};
-        }
-
-        // If the user accepted with no mappings, apply suggested AutoMapLayer values.
-        if( dlg.m_matched_layers_map.empty() )
-            dlg.AutoMatchLayers();
-
-        if( dlg.GetUnmappedRequiredLayers().size() > 0 )
-        {
-            wxMessageBox( _( "All required layers (marked with '*') must be matched. Please click "
-                             "'Auto-Match Layers' to automatically match the remaining layers" ),
-                          _( "Unmatched Layers" ), wxICON_ERROR | wxOK );
-            continue;
-        }
-
-        if( aRenamedLayers && !dlg.m_cbKeepKiCadLayerNames->GetValue() )
-        {
-            std::map<wxString, wxString> invalidNames = dlg.GetInvalidLayerNames();
-
-            if( !invalidNames.empty() )
-            {
-                dlg.UpdateNameWarning();
-                continue;
-            }
-        }
-
-        break;
+        return {};
     }
 
     if( auto* frame = dynamic_cast<PCB_BASE_FRAME*>( dlg.m_parentFrame ) )

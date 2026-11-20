@@ -54,6 +54,8 @@ public:
                                                       const BOARD*                         aValidationBoard = nullptr );
 
 private:
+    bool TransferDataFromWindow() override;
+
     std::map<wxString, wxString> GetInvalidLayerNames() const;
     void                         UpdateNameWarning();
     void                         OnNameEdited( wxListEvent& event );
@@ -100,6 +102,9 @@ private:
     std::vector<wxString>            m_sourceNames;
     WX_INFOBAR*                      m_nameWarning = nullptr;
     wxButton*                        m_renameButton = nullptr;
+
+    /// Imported names replace the KiCad layer names and must be validated.
+    bool m_importNames = false;
 };
 
 #endif // DIALOG_IMPORTED_LAYERS_H
