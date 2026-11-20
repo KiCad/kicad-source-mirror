@@ -476,7 +476,12 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer, con
 {
     GetRuleResolver()->ClearCaches();
 
-    if( m_mode != PNS_MODE_SPREAD_TRACKS )
+    if( m_mode == PNS_MODE_SPREAD_TRACKS )
+    {
+        if( !aStartItem )
+            return false;
+    }
+    else
     {
         if( !isStartingPointRoutable( aP, aStartItem, aLayer ) )
             return false;
