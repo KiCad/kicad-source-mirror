@@ -380,7 +380,8 @@ void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PAT
 
     while( sg->m_absorbed_by )
     {
-        wxCHECK2( sg->m_graph == sg->m_absorbed_by->m_graph, continue );
+        // A broken chain must abandon the walk, never retry the same link forever
+        wxCHECK2( sg->m_graph == sg->m_absorbed_by->m_graph, return );
         sg = sg->m_absorbed_by;
     }
 
@@ -1137,6 +1138,49 @@ CONNECTION_GRAPH::ExtractAffectedItems( const std::set<SCH_ITEM*> &aItems )
         }
     }
 
+    // A survivor linked into the removal set would be left with stale links, so it is rebuilt with it
+    auto links_into = [&subgraphs]( const CONNECTION_SUBGRAPH* aSubgraph ) -> bool
+    {
+        if( aSubgraph->m_hier_parent && subgraphs.contains( aSubgraph->m_hier_parent ) )
+            return true;
+
+        for( CONNECTION_SUBGRAPH* child : aSubgraph->m_hier_children )
+        {
+            if( subgraphs.contains( child ) )
+                return true;
+        }
+
+        for( const auto* links : { &aSubgraph->m_bus_neighbors, &aSubgraph->m_bus_parents } )
+        {
+            for( const auto& [member, linked] : *links )
+            {
+                for( CONNECTION_SUBGRAPH* sg : linked )
+                {
+                    if( subgraphs.contains( sg ) )
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    for( bool grown = true; grown; )
+    {
+        grown = false;
+
+        for( CONNECTION_SUBGRAPH* sg : m_subgraphs )
+        {
+            if( subgraphs.contains( sg ) || !links_into( sg ) )
+                continue;
+
+            const size_t before = subgraphs.size();
+
+            traverse_subgraph( sg );
+            grown |= subgraphs.size() != before;
+        }
+    }
+
     removeSubgraphs( subgraphs );
 
     for( const auto& [path, item] : retvals )
@@ -1329,6 +1373,37 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
             it = m_bus_name_to_code_map.erase( it );
         else
             ++it;
+    }
+
+    // Survivors can hold links to removed subgraphs that the removed side does not mirror, such as the
+    // additional hierarchy parents, and would dereference freed memory on the next incremental update
+    for( CONNECTION_SUBGRAPH* survivor : m_subgraphs )
+    {
+        if( survivor->m_hier_parent && aSubgraphs.contains( survivor->m_hier_parent ) )
+            survivor->m_hier_parent = nullptr;
+
+        std::erase_if( survivor->m_hier_children,
+                       [&]( CONNECTION_SUBGRAPH* aChild )
+                       {
+                           return aSubgraphs.contains( aChild );
+                       } );
+
+        for( auto* links : { &survivor->m_bus_neighbors, &survivor->m_bus_parents } )
+        {
+            for( auto it = links->begin(); it != links->end(); )
+            {
+                std::erase_if( it->second,
+                               [&]( CONNECTION_SUBGRAPH* aLinked )
+                               {
+                                   return aSubgraphs.contains( aLinked );
+                               } );
+
+                if( it->second.empty() )
+                    it = links->erase( it );
+                else
+                    ++it;
+            }
+        }
     }
 
     for( CONNECTION_SUBGRAPH* sg : aSubgraphs )
