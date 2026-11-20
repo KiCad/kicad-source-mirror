@@ -2530,17 +2530,23 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
 
     PNS::ITEM_SET trackItems;
 
-    for( EDA_ITEM* item : curSelection.GetItemsSortedBySelectionOrder() )
-    {
-        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
-        {
-            auto       bitem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-            PNS::ITEM* ritem = m_router->GetWorld()->FindItemByParent( bitem );
+    auto loadTrackItems =
+            [&]()
+            {
+                for( EDA_ITEM* item : curSelection.GetItemsSortedBySelectionOrder() )
+                {
+                    if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
+                    {
+                        auto       bitem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+                        PNS::ITEM* ritem = m_router->GetWorld()->FindItemByParent( bitem );
 
-            if( ritem )
-                trackItems.Add( ritem );
-        }
-    }
+                        if( ritem )
+                            trackItems.Add( ritem );
+                    }
+                }
+            };
+
+    loadTrackItems();
 
     if( trackItems.Empty() )
     {
@@ -2571,10 +2577,12 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             m_router->ClearWorld();
+            loadTrackItems();
         }
         else if( evt->Action() == TA_UNDO_REDO_POST || evt->Action() == TA_MODEL_CHANGE )
         {
             m_router->SyncWorld();
+            loadTrackItems();
         }
         else if( evt->IsMotion() )
         {
