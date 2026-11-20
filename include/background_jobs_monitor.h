@@ -65,7 +65,9 @@ private:
     bool updateUI() override;
 
     BACKGROUND_JOBS_MONITOR* m_monitor;
-    std::shared_ptr<BACKGROUND_JOB> m_job;
+
+    // The job owns its reporter so a strong reference here would leak both
+    std::weak_ptr<BACKGROUND_JOB> m_job;
     wxString m_title;
     wxString m_report;
 };

@@ -174,33 +174,53 @@ bool BACKGROUND_JOB_REPORTER::updateUI()
 
 void BACKGROUND_JOB_REPORTER::Report( const wxString& aMessage )
 {
-    m_job->SetStatus( aMessage );
-    m_monitor->jobUpdated( m_job );
+    std::shared_ptr<BACKGROUND_JOB> job = m_job.lock();
+
+    if( !job )
+        return;
+
+    job->SetStatus( aMessage );
+    m_monitor->jobUpdated( job );
 }
 
 
 void BACKGROUND_JOB_REPORTER::SetNumPhases( int aNumPhases )
 {
     PROGRESS_REPORTER_BASE::SetNumPhases( aNumPhases );
-    m_job->m_maxProgress.store( m_numPhases.load() );
-    m_monitor->jobUpdated( m_job );
+    std::shared_ptr<BACKGROUND_JOB> job = m_job.lock();
+
+    if( !job )
+        return;
+
+    job->m_maxProgress.store( m_numPhases.load() );
+    m_monitor->jobUpdated( job );
 }
 
 
 void BACKGROUND_JOB_REPORTER::AdvancePhase()
 {
     PROGRESS_REPORTER_BASE::AdvancePhase();
-    m_job->m_currentProgress.store( m_phase.load() );
-    m_monitor->jobUpdated( m_job );
+    std::shared_ptr<BACKGROUND_JOB> job = m_job.lock();
+
+    if( !job )
+        return;
+
+    job->m_currentProgress.store( m_phase.load() );
+    m_monitor->jobUpdated( job );
 }
 
 
 void BACKGROUND_JOB_REPORTER::SetCurrentProgress( double aProgress )
 {
     PROGRESS_REPORTER_BASE::SetCurrentProgress( aProgress );
-    m_job->m_maxProgress.store( 1000 );
-    m_job->m_currentProgress.store( static_cast<int>( 1000 * aProgress ) );
-    m_monitor->jobUpdated( m_job );
+    std::shared_ptr<BACKGROUND_JOB> job = m_job.lock();
+
+    if( !job )
+        return;
+
+    job->m_maxProgress.store( 1000 );
+    job->m_currentProgress.store( static_cast<int>( 1000 * aProgress ) );
+    m_monitor->jobUpdated( job );
 }
 
 
