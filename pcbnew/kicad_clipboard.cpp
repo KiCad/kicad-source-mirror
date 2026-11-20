@@ -436,7 +436,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
                 // A generated table goes whole, since trimming it would leave its row keys and
                 // columns describing cells it no longer has
-                if( item->Type() == PCB_TABLECELL_T && copy->Type() == PCB_TABLE_T )
+                if( item->Type() == PCB_TABLECELL_T && !IsGeneratedTableType( copy->Type() ) )
                     deleteUnselectedCells( static_cast<PCB_TABLE*>( copy ) );
 
                 Format( copy );
