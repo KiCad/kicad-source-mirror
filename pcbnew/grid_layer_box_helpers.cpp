@@ -137,12 +137,10 @@ wxString GRID_CELL_LAYER_SELECTOR::GetValue() const
 {
     if( LayerBox()->GetLayerSelection() != UNDEFINED_LAYER )
     {
-        PCB_LAYER_ID layer = ToLAYER_ID( LayerBox()->GetLayerSelection() );
-
         if( m_frame )
-            return m_frame->GetBoard()->GetLayerName( layer );
+            return m_frame->GetBoard()->GetLayerName( LayerBox()->GetLayerIDSelection() );
         else
-            return BOARD::GetStandardLayerName( layer );
+            return BOARD::GetStandardLayerName( LayerBox()->GetLayerIDSelection() );
     }
 
     return wxEmptyString;
@@ -207,8 +205,7 @@ void GRID_CELL_LAYER_SELECTOR::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 }
 
 
-bool GRID_CELL_LAYER_SELECTOR::EndEdit( int , int , const wxGrid* , const wxString& ,
-                                        wxString *newval )
+bool GRID_CELL_LAYER_SELECTOR::EndEdit( int , int , const wxGrid* , const wxString& , wxString *newval )
 {
     const int value = LayerBox()->GetLayerSelection();
 

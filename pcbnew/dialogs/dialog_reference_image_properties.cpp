@@ -131,7 +131,7 @@ bool DIALOG_REFERENCE_IMAGE_PROPERTIES::TransferDataFromWindow()
         m_bitmap.SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
         m_bitmap.GetReferenceImage().SetOrientation( m_rotation.GetAngleValue() );
         m_bitmap.GetReferenceImage().SetOpacity( m_ModOpacity->GetValue() );
-        m_bitmap.SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+        m_bitmap.SetLayer( m_LayerSelectionCtrl->GetLayerIDSelection() );
 
         // Only save locked status on non-footprint editor windows
         if( !m_frame->GetBoard()->IsFootprintHolder() )

@@ -491,7 +491,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_item->SetLocked( m_cbLocked->GetValue() );
 
-    m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_item->SetLayer( m_LayerSelectionCtrl->GetLayerIDSelection() );
     m_item->SetIsKnockout( m_cbKnockout->GetValue() );
 
     if( m_fontCtrl->HaveFontSelection() )

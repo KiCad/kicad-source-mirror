@@ -511,7 +511,7 @@ bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
         m_importer->ClearLayerMap();
 
         if( useSingleLayer )
-            m_importer->SetLayer( PCB_LAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+            m_importer->SetLayer( m_SelLayerBox->GetLayerIDSelection() );
         else
             m_importer->SetLayer( m_parent->GetActiveLayer() );
 

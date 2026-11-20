@@ -337,7 +337,7 @@ bool DIALOG_GENERATED_TABLE_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    m_table->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_table->SetLayer( m_LayerSelectionCtrl->GetLayerIDSelection() );
     m_table->SetLocked( m_cbLocked->GetValue() );
 
     m_table->SetUnits( static_cast<GENERATED_TABLE_UNITS>( m_unitsCtrl->GetSelection() ) );
@@ -411,8 +411,7 @@ void DIALOG_GENERATED_TABLE_PROPERTIES::onColumnGridSize( wxSizeEvent& aEvent )
 
 void DIALOG_GENERATED_TABLE_PROPERTIES::onBorderChecked( wxCommandEvent& aEvent )
 {
-    const int defaultWidth =
-            m_frame->GetDesignSettings().GetLineThickness( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    int defaultWidth = m_frame->GetDesignSettings().GetLineThickness( m_LayerSelectionCtrl->GetLayerIDSelection() );
 
     const bool border = m_borderCheckbox->GetValue() || m_headerBorder->GetValue();
     const bool separators = m_rowSeparators->GetValue() || m_colSeparators->GetValue();

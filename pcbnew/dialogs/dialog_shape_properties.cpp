@@ -1506,8 +1506,6 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !m_item )
         return true;
 
-    int layer = m_LayerSelectionCtrl->GetLayerSelection();
-
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
 
@@ -1538,7 +1536,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     else
         m_item->SetLineStyle( it->first );
 
-    m_item->SetLayer( ToLAYER_ID( layer ) );
+    m_item->SetLayer( m_LayerSelectionCtrl->GetLayerIDSelection() );
 
     m_item->SetHasSolderMask( m_hasSolderMask->GetValue() );
 

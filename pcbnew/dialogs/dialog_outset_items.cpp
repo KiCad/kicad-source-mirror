@@ -124,10 +124,7 @@ void DIALOG_OUTSET_ITEMS::OnLayerDefaultClick( wxCommandEvent& event )
 {
     const BOARD_DESIGN_SETTINGS& settings = m_parent.GetBoard()->GetDesignSettings();
 
-    const PCB_LAYER_ID selLayer = ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() );
-    const int          defaultWidth = settings.GetLineThickness( selLayer );
-
-    m_lineWidth.SetValue( defaultWidth );
+    m_lineWidth.SetValue( settings.GetLineThickness( m_LayerSelectionCtrl->GetLayerIDSelection() ) );
 }
 
 
@@ -174,7 +171,7 @@ bool DIALOG_OUTSET_ITEMS::TransferDataFromWindow()
         return false;
     }
 
-    m_params.layer = ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() );
+    m_params.layer = m_LayerSelectionCtrl->GetLayerIDSelection();
     m_params.outsetDistance = m_outset.GetIntValue();
     m_params.roundCorners = m_roundCorners->GetValue();
     m_params.lineWidth = m_lineWidth.GetIntValue();

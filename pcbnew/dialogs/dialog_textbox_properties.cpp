@@ -375,7 +375,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     m_textBox->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
     m_textBox->SetLocked( m_cbLocked->GetValue() );
-    m_textBox->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+    m_textBox->SetLayer( m_LayerSelectionCtrl->GetLayerIDSelection() );
 
     if( m_fontCtrl->HaveFontSelection() )
     {

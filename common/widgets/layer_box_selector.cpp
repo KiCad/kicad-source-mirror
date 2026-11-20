@@ -64,6 +64,21 @@ LAYER_BOX_SELECTOR::~LAYER_BOX_SELECTOR()
 }
 
 
+PCB_LAYER_ID LAYER_BOX_SELECTOR::GetLayerIDSelection() const
+{
+    if( GetSelection() < 0 )
+    {
+        // UNDEFINED_LAYER is not a valid layer ID
+        if( GetCount() > 0 )
+            return ToLAYER_ID( (int)(intptr_t) GetClientData( 0 ) );
+        else
+            return F_Cu;
+    }
+
+    return ToLAYER_ID( GetLayerSelection() );
+}
+
+
 int LAYER_BOX_SELECTOR::GetLayerSelection() const
 {
     if( GetSelection() < 0 )

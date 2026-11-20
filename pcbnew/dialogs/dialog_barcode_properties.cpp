@@ -265,7 +265,7 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
 
     aBarcode->SetText( m_textInput->GetValue() );
     aBarcode->SetLocked( m_cbLocked->GetValue() );
-    aBarcode->SetLayer( ToLAYER_ID( m_cbLayer->GetLayerSelection() ) );
+    aBarcode->SetLayer( m_cbLayer->GetLayerIDSelection() );
 
     // Position
     aBarcode->SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );

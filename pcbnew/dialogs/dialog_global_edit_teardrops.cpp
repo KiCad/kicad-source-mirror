@@ -323,7 +323,7 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::visitItem( BOARD_COMMIT* aCommit, BOARD_CONNE
 
     if( m_layerFilterOpt->GetValue() && m_layerFilter->GetLayerSelection() != UNDEFINED_LAYER )
     {
-        if( aItem->GetLayer() != m_layerFilter->GetLayerSelection() )
+        if( aItem->GetLayer() != m_layerFilter->GetLayerIDSelection() )
             return;
     }
 

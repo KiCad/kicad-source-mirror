@@ -393,7 +393,7 @@ void PCB_BASE_EDIT_FRAME::configureToolbars()
                 aToolbar->Bind( wxEVT_COMBOBOX,
                                 [this]( wxCommandEvent& aEvent )
                                     {
-                                        SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
+                                        SetActiveLayer( m_SelLayerBox->GetLayerIDSelection() );
 
                                         if( GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL )
                                             GetCanvas()->Refresh();

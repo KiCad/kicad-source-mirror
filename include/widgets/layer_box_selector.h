@@ -18,10 +18,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef LAYER_BOX_SELECTOR_H
-#define LAYER_BOX_SELECTOR_H
+#pragma once
 
 #include <wx/bmpcbox.h>
+#include <layer_ids.h>
 
 
 /**
@@ -57,6 +57,7 @@ public:
     ~LAYER_BOX_SELECTOR() override;
 
     int GetLayerSelection() const;
+    PCB_LAYER_ID GetLayerIDSelection() const;
 
     int SetLayerSelection( int layer );
 
@@ -71,4 +72,3 @@ private:
 #endif
 };
 
-#endif // LAYER_BOX_SELECTOR_H

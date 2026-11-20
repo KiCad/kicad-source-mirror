@@ -705,7 +705,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         }
         else
         {
-            m_backdrillFrontLayer->SetUndefinedLayerName( _( "None" ) );
+            m_backdrillFrontLayer->SetUndefinedLayerName( wxEmptyString );  // Will exclude it from control
             m_backdrillFrontLayer->Resync();
             m_backdrillFrontLayer->SetLayerSelection( secondary_drill_end_layer );
         }
@@ -721,7 +721,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         }
         else
         {
-            m_backdrillBackLayer->SetUndefinedLayerName( _( "None" ) );
+            m_backdrillBackLayer->SetUndefinedLayerName( wxEmptyString );  // Will exclude it from control
             m_backdrillBackLayer->Resync();
             m_backdrillBackLayer->SetLayerSelection( tertiary_drill_end_layer );
         }
@@ -1124,12 +1124,12 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         std::optional<PCB_LAYER_ID> startLayer;
 
         if( m_ViaStartLayer->GetLayerSelection() != UNDEFINED_LAYER )
-            startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
+            startLayer = m_ViaStartLayer->GetLayerIDSelection();
 
         std::optional<PCB_LAYER_ID> endLayer;
 
         if( m_ViaEndLayer->GetLayerSelection() != UNDEFINED_LAYER )
-            endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
+            endLayer = m_ViaEndLayer->GetLayerIDSelection();
 
         std::optional<int> secondaryDrill;
         std::optional<int> tertiaryDrill;
@@ -1149,7 +1149,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 tertiaryStartLayer = B_Cu;
 
                 if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                    tertiaryEndLayer = ToLAYER_ID( m_backdrillBackLayer->GetLayerSelection() );
+                    tertiaryEndLayer = m_backdrillBackLayer->GetLayerIDSelection();
 
                 if( !m_backdrillBackSize.IsIndeterminate() && !m_backdrillBackSize.IsNull() )
                     tertiaryDrill = m_backdrillBackSize.GetIntValue();
@@ -1160,7 +1160,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 secondaryStartLayer = F_Cu;
 
                 if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                    secondaryEndLayer = ToLAYER_ID( m_backdrillFrontLayer->GetLayerSelection() );
+                    secondaryEndLayer = m_backdrillFrontLayer->GetLayerIDSelection();
 
                 if( !m_backdrillFrontSize.IsIndeterminate() && !m_backdrillFrontSize.IsNull() )
                     secondaryDrill = m_backdrillFrontSize.GetIntValue();
@@ -1171,7 +1171,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 secondaryStartLayer = F_Cu;
 
                 if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                    secondaryEndLayer = ToLAYER_ID( m_backdrillFrontLayer->GetLayerSelection() );
+                    secondaryEndLayer = m_backdrillFrontLayer->GetLayerIDSelection();
 
                 if( !m_backdrillFrontSize.IsIndeterminate() && !m_backdrillFrontSize.IsNull() )
                     secondaryDrill = m_backdrillFrontSize.GetIntValue();
@@ -1179,7 +1179,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 tertiaryStartLayer = B_Cu;
 
                 if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                    tertiaryEndLayer = ToLAYER_ID( m_backdrillBackLayer->GetLayerSelection() );
+                    tertiaryEndLayer = m_backdrillBackLayer->GetLayerIDSelection();
 
                 if( !m_backdrillBackSize.IsIndeterminate() && !m_backdrillBackSize.IsNull() )
                     tertiaryDrill = m_backdrillBackSize.GetIntValue();
@@ -1313,7 +1313,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     track->SetWidth( m_trackWidth.GetIntValue() );
 
                 if( m_TrackLayerCtrl->GetLayerSelection() != UNDEFINED_LAYER )
-                    track->SetLayer( ToLAYER_ID( m_TrackLayerCtrl->GetLayerSelection() ) );
+                    track->SetLayer( m_TrackLayerCtrl->GetLayerIDSelection() );
 
                 if ( m_trackHasSolderMask->Get3StateValue() != wxCHK_UNDETERMINED )
                     track->SetHasSolderMask( m_trackHasSolderMask->GetValue() );
@@ -1390,7 +1390,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         }
 
                         if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                            tertiaryDrill.end = ToLAYER_ID( m_backdrillBackLayer->GetLayerSelection() );
+                            tertiaryDrill.end = m_backdrillBackLayer->GetLayerIDSelection();
                         else if( m_backdrillBackLayerMixed )
                             tertiaryDrill.end = viaStack.TertiaryDrill().end;
 
@@ -1409,7 +1409,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         }
 
                         if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                            secondaryDrill.end = ToLAYER_ID( m_backdrillFrontLayer->GetLayerSelection() );
+                            secondaryDrill.end = m_backdrillFrontLayer->GetLayerIDSelection();
                         else if( m_backdrillFrontLayerMixed )
                             secondaryDrill.end = viaStack.SecondaryDrill().end;
 
@@ -1428,7 +1428,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         }
 
                         if( m_backdrillFrontLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                            secondaryDrill.end = ToLAYER_ID( m_backdrillFrontLayer->GetLayerSelection() );
+                            secondaryDrill.end = m_backdrillFrontLayer->GetLayerIDSelection();
                         else if( m_backdrillFrontLayerMixed )
                             secondaryDrill.end = viaStack.SecondaryDrill().end;
 
@@ -1439,7 +1439,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         }
 
                         if( m_backdrillBackLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                            tertiaryDrill.end = ToLAYER_ID( m_backdrillBackLayer->GetLayerSelection() );
+                            tertiaryDrill.end = m_backdrillBackLayer->GetLayerIDSelection();
                         else if( m_backdrillBackLayerMixed )
                             tertiaryDrill.end = viaStack.TertiaryDrill().end;
 
@@ -1537,8 +1537,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 default:                                          break;
                 }
 
-                PCB_LAYER_ID startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
-                PCB_LAYER_ID endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
+                PCB_LAYER_ID startLayer = m_ViaStartLayer->GetLayerIDSelection();
+                PCB_LAYER_ID endLayer = m_ViaEndLayer->GetLayerIDSelection();
 
                 if( startLayer != UNDEFINED_LAYER )
                 {
@@ -2245,21 +2245,20 @@ void DIALOG_TRACK_VIA_PROPERTIES::updateViaPreview()
 
     // A backdrill removes every copper layer from its surface down to the layer chosen, so the
     // count includes the surface layer
-    auto backdrilledLayers = [&]( PCB_LAYER_BOX_SELECTOR* aLayerBox, bool aFromFront ) -> std::optional<int>
-    {
-        int layer = aLayerBox->GetLayerSelection();
+    auto backdrilledLayers =
+            [&]( PCB_LAYER_BOX_SELECTOR* aLayerBox, bool aFromFront ) -> std::optional<int>
+            {
+                if( aLayerBox->GetLayerSelection() == UNDEFINED_LAYER )
+                    return std::nullopt;
 
-        if( layer == UNDEFINED_LAYER )
-            return std::nullopt;
+                int ordinal = copperOrdinal( aLayerBox->GetLayerIDSelection() );
 
-        int ordinal = copperOrdinal( ToLAYER_ID( layer ) );
-
-        return aFromFront ? ordinal + 1 : copperLayers - ordinal;
-    };
+                return aFromFront ? ordinal + 1 : copperLayers - ordinal;
+            };
 
     // Backdrilling is a through via operation, the greyed controls of any other type are ignored
-    const int backdrill =
-            span.m_Through ? m_backdrillChoice->GetSelection() : static_cast<int>( BACKDRILL_MODE::NO_BACKDRILL );
+    const int backdrill = span.m_Through ? m_backdrillChoice->GetSelection()
+                                         : static_cast<int>( BACKDRILL_MODE::NO_BACKDRILL );
 
     if( backdrill == wxNOT_FOUND )
     {

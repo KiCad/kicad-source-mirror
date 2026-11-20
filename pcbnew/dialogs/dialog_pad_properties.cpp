@@ -236,13 +236,11 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD& aPad
     m_backDrillTopLayer->SetLayersHotkeys( false );
     m_backDrillTopLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_backDrillTopLayer->SetBoardFrame( m_parent );
-    m_backDrillTopLayer->SetUndefinedLayerName( _( "None" ) );
     m_backDrillTopLayer->Resync();
 
     m_backDrillBottomLayer->SetLayersHotkeys( false );
     m_backDrillBottomLayer->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
     m_backDrillBottomLayer->SetBoardFrame( m_parent );
-    m_backDrillBottomLayer->SetUndefinedLayerName( _( "None" ) );
     m_backDrillBottomLayer->Resync();
 
     initValues();
@@ -2375,9 +2373,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         if( wantTop )
         {
             padstack.SetBackdrillSize( true, m_backDrillTopSizeBinder.GetIntValue() );
-
-            if( m_backDrillTopLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                padstack.SetBackdrillEndLayer( true, ToLAYER_ID( m_backDrillTopLayer->GetLayerSelection() ) );
+            padstack.SetBackdrillEndLayer( true, m_backDrillTopLayer->GetLayerIDSelection() );
         }
         else
         {
@@ -2387,9 +2383,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         if( wantBottom )
         {
             padstack.SetBackdrillSize( false, m_backDrillBottomSizeBinder.GetIntValue() );
-
-            if( m_backDrillBottomLayer->GetLayerSelection() != UNDEFINED_LAYER )
-                padstack.SetBackdrillEndLayer( false, ToLAYER_ID( m_backDrillBottomLayer->GetLayerSelection() ) );
+            padstack.SetBackdrillEndLayer( false, m_backDrillBottomLayer->GetLayerIDSelection() );
         }
         else
         {

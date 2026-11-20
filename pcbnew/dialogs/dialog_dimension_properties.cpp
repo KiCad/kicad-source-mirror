@@ -620,7 +620,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     aTarget->SetPrefix( board->ConvertCrossReferencesToKIIDs( m_txtPrefix->GetValue() ) );
     aTarget->SetSuffix( board->ConvertCrossReferencesToKIIDs( m_txtSuffix->GetValue() ) );
-    aTarget->SetLayer( static_cast<PCB_LAYER_ID>( m_cbLayerActual->GetLayerSelection() ) );
+    aTarget->SetLayer( m_cbLayerActual->GetLayerIDSelection() );
 
     switch ( m_cbArrowDirection->GetSelection() ) {
         case 0: aTarget->SetArrowDirection( DIM_ARROW_DIRECTION::INWARD );  break;
