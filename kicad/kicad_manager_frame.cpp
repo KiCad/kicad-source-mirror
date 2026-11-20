@@ -74,6 +74,7 @@
 #include <widgets/app_progress_dialog.h>
 #include <widgets/kistatusbar.h>
 #include <widgets/ui_common.h>
+#include <widgets/wx_infobar.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/dnd.h>
@@ -304,8 +305,21 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_notebook->SetTabCtrlHeight( 0 );
     m_notebook->Thaw();
 
-    m_auimgr.AddPane( m_notebook, EDA_PANE().Canvas().Name( "Editors" ).Center().Caption( EDITORS_CAPTION )
-                                            .PaneBorder( false ).MinSize( m_notebook->GetBestSize() ) );
+    // The infobar shares a pane with the notebook, since the frame has no canvas to overlay it on
+    EDA_INFOBAR_PANEL* infoBarPanel = new EDA_INFOBAR_PANEL( this );
+
+    m_infoBar = new WX_INFOBAR( this );
+
+    infoBarPanel->AddInfoBar( m_infoBar );
+    infoBarPanel->AddOtherItem( m_notebook );
+
+    m_auimgr.AddPane( infoBarPanel, EDA_PANE()
+                                            .Canvas()
+                                            .Name( "Editors" )
+                                            .Center()
+                                            .Caption( EDITORS_CAPTION )
+                                            .PaneBorder( false )
+                                            .MinSize( m_notebook->GetBestSize() ) );
 
     m_auimgr.Update();
 
