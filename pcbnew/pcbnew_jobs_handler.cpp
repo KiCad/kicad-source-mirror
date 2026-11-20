@@ -2315,11 +2315,26 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
+    bool hasLayerListSpecified = false; // will be true if the user layer list is not empty
+
     if( aGerberJob->m_argLayers )
-        aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), brd );
+    {
+        if( !aGerberJob->m_argLayers.value().empty() )
+        {
+            aGerberJob->m_plotLayerSequence = convertLayerArg( aGerberJob->m_argLayers.value(), brd );
+            hasLayerListSpecified = true;
+        }
+        else
+        {
+            aGerberJob->m_plotLayerSequence = LSET::AllLayersMask().SeqStackupForPlotting();
+        }
+    }
 
     if( aGerberJob->m_argCommonLayers )
         aGerberJob->m_plotOnAllLayersSequence = convertLayerArg( aGerberJob->m_argCommonLayers.value(), brd );
+
+    if( aGerberJob->m_plotLayerSequence.empty() && !hasLayerListSpecified && aGerberJob->m_plotAllCopperLayers )
+        aGerberJob->m_plotLayerSequence = brd->GetEnabledLayers().SeqStackupForPlotting();
 
     if( aGerberJob->m_plotLayerSequence.size() < 1 )
     {
