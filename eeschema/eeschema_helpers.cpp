@@ -146,10 +146,10 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                 project->GetProjectFile().GetTopLevelSheets();
         const TOP_LEVEL_SHEET_INFO* namedSheet = findDeclaredTopLevelSheet( projectSheets,
                                                                            projectDir, schFile );
-        std::vector<SCH_SHEET*> loadedSheets;
+        std::vector<std::unique_ptr<SCH_SHEET>> loadedSheets;
         const auto loadSheet = [&]( const wxString& aPath, bool aDeclaredRoot )
         {
-            SCH_SHEET* sheet = pi->LoadSchematicFile( aPath, schematic.get() );
+            std::unique_ptr<SCH_SHEET> sheet( pi->LoadSchematicFile( aPath, schematic.get() ) );
 
             if( !sheet || !aRootReporter || aFormat != SCH_IO_MGR::SCH_KICAD
                 || sheet->GetScreen()->GetFileFormatVersionAtLoad() < 20221110 )
@@ -191,11 +191,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
             if( !error.IsEmpty() )
             {
-                delete sheet;
-
-                for( SCH_SHEET* loaded : loadedSheets )
-                    delete loaded;
-
+                loadedSheets.clear();
                 aRootReporter->Report( error, RPT_SEVERITY_ERROR );
                 THROW_IO_ERROR( error );
             }
@@ -215,7 +211,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                 if( !sheetFn.FileExists() )
                     continue;
 
-                SCH_SHEET* sheet = loadSheet( sheetFn.GetFullPath(), true );
+                std::unique_ptr<SCH_SHEET> sheet = loadSheet( sheetFn.GetFullPath(), true );
 
                 if( !sheet )
                     continue;
@@ -227,17 +223,22 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
                 if( !info.name.IsEmpty() )
                     sheet->SetName( info.name );
 
-                loadedSheets.push_back( sheet );
+                loadedSheets.push_back( std::move( sheet ) );
             }
         }
 
         if( !loadedSheets.empty() )
         {
-            schematic->SetTopLevelSheets( loadedSheets );
+            std::vector<SCH_SHEET*> topSheets;
+
+            for( std::unique_ptr<SCH_SHEET>& sheet : loadedSheets )
+                topSheets.push_back( sheet.release() );
+
+            schematic->SetTopLevelSheets( topSheets );
         }
         else
         {
-            SCH_SHEET* rootSheet = loadSheet( schFile.GetFullPath(), namedSheet != nullptr );
+            SCH_SHEET* rootSheet = loadSheet( schFile.GetFullPath(), namedSheet != nullptr ).release();
 
             if( !rootSheet )
             {
@@ -359,12 +360,12 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     schematic->ConnectionGraph()->Reset();
 
-    TOOL_MANAGER* toolManager = new TOOL_MANAGER;
-    toolManager->SetEnvironment( schematic.get(), nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
+    TOOL_MANAGER toolManager;
+    toolManager.SetEnvironment( schematic.get(), nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
 
     if( aCalculateConnectivity )
     {
-        SCH_COMMIT dummyCommit( toolManager );
+        SCH_COMMIT dummyCommit( &toolManager );
         schematic->CleanUpConnections( &dummyCommit, GLOBAL_CLEANUP );
         dummyCommit.Push( _( "Schematic Cleanup" ), SKIP_UNDO | SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
     }
