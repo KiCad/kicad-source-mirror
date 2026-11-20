@@ -792,4 +792,23 @@ BOOST_AUTO_TEST_CASE( Issue24911_CancelledAppendLeavesBoardUntouched )
 }
 
 
+BOOST_AUTO_TEST_CASE( LegacyPadNumericNetNameLoads )
+{
+    const std::string path = KI_TEST::GetPcbnewTestDataDir() + "c4_motherboard.kicad_pcb";
+
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( path );
+
+    BOOST_REQUIRE( board );
+
+    FOOTPRINT* vrm = board->FindFootprintByReference( wxS( "VRM901" ) );
+
+    BOOST_REQUIRE( vrm );
+
+    PAD* pad = vrm->FindPadByNumber( wxS( "B8" ) );
+
+    BOOST_REQUIRE( pad );
+    BOOST_CHECK_EQUAL( pad->GetNetname(), wxString( "+12" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
