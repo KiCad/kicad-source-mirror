@@ -304,10 +304,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     FOOTPRINT* copy = nullptr;
 
     if( !m_isDryRun && !m_commit.GetStatus( aFootprint ) )
-    {
         copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
-        copy->SetParentGroup( nullptr );
-    }
 
     wxString msg;
 
@@ -477,10 +474,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
     FOOTPRINT* copy = nullptr;
 
     if( !m_commit.GetStatus( aFootprint ) )
-    {
         copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
-        copy->SetParentGroup( nullptr );
-    }
 
     bool       changed = false;
 
@@ -1059,10 +1053,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint, COMP
     FOOTPRINT* copy = nullptr;
 
     if( !m_isDryRun && !m_commit.GetStatus( aPcbFootprint ) )
-    {
         copy = static_cast<FOOTPRINT*>( aPcbFootprint->Clone() );
-        copy->SetParentGroup( nullptr );
-    }
 
     bool changed = false;
 
@@ -1148,10 +1139,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
     FOOTPRINT* copy = nullptr;
 
     if( !m_isDryRun && !m_commit.GetStatus( aFootprint ) )
-    {
         copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
-        copy->SetParentGroup( nullptr );
-    }
 
     bool changed = false;
 
@@ -1404,10 +1392,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentUnits( FOOTPRINT* aFootprint, COMPONE
     FOOTPRINT* copy = nullptr;
 
     if( !m_commit.GetStatus( aFootprint ) )
-    {
         copy = static_cast<FOOTPRINT*>( aFootprint->Clone() );
-        copy->SetParentGroup( nullptr );
-    }
 
     aFootprint->SetUnitInfo( newUnits );
 
@@ -1488,10 +1473,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
         FOOTPRINT* copy = nullptr;
 
         if( !m_isDryRun && !m_commit.GetStatus( footprint ) )
-        {
             copy = static_cast<FOOTPRINT*>( footprint->Clone() );
-            copy->SetParentGroup( nullptr );
-        }
 
         bool changed = false;
 
