@@ -99,7 +99,7 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
     case PCB_GENERATOR_T:       return nullptr;  // must be created via CreateGeneratorForType
     case PCB_CONSTRAINT_T:      return std::make_unique<PCB_CONSTRAINT>( aContainer );
     case PCB_REFERENCE_IMAGE_T: return std::make_unique<PCB_REFERENCE_IMAGE>( aContainer );
-    case PCB_GRID_ITEM_T:        return std::make_unique<PCB_GRID_ITEM>( aContainer );
+    case PCB_GRID_ITEM_T:       return std::make_unique<PCB_GRID_ITEM>( aContainer );
 
     case PCB_PAD_T:
     {

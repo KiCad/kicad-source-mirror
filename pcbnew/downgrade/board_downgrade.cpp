@@ -1983,9 +1983,11 @@ static bool isUnreviewedDrawing( const BOARD_ITEM* aItem )
     case PCB_GRID_ITEM_T:
     case PCB_DRILL_CHART_T:
     case PCB_DRILL_MAP_T:
-    case PCB_STACKUP_TABLE_T: return false;
+    case PCB_STACKUP_TABLE_T:
+        return false;
 
-    default: return true;
+    default:
+        return true;
     }
 }
 

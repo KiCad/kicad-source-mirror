@@ -2881,7 +2881,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATED_TABLE* aTable ) const
 
     switch( aTable->Type() )
     {
-    case PCB_DRILL_CHART_T:   m_out->Print( "(drill_chart " ); break;
+    case PCB_DRILL_CHART_T:   m_out->Print( "(drill_chart " );   break;
     case PCB_STACKUP_TABLE_T: m_out->Print( "(stackup_table " ); break;
 
     default:

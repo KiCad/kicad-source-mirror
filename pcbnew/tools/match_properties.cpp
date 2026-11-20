@@ -216,30 +216,62 @@ wxString MATCH_PROPERTIES_CATALOG::Family( const EDA_ITEM& aItem )
     switch( aItem.Type() )
     {
     case PCB_TRACE_T:
-    case PCB_ARC_T: return wxS( "route" );
-    case PCB_VIA_T: return wxS( "via" );
-    case PCB_PAD_T: return wxS( "pad" );
-    case PCB_SHAPE_T: return wxS( "shape" );
+    case PCB_ARC_T:
+        return wxS( "route" );
+
+    case PCB_VIA_T:
+        return wxS( "via" );
+
+    case PCB_PAD_T:
+        return wxS( "pad" );
+
+    case PCB_SHAPE_T:
+        return wxS( "shape" );
+
     case PCB_TEXT_T:
-    case PCB_FIELD_T: return wxS( "text" );
-    case PCB_TEXTBOX_T: return wxS( "textbox" );
+    case PCB_FIELD_T:
+        return wxS( "text" );
+
+    case PCB_TEXTBOX_T:
+        return wxS( "textbox" );
+
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_LEADER_T:
     case PCB_DIM_CENTER_T:
     case PCB_DIM_RADIAL_T:
-    case PCB_DIM_ORTHOGONAL_T: return wxS( "dimension" );
-    case PCB_FOOTPRINT_T: return wxS( "footprint" );
-    case PCB_TABLE_T: return wxS( "table" );
+    case PCB_DIM_ORTHOGONAL_T:
+        return wxS( "dimension" );
+
+    case PCB_FOOTPRINT_T:
+        return wxS( "footprint" );
+
+    case PCB_TABLE_T:
+        return wxS( "table" );
+
     // Their own family, since plain tables advertise colors and Cell Separators they mask and
     // lack the Row Height and Font they add
     case PCB_DRILL_CHART_T:
-    case PCB_STACKUP_TABLE_T: return wxS( "generated_table" );
-    case PCB_TABLECELL_T: return wxS( "table_cell" );
-    case PCB_TARGET_T: return wxS( "target" );
-    case PCB_REFERENCE_IMAGE_T: return wxS( "reference_image" );
-    case PCB_BARCODE_T: return wxS( "barcode" );
-    case PCB_ZONE_T: return static_cast<const ZONE&>( aItem ).GetIsRuleArea() ? wxS( "rule_area" ) : wxS( "zone" );
-    default: return wxEmptyString;
+    case PCB_STACKUP_TABLE_T:
+        return wxS( "generated_table" );
+
+    case PCB_TABLECELL_T:
+        return wxS( "table_cell" );
+
+    case PCB_TARGET_T:
+        return wxS( "target" );
+
+    case PCB_REFERENCE_IMAGE_T:
+        return wxS( "reference_image" );
+
+    case PCB_BARCODE_T:
+        return wxS( "barcode" );
+
+
+    case PCB_ZONE_T:
+        return static_cast<const ZONE&>( aItem ).GetIsRuleArea() ? wxS( "rule_area" ) : wxS( "zone" );
+
+    default:
+        return wxEmptyString;
     }
 }
 
