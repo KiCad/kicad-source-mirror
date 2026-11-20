@@ -4126,6 +4126,10 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
         break;
     }
 
+    // The copy-constructed branches skip Duplicate(), so they join the group here
+    if( new_item )
+        aItem->SetDuplicateGroup( new_item, addToParentGroup, aCommit );
+
     return new_item;
 }
 

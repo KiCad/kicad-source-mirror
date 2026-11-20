@@ -379,18 +379,25 @@ BOARD_ITEM* BOARD_ITEM::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit 
     BOARD_ITEM* dupe = static_cast<BOARD_ITEM*>( Clone() );
     dupe->ResetUuid();
 
-    if( addToParentGroup )
-    {
-        wxCHECK_MSG( aCommit, dupe, "Must supply a commit to update parent group" );
-
-        if( EDA_GROUP* group = dupe->GetParentGroup() )
-        {
-            aCommit->Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
-            group->AddItem( dupe );
-        }
-    }
+    SetDuplicateGroup( dupe, addToParentGroup, aCommit );
 
     return dupe;
+}
+
+
+void BOARD_ITEM::SetDuplicateGroup( BOARD_ITEM* aDupe, bool addToParentGroup, BOARD_COMMIT* aCommit ) const
+{
+    aDupe->SetParentGroup( nullptr );
+
+    EDA_GROUP* group = GetParentGroup();
+
+    if( !addToParentGroup || !group )
+        return;
+
+    wxCHECK_RET( aCommit, "Must supply a commit to update parent group" );
+
+    aCommit->Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+    group->AddItem( aDupe );
 }
 
 

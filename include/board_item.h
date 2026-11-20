@@ -409,6 +409,17 @@ public:
     virtual BOARD_ITEM* Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const;
 
     /**
+     * Give a copy of this item this item's group, or no group.
+     *
+     * A copy carries this item's group pointer without being a member of that group.
+     *
+     * @param aDupe is the copy.
+     * @param addToParentGroup adds the copy to this item's group.  If true, aCommit must be provided.
+     * @param aCommit is the commit object for undo/redo.
+     */
+    void SetDuplicateGroup( BOARD_ITEM* aDupe, bool addToParentGroup, BOARD_COMMIT* aCommit ) const;
+
+    /**
      * Swap data between \a aItem and \a aImage.
      *
      * \a aItem and \a aImage should have the same type.
