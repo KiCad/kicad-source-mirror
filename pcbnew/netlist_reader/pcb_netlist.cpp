@@ -176,6 +176,21 @@ wxString COMPONENT::GetValue( const wxString& aVariantName ) const
 }
 
 
+LIB_ID COMPONENT::GetFPID( const wxString& aVariantName ) const
+{
+    if( const COMPONENT_VARIANT* variant = GetVariant( aVariantName ) )
+    {
+        auto   it = variant->m_fields.find( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
+        LIB_ID fpid;
+
+        if( it != variant->m_fields.end() && !it->second.IsEmpty() && fpid.Parse( it->second, true ) < 0 )
+            return fpid;
+    }
+
+    return m_fpid;
+}
+
+
 nlohmann::ordered_map<wxString, wxString> COMPONENT::GetFields( const wxString& aVariantName ) const
 {
     nlohmann::ordered_map<wxString, wxString> fields = m_fields;

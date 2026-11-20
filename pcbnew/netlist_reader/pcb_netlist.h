@@ -186,6 +186,7 @@ public:
 
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID;  }
     const LIB_ID& GetFPID() const { return m_fpid; }
+    LIB_ID        GetFPID( const wxString& aVariantName ) const;
 
     void SetAltFPID( const LIB_ID& aFPID ) { m_altFpid = aFPID; }
     const LIB_ID& GetAltFPID() const { return m_altFpid; }

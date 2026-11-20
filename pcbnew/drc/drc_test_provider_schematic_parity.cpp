@@ -95,9 +95,24 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
     for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
         COMPONENT* component = aNetlist.GetComponent( ii );
-        FOOTPRINT* footprint = board->FindFootprintByReference( component->GetReference() );
-        nlohmann::ordered_map<wxString, wxString> componentFields = component->GetFields( variant );
-        std::map<wxString, wxString>              componentProperties = component->GetProperties( variant );
+        FOOTPRINT*   footprint = nullptr;
+        const LIB_ID componentFpid = component->GetFPID( variant );
+
+        // A footprint-swapping variant leaves one board footprint per FPID under the same reference
+        for( FOOTPRINT* candidate : board->Footprints() )
+        {
+            if( candidate->GetReference() != component->GetReference() )
+                continue;
+
+            if( !footprint )
+                footprint = candidate;
+
+            if( candidate->GetFPID() == componentFpid )
+            {
+                footprint = candidate;
+                break;
+            }
+        }
 
         const wxString valueField = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
         const wxString componentValue = component->GetValue( variant );
@@ -130,13 +145,13 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
             }
 
-            if( component->GetFPID().GetUniStringLibId() != footprint->GetFPID().GetUniStringLibId()
+            if( componentFpid.GetUniStringLibId() != footprint->GetFPID().GetUniStringLibId()
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
             {
                 wxString msg;
                 msg.Printf( _( "%s doesn't match footprint given by symbol (%s)" ),
                             footprint->GetFPID().GetUniStringLibId(),
-                            component->GetFPID().GetUniStringLibId() );
+                            componentFpid.GetUniStringLibId() );
 
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY );
                 drcItem->SetErrorMessage( msg );
@@ -174,6 +189,8 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                     reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
                 }
             }
+
+            const std::map<wxString, wxString> componentProperties = component->GetProperties( variant );
 
             if( ( componentProperties.count( "dnp" ) > 0 ) != footprint->GetDNPForVariant( variant )
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY ) )
@@ -225,7 +242,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                     if( field->IsReference() || field->IsValue() || field->IsComponentClass() )
                         continue;
 
-                    fpFieldsAsMap[field->GetName()] = footprint->GetFieldValueForVariant( variant, field->GetName() );
+                    fpFieldsAsMap[field->GetName()] = field->GetText();
                 }
 
                 if( const FOOTPRINT_VARIANT* fpVariant = footprint->GetVariant( variant ) )
@@ -235,7 +252,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 }
 
                 // Remove the extra component fields we don't want to evaluate here
-                nlohmann::ordered_map<wxString, wxString> compFields = std::move( componentFields );
+                nlohmann::ordered_map<wxString, wxString> compFields = component->GetFields( variant );
                 compFields.erase( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
                 compFields.erase( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
                 compFields.erase( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );

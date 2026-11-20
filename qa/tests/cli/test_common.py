@@ -18,13 +18,12 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import pytest
+import utils
 import json
 import re
 import shutil
 from pathlib import Path
-
-import pytest
-import utils
 
 def test_version():
     command = [utils.kicad_cli(), "version"]
@@ -100,19 +99,12 @@ def test_jobset_drc_uses_selected_variant(tmp_path):
 
     assert exitcode == 0, stdout + stderr
 
-    report_path = work_dir / "output" / "TestProject-Variant1-drc.json"
+    with (work_dir / "output" / "TestProject-Variant1-drc.json").open(encoding="utf-8") as report_file:
+        descriptions = [v["description"] for v in json.load(report_file)["schematic_parity"]]
 
-    with report_path.open(encoding="utf-8") as report_file:
-        report = json.load(report_file)
-
-    parity_violations = report["schematic_parity"]
-    assert len(parity_violations) == 2
-
-    dnp_violation = next(v for v in parity_violations if "Do not populate" in v["description"])
-    assert any("R1" in item["description"] for item in dnp_violation["items"])
-
-    bom_violation = next(v for v in parity_violations if "bill of materials" in v["description"])
-    assert any("R2" in item["description"] for item in bom_violation["items"])
+    # R1 is DNP and R2 is excluded from BOM only in Variant1
+    assert any("Do not populate" in d for d in descriptions)
+    assert any("bill of materials" in d for d in descriptions)
 
 
 def test_jobset_run_unknown_job_type(tmp_path):

@@ -23,12 +23,11 @@
 #include <i18n_utility.h>
 
 JOB_PCB_DRC::JOB_PCB_DRC() :
-        JOB_RC( "drc" ),
-        m_reportAllTrackErrors( false ),
-        m_parity( true ),
-        m_refillZones( false ),
-        m_saveBoard( false ),
-        m_variant()
+    JOB_RC( "drc" ),
+    m_reportAllTrackErrors( false ),
+    m_parity( true ),
+    m_refillZones( false ),
+    m_saveBoard( false )
 {
     m_params.emplace_back( new JOB_PARAM<bool>( "parity", &m_parity, m_parity ) );
     m_params.emplace_back(
