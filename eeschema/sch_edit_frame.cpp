@@ -1960,6 +1960,12 @@ bool SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 itemsChanged = true;
                 GetCanvas()->GetView()->Update( aChangedItem, KIGFX::REPAINT );
 
+                if( aChangedItem->Type() == SCH_PIN_T || aChangedItem->Type() == SCH_SHEET_PIN_T )
+                {
+                    if( EDA_ITEM* parent = aChangedItem->GetParent() )
+                        GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
+                }
+
                 if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
                     return;
 
