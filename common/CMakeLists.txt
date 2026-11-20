@@ -110,6 +110,7 @@ set( KICOMMON_SRCS
     git/git_compare_handler.cpp
     git/kigit_driver_registry.cpp
     git/kigit_merge_blob_utils.cpp
+    git/kigit_platform_install.cpp
     git/git_init_handler.cpp
     git/project_git_hash.cpp
     git/git_remove_vcs_handler.cpp
