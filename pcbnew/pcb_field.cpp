@@ -366,10 +366,11 @@ double PCB_FIELD::Similarity( const BOARD_ITEM& aOther ) const
             return 0.0;
     }
 
-    if( m_name == other.m_name )
-        return 1.0;
+    // Fields are identified by name, so differing names never pair
+    if( m_name != other.m_name )
+        return 0.0;
 
-    return EDA_TEXT::Similarity( other );
+    return 1.0;
 }
 
 static struct PCB_FIELD_DESC
