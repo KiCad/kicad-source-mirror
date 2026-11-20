@@ -148,7 +148,7 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, int aSlopRadius )
         node->QueryColliding( &test, obs, opts );
 
         DIFF_PAIR_PLACER* dpPlacer = static_cast<DIFF_PAIR_PLACER*>( Placer() );
-        auto              currentDP = dpPlacer->CurrentTrace();
+        const DIFF_PAIR   currentDP = dpPlacer->CurrentTrace();
 
         int distP = std::numeric_limits<int>::max();
         int distN = std::numeric_limits<int>::max();
@@ -259,11 +259,12 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
 {
     m_leaderSegments.clear();
     SetFailureReason( wxEmptyString );
-    auto dbg = GetInterface()->GetDebugDecorator();
+    DEBUG_DECORATOR* dbg = GetInterface()->GetDebugDecorator();
+
     if( aStartItems.Empty() )
         return false;
 
-    auto rr = GetRuleResolver();
+    RULE_RESOLVER* rr = GetRuleResolver();
     rr->ClearCaches();
 
     bool useMultidragger = aStartItems.Count( ITEM::SEGMENT_T | ITEM::ARC_T ) > 1;
@@ -536,8 +537,9 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer, con
 
             if( m_mode == PNS_MODE_SPREAD_TRACKS )
             {
-                auto spreadable = static_cast<TRACKS_SPREADER*>( m_placer.get() )->GetSpreadableItems();
-                for( auto item : spreadable.Items() )
+                ITEM_SET spreadable = static_cast<TRACKS_SPREADER*>( m_placer.get() )->GetSpreadableItems();
+
+                for( ITEM* item : spreadable.Items() )
                     logItems.push_back( item );
             }
 
@@ -580,8 +582,7 @@ bool ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
 }
 
 
-bool ROUTER::GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
-                                      ITEM*& aOtherEndItem )
+bool ROUTER::GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers, ITEM*& aOtherEndItem )
 {
     // Can't finish something with no connections
     if( GetCurrentNets().empty() )
@@ -602,16 +603,12 @@ bool ROUTER::GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOth
 
     // If the user has drawn a line, get the anchor nearest to the line end
     if( trace->SegmentCount() > 0 )
-    {
-        return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers,
-                                                   aOtherEndItem );
-    }
+        return topo.NearestUnconnectedAnchorPoint( trace, aOtherEnd, aOtherEndLayers, aOtherEndItem );
 
     // Otherwise, find the closest anchor to our start point
 
     // Get joint from placer start item
-    const JOINT* jt = lastNode->FindJoint( placer->CurrentStart(), placer->CurrentLayer(),
-                                           placer->CurrentNets()[0] );
+    const JOINT* jt = lastNode->FindJoint( placer->CurrentStart(), placer->CurrentLayer(), placer->CurrentNets()[0] );
 
     if( !jt )
         return false;

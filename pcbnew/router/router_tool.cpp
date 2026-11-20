@@ -2462,6 +2462,7 @@ int ROUTER_TOOL::onSpreadTracksSetDistance( const TOOL_EVENT& aEvent )
     WX_TEXT_ENTRY_DIALOG dlg( frame(), _( "Distance:" ), _( "Set Spreading Distance" ) );
     dlg.SetTextValidator( validator );
     int modalResult = dlg.ShowModal();
+
     if( modalResult == wxID_OK )
     {
         int newSpreadDist = wxAtoi( dlg.GetValue() );
@@ -2535,6 +2536,7 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
         {
             auto       bitem = static_cast<BOARD_CONNECTED_ITEM*>( item );
             PNS::ITEM* ritem = m_router->GetWorld()->FindItemByParent( bitem );
+
             if( ritem )
                 trackItems.Add( ritem );
         }
@@ -3089,13 +3091,16 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 
     switch( dragKindOf( selection ) )
     {
-    case DRAG_KIND::TRACKS_KIND: return true;
+    case DRAG_KIND::TRACKS_KIND:
+        return true;
 
     // Neither footprints nor a block drag free angle
     case DRAG_KIND::FOOTPRINTS_KIND:
-    case DRAG_KIND::BLOCK: return !( aDragMode & PNS::DM_FREE_ANGLE );
+    case DRAG_KIND::BLOCK:
+        return !( aDragMode & PNS::DM_FREE_ANGLE );
 
-    default: return false;
+    default:
+        return false;
     }
 }
 
@@ -3361,10 +3366,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         // Check if user wants to warp the mouse to origin of moved object
 
         if( editFrame->GetMoveWarpsCursor() )
+        {
             tweakedMousePos = footprint->GetPosition(); // Use footprint anchor to warp mouse
+        }
         else
+        {
             tweakedMousePos = GetClampedCoords( controls()->GetCursorPosition(),
                                                 COORDS_PADDING ); // Just use current mouse pos
+        }
 
         // We tweak the mouse position using the value from above, and then use that as the
         // start position to prevent the footprint from jumping when we start dragging.

@@ -159,22 +159,23 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     std::unordered_set<ITEM*> processedItems;
 
-    auto spreadClearanceFunc = [&]( const ITEM* aA, const ITEM* aB, CLEARANCE_ASPECT aAspect ) -> int
-    {
-        auto lnkA = static_cast<const LINKED_ITEM*>( aA );
-        auto lnkB = static_cast<const LINKED_ITEM*>( aB );
+    auto spreadClearanceFunc =
+            [&]( const ITEM* aA, const ITEM* aB, CLEARANCE_ASPECT aAspect ) -> int
+            {
+                const LINKED_ITEM* lnkA = static_cast<const LINKED_ITEM*>( aA );
+                const LINKED_ITEM* lnkB = static_cast<const LINKED_ITEM*>( aB );
 
-        if( !alg::contains( processedItems, aA ) && !alg::contains( processedItems, aB ) )
-            return 0;
+                if( !alg::contains( processedItems, aA ) && !alg::contains( processedItems, aB ) )
+                    return 0;
 
-        if( aA->Net() == aB->Net() )
-            return -1;
+                if( aA->Net() == aB->Net() )
+                    return -1;
 
-        bool Asp = m_spreadableItems.find( lnkA ) != m_spreadableItems.end();
-        bool Bsp = m_spreadableItems.find( lnkB ) != m_spreadableItems.end();
+                bool Asp = m_spreadableItems.find( lnkA ) != m_spreadableItems.end();
+                bool Bsp = m_spreadableItems.find( lnkB ) != m_spreadableItems.end();
 
-        return Asp || Bsp ? Router()->Settings().GetSpreadTracksDistance() : -1;
-    };
+                return Asp || Bsp ? Router()->Settings().GetSpreadTracksDistance() : -1;
+            };
 
     for( LINKED_ITEM* lnk : clippedHead->Links() )
         processedItems.insert( lnk );
@@ -202,14 +203,15 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
                 entry.forwardLine = ret.lines[policy];
 
 
-                for( auto lnk : ret.lines[policy].Links() )
+                for( LINKED_ITEM* lnk : ret.lines[policy].Links() )
                     processedItems.insert( lnk );
+
 #ifdef SPREAD_TRACKS_EXTRA_VERBOSE
                 PNS_DBG( Dbg(), AddItem, &ret.lines[policy], GREEN, 10000,
                          wxString::Format( "walk-line l %d pitems %d", ret.lines[policy].LinkCount(),
                                            (int) processedItems.size() ) );
 #endif
-                for( auto lnk : ret.lines[policy].Links() )
+                for( LINKED_ITEM* lnk : ret.lines[policy].Links() )
                 {
                     bool spreadable = true;
 
@@ -217,11 +219,13 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
                     PNS_DBG( Dbg(), BeginGroup, "spreadable-propagate", 0 );
                     PNS_DBG( Dbg(), AddItem, lnk, WHITE, 100000, wxString::Format( "lnk" ) );
 #endif
+
                     for( int i = 0; i < entry.spreadableLine.SegmentCount(); i++ )
                     {
                         const SEG& s = entry.spreadableLine.CSegment( i );
 
                         SEGMENT* ps = dynamic_cast<SEGMENT*>( lnk );
+
                         if( ps )
                         {
                             int overlapDist = 0;
@@ -268,7 +272,7 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         }
     }
 
-    for( auto& ent : m_lines )
+    for( SPREADABLE_LINE& ent : m_lines )
     {
         spreadNode->Remove( ent.forwardLine );
         ent.forwardLine.Line().Simplify2();
@@ -285,16 +289,18 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         walkaround.SetLengthLimit( false, 0.0 );
 
         PNS_DBG( Dbg(), BeginGroup, wxT( "grp-back-details" ), 0 );
-        auto ret = walkaround.Route( entry.forwardLine );
+        WALKAROUND::RESULT ret = walkaround.Route( entry.forwardLine );
         PNS_DBGN( Dbg(), EndGroup );
 
         bool success = false;
-        for( auto policy : { WALKAROUND::WP_CW, WALKAROUND::WP_CCW } )
+
+        for( WALKAROUND::WALK_POLICY policy : { WALKAROUND::WP_CW, WALKAROUND::WP_CCW } )
         {
             if( ret.status[policy] == WALKAROUND::ST_DONE )
             {
                 entry.backwardLine = ret.lines[policy];
                 OPT_BOX2I affectedArea = entry.backwardLine.ChangedArea( &entry.spreadableLine );
+
                 if( affectedArea.has_value() )
                 {
                     if( !totalAffectedArea )
@@ -302,6 +308,7 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
                     else
                         totalAffectedArea->Merge( affectedArea.value() );
                 }
+
                 entry.backwardLine.Line().Simplify2();
                 spreadNode->Add( entry.backwardLine );
 
@@ -309,6 +316,7 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
                 break;
             }
         }
+
         if( !success )
         {
             PNS_DBG( Dbg(), AddItem, &entry.originLine, WHITE, 100000, wxString::Format( "failing-line-back" ) );
@@ -323,7 +331,6 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         int delta = 4 * m_rootLine.Width(); // 4 is a perfectly fair choice for a fudge factor, isn't it?
         totalAffectedArea->Inflate( delta );
     }
-
 
     for( SPREADABLE_LINE& entry : m_lines | std::views::reverse )
     {
@@ -564,7 +571,6 @@ bool TRACKS_SPREADER::prepareSpreadableLines()
     PNS_DBGN( Dbg(), EndGroup );
 
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "total-spreadable %d" ), (int) m_spreadableItems.size() ) );
-
 
     return true;
 }
