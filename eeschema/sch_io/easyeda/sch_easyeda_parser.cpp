@@ -1188,13 +1188,26 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             sepShapeStr.Replace( wxS( "^^" ), wxS( "\n" ) );
 
             wxArrayString segments = wxSplit( sepShapeStr, '\n', '\0' );
+
+            if( arr.size() < 5 || segments.size() < 3 )
+                continue;
+
             // wxArrayString mainParts = wxSplit( segments[0], '~', '\0' );
-            // wxArrayString uselessParts = wxSplit( segments[1], '~', '\0' );
+            wxArrayString pinParts = wxSplit( segments[1], '~', '\0' );
             wxArrayString valueParts = wxSplit( segments[2], '~', '\0' );
+
+            if( valueParts.size() < 9 )
+                continue;
 
             wxString flagTypename = arr[1];
             VECTOR2D pos( Convert( arr[2] ), Convert( arr[3] ) );
             double   angle = Convert( arr[4] );
+
+            VECTOR2D pinPos;
+
+            // Wires attach at the end of the flag's stub, which can sit off the flag's origin
+            if( pinParts.size() >= 2 && pinParts[0].ToCDouble( &pinPos.x ) && pinParts[1].ToCDouble( &pinPos.y ) )
+                pos = pinPos;
 
             wxString netnameValue = valueParts[0];
             VECTOR2D valuePos( Convert( valueParts[2] ), Convert( valueParts[3] ) );
@@ -1217,7 +1230,8 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
                 if( segments.size() > 3 )
                 {
                     wxArrayString shapeParts = wxSplit( segments[3], '~', '\0' );
-                    if( shapeParts[0] == wxS( "PL" ) )
+
+                    if( shapeParts.size() >= 2 && shapeParts[0] == wxS( "PL" ) )
                     {
                         wxArrayString ptArr = wxSplit( shapeParts[1], ' ', '\0' );
 
@@ -1257,9 +1271,9 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
             }
             else
             {
-                auto        pair = MakePowerSymbol( flagTypename, netnameValue );
-                LIB_SYMBOL* pwrLibSym = pair.first;
-                bool        flip = pair.second;
+                auto                        pair = MakePowerSymbol( flagTypename, netnameValue );
+                std::unique_ptr<LIB_SYMBOL> pwrLibSym( pair.first );
+                bool                        flip = pair.second;
 
                 LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, netnameValue );
 
@@ -1286,17 +1300,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
                     schSym->SetOrientation( SYM_ROTATE_CLOCKWISE );
                 }
 
-                // EasyEDA connects a flag at the end of its stub (the second segment), which is
-                // where the KiCad power symbol has its pin.  The flag's origin is the same point
-                // only for flags without a stub (the grounds); a circle ("Bar") flag placed at its
-                // origin would leave its pin unconnected.
-                wxArrayString pinParts = wxSplit( segments[1], '~', '\0' );
-                VECTOR2D      pinPos = pos;
-
-                if( pinParts.size() >= 2 )
-                    pinPos = VECTOR2D( Convert( pinParts[0] ), Convert( pinParts[1] ) );
-
-                schSym->SetPosition( RelPos( pinPos ) );
+                schSym->SetPosition( RelPos( pos ) );
 
                 SCH_FIELD* valField = schSym->GetField( FIELD_T::VALUE );
 

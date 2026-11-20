@@ -20,13 +20,23 @@
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <connection_graph.h>
 #include <json_common.h>
 #include <lib_symbol.h>
+#include <sch_connection.h>
 #include <sch_io/easyeda/sch_io_easyeda.h>
+#include <sch_pin.h>
+#include <sch_screen.h>
+#include <sch_sheet_path.h>
+#include <sch_symbol.h>
+#include <schematic.h>
+#include <settings/settings_manager.h>
 
 #include <wx/filename.h>
 
 #include <fstream>
+#include <map>
+#include <vector>
 
 
 BOOST_AUTO_TEST_SUITE( EasyedaSchImport )
@@ -65,6 +75,59 @@ BOOST_AUTO_TEST_CASE( WrappedSingleSheetEnumeratesItsSymbols )
     wxRemoveFile( path.GetFullPath() );
 
     BOOST_CHECK( !names.IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( OffsetNetFlagsConnectAtTheirStubEnd )
+{
+    SETTINGS_MANAGER settings;
+    settings.LoadProject( "" );
+
+    SCHEMATIC schematic( nullptr );
+    schematic.SetProject( &settings.Prj() );
+
+    SCH_IO_EASYEDA plugin;
+    wxString       path = KI_TEST::GetEeschemaTestDataDir() + "io/easyeda/easy_sdr_coax_power_supply.json";
+
+    BOOST_REQUIRE( plugin.LoadSchematicFile( path, &schematic ) );
+
+    SCH_SHEET_LIST sheets = schematic.BuildSheetListSortedByPageNumbers();
+    schematic.ConnectionGraph()->Recalculate( sheets, true );
+
+    std::map<wxString, wxString> pinNets;
+
+    for( const SCH_SHEET_PATH& sheet : sheets )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
+            {
+                if( SCH_CONNECTION* conn = pin->Connection( &sheet ) )
+                    pinNets[symbol->GetRef( &sheet ) + wxS( "." ) + pin->GetNumber()] = conn->GetNetName();
+            }
+        }
+    }
+
+    // Each net is joined only through circle flags whose origin sits 10 mils off the wire
+    const std::map<wxString, std::vector<wxString>> expected = {
+        { wxS( "+5V" ), { wxS( "F1.2" ), wxS( "SW1.2" ) } },
+        { wxS( "+3.3V" ), { wxS( "C3.2" ), wxS( "C4.2" ), wxS( "R2.2" ), wxS( "U1.5" ), wxS( "U2.3" ) } },
+        { wxS( "POWER FILTER" ), { wxS( "C1.1" ), wxS( "C2.2" ), wxS( "L1.3" ), wxS( "U1.1" ), wxS( "U1.3" ) } },
+    };
+
+    for( const auto& [netName, pins] : expected )
+    {
+        for( const wxString& pin : pins )
+        {
+            BOOST_TEST_CONTEXT( pin )
+            {
+                BOOST_REQUIRE( pinNets.count( pin ) );
+                BOOST_CHECK_EQUAL( pinNets[pin], netName );
+            }
+        }
+    }
 }
 
 
