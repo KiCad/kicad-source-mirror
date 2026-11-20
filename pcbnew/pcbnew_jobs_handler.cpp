@@ -3057,8 +3057,12 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
                 KIFACE_NETLIST_SCHEMATIC_SERVICE::Type netlister =
                         GetKifaceService<KIFACE_NETLIST_SCHEMATIC_SERVICE>( m_kiway->KiFACE( KIWAY::FACE_SCH ) );
 
-                if( netlister )
-                    ( *netlister )( schematicPath.GetFullPath(), netlist_str, m_kiway );
+                if( !netlister || !( *netlister )( schematicPath.GetFullPath(), netlist_str, m_kiway ) )
+                {
+                    m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
+                                        RPT_SEVERITY_ERROR );
+                    checkParity = false;
+                }
             }
         }
 
