@@ -1177,7 +1177,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         NET_ID                              NetID;
         NET_SCH::CONNECTION_SCH             Conn;
         SHAPE_LINE_CHAIN                    Chain;
-        std::map<NETELEMENT_ID, SCH_LABEL*> Labels;
+        std::map<NETELEMENT_ID, SCH_LABEL_BASE*> Labels;
     };
 
     std::vector<PENDING_CONNECTION> pending;
