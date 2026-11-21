@@ -308,7 +308,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // The infobar shares a pane with the notebook, since the frame has no canvas to overlay it on
     EDA_INFOBAR_PANEL* infoBarPanel = new EDA_INFOBAR_PANEL( this );
 
-    m_infoBar = new WX_INFOBAR( this );
+    // Anchored to the panel so the bar spans the launcher pane, not the whole frame
+    m_infoBar = new WX_INFOBAR( infoBarPanel );
 
     infoBarPanel->AddInfoBar( m_infoBar );
     infoBarPanel->AddOtherItem( m_notebook );
