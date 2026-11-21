@@ -788,8 +788,9 @@ void PGM_BASE::SetLanguagePath()
 
     if( PATHS::RunningFromBuildDir() )
     {
-        wxFileName fn( Pgm().GetExecutablePath() );
-        fn.RemoveLastDir();
+        // On macOS the executable path is the .app bundle, not the build root.
+        wxFileName fn;
+        fn.AssignDir( PATHS::GetStockDataPath( true ) );
         fn.AppendDir( wxT( "translation" ) );
         wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
     }
