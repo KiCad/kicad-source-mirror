@@ -36,6 +36,7 @@
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <math/util.h>
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <settings/color_settings.h>
@@ -2537,13 +2538,14 @@ void APPEARANCE_CONTROLS::syncObjectSettings()
               && m_objectSettingsMap.count( LAYER_FILLED_SHAPES )
               && m_objectSettingsMap.count( LAYER_OUTSIDE_GROUP_OPACITY ) );
 
-    m_objectSettingsMap[LAYER_TRACKS]->ctl_opacity->SetValue( opts.m_TrackOpacity * 100 );
-    m_objectSettingsMap[LAYER_VIAS]->ctl_opacity->SetValue( opts.m_ViaOpacity * 100 );
-    m_objectSettingsMap[LAYER_PADS]->ctl_opacity->SetValue( opts.m_PadOpacity * 100 );
-    m_objectSettingsMap[LAYER_ZONES]->ctl_opacity->SetValue( opts.m_ZoneOpacity * 100 );
-    m_objectSettingsMap[LAYER_DRAW_BITMAPS]->ctl_opacity->SetValue( opts.m_ImageOpacity * 100 );
-    m_objectSettingsMap[LAYER_FILLED_SHAPES]->ctl_opacity->SetValue( opts.m_FilledShapeOpacity * 100 );
-    m_objectSettingsMap[LAYER_OUTSIDE_GROUP_OPACITY]->ctl_opacity->SetValue( opts.m_OutsideGroupOpacity * 100 );
+    m_objectSettingsMap[LAYER_TRACKS]->ctl_opacity->SetValue( KiROUND( opts.m_TrackOpacity * 100 ) );
+    m_objectSettingsMap[LAYER_VIAS]->ctl_opacity->SetValue( KiROUND( opts.m_ViaOpacity * 100 ) );
+    m_objectSettingsMap[LAYER_PADS]->ctl_opacity->SetValue( KiROUND( opts.m_PadOpacity * 100 ) );
+    m_objectSettingsMap[LAYER_ZONES]->ctl_opacity->SetValue( KiROUND( opts.m_ZoneOpacity * 100 ) );
+    m_objectSettingsMap[LAYER_DRAW_BITMAPS]->ctl_opacity->SetValue( KiROUND( opts.m_ImageOpacity * 100 ) );
+    m_objectSettingsMap[LAYER_FILLED_SHAPES]->ctl_opacity->SetValue( KiROUND( opts.m_FilledShapeOpacity * 100 ) );
+    m_objectSettingsMap[LAYER_OUTSIDE_GROUP_OPACITY]->ctl_opacity->SetValue(
+            KiROUND( opts.m_OutsideGroupOpacity * 100 ) );
 }
 
 
