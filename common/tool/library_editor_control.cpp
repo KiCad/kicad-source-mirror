@@ -42,28 +42,29 @@ void LIBRARY_EDITOR_CONTROL::AddContextMenuItems( CONDITIONAL_MENU* aMenu )
 {
     auto checkPinnedStatus = [this]( bool aPin )
     {
-        bool      result = true;
         LIB_TREE* libTree = m_frame->GetLibTree();
-        if( libTree )
-        {
-            std::vector<LIB_TREE_NODE*> selection;
-            libTree->GetSelectedTreeNodes( selection );
 
-            for( const LIB_TREE_NODE* lib : selection )
-            {
-                if( lib && lib->m_Type == LIB_TREE_NODE::TYPE::LIBRARY && lib->m_Pinned != aPin )
-                {
-                    result = false;
-                    break;
-                }
-            }
-        }
-        else
+        if( !libTree )
+            return false;
+
+        std::vector<LIB_TREE_NODE*> selection;
+        libTree->GetSelectedTreeNodes( selection );
+
+        bool anyLibrary = false;
+
+        // A selection of parts alone holds no library to pin or unpin
+        for( const LIB_TREE_NODE* lib : selection )
         {
-            result = false;
+            if( !lib || lib->m_Type != LIB_TREE_NODE::TYPE::LIBRARY )
+                continue;
+
+            if( lib->m_Pinned != aPin )
+                return false;
+
+            anyLibrary = true;
         }
 
-        return result;
+        return anyLibrary;
     };
 
     auto pinnedLibSelectedCondition = [checkPinnedStatus]( const SELECTION& aSel )
