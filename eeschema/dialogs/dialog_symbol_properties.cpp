@@ -1277,22 +1277,32 @@ void DIALOG_SYMBOL_PROPERTIES::HandleDelayedFocus( wxCommandEvent& event )
 
     wxCHECK_RET( loc, wxT( "Missing focus cell location" ) );
 
-    // Run the AutoColumnSizer before setting focus (as it will clear any shown cell edit control
-    // if it has to resize that column).
-    m_fieldsGrid->RecomputeGridWidths();
-
-    // Handle a delayed focus
-
-    m_fieldsGrid->SetFocus();
-    m_fieldsGrid->MakeCellVisible( loc->x, loc->y );
-    m_fieldsGrid->SetGridCursor( loc->x, loc->y );
-
+    VECTOR2I cell = *loc;
     delete loc;
 
-    CallAfter(
-            [this]()
+    // Focusing the grid before the dialog is activated would present it
+    KIPLATFORM::UI::RunWhenActive( this,
+            [this, cell]()
             {
-                m_fieldsGrid->EnableCellEditControl( true );
+                // Run the AutoColumnSizer before setting focus (as it will clear any shown cell
+                // edit control if it has to resize that column).
+                m_fieldsGrid->RecomputeGridWidths();
+
+                // Handle a delayed focus
+
+                m_fieldsGrid->SetFocus();
+                m_fieldsGrid->MakeCellVisible( cell.x, cell.y );
+                m_fieldsGrid->SetGridCursor( cell.x, cell.y );
+
+                CallAfter(
+                        [this]()
+                        {
+                            KIPLATFORM::UI::RunWhenActive( this,
+                                    [this]()
+                                    {
+                                        m_fieldsGrid->EnableCellEditControl( true );
+                                    } );
+                        } );
             } );
 }
 

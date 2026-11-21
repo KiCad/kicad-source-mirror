@@ -243,6 +243,12 @@ public:
 
     void OnMaximize( wxMaximizeEvent& aEvent );
 
+    /**
+     * Raise the frame, without presenting an already shown frame where presenting can unmap it
+     * (see KIPLATFORM::UI::ActivateWithoutPresenting()).
+     */
+    void Raise() override;
+
     int GetAutoSaveInterval() const;
 
     bool IsType( FRAME_T aType ) const { return m_ident == aType; }

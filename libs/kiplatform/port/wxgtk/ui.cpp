@@ -21,6 +21,7 @@
 #include <kiplatform/ui.h>
 
 #include <algorithm>
+#include <deque>
 
 #include <wx/choice.h>
 #include <wx/dataview.h>
@@ -29,6 +30,8 @@
 #include <wx/nonownedwnd.h>
 #include <wx/popupwin.h>
 #include <wx/settings.h>
+#include <wx/toplevel.h>
+#include <wx/weakref.h>
 #include <wx/window.h>
 #include <wx/log.h>
 
@@ -208,19 +211,209 @@ wxWindow* KIPLATFORM::UI::CreateCanvasOverlay( wxWindow* aCanvas )
 }
 
 
+namespace
+{
+
+// Presenting a shown window can unmap it on Wayland
+// GTK knows a window shown by Raise() is visible before wx does
+bool presentCanUnmap( wxWindow* aTlw )
+{
+#ifdef GDK_WINDOWING_WAYLAND
+    GtkWidget* widget = static_cast<GtkWidget*>( aTlw->GetHandle() );
+
+    return GDK_IS_WAYLAND_DISPLAY( gdk_display_get_default() ) && widget && gtk_widget_get_visible( widget );
+#else
+    return false;
+#endif
+}
+
+
+// Holds functions until a top-level window is active, runs them in order, then deletes itself
+class ACTIVATION_WAITER
+{
+public:
+    // Every module links its own copy of this file, so the one waiter hangs off the GTK widget
+    static ACTIVATION_WAITER* Find( wxTopLevelWindow* aTlw )
+    {
+        GtkWidget* widget = static_cast<GtkWidget*>( aTlw->GetHandle() );
+
+        if( !widget )
+            return nullptr;
+
+        return static_cast<ACTIVATION_WAITER*>( g_object_get_data( G_OBJECT( widget ), WAITER_KEY ) );
+    }
+
+    static void Add( wxTopLevelWindow* aTlw, std::function<void()> aFunction, bool aIsFocus )
+    {
+        ACTIVATION_WAITER* waiter = Find( aTlw );
+
+        if( !waiter )
+            waiter = new ACTIVATION_WAITER( aTlw );
+
+        // Only the latest focus request counts, so a window that is never activated holds one
+        if( aIsFocus )
+            std::erase_if( waiter->m_pending, []( const PENDING& aPending ) { return aPending.isFocus; } );
+
+        waiter->m_pending.push_back( { std::move( aFunction ), aIsFocus } );
+    }
+
+private:
+    static constexpr const char* WAITER_KEY = "kicad-activation-waiter";
+
+    struct PENDING
+    {
+        std::function<void()> function;
+        bool                  isFocus;
+    };
+
+    explicit ACTIVATION_WAITER( wxTopLevelWindow* aTlw ) :
+            m_tlw( aTlw )
+    {
+        // The widget owns the waiter so it is freed even if wxEVT_DESTROY never reaches it
+        g_object_set_data_full( G_OBJECT( m_tlw->GetHandle() ), WAITER_KEY, this,
+                                []( gpointer aWaiter )
+                                {
+                                    delete static_cast<ACTIVATION_WAITER*>( aWaiter );
+                                } );
+        m_tlw->Bind( wxEVT_ACTIVATE, &ACTIVATION_WAITER::onActivate, this );
+        m_tlw->Bind( wxEVT_DESTROY, &ACTIVATION_WAITER::onDestroy, this );
+    }
+
+    void finish()
+    {
+        m_tlw->Unbind( wxEVT_ACTIVATE, &ACTIVATION_WAITER::onActivate, this );
+        m_tlw->Unbind( wxEVT_DESTROY, &ACTIVATION_WAITER::onDestroy, this );
+        g_object_steal_data( G_OBJECT( m_tlw->GetHandle() ), WAITER_KEY );
+        delete this;
+    }
+
+    void onActivate( wxActivateEvent& aEvent )
+    {
+        aEvent.Skip();
+
+        if( !aEvent.GetActive() || m_drainPosted )
+            return;
+
+        m_drainPosted = true;
+
+        // Pending events die with the window
+        wxTopLevelWindow* tlw = m_tlw;
+        tlw->CallAfter( [tlw]() { drain( tlw ); } );
+    }
+
+    void onDestroy( wxWindowDestroyEvent& aEvent )
+    {
+        aEvent.Skip();
+
+        // Children's destroy events propagate up to the top-level window
+        if( aEvent.GetEventObject() == m_tlw )
+            finish();
+    }
+
+    // Requests made while draining queue behind the pending ones, so they keep their order
+    static void drain( wxTopLevelWindow* aTlw )
+    {
+        ACTIVATION_WAITER* waiter = Find( aTlw );
+
+        if( !waiter )
+            return;
+
+        wxWeakRef<wxTopLevelWindow> tlw( aTlw );
+
+        while( !waiter->m_pending.empty() )
+        {
+            if( !KIPLATFORM::UI::IsWindowActive( aTlw ) )
+            {
+                waiter->m_drainPosted = false;
+                return;
+            }
+
+            PENDING item = std::move( waiter->m_pending.front() );
+            waiter->m_pending.pop_front();
+            item.function();
+
+            // The function may have destroyed the window and this waiter with it
+            if( !tlw || tlw->IsBeingDeleted() || Find( aTlw ) != waiter )
+                return;
+        }
+
+        waiter->finish();
+    }
+
+    wxTopLevelWindow*   m_tlw;
+    std::deque<PENDING> m_pending;
+    bool                m_drainPosted = false;
+};
+
+
+void runWhenActive( wxWindow* aWindow, std::function<void()> aFunction, bool aIsFocus )
+{
+    wxTopLevelWindow* tlw = wxDynamicCast( wxGetTopLevelParent( aWindow ), wxTopLevelWindow );
+
+    if( tlw
+        && ( ACTIVATION_WAITER::Find( tlw ) || ( presentCanUnmap( tlw ) && !KIPLATFORM::UI::IsWindowActive( tlw ) ) ) )
+    {
+        wxWeakRef<wxWindow> target( aWindow );
+
+        ACTIVATION_WAITER::Add( tlw,
+                                [target, function = std::move( aFunction )]()
+                                {
+                                    if( target && !target->IsBeingDeleted() )
+                                        function();
+                                },
+                                aIsFocus );
+    }
+    else
+    {
+        aFunction();
+    }
+}
+
+} // namespace
+
+
+void KIPLATFORM::UI::RunWhenActive( wxWindow* aWindow, std::function<void()> aFunction )
+{
+    runWhenActive( aWindow, std::move( aFunction ), false );
+}
+
+
+void KIPLATFORM::UI::SetFocusWhenActive( wxWindow* aWindow )
+{
+    runWhenActive( aWindow, [aWindow]() { aWindow->SetFocus(); }, true );
+}
+
+
+bool KIPLATFORM::UI::ActivateWithoutPresenting( wxWindow* aWindow )
+{
+    wxWindow* tlw = wxGetTopLevelParent( aWindow );
+
+    if( !tlw || !presentCanUnmap( tlw ) )
+        return false;
+
+    // Ask even when active since a request for another window may still be pending
+    // Pass the input timestamp as gtk_window_present() does so the compositor can grant it
+    if( GdkWindow* gdkWindow = gtk_widget_get_window( static_cast<GtkWidget*>( tlw->GetHandle() ) ) )
+        gdk_window_focus( gdkWindow, gtk_get_current_event_time() );
+
+    return true;
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
+    if( ActivateWithoutPresenting( aWindow ) )
+    {
+        SetFocusWhenActive( aWindow );
+        return;
+    }
+
     aWindow->SetFocus();
 
     // On GTK, SetFocus() on a dialog may not be sufficient to receive keyboard events
     // (like ESC for closing). We need to ensure the window is presented and active.
     // Find the top-level window and present it to ensure keyboard focus.
-    wxWindow* tlw = aWindow;
-
-    while( tlw && !tlw->IsTopLevel() )
-        tlw = tlw->GetParent();
-
-    if( tlw )
+    if( wxWindow* tlw = wxGetTopLevelParent( aWindow ) )
     {
         GtkWidget* widget = static_cast<GtkWidget*>( tlw->GetHandle() );
 

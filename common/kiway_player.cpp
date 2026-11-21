@@ -29,6 +29,7 @@
 #include <wx/evtloop.h>
 #include <wx/socket.h>
 #include <core/raii.h>
+#include <kiplatform/ui.h>
 #include <wx/log.h>
 
 
@@ -113,7 +114,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
     Show( true );
     Raise();    // Needed on some Window managers to always display the frame
 
-    SetFocus();
+    KIPLATFORM::UI::SetFocusWhenActive( this );
 
     {
         // Using wxWindowDisabler() has two issues: it will disable top-level windows that are
@@ -142,7 +143,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
         // have the final say, after wxWindowDisabler reenables my parent and
         // the events settle down, set the focus
         wxSafeYield();
-        aResultantFocusWindow->SetFocus();
+        KIPLATFORM::UI::SetFocusWhenActive( aResultantFocusWindow );
     }
 
     return m_modal_ret_val;

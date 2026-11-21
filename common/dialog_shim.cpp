@@ -475,7 +475,7 @@ void DIALOG_SHIM::focusParentCanvas( bool aDeferUntilFrameActive )
     if( !target )
         return;
 
-    target->SetFocus();
+    KIPLATFORM::UI::SetFocusWhenActive( target );
 
     if( !aDeferUntilFrameActive || !toolCanvas )
         return;
@@ -502,6 +502,13 @@ void DIALOG_SHIM::focusParentCanvas( bool aDeferUntilFrameActive )
 }
 
 
+void DIALOG_SHIM::Raise()
+{
+    if( !KIPLATFORM::UI::ActivateWithoutPresenting( this ) )
+        wxDialog::Raise();
+}
+
+
 bool DIALOG_SHIM::Show( bool show )
 {
     bool ret;
@@ -511,7 +518,7 @@ bool DIALOG_SHIM::Show( bool show )
         KIPLATFORM::UI::StabilizeWindowPosition( this );
 
 #ifndef __WINDOWS__
-        wxDialog::Raise();  // Needed on OS X and some other window managers (i.e. Unity)
+        Raise(); // Needed on OS X and some other window managers (i.e. Unity)
 #endif
         ret = wxDialog::Show( show );
 

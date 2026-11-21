@@ -115,6 +115,12 @@ public:
 
     bool Show( bool show ) override;
 
+    /**
+     * Raise the dialog, without presenting an already shown dialog where presenting can unmap
+     * it (see KIPLATFORM::UI::ActivateWithoutPresenting()).
+     */
+    void Raise() override;
+
     bool Enable( bool enable ) override;
 
     void OnPaint( wxPaintEvent &event );

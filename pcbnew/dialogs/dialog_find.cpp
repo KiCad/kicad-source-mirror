@@ -28,6 +28,7 @@
 #include <dialog_find.h>
 #include <string_utils.h>
 #include <hotkeys_basic.h>
+#include <kiplatform/ui.h>
 #include <string>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
@@ -418,7 +419,7 @@ bool DIALOG_FIND::Show( bool show )
     bool ret = DIALOG_FIND_BASE::Show( show );
 
     if( show )
-        m_searchCombo->SetFocus();
+        KIPLATFORM::UI::SetFocusWhenActive( m_searchCombo );
 
     return ret;
 }
