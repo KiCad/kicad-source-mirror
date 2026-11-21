@@ -307,6 +307,67 @@ BOOST_AUTO_TEST_CASE( UnitAndBodyStyleNamesAreDetected )
 }
 
 
+// State a symbol saves outside its properties and elements still yields a change record that names it
+BOOST_AUTO_TEST_CASE( OwnSymbolStateIsDetected )
+{
+    auto [ownersA, mapA] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    auto derived = std::ranges::find_if( ownersB,
+                                         []( const std::unique_ptr<LIB_SYMBOL>& aOwner )
+                                         {
+                                             return aOwner && aOwner->IsDerived();
+                                         } );
+
+    BOOST_REQUIRE( derived != ownersB.end() );
+
+    auto root = std::ranges::find_if( ownersB,
+                                      [&]( const std::unique_ptr<LIB_SYMBOL>& aOwner )
+                                      {
+                                          return aOwner && !aOwner->IsDerived()
+                                                 && aOwner->GetName() != ( *derived )->GetParentName();
+                                      } );
+
+    BOOST_REQUIRE( root != ownersB.end() );
+
+    LIB_SYMBOL& symbol = **root;
+    PIN_MAP     map( wxS( "QA_Map" ) );
+
+    map.SetEntry( wxS( "1" ), wxS( "A1" ) );
+    symbol.PinMaps().AddOrReplace( map );
+    symbol.SetAssociatedFootprints( { { LIB_ID( wxS( "QA" ), wxS( "QA_Footprint" ) ), wxS( "QA_Map" ) } } );
+    symbol.SetDuplicatePinNumbersAreJumpers( !symbol.GetDuplicatePinNumbersAreJumpers() );
+    symbol.JumperPinGroups().Add( std::set<wxString>{ wxS( "1" ), wxS( "2" ) } );
+    symbol.SetAreFontsEmbedded( !symbol.GetAreFontsEmbedded() );
+
+    auto file = std::make_shared<EMBEDDED_FILES::EMBEDDED_FILE>();
+    file->name = wxS( "qa.txt" );
+    file->data_hash = "qa";
+    symbol.AddFile( file );
+
+    ( *derived )->SetParent( &symbol );
+
+    std::set<wxString> names;
+
+    for( const ITEM_CHANGE& change : SYM_LIB_DIFFER( mapA, mapB ).Diff().changes )
+    {
+        for( const PROPERTY_DELTA& delta : change.properties )
+            names.insert( delta.name );
+    }
+
+    const std::vector<wxString> covered = { wxS( "Parent" ),
+                                            wxS( "Duplicate Pin Numbers Are Jumpers" ),
+                                            wxS( "Jumper Pin Groups" ),
+                                            wxS( "Pin Maps" ),
+                                            wxS( "Associated Footprints" ),
+                                            wxS( "Embedded Fonts" ),
+                                            wxS( "Embedded Files" ) };
+
+    for( const wxString& name : covered )
+        BOOST_CHECK_MESSAGE( names.contains( name ), name.ToStdString() );
+}
+
+
 BOOST_AUTO_TEST_CASE( PinNameChangeIsDetected )
 {
     auto [ownersA, mapA] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );

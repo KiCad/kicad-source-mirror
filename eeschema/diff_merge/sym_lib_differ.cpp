@@ -167,6 +167,110 @@ namespace
     }
 
 
+    /// State the file keeps for the symbol itself, which no property or element carries and flattening drops
+    std::vector<PROPERTY_DELTA> ownStateDeltas( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
+    {
+        std::vector<PROPERTY_DELTA> deltas;
+
+        auto compare = [&]( const wxString& aName, const auto& aRead )
+        {
+            const wxString before = aRead( aBefore );
+            const wxString after = aRead( aAfter );
+
+            if( before != after )
+                deltas.push_back( { aName, DIFF_VALUE::FromString( before ), DIFF_VALUE::FromString( after ) } );
+        };
+
+        auto flag = []( bool aValue )
+        {
+            return aValue ? wxString( wxS( "yes" ) ) : wxString( wxS( "no" ) );
+        };
+
+        compare( wxS( "Parent" ),
+                 []( const LIB_SYMBOL* aSymbol )
+                 {
+                     return aSymbol->GetParentName();
+                 } );
+
+        compare( wxS( "Duplicate Pin Numbers Are Jumpers" ),
+                 [&]( const LIB_SYMBOL* aSymbol )
+                 {
+                     return flag( aSymbol->GetDuplicatePinNumbersAreJumpers() );
+                 } );
+
+        compare( wxS( "Jumper Pin Groups" ),
+                 []( const LIB_SYMBOL* aSymbol )
+                 {
+                     wxArrayString groups;
+
+                     for( const JUMPER_GROUP& group : aSymbol->JumperPinGroups().GetAll() )
+                     {
+                         wxArrayString names;
+
+                         for( const wxString& name : group.GetNames() )
+                             names.Add( name );
+
+                         groups.Add( wxS( "(" ) + wxJoin( names, ' ' ) + wxS( ")" ) );
+                     }
+
+                     return wxJoin( groups, ' ' );
+                 } );
+
+        compare( wxS( "Pin Maps" ),
+                 []( const LIB_SYMBOL* aSymbol )
+                 {
+                     wxArrayString maps;
+
+                     for( const PIN_MAP& map : aSymbol->GetPinMaps().GetAll() )
+                     {
+                         wxArrayString entries;
+
+                         for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
+                             entries.Add( entry.m_PinNumber + wxS( "=" ) + entry.m_PadNumber );
+
+                         maps.Add( map.GetName() + wxS( "(" ) + wxJoin( entries, ' ' ) + wxS( ")" ) );
+                     }
+
+                     return wxJoin( maps, ' ' );
+                 } );
+
+        compare( wxS( "Associated Footprints" ),
+                 []( const LIB_SYMBOL* aSymbol )
+                 {
+                     wxArrayString footprints;
+
+                     for( const ASSOCIATED_FOOTPRINT& footprint : aSymbol->GetAssociatedFootprints() )
+                         footprints.Add( footprint.m_FootprintLibId.GetUniStringLibId() + wxS( "/" )
+                                         + footprint.m_MapName );
+
+                     return wxJoin( footprints, ' ' );
+                 } );
+
+        compare( wxS( "Embedded Fonts" ),
+                 [&]( const LIB_SYMBOL* aSymbol )
+                 {
+                     return flag( aSymbol->GetAreFontsEmbedded() );
+                 } );
+
+        // Fonts follow the flag above, since saving embeds or clears them
+        compare( wxS( "Embedded Files" ),
+                 []( const LIB_SYMBOL* aSymbol )
+                 {
+                     wxArrayString files;
+
+                     for( const auto& [name, file] : aSymbol->EmbeddedFileMap() )
+                     {
+                         if( file && file->type != EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT )
+                             files.Add( name + wxS( ":" ) + wxString::FromUTF8( file->data_hash ) );
+                     }
+
+                     return wxJoin( files, ' ' );
+                 } );
+
+        return deltas;
+    }
+
+
     bool hasSymbolDifferences( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
     {
         std::unique_ptr<LIB_SYMBOL> before = aBefore->Flatten();
@@ -174,7 +278,8 @@ namespace
 
         return before->Compare( *after, SYMBOL_COMPARE_FLAGS ) != 0
                || !symbolDeltas( before.get(), after.get() ).empty()
-               || !DiffSymbolElements( before.get(), after.get() ).empty();
+               || !DiffSymbolElements( before.get(), after.get() ).empty()
+               || !ownStateDeltas( aBefore, aAfter ).empty();
     }
 } // namespace
 
@@ -207,6 +312,10 @@ DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
         std::unique_ptr<LIB_SYMBOL> after = afterIt->second->Flatten();
 
         change.properties = symbolDeltas( before.get(), after.get() );
+
+        for( PROPERTY_DELTA& delta : ownStateDeltas( beforeIt->second, afterIt->second ) )
+            change.properties.push_back( std::move( delta ) );
+
         AppendElementChanges( change, DiffSymbolElements( before.get(), after.get() ) );
     }
 
