@@ -2734,7 +2734,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock )
 }
 
 
-SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
+SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent, std::set<FIELD_T>* aReadMandatoryFields )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
                  "Cannot parse " + GetTokenString( CurTok() ) + " as a property token." );
@@ -2782,12 +2782,37 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     // Correctly set the ID based on the untranslated field name
     if( aParent->Type() == SCH_SYMBOL_T )
     {
+        bool mandatoryNameTaken = false;
+
         for( FIELD_T id : MANDATORY_FIELDS )
         {
             if( name.CmpNoCase( GetDefaultFieldName( id, UNTRANSLATED ) ) == 0 )
             {
-                fieldId = id;
+                // Claiming it again would overwrite the one the file already gave us.
+                if( aReadMandatoryFields && aReadMandatoryFields->count( id ) )
+                    mandatoryNameTaken = true;
+                else
+                    fieldId = id;
+
                 break;
+            }
+        }
+
+        if( fieldId != FIELD_T::USER && aReadMandatoryFields )
+            aReadMandatoryFields->insert( fieldId );
+
+        // Give it a name of its own so the editor can show both.
+        if( mandatoryNameTaken )
+        {
+            SCH_SYMBOL*    symbol = static_cast<SCH_SYMBOL*>( aParent );
+            const wxString baseName = name;
+
+            for( int ii = 1; ii < 10; ii++ )
+            {
+                name = wxString::Format( wxS( "%s_%d" ), baseName, ii );
+
+                if( !symbol->GetField( name ) )
+                    break;
             }
         }
     }
@@ -3587,7 +3612,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
     SCH_FIELD* field;
     std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
     TRANSFORM transform;
-    std::set<int> fieldIDsRead;
+    std::set<FIELD_T>           fieldIDsRead;
 
     // We'll reset this if we find a fields_autoplaced token
     symbol->SetFieldsAutoplaced( AUTOPLACE_NONE );
@@ -4016,7 +4041,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
         case T_property:
             // The field parent symbol must be set and its orientation must be set before
             // the field positions are set.
-            field = parseSchField( symbol.get() );
+            field = parseSchField( symbol.get(), &fieldIDsRead );
 
             // Exclude from simulation used to be managed by a Sim.Enable field set to "0" when
             // simulation was disabled.
