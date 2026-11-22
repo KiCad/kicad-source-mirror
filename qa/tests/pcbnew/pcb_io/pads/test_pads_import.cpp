@@ -2190,4 +2190,31 @@ BOOST_AUTO_TEST_CASE( Issue25616_BoardDesignRules )
 }
 
 
+// Pulsonix abbreviates the route signal header to *SIG*, which dropped every track and via
+BOOST_AUTO_TEST_CASE( Issue25511_PulsonixSigHeaderRoutes )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue25511_pulsonix.asc";
+
+    std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    int tracks = 0;
+    int vias = 0;
+
+    for( PCB_TRACK* track : board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            vias++;
+        else
+            tracks++;
+    }
+
+    BOOST_CHECK_EQUAL( tracks, 965 );
+    BOOST_CHECK_EQUAL( vias, 121 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

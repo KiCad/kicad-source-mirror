@@ -1928,7 +1928,8 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
     {
         if( line[0] == '*' )
         {
-             if( line.rfind( "*SIGNAL*", 0 ) == 0 )
+             // Pulsonix abbreviates the signal header to *SIG*
+             if( line.rfind( "*SIGNAL*", 0 ) == 0 || line.rfind( "*SIG*", 0 ) == 0 )
              {
                  if( in_track && current_route )
                  {
@@ -1942,7 +1943,7 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
 
                  std::istringstream iss( line );
                  std::string token;
-                 iss >> token; // *SIGNAL*
+                 iss >> token; // *SIGNAL* or *SIG*
 
                  std::string net_name;
                  iss >> net_name;
