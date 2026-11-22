@@ -206,7 +206,8 @@ public:
     /// @return the board layer of a single-layered item.
     PCB_LAYER_ID GetBoardLayer() const { return BoardLayerFromOrdinal( Layer() ); }
 
-    const BOX2I& BBox()
+    /// A cover of the item's geometry. An override may narrow it, never under-cover it.
+    virtual const BOX2I& BBox()
     {
         if( m_dirty.load( std::memory_order_acquire ) && m_valid )
         {
@@ -300,7 +301,27 @@ public:
         if( fillPoly && aSubpolyIndex < fillPoly->OutlineCount() )
             m_outline = fillPoly->Outline( aSubpolyIndex );
 
+        if( HasValidOutline() )
+        {
+            m_islandBBox = m_outline.BBox();
+
+            // BBox() measures the polyline vertices, while Collide() tests an arc exactly and
+            // can reach past them, so take each arc in as well
+            for( size_t ii = 0; ii < m_outline.ArcCount(); ++ii )
+                m_islandBBox.Merge( m_outline.Arc( ii ).BBox() );
+        }
+
         SetLayers( aLayer, aLayer );
+    }
+
+    /// This island's extent, not the whole zone's. m_outline is assigned once in the
+    /// constructor, so the cached box cannot drift from the geometry the collide tests use.
+    const BOX2I& BBox() override
+    {
+        if( HasValidOutline() )
+            return m_islandBBox;
+
+        return CN_ITEM::BBox();
     }
 
     void BuildIndexes()
@@ -315,6 +336,10 @@ public:
 
         if( !fillPoly )
             return;
+
+        // The outline came from an earlier fetch of the fill than these triangles, so cover both
+        if( HasValidOutline() && m_subpolyIndex < fillPoly->OutlineCount() )
+            m_islandBBox.Merge( fillPoly->COutline( m_subpolyIndex ).BBox() );
 
         for( unsigned int ii = 0; ii < fillPoly->TriangulatedPolyCount(); ++ii )
         {
@@ -390,6 +415,7 @@ private:
     int                                 m_subpolyIndex;
     PCB_LAYER_ID                        m_layer;
     SHAPE_LINE_CHAIN                    m_outline;       ///< Cached copy of the zone outline
+    BOX2I                               m_islandBBox;    ///< Extent of m_outline, cached with it
 
     /// Owned deep copies of triangulated polygons (includes vertex storage that TRI references)
     std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> m_triangulatedPolys;

@@ -260,7 +260,8 @@ CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
     appendItem( zitem );
     addItemtoTree( zitem );
 
-    // Re-mark dirty after tree insertion since BBox() clears the dirty flag
+    // In step with the other Add() overloads, where BBox() clears the flag. A zone layer
+    // answers from its cached island box and leaves it alone.
     zitem->SetDirty( true );
     SetDirty();
     return zitem;
