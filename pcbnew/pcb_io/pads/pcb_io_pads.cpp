@@ -26,6 +26,7 @@
 #include <cmath>
 #include <fstream>
 #include <functional>
+#include <tuple>
 
 #include <board.h>
 #include <pcb_track.h>
@@ -1384,6 +1385,9 @@ void PCB_IO_PADS::loadTracksAndVias()
     const std::vector<PADS_IO::ROUTE>& routes = m_parser->GetRoutes();
     std::set<std::pair<int, int>>      placedThroughVias;
 
+    // Each pin pair of a signal restates the trunk it shares with the others
+    std::set<std::tuple<int, PCB_LAYER_ID, int, VECTOR2I, VECTOR2I>> placedTracks;
+
     // Build a position set for test-point vias so we don't also place a bare
     // PCB_VIA at those locations; loadTestPoints() already creates footprints.
     std::set<std::pair<int, int>> testPointPositions;
@@ -1448,6 +1452,11 @@ void PCB_IO_PADS::loadTracksAndVias()
                 }
                 else
                 {
+                    auto [lo, hi] = std::minmax( start, end );
+
+                    if( !placedTracks.emplace( net->GetNetCode(), track_layer, track_width, lo, hi ).second )
+                        continue;
+
                     PCB_TRACK* track = new PCB_TRACK( m_loadBoard );
                     track->SetNet( net );
                     track->SetWidth( track_width );
