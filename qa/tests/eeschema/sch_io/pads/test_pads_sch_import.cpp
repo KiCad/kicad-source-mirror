@@ -4145,5 +4145,19 @@ BOOST_AUTO_TEST_CASE( AsciiHierarchicalSheetLoadIsRefused )
     BOOST_CHECK_EQUAL( m_schematic.GetTopLevelSheet(), existing );
 }
 
+// Pulsonix writes the CAEDECAL font lines unquoted, which shifted the attribute and graphic parse
+BOOST_AUTO_TEST_CASE( Issue25511_PulsonixUnquotedDecalFonts )
+{
+    SCH_IO_PADS plugin;
+    wxString    path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                       + wxS( "/plugins/pads/issue25511_schematic.txt" );
+
+    SCH_SHEET* root = nullptr;
+
+    BOOST_REQUIRE_NO_THROW( root = plugin.LoadSchematicFile( path, &m_schematic ) );
+    BOOST_REQUIRE( root );
+    BOOST_CHECK_EQUAL( itemCount( root->GetScreen(), SCH_SHEET_T ), 5 );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

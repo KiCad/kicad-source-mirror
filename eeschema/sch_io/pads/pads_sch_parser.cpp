@@ -24,6 +24,7 @@
 #include <reporter.h>
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <fstream>
 #include <sstream>
@@ -58,6 +59,57 @@ VECTOR2I padsSchArcMidpoint( const VECTOR2I& aStart, const VECTOR2I& aEnd, const
     }
 
     return midPt;
+}
+
+
+// Pulsonix writes the two CAEDECAL font lines without quotes
+static bool isUnquotedFontLine( const std::string& aLine )
+{
+    if( aLine.empty() )
+        return false;
+
+    unsigned char c = static_cast<unsigned char>( aLine[0] );
+
+    if( std::isdigit( c ) || c == '-' || c == '+' || c == '.' || c == '*' || c == '"' )
+        return false;
+
+    std::string keyword = aLine.substr( 0, aLine.find( ' ' ) );
+
+    if( keyword == "OPEN" || keyword == "CLOSED" || keyword == "CIRCLE" || keyword == "COPCLS" )
+        return false;
+
+    // Pin and label records are a T or P followed by a number
+    if( ( c == 'T' || c == 'P' ) && aLine.size() > 1
+        && ( std::isdigit( static_cast<unsigned char>( aLine[1] ) ) || aLine[1] == '-' ) )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+static void readFontLine( const std::vector<std::string>& aLines, size_t& aIdx, std::string& aFont )
+{
+    if( aIdx >= aLines.size() )
+        return;
+
+    const std::string& line = aLines[aIdx];
+
+    if( line.size() >= 2 && line[0] == '"' )
+    {
+        size_t qEnd = line.find( '"', 1 );
+
+        if( qEnd != std::string::npos )
+            aFont = line.substr( 1, qEnd - 1 );
+
+        aIdx++;
+    }
+    else if( isUnquotedFontLine( line ) )
+    {
+        aFont = line;
+        aIdx++;
+    }
 }
 
 
@@ -1053,25 +1105,8 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
     }
 
     // Two optional font-name lines, absent in older formats
-    if( idx < aLines.size() && aLines[idx].size() >= 2 && aLines[idx][0] == '"' )
-    {
-        size_t qEnd = aLines[idx].find( '"', 1 );
-
-        if( qEnd != std::string::npos )
-            aSymbol.font1 = aLines[idx].substr( 1, qEnd - 1 );
-
-        idx++;
-    }
-
-    if( idx < aLines.size() && aLines[idx].size() >= 2 && aLines[idx][0] == '"' )
-    {
-        size_t qEnd = aLines[idx].find( '"', 1 );
-
-        if( qEnd != std::string::npos )
-            aSymbol.font2 = aLines[idx].substr( 1, qEnd - 1 );
-
-        idx++;
-    }
+    readFontLine( aLines, idx, aSymbol.font1 );
+    readFontLine( aLines, idx, aSymbol.font2 );
 
     // Attribute label pairs, each a position line then a name line
     for( int a = 0; a < aSymbol.num_attrs && idx + 1 < aLines.size(); a++ )
