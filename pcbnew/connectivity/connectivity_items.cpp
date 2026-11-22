@@ -396,9 +396,10 @@ int CN_ANCHOR::ConnectedItemsCount() const
     {
         if( item->Parent()->Type() == PCB_ZONE_T )
         {
-            ZONE* zone = static_cast<ZONE*>( item->Parent() );
-
-            if( zone->HitTestFilledArea( item->GetBoardLayer(), Pos() ) )
+            // The connection is to this island, which carries a triangulation index, not to
+            // every island the zone filled on the layer. Testing the whole fill walks every
+            // point of a plane, which the ratsnest asks for twice per airline.
+            if( static_cast<CN_ZONE_LAYER*>( item )->ContainsPoint( Pos() ) )
                 connected_count++;
         }
         else if( item->Parent()->HitTest( Pos() ) )
