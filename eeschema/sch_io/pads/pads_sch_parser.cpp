@@ -1115,9 +1115,28 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
         }
 
         SYMBOL_GRAPHIC graphic;
+        size_t         primitiveLine = idx;
         idx = parseGraphicPrimitive( aLines, idx, graphic );
-        aSymbol.graphics.push_back( graphic );
         idx++;
+
+        // A shape without two points has no extent and breaks item ordering downstream
+        bool needsTwoPoints = graphic.type == GRAPHIC_TYPE::POLYLINE || graphic.type == GRAPHIC_TYPE::RECTANGLE;
+
+        if( needsTwoPoints && graphic.points.size() < 2 )
+        {
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( _( "Skipped graphic on line %llu of symbol '%s' with fewer "
+                                                         "than two points." ),
+                                                      static_cast<unsigned long long>( primitiveLine + 1 ),
+                                                      wxString::FromUTF8( aSymbol.name ) ),
+                                    RPT_SEVERITY_WARNING );
+            }
+
+            continue;
+        }
+
+        aSymbol.graphics.push_back( graphic );
     }
 
     // Embedded text labels sit between graphics and pins. Scan until a T-prefixed pin line; a
