@@ -1375,12 +1375,11 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
 
         board->SetVisibleLayers( aLayers );
 
-        // A retained scene tracks layer visibility itself, so only items on changed layers need
-        // repainting. Holes also depend on whether any physical layer is left.
+        // Only an item on a changed layer can change shape. The exception is the last
+        // physical layer going away, because that changes every hole.
         const bool anyPhysicalBefore = ( before & LSET::PhysicalLayersMask() ).any();
         const bool anyPhysicalAfter = ( aLayers & LSET::PhysicalLayersMask() ).any();
-        const bool narrow = view->GetGAL() && view->GetGAL()->HasRetainedScene()
-                            && anyPhysicalBefore == anyPhysicalAfter;
+        const bool narrow = anyPhysicalBefore == anyPhysicalAfter;
 
         // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
         // they won't be found in the view layer's itemset for repainting.
