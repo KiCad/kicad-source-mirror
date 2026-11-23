@@ -910,7 +910,7 @@ bool PROJECT_FILE::Store()
 
 bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 {
-    wxASSERT( m_project );
+    wxCHECK( m_project, false );
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
 
@@ -930,7 +930,7 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 
 std::string PROJECT_FILE::SerializeToString()
 {
-    wxASSERT( m_project );
+    wxCHECK( m_project, "" );
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
 
