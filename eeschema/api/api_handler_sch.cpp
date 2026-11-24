@@ -72,6 +72,7 @@
 #include <api/common/types/base_types.pb.h>
 #include <libraries/symbol_library_adapter.h>
 #include <project_sch.h>
+#include <sch_rule_area.h>
 #include <trace_helpers.h>
 
 using namespace kiapi::common::commands;
@@ -1496,13 +1497,16 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         {
             // SwapItemData hands the item the temporary's (empty) instance list, so keep the
             // placements to restore afterwards.
-            std::vector<SCH_SYMBOL_INSTANCE> symbolPlacements;
-            std::vector<SCH_SHEET_INSTANCE>  sheetPlacements;
+            std::vector<SCH_SYMBOL_INSTANCE>    symbolPlacements;
+            std::vector<SCH_SHEET_INSTANCE>     sheetPlacements;
+            std::vector<SCH_RULE_AREA_INSTANCE> ruleAreaPlacements;
 
             if( existingItem->Type() == SCH_SYMBOL_T )
                 symbolPlacements = static_cast<SCH_SYMBOL*>( existingItem )->GetInstances();
             else if( existingItem->Type() == SCH_SHEET_T )
                 sheetPlacements = static_cast<SCH_SHEET*>( existingItem )->GetInstances();
+            else if( existingItem->Type() == SCH_RULE_AREA_T )
+                ruleAreaPlacements = static_cast<SCH_RULE_AREA*>( existingItem )->GetInstances();
 
             // A refused request must not leave the swapped data behind
             if( existingItem->Type() == SCH_SYMBOL_T
@@ -1520,6 +1524,12 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             {
                 existingItem->SetConnectivityDirty();
                 connectivityChanged = true;
+            }
+
+            if( existingItem->Type() == SCH_RULE_AREA_T )
+            {
+                for( const SCH_RULE_AREA_INSTANCE& placement : ruleAreaPlacements )
+                    static_cast<SCH_RULE_AREA*>( existingItem )->AddInstance( placement );
             }
 
             if( existingItem->Type() == SCH_SYMBOL_T )

@@ -213,7 +213,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         {
             SYMBOL* symbol = pin->GetParentSymbol();
 
-            if( symbol && !symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
+            if( symbol && !excludedFromBoard( symbol, sheet ) )
                 net_record->m_Nodes.emplace_back( pin, sheet );
         }
     }

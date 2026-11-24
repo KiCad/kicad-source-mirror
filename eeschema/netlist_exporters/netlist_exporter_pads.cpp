@@ -139,33 +139,8 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
         for( const EXPORT_NET& net : m_exportNets )
             allNets.emplace_back( net.name, net.pins );
 
-        for( auto& [netName, sortedItems] : allNets )
-        {
-            // Netlist ordering: Net name, then ref des, then pin name (intra-net)
-            std::sort( sortedItems.begin(), sortedItems.end(),
-                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                    {
-                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                        if( ref_a == ref_b )
-                            return a.first->GetShownNumber() < b.first->GetShownNumber();
-
-                        return ref_a < ref_b;
-                    } );
-
-            // Remove duplicates across subgraphs for multi-unit parts
-            sortedItems.erase( std::unique( sortedItems.begin(), sortedItems.end(),
-                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                    {
-                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                        return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
-                    } ),
-                    sortedItems.end() );
-
-        }
+        for( auto& net : allNets )
+            prepareBoardNetNodes( net.second );
 
         // Sort nets by name (inter-net ordering) for deterministic output
         std::sort( allNets.begin(), allNets.end(),

@@ -39,6 +39,7 @@
 #include <connection_graph.h>
 #include <sch_label.h>
 #include <sch_line.h>
+#include <sch_rule_area.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <set>
@@ -228,6 +229,38 @@ BOOST_AUTO_TEST_CASE( RejectedSheetUpdateLeavesNoChanges )
     BOOST_CHECK_EQUAL( original->GetName(), originalName );
     BOOST_CHECK_EQUAL( child.GetPageNumber(), originalPage );
     BOOST_CHECK( !model->HasVariant( wxS( "rejected-variant" ) ) );
+}
+
+
+// The API carries no rule area instances, so an update must not wipe them
+BOOST_AUTO_TEST_CASE( RuleAreaUpdateKeepsVariants )
+{
+    SCHEMATIC*      model = loadSchematic( wxS( "api_kitchen_sink" ) );
+    API_HANDLER_SCH handler( m_context );
+    SCH_SHEET_PATH  root = model->Hierarchy()[0];
+    SCH_RULE_AREA*  area = nullptr;
+
+    for( SCH_ITEM* item : root.LastScreen()->Items().OfType( SCH_RULE_AREA_T ) )
+        area = static_cast<SCH_RULE_AREA*>( item );
+
+    BOOST_REQUIRE( area );
+    area->SetDNP( !area->GetDNP(), &root, wxS( "V1" ) );
+    BOOST_REQUIRE( area->HasVariantDifferentials() );
+
+    commands::UpdateItems command;
+    *command.mutable_header()->mutable_document() = makeDocument( *model );
+    area->Serialize( *command.add_items() );
+    ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+    API_RESULT result = handler.Handle( request );
+    BOOST_REQUIRE( result.has_value() );
+
+    commands::UpdateItemsResponse response;
+    BOOST_REQUIRE( result->message().UnpackTo( &response ) );
+    BOOST_REQUIRE_EQUAL( response.updated_items_size(), 1 );
+    BOOST_CHECK_EQUAL( response.updated_items( 0 ).status().code(), commands::ISC_OK );
+    BOOST_CHECK( area->GetDNP( &root, wxS( "V1" ) ) != area->GetDNP() );
 }
 
 

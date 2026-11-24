@@ -351,6 +351,7 @@ const SPICE_ITEM* NETLIST_EXPORTER_SPICE::FindItem( const wxString& aRefName ) c
 void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
 {
     wxString text;
+    wxString variant = m_schematic->GetCurrentVariant();
 
     m_directives.clear();
 
@@ -358,7 +359,7 @@ void NETLIST_EXPORTER_SPICE::ReadDirectives( unsigned aNetlistOptions )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
-            if( item->ResolveExcludedFromSim() )
+            if( item->ResolveExcludedFromSim( &sheet, variant ) )
                 continue;
 
             if( item->Type() == SCH_TEXT_T )

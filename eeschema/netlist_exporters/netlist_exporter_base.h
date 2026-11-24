@@ -187,7 +187,8 @@ protected:
      * Power symbols and virtual symbols that have their reference designators starting with
      * '#' are skipped.
      */
-    std::vector<PIN_INFO> CreatePinList( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath );
+    std::vector<PIN_INFO> CreatePinList( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath,
+                                         const EXPORT_EXCLUSION& aExcluded = nullptr );
 
     /**
      * Check if the given symbol should be processed for netlisting.
@@ -212,6 +213,17 @@ protected:
      * @return the exclusion of footprint exporters, which leave out symbols excluded from the board.
      */
     EXPORT_EXCLUSION boardExclusion() const;
+
+    /**
+     * @return true if the symbol, its rule areas, or a sheet above it excludes it from the board.
+     */
+    bool excludedFromBoard( const SCH_ITEM* aSymbol, const SCH_SHEET_PATH& aSheetPath ) const;
+
+    /**
+     * Drop the board-excluded nodes of a net, then sort the rest by reference and pin number
+     * and remove the duplicates a multi-unit part leaves across subgraphs.
+     */
+    void prepareBoardNetNodes( std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>& aNodes ) const;
 
     /**
      * Erase duplicate pins.
@@ -241,7 +253,7 @@ protected:
      * designator, and for each unit, add all its pins to the sorted pin list.
      */
     void findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, const SCH_SHEET_PATH& aSheetPath,
-                               std::vector<PIN_INFO>& aPins );
+                               std::vector<PIN_INFO>& aPins, const EXPORT_EXCLUSION& aExcluded = nullptr );
 
 protected:
     /// Used for "multiple symbols per package" symbols to avoid processing a lib symbol more than once

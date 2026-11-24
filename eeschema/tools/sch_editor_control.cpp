@@ -83,6 +83,7 @@
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
 #include <sch_shape.h>
+#include <sch_rule_area.h>
 #include <sch_painter.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
@@ -2204,6 +2205,11 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet, const S
 
             updatePastedSymbol( symbol, sheetPath, aClipPath, aForceKeepAnnotations );
         }
+        else if( item->Type() == SCH_RULE_AREA_T )
+        {
+            SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
+            updatePastedRuleArea( ruleArea, std::vector( ruleArea->GetInstances() ), sheetPath, aClipPath );
+        }
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* subsheet = static_cast<SCH_SHEET*>( item );
@@ -2247,6 +2253,26 @@ void SCH_EDITOR_CONTROL::prunePastedSymbolInstances()
         wxCHECK2( symbol, continue );
 
         PrunePastedSymbolInstances( symbol, m_frame->Schematic() );
+    }
+}
+
+
+void SCH_EDITOR_CONTROL::updatePastedRuleArea( SCH_RULE_AREA* aRuleArea,
+                                               const std::vector<SCH_RULE_AREA_INSTANCE>& aClipInstances,
+                                               const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath )
+{
+    wxCHECK( m_frame && aRuleArea, /* void */ );
+
+    for( const SCH_RULE_AREA_INSTANCE& tmp : aClipInstances )
+    {
+        if( ( tmp.m_Path.empty() && aClipPath.empty() ) || ( !aClipPath.empty() && tmp.m_Path.EndsWith( aClipPath ) ) )
+        {
+            SCH_RULE_AREA_INSTANCE newInstance = tmp;
+            newInstance.m_Path = aPastePath.Path();
+            newInstance.m_ProjectName = m_frame->Prj().GetProjectName();
+            aRuleArea->AddInstance( newInstance );
+            return;
+        }
     }
 }
 
@@ -2790,6 +2816,26 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             {
                 destItem->SetConnectivityDirty( true );
                 destItem->SetLastResolvedState( srcItem );
+            }
+
+            if( item->Type() == SCH_RULE_AREA_T )
+            {
+                SCH_RULE_AREA*                      ruleArea = static_cast<SCH_RULE_AREA*>( item );
+                std::vector<SCH_RULE_AREA_INSTANCE> clipInstances = ruleArea->GetInstances();
+
+                // Keep only instances of the sheets pasted onto, letting the copied sheet's override any
+                ruleArea->ClearInstances();
+
+                for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
+                {
+                    if( auto it = std::ranges::find( clipInstances, sheetPath.Path(), &SCH_RULE_AREA_INSTANCE::m_Path );
+                        it != clipInstances.end() )
+                    {
+                        ruleArea->AddInstance( *it );
+                    }
+
+                    updatePastedRuleArea( ruleArea, clipInstances, sheetPath, clipPath );
+                }
             }
 
             // Pasted named groups need a unique name, the multichannel tool matches groups by name.

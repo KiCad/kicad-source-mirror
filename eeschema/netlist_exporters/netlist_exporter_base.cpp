@@ -286,8 +286,49 @@ EXPORT_EXCLUSION NETLIST_EXPORTER_BASE::boardExclusion() const
 {
     return [this]( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheet )
            {
-               return aSymbol->GetExcludedFromBoard( &aSheet, m_exportVariant );
+               return excludedFromBoard( aSymbol, aSheet );
            };
+}
+
+
+bool NETLIST_EXPORTER_BASE::excludedFromBoard( const SCH_ITEM* aSymbol, const SCH_SHEET_PATH& aSheetPath ) const
+{
+    return aSheetPath.GetExcludedFromBoard( m_exportVariant )
+           || aSymbol->ResolveExcludedFromBoard( &aSheetPath, m_exportVariant );
+}
+
+
+void NETLIST_EXPORTER_BASE::prepareBoardNetNodes( std::vector<std::pair<SCH_PIN*, SCH_SHEET_PATH>>& aNodes ) const
+{
+    using NODE = std::pair<SCH_PIN*, SCH_SHEET_PATH>;
+
+    // Excluded first, so an excluded unit's duplicate cannot displace an included pin
+    std::erase_if( aNodes,
+                   [this]( const NODE& aNode )
+                   {
+                       return excludedFromBoard( aNode.first->GetParentSymbol(), aNode.second );
+                   } );
+
+    std::sort( aNodes.begin(), aNodes.end(),
+               []( const NODE& a, const NODE& b )
+               {
+                   wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                   wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
+
+                   if( ref_a == ref_b )
+                       return a.first->GetShownNumber() < b.first->GetShownNumber();
+
+                   return ref_a < ref_b;
+               } );
+
+    aNodes.erase( std::unique( aNodes.begin(), aNodes.end(),
+                               []( const NODE& a, const NODE& b )
+                               {
+                                   return a.first->GetParentSymbol()->GetRef( &a.second )
+                                                  == b.first->GetParentSymbol()->GetRef( &b.second )
+                                          && a.first->GetShownNumber() == b.first->GetShownNumber();
+                               } ),
+                  aNodes.end() );
 }
 
 
@@ -328,7 +369,8 @@ bool NETLIST_EXPORTER_BASE::packageOwnedElsewhere( const SCH_SYMBOL* aSymbol, co
 }
 
 
-std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath )
+std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath,
+                                                            const EXPORT_EXCLUSION& aExcluded )
 {
     std::vector<PIN_INFO> pins;
 
@@ -355,7 +397,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     {
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
-        findAllUnitsOfSymbol( aSymbol, aSheetPath, pins );
+        findAllUnitsOfSymbol( aSymbol, aSheetPath, pins, aExcluded );
     }
 
     else // GetUnitCount() <= 1 means one part per package
@@ -511,7 +553,7 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
 
 
 void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, const SCH_SHEET_PATH& aSheetPath,
-                                                  std::vector<PIN_INFO>& aPins )
+                                                  std::vector<PIN_INFO>& aPins, const EXPORT_EXCLUSION& aExcluded )
 {
     const wxString ref = aSchSymbol->GetRef( &aSheetPath );
 
@@ -522,6 +564,9 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, const 
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( symbol->GetRef( &sheet ).CmpNoCase( ref ) != 0 )
+                continue;
+
+            if( aExcluded && aExcluded( symbol, sheet ) )
                 continue;
 
             for( const SCH_PIN* pin : symbol->GetPins( &sheet ) )

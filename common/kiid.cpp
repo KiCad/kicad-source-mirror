@@ -377,24 +377,10 @@ KIID_PATH::KIID_PATH( const wxString& aString )
 
 bool KIID_PATH::MakeRelativeTo( const KIID_PATH& aPath )
 {
-    KIID_PATH copy = *this;
-    clear();
+    if( !IsContainedWithin( aPath ) )
+        return false;
 
-    if( aPath.size() > copy.size() )
-        return false; // this path is not contained within aPath
-
-    for( size_t i = 0; i < aPath.size(); ++i )
-    {
-        if( copy.at( i ) != aPath.at( i ) )
-        {
-            *this = copy;
-            return false; // this path is not contained within aPath
-        }
-    }
-
-    for( size_t i = aPath.size(); i < copy.size(); ++i )
-        push_back( copy.at( i ) );
-
+    erase( begin(), begin() + aPath.size() );
     return true;
 }
 

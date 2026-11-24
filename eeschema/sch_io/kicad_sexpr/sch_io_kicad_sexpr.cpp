@@ -541,7 +541,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
             break;
 
         case SCH_RULE_AREA_T:
-            saveRuleArea( static_cast<SCH_RULE_AREA*>( item ) );
+            saveRuleArea( static_cast<SCH_RULE_AREA*>( item ), *m_schematic, sheets, false );
             break;
 
         case SCH_TEXT_T:
@@ -750,7 +750,8 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
             break;
 
         case SCH_RULE_AREA_T:
-            saveRuleArea( static_cast<SCH_RULE_AREA*>( item ) );
+            saveRuleArea( static_cast<SCH_RULE_AREA*>( item ), aSchematic, sheets, aForClipboard,
+                          aSelectionPath );
             break;
 
         case SCH_TEXT_T:
@@ -1543,7 +1544,9 @@ void SCH_IO_KICAD_SEXPR::saveShape( SCH_SHAPE* aShape )
 }
 
 
-void SCH_IO_KICAD_SEXPR::saveRuleArea( SCH_RULE_AREA* aRuleArea )
+void SCH_IO_KICAD_SEXPR::saveRuleArea( SCH_RULE_AREA* aRuleArea, const SCHEMATIC& aSchematic,
+                                       const SCH_SHEET_LIST& aSheetList, bool aForClipboard,
+                                       const SCH_SHEET_PATH* aRelativePath )
 {
     wxCHECK_RET( aRuleArea != nullptr && m_out != nullptr, "" );
 
@@ -1557,26 +1560,89 @@ void SCH_IO_KICAD_SEXPR::saveRuleArea( SCH_RULE_AREA* aRuleArea )
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aRuleArea->GetExcludedFromBoard() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aRuleArea->GetDNP() );
 
-    for( const auto& [name, variant] : aRuleArea->GetVariants() )
+    // Instances grouped by project, holding only the variants that differ from the base values
+    std::map<KIID, std::vector<SCH_RULE_AREA_INSTANCE>> projectInstances;
+
+    for( const SCH_RULE_AREA_INSTANCE& inst : aRuleArea->GetInstances() )
     {
-        m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
+        KIID_PATH pathToCheck = aSchematic.NormalizeInstancePath( inst.m_Path );
 
-        if( variant.m_DNP != aRuleArea->GetDNP() )
-            KICAD_FORMAT::FormatBool( m_out, "dnp", variant.m_DNP );
+        if( pathToCheck.empty() )
+            continue;
 
-        if( variant.m_ExcludedFromSim != aRuleArea->GetExcludedFromSim() )
-            KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", variant.m_ExcludedFromSim );
+        bool belongsToThisProject = aSchematic.IsInstancePathInProject( pathToCheck );
 
-        if( variant.m_ExcludedFromBOM != aRuleArea->GetExcludedFromBOM() )
-            KICAD_FORMAT::FormatBool( m_out, "in_bom", !variant.m_ExcludedFromBOM );
+        // Keep all instance data on the clipboard since paste may need it
+        if( !aForClipboard && belongsToThisProject && !aSheetList.GetSheetPathByKIIDPath( pathToCheck ) )
+            continue;
 
-        m_out->Print( ")" ); // Closes `variant` token.
+        SCH_RULE_AREA_INSTANCE written = inst;
+
+        std::erase_if( written.m_Variants,
+                       [&]( const auto& aEntry )
+                       {
+                           return !aEntry.second.HasDifferentials( *aRuleArea );
+                       } );
+
+        if( written.m_Variants.empty() )
+            continue;
+
+        if( belongsToThisProject )
+            written.m_ProjectName = aSchematic.Project().GetProjectName();
+
+        if( aForClipboard && aRelativePath )
+            written.m_Path.MakeRelativeTo( aRelativePath->Path() );
+
+        projectInstances[pathToCheck[0]].push_back( std::move( written ) );
+    }
+
+    if( !projectInstances.empty() )
+    {
+        m_out->Print( "(instances" );
+
+        for( auto& [uuid, instances] : projectInstances )
+        {
+            std::sort( instances.begin(), instances.end(),
+                       []( const SCH_RULE_AREA_INSTANCE& aLhs, const SCH_RULE_AREA_INSTANCE& aRhs )
+                       {
+                           return aLhs.m_Path < aRhs.m_Path;
+                       } );
+
+            m_out->Print( "(project %s", m_out->Quotew( instances[0].m_ProjectName ).c_str() );
+
+            for( const SCH_RULE_AREA_INSTANCE& instance : instances )
+            {
+                m_out->Print( "(path %s", m_out->Quotew( instance.m_Path.AsString() ).c_str() );
+
+                for( const auto& [name, variant] : instance.m_Variants )
+                {
+                    m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
+
+                    if( variant.m_DNP != aRuleArea->GetDNP() )
+                        KICAD_FORMAT::FormatBool( m_out, "dnp", variant.m_DNP );
+
+                    if( variant.m_ExcludedFromSim != aRuleArea->GetExcludedFromSim() )
+                        KICAD_FORMAT::FormatBool( m_out, "exclude_from_sim", variant.m_ExcludedFromSim );
+
+                    if( variant.m_ExcludedFromBOM != aRuleArea->GetExcludedFromBOM() )
+                        KICAD_FORMAT::FormatBool( m_out, "in_bom", !variant.m_ExcludedFromBOM );
+
+                    m_out->Print( ")" );
+                }
+
+                m_out->Print( ")" );
+            }
+
+            m_out->Print( ")" );
+        }
+
+        m_out->Print( ")" ); // Closes `instances`.
     }
 
     saveShape( aRuleArea );
 
     KICAD_FORMAT::FormatCustomProperties( m_out, *aRuleArea );
-    m_out->Print( ")" ); // Closes `rule_area`.
+    m_out->Print( ")" );
 }
 
 

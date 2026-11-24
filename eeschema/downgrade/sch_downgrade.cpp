@@ -30,6 +30,8 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <tuple>
+#include <unordered_set>
 #include <vector>
 
 #include <base_units.h>
@@ -83,10 +85,11 @@ static constexpr int SCH_VER_ALTERNATE_SYMBOLS = 20260722;
 static constexpr int SCH_VER_CUSTOM_PROPERTIES = 20260830;
 static constexpr int SCH_VER_IMAGE_ROTATION = 20261025;
 static constexpr int SCH_VER_IMAGE_OPACITY = 20261025;
+static constexpr int SCH_VER_RULE_AREA_VARIANTS = 20261113;
 
 // The formats this feature was built for. If a version moves past its constant, a new feature
 // landed and the rules or denylist may be stale. Review the keywords, then update these.
-static constexpr int SCH_DOWNGRADE_COVERED = 20261106;
+static constexpr int SCH_DOWNGRADE_COVERED = 20261113;
 static constexpr int SYMLIB_DOWNGRADE_COVERED = 20261106;
 
 
@@ -879,6 +882,24 @@ static void dropRuleAreaFlags( SCH_SCREEN* aScreen )
         area->SetExcludedFromBOM( false );
         area->SetExcludedFromBoard( false );
     }
+}
+
+
+static int countRuleAreaVariants( const SCH_SCREEN* aScreen )
+{
+    int count = 0;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_RULE_AREA_T ) )
+        count += static_cast<const SCH_RULE_AREA*>( item )->HasVariantDifferentials();
+
+    return count;
+}
+
+
+static void dropRuleAreaVariants( SCH_SCREEN* aScreen )
+{
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_RULE_AREA_T ) )
+        static_cast<SCH_RULE_AREA*>( item )->ClearInstances();
 }
 
 
@@ -2131,6 +2152,10 @@ static std::vector<SCREEN_RULE> screenRules()
         { SCH_VER_LOCAL_POWER, DOWNGRADE_BUCKET::BLOCK, _( "Local power symbols" ),
           _( "The target would treat it as global power and merge nets across sheets." ),
           countLocalPowerSymbols, nullptr, countSymbolLocalPower },
+        { SCH_VER_RULE_AREA_VARIANTS, DOWNGRADE_BUCKET::DROP, _( "Rule area variants" ),
+          _( "Variant-specific DNP and exclusion flags on rule areas are removed. The base flags apply in every "
+             "variant." ),
+          countRuleAreaVariants, dropRuleAreaVariants },
         { SCH_VER_RULE_AREA_FLAGS, DOWNGRADE_BUCKET::DROP, _( "Rule area flags" ),
           _( "DNP and exclusion flags on rule areas are removed." ),
           countRuleAreaFlags, dropRuleAreaFlags },
@@ -2250,6 +2275,24 @@ COMPATIBILITY_REPORT ClassifySchematicStructureForDowngrade( const SCHEMATIC&   
             report.Add( DOWNGRADE_BUCKET::BLOCK, _( "Unrepresentable alternate variant symbols" ),
                         _( "The target keeps variants but cannot store a variant's alternate symbol, so the "
                            "variant would resolve to the base symbol." ),
+                        count );
+        }
+    }
+
+    // Same for rule area variants, whose items would follow the area's base flags
+    if( aTarget.m_schVersion >= SCH_VER_VARIANTS && aTarget.m_schVersion < SCH_VER_RULE_AREA_VARIANTS )
+    {
+        SCH_SCREENS screens( aSchematic.Root() );
+        int         count = 0;
+
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            count += countRuleAreaVariants( screen );
+
+        if( count > 0 )
+        {
+            report.Add( DOWNGRADE_BUCKET::BLOCK, _( "Unrepresentable rule area variants" ),
+                        _( "The target keeps variants but cannot store a rule area's variant flags, so the items "
+                           "in the area would follow its base flags in every variant." ),
                         count );
         }
     }
@@ -2466,9 +2509,19 @@ struct SYMBOL_VARIANT_SNAPSHOT
     std::map<wxString, wxString> m_fieldOverrides;
     PIN_MAP_INSTANCE_OVERRIDE    m_pinMap;
     std::optional<LIB_ID>        m_symbolOverride;
-    LIB_SYMBOL*                  m_alternate = nullptr;
 
-    bool operator==( const SYMBOL_VARIANT_SNAPSHOT& ) const = default;
+    // Owned because the symbol's variant cache is cleared while the hierarchy is walked
+    std::shared_ptr<LIB_SYMBOL> m_alternate;
+
+    // m_symbolOverride already names the alternate, so its copy takes no part
+    bool operator==( const SYMBOL_VARIANT_SNAPSHOT& aOther ) const
+    {
+        return std::tie( m_dnp, m_excludedFromSim, m_excludedFromBOM, m_excludedFromBoard, m_excludedFromPosFiles,
+                         m_fieldOverrides, m_pinMap, m_symbolOverride )
+               == std::tie( aOther.m_dnp, aOther.m_excludedFromSim, aOther.m_excludedFromBOM,
+                            aOther.m_excludedFromBoard, aOther.m_excludedFromPosFiles, aOther.m_fieldOverrides,
+                            aOther.m_pinMap, aOther.m_symbolOverride );
+    }
 };
 
 
@@ -2477,11 +2530,12 @@ static SYMBOL_VARIANT_SNAPSHOT snapshotSymbol( const SCH_SYMBOL* aSymbol, const 
 {
     SYMBOL_VARIANT_SNAPSHOT snap;
 
-    snap.m_dnp = aSymbol->GetDNP( &aPath, aVariantName );
-    snap.m_excludedFromSim = aSymbol->GetExcludedFromSim( &aPath, aVariantName );
-    snap.m_excludedFromBOM = aSymbol->GetExcludedFromBOM( &aPath, aVariantName );
-    snap.m_excludedFromBoard = aSymbol->GetExcludedFromBoard( &aPath, aVariantName );
-    snap.m_excludedFromPosFiles = aSymbol->GetExcludedFromPosFiles( &aPath, aVariantName );
+    // Resolved values include the containing rule areas, which a target without them would lose
+    snap.m_dnp = aSymbol->ResolveDNP( &aPath, aVariantName );
+    snap.m_excludedFromSim = aSymbol->ResolveExcludedFromSim( &aPath, aVariantName );
+    snap.m_excludedFromBOM = aSymbol->ResolveExcludedFromBOM( &aPath, aVariantName );
+    snap.m_excludedFromBoard = aSymbol->ResolveExcludedFromBoard( &aPath, aVariantName );
+    snap.m_excludedFromPosFiles = aSymbol->ResolveExcludedFromPosFiles( &aPath, aVariantName );
     snap.m_pinMap = aSymbol->GetPinMapOverride( &aPath, aVariantName );
 
     for( const SCH_SYMBOL_INSTANCE& instance : aSymbol->GetInstances() )
@@ -2499,7 +2553,10 @@ static SYMBOL_VARIANT_SNAPSHOT snapshotSymbol( const SCH_SYMBOL* aSymbol, const 
 
     if( snap.m_symbolOverride && *snap.m_symbolOverride != aSymbol->GetLibId() && aSymbol->Schematic()
         && aSymbol->Schematic()->IsValid() )
-        snap.m_alternate = aSymbol->GetVariantLibSymbol( aVariantName, aPath );
+    {
+        if( LIB_SYMBOL* alternate = aSymbol->GetVariantLibSymbol( aVariantName, aPath ) )
+            snap.m_alternate = alternate->Flatten();
+    }
 
     // The native resolver includes alternate-library values and explicit empty overrides.
     for( const SCH_FIELD& field : aSymbol->GetFields() )
@@ -2530,10 +2587,11 @@ static SHEET_VARIANT_SNAPSHOT snapshotSheet( const SCH_SHEET* aSheet, const SCH_
 {
     SHEET_VARIANT_SNAPSHOT snap;
 
-    snap.m_dnp = aSheet->GetDNP( &aPath, aVariantName );
-    snap.m_excludedFromSim = aSheet->GetExcludedFromSim( &aPath, aVariantName );
-    snap.m_excludedFromBOM = aSheet->GetExcludedFromBOM( &aPath, aVariantName );
-    snap.m_excludedFromBoard = aSheet->GetExcludedFromBoard( &aPath, aVariantName );
+    // Resolved values include the containing rule areas, which a target without them would lose
+    snap.m_dnp = aSheet->ResolveDNP( &aPath, aVariantName );
+    snap.m_excludedFromSim = aSheet->ResolveExcludedFromSim( &aPath, aVariantName );
+    snap.m_excludedFromBOM = aSheet->ResolveExcludedFromBOM( &aPath, aVariantName );
+    snap.m_excludedFromBoard = aSheet->ResolveExcludedFromBoard( &aPath, aVariantName );
 
     for( const SCH_SHEET_INSTANCE& instance : aSheet->GetInstances() )
     {
@@ -2552,18 +2610,31 @@ static SHEET_VARIANT_SNAPSHOT snapshotSheet( const SCH_SHEET* aSheet, const SCH_
 }
 
 
-bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantName, wxString* aConflict )
+// Snapshot every symbol and sheet, failing on what the base attributes cannot hold
+static bool snapshotHierarchy( SCHEMATIC& aSchematic, const SCH_SHEET_LIST& aSheetList, const wxString& aVariantName,
+                               std::map<SCH_SYMBOL*, SYMBOL_VARIANT_SNAPSHOT>& aSymbols,
+                               std::map<SCH_SHEET*, SHEET_VARIANT_SNAPSHOT>& aSheets,
+                               std::map<SCH_SYMBOL*, SCH_SCREEN*>& aScreens, wxString* aConflict )
 {
-    std::map<SCH_SYMBOL*, SYMBOL_VARIANT_SNAPSHOT> symbols;
-    std::map<SCH_SHEET*, SHEET_VARIANT_SNAPSHOT>   sheets;
-    std::map<SCH_SYMBOL*, SCH_SCREEN*>             screens;
-
-    for( const SCH_SHEET_PATH& path : aSchematic.BuildUnorderedSheetList() )
+    for( const SCH_SHEET_PATH& path : aSheetList )
     {
         SCH_SCREEN* screen = path.LastScreen();
 
         if( !screen )
             continue;
+
+        // Symbol containment follows the instance's variant geometry
+        aSchematic.SetCurrentSheet( path );
+        std::vector<SCH_ITEM*> items( screen->Items().begin(), screen->Items().end() );
+
+        for( SCH_ITEM* item : items )
+        {
+            item->ClearCaches();
+            screen->UpdateDisplayBounds( item );
+        }
+
+        std::unordered_set<SCH_SCREEN*> pathScreen{ screen };
+        SCH_RULE_AREA::UpdateRuleAreasInScreens( pathScreen, nullptr );
 
         for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
@@ -2583,8 +2654,8 @@ bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantNam
                 return false;
             }
 
-            auto [it, inserted] = symbols.emplace( symbol, snap );
-            screens.emplace( symbol, screen );
+            auto [it, inserted] = aSymbols.emplace( symbol, snap );
+            aScreens.emplace( symbol, screen );
 
             // A symbol shared between sheet instances must resolve the same everywhere, or
             // the single set of base attributes cannot hold the result.
@@ -2601,9 +2672,13 @@ bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantNam
 
         if( SCH_SHEET* sheet = path.Last() )
         {
-            SHEET_VARIANT_SNAPSHOT snap = snapshotSheet( sheet, path, aVariantName );
+            // A sheet's instance is keyed by its parent's path, as in SCH_SHEET_PATH::GetDNP()
+            SCH_SHEET_PATH parentPath = path;
+            parentPath.pop_back();
 
-            auto [it, inserted] = sheets.emplace( sheet, snap );
+            SHEET_VARIANT_SNAPSHOT snap = snapshotSheet( sheet, parentPath, aVariantName );
+
+            auto [it, inserted] = aSheets.emplace( sheet, snap );
 
             if( !inserted && !( it->second == snap ) )
             {
@@ -2616,6 +2691,41 @@ bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantNam
             }
         }
     }
+
+    return true;
+}
+
+
+bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantName, wxString* aConflict )
+{
+    std::map<SCH_SYMBOL*, SYMBOL_VARIANT_SNAPSHOT> symbols;
+    std::map<SCH_SHEET*, SHEET_VARIANT_SNAPSHOT>   sheets;
+    std::map<SCH_SYMBOL*, SCH_SCREEN*>             screens;
+
+    SCH_SHEET_LIST                  sheetList = aSchematic.BuildUnorderedSheetList();
+    std::unordered_set<SCH_SCREEN*> allScreens;
+
+    for( const SCH_SHEET_PATH& path : sheetList )
+    {
+        if( SCH_SCREEN* screen = path.LastScreen() )
+            allScreens.insert( screen );
+    }
+
+    const SCH_SHEET_PATH savedSheet = aSchematic.CurrentSheet();
+    const wxString       savedVariant = aSchematic.GetCurrentVariant();
+
+    aSchematic.SetCurrentVariant( aVariantName );
+
+    // A CLI load has no containment yet, and a sheet's comes from its parent's screen
+    SCH_RULE_AREA::UpdateRuleAreasInScreens( allScreens, nullptr );
+
+    const bool snapshotted =
+            snapshotHierarchy( aSchematic, sheetList, aVariantName, symbols, sheets, screens, aConflict );
+    aSchematic.SetCurrentVariant( savedVariant );
+    aSchematic.SetCurrentSheet( savedSheet );
+
+    if( !snapshotted )
+        return false;
 
     for( auto& [symbol, snap] : symbols )
     {
@@ -2667,6 +2777,13 @@ bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantNam
                     field.SetText( value );
             }
         }
+    }
+
+    // The baked symbols and sheets now carry each rule area's effect, so the areas must not add it again
+    for( SCH_SCREEN* screen : allScreens )
+    {
+        dropRuleAreaVariants( screen );
+        dropRuleAreaFlags( screen );
     }
 
     for( auto& [sheet, snap] : sheets )

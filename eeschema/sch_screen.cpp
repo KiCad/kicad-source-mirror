@@ -2059,10 +2059,11 @@ std::set<wxString> SCH_SCREEN::GetVariantNames() const
     {
         const SCH_RULE_AREA* ruleArea = static_cast<const SCH_RULE_AREA*>( item );
 
-        wxCHECK2( ruleArea, continue );
-
-        for( const auto& [name, variant] : ruleArea->GetVariants() )
-            variantNames.emplace( name );
+        for( const SCH_RULE_AREA_INSTANCE& instance : ruleArea->GetInstances() )
+        {
+            for( const auto& [name, variant] : instance.m_Variants )
+                variantNames.emplace( name );
+        }
     }
 
     return variantNames;
@@ -2116,8 +2117,6 @@ void SCH_SCREEN::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommi
     for( SCH_ITEM* item : Items().OfType( SCH_RULE_AREA_T ) )
     {
         SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
-
-        wxCHECK2( ruleArea, continue );
 
         if( ruleArea->HasVariant( aVariantName ) )
         {
@@ -2179,8 +2178,6 @@ void SCH_SCREEN::RenameVariant( const wxString& aOldName, const wxString& aNewNa
     {
         SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
 
-        wxCHECK2( ruleArea, continue );
-
         if( ruleArea->HasVariant( aOldName ) )
         {
             if( aCommit )
@@ -2240,8 +2237,6 @@ void SCH_SCREEN::CopyVariant( const wxString& aSourceVariant, const wxString& aN
     for( SCH_ITEM* item : Items().OfType( SCH_RULE_AREA_T ) )
     {
         SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
-
-        wxCHECK2( ruleArea, continue );
 
         if( ruleArea->HasVariant( aSourceVariant ) )
         {

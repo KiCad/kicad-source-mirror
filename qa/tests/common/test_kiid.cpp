@@ -207,4 +207,15 @@ BOOST_AUTO_TEST_CASE( FromDeterministicStringPinnedOutput )
 }
 
 
+// A path the base does not contain must come back unchanged, also when it is the shorter one
+BOOST_AUTO_TEST_CASE( MakeRelativeToKeepsUncontainedPath )
+{
+    KIID_PATH base( wxS( "/00000000-0000-0000-0000-000000000001/00000000-0000-0000-0000-000000000002" ) );
+    KIID_PATH path( wxS( "/00000000-0000-0000-0000-000000000001" ) );
+
+    BOOST_CHECK( !path.MakeRelativeTo( base ) );
+    BOOST_CHECK( path.AsString() == wxS( "/00000000-0000-0000-0000-000000000001" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

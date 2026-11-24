@@ -29,6 +29,8 @@
 class SCH_EDIT_FRAME;
 class SCH_SCREEN;
 class LIB_SYMBOL;
+class SCH_RULE_AREA;
+struct SCH_RULE_AREA_INSTANCE;
 
 /**
  * Handle actions specific to the schematic editor.
@@ -231,6 +233,9 @@ private:
                                       const KIID_PATH& aClipPath, bool aForceKeepAnnotations,
                                       SCH_SHEET_LIST* aPastedSheets,
                                       std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST>& aPastedSymbols );
+
+    void updatePastedRuleArea( SCH_RULE_AREA* aRuleArea, const std::vector<SCH_RULE_AREA_INSTANCE>& aClipInstances,
+                               const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath );
 
     /**
      * Reconcile every pasted symbol's instances against the current project.

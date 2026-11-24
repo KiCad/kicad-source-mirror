@@ -152,34 +152,8 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
         for( const EXPORT_NET& net : m_exportNets )
             all_nets.emplace_back( wxString::Format( "\"%s\"", net.name ), net.pins );
 
-        for( auto& [netName, sorted_items] : all_nets )
-        {
-            // Intra-net ordering: Ref des, then pin name
-            std::sort( sorted_items.begin(), sorted_items.end(),
-                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                    {
-                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                        if( ref_a == ref_b )
-                            return a.first->GetShownNumber() < b.first->GetShownNumber();
-
-                        return ref_a < ref_b;
-                    } );
-
-            // Some duplicates can exist, for example on multi-unit parts with duplicated
-            // pins across units.  If the user connects the pins on each unit, they will
-            // appear on separate subgraphs.  Remove those here:
-            sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a, const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
-                    {
-                        wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
-                        wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
-
-                        return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
-                    } ),
-                    sorted_items.end() );
-        }
+        for( auto& net : all_nets )
+            prepareBoardNetNodes( net.second );
 
         // Inter-net ordering by net name
         std::sort( all_nets.begin(), all_nets.end(),

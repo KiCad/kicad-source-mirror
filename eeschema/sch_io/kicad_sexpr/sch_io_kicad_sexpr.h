@@ -164,7 +164,8 @@ private:
     void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry );
     void saveLine( SCH_LINE* aLine );
     void saveShape( SCH_SHAPE* aShape );
-    void saveRuleArea( SCH_RULE_AREA* aRuleArea );
+    void saveRuleArea( SCH_RULE_AREA* aRuleArea, const SCHEMATIC& aSchematic, const SCH_SHEET_LIST& aSheetList,
+                       bool aForClipboard, const SCH_SHEET_PATH* aRelativePath = nullptr );
     void saveText( SCH_TEXT* aText );
     void saveTextBox( SCH_TEXTBOX* aText );
     void saveTable( SCH_TABLE* aTable );

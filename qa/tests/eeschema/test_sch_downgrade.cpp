@@ -456,11 +456,8 @@ BOOST_AUTO_TEST_CASE( SheetVariantFlattenedIntoSchematic )
     child->AddField( SCH_FIELD( child, FIELD_T::SHEET_USER, wxT( "Note" ) ) );
     child->GetFields().back().SetText( wxT( "base note" ) );
 
-    SCH_SHEET_PATH childPath = rootPath;
-    childPath.push_back( child );
-
     SCH_SHEET_INSTANCE instance;
-    instance.m_Path = childPath.Path();
+    instance.m_Path = rootPath.Path();
 
     SCH_SHEET_VARIANT variant( wxT( "V1" ) );
     variant.InitializeAttributes( *child );

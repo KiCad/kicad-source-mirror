@@ -348,23 +348,9 @@ bool SCH_EDIT_TOOL::Init()
                     switch( item->Type() )
                     {
                     case SCH_SYMBOL_T:
-                        if( static_cast<const SCH_SYMBOL*>( item )->GetDNP( sheet, variant ) )
-                            checked++;
-                        else
-                            unchecked++;
-
-                        break;
-
                     case SCH_SHEET_T:
-                        if( static_cast<const SCH_SHEET*>( item )->GetDNP( sheet, variant ) )
-                            checked++;
-                        else
-                            unchecked++;
-
-                        break;
-
                     case SCH_RULE_AREA_T:
-                        if( static_cast<const SCH_RULE_AREA*>( item )->GetDNP( sheet, variant ) )
+                        if( static_cast<const SCH_ITEM*>( item )->GetDNP( sheet, variant ) )
                             checked++;
                         else
                             unchecked++;
@@ -392,23 +378,9 @@ bool SCH_EDIT_TOOL::Init()
                     switch( item->Type() )
                     {
                     case SCH_SYMBOL_T:
-                        if( static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromSim( sheet, variant ) )
-                            checked++;
-                        else
-                            unchecked++;
-
-                        break;
-
                     case SCH_SHEET_T:
-                        if( static_cast<const SCH_SHEET*>( item )->GetExcludedFromSim( sheet, variant ) )
-                            checked++;
-                        else
-                            unchecked++;
-
-                        break;
-
                     case SCH_RULE_AREA_T:
-                        if( static_cast<const SCH_RULE_AREA*>( item )->GetExcludedFromSim( sheet, variant ) )
+                        if( static_cast<const SCH_ITEM*>( item )->GetExcludedFromSim( sheet, variant ) )
                             checked++;
                         else
                             unchecked++;
@@ -436,23 +408,9 @@ bool SCH_EDIT_TOOL::Init()
                     switch( item->Type() )
                     {
                     case SCH_SYMBOL_T:
-                        if( static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromBOM( sheet, variant ) )
-                            checked++;
-                        else
-                            unchecked++;
-
-                        break;
-
                     case SCH_SHEET_T:
-                        if( static_cast<const SCH_SHEET*>( item )->GetExcludedFromBOM( sheet, variant ) )
-                            checked++;
-                        else
-                            unchecked++;
-
-                        break;
-
                     case SCH_RULE_AREA_T:
-                        if( static_cast<const SCH_RULE_AREA*>( item )->GetExcludedFromBOM( sheet, variant ) )
+                        if( static_cast<const SCH_ITEM*>( item )->GetExcludedFromBOM( sheet, variant ) )
                             checked++;
                         else
                             unchecked++;

@@ -29,6 +29,7 @@
 #include <sch_marker.h>
 #include <sch_label.h>
 #include <sch_shape.h>
+#include <sch_rule_area.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
@@ -374,7 +375,7 @@ bool SCH_SHEET_PATH::GetExcludedFromSim() const
 {
     for( SCH_SHEET* sheet : m_sheets )
     {
-        if( sheet->GetExcludedFromSim() )
+        if( sheet->ResolveExcludedFromSim() )
             return true;
     }
 
@@ -394,7 +395,7 @@ bool SCH_SHEET_PATH::GetExcludedFromSim( const wxString& aVariantName ) const
         SCH_SHEET* sheet = copy.Last();
         copy.pop_back();
 
-        if( sheet->GetExcludedFromSim( &copy, aVariantName ) )
+        if( sheet->ResolveExcludedFromSim( &copy, aVariantName ) )
             return true;
     }
 
@@ -406,7 +407,7 @@ bool SCH_SHEET_PATH::GetExcludedFromBOM() const
 {
     for( SCH_SHEET* sheet : m_sheets )
     {
-        if( sheet->GetExcludedFromBOM() )
+        if( sheet->ResolveExcludedFromBOM() )
             return true;
     }
 
@@ -426,7 +427,7 @@ bool SCH_SHEET_PATH::GetExcludedFromBOM( const wxString& aVariantName ) const
         SCH_SHEET* sheet = copy.Last();
         copy.pop_back();
 
-        if( sheet->GetExcludedFromBOM( &copy, aVariantName ) )
+        if( sheet->ResolveExcludedFromBOM( &copy, aVariantName ) )
             return true;
     }
 
@@ -438,7 +439,7 @@ bool SCH_SHEET_PATH::GetExcludedFromBoard() const
 {
     for( SCH_SHEET* sheet : m_sheets )
     {
-        if( sheet->GetExcludedFromBoard() )
+        if( sheet->ResolveExcludedFromBoard() )
             return true;
     }
 
@@ -458,7 +459,7 @@ bool SCH_SHEET_PATH::GetExcludedFromBoard( const wxString& aVariantName ) const
         SCH_SHEET* sheet = copy.Last();
         copy.pop_back();
 
-        if( sheet->GetExcludedFromBoard( &copy, aVariantName ) )
+        if( sheet->ResolveExcludedFromBoard( &copy, aVariantName ) )
             return true;
     }
 
@@ -470,7 +471,7 @@ bool SCH_SHEET_PATH::GetDNP() const
 {
     for( SCH_SHEET* sheet : m_sheets )
     {
-        if( sheet->GetDNP() )
+        if( sheet->ResolveDNP() )
             return true;
     }
 
@@ -490,7 +491,7 @@ bool SCH_SHEET_PATH::GetDNP( const wxString& aVariantName ) const
         SCH_SHEET* sheet = copy.Last();
         copy.pop_back();
 
-        if( sheet->GetDNP( &copy, aVariantName ) )
+        if( sheet->ResolveDNP( &copy, aVariantName ) )
             return true;
     }
 
@@ -928,6 +929,27 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
             newSymbolInstance.m_Reference = symbol->GetField( FIELD_T::REFERENCE )->GetText();
             newSymbolInstance.m_Unit = symbol->GetUnit();
             symbol->AddHierarchicalReference( newSymbolInstance );
+        }
+    }
+
+    // Rule area instances exist only where a variant does, so an unmatched path gets none rather than another's
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_RULE_AREA_T ) )
+    {
+        SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
+
+        for( const SCH_RULE_AREA_INSTANCE& instance : ruleArea->GetInstances() )
+        {
+            bool matches = below.empty() ? instance.m_Path.size() == 1 || instance.m_Path.EndsWith( Path() )
+                                         : instance.m_Path.EndsWith( below );
+
+            if( matches )
+            {
+                SCH_RULE_AREA_INSTANCE newInstance = instance;
+                newInstance.m_Path = newSheetPath.Path();
+                newInstance.m_ProjectName = aProjectName;
+                ruleArea->AddInstance( newInstance );
+                break;
+            }
         }
     }
 }

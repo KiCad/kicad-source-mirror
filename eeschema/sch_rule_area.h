@@ -37,6 +37,13 @@ class SCHEMATIC;
 class SCH_RULE_AREA;
 
 
+/**
+ * Variant information for a rule area.
+ *
+ * Rule area variants are DNP and exclusion differentials against the default rule area values.
+ *
+ * @note #SCH_RULE_AREA::m_excludedFromBoard is immutable across variants, as it is for sheets.
+ */
 class SCH_RULE_AREA_VARIANT : public VARIANT
 {
 public:
@@ -45,9 +52,24 @@ public:
     {
     }
 
-    virtual ~SCH_RULE_AREA_VARIANT() = default;
-
     void InitializeAttributes( const SCH_RULE_AREA& aRuleArea );
+
+    /// Return true if the variant carries any differential against the base rule area values.
+    bool HasDifferentials( const SCH_RULE_AREA& aRuleArea ) const;
+};
+
+
+/**
+ * Rule area variants for one sheet instance of the screen holding the rule area.
+ */
+struct SCH_RULE_AREA_INSTANCE
+{
+    /// Path of the sheet holding the rule area, as for #SCH_SYMBOL_INSTANCE.
+    KIID_PATH m_Path;
+
+    wxString  m_ProjectName;
+
+    std::map<wxString, SCH_RULE_AREA_VARIANT> m_Variants;
 };
 
 
@@ -185,7 +207,7 @@ public:
     bool IsDirectiveLabelOnlyArea() const
     {
         return !m_directives.empty() && !m_DNP && !m_excludedFromSim && !m_excludedFromBOM
-               && !m_excludedFromBoard;
+               && !m_excludedFromBoard && !HasVariantDifferentials();
     }
 
     /// Get the message panel info for the rule area.
@@ -197,22 +219,27 @@ public:
     /// Remove a directive label from this rule area's caches (called when the label is deleted).
     void RemoveDirective( SCH_DIRECTIVE_LABEL* aLabel );
 
-    /// Add or replace a variant definition by name.
-    void AddVariant( const SCH_RULE_AREA_VARIANT& aVariant );
+    const std::vector<SCH_RULE_AREA_INSTANCE>& GetInstances() const { return m_instances; }
 
-    /// Delete a variant definition by name, if it exists.
+    /// Add an instance, replacing any existing instance with the same path.
+    void AddInstance( const SCH_RULE_AREA_INSTANCE& aInstance );
+
+    void ClearInstances() { m_instances.clear(); }
+
+    /// Delete a variant definition from every instance.
     void DeleteVariant( const wxString& aVariantName );
 
-    /// Rename an existing variant definition.
+    /// Rename a variant definition on every instance.
     void RenameVariant( const wxString& aOldName, const wxString& aNewName );
 
-    /// Copy a variant definition to a new name.
+    /// Copy a variant definition to a new name on every instance holding it.
     void CopyVariant( const wxString& aSourceVariant, const wxString& aNewVariant );
 
-    /// Test if a variant definition exists.
-    bool HasVariant( const wxString& aVariantName ) const { return m_Variants.contains( aVariantName ); }
+    /// Test if any instance defines a variant.
+    bool HasVariant( const wxString& aVariantName ) const;
 
-    const std::map<wxString, SCH_RULE_AREA_VARIANT>& GetVariants() const { return m_Variants; }
+    /// Test if any instance holds a variant that resolves differently from the base values.
+    bool HasVariantDifferentials() const;
 
     /// Break the const-contract for the test suite (only)
     std::unordered_set<SCH_ITEM*>& _GetContainedItems() { return m_items; }
@@ -228,14 +255,24 @@ protected:
     /// Reset all item and directive caches, saving the current state first.
     void resetCaches();
 
+    void swapData( SCH_ITEM* aItem ) override;
+
+    SCH_RULE_AREA_INSTANCE*       getInstance( const KIID_PATH& aPath );
+    const SCH_RULE_AREA_INSTANCE* getInstance( const KIID_PATH& aPath ) const;
+
+    bool getVariantAttribute( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName,
+                              bool SCH_RULE_AREA::*aBase, bool SCH_RULE_AREA_VARIANT::*aOverride ) const;
+
+    void setVariantAttribute( bool aValue, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName,
+                              bool SCH_RULE_AREA::*aBase, bool SCH_RULE_AREA_VARIANT::*aOverride );
+
 protected:
     bool          m_excludedFromSim;
     bool          m_excludedFromBOM;
     bool          m_excludedFromBoard;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
 
-    /// Per-variant overrides for attributes keyed by variant name.
-    std::map<wxString, SCH_RULE_AREA_VARIANT> m_Variants;
+    std::vector<SCH_RULE_AREA_INSTANCE> m_instances;
 
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;

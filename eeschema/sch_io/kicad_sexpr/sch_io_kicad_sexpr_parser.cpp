@@ -5284,55 +5284,90 @@ SCH_RULE_AREA* SCH_IO_KICAD_SEXPR_PARSER::parseSchRuleArea()
             parseCustomProperty( ruleArea.get() );
             break;
 
-        case T_variant:
-        {
-            SCH_RULE_AREA_VARIANT variant;
-            variant.InitializeAttributes( *ruleArea );
-
+        case T_instances:
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
                     Expecting( T_LEFT );
 
-                token = NextTok();
+                if( NextTok() != T_project )
+                    Expecting( "project" );
 
-                switch( token )
+                NeedSYMBOL();
+                wxString projectName = FromUTF8();
+
+                for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                 {
-                case T_name:
+                    if( token != T_LEFT )
+                        Expecting( T_LEFT );
+
+                    if( NextTok() != T_path )
+                        Expecting( "path" );
+
+                    SCH_RULE_AREA_INSTANCE instance;
+                    instance.m_ProjectName = projectName;
                     NeedSYMBOL();
-                    variant.m_Name = FromUTF8();
-                    NeedRIGHT();
-                    break;
+                    instance.m_Path = KIID_PATH( FromUTF8() );
 
-                case T_dnp:
-                    variant.m_DNP = parseBool();
-                    NeedRIGHT();
-                    break;
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token != T_LEFT )
+                            Expecting( T_LEFT );
 
-                case T_exclude_from_sim:
-                    variant.m_ExcludedFromSim = parseBool();
-                    NeedRIGHT();
-                    break;
+                        if( NextTok() != T_variant )
+                            Expecting( "variant" );
 
-                case T_in_bom:
-                {
-                    variant.m_ExcludedFromBOM = !parseBool();
-                    NeedRIGHT();
-                    break;
-                }
+                        // Variants store only differentials and the base flags precede the instances
+                        SCH_RULE_AREA_VARIANT variant;
+                        variant.InitializeAttributes( *ruleArea );
 
-                default: Expecting( "name, dnp, exclude_from_sim, or in_bom" );
+                        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                        {
+                            if( token != T_LEFT )
+                                Expecting( T_LEFT );
+
+                            token = NextTok();
+
+                            switch( token )
+                            {
+                            case T_name:
+                                NeedSYMBOL();
+                                variant.m_Name = FromUTF8();
+                                NeedRIGHT();
+                                break;
+
+                            case T_dnp:
+                                variant.m_DNP = parseBool();
+                                NeedRIGHT();
+                                break;
+
+                            case T_exclude_from_sim:
+                                variant.m_ExcludedFromSim = parseBool();
+                                NeedRIGHT();
+                                break;
+
+                            case T_in_bom:
+                                variant.m_ExcludedFromBOM = !parseBool();
+                                NeedRIGHT();
+                                break;
+
+                            default:
+                                Expecting( "name, dnp, exclude_from_sim, or in_bom" );
+                            }
+                        }
+
+                        if( !variant.m_Name.IsEmpty() )
+                            instance.m_Variants[variant.m_Name] = variant;
+                    }
+
+                    ruleArea->AddInstance( instance );
                 }
             }
 
-            if( !variant.m_Name.IsEmpty() )
-                ruleArea->AddVariant( variant );
-
             break;
-        }
 
         default:
-            Expecting( "polyline, exclude_from_sim, on_board, in_bom, dnp, locked, custom_property, or variant" );
+            Expecting( "polyline, exclude_from_sim, on_board, in_bom, dnp, locked, custom_property, or instances" );
         }
     }
 
