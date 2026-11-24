@@ -198,7 +198,9 @@ protected:
 
 #if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
         if( m )
+        {
             wxCHECK( dynamic_cast<T*>( m ), nullptr );
+        }
 #endif
 
         return static_cast<T*>( m );
