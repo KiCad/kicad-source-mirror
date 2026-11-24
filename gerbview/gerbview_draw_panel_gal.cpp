@@ -46,7 +46,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 {
     m_view = new KIGFX::VIEW();
     m_view->SetGAL( m_gal );
-    GetGAL()->SetWorldUnitLength( 1.0/gerbIUScale.IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
+    GetGAL()->SetWorldUnitLength( GBR_WORLD_UNIT );
 
     m_painter = std::make_unique<KIGFX::GERBVIEW_PAINTER>( m_gal );
     m_view->SetPainter( m_painter.get() );
@@ -137,7 +137,7 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     setDefaultLayerDeps();
 
-    GetGAL()->SetWorldUnitLength( 1.0/gerbIUScale.IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
+    GetGAL()->SetWorldUnitLength( GBR_WORLD_UNIT );
 
     return rv;
 }

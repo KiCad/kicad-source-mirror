@@ -869,7 +869,7 @@ bool PCB_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
-    m_gal->SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+    m_gal->SetWorldUnitLength( PCB_WORLD_UNIT );
 
     // Whether the ratsnest is split depends on the canvas
     if( m_ratsnest && ( m_localRatsnest != nullptr ) != m_gal->HasRetainedScene() )

@@ -38,9 +38,6 @@ class SCHEMATIC_TEXT_VAR_ADAPTER;
 class TEXT_VAR_TRACKER;
 
 
-// Eeschema 100nm as the internal units
-constexpr double SCH_WORLD_UNIT ( 1e-7 / 0.0254 );
-
 static const int SCH_LAYER_ORDER[] = { LAYER_GP_OVERLAY,
                                        LAYER_SELECT_OVERLAY,
                                        LAYER_ERC_ERR,

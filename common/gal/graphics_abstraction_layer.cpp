@@ -60,7 +60,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
 
     // this value for SetWorldUnitLength is only suitable for Pcbnew.
     // Other editors/viewer must call SetWorldUnitLength with their internal units
-    SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+    SetWorldUnitLength( PCB_WORLD_UNIT );
 
     // wxDC::GetPPI() reports 96 DPI, but somehow this value
     // is the closest match to the legacy renderer

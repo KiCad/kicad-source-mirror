@@ -224,6 +224,8 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
                                     const std::vector<KIGFX::VIEW_ITEM*>&       aExtraItems,
                                     const std::map<KIID, KICAD_DIFF::CATEGORY>& aCategories )
 {
+    aCanvas.SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+
     auto painter = std::make_unique<PCB_DIFF_PAINTER>( aCanvas.GetGAL(), aOverrides );
     ConfigurePcbDiffContextRenderSettings( *painter->GetSettings(), aColor );
 

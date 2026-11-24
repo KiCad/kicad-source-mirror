@@ -130,6 +130,12 @@ constexpr EDA_IU_SCALE drawSheetIUScale = EDA_IU_SCALE( PL_IU_PER_MM );
 constexpr EDA_IU_SCALE schIUScale = EDA_IU_SCALE( SCH_IU_PER_MM );
 constexpr EDA_IU_SCALE unityScale = EDA_IU_SCALE( 1 );
 
+constexpr double SCH_WORLD_UNIT ( 1.0 / SCH_IU_PER_MM / 25.4 );
+constexpr double PCB_WORLD_UNIT ( 1.0 / PCB_IU_PER_MM / 25.4 );
+constexpr double DRAWING_SHEET_WORLD_UNIT ( 1.0 / PL_IU_PER_MM / 25.4 );
+constexpr double GBR_WORLD_UNIT ( 1.0 / GERB_IU_PER_MM / 25.4 );
+
+
 // Allowed error to approximate an arg by segments, in millimeters
 constexpr double ARC_LOW_DEF_MM = 0.02;
 constexpr double ARC_HIGH_DEF_MM = 0.005;

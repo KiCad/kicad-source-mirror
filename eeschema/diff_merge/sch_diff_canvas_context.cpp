@@ -125,7 +125,6 @@ void ConfigureSchDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, SCHEMATIC* aRef
                                     SCH_SCREEN* aReferenceScreen, SCH_SCREEN* aComparisonScreen,
                                     std::shared_ptr<const void> aOwner )
 {
-    // The canvas defaults to board units, which caps a schematic's zoom a hundredfold too low
     aCanvas.SetWorldUnitLength( SCH_WORLD_UNIT );
     aCanvas.SetContextPainter( MakeSchDiffContextPainter( aCanvas.GetGAL(),
                                                           aReference ? aReference : aComparison,
