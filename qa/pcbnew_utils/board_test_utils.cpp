@@ -514,11 +514,14 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
                            pad->GetLocalSolderPasteMarginRatio().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ),
                            pad->GetLocalClearance().value_or( 0 ) );
-        CHECK_ENUM_CLASS_EQUAL( expected->GetLocalZoneConnection(), pad->GetLocalZoneConnection() );
-        BOOST_CHECK_EQUAL( expected->GetLocalThermalSpokeWidthOverride().value_or( 0 ),
-                           pad->GetLocalThermalSpokeWidthOverride().value_or( 0 ) );
-        BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle(), pad->GetThermalSpokeAngle() );
-        BOOST_CHECK_EQUAL( expected->GetThermalGap(), pad->GetThermalGap() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetLocalZoneConnection( PADSTACK::TEMP_ALL_LAYERS ),
+                                pad->GetLocalZoneConnection( PADSTACK::TEMP_ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetLocalThermalSpokeWidthOverride( PADSTACK::TEMP_ALL_LAYERS ).value_or( 0 ),
+                           pad->GetLocalThermalSpokeWidthOverride( PADSTACK::TEMP_ALL_LAYERS ).value_or( 0 ) );
+        BOOST_CHECK_EQUAL( expected->GetThermalSpokeAngle( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetThermalSpokeAngle( PADSTACK::TEMP_ALL_LAYERS ) );
+        BOOST_CHECK_EQUAL( expected->GetThermalGap( PADSTACK::TEMP_ALL_LAYERS ),
+                           pad->GetThermalGap( PADSTACK::TEMP_ALL_LAYERS ) );
         BOOST_CHECK_EQUAL( expected->GetRoundRectRadiusRatio( PADSTACK::TEMP_ALL_LAYERS ),
                            pad->GetRoundRectRadiusRatio( PADSTACK::TEMP_ALL_LAYERS ) );
         BOOST_CHECK_EQUAL( expected->GetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS ),
@@ -619,8 +622,7 @@ void CheckFpShape( const PCB_SHAPE* expected, const PCB_SHAPE* shape )
         BOOST_CHECK_EQUAL( expected->GetLayerSet(), shape->GetLayerSet() );
 
         BOOST_CHECK_EQUAL( expected->GetStroke().GetWidth(), shape->GetStroke().GetWidth() );
-        CHECK_ENUM_CLASS_EQUAL( expected->GetStroke().GetLineStyle(),
-                                shape->GetStroke().GetLineStyle() );
+        CHECK_ENUM_CLASS_EQUAL( expected->GetStroke().GetLineStyle(), shape->GetStroke().GetLineStyle() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetFillMode(), shape->GetFillMode() );
     }
 }
@@ -637,8 +639,7 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone )
         BOOST_CHECK_EQUAL( expected->GetNetCode(), zone->GetNetCode() );
         BOOST_CHECK_EQUAL( expected->GetAssignedPriority(), zone->GetAssignedPriority() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetPadConnection(), zone->GetPadConnection() );
-        BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ),
-                           zone->GetLocalClearance().value_or( 0 ) );
+        BOOST_CHECK_EQUAL( expected->GetLocalClearance().value_or( 0 ), zone->GetLocalClearance().value_or( 0 ) );
         BOOST_CHECK_EQUAL( expected->GetMinThickness(), zone->GetMinThickness() );
 
         BOOST_CHECK_EQUAL( expected->GetLayerSet(), zone->GetLayerSet() );
@@ -653,8 +654,7 @@ void CheckFpZone( const ZONE* expected, const ZONE* zone )
         BOOST_CHECK_EQUAL( expected->GetHatchBorderAlgorithm(), zone->GetHatchBorderAlgorithm() );
         BOOST_CHECK_EQUAL( expected->GetHatchHoleMinArea(), zone->GetHatchHoleMinArea() );
         BOOST_CHECK_EQUAL( expected->GetThermalReliefGap(), zone->GetThermalReliefGap() );
-        BOOST_CHECK_EQUAL( expected->GetThermalReliefSpokeWidth(),
-                           zone->GetThermalReliefSpokeWidth() );
+        BOOST_CHECK_EQUAL( expected->GetThermalReliefSpokeWidth(), zone->GetThermalReliefSpokeWidth() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetCornerSmoothingType(), zone->GetCornerSmoothingType() );
         BOOST_CHECK_EQUAL( expected->GetCornerRadius(), zone->GetCornerRadius() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetIslandRemovalMode(), zone->GetIslandRemovalMode() );

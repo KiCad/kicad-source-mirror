@@ -672,7 +672,7 @@ void PCB_BUILDER::buildPlanes()
             for( ZONE* zone : planes )
             {
                 if( pad->GetNet() == zone->GetNet() )
-                    pad->SetThermalSpokeAngle( m_design->ThermalAngled ? ANGLE_45 : ANGLE_0 );
+                    pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, m_design->ThermalAngled ? ANGLE_45 : ANGLE_0 );
 
                 if( pad->HasHole() && pad->IsOnLayer( zone->GetLayer() ) && pad->GetNet() == zone->GetNet() )
                     pad->SetZoneLayerOverride( zone->GetLayer(), ZLO_FORCE_FLASHED );

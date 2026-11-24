@@ -897,9 +897,9 @@ void ZONE::CacheBoundingBox()
 }
 
 
-int ZONE::GetThermalReliefGap( PAD* aPad, wxString* aSource ) const
+int ZONE::GetThermalReliefGap( PAD* aPad, PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    if( aPad->GetLocalThermalGapOverride() == 0 )
+    if( aPad->GetLocalThermalGapOverride( aLayer ) == 0 )
     {
         if( aSource )
             *aSource = _( "zone" );
@@ -907,7 +907,7 @@ int ZONE::GetThermalReliefGap( PAD* aPad, wxString* aSource ) const
         return m_thermalReliefGap;
     }
 
-    return aPad->GetLocalThermalGapOverride( aSource );
+    return aPad->GetLocalThermalGapOverride( aLayer, aSource );
 
 }
 

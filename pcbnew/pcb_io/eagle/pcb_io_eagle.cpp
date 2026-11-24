@@ -2108,7 +2108,11 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         pad->SetOrientation( EDA_ANGLE( e.rot.value().degrees, DEGREES_T ) );
 
     // Eagle spokes are always '+'
-    pad->SetThermalSpokeAngle( ANGLE_0 );
+    pad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                pad->SetThermalSpokeAngle( layer, ANGLE_0 );
+            } );
 
     bool badPad = false;
 
@@ -2580,7 +2584,11 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         pad->SetOrientation( EDA_ANGLE( e.rot.value().degrees, DEGREES_T ) );
 
     // Eagle spokes are always '+'
-    pad->SetThermalSpokeAngle( ANGLE_0 );
+    pad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                pad->SetThermalSpokeAngle( layer, ANGLE_0 );
+            } );
 
     pad->SetLocalSolderPasteMargin( -eagleClamp( m_rules->mlMinCreamFrame,
                                                  (int) ( m_rules->mvCreamFrame * minPadSize ),
@@ -2621,7 +2629,13 @@ void PCB_IO_EAGLE::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 
     // Solid connection to copper zones
     if( aEaglePad.thermals.has_value() && aEaglePad.thermals.value() == false )
-        aPad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
+    {
+        aPad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    aPad->SetLocalZoneConnection( layer, ZONE_CONNECTION::FULL );
+                } );
+    }
 
     FOOTPRINT* footprint = aPad->GetParentFootprint();
     wxCHECK( footprint, /* void */ );

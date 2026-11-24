@@ -2269,28 +2269,28 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                       formatInternalUnits( aPad->GetLocalClearance().value() ).c_str() );
     }
 
-    if( aPad->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED )
+    if( aPad->GetLocalZoneConnection( F_Cu ) != ZONE_CONNECTION::INHERITED )
     {
         m_out->Print( "(zone_connect %d)",
-                      static_cast<int>( aPad->GetLocalZoneConnection() ) );
+                      static_cast<int>( aPad->GetLocalZoneConnection( F_Cu ) ) );
     }
 
-    if( aPad->GetLocalThermalSpokeWidthOverride().has_value() )
+    if( aPad->GetLocalThermalSpokeWidthOverride( F_Cu ).has_value() )
     {
         m_out->Print( "(thermal_bridge_width %s)",
-                      formatInternalUnits( aPad->GetLocalThermalSpokeWidthOverride().value() ).c_str() );
+                      formatInternalUnits( aPad->GetLocalThermalSpokeWidthOverride( F_Cu ).value() ).c_str() );
     }
 
-    if( aPad->GetThermalSpokeAngle() != aPad->Padstack().DefaultThermalSpokeAngleForShape() )
+    if( aPad->GetThermalSpokeAngle( F_Cu ) != aPad->Padstack().DefaultThermalSpokeAngleForShape( F_Cu ) )
     {
         m_out->Print( "(thermal_bridge_angle %s)",
-                      EDA_UNIT_UTILS::FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
+                      EDA_UNIT_UTILS::FormatAngle( aPad->GetThermalSpokeAngle( F_Cu ) ).c_str() );
     }
 
-    if( aPad->GetLocalThermalGapOverride().has_value() )
+    if( aPad->GetLocalThermalGapOverride( F_Cu ).has_value() )
     {
         m_out->Print( "(thermal_gap %s)",
-                      formatInternalUnits( aPad->GetLocalThermalGapOverride().value() ).c_str() );
+                      formatInternalUnits( aPad->GetLocalThermalGapOverride( F_Cu ).value() ).c_str() );
     }
 
     auto anchorShape =
@@ -2482,9 +2482,9 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
 
                 EDA_ANGLE defaultLayerAngle = ANGLE_90;
 
-                if( aPad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE ||
-                    ( aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM
-                      && aPad->GetAnchorPadShape( aLayer ) == PAD_SHAPE::CIRCLE ) )
+                if( aPad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE
+                    || (   aPad->GetShape( aLayer ) == PAD_SHAPE::CUSTOM
+                        && aPad->GetAnchorPadShape( aLayer ) == PAD_SHAPE::CIRCLE ) )
                 {
                     defaultLayerAngle = ANGLE_45;
                 }

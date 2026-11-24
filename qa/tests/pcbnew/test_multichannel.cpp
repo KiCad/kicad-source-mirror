@@ -3916,10 +3916,11 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesPadOverrides, MULTICHANNEL_TEST_FIXTU
 
     BOOST_REQUIRE( refPad );
 
-    refPad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );
+    refPad->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, ZONE_CONNECTION::NONE );
     refPad->SetLocalSolderMaskMargin( pcbIUScale.mmToIU( 0.15 ) );
 
-    BOOST_REQUIRE( targetFP->FindPadByNumber( wxT( "1" ) )->GetLocalZoneConnection() == ZONE_CONNECTION::INHERITED );
+    BOOST_REQUIRE( targetFP->FindPadByNumber( wxT( "1" ) )->GetLocalZoneConnection( PADSTACK::TEMP_ALL_LAYERS )
+                    == ZONE_CONNECTION::INHERITED );
 
     mtTool->CheckRACompatibility( refArea->m_zone );
 
@@ -3932,7 +3933,7 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesPadOverrides, MULTICHANNEL_TEST_FIXTU
 
     BOOST_REQUIRE( targetPad );
 
-    BOOST_CHECK( targetPad->GetLocalZoneConnection() == ZONE_CONNECTION::NONE );
+    BOOST_CHECK( targetPad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) == ZONE_CONNECTION::NONE );
     BOOST_CHECK( targetPad->GetLocalSolderMaskMargin() == refPad->GetLocalSolderMaskMargin() );
 }
 

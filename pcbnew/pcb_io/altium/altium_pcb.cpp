@@ -4320,7 +4320,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
-        pad->SetThermalSpokeAngle( ANGLE_90 );
+        pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
 
         int      anchorSize = 1;
         VECTOR2I anchorPos = linechain.CPoint( 0 );
@@ -4901,9 +4901,10 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     pad->SetNumber( aElem.name );
     pad->SetNetCode( GetNetCode( aElem.net ) );
 
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
     pad->SetPosition( aElem.position );
     pad->SetOrientationDegrees( aElem.direction );
-    pad->SetThermalSpokeAngle( ANGLE_90 );
+    pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
 
     if( aElem.holesize == 0 )
     {
@@ -4920,10 +4921,10 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                 {
                     wxString msg;
                     msg.Printf( _( "Error loading library '%s':\n"
-                               "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
-                            m_library,
-                            m_footprintName,
-                            aElem.name );
+                                   "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
+                                m_library,
+                                m_footprintName,
+                                aElem.name );
                     m_reporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
             }
@@ -4933,8 +4934,8 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                 {
                     wxString msg;
                     msg.Printf( _( "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
-                            aFootprint->GetReference(),
-                            aElem.name );
+                                aFootprint->GetReference(),
+                                aElem.name );
                     m_reporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
             }
@@ -4962,10 +4963,10 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     {
                         wxString msg;
                         msg.Printf( _( "Loading library '%s':\n"
-                                     "Footprint %s pad %s has a square hole (not yet supported)." ),
-                                  m_library,
-                                  m_footprintName,
-                                  aElem.name );
+                                       "Footprint %s pad %s has a square hole (not yet supported)." ),
+                                    m_library,
+                                    m_footprintName,
+                                    aElem.name );
                         m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                     }
                 }
@@ -4975,8 +4976,8 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     {
                         wxString msg;
                         msg.Printf( _( "Footprint %s pad %s has a square hole (not yet supported)." ),
-                                  aFootprint->GetReference(),
-                                  aElem.name );
+                                    aFootprint->GetReference(),
+                                    aElem.name );
                         m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                     }
                 }
@@ -5005,12 +5006,12 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                         {
                             wxString msg;
                             msg.Printf( _( "Loading library '%s':\n"
-                                         "Footprint %s pad %s has a hole-rotation of %d degrees. "
-                                         "KiCad only supports 90 degree rotations." ),
-                                      m_library,
-                                      m_footprintName,
-                                      aElem.name,
-                                      KiROUND( slotRotation.AsDegrees() ) );
+                                           "Footprint %s pad %s has a hole-rotation of %d degrees. "
+                                           "KiCad only supports 90 degree rotations." ),
+                                        m_library,
+                                        m_footprintName,
+                                        aElem.name,
+                                        KiROUND( slotRotation.AsDegrees() ) );
                             m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                         }
                     }
@@ -5020,10 +5021,10 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                         {
                             wxString msg;
                             msg.Printf( _( "Footprint %s pad %s has a hole-rotation of %d degrees. "
-                                         "KiCad only supports 90 degree rotations." ),
-                                      aFootprint->GetReference(),
-                                      aElem.name,
-                                      KiROUND( slotRotation.AsDegrees() ) );
+                                           "KiCad only supports 90 degree rotations." ),
+                                        aFootprint->GetReference(),
+                                        aElem.name,
+                                        KiROUND( slotRotation.AsDegrees() ) );
                             m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                         }
                     }
@@ -5040,11 +5041,11 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     {
                         wxString msg;
                         msg.Printf( _( "Error loading library '%s':\n"
-                                   "Footprint %s pad %s uses a hole of unknown kind %d." ),
-                                m_library,
-                                m_footprintName,
-                                aElem.name,
-                                aElem.sizeAndShape->holeshape );
+                                       "Footprint %s pad %s uses a hole of unknown kind %d." ),
+                                    m_library,
+                                    m_footprintName,
+                                    aElem.name,
+                                    aElem.sizeAndShape->holeshape );
                         m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                     }
                 }
@@ -5054,9 +5055,9 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     {
                         wxString msg;
                         msg.Printf( _( "Footprint %s pad %s uses a hole of unknown kind %d." ),
-                                aFootprint->GetReference(),
-                                aElem.name,
-                                aElem.sizeAndShape->holeshape );
+                                    aFootprint->GetReference(),
+                                    aElem.name,
+                                    aElem.sizeAndShape->holeshape );
                         m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
                     }
                 }
@@ -5071,8 +5072,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     PADSTACK& ps = pad->Padstack();
 
     auto setCopperGeometry =
-            [&]( PCB_LAYER_ID aLayer, int aAltiumIdx, ALTIUM_PAD_SHAPE aShape,
-                 const VECTOR2I& aSize )
+            [&]( PCB_LAYER_ID aLayer, int aAltiumIdx, ALTIUM_PAD_SHAPE aShape, const VECTOR2I& aSize )
             {
                 bool hasAltiumEntry = aElem.sizeAndShape && aAltiumIdx >= 0
                                       && aAltiumIdx < ALTIUM_PADSTACK_IDX_COUNT;
@@ -6203,13 +6203,13 @@ bool ALTIUM_PCB::HelperFoldPendingCopper( const LSET& aCopper, int aMaxError, st
                 extension->SetSize( PADSTACK::ALL_LAYERS, { 1, 1 } );
                 extension->SetPosition( anchorPos );
                 extension->SetOrientation( ANGLE_0 );
-                extension->SetThermalSpokeAngle( ANGLE_90 );
+                extension->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
                 extension->SetLayerSet( LSET{ layer } );
                 extension->SetNumber( aPad->GetNumber() );
                 extension->SetNetCode( aPad->GetNetCode() );
 
                 // Zones met the original copper solidly, not through thermal spokes
-                extension->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
+                extension->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, ZONE_CONNECTION::FULL );
 
                 toPadFrame( aPending.shape.get(), extension.get(), layer );
                 extension->AddPrimitive( PADSTACK::ALL_LAYERS, aPending.shape.release() );
@@ -6316,7 +6316,11 @@ void ALTIUM_PCB::HelperFoldComponentCopperIntoPads()
             viaPad->SetNumber( touched->GetNumber() );
 
             // A via meets zones solidly, which a pad only does when told to
-            viaPad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
+            viaPad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        viaPad->SetLocalZoneConnection( layer, ZONE_CONNECTION::FULL );
+                    } );
 
             it = m_pendingComponentVias.erase( it );
             changed = true;
@@ -7023,13 +7027,13 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         LSET padLayers;
         padLayers.set( aLayer );
 
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         EDA_ANGLE rotation( aElem.rotation, DEGREES_T );
 
         // Handle rotation multiples of 90 degrees
         if( rotation.IsCardinal() )
         {
-            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
             int width = std::abs( aElem.pos2.x - aElem.pos1.x );
@@ -7044,7 +7048,6 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         }
         else
         {
-            pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
 
             int      anchorSize = std::min( std::abs( aElem.pos2.x - aElem.pos1.x ),
@@ -7069,7 +7072,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
             pad->AddPrimitivePoly( F_Cu, shapePolys, 0, true );
         }
 
-        pad->SetThermalSpokeAngle( ANGLE_90 );
+        pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
         pad->SetLayerSet( padLayers );
 
         aFootprint->Add( pad.release(), ADD_MODE::APPEND );

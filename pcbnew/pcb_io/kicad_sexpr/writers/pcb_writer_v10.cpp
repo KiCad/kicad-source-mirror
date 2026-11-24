@@ -1559,15 +1559,15 @@ void PCB_WRITER_V10::format( const PAD* aPad ) const
         m_out->Print( "(clearance %s)", formatInternalUnits( aPad->GetLocalClearance().value() ).c_str() );
     }
 
-    if( aPad->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED )
+    if( aPad->GetLocalZoneConnection( F_Cu ) != ZONE_CONNECTION::INHERITED )
     {
-        m_out->Print( "(zone_connect %d)", static_cast<int>( aPad->GetLocalZoneConnection() ) );
+        m_out->Print( "(zone_connect %d)", static_cast<int>( aPad->GetLocalZoneConnection( F_Cu ) ) );
     }
 
-    if( aPad->GetLocalThermalSpokeWidthOverride().has_value() )
+    if( aPad->GetLocalThermalSpokeWidthOverride( F_Cu ).has_value() )
     {
         m_out->Print( "(thermal_bridge_width %s)",
-                      formatInternalUnits( aPad->GetLocalThermalSpokeWidthOverride().value() ).c_str() );
+                      formatInternalUnits( aPad->GetLocalThermalSpokeWidthOverride( F_Cu ).value() ).c_str() );
     }
 
     EDA_ANGLE defaultThermalSpokeAngle = ANGLE_90;
@@ -1578,15 +1578,16 @@ void PCB_WRITER_V10::format( const PAD* aPad ) const
         defaultThermalSpokeAngle = ANGLE_45;
     }
 
-    if( aPad->GetThermalSpokeAngle() != defaultThermalSpokeAngle )
+    if( aPad->GetThermalSpokeAngle( F_Cu ) != defaultThermalSpokeAngle )
     {
         m_out->Print( "(thermal_bridge_angle %s)",
-                      EDA_UNIT_UTILS::FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
+                      EDA_UNIT_UTILS::FormatAngle( aPad->GetThermalSpokeAngle( F_Cu ) ).c_str() );
     }
 
-    if( aPad->GetLocalThermalGapOverride().has_value() )
+    if( aPad->GetLocalThermalGapOverride( F_Cu ).has_value() )
     {
-        m_out->Print( "(thermal_gap %s)", formatInternalUnits( aPad->GetLocalThermalGapOverride().value() ).c_str() );
+        m_out->Print( "(thermal_gap %s)",
+                      formatInternalUnits( aPad->GetLocalThermalGapOverride( F_Cu ).value() ).c_str() );
     }
 
     auto anchorShape = [&]( PCB_LAYER_ID aLayer )

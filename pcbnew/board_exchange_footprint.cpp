@@ -285,9 +285,15 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
             newPad->SetLocalSolderMaskMargin( oldPad->GetLocalSolderMaskMargin() );
             newPad->SetLocalSolderPasteMargin( oldPad->GetLocalSolderPasteMargin() );
             newPad->SetLocalSolderPasteMarginRatio( oldPad->GetLocalSolderPasteMarginRatio() );
-            newPad->SetLocalZoneConnection( oldPad->GetLocalZoneConnection() );
-            newPad->SetLocalThermalSpokeWidthOverride( oldPad->GetLocalThermalSpokeWidthOverride() );
-            newPad->SetLocalThermalGapOverride( oldPad->GetLocalThermalGapOverride() );
+
+            newPad->Padstack().ForEachUniqueLayer(
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        newPad->Padstack().ZoneConnection( layer ) = oldPad->Padstack().ZoneConnection( layer );
+                        newPad->Padstack().ThermalSpokeAngle( layer ) = oldPad->Padstack().ThermalSpokeAngle( layer );
+                        newPad->Padstack().ThermalSpokeWidth( layer ) = oldPad->Padstack().ThermalSpokeWidth( layer );
+                        newPad->Padstack().ThermalGap( layer ) = oldPad->Padstack().ThermalGap( layer );
+                    } );
         }
 
         if( newPad->IsOnCopperLayer() )

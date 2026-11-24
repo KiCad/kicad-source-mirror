@@ -1272,36 +1272,37 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
             break;
         }
 
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, padSize );
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // No complex padstacks in sprint
+        pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
         pad->SetDrillSize( drillSize );
 
         switch( aObj.tht_shape )
         {
         case SPRINT_LAYOUT::THT_SHAPE_CIRCLE:
-            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_H_ROUND:
         case SPRINT_LAYOUT::THT_SHAPE_V_ROUND:
-            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::OVAL );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_OCT:
         case SPRINT_LAYOUT::THT_SHAPE_H_CHAMFER:
         case SPRINT_LAYOUT::THT_SHAPE_V_CHAMFER:
-            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
-            pad->SetChamferRectRatio( PADSTACK::TEMP_ALL_LAYERS, 0.25 );
-            pad->SetChamferPositions( PADSTACK::TEMP_ALL_LAYERS, RECT_CHAMFER_ALL );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
+            pad->SetChamferRectRatio( PADSTACK::ALL_LAYERS, 0.25 );
+            pad->SetChamferPositions( PADSTACK::ALL_LAYERS, RECT_CHAMFER_ALL );
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_SQUARE:
         case SPRINT_LAYOUT::THT_SHAPE_H_RECT:
         case SPRINT_LAYOUT::THT_SHAPE_V_RECT:
-            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             break;
 
         default:
-            pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
             break;
         }
 
@@ -1322,7 +1323,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         if( standaloneFp && IsBackLayer( padLayer ) )
             fp->SetLayer( B_Cu );
 
-        pad->SetShape( PADSTACK::TEMP_ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
         int width = sprintToKicadCoord( aObj.outer );
         int height = sprintToKicadCoord( aObj.inner );
@@ -1333,7 +1334,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         if( !aObj.points.empty() )
             padPos = ptsCenter;
 
-        pad->SetSize( PADSTACK::TEMP_ALL_LAYERS, VECTOR2I( width, height ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( width, height ) );
         pad->SetPosition( padPos );
         pad->Rotate( padPos, -ptsAngle );
     }
@@ -1350,14 +1351,14 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     {
         int clearance = sprintToKicadCoord( static_cast<float>( aObj.clearance ) );
         pad->SetLocalClearance( std::optional<int>( clearance ) );
-        pad->SetLocalThermalGapOverride( std::optional<int>( clearance ) );
+        pad->SetLocalThermalGapOverride( PADSTACK::ALL_LAYERS, std::optional<int>( clearance ) );
     }
 
     // Thermal reliefs
     if( m_fileData.version >= 5 && aObj.mirror_h != 0 )
     {
         int spokeWidth = aObj.rotation * 10000 / 2;
-        pad->SetLocalThermalSpokeWidthOverride( spokeWidth );
+        pad->SetLocalThermalSpokeWidthOverride( PADSTACK::ALL_LAYERS, spokeWidth );
 
         // Each byte is the spoke directions for one copper layer (C1, C2, I1, I2).
         // 0x55 matches H/V directions, 0xAA matches diagonal directions
@@ -1365,22 +1366,22 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
 
         if( spokeMask != 0 )
         {
-            pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+            pad->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, ZONE_CONNECTION::THERMAL );
 
             if( spokeMask & 0x55555555 )
-                pad->SetThermalSpokeAngle( ANGLE_90 );
+                pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
             else if( spokeMask & 0xAAAAAAAA )
-                pad->SetThermalSpokeAngle( ANGLE_45 );
+                pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_45 );
         }
         else
         {
-            pad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );
+            pad->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, ZONE_CONNECTION::NONE );
         }
     }
     else
     {
-        pad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
-        pad->SetThermalSpokeAngle( ANGLE_90 );
+        pad->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, ZONE_CONNECTION::FULL );
+        pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
     }
 
     // Set net name. Plated THT pads span all copper layers, so accept the GND

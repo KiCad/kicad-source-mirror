@@ -291,28 +291,57 @@ bool padHasOverrides( const PAD* a, const PAD* b, REPORTER& aReporter )
         REPORT_MSG( _( "%s has solder paste clearance override." ), PAD_DESC( a ) );
     }
 
-    if( a->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED
-            && a->GetLocalZoneConnection() != b->GetLocalZoneConnection() )
+    bool zoneConnectionDiffers = false;
+    bool thermalGapDiffers = false;
+    bool thermalSpokeWidthDiffers = false;
+    bool thermalSpokeAngleDiffers = false;
+
+    a->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( a->Padstack().ZoneConnection( layer ).has_value()
+                        && a->Padstack().ZoneConnection( layer ) != b->Padstack().ZoneConnection( layer ) )
+                {
+                    zoneConnectionDiffers = true;
+                }
+
+                if( a->Padstack().ThermalGap( layer ).has_value()
+                        && a->Padstack().ThermalGap( layer ) != b->Padstack().ThermalGap( layer ) )
+                {
+                    thermalGapDiffers = true;
+                }
+
+                if( a->Padstack().ThermalSpokeWidth( layer ).has_value()
+                        && a->Padstack().ThermalSpokeWidth( layer ) != b->Padstack().ThermalSpokeWidth( layer ) )
+                {
+                    thermalSpokeWidthDiffers = true;
+                }
+
+                if( a->Padstack().ThermalSpokeAngle( layer ) != b->Padstack().ThermalSpokeAngle( layer ) )
+                {
+                    thermalSpokeAngleDiffers = true;
+                }
+            } );
+
+    if( zoneConnectionDiffers )
     {
         diff = true;
         REPORT_MSG( _( "%s has zone connection override." ), PAD_DESC( a ) );
     }
 
-    if( a->GetLocalThermalGapOverride().has_value()
-            && a->GetThermalGap() != b->GetThermalGap() )
+    if( thermalGapDiffers )
     {
         diff = true;
         REPORT_MSG( _( "%s has thermal relief gap override." ), PAD_DESC( a ) );
     }
 
-    if( a->GetLocalThermalSpokeWidthOverride().has_value()
-            && a->GetLocalThermalSpokeWidthOverride() != b->GetLocalThermalSpokeWidthOverride() )
+    if( thermalSpokeWidthDiffers )
     {
         diff = true;
         REPORT_MSG( _( "%s has thermal relief spoke width override." ), PAD_DESC( a ) );
     }
 
-    if( a->GetThermalSpokeAngle() != b->GetThermalSpokeAngle() )
+    if( thermalSpokeAngleDiffers )
     {
         diff = true;
         REPORT_MSG( _( "%s has thermal relief spoke angle override." ), PAD_DESC( a ) );

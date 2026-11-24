@@ -246,7 +246,7 @@ public:
     }
 
     int GetThermalReliefGap() const { return m_thermalReliefGap; }
-    int GetThermalReliefGap( PAD* aPad, wxString* aSource = nullptr ) const;
+    int GetThermalReliefGap( PAD* aPad, PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const;
 
     void SetThermalReliefSpokeWidth( int aThermalReliefSpokeWidth )
     {

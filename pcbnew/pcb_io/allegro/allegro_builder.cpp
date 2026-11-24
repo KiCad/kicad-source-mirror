@@ -2641,7 +2641,8 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
     const wxString& padStackName = m_brdDb.GetString( aPadstack.m_PadStr );
 
-    wxLogTrace( traceAllegroBuilder, "Building pad '%s' with %u layers", padStackName, aPadstack.GetLayerCount() );
+    wxLogTrace( traceAllegroBuilder, wxT( "Building pad '%s' with %u layers" ), padStackName,
+                aPadstack.GetLayerCount() );
 
     // First, gather all the copper layers into a set of shape props, which we can then use to decide on the padstack mode
     for( size_t i = 0; i < aPadstack.GetLayerCount(); ++i )
@@ -2660,23 +2661,26 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         {
             if( antiPadComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL )
             {
-                m_reporter.Report( wxString::Format( "Padstack %s: Copper layer %zu has no pad component, but has "
-                                                     "antipad",
+                m_reporter.Report( wxString::Format( wxT( "Padstack %s: Copper layer %zu has no pad component, but "
+                                                          "has antipad" ),
                                                      padStackName,
                                                      i ),
                                    RPT_SEVERITY_WARNING );
             }
+
             if( thermalComp.m_Type != PADSTACK_COMPONENT::TYPE_NULL )
             {
-                m_reporter.Report( wxString::Format( "Copper layer %zu has no pad component, but has thermal relief",
+                m_reporter.Report( wxString::Format( wxT( "Copper layer %zu has no pad component, but has thermal "
+                                                          "relief" ),
                                                      i ),
                                    RPT_SEVERITY_WARNING );
             }
+
             continue;
         }
 
-        auto& layerCuProps = copperLayers[i];
-        wxLogTrace( traceAllegroBuilder, "  Adding copper layer %zu with pad type %d", i, (int) padComp.m_Type );
+        std::unique_ptr<PADSTACK::COPPER_LAYER_PROPS>& layerCuProps = copperLayers[i];
+        wxLogTrace( traceAllegroBuilder, wxT( "  Adding copper layer %zu with pad type %d" ), i, (int) padComp.m_Type );
         layerCuProps = std::make_unique<PADSTACK::COPPER_LAYER_PROPS>();
 
         switch( padComp.m_Type )
@@ -2752,7 +2756,8 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
             if( !shapeData )
             {
-                wxLogTrace( traceAllegroBuilder, "Padstack %s: SHAPE_SYMBOL on layer %zu has no 0x28 shape at %#010x",
+                wxLogTrace( traceAllegroBuilder,
+                            wxT( "Padstack %s: SHAPE_SYMBOL on layer %zu has no 0x28 shape at %#010x" ),
                             padStackName, i, padComp.m_ShapePtr );
                 break;
             }
@@ -2787,7 +2792,8 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             }
             else
             {
-                wxLogTrace( traceAllegroBuilder, "Padstack %s: SHAPE_SYMBOL on layer %zu produced only %d points",
+                wxLogTrace( traceAllegroBuilder,
+                            wxT( "Padstack %s: SHAPE_SYMBOL on layer %zu produced only %d points" ),
                             padStackName, i, outline.PointCount() );
             }
 
@@ -2817,8 +2823,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             outline.Move( S( padComp.m_OffsetX, padComp.m_OffsetY ) );
 
             BOX2I bbox = outline.BBox();
-            int   anchorSize = static_cast<int>(
-                    std::min( bbox.GetWidth(), bbox.GetHeight() ) / 7 );
+            int   anchorSize = static_cast<int>( std::min( bbox.GetWidth(), bbox.GetHeight() ) / 7 );
 
             if( anchorSize < 1 )
                 anchorSize = 1;
@@ -2833,7 +2838,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             break;
         }
         default:
-            m_reporter.Report( wxString::Format( "Padstack %s: unhandled copper pad shape type %d on layer %zu",
+            m_reporter.Report( wxString::Format( wxT( "Padstack %s: unhandled copper pad shape type %d on layer %zu" ),
                                                  padStackName,
                                                  static_cast<int>( padComp.m_Type ),
                                                  i ),
@@ -2846,7 +2851,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             if( antiPadComp.m_Type != padComp.m_Type )
             {
                 wxLogTrace( traceAllegroBuilder,
-                            "Padstack %s: copper layer %zu antipad shape %d differs from pad shape %d",
+                            wxT( "Padstack %s: copper layer %zu antipad shape %d differs from pad shape %d" ),
                             padStackName, i, antiPadComp.m_Type, padComp.m_Type );
             }
 
@@ -2855,14 +2860,15 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
             if( clearanceX && clearanceX != clearanceY )
             {
-                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu unequal antipad clearance X=%d Y=%d",
+                wxLogTrace( traceAllegroBuilder,
+                            wxT( "Padstack %s: copper layer %zu unequal antipad clearance X=%d Y=%d" ),
                             padStackName, i, clearanceX, clearanceY );
             }
 
             if( antiPadComp.m_OffsetX != 0 || antiPadComp.m_OffsetY != 0 )
             {
-                wxLogTrace( traceAllegroBuilder, "Padstack %s: copper layer %zu antipad offset %d, %d", padStackName, i,
-                            antiPadComp.m_OffsetX, antiPadComp.m_OffsetY );
+                wxLogTrace( traceAllegroBuilder, wxT( "Padstack %s: copper layer %zu antipad offset %d, %d" ),
+                            padStackName, i, antiPadComp.m_OffsetX, antiPadComp.m_OffsetY );
             }
 
             layerCuProps->clearance = clearanceX;
@@ -2880,11 +2886,11 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
                     thermalGap = gap;
             }
 
-            wxLogTrace( traceAllegroBuilder, "Padstack %s: thermal relief type=%d, gap=%snm",
+            wxLogTrace( traceAllegroBuilder, wxT( "Padstack %s: thermal relief type=%d, gap=%snm" ),
                         padStackName,
                         thermalComp.m_Type,
-                        thermalGap.has_value() ? wxString::Format( "%d", thermalGap.value() )
-                                               : wxString( "N/A" ) );
+                        thermalGap.has_value() ? wxString::Format( wxT( "%d" ), thermalGap.value() )
+                                               : wxString( wxT( "N/A" ) ) );
         }
 
         // Padstack-level keepouts (antipad relief geometry) are handled via the
@@ -2917,20 +2923,20 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
                 };
 
         for(size_t i = 0; i < copperLayers.size(); ++i )
-            wxLogTrace( traceAllegroBuilder, "  Layer %zu: %s", i, copperLayers[i] ? "present" : "null" );
+            wxLogTrace( traceAllegroBuilder, wxT( "  Layer %zu: %s" ), i, copperLayers[i] ? "present" : "null" );
 
         padStack.SetLayerSet( PAD::PTHMask() );
 
         if( copperLayers.front() && copperLayers.back() && layersEqual( 0, copperLayers.size() ) )
         {
-            wxLogTrace( traceAllegroBuilder, "  Using NORMAL padstack mode (all layers identical)" );
+            wxLogTrace( traceAllegroBuilder, wxT( "  Using NORMAL padstack mode (all layers identical)" ) );
             padStack.SetMode( PADSTACK::MODE::NORMAL );
             PADSTACK::COPPER_LAYER_PROPS& layerProps = padStack.CopperLayer( F_Cu );
             layerProps = *copperLayers.front();
         }
         else if( copperLayers.front() && copperLayers.back() && layersEqual( 1, copperLayers.size() - 1 ) )
         {
-            wxLogTrace( traceAllegroBuilder, "  Using FRONT_INNER_BACK padstack mode (inner layers identical)" );
+            wxLogTrace( traceAllegroBuilder, wxT( "  Using FRONT_INNER_BACK padstack mode (inner layers identical)" ) );
             padStack.SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
             padStack.CopperLayer( F_Cu ) = *copperLayers.front();
             padStack.CopperLayer( B_Cu ) = *copperLayers.back();
@@ -2941,7 +2947,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         }
         else
         {
-            wxLogTrace( traceAllegroBuilder, "  Using CUSTOM padstack mode (layers differ)" );
+            wxLogTrace( traceAllegroBuilder, wxT( "  Using CUSTOM padstack mode (layers differ)" ) );
             padStack.SetMode( PADSTACK::MODE::CUSTOM );
 
             for( size_t i = 0; i < copperLayers.size(); ++i )
@@ -3056,10 +3062,13 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
 
     // A pad with no copper and no hole has no size, which KiCad cannot save
     if( isSmd && std::none_of( copperLayers.begin(), copperLayers.end(),
-                               []( const auto& aProps ) { return aProps != nullptr; } ) )
+                               []( const auto& aProps )
+                               {
+                                   return aProps != nullptr;
+                               } ) )
     {
-        wxLogTrace( traceAllegroBuilder, "Padstack %s has no copper and no drill, skipping pad '%s'", padStackName,
-                    aPadName );
+        wxLogTrace( traceAllegroBuilder, wxT( "Padstack %s has no copper and no drill, skipping pad '%s'" ),
+                    padStackName, aPadName );
         return padItems;
     }
 
@@ -3108,7 +3117,13 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
     }
 
     if( thermalGap.has_value() )
-        pad->SetThermalGap( thermalGap.value() );
+    {
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    pad->SetThermalGap( layer, thermalGap.value() );
+                } );
+    }
 
     // Now, for each technical layer, we see if we can include it into the existing padstack, or if we need to add
     // it as a standalone pad
@@ -3146,7 +3161,7 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
         // All fixed slots are technical layers (solder mask, paste mask, film mask,
         // assembly variant, etc). Custom mask expansion extraction is not yet implemented;
         // KiCad's default pad-matches-mask behavior applies.
-        wxLogTrace( traceAllegroBuilder, "Fixed padstack slot %zu: type=%d, W=%d, H=%d",
+        wxLogTrace( traceAllegroBuilder, wxT( "Fixed padstack slot %zu: type=%d, W=%d, H=%d" ),
                     i, static_cast<int>( psComp.m_Type ), psComp.m_W, psComp.m_H );
     }
 

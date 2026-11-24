@@ -1028,7 +1028,7 @@ void TARGET3001_PCB_BUILDER::buildThermalGaps()
         }
 
         for( const auto& [pad, gap] : overrides )
-            pad->SetLocalThermalGapOverride( gap );
+            pad->SetLocalThermalGapOverride( PADSTACK::ALL_LAYERS, gap );
     }
 
     if( footprintsByGap.empty() )

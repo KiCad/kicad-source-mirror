@@ -1059,7 +1059,7 @@ BOOST_FIXTURE_TEST_CASE( RegressionThermalReliefAnnularRing45, ZONE_FILL_TEST_FI
                                                           "is inside the zone but not flashing on %s",
                                                           pad->GetNumber(),
                                                           pcbIUScale.IUTomm( pad->GetDrillSize().x ),
-                                                          pad->GetThermalSpokeAngle().AsDegrees(),
+                                                          pad->GetThermalSpokeAngle( PADSTACK::ALL_LAYERS ).AsDegrees(),
                                                           pad->GetNetname(),
                                                           m_board->GetLayerName( layer ) ) );
                     padsWithMissingFlashing++;
@@ -4568,7 +4568,7 @@ BOOST_FIXTURE_TEST_CASE( ThermalOverrideOnSolidZoneKeepsSpokes, ZONE_FILL_TEST_F
 
     BOOST_REQUIRE_MESSAGE( overriddenPad, "No same-net pad sits inside a zone on this board." );
 
-    overriddenPad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+    overriddenPad->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, ZONE_CONNECTION::THERMAL );
 
     KI_TEST::FillZones( m_board.get() );
 

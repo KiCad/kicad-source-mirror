@@ -970,7 +970,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer( BOARD_ITEM_CONTAINER* aCo
             pad->SetPadstackMode( PADSTACK::MODE::NORMAL );     // EasyEDA doesn't have complex padstacks
             pad->SetSize( PADSTACK::ALL_LAYERS, size );
             pad->SetOrientationDegrees( Convert( field( 11 ) ) );
-            pad->SetThermalSpokeAngle( ANGLE_0 );
+            pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_0 );
 
             wxString     elayer = field( 6 );
             PCB_LAYER_ID klayer = LayerToKi( elayer );

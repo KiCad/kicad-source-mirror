@@ -3021,28 +3021,28 @@ BOOST_AUTO_TEST_CASE( BinaryPadConnectionMatchesAsc )
         {
             for( PAD* pad : fp->Pads() )
             {
-                if( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL )
-                {
+                if( pad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) == ZONE_CONNECTION::THERMAL )
                     keys.insert( fp->GetReference().ToStdString() + "." + pad->GetNumber().ToStdString() );
-                }
             }
         }
 
         return keys;
     };
 
-    auto everyPourIsSolid = []( const std::shared_ptr<BOARD>& aBoard )
-    {
-        for( ZONE* zone : aBoard->Zones() )
-        {
-            if( !zone->GetIsRuleArea() && zone->GetNetCode() > 0 && zone->GetPadConnection() != ZONE_CONNECTION::FULL )
+    auto everyPourIsSolid =
+            []( const std::shared_ptr<BOARD>& aBoard )
             {
-                return false;
-            }
-        }
+                for( ZONE* zone : aBoard->Zones() )
+                {
+                    if( !zone->GetIsRuleArea() && zone->GetNetCode() > 0
+                            && zone->GetPadConnection() != ZONE_CONNECTION::FULL )
+                    {
+                        return false;
+                    }
+                }
 
-        return true;
-    };
+                return true;
+            };
 
     for( const PADS_BINARY_BOARD_INFO& board : PADS_BINARY_BOARDS )
     {
@@ -3069,11 +3069,9 @@ BOOST_AUTO_TEST_CASE( BinaryPadConnectionMatchesAsc )
                                                         << ( extra.empty() ? std::string( "-" ) : extra.front() ) );
 
             BOOST_CHECK_MESSAGE( everyPourIsSolid( binary ),
-                                 "binary netted pours must connect solid, leaving relief to the "
-                                 "per-pad overrides" );
+                                 "binary netted pours must connect solid, leaving relief to the per-pad overrides" );
             BOOST_CHECK_MESSAGE( everyPourIsSolid( ascii ),
-                                 "ASCII netted pours must connect solid, leaving relief to the "
-                                 "per-pad overrides" );
+                                 "ASCII netted pours must connect solid, leaving relief to the per-pad overrides" );
         }
     }
 }
@@ -3228,21 +3226,22 @@ BOOST_AUTO_TEST_CASE( ThermalReliefRowsReachBinaryPads )
     BOOST_REQUIRE( binary != nullptr );
     BOOST_REQUIRE( ascii != nullptr );
 
-    auto thermalPadKeys = []( const std::shared_ptr<BOARD>& aBoard )
-    {
-        std::set<std::string> keys;
-
-        for( FOOTPRINT* footprint : aBoard->Footprints() )
-        {
-            for( PAD* pad : footprint->Pads() )
+    auto thermalPadKeys =
+            []( const std::shared_ptr<BOARD>& aBoard )
             {
-                if( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL )
-                    keys.insert( footprint->GetReference().ToStdString() + "." + pad->GetNumber().ToStdString() );
-            }
-        }
+                std::set<std::string> keys;
 
-        return keys;
-    };
+                for( FOOTPRINT* footprint : aBoard->Footprints() )
+                {
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( pad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) == ZONE_CONNECTION::THERMAL )
+                            keys.insert( footprint->GetReference().ToStdString() + "." + pad->GetNumber().ToStdString() );
+                    }
+                }
+
+                return keys;
+            };
 
     const std::set<std::string> binKeys = thermalPadKeys( binary );
     const std::set<std::string> ascKeys = thermalPadKeys( ascii );

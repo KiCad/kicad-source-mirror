@@ -76,28 +76,31 @@ BOOST_AUTO_TEST_CASE( FootprintCourtyardAndHull )
         { 0, courtyardH },
     };
 
-    const auto assertCourtyardMatches = [&]( PCB_LAYER_ID layer, const SHAPE_LINE_CHAIN& aExpectedCourtyard )
-    {
-        const SHAPE_POLY_SET& courtyard = fp.GetCourtyard( layer );
+    const auto assertCourtyardMatches =
+            [&]( PCB_LAYER_ID layer, const SHAPE_LINE_CHAIN& aExpectedCourtyard )
+            {
+                const SHAPE_POLY_SET& courtyard = fp.GetCourtyard( layer );
 
-        BOOST_REQUIRE( courtyard.OutlineCount() == 1 );
-        BOOST_CHECK_PREDICATE( CourtyardEqualPredicate, ( courtyard.Outline( 0 ) )( aExpectedCourtyard ) );
-    };
+                BOOST_REQUIRE( courtyard.OutlineCount() == 1 );
+                BOOST_CHECK_PREDICATE( CourtyardEqualPredicate, ( courtyard.Outline( 0 ) )( aExpectedCourtyard ) );
+            };
 
-    const auto assertNoCourtyard = [&]( PCB_LAYER_ID layer )
-    {
-        const SHAPE_POLY_SET& courtyard = fp.GetCourtyard( layer );
+    const auto assertNoCourtyard =
+            [&]( PCB_LAYER_ID layer )
+            {
+                const SHAPE_POLY_SET& courtyard = fp.GetCourtyard( layer );
 
-        BOOST_TEST( courtyard.OutlineCount() == 0 );
-    };
+                BOOST_TEST( courtyard.OutlineCount() == 0 );
+            };
 
-    const auto assertHullMatch = [&]( const SHAPE_LINE_CHAIN& aExpectedHull )
-    {
-        const SHAPE_POLY_SET& hull = fp.GetBoundingHull();
+    const auto assertHullMatch =
+            [&]( const SHAPE_LINE_CHAIN& aExpectedHull )
+            {
+                const SHAPE_POLY_SET& hull = fp.GetBoundingHull();
 
-        BOOST_REQUIRE( hull.OutlineCount() == 1 );
-        BOOST_CHECK_PREDICATE( KI_TEST::ChainsAreCyclicallyEqual, ( hull.Outline( 0 ) )(aExpectedHull) ( 0 ) );
-    };
+                BOOST_REQUIRE( hull.OutlineCount() == 1 );
+                BOOST_CHECK_PREDICATE( KI_TEST::ChainsAreCyclicallyEqual, ( hull.Outline( 0 ) )(aExpectedHull) ( 0 ) );
+            };
 
     {
         std::unique_ptr<PCB_SHAPE> courtyardPoly = std::make_unique<PCB_SHAPE>( &fp, SHAPE_T::POLY );
@@ -428,56 +431,58 @@ BOOST_AUTO_TEST_CASE( ExchangeFootprintPadOverridesFollowResetOption )
     KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
     mgr.RegisterTool( dummyTool );
 
-    auto addPad = []( FOOTPRINT* aFootprint )
-    {
-        PAD* pad = new PAD( aFootprint );
-        pad->SetNumber( "1" );
-        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
-        aFootprint->Add( pad );
-        return pad;
-    };
+    auto addPad =
+            []( FOOTPRINT* aFootprint )
+            {
+                PAD* pad = new PAD( aFootprint );
+                pad->SetNumber( "1" );
+                pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+                pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                aFootprint->Add( pad );
+                return pad;
+            };
 
     // Update a board footprint whose pad has overrides with a library one that has none.
-    auto update = [&]( bool aResetClearanceOverrides )
-    {
-        FOOTPRINT* existing = new FOOTPRINT( &board );
-        existing->SetFPID( LIB_ID( "Lib", "Part" ) );
+    auto update =
+            [&]( bool aResetClearanceOverrides )
+            {
+                FOOTPRINT* existing = new FOOTPRINT( &board );
+                existing->SetFPID( LIB_ID( "Lib", "Part" ) );
 
-        PAD* pad = addPad( existing );
-        pad->SetLocalClearance( pcbIUScale.mmToIU( 0.4 ) );
-        pad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
+                PAD* pad = addPad( existing );
+                pad->SetLocalClearance( pcbIUScale.mmToIU( 0.4 ) );
+                pad->SetLocalZoneConnection( PADSTACK::TEMP_ALL_LAYERS, ZONE_CONNECTION::FULL );
 
-        board.Add( existing );
-        board.BuildConnectivity();
+                board.Add( existing );
+                board.BuildConnectivity();
 
-        FOOTPRINT* fromLibrary = new FOOTPRINT( &board );
-        fromLibrary->SetFPID( existing->GetFPID() );
-        addPad( fromLibrary );
+                FOOTPRINT* fromLibrary = new FOOTPRINT( &board );
+                fromLibrary->SetFPID( existing->GetFPID() );
+                addPad( fromLibrary );
 
-        BOARD_COMMIT commit( dummyTool );
+                BOARD_COMMIT commit( dummyTool );
 
-        board.ExchangeFootprint( existing, fromLibrary, commit, FLIP_DIRECTION::TOP_BOTTOM, true, true, true, true,
-                                 true, true, true, aResetClearanceOverrides, true, false );
-        commit.Push( wxT( "Update Footprint" ) );
+                board.ExchangeFootprint( existing, fromLibrary, commit, FLIP_DIRECTION::TOP_BOTTOM, true, true, true,
+                                         true, true, true, true, aResetClearanceOverrides, true, false );
+                commit.Push( wxT( "Update Footprint" ) );
 
-        // An unmatched pad would carry nothing over and pass the kept case by accident.
-        BOOST_REQUIRE_EQUAL( fromLibrary->Pads().size(), 1u );
-        BOOST_REQUIRE( fromLibrary->Pads()[0]->m_Uuid == pad->m_Uuid );
+                // An unmatched pad would carry nothing over and pass the kept case by accident.
+                BOOST_REQUIRE_EQUAL( fromLibrary->Pads().size(), 1u );
+                BOOST_REQUIRE( fromLibrary->Pads()[0]->m_Uuid == pad->m_Uuid );
 
-        return fromLibrary->Pads()[0];
-    };
+                return fromLibrary->Pads()[0];
+            };
 
     const PAD* kept = update( false );
 
     BOOST_REQUIRE( kept->GetLocalClearance().has_value() );
     BOOST_CHECK_EQUAL( kept->GetLocalClearance().value(), pcbIUScale.mmToIU( 0.4 ) );
-    BOOST_CHECK( kept->GetLocalZoneConnection() == ZONE_CONNECTION::FULL );
+    BOOST_CHECK( kept->GetLocalZoneConnection( PADSTACK::TEMP_ALL_LAYERS ) == ZONE_CONNECTION::FULL );
 
     const PAD* reset = update( true );
 
     BOOST_CHECK( !reset->GetLocalClearance().has_value() );
-    BOOST_CHECK( reset->GetLocalZoneConnection() == ZONE_CONNECTION::INHERITED );
+    BOOST_CHECK( reset->GetLocalZoneConnection( PADSTACK::TEMP_ALL_LAYERS ) == ZONE_CONNECTION::INHERITED );
 }
 
 

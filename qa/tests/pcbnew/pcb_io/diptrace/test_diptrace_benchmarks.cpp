@@ -1775,7 +1775,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesOptional )
 
             pcb2Net7PthPads++;
 
-            if( ( NormalizeDeg( pad->GetThermalSpokeAngle().AsDegrees() ) % 180 ) == 90 )
+            if( ( NormalizeDeg( pad->GetThermalSpokeAngle( PADSTACK::ALL_LAYERS ).AsDegrees() ) % 180 ) == 90 )
                 pcb2Net7At90++;
         }
     }
@@ -1999,7 +1999,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesOptional )
 
             pcb6PowerNetPthPads++;
 
-            if( ( NormalizeDeg( pad->GetThermalSpokeAngle().AsDegrees() ) % 180 ) == 45 )
+            if( ( NormalizeDeg( pad->GetThermalSpokeAngle( PADSTACK::ALL_LAYERS ).AsDegrees() ) % 180 ) == 45 )
                 pcb6PowerNetPadsAt45++;
         }
     }

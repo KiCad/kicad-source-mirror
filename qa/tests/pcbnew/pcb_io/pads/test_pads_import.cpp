@@ -79,8 +79,7 @@ static std::unique_ptr<BOARD> LoadAndVerify( const PADS_BOARD_INFO& aBoard )
 
     wxString filename = GetBoardPath( aBoard );
 
-    BOOST_CHECK_MESSAGE( plugin.CanReadBoard( filename ),
-            aBoard.dir << " should be a readable PADS file" );
+    BOOST_CHECK_MESSAGE( plugin.CanReadBoard( filename ), aBoard.dir << " should be a readable PADS file" );
 
     std::unique_ptr<BOARD> board;
 
@@ -90,14 +89,12 @@ static std::unique_ptr<BOARD> LoadAndVerify( const PADS_BOARD_INFO& aBoard )
     }
     catch( const std::exception& e )
     {
-        BOOST_WARN_MESSAGE( false,
-                aBoard.dir << " threw exception during load: " << e.what() );
+        BOOST_WARN_MESSAGE( false, aBoard.dir << " threw exception during load: " << e.what() );
         return board;
     }
 
     BOOST_REQUIRE_MESSAGE( board != nullptr, aBoard.dir << " failed to load" );
-    BOOST_CHECK_MESSAGE( board->Footprints().size() > 0,
-            aBoard.dir << " should have footprints" );
+    BOOST_CHECK_MESSAGE( board->Footprints().size() > 0, aBoard.dir << " should have footprints" );
 
     return board;
 }
@@ -118,7 +115,7 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
         return;
 
     BOOST_WARN_MESSAGE( board->Tracks().size() > 0,
-            aBoard.dir << " has no tracks (parser may not support this format version)" );
+                        aBoard.dir << " has no tracks (parser may not support this format version)" );
 
     if( board->Tracks().size() > 0 && board->Footprints().size() > 0 )
     {
@@ -135,7 +132,7 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
             trackBbox.Merge( trk->GetBoundingBox() );
 
         BOOST_CHECK_MESSAGE( fpBbox.Intersects( trackBbox ),
-                aBoard.dir << " footprint and track bounding boxes should overlap" );
+                             aBoard.dir << " footprint and track bounding boxes should overlap" );
     }
 
     // No duplicate through-hole vias at the same position
@@ -160,8 +157,7 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
         viaPositions.insert( key );
     }
 
-    BOOST_CHECK_MESSAGE( !hasDuplicate,
-            aBoard.dir << " should have no duplicate through-hole vias" );
+    BOOST_CHECK_MESSAGE( !hasDuplicate, aBoard.dir << " should have no duplicate through-hole vias" );
 
     // All imported tracks must be on copper layers
     for( PCB_TRACK* trk : board->Tracks() )
@@ -169,7 +165,7 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
         if( trk->Type() == PCB_TRACE_T || trk->Type() == PCB_ARC_T )
         {
             BOOST_CHECK_MESSAGE( IsCopperLayer( trk->GetLayer() ),
-                    aBoard.dir << " track on non-copper layer " << trk->GetLayer() );
+                                 aBoard.dir << " track on non-copper layer " << trk->GetLayer() );
         }
     }
 
@@ -180,7 +176,7 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
         {
             BOOST_WARN_MESSAGE( pad->GetSize( PADSTACK::ALL_LAYERS ).x > 0
                                         && pad->GetSize( PADSTACK::ALL_LAYERS ).y > 0,
-                    aBoard.dir << " " << fp->GetReference() << " pad has zero size" );
+                                aBoard.dir << " " << fp->GetReference() << " pad has zero size" );
         }
     }
 
@@ -188,14 +184,13 @@ static void RunStructuralChecks( const PADS_BOARD_INFO& aBoard )
     for( ZONE* zone : board->Zones() )
     {
         const SHAPE_POLY_SET* outline = zone->Outline();
-        BOOST_REQUIRE_MESSAGE( outline != nullptr,
-                aBoard.dir << " zone has null outline" );
+        BOOST_REQUIRE_MESSAGE( outline != nullptr, aBoard.dir << " zone has null outline" );
 
         for( int ii = 0; ii < outline->OutlineCount(); ++ii )
         {
             BOOST_CHECK_MESSAGE( outline->COutline( ii ).PointCount() >= 3,
-                    aBoard.dir << " zone outline " << ii << " has "
-                               << outline->COutline( ii ).PointCount() << " points" );
+                                 aBoard.dir << " zone outline " << ii << " has "
+                                 << outline->COutline( ii ).PointCount() << " points" );
         }
     }
 }
@@ -298,8 +293,7 @@ BOOST_AUTO_TEST_CASE( ClaySight_MK1_ElementCounts )
         if( trk->Type() == PCB_TRACE_T )
         {
             PCB_LAYER_ID layer = trk->GetLayer();
-            BOOST_CHECK_MESSAGE( layer == F_Cu || layer == B_Cu,
-                    "trace on unexpected layer " << layer );
+            BOOST_CHECK_MESSAGE( layer == F_Cu || layer == B_Cu, "trace on unexpected layer " << layer );
         }
     }
 }
@@ -479,10 +473,7 @@ BOOST_AUTO_TEST_CASE( ClaySight_MK2_ElementCounts )
     for( PCB_TRACK* trk : board->Tracks() )
     {
         if( trk->Type() == PCB_TRACE_T )
-        {
-            BOOST_CHECK_MESSAGE( IsCopperLayer( trk->GetLayer() ),
-                    "trace on non-copper layer " << trk->GetLayer() );
-        }
+            BOOST_CHECK_MESSAGE( IsCopperLayer( trk->GetLayer() ), "trace on non-copper layer " << trk->GetLayer() );
     }
 
     // 72 COPPER items on layer 126 become silkscreen graphics. 64 of these
@@ -610,8 +601,7 @@ BOOST_AUTO_TEST_CASE( ImportDegeneratePourSkipped )
 {
     PCB_IO_PADS plugin;
 
-    wxString filename = KI_TEST::GetPcbnewTestDataDir()
-                        + "plugins/pads/synthetic_degenerate_pour.asc";
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_degenerate_pour.asc";
 
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
 
@@ -644,8 +634,7 @@ BOOST_AUTO_TEST_CASE( ImportFilledCopperSingleOutline )
 {
     PCB_IO_PADS plugin;
 
-    wxString filename = KI_TEST::GetPcbnewTestDataDir()
-                        + "plugins/pads/synthetic_filled_copper.asc";
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_filled_copper.asc";
 
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
 
@@ -692,8 +681,7 @@ BOOST_AUTO_TEST_CASE( Importer_SpecificFixes )
         }
     }
 
-    BOOST_CHECK_MESSAGE( dwgsUserCount > 0,
-            "graphics on PADS layer 18 (drill drawing) should map to Dwgs_User" );
+    BOOST_CHECK_MESSAGE( dwgsUserCount > 0, "graphics on PADS layer 18 (drill drawing) should map to Dwgs_User" );
 
     // Bug 3: U1 pads should be oval (OF shape), not circular (RT thermal).
     // U1 has part type DIO_RECT_3PH_1600V_100A with DIOB_D100JHT160V decal.
@@ -743,9 +731,7 @@ BOOST_AUTO_TEST_CASE( Importer_SpecificFixes )
         }
     }
 
-    BOOST_CHECK_MESSAGE( pourZoneCount <= 13,
-            "should not have duplicate zones from HATOUT; got " << pourZoneCount );
-
+    BOOST_CHECK_MESSAGE( pourZoneCount <= 13, "should not have duplicate zones from HATOUT; got " << pourZoneCount );
     BOOST_CHECK_MESSAGE( filledZoneCount > 0, "HATOUT records should produce filled zones" );
 
     // Bug 4: Dimension line should not be skewed.
@@ -763,8 +749,8 @@ BOOST_AUTO_TEST_CASE( Importer_SpecificFixes )
             VECTOR2I end = dim->GetEnd();
 
             BOOST_CHECK_MESSAGE( start.y == end.y,
-                    "horizontal dimension endpoints should have equal Y coordinates; "
-                    "start.y=" << start.y << " end.y=" << end.y );
+                                 "horizontal dimension endpoints should have equal Y coordinates; "
+                                 "start.y=" << start.y << " end.y=" << end.y );
         }
     }
 
@@ -829,15 +815,15 @@ BOOST_AUTO_TEST_CASE( Peka_ViaImport )
 
     // All vias in this 4-layer board span top-to-bottom, so none should be blind
     BOOST_CHECK_MESSAGE( blindCount == 0,
-            "no vias should be blind; STANDARDVIA spans all copper layers; got "
-            << blindCount << " blind vias" );
+                         "no vias should be blind; STANDARDVIA spans all copper layers; got "
+                         << blindCount << " blind vias" );
 
     BOOST_CHECK_MESSAGE( throughCount > 0, "should have through-hole vias" );
 
     // No via should use the soldermask opening as its pad size
     BOOST_CHECK_MESSAGE( oversizedViaCount == 0,
-            "via size should use copper pad, not soldermask opening; got "
-            << oversizedViaCount << " oversized vias" );
+                         "via size should use copper pad, not soldermask opening; got "
+                         << oversizedViaCount << " oversized vias" );
 
     // No duplicate vias at the same position
     int duplicateCount = 0;
@@ -849,8 +835,8 @@ BOOST_AUTO_TEST_CASE( Peka_ViaImport )
     }
 
     BOOST_CHECK_MESSAGE( duplicateCount == 0,
-            "should not have duplicate vias at the same position; got "
-            << duplicateCount << " positions with duplicates" );
+                         "should not have duplicate vias at the same position; got "
+                         << duplicateCount << " positions with duplicates" );
 
     // STANDARDVIA has a layer 25 (front mask) entry but no layer 28 (back mask),
     // so the back should be tented. JMPVIA has no mask layers at all.
@@ -872,8 +858,8 @@ BOOST_AUTO_TEST_CASE( Peka_ViaImport )
     }
 
     BOOST_CHECK_MESSAGE( backTentedCount == totalVias,
-            "vias without soldermask opening should be tented; "
-            << backTentedCount << " of " << totalVias << " back-tented" );
+                         "vias without soldermask opening should be tented; "
+                         << backTentedCount << " of " << totalVias << " back-tented" );
 }
 
 
@@ -925,27 +911,24 @@ BOOST_AUTO_TEST_CASE( Importer_OvalDrillHits )
             || padNum == "4" || padNum == "5" )
         {
             BOOST_CHECK_MESSAGE( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG,
-                    "pad " << padNum << " should have oblong drill" );
+                                 "pad " << padNum << " should have oblong drill" );
 
             VECTOR2I drillSize = pad->GetDrillSize();
             int major = std::max( drillSize.x, drillSize.y );
             int minor = std::min( drillSize.x, drillSize.y );
 
             BOOST_CHECK_MESSAGE( std::abs( major - expectedMajor ) < tolerance,
-                    "pad " << padNum << " drill major axis " << major
-                    << " should be ~" << expectedMajor );
+                                 "pad " << padNum << " drill major axis " << major << " should be ~" << expectedMajor );
 
             BOOST_CHECK_MESSAGE( std::abs( minor - expectedMinor ) < tolerance,
-                    "pad " << padNum << " drill minor axis " << minor
-                    << " should be ~" << expectedMinor );
+                                 "pad " << padNum << " drill minor axis " << minor << " should be ~" << expectedMinor );
 
             if( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
                 oblongCount++;
         }
     }
 
-    BOOST_CHECK_MESSAGE( oblongCount == 5,
-            "expected 5 pads with oblong drill, got " << oblongCount );
+    BOOST_CHECK_MESSAGE( oblongCount == 5, "expected 5 pads with oblong drill, got " << oblongCount );
 }
 
 
@@ -986,27 +969,23 @@ BOOST_AUTO_TEST_CASE( Peka_AlternateDecalDrill )
     const int expectedDrill = 3175000;
     const int tolerance = 10000;
 
-    BOOST_REQUIRE_MESSAGE( m4->Pads().size() == 1,
-            "MTHOLEAAAB has 1 terminal; got " << m4->Pads().size() );
+    BOOST_REQUIRE_MESSAGE( m4->Pads().size() == 1, "MTHOLEAAAB has 1 terminal; got " << m4->Pads().size() );
 
     PAD* pad = m4->Pads().front();
 
-    BOOST_CHECK_MESSAGE( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE,
-            "M4 pad 1 drill should be circular" );
+    BOOST_CHECK_MESSAGE( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE, "M4 pad 1 drill should be circular" );
 
     VECTOR2I padSize = pad->GetSize( F_Cu );
     int padDim = std::max( padSize.x, padSize.y );
 
     BOOST_CHECK_MESSAGE( std::abs( padDim - expectedPadSize ) < tolerance,
-            "M4 pad size " << padDim << " should be ~" << expectedPadSize
-            << " (250 mil)" );
+                         "M4 pad size " << padDim << " should be ~" << expectedPadSize << " (250 mil)" );
 
     VECTOR2I drillSize = pad->GetDrillSize();
     int drillDim = std::max( drillSize.x, drillSize.y );
 
     BOOST_CHECK_MESSAGE( std::abs( drillDim - expectedDrill ) < tolerance,
-            "M4 drill size " << drillDim << " should be ~" << expectedDrill
-            << " (125 mil)" );
+                         "M4 drill size " << drillDim << " should be ~" << expectedDrill << " (125 mil)" );
 }
 
 
@@ -1032,32 +1011,33 @@ BOOST_AUTO_TEST_CASE( Peka_ZoneFillNoSelfIntersection )
     // cross. Clipper2 BooleanSubtract can produce bridge edges where
     // non-adjacent segments share endpoints at T-junctions. These are
     // valid geometry, not real crossings.
-    auto hasTrueCrossing = []( const SHAPE_POLY_SET& aPoly, int aIdx ) -> bool
-    {
-        std::vector<SEG> segs;
-
-        for( auto it = aPoly.CIterateSegmentsWithHoles( aIdx ); it; it++ )
-            segs.emplace_back( *it );
-
-        for( size_t i = 0; i < segs.size(); i++ )
-        {
-            for( size_t j = i + 1; j < segs.size(); j++ )
+    auto hasTrueCrossing =
+            []( const SHAPE_POLY_SET& aPoly, int aIdx ) -> bool
             {
-                // Segments sharing any endpoint are either adjacent in the
-                // contour or bridge junctions from Clipper2.
-                if( segs[i].A == segs[j].A || segs[i].A == segs[j].B
-                    || segs[i].B == segs[j].A || segs[i].B == segs[j].B )
+                std::vector<SEG> segs;
+
+                for( auto it = aPoly.CIterateSegmentsWithHoles( aIdx ); it; it++ )
+                    segs.emplace_back( *it );
+
+                for( size_t i = 0; i < segs.size(); i++ )
                 {
-                    continue;
+                    for( size_t j = i + 1; j < segs.size(); j++ )
+                    {
+                        // Segments sharing any endpoint are either adjacent in the
+                        // contour or bridge junctions from Clipper2.
+                        if( segs[i].A == segs[j].A || segs[i].A == segs[j].B
+                            || segs[i].B == segs[j].A || segs[i].B == segs[j].B )
+                        {
+                            continue;
+                        }
+
+                        if( segs[i].Intersects( segs[j] ) )
+                            return true;
+                    }
                 }
 
-                if( segs[i].Intersects( segs[j] ) )
-                    return true;
-            }
-        }
-
-        return false;
-    };
+                return false;
+            };
 
     int zonesChecked = 0;
 
@@ -1115,21 +1095,24 @@ BOOST_AUTO_TEST_CASE( ImportMaskPasteLayers )
 {
     PCB_IO_PADS plugin;
 
-    wxString filename =
-            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_mask_paste.asc";
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_mask_paste.asc";
 
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
 
     BOOST_REQUIRE( board != nullptr );
     BOOST_REQUIRE_EQUAL( board->Footprints().size(), 5 );
 
-    auto findFP = [&]( const wxString& aRef ) -> FOOTPRINT*
-    {
-        for( FOOTPRINT* fp : board->Footprints() )
-            if( fp->GetReference() == aRef )
-                return fp;
-        return nullptr;
-    };
+    auto findFP =
+            [&]( const wxString& aRef ) -> FOOTPRINT*
+            {
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    if( fp->GetReference() == aRef )
+                        return fp;
+                }
+
+                return nullptr;
+            };
 
     // U1: explicit F.Mask (layer 21) and F.Paste (layer 23) in pad stack
     {
@@ -1210,8 +1193,7 @@ BOOST_AUTO_TEST_CASE( ImportMaskPasteLayersIssue23254 )
 {
     PCB_IO_PADS plugin;
 
-    wxString filename =
-            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23254/issue23254.asc";
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23254/issue23254.asc";
 
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
 
@@ -1223,8 +1205,9 @@ BOOST_AUTO_TEST_CASE( ImportMaskPasteLayersIssue23254 )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->GetAttribute() == PAD_ATTRIB::SMD && pad->IsOnLayer( F_Mask )
-                && pad->IsOnLayer( F_Paste ) )
+            if( pad->GetAttribute() == PAD_ATTRIB::SMD
+                    && pad->IsOnLayer( F_Mask )
+                    && pad->IsOnLayer( F_Paste ) )
             {
                 foundSmdWithMask = true;
                 break;
@@ -1235,8 +1218,7 @@ BOOST_AUTO_TEST_CASE( ImportMaskPasteLayersIssue23254 )
             break;
     }
 
-    BOOST_CHECK_MESSAGE( foundSmdWithMask,
-                         "At least one SMD pad in issue23254.asc should have F.Mask and F.Paste" );
+    BOOST_CHECK_MESSAGE( foundSmdWithMask, "At least one SMD pad in issue23254.asc should have F.Mask and F.Paste" );
 }
 
 
@@ -1272,8 +1254,7 @@ BOOST_AUTO_TEST_CASE( ImportIssue23352 )
             break;
     }
 
-    BOOST_CHECK_MESSAGE( foundSquarePad,
-                         "At least one pad should have RECTANGLE shape (square pad import)" );
+    BOOST_CHECK_MESSAGE( foundSquarePad, "At least one pad should have RECTANGLE shape (square pad import)" );
 
     // Issue 2: Zone connection should default to FULL (solid), not THERMAL.
     // Pads with RT/ST entries should have per-pad THERMAL override.
@@ -1290,14 +1271,13 @@ BOOST_AUTO_TEST_CASE( ImportIssue23352 )
         }
     }
 
-    BOOST_CHECK_MESSAGE( foundZoneWithFull,
-                         "Zones should default to FULL (solid) connection" );
+    BOOST_CHECK_MESSAGE( foundZoneWithFull, "Zones should default to FULL (solid) connection" );
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL )
+            if( pad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) == ZONE_CONNECTION::THERMAL )
                 foundPadWithThermal = true;
             else
                 foundPadWithoutThermal = true;
@@ -1321,16 +1301,13 @@ BOOST_AUTO_TEST_CASE( ImportIssue23352 )
 
     if( nc1It != netclasses.end() )
     {
-        BOOST_CHECK_MESSAGE( nc1It->second->HasTrackWidth(),
-                             "NETTCLASS1 should have a track width rule" );
+        BOOST_CHECK_MESSAGE( nc1It->second->HasTrackWidth(), "NETTCLASS1 should have a track width rule" );
     }
 
     if( nc2It != netclasses.end() )
     {
-        BOOST_CHECK_MESSAGE( nc2It->second->HasTrackWidth(),
-                             "NETTCLASS2 should have a track width rule" );
-        BOOST_CHECK_MESSAGE( nc2It->second->HasClearance(),
-                             "NETTCLASS2 should have a clearance rule" );
+        BOOST_CHECK_MESSAGE( nc2It->second->HasTrackWidth(), "NETTCLASS2 should have a track width rule" );
+        BOOST_CHECK_MESSAGE( nc2It->second->HasClearance(), "NETTCLASS2 should have a clearance rule" );
     }
 
     // Verify net-to-class assignments from the NET_CLASS DATA block
@@ -1539,21 +1516,19 @@ BOOST_AUTO_TEST_CASE( ImportFingerPadOffsetIssue23425 )
 
         // Stored unrotated in pad-local space: all magnitude on X, none on Y.
         BOOST_CHECK_MESSAGE( offset.y == 0,
-                "J3 pad " << pad->GetNumber()
-                << " offset Y should be 0 (unrotated pad-local), got " << offset.y );
+                             "J3 pad " << pad->GetNumber()
+                             << " offset Y should be 0 (unrotated pad-local), got " << offset.y );
 
         BOOST_CHECK_MESSAGE( std::abs( std::abs( offset.x ) - expectedOffset ) < tolerance,
-                "J3 pad " << pad->GetNumber()
-                << " offset X magnitude " << std::abs( offset.x )
-                << " should be ~" << expectedOffset );
+                             "J3 pad " << pad->GetNumber() << " offset X magnitude " << std::abs( offset.x )
+                             << " should be ~" << expectedOffset );
     }
 
     // The connector's signal fingers all carry the offset; before the fix none of
     // them satisfied the checks above. Require a substantial number so a parser
     // change that stops applying the offset entirely cannot pass silently.
     BOOST_CHECK_MESSAGE( offsetPadCount >= 90,
-            "expected the HSEC8 finger pads to carry a finger offset; got "
-            << offsetPadCount );
+                         "expected the HSEC8 finger pads to carry a finger offset; got " << offsetPadCount );
 }
 
 
@@ -1608,52 +1583,42 @@ BOOST_AUTO_TEST_CASE( ImportIssue23391 )
     BOOST_REQUIRE_MESSAGE( conn_bot_pin1, "X2 pin 1 (bottom connector square pad) not found" );
 
     // Same-shape / different-size padstack must remain in NORMAL mode.
-    BOOST_CHECK_MESSAGE(
-            mtg_top_pad->Padstack().Mode() == PADSTACK::MODE::NORMAL,
-            "Mounting hole with same shape but different sizes should use NORMAL padstack mode" );
+    BOOST_CHECK_MESSAGE( mtg_top_pad->Padstack().Mode() == PADSTACK::MODE::NORMAL,
+                         "Mounting hole with same shape but different sizes should use NORMAL padstack mode" );
 
-    BOOST_CHECK_MESSAGE(
-            mtg_bot_pad->Padstack().Mode() == PADSTACK::MODE::NORMAL,
-            "Bottom-placed mounting hole should also use NORMAL padstack mode" );
+    BOOST_CHECK_MESSAGE( mtg_bot_pad->Padstack().Mode() == PADSTACK::MODE::NORMAL,
+                         "Bottom-placed mounting hole should also use NORMAL padstack mode" );
 
     // Both instances of the same footprint must have identical pad sizes.
     VECTOR2I top_size = mtg_top_pad->GetSize( F_Cu );
     VECTOR2I bot_size = mtg_bot_pad->GetSize( F_Cu );
 
-    BOOST_CHECK_MESSAGE(
-            top_size == bot_size,
-            "Top and bottom mounting holes should have equal pad size on F_Cu; "
-            "top=" << top_size.x << " bot=" << bot_size.x );
+    BOOST_CHECK_MESSAGE( top_size == bot_size,
+                         "Top and bottom mounting holes should have equal pad size on F_Cu; top="
+                         << top_size.x << " bot=" << bot_size.x );
 
     // The primary (layer -2) size must be used, not the secondary (layer -1) size.
     // In the test file layer -2 = 200 mils and layer -1 = 150 mils.
     // At 1 mil = 25400 nm, 200 mils = 5080000 nm.
-    BOOST_CHECK_MESSAGE(
-            top_size.x > 0,
-            "Mounting hole pad size must be non-zero" );
+    BOOST_CHECK_MESSAGE( top_size.x > 0, "Mounting hole pad size must be non-zero" );
 
     // Different-shape padstack (square vs round) must still use FRONT_INNER_BACK.
-    BOOST_CHECK_MESSAGE(
-            conn_top_pin1->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK,
-            "Connector pin-1 with square-on-top / round-on-bottom must use FRONT_INNER_BACK" );
+    BOOST_CHECK_MESSAGE( conn_top_pin1->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK,
+                         "Connector pin-1 with square-on-top / round-on-bottom must use FRONT_INNER_BACK" );
 
     // Square (RECTANGLE) shape must appear on F_Cu for the top-placed connector.
-    BOOST_CHECK_MESSAGE(
-            conn_top_pin1->GetShape( F_Cu ) == PAD_SHAPE::RECTANGLE,
-            "Top connector pin-1 must have RECTANGLE shape on F_Cu" );
+    BOOST_CHECK_MESSAGE( conn_top_pin1->GetShape( F_Cu ) == PAD_SHAPE::RECTANGLE,
+                         "Top connector pin-1 must have RECTANGLE shape on F_Cu" );
 
-    BOOST_CHECK_MESSAGE(
-            conn_top_pin1->GetShape( B_Cu ) == PAD_SHAPE::CIRCLE,
-            "Top connector pin-1 must have CIRCLE shape on B_Cu" );
+    BOOST_CHECK_MESSAGE( conn_top_pin1->GetShape( B_Cu ) == PAD_SHAPE::CIRCLE,
+                         "Top connector pin-1 must have CIRCLE shape on B_Cu" );
 
     // After Flip, the bottom-placed connector pin-1 must have the shapes swapped.
-    BOOST_CHECK_MESSAGE(
-            conn_bot_pin1->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE,
-            "Bottom connector pin-1 must have CIRCLE shape on F_Cu after flip" );
+    BOOST_CHECK_MESSAGE( conn_bot_pin1->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE,
+                         "Bottom connector pin-1 must have CIRCLE shape on F_Cu after flip" );
 
-    BOOST_CHECK_MESSAGE(
-            conn_bot_pin1->GetShape( B_Cu ) == PAD_SHAPE::RECTANGLE,
-            "Bottom connector pin-1 must have RECTANGLE shape on B_Cu after flip" );
+    BOOST_CHECK_MESSAGE( conn_bot_pin1->GetShape( B_Cu ) == PAD_SHAPE::RECTANGLE,
+                         "Bottom connector pin-1 must have RECTANGLE shape on B_Cu after flip" );
 }
 
 
@@ -1677,8 +1642,7 @@ BOOST_AUTO_TEST_CASE( InCircuitTestPointImport )
 {
     PCB_IO_PADS plugin;
 
-    wxString filename =
-            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_testpoint.asc";
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_testpoint.asc";
 
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
 
@@ -1705,10 +1669,8 @@ BOOST_AUTO_TEST_CASE( InCircuitTestPointImport )
     if( tpBottom->Pads().size() == 1 )
     {
         PAD* pad = tpBottom->Pads().front();
-        BOOST_CHECK_MESSAGE( pad->IsOnLayer( B_Cu ),
-                             "TP_BOTTOM_SMD pad should be on B.Cu" );
-        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( F_Cu ),
-                             "TP_BOTTOM_SMD pad should not be on F.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( B_Cu ), "TP_BOTTOM_SMD pad should be on B.Cu" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( F_Cu ), "TP_BOTTOM_SMD pad should not be on F.Cu" );
 
         // Pad size: 1200000 BASIC * 2/3 = 800000 nm (0.8mm).  Allow 5% tolerance.
         int padSize = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
@@ -1723,10 +1685,8 @@ BOOST_AUTO_TEST_CASE( InCircuitTestPointImport )
     if( tpTop->Pads().size() == 1 )
     {
         PAD* pad = tpTop->Pads().front();
-        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),
-                             "TP_TOP_SMD pad should be on F.Cu" );
-        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ),
-                             "TP_TOP_SMD pad should not be on B.Cu" );
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ), "TP_TOP_SMD pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ), "TP_TOP_SMD pad should not be on B.Cu" );
 
         int padSize = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
         BOOST_CHECK_MESSAGE( padSize > 700000 && padSize < 900000,
@@ -1754,10 +1714,8 @@ BOOST_AUTO_TEST_CASE( InCircuitTestPointImport )
 
         VECTOR2I pos = via->GetPosition();
 
-        BOOST_CHECK_MESSAGE( pos != tpBottomPos,
-                             "TP_BOTTOM_SMD position should not have a bare PCB_VIA" );
-        BOOST_CHECK_MESSAGE( pos != tpTopPos,
-                             "TP_TOP_SMD position should not have a bare PCB_VIA" );
+        BOOST_CHECK_MESSAGE( pos != tpBottomPos, "TP_BOTTOM_SMD position should not have a bare PCB_VIA" );
+        BOOST_CHECK_MESSAGE( pos != tpTopPos, "TP_TOP_SMD position should not have a bare PCB_VIA" );
     }
 }
 
@@ -1795,8 +1753,7 @@ BOOST_AUTO_TEST_CASE( Issue23856_TextAndPadOrientation )
             continue;
 
         // No imported free text should be empty (empty == dropped on decode).
-        BOOST_CHECK_MESSAGE( !t->GetText().IsEmpty(),
-                "imported free text should not be empty" );
+        BOOST_CHECK_MESSAGE( !t->GetText().IsEmpty(), "imported free text should not be empty" );
 
         if( t->GetText().Contains( wxT( "TEXMATE" ) ) )
         {
@@ -1804,25 +1761,23 @@ BOOST_AUTO_TEST_CASE( Issue23856_TextAndPadOrientation )
 
             // Copyright sign previously broke the UTF-8 decode.
             BOOST_CHECK_MESSAGE( t->GetText().Contains( wxString::FromUTF8( "©" ) ),
-                    "copyright text should retain the (c) character" );
+                                 "copyright text should retain the (c) character" );
 
             if( t->GetLayer() == F_SilkS )
             {
-                BOOST_CHECK_MESSAGE( !t->IsMirrored(),
-                        "front silkscreen text should not be mirrored" );
+                BOOST_CHECK_MESSAGE( !t->IsMirrored(), "front silkscreen text should not be mirrored" );
                 frontCopyrightNotMirrored = true;
             }
             else if( IsBackLayer( t->GetLayer() ) )
             {
-                BOOST_CHECK_MESSAGE( t->IsMirrored(),
-                        "back-side text should be mirrored" );
+                BOOST_CHECK_MESSAGE( t->IsMirrored(), "back-side text should be mirrored" );
                 backCopyrightMirrored = true;
             }
         }
     }
 
     BOOST_CHECK_MESSAGE( copyrightCount >= 2,
-            "expected the copyright text on both front and back, got " << copyrightCount );
+                         "expected the copyright text on both front and back, got " << copyrightCount );
     BOOST_CHECK( frontCopyrightNotMirrored );
     BOOST_CHECK( backCopyrightMirrored );
 
@@ -1838,7 +1793,7 @@ BOOST_AUTO_TEST_CASE( Issue23856_TextAndPadOrientation )
         foundCN1 = true;
 
         BOOST_CHECK_MESSAGE( fp->Pads().size() >= 10,
-                "CN1 should have at least 10 pads, got " << fp->Pads().size() );
+                             "CN1 should have at least 10 pads, got " << fp->Pads().size() );
 
         for( PAD* pad : fp->Pads() )
         {
@@ -1846,11 +1801,9 @@ BOOST_AUTO_TEST_CASE( Issue23856_TextAndPadOrientation )
             if( pad->GetShape( F_Cu ) == PAD_SHAPE::OVAL
                 || pad->GetShape( F_Cu ) == PAD_SHAPE::RECTANGLE )
             {
-                BOOST_CHECK_MESSAGE(
-                        pad->GetOrientation() == EDA_ANGLE( 90, DEGREES_T ),
-                        "CN1 finger pad " << pad->GetNumber().ToStdString()
-                            << " should be oriented 90 degrees, got "
-                            << pad->GetOrientation().AsDegrees() );
+                BOOST_CHECK_MESSAGE( pad->GetOrientation() == EDA_ANGLE( 90, DEGREES_T ),
+                                     "CN1 finger pad " << pad->GetNumber().ToStdString()
+                                     << " should be oriented 90 degrees, got " << pad->GetOrientation().AsDegrees() );
             }
         }
     }
@@ -1874,16 +1827,17 @@ BOOST_AUTO_TEST_CASE( Issue23392_ThermalReliefGap )
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
     BOOST_REQUIRE( board != nullptr );
 
-    auto findFP = [&]( const wxString& aRef ) -> FOOTPRINT*
-    {
-        for( FOOTPRINT* fp : board->Footprints() )
-        {
-            if( fp->GetReference() == aRef )
-                return fp;
-        }
+    auto findFP =
+            [&]( const wxString& aRef ) -> FOOTPRINT*
+            {
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    if( fp->GetReference() == aRef )
+                        return fp;
+                }
 
-        return nullptr;
-    };
+                return nullptr;
+            };
 
     const int tolerance = 5000;  // 5 um
 
@@ -1897,25 +1851,25 @@ BOOST_AUTO_TEST_CASE( Issue23392_ThermalReliefGap )
 
         for( PAD* pad : l1->Pads() )
         {
-            BOOST_CHECK_MESSAGE( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL,
-                    "L1 pad " << pad->GetNumber().ToStdString()
-                        << " should have THERMAL zone connection" );
+            BOOST_CHECK_MESSAGE( pad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) == ZONE_CONNECTION::THERMAL,
+                                 "L1 pad " << pad->GetNumber().ToStdString()
+                                 << " should have THERMAL zone connection" );
 
-            std::optional<int> spoke = pad->GetLocalThermalSpokeWidthOverride();
+            std::optional<int> spoke = pad->GetLocalThermalSpokeWidthOverride( PADSTACK::ALL_LAYERS );
             BOOST_REQUIRE_MESSAGE( spoke.has_value(),
-                    "L1 pad " << pad->GetNumber().ToStdString()
-                        << " should have a spoke-width override" );
+                                   "L1 pad " << pad->GetNumber().ToStdString()
+                                   << " should have a spoke-width override" );
             BOOST_CHECK_MESSAGE( std::abs( spoke.value() - 1000000 ) < tolerance,
-                    "L1 pad " << pad->GetNumber().ToStdString() << " spoke width "
-                        << spoke.value() << " should be ~1000000 nm" );
+                                 "L1 pad " << pad->GetNumber().ToStdString() << " spoke width "
+                                 << spoke.value() << " should be ~1000000 nm" );
 
-            std::optional<int> gap = pad->GetLocalThermalGapOverride();
+            std::optional<int> gap = pad->GetLocalThermalGapOverride( PADSTACK::ALL_LAYERS );
             BOOST_REQUIRE_MESSAGE( gap.has_value(),
-                    "L1 pad " << pad->GetNumber().ToStdString()
-                        << " should have a thermal gap override" );
+                                   "L1 pad " << pad->GetNumber().ToStdString()
+                                   << " should have a thermal gap override" );
             BOOST_CHECK_MESSAGE( std::abs( gap.value() - 120000 ) < tolerance,
-                    "L1 pad " << pad->GetNumber().ToStdString() << " thermal gap "
-                        << gap.value() << " should be ~120000 nm" );
+                                 "L1 pad " << pad->GetNumber().ToStdString() << " thermal gap "
+                                 << gap.value() << " should be ~120000 nm" );
         }
     }
 
@@ -1927,10 +1881,10 @@ BOOST_AUTO_TEST_CASE( Issue23392_ThermalReliefGap )
         BOOST_REQUIRE( !e1->Pads().empty() );
 
         PAD* pad = e1->Pads().front();
-        BOOST_CHECK_MESSAGE( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL,
-                "E1 pad should have THERMAL zone connection" );
-        BOOST_CHECK_MESSAGE( !pad->GetLocalThermalGapOverride().has_value(),
-                "E1 pad should NOT have a thermal gap override (outer == pad size)" );
+        BOOST_CHECK_MESSAGE( pad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) == ZONE_CONNECTION::THERMAL,
+                             "E1 pad should have THERMAL zone connection" );
+        BOOST_CHECK_MESSAGE( !pad->GetLocalThermalGapOverride( PADSTACK::ALL_LAYERS ).has_value(),
+                             "E1 pad should NOT have a thermal gap override (outer == pad size)" );
     }
 }
 
@@ -1946,8 +1900,7 @@ BOOST_AUTO_TEST_CASE( Issue23241_V5Parts )
 {
     PCB_IO_PADS plugin;
 
-    wxString filename =
-            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23241/partsandattr.asc";
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23241/partsandattr.asc";
 
     std::unique_ptr<BOARD> board = plugin.LoadBoard( filename, nullptr, nullptr );
 

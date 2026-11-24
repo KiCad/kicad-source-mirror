@@ -1543,17 +1543,20 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            pad->SetLocalZoneConnection( (ZONE_CONNECTION) tmp );
+            // Legacy format pre-dates complex padstacks
+            pad->SetLocalZoneConnection( PADSTACK::ALL_LAYERS, (ZONE_CONNECTION) tmp );
         }
         else if( TESTLINE( ".ThermalWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
-            pad->SetLocalThermalSpokeWidthOverride( tmp );
+            // Legacy format pre-dates complex padstacks
+            pad->SetLocalThermalSpokeWidthOverride( PADSTACK::ALL_LAYERS, tmp );
         }
         else if( TESTLINE( ".ThermalGap" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalGap" ) );
-            pad->SetLocalThermalGapOverride( tmp );
+            // Legacy format pre-dates complex padstacks
+            pad->SetLocalThermalGapOverride( PADSTACK::ALL_LAYERS, tmp );
         }
         else if( TESTLINE( "$EndPAD" ) )
         {

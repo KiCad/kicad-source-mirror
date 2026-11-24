@@ -629,10 +629,13 @@ public:
         m_padStack.SolderPasteMarginRatio( B_Paste ) = aRatio;
     }
 
-    void SetLocalZoneConnection( ZONE_CONNECTION aType ) { m_padStack.ZoneConnection() = aType; }
-    ZONE_CONNECTION GetLocalZoneConnection() const
+    void SetLocalZoneConnection( PCB_LAYER_ID aLayer, ZONE_CONNECTION aType )
     {
-        return m_padStack.ZoneConnection().value_or( ZONE_CONNECTION::INHERITED );
+        m_padStack.ZoneConnection( aLayer ) = aType;
+    }
+    ZONE_CONNECTION GetLocalZoneConnection( PCB_LAYER_ID aLayer ) const
+    {
+        return m_padStack.ZoneConnection( aLayer ).value_or( ZONE_CONNECTION::INHERITED );
     }
 
     /**
@@ -750,59 +753,48 @@ public:
     */
     VECTOR2I GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const;
 
-    ZONE_CONNECTION GetZoneConnectionOverrides( wxString* aSource = nullptr ) const;
+    ZONE_CONNECTION GetZoneConnectionOverrides( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const;
 
     /**
      * Set the width of the thermal spokes connecting the pad to a zone.  If != 0 this will
      * override similar settings in the parent footprint and zone.
      */
-    void SetLocalThermalSpokeWidthOverride( std::optional<int> aWidth )
+    void SetLocalThermalSpokeWidthOverride( PCB_LAYER_ID aLayer, std::optional<int> aWidth )
     {
-        m_padStack.ThermalSpokeWidth() = aWidth;
+        m_padStack.ThermalSpokeWidth( aLayer ) = aWidth;
     }
-    std::optional<int> GetLocalThermalSpokeWidthOverride() const
+    std::optional<int> GetLocalThermalSpokeWidthOverride( PCB_LAYER_ID aLayer ) const
     {
-        return m_padStack.ThermalSpokeWidth();
+        return m_padStack.ThermalSpokeWidth( aLayer );
     }
 
-    int GetLocalSpokeWidthOverride( wxString* aSource = nullptr ) const;
-
+    int GetLocalSpokeWidthOverride( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const;
     /**
      * The orientation of the thermal spokes.  45° will produce an X (the default for circular
      * pads and circular-anchored custom shaped pads), while 90° will produce a + (the default
      * for all other shapes).
      */
-    void SetThermalSpokeAngle( const EDA_ANGLE& aAngle )
+    void SetThermalSpokeAngle( PCB_LAYER_ID aLayer, const EDA_ANGLE& aAngle )
     {
-        m_padStack.SetThermalSpokeAngle( aAngle );
+        m_padStack.SetThermalSpokeAngle( aAngle, aLayer );
     }
-    EDA_ANGLE GetThermalSpokeAngle() const
+    EDA_ANGLE GetThermalSpokeAngle( PCB_LAYER_ID aLayer ) const
     {
-        return m_padStack.ThermalSpokeAngle();
-    }
-
-    // For property system
-    void SetThermalSpokeAngleDegrees( double aAngle )
-    {
-        m_padStack.SetThermalSpokeAngle( EDA_ANGLE( aAngle, DEGREES_T ) );
-    }
-    double GetThermalSpokeAngleDegrees() const
-    {
-        return m_padStack.ThermalSpokeAngle().AsDegrees();
+        return m_padStack.ThermalSpokeAngle( aLayer );
     }
 
-    void SetThermalGap( int aGap ) { m_padStack.ThermalGap() = aGap; }
-    int GetThermalGap() const { return m_padStack.ThermalGap().value_or( 0 ); }
+    void SetThermalGap( PCB_LAYER_ID aLayer, int aGap ) { m_padStack.ThermalGap( aLayer ) = aGap; }
+    int GetThermalGap(PCB_LAYER_ID aLayer ) const { return m_padStack.ThermalGap( aLayer ).value_or( 0 ); }
 
-    int GetLocalThermalGapOverride( wxString* aSource ) const;
+    int GetLocalThermalGapOverride( PCB_LAYER_ID aLayer, wxString* aSource ) const;
 
-    std::optional<int> GetLocalThermalGapOverride() const
+    std::optional<int> GetLocalThermalGapOverride( PCB_LAYER_ID aLayer ) const
     {
-        return m_padStack.ThermalGap();
+        return m_padStack.ThermalGap( aLayer );
     }
-    void SetLocalThermalGapOverride( const std::optional<int>& aOverride )
+    void SetLocalThermalGapOverride(  PCB_LAYER_ID aLayer, const std::optional<int>& aOverride )
     {
-        m_padStack.ThermalGap() = aOverride;
+        m_padStack.ThermalGap( aLayer ) = aOverride;
     }
 
     void SetRoundRectCornerRadius( PCB_LAYER_ID aLayer, double aRadius );
@@ -1108,6 +1100,79 @@ public:
 
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
+
+protected:
+    friend struct PAD_DESC;
+
+    //
+    // These calls are for the property system ONLY.  The inspector doesn't currently support custom
+    // values per layer, so these methods all read from F_Cu/ALL_LAYERS, and write uniformly to the
+    // padstack's complete set of extant layers.
+    //
+
+    ZONE_CONNECTION getZoneConnectionProperty() const
+    {
+        // The KiCad GUI doesn't currently support custom spoke angles per layer.
+        return m_padStack.ZoneConnection( PADSTACK::TEMP_ALL_LAYERS ).value_or( ZONE_CONNECTION::INHERITED );
+    }
+    void setZoneConnectionProperty( ZONE_CONNECTION aType )
+    {
+        // The KiCad GUI doesn't currently support custom spoke angles per layer.  Make sure they're
+        // uniform.
+        m_padStack.ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    m_padStack.ZoneConnection( layer ) = aType;
+                } );
+    }
+
+    std::optional<int> getLocalThermalSpokeWidthProperty() const
+    {
+        // The KiCad GUI doesn't currently support custom spoke angles per layer.
+        return GetLocalSpokeWidthOverride( PADSTACK::TEMP_ALL_LAYERS );
+    }
+    void setLocalThermalSpokeWidthProperty( std::optional<int> aWidth )
+    {
+        // The KiCad GUI doesn't currently support custom spoke angles per layer.  Make sure they're
+        // uniform.
+        m_padStack.ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    m_padStack.ThermalSpokeWidth( layer ) = aWidth;
+                } );
+    }
+
+    double getThermalSpokeAngleProperty() const
+    {
+        // The KiCad GUI doesn't currently support custom spoke angles per layer.
+        return m_padStack.ThermalSpokeAngle( PADSTACK::TEMP_ALL_LAYERS ).AsDegrees();
+    }
+    void setThermalSpokeAngleProperty( double aAngle )
+    {
+        // The KiCad GUI doesn't currently support custom spoke angles per layer.  Make sure they're
+        // uniform.
+        m_padStack.ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    m_padStack.SetThermalSpokeAngle( EDA_ANGLE( aAngle, DEGREES_T ), layer );
+                } );
+    }
+
+    std::optional<int> getLocalThermalGapProperty() const
+    {
+        // The KiCad GUI doesn't currently support custom thermal gaps per layer.
+        return m_padStack.ThermalGap( PADSTACK::TEMP_ALL_LAYERS );
+    }
+    void setLocalThermalGapProperty(  const std::optional<int>& aOverride )
+    {
+        // The KiCad GUI doesn't currently support custom thermal gaps per layer.  Make sure they're
+        // uniform.
+        m_padStack.ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    m_padStack.ThermalGap( layer ) = aOverride;
+                } );
+    }
 
 private:
     const SHAPE_COMPOUND& buildEffectiveShape( PCB_LAYER_ID aLayer ) const;

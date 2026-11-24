@@ -507,18 +507,18 @@ public:
     std::optional<double>& SolderPasteMarginRatio( PCB_LAYER_ID aLayer = F_Cu );
     const std::optional<double>& SolderPasteMarginRatio( PCB_LAYER_ID aLayer = F_Cu ) const;
 
-    std::optional<ZONE_CONNECTION>& ZoneConnection( PCB_LAYER_ID aLayer = F_Cu );
-    const std::optional<ZONE_CONNECTION>& ZoneConnection( PCB_LAYER_ID aLayer = F_Cu ) const;
+    std::optional<ZONE_CONNECTION>& ZoneConnection( PCB_LAYER_ID aLayer );
+    const std::optional<ZONE_CONNECTION>& ZoneConnection( PCB_LAYER_ID aLayer ) const;
 
-    std::optional<int>& ThermalSpokeWidth( PCB_LAYER_ID aLayer = F_Cu );
-    const std::optional<int>& ThermalSpokeWidth( PCB_LAYER_ID aLayer = F_Cu ) const;
+    std::optional<int>& ThermalSpokeWidth( PCB_LAYER_ID aLayer );
+    const std::optional<int>& ThermalSpokeWidth( PCB_LAYER_ID aLayer ) const;
 
-    std::optional<int>& ThermalGap( PCB_LAYER_ID aLayer = F_Cu );
-    const std::optional<int>& ThermalGap( PCB_LAYER_ID aLayer = F_Cu ) const;
+    std::optional<int>& ThermalGap( PCB_LAYER_ID aLayer );
+    const std::optional<int>& ThermalGap( PCB_LAYER_ID aLayer ) const;
 
-    EDA_ANGLE DefaultThermalSpokeAngleForShape( PCB_LAYER_ID aLayer = F_Cu ) const;
-    EDA_ANGLE ThermalSpokeAngle( PCB_LAYER_ID aLayer = F_Cu ) const;
-    void SetThermalSpokeAngle( EDA_ANGLE aAngle, PCB_LAYER_ID aLayer = F_Cu );
+    EDA_ANGLE DefaultThermalSpokeAngleForShape( PCB_LAYER_ID aLayer ) const;
+    EDA_ANGLE ThermalSpokeAngle( PCB_LAYER_ID aLayer ) const;
+    void SetThermalSpokeAngle( EDA_ANGLE aAngle, PCB_LAYER_ID aLayer );
 
     std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer );
     const std::vector<std::shared_ptr<PCB_SHAPE>>& Primitives( PCB_LAYER_ID aLayer ) const;

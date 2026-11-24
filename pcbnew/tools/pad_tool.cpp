@@ -162,7 +162,7 @@ public:
         std::unique_ptr<PAD> pad = std::make_unique<PAD>( nullptr );
 
         pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
-        pad->SetThermalSpokeAngle( ANGLE_90 );
+        pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
 
         switch( aMasterType )
         {
@@ -1264,8 +1264,8 @@ void PAD_TOOL::explodePad( PAD* aPad, BOARD_COMMIT& aCommit )
 
                         if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::SEGMENT )
                         {
-                            if( aPad->GetLocalThermalSpokeWidthOverride().has_value() )
-                                shape->SetWidth( aPad->GetLocalThermalSpokeWidthOverride().value() );
+                            if( aPad->Padstack().ThermalSpokeWidth( padstackStorageLayer ).has_value() )
+                                shape->SetWidth( aPad->Padstack().ThermalSpokeWidth( padstackStorageLayer ).value() );
                             else
                                 shape->SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
                         }

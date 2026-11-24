@@ -7770,13 +7770,13 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_zone_connect:
-            pad->SetLocalZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
+            pad->SetLocalZoneConnection( F_Cu, (ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
         case T_thermal_width:       // legacy token
         case T_thermal_bridge_width:
-            pad->SetLocalThermalSpokeWidthOverride( parseBoardUnits( token ) );
+            pad->SetLocalThermalSpokeWidthOverride( F_Cu, parseBoardUnits( token ) );
             NeedRIGHT();
             break;
 
@@ -7787,7 +7787,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
 
         case T_thermal_gap:
-            pad->SetThermalGap( parseBoardUnits( "thermal relief gap value" ) );
+            pad->SetThermalGap( F_Cu, parseBoardUnits( "thermal relief gap value" ) );
             NeedRIGHT();
             break;
 
@@ -7975,25 +7975,25 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
     if( thermalBrAngleOverride )
     {
-        pad->SetThermalSpokeAngle( *thermalBrAngleOverride );
+        pad->SetThermalSpokeAngle( F_Cu, *thermalBrAngleOverride );
     }
     else
     {
         // This is here because custom pad anchor shape isn't known before reading (options
         if( pad->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE )
         {
-            pad->SetThermalSpokeAngle( ANGLE_45 );
+            pad->SetThermalSpokeAngle( F_Cu, ANGLE_45 );
         }
         else if( pad->GetShape( F_Cu ) == PAD_SHAPE::CUSTOM && pad->GetAnchorPadShape( F_Cu ) == PAD_SHAPE::CIRCLE )
         {
             if( m_requiredVersion <= 20211014 ) // 6.0
-                pad->SetThermalSpokeAngle( ANGLE_90 );
+                pad->SetThermalSpokeAngle( F_Cu, ANGLE_90 );
             else
-                pad->SetThermalSpokeAngle( ANGLE_45 );
+                pad->SetThermalSpokeAngle( F_Cu, ANGLE_45 );
         }
         else
         {
-            pad->SetThermalSpokeAngle( ANGLE_90 );
+            pad->SetThermalSpokeAngle( F_Cu, ANGLE_90 );
         }
     }
 
@@ -8381,7 +8381,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     break;
 
                 case T_thermal_bridge_angle:
-                    padstack.SetThermalSpokeAngle( EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T ) );
+                    padstack.ThermalSpokeAngle( curLayer ) =
+                            EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T );
                     NeedRIGHT();
                     break;
 

@@ -851,32 +851,44 @@ void PCB_IO_PADS::loadFootprints()
                         if( layer_def.sizeA <= 0 )
                             continue;
 
-                        // RT/ST are thermal relief spoke patterns for plane layers.
-                        // RA/SA are anti-pad (clearance) shapes for plane layers.
-                        // KiCad computes thermal reliefs from zone settings, so skip
-                        // these to avoid overwriting the actual pad shape.  However,
-                        // the presence of RT/ST indicates this pad should have thermal
-                        // relief rather than a solid connection to copper pours.
+                        // RT/ST are thermal relief spoke patterns for plane layers.  RA/SA are anti-pad
+                        // (clearance) shapes for plane layers.  KiCad computes thermal reliefs from zone settings,
+                        // so skip these to avoid overwriting the actual pad shape.  However, the presence of RT/ST
+                        // indicates this pad should have thermal relief rather than a solid connection to copper
+                        // pours.
                         if( PADS_IO::IsThermalReliefPadRow( layer_def ) )
                         {
-                            pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+                            // Note that neither the Kicad GUI nor the PADS importer currently supports these being
+                            // different on different layers.
 
-                            if( layer_def.thermal_spoke_width > 0 )
-                                pad->SetLocalThermalSpokeWidthOverride( decalScaler( layer_def.thermal_spoke_width ) );
+                            pad->Padstack().ForEachUniqueLayer(
+                                    [&]( PCB_LAYER_ID layer )
+                                    {
+                                        pad->Padstack().ZoneConnection( layer ) = ZONE_CONNECTION::THERMAL;
 
-                            if( layer_def.thermal_outer_diameter > layer_def.sizeA )
-                            {
-                                double gap = ( layer_def.thermal_outer_diameter - layer_def.sizeA ) / 2.0;
-                                int    scaledGap = decalScaler( gap );
+                                        if( layer_def.thermal_spoke_width > 0 )
+                                        {
+                                            int scaledWidth = decalScaler( layer_def.thermal_spoke_width );
+                                            pad->Padstack().ThermalSpokeWidth( layer ) = scaledWidth;
+                                        }
 
-                                // An override of 0 reads as "inherit the zone gap", so only
-                                // apply it when the relief gap survives rounding to nm.
-                                if( scaledGap > 0 )
-                                    pad->SetLocalThermalGapOverride( scaledGap );
-                            }
+                                        if( layer_def.thermal_outer_diameter > layer_def.sizeA )
+                                        {
+                                            double gap = ( layer_def.thermal_outer_diameter - layer_def.sizeA ) / 2.0;
+                                            int    scaledGap = decalScaler( gap );
 
-                            if( layer_def.thermal_spoke_orientation != 0.0 )
-                                pad->SetThermalSpokeAngleDegrees( layer_def.thermal_spoke_orientation );
+                                            // An override of 0 reads as "inherit the zone gap", so only
+                                            // apply it when the relief gap survives rounding to nm.
+                                            if( scaledGap > 0 )
+                                                pad->Padstack().ThermalGap( layer ) = scaledGap;
+                                        }
+
+                                        if( layer_def.thermal_spoke_orientation != 0.0 )
+                                        {
+                                            EDA_ANGLE orientation( layer_def.thermal_spoke_orientation, DEGREES_T );
+                                            pad->Padstack().ThermalSpokeAngle( layer ) = orientation;
+                                        }
+                                    } );
 
                             continue;
                         }

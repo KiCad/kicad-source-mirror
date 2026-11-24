@@ -757,17 +757,34 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_pasteMargin.SetOffsetValue( m_previewPad->GetLocalSolderPasteMargin() );
     m_pasteMargin.SetRatioValue( m_previewPad->GetLocalSolderPasteMarginRatio() );
 
-    if( m_previewPad->GetLocalThermalSpokeWidthOverride().has_value() )
-        m_spokeWidth.ChangeValue( m_previewPad->GetLocalThermalSpokeWidthOverride().value() );
-    else
-        m_spokeWidth.SetNull();
+    {
+        // NB: The KiCad GUI currently only supports a single set of thermal relief properties per pad.  If the
+        // padstack is complex and contains other gap/spoke-width/angle values on other layers, they will be lost
+        // of the user OK's.
 
-    if( m_previewPad->GetLocalThermalGapOverride().has_value() )
-        m_thermalGap.ChangeValue( m_previewPad->GetLocalThermalGapOverride().value() );
-    else
-        m_thermalGap.SetNull();
+        if( m_previewPad->GetLocalThermalGapOverride( PADSTACK::ALL_LAYERS ).has_value() )
+            m_thermalGap.ChangeValue( m_previewPad->GetLocalThermalGapOverride( PADSTACK::ALL_LAYERS ).value() );
+        else
+            m_thermalGap.SetNull();
 
-    m_spokeAngle.ChangeAngleValue( m_previewPad->GetThermalSpokeAngle() );
+        if( m_previewPad->GetLocalThermalSpokeWidthOverride( PADSTACK::ALL_LAYERS ).has_value() )
+            m_spokeWidth.ChangeValue( m_previewPad->GetLocalThermalSpokeWidthOverride( PADSTACK::ALL_LAYERS ).value() );
+        else
+            m_spokeWidth.SetNull();
+
+        m_spokeAngle.ChangeAngleValue( m_previewPad->GetThermalSpokeAngle( PADSTACK::ALL_LAYERS ) );
+
+        switch( m_previewPad->GetLocalZoneConnection( PADSTACK::ALL_LAYERS ) )
+        {
+        default:
+        case ZONE_CONNECTION::INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
+        case ZONE_CONNECTION::FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
+        case ZONE_CONNECTION::THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
+        case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
+        }
+
+    }
+
     m_pad_orientation.ChangeAngleValue( m_previewPad->GetOrientation() );
 
     m_cbTeardrops->SetValue( m_previewPad->GetTeardropParams().m_Enabled );
@@ -779,15 +796,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_spTeardropSizePercent->SetValue( m_previewPad->GetTeardropParams().m_BestWidthRatio *100 );
     m_spTeardropHDPercent->SetValue( m_previewPad->GetTeardropParams().m_WidthtoSizeFilterRatio*100 );
     m_curvedEdges->SetValue( m_previewPad->GetTeardropParams().m_CurvedEdges );
-
-    switch( m_previewPad->GetLocalZoneConnection() )
-    {
-    default:
-    case ZONE_CONNECTION::INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
-    case ZONE_CONNECTION::FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
-    case ZONE_CONNECTION::THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
-    case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
-    }
 
     if( m_previewPad->GetCustomShapeInZoneOpt() == CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
         m_ZoneCustomPadShape->SetSelection( 1 );
@@ -2039,29 +2047,36 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetOffsetValue() );
     aPad->SetLocalSolderPasteMarginRatio( m_pasteMargin.GetRatioValue() );
 
-    if( m_spokeWidth.IsNull() )
-        aPad->SetLocalThermalSpokeWidthOverride( {} );
-    else
-        aPad->SetLocalThermalSpokeWidthOverride( m_spokeWidth.GetIntValue() );
+    // The KiCad GUI doesn't currently support setting these values per layer.  Make sure we set them to all
+    // layers so that any complex padstacks are uniform.
+    aPad->Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                if( m_spokeWidth.IsNull() )
+                    aPad->SetLocalThermalSpokeWidthOverride( layer, {} );
+                else
+                    aPad->SetLocalThermalSpokeWidthOverride( layer, m_spokeWidth.GetIntValue() );
 
-    if( m_thermalGap.IsNull() )
-        aPad->SetLocalThermalGapOverride( {} );
-    else
-        aPad->SetLocalThermalGapOverride( m_thermalGap.GetIntValue() );
+                if( m_thermalGap.IsNull() )
+                    aPad->SetLocalThermalGapOverride( layer, {} );
+                else
+                    aPad->SetLocalThermalGapOverride( layer, m_thermalGap.GetIntValue() );
 
-    aPad->SetThermalSpokeAngle( m_spokeAngle.GetAngleValue() );
+                aPad->SetThermalSpokeAngle( layer, m_spokeAngle.GetAngleValue() );
+
+                switch( m_ZoneConnectionChoice->GetSelection() )
+                {
+                default:
+                case 0: aPad->SetLocalZoneConnection( layer, ZONE_CONNECTION::INHERITED ); break;
+                case 1: aPad->SetLocalZoneConnection( layer, ZONE_CONNECTION::FULL );      break;
+                case 2: aPad->SetLocalZoneConnection( layer, ZONE_CONNECTION::THERMAL );   break;
+                case 3: aPad->SetLocalZoneConnection( layer, ZONE_CONNECTION::NONE );      break;
+                }
+            } );
+
 
     // And rotation
     aPad->SetOrientation( m_pad_orientation.GetAngleValue() );
-
-    switch( m_ZoneConnectionChoice->GetSelection() )
-    {
-    default:
-    case 0: aPad->SetLocalZoneConnection( ZONE_CONNECTION::INHERITED ); break;
-    case 1: aPad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );      break;
-    case 2: aPad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );   break;
-    case 3: aPad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );      break;
-    }
 
     VECTOR2I pos( m_posX.GetIntValue(), m_posY.GetIntValue() );
 

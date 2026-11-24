@@ -2125,9 +2125,9 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
 }
 
 
-ZONE_CONNECTION PAD::GetZoneConnectionOverrides( wxString* aSource ) const
+ZONE_CONNECTION PAD::GetZoneConnectionOverrides( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    ZONE_CONNECTION connection = m_padStack.ZoneConnection().value_or( ZONE_CONNECTION::INHERITED );
+    ZONE_CONNECTION connection = m_padStack.ZoneConnection( aLayer ).value_or( ZONE_CONNECTION::INHERITED );
 
     if( connection != ZONE_CONNECTION::INHERITED )
     {
@@ -2145,21 +2145,21 @@ ZONE_CONNECTION PAD::GetZoneConnectionOverrides( wxString* aSource ) const
 }
 
 
-int PAD::GetLocalSpokeWidthOverride( wxString* aSource ) const
+int PAD::GetLocalSpokeWidthOverride( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    if( m_padStack.ThermalSpokeWidth().has_value() && aSource )
+    if( m_padStack.ThermalSpokeWidth( aLayer ).has_value() && aSource )
         *aSource = _( "pad" );
 
-    return m_padStack.ThermalSpokeWidth().value_or( 0 );
+    return m_padStack.ThermalSpokeWidth( aLayer ).value_or( 0 );
 }
 
 
-int PAD::GetLocalThermalGapOverride( wxString* aSource ) const
+int PAD::GetLocalThermalGapOverride( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
-    if( m_padStack.ThermalGap().has_value() && aSource )
+    if( m_padStack.ThermalGap( aLayer ).has_value() && aSource )
         *aSource = _( "pad" );
 
-    return GetLocalThermalGapOverride().value_or( 0 );
+    return GetLocalThermalGapOverride( aLayer ).value_or( 0 );
 }
 
 
@@ -2979,10 +2979,15 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetLocalSolderPasteMargin( aMasterPad.GetLocalSolderPasteMargin() );
     SetLocalSolderPasteMarginRatio( aMasterPad.GetLocalSolderPasteMarginRatio() );
 
-    SetLocalZoneConnection( aMasterPad.GetLocalZoneConnection() );
-    SetLocalThermalSpokeWidthOverride( aMasterPad.GetLocalThermalSpokeWidthOverride() );
-    SetThermalSpokeAngle( aMasterPad.GetThermalSpokeAngle() );
-    SetLocalThermalGapOverride( aMasterPad.GetLocalThermalGapOverride() );
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID layer )
+            {
+                Padstack().ZoneConnection( layer ) = aMasterPad.GetLocalZoneConnection( layer );
+
+                Padstack().ThermalSpokeWidth( layer ) = aMasterPad.Padstack().ThermalSpokeWidth( layer );
+                Padstack().ThermalSpokeAngle( layer ) = aMasterPad.Padstack().ThermalSpokeAngle( layer );
+                Padstack().ThermalGap( layer ) = aMasterPad.Padstack().ThermalGap( layer );
+            } );
 
     SetCustomShapeInZoneOpt( aMasterPad.GetCustomShapeInZoneOpt() );
 
@@ -3000,8 +3005,7 @@ void PAD::swapData( BOARD_ITEM* aImage )
 }
 
 
-bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
-                                  ERROR_LOC aErrorLoc ) const
+bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int aError, ERROR_LOC aErrorLoc ) const
 {
     VECTOR2I drillsize = GetDrillSize();
 
@@ -4027,27 +4031,27 @@ static struct PAD_DESC
                 .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PAD, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),
-                    &PAD::SetLocalZoneConnection, &PAD::GetLocalZoneConnection ),
+                    &PAD::setZoneConnectionProperty, &PAD::getZoneConnectionProperty ),
                     groupOverrides )
                 .SetIsCopyable();
 
         constexpr int minZoneWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Spoke Width" ),
-                    &PAD::SetLocalThermalSpokeWidthOverride, &PAD::GetLocalThermalSpokeWidthOverride,
+                    &PAD::setLocalThermalSpokeWidthProperty, &PAD::getLocalThermalSpokeWidthProperty,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minZoneWidth, INT_MAX> )
                 .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
-                    &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
+                    &PAD::setThermalSpokeAngleProperty, &PAD::getThermalSpokeAngleProperty,
                     PROPERTY_DISPLAY::PT_DEGREE ),
                     groupOverrides )
                 .SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PAD, std::optional<int>>( _HKI( "Thermal Relief Gap" ),
-                    &PAD::SetLocalThermalGapOverride, &PAD::GetLocalThermalGapOverride,
+                    &PAD::setLocalThermalGapProperty, &PAD::getLocalThermalGapProperty,
                     PROPERTY_DISPLAY::PT_SIZE ),
                     groupOverrides )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator )

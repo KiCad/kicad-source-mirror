@@ -329,7 +329,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT* aFootp
     if( hasHole )
         PCB_IO_EASYEDAPRO_PARSER::SizeHoleOnlyPad( *pad, aRow.inner.value( "plated", true ) );
 
-    pad->SetThermalSpokeAngle( ANGLE_90 );
+    pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
 
     return pad;
 }

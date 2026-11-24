@@ -1242,10 +1242,22 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     }
 
     if( csPadcode.ReliefClearance != UNDEFINED_VALUE )
-        pad->SetThermalGap( getKiCadLength( csPadcode.ReliefClearance, 0.5 ) );
+    {
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    pad->SetThermalGap( layer, getKiCadLength( csPadcode.ReliefClearance, 0.5 ) );
+                } );
+    }
 
     if( csPadcode.ReliefWidth != UNDEFINED_VALUE )
-        pad->SetLocalThermalSpokeWidthOverride( getKiCadLength( csPadcode.ReliefWidth, 0.5 ) );
+    {
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    pad->SetLocalThermalSpokeWidthOverride( layer, getKiCadLength( csPadcode.ReliefWidth, 0.5 ) );
+                } );
+    }
 
     if( csPadcode.DrillDiameter != UNDEFINED_VALUE )
     {

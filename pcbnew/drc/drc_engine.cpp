@@ -1250,10 +1250,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     }
     else if( aConstraintType == ZONE_CONNECTION_CONSTRAINT )
     {
-        if( pad && pad->GetLocalZoneConnection() != ZONE_CONNECTION::INHERITED )
+        if( pad && pad->GetLocalZoneConnection( aLayer ) != ZONE_CONNECTION::INHERITED )
         {
             wxString msg;
-            ZONE_CONNECTION override = pad->GetZoneConnectionOverrides( &msg );
+            ZONE_CONNECTION override = pad->GetZoneConnectionOverrides( aLayer, &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; zone connection: %s." ),
@@ -1267,10 +1267,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     }
     else if( aConstraintType == THERMAL_RELIEF_GAP_CONSTRAINT )
     {
-        if( pad && pad->GetLocalThermalGapOverride( nullptr ) > 0 )
+        if( pad && pad->GetLocalThermalGapOverride( aLayer, nullptr ) > 0 )
         {
             wxString msg;
-            int gap_override = pad->GetLocalThermalGapOverride( &msg );
+            int gap_override = pad->GetLocalThermalGapOverride( aLayer, &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal relief gap: %s." ),
@@ -1284,10 +1284,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     }
     else if( aConstraintType == THERMAL_SPOKE_WIDTH_CONSTRAINT )
     {
-        if( pad && pad->GetLocalSpokeWidthOverride( nullptr ) > 0 )
+        if( pad && pad->GetLocalSpokeWidthOverride( aLayer, nullptr ) > 0 )
         {
             wxString msg;
-            int spoke_override = pad->GetLocalSpokeWidthOverride( &msg );
+            int spoke_override = pad->GetLocalSpokeWidthOverride( aLayer, &msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal spoke width: %s." ),

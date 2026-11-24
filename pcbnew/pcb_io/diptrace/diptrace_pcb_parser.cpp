@@ -5930,7 +5930,7 @@ void PCB_PARSER::CreateTracksAndVias()
 void PCB_PARSER::CreateZones()
 {
     std::unordered_map<int, int> zoneSpokeModeByDipNet;
-    std::unordered_set<int>       zoneSpokeModeConflicts;
+    std::unordered_set<int>      zoneSpokeModeConflicts;
 
     for( const DT_ZONE& dtZone : m_zones )
     {
@@ -5956,8 +5956,7 @@ void PCB_PARSER::CreateZones()
         if( dtZone.minWidth > 0 )
         {
             zone->SetMinThickness( std::max( ToKiCadCoord( dtZone.minWidth ),
-                                             static_cast<int>( ZONE_THICKNESS_MIN_VALUE_MM
-                                                                * pcbIUScale.IU_PER_MM ) ) );
+                                             static_cast<int>( ZONE_THICKNESS_MIN_VALUE_MM * pcbIUScale.IU_PER_MM ) ) );
         }
 
         if( dtZone.spokeWidth > 0 )
@@ -6064,12 +6063,14 @@ void PCB_PARSER::CreateZones()
 
             if( spokeMode == 1 || spokeMode == 4 )
             {
-                pad->SetThermalSpokeAngle( ANGLE_90 );
+                // No complex padstacks in diptrace
+                pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
                 adjustedPadThermalAngles++;
             }
             else if( spokeMode == 2 || spokeMode == 3 )
             {
-                pad->SetThermalSpokeAngle( ANGLE_45 );
+                // No complex padstacks in diptrace
+                pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_45 );
                 adjustedPadThermalAngles++;
             }
         }

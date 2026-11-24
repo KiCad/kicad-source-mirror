@@ -3975,7 +3975,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             // Use pad's thermal spoke angle for both solid and hatch zones.
             // This ensures custom thermal spoke templates are respected.
             if( pad )
-                thermalSpokeAngle = pad->GetThermalSpokeAngle();
+                thermalSpokeAngle = pad->GetThermalSpokeAngle( aLayer );
 
             BOX2I     spokesBox;
             VECTOR2I  position;

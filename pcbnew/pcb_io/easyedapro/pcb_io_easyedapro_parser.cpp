@@ -893,7 +893,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT* aFootprint,
     if( hasHole )
         SizeHoleOnlyPad( *pad, !( line.size() > 15 && line.at( 15 ).is_number() && line.at( 15 ).get<int>() == 0 ) );
 
-    pad->SetThermalSpokeAngle( ANGLE_90 );
+    pad->SetThermalSpokeAngle( PADSTACK::ALL_LAYERS, ANGLE_90 );
 
     return pad;
 }
