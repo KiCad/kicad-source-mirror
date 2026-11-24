@@ -80,8 +80,10 @@ bool SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary, const std:
         return true;
     }
 
-    for( const auto& node : root->children )
+    if( !root->children.empty() )
     {
+        const auto& node = root->children.front();
+
         if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModelAko>() )
         {
             // The first pass of model loading is done in parallel, so we can't (yet) look
