@@ -168,7 +168,7 @@ static bool sortByCentroidZ( const OBJECT_2D* a, const OBJECT_2D* b )
 
 void BVH_CONTAINER_2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNodeParent )
 {
-    wxASSERT( aNodeParent != nullptr );
+    wxCHECK2( aNodeParent != nullptr, return );
     wxASSERT( aNodeParent->m_BBox.IsInitialized() == true );
     wxASSERT( aNodeParent->m_LeafList.size() > 0 );
 
@@ -239,7 +239,7 @@ void BVH_CONTAINER_2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNode
         aNodeParent->m_Children[1] = nullptr;
     }
 
-    wxASSERT( aNodeParent != nullptr );
+    wxCHECK2( aNodeParent != nullptr, return );
     wxASSERT( aNodeParent->m_BBox.IsInitialized() == true );
 }
 
@@ -258,7 +258,7 @@ bool BVH_CONTAINER_2D::IntersectAny( const RAYSEG2D& aSegRay ) const
 bool BVH_CONTAINER_2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode,
                                               const RAYSEG2D& aSegRay ) const
 {
-    wxASSERT( aNode != nullptr );
+    wxCHECK( aNode != nullptr, false );
 
     if( aNode->m_BBox.Inside( aSegRay.m_Start ) || aNode->m_BBox.Inside( aSegRay.m_End ) ||
         aNode->m_BBox.Intersect( aSegRay ) )
@@ -279,8 +279,8 @@ bool BVH_CONTAINER_2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode
         }
         else
         {
-            wxASSERT( aNode->m_Children[0] != nullptr );
-            wxASSERT( aNode->m_Children[1] != nullptr );
+            wxCHECK( aNode->m_Children[0] != nullptr, false );
+            wxCHECK( aNode->m_Children[1] != nullptr, false );
 
             // Node
             if( recursiveIntersectAny( aNode->m_Children[0], aSegRay ) )
@@ -312,7 +312,7 @@ void BVH_CONTAINER_2D::recursiveGetListObjectsIntersects( const BVH_CONTAINER_NO
                                                           const BBOX_2D& aBBox,
                                                           CONST_LIST_OBJECT2D& aOutList ) const
 {
-    wxASSERT( aNode != nullptr );
+    wxCHECK2( aNode != nullptr, return );
     wxASSERT( aBBox.IsInitialized() == true );
 
     if( aNode->m_BBox.Intersects( aBBox ) )
@@ -335,8 +335,8 @@ void BVH_CONTAINER_2D::recursiveGetListObjectsIntersects( const BVH_CONTAINER_NO
         }
         else
         {
-            wxASSERT( aNode->m_Children[0] != nullptr );
-            wxASSERT( aNode->m_Children[1] != nullptr );
+            wxCHECK2( aNode->m_Children[0] != nullptr, return );
+            wxCHECK2( aNode->m_Children[1] != nullptr, return );
 
             // Node
             recursiveGetListObjectsIntersects( aNode->m_Children[0], aBBox, aOutList );

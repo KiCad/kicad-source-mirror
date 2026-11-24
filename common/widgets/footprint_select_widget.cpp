@@ -62,7 +62,7 @@ void FOOTPRINT_SELECT_WIDGET::OnComboBox( wxCommandEvent& aEvent )
         return;
 
     wxStringClientData* clientdata = static_cast<wxStringClientData*>( m_fp_sel_ctrl->GetClientObject( sel ) );
-    wxASSERT( clientdata );
+    wxCHECK2( clientdata, return );
 
     evt.SetString( clientdata->GetData() );
     wxPostEvent( this, evt );

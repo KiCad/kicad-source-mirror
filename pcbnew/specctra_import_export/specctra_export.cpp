@@ -990,8 +990,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
                 isStartContour = iterator.IsEndContour();
 
-                wxASSERT( window );
-                wxASSERT( cutout );
+                wxCHECK2( window, continue );
+                wxCHECK2( cutout, continue );
 
                 VECTOR2I point( iterator->x, iterator->y );
 
@@ -1449,8 +1449,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                     isStartContour = iterator.IsEndContour();
 
-                    wxASSERT( window );
-                    wxASSERT( cutout );
+                    wxCHECK2( window, continue );
+                    wxCHECK2( cutout, continue );
 
                     VECTOR2I point( iterator->x, iterator->y );
 
@@ -1652,7 +1652,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 continue;
 
             NETINFO_ITEM* net = aBoard->FindNet( netcode );
-            wxASSERT( net );
+            wxCHECK2( net, continue );
 
             WIRE* wire = new WIRE( wiring );
 

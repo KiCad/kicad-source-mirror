@@ -543,7 +543,7 @@ void SETTINGS_MANAGER::SaveColorSettings( COLOR_SETTINGS* aSettings, const std::
 
 wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
 {
-    wxASSERT( aSettings );
+    wxCHECK( aSettings, wxEmptyString );
 
     switch( aSettings->GetLocation() )
     {
@@ -731,7 +731,7 @@ bool SETTINGS_MANAGER::MigrateFromPreviousVersion( const wxString& aSourcePath )
 
 bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
 {
-    wxASSERT( aPaths );
+    wxCHECK( aPaths, false );
 
     aPaths->clear();
 

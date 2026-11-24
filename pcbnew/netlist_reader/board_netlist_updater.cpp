@@ -332,7 +332,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentClass( FOOTPRINT* aFootprint, COMPONE
     }
     else
     {
-        wxASSERT_MSG( newClass != nullptr, "Component class should not be nullptr" );
+        wxCHECK_MSG( newClass != nullptr, false, "Component class should not be nullptr" );
 
         aFootprint->SetStaticComponentClass( newClass );
 

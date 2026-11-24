@@ -35,7 +35,7 @@ SELECTION_CONDITION SCH_EDITOR_CONDITIONS::LineMode( LINE_MODE aMode )
 {
     SCH_BASE_FRAME* schFrame = dynamic_cast<SCH_BASE_FRAME*>( m_frame );
 
-    wxASSERT( schFrame );
+    wxCHECK( schFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &SCH_EDITOR_CONDITIONS::lineModeFunc, _1, schFrame, aMode );
 }

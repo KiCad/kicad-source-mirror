@@ -97,7 +97,7 @@ void SYMBOL_DIFF_WIDGET::DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSy
         delete m_previewItem;
         m_previewItem = nullptr;
 
-        wxASSERT( m_libraryItem );
+        wxCHECK2( m_libraryItem, return );
 
         view->Remove( m_libraryItem );
         delete m_libraryItem;

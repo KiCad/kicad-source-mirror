@@ -629,7 +629,7 @@ bool ROUTER_TOOL::Init()
 
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
 
-    wxASSERT( frame );
+    wxCHECK( frame, false );
 
     auto& menu = m_menu->GetMenu();
     menu.SetUntranslatedTitle( _HKI( "Interactive Router" ) );
@@ -927,7 +927,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
         if( item->OfKind( PNS::ITEM::HOLE_T ) )
             continue;
 
-        wxASSERT_MSG( item->Parent() != nullptr, "removed an item with no parent uuid?" );
+        wxCHECK2_MSG( item->Parent() != nullptr, continue, "removed an item with no parent uuid?" );
 
         if( item->Parent() )
             logData.m_RemovedItems.insert( item->Parent()->m_Uuid );
@@ -3819,8 +3819,8 @@ void ROUTER_TOOL::UpdateMessagePanel()
 
             NETINFO_ITEM* netA = static_cast<NETINFO_ITEM*>( nets[0] );
             NETINFO_ITEM* netB = static_cast<NETINFO_ITEM*>( nets[1] );
-            wxASSERT( netA );
-            wxASSERT( netB );
+            wxCHECK2( netA, return );
+            wxCHECK2( netB, return );
 
             description = wxString::Format( _( "Routing Diff Pair: %s" ),
                                             netA->GetNetname() + wxT( ", " ) + netB->GetNetname() );

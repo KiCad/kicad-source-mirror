@@ -319,7 +319,7 @@ bool SCH_EDIT_TOOL::Init()
     SCH_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
     SCH_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
 
-    wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
+    wxCHECK_MSG( drawingTools, false, "eeshema.InteractiveDrawing tool is not available" );
 
     static const std::vector<KICAD_T> attribTypes = { SCH_SYMBOL_T, SCH_SHEET_T, SCH_RULE_AREA_T };
     static const std::vector<KICAD_T> sheetTypes = { SCH_SHEET_T };

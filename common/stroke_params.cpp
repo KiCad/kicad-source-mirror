@@ -472,7 +472,7 @@ bool STROKE_PARAMS::operator<(const STROKE_PARAMS& aOther) const
 
 void STROKE_PARAMS::Format( OUTPUTFORMATTER* aFormatter, const EDA_IU_SCALE& aIuScale ) const
 {
-    wxASSERT( aFormatter != nullptr );
+    wxCHECK2( aFormatter != nullptr, return );
 
     if( GetColor() == KIGFX::COLOR4D::UNSPECIFIED )
     {

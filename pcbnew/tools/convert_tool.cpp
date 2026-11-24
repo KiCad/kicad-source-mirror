@@ -759,7 +759,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                 };
 
         std::optional<SEG> anchors = getStartEndPoints( candidate );
-        wxASSERT( anchors );
+        wxCHECK2( anchors, continue );
 
         // Start with the first object and walk "right"
         // Note if the first object is an arc, we don't need to insert its first point here, the

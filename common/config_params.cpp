@@ -29,7 +29,7 @@
 void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList,
                          const wxString& aGroup )
 {
-    wxASSERT( aCfg );
+    wxCHECK2( aCfg, return );
 
     for( const auto& param : aList )
     {
@@ -48,7 +48,7 @@ void wxConfigLoadParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<P
 
 void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList )
 {
-    wxASSERT( aCfg );
+    wxCHECK2( aCfg, return );
 
     for( const auto& param : aList )
     {
@@ -63,7 +63,7 @@ void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<P
 void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList,
                          const wxString& aGroup )
 {
-    wxASSERT( aCfg );
+    wxCHECK2( aCfg, return );
 
     for( const auto& param : aList )
     {
@@ -90,7 +90,7 @@ void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<std::unique_ptr<P
 
 void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<std::unique_ptr<PARAM_CFG>>& aList )
 {
-    wxASSERT( aCfg );
+    wxCHECK2( aCfg, return );
 
     for( const auto& param : aList )
     {

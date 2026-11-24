@@ -589,7 +589,7 @@ bool PROJECT_LOCAL_SETTINGS::MigrateFromLegacy( wxConfigBase* aLegacyConfig )
 
 bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
-    wxASSERT( m_project );
+    wxCHECK( m_project, false );
 
     Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
 

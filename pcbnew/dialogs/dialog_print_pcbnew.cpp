@@ -53,7 +53,7 @@ private:
 
     PCBNEW_PRINTOUT_SETTINGS* settings() const
     {
-        wxASSERT( dynamic_cast<PCBNEW_PRINTOUT_SETTINGS*>( m_settings ) );
+        wxCHECK( dynamic_cast<PCBNEW_PRINTOUT_SETTINGS*>( m_settings ), nullptr );
         return static_cast<PCBNEW_PRINTOUT_SETTINGS*>( m_settings );
     }
 

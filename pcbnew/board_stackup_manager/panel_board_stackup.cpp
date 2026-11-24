@@ -1688,7 +1688,7 @@ wxColor PANEL_SETUP_BOARD_STACKUP::getColorIconItem( int aRow )
 {
     BOARD_STACKUP_ITEM* st_item = dynamic_cast<BOARD_STACKUP_ITEM*>( GetStackupItem( aRow ) );
 
-    wxASSERT( st_item );
+    wxCHECK( st_item, {} );
     wxColor color;
 
     if( ! st_item )
@@ -1708,7 +1708,7 @@ wxColor PANEL_SETUP_BOARD_STACKUP::getColorIconItem( int aRow )
         break;
     }
 
-    wxASSERT_MSG( color.IsOk(), wxT( "Invalid color in PCB stackup" ) );
+    wxCHECK_MSG( color.IsOk(), {}, wxT( "Invalid color in PCB stackup" ) );
 
     return color;
 }

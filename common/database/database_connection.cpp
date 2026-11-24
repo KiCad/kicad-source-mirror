@@ -32,7 +32,7 @@ DATABASE_CONNECTION::DATABASE_CONNECTION( std::unique_ptr<DATABASE_BACKEND> aBac
         m_backend( std::move( aBackend ) ),
         m_cache( std::make_unique<DB_CACHE_TYPE>( 10, 1 ) )
 {
-    wxASSERT_MSG( m_backend, "DATABASE_CONNECTION needs a backend" );
+    wxASSERT_MSG( m_backend, "DATABASE_CONNECTION needs a backend"  );
 
     if( aConnectNow )
         Connect();

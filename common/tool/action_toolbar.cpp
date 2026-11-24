@@ -338,7 +338,7 @@ std::list<ACTION_TOOLBAR_CONTROL*> ACTION_TOOLBAR::GetCustomControlList( FRAME_T
 
 void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
 {
-    wxASSERT( GetParent() );
+    wxCHECK2( GetParent(), return );
 
     // Keep each group's selection across the rebuild.
     std::map<std::string, std::string> currentGroupItems = m_groupSelections;
@@ -489,7 +489,7 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction )
 
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool aIsCancellable )
 {
-    wxASSERT( GetParent() );
+    wxCHECK2( GetParent(), return );
     wxASSERT_MSG( !( aIsCancellable && !aIsToggleEntry ),
                   wxS( "aIsCancellable requires aIsToggleEntry" ) );
 
@@ -539,7 +539,7 @@ void ACTION_TOOLBAR::AddScaledSeparator( wxWindow* aWindow )
 
 void ACTION_TOOLBAR::Add( wxControl* aControl, const wxString& aLabel )
 {
-    wxASSERT( aControl );
+    wxCHECK2( aControl, return );
     m_controlIDs.push_back( aControl->GetId() );
     AddControl( aControl, aLabel );
 }
@@ -559,8 +559,8 @@ void ACTION_TOOLBAR::AddGroup( std::unique_ptr<ACTION_GROUP> aGroup )
     const TOOL_ACTION* defaultAction = aGroup->GetDefaultAction();
     int                iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
 
-    wxASSERT( GetParent() );
-    wxASSERT( defaultAction );
+    wxCHECK2( GetParent(), return );
+    wxCHECK2( defaultAction, return );
 
     // Turn this into a toggle entry if any one of the actions is a toggle entry
     bool isToggleEntry = false;
@@ -621,7 +621,7 @@ void ACTION_TOOLBAR::SelectAction( const TOOL_ACTION& aAction )
 
 void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction )
 {
-    wxASSERT( GetParent() );
+    wxCHECK2( GetParent(), return );
 
     int groupId = aGroup->GetUIId();
 
@@ -674,11 +674,11 @@ void ACTION_TOOLBAR::UpdateControlWidths()
 void ACTION_TOOLBAR::UpdateControlWidth( int aID )
 {
     wxAuiToolBarItem* item = FindTool( aID );
-    wxASSERT_MSG( item, wxString::Format( "No toolbar item found for ID %d", aID ) );
+    wxCHECK_RET( item, wxString::Format( "No toolbar item found for ID %d", aID ) );
 
     // The control on the toolbar is stored inside the window field of the item
     wxControl* control = dynamic_cast<wxControl*>( item->GetWindow() );
-    wxASSERT_MSG( control, wxString::Format( "No control located in toolbar item with ID %d", aID ) );
+    wxCHECK_RET( control, wxString::Format( "No control located in toolbar item with ID %d", aID ) );
 
     // Update the size the item has stored using the best size of the control
     control->InvalidateBestSize();

@@ -1198,7 +1198,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return group->HasDesignBlockLink();
             };
 
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
@@ -2088,7 +2088,7 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::LoadSettings( aCfg );
 
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK2( cfg, return );
 
     if( cfg )
     {
@@ -2104,7 +2104,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     PCB_BASE_FRAME::SaveSettings( aCfg );
 
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
-    wxASSERT( cfg );
+    wxCHECK2( cfg, return );
 
     if( cfg )
     {

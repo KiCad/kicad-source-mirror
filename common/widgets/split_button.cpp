@@ -169,7 +169,7 @@ void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
     if( x < ( GetSize().GetWidth() - m_arrowButtonWidth ) )
     {
         wxEvtHandler* pEventHandler = GetEventHandler();
-        wxASSERT( pEventHandler );
+        wxCHECK2( pEventHandler, return );
 
         pEventHandler->CallAfter(
                 [this]()

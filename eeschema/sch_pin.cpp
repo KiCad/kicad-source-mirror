@@ -2065,7 +2065,7 @@ int PIN_COMPARISON_DATA::Compare( const PIN_COMPARISON_DATA& aOther, int aCompar
 
 PIN_COMPARISON_DATA SCH_PIN::ComparisonData() const
 {
-    wxASSERT( dynamic_cast<const LIB_SYMBOL*>( GetParentSymbol() ) );
+    wxCHECK( dynamic_cast<const LIB_SYMBOL*>( GetParentSymbol() ), {} );
     return { GetUnit(), GetBodyStyle(), IsPrivate(), m_position, m_number, m_name, m_length,
              m_orientation, m_shape, m_type, m_hidden, m_numTextSize, m_nameTextSize, m_alternates };
 }

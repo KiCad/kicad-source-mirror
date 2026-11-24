@@ -787,7 +787,7 @@ std::string DXF_PLOTTER::emitSymbolTableHeader( const char* aTableName, int aCou
 
 bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     // Reset state so a single DXF_PLOTTER instance can be reused for multiple plots.
     m_handle = 0;
@@ -1348,7 +1348,7 @@ void DXF_PLOTTER::writeObjectsSection()
 
 bool DXF_PLOTTER::EndPlot()
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     fmt::print( m_outputFile,
                 "  0\n"
@@ -1383,7 +1383,7 @@ void DXF_PLOTTER::SetColor( const COLOR4D& color )
 
 void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width, int aCornerRadius )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     if( aCornerRadius > 0 )
     {
@@ -1420,7 +1420,7 @@ void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 
 void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int width )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     double   radius = userToDeviceSize( diameter / 2.0 );
     VECTOR2D centre_dev = userToDeviceCoordinates( centre );
 
@@ -1591,7 +1591,7 @@ void DXF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, in
 
 void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     if( plume == 'Z' )
         return;
@@ -1644,7 +1644,7 @@ void DXF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                        const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     if( aRadius <= 0 )
         return;
@@ -1798,7 +1798,7 @@ void DXF_PLOTTER::ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aDat
 
 void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient, void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     VECTOR2I  size( aSize );
     EDA_ANGLE orient( aOrient );
@@ -1817,7 +1817,7 @@ void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize, con
 
 void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     Circle( pos, diametre, FILL_T::NO_FILL, DXF_LINE_WIDTH );
 }
 
@@ -1825,7 +1825,7 @@ void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData
 void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize, const EDA_ANGLE& aOrient,
                                 void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     VECTOR2I size, start, end;
 
@@ -1920,7 +1920,7 @@ void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize
 void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners, const EDA_ANGLE& aPadOrient,
                                   void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     VECTOR2I coord[4]; /* coord actual corners of a trapezoidal trace */
 
     for( int ii = 0; ii < 4; ii++ )

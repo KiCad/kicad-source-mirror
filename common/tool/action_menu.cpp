@@ -367,7 +367,7 @@ void ACTION_MENU::updateHotKeys()
 {
     TOOL_MANAGER* toolMgr = getToolManager();
 
-    wxASSERT( toolMgr );
+    wxCHECK2( toolMgr, return );
 
     for( std::pair<const int, const TOOL_ACTION*>& ii : m_toolActions )
     {
@@ -725,7 +725,7 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     if( aSource->IsSubMenu() )
     {
         ACTION_MENU* menu = dynamic_cast<ACTION_MENU*>( aSource->GetSubMenu() );
-        wxASSERT_MSG( menu, wxS( "Submenus are expected to be a ACTION_MENU" ) );
+        wxASSERT_MSG( menu, wxS( "Submenus are expected to be a ACTION_MENU" )  );
 
         if( menu )
         {

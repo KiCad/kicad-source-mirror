@@ -90,7 +90,7 @@ void PSLIKE_PLOTTER::SetColor( const COLOR4D& color )
 void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                    const EDA_ANGLE& aPadOrient, void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     VECTOR2I  size( aSize );
     EDA_ANGLE orient( aPadOrient );
@@ -377,7 +377,7 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
 
 void PS_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     if( aWidth == DO_NOT_SET_LINE_WIDTH )
         return;
@@ -397,7 +397,7 @@ void PS_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 
 void PS_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     // Postscript treats all colors as opaque, so the best we can do with alpha is generate
     // an appropriate blended color assuming white paper.  (It's possible that a halftone would
@@ -492,7 +492,7 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
     if( fill == FILL_T::NO_FILL && GetCurrentLineWidth() <= 0 )
         return;
 
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     VECTOR2D pos_dev = userToDeviceCoordinates( pos );
     double   radius = userToDeviceSize( diametre / 2.0 );
 
@@ -507,7 +507,7 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
 void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     VECTOR2D center_device = userToDeviceCoordinates( aCenter );
     double   radius_device = userToDeviceSize( aRadius );
@@ -690,7 +690,7 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
 
 void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     if( plume == 'Z' )
     {
@@ -726,7 +726,7 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
 bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     std::string PSMacro =
     "%%BeginProlog\n"
@@ -876,7 +876,7 @@ bool PS_PLOTTER::StartPlot( const wxString& aPageNumber )
 
 bool PS_PLOTTER::EndPlot()
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
     fmt::print( m_outputFile,
                 "showpage\n"
                 "grestore\n"

@@ -245,7 +245,7 @@ float BBOX_2D::Area() const
 // http://tavianator.com/fast-branchless-raybounding-box-intersections/
 bool BBOX_2D::Intersect( const RAY2D& aRay, float* t ) const
 {
-    wxASSERT( t );
+    wxCHECK( t, false );
 
     const float tx1 = ( m_min.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
     const float tx2 = ( m_max.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
@@ -295,8 +295,8 @@ bool BBOX_2D::Intersect( const RAYSEG2D& aRaySeg ) const
 
 bool BBOX_2D::Intersect( const RAY2D& aRay, float* aOutHitT0, float* aOutHitT1 ) const
 {
-    wxASSERT( aOutHitT0 );
-    wxASSERT( aOutHitT1 );
+    wxCHECK( aOutHitT0, false );
+    wxCHECK( aOutHitT1, false );
 
     const float tx1 = ( m_min.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
     const float tx2 = ( m_max.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;

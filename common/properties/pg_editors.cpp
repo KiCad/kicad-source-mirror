@@ -93,7 +93,7 @@ void PG_UNIT_EDITOR::UpdateFrame( EDA_DRAW_FRAME* aFrame )
 wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGProperty* aProperty,
                                                const wxPoint& aPos, const wxSize& aSize ) const
 {
-    wxASSERT( m_unitBinder );
+    wxCHECK( m_unitBinder, wxPGWindowList( nullptr ) );
 
 #if wxCHECK_VERSION( 3, 3, 0 )
     wxString text = aProperty->GetValueAsString( wxPGPropValFormatFlags::EditableValue );

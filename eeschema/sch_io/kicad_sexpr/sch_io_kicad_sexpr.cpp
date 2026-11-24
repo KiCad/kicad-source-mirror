@@ -113,7 +113,7 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCH
                                                   SCH_SHEET* aAppendToMe,
                                                   const std::map<std::string, UTF8>* aProperties )
 {
-    wxASSERT( !aFileName || aSchematic != nullptr );
+    wxCHECK( !aFileName || aSchematic != nullptr, nullptr );
 
     SCH_SHEET*  sheet;
 

@@ -137,8 +137,8 @@ void EDA_3D_MODEL_VIEWER::Set3DModel( const S3DMODEL& a3DModel )
     wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::Set3DModel with a S3DMODEL" ) );
 
     // Validate a3DModel pointers
-    wxASSERT( a3DModel.m_Materials != nullptr );
-    wxASSERT( a3DModel.m_Meshes != nullptr );
+    wxCHECK2( a3DModel.m_Materials != nullptr, return );
+    wxCHECK2( a3DModel.m_Meshes != nullptr, return );
     wxASSERT( a3DModel.m_MaterialsSize > 0 );
     wxASSERT( a3DModel.m_MeshesSize > 0 );
 

@@ -308,7 +308,7 @@ JOBSET_DESTINATION* JOBSET::FindDestination( wxString& aDestinationStr )
 
 std::vector<JOBSET_JOB> JOBSET::GetJobsForDestination( JOBSET_DESTINATION* aDestination )
 {
-    wxASSERT( aDestination != nullptr );
+    wxCHECK( aDestination != nullptr, {} );
 
     if( aDestination->m_only.size() == 0 )
     {

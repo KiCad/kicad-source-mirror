@@ -833,7 +833,7 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
 
     std::optional<LIBRARY_TABLE*> newTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
                                                                               LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxASSERT( newTable );
+    wxCHECK2( newTable, return );
 
     FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
 

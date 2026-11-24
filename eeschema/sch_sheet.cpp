@@ -1020,7 +1020,7 @@ wxString SCH_SHEET::GetFieldText( const wxString& aFieldName, const SCH_SHEET_PA
 
 void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
 {
-    wxASSERT( aSheetPin != nullptr );
+    wxCHECK2( aSheetPin != nullptr, return );
     wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
     if( SCH_SCREEN* screen = GetParentScreen() )
@@ -1034,7 +1034,7 @@ void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
 
 void SCH_SHEET::RemovePin( const SCH_SHEET_PIN* aSheetPin )
 {
-    wxASSERT( aSheetPin != nullptr );
+    wxCHECK2( aSheetPin != nullptr, return );
     wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
     for( auto i = m_pins.begin(); i < m_pins.end(); ++i )

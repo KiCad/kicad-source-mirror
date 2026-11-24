@@ -211,7 +211,7 @@ void EDA_3D_CANVAS::releaseOpenGL()
     if( m_glRC )
     {
         GL_CONTEXT_MANAGER* gl_mgr = Pgm().GetGLContextManager();
-        wxASSERT( gl_mgr );
+        wxCHECK2( gl_mgr, return );
 
         if( gl_mgr )
         {

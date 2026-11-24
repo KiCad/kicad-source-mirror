@@ -532,7 +532,7 @@ static void libSaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter, con
     {
         std::shared_ptr<LIB_SYMBOL> parent = aSymbol->GetParent().lock();
 
-        wxASSERT( parent );
+        wxCHECK2( parent, return );
 
         aFormatter.Print( "(symbol %s (extends %s)", name.c_str(), aFormatter.Quotew( parent->GetName() ).c_str() );
 

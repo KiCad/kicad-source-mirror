@@ -97,7 +97,7 @@ long ASSET_ARCHIVE::GetFilePointer( const wxString& aFilePath, const unsigned ch
     if( aFilePath.IsEmpty() )
         return -1;
 
-    wxASSERT( aDest );
+    wxCHECK( aDest, -1 );
 
     if( !m_fileInfoCache.count( aFilePath ) )
         return -1;

@@ -20,3 +20,23 @@ check_wxlogdebug:
     - git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null ||
       git fetch --depth=1 "${CI_MERGE_REQUEST_PROJECT_URL:-origin}" "${BASE_SHA}"
     - ./tools/check_wxlogdebug.sh "${BASE_SHA}" "${CI_COMMIT_SHA}"
+
+##########################################################################
+# Reject wxASSERT null pointer and file handle guards added by a push or merge request
+##########################################################################
+check_wxassert_null:
+  stage: test
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
+  script:
+    - BASE_SHA="${CI_MERGE_REQUEST_DIFF_BASE_SHA:-$CI_COMMIT_BEFORE_SHA}"
+    - |
+      if [ -z "$(echo "${BASE_SHA}" | tr -d 0)" ]; then
+        echo "No base commit for this pipeline; skipping"
+        exit 0
+      fi
+    - git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null ||
+      git fetch --depth=1 "${CI_MERGE_REQUEST_PROJECT_URL:-origin}" "${BASE_SHA}"
+    - ./tools/check_wxassert_null.sh "${BASE_SHA}" "${CI_COMMIT_SHA}"

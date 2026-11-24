@@ -1723,7 +1723,7 @@ void BOARD::BulkRemoveStaleTeardrops( BOARD_COMMIT& aCommit )
 void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 {
     // find these calls and fix them!  Don't send me no stinking' nullptr.
-    wxASSERT( aBoardItem );
+    wxCHECK2( aBoardItem, return );
 
     // This is redundant with BOARD_COMMIT::Push but necessary to support SWIG interaction
     // until the SWIG API is completely removed (since it doesn't use the commit system)

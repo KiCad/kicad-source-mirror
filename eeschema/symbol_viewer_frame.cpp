@@ -308,7 +308,7 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
     EDITOR_CONDITIONS cond( this );
 
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )

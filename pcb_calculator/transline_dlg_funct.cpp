@@ -241,7 +241,7 @@ void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
             break;
         }
 
-        wxASSERT ( data );
+        wxCHECK2( data, continue );
         data->name->SetToolTip( prm->m_ToolTip );
         data->name->SetLabel( prm->m_DlgLabel != wxS( "" ) ? prm->m_DlgLabel + wxS( ':' ) : wxString( wxS( "" ) ) );
         prm->m_ValueCtrl = data->value;

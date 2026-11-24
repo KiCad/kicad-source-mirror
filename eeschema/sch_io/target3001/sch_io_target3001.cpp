@@ -46,7 +46,7 @@ SCH_SHEET* SCH_IO_TARGET3001::LoadSchematicFile( const wxString& aFileName, SCHE
                                                  SCH_SHEET*                         aAppendToMe,
                                                  const std::map<std::string, UTF8>* aProperties )
 {
-    wxASSERT( !aFileName.IsEmpty() && aSchematic != nullptr );
+    wxCHECK( !aFileName.IsEmpty() && aSchematic != nullptr, nullptr );
 
     if( m_progressReporter )
     {

@@ -2102,7 +2102,7 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
 {
     std::vector<int> layers = aItem->ViewGetLayers();
 
-    wxASSERT( aItem->m_viewPrivData ); //must have a viewPrivData
+    wxCHECK2( aItem->m_viewPrivData, return ); //must have a viewPrivData
 
     const BOX2I  new_bbox = aItem->ViewBBox();
 

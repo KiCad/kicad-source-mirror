@@ -537,7 +537,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
     {
         std::shared_ptr<LIB_SYMBOL> parent = aSymbol->GetParent().lock();
 
-        wxASSERT( parent );
+        wxCHECK2( parent, return );
 
         // Prefer the recorded parent name over dereferencing the live parent pointer. The parent
         // LIB_SYMBOL uses a null_deleter shared_ptr, so the weak_ptr's control block can outlive the

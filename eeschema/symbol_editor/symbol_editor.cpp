@@ -700,7 +700,7 @@ public:
                 LIB_SYMBOL* newParent = m_libMgr.GetSymbol( newNames.back(), aNewLibName );
 
                 // We should have stored this already, why didn't we get it back?
-                wxASSERT( newParent );
+                wxCHECK( newParent, false );
                 new_symbol.SetParent( newParent );
 
                 // Keep the recorded parent name in sync with the (possibly renamed) buffered

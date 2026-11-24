@@ -96,7 +96,7 @@ void PANEL_RF_ATTENUATORS::UpdateUI()
 
 void PANEL_RF_ATTENUATORS::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    wxASSERT( aCfg );
+    wxCHECK2( aCfg, return );
 
     for( ATTENUATOR* attenuator : m_AttenuatorList )
         attenuator->ReadConfig();
@@ -108,7 +108,7 @@ void PANEL_RF_ATTENUATORS::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
 void PANEL_RF_ATTENUATORS::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    wxASSERT( aCfg );
+    wxCHECK2( aCfg, return );
 
     aCfg->m_Attenuators.type = m_AttenuatorsSelection->GetSelection();
 

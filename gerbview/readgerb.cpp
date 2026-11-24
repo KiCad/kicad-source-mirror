@@ -63,7 +63,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     }
 
     gerber = gerber_uptr.release();
-    wxASSERT( gerber != nullptr );
+    wxCHECK( gerber != nullptr, false );
     images->AddGbrImage( gerber, layer );
 
     // Display errors list

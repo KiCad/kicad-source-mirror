@@ -3306,7 +3306,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         {
             PCB_FIELD* field = static_cast<PCB_FIELD*>( board_item );
 
-            wxASSERT( parentFP );
+            wxCHECK2( parentFP, continue );
             commit.Modify( parentFP );
 
             if( field->IsVisible() )

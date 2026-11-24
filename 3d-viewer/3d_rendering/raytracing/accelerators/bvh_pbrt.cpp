@@ -423,7 +423,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
                                          int start, int end, int* totalNodes,
                                          std::vector<const OBJECT_3D*>& orderedPrims )
 {
-    wxASSERT( totalNodes != nullptr );
+    wxCHECK( totalNodes != nullptr, nullptr );
     wxASSERT( start >= 0 );
     wxASSERT( end   >= 0 );
     wxASSERT( start != end );
@@ -495,7 +495,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
 
                 const OBJECT_3D* obj = static_cast<const OBJECT_3D*>( m_primitives[ primitiveNr ] );
 
-                wxASSERT( obj != nullptr );
+                wxCHECK2( obj != nullptr, continue );
 
                 orderedPrims.push_back( obj );
             }
@@ -793,10 +793,10 @@ BVHBuildNode *BVH_PBRT::emitLBVH( BVHBuildNode* &buildNodes, const std::vector<B
                                   std::vector<const OBJECT_3D*>& orderedPrims, int *orderedPrimsOffset, int bit )
 {
     wxASSERT( nPrimitives > 0 );
-    wxASSERT( totalNodes != nullptr );
-    wxASSERT( orderedPrimsOffset != nullptr );
+    wxCHECK( totalNodes != nullptr, nullptr );
+    wxCHECK( orderedPrimsOffset != nullptr, nullptr );
     wxASSERT( nPrimitives > 0 );
-    wxASSERT( mortonPrims != nullptr );
+    wxCHECK( mortonPrims != nullptr, nullptr );
 
     if( ( bit == -1 ) || ( nPrimitives < m_maxPrimsInNode ) )
     {
@@ -888,7 +888,7 @@ BVHBuildNode *BVH_PBRT::emitLBVH( BVHBuildNode* &buildNodes, const std::vector<B
 BVHBuildNode *BVH_PBRT::buildUpperSAH( std::vector<BVHBuildNode*>& treeletRoots, int start,
                                        int end, int* totalNodes )
 {
-    wxASSERT( totalNodes != nullptr );
+    wxCHECK( totalNodes != nullptr, nullptr );
     wxASSERT( start < end );
     wxASSERT( end <= (int)treeletRoots.size() );
 

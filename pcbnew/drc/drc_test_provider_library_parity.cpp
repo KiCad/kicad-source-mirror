@@ -872,7 +872,7 @@ bool footprintVsBoardStackup( const FOOTPRINT& aFp, const BOARD& aBoard, REPORTE
 bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags,
                                       REPORTER* aReporter )
 {
-    wxASSERT( aLibFP );
+    wxCHECK( aLibFP, false );
     bool diff = false;
 
     std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( aLibFP->Clone() ) );

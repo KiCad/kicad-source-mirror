@@ -173,7 +173,7 @@ void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
 {
     wxObject* obj = event.GetEventObject();
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
-    wxASSERT( posrelTool );
+    wxCHECK2( posrelTool, return );
 
     VECTOR2I  offset = posrelTool->GetSelectionAnchorPosition() - getAnchorPos();
     double    r;

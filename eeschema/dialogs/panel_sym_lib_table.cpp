@@ -782,7 +782,7 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
 
     std::optional<LIBRARY_TABLE*> newTable = Pgm().GetLibraryManager().Table( LIBRARY_TABLE_TYPE::SYMBOL,
                                                                               LIBRARY_TABLE_SCOPE::GLOBAL );
-    wxASSERT( newTable );
+    wxCHECK2( newTable, return );
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_parent->Kiway().Prj() );
 

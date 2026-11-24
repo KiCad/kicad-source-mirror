@@ -916,8 +916,8 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aPNSLayer, BOAR
     PNS::LINKED_ITEM* startItem = PNS::HELPERS::PickSegment( aRouter, aStart, aPNSLayer, startSnapPoint );
     PNS::LINKED_ITEM* endItem = PNS::HELPERS::PickSegment( aRouter, aEnd, aPNSLayer, endSnapPoint );
 
-    wxASSERT( startItem );
-    wxASSERT( endItem );
+    wxCHECK( startItem, false );
+    wxCHECK( endItem, false );
 
     if( !startItem || !endItem )
         return false;
@@ -1382,8 +1382,8 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     PNS::LINKED_ITEM* startItem = PNS::HELPERS::PickSegment( router, m_origin, pnslayer, startSnapPoint, *m_baseLine );
     PNS::LINKED_ITEM* endItem = PNS::HELPERS::PickSegment( router, m_end, pnslayer, endSnapPoint, *m_baseLine );
 
-    wxASSERT( startItem );
-    wxASSERT( endItem );
+    wxCHECK( startItem, false );
+    wxCHECK( endItem, false );
 
     if( !startItem || !endItem )
         return false;

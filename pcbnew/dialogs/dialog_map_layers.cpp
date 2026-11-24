@@ -405,7 +405,7 @@ std::vector<wxString> DIALOG_MAP_LAYERS::GetUnmappedRequiredLayers() const
     for( const wxString& layerName : m_unmatched_layer_names )
     {
         const INPUT_LAYER_DESC* layerDesc = GetLayerDescription( layerName );
-        wxASSERT_MSG( layerDesc != nullptr, wxT( "Expected to find layer description" ) );
+        wxCHECK2_MSG( layerDesc != nullptr, continue, wxT( "Expected to find layer description" ) );
 
         if( layerDesc->Required )
             unmappedLayers.push_back( layerDesc->Name );

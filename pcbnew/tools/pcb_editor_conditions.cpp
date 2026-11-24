@@ -40,7 +40,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::HasItems()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::hasItemsFunc, _1, drwFrame );
 }
@@ -51,7 +51,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::PadNumbersDisplay()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::padNumberDisplayFunc, _1, drwFrame );
 }
@@ -62,7 +62,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::PadFillDisplay()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::padFillDisplayFunc, _1, drwFrame );
 }
@@ -73,7 +73,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::TextFillDisplay()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::textFillDisplayFunc, _1, drwFrame );
 }
@@ -84,7 +84,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::GraphicsFillDisplay()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::graphicsFillDisplayFunc, _1, drwFrame );
 }
@@ -95,7 +95,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::ViaFillDisplay()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::viaFillDisplayFunc, _1, drwFrame );
 }
@@ -106,7 +106,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::TrackFillDisplay()
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::trackFillDisplayFunc, _1, drwFrame );
 }
@@ -117,7 +117,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::ZoneDisplayMode( ZONE_DISPLAY_MODE aM
     // Requires a PCB_BASE_FRAME
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::zoneDisplayModeFunc, _1, drwFrame, aMode );
 }
@@ -127,7 +127,7 @@ SELECTION_CONDITION PCB_EDITOR_CONDITIONS::FootprintViewerAutoZoom()
 {
     PCB_BASE_FRAME* drwFrame = dynamic_cast<PCB_BASE_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &PCB_EDITOR_CONDITIONS::footprintViewerAutoZoom, _1, drwFrame );
 }

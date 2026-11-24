@@ -90,7 +90,7 @@ public:
 
     void AddAttribute( wxXmlAttribute* aAttr ) override
     {
-        wxASSERT_MSG( dynamic_cast<XATTR*>( aAttr ), "use XATTR instead of wxXmlAttribute!" );
+        wxCHECK_RET( dynamic_cast<XATTR*>( aAttr ), "use XATTR instead of wxXmlAttribute!" );
         return wxXmlNode::AddAttribute( aAttr );
     }
 

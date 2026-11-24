@@ -797,7 +797,7 @@ void SIMULATOR_FRAME::setupUIConditions()
     EDA_BASE_FRAME::setupUIConditions();
 
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
     auto showGridCondition =
             [this]( const SELECTION& aSel )

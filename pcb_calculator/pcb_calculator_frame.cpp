@@ -366,10 +366,10 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         PANEL_VIA_SIZE*           viaSizePanel     = GetCalculator<PANEL_VIA_SIZE>();
         PANEL_REGULATOR*          regulPanel       = GetCalculator<PANEL_REGULATOR>();
 
-        wxASSERT( translinePanel );
-        wxASSERT( attenPanel );
-        wxASSERT( viaSizePanel );
-        wxASSERT( regulPanel );
+        wxCHECK2( translinePanel, return );
+        wxCHECK2( attenPanel, return );
+        wxCHECK2( viaSizePanel, return );
+        wxCHECK2( regulPanel, return );
 
         {
             wxCommandEvent event2( wxEVT_RADIOBUTTON );
@@ -408,7 +408,7 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 {
     PANEL_REGULATOR* regPanel = GetCalculator<PANEL_REGULATOR>();
 
-    wxASSERT( regPanel );
+    wxCHECK2( regPanel, return );
 
     if( regPanel->m_RegulatorListChanged )
     {

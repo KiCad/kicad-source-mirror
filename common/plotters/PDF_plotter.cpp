@@ -220,7 +220,7 @@ void PDF_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil, d
 
 void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     if( aWidth == DO_NOT_SET_LINE_WIDTH )
         return;
@@ -252,7 +252,7 @@ int PDF_PLOTTER::getExtGStateHandleForAlpha( double aAlpha )
 
 void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     fmt::println( m_workFile, "{} {} {} rg {} {} {} RG",
                   encodeDoubleForPlotter( r ), encodeDoubleForPlotter( g ), encodeDoubleForPlotter( b ),
@@ -275,7 +275,7 @@ void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b, double a )
 
 void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     std::vector<int> pattern;
 
@@ -322,7 +322,7 @@ void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 
 void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width, int aCornerRadius )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     if( fill == FILL_T::NO_FILL && width == 0 )
         return;
@@ -387,7 +387,7 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 
 void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int width )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     if( aFill == FILL_T::NO_FILL && width == 0 )
         return;
@@ -485,7 +485,7 @@ std::vector<VECTOR2D> PDF_PLOTTER::arcPath( const VECTOR2D& aCenter, const EDA_A
 void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                        const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     SetCurrentLineWidth( aWidth );
 
@@ -527,7 +527,7 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                             void* aData )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     if( aCornerList.size() <= 1 )
         return;
@@ -615,7 +615,7 @@ void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, in
 
 void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
 
     if( plume == 'Z' )
     {
@@ -646,7 +646,7 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
 void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor, double aAlpha )
 {
-    wxASSERT( m_workFile );
+    wxCHECK2( m_workFile, return );
     VECTOR2I pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
     // Requested size (in IUs)
@@ -740,7 +740,7 @@ int PDF_PLOTTER::allocPdfObject()
 
 int PDF_PLOTTER::startPdfObject( int aHandle )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, 0 );
     wxASSERT( !m_workFile );
 
     if( !m_xrefTable.IsValid( aHandle ) )
@@ -757,7 +757,7 @@ int PDF_PLOTTER::startPdfObject( int aHandle )
 
 void PDF_PLOTTER::closePdfObject()
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     wxASSERT( !m_workFile );
     fmt::println( m_outputFile, "endobj" );
 }
@@ -765,7 +765,7 @@ void PDF_PLOTTER::closePdfObject()
 
 int PDF_PLOTTER::startPdfStream( int aHandle )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, 0 );
     wxASSERT( !m_workFile );
     int handle = startPdfObject( aHandle );
 
@@ -862,7 +862,7 @@ void PDF_PLOTTER::closePdfStream()
 void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageName,
                              const wxString& aParentPageNumber, const wxString& aParentPageName )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     wxASSERT( !m_workFile );
 
     m_pageNumbers.push_back( aPageNumber );
@@ -984,7 +984,7 @@ void PDF_PLOTTER::ClosePage()
     // non 3d exports need this
     if( m_pageStreamHandle != -1 )
     {
-        wxASSERT( m_workFile );
+        wxCHECK2( m_workFile, return );
 
         // Close the page stream (and compress it)
         closePdfStream();
@@ -1217,7 +1217,7 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber )
 
 bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageName )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     // First things first: the customary null object
     m_pageHandles.clear();

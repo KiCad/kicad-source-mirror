@@ -516,7 +516,7 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
 
     ACTION_MANAGER* manager = m_toolManager->GetActionManager();
 
-    wxASSERT( manager );
+    wxCHECK2( manager, return );
 
     auto activeProject =
             [this] ( const SELECTION& )
@@ -570,7 +570,7 @@ wxWindow* KICAD_MANAGER_FRAME::GetToolCanvas() const
 APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config() const
 {
     APP_SETTINGS_BASE* ret = PgmTop().PgmSettings();
-    wxASSERT( ret );
+    wxCHECK( ret, nullptr );
     return ret;
 }
 
@@ -578,7 +578,7 @@ APP_SETTINGS_BASE* KICAD_MANAGER_FRAME::config() const
 KICAD_SETTINGS* KICAD_MANAGER_FRAME::kicadSettings() const
 {
     KICAD_SETTINGS* ret = dynamic_cast<KICAD_SETTINGS*>( config() );
-    wxASSERT( ret );
+    wxCHECK( ret, nullptr );
     return ret;
 }
 

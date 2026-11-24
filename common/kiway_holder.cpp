@@ -40,7 +40,7 @@ void KIWAY_HOLDER::SetKiway( wxWindow* aDest, KIWAY* aKiway )
 {
 #if defined(DEBUG)
     // offer a trap point for debugging most any window
-    wxASSERT( aDest );
+    wxCHECK2( aDest, return );
     if( !strcmp( typeid(aDest).name(), "DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB" ) )
     {
         int breakhere=1;

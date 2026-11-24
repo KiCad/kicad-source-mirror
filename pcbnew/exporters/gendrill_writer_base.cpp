@@ -194,7 +194,7 @@ const std::string GENDRILL_WRITER_BASE::layerPairName( DRILL_LAYER_PAIR aPair ) 
 const wxString GENDRILL_WRITER_BASE::getDrillFileName( const DRILL_SPAN& aSpan, bool aNPTH,
                                                        bool aMerge_PTH_NPTH ) const
 {
-    wxASSERT( m_pcb );
+    wxCHECK( m_pcb, wxEmptyString );
 
     wxString    extend;
 
@@ -249,7 +249,7 @@ const wxString GENDRILL_WRITER_BASE::getDrillFileName( const DRILL_SPAN& aSpan, 
 const wxString GENDRILL_WRITER_BASE::getProtectionFileName( const DRILL_SPAN& aSpan,
                                                             IPC4761_FEATURES aFeature ) const
 {
-    wxASSERT( m_pcb );
+    wxCHECK( m_pcb, wxEmptyString );
 
     wxString extend;
 
@@ -868,7 +868,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, RE
     static const char separator[] =
         "    =============================================================\n";
 
-    wxASSERT( m_pcb );
+    wxCHECK( m_pcb, false );
 
     unsigned    totalHoleCount;
     wxFileName  brdFilename( m_pcb->GetFileName() );

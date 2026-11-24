@@ -791,7 +791,7 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
 bool SVG_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     std::string header = "<?xml version=\"1.0\" standalone=\"no\"?>\n"
                 " <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \n"

@@ -387,7 +387,7 @@ public:
 
     GBR_LAYOUT* GetGerberLayout() const
     {
-        wxASSERT( m_gerberLayout );
+        wxCHECK( m_gerberLayout, nullptr );
         return m_gerberLayout;
     }
 

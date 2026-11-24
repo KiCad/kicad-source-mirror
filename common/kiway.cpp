@@ -305,7 +305,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             KIFACE* kiface = ki_getter( &m_kiface_version[aFaceId], KIFACE_VERSION, &Pgm() );
 
             // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
-            wxASSERT_MSG( kiface, wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
+            wxCHECK_MSG( kiface, nullptr, wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
 
             wxDllType dsoHandle = dso.Detach();
 

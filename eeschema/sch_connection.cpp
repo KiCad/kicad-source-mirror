@@ -348,7 +348,7 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
 
 bool SCH_CONNECTION::IsDriver() const
 {
-    wxASSERT( Parent() );
+    wxCHECK( Parent(), false );
 
     switch( Parent()->Type() )
     {

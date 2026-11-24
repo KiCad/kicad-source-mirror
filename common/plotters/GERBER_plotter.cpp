@@ -247,7 +247,7 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
     m_hasApertureChamferedRect = false; // true is at least one chamfered rect is in use
     m_am_freepoly_list.ClearList();
 
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     finalFile = m_outputFile;     // the actual gerber file will be created later
 
@@ -256,7 +256,7 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
     m_workFilename = wxFileName::CreateTempFileName( "" );
     workFile = wxFopen( m_workFilename, wxT( "wt" ) );
     m_outputFile = workFile;
-    wxASSERT( m_outputFile );
+    wxCHECK( m_outputFile, false );
 
     if( m_outputFile == nullptr )
         return false;
@@ -605,7 +605,7 @@ void GERBER_PLOTTER::selectApertureWithAttributes( const VECTOR2I& aPos, GBR_MET
 
 void GERBER_PLOTTER::writeApertureList()
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     bool useX1StructuredComment = false;
 
@@ -827,7 +827,7 @@ void GERBER_PLOTTER::writeApertureList()
 
 void GERBER_PLOTTER::PenTo( const VECTOR2I& aPos, char plume )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
     VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
 
     switch( plume )
@@ -1275,7 +1275,7 @@ void GERBER_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, void* aD
 void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
                                    const EDA_ANGLE& aOrient, void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     VECTOR2I      size( aSize );
     EDA_ANGLE     orient( aOrient );
@@ -1326,7 +1326,7 @@ void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
 void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
                                    const EDA_ANGLE& aOrient, void* aData )
 {
-    wxASSERT( m_outputFile );
+    wxCHECK2( m_outputFile, return );
 
     VECTOR2I      size( aSize );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );

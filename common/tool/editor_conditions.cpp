@@ -75,7 +75,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::GridVisible()
     // The grid visibility check requires a draw frame
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::gridFunc, _1, drwFrame );
 }
@@ -86,7 +86,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::GridOverrides()
     // The grid lock check requires a draw frame
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::gridOverridesFunc, _1, drwFrame );
 }
@@ -97,7 +97,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::PolarCoordinates()
     // The polar coordinates require a draw frame
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::polarCoordFunc, _1, drwFrame );
 }
@@ -107,7 +107,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::CursorSmallCrosshairs()
 {
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame,
                       KIGFX::CROSS_HAIR_MODE::SMALL_CROSS );
@@ -118,7 +118,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::CursorFullCrosshairs()
 {
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame,
                       KIGFX::CROSS_HAIR_MODE::FULLSCREEN_CROSS );
@@ -129,7 +129,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::Cursor45Crosshairs()
 {
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::cursorFunc, _1, drwFrame,
                       KIGFX::CROSS_HAIR_MODE::FULLSCREEN_DIAGONAL );
@@ -140,7 +140,7 @@ SELECTION_CONDITION EDITOR_CONDITIONS::BoundingBoxes()
 {
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
 
-    wxASSERT( drwFrame );
+    wxCHECK( drwFrame, SELECTION_CONDITIONS::ShowNever );
 
     return std::bind( &EDITOR_CONDITIONS::bboxesFunc, _1, drwFrame );
 }

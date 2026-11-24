@@ -318,7 +318,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
         via->SetLayerPair( m_pcbLayer2kicad[ topLayerNdx ], m_pcbLayer2kicad[ botLayerNdx ] );
     }
 
-    wxASSERT( via );
+    wxCHECK( via, nullptr );
 
     via->SetNetCode( aNetCode );
 
@@ -391,7 +391,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
                     continue;
 
                 UNIT_RES* resolution = place.GetUnits();
-                wxASSERT( resolution );
+                wxCHECK2( resolution, continue );
 
                 aCommit.Modify( footprint );
 

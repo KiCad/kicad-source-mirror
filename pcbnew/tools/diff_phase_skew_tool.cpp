@@ -1578,7 +1578,7 @@ void DIFF_PHASE_SKEW_TOOL::reversePath( PNS::ITEM_SET& aPath, PNS::SOLID** aStar
         if( ( *itr )->Kind() == PNS::ITEM::LINE_T )
         {
             PNS::LINE* l = dyn_cast<PNS::LINE*>( *itr );
-            wxASSERT( l != nullptr );
+            wxCHECK2( l != nullptr, continue );
 
             if( l != nullptr )
                 l->Reverse();

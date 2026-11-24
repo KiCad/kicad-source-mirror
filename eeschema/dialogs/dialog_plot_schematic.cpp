@@ -111,7 +111,7 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
     if( !m_job )
     {
         EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-        wxASSERT( cfg );
+        wxCHECK( cfg, false );
 
         if( m_lineWidthCtrl->GetValue().IsEmpty() && cfg )
         {

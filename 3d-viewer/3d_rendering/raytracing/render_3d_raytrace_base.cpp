@@ -1401,7 +1401,7 @@ SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& a
                                            unsigned int aRecursiveLevel, bool is_testShadow ) const
 {
     const MATERIAL* objMaterial = aHitInfo.pHitObject->GetMaterial();
-    wxASSERT( objMaterial != nullptr );
+    wxCHECK( objMaterial != nullptr, {} );
 
     SFVEC4F outColor =
             SFVEC4F( objMaterial->GetEmissiveColor() + objMaterial->GetAmbientColor(), 1.0f );

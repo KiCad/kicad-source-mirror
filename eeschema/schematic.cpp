@@ -244,7 +244,7 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
 
 void SCHEMATIC::CacheExistingAnnotation()
 {
-    wxASSERT( m_project );
+    wxCHECK2( m_project, return );
 
     // Cache all existing annotations in the REFDES_TRACKER
     std::shared_ptr<REFDES_TRACKER> refdesTracker = m_project->GetProjectFile().m_SchematicSettings->m_refDesTracker;

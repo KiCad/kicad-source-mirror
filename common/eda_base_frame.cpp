@@ -876,7 +876,7 @@ void EDA_BASE_FRAME::RecreateToolbars()
 {
     wxWindowUpdateLocker dummy( this );
 
-    wxASSERT( m_toolbarSettings );
+    wxCHECK2( m_toolbarSettings, return );
 
     if( m_tbRight )
         m_tbRight->ClearToolbar();
@@ -1590,7 +1590,7 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTO
     if( !aFileHistory )
         aFileHistory = m_fileHistory;
 
-    wxASSERT( aFileHistory );
+    wxCHECK2( aFileHistory, return );
 
     aFileHistory->AddFileToHistory( FullFileName );
 
@@ -1608,7 +1608,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type, FI
     if( !aFileHistory )
         aFileHistory = m_fileHistory;
 
-    wxASSERT( aFileHistory );
+    wxCHECK( aFileHistory, wxEmptyString );
 
     int baseId = aFileHistory->GetBaseId();
 
@@ -1645,7 +1645,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type, FI
 
 void EDA_BASE_FRAME::ClearFileHistory()
 {
-    wxASSERT( m_fileHistory );
+    wxCHECK2( m_fileHistory, return );
 
     m_fileHistory->ClearFileHistory();
 

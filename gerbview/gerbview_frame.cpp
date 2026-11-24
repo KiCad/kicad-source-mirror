@@ -928,7 +928,7 @@ const TITLE_BLOCK& GERBVIEW_FRAME::GetTitleBlock() const
 
 void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 {
-    wxASSERT( m_gerberLayout );
+    wxCHECK2( m_gerberLayout, return );
     m_gerberLayout->SetTitleBlock( aTitleBlock );
 }
 
@@ -1111,7 +1111,7 @@ void GERBVIEW_FRAME::setupUIConditions()
     ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
     EDITOR_CONDITIONS cond( this );
 
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )

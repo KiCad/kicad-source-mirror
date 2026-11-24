@@ -412,7 +412,7 @@ void SCH_IO_KICAD_LEGACY::loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen 
 
 void SCH_IO_KICAD_LEGACY::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScreen )
 {
-    wxASSERT( aScreen != nullptr );
+    wxCHECK2( aScreen != nullptr, return );
 
     wxString    buf;
     const char* line = aReader.Line();

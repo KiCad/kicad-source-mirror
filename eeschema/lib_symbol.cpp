@@ -1356,7 +1356,7 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
 void LIB_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts, int aUnit, int aBodyStyle,
                        const VECTOR2I& aOffset, bool aDimmed )
 {
-    wxASSERT( aPlotter != nullptr );
+    wxCHECK2( aPlotter != nullptr, return );
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
     COLOR4D              color = renderSettings->GetLayerColor( LAYER_DEVICE );
@@ -1401,7 +1401,7 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts, int aUnit,
                              int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
-    wxASSERT( aPlotter != nullptr );
+    wxCHECK2( aPlotter != nullptr, return );
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
     COLOR4D              color = renderSettings->GetLayerColor( LAYER_FIELDS );
@@ -1481,7 +1481,7 @@ void LIB_SYMBOL::FixupDrawItems()
 
 void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
 {
-    wxASSERT( aItem != nullptr );
+    wxCHECK2( aItem != nullptr, return );
 
     // none of the MANDATORY_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
@@ -1701,12 +1701,12 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
 {
     for( const SCH_PIN* pin : GetGraphicalPins() )
     {
-        wxASSERT( pin );
+        wxCHECK2( pin, continue );
         bool foundMatch = false;
 
         for( const SCH_PIN* otherPin : aOtherPart.GetGraphicalPins() )
         {
-            wxASSERT( otherPin );
+            wxCHECK2( otherPin, continue );
 
             // Same unit?
             if( pin->GetUnit() != otherPin->GetUnit() )

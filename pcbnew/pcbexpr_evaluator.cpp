@@ -42,7 +42,7 @@
 
 BOARD_ITEM* PCBEXPR_VAR_REF::GetObject( const LIBEVAL::CONTEXT* aCtx ) const
 {
-    wxASSERT( dynamic_cast<const PCBEXPR_CONTEXT*>( aCtx ) );
+    wxCHECK( dynamic_cast<const PCBEXPR_CONTEXT*>( aCtx ), nullptr );
 
     const PCBEXPR_CONTEXT* ctx = static_cast<const PCBEXPR_CONTEXT*>( aCtx );
     BOARD_ITEM*            item  = ctx->GetItem( m_itemIndex );

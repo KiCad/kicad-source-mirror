@@ -73,7 +73,7 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
                                                   const wxString& aNetlistFileName,
                                                   const wxString& aCompFootprintFileName )
 {
-    wxASSERT( aNetlist != nullptr );
+    wxCHECK( aNetlist != nullptr, nullptr );
 
     std::unique_ptr<FILE_LINE_READER> file_rdr =
             std::make_unique<FILE_LINE_READER>( aNetlistFileName );

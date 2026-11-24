@@ -956,7 +956,7 @@ SYMBOL_BUFFER::~SYMBOL_BUFFER()
 void SYMBOL_BUFFER::SetSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol )
 {
     wxCHECK( m_symbol != aSymbol, /* void */ );
-    wxASSERT( aSymbol );
+    wxCHECK2( aSymbol, return );
     m_symbol = std::move( aSymbol );
 
     // If the symbol moves libraries then the original moves with it
@@ -971,7 +971,7 @@ void SYMBOL_BUFFER::SetSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol )
 void SYMBOL_BUFFER::SetOriginal( std::unique_ptr<LIB_SYMBOL> aSymbol )
 {
     wxCHECK( m_original != aSymbol, /* void */ );
-    wxASSERT( aSymbol );
+    wxCHECK2( aSymbol, return );
     m_original = std::move( aSymbol );
 
     // The original is not allowed to have a different library than its symbol
@@ -1002,7 +1002,7 @@ LIB_SYMBOL* LIB_BUFFER::GetSymbol( const wxString& aAlias ) const
 
 bool LIB_BUFFER::CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen, bool aNew )
 {
-    wxASSERT( aCopy );
+    wxCHECK( aCopy, false );
     wxASSERT( aCopy->GetLib() == nullptr );
 
     // Set the parent library name,

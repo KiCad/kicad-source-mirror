@@ -211,7 +211,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UN
             if( commandToUndo->GetPickedItemLink( ii ) == nullptr )
                 commandToUndo->SetPickedItemLink( sch_item->Duplicate( IGNORE_PARENT_GROUP, nullptr, true ), ii );
 
-            wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
+            wxCHECK2( commandToUndo->GetPickedItemLink( ii ), continue );
             break;
 
         case UNDO_REDO::NEWITEM:

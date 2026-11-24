@@ -935,7 +935,7 @@ void FOOTPRINT_CHOOSER_FRAME::setupUIConditions()
     ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
     PCB_EDITOR_CONDITIONS cond( this );
 
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
     // clang-format off
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )

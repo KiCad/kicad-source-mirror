@@ -451,7 +451,7 @@ int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
-    wxASSERT( aTool != nullptr );
+    wxCHECK( aTool != nullptr, false );
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
 
@@ -470,7 +470,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 
 bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 {
-    wxASSERT( aTool != nullptr );
+    wxCHECK( aTool != nullptr, false );
 
     wxString msg = wxString::Format( wxS( "TOOL_MANAGER::runTool - running tool %s" ), aTool->GetName() );
     APP_MONITOR::AddTransactionBreadcrumb( msg, "tool.run" );
@@ -560,7 +560,7 @@ void TOOL_MANAGER::ShutdownTool( const std::string& aToolName )
 
 void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
 {
-    wxASSERT( aTool != nullptr );
+    wxCHECK2( aTool != nullptr, return );
 
     while( isActive( aTool ) )
     {

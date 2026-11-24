@@ -763,7 +763,7 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 void SCH_SYMBOL::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     if( aAlgo == AUTOPLACE_MANUAL )
-        wxASSERT_MSG( aScreen, wxS( "A SCH_SCREEN ptr must be given for manual autoplacement" ) );
+        wxCHECK_RET( aScreen, wxS( "A SCH_SCREEN ptr must be given for manual autoplacement" ) );
 
     AUTOPLACER autoplacer( this, aScreen );
     autoplacer.DoAutoplace( aAlgo );

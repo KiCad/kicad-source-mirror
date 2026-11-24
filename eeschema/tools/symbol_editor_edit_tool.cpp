@@ -297,7 +297,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     SYMBOL_EDITOR_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SYMBOL_EDITOR_MOVE_TOOL>();
 
-    wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
+    wxCHECK_MSG( drawingTools, false, "eeschema.SymbolDrawing tool is not available" );
 
     auto haveSymbolCondition =
             [&]( const SELECTION& sel )

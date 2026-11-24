@@ -2455,13 +2455,13 @@ void RENDER_3D_RAYTRACE_BASE::addModels( CONTAINER_3D& aDstContainer, const S3DM
                                          bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem )
 {
     // Validate a3DModel pointers
-    wxASSERT( a3DModel != nullptr );
+    wxCHECK2( a3DModel != nullptr, return );
 
     if( a3DModel == nullptr )
         return;
 
-    wxASSERT( a3DModel->m_Materials != nullptr );
-    wxASSERT( a3DModel->m_Meshes != nullptr );
+    wxCHECK2( a3DModel->m_Materials != nullptr, return );
+    wxCHECK2( a3DModel->m_Meshes != nullptr, return );
     wxASSERT( a3DModel->m_MaterialsSize > 0 );
     wxASSERT( a3DModel->m_MeshesSize > 0 );
 
@@ -2488,9 +2488,9 @@ void RENDER_3D_RAYTRACE_BASE::addModels( CONTAINER_3D& aDstContainer, const S3DM
             const SMESH& mesh = a3DModel->m_Meshes[mesh_i];
 
             // Validate the mesh pointers
-            wxASSERT( mesh.m_Positions != nullptr );
-            wxASSERT( mesh.m_FaceIdx != nullptr );
-            wxASSERT( mesh.m_Normals != nullptr );
+            wxCHECK2( mesh.m_Positions != nullptr, continue );
+            wxCHECK2( mesh.m_FaceIdx != nullptr, continue );
+            wxCHECK2( mesh.m_Normals != nullptr, continue );
             wxASSERT( mesh.m_FaceIdxSize > 0 );
             wxASSERT( ( mesh.m_FaceIdxSize % 3 ) == 0 );
 

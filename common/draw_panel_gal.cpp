@@ -703,7 +703,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
     ( *m_PaintEventCounter )++;
 
-    wxASSERT( m_painter );
+    wxCHECK( m_painter, false );
 
     KIGFX::RENDER_SETTINGS* settings =
             static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );

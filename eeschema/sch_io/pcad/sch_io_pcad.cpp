@@ -1327,7 +1327,7 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
                                            SCH_SHEET*             aAppendToMe,
                                            const std::map<std::string, UTF8>* aProperties )
 {
-    wxASSERT( !aFileName.IsEmpty() && aSchematic != nullptr );
+    wxCHECK( !aFileName.IsEmpty() && aSchematic != nullptr, nullptr );
 
     PCAD_SCH::SCHEMATIC pcad;
     PCAD_SCH::PCAD_SCH_PARSER parser;

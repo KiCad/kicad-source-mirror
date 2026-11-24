@@ -182,7 +182,7 @@ protected:
     T* getEditFrame() const
     {
 #if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
-        wxASSERT( dynamic_cast<T*>( getToolHolderInternal() ) );
+        wxCHECK( dynamic_cast<T*>( getToolHolderInternal() ), nullptr );
 #endif
 
         return static_cast<T*>( getToolHolderInternal() );
@@ -198,7 +198,7 @@ protected:
 
 #if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
         if( m )
-            wxASSERT( dynamic_cast<T*>( m ) );
+            wxCHECK( dynamic_cast<T*>( m ), nullptr );
 #endif
 
         return static_cast<T*>( m );

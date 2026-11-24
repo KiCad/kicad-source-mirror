@@ -2230,7 +2230,7 @@ bool PCB_POINT_EDITOR::Init()
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    wxASSERT_MSG( m_selectionTool, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
+    wxCHECK_MSG( m_selectionTool, false, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
 
     const auto arcIsEdited =
             []( const SELECTION& aSelection ) -> bool

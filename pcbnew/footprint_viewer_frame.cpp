@@ -338,7 +338,7 @@ void FOOTPRINT_VIEWER_FRAME::setupUIConditions()
     ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
     PCB_EDITOR_CONDITIONS cond( this );
 
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
     auto addToBoardCond =
             [this]( const SELECTION& )

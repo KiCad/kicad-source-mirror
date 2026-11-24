@@ -1213,7 +1213,7 @@ void PANEL_SETUP_LAYERS::addUserDefinedLayer( wxCommandEvent& aEvent )
     PANEL_SETUP_LAYERS_CTLs& ctl = m_layersControls[layer];
 
     // All user-defined layers should have a checkbox
-    wxASSERT( ctl.checkbox );
+    wxCHECK2( ctl.checkbox, return );
     ctl.checkbox->SetValue( true );
 
     wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctl.name );

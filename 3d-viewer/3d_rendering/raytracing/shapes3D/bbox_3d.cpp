@@ -263,8 +263,8 @@ SFVEC3F BBOX_3D::Offset( const SFVEC3F& p ) const
 // https://github.com/mmp/pbrt-v2/blob/master/src/accelerators/bvh.cpp#L126
 bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) const
 {
-    wxASSERT( aOutHitt0 );
-    wxASSERT( aOutHitt1 );
+    wxCHECK( aOutHitt0, false );
+    wxCHECK( aOutHitt1, false );
 
     const SFVEC3F bounds[2] = {m_min, m_max};
 

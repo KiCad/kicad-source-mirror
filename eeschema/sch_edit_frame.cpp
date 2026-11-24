@@ -777,7 +777,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
     SCH_EDITOR_CONDITIONS cond( this );
 
-    wxASSERT( mgr );
+    wxCHECK2( mgr, return );
 
     auto hasElements =
             [ this ] ( const SELECTION& aSel )

@@ -835,7 +835,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( PCBNEW_SETTINGS* pcbnew_cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg ) )
         m_polarCoords = pcbnew_cfg->m_PolarCoords;
 
-    wxASSERT( GetCanvas() );
+    wxCHECK2( GetCanvas(), return );
 
     if( GetCanvas() )
     {

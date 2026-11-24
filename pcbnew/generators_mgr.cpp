@@ -33,7 +33,7 @@ void GENERATORS_MGR::Register( const wxString& aTypeStr, const wxString& aName,
 {
     wxASSERT( !aName.empty() );
     wxASSERT( !aTypeStr.empty() );
-    wxASSERT( aCreateFunc );
+    wxCHECK2( aCreateFunc, return );
 
     ENTRY ent;
     ent.m_createFunc = aCreateFunc;

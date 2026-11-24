@@ -108,7 +108,7 @@ public:
 
     const BLK_T* operator->() const
     {
-        wxASSERT( m_block != nullptr );
+        wxCHECK( m_block != nullptr, nullptr );
         return &BlockDataAs<BLK_T>( *m_block );
     }
 

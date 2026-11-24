@@ -85,7 +85,7 @@ PANEL_TRANSLINE* getTranslinePanel()
     PCB_CALCULATOR_FRAME* frame     = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
     PANEL_TRANSLINE*      transline = frame->GetCalculator<PANEL_TRANSLINE>();
 
-    wxASSERT( transline );
+    wxCHECK( transline, nullptr );
     return transline;
 }
 
