@@ -139,7 +139,7 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
 
 
 bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
-                                          SCH_IO_MGR::SCH_FILE_T aFileType )
+                                          SCH_IO_MGR::SCH_FILE_T aFileType, bool aReplacesOwnFile )
 {
     wxCHECK( aFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
 
@@ -161,8 +161,6 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         // Handle buffered library
         LIB_BUFFER& libBuf = it->second;
 
-        const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& symbolBuffers = libBuf.GetBuffers();
-
         wxFileName original, destination( aFileName );
         LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
@@ -174,25 +172,10 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
         destination.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
 
-        bool toOriginal = original == destination;
+        if( original != destination )
+            return libBuf.SaveAs( aFileName, &*pi, aReplacesOwnFile );
 
-        if( toOriginal )
-        {
-            res = libBuf.SaveModifiedBuffers( aFileName, &*pi );
-        }
-        else
-        {
-            for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : symbolBuffers )
-            {
-                wxCHECK2( symbolBuf, continue );
-
-                if( !libBuf.SaveBuffer( *symbolBuf, aFileName, &*pi, true ) )
-                {
-                    // Something went wrong, but try to save other symbols
-                    res = false;
-                }
-            }
-        }
+        res = libBuf.SaveModifiedBuffers( aFileName, &*pi );
 
         try
         {
@@ -205,7 +188,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         }
 
         // clear the deleted symbols buffer only if data is saved to the original file
-        if( res && toOriginal )
+        if( res )
         {
             // Delete symbols that were removed from the buffer before clearing the deleted list
             for( const std::shared_ptr<SYMBOL_BUFFER>& deletedBuf : libBuf.GetDeletedBuffers() )
@@ -1171,6 +1154,34 @@ bool LIB_BUFFER::SaveModifiedBuffers( const wxString& aFileName, SCH_IO* aPlugin
             std::erase( m_added, symbolBuf );
         else
             res = false;
+    }
+
+    return res;
+}
+
+
+bool LIB_BUFFER::SaveAs( const wxString& aFileName, SCH_IO* aPlugin, bool aReplacesOwnFile )
+{
+    bool res = true;
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : m_symbols )
+    {
+        // Saving a buffer moves its original to what was written, which would drop a pending rename
+        SYMBOL_BUFFER copy( std::make_unique<LIB_SYMBOL>( symbolBuf->GetSymbol() ) );
+
+        if( !SaveBuffer( copy, aFileName, aPlugin, true ) )
+            res = false;
+        else if( aReplacesOwnFile )
+            symbolBuf->SetOriginal( std::make_unique<LIB_SYMBOL>( symbolBuf->GetSymbol() ) );
+    }
+
+    try
+    {
+        aPlugin->SaveLibrary( aFileName );
+    }
+    catch( ... )
+    {
+        res = false;
     }
 
     return res;

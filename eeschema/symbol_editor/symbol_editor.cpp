@@ -1716,7 +1716,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
         }
     }
 
-    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType ) )
+    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType,
+                                type == SYMBOL_SAVEAS_TYPE::REPLACE_TABLE_ENTRY ) )
     {
         msg.Printf( _( "Failed to save changes to symbol library file '%s'." ),
                     fn.GetFullPath() );

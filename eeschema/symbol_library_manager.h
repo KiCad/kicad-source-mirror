@@ -144,6 +144,14 @@ public:
      */
     bool SaveModifiedBuffers( const wxString& aFileName, SCH_IO* aPlugin );
 
+    /**
+     * Save every symbol to aFileName, a file other than the library's own, and write it.
+     *
+     * @param aReplacesOwnFile is true when aFileName becomes the library's own file. The buffers then take what was
+     *                         saved as their originals. Otherwise they still owe their own file any pending renames.
+     */
+    bool SaveAs( const wxString& aFileName, SCH_IO* aPlugin, bool aReplacesOwnFile );
+
     /// Save stored modifications using a plugin. aBuffer decides whether the changes
     /// should be cached or stored directly to the disk (for #SCH_IO_KICAD_LEGACY).
     bool SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileName, SCH_IO* aPlugin,
@@ -365,11 +373,13 @@ public:
      * @param aLibrary is the library name.
      * @param aFileName is the target file name.
      * @param aFileType is the plugin type used to save the library.
+     * @param aReplacesOwnFile is true when aFileName, if not the library's own file, is about to replace it.
      *
      * @return True on success, false otherwise.
      */
     bool SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
-                      SCH_IO_MGR::SCH_FILE_T aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY );
+                      SCH_IO_MGR::SCH_FILE_T aFileType = SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY,
+                      bool aReplacesOwnFile = false );
 
     /**
      * Revert unsaved changes for a symbol and clear its modified flag.

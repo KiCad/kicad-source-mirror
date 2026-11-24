@@ -1062,4 +1062,78 @@ BOOST_AUTO_TEST_CASE( RevertKeepsWrittenSymbol )
 }
 
 
+static bool saveAs( LIB_BUFFER& aBuffer, const wxString& aPath, bool aReplacesOwnFile = false )
+{
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    return aBuffer.SaveAs( aPath, &*plugin, aReplacesOwnFile );
+}
+
+
+// Save As must leave the buffer owing its own file a pending rename
+BOOST_AUTO_TEST_CASE( SaveCopyKeepsPendingRename )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "R" ), wxS( "C" ) }, dir );
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "R" ), wxS( "C" ) } );
+    renameBuffer( libBuffer, *libBuffer.GetBuffer( wxS( "C" ) ), wxS( "C_Renamed" ) );
+
+    BOOST_CHECK( saveAs( libBuffer, wxFileName( dir, wxS( "copy.kicad_sym" ) ).GetFullPath() ) );
+
+    saveLibrary( libBuffer, path );
+    BOOST_CHECK( !inLibrary( path, wxS( "C" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// A Save As that replaces the table entry must hand its new file a later rename
+BOOST_AUTO_TEST_CASE( ReplacingSaveAsTakesLaterRename )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "C" ), wxS( "R" ) }, dir );
+    wxString copyPath = wxFileName( dir, wxS( "copy.kicad_sym" ) ).GetFullPath();
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "C" ), wxS( "R" ) } );
+
+    SYMBOL_BUFFER& buf = *libBuffer.GetBuffer( wxS( "C" ) );
+    renameBuffer( libBuffer, buf, wxS( "C_Exported" ) );
+    BOOST_REQUIRE( saveAs( libBuffer, copyPath, true ) );
+
+    renameBuffer( libBuffer, buf, wxS( "C_Later" ) );
+    saveLibrary( libBuffer, copyPath );
+
+    BOOST_CHECK( inLibrary( copyPath, wxS( "C_Later" ) ) );
+    BOOST_CHECK( !inLibrary( copyPath, wxS( "C_Exported" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// An unpacked export must keep another library's file named as a renamed symbol was
+BOOST_AUTO_TEST_CASE( SaveCopyToFolderKeepsOtherSymbolFiles )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "D" ) }, dir );
+    wxString folder = wxFileName( dir, wxS( "export" ) ).GetFullPath();
+    BOOST_REQUIRE( wxFileName::Mkdir( folder ) );
+
+    LIB_BUFFER otherBuffer( wxS( "other" ) );
+    bufferSymbols( otherBuffer, path, { wxS( "D" ) } );
+    BOOST_REQUIRE( saveAs( otherBuffer, folder ) );
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "D" ) } );
+    renameBuffer( libBuffer, *libBuffer.GetBuffer( wxS( "D" ) ), wxS( "D_New" ) );
+    BOOST_REQUIRE( saveAs( libBuffer, folder ) );
+
+    BOOST_CHECK( inLibrary( folder, wxS( "D" ) ) );
+    BOOST_CHECK( inLibrary( folder, wxS( "D_New" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
