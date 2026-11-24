@@ -93,6 +93,40 @@ public:
      */
     void ChangeHighContrastLayer( PCB_LAYER_ID aLayer );
 
+    /**
+     * Hold back the colour pass of an active layer change.
+     *
+     * The caller must recolour before the next paint, or the old colours stay.
+     */
+    /// True when a layer change skipped its colour pass and nothing has redone it.
+    bool WasRecolorDeferred() const { return m_recolorDeferred; }
+
+    class DEFERRED_RECOLOR
+    {
+    public:
+        DEFERRED_RECOLOR( PCB_DRAW_PANEL_GAL* aPanel ) :
+                m_panel( aPanel )
+        {
+            if( m_panel )
+            {
+                m_panel->m_suppressRecolor = true;
+                m_panel->m_recolorDeferred = false;
+            }
+        }
+
+        ~DEFERRED_RECOLOR()
+        {
+            if( m_panel )
+                m_panel->m_suppressRecolor = false;
+        }
+
+        DEFERRED_RECOLOR( const DEFERRED_RECOLOR& ) = delete;
+        DEFERRED_RECOLOR& operator=( const DEFERRED_RECOLOR& ) = delete;
+
+    private:
+        PCB_DRAW_PANEL_GAL* m_panel;
+    };
+
     /// @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer()
     virtual void SetTopLayer( int aLayer ) override
     {
@@ -162,6 +196,12 @@ protected:
 
 protected:
     std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;  ///< Currently used drawing-sheet.
+
+    /** A layer change is holding back its colour pass, see DEFERRED_RECOLOR */
+    bool m_suppressRecolor = false;
+
+    /** A colour pass was skipped and still owes the caller a recolour */
+    bool m_recolorDeferred = false;
 
     /** High contrast was on at the last recolour, so the next one may bring items back */
     bool m_highContrastShown = false;

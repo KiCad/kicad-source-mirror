@@ -1775,7 +1775,17 @@ bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
     }
 
     m_originalActiveLayer = editFrame->GetActiveLayer();
-    editFrame->SetActiveLayer( pcbLayer );
+
+    // The layer change and the highlight below both recolour the whole view, and nothing is
+    // painted between them. Hold the first back so the highlight does the only pass.
+    bool recolorPending = false;
+
+    {
+        PCB_DRAW_PANEL_GAL::DEFERRED_RECOLOR deferRecolor( editFrame->GetCanvas() );
+
+        editFrame->SetActiveLayer( pcbLayer );
+        recolorPending = editFrame->GetCanvas()->WasRecolorDeferred();
+    }
 
     if( !getView()->IsLayerVisible( pcbLayer ) )
     {
@@ -1799,13 +1809,21 @@ bool ROUTER_TOOL::prepareInteractive( VECTOR2D aStartPosition )
         if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
         {
             if( PNS::NET_HANDLE coupledNet = m_router->GetRuleResolver()->DpCoupledNet( m_startItem->Net() ) )
+            {
                 highlightNets( true, { m_startItem->Net(), coupledNet } );
+                recolorPending = false;
+            }
         }
         else
         {
             highlightNets( true, { m_startItem->Net() } );
+            recolorPending = false;
         }
     }
+
+    // Not every path above highlights, so the held-back pass may still be owed.
+    if( recolorPending )
+        editFrame->GetCanvas()->ChangeHighContrastLayer( pcbLayer );
 
     controls()->SetAutoPan( true );
 

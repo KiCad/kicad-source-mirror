@@ -507,6 +507,16 @@ void PCB_DRAW_PANEL_GAL::applyHighContrastLayer( PCB_LAYER_ID aLayer, bool aOnly
     auto*      pcbSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( rSettings );
     const bool hidden = contrast && pcbSettings->m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN;
 
+    // Only a pure colour pass can be deferred. With contrast on, the branch below also
+    // changes visibility.
+    if( m_suppressRecolor && !contrast && !m_highContrastShown )
+    {
+        m_highContrastShown = contrast;
+        m_highContrastHidden = hidden;
+        m_recolorDeferred = true;
+        return;
+    }
+
     // Layers the canvas fades keep their item colours, unless high contrast hides inactive layers
     // now or did at the last switch
     if( aOnlyLayerChanged && pcbSettings->HasCanvasFadedLayers() && !hidden && !m_highContrastHidden )
