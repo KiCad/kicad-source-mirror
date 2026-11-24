@@ -97,8 +97,8 @@ private:
     void OnClearVariantSymbol( wxCommandEvent& ) override;
 
     void AdjustPinsGridColumns();
-    void HandleDelayedFocus( wxCommandEvent& event );
-    void HandleDelayedSelection( wxCommandEvent& event );
+    void HandleDelayedFocus( int aRow, int aCol );
+    void HandleDelayedSelection( int aRow, int aCol );
 
     virtual void onUpdateEditSymbol( wxUpdateUIEvent& event ) override;
     virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) override;
