@@ -138,6 +138,27 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
 }
 
 
+/// Delete aName from aFileName if it is there. Deleting a root also deletes its derived symbols.
+static bool deleteSymbol( SCH_IO* aPlugin, const wxString& aFileName, const wxString& aName )
+{
+    std::map<std::string, UTF8> properties{ { SCH_IO_KICAD_LEGACY::PropBuffering, "" } };
+
+    try
+    {
+        if( aPlugin->LoadSymbol( aFileName, aName ) )
+            aPlugin->DeleteSymbol( aFileName, aName, &properties );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogError( _( "Error deleting symbol %s from library '%s'." ) + wxS( "\n%s" ), UnescapeString( aName ),
+                    aFileName, ioe.What() );
+        return false;
+    }
+
+    return true;
+}
+
+
 bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName,
                                           SCH_IO_MGR::SCH_FILE_T aFileType, bool aReplacesOwnFile )
 {
@@ -195,21 +216,8 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
             {
                 wxCHECK2( deletedBuf, continue );
 
-                const wxString& originalName = deletedBuf->GetOriginal().GetName();
-
-                try
-                {
-                    if( pi->LoadSymbol( aFileName, originalName ) )
-                        pi->DeleteSymbol( aFileName, originalName, &properties );
-                }
-                catch( const IO_ERROR& ioe )
-                {
-                    wxLogError( _( "Error deleting symbol %s from library '%s'." ) + wxS( "\n%s" ),
-                                UnescapeString( originalName ),
-                                aFileName,
-                                ioe.What() );
+                if( !deleteSymbol( &*pi, aFileName, deletedBuf->GetOriginal().GetName() ) )
                     res = false;
-                }
             }
 
             libBuf.ClearAddedAndDeletedBufferLists();
@@ -1162,9 +1170,40 @@ bool LIB_BUFFER::SaveModifiedBuffers( const wxString& aFileName, SCH_IO* aPlugin
 
 bool LIB_BUFFER::SaveAs( const wxString& aFileName, SCH_IO* aPlugin, bool aReplacesOwnFile )
 {
+    // Only a packed file was confirmed as overwritten, and a folder may hold other libraries' symbols
+    if( wxFileName::FileExists( aFileName ) )
+    {
+        wxArrayString existing;
+
+        try
+        {
+            aPlugin->EnumerateSymbolLib( existing, aFileName );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( _( "Error loading library '%s'." ) + wxS( "\n%s" ), aFileName, ioe.What() );
+            return false;
+        }
+
+        for( const wxString& name : existing )
+        {
+            if( !GetSymbol( name ) && !deleteSymbol( aPlugin, aFileName, name ) )
+                return false;
+        }
+    }
+
+    // A parent saved after its child replaces the cached child and orphans the grandchild linked to it
+    std::deque<std::shared_ptr<SYMBOL_BUFFER>> symbols = m_symbols;
+
+    std::ranges::stable_sort( symbols, {},
+                              []( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+                              {
+                                  return aBuf->GetSymbol().GetInheritanceDepth();
+                              } );
+
     bool res = true;
 
-    for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : m_symbols )
+    for( const std::shared_ptr<SYMBOL_BUFFER>& symbolBuf : symbols )
     {
         // Saving a buffer moves its original to what was written, which would drop a pending rename
         SYMBOL_BUFFER copy( std::make_unique<LIB_SYMBOL>( symbolBuf->GetSymbol() ) );

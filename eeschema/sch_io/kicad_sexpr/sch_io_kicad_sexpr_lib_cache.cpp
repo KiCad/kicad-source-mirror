@@ -39,6 +39,7 @@
 #include <string_utils.h>
 #include <trace_helpers.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <kiplatform/io.h>
 
 
 SCH_IO_KICAD_SEXPR_LIB_CACHE::SCH_IO_KICAD_SEXPR_LIB_CACHE( const wxString& aFullPathAndFileName ) :
@@ -50,6 +51,30 @@ SCH_IO_KICAD_SEXPR_LIB_CACHE::SCH_IO_KICAD_SEXPR_LIB_CACHE( const wxString& aFul
 
 SCH_IO_KICAD_SEXPR_LIB_CACHE::~SCH_IO_KICAD_SEXPR_LIB_CACHE()
 {
+}
+
+
+/// The folder's own behavior, which the platform's path format does not tell
+static bool isFolderCaseSensitive( const wxString& aFolder )
+{
+    wxString probe;
+    wxString error;
+
+    // The writer's own exclusive create, named with upper-case letters and never matching the *.kicad_sym load filter
+    FILE* fp = KIPLATFORM::IO::OpenUniqueSiblingTempFile( wxFileName( aFolder, wxS( "KiCadCase" ) ).GetFullPath(),
+                                                          wxS( "wb" ), &probe, &error );
+
+    if( !fp )
+        THROW_IO_ERROR( error );
+
+    fclose( fp );
+
+    wxFileName folded( probe );
+    folded.SetFullName( folded.GetFullName().Lower() );
+
+    const bool sensitive = !wxFileExists( folded.GetFullPath() );
+    wxRemoveFile( probe );
+    return sensitive;
 }
 
 
@@ -288,6 +313,22 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
         // Group symbols by their source file to preserve multi-symbol files
         std::map<wxString, std::vector<LIB_SYMBOL*>> symbolsByFile;
 
+        // Spellings of one file on a case-insensitive filesystem must share a group, or one write replaces another
+        const bool                   caseSensitive = isFolderCaseSensitive( fn.GetPath() );
+        std::map<wxString, wxString> fileForKey;
+
+        auto fileKey =
+                [caseSensitive]( const wxString& aPath )
+                {
+                    return caseSensitive ? aPath : aPath.Lower();
+                };
+
+        auto addToFile =
+                [&]( const wxString& aPath, LIB_SYMBOL* aSymbol )
+                {
+                    symbolsByFile[fileForKey.emplace( fileKey( aPath ), aPath ).first->second].push_back( aSymbol );
+                };
+
         for( const auto& [ name, symbol ] : m_symbols )
         {
             auto it = m_symbolSourceFiles.find( name );
@@ -295,7 +336,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
             if( it != m_symbolSourceFiles.end() )
             {
                 // Symbol has a known source file - group it with others from that file
-                symbolsByFile[ it->second ].push_back( symbol );
+                addToFile( it->second, symbol );
             }
             else
             {
@@ -304,7 +345,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
                 saveFn.SetName( EscapeString( name, CTX_FILENAME ) );
                 saveFn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
-                symbolsByFile[ saveFn.GetFullPath() ].push_back( symbol );
+                addToFile( saveFn.GetFullPath(), symbol );
             }
         }
 
@@ -350,7 +391,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
         // Remove files for deleted symbols that are no longer needed
         for( const wxString& deadFile : m_pendingFileDeletes )
         {
-            if( symbolsByFile.find( deadFile ) == symbolsByFile.end() && wxFileExists( deadFile ) )
+            if( !fileForKey.contains( fileKey( deadFile ) ) && wxFileExists( deadFile ) )
             {
                 wxRemoveFile( deadFile );
             }

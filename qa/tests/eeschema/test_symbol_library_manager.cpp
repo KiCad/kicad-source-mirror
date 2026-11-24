@@ -1136,4 +1136,98 @@ BOOST_AUTO_TEST_CASE( SaveCopyToFolderKeepsOtherSymbolFiles )
 }
 
 
+// An export over an earlier one must leave only the symbols the library now has
+BOOST_AUTO_TEST_CASE( SaveCopyOverExportKeepsOnlyCurrentSymbols )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "R" ), wxS( "C" ) }, dir );
+    wxString copyPath = wxFileName( dir, wxS( "copy.kicad_sym" ) ).GetFullPath();
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "R" ), wxS( "C" ) } );
+    BOOST_REQUIRE( saveAs( libBuffer, copyPath ) );
+
+    BOOST_REQUIRE( libBuffer.DeleteBuffer( *libBuffer.GetBuffer( wxS( "R" ) ) ) );
+    BOOST_REQUIRE( saveAs( libBuffer, copyPath ) );
+
+    BOOST_CHECK( inLibrary( copyPath, wxS( "C" ) ) );
+    BOOST_CHECK( !inLibrary( copyPath, wxS( "R" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Symbols whose file names differ only in case must both survive an unpacked save
+BOOST_AUTO_TEST_CASE( FolderSaveKeepsSymbolsDifferingInCase )
+{
+    wxString dir;
+    makeTempLibrary( {}, dir );
+    wxString folder = wxFileName( dir, wxS( "export" ) ).GetFullPath();
+    BOOST_REQUIRE( wxFileName::Mkdir( folder ) );
+
+    {
+        IO_RELEASER<SCH_IO>         plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        std::map<std::string, UTF8> properties{ { SCH_IO_KICAD_SEXPR::PropBuffering, "" } };
+
+        for( const wxString& name : { wxS( "part" ), wxS( "Part" ) } )
+            plugin->SaveSymbol( folder, std::make_unique<LIB_SYMBOL>( name ), &properties );
+
+        plugin->SaveLibrary( folder );
+    }
+
+    BOOST_CHECK( inLibrary( folder, wxS( "part" ) ) );
+    BOOST_CHECK( inLibrary( folder, wxS( "Part" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// A case-only rename in an unpacked library must leave only the new name
+BOOST_AUTO_TEST_CASE( FolderSaveTakesCaseOnlyRename )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "part" ) }, dir );
+    wxString folder = wxFileName( dir, wxS( "export" ) ).GetFullPath();
+    BOOST_REQUIRE( wxFileName::Mkdir( folder ) );
+
+    LIB_BUFFER source( wxS( "lib" ) );
+    bufferSymbols( source, path, { wxS( "part" ) } );
+    BOOST_REQUIRE( saveAs( source, folder ) );
+
+    LIB_BUFFER libBuffer( wxS( "export" ) );
+    bufferSymbols( libBuffer, folder, { wxS( "part" ) } );
+    renameBuffer( libBuffer, *libBuffer.GetBuffer( wxS( "part" ) ), wxS( "Part" ) );
+    saveLibrary( libBuffer, folder );
+
+    BOOST_CHECK( inLibrary( folder, wxS( "Part" ) ) );
+    BOOST_CHECK( !inLibrary( folder, wxS( "part" ) ) );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Save As must keep a grandchild's parent when the buffer holds a child before its root
+BOOST_AUTO_TEST_CASE( SaveCopyKeepsGrandchildParent )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "C" ), wxS( "D" ), wxS( "P" ) }, dir );
+    wxString copyPath = wxFileName( dir, wxS( "copy.kicad_sym" ) ).GetFullPath();
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "C" ), wxS( "D" ), wxS( "P" ) } );
+    libBuffer.GetSymbol( wxS( "C" ) )->SetParent( libBuffer.GetSymbol( wxS( "P" ) ) );
+    libBuffer.GetSymbol( wxS( "D" ) )->SetParent( libBuffer.GetSymbol( wxS( "C" ) ) );
+
+    BOOST_REQUIRE( saveAs( libBuffer, copyPath ) );
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    LIB_SYMBOL*         c = plugin->LoadSymbol( copyPath, wxS( "C" ) );
+    LIB_SYMBOL*         d = plugin->LoadSymbol( copyPath, wxS( "D" ) );
+    BOOST_REQUIRE( c && d );
+    BOOST_CHECK( d->GetParent().lock().get() == c );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
