@@ -1027,9 +1027,11 @@ void SCH_IO_ALTIUM::CreateAliases()
 
         if( !busLine )
         {
-            for( SCH_ITEM* elem : screen->Items().Overlapping( SCH_HIER_LABEL_T, box ) )
+            auto labels = screen->Items().Overlapping( SCH_HIER_LABEL_T, box );
+
+            if( auto it = labels.begin(); it != labels.end() )
             {
-                SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( elem );
+                SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( *it );
 
                 pos = label->GetPosition();
                 VECTOR2I center = box.GetCenter();
@@ -1050,8 +1052,6 @@ void SCH_IO_ALTIUM::CreateAliases()
                     busLine->SetFlags( IS_NEW );
                     screen->Append( busLine );
                 }
-
-                break;
             }
         }
 
