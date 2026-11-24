@@ -578,8 +578,8 @@ const std::vector<SCENE_SHAPE>& ShapesFor( const DIFF_SCENE& aScene, CATEGORY aC
 {
     switch( aCategory )
     {
-    case CATEGORY::ADDED: return aScene.addedShapes;
-    case CATEGORY::REMOVED: return aScene.removedShapes;
+    case CATEGORY::ADDED:    return aScene.addedShapes;
+    case CATEGORY::REMOVED:  return aScene.removedShapes;
     case CATEGORY::MODIFIED: return aScene.modifiedShapes;
     case CATEGORY::CONFLICT: return aScene.conflictShapes;
     }

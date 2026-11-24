@@ -48,8 +48,9 @@ namespace
 // Where to open the before and after canvases: on the first change, padded to a readable size.
 std::optional<BOX2I> firstChangeBox( const KICAD_DIFF::DIFF_SCENE& aScene, KICAD_DIFF::DOC_KIND aKind )
 {
-    for( const std::vector<KICAD_DIFF::SCENE_SHAPE>* shapes :
-         { &aScene.modifiedShapes, &aScene.addedShapes, &aScene.removedShapes } )
+    for( const std::vector<KICAD_DIFF::SCENE_SHAPE>* shapes : { &aScene.modifiedShapes,
+                                                                &aScene.addedShapes,
+                                                                &aScene.removedShapes } )
     {
         if( shapes->empty() )
             continue;

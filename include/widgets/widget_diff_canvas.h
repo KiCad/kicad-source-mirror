@@ -203,13 +203,14 @@ private:
     void onChar( wxKeyEvent& aEvent );
     void onSize( wxSizeEvent& aEvent );
 
+private:
     struct HIGHLIGHT_BOX_ITEM;
 
-    KICAD_DIFF::DIFF_SCENE   m_scene;
+    KICAD_DIFF::DIFF_SCENE              m_scene;
     KICAD_DIFF::DIFF_SCENE              m_renderScene;
-    std::optional<KIID_PATH> m_highlight;
+    std::optional<KIID_PATH>            m_highlight;
     std::optional<KIID_PATH>            m_hover;
-    PICK_HANDLER             m_pickHandler;
+    PICK_HANDLER                        m_pickHandler;
     ITEM_HANDLER                        m_dclickHandler;
     DIMMER                              m_itemDimmer;
     ITEM_ID_GETTER                      m_itemIdGetter;
@@ -221,30 +222,30 @@ private:
     std::set<KIID_PATH> m_hiddenChanges;
 
     /// While true, rebuildOverlay()/ZoomToFit() are held so a batch renders once.
-    bool m_holdRebuild = false;
+    bool                m_holdRebuild = false;
 
-    bool m_changeOutlinesShown = true;
+    bool                m_changeOutlinesShown = true;
 
-    LSET m_layerVisible;
+    LSET                m_layerVisible;
 
     bool m_hasNativeContext = false;
-    std::unique_ptr<KIGFX::VIEW_GROUP> m_contextGroup;
+    std::unique_ptr<KIGFX::VIEW_GROUP>                m_contextGroup;
     std::vector<KIGFX::VIEW_ITEM*>                    m_contextGroupItems;
     std::shared_ptr<const void>                       m_contextOwner;
     std::map<KIGFX::VIEW_ITEM*, KICAD_DIFF::CATEGORY> m_itemCategories;
-    std::shared_ptr<KIGFX::VIEW_OVERLAY> m_overlay;
+    std::shared_ptr<KIGFX::VIEW_OVERLAY>              m_overlay;
 
     /// EDA_DRAW_PANEL_GAL keeps a reference to the options struct, so it
     /// must outlive the panel. Per-instance so siblings can vary if needed.
-    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_galOptions;
+    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS>       m_galOptions;
 
     /// True when a ZoomToFit was requested before the canvas had a real
     /// size — the next onSize will retry the fit and clear this.
-    bool m_zoomToFitPending = false;
+    bool                 m_zoomToFitPending = false;
 
-    bool     m_leftDragPans = false;
-    bool     m_leftPanning = false;
-    VECTOR2D m_leftPanLast;
+    bool                 m_leftDragPans = false;
+    bool                 m_leftPanning = false;
+    VECTOR2D             m_leftPanLast;
 
     std::optional<BOX2I> m_focusBox;
 };
