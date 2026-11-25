@@ -124,7 +124,7 @@ bool BLOCK_DRAGGER::coveredBySolid( const JOINT* aJoint, bool aSelected ) const
 
     for( const ITEM* item : hits.CItems() )
     {
-        if( !item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) )
+        if( !item->OfKind( ITEM::SOLID_T | ITEM::VIA_T ) || item->IsVirtual() )
             continue;
 
         if( ( m_rigidItems.count( const_cast<ITEM*>( item ) ) != 0 ) != aSelected )

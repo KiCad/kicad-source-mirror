@@ -1534,6 +1534,44 @@ BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerReportsArcsHeldAtBothEnds, PNS_TEST_FIXT
 }
 
 
+// A width change gets a virtual via, which must not hold the dragged block back.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesCopperAcrossAWidthChange, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   start( 0, 0 );
+    VECTOR2I                   widthChange( 2000000, 0 );
+    VECTOR2I                   end( 4000000, 0 );
+
+    PNS::SEGMENT* thin = makeTestTrack( start, widthChange, net );
+    PNS::SEGMENT* thick = makeTestTrack( widthChange, end, net );
+    thick->SetWidth( 500000 );
+
+    world->AddRaw( thin );
+    world->AddRaw( thick );
+    world->FixupVirtualVias();
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( thin );
+    itemsToDrag.Add( thick );
+    BOOST_REQUIRE( dragger.Start( start, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 1000000 );
+    dragger.Drag( start + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+
+    BOOST_CHECK_MESSAGE( tracesTouch( traces, start + delta ), "the free end did not travel" );
+    BOOST_CHECK_MESSAGE( tracesTouch( traces, widthChange + delta ), "the width change did not travel" );
+    BOOST_CHECK_MESSAGE( tracesTouch( traces, end + delta ), "the far end did not travel" );
+
+    world->KillChildren();
+}
+
+
 /**
  * Test that COMPONENT_DRAGGER works correctly with basic solid dragging.
  *
