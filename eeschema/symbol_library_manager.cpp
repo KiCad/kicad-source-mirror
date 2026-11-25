@@ -860,33 +860,8 @@ LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer( const wxString& aLibrary )
     auto ret = m_libs.emplace( aLibrary, LIB_BUFFER( aLibrary ) );
     LIB_BUFFER& buf = ret.first->second;
 
-    for( LIB_SYMBOL* symbol : getOriginalSymbols( aLibrary ) )
-    {
-        if( symbol->IsDerived() )
-        {
-            std::shared_ptr<LIB_SYMBOL> oldParent = symbol->GetParent().lock();
-
-            wxCHECK_MSG( oldParent, buf, wxString::Format( "Derived symbol '%s' found with undefined parent.",
-                                                           symbol->GetName() ) );
-
-            LIB_SYMBOL* libParent = buf.GetSymbol( oldParent->GetName() );
-
-            if( !libParent )
-            {
-                std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *oldParent.get() );
-                libParent = newParent.get();
-                buf.CreateBuffer( std::move( newParent ), std::make_unique<SCH_SCREEN>() );
-            }
-
-            std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
-            newSymbol->SetParent( libParent );
-            buf.CreateBuffer( std::move( newSymbol ), std::make_unique<SCH_SCREEN>() );
-        }
-        else if( !buf.GetSymbol( symbol->GetName() ) )
-        {
-            buf.CreateBuffer( std::make_unique<LIB_SYMBOL>( *symbol ), std::make_unique<SCH_SCREEN>() );
-        }
-    }
+    const std::set<LIB_SYMBOL*> originals = getOriginalSymbols( aLibrary );
+    buf.BufferOriginals( { originals.begin(), originals.end() } );
 
     return buf;
 }
@@ -995,6 +970,41 @@ LIB_SYMBOL* LIB_BUFFER::GetSymbol( const wxString& aAlias ) const
         return nullptr;
 
     return &buf->GetSymbol();
+}
+
+
+void LIB_BUFFER::BufferOriginals( std::vector<LIB_SYMBOL*> aOriginals )
+{
+    // A parent must be buffered before its derived symbols, which would otherwise buffer a second copy of it
+    std::ranges::stable_sort( aOriginals, {}, &LIB_SYMBOL::GetInheritanceDepth );
+
+    for( LIB_SYMBOL* symbol : aOriginals )
+    {
+        if( symbol->IsDerived() )
+        {
+            std::shared_ptr<LIB_SYMBOL> oldParent = symbol->GetParent().lock();
+
+            wxCHECK_MSG( oldParent, /* void */, wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                                                                  symbol->GetName() ) );
+
+            LIB_SYMBOL* libParent = GetSymbol( oldParent->GetName() );
+
+            if( !libParent )
+            {
+                std::unique_ptr<LIB_SYMBOL> newParent = std::make_unique<LIB_SYMBOL>( *oldParent.get() );
+                libParent = newParent.get();
+                CreateBuffer( std::move( newParent ), std::make_unique<SCH_SCREEN>() );
+            }
+
+            std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( *symbol );
+            newSymbol->SetParent( libParent );
+            CreateBuffer( std::move( newSymbol ), std::make_unique<SCH_SCREEN>() );
+        }
+        else if( !GetSymbol( symbol->GetName() ) )
+        {
+            CreateBuffer( std::make_unique<LIB_SYMBOL>( *symbol ), std::make_unique<SCH_SCREEN>() );
+        }
+    }
 }
 
 

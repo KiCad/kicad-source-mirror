@@ -100,6 +100,9 @@ public:
     /// Return the working copy of a #LIB_SYMBOL root object with specified alias.
     LIB_SYMBOL* GetSymbol( const wxString& aAlias ) const;
 
+    /// Buffer copies of a library's symbols, linking each derived copy to its buffered parent
+    void BufferOriginals( std::vector<LIB_SYMBOL*> aOriginals );
+
     /// Create a new buffer to store a symbol. #LIB_BUFFER takes ownership of \a aCopy.
     bool CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen, bool aNew = false );
 

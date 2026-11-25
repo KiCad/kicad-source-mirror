@@ -1230,6 +1230,23 @@ BOOST_AUTO_TEST_CASE( SaveCopyKeepsGrandchildParent )
 }
 
 
+// Buffering a library must buffer each symbol once, even when a grandchild comes before its parent
+BOOST_AUTO_TEST_CASE( BufferOriginalsTakesParentsFirst )
+{
+    LIB_SYMBOL root( wxS( "R" ) );
+    LIB_SYMBOL middle( wxS( "M" ) );
+    LIB_SYMBOL leaf( wxS( "L" ) );
+    middle.SetParent( &root );
+    leaf.SetParent( &middle );
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    libBuffer.BufferOriginals( { &leaf, &middle, &root } );
+
+    BOOST_CHECK_EQUAL( libBuffer.GetBuffers().size(), 3 );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "M" ) )->GetParent().lock().get() == libBuffer.GetSymbol( wxS( "R" ) ) );
+}
+
+
 // Replacing a derived symbol in the plugin cache must keep the symbols derived from it
 BOOST_AUTO_TEST_CASE( ReplacingParentKeepsGrandchild )
 {
