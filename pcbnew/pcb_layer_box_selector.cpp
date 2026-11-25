@@ -37,6 +37,7 @@ PCB_LAYER_BOX_SELECTOR::PCB_LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
         LAYER_BOX_SELECTOR( parent, id, pos, size, n, choices ),
         m_boardFrame( nullptr ),
         m_showNotEnabledBrdlayers( false ),
+        m_allowIndeterminateState( false ),
         m_layerPresentation( std::make_unique<PCB_LAYER_PRESENTATION>( nullptr ) ) // The parent isn't always the frame
 {
 }

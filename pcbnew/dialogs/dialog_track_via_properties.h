@@ -114,6 +114,9 @@ private:
     bool TransferDataToWindow() override;
 
 private:
+    void commonInit( PCB_BASE_EDIT_FRAME* aParent );
+
+private:
     /// Used for standalone via mode to flow through the normal update logic
     PCB_SELECTION        m_viaStandaloneSelection;
     PCB_BASE_EDIT_FRAME* m_frame;
@@ -121,8 +124,6 @@ private:
 
     /// Dialog was constructed for a standalone via (via stitching
     bool                 m_standalone = false;
-
-    void commonInit( PCB_BASE_EDIT_FRAME* aParent );
 
     UNIT_BINDER          m_trackStartX, m_trackStartY;
     UNIT_BINDER          m_trackEndX, m_trackEndY;
@@ -149,14 +150,10 @@ private:
     bool                 m_vias;       // True if dialog displays any via properties.
 
     /// Temporary padstack of the edited via(s)
-    std::unique_ptr<PADSTACK> m_viaStack;
+    std::unique_ptr<PADSTACK>   m_viaStack;
 
     /// The currently-shown copper layer of the edited via(s)
-    PCB_LAYER_ID m_editLayer;
+    PCB_LAYER_ID                m_editLayer;
     std::map<int, PCB_LAYER_ID> m_editLayerCtrlMap;
     bool                        m_padstackDirty;
-
-    /// A layer selector cannot hold a mixed state in its value, so the dialog remembers it
-    bool m_backdrillFrontLayerMixed = false;
-    bool m_backdrillBackLayerMixed = false;
 };

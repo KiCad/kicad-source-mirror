@@ -52,9 +52,18 @@ public:
     // SetLayerSet allows disabling some layers, which are not shown in list
     void SetNotAllowedLayerSet( const LSET& aMask ) { m_layerMaskDisable = aMask; }
 
-    // If the UNDEFINED_LAYER should be selectable, give it a name here.  Usually either
+    // Allow the selection and display of an indeterminate state.  The supplied name is normally
     // INDETERMINATE_STATE or INDETERMINATE_ACTION.
-    void SetUndefinedLayerName( const wxString& aName ) { m_undefinedLayerName = aName; }
+    void SetAllowsIndeterminateState( const wxString& aIndeterminateStateName )
+    {
+        m_allowIndeterminateState = true;
+        m_undefinedLayerName = aIndeterminateStateName;
+    }
+
+    bool IsIndeterminate()
+    {
+        return m_allowIndeterminateState && GetLayerSelection() == UNDEFINED_LAYER;
+    }
 
     // Reload the Layers names and bitmaps
     void Resync() override;
@@ -69,12 +78,14 @@ private:
 
     LSET getEnabledLayers() const;
 
+private:
     PCB_BASE_FRAME* m_boardFrame;
 
     LSET     m_layerMaskDisable;        // A mask to remove some (not allowed) layers
                                         // from layer list
     bool     m_showNotEnabledBrdlayers; // true to list all allowed layers
                                         // (with not activated layers flagged)
+    bool     m_allowIndeterminateState;
     wxString m_undefinedLayerName;      // if not empty add an item with this name which sets
                                         // the layer to UNDEFINED_LAYER
 
