@@ -1799,8 +1799,16 @@ void DIALOG_FIELDS_TABLE::rebuildBomPresetsWidget()
     // At least the built-in presets should always be present
     wxASSERT( !m_bomPresets.empty() );
 
-    m_cbBomPresets->SetSelection( default_idx );
-    m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( default_idx ) );
+    if( static_cast<unsigned int>( default_idx ) < m_cbBomPresets->GetCount() )
+    {
+        m_cbBomPresets->SetSelection( default_idx );
+        m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( default_idx ) );
+    }
+    else if( !m_cbBomPresets->IsEmpty() )
+    {
+        m_cbBomPresets->SetSelection( 0 );
+        m_currentBomPreset = static_cast<BOM_PRESET*>( m_cbBomPresets->GetClientData( 0 ) );
+    }
 }
 
 
@@ -2058,10 +2066,17 @@ BOM_FMT_PRESET DIALOG_FIELDS_TABLE::GetCurrentBomFmtSettings()
 
     if( selection != wxNOT_FOUND )
     {
-        if( auto* preset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( selection ) ) )
-            current.name = preset->name;
+        if( m_cbBomFmtPresets->HasClientData() )
+        {
+            if( auto* preset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( selection ) ) )
+                current.name = preset->name;
+            else
+                current.name = m_cbBomFmtPresets->GetString( selection );
+        }
         else
+        {
             current.name = m_cbBomFmtPresets->GetString( selection );
+        }
     }
 
     current.fieldDelimiter = m_textFieldDelimiter->GetValue();
@@ -2195,8 +2210,16 @@ void DIALOG_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
     // At least the built-in presets should always be present
     wxASSERT( !m_bomFmtPresets.empty() );
 
-    m_cbBomFmtPresets->SetSelection( default_idx );
-    m_currentBomFmtPreset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( default_idx ) );
+    if( static_cast<unsigned int>( default_idx ) < m_cbBomFmtPresets->GetCount() )
+    {
+        m_cbBomFmtPresets->SetSelection( default_idx );
+        m_currentBomFmtPreset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( default_idx ) );
+    }
+    else if( !m_cbBomPresets->IsEmpty() )
+    {
+        m_cbBomFmtPresets->SetSelection( 0 );
+        m_currentBomFmtPreset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( 0 ) );
+    }
 }
 
 
