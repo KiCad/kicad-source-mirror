@@ -1071,13 +1071,19 @@ bool EDIT_TOOL::isRouterActive() const
 }
 
 
-// The router drags a footprint by its pads, so a footprint with none gives it nothing to do
+// The router drags a footprint by its copper, so one with no copper pad gives it nothing to do
 static bool routerHasWork( const PCB_SELECTION& aSelection )
 {
     for( EDA_ITEM* item : aSelection )
     {
-        if( item->Type() != PCB_FOOTPRINT_T || !static_cast<FOOTPRINT*>( item )->Pads().empty() )
+        if( item->Type() != PCB_FOOTPRINT_T )
             return true;
+
+        for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+        {
+            if( !pad->GetLayerSet().CuStack().empty() || pad->GetDrillSize().x > 0 )
+                return true;
+        }
     }
 
     return false;
