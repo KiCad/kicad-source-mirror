@@ -267,6 +267,15 @@ public:
 
     virtual bool HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
+    /**
+     * True when changing the board's visible layers from \p aBefore to \p aAfter changes what
+     * Draw() produces for \p aItem.
+     *
+     * The view hides and shows whole layers by itself, so this only covers drawing that reads the
+     * board's visible layers. Keep it in step with those reads.
+     */
+    static bool VisibleLayersChangeDrawing( const BOARD_ITEM* aItem, const LSET& aBefore, const LSET& aAfter );
+
 protected:
     PCB_VIEWERS_SETTINGS_BASE* viewer_settings();
 

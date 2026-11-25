@@ -1371,24 +1371,18 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
     else if( BOARD* board = m_frame->GetBoard() )
     {
         const LSET before = board->GetVisibleLayers();
-        const LSET changed = before ^ aLayers;
 
         board->SetVisibleLayers( aLayers );
 
-        // Only an item on a changed layer can change shape. The exception is the last
-        // physical layer going away, because that changes every hole.
+        // The last physical layer going away changes every hole
         const bool anyPhysicalBefore = ( before & LSET::PhysicalLayersMask() ).any();
         const bool anyPhysicalAfter = ( aLayers & LSET::PhysicalLayersMask() ).any();
         const bool narrow = anyPhysicalBefore == anyPhysicalAfter;
 
-        // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
-        // they won't be found in the view layer's itemset for repainting.
-        view->UpdateAllItemsConditionally( KIGFX::ALL,
+        // Visibility leaves view layers and bounding boxes alone, so repaint and skip the R-tree rebuild
+        view->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
                 {
-                    // Items rendered to composite layers (such as LAYER_PAD_TH) must be redrawn
-                    // whether they're optionally flashed or not (as the layer being hidden/shown
-                    // might be the last layer the item is visible on).
                     if( !aItem->IsBOARD_ITEM() )
                         return false;
 
@@ -1397,7 +1391,7 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
                     if( item->Type() != PCB_VIA_T && item->Type() != PCB_PAD_T )
                         return false;
 
-                    return !narrow || ( item->GetLayerSet() & changed ).any();
+                    return !narrow || KIGFX::PCB_PAINTER::VisibleLayersChangeDrawing( item, before, aLayers );
                 } );
 
         m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );

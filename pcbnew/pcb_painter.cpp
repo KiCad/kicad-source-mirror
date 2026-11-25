@@ -1365,6 +1365,50 @@ bool PCB_PAINTER::HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const
 }
 
 
+bool PCB_PAINTER::VisibleLayersChangeDrawing( const BOARD_ITEM* aItem, const LSET& aBefore, const LSET& aAfter )
+{
+    const BOARD* board = aItem->GetBoard();
+    const LSET   enabled = board ? board->GetEnabledLayers() : LSET::AllLayersMask();
+    const LSET   before = aBefore & enabled & aItem->GetLayerSet();
+    const LSET   after = aAfter & enabled & aItem->GetLayerSet();
+
+    if( before == after )
+        return false;
+
+    switch( aItem->Type() )
+    {
+    case PCB_VIA_T:
+    {
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
+        const LSET     copper = LSET::AllCuMask();
+
+        // Without visible copper GetColor() takes the via colour from its other visible layers
+        if( ( before & copper ).none() || ( after & copper ).none() )
+            return true;
+
+        // GetColor() shows the via in an active mask layer's colour
+        if( before.test( F_Mask ) != after.test( F_Mask ) || before.test( B_Mask ) != after.test( B_Mask ) )
+            return true;
+
+        // draw() skips the annular ring once the via flashes on no visible layer
+        return via->FlashLayer( aBefore & enabled ) != via->FlashLayer( aAfter & enabled );
+    }
+
+    case PCB_PAD_T:
+    {
+        // The locked shadow takes the largest expansion among the visible layers
+        const PAD*       pad = static_cast<const PAD*>( aItem );
+        const FOOTPRINT* parent = pad->GetParentFootprint();
+
+        return pad->IsLocked() || ( parent && parent->IsLocked() );
+    }
+
+    default:
+        return true;
+    }
+}
+
+
 bool PCB_PAINTER::zoneOutlineOnly( const ZONE* aZone ) const
 {
     return aZone->GetIsRuleArea()

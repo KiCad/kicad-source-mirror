@@ -1466,19 +1466,19 @@ void GAL_MODERN::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
 
         const int segCount = std::max( 1, static_cast<int>( std::ceil( sweep / calcAngleStep( aRadius ) ) ) );
 
-        std::vector<VECTOR2D> sectorPts;
-        sectorPts.reserve( static_cast<size_t>( segCount ) + 2 );
-        sectorPts.push_back( aCenterPoint );
+        // A sector is star-shaped about its centre, so a fan covers it without the triangulator
+        const RHI_VERTEX fill = fillVertex( m_fillColor );
+        VECTOR2D         prev( aCenterPoint.x + std::cos( startAngle ) * aRadius,
+                               aCenterPoint.y + std::sin( startAngle ) * aRadius );
 
-        for( int ii = 0; ii <= segCount; ++ii )
+        for( int ii = 1; ii <= segCount; ++ii )
         {
-            const double a = startAngle + sweep * ii / segCount;
-            sectorPts.emplace_back( aCenterPoint.x + std::cos( a ) * aRadius,
-                                    aCenterPoint.y + std::sin( a ) * aRadius );
-        }
+            const double   a = startAngle + sweep * ii / segCount;
+            const VECTOR2D next( aCenterPoint.x + std::cos( a ) * aRadius, aCenterPoint.y + std::sin( a ) * aRadius );
 
-        // Not DrawPolygon(), which would also stroke the radial edges
-        fillOutline( roundedOutline( sectorPts.begin(), sectorPts.end() ), m_fillColor );
+            emitTriangle( aCenterPoint, prev, next, fill );
+            prev = next;
+        }
     }
 
     if( m_isStrokeEnabled )

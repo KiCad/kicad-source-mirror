@@ -517,6 +517,13 @@ void PCB_DRAW_PANEL_GAL::applyHighContrastLayer( PCB_LAYER_ID aLayer, bool aOnly
         return;
     }
 
+    // Without high contrast only an active mask layer changes item colours
+    if( aOnlyLayerChanged && !contrast && !m_highContrastShown && m_coloredLayer != UNDEFINED_LAYER
+        && !IsSolderMaskLayer( m_coloredLayer ) && !IsSolderMaskLayer( aLayer ) )
+    {
+        return;
+    }
+
     // Layers the canvas fades keep their item colours, unless high contrast hides inactive layers
     // now or did at the last switch
     if( aOnlyLayerChanged && pcbSettings->HasCanvasFadedLayers() && !hidden && !m_highContrastHidden )
@@ -536,6 +543,7 @@ void PCB_DRAW_PANEL_GAL::applyHighContrastLayer( PCB_LAYER_ID aLayer, bool aOnly
         m_view->UpdateAllLayersColor();
     }
 
+    m_coloredLayer = aLayer;
     m_highContrastShown = contrast;
     m_highContrastHidden = hidden;
 }

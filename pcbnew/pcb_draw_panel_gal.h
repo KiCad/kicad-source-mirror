@@ -208,6 +208,10 @@ protected:
 
     /** High contrast hid inactive layers at the last recolour, which the canvas cannot fade away */
     bool m_highContrastHidden = false;
+
+    /** The active layer the item colours were last computed for */
+    PCB_LAYER_ID m_coloredLayer = UNDEFINED_LAYER;
+
     std::unique_ptr<RATSNEST_VIEW_ITEM> m_ratsnest;      ///< Ratsnest view item
     std::unique_ptr<RATSNEST_VIEW_ITEM> m_localRatsnest; /**< Moving items' part, when split off */
 };
