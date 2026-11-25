@@ -99,7 +99,8 @@ public:
     {
         LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
-        if( !symbol )
+        // A schematic instance shares the library symbol's ID, and reverting would discard the library tab's edits
+        if( !symbol || m_frame->IsSymbolFromSchematic() )
             return false;
 
         LIB_ID libId = symbol->GetLibId();
@@ -109,8 +110,11 @@ public:
 
         LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
 
-        if( !libMgr.SymbolExists( libId.GetLibNickname(), libId.GetLibItemName() ) || !libMgr.CanRevertSymbol( libId, true ) )
+        if( !libMgr.SymbolExists( libId.GetLibItemName(), libId.GetLibNickname() )
+            || !libMgr.CanRevertSymbol( libId, true ) )
+        {
             return false;
+        }
 
         m_frame->Revert( libId, /* aConfirm = */ false );
         return true;
