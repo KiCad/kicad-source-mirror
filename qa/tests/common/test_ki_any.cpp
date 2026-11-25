@@ -182,7 +182,8 @@ BOOST_AUTO_TEST_CASE( AnyCast_3 )
     MoveEnabled m;
     MoveEnabled m2 = any_cast<MoveEnabled>(any(m));
     BOOST_CHECK(move_count == 1);
-    MoveEnabled&& m3 = any_cast<MoveEnabled&&>(any(m));
+    any a( m );
+    MoveEnabled&& m3 = any_cast<MoveEnabled&&>( std::move( a ) );
     BOOST_CHECK(move_count == 1);
 }
 
