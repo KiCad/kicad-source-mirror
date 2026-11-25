@@ -84,7 +84,12 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCur
     APP_SETTINGS_BASE* cfg = Kiface().KifaceSettings();
     wxASSERT( cfg );
 
-    m_notebook->SetSelection( cfg->m_ColorPicker.default_tab );
+    int defaultTab = 0;
+
+    if( cfg )
+        defaultTab = cfg->m_ColorPicker.default_tab;
+
+    m_notebook->SetSelection( defaultTab );
 
     // Build the defined colors panel:
     initDefinedColors( aUserColors );
