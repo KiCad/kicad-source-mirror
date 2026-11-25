@@ -509,7 +509,12 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
             // Edits reach the library buffer as they are made, so discarding them must restore it too
             if( !ctx->IsTransient() && m_libMgr->IsSymbolModified( ctx->GetName(), ctx->GetLibrary() ) )
             {
-                m_libMgr->RevertSymbol( LIB_ID( ctx->GetLibrary(), ctx->GetName() ) );
+                const LIB_ID id( ctx->GetLibrary(), ctx->GetName() );
+
+                if( !m_libMgr->CanRevertSymbol( id ) )
+                    return false;
+
+                m_libMgr->RevertSymbol( id );
 
                 if( IsLibraryTreeShown() )
                     m_treePane->GetLibTree()->RefreshLibTree();

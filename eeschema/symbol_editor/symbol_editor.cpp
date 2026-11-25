@@ -1457,6 +1457,10 @@ void SYMBOL_EDIT_FRAME::Revert( LIB_ID& aTarget, bool aConfirm )
     if( aConfirm && !ConfirmRevertDialog( this, msg ) )
         return;
 
+    // A refused revert must not close the tabs and their undo history first
+    if( !symbolName.IsEmpty() && !m_libMgr->CanRevertSymbol( aTarget, true ) )
+        return;
+
     // Other tabs may hold unsaved edits, so close only the reverted ones
     int          unit = m_unit;
     const LIB_ID active = closeLibraryTabs( libName, symbolName );

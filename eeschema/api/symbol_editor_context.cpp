@@ -109,7 +109,7 @@ public:
 
         LIB_SYMBOL_LIBRARY_MANAGER& libMgr = m_frame->GetLibManager();
 
-        if( !libMgr.SymbolExists( libId.GetLibNickname(), libId.GetLibItemName() ) )
+        if( !libMgr.SymbolExists( libId.GetLibNickname(), libId.GetLibItemName() ) || !libMgr.CanRevertSymbol( libId, true ) )
             return false;
 
         m_frame->Revert( libId, /* aConfirm = */ false );

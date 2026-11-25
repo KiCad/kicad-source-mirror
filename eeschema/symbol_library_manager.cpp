@@ -212,14 +212,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         if( res )
         {
             // Delete symbols that were removed from the buffer before clearing the deleted list
-            for( const std::shared_ptr<SYMBOL_BUFFER>& deletedBuf : libBuf.GetDeletedBuffers() )
-            {
-                wxCHECK2( deletedBuf, continue );
-
-                if( !deleteSymbol( &*pi, aFileName, deletedBuf->GetOriginal().GetName() ) )
-                    res = false;
-            }
-
+            res = libBuf.RemoveDeletedSymbols( aFileName, &*pi );
             libBuf.ClearAddedAndDeletedBufferLists();
         }
 
@@ -520,6 +513,20 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const
     OnDataChanged();
 
     return true;
+}
+
+
+bool SYMBOL_LIBRARY_MANAGER::CanRevertSymbol( const LIB_ID& aId, bool aDropNeverSaved ) const
+{
+    auto                           it = m_libs.find( aId.GetLibNickname() );
+    std::shared_ptr<SYMBOL_BUFFER> buf = it == m_libs.end() ? nullptr : it->second.GetBuffer( aId.GetLibItemName() );
+
+    if( !buf || it->second.CanRevertBuffer( *buf, aDropNeverSaved ) )
+        return true;
+
+    wxLogWarning( _( "Symbol %s cannot be reverted without a conflict in the library." ),
+                  UnescapeString( aId.GetLibItemName() ) );
+    return false;
 }
 
 
@@ -1096,14 +1103,25 @@ wxString LIB_BUFFER::RevertBuffer( SYMBOL_BUFFER& aSymbolBuf, bool aDropNeverSav
 
     auto addedIt = std::find_if( m_added.begin(), m_added.end(), sameBufferPredicate );
 
-    // Dropping a parent would leave its derived symbols without one
-    if( aDropNeverSaved && addedIt != m_added.end() && !HasDerivedSymbols( aSymbolBuf.GetSymbol().GetName() ) )
+    if( aDropNeverSaved && canDropBuffer( aSymbolBuf ) )
     {
         std::erase_if( m_symbols, sameBufferPredicate );
         m_added.erase( addedIt );
         ++m_hash;
 
         return wxEmptyString;
+    }
+
+    std::vector<std::shared_ptr<SYMBOL_BUFFER>> undeleted;
+
+    if( !findDeletedAncestors( aSymbolBuf, undeleted ) )
+        return aSymbolBuf.GetSymbol().GetName();
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : undeleted )
+    {
+        std::erase( m_deleted, buf );
+        m_symbols.push_back( buf );
+        ++m_hash;
     }
 
     LIB_SYMBOL original( aSymbolBuf.GetOriginal() );
@@ -1118,6 +1136,133 @@ wxString LIB_BUFFER::RevertBuffer( SYMBOL_BUFFER& aSymbolBuf, bool aDropNeverSav
     aSymbolBuf.GetScreen()->SetContentModified( addedIt != m_added.end() );
 
     return original.GetName();
+}
+
+
+bool LIB_BUFFER::canDropBuffer( const SYMBOL_BUFFER& aSymbolBuf ) const
+{
+    if( std::ranges::none_of( m_added,
+                              [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+                              {
+                                  return aBuf.get() == &aSymbolBuf;
+                              } )
+        || HasDerivedSymbols( aSymbolBuf.GetSymbol().GetName() ) )
+    {
+        return false;
+    }
+
+    // Walk every parent link a revert of another symbol could restore, including those of the deleted ancestors
+    // it undeletes, which a later revert takes back to their own saved parents. A path a refused revert would
+    // need is walked too, since another revert can lift the refusal after the drop.
+    std::set<const LIB_SYMBOL*>              visited;
+    std::vector<std::shared_ptr<LIB_SYMBOL>> pending;
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_symbols )
+    {
+        if( buf.get() != &aSymbolBuf )
+            pending.push_back( buf->GetOriginal().GetParent().lock() );
+    }
+
+    while( !pending.empty() )
+    {
+        std::shared_ptr<LIB_SYMBOL> parent = std::move( pending.back() );
+        pending.pop_back();
+
+        if( !parent || !visited.insert( parent.get() ).second )
+            continue;
+
+        if( parent.get() == &aSymbolBuf.GetSymbol() )
+            return false;
+
+        pending.push_back( parent->GetParent().lock() );
+
+        auto deletedIt = std::ranges::find_if( m_deleted,
+                                               [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+                                               {
+                                                   return &aBuf->GetSymbol() == parent.get();
+                                               } );
+
+        if( deletedIt != m_deleted.end() )
+            pending.push_back( ( *deletedIt )->GetOriginal().GetParent().lock() );
+    }
+
+    return true;
+}
+
+
+bool LIB_BUFFER::CanRevertBuffer( const SYMBOL_BUFFER& aSymbolBuf, bool aDropNeverSaved ) const
+{
+    std::vector<std::shared_ptr<SYMBOL_BUFFER>> deleted;
+    return ( aDropNeverSaved && canDropBuffer( aSymbolBuf ) ) || findDeletedAncestors( aSymbolBuf, deleted );
+}
+
+
+bool LIB_BUFFER::findDeletedAncestors( const SYMBOL_BUFFER&                         aSymbolBuf,
+                                       std::vector<std::shared_ptr<SYMBOL_BUFFER>>& aDeleted ) const
+{
+    // The names every buffer will have once aSymbolBuf is reverted, compared as SymbolNameInUse does
+    std::set<wxString> names;
+
+    const auto nameKey =
+            []( const LIB_SYMBOL& aSymbol )
+            {
+                return UnescapeString( aSymbol.GetName() ).Lower();
+            };
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_symbols )
+    {
+        if( buf.get() != &aSymbolBuf )
+            names.insert( nameKey( buf->GetSymbol() ) );
+    }
+
+    // A rename cannot revert to a name another symbol took since
+    if( !names.insert( nameKey( aSymbolBuf.GetOriginal() ) ).second
+        && aSymbolBuf.GetOriginal().GetName() != aSymbolBuf.GetSymbol().GetName() )
+    {
+        return false;
+    }
+
+    for( std::shared_ptr<LIB_SYMBOL> parent = aSymbolBuf.GetOriginal().GetParent().lock(); parent;
+         parent = parent->GetParent().lock() )
+    {
+        if( parent.get() == &aSymbolBuf.GetSymbol() )
+            return false;
+
+        const auto holdsParent =
+                [&]( const std::shared_ptr<SYMBOL_BUFFER>& aBuf )
+                {
+                    return &aBuf->GetSymbol() == parent.get();
+                };
+
+        auto deletedIt = std::ranges::find_if( m_deleted, holdsParent );
+
+        if( deletedIt == m_deleted.end() )
+            continue;
+
+        if( !names.insert( nameKey( *parent ) ).second )
+            return false;
+
+        aDeleted.push_back( *deletedIt );
+    }
+
+    return true;
+}
+
+
+bool LIB_BUFFER::RemoveDeletedSymbols( const wxString& aFileName, SCH_IO* aPlugin ) const
+{
+    bool res = true;
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& deletedBuf : m_deleted )
+    {
+        const wxString& name = deletedBuf->GetOriginal().GetName();
+
+        // The file now holds the live symbol of that name
+        if( !GetBuffer( name ) && !deleteSymbol( aPlugin, aFileName, name ) )
+            res = false;
+    }
+
+    return res;
 }
 
 
