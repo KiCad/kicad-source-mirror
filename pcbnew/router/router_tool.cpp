@@ -2549,8 +2549,6 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
 
     bool pickingStartPoint = true;
 
-    setSelectableItemMask( PNS::ITEM::ARC_T | PNS::ITEM::SEGMENT_T );
-
     // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Catch any visibility
     // changes while routing.
     m_toolMgr->GetView()->SyncLayerVisibilityCache();
@@ -2582,6 +2580,9 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
     }
 
     frame->ShowInfoBarMsg( _( "Pick a track you want to spread other tracks around." ) );
+
+    // Only tracks are pickable while spreading.
+    setSelectableItemMask( PNS::ITEM::ARC_T | PNS::ITEM::SEGMENT_T );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -2693,6 +2694,7 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
 
     m_startItem = nullptr;
 
+    setSelectableItemMask( PNS::ITEM::ANY_T );
     controls->ForceCursorPosition( false );
     highlightNets( false );
 
