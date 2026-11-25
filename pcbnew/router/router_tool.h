@@ -73,7 +73,7 @@ public:
     int SpreadTracks( const TOOL_EVENT& aEvent );
 
     int InlineBreakTrack( const TOOL_EVENT& aEvent );
-    bool CanInlineDrag( int aDragMode );
+    bool CanInlineDrag();
     int InlineDrag( const TOOL_EVENT& aEvent );
 
     int SelectCopperLayerPair( const TOOL_EVENT& aEvent );

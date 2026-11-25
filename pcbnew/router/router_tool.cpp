@@ -3105,7 +3105,7 @@ static DRAG_KIND dragKindOf( const PCB_SELECTION& aSelection )
 }
 
 
-bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
+bool ROUTER_TOOL::CanInlineDrag()
 {
     m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( ACTIONS::selectionCursor, NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
@@ -3120,10 +3120,8 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
     case DRAG_KIND::TRACKS_KIND:
         return true;
 
-    // Neither footprints nor a block drag free angle
     case DRAG_KIND::FOOTPRINTS_KIND:
-    case DRAG_KIND::BLOCK:
-        return !( aDragMode & PNS::DM_FREE_ANGLE );
+    case DRAG_KIND::BLOCK: return true;
 
     default:
         return false;
