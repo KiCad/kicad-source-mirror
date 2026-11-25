@@ -2085,31 +2085,42 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     {
         wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::KiwayMailIn MAIL_RELOAD_LIB -> SyncLibraries" ) );
 
-        LIB_SYMBOL* current = GetCurSymbol();
-        wxString    lib = current ? current->GetLibId().GetLibNickname().wx_str() : wxString();
+        wxString                    currentSymbolName;
+        wxString                    currentSymbolLibNickname;
+        bool                        refresh = false;
+        std::unique_ptr<LIB_SYMBOL> flattenedCopyOfCurrent;
+        std::set<wxString>          keepLibraries;
 
-        // The open symbol is a copy, so an unedited one is refreshed when nothing holds on to it
-        bool refresh = current && !IsContentModified() && !IsSymbolFromSchematic() && IsEnabled()
-                       && !Kiway().HasBlockingDialog() && ToolStackIsEmpty();
-
-        // A derived symbol's copy links to its parent in the buffer, so keep every buffer a copy
-        // still shows
-        std::set<wxString> keep;
-
-        for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+        if( LIB_SYMBOL* current = GetCurSymbol() )
         {
-            if( ctx.get() != m_activeTab || !refresh )
-                keep.insert( ctx->GetLibrary() );
+            currentSymbolName = current->GetName();
+            currentSymbolLibNickname = current->GetLibId().GetLibNickname().wx_str();
+
+            // The open symbol is a copy, so an unedited one is refreshed when nothing holds on to it
+            refresh = !IsContentModified()
+                        && !IsSymbolFromSchematic()
+                        && IsEnabled()
+                        && !Kiway().HasBlockingDialog()
+                        && ToolStackIsEmpty();
+
+            if( refresh )
+                flattenedCopyOfCurrent = current->Flatten();
+
+            // A derived symbol's copy links to its parent in the buffer, so keep every buffer a copy
+            // still shows
+
+            for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+            {
+                if( ctx.get() != m_activeTab || !refresh )
+                    keepLibraries.insert( ctx->GetLibrary() );
+            }
+
+            if( !refresh )
+                keepLibraries.insert( currentSymbolLibNickname );
         }
 
-        if( current && !refresh )
-            keep.insert( lib );
-
-        // Holds a refreshed copy's parent alive until the copy is replaced
-        std::shared_ptr<LIB_SYMBOL> heldParent = refresh ? current->GetParent().lock() : nullptr;
-
         // Untouched buffers hold the files as they were, and a pull may have changed them since
-        std::vector<wxString> dropped = m_libMgr->DropUnmodifiedBuffers( keep );
+        std::vector<wxString> dropped = m_libMgr->DropUnmodifiedBuffers( keepLibraries );
 
         // Only the pane is frozen. A frozen adapter hides every parent, and the view rebuilt from it
         // at the end of the sync is left with rows that no longer exist.
@@ -2121,20 +2132,19 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         m_treePane->Thaw();
         RefreshLibraryTree();
 
-        if( refresh && alg::contains( dropped, lib ) )
+        if( refresh && alg::contains( dropped, currentSymbolLibNickname ) )
         {
-            const wxString name = current->GetName();
             LIB_SYMBOL*    refreshed = nullptr;
 
-            if( m_libMgr->SymbolExists( name, lib ) )
-                refreshed = m_libMgr->GetBufferedSymbol( name, lib );
+            if( m_libMgr->SymbolExists( currentSymbolName, currentSymbolLibNickname ) )
+                refreshed = m_libMgr->GetBufferedSymbol( currentSymbolName, currentSymbolLibNickname );
 
             LIB_SYMBOL* replacement = nullptr;
 
             if( refreshed )
                 replacement = new LIB_SYMBOL( *refreshed );
-            else if( heldParent )
-                replacement = current->Flatten().release(); // The pull removed it and its parent dies with heldParent
+            else if( flattenedCopyOfCurrent )
+                replacement = flattenedCopyOfCurrent.release();
 
             if( replacement )
             {
