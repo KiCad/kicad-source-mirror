@@ -1325,12 +1325,11 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
                 return false;
             }
 
-            std::unique_ptr<LIB_SYMBOL> originalParent = std::make_unique<LIB_SYMBOL>( *bufferedParent );
-            LIB_SYMBOL&                 parentRef = *originalParent;
-            aSymbolBuf.SetOriginal( std::move( originalParent ) );
+            // Link to the buffered parent, since a buffered copy may still link to one the source library owns
+            LIB_SYMBOL* originalParent = GetSymbol( bufferedParent->GetName() );
 
             std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
-            newSymbol->SetParent( &parentRef );
+            newSymbol->SetParent( originalParent ? originalParent : bufferedParent.get() );
             aSymbolBuf.SetOriginal( std::move( newSymbol ) );
         }
         else

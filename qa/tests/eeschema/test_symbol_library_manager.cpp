@@ -1230,4 +1230,25 @@ BOOST_AUTO_TEST_CASE( SaveCopyKeepsGrandchildParent )
 }
 
 
+// Reverting a symbol saved under a parent the file does not hold yet must keep it derived
+BOOST_AUTO_TEST_CASE( RevertKeepsNewParentOfSavedChild )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "C" ) }, dir );
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "C" ) } );
+    libBuffer.CreateBuffer( std::make_unique<LIB_SYMBOL>( wxS( "Q" ) ), std::make_unique<SCH_SCREEN>(), true );
+
+    SYMBOL_BUFFER& child = *libBuffer.GetBuffer( wxS( "C" ) );
+    child.GetSymbol().SetParent( libBuffer.GetSymbol( wxS( "Q" ) ) );
+    saveLibrary( libBuffer, path );
+
+    libBuffer.RevertBuffer( child, false );
+    BOOST_CHECK( child.GetSymbol().IsDerived() );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
