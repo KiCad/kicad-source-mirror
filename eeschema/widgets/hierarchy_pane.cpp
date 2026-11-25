@@ -130,17 +130,7 @@ void HIERARCHY_PANE::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxTreeItem
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
         aList->push_back( sheet );
 
-        wxString sheetNameBase = sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
-
-        // If the sheet name is empty, use the filename (without extension) as fallback
-        if( sheetNameBase.IsEmpty() )
-        {
-            wxFileName fn( sheet->GetFileName() );
-            sheetNameBase = fn.GetName();
-        }
-
-        wxString     sheetName = formatPageString( sheetNameBase, aList->GetPageNumber() );
-        wxTreeItemId child = m_tree->AppendItem( aParent, sheetName, 0, 1 );
+        wxTreeItemId child = m_tree->AppendItem( aParent, formatSheetLabel( *aList ), 0, 1 );
         m_tree->SetItemData( child, new TREE_ITEM_DATA( *aList ) );
 
         buildHierarchyTree( aList, child );
@@ -312,18 +302,8 @@ void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
             m_list.clear();
             m_list.push_back( sheet );
 
-            wxString sheetNameBase = sheet->GetShownName( FOR_GUI );
-
-            // If the sheet name is empty, use the filename (without extension) as fallback
-            if( sheetNameBase.IsEmpty() && sheet->GetScreen() )
-            {
-                wxFileName fn( sheet->GetScreen()->GetFileName() );
-                sheetNameBase = fn.GetName();
-            }
-
             // Create tree item for this top-level sheet
-            wxString sheetName = formatPageString( sheetNameBase, m_list.GetPageNumber() );
-            wxTreeItemId topLevelItem = m_tree->AppendItem( projectRoot, sheetName, 0, 1 );
+            wxTreeItemId topLevelItem = m_tree->AppendItem( projectRoot, formatSheetLabel( m_list ), 0, 1 );
             m_tree->SetItemData( topLevelItem, new TREE_ITEM_DATA( m_list ) );
 
             // Build hierarchy for this top-level sheet
@@ -411,9 +391,7 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
                 if( !itemData )     // happens if not shown in wxTreeCtrl m_tree (virtual sheet)
                     return;
 
-                SCH_SHEET* sheet = itemData->m_SheetPath.Last();
-                wxString   sheetNameBase = sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( FOR_GUI );
-                wxString   sheetName = formatPageString( sheetNameBase, itemData->m_SheetPath.GetPageNumber() );
+                wxString sheetName = formatSheetLabel( itemData->m_SheetPath );
 
                 if( m_tree->GetItemText( id ) != sheetName )
                     m_tree->SetItemText( id, sheetName );
@@ -751,8 +729,7 @@ void HIERARCHY_PANE::onTreeEditFinished( wxTreeEvent& event )
             return;
         }
 
-        m_tree->SetItemText( event.GetItem(), formatPageString( data->m_SheetPath.Last()->GetName(),
-                                                                data->m_SheetPath.GetPageNumber() ) );
+        m_tree->SetItemText( event.GetItem(), formatSheetLabel( data->m_SheetPath ) );
         setIdenticalSheetsHighlighted( data->m_SheetPath, false );
     }
 }
@@ -866,6 +843,25 @@ wxString HIERARCHY_PANE::getRootString()
 wxString HIERARCHY_PANE::formatPageString( const wxString& aName, const wxString& aPage )
 {
     return aName + wxT( " " ) + wxString::Format( _( "(page %s)" ), aPage );
+}
+
+
+wxString HIERARCHY_PANE::formatSheetLabel( const SCH_SHEET_PATH& aPath )
+{
+    SCH_SHEET* sheet = aPath.Last();
+    wxString   name = sheet->GetShownName( FOR_GUI );
+
+    if( name.IsEmpty() )
+    {
+        // A new root sheet has no file field, only its screen's default name
+        if( sheet->GetScreen() )
+            name = wxFileName( sheet->GetScreen()->GetFileName() ).GetName();
+
+        if( name.IsEmpty() )
+            name = wxFileName( sheet->GetFileName() ).GetName();
+    }
+
+    return formatPageString( name, aPath.GetPageNumber() );
 }
 
 
@@ -997,8 +993,7 @@ void HIERARCHY_PANE::renameIdenticalSheets( const SCH_SHEET_PATH& renamedSheet,
                             m_frame->OnPageSettingsChange();
                         }
 
-                        m_tree->SetItemText( id, formatPageString( data->m_SheetPath.Last()->GetName(),
-                                                                   data->m_SheetPath.GetPageNumber() ) );
+                        m_tree->SetItemText( id, formatSheetLabel( data->m_SheetPath ) );
                     }
                 }
 

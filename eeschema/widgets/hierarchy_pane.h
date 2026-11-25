@@ -149,6 +149,9 @@ private:
     */
     wxString formatPageString( const wxString& aName, const wxString& aPage );
 
+    /// The sheet's name, or its file's name when it has none, with the page number in parentheses.
+    wxString formatSheetLabel( const SCH_SHEET_PATH& aPath );
+
     /**
      * When renaming the sheets in tree it is helpful to highlight
      * the identical sheets which got renamed by renaming the current sheet.
