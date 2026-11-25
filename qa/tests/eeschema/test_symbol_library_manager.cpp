@@ -1230,6 +1230,31 @@ BOOST_AUTO_TEST_CASE( SaveCopyKeepsGrandchildParent )
 }
 
 
+// Replacing a derived symbol in the plugin cache must keep the symbols derived from it
+BOOST_AUTO_TEST_CASE( ReplacingParentKeepsGrandchild )
+{
+    wxString dir;
+    wxString path = makeTempLibrary( { wxS( "C" ), wxS( "M" ), wxS( "R" ) }, dir );
+
+    LIB_BUFFER libBuffer( wxS( "lib" ) );
+    bufferSymbols( libBuffer, path, { wxS( "C" ), wxS( "M" ), wxS( "R" ) } );
+    libBuffer.GetSymbol( wxS( "M" ) )->SetParent( libBuffer.GetSymbol( wxS( "R" ) ) );
+    libBuffer.GetSymbol( wxS( "C" ) )->SetParent( libBuffer.GetSymbol( wxS( "M" ) ) );
+    saveLibrary( libBuffer, path );
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    plugin->SaveSymbol( path, std::make_unique<LIB_SYMBOL>( *libBuffer.GetSymbol( wxS( "M" ) ) ) );
+
+    IO_RELEASER<SCH_IO> reader( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    LIB_SYMBOL*         c = reader->LoadSymbol( path, wxS( "C" ) );
+    LIB_SYMBOL*         m = reader->LoadSymbol( path, wxS( "M" ) );
+    BOOST_REQUIRE( c && m );
+    BOOST_CHECK( c->GetParent().lock().get() == m );
+
+    wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 // Reverting a symbol saved under a parent the file does not hold yet must keep it derived
 BOOST_AUTO_TEST_CASE( RevertKeepsNewParentOfSavedChild )
 {

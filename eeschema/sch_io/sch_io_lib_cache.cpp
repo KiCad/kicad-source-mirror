@@ -218,6 +218,13 @@ void SCH_IO_LIB_CACHE::AddSymbol( std::unique_ptr<LIB_SYMBOL> aSymbol )
 
     if( it != m_symbols.end() )
     {
+        // Derived symbols follow the replacement, or removing the old symbol orphans them
+        for( const auto& [childName, child] : m_symbols )
+        {
+            if( child->GetParent().lock().get() == it->second )
+                child->SetParent( aSymbol.get() );
+        }
+
         removeSymbol( it->second );
     }
 
