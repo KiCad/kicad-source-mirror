@@ -1727,6 +1727,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaSelect( wxCommandEvent& aEvent )
 
     m_viaDiameter.ChangeValue( viaDimension->m_Diameter );
     m_viaDrill.ChangeValue( viaDimension->m_Drill );
+
+    updateViaPreview();
 }
 
 
