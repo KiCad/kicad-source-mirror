@@ -655,7 +655,7 @@ void TOOL_MANAGER::InitTools()
     {
         TOOL_BASE* tool = *it;
 
-        wxASSERT( m_toolState.count( tool ) );
+        wxCHECK2( m_toolState.count( tool ), continue );
         TOOL_STATE* state = m_toolState[tool];
         setActiveState( state );
 
