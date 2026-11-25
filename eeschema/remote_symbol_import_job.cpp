@@ -363,7 +363,7 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
             return false;
     }
 
-    return true;
+    return didImportSymbol;
 }
 
 
