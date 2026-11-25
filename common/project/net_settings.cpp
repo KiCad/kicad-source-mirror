@@ -1126,9 +1126,9 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
     if( !m_patternIndexValid )
         buildPatternIndex();
 
-    if( auto it = m_literalPatternIndex.find( aNetName ); it != m_literalPatternIndex.end() )
+    if( auto lit = m_literalPatternIndex.find( aNetName ); lit != m_literalPatternIndex.end() )
     {
-        for( const wxString& netclassName : it->second )
+        for( const wxString& netclassName : lit->second )
             addNetclassByName( netclassName );
     }
 

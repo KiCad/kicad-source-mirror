@@ -2585,9 +2585,9 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     // Eagle spokes are always '+'
     pad->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID layer )
+            [&]( PCB_LAYER_ID aLayer )
             {
-                pad->SetThermalSpokeAngle( layer, ANGLE_0 );
+                pad->SetThermalSpokeAngle( aLayer, ANGLE_0 );
             } );
 
     pad->SetLocalSolderPasteMargin( -eagleClamp( m_rules->mlMinCreamFrame,
