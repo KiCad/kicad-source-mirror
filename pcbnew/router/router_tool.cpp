@@ -283,6 +283,7 @@ static const TOOL_ACTION ACT_CustomTrackWidth( TOOL_ACTION_ARGS()
         .Tooltip( _( "Shows a dialog for changing the track width and via size." ) )
         .Icon( BITMAPS::width_track ) );
 
+// E belongs to the global Properties action outside spread mode. Init() gates it.
 static const TOOL_ACTION ACT_SpreadTracksSetDistance( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SpreadTracksSetDistance" )
         .Scope( AS_CONTEXT )
@@ -762,6 +763,14 @@ bool ROUTER_TOOL::Init()
     mgr->SetConditions( ACT_SwitchCornerMode90,       CHECK( cornerMode90Cond ) );
     mgr->SetConditions( ACT_SwitchCornerModeArc45,    CHECK( cornerModeArc45Cond ) );
     mgr->SetConditions( ACT_SwitchCornerModeArc90,    CHECK( cornerModeArc90Cond ) );
+
+    // Claim the spreading keys in spread mode only, or E never reaches PCB_ACTIONS::properties
+    // and the track and via size dialog stops opening while routing.
+    const ACTION_CONDITIONS spreading = ACTION_CONDITIONS().HotkeyEnable( spreadingTracksCond );
+
+    mgr->SetConditions( ACT_SpreadTracksSetDistance, spreading );
+    mgr->SetConditions( ACT_IncreaseSpreadingDistance, spreading );
+    mgr->SetConditions( ACT_DecreaseSpreadingDistance, spreading );
 
     auto diffPairCond =
         [this]( const SELECTION& )

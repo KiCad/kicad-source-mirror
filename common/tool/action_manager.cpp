@@ -200,12 +200,6 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         }
     }
 
-    if( !context && global.size() > 1 )
-    {
-        if( EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
-            PromoteUserBoundFrameAction( global, frame->GetFrameType(), matchedHotKey );
-    }
-
     // Get the selection to use to test if the action is enabled
     SELECTION& sel = m_toolMgr->GetToolHolder()->GetCurrentSelection();
 
@@ -223,8 +217,17 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         if( runAction )
             return m_toolMgr->RunAction( *context );
     }
-    else if( !global.empty() )
+
+    // A context action that cannot run releases the key, otherwise its tool would shadow the
+    // global ones for as long as it is on the stack.
+    if( !global.empty() )
     {
+        if( global.size() > 1 )
+        {
+            if( EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
+                PromoteUserBoundFrameAction( global, frame->GetFrameType(), matchedHotKey );
+        }
+
         for( const TOOL_ACTION* act : global )
         {
             bool runAction = true;
