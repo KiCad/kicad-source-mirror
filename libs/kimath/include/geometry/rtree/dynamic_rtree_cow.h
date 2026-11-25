@@ -796,8 +796,9 @@ private:
         return false;
     }
 
+    // Unwind every level once the visitor stops
     template <class VISITOR>
-    void searchImpl( NODE* aNode, const ELEMTYPE aMin[NUMDIMS],
+    bool searchImpl( NODE* aNode, const ELEMTYPE aMin[NUMDIMS],
                      const ELEMTYPE aMax[NUMDIMS], VISITOR& aVisitor, int& aFound ) const
     {
         if( aNode->IsLeaf() )
@@ -809,7 +810,7 @@ private:
                     aFound++;
 
                     if( !aVisitor( aNode->data[i] ) )
-                        return;
+                        return false;
                 }
             }
         }
@@ -817,10 +818,15 @@ private:
         {
             for( int i = 0; i < aNode->count; ++i )
             {
-                if( aNode->ChildOverlaps( i, aMin, aMax ) )
-                    searchImpl( aNode->children[i], aMin, aMax, aVisitor, aFound );
+                if( aNode->ChildOverlaps( i, aMin, aMax )
+                    && !searchImpl( aNode->children[i], aMin, aMax, aVisitor, aFound ) )
+                {
+                    return false;
+                }
             }
         }
+
+        return true;
     }
 
     NODE*                              m_root = nullptr;

@@ -982,6 +982,34 @@ BOOST_AUTO_TEST_CASE( CloneSharesData )
 }
 
 
+BOOST_AUTO_TEST_CASE( EarlyTermination )
+{
+    COW_RTREE<intptr_t, int, 2> tree;
+
+    // Span several leaves so the stop must unwind past sibling subtrees
+    for( int i = 0; i < 100; ++i )
+    {
+        int min[2] = { 0, 0 };
+        int max[2] = { 100, 100 };
+        tree.Insert( min, max, static_cast<intptr_t>( i ) );
+    }
+
+    int count = 0;
+
+    auto stopAfter5 = [&count]( intptr_t )
+    {
+        count++;
+        return count < 5;
+    };
+
+    int sMin[2] = { 0, 0 };
+    int sMax[2] = { 100, 100 };
+    tree.Search( sMin, sMax, stopAfter5 );
+
+    BOOST_CHECK_EQUAL( count, 5 );
+}
+
+
 BOOST_AUTO_TEST_CASE( CloneMutateInsert )
 {
     COW_RTREE<intptr_t, int, 2> tree;
