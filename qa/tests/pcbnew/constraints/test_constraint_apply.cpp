@@ -28,6 +28,8 @@
 #include <algorithm>
 
 #include <board.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_shape.h>
 
 #include <constraints/pcb_constraint.h>
@@ -304,6 +306,70 @@ BOOST_AUTO_TEST_CASE( FailedOrEmptyClusterLeavesGeometry )
 
     BOOST_TEST( !diag.solved );
     BOOST_TEST( modified.empty() );
+}
+
+
+namespace
+{
+PAD* addPad( FOOTPRINT* aFootprint, const VECTOR2I& aPosition )
+{
+    PAD* pad = new PAD( aFootprint );
+    pad->SetPosition( aPosition );
+    aFootprint->Add( pad );
+    return pad;
+}
+} // namespace
+
+
+// A pad in the footprint editor is the geometry under edit, so the solver may move it.
+BOOST_AUTO_TEST_CASE( FootprintEditorDistanceMovesTheFreePad )
+{
+    BOARD board;
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    board.Add( fp );
+
+    PAD* anchored = addPad( fp, { 0, 0 } );
+    PAD* moving = addPad( fp, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* distance = new PCB_CONSTRAINT( fp, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    distance->AddMember( anchored->m_Uuid, CONSTRAINT_ANCHOR::CENTER );
+    distance->AddMember( moving->m_Uuid, CONSTRAINT_ANCHOR::CENTER );
+    distance->SetValue( 5.0 * MM );
+    fp->Add( distance );
+
+    ApplyConstraintImmediately( &board, distance );
+
+    BOOST_CHECK( anchored->GetPosition() == VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_MESSAGE( moving->GetPosition() == VECTOR2I( 5 * MM, 0 ),
+                         "pad sits at " << moving->GetPosition().x << "," << moving->GetPosition().y );
+}
+
+
+// The same relation on the board moves the whole footprint, since a placed pad travels with it.
+BOOST_AUTO_TEST_CASE( BoardDistanceTranslatesThePadsFootprint )
+{
+    BOARD board;
+
+    FOOTPRINT* anchorFp = new FOOTPRINT( &board );
+    board.Add( anchorFp );
+    PAD* anchored = addPad( anchorFp, { 0, 0 } );
+
+    FOOTPRINT* movingFp = new FOOTPRINT( &board );
+    movingFp->SetPosition( { 10 * MM, 0 } );
+    board.Add( movingFp );
+    PAD* moving = addPad( movingFp, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* distance = addConstraint(
+            board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+            { { anchored->m_Uuid, CONSTRAINT_ANCHOR::CENTER }, { moving->m_Uuid, CONSTRAINT_ANCHOR::CENTER } },
+            5.0 * MM );
+
+    ApplyConstraintImmediately( &board, distance );
+
+    BOOST_CHECK( moving->GetPosition() == VECTOR2I( 5 * MM, 0 ) );
+    BOOST_CHECK( movingFp->GetPosition() == VECTOR2I( 5 * MM, 0 ) );
 }
 
 

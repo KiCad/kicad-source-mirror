@@ -1496,13 +1496,6 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
 
     for( const auto& [kiid, vars] : m_shapeVars )
     {
-        if( vars.kind == SHAPE_KIND::PAD_CENTER && !m_rigidMembers.contains( kiid ) )
-        {
-            fixedParams.insert( vars.startX );
-            fixedParams.insert( vars.startX + 1 );
-            continue;
-        }
-
         // A rigid footprint's dimension travels with the footprint instead of staying grounded
         if( vars.kind != SHAPE_KIND::POINT_PAIR || m_rigidMembers.contains( kiid ) )
             continue;
@@ -2841,9 +2834,23 @@ std::vector<PCB_SHAPE*> BOARD_CONSTRAINT_ADAPTER::Apply( const std::function<voi
 
     for( const auto& [kiid, vars] : m_shapeVars )
     {
-        // Rigid children already moved with their footprint and a pad never moves on its own
-        if( m_rigidMembers.contains( kiid ) || vars.kind == SHAPE_KIND::PAD_CENTER )
+        // Rigid children already moved with their footprint
+        if( m_rigidMembers.contains( kiid ) )
             continue;
+
+        if( vars.kind == SHAPE_KIND::PAD_CENTER )
+        {
+            VECTOR2I position = pointAt( vars.startX );
+
+            if( position == vars.pad->GetPosition() )
+                continue;
+
+            if( aBeforeWrite )
+                aBeforeWrite( vars.pad );
+
+            vars.pad->SetPosition( position );
+            continue;
+        }
 
         if( vars.kind == SHAPE_KIND::POINT_PAIR )
         {
