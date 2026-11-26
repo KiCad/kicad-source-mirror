@@ -1,0 +1,115 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.common.commands;
+
+import "common/types/base_types.proto";
+
+// Since: 11.0
+enum AnnotationMatchMode
+{
+  AMM_UNKNOWN = 0;
+  AMM_UUID = 1;       // Match by unique ID (normal update).
+  AMM_REFERENCE = 2;  // Match by reference designator (re-link footprints).
+}
+
+// Since: 11.0
+message ForwardAnnotationSettings
+{
+  AnnotationMatchMode match_mode = 1;
+  bool dry_run = 2;
+
+  bool delete_extra_footprints = 3;
+  bool update_footprints = 4;
+  bool transfer_groups = 5;
+  bool override_locks = 6;
+  bool update_fields = 7;
+  bool remove_extra_fields = 8;
+}
+
+// Updates a board from its schematic.  Both must be in the same project, and both must be open.
+// Returns ForwardAnnotationResponse.
+// Since: 11.0
+message UpdateBoardFromSchematic
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+  kiapi.common.types.DocumentSpecifier schematic = 2;
+  ForwardAnnotationSettings settings = 3;
+}
+
+// Since: 11.0
+enum BackAnnotationReferenceMode
+{
+  BARM_UNKNOWN = 0;
+  BARM_UPDATE_REFERENCES = 1;
+  BARM_RELINK_FOOTPRINTS = 2;
+}
+
+// Since: 11.0
+message BackAnnotationSettings
+{
+  bool dry_run = 1;
+
+  bool update_footprints = 2;
+  bool update_values = 3;
+  bool update_net_names = 4;
+  bool update_attributes = 5;
+  bool update_other_fields = 6;
+  bool prefer_unit_swaps = 7;
+  bool prefer_pin_swaps = 8;
+
+  BackAnnotationReferenceMode reference_mode = 9;
+}
+
+// Updates a schematic from its board. Both must be in the same project, and both must be open.
+// Returns BackAnnotationResponse.
+// Since: 11.0
+message UpdateSchematicFromBoard
+{
+  kiapi.common.types.DocumentSpecifier schematic = 1;
+  kiapi.common.types.DocumentSpecifier board = 2;
+  BackAnnotationSettings settings = 3;
+}
+
+// Since: 11.0
+message ForwardAnnotationResponse
+{
+  uint32 error_count = 1;
+  uint32 warning_count = 2;
+
+  // Number of added or replaced footprints.
+  uint32 new_footprint_count = 3;
+
+  // Human-readable report: contents are not API-stable, parse them at your own risk.
+  string report = 4;
+}
+
+// Since: 11.0
+message BackAnnotationResponse
+{
+  uint32 error_count = 1;
+  uint32 warning_count = 2;
+
+  uint32 change_count = 3;
+
+  // Human-readable report: contents are not API-stable, parse them at your own risk.
+  string report = 4;
+}

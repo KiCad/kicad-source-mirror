@@ -30,6 +30,7 @@ set( KIAPI_PROTO_SRCS
     common/types/variants.proto
     common/types/library_types.proto
 
+    common/commands/annotation_commands.proto
     common/commands/base_commands.proto
     common/commands/editor_commands.proto
     common/commands/library_commands.proto
