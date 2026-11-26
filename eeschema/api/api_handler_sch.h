@@ -51,6 +51,8 @@ public:
     API_HANDLER_SCH( SCH_EDIT_FRAME* aFrame );
     API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext, SCH_EDIT_FRAME* aFrame = nullptr );
 
+    bool HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse ) override;
+
 protected:
     std::optional<ApiResponseStatus> checkForHeadless( const std::string& aCommandName ) const;
 

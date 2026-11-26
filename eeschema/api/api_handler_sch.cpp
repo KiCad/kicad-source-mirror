@@ -20,10 +20,12 @@
 
 #include <api/api_handler_sch.h>
 #include <api/api_enums.h>
+#include <api/api_sch_annotation.h>
 #include <api/api_sch_utils.h>
 #include <api/api_utils.h>
 #include <api/api_server.h>
 #include <api/cross_probe_client.h>
+#include <api/internal/annotation.pb.h>
 #include <api/sch_context.h>
 #include <fmt.h>
 #include <fmt/ranges.h>
@@ -203,6 +205,68 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
             &API_HANDLER_SCH::handleExpandTextVariables );
     registerHandler<PlaceSymbolFromLibrary, PlaceFromLibraryResponse>(
             &API_HANDLER_SCH::handlePlaceSymbolFromLibrary );
+}
+
+
+bool API_HANDLER_SCH::HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse )
+{
+    ApiRequest envelope;
+
+    if( !envelope.ParseFromString( aRequest ) )
+        return false;
+
+    // Only one request for now... can make this more complicated later if we need to.
+    GenerateNetlistRequest request;
+
+    if( !envelope.message().UnpackTo( &request ) )
+        return false;
+
+    ApiResponse response;
+
+    if( HANDLER_RESULT<bool> validation = validateDocument( request.document() ); !validation )
+    {
+        *response.mutable_status() = validation.error();
+        aResponse = response.SerializeAsString();
+        return true;
+    }
+
+    if( !m_commits.empty() )
+    {
+        response.mutable_status()->set_status( AS_BUSY );
+        response.mutable_status()->set_error_message( "annotation cannot run while a commit is open" );
+        aResponse = response.SerializeAsString();
+        return true;
+    }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+    {
+        *response.mutable_status() = *busy;
+        aResponse = response.SerializeAsString();
+        return true;
+    }
+
+    WX_STRING_REPORTER reporter;
+    std::string        netlist;
+
+    GenerateNetlistResponse result;
+    result.set_success( GenerateSchematicNetlist( *schematic(), context()->GetKiway(), netlist, reporter ) );
+    result.set_netlist( netlist );
+    result.set_report( reporter.GetMessages().ToStdString() );
+
+    response.mutable_message()->PackFrom( result );
+
+    if( result.success() )
+    {
+        response.mutable_status()->set_status( AS_OK );
+    }
+    else
+    {
+        response.mutable_status()->set_status( AS_BAD_REQUEST );
+        response.mutable_status()->set_error_message( result.report() );
+    }
+
+    aResponse = response.SerializeAsString();
+    return true;
 }
 
 

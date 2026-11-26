@@ -32,6 +32,7 @@
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_text.h>
+#include <schematic.h>
 #include <erc/erc_settings.h>
 
 class REFDES_TRACKER;
@@ -316,13 +317,6 @@ private:
                                          ///< leading zeroes).
     int             m_flag;
 };
-
-
-/**
- * Define a standard error handler for annotation errors.
- */
-typedef std::function<void( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA,
-                            SCH_REFERENCE* aItemB )> ANNOTATION_ERROR_HANDLER;
 
 
 /**

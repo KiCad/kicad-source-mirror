@@ -21,6 +21,7 @@
 
 #include <wx/tokenzr.h>
 #include <api/api_utils.h>
+#include <api/api_sch_annotation.h>
 #include <api/internal/cross_probe_commands.pb.h>
 #include <api/cross_probe_client.h>
 #include <fmt.h>
@@ -512,13 +513,9 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         PrepareForNetlist();
 
-        NETLIST_EXPORTER_KICAD exporter( &Schematic(), &Kiway() );
-        STRING_FORMATTER formatter;
-
-        exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
+        FormatSchematicNetlist( Schematic(), &Kiway(), payload );
 
         RefreshConnectivity( true );
-        payload = formatter.GetString();
         break;
     }
 

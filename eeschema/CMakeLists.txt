@@ -549,6 +549,7 @@ set( EESCHEMA_SRCS
 
     api/api_sch_enums.cpp
     api/api_sch_utils.cpp
+    api/api_sch_annotation.cpp
     api/api_handler_sch_libraries.cpp
     api/api_handler_sch.cpp
     api/api_handler_sch_tasks.cpp

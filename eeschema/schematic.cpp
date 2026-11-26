@@ -242,6 +242,18 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
 }
 
 
+int SCHEMATIC::CheckAnnotateAll( ANNOTATION_ERROR_HANDLER aErrorHandler )
+{
+    SCH_REFERENCE_LIST referenceList;
+    Hierarchy().GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER, true );
+
+    if( referenceList.GetCount() == 0 )
+        return 0;
+
+    return referenceList.CheckAnnotation( aErrorHandler );
+}
+
+
 void SCHEMATIC::CacheExistingAnnotation()
 {
     wxCHECK2( m_project, return );

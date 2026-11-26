@@ -23,6 +23,7 @@
 #include <eda_item.h>
 #include <embedded_files.h>
 #include <erc/erc_exclusion.h>
+#include <erc/erc_settings.h>
 #include <properties/property_mgr.h>
 #include <schematic_holder.h>
 #include <sch_rtree.h>
@@ -59,6 +60,14 @@ class PROGRESS_REPORTER;
 class TOOL_MANAGER;
 class wxFileName;
 class PICKED_ITEMS_LIST;
+
+
+/**
+ * Define a standard error handler for annotation errors.
+ */
+typedef std::function<void( ERCE_T aType, const wxString& aMsg, SCH_REFERENCE* aItemA,
+                            SCH_REFERENCE* aItemB )> ANNOTATION_ERROR_HANDLER;
+
 
 namespace SCH_CONNECTIVITY
 {
@@ -691,6 +700,9 @@ public:
                                  std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr,
                                  PICKED_ITEMS_LIST*                aLastChangeList = nullptr,
                                  bool aCleanupDone = false );
+
+    /// Checks annotation on this schematic, returning the total number of errors
+    int CheckAnnotateAll( ANNOTATION_ERROR_HANDLER aErrorHandler );
 
     /**
      * Store all existing annotations in the REFDES_TRACKER.
