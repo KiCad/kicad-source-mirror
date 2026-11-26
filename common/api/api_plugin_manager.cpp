@@ -135,8 +135,29 @@ static void reportPluginLoadMessage( REPORTER* aReporter, const wxString& aPlugi
 }
 
 
+static wxString combineOutputStreams( const wxString& aOutput, const wxString& aError )
+{
+    wxString output = aOutput;
+    output.Trim();
+    output.Trim( false );
+
+    wxString error = aError;
+    error.Trim();
+    error.Trim( false );
+
+    if( output.IsEmpty() )
+        return error;
+
+    if( error.IsEmpty() )
+        return output;
+
+    output << '\n' << error;
+    return output;
+}
+
+
 static void reportPluginActionResult( REPORTER* aReporter, const wxString& aActionName,
-                                      int aRetVal, const wxString& aError )
+                                      int aRetVal, const wxString& aOutput, const wxString& aError )
 {
     wxString trimmedError = aError;
     trimmedError.Trim();
@@ -148,8 +169,10 @@ static void reportPluginActionResult( REPORTER* aReporter, const wxString& aActi
         error.SetTitle( wxString::Format( _( "Plugin action '%s'" ), aActionName ) );
         error.SetDescription( wxString::Format( _( "exited with code %d" ), aRetVal ) );
 
-        if( !trimmedError.IsEmpty() )
-            error.SetDebugText( trimmedError );
+        wxString detail = combineOutputStreams( aOutput, aError );
+
+        if( !detail.IsEmpty() )
+            error.SetDebugText( detail );
 
         if( aReporter )
             aReporter->Report( error );
@@ -555,7 +578,7 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier,
             wxString* stdoutSink = aStdout ? aStdout : &stdOut;
             wxString* stderrSink = aStderr ? aStderr : &stdErr;
             int ret = manager.ExecuteSync( pyArgs, stdoutSink, stderrSink, &env );
-            reportPluginActionResult( aReporter.get(), action->name, ret, *stderrSink );
+            reportPluginActionResult( aReporter.get(), action->name, ret, *stdoutSink, *stderrSink );
             return ret;
         }
 
@@ -569,7 +592,7 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier,
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
 
-                    reportPluginActionResult( aReporter.get(), actionName, aRetVal, aError );
+                    reportPluginActionResult( aReporter.get(), actionName, aRetVal, aOutput, aError );
                 },
                 &env, true );
 
@@ -652,11 +675,13 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier,
 
             pidOrRetCode = wxExecute( cmd, out, err, wxEXEC_BLOCK, &env );
 
+            wxString stdOut;
+
+            for( const wxString& line : out )
+                stdOut << line << "\n";
+
             if( aStdout )
-            {
-                for( const wxString& line : out )
-                    *aStdout << line << "\n";
-            }
+                *aStdout << stdOut;
 
             wxString stdErr;
 
@@ -666,7 +691,7 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier,
             if( aStderr )
                 *aStderr = stdErr;
 
-            reportPluginActionResult( aReporter.get(), action->name, pidOrRetCode, stdErr );
+            reportPluginActionResult( aReporter.get(), action->name, pidOrRetCode, stdOut, stdErr );
             return pidOrRetCode;
         }
         else
@@ -682,7 +707,7 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier,
                             wxLogTrace( traceApi,
                                         wxString::Format( "Manager: action stderr: %s", aError ) );
 
-                        reportPluginActionResult( aReporter.get(), actionName, aRetVal, aError );
+                        reportPluginActionResult( aReporter.get(), actionName, aRetVal, aOutput, aError );
                     } );
 
             process->Redirect();
@@ -950,8 +975,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
                     if( aRetVal != 0 )
                     {
-                        wxString error = aError;
-                        error.Trim().Trim( false );
+                        wxString error = combineOutputStreams( aOutput, aError );
 
                         if( error.IsEmpty() )
                             error = wxString::Format( _( "error code %d" ), aRetVal );
@@ -1048,8 +1072,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
                     if( aRetVal != 0 )
                     {
-                        wxString error = aError;
-                        error.Trim().Trim( false );
+                        wxString error = combineOutputStreams( aOutput, aError );
 
                         if( error.IsEmpty() )
                             error = wxString::Format( _( "error code %d" ), aRetVal );
@@ -1161,8 +1184,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
                     if( aRetVal != 0 )
                     {
-                        wxString error = aError;
-                        error.Trim().Trim( false );
+                        wxString error = combineOutputStreams( aOutput, aError );
 
                         if( error.IsEmpty() )
                             error = wxString::Format( _( "error code %d" ), aRetVal );
