@@ -1,0 +1,54 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// Private cross-editor messages used by forward and back annotation.
+// kiapi.internal messages do not follow API stability guarantees.
+
+syntax = "proto3";
+
+package kiapi.internal;
+
+import "common/types/base_types.proto";
+
+
+message GenerateNetlistRequest
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message GenerateNetlistResponse
+{
+  bool success = 1;
+  string netlist = 2;
+  string report = 3;
+}
+
+message RelinkFootprintsRequest
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+  string schematic_netlist = 2;
+}
+
+message RelinkFootprintsResponse
+{
+  bool success = 1;
+  uint32 error_count = 2;
+  uint32 warning_count = 3;
+  string report = 4;
+}

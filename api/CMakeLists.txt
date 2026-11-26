@@ -38,6 +38,8 @@ set( KIAPI_PROTO_SRCS
     common/commands/variant_commands.proto
     common/types/wizards.proto
 
+    internal/annotation.proto
+
     board/board.proto
     board/board_commands.proto
     board/board_jobs.proto
