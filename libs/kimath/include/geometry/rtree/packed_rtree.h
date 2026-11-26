@@ -37,6 +37,53 @@ namespace KIRTREE
 {
 
 /**
+ * Stable LSD radix sort of (key, index) pairs by key, in 11-bit digits.
+ *
+ * Ties keep their input order, so the result matches std::sort on pairs whose indices ascend.
+ */
+inline void RadixSortPairs( std::vector<std::pair<uint64_t, size_t>>& aPairs )
+{
+    constexpr int    BITS = 11;
+    constexpr size_t BUCKETS = size_t{ 1 } << BITS;
+    constexpr int    PASSES = ( 64 + BITS - 1 ) / BITS;
+
+    std::vector<uint32_t> counts( BUCKETS * PASSES, 0 );
+
+    for( const auto& e : aPairs )
+    {
+        for( int p = 0; p < PASSES; ++p )
+            counts[p * BUCKETS + ( ( e.first >> ( p * BITS ) ) & ( BUCKETS - 1 ) )]++;
+    }
+
+    std::vector<std::pair<uint64_t, size_t>> scratch( aPairs.size() );
+    const size_t                             n = aPairs.size();
+
+    for( int p = 0; p < PASSES; ++p )
+    {
+        uint32_t* c = &counts[p * BUCKETS];
+
+        // Nearby items share their high curve digits, and a pass where every key lands in one bucket moves nothing
+        if( std::find( c, c + BUCKETS, static_cast<uint32_t>( n ) ) != c + BUCKETS )
+            continue;
+
+        uint32_t sum = 0;
+
+        for( size_t b = 0; b < BUCKETS; ++b )
+        {
+            uint32_t v = c[b];
+            c[b] = sum;
+            sum += v;
+        }
+
+        for( const auto& e : aPairs )
+            scratch[c[( e.first >> ( p * BITS ) ) & ( BUCKETS - 1 )]++] = e;
+
+        aPairs.swap( scratch );
+    }
+}
+
+
+/**
  * Static (immutable) packed R-tree built via Hilbert-curve bulk loading.
  *
  * Provides optimal query performance for build-once-query-many workloads such as DRC
@@ -258,14 +305,30 @@ public:
             // Sort items by Hilbert value
             std::vector<size_t> indices( n );
 
-            for( size_t i = 0; i < n; ++i )
-                indices[i] = i;
+            // Radix setup costs more than it saves on small inputs, where an index sort stays in cache
+            if( n >= 2048 )
+            {
+                std::vector<std::pair<uint64_t, size_t>> order( n );
 
-            std::sort( indices.begin(), indices.end(),
-                       [&hilbertValues]( size_t a, size_t b )
-                       {
-                           return hilbertValues[a] < hilbertValues[b];
-                       } );
+                for( size_t i = 0; i < n; ++i )
+                    order[i] = { hilbertValues[i], i };
+
+                RadixSortPairs( order );
+
+                for( size_t i = 0; i < n; ++i )
+                    indices[i] = order[i].second;
+            }
+            else
+            {
+                for( size_t i = 0; i < n; ++i )
+                    indices[i] = i;
+
+                std::sort( indices.begin(), indices.end(),
+                           [&hilbertValues]( size_t a, size_t b )
+                           {
+                               return hilbertValues[a] < hilbertValues[b];
+                           } );
+            }
 
             // Store sorted data
             tree.m_data.resize( n );
