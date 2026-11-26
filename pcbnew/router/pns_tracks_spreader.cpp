@@ -130,21 +130,24 @@ bool TRACKS_SPREADER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     auto clippedHead = breakAndReassemble( spreadNode, &m_rootLine, m_startAnchor, rnearest );
     m_spreadableItems.clear();
 
-    if( clippedHead )
+    if( !clippedHead )
     {
+        delete spreadNode;
+        m_currentNode = nullptr;
+        return false;
+    }
+
 #ifdef SPREAD_TRACKS_EXTRA_VERBOSE
-        PNS_DBG( Dbg(), AddItem, &( *clippedHead ), GREEN, 10000,
-                 wxString::Format( "clip-head %d", (int) clippedHead->LinkCount() ) );
+    PNS_DBG( Dbg(), AddItem, &( *clippedHead ), GREEN, 10000,
+             wxString::Format( "clip-head %d", (int) clippedHead->LinkCount() ) );
 #endif
 
-        for( auto& lnk : clippedHead->Links() )
-        {
-            m_spreadableItems.insert( lnk );
+    for( auto& lnk : clippedHead->Links() )
+    {
+        m_spreadableItems.insert( lnk );
 #ifdef SPREAD_TRACKS_EXTRA_VERBOSE
-            PNS_DBG( Dbg(), AddItem, static_cast<const ITEM*>( lnk ), GREEN, 10000,
-                     wxString::Format( "cliplinkd %d", 0 ) );
+        PNS_DBG( Dbg(), AddItem, static_cast<const ITEM*>( lnk ), GREEN, 10000, wxString::Format( "cliplinkd %d", 0 ) );
 #endif
-        }
     }
 
     for( SPREADABLE_LINE& l : m_lines )
