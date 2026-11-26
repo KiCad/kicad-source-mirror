@@ -40,11 +40,25 @@ namespace KIRTREE
 {
 
 /**
+ * Spread the low 32 bits of a value so bit i moves to bit 2i.
+ */
+inline uint64_t InterleaveZero32( uint64_t aValue )
+{
+    aValue = ( aValue | ( aValue << 16 ) ) & 0x0000FFFF0000FFFFull;
+    aValue = ( aValue | ( aValue << 8 ) ) & 0x00FF00FF00FF00FFull;
+    aValue = ( aValue | ( aValue << 4 ) ) & 0x0F0F0F0F0F0F0F0Full;
+    aValue = ( aValue | ( aValue << 2 ) ) & 0x3333333333333333ull;
+    aValue = ( aValue | ( aValue << 1 ) ) & 0x5555555555555555ull;
+    return aValue;
+}
+
+
+/**
  * Compute a 64-bit Hilbert curve index from 2D unsigned coordinates.
  *
- * Uses the standard iterative bit-manipulation algorithm for order-32 Hilbert curve,
- * mapping 2 uint32 coordinates to a single uint64 index. This provides excellent spatial
- * locality for R-tree bulk loading.
+ * Even orders use the branchless prefix-scan form from rawrunprotected/hilbert_curves (public domain),
+ * widened to 32 bits per axis.  It matches the iterative algorithm for coordinates below 2^aOrder
+ * because each unused top level swaps x and y, and an even number of swaps cancels.
  *
  * @param aOrder Hilbert curve order (bits per axis, typically 32)
  * @param aX     X coordinate in [0, 2^aOrder)
@@ -53,6 +67,42 @@ namespace KIRTREE
  */
 inline uint64_t HilbertXY2D( int aOrder, uint32_t aX, uint32_t aY )
 {
+    if( aOrder % 2 == 0 )
+    {
+        const uint32_t ones = 0xFFFFFFFFu;
+
+        uint32_t a = aX ^ aY;
+        uint32_t b = ones ^ a;
+        uint32_t c = ones ^ ( aX | aY );
+        uint32_t d = aX & ( aY ^ ones );
+
+        uint32_t A = a | ( b >> 1 );
+        uint32_t B = ( a >> 1 ) ^ a;
+        uint32_t C = ( ( c >> 1 ) ^ ( b & ( d >> 1 ) ) ) ^ c;
+        uint32_t D = ( ( a & ( c >> 1 ) ) ^ ( d >> 1 ) ) ^ d;
+
+        for( int shift = 2; shift <= 16; shift <<= 1 )
+        {
+            a = A;
+            b = B;
+            c = C;
+            d = D;
+
+            A = ( a & ( a >> shift ) ) ^ ( b & ( b >> shift ) );
+            B = ( a & ( b >> shift ) ) ^ ( b & ( ( a ^ b ) >> shift ) );
+            C ^= ( a & ( c >> shift ) ) ^ ( b & ( d >> shift ) );
+            D ^= ( b & ( c >> shift ) ) ^ ( ( a ^ b ) & ( d >> shift ) );
+        }
+
+        a = C ^ ( C >> 1 );
+        b = D ^ ( D >> 1 );
+
+        uint32_t i0 = aX ^ aY;
+        uint32_t i1 = b | ( ones ^ ( i0 | a ) );
+
+        return ( InterleaveZero32( i1 ) << 1 ) | InterleaveZero32( i0 );
+    }
+
     uint64_t d = 0;
     uint32_t x = aX;
     uint32_t y = aY;
