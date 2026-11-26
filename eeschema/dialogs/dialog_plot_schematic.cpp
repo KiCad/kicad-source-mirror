@@ -42,6 +42,7 @@
 #include <sch_painter.h>
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
+#include <wx/filedlg.h>
 #include <kiplatform/environment.h>
 #include <kiplatform/ui.h>
 

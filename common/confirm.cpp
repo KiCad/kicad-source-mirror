@@ -27,6 +27,8 @@
 #include <wx/msgdlg.h>
 #include <wx/choicdlg.h>
 #include <wx/crt.h>
+#include <wx/filename.h>
+
 /**
  * Flag to enable confirmation dialog debugging output.
  *
