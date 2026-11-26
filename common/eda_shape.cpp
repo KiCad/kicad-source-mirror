@@ -81,7 +81,7 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
         m_stroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_startEnding(),
         m_endEnding(),
-        m_fill(),
+        m_fill( FILL_T::NO_FILL ),
         m_hatchingDirty( true ),
         m_rectangleHeight( 0 ),
         m_rectangleWidth( 0 ),
