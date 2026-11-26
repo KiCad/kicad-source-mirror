@@ -434,4 +434,98 @@ BOOST_AUTO_TEST_CASE( TuningProfileZeroThicknessSignalMatchesTopDielectric )
 }
 
 
+namespace
+{
+double DiffImpedanceAtGap( double topDielectric, double signal, double bottomDielectric, double width, double gap )
+{
+    Geometry g{ topDielectric + signal + bottomDielectric, width, gap, signal, 4.5, 1.0e9, 100.0 * TC::UNIT_MM };
+
+    const double striplineA = topDielectric == bottomDielectric ? -1.0 : topDielectric + 0.5 * signal;
+
+    COUPLED_STRIPLINE calc = MakeCalc( g, striplineA );
+    return Run( calc ).zdiff;
+}
+} // namespace
+
+
+// Issue 26100: Zdiff fell by 12-18 % where calcZ0OddMode() switches from Cohn Eq. 22 to Eq. 20 at s = 5t
+BOOST_AUTO_TEST_CASE( DiffImpedanceContinuousAtThickStripSwitch )
+{
+    const double signal = 0.035 * TC::UNIT_MM;
+    const double width = 0.05 * TC::UNIT_MM;
+    const double switchGap = 5.0 * signal;
+
+    for( const auto& [top, bottom] : { std::pair{ 0.25, 0.25 }, std::pair{ 0.1, 0.25 } } )
+    {
+        const double below = DiffImpedanceAtGap( top * TC::UNIT_MM, signal, bottom * TC::UNIT_MM, width,
+                                                 switchGap * ( 1.0 - 1e-6 ) );
+        const double above = DiffImpedanceAtGap( top * TC::UNIT_MM, signal, bottom * TC::UNIT_MM, width,
+                                                 switchGap * ( 1.0 + 1e-6 ) );
+
+        BOOST_TEST_INFO( "top " << top << " mm, bottom " << bottom << " mm" );
+        BOOST_TEST( std::abs( above - below ) / above < 0.05 );
+    }
+}
+
+
+// Issue 26100: on an asymmetric stackup the gap solver found impossible gaps because Zdiff rose above
+// its wide-gap value just below s = 5t and then dropped
+BOOST_AUTO_TEST_CASE( OffsetDiffImpedanceRisesWithGap )
+{
+    const double top = 0.1 * TC::UNIT_MM;
+    const double signal = 0.035 * TC::UNIT_MM;
+    const double bottom = 0.25 * TC::UNIT_MM;
+    const double width = 0.05 * TC::UNIT_MM;
+
+    double previous = 0.0;
+
+    for( int step = 1; step <= 100; ++step )
+    {
+        const double gap = step * 0.01 * TC::UNIT_MM;
+        const double zdiff = DiffImpedanceAtGap( top, signal, bottom, width, gap );
+
+        BOOST_TEST_INFO( "gap " << step * 0.01 << " mm" );
+        BOOST_TEST( zdiff >= previous );
+        previous = zdiff;
+    }
+}
+
+
+// Issue 26100: a track too wide to reach the target Zdiff at any gap returned a gap of metres with
+// an OK status, which the tuning profile showed as the result
+BOOST_AUTO_TEST_CASE( GapSynthesisFailsWhenTargetUnreachable )
+{
+    const double top = 0.1 * TC::UNIT_MM;
+    const double signal = 0.035 * TC::UNIT_MM;
+    const double bottom = 0.25 * TC::UNIT_MM;
+
+    // On this stackup Zdiff tops out at 101.7 ohm for a 0.08 mm track and 97.4 ohm for 0.09 mm
+    for( const double widthMm : { 0.08, 0.09, 0.1 } )
+    {
+        Geometry g{ top + signal + bottom, widthMm * TC::UNIT_MM, 0.1 * TC::UNIT_MM, signal, 4.5, 1.0e9, 1.0 };
+
+        COUPLED_STRIPLINE calc = MakeCalc( g, top + 0.5 * signal );
+        calc.SetParameter( TCP::Z0_E, 50.0 );
+        calc.SetParameter( TCP::Z0_O, 50.0 );
+        calc.SetParameter( TCP::Z_DIFF, 100.0 );
+
+        const bool converged = calc.Synthesize( SYNTHESIZE_OPTS::FIX_WIDTH );
+        const auto gap = calc.GetSynthesisResults()[TCP::PHYS_S];
+
+        BOOST_TEST_INFO( "width " << widthMm << " mm, gap " << gap.first / TC::UNIT_MM << " mm" );
+
+        if( widthMm < 0.085 )
+        {
+            BOOST_TEST( converged );
+            BOOST_TEST( ( gap.second == TRANSLINE_STATUS::OK ) );
+        }
+        else
+        {
+            BOOST_TEST( !converged );
+            BOOST_TEST( ( gap.second != TRANSLINE_STATUS::OK ) );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
