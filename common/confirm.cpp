@@ -307,6 +307,7 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle,
     return dlg.GetSelection();
 }
 
+
 wxString MakeRelativePathWithPrompt( wxWindow* aParent, const wxString& aPath, const wxString& aProjectPath )
 {
     wxString   baseDir = wxFileName::DirName( aProjectPath ).GetPathWithSep();
