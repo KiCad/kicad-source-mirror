@@ -31,7 +31,7 @@
 #include <lset.h>
 #include <api/common/types/base_types.pb.h>
 #include <api/common/types/embedded_files.pb.h>
-#include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/internal/cross_probe_commands.pb.h>
 #include <api/board/board_types.pb.h>
 
 class BOARD;
@@ -77,7 +77,7 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const kiapi::common::types::E
  */
 std::vector<BOARD_ITEM*> FindItemsFromSyncSelection(
         const BOARD* aBoard,
-        const google::protobuf::RepeatedPtrField<kiapi::common::commands::SelectionSpec>& aItems );
+        const google::protobuf::RepeatedPtrField<kiapi::internal::SelectionSpec>& aItems );
 
 }   // namespace kiapi::board
 

@@ -96,7 +96,7 @@ void CROSS_PROBE_CLIENT::AnnounceToPrimary( FRAME_T aFrameType )
     if( primaryUrl == ourUrl )
         return;
 
-    kiapi::common::commands::CrossProbeAnnounce announce;
+    kiapi::internal::CrossProbeAnnounce announce;
     announce.set_frame_type( static_cast<kiapi::common::types::FrameType>( aFrameType ) );
     announce.set_socket_path( ourUrl );
     announce.set_api_token( server.Token() );

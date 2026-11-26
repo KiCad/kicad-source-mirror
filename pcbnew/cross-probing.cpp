@@ -30,7 +30,7 @@
 #include <api/api_handler_pcb.h>
 #include <wx/tokenzr.h>
 #include <api/api_utils.h>
-#include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/internal/cross_probe_commands.pb.h>
 #include <api/cross_probe_client.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -80,6 +80,7 @@
 
 
 using namespace kiapi::common::commands;
+using namespace kiapi::internal;
 
 /* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
  *
@@ -565,7 +566,7 @@ void PCB_EDIT_FRAME::SendSelectItemsToSch( const std::deque<EDA_ITEM*>& aItems, 
 
 void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 {
-    kiapi::common::commands::HighlightNets message;
+    kiapi::internal::HighlightNets message;
 
     message.add_net_name( aNetName.ToUTF8() );
 
@@ -591,7 +592,7 @@ void PCB_EDIT_FRAME::SendCrossProbeItem( BOARD_ITEM* aSyncItem )
         return;
     }
 
-    kiapi::common::commands::FocusOnItem message;
+    kiapi::internal::FocusOnItem message;
     SelectionSpec* spec = message.mutable_focus_item();
 
     switch( aSyncItem->Type() )

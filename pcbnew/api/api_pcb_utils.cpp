@@ -321,9 +321,9 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::Embedded
 
 std::vector<BOARD_ITEM*> FindItemsFromSyncSelection(
         const BOARD* aBoard,
-        const google::protobuf::RepeatedPtrField<kiapi::common::commands::SelectionSpec>& aItems )
+        const google::protobuf::RepeatedPtrField<kiapi::internal::SelectionSpec>& aItems )
 {
-    using kiapi::common::commands::SelectionSpec;
+    using kiapi::internal::SelectionSpec;
 
     std::vector<std::pair<int, BOARD_ITEM*>> orderPairs;
     wxCHECK( aBoard, {} );

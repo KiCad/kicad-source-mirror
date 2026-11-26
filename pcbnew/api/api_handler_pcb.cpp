@@ -111,6 +111,7 @@
 #include <wx/ffile.h>
 
 using namespace kiapi::common::commands;
+using namespace kiapi::internal;
 using namespace kiapi::board::commands;
 using types::CommandStatus;
 using types::DocumentType;

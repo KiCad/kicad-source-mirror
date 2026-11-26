@@ -31,8 +31,8 @@
 #include <pad.h>
 #include <settings/settings_manager.h>
 
-using kiapi::common::commands::SelectionSpec;
-using kiapi::common::commands::SyncSelection;
+using kiapi::internal::SelectionSpec;
+using kiapi::internal::SyncSelection;
 
 
 // The two hierarchical sheets of the complex_hierarchy demo.  Both instantiate ampli_ht.kicad_sch

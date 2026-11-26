@@ -19,7 +19,7 @@
 
 syntax = "proto3";
 
-package kiapi.common.commands;
+package kiapi.internal;
 
 import "common/types/base_types.proto";
 

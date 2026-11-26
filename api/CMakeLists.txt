@@ -31,7 +31,6 @@ set( KIAPI_PROTO_SRCS
     common/types/library_types.proto
 
     common/commands/base_commands.proto
-    common/commands/cross_probe_commands.proto
     common/commands/editor_commands.proto
     common/commands/library_commands.proto
     common/commands/project_commands.proto
@@ -39,6 +38,7 @@ set( KIAPI_PROTO_SRCS
     common/types/wizards.proto
 
     internal/annotation.proto
+    internal/cross_probe_commands.proto
 
     board/board.proto
     board/board_commands.proto

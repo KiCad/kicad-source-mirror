@@ -27,7 +27,7 @@
 #include <kicommon.h>
 #include <kiway.h>
 
-#include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/internal/cross_probe_commands.pb.h>
 
 
 /**

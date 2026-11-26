@@ -20,7 +20,7 @@
  */
 
 #include <pgm_base.h>
-#include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/internal/cross_probe_commands.pb.h>
 #include <api/cross_probe_client.h>
 #include <api/api_utils.h>
 #include <bitmaps.h>
@@ -924,7 +924,7 @@ void CVPCB_MAINFRAME::SendComponentSelectionToSch( bool aClearSelectionOnly )
     if( m_netlist.IsEmpty() && !aClearSelectionOnly )
         return;
 
-    kiapi::common::commands::SyncSelection sync;
+    kiapi::internal::SyncSelection sync;
 
     if( !aClearSelectionOnly )
     {
@@ -939,7 +939,7 @@ void CVPCB_MAINFRAME::SendComponentSelectionToSch( bool aClearSelectionOnly )
         // Now select the corresponding symbol on the schematic:
         wxString ref = m_netlist.GetComponent( selection )->GetReference();
 
-        sync.set_mode( kiapi::common::commands::SSM_ITEMS_ONLY );
+        sync.set_mode( kiapi::internal::SSM_ITEMS_ONLY );
         sync.add_items()->mutable_footprint()->set_reference( ref.ToUTF8() );
     }
 

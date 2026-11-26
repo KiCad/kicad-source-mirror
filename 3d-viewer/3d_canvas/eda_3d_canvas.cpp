@@ -27,7 +27,7 @@
 #include <fmt/format.h>
 
 #include <api/api_utils.h>
-#include <api/common/commands/cross_probe_commands.pb.h>
+#include <api/internal/cross_probe_commands.pb.h>
 
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
@@ -1244,13 +1244,13 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
         // kind of frame has ExpressMail stuff
         if( EDA_3D_VIEWER_FRAME* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( wxGetTopLevelParent( this ) ) )
         {
-            kiapi::common::commands::SyncSelection sync;
+            kiapi::internal::SyncSelection sync;
 
             if( footprint )
                 sync.add_items()->mutable_footprint()->set_reference( footprint->GetReference().ToUTF8() );
 
-            sync.set_mode( kiapi::common::commands::SyncSelectionMode::SSM_ITEMS_ONLY );
-            sync.set_context( kiapi::common::commands::SyncSelectionContext::SSC_IMPLICIT );
+            sync.set_mode( kiapi::internal::SyncSelectionMode::SSM_ITEMS_ONLY );
+            sync.set_context( kiapi::internal::SyncSelectionContext::SSC_IMPLICIT );
 
             std::string payload;
 

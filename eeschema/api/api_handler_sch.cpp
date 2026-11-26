@@ -76,6 +76,7 @@
 #include <trace_helpers.h>
 
 using namespace kiapi::common::commands;
+using namespace kiapi::internal;
 using kiapi::common::types::CommandStatus;
 using kiapi::common::types::DocumentType;
 using kiapi::common::types::ItemRequestStatus;
@@ -2459,7 +2460,7 @@ bool sheetContainsOnlyWantedItems(
 
 std::optional<std::tuple<SCH_SHEET_PATH, SCH_ITEM*, std::vector<SCH_ITEM*>>>
 findItemsFromSyncSelection( const SCHEMATIC& aSchematic,
-                            const kiapi::common::commands::SyncSelection& aSync )
+                            const kiapi::internal::SyncSelection& aSync )
 {
     std::unordered_map<wxString, std::vector<SCH_REFERENCE>>             syncSymMap;
     std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>> syncPinMap;
@@ -2482,20 +2483,20 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic,
             orderedSheets.push_back( sheetPath );
     }
 
-    const bool focusOnFirst = ( aSync.mode() == kiapi::common::commands::SSM_ITEMS_AND_NETS ) && aSync.has_focus_item();
+    const bool focusOnFirst = ( aSync.mode() == kiapi::internal::SSM_ITEMS_AND_NETS ) && aSync.has_focus_item();
 
-    for( const kiapi::common::commands::SelectionSpec& spec : aSync.items() )
+    for( const kiapi::internal::SelectionSpec& spec : aSync.items() )
     {
         switch( spec.spec_case() )
         {
-        case kiapi::common::commands::SelectionSpec::kFootprint:
+        case kiapi::internal::SelectionSpec::kFootprint:
         {
             wxString symRef = wxString::FromUTF8( spec.footprint().reference() );
             syncSymMap[symRef] = std::vector<SCH_REFERENCE>();
             break;
         }
 
-        case kiapi::common::commands::SelectionSpec::kPad:
+        case kiapi::internal::SelectionSpec::kPad:
         {
             wxString symRef = wxString::FromUTF8( spec.pad().reference() );
             wxString padNum = wxString::FromUTF8( spec.pad().number() );
@@ -2510,7 +2511,7 @@ findItemsFromSyncSelection( const SCHEMATIC& aSchematic,
 
     if( focusOnFirst )
     {
-        const kiapi::common::commands::SelectionSpec& focusSpec = aSync.focus_item();
+        const kiapi::internal::SelectionSpec& focusSpec = aSync.focus_item();
 
         if( focusSpec.has_footprint() )
             focusSymbol = wxString::FromUTF8( focusSpec.footprint().reference() );
