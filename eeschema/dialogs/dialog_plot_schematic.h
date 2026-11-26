@@ -44,6 +44,7 @@ private:
     void onColorMode( wxCommandEvent& aEvent ) override;
     void onPlotFormatSelection( wxCommandEvent& event ) override;
     void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void onDrawingSheetBrowseClicked( wxCommandEvent& event ) override;
 
     void OnPlotCurrent( wxCommandEvent& event ) override;
     void OnPlotAll( wxCommandEvent& event ) override;

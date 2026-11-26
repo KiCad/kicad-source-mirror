@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,6 +75,9 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxCheckBox* m_pngAntialias;
 		wxStaticBoxSizer* m_otherOptions;
 		wxCheckBox* m_openFileAfterPlot;
+		wxStaticBoxSizer* m_sheetSizer;
+		wxTextCtrl* m_drawingSheet;
+		STD_BITMAP_BUTTON* m_browseDrawingSheetButton;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -86,6 +89,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void onOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlotFormatSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onColorMode( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDrawingSheetBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotCurrent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlotAll( wxCommandEvent& event ) { event.Skip(); }
 

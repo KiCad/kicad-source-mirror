@@ -169,4 +169,17 @@ KICOMMON_API int SelectSingleOption( wxWindow* aParent, const wxString& aTitle,
                                      const wxString& aMessage,
                                      const wxArrayString& aOptions );
 
+
+/**
+ * Check if a path can be shortened relative to the project path.
+ * If it can, prompt the user asking whether to make the path relative.
+ *
+ * @param aParent is the parent window for the prompt dialog.
+ * @param path is the file or directory path to consider.
+ * @param projectPath is the project directory path.
+ * @return The relative path if chosen, otherwise the original path.
+ */
+KICOMMON_API wxString MakeRelativePathWithPrompt( wxWindow* aParent, const wxString& aPath,
+                                                  const wxString& aProjectPath );
+
 #endif /* __INCLUDE__CONFIRM_H__ */

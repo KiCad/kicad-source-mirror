@@ -307,3 +307,18 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle,
     return dlg.GetSelection();
 }
 
+wxString MakeRelativePathWithPrompt( wxWindow* aParent, const wxString& aPath, const wxString& aProjectPath )
+{
+    wxString   baseDir = wxFileName::DirName( aProjectPath ).GetPathWithSep();
+    wxFileName targetPath( aPath );
+    wxFileName relPathTest( aPath );
+
+    // Test if making the path relative is possible before asking the user if they want to do it
+    if( relPathTest.MakeRelativeTo( baseDir ) )
+    {
+        if( IsOK( aParent, wxString::Format( _( "Do you want to use a path relative to\n'%s'?" ), baseDir ) ) )
+            targetPath.MakeRelativeTo( baseDir );
+    }
+
+    return targetPath.GetFullPath();
+}

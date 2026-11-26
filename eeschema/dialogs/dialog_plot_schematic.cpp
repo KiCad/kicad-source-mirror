@@ -43,6 +43,7 @@
 #include <wx/dirdlg.h>
 #include <wx/msgdlg.h>
 #include <kiplatform/environment.h>
+#include <kiplatform/ui.h>
 
 #include <jobs/job_export_sch_plot.h>
 #include <confirm.h>
@@ -66,6 +67,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         m_MessagesBox->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
+        m_sheetSizer->GetStaticBox()->Hide();
+
         SetupStandardButtons( { { wxID_OK,     _( "Plot All Pages" )    },
                                 { wxID_APPLY,  _( "Plot Current Page" ) },
                                 { wxID_CANCEL, _( "Close" )             } } );
@@ -86,6 +89,8 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* aEditFrame, wxWind
             m_outputPath->SetToolTip( _( "Target file for the plot. Can be absolute or relative to the schematic "
                                          "main file location." ) );
         }
+
+        m_browseDrawingSheetButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
         SetupStandardButtons();
     }
@@ -178,6 +183,8 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
                 m_variantChoiceCtrl->SetSelection( idx );
         }
 
+        m_drawingSheet->SetValue( m_job->m_drawingSheet );
+
         // Must readjust dialog sizing after hiding plot format
         Layout();
         GetSizer()->SetSizeHints( this );
@@ -188,7 +195,6 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
 
     return true;
 }
-
 
 /**
  * @todo Copy of DIALOG_PLOT::onOutputDirectoryBrowseClicked in dialog_plot.cpp, maybe merge to
@@ -234,6 +240,21 @@ void DIALOG_PLOT_SCHEMATIC::onOutputDirectoryBrowseClicked( wxCommandEvent& even
     m_outputPath->SetValue( dirName.GetFullPath() );
 }
 
+void DIALOG_PLOT_SCHEMATIC::onDrawingSheetBrowseClicked( wxCommandEvent& event )
+{
+    wxString     projectPath = Prj().GetProjectPath();
+    wxFileDialog openFileDialog( this, _( "Open Drawing Sheet" ), projectPath, wxEmptyString,
+                                 FILEEXT::DrawingSheetFileWildcard(), wxFD_OPEN );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &openFileDialog );
+
+    if( openFileDialog.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString filePath = MakeRelativePathWithPrompt( this, openFileDialog.GetPath(), projectPath );
+
+    m_drawingSheet->SetValue( filePath );
+}
 
 PLOT_FORMAT DIALOG_PLOT_SCHEMATIC::getPlotFileFormat()
 {
@@ -361,6 +382,8 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
             pngJob->m_antialias = m_pngAntialias->GetValue();
         }
 
+        m_job->m_drawingSheet = m_drawingSheet->GetValue();
+
         event.Skip(); // Allow normal close action
     }
 }
@@ -396,6 +419,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_pngDPI = m_pngDPI->GetValue();
     plotOpts.m_pngAntialias = m_pngAntialias->GetValue();
     plotOpts.m_variant = getSelectedVariant();
+
     schPlotter->Plot( getPlotFileFormat(), plotOpts, &renderSettings, &m_MessagesBox->Reporter() );
 
     if( getPlotFileFormat() == PLOT_FORMAT::PDF && m_openFileAfterPlot->GetValue() )
