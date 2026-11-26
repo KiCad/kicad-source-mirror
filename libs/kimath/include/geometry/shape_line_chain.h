@@ -838,7 +838,7 @@ public:
      * @param aMaxError is the max error used for rounding.
      * @param aLeft left line chain output.
      * @param aRight right line chain output.
-     * @param aSimplify set to run Simplify on the inflated polygon.
+     * @param aSimplify set to union the offset again, which merges outlines that touch.
      */
     bool OffsetLine( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                      SHAPE_LINE_CHAIN& aLeft, SHAPE_LINE_CHAIN& aRight,

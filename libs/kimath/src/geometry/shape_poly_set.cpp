@@ -1187,8 +1187,8 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
         Paths64 paths;
         c.Execute( aAmount, paths );
 
-        Clipper2Lib::SimplifyPaths( paths, std::abs( aAmount ) * coeff, true );
-
+        // A second union of the clean offset merges touching outlines, and on zone fills it is about
+        // twice as fast as building the tree from the raw offset
         Clipper64 c2;
         c2.PreserveCollinear( false );
         c2.ReverseSolution( false );
@@ -1283,8 +1283,6 @@ void SHAPE_POLY_SET::inflateLine2( const SHAPE_LINE_CHAIN& aLine, int aAmount, i
     {
         Paths64 paths2;
         c.Execute( aAmount, paths2 );
-
-        Clipper2Lib::SimplifyPaths( paths2, std::abs( aAmount ) * coeff, false );
 
         Clipper64 c2;
         c2.PreserveCollinear( false );

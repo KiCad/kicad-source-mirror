@@ -1054,7 +1054,7 @@ public:
      *                        #CORNER_STRATEGY::ROUND_ALL_CORNERS to round regardless of angles
      * @param aMaxError is the allowable deviation when rounding corners with an approximated
      *                  polygon
-     * @param aSimplify simplifies the polygon when true.
+     * @param aSimplify set to union the offset again, which merges outlines that touch.
      */
     void Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
                   bool aSimplify = false );
@@ -1075,7 +1075,7 @@ public:
      *                        #CORNER_STRATEGY::ROUND_ALL_CORNERS to round regardless of angles
      * @param aMaxError is the allowable deviation when rounding corners with an approximated
      *                  polygon
-     * @param aSimplify set to simplify the output polygon.
+     * @param aSimplify set to union the offset again, which merges outlines that touch.
      */
     void OffsetLineChain( const SHAPE_LINE_CHAIN& aLine, int aAmount,
                           CORNER_STRATEGY aCornerStrategy, int aMaxError, bool aSimplify );
