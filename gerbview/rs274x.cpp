@@ -107,6 +107,8 @@ enum RS274X_PARAMETERS {
 
     LOAD_POLARITY  = CODE( 'L', 'P' ),          //LPC or LPD. Default: Dark (LPD)
     LOAD_NAME      = CODE( 'L', 'N' ),          // Deprecated: equivalent to G04
+    TO_SKIP        = CODE( 'I', 'C' )           // sometimes in oldfiles %ICAS*% is found and
+                                                // is illegal. Just skip it
 };
 
 
@@ -677,6 +679,22 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         // %LN is a (deprecated) equivalentto G04: a comment
         while( *aText && *aText != '*' )
             aText++; // Skip text
+
+        break;
+
+    case TO_SKIP:
+        // %ICAS*% is sometimes found in old files. It is illegal and has no meaning. Just skip it
+        if( strncasecmp( aText, "AS*", 3 ) == 0 )        // "IC" is aleady read
+        {
+            #if 0       // I am not sure this warning must be shown
+            AddMessageToList( _( "ICAS Gerber command found but is illegal. Skip it" ) );
+            #endif
+
+            while( *aText && *aText != '*' )
+                aText++;    // Skip text
+        }
+        else
+            ok = false;
 
         break;
 
