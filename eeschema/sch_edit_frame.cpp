@@ -1401,6 +1401,15 @@ SEVERITY SCH_EDIT_FRAME::GetSeverity( int aErrorCode ) const
 }
 
 
+bool SCH_EDIT_FRAME::HandleApiRequest( const std::string& aRequest, std::string& aResponse )
+{
+    if( !m_apiHandler )
+        return false;
+
+    return m_apiHandler->HandleInternalApiRequest( aRequest, aResponse );
+}
+
+
 void SCH_EDIT_FRAME::OnModify()
 {
     EDA_BASE_FRAME::OnModify();

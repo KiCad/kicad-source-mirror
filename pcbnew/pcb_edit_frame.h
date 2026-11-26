@@ -654,6 +654,8 @@ public:
      */
     void SendCrossProbeNetName( const wxString& aNetName );
 
+    bool HandleApiRequest( const std::string& aRequest, std::string& aResponse );
+
     void ShowChangedLanguage() override;
 
     /**

@@ -683,6 +683,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
 
+    bool HandleApiRequest( const std::string& aRequest, std::string& aResponse ) override;
+
     bool handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
 
     bool handleCreatePcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
@@ -1024,6 +1026,21 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER*
     }
 
     return handleOpenPcb( aSpec.path, aServer, aError );
+}
+
+
+bool IFACE::HandleApiRequest( const std::string& aRequest, std::string& aResponse )
+{
+    if( m_kiway )
+    {
+        if( PCB_EDIT_FRAME* frame = dynamic_cast<PCB_EDIT_FRAME*>( m_kiway->Player( FRAME_PCB_EDITOR, false ) ) )
+            return frame->HandleApiRequest( aRequest, aResponse );
+    }
+
+    if( m_openHandler )
+        return m_openHandler->HandleInternalApiRequest( aRequest, aResponse );
+
+    return false;
 }
 
 

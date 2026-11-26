@@ -817,6 +817,14 @@ bool KIWAY::ProcessApiCloseDocument( KIWAY::FACE_T aFace, const KIFACE::DOCUMENT
 }
 
 
+bool KIWAY::ProcessApiRequest( KIWAY::FACE_T aFace, const std::string& aRequest, std::string& aResponse )
+{
+    KIFACE* kiface = KiFACE( aFace );
+
+    return kiface && kiface->HandleApiRequest( aRequest, aResponse );
+}
+
+
 void KIWAY::OnKiCadExit()
 {
     if( m_ctl & KFCTL_CPP_PROJECT_SUITE )

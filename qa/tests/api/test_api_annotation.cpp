@@ -20,6 +20,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <api/annotation.h>
+#include <api/api_handler.h>
 #include <api/internal/annotation.pb.h>
 
 BOOST_AUTO_TEST_SUITE( ApiAnnotation )
@@ -43,6 +44,15 @@ BOOST_AUTO_TEST_CASE( InternalGenerateNetlistRoundTrips )
     BOOST_REQUIRE( parsedResponse.ParseFromString( response.SerializeAsString() ) );
     BOOST_REQUIRE( parsedResponse.success() );
     BOOST_REQUIRE_EQUAL( parsedResponse.netlist(), "(export)" );
+}
+
+BOOST_AUTO_TEST_CASE( InternalRequestHandlerDefaultsToUnhandled )
+{
+    API_HANDLER handler;
+    std::string response;
+
+    BOOST_REQUIRE( !handler.HandleInternalApiRequest( "not-a-request", response ) );
+    BOOST_REQUIRE( response.empty() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

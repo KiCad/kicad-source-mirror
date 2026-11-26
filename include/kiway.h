@@ -314,6 +314,11 @@ struct KIFACE
      * Returns true if a load was started.
      */
     virtual bool LoadAllLibraries() { return false; }
+
+    virtual bool HandleApiRequest( const std::string& aRequest, std::string& aResponse )
+    {
+        return false;
+    }
 };
 
 
@@ -513,6 +518,9 @@ public:
     bool ProcessApiCloseDocument( KIWAY::FACE_T aFace, const KIFACE::DOCUMENT_SPEC& aSpec,
                                   KICAD_API_SERVER* aServer,
                                   wxString* aError = nullptr );
+
+    bool ProcessApiRequest( KIWAY::FACE_T aFace, const std::string& aRequest,
+                            std::string& aResponse );
     bool ProcessJobConfigDialog( KIWAY::FACE_T aFace, JOB* aJob, wxWindow* aWindow );
 
     bool ProcessApiOpenDocument( KIWAY::FACE_T aFace, const KIFACE::DOCUMENT_SPEC& aSpec,

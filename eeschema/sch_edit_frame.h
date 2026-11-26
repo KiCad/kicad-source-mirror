@@ -354,6 +354,8 @@ public:
      */
     void SendCrossProbeClearHighlight();
 
+    bool HandleApiRequest( const std::string& aRequest, std::string& aResponse );
+
     const wxString& GetHighlightedConnection() const
     {
         return m_highlightedConn;

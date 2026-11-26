@@ -90,6 +90,11 @@ public:
      */
     virtual void onNetSettingsChanged() {}
 
+    virtual bool HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse )
+    {
+        return false;
+    }
+
     void requestNetSettingsNotification() { m_notifyNetSettings = true; }
 
     /// Returns true if the notification had been requested at the time of the call

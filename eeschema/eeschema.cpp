@@ -728,6 +728,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
 
+    bool HandleApiRequest( const std::string& aRequest, std::string& aResponse ) override;
+
     void PreloadLibraries( KIWAY* aKiway ) override;
     void CancelPreload( bool aBlock = true ) override;
     void ProjectChanged() override;
@@ -1403,6 +1405,21 @@ bool IFACE::handleOpenSymbol( const wxString& aProjectPath, const wxString& aLib
     aServer->RegisterHandler( m_openSymbolHandler.get() );
 
     return true;
+}
+
+
+bool IFACE::HandleApiRequest( const std::string& aRequest, std::string& aResponse )
+{
+    if( m_kiway )
+    {
+        if( SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_kiway->Player( FRAME_SCH, false ) ) )
+            return frame->HandleApiRequest( aRequest, aResponse );
+    }
+
+    if( m_openHandler )
+        return m_openHandler->HandleInternalApiRequest( aRequest, aResponse );
+
+    return false;
 }
 
 

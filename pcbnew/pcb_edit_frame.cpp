@@ -2456,6 +2456,15 @@ void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPat
 }
 
 
+bool PCB_EDIT_FRAME::HandleApiRequest( const std::string& aRequest, std::string& aResponse )
+{
+    if( !m_apiHandler )
+        return false;
+
+    return m_apiHandler->HandleInternalApiRequest( aRequest, aResponse );
+}
+
+
 void PCB_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
