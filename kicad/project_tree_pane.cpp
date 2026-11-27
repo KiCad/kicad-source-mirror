@@ -2512,7 +2512,16 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
                 items.push( { child, ignored } );
 
-                const int      state = known && !ignored ? static_cast<int>( it->second ) : wxTREE_ITEMSTATE_NONE;
+                PROJECT_TREE_ITEM* data = GetItemIdData( child );
+                const bool         isFile = data && data->GetType() != TREE_FILE_TYPE::DIRECTORY;
+
+                // A file with no badge takes the blank one, so its icon stays in line with its siblings
+                int state = isFile ? static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED )
+                                   : wxTREE_ITEMSTATE_NONE;
+
+                if( known && !ignored )
+                    state = static_cast<int>( it->second );
+
                 const wxColour colour = ignored ? dimmed : normal;
 
                 // Setting either repaints the row, so only a change is worth writing.
