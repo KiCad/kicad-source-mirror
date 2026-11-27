@@ -35,7 +35,7 @@
 #include <drc/drc_rtree.h>
 #include <thread_pool.h>
 #include <mutex>
-#include <set>
+#include <map>
 #include <tuple>
 
 /*
@@ -95,6 +95,18 @@ private:
     void testCopperOutsideBoard( const std::vector<WORK_UNIT>& aWorkUnits,
                                  const std::vector<COPPER_ITEM_UNITS>& aCopperItems );
 
+    void reportEdgeViolations();
+
+    struct EDGE_REPORT
+    {
+        BOARD_ITEM*    item;
+        BOARD_ITEM*    edge;
+        PCB_LAYER_ID   layer;
+        int            actual;
+        DRC_CONSTRAINT constraint;
+        PCB_DRC_CODE   errorCode;
+    };
+
 private:
     std::vector<PAD*> m_castellatedPads;
     int               m_largestEdgeClearance;
@@ -108,8 +120,8 @@ private:
     // copper layer. For edge clearance, EvalRules is layer-agnostic
     // (UNDEFINED_LAYER), so per-layer reports for the same (item, edge, pos)
     // are redundant. Dedup at emission time.
-    std::set<std::tuple<KIID, KIID, VECTOR2I>> m_emittedEdgeReports;
-    std::mutex                                 m_emittedMutex;
+    std::map<std::tuple<KIID, KIID, VECTOR2I>, EDGE_REPORT> m_edgeReports;
+    std::mutex                                              m_edgeReportsMutex;
 };
 
 
@@ -235,32 +247,15 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
             }
 
             {
-                std::lock_guard<std::mutex> lock( m_emittedMutex );
+                std::lock_guard<std::mutex> lock( m_edgeReportsMutex );
 
-                if( !m_emittedEdgeReports.insert( { item->m_Uuid, edge->m_Uuid, pos } ).second )
-                {
-                    // Same (item, edge, pos) already reported from another work unit.
-                    if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
-                        return m_drcEngine->GetReportAllTrackErrors();
-                    else
-                        return false;
-                }
+                EDGE_REPORT report = { item, edge, shapeLayer, actual, constraint, aErrorCode };
+                auto [it, inserted] = m_edgeReports.try_emplace( { item->m_Uuid, edge->m_Uuid, pos }, report );
+
+                // Work units of one item race here, so keep the lowest layer rather than the first to arrive
+                if( !inserted && std::tie( shapeLayer, actual ) < std::tie( it->second.layer, it->second.actual ) )
+                    it->second = report;
             }
-
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( aErrorCode );
-
-            // Only report clearance info if there is any; otherwise it's just a straight collision
-            if( minClearance > 0 )
-            {
-                drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                    constraint.GetName(),
-                                                    minClearance,
-                                                    actual ) );
-            }
-
-            drcItem->SetItems( edge->m_Uuid, item->m_Uuid );
-            drcItem->SetViolatingRule( constraint.GetParentRule() );
-            reportTwoItemGeometry( drcItem, pos, edge, item, shapeLayer, actual );
 
             if( aErrorCode == DRCE_SILK_EDGE_CLEARANCE )
             {
@@ -276,6 +271,32 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
     }
 
     return true;
+}
+
+
+void DRC_TEST_PROVIDER_EDGE_CLEARANCE::reportEdgeViolations()
+{
+    for( auto& [key, report] : m_edgeReports )
+    {
+        const VECTOR2I&           pos = std::get<2>( key );
+        int                       minClearance = report.constraint.GetValue().Min();
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( report.errorCode );
+
+        // Only report clearance info if there is any; otherwise it's just a straight collision
+        if( minClearance > 0 )
+        {
+            drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                report.constraint.GetName(),
+                                                minClearance,
+                                                report.actual ) );
+        }
+
+        drcItem->SetItems( report.edge->m_Uuid, report.item->m_Uuid );
+        drcItem->SetViolatingRule( report.constraint.GetParentRule() );
+        reportTwoItemGeometry( drcItem, pos, report.edge, report.item, report.layer, report.actual );
+    }
+
+    m_edgeReports.clear();
 }
 
 
@@ -351,7 +372,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     m_epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
     m_edgesTree.clear();
     m_silkDisposition.clear();
-    m_emittedEdgeReports.clear();
+    m_edgeReports.clear();
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
@@ -644,6 +665,8 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
         futures.wait_for( std::chrono::milliseconds( 250 ) );
     }
+
+    reportEdgeViolations();
 
     if( !m_drcEngine->IsCancelled() && !m_drcEngine->IsErrorLimitExceeded( DRCE_COPPER_OUTSIDE_BOARD ) )
         testCopperOutsideBoard( workUnits, copperItems );
