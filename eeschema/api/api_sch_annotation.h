@@ -22,9 +22,14 @@
 
 #include <string>
 
+#include <api/annotation.h>
+#include <api/common/commands/annotation_commands.pb.h>
+
 class KIWAY;
 class REPORTER;
 class SCHEMATIC;
+class SCH_CONTEXT;
+class SCH_EDIT_FRAME;
 
 bool CheckSchematicReadyForNetlist( SCHEMATIC& aSchematic, REPORTER& aReporter );
 
@@ -32,5 +37,10 @@ void FormatSchematicNetlist( SCHEMATIC& aSchematic, KIWAY* aKiway, std::string& 
 
 bool GenerateSchematicNetlist( SCHEMATIC& aSchematic, KIWAY* aKiway, std::string& aNetlist,
                                REPORTER& aReporter );
+
+bool ApplyBoardNetlistToSchematic( SCH_CONTEXT* aContext, SCH_EDIT_FRAME* aFrame,
+                                   const std::string& aNetlist,
+                                   const kiapi::common::commands::BackAnnotationSettings& aSettings,
+                                   ANNOTATION_RESULT& aResult, REPORTER& aReporter );
 
 #endif // KICAD_API_SCH_ANNOTATION_H

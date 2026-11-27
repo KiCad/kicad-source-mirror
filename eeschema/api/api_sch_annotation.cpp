@@ -18,6 +18,8 @@
  */
 
 #include <api/api_sch_annotation.h>
+#include <api/common/commands/annotation_commands.pb.h>
+#include <api/sch_context.h>
 
 #include <wx/intl.h>
 
@@ -26,8 +28,10 @@
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <reporter.h>
 #include <richio.h>
+#include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
+#include <tools/backannotate.h>
 
 
 bool CheckSchematicReadyForNetlist( SCHEMATIC& aSchematic, REPORTER& aReporter )
@@ -71,6 +75,40 @@ bool GenerateSchematicNetlist( SCHEMATIC& aSchematic, KIWAY* aKiway, std::string
 
     aSchematic.RebuildConnectivity();
     FormatSchematicNetlist( aSchematic, aKiway, aNetlist );
+
+    return true;
+}
+
+
+bool ApplyBoardNetlistToSchematic( SCH_CONTEXT* aContext, SCH_EDIT_FRAME* aFrame, const std::string& aNetlist,
+                                   const kiapi::common::commands::BackAnnotationSettings& aSettings,
+                                   ANNOTATION_RESULT& aResult, REPORTER& aReporter )
+{
+    using namespace kiapi::common::commands;
+
+    const bool relink = aSettings.reference_mode() == BackAnnotationReferenceMode::BARM_RELINK_FOOTPRINTS;
+    const bool updateReferences = aSettings.reference_mode() == BackAnnotationReferenceMode::BARM_UPDATE_REFERENCES;
+
+    if( relink && !CheckSchematicReadyForNetlist( *aContext->GetSchematic(), aReporter ) )
+        return false;
+
+    BACK_ANNOTATE backAnno( aContext, aFrame, aReporter, relink, aSettings.update_footprints(),
+                            aSettings.update_values(), updateReferences, aSettings.update_net_names(),
+                            aSettings.update_attributes(), aSettings.update_other_fields(),
+                            aSettings.prefer_unit_swaps(), aSettings.prefer_pin_swaps(), aSettings.dry_run() );
+
+    if( !backAnno.BackAnnotateSymbols( aNetlist ) )
+        return false;
+
+    aResult.changeCount = backAnno.GetChangeCount();
+
+    if( !aSettings.dry_run() && aFrame )
+    {
+        aFrame->SetSheetNumberAndCount();
+        aFrame->SyncView();
+        aFrame->OnModify();
+        aFrame->GetCanvas()->Refresh();
+    }
 
     return true;
 }

@@ -33,6 +33,7 @@
 class REPORTER;
 class SCH_SHEET_LIST;
 class SCH_EDIT_FRAME;
+class SCH_CONTEXT;
 class SCH_COMMIT;
 
 struct BACKANNOTATE_UNIT_SWAP_CANDIDATE
@@ -152,10 +153,11 @@ public:
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_FP_DATA>>;
 
-    BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
-                   bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
-                   bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
-                   bool aPreferUnitSwaps, bool aPreferPinSwaps, bool aDryRun );
+    BACK_ANNOTATE( SCH_CONTEXT* aContext, SCH_EDIT_FRAME* aFrame, REPORTER& aReporter,
+                   bool aRelinkFootprints, bool aProcessFootprints, bool aProcessValues,
+                   bool aProcessReferences, bool aProcessNetNames, bool aProcessAttributes,
+                   bool aProcessOtherFields, bool aPreferUnitSwaps, bool aPreferPinSwaps,
+                   bool aDryRun );
 
     ~BACK_ANNOTATE() = default;
 
@@ -176,6 +178,8 @@ public:
      * @return true if back annotation completed success.
      */
     bool BackAnnotateSymbols( const std::string& aNetlist );
+
+    int GetChangeCount() const { return m_changesCount; }
 
 private:
     /**
@@ -227,6 +231,7 @@ private:
     SCH_REFERENCE_LIST           m_refs;
     SCH_MULTI_UNIT_REFERENCE_MAP m_multiUnitsRefs;
     std::deque<CHANGELIST_ITEM>  m_changelist;
+    SCH_CONTEXT*                 m_context;
     SCH_EDIT_FRAME*              m_frame;
 
     int                          m_changesCount;    // Number of user-level changes

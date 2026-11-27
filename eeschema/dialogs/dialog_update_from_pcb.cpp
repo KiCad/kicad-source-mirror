@@ -19,6 +19,7 @@
  */
 
 #include <backannotate.h>
+#include <api/sch_context.h>
 #include <dialog_update_from_pcb.h>
 #include <sch_edit_frame.h>
 #include <sch_editor_control.h>
@@ -55,7 +56,10 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
 {
     bool successfulRun = false;
     m_messagePanel->Clear();
-    BACK_ANNOTATE backAnno( m_frame,
+
+    std::shared_ptr<SCH_CONTEXT> context = CreateSchFrameContext( m_frame );
+
+    BACK_ANNOTATE backAnno( context.get(), m_frame,
                             m_messagePanel->Reporter(),
                             m_cbRelinkFootprints->GetValue(),
                             m_cbUpdateFootprints->GetValue(),
@@ -107,7 +111,10 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
 {
     std::string netlist;
     m_messagePanel->Clear();
-    BACK_ANNOTATE backAnno( m_frame,
+
+    std::shared_ptr<SCH_CONTEXT> context = CreateSchFrameContext( m_frame );
+
+    BACK_ANNOTATE backAnno( context.get(), m_frame,
                             m_messagePanel->Reporter(),
                             m_cbRelinkFootprints->GetValue(),
                             m_cbUpdateFootprints->GetValue(),

@@ -21,8 +21,12 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
 #include <api/api_handler_sch.h>
+#include <api/api_sch_annotation.h>
 #include <api/api_utils.h>
+#include <api/common/commands/annotation_commands.pb.h>
 #include <api/common/envelope.pb.h>
 #include <api/headless_sch_context.h>
 #include <api/internal/annotation.pb.h>
@@ -113,6 +117,72 @@ BOOST_AUTO_TEST_CASE( InternalGenerateNetlistRejectsUnannotatedSchematic )
     kiapi::common::ApiResponse response;
     BOOST_REQUIRE( response.ParseFromString( responseText ) );
     BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_BAD_REQUEST );
+}
+
+
+static std::string MakeBoardNetlist( const SCH_REFERENCE& aRef, const wxString& aValue )
+{
+    return std::string( "(pcb_netlist\n  (ref \"" )
+           + aRef.GetComposedRef().ToUTF8().data() + "\" (fpid \""
+           + aRef.GetFootprint().ToUTF8().data() + "\") (value \""
+           + aValue.ToUTF8().data() + "\") (timestamp \""
+           + aRef.GetFullPath().ToUTF8().data() + "\") (fields))\n)\n";
+}
+
+
+BOOST_AUTO_TEST_CASE( BackAnnotationUpdatesSymbolValue )
+{
+    loadSchematic( wxS( "api_kitchen_sink" ) );
+
+    SCH_SHEET_LIST sheets = m_context->GetSchematic()->Hierarchy();
+    SCH_REFERENCE_LIST refs;
+    sheets.GetSymbols( refs, SYMBOL_FILTER_NON_POWER );
+    BOOST_REQUIRE( refs.GetCount() > 0 );
+
+    SCH_SYMBOL*    symbol = refs[0].GetSymbol();
+    const wxString oldValue = symbol->GetValue( &refs[0].GetSheetPath(), RAW_VALUE );
+    BOOST_REQUIRE( oldValue != wxT( "CHANGED" ) );
+
+    kiapi::common::commands::BackAnnotationSettings settings;
+    settings.set_reference_mode( kiapi::common::commands::BARM_UPDATE_REFERENCES );
+    settings.set_update_values( true );
+
+    WX_STRING_REPORTER reporter;
+    ANNOTATION_RESULT  result;
+
+    BOOST_REQUIRE( ApplyBoardNetlistToSchematic(
+            m_context.get(), nullptr, MakeBoardNetlist( refs[0], wxT( "CHANGED" ) ), settings,
+            result, reporter ) );
+    BOOST_REQUIRE_EQUAL( symbol->GetValue( &refs[0].GetSheetPath(), RAW_VALUE ), wxT( "CHANGED" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( BackAnnotationDryRunDoesNotModify )
+{
+    loadSchematic( wxS( "api_kitchen_sink" ) );
+
+    SCH_SHEET_LIST sheets = m_context->GetSchematic()->Hierarchy();
+    SCH_REFERENCE_LIST refs;
+    sheets.GetSymbols( refs, SYMBOL_FILTER_NON_POWER );
+    BOOST_REQUIRE( refs.GetCount() > 0 );
+
+    SCH_SYMBOL*    symbol = refs[0].GetSymbol();
+    const wxString oldValue = symbol->GetValue( &refs[0].GetSheetPath(), RAW_VALUE );
+    BOOST_REQUIRE( oldValue != wxT( "CHANGED" ) );
+
+    kiapi::common::commands::BackAnnotationSettings settings;
+    settings.set_reference_mode( kiapi::common::commands::BARM_UPDATE_REFERENCES );
+    settings.set_update_values( true );
+    settings.set_dry_run( true );
+
+    WX_STRING_REPORTER reporter;
+    ANNOTATION_RESULT  result;
+
+    BOOST_REQUIRE( ApplyBoardNetlistToSchematic(
+            m_context.get(), nullptr, MakeBoardNetlist( refs[0], wxT( "CHANGED" ) ), settings,
+            result, reporter ) );
+    BOOST_REQUIRE_EQUAL( symbol->GetValue( &refs[0].GetSheetPath(), RAW_VALUE ), oldValue );
+    BOOST_REQUIRE_GT( result.changeCount, 0 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -32,6 +32,8 @@
 #include <lib_symbol.h>
 #include <schematic.h>
 #include <advanced_config.h>
+#include <api/api_sch_annotation.h>
+#include <api/sch_context.h>
 #include <connectivity/conn_facade.h>
 #include <sch_commit.h>
 #include <string_utils.h>
@@ -237,10 +239,12 @@ BACKANNOTATE_UNIT_SWAP_PLAN PlanBackannotateUnitSwaps(
 }
 
 
-BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
-                              bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
-                              bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
-                              bool aPreferUnitSwaps, bool aPreferPinSwaps, bool aDryRun ) :
+BACK_ANNOTATE::BACK_ANNOTATE( SCH_CONTEXT* aContext, SCH_EDIT_FRAME* aFrame, REPORTER& aReporter,
+                              bool aRelinkFootprints, bool aProcessFootprints,
+                              bool aProcessValues, bool aProcessReferences,
+                              bool aProcessNetNames, bool aProcessAttributes,
+                              bool aProcessOtherFields, bool aPreferUnitSwaps, bool aPreferPinSwaps,
+                              bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
@@ -252,6 +256,7 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool 
         m_preferUnitSwaps( aPreferUnitSwaps ),
         m_preferPinSwaps( aPreferPinSwaps ),
         m_dryRun( aDryRun ),
+        m_context( aContext ),
         m_frame( aFrame ),
         m_changesCount( 0 )
 { }
@@ -270,7 +275,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 
     getPcbModulesFromString( aNetlist );
 
-    SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
+    SCH_SHEET_LIST sheets = m_context->GetSchematic()->Hierarchy();
     sheets.GetSymbols( m_refs, SYMBOL_FILTER_NON_POWER );
     sheets.GetMultiUnitSymbols( m_multiUnitsRefs, SYMBOL_FILTER_NON_POWER );
 
@@ -284,6 +289,9 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 
 bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
 {
+    if( !m_frame )
+        return false;
+
     if( Kiface().IsSingle() )
     {
         DisplayErrorMessage( m_frame, _( "Cannot fetch PCB netlist because Schematic Editor is opened in "
@@ -310,6 +318,9 @@ bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
 
 void BACK_ANNOTATE::PushNewLinksToPCB()
 {
+    if( !m_frame )
+        return;
+
     std::string nullPayload;
 
     m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_UPDATE_LINKS, nullPayload );
@@ -534,8 +545,9 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
         ++i;
     }
 
-    if( m_matchByReference && !m_frame->ReadyToNetlist( _( "Re-linking footprints requires a fully "
-                                                           "annotated schematic." ) ) )
+    if( m_matchByReference && m_frame
+        && !m_frame->ReadyToNetlist( _( "Re-linking footprints requires a fully "
+                                        "annotated schematic." ) ) )
     {
         m_reporter.ReportTail( _( "Footprint re-linking canceled by user." ), RPT_SEVERITY_ERROR );
     }
@@ -625,11 +637,18 @@ ResolveBackannotatedRefs( const std::vector<std::pair<const SCH_REFERENCE*, wxSt
 
 void BACK_ANNOTATE::applyChangelist()
 {
-    SCH_COMMIT commit( m_frame );
-    wxString   msg;
+    std::unique_ptr<SCH_COMMIT> commit;
+
+    if( m_frame )
+        commit = std::make_unique<SCH_COMMIT>( m_frame );
+    else
+        commit = std::make_unique<SCH_COMMIT>( m_context->GetToolManager() );
+
+    wxString msg;
 
     // Staged edits hide published nets on their screens; read every net from the pre-edit publication
-    std::optional<SCH_CONNECTIVITY::PUBLICATION_HOLD> hold( std::in_place, m_frame->Schematic().Connectivity() );
+    std::optional<SCH_CONNECTIVITY::PUBLICATION_HOLD> hold(
+            std::in_place, m_context->GetSchematic()->Connectivity() );
 
     std::set<CHANGELIST_ITEM*> unitSwapItems;
 
@@ -638,7 +657,7 @@ void BACK_ANNOTATE::applyChangelist()
     // because the swaps will modify the changelist
     if( m_processNetNames && m_preferUnitSwaps )
     {
-        const wxString variantName = m_frame->Schematic().GetCurrentVariant();
+        const wxString variantName = m_context->GetSchematic()->GetCurrentVariant();
         REPORTER& debugReporter = NULL_REPORTER::GetInstance(); // Change to m_reporter for debugging
 
         // Group changelist items by shared PCB footprint data pointer
@@ -848,7 +867,7 @@ void BACK_ANNOTATE::applyChangelist()
             if( !m_dryRun )
             {
                 for( size_t candidateIdx : plan.m_swappedCandidateIndices )
-                    commit.Modify( symbolUnits[candidateIdx].sym, symbolUnits[candidateIdx].screen );
+                    commit->Modify( symbolUnits[candidateIdx].sym, symbolUnits[candidateIdx].screen );
             }
 
             for( const BACKANNOTATE_UNIT_SWAP_STEP& step : plan.m_steps )
@@ -931,7 +950,7 @@ void BACK_ANNOTATE::applyChangelist()
     }
 
     std::vector<std::pair<const SCH_REFERENCE*, wxString>> refRequests;
-    const bool shareBases = m_frame->Schematic().Settings().m_AnnotateReusedSheetSuffixes;
+    const bool shareBases = m_context->GetSchematic()->Settings().m_AnnotateReusedSheetSuffixes;
 
     for( const CHANGELIST_ITEM& item : m_changelist )
         refRequests.emplace_back( &item.first, item.second->m_ref );
@@ -962,7 +981,7 @@ void BACK_ANNOTATE::applyChangelist()
                 };
 
         if( !m_dryRun )
-            commit.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
+            commit->Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
 
         if( m_processReferences && ref.GetComposedRef() != fpData.m_ref && !skip
                 && !symbol->GetField( FIELD_T::REFERENCE )->HasTextVars() )
@@ -1077,7 +1096,7 @@ void BACK_ANNOTATE::applyChangelist()
 
         // Try to satisfy footprint pad net swaps by moving symbol pins before falling back to labels.
         if( m_preferPinSwaps && m_processNetNames && !skip )
-            swappedPins = applyPinSwaps( symbol, ref, fpData, &commit );
+            swappedPins = applyPinSwaps( symbol, ref, fpData, commit.get() );
 
         if( m_processNetNames && !skip )
         {
@@ -1104,7 +1123,7 @@ void BACK_ANNOTATE::applyChangelist()
                 const std::optional<wxString> netName = pin->GetConnectionName( &ref.GetSheetPath(), false, true );
 
                 if( netName && *netName != shortNetName )
-                    processNetNameChange( &commit, ref.GetRef(), pin, ref.GetSheetPath(), *netName, shortNetName );
+                    processNetNameChange( commit.get(), ref.GetRef(), pin, ref.GetSheetPath(), *netName, shortNetName );
             }
         }
 
@@ -1207,10 +1226,13 @@ void BACK_ANNOTATE::applyChangelist()
 
     if( !m_dryRun )
     {
-        m_frame->RecalculateConnections( &commit, NO_CLEANUP );
-        m_frame->UpdateNetHighlightStatus();
+        if( m_frame )
+        {
+            m_frame->RecalculateConnections( commit.get(), NO_CLEANUP );
+            m_frame->UpdateNetHighlightStatus();
+        }
 
-        commit.Push( _( "Update Schematic from PCB" ) );
+        commit->Push( _( "Update Schematic from PCB" ) );
     }
 }
 
@@ -1322,8 +1344,6 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
     if( !screen )
         return swappedPins;
 
-    wxCHECK( m_frame, swappedPins );
-
     // Used to build the list of schematic pins whose current net assignment does not match the PCB.
     struct PIN_CHANGE
     {
@@ -1379,9 +1399,9 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
     wxString              msg;
 
     bool allowPinSwaps = false;
-    wxString currentProjectName = m_frame->Prj().GetProjectName();
+    wxString currentProjectName = m_context->Prj().GetProjectName();
 
-    if( m_frame->eeconfig() )
+    if( m_frame && m_frame->eeconfig() )
         allowPinSwaps = m_frame->eeconfig()->m_Input.allow_unconstrained_pin_swaps;
 
     std::set<wxString> sharedSheetPaths;
@@ -1392,7 +1412,7 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
     std::set<wxString> friendlySheetNames;
 
     if( sharedSheetSymbol && !sharedSheetPaths.empty() )
-        friendlySheetNames = GetSheetNamesFromPaths( sharedSheetPaths, m_frame->Schematic() );
+        friendlySheetNames = GetSheetNamesFromPaths( sharedSheetPaths, *m_context->GetSchematic() );
 
     // Check each mismatch and try to find a partner whose desired net matches our current net
     // (i.e. the two pins have been swapped on the PCB).
@@ -1545,9 +1565,10 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
         if( swappedLibPins )
             aSymbol->UpdatePins();
 
-        m_frame->UpdateItem( aSymbol, false, true );
+        if( m_frame )
+            m_frame->UpdateItem( aSymbol, false, true );
 
-        if( TOOL_MANAGER* toolMgr = m_frame->GetToolManager() )
+        if( TOOL_MANAGER* toolMgr = m_context->GetToolManager() )
         {
             if( SCH_LINE_WIRE_BUS_TOOL* lwbTool = toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>() )
             {
@@ -1562,7 +1583,7 @@ std::set<wxString> BACK_ANNOTATE::applyPinSwaps( SCH_SYMBOL* aSymbol, const SCH_
             }
         }
 
-        m_frame->Schematic().CleanUp( aCommit );
+        m_context->GetSchematic()->CleanUp( aCommit );
     }
 
     return swappedPins;
@@ -1637,7 +1658,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
             SCH_ITEM*                     resolvedDriver = nullptr;
             SCH_SHEET_PATH                driverSheet;
             CONNECTION_SUBGRAPH::PRIORITY resolvedPriority = CONNECTION_SUBGRAPH::PRIORITY::NONE;
-            SCHEMATIC&                    schematic = m_frame->Schematic();
+            SCHEMATIC&                    schematic = *m_context->GetSchematic();
 
             if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
             {
@@ -1700,9 +1721,9 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
 
         if( !m_dryRun )
         {
-            SCHEMATIC_SETTINGS& settings = m_frame->Schematic().Settings();
+            SCHEMATIC_SETTINGS& settings = m_context->GetSchematic()->Settings();
             SCH_LABEL* label = new SCH_LABEL( driver->GetPosition(), aNewName );
-            label->SetParent( &m_frame->Schematic() );
+            label->SetParent( m_context->GetSchematic() );
             label->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
             label->SetSpinStyle( orientLabel( static_cast<SCH_PIN*>( driver ) ) );
             label->SetFlags( IS_NEW );
