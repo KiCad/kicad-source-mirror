@@ -17,6 +17,7 @@
     */
 
 #include <optional>
+#include <unordered_set>
 
 #include "drc/drc_creepage_utils.h"
 
@@ -2361,6 +2362,45 @@ std::vector<PATH_CONNECTION> GetPaths( CREEP_SHAPE* aS1, CREEP_SHAPE* aS2, doubl
     return result;
 }
 
+// Graph build order and adjacency sets follow addresses, so equal paths are told apart by content
+static bool graphNodeLess( const GRAPH_NODE* aA, const GRAPH_NODE* aB )
+{
+    auto shapeKey =
+            []( const CREEP_SHAPE* aShape )
+            {
+                if( !aShape )
+                    return std::make_tuple( -1, VECTOR2I(), 0, VECTOR2I(), VECTOR2I(), niluuid );
+
+                const BOARD_ITEM* item = aShape->GetParent();
+                VECTOR2I          start = aShape->GetStartPoint();
+                VECTOR2I          end = aShape->GetEndPoint();
+
+                if( const CU_SHAPE_SEGMENT* segment = dynamic_cast<const CU_SHAPE_SEGMENT*>( aShape ) )
+                {
+                    start = segment->GetStart();
+                    end = segment->GetEnd();
+                }
+
+                return std::make_tuple( static_cast<int>( aShape->GetType() ), aShape->GetPos(), aShape->GetRadius(),
+                                        start, end, item ? item->m_Uuid : niluuid );
+            };
+
+    auto keyA = std::make_tuple( aA->m_pos, static_cast<int>( aA->m_type ), aA->m_net );
+    auto keyB = std::make_tuple( aB->m_pos, static_cast<int>( aB->m_type ), aB->m_net );
+
+    if( keyA != keyB )
+        return keyA < keyB;
+
+    auto shapeA = shapeKey( aA->m_parent );
+    auto shapeB = shapeKey( aB->m_parent );
+
+    if( shapeA != shapeB )
+        return shapeA < shapeB;
+
+    return aA < aB;
+}
+
+
 double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_ptr<GRAPH_NODE>& aTo,
                               std::vector<std::shared_ptr<GRAPH_CONNECTION>>& aResult ) // Change to vector of pointers
 {
@@ -2382,7 +2422,8 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
     auto cmp = []( const QUEUE_ITEM& aLeft, const QUEUE_ITEM& aRight )
     {
         if( aLeft.first == aRight.first )
-            return aLeft.second > aRight.second; // Compare addresses to avoid ties.
+            return graphNodeLess( aRight.second, aLeft.second );
+
         return aLeft.first > aRight.first;
     };
     std::priority_queue<QUEUE_ITEM, std::vector<QUEUE_ITEM>, decltype( cmp )> pq( cmp );
@@ -2398,6 +2439,8 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
     distances[aTo.get()] = std::numeric_limits<double>::infinity();
     pq.push( { 0.0, aFrom.get() } );
 
+    std::unordered_set<GRAPH_NODE*> settled;
+
     // Dijkstra's main loop
     while( !pq.empty() )
     {
@@ -2406,7 +2449,7 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
 
         // A stale entry left behind by a decrease-key reinsertion; its shorter copy was already
         // processed
-        if( dist > distances[current] )
+        if( dist > distances[current] || !settled.insert( current ).second )
             continue;
 
         if( current == aTo.get() )
@@ -2438,6 +2481,12 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
                 previous[neighbor] = current;
                 pq.push( { alt, neighbor } );
             }
+            else if( alt == distances[neighbor] && !settled.count( neighbor )
+                     && graphNodeLess( current, previous[neighbor] ) )
+            {
+                // Equal paths would otherwise keep whichever predecessor comes first by address
+                previous[neighbor] = current;
+            }
         }
     }
 
@@ -2452,17 +2501,30 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
 
     while( step != aFrom.get() )
     {
-        GRAPH_NODE* prevNode = previous[step];
+        GRAPH_NODE*                       prevNode = previous[step];
+        std::shared_ptr<GRAPH_CONNECTION> best;
 
+        // Parallel connections sit in address order, so pick by weight and geometry
         for( const std::shared_ptr<GRAPH_CONNECTION>& node_conn : step->m_node_conns )
         {
             if( ( ( node_conn->n1 ).get() == prevNode && ( node_conn->n2 ).get() == step )
                 || ( ( node_conn->n1 ).get() == step && ( node_conn->n2 ).get() == prevNode ) )
             {
-                aResult.push_back( node_conn );
-                break;
+                const PATH_CONNECTION& pc = node_conn->m_path;
+
+                if( !best
+                        || std::tie( pc.weight, pc.a1.x, pc.a1.y, pc.a2.x, pc.a2.y )
+                                   < std::tie( best->m_path.weight, best->m_path.a1.x, best->m_path.a1.y,
+                                               best->m_path.a2.x, best->m_path.a2.y ) )
+                {
+                    best = node_conn;
+                }
             }
         }
+
+        if( best )
+            aResult.push_back( best );
+
         step = prevNode;
     }
 
@@ -2763,8 +2825,8 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
         {
             const BOARD_ITEM* parent2 = entry2->parent;
 
-            // Only process if parent1 < parent2 to avoid duplicates
-            if( parent1 >= parent2 )
+            // Visit each pair once, ordered by UUID since its direction picks among equally short paths
+            if( parent1 == parent2 || CompareByUuid()( parent2, parent1 ) )
                 return true;
 
             // Precise bbox distance check
