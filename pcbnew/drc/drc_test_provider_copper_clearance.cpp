@@ -634,14 +634,53 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM
 
 void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 {
-    std::map<BOARD_ITEM*, int>  freePadsUsageMap;
-    std::mutex                  freePadsUsageMapMutex;
-    std::atomic<size_t>         done( 0 );
-    size_t                      count = m_board->Tracks().size();
+    std::atomic<size_t> done( 0 );
+    size_t              count = m_board->Tracks().size();
 
     REPORT_AUX( wxString::Format( wxT( "Testing %d tracks & vias..." ), count ) );
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
+
+    // A free pad takes the net of its lowest-UUID track, not of whichever worker reaches it first
+    std::map<BOARD_ITEM*, std::pair<KIID, int>> freePadNets;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( !pad->IsFreePad() )
+                continue;
+
+            // Match the copper tree, where a hole pierces every layer
+            LSET padLayers = pad->HasHole() ? boardCopperLayers : LSET( pad->GetLayerSet() & boardCopperLayers );
+
+            for( PCB_LAYER_ID layer : padLayers )
+            {
+                std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
+
+                m_board->m_CopperItemRTreeCache->QueryCollidingPreparedCopper( pad, padShape, layer,
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            KICAD_T type = other->Type();
+
+                            // Same-net tracks never reach the pad in the track loop, so they cannot claim it
+                            return ( type == PCB_TRACE_T || type == PCB_ARC_T || type == PCB_VIA_T )
+                                   && static_cast<PCB_TRACK*>( other )->GetNetCode() != pad->GetNetCode();
+                        },
+                        [&]( BOARD_ITEM* other, const std::shared_ptr<SHAPE>& ) -> bool
+                        {
+                            PCB_TRACK* track = static_cast<PCB_TRACK*>( other );
+                            auto [it, inserted] = freePadNets.try_emplace( pad, track->m_Uuid,
+                                                                           track->GetNetCode() );
+
+                            if( !inserted && track->m_Uuid < it->second.first )
+                                it->second = { track->m_Uuid, track->GetNetCode() };
+
+                            return true;
+                        } );
+            }
+        }
+    }
 
     auto testTrack =
             [&]( const int trackIdx )
@@ -686,18 +725,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                 {
                                     if( aPreparedOther->Collide( trackShape.get() ) )
                                     {
-                                        std::lock_guard<std::mutex> lock( freePadsUsageMapMutex );
-                                        auto it = freePadsUsageMap.find( other );
+                                        auto it = freePadNets.find( other );
 
-                                        if( it == freePadsUsageMap.end() )
-                                        {
-                                            freePadsUsageMap[ other ] = track->GetNetCode();
+                                        if( it != freePadNets.end() && it->second.second == track->GetNetCode() )
                                             return true;    // Continue colliding tests
-                                        }
-                                        else if( it->second == track->GetNetCode() )
-                                        {
-                                            return true;    // Continue colliding tests
-                                        }
                                     }
                                 }
 
