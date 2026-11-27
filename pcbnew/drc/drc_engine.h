@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <mutex>
+#include <thread>
 #include <shared_mutex>
 #include <vector>
 #include <unordered_map>
@@ -201,6 +202,11 @@ public:
     void RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aTestFootprints,
                    BOARD_COMMIT* aCommit = nullptr );
 
+    /**
+     * On the thread running RunTests this first passes on the violations held back so far, so a
+     * provider can skip a later phase once an earlier one filled the limit.  Worker threads see
+     * only what was already passed on, which does not depend on scheduling.
+     */
     bool IsErrorLimitExceeded( int error_code );
 
     /**
@@ -281,6 +287,13 @@ public:
 
     bool RulesValid() { return m_rulesValid; }
 
+    /**
+     * Report a violation to the handler.
+     *
+     * During RunTests() violations are held back and passed on in a content-defined order when
+     * the provider finishes or the RunTests thread checks a limit, so the report does not depend
+     * on the order in which worker threads found them.
+     */
     void ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
                           int aMarkerLayer, const std::function<void( PCB_MARKER* )>& aPathGenerator = {} );
 
@@ -368,6 +381,19 @@ private:
     std::shared_ptr<DRC_RULE> createImplicitRule( const wxString& name, DRC_IMPLICIT_SOURCE aImplicitSource );
 
 protected:
+    struct PENDING_VIOLATION;
+
+    void emitViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aMarkerLayer,
+                        const std::function<void( PCB_MARKER* )>& aPathGenerator );
+
+    void flushPendingViolations();
+
+    void flushOnRunTestsThread();
+
+    static bool pendingViolationLess( const std::unique_ptr<PENDING_VIOLATION>& a,
+                                      const std::unique_ptr<PENDING_VIOLATION>& b );
+
+protected:
     BOARD_DESIGN_SETTINGS*     m_designSettings;
     BOARD*                     m_board;
     DS_PROXY_VIEW_ITEM*        m_drawingSheet;
@@ -386,6 +412,14 @@ protected:
     std::map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
 
     DRC_VIOLATION_HANDLER      m_violationHandler;
+    std::mutex                 m_violationMutex;
+    bool                       m_deferViolations;
+    bool                       m_flushingViolations;
+    std::thread::id            m_runTestsThread;
+    int                        m_pendingCount;
+
+    /// Held-back violations per error code, each a max-heap bounded by the code's limit
+    std::vector<std::vector<std::unique_ptr<PENDING_VIOLATION>>> m_pendingViolations;
     REPORTER*                  m_logReporter;
     PROGRESS_REPORTER*         m_progressReporter;
 

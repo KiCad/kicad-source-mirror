@@ -45,7 +45,9 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
+#include <algorithm>
 #include <core/profile.h>
+#include <scoped_set_reset.h>
 #include <thread_pool.h>
 #include <zone.h>
 #include <project/project_file.h>
@@ -68,6 +70,19 @@
  * @ingroup trace_env_vars
  */
 static const wxChar* traceDrcProfile = wxT( "KICAD_DRC_PROFILE" );
+
+
+struct DRC_ENGINE::PENDING_VIOLATION
+{
+    std::shared_ptr<DRC_ITEM> item;
+    VECTOR2I                  pos;
+    int                       layer;
+    std::vector<KIID>         ids;
+    wxString                  message;
+    std::vector<PCB_SHAPE>    path;
+    VECTOR2I                  pathStart;
+    VECTOR2I                  pathEnd;
+};
 
 
 void drcPrintDebugMessage( int level, const wxString& msg, const char *function, int line )
@@ -93,6 +108,9 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
         m_rulesValid( false ),
         m_reportAllTrackErrors( false ),
         m_testFootprints( false ),
+        m_deferViolations( false ),
+        m_flushingViolations( false ),
+        m_pendingCount( 0 ),
         m_logReporter( nullptr ),
         m_progressReporter( nullptr )
 {
@@ -971,14 +989,23 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 
     int timestamp = m_board->GetTimeStamp();
 
+    m_pendingViolations.clear();
+    m_pendingViolations.resize( DRCE_LAST + 1 );
+    m_pendingCount = 0;
+    m_runTestsThread = std::this_thread::get_id();
+    SCOPED_SET_RESET<bool> deferViolations( m_deferViolations, true );
+
     for( DRC_TEST_PROVIDER* provider : m_testProviders )
     {
         if( m_logReporter )
             m_logReporter->Report( wxString::Format( wxT( "Run DRC provider: '%s'" ), provider->GetName() ) );
 
         PROF_TIMER providerTimer;
+        bool       keepGoing = provider->RunTests( aUnits );
 
-        if( !provider->RunTests( aUnits ) )
+        flushPendingViolations();
+
+        if( !keepGoing )
             break;
 
         providerTimer.Stop();
@@ -2355,6 +2382,8 @@ void DRC_ENGINE::ProcessAssertions( const BOARD_ITEM* a, std::function<void( con
 bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 {
     assert( error_code >= 0 && error_code <= DRCE_LAST );
+    flushOnRunTestsThread();
+
     std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
     return m_errorLimits[ error_code ] <= 0;
 }
@@ -2363,14 +2392,28 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 int DRC_ENGINE::GetErrorLimit( int error_code )
 {
     assert( error_code >= 0 && error_code <= DRCE_LAST );
+    flushOnRunTestsThread();
+
     std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
     return std::max( 0, m_errorLimits[ error_code ] );
+}
+
+
+void DRC_ENGINE::flushOnRunTestsThread()
+{
+    // Workers have joined whenever the RunTests thread asks, so what it has pending is complete
+    if( std::this_thread::get_id() == m_runTestsThread && m_deferViolations && !m_flushingViolations )
+        flushPendingViolations();
 }
 
 
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
                                   int aMarkerLayer, const std::function<void( PCB_MARKER* )>& aPathGenerator )
 {
+    std::lock_guard<std::mutex> guard( m_violationMutex );
+    int                         code = aItem->GetErrorCode();
+    int                         limit;
+
     {
         std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
 
@@ -2378,18 +2421,113 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
         // are processed in parallel, letting many threads slip past the cap and overshoot
         // it.  Enforce the per-code limit atomically here so the reported count is exact
         // and reproducible regardless of worker scheduling.
-        if( m_errorLimits[ aItem->GetErrorCode() ] <= 0 )
+        if( m_errorLimits[ code ] <= 0 )
             return;
 
-        m_errorLimits[ aItem->GetErrorCode() ] -= 1;
+        // Deferred violations count against the limit when flushed, in sorted order, so the
+        // kept subset does not depend on which thread found its violations first
+        if( !m_deferViolations )
+            m_errorLimits[ code ] -= 1;
+
+        limit = m_errorLimits[ code ];
     }
 
-    if( m_violationHandler )
+    if( !m_deferViolations )
     {
-        static std::mutex handlerLock;
-        std::lock_guard<std::mutex> guard( handlerLock );
-        m_violationHandler( aItem, aPos, aMarkerLayer, aPathGenerator );
+        emitViolation( aItem, aPos, aMarkerLayer, aPathGenerator );
+        return;
     }
+
+    auto pending = std::make_unique<PENDING_VIOLATION>();
+    pending->item = aItem;
+    pending->pos = aPos;
+    pending->layer = aMarkerLayer;
+    pending->ids = aItem->GetIDs();
+    pending->message = aItem->GetErrorMessage( false );
+
+    // Keep only the lowest violations the limit can still take, as a max-heap per code
+    std::vector<std::unique_ptr<PENDING_VIOLATION>>& heap = m_pendingViolations[ code ];
+
+    if( static_cast<int>( heap.size() ) >= limit )
+    {
+        if( !pendingViolationLess( pending, heap.front() ) )
+            return;
+
+        std::pop_heap( heap.begin(), heap.end(), pendingViolationLess );
+        heap.pop_back();
+        m_pendingCount--;
+    }
+
+    // Path generators capture provider locals by reference, so run them now against a scratch marker
+    if( aPathGenerator )
+    {
+        PCB_MARKER scratch( nullptr, aPos, aMarkerLayer );
+        aPathGenerator( &scratch );
+        pending->path = scratch.GetPath();
+        pending->pathStart = scratch.GetPathStart();
+        pending->pathEnd = scratch.GetPathEnd();
+    }
+
+    heap.push_back( std::move( pending ) );
+    std::push_heap( heap.begin(), heap.end(), pendingViolationLess );
+    m_pendingCount++;
+}
+
+
+bool DRC_ENGINE::pendingViolationLess( const std::unique_ptr<PENDING_VIOLATION>& a,
+                                       const std::unique_ptr<PENDING_VIOLATION>& b )
+{
+    return std::forward_as_tuple( a->pos.x, a->pos.y, a->layer, a->ids, a->message )
+           < std::forward_as_tuple( b->pos.x, b->pos.y, b->layer, b->ids, b->message );
+}
+
+
+void DRC_ENGINE::flushPendingViolations()
+{
+    std::lock_guard<std::mutex> guard( m_violationMutex );
+
+    if( m_pendingCount == 0 )
+        return;
+
+    SCOPED_SET_RESET<bool> flushing( m_flushingViolations, true );
+
+    for( int code = 0; code < static_cast<int>( m_pendingViolations.size() ); ++code )
+    {
+        std::vector<std::unique_ptr<PENDING_VIOLATION>>& heap = m_pendingViolations[ code ];
+
+        std::sort_heap( heap.begin(), heap.end(), pendingViolationLess );
+
+        for( const std::unique_ptr<PENDING_VIOLATION>& pending : heap )
+        {
+            {
+                std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
+                int&                        limit = m_errorLimits[ code ];
+
+                if( limit <= 0 )
+                    break;
+
+                limit -= 1;
+            }
+
+            emitViolation( pending->item, pending->pos, pending->layer,
+                           [&]( PCB_MARKER* aMarker )
+                           {
+                               aMarker->SetPath( pending->path, pending->pathStart, pending->pathEnd );
+                           } );
+        }
+
+        heap.clear();
+    }
+
+    m_pendingCount = 0;
+}
+
+
+void DRC_ENGINE::emitViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aMarkerLayer,
+                                const std::function<void( PCB_MARKER* )>& aPathGenerator )
+{
+    if( m_violationHandler )
+        m_violationHandler( aItem, aPos, aMarkerLayer, aPathGenerator );
 
     if( m_logReporter )
     {

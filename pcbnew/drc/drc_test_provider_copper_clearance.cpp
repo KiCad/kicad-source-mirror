@@ -757,15 +757,28 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, const std
     // Disable some tests for net-tie objects in a footprint
     if( other->GetParent() == pad->GetParent() )
     {
-        FOOTPRINT*              fp = pad->GetParentFootprint();
-        std::map<wxString, int> padToNetTieGroupMap = fp->MapPadNumbersToNetTieGroups();
-        int                     padGroupIdx = padToNetTieGroupMap[ pad->GetNumber() ];
+        FOOTPRINT* fp = pad->GetParentFootprint();
+
+        // Building the map costs a string insert per pad, so skip it for the common footprint without ties
+        std::map<wxString, int> padToNetTieGroupMap;
+
+        if( fp->IsNetTie() )
+            padToNetTieGroupMap = fp->MapPadNumbersToNetTieGroups();
+
+        auto groupOf =
+                [&]( PAD* aPad )
+                {
+                    auto it = padToNetTieGroupMap.find( aPad->GetNumber() );
+                    return it == padToNetTieGroupMap.end() ? -1 : it->second;
+                };
+
+        int padGroupIdx = groupOf( pad );
 
         if( other->Type() == PCB_PAD_T )
         {
             PAD* otherPad = static_cast<PAD*>( other );
 
-            if( padGroupIdx >= 0 && padGroupIdx == padToNetTieGroupMap[ otherPad->GetNumber() ] )
+            if( padGroupIdx >= 0 && padGroupIdx == groupOf( otherPad ) )
                 testClearance = testShorting = false;
 
             if( pad->SameLogicalPadAs( otherPad ) )
@@ -975,72 +988,73 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 {
     thread_pool&        tp = GetKiCadThreadPool();
     std::atomic<size_t> done( 1 );
+    std::vector<PAD*>   pads;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+        pads.insert( pads.end(), footprint->Pads().begin(), footprint->Pads().end() );
 
     LSET boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
-    const auto fp_check =
+    // One task per pad, not per footprint, so a large BGA does not leave a single worker running
+    const auto pad_check =
             [&]( size_t ii )
             {
-                FOOTPRINT*         footprint = m_board->Footprints()[ ii ];
+                PAD*               pad = pads[ ii ];
                 std::vector<ZONE*> zones;
 
-                for( PAD* pad : footprint->Pads() )
+                // Through-hole pads are tested per-layer, so overlapping TH pads
+                // may produce one violation per shared copper layer. This is
+                // intentional for parallelized DRC to avoid cross-layer shared state.
+                for( PCB_LAYER_ID layer : LSET( pad->GetLayerSet() & boardCopperLayers ) )
                 {
-                    // Through-hole pads are tested per-layer, so overlapping TH pads
-                    // may produce one violation per shared copper layer. This is
-                    // intentional for parallelized DRC to avoid cross-layer shared state.
-                    for( PCB_LAYER_ID layer : LSET( pad->GetLayerSet() & boardCopperLayers ) )
+                    if( m_drcEngine->IsCancelled() )
+                        return;
+
+                    std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
+
+                    m_board->m_CopperItemRTreeCache->QueryCollidingPreparedCopper(
+                            pad, padShape, layer,
+                            // Filter:
+                            [&]( BOARD_ITEM* other ) -> bool
+                            {
+                                // Dedup on UUID, not heap address, so that exclusion
+                                // checking against previously-generated violations will work
+                                if( other->Type() == PCB_PAD_T && pad->m_Uuid > other->m_Uuid )
+                                {
+                                    return false;
+                                }
+
+                                return true;
+                            },
+                            // Visitor
+                            [&]( BOARD_ITEM* other, const std::shared_ptr<SHAPE>& aPreparedOther ) -> bool
+                            {
+                                testPadAgainstItem( pad, padShape, layer, other, aPreparedOther.get() );
+                                return !m_drcEngine->IsCancelled();
+                            },
+                            m_board->m_DRCMaxClearance, true );
+
+                    collectZonesNear( pad, layer, zones );
+
+                    for( ZONE* zone : zones )
                     {
+                        testItemAgainstZone( pad, zone, layer );
+
                         if( m_drcEngine->IsCancelled() )
                             return;
-
-                        std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
-
-                        m_board->m_CopperItemRTreeCache->QueryCollidingPreparedCopper(
-                                pad, padShape, layer,
-                                // Filter:
-                                [&]( BOARD_ITEM* other ) -> bool
-                                {
-                                    // Dedup on UUID, not heap address, so that exclusion
-                                    // checking against previously-generated violations will work
-                                    if( other->Type() == PCB_PAD_T && pad->m_Uuid > other->m_Uuid )
-                                    {
-                                        return false;
-                                    }
-
-                                    return true;
-                                },
-                                // Visitor
-                                [&]( BOARD_ITEM* other, const std::shared_ptr<SHAPE>& aPreparedOther ) -> bool
-                                {
-                                    testPadAgainstItem( pad, padShape, layer, other, aPreparedOther.get() );
-                                    return !m_drcEngine->IsCancelled();
-                                },
-                                m_board->m_DRCMaxClearance, true );
-
-                        collectZonesNear( pad, layer, zones );
-
-                        for( ZONE* zone : zones )
-                        {
-                            testItemAgainstZone( pad, zone, layer );
-
-                            if( m_drcEngine->IsCancelled() )
-                                return;
-                        }
                     }
                 }
 
                 done.fetch_add( 1 );
             };
 
-    size_t numFootprints = m_board->Footprints().size();
-    auto returns = tp.submit_loop( 0, numFootprints, fp_check, numFootprints );
+    auto returns = tp.submit_loop( 0, pads.size(), pad_check, pads.size() );
 
     // Wait for all threads to finish
     for( const std::future<void>& ret : returns )
     {
         while( ret.wait_for( std::chrono::milliseconds( 250 ) ) != std::future_status::ready )
-            reportProgress( done, numFootprints );
+            reportProgress( done, pads.size() );
     }
 }
 

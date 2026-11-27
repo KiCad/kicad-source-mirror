@@ -166,6 +166,8 @@ public:
     }
 
     const std::vector<PCB_SHAPE>& GetPath() const { return m_pathShapes; }
+    const VECTOR2I&               GetPathStart() const { return m_pathStart; }
+    const VECTOR2I&               GetPathEnd() const { return m_pathEnd; }
 
 protected:
     void swapData( BOARD_ITEM* aImage ) override;
