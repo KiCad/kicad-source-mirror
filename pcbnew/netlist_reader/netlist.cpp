@@ -79,7 +79,8 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aN
 }
 
 
-void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aDidRunDragCommand )
+void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aDidRunDragCommand,
+                                       bool aInteractive )
 {
     BOARD* board = GetBoard();
 
@@ -136,12 +137,13 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aD
     // Spread new footprints.
     std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
 
-    GetToolManager()->RunAction( ACTIONS::selectionClear );
+    if( aInteractive )
+        GetToolManager()->RunAction( ACTIONS::selectionClear );
 
     SpreadFootprints( &newFootprints, { 0, 0 }, true );
 
     // Start drag command for new footprints
-    if( !newFootprints.empty() )
+    if( aInteractive && !newFootprints.empty() )
     {
         EDA_ITEMS items;
         std::copy( newFootprints.begin(), newFootprints.end(), std::back_inserter( items ) );

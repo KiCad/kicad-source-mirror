@@ -101,10 +101,10 @@ public:
         return std::make_unique<BOARD_NETLIST_UPDATER>( m_frame, GetBoard() );
     }
 
-    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) override
+    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool aInteractive = true ) override
     {
         bool runDragCommand = false;
-        m_frame->OnNetlistChanged( aUpdater, &runDragCommand );
+        m_frame->OnNetlistChanged( aUpdater, &runDragCommand, aInteractive );
     }
 
     bool RevertToSaved() override

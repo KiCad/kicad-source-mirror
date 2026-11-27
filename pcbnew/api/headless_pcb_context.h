@@ -68,7 +68,7 @@ public:
 
     std::unique_ptr<BOARD_NETLIST_UPDATER> MakeNetlistUpdater() override;
 
-    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) override;
+    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool aInteractive = true ) override;
 
     bool RevertToSaved() override;
 

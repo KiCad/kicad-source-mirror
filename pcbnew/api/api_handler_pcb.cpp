@@ -27,10 +27,12 @@
 #include <common.h>
 #include <fmt.h>
 #include <api/api_handler_pcb.h>
+#include <api/api_pcb_annotation.h>
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
+#include <api/internal/annotation.pb.h>
 #include <api/common/commands/library_commands.pb.h>
 #include <api/cross_probe_client.h>
 #include <wx/log.h>
@@ -230,6 +232,110 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
 
     registerHandler<PlaceFootprintFromLibrary, PlaceFromLibraryResponse>(
             &API_HANDLER_PCB::handlePlaceFootprintFromLibrary );
+}
+
+
+bool API_HANDLER_PCB::HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse )
+{
+    ApiRequest envelope;
+
+    if( !envelope.ParseFromString( aRequest ) )
+        return false;
+
+    ApiResponse response;
+    WX_STRING_REPORTER reporter;
+
+    auto finish =
+            [&]( const google::protobuf::Message& aMessage, bool aSuccess )
+            {
+                response.mutable_message()->PackFrom( aMessage );
+
+                if( aSuccess )
+                {
+                    response.mutable_status()->set_status( kiapi::common::AS_OK );
+                }
+                else
+                {
+                    response.mutable_status()->set_status( kiapi::common::AS_BAD_REQUEST );
+                    response.mutable_status()->set_error_message( reporter.GetMessages().ToUTF8() );
+                }
+
+                aResponse = response.SerializeAsString();
+                return true;
+            };
+
+    auto reject =
+            [&]( const ApiResponseStatus& aStatus )
+            {
+                *response.mutable_status() = aStatus;
+                aResponse = response.SerializeAsString();
+                return true;
+            };
+
+    // TODO(JE) for now we only have two requests so this is inline.  Factor out later if needed.
+
+    GenerateNetlistRequest netlistRequest;
+
+    if( envelope.message().UnpackTo( &netlistRequest ) )
+    {
+        if( HANDLER_RESULT<bool> validation = validateDocument( netlistRequest.document() ); !validation )
+        {
+            return reject( validation.error() );
+        }
+
+        if( !m_commits.empty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BUSY );
+            e.set_error_message( "annotation cannot run while a commit is open" );
+            return reject( e );
+        }
+
+        if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+            return reject( *busy );
+
+        kiapi::internal::GenerateNetlistResponse result;
+        std::string                              netlist;
+
+        result.set_success( GenerateBoardNetlist( *board(), netlist ) );
+        result.set_netlist( netlist );
+
+        return finish( result, result.success() );
+    }
+
+    RelinkFootprintsRequest relinkRequest;
+
+    if( envelope.message().UnpackTo( &relinkRequest ) )
+    {
+        if( HANDLER_RESULT<bool> validation = validateDocument( relinkRequest.board() ); !validation )
+        {
+            return reject( validation.error() );
+        }
+
+        if( !m_commits.empty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BUSY );
+            e.set_error_message( "annotation cannot run while a commit is open" );
+            return reject( e );
+        }
+
+        if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+            return reject( *busy );
+
+        ANNOTATION_RESULT updateResult;
+
+        RelinkFootprintsResponse result;
+        result.set_success(
+                RelinkFootprints( *pcbContext(), relinkRequest.schematic_netlist(), updateResult, reporter ) );
+        result.set_error_count( updateResult.errorCount );
+        result.set_warning_count( updateResult.warningCount );
+        result.set_report( reporter.GetMessages().ToUTF8() );
+
+        return finish( result, result.success() );
+    }
+
+    return false;
 }
 
 
@@ -1898,11 +2004,18 @@ HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( cons
     PCB_CONTEXT*       ctx = pcbContext();
     WX_STRING_REPORTER reporter;
 
-    const bool lookupByTimestamp = aCtx.Request.match_mode() != NetlistMatchMode::NMM_REFERENCE;
+    ForwardAnnotationSettings settings;
+    settings.set_match_mode( aCtx.Request.match_mode() == NetlistMatchMode::NMM_REFERENCE
+                                     ? AnnotationMatchMode::AMM_REFERENCE
+                                     : AnnotationMatchMode::AMM_UUID );
+    settings.set_dry_run( aCtx.Request.dry_run() );
+    settings.set_delete_extra_footprints( aCtx.Request.delete_extra_footprints() );
+    settings.set_update_footprints( aCtx.Request.update_footprints() );
+    settings.set_transfer_groups( aCtx.Request.transfer_groups() );
+    settings.set_override_locks( aCtx.Request.override_locks() );
+    settings.set_update_fields( true );
 
     NETLIST netlist;
-    netlist.SetFindByTimeStamp( lookupByTimestamp );
-    netlist.SetReplaceFootprints( aCtx.Request.update_footprints() );
 
     if( !ctx->ReadNetlistFromFile( netlistPath.GetFullPath(), netlist, reporter ) )
     {
@@ -1914,28 +2027,14 @@ HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( cons
         return tl::unexpected( e );
     }
 
-    std::unique_ptr<BOARD_NETLIST_UPDATER> updater = ctx->MakeNetlistUpdater();
-
-    updater->SetReporter( &reporter );
-    updater->SetIsDryRun( aCtx.Request.dry_run() );
-    updater->SetWillDrag( false );
-    updater->SetLookupByTimestamp( lookupByTimestamp );
-    updater->SetDeleteUnusedFootprints( aCtx.Request.delete_extra_footprints() );
-    updater->SetReplaceFootprints( aCtx.Request.update_footprints() );
-    updater->SetTransferGroups( aCtx.Request.transfer_groups() );
-    updater->SetOverrideLocks( aCtx.Request.override_locks() );
-    updater->SetUpdateFields( true );
-
-    const bool success = updater->UpdateNetlist( netlist );
-
-    if( !aCtx.Request.dry_run() && success )
-        ctx->OnNetlistChanged( *updater );
+    ANNOTATION_RESULT result;
+    ApplyNetlist( *ctx, netlist, settings, result, reporter );
 
     ImportNetlistResponse response;
     response.set_report( reporter.GetMessages().ToUTF8() );
-    response.set_error_count( updater->GetErrorCount() );
-    response.set_warning_count( updater->GetWarningCount() );
-    response.set_new_footprint_count( updater->GetNewFootprintCount() );
+    response.set_error_count( result.errorCount );
+    response.set_warning_count( result.warningCount );
+    response.set_new_footprint_count( result.newFootprintCount );
     return response;
 }
 

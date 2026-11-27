@@ -237,7 +237,7 @@ std::unique_ptr<BOARD_NETLIST_UPDATER> HEADLESS_PCB_CONTEXT::MakeNetlistUpdater(
 }
 
 
-void HEADLESS_PCB_CONTEXT::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater )
+void HEADLESS_PCB_CONTEXT::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool aInteractive )
 {
     BOARD* board = GetBoard();
 

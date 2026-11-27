@@ -55,6 +55,8 @@ public:
     API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame );
     API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDIT_FRAME* aFrame = nullptr );
 
+    bool HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse ) override;
+
 private:
     typedef std::map<std::string, PROPERTY_BASE*> PROTO_PROPERTY_MAP;
 

@@ -624,7 +624,8 @@ public:
      * @param aUpdater is the updater object that was run.
      * @param aRunDragCommand [out] is set to true if a drag command should be run following this call.
      */
-    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
+    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand,
+                           bool aInteractive = true );
 
     /**
      * Send a message to the schematic editor to try to find schematic counterparts
