@@ -269,8 +269,9 @@ struct DIFF_PAIR_COUPLED_SEGMENTS
 
 struct DIFF_PAIR_ITEMS
 {
-    std::set<BOARD_CONNECTED_ITEM*> itemsP, itemsN;
-    std::vector<DIFF_PAIR_COUPLED_SEGMENTS> coupled;
+    // UUID order, since the first item of each polarity places the uncoupled-length marker
+    std::set<BOARD_CONNECTED_ITEM*, CompareByUuid> itemsP, itemsN;
+    std::vector<DIFF_PAIR_COUPLED_SEGMENTS>        coupled;
     int totalCoupled;
     int totalLengthN;
     int totalLengthP;

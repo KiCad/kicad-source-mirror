@@ -48,6 +48,15 @@
     Todo: arc support
 */
 
+// Connection items are held by pointer, so report them in UUID order
+static std::vector<BOARD_CONNECTED_ITEM*> itemsByUuid( const std::set<BOARD_CONNECTED_ITEM*>& aItems )
+{
+    std::vector<BOARD_CONNECTED_ITEM*> items( aItems.begin(), aItems.end() );
+    std::sort( items.begin(), items.end(), CompareByUuid() );
+    return items;
+}
+
+
 class DRC_TEST_PROVIDER_MATCHED_LENGTH : public DRC_TEST_PROVIDER
 {
 public:
@@ -164,12 +173,14 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aCons
                                                     dataType ) );
             }
 
-            for( auto offendingTrack : ent.items )
+            std::vector<BOARD_CONNECTED_ITEM*> items = itemsByUuid( ent.items );
+
+            for( BOARD_CONNECTED_ITEM* offendingTrack : items )
                 drcItem->AddItem( offendingTrack );
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(), ( *ent.items.begin() )->GetLayer() );
+            reportViolation( drcItem, items.front()->GetPosition(), items.front()->GetLayer() );
         }
     }
 }
@@ -257,12 +268,14 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
 
                 drcItem->SetErrorDetail( msg );
 
-                for( BOARD_CONNECTED_ITEM* offendingTrack : ent.items )
+                std::vector<BOARD_CONNECTED_ITEM*> items = itemsByUuid( ent.items );
+
+                for( BOARD_CONNECTED_ITEM* offendingTrack : items )
                     drcItem->SetItems( offendingTrack );
 
                 drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-                reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(), ( *ent.items.begin() )->GetLayer() );
+                reportViolation( drcItem, items.front()->GetPosition(), items.front()->GetLayer() );
             }
         }
     };
@@ -336,12 +349,14 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( const DRC_CONSTRAINT& aCo
 
         if( drcItem )
         {
-            for( const BOARD_CONNECTED_ITEM* offendingTrack : ent.items )
+            std::vector<BOARD_CONNECTED_ITEM*> items = itemsByUuid( ent.items );
+
+            for( const BOARD_CONNECTED_ITEM* offendingTrack : items )
                 drcItem->SetItems( offendingTrack );
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(), ( *ent.items.begin() )->GetLayer() );
+            reportViolation( drcItem, items.front()->GetPosition(), items.front()->GetLayer() );
         }
     }
 }
@@ -823,16 +838,18 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths( const DRC_CONSTRAINT& a
                                                  netInfo->GetNetname() ) );
         item->SetViolatingRule( aRule );
 
-        for( BOARD_CONNECTED_ITEM* connItem : conn.items )
+        std::vector<BOARD_CONNECTED_ITEM*> connItems = itemsByUuid( conn.items );
+
+        for( BOARD_CONNECTED_ITEM* connItem : connItems )
             item->AddItem( connItem );
 
         VECTOR2I     pos;
         PCB_LAYER_ID layer = UNDEFINED_LAYER;
 
-        if( !conn.items.empty() )
+        if( !connItems.empty() )
         {
-            pos = ( *conn.items.begin() )->GetPosition();
-            layer = ( *conn.items.begin() )->GetLayer();
+            pos = connItems.front()->GetPosition();
+            layer = connItems.front()->GetLayer();
         }
 
         reportViolation( item, pos, layer );

@@ -379,7 +379,9 @@ void RN_NET::OptimizeRNEdges()
                         {
                             SEG::ecoord dist_sq = ( pt - aPos ).SquaredEuclideanNorm();
 
-                            if( dist_sq < closest_dist_sq )
+                            // Connected items come in pointer order, so break ties on the point
+                            if( dist_sq < closest_dist_sq
+                                    || ( closest_item && dist_sq == closest_dist_sq && pt < closest_pt ) )
                             {
                                 closest_pt = pt;
                                 closest_item = zoneLayer;
@@ -470,10 +472,25 @@ void RN_NET::OptimizeRNEdges()
             }
         }
 
+        // Connected items come in pointer order, so equal distances fall back to the zone islands
+        auto islandKey =
+                []( CN_ITEM* aItem )
+                {
+                    CN_ZONE_LAYER* zoneLayer = static_cast<CN_ZONE_LAYER*>( aItem );
+                    return std::make_tuple( zoneLayer->Parent()->m_Uuid, zoneLayer->Layer(),
+                                            zoneLayer->SubpolyIndex() );
+                };
+
         std::sort( pairsToTest.begin(), pairsToTest.end(),
-                   []( const DIST_PAIR& dp_a, const DIST_PAIR& dp_b )
+                   [&]( const DIST_PAIR& dp_a, const DIST_PAIR& dp_b )
                    {
-                       return dp_a.dist_sq < dp_b.dist_sq;
+                       if( dp_a.dist_sq != dp_b.dist_sq )
+                           return dp_a.dist_sq < dp_b.dist_sq;
+
+                       return std::make_tuple( islandKey( connectedItemsA[dp_a.idA] ),
+                                               islandKey( connectedItemsB[dp_a.idB] ) )
+                              < std::make_tuple( islandKey( connectedItemsA[dp_b.idA] ),
+                                                 islandKey( connectedItemsB[dp_b.idB] ) );
                    } );
 
         const int c_polyPairsLimit = 3;

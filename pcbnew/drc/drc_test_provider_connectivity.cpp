@@ -195,6 +195,10 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
             if( !citem->Valid() )
                 continue;
 
+            // Connections are held in pointer order, so report the lowest-UUID via rather than the first
+            PCB_VIA* offCenterVia = nullptr;
+            VECTOR2I offCenterPos;
+
             for( CN_ITEM* connected : citem->ConnectedItems() )
             {
                 BOARD_CONNECTED_ITEM* item = connected->Parent();
@@ -249,21 +253,36 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
                 if( ( startInVia && track->GetStart() != viaPos ) || ( endInVia && track->GetEnd() != viaPos ) )
                 {
-                    bool     startViolation = startInVia && track->GetStart() != viaPos;
-                    VECTOR2I pos = startViolation ? track->GetStart() : track->GetEnd();
+                    bool startViolation = startInVia && track->GetStart() != viaPos;
 
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_NOT_CENTERED_ON_VIA );
-                    drcItem->SetItems( track, via );
-                    reportViolation( drcItem, pos, track->GetLayer() );
-                    break;
+                    if( !offCenterVia || via->m_Uuid < offCenterVia->m_Uuid )
+                    {
+                        offCenterVia = via;
+                        offCenterPos = startViolation ? track->GetStart() : track->GetEnd();
+                    }
                 }
+            }
+
+            if( offCenterVia )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TRACK_NOT_CENTERED_ON_VIA );
+                drcItem->SetItems( track, offCenterVia );
+                reportViolation( drcItem, offCenterPos, track->GetLayer() );
             }
         }
     }
 
     /* test starved zones */
-    for( const auto& [ zone, zoneIslands ] : board->m_ZoneIsolatedIslandsMap )
+    // The island map is keyed by pointer; walk the zones in board order so the cap keeps the same islands
+    for( ZONE* zone : board->Zones() )
     {
+        auto islandsIt = board->m_ZoneIsolatedIslandsMap.find( zone );
+
+        if( islandsIt == board->m_ZoneIsolatedIslandsMap.end() )
+            continue;
+
+        const auto& zoneIslands = islandsIt->second;
+
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_ISOLATED_COPPER ) )
             break;
 

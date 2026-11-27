@@ -173,13 +173,11 @@ void DRC_TEST_PROVIDER_EDGE_CLEARANCE::resolveSilkDisposition( BOARD_ITEM* aItem
                 nearestEdgePt = otherEdgePt;
         }
 
+        // At a corner both edges hit, and the tree returns them in pointer order
         for( BOARD_ITEM* edge : m_edgesTree.GetObjectsAt( nearestEdgePt, Edge_Cuts, m_epsilon ) )
         {
-            if( edge->HitTest( nearestEdgePt, m_epsilon ) )
-            {
+            if( edge->HitTest( nearestEdgePt, m_epsilon ) && ( !nearestEdge || CompareByUuid()( edge, nearestEdge ) ) )
                 nearestEdge = edge;
-                break;
-            }
         }
 
         if( !nearestEdge )
