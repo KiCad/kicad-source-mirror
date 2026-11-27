@@ -1792,9 +1792,9 @@ public:
     mutable std::shared_mutex                             m_CachesMutex;
     // These predicate caches are written per item-pair from every DRC worker thread, so they
     // carry their own internal sharded locks and are NOT covered by m_CachesMutex.
-    SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsCourtyardCache;
-    SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsFCourtyardCache;
-    SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsBCourtyardCache;
+    SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsCourtyardCache;
+    SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsFCourtyardCache;
+    SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsBCourtyardCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsAreaCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsKeepoutCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_EnclosedByAreaCache;

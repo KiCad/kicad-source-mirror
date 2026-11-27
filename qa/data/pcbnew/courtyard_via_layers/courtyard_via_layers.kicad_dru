@@ -1,0 +1,11 @@
+(version 1)
+
+# Reduced clearance for GND vias to traces and other vias
+
+(rule "gnd_via_to_trace_clearance"
+    (condition "(A.Type == 'Via' && A.NetName == 'GND') && (B.Type == 'Track' || B.Type == 'Via')")
+    (constraint clearance (min 0.13mm)))
+
+(rule "class_neckdown"
+    (condition "((A.Type == 'Track' ) || (A.Type == 'Via' || (A.Type=='Pad'))) && (B.Type != 'Zone') && (A.intersectsCourtyard('${Class:fine_pitch}'))")
+    (constraint clearance (min 0.1mm)))

@@ -384,8 +384,10 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 bool res = searchFootprintsNearItem( board, selector, context, item,
                         [&]( FOOTPRINT* fp )
                         {
-                            PTR_PTR_CACHE_KEY key = { fp, item };
-                            bool              cached = false;
+                            // The item's shape depends on the layer, so a layer-less key keeps whichever
+                            // layer a worker thread evaluated first
+                            PTR_PTR_LAYER_CACHE_KEY key = { fp, item, context->GetLayer() };
+                            bool                    cached = false;
 
                             if( !transient && board->m_IntersectsCourtyardCache.Get( key, cached ) )
                                 return cached;
@@ -457,8 +459,8 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 bool res = searchFootprintsNearItem( board, selector, context, item,
                         [&]( FOOTPRINT* fp )
                         {
-                            PTR_PTR_CACHE_KEY key = { fp, item };
-                            bool              cached = false;
+                            PTR_PTR_LAYER_CACHE_KEY key = { fp, item, context->GetLayer() };
+                            bool                    cached = false;
 
                             if( !transient && board->m_IntersectsFCourtyardCache.Get( key, cached ) )
                                 return cached;
@@ -526,8 +528,8 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 bool res = searchFootprintsNearItem( board, selector, context, item,
                         [&]( FOOTPRINT* fp )
                         {
-                            PTR_PTR_CACHE_KEY key = { fp, item };
-                            bool              cached = false;
+                            PTR_PTR_LAYER_CACHE_KEY key = { fp, item, context->GetLayer() };
+                            bool                    cached = false;
 
                             if( !transient && board->m_IntersectsBCourtyardCache.Get( key, cached ) )
                                 return cached;
