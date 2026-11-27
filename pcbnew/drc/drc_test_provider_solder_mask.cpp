@@ -621,7 +621,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem, con
                     {
                         recordMaskAperture( other, aItem, aRefLayer, itemNet, pos );
                     }
-                    else if( checkItemMask( other, itemNet ) )
+                    // Either item's worker may claim the pair, so test both sides' exemptions
+                    else if( checkItemMask( other, itemNet ) && checkItemMask( aItem, otherNet ) )
                     {
                         collectBridge( aItem, other, nullptr, pos, aTargetLayer );
                     }
