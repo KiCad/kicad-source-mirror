@@ -807,12 +807,20 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             auto resumed = st->cofunc;
 
             setActiveState( st );
-            bool end = !st->cofunc->Resume();
+            bool end = !resumed->Resume();
 
             if( end )
             {
-                it = finishTool( st );
-                increment = false;
+                // A handler can install a nested context while it runs, so the live coroutine is
+                // no longer the one that just returned. Retiring it here would delete a coroutine
+                // that is still suspended, freeing its stack without unwinding it: the objects
+                // living on that stack are never destroyed, and whatever they registered in the
+                // view is left dangling.
+                if( st->cofunc == resumed )
+                {
+                    it = finishTool( st );
+                    increment = false;
+                }
             }
             else if( ownActivation )
             {
