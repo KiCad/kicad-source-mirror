@@ -337,17 +337,18 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
     if( m_drcEngine->IsCancelled() )
         return false;   // DRC cancelled
 
+    // Items stay in board order; pointer order would vary the merged polygon and so the reported necks
     struct ITEMS_POLY
     {
-        std::set<BOARD_ITEM*> Items;
-        SHAPE_POLY_SET        Poly;
+        std::vector<BOARD_ITEM*> Items;
+        SHAPE_POLY_SET           Poly;
     };
 
     std::unordered_map<NETCODE_LAYER_CACHE_KEY, ITEMS_POLY> dataset;
     std::atomic<size_t> done( 1 );
 
     auto calc_effort =
-            [&]( const std::set<BOARD_ITEM*>& items, PCB_LAYER_ID aLayer ) -> size_t
+            [&]( const std::vector<BOARD_ITEM*>& items, PCB_LAYER_ID aLayer ) -> size_t
             {
                 size_t effort = 0;
 
@@ -434,9 +435,14 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
                                 contributingItems.push_back( item );
                         }
 
-                        for( auto& [ zone, rtree ] : board->m_CopperZoneRTreeCache )
+                        // The first two hits feed EvalRules, and the tree returns them in pointer order
+                        std::sort( contributingItems.begin(), contributingItems.end(), CompareByUuid() );
+
+                        for( ZONE* zone : board->m_DRCCopperZones )
                         {
-                            if( !rtree.get() )
+                            DRC_RTREE* rtree = board->GetCopperZoneRTree( zone );
+
+                            if( !rtree )
                                 continue;
 
                             auto obj_list = rtree->GetObjectsAt( location, aLayer, aMinWidth );
@@ -487,7 +493,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
         for( ZONE* zone : board->m_DRCCopperZones )
         {
             if( !zone->GetIsRuleArea() && zone->IsOnLayer( layer ) )
-                dataset[ { zone->GetNetCode(), layer } ].Items.emplace( zone );
+                dataset[ { zone->GetNetCode(), layer } ].Items.push_back( zone );
         }
 
         for( PCB_TRACK* track : board->Tracks() )
@@ -495,11 +501,11 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( track ) )
             {
                 if( via->FlashLayer( static_cast<int>( layer ) ) )
-                    dataset[ { via->GetNetCode(), layer } ].Items.emplace( via );
+                    dataset[ { via->GetNetCode(), layer } ].Items.push_back( via );
             }
             else if( track->IsOnLayer( layer ) )
             {
-                dataset[ { track->GetNetCode(), layer } ].Items.emplace( track );
+                dataset[ { track->GetNetCode(), layer } ].Items.push_back( track );
             }
         }
 
@@ -508,7 +514,7 @@ bool DRC_TEST_PROVIDER_CONNECTION_WIDTH::Run()
             for( PAD* pad : fp->Pads() )
             {
                 if( pad->FlashLayer( static_cast<int>( layer ) ) )
-                    dataset[ { pad->GetNetCode(), layer } ].Items.emplace( pad );
+                    dataset[ { pad->GetNetCode(), layer } ].Items.push_back( pad );
             }
 
             // Footprint zones are also in the m_DRCCopperZones cache
