@@ -2637,7 +2637,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
 
     // The caller pinned the session on the UI thread, so a concurrent release cannot
     // free it under us.
-    if( !aGitCommon || !aGitCommon->GetRepo() )
+    if( !aGitCommon )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: No git repository found" ) );
         return;
@@ -2681,6 +2681,13 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
     if( aGitCommon->IsShuttingDown() )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Cancelled" ) );
+        return;
+    }
+
+    // A release clears the repository under the action lock, so it is only safe to read here
+    if( !aGitCommon->GetRepo() )
+    {
+        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: No git repository found" ) );
         return;
     }
 
@@ -2756,6 +2763,10 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
         CallAfter(
                 [this, aGitCommon]()
                 {
+                    // Git can be turned off for the project after the pass was queued
+                    if( aGitCommon->IsShuttingDown() || aGitCommon != gitCommon() )
+                        return;
+
                     updateGitStatusIcons();
 
                     // The docked panels read the same status, so they are stale until they
