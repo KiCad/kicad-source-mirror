@@ -250,10 +250,25 @@ public:
             if( chain.size() < 2 )
                 continue;
 
-            std::sort( chain.begin(), chain.end(),
-                    [] ( const std::shared_ptr<CN_ANCHOR>& a, const std::shared_ptr<CN_ANCHOR>& b )
+            // Group by cluster in first-seen order; cluster addresses would vary the edges run to run
+            std::vector<const CN_CLUSTER*> clusterOrder;
+
+            for( const std::shared_ptr<CN_ANCHOR>& anchor : chain )
+            {
+                if( std::ranges::find( clusterOrder, anchor->GetCluster().get() ) == clusterOrder.end() )
+                    clusterOrder.push_back( anchor->GetCluster().get() );
+            }
+
+            auto clusterRank =
+                    [&]( const std::shared_ptr<CN_ANCHOR>& aAnchor )
                     {
-                        return a->GetCluster().get() < b->GetCluster().get();
+                        return std::ranges::find( clusterOrder, aAnchor->GetCluster().get() ) - clusterOrder.begin();
+                    };
+
+            std::stable_sort( chain.begin(), chain.end(),
+                    [&]( const std::shared_ptr<CN_ANCHOR>& a, const std::shared_ptr<CN_ANCHOR>& b )
+                    {
+                        return clusterRank( a ) < clusterRank( b );
                     } );
 
             for( unsigned int j = 1; j < chain.size(); j++ )
