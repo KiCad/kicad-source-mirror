@@ -417,6 +417,25 @@ public:
         return true;
     }
 
+    bool SaveDocument( const kiapi::common::types::DocumentSpecifier& aDocument )
+    {
+        kiapi::common::commands::SaveDocument request;
+        *request.mutable_document() = aDocument;
+
+        kiapi::common::ApiResponse response;
+
+        if( !send( request, response ) )
+            return false;
+
+        if( response.status().status() != kiapi::common::AS_OK )
+        {
+            m_lastError = response.status().error_message();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Send an arbitrary job request and receive a RunJobResponse.
      */

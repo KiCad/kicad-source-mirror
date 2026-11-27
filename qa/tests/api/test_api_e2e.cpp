@@ -32,6 +32,10 @@
 #include <api/board/board.pb.h>
 #include <api/board/board_commands.pb.h>
 #include <api/board/board_rules.pb.h>
+#include <api/board/board_types.pb.h>
+#include <api/common/commands/annotation_commands.pb.h>
+#include <api/internal/annotation.pb.h>
+#include <api/schematic/schematic_types.pb.h>
 #include <pcb_field.h>
 
 
@@ -975,6 +979,178 @@ BOOST_FIXTURE_TEST_CASE( SaveDocumentAsSwitchesProject, API_SERVER_E2E_FIXTURE )
     BOOST_CHECK( Client().LastError().Contains( wxS( "already open" ) ) );
 
     Client().CloseAllDocuments();
+}
+
+
+BOOST_FIXTURE_TEST_CASE( AnnotationRoundTrip, API_SERVER_E2E_FIXTURE )
+{
+    BOOST_REQUIRE_MESSAGE( Start(), LastError() );
+
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_api_annotation" );
+
+    const wxString sourceDir = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + wxS( "cli/basic_test/" );
+
+    const wxString fixtureFiles[] = { wxS( "basic_test.kicad_pro" ), wxS( "basic_test.kicad_sch" ),
+                                      wxS( "basic_test.kicad_pcb" ) };
+
+    for( const wxString& name : fixtureFiles )
+    {
+        wxFileName destination( tempDir.PathStr(), name );
+        BOOST_REQUIRE( wxCopyFile( sourceDir + name, destination.GetFullPath(), true ) );
+    }
+
+    wxFileName schFile( tempDir.PathStr(), wxS( "basic_test.kicad_sch" ) );
+    wxFileName pcbFile( tempDir.PathStr(), wxS( "basic_test.kicad_pcb" ) );
+
+    kiapi::common::types::DocumentSpecifier schematic;
+    kiapi::common::types::DocumentSpecifier board;
+
+    BOOST_REQUIRE_MESSAGE(
+            Client().OpenDocument( schFile.GetFullPath(), kiapi::common::types::DOCTYPE_SCHEMATIC, &schematic ),
+            "OpenDocument(schematic) failed: " + Client().LastError() );
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( pcbFile.GetFullPath(), kiapi::common::types::DOCTYPE_PCB, &board ),
+                           "OpenDocument(board) failed: " + Client().LastError() );
+
+    kiapi::common::ApiResponse response;
+
+    kiapi::common::commands::UpdateBoardFromSchematic forward;
+    *forward.mutable_board() = board;
+    *forward.mutable_schematic() = schematic;
+    forward.mutable_settings()->set_match_mode( kiapi::common::commands::AMM_UUID );
+
+    forward.mutable_settings()->set_dry_run( true );
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( forward, &response ),
+                           "forward dry run failed to send: " + Client().LastError() );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::commands::ForwardAnnotationResponse forwardResponse;
+    BOOST_REQUIRE( response.message().UnpackTo( &forwardResponse ) );
+    BOOST_CHECK( !forwardResponse.report().empty() );
+
+    forward.mutable_settings()->set_dry_run( false );
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( forward, &response ),
+                           "forward failed to send: " + Client().LastError() );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::commands::GetItems getFootprints;
+    *getFootprints.mutable_header()->mutable_document() = board;
+    getFootprints.add_types( kiapi::common::types::KOT_PCB_FOOTPRINT );
+    BOOST_REQUIRE( Client().SendCommand( getFootprints, &response ) );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::commands::GetItemsResponse footprintItems;
+    BOOST_REQUIRE( response.message().UnpackTo( &footprintItems ) );
+    BOOST_REQUIRE_GT( footprintItems.items_size(), 0 );
+
+    kiapi::board::types::FootprintInstance footprint;
+    BOOST_REQUIRE( footprintItems.items( 0 ).UnpackTo( &footprint ) );
+
+    const std::string footprintRef = footprint.reference_field().text().text().text();
+    BOOST_REQUIRE( !footprintRef.empty() );
+
+    footprint.mutable_value_field()->mutable_text()->mutable_text()->set_text( "CHANGED" );
+
+    kiapi::common::commands::UpdateItems updateFootprint;
+    *updateFootprint.mutable_header()->mutable_document() = board;
+    updateFootprint.add_items()->PackFrom( footprint );
+    BOOST_REQUIRE( Client().SendCommand( updateFootprint, &response ) );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::commands::UpdateItemsResponse updateResponse;
+    BOOST_REQUIRE( response.message().UnpackTo( &updateResponse ) );
+    BOOST_REQUIRE_EQUAL( updateResponse.updated_items_size(), 1 );
+    BOOST_CHECK_EQUAL( updateResponse.updated_items( 0 ).status().code(), kiapi::common::commands::ISC_OK );
+
+    auto footprintValue = [&]() -> std::string
+    {
+        kiapi::common::commands::GetItems request;
+        *request.mutable_header()->mutable_document() = board;
+        request.add_types( kiapi::common::types::KOT_PCB_FOOTPRINT );
+
+        kiapi::common::ApiResponse reply;
+        BOOST_REQUIRE( Client().SendCommand( request, &reply ) );
+
+        kiapi::common::commands::GetItemsResponse items;
+        BOOST_REQUIRE( reply.message().UnpackTo( &items ) );
+
+        for( const google::protobuf::Any& any : items.items() )
+        {
+            kiapi::board::types::FootprintInstance candidate;
+
+            if( any.UnpackTo( &candidate ) && candidate.reference_field().text().text().text() == footprintRef )
+            {
+                return candidate.value_field().text().text().text();
+            }
+        }
+
+        return {};
+    };
+
+    auto schematicValue = [&]() -> std::string
+    {
+        kiapi::common::commands::GetItems request;
+        *request.mutable_header()->mutable_document() = schematic;
+        request.add_types( kiapi::common::types::KOT_SCH_SYMBOL );
+
+        kiapi::common::ApiResponse reply;
+        BOOST_REQUIRE( Client().SendCommand( request, &reply ) );
+
+        kiapi::common::commands::GetItemsResponse items;
+        BOOST_REQUIRE( reply.message().UnpackTo( &items ) );
+
+        for( const google::protobuf::Any& any : items.items() )
+        {
+            kiapi::schematic::types::SchematicSymbolInstance candidate;
+
+            if( any.UnpackTo( &candidate ) && candidate.reference_field().text().text() == footprintRef )
+            {
+                return candidate.value_field().text().text();
+            }
+        }
+
+        return {};
+    };
+
+    BOOST_CHECK_NE( schematicValue(), "CHANGED" );
+
+    kiapi::common::commands::UpdateSchematicFromBoard back;
+    *back.mutable_schematic() = schematic;
+    *back.mutable_board() = board;
+    back.mutable_settings()->set_reference_mode( kiapi::common::commands::BARM_UPDATE_REFERENCES );
+    back.mutable_settings()->set_update_values( true );
+
+    back.mutable_settings()->set_dry_run( true );
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( back, &response ),
+                           "back dry run failed to send: " + Client().LastError() );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::commands::BackAnnotationResponse backResponse;
+    BOOST_REQUIRE( response.message().UnpackTo( &backResponse ) );
+    BOOST_CHECK_GT( backResponse.change_count(), 0 );
+    BOOST_CHECK_NE( schematicValue(), "CHANGED" );
+
+    back.mutable_settings()->set_dry_run( false );
+    BOOST_REQUIRE_MESSAGE( Client().SendCommand( back, &response ), "back failed to send: " + Client().LastError() );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_OK );
+    BOOST_CHECK_EQUAL( schematicValue(), "CHANGED" );
+
+    BOOST_REQUIRE( Client().SaveDocument( board ) );
+    BOOST_REQUIRE( Client().SaveDocument( schematic ) );
+    BOOST_REQUIRE( Client().CloseAllDocuments() );
+
+    BOOST_REQUIRE_MESSAGE(
+            Client().OpenDocument( schFile.GetFullPath(), kiapi::common::types::DOCTYPE_SCHEMATIC, &schematic ),
+            "reopen schematic failed: " + Client().LastError() );
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( pcbFile.GetFullPath(), kiapi::common::types::DOCTYPE_PCB, &board ),
+                           "reopen board failed: " + Client().LastError() );
+
+    BOOST_CHECK_EQUAL( schematicValue(), "CHANGED" );
+    BOOST_CHECK_EQUAL( footprintValue(), "CHANGED" );
+
+    kiapi::internal::GenerateNetlistRequest internalRequest;
+    *internalRequest.mutable_document() = board;
+    BOOST_REQUIRE( Client().SendCommand( internalRequest, &response ) );
+    BOOST_CHECK_EQUAL( response.status().status(), kiapi::common::AS_UNHANDLED );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
