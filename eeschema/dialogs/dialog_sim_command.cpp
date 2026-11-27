@@ -424,7 +424,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         }
 
         if( !ref.IsEmpty() )
-            ref = wxS( "," ) + m_circuitModel->GetItemName( ref );
+            ref = wxS( ", " ) +  ref;
 
         m_simCommand.Printf( ".noise v(%s%s) %s %s %s %s %s %s",
                              output,
