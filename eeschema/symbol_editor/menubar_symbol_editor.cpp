@@ -56,8 +56,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( SCH_ACTIONS::saveSymbolAs );
     fileMenu->Add( SCH_ACTIONS::saveSymbolCopyAs );
 
-    if( !IsSymbolFromSchematic() )
-        fileMenu->Add( ACTIONS::saveAll );
+    fileMenu->Add( ACTIONS::saveAll );
 
     fileMenu->Add( ACTIONS::revert );
 

@@ -340,7 +340,15 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 void SYMBOL_EDIT_FRAME::SaveAll()
 {
     saveAllLibraries( false );
+
+    // A symbol from the schematic has no library buffer, so saveAllLibraries cannot reach it.
+    if( IsSymbolFromSchematic() )
+        saveCurrentSymbol();
+
     m_treePane->GetLibTree()->RefreshLibTree();
+
+    // saveAllLibraries already refreshed the title, but it ran before the symbol above was saved.
+    UpdateTitle();
 }
 
 
