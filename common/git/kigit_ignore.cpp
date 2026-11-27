@@ -20,11 +20,17 @@
 #include "kigit_ignore.h"
 
 #include <core/kicad_algo.h>
+#include <gestfich.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 
+#include <filesystem>
 #include <optional>
 #include <string>
+
+#ifndef __WINDOWS__
+#include <fcntl.h>
+#endif
 
 #include <wx/ffile.h>
 #include <wx/file.h>
@@ -40,9 +46,14 @@ wxString escapePattern( const wxString& aText )
 {
     wxString escaped;
 
-    for( const wxUniChar& ch : aText )
+    // Git drops trailing spaces unless they are escaped
+    const size_t trailing = aText.find_last_not_of( ' ' ) + 1;
+
+    for( size_t ii = 0; ii < aText.length(); ++ii )
     {
-        if( ch == '*' || ch == '?' || ch == '[' || ch == '\\' )
+        const wxUniChar ch = aText[ii];
+
+        if( ch == '*' || ch == '?' || ch == '[' || ch == '\\' || ( ch == ' ' && ii >= trailing ) )
             escaped += '\\';
 
         escaped += ch;
@@ -52,13 +63,41 @@ wxString escapePattern( const wxString& aText )
 }
 
 
+// The rule as git reads the line, which drops a CR and the trailing spaces no backslash escapes
+wxString ruleText( const wxString& aLine )
+{
+    const size_t length = aLine.EndsWith( wxS( "\r" ) ) ? aLine.length() - 1 : aLine.length();
+    size_t       keep = 0;
+    bool         escaped = false;
+
+    for( size_t ii = 0; ii < length; ++ii )
+    {
+        if( aLine[ii] != ' ' || escaped )
+            keep = ii + 1;
+
+        escaped = aLine[ii] == '\\' && !escaped;
+    }
+
+    return aLine.Left( keep );
+}
+
+
+// Git does not read a symlinked ignore file, and writing through one changes a file outside the project
+bool isSymlink( const wxFileName& aFile )
+{
+    std::error_code ec;
+    return std::filesystem::is_symlink( ToFsPath( aFile.GetFullPath() ), ec );
+}
+
+
 bool readIgnoreFile( const wxFileName& aIgnoreFile, wxString& aContents )
 {
     // Opening a file that is not there logs a system error, and having no rules yet is normal.
-    if( !aIgnoreFile.FileExists() )
+    if( !aIgnoreFile.FileExists() || isSymlink( aIgnoreFile ) )
         return false;
 
-    wxFFile in( aIgnoreFile.GetFullPath(), wxT( "r" ) );
+    // Binary mode keeps the CR of a CRLF file, so new lines can match it
+    wxFFile in( aIgnoreFile.GetFullPath(), wxT( "rb" ) );
 
     return in.IsOpened() && in.ReadAll( &aContents );
 }
@@ -78,8 +117,7 @@ std::vector<wxString> splitIgnoreRules( const wxString& aContents )
 
     while( tokenizer.HasMoreTokens() )
     {
-        wxString line = tokenizer.GetNextToken();
-        line.Trim().Trim( false );
+        const wxString line = ruleText( tokenizer.GetNextToken() );
 
         if( !line.IsEmpty() && !line.StartsWith( wxS( "#" ) ) )
             rules.push_back( line );
@@ -102,13 +140,11 @@ wxString KIGIT::PathIgnoreRule( const wxString& aProjectRelPath, bool aIsDirecto
     if( aProjectRelPath.IsEmpty() )
         return wxEmptyString;
 
+    // The separator goes on first, so a folder name ending in a space needs no escape
+    const wxString pattern = aIsDirectory ? aProjectRelPath + wxS( "/" ) : aProjectRelPath;
+
     // The leading slash anchors the rule here, so it cannot match the same name further down.
-    wxString rule = wxS( "/" ) + escapePattern( aProjectRelPath );
-
-    if( aIsDirectory )
-        rule += wxS( "/" );
-
-    return rule;
+    return wxS( "/" ) + escapePattern( pattern );
 }
 
 
@@ -137,6 +173,9 @@ std::vector<wxString> KIGIT::ReadIgnoreRules( const wxFileName& aIgnoreFile )
 bool KIGIT::AddIgnoreRules( const wxFileName& aIgnoreFile, const std::vector<wxString>& aRules, const wxString& aHeader,
                             wxString& aError )
 {
+    if( isSymlink( aIgnoreFile ) )
+        return fileError( aError, _( "'%s' is a symbolic link, so KiCad does not edit it." ), aIgnoreFile );
+
     const bool exists = aIgnoreFile.FileExists();
     wxString   contents;
 
@@ -144,16 +183,21 @@ bool KIGIT::AddIgnoreRules( const wxFileName& aIgnoreFile, const std::vector<wxS
         return fileError( aError, _( "Could not read '%s'." ), aIgnoreFile );
 
     std::vector<wxString> present = splitIgnoreRules( contents );
+    const wxString        eol = contents.Contains( wxS( "\r\n" ) ) ? wxS( "\r\n" ) : wxS( "\n" );
     wxString              missing;
 
     for( const wxString& rule : aRules )
     {
+        // A line break would split the name into rules that ignore other files
+        if( rule.find_first_of( wxS( "\r\n" ) ) != wxString::npos )
+            return fileError( aError, _( "A name holding a line break cannot be added to '%s'." ), aIgnoreFile );
+
         if( rule.IsEmpty() || alg::contains( present, rule ) )
             continue;
 
         // A rule listed twice in one call would otherwise be written twice.
         present.push_back( rule );
-        missing += rule + wxS( "\n" );
+        missing += rule + eol;
     }
 
     if( missing.IsEmpty() )
@@ -162,17 +206,25 @@ bool KIGIT::AddIgnoreRules( const wxFileName& aIgnoreFile, const std::vector<wxS
     if( !exists )
     {
         if( !aHeader.IsEmpty() )
-            missing.Prepend( wxS( "# " ) + aHeader + wxS( "\n" ) );
+            missing.Prepend( wxS( "# " ) + aHeader + eol );
     }
     else if( !contents.IsEmpty() && !contents.EndsWith( wxS( "\n" ) ) )
     {
-        // Otherwise the first new rule would land on the end of the user's last one.
-        missing.Prepend( wxS( "\n" ) );
+        // Otherwise the first new rule would land on the end of the user's last one. A lone CR
+        // only needs its LF, or the extra CR would join the rule above
+        missing.Prepend( contents.EndsWith( wxS( "\r" ) ) ? wxString( wxS( "\n" ) ) : eol );
     }
 
-    wxFFile out( aIgnoreFile.GetFullPath(), wxT( "a" ) );
+#ifdef __WINDOWS__
+    wxFFile out( aIgnoreFile.GetFullPath(), wxT( "ab" ) );
+#else
+    // A link swapped in after the check above must not redirect the append, since the rule text is a file name.
+    // Non-blocking, so a FIFO in its place fails instead of hanging the UI
+    wxFile out( ::open( aIgnoreFile.GetFullPath().fn_str(),
+                        O_WRONLY | O_APPEND | O_CREAT | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC, 0666 ) );
+#endif
 
-    if( !out.IsOpened() || !out.Write( missing ) )
+    if( !out.IsOpened() || !out.Write( missing, wxConvUTF8 ) || !out.Close() )
         return fileError( aError, _( "Could not write to '%s'." ), aIgnoreFile );
 
     return true;
@@ -183,6 +235,9 @@ bool KIGIT::RemoveIgnoreRules( const wxFileName& aIgnoreFile, const std::vector<
 {
     wxString contents;
 
+    if( isSymlink( aIgnoreFile ) )
+        return fileError( aError, _( "'%s' is a symbolic link, so KiCad does not edit it." ), aIgnoreFile );
+
     if( !aIgnoreFile.FileExists() )
         return true;
 
@@ -192,13 +247,12 @@ bool KIGIT::RemoveIgnoreRules( const wxFileName& aIgnoreFile, const std::vector<
     wxString kept;
     bool     removed = false;
 
-    wxStringTokenizer tokenizer( contents, wxS( "\n" ), wxTOKEN_RET_EMPTY );
+    wxStringTokenizer tokenizer( contents, wxS( "\n" ), wxTOKEN_RET_EMPTY_ALL );
 
     while( tokenizer.HasMoreTokens() )
     {
-        wxString line = tokenizer.GetNextToken();
-        wxString rule = line;
-        rule.Trim().Trim( false );
+        const wxString line = tokenizer.GetNextToken();
+        const wxString rule = ruleText( line );
 
         if( !rule.IsEmpty() && alg::contains( aRules, rule ) )
         {
@@ -206,7 +260,11 @@ bool KIGIT::RemoveIgnoreRules( const wxFileName& aIgnoreFile, const std::vector<
             continue;
         }
 
-        kept += line + wxS( "\n" );
+        kept += line;
+
+        // Each line keeps the break it had, so blank lines and an unterminated last line survive
+        if( tokenizer.GetLastDelimiter() == '\n' )
+            kept += wxS( "\n" );
     }
 
     if( !removed )

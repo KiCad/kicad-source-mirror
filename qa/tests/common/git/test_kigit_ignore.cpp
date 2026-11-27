@@ -26,6 +26,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <gestfich.h>
 #include <git/git_status_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
@@ -33,6 +34,7 @@
 
 #include <git2.h>
 
+#include <filesystem>
 #include <map>
 
 #include <qa_utils/git_test_fixture.h>
@@ -253,6 +255,105 @@ BOOST_AUTO_TEST_CASE( RemovingTakesOnlyTheRuleNamed )
     KIGIT_COMMON common( repo(), projectPath() );
     BOOST_CHECK( KIGIT::IgnoreState( common, wxT( "out/top.gbr" ), false ).ignored );
 }
+
+
+// Git drops an unescaped trailing space, which would leave the rule naming another file
+BOOST_AUTO_TEST_CASE( TrailingSpaceStaysInTheRule )
+{
+    const wxString rule = KIGIT::PathIgnoreRule( wxT( "notes.txt " ), false );
+    BOOST_CHECK_EQUAL( rule, wxT( "/notes.txt\\ " ) );
+
+    // A space before the folder separator is not trailing, so the rule nightly builds wrote still matches
+    BOOST_CHECK_EQUAL( KIGIT::PathIgnoreRule( wxT( "fab " ), true ), wxT( "/fab /" ) );
+
+    wxString error;
+    BOOST_REQUIRE_MESSAGE( KIGIT::AddIgnoreRules( ignoreFile(), { rule }, wxEmptyString, error ), error );
+    BOOST_REQUIRE_MESSAGE( KIGIT::AddIgnoreRules( ignoreFile(), { rule }, wxEmptyString, error ), error );
+    BOOST_CHECK_EQUAL( rules(), rule + wxT( "\n" ) );
+
+    KIGIT_COMMON common( repo(), projectPath() );
+    BOOST_CHECK( KIGIT::IgnoreState( common, wxT( "notes.txt " ), false ).ignored );
+    BOOST_CHECK( !KIGIT::IgnoreState( common, wxT( "notes.txt" ), false ).ignored );
+
+    BOOST_REQUIRE_MESSAGE( KIGIT::RemoveIgnoreRules( ignoreFile(), { rule }, error ), error );
+    BOOST_CHECK_EQUAL( rules(), wxEmptyString );
+
+    // A dangling backslash is not the escaped space, so it does not stand in for the rule
+    writeFile( wxT( ".gitignore" ), wxT( "/notes.txt\\\n" ) );
+    BOOST_REQUIRE_MESSAGE( KIGIT::AddIgnoreRules( ignoreFile(), { rule }, wxEmptyString, error ), error );
+    BOOST_CHECK_EQUAL( rules(), wxT( "/notes.txt\\\n" ) + rule + wxT( "\n" ) );
+}
+
+
+// Git would read each part of the name as a rule of its own
+BOOST_AUTO_TEST_CASE( NameWithALineBreakIsRefused )
+{
+    writeFile( wxT( ".gitignore" ), wxT( "*.bak\n" ) );
+
+    wxString error;
+    BOOST_CHECK( !KIGIT::AddIgnoreRules( ignoreFile(), { wxT( "/out.gbr" ), wxT( "/a\n*" ) }, wxEmptyString, error ) );
+    BOOST_CHECK( !error.IsEmpty() );
+    BOOST_CHECK_EQUAL( rules(), wxT( "*.bak\n" ) );
+}
+
+
+// A line in the other ending would leave the file mixed
+BOOST_AUTO_TEST_CASE( RulesKeepTheFileLineEnding )
+{
+    writeFile( wxT( ".gitignore" ), wxT( "# my own rules\r\n*.bak\r\n" ) );
+
+    auto raw = [&]()
+    {
+        wxFFile  in( ignoreFile().GetFullPath(), wxT( "rb" ) );
+        wxString contents;
+
+        BOOST_REQUIRE( in.IsOpened() && in.ReadAll( &contents ) );
+        return contents;
+    };
+
+    wxString error;
+    BOOST_REQUIRE_MESSAGE( KIGIT::AddIgnoreRules( ignoreFile(), { wxT( "/out/top.gbr" ) }, wxEmptyString, error ),
+                           error );
+    BOOST_CHECK_EQUAL( raw(), wxT( "# my own rules\r\n*.bak\r\n/out/top.gbr\r\n" ) );
+
+    BOOST_REQUIRE_MESSAGE( KIGIT::RemoveIgnoreRules( ignoreFile(), { wxT( "*.bak" ) }, error ), error );
+    BOOST_CHECK_EQUAL( raw(), wxT( "# my own rules\r\n/out/top.gbr\r\n" ) );
+
+    writeFile( wxT( ".gitignore" ), wxT( "*.bak\r\nkeep" ) );
+    BOOST_REQUIRE_MESSAGE( KIGIT::RemoveIgnoreRules( ignoreFile(), { wxT( "*.bak" ) }, error ), error );
+    BOOST_CHECK_EQUAL( raw(), wxT( "keep" ) );
+
+    writeFile( wxT( ".gitignore" ), wxT( "*.bak\nkeep\n\n" ) );
+    BOOST_REQUIRE_MESSAGE( KIGIT::RemoveIgnoreRules( ignoreFile(), { wxT( "*.bak" ) }, error ), error );
+    BOOST_CHECK_EQUAL( raw(), wxT( "keep\n\n" ) );
+
+    // A file cut off after its CR needs only the LF, or the rule above would end in a CR
+    writeFile( wxT( ".gitignore" ), wxT( "# h\r\n/keep\r" ) );
+    BOOST_REQUIRE_MESSAGE( KIGIT::AddIgnoreRules( ignoreFile(), { wxT( "/x" ) }, wxEmptyString, error ), error );
+    BOOST_CHECK_EQUAL( raw(), wxT( "# h\r\n/keep\r\n/x\r\n" ) );
+}
+
+
+#ifndef __WINDOWS__
+// Git does not read a symlinked ignore file, so a rule written through it would change only the target
+BOOST_AUTO_TEST_CASE( SymlinkedIgnoreFileIsLeftAlone )
+{
+    writeFile( wxT( "shared.txt" ), wxT( "*.bak\n" ) );
+    std::filesystem::create_symlink( "shared.txt", ToFsPath( ignoreFile().GetFullPath() ) );
+
+    wxString error;
+    BOOST_CHECK( !KIGIT::AddIgnoreRules( ignoreFile(), { wxT( "/out/top.gbr" ) }, wxEmptyString, error ) );
+    BOOST_CHECK( !KIGIT::RemoveIgnoreRules( ignoreFile(), { wxT( "*.bak" ) }, error ) );
+    BOOST_CHECK( KIGIT::ReadIgnoreRules( ignoreFile() ).empty() );
+
+    wxFFile  in( m_repoPath + wxFileName::GetPathSeparator() + wxT( "shared.txt" ), wxT( "rb" ) );
+    wxString contents;
+
+    BOOST_REQUIRE( in.IsOpened() && in.ReadAll( &contents ) );
+    BOOST_CHECK_EQUAL( contents, wxT( "*.bak\n" ) );
+    BOOST_CHECK( std::filesystem::is_symlink( ToFsPath( ignoreFile().GetFullPath() ) ) );
+}
+#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()
