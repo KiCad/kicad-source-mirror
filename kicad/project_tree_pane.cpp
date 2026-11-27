@@ -2473,6 +2473,9 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
     if( !lock.owns_lock() )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIcons: Failed to acquire lock for git status icon update" ) );
+
+        // The pass holding the lock may find nothing new, so the next one has to apply the map
+        m_gitIconsInitialized = false;
         m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
         return;
     }
@@ -2623,20 +2626,32 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
     if( !Pgm().GetCommonSettings()->m_Git.enableGit || !m_TreeProject )
         return;
 
+    // The caller pinned the session on the UI thread, so a concurrent release cannot
+    // free it under us.
+    if( !aGitCommon || !aGitCommon->GetRepo() )
+    {
+        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: No git repository found" ) );
+        return;
+    }
+
+    // A pass that cannot run has to come back, or the change that asked for it never shows
+    auto retry = [this, aGitCommon]( int aDelayMs )
+    {
+        CallAfter(
+                [this, aGitCommon, aDelayMs]()
+                {
+                    if( !aGitCommon->IsShuttingDown() && aGitCommon == gitCommon() )
+                        m_gitStatusTimer.Start( aDelayMs, wxTIMER_ONE_SHOT );
+                } );
+    };
+
     std::unique_lock<std::mutex> lock1( m_gitStatusMutex, std::try_to_lock );
     std::unique_lock<std::mutex> lock2( m_gitTreeCacheMutex, std::try_to_lock );
 
     if( !lock1.owns_lock() || !lock2.owns_lock() )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Failed to acquire locks for git status icon update" ) );
-        return;
-    }
-
-    // The caller pinned the session on the UI thread, so a concurrent release cannot
-    // free it under us.
-    if( !aGitCommon || !aGitCommon->GetRepo() )
-    {
-        wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: No git repository found" ) );
+        retry( 500 );
         return;
     }
 
@@ -2647,6 +2662,9 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
     if( !gitLock.owns_lock() )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Failed to acquire git action mutex" ) );
+
+        // An action here notifies the tree when it ends, so only another process needs this slower poll
+        retry( 5000 );
         return;
     }
 
@@ -2717,8 +2735,14 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
 
     wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Updated git status icons" ) );
 
-    // Update UI if icons changed
-    if( updated || !m_gitIconsInitialized )
+    const bool apply = updated || !m_gitIconsInitialized;
+
+    // The UI thread can run the update before this returns, and must find the locks free
+    gitLock.unlock();
+    lock2.unlock();
+    lock1.unlock();
+
+    if( apply )
     {
         CallAfter(
                 [this, aGitCommon]()
@@ -2854,7 +2878,11 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
     // See onGitSyncTimer: overwriting a still-running task's future abandons a task that holds
     // a raw pointer to this pane, and the destructor would no longer wait for it.
     if( gitTaskStillRunning( m_gitStatusIconTask ) )
+    {
+        // The running pass may have read the status before this change, so look again after it
+        m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
         return;
+    }
 
     updateTreeCache();
     thread_pool& tp = GetKiCadThreadPool();

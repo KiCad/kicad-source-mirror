@@ -26,6 +26,7 @@
 #ifndef TREEPRJ_FRAME_H
 #define TREEPRJ_FRAME_H
 
+#include <atomic>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -334,7 +335,7 @@ private:
     std::unordered_map<wxString, wxTreeItemId>       m_gitTreeCache;
     std::mutex                                       m_gitStatusMutex;
     std::map<wxTreeItemId, KIGIT_COMMON::GIT_STATUS> m_gitStatusIcons;
-    bool                                             m_gitIconsInitialized;
+    std::atomic<bool>                                m_gitIconsInitialized;
 
     /// Raw status of every file in the last pass, so a change with no tree item still reaches the panels
     std::map<wxString, unsigned int> m_gitLastStatus;
