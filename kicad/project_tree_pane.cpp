@@ -691,6 +691,9 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     m_TreeProject->SetItemData( newItemId, data );
     data->SetState( 0 );
 
+    // No status pass has painted the row, and an unchanged pass would leave it alone
+    m_gitIconsInitialized = false;
+
     // Mark root files (files which have the same aName as the project)
     wxString fileName = currfile.GetName().Lower();
     wxString projName = project.GetName().Lower();
@@ -1323,9 +1326,7 @@ void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
     wxTreeItemIdValue   cookie;
     wxTreeItemId        kid = m_TreeProject->GetFirstChild( itemId, cookie );
 
-#ifndef __WINDOWS__
     bool subdir_populated = false;
-#endif
 
     for( ; kid.IsOk(); kid = m_TreeProject->GetNextChild( itemId, cookie ) )
     {
@@ -1356,20 +1357,22 @@ void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
             }
 
             itemData->SetPopulated( true );       // set state to populated
-
-#ifndef __WINDOWS__
             subdir_populated = true;
-#endif
         }
 
         // Sort filenames by alphabetic order
         m_TreeProject->SortChildren( kid );
     }
 
-#ifndef __WINDOWS__
     if( subdir_populated )
+    {
+#ifndef __WINDOWS__
         m_watcherNeedReset = true;
 #endif
+
+        // Nothing else asks for a status pass when a folder is first expanded
+        m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
+    }
 }
 
 
