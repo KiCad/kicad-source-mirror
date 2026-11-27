@@ -23,6 +23,7 @@
 
 #include <api/api_handler_editor.h>
 #include <api/sch_context.h>
+#include <api/common/commands/annotation_commands.pb.h>
 #include <api/internal/cross_probe_commands.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
@@ -34,6 +35,7 @@
 #include <api/schematic/schematic_jobs.pb.h>
 #include <api/schematic/schematic_tasks.pb.h>
 #include <kiid.h>
+#include <kiway.h>
 
 using namespace kiapi;
 using namespace kiapi::common;
@@ -54,6 +56,8 @@ public:
     bool HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse ) override;
 
 protected:
+    virtual bool processApiRequest( KIWAY::FACE_T aFace, const std::string& aRequest, std::string& aResponse );
+
     std::optional<ApiResponseStatus> checkForHeadless( const std::string& aCommandName ) const;
 
     std::unique_ptr<COMMIT> createCommit() override;
@@ -181,6 +185,9 @@ private:
 
     HANDLER_RESULT<kiapi::schematic::commands::SchematicNetlistResponse>
     handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::commands::GetSchematicNetlist>& aCtx );
+
+    HANDLER_RESULT<kiapi::common::commands::BackAnnotationResponse>
+    handleUpdateSchematicFromBoard( const HANDLER_CONTEXT<kiapi::common::commands::UpdateSchematicFromBoard>& aCtx );
 
     HANDLER_RESULT<kiapi::internal::CrossProbeAnnounceResponse>
     handleCrossProbeAnnounce( const HANDLER_CONTEXT<kiapi::internal::CrossProbeAnnounce>& aCtx );

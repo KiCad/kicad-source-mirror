@@ -185,6 +185,9 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleGetPageSettings );
     registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleSetPageSettings );
     registerHandler<GetSchematicNetlist, SchematicNetlistResponse>( &API_HANDLER_SCH::handleGetSchematicNetlist );
+    registerHandler<kiapi::common::commands::UpdateSchematicFromBoard,
+                    kiapi::common::commands::BackAnnotationResponse>(
+            &API_HANDLER_SCH::handleUpdateSchematicFromBoard );
     registerHandler<CrossProbeAnnounce, CrossProbeAnnounceResponse>( &API_HANDLER_SCH::handleCrossProbeAnnounce );
     registerHandler<kiapi::schematic::tasks::StartErcTask, kiapi::common::tasks::StartTaskResponse>(
             &API_HANDLER_SCH::handleStartErcTask );
@@ -267,6 +270,174 @@ bool API_HANDLER_SCH::HandleInternalApiRequest( const std::string& aRequest, std
 
     aResponse = response.SerializeAsString();
     return true;
+}
+
+
+bool API_HANDLER_SCH::processApiRequest( KIWAY::FACE_T aFace, const std::string& aRequest, std::string& aResponse )
+{
+    KIWAY* kiway = context()->GetKiway();
+    return kiway && kiway->ProcessApiRequest( aFace, aRequest, aResponse );
+}
+
+
+HANDLER_RESULT<BackAnnotationResponse>
+API_HANDLER_SCH::handleUpdateSchematicFromBoard( const HANDLER_CONTEXT<UpdateSchematicFromBoard>& aCtx )
+{
+    if( HANDLER_RESULT<bool> validation = validateDocument( aCtx.Request.schematic() ); !validation )
+        return tl::unexpected( validation.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !m_commits.empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BUSY );
+        e.set_error_message( "annotation cannot run while a commit is open" );
+        return tl::unexpected( e );
+    }
+
+    GenerateNetlistRequest netlistRequest;
+    *netlistRequest.mutable_document() = aCtx.Request.board();
+
+    ApiRequest envelope;
+    envelope.mutable_message()->PackFrom( netlistRequest );
+
+    std::string reply;
+
+    if( !processApiRequest( KIWAY::FACE_PCB, envelope.SerializeAsString(), reply ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_NOT_READY );
+        e.set_error_message( "the board is not open" );
+        return tl::unexpected( e );
+    }
+
+    ApiResponse remoteResponse;
+
+    if( !remoteResponse.ParseFromString( reply ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( "the board netlist reply could not be read" );
+        return tl::unexpected( e );
+    }
+
+    if( remoteResponse.status().status() != ApiStatusCode::AS_OK )
+    {
+        ApiResponseStatus e;
+        e.set_status( remoteResponse.status().status() == ApiStatusCode::AS_UNHANDLED
+                              ? ApiStatusCode::AS_BAD_REQUEST
+                              : remoteResponse.status().status() );
+        e.set_error_message( remoteResponse.status().error_message() );
+        return tl::unexpected( e );
+    }
+
+    GenerateNetlistResponse netlistResult;
+
+    if( !remoteResponse.message().UnpackTo( &netlistResult ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( "the board netlist reply has an unexpected type" );
+        return tl::unexpected( e );
+    }
+
+    if( !netlistResult.success() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( netlistResult.report() );
+        return tl::unexpected( e );
+    }
+
+    const BackAnnotationSettings& settings = aCtx.Request.settings();
+
+    API_ANNOTATION_REPORTER reporter;
+    ANNOTATION_RESULT       result;
+
+    if( !ApplyBoardNetlistToSchematic( context(), frame(), netlistResult.netlist(), settings, result, reporter ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( reporter.GetMessages().ToUTF8() );
+        return tl::unexpected( e );
+    }
+
+    uint32_t    relinkErrors = 0;
+    uint32_t    relinkWarnings = 0;
+    std::string relinkReport;
+
+    if( settings.reference_mode() ==  BackAnnotationReferenceMode::BARM_RELINK_FOOTPRINTS && !settings.dry_run() )
+    {
+        std::string schematicNetlist;
+
+        if( GenerateSchematicNetlist( *schematic(), context()->GetKiway(), schematicNetlist, reporter ) )
+        {
+            RelinkFootprintsRequest relinkRequest;
+            *relinkRequest.mutable_board() = aCtx.Request.board();
+            relinkRequest.set_schematic_netlist( schematicNetlist );
+
+            ApiRequest relinkEnvelope;
+            relinkEnvelope.mutable_message()->PackFrom( relinkRequest );
+
+            std::string relinkReply;
+
+            if( processApiRequest( KIWAY::FACE_PCB, relinkEnvelope.SerializeAsString(), relinkReply ) )
+            {
+                ApiResponse              relinkResponse;
+                RelinkFootprintsResponse relinkResult;
+
+                if( !relinkResponse.ParseFromString( relinkReply ) )
+                {
+                    ++relinkErrors;
+                    relinkReport = "the footprint relink reply could not be read";
+                }
+                else if( relinkResponse.status().status() != ApiStatusCode::AS_OK )
+                {
+                    ++relinkErrors;
+                    relinkReport = relinkResponse.status().error_message();
+                }
+                else if( !relinkResponse.message().UnpackTo( &relinkResult ) )
+                {
+                    ++relinkErrors;
+                    relinkReport = "the footprint relink reply has an unexpected type";
+                }
+                else
+                {
+                    relinkErrors = relinkResult.error_count();
+                    relinkWarnings = relinkResult.warning_count();
+                    relinkReport = relinkResult.report();
+
+                    if( !relinkResult.success() )
+                        ++relinkErrors;
+                }
+            }
+            else
+            {
+                ++relinkErrors;
+                relinkReport = "the board is not open for relinking";
+            }
+        }
+        else
+        {
+            ++relinkErrors;
+            relinkReport = "the schematic netlist for relinking could not be generated";
+        }
+    }
+
+    std::string report = reporter.GetMessages().ToUTF8().data();
+
+    if( !relinkReport.empty() )
+        report += "\n" + relinkReport;
+
+    BackAnnotationResponse response;
+    response.set_error_count( static_cast<uint32_t>( reporter.errorCount ) + relinkErrors );
+    response.set_warning_count( static_cast<uint32_t>( reporter.warningCount ) + relinkWarnings );
+    response.set_change_count( static_cast<uint32_t>( result.changeCount ) );
+    response.set_report( report );
+
+    return response;
 }
 
 
