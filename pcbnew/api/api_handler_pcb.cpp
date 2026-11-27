@@ -159,6 +159,9 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
             &API_HANDLER_PCB::handleGetNetClassForNets );
     registerHandler<RefillZones, Empty>( &API_HANDLER_PCB::handleRefillZones );
     registerHandler<ImportNetlist, ImportNetlistResponse>( &API_HANDLER_PCB::handleImportNetlist );
+    registerHandler<kiapi::common::commands::UpdateBoardFromSchematic,
+                    kiapi::common::commands::ForwardAnnotationResponse>(
+            &API_HANDLER_PCB::handleUpdateBoardFromSchematic );
     registerHandler<ImportSpecctraSession, ImportSpecctraSessionResponse>(
             &API_HANDLER_PCB::handleImportSpecctraSession );
     registerHandler<kiapi::board::tasks::StartRefillZonesTask, kiapi::common::tasks::StartTaskResponse>(
@@ -235,6 +238,15 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
 }
 
 
+bool API_HANDLER_PCB::processApiRequest( KIWAY::FACE_T aFace, const std::string& aRequest,
+                                         std::string& aResponse )
+{
+    KIWAY* kiway = pcbContext()->GetKiway();
+
+    return kiway && kiway->ProcessApiRequest( aFace, aRequest, aResponse );
+}
+
+
 bool API_HANDLER_PCB::HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse )
 {
     ApiRequest envelope;
@@ -294,7 +306,7 @@ bool API_HANDLER_PCB::HandleInternalApiRequest( const std::string& aRequest, std
         if( std::optional<ApiResponseStatus> busy = checkForBusy() )
             return reject( *busy );
 
-        kiapi::internal::GenerateNetlistResponse result;
+        GenerateNetlistResponse result;
         std::string                              netlist;
 
         result.set_success( GenerateBoardNetlist( *board(), netlist ) );
@@ -1977,6 +1989,94 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
 
     onModified();
     return Empty();
+}
+
+
+HANDLER_RESULT<ForwardAnnotationResponse> API_HANDLER_PCB::handleUpdateBoardFromSchematic(
+        const HANDLER_CONTEXT<UpdateBoardFromSchematic>& aCtx )
+{
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !m_commits.empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BUSY );
+        e.set_error_message( "annotation cannot run while a commit is open" );
+        return tl::unexpected( e );
+    }
+
+    GenerateNetlistRequest netlistRequest;
+    *netlistRequest.mutable_document() = aCtx.Request.schematic();
+
+    // TODO(JE) factor this out if we need more commands in the future
+
+    ApiRequest envelope;
+    envelope.mutable_message()->PackFrom( netlistRequest );
+
+    std::string reply;
+
+    if( !processApiRequest( KIWAY::FACE_SCH, envelope.SerializeAsString(), reply ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_NOT_READY );
+        e.set_error_message( "the schematic is not open" );
+        return tl::unexpected( e );
+    }
+
+    ApiResponse remoteResponse;
+
+    if( !remoteResponse.ParseFromString( reply ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( "the schematic netlist reply could not be read" );
+        return tl::unexpected( e );
+    }
+
+    if( remoteResponse.status().status() != kiapi::common::AS_OK )
+    {
+        ApiResponseStatus e;
+        e.set_status( remoteResponse.status().status() == kiapi::common::AS_UNHANDLED
+                              ? kiapi::common::AS_BAD_REQUEST
+                              : remoteResponse.status().status() );
+        e.set_error_message( remoteResponse.status().error_message() );
+        return tl::unexpected( e );
+    }
+
+    GenerateNetlistResponse netlistResult;
+
+    if( !remoteResponse.message().UnpackTo( &netlistResult ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( "the schematic netlist reply has an unexpected type" );
+        return tl::unexpected( e );
+    }
+
+    if( !netlistResult.success() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( netlistResult.report() );
+        return tl::unexpected( e );
+    }
+
+    WX_STRING_REPORTER reporter;
+    ANNOTATION_RESULT  result;
+
+    ApplySchematicNetlist( *pcbContext(), netlistResult.netlist(), aCtx.Request.settings(), result, reporter );
+
+    ForwardAnnotationResponse response;
+    response.set_error_count( result.errorCount );
+    response.set_warning_count( result.warningCount );
+    response.set_new_footprint_count( result.newFootprintCount );
+    response.set_report( reporter.GetMessages().ToUTF8() );
+
+    return response;
 }
 
 

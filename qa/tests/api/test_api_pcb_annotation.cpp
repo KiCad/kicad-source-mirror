@@ -37,6 +37,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <kiway.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
 
@@ -110,6 +111,65 @@ bool boardHasRef( BOARD& aBoard, const wxString& aRef )
 }
 
 } // namespace
+
+
+class TEST_FORWARD_HANDLER : public API_HANDLER_PCB
+{
+public:
+    using API_HANDLER_PCB::API_HANDLER_PCB;
+
+    std::string m_netlist;
+    bool        m_schematicSuccess = true;
+    bool        m_statusOnly = false;
+    kiapi::common::ApiStatusCode m_statusOnlyStatus = kiapi::common::AS_BUSY;
+
+protected:
+    bool processApiRequest( KIWAY::FACE_T aFace, const std::string&, std::string& aResponse ) override
+    {
+        BOOST_REQUIRE_EQUAL( aFace, KIWAY::FACE_SCH );
+
+        kiapi::common::ApiResponse response;
+
+        if( m_statusOnly )
+        {
+            response.mutable_status()->set_status( m_statusOnlyStatus );
+            aResponse = response.SerializeAsString();
+            return true;
+        }
+
+        kiapi::internal::GenerateNetlistResponse result;
+        result.set_success( m_schematicSuccess );
+        result.set_netlist( m_netlist );
+
+        if( !m_schematicSuccess )
+            result.set_report( "schematic is not annotated" );
+
+        response.mutable_status()->set_status( m_schematicSuccess ? kiapi::common::AS_OK
+                                                                  : kiapi::common::AS_BAD_REQUEST );
+        response.mutable_message()->PackFrom( result );
+        aResponse = response.SerializeAsString();
+        return true;
+    }
+};
+
+
+kiapi::common::ApiRequest makeForwardRequest(
+        const BOARD& aBoard,
+        const kiapi::common::commands::ForwardAnnotationSettings& aSettings )
+{
+    kiapi::common::commands::UpdateBoardFromSchematic command;
+    command.mutable_board()->set_type( kiapi::common::types::DOCTYPE_PCB );
+    command.mutable_board()->set_board_filename(
+            wxFileName( aBoard.GetFileName() ).GetFullName().ToStdString() );
+    command.mutable_schematic()->set_type( kiapi::common::types::DOCTYPE_SCHEMATIC );
+    *command.mutable_settings() = aSettings;
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    BOOST_REQUIRE( request.mutable_message()->PackFrom( command ) );
+
+    return request;
+}
 
 
 BOOST_FIXTURE_TEST_SUITE( ApiPcbAnnotation, API_PCB_ANNOTATION_FIXTURE )
@@ -245,6 +305,134 @@ BOOST_AUTO_TEST_CASE( DeleteExtraFootprintsRemovesOnlyUnlockedUnusedFootprints )
     settings.set_override_locks( true );
     BOOST_REQUIRE( ApplySchematicNetlist( *m_context, netlistText, settings, result, reporter ) );
     BOOST_REQUIRE( !boardHasRef( *board, wxT( "EXTRA_LOCKED" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForwardCommandUpdatesFootprintValue )
+{
+    BOARD* board = loadBoard( wxS( "api_kitchen_sink" ) );
+    BOOST_REQUIRE( !board->Footprints().empty() );
+
+    FOOTPRINT*     footprint = board->Footprints().front();
+    const wxString oldValue = footprint->GetValue();
+    BOOST_REQUIRE( oldValue != wxT( "CHANGED" ) );
+
+    TEST_FORWARD_HANDLER handler( m_context, nullptr );
+    handler.m_netlist = makeSchematicNetlist( *board, footprint->GetReference(),
+                                              wxT( "CHANGED" ) );
+
+    kiapi::common::commands::ForwardAnnotationSettings settings;
+    settings.set_match_mode( kiapi::common::commands::AMM_REFERENCE );
+    settings.set_update_fields( true );
+
+    kiapi::common::ApiRequest request = makeForwardRequest( *board, settings );
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( result.has_value() );
+    BOOST_REQUIRE_EQUAL( result->status().status(), kiapi::common::AS_OK );
+    BOOST_REQUIRE_EQUAL( footprint->GetValue(), wxT( "CHANGED" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForwardCommandDryRunDoesNotModify )
+{
+    BOARD* board = loadBoard( wxS( "api_kitchen_sink" ) );
+    BOOST_REQUIRE( !board->Footprints().empty() );
+
+    FOOTPRINT*     footprint = board->Footprints().front();
+    const wxString oldValue = footprint->GetValue();
+    BOOST_REQUIRE( oldValue != wxT( "CHANGED" ) );
+
+    TEST_FORWARD_HANDLER handler( m_context, nullptr );
+    handler.m_netlist = makeSchematicNetlist( *board, footprint->GetReference(),
+                                              wxT( "CHANGED" ) );
+
+    kiapi::common::commands::ForwardAnnotationSettings settings;
+    settings.set_match_mode( kiapi::common::commands::AMM_REFERENCE );
+    settings.set_update_fields( true );
+    settings.set_dry_run( true );
+
+    kiapi::common::ApiRequest request = makeForwardRequest( *board, settings );
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( result.has_value() );
+    BOOST_REQUIRE_EQUAL( result->status().status(), kiapi::common::AS_OK );
+    BOOST_REQUIRE_EQUAL( footprint->GetValue(), oldValue );
+    BOOST_REQUIRE( !m_context->IsContentModified() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForwardCommandRejectsFailedSchematic )
+{
+    BOARD* board = loadBoard( wxS( "api_kitchen_sink" ) );
+    BOOST_REQUIRE( !board->Footprints().empty() );
+
+    FOOTPRINT*     footprint = board->Footprints().front();
+    const wxString oldValue = footprint->GetValue();
+
+    TEST_FORWARD_HANDLER handler( m_context, nullptr );
+    handler.m_schematicSuccess = false;
+    handler.m_netlist = makeSchematicNetlist( *board, footprint->GetReference(),
+                                              wxT( "CHANGED" ) );
+
+    kiapi::common::commands::ForwardAnnotationSettings settings;
+    settings.set_match_mode( kiapi::common::commands::AMM_REFERENCE );
+    settings.set_update_fields( true );
+
+    kiapi::common::ApiRequest request = makeForwardRequest( *board, settings );
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_REQUIRE_EQUAL( result.error().status(), kiapi::common::AS_BAD_REQUEST );
+    BOOST_REQUIRE_EQUAL( footprint->GetValue(), oldValue );
+}
+
+BOOST_AUTO_TEST_CASE( ForwardCommandPropagatesRemoteBusy )
+{
+    BOARD* board = loadBoard( wxS( "api_kitchen_sink" ) );
+    BOOST_REQUIRE( !board->Footprints().empty() );
+
+    TEST_FORWARD_HANDLER handler( m_context, nullptr );
+    handler.m_statusOnly = true;
+    handler.m_statusOnlyStatus = kiapi::common::AS_BUSY;
+    handler.m_netlist = makeSchematicNetlist( *board );
+
+    kiapi::common::commands::ForwardAnnotationSettings settings;
+    settings.set_match_mode( kiapi::common::commands::AMM_REFERENCE );
+
+    kiapi::common::ApiRequest request = makeForwardRequest( *board, settings );
+    API_RESULT result = handler.Handle( request );
+
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_REQUIRE_EQUAL( result.error().status(), kiapi::common::AS_BUSY );
+}
+
+BOOST_AUTO_TEST_CASE( InternalNetlistRequestRejectsOpenCommit )
+{
+    BOARD* board = loadBoard( wxS( "api_kitchen_sink" ) );
+
+    API_HANDLER_PCB handler( m_context, nullptr );
+
+    kiapi::common::commands::BeginCommit begin;
+    *begin.mutable_header()->mutable_document() = makeNetlistRequest( *board ).document();
+
+    kiapi::common::ApiRequest beginEnvelope;
+    beginEnvelope.mutable_header()->set_client_name( "kicad.qa" );
+    beginEnvelope.mutable_message()->PackFrom( begin );
+
+    API_RESULT beginResult = handler.Handle( beginEnvelope );
+    BOOST_REQUIRE( beginResult.has_value() );
+    BOOST_REQUIRE_EQUAL( beginResult->status().status(), kiapi::common::AS_OK );
+
+    kiapi::common::ApiRequest envelope;
+    envelope.mutable_message()->PackFrom( makeNetlistRequest( *board ) );
+
+    std::string responseText;
+    BOOST_REQUIRE( handler.HandleInternalApiRequest( envelope.SerializeAsString(), responseText ) );
+
+    kiapi::common::ApiResponse response;
+    BOOST_REQUIRE( response.ParseFromString( responseText ) );
+    BOOST_REQUIRE_EQUAL( response.status().status(), kiapi::common::AS_BUSY );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -25,11 +25,13 @@
 #include <api/pcb_context.h>
 #include <api/board/board_jobs.pb.h>
 #include <api/board/board_tasks.pb.h>
+#include <api/common/commands/annotation_commands.pb.h>
 #include <api/common/tasks.pb.h>
 #include <api/internal/cross_probe_commands.pb.h>
 #include <api/common/commands/project_commands.pb.h>
 #include <api/common/commands/variant_commands.pb.h>
 #include <api/common/commands/library_commands.pb.h>
+#include <kiway.h>
 #include <properties/property_mgr.h>
 
 using namespace kiapi::board::jobs;
@@ -56,6 +58,10 @@ public:
     API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDIT_FRAME* aFrame = nullptr );
 
     bool HandleInternalApiRequest( const std::string& aRequest, std::string& aResponse ) override;
+
+protected:
+    virtual bool processApiRequest( KIWAY::FACE_T aFace, const std::string& aRequest,
+                                    std::string& aResponse );
 
 private:
     typedef std::map<std::string, PROPERTY_BASE*> PROTO_PROPERTY_MAP;
@@ -128,6 +134,10 @@ private:
 
     HANDLER_RESULT<ImportNetlistResponse> handleImportNetlist(
             const HANDLER_CONTEXT<ImportNetlist>& aCtx );
+
+    HANDLER_RESULT<kiapi::common::commands::ForwardAnnotationResponse>
+    handleUpdateBoardFromSchematic(
+            const HANDLER_CONTEXT<kiapi::common::commands::UpdateBoardFromSchematic>& aCtx );
 
     HANDLER_RESULT<ImportSpecctraSessionResponse> handleImportSpecctraSession(
             const HANDLER_CONTEXT<ImportSpecctraSession>& aCtx );
