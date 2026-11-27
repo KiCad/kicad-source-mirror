@@ -2437,6 +2437,7 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
         m_gitIconsInitialized = false;
 
         // Clear all item states to remove git status icons
+        const wxColour           normal = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         std::stack<wxTreeItemId> items;
         items.push( m_TreeProject->GetRootItem() );
 
@@ -2446,6 +2447,9 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
             items.pop();
 
             m_TreeProject->SetItemState( current, wxTREE_ITEMSTATE_NONE );
+
+            // Without git nothing is ignored, so no name stays dimmed
+            m_TreeProject->SetItemTextColour( current, normal );
 
             wxTreeItemIdValue cookie;
             wxTreeItemId      child = m_TreeProject->GetFirstChild( current, cookie );
@@ -2461,6 +2465,11 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
     {
         // Re-enabling Git integration - try to find and connect to the repository
         Prj().AttachGitRepository();
+
+        // The release left a new session that the tree does not listen to, and no pass would repaint it
+        syncGitListener();
+        m_gitIconsInitialized = false;
+        m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
     }
 
     // Save the preference to the project local settings file
