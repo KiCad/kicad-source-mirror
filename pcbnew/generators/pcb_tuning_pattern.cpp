@@ -226,7 +226,7 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         gal->SetLineWidth( gal->GetScreenWorldMatrix().GetScale().x * 2 );
         gal->SetStrokeColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
         KIGFX::COLOR4D bgColor( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-        gal->SetFillColor( bgColor.WithAlpha( 0.9 ) );
+        gal->SetFillColor( bgColor.WithAlpha( 0.7 ) );
 
         gal->DrawRectangle( GetPosition() + offset - margin,
                             GetPosition() + offset + size + margin );
