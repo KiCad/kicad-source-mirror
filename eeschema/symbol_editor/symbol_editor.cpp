@@ -80,6 +80,12 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
             {
                 schframe->SaveSymbolToSchematic( *m_symbol, m_schematicSymbolUUID );
                 GetScreen()->SetContentModified( false );
+
+                if( int idx = m_activeTab ? m_tabsPanel->FindTab( m_activeTab->GetTabKey() ) : -1; idx >= 0 )
+                {
+                    m_tabsPanel->MarkModified( idx, false );
+                }
+
                 return true;
             }
         }
@@ -294,6 +300,10 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbol( LIB_SYMBOL* aEntry, const wxString
 void SYMBOL_EDIT_FRAME::SaveAll()
 {
     saveAllLibraries( false );
+
+    // A symbol from the schematic has no library buffer, so saveAllLibraries cannot reach it.
+    saveSchematicInstanceTabs();
+
     m_treePane->GetLibTree()->RefreshLibTree();
 }
 

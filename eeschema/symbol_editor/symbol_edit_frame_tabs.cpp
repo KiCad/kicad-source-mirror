@@ -623,6 +623,36 @@ bool SYMBOL_EDIT_FRAME::promptToSaveInactiveInstanceTabs()
 }
 
 
+bool SYMBOL_EDIT_FRAME::saveSchematicInstanceTabs()
+{
+    std::vector<SYMBOL_EDITOR_TAB_CONTEXT*> dirty;
+
+    for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+    {
+        if( ctx->IsFromSchematic() && ctx->IsModified() )
+            dirty.push_back( ctx.get() );
+    }
+
+    if( dirty.empty() )
+        return true;
+
+    SYMBOL_EDITOR_TAB_CONTEXT* originalActive = m_activeTab;
+    bool                       retv = true;
+
+    for( SYMBOL_EDITOR_TAB_CONTEXT* ctx : dirty )
+    {
+        activateSymbolTab( ctx );
+
+        if( !saveCurrentSymbol() )
+            retv = false;
+    }
+
+    activateSymbolTab( originalActive );
+
+    return retv;
+}
+
+
 void SYMBOL_EDIT_FRAME::closeSymbolTab( const LIB_ID& aLibId )
 {
     const wxString key = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aLibId.GetLibNickname(), aLibId.GetLibItemName() );

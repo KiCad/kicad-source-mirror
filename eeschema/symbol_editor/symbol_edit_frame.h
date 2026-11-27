@@ -681,6 +681,12 @@ private:
     bool promptToSaveInactiveInstanceTabs();
 
     /**
+     * Write every dirty instance (symbol from schematic) tab back to its schematic symbol, without
+     * prompting. Returns false if any of them could not be saved.
+     */
+    bool saveSchematicInstanceTabs();
+
+    /**
      * True if any non-active instance (schematic) tab has unsaved edits. Used to veto a session-end
      * query early, since those tabs are invisible to IsContentModified (which sees only the active tab).
      */
