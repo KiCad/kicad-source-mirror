@@ -263,6 +263,9 @@ public:
         {
             reporter = std::make_unique<API_TASK_GUI_PROGRESS_REPORTER>( frame, _( "Running DRC" ), 1,
                                                                         PR_CAN_ABORT );
+
+            // Some providers never refresh after entry, so serve API queries as each one starts
+            reporter->SetRefreshOnPhaseChange( true );
             drcEngine->SetProgressReporter( reporter.get() );
         }
 

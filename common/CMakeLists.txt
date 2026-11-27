@@ -1116,7 +1116,6 @@ list( APPEND COMMON_SRCS
     api/api_handler_common.cpp
     api/api_handler_editor.cpp
     api/api_handler_libraries.cpp
-    api/api_task_gui_reporter.cpp
 )
 
 add_library( common STATIC

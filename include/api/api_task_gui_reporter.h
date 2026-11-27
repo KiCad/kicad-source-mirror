@@ -34,7 +34,8 @@ public:
             WX_PROGRESS_REPORTER( aParent, aTitle, aNumPhases, aCanAbort )
     {}
 
-    bool updateUI() override;
+protected:
+    long drainCategories() const override { return wxEVT_CATEGORY_TIMER | wxEVT_CATEGORY_THREAD; }
 };
 
 #endif //KICAD_API_TASK_GUI_REPORTER_H

@@ -54,6 +54,11 @@ public:
         return false;
     }
 
+    /**
+     * Start a new interval now, so the next Ready() waits a full interval from this call.
+     */
+    void Restart() { m_last = std::chrono::steady_clock::now(); }
+
 private:
     std::chrono::milliseconds             m_interval;
     std::chrono::steady_clock::time_point m_last;

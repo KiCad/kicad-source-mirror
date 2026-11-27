@@ -98,6 +98,9 @@ public:
 protected:
     bool updateUI() override;
 
+    ///< Event categories served after each refresh.
+    virtual long drainCategories() const { return wxEVT_CATEGORY_TIMER; }
+
 private:
     wxAppProgressIndicator m_appProgressIndicator;
     bool                   m_reservedSize;

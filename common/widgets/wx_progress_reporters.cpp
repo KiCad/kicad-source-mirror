@@ -107,17 +107,23 @@ bool WX_PROGRESS_REPORTER::updateUI()
     // Allowing interaction with other windows has unintended consequences
     wxWindowDisabler ed( this );
 
+    // Past the declared phases the gauge maximum would finish the dialog early and hide its Cancel button
+    bool pulse = m_indeterminate.load() || phase >= m_numPhases.load();
+
     // Returns false when cancelled (if it's a cancellable dialog). A phase whose total is not
     // known yet pulses instead, so the gauge shows that work is still going on.
-    bool diag = m_indeterminate.load() ? WX_PROGRESS_REPORTER_BASE::Pulse( message )
-                                       : WX_PROGRESS_REPORTER_BASE::Update( cur, message );
+    bool diag = pulse ? WX_PROGRESS_REPORTER_BASE::Pulse( message )
+                      : WX_PROGRESS_REPORTER_BASE::Update( cur, message );
 
     if( !message.empty() )
         Fit();
 
-    DrainPendingEvents();
+    DrainPendingEvents( drainCategories() );
 
     m_lastUpdateResult.store( diag );
+
+    // Time the interval from the end of the refresh so a slow display cannot starve the work
+    m_updateThrottle.Restart();
 
     return diag;
 }
