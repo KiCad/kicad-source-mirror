@@ -266,6 +266,31 @@ wxString SCH_RULE_AREA::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool
 }
 
 
+bool SCH_RULE_AREA::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_PATH* aInstance ) const
+{
+    if( aItem == this )
+        return false;
+
+    const SCH_RULE_AREA* ruleArea = dynamic_cast<const SCH_RULE_AREA*>( aItem );
+
+    wxCHECK( ruleArea, false );
+
+    const SHAPE_POLY_SET& poly = GetPolyShape();
+    const SHAPE_POLY_SET& otherPoly = ruleArea->GetPolyShape();
+
+    if( poly.OutlineCount() != otherPoly.OutlineCount() )
+        return true;
+
+    for( int ii = 0; ii < poly.OutlineCount(); ++ii )
+    {
+        if( poly.COutline( ii ) != otherPoly.COutline( ii ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SCH_RULE_AREA_VARIANT::InitializeAttributes( const SCH_RULE_AREA& aRuleArea )
 {
     m_DNP = aRuleArea.GetDNP();

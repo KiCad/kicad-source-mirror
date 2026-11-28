@@ -489,8 +489,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                                       || originalSheet->HasPinIdentityChanges( *modifiedSheet );
             }
 
-            if( itemCopy->HasConnectivityChanges( schItem, &currentSheet )
-                || ( itemCopy->Type() == SCH_RULE_AREA_T ) )
+            if( itemCopy->HasConnectivityChanges( schItem, &currentSheet ) )
             {
                 updateConnectivityFlag( schItem, screen, fullSheetUpdate );
             }

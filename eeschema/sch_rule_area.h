@@ -179,6 +179,8 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
+    bool HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_PATH* aInstance = nullptr ) const override;
+
     /// Refresh the list of items which this rule area affects.
     void RefreshContainedItemsAndDirectives( SCH_SCREEN* screen );
 
